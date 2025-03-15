@@ -67,6 +67,8 @@ describe('parse', () => {
         expect(result).toBeDefined()
         expect(result?.version).toBe('https://jsonfeed.org/version/1')
         expect(result?.title).toBe('My Example Feed')
+        expect(result?.author).toBeObject()
+        expect(result?.author?.name).toBe('John Doe')
         expect(result?.items).toHaveLength(1)
         expect(result?.items?.[0].id).toBe('1')
         expect(result?.items?.[0].content_html).toBe('<p>Hello world</p>')
@@ -82,6 +84,9 @@ describe('parse', () => {
         expect(result?.language).toBe('en-US')
         expect(result?.authors).toHaveLength(1)
         expect(result?.authors?.[0].name).toBe('John Doe')
+        expect(result?.items).toHaveLength(1)
+        expect(result?.items?.[0].id).toBe('1')
+        expect(result?.items?.[0].content_html).toBe('<p>Hello world</p>')
       })
 
       it('should not include unregistered custom fields', () => {
