@@ -24,5 +24,13 @@
         "stage_fixed": true
       }
     }
+  },
+  "pre-push": {
+    "parallel": true,
+    "commands": {
+      "test": {
+        "run": "bun test"
+      }
+    }
   }
 }
