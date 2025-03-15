@@ -7,7 +7,7 @@ import {
   parseNumber,
   parseString,
 } from '../../common/parse/functions'
-import type { ParseFunction } from '../../common/parse/types'
+import type { NonStrictParseLevel, ParseFunction } from '../../common/parse/types'
 import type { ParsedAttachment, ParsedAuthor, ParsedFeed, ParsedHub, ParsedItem } from './types'
 
 export const parseTags: ParseFunction<Array<string>> = (value, level) => {
@@ -44,6 +44,20 @@ export const parseAuthor: ParseFunction<ParsedAuthor> = (value, level) => {
   }
 
   return undefined
+}
+
+export const parseAuthors = (
+  authors: unknown,
+  author: unknown,
+  level: NonStrictParseLevel,
+): Array<ParsedAuthor> | undefined => {
+  // Regardless of the JSON Feed version, the 'authors' property is returned in the item/feed.
+  // Some feeds use author/authors incorrectly based on the feed version, so this function helps
+  // to unify those into one value.
+  const parsedAuthors = parseArrayOf(authors, parseAuthor, level, true)
+  const parsedAuthor = parseArrayOf(author, parseAuthor, level, true)
+
+  return parsedAuthors?.length ? parsedAuthors : parsedAuthor
 }
 
 export const parseHub: ParseFunction<ParsedHub> = (value, level) => {

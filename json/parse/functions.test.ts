@@ -2,6 +2,7 @@ import { describe, expect, it } from 'bun:test'
 import {
   parseAttachment,
   parseAuthor,
+  parseAuthors,
   parseFeed,
   parseHub,
   parseItem,
@@ -157,6 +158,32 @@ describe('parseAuthor', () => {
 
     expect(parseAuthor(value, 'coerce')).toBeUndefined()
     expect(parseAuthor(value, 'skip')).toBeUndefined()
+  })
+})
+
+describe('parseAuthors', () => {
+  it('should handle authors as object', () => {
+    const authors = { name: 'John' }
+    const author = undefined
+
+    expect(parseAuthors(authors, author, 'coerce')).toEqual([{ name: 'John' }])
+    expect(parseAuthors(authors, author, 'skip')).toEqual([{ name: 'John' }])
+  })
+
+  it('should handle both authors and author ', () => {
+    const authors = { name: 'John' }
+    const author = { name: 'Jane' }
+
+    expect(parseAuthors(authors, author, 'coerce')).toEqual([{ name: 'John' }])
+    expect(parseAuthors(authors, author, 'skip')).toEqual([{ name: 'John' }])
+  })
+
+  it('should handle author when no authors present', () => {
+    const authors = undefined
+    const author = { name: 'Jane' }
+
+    expect(parseAuthors(authors, author, 'coerce')).toEqual([{ name: 'Jane' }])
+    expect(parseAuthors(authors, author, 'skip')).toEqual([{ name: 'Jane' }])
   })
 })
 
