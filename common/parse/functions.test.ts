@@ -482,6 +482,13 @@ describe('parseArrayOf', () => {
     expect(parseArrayOf(value, parser, 'skip')).toBeUndefined()
   })
 
+  it('should handle string when in force mode', () => {
+    const value = 'Jack'
+
+    expect(parseArrayOf(value, parser, 'coerce', true)).toEqual(['Jack'])
+    expect(parseArrayOf(value, parser, 'skip', true)).toEqual(['Jack'])
+  })
+
   it('should handle array of strings', () => {
     const value = ['John', 123]
 
