@@ -18,8 +18,8 @@ export const parsedAttachment = z
     url: z.string(),
     mime_type: z.string(),
     title: z.string(),
-    size_in_bytes: z.coerce.number().catch(0),
-    duration_in_seconds: z.coerce.number().catch(0),
+    size_in_bytes: z.number(),
+    duration_in_seconds: z.number(),
   })
   .partial()
 
@@ -62,7 +62,7 @@ export const parsedFeed = z
     icon: z.string(),
     favicon: z.string(),
     language: z.string(),
-    expired: z.coerce.boolean(),
+    expired: z.boolean(),
     hubs: z.array(parsedHub),
     authors: z.array(parsedAuthor),
     items: z.array(parsedItem),
