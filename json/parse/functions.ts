@@ -108,8 +108,7 @@ export const parseItem: ParseFunction<ParsedItem> = (value, level) => {
     date_published: parseString(value.date_published, level),
     date_modified: parseString(value.date_modified, level),
     tags: parseTags(value.tags, level),
-    author: parseAuthor(value.author, level),
-    authors: parseArrayOf(value.authors, parseAuthor, level),
+    authors: parseAuthors(value.authors, value.author, level),
     language: parseString(value.language, level),
     attachments: parseArrayOf(value.attachments, parseAttachment, level),
   }
@@ -136,8 +135,7 @@ export const parseFeed: ParseFunction<ParsedFeed> = (value, level) => {
     language: parseString(value.language, level),
     expired: parseBoolean(value.expired, level),
     hubs: parseArrayOf(value.hubs, parseHub, level),
-    author: parseAuthor(value.author, level),
-    authors: parseArrayOf(value.authors, parseAuthor, level),
+    authors: parseAuthors(value.authors, value.author, level),
     items: parseArrayOf(value.items, parseItem, level),
   }
 

@@ -17,6 +17,7 @@ export const parse: Parse = (json, options) => {
   //   extraFeedAttributes?: Array<string>
   //   extraHeadAttributes?: Array<string>
   //   extraItemAttributes?: Array<string>
+  // - In strict mode, author should also be converted to authors.
 
   if (level === 'strict') {
     return parsedFeed.parse(json)

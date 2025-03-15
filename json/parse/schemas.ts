@@ -37,7 +37,6 @@ export const parsedItem = z
     date_published: z.string(),
     date_modified: z.string(),
     tags: z.array(z.string()),
-    author: parsedAuthor,
     authors: z.array(parsedAuthor),
     language: z.string(),
     attachments: z.array(parsedAttachment),
@@ -65,7 +64,6 @@ export const parsedFeed = z
     language: z.string(),
     expired: z.coerce.boolean(),
     hubs: z.array(parsedHub),
-    author: parsedAuthor,
     authors: z.array(parsedAuthor),
     items: z.array(parsedItem),
   })

@@ -424,7 +424,6 @@ describe('parseItem', () => {
       date_published: '2023-05-15T14:30:00Z',
       date_modified: '2023-05-16T10:15:00Z',
       tags: ['test', 'article', 'sample'],
-      author: { name: 'John Doe', url: 'https://example.com/john' },
       authors: [
         { name: 'John Doe', url: 'https://example.com/john' },
         { name: 'Jane Smith', url: 'https://example.com/jane' },
@@ -453,6 +452,20 @@ describe('parseItem', () => {
     expect(parseItem(value, 'skip')).toEqual(value)
   })
 
+  it('should handle an item with author as authors', () => {
+    const value = {
+      id: 'minimal-item-123',
+      author: { name: 'John Doe' },
+    }
+    const expected = {
+      id: 'minimal-item-123',
+      authors: [{ name: 'John Doe' }],
+    }
+
+    expect(parseItem(value, 'coerce')).toEqual(expected)
+    expect(parseItem(value, 'skip')).toEqual(expected)
+  })
+
   it('should handle coercible properties correctly in coerce mode', () => {
     const value = {
       id: 12345,
@@ -468,7 +481,7 @@ describe('parseItem', () => {
       url: '98765',
       title: '45678',
       tags: ['javascript'],
-      author: { name: 'John Doe' },
+      authors: [{ name: 'John Doe' }],
       attachments: [{ url: 'https://example.com/file.pdf', size_in_bytes: 5000 }],
     })
     expect(parseItem(value, 'skip')).toBeUndefined()
@@ -608,7 +621,6 @@ describe('parseFeed', () => {
       language: 'en-US',
       expired: false,
       hubs: [{ type: 'websub', url: 'https://websub.example.com/' }],
-      author: { name: 'John Doe', url: 'https://example.com/john' },
       authors: [
         { name: 'John Doe', url: 'https://example.com/john' },
         { name: 'Jane Smith', url: 'https://example.com/jane' },
@@ -659,7 +671,7 @@ describe('parseFeed', () => {
       version: '123',
       title: '456',
       expired: true,
-      author: { name: 'John Doe' },
+      authors: [{ name: 'John Doe' }],
       items: [{ id: '789', content_text: 'Content' }],
     }
 

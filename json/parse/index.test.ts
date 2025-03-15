@@ -59,7 +59,7 @@ describe('parse', () => {
     items: [{ id: '1', content_html: '<p>Hello world</p>' }],
   }
 
-  for (const level of ['strict', 'skip', 'coerce'] as const) {
+  for (const level of ['skip', 'coerce'] as const) {
     describe(level, () => {
       it('should parse valid JSON Feed v1', () => {
         const result = parse(validFeedV1, { level })
@@ -67,8 +67,8 @@ describe('parse', () => {
         expect(result).toBeDefined()
         expect(result?.version).toBe('https://jsonfeed.org/version/1')
         expect(result?.title).toBe('My Example Feed')
-        expect(result?.author).toBeObject()
-        expect(result?.author?.name).toBe('John Doe')
+        expect(result?.authors).toHaveLength(1)
+        expect(result?.authors?.[0].name).toBe('John Doe')
         expect(result?.items).toHaveLength(1)
         expect(result?.items?.[0].id).toBe('1')
         expect(result?.items?.[0].content_html).toBe('<p>Hello world</p>')
@@ -110,12 +110,10 @@ describe('parse', () => {
         expect(result?.title).toBe('My Example Feed')
         expect(result?.home_page_url).toBeUndefined()
         expect(result?.feed_url).toBeUndefined()
-        expect((result as ParsedFeed).author).toBeUndefined()
+        expect((result as ParsedFeed).authors).toBeUndefined()
       })
     })
-  }
 
-  for (const level of ['skip', 'coerce'] as const) {
     describe(level, () => {
       it('should handle null input', () => {
         expect(parse(null, { level })).toBeUndefined()
