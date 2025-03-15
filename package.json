@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "prepare": "lefthook install",
-    "lint:tsc": "npm run lint:tsc",
+    "lint:tsc": "tsc --pretty --noEmit",
     "lint:biome": "npx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
   },
   "dependencies": {
