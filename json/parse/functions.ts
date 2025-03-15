@@ -46,16 +46,16 @@ export const parseAuthor: ParseFunction<ParsedAuthor> = (value, level) => {
   return undefined
 }
 
-export const parseAuthors = (
-  authors: unknown,
-  author: unknown,
-  level: NonStrictParseLevel,
-): Array<ParsedAuthor> | undefined => {
+export const parseAuthors: ParseFunction<Array<ParsedAuthor>> = (value: unknown, level) => {
+  if (!isObject(value)) {
+    return undefined
+  }
+
   // Regardless of the JSON Feed version, the 'authors' property is returned in the item/feed.
   // Some feeds use author/authors incorrectly based on the feed version, so this function helps
   // to unify those into one value.
-  const parsedAuthors = parseArrayOf(authors, parseAuthor, level, true)
-  const parsedAuthor = parseArrayOf(author, parseAuthor, level, true)
+  const parsedAuthors = parseArrayOf(value.authors, parseAuthor, level, true)
+  const parsedAuthor = parseArrayOf(value.author, parseAuthor, level, true)
 
   return parsedAuthors?.length ? parsedAuthors : parsedAuthor
 }
@@ -108,7 +108,7 @@ export const parseItem: ParseFunction<ParsedItem> = (value, level) => {
     date_published: parseString(value.date_published, level),
     date_modified: parseString(value.date_modified, level),
     tags: parseTags(value.tags, level),
-    authors: parseAuthors(value.authors, value.author, level),
+    authors: parseAuthors(value, level),
     language: parseString(value.language, level),
     attachments: parseArrayOf(value.attachments, parseAttachment, level),
   }
@@ -135,7 +135,7 @@ export const parseFeed: ParseFunction<ParsedFeed> = (value, level) => {
     language: parseString(value.language, level),
     expired: parseBoolean(value.expired, level),
     hubs: parseArrayOf(value.hubs, parseHub, level),
-    authors: parseAuthors(value.authors, value.author, level),
+    authors: parseAuthors(value, level),
     items: parseArrayOf(value.items, parseItem, level),
   }
 
