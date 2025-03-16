@@ -42,7 +42,7 @@ export const parseAuthor: ParseFunction<ParsedAuthor> = (value, level) => {
   }
 }
 
-export const parseAuthors: ParseFunction<Array<ParsedAuthor>> = (value: unknown, level) => {
+export const parseAuthors: ParseFunction<Array<ParsedAuthor>> = (value, level) => {
   if (!isObject(value)) {
     return
   }

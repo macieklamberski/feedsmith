@@ -1,7 +1,7 @@
 import { decode } from 'html-entities'
-import type { NonStrictParseLevel, ParseFunction } from './types'
+import type { NonStrictParseLevel, ParseFunction, Unreliable } from './types'
 
-export const isObject = (value: unknown): value is Record<string, unknown> => {
+export const isObject = (value: Unreliable): value is Record<string, Unreliable> => {
   return (
     typeof value === 'object' &&
     value !== null &&
@@ -10,7 +10,7 @@ export const isObject = (value: unknown): value is Record<string, unknown> => {
   )
 }
 
-export const isNonEmptyStringOrNumber = (value: unknown): value is string | number => {
+export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | number => {
   return value !== '' && (typeof value === 'string' || typeof value === 'number')
 }
 
@@ -54,7 +54,7 @@ export const parseBoolean: ParseFunction<boolean> = (value, level) => {
   }
 }
 
-export const parseArray: ParseFunction<Array<unknown>> = (value, level) => {
+export const parseArray: ParseFunction<Array<Unreliable>> = (value, level) => {
   if (Array.isArray(value)) {
     return value
   }
@@ -64,7 +64,7 @@ export const parseArray: ParseFunction<Array<unknown>> = (value, level) => {
   }
 
   if (value.length) {
-    return Array.from(value as unknown as ArrayLike<unknown>)
+    return Array.from(value as Unreliable as ArrayLike<Unreliable>)
   }
 
   const keys = Object.keys(value)
@@ -86,7 +86,7 @@ export const parseArray: ParseFunction<Array<unknown>> = (value, level) => {
 }
 
 export const parseArrayOf = <P>(
-  value: unknown,
+  value: Unreliable,
   parse: ParseFunction<P>,
   level: NonStrictParseLevel,
   // Force is useful in cases where the value should be coerced to array regardless of level.
