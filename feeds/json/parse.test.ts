@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { parse } from './index'
+import { parse } from './parse'
 import type { ParsedFeed } from './types'
 
 describe('parse', () => {

@@ -1,4 +1,4 @@
-import type { ParseLevel } from '../../../common/parse/types'
+import type { ParseLevel } from '../../common/parse/types'
 import { parseFeed } from './functions'
 import { parsedFeed } from './schemas'
 import type { ParsedFeed } from './types'
