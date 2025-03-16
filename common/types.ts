@@ -1,5 +1,5 @@
-import type { ParsedFeed as ParsedJsonFeed } from '../../json/parse/types'
-import type { ParsedFeed as ParsedRssFeed } from '../../rss/parse/types'
+import type { ParsedFeed as ParsedJsonFeed } from '../feeds/json/types'
+import type { ParsedFeed as ParsedRssFeed } from '../feeds/rss/types'
 
 export type ParseLevel = 'strict' | 'skip' | 'coerce'
 
