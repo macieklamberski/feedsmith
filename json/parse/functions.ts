@@ -7,7 +7,7 @@ import {
   parseNumber,
   parseString,
 } from '../../common/parse/functions'
-import type { NonStrictParseLevel, ParseFunction } from '../../common/parse/types'
+import type { ParseFunction } from '../../common/parse/types'
 import type { ParsedAttachment, ParsedAuthor, ParsedFeed, ParsedHub, ParsedItem } from './types'
 
 export const parseTags: ParseFunction<Array<string>> = (value, level) => {
