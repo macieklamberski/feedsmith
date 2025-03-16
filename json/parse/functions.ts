@@ -18,8 +18,6 @@ export const parseTags: ParseFunction<Array<string>> = (value, level) => {
   if (level === 'coerce' && isNonEmptyStringOrNumber(value)) {
     return omitNullish([parseString(value, level)])
   }
-
-  return undefined
 }
 
 export const parseAuthor: ParseFunction<ParsedAuthor> = (value, level) => {
@@ -42,13 +40,11 @@ export const parseAuthor: ParseFunction<ParsedAuthor> = (value, level) => {
       name: parseString(value, level),
     }
   }
-
-  return undefined
 }
 
 export const parseAuthors: ParseFunction<Array<ParsedAuthor>> = (value: unknown, level) => {
   if (!isObject(value)) {
-    return undefined
+    return
   }
 
   // Regardless of the JSON Feed version, the 'authors' property is returned in the item/feed.
@@ -62,7 +58,7 @@ export const parseAuthors: ParseFunction<Array<ParsedAuthor>> = (value: unknown,
 
 export const parseHub: ParseFunction<ParsedHub> = (value, level) => {
   if (!isObject(value)) {
-    return undefined
+    return
   }
 
   const hub = {
@@ -75,7 +71,7 @@ export const parseHub: ParseFunction<ParsedHub> = (value, level) => {
 
 export const parseAttachment: ParseFunction<ParsedAttachment> = (value, level) => {
   if (!isObject(value)) {
-    return undefined
+    return
   }
 
   const attachment = {
@@ -92,7 +88,7 @@ export const parseAttachment: ParseFunction<ParsedAttachment> = (value, level) =
 
 export const parseItem: ParseFunction<ParsedItem> = (value, level) => {
   if (!isObject(value)) {
-    return undefined
+    return
   }
 
   const item = {
@@ -119,7 +115,7 @@ export const parseItem: ParseFunction<ParsedItem> = (value, level) => {
 
 export const parseFeed: ParseFunction<ParsedFeed> = (value, level) => {
   if (!isObject(value)) {
-    return undefined
+    return
   }
 
   const feed = {

@@ -26,8 +26,6 @@ export const parseString: ParseFunction<string> = (value, level) => {
   if (typeof value === 'string') {
     return decode(value)
   }
-
-  return undefined
 }
 
 export const parseNumber: ParseFunction<number> = (value, level) => {
@@ -40,8 +38,6 @@ export const parseNumber: ParseFunction<number> = (value, level) => {
 
     return Number.isNaN(numeric) ? undefined : numeric
   }
-
-  return undefined
 }
 
 export const parseBoolean: ParseFunction<boolean> = (value, level) => {
@@ -56,8 +52,6 @@ export const parseBoolean: ParseFunction<boolean> = (value, level) => {
   if (level === 'coerce' && value === 'false') {
     return false
   }
-
-  return undefined
 }
 
 export const parseArray: ParseFunction<Array<unknown>> = (value, level) => {
@@ -66,7 +60,7 @@ export const parseArray: ParseFunction<Array<unknown>> = (value, level) => {
   }
 
   if (level === 'skip' || !isObject(value)) {
-    return undefined
+    return
   }
 
   if (value.length) {
@@ -76,7 +70,7 @@ export const parseArray: ParseFunction<Array<unknown>> = (value, level) => {
   const keys = Object.keys(value)
 
   if (keys.length === 0) {
-    return undefined
+    return
   }
 
   for (let i = 0; i < keys.length; i++) {
@@ -84,7 +78,7 @@ export const parseArray: ParseFunction<Array<unknown>> = (value, level) => {
     const n = Number(key)
 
     if (!Number.isInteger(n) || n !== i) {
-      return undefined
+      return
     }
   }
 
@@ -110,6 +104,4 @@ export const parseArrayOf = <P>(
 
     return parsed ? [parsed] : undefined
   }
-
-  return undefined
 }
