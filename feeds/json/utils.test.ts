@@ -312,23 +312,23 @@ describe('parseAttachment', () => {
     })
   })
 
+  it('should handle url as empty string', () => {
+    const value = {
+      url: '',
+      mime_type: 'image/png',
+      title: 'Empty URL Image',
+    }
+
+    expect(parseAttachment(value, 'coerce')).toEqual(value)
+    expect(parseAttachment(value, 'skip')).toEqual(value)
+  })
+
   it('should return undefined if url is not present', () => {
     const value = {
       mime_type: 'video/mp4',
       title: 'Sample Video',
       size_in_bytes: 98765,
       duration_in_seconds: 300,
-    }
-
-    expect(parseAttachment(value, 'coerce')).toBeUndefined()
-    expect(parseAttachment(value, 'skip')).toBeUndefined()
-  })
-
-  it('should return undefined if url is empty string', () => {
-    const value = {
-      url: '',
-      mime_type: 'image/png',
-      title: 'Empty URL Image',
     }
 
     expect(parseAttachment(value, 'coerce')).toBeUndefined()
@@ -498,15 +498,15 @@ describe('parseItem', () => {
     expect(parseItem(value, 'skip')).toBeUndefined()
   })
 
-  it('should return undefined if id is empty string', () => {
+  it('should handle id as empty string', () => {
     const value = {
       id: '',
       url: 'https://example.com/article',
       title: 'Article with empty ID',
     }
 
-    expect(parseItem(value, 'coerce')).toBeUndefined()
-    expect(parseItem(value, 'skip')).toBeUndefined()
+    expect(parseItem(value, 'coerce')).toEqual(value)
+    expect(parseItem(value, 'skip')).toEqual(value)
   })
 
   it('should handle invalid author and attachments', () => {

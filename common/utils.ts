@@ -10,6 +10,32 @@ export const isObject = (value: Unreliable): value is Record<string, Unreliable>
   )
 }
 
+export const hasAnyProps = <T extends Record<string, Unreliable>, K extends keyof T>(
+  value: T,
+  props: Array<K>,
+): boolean => {
+  for (const prop of props) {
+    if (value[prop] !== undefined) {
+      return true
+    }
+  }
+
+  return false
+}
+
+export const hasAllProps = <T extends Record<string, Unreliable>, K extends keyof T>(
+  value: T,
+  props: Array<K>,
+): boolean => {
+  for (const prop of props) {
+    if (value[prop] === undefined) {
+      return false
+    }
+  }
+
+  return true
+}
+
 export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | number => {
   return value !== '' && (typeof value === 'string' || typeof value === 'number')
 }

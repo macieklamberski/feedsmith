@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import {
+  hasAllProps,
+  hasAnyProps,
   isNonEmptyStringOrNumber,
   isObject,
   omitNullish,
@@ -66,6 +68,83 @@ describe('isObject', () => {
     // biome-ignore lint/complexity/useRegexLiterals: It's for testing purposes.
     expect(isObject(new RegExp('.'))).toEqual(false)
     expect(isObject(new ArrayBuffer(10))).toEqual(false)
+  })
+})
+
+describe('hasAnyProps', () => {
+  it('should return true when any of the specified properties has a defined value', () => {
+    const value = { a: 1, b: 'string', c: false }
+
+    expect(hasAnyProps(value, ['a', 'b'])).toBe(true)
+    expect(hasAnyProps(value, ['a', 'b', 'c'])).toBe(true)
+    // @ts-ignore: This is for testing purposes.
+    expect(hasAnyProps(value, ['a', 'd'])).toBe(true)
+  })
+
+  it('should return false when all specified properties are undefined or do not exist', () => {
+    const value = { a: undefined, b: undefined, c: 1 }
+
+    expect(hasAnyProps(value, ['a', 'b'])).toBe(false)
+    // @ts-ignore: This is for testing purposes.
+    expect(hasAnyProps(value, ['a', 'b', 'd'])).toBe(false)
+    expect(hasAnyProps(value, ['c'])).toBe(true)
+  })
+
+  it('should return false when none of the specified properties exist', () => {
+    const value = { a: 1, b: 'string' }
+
+    // @ts-ignore: This is for testing purposes.
+    expect(hasAnyProps(value, ['c', 'd'])).toBe(false)
+  })
+
+  it('should return false for empty array of props', () => {
+    const value = { a: 1, b: 'string' }
+
+    expect(hasAnyProps(value, [])).toBe(false)
+  })
+
+  it('should handle properties with falsy values correctly', () => {
+    const value = { a: 0, b: '', c: false, d: null, e: undefined }
+
+    expect(hasAnyProps(value, ['a', 'e'])).toBe(true)
+    expect(hasAnyProps(value, ['b', 'c'])).toBe(true)
+    expect(hasAnyProps(value, ['d'])).toBe(true)
+    expect(hasAnyProps(value, ['e'])).toBe(false)
+    // @ts-ignore: This is for testing purposes.
+    expect(hasAnyProps(value, ['f'])).toBe(false)
+  })
+})
+
+
+describe('hasAllProps', () => {
+  it('should return true when all required properties have defined values', () => {
+    const value = { a: 1, b: 'string', c: false }
+
+    expect(hasAllProps(value, ['a', 'b'])).toBe(true)
+    expect(hasAllProps(value, ['a', 'b', 'c'])).toBe(true)
+    expect(hasAllProps(value, [])).toBe(true)
+  })
+
+  it('should return false when any required property is undefined', () => {
+    const value = { a: 1, b: undefined, c: null }
+
+    expect(hasAllProps(value, ['a', 'b'])).toBe(false)
+    expect(hasAllProps(value, ['a', 'c'])).toBe(true)
+  })
+
+  it('should return false when any required property does not exist', () => {
+    const value = { a: 1, b: 'string' }
+
+    // @ts-ignore: This is for testing purposes.
+    expect(hasAllProps(value, ['a', 'c'])).toBe(false)
+    // @ts-ignore: This is for testing purposes.
+    expect(hasAllProps(value, ['c', 'd'])).toBe(false)
+  })
+
+  it('should handle properties with falsy values correctly', () => {
+    const value = { a: 0, b: '', c: false, d: null }
+
+    expect(hasAllProps(value, ['a', 'b', 'c', 'd'])).toBe(true)
   })
 })
 

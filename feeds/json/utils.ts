@@ -1,4 +1,6 @@
 import {
+  hasAllProps,
+  hasAnyProps,
   isNonEmptyStringOrNumber,
   isObject,
   omitNullish,
@@ -66,7 +68,9 @@ export const parseHub: ParseFunction<Hub> = (value, level) => {
     url: parseString(value.url, level),
   }
 
-  return hub.type || hub.url ? hub : undefined
+  if (hasAnyProps(hub, ['type', 'url'])) {
+    return hub
+  }
 }
 
 export const parseAttachment: ParseFunction<Attachment> = (value, level) => {
@@ -83,7 +87,9 @@ export const parseAttachment: ParseFunction<Attachment> = (value, level) => {
   }
 
   // TODO: Consider checking if URL has value before parsing the whole object.
-  return attachment.url ? attachment : undefined
+  if (hasAllProps(attachment, ['url'])) {
+    return attachment
+  }
 }
 
 export const parseItem: ParseFunction<Item> = (value, level) => {
@@ -110,7 +116,9 @@ export const parseItem: ParseFunction<Item> = (value, level) => {
   }
 
   // TODO: Consider checking if ID has value before parsing the whole object.
-  return item.id ? item : undefined
+  if (hasAllProps(item, ['id'])) {
+    return item
+  }
 }
 
 export const parseFeed: ParseFunction<Feed> = (value, level) => {
@@ -136,7 +144,7 @@ export const parseFeed: ParseFunction<Feed> = (value, level) => {
   }
 
   // TODO: Consider checking if version, title and items have value before parsing the whole object.
-  return feed.version !== undefined && feed.title !== undefined && feed.items !== undefined
-    ? feed
-    : undefined
+  if (hasAllProps(feed, ['version', 'title', 'items'])) {
+    return feed
+  }
 }
