@@ -17,8 +17,8 @@
     <cloud domain="rpc.example.com" port="80" path="/RPC2" registerProcedure="pingMe" protocol="soap" />
     <ttl>60</ttl>
     <image>
-      <url>http://example.org/banner.png</url>
       <title>Example banner</title>
+      <url>http://example.org/banner.png</url>
       <link>http://example.org/</link>
       <description>Quos placeat quod ea temporibus ratione</description>
       <width>80</width>
@@ -49,7 +49,7 @@
       <description>Watch out for &lt;span style="background: url(javascript:window.location=’http://example.org/’)"&gt; nasty tricks&lt;/span&gt;</description>
       <author>mark@example.org (Mark Pilgrim)</author>
       <category>Miscellaneous</category>
-      <category domain="http://www.example.com/cusips">Other</category>
+      <category domain="http://www.example.com/categories">Technology</category>
       <comments>http://example.org/comments/1</comments>
       <enclosure url="http://example.org/audio/demo.mp3" length="1069871" type="audio/mpeg" />
       <guid isPermaLink="true">http://example.org/guid/1</guid>

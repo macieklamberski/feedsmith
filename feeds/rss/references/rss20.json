@@ -47,7 +47,7 @@
       "authors": ["mark@example.org (Mark Pilgrim)"],
       "categories": [
         { "name": "Miscellaneous" },
-        { "name": "Other", "domain": "http://www.example.com/cusips" }
+        { "name": "Technology", "domain": "http://www.example.com/categories" }
       ],
       "comments": "http://example.org/comments/1",
       "enclosure": {},

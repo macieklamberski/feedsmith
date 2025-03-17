@@ -20,9 +20,9 @@
       <title>Example banner</title>
       <url>http://example.org/banner.png</url>
       <link>http://example.org/</link>
+      <description>Quos placeat quod ea temporibus ratione</description>
       <width>80</width>
       <height>15</height>
-      <description>Quos placeat quod ea temporibus ratione</description>
     </image>
     <rating>(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l by "webmaster@example.com" on "2006.01.29T10:09-0800" r (n 0 s 0 v 0 l 0))</rating>
     <textInput>

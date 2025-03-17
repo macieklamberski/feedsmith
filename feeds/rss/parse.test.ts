@@ -3,7 +3,7 @@ import { parse } from './parse'
 
 describe('parse', () => {
   const versions = {
-    '09': '0.9',
+    '090': '0.90',
     '091': '0.91',
     '092': '0.92',
     '093': '0.93',
