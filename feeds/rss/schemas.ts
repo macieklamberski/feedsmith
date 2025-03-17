@@ -28,6 +28,9 @@ export const enclosure = z
   })
   .partial()
 
+// TODO: Consider replacing this with an object { id, isPermalink }.
+export const guid = z.string()
+
 export const source = z
   .object({
     title: z.string(),
@@ -55,17 +58,6 @@ export const textInput = z
   })
   .partial()
 
-export const itemMedia = z
-  .object({
-    image: z.string(),
-    length: z.number(),
-    mimetype: z.string(),
-    title: z.string(),
-    type: z.string(),
-    link: z.string(),
-  })
-  .partial()
-
 export const item = z
   .object({
     title: z.string(),
@@ -75,7 +67,7 @@ export const item = z
     categories: z.array(category),
     comments: z.string(),
     enclosure,
-    guid: z.string(),
+    guid,
     pubDate: z.string(),
     source,
   })

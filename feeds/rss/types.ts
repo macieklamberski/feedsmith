@@ -5,9 +5,9 @@ import type {
   cloud,
   enclosure,
   feed,
+  guid,
   image,
   item,
-  itemMedia,
   source,
   textInput,
 } from './schemas'
@@ -20,13 +20,13 @@ export type Cloud = z.infer<typeof cloud>
 
 export type Enclosure = z.infer<typeof enclosure>
 
+export type Guid = z.infer<typeof guid>
+
 export type Source = z.infer<typeof source>
 
 export type Image = z.infer<typeof image>
 
 export type TextInput = z.infer<typeof textInput>
-
-export type ItemMedia = z.infer<typeof itemMedia>
 
 export type Item = z.infer<typeof item>
 
