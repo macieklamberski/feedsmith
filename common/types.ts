@@ -1,5 +1,6 @@
-import type { ParsedFeed as ParsedJsonFeed } from '../feeds/json/types'
-import type { ParsedFeed as ParsedRssFeed } from '../feeds/rss/types'
+import type { Feed as JsonFeed } from '../feeds/json/types'
+import type { Feed as RssFeed } from '../feeds/rss/types'
+import type { Feed as AtomFeed } from '../feeds/atom/types'
 
 export type ParseLevel = 'strict' | 'skip' | 'coerce'
 
@@ -11,6 +12,6 @@ export type Unreliable = any // Was: { [key: string]: Unreliable } | undefined.
 export type ParseFunction<R> = (value: Unreliable, level: NonStrictParseLevel) => R | undefined
 
 export type ParsedFeed = {
-  type: 'json' | 'rss' | 'atom' | 'rdf'
-  feed: ParsedJsonFeed | ParsedRssFeed
+  type: 'json' | 'rss' | 'atom'
+  feed: JsonFeed | RssFeed | AtomFeed
 }
