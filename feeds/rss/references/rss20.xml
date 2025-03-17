@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Sample Feed</title>
+    <link>http://example.org/</link>
+    <description>For documentation &lt;em&gt;only&lt;/em&gt;</description>
+    <language>en</language>
+    <copyright>Copyright 2004, Mark Pilgrim</copyright>
+    <managingEditor>editor@example.org</managingEditor>
+    <webMaster>webmaster@example.org</webMaster>
+    <pubDate>Sat, 19 Mar 1988 07:15:00 GMT</pubDate>
+    <lastBuildDate>Sat, 19 Mar 1988 07:15:00 GMT</lastBuildDate>
+    <category>Examples1</category>
+    <category domain="http://www.example.com/cusips">Examples2</category>
+    <generator>Sample Toolkit</generator>
+    <docs>http://feedvalidator.org/docs/rss2.html</docs>
+    <cloud domain="rpc.example.com" port="80" path="/RPC2" registerProcedure="pingMe" protocol="soap" />
+    <ttl>60</ttl>
+    <image>
+      <url>http://example.org/banner.png</url>
+      <title>Example banner</title>
+      <link>http://example.org/</link>
+      <description>Quos placeat quod ea temporibus ratione</description>
+      <width>80</width>
+      <height>15</height>
+    </image>
+    <rating>(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l by "webmaster@example.com" on "2006.01.29T10:09-0800" r (n 0 s 0 v 0 l 0))</rating>
+    <textInput>
+      <title>Search</title>
+      <description>Search this site:</description>
+      <name>q</name>
+      <link>http://example.org/mt/mt-search.cgi</link>
+    </textInput>
+    <skipHours>
+      <hour>0</hour>
+      <hour>20</hour>
+      <hour>21</hour>
+      <hour>22</hour>
+      <hour>23</hour>
+    </skipHours>
+    <skipDays>
+      <day>Monday</day>
+      <day>Wednesday</day>
+      <day>Friday</day>
+    </skipDays>
+    <item>
+      <title>First item title</title>
+      <link>http://example.org/item/1</link>
+      <description>Watch out for &lt;span style="background: url(javascript:window.location=’http://example.org/’)"&gt; nasty tricks&lt;/span&gt;</description>
+      <author>mark@example.org (Mark Pilgrim)</author>
+      <category>Miscellaneous</category>
+      <category domain="http://www.example.com/cusips">Other</category>
+      <comments>http://example.org/comments/1</comments>
+      <enclosure url="http://example.org/audio/demo.mp3" length="1069871" type="audio/mpeg" />
+      <guid isPermaLink="true">http://example.org/guid/1</guid>
+      <pubDate>Thu, 05 Sep 2002 0:00:01 GMT</pubDate>
+      <source url="http://www.example.org/links.xml">Example's Realm</source>
+    </item>
+    <item>
+      <title>Second item title</title>
+      <link>http://example.org/item/2</link>
+      <description>Watch out for &lt;span style="background: url(javascript:window.location=’http://example.org/’)"&gt; nasty tricks&lt;/span&gt;</description>
+      <author>mark@example.org (Mark Pilgrim)</author>
+      <category>Miscellaneous</category>
+      <comments>http://example.org/comments/2</comments>
+      <enclosure url="http://example.org/audio/demo.mp3" length="1069871" type="audio/mpeg" />
+      <guid>http://example.org/guid/2</guid>
+      <pubDate>Thu, 05 Sep 2002 0:00:01 GMT</pubDate>
+      <source url="http://www.example.org/links.xml">Example's Realm</source>
+    </item>
+  </channel>
+</rss>

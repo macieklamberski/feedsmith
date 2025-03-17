@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE rss PUBLIC "-//Netscape Communications//DTD RSS 0.9//EN" "http://my.netscape.com/publish/formats/rss-0.9.dtd">
+<rss version="0.9">
+  <channel>
+    <title>Sample Feed</title>
+    <link>http://example.org/</link>
+    <description>For documentation &lt;em&gt;only&lt;/em&gt;</description>
+    <image>
+      <title>Example banner</title>
+      <url>http://example.org/banner.png</url>
+      <link>http://example.org/</link>
+    </image>
+    <item>
+      <title>First item title</title>
+      <link>http://example.org/item/1</link>
+      <description>Watch out for &lt;span style="background: url(javascript:window.location='http://example.org/')"&gt; nasty tricks&lt;/span&gt;</description>
+    </item>
+    <item>
+      <title>Second item title</title>
+      <link>http://example.org/item/2</link>
+      <description>Watch out for &lt;span style="background: url(javascript:window.location='http://example.org/')"&gt; nasty tricks&lt;/span&gt;</description>
+    </item>
+  </channel>
+</rss>

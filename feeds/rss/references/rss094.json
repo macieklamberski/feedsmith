@@ -1,0 +1,71 @@
+{
+  "title": "Sample Feed",
+  "link": "http://example.org/",
+  "description": "For documentation <em>only</em>",
+  "language": "en",
+  "copyright": "Copyright 2004, Mark Pilgrim",
+  "managingEditor": "editor@example.org",
+  "webMaster": "webmaster@example.org",
+  "pubDate": "Sat, 19 Mar 1988 07:15:00 GMT",
+  "lastBuildDate": "Sat, 19 Mar 1988 07:15:00 GMT",
+  "categories": [
+    { "name": "Examples1" },
+    { "name": "Examples2", "domain": "http://www.example.com/cusips" }
+  ],
+  "generator": "Sample Toolkit",
+  "docs": "http://backend.userland.com/rss094",
+  "cloud": {
+    "domain": "rpc.example.com",
+    "port": 80,
+    "path": "/RPC2",
+    "registerProcedure": "pingMe",
+    "protocol": "soap"
+  },
+  "ttl": 60,
+  "image": {
+    "url": "http://example.org/banner.png",
+    "title": "Example banner",
+    "link": "http://example.org/",
+    "description": "Quos placeat quod ea temporibus ratione",
+    "height": 15,
+    "width": 80
+  },
+  "rating": "(PICS-1.1 \"http://www.rsac.org/ratingsv01.html\" l by \"webmaster@example.com\" on \"2006.01.29T10:09-0800\" r (n 0 s 0 v 0 l 0))",
+  "textInput": {
+    "title": "Search",
+    "description": "Search this site:",
+    "name": "q",
+    "link": "http://example.org/mt/mt-search.cgi"
+  },
+  "skipHours": [0, 20, 21, 22, 23],
+  "skipDays": ["Monday", "Wednesday", "Friday"],
+  "items": [
+    {
+      "title": "First item title",
+      "link": "http://example.org/item/1",
+      "description": "Watch out for <span style=\"background: url(javascript:window.location='http://example.org/')\"> nasty tricks</span>",
+      "authors": ["mark@example.org"],
+      "categories": [
+        { "name": "Miscellaneous" },
+        { "name": "Technology", "domain": "http://www.example.com/categories" }
+      ],
+      "comments": "http://example.org/comments/1",
+      "enclosure": {},
+      "guid": "http://example.org/guid/1",
+      "pubDate": "Thu, 05 Sep 2002 0:00:01 GMT",
+      "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
+    },
+    {
+      "title": "Second item title",
+      "link": "http://example.org/item/2",
+      "description": "Watch out for <span style=\"background: url(javascript:window.location='http://example.org/')\"> nasty tricks</span>",
+      "authors": ["mark@example.org"],
+      "categories": [{ "name": "Miscellaneous" }],
+      "comments": "http://example.org/comments/2",
+      "enclosure": {},
+      "guid": "http://example.org/guid/2",
+      "pubDate": "Thu, 05 Sep 2002 0:00:01 GMT",
+      "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Sample Feed",
+  "link": "http://example.org/",
+  "description": "For documentation <em>only</em>",
+  "image": {
+    "url": "http://example.org/banner.png",
+    "title": "Example banner",
+    "link": "http://example.org/"
+  },
+  "items": [
+    {
+      "title": "First item title",
+      "link": "http://example.org/item/1",
+      "description": "Watch out for <span style=\"background: url(javascript:window.location='http://example.org/')\"> nasty tricks</span>"
+    },
+    {
+      "title": "Second item title",
+      "link": "http://example.org/item/2",
+      "description": "Watch out for <span style=\"background: url(javascript:window.location='http://example.org/')\"> nasty tricks</span>"
+    }
+  ]
+}
