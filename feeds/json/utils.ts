@@ -6,7 +6,7 @@ import {
   parseBoolean,
   parseNumber,
   parseString,
-} from '../../common/functions'
+} from '../../common/utils'
 import type { ParseFunction } from '../../common/types'
 import type { ParsedAttachment, ParsedAuthor, ParsedFeed, ParsedHub, ParsedItem } from './types'
 

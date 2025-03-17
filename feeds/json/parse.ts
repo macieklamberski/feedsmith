@@ -1,5 +1,5 @@
 import type { ParseLevel } from '../../common/types'
-import { parseFeed } from './functions'
+import { parseFeed } from './utils'
 import { parsedFeed } from './schemas'
 import type { ParsedFeed } from './types'
 

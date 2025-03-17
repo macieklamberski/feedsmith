@@ -7,7 +7,7 @@ import {
   parseHub,
   parseItem,
   parseTags,
-} from './functions'
+} from './utils'
 
 describe('parseTags', () => {
   it('should handle array of strings', () => {

@@ -8,7 +8,7 @@ import {
   parseBoolean,
   parseNumber,
   parseString,
-} from './functions'
+} from './utils'
 import type { ParseFunction } from './types'
 
 describe('isObject', () => {
