@@ -8,7 +8,7 @@ import {
   parseString,
 } from '../../common/utils'
 import type { ParseFunction } from '../../common/types'
-import type { ParsedAttachment, ParsedAuthor, ParsedFeed, ParsedHub, ParsedItem } from './types'
+import type { Attachment, Author, Feed, Hub, Item } from './types'
 
 export const parseTags: ParseFunction<Array<string>> = (value, level) => {
   if (Array.isArray(value)) {
@@ -20,7 +20,7 @@ export const parseTags: ParseFunction<Array<string>> = (value, level) => {
   }
 }
 
-export const parseAuthor: ParseFunction<ParsedAuthor> = (value, level) => {
+export const parseAuthor: ParseFunction<Author> = (value, level) => {
   if (isObject(value)) {
     const author = {
       name: parseString(value.name, level),
@@ -42,7 +42,7 @@ export const parseAuthor: ParseFunction<ParsedAuthor> = (value, level) => {
   }
 }
 
-export const parseAuthors: ParseFunction<Array<ParsedAuthor>> = (value, level) => {
+export const parseAuthors: ParseFunction<Array<Author>> = (value, level) => {
   if (!isObject(value)) {
     return
   }
@@ -56,7 +56,7 @@ export const parseAuthors: ParseFunction<Array<ParsedAuthor>> = (value, level) =
   return parsedAuthors?.length ? parsedAuthors : parsedAuthor
 }
 
-export const parseHub: ParseFunction<ParsedHub> = (value, level) => {
+export const parseHub: ParseFunction<Hub> = (value, level) => {
   if (!isObject(value)) {
     return
   }
@@ -69,7 +69,7 @@ export const parseHub: ParseFunction<ParsedHub> = (value, level) => {
   return hub.type || hub.url ? hub : undefined
 }
 
-export const parseAttachment: ParseFunction<ParsedAttachment> = (value, level) => {
+export const parseAttachment: ParseFunction<Attachment> = (value, level) => {
   if (!isObject(value)) {
     return
   }
@@ -86,7 +86,7 @@ export const parseAttachment: ParseFunction<ParsedAttachment> = (value, level) =
   return attachment.url ? attachment : undefined
 }
 
-export const parseItem: ParseFunction<ParsedItem> = (value, level) => {
+export const parseItem: ParseFunction<Item> = (value, level) => {
   if (!isObject(value)) {
     return
   }
@@ -113,7 +113,7 @@ export const parseItem: ParseFunction<ParsedItem> = (value, level) => {
   return item.id ? item : undefined
 }
 
-export const parseFeed: ParseFunction<ParsedFeed> = (value, level) => {
+export const parseFeed: ParseFunction<Feed> = (value, level) => {
   if (!isObject(value)) {
     return
   }

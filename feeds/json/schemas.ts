@@ -5,7 +5,7 @@ import { z } from 'zod'
 // the correct underscore character. For any custom fields not starting with underscore raise an
 // error. More details here: https://www.jsonfeed.org/version/1.1/#extensions-a-name-extensions-a.
 
-export const parsedAuthor = z
+export const author = z
   .object({
     name: z.string(),
     url: z.string(),
@@ -13,7 +13,7 @@ export const parsedAuthor = z
   })
   .partial()
 
-export const parsedAttachment = z
+export const attachment = z
   .object({
     url: z.string(),
     mime_type: z.string(),
@@ -23,7 +23,7 @@ export const parsedAttachment = z
   })
   .partial()
 
-export const parsedItem = z
+export const item = z
   .object({
     id: z.string(),
     url: z.string(),
@@ -37,20 +37,20 @@ export const parsedItem = z
     date_published: z.string(),
     date_modified: z.string(),
     tags: z.array(z.string()),
-    authors: z.array(parsedAuthor),
+    authors: z.array(author),
     language: z.string(),
-    attachments: z.array(parsedAttachment),
+    attachments: z.array(attachment),
   })
   .partial()
 
-export const parsedHub = z
+export const hub = z
   .object({
     type: z.string(),
     url: z.string(),
   })
   .partial()
 
-export const parsedFeed = z
+export const feed = z
   .object({
     version: z.string(),
     title: z.string(),
@@ -63,8 +63,8 @@ export const parsedFeed = z
     favicon: z.string(),
     language: z.string(),
     expired: z.boolean(),
-    hubs: z.array(parsedHub),
-    authors: z.array(parsedAuthor),
-    items: z.array(parsedItem),
+    hubs: z.array(hub),
+    authors: z.array(author),
+    items: z.array(item),
   })
   .partial()

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { parse } from './parse'
-import type { ParsedFeed } from './types'
+import type { Feed } from './types'
 
 describe('parse', () => {
   const validFeedV1 = {
@@ -110,7 +110,7 @@ describe('parse', () => {
         expect(result?.title).toBe('My Example Feed')
         expect(result?.home_page_url).toBeUndefined()
         expect(result?.feed_url).toBeUndefined()
-        expect((result as ParsedFeed).authors).toBeUndefined()
+        expect((result as Feed).authors).toBeUndefined()
       })
     })
 

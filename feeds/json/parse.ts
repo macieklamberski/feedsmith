@@ -1,13 +1,13 @@
 import type { ParseLevel } from '../../common/types'
 import { parseFeed } from './utils'
-import { parsedFeed } from './schemas'
-import type { ParsedFeed } from './types'
+import { feed } from './schemas'
+import type { Feed } from './types'
 
 export type Options = {
   level: ParseLevel
 }
 
-export type Parse = (value: unknown, options?: Options) => ParsedFeed | undefined
+export type Parse = (value: unknown, options?: Options) => Feed | undefined
 
 export const parse: Parse = (value, options) => {
   const level: ParseLevel = options?.level || 'coerce'
@@ -19,10 +19,10 @@ export const parse: Parse = (value, options) => {
   // - In strict mode, author should also be converted to authors.
 
   if (level === 'strict') {
-    return parsedFeed.parse(value)
+    return feed.parse(value)
   }
 
-  const feed = parseFeed(value, level)
+  const parsedFeed = parseFeed(value, level)
 
-  return feed ? parsedFeed.parse(feed) : undefined
+  return parsedFeed ? feed.parse(parsedFeed) : undefined
 }
