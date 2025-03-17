@@ -16,6 +16,7 @@ export const parser = new XMLParser({
   attributeNamePrefix: '',
   parseTagValue: false,
   parseAttributeValue: false,
-  transformTagName: (tagName) => tagName.toLowerCase(),
+  transformTagName: (name) => name.toLowerCase(),
+  transformAttributeName: (name) => name.toLowerCase(),
   isArray: (name) => arrayTags.includes(name),
 })
