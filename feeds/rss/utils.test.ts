@@ -66,11 +66,11 @@ describe('parseTextInput', () => {
 describe('parseCloud', () => {
   it('should handle valid cloud object', () => {
     const value = {
-      domain: 'rpc.example.com',
-      port: '80',
-      path: '/RPC2',
-      registerprocedure: 'pingMe',
-      protocol: 'soap',
+      '@domain': 'rpc.example.com',
+      '@port': '80',
+      '@path': '/RPC2',
+      '@registerprocedure': 'pingMe',
+      '@protocol': 'soap',
     }
 
     expect(parseCloud(value, 'coerce')).toEqual({
@@ -84,8 +84,8 @@ describe('parseCloud', () => {
 
   it('should handle partial cloud object', () => {
     const value = {
-      domain: 'rpc.example.com',
-      protocol: 'soap',
+      '@domain': 'rpc.example.com',
+      '@protocol': 'soap',
     }
 
     expect(parseCloud(value, 'coerce')).toEqual({
@@ -107,9 +107,9 @@ describe('parseCloud', () => {
 
   it('should handle coercible values', () => {
     const value = {
-      domain: 123,
-      port: '80',
-      path: true,
+      '@domain': 123,
+      '@port': '80',
+      '@path': true,
     }
 
     expect(parseCloud(value, 'coerce')).toEqual({ domain: '123', port: 80 })
@@ -247,7 +247,7 @@ describe('parseSource', () => {
   it('should parse complete source object', () => {
     const value = {
       '#text': 'Technology',
-      url: 'http://example.com/source',
+      '@url': 'http://example.com/source',
     }
 
     expect(parseSource(value, 'coerce')).toEqual({
@@ -267,7 +267,7 @@ describe('parseSource', () => {
   it('should handle coercible values', () => {
     const value = {
       '#text': 123,
-      url: true,
+      '@url': true,
     }
 
     expect(parseSource(value, 'coerce')).toEqual({ title: '123' })
@@ -275,7 +275,7 @@ describe('parseSource', () => {
 
   it('should return undefined if title is missing', () => {
     const value = {
-      url: 'http://example.com/categories',
+      '@url': 'http://example.com/categories',
     }
 
     expect(parseSource(value, 'coerce')).toBeUndefined()
@@ -356,7 +356,7 @@ describe('parseCategory', () => {
   it('should parse complete category object', () => {
     const value = {
       '#text': 'Technology',
-      domain: 'http://example.com/categories',
+      '@domain': 'http://example.com/categories',
     }
 
     expect(parseCategory(value, 'coerce')).toEqual({
@@ -378,7 +378,7 @@ describe('parseCategory', () => {
   it('should handle coercible values', () => {
     const value = {
       '#text': 123,
-      domain: true,
+      '@domain': true,
     }
 
     expect(parseCategory(value, 'coerce')).toEqual({
@@ -388,7 +388,7 @@ describe('parseCategory', () => {
 
   it('should return undefined if name is missing', () => {
     const value = {
-      domain: 'http://example.com/categories',
+      '@domain': 'http://example.com/categories',
     }
 
     expect(parseCategory(value, 'coerce')).toBeUndefined()
@@ -441,7 +441,7 @@ describe('parseItem', () => {
       description: { '#text': 'Item Description' },
       author: [{ '#text': 'John Doe (john@example.com)' }],
       category: [
-        { '#text': 'Technology', domain: 'http://example.com/categories' },
+        { '#text': 'Technology', '@domain': 'http://example.com/categories' },
         { '#text': 'Web Development' },
       ],
       comments: { '#text': 'https://example.com/item/comments' },
@@ -452,7 +452,7 @@ describe('parseItem', () => {
       },
       guid: { '#text': 'https://example.com/guid/1234' },
       pubdate: { '#text': 'Mon, 15 Mar 2023 12:30:00 GMT' },
-      source: { '#text': 'Example Source', url: 'https://example.com/source.xml' },
+      source: { '#text': 'Example Source', '@url': 'https://example.com/source.xml' },
     }
     const expected = {
       title: 'Item Title',
@@ -539,15 +539,15 @@ describe('parseFeed', () => {
         webmaster: { '#text': 'webmaster@example.com' },
         pubdate: { '#text': 'Mon, 15 Mar 2023 12:00:00 GMT' },
         lastbuilddate: { '#text': 'Mon, 15 Mar 2023 13:00:00 GMT' },
-        category: [{ '#text': 'Technology', domain: 'http://example.com/categories' }],
+        category: [{ '#text': 'Technology', '@domain': 'http://example.com/categories' }],
         generator: { '#text': 'Example RSS Generator' },
         docs: { '#text': 'https://example.com/rss-docs' },
         cloud: {
-          domain: 'rpc.example.com',
-          port: '80',
-          path: '/RPC2',
-          registerprocedure: 'pingMe',
-          protocol: 'soap',
+          '@domain': 'rpc.example.com',
+          '@port': '80',
+          '@path': '/RPC2',
+          '@registerprocedure': 'pingMe',
+          '@protocol': 'soap',
         },
         ttl: { '#text': '60' },
         image: {
@@ -688,14 +688,15 @@ describe('parseFeed', () => {
         ],
       },
     }
-
-    expect(parseFeed(value, 'coerce')).toEqual({
+    const expected = {
       title: '123',
       link: '456',
       ttl: 60,
       categories: [{ name: '789' }],
       items: [{ title: 'Item Title', guid: '101112' }],
-    })
+    }
+
+    expect(parseFeed(value, 'coerce')).toEqual(expected)
   })
 
   it('should return undefined for empty channel', () => {
@@ -727,7 +728,7 @@ describe('parseFeed', () => {
             title: { '#text': 'Item 1' },
             category: [
               { '#text': 'Category 1' },
-              { '#text': 'Category 2', domain: 'http://example.com/cat' },
+              { '#text': 'Category 2', '@domain': 'http://example.com/cat' },
             ],
             enclosure: {
               url: { '#text': 'https://example.com/file.mp3' },

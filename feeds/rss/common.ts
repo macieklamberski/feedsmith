@@ -13,7 +13,7 @@ export const arrayTags = [
 export const parser = new XMLParser({
   alwaysCreateTextNode: true,
   ignoreAttributes: false,
-  attributeNamePrefix: '',
+  attributeNamePrefix: '@',
   parseTagValue: false,
   parseAttributeValue: false,
   transformTagName: (name) => name.toLowerCase(),

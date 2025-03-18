@@ -41,11 +41,11 @@ export const parseCloud: ParseFunction<Cloud> = (value, level) => {
   }
 
   const cloud = {
-    domain: parseString(value?.domain, level),
-    port: parseNumber(value?.port, level),
-    path: parseString(value?.path, level),
-    registerProcedure: parseString(value?.registerprocedure, level),
-    protocol: parseString(value?.protocol, level),
+    domain: parseString(value?.['@domain'], level),
+    port: parseNumber(value?.['@port'], level),
+    path: parseString(value?.['@path'], level),
+    registerProcedure: parseString(value?.['@registerprocedure'], level),
+    protocol: parseString(value?.['@protocol'], level),
   }
 
   // TODO: Return only if required values are present: all.
@@ -90,7 +90,7 @@ export const parseEnclosure: ParseFunction<Enclosure> = (value, level) => {
 export const parseSource: ParseFunction<Source> = (value, level) => {
   const source = {
     title: parseString(value?.['#text'], level),
-    url: parseString(value?.url, level),
+    url: parseString(value?.['@url'], level),
   }
 
   if (source.title) {
@@ -119,7 +119,7 @@ export const parseImage: ParseFunction<Image> = (value, level) => {
 export const parseCategory: ParseFunction<Category> = (value, level) => {
   const category = {
     name: parseString(value?.['#text'], level),
-    domain: parseString(value?.domain, level),
+    domain: parseString(value?.['@domain'], level),
   }
 
   if (category.name) {
