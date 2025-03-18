@@ -1,14 +1,4 @@
 import { XMLParser } from 'fast-xml-parser'
-import { arrayTags as arrayTagsAtom } from '../atom/common'
-
-export const arrayTags = [
-  'item',
-  'category',
-  'author',
-  'hour',
-  'day',
-  ...arrayTagsAtom.map((tag) => `atom:${tag}`),
-]
 
 export const stopNodes = [
   'rss.channel.title',
@@ -60,5 +50,4 @@ export const parser = new XMLParser({
   stopNodes,
   transformTagName: (name) => name.toLowerCase(),
   transformAttributeName: (name) => name.toLowerCase(),
-  isArray: (name) => arrayTags.includes(name),
 })

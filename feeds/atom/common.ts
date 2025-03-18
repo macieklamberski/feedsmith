@@ -1,7 +1,5 @@
 import { XMLParser } from 'fast-xml-parser'
 
-export const arrayTags = ['link', 'author', 'contributor', 'category']
-
 export const stopNodes = [
   'feed.author.name',
   'feed.author.uri',
@@ -73,5 +71,4 @@ export const parser = new XMLParser({
   stopNodes,
   transformTagName: (name) => name.toLowerCase(),
   transformAttributeName: (name) => name.toLowerCase(),
-  isArray: (name) => arrayTags.includes(name),
 })
