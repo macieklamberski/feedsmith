@@ -41,6 +41,7 @@
           "label": "Documentation"
         }
       ],
+      "content": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Watch out for <span style=\"background-image: url(javascript:window.location='http://example.org/')\"> nasty tricks</span></div>",
       "contributors": [
         { "name": "Joe", "uri": "http://example.org/joe/", "email": "joe@example.org" },
         { "name": "Sam", "uri": "http://example.org/sam/", "email": "sam@example.org" }

@@ -83,6 +83,7 @@
         },
         { "term": "complete", "label": "Complete Example" }
       ],
+      "content": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n        <h1>Comprehensive Atom 1.0 Entry</h1>\n        <p>This entry demonstrates all possible elements in an Atom 1.0 entry.</p>\n        <ul>\n          <li>Required elements: id, title, updated</li>\n          <li>Optional elements: author, category, content, contributor, link, published, rights, source, summary</li>\n        </ul>\n        <p>The content can contain rich <strong>XHTML</strong> markup.</p>\n      </div>",
       "contributors": [
         {
           "name": "Technical Editor",

@@ -50,7 +50,7 @@ export const parseString: ParseFunction<string> = (value, level) => {
   }
 
   if (typeof value === 'string') {
-    return decode(value)
+    return decode(value).trim()
   }
 }
 

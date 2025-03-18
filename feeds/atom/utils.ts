@@ -7,7 +7,7 @@ import {
   parseNumber,
   parseString,
 } from '../../common/utils'
-import type { Category, Entry, Feed, Generator, Link, Person, Source, Text } from './types'
+import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types'
 
 export const parseLink: ParseFunction<Link> = (value, level) => {
   if (!isObject(value)) {
