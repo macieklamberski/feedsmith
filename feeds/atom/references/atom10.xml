@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:base="http://example.org/" xml:lang="en">
+  <title type="text">Comprehensive Atom 1.0 Example Feed</title>
+  <subtitle type="html">A &lt;em&gt;comprehensive&lt;/em&gt; example showing all Atom 1.0 elements</subtitle>
+  <link rel="alternate" type="text/html" href="/"/>
+  <link rel="self" type="application/atom+xml" href="http://example.org/atom10.xml"/>
+  <link rel="first" type="application/atom+xml" href="http://example.org/atom10.xml?page=1"/>
+  <link rel="previous" type="application/atom+xml" href="http://example.org/atom10.xml?page=2"/>
+  <link rel="next" type="application/atom+xml" href="http://example.org/atom10.xml?page=4"/>
+  <link rel="last" type="application/atom+xml" href="http://example.org/atom10.xml?page=10"/>
+  <link rel="hub" href="http://pubsubhubbub.example.org/"/>
+  <link rel="search" type="application/opensearchdescription+xml" href="http://example.org/search.xml" title="Search"/>
+  <link rel="license" href="http://creativecommons.org/licenses/by/4.0/"/>
+  <link rel="related" href="http://example.org/related" hreflang="en" title="Related Content" length="1000"/>
+  <rights type="html">&lt;p&gt;Copyright © 2023, Example Organization. All rights reserved.&lt;/p&gt;</rights>
+  <icon>http://example.org/favicon.ico</icon>
+  <logo>http://example.org/logo.png</logo>
+  <generator uri="http://example.org/generator/" version="4.0">Comprehensive Atom Generator</generator>
+  <id>tag:example.org,2023:comprehensive-atom-feed</id>
+  <updated>2023-01-15T12:00:00Z</updated>
+  <category term="technology" scheme="http://example.org/categories/" label="Technology"/>
+  <category term="documentation" scheme="http://example.org/categories/" label="Documentation"/>
+  <category term="examples" scheme="http://example.org/categories/" label="Examples"/>
+  <category term="atom" label="Atom Feeds"/>
+  <author>
+    <name>John Doe</name>
+    <uri>http://example.org/john/</uri>
+    <email>john@example.org</email>
+  </author>
+  <author>
+    <name>Jane Smith</name>
+    <uri>http://example.org/jane/</uri>
+    <email>jane@example.org</email>
+  </author>
+  <contributor>
+    <name>Bob Johnson</name>
+    <uri>http://example.org/bob/</uri>
+    <email>bob@example.org</email>
+  </contributor>
+  <contributor>
+    <name>Alice Williams</name>
+    <uri>http://example.org/alice/</uri>
+    <email>alice@example.org</email>
+  </contributor>
+  <entry>
+    <title type="text">Comprehensive Entry Example</title>
+    <link rel="alternate" type="text/html" href="/entry/1"/>
+    <link rel="related" type="text/html" href="http://related.example.org/"/>
+    <link rel="via" type="text/html" href="http://source.example.org/original"/>
+    <link rel="enclosure" type="audio/mpeg" href="http://example.org/audio.mp3" length="1234567" title="Audio Podcast"/>
+    <link rel="enclosure" type="video/mp4" href="http://example.org/video.mp4" length="7654321" title="Video Podcast"/>
+    <link rel="edit" href="http://example.org/edit/1"/>
+    <link rel="self" href="http://example.org/entry/1"/>
+    <link rel="replies" type="application/atom+xml" href="http://example.org/comments/1" title="Comments"/>
+    <id>tag:example.org,2023:entry-1</id>
+    <published>2023-01-10T08:30:00Z</published>
+    <updated>2023-01-15T11:45:00Z</updated>
+    <author>
+      <name>John Doe</name>
+      <uri>http://example.org/john/</uri>
+      <email>john@example.org</email>
+    </author>
+    <contributor>
+      <name>Technical Editor</name>
+      <uri>http://example.org/editor/</uri>
+      <email>editor@example.org</email>
+    </contributor>
+    <contributor>
+      <name>Research Assistant</name>
+      <uri>http://example.org/assistant/</uri>
+      <email>assistant@example.org</email>
+    </contributor>
+    <category term="atom" scheme="http://example.org/categories/" label="Atom"/>
+    <category term="examples" scheme="http://example.org/categories/" label="Examples"/>
+    <category term="documentation" scheme="http://example.org/categories/" label="Documentation"/>
+    <category term="complete" label="Complete Example"/>
+    <summary type="text">
+      This is a comprehensive example entry showing all possible Atom 1.0 elements in an entry.
+    </summary>
+    <content type="xhtml" xml:base="http://example.org/entry/1" xml:lang="en-US">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+        <h1>Comprehensive Atom 1.0 Entry</h1>
+        <p>This entry demonstrates all possible elements in an Atom 1.0 entry.</p>
+        <ul>
+          <li>Required elements: id, title, updated</li>
+          <li>Optional elements: author, category, content, contributor, link, published, rights, source, summary</li>
+        </ul>
+        <p>The content can contain rich <strong>XHTML</strong> markup.</p>
+      </div>
+    </content>
+    <source>
+      <id>tag:example.org,2023:original-feed</id>
+      <title>Original Source Feed</title>
+      <updated>2023-01-10T08:00:00Z</updated>
+      <author>
+        <name>Original Author</name>
+        <uri>http://original.example.org/author/</uri>
+        <email>original@example.org</email>
+      </author>
+      <contributor>
+        <name>Original Contributor</name>
+        <uri>http://original.example.org/contributor/</uri>
+        <email>contributor@example.org</email>
+      </contributor>
+      <link rel="self" href="http://original.example.org/feed.atom"/>
+      <link rel="alternate" href="http://original.example.org/"/>
+      <category term="original" scheme="http://original.example.org/categories/" label="Original Content"/>
+      <generator uri="http://original.example.org/generator/" version="3.0">Original Generator</generator>
+      <icon>http://original.example.org/favicon.ico</icon>
+      <logo>http://original.example.org/logo.png</logo>
+      <rights>Copyright © 2023, Original Organization</rights>
+      <subtitle>Original source subtitle</subtitle>
+    </source>
+    <rights type="html">&lt;p&gt;Copyright © 2023, Entry Copyright Holder. All rights reserved.&lt;/p&gt;</rights>
+  </entry>
+  <entry>
+    <title>Minimal Required Entry</title>
+    <id>tag:example.org,2023:entry-2</id>
+    <updated>2023-01-14T15:30:00Z</updated>
+    <content type="text">This entry contains only the required elements: id, title, and updated.</content>
+  </entry>
+  <entry>
+    <title>Content Types Example</title>
+    <id>tag:example.org,2023:entry-3</id>
+    <updated>2023-01-13T18:45:00Z</updated>
+    <link rel="alternate" href="/entry/3"/>
+    <content type="text">
+      This is plain text content without any markup.
+    </content>
+    <summary type="html">
+      &lt;p&gt;This is a summary with &lt;strong&gt;HTML&lt;/strong&gt; markup.&lt;/p&gt;
+    </summary>
+  </entry>
+  <entry>
+    <title>Content by Reference</title>
+    <id>tag:example.org,2023:entry-4</id>
+    <updated>2023-01-12T09:15:00Z</updated>
+    <content type="text/html" src="http://example.org/full-content.html"/>
+    <summary>
+      This entry references its content rather than including it inline.
+    </summary>
+  </entry>
+  <entry>
+    <title>Multiple Authors Example</title>
+    <id>tag:example.org,2023:entry-5</id>
+    <updated>2023-01-11T14:20:00Z</updated>
+    <author>
+      <name>Primary Author</name>
+      <uri>http://example.org/primary/</uri>
+      <email>primary@example.org</email>
+    </author>
+    <author>
+      <name>Co-Author</name>
+      <uri>http://example.org/co-author/</uri>
+      <email>co-author@example.org</email>
+    </author>
+    <content type="text">
+      This entry has multiple authors to demonstrate how multiple author elements can be used.
+    </content>
+  </entry>
+  <entry xml:lang="fr">
+    <title>Exemple de Contenu en Français</title>
+    <id>tag:example.org,2023:entry-6</id>
+    <updated>2023-01-10T11:05:00Z</updated>
+    <content type="text">
+      Cet article est écrit en français pour démontrer l'utilisation de l'attribut xml:lang.
+    </content>
+    <summary xml:lang="en">
+      This is an English summary of a French entry to demonstrate language-specific content.
+    </summary>
+  </entry>
+</feed>

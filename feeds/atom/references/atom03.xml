@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed version="0.3" xmlns="http://purl.org/atom/ns#" xml:base="http://example.org/" xml:lang="en">
+  <title type="text/plain" mode="escaped">
+    Sample Feed
+  </title>
+  <tagline type="text/html" mode="escaped">
+    For documentation &lt;em&gt;only&lt;/em&gt;
+  </tagline>
+  <link rel="alternate" type="text/html" href="/"/>
+  <link rel="self" type="application/atom+xml" href="/feed.atom"/>
+  <link rel="prev" type="application/atom+xml" href="/feed.atom?page=1"/>
+  <link rel="next" type="application/atom+xml" href="/feed.atom?page=3"/>
+  <copyright type="text/html" mode="escaped">
+    &lt;p>Copyright 2004, Mark Pilgrim&lt;/p>&lt;
+  </copyright>
+  <generator url="http://example.org/generator/" version="3.0">
+    Sample Toolkit
+  </generator>
+  <id>tag:feedparser.org,2004-04-20:/docs/examples/atom03.xml</id>
+  <modified>2004-04-20T11:56:34Z</modified>
+  <created>2004-04-18T09:00:00Z</created>
+  <issued>2004-04-19T10:15:00Z</issued>
+  <info type="application/xhtml+xml" mode="xml">
+    <div xmlns="http://www.w3.org/1999/xhtml"><p>This is an Atom syndication feed.</p></div>
+  </info>
+  <author>
+    <name>Feed Author</name>
+    <url>http://example.org/author/</url>
+    <email>author@example.org</email>
+  </author>
+  <contributor>
+    <name>Feed Contributor</name>
+    <url>http://example.org/contributor/</url>
+    <email>contributor@example.org</email>
+  </contributor>
+  <category term="technology" scheme="http://example.org/categories/" label="Technology"/>
+  <category term="sample" scheme="http://example.org/categories/" label="Sample Documents"/>
+  <entry>
+    <title type="text/plain" mode="escaped">First entry title</title>
+    <link rel="alternate" type="text/html" href="/entry/3"/>
+    <link rel="service.edit" type="application/atom+xml" title="Atom API entrypoint to edit this entry" href="/api/edit/3"/>
+    <link rel="service.post" type="application/atom+xml" title="Atom API entrypoint to add comments to this entry" href="/api/comment/3"/>
+    <link rel="enclosure" type="audio/mpeg" length="1337" href="/audio/sample.mp3"/>
+    <link rel="related" type="text/html" href="/related/3"/>
+    <id>tag:feedparser.org,2004-04-20:/docs/examples/atom03.xml:3</id>
+    <created>2004-04-19T07:45:00Z</created>
+    <issued>2004-04-20T00:23:47Z</issued>
+    <modified>2004-04-20T11:56:34Z</modified>
+    <author>
+      <name>Mark Pilgrim</name>
+      <url>http://diveintomark.org/</url>
+      <email>mark@example.org</email>
+    </author>
+    <contributor>
+      <name>Joe</name>
+      <url>http://example.org/joe/</url>
+      <email>joe@example.org</email>
+    </contributor>
+    <contributor>
+      <name>Sam</name>
+      <url>http://example.org/sam/</url>
+      <email>sam@example.org</email>
+    </contributor>
+    <category term="examples" scheme="http://example.org/categories/" label="Examples"/>
+    <category term="documentation" scheme="http://example.org/categories/" label="Documentation"/>
+    <summary type="text/plain" mode="escaped">
+      Watch out for nasty tricks
+    </summary>
+    <content type="application/xhtml+xml" mode="xml" xml:base="http://example.org/entry/3" xml:lang="en-US">
+      <div xmlns="http://www.w3.org/1999/xhtml">Watch out for <span style="background-image: url(javascript:window.location='http://example.org/')"> nasty tricks</span></div>
+    </content>
+    <source>
+      <id>tag:example.org,2004:original-feed</id>
+      <title>Original Feed Title</title>
+      <link rel="alternate" type="text/html" href="http://original-source.example.org/"/>
+      <author>
+        <name>Original Author</name>
+      </author>
+      <modified>2004-04-18T12:00:00Z</modified>
+    </source>
+    <copyright type="text/plain" mode="escaped">Copyright 2004, Entry Copyright Holder</copyright>
+  </entry>
+  <entry>
+    <title>Second entry title</title>
+    <link rel="alternate" type="text/html" href="/entry/4"/>
+    <id>tag:feedparser.org,2004-04-20:/docs/examples/atom03.xml:4</id>
+    <created>2004-04-20T08:30:00Z</created>
+    <issued>2004-04-20T08:45:00Z</issued>
+    <modified>2004-04-20T09:10:00Z</modified>
+    <author>
+      <name>Jane Smith</name>
+      <url>http://example.org/jane/</url>
+      <email>jane@example.org</email>
+    </author>
+    <summary>
+      This is a shorter entry with minimal elements to show contrast
+    </summary>
+  </entry>
+  <!-- <entry>
+    <title>Third entry title</title>
+    <link rel="alternate" type="text/html" href="/entry/4"/>
+    <id>tag:feedparser.org,2004-04-20:/docs/examples/atom03.xml:4</id>
+    <created>2004-04-20T08:30:00Z</created>
+    <issued>2004-04-20T08:45:00Z</issued>
+    <modified>2004-04-20T09:10:00Z</modified>
+    <author>
+      <name>Jane Smith</name>
+      <url>http://example.org/jane/</url>
+      <email>jane@example.org</email>
+    </author>
+    <summary>
+      This is an entry showing a text version of content
+    </summary>
+    <content type="application/xhtml+xml" mode="xml" xml:base="http://example.org/entry/3" xml:lang="en-US">
+      <div xmlns="http://www.w3.org/1999/xhtml">Watch out for <span style="background-image: url(javascript:window.location='http://example.org/')"> nasty tricks</span></div>
+    </content>
+  </entry> -->
+</feed>
