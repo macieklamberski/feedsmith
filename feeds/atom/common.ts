@@ -8,6 +8,7 @@ export const parser = new XMLParser({
   attributeNamePrefix: '@',
   parseTagValue: false,
   parseAttributeValue: false,
+  stopNodes: ['root.feed.content'],
   transformTagName: (name) => name.toLowerCase(),
   transformAttributeName: (name) => name.toLowerCase(),
   isArray: (name) => arrayTags.includes(name),

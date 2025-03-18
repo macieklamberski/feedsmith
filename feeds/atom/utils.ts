@@ -3,12 +3,11 @@ import {
   hasAllProps,
   hasAnyProps,
   isObject,
-  parseArray,
   parseArrayOf,
   parseNumber,
   parseString,
 } from '../../common/utils'
-import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types'
+import type { Category, Entry, Feed, Generator, Link, Person, Source, Text } from './types'
 
 export const parseLink: ParseFunction<Link> = (value, level) => {
   if (!isObject(value)) {
@@ -169,7 +168,7 @@ export const parseEntry: ParseFunction<Entry> = (value, level) => {
   const entry = {
     authors: parseArrayOf(value.author, parsePerson, level),
     categories: parseArrayOf(value.category, parseCategory, level),
-    content: parseString(value.content, level),
+    content: parseString(value.content?.['#text'], level),
     contributors: parseArrayOf(value.contributor, parsePerson, level),
     id: parseString(value.id?.['#text'], level),
     links: parseArrayOf(value.link, parseLink, level),
@@ -181,10 +180,8 @@ export const parseEntry: ParseFunction<Entry> = (value, level) => {
     updated: retrieveUpdated(value, level),
   }
 
-  console.log(value.content)
-
-  // INFO: Spec also says about required "updated" and "author" but those are not always present
-  // in feeds. We can still parse the feed without them.
+  // INFO: Spec also says about required "updated" and "author" but those are
+  // not always present in feeds. We can still parse the feed without them.
   if (hasAllProps(entry, ['id', 'title'])) {
     return entry
   }
@@ -211,8 +208,8 @@ export const parseFeed: ParseFunction<Feed> = (value, level) => {
     entries: parseArrayOf(value.entry, parseEntry, level),
   }
 
-  // INFO: Spec also says about required "updated" and "author" but those are not always present
-  // in feeds. We can still parse the feed without them.
+  // INFO: Spec also says about required "updated" and "author" but those are
+  // not always present in feeds. We can still parse the feed without them.
   if (hasAllProps(feed, ['id', 'title'])) {
     return feed
   }

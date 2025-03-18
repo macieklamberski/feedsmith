@@ -585,7 +585,7 @@ describe('parseEntry', () => {
       title: { '#text': 'Entry Title' },
       updated: { '#text': '2023-01-01T12:00:00Z' },
       author: [{ name: { '#text': 'John Doe' } }],
-      // content: '<p>Entry content</p>',
+      content: { '#text': '<p>Entry content</p>' },
       summary: { '#text': 'Entry summary' },
       published: { '#text': '2023-01-01T10:00:00Z' },
       link: [
@@ -605,7 +605,7 @@ describe('parseEntry', () => {
       title: 'Entry Title',
       updated: '2023-01-01T12:00:00Z',
       authors: [{ name: 'John Doe' }],
-      // content: '<p>Entry content</p>',
+      content: '<p>Entry content</p>',
       summary: 'Entry summary',
       published: '2023-01-01T10:00:00Z',
       links: [
@@ -658,13 +658,13 @@ describe('parseEntry', () => {
     const value = {
       id: { '#text': 123 },
       title: { '#text': 456 },
-      // content: { '#text': 789 },
+      content: { '#text': 789 },
       link: [{ '@href': 'https://example.com/' }],
     }
     const expected = {
       id: '123',
       title: '456',
-      // content: '789',
+      content: '789',
       links: [{ href: 'https://example.com/' }],
     }
 
@@ -724,13 +724,13 @@ describe('parseFeed', () => {
           id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
           title: { '#text': 'First Entry' },
           updated: { '#text': '2023-01-01T10:00:00Z' },
-          // content: '<p>First entry content</p>',
+          content: { '#text': '<p>First entry content</p>' },
         },
         {
           id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-bbbb-80da344efa6a' },
           title: { '#text': 'Second Entry' },
           updated: { '#text': '2023-01-02T10:00:00Z' },
-          // content:'<p>Second entry content</p>' ,
+          content: { '#text': '<p>Second entry content</p>' },
         },
       ],
     }
@@ -755,13 +755,13 @@ describe('parseFeed', () => {
           id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
           title: 'First Entry',
           updated: '2023-01-01T10:00:00Z',
-          // content: '<p>First entry content</p>',
+          content: '<p>First entry content</p>',
         },
         {
           id: 'urn:uuid:1225c695-cfb8-4ebb-bbbb-80da344efa6a',
           title: 'Second Entry',
           updated: '2023-01-02T10:00:00Z',
-          // content: '<p>Second entry content</p>',
+          content: '<p>Second entry content</p>',
         },
       ],
     }

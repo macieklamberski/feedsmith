@@ -1,20 +1,8 @@
 import { z } from 'zod'
 
-// In the Atom specification, the text construct is represented by the { type, text } object.
+// In the Atom specification, the text construct is represented by the { type, text, url } object.
 // For simplicity's sake, a string is used for now, but this may be reconsidered in the future.
-export const plainText = z.string()
-
-export const text = z.object({
-  type: z.string(), // Atom 1.0.
-  text: z.string(), // Atom 1.0.
-  html: z.string(), // Atom 1.0.
-  xhtml: z.any(), // Atom 1.0.
-  src: z.string(), // Atom 1.0.
-  mode: z.string(), // Atom 0.3.
-  xml: z.any(), // Atom 0.3.
-  escaped: z.string(), // Atom 0.3.
-  base64: z.string(), // Atom 0.3.
-})
+export const text = z.string()
 
 export const link = z
   .object({
@@ -61,9 +49,9 @@ export const source = z
     id: z.string(),
     links: z.array(link),
     logo: z.string(),
-    rights: plainText,
-    subtitle: plainText,
-    title: plainText,
+    rights: text,
+    subtitle: text,
+    title: text,
     updated: z.string(),
   })
   .partial()
@@ -72,15 +60,15 @@ export const entry = z
   .object({
     authors: z.array(person),
     categories: z.array(category),
-    content: plainText,
+    content: text,
     contributors: z.array(person),
     id: z.string(),
     links: z.array(link),
     published: z.string(),
-    rights: plainText,
+    rights: text,
     source,
-    summary: plainText,
-    title: plainText,
+    summary: text,
+    title: text,
     updated: z.string(),
   })
   .partial()
@@ -95,9 +83,9 @@ export const feed = z
     id: z.string(),
     links: z.array(link),
     logo: z.string(),
-    rights: plainText,
-    subtitle: plainText,
-    title: plainText,
+    rights: text,
+    subtitle: text,
+    title: text,
     updated: z.string(),
     entries: z.array(entry),
   })
