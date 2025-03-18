@@ -182,7 +182,7 @@ export const parseFeed: ParseFunction<Feed> = (value, level) => {
   }
 
   // TODO: Return only if required values are present: title, link, description.
-  // Reconsider requiring description as it might not be as commont that this value is present.
+  // Reconsider requiring "description" as it might not be as common that this value is present.
   if (hasAllProps(feed, ['title', 'link'])) {
     return feed
   }
