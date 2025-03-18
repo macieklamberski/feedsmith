@@ -1,3 +1,4 @@
+import type { ParseFunction } from '../../common/types'
 import {
   hasAllProps,
   hasAnyProps,
@@ -9,7 +10,6 @@ import {
   parseNumber,
   parseString,
 } from '../../common/utils'
-import type { ParseFunction } from '../../common/types'
 import type { Attachment, Author, Feed, Hub, Item } from './types'
 
 export const parseTags: ParseFunction<Array<string>> = (value, level) => {
@@ -44,7 +44,7 @@ export const parseAuthor: ParseFunction<Author> = (value, level) => {
   }
 }
 
-export const parseAuthors: ParseFunction<Array<Author>> = (value, level) => {
+export const retrieveAuthors: ParseFunction<Array<Author>> = (value, level) => {
   if (!isObject(value)) {
     return
   }
@@ -110,7 +110,7 @@ export const parseItem: ParseFunction<Item> = (value, level) => {
     date_published: parseString(value.date_published, level),
     date_modified: parseString(value.date_modified, level),
     tags: parseTags(value.tags, level),
-    authors: parseAuthors(value, level),
+    authors: retrieveAuthors(value, level),
     language: parseString(value.language, level),
     attachments: parseArrayOf(value.attachments, parseAttachment, level),
   }
@@ -139,7 +139,7 @@ export const parseFeed: ParseFunction<Feed> = (value, level) => {
     language: parseString(value.language, level),
     expired: parseBoolean(value.expired, level),
     hubs: parseArrayOf(value.hubs, parseHub, level),
-    authors: parseAuthors(value, level),
+    authors: retrieveAuthors(value, level),
     items: parseArrayOf(value.items, parseItem, level),
   }
 
