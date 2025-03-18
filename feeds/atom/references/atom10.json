@@ -1,0 +1,217 @@
+{
+  "authors": [
+    { "name": "John Doe", "uri": "http://example.org/john/", "email": "john@example.org" },
+    { "name": "Jane Smith", "uri": "http://example.org/jane/", "email": "jane@example.org" }
+  ],
+  "categories": [
+    { "term": "technology", "scheme": "http://example.org/categories/", "label": "Technology" },
+    {
+      "term": "documentation",
+      "scheme": "http://example.org/categories/",
+      "label": "Documentation"
+    },
+    { "term": "examples", "scheme": "http://example.org/categories/", "label": "Examples" },
+    { "term": "atom", "label": "Atom Feeds" }
+  ],
+  "contributors": [
+    { "name": "Bob Johnson", "uri": "http://example.org/bob/", "email": "bob@example.org" },
+    { "name": "Alice Williams", "uri": "http://example.org/alice/", "email": "alice@example.org" }
+  ],
+  "generator": {
+    "text": "Comprehensive Atom Generator",
+    "uri": "http://example.org/generator/",
+    "version": "4.0"
+  },
+  "icon": "http://example.org/favicon.ico",
+  "id": "tag:example.org,2023:comprehensive-atom-feed",
+  "links": [
+    { "href": "/", "rel": "alternate", "type": "text/html" },
+    { "href": "http://example.org/atom10.xml", "rel": "self", "type": "application/atom+xml" },
+    {
+      "href": "http://example.org/atom10.xml?page=1",
+      "rel": "first",
+      "type": "application/atom+xml"
+    },
+    {
+      "href": "http://example.org/atom10.xml?page=2",
+      "rel": "previous",
+      "type": "application/atom+xml"
+    },
+    {
+      "href": "http://example.org/atom10.xml?page=4",
+      "rel": "next",
+      "type": "application/atom+xml"
+    },
+    {
+      "href": "http://example.org/atom10.xml?page=10",
+      "rel": "last",
+      "type": "application/atom+xml"
+    },
+    { "href": "http://pubsubhubbub.example.org/", "rel": "hub" },
+    {
+      "href": "http://example.org/search.xml",
+      "rel": "search",
+      "type": "application/opensearchdescription+xml",
+      "title": "Search"
+    },
+    { "href": "http://creativecommons.org/licenses/by/4.0/", "rel": "license" },
+    {
+      "href": "http://example.org/related",
+      "rel": "related",
+      "hreflang": "en",
+      "title": "Related Content",
+      "length": 1000
+    }
+  ],
+  "logo": "http://example.org/logo.png",
+  "rights": "<p>Copyright © 2023, Example Organization. All rights reserved.</p>",
+  "subtitle": "A <em>comprehensive</em> example showing all Atom 1.0 elements",
+  "title": "Comprehensive Atom 1.0 Example Feed",
+  "updated": "2023-01-15T12:00:00Z",
+  "entries": [
+    {
+      "authors": [
+        { "name": "John Doe", "uri": "http://example.org/john/", "email": "john@example.org" }
+      ],
+      "categories": [
+        { "term": "atom", "scheme": "http://example.org/categories/", "label": "Atom" },
+        { "term": "examples", "scheme": "http://example.org/categories/", "label": "Examples" },
+        {
+          "term": "documentation",
+          "scheme": "http://example.org/categories/",
+          "label": "Documentation"
+        },
+        { "term": "complete", "label": "Complete Example" }
+      ],
+      "contributors": [
+        {
+          "name": "Technical Editor",
+          "uri": "http://example.org/editor/",
+          "email": "editor@example.org"
+        },
+        {
+          "name": "Research Assistant",
+          "uri": "http://example.org/assistant/",
+          "email": "assistant@example.org"
+        }
+      ],
+      "id": "tag:example.org,2023:entry-1",
+      "links": [
+        { "href": "/entry/1", "rel": "alternate", "type": "text/html" },
+        { "href": "http://related.example.org/", "rel": "related", "type": "text/html" },
+        { "href": "http://source.example.org/original", "rel": "via", "type": "text/html" },
+        {
+          "href": "http://example.org/audio.mp3",
+          "rel": "enclosure",
+          "type": "audio/mpeg",
+          "title": "Audio Podcast",
+          "length": 1234567
+        },
+        {
+          "href": "http://example.org/video.mp4",
+          "rel": "enclosure",
+          "type": "video/mp4",
+          "title": "Video Podcast",
+          "length": 7654321
+        },
+        { "href": "http://example.org/edit/1", "rel": "edit" },
+        { "href": "http://example.org/entry/1", "rel": "self" },
+        {
+          "href": "http://example.org/comments/1",
+          "rel": "replies",
+          "type": "application/atom+xml",
+          "title": "Comments"
+        }
+      ],
+      "published": "2023-01-10T08:30:00Z",
+      "rights": "<p>Copyright © 2023, Entry Copyright Holder. All rights reserved.</p>",
+      "source": {
+        "authors": [
+          {
+            "name": "Original Author",
+            "uri": "http://original.example.org/author/",
+            "email": "original@example.org"
+          }
+        ],
+        "categories": [
+          {
+            "term": "original",
+            "scheme": "http://original.example.org/categories/",
+            "label": "Original Content"
+          }
+        ],
+        "contributors": [
+          {
+            "name": "Original Contributor",
+            "uri": "http://original.example.org/contributor/",
+            "email": "contributor@example.org"
+          }
+        ],
+        "generator": {
+          "text": "Original Generator",
+          "uri": "http://original.example.org/generator/",
+          "version": "3.0"
+        },
+        "icon": "http://original.example.org/favicon.ico",
+        "id": "tag:example.org,2023:original-feed",
+        "links": [
+          { "href": "http://original.example.org/feed.atom", "rel": "self" },
+          { "href": "http://original.example.org/", "rel": "alternate" }
+        ],
+        "logo": "http://original.example.org/logo.png",
+        "rights": "Copyright © 2023, Original Organization",
+        "subtitle": "Original source subtitle",
+        "title": "Original Source Feed",
+        "updated": "2023-01-10T08:00:00Z"
+      },
+      "summary": "This is a comprehensive example entry showing all possible Atom 1.0 elements in an entry.",
+      "title": "Comprehensive Entry Example",
+      "updated": "2023-01-15T11:45:00Z"
+    },
+    {
+      "content": "This entry contains only the required elements: id, title, and updated.",
+      "id": "tag:example.org,2023:entry-2",
+      "title": "Minimal Required Entry",
+      "updated": "2023-01-14T15:30:00Z"
+    },
+    {
+      "content": "This is plain text content without any markup.",
+      "id": "tag:example.org,2023:entry-3",
+      "links": [{ "href": "/entry/3", "rel": "alternate" }],
+      "summary": "<p>This is a summary with <strong>HTML</strong> markup.</p>",
+      "title": "Content Types Example",
+      "updated": "2023-01-13T18:45:00Z"
+    },
+    {
+      "id": "tag:example.org,2023:entry-4",
+      "summary": "This entry references its content rather than including it inline.",
+      "title": "Content by Reference",
+      "updated": "2023-01-12T09:15:00Z"
+    },
+    {
+      "authors": [
+        {
+          "name": "Primary Author",
+          "uri": "http://example.org/primary/",
+          "email": "primary@example.org"
+        },
+        {
+          "name": "Co-Author",
+          "uri": "http://example.org/co-author/",
+          "email": "co-author@example.org"
+        }
+      ],
+      "content": "This entry has multiple authors to demonstrate how multiple author elements can be used.",
+      "id": "tag:example.org,2023:entry-5",
+      "title": "Multiple Authors Example",
+      "updated": "2023-01-11T14:20:00Z"
+    },
+    {
+      "content": "Cet article est écrit en français pour démontrer l'utilisation de l'attribut xml:lang.",
+      "id": "tag:example.org,2023:entry-6",
+      "summary": "This is an English summary of a French entry to demonstrate language-specific content.",
+      "title": "Exemple de Contenu en Français",
+      "updated": "2023-01-10T11:05:00Z"
+    }
+  ]
+}
