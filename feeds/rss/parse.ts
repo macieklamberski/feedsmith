@@ -1,5 +1,4 @@
 import { parser } from './common'
-import { feed } from './schemas'
 import type { Feed } from './types'
 import { parseFeed } from './utils'
 
@@ -9,5 +8,5 @@ export const parse: Parse = (value) => {
   const object = parser.parse(value)
   const parsed = parseFeed(object, 'coerce')
 
-  return parsed ? feed.parse(parsed) : undefined
+  return parsed
 }
