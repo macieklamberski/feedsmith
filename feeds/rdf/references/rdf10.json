@@ -1,0 +1,28 @@
+{
+  "title": "XML.com",
+  "link": "http://xml.com/pub",
+  "description": "XML.com features a rich mix of information and services\n      for the XML community.",
+  "image": {
+    "title": "XML.com",
+    "link": "http://www.xml.com",
+    "url": "http://xml.com/universal/images/xml_tiny.gif"
+  },
+  "items": [
+    {
+      "title": "Processing Inclusions with XSLT",
+      "link": "http://xml.com/pub/2000/08/09/xslt/xslt.html",
+      "description": "Processing document inclusions with general XML tools can be\n     problematic. This article proposes a way of preserving inclusion\n     information through SAX-based processing."
+    },
+    {
+      "title": "Putting RDF to Work",
+      "link": "http://xml.com/pub/2000/08/09/rdfdb/index.html",
+      "description": "Tool and API support for the Resource Description Framework\n     is slowly coming of age. Edd Dumbill takes a look at RDFDB,\n     one of the most exciting new RDF toolkits."
+    }
+  ],
+  "textinput": {
+    "title": "Search XML.com",
+    "description": "Search XML.com's XML collection",
+    "name": "s",
+    "link": "http://search.xml.com"
+  }
+}

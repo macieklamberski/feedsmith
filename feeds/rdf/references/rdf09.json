@@ -1,0 +1,17 @@
+{
+  "title": "Mozilla Dot Org",
+  "link": "http://www.mozilla.org",
+  "description": "the Mozilla Organization web site",
+  "image": {
+    "title": "Mozilla",
+    "link": "http://www.mozilla.org",
+    "url": "http://www.mozilla.org/images/moz.gif"
+  },
+  "items": [
+    { "title": "New Status Updates", "link": "http://www.mozilla.org/status/" },
+    { "title": "Bugzilla Reorganized", "link": "http://www.mozilla.org/bugs/" },
+    { "title": "Mozilla Party, 2.0!", "link": "http://www.mozilla.org/party/1999/" },
+    { "title": "Unix Platform Parity", "link": "http://www.mozilla.org/build/unix.html" },
+    { "title": "NPL 1.0M published", "link": "http://www.mozilla.org/NPL/NPL-1.0M.html" }
+  ]
+}

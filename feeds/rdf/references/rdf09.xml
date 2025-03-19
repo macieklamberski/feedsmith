@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://channel.netscape.com/rdf/simple/0.9/"
+>
+  <channel>
+    <title>Mozilla Dot Org</title>
+    <link>http://www.mozilla.org</link>
+    <description>the Mozilla Organization web site</description>
+  </channel>
+  <image>
+    <title>Mozilla</title>
+    <url>http://www.mozilla.org/images/moz.gif</url>
+    <link>http://www.mozilla.org</link>
+  </image>
+  <item rdf:about="http://example.org/item1">
+    <title>New Status Updates</title>
+    <link>http://www.mozilla.org/status/</link>
+  </item>
+  <item rdf:about="http://example.org/item2">
+    <title>Bugzilla Reorganized</title>
+    <link>http://www.mozilla.org/bugs/</link>
+  </item>
+  <item rdf:about="http://example.org/item3">
+    <title>Mozilla Party, 2.0!</title>
+    <link>http://www.mozilla.org/party/1999/</link>
+  </item>
+  <item rdf:about="http://example.org/item4">
+    <title>Unix Platform Parity</title>
+    <link>http://www.mozilla.org/build/unix.html</link>
+  </item>
+  <item rdf:about="http://example.org/item5">
+    <title>NPL 1.0M published</title>
+    <link>http://www.mozilla.org/NPL/NPL-1.0M.html</link>
+  </item>
+</rdf:RDF>
