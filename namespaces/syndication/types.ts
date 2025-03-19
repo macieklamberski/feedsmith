@@ -1,4 +1,4 @@
 import type z from 'zod'
-import type { channel } from './schemas'
+import type { feed } from './schemas'
 
-export type Channel = z.infer<typeof channel>
+export type Feed = z.infer<typeof feed>

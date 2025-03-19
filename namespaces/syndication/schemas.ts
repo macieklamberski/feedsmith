@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const channel = z
+export const feed = z
   .object({
     updatePeriod: z.string(),
     updateFrequency: z.number(),
