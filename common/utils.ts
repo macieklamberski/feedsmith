@@ -44,13 +44,21 @@ export const omitNullish = <T>(array: Array<T | null | undefined>): Array<T> => 
   return array.filter((item): item is T => item !== null && item !== undefined)
 }
 
+export const stripCdata = (text: Unreliable) => {
+  if (typeof text !== 'string' || text.indexOf('<![CDATA[') === -1) {
+    return text
+  }
+
+  return text.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, (_, content) => content || '')
+}
+
 export const parseString: ParseFunction<string> = (value, level) => {
   if (typeof value === 'number') {
     return level === 'coerce' ? value.toString() : undefined
   }
 
   if (typeof value === 'string') {
-    return decode(value).trim()
+    return decode(stripCdata(value).trim())
   }
 }
 

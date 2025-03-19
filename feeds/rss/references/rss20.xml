@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
   <channel>
-    <title>Sample Feed</title>
+    <title><![CDATA[Sample Feed]]></title>
     <link>http://example.org/</link>
     <description>For documentation &lt;em&gt;only&lt;/em&gt;</description>
     <language>en</language>
@@ -27,7 +27,7 @@
     <rating>(PICS-1.1 "http://www.rsac.org/ratingsv01.html" l by "webmaster@example.com" on "2006.01.29T10:09-0800" r (n 0 s 0 v 0 l 0))</rating>
     <textInput>
       <title>Search</title>
-      <description>Search this site:</description>
+      <description><![CDATA[Search this site:]]></description>
       <name>q</name>
       <link>http://example.org/mt/mt-search.cgi</link>
     </textInput>

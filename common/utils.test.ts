@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'bun:test'
+import type { ParseFunction } from './types'
 import {
   hasAllProps,
   hasAnyProps,
@@ -10,8 +11,8 @@ import {
   parseBoolean,
   parseNumber,
   parseString,
+  stripCdata,
 } from './utils'
-import type { ParseFunction } from './types'
 
 describe('isObject', () => {
   it('should return true for plain objects', () => {
@@ -114,7 +115,6 @@ describe('hasAnyProps', () => {
     expect(hasAnyProps(value, ['f'])).toBe(false)
   })
 })
-
 
 describe('hasAllProps', () => {
   it('should return true when all required properties have defined values', () => {
@@ -256,6 +256,73 @@ describe('omitNullish', () => {
     const value = [1, 'string', true, null, { key: 'value' }, undefined, []]
 
     expect(omitNullish(value)).toEqual([1, 'string', true, { key: 'value' }, []])
+  })
+})
+
+describe('stripCdata', () => {
+  it('should return string without CDATA markers when present', () => {
+    expect(stripCdata('<![CDATA[content]]>')).toEqual('content')
+    expect(stripCdata('prefix<![CDATA[content]]>suffix')).toEqual('prefixcontentsuffix')
+    expect(stripCdata('<![CDATA[]]>')).toEqual('')
+  })
+
+  it('should handle multiple CDATA sections in a single string', () => {
+    expect(stripCdata('<![CDATA[first]]>middle<![CDATA[second]]>')).toEqual('firstmiddlesecond')
+    expect(stripCdata('start<![CDATA[one]]>between<![CDATA[two]]>end')).toEqual(
+      'startonebetweentwoend',
+    )
+    expect(stripCdata('<![CDATA[a]]><![CDATA[b]]><![CDATA[c]]>')).toEqual('abc')
+  })
+
+  it('should return the original string when no CDATA markers are present', () => {
+    expect(stripCdata('regular text')).toEqual('regular text')
+    expect(stripCdata('')).toEqual('')
+    expect(stripCdata('text with <tags> but no CDATA')).toEqual('text with <tags> but no CDATA')
+  })
+
+  it('should handle CDATA with special XML characters', () => {
+    expect(stripCdata('<![CDATA[<div>HTML content</div>]]>')).toEqual('<div>HTML content</div>')
+    expect(stripCdata('<![CDATA[&lt;p&gt;encoded entities&lt;/p&gt;]]>')).toEqual(
+      '&lt;p&gt;encoded entities&lt;/p&gt;',
+    )
+    expect(stripCdata('<![CDATA[5 < 10 && 10 > 5]]>')).toEqual('5 < 10 && 10 > 5')
+  })
+
+  it('should handle CDATA with newlines and whitespace', () => {
+    expect(stripCdata('<![CDATA[\n  multiline\n  content\n]]>')).toEqual(
+      '\n  multiline\n  content\n',
+    )
+    expect(stripCdata('<![CDATA[   space   ]]>')).toEqual('   space   ')
+    expect(stripCdata('  <![CDATA[trimming]]>  ')).toEqual('  trimming  ')
+  })
+
+  it('should handle malformed or partial CDATA properly', () => {
+    expect(stripCdata('Incomplete <![CDATA[content')).toEqual('Incomplete <![CDATA[content')
+    expect(stripCdata('Missing end content]]>')).toEqual('Missing end content]]>')
+    expect(stripCdata('<![CDATA[nested <![CDATA[content]]>]]>')).toEqual(
+      'nested <![CDATA[content]]>',
+    )
+  })
+
+  it('should handle case-sensitivity properly', () => {
+    expect(stripCdata('<![cdata[lowercase]]>')).toEqual('<![cdata[lowercase]]>')
+    expect(stripCdata('<![CDATA[correct case]]>')).toEqual('correct case')
+  })
+
+  it('should handle empty values correctly', () => {
+    expect(stripCdata('')).toEqual('')
+    expect(stripCdata('   ')).toEqual('   ')
+  })
+
+  it('should return the same value for non-string inputs', () => {
+    expect(stripCdata(null)).toEqual(null)
+    expect(stripCdata(undefined)).toEqual(undefined)
+    expect(stripCdata(123)).toEqual(123)
+    expect(stripCdata(true)).toEqual(true)
+    expect(stripCdata(false)).toEqual(false)
+    expect(stripCdata([])).toEqual([])
+    expect(stripCdata({})).toEqual({})
+    expect(stripCdata(() => {})).toBeTypeOf('function')
   })
 })
 
