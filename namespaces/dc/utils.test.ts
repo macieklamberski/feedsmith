@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
-import { retrieveAny } from './utils'
+import { retrieveDublinCore } from './utils'
 
-describe('retrieveAny', () => {
+describe('retrieveDublinCore', () => {
   it('should parse complete dublincore object with all properties', () => {
     const value = {
       'dc:title': { '#text': 'Sample Title' },
@@ -38,7 +38,7 @@ describe('retrieveAny', () => {
       rights: 'Copyright 2023, All rights reserved',
     }
 
-    expect(retrieveAny(value, 'coerce')).toEqual(expected)
+    expect(retrieveDublinCore(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle partial dublincore object with common properties', () => {
@@ -53,7 +53,7 @@ describe('retrieveAny', () => {
       date: '2023-05-15T09:30:00Z',
     }
 
-    expect(retrieveAny(value, 'coerce')).toEqual(expected)
+    expect(retrieveDublinCore(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle object with only title property', () => {
@@ -64,7 +64,7 @@ describe('retrieveAny', () => {
       title: 'Only Title',
     }
 
-    expect(retrieveAny(value, 'coerce')).toEqual(expected)
+    expect(retrieveDublinCore(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -78,20 +78,20 @@ describe('retrieveAny', () => {
       identifier: '456',
     }
 
-    expect(retrieveAny(value, 'coerce')).toEqual(expected)
+    expect(retrieveDublinCore(value, 'coerce')).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    expect(retrieveAny(value, 'coerce')).toBeUndefined()
+    expect(retrieveDublinCore(value, 'coerce')).toBeUndefined()
   })
 
   it('should return undefined for non-object value', () => {
-    expect(retrieveAny('not an object', 'coerce')).toBeUndefined()
-    expect(retrieveAny(undefined, 'coerce')).toBeUndefined()
-    expect(retrieveAny(null, 'coerce')).toBeUndefined()
-    expect(retrieveAny([], 'coerce')).toBeUndefined()
+    expect(retrieveDublinCore('not an object', 'coerce')).toBeUndefined()
+    expect(retrieveDublinCore(undefined, 'coerce')).toBeUndefined()
+    expect(retrieveDublinCore(null, 'coerce')).toBeUndefined()
+    expect(retrieveDublinCore([], 'coerce')).toBeUndefined()
   })
 
   it('should return undefined when no properties can be parsed', () => {
@@ -100,7 +100,7 @@ describe('retrieveAny', () => {
       'unknown:field': { '#text': 'data' },
     }
 
-    expect(retrieveAny(value, 'coerce')).toBeUndefined()
+    expect(retrieveDublinCore(value, 'coerce')).toBeUndefined()
   })
 
   it('should handle objects with missing #text property', () => {
@@ -114,7 +114,7 @@ describe('retrieveAny', () => {
       date: '2023-01-01T12:00:00Z',
     }
 
-    expect(retrieveAny(value, 'coerce')).toEqual(expected)
+    expect(retrieveDublinCore(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle empty strings in properties', () => {
@@ -129,7 +129,7 @@ describe('retrieveAny', () => {
       description: '',
     }
 
-    expect(retrieveAny(value, 'coerce')).toEqual(expected)
+    expect(retrieveDublinCore(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle null values in properties', () => {
@@ -142,7 +142,7 @@ describe('retrieveAny', () => {
       creator: 'John Doe',
     }
 
-    expect(retrieveAny(value, 'coerce')).toEqual(expected)
+    expect(retrieveDublinCore(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle numeric values in properties', () => {
@@ -155,7 +155,7 @@ describe('retrieveAny', () => {
       language: 'en',
     }
 
-    expect(retrieveAny(value, 'coerce')).toEqual(expected)
+    expect(retrieveDublinCore(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle object with all properties having null values', () => {
@@ -165,6 +165,6 @@ describe('retrieveAny', () => {
       'dc:subject': { '#text': null },
     }
 
-    expect(retrieveAny(value, 'coerce')).toBeUndefined()
+    expect(retrieveDublinCore(value, 'coerce')).toBeUndefined()
   })
 })

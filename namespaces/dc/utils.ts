@@ -1,13 +1,13 @@
 import type { ParseFunction } from '../../common/types'
-import { hasAnyProps, isObject, parseNumber, parseString } from '../../common/utils'
-import type { Any } from './types'
+import { hasAnyProps, isObject, parseString } from '../../common/utils'
+import type { DublinCore } from './types'
 
-export const retrieveAny: ParseFunction<Any> = (value, level) => {
+export const retrieveDublinCore: ParseFunction<DublinCore> = (value, level) => {
   if (!isObject(value)) {
     return
   }
 
-  const any = {
+  const dublinCore = {
     title: parseString(value['dc:title']?.['#text'], level),
     creator: parseString(value['dc:creator']?.['#text'], level),
     subject: parseString(value['dc:subject']?.['#text'], level),
@@ -25,7 +25,7 @@ export const retrieveAny: ParseFunction<Any> = (value, level) => {
     rights: parseString(value['dc:rights']?.['#text'], level),
   }
 
-  if (hasAnyProps(any, Object.keys(any) as Array<keyof Any>)) {
-    return any
+  if (hasAnyProps(dublinCore, Object.keys(dublinCore) as Array<keyof DublinCore>)) {
+    return dublinCore
   }
 }
