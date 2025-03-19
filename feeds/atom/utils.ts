@@ -188,24 +188,24 @@ export const parseEntry: ParseFunction<Entry> = (value, level) => {
 }
 
 export const parseFeed: ParseFunction<Feed> = (value, level) => {
-  if (!isObject(value)) {
+  if (!isObject(value?.feed)) {
     return
   }
 
   const feed = {
-    authors: parseArrayOf(value.author, parsePerson, level),
-    categories: parseArrayOf(value.category, parseCategory, level),
-    contributors: parseArrayOf(value.contributor, parsePerson, level),
-    generator: parseGenerator(value.generator, level),
-    icon: parseString(value.icon?.['#text'], level),
-    id: parseString(value.id?.['#text'], level),
-    links: parseArrayOf(value.link, parseLink, level),
-    logo: parseString(value.logo?.['#text'], level),
-    rights: parseString(value.rights?.['#text'], level),
-    subtitle: retrieveSubtitle(value, level),
-    title: parseString(value.title?.['#text'], level),
-    updated: retrieveUpdated(value, level),
-    entries: parseArrayOf(value.entry, parseEntry, level),
+    authors: parseArrayOf(value.feed.author, parsePerson, level),
+    categories: parseArrayOf(value.feed.category, parseCategory, level),
+    contributors: parseArrayOf(value.feed.contributor, parsePerson, level),
+    generator: parseGenerator(value.feed.generator, level),
+    icon: parseString(value.feed.icon?.['#text'], level),
+    id: parseString(value.feed.id?.['#text'], level),
+    links: parseArrayOf(value.feed.link, parseLink, level),
+    logo: parseString(value.feed.logo?.['#text'], level),
+    rights: parseString(value.feed.rights?.['#text'], level),
+    subtitle: retrieveSubtitle(value.feed, level),
+    title: parseString(value.feed.title?.['#text'], level),
+    updated: retrieveUpdated(value.feed, level),
+    entries: parseArrayOf(value.feed.entry, parseEntry, level),
   }
 
   // INFO: Spec also says about required "updated" and "author" but those are

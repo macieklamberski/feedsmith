@@ -6,7 +6,7 @@ import { parseFeed } from './utils'
 export type Parse = (value: string | Buffer) => Feed | undefined
 
 export const parse: Parse = (value) => {
-  const object = parser.parse(value).feed
+  const object = parser.parse(value)
   const parsed = parseFeed(object, 'coerce')
 
   return parsed ? feed.parse(parsed) : undefined
