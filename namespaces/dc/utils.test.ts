@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
-import { retrieveDublincore } from './utils'
+import { retrieveAny } from './utils'
 
-describe('retrieveDublincore', () => {
+describe('retrieveAny', () => {
   it('should parse complete dublincore object with all properties', () => {
     const value = {
       'dc:title': { '#text': 'Sample Title' },
@@ -38,7 +38,7 @@ describe('retrieveDublincore', () => {
       rights: 'Copyright 2023, All rights reserved',
     }
 
-    expect(retrieveDublincore(value, 'coerce')).toEqual(expected)
+    expect(retrieveAny(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle partial dublincore object with common properties', () => {
@@ -53,7 +53,7 @@ describe('retrieveDublincore', () => {
       date: '2023-05-15T09:30:00Z',
     }
 
-    expect(retrieveDublincore(value, 'coerce')).toEqual(expected)
+    expect(retrieveAny(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle object with only title property', () => {
@@ -64,7 +64,7 @@ describe('retrieveDublincore', () => {
       title: 'Only Title',
     }
 
-    expect(retrieveDublincore(value, 'coerce')).toEqual(expected)
+    expect(retrieveAny(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -78,20 +78,20 @@ describe('retrieveDublincore', () => {
       identifier: '456',
     }
 
-    expect(retrieveDublincore(value, 'coerce')).toEqual(expected)
+    expect(retrieveAny(value, 'coerce')).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    expect(retrieveDublincore(value, 'coerce')).toBeUndefined()
+    expect(retrieveAny(value, 'coerce')).toBeUndefined()
   })
 
   it('should return undefined for non-object value', () => {
-    expect(retrieveDublincore('not an object', 'coerce')).toBeUndefined()
-    expect(retrieveDublincore(undefined, 'coerce')).toBeUndefined()
-    expect(retrieveDublincore(null, 'coerce')).toBeUndefined()
-    expect(retrieveDublincore([], 'coerce')).toBeUndefined()
+    expect(retrieveAny('not an object', 'coerce')).toBeUndefined()
+    expect(retrieveAny(undefined, 'coerce')).toBeUndefined()
+    expect(retrieveAny(null, 'coerce')).toBeUndefined()
+    expect(retrieveAny([], 'coerce')).toBeUndefined()
   })
 
   it('should return undefined when no properties can be parsed', () => {
@@ -100,7 +100,7 @@ describe('retrieveDublincore', () => {
       'unknown:field': { '#text': 'data' },
     }
 
-    expect(retrieveDublincore(value, 'coerce')).toBeUndefined()
+    expect(retrieveAny(value, 'coerce')).toBeUndefined()
   })
 
   it('should handle objects with missing #text property', () => {
@@ -114,7 +114,7 @@ describe('retrieveDublincore', () => {
       date: '2023-01-01T12:00:00Z',
     }
 
-    expect(retrieveDublincore(value, 'coerce')).toEqual(expected)
+    expect(retrieveAny(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle empty strings in properties', () => {
@@ -129,7 +129,7 @@ describe('retrieveDublincore', () => {
       description: '',
     }
 
-    expect(retrieveDublincore(value, 'coerce')).toEqual(expected)
+    expect(retrieveAny(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle null values in properties', () => {
@@ -142,7 +142,7 @@ describe('retrieveDublincore', () => {
       creator: 'John Doe',
     }
 
-    expect(retrieveDublincore(value, 'coerce')).toEqual(expected)
+    expect(retrieveAny(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle numeric values in properties', () => {
@@ -155,7 +155,7 @@ describe('retrieveDublincore', () => {
       language: 'en',
     }
 
-    expect(retrieveDublincore(value, 'coerce')).toEqual(expected)
+    expect(retrieveAny(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle object with all properties having null values', () => {
@@ -165,6 +165,6 @@ describe('retrieveDublincore', () => {
       'dc:subject': { '#text': null },
     }
 
-    expect(retrieveDublincore(value, 'coerce')).toBeUndefined()
+    expect(retrieveAny(value, 'coerce')).toBeUndefined()
   })
 })

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const dublincore = z
+export const any = z
   .object({
     title: z.string(),
     creator: z.string(),
