@@ -8,9 +8,9 @@ export const retrieveFeed: ParseFunction<Feed> = (value, level) => {
   }
 
   const feed = {
-    updatePeriod: parseString(value['sy:updatePeriod']?.['#text'], level),
-    updateFrequency: parseNumber(value['sy:updateFrequency']?.['#text'], level),
-    updateBase: parseString(value['sy:updateBase']?.['#text'], level),
+    updatePeriod: parseString(value['sy:updateperiod']?.['#text'], level),
+    updateFrequency: parseNumber(value['sy:updatefrequency']?.['#text'], level),
+    updateBase: parseString(value['sy:updatebase']?.['#text'], level),
   }
 
   if (hasAnyProps(feed, Object.keys(feed) as Array<keyof Feed>)) {
