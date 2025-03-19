@@ -7,6 +7,9 @@ import {
   parseNumber,
   parseString,
 } from '../../common/utils'
+import { retrieveItem as retrieveContentNamespaceItem } from '../../namespaces/content/utils'
+import { retrieveDublinCore as retrieveDublinCoreNamespaceFeed } from '../../namespaces/dc/utils'
+import { retrieveFeed as retrieveSyndicationNamespaceFeed } from '../../namespaces/sy/utils'
 import type {
   Author,
   Category,
@@ -137,16 +140,18 @@ export const parseItem: ParseFunction<Item> = (value, level) => {
   }
 
   const item = {
-    title: parseString(value?.title?.['#text'], level),
-    link: parseString(value?.link?.['#text'], level),
-    description: parseString(value?.description?.['#text'], level),
-    authors: parseArrayOf(value?.author, parseAuthor, level),
-    categories: parseArrayOf(value?.category, parseCategory, level),
-    comments: parseString(value?.comments?.['#text'], level),
-    enclosure: parseEnclosure(value?.enclosure, level),
-    guid: parseString(value?.guid?.['#text'], level),
-    pubDate: parseString(value?.pubdate?.['#text'], level),
-    source: parseSource(value?.source, level),
+    title: parseString(value.title?.['#text'], level),
+    link: parseString(value.link?.['#text'], level),
+    description: parseString(value.description?.['#text'], level),
+    authors: parseArrayOf(value.author, parseAuthor, level),
+    categories: parseArrayOf(value.category, parseCategory, level),
+    comments: parseString(value.comments?.['#text'], level),
+    enclosure: parseEnclosure(value.enclosure, level),
+    guid: parseString(value.guid?.['#text'], level),
+    pubDate: parseString(value.pubdate?.['#text'], level),
+    source: parseSource(value.source, level),
+    content: retrieveContentNamespaceItem(value, level),
+    dc: retrieveDublinCoreNamespaceFeed(value, level),
   }
 
   // TODO: Return only if required values are present: title || description.
@@ -154,31 +159,35 @@ export const parseItem: ParseFunction<Item> = (value, level) => {
 }
 
 export const parseFeed: ParseFunction<Feed> = (value, level) => {
-  if (!isObject(value?.rss)) {
+  const channel = value?.rss?.channel
+
+  if (!isObject(channel)) {
     return
   }
 
   const feed = {
-    title: parseString(value.rss.channel?.title?.['#text'], level),
-    link: parseString(value.rss.channel?.link?.['#text'], level),
-    description: parseString(value.rss.channel?.description?.['#text'], level),
-    language: parseString(value.rss.channel?.language?.['#text'], level),
-    copyright: parseString(value.rss.channel?.copyright?.['#text'], level),
-    managingEditor: parseString(value.rss.channel?.managingeditor?.['#text'], level),
-    webMaster: parseString(value.rss.channel?.webmaster?.['#text'], level),
-    pubDate: parseString(value.rss.channel?.pubdate?.['#text'], level),
-    lastBuildDate: parseString(value.rss.channel?.lastbuilddate?.['#text'], level),
-    categories: parseArrayOf(value.rss.channel?.category, parseCategory, level),
-    generator: parseString(value.rss.channel?.generator?.['#text'], level),
-    docs: parseString(value.rss.channel?.docs?.['#text'], level),
-    cloud: parseCloud(value.rss.channel?.cloud, level),
-    ttl: parseNumber(value.rss.channel?.ttl?.['#text'], level),
-    image: parseImage(value.rss.channel?.image, level),
-    rating: parseString(value.rss.channel?.rating?.['#text'], level),
-    textInput: parseTextInput(value.rss.channel?.textinput, level),
-    skipHours: parseSkipHours(value.rss.channel?.skiphours, level),
-    skipDays: parseSkipDays(value.rss.channel?.skipdays, level),
-    items: parseArrayOf(value.rss.channel?.item, parseItem, level),
+    title: parseString(channel.title?.['#text'], level),
+    link: parseString(channel.link?.['#text'], level),
+    description: parseString(channel.description?.['#text'], level),
+    language: parseString(channel.language?.['#text'], level),
+    copyright: parseString(channel.copyright?.['#text'], level),
+    managingEditor: parseString(channel.managingeditor?.['#text'], level),
+    webMaster: parseString(channel.webmaster?.['#text'], level),
+    pubDate: parseString(channel.pubdate?.['#text'], level),
+    lastBuildDate: parseString(channel.lastbuilddate?.['#text'], level),
+    categories: parseArrayOf(channel.category, parseCategory, level),
+    generator: parseString(channel.generator?.['#text'], level),
+    docs: parseString(channel.docs?.['#text'], level),
+    cloud: parseCloud(channel.cloud, level),
+    ttl: parseNumber(channel.ttl?.['#text'], level),
+    image: parseImage(channel.image, level),
+    rating: parseString(channel.rating?.['#text'], level),
+    textInput: parseTextInput(channel.textinput, level),
+    skipHours: parseSkipHours(channel.skiphours, level),
+    skipDays: parseSkipDays(channel.skipdays, level),
+    items: parseArrayOf(channel.item, parseItem, level),
+    dc: retrieveDublinCoreNamespaceFeed(channel, level),
+    sy: retrieveSyndicationNamespaceFeed(channel, level),
   }
 
   // TODO: Return only if required values are present: title, link, description.

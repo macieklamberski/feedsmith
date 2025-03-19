@@ -9,10 +9,11 @@ describe('parse', () => {
     '093': '0.93',
     '094': '0.94',
     '20': '2.0',
+    ns: 'with namespaces',
   }
 
   for (const [key, label] of Object.entries(versions)) {
-    it(`should correctly parse RSS ${label} feed`, async () => {
+    it(`should correctly parse RSS ${label}`, async () => {
       const reference = `${import.meta.dir}/references/rss${key}`
       const input = await Bun.file(`${reference}.xml`).text()
       const expectation = await Bun.file(`${reference}.json`).json()
@@ -22,7 +23,7 @@ describe('parse', () => {
     })
   }
 
-  it('should correctly parse RSS feed with mixed case tags', async () => {
+  it('should correctly parse RSS with mixed case tags', async () => {
     const input = `
       <?xml version="1.0" encoding="UTF-8" ?>
       <rSs version="2.0">

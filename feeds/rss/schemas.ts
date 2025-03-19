@@ -1,4 +1,7 @@
 import { z } from 'zod'
+import { item as contentNamespaceItem } from '../../namespaces/content/schemas'
+import { dublinCore as dublinCoreNamespace } from '../../namespaces/dc/schemas'
+import { feed as syndicationNamespaceFeed } from '../../namespaces/sy/schemas'
 
 // TODO: Consider replacing this with breaking up the author string to { name, email }.
 export const author = z.string()
@@ -70,6 +73,8 @@ export const item = z
     guid,
     pubDate: z.string(),
     source,
+    content: contentNamespaceItem,
+    dc: dublinCoreNamespace,
   })
   .partial()
 
@@ -84,7 +89,7 @@ export const feed = z
     webMaster: z.string(),
     pubDate: z.string(),
     lastBuildDate: z.string(),
-    authors: z.array(z.string()),
+    authors: z.array(author),
     categories: z.array(category),
     generator: z.string(),
     docs: z.string(),
@@ -96,5 +101,7 @@ export const feed = z
     skipHours: z.array(z.number()),
     skipDays: z.array(z.string()),
     items: z.array(item),
+    dc: dublinCoreNamespace,
+    sy: syndicationNamespaceFeed,
   })
   .partial()
