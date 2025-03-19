@@ -1,6 +1,7 @@
 import { XMLParser } from 'fast-xml-parser'
 
 export const stopNodes = [
+  // TODO: What about the namespaces?
   'rss.channel.title',
   'rss.channel.link',
   'rss.channel.description',

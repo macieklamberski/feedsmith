@@ -1,6 +1,7 @@
 import { XMLParser } from 'fast-xml-parser'
 
 export const stopNodes = [
+  // TODO: What about the namespaces?
   'feed.author.name',
   'feed.author.uri',
   'feed.author.url', // Atom 0.3.
