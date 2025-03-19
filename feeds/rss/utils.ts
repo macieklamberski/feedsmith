@@ -154,31 +154,31 @@ export const parseItem: ParseFunction<Item> = (value, level) => {
 }
 
 export const parseFeed: ParseFunction<Feed> = (value, level) => {
-  if (!isObject(value)) {
+  if (!isObject(value?.rss)) {
     return
   }
 
   const feed = {
-    title: parseString(value.channel?.title?.['#text'], level),
-    link: parseString(value.channel?.link?.['#text'], level),
-    description: parseString(value.channel?.description?.['#text'], level),
-    language: parseString(value.channel?.language?.['#text'], level),
-    copyright: parseString(value.channel?.copyright?.['#text'], level),
-    managingEditor: parseString(value.channel?.managingeditor?.['#text'], level),
-    webMaster: parseString(value.channel?.webmaster?.['#text'], level),
-    pubDate: parseString(value.channel?.pubdate?.['#text'], level),
-    lastBuildDate: parseString(value.channel?.lastbuilddate?.['#text'], level),
-    categories: parseArrayOf(value.channel?.category, parseCategory, level),
-    generator: parseString(value.channel?.generator?.['#text'], level),
-    docs: parseString(value.channel?.docs?.['#text'], level),
-    cloud: parseCloud(value.channel?.cloud, level),
-    ttl: parseNumber(value.channel?.ttl?.['#text'], level),
-    image: parseImage(value.channel?.image, level),
-    rating: parseString(value.channel?.rating?.['#text'], level),
-    textInput: parseTextInput(value.channel?.textinput, level),
-    skipHours: parseSkipHours(value.channel?.skiphours, level),
-    skipDays: parseSkipDays(value.channel?.skipdays, level),
-    items: parseArrayOf(value?.channel?.item, parseItem, level),
+    title: parseString(value.rss.channel?.title?.['#text'], level),
+    link: parseString(value.rss.channel?.link?.['#text'], level),
+    description: parseString(value.rss.channel?.description?.['#text'], level),
+    language: parseString(value.rss.channel?.language?.['#text'], level),
+    copyright: parseString(value.rss.channel?.copyright?.['#text'], level),
+    managingEditor: parseString(value.rss.channel?.managingeditor?.['#text'], level),
+    webMaster: parseString(value.rss.channel?.webmaster?.['#text'], level),
+    pubDate: parseString(value.rss.channel?.pubdate?.['#text'], level),
+    lastBuildDate: parseString(value.rss.channel?.lastbuilddate?.['#text'], level),
+    categories: parseArrayOf(value.rss.channel?.category, parseCategory, level),
+    generator: parseString(value.rss.channel?.generator?.['#text'], level),
+    docs: parseString(value.rss.channel?.docs?.['#text'], level),
+    cloud: parseCloud(value.rss.channel?.cloud, level),
+    ttl: parseNumber(value.rss.channel?.ttl?.['#text'], level),
+    image: parseImage(value.rss.channel?.image, level),
+    rating: parseString(value.rss.channel?.rating?.['#text'], level),
+    textInput: parseTextInput(value.rss.channel?.textinput, level),
+    skipHours: parseSkipHours(value.rss.channel?.skiphours, level),
+    skipDays: parseSkipDays(value.rss.channel?.skipdays, level),
+    items: parseArrayOf(value.rss.channel?.item, parseItem, level),
   }
 
   // TODO: Return only if required values are present: title, link, description.

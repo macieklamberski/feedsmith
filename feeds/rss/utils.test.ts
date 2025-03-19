@@ -529,60 +529,61 @@ describe('parseItem', () => {
 describe('parseFeed', () => {
   it('should parse complete feed object', () => {
     const value = {
-      channel: {
-        title: { '#text': 'Feed Title' },
-        link: { '#text': 'https://example.com' },
-        description: { '#text': 'Feed Description' },
-        language: { '#text': 'en-us' },
-        copyright: { '#text': '© 2023 Example' },
-        managingeditor: { '#text': 'editor@example.com' },
-        webmaster: { '#text': 'webmaster@example.com' },
-        pubdate: { '#text': 'Mon, 15 Mar 2023 12:00:00 GMT' },
-        lastbuilddate: { '#text': 'Mon, 15 Mar 2023 13:00:00 GMT' },
-        category: [{ '#text': 'Technology', '@domain': 'http://example.com/categories' }],
-        generator: { '#text': 'Example RSS Generator' },
-        docs: { '#text': 'https://example.com/rss-docs' },
-        cloud: {
-          '@domain': 'rpc.example.com',
-          '@port': '80',
-          '@path': '/RPC2',
-          '@registerprocedure': 'pingMe',
-          '@protocol': 'soap',
-        },
-        ttl: { '#text': '60' },
-        image: {
-          url: { '#text': 'https://example.com/image.jpg' },
-          title: { '#text': 'Example Image' },
+      rss: {
+        channel: {
+          title: { '#text': 'Feed Title' },
           link: { '#text': 'https://example.com' },
-        },
-        rating: { '#text': 'The PICS rating of the feed' },
-        textinput: {
-          title: { '#text': 'Search' },
-          description: { '#text': 'Search this feed' },
-          name: { '#text': 'q' },
-          link: { '#text': 'https://example.com/search' },
-        },
-        skiphours: {
-          hour: [{ '#text': '0' }, { '#text': '1' }],
-        },
-        skipdays: {
-          day: [{ '#text': 'Saturday' }, { '#text': 'Sunday' }],
-        },
-        item: [
-          {
-            title: { '#text': 'Item 1 Title' },
-            link: { '#text': 'https://example.com/item1' },
-            description: { '#text': 'Item 1 Description' },
+          description: { '#text': 'Feed Description' },
+          language: { '#text': 'en-us' },
+          copyright: { '#text': '© 2023 Example' },
+          managingeditor: { '#text': 'editor@example.com' },
+          webmaster: { '#text': 'webmaster@example.com' },
+          pubdate: { '#text': 'Mon, 15 Mar 2023 12:00:00 GMT' },
+          lastbuilddate: { '#text': 'Mon, 15 Mar 2023 13:00:00 GMT' },
+          category: [{ '#text': 'Technology', '@domain': 'http://example.com/categories' }],
+          generator: { '#text': 'Example RSS Generator' },
+          docs: { '#text': 'https://example.com/rss-docs' },
+          cloud: {
+            '@domain': 'rpc.example.com',
+            '@port': '80',
+            '@path': '/RPC2',
+            '@registerprocedure': 'pingMe',
+            '@protocol': 'soap',
           },
-          {
-            title: { '#text': 'Item 2 Title' },
-            link: { '#text': 'https://example.com/item2' },
-            description: { '#text': 'Item 2 Description' },
+          ttl: { '#text': '60' },
+          image: {
+            url: { '#text': 'https://example.com/image.jpg' },
+            title: { '#text': 'Example Image' },
+            link: { '#text': 'https://example.com' },
           },
-        ],
+          rating: { '#text': 'The PICS rating of the feed' },
+          textinput: {
+            title: { '#text': 'Search' },
+            description: { '#text': 'Search this feed' },
+            name: { '#text': 'q' },
+            link: { '#text': 'https://example.com/search' },
+          },
+          skiphours: {
+            hour: [{ '#text': '0' }, { '#text': '1' }],
+          },
+          skipdays: {
+            day: [{ '#text': 'Saturday' }, { '#text': 'Sunday' }],
+          },
+          item: [
+            {
+              title: { '#text': 'Item 1 Title' },
+              link: { '#text': 'https://example.com/item1' },
+              description: { '#text': 'Item 1 Description' },
+            },
+            {
+              title: { '#text': 'Item 2 Title' },
+              link: { '#text': 'https://example.com/item2' },
+              description: { '#text': 'Item 2 Description' },
+            },
+          ],
+        },
       },
     }
-
     const expected = {
       title: 'Feed Title',
       link: 'https://example.com',
@@ -637,9 +638,11 @@ describe('parseFeed', () => {
 
   it('should handle minimal feed with only required fields', () => {
     const value = {
-      channel: {
-        title: { '#text': 'Feed Title' },
-        link: { '#text': 'https://example.com' },
+      rss: {
+        channel: {
+          title: { '#text': 'Feed Title' },
+          link: { '#text': 'https://example.com' },
+        },
       },
     }
 
@@ -653,9 +656,11 @@ describe('parseFeed', () => {
 
   it('should return undefined when title is missing', () => {
     const value = {
-      channel: {
-        link: { '#text': 'https://example.com' },
-        description: { '#text': 'Feed Description' },
+      rss: {
+        channel: {
+          link: { '#text': 'https://example.com' },
+          description: { '#text': 'Feed Description' },
+        },
       },
     }
 
@@ -664,9 +669,11 @@ describe('parseFeed', () => {
 
   it('should return undefined when link is missing', () => {
     const value = {
-      channel: {
-        title: { '#text': 'Feed Title' },
-        description: { '#text': 'Feed Description' },
+      rss: {
+        channel: {
+          title: { '#text': 'Feed Title' },
+          description: { '#text': 'Feed Description' },
+        },
       },
     }
 
@@ -675,17 +682,19 @@ describe('parseFeed', () => {
 
   it('should handle coercible values', () => {
     const value = {
-      channel: {
-        title: { '#text': 123 },
-        link: { '#text': 456 },
-        ttl: { '#text': '60' },
-        category: [{ '#text': 789 }],
-        item: [
-          {
-            title: { '#text': 'Item Title' },
-            guid: { '#text': 101112 },
-          },
-        ],
+      rss: {
+        channel: {
+          title: { '#text': 123 },
+          link: { '#text': 456 },
+          ttl: { '#text': '60' },
+          category: [{ '#text': 789 }],
+          item: [
+            {
+              title: { '#text': 'Item Title' },
+              guid: { '#text': 101112 },
+            },
+          ],
+        },
       },
     }
     const expected = {
@@ -720,34 +729,36 @@ describe('parseFeed', () => {
 
   it('should handle complex nested structures', () => {
     const value = {
-      channel: {
-        title: { '#text': 'Feed Title' },
-        link: { '#text': 'https://example.com' },
-        item: [
-          {
-            title: { '#text': 'Item 1' },
-            category: [
-              { '#text': 'Category 1' },
-              { '#text': 'Category 2', '@domain': 'http://example.com/cat' },
-            ],
-            enclosure: {
-              url: { '#text': 'https://example.com/file.mp3' },
-              length: { '#text': '12345' },
-              type: { '#text': 'audio/mpeg' },
-            },
-          },
-          {
-            title: { '#text': 'Item 2' },
-            description: { '#text': 'Item 2 Description' },
-            author: [{ '#text': 'Author 1' }, { '#text': 'Author 2' }],
-          },
-        ],
-        image: {
-          url: { '#text': 'https://example.com/image.jpg' },
-          title: { '#text': 'Image Title' },
+      rss: {
+        channel: {
+          title: { '#text': 'Feed Title' },
           link: { '#text': 'https://example.com' },
-          height: { '#text': '32' },
-          width: { '#text': '32' },
+          item: [
+            {
+              title: { '#text': 'Item 1' },
+              category: [
+                { '#text': 'Category 1' },
+                { '#text': 'Category 2', '@domain': 'http://example.com/cat' },
+              ],
+              enclosure: {
+                url: { '#text': 'https://example.com/file.mp3' },
+                length: { '#text': '12345' },
+                type: { '#text': 'audio/mpeg' },
+              },
+            },
+            {
+              title: { '#text': 'Item 2' },
+              description: { '#text': 'Item 2 Description' },
+              author: [{ '#text': 'Author 1' }, { '#text': 'Author 2' }],
+            },
+          ],
+          image: {
+            url: { '#text': 'https://example.com/image.jpg' },
+            title: { '#text': 'Image Title' },
+            link: { '#text': 'https://example.com' },
+            height: { '#text': '32' },
+            width: { '#text': '32' },
+          },
         },
       },
     }
