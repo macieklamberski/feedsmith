@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
   <channel>
-    <title>Sample Feed</title>
-    <link>http://example.org/</link>
+    <title>Example Feed</title>
+    <link>http://example.org</link>
     <dc:creator>John Doe</dc:creator>
     <dc:contributor>Jane Smith</dc:contributor>
     <dc:date>2022-01-01T12:00+00:00</dc:date>
-    <dc:description>This is a sample feed.</dc:description>
+    <dc:description>This is an example of description.</dc:description>
     <sy:updateBase>2000-01-01T12:00+00:00</sy:updateBase>
     <sy:updatePeriod>hourly</sy:updatePeriod>
     <sy:updateFrequency>1</sy:updateFrequency>
     <item>
-      <title>First item title</title>
+      <title>Example Item</title>
       <link>http://example.org/item/1</link>
-      <content:encoded>This is the content of the first item.</content:encoded>
+      <content:encoded>This is an example of content.</content:encoded>
       <dc:creator>Jack Jackson</dc:creator>
       <dc:date>2022-01-01T12:00+00:00</dc:date>
     </item>

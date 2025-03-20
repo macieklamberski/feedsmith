@@ -1,19 +1,28 @@
 {
-  "title": "Sample Feed",
-  "link": "http://example.org/",
+  "title": "Example Feed",
+  "link": "http://example.org",
   "items": [
     {
-      "title": "First item title",
+      "title": "Example Item",
       "link": "http://example.org/item/1",
-      "content": { "encoded": "This is the content of the first item." },
-      "dc": { "creator": "Jack Jackson", "date": "2022-01-01T12:00+00:00" }
+      "content": {
+        "encoded": "This is an example of content."
+      },
+      "dc": {
+        "creator": "Jack Jackson",
+        "date": "2022-01-01T12:00+00:00"
+      }
     }
   ],
   "dc": {
     "creator": "John Doe",
-    "description": "This is a sample feed.",
+    "description": "This is an example of description.",
     "contributor": "Jane Smith",
     "date": "2022-01-01T12:00+00:00"
   },
-  "sy": { "updatePeriod": "hourly", "updateFrequency": 1, "updateBase": "2000-01-01T12:00+00:00" }
+  "sy": {
+    "updatePeriod": "hourly",
+    "updateFrequency": 1,
+    "updateBase": "2000-01-01T12:00+00:00"
+  }
 }

@@ -5,7 +5,7 @@
   <dc:creator>John Doe</dc:creator>
   <dc:contributor>Jane Smith</dc:contributor>
   <dc:date>2022-01-01T12:00+00:00</dc:date>
-  <dc:description>This is a sample feed.</dc:description>
+  <dc:description>This is an example of description.</dc:description>
   <sy:updateBase>2000-01-01T12:00+00:00</sy:updateBase>
   <sy:updatePeriod>hourly</sy:updatePeriod>
   <sy:updateFrequency>1</sy:updateFrequency>

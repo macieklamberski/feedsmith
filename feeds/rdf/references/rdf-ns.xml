@@ -3,21 +3,21 @@
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xmlns="http://purl.org/rss/1.0/"
 >
-  <channel rdf:about="http://www.xml.com/xml/news.rss">
-    <title>XML.com</title>
-    <link>http://xml.com/pub</link>
+  <channel rdf:about="http://example.org/rss">
+    <title>Example Feed</title>
+    <link>http://example.org</link>
     <dc:creator>John Doe</dc:creator>
     <dc:contributor>Jane Smith</dc:contributor>
     <dc:date>2022-01-01T12:00+00:00</dc:date>
-    <dc:description>This is a sample feed.</dc:description>
+    <dc:description>This is an example of description.</dc:description>
     <sy:updateBase>2000-01-01T12:00+00:00</sy:updateBase>
     <sy:updatePeriod>hourly</sy:updatePeriod>
     <sy:updateFrequency>1</sy:updateFrequency>
   </channel>
-  <item rdf:about="http://xml.com/pub/2000/08/09/rdfdb/index.html">
-    <title>Putting RDF to Work</title>
-    <link>http://xml.com/pub/2000/08/09/rdfdb/index.html</link>
-    <content:encoded>This is the content of the first item.</content:encoded>
+  <item rdf:about="http://example.org/item/1">
+    <title>Example Item</title>
+    <link>http://example.org/item/1</link>
+    <content:encoded>This is an example of content.</content:encoded>
     <dc:creator>Jack Jackson</dc:creator>
     <dc:date>2022-01-01T12:00+00:00</dc:date>
   </item>
