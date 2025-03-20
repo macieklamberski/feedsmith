@@ -5,11 +5,12 @@ describe('parse', () => {
   const versions = {
     '09': '0.9',
     '10': '1.0',
+    ns: 'with namespaces',
   }
 
   for (const [key, label] of Object.entries(versions)) {
-    it(`should correctly parse RDF ${label} feed`, async () => {
-      const reference = `${import.meta.dir}/references/rdf${key}`
+    it(`should correctly parse RDF ${label}`, async () => {
+      const reference = `${import.meta.dir}/references/rdf-${key}`
       const input = await Bun.file(`${reference}.xml`).text()
       const expectation = await Bun.file(`${reference}.json`).json()
       const result = parse(input)
@@ -18,7 +19,7 @@ describe('parse', () => {
     })
   }
 
-  it('should correctly parse RSS feed with mixed case tags', async () => {
+  it('should correctly parse RDF with mixed case tags', async () => {
     const input = `
       <?xml version="1.0" encoding="UTF-8" ?>
       <?xml version="1.0"?>
