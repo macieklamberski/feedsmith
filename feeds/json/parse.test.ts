@@ -59,111 +59,79 @@ describe('parse', () => {
     items: [{ id: '1', content_html: '<p>Hello world</p>' }],
   }
 
-  for (const level of ['skip', 'coerce'] as const) {
-    describe(level, () => {
-      it('should parse valid JSON Feed v1', () => {
-        const result = parse(validFeedV1, { level })
+  it('should parse valid JSON Feed v1', () => {
+    const result = parse(validFeedV1)
 
-        expect(result).toBeDefined()
-        expect(result?.version).toBe('https://jsonfeed.org/version/1')
-        expect(result?.title).toBe('My Example Feed')
-        expect(result?.authors).toHaveLength(1)
-        expect(result?.authors?.[0].name).toBe('John Doe')
-        expect(result?.items).toHaveLength(1)
-        expect(result?.items?.[0].id).toBe('1')
-        expect(result?.items?.[0].content_html).toBe('<p>Hello world</p>')
-      })
+    expect(result).toBeDefined()
+    expect(result?.version).toBe('https://jsonfeed.org/version/1')
+    expect(result?.title).toBe('My Example Feed')
+    expect(result?.authors).toHaveLength(1)
+    expect(result?.authors?.[0].name).toBe('John Doe')
+    expect(result?.items).toHaveLength(1)
+    expect(result?.items?.[0].id).toBe('1')
+    expect(result?.items?.[0].content_html).toBe('<p>Hello world</p>')
+  })
 
-      it('should parse valid JSON Feed v1.1', () => {
-        const result = parse(validFeedV11, { level })
+  it('should parse valid JSON Feed v1.1', () => {
+    const result = parse(validFeedV11)
 
-        expect(result).toBeDefined()
-        expect(result?.version).toBe('https://jsonfeed.org/version/1.1')
-        expect(result?.title).toBe('My Example Feed')
-        expect(result?.items).toHaveLength(1)
-        expect(result?.language).toBe('en-US')
-        expect(result?.authors).toHaveLength(1)
-        expect(result?.authors?.[0].name).toBe('John Doe')
-        expect(result?.items).toHaveLength(1)
-        expect(result?.items?.[0].id).toBe('1')
-        expect(result?.items?.[0].content_html).toBe('<p>Hello world</p>')
-      })
+    expect(result).toBeDefined()
+    expect(result?.version).toBe('https://jsonfeed.org/version/1.1')
+    expect(result?.title).toBe('My Example Feed')
+    expect(result?.items).toHaveLength(1)
+    expect(result?.language).toBe('en-US')
+    expect(result?.authors).toHaveLength(1)
+    expect(result?.authors?.[0].name).toBe('John Doe')
+    expect(result?.items).toHaveLength(1)
+    expect(result?.items?.[0].id).toBe('1')
+    expect(result?.items?.[0].content_html).toBe('<p>Hello world</p>')
+  })
 
-      it('should not include unregistered custom fields', () => {
-        const result = parse(validFeedV1, { level })
+  it('should not include unregistered custom fields', () => {
+    const result = parse(validFeedV1)
 
-        // biome-ignore lint/suspicious/noExplicitAny: It's for testing purposes.
-        expect((result as any).custom_field).toBeUndefined()
-      })
+    // biome-ignore lint/suspicious/noExplicitAny: It's for testing purposes.
+    expect((result as any).custom_field).toBeUndefined()
+  })
 
-      it('should parse feed with invalid URLs', () => {
-        const result = parse(feedWithInvalidLinks, { level })
+  it('should parse feed with invalid URLs', () => {
+    const result = parse(feedWithInvalidLinks)
 
-        expect(result?.home_page_url).toBe('invalid-url')
-      })
+    expect(result?.home_page_url).toBe('invalid-url')
+  })
 
-      it('should handle missing optional fields', () => {
-        const result = parse(minimalFeed, { level })
+  it('should handle missing optional fields', () => {
+    const result = parse(minimalFeed)
 
-        expect(result).toBeDefined()
-        expect(result?.version).toBe('https://jsonfeed.org/version/1')
-        expect(result?.title).toBe('My Example Feed')
-        expect(result?.home_page_url).toBeUndefined()
-        expect(result?.feed_url).toBeUndefined()
-        expect((result as Feed).authors).toBeUndefined()
-      })
-    })
+    expect(result).toBeDefined()
+    expect(result?.version).toBe('https://jsonfeed.org/version/1')
+    expect(result?.title).toBe('My Example Feed')
+    expect(result?.home_page_url).toBeUndefined()
+    expect(result?.feed_url).toBeUndefined()
+    expect((result as Feed).authors).toBeUndefined()
+  })
 
-    describe(level, () => {
-      it('should handle null input', () => {
-        expect(parse(null, { level })).toBeUndefined()
-      })
+  it('should handle null input', () => {
+    expect(parse(null)).toBeUndefined()
+  })
 
-      it('should handle undefined input', () => {
-        expect(parse(undefined, { level })).toBeUndefined()
-      })
+  it('should handle undefined input', () => {
+    expect(parse(undefined)).toBeUndefined()
+  })
 
-      it('should handle array input', () => {
-        expect(parse([], { level })).toBeUndefined()
-      })
+  it('should handle array input', () => {
+    expect(parse([])).toBeUndefined()
+  })
 
-      it('should handle empty object input', () => {
-        expect(parse({}, { level })).toBeUndefined()
-      })
+  it('should handle empty object input', () => {
+    expect(parse({})).toBeUndefined()
+  })
 
-      it('should handle string input', () => {
-        expect(parse('not a feed', { level })).toBeUndefined()
-      })
+  it('should handle string input', () => {
+    expect(parse('not a feed')).toBeUndefined()
+  })
 
-      it('should handle number input', () => {
-        expect(parse(123, { level })).toBeUndefined()
-      })
-    })
-  }
-
-  describe('strict', () => {
-    it('should handle null input', () => {
-      expect(() => parse(null, { level: 'strict' })).toThrow()
-    })
-
-    it('should handle undefined input', () => {
-      expect(() => parse(undefined, { level: 'strict' })).toThrow()
-    })
-
-    it('should handle array input', () => {
-      expect(() => parse([], { level: 'strict' })).toThrow()
-    })
-
-    it('should handle empty object input', () => {
-      expect(() => parse({}, { level: 'strict' })).not.toThrow()
-    })
-
-    it('should handle string input', () => {
-      expect(() => parse('not a feed', { level: 'strict' })).toThrow()
-    })
-
-    it('should handle number input', () => {
-      expect(() => parse(123, { level: 'strict' })).toThrow()
-    })
+  it('should handle number input', () => {
+    expect(parse(123)).toBeUndefined()
   })
 })
