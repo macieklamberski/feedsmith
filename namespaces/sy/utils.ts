@@ -2,7 +2,7 @@ import type { ParseFunction } from '../../common/types'
 import { hasAnyProps, isObject, parseNumber, parseString } from '../../common/utils'
 import type { Feed } from './types'
 
-export const retrieveFeed: ParseFunction<Feed> = (value) => {
+export const parseFeed: ParseFunction<Feed> = (value) => {
   if (!isObject(value)) {
     return
   }

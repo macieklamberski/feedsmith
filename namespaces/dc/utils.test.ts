@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
-import { retrieveDublinCore } from './utils'
+import { parseDublinCore } from './utils'
 
-describe('retrieveDublinCore', () => {
+describe('parseDublinCore', () => {
   it('should parse complete dublincore object with all properties', () => {
     const value = {
       'dc:title': { '#text': 'Sample Title' },
@@ -38,7 +38,7 @@ describe('retrieveDublinCore', () => {
       rights: 'Copyright 2023, All rights reserved',
     }
 
-    expect(retrieveDublinCore(value)).toEqual(expected)
+    expect(parseDublinCore(value)).toEqual(expected)
   })
 
   it('should handle partial dublincore object with common properties', () => {
@@ -53,7 +53,7 @@ describe('retrieveDublinCore', () => {
       date: '2023-05-15T09:30:00Z',
     }
 
-    expect(retrieveDublinCore(value)).toEqual(expected)
+    expect(parseDublinCore(value)).toEqual(expected)
   })
 
   it('should handle object with only title property', () => {
@@ -64,7 +64,7 @@ describe('retrieveDublinCore', () => {
       title: 'Only Title',
     }
 
-    expect(retrieveDublinCore(value)).toEqual(expected)
+    expect(parseDublinCore(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -78,20 +78,20 @@ describe('retrieveDublinCore', () => {
       identifier: '456',
     }
 
-    expect(retrieveDublinCore(value)).toEqual(expected)
+    expect(parseDublinCore(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    expect(retrieveDublinCore(value)).toBeUndefined()
+    expect(parseDublinCore(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object value', () => {
-    expect(retrieveDublinCore('not an object')).toBeUndefined()
-    expect(retrieveDublinCore(undefined)).toBeUndefined()
-    expect(retrieveDublinCore(null)).toBeUndefined()
-    expect(retrieveDublinCore([])).toBeUndefined()
+    expect(parseDublinCore('not an object')).toBeUndefined()
+    expect(parseDublinCore(undefined)).toBeUndefined()
+    expect(parseDublinCore(null)).toBeUndefined()
+    expect(parseDublinCore([])).toBeUndefined()
   })
 
   it('should return undefined when no properties can be parsed', () => {
@@ -100,7 +100,7 @@ describe('retrieveDublinCore', () => {
       'unknown:field': { '#text': 'data' },
     }
 
-    expect(retrieveDublinCore(value)).toBeUndefined()
+    expect(parseDublinCore(value)).toBeUndefined()
   })
 
   it('should handle objects with missing #text property', () => {
@@ -114,7 +114,7 @@ describe('retrieveDublinCore', () => {
       date: '2023-01-01T12:00:00Z',
     }
 
-    expect(retrieveDublinCore(value)).toEqual(expected)
+    expect(parseDublinCore(value)).toEqual(expected)
   })
 
   it('should handle empty strings in properties', () => {
@@ -129,7 +129,7 @@ describe('retrieveDublinCore', () => {
       description: '',
     }
 
-    expect(retrieveDublinCore(value)).toEqual(expected)
+    expect(parseDublinCore(value)).toEqual(expected)
   })
 
   it('should handle null values in properties', () => {
@@ -142,7 +142,7 @@ describe('retrieveDublinCore', () => {
       creator: 'John Doe',
     }
 
-    expect(retrieveDublinCore(value)).toEqual(expected)
+    expect(parseDublinCore(value)).toEqual(expected)
   })
 
   it('should handle numeric values in properties', () => {
@@ -155,7 +155,7 @@ describe('retrieveDublinCore', () => {
       language: 'en',
     }
 
-    expect(retrieveDublinCore(value)).toEqual(expected)
+    expect(parseDublinCore(value)).toEqual(expected)
   })
 
   it('should handle object with all properties having null values', () => {
@@ -165,6 +165,6 @@ describe('retrieveDublinCore', () => {
       'dc:subject': { '#text': null },
     }
 
-    expect(retrieveDublinCore(value)).toBeUndefined()
+    expect(parseDublinCore(value)).toBeUndefined()
   })
 })

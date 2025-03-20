@@ -7,9 +7,9 @@ import {
   parseNumber,
   parseString,
 } from '../../common/utils'
-import { retrieveItem as retrieveContentNamespaceItem } from '../../namespaces/content/utils'
-import { retrieveDublinCore as retrieveDublinCoreNamespaceFeed } from '../../namespaces/dc/utils'
-import { retrieveFeed as retrieveSyndicationNamespaceFeed } from '../../namespaces/sy/utils'
+import { parseItem as parseContentNamespaceItem } from '../../namespaces/content/utils'
+import { parseDublinCore as parseDublinCoreNamespaceFeed } from '../../namespaces/dc/utils'
+import { parseFeed as parseSyndicationNamespaceFeed } from '../../namespaces/sy/utils'
 import type {
   Author,
   Category,
@@ -150,8 +150,8 @@ export const parseItem: ParseFunction<Item> = (value) => {
     guid: parseString(value.guid?.['#text']),
     pubDate: parseString(value.pubdate?.['#text']),
     source: parseSource(value.source),
-    content: retrieveContentNamespaceItem(value),
-    dc: retrieveDublinCoreNamespaceFeed(value),
+    content: parseContentNamespaceItem(value),
+    dc: parseDublinCoreNamespaceFeed(value),
   }
 
   // TODO: Return only if required values are present: title || description.
@@ -186,8 +186,8 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     skipHours: parseSkipHours(channel.skiphours),
     skipDays: parseSkipDays(channel.skipdays),
     items: parseArrayOf(channel.item, parseItem),
-    dc: retrieveDublinCoreNamespaceFeed(channel),
-    sy: retrieveSyndicationNamespaceFeed(channel),
+    dc: parseDublinCoreNamespaceFeed(channel),
+    sy: parseSyndicationNamespaceFeed(channel),
   }
 
   // TODO: Return only if required values are present: title, link, description.

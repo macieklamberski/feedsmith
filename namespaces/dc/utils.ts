@@ -2,7 +2,7 @@ import type { ParseFunction } from '../../common/types'
 import { hasAnyProps, isObject, parseString } from '../../common/utils'
 import type { DublinCore } from './types'
 
-export const retrieveDublinCore: ParseFunction<DublinCore> = (value) => {
+export const parseDublinCore: ParseFunction<DublinCore> = (value) => {
   if (!isObject(value)) {
     return
   }

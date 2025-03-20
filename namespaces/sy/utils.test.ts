@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
-import { retrieveFeed } from './utils'
+import { parseFeed } from './utils'
 
-describe('retrieveFeed', () => {
+describe('parseFeed', () => {
   it('should parse complete channel object', () => {
     const value = {
       'sy:updateperiod': { '#text': 'hourly' },
@@ -14,7 +14,7 @@ describe('retrieveFeed', () => {
       updateBase: '2023-01-01T12:00:00Z',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should handle partial channel object with only updatePeriod', () => {
@@ -25,7 +25,7 @@ describe('retrieveFeed', () => {
       updatePeriod: 'daily',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should handle partial channel object with only updateFrequency', () => {
@@ -36,7 +36,7 @@ describe('retrieveFeed', () => {
       updateFrequency: 6,
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should handle partial channel object with only updateBase', () => {
@@ -47,7 +47,7 @@ describe('retrieveFeed', () => {
       updateBase: '2023-05-15T09:30:00Z',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -60,20 +60,20 @@ describe('retrieveFeed', () => {
       updatePeriod: '123',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    expect(retrieveFeed(value)).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object value', () => {
-    expect(retrieveFeed('not an object')).toBeUndefined()
-    expect(retrieveFeed(undefined)).toBeUndefined()
-    expect(retrieveFeed(null)).toBeUndefined()
-    expect(retrieveFeed([])).toBeUndefined()
+    expect(parseFeed('not an object')).toBeUndefined()
+    expect(parseFeed(undefined)).toBeUndefined()
+    expect(parseFeed(null)).toBeUndefined()
+    expect(parseFeed([])).toBeUndefined()
   })
 
   it('should return undefined when no properties can be parsed', () => {
@@ -82,7 +82,7 @@ describe('retrieveFeed', () => {
       'other:property': { '#text': 'value' },
     }
 
-    expect(retrieveFeed(value)).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should handle objects with missing #text property', () => {
@@ -96,7 +96,7 @@ describe('retrieveFeed', () => {
       updateBase: '2023-01-01T12:00:00Z',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should handle all properties with various values', () => {
@@ -111,6 +111,6 @@ describe('retrieveFeed', () => {
       updateBase: '2023-01-01T00:00:00Z',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 })

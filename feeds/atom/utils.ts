@@ -7,8 +7,8 @@ import {
   parseNumber,
   parseString,
 } from '../../common/utils'
-import { retrieveDublinCore as retrieveDublinCoreNamespaceFeed } from '../../namespaces/dc/utils'
-import { retrieveFeed as retrieveSyndicationNamespaceFeed } from '../../namespaces/sy/utils'
+import { parseDublinCore as parseDublinCoreNamespaceFeed } from '../../namespaces/dc/utils'
+import { parseFeed as parseSyndicationNamespaceFeed } from '../../namespaces/sy/utils'
 import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types'
 
 export const parseLink: ParseFunction<Link> = (value) => {
@@ -180,7 +180,7 @@ export const parseEntry: ParseFunction<Entry> = (value) => {
     summary: parseString(value.summary?.['#text']),
     title: parseString(value.title?.['#text']),
     updated: retrieveUpdated(value),
-    dc: retrieveDublinCoreNamespaceFeed(value),
+    dc: parseDublinCoreNamespaceFeed(value),
   }
 
   // INFO: Spec also says about required "updated" and "author" but those are
@@ -209,8 +209,8 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     title: parseString(value.feed.title?.['#text']),
     updated: retrieveUpdated(value.feed),
     entries: parseArrayOf(value.feed.entry, parseEntry),
-    dc: retrieveDublinCoreNamespaceFeed(value.feed),
-    sy: retrieveSyndicationNamespaceFeed(value.feed),
+    dc: parseDublinCoreNamespaceFeed(value.feed),
+    sy: parseSyndicationNamespaceFeed(value.feed),
   }
 
   // INFO: Spec also says about required "updated" and "author" but those are
