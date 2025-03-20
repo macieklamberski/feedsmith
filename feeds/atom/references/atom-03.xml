@@ -96,7 +96,7 @@
       This is a shorter entry with minimal elements to show contrast
     </summary>
   </entry>
-  <!-- <entry>
+   <entry>
     <title>Third entry title</title>
     <link rel="alternate" type="text/html" href="/entry/4"/>
     <id>tag:feedparser.org,2004-04-20:/docs/examples/atom03.xml:4</id>
@@ -114,5 +114,5 @@
     <content type="application/xhtml+xml" mode="xml" xml:base="http://example.org/entry/3" xml:lang="en-US">
       <div xmlns="http://www.w3.org/1999/xhtml">Watch out for <span style="background-image: url(javascript:window.location='http://example.org/')"> nasty tricks</span></div>
     </content>
-  </entry> -->
+  </entry>
 </feed>

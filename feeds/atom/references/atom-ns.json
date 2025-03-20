@@ -1,0 +1,18 @@
+{
+  "id": "example-feed",
+  "title": "Example Feed",
+  "entries": [
+    {
+      "id": "example-entry",
+      "title": "Example Entry",
+      "dc": { "creator": "Jack Jackson", "date": "2022-01-01T12:00+00:00" }
+    }
+  ],
+  "dc": {
+    "creator": "John Doe",
+    "description": "This is a sample feed.",
+    "contributor": "Jane Smith",
+    "date": "2022-01-01T12:00+00:00"
+  },
+  "sy": { "updatePeriod": "hourly", "updateFrequency": 1, "updateBase": "2000-01-01T12:00+00:00" }
+}

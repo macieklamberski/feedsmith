@@ -88,6 +88,18 @@
       "summary": "This is a shorter entry with minimal elements to show contrast",
       "title": "Second entry title",
       "updated": "2004-04-20T09:10:00Z"
+    },
+    {
+      "authors": [
+        { "name": "Jane Smith", "uri": "http://example.org/jane/", "email": "jane@example.org" }
+      ],
+      "content": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Watch out for <span style=\"background-image: url(javascript:window.location='http://example.org/')\"> nasty tricks</span></div>",
+      "id": "tag:feedparser.org,2004-04-20:/docs/examples/atom03.xml:4",
+      "links": [{ "href": "/entry/4", "rel": "alternate", "type": "text/html" }],
+      "published": "2004-04-20T08:45:00Z",
+      "summary": "This is an entry showing a text version of content",
+      "title": "Third entry title",
+      "updated": "2004-04-20T09:10:00Z"
     }
   ]
 }

@@ -1,4 +1,6 @@
 import { z } from 'zod'
+import { dublinCore as dublinCoreNamespace } from '../../namespaces/dc/schemas'
+import { feed as syndicationNamespaceFeed } from '../../namespaces/sy/schemas'
 
 // In the Atom specification, the text construct is represented by the { type, text, url } object.
 // For simplicity's sake, a string is used for now, but this may be reconsidered in the future.
@@ -70,6 +72,7 @@ export const entry = z
     summary: text,
     title: text,
     updated: z.string(),
+    dc: dublinCoreNamespace,
   })
   .partial()
 
@@ -88,5 +91,7 @@ export const feed = z
     title: text,
     updated: z.string(),
     entries: z.array(entry),
+    dc: dublinCoreNamespace,
+    sy: syndicationNamespaceFeed,
   })
   .partial()

@@ -5,11 +5,12 @@ describe('parse', () => {
   const versions = {
     '03': '0.3',
     '10': '1.0',
+    ns: 'with namespaces',
   }
 
   for (const [key, label] of Object.entries(versions)) {
     it(`should correctly parse Atom ${label} feed`, async () => {
-      const reference = `${import.meta.dir}/references/atom${key}`
+      const reference = `${import.meta.dir}/references/atom-${key}`
       const input = await Bun.file(`${reference}.xml`).text()
       const expected = await Bun.file(`${reference}.json`).json()
       const result = parse(input)
