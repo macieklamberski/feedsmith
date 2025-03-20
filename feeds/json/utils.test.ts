@@ -14,241 +14,187 @@ describe('parseTags', () => {
     const value = ['javascript', 'typescript']
 
     expect(parseTags(value, 'coerce')).toEqual(value)
-    expect(parseTags(value, 'skip')).toEqual(value)
   })
 
   it('should handle array of mixed values', () => {
     const value = ['javascript', true, 123, {}, [], null]
 
     expect(parseTags(value, 'coerce')).toEqual(['javascript', '123'])
-    expect(parseTags(value, 'skip')).toEqual(['javascript'])
   })
 
   it('should handle object', () => {
     const value = { name: 'javascript' }
 
     expect(parseTags(value, 'coerce')).toBeUndefined()
-    expect(parseTags(value, 'skip')).toBeUndefined()
   })
 
   it('should handle non-empty string', () => {
     const value = 'javascript'
 
     expect(parseTags(value, 'coerce')).toEqual([value])
-    expect(parseTags(value, 'skip')).toBeUndefined()
   })
 
   it('should handle empty string', () => {
     const value = ''
 
     expect(parseTags(value, 'coerce')).toBeUndefined()
-    expect(parseTags(value, 'skip')).toBeUndefined()
   })
 
   it('should handle number', () => {
     const value = 420
 
     expect(parseTags(value, 'coerce')).toEqual(['420'])
-    expect(parseTags(value, 'skip')).toBeUndefined()
   })
 
   it('should handle boolean', () => {
     const value = true
 
     expect(parseTags(value, 'coerce')).toBeUndefined()
-    expect(parseTags(value, 'skip')).toBeUndefined()
   })
 
   it('should handle null', () => {
     const value = null
 
     expect(parseTags(value, 'coerce')).toBeUndefined()
-    expect(parseTags(value, 'skip')).toBeUndefined()
   })
 
   it('should return undefined', () => {
     const value = undefined
 
     expect(parseTags(value, 'coerce')).toBeUndefined()
-    expect(parseTags(value, 'skip')).toBeUndefined()
   })
 })
 
 describe('parseAuthor', () => {
-  it('should handle array of strings', () => {
-    const value = ['John', 'James']
-
-    expect(parseAuthor(value, 'coerce')).toEqual({ name: 'John' })
-    expect(parseAuthor(value, 'skip')).toBeUndefined()
-  })
-
-  it('should handle array of mixed values', () => {
-    const value = [true, {}, [], null, 'John', 123]
-
-    expect(parseAuthor(value, 'coerce')).toEqual({ name: 'John' })
-    expect(parseAuthor(value, 'skip')).toBeUndefined()
-  })
-
-  it('should handle array of Author objects', () => {
-    const value = [{ name: 'John' }, { name: 'James' }]
-
-    expect(parseAuthor(value, 'coerce')).toEqual({ name: 'John' })
-    expect(parseAuthor(value, 'skip')).toBeUndefined()
-  })
-
   it('should handle Author object', () => {
     const value = { name: 'John', url: 'link', avatar: 123 }
+    const expected = { name: 'John', url: 'link', avatar: '123' }
 
-    expect(parseAuthor(value, 'coerce')).toEqual({
-      name: 'John',
-      url: 'link',
-      avatar: '123',
-    })
-    expect(parseAuthor(value, 'skip')).toEqual({
-      name: 'John',
-      url: 'link',
-      avatar: undefined,
-    })
+    expect(parseAuthor(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle non-Author object', () => {
     const value = { count: 1 }
 
     expect(parseAuthor(value, 'coerce')).toBeUndefined()
-    expect(parseAuthor(value, 'skip')).toBeUndefined()
   })
 
   it('should handle non-empty string', () => {
     const value = 'Alice'
+    const expected = { name: 'Alice' }
 
-    expect(parseAuthor(value, 'coerce')).toEqual({ name: 'Alice' })
-    expect(parseAuthor(value, 'skip')).toBeUndefined()
+    expect(parseAuthor(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle empty string', () => {
     const value = ''
 
     expect(parseAuthor(value, 'coerce')).toBeUndefined()
-    expect(parseAuthor(value, 'skip')).toBeUndefined()
   })
 
   it('should handle number', () => {
     const value = 420
+    const expected = { name: '420' }
 
-    expect(parseAuthor(value, 'coerce')).toEqual({ name: '420' })
-    expect(parseAuthor(value, 'skip')).toBeUndefined()
+    expect(parseAuthor(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle boolean', () => {
     const value = true
 
     expect(parseAuthor(value, 'coerce')).toBeUndefined()
-    expect(parseAuthor(value, 'skip')).toBeUndefined()
   })
 
   it('should handle null', () => {
     const value = null
 
     expect(parseAuthor(value, 'coerce')).toBeUndefined()
-    expect(parseAuthor(value, 'skip')).toBeUndefined()
   })
 
   it('should return undefined', () => {
     const value = undefined
 
     expect(parseAuthor(value, 'coerce')).toBeUndefined()
-    expect(parseAuthor(value, 'skip')).toBeUndefined()
   })
 })
 
 describe('retrieveAuthors', () => {
   it('should handle authors as object', () => {
-    const authors = { name: 'John' }
-    const author = undefined
+    const value = {
+      authors: { name: 'John' },
+      author: undefined,
+    }
 
-    expect(retrieveAuthors({ authors, author }, 'coerce')).toEqual([{ name: 'John' }])
-    expect(retrieveAuthors({ authors, author }, 'skip')).toEqual([{ name: 'John' }])
+    expect(retrieveAuthors(value, 'coerce')).toEqual([{ name: 'John' }])
   })
 
   it('should handle both authors and author ', () => {
-    const authors = { name: 'John' }
-    const author = { name: 'Jane' }
+    const value = {
+      authors: { name: 'John' },
+      author: { name: 'Jane' },
+    }
 
-    expect(retrieveAuthors({ authors, author }, 'coerce')).toEqual([{ name: 'John' }])
-    expect(retrieveAuthors({ authors, author }, 'skip')).toEqual([{ name: 'John' }])
+    expect(retrieveAuthors(value, 'coerce')).toEqual([{ name: 'John' }])
   })
 
   it('should handle author when no authors present', () => {
-    const authors = undefined
-    const author = { name: 'Jane' }
+    const value = {
+      authors: undefined,
+      author: { name: 'Jane' },
+    }
 
-    expect(retrieveAuthors({ authors, author }, 'coerce')).toEqual([{ name: 'Jane' }])
-    expect(retrieveAuthors({ authors, author }, 'skip')).toEqual([{ name: 'Jane' }])
+    expect(retrieveAuthors(value, 'coerce')).toEqual([{ name: 'Jane' }])
   })
 })
 
 describe('parseHub', () => {
-  it('should handle array of mixed values', () => {
-    const value = [true, {}, [], null, 'John', 123]
-
-    expect(parseHub(value, 'coerce')).toBeUndefined()
-    expect(parseHub(value, 'skip')).toBeUndefined()
-  })
-
-  it('should handle array of non-Hub objects', () => {
-    const value = [{ name: 'John' }, { name: 'James' }]
-
-    expect(parseHub(value, 'coerce')).toBeUndefined()
-    expect(parseHub(value, 'skip')).toBeUndefined()
-  })
-
   it('should handle Hub object', () => {
     const value = { type: 'pub', url: 33 }
+    const expected = { type: 'pub', url: '33' }
 
-    expect(parseHub(value, 'coerce')).toEqual({ type: 'pub', url: '33' })
-    expect(parseHub(value, 'skip')).toEqual({ type: 'pub', url: undefined })
+    expect(parseHub(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle non-Hub object', () => {
     const value = { count: 2 }
 
     expect(parseHub(value, 'coerce')).toBeUndefined()
-    expect(parseHub(value, 'skip')).toBeUndefined()
   })
 
   it('should handle string', () => {
     const value = 'Alice'
 
     expect(parseHub(value, 'coerce')).toBeUndefined()
-    expect(parseHub(value, 'skip')).toBeUndefined()
   })
 
   it('should handle number', () => {
     const value = 420
 
     expect(parseHub(value, 'coerce')).toBeUndefined()
-    expect(parseHub(value, 'skip')).toBeUndefined()
   })
 
   it('should handle boolean', () => {
     const value = true
 
     expect(parseHub(value, 'coerce')).toBeUndefined()
-    expect(parseHub(value, 'skip')).toBeUndefined()
   })
 
   it('should handle null', () => {
     const value = null
 
     expect(parseHub(value, 'coerce')).toBeUndefined()
-    expect(parseHub(value, 'skip')).toBeUndefined()
   })
 
   it('should return undefined', () => {
     const value = undefined
 
     expect(parseHub(value, 'coerce')).toBeUndefined()
-    expect(parseHub(value, 'skip')).toBeUndefined()
+  })
+
+  it('should handle array', () => {
+    const value = ['something']
+
+    expect(parseHub(value, 'coerce')).toBeUndefined()
   })
 })
 
@@ -261,34 +207,26 @@ describe('parseAttachment', () => {
       size_in_bytes: 12345,
       duration_in_seconds: 60,
     }
+    const expected = {
+      url: 'https://example.com/image.jpg',
+      mime_type: 'image/jpeg',
+      title: 'Sample Image',
+      size_in_bytes: 12345,
+      duration_in_seconds: 60,
+    }
 
-    expect(parseAttachment(value, 'coerce')).toEqual({
-      url: 'https://example.com/image.jpg',
-      mime_type: 'image/jpeg',
-      title: 'Sample Image',
-      size_in_bytes: 12345,
-      duration_in_seconds: 60,
-    })
-    expect(parseAttachment(value, 'skip')).toEqual({
-      url: 'https://example.com/image.jpg',
-      mime_type: 'image/jpeg',
-      title: 'Sample Image',
-      size_in_bytes: 12345,
-      duration_in_seconds: 60,
-    })
+    expect(parseAttachment(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle attachment object with only required url property', () => {
     const value = {
       url: 'https://example.com/file.pdf',
     }
+    const expected = {
+      url: 'https://example.com/file.pdf',
+    }
 
-    expect(parseAttachment(value, 'coerce')).toEqual({
-      url: 'https://example.com/file.pdf',
-    })
-    expect(parseAttachment(value, 'skip')).toEqual({
-      url: 'https://example.com/file.pdf',
-    })
+    expect(parseAttachment(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle attachment object with coercible property values', () => {
@@ -299,17 +237,15 @@ describe('parseAttachment', () => {
       size_in_bytes: '10000',
       duration_in_seconds: '180',
     }
-
-    expect(parseAttachment(value, 'coerce')).toEqual({
+    const expected = {
       url: 'https://example.com/audio.mp3',
       mime_type: '123',
       title: '456',
       size_in_bytes: 10000,
       duration_in_seconds: 180,
-    })
-    expect(parseAttachment(value, 'skip')).toEqual({
-      url: 'https://example.com/audio.mp3',
-    })
+    }
+
+    expect(parseAttachment(value, 'coerce')).toEqual(expected)
   })
 
   it('should handle url as empty string', () => {
@@ -320,7 +256,6 @@ describe('parseAttachment', () => {
     }
 
     expect(parseAttachment(value, 'coerce')).toEqual(value)
-    expect(parseAttachment(value, 'skip')).toEqual(value)
   })
 
   it('should return undefined if url is not present', () => {
@@ -332,7 +267,6 @@ describe('parseAttachment', () => {
     }
 
     expect(parseAttachment(value, 'coerce')).toBeUndefined()
-    expect(parseAttachment(value, 'skip')).toBeUndefined()
   })
 
   it('should handle array', () => {
@@ -342,42 +276,36 @@ describe('parseAttachment', () => {
     ]
 
     expect(parseAttachment(value, 'coerce')).toBeUndefined()
-    expect(parseAttachment(value, 'skip')).toBeUndefined()
   })
 
   it('should handle string', () => {
     const value = 'https://example.com/image.jpg'
 
     expect(parseAttachment(value, 'coerce')).toBeUndefined()
-    expect(parseAttachment(value, 'skip')).toBeUndefined()
   })
 
   it('should handle number', () => {
     const value = 420
 
     expect(parseAttachment(value, 'coerce')).toBeUndefined()
-    expect(parseAttachment(value, 'skip')).toBeUndefined()
   })
 
   it('should handle boolean', () => {
     const value = true
 
     expect(parseAttachment(value, 'coerce')).toBeUndefined()
-    expect(parseAttachment(value, 'skip')).toBeUndefined()
   })
 
   it('should handle null', () => {
     const value = null
 
     expect(parseAttachment(value, 'coerce')).toBeUndefined()
-    expect(parseAttachment(value, 'skip')).toBeUndefined()
   })
 
   it('should handle undefined', () => {
     const value = undefined
 
     expect(parseAttachment(value, 'coerce')).toBeUndefined()
-    expect(parseAttachment(value, 'skip')).toBeUndefined()
   })
 
   it('should handle object with invalid url', () => {
@@ -388,7 +316,6 @@ describe('parseAttachment', () => {
     }
 
     expect(parseAttachment(value, 'coerce')).toBeUndefined()
-    expect(parseAttachment(value, 'skip')).toBeUndefined()
   })
 
   it('should handle object with invalid properties', () => {
@@ -399,13 +326,11 @@ describe('parseAttachment', () => {
       size_in_bytes: 'not-a-number',
       duration_in_seconds: false,
     }
+    const expected = {
+      url: 'https://example.com/document.pdf',
+    }
 
-    expect(parseAttachment(value, 'coerce')).toEqual({
-      url: 'https://example.com/document.pdf',
-    })
-    expect(parseAttachment(value, 'skip')).toEqual({
-      url: 'https://example.com/document.pdf',
-    })
+    expect(parseAttachment(value, 'coerce')).toEqual(expected)
   })
 })
 
@@ -440,7 +365,6 @@ describe('parseItem', () => {
     }
 
     expect(parseItem(value, 'coerce')).toEqual(value)
-    expect(parseItem(value, 'skip')).toEqual(value)
   })
 
   it('should handle an item object with only required id property', () => {
@@ -449,7 +373,6 @@ describe('parseItem', () => {
     }
 
     expect(parseItem(value, 'coerce')).toEqual(value)
-    expect(parseItem(value, 'skip')).toEqual(value)
   })
 
   it('should handle an item with author as authors', () => {
@@ -463,7 +386,6 @@ describe('parseItem', () => {
     }
 
     expect(parseItem(value, 'coerce')).toEqual(expected)
-    expect(parseItem(value, 'skip')).toEqual(expected)
   })
 
   it('should handle coercible properties correctly in coerce mode', () => {
@@ -475,16 +397,16 @@ describe('parseItem', () => {
       author: 'John Doe',
       attachments: [{ url: 'https://example.com/file.pdf', size_in_bytes: '5000' }],
     }
-
-    expect(parseItem(value, 'coerce')).toEqual({
+    const expected = {
       id: '12345',
       url: '98765',
       title: '45678',
       tags: ['javascript'],
       authors: [{ name: 'John Doe' }],
       attachments: [{ url: 'https://example.com/file.pdf', size_in_bytes: 5000 }],
-    })
-    expect(parseItem(value, 'skip')).toBeUndefined()
+    }
+
+    expect(parseItem(value, 'coerce')).toEqual(expected)
   })
 
   it('should return undefined if id is not present', () => {
@@ -495,7 +417,6 @@ describe('parseItem', () => {
     }
 
     expect(parseItem(value, 'coerce')).toBeUndefined()
-    expect(parseItem(value, 'skip')).toBeUndefined()
   })
 
   it('should handle id as empty string', () => {
@@ -506,7 +427,6 @@ describe('parseItem', () => {
     }
 
     expect(parseItem(value, 'coerce')).toEqual(value)
-    expect(parseItem(value, 'skip')).toEqual(value)
   })
 
   it('should handle invalid author and attachments', () => {
@@ -525,7 +445,6 @@ describe('parseItem', () => {
     }
 
     expect(parseItem(value, 'coerce')).toEqual(expected)
-    expect(parseItem(value, 'skip')).toEqual(expected)
   })
 
   it('should handle array', () => {
@@ -535,42 +454,36 @@ describe('parseItem', () => {
     ]
 
     expect(parseItem(value, 'coerce')).toBeUndefined()
-    expect(parseItem(value, 'skip')).toBeUndefined()
   })
 
   it('should handle string', () => {
     const value = 'item-123'
 
     expect(parseItem(value, 'coerce')).toBeUndefined()
-    expect(parseItem(value, 'skip')).toBeUndefined()
   })
 
   it('should handle number', () => {
     const value = 123
 
     expect(parseItem(value, 'coerce')).toBeUndefined()
-    expect(parseItem(value, 'skip')).toBeUndefined()
   })
 
   it('should handle boolean', () => {
     const value = true
 
     expect(parseItem(value, 'coerce')).toBeUndefined()
-    expect(parseItem(value, 'skip')).toBeUndefined()
   })
 
   it('should handle null', () => {
     const value = null
 
     expect(parseItem(value, 'coerce')).toBeUndefined()
-    expect(parseItem(value, 'skip')).toBeUndefined()
   })
 
   it('should handle undefined', () => {
     const value = undefined
 
     expect(parseItem(value, 'coerce')).toBeUndefined()
-    expect(parseItem(value, 'skip')).toBeUndefined()
   })
 
   it('should handle complex nested authors and attachments', () => {
@@ -588,8 +501,7 @@ describe('parseItem', () => {
         { not_a_url: 'Invalid attachment' },
       ],
     }
-
-    expect(parseItem(value, 'coerce')).toEqual({
+    const expected = {
       id: 'complex-item',
       authors: [
         { name: 'Author 1', url: 'https://example.com/author1' },
@@ -597,12 +509,9 @@ describe('parseItem', () => {
         { name: 'Author 2' },
       ],
       attachments: [{ url: 'https://example.com/file1.pdf', mime_type: 'application/pdf' }],
-    })
-    expect(parseItem(value, 'skip')).toEqual({
-      id: 'complex-item',
-      authors: [{ name: 'Author 1', url: 'https://example.com/author1' }, { name: 'Author 2' }],
-      attachments: [{ url: 'https://example.com/file1.pdf', mime_type: 'application/pdf' }],
-    })
+    }
+
+    expect(parseItem(value, 'coerce')).toEqual(expected)
   })
 })
 
@@ -640,7 +549,6 @@ describe('parseFeed', () => {
     }
 
     expect(parseFeed(value, 'coerce')).toEqual(value)
-    expect(parseFeed(value, 'skip')).toEqual(value)
   })
 
   it('should handle a minimal valid feed object with only required properties', () => {
@@ -649,14 +557,8 @@ describe('parseFeed', () => {
       title: 'Minimal Feed',
       items: [{ id: 'item-1', content_text: 'Content' }],
     }
-    const expected = {
-      version: 'https://jsonfeed.org/version/1.1',
-      title: 'Minimal Feed',
-      items: [{ id: 'item-1', content_text: 'Content' }],
-    }
 
-    expect(parseFeed(value, 'coerce')).toEqual(expected)
-    expect(parseFeed(value, 'skip')).toEqual(expected)
+    expect(parseFeed(value, 'coerce')).toEqual(value)
   })
 
   it('should handle coercible properties correctly in coerce mode', () => {
@@ -676,7 +578,6 @@ describe('parseFeed', () => {
     }
 
     expect(parseFeed(value, 'coerce')).toEqual(expected)
-    expect(parseFeed(value, 'skip')).toBeUndefined()
   })
 
   it('should return undefined if required properties are missing', () => {
@@ -694,13 +595,8 @@ describe('parseFeed', () => {
     }
 
     expect(parseFeed(missingVersion, 'coerce')).toBeUndefined()
-    expect(parseFeed(missingVersion, 'skip')).toBeUndefined()
-
     expect(parseFeed(missingTitle, 'coerce')).toBeUndefined()
-    expect(parseFeed(missingTitle, 'skip')).toBeUndefined()
-
     expect(parseFeed(missingItems, 'coerce')).toBeUndefined()
-    expect(parseFeed(missingItems, 'skip')).toBeUndefined()
   })
 
   it('should return undefined if required properties are not defined', () => {
@@ -708,25 +604,18 @@ describe('parseFeed', () => {
       title: 'Feed With Empty Version',
       items: [{ id: 'item-1' }],
     }
-
     const emptyTitle = {
       version: 'https://jsonfeed.org/version/1.1',
       items: [{ id: 'item-1' }],
     }
-
     const emptyItems = {
       version: 'https://jsonfeed.org/version/1.1',
       title: 'Feed With Empty Items',
     }
 
     expect(parseFeed(emptyVersion, 'coerce')).toBeUndefined()
-    expect(parseFeed(emptyVersion, 'skip')).toBeUndefined()
-
     expect(parseFeed(emptyTitle, 'coerce')).toBeUndefined()
-    expect(parseFeed(emptyTitle, 'skip')).toBeUndefined()
-
     expect(parseFeed(emptyItems, 'coerce')).toBeUndefined()
-    expect(parseFeed(emptyItems, 'skip')).toBeUndefined()
   })
 
   it('should return feed object if required properties are defined and empty', () => {
@@ -737,7 +626,6 @@ describe('parseFeed', () => {
     }
 
     expect(parseFeed(value, 'coerce')).toEqual(value)
-    expect(parseFeed(value, 'skip')).toEqual(value)
   })
 
   it('should handle invalid nested properties', () => {
@@ -752,7 +640,6 @@ describe('parseFeed', () => {
         { type: 'websub', url: 'https://example.com/hub' },
       ],
     }
-
     const expected = {
       version: 'https://jsonfeed.org/version/1.1',
       title: 'Feed with Invalid Properties',
@@ -761,7 +648,6 @@ describe('parseFeed', () => {
     }
 
     expect(parseFeed(value, 'coerce')).toEqual(expected)
-    expect(parseFeed(value, 'skip')).toEqual(expected)
   })
 
   it('should handle array input', () => {
@@ -779,42 +665,36 @@ describe('parseFeed', () => {
     ]
 
     expect(parseFeed(value, 'coerce')).toBeUndefined()
-    expect(parseFeed(value, 'skip')).toBeUndefined()
   })
 
   it('should handle string input', () => {
     const value = 'not a feed'
 
     expect(parseFeed(value, 'coerce')).toBeUndefined()
-    expect(parseFeed(value, 'skip')).toBeUndefined()
   })
 
   it('should handle number input', () => {
     const value = 123
 
     expect(parseFeed(value, 'coerce')).toBeUndefined()
-    expect(parseFeed(value, 'skip')).toBeUndefined()
   })
 
   it('should handle boolean input', () => {
     const value = true
 
     expect(parseFeed(value, 'coerce')).toBeUndefined()
-    expect(parseFeed(value, 'skip')).toBeUndefined()
   })
 
   it('should handle null input', () => {
     const value = null
 
     expect(parseFeed(value, 'coerce')).toBeUndefined()
-    expect(parseFeed(value, 'skip')).toBeUndefined()
   })
 
   it('should handle undefined input', () => {
     const value = undefined
 
     expect(parseFeed(value, 'coerce')).toBeUndefined()
-    expect(parseFeed(value, 'skip')).toBeUndefined()
   })
 
   it('should correctly process complex feed with nested structures', () => {
@@ -848,8 +728,7 @@ describe('parseFeed', () => {
         },
       ],
     }
-
-    expect(parseFeed(value, 'coerce')).toEqual({
+    const expected = {
       version: 'https://jsonfeed.org/version/1.1',
       title: 'Complex Feed',
       description: 'Feed with complex nested structures',
@@ -870,28 +749,8 @@ describe('parseFeed', () => {
           tags: ['tag1', '123', 'tag2'],
         },
       ],
-    })
-    expect(parseFeed(value, 'skip')).toEqual({
-      version: 'https://jsonfeed.org/version/1.1',
-      title: 'Complex Feed',
-      description: 'Feed with complex nested structures',
-      authors: [{ name: 'Author 1', url: 'https://example.com/author1' }, { name: 'Author 2' }],
-      items: [
-        {
-          id: 'item-1',
-          title: 'Item with attachments',
-          authors: [{ name: 'Item Author 1' }, { name: 'Item Author 2' }],
-          attachments: [
-            { url: 'https://example.com/file1.pdf', mime_type: 'application/pdf' },
-            { url: 'https://example.com/file2.jpg', mime_type: 'image/jpeg' },
-          ],
-        },
-        {
-          id: 'item-2',
-          title: 'Item with tags',
-          tags: ['tag1', 'tag2'],
-        },
-      ],
-    })
+    }
+
+    expect(parseFeed(value, 'coerce')).toEqual(expected)
   })
 })

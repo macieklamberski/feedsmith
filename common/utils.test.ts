@@ -331,63 +331,54 @@ describe('parseString', () => {
     const value = ['javascript', { another: 'typescript' }]
 
     expect(parseString(value, 'coerce')).toBeUndefined()
-    expect(parseString(value, 'skip')).toBeUndefined()
   })
 
   it('should handle object', () => {
     const value = { name: 'javascript' }
 
     expect(parseString(value, 'coerce')).toBeUndefined()
-    expect(parseString(value, 'skip')).toBeUndefined()
   })
 
   it('should handle non-empty string', () => {
     const value = 'javascript'
 
     expect(parseString(value, 'coerce')).toEqual(value)
-    expect(parseString(value, 'skip')).toEqual(value)
   })
 
   it('should handle empty string', () => {
     const value = ''
 
     expect(parseString(value, 'coerce')).toEqual(value)
-    expect(parseString(value, 'skip')).toEqual(value)
   })
 
   it('should handle HTML entities in string', () => {
     const value = '&amp;'
 
     expect(parseString(value, 'coerce')).toEqual('&')
-    expect(parseString(value, 'skip')).toEqual('&')
   })
 
   it('should return number', () => {
     const value = 420
 
     expect(parseString(value, 'coerce')).toEqual('420')
-    expect(parseString(value, 'skip')).toBeUndefined()
   })
 
   it('should return boolean', () => {
     const value = true
 
     expect(parseString(value, 'coerce')).toBeUndefined()
-    expect(parseString(value, 'skip')).toBeUndefined()
   })
 
   it('should handle null', () => {
     const value = null
 
     expect(parseString(value, 'coerce')).toBeUndefined()
-    expect(parseString(value, 'skip')).toBeUndefined()
   })
 
   it('should return undefined', () => {
     const value = undefined
 
     expect(parseString(value, 'coerce')).toBeUndefined()
-    expect(parseString(value, 'skip')).toBeUndefined()
   })
 })
 
@@ -396,56 +387,48 @@ describe('parseNumber', () => {
     const value = ['javascript', { another: 'typescript' }]
 
     expect(parseNumber(value, 'coerce')).toBeUndefined()
-    expect(parseNumber(value, 'skip')).toBeUndefined()
   })
 
   it('should handle object', () => {
     const value = { name: 'javascript' }
 
     expect(parseNumber(value, 'coerce')).toBeUndefined()
-    expect(parseNumber(value, 'skip')).toBeUndefined()
   })
 
   it('should handle non-numeric string', () => {
     const value = 'javascript'
 
     expect(parseNumber(value, 'coerce')).toBeUndefined()
-    expect(parseNumber(value, 'skip')).toBeUndefined()
   })
 
   it('should handle numeric string', () => {
     const value = '36.6'
 
     expect(parseNumber(value, 'coerce')).toEqual(36.6)
-    expect(parseNumber(value, 'skip')).toBeUndefined()
   })
 
   it('should return number', () => {
     const value = 420
 
     expect(parseNumber(value, 'coerce')).toEqual(value)
-    expect(parseNumber(value, 'skip')).toEqual(value)
   })
 
   it('should return boolean', () => {
     const value = true
 
     expect(parseNumber(value, 'coerce')).toBeUndefined()
-    expect(parseNumber(value, 'skip')).toBeUndefined()
   })
 
   it('should handle null', () => {
     const value = null
 
     expect(parseNumber(value, 'coerce')).toBeUndefined()
-    expect(parseNumber(value, 'skip')).toBeUndefined()
   })
 
   it('should return undefined', () => {
     const value = undefined
 
     expect(parseNumber(value, 'coerce')).toBeUndefined()
-    expect(parseNumber(value, 'skip')).toBeUndefined()
   })
 })
 
@@ -454,63 +437,54 @@ describe('parseBoolean', () => {
     const value = ['javascript', { another: 'typescript' }]
 
     expect(parseBoolean(value, 'coerce')).toBeUndefined()
-    expect(parseBoolean(value, 'skip')).toBeUndefined()
   })
 
   it('should handle object', () => {
     const value = { name: 'javascript' }
 
     expect(parseBoolean(value, 'coerce')).toBeUndefined()
-    expect(parseBoolean(value, 'skip')).toBeUndefined()
   })
 
   it('should handle non-boolean string', () => {
     const value = 'javascript'
 
     expect(parseBoolean(value, 'coerce')).toBeUndefined()
-    expect(parseBoolean(value, 'skip')).toBeUndefined()
   })
 
   it('should handle true string', () => {
     const value = 'true'
 
     expect(parseBoolean(value, 'coerce')).toEqual(true)
-    expect(parseBoolean(value, 'skip')).toBeUndefined()
   })
 
   it('should handle false string', () => {
     const value = 'false'
 
     expect(parseBoolean(value, 'coerce')).toEqual(false)
-    expect(parseBoolean(value, 'skip')).toBeUndefined()
   })
 
   it('should return number', () => {
     const value = 420
 
     expect(parseBoolean(value, 'coerce')).toBeUndefined()
-    expect(parseBoolean(value, 'skip')).toBeUndefined()
   })
 
   it('should return boolean', () => {
     const value = true
 
     expect(parseBoolean(value, 'coerce')).toEqual(value)
-    expect(parseBoolean(value, 'skip')).toEqual(value)
   })
 
   it('should handle null', () => {
     const value = null
 
     expect(parseBoolean(value, 'coerce')).toBeUndefined()
-    expect(parseBoolean(value, 'skip')).toBeUndefined()
   })
 
   it('should return undefined', () => {
     const value = undefined
 
     expect(parseBoolean(value, 'coerce')).toBeUndefined()
-    expect(parseBoolean(value, 'skip')).toBeUndefined()
   })
 })
 
@@ -523,9 +497,6 @@ describe('parseArray', () => {
     expect(parseArray(value1, 'coerce')).toEqual(value1)
     expect(parseArray(value2, 'coerce')).toEqual(value2)
     expect(parseArray(value3, 'coerce')).toEqual(value3)
-    expect(parseArray(value1, 'skip')).toEqual(value1)
-    expect(parseArray(value2, 'skip')).toEqual(value2)
-    expect(parseArray(value3, 'skip')).toEqual(value3)
   })
 
   it('should handle objects with sequential numeric keys starting from 0', () => {
@@ -534,8 +505,6 @@ describe('parseArray', () => {
 
     expect(parseArray(value1, 'coerce')).toEqual(['a', 'b', 'c'])
     expect(parseArray(value2, 'coerce')).toEqual(['only one item'])
-    expect(parseArray(value1, 'skip')).toBeUndefined()
-    expect(parseArray(value2, 'skip')).toBeUndefined()
   })
 
   it('should handle object with length property', () => {
@@ -544,8 +513,6 @@ describe('parseArray', () => {
 
     expect(parseArray(value1, 'coerce')).toEqual(['a', 'b'])
     expect(parseArray(value2, 'coerce')).toEqual([undefined, undefined, undefined])
-    expect(parseArray(value1, 'skip')).toBeUndefined()
-    expect(parseArray(value2, 'skip')).toBeUndefined()
   })
 
   it('should return false for non-sequential or non-zero-indexed objects', () => {
@@ -558,10 +525,6 @@ describe('parseArray', () => {
     expect(parseArray(value2, 'coerce')).toBeUndefined()
     expect(parseArray(value3, 'coerce')).toBeUndefined()
     expect(parseArray(value4, 'coerce')).toBeUndefined()
-    expect(parseArray(value1, 'skip')).toBeUndefined()
-    expect(parseArray(value2, 'skip')).toBeUndefined()
-    expect(parseArray(value3, 'skip')).toBeUndefined()
-    expect(parseArray(value4, 'skip')).toBeUndefined()
   })
 
   it('should return false for primitive types', () => {
@@ -580,13 +543,6 @@ describe('parseArray', () => {
     expect(parseArray(value5, 'coerce')).toBeUndefined()
     expect(parseArray(value6, 'coerce')).toBeUndefined()
     expect(parseArray(value7, 'coerce')).toBeUndefined()
-    expect(parseArray(value1, 'skip')).toBeUndefined()
-    expect(parseArray(value2, 'skip')).toBeUndefined()
-    expect(parseArray(value3, 'skip')).toBeUndefined()
-    expect(parseArray(value4, 'skip')).toBeUndefined()
-    expect(parseArray(value5, 'skip')).toBeUndefined()
-    expect(parseArray(value6, 'skip')).toBeUndefined()
-    expect(parseArray(value7, 'skip')).toBeUndefined()
   })
 
   it('should return false for other object types', () => {
@@ -603,12 +559,6 @@ describe('parseArray', () => {
     expect(parseArray(value4, 'coerce')).toBeUndefined()
     expect(parseArray(value5, 'coerce')).toBeUndefined()
     expect(parseArray(value6, 'coerce')).toBeUndefined()
-    expect(parseArray(value1, 'skip')).toBeUndefined()
-    expect(parseArray(value2, 'skip')).toBeUndefined()
-    expect(parseArray(value3, 'skip')).toBeUndefined()
-    expect(parseArray(value4, 'skip')).toBeUndefined()
-    expect(parseArray(value5, 'skip')).toBeUndefined()
-    expect(parseArray(value6, 'skip')).toBeUndefined()
   })
 })
 
@@ -625,55 +575,41 @@ describe('parseArrayOf', () => {
     const value = 'Jack'
 
     expect(parseArrayOf(value, parser, 'coerce')).toEqual(['Jack'])
-    expect(parseArrayOf(value, parser, 'skip')).toBeUndefined()
-  })
-
-  it('should handle string when in force mode', () => {
-    const value = 'Jack'
-
-    expect(parseArrayOf(value, parser, 'coerce', true)).toEqual(['Jack'])
-    expect(parseArrayOf(value, parser, 'skip', true)).toEqual(['Jack'])
   })
 
   it('should handle array of strings', () => {
     const value = ['John', 123]
 
     expect(parseArrayOf(value, parser, 'coerce')).toEqual(['John', '123'])
-    expect(parseArrayOf(value, parser, 'skip')).toEqual(['John'])
   })
 
   it('should handle array of mixed values', () => {
     const value = [true, {}, [], null, 'John', 123]
 
     expect(parseArrayOf(value, parser, 'coerce')).toEqual(['John', '123'])
-    expect(parseArrayOf(value, parser, 'skip')).toEqual(['John'])
   })
 
   it('should handle number', () => {
     const value = 420
 
     expect(parseArrayOf(value, parser, 'coerce')).toEqual(['420'])
-    expect(parseArrayOf(value, parser, 'skip')).toBeUndefined()
   })
 
   it('should handle boolean', () => {
     const value = true
 
     expect(parseArrayOf(value, parser, 'coerce')).toBeUndefined()
-    expect(parseArrayOf(value, parser, 'skip')).toBeUndefined()
   })
 
   it('should handle null', () => {
     const value = null
 
     expect(parseArrayOf(value, parser, 'coerce')).toBeUndefined()
-    expect(parseArrayOf(value, parser, 'skip')).toBeUndefined()
   })
 
   it('should return undefined', () => {
     const value = undefined
 
     expect(parseArrayOf(value, parser, 'coerce')).toBeUndefined()
-    expect(parseArrayOf(value, parser, 'skip')).toBeUndefined()
   })
 })

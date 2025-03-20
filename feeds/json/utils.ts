@@ -17,7 +17,7 @@ export const parseTags: ParseFunction<Array<string>> = (value, level) => {
     return omitNullish(value.map((item) => parseString(item, level)))
   }
 
-  if (level === 'coerce' && isNonEmptyStringOrNumber(value)) {
+  if (isNonEmptyStringOrNumber(value)) {
     return omitNullish([parseString(value, level)])
   }
 }
@@ -33,11 +33,7 @@ export const parseAuthor: ParseFunction<Author> = (value, level) => {
     return author.name || author.url || author.avatar ? author : undefined
   }
 
-  if (level === 'coerce' && Array.isArray(value)) {
-    return omitNullish(value.map((item) => parseAuthor(item, level)))[0]
-  }
-
-  if (level === 'coerce' && isNonEmptyStringOrNumber(value)) {
+  if (isNonEmptyStringOrNumber(value)) {
     return {
       name: parseString(value, level),
     }
@@ -52,8 +48,8 @@ export const retrieveAuthors: ParseFunction<Array<Author>> = (value, level) => {
   // Regardless of the JSON Feed version, the 'authors' property is returned in the item/feed.
   // Some feeds use author/authors incorrectly based on the feed version, so this function helps
   // to unify those into one value.
-  const parsedAuthors = parseArrayOf(value.authors, parseAuthor, level, true)
-  const parsedAuthor = parseArrayOf(value.author, parseAuthor, level, true)
+  const parsedAuthors = parseArrayOf(value.authors, parseAuthor, level)
+  const parsedAuthor = parseArrayOf(value.author, parseAuthor, level)
 
   return parsedAuthors?.length ? parsedAuthors : parsedAuthor
 }

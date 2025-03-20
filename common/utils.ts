@@ -93,7 +93,7 @@ export const parseArray: ParseFunction<Array<Unreliable>> = (value, level) => {
     return value
   }
 
-  if (level === 'skip' || !isObject(value)) {
+  if (!isObject(value)) {
     return
   }
 
@@ -123,9 +123,6 @@ export const parseArrayOf = <P>(
   value: Unreliable,
   parse: ParseFunction<P>,
   level: NonStrictParseLevel,
-  // Force is useful in cases where the value should be coerced to array regardless of level.
-  // Example: JSON Feed v1/v1.1 author/authors field should be treated as array at all times.
-  force?: boolean,
 ): Array<P> | undefined => {
   const array = parseArray(value, level)
 
@@ -133,7 +130,7 @@ export const parseArrayOf = <P>(
     return omitNullish(array.map((item) => parse(item, level)))
   }
 
-  if (level === 'coerce' || force) {
+  if (level === 'coerce') {
     const parsed = parse(value, level)
 
     return parsed ? [parsed] : undefined
