@@ -33,7 +33,7 @@ describe('parseLink', () => {
       length: 12345,
     }
 
-    expect(parseLink(value, 'coerce')).toEqual(expected)
+    expect(parseLink(value)).toEqual(expected)
   })
 
   it('should parse link with only required href', () => {
@@ -44,7 +44,7 @@ describe('parseLink', () => {
       href: 'https://example.com/feed',
     }
 
-    expect(parseLink(value, 'coerce')).toEqual(expected)
+    expect(parseLink(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -61,7 +61,7 @@ describe('parseLink', () => {
       length: 5000,
     }
 
-    expect(parseLink(value, 'coerce')).toEqual(expected)
+    expect(parseLink(value)).toEqual(expected)
   })
 
   it('should return undefined if href is missing', () => {
@@ -70,14 +70,14 @@ describe('parseLink', () => {
       type: 'text/html',
     }
 
-    expect(parseLink(value, 'coerce')).toBeUndefined()
+    expect(parseLink(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parseLink('not an object', 'coerce')).toBeUndefined()
-    expect(parseLink(undefined, 'coerce')).toBeUndefined()
-    expect(parseLink(null, 'coerce')).toBeUndefined()
-    expect(parseLink([], 'coerce')).toBeUndefined()
+    expect(parseLink('not an object')).toBeUndefined()
+    expect(parseLink(undefined)).toBeUndefined()
+    expect(parseLink(null)).toBeUndefined()
+    expect(parseLink([])).toBeUndefined()
   })
 })
 
@@ -88,7 +88,7 @@ describe('retrievePersonUri', () => {
       url: { '#text': 'http://example-url.com' },
     }
 
-    expect(retrievePersonUri(value, 'coerce')).toBe('http://example-uri.com')
+    expect(retrievePersonUri(value)).toBe('http://example-uri.com')
   })
 
   it('should fall back to url (Atom 0.3) if uri is missing', () => {
@@ -96,7 +96,7 @@ describe('retrievePersonUri', () => {
       url: { '#text': 'http://example-url.com' },
     }
 
-    expect(retrievePersonUri(value, 'coerce')).toBe('http://example-url.com')
+    expect(retrievePersonUri(value)).toBe('http://example-url.com')
   })
 
   it('should return undefined if no uri fields exist', () => {
@@ -104,7 +104,7 @@ describe('retrievePersonUri', () => {
       name: { '#text': 'No uris here' },
     }
 
-    expect(retrievePersonUri(value, 'coerce')).toBeUndefined()
+    expect(retrievePersonUri(value)).toBeUndefined()
   })
 
   it('should handle coercible values', () => {
@@ -112,14 +112,14 @@ describe('retrievePersonUri', () => {
       uri: { '#text': 20230101 },
     }
 
-    expect(retrievePersonUri(value, 'coerce')).toBe('20230101')
+    expect(retrievePersonUri(value)).toBe('20230101')
   })
 
   it('should return undefined for non-object input', () => {
-    expect(retrievePersonUri('not an object', 'coerce')).toBeUndefined()
-    expect(retrievePersonUri(undefined, 'coerce')).toBeUndefined()
-    expect(retrievePersonUri(null, 'coerce')).toBeUndefined()
-    expect(retrievePersonUri([], 'coerce')).toBeUndefined()
+    expect(retrievePersonUri('not an object')).toBeUndefined()
+    expect(retrievePersonUri(undefined)).toBeUndefined()
+    expect(retrievePersonUri(null)).toBeUndefined()
+    expect(retrievePersonUri([])).toBeUndefined()
   })
 })
 
@@ -136,7 +136,7 @@ describe('parsePerson', () => {
       email: 'john@example.com',
     }
 
-    expect(parsePerson(value, 'coerce')).toEqual(expected)
+    expect(parsePerson(value)).toEqual(expected)
   })
 
   it('should parse complete person object (Atom 0.3)', () => {
@@ -151,7 +151,7 @@ describe('parsePerson', () => {
       email: 'john@example.com',
     }
 
-    expect(parsePerson(value, 'coerce')).toEqual(expected)
+    expect(parsePerson(value)).toEqual(expected)
   })
 
   it('should parse person with only required name', () => {
@@ -162,7 +162,7 @@ describe('parsePerson', () => {
       name: 'John Doe',
     }
 
-    expect(parsePerson(value, 'coerce')).toEqual(expected)
+    expect(parsePerson(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -176,7 +176,7 @@ describe('parsePerson', () => {
       email: '456',
     }
 
-    expect(parsePerson(value, 'coerce')).toEqual(expected)
+    expect(parsePerson(value)).toEqual(expected)
   })
 
   it('should return undefined if name is missing', () => {
@@ -185,14 +185,14 @@ describe('parsePerson', () => {
       email: { '#text': 'john@example.com' },
     }
 
-    expect(parsePerson(value, 'coerce')).toBeUndefined()
+    expect(parsePerson(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parsePerson('not an object', 'coerce')).toBeUndefined()
-    expect(parsePerson(undefined, 'coerce')).toBeUndefined()
-    expect(parsePerson(null, 'coerce')).toBeUndefined()
-    expect(parsePerson([], 'coerce')).toBeUndefined()
+    expect(parsePerson('not an object')).toBeUndefined()
+    expect(parsePerson(undefined)).toBeUndefined()
+    expect(parsePerson(null)).toBeUndefined()
+    expect(parsePerson([])).toBeUndefined()
   })
 })
 
@@ -209,7 +209,7 @@ describe('parseCategory', () => {
       label: 'Technology',
     }
 
-    expect(parseCategory(value, 'coerce')).toEqual(expected)
+    expect(parseCategory(value)).toEqual(expected)
   })
 
   it('should parse category with only required term', () => {
@@ -220,7 +220,7 @@ describe('parseCategory', () => {
       term: 'technology',
     }
 
-    expect(parseCategory(value, 'coerce')).toEqual(expected)
+    expect(parseCategory(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -234,7 +234,7 @@ describe('parseCategory', () => {
       label: '456',
     }
 
-    expect(parseCategory(value, 'coerce')).toEqual(expected)
+    expect(parseCategory(value)).toEqual(expected)
   })
 
   it('should return undefined if term is missing', () => {
@@ -243,14 +243,14 @@ describe('parseCategory', () => {
       '@label': 'Technology',
     }
 
-    expect(parseCategory(value, 'coerce')).toBeUndefined()
+    expect(parseCategory(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parseCategory('not an object', 'coerce')).toBeUndefined()
-    expect(parseCategory(undefined, 'coerce')).toBeUndefined()
-    expect(parseCategory(null, 'coerce')).toBeUndefined()
-    expect(parseCategory([], 'coerce')).toBeUndefined()
+    expect(parseCategory('not an object')).toBeUndefined()
+    expect(parseCategory(undefined)).toBeUndefined()
+    expect(parseCategory(null)).toBeUndefined()
+    expect(parseCategory([])).toBeUndefined()
   })
 })
 
@@ -261,7 +261,7 @@ describe('retrieveGeneratorUri', () => {
       '@url': 'http://example-url.com',
     }
 
-    expect(retrieveGeneratorUri(value, 'coerce')).toBe('http://example-uri.com')
+    expect(retrieveGeneratorUri(value)).toBe('http://example-uri.com')
   })
 
   it('should fall back to url (Atom 0.3) if uri is missing', () => {
@@ -269,7 +269,7 @@ describe('retrieveGeneratorUri', () => {
       '@url': 'http://example-url.com',
     }
 
-    expect(retrieveGeneratorUri(value, 'coerce')).toBe('http://example-url.com')
+    expect(retrieveGeneratorUri(value)).toBe('http://example-url.com')
   })
 
   it('should return undefined if no uri attributes exist', () => {
@@ -277,7 +277,7 @@ describe('retrieveGeneratorUri', () => {
       text: { '#text': 'Generator name' },
     }
 
-    expect(retrieveGeneratorUri(value, 'coerce')).toBeUndefined()
+    expect(retrieveGeneratorUri(value)).toBeUndefined()
   })
 
   it('should handle coercible values', () => {
@@ -285,14 +285,14 @@ describe('retrieveGeneratorUri', () => {
       '@uri': 20230101,
     }
 
-    expect(retrieveGeneratorUri(value, 'coerce')).toBe('20230101')
+    expect(retrieveGeneratorUri(value)).toBe('20230101')
   })
 
   it('should return undefined for non-object input', () => {
-    expect(retrieveGeneratorUri('not an object', 'coerce')).toBeUndefined()
-    expect(retrieveGeneratorUri(undefined, 'coerce')).toBeUndefined()
-    expect(retrieveGeneratorUri(null, 'coerce')).toBeUndefined()
-    expect(retrieveGeneratorUri([], 'coerce')).toBeUndefined()
+    expect(retrieveGeneratorUri('not an object')).toBeUndefined()
+    expect(retrieveGeneratorUri(undefined)).toBeUndefined()
+    expect(retrieveGeneratorUri(null)).toBeUndefined()
+    expect(retrieveGeneratorUri([])).toBeUndefined()
   })
 })
 
@@ -309,7 +309,7 @@ describe('parseGenerator', () => {
       version: '1.0',
     }
 
-    expect(parseGenerator(value, 'coerce')).toEqual(expected)
+    expect(parseGenerator(value)).toEqual(expected)
   })
 
   it('should parse complete generator object (Atom 0.3)', () => {
@@ -324,7 +324,7 @@ describe('parseGenerator', () => {
       version: '1.0',
     }
 
-    expect(parseGenerator(value, 'coerce')).toEqual(expected)
+    expect(parseGenerator(value)).toEqual(expected)
   })
 
   it('should parse generator with only required text', () => {
@@ -335,7 +335,7 @@ describe('parseGenerator', () => {
       text: 'Example Generator',
     }
 
-    expect(parseGenerator(value, 'coerce')).toEqual(expected)
+    expect(parseGenerator(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -349,7 +349,7 @@ describe('parseGenerator', () => {
       version: '456',
     }
 
-    expect(parseGenerator(value, 'coerce')).toEqual(expected)
+    expect(parseGenerator(value)).toEqual(expected)
   })
 
   it('should return undefined if text is missing', () => {
@@ -358,14 +358,14 @@ describe('parseGenerator', () => {
       '@version': '1.0',
     }
 
-    expect(parseGenerator(value, 'coerce')).toBeUndefined()
+    expect(parseGenerator(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parseGenerator('not an object', 'coerce')).toBeUndefined()
-    expect(parseGenerator(undefined, 'coerce')).toBeUndefined()
-    expect(parseGenerator(null, 'coerce')).toBeUndefined()
-    expect(parseGenerator([], 'coerce')).toBeUndefined()
+    expect(parseGenerator('not an object')).toBeUndefined()
+    expect(parseGenerator(undefined)).toBeUndefined()
+    expect(parseGenerator(null)).toBeUndefined()
+    expect(parseGenerator([])).toBeUndefined()
   })
 })
 
@@ -399,7 +399,7 @@ describe('parseSource', () => {
       rights: 'Copyright 2003, Example Corp.',
       subtitle: 'A blog about examples',
     }
-    expect(parseSource(value, 'coerce')).toEqual(expected)
+    expect(parseSource(value)).toEqual(expected)
   })
 
   it('should parse source with minimal properties', () => {
@@ -409,7 +409,7 @@ describe('parseSource', () => {
     const expected = {
       title: 'Example Feed',
     }
-    expect(parseSource(value, 'coerce')).toEqual(expected)
+    expect(parseSource(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -424,21 +424,21 @@ describe('parseSource', () => {
       links: [{ href: 'https://example.com/' }],
     }
 
-    expect(parseSource(value, 'coerce')).toEqual(expected)
+    expect(parseSource(value)).toEqual(expected)
   })
 
   it('should return undefined if no properties are valid', () => {
     const value = {
       nonExistingProp: { '#text': 'value' },
     }
-    expect(parseSource(value, 'coerce')).toBeUndefined()
+    expect(parseSource(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parseSource('not an object', 'coerce')).toBeUndefined()
-    expect(parseSource(undefined, 'coerce')).toBeUndefined()
-    expect(parseSource(null, 'coerce')).toBeUndefined()
-    expect(parseSource([], 'coerce')).toBeUndefined()
+    expect(parseSource('not an object')).toBeUndefined()
+    expect(parseSource(undefined)).toBeUndefined()
+    expect(parseSource(null)).toBeUndefined()
+    expect(parseSource([])).toBeUndefined()
   })
 })
 
@@ -450,7 +450,7 @@ describe('retrievePublished', () => {
       created: { '#text': '2023-01-03T12:00:00Z' },
     }
 
-    expect(retrievePublished(value, 'coerce')).toBe('2023-01-01T12:00:00Z')
+    expect(retrievePublished(value)).toBe('2023-01-01T12:00:00Z')
   })
 
   it('should fall back to issued (Atom 0.3) if published is missing', () => {
@@ -459,7 +459,7 @@ describe('retrievePublished', () => {
       created: { '#text': '2023-01-03T12:00:00Z' },
     }
 
-    expect(retrievePublished(value, 'coerce')).toBe('2023-01-02T12:00:00Z')
+    expect(retrievePublished(value)).toBe('2023-01-02T12:00:00Z')
   })
 
   it('should fall back to created (Atom 0.3) if published and issued are missing', () => {
@@ -467,7 +467,7 @@ describe('retrievePublished', () => {
       created: { '#text': '2023-01-03T12:00:00Z' },
     }
 
-    expect(retrievePublished(value, 'coerce')).toBe('2023-01-03T12:00:00Z')
+    expect(retrievePublished(value)).toBe('2023-01-03T12:00:00Z')
   })
 
   it('should return undefined if no date fields exist', () => {
@@ -475,7 +475,7 @@ describe('retrievePublished', () => {
       title: { '#text': 'No dates here' },
     }
 
-    expect(retrievePublished(value, 'coerce')).toBeUndefined()
+    expect(retrievePublished(value)).toBeUndefined()
   })
 
   it('should handle coercible values', () => {
@@ -483,14 +483,14 @@ describe('retrievePublished', () => {
       published: { '#text': '20230101' },
     }
 
-    expect(retrievePublished(value, 'coerce')).toBe('20230101')
+    expect(retrievePublished(value)).toBe('20230101')
   })
 
   it('should return undefined for non-object input', () => {
-    expect(retrievePublished('not an object', 'coerce')).toBeUndefined()
-    expect(retrievePublished(undefined, 'coerce')).toBeUndefined()
-    expect(retrievePublished(null, 'coerce')).toBeUndefined()
-    expect(retrievePublished([], 'coerce')).toBeUndefined()
+    expect(retrievePublished('not an object')).toBeUndefined()
+    expect(retrievePublished(undefined)).toBeUndefined()
+    expect(retrievePublished(null)).toBeUndefined()
+    expect(retrievePublished([])).toBeUndefined()
   })
 })
 
@@ -501,7 +501,7 @@ describe('retrieveUpdated', () => {
       modified: { '#text': '2023-01-02T12:00:00Z' },
     }
 
-    expect(retrieveUpdated(value, 'coerce')).toBe('2023-01-01T12:00:00Z')
+    expect(retrieveUpdated(value)).toBe('2023-01-01T12:00:00Z')
   })
 
   it('should fall back to modified (Atom 0.3) if updated is missing', () => {
@@ -509,7 +509,7 @@ describe('retrieveUpdated', () => {
       modified: { '#text': '2023-01-02T12:00:00Z' },
     }
 
-    expect(retrieveUpdated(value, 'coerce')).toBe('2023-01-02T12:00:00Z')
+    expect(retrieveUpdated(value)).toBe('2023-01-02T12:00:00Z')
   })
 
   it('should return undefined if no date fields exist', () => {
@@ -517,7 +517,7 @@ describe('retrieveUpdated', () => {
       title: { '#text': 'No dates here' },
     }
 
-    expect(retrieveUpdated(value, 'coerce')).toBeUndefined()
+    expect(retrieveUpdated(value)).toBeUndefined()
   })
 
   it('should handle coercible values', () => {
@@ -525,14 +525,14 @@ describe('retrieveUpdated', () => {
       updated: { '#text': 20230101 },
     }
 
-    expect(retrieveUpdated(value, 'coerce')).toBe('20230101')
+    expect(retrieveUpdated(value)).toBe('20230101')
   })
 
   it('should return undefined for non-object input', () => {
-    expect(retrieveUpdated('not an object', 'coerce')).toBeUndefined()
-    expect(retrieveUpdated(undefined, 'coerce')).toBeUndefined()
-    expect(retrieveUpdated(null, 'coerce')).toBeUndefined()
-    expect(retrieveUpdated([], 'coerce')).toBeUndefined()
+    expect(retrieveUpdated('not an object')).toBeUndefined()
+    expect(retrieveUpdated(undefined)).toBeUndefined()
+    expect(retrieveUpdated(null)).toBeUndefined()
+    expect(retrieveUpdated([])).toBeUndefined()
   })
 })
 
@@ -543,7 +543,7 @@ describe('retrieveSubtitle', () => {
       tagline: { '#text': 'Feed tagline' },
     }
 
-    expect(retrieveSubtitle(value, 'coerce')).toBe('Feed subtitle')
+    expect(retrieveSubtitle(value)).toBe('Feed subtitle')
   })
 
   it('should fall back to tagline (Atom 0.3) if subtitle is missing', () => {
@@ -551,7 +551,7 @@ describe('retrieveSubtitle', () => {
       tagline: { '#text': 'Feed tagline' },
     }
 
-    expect(retrieveSubtitle(value, 'coerce')).toBe('Feed tagline')
+    expect(retrieveSubtitle(value)).toBe('Feed tagline')
   })
 
   it('should return undefined if no subtitle fields exist', () => {
@@ -559,7 +559,7 @@ describe('retrieveSubtitle', () => {
       title: { '#text': 'No subtitle here' },
     }
 
-    expect(retrieveSubtitle(value, 'coerce')).toBeUndefined()
+    expect(retrieveSubtitle(value)).toBeUndefined()
   })
 
   it('should handle coercible values', () => {
@@ -567,14 +567,14 @@ describe('retrieveSubtitle', () => {
       subtitle: { '#text': 123 },
     }
 
-    expect(retrieveSubtitle(value, 'coerce')).toBe('123')
+    expect(retrieveSubtitle(value)).toBe('123')
   })
 
   it('should return undefined for non-object input', () => {
-    expect(retrieveSubtitle('not an object', 'coerce')).toBeUndefined()
-    expect(retrieveSubtitle(undefined, 'coerce')).toBeUndefined()
-    expect(retrieveSubtitle(null, 'coerce')).toBeUndefined()
-    expect(retrieveSubtitle([], 'coerce')).toBeUndefined()
+    expect(retrieveSubtitle('not an object')).toBeUndefined()
+    expect(retrieveSubtitle(undefined)).toBeUndefined()
+    expect(retrieveSubtitle(null)).toBeUndefined()
+    expect(retrieveSubtitle([])).toBeUndefined()
   })
 })
 
@@ -621,7 +621,7 @@ describe('parseEntry', () => {
       },
     }
 
-    expect(parseEntry(value, 'coerce')).toEqual(expected)
+    expect(parseEntry(value)).toEqual(expected)
   })
 
   it('should parse entry with only required fields', () => {
@@ -634,7 +634,7 @@ describe('parseEntry', () => {
       title: 'Entry Title',
     }
 
-    expect(parseEntry(value, 'coerce')).toEqual(expected)
+    expect(parseEntry(value)).toEqual(expected)
   })
 
   it('should handle entry with legacy date fields', () => {
@@ -651,7 +651,7 @@ describe('parseEntry', () => {
       updated: '2003-12-13T18:30:02Z',
     }
 
-    expect(parseEntry(value, 'coerce')).toEqual(expected)
+    expect(parseEntry(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -668,7 +668,7 @@ describe('parseEntry', () => {
       links: [{ href: 'https://example.com/' }],
     }
 
-    expect(parseEntry(value, 'coerce')).toEqual(expected)
+    expect(parseEntry(value)).toEqual(expected)
   })
 
   it('should return undefined if id is missing', () => {
@@ -677,7 +677,7 @@ describe('parseEntry', () => {
       updated: { '#text': '2023-01-01T12:00:00Z' },
     }
 
-    expect(parseEntry(value, 'coerce')).toBeUndefined()
+    expect(parseEntry(value)).toBeUndefined()
   })
 
   it('should return undefined if title is missing', () => {
@@ -686,14 +686,14 @@ describe('parseEntry', () => {
       updated: { '#text': '2023-01-01T12:00:00Z' },
     }
 
-    expect(parseEntry(value, 'coerce')).toBeUndefined()
+    expect(parseEntry(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parseEntry('not an object', 'coerce')).toBeUndefined()
-    expect(parseEntry(undefined, 'coerce')).toBeUndefined()
-    expect(parseEntry(null, 'coerce')).toBeUndefined()
-    expect(parseEntry([], 'coerce')).toBeUndefined()
+    expect(parseEntry('not an object')).toBeUndefined()
+    expect(parseEntry(undefined)).toBeUndefined()
+    expect(parseEntry(null)).toBeUndefined()
+    expect(parseEntry([])).toBeUndefined()
   })
 })
 
@@ -768,7 +768,7 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with only required fields', () => {
@@ -783,7 +783,7 @@ describe('parseFeed', () => {
       title: 'Example Feed',
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should handle feed with legacy elements', () => {
@@ -816,7 +816,7 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -835,7 +835,7 @@ describe('parseFeed', () => {
       entries: [{ id: '789', title: 'First Entry' }],
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should return undefined if id is missing', () => {
@@ -846,7 +846,7 @@ describe('parseFeed', () => {
       },
     }
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should return undefined if title is missing', () => {
@@ -857,14 +857,14 @@ describe('parseFeed', () => {
       },
     }
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parseFeed('not an object', 'coerce')).toBeUndefined()
-    expect(parseFeed(undefined, 'coerce')).toBeUndefined()
-    expect(parseFeed(null, 'coerce')).toBeUndefined()
-    expect(parseFeed([], 'coerce')).toBeUndefined()
+    expect(parseFeed('not an object')).toBeUndefined()
+    expect(parseFeed(undefined)).toBeUndefined()
+    expect(parseFeed(null)).toBeUndefined()
+    expect(parseFeed([])).toBeUndefined()
   })
 
   it('should handle entries that are not valid', () => {
@@ -888,6 +888,6 @@ describe('parseFeed', () => {
       entries: [{ id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a', title: 'Valid Entry' }],
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 })

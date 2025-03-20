@@ -22,78 +22,78 @@ import type {
   TextInput,
 } from './types'
 
-export const parseTextInput: ParseFunction<TextInput> = (value, level) => {
+export const parseTextInput: ParseFunction<TextInput> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const textInput = {
-    title: parseString(value?.title?.['#text'], level),
-    description: parseString(value?.description?.['#text'], level),
-    name: parseString(value?.name?.['#text'], level),
-    link: parseString(value?.link?.['#text'], level),
+    title: parseString(value?.title?.['#text']),
+    description: parseString(value?.description?.['#text']),
+    name: parseString(value?.name?.['#text']),
+    link: parseString(value?.link?.['#text']),
   }
 
   // TODO: Return only if required values are present: all.
   return textInput
 }
 
-export const parseCloud: ParseFunction<Cloud> = (value, level) => {
+export const parseCloud: ParseFunction<Cloud> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const cloud = {
-    domain: parseString(value?.['@domain'], level),
-    port: parseNumber(value?.['@port'], level),
-    path: parseString(value?.['@path'], level),
-    registerProcedure: parseString(value?.['@registerprocedure'], level),
-    protocol: parseString(value?.['@protocol'], level),
+    domain: parseString(value?.['@domain']),
+    port: parseNumber(value?.['@port']),
+    path: parseString(value?.['@path']),
+    registerProcedure: parseString(value?.['@registerprocedure']),
+    protocol: parseString(value?.['@protocol']),
   }
 
   // TODO: Return only if required values are present: all.
   return cloud
 }
 
-export const parseSkipHours: ParseFunction<Array<number>> = (value, level) => {
+export const parseSkipHours: ParseFunction<Array<number>> = (value) => {
   const hours = value?.hour
 
   if (!Array.isArray(hours)) {
     return
   }
 
-  return omitNullish(hours.map((hour) => parseNumber(hour?.['#text'], level)))
+  return omitNullish(hours.map((hour) => parseNumber(hour?.['#text'])))
 }
 
-export const parseSkipDays: ParseFunction<Array<string>> = (value, level) => {
+export const parseSkipDays: ParseFunction<Array<string>> = (value) => {
   const days = value?.day
 
   if (!Array.isArray(days)) {
     return
   }
 
-  return omitNullish(days.map((hour) => parseString(hour?.['#text'], level)))
+  return omitNullish(days.map((hour) => parseString(hour?.['#text'])))
 }
 
-export const parseEnclosure: ParseFunction<Enclosure> = (value, level) => {
+export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const enclosure = {
-    url: parseString(value.url?.['#text'], level),
-    length: parseNumber(value.length?.['#text'], level),
-    type: parseString(value.type?.['#text'], level),
+    url: parseString(value.url?.['#text']),
+    length: parseNumber(value.length?.['#text']),
+    type: parseString(value.type?.['#text']),
   }
 
   // TODO: Return only if required values are present: url, length, type.
   return enclosure
 }
 
-export const parseSource: ParseFunction<Source> = (value, level) => {
+export const parseSource: ParseFunction<Source> = (value) => {
   const source = {
-    title: parseString(value?.['#text'], level),
-    url: parseString(value?.['@url'], level),
+    title: parseString(value?.['#text']),
+    url: parseString(value?.['@url']),
   }
 
   if (source.title) {
@@ -101,28 +101,28 @@ export const parseSource: ParseFunction<Source> = (value, level) => {
   }
 }
 
-export const parseImage: ParseFunction<Image> = (value, level) => {
+export const parseImage: ParseFunction<Image> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const image = {
-    url: parseString(value.url?.['#text'], level),
-    title: parseString(value.title?.['#text'], level),
-    link: parseString(value.link?.['#text'], level),
-    description: parseString(value.description?.['#text'], level),
-    height: parseNumber(value.height?.['#text'], level),
-    width: parseNumber(value.width?.['#text'], level),
+    url: parseString(value.url?.['#text']),
+    title: parseString(value.title?.['#text']),
+    link: parseString(value.link?.['#text']),
+    description: parseString(value.description?.['#text']),
+    height: parseNumber(value.height?.['#text']),
+    width: parseNumber(value.width?.['#text']),
   }
 
   // TODO: Return only if required values are present: url, title, link, description.
   return image
 }
 
-export const parseCategory: ParseFunction<Category> = (value, level) => {
+export const parseCategory: ParseFunction<Category> = (value) => {
   const category = {
-    name: parseString(value?.['#text'], level),
-    domain: parseString(value?.['@domain'], level),
+    name: parseString(value?.['#text']),
+    domain: parseString(value?.['@domain']),
   }
 
   if (category.name) {
@@ -130,35 +130,35 @@ export const parseCategory: ParseFunction<Category> = (value, level) => {
   }
 }
 
-export const parseAuthor: ParseFunction<Author> = (value, level) => {
-  return parseString(value?.['#text'], level)
+export const parseAuthor: ParseFunction<Author> = (value) => {
+  return parseString(value?.['#text'])
 }
 
-export const parseItem: ParseFunction<Item> = (value, level) => {
+export const parseItem: ParseFunction<Item> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const item = {
-    title: parseString(value.title?.['#text'], level),
-    link: parseString(value.link?.['#text'], level),
-    description: parseString(value.description?.['#text'], level),
-    authors: parseArrayOf(value.author, parseAuthor, level),
-    categories: parseArrayOf(value.category, parseCategory, level),
-    comments: parseString(value.comments?.['#text'], level),
-    enclosure: parseEnclosure(value.enclosure, level),
-    guid: parseString(value.guid?.['#text'], level),
-    pubDate: parseString(value.pubdate?.['#text'], level),
-    source: parseSource(value.source, level),
-    content: retrieveContentNamespaceItem(value, level),
-    dc: retrieveDublinCoreNamespaceFeed(value, level),
+    title: parseString(value.title?.['#text']),
+    link: parseString(value.link?.['#text']),
+    description: parseString(value.description?.['#text']),
+    authors: parseArrayOf(value.author, parseAuthor),
+    categories: parseArrayOf(value.category, parseCategory),
+    comments: parseString(value.comments?.['#text']),
+    enclosure: parseEnclosure(value.enclosure),
+    guid: parseString(value.guid?.['#text']),
+    pubDate: parseString(value.pubdate?.['#text']),
+    source: parseSource(value.source),
+    content: retrieveContentNamespaceItem(value),
+    dc: retrieveDublinCoreNamespaceFeed(value),
   }
 
   // TODO: Return only if required values are present: title || description.
   return item
 }
 
-export const parseFeed: ParseFunction<Feed> = (value, level) => {
+export const parseFeed: ParseFunction<Feed> = (value) => {
   const channel = value?.rss?.channel
 
   if (!isObject(channel)) {
@@ -166,28 +166,28 @@ export const parseFeed: ParseFunction<Feed> = (value, level) => {
   }
 
   const feed = {
-    title: parseString(channel.title?.['#text'], level),
-    link: parseString(channel.link?.['#text'], level),
-    description: parseString(channel.description?.['#text'], level),
-    language: parseString(channel.language?.['#text'], level),
-    copyright: parseString(channel.copyright?.['#text'], level),
-    managingEditor: parseString(channel.managingeditor?.['#text'], level),
-    webMaster: parseString(channel.webmaster?.['#text'], level),
-    pubDate: parseString(channel.pubdate?.['#text'], level),
-    lastBuildDate: parseString(channel.lastbuilddate?.['#text'], level),
-    categories: parseArrayOf(channel.category, parseCategory, level),
-    generator: parseString(channel.generator?.['#text'], level),
-    docs: parseString(channel.docs?.['#text'], level),
-    cloud: parseCloud(channel.cloud, level),
-    ttl: parseNumber(channel.ttl?.['#text'], level),
-    image: parseImage(channel.image, level),
-    rating: parseString(channel.rating?.['#text'], level),
-    textInput: parseTextInput(channel.textinput, level),
-    skipHours: parseSkipHours(channel.skiphours, level),
-    skipDays: parseSkipDays(channel.skipdays, level),
-    items: parseArrayOf(channel.item, parseItem, level),
-    dc: retrieveDublinCoreNamespaceFeed(channel, level),
-    sy: retrieveSyndicationNamespaceFeed(channel, level),
+    title: parseString(channel.title?.['#text']),
+    link: parseString(channel.link?.['#text']),
+    description: parseString(channel.description?.['#text']),
+    language: parseString(channel.language?.['#text']),
+    copyright: parseString(channel.copyright?.['#text']),
+    managingEditor: parseString(channel.managingeditor?.['#text']),
+    webMaster: parseString(channel.webmaster?.['#text']),
+    pubDate: parseString(channel.pubdate?.['#text']),
+    lastBuildDate: parseString(channel.lastbuilddate?.['#text']),
+    categories: parseArrayOf(channel.category, parseCategory),
+    generator: parseString(channel.generator?.['#text']),
+    docs: parseString(channel.docs?.['#text']),
+    cloud: parseCloud(channel.cloud),
+    ttl: parseNumber(channel.ttl?.['#text']),
+    image: parseImage(channel.image),
+    rating: parseString(channel.rating?.['#text']),
+    textInput: parseTextInput(channel.textinput),
+    skipHours: parseSkipHours(channel.skiphours),
+    skipDays: parseSkipDays(channel.skipdays),
+    items: parseArrayOf(channel.item, parseItem),
+    dc: retrieveDublinCoreNamespaceFeed(channel),
+    sy: retrieveSyndicationNamespaceFeed(channel),
   }
 
   // TODO: Return only if required values are present: title, link, description.

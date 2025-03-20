@@ -10,7 +10,7 @@ describe('retrieveItem', () => {
       encoded: '<p>This is encoded content</p>',
     }
 
-    expect(retrieveItem(value, 'coerce')).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should handle HTML content in encoded field', () => {
@@ -23,7 +23,7 @@ describe('retrieveItem', () => {
       encoded: '<h1>Title</h1><p>Paragraph with <strong>bold</strong> text</p>',
     }
 
-    expect(retrieveItem(value, 'coerce')).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should handle CDATA content in encoded field', () => {
@@ -36,7 +36,7 @@ describe('retrieveItem', () => {
       encoded: '<h1>Title</h1><p>Paragraph with <strong>bold</strong> text</p>',
     }
 
-    expect(retrieveItem(value, 'coerce')).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -47,20 +47,20 @@ describe('retrieveItem', () => {
       encoded: '123',
     }
 
-    expect(retrieveItem(value, 'coerce')).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    expect(retrieveItem(value, 'coerce')).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object value', () => {
-    expect(retrieveItem('not an object', 'coerce')).toBeUndefined()
-    expect(retrieveItem(undefined, 'coerce')).toBeUndefined()
-    expect(retrieveItem(null, 'coerce')).toBeUndefined()
-    expect(retrieveItem([], 'coerce')).toBeUndefined()
+    expect(retrieveItem('not an object')).toBeUndefined()
+    expect(retrieveItem(undefined)).toBeUndefined()
+    expect(retrieveItem(null)).toBeUndefined()
+    expect(retrieveItem([])).toBeUndefined()
   })
 
   it('should handle object with content:encoded but missing #text property', () => {
@@ -68,7 +68,7 @@ describe('retrieveItem', () => {
       'content:encoded': {},
     }
 
-    expect(retrieveItem(value, 'coerce')).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 
   it('should handle object with unrelated properties', () => {
@@ -77,7 +77,7 @@ describe('retrieveItem', () => {
       'something:else': { '#text': 'another value' },
     }
 
-    expect(retrieveItem(value, 'coerce')).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 
   it('should handle boolean values', () => {
@@ -85,7 +85,7 @@ describe('retrieveItem', () => {
       'content:encoded': { '#text': true },
     }
 
-    expect(retrieveItem(value, 'coerce')).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 
   it('should handle empty string in encoded field', () => {
@@ -96,7 +96,7 @@ describe('retrieveItem', () => {
       encoded: '',
     }
 
-    expect(retrieveItem(value, 'coerce')).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should handle null in encoded field', () => {
@@ -104,6 +104,6 @@ describe('retrieveItem', () => {
       'content:encoded': { '#text': null },
     }
 
-    expect(retrieveItem(value, 'coerce')).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 })

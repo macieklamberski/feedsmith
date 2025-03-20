@@ -13,55 +13,55 @@ describe('parseTags', () => {
   it('should handle array of strings', () => {
     const value = ['javascript', 'typescript']
 
-    expect(parseTags(value, 'coerce')).toEqual(value)
+    expect(parseTags(value)).toEqual(value)
   })
 
   it('should handle array of mixed values', () => {
     const value = ['javascript', true, 123, {}, [], null]
 
-    expect(parseTags(value, 'coerce')).toEqual(['javascript', '123'])
+    expect(parseTags(value)).toEqual(['javascript', '123'])
   })
 
   it('should handle object', () => {
     const value = { name: 'javascript' }
 
-    expect(parseTags(value, 'coerce')).toBeUndefined()
+    expect(parseTags(value)).toBeUndefined()
   })
 
   it('should handle non-empty string', () => {
     const value = 'javascript'
 
-    expect(parseTags(value, 'coerce')).toEqual([value])
+    expect(parseTags(value)).toEqual([value])
   })
 
   it('should handle empty string', () => {
     const value = ''
 
-    expect(parseTags(value, 'coerce')).toBeUndefined()
+    expect(parseTags(value)).toBeUndefined()
   })
 
   it('should handle number', () => {
     const value = 420
 
-    expect(parseTags(value, 'coerce')).toEqual(['420'])
+    expect(parseTags(value)).toEqual(['420'])
   })
 
   it('should handle boolean', () => {
     const value = true
 
-    expect(parseTags(value, 'coerce')).toBeUndefined()
+    expect(parseTags(value)).toBeUndefined()
   })
 
   it('should handle null', () => {
     const value = null
 
-    expect(parseTags(value, 'coerce')).toBeUndefined()
+    expect(parseTags(value)).toBeUndefined()
   })
 
   it('should return undefined', () => {
     const value = undefined
 
-    expect(parseTags(value, 'coerce')).toBeUndefined()
+    expect(parseTags(value)).toBeUndefined()
   })
 })
 
@@ -70,51 +70,51 @@ describe('parseAuthor', () => {
     const value = { name: 'John', url: 'link', avatar: 123 }
     const expected = { name: 'John', url: 'link', avatar: '123' }
 
-    expect(parseAuthor(value, 'coerce')).toEqual(expected)
+    expect(parseAuthor(value)).toEqual(expected)
   })
 
   it('should handle non-Author object', () => {
     const value = { count: 1 }
 
-    expect(parseAuthor(value, 'coerce')).toBeUndefined()
+    expect(parseAuthor(value)).toBeUndefined()
   })
 
   it('should handle non-empty string', () => {
     const value = 'Alice'
     const expected = { name: 'Alice' }
 
-    expect(parseAuthor(value, 'coerce')).toEqual(expected)
+    expect(parseAuthor(value)).toEqual(expected)
   })
 
   it('should handle empty string', () => {
     const value = ''
 
-    expect(parseAuthor(value, 'coerce')).toBeUndefined()
+    expect(parseAuthor(value)).toBeUndefined()
   })
 
   it('should handle number', () => {
     const value = 420
     const expected = { name: '420' }
 
-    expect(parseAuthor(value, 'coerce')).toEqual(expected)
+    expect(parseAuthor(value)).toEqual(expected)
   })
 
   it('should handle boolean', () => {
     const value = true
 
-    expect(parseAuthor(value, 'coerce')).toBeUndefined()
+    expect(parseAuthor(value)).toBeUndefined()
   })
 
   it('should handle null', () => {
     const value = null
 
-    expect(parseAuthor(value, 'coerce')).toBeUndefined()
+    expect(parseAuthor(value)).toBeUndefined()
   })
 
   it('should return undefined', () => {
     const value = undefined
 
-    expect(parseAuthor(value, 'coerce')).toBeUndefined()
+    expect(parseAuthor(value)).toBeUndefined()
   })
 })
 
@@ -125,7 +125,7 @@ describe('retrieveAuthors', () => {
       author: undefined,
     }
 
-    expect(retrieveAuthors(value, 'coerce')).toEqual([{ name: 'John' }])
+    expect(retrieveAuthors(value)).toEqual([{ name: 'John' }])
   })
 
   it('should handle both authors and author ', () => {
@@ -134,7 +134,7 @@ describe('retrieveAuthors', () => {
       author: { name: 'Jane' },
     }
 
-    expect(retrieveAuthors(value, 'coerce')).toEqual([{ name: 'John' }])
+    expect(retrieveAuthors(value)).toEqual([{ name: 'John' }])
   })
 
   it('should handle author when no authors present', () => {
@@ -143,7 +143,7 @@ describe('retrieveAuthors', () => {
       author: { name: 'Jane' },
     }
 
-    expect(retrieveAuthors(value, 'coerce')).toEqual([{ name: 'Jane' }])
+    expect(retrieveAuthors(value)).toEqual([{ name: 'Jane' }])
   })
 })
 
@@ -152,49 +152,49 @@ describe('parseHub', () => {
     const value = { type: 'pub', url: 33 }
     const expected = { type: 'pub', url: '33' }
 
-    expect(parseHub(value, 'coerce')).toEqual(expected)
+    expect(parseHub(value)).toEqual(expected)
   })
 
   it('should handle non-Hub object', () => {
     const value = { count: 2 }
 
-    expect(parseHub(value, 'coerce')).toBeUndefined()
+    expect(parseHub(value)).toBeUndefined()
   })
 
   it('should handle string', () => {
     const value = 'Alice'
 
-    expect(parseHub(value, 'coerce')).toBeUndefined()
+    expect(parseHub(value)).toBeUndefined()
   })
 
   it('should handle number', () => {
     const value = 420
 
-    expect(parseHub(value, 'coerce')).toBeUndefined()
+    expect(parseHub(value)).toBeUndefined()
   })
 
   it('should handle boolean', () => {
     const value = true
 
-    expect(parseHub(value, 'coerce')).toBeUndefined()
+    expect(parseHub(value)).toBeUndefined()
   })
 
   it('should handle null', () => {
     const value = null
 
-    expect(parseHub(value, 'coerce')).toBeUndefined()
+    expect(parseHub(value)).toBeUndefined()
   })
 
   it('should return undefined', () => {
     const value = undefined
 
-    expect(parseHub(value, 'coerce')).toBeUndefined()
+    expect(parseHub(value)).toBeUndefined()
   })
 
   it('should handle array', () => {
     const value = ['something']
 
-    expect(parseHub(value, 'coerce')).toBeUndefined()
+    expect(parseHub(value)).toBeUndefined()
   })
 })
 
@@ -215,7 +215,7 @@ describe('parseAttachment', () => {
       duration_in_seconds: 60,
     }
 
-    expect(parseAttachment(value, 'coerce')).toEqual(expected)
+    expect(parseAttachment(value)).toEqual(expected)
   })
 
   it('should handle attachment object with only required url property', () => {
@@ -226,7 +226,7 @@ describe('parseAttachment', () => {
       url: 'https://example.com/file.pdf',
     }
 
-    expect(parseAttachment(value, 'coerce')).toEqual(expected)
+    expect(parseAttachment(value)).toEqual(expected)
   })
 
   it('should handle attachment object with coercible property values', () => {
@@ -245,7 +245,7 @@ describe('parseAttachment', () => {
       duration_in_seconds: 180,
     }
 
-    expect(parseAttachment(value, 'coerce')).toEqual(expected)
+    expect(parseAttachment(value)).toEqual(expected)
   })
 
   it('should handle url as empty string', () => {
@@ -255,7 +255,7 @@ describe('parseAttachment', () => {
       title: 'Empty URL Image',
     }
 
-    expect(parseAttachment(value, 'coerce')).toEqual(value)
+    expect(parseAttachment(value)).toEqual(value)
   })
 
   it('should return undefined if url is not present', () => {
@@ -266,7 +266,7 @@ describe('parseAttachment', () => {
       duration_in_seconds: 300,
     }
 
-    expect(parseAttachment(value, 'coerce')).toBeUndefined()
+    expect(parseAttachment(value)).toBeUndefined()
   })
 
   it('should handle array', () => {
@@ -275,37 +275,37 @@ describe('parseAttachment', () => {
       { url: 'https://example.com/image2.jpg' },
     ]
 
-    expect(parseAttachment(value, 'coerce')).toBeUndefined()
+    expect(parseAttachment(value)).toBeUndefined()
   })
 
   it('should handle string', () => {
     const value = 'https://example.com/image.jpg'
 
-    expect(parseAttachment(value, 'coerce')).toBeUndefined()
+    expect(parseAttachment(value)).toBeUndefined()
   })
 
   it('should handle number', () => {
     const value = 420
 
-    expect(parseAttachment(value, 'coerce')).toBeUndefined()
+    expect(parseAttachment(value)).toBeUndefined()
   })
 
   it('should handle boolean', () => {
     const value = true
 
-    expect(parseAttachment(value, 'coerce')).toBeUndefined()
+    expect(parseAttachment(value)).toBeUndefined()
   })
 
   it('should handle null', () => {
     const value = null
 
-    expect(parseAttachment(value, 'coerce')).toBeUndefined()
+    expect(parseAttachment(value)).toBeUndefined()
   })
 
   it('should handle undefined', () => {
     const value = undefined
 
-    expect(parseAttachment(value, 'coerce')).toBeUndefined()
+    expect(parseAttachment(value)).toBeUndefined()
   })
 
   it('should handle object with invalid url', () => {
@@ -315,7 +315,7 @@ describe('parseAttachment', () => {
       title: 'Invalid URL Test',
     }
 
-    expect(parseAttachment(value, 'coerce')).toBeUndefined()
+    expect(parseAttachment(value)).toBeUndefined()
   })
 
   it('should handle object with invalid properties', () => {
@@ -330,7 +330,7 @@ describe('parseAttachment', () => {
       url: 'https://example.com/document.pdf',
     }
 
-    expect(parseAttachment(value, 'coerce')).toEqual(expected)
+    expect(parseAttachment(value)).toEqual(expected)
   })
 })
 
@@ -364,7 +364,7 @@ describe('parseItem', () => {
       ],
     }
 
-    expect(parseItem(value, 'coerce')).toEqual(value)
+    expect(parseItem(value)).toEqual(value)
   })
 
   it('should handle an item object with only required id property', () => {
@@ -372,7 +372,7 @@ describe('parseItem', () => {
       id: 'minimal-item-123',
     }
 
-    expect(parseItem(value, 'coerce')).toEqual(value)
+    expect(parseItem(value)).toEqual(value)
   })
 
   it('should handle an item with author as authors', () => {
@@ -385,7 +385,7 @@ describe('parseItem', () => {
       authors: [{ name: 'John Doe' }],
     }
 
-    expect(parseItem(value, 'coerce')).toEqual(expected)
+    expect(parseItem(value)).toEqual(expected)
   })
 
   it('should handle coercible properties correctly in coerce mode', () => {
@@ -406,7 +406,7 @@ describe('parseItem', () => {
       attachments: [{ url: 'https://example.com/file.pdf', size_in_bytes: 5000 }],
     }
 
-    expect(parseItem(value, 'coerce')).toEqual(expected)
+    expect(parseItem(value)).toEqual(expected)
   })
 
   it('should return undefined if id is not present', () => {
@@ -416,7 +416,7 @@ describe('parseItem', () => {
       content_text: 'This article has no ID',
     }
 
-    expect(parseItem(value, 'coerce')).toBeUndefined()
+    expect(parseItem(value)).toBeUndefined()
   })
 
   it('should handle id as empty string', () => {
@@ -426,7 +426,7 @@ describe('parseItem', () => {
       title: 'Article with empty ID',
     }
 
-    expect(parseItem(value, 'coerce')).toEqual(value)
+    expect(parseItem(value)).toEqual(value)
   })
 
   it('should handle invalid author and attachments', () => {
@@ -444,7 +444,7 @@ describe('parseItem', () => {
       attachments: [{ url: 'https://valid.com/attachment.pdf' }],
     }
 
-    expect(parseItem(value, 'coerce')).toEqual(expected)
+    expect(parseItem(value)).toEqual(expected)
   })
 
   it('should handle array', () => {
@@ -453,37 +453,37 @@ describe('parseItem', () => {
       { id: 'item-2', title: 'Second Item' },
     ]
 
-    expect(parseItem(value, 'coerce')).toBeUndefined()
+    expect(parseItem(value)).toBeUndefined()
   })
 
   it('should handle string', () => {
     const value = 'item-123'
 
-    expect(parseItem(value, 'coerce')).toBeUndefined()
+    expect(parseItem(value)).toBeUndefined()
   })
 
   it('should handle number', () => {
     const value = 123
 
-    expect(parseItem(value, 'coerce')).toBeUndefined()
+    expect(parseItem(value)).toBeUndefined()
   })
 
   it('should handle boolean', () => {
     const value = true
 
-    expect(parseItem(value, 'coerce')).toBeUndefined()
+    expect(parseItem(value)).toBeUndefined()
   })
 
   it('should handle null', () => {
     const value = null
 
-    expect(parseItem(value, 'coerce')).toBeUndefined()
+    expect(parseItem(value)).toBeUndefined()
   })
 
   it('should handle undefined', () => {
     const value = undefined
 
-    expect(parseItem(value, 'coerce')).toBeUndefined()
+    expect(parseItem(value)).toBeUndefined()
   })
 
   it('should handle complex nested authors and attachments', () => {
@@ -511,7 +511,7 @@ describe('parseItem', () => {
       attachments: [{ url: 'https://example.com/file1.pdf', mime_type: 'application/pdf' }],
     }
 
-    expect(parseItem(value, 'coerce')).toEqual(expected)
+    expect(parseItem(value)).toEqual(expected)
   })
 })
 
@@ -548,7 +548,7 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(value)
+    expect(parseFeed(value)).toEqual(value)
   })
 
   it('should handle a minimal valid feed object with only required properties', () => {
@@ -558,7 +558,7 @@ describe('parseFeed', () => {
       items: [{ id: 'item-1', content_text: 'Content' }],
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(value)
+    expect(parseFeed(value)).toEqual(value)
   })
 
   it('should handle coercible properties correctly in coerce mode', () => {
@@ -577,7 +577,7 @@ describe('parseFeed', () => {
       items: [{ id: '789', content_text: 'Content' }],
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should return undefined if required properties are missing', () => {
@@ -594,9 +594,9 @@ describe('parseFeed', () => {
       title: 'Feed Without Items',
     }
 
-    expect(parseFeed(missingVersion, 'coerce')).toBeUndefined()
-    expect(parseFeed(missingTitle, 'coerce')).toBeUndefined()
-    expect(parseFeed(missingItems, 'coerce')).toBeUndefined()
+    expect(parseFeed(missingVersion)).toBeUndefined()
+    expect(parseFeed(missingTitle)).toBeUndefined()
+    expect(parseFeed(missingItems)).toBeUndefined()
   })
 
   it('should return undefined if required properties are not defined', () => {
@@ -613,9 +613,9 @@ describe('parseFeed', () => {
       title: 'Feed With Empty Items',
     }
 
-    expect(parseFeed(emptyVersion, 'coerce')).toBeUndefined()
-    expect(parseFeed(emptyTitle, 'coerce')).toBeUndefined()
-    expect(parseFeed(emptyItems, 'coerce')).toBeUndefined()
+    expect(parseFeed(emptyVersion)).toBeUndefined()
+    expect(parseFeed(emptyTitle)).toBeUndefined()
+    expect(parseFeed(emptyItems)).toBeUndefined()
   })
 
   it('should return feed object if required properties are defined and empty', () => {
@@ -625,7 +625,7 @@ describe('parseFeed', () => {
       items: [],
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(value)
+    expect(parseFeed(value)).toEqual(value)
   })
 
   it('should handle invalid nested properties', () => {
@@ -647,7 +647,7 @@ describe('parseFeed', () => {
       items: [{ id: 'item-1' }, { id: 'item-2' }],
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should handle array input', () => {
@@ -664,37 +664,37 @@ describe('parseFeed', () => {
       },
     ]
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should handle string input', () => {
     const value = 'not a feed'
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should handle number input', () => {
     const value = 123
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should handle boolean input', () => {
     const value = true
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should handle null input', () => {
     const value = null
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should handle undefined input', () => {
     const value = undefined
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should correctly process complex feed with nested structures', () => {
@@ -751,6 +751,6 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 })

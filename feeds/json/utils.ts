@@ -12,22 +12,22 @@ import {
 } from '../../common/utils'
 import type { Attachment, Author, Feed, Hub, Item } from './types'
 
-export const parseTags: ParseFunction<Array<string>> = (value, level) => {
+export const parseTags: ParseFunction<Array<string>> = (value) => {
   if (Array.isArray(value)) {
-    return omitNullish(value.map((item) => parseString(item, level)))
+    return omitNullish(value.map((item) => parseString(item)))
   }
 
   if (isNonEmptyStringOrNumber(value)) {
-    return omitNullish([parseString(value, level)])
+    return omitNullish([parseString(value)])
   }
 }
 
-export const parseAuthor: ParseFunction<Author> = (value, level) => {
+export const parseAuthor: ParseFunction<Author> = (value) => {
   if (isObject(value)) {
     const author = {
-      name: parseString(value.name, level),
-      url: parseString(value.url, level),
-      avatar: parseString(value.avatar, level),
+      name: parseString(value.name),
+      url: parseString(value.url),
+      avatar: parseString(value.avatar),
     }
 
     return author.name || author.url || author.avatar ? author : undefined
@@ -35,12 +35,12 @@ export const parseAuthor: ParseFunction<Author> = (value, level) => {
 
   if (isNonEmptyStringOrNumber(value)) {
     return {
-      name: parseString(value, level),
+      name: parseString(value),
     }
   }
 }
 
-export const retrieveAuthors: ParseFunction<Array<Author>> = (value, level) => {
+export const retrieveAuthors: ParseFunction<Array<Author>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -48,20 +48,20 @@ export const retrieveAuthors: ParseFunction<Array<Author>> = (value, level) => {
   // Regardless of the JSON Feed version, the 'authors' property is returned in the item/feed.
   // Some feeds use author/authors incorrectly based on the feed version, so this function helps
   // to unify those into one value.
-  const parsedAuthors = parseArrayOf(value.authors, parseAuthor, level)
-  const parsedAuthor = parseArrayOf(value.author, parseAuthor, level)
+  const parsedAuthors = parseArrayOf(value.authors, parseAuthor)
+  const parsedAuthor = parseArrayOf(value.author, parseAuthor)
 
   return parsedAuthors?.length ? parsedAuthors : parsedAuthor
 }
 
-export const parseHub: ParseFunction<Hub> = (value, level) => {
+export const parseHub: ParseFunction<Hub> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const hub = {
-    type: parseString(value.type, level),
-    url: parseString(value.url, level),
+    type: parseString(value.type),
+    url: parseString(value.url),
   }
 
   if (hasAnyProps(hub, ['type', 'url'])) {
@@ -69,17 +69,17 @@ export const parseHub: ParseFunction<Hub> = (value, level) => {
   }
 }
 
-export const parseAttachment: ParseFunction<Attachment> = (value, level) => {
+export const parseAttachment: ParseFunction<Attachment> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const attachment = {
-    url: parseString(value.url, level),
-    mime_type: parseString(value.mime_type, level),
-    title: parseString(value.title, level),
-    size_in_bytes: parseNumber(value.size_in_bytes, level),
-    duration_in_seconds: parseNumber(value.duration_in_seconds, level),
+    url: parseString(value.url),
+    mime_type: parseString(value.mime_type),
+    title: parseString(value.title),
+    size_in_bytes: parseNumber(value.size_in_bytes),
+    duration_in_seconds: parseNumber(value.duration_in_seconds),
   }
 
   // TODO: Consider checking if URL has value before parsing the whole object.
@@ -88,27 +88,27 @@ export const parseAttachment: ParseFunction<Attachment> = (value, level) => {
   }
 }
 
-export const parseItem: ParseFunction<Item> = (value, level) => {
+export const parseItem: ParseFunction<Item> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const item = {
-    id: parseString(value.id, level),
-    url: parseString(value.url, level),
-    external_url: parseString(value.external_url, level),
-    title: parseString(value.title, level),
-    content_html: parseString(value.content_html, level),
-    content_text: parseString(value.content_text, level),
-    summary: parseString(value.summary, level),
-    image: parseString(value.image, level),
-    banner_image: parseString(value.banner_image, level),
-    date_published: parseString(value.date_published, level),
-    date_modified: parseString(value.date_modified, level),
-    tags: parseTags(value.tags, level),
-    authors: retrieveAuthors(value, level),
-    language: parseString(value.language, level),
-    attachments: parseArrayOf(value.attachments, parseAttachment, level),
+    id: parseString(value.id),
+    url: parseString(value.url),
+    external_url: parseString(value.external_url),
+    title: parseString(value.title),
+    content_html: parseString(value.content_html),
+    content_text: parseString(value.content_text),
+    summary: parseString(value.summary),
+    image: parseString(value.image),
+    banner_image: parseString(value.banner_image),
+    date_published: parseString(value.date_published),
+    date_modified: parseString(value.date_modified),
+    tags: parseTags(value.tags),
+    authors: retrieveAuthors(value),
+    language: parseString(value.language),
+    attachments: parseArrayOf(value.attachments, parseAttachment),
   }
 
   // TODO: Consider checking if ID has value before parsing the whole object.
@@ -117,26 +117,26 @@ export const parseItem: ParseFunction<Item> = (value, level) => {
   }
 }
 
-export const parseFeed: ParseFunction<Feed> = (value, level) => {
+export const parseFeed: ParseFunction<Feed> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const feed = {
-    version: parseString(value.version, level),
-    title: parseString(value.title, level),
-    home_page_url: parseString(value.home_page_url, level),
-    feed_url: parseString(value.feed_url, level),
-    description: parseString(value.description, level),
-    user_comment: parseString(value.user_comment, level),
-    next_url: parseString(value.next_url, level),
-    icon: parseString(value.icon, level),
-    favicon: parseString(value.favicon, level),
-    language: parseString(value.language, level),
-    expired: parseBoolean(value.expired, level),
-    hubs: parseArrayOf(value.hubs, parseHub, level),
-    authors: retrieveAuthors(value, level),
-    items: parseArrayOf(value.items, parseItem, level),
+    version: parseString(value.version),
+    title: parseString(value.title),
+    home_page_url: parseString(value.home_page_url),
+    feed_url: parseString(value.feed_url),
+    description: parseString(value.description),
+    user_comment: parseString(value.user_comment),
+    next_url: parseString(value.next_url),
+    icon: parseString(value.icon),
+    favicon: parseString(value.favicon),
+    language: parseString(value.language),
+    expired: parseBoolean(value.expired),
+    hubs: parseArrayOf(value.hubs, parseHub),
+    authors: retrieveAuthors(value),
+    items: parseArrayOf(value.items, parseItem),
   }
 
   // TODO: Consider checking if version, title and items have value before parsing the whole object.

@@ -2,27 +2,27 @@ import type { ParseFunction } from '../../common/types'
 import { hasAnyProps, isObject, parseString } from '../../common/utils'
 import type { DublinCore } from './types'
 
-export const retrieveDublinCore: ParseFunction<DublinCore> = (value, level) => {
+export const retrieveDublinCore: ParseFunction<DublinCore> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const dublinCore = {
-    title: parseString(value['dc:title']?.['#text'], level),
-    creator: parseString(value['dc:creator']?.['#text'], level),
-    subject: parseString(value['dc:subject']?.['#text'], level),
-    description: parseString(value['dc:description']?.['#text'], level),
-    publisher: parseString(value['dc:publisher']?.['#text'], level),
-    contributor: parseString(value['dc:contributor']?.['#text'], level),
-    date: parseString(value['dc:date']?.['#text'], level),
-    type: parseString(value['dc:type']?.['#text'], level),
-    format: parseString(value['dc:format']?.['#text'], level),
-    identifier: parseString(value['dc:identifier']?.['#text'], level),
-    source: parseString(value['dc:source']?.['#text'], level),
-    language: parseString(value['dc:language']?.['#text'], level),
-    relation: parseString(value['dc:relation']?.['#text'], level),
-    coverage: parseString(value['dc:coverage']?.['#text'], level),
-    rights: parseString(value['dc:rights']?.['#text'], level),
+    title: parseString(value['dc:title']?.['#text']),
+    creator: parseString(value['dc:creator']?.['#text']),
+    subject: parseString(value['dc:subject']?.['#text']),
+    description: parseString(value['dc:description']?.['#text']),
+    publisher: parseString(value['dc:publisher']?.['#text']),
+    contributor: parseString(value['dc:contributor']?.['#text']),
+    date: parseString(value['dc:date']?.['#text']),
+    type: parseString(value['dc:type']?.['#text']),
+    format: parseString(value['dc:format']?.['#text']),
+    identifier: parseString(value['dc:identifier']?.['#text']),
+    source: parseString(value['dc:source']?.['#text']),
+    language: parseString(value['dc:language']?.['#text']),
+    relation: parseString(value['dc:relation']?.['#text']),
+    coverage: parseString(value['dc:coverage']?.['#text']),
+    rights: parseString(value['dc:rights']?.['#text']),
   }
 
   if (hasAnyProps(dublinCore, Object.keys(dublinCore) as Array<keyof DublinCore>)) {

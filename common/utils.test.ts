@@ -330,55 +330,55 @@ describe('parseString', () => {
   it('should handle array', () => {
     const value = ['javascript', { another: 'typescript' }]
 
-    expect(parseString(value, 'coerce')).toBeUndefined()
+    expect(parseString(value)).toBeUndefined()
   })
 
   it('should handle object', () => {
     const value = { name: 'javascript' }
 
-    expect(parseString(value, 'coerce')).toBeUndefined()
+    expect(parseString(value)).toBeUndefined()
   })
 
   it('should handle non-empty string', () => {
     const value = 'javascript'
 
-    expect(parseString(value, 'coerce')).toEqual(value)
+    expect(parseString(value)).toEqual(value)
   })
 
   it('should handle empty string', () => {
     const value = ''
 
-    expect(parseString(value, 'coerce')).toEqual(value)
+    expect(parseString(value)).toEqual(value)
   })
 
   it('should handle HTML entities in string', () => {
     const value = '&amp;'
 
-    expect(parseString(value, 'coerce')).toEqual('&')
+    expect(parseString(value)).toEqual('&')
   })
 
   it('should return number', () => {
     const value = 420
 
-    expect(parseString(value, 'coerce')).toEqual('420')
+    expect(parseString(value)).toEqual('420')
   })
 
   it('should return boolean', () => {
     const value = true
 
-    expect(parseString(value, 'coerce')).toBeUndefined()
+    expect(parseString(value)).toBeUndefined()
   })
 
   it('should handle null', () => {
     const value = null
 
-    expect(parseString(value, 'coerce')).toBeUndefined()
+    expect(parseString(value)).toBeUndefined()
   })
 
   it('should return undefined', () => {
     const value = undefined
 
-    expect(parseString(value, 'coerce')).toBeUndefined()
+    expect(parseString(value)).toBeUndefined()
   })
 })
 
@@ -386,49 +386,49 @@ describe('parseNumber', () => {
   it('should handle array', () => {
     const value = ['javascript', { another: 'typescript' }]
 
-    expect(parseNumber(value, 'coerce')).toBeUndefined()
+    expect(parseNumber(value)).toBeUndefined()
   })
 
   it('should handle object', () => {
     const value = { name: 'javascript' }
 
-    expect(parseNumber(value, 'coerce')).toBeUndefined()
+    expect(parseNumber(value)).toBeUndefined()
   })
 
   it('should handle non-numeric string', () => {
     const value = 'javascript'
 
-    expect(parseNumber(value, 'coerce')).toBeUndefined()
+    expect(parseNumber(value)).toBeUndefined()
   })
 
   it('should handle numeric string', () => {
     const value = '36.6'
 
-    expect(parseNumber(value, 'coerce')).toEqual(36.6)
+    expect(parseNumber(value)).toEqual(36.6)
   })
 
   it('should return number', () => {
     const value = 420
 
-    expect(parseNumber(value, 'coerce')).toEqual(value)
+    expect(parseNumber(value)).toEqual(value)
   })
 
   it('should return boolean', () => {
     const value = true
 
-    expect(parseNumber(value, 'coerce')).toBeUndefined()
+    expect(parseNumber(value)).toBeUndefined()
   })
 
   it('should handle null', () => {
     const value = null
 
-    expect(parseNumber(value, 'coerce')).toBeUndefined()
+    expect(parseNumber(value)).toBeUndefined()
   })
 
   it('should return undefined', () => {
     const value = undefined
 
-    expect(parseNumber(value, 'coerce')).toBeUndefined()
+    expect(parseNumber(value)).toBeUndefined()
   })
 })
 
@@ -436,55 +436,55 @@ describe('parseBoolean', () => {
   it('should handle array', () => {
     const value = ['javascript', { another: 'typescript' }]
 
-    expect(parseBoolean(value, 'coerce')).toBeUndefined()
+    expect(parseBoolean(value)).toBeUndefined()
   })
 
   it('should handle object', () => {
     const value = { name: 'javascript' }
 
-    expect(parseBoolean(value, 'coerce')).toBeUndefined()
+    expect(parseBoolean(value)).toBeUndefined()
   })
 
   it('should handle non-boolean string', () => {
     const value = 'javascript'
 
-    expect(parseBoolean(value, 'coerce')).toBeUndefined()
+    expect(parseBoolean(value)).toBeUndefined()
   })
 
   it('should handle true string', () => {
     const value = 'true'
 
-    expect(parseBoolean(value, 'coerce')).toEqual(true)
+    expect(parseBoolean(value)).toEqual(true)
   })
 
   it('should handle false string', () => {
     const value = 'false'
 
-    expect(parseBoolean(value, 'coerce')).toEqual(false)
+    expect(parseBoolean(value)).toEqual(false)
   })
 
   it('should return number', () => {
     const value = 420
 
-    expect(parseBoolean(value, 'coerce')).toBeUndefined()
+    expect(parseBoolean(value)).toBeUndefined()
   })
 
   it('should return boolean', () => {
     const value = true
 
-    expect(parseBoolean(value, 'coerce')).toEqual(value)
+    expect(parseBoolean(value)).toEqual(value)
   })
 
   it('should handle null', () => {
     const value = null
 
-    expect(parseBoolean(value, 'coerce')).toBeUndefined()
+    expect(parseBoolean(value)).toBeUndefined()
   })
 
   it('should return undefined', () => {
     const value = undefined
 
-    expect(parseBoolean(value, 'coerce')).toBeUndefined()
+    expect(parseBoolean(value)).toBeUndefined()
   })
 })
 
@@ -494,25 +494,25 @@ describe('parseArray', () => {
     const value2 = [1, 2, 3]
     const value3 = new Array(5)
 
-    expect(parseArray(value1, 'coerce')).toEqual(value1)
-    expect(parseArray(value2, 'coerce')).toEqual(value2)
-    expect(parseArray(value3, 'coerce')).toEqual(value3)
+    expect(parseArray(value1)).toEqual(value1)
+    expect(parseArray(value2)).toEqual(value2)
+    expect(parseArray(value3)).toEqual(value3)
   })
 
   it('should handle objects with sequential numeric keys starting from 0', () => {
     const value1 = { 0: 'a', 1: 'b', 2: 'c' }
     const value2 = { 0: 'only one item' }
 
-    expect(parseArray(value1, 'coerce')).toEqual(['a', 'b', 'c'])
-    expect(parseArray(value2, 'coerce')).toEqual(['only one item'])
+    expect(parseArray(value1)).toEqual(['a', 'b', 'c'])
+    expect(parseArray(value2)).toEqual(['only one item'])
   })
 
   it('should handle object with length property', () => {
     const value1 = { 0: 'a', 1: 'b', length: 2 }
     const value2 = { length: 3 }
 
-    expect(parseArray(value1, 'coerce')).toEqual(['a', 'b'])
-    expect(parseArray(value2, 'coerce')).toEqual([undefined, undefined, undefined])
+    expect(parseArray(value1)).toEqual(['a', 'b'])
+    expect(parseArray(value2)).toEqual([undefined, undefined, undefined])
   })
 
   it('should return false for non-sequential or non-zero-indexed objects', () => {
@@ -521,10 +521,10 @@ describe('parseArray', () => {
     const value3 = { a: 1, b: 2 }
     const value4 = { 0: 'a', 1: 'b', 5: 'c' }
 
-    expect(parseArray(value1, 'coerce')).toBeUndefined()
-    expect(parseArray(value2, 'coerce')).toBeUndefined()
-    expect(parseArray(value3, 'coerce')).toBeUndefined()
-    expect(parseArray(value4, 'coerce')).toBeUndefined()
+    expect(parseArray(value1)).toBeUndefined()
+    expect(parseArray(value2)).toBeUndefined()
+    expect(parseArray(value3)).toBeUndefined()
+    expect(parseArray(value4)).toBeUndefined()
   })
 
   it('should return false for primitive types', () => {
@@ -536,13 +536,13 @@ describe('parseArray', () => {
     const value6 = Symbol('sym')
     const value7 = BigInt(123)
 
-    expect(parseArray(value1, 'coerce')).toBeUndefined()
-    expect(parseArray(value2, 'coerce')).toBeUndefined()
-    expect(parseArray(value3, 'coerce')).toBeUndefined()
-    expect(parseArray(value4, 'coerce')).toBeUndefined()
-    expect(parseArray(value5, 'coerce')).toBeUndefined()
-    expect(parseArray(value6, 'coerce')).toBeUndefined()
-    expect(parseArray(value7, 'coerce')).toBeUndefined()
+    expect(parseArray(value1)).toBeUndefined()
+    expect(parseArray(value2)).toBeUndefined()
+    expect(parseArray(value3)).toBeUndefined()
+    expect(parseArray(value4)).toBeUndefined()
+    expect(parseArray(value5)).toBeUndefined()
+    expect(parseArray(value6)).toBeUndefined()
+    expect(parseArray(value7)).toBeUndefined()
   })
 
   it('should return false for other object types', () => {
@@ -553,18 +553,18 @@ describe('parseArray', () => {
     const value5 = /regex/
     const value6 = () => {}
 
-    expect(parseArray(value1, 'coerce')).toBeUndefined()
-    expect(parseArray(value2, 'coerce')).toBeUndefined()
-    expect(parseArray(value3, 'coerce')).toBeUndefined()
-    expect(parseArray(value4, 'coerce')).toBeUndefined()
-    expect(parseArray(value5, 'coerce')).toBeUndefined()
-    expect(parseArray(value6, 'coerce')).toBeUndefined()
+    expect(parseArray(value1)).toBeUndefined()
+    expect(parseArray(value2)).toBeUndefined()
+    expect(parseArray(value3)).toBeUndefined()
+    expect(parseArray(value4)).toBeUndefined()
+    expect(parseArray(value5)).toBeUndefined()
+    expect(parseArray(value6)).toBeUndefined()
   })
 })
 
 describe('parseArrayOf', () => {
-  const parser: ParseFunction<string> = (value, level) => {
-    if (level === 'coerce' && typeof value === 'number') {
+  const parser: ParseFunction<string> = (value) => {
+    if (typeof value === 'number') {
       return value.toString()
     }
 
@@ -574,42 +574,42 @@ describe('parseArrayOf', () => {
   it('should handle string', () => {
     const value = 'Jack'
 
-    expect(parseArrayOf(value, parser, 'coerce')).toEqual(['Jack'])
+    expect(parseArrayOf(value, parser)).toEqual(['Jack'])
   })
 
   it('should handle array of strings', () => {
     const value = ['John', 123]
 
-    expect(parseArrayOf(value, parser, 'coerce')).toEqual(['John', '123'])
+    expect(parseArrayOf(value, parser)).toEqual(['John', '123'])
   })
 
   it('should handle array of mixed values', () => {
     const value = [true, {}, [], null, 'John', 123]
 
-    expect(parseArrayOf(value, parser, 'coerce')).toEqual(['John', '123'])
+    expect(parseArrayOf(value, parser)).toEqual(['John', '123'])
   })
 
   it('should handle number', () => {
     const value = 420
 
-    expect(parseArrayOf(value, parser, 'coerce')).toEqual(['420'])
+    expect(parseArrayOf(value, parser)).toEqual(['420'])
   })
 
   it('should handle boolean', () => {
     const value = true
 
-    expect(parseArrayOf(value, parser, 'coerce')).toBeUndefined()
+    expect(parseArrayOf(value, parser)).toBeUndefined()
   })
 
   it('should handle null', () => {
     const value = null
 
-    expect(parseArrayOf(value, parser, 'coerce')).toBeUndefined()
+    expect(parseArrayOf(value, parser)).toBeUndefined()
   })
 
   it('should return undefined', () => {
     const value = undefined
 
-    expect(parseArrayOf(value, parser, 'coerce')).toBeUndefined()
+    expect(parseArrayOf(value, parser)).toBeUndefined()
   })
 })

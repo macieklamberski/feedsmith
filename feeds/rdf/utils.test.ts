@@ -16,7 +16,7 @@ describe('retrieveImage', () => {
       url: 'https://example.com/image.jpg',
     }
 
-    expect(retrieveImage(value, 'coerce')).toEqual(expected)
+    expect(retrieveImage(value)).toEqual(expected)
   })
 
   it('should parse image with only required fields', () => {
@@ -31,7 +31,7 @@ describe('retrieveImage', () => {
       link: 'https://example.com',
     }
 
-    expect(retrieveImage(value, 'coerce')).toEqual(expected)
+    expect(retrieveImage(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -47,7 +47,7 @@ describe('retrieveImage', () => {
       link: '456',
     }
 
-    expect(retrieveImage(value, 'coerce')).toEqual(expected)
+    expect(retrieveImage(value)).toEqual(expected)
   })
 
   it('should return undefined if title is missing', () => {
@@ -58,7 +58,7 @@ describe('retrieveImage', () => {
       },
     }
 
-    expect(retrieveImage(value, 'coerce')).toBeUndefined()
+    expect(retrieveImage(value)).toBeUndefined()
   })
 
   it('should return undefined if link is missing', () => {
@@ -69,14 +69,14 @@ describe('retrieveImage', () => {
       },
     }
 
-    expect(retrieveImage(value, 'coerce')).toBeUndefined()
+    expect(retrieveImage(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(retrieveImage('not an object', 'coerce')).toBeUndefined()
-    expect(retrieveImage(undefined, 'coerce')).toBeUndefined()
-    expect(retrieveImage(null, 'coerce')).toBeUndefined()
-    expect(retrieveImage([], 'coerce')).toBeUndefined()
+    expect(retrieveImage('not an object')).toBeUndefined()
+    expect(retrieveImage(undefined)).toBeUndefined()
+    expect(retrieveImage(null)).toBeUndefined()
+    expect(retrieveImage([])).toBeUndefined()
   })
 
   it('should return undefined for missing image property', () => {
@@ -84,7 +84,7 @@ describe('retrieveImage', () => {
       someOtherProperty: {},
     }
 
-    expect(retrieveImage(value, 'coerce')).toBeUndefined()
+    expect(retrieveImage(value)).toBeUndefined()
   })
 })
 
@@ -101,7 +101,7 @@ describe('parseItem', () => {
       description: 'Item Description',
     }
 
-    expect(parseItem(value, 'coerce')).toEqual(expected)
+    expect(parseItem(value)).toEqual(expected)
   })
 
   it('should parse item with only required fields', () => {
@@ -114,7 +114,7 @@ describe('parseItem', () => {
       link: 'https://example.com/item',
     }
 
-    expect(parseItem(value, 'coerce')).toEqual(expected)
+    expect(parseItem(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -128,7 +128,7 @@ describe('parseItem', () => {
       link: '456',
     }
 
-    expect(parseItem(value, 'coerce')).toEqual(expected)
+    expect(parseItem(value)).toEqual(expected)
   })
 
   it('should return undefined if title is missing', () => {
@@ -137,7 +137,7 @@ describe('parseItem', () => {
       description: { '#text': 'Item Description' },
     }
 
-    expect(parseItem(value, 'coerce')).toBeUndefined()
+    expect(parseItem(value)).toBeUndefined()
   })
 
   it('should return undefined if link is missing', () => {
@@ -146,14 +146,14 @@ describe('parseItem', () => {
       description: { '#text': 'Item Description' },
     }
 
-    expect(parseItem(value, 'coerce')).toBeUndefined()
+    expect(parseItem(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parseItem('not an object', 'coerce')).toBeUndefined()
-    expect(parseItem(undefined, 'coerce')).toBeUndefined()
-    expect(parseItem(null, 'coerce')).toBeUndefined()
-    expect(parseItem([], 'coerce')).toBeUndefined()
+    expect(parseItem('not an object')).toBeUndefined()
+    expect(parseItem(undefined)).toBeUndefined()
+    expect(parseItem(null)).toBeUndefined()
+    expect(parseItem([])).toBeUndefined()
   })
 })
 
@@ -186,7 +186,7 @@ describe('retrieveItems', () => {
       },
     ]
 
-    expect(retrieveItems(value, 'coerce')).toEqual(expected)
+    expect(retrieveItems(value)).toEqual(expected)
   })
 
   it('should filter out invalid items from array', () => {
@@ -213,7 +213,7 @@ describe('retrieveItems', () => {
       },
     ]
 
-    expect(retrieveItems(value, 'coerce')).toEqual(expected)
+    expect(retrieveItems(value)).toEqual(expected)
   })
 
   it('should handle empty array of items', () => {
@@ -221,7 +221,7 @@ describe('retrieveItems', () => {
       item: [],
     }
 
-    expect(retrieveItems(value, 'coerce')).toEqual([])
+    expect(retrieveItems(value)).toEqual([])
   })
 
   it('should handle coercible values in items', () => {
@@ -241,14 +241,14 @@ describe('retrieveItems', () => {
       },
     ]
 
-    expect(retrieveItems(value, 'coerce')).toEqual(expected)
+    expect(retrieveItems(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
-    expect(retrieveItems('not an object', 'coerce')).toBeUndefined()
-    expect(retrieveItems(undefined, 'coerce')).toBeUndefined()
-    expect(retrieveItems(null, 'coerce')).toBeUndefined()
-    expect(retrieveItems([], 'coerce')).toBeUndefined()
+    expect(retrieveItems('not an object')).toBeUndefined()
+    expect(retrieveItems(undefined)).toBeUndefined()
+    expect(retrieveItems(null)).toBeUndefined()
+    expect(retrieveItems([])).toBeUndefined()
   })
 
   it('should return empty array when item is not an array', () => {
@@ -265,7 +265,7 @@ describe('retrieveItems', () => {
       },
     ]
 
-    expect(retrieveItems(value, 'coerce')).toEqual(expected)
+    expect(retrieveItems(value)).toEqual(expected)
   })
 
   it('should return undefined when item property is missing', () => {
@@ -273,7 +273,7 @@ describe('retrieveItems', () => {
       someOtherProperty: {},
     }
 
-    expect(retrieveItems(value, 'coerce')).toBeUndefined()
+    expect(retrieveItems(value)).toBeUndefined()
   })
 })
 
@@ -294,7 +294,7 @@ describe('retrieveTextinput', () => {
       link: 'https://example.com/search',
     }
 
-    expect(retrieveTextinput(value, 'coerce')).toEqual(expected)
+    expect(retrieveTextinput(value)).toEqual(expected)
   })
 
   it('should handle partial textinput object', () => {
@@ -305,7 +305,7 @@ describe('retrieveTextinput', () => {
       },
     }
 
-    expect(retrieveTextinput(value, 'coerce')).toBeUndefined()
+    expect(retrieveTextinput(value)).toBeUndefined()
   })
 
   it('should handle coercible values', () => {
@@ -324,7 +324,7 @@ describe('retrieveTextinput', () => {
       link: '101',
     }
 
-    expect(retrieveTextinput(value, 'coerce')).toEqual(expected)
+    expect(retrieveTextinput(value)).toEqual(expected)
   })
 
   it('should return undefined if not all fields are present', () => {
@@ -335,14 +335,14 @@ describe('retrieveTextinput', () => {
       },
     }
 
-    expect(retrieveTextinput(value, 'coerce')).toBeUndefined()
+    expect(retrieveTextinput(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(retrieveTextinput('not an object', 'coerce')).toBeUndefined()
-    expect(retrieveTextinput(undefined, 'coerce')).toBeUndefined()
-    expect(retrieveTextinput(null, 'coerce')).toBeUndefined()
-    expect(retrieveTextinput([], 'coerce')).toBeUndefined()
+    expect(retrieveTextinput('not an object')).toBeUndefined()
+    expect(retrieveTextinput(undefined)).toBeUndefined()
+    expect(retrieveTextinput(null)).toBeUndefined()
+    expect(retrieveTextinput([])).toBeUndefined()
   })
 
   it('should return undefined for missing textinput property', () => {
@@ -350,7 +350,7 @@ describe('retrieveTextinput', () => {
       someOtherProperty: {},
     }
 
-    expect(retrieveTextinput(value, 'coerce')).toBeUndefined()
+    expect(retrieveTextinput(value)).toBeUndefined()
   })
 })
 
@@ -413,7 +413,7 @@ describe('parseFeed', () => {
       },
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with minimal required fields', () => {
@@ -440,7 +440,7 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -468,7 +468,7 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should return undefined if title is missing', () => {
@@ -486,7 +486,7 @@ describe('parseFeed', () => {
       },
     }
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should return undefined if items are missing', () => {
@@ -499,7 +499,7 @@ describe('parseFeed', () => {
       },
     }
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object rdf:rdf', () => {
@@ -507,7 +507,7 @@ describe('parseFeed', () => {
       'rdf:rdf': 'not an object',
     }
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should return undefined for missing rdf:rdf', () => {
@@ -515,14 +515,14 @@ describe('parseFeed', () => {
       someOtherProperty: {},
     }
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parseFeed('not an object', 'coerce')).toBeUndefined()
-    expect(parseFeed(undefined, 'coerce')).toBeUndefined()
-    expect(parseFeed(null, 'coerce')).toBeUndefined()
-    expect(parseFeed([], 'coerce')).toBeUndefined()
+    expect(parseFeed('not an object')).toBeUndefined()
+    expect(parseFeed(undefined)).toBeUndefined()
+    expect(parseFeed(null)).toBeUndefined()
+    expect(parseFeed([])).toBeUndefined()
   })
 
   it('should handle feed with empty items array', () => {
@@ -536,6 +536,6 @@ describe('parseFeed', () => {
       },
     }
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 })

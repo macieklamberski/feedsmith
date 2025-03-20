@@ -22,7 +22,7 @@ describe('parseTextInput', () => {
       link: { '#text': 'https://example.com/search' },
     }
 
-    expect(parseTextInput(value, 'coerce')).toEqual({
+    expect(parseTextInput(value)).toEqual({
       title: 'Search Title',
       description: 'Search Description',
       name: 'searchForm',
@@ -36,7 +36,7 @@ describe('parseTextInput', () => {
       link: { '#text': 'https://example.com/search' },
     }
 
-    expect(parseTextInput(value, 'coerce')).toEqual({
+    expect(parseTextInput(value)).toEqual({
       title: 'Search Title',
       link: 'https://example.com/search',
     })
@@ -45,12 +45,12 @@ describe('parseTextInput', () => {
   it('should handle empty textInput object', () => {
     const value = {}
 
-    expect(parseTextInput(value, 'coerce')).toEqual({})
+    expect(parseTextInput(value)).toEqual({})
   })
 
   it('should handle non-object value', () => {
-    expect(parseTextInput('not an object', 'coerce')).toBeUndefined()
-    expect(parseTextInput(undefined, 'coerce')).toBeUndefined()
+    expect(parseTextInput('not an object')).toBeUndefined()
+    expect(parseTextInput(undefined)).toBeUndefined()
   })
 
   it('should handle nested structures with coercible values', () => {
@@ -59,7 +59,7 @@ describe('parseTextInput', () => {
       description: { '#text': true },
     }
 
-    expect(parseTextInput(value, 'coerce')).toEqual({ title: '123' })
+    expect(parseTextInput(value)).toEqual({ title: '123' })
   })
 })
 
@@ -73,7 +73,7 @@ describe('parseCloud', () => {
       '@protocol': 'soap',
     }
 
-    expect(parseCloud(value, 'coerce')).toEqual({
+    expect(parseCloud(value)).toEqual({
       domain: 'rpc.example.com',
       port: 80,
       path: '/RPC2',
@@ -88,7 +88,7 @@ describe('parseCloud', () => {
       '@protocol': 'soap',
     }
 
-    expect(parseCloud(value, 'coerce')).toEqual({
+    expect(parseCloud(value)).toEqual({
       domain: 'rpc.example.com',
       protocol: 'soap',
     })
@@ -97,12 +97,12 @@ describe('parseCloud', () => {
   it('should handle empty cloud object', () => {
     const value = {}
 
-    expect(parseCloud(value, 'coerce')).toEqual({})
+    expect(parseCloud(value)).toEqual({})
   })
 
   it('should handle non-object value', () => {
-    expect(parseCloud('not an object', 'coerce')).toBeUndefined()
-    expect(parseCloud(undefined, 'coerce')).toBeUndefined()
+    expect(parseCloud('not an object')).toBeUndefined()
+    expect(parseCloud(undefined)).toBeUndefined()
   })
 
   it('should handle coercible values', () => {
@@ -112,7 +112,7 @@ describe('parseCloud', () => {
       '@path': true,
     }
 
-    expect(parseCloud(value, 'coerce')).toEqual({ domain: '123', port: 80 })
+    expect(parseCloud(value)).toEqual({ domain: '123', port: 80 })
   })
 })
 
@@ -122,7 +122,7 @@ describe('parseSkipHours', () => {
       hour: [{ '#text': '0' }, { '#text': '1' }, { '#text': '2' }, { '#text': '23' }],
     }
 
-    expect(parseSkipHours(value, 'coerce')).toEqual([0, 1, 2, 23])
+    expect(parseSkipHours(value)).toEqual([0, 1, 2, 23])
   })
 
   it('should handle coercible values', () => {
@@ -130,7 +130,7 @@ describe('parseSkipHours', () => {
       hour: [{ '#text': '0' }, { '#text': 'not a number' }, { '#text': '5' }],
     }
 
-    expect(parseSkipHours(value, 'coerce')).toEqual([0, 5])
+    expect(parseSkipHours(value)).toEqual([0, 5])
   })
 
   it('should return undefined for non-array hour', () => {
@@ -138,18 +138,18 @@ describe('parseSkipHours', () => {
       hour: { '#text': '0' },
     }
 
-    expect(parseSkipHours(value, 'coerce')).toBeUndefined()
+    expect(parseSkipHours(value)).toBeUndefined()
   })
 
   it('should return undefined for missing hour', () => {
     const value = {}
 
-    expect(parseSkipHours(value, 'coerce')).toBeUndefined()
+    expect(parseSkipHours(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object value', () => {
-    expect(parseSkipHours('not an object', 'coerce')).toBeUndefined()
-    expect(parseSkipHours(undefined, 'coerce')).toBeUndefined()
+    expect(parseSkipHours('not an object')).toBeUndefined()
+    expect(parseSkipHours(undefined)).toBeUndefined()
   })
 })
 
@@ -159,7 +159,7 @@ describe('parseSkipDays', () => {
       day: [{ '#text': 'Monday' }, { '#text': 'Saturday' }, { '#text': 'Sunday' }],
     }
 
-    expect(parseSkipDays(value, 'coerce')).toEqual(['Monday', 'Saturday', 'Sunday'])
+    expect(parseSkipDays(value)).toEqual(['Monday', 'Saturday', 'Sunday'])
   })
 
   it('should handle coercible values', () => {
@@ -167,7 +167,7 @@ describe('parseSkipDays', () => {
       day: [{ '#text': 'Monday' }, { '#text': 123 }, { '#text': '' }],
     }
 
-    expect(parseSkipDays(value, 'coerce')).toEqual(['Monday', '123', ''])
+    expect(parseSkipDays(value)).toEqual(['Monday', '123', ''])
   })
 
   it('should return undefined for non-array day', () => {
@@ -175,18 +175,18 @@ describe('parseSkipDays', () => {
       day: { '#text': 'Monday' },
     }
 
-    expect(parseSkipDays(value, 'coerce')).toBeUndefined()
+    expect(parseSkipDays(value)).toBeUndefined()
   })
 
   it('should return undefined for missing day', () => {
     const value = {}
 
-    expect(parseSkipDays(value, 'coerce')).toBeUndefined()
+    expect(parseSkipDays(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object value', () => {
-    expect(parseSkipDays('not an object', 'coerce')).toBeUndefined()
-    expect(parseSkipDays(undefined, 'coerce')).toBeUndefined()
+    expect(parseSkipDays('not an object')).toBeUndefined()
+    expect(parseSkipDays(undefined)).toBeUndefined()
   })
 })
 
@@ -198,11 +198,13 @@ describe('parseEnclosure', () => {
       type: { '#text': 'audio/mpeg' },
     }
 
-    expect(parseEnclosure(value, 'coerce')).toEqual({
+    const expected = {
       url: 'https://example.com/audio.mp3',
       length: 12345678,
       type: 'audio/mpeg',
-    })
+    }
+
+    expect(parseEnclosure(value)).toEqual(expected)
   })
 
   it('should handle partial enclosure object', () => {
@@ -211,10 +213,12 @@ describe('parseEnclosure', () => {
       type: { '#text': 'audio/mpeg' },
     }
 
-    expect(parseEnclosure(value, 'coerce')).toEqual({
+    const expected = {
       url: 'https://example.com/audio.mp3',
       type: 'audio/mpeg',
-    })
+    }
+
+    expect(parseEnclosure(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -224,22 +228,24 @@ describe('parseEnclosure', () => {
       type: { '#text': 123 },
     }
 
-    expect(parseEnclosure(value, 'coerce')).toEqual({
+    const expected = {
       url: 'https://example.com/audio.mp3',
       type: '123',
-    })
+    }
+
+    expect(parseEnclosure(value)).toEqual(expected)
   })
 
   // TODO: Figure out what to do with enclosure with all empty fields.
   // it('should return undefined for missing enclosure', () => {
   //   const value = {}
 
-  //   expect(parseEnclosure(value, 'coerce')).toBeUndefined()
+  //   expect(parseEnclosure(value)).toBeUndefined()
   // })
 
   it('should return undefined for non-object value', () => {
-    expect(parseEnclosure('not an object', 'coerce')).toBeUndefined()
-    expect(parseEnclosure(undefined, 'coerce')).toBeUndefined()
+    expect(parseEnclosure('not an object')).toBeUndefined()
+    expect(parseEnclosure(undefined)).toBeUndefined()
   })
 })
 
@@ -250,7 +256,7 @@ describe('parseSource', () => {
       '@url': 'http://example.com/source',
     }
 
-    expect(parseSource(value, 'coerce')).toEqual({
+    expect(parseSource(value)).toEqual({
       title: 'Technology',
       url: 'http://example.com/source',
     })
@@ -261,7 +267,7 @@ describe('parseSource', () => {
       '#text': 'Technology',
     }
 
-    expect(parseSource(value, 'coerce')).toEqual({ title: 'Technology' })
+    expect(parseSource(value)).toEqual({ title: 'Technology' })
   })
 
   it('should handle coercible values', () => {
@@ -270,7 +276,7 @@ describe('parseSource', () => {
       '@url': true,
     }
 
-    expect(parseSource(value, 'coerce')).toEqual({ title: '123' })
+    expect(parseSource(value)).toEqual({ title: '123' })
   })
 
   it('should return undefined if title is missing', () => {
@@ -278,17 +284,17 @@ describe('parseSource', () => {
       '@url': 'http://example.com/categories',
     }
 
-    expect(parseSource(value, 'coerce')).toBeUndefined()
+    expect(parseSource(value)).toBeUndefined()
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    expect(parseSource(value, 'coerce')).toBeUndefined()
+    expect(parseSource(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object value', () => {
-    expect(parseSource(null, 'coerce')).toBeUndefined()
+    expect(parseSource(null)).toBeUndefined()
   })
 })
 
@@ -302,15 +308,16 @@ describe('parseImage', () => {
       height: { '#text': '32' },
       width: { '#text': '32' },
     }
-
-    expect(parseImage(value, 'coerce')).toEqual({
+    const expected = {
       url: 'https://example.com/image.jpg',
       title: 'Example Image',
       link: 'https://example.com',
       description: 'Example description',
       height: 32,
       width: 32,
-    })
+    }
+
+    expect(parseImage(value)).toEqual(expected)
   })
 
   it('should handle partial image object', () => {
@@ -319,10 +326,12 @@ describe('parseImage', () => {
       title: { '#text': 'Example Image' },
     }
 
-    expect(parseImage(value, 'coerce')).toEqual({
+    const expected = {
       url: 'https://example.com/image.jpg',
       title: 'Example Image',
-    })
+    }
+
+    expect(parseImage(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -333,22 +342,24 @@ describe('parseImage', () => {
       width: { '#text': '32' },
     }
 
-    expect(parseImage(value, 'coerce')).toEqual({
+    const expected = {
       url: 'https://example.com/image.jpg',
       title: '123',
       width: 32,
-    })
+    }
+
+    expect(parseImage(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object value', () => {
-    expect(parseImage('not an object', 'coerce')).toBeUndefined()
-    expect(parseImage(undefined, 'coerce')).toBeUndefined()
+    expect(parseImage('not an object')).toBeUndefined()
+    expect(parseImage(undefined)).toBeUndefined()
   })
 
   it('should handle empty image object', () => {
     const value = {}
 
-    expect(parseImage(value, 'coerce')).toEqual({})
+    expect(parseImage(value)).toEqual({})
   })
 })
 
@@ -358,21 +369,23 @@ describe('parseCategory', () => {
       '#text': 'Technology',
       '@domain': 'http://example.com/categories',
     }
-
-    expect(parseCategory(value, 'coerce')).toEqual({
+    const expected = {
       name: 'Technology',
       domain: 'http://example.com/categories',
-    })
+    }
+
+    expect(parseCategory(value)).toEqual(expected)
   })
 
   it('should handle category with only name', () => {
     const value = {
       '#text': 'Technology',
     }
-
-    expect(parseCategory(value, 'coerce')).toEqual({
+    const expected = {
       name: 'Technology',
-    })
+    }
+
+    expect(parseCategory(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -380,10 +393,11 @@ describe('parseCategory', () => {
       '#text': 123,
       '@domain': true,
     }
-
-    expect(parseCategory(value, 'coerce')).toEqual({
+    const expected = {
       name: '123',
-    })
+    }
+
+    expect(parseCategory(value)).toEqual(expected)
   })
 
   it('should return undefined if name is missing', () => {
@@ -391,17 +405,17 @@ describe('parseCategory', () => {
       '@domain': 'http://example.com/categories',
     }
 
-    expect(parseCategory(value, 'coerce')).toBeUndefined()
+    expect(parseCategory(value)).toBeUndefined()
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    expect(parseCategory(value, 'coerce')).toBeUndefined()
+    expect(parseCategory(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object value', () => {
-    expect(parseCategory(null, 'coerce')).toBeUndefined()
+    expect(parseCategory(null)).toBeUndefined()
   })
 })
 
@@ -411,7 +425,7 @@ describe('parseAuthor', () => {
       '#text': 'John Doe (john@example.com)',
     }
 
-    expect(parseAuthor(value, 'coerce')).toBe('John Doe (john@example.com)')
+    expect(parseAuthor(value)).toBe('John Doe (john@example.com)')
   })
 
   it('should handle coercible values', () => {
@@ -419,17 +433,17 @@ describe('parseAuthor', () => {
       '#text': 123,
     }
 
-    expect(parseAuthor(value, 'coerce')).toBe('123')
+    expect(parseAuthor(value)).toBe('123')
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    expect(parseAuthor(value, 'coerce')).toBeUndefined()
+    expect(parseAuthor(value)).toBeUndefined()
   })
 
   it('should return undefined for undefined value', () => {
-    expect(parseAuthor(undefined, 'coerce')).toBeUndefined()
+    expect(parseAuthor(undefined)).toBeUndefined()
   })
 })
 
@@ -474,31 +488,29 @@ describe('parseItem', () => {
       source: { title: 'Example Source', url: 'https://example.com/source.xml' },
     }
 
-    expect(parseItem(value, 'coerce')).toEqual(expected)
+    expect(parseItem(value)).toEqual(expected)
   })
 
   it('should handle minimal item with title only', () => {
     const value = {
       title: { '#text': 'Item Title' },
     }
-
     const expected = {
       title: 'Item Title',
     }
 
-    expect(parseItem(value, 'coerce')).toEqual(expected)
+    expect(parseItem(value)).toEqual(expected)
   })
 
   it('should handle minimal item with description only', () => {
     const value = {
       description: { '#text': 'Item Description' },
     }
-
     const expected = {
       description: 'Item Description',
     }
 
-    expect(parseItem(value, 'coerce')).toEqual(expected)
+    expect(parseItem(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -508,7 +520,7 @@ describe('parseItem', () => {
       author: [{ '#text': 456 }],
     }
 
-    expect(parseItem(value, 'coerce')).toEqual({
+    expect(parseItem(value)).toEqual({
       title: '123',
       authors: ['456'],
     })
@@ -517,12 +529,12 @@ describe('parseItem', () => {
   it('should return empty object for empty input', () => {
     const value = {}
 
-    expect(parseItem(value, 'coerce')).toEqual({})
+    expect(parseItem(value)).toEqual({})
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parseItem('not an object', 'coerce')).toBeUndefined()
-    expect(parseItem(undefined, 'coerce')).toBeUndefined()
+    expect(parseItem('not an object')).toBeUndefined()
+    expect(parseItem(undefined)).toBeUndefined()
   })
 })
 
@@ -633,7 +645,7 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should handle minimal feed with only required fields', () => {
@@ -645,13 +657,12 @@ describe('parseFeed', () => {
         },
       },
     }
-
     const expected = {
       title: 'Feed Title',
       link: 'https://example.com',
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should return undefined when title is missing', () => {
@@ -664,7 +675,7 @@ describe('parseFeed', () => {
       },
     }
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should return undefined when link is missing', () => {
@@ -677,7 +688,7 @@ describe('parseFeed', () => {
       },
     }
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should handle coercible values', () => {
@@ -705,7 +716,7 @@ describe('parseFeed', () => {
       items: [{ title: 'Item Title', guid: '101112' }],
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should return undefined for empty channel', () => {
@@ -713,18 +724,18 @@ describe('parseFeed', () => {
       channel: {},
     }
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should return undefined for missing channel', () => {
     const value = {}
 
-    expect(parseFeed(value, 'coerce')).toBeUndefined()
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parseFeed('not an object', 'coerce')).toBeUndefined()
-    expect(parseFeed(undefined, 'coerce')).toBeUndefined()
+    expect(parseFeed('not an object')).toBeUndefined()
+    expect(parseFeed(undefined)).toBeUndefined()
   })
 
   it('should handle complex nested structures', () => {
@@ -793,6 +804,6 @@ describe('parseFeed', () => {
       },
     }
 
-    expect(parseFeed(value, 'coerce')).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expected)
   })
 })

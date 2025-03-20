@@ -8,7 +8,7 @@ import { parseFeed } from './utils'
 export type Parse = (value: unknown) => Feed | undefined
 
 export const parse: Parse = (value) => {
-  const parsed = parseFeed(value, 'coerce')
+  const parsed = parseFeed(value)
 
   return parsed
 }
