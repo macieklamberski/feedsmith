@@ -18,6 +18,7 @@ export const stopNodes = [
 ]
 
 export const parser = new XMLParser({
+  processEntities: false,
   alwaysCreateTextNode: true,
   ignoreAttributes: false,
   attributeNamePrefix: '@',
