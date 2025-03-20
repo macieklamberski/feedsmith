@@ -134,7 +134,7 @@ export const retrievePublished: ParseFunction<string> = (value) => {
   const issued = parseString(value.issued?.['#text']) // Atom 0.3.
   const created = parseString(value.created?.['#text']) // Atom 0.3.
 
-  // The "created" date is not entirely valid as "published date", but if it's there awhen
+  // The "created" date is not entirely valid as "published date", but if it's there when
   // no other date is present, it's a good-enough fallback especially that it's not present
   // in 1.0 version of the specfication.
   return published || issued || created
