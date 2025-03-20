@@ -1,8 +1,93 @@
 import { describe, expect, it } from 'bun:test'
-import { parseFeed, parseItem, retrieveImage, retrieveItems, retrieveTextinput } from './utils'
+import {
+  parseFeed,
+  parseImage,
+  parseItem,
+  parseTextinput,
+  retrieveImage,
+  retrieveItems,
+  retrieveTextinput,
+} from './utils'
+
+describe('parseImage', () => {
+  it('should handle complete image object', () => {
+    const value = {
+      title: { '#text': 'Image Title' },
+      link: { '#text': 'https://example.com' },
+      url: { '#text': 'https://example.com/image.jpg' },
+    }
+    const expected = {
+      title: 'Image Title',
+      link: 'https://example.com',
+      url: 'https://example.com/image.jpg',
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should handle image with only required fields', () => {
+    const value = {
+      title: { '#text': 'Image Title' },
+      link: { '#text': 'https://example.com' },
+    }
+    const expected = {
+      title: 'Image Title',
+      link: 'https://example.com',
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should handle coercible values', () => {
+    const value = {
+      title: { '#text': 123 },
+      link: { '#text': 456 },
+      url: { '#text': true },
+    }
+    const expected = {
+      title: '123',
+      link: '456',
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should return undefined if title is missing', () => {
+    const value = {
+      link: { '#text': 'https://example.com' },
+      url: { '#text': 'https://example.com/image.jpg' },
+    }
+
+    expect(parseImage(value)).toBeUndefined()
+  })
+
+  it('should return undefined if link is missing', () => {
+    const value = {
+      title: { '#text': 'Image Title' },
+      url: { '#text': 'https://example.com/image.jpg' },
+    }
+
+    expect(parseImage(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(parseImage('not an object')).toBeUndefined()
+    expect(parseImage(undefined)).toBeUndefined()
+    expect(parseImage(null)).toBeUndefined()
+    expect(parseImage([])).toBeUndefined()
+  })
+
+  it('should return undefined for missing image property', () => {
+    const value = {
+      someOtherProperty: {},
+    }
+
+    expect(parseImage(value)).toBeUndefined()
+  })
+})
 
 describe('retrieveImage', () => {
-  it('should parse complete image object', () => {
+  it('should retrieve complete image object', () => {
     const value = {
       image: {
         title: { '#text': 'Image Title' },
@@ -17,74 +102,6 @@ describe('retrieveImage', () => {
     }
 
     expect(retrieveImage(value)).toEqual(expected)
-  })
-
-  it('should parse image with only required fields', () => {
-    const value = {
-      image: {
-        title: { '#text': 'Image Title' },
-        link: { '#text': 'https://example.com' },
-      },
-    }
-    const expected = {
-      title: 'Image Title',
-      link: 'https://example.com',
-    }
-
-    expect(retrieveImage(value)).toEqual(expected)
-  })
-
-  it('should handle coercible values', () => {
-    const value = {
-      image: {
-        title: { '#text': 123 },
-        link: { '#text': 456 },
-        url: { '#text': true },
-      },
-    }
-    const expected = {
-      title: '123',
-      link: '456',
-    }
-
-    expect(retrieveImage(value)).toEqual(expected)
-  })
-
-  it('should return undefined if title is missing', () => {
-    const value = {
-      image: {
-        link: { '#text': 'https://example.com' },
-        url: { '#text': 'https://example.com/image.jpg' },
-      },
-    }
-
-    expect(retrieveImage(value)).toBeUndefined()
-  })
-
-  it('should return undefined if link is missing', () => {
-    const value = {
-      image: {
-        title: { '#text': 'Image Title' },
-        url: { '#text': 'https://example.com/image.jpg' },
-      },
-    }
-
-    expect(retrieveImage(value)).toBeUndefined()
-  })
-
-  it('should return undefined for non-object input', () => {
-    expect(retrieveImage('not an object')).toBeUndefined()
-    expect(retrieveImage(undefined)).toBeUndefined()
-    expect(retrieveImage(null)).toBeUndefined()
-    expect(retrieveImage([])).toBeUndefined()
-  })
-
-  it('should return undefined for missing image property', () => {
-    const value = {
-      someOtherProperty: {},
-    }
-
-    expect(retrieveImage(value)).toBeUndefined()
   })
 })
 
@@ -251,7 +268,7 @@ describe('retrieveItems', () => {
     expect(retrieveItems([])).toBeUndefined()
   })
 
-  it('should return empty array when item is not an array', () => {
+  it('should return array of one item when item is not an array', () => {
     const value = {
       item: {
         title: { '#text': 'Single Item' },
@@ -277,8 +294,77 @@ describe('retrieveItems', () => {
   })
 })
 
+describe('parseTextinput', () => {
+  it('should handle complete textinput object', () => {
+    const value = {
+      title: { '#text': 'Search Title' },
+      description: { '#text': 'Search Description' },
+      name: { '#text': 'q' },
+      link: { '#text': 'https://example.com/search' },
+    }
+    const expected = {
+      title: 'Search Title',
+      description: 'Search Description',
+      name: 'q',
+      link: 'https://example.com/search',
+    }
+
+    expect(parseTextinput(value)).toEqual(expected)
+  })
+
+  it('should handle partial textinput object', () => {
+    const value = {
+      title: { '#text': 'Search Title' },
+      name: { '#text': 'q' },
+    }
+
+    expect(parseTextinput(value)).toBeUndefined()
+  })
+
+  it('should handle coercible values', () => {
+    const value = {
+      title: { '#text': 123 },
+      description: { '#text': 456 },
+      name: { '#text': 789 },
+      link: { '#text': 101 },
+    }
+    const expected = {
+      title: '123',
+      description: '456',
+      name: '789',
+      link: '101',
+    }
+
+    expect(parseTextinput(value)).toEqual(expected)
+  })
+
+  it('should return undefined if not all fields are present', () => {
+    const value = {
+      title: { '#text': 'Search Title' },
+      description: { '#text': 'Search Description' },
+    }
+
+    expect(parseTextinput(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(parseTextinput('not an object')).toBeUndefined()
+    expect(parseTextinput(undefined)).toBeUndefined()
+    expect(parseTextinput(null)).toBeUndefined()
+    expect(parseTextinput([])).toBeUndefined()
+  })
+
+  it('should return undefined for missing textinput property', () => {
+    const value = {
+      someOtherProperty: {},
+    }
+
+    expect(parseTextinput(value)).toBeUndefined()
+  })
+})
+
 describe('retrieveTextinput', () => {
-  it('should parse complete textinput object', () => {
+  it('should retrieve complete textinput object', () => {
     const value = {
       textinput: {
         title: { '#text': 'Search Title' },
@@ -295,62 +381,6 @@ describe('retrieveTextinput', () => {
     }
 
     expect(retrieveTextinput(value)).toEqual(expected)
-  })
-
-  it('should handle partial textinput object', () => {
-    const value = {
-      textinput: {
-        title: { '#text': 'Search Title' },
-        name: { '#text': 'q' },
-      },
-    }
-
-    expect(retrieveTextinput(value)).toBeUndefined()
-  })
-
-  it('should handle coercible values', () => {
-    const value = {
-      textinput: {
-        title: { '#text': 123 },
-        description: { '#text': 456 },
-        name: { '#text': 789 },
-        link: { '#text': 101 },
-      },
-    }
-    const expected = {
-      title: '123',
-      description: '456',
-      name: '789',
-      link: '101',
-    }
-
-    expect(retrieveTextinput(value)).toEqual(expected)
-  })
-
-  it('should return undefined if not all fields are present', () => {
-    const value = {
-      textinput: {
-        title: { '#text': 'Search Title' },
-        description: { '#text': 'Search Description' },
-      },
-    }
-
-    expect(retrieveTextinput(value)).toBeUndefined()
-  })
-
-  it('should return undefined for non-object input', () => {
-    expect(retrieveTextinput('not an object')).toBeUndefined()
-    expect(retrieveTextinput(undefined)).toBeUndefined()
-    expect(retrieveTextinput(null)).toBeUndefined()
-    expect(retrieveTextinput([])).toBeUndefined()
-  })
-
-  it('should return undefined for missing textinput property', () => {
-    const value = {
-      someOtherProperty: {},
-    }
-
-    expect(retrieveTextinput(value)).toBeUndefined()
   })
 })
 
