@@ -89,6 +89,10 @@ export const parseBoolean: ParseFunction<boolean> = (value) => {
   }
 }
 
+export const parseSingular = <T>(value: T | Array<T>): T => {
+  return Array.isArray(value) ? value[0] : value
+}
+
 export const parseArray: ParseFunction<Array<Unreliable>> = (value) => {
   if (Array.isArray(value)) {
     return value
@@ -120,10 +124,10 @@ export const parseArray: ParseFunction<Array<Unreliable>> = (value) => {
   return Object.values(value)
 }
 
-export const parseArrayOf = <P>(
+export const parseArrayOf = <R>(
   value: Unreliable,
-  parse: ParseFunction<P>,
-): Array<P> | undefined => {
+  parse: ParseFunction<R>,
+): Array<R> | undefined => {
   const array = parseArray(value)
 
   if (array) {

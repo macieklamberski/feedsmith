@@ -10,6 +10,7 @@ import {
   parseArrayOf,
   parseBoolean,
   parseNumber,
+  parseSingular,
   parseString,
   stripCdata,
 } from './utils'
@@ -485,6 +486,50 @@ describe('parseBoolean', () => {
     const value = undefined
 
     expect(parseBoolean(value)).toBeUndefined()
+  })
+})
+
+describe('parseSingular', () => {
+  it('should return the first element of an array', () => {
+    expect(parseSingular([1, 2, 3])).toEqual(1)
+    expect(parseSingular(['a', 'b', 'c'])).toEqual('a')
+    expect(parseSingular([{ key: 'value' }, { another: 'object' }])).toEqual({ key: 'value' })
+  })
+
+  it('should return the value itself when not an array', () => {
+    expect(parseSingular(42)).toEqual(42)
+    expect(parseSingular('string')).toEqual('string')
+    expect(parseSingular(true)).toEqual(true)
+    expect(parseSingular({ key: 'value' })).toEqual({ key: 'value' })
+  })
+
+  it('should handle empty arrays', () => {
+    expect(parseSingular([])).toBeUndefined()
+  })
+
+  it('should handle arrays with undefined or null first elements', () => {
+    expect(parseSingular([undefined, 1, 2])).toBeUndefined()
+    expect(parseSingular([null, 1, 2])).toEqual(null)
+  })
+
+  it('should handle array-like objects correctly', () => {
+    const arrayLike = { 0: 'first', 1: 'second', length: 2 }
+    expect(parseSingular(arrayLike)).toEqual(arrayLike)
+  })
+
+  it('should preserve the type of the input', () => {
+    const numberResult = parseSingular<number>([42])
+    const stringResult = parseSingular<string>('test')
+    const objectResult = parseSingular<{ id: number }>({ id: 1 })
+
+    expect(typeof numberResult).toEqual('number')
+    expect(typeof stringResult).toEqual('string')
+    expect(typeof objectResult).toEqual('object')
+  })
+
+  it('should handle null and undefined', () => {
+    expect(parseSingular(null)).toEqual(null)
+    expect(parseSingular(undefined)).toBeUndefined()
   })
 })
 
