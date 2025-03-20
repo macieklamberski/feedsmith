@@ -1,5 +1,8 @@
 import type { ParseFunction } from '../../common/types'
 import { hasAllProps, isObject, parseArrayOf, parseString } from '../../common/utils'
+import { retrieveItem as retrieveContentNamespaceItem } from '../../namespaces/content/utils'
+import { retrieveDublinCore as retrieveDublinCoreNamespaceFeed } from '../../namespaces/dc/utils'
+import { retrieveFeed as retrieveSyndicationNamespaceFeed } from '../../namespaces/sy/utils'
 import type { Feed, Image, Item, Textinput } from './types'
 
 export const retrieveImage: ParseFunction<Image> = (value, level) => {
@@ -32,6 +35,8 @@ export const parseItem: ParseFunction<Item> = (value, level) => {
     title: parseString(value.title?.['#text'], level),
     link: parseString(value.link?.['#text'], level),
     description: parseString(value.description?.['#text'], level),
+    content: retrieveContentNamespaceItem(value, level),
+    dc: retrieveDublinCoreNamespaceFeed(value, level),
   }
 
   if (hasAllProps(item, ['title', 'link'])) {
@@ -88,6 +93,8 @@ export const parseFeed: ParseFunction<Feed> = (value, level) => {
     image: retrieveImage(rdf, level),
     items: retrieveItems(rdf, level),
     textinput: retrieveTextinput(rdf, level),
+    dc: retrieveDublinCoreNamespaceFeed(rdf.channel, level),
+    sy: retrieveSyndicationNamespaceFeed(rdf.channel, level),
   }
 
   if (hasAllProps(feed, ['title', 'items'])) {

@@ -1,0 +1,19 @@
+{
+  "title": "XML.com",
+  "link": "http://xml.com/pub",
+  "items": [
+    {
+      "title": "Putting RDF to Work",
+      "link": "http://xml.com/pub/2000/08/09/rdfdb/index.html",
+      "content": { "encoded": "This is the content of the first item." },
+      "dc": { "creator": "Jack Jackson", "date": "2022-01-01T12:00+00:00" }
+    }
+  ],
+  "dc": {
+    "creator": "John Doe",
+    "description": "This is a sample feed.",
+    "contributor": "Jane Smith",
+    "date": "2022-01-01T12:00+00:00"
+  },
+  "sy": { "updatePeriod": "hourly", "updateFrequency": 1, "updateBase": "2000-01-01T12:00+00:00" }
+}
