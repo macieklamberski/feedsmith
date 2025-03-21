@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const dublinCore = z
+export const itemOrFeed = z
   .object({
     title: z.string(),
     creator: z.string(),

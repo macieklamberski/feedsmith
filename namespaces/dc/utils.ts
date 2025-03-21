@@ -1,13 +1,13 @@
 import type { ParseFunction } from '../../common/types'
 import { hasAnyProps, isObject, parseString } from '../../common/utils'
-import type { DublinCore } from './types'
+import type { ItemOrFeed } from './types'
 
-export const parseDublinCore: ParseFunction<DublinCore> = (value) => {
+export const parseItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  const dublinCore = {
+  const itemOrFeed = {
     title: parseString(value['dc:title']?.['#text']),
     creator: parseString(value['dc:creator']?.['#text']),
     subject: parseString(value['dc:subject']?.['#text']),
@@ -25,7 +25,7 @@ export const parseDublinCore: ParseFunction<DublinCore> = (value) => {
     rights: parseString(value['dc:rights']?.['#text']),
   }
 
-  if (hasAnyProps(dublinCore, Object.keys(dublinCore) as Array<keyof DublinCore>)) {
-    return dublinCore
+  if (hasAnyProps(itemOrFeed, Object.keys(itemOrFeed) as Array<keyof ItemOrFeed>)) {
+    return itemOrFeed
   }
 }

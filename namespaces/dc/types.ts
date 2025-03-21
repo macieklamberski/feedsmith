@@ -1,4 +1,4 @@
 import type z from 'zod'
-import type { dublinCore } from './schemas'
+import type { itemOrFeed } from './schemas'
 
-export type DublinCore = z.infer<typeof dublinCore>
+export type ItemOrFeed = z.infer<typeof itemOrFeed>
