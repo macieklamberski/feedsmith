@@ -7,8 +7,8 @@
     "lint:biome": "npx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
   },
   "dependencies": {
-    "fast-xml-parser": "^5.0.9",
-    "html-entities": "^2.5.2"
+    "entities": "^6.0.0",
+    "fast-xml-parser": "^5.0.9"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
