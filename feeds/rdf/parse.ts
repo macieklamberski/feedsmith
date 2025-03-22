@@ -1,4 +1,4 @@
-import { parser } from './common'
+import { parser } from './config'
 import { feed } from './schemas'
 import type { Feed } from './types'
 import { retrieveFeed } from './utils'

@@ -1,4 +1,5 @@
 import { XMLParser } from 'fast-xml-parser'
+import { parserConfig } from '../../common/config'
 
 export const stopNodes = [
   // TODO: What about the namespaces?
@@ -64,14 +65,6 @@ export const stopNodes = [
 ]
 
 export const parser = new XMLParser({
-  trimValues: false,
-  processEntities: false,
-  alwaysCreateTextNode: true,
-  ignoreAttributes: false,
-  attributeNamePrefix: '@',
-  parseTagValue: false,
-  parseAttributeValue: false,
+  ...parserConfig,
   stopNodes,
-  transformTagName: (name) => name.toLowerCase(),
-  transformAttributeName: (name) => name.toLowerCase(),
 })
