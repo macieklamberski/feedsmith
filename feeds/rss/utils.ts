@@ -1,6 +1,7 @@
 import type { ParseFunction } from '../../common/types'
 import {
   hasAllProps,
+  hasAnyProps,
   isObject,
   omitNullish,
   parseArrayOf,
@@ -38,8 +39,9 @@ export const parseTextInput: ParseFunction<TextInput> = (value) => {
     link: parseString(value?.link?.['#text']),
   }
 
-  // TODO: Return only if required values are present: all.
-  return textInput
+  if (hasAllProps(textInput, Object.keys(textInput) as Array<keyof TextInput>)) {
+    return textInput
+  }
 }
 
 export const parseCloud: ParseFunction<Cloud> = (value) => {
@@ -55,8 +57,9 @@ export const parseCloud: ParseFunction<Cloud> = (value) => {
     protocol: parseString(value?.['@protocol']),
   }
 
-  // TODO: Return only if required values are present: all.
-  return cloud
+  if (hasAllProps(cloud, Object.keys(cloud) as Array<keyof Cloud>)) {
+    return cloud
+  }
 }
 
 export const parseSkipHours: ParseFunction<Array<number>> = (value) => {
@@ -85,13 +88,14 @@ export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
   }
 
   const enclosure = {
-    url: parseString(value.url?.['#text']),
-    length: parseNumber(value.length?.['#text']),
-    type: parseString(value.type?.['#text']),
+    url: parseString(value['@url']),
+    length: parseNumber(value['@length']),
+    type: parseString(value['@type']),
   }
 
-  // TODO: Return only if required values are present: url, length, type.
-  return enclosure
+  if (hasAllProps(enclosure, Object.keys(enclosure) as Array<keyof Enclosure>)) {
+    return enclosure
+  }
 }
 
 export const parseSource: ParseFunction<Source> = (value) => {
@@ -119,8 +123,9 @@ export const parseImage: ParseFunction<Image> = (value) => {
     width: parseNumber(value.width?.['#text']),
   }
 
-  // TODO: Return only if required values are present: url, title, link, description.
-  return image
+  if (hasAllProps(image, ['url', 'title', 'link'])) {
+    return image
+  }
 }
 
 export const parseCategory: ParseFunction<Category> = (value) => {
@@ -159,8 +164,9 @@ export const parseItem: ParseFunction<Item> = (value) => {
     dc: parseDcItemOrFeed(value),
   }
 
-  // TODO: Return only if required values are present: title || description.
-  return item
+  if (hasAnyProps(item, ['title', 'description'])) {
+    return item
+  }
 }
 
 export const parseFeed: ParseFunction<Feed> = (value) => {
@@ -194,8 +200,8 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     sy: parseSyFeed(value),
   }
 
-  // TODO: Return only if required values are present: title, link, description.
-  // Reconsider requiring "description" as it might not be as common that this value is present.
+  // INFO: Spec also says about required "description" but this field is
+  // not always present in feeds. We can still parse the feed without it.
   if (hasAllProps(feed, ['title', 'link'])) {
     return feed
   }

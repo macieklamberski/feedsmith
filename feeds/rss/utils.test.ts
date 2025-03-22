@@ -23,13 +23,14 @@ describe('parseTextInput', () => {
       name: { '#text': 'searchForm' },
       link: { '#text': 'https://example.com/search' },
     }
-
-    expect(parseTextInput(value)).toEqual({
+    const expected = {
       title: 'Search Title',
       description: 'Search Description',
       name: 'searchForm',
       link: 'https://example.com/search',
-    })
+    }
+
+    expect(parseTextInput(value)).toEqual(expected)
   })
 
   it('should handle partial textInput object', () => {
@@ -38,16 +39,13 @@ describe('parseTextInput', () => {
       link: { '#text': 'https://example.com/search' },
     }
 
-    expect(parseTextInput(value)).toEqual({
-      title: 'Search Title',
-      link: 'https://example.com/search',
-    })
+    expect(parseTextInput(value)).toBeUndefined()
   })
 
   it('should handle empty textInput object', () => {
     const value = {}
 
-    expect(parseTextInput(value)).toEqual({})
+    expect(parseTextInput(value)).toBeUndefined()
   })
 
   it('should handle non-object value', () => {
@@ -55,18 +53,26 @@ describe('parseTextInput', () => {
     expect(parseTextInput(undefined)).toBeUndefined()
   })
 
-  it('should handle nested structures with coercible values', () => {
+  it('should handle coercible values', () => {
     const value = {
       title: { '#text': 123 },
-      description: { '#text': true },
+      description: { '#text': 'Search Description' },
+      name: { '#text': 'searchForm' },
+      link: { '#text': 'https://example.com/search' },
+    }
+    const expected = {
+      title: '123',
+      description: 'Search Description',
+      name: 'searchForm',
+      link: 'https://example.com/search',
     }
 
-    expect(parseTextInput(value)).toEqual({ title: '123' })
+    expect(parseTextInput(value)).toEqual(expected)
   })
 })
 
 describe('parseCloud', () => {
-  it('should handle valid cloud object', () => {
+  it('should handle valid cloud object (also with coercible values)', () => {
     const value = {
       '@domain': 'rpc.example.com',
       '@port': '80',
@@ -74,14 +80,15 @@ describe('parseCloud', () => {
       '@registerprocedure': 'pingMe',
       '@protocol': 'soap',
     }
-
-    expect(parseCloud(value)).toEqual({
+    const expected = {
       domain: 'rpc.example.com',
       port: 80,
       path: '/RPC2',
       registerProcedure: 'pingMe',
       protocol: 'soap',
-    })
+    }
+
+    expect(parseCloud(value)).toEqual(expected)
   })
 
   it('should handle partial cloud object', () => {
@@ -90,31 +97,18 @@ describe('parseCloud', () => {
       '@protocol': 'soap',
     }
 
-    expect(parseCloud(value)).toEqual({
-      domain: 'rpc.example.com',
-      protocol: 'soap',
-    })
+    expect(parseCloud(value)).toBeUndefined()
   })
 
   it('should handle empty cloud object', () => {
     const value = {}
 
-    expect(parseCloud(value)).toEqual({})
+    expect(parseCloud(value)).toBeUndefined()
   })
 
   it('should handle non-object value', () => {
     expect(parseCloud('not an object')).toBeUndefined()
     expect(parseCloud(undefined)).toBeUndefined()
-  })
-
-  it('should handle coercible values', () => {
-    const value = {
-      '@domain': 123,
-      '@port': '80',
-      '@path': true,
-    }
-
-    expect(parseCloud(value)).toEqual({ domain: '123', port: 80 })
   })
 })
 
@@ -195,11 +189,10 @@ describe('parseSkipDays', () => {
 describe('parseEnclosure', () => {
   it('should parse valid enclosure object', () => {
     const value = {
-      url: { '#text': 'https://example.com/audio.mp3' },
-      length: { '#text': '12345678' },
-      type: { '#text': 'audio/mpeg' },
+      '@url': 'https://example.com/audio.mp3',
+      '@length': '12345678',
+      '@type': 'audio/mpeg',
     }
-
     const expected = {
       url: 'https://example.com/audio.mp3',
       length: 12345678,
@@ -211,39 +204,28 @@ describe('parseEnclosure', () => {
 
   it('should handle partial enclosure object', () => {
     const value = {
-      url: { '#text': 'https://example.com/audio.mp3' },
-      type: { '#text': 'audio/mpeg' },
+      '@url': 'https://example.com/audio.mp3',
+      '@type': 'audio/mpeg',
     }
 
-    const expected = {
-      url: 'https://example.com/audio.mp3',
-      type: 'audio/mpeg',
-    }
-
-    expect(parseEnclosure(value)).toEqual(expected)
+    expect(parseEnclosure(value)).toBeUndefined()
   })
 
   it('should handle coercible values', () => {
     const value = {
-      url: { '#text': 'https://example.com/audio.mp3' },
-      length: { '#text': 'not a number' },
-      type: { '#text': 123 },
+      '@url': 'https://example.com/audio.mp3',
+      '@length': 'not a number',
+      '@type': 123,
     }
 
-    const expected = {
-      url: 'https://example.com/audio.mp3',
-      type: '123',
-    }
-
-    expect(parseEnclosure(value)).toEqual(expected)
+    expect(parseEnclosure(value)).toBeUndefined()
   })
 
-  // TODO: Figure out what to do with enclosure with all empty fields.
-  // it('should return undefined for missing enclosure', () => {
-  //   const value = {}
+  it('should return undefined for missing enclosure', () => {
+    const value = {}
 
-  //   expect(parseEnclosure(value)).toBeUndefined()
-  // })
+    expect(parseEnclosure(value)).toBeUndefined()
+  })
 
   it('should return undefined for non-object value', () => {
     expect(parseEnclosure('not an object')).toBeUndefined()
@@ -301,7 +283,7 @@ describe('parseSource', () => {
 })
 
 describe('parseImage', () => {
-  it('should parse complete image object', () => {
+  it('should parse complete image object (with correct values)', () => {
     const value = {
       url: { '#text': 'https://example.com/image.jpg' },
       title: { '#text': 'Example Image' },
@@ -328,29 +310,7 @@ describe('parseImage', () => {
       title: { '#text': 'Example Image' },
     }
 
-    const expected = {
-      url: 'https://example.com/image.jpg',
-      title: 'Example Image',
-    }
-
-    expect(parseImage(value)).toEqual(expected)
-  })
-
-  it('should handle coercible values', () => {
-    const value = {
-      url: { '#text': 'https://example.com/image.jpg' },
-      title: { '#text': 123 },
-      height: { '#text': 'not a number' },
-      width: { '#text': '32' },
-    }
-
-    const expected = {
-      url: 'https://example.com/image.jpg',
-      title: '123',
-      width: 32,
-    }
-
-    expect(parseImage(value)).toEqual(expected)
+    expect(parseImage(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object value', () => {
@@ -361,7 +321,7 @@ describe('parseImage', () => {
   it('should handle empty image object', () => {
     const value = {}
 
-    expect(parseImage(value)).toEqual({})
+    expect(parseImage(value)).toBeUndefined()
   })
 })
 
@@ -462,9 +422,9 @@ describe('parseItem', () => {
       ],
       comments: { '#text': 'https://example.com/item/comments' },
       enclosure: {
-        url: { '#text': 'https://example.com/audio.mp3' },
-        length: { '#text': '12345678' },
-        type: { '#text': 'audio/mpeg' },
+        '@url': 'https://example.com/audio.mp3',
+        '@length': '12345678',
+        '@type': 'audio/mpeg',
       },
       guid: { '#text': 'https://example.com/guid/1234' },
       pubdate: { '#text': 'Mon, 15 Mar 2023 12:30:00 GMT' },
@@ -531,7 +491,7 @@ describe('parseItem', () => {
   it('should return empty object for empty input', () => {
     const value = {}
 
-    expect(parseItem(value)).toEqual({})
+    expect(parseItem(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
@@ -606,6 +566,7 @@ describe('parseFeed', () => {
         url: { '#text': 'https://example.com/image.jpg' },
         title: { '#text': 'Example Image' },
         link: { '#text': 'https://example.com' },
+        description: { '#text': 'Some image description' },
       },
       rating: { '#text': 'The PICS rating of the feed' },
       textinput: {
@@ -658,6 +619,7 @@ describe('parseFeed', () => {
         url: 'https://example.com/image.jpg',
         title: 'Example Image',
         link: 'https://example.com',
+        description: 'Some image description',
       },
       rating: 'The PICS rating of the feed',
       textInput: {
@@ -763,9 +725,9 @@ describe('parseFeed', () => {
             { '#text': 'Category 2', '@domain': 'http://example.com/cat' },
           ],
           enclosure: {
-            url: { '#text': 'https://example.com/file.mp3' },
-            length: { '#text': '12345' },
-            type: { '#text': 'audio/mpeg' },
+            '@url': 'https://example.com/file.mp3',
+            '@length': '12345',
+            '@type': 'audio/mpeg',
           },
         },
         {

@@ -50,7 +50,11 @@
         { "name": "Technology", "domain": "http://www.example.com/categories" }
       ],
       "comments": "http://example.org/comments/1",
-      "enclosure": {},
+      "enclosure": {
+        "url": "http://example.org/audio/demo.mp3",
+        "length": 1069871,
+        "type": "audio/mpeg"
+      },
       "guid": "http://example.org/guid/1",
       "pubDate": "Thu, 05 Sep 2002 0:00:01 GMT",
       "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
@@ -62,7 +66,11 @@
       "authors": ["mark@example.org (Mark Pilgrim)"],
       "categories": [{ "name": "Miscellaneous" }],
       "comments": "http://example.org/comments/2",
-      "enclosure": {},
+      "enclosure": {
+        "url": "http://example.org/audio/demo.mp3",
+        "length": 1069871,
+        "type": "audio/mpeg"
+      },
       "guid": "http://example.org/guid/2",
       "pubDate": "Thu, 05 Sep 2002 0:00:01 GMT",
       "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
