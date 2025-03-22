@@ -198,8 +198,8 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
     return entry
   }
 
-  // INFO: Spec also says about required "updated" and "author" but those are
-  // not always present in feeds. We can still parse the feed without them.
+  // INFO: Spec also says about required "updated" but this field is
+  // not always present in entries. We can still parse the entry without it.
   if (hasAllProps(entry, ['id', 'title'])) {
     return entry
   }
@@ -235,8 +235,8 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
     return feed
   }
 
-  // INFO: Spec also says about required "updated" and "author" but those are
-  // not always present in feeds. We can still parse the feed without them.
+  // INFO: Spec also says about required "updated" but this field is
+  // not always present in feeds. We can still parse the feed without it.
   if (hasAllProps(feed, ['id', 'title'])) {
     return feed
   }
