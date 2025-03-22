@@ -1,7 +1,8 @@
 import { z } from 'zod'
-import { item as contentNamespaceItem } from '../../namespaces/content/schemas'
-import { dublinCore as dublinCoreNamespace } from '../../namespaces/dc/schemas'
-import { feed as syndicationNamespaceFeed } from '../../namespaces/sy/schemas'
+import { item as contentItem } from '../../namespaces/content/schemas'
+import { itemOrFeed as dcItemOrFeed } from '../../namespaces/dc/schemas'
+import { feed as syFeed } from '../../namespaces/sy/schemas'
+import { entry as atomEntry, feed as atomFeed } from '../atom/schemas'
 
 export const image = z
   .object({
@@ -25,8 +26,9 @@ export const item = z
     title: z.string(),
     link: z.string(),
     description: z.string(),
-    content: contentNamespaceItem,
-    dc: dublinCoreNamespace,
+    atom: atomEntry,
+    content: contentItem,
+    dc: dcItemOrFeed,
   })
   .partial()
 
@@ -38,7 +40,8 @@ export const feed = z
     image,
     items: z.array(item),
     textinput,
-    dc: dublinCoreNamespace,
-    sy: syndicationNamespaceFeed,
+    atom: atomFeed,
+    dc: dcItemOrFeed,
+    sy: syFeed,
   })
   .partial()

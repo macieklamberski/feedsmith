@@ -7,6 +7,7 @@ import {
   parseLink,
   parsePerson,
   parseSource,
+  retrieveFeed,
   retrieveGeneratorUri,
   retrievePersonUri,
   retrievePublished,
@@ -695,46 +696,59 @@ describe('parseEntry', () => {
     expect(parseEntry(null)).toBeUndefined()
     expect(parseEntry([])).toBeUndefined()
   })
+
+  it('should handle dc namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'dc:creator': { '#text': 'John Doe' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Entry',
+      dc: { creator: 'John Doe' },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
 })
 
 describe('parseFeed', () => {
   it('should parse complete feed object', () => {
     const value = {
-      feed: {
-        id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
-        title: { '#text': 'Example Feed' },
-        updated: { '#text': '2023-01-01T12:00:00Z' },
-        author: [{ name: { '#text': 'John Doe' } }],
-        subtitle: { '#text': 'A subtitle for my feed' },
-        link: [
-          { '@href': 'https://example.com/', '@rel': 'alternate' },
-          { '@href': 'https://example.com/feed', '@rel': 'self' },
-        ],
-        category: [{ '@term': 'technology' }, { '@term': 'web' }],
-        contributor: [{ name: { '#text': 'Jane Smith' } }],
-        generator: {
-          '#text': 'Example Generator',
-          '@uri': 'https://example.com/gen',
-          '@version': '1.0',
-        },
-        icon: { '#text': 'https://example.com/favicon.ico' },
-        logo: { '#text': 'https://example.com/logo.png' },
-        rights: { '#text': 'Copyright 2023, Example Corp.' },
-        entry: [
-          {
-            id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
-            title: { '#text': 'First Entry' },
-            updated: { '#text': '2023-01-01T10:00:00Z' },
-            content: { '#text': '<p>First entry content</p>' },
-          },
-          {
-            id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-bbbb-80da344efa6a' },
-            title: { '#text': 'Second Entry' },
-            updated: { '#text': '2023-01-02T10:00:00Z' },
-            content: { '#text': '<p>Second entry content</p>' },
-          },
-        ],
+      id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
+      title: { '#text': 'Example Feed' },
+      updated: { '#text': '2023-01-01T12:00:00Z' },
+      author: [{ name: { '#text': 'John Doe' } }],
+      subtitle: { '#text': 'A subtitle for my feed' },
+      link: [
+        { '@href': 'https://example.com/', '@rel': 'alternate' },
+        { '@href': 'https://example.com/feed', '@rel': 'self' },
+      ],
+      category: [{ '@term': 'technology' }, { '@term': 'web' }],
+      contributor: [{ name: { '#text': 'Jane Smith' } }],
+      generator: {
+        '#text': 'Example Generator',
+        '@uri': 'https://example.com/gen',
+        '@version': '1.0',
       },
+      icon: { '#text': 'https://example.com/favicon.ico' },
+      logo: { '#text': 'https://example.com/logo.png' },
+      rights: { '#text': 'Copyright 2023, Example Corp.' },
+      entry: [
+        {
+          id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+          title: { '#text': 'First Entry' },
+          updated: { '#text': '2023-01-01T10:00:00Z' },
+          content: { '#text': '<p>First entry content</p>' },
+        },
+        {
+          id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-bbbb-80da344efa6a' },
+          title: { '#text': 'Second Entry' },
+          updated: { '#text': '2023-01-02T10:00:00Z' },
+          content: { '#text': '<p>Second entry content</p>' },
+        },
+      ],
     }
     const expected = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
@@ -773,10 +787,8 @@ describe('parseFeed', () => {
 
   it('should parse feed with only required fields', () => {
     const value = {
-      feed: {
-        id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
-        title: { '#text': 'Example Feed' },
-      },
+      id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
+      title: { '#text': 'Example Feed' },
     }
     const expected = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
@@ -788,19 +800,17 @@ describe('parseFeed', () => {
 
   it('should handle feed with legacy elements', () => {
     const value = {
-      feed: {
-        id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
-        title: { '#text': 'Example Feed' },
-        modified: { '#text': '2003-12-13T18:30:02Z' },
-        tagline: { '#text': 'A tagline for my feed' },
-        entry: [
-          {
-            id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
-            title: { '#text': 'First Entry' },
-            issued: { '#text': '2003-12-13T08:29:29-04:00' },
-          },
-        ],
-      },
+      id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
+      title: { '#text': 'Example Feed' },
+      modified: { '#text': '2003-12-13T18:30:02Z' },
+      tagline: { '#text': 'A tagline for my feed' },
+      entry: [
+        {
+          id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+          title: { '#text': 'First Entry' },
+          issued: { '#text': '2003-12-13T08:29:29-04:00' },
+        },
+      ],
     }
     const expected = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
@@ -821,12 +831,10 @@ describe('parseFeed', () => {
 
   it('should handle coercible values', () => {
     const value = {
-      feed: {
-        id: { '#text': 123 },
-        title: { '#text': 456 },
-        link: [{ '@href': 'https://example.com/' }],
-        entry: [{ id: { '#text': 789 }, title: { '#text': 'First Entry' } }],
-      },
+      id: { '#text': 123 },
+      title: { '#text': 456 },
+      link: [{ '@href': 'https://example.com/' }],
+      entry: [{ id: { '#text': 789 }, title: { '#text': 'First Entry' } }],
     }
     const expected = {
       id: '123',
@@ -840,10 +848,8 @@ describe('parseFeed', () => {
 
   it('should return undefined if id is missing', () => {
     const value = {
-      feed: {
-        title: { '#text': 'Example Feed' },
-        updated: { '#text': '2023-01-01T12:00:00Z' },
-      },
+      title: { '#text': 'Example Feed' },
+      updated: { '#text': '2023-01-01T12:00:00Z' },
     }
 
     expect(parseFeed(value)).toBeUndefined()
@@ -851,10 +857,8 @@ describe('parseFeed', () => {
 
   it('should return undefined if title is missing', () => {
     const value = {
-      feed: {
-        id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
-        updated: { '#text': '2023-01-01T12:00:00Z' },
-      },
+      id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
+      updated: { '#text': '2023-01-01T12:00:00Z' },
     }
 
     expect(parseFeed(value)).toBeUndefined()
@@ -869,18 +873,16 @@ describe('parseFeed', () => {
 
   it('should handle entries that are not valid', () => {
     const value = {
-      feed: {
-        id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
-        title: { '#text': 'Example Feed' },
-        entry: [
-          {
-            id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
-            title: { '#text': 'Valid Entry' },
-          },
-          { title: { '#text': 'Invalid Entry' } },
-          { id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-cccc-80da344efa6a' } },
-        ],
-      },
+      id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
+      title: { '#text': 'Example Feed' },
+      entry: [
+        {
+          id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+          title: { '#text': 'Valid Entry' },
+        },
+        { title: { '#text': 'Invalid Entry' } },
+        { id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-cccc-80da344efa6a' } },
+      ],
     }
     const expected = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
@@ -890,4 +892,63 @@ describe('parseFeed', () => {
 
     expect(parseFeed(value)).toEqual(expected)
   })
+
+  it('should handle dc namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Feed' },
+      'dc:creator': { '#text': 'John Doe' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Feed',
+      dc: { creator: 'John Doe' },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle sy namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Feed' },
+      'sy:updatefrequency': { '#text': '5' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Feed',
+      sy: { updateFrequency: 5 },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
 })
+
+describe('retrieveFeed', () => {
+  it('should retrieve feed with only required fields', () => {
+    const value = {
+      feed: {
+        id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
+        title: { '#text': 'Example Feed' },
+      },
+    }
+    const expected = {
+      id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
+      title: 'Example Feed',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should return undefined if feed is not nested under the "feed"', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
+      title: { '#text': 'Example Feed' },
+    }
+
+    expect(retrieveFeed(value)).toBeUndefined()
+  })
+})
+
+// TODO: Write tests for supporting asNAmespace option.
+// - Should return items with given namespace prefix, allow partial and not use namespaces.

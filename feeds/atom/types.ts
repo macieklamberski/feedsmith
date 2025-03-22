@@ -2,7 +2,7 @@ import type z from 'zod'
 import type { ParseFunction as CommonParseFunction } from '../../common/types'
 import type { category, entry, feed, generator, link, person, source, text } from './schemas'
 
-export type ParseFunction<R> = CommonParseFunction<R, { prefix: string; partial: boolean }>
+export type ParseFunction<R> = CommonParseFunction<R, { asNamespace: string }>
 
 export type Text = z.infer<typeof text>
 

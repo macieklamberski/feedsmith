@@ -1,7 +1,8 @@
 import { z } from 'zod'
-import { item as contentNamespaceItem } from '../../namespaces/content/schemas'
-import { dublinCore as dublinCoreNamespace } from '../../namespaces/dc/schemas'
+import { item as contentItem } from '../../namespaces/content/schemas'
+import { itemOrFeed as dcItemOrFeed } from '../../namespaces/dc/schemas'
 import { feed as syndicationNamespaceFeed } from '../../namespaces/sy/schemas'
+import { entry as atomEntry, feed as atomFeed } from '../atom/schemas'
 
 // TODO: Consider replacing this with breaking up the author string to { name, email }.
 export const author = z.string()
@@ -73,8 +74,9 @@ export const item = z
     guid,
     pubDate: z.string(),
     source,
-    content: contentNamespaceItem,
-    dc: dublinCoreNamespace,
+    atom: atomEntry,
+    content: contentItem,
+    dc: dcItemOrFeed,
   })
   .partial()
 
@@ -101,7 +103,8 @@ export const feed = z
     skipHours: z.array(z.number()),
     skipDays: z.array(z.string()),
     items: z.array(item),
-    dc: dublinCoreNamespace,
+    atom: atomFeed,
+    dc: dcItemOrFeed,
     sy: syndicationNamespaceFeed,
   })
   .partial()

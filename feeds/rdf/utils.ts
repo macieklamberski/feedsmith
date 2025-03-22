@@ -1,8 +1,12 @@
 import type { ParseFunction } from '../../common/types'
-import { hasAllProps, isObject, parseArrayOf, parseSingular, parseString } from '../../common/utils'
-import { parseItem as parseContentNamespaceItem } from '../../namespaces/content/utils'
-import { parseDublinCore as parseDublinCoreNamespaceFeed } from '../../namespaces/dc/utils'
-import { parseFeed as retrieveSyndicationNamespaceFeed } from '../../namespaces/sy/utils'
+import { hasAllProps, isObject, parseArrayOf, parseString } from '../../common/utils'
+import {
+  parseEntry as parseAtomEntry,
+  parseFeed as parseAtomFeed,
+} from '../../namespaces/atom/utils'
+import { parseItem as parseContentItem } from '../../namespaces/content/utils'
+import { parseItemOrFeed as parseDcItemOrFeed } from '../../namespaces/dc/utils'
+import { parseFeed as parseSyFeed } from '../../namespaces/sy/utils'
 import type { Feed, Image, Item, Textinput } from './types'
 
 export const parseImage: ParseFunction<Image> = (value) => {
@@ -34,8 +38,9 @@ export const parseItem: ParseFunction<Item> = (value) => {
     title: parseString(value.title?.['#text']),
     link: parseString(value.link?.['#text']),
     description: parseString(value.description?.['#text']),
-    content: parseContentNamespaceItem(value),
-    dc: parseDublinCoreNamespaceFeed(value),
+    atom: parseAtomEntry(value),
+    content: parseContentItem(value),
+    dc: parseDcItemOrFeed(value),
   }
 
   if (hasAllProps(item, ['title', 'link'])) {
@@ -73,24 +78,31 @@ export const retrieveTextinput: ParseFunction<Textinput> = (value) => {
 }
 
 export const parseFeed: ParseFunction<Feed> = (value) => {
-  const rdf = value?.['rdf:rdf']
-
-  if (!isObject(rdf)) {
+  if (!isObject(value)) {
     return
   }
 
   const feed = {
-    title: parseString(rdf.channel?.title?.['#text']),
-    link: parseString(rdf.channel?.link?.['#text']),
-    description: parseString(rdf.channel?.description?.['#text']),
-    image: retrieveImage(rdf),
-    items: retrieveItems(rdf),
-    textinput: retrieveTextinput(rdf),
-    dc: parseDublinCoreNamespaceFeed(rdf.channel),
-    sy: retrieveSyndicationNamespaceFeed(rdf.channel),
+    title: parseString(value.channel?.title?.['#text']),
+    link: parseString(value.channel?.link?.['#text']),
+    description: parseString(value.channel?.description?.['#text']),
+    image: retrieveImage(value),
+    items: retrieveItems(value),
+    textinput: retrieveTextinput(value),
+    atom: parseAtomFeed(value.channel),
+    dc: parseDcItemOrFeed(value.channel),
+    sy: parseSyFeed(value.channel),
   }
 
   if (hasAllProps(feed, ['title', 'items'])) {
     return feed
   }
+}
+
+export const retrieveFeed: ParseFunction<Feed> = (value) => {
+  if (!isObject(value?.['rdf:rdf'])) {
+    return
+  }
+
+  return parseFeed(value['rdf:rdf'])
 }

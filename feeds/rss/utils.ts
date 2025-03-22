@@ -7,9 +7,13 @@ import {
   parseNumber,
   parseString,
 } from '../../common/utils'
-import { parseItem as parseContentNamespaceItem } from '../../namespaces/content/utils'
-import { parseDublinCore as parseDublinCoreNamespaceFeed } from '../../namespaces/dc/utils'
-import { parseFeed as parseSyndicationNamespaceFeed } from '../../namespaces/sy/utils'
+import {
+  parseEntry as parseAtomEntry,
+  parseFeed as parseAtomFeed,
+} from '../../namespaces/atom/utils'
+import { parseItem as parseContentItem } from '../../namespaces/content/utils'
+import { parseItemOrFeed as parseDcItemOrFeed } from '../../namespaces/dc/utils'
+import { parseFeed as parseSyFeed } from '../../namespaces/sy/utils'
 import type {
   Author,
   Category,
@@ -150,8 +154,9 @@ export const parseItem: ParseFunction<Item> = (value) => {
     guid: parseString(value.guid?.['#text']),
     pubDate: parseString(value.pubdate?.['#text']),
     source: parseSource(value.source),
-    content: parseContentNamespaceItem(value),
-    dc: parseDublinCoreNamespaceFeed(value),
+    content: parseContentItem(value),
+    atom: parseAtomEntry(value),
+    dc: parseDcItemOrFeed(value),
   }
 
   // TODO: Return only if required values are present: title || description.
@@ -159,35 +164,34 @@ export const parseItem: ParseFunction<Item> = (value) => {
 }
 
 export const parseFeed: ParseFunction<Feed> = (value) => {
-  const channel = value?.rss?.channel
-
-  if (!isObject(channel)) {
+  if (!isObject(value)) {
     return
   }
 
   const feed = {
-    title: parseString(channel.title?.['#text']),
-    link: parseString(channel.link?.['#text']),
-    description: parseString(channel.description?.['#text']),
-    language: parseString(channel.language?.['#text']),
-    copyright: parseString(channel.copyright?.['#text']),
-    managingEditor: parseString(channel.managingeditor?.['#text']),
-    webMaster: parseString(channel.webmaster?.['#text']),
-    pubDate: parseString(channel.pubdate?.['#text']),
-    lastBuildDate: parseString(channel.lastbuilddate?.['#text']),
-    categories: parseArrayOf(channel.category, parseCategory),
-    generator: parseString(channel.generator?.['#text']),
-    docs: parseString(channel.docs?.['#text']),
-    cloud: parseCloud(channel.cloud),
-    ttl: parseNumber(channel.ttl?.['#text']),
-    image: parseImage(channel.image),
-    rating: parseString(channel.rating?.['#text']),
-    textInput: parseTextInput(channel.textinput),
-    skipHours: parseSkipHours(channel.skiphours),
-    skipDays: parseSkipDays(channel.skipdays),
-    items: parseArrayOf(channel.item, parseItem),
-    dc: parseDublinCoreNamespaceFeed(channel),
-    sy: parseSyndicationNamespaceFeed(channel),
+    title: parseString(value.title?.['#text']),
+    link: parseString(value.link?.['#text']),
+    description: parseString(value.description?.['#text']),
+    language: parseString(value.language?.['#text']),
+    copyright: parseString(value.copyright?.['#text']),
+    managingEditor: parseString(value.managingeditor?.['#text']),
+    webMaster: parseString(value.webmaster?.['#text']),
+    pubDate: parseString(value.pubdate?.['#text']),
+    lastBuildDate: parseString(value.lastbuilddate?.['#text']),
+    categories: parseArrayOf(value.category, parseCategory),
+    generator: parseString(value.generator?.['#text']),
+    docs: parseString(value.docs?.['#text']),
+    cloud: parseCloud(value.cloud),
+    ttl: parseNumber(value.ttl?.['#text']),
+    image: parseImage(value.image),
+    rating: parseString(value.rating?.['#text']),
+    textInput: parseTextInput(value.textinput),
+    skipHours: parseSkipHours(value.skiphours),
+    skipDays: parseSkipDays(value.skipdays),
+    items: parseArrayOf(value.item, parseItem),
+    atom: parseAtomFeed(value),
+    dc: parseDcItemOrFeed(value),
+    sy: parseSyFeed(value),
   }
 
   // TODO: Return only if required values are present: title, link, description.
@@ -195,4 +199,12 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
   if (hasAllProps(feed, ['title', 'link'])) {
     return feed
   }
+}
+
+export const retrieveFeed: ParseFunction<Feed> = (value) => {
+  if (!isObject(value?.rss?.channel)) {
+    return
+  }
+
+  return parseFeed(value.rss.channel)
 }

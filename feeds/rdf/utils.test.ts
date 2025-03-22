@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'bun:test'
+import { link } from '../atom/schemas'
 import {
   parseFeed,
   parseImage,
   parseItem,
   parseTextinput,
+  retrieveFeed,
   retrieveImage,
   retrieveItems,
   retrieveTextinput,
@@ -171,6 +173,51 @@ describe('parseItem', () => {
     expect(parseItem(undefined)).toBeUndefined()
     expect(parseItem(null)).toBeUndefined()
     expect(parseItem([])).toBeUndefined()
+  })
+
+  it('should handle atom namespace', () => {
+    const value = {
+      title: { '#text': 'Item 1' },
+      link: { '#text': 'https://example.com/item1' },
+      'atom:link': { '@href': 'http://example.com', '@rel': 'self' },
+    }
+    const expected = {
+      title: 'Item 1',
+      link: 'https://example.com/item1',
+      atom: { links: [{ href: 'http://example.com', rel: 'self' }] },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle content namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'content:encoded': { '#text': '<![CDATA[<div>John Doe</div>]]>' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      content: { encoded: '<div>John Doe</div>' },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle dc namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'dc:creator': { '#text': 'John Doe' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      dc: { creator: 'John Doe' },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
   })
 })
 
@@ -387,33 +434,31 @@ describe('retrieveTextinput', () => {
 describe('parseFeed', () => {
   it('should parse complete feed object', () => {
     const value = {
-      'rdf:rdf': {
-        channel: {
-          title: { '#text': 'Feed Title' },
-          link: { '#text': 'https://example.com' },
-          description: { '#text': 'Feed Description' },
+      channel: {
+        title: { '#text': 'Feed Title' },
+        link: { '#text': 'https://example.com' },
+        description: { '#text': 'Feed Description' },
+      },
+      image: {
+        title: { '#text': 'Image Title' },
+        link: { '#text': 'https://example.com' },
+        url: { '#text': 'https://example.com/image.jpg' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
         },
-        image: {
-          title: { '#text': 'Image Title' },
-          link: { '#text': 'https://example.com' },
-          url: { '#text': 'https://example.com/image.jpg' },
+        {
+          title: { '#text': 'Item 2' },
+          link: { '#text': 'https://example.com/item2' },
         },
-        item: [
-          {
-            title: { '#text': 'Item 1' },
-            link: { '#text': 'https://example.com/item1' },
-          },
-          {
-            title: { '#text': 'Item 2' },
-            link: { '#text': 'https://example.com/item2' },
-          },
-        ],
-        textinput: {
-          title: { '#text': 'Search' },
-          description: { '#text': 'Search this site' },
-          name: { '#text': 'q' },
-          link: { '#text': 'https://example.com/search' },
-        },
+      ],
+      textinput: {
+        title: { '#text': 'Search' },
+        description: { '#text': 'Search this site' },
+        name: { '#text': 'q' },
+        link: { '#text': 'https://example.com/search' },
       },
     }
     const expected = {
@@ -448,6 +493,200 @@ describe('parseFeed', () => {
 
   it('should parse feed with minimal required fields', () => {
     const value = {
+      channel: {
+        title: { '#text': 'Feed Title' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Feed Title',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle coercible values', () => {
+    const value = {
+      channel: {
+        title: { '#text': 123 },
+        link: { '#text': true },
+      },
+      item: [
+        {
+          title: { '#text': 456 },
+          link: { '#text': 789 },
+        },
+      ],
+    }
+    const expected = {
+      title: '123',
+      items: [
+        {
+          title: '456',
+          link: '789',
+        },
+      ],
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should return undefined if title is missing', () => {
+    const value = {
+      channel: {
+        link: { '#text': 'https://example.com' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parseFeed(value)).toBeUndefined()
+  })
+
+  it('should return undefined if items are missing', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Feed Title' },
+        link: { '#text': 'https://example.com' },
+      },
+    }
+
+    expect(parseFeed(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object rdf:rdf', () => {
+    const value = 'not an object'
+
+    expect(parseFeed(value)).toBeUndefined()
+  })
+
+  it('should return undefined for missing rdf:rdf', () => {
+    const value = {
+      someOtherProperty: {},
+    }
+
+    expect(parseFeed(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(parseFeed('not an object')).toBeUndefined()
+    expect(parseFeed(undefined)).toBeUndefined()
+    expect(parseFeed(null)).toBeUndefined()
+    expect(parseFeed([])).toBeUndefined()
+  })
+
+  it('should handle feed with empty items array', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Feed Title' },
+        link: { '#text': 'https://example.com' },
+      },
+      items: [],
+    }
+
+    expect(parseFeed(value)).toBeUndefined()
+  })
+
+  it('should handle atom namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Feed Title' },
+        'atom:link': { '@href': 'http://example.com', '@rel': 'self' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Feed Title',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      atom: { links: [{ href: 'http://example.com', rel: 'self' }] },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle dc namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Feed Title' },
+        'dc:creator': { '#text': 'John Doe' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Feed Title',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      dc: { creator: 'John Doe' },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle sy namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'sy:updatefrequency': { '#text': '5' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      sy: { updateFrequency: 5 },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+})
+
+describe('retrieveFeed', () => {
+  it('should retrieve feed with only required fields', () => {
+    const value = {
       'rdf:rdf': {
         channel: {
           title: { '#text': 'Feed Title' },
@@ -470,102 +709,6 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
-  })
-
-  it('should handle coercible values', () => {
-    const value = {
-      'rdf:rdf': {
-        channel: {
-          title: { '#text': 123 },
-          link: { '#text': true },
-        },
-        item: [
-          {
-            title: { '#text': 456 },
-            link: { '#text': 789 },
-          },
-        ],
-      },
-    }
-    const expected = {
-      title: '123',
-      items: [
-        {
-          title: '456',
-          link: '789',
-        },
-      ],
-    }
-
-    expect(parseFeed(value)).toEqual(expected)
-  })
-
-  it('should return undefined if title is missing', () => {
-    const value = {
-      'rdf:rdf': {
-        channel: {
-          link: { '#text': 'https://example.com' },
-        },
-        item: [
-          {
-            title: { '#text': 'Item 1' },
-            link: { '#text': 'https://example.com/item1' },
-          },
-        ],
-      },
-    }
-
-    expect(parseFeed(value)).toBeUndefined()
-  })
-
-  it('should return undefined if items are missing', () => {
-    const value = {
-      'rdf:rdf': {
-        channel: {
-          title: { '#text': 'Feed Title' },
-          link: { '#text': 'https://example.com' },
-        },
-      },
-    }
-
-    expect(parseFeed(value)).toBeUndefined()
-  })
-
-  it('should return undefined for non-object rdf:rdf', () => {
-    const value = {
-      'rdf:rdf': 'not an object',
-    }
-
-    expect(parseFeed(value)).toBeUndefined()
-  })
-
-  it('should return undefined for missing rdf:rdf', () => {
-    const value = {
-      someOtherProperty: {},
-    }
-
-    expect(parseFeed(value)).toBeUndefined()
-  })
-
-  it('should return undefined for non-object input', () => {
-    expect(parseFeed('not an object')).toBeUndefined()
-    expect(parseFeed(undefined)).toBeUndefined()
-    expect(parseFeed(null)).toBeUndefined()
-    expect(parseFeed([])).toBeUndefined()
-  })
-
-  it('should handle feed with empty items array', () => {
-    const value = {
-      'rdf:rdf': {
-        channel: {
-          title: { '#text': 'Feed Title' },
-          link: { '#text': 'https://example.com' },
-        },
-        items: [],
-      },
-    }
-
-    expect(parseFeed(value)).toBeUndefined()
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 })

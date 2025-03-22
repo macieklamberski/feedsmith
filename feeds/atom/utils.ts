@@ -1,4 +1,3 @@
-import type { ParseFunction } from '../../common/types'
 import {
   hasAllProps,
   hasAnyProps,
@@ -7,8 +6,9 @@ import {
   parseNumber,
   parseString,
 } from '../../common/utils'
-import { parseDublinCore as parseDublinCoreNamespaceFeed } from '../../namespaces/dc/utils'
-import { parseFeed as parseSyndicationNamespaceFeed } from '../../namespaces/sy/utils'
+import { parseItemOrFeed as parseDcItemOrFeed } from '../../namespaces/dc/utils'
+import { parseFeed as parseSyFeed } from '../../namespaces/sy/utils'
+import type { ParseFunction } from './types'
 import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types'
 
 export const parseLink: ParseFunction<Link> = (value) => {
@@ -30,26 +30,28 @@ export const parseLink: ParseFunction<Link> = (value) => {
   }
 }
 
-export const retrievePersonUri: ParseFunction<string> = (value) => {
+export const retrievePersonUri: ParseFunction<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
 
-  const uri = parseString(value.uri?.['#text']) // Atom 1.0.
-  const url = parseString(value.url?.['#text']) // Atom 0.3.
+  const prefix = options?.asNamespace ?? ''
+  const uri = parseString(value[`${prefix}uri`]?.['#text']) // Atom 1.0.
+  const url = parseString(value[`${prefix}url`]?.['#text']) // Atom 0.3.
 
   return uri || url
 }
 
-export const parsePerson: ParseFunction<Person> = (value) => {
+export const parsePerson: ParseFunction<Person> = (value, options) => {
   if (!isObject(value)) {
     return
   }
 
+  const prefix = options?.asNamespace ?? ''
   const person = {
-    name: parseString(value.name?.['#text']),
-    uri: retrievePersonUri(value),
-    email: parseString(value.email?.['#text']),
+    name: parseString(value[`${prefix}name`]?.['#text']),
+    uri: retrievePersonUri(value, options),
+    email: parseString(value[`${prefix}email`]?.['#text']),
   }
 
   if (hasAllProps(person, ['name'])) {
@@ -100,23 +102,26 @@ export const parseGenerator: ParseFunction<Generator> = (value) => {
   }
 }
 
-export const parseSource: ParseFunction<Source> = (value) => {
+export const parseSource: ParseFunction<Source> = (value, options) => {
   if (!isObject(value)) {
     return
   }
 
+  const prefix = options?.asNamespace ?? ''
   const source = {
-    authors: parseArrayOf<Person>(value.author, parsePerson),
-    categories: parseArrayOf<Category>(value.category, parseCategory),
-    contributors: parseArrayOf<Person>(value.contributor, parsePerson),
-    generator: parseGenerator(value.generator),
-    icon: parseString(value.icon?.['#text']),
-    id: parseString(value.id?.['#text']),
-    links: parseArrayOf(value.link, parseLink),
-    logo: parseString(value.logo?.['#text']),
-    rights: parseString(value.rights?.['#text']),
-    subtitle: parseString(value.subtitle?.['#text']),
-    title: parseString(value.title?.['#text']),
+    authors: parseArrayOf(value[`${prefix}author`], (value) => parsePerson(value, options)),
+    categories: parseArrayOf(value[`${prefix}category`], (value) => parseCategory(value, options)),
+    contributors: parseArrayOf(value[`${prefix}contributor`], (value) =>
+      parsePerson(value, options),
+    ),
+    generator: parseGenerator(value[`${prefix}generator`]),
+    icon: parseString(value[`${prefix}icon`]?.['#text']),
+    id: parseString(value[`${prefix}id`]?.['#text']),
+    links: parseArrayOf(value[`${prefix}link`], (value) => parseLink(value, options)),
+    logo: parseString(value[`${prefix}logo`]?.['#text']),
+    rights: parseString(value[`${prefix}rights`]?.['#text']),
+    subtitle: parseString(value[`${prefix}subtitle`]?.['#text']),
+    title: parseString(value[`${prefix}title`]?.['#text']),
     updated: retrieveUpdated(value),
   }
 
@@ -125,14 +130,15 @@ export const parseSource: ParseFunction<Source> = (value) => {
   }
 }
 
-export const retrievePublished: ParseFunction<string> = (value) => {
+export const retrievePublished: ParseFunction<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
 
-  const published = parseString(value.published?.['#text']) // Atom 1.0.
-  const issued = parseString(value.issued?.['#text']) // Atom 0.3.
-  const created = parseString(value.created?.['#text']) // Atom 0.3.
+  const prefix = options?.asNamespace ?? ''
+  const published = parseString(value[`${prefix}published`]?.['#text']) // Atom 1.0.
+  const issued = parseString(value[`${prefix}issued`]?.['#text']) // Atom 0.3.
+  const created = parseString(value[`${prefix}created`]?.['#text']) // Atom 0.3.
 
   // The "created" date is not entirely valid as "published date", but if it's there when
   // no other date is present, it's a good-enough fallback especially that it's not present
@@ -140,47 +146,56 @@ export const retrievePublished: ParseFunction<string> = (value) => {
   return published || issued || created
 }
 
-export const retrieveUpdated: ParseFunction<string> = (value) => {
+export const retrieveUpdated: ParseFunction<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
 
-  const updated = parseString(value.updated?.['#text']) // Atom 1.0.
-  const modified = parseString(value.modified?.['#text']) // Atom 0.3.
+  const prefix = options?.asNamespace ?? ''
+  const updated = parseString(value[`${prefix}updated`]?.['#text']) // Atom 1.0.
+  const modified = parseString(value[`${prefix}modified`]?.['#text']) // Atom 0.3.
 
   return updated || modified
 }
 
-export const retrieveSubtitle: ParseFunction<string> = (value) => {
+export const retrieveSubtitle: ParseFunction<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
 
-  const subtitle = parseString(value.subtitle?.['#text']) // Atom 1.0.
-  const tagline = parseString(value.tagline?.['#text']) // Atom 0.3.
+  const prefix = options?.asNamespace ?? ''
+  const subtitle = parseString(value[`${prefix}subtitle`]?.['#text']) // Atom 1.0.
+  const tagline = parseString(value[`${prefix}tagline`]?.['#text']) // Atom 0.3.
 
   return subtitle || tagline
 }
 
-export const parseEntry: ParseFunction<Entry> = (value) => {
+export const parseEntry: ParseFunction<Entry> = (value, options) => {
   if (!isObject(value)) {
     return
   }
 
+  const prefix = options?.asNamespace ?? ''
   const entry = {
-    authors: parseArrayOf(value.author, parsePerson),
-    categories: parseArrayOf(value.category, parseCategory),
-    content: parseString(value.content?.['#text']),
-    contributors: parseArrayOf(value.contributor, parsePerson),
-    id: parseString(value.id?.['#text']),
-    links: parseArrayOf(value.link, parseLink),
-    published: retrievePublished(value),
-    rights: parseString(value.rights?.['#text']),
-    source: parseSource(value.source),
-    summary: parseString(value.summary?.['#text']),
-    title: parseString(value.title?.['#text']),
-    updated: retrieveUpdated(value),
-    dc: parseDublinCoreNamespaceFeed(value),
+    authors: parseArrayOf(value[`${prefix}author`], (value) => parsePerson(value, options)),
+    categories: parseArrayOf(value[`${prefix}category`], (value) => parseCategory(value, options)),
+    content: parseString(value[`${prefix}content`]?.['#text']),
+    contributors: parseArrayOf(value[`${prefix}contributor`], (value) =>
+      parsePerson(value, options),
+    ),
+    id: parseString(value[`${prefix}id`]?.['#text']),
+    links: parseArrayOf(value[`${prefix}link`], (value) => parseLink(value, options)),
+    published: retrievePublished(value, options),
+    rights: parseString(value[`${prefix}rights`]?.['#text']),
+    source: parseSource(value[`${prefix}source`]),
+    summary: parseString(value[`${prefix}summary`]?.['#text']),
+    title: parseString(value[`${prefix}title`]?.['#text']),
+    updated: retrieveUpdated(value, options),
+    dc: options?.asNamespace ? undefined : parseDcItemOrFeed(value),
+  }
+
+  if (options?.asNamespace && hasAnyProps(entry, Object.keys(entry) as Array<keyof Entry>)) {
+    return entry
   }
 
   // INFO: Spec also says about required "updated" and "author" but those are
@@ -190,27 +205,34 @@ export const parseEntry: ParseFunction<Entry> = (value) => {
   }
 }
 
-export const parseFeed: ParseFunction<Feed> = (value) => {
-  if (!isObject(value?.feed)) {
+export const parseFeed: ParseFunction<Feed> = (value, options) => {
+  if (!isObject(value)) {
     return
   }
 
+  const prefix = options?.asNamespace ?? ''
   const feed = {
-    authors: parseArrayOf(value.feed.author, parsePerson),
-    categories: parseArrayOf(value.feed.category, parseCategory),
-    contributors: parseArrayOf(value.feed.contributor, parsePerson),
-    generator: parseGenerator(value.feed.generator),
-    icon: parseString(value.feed.icon?.['#text']),
-    id: parseString(value.feed.id?.['#text']),
-    links: parseArrayOf(value.feed.link, parseLink),
-    logo: parseString(value.feed.logo?.['#text']),
-    rights: parseString(value.feed.rights?.['#text']),
-    subtitle: retrieveSubtitle(value.feed),
-    title: parseString(value.feed.title?.['#text']),
-    updated: retrieveUpdated(value.feed),
-    entries: parseArrayOf(value.feed.entry, parseEntry),
-    dc: parseDublinCoreNamespaceFeed(value.feed),
-    sy: parseSyndicationNamespaceFeed(value.feed),
+    authors: parseArrayOf(value[`${prefix}author`], (value) => parsePerson(value, options)),
+    categories: parseArrayOf(value[`${prefix}category`], (value) => parseCategory(value, options)),
+    contributors: parseArrayOf(value[`${prefix}contributor`], (value) =>
+      parsePerson(value, options),
+    ),
+    generator: parseGenerator(value[`${prefix}generator`]),
+    icon: parseString(value[`${prefix}icon`]?.['#text']),
+    id: parseString(value[`${prefix}id`]?.['#text']),
+    links: parseArrayOf(value[`${prefix}link`], (value) => parseLink(value, options)),
+    logo: parseString(value[`${prefix}logo`]?.['#text']),
+    rights: parseString(value[`${prefix}rights`]?.['#text']),
+    subtitle: retrieveSubtitle(value, options),
+    title: parseString(value[`${prefix}title`]?.['#text']),
+    updated: retrieveUpdated(value, options),
+    entries: parseArrayOf(value[`${prefix}entry`], (value) => parseEntry(value, options)),
+    dc: options?.asNamespace ? undefined : parseDcItemOrFeed(value),
+    sy: options?.asNamespace ? undefined : parseSyFeed(value),
+  }
+
+  if (options?.asNamespace && hasAnyProps(feed, Object.keys(feed) as Array<keyof Feed>)) {
+    return feed
   }
 
   // INFO: Spec also says about required "updated" and "author" but those are
@@ -218,4 +240,12 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
   if (hasAllProps(feed, ['id', 'title'])) {
     return feed
   }
+}
+
+export const retrieveFeed: ParseFunction<Feed> = (value, options) => {
+  if (!isObject(value?.feed)) {
+    return
+  }
+
+  return parseFeed(value.feed, options)
 }
