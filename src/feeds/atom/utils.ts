@@ -35,7 +35,7 @@ export const retrievePersonUri: ParseFunction<string> = (value, options) => {
     return
   }
 
-  const prefix = options?.asNamespace ?? ''
+  const prefix = options?.prefix ?? ''
   const uri = parseString(value[`${prefix}uri`]?.['#text']) // Atom 1.0.
   const url = parseString(value[`${prefix}url`]?.['#text']) // Atom 0.3.
 
@@ -47,7 +47,7 @@ export const parsePerson: ParseFunction<Person> = (value, options) => {
     return
   }
 
-  const prefix = options?.asNamespace ?? ''
+  const prefix = options?.prefix ?? ''
   const person = {
     name: parseString(value[`${prefix}name`]?.['#text']),
     uri: retrievePersonUri(value, options),
@@ -107,7 +107,7 @@ export const parseSource: ParseFunction<Source> = (value, options) => {
     return
   }
 
-  const prefix = options?.asNamespace ?? ''
+  const prefix = options?.prefix ?? ''
   const source = {
     authors: parseArrayOf(value[`${prefix}author`], (value) => parsePerson(value, options)),
     categories: parseArrayOf(value[`${prefix}category`], (value) => parseCategory(value, options)),
@@ -135,7 +135,7 @@ export const retrievePublished: ParseFunction<string> = (value, options) => {
     return
   }
 
-  const prefix = options?.asNamespace ?? ''
+  const prefix = options?.prefix ?? ''
   const published = parseString(value[`${prefix}published`]?.['#text']) // Atom 1.0.
   const issued = parseString(value[`${prefix}issued`]?.['#text']) // Atom 0.3.
   const created = parseString(value[`${prefix}created`]?.['#text']) // Atom 0.3.
@@ -151,7 +151,7 @@ export const retrieveUpdated: ParseFunction<string> = (value, options) => {
     return
   }
 
-  const prefix = options?.asNamespace ?? ''
+  const prefix = options?.prefix ?? ''
   const updated = parseString(value[`${prefix}updated`]?.['#text']) // Atom 1.0.
   const modified = parseString(value[`${prefix}modified`]?.['#text']) // Atom 0.3.
 
@@ -163,7 +163,7 @@ export const retrieveSubtitle: ParseFunction<string> = (value, options) => {
     return
   }
 
-  const prefix = options?.asNamespace ?? ''
+  const prefix = options?.prefix ?? ''
   const subtitle = parseString(value[`${prefix}subtitle`]?.['#text']) // Atom 1.0.
   const tagline = parseString(value[`${prefix}tagline`]?.['#text']) // Atom 0.3.
 
@@ -175,7 +175,7 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
     return
   }
 
-  const prefix = options?.asNamespace ?? ''
+  const prefix = options?.prefix ?? ''
   const entry = {
     authors: parseArrayOf(value[`${prefix}author`], (value) => parsePerson(value, options)),
     categories: parseArrayOf(value[`${prefix}category`], (value) => parseCategory(value, options)),
@@ -191,10 +191,10 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
     summary: parseString(value[`${prefix}summary`]?.['#text']),
     title: parseString(value[`${prefix}title`]?.['#text']),
     updated: retrieveUpdated(value, options),
-    dc: options?.asNamespace ? undefined : parseDcItemOrFeed(value),
+    dc: options?.partial ? undefined : parseDcItemOrFeed(value),
   }
 
-  if (options?.asNamespace && hasAnyProps(entry, Object.keys(entry) as Array<keyof Entry>)) {
+  if (options?.partial && hasAnyProps(entry, Object.keys(entry) as Array<keyof Entry>)) {
     return entry
   }
 
@@ -210,7 +210,7 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
     return
   }
 
-  const prefix = options?.asNamespace ?? ''
+  const prefix = options?.prefix ?? ''
   const feed = {
     authors: parseArrayOf(value[`${prefix}author`], (value) => parsePerson(value, options)),
     categories: parseArrayOf(value[`${prefix}category`], (value) => parseCategory(value, options)),
@@ -227,11 +227,11 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
     title: parseString(value[`${prefix}title`]?.['#text']),
     updated: retrieveUpdated(value, options),
     entries: parseArrayOf(value[`${prefix}entry`], (value) => parseEntry(value, options)),
-    dc: options?.asNamespace ? undefined : parseDcItemOrFeed(value),
-    sy: options?.asNamespace ? undefined : parseSyFeed(value),
+    dc: options?.partial ? undefined : parseDcItemOrFeed(value),
+    sy: options?.partial ? undefined : parseSyFeed(value),
   }
 
-  if (options?.asNamespace && hasAnyProps(feed, Object.keys(feed) as Array<keyof Feed>)) {
+  if (options?.partial && hasAnyProps(feed, Object.keys(feed) as Array<keyof Feed>)) {
     return feed
   }
 
@@ -242,13 +242,13 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
   }
 }
 
-export const retrieveFeed: ParseFunction<Feed> = (value, options) => {
-  if (!isObject(value?.feed)) {
+export const retrieveFeed: ParseFunction<Feed> = (value) => {
+  if (!isObject(value?.feed || value?.['atom:feed'])) {
     return
   }
 
-  const notNamespaced = parseFeed(value.feed, options)
-  const namespaced = parseFeed(value['atom:feed'], options)
+  const notNamespaced = parseFeed(value.feed)
+  const namespaced = parseFeed(value['atom:feed'], { prefix: 'atom:' })
 
   return notNamespaced || namespaced
 }

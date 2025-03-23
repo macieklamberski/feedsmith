@@ -4,13 +4,14 @@ import { parseEntry as parseAtomEntry, parseFeed as parseAtomFeed } from '../../
 
 export const parseEntry: ParseFunction<Entry> = (value) => {
   return (
-    parseAtomEntry(value, { asNamespace: 'atom:' }) ||
-    parseAtomEntry(value, { asNamespace: 'a10:' })
+    parseAtomEntry(value, { prefix: 'atom:', partial: true }) ||
+    parseAtomEntry(value, { prefix: 'a10:', partial: true })
   )
 }
 
 export const parseFeed: ParseFunction<Feed> = (value) => {
   return (
-    parseAtomFeed(value, { asNamespace: 'atom:' }) || parseAtomFeed(value, { asNamespace: 'a10:' })
+    parseAtomFeed(value, { prefix: 'atom:', partial: true }) ||
+    parseAtomFeed(value, { prefix: 'a10:', partial: true })
   )
 }

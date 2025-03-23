@@ -141,4 +141,31 @@ describe('parse', () => {
 
     expect(result).toEqual(expected)
   })
+
+  it('should correctly parse namespaced Atom feed', async () => {
+    const input = `
+      <?xml version="1.0" encoding="utf-8"?>
+      <atom:feed atom:xmlns="http://www.w3.org/2005/Atom">
+        <atom:title>Example Feed</title>
+        <atom:id>example-feed</id>
+        <atom:entry>
+          <atom:title>Example Entry</title>
+          <atom:id>example-entry</id>
+        </atom:entry>
+      </atom:feed>
+    `
+    const expected = {
+      id: 'example-feed',
+      title: 'Example Feed',
+      entries: [
+        {
+          id: 'example-entry',
+          title: 'Example Entry',
+        },
+      ],
+    }
+    const result = parse(input)
+
+    expect(result).toEqual(expected)
+  })
 })

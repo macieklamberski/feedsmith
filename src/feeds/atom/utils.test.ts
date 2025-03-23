@@ -940,6 +940,21 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
+  it('should retrieve feed prefixed with atom: with only required fields', () => {
+    const value = {
+      'atom:feed': {
+        'atom:id': { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
+        'atom:title': { '#text': 'Example Feed' },
+      },
+    }
+    const expected = {
+      id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
+      title: 'Example Feed',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
   it('should return undefined if feed is not nested under the "feed"', () => {
     const value = {
       id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
