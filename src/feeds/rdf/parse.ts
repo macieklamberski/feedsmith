@@ -3,9 +3,7 @@ import { feed } from './schemas'
 import type { Feed } from './types'
 import { retrieveFeed } from './utils'
 
-export type Parse = (value: string) => Feed | undefined
-
-export const parse: Parse = (value) => {
+export const parse = (value: string): Feed | undefined => {
   const object = parser.parse(value)
   const parsed = retrieveFeed(object)
 

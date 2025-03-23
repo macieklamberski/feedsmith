@@ -5,9 +5,7 @@ import { parseFeed } from './utils'
 // This can be done as two array parameters in second "options" parameter to parse().
 // - extraFeedFields?: Array<string>
 // - extraItemFields?: Array<string>
-export type Parse = (value: unknown) => Feed | undefined
-
-export const parse: Parse = (value) => {
+export const parse = (value: unknown): Feed | undefined => {
   const parsed = parseFeed(value)
 
   return parsed
