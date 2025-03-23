@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'bun:test'
-import { detect } from './'
+import { detect } from './detect'
 
 describe('detect', () => {
-  test('detects valid Atom feed with xmlns declaration', () => {
+  test('detect valid Atom feed with xmlns declaration', () => {
     const atomFeed = `
       <?xml version="1.0"?>
       <feed xmlns="http://www.w3.org/2005/Atom">
@@ -13,7 +13,7 @@ describe('detect', () => {
     expect(detect(atomFeed)).toBe(true)
   })
 
-  test('handles case sensitivity correctly', () => {
+  test('handle case sensitivity correctly', () => {
     const uppercaseFeed = `
       <?xml version="1.0" encoding="utf-8"?>
       <FEED xmlns="http://www.w3.org/2005/Atom">
@@ -24,7 +24,7 @@ describe('detect', () => {
     expect(detect(uppercaseFeed)).toBe(true)
   })
 
-  test('detects Atom feed without namespace', () => {
+  test('detect Atom feed without xmlns declaration', () => {
     const atomFeed = `
       <?xml version="1.0"?>
       <feed>
@@ -35,7 +35,7 @@ describe('detect', () => {
     expect(detect(atomFeed)).toBe(true)
   })
 
-  test('detects Atom feed with namespace prefix', () => {
+  test('detect Atom feed with namespace prefix', () => {
     const atomFeed = `
       <?xml version="1.0" encoding="utf-8"?>
       <atom:feed xmlns:atom="http://www.w3.org/2005/Atom">
@@ -46,7 +46,7 @@ describe('detect', () => {
     expect(detect(atomFeed)).toBe(true)
   })
 
-  test('returns false for RSS feed', () => {
+  test('return false for RSS feed', () => {
     const rssFeed = `
       <?xml version="1.0" encoding="UTF-8" ?>
       <rss version="2.0">
@@ -59,7 +59,7 @@ describe('detect', () => {
     expect(detect(rssFeed)).toBe(false)
   })
 
-  test('returns false for RDF feed', () => {
+  test('return false for RDF feed', () => {
     const rdfFeed = `
       <?xml version="1.0" encoding="UTF-8"?>
       <rdf:RDF
@@ -74,7 +74,7 @@ describe('detect', () => {
     expect(detect(rdfFeed)).toBe(false)
   })
 
-  test('returns false for JSON feed', () => {
+  test('return false for JSON feed', () => {
     const jsonFeed = `
       {
         "version": "https://jsonfeed.org/version/1.1",
@@ -85,7 +85,7 @@ describe('detect', () => {
     expect(detect(jsonFeed)).toBe(false)
   })
 
-  test('returns false for plain HTML', () => {
+  test('return false for plain HTML', () => {
     const html = `
       <!DOCTYPE html>
       <html>
@@ -102,7 +102,11 @@ describe('detect', () => {
     expect(detect(html)).toBe(false)
   })
 
-  test('returns false for empty string', () => {
+  test('return false for empty string or non-string value', () => {
     expect(detect('')).toBe(false)
+    expect(detect(undefined)).toEqual(false)
+    expect(detect(null)).toEqual(false)
+    expect(detect([])).toEqual(false)
+    expect(detect({})).toEqual(false)
   })
 })
