@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { detect } from './'
+import { detect } from './detect'
 
 describe('detect', () => {
   test('detect any object as potential JSON feed', () => {
