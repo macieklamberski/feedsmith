@@ -247,5 +247,8 @@ export const retrieveFeed: ParseFunction<Feed> = (value, options) => {
     return
   }
 
-  return parseFeed(value.feed, options)
+  const notNamespaced = parseFeed(value.feed, options)
+  const namespaced = parseFeed(value['atom:feed'], options)
+
+  return notNamespaced || namespaced
 }
