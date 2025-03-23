@@ -3,6 +3,9 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "bundler",
+    "declaration": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
     "strict": true,
     "skipLibCheck": true
   }
