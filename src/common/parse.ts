@@ -1,15 +1,15 @@
-import {
-  type Feed as AtomFeed,
-  detect as detectAtom,
-  parse as parseAtom,
-} from '../feeds/atom/index'
-import {
-  type Feed as JsonFeed,
-  detect as detectJson,
-  parse as parseJson,
-} from '../feeds/json/index'
-import { type Feed as RdfFeed, detect as detectRdf, parse as parseRdf } from '../feeds/rdf/index'
-import { type Feed as RssFeed, detect as detectRss, parse as parseRss } from '../feeds/rss/index'
+import { detect as detectAtom } from '../feeds/atom/detect'
+import { parse as parseAtom } from '../feeds/atom/parse'
+import type { Feed as AtomFeed } from '../feeds/atom/types'
+import { detect as detectJson } from '../feeds/json/detect'
+import { parse as parseJson } from '../feeds/json/parse'
+import type { Feed as JsonFeed } from '../feeds/json/types'
+import { detect as detectRdf } from '../feeds/rdf/detect'
+import { parse as parseRdf } from '../feeds/rdf/parse'
+import type { Feed as RdfFeed } from '../feeds/rdf/types'
+import { detect as detectRss } from '../feeds/rss/detect'
+import { parse as parseRss } from '../feeds/rss/parse'
+import type { Feed as RssFeed } from '../feeds/rss/types'
 
 export type Feed =
   | { type: 'json'; feed: JsonFeed }
