@@ -26,7 +26,7 @@ jobs:
       - name: Build package
         run: bun run build
 
-      - name: Publish to NPM
-        run: bun publish
+      - name: Release and publish package
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: bunx semantic-release --extends ./release.json
