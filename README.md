@@ -314,13 +314,13 @@ import { parseFeed, parseJsonFeed } from 'parsser'
 try {
   const universalFeed = parseFeed('<not-a-feed></not-a-feed>')
 } catch (error) {
-  // Error: Unrecognized feed format.
+  // Error: Unrecognized feed format
 }
 
 try {
   const jsonFeed = parseJsonFeed('{}')
 } catch (error) {
-  // Error: Invalid JSON feed.
+  // Error: Invalid feed format
 }
 ```
 
