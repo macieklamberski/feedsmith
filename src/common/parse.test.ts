@@ -1,8 +1,9 @@
-import { describe, expect, test } from 'bun:test'
+import { describe, expect, it } from 'bun:test'
+import { locales } from './config'
 import { parse } from './parse'
 
 describe('parse', () => {
-  test('parse valid Atom feed', () => {
+  it('parse valid Atom feed', () => {
     const atomFeed = `
       <?xml version="1.0"?>
       <feed xmlns="http://www.w3.org/2005/Atom">
@@ -21,7 +22,7 @@ describe('parse', () => {
     expect(parse(atomFeed)).toEqual(expected)
   })
 
-  test('parse valid JSON feed', () => {
+  it('parse valid JSON feed', () => {
     const jsonFeed = {
       version: 'https://jsonfeed.org/version/1.1',
       title: 'My Example Feed',
@@ -48,7 +49,7 @@ describe('parse', () => {
     expect(parse(jsonFeed)).toEqual(expected)
   })
 
-  test('parse valid RSS feed', () => {
+  it('parse valid RSS feed', () => {
     const rssFeed = `
       <?xml version="1.0"?>
       <rss version="2.0">
@@ -71,7 +72,7 @@ describe('parse', () => {
     expect(parse(rssFeed)).toEqual(expected)
   })
 
-  test('parse valid RDF feed', () => {
+  it('parse valid RDF feed', () => {
     const rdfFeed = `
       <?xml version="1.0"?>
       <rdf:RDF
@@ -106,10 +107,32 @@ describe('parse', () => {
     expect(parse(rdfFeed)).toEqual(expected)
   })
 
-  test('should return undefined for non-feed input', () => {
-    expect(parse('not an object')).toBeUndefined()
-    expect(parse(undefined)).toBeUndefined()
-    expect(parse(null)).toBeUndefined()
-    expect(parse([])).toBeUndefined()
+  it('should throw error for invalid input', () => {
+    expect(() => parse('not a feed')).toThrowError(locales.unrecognized)
+  })
+
+  it('should handle null input', () => {
+    expect(() => parse(null)).toThrowError(locales.unrecognized)
+  })
+
+  it('should handle undefined input', () => {
+    expect(() => parse(undefined)).toThrowError(locales.unrecognized)
+  })
+
+  it('should handle array input', () => {
+    expect(() => parse([])).toThrowError(locales.unrecognized)
+  })
+
+  it('should handle empty object input', () => {
+    // This will be picked up by JSON Feed parser.
+    expect(() => parse({})).toThrowError(locales.invalid)
+  })
+
+  it('should handle string input', () => {
+    expect(() => parse('not a feed')).toThrowError(locales.unrecognized)
+  })
+
+  it('should handle number input', () => {
+    expect(() => parse(123)).toThrowError(locales.unrecognized)
   })
 })

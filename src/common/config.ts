@@ -12,3 +12,8 @@ export const parserConfig: X2jOptions = {
   transformTagName: (name) => name.toLowerCase(),
   transformAttributeName: (name) => name.toLowerCase(),
 }
+
+export const locales = {
+  unrecognized: 'Unrecognized feed format',
+  invalid: 'Invalid feed format',
+}

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'bun:test'
+import { locales } from '../../common/config'
 import { parse } from './parse'
 
 describe('parse', () => {
@@ -47,5 +48,33 @@ describe('parse', () => {
     const result = parse(input)
 
     expect(result).toEqual(expectation)
+  })
+
+  it('should throw error for invalid input', () => {
+    expect(() => parse('not a feed')).toThrowError(locales.invalid)
+  })
+
+  it('should handle null input', () => {
+    expect(() => parse(null)).toThrowError(locales.invalid)
+  })
+
+  it('should handle undefined input', () => {
+    expect(() => parse(undefined)).toThrowError(locales.invalid)
+  })
+
+  it('should handle array input', () => {
+    expect(() => parse([])).toThrowError(locales.invalid)
+  })
+
+  it('should handle empty object input', () => {
+    expect(() => parse({})).toThrowError(locales.invalid)
+  })
+
+  it('should handle string input', () => {
+    expect(() => parse('not a feed')).toThrowError(locales.invalid)
+  })
+
+  it('should handle number input', () => {
+    expect(() => parse(123)).toThrowError(locales.invalid)
   })
 })

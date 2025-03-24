@@ -1,12 +1,19 @@
+import { locales } from '../../common/config'
 import { parser } from './config'
 import type { Feed } from './types'
 import { retrieveFeed } from './utils'
 
-export type Parse = (value: string) => Feed | undefined
+export const parse = (value: unknown): Feed => {
+  if (typeof value !== 'string') {
+    throw new Error(locales.invalid)
+  }
 
-export const parse: Parse = (value) => {
   const object = parser.parse(value)
   const parsed = retrieveFeed(object)
+
+  if (!parsed) {
+    throw new Error(locales.invalid)
+  }
 
   return parsed
 }

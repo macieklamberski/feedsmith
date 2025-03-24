@@ -23,7 +23,7 @@ Modern JavaScript utility for parsing JSON Feed, Atom, RSS, and RDF feeds, with 
 #### Performance and type-safety
 * **Fast parsing** — Built on [fast-xml-parser](https://www.npmjs.com/package/fast-xml-parser) for efficient XML processing.
 * **Type-safe APIs** — Full TypeScript support with comprehensive type definitions.
-* **Well tested** — Comprehensive test suite with over 400 tests and 99.8% code coverage based on `bun test --coverage`.
+* **Well tested** — Comprehensive test suite with over 450 tests and 99.9% code coverage based on `bun test --coverage`.
 * **Tree-shakable** — Only include the parts of the library you need, reducing bundle size.
 
 ## Supported feeds and namespaces

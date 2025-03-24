@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'bun:test'
+import { locales } from '../../common/config'
 import { parse } from './parse'
 import type { Feed } from './types'
 
@@ -111,27 +112,31 @@ describe('parse', () => {
     expect((result as Feed).authors).toBeUndefined()
   })
 
+  it('should throw error for invalid input', () => {
+    expect(() => parse('not a feed')).toThrowError(locales.invalid)
+  })
+
   it('should handle null input', () => {
-    expect(parse(null)).toBeUndefined()
+    expect(() => parse(null)).toThrowError(locales.invalid)
   })
 
   it('should handle undefined input', () => {
-    expect(parse(undefined)).toBeUndefined()
+    expect(() => parse(undefined)).toThrowError(locales.invalid)
   })
 
   it('should handle array input', () => {
-    expect(parse([])).toBeUndefined()
+    expect(() => parse([])).toThrowError(locales.invalid)
   })
 
   it('should handle empty object input', () => {
-    expect(parse({})).toBeUndefined()
+    expect(() => parse({})).toThrowError(locales.invalid)
   })
 
   it('should handle string input', () => {
-    expect(parse('not a feed')).toBeUndefined()
+    expect(() => parse('not a feed')).toThrowError(locales.invalid)
   })
 
   it('should handle number input', () => {
-    expect(parse(123)).toBeUndefined()
+    expect(() => parse(123)).toThrowError(locales.invalid)
   })
 })
