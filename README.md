@@ -383,13 +383,13 @@ Parsser is designed to be forgiving. It will extract whatever valid data it can 
 
 Even though Parsser is more suited for the Node.js environments, it was also tested in modern browsers where it works seamlessly. It's provided as an ES module.
 
+## Acknowledgements
+
+* The library API is inspired by the [FeedKit library for Swift](https://github.com/nmdias/FeedKit).
+* XML parsing is provided by [fast-xml-parser](https://github.com/NaturalIntelligence/fast-xml-parser).
+* HTML entity decoding is handled by [entities](https://github.com/fb55/entities).
+
 ## License
 
 Licensed under the [MIT](LICENSE) license.<br/>
 Copyright © 2025, Maciej Lamberski
-
-## Acknowledgements
-
-- The library API is inspired by the [FeedKit library for Swift](https://github.com/nmdias/FeedKit),
-- XML parsing is provided by [fast-xml-parser](https://github.com/NaturalIntelligence/fast-xml-parser),
-- HTML entity decoding is handled by [entities](https://github.com/fb55/entities).
