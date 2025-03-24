@@ -1,10 +1,18 @@
 {
   "name": "parsser",
   "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
     "prepare": "lefthook install",
     "lint:tsc": "tsc --pretty --noEmit",
-    "lint:biome": "bunx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
+    "lint:biome": "bunx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
+    "build": "rm -rf dist && tsc"
   },
   "dependencies": {
     "entities": "^6.0.0",
