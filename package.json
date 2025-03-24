@@ -1,13 +1,28 @@
 {
   "name": "parsser",
-  "type": "module",
+  "description": "Modern JavaScript utility for parsing and building JSON Feed, Atom, RSS, and RDF feeds, with support for Dublin Core, Syndication, iTunes, and many other popular namespaces.",
+  "license": "MIT",
+  "author": "Maciej Lamberski",
   "sideEffects": false,
+  "keywords": [
+    "rss-feed",
+    "rss-parser",
+    "rss-reader",
+    "feed-parser",
+    "feed-builder",
+    "atom",
+    "rss",
+    "rdf",
+    "jsonfeed"
+  ],
+  "type": "module",
   "exports": {
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     }
   },
+  "files": ["dist"],
   "scripts": {
     "prepare": "lefthook install",
     "lint:tsc": "tsc --pretty --noEmit",
