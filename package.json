@@ -1,15 +1,15 @@
 {
   "name": "parsser",
-  "description": "Modern JavaScript utility for parsing and building JSON Feed, Atom, RSS, and RDF feeds, with support for Dublin Core, Syndication, iTunes, and many other popular namespaces.",
+  "description": "Modern JavaScript utility for parsing JSON Feed, Atom, RSS, and RDF feeds, with support for Dublin Core, Syndication, iTunes, and many other popular namespaces.",
   "license": "MIT",
   "author": "Maciej Lamberski",
   "sideEffects": false,
   "keywords": [
     "rss-feed",
     "rss-parser",
-    "rss-reader",
+    "rss-generator",
     "feed-parser",
-    "feed-builder",
+    "feed-generator",
     "atom",
     "rss",
     "rdf",
