@@ -4,7 +4,7 @@ import {
   hasAnyProps,
   isNonEmptyStringOrNumber,
   isObject,
-  omitNullish,
+  omitNullishFromArray,
   omitUndefinedFromObject,
   parseArrayOf,
   parseBoolean,
@@ -15,11 +15,11 @@ import type { Attachment, Author, Feed, Hub, Item } from './types'
 
 export const parseTags: ParseFunction<Array<string>> = (value) => {
   if (Array.isArray(value)) {
-    return omitNullish(value.map((item) => parseString(item)))
+    return omitNullishFromArray(value.map((item) => parseString(item)))
   }
 
   if (isNonEmptyStringOrNumber(value)) {
-    return omitNullish([parseString(value)])
+    return omitNullishFromArray([parseString(value)])
   }
 }
 

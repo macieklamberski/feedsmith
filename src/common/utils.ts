@@ -54,7 +54,7 @@ export const omitUndefinedFromObject = <T extends Record<string, unknown>>(
   return result
 }
 
-export const omitNullish = <T>(array: Array<T | null | undefined>): Array<T> => {
+export const omitNullishFromArray = <T>(array: Array<T | null | undefined>): Array<T> => {
   return array.filter((item): item is T => item !== null && item !== undefined)
 }
 
@@ -145,7 +145,7 @@ export const parseArrayOf = <R>(
   const array = parseArray(value)
 
   if (array) {
-    return omitNullish(array.map(parse))
+    return omitNullishFromArray(array.map(parse))
   }
 
   const parsed = parse(value)

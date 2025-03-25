@@ -3,7 +3,7 @@ import {
   hasAllProps,
   hasAnyProps,
   isObject,
-  omitNullish,
+  omitNullishFromArray,
   omitUndefinedFromObject,
   parseArrayOf,
   parseNumber,
@@ -70,7 +70,7 @@ export const parseSkipHours: ParseFunction<Array<number>> = (value) => {
     return
   }
 
-  return omitNullish(hours.map((hour) => parseNumber(hour?.['#text'])))
+  return omitNullishFromArray(hours.map((hour) => parseNumber(hour?.['#text'])))
 }
 
 export const parseSkipDays: ParseFunction<Array<string>> = (value) => {
@@ -80,7 +80,7 @@ export const parseSkipDays: ParseFunction<Array<string>> = (value) => {
     return
   }
 
-  return omitNullish(days.map((hour) => parseString(hour?.['#text'])))
+  return omitNullishFromArray(days.map((hour) => parseString(hour?.['#text'])))
 }
 
 export const parseEnclosure: ParseFunction<Enclosure> = (value) => {

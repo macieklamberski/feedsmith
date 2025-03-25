@@ -5,7 +5,7 @@ import {
   hasAnyProps,
   isNonEmptyStringOrNumber,
   isObject,
-  omitNullish,
+  omitNullishFromArray,
   omitUndefinedFromObject,
   parseArray,
   parseArrayOf,
@@ -299,47 +299,47 @@ describe('omitUndefinedFromObject', () => {
   })
 })
 
-describe('omitNullish', () => {
+describe('omitNullishFromArray', () => {
   it('should filter out null and undefined values', () => {
-    expect(omitNullish([1, null, 2, undefined, 3])).toEqual([1, 2, 3])
-    expect(omitNullish(['a', null, 'b', undefined])).toEqual(['a', 'b'])
-    expect(omitNullish([null, undefined])).toEqual([])
+    expect(omitNullishFromArray([1, null, 2, undefined, 3])).toEqual([1, 2, 3])
+    expect(omitNullishFromArray(['a', null, 'b', undefined])).toEqual(['a', 'b'])
+    expect(omitNullishFromArray([null, undefined])).toEqual([])
   })
 
   it('should preserve empty arrays', () => {
-    expect(omitNullish([])).toEqual([])
+    expect(omitNullishFromArray([])).toEqual([])
   })
 
   it('should keep falsy values that are not null or undefined', () => {
     const input = [0, '', false, null, undefined, Number.NaN]
     const expected = [0, '', false, Number.NaN]
 
-    expect(omitNullish(input)).toEqual(expected)
+    expect(omitNullishFromArray(input)).toEqual(expected)
   })
 
   it('should work with complex objects', () => {
     const value1 = { id: 1 }
     const value2 = { id: 2 }
 
-    expect(omitNullish([value1, null, value2, undefined])).toEqual([value1, value2])
+    expect(omitNullishFromArray([value1, null, value2, undefined])).toEqual([value1, value2])
   })
 
   it('should preserve the order of non-nullish elements', () => {
     const value = ['first', null, 'second', undefined, 'third']
     const expected = ['first', 'second', 'third']
 
-    expect(omitNullish(value)).toEqual(expected)
+    expect(omitNullishFromArray(value)).toEqual(expected)
   })
 
   it('should handle arrays with only nullish values', () => {
-    expect(omitNullish([null, undefined, null])).toEqual([])
+    expect(omitNullishFromArray([null, undefined, null])).toEqual([])
   })
 
   it('should handle mixed type arrays', () => {
     const value = [1, 'string', true, null, { key: 'value' }, undefined, []]
     const expected = [1, 'string', true, { key: 'value' }, []]
 
-    expect(omitNullish(value)).toEqual(expected)
+    expect(omitNullishFromArray(value)).toEqual(expected)
   })
 })
 
