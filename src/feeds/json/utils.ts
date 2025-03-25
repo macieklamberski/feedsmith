@@ -13,6 +13,23 @@ import {
 } from '../../common/utils'
 import type { Attachment, Author, Feed, Hub, Item } from './types'
 
+export const createCaseInsensitiveGetter = (
+  value: Record<string, unknown>,
+): ((lowercaseKey: string) => unknown) => {
+  const keyMap = new Map<string, string>()
+
+  for (const key in value) {
+    if (Object.prototype.hasOwnProperty.call(value, key)) {
+      keyMap.set(key.toLowerCase(), key)
+    }
+  }
+
+  return (lowercaseKey: string) => {
+    const originalKey = keyMap.get(lowercaseKey)
+    return originalKey ? value[originalKey] : undefined
+  }
+}
+
 export const parseTags: ParseFunction<Array<string>> = (value) => {
   if (Array.isArray(value)) {
     return omitNullishFromArray(value.map((item) => parseString(item)))
@@ -25,10 +42,11 @@ export const parseTags: ParseFunction<Array<string>> = (value) => {
 
 export const parseAuthor: ParseFunction<Author> = (value) => {
   if (isObject(value)) {
+    const get = createCaseInsensitiveGetter(value)
     const author = omitUndefinedFromObject({
-      name: parseString(value.name),
-      url: parseString(value.url),
-      avatar: parseString(value.avatar),
+      name: parseString(get('name')),
+      url: parseString(get('url')),
+      avatar: parseString(get('avatar')),
     })
 
     return author.name || author.url || author.avatar ? author : undefined
@@ -49,8 +67,9 @@ export const retrieveAuthors: ParseFunction<Array<Author>> = (value) => {
   // Regardless of the JSON Feed version, the 'authors' property is returned in the item/feed.
   // Some feeds use author/authors incorrectly based on the feed version, so this function helps
   // to unify those into one value.
-  const parsedAuthors = parseArrayOf(value.authors, parseAuthor)
-  const parsedAuthor = parseArrayOf(value.author, parseAuthor)
+  const get = createCaseInsensitiveGetter(value)
+  const parsedAuthors = parseArrayOf(get('authors'), parseAuthor)
+  const parsedAuthor = parseArrayOf(get('author'), parseAuthor)
 
   return parsedAuthors?.length ? parsedAuthors : parsedAuthor
 }
@@ -60,9 +79,10 @@ export const parseHub: ParseFunction<Hub> = (value) => {
     return
   }
 
+  const get = createCaseInsensitiveGetter(value)
   const hub = omitUndefinedFromObject({
-    type: parseString(value.type),
-    url: parseString(value.url),
+    type: parseString(get('type')),
+    url: parseString(get('url')),
   })
 
   if (hasAnyProps(hub, ['type', 'url'])) {
@@ -75,12 +95,13 @@ export const parseAttachment: ParseFunction<Attachment> = (value) => {
     return
   }
 
+  const get = createCaseInsensitiveGetter(value)
   const attachment = omitUndefinedFromObject({
-    url: parseString(value.url),
-    mime_type: parseString(value.mime_type),
-    title: parseString(value.title),
-    size_in_bytes: parseNumber(value.size_in_bytes),
-    duration_in_seconds: parseNumber(value.duration_in_seconds),
+    url: parseString(get('url')),
+    mime_type: parseString(get('mime_type')),
+    title: parseString(get('title')),
+    size_in_bytes: parseNumber(get('size_in_bytes')),
+    duration_in_seconds: parseNumber(get('duration_in_seconds')),
   })
 
   // TODO: Consider checking if URL has value before parsing the whole object.
@@ -94,22 +115,23 @@ export const parseItem: ParseFunction<Item> = (value) => {
     return
   }
 
+  const get = createCaseInsensitiveGetter(value)
   const item = omitUndefinedFromObject({
-    id: parseString(value.id),
-    url: parseString(value.url),
-    external_url: parseString(value.external_url),
-    title: parseString(value.title),
-    content_html: parseString(value.content_html),
-    content_text: parseString(value.content_text),
-    summary: parseString(value.summary),
-    image: parseString(value.image),
-    banner_image: parseString(value.banner_image),
-    date_published: parseString(value.date_published),
-    date_modified: parseString(value.date_modified),
-    tags: parseTags(value.tags),
+    id: parseString(get('id')),
+    url: parseString(get('url')),
+    external_url: parseString(get('external_url')),
+    title: parseString(get('title')),
+    content_html: parseString(get('content_html')),
+    content_text: parseString(get('content_text')),
+    summary: parseString(get('summary')),
+    image: parseString(get('image')),
+    banner_image: parseString(get('banner_image')),
+    date_published: parseString(get('date_published')),
+    date_modified: parseString(get('date_modified')),
+    tags: parseTags(get('tags')),
     authors: retrieveAuthors(value),
-    language: parseString(value.language),
-    attachments: parseArrayOf(value.attachments, parseAttachment),
+    language: parseString(get('language')),
+    attachments: parseArrayOf(get('attachments'), parseAttachment),
   })
 
   // TODO: Consider checking if ID has value before parsing the whole object.
@@ -123,21 +145,22 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     return
   }
 
+  const get = createCaseInsensitiveGetter(value)
   const feed = omitUndefinedFromObject({
-    version: parseString(value.version),
-    title: parseString(value.title),
-    home_page_url: parseString(value.home_page_url),
-    feed_url: parseString(value.feed_url),
-    description: parseString(value.description),
-    user_comment: parseString(value.user_comment),
-    next_url: parseString(value.next_url),
-    icon: parseString(value.icon),
-    favicon: parseString(value.favicon),
-    language: parseString(value.language),
-    expired: parseBoolean(value.expired),
-    hubs: parseArrayOf(value.hubs, parseHub),
+    version: parseString(get('version')),
+    title: parseString(get('title')),
+    home_page_url: parseString(get('home_page_url')),
+    feed_url: parseString(get('feed_url')),
+    description: parseString(get('description')),
+    user_comment: parseString(get('user_comment')),
+    next_url: parseString(get('next_url')),
+    icon: parseString(get('icon')),
+    favicon: parseString(get('favicon')),
+    language: parseString(get('language')),
+    expired: parseBoolean(get('expired')),
+    hubs: parseArrayOf(get('hubs'), parseHub),
     authors: retrieveAuthors(value),
-    items: parseArrayOf(value.items, parseItem),
+    items: parseArrayOf(get('items'), parseItem),
   })
 
   // TODO: Consider checking if version, title and items have value before parsing the whole object.

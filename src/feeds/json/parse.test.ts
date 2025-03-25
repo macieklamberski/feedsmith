@@ -59,6 +59,11 @@ describe('parse', () => {
     title: 'My Example Feed',
     items: [{ id: '1', content_html: '<p>Hello world</p>' }],
   }
+  const minimalFeedCaseInsensitive = {
+    vErsIOn: 'https://jsonfeed.org/version/1',
+    TITLE: 'My Example Feed',
+    items: [{ id: '1', content_HTML: '<p>Hello world</p>' }],
+  }
 
   it('should parse valid JSON Feed v1', () => {
     const result = parse(validFeedV1)
@@ -103,6 +108,17 @@ describe('parse', () => {
 
   it('should handle missing optional fields', () => {
     const result = parse(minimalFeed)
+
+    expect(result).toBeDefined()
+    expect(result?.version).toBe('https://jsonfeed.org/version/1')
+    expect(result?.title).toBe('My Example Feed')
+    expect(result?.home_page_url).toBeUndefined()
+    expect(result?.feed_url).toBeUndefined()
+    expect((result as Feed).authors).toBeUndefined()
+  })
+
+  it('should handle case insensitive fields', () => {
+    const result = parse(minimalFeedCaseInsensitive)
 
     expect(result).toBeDefined()
     expect(result?.version).toBe('https://jsonfeed.org/version/1')

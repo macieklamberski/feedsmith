@@ -18,7 +18,7 @@ Modern JavaScript utility for parsing JSON Feed, Atom, RSS, and RDF feeds, with 
 
 #### Leniency
 * **Normalizes legacy elements** ✨ — Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
-* **CaSe INSENsiTive** — Handles XML tags in any case (lowercase, uppercase, mixed).
+* **CaSe INSENsiTive** — Handles JSON properties and XML tags in any case (lowercase, uppercase, mixed).
 
 #### Performance and type-safety
 * **Fast parsing** — Built on [fast-xml-parser](https://www.npmjs.com/package/fast-xml-parser) for efficient XML processing.
