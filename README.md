@@ -30,10 +30,10 @@ Modern JavaScript utility for parsing JSON Feed, Atom, RSS, and RDF feeds, with 
 
 #### Feeds
 
-* [x] [Atom](https://tools.ietf.org/html/rfc4287) (versions: 0.3, 1.0)
-* [x] [RSS](http://cyber.law.harvard.edu/rss/rss.html) (versions: 0.90, 0.91, 0.92, 0.93, 0.94, 2.0)
-* [x] [JSON](https://jsonfeed.org) (versions: 1.0, 1.1)
-* [x] [RDF](https://web.resource.org/rss/1.0/spec) (versions: 0.9, 1.0)
+* [x] [Atom](https://tools.ietf.org/html/rfc4287) (versions: `0.3`, `1.0`)
+* [x] [RSS](http://cyber.law.harvard.edu/rss/rss.html) (versions: `0.90`, `0.91`, `0.92`, `0.93`, `0.94`, `2.0`)
+* [x] [JSON](https://jsonfeed.org) (versions: `1.0`, `1.1`)
+* [x] [RDF](https://web.resource.org/rss/1.0/spec) (versions: `0.9`, `1.0`)
 
 #### Namespaces
 
