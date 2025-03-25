@@ -1,5 +1,5 @@
 import type { ParseFunction } from '../../common/types'
-import { hasAnyProps, isObject, parseString } from '../../common/utils'
+import { hasAnyProps, isObject, omitUndefinedFromObject, parseString } from '../../common/utils'
 import type { Item } from './types'
 
 export const parseItem: ParseFunction<Item> = (value) => {
@@ -7,9 +7,9 @@ export const parseItem: ParseFunction<Item> = (value) => {
     return
   }
 
-  const channel = {
+  const channel = omitUndefinedFromObject({
     encoded: parseString(value['content:encoded']?.['#text']),
-  }
+  })
 
   if (hasAnyProps(channel, ['encoded'])) {
     return channel

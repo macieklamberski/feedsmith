@@ -5,6 +5,7 @@ import {
   isNonEmptyStringOrNumber,
   isObject,
   omitNullish,
+  omitUndefinedFromObject,
   parseArrayOf,
   parseBoolean,
   parseNumber,
@@ -24,11 +25,11 @@ export const parseTags: ParseFunction<Array<string>> = (value) => {
 
 export const parseAuthor: ParseFunction<Author> = (value) => {
   if (isObject(value)) {
-    const author = {
+    const author = omitUndefinedFromObject({
       name: parseString(value.name),
       url: parseString(value.url),
       avatar: parseString(value.avatar),
-    }
+    })
 
     return author.name || author.url || author.avatar ? author : undefined
   }
@@ -59,10 +60,10 @@ export const parseHub: ParseFunction<Hub> = (value) => {
     return
   }
 
-  const hub = {
+  const hub = omitUndefinedFromObject({
     type: parseString(value.type),
     url: parseString(value.url),
-  }
+  })
 
   if (hasAnyProps(hub, ['type', 'url'])) {
     return hub
@@ -74,13 +75,13 @@ export const parseAttachment: ParseFunction<Attachment> = (value) => {
     return
   }
 
-  const attachment = {
+  const attachment = omitUndefinedFromObject({
     url: parseString(value.url),
     mime_type: parseString(value.mime_type),
     title: parseString(value.title),
     size_in_bytes: parseNumber(value.size_in_bytes),
     duration_in_seconds: parseNumber(value.duration_in_seconds),
-  }
+  })
 
   // TODO: Consider checking if URL has value before parsing the whole object.
   if (hasAllProps(attachment, ['url'])) {
@@ -93,7 +94,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     return
   }
 
-  const item = {
+  const item = omitUndefinedFromObject({
     id: parseString(value.id),
     url: parseString(value.url),
     external_url: parseString(value.external_url),
@@ -109,7 +110,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     authors: retrieveAuthors(value),
     language: parseString(value.language),
     attachments: parseArrayOf(value.attachments, parseAttachment),
-  }
+  })
 
   // TODO: Consider checking if ID has value before parsing the whole object.
   if (hasAllProps(item, ['id'])) {
@@ -122,7 +123,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     return
   }
 
-  const feed = {
+  const feed = omitUndefinedFromObject({
     version: parseString(value.version),
     title: parseString(value.title),
     home_page_url: parseString(value.home_page_url),
@@ -137,7 +138,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     hubs: parseArrayOf(value.hubs, parseHub),
     authors: retrieveAuthors(value),
     items: parseArrayOf(value.items, parseItem),
-  }
+  })
 
   // TODO: Consider checking if version, title and items have value before parsing the whole object.
   if (hasAllProps(feed, ['version', 'title', 'items'])) {

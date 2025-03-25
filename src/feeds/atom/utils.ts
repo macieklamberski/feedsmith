@@ -2,6 +2,7 @@ import {
   hasAllProps,
   hasAnyProps,
   isObject,
+  omitUndefinedFromObject,
   parseArrayOf,
   parseNumber,
   parseString,
@@ -16,14 +17,14 @@ export const parseLink: ParseFunction<Link> = (value) => {
     return
   }
 
-  const link = {
+  const link = omitUndefinedFromObject({
     href: parseString(value?.['@href']),
     rel: parseString(value?.['@rel']),
     type: parseString(value?.['@type']),
     hreflang: parseString(value?.['@hreflang']),
     title: parseString(value?.['@title']),
     length: parseNumber(value?.['@length']),
-  }
+  })
 
   if (hasAllProps(link, ['href'])) {
     return link
@@ -48,11 +49,11 @@ export const parsePerson: ParseFunction<Person> = (value, options) => {
   }
 
   const prefix = options?.prefix ?? ''
-  const person = {
+  const person = omitUndefinedFromObject({
     name: parseString(value[`${prefix}name`]?.['#text']),
     uri: retrievePersonUri(value, options),
     email: parseString(value[`${prefix}email`]?.['#text']),
-  }
+  })
 
   if (hasAllProps(person, ['name'])) {
     return person
@@ -64,11 +65,11 @@ export const parseCategory: ParseFunction<Category> = (value) => {
     return
   }
 
-  const category = {
+  const category = omitUndefinedFromObject({
     term: parseString(value['@term']),
     scheme: parseString(value['@scheme']),
     label: parseString(value['@label']),
-  }
+  })
 
   if (hasAllProps(category, ['term'])) {
     return category
@@ -91,11 +92,11 @@ export const parseGenerator: ParseFunction<Generator> = (value) => {
     return
   }
 
-  const generator = {
+  const generator = omitUndefinedFromObject({
     text: parseString(value?.['#text']),
     uri: retrieveGeneratorUri(value),
     version: parseString(value['@version']),
-  }
+  })
 
   if (hasAllProps(generator, ['text'])) {
     return generator
@@ -108,7 +109,7 @@ export const parseSource: ParseFunction<Source> = (value, options) => {
   }
 
   const prefix = options?.prefix ?? ''
-  const source = {
+  const source = omitUndefinedFromObject({
     authors: parseArrayOf(value[`${prefix}author`], (value) => parsePerson(value, options)),
     categories: parseArrayOf(value[`${prefix}category`], (value) => parseCategory(value, options)),
     contributors: parseArrayOf(value[`${prefix}contributor`], (value) =>
@@ -123,8 +124,9 @@ export const parseSource: ParseFunction<Source> = (value, options) => {
     subtitle: parseString(value[`${prefix}subtitle`]?.['#text']),
     title: parseString(value[`${prefix}title`]?.['#text']),
     updated: retrieveUpdated(value),
-  }
+  })
 
+  // TODO: This could be improved. Replace this with isEmptyObject().
   if (hasAnyProps(source, Object.keys(source) as Array<keyof Source>)) {
     return source
   }
@@ -176,7 +178,7 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
   }
 
   const prefix = options?.prefix ?? ''
-  const entry = {
+  const entry = omitUndefinedFromObject({
     authors: parseArrayOf(value[`${prefix}author`], (value) => parsePerson(value, options)),
     categories: parseArrayOf(value[`${prefix}category`], (value) => parseCategory(value, options)),
     content: parseString(value[`${prefix}content`]?.['#text']),
@@ -192,8 +194,9 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
     title: parseString(value[`${prefix}title`]?.['#text']),
     updated: retrieveUpdated(value, options),
     dc: options?.partial ? undefined : parseDcItemOrFeed(value),
-  }
+  })
 
+  // TODO: This could be improved. Replace this with isEmptyObject().
   if (options?.partial && hasAnyProps(entry, Object.keys(entry) as Array<keyof Entry>)) {
     return entry
   }
@@ -211,7 +214,7 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
   }
 
   const prefix = options?.prefix ?? ''
-  const feed = {
+  const feed = omitUndefinedFromObject({
     authors: parseArrayOf(value[`${prefix}author`], (value) => parsePerson(value, options)),
     categories: parseArrayOf(value[`${prefix}category`], (value) => parseCategory(value, options)),
     contributors: parseArrayOf(value[`${prefix}contributor`], (value) =>
@@ -229,8 +232,9 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
     entries: parseArrayOf(value[`${prefix}entry`], (value) => parseEntry(value, options)),
     dc: options?.partial ? undefined : parseDcItemOrFeed(value),
     sy: options?.partial ? undefined : parseSyFeed(value),
-  }
+  })
 
+  // TODO: This could be improved. Replace this with isEmptyObject().
   if (options?.partial && hasAnyProps(feed, Object.keys(feed) as Array<keyof Feed>)) {
     return feed
   }

@@ -1,5 +1,11 @@
 import type { ParseFunction } from '../../common/types'
-import { hasAnyProps, isObject, parseNumber, parseString } from '../../common/utils'
+import {
+  hasAnyProps,
+  isObject,
+  omitUndefinedFromObject,
+  parseNumber,
+  parseString,
+} from '../../common/utils'
 import type { Feed } from './types'
 
 export const parseFeed: ParseFunction<Feed> = (value) => {
@@ -7,12 +13,13 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     return
   }
 
-  const feed = {
+  const feed = omitUndefinedFromObject({
     updatePeriod: parseString(value['sy:updateperiod']?.['#text']),
     updateFrequency: parseNumber(value['sy:updatefrequency']?.['#text']),
     updateBase: parseString(value['sy:updatebase']?.['#text']),
-  }
+  })
 
+  // TODO: This could be improved. Replace this with isEmptyObject().
   if (hasAnyProps(feed, Object.keys(feed) as Array<keyof Feed>)) {
     return feed
   }

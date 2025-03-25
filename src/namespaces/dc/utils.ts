@@ -1,5 +1,5 @@
 import type { ParseFunction } from '../../common/types'
-import { hasAnyProps, isObject, parseString } from '../../common/utils'
+import { hasAnyProps, isObject, omitUndefinedFromObject, parseString } from '../../common/utils'
 import type { ItemOrFeed } from './types'
 
 export const parseItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
@@ -7,7 +7,7 @@ export const parseItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
     return
   }
 
-  const itemOrFeed = {
+  const itemOrFeed = omitUndefinedFromObject({
     title: parseString(value['dc:title']?.['#text']),
     creator: parseString(value['dc:creator']?.['#text']),
     subject: parseString(value['dc:subject']?.['#text']),
@@ -23,8 +23,9 @@ export const parseItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
     relation: parseString(value['dc:relation']?.['#text']),
     coverage: parseString(value['dc:coverage']?.['#text']),
     rights: parseString(value['dc:rights']?.['#text']),
-  }
+  })
 
+  // TODO: This could be improved. Replace this with isEmptyObject().
   if (hasAnyProps(itemOrFeed, Object.keys(itemOrFeed) as Array<keyof ItemOrFeed>)) {
     return itemOrFeed
   }

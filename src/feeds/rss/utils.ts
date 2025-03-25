@@ -4,6 +4,7 @@ import {
   hasAnyProps,
   isObject,
   omitNullish,
+  omitUndefinedFromObject,
   parseArrayOf,
   parseNumber,
   parseString,
@@ -32,14 +33,14 @@ export const parseTextInput: ParseFunction<TextInput> = (value) => {
     return
   }
 
-  const textInput = {
+  const textInput = omitUndefinedFromObject({
     title: parseString(value?.title?.['#text']),
     description: parseString(value?.description?.['#text']),
     name: parseString(value?.name?.['#text']),
     link: parseString(value?.link?.['#text']),
-  }
+  })
 
-  if (hasAllProps(textInput, Object.keys(textInput) as Array<keyof TextInput>)) {
+  if (hasAllProps(textInput, ['title', 'description', 'name', 'link'])) {
     return textInput
   }
 }
@@ -49,15 +50,15 @@ export const parseCloud: ParseFunction<Cloud> = (value) => {
     return
   }
 
-  const cloud = {
+  const cloud = omitUndefinedFromObject({
     domain: parseString(value?.['@domain']),
     port: parseNumber(value?.['@port']),
     path: parseString(value?.['@path']),
     registerProcedure: parseString(value?.['@registerprocedure']),
     protocol: parseString(value?.['@protocol']),
-  }
+  })
 
-  if (hasAllProps(cloud, Object.keys(cloud) as Array<keyof Cloud>)) {
+  if (hasAllProps(cloud, ['domain', 'port', 'path', 'registerProcedure', 'protocol'])) {
     return cloud
   }
 }
@@ -87,24 +88,28 @@ export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
     return
   }
 
-  const enclosure = {
+  const enclosure = omitUndefinedFromObject({
     url: parseString(value['@url']),
     length: parseNumber(value['@length']),
     type: parseString(value['@type']),
-  }
+  })
 
-  if (hasAllProps(enclosure, Object.keys(enclosure) as Array<keyof Enclosure>)) {
+  if (hasAllProps(enclosure, ['url', 'length', 'type'])) {
     return enclosure
   }
 }
 
 export const parseSource: ParseFunction<Source> = (value) => {
-  const source = {
-    title: parseString(value?.['#text']),
-    url: parseString(value?.['@url']),
+  if (!isObject(value)) {
+    return
   }
 
-  if (source.title) {
+  const source = omitUndefinedFromObject({
+    title: parseString(value?.['#text']),
+    url: parseString(value?.['@url']),
+  })
+
+  if (hasAllProps(source, ['title'])) {
     return source
   }
 }
@@ -114,14 +119,14 @@ export const parseImage: ParseFunction<Image> = (value) => {
     return
   }
 
-  const image = {
+  const image = omitUndefinedFromObject({
     url: parseString(value.url?.['#text']),
     title: parseString(value.title?.['#text']),
     link: parseString(value.link?.['#text']),
     description: parseString(value.description?.['#text']),
     height: parseNumber(value.height?.['#text']),
     width: parseNumber(value.width?.['#text']),
-  }
+  })
 
   if (hasAllProps(image, ['url', 'title', 'link'])) {
     return image
@@ -129,10 +134,14 @@ export const parseImage: ParseFunction<Image> = (value) => {
 }
 
 export const parseCategory: ParseFunction<Category> = (value) => {
-  const category = {
+  if (!isObject(value)) {
+    return
+  }
+
+  const category = omitUndefinedFromObject({
     name: parseString(value?.['#text']),
     domain: parseString(value?.['@domain']),
-  }
+  })
 
   if (category.name) {
     return category
@@ -148,7 +157,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     return
   }
 
-  const item = {
+  const item = omitUndefinedFromObject({
     title: parseString(value.title?.['#text']),
     link: parseString(value.link?.['#text']),
     description: parseString(value.description?.['#text']),
@@ -162,7 +171,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     content: parseContentItem(value),
     atom: parseAtomEntry(value),
     dc: parseDcItemOrFeed(value),
-  }
+  })
 
   if (hasAnyProps(item, ['title', 'description'])) {
     return item
@@ -174,7 +183,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     return
   }
 
-  const feed = {
+  const feed = omitUndefinedFromObject({
     title: parseString(value.title?.['#text']),
     link: parseString(value.link?.['#text']),
     description: parseString(value.description?.['#text']),
@@ -198,7 +207,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     atom: parseAtomFeed(value),
     dc: parseDcItemOrFeed(value),
     sy: parseSyFeed(value),
-  }
+  })
 
   // INFO: Spec also says about required "description" but this field is
   // not always present in feeds. We can still parse the feed without it.

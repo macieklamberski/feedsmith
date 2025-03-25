@@ -1,5 +1,11 @@
 import type { ParseFunction } from '../../common/types'
-import { hasAllProps, isObject, parseArrayOf, parseString } from '../../common/utils'
+import {
+  hasAllProps,
+  isObject,
+  omitUndefinedFromObject,
+  parseArrayOf,
+  parseString,
+} from '../../common/utils'
 import {
   parseEntry as parseAtomEntry,
   parseFeed as parseAtomFeed,
@@ -14,11 +20,11 @@ export const parseImage: ParseFunction<Image> = (value) => {
     return
   }
 
-  const image = {
+  const image = omitUndefinedFromObject({
     title: parseString(value.title?.['#text']),
     link: parseString(value.link?.['#text']),
     url: parseString(value.url?.['#text']),
-  }
+  })
 
   if (hasAllProps(image, ['title', 'link'])) {
     return image
@@ -34,14 +40,14 @@ export const parseItem: ParseFunction<Item> = (value) => {
     return
   }
 
-  const item = {
+  const item = omitUndefinedFromObject({
     title: parseString(value.title?.['#text']),
     link: parseString(value.link?.['#text']),
     description: parseString(value.description?.['#text']),
     atom: parseAtomEntry(value),
     content: parseContentItem(value),
     dc: parseDcItemOrFeed(value),
-  }
+  })
 
   if (hasAllProps(item, ['title', 'link'])) {
     return item
@@ -61,14 +67,14 @@ export const parseTextinput: ParseFunction<Textinput> = (value) => {
     return
   }
 
-  const textinput = {
+  const textinput = omitUndefinedFromObject({
     title: parseString(value.title?.['#text']),
     description: parseString(value.description?.['#text']),
     name: parseString(value.name?.['#text']),
     link: parseString(value.link?.['#text']),
-  }
+  })
 
-  if (hasAllProps(textinput, Object.keys(textinput) as Array<keyof Textinput>)) {
+  if (hasAllProps(textinput, ['title', 'description', 'name', 'link'])) {
     return textinput
   }
 }
@@ -82,7 +88,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     return
   }
 
-  const feed = {
+  const feed = omitUndefinedFromObject({
     title: parseString(value.channel?.title?.['#text']),
     link: parseString(value.channel?.link?.['#text']),
     description: parseString(value.channel?.description?.['#text']),
@@ -92,7 +98,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     atom: parseAtomFeed(value.channel),
     dc: parseDcItemOrFeed(value.channel),
     sy: parseSyFeed(value.channel),
-  }
+  })
 
   if (hasAllProps(feed, ['title', 'items'])) {
     return feed
