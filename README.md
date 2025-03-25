@@ -4,7 +4,7 @@ Modern JavaScript utility for parsing JSON Feed, Atom, RSS, and RDF feeds, with 
 
 [![tests](https://github.com/macieklamberski/feedsmith/actions/workflows/test.yml/badge.svg)](https://github.com/macieklamberski/feedsmith/actions/workflows/test.yml)
 [![npm version](https://img.shields.io/npm/v/feedsmith.svg)](https://www.npmjs.com/package/feedsmith)
-[![license](https://img.shields.io/npm/l/feedsmith.svg)](https://github.com/feedsmith/feedsmith/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/feedsmith.svg)](https://github.com/macieklamberski/feedsmith/blob/main/LICENSE)
 
 ## Features
 
@@ -395,4 +395,4 @@ Even though Feedsmith is more suited for the Node.js environments, it was also t
 ## License
 
 Licensed under the [MIT](LICENSE) license.<br/>
-Copyright © 2025, Maciej Lamberski
+Copyright 2025 Maciej Lamberski
