@@ -4,7 +4,6 @@ import { itemOrFeed as dcItemOrFeed } from '../../namespaces/dc/schemas'
 import { feed as syndicationNamespaceFeed } from '../../namespaces/sy/schemas'
 import { entry as atomEntry, feed as atomFeed } from '../atom/schemas'
 
-// TODO: Consider replacing this with breaking up the author string to { name, email }.
 export const author = z.string()
 
 export const category = z
@@ -32,7 +31,6 @@ export const enclosure = z
   })
   .partial()
 
-// TODO: Consider replacing this with an object { id, isPermalink }.
 export const guid = z.string()
 
 export const source = z
