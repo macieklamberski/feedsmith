@@ -41,10 +41,13 @@ Modern JavaScript utility for parsing JSON Feed, Atom, RSS, and RDF feeds, with 
 * [x] [Dublin Core](http://purl.org/dc/elements/1.1/) (`<dc:*>`)
 * [x] [Syndication](http://purl.org/rss/1.0/modules/syndication/) (`<sy:*>`)
 * [x] [Content](http://purl.org/rss/1.0/modules/content/) (`<content:*>`)
-* [ ] 🏗️ [Dublin Core Terms](http://purl.org/dc/terms/) (`<dcterms:*>`)
+* [ ] 🏗️ [iTunes](http://www.itunes.com/dtds/podcast-1.0.dtd) (`<itunes:*>`)
+* [ ] 🏗️ [Podcast](https://podcastindex.org/namespace/1.0) (`<podcast:*>`)
 * [ ] 🏗️ [Media RSS](http://search.yahoo.com/mrss/) (`<media:*>`)
 * [ ] 🏗️ [Geo RSS](http://www.georss.org/georss) (`<georss:*>`)
-* [ ] 🏗️ [iTunes](http://www.itunes.com/dtds/podcast-1.0.dtd) (`<itunes:*>`)
+* [ ] 🏗️ [Dublin Core Terms](http://purl.org/dc/terms/) (`<dcterms:*>`)
+* [ ] 🏗️ [Administrative](https://web.resource.org/rss/1.0/modules/admin/) (`<admin:*>`)
+* [ ] 🏗️ [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) (`<thr:*>`)
 * [ ] Need something else?
 
 ## Installation
