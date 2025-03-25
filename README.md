@@ -101,11 +101,11 @@ const rssFeed = parseRssFeed(rssContent)
 const rdfFeed = parseRdfFeed(rdfContent)
 
 // Then read the TypeScript suggestions for the specific feed type.
-rssFeed?.title
-rssFeed?.dc?.creator
-rssFeed?.dc?.date
-rssFeed?.sy?.updateBase
-rssFeed?.items?.[0]?.title
+rssFeed.title
+rssFeed.dc?.creator
+rssFeed.dc?.date
+rssFeed.sy?.updateBase
+rssFeed.items?.[0]?.title
 ```
 
 ### Returned values
@@ -136,12 +136,12 @@ const atomFeed = parseAtomFeed(`
   </feed>
 `)
 
-atomFeed?.title // → Example Feed
-atomFeed?.dc?.contributor // → Jane Smith
-atomFeed?.dc?.date // → 2022-01-01T12:00+00:00
-atomFeed?.sy?.updateFrequency // → 1
-atomFeed?.entries?.[0]?.title // → Example Entry
-atomFeed?.entries?.[0]?.dc?.creator // → Jack Jackson
+atomFeed.title // → Example Feed
+atomFeed.dc?.contributor // → Jane Smith
+atomFeed.dc?.date // → 2022-01-01T12:00+00:00
+atomFeed.sy?.updateFrequency // → 1
+atomFeed.entries?.[0]?.title // → Example Entry
+atomFeed.entries?.[0]?.dc?.creator // → Jack Jackson
 ```
 
 Returns:
@@ -236,10 +236,10 @@ const rssFeed = parseRssFeed(`
   </rss>
 `)
 
-rssFeed?.title // → Sample Feed
-rssFeed?.textInput?.description // → Search this site:
-rssFeed?.items?.length // → 1
-rssFeed?.items?.[0]?.enclosure?.url // → http://example.org/audio/demo.mp3
+rssFeed.title // → Sample Feed
+rssFeed.textInput?.description // → Search this site:
+rssFeed.items?.length // → 1
+rssFeed.items?.[0]?.enclosure?.url // → http://example.org/audio/demo.mp3
 ```
 
 Returns:
