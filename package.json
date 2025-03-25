@@ -1,5 +1,5 @@
 {
-  "name": "parsser",
+  "name": "feedsmith",
   "description": "Modern JavaScript utility for parsing JSON Feed, Atom, RSS, and RDF feeds, with support for Dublin Core, Syndication, iTunes, and many other popular namespaces.",
   "license": "MIT",
   "author": "Maciej Lamberski",

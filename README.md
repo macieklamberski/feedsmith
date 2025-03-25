@@ -1,10 +1,10 @@
-# Parsser
+# Feedsmith
 
 Modern JavaScript utility for parsing JSON Feed, Atom, RSS, and RDF feeds, with support for popular namespaces.
 
-[![tests](https://github.com/macieklamberski/parsser/actions/workflows/test.yml/badge.svg)](https://github.com/macieklamberski/parsser/actions/workflows/test.yml)
-[![npm version](https://img.shields.io/npm/v/parsser.svg)](https://www.npmjs.com/package/parsser)
-[![license](https://img.shields.io/npm/l/parsser.svg)](https://github.com/yourusername/parsser/blob/main/LICENSE)
+[![tests](https://github.com/macieklamberski/feedsmith/actions/workflows/test.yml/badge.svg)](https://github.com/macieklamberski/feedsmith/actions/workflows/test.yml)
+[![npm version](https://img.shields.io/npm/v/feedsmith.svg)](https://www.npmjs.com/package/feedsmith)
+[![license](https://img.shields.io/npm/l/feedsmith.svg)](https://github.com/feedsmith/feedsmith/blob/main/LICENSE)
 
 ## Features
 
@@ -14,7 +14,7 @@ Modern JavaScript utility for parsing JSON Feed, Atom, RSS, and RDF feeds, with 
 * Dublin Core, Syndication, Content, and Atom namespace support. Support for other namespaces is in the works.
 
 #### Advantages
-* Get access to all the information in the feed, as Parsser preserves the original feed structure exactly as provided in each specific format. TypeScript type definitions are available for each feed type, making it easy to work with the data.
+* Get access to all the information in the feed, as Feedsmith preserves the original feed structure exactly as provided in each specific format. TypeScript type definitions are available for each feed type, making it easy to work with the data.
 
 #### Leniency
 * **Normalizes legacy elements** ✨ — Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
@@ -50,7 +50,7 @@ Modern JavaScript utility for parsing JSON Feed, Atom, RSS, and RDF feeds, with 
 ## Installation
 
 ```bash
-npm install parsser
+npm install feedsmith
 ```
 
 ## Parsing feeds
@@ -60,7 +60,7 @@ npm install parsser
 The easiest way to parse any feed is to use the universal `parseFeed` function:
 
 ```ts
-import { parseFeed } from 'parsser'
+import { parseFeed } from 'feedsmith'
 
 const { type, feed } = parseFeed('feedContent')
 
@@ -89,7 +89,7 @@ if (type === 'rdf') {
 If you know the format in advance, you can use the format-specific parsers:
 
 ```ts
-import { parseAtomFeed, parseJsonFeed, parseRssFeed, parseRdfFeed } from 'parsser'
+import { parseAtomFeed, parseJsonFeed, parseRssFeed, parseRdfFeed } from 'feedsmith'
 
 // Parse the feed content.
 const atomFeed = parseAtomFeed(atomContent)
@@ -110,7 +110,7 @@ rssFeed?.items?.[0]?.title
 The objects returned from the parser functions are highly comprehensive, aiming to recreate the actual feed structure and its values, including all the supported namespaces. Below are some examples of what is available.
 
 ```ts
-import { parseAtomFeed } from 'parsser'
+import { parseAtomFeed } from 'feedsmith'
 
 const atomFeed = parseAtomFeed(`
   <?xml version="1.0" encoding="utf-8"?>
@@ -175,7 +175,7 @@ Returns:
 <summary>Example of a more complex RSS feed 📜</summary>
 
 ```ts
-import { parseRssFeed } from 'parsser'
+import { parseRssFeed } from 'feedsmith'
 
 const rssFeed = parseRssFeed(`
   <?xml version="1.0" encoding="utf-8"?>
@@ -299,17 +299,17 @@ Returns:
 
 For more examples, check the _*/references_ folders located in the source code. There, you'll find the complete objects returned from the parser functions for all feed formats and versions.
 
-* Atom examples: [src/feeds/atom/references](https://github.com/macieklamberski/parsser/blob/main/src/feeds/atom/references),
-* JSON examples: [src/feeds/json/references](https://github.com/macieklamberski/parsser/blob/main/src/feeds/json/references),
-* RSS examples: [src/feeds/rss/references](https://github.com/macieklamberski/parsser/blob/main/src/feeds/rss/references),
-* RDF examples: [src/feeds/rdf/references](https://github.com/macieklamberski/parsser/blob/main/src/feeds/rdf/references).
+* Atom examples: [src/feeds/atom/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/atom/references),
+* JSON examples: [src/feeds/json/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/json/references),
+* RSS examples: [src/feeds/rss/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/rss/references),
+* RDF examples: [src/feeds/rdf/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/rdf/references).
 
 ### Error handling
 
 If the feed is unrecognized or invalid, an `Error` will be thrown with a descriptive message.
 
 ```ts
-import { parseFeed, parseJsonFeed } from 'parsser'
+import { parseFeed, parseJsonFeed } from 'feedsmith'
 
 try {
   const universalFeed = parseFeed('<not-a-feed></not-a-feed>')
@@ -329,7 +329,7 @@ try {
 You can detect feed formats without parsing them.
 
 ```ts
-import { detectAtomFeed, detectJsonFeed, detectRssFeed, detectRdfFeed } from 'parsser'
+import { detectAtomFeed, detectJsonFeed, detectRssFeed, detectRdfFeed } from 'feedsmith'
 
 if (detectAtomFeed(content)) {
   console.log('This is an Atom feed')
@@ -348,13 +348,13 @@ if (detectRdfFeed(content)) {
 }
 ```
 
-**⚠️ Important note:** Detect functions are designed to quickly identify the type of feed. They specifically search for the signature of the feed, such as the `<rss>` tag in the case of RSS feeds. However, it is possible for the function to detect an RSS feed, even if that feed is invalid. Only when using the `parseRssFeed` function will the feed be fully validated.
+**⚠️ Important note:** Detect functions are designed to quickly identify the type of feed by searching for the signature of the feed, such as the `<rss>` tag in the case of RSS feeds. However, it is possible for the function to detect an RSS feed, even if that feed is invalid. Only when using the `parseRssFeed` function will the feed be fully validated.
 
 ## FAQ
 
-### Why should I use Parsser instead of alternative modules?
+### Why should I use Feedsmith instead of alternative modules?
 
-As stated in the Features section, the key advantage of Parsser is that it preserves the original feed structure exactly as provided in each specific feed format.
+As stated in the Features section, the key advantage of Feedsmith is that it preserves the original feed structure exactly as provided in each specific feed format.
 
 Many competing packages attempt to normalize data by:
 * Merging distinct fields like `author`, `dc:creator`, and `creator` into a single property.
@@ -363,25 +363,25 @@ Many competing packages attempt to normalize data by:
 
 Some libraries try to combine different feed formats into one universal structure, which can lead to loss of information.
 
-Also, Parsser is a bit faster than other packages. Still, this is not a very differentiated space and other newer packages can catch up.
+Also, Feedsmith is a bit faster than other packages. Still, this is not a very differentiated space and other newer packages can catch up.
 
 ### Why are date fields returned as strings?
 
 In the course of parsing hundreds of thousands of feeds, we've found that dates in feeds use many different formats. Rather than attempting to parse them all (and potentially introducing errors), we return dates in their original string form, allowing you to use your preferred date parsing library.
 
-### Does Parsser validate feeds?
+### Does Feedsmith validate feeds?
 
-Parsser focuses on parsing feeds rather than validating them. It will extract whatever valid data it can find, even from partially valid feeds. This approach makes it more resilient when dealing with feeds found in the wild.
+Feedsmith focuses on parsing feeds rather than validating them. It will extract whatever valid data it can find, even from partially valid feeds. This approach makes it more resilient when dealing with feeds found in the wild.
 
 It will only fail if the feed is completely invalid or it does not contain all the fields required according to the specification.
 
-### How does Parsser handle missing or incomplete data?
+### How does Feedsmith handle missing or incomplete data?
 
-Parsser is designed to be forgiving. It will extract whatever valid data it can find and ignore missing or invalid elements. This makes it suitable for use with real-world feeds that may not strictly follow specifications.
+Feedsmith is designed to be forgiving. It will extract whatever valid data it can find and ignore missing or invalid elements. This makes it suitable for use with real-world feeds that may not strictly follow specifications.
 
-### Does Parsser work in the browser?
+### Does Feedsmith work in the browser?
 
-Even though Parsser is more suited for the Node.js environments, it was also tested in modern browsers where it works seamlessly. It's provided as an ES module.
+Even though Feedsmith is more suited for the Node.js environments, it was also tested in modern browsers where it works seamlessly. It's provided as an ES module.
 
 ## Acknowledgements
 
