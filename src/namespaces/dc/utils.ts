@@ -1,5 +1,10 @@
 import type { ParseFunction } from '../../common/types'
-import { hasAnyProps, isObject, omitUndefinedFromObject, parseString } from '../../common/utils'
+import {
+  isNonEmptyObject,
+  isObject,
+  omitUndefinedFromObject,
+  parseString,
+} from '../../common/utils'
 import type { ItemOrFeed } from './types'
 
 export const parseItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
@@ -25,8 +30,7 @@ export const parseItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
     rights: parseString(value['dc:rights']?.['#text']),
   })
 
-  // TODO: This could be improved. Replace this with isEmptyObject().
-  if (hasAnyProps(itemOrFeed, Object.keys(itemOrFeed) as Array<keyof ItemOrFeed>)) {
+  if (isNonEmptyObject(itemOrFeed)) {
     return itemOrFeed
   }
 }

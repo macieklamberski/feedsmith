@@ -1,6 +1,6 @@
 import {
   hasAllProps,
-  hasAnyProps,
+  isNonEmptyObject,
   isObject,
   omitUndefinedFromObject,
   parseArrayOf,
@@ -126,8 +126,7 @@ export const parseSource: ParseFunction<Source> = (value, options) => {
     updated: retrieveUpdated(value),
   })
 
-  // TODO: This could be improved. Replace this with isEmptyObject().
-  if (hasAnyProps(source, Object.keys(source) as Array<keyof Source>)) {
+  if (isNonEmptyObject(source)) {
     return source
   }
 }
@@ -196,8 +195,7 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
     dc: options?.partial ? undefined : parseDcItemOrFeed(value),
   })
 
-  // TODO: This could be improved. Replace this with isEmptyObject().
-  if (options?.partial && hasAnyProps(entry, Object.keys(entry) as Array<keyof Entry>)) {
+  if (options?.partial && isNonEmptyObject(entry)) {
     return entry
   }
 
@@ -234,8 +232,7 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
     sy: options?.partial ? undefined : parseSyFeed(value),
   })
 
-  // TODO: This could be improved. Replace this with isEmptyObject().
-  if (options?.partial && hasAnyProps(feed, Object.keys(feed) as Array<keyof Feed>)) {
+  if (options?.partial && isNonEmptyObject(feed)) {
     return feed
   }
 

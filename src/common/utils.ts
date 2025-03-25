@@ -3,11 +3,25 @@ import type { ParseFunction, Unreliable } from './types'
 
 export const isObject = (value: Unreliable): value is Record<string, Unreliable> => {
   return (
-    typeof value === 'object' &&
     value !== null &&
+    typeof value === 'object' &&
     !Array.isArray(value) &&
     Object.getPrototypeOf(value) === Object.prototype
   )
+}
+
+export const isNonEmptyObject = (value: Unreliable): value is Record<string, Unreliable> => {
+  if (!isObject(value)) {
+    return false
+  }
+
+  for (const key in value) {
+    if (Object.prototype.hasOwnProperty.call(value, key)) {
+      return true
+    }
+  }
+
+  return false
 }
 
 export const hasAnyProps = <T extends Record<string, Unreliable>, K extends keyof T>(

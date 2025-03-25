@@ -3,6 +3,7 @@ import type { ParseFunction } from './types'
 import {
   hasAllProps,
   hasAnyProps,
+  isNonEmptyObject,
   isNonEmptyStringOrNumber,
   isObject,
   omitNullishFromArray,
@@ -71,6 +72,71 @@ describe('isObject', () => {
     // biome-ignore lint/complexity/useRegexLiterals: It's for testing purposes.
     expect(isObject(new RegExp('.'))).toEqual(false)
     expect(isObject(new ArrayBuffer(10))).toEqual(false)
+  })
+})
+
+describe('isNonEmptyObject', () => {
+  it('should return true for non-empty plain objects', () => {
+    expect(isNonEmptyObject({ a: 1 })).toEqual(true)
+    expect(isNonEmptyObject({ key: undefined })).toEqual(true)
+    expect(isNonEmptyObject({ key: null })).toEqual(true)
+    expect(isNonEmptyObject({ toString: () => 'custom' })).toEqual(true)
+  })
+
+  it('should return false for empty plain objects', () => {
+    expect(isNonEmptyObject({})).toEqual(false)
+    expect(isNonEmptyObject(Object.create(Object.prototype))).toEqual(false)
+  })
+
+  it('should return false for arrays', () => {
+    expect(isNonEmptyObject([])).toEqual(false)
+    expect(isNonEmptyObject([1, 2, 3])).toEqual(false)
+    expect(isNonEmptyObject(new Array(5))).toEqual(false)
+  })
+
+  it('should return false for null', () => {
+    expect(isNonEmptyObject(null)).toEqual(false)
+  })
+
+  it('should return false for undefined', () => {
+    expect(isNonEmptyObject(undefined)).toEqual(false)
+  })
+
+  it('should return false for primitive types', () => {
+    expect(isNonEmptyObject(42)).toEqual(false)
+    expect(isNonEmptyObject('string')).toEqual(false)
+    expect(isNonEmptyObject(true)).toEqual(false)
+    expect(isNonEmptyObject(Symbol('sym'))).toEqual(false)
+    expect(isNonEmptyObject(BigInt(123))).toEqual(false)
+  })
+
+  it('should return false for functions', () => {
+    expect(isNonEmptyObject(() => {})).toEqual(false)
+    // biome-ignore lint/complexity/useArrowFunction: It's for testing purposes.
+    expect(isNonEmptyObject(function () {})).toEqual(false)
+    expect(isNonEmptyObject(Math.sin)).toEqual(false)
+  })
+
+  it('should return false for objects with custom prototypes', () => {
+    expect(isNonEmptyObject(Object.create(null))).toEqual(false)
+
+    const protoObj = Object.create({})
+    expect(isNonEmptyObject(protoObj)).toEqual(false)
+
+    class CustomClass {}
+    expect(isNonEmptyObject(new CustomClass())).toEqual(false)
+  })
+
+  it('should return false for built-in objects', () => {
+    expect(isNonEmptyObject(new Date())).toEqual(false)
+    expect(isNonEmptyObject(new Error())).toEqual(false)
+    expect(isNonEmptyObject(new Map())).toEqual(false)
+    expect(isNonEmptyObject(new Set())).toEqual(false)
+    expect(isNonEmptyObject(new WeakMap())).toEqual(false)
+    expect(isNonEmptyObject(new WeakSet())).toEqual(false)
+    // biome-ignore lint/complexity/useRegexLiterals: It's for testing purposes.
+    expect(isNonEmptyObject(new RegExp('.'))).toEqual(false)
+    expect(isNonEmptyObject(new ArrayBuffer(10))).toEqual(false)
   })
 })
 

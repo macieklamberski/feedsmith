@@ -1,6 +1,6 @@
 import type { ParseFunction } from '../../common/types'
 import {
-  hasAnyProps,
+  isNonEmptyObject,
   isObject,
   omitUndefinedFromObject,
   parseNumber,
@@ -19,8 +19,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     updateBase: parseString(value['sy:updatebase']?.['#text']),
   })
 
-  // TODO: This could be improved. Replace this with isEmptyObject().
-  if (hasAnyProps(feed, Object.keys(feed) as Array<keyof Feed>)) {
+  if (isNonEmptyObject(feed)) {
     return feed
   }
 }
