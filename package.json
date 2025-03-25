@@ -36,8 +36,8 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@semantic-release/changelog": "^6.0.3",
-    "@types/bun": "^1.2.5",
-    "lefthook": "^1.11.4",
+    "@types/bun": "^1.2.6",
+    "lefthook": "^1.11.5",
     "semantic-release": "^24.2.3",
     "typescript": "^5.8.2",
     "zod": "^3.24.2"
