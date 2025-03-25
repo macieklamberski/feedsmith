@@ -1,10 +1,5 @@
 import { z } from 'zod'
 
-// TODO: Add option to define custom fields starting with underscore. Those fields should not be
-// stripped from the object when parsing and should not raise validation errors if they start with
-// the correct underscore character. For any custom fields not starting with underscore raise an
-// error. More details here: https://www.jsonfeed.org/version/1.1/#extensions-a-name-extensions-a.
-
 export const author = z
   .object({
     name: z.string(),
