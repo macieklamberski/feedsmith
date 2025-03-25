@@ -6,6 +6,7 @@ import {
   isNonEmptyStringOrNumber,
   isObject,
   omitNullish,
+  omitUndefinedFromObject,
   parseArray,
   parseArrayOf,
   parseBoolean,
@@ -216,6 +217,88 @@ describe('isNonEmptyStringOrNumber', () => {
   })
 })
 
+describe('omitUndefinedFromObject', () => {
+  it('should remove undefined properties from objects', () => {
+    const input = { a: 1, b: undefined, c: 'string', d: undefined, e: null, f: false, g: 0, h: '' }
+    const expected = { a: 1, c: 'string', e: null, f: false, g: 0, h: '' }
+
+    expect(omitUndefinedFromObject(input)).toEqual(expected)
+  })
+
+  it('should return an empty object when all properties are undefined', () => {
+    const input = { a: undefined, b: undefined, c: undefined }
+    const expected = {}
+
+    expect(omitUndefinedFromObject(input)).toEqual(expected)
+  })
+
+  it('should return the same object when no properties are undefined', () => {
+    const input = { a: 1, b: 'string', c: null, d: false, e: [], f: {} }
+
+    expect(omitUndefinedFromObject(input)).toEqual(input)
+  })
+
+  it('should handle empty objects', () => {
+    expect(omitUndefinedFromObject({})).toEqual({})
+  })
+
+  it('should handle objects with inherited properties', () => {
+    const proto = { inherited: 'value' }
+    const obj = Object.create(proto)
+    obj.own = 'property'
+    obj.undef = undefined
+
+    expect(omitUndefinedFromObject(obj)).toEqual({ own: 'property' })
+  })
+
+  it('should preserve falsy non-undefined values', () => {
+    const input = { a: 0, b: '', c: false, d: null, e: Number.NaN }
+
+    expect(omitUndefinedFromObject(input)).toEqual(input)
+  })
+
+  it('should handle objects with symbol keys', () => {
+    const sym = Symbol('test')
+    const input = { a: 1, b: undefined, [sym]: 'symbol value' }
+
+    const result = omitUndefinedFromObject(input)
+    expect(result.a).toEqual(1)
+    expect(result.b).toBeUndefined()
+    expect(result[sym]).toBeUndefined() // Symbol keys are not enumerable with for..in.
+  })
+
+  it('should handle complex nested objects', () => {
+    const input = {
+      a: { nested: 'value', undef: undefined },
+      b: undefined,
+      c: [1, undefined, 3],
+    }
+    const expected = {
+      a: { nested: 'value', undef: undefined },
+      c: [1, undefined, 3],
+    }
+
+    // The function only removes top-level undefined properties, not those in nested objects.
+    expect(omitUndefinedFromObject(input)).toEqual(expected)
+  })
+
+  it('should handle object with getters', () => {
+    const input = {
+      get a() {
+        return 1
+      },
+      get b() {
+        return undefined
+      },
+    }
+
+    const result = omitUndefinedFromObject(input)
+    expect(result.a).toEqual(1)
+    expect(result.b).toBeUndefined()
+    expect('b' in result).toBe(false)
+  })
+})
+
 describe('omitNullish', () => {
   it('should filter out null and undefined values', () => {
     expect(omitNullish([1, null, 2, undefined, 3])).toEqual([1, 2, 3])
@@ -228,12 +311,10 @@ describe('omitNullish', () => {
   })
 
   it('should keep falsy values that are not null or undefined', () => {
-    expect(omitNullish([0, '', false, null, undefined, Number.NaN])).toEqual([
-      0,
-      '',
-      false,
-      Number.NaN,
-    ])
+    const input = [0, '', false, null, undefined, Number.NaN]
+    const expected = [0, '', false, Number.NaN]
+
+    expect(omitNullish(input)).toEqual(expected)
   })
 
   it('should work with complex objects', () => {
@@ -245,8 +326,9 @@ describe('omitNullish', () => {
 
   it('should preserve the order of non-nullish elements', () => {
     const value = ['first', null, 'second', undefined, 'third']
+    const expected = ['first', 'second', 'third']
 
-    expect(omitNullish(value)).toEqual(['first', 'second', 'third'])
+    expect(omitNullish(value)).toEqual(expected)
   })
 
   it('should handle arrays with only nullish values', () => {
@@ -255,8 +337,9 @@ describe('omitNullish', () => {
 
   it('should handle mixed type arrays', () => {
     const value = [1, 'string', true, null, { key: 'value' }, undefined, []]
+    const expected = [1, 'string', true, { key: 'value' }, []]
 
-    expect(omitNullish(value)).toEqual([1, 'string', true, { key: 'value' }, []])
+    expect(omitNullish(value)).toEqual(expected)
   })
 })
 

@@ -40,6 +40,20 @@ export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | n
   return value !== '' && (typeof value === 'string' || typeof value === 'number')
 }
 
+export const omitUndefinedFromObject = <T extends Record<string, unknown>>(
+  object: T,
+): Partial<T> => {
+  const result: Partial<T> = {}
+
+  for (const key in object) {
+    if (Object.prototype.hasOwnProperty.call(object, key) && object[key] !== undefined) {
+      result[key] = object[key]
+    }
+  }
+
+  return result
+}
+
 export const omitNullish = <T>(array: Array<T | null | undefined>): Array<T> => {
   return array.filter((item): item is T => item !== null && item !== undefined)
 }
