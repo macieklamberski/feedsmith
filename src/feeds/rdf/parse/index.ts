@@ -1,4 +1,4 @@
-import { locales } from '../../common/config'
+import { locales } from '../../../common/config'
 import { parser } from './config'
 import type { Feed } from './types'
 import { retrieveFeed } from './utils'

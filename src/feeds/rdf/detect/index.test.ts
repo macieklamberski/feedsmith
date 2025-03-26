@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { detect } from './detect'
+import { detect } from './index'
 
 describe('detect', () => {
   test('detect valid RDF feed with xmlns declaration', () => {
