@@ -1,6 +1,6 @@
 import { detect as detectAtomFeed } from '../feeds/atom/detect'
-import { parse as parseAtomFeed } from '../feeds/atom/parse'
-import type { Feed as AtomFeed } from '../feeds/atom/types'
+import { parse as parseAtomFeed } from '../feeds/atom/parse/index'
+import type { Feed as AtomFeed } from '../feeds/atom/parse/types'
 import { detect as detectJsonFeed } from '../feeds/json/detect'
 import { parse as parseJsonFeed } from '../feeds/json/parse/index'
 import type { Feed as JsonFeed } from '../feeds/json/parse/types'

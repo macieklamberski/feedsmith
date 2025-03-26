@@ -6,9 +6,9 @@ import {
   parseArrayOf,
   parseNumber,
   parseString,
-} from '../../common/utils'
-import { parseItemOrFeed as parseDcItemOrFeed } from '../../namespaces/dc/utils'
-import { parseFeed as parseSyFeed } from '../../namespaces/sy/utils'
+} from '../../../common/utils'
+import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils'
+import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils'
 import type { ParseFunction } from './types'
 import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types'
 

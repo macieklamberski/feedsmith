@@ -1,9 +1,9 @@
 export { parse as parseFeed } from './common/parse'
 export type { Feed } from './common/parse'
 
-export { parse as parseAtomFeed } from './feeds/atom/parse'
-export type { Feed as AtomFeed } from './feeds/atom/types'
-export { detect as detectAtomFeed } from './feeds/atom/detect'
+export { parse as parseAtomFeed } from './feeds/atom/parse/index'
+export type { Feed as AtomFeed } from './feeds/atom/parse/types'
+export { detect as detectAtomFeed } from './feeds/atom/detect/index'
 
 export { parse as parseJsonFeed } from './feeds/json/parse/index'
 export type { Feed as JsonFeed } from './feeds/json/parse/types'

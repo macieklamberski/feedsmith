@@ -1,6 +1,9 @@
 import type { ParseFunction } from '../../common/types'
-import type { Entry, Feed } from '../../feeds/atom/types'
-import { parseEntry as parseAtomEntry, parseFeed as parseAtomFeed } from '../../feeds/atom/utils'
+import type { Entry, Feed } from '../../feeds/atom/parse/types'
+import {
+  parseEntry as parseAtomEntry,
+  parseFeed as parseAtomFeed,
+} from '../../feeds/atom/parse/utils'
 
 export const parseEntry: ParseFunction<Entry> = (value) => {
   return (
