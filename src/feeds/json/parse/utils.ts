@@ -1,7 +1,8 @@
-import type { ParseFunction } from '../../common/types'
+import type { ParseFunction } from '../../../common/types'
 import {
   hasAllProps,
   hasAnyProps,
+  isNonEmptyObject,
   isNonEmptyStringOrNumber,
   isObject,
   omitNullishFromArray,
@@ -10,7 +11,7 @@ import {
   parseBoolean,
   parseNumber,
   parseString,
-} from '../../common/utils'
+} from '../../../common/utils'
 import type { Attachment, Author, Feed, Hub, Item } from './types'
 
 export const createCaseInsensitiveGetter = (
@@ -49,7 +50,7 @@ export const parseAuthor: ParseFunction<Author> = (value) => {
       avatar: parseString(get('avatar')),
     })
 
-    return author.name || author.url || author.avatar ? author : undefined
+    return isNonEmptyObject(author) ? author : undefined
   }
 
   if (isNonEmptyStringOrNumber(value)) {
