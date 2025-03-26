@@ -7,9 +7,9 @@ import type { Feed as JsonFeed } from '../feeds/json/parse/types'
 import { detect as detectRdfFeed } from '../feeds/rdf/detect'
 import { parse as parseRdfFeed } from '../feeds/rdf/parse'
 import type { Feed as RdfFeed } from '../feeds/rdf/types'
-import { detect as detectRssFeed } from '../feeds/rss/detect'
-import { parse as parseRssFeed } from '../feeds/rss/parse'
-import type { Feed as RssFeed } from '../feeds/rss/types'
+import { detect as detectRssFeed } from '../feeds/rss/detect/index'
+import { parse as parseRssFeed } from '../feeds/rss/parse/index'
+import type { Feed as RssFeed } from '../feeds/rss/parse/types'
 import { locales } from './config'
 
 export type Feed =

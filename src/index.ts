@@ -9,9 +9,9 @@ export { parse as parseJsonFeed } from './feeds/json/parse/index'
 export type { Feed as JsonFeed } from './feeds/json/parse/types'
 export { detect as detectJsonFeed } from './feeds/json/detect/index'
 
-export { parse as parseRssFeed } from './feeds/rss/parse'
-export type { Feed as RssFeed } from './feeds/rss/types'
-export { detect as detectRssFeed } from './feeds/rss/detect'
+export { parse as parseRssFeed } from './feeds/rss/parse/index'
+export type { Feed as RssFeed } from './feeds/rss/parse/types'
+export { detect as detectRssFeed } from './feeds/rss/detect/index'
 
 export { parse as parseRdfFeed } from './feeds/rdf/parse'
 export type { Feed as RdfFeed } from './feeds/rdf/types'
