@@ -1,11 +1,38 @@
-import type z from 'zod'
-import type { feed } from './schemas'
-import type { image, item, textinput } from './schemas'
+import type { Item as ContentItem } from '../../namespaces/content/types'
+import type { ItemOrFeed as DcItemOrFeed } from '../../namespaces/dc/types'
+import type { Feed as SyFeed } from '../../namespaces/sy/types'
+import type { Entry as AtomEntry, Feed as AtomFeed } from '../atom/types'
 
-export type Image = z.infer<typeof image>
+export type Image = {
+  title?: string
+  link?: string
+  url?: string
+}
 
-export type Textinput = z.infer<typeof textinput>
+export type Textinput = {
+  title?: string
+  description?: string
+  name?: string
+  link?: string
+}
 
-export type Item = z.infer<typeof item>
+export type Item = {
+  title?: string
+  link?: string
+  description?: string
+  atom?: AtomEntry
+  content?: ContentItem
+  dc?: DcItemOrFeed
+}
 
-export type Feed = z.infer<typeof feed>
+export type Feed = {
+  title?: string
+  link?: string
+  description?: string
+  image?: Image
+  items?: Array<Item>
+  textinput?: Textinput
+  atom?: AtomFeed
+  dc?: DcItemOrFeed
+  sy?: SyFeed
+}

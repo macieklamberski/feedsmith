@@ -1,21 +1,84 @@
-import type z from 'zod'
 import type { ParseFunction as CommonParseFunction } from '../../common/types'
-import type { category, entry, feed, generator, link, person, source, text } from './schemas'
+import type { ItemOrFeed as DcItemOrFeed } from '../../namespaces/dc/types'
+import type { Feed as SyFeed } from '../../namespaces/sy/types'
 
 export type ParseFunction<R> = CommonParseFunction<R, { prefix?: string; partial?: boolean }>
 
-export type Text = z.infer<typeof text>
+// For simplicity's sake, a string is used for now, but this may be reconsidered in the future.
+export type Text = string
 
-export type Link = z.infer<typeof link>
+export type Link = {
+  href?: string
+  rel?: string
+  type?: string
+  hreflang?: string
+  title?: string
+  length?: number
+}
 
-export type Person = z.infer<typeof person>
+export type Person = {
+  name?: string
+  uri?: string
+  email?: string
+}
 
-export type Category = z.infer<typeof category>
+export type Category = {
+  term?: string
+  scheme?: string
+  label?: string
+}
 
-export type Generator = z.infer<typeof generator>
+export type Generator = {
+  text?: string
+  uri?: string
+  version?: string
+}
 
-export type Source = z.infer<typeof source>
+export type Source = {
+  authors?: Array<Person>
+  categories?: Array<Category>
+  contributors?: Array<Person>
+  generator?: Generator
+  icon?: string
+  id?: string
+  links?: Array<Link>
+  logo?: string
+  rights?: Text
+  subtitle?: Text
+  title?: Text
+  updated?: string
+}
 
-export type Entry = z.infer<typeof entry>
+export type Entry = {
+  authors?: Array<Person>
+  categories?: Array<Category>
+  content?: Text
+  contributors?: Array<Person>
+  id?: string
+  links?: Array<Link>
+  published?: string
+  rights?: Text
+  source?: Source
+  summary?: Text
+  title?: Text
+  updated?: string
+  dc?: DcItemOrFeed
+}
 
-export type Feed = z.infer<typeof feed>
+export type Feed = {
+  authors?: Array<Person>
+  categories?: Array<Category>
+  contributors?: Array<Person>
+  generator?: Generator
+  icon?: string
+  id?: string
+  links?: Array<Link>
+  logo?: string
+  rights?: Text
+  subtitle?: Text
+  title?: Text
+  updated?: string
+  entries?: Array<Entry>
+  dc?: DcItemOrFeed
+  sy?: SyFeed
+}
