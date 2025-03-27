@@ -1,4 +1,5 @@
-import type z from 'zod'
-import type { feed } from './schemas'
-
-export type Feed = z.infer<typeof feed>
+export type Feed = {
+  updatePeriod?: string
+  updateFrequency?: number
+  updateBase?: string
+}

@@ -1,4 +1,17 @@
-import type z from 'zod'
-import type { itemOrFeed } from './schemas'
-
-export type ItemOrFeed = z.infer<typeof itemOrFeed>
+export type ItemOrFeed = {
+  title?: string
+  creator?: string
+  subject?: string
+  description?: string
+  publisher?: string
+  contributor?: string
+  date?: string
+  type?: string
+  format?: string
+  identifier?: string
+  source?: string
+  language?: string
+  relation?: string
+  coverage?: string
+  rights?: string
+}
