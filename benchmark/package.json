@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@extractus/feed-extractor": "^7.1.4",
+    "@rowanmanning/feed-parser": "^2.0.1",
+    "@ulisesgascon/rss-feed-parser": "^1.0.1",
+    "fast-xml-parser": "^5.0.9",
+    "feed-read": "^0.0.1",
+    "feedme": "^2.0.2",
+    "feedparser": "^2.2.10",
+    "rss-parser": "^3.13.0",
+    "tinybench": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.8",
+    "@types/feedme": "^2.0.4",
+    "@types/feedparser": "^2.2.8",
+    "typescript": "^5.8.2"
+  }
+}
