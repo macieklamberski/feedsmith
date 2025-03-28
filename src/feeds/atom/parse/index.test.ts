@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import { parse } from '.'
 import { locales } from '../../../common/config'
+import { parse } from './index'
 
 describe('parse', () => {
   const versions = {
