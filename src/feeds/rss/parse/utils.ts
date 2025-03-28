@@ -15,6 +15,7 @@ import {
 } from '../../../namespaces/atom/utils'
 import { parseItem as parseContentItem } from '../../../namespaces/content/utils'
 import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils'
+import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils'
 import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils'
 import type {
   Author,
@@ -171,6 +172,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     content: parseContentItem(value),
     atom: parseAtomEntry(value),
     dc: parseDcItemOrFeed(value),
+    slash: parseSlashItem(value),
   })
 
   if (hasAnyProps(item, ['title', 'description'])) {

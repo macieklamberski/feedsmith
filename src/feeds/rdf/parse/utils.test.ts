@@ -218,6 +218,21 @@ describe('parseItem', () => {
 
     expect(parseItem(value)).toEqual(expected)
   })
+
+  it('should handle slash namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'slash:comments': { '#text': '10' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      slash: { comments: 10 },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
 })
 
 describe('retrieveItems', () => {

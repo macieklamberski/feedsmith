@@ -711,6 +711,21 @@ describe('parseEntry', () => {
 
     expect(parseEntry(value)).toEqual(expected)
   })
+
+  it('should handle slash namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'slash:comments': { '#text': '10' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Entry',
+      slash: { comments: 10 },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
 })
 
 describe('parseFeed', () => {
