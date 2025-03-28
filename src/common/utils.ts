@@ -37,10 +37,10 @@ export const hasAnyProps = <T extends Record<string, Unreliable>, K extends keyo
   return false
 }
 
-export const hasAllProps = <T extends Record<string, Unreliable>, K extends keyof T>(
+export function hasAllProps<T extends object, K extends keyof T>(
   value: T,
-  props: Array<K>,
-): boolean => {
+  props: readonly K[],
+): value is T & { [P in K]-?: NonNullable<T[P]> } {
   for (const prop of props) {
     if (value[prop] === undefined) {
       return false
