@@ -8,6 +8,7 @@ import {
   parseString,
 } from '../../../common/utils'
 import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils'
+import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils'
 import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils'
 import type { ParseFunction } from './types'
 import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types'
@@ -193,6 +194,7 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
     title: parseString(value[`${prefix}title`]?.['#text']),
     updated: retrieveUpdated(value, options),
     dc: options?.partial ? undefined : parseDcItemOrFeed(value),
+    slash: options?.partial ? undefined : parseSlashItem(value),
   })
 
   if (options?.partial && isNonEmptyObject(entry)) {

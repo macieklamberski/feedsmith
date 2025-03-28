@@ -1,5 +1,6 @@
 import type { ParseFunction as CommonParseFunction } from '../../../common/types'
 import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/types'
+import type { Item as SlashItem } from '../../../namespaces/slash/types'
 import type { Feed as SyFeed } from '../../../namespaces/sy/types'
 
 export type ParseFunction<R> = CommonParseFunction<R, { prefix?: string; partial?: boolean }>
@@ -63,6 +64,7 @@ export type Entry = {
   title?: Text
   updated?: string
   dc?: DcItemOrFeed
+  slash?: SlashItem
 }
 
 export type Feed = {

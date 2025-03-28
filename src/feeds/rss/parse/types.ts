@@ -1,6 +1,7 @@
 import type { Entry as AtomEntry, Feed as AtomFeed } from '../../../namespaces/atom/types'
 import type { Item as ContentItem } from '../../../namespaces/content/types'
 import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/types'
+import type { Item as SlashItem } from '../../../namespaces/slash/types'
 import type { Feed as SyFeed } from '../../../namespaces/sy/types'
 
 export type Author = string
@@ -61,6 +62,7 @@ export type Item = {
   atom?: AtomEntry
   content?: ContentItem
   dc?: DcItemOrFeed
+  slash?: SlashItem
 }
 
 export type Feed = {

@@ -12,6 +12,7 @@ import {
 } from '../../../namespaces/atom/utils'
 import { parseItem as parseContentItem } from '../../../namespaces/content/utils'
 import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils'
+import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils'
 import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils'
 import type { Feed, Image, Item, Textinput } from './types'
 
@@ -47,6 +48,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     atom: parseAtomEntry(value),
     content: parseContentItem(value),
     dc: parseDcItemOrFeed(value),
+    slash: parseSlashItem(value),
   })
 
   if (hasAllProps(item, ['title', 'link'])) {
