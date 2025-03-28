@@ -1,5 +1,5 @@
 import { XMLParser } from 'fast-xml-parser'
-import { parserConfig } from '../../common/config'
+import { parserConfig } from '../../../common/config'
 
 export const stopNodes = [
   // TODO: What about the namespaces?

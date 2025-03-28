@@ -1,65 +1,59 @@
 import { describe, expect, test } from 'bun:test'
-import { detect } from './detect'
+import { detect } from './index'
 
 describe('detect', () => {
-  test('detect valid RDF feed with xmlns declaration', () => {
-    const rdfFeed = `
-      <?xml version="1.0"?>
-      <rdf:RDF
-        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-        xmlns="http://purl.org/rss/1.0/"
-      >
-        <channel rdf:about="http://example.org/rss">
+  test('detect valid RSS feed with xmlns declaration', () => {
+    const rssFeed = `
+      <?xml version="1.0" encoding="utf-8"?>
+      <rss version="2.0">
+        <channel>
           <title>Example Feed</title>
           <link>http://example.org</link>
+          <item>
+            <title>Example Item</title>
+            <link>http://example.org/item/1</link>
+          </item>
         </channel>
-        <item rdf:about="http://example.org/item/1">
-          <title>Example Item</title>
-          <link>http://example.org/item/1</link>
-        </item>
-      </rdf:RDF>
+      </rss>
     `
 
-    expect(detect(rdfFeed)).toBe(true)
+    expect(detect(rssFeed)).toBe(true)
   })
 
   test('handle case sensitivity correctly', () => {
     const uppercaseFeed = `
-      <?xml version="1.0"?>
-        <RDF:RDF
-          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-          xmlns="http://purl.org/rss/1.0/"
-        >
-          <CHANNEL rdf:about="http://example.org/rss">
-            <title>Example Feed</title>
-            <link>http://example.org</link>
-          </CHANNEL>
-          <iTeM rdf:about="http://example.org/item/1">
+      <?xml version="1.0" encoding="utf-8"?>
+      <RSS version="2.0">
+        <channel>
+          <title>Example Feed</title>
+          <link>http://example.org</link>
+          <ItEm>
             <title>Example Item</title>
             <link>http://example.org/item/1</link>
-          </iTeM>
-        </RDF:RDF>
+          </ItEm>
+        </channel>
+      </RSS>
     `
 
     expect(detect(uppercaseFeed)).toBe(true)
   })
 
-  test('detect RDF feed without xmlns declaration', () => {
-    const rdfFeed = `
-      <?xml version="1.0"?>
-        <rdf:RDF>
-          <channel rdf:about="http://example.org/rss">
-            <title>Example Feed</title>
-            <link>http://example.org</link>
-          </channel>
-          <item rdf:about="http://example.org/item/1">
+  test('detect RDF feed without version attribute', () => {
+    const rssFeed = `
+      <?xml version="1.0" encoding="utf-8"?>
+      <rss>
+        <channel>
+          <title>Example Feed</title>
+          <link>http://example.org</link>
+          <item>
             <title>Example Item</title>
             <link>http://example.org/item/1</link>
           </item>
-        </rdf:RDF>
+        </channel>
+      </rss>
     `
 
-    expect(detect(rdfFeed)).toBe(true)
+    expect(detect(rssFeed)).toBe(true)
   })
 
   test('return false for Atom feed', () => {
@@ -73,17 +67,19 @@ describe('detect', () => {
     expect(detect(atomFeed)).toBe(false)
   })
 
-  test('return false for RSS feed', () => {
-    const rssFeed = `
-      <?xml version="1.0" encoding="UTF-8" ?>
-      <rss version="2.0">
-        <channel>
-          <title>RSS Title</title>
-        </channel>
-      </rss>
-    `
+  test('return false for RDF feed', () => {
+    const rdfFeed = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/">
+          <channel>
+            <title>RDF Example</title>
+          </channel>
+        </rdf:RDF>
+      `
 
-    expect(detect(rssFeed)).toBe(false)
+    expect(detect(rdfFeed)).toBe(false)
   })
 
   test('return false for JSON feed', () => {

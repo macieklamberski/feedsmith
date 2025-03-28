@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import { locales } from '../../common/config'
-import { parse } from './parse'
+import { locales } from '../../../common/config'
+import { parse } from './index'
 
 describe('parse', () => {
   const versions = {
@@ -15,7 +15,7 @@ describe('parse', () => {
 
   for (const [key, label] of Object.entries(versions)) {
     it(`should correctly parse RSS ${label}`, async () => {
-      const reference = `${import.meta.dir}/references/rss-${key}`
+      const reference = `${import.meta.dir}/../references/rss-${key}`
       const input = await Bun.file(`${reference}.xml`).text()
       const expectation = await Bun.file(`${reference}.json`).json()
       const result = parse(input)

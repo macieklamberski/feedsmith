@@ -1,4 +1,4 @@
-import type { ParseFunction } from '../../common/types'
+import type { ParseFunction } from '../../../common/types'
 import {
   hasAllProps,
   hasAnyProps,
@@ -8,14 +8,14 @@ import {
   parseArrayOf,
   parseNumber,
   parseString,
-} from '../../common/utils'
+} from '../../../common/utils'
 import {
   parseEntry as parseAtomEntry,
   parseFeed as parseAtomFeed,
-} from '../../namespaces/atom/utils'
-import { parseItem as parseContentItem } from '../../namespaces/content/utils'
-import { parseItemOrFeed as parseDcItemOrFeed } from '../../namespaces/dc/utils'
-import { parseFeed as parseSyFeed } from '../../namespaces/sy/utils'
+} from '../../../namespaces/atom/utils'
+import { parseItem as parseContentItem } from '../../../namespaces/content/utils'
+import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils'
+import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils'
 import type {
   Author,
   Category,

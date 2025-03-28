@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import { locales } from '../../common/config'
-import { parse } from './parse'
+import { locales } from '../../../common/config'
+import { parse } from './index'
 import type { Feed } from './types'
 
 describe('parse', () => {
