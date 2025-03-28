@@ -659,18 +659,22 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
+  it('should return feed when link is missing', () => {
+    const value = {
+      title: { '#text': 'Feed Title' },
+      description: { '#text': 'Feed Description' },
+    }
+    const expected = {
+      title: 'Feed Title',
+      description: 'Feed Description',
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
   it('should return undefined when title is missing', () => {
     const value = {
       link: { '#text': 'https://example.com' },
-      description: { '#text': 'Feed Description' },
-    }
-
-    expect(parseFeed(value)).toBeUndefined()
-  })
-
-  it('should return undefined when link is missing', () => {
-    const value = {
-      title: { '#text': 'Feed Title' },
       description: { '#text': 'Feed Description' },
     }
 

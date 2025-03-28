@@ -209,9 +209,10 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     sy: parseSyFeed(value),
   })
 
-  // INFO: Spec also says about required "description" but this field is
-  // not always present in feeds. We can still parse the feed without it.
-  if (hasAllProps(feed, ['title', 'link'])) {
+  // INFO: Spec also says about required "description" but this field is not always present
+  // in feeds. We can still parse the feed without it. In addition, the "link" might be missing
+  // as well when the atom:link rel="self" is present so checking "link" is skipped as well.
+  if (hasAllProps(feed, ['title'])) {
     return feed
   }
 }

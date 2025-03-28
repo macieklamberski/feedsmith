@@ -100,7 +100,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     sy: parseSyFeed(value.channel),
   })
 
-  if (hasAllProps(feed, ['title', 'items'])) {
+  if (hasAllProps(feed, ['title'])) {
     return feed
   }
 }
