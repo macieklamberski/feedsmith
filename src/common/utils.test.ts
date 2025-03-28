@@ -583,22 +583,16 @@ describe('parseNumber', () => {
 })
 
 describe('parseBoolean', () => {
-  it('should handle array', () => {
-    const value = ['javascript', { another: 'typescript' }]
+  it('should return boolean true', () => {
+    const value = true
 
-    expect(parseBoolean(value)).toBeUndefined()
+    expect(parseBoolean(value)).toEqual(true)
   })
 
-  it('should handle object', () => {
-    const value = { name: 'javascript' }
+  it('should return boolean false', () => {
+    const value = false
 
-    expect(parseBoolean(value)).toBeUndefined()
-  })
-
-  it('should handle non-boolean string', () => {
-    const value = 'javascript'
-
-    expect(parseBoolean(value)).toBeUndefined()
+    expect(parseBoolean(value)).toEqual(false)
   })
 
   it('should handle true string', () => {
@@ -613,16 +607,34 @@ describe('parseBoolean', () => {
     expect(parseBoolean(value)).toEqual(false)
   })
 
+  it('should handle case insensitive false string', () => {
+    const value = 'FaLse'
+
+    expect(parseBoolean(value)).toEqual(false)
+  })
+
+  it('should handle non-boolean string', () => {
+    const value = 'javascript'
+
+    expect(parseBoolean(value)).toBeUndefined()
+  })
+
   it('should return number', () => {
     const value = 420
 
     expect(parseBoolean(value)).toBeUndefined()
   })
 
-  it('should return boolean', () => {
-    const value = true
+  it('should handle array', () => {
+    const value = ['javascript', { another: 'typescript' }]
 
-    expect(parseBoolean(value)).toEqual(value)
+    expect(parseBoolean(value)).toBeUndefined()
+  })
+
+  it('should handle object', () => {
+    const value = { name: 'javascript' }
+
+    expect(parseBoolean(value)).toBeUndefined()
   })
 
   it('should handle null', () => {
