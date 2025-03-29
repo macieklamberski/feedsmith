@@ -557,6 +557,12 @@ describe('parseNumber', () => {
     expect(parseNumber(value)).toEqual(36.6)
   })
 
+  it('should handle empty string', () => {
+    const value = ''
+
+    expect(parseNumber(value)).toBeUndefined()
+  })
+
   it('should return number', () => {
     const value = 420
 

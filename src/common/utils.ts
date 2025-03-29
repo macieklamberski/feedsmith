@@ -95,7 +95,7 @@ export const parseNumber: ParseFunction<number> = (value) => {
     return value
   }
 
-  if (typeof value === 'string') {
+  if (typeof value === 'string' && value !== '') {
     // TODO: Maybe use the strnum package instead? It's already included with fast-xml-parser.
     const numeric = Number(value)
 
