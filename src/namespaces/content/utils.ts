@@ -7,11 +7,11 @@ export const parseItem: ParseFunction<Item> = (value) => {
     return
   }
 
-  const channel = omitUndefinedFromObject({
+  const item = omitUndefinedFromObject({
     encoded: parseString(value['content:encoded']?.['#text']),
   })
 
-  if (hasAnyProps(channel, ['encoded'])) {
-    return channel
+  if (hasAnyProps(item, ['encoded'])) {
+    return item
   }
 }

@@ -10,12 +10,22 @@
     <sy:updateBase>2000-01-01T12:00+00:00</sy:updateBase>
     <sy:updatePeriod>hourly</sy:updatePeriod>
     <sy:updateFrequency>1</sy:updateFrequency>
+    <itunes:category text="Society &amp; Culture"/>
+    <itunes:owner>
+      <itunes:name>Jack Smith</itunes:name>
+      <itunes:email>news@example.com</itunes:email>
+    </itunes:owner>
     <item>
       <title>Example Item</title>
       <link>http://example.org/item/1</link>
       <content:encoded>This is an example of content.</content:encoded>
       <dc:creator>Jack Jackson</dc:creator>
       <dc:date>2022-01-01T12:00+00:00</dc:date>
+      <slash:section>articles</slash:section>
+      <slash:department>not-an-ocean-unless-there-are-lobsters</slash:department>
+      <slash:comments>177</slash:comments>
+      <slash:hit_parade>177,155,105,33,6,3,0</slash:hit_parade>
+      <itunes:explicit>false</itunes:explicit>
     </item>
   </channel>
 </rss>

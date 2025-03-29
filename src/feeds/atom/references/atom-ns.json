@@ -8,6 +8,15 @@
       "dc": {
         "creator": "Jack Jackson",
         "date": "2022-01-01T12:00+00:00"
+      },
+      "slash": {
+        "section": "articles",
+        "department": "not-an-ocean-unless-there-are-lobsters",
+        "comments": 177,
+        "hit_parade": [177, 155, 105, 33, 6, 3, 0]
+      },
+      "itunes": {
+        "explicit": false
       }
     }
   ],
@@ -21,5 +30,16 @@
     "updatePeriod": "hourly",
     "updateFrequency": 1,
     "updateBase": "2000-01-01T12:00+00:00"
+  },
+  "itunes": {
+    "categories": [
+      {
+        "text": "Society & Culture"
+      }
+    ],
+    "owner": {
+      "email": "news@example.com",
+      "name": "Jack Smith"
+    }
   }
 }

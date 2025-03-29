@@ -15,6 +15,11 @@ import {
 } from '../../../namespaces/atom/utils'
 import { parseItem as parseContentItem } from '../../../namespaces/content/utils'
 import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils'
+import {
+  parseFeed as parseItunesFeed,
+  parseItem as parseItunesItem,
+} from '../../../namespaces/itunes/utils'
+import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils'
 import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils'
 import type {
   Author,
@@ -171,6 +176,8 @@ export const parseItem: ParseFunction<Item> = (value) => {
     content: parseContentItem(value),
     atom: parseAtomEntry(value),
     dc: parseDcItemOrFeed(value),
+    slash: parseSlashItem(value),
+    itunes: parseItunesItem(value),
   })
 
   if (hasAnyProps(item, ['title', 'description'])) {
@@ -207,11 +214,13 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     atom: parseAtomFeed(value),
     dc: parseDcItemOrFeed(value),
     sy: parseSyFeed(value),
+    itunes: parseItunesFeed(value),
   })
 
-  // INFO: Spec also says about required "description" but this field is
-  // not always present in feeds. We can still parse the feed without it.
-  if (hasAllProps(feed, ['title', 'link'])) {
+  // INFO: Spec also says about required "description" but this field is not always present
+  // in feeds. We can still parse the feed without it. In addition, the "link" might be missing
+  // as well when the atom:link rel="self" is present so checking "link" is skipped as well.
+  if (hasAllProps(feed, ['title'])) {
     return feed
   }
 }

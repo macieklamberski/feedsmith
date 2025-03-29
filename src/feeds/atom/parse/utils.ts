@@ -8,6 +8,11 @@ import {
   parseString,
 } from '../../../common/utils'
 import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils'
+import {
+  parseFeed as parseItunesFeed,
+  parseItem as parseItunesItem,
+} from '../../../namespaces/itunes/utils'
+import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils'
 import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils'
 import type { ParseFunction } from './types'
 import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types'
@@ -193,6 +198,8 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
     title: parseString(value[`${prefix}title`]?.['#text']),
     updated: retrieveUpdated(value, options),
     dc: options?.partial ? undefined : parseDcItemOrFeed(value),
+    slash: options?.partial ? undefined : parseSlashItem(value),
+    itunes: options?.partial ? undefined : parseItunesItem(value),
   })
 
   if (options?.partial && isNonEmptyObject(entry)) {
@@ -230,6 +237,7 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
     entries: parseArrayOf(value[`${prefix}entry`], (value) => parseEntry(value, options)),
     dc: options?.partial ? undefined : parseDcItemOrFeed(value),
     sy: options?.partial ? undefined : parseSyFeed(value),
+    itunes: options?.partial ? undefined : parseItunesFeed(value),
   })
 
   if (options?.partial && isNonEmptyObject(feed)) {

@@ -218,6 +218,21 @@ describe('parseItem', () => {
 
     expect(parseItem(value)).toEqual(expected)
   })
+
+  it('should handle slash namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'slash:comments': { '#text': '10' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      slash: { comments: 10 },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
 })
 
 describe('retrieveItems', () => {
@@ -557,17 +572,6 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toBeUndefined()
   })
 
-  it('should return undefined if items are missing', () => {
-    const value = {
-      channel: {
-        title: { '#text': 'Feed Title' },
-        link: { '#text': 'https://example.com' },
-      },
-    }
-
-    expect(parseFeed(value)).toBeUndefined()
-  })
-
   it('should return undefined for non-object rdf:rdf', () => {
     const value = 'not an object'
 
@@ -589,6 +593,21 @@ describe('parseFeed', () => {
     expect(parseFeed([])).toBeUndefined()
   })
 
+  it('should handle feed with not defined items array', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Feed Title' },
+        link: { '#text': 'https://example.com' },
+      },
+    }
+    const expected = {
+      title: 'Feed Title',
+      link: 'https://example.com',
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
   it('should handle feed with empty items array', () => {
     const value = {
       channel: {
@@ -597,8 +616,12 @@ describe('parseFeed', () => {
       },
       items: [],
     }
+    const expected = {
+      title: 'Feed Title',
+      link: 'https://example.com',
+    }
 
-    expect(parseFeed(value)).toBeUndefined()
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should handle atom namespace', () => {
