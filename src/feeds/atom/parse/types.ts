@@ -1,5 +1,6 @@
 import type { ParseFunction as CommonParseFunction } from '../../../common/types'
 import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/types'
+import type { Feed as ItunesFeed, Item as ItunesItem } from '../../../namespaces/itunes/types'
 import type { Item as SlashItem } from '../../../namespaces/slash/types'
 import type { Feed as SyFeed } from '../../../namespaces/sy/types'
 
@@ -65,6 +66,7 @@ export type Entry = {
   updated?: string
   dc?: DcItemOrFeed
   slash?: SlashItem
+  itunes?: ItunesItem
 }
 
 export type Feed = {
@@ -83,4 +85,5 @@ export type Feed = {
   entries?: Array<Entry>
   dc?: DcItemOrFeed
   sy?: SyFeed
+  itunes?: ItunesFeed
 }
