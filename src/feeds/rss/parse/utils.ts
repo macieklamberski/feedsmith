@@ -15,6 +15,10 @@ import {
 } from '../../../namespaces/atom/utils'
 import { parseItem as parseContentItem } from '../../../namespaces/content/utils'
 import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils'
+import {
+  parseFeed as parseItunesFeed,
+  parseItem as parseItunesItem,
+} from '../../../namespaces/itunes/utils'
 import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils'
 import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils'
 import type {
@@ -173,6 +177,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     atom: parseAtomEntry(value),
     dc: parseDcItemOrFeed(value),
     slash: parseSlashItem(value),
+    itunes: parseItunesItem(value),
   })
 
   if (hasAnyProps(item, ['title', 'description'])) {
@@ -209,6 +214,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     atom: parseAtomFeed(value),
     dc: parseDcItemOrFeed(value),
     sy: parseSyFeed(value),
+    itunes: parseItunesFeed(value),
   })
 
   // INFO: Spec also says about required "description" but this field is not always present
