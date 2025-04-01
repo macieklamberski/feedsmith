@@ -13,7 +13,7 @@ import {
   retrievePublished,
   retrieveSubtitle,
   retrieveUpdated,
-} from './utils'
+} from './utils.js'
 
 describe('parseLink', () => {
   it('should parse complete link object', () => {

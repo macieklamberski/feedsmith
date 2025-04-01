@@ -6,16 +6,16 @@ import {
   parseArrayOf,
   parseNumber,
   parseString,
-} from '../../../common/utils'
-import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils'
+} from '../../../common/utils.js'
+import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils.js'
 import {
   parseFeed as parseItunesFeed,
   parseItem as parseItunesItem,
-} from '../../../namespaces/itunes/utils'
-import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils'
-import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils'
-import type { ParseFunction } from './types'
-import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types'
+} from '../../../namespaces/itunes/utils.js'
+import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils.js'
+import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils.js'
+import type { ParseFunction } from './types.js'
+import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types.js'
 
 export const parseLink: ParseFunction<Link> = (value) => {
   if (!isObject(value)) {

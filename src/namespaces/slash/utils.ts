@@ -1,4 +1,4 @@
-import type { ParseFunction } from '../../common/types'
+import type { ParseFunction } from '../../common/types.js'
 import {
   hasAnyProps,
   isNonEmptyStringOrNumber,
@@ -7,8 +7,8 @@ import {
   omitUndefinedFromObject,
   parseNumber,
   parseString,
-} from '../../common/utils'
-import type { HitParade, Item } from './types'
+} from '../../common/utils.js'
+import type { HitParade, Item } from './types.js'
 
 export const parseHitParade: ParseFunction<HitParade> = (value) => {
   if (!isNonEmptyStringOrNumber(value)) {

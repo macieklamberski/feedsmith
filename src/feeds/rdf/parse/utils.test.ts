@@ -8,7 +8,7 @@ import {
   retrieveImage,
   retrieveItems,
   retrieveTextinput,
-} from './utils'
+} from './utils.js'
 
 describe('parseImage', () => {
   it('should handle complete image object', () => {

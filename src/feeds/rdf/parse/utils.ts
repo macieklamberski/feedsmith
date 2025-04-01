@@ -1,24 +1,24 @@
-import type { ParseFunction } from '../../../common/types'
+import type { ParseFunction } from '../../../common/types.js'
 import {
   hasAllProps,
   isObject,
   omitUndefinedFromObject,
   parseArrayOf,
   parseString,
-} from '../../../common/utils'
+} from '../../../common/utils.js'
 import {
   parseEntry as parseAtomEntry,
   parseFeed as parseAtomFeed,
-} from '../../../namespaces/atom/utils'
-import { parseItem as parseContentItem } from '../../../namespaces/content/utils'
-import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils'
+} from '../../../namespaces/atom/utils.js'
+import { parseItem as parseContentItem } from '../../../namespaces/content/utils.js'
+import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils.js'
 import {
   parseFeed as parseItunesFeed,
   parseItem as parseItunesItem,
-} from '../../../namespaces/itunes/utils'
-import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils'
-import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils'
-import type { Feed, Image, Item, Textinput } from './types'
+} from '../../../namespaces/itunes/utils.js'
+import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils.js'
+import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils.js'
+import type { Feed, Image, Item, Textinput } from './types.js'
 
 export const parseImage: ParseFunction<Image> = (value) => {
   if (!isObject(value)) {

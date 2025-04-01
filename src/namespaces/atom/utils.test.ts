@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { parseEntry, parseFeed } from './utils'
+import { parseEntry, parseFeed } from './utils.js'
 
 describe('parseEntry', () => {
   it('should parse entry with atom: prefix', () => {
