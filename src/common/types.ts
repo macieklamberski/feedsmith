@@ -2,4 +2,4 @@
 // biome-ignore lint/suspicious/noExplicitAny: Temporary solution until the Unreliable type fixed.
 export type Unreliable = any
 
-export type ParseFunction<R, O = unknown> = (value: Unreliable, options?: O) => R | undefined
+export type ParseFunction<R, O = never> = (value: Unreliable, options?: O) => R | undefined

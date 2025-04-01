@@ -163,7 +163,7 @@ export const parseArrayOf = <R>(
   const array = parseArray(value)
 
   if (array) {
-    return omitNullishFromArray(array.map(parse))
+    return omitNullishFromArray(array.map((subValue) => parse(subValue)))
   }
 
   const parsed = parse(value)

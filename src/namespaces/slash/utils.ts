@@ -15,7 +15,12 @@ export const parseHitParade: ParseFunction<HitParade> = (value) => {
     return
   }
 
-  const hitParade = omitNullishFromArray(value.toString().split(',').map(parseNumber))
+  const hitParade = omitNullishFromArray(
+    value
+      .toString()
+      .split(',')
+      .map((subValue) => parseNumber(subValue)),
+  )
 
   if (hitParade.length > 0) {
     return hitParade
