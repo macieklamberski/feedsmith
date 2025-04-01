@@ -1,7 +1,7 @@
-import { locales } from '../../../common/config'
-import { detectJsonFeed } from '../../../index'
-import type { Feed } from './types'
-import { parseFeed } from './utils'
+import { locales } from '../../../common/config.js'
+import { detectJsonFeed } from '../../../index.js'
+import type { Feed } from './types.js'
+import { parseFeed } from './utils.js'
 
 export const parse = (value: unknown): Feed => {
   if (!detectJsonFeed(value)) {

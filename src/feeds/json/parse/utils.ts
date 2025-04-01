@@ -1,4 +1,4 @@
-import type { ParseFunction } from '../../../common/types'
+import type { ParseFunction } from '../../../common/types.js'
 import {
   hasAllProps,
   hasAnyProps,
@@ -11,8 +11,8 @@ import {
   parseBoolean,
   parseNumber,
   parseString,
-} from '../../../common/utils'
-import type { Attachment, Author, Feed, Hub, Item } from './types'
+} from '../../../common/utils.js'
+import type { Attachment, Author, Feed, Hub, Item } from './types.js'
 
 export const createCaseInsensitiveGetter = (
   value: Record<string, unknown>,

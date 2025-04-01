@@ -7,7 +7,7 @@ import {
   parseItem,
   parseTags,
   retrieveAuthors,
-} from './utils'
+} from './utils.js'
 
 describe('parseTags', () => {
   it('should handle array of strings', () => {

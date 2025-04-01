@@ -1,5 +1,5 @@
 import { decodeHTML } from 'entities'
-import type { ParseFunction, Unreliable } from './types'
+import type { ParseFunction, Unreliable } from './types.js'
 
 export const isObject = (value: Unreliable): value is Record<string, Unreliable> => {
   return (
