@@ -1,5 +1,6 @@
 import {
   hasAllProps,
+  hasAnyProps,
   isNonEmptyObject,
   isObject,
   omitUndefinedFromObject,
@@ -244,9 +245,13 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
     return feed
   }
 
-  // INFO: Spec also says about required "updated" but this field is
-  // not always present in feeds. We can still parse the feed without it.
-  if (hasAllProps(feed, ['id', 'title'])) {
+  // INFO: Spec says about required "id", "title" and "updated". The thing is "updated" is
+  // frequently missing from the feeds and since this field is not strictly necessary to make
+  // the feed make sense, it is not required here. The "ID" field is mostly present, but also
+  // not in 100% of cases. It's not ideal not to have it, but it's not a dealbreaker either,
+  // so if either "id" or "title" is present, the feed is treated as valid.
+  // The "ID" can always fall back to the "title" if it's missing in application's code.
+  if (hasAnyProps(feed, ['id', 'title'])) {
     return feed
   }
 }
