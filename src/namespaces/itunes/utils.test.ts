@@ -9,7 +9,7 @@ import {
   parseOwner,
   parseYesNoBoolean,
   retrieveApplePodcastsVerify,
-} from './utils'
+} from './utils.js'
 
 describe('parseCategory', () => {
   it('should parse a simple category with only text', () => {

@@ -1,21 +1,22 @@
 import {
   hasAllProps,
+  hasAnyProps,
   isNonEmptyObject,
   isObject,
   omitUndefinedFromObject,
   parseArrayOf,
   parseNumber,
   parseString,
-} from '../../../common/utils'
-import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils'
+} from '../../../common/utils.js'
+import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils.js'
 import {
   parseFeed as parseItunesFeed,
   parseItem as parseItunesItem,
-} from '../../../namespaces/itunes/utils'
-import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils'
-import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils'
-import type { ParseFunction } from './types'
-import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types'
+} from '../../../namespaces/itunes/utils.js'
+import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils.js'
+import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils.js'
+import type { ParseFunction } from './types.js'
+import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types.js'
 
 export const parseLink: ParseFunction<Link> = (value) => {
   if (!isObject(value)) {
@@ -244,9 +245,13 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
     return feed
   }
 
-  // INFO: Spec also says about required "updated" but this field is
-  // not always present in feeds. We can still parse the feed without it.
-  if (hasAllProps(feed, ['id', 'title'])) {
+  // INFO: Spec says about required "id", "title" and "updated". The thing is "updated" is
+  // frequently missing from the feeds and since this field is not strictly necessary to make
+  // the feed make sense, it is not required here. The "ID" field is mostly present, but also
+  // not in 100% of cases. It's not ideal not to have it, but it's not a dealbreaker either,
+  // so if either "id" or "title" is present, the feed is treated as valid.
+  // The "ID" can always fall back to the "title" if it's missing in application's code.
+  if (hasAnyProps(feed, ['id', 'title'])) {
     return feed
   }
 }

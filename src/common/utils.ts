@@ -1,5 +1,5 @@
 import { decodeHTML } from 'entities'
-import type { ParseFunction, Unreliable } from './types'
+import type { ParseFunction, Unreliable } from './types.js'
 
 export const isObject = (value: Unreliable): value is Record<string, Unreliable> => {
   return (
@@ -163,7 +163,7 @@ export const parseArrayOf = <R>(
   const array = parseArray(value)
 
   if (array) {
-    return omitNullishFromArray(array.map(parse))
+    return omitNullishFromArray(array.map((subValue) => parse(subValue)))
   }
 
   const parsed = parse(value)

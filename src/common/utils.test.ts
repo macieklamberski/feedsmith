@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import type { ParseFunction } from './types'
+import type { ParseFunction } from './types.js'
 import {
   hasAllProps,
   hasAnyProps,
@@ -15,7 +15,7 @@ import {
   parseSingular,
   parseString,
   stripCdata,
-} from './utils'
+} from './utils.js'
 
 describe('isObject', () => {
   it('should return true for plain objects', () => {

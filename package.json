@@ -39,13 +39,13 @@
   },
   "dependencies": {
     "entities": "^6.0.0",
-    "fast-xml-parser": "^5.0.9"
+    "fast-xml-parser": "^5.2.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/bun": "^1.2.8",
-    "lefthook": "^1.11.5",
+    "lefthook": "^1.11.7",
     "semantic-release": "^24.2.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   }
 }

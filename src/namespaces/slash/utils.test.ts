@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { parseHitParade, parseItem } from './utils'
+import { parseHitParade, parseItem } from './utils.js'
 
 describe('parseHitParade', () => {
   it('should parse comma-separated hit parade string to array of numbers', () => {

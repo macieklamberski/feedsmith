@@ -1,12 +1,12 @@
-import type { ParseFunction } from '../../common/types'
+import type { ParseFunction } from '../../common/types.js'
 import {
   isNonEmptyObject,
   isObject,
   omitUndefinedFromObject,
   parseNumber,
   parseString,
-} from '../../common/utils'
-import type { Feed } from './types'
+} from '../../common/utils.js'
+import type { Feed } from './types.js'
 
 export const parseFeed: ParseFunction<Feed> = (value) => {
   if (!isObject(value)) {

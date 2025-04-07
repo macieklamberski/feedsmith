@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { parseItem } from './utils'
+import { parseItem } from './utils.js'
 
 describe('parseItem', () => {
   it('should parse complete item object with encoded content', () => {

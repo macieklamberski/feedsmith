@@ -1,4 +1,4 @@
-import type { ParseFunction } from '../../common/types'
+import type { ParseFunction } from '../../common/types.js'
 import {
   hasAllProps,
   isNonEmptyObject,
@@ -10,8 +10,8 @@ import {
   parseBoolean,
   parseNumber,
   parseString,
-} from '../../common/utils'
-import type { Category, Feed, Item, Owner } from './types'
+} from '../../common/utils.js'
+import type { Category, Feed, Item, Owner } from './types.js'
 
 export const parseCategory: ParseFunction<Category> = (value) => {
   if (!isObject(value)) {

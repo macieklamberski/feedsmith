@@ -12,7 +12,7 @@ import {
   parseSource,
   parseTextInput,
   retrieveFeed,
-} from './utils'
+} from './utils.js'
 
 describe('parseTextInput', () => {
   it('should handle valid textInput object', () => {
