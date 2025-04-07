@@ -861,18 +861,34 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should return undefined if id is missing', () => {
+  it('should handle case if id is missing', () => {
     const value = {
       title: { '#text': 'Example Feed' },
       updated: { '#text': '2023-01-01T12:00:00Z' },
     }
+    const expected = {
+      title: 'Example Feed',
+      updated: '2023-01-01T12:00:00Z',
+    }
 
-    expect(parseFeed(value)).toBeUndefined()
+    expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should return undefined if title is missing', () => {
+  it('should handle case if title is missing', () => {
     const value = {
       id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
+      updated: { '#text': '2023-01-01T12:00:00Z' },
+    }
+    const expected = {
+      id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
+      updated: '2023-01-01T12:00:00Z',
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should return undefined if id and title are missing', () => {
+    const value = {
       updated: { '#text': '2023-01-01T12:00:00Z' },
     }
 
