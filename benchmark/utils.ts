@@ -46,7 +46,9 @@ export const runBenchmark = async (
     },
   })
 
-  for (const [name, test] of Object.entries(tests)) {
+  const randomlySortedTests = Object.entries(tests).toSorted((a, b) => Math.random() - 0.5)
+
+  for (const [name, test] of randomlySortedTests) {
     bench.add(name, test)
   }
 
