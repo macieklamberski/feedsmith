@@ -1,10 +1,12 @@
-# Feed Parsers and Generators Benchmark
+# Feed Parsers Benchmark
 
-This repository contains speed benchmarks for popular JavaScript packages for parsing and generating feeds.
+Below are the speed benchmarks for popular JavaScript packages for parsing feeds.
 
 The benchmarks use real-world feeds organized by feed type (RSS, Atom, JSON Feed, RDF) and file size ranges. Each category contains 10 representative feed files that span the specified size range, providing insight into how each package performs across various scenarios.
 
 The results should be taken with a grain of salt, as direct comparisons aren't always fair. Packages vary in feature support (such as handling specific namespaces or feed formats).
+
+Caveat regarding the `fast-xml-parser` results: Although `fast-xml-parser` is not strictly a feed parser, it is included in the benchmark to compare it with Feedsmith, which uses it internally. One key difference is that Feedsmith enhances performance by using the `entities` package to manage HTML entities, rather than relying on support built-in into `fast-xml-parser`, which appears to be slower. One other difference is `trimValues: false` in Feedsmith. All other settings remain the same.
 
 ## Results: Parsing
 
