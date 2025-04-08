@@ -1,6 +1,7 @@
 import type { ParseFunction } from '../../common/types.js'
 import {
   hasAllProps,
+  hasAnyProps,
   isNonEmptyObject,
   isNonEmptyStringOrNumber,
   isObject,
@@ -18,13 +19,13 @@ export const parseCategory: ParseFunction<Category> = (value) => {
     return
   }
 
-  const category = omitUndefinedFromObject({
+  const category = {
     text: parseString(value['@text']),
     categories: parseArrayOf(value['itunes:category'], parseCategory),
-  })
+  }
 
   if (hasAllProps(category, ['text'])) {
-    return category
+    return omitUndefinedFromObject(category)
   }
 }
 
@@ -33,13 +34,13 @@ export const parseOwner: ParseFunction<Owner> = (value) => {
     return
   }
 
-  const owner = omitUndefinedFromObject({
+  const owner = {
     name: parseString(value['itunes:name']?.['#text']),
     email: parseString(value['itunes:email']?.['#text']),
-  })
+  }
 
-  if (isNonEmptyObject(owner)) {
-    return owner
+  if (hasAnyProps(owner, ['name', 'email'])) {
+    return omitUndefinedFromObject(owner)
   }
 }
 

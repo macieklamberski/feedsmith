@@ -1,5 +1,6 @@
 import type { ParseFunction } from '../../common/types.js'
 import {
+  hasAnyProps,
   isNonEmptyObject,
   isObject,
   omitUndefinedFromObject,
@@ -13,13 +14,13 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     return
   }
 
-  const feed = omitUndefinedFromObject({
+  const feed = {
     updatePeriod: parseString(value['sy:updateperiod']?.['#text']),
     updateFrequency: parseNumber(value['sy:updatefrequency']?.['#text']),
     updateBase: parseString(value['sy:updatebase']?.['#text']),
-  })
+  }
 
-  if (isNonEmptyObject(feed)) {
-    return feed
+  if (hasAnyProps(feed, ['updatePeriod', 'updateFrequency', 'updateBase'])) {
+    return omitUndefinedFromObject(feed)
   }
 }

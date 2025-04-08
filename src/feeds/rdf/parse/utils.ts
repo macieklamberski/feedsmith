@@ -25,14 +25,14 @@ export const parseImage: ParseFunction<Image> = (value) => {
     return
   }
 
-  const image = omitUndefinedFromObject({
+  const image = {
     title: parseString(value.title?.['#text']),
     link: parseString(value.link?.['#text']),
     url: parseString(value.url?.['#text']),
-  })
+  }
 
   if (hasAllProps(image, ['title', 'link'])) {
-    return image
+    return omitUndefinedFromObject(image)
   }
 }
 
@@ -45,7 +45,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     return
   }
 
-  const item = omitUndefinedFromObject({
+  const item = {
     title: parseString(value.title?.['#text']),
     link: parseString(value.link?.['#text']),
     description: parseString(value.description?.['#text']),
@@ -54,10 +54,10 @@ export const parseItem: ParseFunction<Item> = (value) => {
     dc: parseDcItemOrFeed(value),
     slash: parseSlashItem(value),
     itunes: parseItunesItem(value),
-  })
+  }
 
   if (hasAllProps(item, ['title', 'link'])) {
-    return item
+    return omitUndefinedFromObject(item)
   }
 }
 
@@ -74,15 +74,15 @@ export const parseTextinput: ParseFunction<Textinput> = (value) => {
     return
   }
 
-  const textinput = omitUndefinedFromObject({
+  const textinput = {
     title: parseString(value.title?.['#text']),
     description: parseString(value.description?.['#text']),
     name: parseString(value.name?.['#text']),
     link: parseString(value.link?.['#text']),
-  })
+  }
 
   if (hasAllProps(textinput, ['title', 'description', 'name', 'link'])) {
-    return textinput
+    return omitUndefinedFromObject(textinput)
   }
 }
 
@@ -95,7 +95,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     return
   }
 
-  const feed = omitUndefinedFromObject({
+  const feed = {
     title: parseString(value.channel?.title?.['#text']),
     link: parseString(value.channel?.link?.['#text']),
     description: parseString(value.channel?.description?.['#text']),
@@ -106,10 +106,10 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     dc: parseDcItemOrFeed(value.channel),
     sy: parseSyFeed(value.channel),
     itunes: parseItunesFeed(value.channel),
-  })
+  }
 
   if (hasAllProps(feed, ['title'])) {
-    return feed
+    return omitUndefinedFromObject(feed)
   }
 }
 
