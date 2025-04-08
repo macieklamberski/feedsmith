@@ -18,7 +18,7 @@ import {
 } from '../../../namespaces/itunes/utils.js'
 import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils.js'
 import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils.js'
-import type { Feed, Image, Item, Textinput } from './types.js'
+import type { Feed, Image, Item, TextInput } from './types.js'
 
 export const parseImage: ParseFunction<Image> = (value) => {
   if (!isObject(value)) {
@@ -69,25 +69,25 @@ export const retrieveItems: ParseFunction<Array<Item>> = (value) => {
   return parseArrayOf(value?.item, parseItem)
 }
 
-export const parseTextinput: ParseFunction<Textinput> = (value) => {
+export const parseTextInput: ParseFunction<TextInput> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  const textinput = {
+  const textInput = {
     title: parseString(value.title?.['#text']),
     description: parseString(value.description?.['#text']),
     name: parseString(value.name?.['#text']),
     link: parseString(value.link?.['#text']),
   }
 
-  if (hasAllProps(textinput, ['title', 'description', 'name', 'link'])) {
-    return omitUndefinedFromObject(textinput)
+  if (hasAllProps(textInput, ['title', 'description', 'name', 'link'])) {
+    return omitUndefinedFromObject(textInput)
   }
 }
 
-export const retrieveTextinput: ParseFunction<Textinput> = (value) => {
-  return parseTextinput(value?.textinput)
+export const retrieveTextInput: ParseFunction<TextInput> = (value) => {
+  return parseTextInput(value?.textinput)
 }
 
 export const parseFeed: ParseFunction<Feed> = (value) => {
@@ -101,7 +101,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     description: parseString(value.channel?.description?.['#text']),
     image: retrieveImage(value),
     items: retrieveItems(value),
-    textinput: retrieveTextinput(value),
+    textInput: retrieveTextInput(value),
     atom: parseAtomFeed(value.channel),
     dc: parseDcItemOrFeed(value.channel),
     sy: parseSyFeed(value.channel),
