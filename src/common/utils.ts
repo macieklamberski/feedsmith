@@ -1,4 +1,4 @@
-import { decodeHTML } from 'entities'
+import { decodeHTML, decodeXML } from 'entities'
 import type { ParseFunction, Unreliable } from './types.js'
 
 export const isObject = (value: Unreliable): value is Record<string, Unreliable> => {
@@ -86,7 +86,7 @@ export const parseString: ParseFunction<string> = (value) => {
   }
 
   if (typeof value === 'string') {
-    return decodeHTML(stripCdata(value).trim())
+    return decodeHTML(decodeXML(stripCdata(value).trim()))
   }
 }
 
