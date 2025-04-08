@@ -32,14 +32,14 @@ export const parseItem: ParseFunction<Item> = (value) => {
     return
   }
 
-  const item = omitUndefinedFromObject({
+  const item = {
     section: parseString(value['slash:section']?.['#text']),
     department: parseString(value['slash:department']?.['#text']),
     comments: parseNumber(value['slash:comments']?.['#text']),
     hit_parade: parseHitParade(value['slash:hit_parade']?.['#text']),
-  })
+  }
 
   if (hasAnyProps(item, ['section', 'department', 'comments', 'hit_parade'])) {
-    return item
+    return omitUndefinedFromObject(item)
   }
 }

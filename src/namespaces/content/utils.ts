@@ -7,9 +7,9 @@ export const parseItem: ParseFunction<Item> = (value) => {
     return
   }
 
-  const item = omitUndefinedFromObject({
+  const item = {
     encoded: parseString(value['content:encoded']?.['#text']),
-  })
+  }
 
   if (hasAnyProps(item, ['encoded'])) {
     return item

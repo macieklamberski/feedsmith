@@ -50,7 +50,9 @@ export const parseAuthor: ParseFunction<Author> = (value) => {
       avatar: parseString(get('avatar')),
     })
 
-    return isNonEmptyObject(author) ? author : undefined
+    if (isNonEmptyObject(author)) {
+      return author
+    }
   }
 
   if (isNonEmptyStringOrNumber(value)) {
@@ -81,13 +83,13 @@ export const parseHub: ParseFunction<Hub> = (value) => {
   }
 
   const get = createCaseInsensitiveGetter(value)
-  const hub = omitUndefinedFromObject({
+  const hub = {
     type: parseString(get('type')),
     url: parseString(get('url')),
-  })
+  }
 
   if (hasAnyProps(hub, ['type', 'url'])) {
-    return hub
+    return omitUndefinedFromObject(hub)
   }
 }
 
@@ -97,17 +99,17 @@ export const parseAttachment: ParseFunction<Attachment> = (value) => {
   }
 
   const get = createCaseInsensitiveGetter(value)
-  const attachment = omitUndefinedFromObject({
+  const attachment = {
     url: parseString(get('url')),
     mime_type: parseString(get('mime_type')),
     title: parseString(get('title')),
     size_in_bytes: parseNumber(get('size_in_bytes')),
     duration_in_seconds: parseNumber(get('duration_in_seconds')),
-  })
+  }
 
   // TODO: Consider checking if URL has value before parsing the whole object.
   if (hasAllProps(attachment, ['url'])) {
-    return attachment
+    return omitUndefinedFromObject(attachment)
   }
 }
 
@@ -117,7 +119,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
   }
 
   const get = createCaseInsensitiveGetter(value)
-  const item = omitUndefinedFromObject({
+  const item = {
     id: parseString(get('id')),
     url: parseString(get('url')),
     external_url: parseString(get('external_url')),
@@ -133,11 +135,11 @@ export const parseItem: ParseFunction<Item> = (value) => {
     authors: retrieveAuthors(value),
     language: parseString(get('language')),
     attachments: parseArrayOf(get('attachments'), parseAttachment),
-  })
+  }
 
   // TODO: Consider checking if ID has value before parsing the whole object.
   if (hasAllProps(item, ['id'])) {
-    return item
+    return omitUndefinedFromObject(item)
   }
 }
 
@@ -147,7 +149,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
   }
 
   const get = createCaseInsensitiveGetter(value)
-  const feed = omitUndefinedFromObject({
+  const feed = {
     version: parseString(get('version')),
     title: parseString(get('title')),
     home_page_url: parseString(get('home_page_url')),
@@ -162,10 +164,10 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     hubs: parseArrayOf(get('hubs'), parseHub),
     authors: retrieveAuthors(value),
     items: parseArrayOf(get('items'), parseItem),
-  })
+  }
 
   // TODO: Consider checking if version, title and items have value before parsing the whole object.
   if (hasAllProps(feed, ['version', 'title', 'items'])) {
-    return feed
+    return omitUndefinedFromObject(feed)
   }
 }
