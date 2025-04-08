@@ -16,7 +16,7 @@ export const isNonEmptyObject = (value: Unreliable): value is Record<string, Unr
   }
 
   for (const key in value) {
-    if (Object.prototype.hasOwnProperty.call(value, key)) {
+    if (Object.hasOwn(value, key)) {
       return true
     }
   }
@@ -28,8 +28,8 @@ export const hasAnyProps = <T extends Record<string, Unreliable>, K extends keyo
   value: T,
   props: Array<K>,
 ): boolean => {
-  for (const prop of props) {
-    if (value[prop] !== undefined) {
+  for (let i = 0; i < props.length; i++) {
+    if (value[props[i]] !== undefined) {
       return true
     }
   }
@@ -41,8 +41,8 @@ export const hasAllProps = <T extends Record<string, Unreliable>, K extends keyo
   value: T,
   props: Array<K>,
 ): boolean => {
-  for (const prop of props) {
-    if (value[prop] === undefined) {
+  for (let i = 0; i < props.length; i++) {
+    if (value[props[i]] === undefined) {
       return false
     }
   }
@@ -58,9 +58,12 @@ export const omitUndefinedFromObject = <T extends Record<string, unknown>>(
   object: T,
 ): Partial<T> => {
   const result: Partial<T> = {}
+  const keys: Array<keyof T> = Object.keys(object)
 
-  for (const key in object) {
-    if (Object.prototype.hasOwnProperty.call(object, key) && object[key] !== undefined) {
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+
+    if (object[key] !== undefined) {
       result[key] = object[key]
     }
   }
@@ -168,5 +171,7 @@ export const parseArrayOf = <R>(
 
   const parsed = parse(value)
 
-  return parsed ? [parsed] : undefined
+  if (parsed) {
+    return [parsed]
+  }
 }
