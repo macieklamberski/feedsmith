@@ -23,17 +23,17 @@ export const parseLink: ParseFunction<Link> = (value) => {
     return
   }
 
-  const link = omitUndefinedFromObject({
+  const link = {
     href: parseString(value?.['@href']),
     rel: parseString(value?.['@rel']),
     type: parseString(value?.['@type']),
     hreflang: parseString(value?.['@hreflang']),
     title: parseString(value?.['@title']),
     length: parseNumber(value?.['@length']),
-  })
+  }
 
   if (hasAllProps(link, ['href'])) {
-    return link
+    return omitUndefinedFromObject(link)
   }
 }
 
@@ -55,14 +55,14 @@ export const parsePerson: ParseFunction<Person> = (value, options) => {
   }
 
   const prefix = options?.prefix ?? ''
-  const person = omitUndefinedFromObject({
+  const person = {
     name: parseString(value[`${prefix}name`]?.['#text']),
     uri: retrievePersonUri(value, options),
     email: parseString(value[`${prefix}email`]?.['#text']),
-  })
+  }
 
   if (hasAllProps(person, ['name'])) {
-    return person
+    return omitUndefinedFromObject(person)
   }
 }
 
@@ -71,14 +71,14 @@ export const parseCategory: ParseFunction<Category> = (value) => {
     return
   }
 
-  const category = omitUndefinedFromObject({
+  const category = {
     term: parseString(value['@term']),
     scheme: parseString(value['@scheme']),
     label: parseString(value['@label']),
-  })
+  }
 
   if (hasAllProps(category, ['term'])) {
-    return category
+    return omitUndefinedFromObject(category)
   }
 }
 
@@ -98,14 +98,14 @@ export const parseGenerator: ParseFunction<Generator> = (value) => {
     return
   }
 
-  const generator = omitUndefinedFromObject({
+  const generator = {
     text: parseString(value?.['#text']),
     uri: retrieveGeneratorUri(value),
     version: parseString(value['@version']),
-  })
+  }
 
   if (hasAllProps(generator, ['text'])) {
-    return generator
+    return omitUndefinedFromObject(generator)
   }
 }
 
