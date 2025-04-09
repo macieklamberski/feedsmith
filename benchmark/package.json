@@ -13,7 +13,7 @@
     "tinybench": "^4.0.1"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.8",
+    "@types/bun": "^1.2.9",
     "@types/feedme": "^2.0.4",
     "@types/feedparser": "^2.2.8",
     "typescript": "^5.8.3"

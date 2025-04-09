@@ -26,7 +26,7 @@
 
     "@rowanmanning/feed-parser": ["@rowanmanning/feed-parser@2.0.2", "", { "dependencies": { "fast-xml-parser": "^5.0.8", "html-entities": "^2.3.3" } }, "sha512-8ezh7gWosOKWCHm11izzbj+hZfz4v+iVqDANjz7R7S2iCeuMG//UbFTIUMbYTVYuSfGsr2RCLU6Xta1WVdrwBw=="],
 
-    "@types/bun": ["@types/bun@1.2.8", "", { "dependencies": { "bun-types": "1.2.7" } }, "sha512-t8L1RvJVUghW5V+M/fL3Thbxcs0HwNsXsnTEBEfEVqGteiJToOlZ/fyOEaR1kZsNqnu+3XA4RI/qmnX4w6+S+w=="],
+    "@types/bun": ["@types/bun@1.2.9", "", { "dependencies": { "bun-types": "1.2.9" } }, "sha512-epShhLGQYc4Bv/aceHbmBhOz1XgUnuTZgcxjxk+WXwNyDXavv5QHD1QEFV0FwbTSQtNq6g4ZcV6y0vZakTjswg=="],
 
     "@types/feedme": ["@types/feedme@2.0.4", "", { "dependencies": { "feedme": "*" } }, "sha512-IpMFyDtIx/KypkY4AUqMWBzUt6ce5jR42kjCWB+p+5Qu90+3YveX9lJ6gWGT9eu7GtNR4jkbBwbnkEMiueYKVA=="],
 
@@ -60,7 +60,7 @@
 
     "bellajs": ["bellajs@11.2.0", "", {}, "sha512-Wjss+Bc674ZABPr+SCKWTqA4V1pyYFhzDTjNBJy4jdmgOv0oGIGXeKBRJyINwP5tIy+iIZD9SfgZpztduzQ5QA=="],
 
-    "bun-types": ["bun-types@1.2.7", "", { "dependencies": { "@types/node": "*", "@types/ws": "*" } }, "sha512-P4hHhk7kjF99acXqKvltyuMQ2kf/rzIw3ylEDpCxDS9Xa0X0Yp/gJu/vDCucmWpiur5qJ0lwB2bWzOXa2GlHqA=="],
+    "bun-types": ["bun-types@1.2.9", "", { "dependencies": { "@types/node": "*", "@types/ws": "*" } }, "sha512-dk/kOEfQbajENN/D6FyiSgOKEuUi9PWfqKQJEgwKrCMWbjS/S6tEXp178mWvWAcUSYm9ArDlWHZKO3T/4cLXiw=="],
 
     "caseless": ["caseless@0.12.0", "", {}, "sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw=="],
 
