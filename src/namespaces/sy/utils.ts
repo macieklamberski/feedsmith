@@ -1,7 +1,6 @@
 import type { ParseFunction } from '../../common/types.js'
 import {
   hasAnyProps,
-  isNonEmptyObject,
   isObject,
   omitUndefinedFromObject,
   parseNumber,

@@ -88,8 +88,7 @@ describe('parse', () => {
           <link>http://example.org/item/1</link>
         </item>
       </rdf:RDF>
-
-      `
+    `
     const expected = {
       type: 'rdf' as const,
       feed: {
