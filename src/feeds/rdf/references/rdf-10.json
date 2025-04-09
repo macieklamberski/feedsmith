@@ -19,7 +19,7 @@
       "description": "Tool and API support for the Resource Description Framework\n     is slowly coming of age. Edd Dumbill takes a look at RDFDB,\n     one of the most exciting new RDF toolkits."
     }
   ],
-  "textinput": {
+  "textInput": {
     "title": "Search XML.com",
     "description": "Search XML.com's XML collection",
     "name": "s",

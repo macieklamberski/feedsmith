@@ -11,7 +11,7 @@ export type Image = {
   url?: string
 }
 
-export type Textinput = {
+export type TextInput = {
   title?: string
   description?: string
   name?: string
@@ -35,7 +35,7 @@ export type Feed = {
   description?: string
   image?: Image
   items?: Array<Item>
-  textinput?: Textinput
+  textInput?: TextInput
   atom?: AtomFeed
   dc?: DcItemOrFeed
   sy?: SyFeed
