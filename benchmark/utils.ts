@@ -46,7 +46,7 @@ export const runBenchmark = async (
     },
   })
 
-  const randomlySortedTests = Object.entries(tests).toSorted((a, b) => Math.random() - 0.5)
+  const randomlySortedTests = Object.entries(tests).sort(() => Math.random() - 0.5)
 
   for (const [name, test] of randomlySortedTests) {
     bench.add(name, test)
@@ -56,7 +56,6 @@ export const runBenchmark = async (
   await bench.run()
 
   console.log(`📊 Results for: ${name}`)
-
   const results = bench.tasks
     .map(({ name, result }) => ({
       Task: name,
@@ -66,7 +65,7 @@ export const runBenchmark = async (
       'Total runs': result?.latency?.samples.length || 0,
       _rawMean: result?.latency?.mean || Number.MAX_VALUE,
     }))
-    .toSorted((a, b) => a._rawMean - b._rawMean)
+    .sort((a, b) => a._rawMean - b._rawMean)
     .map(({ _rawMean, ...rest }) => rest)
 
   console.table(results)
