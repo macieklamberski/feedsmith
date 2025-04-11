@@ -1,3 +1,4 @@
+import type { Unreliable } from '../../../common/types.js'
 import {
   hasAllProps,
   hasAnyProps,
@@ -17,6 +18,15 @@ import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils.js'
 import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils.js'
 import type { ParseFunction } from './types.js'
 import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types.js'
+
+export const createNamespaceGetter = (
+  value: Record<string, Unreliable>,
+  prefix: string | undefined,
+) => {
+  return (key: string): Unreliable => {
+    return value[`${prefix || ''}${key}`]
+  }
+}
 
 export const parseLink: ParseFunction<Link> = (value) => {
   if (!isObject(value)) {
@@ -42,9 +52,9 @@ export const retrievePersonUri: ParseFunction<string> = (value, options) => {
     return
   }
 
-  const prefix = options?.prefix ?? ''
-  const uri = parseString(value[`${prefix}uri`]?.['#text']) // Atom 1.0.
-  const url = parseString(value[`${prefix}url`]?.['#text']) // Atom 0.3.
+  const get = createNamespaceGetter(value, options?.prefix)
+  const uri = parseString(get('uri')?.['#text']) // Atom 1.0.
+  const url = parseString(get('url')?.['#text']) // Atom 0.3.
 
   return uri || url
 }
@@ -54,11 +64,11 @@ export const parsePerson: ParseFunction<Person> = (value, options) => {
     return
   }
 
-  const prefix = options?.prefix ?? ''
+  const get = createNamespaceGetter(value, options?.prefix)
   const person = {
-    name: parseString(value[`${prefix}name`]?.['#text']),
+    name: parseString(get('name')?.['#text']),
     uri: retrievePersonUri(value, options),
-    email: parseString(value[`${prefix}email`]?.['#text']),
+    email: parseString(get('email')?.['#text']),
   }
 
   if (hasAllProps(person, ['name'])) {
@@ -114,21 +124,19 @@ export const parseSource: ParseFunction<Source> = (value, options) => {
     return
   }
 
-  const prefix = options?.prefix ?? ''
+  const get = createNamespaceGetter(value, options?.prefix)
   const source = omitUndefinedFromObject({
-    authors: parseArrayOf(value[`${prefix}author`], (value) => parsePerson(value, options)),
-    categories: parseArrayOf(value[`${prefix}category`], (value) => parseCategory(value, options)),
-    contributors: parseArrayOf(value[`${prefix}contributor`], (value) =>
-      parsePerson(value, options),
-    ),
-    generator: parseGenerator(value[`${prefix}generator`]),
-    icon: parseString(value[`${prefix}icon`]?.['#text']),
-    id: parseString(value[`${prefix}id`]?.['#text']),
-    links: parseArrayOf(value[`${prefix}link`], (value) => parseLink(value, options)),
-    logo: parseString(value[`${prefix}logo`]?.['#text']),
-    rights: parseString(value[`${prefix}rights`]?.['#text']),
-    subtitle: parseString(value[`${prefix}subtitle`]?.['#text']),
-    title: parseString(value[`${prefix}title`]?.['#text']),
+    authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
+    categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
+    contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
+    generator: parseGenerator(get('generator')),
+    icon: parseString(get('icon')?.['#text']),
+    id: parseString(get('id')?.['#text']),
+    links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
+    logo: parseString(get('logo')?.['#text']),
+    rights: parseString(get('rights')?.['#text']),
+    subtitle: parseString(get('subtitle')?.['#text']),
+    title: parseString(get('title')?.['#text']),
     updated: retrieveUpdated(value),
   })
 
@@ -142,10 +150,10 @@ export const retrievePublished: ParseFunction<string> = (value, options) => {
     return
   }
 
-  const prefix = options?.prefix ?? ''
-  const published = parseString(value[`${prefix}published`]?.['#text']) // Atom 1.0.
-  const issued = parseString(value[`${prefix}issued`]?.['#text']) // Atom 0.3.
-  const created = parseString(value[`${prefix}created`]?.['#text']) // Atom 0.3.
+  const get = createNamespaceGetter(value, options?.prefix)
+  const published = parseString(get('published')?.['#text']) // Atom 1.0.
+  const issued = parseString(get('issued')?.['#text']) // Atom 0.3.
+  const created = parseString(get('created')?.['#text']) // Atom 0.3.
 
   // The "created" date is not entirely valid as "published date", but if it's there when
   // no other date is present, it's a good-enough fallback especially that it's not present
@@ -158,9 +166,9 @@ export const retrieveUpdated: ParseFunction<string> = (value, options) => {
     return
   }
 
-  const prefix = options?.prefix ?? ''
-  const updated = parseString(value[`${prefix}updated`]?.['#text']) // Atom 1.0.
-  const modified = parseString(value[`${prefix}modified`]?.['#text']) // Atom 0.3.
+  const get = createNamespaceGetter(value, options?.prefix)
+  const updated = parseString(get('updated')?.['#text']) // Atom 1.0.
+  const modified = parseString(get('modified')?.['#text']) // Atom 0.3.
 
   return updated || modified
 }
@@ -170,9 +178,9 @@ export const retrieveSubtitle: ParseFunction<string> = (value, options) => {
     return
   }
 
-  const prefix = options?.prefix ?? ''
-  const subtitle = parseString(value[`${prefix}subtitle`]?.['#text']) // Atom 1.0.
-  const tagline = parseString(value[`${prefix}tagline`]?.['#text']) // Atom 0.3.
+  const get = createNamespaceGetter(value, options?.prefix)
+  const subtitle = parseString(get('subtitle')?.['#text']) // Atom 1.0.
+  const tagline = parseString(get('tagline')?.['#text']) // Atom 0.3.
 
   return subtitle || tagline
 }
@@ -182,21 +190,19 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
     return
   }
 
-  const prefix = options?.prefix ?? ''
+  const get = createNamespaceGetter(value, options?.prefix)
   const entry = omitUndefinedFromObject({
-    authors: parseArrayOf(value[`${prefix}author`], (value) => parsePerson(value, options)),
-    categories: parseArrayOf(value[`${prefix}category`], (value) => parseCategory(value, options)),
-    content: parseString(value[`${prefix}content`]?.['#text']),
-    contributors: parseArrayOf(value[`${prefix}contributor`], (value) =>
-      parsePerson(value, options),
-    ),
-    id: parseString(value[`${prefix}id`]?.['#text']),
-    links: parseArrayOf(value[`${prefix}link`], (value) => parseLink(value, options)),
+    authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
+    categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
+    content: parseString(get('content')?.['#text']),
+    contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
+    id: parseString(get('id')?.['#text']),
+    links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
     published: retrievePublished(value, options),
-    rights: parseString(value[`${prefix}rights`]?.['#text']),
-    source: parseSource(value[`${prefix}source`]),
-    summary: parseString(value[`${prefix}summary`]?.['#text']),
-    title: parseString(value[`${prefix}title`]?.['#text']),
+    rights: parseString(get('rights')?.['#text']),
+    source: parseSource(get('source')),
+    summary: parseString(get('summary')?.['#text']),
+    title: parseString(get('title')?.['#text']),
     updated: retrieveUpdated(value, options),
     dc: options?.partial ? undefined : parseDcItemOrFeed(value),
     slash: options?.partial ? undefined : parseSlashItem(value),
@@ -219,23 +225,21 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
     return
   }
 
-  const prefix = options?.prefix ?? ''
+  const get = createNamespaceGetter(value, options?.prefix)
   const feed = omitUndefinedFromObject({
-    authors: parseArrayOf(value[`${prefix}author`], (value) => parsePerson(value, options)),
-    categories: parseArrayOf(value[`${prefix}category`], (value) => parseCategory(value, options)),
-    contributors: parseArrayOf(value[`${prefix}contributor`], (value) =>
-      parsePerson(value, options),
-    ),
-    generator: parseGenerator(value[`${prefix}generator`]),
-    icon: parseString(value[`${prefix}icon`]?.['#text']),
-    id: parseString(value[`${prefix}id`]?.['#text']),
-    links: parseArrayOf(value[`${prefix}link`], (value) => parseLink(value, options)),
-    logo: parseString(value[`${prefix}logo`]?.['#text']),
-    rights: parseString(value[`${prefix}rights`]?.['#text']),
+    authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
+    categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
+    contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
+    generator: parseGenerator(get('generator')),
+    icon: parseString(get('icon')?.['#text']),
+    id: parseString(get('id')?.['#text']),
+    links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
+    logo: parseString(get('logo')?.['#text']),
+    rights: parseString(get('rights')?.['#text']),
     subtitle: retrieveSubtitle(value, options),
-    title: parseString(value[`${prefix}title`]?.['#text']),
+    title: parseString(get('title')?.['#text']),
     updated: retrieveUpdated(value, options),
-    entries: parseArrayOf(value[`${prefix}entry`], (value) => parseEntry(value, options)),
+    entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options)),
     dc: options?.partial ? undefined : parseDcItemOrFeed(value),
     sy: options?.partial ? undefined : parseSyFeed(value),
     itunes: options?.partial ? undefined : parseItunesFeed(value),
