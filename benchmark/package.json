@@ -3,9 +3,9 @@
   "type": "module",
   "dependencies": {
     "@extractus/feed-extractor": "^7.1.4",
+    "@gaphub/feed": "^5.2.4",
     "@rowanmanning/feed-parser": "^2.0.2",
     "@ulisesgascon/rss-feed-parser": "^1.0.1",
-    "fast-xml-parser": "^5.2.0",
     "feed-read": "^0.0.1",
     "feedme": "^2.0.2",
     "feedparser": "^2.2.10",

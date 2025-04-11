@@ -1,30 +1,18 @@
 import { Readable } from 'node:stream'
 import { extractFromXml } from '@extractus/feed-extractor'
+import { FeedParser as GapHubFeedParser } from '@gaphub/feed'
 import { parseFeed as rowanmanningFeedParser } from '@rowanmanning/feed-parser'
 import { rssParse as ulisesgasconRssFeedParser } from '@ulisesgascon/rss-feed-parser'
-import { XMLParser } from 'fast-xml-parser'
 import FeedMeJs from 'feedme'
 import FeedParser from 'feedparser'
 import RssParser from 'rss-parser'
 import { parseAtomFeed, parseJsonFeed, parseRdfFeed, parseRssFeed } from '../src/index'
 import { loadFeedFiles, runBenchmark, runTest } from './utils'
 
-// This is a fast-xml-parser instance with settings comparable to those used by Feedsmith.
-// The only difference is that here, trimming values and processing entities are enabled,
-// while in Feedsmith, those features are disabled. Feedsmith uses a different approach for
-// trimming/entities (more optimal), so the final output is the same.
-const xmlParser = new XMLParser({
-  trimValues: true,
-  processEntities: true,
-  htmlEntities: true,
-  parseTagValue: false,
-  parseAttributeValue: false,
-  alwaysCreateTextNode: true,
-  ignoreAttributes: false,
-  attributeNamePrefix: '@',
-  transformTagName: (name) => name.toLowerCase(),
-  transformAttributeName: (name) => name.toLowerCase(),
-})
+const gaphubFeedParserInstance = new GapHubFeedParser()
+const gaphubFeedParser = (feed: string) => {
+  return gaphubFeedParserInstance.parseString(feed)
+}
 
 const feedMeJs = (feed: string) => {
   const parser = new FeedMeJs(true)
@@ -57,10 +45,6 @@ const rssParser = (feed: string) => {
   return rssParserInstance.parseString(feed)
 }
 
-const fastXmlParser = (feed: string) => {
-  return xmlParser.parse(feed)
-}
-
 const jsonFilesStrings = loadFeedFiles('feeds/json', 10)
 const jsonFilesObjects = Object.entries(jsonFilesStrings).reduce(
   (jsons, [name, json]) => {
@@ -82,7 +66,7 @@ await runBenchmark('JSON feed parsing (100KB — 5MB)', {
 
 await runBenchmark('RSS feed parsing (5MB — 50MB)', {
   'rss-parser': () => runTest(rssBigFiles, rssParser),
-  'fast-xml-parser': () => runTest(rssBigFiles, fastXmlParser),
+  '@gaphub/feed': () => runTest(rssBigFiles, gaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(rssBigFiles, rowanmanningFeedParser),
   'feedme.js': () => runTest(rssBigFiles, feedMeJs),
   '@extractus/feed-extractor': () => runTest(rssBigFiles, extractFromXml),
@@ -93,7 +77,7 @@ await runBenchmark('RSS feed parsing (5MB — 50MB)', {
 
 await runBenchmark('RSS feed parsing (100KB — 5MB)', {
   'rss-parser': () => runTest(rssSmallFiles, rssParser),
-  'fast-xml-parser': () => runTest(rssSmallFiles, fastXmlParser),
+  '@gaphub/feed': () => runTest(rssBigFiles, gaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(rssSmallFiles, rowanmanningFeedParser),
   'feedme.js': () => runTest(rssSmallFiles, feedMeJs),
   '@extractus/feed-extractor': () => runTest(rssSmallFiles, extractFromXml),
@@ -104,7 +88,7 @@ await runBenchmark('RSS feed parsing (100KB — 5MB)', {
 
 await runBenchmark('Atom feed parsing (5MB — 50MB)', {
   'rss-parser': () => runTest(atomBigFiles, rssParser),
-  'fast-xml-parser': () => runTest(atomBigFiles, fastXmlParser),
+  '@gaphub/feed': () => runTest(rssBigFiles, gaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(atomBigFiles, rowanmanningFeedParser),
   'feedme.js': () => runTest(atomBigFiles, feedMeJs),
   '@extractus/feed-extractor': () => runTest(atomBigFiles, extractFromXml),
@@ -115,7 +99,7 @@ await runBenchmark('Atom feed parsing (5MB — 50MB)', {
 
 await runBenchmark('Atom feed parsing (100KB — 5MB)', {
   'rss-parser': () => runTest(atomSmallFiles, rssParser),
-  'fast-xml-parser': () => runTest(atomSmallFiles, fastXmlParser),
+  '@gaphub/feed': () => runTest(rssBigFiles, gaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(atomSmallFiles, rowanmanningFeedParser),
   'feedme.js': () => runTest(atomSmallFiles, feedMeJs),
   '@extractus/feed-extractor': () => runTest(atomSmallFiles, extractFromXml),
@@ -126,7 +110,7 @@ await runBenchmark('Atom feed parsing (100KB — 5MB)', {
 
 await runBenchmark('RDF feed parsing (100KB — 5MB)', {
   'rss-parser': () => runTest(rdfFiles, rssParser),
-  'fast-xml-parser': () => runTest(rdfFiles, fastXmlParser),
+  '@gaphub/feed': () => runTest(rssBigFiles, gaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(rdfFiles, rowanmanningFeedParser),
   'feedme.js': () => runTest(rdfFiles, feedMeJs),
   '@extractus/feed-extractor': () => runTest(rdfFiles, extractFromXml),
