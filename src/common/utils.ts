@@ -84,12 +84,12 @@ export const stripCdata = (text: Unreliable) => {
 }
 
 export const parseString: ParseFunction<string> = (value) => {
-  if (typeof value === 'number') {
-    return value.toString()
-  }
-
   if (typeof value === 'string') {
     return decodeHTML(decodeXML(stripCdata(value).trim()))
+  }
+
+  if (typeof value === 'number') {
+    return value.toString()
   }
 }
 
