@@ -1,5 +1,6 @@
-import { XMLParser } from 'fast-xml-parser'
+import { type X2jOptions, XMLParser } from 'fast-xml-parser'
 import { parserConfig } from '../../../common/config.js'
+import { parseAtomTag } from '../../atom/parse/utils.js'
 
 export const stopNodes = [
   // TODO: What about the namespaces?
@@ -43,7 +44,12 @@ export const stopNodes = [
   'rss.channel.item.source',
 ]
 
+const updateTag: X2jOptions['updateTag'] = (name, jPath, attrs) => {
+  return parseAtomTag(name, attrs) ?? name
+}
+
 export const parser = new XMLParser({
   ...parserConfig,
+  updateTag,
   stopNodes,
 })

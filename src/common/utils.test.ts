@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import type { ParseFunction } from './types.js'
 import {
+  createNamespaceGetter,
   hasAllProps,
   hasAnyProps,
   isNonEmptyObject,
@@ -310,11 +311,11 @@ describe('omitUndefinedFromObject', () => {
 
   it('should handle objects with inherited properties', () => {
     const proto = { inherited: 'value' }
-    const obj = Object.create(proto)
-    obj.own = 'property'
-    obj.undef = undefined
+    const value = Object.create(proto)
+    value.own = 'property'
+    value.undef = undefined
 
-    expect(omitUndefinedFromObject(obj)).toEqual({ own: 'property' })
+    expect(omitUndefinedFromObject(value)).toEqual({ own: 'property' })
   })
 
   it('should preserve falsy non-undefined values', () => {
@@ -895,5 +896,151 @@ describe('parseArrayOf', () => {
     const value = undefined
 
     expect(parseArrayOf(value, parser)).toBeUndefined()
+  })
+})
+
+describe('createNamespaceGetter', () => {
+  it('should retrieve value with prefix when prefix is provided', () => {
+    const value = {
+      'ns:key': 'prefixed value',
+      key: 'unprefixed value',
+    }
+    const getter = createNamespaceGetter(value, 'ns:')
+
+    expect(getter('key')).toEqual('prefixed value')
+  })
+
+  it('should retrieve unprefixed value when fallbackToNoPrefix is true and prefixed key does not exist', () => {
+    const value = {
+      key: 'unprefixed value',
+    }
+    const getter = createNamespaceGetter(value, 'ns:', true)
+
+    expect(getter('key')).toEqual('unprefixed value')
+  })
+
+  it('should prioritize prefixed value when both prefixed and unprefixed keys exist and fallbackToNoPrefix is true', () => {
+    const value = {
+      'ns:key': 'prefixed value',
+      key: 'unprefixed value',
+    }
+    const getter = createNamespaceGetter(value, 'ns:', true)
+
+    expect(getter('key')).toEqual('prefixed value')
+  })
+
+  it('should handle empty prefix', () => {
+    const value = {
+      key: 'value',
+    }
+    const getter = createNamespaceGetter(value, '')
+
+    expect(getter('key')).toEqual('value')
+  })
+
+  it('should handle undefined prefix', () => {
+    const value = {
+      key: 'value',
+    }
+    const getter = createNamespaceGetter(value, undefined)
+
+    expect(getter('key')).toEqual('value')
+  })
+
+  it('should handle complex objects as values', () => {
+    const complexValue = { nested: 'object' }
+    const value = {
+      'ns:key': complexValue,
+      key: 'simple value',
+    }
+    const getter = createNamespaceGetter(value, 'ns:')
+
+    expect(getter('key')).toBe(complexValue)
+  })
+
+  it('should handle arrays as values', () => {
+    const arrayValue = [1, 2, 3]
+    const value = {
+      'ns:key': arrayValue,
+      key: 'simple value',
+    }
+    const getter = createNamespaceGetter(value, 'ns:')
+
+    expect(getter('key')).toBe(arrayValue)
+  })
+
+  it('should handle non-string keys gracefully', () => {
+    const value = {
+      'ns:123': 'numeric key with prefix',
+      '123': 'numeric key',
+    }
+    const getter = createNamespaceGetter(value, 'ns:')
+
+    expect(getter('123')).toEqual('numeric key with prefix')
+  })
+
+  it('should handle fallbackToNoPrefix with mixed key types', () => {
+    const value = {
+      '123': 'numeric key',
+    }
+    const getter = createNamespaceGetter(value, 'ns:', true)
+
+    expect(getter('123')).toEqual('numeric key')
+  })
+
+  it('should handle various prefix formats', () => {
+    const value = {
+      'namespace:key': 'value with colon',
+      'namespace-key': 'value with dash',
+      namespace_key: 'value with underscore',
+    }
+
+    const colonGetter = createNamespaceGetter(value, 'namespace:')
+    const dashGetter = createNamespaceGetter(value, 'namespace-')
+    const underscoreGetter = createNamespaceGetter(value, 'namespace_')
+
+    expect(colonGetter('key')).toEqual('value with colon')
+    expect(dashGetter('key')).toEqual('value with dash')
+    expect(underscoreGetter('key')).toEqual('value with underscore')
+  })
+
+  it('should return non-prefixed if namespaced has nullish value', () => {
+    const value = {
+      'ns:nullKey': null,
+      'ns:undefinedKey': undefined,
+      nullKey: 'fallback for null',
+      undefinedKey: 'fallback for undefined',
+    }
+    const getter = createNamespaceGetter(value, 'ns:', true)
+
+    expect(getter('nullKey')).toEqual('fallback for null')
+    expect(getter('undefinedKey')).toEqual('fallback for undefined')
+  })
+
+  it('should return undefined when prefixed key does not exist', () => {
+    const value = {
+      key: 'unprefixed value',
+    }
+    const getter = createNamespaceGetter(value, 'ns:')
+
+    expect(getter('key')).toBeUndefined()
+  })
+
+  it('should return undefined for non-existent keys (with prefix)', () => {
+    const value = {
+      'ns:existingKey': 'value',
+    }
+    const getter = createNamespaceGetter(value, 'ns:')
+
+    expect(getter('nonExistentKey')).toBeUndefined()
+  })
+
+  it('should return undefined for non-existent keys (fallback enabled)', () => {
+    const value = {
+      existingKey: 'value',
+    }
+    const getter = createNamespaceGetter(value, 'ns:', true)
+
+    expect(getter('nonExistentKey')).toBeUndefined()
   })
 })

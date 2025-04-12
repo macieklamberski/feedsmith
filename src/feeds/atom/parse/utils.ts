@@ -1,5 +1,5 @@
-import type { Unreliable } from '../../../common/types.js'
 import {
+  createNamespaceGetter,
   hasAllProps,
   hasAnyProps,
   isNonEmptyObject,
@@ -16,15 +16,15 @@ import {
 } from '../../../namespaces/itunes/utils.js'
 import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils.js'
 import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils.js'
+import { parser } from './config.js'
 import type { ParseFunction } from './types.js'
 import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types.js'
 
-export const createNamespaceGetter = (
-  value: Record<string, Unreliable>,
-  prefix: string | undefined,
-) => {
-  return (key: string): Unreliable => {
-    return value[`${prefix || ''}${key}`]
+export const parseAtomTag = (name: string, attrs: Record<string, string> | undefined) => {
+  if (attrs?.[`@xmlns:${name}`] === 'http://www.w3.org/2005/Atom') {
+    attrs['@xmlns'] = '1' // To indicate whether to parse the contents in parse* function.
+
+    return `atom:${name}`
   }
 }
 
@@ -52,7 +52,7 @@ export const retrievePersonUri: ParseFunction<string> = (value, options) => {
     return
   }
 
-  const get = createNamespaceGetter(value, options?.prefix)
+  const get = createNamespaceGetter(value, options?.prefix, true)
   const uri = parseString(get('uri')?.['#text']) // Atom 1.0.
   const url = parseString(get('url')?.['#text']) // Atom 0.3.
 
@@ -64,7 +64,12 @@ export const parsePerson: ParseFunction<Person> = (value, options) => {
     return
   }
 
-  const get = createNamespaceGetter(value, options?.prefix)
+  if (value['@xmlns'] && value['#text']) {
+    // biome-ignore lint/style/noParameterAssign: No explanation.
+    value = parser.parse(value['#text'])
+  }
+
+  const get = createNamespaceGetter(value, options?.prefix, true)
   const person = {
     name: parseString(get('name')?.['#text']),
     uri: retrievePersonUri(value, options),

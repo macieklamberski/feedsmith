@@ -175,3 +175,15 @@ export const parseArrayOf = <R>(
     return [parsed]
   }
 }
+
+export const createNamespaceGetter = (
+  value: Record<string, Unreliable>,
+  prefix: string | undefined,
+  fallbackToNoPrefix = false,
+) => {
+  return (key: string): Unreliable => {
+    return fallbackToNoPrefix
+      ? (value[`${prefix || ''}${key}`] ?? value[key])
+      : value[`${prefix || ''}${key}`]
+  }
+}
