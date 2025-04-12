@@ -124,6 +124,24 @@ export const parseBoolean: ParseFunction<boolean> = (value) => {
   }
 }
 
+export const parseYesNoBoolean: ParseFunction<boolean> = (value) => {
+  const boolean = parseBoolean(value)
+
+  if (boolean !== undefined) {
+    return boolean
+  }
+
+  if (typeof value === 'string') {
+    if (value.toLowerCase() === 'yes') {
+      return true
+    }
+
+    if (value.toLowerCase() === 'no') {
+      return false
+    }
+  }
+}
+
 export const parseSingular = <T>(value: T | Array<T>): T => {
   return Array.isArray(value) ? value[0] : value
 }

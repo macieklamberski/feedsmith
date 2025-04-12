@@ -16,6 +16,7 @@ import {
   parseNumber,
   parseSingular,
   parseString,
+  parseYesNoBoolean,
   stripCdata,
 } from './utils.js'
 
@@ -727,6 +728,98 @@ describe('parseBoolean', () => {
     const value = undefined
 
     expect(parseBoolean(value)).toBeUndefined()
+  })
+})
+
+describe('parseYesNoBoolean', () => {
+  it('should return boolean true', () => {
+    const value = true
+
+    expect(parseYesNoBoolean(value)).toEqual(true)
+  })
+
+  it('should return boolean false', () => {
+    const value = false
+
+    expect(parseYesNoBoolean(value)).toEqual(false)
+  })
+
+  it('should handle true string', () => {
+    const value = 'true'
+
+    expect(parseYesNoBoolean(value)).toEqual(true)
+  })
+
+  it('should handle false string', () => {
+    const value = 'false'
+
+    expect(parseYesNoBoolean(value)).toEqual(false)
+  })
+
+  it('should handle case insensitive false string', () => {
+    const value = 'FaLse'
+
+    expect(parseYesNoBoolean(value)).toEqual(false)
+  })
+
+  it('should handle "yes" string as true', () => {
+    const value = 'yes'
+
+    expect(parseYesNoBoolean(value)).toEqual(true)
+  })
+
+  it('should handle case insensitive "yes" string', () => {
+    const value = 'YeS'
+
+    expect(parseYesNoBoolean(value)).toEqual(true)
+  })
+
+  it('should handle "no" string as false', () => {
+    const value = 'no'
+
+    expect(parseYesNoBoolean(value)).toEqual(false)
+  })
+
+  it('should handle invalid strings as undefined', () => {
+    const value = 'anything'
+
+    expect(parseYesNoBoolean(value)).toBeUndefined()
+  })
+
+  it('should handle empty string as undefined', () => {
+    const value = ''
+
+    expect(parseYesNoBoolean(value)).toBeUndefined()
+  })
+
+  it('should return number as undefined', () => {
+    const value = 420
+
+    expect(parseYesNoBoolean(value)).toBeUndefined()
+  })
+
+  it('should handle array as undefined', () => {
+    const value = ['javascript', { another: 'typescript' }]
+
+    expect(parseYesNoBoolean(value)).toBeUndefined()
+  })
+
+  it('should handle object as undefined', () => {
+    const value = { name: 'javascript' }
+
+    expect(parseYesNoBoolean(value)).toBeUndefined()
+  })
+
+  it('should handle null as undefined', () => {
+    const value = null
+
+    expect(parseYesNoBoolean(value)).toBeUndefined()
+  })
+
+  it('should handle undefined as undefined', () => {
+    const value = undefined
+
+    expect(parseYesNoBoolean(value)).toBeUndefined()
   })
 })
 

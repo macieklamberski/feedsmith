@@ -11,6 +11,7 @@ import {
   parseBoolean,
   parseNumber,
   parseString,
+  parseYesNoBoolean,
 } from '../../common/utils.js'
 import type { Category, Feed, Item, Owner } from './types.js'
 
@@ -41,18 +42,6 @@ export const parseOwner: ParseFunction<Owner> = (value) => {
 
   if (hasAnyProps(owner, ['name', 'email'])) {
     return omitUndefinedFromObject(owner)
-  }
-}
-
-export const parseYesNoBoolean: ParseFunction<boolean> = (value) => {
-  const boolean = parseBoolean(value)
-
-  if (boolean !== undefined) {
-    return boolean
-  }
-
-  if (typeof value === 'string') {
-    return value.toLowerCase() === 'yes'
   }
 }
 
