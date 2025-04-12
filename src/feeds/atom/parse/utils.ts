@@ -43,7 +43,7 @@ export const retrievePersonUri: ParseFunction<string> = (value, options) => {
     return
   }
 
-  const get = createNamespaceGetter(value, options?.prefix, true)
+  const get = createNamespaceGetter(value, options?.prefix)
   const uri = parseString(get('uri')?.['#text']) // Atom 1.0.
   const url = parseString(get('url')?.['#text']) // Atom 0.3.
 
@@ -55,7 +55,7 @@ export const parsePerson: ParseFunction<Person> = (value, options) => {
     return
   }
 
-  const get = createNamespaceGetter(value, options?.prefix, true)
+  const get = createNamespaceGetter(value, options?.prefix)
   const person = {
     name: parseString(get('name')?.['#text']),
     uri: retrievePersonUri(value, options),

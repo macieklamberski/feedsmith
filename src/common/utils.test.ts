@@ -911,25 +911,6 @@ describe('createNamespaceGetter', () => {
     expect(get('key')).toEqual('prefixed value')
   })
 
-  it('should retrieve unprefixed value when fallbackToNoPrefix is true and prefixed key does not exist', () => {
-    const value = {
-      key: 'unprefixed value',
-    }
-    const get = createNamespaceGetter(value, 'ns:', true)
-
-    expect(get('key')).toEqual('unprefixed value')
-  })
-
-  it('should prioritize prefixed value when both prefixed and unprefixed keys exist and fallbackToNoPrefix is true', () => {
-    const value = {
-      'ns:key': 'prefixed value',
-      key: 'unprefixed value',
-    }
-    const get = createNamespaceGetter(value, 'ns:', true)
-
-    expect(get('key')).toEqual('prefixed value')
-  })
-
   it('should handle empty prefix', () => {
     const value = {
       key: 'value',
@@ -980,15 +961,6 @@ describe('createNamespaceGetter', () => {
     expect(get('123')).toEqual('numeric key with prefix')
   })
 
-  it('should handle fallbackToNoPrefix with mixed key types', () => {
-    const value = {
-      '123': 'numeric key',
-    }
-    const get = createNamespaceGetter(value, 'ns:', true)
-
-    expect(get('123')).toEqual('numeric key')
-  })
-
   it('should handle various prefix formats', () => {
     const value = {
       'namespace:key': 'value with colon',
@@ -1005,19 +977,6 @@ describe('createNamespaceGetter', () => {
     expect(underscoreGetter('key')).toEqual('value with underscore')
   })
 
-  it('should return non-prefixed if namespaced has nullish value', () => {
-    const value = {
-      'ns:nullKey': null,
-      'ns:undefinedKey': undefined,
-      nullKey: 'fallback for null',
-      undefinedKey: 'fallback for undefined',
-    }
-    const get = createNamespaceGetter(value, 'ns:', true)
-
-    expect(get('nullKey')).toEqual('fallback for null')
-    expect(get('undefinedKey')).toEqual('fallback for undefined')
-  })
-
   it('should return undefined when prefixed key does not exist', () => {
     const value = {
       key: 'unprefixed value',
@@ -1032,15 +991,6 @@ describe('createNamespaceGetter', () => {
       'ns:existingKey': 'value',
     }
     const get = createNamespaceGetter(value, 'ns:')
-
-    expect(get('nonExistentKey')).toBeUndefined()
-  })
-
-  it('should return undefined for non-existent keys (fallback enabled)', () => {
-    const value = {
-      existingKey: 'value',
-    }
-    const get = createNamespaceGetter(value, 'ns:', true)
 
     expect(get('nonExistentKey')).toBeUndefined()
   })

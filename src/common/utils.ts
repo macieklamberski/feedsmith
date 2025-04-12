@@ -179,12 +179,9 @@ export const parseArrayOf = <R>(
 export const createNamespaceGetter = (
   value: Record<string, Unreliable>,
   prefix: string | undefined,
-  fallbackToUnprefixed = false,
 ) => {
   return (key: string): Unreliable => {
-    return fallbackToUnprefixed
-      ? (value[`${prefix || ''}${key}`] ?? value[key])
-      : value[`${prefix || ''}${key}`]
+    return value[`${prefix || ''}${key}`]
   }
 }
 
