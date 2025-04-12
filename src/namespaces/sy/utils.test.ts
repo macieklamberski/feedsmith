@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { parseFeed } from './utils'
+import { parseFeed } from './utils.js'
 
 describe('parseFeed', () => {
   it('should parse complete channel object', () => {

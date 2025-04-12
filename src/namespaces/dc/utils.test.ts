@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { parseItemOrFeed } from './utils'
+import { parseItemOrFeed } from './utils.js'
 
 describe('parseItemOrFeed', () => {
   it('should parse complete item or feed object with all properties', () => {

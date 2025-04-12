@@ -1,5 +1,5 @@
-import { decodeHTML } from 'entities'
-import type { ParseFunction, Unreliable } from './types'
+import { decodeHTML, decodeXML } from 'entities'
+import type { ParseFunction, Unreliable } from './types.js'
 
 export const isObject = (value: Unreliable): value is Record<string, Unreliable> => {
   return (
@@ -16,7 +16,7 @@ export const isNonEmptyObject = (value: Unreliable): value is Record<string, Unr
   }
 
   for (const key in value) {
-    if (Object.prototype.hasOwnProperty.call(value, key)) {
+    if (Object.hasOwn(value, key)) {
       return true
     }
   }
@@ -28,8 +28,8 @@ export const hasAnyProps = <T extends Record<string, Unreliable>, K extends keyo
   value: T,
   props: Array<K>,
 ): boolean => {
-  for (const prop of props) {
-    if (value[prop] !== undefined) {
+  for (let i = 0; i < props.length; i++) {
+    if (value[props[i]] !== undefined) {
       return true
     }
   }
@@ -41,8 +41,8 @@ export function hasAllProps<T extends object, K extends keyof T>(
   value: T,
   props: readonly K[],
 ): value is T & { [P in K]-?: NonNullable<T[P]> } {
-  for (const prop of props) {
-    if (value[prop] === undefined) {
+  for (let i = 0; i < props.length; i++) {
+    if (value[props[i]] === undefined) {
       return false
     }
   }
@@ -58,9 +58,12 @@ export const omitUndefinedFromObject = <T extends Record<string, unknown>>(
   object: T,
 ): Partial<T> => {
   const result: Partial<T> = {}
+  const keys: Array<keyof T> = Object.keys(object)
 
-  for (const key in object) {
-    if (Object.prototype.hasOwnProperty.call(object, key) && object[key] !== undefined) {
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+
+    if (object[key] !== undefined) {
       result[key] = object[key]
     }
   }
@@ -81,12 +84,12 @@ export const stripCdata = (text: Unreliable) => {
 }
 
 export const parseString: ParseFunction<string> = (value) => {
-  if (typeof value === 'number') {
-    return value.toString()
+  if (typeof value === 'string') {
+    return decodeHTML(decodeXML(stripCdata(value).trim()))
   }
 
-  if (typeof value === 'string') {
-    return decodeHTML(stripCdata(value).trim())
+  if (typeof value === 'number') {
+    return value.toString()
   }
 }
 
@@ -95,7 +98,7 @@ export const parseNumber: ParseFunction<number> = (value) => {
     return value
   }
 
-  if (typeof value === 'string') {
+  if (typeof value === 'string' && value !== '') {
     // TODO: Maybe use the strnum package instead? It's already included with fast-xml-parser.
     const numeric = Number(value)
 
@@ -108,11 +111,15 @@ export const parseBoolean: ParseFunction<boolean> = (value) => {
     return value
   }
 
-  if (value === 'true') {
+  if (typeof value !== 'string') {
+    return
+  }
+
+  if (value.toLowerCase() === 'true') {
     return true
   }
 
-  if (value === 'false') {
+  if (value.toLowerCase() === 'false') {
     return false
   }
 }
@@ -159,10 +166,36 @@ export const parseArrayOf = <R>(
   const array = parseArray(value)
 
   if (array) {
-    return omitNullishFromArray(array.map(parse))
+    return omitNullishFromArray(array.map((subValue) => parse(subValue)))
   }
 
   const parsed = parse(value)
 
-  return parsed ? [parsed] : undefined
+  if (parsed) {
+    return [parsed]
+  }
+}
+
+export const createNamespaceGetter = (
+  value: Record<string, Unreliable>,
+  prefix: string | undefined,
+) => {
+  return (key: string): Unreliable => {
+    return value[`${prefix || ''}${key}`]
+  }
+}
+
+export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
+  const keyMap = new Map<string, string>()
+
+  for (const key in value) {
+    if (Object.prototype.hasOwnProperty.call(value, key)) {
+      keyMap.set(key.toLowerCase(), key)
+    }
+  }
+
+  return (requestedKey: string) => {
+    const originalKey = keyMap.get(requestedKey.toLowerCase())
+    return originalKey ? value[originalKey] : undefined
+  }
 }

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'bun:test'
-import type { ParseFunction } from './types'
+import type { ParseFunction } from './types.js'
 import {
+  createCaseInsensitiveGetter,
+  createNamespaceGetter,
   hasAllProps,
   hasAnyProps,
   isNonEmptyObject,
@@ -15,7 +17,7 @@ import {
   parseSingular,
   parseString,
   stripCdata,
-} from './utils'
+} from './utils.js'
 
 describe('isObject', () => {
   it('should return true for plain objects', () => {
@@ -310,11 +312,11 @@ describe('omitUndefinedFromObject', () => {
 
   it('should handle objects with inherited properties', () => {
     const proto = { inherited: 'value' }
-    const obj = Object.create(proto)
-    obj.own = 'property'
-    obj.undef = undefined
+    const value = Object.create(proto)
+    value.own = 'property'
+    value.undef = undefined
 
-    expect(omitUndefinedFromObject(obj)).toEqual({ own: 'property' })
+    expect(omitUndefinedFromObject(value)).toEqual({ own: 'property' })
   })
 
   it('should preserve falsy non-undefined values', () => {
@@ -501,10 +503,82 @@ describe('parseString', () => {
     expect(parseString(value)).toEqual(value)
   })
 
-  it('should handle HTML entities in string', () => {
-    const value = '&amp;'
+  it('Should handle entities #1', () => {
+    const value =
+      'Testing &lt;b&gt;bold text&lt;/b&gt; and &lt;i&gt;italic text&lt;/i&gt; with &amp;amp; ampersand, &amp;quot; quotes, &amp;apos; apostrophe and &amp;nbsp; non-breaking space.'
+    const expected = `Testing <b>bold text</b> and <i>italic text</i> with & ampersand, " quotes, ' apostrophe and   non-breaking space.`
+    expect(parseString(value)).toEqual(expected)
+  })
 
-    expect(parseString(value)).toEqual('&')
+  it('Should handle entities #2', () => {
+    const value =
+      '<![CDATA[Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.]]>'
+    const expected = `Testing <b>bold text</b> and <i>italic text</i> with & ampersand, " quotes, ' apostrophe and   non-breaking space.`
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #3', () => {
+    const value =
+      'Special chars: &amp;lt; &amp;gt; &amp;euro; € &amp;copy; © &amp;reg; ® &amp;pound; £ &amp;yen; ¥'
+    const expected = 'Special chars: < > € € © © ® ® £ £ ¥ ¥'
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #4', () => {
+    const value = '<![CDATA[Special chars: &lt; &gt; &euro; € &copy; © &reg; ® &pound; £ &yen; ¥]]>'
+    const expected = 'Special chars: < > € € © © ® ® £ £ ¥ ¥'
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #5', () => {
+    const value =
+      'Numeric entities: &amp;#169; &#169; &amp;#8364; &#8364; &amp;#8482; &#8482; &amp;#x2122; &#x2122;'
+    const expected = 'Numeric entities: © © € € ™ ™ ™ ™'
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #6', () => {
+    const value = '<![CDATA[Numeric entities: &#169; &#8364; &#8482; &#x2122;]]>'
+    const expected = 'Numeric entities: © € ™ ™'
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #7', () => {
+    const value =
+      '&lt;p&gt;HTML mixed with entities: &amp;copy; ©, &amp;reg; ®, &amp;#8364; € and &lt;a href=&quot;https://example.com?param1=value1&amp;param2=value2&quot;&gt;URL with ampersand&lt;/a&gt;&lt;/p&gt;'
+    const expected =
+      '<p>HTML mixed with entities: © ©, ® ®, € € and <a href="https://example.com?param1=value1¶m2=value2">URL with ampersand</a></p>'
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #8', () => {
+    const value =
+      '<![CDATA[<p>HTML mixed with entities: &copy; ©, &reg; ®, &#8364; € and <a href="https://example.com?param1=value1&param2=value2">URL with ampersand</a></p>]]>'
+    const expected =
+      '<p>HTML mixed with entities: © ©, ® ®, € € and <a href="https://example.com?param1=value1¶m2=value2">URL with ampersand</a></p>'
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #9', () => {
+    const value =
+      '<![CDATA[Testing CDATA with brackets: [This is in brackets] and <code>if (x > y) { doSomething(); }</code>]]>'
+    const expected =
+      'Testing CDATA with brackets: [This is in brackets] and <code>if (x > y) { doSomething(); }</code>'
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #10', () => {
+    const value =
+      '&lt;script&gt;function test() { if (x &lt; y &amp;&amp; z &gt; 0) { alert(&quot;Hello!&quot;); } }&lt;/script&gt;'
+    const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #11', () => {
+    const value =
+      '<![CDATA[<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>]]>'
+    const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+    expect(parseString(value)).toEqual(expected)
   })
 
   it('should return number', () => {
@@ -557,6 +631,12 @@ describe('parseNumber', () => {
     expect(parseNumber(value)).toEqual(36.6)
   })
 
+  it('should handle empty string', () => {
+    const value = ''
+
+    expect(parseNumber(value)).toBeUndefined()
+  })
+
   it('should return number', () => {
     const value = 420
 
@@ -583,22 +663,16 @@ describe('parseNumber', () => {
 })
 
 describe('parseBoolean', () => {
-  it('should handle array', () => {
-    const value = ['javascript', { another: 'typescript' }]
+  it('should return boolean true', () => {
+    const value = true
 
-    expect(parseBoolean(value)).toBeUndefined()
+    expect(parseBoolean(value)).toEqual(true)
   })
 
-  it('should handle object', () => {
-    const value = { name: 'javascript' }
+  it('should return boolean false', () => {
+    const value = false
 
-    expect(parseBoolean(value)).toBeUndefined()
-  })
-
-  it('should handle non-boolean string', () => {
-    const value = 'javascript'
-
-    expect(parseBoolean(value)).toBeUndefined()
+    expect(parseBoolean(value)).toEqual(false)
   })
 
   it('should handle true string', () => {
@@ -613,16 +687,34 @@ describe('parseBoolean', () => {
     expect(parseBoolean(value)).toEqual(false)
   })
 
+  it('should handle case insensitive false string', () => {
+    const value = 'FaLse'
+
+    expect(parseBoolean(value)).toEqual(false)
+  })
+
+  it('should handle non-boolean string', () => {
+    const value = 'javascript'
+
+    expect(parseBoolean(value)).toBeUndefined()
+  })
+
   it('should return number', () => {
     const value = 420
 
     expect(parseBoolean(value)).toBeUndefined()
   })
 
-  it('should return boolean', () => {
-    const value = true
+  it('should handle array', () => {
+    const value = ['javascript', { another: 'typescript' }]
 
-    expect(parseBoolean(value)).toEqual(value)
+    expect(parseBoolean(value)).toBeUndefined()
+  })
+
+  it('should handle object', () => {
+    const value = { name: 'javascript' }
+
+    expect(parseBoolean(value)).toBeUndefined()
   })
 
   it('should handle null', () => {
@@ -805,5 +897,233 @@ describe('parseArrayOf', () => {
     const value = undefined
 
     expect(parseArrayOf(value, parser)).toBeUndefined()
+  })
+})
+
+describe('createNamespaceGetter', () => {
+  it('should retrieve value with prefix when prefix is provided', () => {
+    const value = {
+      'ns:key': 'prefixed value',
+      key: 'unprefixed value',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('key')).toEqual('prefixed value')
+  })
+
+  it('should handle empty prefix', () => {
+    const value = {
+      key: 'value',
+    }
+    const get = createNamespaceGetter(value, '')
+
+    expect(get('key')).toEqual('value')
+  })
+
+  it('should handle undefined prefix', () => {
+    const value = {
+      key: 'value',
+    }
+    const get = createNamespaceGetter(value, undefined)
+
+    expect(get('key')).toEqual('value')
+  })
+
+  it('should handle complex objects as values', () => {
+    const complexValue = { nested: 'object' }
+    const value = {
+      'ns:key': complexValue,
+      key: 'simple value',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('key')).toBe(complexValue)
+  })
+
+  it('should handle arrays as values', () => {
+    const arrayValue = [1, 2, 3]
+    const value = {
+      'ns:key': arrayValue,
+      key: 'simple value',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('key')).toBe(arrayValue)
+  })
+
+  it('should handle non-string keys gracefully', () => {
+    const value = {
+      'ns:123': 'numeric key with prefix',
+      '123': 'numeric key',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('123')).toEqual('numeric key with prefix')
+  })
+
+  it('should handle various prefix formats', () => {
+    const value = {
+      'namespace:key': 'value with colon',
+      'namespace-key': 'value with dash',
+      namespace_key: 'value with underscore',
+    }
+
+    const colonGetter = createNamespaceGetter(value, 'namespace:')
+    const dashGetter = createNamespaceGetter(value, 'namespace-')
+    const underscoreGetter = createNamespaceGetter(value, 'namespace_')
+
+    expect(colonGetter('key')).toEqual('value with colon')
+    expect(dashGetter('key')).toEqual('value with dash')
+    expect(underscoreGetter('key')).toEqual('value with underscore')
+  })
+
+  it('should return undefined when prefixed key does not exist', () => {
+    const value = {
+      key: 'unprefixed value',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('key')).toBeUndefined()
+  })
+
+  it('should return undefined for non-existent keys (with prefix)', () => {
+    const value = {
+      'ns:existingKey': 'value',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('nonExistentKey')).toBeUndefined()
+  })
+})
+
+describe('createCaseInsensitiveGetter', () => {
+  it('should retrieve value using case-insensitive key lookup', () => {
+    const value = {
+      Title: 'Example Title',
+      AUTHOR: 'John Doe',
+      content: 'Some content here',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('title')).toEqual('Example Title')
+    expect(get('author')).toEqual('John Doe')
+    expect(get('CONTENT')).toEqual('Some content here')
+  })
+
+  it('should preserve the original value types', () => {
+    const value = {
+      Number: 42,
+      Boolean: true,
+      Object: { key: 'value' },
+      Array: [1, 2, 3],
+      Null: null,
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('number')).toBe(42)
+    expect(get('boolean')).toBe(true)
+    expect(get('object')).toEqual({ key: 'value' })
+    expect(get('array')).toEqual([1, 2, 3])
+    expect(get('null')).toBeNull()
+  })
+
+  it('should handle keys that differ only in case', () => {
+    // Note: In JavaScript objects, keys that differ only in case would overwrite each other
+    // This test verifies that the last key-value pair wins.
+    const value = {
+      key: 'lowercase value',
+      KEY: 'uppercase value',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('key')).toEqual('uppercase value')
+    expect(get('KEY')).toEqual('uppercase value')
+  })
+
+  it('should handle non-string key lookups by coercing to string', () => {
+    const value = {
+      '123': 'numeric key',
+      true: 'boolean key',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('123')).toEqual('numeric key')
+    expect(get('TRUE')).toEqual('boolean key')
+  })
+
+  it('should handle special characters in keys', () => {
+    const value = {
+      'Special-Key': 'with dash',
+      Special_Key: 'with underscore',
+      'Special.Key': 'with dot',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('special-key')).toEqual('with dash')
+    expect(get('SPECIAL_KEY')).toEqual('with underscore')
+    expect(get('special.key')).toEqual('with dot')
+  })
+
+  it('should only consider own properties', () => {
+    const proto = { PrototypeProp: 'from prototype' }
+    const value = Object.create(proto)
+    value.OwnProp = 'own property'
+
+    const get = createCaseInsensitiveGetter(value)
+    expect(get('ownprop')).toEqual('own property')
+    expect(get('prototypeprop')).toBeUndefined()
+  })
+
+  it('should handle Unicode characters correctly', () => {
+    const value = {
+      CaféItem: 'coffee',
+      RÉSUMÉ: 'document',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('caféitem')).toEqual('coffee')
+    expect(get('résumé')).toEqual('document')
+  })
+
+  it('should handle multiple lookups on the same getter', () => {
+    const value = {
+      First: 'first value',
+      Second: 'second value',
+      Third: 'third value',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('first')).toEqual('first value')
+    expect(get('SECOND')).toEqual('second value')
+    expect(get('THiRd')).toEqual('third value')
+  })
+
+  it('should handle undefined values in the object', () => {
+    const value = {
+      DefinedKey: 'defined value',
+      UndefinedKey: undefined,
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('definedkey')).toEqual('defined value')
+    expect(get('undefinedkey')).toBeUndefined()
+    // Make sure we can distinguish between non-existent keys and keys with undefined values.
+    expect('UndefinedKey' in value).toBe(true)
+  })
+
+  it('should return undefined for non-existent keys', () => {
+    const value = {
+      ExistingKey: 'value',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('nonexistentkey')).toBeUndefined()
+  })
+
+  it('should handle empty objects', () => {
+    const value = {}
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('anykey')).toBeUndefined()
   })
 })

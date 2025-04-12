@@ -3,12 +3,12 @@ import {
   parseFeed,
   parseImage,
   parseItem,
-  parseTextinput,
+  parseTextInput,
   retrieveFeed,
   retrieveImage,
   retrieveItems,
-  retrieveTextinput,
-} from './utils'
+  retrieveTextInput,
+} from './utils.js'
 
 describe('parseImage', () => {
   it('should handle complete image object', () => {
@@ -218,6 +218,21 @@ describe('parseItem', () => {
 
     expect(parseItem(value)).toEqual(expected)
   })
+
+  it('should handle slash namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'slash:comments': { '#text': '10' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      slash: { comments: 10 },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
 })
 
 describe('retrieveItems', () => {
@@ -340,8 +355,8 @@ describe('retrieveItems', () => {
   })
 })
 
-describe('parseTextinput', () => {
-  it('should handle complete textinput object', () => {
+describe('parseTextInput', () => {
+  it('should handle complete textInput object', () => {
     const value = {
       title: { '#text': 'Search Title' },
       description: { '#text': 'Search Description' },
@@ -355,16 +370,16 @@ describe('parseTextinput', () => {
       link: 'https://example.com/search',
     }
 
-    expect(parseTextinput(value)).toEqual(expected)
+    expect(parseTextInput(value)).toEqual(expected)
   })
 
-  it('should handle partial textinput object', () => {
+  it('should handle partial textInput object', () => {
     const value = {
       title: { '#text': 'Search Title' },
       name: { '#text': 'q' },
     }
 
-    expect(parseTextinput(value)).toBeUndefined()
+    expect(parseTextInput(value)).toBeUndefined()
   })
 
   it('should handle coercible values', () => {
@@ -381,7 +396,7 @@ describe('parseTextinput', () => {
       link: '101',
     }
 
-    expect(parseTextinput(value)).toEqual(expected)
+    expect(parseTextInput(value)).toEqual(expected)
   })
 
   it('should return undefined if not all fields are present', () => {
@@ -390,27 +405,27 @@ describe('parseTextinput', () => {
       description: { '#text': 'Search Description' },
     }
 
-    expect(parseTextinput(value)).toBeUndefined()
+    expect(parseTextInput(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parseTextinput('not an object')).toBeUndefined()
-    expect(parseTextinput(undefined)).toBeUndefined()
-    expect(parseTextinput(null)).toBeUndefined()
-    expect(parseTextinput([])).toBeUndefined()
+    expect(parseTextInput('not an object')).toBeUndefined()
+    expect(parseTextInput(undefined)).toBeUndefined()
+    expect(parseTextInput(null)).toBeUndefined()
+    expect(parseTextInput([])).toBeUndefined()
   })
 
-  it('should return undefined for missing textinput property', () => {
+  it('should return undefined for missing textInput property', () => {
     const value = {
       someOtherProperty: {},
     }
 
-    expect(parseTextinput(value)).toBeUndefined()
+    expect(parseTextInput(value)).toBeUndefined()
   })
 })
 
-describe('retrieveTextinput', () => {
-  it('should retrieve complete textinput object', () => {
+describe('retrieveTextInput', () => {
+  it('should retrieve complete textInput object', () => {
     const value = {
       textinput: {
         title: { '#text': 'Search Title' },
@@ -426,7 +441,7 @@ describe('retrieveTextinput', () => {
       link: 'https://example.com/search',
     }
 
-    expect(retrieveTextinput(value)).toEqual(expected)
+    expect(retrieveTextInput(value)).toEqual(expected)
   })
 })
 
@@ -479,7 +494,7 @@ describe('parseFeed', () => {
           link: 'https://example.com/item2',
         },
       ],
-      textinput: {
+      textInput: {
         title: 'Search',
         description: 'Search this site',
         name: 'q',
@@ -557,17 +572,6 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toBeUndefined()
   })
 
-  it('should return undefined if items are missing', () => {
-    const value = {
-      channel: {
-        title: { '#text': 'Feed Title' },
-        link: { '#text': 'https://example.com' },
-      },
-    }
-
-    expect(parseFeed(value)).toBeUndefined()
-  })
-
   it('should return undefined for non-object rdf:rdf', () => {
     const value = 'not an object'
 
@@ -589,6 +593,21 @@ describe('parseFeed', () => {
     expect(parseFeed([])).toBeUndefined()
   })
 
+  it('should handle feed with not defined items array', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Feed Title' },
+        link: { '#text': 'https://example.com' },
+      },
+    }
+    const expected = {
+      title: 'Feed Title',
+      link: 'https://example.com',
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
   it('should handle feed with empty items array', () => {
     const value = {
       channel: {
@@ -597,8 +616,12 @@ describe('parseFeed', () => {
       },
       items: [],
     }
+    const expected = {
+      title: 'Feed Title',
+      link: 'https://example.com',
+    }
 
-    expect(parseFeed(value)).toBeUndefined()
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should handle atom namespace', () => {

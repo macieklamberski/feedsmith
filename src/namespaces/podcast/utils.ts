@@ -1,4 +1,4 @@
-import type { ParseFunction } from '../../common/types'
+import type { ParseFunction } from '../../common/types.js'
 import {
   hasAllProps,
   isNonEmptyObject,
@@ -8,7 +8,7 @@ import {
   parseBoolean,
   parseNumber,
   parseString,
-} from '../../common/utils'
+} from '../../common/utils.js'
 import type {
   AlternateEnclosure,
   Block,
@@ -38,7 +38,7 @@ import type {
   Value,
   ValueRecipient,
   ValueTimeSplit,
-} from './types'
+} from './types.js'
 
 export const parseTranscript: ParseFunction<Transcript> = (value) => {
   if (!isObject(value)) {

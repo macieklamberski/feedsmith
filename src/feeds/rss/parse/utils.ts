@@ -1,4 +1,4 @@
-import type { ParseFunction } from '../../../common/types'
+import type { ParseFunction } from '../../../common/types.js'
 import {
   hasAllProps,
   hasAnyProps,
@@ -8,14 +8,19 @@ import {
   parseArrayOf,
   parseNumber,
   parseString,
-} from '../../../common/utils'
+} from '../../../common/utils.js'
 import {
   parseEntry as parseAtomEntry,
   parseFeed as parseAtomFeed,
-} from '../../../namespaces/atom/utils'
-import { parseItem as parseContentItem } from '../../../namespaces/content/utils'
-import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils'
-import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils'
+} from '../../../namespaces/atom/utils.js'
+import { parseItem as parseContentItem } from '../../../namespaces/content/utils.js'
+import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils.js'
+import {
+  parseFeed as parseItunesFeed,
+  parseItem as parseItunesItem,
+} from '../../../namespaces/itunes/utils.js'
+import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils.js'
+import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils.js'
 import type {
   Author,
   Category,
@@ -26,22 +31,22 @@ import type {
   Item,
   Source,
   TextInput,
-} from './types'
+} from './types.js'
 
 export const parseTextInput: ParseFunction<TextInput> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  const textInput = omitUndefinedFromObject({
+  const textInput = {
     title: parseString(value?.title?.['#text']),
     description: parseString(value?.description?.['#text']),
     name: parseString(value?.name?.['#text']),
     link: parseString(value?.link?.['#text']),
-  })
+  }
 
   if (hasAllProps(textInput, ['title', 'description', 'name', 'link'])) {
-    return textInput
+    return omitUndefinedFromObject(textInput)
   }
 }
 
@@ -50,16 +55,16 @@ export const parseCloud: ParseFunction<Cloud> = (value) => {
     return
   }
 
-  const cloud = omitUndefinedFromObject({
+  const cloud = {
     domain: parseString(value?.['@domain']),
     port: parseNumber(value?.['@port']),
     path: parseString(value?.['@path']),
     registerProcedure: parseString(value?.['@registerprocedure']),
     protocol: parseString(value?.['@protocol']),
-  })
+  }
 
   if (hasAllProps(cloud, ['domain', 'port', 'path', 'registerProcedure', 'protocol'])) {
-    return cloud
+    return omitUndefinedFromObject(cloud)
   }
 }
 
@@ -88,14 +93,14 @@ export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
     return
   }
 
-  const enclosure = omitUndefinedFromObject({
+  const enclosure = {
     url: parseString(value['@url']),
     length: parseNumber(value['@length']),
     type: parseString(value['@type']),
-  })
+  }
 
   if (hasAllProps(enclosure, ['url', 'length', 'type'])) {
-    return enclosure
+    return omitUndefinedFromObject(enclosure)
   }
 }
 
@@ -104,13 +109,13 @@ export const parseSource: ParseFunction<Source> = (value) => {
     return
   }
 
-  const source = omitUndefinedFromObject({
+  const source = {
     title: parseString(value?.['#text']),
     url: parseString(value?.['@url']),
-  })
+  }
 
   if (hasAllProps(source, ['title'])) {
-    return source
+    return omitUndefinedFromObject(source)
   }
 }
 
@@ -119,17 +124,17 @@ export const parseImage: ParseFunction<Image> = (value) => {
     return
   }
 
-  const image = omitUndefinedFromObject({
+  const image = {
     url: parseString(value.url?.['#text']),
     title: parseString(value.title?.['#text']),
     link: parseString(value.link?.['#text']),
     description: parseString(value.description?.['#text']),
     height: parseNumber(value.height?.['#text']),
     width: parseNumber(value.width?.['#text']),
-  })
+  }
 
   if (hasAllProps(image, ['url', 'title', 'link'])) {
-    return image
+    return omitUndefinedFromObject(image)
   }
 }
 
@@ -138,18 +143,18 @@ export const parseCategory: ParseFunction<Category> = (value) => {
     return
   }
 
-  const category = omitUndefinedFromObject({
+  const category = {
     name: parseString(value?.['#text']),
     domain: parseString(value?.['@domain']),
-  })
+  }
 
   if (category.name) {
-    return category
+    return omitUndefinedFromObject(category)
   }
 }
 
 export const parseAuthor: ParseFunction<Author> = (value) => {
-  return parseString(value?.['#text'])
+  return parseString(value?.name?.['#text'] || value?.['#text'])
 }
 
 export const parseItem: ParseFunction<Item> = (value) => {
@@ -157,7 +162,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     return
   }
 
-  const item = omitUndefinedFromObject({
+  const item = {
     title: parseString(value.title?.['#text']),
     link: parseString(value.link?.['#text']),
     description: parseString(value.description?.['#text']),
@@ -171,10 +176,12 @@ export const parseItem: ParseFunction<Item> = (value) => {
     content: parseContentItem(value),
     atom: parseAtomEntry(value),
     dc: parseDcItemOrFeed(value),
-  })
+    slash: parseSlashItem(value),
+    itunes: parseItunesItem(value),
+  }
 
   if (hasAnyProps(item, ['title', 'description'])) {
-    return item
+    return omitUndefinedFromObject(item)
   }
 }
 
@@ -183,7 +190,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     return
   }
 
-  const feed = omitUndefinedFromObject({
+  const feed = {
     title: parseString(value.title?.['#text']),
     link: parseString(value.link?.['#text']),
     description: parseString(value.description?.['#text']),
@@ -207,12 +214,14 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     atom: parseAtomFeed(value),
     dc: parseDcItemOrFeed(value),
     sy: parseSyFeed(value),
-  })
+    itunes: parseItunesFeed(value),
+  }
 
-  // INFO: Spec also says about required "description" but this field is
-  // not always present in feeds. We can still parse the feed without it.
-  if (hasAllProps(feed, ['title', 'link'])) {
-    return feed
+  // INFO: Spec also says about required "description" but this field is not always present
+  // in feeds. We can still parse the feed without it. In addition, the "link" might be missing
+  // as well when the atom:link rel="self" is present so checking "link" is skipped as well.
+  if (hasAllProps(feed, ['title'])) {
+    return omitUndefinedFromObject(feed)
   }
 }
 
