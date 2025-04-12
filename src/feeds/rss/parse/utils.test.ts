@@ -389,6 +389,16 @@ describe('parseAuthor', () => {
     expect(parseAuthor(value)).toBe('John Doe (john@example.com)')
   })
 
+  it('should parse author nested under author.name', () => {
+    const value = {
+      name: {
+        '#text': 'John Doe',
+      },
+    }
+
+    expect(parseAuthor(value)).toBe('John Doe')
+  })
+
   it('should handle coercible values', () => {
     const value = {
       '#text': 123,

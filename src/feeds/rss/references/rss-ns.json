@@ -5,6 +5,7 @@
     {
       "title": "Example Item",
       "link": "http://example.org/item/1",
+      "authors": ["John Smith"],
       "content": {
         "encoded": "This is an example of content."
       },

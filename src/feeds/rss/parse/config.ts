@@ -34,7 +34,9 @@ export const stopNodes = [
   'rss.channel.item.title',
   'rss.channel.item.link',
   'rss.channel.item.description',
-  'rss.channel.item.author',
+  // INFO: Added support for nested *.name under author to support cases as
+  // described here: https://github.com/macieklamberski/feedsmith/issues/22.
+  'rss.channel.item.author.name',
   'rss.channel.item.category',
   'rss.channel.item.comments',
   'rss.channel.item.enclosure',

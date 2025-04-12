@@ -84,12 +84,12 @@ export const stripCdata = (text: Unreliable) => {
 }
 
 export const parseString: ParseFunction<string> = (value) => {
-  if (typeof value === 'number') {
-    return value.toString()
-  }
-
   if (typeof value === 'string') {
     return decodeHTML(decodeXML(stripCdata(value).trim()))
+  }
+
+  if (typeof value === 'number') {
+    return value.toString()
   }
 }
 
@@ -173,5 +173,29 @@ export const parseArrayOf = <R>(
 
   if (parsed) {
     return [parsed]
+  }
+}
+
+export const createNamespaceGetter = (
+  value: Record<string, Unreliable>,
+  prefix: string | undefined,
+) => {
+  return (key: string): Unreliable => {
+    return value[`${prefix || ''}${key}`]
+  }
+}
+
+export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
+  const keyMap = new Map<string, string>()
+
+  for (const key in value) {
+    if (Object.prototype.hasOwnProperty.call(value, key)) {
+      keyMap.set(key.toLowerCase(), key)
+    }
+  }
+
+  return (requestedKey: string) => {
+    const originalKey = keyMap.get(requestedKey.toLowerCase())
+    return originalKey ? value[originalKey] : undefined
   }
 }
