@@ -6,7 +6,7 @@ export type Transcript = {
 }
 
 export type Locked = {
-  value: string // Spec says: 'yes' | 'no'.
+  value: boolean
   owner?: string
 }
 
@@ -91,7 +91,7 @@ export type Integrity = {
 export type Value = {
   type: string
   method: string
-  suggested: number
+  suggested?: number
   valueRecipients?: Array<ValueRecipient>
   valueTimeSplits?: Array<ValueTimeSplit>
 }
@@ -102,8 +102,12 @@ export type ValueRecipient = {
   customValue?: string
   type: string
   address: string
-  split?: number
+  split: number
   fee?: boolean
+}
+
+export type Images = {
+  srcset: string
 }
 
 export type LiveItem = Item & {
@@ -127,7 +131,7 @@ export type SocialInteract = {
 }
 
 export type Block = {
-  value: string // Spec says: 'yes' | 'no'.
+  value: boolean
   id?: string
 }
 

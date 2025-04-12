@@ -8,6 +8,7 @@ import {
   parseBoolean,
   parseNumber,
   parseString,
+  parseYesNoBoolean,
 } from '../../common/utils.js'
 import type {
   AlternateEnclosure,
@@ -17,6 +18,7 @@ import type {
   ContentLink,
   Episode,
   Funding,
+  Images,
   Integrity,
   Item,
   License,
@@ -63,7 +65,7 @@ export const parseLocked: ParseFunction<Locked> = (value) => {
   }
 
   const locked = omitUndefinedFromObject({
-    value: parseString(value['@value']),
+    value: parseYesNoBoolean(value['@value']),
     owner: parseString(value['@owner']),
   })
 
@@ -283,7 +285,7 @@ export const parseValue: ParseFunction<Value> = (value) => {
     valueTimeSplits: parseArrayOf(value['podcast:valueTimeSplit'], parseValueTimeSplit),
   })
 
-  if (hasAllProps(valueData, ['type', 'method', 'suggested'])) {
+  if (hasAllProps(valueData, ['type', 'method'])) {
     return valueData
   }
 }
@@ -303,8 +305,22 @@ export const parseValueRecipient: ParseFunction<ValueRecipient> = (value) => {
     fee: parseBoolean(value['@fee']),
   })
 
-  if (hasAllProps(valueRecipient, ['type', 'address'])) {
+  if (hasAllProps(valueRecipient, ['type', 'address', 'split'])) {
     return valueRecipient
+  }
+}
+
+export const parseImages: ParseFunction<Images> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const images = omitUndefinedFromObject({
+    srcset: parseString(value['@srcset']),
+  })
+
+  if (hasAllProps(images, ['srcset'])) {
+    return images
   }
 }
 
@@ -371,7 +387,7 @@ export const parseBlock: ParseFunction<Block> = (value) => {
   }
 
   const block = omitUndefinedFromObject({
-    value: parseString(value['@value']),
+    value: parseYesNoBoolean(value['@value']),
     id: parseString(value['@id']),
   })
 
@@ -417,9 +433,13 @@ export const parsePodroll: ParseFunction<Podroll> = (value) => {
     return
   }
 
-  return omitUndefinedFromObject({
+  const podroll = omitUndefinedFromObject({
     remoteItems: parseArrayOf(value['podcast:remoteItem'], parseRemoteItem),
   })
+
+  if (isNonEmptyObject(podroll)) {
+    return podroll
+  }
 }
 
 export const parseUpdateFrequency: ParseFunction<UpdateFrequency> = (value) => {
@@ -427,12 +447,16 @@ export const parseUpdateFrequency: ParseFunction<UpdateFrequency> = (value) => {
     return
   }
 
-  return omitUndefinedFromObject({
+  const updateFrequency = omitUndefinedFromObject({
     display: parseString(value['#text']),
     complete: parseBoolean(value['@complete']),
     dtstart: parseString(value['@dtstart']),
     rrule: parseString(value['@rrule']),
   })
+
+  if (hasAllProps(updateFrequency, ['display'])) {
+    return updateFrequency
+  }
 }
 
 export const parsePodping: ParseFunction<Podping> = (value) => {
@@ -440,8 +464,12 @@ export const parsePodping: ParseFunction<Podping> = (value) => {
     return
   }
 
-  return {
-    usesPodping: true,
+  const podping = omitUndefinedFromObject({
+    usesPodping: parseBoolean(value['@usesPodping']),
+  })
+
+  if (hasAllProps(podping, ['usesPodping'])) {
+    return podping
   }
 }
 
@@ -455,6 +483,8 @@ export const parseValueTimeSplit: ParseFunction<ValueTimeSplit> = (value) => {
     duration: parseNumber(value['@duration']),
     remoteStartTime: parseNumber(value['@remoteStartTime']),
     remotePercentage: parseNumber(value['@remotePercentage']),
+    // TODO: Make sure that even if the remoteItem is an array (if feed contained multiple items),
+    // only the first one is taken.
     remoteItem: parseRemoteItem(value['podcast:remoteItem']),
     valueRecipients: parseArrayOf(value['podcast:valueRecipient'], parseValueRecipient),
   })
