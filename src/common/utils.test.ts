@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import type { ParseFunction } from './types.js'
 import {
+  createCaseInsensitiveGetter,
   createNamespaceGetter,
   hasAllProps,
   hasAnyProps,
@@ -905,18 +906,18 @@ describe('createNamespaceGetter', () => {
       'ns:key': 'prefixed value',
       key: 'unprefixed value',
     }
-    const getter = createNamespaceGetter(value, 'ns:')
+    const get = createNamespaceGetter(value, 'ns:')
 
-    expect(getter('key')).toEqual('prefixed value')
+    expect(get('key')).toEqual('prefixed value')
   })
 
   it('should retrieve unprefixed value when fallbackToNoPrefix is true and prefixed key does not exist', () => {
     const value = {
       key: 'unprefixed value',
     }
-    const getter = createNamespaceGetter(value, 'ns:', true)
+    const get = createNamespaceGetter(value, 'ns:', true)
 
-    expect(getter('key')).toEqual('unprefixed value')
+    expect(get('key')).toEqual('unprefixed value')
   })
 
   it('should prioritize prefixed value when both prefixed and unprefixed keys exist and fallbackToNoPrefix is true', () => {
@@ -924,27 +925,27 @@ describe('createNamespaceGetter', () => {
       'ns:key': 'prefixed value',
       key: 'unprefixed value',
     }
-    const getter = createNamespaceGetter(value, 'ns:', true)
+    const get = createNamespaceGetter(value, 'ns:', true)
 
-    expect(getter('key')).toEqual('prefixed value')
+    expect(get('key')).toEqual('prefixed value')
   })
 
   it('should handle empty prefix', () => {
     const value = {
       key: 'value',
     }
-    const getter = createNamespaceGetter(value, '')
+    const get = createNamespaceGetter(value, '')
 
-    expect(getter('key')).toEqual('value')
+    expect(get('key')).toEqual('value')
   })
 
   it('should handle undefined prefix', () => {
     const value = {
       key: 'value',
     }
-    const getter = createNamespaceGetter(value, undefined)
+    const get = createNamespaceGetter(value, undefined)
 
-    expect(getter('key')).toEqual('value')
+    expect(get('key')).toEqual('value')
   })
 
   it('should handle complex objects as values', () => {
@@ -953,9 +954,9 @@ describe('createNamespaceGetter', () => {
       'ns:key': complexValue,
       key: 'simple value',
     }
-    const getter = createNamespaceGetter(value, 'ns:')
+    const get = createNamespaceGetter(value, 'ns:')
 
-    expect(getter('key')).toBe(complexValue)
+    expect(get('key')).toBe(complexValue)
   })
 
   it('should handle arrays as values', () => {
@@ -964,9 +965,9 @@ describe('createNamespaceGetter', () => {
       'ns:key': arrayValue,
       key: 'simple value',
     }
-    const getter = createNamespaceGetter(value, 'ns:')
+    const get = createNamespaceGetter(value, 'ns:')
 
-    expect(getter('key')).toBe(arrayValue)
+    expect(get('key')).toBe(arrayValue)
   })
 
   it('should handle non-string keys gracefully', () => {
@@ -974,18 +975,18 @@ describe('createNamespaceGetter', () => {
       'ns:123': 'numeric key with prefix',
       '123': 'numeric key',
     }
-    const getter = createNamespaceGetter(value, 'ns:')
+    const get = createNamespaceGetter(value, 'ns:')
 
-    expect(getter('123')).toEqual('numeric key with prefix')
+    expect(get('123')).toEqual('numeric key with prefix')
   })
 
   it('should handle fallbackToNoPrefix with mixed key types', () => {
     const value = {
       '123': 'numeric key',
     }
-    const getter = createNamespaceGetter(value, 'ns:', true)
+    const get = createNamespaceGetter(value, 'ns:', true)
 
-    expect(getter('123')).toEqual('numeric key')
+    expect(get('123')).toEqual('numeric key')
   })
 
   it('should handle various prefix formats', () => {
@@ -1011,36 +1012,168 @@ describe('createNamespaceGetter', () => {
       nullKey: 'fallback for null',
       undefinedKey: 'fallback for undefined',
     }
-    const getter = createNamespaceGetter(value, 'ns:', true)
+    const get = createNamespaceGetter(value, 'ns:', true)
 
-    expect(getter('nullKey')).toEqual('fallback for null')
-    expect(getter('undefinedKey')).toEqual('fallback for undefined')
+    expect(get('nullKey')).toEqual('fallback for null')
+    expect(get('undefinedKey')).toEqual('fallback for undefined')
   })
 
   it('should return undefined when prefixed key does not exist', () => {
     const value = {
       key: 'unprefixed value',
     }
-    const getter = createNamespaceGetter(value, 'ns:')
+    const get = createNamespaceGetter(value, 'ns:')
 
-    expect(getter('key')).toBeUndefined()
+    expect(get('key')).toBeUndefined()
   })
 
   it('should return undefined for non-existent keys (with prefix)', () => {
     const value = {
       'ns:existingKey': 'value',
     }
-    const getter = createNamespaceGetter(value, 'ns:')
+    const get = createNamespaceGetter(value, 'ns:')
 
-    expect(getter('nonExistentKey')).toBeUndefined()
+    expect(get('nonExistentKey')).toBeUndefined()
   })
 
   it('should return undefined for non-existent keys (fallback enabled)', () => {
     const value = {
       existingKey: 'value',
     }
-    const getter = createNamespaceGetter(value, 'ns:', true)
+    const get = createNamespaceGetter(value, 'ns:', true)
 
-    expect(getter('nonExistentKey')).toBeUndefined()
+    expect(get('nonExistentKey')).toBeUndefined()
+  })
+})
+
+describe('createCaseInsensitiveGetter', () => {
+  it('should retrieve value using case-insensitive key lookup', () => {
+    const value = {
+      Title: 'Example Title',
+      AUTHOR: 'John Doe',
+      content: 'Some content here',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('title')).toEqual('Example Title')
+    expect(get('author')).toEqual('John Doe')
+    expect(get('CONTENT')).toEqual('Some content here')
+  })
+
+  it('should preserve the original value types', () => {
+    const value = {
+      Number: 42,
+      Boolean: true,
+      Object: { key: 'value' },
+      Array: [1, 2, 3],
+      Null: null,
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('number')).toBe(42)
+    expect(get('boolean')).toBe(true)
+    expect(get('object')).toEqual({ key: 'value' })
+    expect(get('array')).toEqual([1, 2, 3])
+    expect(get('null')).toBeNull()
+  })
+
+  it('should handle keys that differ only in case', () => {
+    // Note: In JavaScript objects, keys that differ only in case would overwrite each other
+    // This test verifies that the last key-value pair wins.
+    const value = {
+      key: 'lowercase value',
+      KEY: 'uppercase value',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('key')).toEqual('uppercase value')
+    expect(get('KEY')).toEqual('uppercase value')
+  })
+
+  it('should handle non-string key lookups by coercing to string', () => {
+    const value = {
+      '123': 'numeric key',
+      true: 'boolean key',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('123')).toEqual('numeric key')
+    expect(get('TRUE')).toEqual('boolean key')
+  })
+
+  it('should handle special characters in keys', () => {
+    const value = {
+      'Special-Key': 'with dash',
+      Special_Key: 'with underscore',
+      'Special.Key': 'with dot',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('special-key')).toEqual('with dash')
+    expect(get('SPECIAL_KEY')).toEqual('with underscore')
+    expect(get('special.key')).toEqual('with dot')
+  })
+
+  it('should only consider own properties', () => {
+    const proto = { PrototypeProp: 'from prototype' }
+    const value = Object.create(proto)
+    value.OwnProp = 'own property'
+
+    const get = createCaseInsensitiveGetter(value)
+    expect(get('ownprop')).toEqual('own property')
+    expect(get('prototypeprop')).toBeUndefined()
+  })
+
+  it('should handle Unicode characters correctly', () => {
+    const value = {
+      CaféItem: 'coffee',
+      RÉSUMÉ: 'document',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('caféitem')).toEqual('coffee')
+    expect(get('résumé')).toEqual('document')
+  })
+
+  it('should handle multiple lookups on the same getter', () => {
+    const value = {
+      First: 'first value',
+      Second: 'second value',
+      Third: 'third value',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('first')).toEqual('first value')
+    expect(get('SECOND')).toEqual('second value')
+    expect(get('THiRd')).toEqual('third value')
+  })
+
+  it('should handle undefined values in the object', () => {
+    const value = {
+      DefinedKey: 'defined value',
+      UndefinedKey: undefined,
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('definedkey')).toEqual('defined value')
+    expect(get('undefinedkey')).toBeUndefined()
+    // Make sure we can distinguish between non-existent keys and keys with undefined values.
+    expect('UndefinedKey' in value).toBe(true)
+  })
+
+  it('should return undefined for non-existent keys', () => {
+    const value = {
+      ExistingKey: 'value',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('nonexistentkey')).toBeUndefined()
+  })
+
+  it('should handle empty objects', () => {
+    const value = {}
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('anykey')).toBeUndefined()
   })
 })

@@ -1,5 +1,6 @@
 import type { ParseFunction } from '../../../common/types.js'
 import {
+  createCaseInsensitiveGetter,
   hasAllProps,
   hasAnyProps,
   isNonEmptyObject,
@@ -13,23 +14,6 @@ import {
   parseString,
 } from '../../../common/utils.js'
 import type { Attachment, Author, Feed, Hub, Item } from './types.js'
-
-export const createCaseInsensitiveGetter = (
-  value: Record<string, unknown>,
-): ((lowercaseKey: string) => unknown) => {
-  const keyMap = new Map<string, string>()
-
-  for (const key in value) {
-    if (Object.prototype.hasOwnProperty.call(value, key)) {
-      keyMap.set(key.toLowerCase(), key)
-    }
-  }
-
-  return (lowercaseKey: string) => {
-    const originalKey = keyMap.get(lowercaseKey)
-    return originalKey ? value[originalKey] : undefined
-  }
-}
 
 export const parseTags: ParseFunction<Array<string>> = (value) => {
   if (Array.isArray(value)) {

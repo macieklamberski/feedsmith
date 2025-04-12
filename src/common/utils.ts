@@ -179,11 +179,26 @@ export const parseArrayOf = <R>(
 export const createNamespaceGetter = (
   value: Record<string, Unreliable>,
   prefix: string | undefined,
-  fallbackToNoPrefix = false,
+  fallbackToUnprefixed = false,
 ) => {
   return (key: string): Unreliable => {
-    return fallbackToNoPrefix
+    return fallbackToUnprefixed
       ? (value[`${prefix || ''}${key}`] ?? value[key])
       : value[`${prefix || ''}${key}`]
+  }
+}
+
+export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
+  const keyMap = new Map<string, string>()
+
+  for (const key in value) {
+    if (Object.prototype.hasOwnProperty.call(value, key)) {
+      keyMap.set(key.toLowerCase(), key)
+    }
+  }
+
+  return (requestedKey: string) => {
+    const originalKey = keyMap.get(requestedKey.toLowerCase())
+    return originalKey ? value[originalKey] : undefined
   }
 }
