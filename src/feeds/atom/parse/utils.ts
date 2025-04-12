@@ -16,17 +16,8 @@ import {
 } from '../../../namespaces/itunes/utils.js'
 import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils.js'
 import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils.js'
-import { parser } from './config.js'
 import type { ParseFunction } from './types.js'
 import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types.js'
-
-export const parseAtomTag = (name: string, attrs: Record<string, string> | undefined) => {
-  if (attrs?.[`@xmlns:${name}`] === 'http://www.w3.org/2005/Atom') {
-    attrs['@xmlns'] = '1' // To indicate whether to parse the contents in parse* function.
-
-    return `atom:${name}`
-  }
-}
 
 export const parseLink: ParseFunction<Link> = (value) => {
   if (!isObject(value)) {
@@ -62,11 +53,6 @@ export const retrievePersonUri: ParseFunction<string> = (value, options) => {
 export const parsePerson: ParseFunction<Person> = (value, options) => {
   if (!isObject(value)) {
     return
-  }
-
-  if (value['@xmlns'] && value['#text']) {
-    // biome-ignore lint/style/noParameterAssign: No explanation.
-    value = parser.parse(value['#text'])
   }
 
   const get = createNamespaceGetter(value, options?.prefix, true)

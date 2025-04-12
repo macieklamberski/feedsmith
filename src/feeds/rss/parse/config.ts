@@ -1,6 +1,5 @@
-import { type X2jOptions, XMLParser } from 'fast-xml-parser'
+import { XMLParser } from 'fast-xml-parser'
 import { parserConfig } from '../../../common/config.js'
-import { parseAtomTag } from '../../atom/parse/utils.js'
 
 export const stopNodes = [
   // TODO: What about the namespaces?
@@ -35,7 +34,9 @@ export const stopNodes = [
   'rss.channel.item.title',
   'rss.channel.item.link',
   'rss.channel.item.description',
-  'rss.channel.item.author',
+  // INFO: Added support for nested *.name under author to support cases as
+  // described here: https://github.com/macieklamberski/feedsmith/issues/22.
+  'rss.channel.item.author.name',
   'rss.channel.item.category',
   'rss.channel.item.comments',
   'rss.channel.item.enclosure',
@@ -44,12 +45,7 @@ export const stopNodes = [
   'rss.channel.item.source',
 ]
 
-const updateTag: X2jOptions['updateTag'] = (name, jPath, attrs) => {
-  return parseAtomTag(name, attrs) ?? name
-}
-
 export const parser = new XMLParser({
   ...parserConfig,
-  updateTag,
   stopNodes,
 })

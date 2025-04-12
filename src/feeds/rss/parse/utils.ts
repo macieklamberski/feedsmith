@@ -154,7 +154,7 @@ export const parseCategory: ParseFunction<Category> = (value) => {
 }
 
 export const parseAuthor: ParseFunction<Author> = (value) => {
-  return parseString(value?.['#text'])
+  return parseString(value?.name?.['#text'] || value?.['#text'])
 }
 
 export const parseItem: ParseFunction<Item> = (value) => {

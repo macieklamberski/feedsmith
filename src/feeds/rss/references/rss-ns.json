@@ -5,9 +5,7 @@
     {
       "title": "Example Item",
       "link": "http://example.org/item/1",
-      "atom": {
-        "authors": [{ "name": "Matt Renner" }]
-      },
+      "authors": ["Matt Renner"],
       "content": {
         "encoded": "This is an example of content."
       },
