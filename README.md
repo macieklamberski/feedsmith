@@ -1,20 +1,22 @@
 # Feedsmith
 
-Modern JavaScript utility for parsing JSON Feed, Atom, RSS, and RDF feeds, with support for popular namespaces.
-
 [![tests](https://github.com/macieklamberski/feedsmith/actions/workflows/test.yml/badge.svg)](https://github.com/macieklamberski/feedsmith/actions/workflows/test.yml)
 [![npm version](https://img.shields.io/npm/v/feedsmith.svg)](https://www.npmjs.com/package/feedsmith)
 [![license](https://img.shields.io/npm/l/feedsmith.svg)](https://github.com/macieklamberski/feedsmith/blob/main/LICENSE)
 
-## Features
+Modern JavaScript utility for parsing and generating JSON Feed, Atom, RSS, and RDF feeds, with support for popular namespaces. It provides both universal and format-specific parsers that preserve the original feed structure while offering helpful normalization.
 
-#### Universal and dedicated parsers
-* Parse any feed format with a single function that automatically identifies JSON Feed, Atom, RSS, and RDF feeds.
-* Or… use dedicated functions when you know the feed type.
-* Dublin Core, Syndication, Content, and Atom namespace support. Support for other namespaces is in the works.
+Feedsmith preserves the original feed structure in a clean object-oriented format while intelligently normalizing legacy elements, giving you complete access to all feed data without sacrificing simplicity.
 
-#### Advantages
-* Get access to all the information in the feed, as Feedsmith preserves the original feed structure exactly as provided in each specific format. TypeScript type definitions are available for each feed type, making it easy to work with the data.
+[Features](#supported-feeds-and-namespaces)
+&nbsp;&nbsp;·&nbsp;&nbsp;
+[Installation](#installation)
+&nbsp;&nbsp;·&nbsp;&nbsp;
+[Parsing feeds](#parsing-feeds)
+&nbsp;&nbsp;·&nbsp;&nbsp;
+[FAQ](#faq)
+
+---
 
 #### Leniency
 * **Normalizes legacy elements** ✨ — Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
@@ -22,34 +24,51 @@ Modern JavaScript utility for parsing JSON Feed, Atom, RSS, and RDF feeds, with 
 
 #### Performance and type-safety
 * **Fast parsing** — Built on [fast-xml-parser](https://www.npmjs.com/package/fast-xml-parser) for efficient XML processing.
-* **Type-safe APIs** — Full TypeScript support with comprehensive type definitions.
-* **Well tested** — Comprehensive test suite with over 450 tests and 99.9% code coverage based on `bun test --coverage`.
+* **Type-safe API** — TypeScript type definitions are available for each feed format, making it easy to work with the data.
 * **Tree-shakable** — Only include the parts of the library you need, reducing bundle size.
+* **Well-tested** — Comprehensive test suite with over 450 tests and 99.9% code coverage.
+
+#### Compatibility
+* Works in Node.js and all modern browsers.
+* Works with plain JavaScript, you don't need to use TypeScript.
 
 ## Supported feeds and namespaces
 
-#### Feeds
+### Feeds
 
-* [x] [Atom](https://tools.ietf.org/html/rfc4287) (versions: `0.3`, `1.0`)
-* [x] [RSS](http://cyber.law.harvard.edu/rss/rss.html) (versions: `0.90`, `0.91`, `0.92`, `0.93`, `0.94`, `2.0`)
-* [x] [JSON](https://jsonfeed.org) (versions: `1.0`, `1.1`)
-* [x] [RDF](https://web.resource.org/rss/1.0/spec) (versions: `0.9`, `1.0`)
+| Format | Versions | Parsing | Generating |
+|--------|----------|---------|------------|
+| [RSS](http://cyber.law.harvard.edu/rss/rss.html) | 0.9x, 2.0 | ✅ | ⏳ |
+| [Atom](https://tools.ietf.org/html/rfc4287) | 0.3, 1.0 | ✅ | ⏳ |
+| [JSON Feed](https://jsonfeed.org) | 1.0, 1.1 | ✅ | ⏳ |
+| [RDF](https://web.resource.org/rss/1.0/spec) | 0.9, 1.0 | ✅ | ⏳ |
 
-#### Namespaces
+✅ Available
+&nbsp;&nbsp;·&nbsp;&nbsp;
+⌛️ Work in progress
 
-* [x] [Atom](http://www.w3.org/2005/Atom) (as both `<atom:*>` and `<a10:*>`)
-* [x] [Dublin Core](http://purl.org/dc/elements/1.1/) (`<dc:*>`)
-* [x] [Syndication](http://purl.org/rss/1.0/modules/syndication/) (`<sy:*>`)
-* [x] [Content](http://purl.org/rss/1.0/modules/content/) (`<content:*>`)
-* [x] [Slash](http://purl.org/rss/1.0/modules/slash/) (`<slash:*>`)
-* [x] [iTunes](http://www.itunes.com/dtds/podcast-1.0.dtd) (`<itunes:*>`)
-* [ ] 🏗️ [Podcast](https://podcastindex.org/namespace/1.0) (`<podcast:*>`)
-* [ ] 🏗️ [Media RSS](http://search.yahoo.com/mrss/) (`<media:*>`)
-* [ ] 🏗️ [Geo RSS](http://www.georss.org/georss) (`<georss:*>`)
-* [ ] 🏗️ [Dublin Core Terms](http://purl.org/dc/terms/) (`<dcterms:*>`)
-* [ ] 🏗️ [Administrative](https://web.resource.org/rss/1.0/modules/admin/) (`<admin:*>`)
-* [ ] 🏗️ [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) (`<thr:*>`)
-* [ ] Need something else?
+### Namespaces
+
+| Name | Prefix | Parsing | Generating |
+|------|--------|---------|------------|
+| [Atom](http://www.w3.org/2005/Atom) | `<atom:*>`, `<a10:*>` | ✅ | ⏳ |
+| [Dublin Core](http://purl.org/dc/elements/1.1/) | `<dc:*>` | ✅ | ⏳ |
+| [Syndication](http://purl.org/rss/1.0/modules/syndication/) | `<sy:*>` | ✅ | ⏳ |
+| [Content](http://purl.org/rss/1.0/modules/content/) | `<content:*>` | ✅ | ⏳ |
+| [Slash](http://purl.org/rss/1.0/modules/slash/) | `<slash:*>` | ✅ | ⏳ |
+| [iTunes](http://www.itunes.com/dtds/podcast-1.0.dtd) | `<itunes:*>` | ✅ | ⏳ |
+| [Podcast](https://podcastindex.org/namespace/1.0) | `<podcast:*>` | ⏳ | ⏳ |
+| [Media RSS](http://search.yahoo.com/mrss/) | `<media:*>` | ⏳ | ⏳ |
+| [Geo RSS](http://www.georss.org/georss) | `<georss:*>` | 📋 | 📋 |
+| [Dublin Core Terms](http://purl.org/dc/terms/) | `<dcterms:*>` | 📋 | 📋 |
+| [Administrative](https://web.resource.org/rss/1.0/modules/admin/) | `<admin:*>` | 📋 | 📋 |
+| [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) | `<thr:*>` | 📋 | 📋 |
+
+✅ Available
+&nbsp;&nbsp;·&nbsp;&nbsp;
+⌛️ Work in progress
+&nbsp;&nbsp;·&nbsp;&nbsp;
+📋 Planned
 
 ## Installation
 
@@ -59,7 +78,7 @@ npm install feedsmith
 
 ## Parsing feeds
 
-### Universal parser
+### Universal
 
 The easiest way to parse any feed is to use the universal `parseFeed` function:
 
@@ -88,20 +107,20 @@ if (type === 'rdf') {
 }
 ```
 
-### Dedicated parsers
+### Dedicated
 
 If you know the format in advance, you can use the format-specific parsers:
 
 ```ts
 import { parseAtomFeed, parseJsonFeed, parseRssFeed, parseRdfFeed } from 'feedsmith'
 
-// Parse the feed content.
+// Parse the feed content
 const atomFeed = parseAtomFeed(atomContent)
 const jsonFeed = parseJsonFeed(jsonContent)
 const rssFeed = parseRssFeed(rssContent)
 const rdfFeed = parseRdfFeed(rdfContent)
 
-// Then read the TypeScript suggestions for the specific feed type.
+// Then read the TypeScript suggestions for the specific feed type
 rssFeed.title
 rssFeed.dc?.creator
 rssFeed.dc?.date
@@ -352,7 +371,7 @@ if (detectRdfFeed(content)) {
 }
 ```
 
-**⚠️ Important note:** Detect functions are designed to quickly identify the type of feed by searching for the signature of the feed, such as the `<rss>` tag in the case of RSS feeds. However, it is possible for the function to detect an RSS feed, even if that feed is invalid. Only when using the `parseRssFeed` function will the feed be fully validated.
+> ⚠️ Detect functions are designed to quickly identify the type of feed by searching for the signature of the feed, such as the `<rss>` tag in the case of RSS feeds. However, it is possible for the function to detect an RSS feed, even if that feed is invalid. Only when using the `parseRssFeed` function will the feed be fully validated.
 
 ## FAQ
 
@@ -367,11 +386,9 @@ Many competing packages attempt to normalize data by:
 
 Some libraries try to combine different feed formats into one universal structure, which can lead to loss of information.
 
-Also, Feedsmith is a bit faster than other packages. Still, this is not a very differentiated space and other newer packages can catch up.
-
 ### Why are date fields returned as strings?
 
-In the course of parsing hundreds of thousands of feeds, we've found that dates in feeds use many different formats. Rather than attempting to parse them all (and potentially introducing errors), we return dates in their original string form, allowing you to use your preferred date parsing library.
+In the course of parsing hundreds of thousands of feeds, I have found that dates in feeds use many different formats. Rather than attempting to parse them all (and potentially introducing errors), dates are returned in their original string form, allowing you to use your preferred date parsing library (or just `Date` object).
 
 ### Does Feedsmith validate feeds?
 

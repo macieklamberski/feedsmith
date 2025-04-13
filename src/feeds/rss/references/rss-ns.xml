@@ -26,6 +26,12 @@
       <slash:comments>177</slash:comments>
       <slash:hit_parade>177,155,105,33,6,3,0</slash:hit_parade>
       <itunes:explicit>false</itunes:explicit>
+      <author xmlns:author="http://www.w3.org/2005/Atom">
+        <name>John Smith</name>
+        <title>Director, Business Development at Tech Corp</title>
+        <department/>
+        <company/>
+      </author>
     </item>
   </channel>
 </rss>

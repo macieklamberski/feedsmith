@@ -1,7 +1,6 @@
 {
   "name": "feedsmith",
-  "description": "Modern JavaScript utility for parsing JSON Feed, Atom, RSS, and RDF feeds, with support for Dublin Core, Syndication, iTunes, and many other popular namespaces.",
-  "homepage": "https://github.com/macieklamberski/feedsmith",
+  "description": "Modern JavaScript utility for parsing and generating JSON Feed, Atom, RSS, and RDF feeds, with support for Dublin Core, Syndication, iTunes, and many other popular namespaces.",
   "repository": {
     "type": "git",
     "url": "https://github.com/macieklamberski/feedsmith.git"
