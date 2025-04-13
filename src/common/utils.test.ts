@@ -5,6 +5,7 @@ import {
   createNamespaceGetter,
   hasAllProps,
   hasAnyProps,
+  hasEntities,
   isNonEmptyObject,
   isNonEmptyStringOrNumber,
   isObject,
@@ -475,6 +476,81 @@ describe('stripCdata', () => {
     expect(stripCdata([])).toEqual([])
     expect(stripCdata({})).toEqual({})
     expect(stripCdata(() => {})).toBeTypeOf('function')
+  })
+})
+
+describe('hasEntities', () => {
+  it('should detect basic HTML entities', () => {
+    expect(hasEntities('This contains &lt;')).toBe(true)
+    expect(hasEntities('This contains &gt;')).toBe(true)
+    expect(hasEntities('This contains &amp;')).toBe(true)
+    expect(hasEntities('This contains &quot;')).toBe(true)
+    expect(hasEntities('This contains &apos;')).toBe(true)
+  })
+
+  it('should detect named HTML entities', () => {
+    expect(hasEntities('This contains &copy;')).toBe(true)
+    expect(hasEntities('This contains &reg;')).toBe(true)
+    expect(hasEntities('This contains &euro;')).toBe(true)
+    expect(hasEntities('This contains &trade;')).toBe(true)
+    expect(hasEntities('This contains &nbsp;')).toBe(true)
+  })
+
+  it('should detect numeric HTML entities', () => {
+    expect(hasEntities('This contains &#169;')).toBe(true)
+    expect(hasEntities('This contains &#8364;')).toBe(true)
+    expect(hasEntities('This contains &#x00A9;')).toBe(true)
+    expect(hasEntities('This contains &#x20AC;')).toBe(true)
+  })
+
+  it('should detect multiple entities in the same string', () => {
+    expect(hasEntities('This &lt;tag&gt; has multiple &amp; entities')).toBe(true)
+    expect(hasEntities('Copyright &copy; 2023, &reg; trademark')).toBe(true)
+  })
+
+  it('should detect entities in different positions', () => {
+    expect(hasEntities('&lt;p&gt;At the beginning')).toBe(true)
+    expect(hasEntities('In the middle &amp; of the string')).toBe(true)
+    expect(hasEntities('At the end &gt;')).toBe(true)
+  })
+
+  it('should detect nested entities', () => {
+    expect(hasEntities('This contains &amp;lt;')).toBe(true)
+    expect(hasEntities('Complex &amp;amp; nested entities')).toBe(true)
+  })
+
+  it('should detect XML entities', () => {
+    expect(hasEntities('<tag attribute="&apos;value&apos;">')).toBe(true)
+    expect(hasEntities('<![CDATA[content with &lt; entity]]>')).toBe(true)
+  })
+
+  it('should return false when no entities are present', () => {
+    expect(hasEntities('This string has no entities')).toBe(false)
+    expect(hasEntities('Plain <tag> without entities')).toBe(false)
+    expect(hasEntities('Regular & ampersand')).toBe(false)
+    expect(hasEntities('Symbol ; semicolon')).toBe(false)
+  })
+
+  it('should handle strings with ampersand but no semicolon', () => {
+    expect(hasEntities('This & that')).toBe(false)
+    expect(hasEntities('Company & Co.')).toBe(false)
+    expect(hasEntities('A&B Corporation')).toBe(false)
+  })
+
+  it('should handle strings with semicolon but no ampersand', () => {
+    expect(hasEntities('This; that')).toBe(false)
+    expect(hasEntities('List: item1; item2; item3')).toBe(false)
+  })
+
+  it('should return false for unusual cases', () => {
+    expect(hasEntities('& amp;')).toBe(true)
+    expect(hasEntities('&amp')).toBe(false)
+    expect(hasEntities('')).toBe(false)
+  })
+
+  it('should handle cases that might produce false positives', () => {
+    expect(hasEntities('Fish & Chips; best in town')).toBe(true)
+    expect(hasEntities('Salt & pepper; sugar & spice')).toBe(true)
   })
 })
 
