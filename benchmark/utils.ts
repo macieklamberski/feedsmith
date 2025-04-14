@@ -1,5 +1,7 @@
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
+import { run } from 'node:test'
+import Benchmark from 'benchmark'
 import { Bench, nToMs } from 'tinybench'
 
 export const loadFeedFiles = (dir: string, limit?: number): Record<string, string> => {
@@ -30,7 +32,15 @@ export const runTest = async <T, F = unknown>(
   }
 }
 
-export const runBenchmark = async (
+export const runBenchmarks = async (
+  name: string,
+  tests: Record<string, () => Promise<unknown> | unknown>,
+) => {
+  await runTinybench(name, tests)
+  await runBenchmarkJs(name, tests)
+}
+
+export const runTinybench = async (
   name: string,
   tests: Record<string, () => Promise<unknown> | unknown>,
 ) => {
@@ -52,7 +62,7 @@ export const runBenchmark = async (
     bench.add(name, test)
   }
 
-  console.log(`⏳ Running benchmark: ${name}`)
+  console.log(`⏳ Running in Tinybench: ${name}`)
   await bench.run()
 
   console.log(`📊 Results for: ${name}`)
@@ -69,4 +79,36 @@ export const runBenchmark = async (
     .map(({ _rawMean, ...rest }) => rest)
 
   console.table(results)
+}
+
+export const runBenchmarkJs = async (
+  name: string,
+  tests: Record<string, () => Promise<unknown> | unknown>,
+) => {
+  const suite = new Benchmark.Suite(name)
+  const randomlySortedTests = Object.entries(tests).sort(() => Math.random() - 0.5)
+
+  for (const [testName, testFn] of randomlySortedTests) {
+    suite.add(testName, {
+      defer: true,
+      fn: (deferred: { resolve: () => void }) => {
+        // @ts-ignore
+        testFn().then(() => deferred.resolve())
+      },
+    })
+  }
+
+  console.log(`⏳ Running in benchmark.js: ${name}`)
+
+  return new Promise<void>((resolve) => {
+    suite.on('cycle', ({ target }) => {
+      console.log(`🧪 ${target}`)
+    })
+    suite.on('complete', function () {
+      console.log(`📊 Fastest is ${this.filter('fastest').map('name')}`)
+      resolve()
+    })
+
+    suite.run({ async: true })
+  })
 }

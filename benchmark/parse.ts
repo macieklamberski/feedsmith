@@ -7,7 +7,7 @@ import FeedMeJs from 'feedme'
 import FeedParser from 'feedparser'
 import RssParser from 'rss-parser'
 import { parseAtomFeed, parseJsonFeed, parseRdfFeed, parseRssFeed } from '../src/index'
-import { loadFeedFiles, runBenchmark, runTest } from './utils'
+import { loadFeedFiles, runBenchmarks, runTest } from './utils'
 
 const gaphubFeedParserInstance = new GapHubFeedParser()
 const gaphubFeedParser = (feed: string) => {
@@ -53,18 +53,18 @@ const jsonFilesObjects = Object.entries(jsonFilesStrings).reduce(
   },
   {} as Record<string, unknown>,
 )
-const rssBigFiles = loadFeedFiles('feeds/rss-big', 10)
-const rssSmallFiles = loadFeedFiles('feeds/rss-small', 10)
-const atomBigFiles = loadFeedFiles('feeds/atom-big', 10)
-const atomSmallFiles = loadFeedFiles('feeds/atom-small', 10)
-const rdfFiles = loadFeedFiles('feeds/rdf', 10)
+const rssBigFiles = loadFeedFiles('feeds/rss-big', 50)
+const rssSmallFiles = loadFeedFiles('feeds/rss-small', 50)
+const atomBigFiles = loadFeedFiles('feeds/atom-big', 50)
+const atomSmallFiles = loadFeedFiles('feeds/atom-small', 50)
+const rdfFiles = loadFeedFiles('feeds/rdf', 50)
 
-await runBenchmark('JSON feed parsing (100KB — 5MB)', {
+await runBenchmarks('JSON feed parsing (100KB — 5MB)', {
   // '@extractus/feed-extractor' — does not properly parse and always returns empty feed.
   'feedsmith 👈': () => runTest(jsonFilesObjects, parseJsonFeed),
 })
 
-await runBenchmark('RSS feed parsing (5MB — 50MB)', {
+await runBenchmarks('RSS feed parsing (5MB — 50MB)', {
   'rss-parser': () => runTest(rssBigFiles, rssParser),
   '@gaphub/feed': () => runTest(rssBigFiles, gaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(rssBigFiles, rowanmanningFeedParser),
@@ -75,7 +75,7 @@ await runBenchmark('RSS feed parsing (5MB — 50MB)', {
   'feedsmith 👈': () => runTest(rssBigFiles, parseRssFeed),
 })
 
-await runBenchmark('RSS feed parsing (100KB — 5MB)', {
+await runBenchmarks('RSS feed parsing (100KB — 5MB)', {
   'rss-parser': () => runTest(rssSmallFiles, rssParser),
   '@gaphub/feed': () => runTest(rssBigFiles, gaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(rssSmallFiles, rowanmanningFeedParser),
@@ -86,7 +86,7 @@ await runBenchmark('RSS feed parsing (100KB — 5MB)', {
   'feedsmith 👈': () => runTest(rssSmallFiles, parseRssFeed),
 })
 
-await runBenchmark('Atom feed parsing (5MB — 50MB)', {
+await runBenchmarks('Atom feed parsing (5MB — 50MB)', {
   'rss-parser': () => runTest(atomBigFiles, rssParser),
   '@gaphub/feed': () => runTest(rssBigFiles, gaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(atomBigFiles, rowanmanningFeedParser),
@@ -97,7 +97,7 @@ await runBenchmark('Atom feed parsing (5MB — 50MB)', {
   'feedsmith 👈': () => runTest(atomBigFiles, parseAtomFeed),
 })
 
-await runBenchmark('Atom feed parsing (100KB — 5MB)', {
+await runBenchmarks('Atom feed parsing (100KB — 5MB)', {
   'rss-parser': () => runTest(atomSmallFiles, rssParser),
   '@gaphub/feed': () => runTest(rssBigFiles, gaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(atomSmallFiles, rowanmanningFeedParser),
@@ -108,7 +108,7 @@ await runBenchmark('Atom feed parsing (100KB — 5MB)', {
   'feedsmith 👈': () => runTest(atomSmallFiles, parseAtomFeed),
 })
 
-await runBenchmark('RDF feed parsing (100KB — 5MB)', {
+await runBenchmarks('RDF feed parsing (100KB — 5MB)', {
   'rss-parser': () => runTest(rdfFiles, rssParser),
   '@gaphub/feed': () => runTest(rssBigFiles, gaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(rdfFiles, rowanmanningFeedParser),
