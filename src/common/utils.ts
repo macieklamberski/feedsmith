@@ -104,8 +104,7 @@ export const parseNumber: ParseFunction<number> = (value) => {
   }
 
   if (typeof value === 'string' && value !== '') {
-    // TODO: Maybe use the strnum package instead? It's already included with fast-xml-parser.
-    const numeric = Number(value)
+    const numeric = +value
 
     return Number.isNaN(numeric) ? undefined : numeric
   }
