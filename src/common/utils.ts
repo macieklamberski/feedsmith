@@ -185,9 +185,7 @@ export const createNamespaceGetter = (
   value: Record<string, Unreliable>,
   prefix: string | undefined,
 ) => {
-  return (key: string): Unreliable => {
-    return value[`${prefix || ''}${key}`]
-  }
+  return prefix ? (key: string) => value[prefix + key] : (key: string) => value[key]
 }
 
 export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
