@@ -85,7 +85,7 @@ export const parseSkipHours: ParseFunction<Array<number>> = (value) => {
     return
   }
 
-  return trimArray(hours.map((hour) => parseNumber(hour?.['#text'])))
+  return trimArray(hours, (hour) => parseNumber(hour?.['#text']))
 }
 
 export const parseSkipDays: ParseFunction<Array<string>> = (value) => {
@@ -95,7 +95,7 @@ export const parseSkipDays: ParseFunction<Array<string>> = (value) => {
     return
   }
 
-  return trimArray(days.map((hour) => parseString(hour?.['#text'])))
+  return trimArray(days, (day) => parseString(day?.['#text']))
 }
 
 export const parseEnclosure: ParseFunction<Enclosure> = (value) => {

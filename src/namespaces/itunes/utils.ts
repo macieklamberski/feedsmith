@@ -106,11 +106,11 @@ export const parseKeywords: ParseFunction<Array<string>> = (value) => {
     return
   }
 
-  return trimArray(
-    parseString(value)
-      ?.split(',')
-      ?.map((keyword) => keyword.trim() || undefined) || [],
-  )
+  const keywords = parseString(value)?.split(',')
+
+  if (keywords) {
+    return trimArray(keywords, (keyword) => parseString(keyword) || undefined)
+  }
 }
 
 export const parseItem: ParseFunction<Item> = (value) => {

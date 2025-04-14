@@ -39,15 +39,26 @@ export const trimObject = <T extends Record<string, unknown>>(
   }
 }
 
-export const trimArray = <T>(array: Array<T | null | undefined>): Array<T> | undefined => {
-  if (!Array.isArray(array)) {
+export const trimArray = <T, R = T>(
+  value: Array<T>,
+  parse?: ParseFunction<R>,
+): Array<R> | undefined => {
+  if (!Array.isArray(value)) {
     return
   }
 
-  const filtered = array.filter((item): item is T => isPresent(item))
+  const result: Array<R> = []
 
-  if (filtered.length > 0) {
-    return filtered
+  for (let i = 0; i < value.length; i++) {
+    const item = parse ? parse(value[i]) : value[i]
+
+    if (isPresent(item)) {
+      result.push(item as R)
+    }
+  }
+
+  if (result.length > 0) {
+    return result
   }
 }
 
@@ -164,7 +175,7 @@ export const parseArrayOf = <R>(
   const array = parseArray(value)
 
   if (array) {
-    return trimArray(array.map((subValue) => parse(subValue)))
+    return trimArray(array, parse)
   }
 
   const parsed = parse(value)

@@ -15,11 +15,11 @@ import type { Attachment, Author, Feed, Hub, Item } from './types.js'
 
 export const parseTags: ParseFunction<Array<string>> = (value) => {
   if (Array.isArray(value)) {
-    return trimArray(value.map((item) => parseString(item)))
+    return trimArray(value, parseString)
   }
 
   if (isNonEmptyStringOrNumber(value)) {
-    return trimArray([parseString(value)])
+    return trimArray([value], parseString)
   }
 }
 

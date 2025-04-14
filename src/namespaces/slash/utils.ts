@@ -14,12 +14,11 @@ export const parseHitParade: ParseFunction<HitParade> = (value) => {
     return
   }
 
-  return trimArray(
-    value
-      .toString()
-      .split(',')
-      .map((subValue) => parseNumber(subValue)),
-  )
+  const hitParade = parseString(value)?.split(',')
+
+  if (hitParade) {
+    return trimArray(hitParade, parseNumber)
+  }
 }
 
 export const parseItem: ParseFunction<Item> = (value) => {
