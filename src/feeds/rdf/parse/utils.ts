@@ -1,10 +1,10 @@
 import type { ParseFunction } from '../../../common/types.js'
 import {
-  hasAllProps,
   isObject,
-  omitUndefinedFromObject,
+  isPresent,
   parseArrayOf,
   parseString,
+  trimObject,
 } from '../../../common/utils.js'
 import {
   parseEntry as parseAtomEntry,
@@ -31,8 +31,8 @@ export const parseImage: ParseFunction<Image> = (value) => {
     url: parseString(value.url?.['#text']),
   }
 
-  if (hasAllProps(image, ['title', 'link'])) {
-    return omitUndefinedFromObject(image)
+  if (isPresent(image.title) && isPresent(image.link)) {
+    return trimObject(image)
   }
 }
 
@@ -56,8 +56,8 @@ export const parseItem: ParseFunction<Item> = (value) => {
     itunes: parseItunesItem(value),
   }
 
-  if (hasAllProps(item, ['title', 'link'])) {
-    return omitUndefinedFromObject(item)
+  if (isPresent(item.title) && isPresent(item.link)) {
+    return trimObject(item)
   }
 }
 
@@ -81,8 +81,13 @@ export const parseTextInput: ParseFunction<TextInput> = (value) => {
     link: parseString(value.link?.['#text']),
   }
 
-  if (hasAllProps(textInput, ['title', 'description', 'name', 'link'])) {
-    return omitUndefinedFromObject(textInput)
+  if (
+    isPresent(textInput.title) &&
+    isPresent(textInput.description) &&
+    isPresent(textInput.name) &&
+    isPresent(textInput.link)
+  ) {
+    return trimObject(textInput)
   }
 }
 
@@ -108,8 +113,8 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     itunes: parseItunesFeed(value.channel),
   }
 
-  if (hasAllProps(feed, ['title'])) {
-    return omitUndefinedFromObject(feed)
+  if (isPresent(feed.title)) {
+    return trimObject(feed)
   }
 }
 

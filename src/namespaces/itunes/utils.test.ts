@@ -132,7 +132,6 @@ describe('parseCategory', () => {
     }
     const expected = {
       text: 'Technology',
-      categories: [],
     }
 
     expect(parseCategory(value)).toEqual(expected)

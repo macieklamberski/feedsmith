@@ -1,13 +1,12 @@
 import type { ParseFunction } from '../../../common/types.js'
 import {
-  hasAllProps,
-  hasAnyProps,
   isObject,
-  omitNullishFromArray,
-  omitUndefinedFromObject,
+  isPresent,
   parseArrayOf,
   parseNumber,
   parseString,
+  trimArray,
+  trimObject,
 } from '../../../common/utils.js'
 import {
   parseEntry as parseAtomEntry,
@@ -45,8 +44,13 @@ export const parseTextInput: ParseFunction<TextInput> = (value) => {
     link: parseString(value?.link?.['#text']),
   }
 
-  if (hasAllProps(textInput, ['title', 'description', 'name', 'link'])) {
-    return omitUndefinedFromObject(textInput)
+  if (
+    isPresent(textInput.title) &&
+    isPresent(textInput.description) &&
+    isPresent(textInput.name) &&
+    isPresent(textInput.link)
+  ) {
+    return trimObject(textInput)
   }
 }
 
@@ -63,8 +67,14 @@ export const parseCloud: ParseFunction<Cloud> = (value) => {
     protocol: parseString(value?.['@protocol']),
   }
 
-  if (hasAllProps(cloud, ['domain', 'port', 'path', 'registerProcedure', 'protocol'])) {
-    return omitUndefinedFromObject(cloud)
+  if (
+    isPresent(cloud.domain) &&
+    isPresent(cloud.port) &&
+    isPresent(cloud.path) &&
+    isPresent(cloud.registerProcedure) &&
+    isPresent(cloud.protocol)
+  ) {
+    return trimObject(cloud)
   }
 }
 
@@ -75,7 +85,7 @@ export const parseSkipHours: ParseFunction<Array<number>> = (value) => {
     return
   }
 
-  return omitNullishFromArray(hours.map((hour) => parseNumber(hour?.['#text'])))
+  return trimArray(hours.map((hour) => parseNumber(hour?.['#text'])))
 }
 
 export const parseSkipDays: ParseFunction<Array<string>> = (value) => {
@@ -85,7 +95,7 @@ export const parseSkipDays: ParseFunction<Array<string>> = (value) => {
     return
   }
 
-  return omitNullishFromArray(days.map((hour) => parseString(hour?.['#text'])))
+  return trimArray(days.map((hour) => parseString(hour?.['#text'])))
 }
 
 export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
@@ -99,8 +109,8 @@ export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
     type: parseString(value['@type']),
   }
 
-  if (hasAllProps(enclosure, ['url', 'length', 'type'])) {
-    return omitUndefinedFromObject(enclosure)
+  if (isPresent(enclosure.url) && isPresent(enclosure.length) && isPresent(enclosure.type)) {
+    return trimObject(enclosure)
   }
 }
 
@@ -114,8 +124,8 @@ export const parseSource: ParseFunction<Source> = (value) => {
     url: parseString(value?.['@url']),
   }
 
-  if (hasAllProps(source, ['title'])) {
-    return omitUndefinedFromObject(source)
+  if (isPresent(source.title)) {
+    return trimObject(source)
   }
 }
 
@@ -133,8 +143,8 @@ export const parseImage: ParseFunction<Image> = (value) => {
     width: parseNumber(value.width?.['#text']),
   }
 
-  if (hasAllProps(image, ['url', 'title', 'link'])) {
-    return omitUndefinedFromObject(image)
+  if (isPresent(image.url) && isPresent(image.title) && isPresent(image.link)) {
+    return trimObject(image)
   }
 }
 
@@ -148,8 +158,8 @@ export const parseCategory: ParseFunction<Category> = (value) => {
     domain: parseString(value?.['@domain']),
   }
 
-  if (category.name) {
-    return omitUndefinedFromObject(category)
+  if (isPresent(category.name)) {
+    return trimObject(category)
   }
 }
 
@@ -180,8 +190,8 @@ export const parseItem: ParseFunction<Item> = (value) => {
     itunes: parseItunesItem(value),
   }
 
-  if (hasAnyProps(item, ['title', 'description'])) {
-    return omitUndefinedFromObject(item)
+  if (isPresent(item.title) || isPresent(item.description)) {
+    return trimObject(item)
   }
 }
 
@@ -220,8 +230,8 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
   // INFO: Spec also says about required "description" but this field is not always present
   // in feeds. We can still parse the feed without it. In addition, the "link" might be missing
   // as well when the atom:link rel="self" is present so checking "link" is skipped as well.
-  if (hasAllProps(feed, ['title'])) {
-    return omitUndefinedFromObject(feed)
+  if (isPresent(feed.title)) {
+    return trimObject(feed)
   }
 }
 

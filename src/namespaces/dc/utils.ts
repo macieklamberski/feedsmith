@@ -1,10 +1,5 @@
 import type { ParseFunction } from '../../common/types.js'
-import {
-  isNonEmptyObject,
-  isObject,
-  omitUndefinedFromObject,
-  parseString,
-} from '../../common/utils.js'
+import { isObject, parseString, trimObject } from '../../common/utils.js'
 import type { ItemOrFeed } from './types.js'
 
 export const parseItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
@@ -12,7 +7,7 @@ export const parseItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
     return
   }
 
-  const itemOrFeed = omitUndefinedFromObject({
+  const itemOrFeed = trimObject({
     title: parseString(value['dc:title']?.['#text']),
     creator: parseString(value['dc:creator']?.['#text']),
     subject: parseString(value['dc:subject']?.['#text']),
@@ -30,7 +25,5 @@ export const parseItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
     rights: parseString(value['dc:rights']?.['#text']),
   })
 
-  if (isNonEmptyObject(itemOrFeed)) {
-    return itemOrFeed
-  }
+  return itemOrFeed
 }

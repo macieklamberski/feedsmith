@@ -3,14 +3,10 @@ import type { ParseFunction } from './types.js'
 import {
   createCaseInsensitiveGetter,
   createNamespaceGetter,
-  hasAllProps,
-  hasAnyProps,
   hasEntities,
-  isNonEmptyObject,
   isNonEmptyStringOrNumber,
   isObject,
-  omitNullishFromArray,
-  omitUndefinedFromObject,
+  isPresent,
   parseArray,
   parseArrayOf,
   parseBoolean,
@@ -18,7 +14,71 @@ import {
   parseSingular,
   parseString,
   stripCdata,
+  trimArray,
+  trimObject,
 } from './utils.js'
+
+describe('isPresent', () => {
+  it('should return false for null', () => {
+    expect(isPresent(null)).toBe(false)
+  })
+
+  it('should return false for undefined', () => {
+    expect(isPresent(undefined)).toBe(false)
+  })
+
+  it('should return true for empty string', () => {
+    expect(isPresent('')).toBe(true)
+  })
+
+  it('should return true for zero', () => {
+    expect(isPresent(0)).toBe(true)
+  })
+
+  it('should return true for NaN', () => {
+    expect(isPresent(Number.NaN)).toBe(true)
+  })
+
+  it('should return true for false', () => {
+    expect(isPresent(false)).toBe(true)
+  })
+
+  it('should return true for empty objects', () => {
+    expect(isPresent({})).toBe(true)
+  })
+
+  it('should return true for empty arrays', () => {
+    expect(isPresent([])).toBe(true)
+  })
+
+  it('should return true for string values', () => {
+    expect(isPresent('hello')).toBe(true)
+  })
+
+  it('should return true for number values', () => {
+    expect(isPresent(123)).toBe(true)
+  })
+
+  it('should return true for object values', () => {
+    expect(isPresent({ key: 'value' })).toBe(true)
+  })
+
+  it('should return true for array values', () => {
+    expect(isPresent([1, 2, 3])).toBe(true)
+  })
+
+  it('should return true for function values', () => {
+    expect(isPresent(() => {})).toBe(true)
+  })
+
+  it('should return true for Date objects', () => {
+    expect(isPresent(new Date())).toBe(true)
+  })
+
+  it('should return true for RegExp objects', () => {
+    expect(isPresent(/test/)).toBe(true)
+  })
+})
 
 describe('isObject', () => {
   it('should return true for plain objects', () => {
@@ -75,147 +135,6 @@ describe('isObject', () => {
     // biome-ignore lint/complexity/useRegexLiterals: It's for testing purposes.
     expect(isObject(new RegExp('.'))).toEqual(false)
     expect(isObject(new ArrayBuffer(10))).toEqual(false)
-  })
-})
-
-describe('isNonEmptyObject', () => {
-  it('should return true for non-empty plain objects', () => {
-    expect(isNonEmptyObject({ a: 1 })).toEqual(true)
-    expect(isNonEmptyObject({ key: undefined })).toEqual(true)
-    expect(isNonEmptyObject({ key: null })).toEqual(true)
-    expect(isNonEmptyObject({ toString: () => 'custom' })).toEqual(true)
-  })
-
-  it('should return false for empty plain objects', () => {
-    expect(isNonEmptyObject({})).toEqual(false)
-    expect(isNonEmptyObject(Object.create(Object.prototype))).toEqual(false)
-  })
-
-  it('should return false for arrays', () => {
-    expect(isNonEmptyObject([])).toEqual(false)
-    expect(isNonEmptyObject([1, 2, 3])).toEqual(false)
-    expect(isNonEmptyObject(new Array(5))).toEqual(false)
-  })
-
-  it('should return false for null', () => {
-    expect(isNonEmptyObject(null)).toEqual(false)
-  })
-
-  it('should return false for undefined', () => {
-    expect(isNonEmptyObject(undefined)).toEqual(false)
-  })
-
-  it('should return false for primitive types', () => {
-    expect(isNonEmptyObject(42)).toEqual(false)
-    expect(isNonEmptyObject('string')).toEqual(false)
-    expect(isNonEmptyObject(true)).toEqual(false)
-    expect(isNonEmptyObject(Symbol('sym'))).toEqual(false)
-    expect(isNonEmptyObject(BigInt(123))).toEqual(false)
-  })
-
-  it('should return false for functions', () => {
-    expect(isNonEmptyObject(() => {})).toEqual(false)
-    // biome-ignore lint/complexity/useArrowFunction: It's for testing purposes.
-    expect(isNonEmptyObject(function () {})).toEqual(false)
-    expect(isNonEmptyObject(Math.sin)).toEqual(false)
-  })
-
-  it('should return false for objects with custom prototypes', () => {
-    expect(isNonEmptyObject(Object.create(null))).toEqual(false)
-
-    const protoObj = Object.create({})
-    expect(isNonEmptyObject(protoObj)).toEqual(false)
-
-    class CustomClass {}
-    expect(isNonEmptyObject(new CustomClass())).toEqual(false)
-  })
-
-  it('should return false for built-in objects', () => {
-    expect(isNonEmptyObject(new Date())).toEqual(false)
-    expect(isNonEmptyObject(new Error())).toEqual(false)
-    expect(isNonEmptyObject(new Map())).toEqual(false)
-    expect(isNonEmptyObject(new Set())).toEqual(false)
-    expect(isNonEmptyObject(new WeakMap())).toEqual(false)
-    expect(isNonEmptyObject(new WeakSet())).toEqual(false)
-    // biome-ignore lint/complexity/useRegexLiterals: It's for testing purposes.
-    expect(isNonEmptyObject(new RegExp('.'))).toEqual(false)
-    expect(isNonEmptyObject(new ArrayBuffer(10))).toEqual(false)
-  })
-})
-
-describe('hasAnyProps', () => {
-  it('should return true when any of the specified properties has a defined value', () => {
-    const value = { a: 1, b: 'string', c: false }
-
-    expect(hasAnyProps(value, ['a', 'b'])).toBe(true)
-    expect(hasAnyProps(value, ['a', 'b', 'c'])).toBe(true)
-    // @ts-ignore: This is for testing purposes.
-    expect(hasAnyProps(value, ['a', 'd'])).toBe(true)
-  })
-
-  it('should return false when all specified properties are undefined or do not exist', () => {
-    const value = { a: undefined, b: undefined, c: 1 }
-
-    expect(hasAnyProps(value, ['a', 'b'])).toBe(false)
-    // @ts-ignore: This is for testing purposes.
-    expect(hasAnyProps(value, ['a', 'b', 'd'])).toBe(false)
-    expect(hasAnyProps(value, ['c'])).toBe(true)
-  })
-
-  it('should return false when none of the specified properties exist', () => {
-    const value = { a: 1, b: 'string' }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(hasAnyProps(value, ['c', 'd'])).toBe(false)
-  })
-
-  it('should return false for empty array of props', () => {
-    const value = { a: 1, b: 'string' }
-
-    expect(hasAnyProps(value, [])).toBe(false)
-  })
-
-  it('should handle properties with falsy values correctly', () => {
-    const value = { a: 0, b: '', c: false, d: null, e: undefined }
-
-    expect(hasAnyProps(value, ['a', 'e'])).toBe(true)
-    expect(hasAnyProps(value, ['b', 'c'])).toBe(true)
-    expect(hasAnyProps(value, ['d'])).toBe(true)
-    expect(hasAnyProps(value, ['e'])).toBe(false)
-    // @ts-ignore: This is for testing purposes.
-    expect(hasAnyProps(value, ['f'])).toBe(false)
-  })
-})
-
-describe('hasAllProps', () => {
-  it('should return true when all required properties have defined values', () => {
-    const value = { a: 1, b: 'string', c: false }
-
-    expect(hasAllProps(value, ['a', 'b'])).toBe(true)
-    expect(hasAllProps(value, ['a', 'b', 'c'])).toBe(true)
-    expect(hasAllProps(value, [])).toBe(true)
-  })
-
-  it('should return false when any required property is undefined', () => {
-    const value = { a: 1, b: undefined, c: null }
-
-    expect(hasAllProps(value, ['a', 'b'])).toBe(false)
-    expect(hasAllProps(value, ['a', 'c'])).toBe(true)
-  })
-
-  it('should return false when any required property does not exist', () => {
-    const value = { a: 1, b: 'string' }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(hasAllProps(value, ['a', 'c'])).toBe(false)
-    // @ts-ignore: This is for testing purposes.
-    expect(hasAllProps(value, ['c', 'd'])).toBe(false)
-  })
-
-  it('should handle properties with falsy values correctly', () => {
-    const value = { a: 0, b: '', c: false, d: null }
-
-    expect(hasAllProps(value, ['a', 'b', 'c', 'd'])).toBe(true)
   })
 })
 
@@ -286,54 +205,43 @@ describe('isNonEmptyStringOrNumber', () => {
   })
 })
 
-describe('omitUndefinedFromObject', () => {
-  it('should remove undefined properties from objects', () => {
+describe('trimObject', () => {
+  it('should remove nullish properties from objects', () => {
     const input = { a: 1, b: undefined, c: 'string', d: undefined, e: null, f: false, g: 0, h: '' }
-    const expected = { a: 1, c: 'string', e: null, f: false, g: 0, h: '' }
+    const expected = { a: 1, c: 'string', f: false, g: 0, h: '' }
 
-    expect(omitUndefinedFromObject(input)).toEqual(expected)
+    expect(trimObject(input)).toEqual(expected)
   })
 
-  it('should return an empty object when all properties are undefined', () => {
-    const input = { a: undefined, b: undefined, c: undefined }
-    const expected = {}
+  it('should return the same object when no properties are nullish', () => {
+    const input = { a: 1, b: 'string', c: false, d: [], e: {} }
 
-    expect(omitUndefinedFromObject(input)).toEqual(expected)
-  })
-
-  it('should return the same object when no properties are undefined', () => {
-    const input = { a: 1, b: 'string', c: null, d: false, e: [], f: {} }
-
-    expect(omitUndefinedFromObject(input)).toEqual(input)
-  })
-
-  it('should handle empty objects', () => {
-    expect(omitUndefinedFromObject({})).toEqual({})
+    expect(trimObject(input)).toEqual(input)
   })
 
   it('should handle objects with inherited properties', () => {
     const proto = { inherited: 'value' }
-    const value = Object.create(proto)
-    value.own = 'property'
-    value.undef = undefined
+    const obj = Object.create(proto)
+    obj.own = 'property'
+    obj.undef = undefined
 
-    expect(omitUndefinedFromObject(value)).toEqual({ own: 'property' })
+    expect(trimObject(obj)).toEqual({ own: 'property' })
   })
 
   it('should preserve falsy non-undefined values', () => {
-    const input = { a: 0, b: '', c: false, d: null, e: Number.NaN }
+    const input = { a: 0, b: '', c: false, d: Number.NaN }
 
-    expect(omitUndefinedFromObject(input)).toEqual(input)
+    expect(trimObject(input)).toEqual(input)
   })
 
   it('should handle objects with symbol keys', () => {
     const sym = Symbol('test')
     const input = { a: 1, b: undefined, [sym]: 'symbol value' }
 
-    const result = omitUndefinedFromObject(input)
-    expect(result.a).toEqual(1)
-    expect(result.b).toBeUndefined()
-    expect(result[sym]).toBeUndefined() // Symbol keys are not enumerable with for..in.
+    const result = trimObject(input)
+    expect(result?.a).toEqual(1)
+    expect(result?.b).toBeUndefined()
+    expect(result?.[sym]).toBeUndefined() // Symbol keys are not enumerable with for..in.
   })
 
   it('should handle complex nested objects', () => {
@@ -348,7 +256,7 @@ describe('omitUndefinedFromObject', () => {
     }
 
     // The function only removes top-level undefined properties, not those in nested objects.
-    expect(omitUndefinedFromObject(input)).toEqual(expected)
+    expect(trimObject(input)).toEqual(expected)
   })
 
   it('should handle object with getters', () => {
@@ -360,55 +268,63 @@ describe('omitUndefinedFromObject', () => {
         return undefined
       },
     }
+    const result = trimObject(input)
 
-    const result = omitUndefinedFromObject(input)
-    expect(result.a).toEqual(1)
-    expect(result.b).toBeUndefined()
-    expect('b' in result).toBe(false)
+    expect(result?.a).toEqual(1)
+    expect(result?.b).toBeUndefined()
+  })
+
+  it('should return undefined object when all properties are nullish', () => {
+    const input = { a: undefined, b: undefined, c: null }
+
+    expect(trimObject(input)).toBeUndefined()
+  })
+
+  it('should handle empty objects', () => {
+    expect(trimObject({})).toBeUndefined()
   })
 })
 
-describe('omitNullishFromArray', () => {
+describe('trimArray', () => {
   it('should filter out null and undefined values', () => {
-    expect(omitNullishFromArray([1, null, 2, undefined, 3])).toEqual([1, 2, 3])
-    expect(omitNullishFromArray(['a', null, 'b', undefined])).toEqual(['a', 'b'])
-    expect(omitNullishFromArray([null, undefined])).toEqual([])
-  })
-
-  it('should preserve empty arrays', () => {
-    expect(omitNullishFromArray([])).toEqual([])
+    expect(trimArray([1, null, 2, undefined, 3])).toEqual([1, 2, 3])
+    expect(trimArray(['a', null, 'b', undefined])).toEqual(['a', 'b'])
   })
 
   it('should keep falsy values that are not null or undefined', () => {
     const input = [0, '', false, null, undefined, Number.NaN]
     const expected = [0, '', false, Number.NaN]
 
-    expect(omitNullishFromArray(input)).toEqual(expected)
+    expect(trimArray(input)).toEqual(expected)
   })
 
   it('should work with complex objects', () => {
     const value1 = { id: 1 }
     const value2 = { id: 2 }
 
-    expect(omitNullishFromArray([value1, null, value2, undefined])).toEqual([value1, value2])
+    expect(trimArray([value1, null, value2, undefined])).toEqual([value1, value2])
   })
 
   it('should preserve the order of non-nullish elements', () => {
     const value = ['first', null, 'second', undefined, 'third']
     const expected = ['first', 'second', 'third']
 
-    expect(omitNullishFromArray(value)).toEqual(expected)
-  })
-
-  it('should handle arrays with only nullish values', () => {
-    expect(omitNullishFromArray([null, undefined, null])).toEqual([])
+    expect(trimArray(value)).toEqual(expected)
   })
 
   it('should handle mixed type arrays', () => {
     const value = [1, 'string', true, null, { key: 'value' }, undefined, []]
     const expected = [1, 'string', true, { key: 'value' }, []]
 
-    expect(omitNullishFromArray(value)).toEqual(expected)
+    expect(trimArray(value)).toEqual(expected)
+  })
+
+  it('should preserve empty arrays', () => {
+    expect(trimArray([])).toBeUndefined()
+  })
+
+  it('should handle arrays with only nullish values', () => {
+    expect(trimArray([null, undefined, null])).toBeUndefined()
   })
 })
 

@@ -1,13 +1,11 @@
 import {
   createNamespaceGetter,
-  hasAllProps,
-  hasAnyProps,
-  isNonEmptyObject,
   isObject,
-  omitUndefinedFromObject,
+  isPresent,
   parseArrayOf,
   parseNumber,
   parseString,
+  trimObject,
 } from '../../../common/utils.js'
 import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils.js'
 import {
@@ -33,8 +31,8 @@ export const parseLink: ParseFunction<Link> = (value) => {
     length: parseNumber(value?.['@length']),
   }
 
-  if (hasAllProps(link, ['href'])) {
-    return omitUndefinedFromObject(link)
+  if (isPresent(link.href)) {
+    return trimObject(link)
   }
 }
 
@@ -62,8 +60,8 @@ export const parsePerson: ParseFunction<Person> = (value, options) => {
     email: parseString(get('email')?.['#text']),
   }
 
-  if (hasAllProps(person, ['name'])) {
-    return omitUndefinedFromObject(person)
+  if (isPresent(person.name)) {
+    return trimObject(person)
   }
 }
 
@@ -78,8 +76,8 @@ export const parseCategory: ParseFunction<Category> = (value) => {
     label: parseString(value['@label']),
   }
 
-  if (hasAllProps(category, ['term'])) {
-    return omitUndefinedFromObject(category)
+  if (isPresent(category.term)) {
+    return trimObject(category)
   }
 }
 
@@ -105,8 +103,8 @@ export const parseGenerator: ParseFunction<Generator> = (value) => {
     version: parseString(value['@version']),
   }
 
-  if (hasAllProps(generator, ['text'])) {
-    return omitUndefinedFromObject(generator)
+  if (isPresent(generator.text)) {
+    return trimObject(generator)
   }
 }
 
@@ -116,7 +114,7 @@ export const parseSource: ParseFunction<Source> = (value, options) => {
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const source = omitUndefinedFromObject({
+  const source = trimObject({
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
@@ -131,9 +129,7 @@ export const parseSource: ParseFunction<Source> = (value, options) => {
     updated: retrieveUpdated(value),
   })
 
-  if (isNonEmptyObject(source)) {
-    return source
-  }
+  return source
 }
 
 export const retrievePublished: ParseFunction<string> = (value, options) => {
@@ -182,7 +178,7 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const entry = omitUndefinedFromObject({
+  const entry = trimObject({
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     content: parseString(get('content')?.['#text']),
@@ -200,13 +196,13 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
     itunes: options?.partial ? undefined : parseItunesItem(value),
   })
 
-  if (options?.partial && isNonEmptyObject(entry)) {
+  if (options?.partial || !entry) {
     return entry
   }
 
   // INFO: Spec also says about required "updated" but this field is
   // not always present in entries. We can still parse the entry without it.
-  if (hasAllProps(entry, ['id', 'title'])) {
+  if (isPresent(entry.id) && isPresent(entry.title)) {
     return entry
   }
 }
@@ -217,7 +213,7 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const feed = omitUndefinedFromObject({
+  const feed = trimObject({
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
@@ -236,7 +232,7 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
     itunes: options?.partial ? undefined : parseItunesFeed(value),
   })
 
-  if (options?.partial && isNonEmptyObject(feed)) {
+  if (options?.partial || !feed) {
     return feed
   }
 
@@ -246,7 +242,7 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
   // not in 100% of cases. It's not ideal not to have it, but it's not a dealbreaker either,
   // so if either "id" or "title" is present, the feed is treated as valid.
   // The "ID" can always fall back to the "title" if it's missing in application's code.
-  if (hasAnyProps(feed, ['id', 'title'])) {
+  if (isPresent(feed.id) || isPresent(feed.title)) {
     return feed
   }
 }

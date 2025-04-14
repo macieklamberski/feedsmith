@@ -1,78 +1,54 @@
 import { decodeHTML, decodeXML } from 'entities'
 import type { ParseFunction, Unreliable } from './types.js'
 
+export const isPresent = (value: Unreliable): value is string | number | boolean => {
+  return value !== undefined && value !== null
+}
+
 export const isObject = (value: Unreliable): value is Record<string, Unreliable> => {
   return (
-    value !== null &&
+    isPresent(value) &&
     typeof value === 'object' &&
     !Array.isArray(value) &&
     Object.getPrototypeOf(value) === Object.prototype
   )
 }
 
-export const isNonEmptyObject = (value: Unreliable): value is Record<string, Unreliable> => {
-  if (!isObject(value)) {
-    return false
-  }
-
-  for (const key in value) {
-    if (Object.hasOwn(value, key)) {
-      return true
-    }
-  }
-
-  return false
-}
-
-export const hasAnyProps = <T extends Record<string, Unreliable>, K extends keyof T>(
-  value: T,
-  props: Array<K>,
-): boolean => {
-  for (let i = 0; i < props.length; i++) {
-    if (value[props[i]] !== undefined) {
-      return true
-    }
-  }
-
-  return false
-}
-
-export const hasAllProps = <T extends Record<string, Unreliable>, K extends keyof T>(
-  value: T,
-  props: Array<K>,
-): boolean => {
-  for (let i = 0; i < props.length; i++) {
-    if (value[props[i]] === undefined) {
-      return false
-    }
-  }
-
-  return true
-}
-
 export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | number => {
   return value !== '' && (typeof value === 'string' || typeof value === 'number')
 }
 
-export const omitUndefinedFromObject = <T extends Record<string, unknown>>(
+export const trimObject = <T extends Record<string, unknown>>(
   object: T,
-): Partial<T> => {
+): Partial<T> | undefined => {
   const result: Partial<T> = {}
   const keys: Array<keyof T> = Object.keys(object)
+  let hasProperties = false
 
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
 
-    if (object[key] !== undefined) {
+    if (isPresent(object[key])) {
       result[key] = object[key]
+      hasProperties = true
     }
   }
 
-  return result
+  if (hasProperties) {
+    return result
+  }
 }
 
-export const omitNullishFromArray = <T>(array: Array<T | null | undefined>): Array<T> => {
-  return array.filter((item): item is T => item !== null && item !== undefined)
+export const trimArray = <T>(array: Array<T | null | undefined>): Array<T> | undefined => {
+  if (!Array.isArray(array)) {
+    return
+  }
+
+  const filtered = array.filter((item): item is T => isPresent(item))
+
+  if (filtered.length > 0) {
+    return filtered
+  }
 }
 
 export const stripCdata = (text: Unreliable) => {
@@ -195,7 +171,7 @@ export const parseArrayOf = <R>(
   const array = parseArray(value)
 
   if (array) {
-    return omitNullishFromArray(array.map((subValue) => parse(subValue)))
+    return trimArray(array.map((subValue) => parse(subValue)))
   }
 
   const parsed = parse(value)
@@ -218,7 +194,7 @@ export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
   const keyMap = new Map<string, string>()
 
   for (const key in value) {
-    if (Object.prototype.hasOwnProperty.call(value, key)) {
+    if (Object.hasOwn(value, key)) {
       keyMap.set(key.toLowerCase(), key)
     }
   }

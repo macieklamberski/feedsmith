@@ -294,14 +294,6 @@ describe('retrieveItems', () => {
     expect(retrieveItems(value)).toEqual(expected)
   })
 
-  it('should handle empty array of items', () => {
-    const value = {
-      item: [],
-    }
-
-    expect(retrieveItems(value)).toEqual([])
-  })
-
   it('should handle coercible values in items', () => {
     const value = {
       item: [
@@ -320,6 +312,14 @@ describe('retrieveItems', () => {
     ]
 
     expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should handle empty array of items', () => {
+    const value = {
+      item: [],
+    }
+
+    expect(retrieveItems(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
