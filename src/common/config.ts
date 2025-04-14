@@ -8,6 +8,8 @@ export const parserConfig: X2jOptions = {
   parseAttributeValue: false,
   alwaysCreateTextNode: true,
   ignoreAttributes: false,
+  ignorePiTags: true,
+  ignoreDeclaration: true,
   attributeNamePrefix: '@',
   transformTagName: (name) => name.toLowerCase(),
   transformAttributeName: (name) => name.toLowerCase(),
