@@ -326,6 +326,72 @@ describe('trimArray', () => {
   it('should handle arrays with only nullish values', () => {
     expect(trimArray([null, undefined, null])).toBeUndefined()
   })
+
+  describe('with parsing function', () => {
+    it('should apply the parsing function to each element', () => {
+      const value = [1, 2, 3]
+      const expected = ['1', '2', '3']
+      const parseToString = (val: number) => val.toString()
+
+      expect(trimArray(value, parseToString)).toEqual(expected)
+    })
+
+    it('should filter out values that become null or undefined after parsing', () => {
+      const value = [1, 2, 3, 4]
+      const expected = [2, 4]
+      const parseEvenNumbers = (val: number) => (val % 2 === 0 ? val : null)
+
+      expect(trimArray(value, parseEvenNumbers)).toEqual(expected)
+    })
+
+    it('should handle type transformations', () => {
+      const value = [1, 2, 3]
+      const expected = [{ value: 1 }, { value: 2 }, { value: 3 }]
+      const parseToObject = (val: number) => ({ value: val })
+
+      expect(trimArray(value, parseToObject)).toEqual(expected)
+    })
+
+    it('should combine parsing and filtering of nullish values', () => {
+      const value = [1, null, 2, undefined, 3]
+      const expected = [2, 4, 6]
+      const double = (val: number | null | undefined) => {
+        return val !== null && val !== undefined ? val * 2 : val
+      }
+
+      expect(trimArray(value, double)).toEqual(expected)
+    })
+
+    it('should return undefined when parsing results in empty array', () => {
+      const value = [1, 2, 3]
+      const parseToAllNull = () => null
+
+      expect(trimArray(value, parseToAllNull)).toBeUndefined()
+    })
+
+    it('should handle complex parsing logic', () => {
+      const value = ['a', 3, 'b', 6, null, true]
+      const expected = ['A', 'B', 12, true]
+      const parseWithConditions = (val: unknown) => {
+        if (typeof val === 'string') return val.toUpperCase()
+        if (typeof val === 'number' && val > 5) return val * 2
+        if (typeof val === 'number') return null
+        return val
+      }
+
+      expect(trimArray(value, parseWithConditions)).toEqual(expected)
+    })
+
+    it('should handle nested data structures with parsing', () => {
+      const value = [{ items: [1, 2] }, { items: [3, 4] }]
+      const expected = [1, 3]
+      const extractFirstItem = (obj: { items: number[] }) => {
+        return obj.items && obj.items.length > 0 ? obj.items[0] : null
+      }
+
+      expect(trimArray(value, extractFirstItem)).toEqual(expected)
+    })
+  })
 })
 
 describe('stripCdata', () => {
