@@ -115,16 +115,10 @@ export const parseBoolean: ParseFunction<boolean> = (value) => {
     return value
   }
 
-  if (typeof value !== 'string') {
-    return
-  }
-
-  if (value.toLowerCase() === 'true') {
-    return true
-  }
-
-  if (value.toLowerCase() === 'false') {
-    return false
+  if (typeof value === 'string') {
+    const lowercased = value.toLowerCase()
+    if (lowercased === 'true') return true
+    if (lowercased === 'false') return false
   }
 }
 
