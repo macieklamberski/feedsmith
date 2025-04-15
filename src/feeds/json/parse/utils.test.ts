@@ -618,14 +618,14 @@ describe('parseFeed', () => {
     expect(parseFeed(emptyItems)).toBeUndefined()
   })
 
-  it('should return feed object if required properties are defined and empty', () => {
+  it('should return undefined if required properties are defined but empty', () => {
     const value = {
       version: '',
       title: '',
       items: [],
     }
 
-    expect(parseFeed(value)).toEqual(value)
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should handle invalid nested properties', () => {

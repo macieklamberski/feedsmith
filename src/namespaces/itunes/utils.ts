@@ -1,16 +1,14 @@
 import type { ParseFunction } from '../../common/types.js'
 import {
-  hasAllProps,
-  hasAnyProps,
-  isNonEmptyObject,
   isNonEmptyStringOrNumber,
   isObject,
-  omitNullishFromArray,
-  omitUndefinedFromObject,
+  isPresent,
   parseArrayOf,
   parseBoolean,
   parseNumber,
   parseString,
+  trimArray,
+  trimObject,
 } from '../../common/utils.js'
 import type { Category, Feed, Item, Owner } from './types.js'
 
@@ -24,8 +22,8 @@ export const parseCategory: ParseFunction<Category> = (value) => {
     categories: parseArrayOf(value['itunes:category'], parseCategory),
   }
 
-  if (hasAllProps(category, ['text'])) {
-    return omitUndefinedFromObject(category)
+  if (isPresent(category.text)) {
+    return trimObject(category)
   }
 }
 
@@ -39,8 +37,8 @@ export const parseOwner: ParseFunction<Owner> = (value) => {
     email: parseString(value['itunes:email']?.['#text']),
   }
 
-  if (hasAnyProps(owner, ['name', 'email'])) {
-    return omitUndefinedFromObject(owner)
+  if (isPresent(owner.name) || isPresent(owner.email)) {
+    return trimObject(owner)
   }
 }
 
@@ -108,14 +106,10 @@ export const parseKeywords: ParseFunction<Array<string>> = (value) => {
     return
   }
 
-  const keywords = omitNullishFromArray(
-    parseString(value)
-      ?.split(',')
-      ?.map((keyword) => keyword.trim() || undefined) || [],
-  )
+  const keywords = parseString(value)?.split(',')
 
-  if (keywords.length > 0) {
-    return keywords
+  if (keywords) {
+    return trimArray(keywords, (keyword) => parseString(keyword) || undefined)
   }
 }
 
@@ -124,7 +118,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     return
   }
 
-  const item = omitUndefinedFromObject({
+  const item = trimObject({
     duration: parseDuration(value['itunes:duration']?.['#text']),
     image: parseString(value['itunes:image']),
     explicit: parseExplicit(value['itunes:explicit']?.['#text']),
@@ -138,9 +132,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     keywords: parseKeywords(value['itunes:keywords']?.['#text']),
   })
 
-  if (isNonEmptyObject(item)) {
-    return item
-  }
+  return item
 }
 
 export const parseFeed: ParseFunction<Feed> = (value) => {
@@ -148,7 +140,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     return
   }
 
-  const feed = omitUndefinedFromObject({
+  const feed = trimObject({
     image: parseString(value['itunes:image']?.['@href']),
     explicit: parseExplicit(value['itunes:explicit']?.['#text']),
     author: parseString(value['itunes:author']?.['#text']),
@@ -165,7 +157,5 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     keywords: parseKeywords(value['itunes:keywords']?.['#text']),
   })
 
-  if (isNonEmptyObject(feed)) {
-    return feed
-  }
+  return feed
 }

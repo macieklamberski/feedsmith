@@ -1,12 +1,11 @@
 import type { ParseFunction } from '../../common/types.js'
 import {
-  hasAnyProps,
   isNonEmptyStringOrNumber,
   isObject,
-  omitNullishFromArray,
-  omitUndefinedFromObject,
   parseNumber,
   parseString,
+  trimArray,
+  trimObject,
 } from '../../common/utils.js'
 import type { HitParade, Item } from './types.js'
 
@@ -15,15 +14,10 @@ export const parseHitParade: ParseFunction<HitParade> = (value) => {
     return
   }
 
-  const hitParade = omitNullishFromArray(
-    value
-      .toString()
-      .split(',')
-      .map((subValue) => parseNumber(subValue)),
-  )
+  const hitParade = parseString(value)?.split(',')
 
-  if (hitParade.length > 0) {
-    return hitParade
+  if (hitParade) {
+    return trimArray(hitParade, parseNumber)
   }
 }
 
@@ -32,14 +26,12 @@ export const parseItem: ParseFunction<Item> = (value) => {
     return
   }
 
-  const item = {
+  const item = trimObject({
     section: parseString(value['slash:section']?.['#text']),
     department: parseString(value['slash:department']?.['#text']),
     comments: parseNumber(value['slash:comments']?.['#text']),
     hit_parade: parseHitParade(value['slash:hit_parade']?.['#text']),
-  }
+  })
 
-  if (hasAnyProps(item, ['section', 'department', 'comments', 'hit_parade'])) {
-    return omitUndefinedFromObject(item)
-  }
+  return item
 }

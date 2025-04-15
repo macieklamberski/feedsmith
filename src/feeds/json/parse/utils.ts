@@ -1,42 +1,38 @@
 import type { ParseFunction } from '../../../common/types.js'
 import {
   createCaseInsensitiveGetter,
-  hasAllProps,
-  hasAnyProps,
-  isNonEmptyObject,
   isNonEmptyStringOrNumber,
   isObject,
-  omitNullishFromArray,
-  omitUndefinedFromObject,
+  isPresent,
   parseArrayOf,
   parseBoolean,
   parseNumber,
   parseString,
+  trimArray,
+  trimObject,
 } from '../../../common/utils.js'
 import type { Attachment, Author, Feed, Hub, Item } from './types.js'
 
 export const parseTags: ParseFunction<Array<string>> = (value) => {
   if (Array.isArray(value)) {
-    return omitNullishFromArray(value.map((item) => parseString(item)))
+    return trimArray(value, parseString)
   }
 
   if (isNonEmptyStringOrNumber(value)) {
-    return omitNullishFromArray([parseString(value)])
+    return trimArray([value], parseString)
   }
 }
 
 export const parseAuthor: ParseFunction<Author> = (value) => {
   if (isObject(value)) {
     const get = createCaseInsensitiveGetter(value)
-    const author = omitUndefinedFromObject({
+    const author = trimObject({
       name: parseString(get('name')),
       url: parseString(get('url')),
       avatar: parseString(get('avatar')),
     })
 
-    if (isNonEmptyObject(author)) {
-      return author
-    }
+    return author
   }
 
   if (isNonEmptyStringOrNumber(value)) {
@@ -72,8 +68,8 @@ export const parseHub: ParseFunction<Hub> = (value) => {
     url: parseString(get('url')),
   }
 
-  if (hasAnyProps(hub, ['type', 'url'])) {
-    return omitUndefinedFromObject(hub)
+  if (isPresent(hub.type) || isPresent(hub.url)) {
+    return trimObject(hub)
   }
 }
 
@@ -91,9 +87,8 @@ export const parseAttachment: ParseFunction<Attachment> = (value) => {
     duration_in_seconds: parseNumber(get('duration_in_seconds')),
   }
 
-  // TODO: Consider checking if URL has value before parsing the whole object.
-  if (hasAllProps(attachment, ['url'])) {
-    return omitUndefinedFromObject(attachment)
+  if (isPresent(attachment.url)) {
+    return trimObject(attachment)
   }
 }
 
@@ -121,9 +116,8 @@ export const parseItem: ParseFunction<Item> = (value) => {
     attachments: parseArrayOf(get('attachments'), parseAttachment),
   }
 
-  // TODO: Consider checking if ID has value before parsing the whole object.
-  if (hasAllProps(item, ['id'])) {
-    return omitUndefinedFromObject(item)
+  if (isPresent(item.id)) {
+    return trimObject(item)
   }
 }
 
@@ -150,8 +144,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     items: parseArrayOf(get('items'), parseItem),
   }
 
-  // TODO: Consider checking if version, title and items have value before parsing the whole object.
-  if (hasAllProps(feed, ['version', 'title', 'items'])) {
-    return omitUndefinedFromObject(feed)
+  if (isPresent(feed.version) && isPresent(feed.title) && isPresent(feed.items)) {
+    return trimObject(feed)
   }
 }

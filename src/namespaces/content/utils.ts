@@ -1,5 +1,5 @@
 import type { ParseFunction } from '../../common/types.js'
-import { hasAnyProps, isObject, omitUndefinedFromObject, parseString } from '../../common/utils.js'
+import { isObject, parseString, trimObject } from '../../common/utils.js'
 import type { Item } from './types.js'
 
 export const parseItem: ParseFunction<Item> = (value) => {
@@ -7,11 +7,9 @@ export const parseItem: ParseFunction<Item> = (value) => {
     return
   }
 
-  const item = {
+  const item = trimObject({
     encoded: parseString(value['content:encoded']?.['#text']),
-  }
+  })
 
-  if (hasAnyProps(item, ['encoded'])) {
-    return item
-  }
+  return item
 }
