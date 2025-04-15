@@ -437,7 +437,7 @@ For a quick overview, here are the results of parsing RSS, Atom, and RDF feeds u
 
 As stated in the overview section, the key advantage of Feedsmith is that it preserves the original feed structure exactly as provided in each specific feed format.
 
-Many competing packages attempt to normalize data by:
+Many alternative packages attempt to normalize data by:
 
 * Merging distinct fields like `author`, `dc:creator`, and `creator` into a single property.
 * Combining date fields such as `dc:date` and `pubDate` without preserving their sources.
