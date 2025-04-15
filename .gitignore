@@ -22,4 +22,4 @@ yarn-error.log*
 tsconfig.tsbuildinfo
 
 # Other
-benchmark/feeds
+benchmarks/feeds
