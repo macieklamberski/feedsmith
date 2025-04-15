@@ -53,16 +53,11 @@ const jsonFilesObjects = Object.entries(jsonFilesStrings).reduce(
   },
   {} as Record<string, unknown>,
 )
-const rssBigFiles = loadFeedFiles('feeds/rss-big', 50)
+const rssBigFiles = loadFeedFiles('feeds/rss-big', 10)
 const rssSmallFiles = loadFeedFiles('feeds/rss-small', 50)
-const atomBigFiles = loadFeedFiles('feeds/atom-big', 50)
+const atomBigFiles = loadFeedFiles('feeds/atom-big', 10)
 const atomSmallFiles = loadFeedFiles('feeds/atom-small', 50)
 const rdfFiles = loadFeedFiles('feeds/rdf', 50)
-
-await runBenchmarks('JSON feed parsing (100KB — 5MB)', {
-  // '@extractus/feed-extractor' — does not properly parse and always returns empty feed.
-  'feedsmith 👈': () => runTest(jsonFilesObjects, parseJsonFeed),
-})
 
 await runBenchmarks('RSS feed parsing (5MB — 50MB)', {
   'rss-parser': () => runTest(rssBigFiles, rssParser),
@@ -72,7 +67,7 @@ await runBenchmarks('RSS feed parsing (5MB — 50MB)', {
   '@extractus/feed-extractor': () => runTest(rssBigFiles, extractFromXml),
   '@ulisesgascon/rss-feed-parser': () => runTest(rssBigFiles, ulisesgasconRssFeedParser),
   feedparser: () => runTest(rssBigFiles, feedParser),
-  'feedsmith 👈': () => runTest(rssBigFiles, parseRssFeed),
+  'feedsmith *': () => runTest(rssBigFiles, parseRssFeed),
 })
 
 await runBenchmarks('RSS feed parsing (100KB — 5MB)', {
@@ -83,7 +78,7 @@ await runBenchmarks('RSS feed parsing (100KB — 5MB)', {
   '@extractus/feed-extractor': () => runTest(rssSmallFiles, extractFromXml),
   '@ulisesgascon/rss-feed-parser': () => runTest(rssSmallFiles, ulisesgasconRssFeedParser),
   feedparser: () => runTest(rssSmallFiles, feedParser),
-  'feedsmith 👈': () => runTest(rssSmallFiles, parseRssFeed),
+  'feedsmith *': () => runTest(rssSmallFiles, parseRssFeed),
 })
 
 await runBenchmarks('Atom feed parsing (5MB — 50MB)', {
@@ -94,7 +89,7 @@ await runBenchmarks('Atom feed parsing (5MB — 50MB)', {
   '@extractus/feed-extractor': () => runTest(atomBigFiles, extractFromXml),
   // @ulisesgascon/rss-feed-parser — does not support Atom feeds.
   feedparser: () => runTest(atomBigFiles, feedParser),
-  'feedsmith 👈': () => runTest(atomBigFiles, parseAtomFeed),
+  'feedsmith *': () => runTest(atomBigFiles, parseAtomFeed),
 })
 
 await runBenchmarks('Atom feed parsing (100KB — 5MB)', {
@@ -105,7 +100,7 @@ await runBenchmarks('Atom feed parsing (100KB — 5MB)', {
   '@extractus/feed-extractor': () => runTest(atomSmallFiles, extractFromXml),
   // @ulisesgascon/rss-feed-parser — does not support Atom feeds.
   feedparser: () => runTest(atomSmallFiles, feedParser),
-  'feedsmith 👈': () => runTest(atomSmallFiles, parseAtomFeed),
+  'feedsmith *': () => runTest(atomSmallFiles, parseAtomFeed),
 })
 
 await runBenchmarks('RDF feed parsing (100KB — 5MB)', {
@@ -116,5 +111,10 @@ await runBenchmarks('RDF feed parsing (100KB — 5MB)', {
   '@extractus/feed-extractor': () => runTest(rdfFiles, extractFromXml),
   // @ulisesgascon/rss-feed-parser — does not support RDF feeds.
   feedparser: () => runTest(rdfFiles, feedParser),
-  'feedsmith 👈': () => runTest(rdfFiles, parseRdfFeed),
+  'feedsmith *': () => runTest(rdfFiles, parseRdfFeed),
+})
+
+await runBenchmarks('JSON feed parsing (100KB — 5MB)', {
+  // '@extractus/feed-extractor' — does not properly parse and always returns empty feed.
+  'feedsmith *': () => runTest(jsonFilesObjects, parseJsonFeed),
 })
