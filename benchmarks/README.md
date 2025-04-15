@@ -6,7 +6,6 @@ The benchmarks use real-world feeds organized by feed format (RSS, Atom, JSON Fe
 
 Tests performed in both [Tinybench](https://github.com/tinylibs/tinybench) and [Benchmark.js](https://github.com/bestiejs/benchmark.js) with random tests order on every run.
 
-
 > [!NOTE]
 > Packages vary in feature support (such as handling specific namespaces or feed formats). The results should be taken with a grain of salt, as direct comparisons aren't always fair.
 
@@ -164,4 +163,5 @@ $ bun parsing.ts
 └───┴──────────────┴─────────┴──────────────┴──────────┴──────────┴──────┘
 ```
 
-**Note:** It was hard to find libraries for handling JSON Feed, so at this moment only Feedsmith is listed.
+> [!NOTE]
+> It was hard to find libraries for handling JSON Feed, so at this moment only Feedsmith is listed.
