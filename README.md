@@ -24,13 +24,13 @@ Feedsmith maintains the original feed structure in a clean, object-oriented form
 
 #### Leniency
 * **Normalizes legacy elements** ✨ — Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
-* **CaSe INSENsiTive** — Handles JSON properties and XML tags in any case (lowercase, uppercase, mixed).
+* **CaSe INSENsiTive** — Handles fields and attributes in any case (lowercase, uppercase, mixed).
 
 #### Performance and type-safety
-* **Fast parsing** — Built on fast-xml-parser, it's one of the fastest feed parsers in JavaScript (see [benchmarks](#benchmarks)).
+* **Fast parsing** — One of the fastest feed parsers in JavaScript (see [benchmarks](#benchmarks)).
 * **Type-safe API** — TypeScript type definitions are available for each feed format, making it easy to work with the data.
 * **Tree-shakable** — Only include the parts of the library you need, reducing bundle size.
-* **Well-tested** — Comprehensive test suite with over 450 tests and 99.9% code coverage.
+* **Well-tested** — Comprehensive test suite with over 650 tests and 99% code coverage.
 
 #### Compatibility
 * Works in Node.js and all modern browsers.
@@ -91,23 +91,11 @@ import { parseFeed } from 'feedsmith'
 
 const { type, feed } = parseFeed('feedContent')
 
-console.log('Feed type:', type)
+console.log('Feed type:', type) // → rss, atom, json, rdf
 console.log('Feed title:', feed.title)
-
-if (type === 'atom') {
-  console.log('Atom feed ID:', feed.id)
-}
 
 if (type === 'rss') {
   console.log('RSS feed link:', feed.link)
-}
-
-if (type === 'json') {
-  console.log('JSON feed version:', feed.version)
-}
-
-if (type === 'rdf') {
-  console.log('RDF feed link:', feed.link)
 }
 ```
 
@@ -390,7 +378,7 @@ A comprehensive set of benchmarks, categorized by various file sizes, is availab
 For a quick overview, here are the results of parsing RSS, Atom, and RDF feeds using various JS packages with Tinybench. Feedsmith's results are marked with an asterisk (`*`).
 
 ```
-📊 RSS feed parsing (50 files × 100KB — 5MB)
+📊 RSS feed parsing (50 files × 100KB–5MB)
 ┌───┬───────────────────────────────┬─────────┬──────────────┬──────────┬──────────┬──────┐
 │   │ Package                       │ Ops/sec │ Average (ms) │ Min (ms) │ Max (ms) │ Runs │
 ├───┼───────────────────────────────┼─────────┼──────────────┼──────────┼──────────┼──────┤
@@ -404,7 +392,7 @@ For a quick overview, here are the results of parsing RSS, Atom, and RDF feeds u
 │ 7 │ @gaphub/feed                  │ 0.94    │ 1068.621     │ 995.044  │ 1138.913 │ 15   │
 └───┴───────────────────────────────┴─────────┴──────────────┴──────────┴──────────┴──────┘
 
-📊 Atom feed parsing (50 files × 100KB — 5MB)
+📊 Atom feed parsing (50 files × 100KB–5MB)
 ┌───┬───────────────────────────┬─────────┬──────────────┬──────────┬──────────┬──────┐
 │   │ Package                   │ Ops/sec │ Average (ms) │ Min (ms) │ Max (ms) │ Runs │
 ├───┼───────────────────────────┼─────────┼──────────────┼──────────┼──────────┼──────┤
@@ -417,7 +405,7 @@ For a quick overview, here are the results of parsing RSS, Atom, and RDF feeds u
 │ 6 │ rss-parser                │ 0.18    │ 5539.014     │ 5479.560 │ 5609.397 │ 3    │
 └───┴───────────────────────────┴─────────┴──────────────┴──────────┴──────────┴──────┘
 
-📊 RDF feed parsing (50 files × 100KB — 5MB)
+📊 RDF feed parsing (50 files × 100KB–5MB)
 ┌───┬───────────────────────────┬─────────┬──────────────┬──────────┬──────────┬──────┐
 │   │ Package                   │ Ops/sec │ Average (ms) │ Min (ms) │ Max (ms) │ Runs │
 ├───┼───────────────────────────┼─────────┼──────────────┼──────────┼──────────┼──────┤
