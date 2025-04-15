@@ -324,10 +324,9 @@ Returns:
 ```
 </details>
 
-For more examples, check the _*/references_ folders located in the source code. There, you'll find the complete objects returned from the parser functions for some feed formats and versions.
+For more examples, check the _*/references_ folders in the source code. There, you'll find the complete objects returned from the parser functions for the various feed formats and versions.
 
 * Atom examples: [src/feeds/atom/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/atom/references),
-* JSON examples: [src/feeds/json/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/json/references),
 * RSS examples: [src/feeds/rss/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/rss/references),
 * RDF examples: [src/feeds/rdf/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/rdf/references).
 
