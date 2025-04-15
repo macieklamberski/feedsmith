@@ -4,9 +4,9 @@
 [![npm version](https://img.shields.io/npm/v/feedsmith.svg)](https://www.npmjs.com/package/feedsmith)
 [![license](https://img.shields.io/npm/l/feedsmith.svg)](https://github.com/macieklamberski/feedsmith/blob/main/LICENSE)
 
-Modern JavaScript utility for parsing and generating JSON Feed, Atom, RSS, and RDF feeds, with support for popular namespaces. It provides both universal and format-specific parsers that preserve the original feed structure while offering helpful normalization.
+Modern JavaScript utility for parsing and generating JSON Feed, Atom, RSS, and RDF feeds, with support for popular namespaces. It provides both universal and format-specific parsers that maintain the original feed structure while offering helpful normalization.
 
-Feedsmith preserves the original feed structure in a clean object-oriented format while intelligently normalizing legacy elements, giving you complete access to all feed data without sacrificing simplicity.
+Feedsmith maintains the original feed structure in a clean, object-oriented format. It intelligently normalizes legacy elements, providing you with complete access to all feed data without compromising simplicity.
 
 [Features](#supported-feeds-and-namespaces)
 &nbsp;&nbsp;·&nbsp;&nbsp;
@@ -27,7 +27,7 @@ Feedsmith preserves the original feed structure in a clean object-oriented forma
 * **CaSe INSENsiTive** — Handles JSON properties and XML tags in any case (lowercase, uppercase, mixed).
 
 #### Performance and type-safety
-* **Fast parsing** — Built on [fast-xml-parser](https://www.npmjs.com/package/fast-xml-parser) for efficient XML processing.
+* **Fast parsing** — Built on fast-xml-parser, it's one of the fastest feed parsers in JavaScript (see [benchmarks](#benchmarks)).
 * **Type-safe API** — TypeScript type definitions are available for each feed format, making it easy to work with the data.
 * **Tree-shakable** — Only include the parts of the library you need, reducing bundle size.
 * **Well-tested** — Comprehensive test suite with over 450 tests and 99.9% code coverage.
@@ -324,7 +324,7 @@ Returns:
 ```
 </details>
 
-For more examples, check the _*/references_ folders located in the source code. There, you'll find the complete objects returned from the parser functions for all feed formats and versions.
+For more examples, check the _*/references_ folders located in the source code. There, you'll find the complete objects returned from the parser functions for some feed formats and versions.
 
 * Atom examples: [src/feeds/atom/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/atom/references),
 * JSON examples: [src/feeds/json/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/json/references),
@@ -376,7 +376,7 @@ if (detectRdfFeed(content)) {
 ```
 
 > [!WARNING]
-> Detect functions are designed to quickly identify the type of feed by searching for the signature of the feed, such as the `<rss>` tag in the case of RSS feeds. However, it is possible for the function to detect an RSS feed, even if that feed is invalid. Only when using the `parseRssFeed` function will the feed be fully validated.
+> Detect functions are designed to quickly identify the feed format by looking for its signature, such as the `<rss>` tag in the case of RSS feeds. However, the function may detect an RSS feed even if it is invalid. The feed will be fully validated only when using the `parseRssFeed` function.
 
 ## Generating feeds
 
@@ -384,11 +384,11 @@ The functionality for generating feeds is currently under development and will b
 
 ## Benchmarks
 
-A comprehensive set of benchmarks, divided into multiple categories and file sizes, is available in the _/benchmarks_ directory. These benchmarks were performed using both Tinybench and Benchmark.js.
+A comprehensive set of benchmarks, categorized by various file sizes, is available in the _/benchmarks_ directory. These benchmarks were conducted using both Tinybench and Benchmark.js.
 
 [See full benchmark results →](benchmarks/README.md)
 
-For a quick overview, here are the results of parsing RSS, Atom and RDF feeds (100KB — 5MB) using various JS packages with Tinybench. Feedsmith's results are marked with an asterisk (`*`).
+For a quick overview, here are the results of parsing RSS, Atom, and RDF feeds using various JS packages with Tinybench. Feedsmith's results are marked with an asterisk (`*`).
 
 ```
 📊 RSS feed parsing (50 files × 100KB — 5MB)
@@ -449,7 +449,7 @@ While this approach can be useful for quick reading of feed data, it often resul
 
 ### Why are date fields returned as strings?
 
-In the course of parsing hundreds of thousands of feeds, I have found that dates in feeds use many different formats. Rather than attempting to parse them all (and potentially introducing errors), dates are returned in their original string form, allowing you to use your preferred date parsing library (or just `Date` object).
+In the course of parsing hundreds of thousands of feeds, I have found that dates in feeds use many different formats. Rather than attempting to parse them all (and potentially introducing errors), dates are returned in their original string form. This approach allows you to use your preferred date parsing library or simply the `Date` object.
 
 ### Does Feedsmith validate feeds?
 
