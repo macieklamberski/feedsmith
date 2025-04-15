@@ -14,6 +14,8 @@ Feedsmith preserves the original feed structure in a clean object-oriented forma
 &nbsp;&nbsp;·&nbsp;&nbsp;
 [Parsing feeds](#parsing-feeds)
 &nbsp;&nbsp;·&nbsp;&nbsp;
+[Generating feeds](#generating-feeds)
+&nbsp;&nbsp;·&nbsp;&nbsp;
 [Benchmarks](#benchmarks)
 &nbsp;&nbsp;·&nbsp;&nbsp;
 [FAQ](#faq)
@@ -375,6 +377,10 @@ if (detectRdfFeed(content)) {
 
 > ⚠️ Detect functions are designed to quickly identify the type of feed by searching for the signature of the feed, such as the `<rss>` tag in the case of RSS feeds. However, it is possible for the function to detect an RSS feed, even if that feed is invalid. Only when using the `parseRssFeed` function will the feed be fully validated.
 
+## Generating feeds
+
+The functionality for generating feeds is currently under development and will be gradually introduced for each feed format. For more information, see the [Supported feeds and namespaces](#supported-feeds-and-namespaces).
+
 ## Benchmarks
 
 A comprehensive set of benchmarks, divided into multiple categories and file sizes, is available in the _/benchmarks_ directory. These benchmarks were performed using both Tinybench and Benchmark.js.
@@ -429,14 +435,16 @@ For a quick overview, here are the results of parsing RSS, Atom and RDF feeds (1
 
 ### Why should I use Feedsmith instead of alternative modules?
 
-As stated in the Features section, the key advantage of Feedsmith is that it preserves the original feed structure exactly as provided in each specific feed format.
+As stated in the overview section, the key advantage of Feedsmith is that it preserves the original feed structure exactly as provided in each specific feed format.
 
 Many competing packages attempt to normalize data by:
-* Merging distinct fields like `author`, `dc:creator`, and `creator` into a single property.
-* Combining date fields such as `dc:date` and `pubDate` without preserving their source.
-* Handling multiple `<atom:link>` elements inconsistently, sometimes only keeping the first/last one or ignoring different `rel` attributes.
 
-Some libraries try to combine different feed formats into one universal structure, which can lead to loss of information.
+* Merging distinct fields like `author`, `dc:creator`, and `creator` into a single property.
+* Combining date fields such as `dc:date` and `pubDate` without preserving their sources.
+* Handling multiple `<atom:link>` elements inconsistently, sometimes keeping only the first or last one or ignoring different `rel` attributes.
+* Some libraries try to combine different feed formats into one universal structure.
+
+While this approach can be useful for quick reading of feed data, it often results in a loss of information that may be crucial for certain applications, such as reading data from specific namespaces.
 
 ### Why are date fields returned as strings?
 
