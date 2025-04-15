@@ -1,6 +1,6 @@
 # Benchmarks
 
-Below are the speed benchmarks for popular JavaScript packages for parsing feeds.
+Below are the speed benchmarks for popular JavaScript packages for parsing feeds. Feedsmith's results are marked with an asterisk (`*`).
 
 The benchmarks use real-world feeds organized by feed format (RSS, Atom, JSON Feed, RDF) and file size ranges. Each category contains 50 (10 for size 5MB — 50MB) representative feed files that span the specified size range, providing insight into how each package performs across various scenarios.
 
