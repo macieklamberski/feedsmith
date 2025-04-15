@@ -375,7 +375,7 @@ if (detectRdfFeed(content)) {
 }
 ```
 
-> [!IMPORTANT]
+> [!WARNING]
 > Detect functions are designed to quickly identify the type of feed by searching for the signature of the feed, such as the `<rss>` tag in the case of RSS feeds. However, it is possible for the function to detect an RSS feed, even if that feed is invalid. Only when using the `parseRssFeed` function will the feed be fully validated.
 
 ## Generating feeds
