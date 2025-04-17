@@ -181,8 +181,12 @@ export const parseArrayOf = <R>(
   }
 }
 
+export const parseSingular = <T>(value: T | Array<T>): T => {
+  return Array.isArray(value) ? value[0] : value
+}
+
 export const parseSingularOf = <R>(value: Unreliable, parse: ParseFunction<R>): R | undefined => {
-  return parse(Array.isArray(value) ? value[0] : value)
+  return parse(parseSingular(value))
 }
 
 export const createNamespaceGetter = (
