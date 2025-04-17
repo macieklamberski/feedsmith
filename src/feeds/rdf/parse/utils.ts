@@ -4,6 +4,7 @@ import {
   isPresent,
   parseArrayOf,
   parseString,
+  retrieveText,
   trimObject,
 } from '../../../common/utils.js'
 import {
@@ -26,9 +27,9 @@ export const parseImage: ParseFunction<Image> = (value) => {
   }
 
   const image = {
-    title: parseString(value.title?.['#text']),
-    link: parseString(value.link?.['#text']),
-    url: parseString(value.url?.['#text']),
+    title: parseString(retrieveText(value.title)),
+    link: parseString(retrieveText(value.link)),
+    url: parseString(retrieveText(value.url)),
   }
 
   if (isPresent(image.title) && isPresent(image.link)) {
@@ -46,9 +47,9 @@ export const parseItem: ParseFunction<Item> = (value) => {
   }
 
   const item = {
-    title: parseString(value.title?.['#text']),
-    link: parseString(value.link?.['#text']),
-    description: parseString(value.description?.['#text']),
+    title: parseString(retrieveText(value.title)),
+    link: parseString(retrieveText(value.link)),
+    description: parseString(retrieveText(value.description)),
     atom: parseAtomEntry(value),
     content: parseContentItem(value),
     dc: parseDcItemOrFeed(value),
@@ -75,10 +76,10 @@ export const parseTextInput: ParseFunction<TextInput> = (value) => {
   }
 
   const textInput = {
-    title: parseString(value.title?.['#text']),
-    description: parseString(value.description?.['#text']),
-    name: parseString(value.name?.['#text']),
-    link: parseString(value.link?.['#text']),
+    title: parseString(retrieveText(value.title)),
+    description: parseString(retrieveText(value.description)),
+    name: parseString(retrieveText(value.name)),
+    link: parseString(retrieveText(value.link)),
   }
 
   if (
@@ -101,9 +102,9 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
   }
 
   const feed = {
-    title: parseString(value.channel?.title?.['#text']),
-    link: parseString(value.channel?.link?.['#text']),
-    description: parseString(value.channel?.description?.['#text']),
+    title: parseString(retrieveText(value.channel?.title)),
+    link: parseString(retrieveText(value.channel?.link)),
+    description: parseString(retrieveText(value.channel?.description)),
     image: retrieveImage(value),
     items: retrieveItems(value),
     textInput: retrieveTextInput(value),
@@ -119,9 +120,5 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
 }
 
 export const retrieveFeed: ParseFunction<Feed> = (value) => {
-  if (!isObject(value?.['rdf:rdf'])) {
-    return
-  }
-
-  return parseFeed(value['rdf:rdf'])
+  return parseFeed(value?.['rdf:rdf'])
 }

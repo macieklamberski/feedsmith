@@ -7,6 +7,7 @@ import {
   parseBoolean,
   parseNumber,
   parseString,
+  retrieveText,
   trimArray,
   trimObject,
 } from '../../common/utils.js'
@@ -33,8 +34,8 @@ export const parseOwner: ParseFunction<Owner> = (value) => {
   }
 
   const owner = {
-    name: parseString(value['itunes:name']?.['#text']),
-    email: parseString(value['itunes:email']?.['#text']),
+    name: parseString(retrieveText(value['itunes:name'])),
+    email: parseString(retrieveText(value['itunes:email'])),
   }
 
   if (isPresent(owner.name) || isPresent(owner.email)) {
@@ -94,7 +95,7 @@ export const retrieveApplePodcastsVerify: ParseFunction<string> = (value) => {
     return
   }
 
-  const itunes = parseString(value['itunes:applepodcastsverify']?.['#text'])
+  const itunes = parseString(retrieveText(value['itunes:applepodcastsverify']))
   // TODO: Implement support for <podcast:txt purpose=“applepodcastsverify”>.
   // On the other hand, shouldn't this be the domain of podcast namespace? Food for thought.
 
@@ -119,17 +120,17 @@ export const parseItem: ParseFunction<Item> = (value) => {
   }
 
   const item = trimObject({
-    duration: parseDuration(value['itunes:duration']?.['#text']),
+    duration: parseDuration(retrieveText(value['itunes:duration'])),
     image: parseString(value['itunes:image']),
-    explicit: parseExplicit(value['itunes:explicit']?.['#text']),
-    title: parseString(value['itunes:title']?.['#text']),
-    episode: parseNumber(value['itunes:episode']?.['#text']),
-    season: parseNumber(value['itunes:season']?.['#text']),
-    episodeTitle: parseString(value['itunes:episodeType']?.['#text']),
-    block: parseYesNoBoolean(value['itunes:block']?.['#text']),
-    summary: parseString(value['itunes:summary']?.['#text']),
-    subtitle: parseString(value['itunes:subtitle']?.['#text']),
-    keywords: parseKeywords(value['itunes:keywords']?.['#text']),
+    explicit: parseExplicit(retrieveText(value['itunes:explicit'])),
+    title: parseString(retrieveText(value['itunes:title'])),
+    episode: parseNumber(retrieveText(value['itunes:episode'])),
+    season: parseNumber(retrieveText(value['itunes:season'])),
+    episodeTitle: parseString(retrieveText(value['itunes:episodeType'])),
+    block: parseYesNoBoolean(retrieveText(value['itunes:block'])),
+    summary: parseString(retrieveText(value['itunes:summary'])),
+    subtitle: parseString(retrieveText(value['itunes:subtitle'])),
+    keywords: parseKeywords(retrieveText(value['itunes:keywords'])),
   })
 
   return item
@@ -142,19 +143,19 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
 
   const feed = trimObject({
     image: parseString(value['itunes:image']?.['@href']),
-    explicit: parseExplicit(value['itunes:explicit']?.['#text']),
-    author: parseString(value['itunes:author']?.['#text']),
-    title: parseString(value['itunes:title']?.['#text']),
-    type: parseString(value['itunes:type']?.['#text']),
-    newFeedUrl: parseString(value['itunes:new-feed-url']?.['#text']),
-    block: parseYesNoBoolean(value['itunes:block']?.['#text']),
-    complete: parseYesNoBoolean(value['itunes:complete']?.['#text']),
+    explicit: parseExplicit(retrieveText(value['itunes:explicit'])),
+    author: parseString(retrieveText(value['itunes:author'])),
+    title: parseString(retrieveText(value['itunes:title'])),
+    type: parseString(retrieveText(value['itunes:type'])),
+    newFeedUrl: parseString(retrieveText(value['itunes:new-feed-url'])),
+    block: parseYesNoBoolean(retrieveText(value['itunes:block'])),
+    complete: parseYesNoBoolean(retrieveText(value['itunes:complete'])),
     applePodcastsVerify: retrieveApplePodcastsVerify(value),
     categories: parseArrayOf(value['itunes:category'], parseCategory),
     owner: parseOwner(value['itunes:owner']),
-    summary: parseString(value['itunes:summary']?.['#text']),
-    subtitle: parseString(value['itunes:subtitle']?.['#text']),
-    keywords: parseKeywords(value['itunes:keywords']?.['#text']),
+    summary: parseString(retrieveText(value['itunes:summary'])),
+    subtitle: parseString(retrieveText(value['itunes:subtitle'])),
+    keywords: parseKeywords(retrieveText(value['itunes:keywords'])),
   })
 
   return feed

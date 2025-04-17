@@ -18,6 +18,10 @@ export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | n
   return value !== '' && (typeof value === 'string' || typeof value === 'number')
 }
 
+export const retrieveText = (value: Unreliable): Unreliable => {
+  return value?.['#text'] ?? value
+}
+
 export const trimObject = <T extends Record<string, unknown>>(
   object: T,
 ): Partial<T> | undefined => {

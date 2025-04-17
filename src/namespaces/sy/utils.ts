@@ -1,5 +1,5 @@
 import type { ParseFunction } from '../../common/types.js'
-import { isObject, parseNumber, parseString, trimObject } from '../../common/utils.js'
+import { isObject, parseNumber, parseString, retrieveText, trimObject } from '../../common/utils.js'
 import type { Feed } from './types.js'
 
 export const parseFeed: ParseFunction<Feed> = (value) => {
@@ -8,9 +8,9 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
   }
 
   const feed = trimObject({
-    updatePeriod: parseString(value['sy:updateperiod']?.['#text']),
-    updateFrequency: parseNumber(value['sy:updatefrequency']?.['#text']),
-    updateBase: parseString(value['sy:updatebase']?.['#text']),
+    updatePeriod: parseString(retrieveText(value['sy:updateperiod'])),
+    updateFrequency: parseNumber(retrieveText(value['sy:updatefrequency'])),
+    updateBase: parseString(retrieveText(value['sy:updatebase'])),
   })
 
   return feed
