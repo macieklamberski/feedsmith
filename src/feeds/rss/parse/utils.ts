@@ -38,10 +38,10 @@ export const parseTextInput: ParseFunction<TextInput> = (value) => {
   }
 
   const textInput = {
-    title: parseString(value?.title?.['#text']),
-    description: parseString(value?.description?.['#text']),
-    name: parseString(value?.name?.['#text']),
-    link: parseString(value?.link?.['#text']),
+    title: parseString(value.title?.['#text']),
+    description: parseString(value.description?.['#text']),
+    name: parseString(value.name?.['#text']),
+    link: parseString(value.link?.['#text']),
   }
 
   if (
@@ -60,11 +60,11 @@ export const parseCloud: ParseFunction<Cloud> = (value) => {
   }
 
   const cloud = {
-    domain: parseString(value?.['@domain']),
-    port: parseNumber(value?.['@port']),
-    path: parseString(value?.['@path']),
-    registerProcedure: parseString(value?.['@registerprocedure']),
-    protocol: parseString(value?.['@protocol']),
+    domain: parseString(value['@domain']),
+    port: parseNumber(value['@port']),
+    path: parseString(value['@path']),
+    registerProcedure: parseString(value['@registerprocedure']),
+    protocol: parseString(value['@protocol']),
   }
 
   if (
@@ -108,8 +108,8 @@ export const parseSource: ParseFunction<Source> = (value) => {
   }
 
   const source = {
-    title: parseString(value?.['#text']),
-    url: parseString(value?.['@url']),
+    title: parseString(value['#text']),
+    url: parseString(value['@url']),
   }
 
   if (isPresent(source.title)) {
@@ -142,8 +142,8 @@ export const parseCategory: ParseFunction<Category> = (value) => {
   }
 
   const category = {
-    name: parseString(value?.['#text']),
-    domain: parseString(value?.['@domain']),
+    name: parseString(value['#text']),
+    domain: parseString(value['@domain']),
   }
 
   if (isPresent(category.name)) {

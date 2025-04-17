@@ -62,10 +62,6 @@ export const parseItem: ParseFunction<Item> = (value) => {
 }
 
 export const retrieveItems: ParseFunction<Array<Item>> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
   return parseArrayOf(value?.item, parseItem)
 }
 
