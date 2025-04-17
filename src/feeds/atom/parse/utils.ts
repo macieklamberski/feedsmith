@@ -23,12 +23,12 @@ export const parseLink: ParseFunction<Link> = (value) => {
   }
 
   const link = {
-    href: parseString(value?.['@href']),
-    rel: parseString(value?.['@rel']),
-    type: parseString(value?.['@type']),
-    hreflang: parseString(value?.['@hreflang']),
-    title: parseString(value?.['@title']),
-    length: parseNumber(value?.['@length']),
+    href: parseString(value['@href']),
+    rel: parseString(value['@rel']),
+    type: parseString(value['@type']),
+    hreflang: parseString(value['@hreflang']),
+    title: parseString(value['@title']),
+    length: parseNumber(value['@length']),
   }
 
   if (isPresent(link.href)) {
@@ -98,7 +98,7 @@ export const parseGenerator: ParseFunction<Generator> = (value) => {
   }
 
   const generator = {
-    text: parseString(value?.['#text']),
+    text: parseString(value['#text']),
     uri: retrieveGeneratorUri(value),
     version: parseString(value['@version']),
   }
@@ -248,12 +248,8 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
 }
 
 export const retrieveFeed: ParseFunction<Feed> = (value) => {
-  if (!isObject(value?.feed || value?.['atom:feed'])) {
-    return
-  }
-
-  const notNamespaced = parseFeed(value.feed)
-  const namespaced = parseFeed(value['atom:feed'], { prefix: 'atom:' })
+  const notNamespaced = parseFeed(value?.feed)
+  const namespaced = parseFeed(value?.['atom:feed'], { prefix: 'atom:' })
 
   return notNamespaced || namespaced
 }
