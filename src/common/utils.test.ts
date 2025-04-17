@@ -11,7 +11,7 @@ import {
   parseArrayOf,
   parseBoolean,
   parseNumber,
-  parseSingular,
+  parseSingularOf,
   parseString,
   stripCdata,
   trimArray,
@@ -788,47 +788,61 @@ describe('parseBoolean', () => {
   })
 })
 
-describe('parseSingular', () => {
-  it('should return the first element of an array', () => {
-    expect(parseSingular([1, 2, 3])).toEqual(1)
-    expect(parseSingular(['a', 'b', 'c'])).toEqual('a')
-    expect(parseSingular([{ key: 'value' }, { another: 'object' }])).toEqual({ key: 'value' })
+describe('parseSingularOf', () => {
+  it('should apply parse function to the first element of an array', () => {
+    const parseToString: ParseFunction<string> = (value) => {
+      return typeof value === 'number' || typeof value === 'string' ? String(value) : undefined
+    }
+
+    expect(parseSingularOf([1, 2, 3], parseToString)).toEqual('1')
+    expect(parseSingularOf(['a', 'b', 'c'], parseToString)).toEqual('a')
+    expect(parseSingularOf([42, 'text'], parseString)).toEqual('42')
   })
 
-  it('should return the value itself when not an array', () => {
-    expect(parseSingular(42)).toEqual(42)
-    expect(parseSingular('string')).toEqual('string')
-    expect(parseSingular(true)).toEqual(true)
-    expect(parseSingular({ key: 'value' })).toEqual({ key: 'value' })
+  it('should apply parse function to non-array values', () => {
+    expect(parseSingularOf(42, parseString)).toEqual('42')
+    expect(parseSingularOf('123', parseNumber)).toEqual(123)
+    expect(parseSingularOf('true', parseBoolean)).toEqual(true)
+  })
+
+  it('should return undefined when the parse function returns undefined', () => {
+    expect(parseSingularOf({}, parseNumber)).toBeUndefined()
+    expect(parseSingularOf('not-a-number', parseNumber)).toBeUndefined()
+    expect(parseSingularOf([{}, 'string'], parseNumber)).toBeUndefined()
   })
 
   it('should handle empty arrays', () => {
-    expect(parseSingular([])).toBeUndefined()
+    expect(parseSingularOf([], parseString)).toBeUndefined()
   })
 
   it('should handle arrays with undefined or null first elements', () => {
-    expect(parseSingular([undefined, 1, 2])).toBeUndefined()
-    expect(parseSingular([null, 1, 2])).toEqual(null)
+    expect(parseSingularOf([undefined, 1, 2], parseNumber)).toBeUndefined()
+    expect(parseSingularOf([null, 1, 2], parseNumber)).toBeUndefined()
   })
 
-  it('should handle array-like objects correctly', () => {
-    const arrayLike = { 0: 'first', 1: 'second', length: 2 }
-    expect(parseSingular(arrayLike)).toEqual(arrayLike)
-  })
-
-  it('should preserve the type of the input', () => {
-    const numberResult = parseSingular<number>([42])
-    const stringResult = parseSingular<string>('test')
-    const objectResult = parseSingular<{ id: number }>({ id: 1 })
+  it('should preserve the type returned by the parse function', () => {
+    const numberResult = parseSingularOf<number>('42', parseNumber)
+    const stringResult = parseSingularOf<string>(42, parseString)
+    const booleanResult = parseSingularOf<boolean>('true', parseBoolean)
 
     expect(typeof numberResult).toEqual('number')
     expect(typeof stringResult).toEqual('string')
-    expect(typeof objectResult).toEqual('object')
+    expect(typeof booleanResult).toEqual('boolean')
   })
 
-  it('should handle null and undefined', () => {
-    expect(parseSingular(null)).toEqual(null)
-    expect(parseSingular(undefined)).toBeUndefined()
+  it('should work with custom parse functions', () => {
+    const parseUpperCase: ParseFunction<string> = (value) => {
+      return typeof value === 'string' ? value.toUpperCase() : undefined
+    }
+
+    expect(parseSingularOf('hello', parseUpperCase)).toEqual('HELLO')
+    expect(parseSingularOf(['hello', 'world'], parseUpperCase)).toEqual('HELLO')
+    expect(parseSingularOf(123, parseUpperCase)).toBeUndefined()
+  })
+
+  it('should handle null and undefined input values', () => {
+    expect(parseSingularOf(null, parseString)).toBeUndefined()
+    expect(parseSingularOf(undefined, parseNumber)).toBeUndefined()
   })
 })
 

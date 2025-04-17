@@ -133,10 +133,6 @@ export const parseBoolean: ParseFunction<boolean> = (value) => {
   }
 }
 
-export const parseSingular = <T>(value: T | Array<T>): T => {
-  return Array.isArray(value) ? value[0] : value
-}
-
 export const parseArray: ParseFunction<Array<Unreliable>> = (value) => {
   if (Array.isArray(value)) {
     return value
@@ -183,6 +179,10 @@ export const parseArrayOf = <R>(
   if (parsed) {
     return [parsed]
   }
+}
+
+export const parseSingularOf = <R>(value: Unreliable, parse: ParseFunction<R>): R | undefined => {
+  return parse(Array.isArray(value) ? value[0] : value)
 }
 
 export const createNamespaceGetter = (
