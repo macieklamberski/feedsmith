@@ -119,9 +119,5 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
 }
 
 export const retrieveFeed: ParseFunction<Feed> = (value) => {
-  if (!isObject(value?.['rdf:rdf'])) {
-    return
-  }
-
-  return parseFeed(value['rdf:rdf'])
+  return parseFeed(value?.['rdf:rdf'])
 }

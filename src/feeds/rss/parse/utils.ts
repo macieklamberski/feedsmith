@@ -79,23 +79,11 @@ export const parseCloud: ParseFunction<Cloud> = (value) => {
 }
 
 export const parseSkipHours: ParseFunction<Array<number>> = (value) => {
-  const hours = value?.hour
-
-  if (!Array.isArray(hours)) {
-    return
-  }
-
-  return trimArray(hours, (hour) => parseNumber(hour?.['#text']))
+  return trimArray(value?.hour, (hour) => parseNumber(hour?.['#text']))
 }
 
 export const parseSkipDays: ParseFunction<Array<string>> = (value) => {
-  const days = value?.day
-
-  if (!Array.isArray(days)) {
-    return
-  }
-
-  return trimArray(days, (day) => parseString(day?.['#text']))
+  return trimArray(value?.day, (day) => parseString(day?.['#text']))
 }
 
 export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
@@ -236,9 +224,5 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
 }
 
 export const retrieveFeed: ParseFunction<Feed> = (value) => {
-  if (!isObject(value?.rss?.channel)) {
-    return
-  }
-
-  return parseFeed(value.rss.channel)
+  return parseFeed(value?.rss?.channel)
 }

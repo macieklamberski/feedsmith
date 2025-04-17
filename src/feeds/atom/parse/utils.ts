@@ -248,12 +248,8 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
 }
 
 export const retrieveFeed: ParseFunction<Feed> = (value) => {
-  if (!isObject(value?.feed || value?.['atom:feed'])) {
-    return
-  }
-
-  const notNamespaced = parseFeed(value.feed)
-  const namespaced = parseFeed(value['atom:feed'], { prefix: 'atom:' })
+  const notNamespaced = parseFeed(value?.feed)
+  const namespaced = parseFeed(value?.['atom:feed'], { prefix: 'atom:' })
 
   return notNamespaced || namespaced
 }
