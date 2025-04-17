@@ -5,6 +5,7 @@ import {
   parseArrayOf,
   parseNumber,
   parseString,
+  retrieveText,
   trimObject,
 } from '../../../common/utils.js'
 import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils.js'
@@ -42,8 +43,8 @@ export const retrievePersonUri: ParseFunction<string> = (value, options) => {
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const uri = parseString(get('uri')?.['#text']) // Atom 1.0.
-  const url = parseString(get('url')?.['#text']) // Atom 0.3.
+  const uri = parseString(retrieveText(get('uri'))) // Atom 1.0.
+  const url = parseString(retrieveText(get('url'))) // Atom 0.3.
 
   return uri || url
 }
@@ -55,9 +56,9 @@ export const parsePerson: ParseFunction<Person> = (value, options) => {
 
   const get = createNamespaceGetter(value, options?.prefix)
   const person = {
-    name: parseString(get('name')?.['#text']),
+    name: parseString(retrieveText(get('name'))),
     uri: retrievePersonUri(value, options),
-    email: parseString(get('email')?.['#text']),
+    email: parseString(retrieveText(get('email'))),
   }
 
   if (isPresent(person.name)) {
@@ -98,7 +99,7 @@ export const parseGenerator: ParseFunction<Generator> = (value) => {
   }
 
   const generator = {
-    text: parseString(value['#text']),
+    text: parseString(retrieveText(value)),
     uri: retrieveGeneratorUri(value),
     version: parseString(value['@version']),
   }
@@ -119,13 +120,13 @@ export const parseSource: ParseFunction<Source> = (value, options) => {
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
     generator: parseGenerator(get('generator')),
-    icon: parseString(get('icon')?.['#text']),
-    id: parseString(get('id')?.['#text']),
+    icon: parseString(retrieveText(get('icon'))),
+    id: parseString(retrieveText(get('id'))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
-    logo: parseString(get('logo')?.['#text']),
-    rights: parseString(get('rights')?.['#text']),
-    subtitle: parseString(get('subtitle')?.['#text']),
-    title: parseString(get('title')?.['#text']),
+    logo: parseString(retrieveText(get('logo'))),
+    rights: parseString(retrieveText(get('rights'))),
+    subtitle: parseString(retrieveText(get('subtitle'))),
+    title: parseString(retrieveText(get('title'))),
     updated: retrieveUpdated(value),
   })
 
@@ -138,9 +139,9 @@ export const retrievePublished: ParseFunction<string> = (value, options) => {
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const published = parseString(get('published')?.['#text']) // Atom 1.0.
-  const issued = parseString(get('issued')?.['#text']) // Atom 0.3.
-  const created = parseString(get('created')?.['#text']) // Atom 0.3.
+  const published = parseString(retrieveText(get('published'))) // Atom 1.0.
+  const issued = parseString(retrieveText(get('issued'))) // Atom 0.3.
+  const created = parseString(retrieveText(get('created'))) // Atom 0.3.
 
   // The "created" date is not entirely valid as "published date", but if it's there when
   // no other date is present, it's a good-enough fallback especially that it's not present
@@ -154,8 +155,8 @@ export const retrieveUpdated: ParseFunction<string> = (value, options) => {
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const updated = parseString(get('updated')?.['#text']) // Atom 1.0.
-  const modified = parseString(get('modified')?.['#text']) // Atom 0.3.
+  const updated = parseString(retrieveText(get('updated'))) // Atom 1.0.
+  const modified = parseString(retrieveText(get('modified'))) // Atom 0.3.
 
   return updated || modified
 }
@@ -166,8 +167,8 @@ export const retrieveSubtitle: ParseFunction<string> = (value, options) => {
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const subtitle = parseString(get('subtitle')?.['#text']) // Atom 1.0.
-  const tagline = parseString(get('tagline')?.['#text']) // Atom 0.3.
+  const subtitle = parseString(retrieveText(get('subtitle'))) // Atom 1.0.
+  const tagline = parseString(retrieveText(get('tagline'))) // Atom 0.3.
 
   return subtitle || tagline
 }
@@ -181,15 +182,15 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
   const entry = trimObject({
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
-    content: parseString(get('content')?.['#text']),
+    content: parseString(retrieveText(get('content'))),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
-    id: parseString(get('id')?.['#text']),
+    id: parseString(retrieveText(get('id'))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
     published: retrievePublished(value, options),
-    rights: parseString(get('rights')?.['#text']),
+    rights: parseString(retrieveText(get('rights'))),
     source: parseSource(get('source')),
-    summary: parseString(get('summary')?.['#text']),
-    title: parseString(get('title')?.['#text']),
+    summary: parseString(retrieveText(get('summary'))),
+    title: parseString(retrieveText(get('title'))),
     updated: retrieveUpdated(value, options),
     dc: options?.partial ? undefined : parseDcItemOrFeed(value),
     slash: options?.partial ? undefined : parseSlashItem(value),
@@ -218,13 +219,13 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
     generator: parseGenerator(get('generator')),
-    icon: parseString(get('icon')?.['#text']),
-    id: parseString(get('id')?.['#text']),
+    icon: parseString(retrieveText(get('icon'))),
+    id: parseString(retrieveText(get('id'))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
-    logo: parseString(get('logo')?.['#text']),
-    rights: parseString(get('rights')?.['#text']),
+    logo: parseString(retrieveText(get('logo'))),
+    rights: parseString(retrieveText(get('rights'))),
     subtitle: retrieveSubtitle(value, options),
-    title: parseString(get('title')?.['#text']),
+    title: parseString(retrieveText(get('title'))),
     updated: retrieveUpdated(value, options),
     entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options)),
     dc: options?.partial ? undefined : parseDcItemOrFeed(value),
