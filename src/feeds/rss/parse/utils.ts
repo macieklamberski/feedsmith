@@ -104,13 +104,9 @@ export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
 }
 
 export const parseSource: ParseFunction<Source> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
   const source = {
     title: parseString(retrieveText(value)),
-    url: parseString(value['@url']),
+    url: parseString(value?.['@url']),
   }
 
   if (isPresent(source.title)) {
@@ -138,13 +134,9 @@ export const parseImage: ParseFunction<Image> = (value) => {
 }
 
 export const parseCategory: ParseFunction<Category> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
   const category = {
     name: parseString(retrieveText(value)),
-    domain: parseString(value['@domain']),
+    domain: parseString(value?.['@domain']),
   }
 
   if (isPresent(category.name)) {

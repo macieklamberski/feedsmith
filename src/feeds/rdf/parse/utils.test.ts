@@ -11,11 +11,26 @@ import {
 } from './utils.js'
 
 describe('parseImage', () => {
-  it('should handle complete image object', () => {
+  it('should handle complete image object (with #text)', () => {
     const value = {
       title: { '#text': 'Image Title' },
       link: { '#text': 'https://example.com' },
       url: { '#text': 'https://example.com/image.jpg' },
+    }
+    const expected = {
+      title: 'Image Title',
+      link: 'https://example.com',
+      url: 'https://example.com/image.jpg',
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should handle complete image object (without #text)', () => {
+    const value = {
+      title: 'Image Title',
+      link: 'https://example.com',
+      url: 'https://example.com/image.jpg',
     }
     const expected = {
       title: 'Image Title',
@@ -107,11 +122,26 @@ describe('retrieveImage', () => {
 })
 
 describe('parseItem', () => {
-  it('should parse complete item object', () => {
+  it('should parse complete item object (with #text)', () => {
     const value = {
       title: { '#text': 'Item Title' },
       link: { '#text': 'https://example.com/item' },
       description: { '#text': 'Item Description' },
+    }
+    const expected = {
+      title: 'Item Title',
+      link: 'https://example.com/item',
+      description: 'Item Description',
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should parse complete item object (without #text)', () => {
+    const value = {
+      title: 'Item Title',
+      link: 'https://example.com/item',
+      description: 'Item Description',
     }
     const expected = {
       title: 'Item Title',
@@ -356,12 +386,29 @@ describe('retrieveItems', () => {
 })
 
 describe('parseTextInput', () => {
-  it('should handle complete textInput object', () => {
+  it('should handle complete textInput object (with #text)', () => {
     const value = {
       title: { '#text': 'Search Title' },
       description: { '#text': 'Search Description' },
       name: { '#text': 'q' },
       link: { '#text': 'https://example.com/search' },
+    }
+    const expected = {
+      title: 'Search Title',
+      description: 'Search Description',
+      name: 'q',
+      link: 'https://example.com/search',
+    }
+
+    expect(parseTextInput(value)).toEqual(expected)
+  })
+
+  it('should handle complete textInput object (without #text)', () => {
+    const value = {
+      title: 'Search Title',
+      description: 'Search Description',
+      name: 'q',
+      link: 'https://example.com/search',
     }
     const expected = {
       title: 'Search Title',
@@ -446,7 +493,7 @@ describe('retrieveTextInput', () => {
 })
 
 describe('parseFeed', () => {
-  it('should parse complete feed object', () => {
+  it('should parse complete feed object (with #text)', () => {
     const value = {
       channel: {
         title: { '#text': 'Feed Title' },
@@ -473,6 +520,65 @@ describe('parseFeed', () => {
         description: { '#text': 'Search this site' },
         name: { '#text': 'q' },
         link: { '#text': 'https://example.com/search' },
+      },
+    }
+    const expected = {
+      title: 'Feed Title',
+      link: 'https://example.com',
+      description: 'Feed Description',
+      image: {
+        title: 'Image Title',
+        link: 'https://example.com',
+        url: 'https://example.com/image.jpg',
+      },
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+        {
+          title: 'Item 2',
+          link: 'https://example.com/item2',
+        },
+      ],
+      textInput: {
+        title: 'Search',
+        description: 'Search this site',
+        name: 'q',
+        link: 'https://example.com/search',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should parse complete feed object (without #text)', () => {
+    const value = {
+      channel: {
+        title: 'Feed Title',
+        link: 'https://example.com',
+        description: 'Feed Description',
+      },
+      image: {
+        title: 'Image Title',
+        link: 'https://example.com',
+        url: 'https://example.com/image.jpg',
+      },
+      item: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+        {
+          title: 'Item 2',
+          link: 'https://example.com/item2',
+        },
+      ],
+      textinput: {
+        title: 'Search',
+        description: 'Search this site',
+        name: 'q',
+        link: 'https://example.com/search',
       },
     }
     const expected = {

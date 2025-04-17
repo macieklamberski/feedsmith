@@ -38,6 +38,7 @@ export const parseImage: ParseFunction<Image> = (value) => {
 }
 
 export const retrieveImage: ParseFunction<Image> = (value) => {
+  // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
   return parseImage(value?.image)
 }
 
@@ -63,6 +64,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
 }
 
 export const retrieveItems: ParseFunction<Array<Item>> = (value) => {
+  // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
   return parseArrayOf(value?.item, parseItem)
 }
 
@@ -89,6 +91,7 @@ export const parseTextInput: ParseFunction<TextInput> = (value) => {
 }
 
 export const retrieveTextInput: ParseFunction<TextInput> = (value) => {
+  // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
   return parseTextInput(value?.textinput)
 }
 

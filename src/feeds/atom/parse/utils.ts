@@ -94,14 +94,10 @@ export const retrieveGeneratorUri: ParseFunction<string> = (value) => {
 }
 
 export const parseGenerator: ParseFunction<Generator> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
   const generator = {
     text: parseString(retrieveText(value)),
     uri: retrieveGeneratorUri(value),
-    version: parseString(value['@version']),
+    version: parseString(value?.['@version']),
   }
 
   if (isPresent(generator.text)) {

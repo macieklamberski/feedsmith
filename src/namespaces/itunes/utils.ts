@@ -126,7 +126,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     title: parseString(retrieveText(value['itunes:title'])),
     episode: parseNumber(retrieveText(value['itunes:episode'])),
     season: parseNumber(retrieveText(value['itunes:season'])),
-    episodeTitle: parseString(retrieveText(value['itunes:episodeType'])),
+    episodeTitle: parseString(retrieveText(value['itunes:episodetype'])),
     block: parseYesNoBoolean(retrieveText(value['itunes:block'])),
     summary: parseString(retrieveText(value['itunes:summary'])),
     subtitle: parseString(retrieveText(value['itunes:subtitle'])),
