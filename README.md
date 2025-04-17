@@ -421,7 +421,7 @@ For a quick overview, here are the results of parsing RSS, Atom, and RDF feeds u
 
 ## FAQ
 
-### Why should I use Feedsmith instead of alternative modules?
+### Why should I use Feedsmith instead of alternative packages?
 
 As stated in the overview section, the key advantage of Feedsmith is that it preserves the original feed structure exactly as provided in each specific feed format.
 
