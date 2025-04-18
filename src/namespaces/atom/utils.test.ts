@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test'
 import { parseEntry, parseFeed } from './utils.js'
 
 describe('parseEntry', () => {
-  it('should parse entry with atom: prefix', () => {
+  it('should parse entry with atom: prefix (with #text)', () => {
     const value = {
       'atom:title': { '#text': 'Entry Title' },
       'atom:id': { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
@@ -19,12 +19,46 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
-  it('should parse entry with a10: prefix', () => {
+  it('should parse entry with atom: prefix (without #text)', () => {
+    const value = {
+      'atom:title': 'Entry Title',
+      'atom:id': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      'atom:updated': '2023-01-01T12:00:00Z',
+      'atom:author': [{ 'atom:name': 'John Doe' }],
+    }
+    const expected = {
+      title: 'Entry Title',
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      updated: '2023-01-01T12:00:00Z',
+      authors: [{ name: 'John Doe' }],
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should parse entry with a10: prefix (with #text)', () => {
     const value = {
       'a10:title': { '#text': 'Entry Title' },
       'a10:id': { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
       'a10:updated': { '#text': '2023-01-01T12:00:00Z' },
       'a10:author': [{ 'a10:name': { '#text': 'John Doe' } }],
+    }
+    const expected = {
+      title: 'Entry Title',
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      updated: '2023-01-01T12:00:00Z',
+      authors: [{ name: 'John Doe' }],
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should parse entry with a10: prefix (without #text)', () => {
+    const value = {
+      'a10:title': 'Entry Title',
+      'a10:id': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      'a10:updated': '2023-01-01T12:00:00Z',
+      'a10:author': [{ 'a10:name': 'John Doe' }],
     }
     const expected = {
       title: 'Entry Title',

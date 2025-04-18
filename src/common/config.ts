@@ -6,7 +6,7 @@ export const parserConfig: X2jOptions = {
   htmlEntities: false,
   parseTagValue: false,
   parseAttributeValue: false,
-  alwaysCreateTextNode: true,
+  alwaysCreateTextNode: false,
   ignoreAttributes: false,
   ignorePiTags: true,
   ignoreDeclaration: true,

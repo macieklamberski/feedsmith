@@ -2,9 +2,20 @@ import { describe, expect, it } from 'bun:test'
 import { parseItem } from './utils.js'
 
 describe('parseItem', () => {
-  it('should parse complete item object with encoded content', () => {
+  it('should parse complete item object with encoded content (with #text)', () => {
     const value = {
       'content:encoded': { '#text': '<p>This is encoded content</p>' },
+    }
+    const expected = {
+      encoded: '<p>This is encoded content</p>',
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should parse complete item object with encoded content (without #text)', () => {
+    const value = {
+      'content:encoded': '<p>This is encoded content</p>',
     }
     const expected = {
       encoded: '<p>This is encoded content</p>',
