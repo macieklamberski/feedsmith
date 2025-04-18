@@ -7,7 +7,6 @@ import {
   parseKeywords,
   parseOwner,
   parseYesNoBoolean,
-  retrieveApplePodcastsVerify,
   retrieveFeed,
   retrieveItem,
 } from './utils.js'
@@ -612,117 +611,6 @@ describe('parseImage', () => {
     expect(parseImage(true)).toBeUndefined()
     expect(parseImage([])).toBeUndefined()
     expect(parseImage(() => {})).toBeUndefined()
-  })
-})
-
-describe('retrieveApplePodcastsVerify', () => {
-  it('should return the Apple Podcasts verification string when present (with #text)', () => {
-    const value = {
-      'itunes:applepodcastsverify': {
-        '#text': 'abc123def456',
-      },
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toEqual('abc123def456')
-  })
-
-  it('should return the Apple Podcasts verification string when present (#without #text)', () => {
-    const value = {
-      'itunes:applepodcastsverify': 'abc123def456',
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toEqual('abc123def456')
-  })
-
-  it('should handle empty verification string', () => {
-    const value = {
-      'itunes:applepodcastsverify': {
-        '#text': '',
-      },
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toEqual('')
-  })
-
-  it('should handle nested verification string with HTML entities', () => {
-    const value = {
-      'itunes:applepodcastsverify': {
-        '#text': 'verify&amp;123',
-      },
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toEqual('verify&123')
-  })
-
-  it('should return undefined when verification tag exists but has no text', () => {
-    const value = {
-      'itunes:applepodcastsverify': {},
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toBeUndefined()
-  })
-
-  it('should coerce value', () => {
-    const value = {
-      'itunes:applepodcastsverify': {
-        '#text': 123,
-      },
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toEqual('123')
-  })
-
-  it('should return undefined when verification tag is null', () => {
-    const value = {
-      'itunes:applepodcastsverify': null,
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toBeUndefined()
-  })
-
-  it('should return undefined when verification tag is missing', () => {
-    const value = {
-      'other:tag': {
-        '#text': 'some value',
-      },
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toBeUndefined()
-  })
-
-  it('should return undefined for non-object inputs', () => {
-    expect(retrieveApplePodcastsVerify(null)).toBeUndefined()
-    expect(retrieveApplePodcastsVerify(undefined)).toBeUndefined()
-    expect(retrieveApplePodcastsVerify('string')).toBeUndefined()
-    expect(retrieveApplePodcastsVerify(123)).toBeUndefined()
-    expect(retrieveApplePodcastsVerify(true)).toBeUndefined()
-    expect(retrieveApplePodcastsVerify([])).toBeUndefined()
-    expect(retrieveApplePodcastsVerify(() => {})).toBeUndefined()
-  })
-
-  it('should handle complex nested objects', () => {
-    const value = {
-      channel: {
-        'itunes:applepodcastsverify': {
-          '#text': 'nestedVerify',
-        },
-      },
-      'itunes:applepodcastsverify': {
-        '#text': 'topLevelVerify',
-      },
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toEqual('topLevelVerify')
-  })
-
-  it('should handle CDATA wrapped content', () => {
-    const value = {
-      'itunes:applepodcastsverify': {
-        '#text': '<![CDATA[verify-code-123]]>',
-      },
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toEqual('verify-code-123')
   })
 })
 

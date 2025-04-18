@@ -107,18 +107,6 @@ export const parseImage: ParseFunction<string> = (value) => {
   return parseString(retrieveText(value['@href']))
 }
 
-export const retrieveApplePodcastsVerify: ParseFunction<string> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
-  const itunes = parseSingularOf(value['itunes:applepodcastsverify'], parseTextString)
-  // TODO: Implement support for <podcast:txt purpose=“applepodcastsverify”>.
-  // On the other hand, shouldn't this be the domain of podcast namespace? Food for thought.
-
-  return itunes
-}
-
 export const parseKeywords: ParseFunction<Array<string>> = (value) => {
   if (!isNonEmptyStringOrNumber(value)) {
     return
@@ -173,7 +161,7 @@ export const retrieveFeed: ParseFunction<Feed> = (value) => {
     newFeedUrl: parseSingularOf(value['itunes:new-feed-url'], parseTextString),
     block: parseYesNoBoolean(retrieveText(value['itunes:block'])),
     complete: parseYesNoBoolean(retrieveText(value['itunes:complete'])),
-    applePodcastsVerify: retrieveApplePodcastsVerify(value),
+    applePodcastsVerify: parseSingularOf(value['itunes:applepodcastsverify'], parseTextString),
     categories: parseArrayOf(value['itunes:category'], parseCategory),
     owner: parseOwner(value['itunes:owner']),
     summary: parseSingularOf(value['itunes:summary'], parseTextString),
