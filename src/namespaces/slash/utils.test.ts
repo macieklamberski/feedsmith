@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { parseHitParade, parseItem } from './utils.js'
+import { parseHitParade, retrieveItem } from './utils.js'
 
 describe('parseHitParade', () => {
   it('should parse comma-separated hit parade string to array of numbers', () => {
@@ -46,7 +46,14 @@ describe('parseHitParade', () => {
   })
 })
 
-describe('parseItem', () => {
+describe('retrieveItem', () => {
+  const expectedFull = {
+    section: 'technology',
+    department: 'open-source',
+    comments: 42,
+    hit_parade: [42, 38, 24, 16, 8, 4, 2],
+  }
+
   it('should parse complete slash namespace item (with #text)', () => {
     const value = {
       'slash:section': { '#text': 'technology' },
@@ -54,14 +61,7 @@ describe('parseItem', () => {
       'slash:comments': { '#text': '42' },
       'slash:hit_parade': { '#text': '42,38,24,16,8,4,2' },
     }
-    const expected = {
-      section: 'technology',
-      department: 'open-source',
-      comments: 42,
-      hit_parade: [42, 38, 24, 16, 8, 4, 2],
-    }
-
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expectedFull)
   })
 
   it('should parse complete slash namespace item (without #text)', () => {
@@ -71,14 +71,19 @@ describe('parseItem', () => {
       'slash:comments': '42',
       'slash:hit_parade': '42,38,24,16,8,4,2',
     }
-    const expected = {
-      section: 'technology',
-      department: 'open-source',
-      comments: 42,
-      hit_parade: [42, 38, 24, 16, 8, 4, 2],
+
+    expect(retrieveItem(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete slash namespace item (with array of attributes)', () => {
+    const value = {
+      'slash:section': ['technology', 'computers'],
+      'slash:department': ['open-source', 'closed-source'],
+      'slash:comments': ['42', '55'],
+      'slash:hit_parade': ['42,38,24,16,8,4,2', '11,10'],
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expectedFull)
   })
 
   it('should parse item with only section field', () => {
@@ -89,7 +94,7 @@ describe('parseItem', () => {
       section: 'technology',
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should parse item with only department field', () => {
@@ -100,7 +105,7 @@ describe('parseItem', () => {
       department: 'open-source',
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should parse item with only comments field', () => {
@@ -111,7 +116,7 @@ describe('parseItem', () => {
       comments: 42,
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should parse item with only hit_parade field', () => {
@@ -122,7 +127,7 @@ describe('parseItem', () => {
       hit_parade: [42, 38, 24, 16, 8, 4, 2],
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -136,13 +141,13 @@ describe('parseItem', () => {
       hit_parade: [42],
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    expect(parseItem(value)).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 
   it('should return undefined if no slash properties exist', () => {
@@ -150,7 +155,7 @@ describe('parseItem', () => {
       title: { '#text': 'Not a slash item' },
     }
 
-    expect(parseItem(value)).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 
   it('should return undefined when properties exist but values are invalid', () => {
@@ -159,13 +164,13 @@ describe('parseItem', () => {
       'slash:hit_parade': { '#text': 'not,numbers' },
     }
 
-    expect(parseItem(value)).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parseItem('not an object')).toBeUndefined()
-    expect(parseItem(undefined)).toBeUndefined()
-    expect(parseItem(null)).toBeUndefined()
-    expect(parseItem([])).toBeUndefined()
+    expect(retrieveItem('not an object')).toBeUndefined()
+    expect(retrieveItem(undefined)).toBeUndefined()
+    expect(retrieveItem(null)).toBeUndefined()
+    expect(retrieveItem([])).toBeUndefined()
   })
 })

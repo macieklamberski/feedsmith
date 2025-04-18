@@ -3,13 +3,12 @@ import {
   parseCategory,
   parseDuration,
   parseExplicit,
-  parseFeed,
   parseImage,
-  parseItem,
   parseKeywords,
   parseOwner,
   parseYesNoBoolean,
-  retrieveApplePodcastsVerify,
+  retrieveFeed,
+  retrieveItem,
 } from './utils.js'
 
 describe('parseCategory', () => {
@@ -148,17 +147,17 @@ describe('parseCategory', () => {
 })
 
 describe('parseOwner', () => {
+  const expectedFull = {
+    name: 'John Doe',
+    email: 'john@example.com',
+  }
+
   it('should parse owner with both name and email (with #text)', () => {
     const value = {
       'itunes:name': { '#text': 'John Doe' },
       'itunes:email': { '#text': 'john@example.com' },
     }
-    const expected = {
-      name: 'John Doe',
-      email: 'john@example.com',
-    }
-
-    expect(parseOwner(value)).toEqual(expected)
+    expect(parseOwner(value)).toEqual(expectedFull)
   })
 
   it('should parse owner with both name and email (without #text)', () => {
@@ -166,12 +165,17 @@ describe('parseOwner', () => {
       'itunes:name': 'John Doe',
       'itunes:email': 'john@example.com',
     }
-    const expected = {
-      name: 'John Doe',
-      email: 'john@example.com',
+
+    expect(parseOwner(value)).toEqual(expectedFull)
+  })
+
+  it('should parse owner with both name and email (with array of values)', () => {
+    const value = {
+      'itunes:name': ['John Doe', 'Jane Smith'],
+      'itunes:email': ['john@example.com', 'jane@example.com'],
     }
 
-    expect(parseOwner(value)).toEqual(expected)
+    expect(parseOwner(value)).toEqual(expectedFull)
   })
 
   it('should parse owner with only name', () => {
@@ -615,117 +619,6 @@ describe('parseImage', () => {
   })
 })
 
-describe('retrieveApplePodcastsVerify', () => {
-  it('should return the Apple Podcasts verification string when present (with #text)', () => {
-    const value = {
-      'itunes:applepodcastsverify': {
-        '#text': 'abc123def456',
-      },
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toEqual('abc123def456')
-  })
-
-  it('should return the Apple Podcasts verification string when present (#without #text)', () => {
-    const value = {
-      'itunes:applepodcastsverify': 'abc123def456',
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toEqual('abc123def456')
-  })
-
-  it('should handle empty verification string', () => {
-    const value = {
-      'itunes:applepodcastsverify': {
-        '#text': '',
-      },
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toEqual('')
-  })
-
-  it('should handle nested verification string with HTML entities', () => {
-    const value = {
-      'itunes:applepodcastsverify': {
-        '#text': 'verify&amp;123',
-      },
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toEqual('verify&123')
-  })
-
-  it('should return undefined when verification tag exists but has no text', () => {
-    const value = {
-      'itunes:applepodcastsverify': {},
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toBeUndefined()
-  })
-
-  it('should coerce value', () => {
-    const value = {
-      'itunes:applepodcastsverify': {
-        '#text': 123,
-      },
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toEqual('123')
-  })
-
-  it('should return undefined when verification tag is null', () => {
-    const value = {
-      'itunes:applepodcastsverify': null,
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toBeUndefined()
-  })
-
-  it('should return undefined when verification tag is missing', () => {
-    const value = {
-      'other:tag': {
-        '#text': 'some value',
-      },
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toBeUndefined()
-  })
-
-  it('should return undefined for non-object inputs', () => {
-    expect(retrieveApplePodcastsVerify(null)).toBeUndefined()
-    expect(retrieveApplePodcastsVerify(undefined)).toBeUndefined()
-    expect(retrieveApplePodcastsVerify('string')).toBeUndefined()
-    expect(retrieveApplePodcastsVerify(123)).toBeUndefined()
-    expect(retrieveApplePodcastsVerify(true)).toBeUndefined()
-    expect(retrieveApplePodcastsVerify([])).toBeUndefined()
-    expect(retrieveApplePodcastsVerify(() => {})).toBeUndefined()
-  })
-
-  it('should handle complex nested objects', () => {
-    const value = {
-      channel: {
-        'itunes:applepodcastsverify': {
-          '#text': 'nestedVerify',
-        },
-      },
-      'itunes:applepodcastsverify': {
-        '#text': 'topLevelVerify',
-      },
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toEqual('topLevelVerify')
-  })
-
-  it('should handle CDATA wrapped content', () => {
-    const value = {
-      'itunes:applepodcastsverify': {
-        '#text': '<![CDATA[verify-code-123]]>',
-      },
-    }
-
-    expect(retrieveApplePodcastsVerify(value)).toEqual('verify-code-123')
-  })
-})
-
 describe('parseKeywords', () => {
   it('should parse comma-separated keywords string into an array', () => {
     const value = 'podcast,technology,programming'
@@ -817,7 +710,21 @@ describe('parseKeywords', () => {
   })
 })
 
-describe('parseItem', () => {
+describe('retrieveItem', () => {
+  const expectedFull = {
+    duration: 3600,
+    image: 'https://example.com/image.jpg',
+    explicit: true,
+    title: 'Episode Title',
+    episode: 42,
+    season: 2,
+    episodeTitle: 'full',
+    block: true,
+    keywords: ['podcast', 'technology', 'programming'],
+    summary: 'A detailed summary of this episode',
+    subtitle: 'Episode subtitle',
+  }
+
   it('should parse all iTunes item properties when present (with #text)', () => {
     const value = {
       'itunes:duration': { '#text': '3600' },
@@ -832,21 +739,8 @@ describe('parseItem', () => {
       'itunes:summary': { '#text': 'A detailed summary of this episode' },
       'itunes:subtitle': { '#text': 'Episode subtitle' },
     }
-    const expected = {
-      duration: 3600,
-      image: 'https://example.com/image.jpg',
-      explicit: true,
-      title: 'Episode Title',
-      episode: 42,
-      season: 2,
-      episodeTitle: 'full',
-      block: true,
-      keywords: ['podcast', 'technology', 'programming'],
-      summary: 'A detailed summary of this episode',
-      subtitle: 'Episode subtitle',
-    }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expectedFull)
   })
 
   it('should parse all iTunes item properties when present (without #text)', () => {
@@ -863,21 +757,32 @@ describe('parseItem', () => {
       'itunes:summary': 'A detailed summary of this episode',
       'itunes:subtitle': 'Episode subtitle',
     }
-    const expected = {
-      duration: 3600,
-      image: 'https://example.com/image.jpg',
-      explicit: true,
-      title: 'Episode Title',
-      episode: 42,
-      season: 2,
-      episodeTitle: 'full',
-      block: true,
-      keywords: ['podcast', 'technology', 'programming'],
-      summary: 'A detailed summary of this episode',
-      subtitle: 'Episode subtitle',
+
+    expect(retrieveItem(value)).toEqual(expectedFull)
+  })
+
+  it('should parse all iTunes item properties when present (with array of values)', () => {
+    const value = {
+      'itunes:duration': ['3600', '1800'],
+      'itunes:image': [
+        { '@href': 'https://example.com/image.jpg' },
+        { '@href': 'https://example.com/alternate-image.jpg' },
+      ],
+      'itunes:explicit': ['yes', 'no'],
+      'itunes:title': ['Episode Title', 'Alternative Episode Title'],
+      'itunes:episode': ['42', '43'],
+      'itunes:season': ['2', '3'],
+      'itunes:episodetype': ['full', 'trailer'],
+      'itunes:block': ['yes', 'no'],
+      'itunes:keywords': ['podcast,technology,programming', 'development,coding,software'],
+      'itunes:summary': [
+        'A detailed summary of this episode',
+        'An alternative description of this episode',
+      ],
+      'itunes:subtitle': ['Episode subtitle', 'Alternative episode subtitle'],
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expectedFull)
   })
 
   it('should parse only the valid properties and omit undefined ones', () => {
@@ -896,13 +801,13 @@ describe('parseItem', () => {
       season: 2,
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should parse duration in various formats', () => {
     const testWithDuration = (durationValue: string, expectedDuration: number) => {
       const value = { 'itunes:duration': { '#text': durationValue } }
-      const expected = parseItem(value)
+      const expected = retrieveItem(value)
 
       expect(expected).toHaveProperty('duration', expectedDuration)
     }
@@ -917,7 +822,7 @@ describe('parseItem', () => {
       const value = {
         'itunes:explicit': { '#text': explicitValue },
       }
-      const result = parseItem(value)
+      const result = retrieveItem(value)
       expect(result).toHaveProperty('explicit', expectedExplicit)
     }
 
@@ -934,7 +839,7 @@ describe('parseItem', () => {
       const value = {
         'itunes:block': { '#text': blockValue },
       }
-      const result = parseItem(value)
+      const result = retrieveItem(value)
       expect(result).toHaveProperty('block', expectedBlock)
     }
 
@@ -952,7 +857,7 @@ describe('parseItem', () => {
       title: 'Title with & symbol',
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should handle CDATA sections in text content', () => {
@@ -963,13 +868,13 @@ describe('parseItem', () => {
       title: 'Title with <tags> inside',
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should handle mix of valid and invalid properties', () => {
     const value = {
       'itunes:duration': { '#text': '3600' },
-      'itunes:image': null,
+      'itunes:image': { '#text': null },
       'itunes:explicit': { '#text': [] },
       'itunes:title': { '#text': 'Episode Title' },
       'itunes:episode': { '#text': '42' },
@@ -984,7 +889,7 @@ describe('parseItem', () => {
       block: false,
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should handle nested tag structure correctly', () => {
@@ -998,7 +903,7 @@ describe('parseItem', () => {
       title: 'Episode Title',
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should return undefined when no valid item properties are present', () => {
@@ -1006,17 +911,17 @@ describe('parseItem', () => {
       'some:othertag': { '#text': 'value' },
     }
 
-    expect(parseItem(value)).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object inputs', () => {
-    expect(parseItem(null)).toBeUndefined()
-    expect(parseItem(undefined)).toBeUndefined()
-    expect(parseItem('string')).toBeUndefined()
-    expect(parseItem(123)).toBeUndefined()
-    expect(parseItem(true)).toBeUndefined()
-    expect(parseItem([])).toBeUndefined()
-    expect(parseItem(() => {})).toBeUndefined()
+    expect(retrieveItem(null)).toBeUndefined()
+    expect(retrieveItem(undefined)).toBeUndefined()
+    expect(retrieveItem('string')).toBeUndefined()
+    expect(retrieveItem(123)).toBeUndefined()
+    expect(retrieveItem(true)).toBeUndefined()
+    expect(retrieveItem([])).toBeUndefined()
+    expect(retrieveItem(() => {})).toBeUndefined()
   })
 
   it('should return undefined if all parsed properties are undefined', () => {
@@ -1031,11 +936,34 @@ describe('parseItem', () => {
       'itunes:block': { '#text': {} },
     }
 
-    expect(parseItem(value)).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 })
 
-describe('parseFeed', () => {
+describe('retrieveFeed', () => {
+  const expectedFull = {
+    image: 'https://example.com/image.jpg',
+    explicit: true,
+    author: 'Podcast Author',
+    title: 'Podcast Title',
+    type: 'episodic',
+    newFeedUrl: 'https://example.com/new-feed',
+    block: true,
+    complete: true,
+    applePodcastsVerify: 'verification-code',
+    categories: [
+      { text: 'Technology' },
+      { text: 'Business', categories: [{ text: 'Entrepreneurship' }] },
+    ],
+    owner: {
+      name: 'John Doe',
+      email: 'john@example.com',
+    },
+    keywords: ['podcast', 'technology', 'programming'],
+    summary: 'A detailed summary of this episode',
+    subtitle: 'Episode subtitle',
+  }
+
   it('should parse all iTunes feed properties when present (with #text)', () => {
     const value = {
       'itunes:image': { '@href': 'https://example.com/image.jpg' },
@@ -1059,30 +987,8 @@ describe('parseFeed', () => {
       'itunes:summary': { '#text': 'A detailed summary of this episode' },
       'itunes:subtitle': { '#text': 'Episode subtitle' },
     }
-    const expected = {
-      image: 'https://example.com/image.jpg',
-      explicit: true,
-      author: 'Podcast Author',
-      title: 'Podcast Title',
-      type: 'episodic',
-      newFeedUrl: 'https://example.com/new-feed',
-      block: true,
-      complete: true,
-      applePodcastsVerify: 'verification-code',
-      categories: [
-        { text: 'Technology' },
-        { text: 'Business', categories: [{ text: 'Entrepreneurship' }] },
-      ],
-      owner: {
-        name: 'John Doe',
-        email: 'john@example.com',
-      },
-      keywords: ['podcast', 'technology', 'programming'],
-      summary: 'A detailed summary of this episode',
-      subtitle: 'Episode subtitle',
-    }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expectedFull)
   })
 
   it('should parse all iTunes feed properties when present (without #text)', () => {
@@ -1108,30 +1014,47 @@ describe('parseFeed', () => {
       'itunes:summary': 'A detailed summary of this episode',
       'itunes:subtitle': 'Episode subtitle',
     }
-    const expected = {
-      image: 'https://example.com/image.jpg',
-      explicit: true,
-      author: 'Podcast Author',
-      title: 'Podcast Title',
-      type: 'episodic',
-      newFeedUrl: 'https://example.com/new-feed',
-      block: true,
-      complete: true,
-      applePodcastsVerify: 'verification-code',
-      categories: [
-        { text: 'Technology' },
-        { text: 'Business', categories: [{ text: 'Entrepreneurship' }] },
+
+    expect(retrieveFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should parse all iTunes feed properties when present (with array of values)', () => {
+    const value = {
+      'itunes:image': [
+        { '@href': 'https://example.com/image.jpg' },
+        { '@href': 'https://example.com/image2.jpg' },
       ],
-      owner: {
-        name: 'John Doe',
-        email: 'john@example.com',
-      },
-      keywords: ['podcast', 'technology', 'programming'],
-      summary: 'A detailed summary of this episode',
-      subtitle: 'Episode subtitle',
+      'itunes:explicit': ['yes', 'no'],
+      'itunes:author': ['Podcast Author', 'Another Author'],
+      'itunes:title': ['Podcast Title', 'Alternative Podcast Title'],
+      'itunes:type': ['episodic', 'serial'],
+      'itunes:new-feed-url': ['https://example.com/new-feed', 'https://example.com/alternate-feed'],
+      'itunes:block': ['yes', 'no'],
+      'itunes:complete': ['yes', 'no'],
+      'itunes:applepodcastsverify': ['verification-code', 'secondary-verification-code'],
+      'itunes:category': [
+        { '@text': 'Technology' },
+        { '@text': 'Business', 'itunes:category': { '@text': 'Entrepreneurship' } },
+      ],
+      'itunes:owner': [
+        {
+          'itunes:name': 'John Doe',
+          'itunes:email': 'john@example.com',
+        },
+        {
+          'itunes:name': 'Jane Smith',
+          'itunes:email': 'jane@example.com',
+        },
+      ],
+      'itunes:keywords': ['podcast,technology,programming', 'development,coding,software'],
+      'itunes:summary': [
+        'A detailed summary of this episode',
+        'An alternative description of this podcast content',
+      ],
+      'itunes:subtitle': ['Episode subtitle', 'Alternative episode tagline'],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expectedFull)
   })
 
   it('should parse only the valid properties and omit undefined ones', () => {
@@ -1153,7 +1076,7 @@ describe('parseFeed', () => {
       categories: [{ text: 'Technology' }],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should handle missing image @href attribute', () => {
@@ -1165,7 +1088,7 @@ describe('parseFeed', () => {
       author: 'Podcast Author',
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should parse explicit value correctly', () => {
@@ -1180,7 +1103,7 @@ describe('parseFeed', () => {
         explicit: expectedExplicit,
       }
 
-      expect(parseFeed(value)).toEqual(expected)
+      expect(retrieveFeed(value)).toEqual(expected)
     }
 
     testWithExplicit('true', true)
@@ -1203,7 +1126,7 @@ describe('parseFeed', () => {
       complete: false,
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should handle HTML entities in text content', () => {
@@ -1216,7 +1139,7 @@ describe('parseFeed', () => {
       author: 'Author with & symbol',
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should handle CDATA sections in text content', () => {
@@ -1229,7 +1152,7 @@ describe('parseFeed', () => {
       author: 'Author with <formatting> inside',
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should parse single category correctly', () => {
@@ -1242,7 +1165,7 @@ describe('parseFeed', () => {
       categories: [{ text: 'Technology' }],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should parse multiple categories with subcategories', () => {
@@ -1263,7 +1186,7 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should handle invalid category structure', () => {
@@ -1281,7 +1204,7 @@ describe('parseFeed', () => {
       categories: [{ text: 'Technology' }, { text: 'Business' }],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should handle Apple Podcasts verification tag', () => {
@@ -1294,7 +1217,7 @@ describe('parseFeed', () => {
       applePodcastsVerify: 'verification-code',
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should handle nested tag structure correctly', () => {
@@ -1308,7 +1231,7 @@ describe('parseFeed', () => {
       image: 'https://example.com/image.jpg',
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should return undefined when no valid feed properties are present', () => {
@@ -1316,17 +1239,17 @@ describe('parseFeed', () => {
       'some:othertag': { '#text': 'value' },
     }
 
-    expect(parseFeed(value)).toBeUndefined()
+    expect(retrieveFeed(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object inputs', () => {
-    expect(parseFeed(null)).toBeUndefined()
-    expect(parseFeed(undefined)).toBeUndefined()
-    expect(parseFeed('string')).toBeUndefined()
-    expect(parseFeed(123)).toBeUndefined()
-    expect(parseFeed(true)).toBeUndefined()
-    expect(parseFeed([])).toBeUndefined()
-    expect(parseFeed(() => {})).toBeUndefined()
+    expect(retrieveFeed(null)).toBeUndefined()
+    expect(retrieveFeed(undefined)).toBeUndefined()
+    expect(retrieveFeed('string')).toBeUndefined()
+    expect(retrieveFeed(123)).toBeUndefined()
+    expect(retrieveFeed(true)).toBeUndefined()
+    expect(retrieveFeed([])).toBeUndefined()
+    expect(retrieveFeed(() => {})).toBeUndefined()
   })
 
   it('should return undefined if all parsed properties are undefined', () => {
@@ -1343,6 +1266,6 @@ describe('parseFeed', () => {
       'itunes:category': null,
     }
 
-    expect(parseFeed(value)).toBeUndefined()
+    expect(retrieveFeed(value)).toBeUndefined()
   })
 })

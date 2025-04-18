@@ -1,16 +1,22 @@
 import type { ParseFunction } from '../../common/types.js'
-import { isObject, parseNumber, parseString, retrieveText, trimObject } from '../../common/utils.js'
+import {
+  isObject,
+  parseSingularOf,
+  parseTextNumber,
+  parseTextString,
+  trimObject,
+} from '../../common/utils.js'
 import type { Feed } from './types.js'
 
-export const parseFeed: ParseFunction<Feed> = (value) => {
+export const retrieveFeed: ParseFunction<Feed> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const feed = trimObject({
-    updatePeriod: parseString(retrieveText(value['sy:updateperiod'])),
-    updateFrequency: parseNumber(retrieveText(value['sy:updatefrequency'])),
-    updateBase: parseString(retrieveText(value['sy:updatebase'])),
+    updatePeriod: parseSingularOf(value['sy:updateperiod'], parseTextString),
+    updateFrequency: parseSingularOf(value['sy:updatefrequency'], parseTextNumber),
+    updateBase: parseSingularOf(value['sy:updatebase'], parseTextString),
   })
 
   return feed

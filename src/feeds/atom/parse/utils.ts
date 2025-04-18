@@ -4,17 +4,19 @@ import {
   isPresent,
   parseArrayOf,
   parseNumber,
+  parseSingularOf,
   parseString,
+  parseTextString,
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils.js'
+import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/utils.js'
 import {
-  parseFeed as parseItunesFeed,
-  parseItem as parseItunesItem,
+  retrieveFeed as retrieveItunesFeed,
+  retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/utils.js'
-import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils.js'
-import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils.js'
+import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
+import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
 import type { ParseFunction } from './types.js'
 import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types.js'
 
@@ -43,8 +45,8 @@ export const retrievePersonUri: ParseFunction<string> = (value, options) => {
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const uri = parseString(retrieveText(get('uri'))) // Atom 1.0.
-  const url = parseString(retrieveText(get('url'))) // Atom 0.3.
+  const uri = parseSingularOf(get('uri'), parseTextString) // Atom 1.0.
+  const url = parseSingularOf(get('url'), parseTextString) // Atom 0.3.
 
   return uri || url
 }
@@ -56,9 +58,9 @@ export const parsePerson: ParseFunction<Person> = (value, options) => {
 
   const get = createNamespaceGetter(value, options?.prefix)
   const person = {
-    name: parseString(retrieveText(get('name'))),
+    name: parseSingularOf(get('name'), parseTextString),
     uri: retrievePersonUri(value, options),
-    email: parseString(retrieveText(get('email'))),
+    email: parseSingularOf(get('email'), parseTextString),
   }
 
   if (isPresent(person.name)) {
@@ -115,14 +117,14 @@ export const parseSource: ParseFunction<Source> = (value, options) => {
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
-    generator: parseGenerator(get('generator')),
-    icon: parseString(retrieveText(get('icon'))),
-    id: parseString(retrieveText(get('id'))),
+    generator: parseSingularOf(get('generator'), parseGenerator),
+    icon: parseSingularOf(get('icon'), parseTextString),
+    id: parseSingularOf(get('id'), parseTextString),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
-    logo: parseString(retrieveText(get('logo'))),
-    rights: parseString(retrieveText(get('rights'))),
-    subtitle: parseString(retrieveText(get('subtitle'))),
-    title: parseString(retrieveText(get('title'))),
+    logo: parseSingularOf(get('logo'), parseTextString),
+    rights: parseSingularOf(get('rights'), parseTextString),
+    subtitle: parseSingularOf(get('subtitle'), parseTextString),
+    title: parseSingularOf(get('title'), parseTextString),
     updated: retrieveUpdated(value),
   })
 
@@ -135,9 +137,9 @@ export const retrievePublished: ParseFunction<string> = (value, options) => {
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const published = parseString(retrieveText(get('published'))) // Atom 1.0.
-  const issued = parseString(retrieveText(get('issued'))) // Atom 0.3.
-  const created = parseString(retrieveText(get('created'))) // Atom 0.3.
+  const published = parseSingularOf(get('published'), parseTextString) // Atom 1.0.
+  const issued = parseSingularOf(get('issued'), parseTextString) // Atom 0.3.
+  const created = parseSingularOf(get('created'), parseTextString) // Atom 0.3.
 
   // The "created" date is not entirely valid as "published date", but if it's there when
   // no other date is present, it's a good-enough fallback especially that it's not present
@@ -151,8 +153,8 @@ export const retrieveUpdated: ParseFunction<string> = (value, options) => {
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const updated = parseString(retrieveText(get('updated'))) // Atom 1.0.
-  const modified = parseString(retrieveText(get('modified'))) // Atom 0.3.
+  const updated = parseSingularOf(get('updated'), parseTextString) // Atom 1.0.
+  const modified = parseSingularOf(get('modified'), parseTextString) // Atom 0.3.
 
   return updated || modified
 }
@@ -163,8 +165,8 @@ export const retrieveSubtitle: ParseFunction<string> = (value, options) => {
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const subtitle = parseString(retrieveText(get('subtitle'))) // Atom 1.0.
-  const tagline = parseString(retrieveText(get('tagline'))) // Atom 0.3.
+  const subtitle = parseSingularOf(get('subtitle'), parseTextString) // Atom 1.0.
+  const tagline = parseSingularOf(get('tagline'), parseTextString) // Atom 0.3.
 
   return subtitle || tagline
 }
@@ -178,19 +180,19 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
   const entry = trimObject({
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
-    content: parseString(retrieveText(get('content'))),
+    content: parseSingularOf(get('content'), parseTextString),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
-    id: parseString(retrieveText(get('id'))),
+    id: parseSingularOf(get('id'), parseTextString),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
     published: retrievePublished(value, options),
-    rights: parseString(retrieveText(get('rights'))),
-    source: parseSource(get('source')),
-    summary: parseString(retrieveText(get('summary'))),
-    title: parseString(retrieveText(get('title'))),
+    rights: parseSingularOf(get('rights'), parseTextString),
+    source: parseSingularOf(get('source'), parseSource),
+    summary: parseSingularOf(get('summary'), parseTextString),
+    title: parseSingularOf(get('title'), parseTextString),
     updated: retrieveUpdated(value, options),
-    dc: options?.partial ? undefined : parseDcItemOrFeed(value),
-    slash: options?.partial ? undefined : parseSlashItem(value),
-    itunes: options?.partial ? undefined : parseItunesItem(value),
+    dc: options?.partial ? undefined : retrieveDcItemOrFeed(value),
+    slash: options?.partial ? undefined : retrieveSlashItem(value),
+    itunes: options?.partial ? undefined : retrieveItunesItem(value),
   })
 
   if (options?.partial || !entry) {
@@ -214,19 +216,19 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
-    generator: parseGenerator(get('generator')),
-    icon: parseString(retrieveText(get('icon'))),
-    id: parseString(retrieveText(get('id'))),
+    generator: parseSingularOf(get('generator'), parseGenerator),
+    icon: parseSingularOf(get('icon'), parseTextString),
+    id: parseSingularOf(get('id'), parseTextString),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
-    logo: parseString(retrieveText(get('logo'))),
-    rights: parseString(retrieveText(get('rights'))),
+    logo: parseSingularOf(get('logo'), parseTextString),
+    rights: parseSingularOf(get('rights'), parseTextString),
     subtitle: retrieveSubtitle(value, options),
-    title: parseString(retrieveText(get('title'))),
+    title: parseSingularOf(get('title'), parseTextString),
     updated: retrieveUpdated(value, options),
     entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options)),
-    dc: options?.partial ? undefined : parseDcItemOrFeed(value),
-    sy: options?.partial ? undefined : parseSyFeed(value),
-    itunes: options?.partial ? undefined : parseItunesFeed(value),
+    dc: options?.partial ? undefined : retrieveDcItemOrFeed(value),
+    sy: options?.partial ? undefined : retrieveSyFeed(value),
+    itunes: options?.partial ? undefined : retrieveItunesFeed(value),
   })
 
   if (options?.partial || !feed) {
@@ -245,8 +247,10 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
 }
 
 export const retrieveFeed: ParseFunction<Feed> = (value) => {
-  const notNamespaced = parseFeed(value?.feed)
-  const namespaced = parseFeed(value?.['atom:feed'], { prefix: 'atom:' })
+  const notNamespaced = parseSingularOf(value?.feed, parseFeed)
+  const namespaced = parseSingularOf(value?.['atom:feed'], (value) =>
+    parseFeed(value, { prefix: 'atom:' }),
+  )
 
   return notNamespaced || namespaced
 }

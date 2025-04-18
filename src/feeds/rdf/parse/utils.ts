@@ -3,22 +3,25 @@ import {
   isObject,
   isPresent,
   parseArrayOf,
+  parseSingular,
+  parseSingularOf,
   parseString,
+  parseTextString,
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
 import {
-  parseEntry as parseAtomEntry,
-  parseFeed as parseAtomFeed,
+  retrieveEntry as retrieveAtomEntry,
+  retrieveFeed as retrieveAtomFeed,
 } from '../../../namespaces/atom/utils.js'
-import { parseItem as parseContentItem } from '../../../namespaces/content/utils.js'
-import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils.js'
+import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/utils.js'
+import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/utils.js'
 import {
-  parseFeed as parseItunesFeed,
-  parseItem as parseItunesItem,
+  retrieveFeed as retrieveItunesFeed,
+  retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/utils.js'
-import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils.js'
-import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils.js'
+import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
+import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
 import type { Feed, Image, Item, TextInput } from './types.js'
 
 export const parseImage: ParseFunction<Image> = (value) => {
@@ -27,9 +30,9 @@ export const parseImage: ParseFunction<Image> = (value) => {
   }
 
   const image = {
-    title: parseString(retrieveText(value.title)),
-    link: parseString(retrieveText(value.link)),
-    url: parseString(retrieveText(value.url)),
+    title: parseSingularOf(value.title, parseTextString),
+    link: parseSingularOf(value.link, parseTextString),
+    url: parseSingularOf(value.url, parseTextString),
   }
 
   if (isPresent(image.title) && isPresent(image.link)) {
@@ -39,7 +42,7 @@ export const parseImage: ParseFunction<Image> = (value) => {
 
 export const retrieveImage: ParseFunction<Image> = (value) => {
   // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
-  return parseImage(value?.image)
+  return parseSingularOf(value?.image, parseImage)
 }
 
 export const parseItem: ParseFunction<Item> = (value) => {
@@ -48,14 +51,14 @@ export const parseItem: ParseFunction<Item> = (value) => {
   }
 
   const item = {
-    title: parseString(retrieveText(value.title)),
-    link: parseString(retrieveText(value.link)),
-    description: parseString(retrieveText(value.description)),
-    atom: parseAtomEntry(value),
-    content: parseContentItem(value),
-    dc: parseDcItemOrFeed(value),
-    slash: parseSlashItem(value),
-    itunes: parseItunesItem(value),
+    title: parseSingularOf(value.title, parseTextString),
+    link: parseSingularOf(value.link, parseTextString),
+    description: parseSingularOf(value.description, parseTextString),
+    atom: retrieveAtomEntry(value),
+    content: retrieveContentItem(value),
+    dc: retrieveDcItemOrFeed(value),
+    slash: retrieveSlashItem(value),
+    itunes: retrieveItunesItem(value),
   }
 
   if (isPresent(item.title) && isPresent(item.link)) {
@@ -74,10 +77,10 @@ export const parseTextInput: ParseFunction<TextInput> = (value) => {
   }
 
   const textInput = {
-    title: parseString(retrieveText(value.title)),
-    description: parseString(retrieveText(value.description)),
-    name: parseString(retrieveText(value.name)),
-    link: parseString(retrieveText(value.link)),
+    title: parseSingularOf(value.title, parseTextString),
+    description: parseSingularOf(value.description, parseTextString),
+    name: parseSingularOf(value.name, parseTextString),
+    link: parseSingularOf(value.link, parseTextString),
   }
 
   if (
@@ -92,7 +95,7 @@ export const parseTextInput: ParseFunction<TextInput> = (value) => {
 
 export const retrieveTextInput: ParseFunction<TextInput> = (value) => {
   // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
-  return parseTextInput(value?.textinput)
+  return parseSingularOf(value?.textinput, parseTextInput)
 }
 
 export const parseFeed: ParseFunction<Feed> = (value) => {
@@ -100,17 +103,18 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     return
   }
 
+  const channel = parseSingular(value.channel)
   const feed = {
-    title: parseString(retrieveText(value.channel?.title)),
-    link: parseString(retrieveText(value.channel?.link)),
-    description: parseString(retrieveText(value.channel?.description)),
+    title: parseSingularOf(channel?.title, parseTextString),
+    link: parseSingularOf(channel?.link, parseTextString),
+    description: parseSingularOf(channel?.description, parseTextString),
     image: retrieveImage(value),
     items: retrieveItems(value),
     textInput: retrieveTextInput(value),
-    atom: parseAtomFeed(value.channel),
-    dc: parseDcItemOrFeed(value.channel),
-    sy: parseSyFeed(value.channel),
-    itunes: parseItunesFeed(value.channel),
+    atom: retrieveAtomFeed(channel),
+    dc: retrieveDcItemOrFeed(channel),
+    sy: retrieveSyFeed(channel),
+    itunes: retrieveItunesFeed(channel),
   }
 
   if (isPresent(feed.title)) {
@@ -119,5 +123,5 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
 }
 
 export const retrieveFeed: ParseFunction<Feed> = (value) => {
-  return parseFeed(value?.['rdf:rdf'])
+  return parseSingularOf(value?.['rdf:rdf'], parseFeed)
 }

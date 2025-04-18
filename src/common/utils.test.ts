@@ -12,6 +12,7 @@ import {
   parseBoolean,
   parseNumber,
   parseSingular,
+  parseSingularOf,
   parseString,
   retrieveText,
   stripCdata,
@@ -900,6 +901,64 @@ describe('parseSingular', () => {
   it('should handle null and undefined', () => {
     expect(parseSingular(null)).toEqual(null)
     expect(parseSingular(undefined)).toBeUndefined()
+  })
+})
+
+describe('parseSingularOf', () => {
+  it('should apply parse function to the first element of an array', () => {
+    const parseToString: ParseFunction<string> = (value) => {
+      return typeof value === 'number' || typeof value === 'string' ? String(value) : undefined
+    }
+
+    expect(parseSingularOf([1, 2, 3], parseToString)).toEqual('1')
+    expect(parseSingularOf(['a', 'b', 'c'], parseToString)).toEqual('a')
+    expect(parseSingularOf([42, 'text'], parseString)).toEqual('42')
+  })
+
+  it('should apply parse function to non-array values', () => {
+    expect(parseSingularOf(42, parseString)).toEqual('42')
+    expect(parseSingularOf('123', parseNumber)).toEqual(123)
+    expect(parseSingularOf('true', parseBoolean)).toEqual(true)
+  })
+
+  it('should return undefined when the parse function returns undefined', () => {
+    expect(parseSingularOf({}, parseNumber)).toBeUndefined()
+    expect(parseSingularOf('not-a-number', parseNumber)).toBeUndefined()
+    expect(parseSingularOf([{}, 'string'], parseNumber)).toBeUndefined()
+  })
+
+  it('should handle empty arrays', () => {
+    expect(parseSingularOf([], parseString)).toBeUndefined()
+  })
+
+  it('should handle arrays with undefined or null first elements', () => {
+    expect(parseSingularOf([undefined, 1, 2], parseNumber)).toBeUndefined()
+    expect(parseSingularOf([null, 1, 2], parseNumber)).toBeUndefined()
+  })
+
+  it('should preserve the type returned by the parse function', () => {
+    const numberResult = parseSingularOf<number>('42', parseNumber)
+    const stringResult = parseSingularOf<string>(42, parseString)
+    const booleanResult = parseSingularOf<boolean>('true', parseBoolean)
+
+    expect(typeof numberResult).toEqual('number')
+    expect(typeof stringResult).toEqual('string')
+    expect(typeof booleanResult).toEqual('boolean')
+  })
+
+  it('should work with custom parse functions', () => {
+    const parseUpperCase: ParseFunction<string> = (value) => {
+      return typeof value === 'string' ? value.toUpperCase() : undefined
+    }
+
+    expect(parseSingularOf('hello', parseUpperCase)).toEqual('HELLO')
+    expect(parseSingularOf(['hello', 'world'], parseUpperCase)).toEqual('HELLO')
+    expect(parseSingularOf(123, parseUpperCase)).toBeUndefined()
+  })
+
+  it('should handle null and undefined input values', () => {
+    expect(parseSingularOf(null, parseString)).toBeUndefined()
+    expect(parseSingularOf(undefined, parseNumber)).toBeUndefined()
   })
 })
 

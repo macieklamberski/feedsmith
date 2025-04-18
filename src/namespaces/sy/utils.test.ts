@@ -1,20 +1,20 @@
 import { describe, expect, it } from 'bun:test'
-import { parseFeed } from './utils.js'
+import { retrieveFeed } from './utils.js'
 
-describe('parseFeed', () => {
+describe('retrieveFeed', () => {
+  const expectedFull = {
+    updatePeriod: 'hourly',
+    updateFrequency: 2,
+    updateBase: '2023-01-01T12:00:00Z',
+  }
+
   it('should parse complete channel object (with #text)', () => {
     const value = {
       'sy:updateperiod': { '#text': 'hourly' },
       'sy:updatefrequency': { '#text': '2' },
       'sy:updatebase': { '#text': '2023-01-01T12:00:00Z' },
     }
-    const expected = {
-      updatePeriod: 'hourly',
-      updateFrequency: 2,
-      updateBase: '2023-01-01T12:00:00Z',
-    }
-
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expectedFull)
   })
 
   it('should parse complete channel object (without #text)', () => {
@@ -23,13 +23,18 @@ describe('parseFeed', () => {
       'sy:updatefrequency': '2',
       'sy:updatebase': '2023-01-01T12:00:00Z',
     }
-    const expected = {
-      updatePeriod: 'hourly',
-      updateFrequency: 2,
-      updateBase: '2023-01-01T12:00:00Z',
+
+    expect(retrieveFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete channel object (with array of values)', () => {
+    const value = {
+      'sy:updateperiod': ['hourly', 'daily'],
+      'sy:updatefrequency': ['2', '3'],
+      'sy:updatebase': ['2023-01-01T12:00:00Z', '2023-01-02T12:00:00Z'],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expectedFull)
   })
 
   it('should handle partial channel object with only updatePeriod', () => {
@@ -40,7 +45,7 @@ describe('parseFeed', () => {
       updatePeriod: 'daily',
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should handle partial channel object with only updateFrequency', () => {
@@ -51,7 +56,7 @@ describe('parseFeed', () => {
       updateFrequency: 6,
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should handle partial channel object with only updateBase', () => {
@@ -62,7 +67,7 @@ describe('parseFeed', () => {
       updateBase: '2023-05-15T09:30:00Z',
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -75,20 +80,20 @@ describe('parseFeed', () => {
       updatePeriod: '123',
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    expect(parseFeed(value)).toBeUndefined()
+    expect(retrieveFeed(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object value', () => {
-    expect(parseFeed('not an object')).toBeUndefined()
-    expect(parseFeed(undefined)).toBeUndefined()
-    expect(parseFeed(null)).toBeUndefined()
-    expect(parseFeed([])).toBeUndefined()
+    expect(retrieveFeed('not an object')).toBeUndefined()
+    expect(retrieveFeed(undefined)).toBeUndefined()
+    expect(retrieveFeed(null)).toBeUndefined()
+    expect(retrieveFeed([])).toBeUndefined()
   })
 
   it('should return undefined when no properties can be parsed', () => {
@@ -97,7 +102,7 @@ describe('parseFeed', () => {
       'other:property': { '#text': 'value' },
     }
 
-    expect(parseFeed(value)).toBeUndefined()
+    expect(retrieveFeed(value)).toBeUndefined()
   })
 
   it('should handle objects with missing #text property', () => {
@@ -111,7 +116,7 @@ describe('parseFeed', () => {
       updateBase: '2023-01-01T12:00:00Z',
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should handle all properties with various values', () => {
@@ -126,6 +131,6 @@ describe('parseFeed', () => {
       updateBase: '2023-01-01T00:00:00Z',
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 })

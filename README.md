@@ -4,7 +4,7 @@
 [![npm version](https://img.shields.io/npm/v/feedsmith.svg)](https://www.npmjs.com/package/feedsmith)
 [![license](https://img.shields.io/npm/l/feedsmith.svg)](https://github.com/macieklamberski/feedsmith/blob/main/LICENSE)
 
-Modern JavaScript utility for parsing and generating JSON Feed, Atom, RSS, and RDF feeds, with support for popular namespaces. It provides both universal and format-specific parsers that maintain the original feed structure while offering helpful normalization.
+Robust and fast JavaScript parser for RSS, Atom, JSON Feed, and RDF feeds, with support for popular namespaces. It provides both universal and format-specific parsers that maintain the original feed structure while offering helpful normalization.
 
 Feedsmith maintains the original feed structure in a clean, object-oriented format. It intelligently normalizes legacy elements, providing you with complete access to all feed data without compromising simplicity.
 
@@ -421,7 +421,7 @@ For a quick overview, here are the results of parsing RSS, Atom, and RDF feeds u
 
 ## FAQ
 
-### Why should I use Feedsmith instead of alternative modules?
+### Why should I use Feedsmith instead of alternative packages?
 
 As stated in the overview section, the key advantage of Feedsmith is that it preserves the original feed structure exactly as provided in each specific feed format.
 

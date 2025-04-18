@@ -138,10 +138,6 @@ export const parseBoolean: ParseFunction<boolean> = (value) => {
   }
 }
 
-export const parseSingular = <T>(value: T | Array<T>): T => {
-  return Array.isArray(value) ? value[0] : value
-}
-
 export const parseArray: ParseFunction<Array<Unreliable>> = (value) => {
   if (Array.isArray(value)) {
     return value
@@ -190,6 +186,14 @@ export const parseArrayOf = <R>(
   }
 }
 
+export const parseSingular = <T>(value: T | Array<T>): T => {
+  return Array.isArray(value) ? value[0] : value
+}
+
+export const parseSingularOf = <R>(value: Unreliable, parse: ParseFunction<R>): R | undefined => {
+  return parse(parseSingular(value))
+}
+
 export const createNamespaceGetter = (
   value: Record<string, Unreliable>,
   prefix: string | undefined,
@@ -210,4 +214,14 @@ export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
     const originalKey = keyMap.get(requestedKey.toLowerCase())
     return originalKey ? value[originalKey] : undefined
   }
+}
+
+// TODO: Write tests.
+export const parseTextString: ParseFunction<string> = (value) => {
+  return parseString(retrieveText(value))
+}
+
+// TODO: Write tests.
+export const parseTextNumber: ParseFunction<number> = (value) => {
+  return parseNumber(retrieveText(value))
 }
