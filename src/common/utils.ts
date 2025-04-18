@@ -2,7 +2,7 @@ import { decodeHTML, decodeXML } from 'entities'
 import type { ParseFunction, Unreliable } from './types.js'
 
 export const isPresent = (value: Unreliable): value is string | number | boolean => {
-  return value !== undefined && value !== null
+  return value != null
 }
 
 export const isObject = (value: Unreliable): value is Record<string, Unreliable> => {
