@@ -1,5 +1,5 @@
 import type { ParseFunction } from '../../common/types.js'
-import { isObject, parseString, retrieveText, trimObject } from '../../common/utils.js'
+import { isObject, parseSingularOf, parseTextString, trimObject } from '../../common/utils.js'
 import type { Item } from './types.js'
 
 export const parseItem: ParseFunction<Item> = (value) => {
@@ -8,7 +8,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
   }
 
   const item = trimObject({
-    encoded: parseString(retrieveText(value['content:encoded'])),
+    encoded: parseSingularOf(value['content:encoded'], parseTextString),
   })
 
   return item

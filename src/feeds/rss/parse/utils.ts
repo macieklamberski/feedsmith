@@ -4,7 +4,10 @@ import {
   isPresent,
   parseArrayOf,
   parseNumber,
+  parseSingularOf,
   parseString,
+  parseTextNumber,
+  parseTextString,
   retrieveText,
   trimArray,
   trimObject,
@@ -39,10 +42,10 @@ export const parseTextInput: ParseFunction<TextInput> = (value) => {
   }
 
   const textInput = {
-    title: parseString(retrieveText(value.title)),
-    description: parseString(retrieveText(value.description)),
-    name: parseString(retrieveText(value.name)),
-    link: parseString(retrieveText(value.link)),
+    title: parseSingularOf(value.title, parseTextString),
+    description: parseSingularOf(value.description, parseTextString),
+    name: parseSingularOf(value.name, parseTextString),
+    link: parseSingularOf(value.link, parseTextString),
   }
 
   if (
@@ -80,11 +83,11 @@ export const parseCloud: ParseFunction<Cloud> = (value) => {
 }
 
 export const parseSkipHours: ParseFunction<Array<number>> = (value) => {
-  return trimArray(value?.hour, (hour) => parseNumber(retrieveText(hour)))
+  return trimArray(value?.hour, parseTextNumber)
 }
 
 export const parseSkipDays: ParseFunction<Array<string>> = (value) => {
-  return trimArray(value?.day, (day) => parseString(retrieveText(day)))
+  return trimArray(value?.day, parseTextString)
 }
 
 export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
@@ -120,12 +123,12 @@ export const parseImage: ParseFunction<Image> = (value) => {
   }
 
   const image = {
-    url: parseString(retrieveText(value.url)),
-    title: parseString(retrieveText(value.title)),
-    link: parseString(retrieveText(value.link)),
-    description: parseString(retrieveText(value.description)),
-    height: parseNumber(retrieveText(value.height)),
-    width: parseNumber(retrieveText(value.width)),
+    url: parseSingularOf(value.url, parseTextString),
+    title: parseSingularOf(value.title, parseTextString),
+    link: parseSingularOf(value.link, parseTextString),
+    description: parseSingularOf(value.description, parseTextString),
+    height: parseSingularOf(value.height, parseTextNumber),
+    width: parseSingularOf(value.width, parseTextNumber),
   }
 
   if (isPresent(image.url) && isPresent(image.title) && isPresent(image.link)) {
@@ -145,7 +148,7 @@ export const parseCategory: ParseFunction<Category> = (value) => {
 }
 
 export const parseAuthor: ParseFunction<Author> = (value) => {
-  return parseString(retrieveText(value?.name ?? value))
+  return parseSingularOf(value?.name ?? value, parseTextString)
 }
 
 export const parseItem: ParseFunction<Item> = (value) => {
@@ -154,16 +157,16 @@ export const parseItem: ParseFunction<Item> = (value) => {
   }
 
   const item = {
-    title: parseString(retrieveText(value.title)),
-    link: parseString(retrieveText(value.link)),
-    description: parseString(retrieveText(value.description)),
+    title: parseSingularOf(value.title, parseTextString),
+    link: parseSingularOf(value.link, parseTextString),
+    description: parseSingularOf(value.description, parseTextString),
     authors: parseArrayOf(value.author, parseAuthor),
     categories: parseArrayOf(value.category, parseCategory),
-    comments: parseString(retrieveText(value.comments)),
-    enclosure: parseEnclosure(value.enclosure),
-    guid: parseString(retrieveText(value.guid)),
-    pubDate: parseString(retrieveText(value.pubdate)),
-    source: parseSource(value.source),
+    comments: parseSingularOf(value.comments, parseTextString),
+    enclosure: parseSingularOf(value.enclosure, parseEnclosure),
+    guid: parseSingularOf(value.guid, parseTextString),
+    pubDate: parseSingularOf(value.pubdate, parseTextString),
+    source: parseSingularOf(value.source, parseSource),
     content: parseContentItem(value),
     atom: parseAtomEntry(value),
     dc: parseDcItemOrFeed(value),
@@ -182,25 +185,25 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
   }
 
   const feed = {
-    title: parseString(retrieveText(value.title)),
-    link: parseString(retrieveText(value.link)),
-    description: parseString(retrieveText(value.description)),
-    language: parseString(retrieveText(value.language)),
-    copyright: parseString(retrieveText(value.copyright)),
-    managingEditor: parseString(retrieveText(value.managingeditor)),
-    webMaster: parseString(retrieveText(value.webmaster)),
-    pubDate: parseString(retrieveText(value.pubdate)),
-    lastBuildDate: parseString(retrieveText(value.lastbuilddate)),
+    title: parseSingularOf(value.title, parseTextString),
+    link: parseSingularOf(value.link, parseTextString),
+    description: parseSingularOf(value.description, parseTextString),
+    language: parseSingularOf(value.language, parseTextString),
+    copyright: parseSingularOf(value.copyright, parseTextString),
+    managingEditor: parseSingularOf(value.managingeditor, parseTextString),
+    webMaster: parseSingularOf(value.webmaster, parseTextString),
+    pubDate: parseSingularOf(value.pubdate, parseTextString),
+    lastBuildDate: parseSingularOf(value.lastbuilddate, parseTextString),
     categories: parseArrayOf(value.category, parseCategory),
-    generator: parseString(retrieveText(value.generator)),
-    docs: parseString(retrieveText(value.docs)),
-    cloud: parseCloud(value.cloud),
-    ttl: parseNumber(retrieveText(value.ttl)),
-    image: parseImage(value.image),
-    rating: parseString(retrieveText(value.rating)),
-    textInput: parseTextInput(value.textinput),
-    skipHours: parseSkipHours(value.skiphours),
-    skipDays: parseSkipDays(value.skipdays),
+    generator: parseSingularOf(value.generator, parseTextString),
+    docs: parseSingularOf(value.docs, parseTextString),
+    cloud: parseSingularOf(value.cloud, parseCloud),
+    ttl: parseSingularOf(value.ttl, parseTextNumber),
+    image: parseSingularOf(value.image, parseImage),
+    rating: parseSingularOf(value.rating, parseTextString),
+    textInput: parseSingularOf(value.textinput, parseTextInput),
+    skipHours: parseSingularOf(value.skiphours, parseSkipHours),
+    skipDays: parseSingularOf(value.skipdays, parseSkipDays),
     items: parseArrayOf(value.item, parseItem),
     atom: parseAtomFeed(value),
     dc: parseDcItemOrFeed(value),
@@ -217,5 +220,5 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
 }
 
 export const retrieveFeed: ParseFunction<Feed> = (value) => {
-  return parseFeed(value?.rss?.channel)
+  return parseSingularOf(value?.rss?.channel, parseFeed)
 }

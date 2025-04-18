@@ -757,7 +757,7 @@ describe('parseItem', () => {
   it('should parse all iTunes item properties when present (with #text)', () => {
     const value = {
       'itunes:duration': { '#text': '3600' },
-      'itunes:image': 'https://example.com/image.jpg',
+      'itunes:image': { '#text': 'https://example.com/image.jpg' },
       'itunes:explicit': { '#text': 'yes' },
       'itunes:title': { '#text': 'Episode Title' },
       'itunes:episode': { '#text': '42' },
@@ -819,7 +819,7 @@ describe('parseItem', () => {
   it('should parse only the valid properties and omit undefined ones', () => {
     const value = {
       'itunes:duration': { '#text': 'not a number' },
-      'itunes:image': 'https://example.com/image.jpg',
+      'itunes:image': { '#text': 'https://example.com/image.jpg' },
       'itunes:explicit': { '#text': 'clean' },
       'itunes:title': { '#text': 'Episode Title' },
       'itunes:episode': { '#text': 'not a number' },
@@ -905,7 +905,7 @@ describe('parseItem', () => {
   it('should handle mix of valid and invalid properties', () => {
     const value = {
       'itunes:duration': { '#text': '3600' },
-      'itunes:image': null,
+      'itunes:image': { '#text': null },
       'itunes:explicit': { '#text': [] },
       'itunes:title': { '#text': 'Episode Title' },
       'itunes:episode': { '#text': '42' },

@@ -215,3 +215,13 @@ export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
     return originalKey ? value[originalKey] : undefined
   }
 }
+
+// TODO: Write tests.
+export const parseTextString: ParseFunction<string> = (value) => {
+  return parseString(retrieveText(value))
+}
+
+// TODO: Write tests.
+export const parseTextNumber: ParseFunction<number> = (value) => {
+  return parseNumber(retrieveText(value))
+}

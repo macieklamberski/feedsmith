@@ -5,65 +5,8 @@ import {
   parseFeed,
   parseHub,
   parseItem,
-  parseTags,
   retrieveAuthors,
 } from './utils.js'
-
-describe('parseTags', () => {
-  it('should handle array of strings', () => {
-    const value = ['javascript', 'typescript']
-
-    expect(parseTags(value)).toEqual(value)
-  })
-
-  it('should handle array of mixed values', () => {
-    const value = ['javascript', true, 123, {}, [], null]
-
-    expect(parseTags(value)).toEqual(['javascript', '123'])
-  })
-
-  it('should handle object', () => {
-    const value = { name: 'javascript' }
-
-    expect(parseTags(value)).toBeUndefined()
-  })
-
-  it('should handle non-empty string', () => {
-    const value = 'javascript'
-
-    expect(parseTags(value)).toEqual([value])
-  })
-
-  it('should handle empty string', () => {
-    const value = ''
-
-    expect(parseTags(value)).toBeUndefined()
-  })
-
-  it('should handle number', () => {
-    const value = 420
-
-    expect(parseTags(value)).toEqual(['420'])
-  })
-
-  it('should handle boolean', () => {
-    const value = true
-
-    expect(parseTags(value)).toBeUndefined()
-  })
-
-  it('should handle null', () => {
-    const value = null
-
-    expect(parseTags(value)).toBeUndefined()
-  })
-
-  it('should return undefined', () => {
-    const value = undefined
-
-    expect(parseTags(value)).toBeUndefined()
-  })
-})
 
 describe('parseAuthor', () => {
   it('should handle Author object', () => {
