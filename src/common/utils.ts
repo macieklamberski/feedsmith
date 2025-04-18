@@ -94,7 +94,8 @@ export const stripCdata = (text: Unreliable) => {
 }
 
 export const hasEntities = (text: string) => {
-  return text.indexOf('&') !== -1 && text.indexOf(';') !== -1
+  const ampIndex = text.indexOf('&')
+  return ampIndex !== -1 && text.indexOf(';', ampIndex) !== -1
 }
 
 export const parseString: ParseFunction<string> = (value) => {
