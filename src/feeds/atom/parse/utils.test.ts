@@ -298,7 +298,7 @@ describe('retrieveGeneratorUri', () => {
 })
 
 describe('parseGenerator', () => {
-  it('should parse complete generator object (Atom 1.0)', () => {
+  it('should parse complete generator object (Atom 1.0) (with #text)', () => {
     const value = {
       '#text': 'Example Generator',
       '@uri': 'https://example.com/generator',
@@ -328,10 +328,19 @@ describe('parseGenerator', () => {
     expect(parseGenerator(value)).toEqual(expected)
   })
 
-  it('should parse generator with only required text', () => {
+  it('should parse generator with only required text (with #text)', () => {
     const value = {
       '#text': 'Example Generator',
     }
+    const expected = {
+      text: 'Example Generator',
+    }
+
+    expect(parseGenerator(value)).toEqual(expected)
+  })
+
+  it('should parse generator with only required text (without #text)', () => {
+    const value = 'Example Generator'
     const expected = {
       text: 'Example Generator',
     }
@@ -363,7 +372,6 @@ describe('parseGenerator', () => {
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parseGenerator('not an object')).toBeUndefined()
     expect(parseGenerator(undefined)).toBeUndefined()
     expect(parseGenerator(null)).toBeUndefined()
     expect(parseGenerator([])).toBeUndefined()

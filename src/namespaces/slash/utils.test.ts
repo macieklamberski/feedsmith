@@ -47,12 +47,29 @@ describe('parseHitParade', () => {
 })
 
 describe('parseItem', () => {
-  it('should parse complete slash namespace item', () => {
+  it('should parse complete slash namespace item (with #text)', () => {
     const value = {
       'slash:section': { '#text': 'technology' },
       'slash:department': { '#text': 'open-source' },
       'slash:comments': { '#text': '42' },
       'slash:hit_parade': { '#text': '42,38,24,16,8,4,2' },
+    }
+    const expected = {
+      section: 'technology',
+      department: 'open-source',
+      comments: 42,
+      hit_parade: [42, 38, 24, 16, 8, 4, 2],
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should parse complete slash namespace item (without #text)', () => {
+    const value = {
+      'slash:section': 'technology',
+      'slash:department': 'open-source',
+      'slash:comments': '42',
+      'slash:hit_parade': '42,38,24,16,8,4,2',
     }
     const expected = {
       section: 'technology',

@@ -4,6 +4,7 @@ import {
   isObject,
   parseNumber,
   parseString,
+  retrieveText,
   trimArray,
   trimObject,
 } from '../../common/utils.js'
@@ -27,10 +28,10 @@ export const parseItem: ParseFunction<Item> = (value) => {
   }
 
   const item = trimObject({
-    section: parseString(value['slash:section']?.['#text']),
-    department: parseString(value['slash:department']?.['#text']),
-    comments: parseNumber(value['slash:comments']?.['#text']),
-    hit_parade: parseHitParade(value['slash:hit_parade']?.['#text']),
+    section: parseString(retrieveText(value['slash:section'])),
+    department: parseString(retrieveText(value['slash:department'])),
+    comments: parseNumber(retrieveText(value['slash:comments'])),
+    hit_parade: parseHitParade(retrieveText(value['slash:hit_parade'])),
   })
 
   return item

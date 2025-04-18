@@ -2,7 +2,7 @@ import { decodeHTML, decodeXML } from 'entities'
 import type { ParseFunction, Unreliable } from './types.js'
 
 export const isPresent = (value: Unreliable): value is string | number | boolean => {
-  return value !== undefined && value !== null
+  return value != null
 }
 
 export const isObject = (value: Unreliable): value is Record<string, Unreliable> => {
@@ -16,6 +16,10 @@ export const isObject = (value: Unreliable): value is Record<string, Unreliable>
 
 export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | number => {
   return value !== '' && (typeof value === 'string' || typeof value === 'number')
+}
+
+export const retrieveText = (value: Unreliable): Unreliable => {
+  return value?.['#text'] ?? value
 }
 
 export const trimObject = <T extends Record<string, unknown>>(
@@ -94,7 +98,8 @@ export const stripCdata = (text: Unreliable) => {
 }
 
 export const hasEntities = (text: string) => {
-  return text.indexOf('&') !== -1 && text.indexOf(';') !== -1
+  const ampIndex = text.indexOf('&')
+  return ampIndex !== -1 && text.indexOf(';', ampIndex) !== -1
 }
 
 export const parseString: ParseFunction<string> = (value) => {

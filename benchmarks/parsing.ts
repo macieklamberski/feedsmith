@@ -72,7 +72,7 @@ await runBenchmarks('RSS feed parsing (10 files × 5MB — 50MB)', {
 
 await runBenchmarks('RSS feed parsing (50 files × 100KB — 5MB)', {
   'rss-parser': () => runTest(rssSmallFiles, rssParser),
-  '@gaphub/feed': () => runTest(rssBigFiles, gaphubFeedParser),
+  '@gaphub/feed': () => runTest(rssSmallFiles, gaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(rssSmallFiles, rowanmanningFeedParser),
   'feedme.js': () => runTest(rssSmallFiles, feedMeJs),
   '@extractus/feed-extractor': () => runTest(rssSmallFiles, extractFromXml),
@@ -83,7 +83,7 @@ await runBenchmarks('RSS feed parsing (50 files × 100KB — 5MB)', {
 
 await runBenchmarks('Atom feed parsing (10 files × 5MB — 50MB)', {
   'rss-parser': () => runTest(atomBigFiles, rssParser),
-  '@gaphub/feed': () => runTest(rssBigFiles, gaphubFeedParser),
+  '@gaphub/feed': () => runTest(atomBigFiles, gaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(atomBigFiles, rowanmanningFeedParser),
   'feedme.js': () => runTest(atomBigFiles, feedMeJs),
   '@extractus/feed-extractor': () => runTest(atomBigFiles, extractFromXml),
@@ -94,7 +94,7 @@ await runBenchmarks('Atom feed parsing (10 files × 5MB — 50MB)', {
 
 await runBenchmarks('Atom feed parsing (50 files × 100KB — 5MB)', {
   'rss-parser': () => runTest(atomSmallFiles, rssParser),
-  '@gaphub/feed': () => runTest(rssBigFiles, gaphubFeedParser),
+  '@gaphub/feed': () => runTest(atomSmallFiles, gaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(atomSmallFiles, rowanmanningFeedParser),
   'feedme.js': () => runTest(atomSmallFiles, feedMeJs),
   '@extractus/feed-extractor': () => runTest(atomSmallFiles, extractFromXml),
@@ -105,7 +105,7 @@ await runBenchmarks('Atom feed parsing (50 files × 100KB — 5MB)', {
 
 await runBenchmarks('RDF feed parsing (50 files × 100KB — 5MB)', {
   'rss-parser': () => runTest(rdfFiles, rssParser),
-  '@gaphub/feed': () => runTest(rssBigFiles, gaphubFeedParser),
+  '@gaphub/feed': () => runTest(rdfFiles, gaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(rdfFiles, rowanmanningFeedParser),
   'feedme.js': () => runTest(rdfFiles, feedMeJs),
   '@extractus/feed-extractor': () => runTest(rdfFiles, extractFromXml),

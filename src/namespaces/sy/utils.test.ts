@@ -2,11 +2,26 @@ import { describe, expect, it } from 'bun:test'
 import { parseFeed } from './utils.js'
 
 describe('parseFeed', () => {
-  it('should parse complete channel object', () => {
+  it('should parse complete channel object (with #text)', () => {
     const value = {
       'sy:updateperiod': { '#text': 'hourly' },
       'sy:updatefrequency': { '#text': '2' },
       'sy:updatebase': { '#text': '2023-01-01T12:00:00Z' },
+    }
+    const expected = {
+      updatePeriod: 'hourly',
+      updateFrequency: 2,
+      updateBase: '2023-01-01T12:00:00Z',
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should parse complete channel object (without #text)', () => {
+    const value = {
+      'sy:updateperiod': 'hourly',
+      'sy:updatefrequency': '2',
+      'sy:updatebase': '2023-01-01T12:00:00Z',
     }
     const expected = {
       updatePeriod: 'hourly',

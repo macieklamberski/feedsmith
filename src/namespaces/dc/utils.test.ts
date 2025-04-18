@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test'
 import { parseItemOrFeed } from './utils.js'
 
 describe('parseItemOrFeed', () => {
-  it('should parse complete item or feed object with all properties', () => {
+  it('should parse complete item or feed object with all properties (with #text)', () => {
     const value = {
       'dc:title': { '#text': 'Sample Title' },
       'dc:creator': { '#text': 'John Doe' },
@@ -19,6 +19,45 @@ describe('parseItemOrFeed', () => {
       'dc:relation': { '#text': 'https://example.org/related' },
       'dc:coverage': { '#text': 'Worldwide' },
       'dc:rights': { '#text': 'Copyright 2023, All rights reserved' },
+    }
+    const expected = {
+      title: 'Sample Title',
+      creator: 'John Doe',
+      subject: 'Test Subject',
+      description: 'This is a description',
+      publisher: 'Test Publisher',
+      contributor: 'Jane Smith',
+      date: '2023-05-15T09:30:00Z',
+      type: 'Article',
+      format: 'text/html',
+      identifier: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      source: 'https://example.org/source',
+      language: 'en-US',
+      relation: 'https://example.org/related',
+      coverage: 'Worldwide',
+      rights: 'Copyright 2023, All rights reserved',
+    }
+
+    expect(parseItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should parse complete item or feed object with all properties (without #text)', () => {
+    const value = {
+      'dc:title': 'Sample Title',
+      'dc:creator': 'John Doe',
+      'dc:subject': 'Test Subject',
+      'dc:description': 'This is a description',
+      'dc:publisher': 'Test Publisher',
+      'dc:contributor': 'Jane Smith',
+      'dc:date': '2023-05-15T09:30:00Z',
+      'dc:type': 'Article',
+      'dc:format': 'text/html',
+      'dc:identifier': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      'dc:source': 'https://example.org/source',
+      'dc:language': 'en-US',
+      'dc:relation': 'https://example.org/related',
+      'dc:coverage': 'Worldwide',
+      'dc:rights': 'Copyright 2023, All rights reserved',
     }
     const expected = {
       title: 'Sample Title',
