@@ -13,6 +13,7 @@ import {
   parseNumber,
   parseSingular,
   parseString,
+  retrieveText,
   stripCdata,
   trimArray,
   trimObject,
@@ -202,6 +203,76 @@ describe('isNonEmptyStringOrNumber', () => {
 
     expect(isNonEmptyStringOrNumber(stringObject)).toEqual(false)
     expect(isNonEmptyStringOrNumber(numberObject)).toEqual(false)
+  })
+})
+
+describe('retrieveText', () => {
+  it('should extract #text property when present', () => {
+    const value = { '#text': 'Hello world' }
+    expect(retrieveText(value)).toEqual('Hello world')
+  })
+
+  it('should return the original value when #text property is not present', () => {
+    const value = { title: 'Example Title' }
+    expect(retrieveText(value)).toEqual(value)
+  })
+  it('should return #text property even if it has falsy value (except null/undefined)', () => {
+    expect(retrieveText({ '#text': '' })).toEqual('')
+    expect(retrieveText({ '#text': 0 })).toEqual(0)
+    expect(retrieveText({ '#text': false })).toEqual(false)
+  })
+
+  it('should return original value when #text property is null or undefined', () => {
+    const valueWithNullText = { '#text': null, other: 'property' }
+    const valueWithUndefinedText = { '#text': undefined, other: 'property' }
+
+    expect(retrieveText(valueWithNullText)).toEqual(valueWithNullText)
+    expect(retrieveText(valueWithUndefinedText)).toEqual(valueWithUndefinedText)
+  })
+
+  it('should handle nested structures correctly', () => {
+    const nestedObject = { '#text': { nested: 'value' } }
+    const nestedArray = { '#text': [1, 2, 3] }
+
+    expect(retrieveText(nestedObject)).toEqual({ nested: 'value' })
+    expect(retrieveText(nestedArray)).toEqual([1, 2, 3])
+  })
+
+  it('should work with arrays', () => {
+    const array = [1, 2, 3]
+    expect(retrieveText(array)).toEqual(array)
+  })
+
+  it('should work with dates', () => {
+    const date = new Date()
+    expect(retrieveText(date)).toEqual(date)
+  })
+
+  it('should work with functions', () => {
+    const func = () => {}
+    expect(retrieveText(func)).toBe(func)
+  })
+
+  it('should handle object with only #text property', () => {
+    const value = { '#text': 'Text only' }
+    expect(retrieveText(value)).toEqual('Text only')
+  })
+
+  it('should handle object with #text property among others', () => {
+    const value = { '#text': 'Main text', title: 'Title', count: 42 }
+    expect(retrieveText(value)).toEqual('Main text')
+  })
+
+  it('should return primitive values as is', () => {
+    expect(retrieveText('string value')).toEqual('string value')
+    expect(retrieveText(42)).toEqual(42)
+    expect(retrieveText(true)).toEqual(true)
+    expect(retrieveText(false)).toEqual(false)
+  })
+
+  it('should handle null and undefined correctly', () => {
+    expect(retrieveText(null)).toEqual(null)
+    expect(retrieveText(undefined)).toEqual(undefined)
   })
 })
 

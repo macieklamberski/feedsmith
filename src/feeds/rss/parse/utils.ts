@@ -1,10 +1,11 @@
-import type { ParseFunction } from '../../../common/types.js'
+import type { ParseFunction, Unreliable } from '../../../common/types.js'
 import {
   isObject,
   isPresent,
   parseArrayOf,
   parseNumber,
   parseString,
+  retrieveText,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
@@ -38,10 +39,10 @@ export const parseTextInput: ParseFunction<TextInput> = (value) => {
   }
 
   const textInput = {
-    title: parseString(value.title?.['#text']),
-    description: parseString(value.description?.['#text']),
-    name: parseString(value.name?.['#text']),
-    link: parseString(value.link?.['#text']),
+    title: parseString(retrieveText(value.title)),
+    description: parseString(retrieveText(value.description)),
+    name: parseString(retrieveText(value.name)),
+    link: parseString(retrieveText(value.link)),
   }
 
   if (
@@ -79,11 +80,11 @@ export const parseCloud: ParseFunction<Cloud> = (value) => {
 }
 
 export const parseSkipHours: ParseFunction<Array<number>> = (value) => {
-  return trimArray(value?.hour, (hour) => parseNumber(hour?.['#text']))
+  return trimArray(value?.hour, (hour) => parseNumber(retrieveText(hour)))
 }
 
 export const parseSkipDays: ParseFunction<Array<string>> = (value) => {
-  return trimArray(value?.day, (day) => parseString(day?.['#text']))
+  return trimArray(value?.day, (day) => parseString(retrieveText(day)))
 }
 
 export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
@@ -103,13 +104,9 @@ export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
 }
 
 export const parseSource: ParseFunction<Source> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
   const source = {
-    title: parseString(value['#text']),
-    url: parseString(value['@url']),
+    title: parseString(retrieveText(value)),
+    url: parseString(value?.['@url']),
   }
 
   if (isPresent(source.title)) {
@@ -123,12 +120,12 @@ export const parseImage: ParseFunction<Image> = (value) => {
   }
 
   const image = {
-    url: parseString(value.url?.['#text']),
-    title: parseString(value.title?.['#text']),
-    link: parseString(value.link?.['#text']),
-    description: parseString(value.description?.['#text']),
-    height: parseNumber(value.height?.['#text']),
-    width: parseNumber(value.width?.['#text']),
+    url: parseString(retrieveText(value.url)),
+    title: parseString(retrieveText(value.title)),
+    link: parseString(retrieveText(value.link)),
+    description: parseString(retrieveText(value.description)),
+    height: parseNumber(retrieveText(value.height)),
+    width: parseNumber(retrieveText(value.width)),
   }
 
   if (isPresent(image.url) && isPresent(image.title) && isPresent(image.link)) {
@@ -137,13 +134,9 @@ export const parseImage: ParseFunction<Image> = (value) => {
 }
 
 export const parseCategory: ParseFunction<Category> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
   const category = {
-    name: parseString(value['#text']),
-    domain: parseString(value['@domain']),
+    name: parseString(retrieveText(value)),
+    domain: parseString(value?.['@domain']),
   }
 
   if (isPresent(category.name)) {
@@ -152,7 +145,7 @@ export const parseCategory: ParseFunction<Category> = (value) => {
 }
 
 export const parseAuthor: ParseFunction<Author> = (value) => {
-  return parseString(value?.name?.['#text'] || value?.['#text'])
+  return parseString(retrieveText(value?.name ?? value))
 }
 
 export const parseItem: ParseFunction<Item> = (value) => {
@@ -161,15 +154,15 @@ export const parseItem: ParseFunction<Item> = (value) => {
   }
 
   const item = {
-    title: parseString(value.title?.['#text']),
-    link: parseString(value.link?.['#text']),
-    description: parseString(value.description?.['#text']),
+    title: parseString(retrieveText(value.title)),
+    link: parseString(retrieveText(value.link)),
+    description: parseString(retrieveText(value.description)),
     authors: parseArrayOf(value.author, parseAuthor),
     categories: parseArrayOf(value.category, parseCategory),
-    comments: parseString(value.comments?.['#text']),
+    comments: parseString(retrieveText(value.comments)),
     enclosure: parseEnclosure(value.enclosure),
-    guid: parseString(value.guid?.['#text']),
-    pubDate: parseString(value.pubdate?.['#text']),
+    guid: parseString(retrieveText(value.guid)),
+    pubDate: parseString(retrieveText(value.pubdate)),
     source: parseSource(value.source),
     content: parseContentItem(value),
     atom: parseAtomEntry(value),
@@ -189,22 +182,22 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
   }
 
   const feed = {
-    title: parseString(value.title?.['#text']),
-    link: parseString(value.link?.['#text']),
-    description: parseString(value.description?.['#text']),
-    language: parseString(value.language?.['#text']),
-    copyright: parseString(value.copyright?.['#text']),
-    managingEditor: parseString(value.managingeditor?.['#text']),
-    webMaster: parseString(value.webmaster?.['#text']),
-    pubDate: parseString(value.pubdate?.['#text']),
-    lastBuildDate: parseString(value.lastbuilddate?.['#text']),
+    title: parseString(retrieveText(value.title)),
+    link: parseString(retrieveText(value.link)),
+    description: parseString(retrieveText(value.description)),
+    language: parseString(retrieveText(value.language)),
+    copyright: parseString(retrieveText(value.copyright)),
+    managingEditor: parseString(retrieveText(value.managingeditor)),
+    webMaster: parseString(retrieveText(value.webmaster)),
+    pubDate: parseString(retrieveText(value.pubdate)),
+    lastBuildDate: parseString(retrieveText(value.lastbuilddate)),
     categories: parseArrayOf(value.category, parseCategory),
-    generator: parseString(value.generator?.['#text']),
-    docs: parseString(value.docs?.['#text']),
+    generator: parseString(retrieveText(value.generator)),
+    docs: parseString(retrieveText(value.docs)),
     cloud: parseCloud(value.cloud),
-    ttl: parseNumber(value.ttl?.['#text']),
+    ttl: parseNumber(retrieveText(value.ttl)),
     image: parseImage(value.image),
-    rating: parseString(value.rating?.['#text']),
+    rating: parseString(retrieveText(value.rating)),
     textInput: parseTextInput(value.textinput),
     skipHours: parseSkipHours(value.skiphours),
     skipDays: parseSkipDays(value.skipdays),
