@@ -25,7 +25,7 @@ export const parseHitParade: ParseFunction<HitParade> = (value) => {
   }
 }
 
-export const parseItem: ParseFunction<Item> = (value) => {
+export const retrieveItem: ParseFunction<Item> = (value) => {
   if (!isObject(value)) {
     return
   }

@@ -10,13 +10,13 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils.js'
+import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/utils.js'
 import {
-  parseFeed as parseItunesFeed,
-  parseItem as parseItunesItem,
+  retrieveFeed as retrieveItunesFeed,
+  retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/utils.js'
-import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils.js'
-import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils.js'
+import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
+import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
 import type { ParseFunction } from './types.js'
 import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types.js'
 
@@ -190,9 +190,9 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
     summary: parseSingularOf(get('summary'), parseTextString),
     title: parseSingularOf(get('title'), parseTextString),
     updated: retrieveUpdated(value, options),
-    dc: options?.partial ? undefined : parseDcItemOrFeed(value),
-    slash: options?.partial ? undefined : parseSlashItem(value),
-    itunes: options?.partial ? undefined : parseItunesItem(value),
+    dc: options?.partial ? undefined : retrieveDcItemOrFeed(value),
+    slash: options?.partial ? undefined : retrieveSlashItem(value),
+    itunes: options?.partial ? undefined : retrieveItunesItem(value),
   })
 
   if (options?.partial || !entry) {
@@ -226,9 +226,9 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
     title: parseSingularOf(get('title'), parseTextString),
     updated: retrieveUpdated(value, options),
     entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options)),
-    dc: options?.partial ? undefined : parseDcItemOrFeed(value),
-    sy: options?.partial ? undefined : parseSyFeed(value),
-    itunes: options?.partial ? undefined : parseItunesFeed(value),
+    dc: options?.partial ? undefined : retrieveDcItemOrFeed(value),
+    sy: options?.partial ? undefined : retrieveSyFeed(value),
+    itunes: options?.partial ? undefined : retrieveItunesFeed(value),
   })
 
   if (options?.partial || !feed) {

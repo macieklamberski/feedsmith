@@ -8,7 +8,7 @@ import {
 } from '../../common/utils.js'
 import type { Feed } from './types.js'
 
-export const parseFeed: ParseFunction<Feed> = (value) => {
+export const retrieveFeed: ParseFunction<Feed> = (value) => {
   if (!isObject(value)) {
     return
   }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
-import { parseItemOrFeed } from './utils.js'
+import { retrieveItemOrFeed } from './utils.js'
 
-describe('parseItemOrFeed', () => {
+describe('retrieveItemOrFeed', () => {
   it('should parse complete item or feed object with all properties (with #text)', () => {
     const value = {
       'dc:title': { '#text': 'Sample Title' },
@@ -38,7 +38,7 @@ describe('parseItemOrFeed', () => {
       rights: 'Copyright 2023, All rights reserved',
     }
 
-    expect(parseItemOrFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse complete item or feed object with all properties (without #text)', () => {
@@ -77,7 +77,7 @@ describe('parseItemOrFeed', () => {
       rights: 'Copyright 2023, All rights reserved',
     }
 
-    expect(parseItemOrFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should handle partial dublincore object with common properties', () => {
@@ -92,7 +92,7 @@ describe('parseItemOrFeed', () => {
       date: '2023-05-15T09:30:00Z',
     }
 
-    expect(parseItemOrFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should handle object with only title property', () => {
@@ -103,7 +103,7 @@ describe('parseItemOrFeed', () => {
       title: 'Only Title',
     }
 
-    expect(parseItemOrFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -117,20 +117,20 @@ describe('parseItemOrFeed', () => {
       identifier: '456',
     }
 
-    expect(parseItemOrFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    expect(parseItemOrFeed(value)).toBeUndefined()
+    expect(retrieveItemOrFeed(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object value', () => {
-    expect(parseItemOrFeed('not an object')).toBeUndefined()
-    expect(parseItemOrFeed(undefined)).toBeUndefined()
-    expect(parseItemOrFeed(null)).toBeUndefined()
-    expect(parseItemOrFeed([])).toBeUndefined()
+    expect(retrieveItemOrFeed('not an object')).toBeUndefined()
+    expect(retrieveItemOrFeed(undefined)).toBeUndefined()
+    expect(retrieveItemOrFeed(null)).toBeUndefined()
+    expect(retrieveItemOrFeed([])).toBeUndefined()
   })
 
   it('should return undefined when no properties can be parsed', () => {
@@ -139,7 +139,7 @@ describe('parseItemOrFeed', () => {
       'unknown:field': { '#text': 'data' },
     }
 
-    expect(parseItemOrFeed(value)).toBeUndefined()
+    expect(retrieveItemOrFeed(value)).toBeUndefined()
   })
 
   it('should handle objects with missing #text property', () => {
@@ -153,7 +153,7 @@ describe('parseItemOrFeed', () => {
       date: '2023-01-01T12:00:00Z',
     }
 
-    expect(parseItemOrFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should handle empty strings in properties', () => {
@@ -168,7 +168,7 @@ describe('parseItemOrFeed', () => {
       description: '',
     }
 
-    expect(parseItemOrFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should handle null values in properties', () => {
@@ -181,7 +181,7 @@ describe('parseItemOrFeed', () => {
       creator: 'John Doe',
     }
 
-    expect(parseItemOrFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should handle numeric values in properties', () => {
@@ -194,7 +194,7 @@ describe('parseItemOrFeed', () => {
       language: 'en',
     }
 
-    expect(parseItemOrFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should handle object with all properties having null values', () => {
@@ -204,6 +204,6 @@ describe('parseItemOrFeed', () => {
       'dc:subject': { '#text': null },
     }
 
-    expect(parseItemOrFeed(value)).toBeUndefined()
+    expect(retrieveItemOrFeed(value)).toBeUndefined()
   })
 })

@@ -11,17 +11,17 @@ import {
   trimObject,
 } from '../../../common/utils.js'
 import {
-  parseEntry as parseAtomEntry,
-  parseFeed as parseAtomFeed,
+  retrieveEntry as retrieveAtomEntry,
+  retrieveFeed as retrieveAtomFeed,
 } from '../../../namespaces/atom/utils.js'
-import { parseItem as parseContentItem } from '../../../namespaces/content/utils.js'
-import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils.js'
+import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/utils.js'
+import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/utils.js'
 import {
-  parseFeed as parseItunesFeed,
-  parseItem as parseItunesItem,
+  retrieveFeed as retrieveItunesFeed,
+  retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/utils.js'
-import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils.js'
-import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils.js'
+import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
+import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
 import type { Feed, Image, Item, TextInput } from './types.js'
 
 export const parseImage: ParseFunction<Image> = (value) => {
@@ -54,11 +54,11 @@ export const parseItem: ParseFunction<Item> = (value) => {
     title: parseSingularOf(value.title, parseTextString),
     link: parseSingularOf(value.link, parseTextString),
     description: parseSingularOf(value.description, parseTextString),
-    atom: parseAtomEntry(value),
-    content: parseContentItem(value),
-    dc: parseDcItemOrFeed(value),
-    slash: parseSlashItem(value),
-    itunes: parseItunesItem(value),
+    atom: retrieveAtomEntry(value),
+    content: retrieveContentItem(value),
+    dc: retrieveDcItemOrFeed(value),
+    slash: retrieveSlashItem(value),
+    itunes: retrieveItunesItem(value),
   }
 
   if (isPresent(item.title) && isPresent(item.link)) {
@@ -111,10 +111,10 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     image: retrieveImage(value),
     items: retrieveItems(value),
     textInput: retrieveTextInput(value),
-    atom: parseAtomFeed(channel),
-    dc: parseDcItemOrFeed(channel),
-    sy: parseSyFeed(channel),
-    itunes: parseItunesFeed(channel),
+    atom: retrieveAtomFeed(channel),
+    dc: retrieveDcItemOrFeed(channel),
+    sy: retrieveSyFeed(channel),
+    itunes: retrieveItunesFeed(channel),
   }
 
   if (isPresent(feed.title)) {

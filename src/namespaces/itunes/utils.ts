@@ -131,7 +131,7 @@ export const parseKeywords: ParseFunction<Array<string>> = (value) => {
   }
 }
 
-export const parseItem: ParseFunction<Item> = (value) => {
+export const retrieveItem: ParseFunction<Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -159,7 +159,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
   return item
 }
 
-export const parseFeed: ParseFunction<Feed> = (value) => {
+export const retrieveFeed: ParseFunction<Feed> = (value) => {
   if (!isObject(value)) {
     return
   }

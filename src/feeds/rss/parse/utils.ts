@@ -13,17 +13,17 @@ import {
   trimObject,
 } from '../../../common/utils.js'
 import {
-  parseEntry as parseAtomEntry,
-  parseFeed as parseAtomFeed,
+  retrieveEntry as retrieveAtomEntry,
+  retrieveFeed as retrieveAtomFeed,
 } from '../../../namespaces/atom/utils.js'
-import { parseItem as parseContentItem } from '../../../namespaces/content/utils.js'
-import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils.js'
+import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/utils.js'
+import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/utils.js'
 import {
-  parseFeed as parseItunesFeed,
-  parseItem as parseItunesItem,
+  retrieveFeed as retrieveItunesFeed,
+  retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/utils.js'
-import { parseItem as parseSlashItem } from '../../../namespaces/slash/utils.js'
-import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils.js'
+import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
+import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
 import type {
   Author,
   Category,
@@ -167,11 +167,11 @@ export const parseItem: ParseFunction<Item> = (value) => {
     guid: parseSingularOf(value.guid, parseTextString),
     pubDate: parseSingularOf(value.pubdate, parseTextString),
     source: parseSingularOf(value.source, parseSource),
-    content: parseContentItem(value),
-    atom: parseAtomEntry(value),
-    dc: parseDcItemOrFeed(value),
-    slash: parseSlashItem(value),
-    itunes: parseItunesItem(value),
+    content: retrieveContentItem(value),
+    atom: retrieveAtomEntry(value),
+    dc: retrieveDcItemOrFeed(value),
+    slash: retrieveSlashItem(value),
+    itunes: retrieveItunesItem(value),
   }
 
   if (isPresent(item.title) || isPresent(item.description)) {
@@ -205,10 +205,10 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     skipHours: parseSingularOf(value.skiphours, parseSkipHours),
     skipDays: parseSingularOf(value.skipdays, parseSkipDays),
     items: parseArrayOf(value.item, parseItem),
-    atom: parseAtomFeed(value),
-    dc: parseDcItemOrFeed(value),
-    sy: parseSyFeed(value),
-    itunes: parseItunesFeed(value),
+    atom: retrieveAtomFeed(value),
+    dc: retrieveDcItemOrFeed(value),
+    sy: retrieveSyFeed(value),
+    itunes: retrieveItunesFeed(value),
   }
 
   // INFO: Spec also says about required "description" but this field is not always present

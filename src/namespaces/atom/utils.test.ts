@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
-import { parseEntry, parseFeed } from './utils.js'
+import { retrieveEntry, retrieveFeed } from './utils.js'
 
-describe('parseEntry', () => {
+describe('retrieveEntry', () => {
   it('should parse entry with atom: prefix (with #text)', () => {
     const value = {
       'atom:title': { '#text': 'Entry Title' },
@@ -16,7 +16,7 @@ describe('parseEntry', () => {
       authors: [{ name: 'John Doe' }],
     }
 
-    expect(parseEntry(value)).toEqual(expected)
+    expect(retrieveEntry(value)).toEqual(expected)
   })
 
   it('should parse entry with atom: prefix (without #text)', () => {
@@ -33,7 +33,7 @@ describe('parseEntry', () => {
       authors: [{ name: 'John Doe' }],
     }
 
-    expect(parseEntry(value)).toEqual(expected)
+    expect(retrieveEntry(value)).toEqual(expected)
   })
 
   it('should parse entry with a10: prefix (with #text)', () => {
@@ -50,7 +50,7 @@ describe('parseEntry', () => {
       authors: [{ name: 'John Doe' }],
     }
 
-    expect(parseEntry(value)).toEqual(expected)
+    expect(retrieveEntry(value)).toEqual(expected)
   })
 
   it('should parse entry with a10: prefix (without #text)', () => {
@@ -67,7 +67,7 @@ describe('parseEntry', () => {
       authors: [{ name: 'John Doe' }],
     }
 
-    expect(parseEntry(value)).toEqual(expected)
+    expect(retrieveEntry(value)).toEqual(expected)
   })
 
   it('should return undefined for non-atom entry', () => {
@@ -76,11 +76,11 @@ describe('parseEntry', () => {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
     }
 
-    expect(parseEntry(value)).toBeUndefined()
+    expect(retrieveEntry(value)).toBeUndefined()
   })
 })
 
-describe('parseFeed', () => {
+describe('retrieveFeed', () => {
   it('should parse feed with atom: prefix', () => {
     const value = {
       'atom:title': { '#text': 'Feed Title' },
@@ -107,7 +107,7 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with a10: prefix', () => {
@@ -136,7 +136,7 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should return undefined for non-atom feed', () => {
@@ -145,6 +145,6 @@ describe('parseFeed', () => {
       link: { '#text': 'https://example.com/' },
     }
 
-    expect(parseFeed(value)).toBeUndefined()
+    expect(retrieveFeed(value)).toBeUndefined()
   })
 })

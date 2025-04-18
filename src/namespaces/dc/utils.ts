@@ -2,7 +2,7 @@ import type { ParseFunction } from '../../common/types.js'
 import { isObject, parseSingularOf, parseTextString, trimObject } from '../../common/utils.js'
 import type { ItemOrFeed } from './types.js'
 
-export const parseItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
+export const retrieveItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
   if (!isObject(value)) {
     return
   }
