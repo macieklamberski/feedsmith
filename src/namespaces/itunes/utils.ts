@@ -93,6 +93,20 @@ export const parseDuration: ParseFunction<number> = (value) => {
   }
 }
 
+export const parseImage: ParseFunction<string> = (value) => {
+  // Support non-standard format of the image tag where href is not provided in the @href
+  // attribute but rather provided as a node value.
+  if (isNonEmptyStringOrNumber(value)) {
+    return parseString(value)
+  }
+
+  if (!isObject(value)) {
+    return
+  }
+
+  return parseString(retrieveText(value['@href']))
+}
+
 export const retrieveApplePodcastsVerify: ParseFunction<string> = (value) => {
   if (!isObject(value)) {
     return
@@ -124,7 +138,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
 
   const item = trimObject({
     duration: parseDuration(retrieveText(value['itunes:duration'])),
-    image: parseSingularOf(value['itunes:image'], parseTextString),
+    image: parseSingularOf(value['itunes:image'], parseImage),
     explicit: parseSingularOf(value['itunes:explicit'], (value) =>
       parseExplicit(retrieveText(value)),
     ),
@@ -151,7 +165,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
   }
 
   const feed = trimObject({
-    image: parseString(value['itunes:image']?.['@href']),
+    image: parseSingularOf(value['itunes:image'], parseImage),
     explicit: parseExplicit(retrieveText(value['itunes:explicit'])),
     author: parseSingularOf(value['itunes:author'], parseTextString),
     title: parseSingularOf(value['itunes:title'], parseTextString),
