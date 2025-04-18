@@ -5,6 +5,7 @@ import { parseFeed as rowanmanningFeedParser } from '@rowanmanning/feed-parser'
 import { rssParse as ulisesgasconRssFeedParser } from '@ulisesgascon/rss-feed-parser'
 import FeedMeJs from 'feedme'
 import FeedParser from 'feedparser'
+import { getPodcastFromFeed as podcastFeedParser } from 'podcast-feed-parser'
 import RssParser from 'rss-parser'
 import { parseAtomFeed, parseJsonFeed, parseRdfFeed, parseRssFeed } from '../src/index'
 import { loadFeedFiles, runBenchmarks, runTest } from './utils'
@@ -67,6 +68,7 @@ await runBenchmarks('RSS feed parsing (10 files × 5MB–50MB)', {
   '@extractus/feed-extractor': () => runTest(rssBigFiles, extractFromXml),
   '@ulisesgascon/rss-feed-parser': () => runTest(rssBigFiles, ulisesgasconRssFeedParser),
   feedparser: () => runTest(rssBigFiles, feedParser),
+  'podcast-feed-parser': () => runTest(rssBigFiles, podcastFeedParser),
   'feedsmith *': () => runTest(rssBigFiles, parseRssFeed),
 })
 
@@ -78,6 +80,7 @@ await runBenchmarks('RSS feed parsing (50 files × 100KB–5MB)', {
   '@extractus/feed-extractor': () => runTest(rssSmallFiles, extractFromXml),
   '@ulisesgascon/rss-feed-parser': () => runTest(rssSmallFiles, ulisesgasconRssFeedParser),
   feedparser: () => runTest(rssSmallFiles, feedParser),
+  'podcast-feed-parser': () => runTest(rssSmallFiles, podcastFeedParser),
   'feedsmith *': () => runTest(rssSmallFiles, parseRssFeed),
 })
 
@@ -89,6 +92,7 @@ await runBenchmarks('Atom feed parsing (10 files × 5MB–50MB)', {
   '@extractus/feed-extractor': () => runTest(atomBigFiles, extractFromXml),
   // @ulisesgascon/rss-feed-parser — does not support Atom feeds.
   feedparser: () => runTest(atomBigFiles, feedParser),
+  // podcast-feed-parser — does not support Atom feeds.
   'feedsmith *': () => runTest(atomBigFiles, parseAtomFeed),
 })
 
@@ -100,6 +104,7 @@ await runBenchmarks('Atom feed parsing (50 files × 100KB–5MB)', {
   '@extractus/feed-extractor': () => runTest(atomSmallFiles, extractFromXml),
   // @ulisesgascon/rss-feed-parser — does not support Atom feeds.
   feedparser: () => runTest(atomSmallFiles, feedParser),
+  // podcast-feed-parser — does not support Atom feeds.
   'feedsmith *': () => runTest(atomSmallFiles, parseAtomFeed),
 })
 
@@ -111,6 +116,7 @@ await runBenchmarks('RDF feed parsing (50 files × 100KB–5MB)', {
   '@extractus/feed-extractor': () => runTest(rdfFiles, extractFromXml),
   // @ulisesgascon/rss-feed-parser — does not support RDF feeds.
   feedparser: () => runTest(rdfFiles, feedParser),
+  // podcast-feed-parser — does not support RDF feeds.
   'feedsmith *': () => runTest(rdfFiles, parseRdfFeed),
 })
 
