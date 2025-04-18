@@ -125,7 +125,9 @@ export const retrieveItem: ParseFunction<Item> = (value) => {
   }
 
   const item = trimObject({
-    duration: parseDuration(retrieveText(value['itunes:duration'])),
+    duration: parseSingularOf(value['itunes:duration'], (value) =>
+      parseDuration(retrieveText(value)),
+    ),
     image: parseSingularOf(value['itunes:image'], parseImage),
     explicit: parseSingularOf(value['itunes:explicit'], (value) =>
       parseExplicit(retrieveText(value)),
@@ -154,19 +156,27 @@ export const retrieveFeed: ParseFunction<Feed> = (value) => {
 
   const feed = trimObject({
     image: parseSingularOf(value['itunes:image'], parseImage),
-    explicit: parseExplicit(retrieveText(value['itunes:explicit'])),
+    explicit: parseSingularOf(value['itunes:explicit'], (value) =>
+      parseExplicit(retrieveText(value)),
+    ),
     author: parseSingularOf(value['itunes:author'], parseTextString),
     title: parseSingularOf(value['itunes:title'], parseTextString),
     type: parseSingularOf(value['itunes:type'], parseTextString),
     newFeedUrl: parseSingularOf(value['itunes:new-feed-url'], parseTextString),
-    block: parseYesNoBoolean(retrieveText(value['itunes:block'])),
-    complete: parseYesNoBoolean(retrieveText(value['itunes:complete'])),
+    block: parseSingularOf(value['itunes:block'], (value) =>
+      parseYesNoBoolean(retrieveText(value)),
+    ),
+    complete: parseSingularOf(value['itunes:complete'], (value) =>
+      parseYesNoBoolean(retrieveText(value)),
+    ),
     applePodcastsVerify: parseSingularOf(value['itunes:applepodcastsverify'], parseTextString),
     categories: parseArrayOf(value['itunes:category'], parseCategory),
-    owner: parseOwner(value['itunes:owner']),
+    owner: parseSingularOf(value['itunes:owner'], parseOwner),
     summary: parseSingularOf(value['itunes:summary'], parseTextString),
     subtitle: parseSingularOf(value['itunes:subtitle'], parseTextString),
-    keywords: parseKeywords(retrieveText(value['itunes:keywords'])),
+    keywords: parseSingularOf(value['itunes:keywords'], (value) =>
+      parseKeywords(retrieveText(value)),
+    ),
   })
 
   return feed

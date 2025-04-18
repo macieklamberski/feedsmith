@@ -2,26 +2,31 @@ import { describe, expect, it } from 'bun:test'
 import { retrieveItem } from './utils.js'
 
 describe('retrieveItem', () => {
+  const expectedFull = {
+    encoded: '<p>This is encoded content</p>',
+  }
+
   it('should parse complete item object with encoded content (with #text)', () => {
     const value = {
       'content:encoded': { '#text': '<p>This is encoded content</p>' },
     }
-    const expected = {
-      encoded: '<p>This is encoded content</p>',
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expectedFull)
   })
 
   it('should parse complete item object with encoded content (without #text)', () => {
     const value = {
       'content:encoded': '<p>This is encoded content</p>',
     }
-    const expected = {
-      encoded: '<p>This is encoded content</p>',
+
+    expect(retrieveItem(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete item object with encoded content (with array of values)', () => {
+    const value = {
+      'content:encoded': ['<p>This is encoded content</p>', '<p>Another encoded content</p>'],
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expectedFull)
   })
 
   it('should handle HTML content in encoded field', () => {

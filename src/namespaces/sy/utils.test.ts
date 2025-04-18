@@ -2,19 +2,19 @@ import { describe, expect, it } from 'bun:test'
 import { retrieveFeed } from './utils.js'
 
 describe('retrieveFeed', () => {
+  const expectedFull = {
+    updatePeriod: 'hourly',
+    updateFrequency: 2,
+    updateBase: '2023-01-01T12:00:00Z',
+  }
+
   it('should parse complete channel object (with #text)', () => {
     const value = {
       'sy:updateperiod': { '#text': 'hourly' },
       'sy:updatefrequency': { '#text': '2' },
       'sy:updatebase': { '#text': '2023-01-01T12:00:00Z' },
     }
-    const expected = {
-      updatePeriod: 'hourly',
-      updateFrequency: 2,
-      updateBase: '2023-01-01T12:00:00Z',
-    }
-
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expectedFull)
   })
 
   it('should parse complete channel object (without #text)', () => {
@@ -23,13 +23,18 @@ describe('retrieveFeed', () => {
       'sy:updatefrequency': '2',
       'sy:updatebase': '2023-01-01T12:00:00Z',
     }
-    const expected = {
-      updatePeriod: 'hourly',
-      updateFrequency: 2,
-      updateBase: '2023-01-01T12:00:00Z',
+
+    expect(retrieveFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete channel object (with array of values)', () => {
+    const value = {
+      'sy:updateperiod': ['hourly', 'daily'],
+      'sy:updatefrequency': ['2', '3'],
+      'sy:updatebase': ['2023-01-01T12:00:00Z', '2023-01-02T12:00:00Z'],
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expectedFull)
   })
 
   it('should handle partial channel object with only updatePeriod', () => {

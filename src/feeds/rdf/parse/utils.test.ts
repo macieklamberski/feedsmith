@@ -11,19 +11,20 @@ import {
 } from './utils.js'
 
 describe('parseImage', () => {
+  const expectedFull = {
+    title: 'Image Title',
+    link: 'https://example.com',
+    url: 'https://example.com/image.jpg',
+  }
+
   it('should handle complete image object (with #text)', () => {
     const value = {
       title: { '#text': 'Image Title' },
       link: { '#text': 'https://example.com' },
       url: { '#text': 'https://example.com/image.jpg' },
     }
-    const expected = {
-      title: 'Image Title',
-      link: 'https://example.com',
-      url: 'https://example.com/image.jpg',
-    }
 
-    expect(parseImage(value)).toEqual(expected)
+    expect(parseImage(value)).toEqual(expectedFull)
   })
 
   it('should handle complete image object (without #text)', () => {
@@ -32,13 +33,18 @@ describe('parseImage', () => {
       link: 'https://example.com',
       url: 'https://example.com/image.jpg',
     }
-    const expected = {
-      title: 'Image Title',
-      link: 'https://example.com',
-      url: 'https://example.com/image.jpg',
+
+    expect(parseImage(value)).toEqual(expectedFull)
+  })
+
+  it('should handle complete image object (with array of values)', () => {
+    const value = {
+      title: ['Image Title', 'Alternative Image Title'],
+      link: ['https://example.com', 'https://example.com/alternate'],
+      url: ['https://example.com/image.jpg', 'https://example.com/alternate-image.jpg'],
     }
 
-    expect(parseImage(value)).toEqual(expected)
+    expect(parseImage(value)).toEqual(expectedFull)
   })
 
   it('should handle image with only required fields', () => {
@@ -122,19 +128,20 @@ describe('retrieveImage', () => {
 })
 
 describe('parseItem', () => {
+  const expectedFull = {
+    title: 'Item Title',
+    link: 'https://example.com/item',
+    description: 'Item Description',
+  }
+
   it('should parse complete item object (with #text)', () => {
     const value = {
       title: { '#text': 'Item Title' },
       link: { '#text': 'https://example.com/item' },
       description: { '#text': 'Item Description' },
     }
-    const expected = {
-      title: 'Item Title',
-      link: 'https://example.com/item',
-      description: 'Item Description',
-    }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(parseItem(value)).toEqual(expectedFull)
   })
 
   it('should parse complete item object (without #text)', () => {
@@ -143,13 +150,18 @@ describe('parseItem', () => {
       link: 'https://example.com/item',
       description: 'Item Description',
     }
-    const expected = {
-      title: 'Item Title',
-      link: 'https://example.com/item',
-      description: 'Item Description',
+
+    expect(parseItem(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete item object (with array of values)', () => {
+    const value = {
+      title: ['Item Title', 'Alternative Item Title'],
+      link: ['https://example.com/item', 'https://example.com/item-alternate'],
+      description: ['Item Description', 'Extended Item Description'],
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(parseItem(value)).toEqual(expectedFull)
   })
 
   it('should parse item with only required fields', () => {
@@ -386,6 +398,13 @@ describe('retrieveItems', () => {
 })
 
 describe('parseTextInput', () => {
+  const expectedFull = {
+    title: 'Search Title',
+    description: 'Search Description',
+    name: 'q',
+    link: 'https://example.com/search',
+  }
+
   it('should handle complete textInput object (with #text)', () => {
     const value = {
       title: { '#text': 'Search Title' },
@@ -393,14 +412,8 @@ describe('parseTextInput', () => {
       name: { '#text': 'q' },
       link: { '#text': 'https://example.com/search' },
     }
-    const expected = {
-      title: 'Search Title',
-      description: 'Search Description',
-      name: 'q',
-      link: 'https://example.com/search',
-    }
 
-    expect(parseTextInput(value)).toEqual(expected)
+    expect(parseTextInput(value)).toEqual(expectedFull)
   })
 
   it('should handle complete textInput object (without #text)', () => {
@@ -410,14 +423,19 @@ describe('parseTextInput', () => {
       name: 'q',
       link: 'https://example.com/search',
     }
-    const expected = {
-      title: 'Search Title',
-      description: 'Search Description',
-      name: 'q',
-      link: 'https://example.com/search',
+
+    expect(parseTextInput(value)).toEqual(expectedFull)
+  })
+
+  it('should handle complete textInput object (with array of values)', () => {
+    const value = {
+      title: ['Search Title', 'Alternative Search Title'],
+      description: ['Search Description', 'Extended Search Description'],
+      name: ['q', 'query'],
+      link: ['https://example.com/search', 'https://example.com/advanced-search'],
     }
 
-    expect(parseTextInput(value)).toEqual(expected)
+    expect(parseTextInput(value)).toEqual(expectedFull)
   })
 
   it('should handle partial textInput object', () => {
@@ -472,7 +490,7 @@ describe('parseTextInput', () => {
 })
 
 describe('retrieveTextInput', () => {
-  it('should retrieve complete textInput object', () => {
+  it('should retrieve complete textInput object (with #text)', () => {
     const value = {
       textinput: {
         title: { '#text': 'Search Title' },
@@ -493,6 +511,33 @@ describe('retrieveTextInput', () => {
 })
 
 describe('parseFeed', () => {
+  const expectedFull = {
+    title: 'Feed Title',
+    link: 'https://example.com',
+    description: 'Feed Description',
+    image: {
+      title: 'Image Title',
+      link: 'https://example.com',
+      url: 'https://example.com/image.jpg',
+    },
+    items: [
+      {
+        title: 'Item 1',
+        link: 'https://example.com/item1',
+      },
+      {
+        title: 'Item 2',
+        link: 'https://example.com/item2',
+      },
+    ],
+    textInput: {
+      title: 'Search',
+      description: 'Search this site',
+      name: 'q',
+      link: 'https://example.com/search',
+    },
+  }
+
   it('should parse complete feed object (with #text)', () => {
     const value = {
       channel: {
@@ -522,34 +567,8 @@ describe('parseFeed', () => {
         link: { '#text': 'https://example.com/search' },
       },
     }
-    const expected = {
-      title: 'Feed Title',
-      link: 'https://example.com',
-      description: 'Feed Description',
-      image: {
-        title: 'Image Title',
-        link: 'https://example.com',
-        url: 'https://example.com/image.jpg',
-      },
-      items: [
-        {
-          title: 'Item 1',
-          link: 'https://example.com/item1',
-        },
-        {
-          title: 'Item 2',
-          link: 'https://example.com/item2',
-        },
-      ],
-      textInput: {
-        title: 'Search',
-        description: 'Search this site',
-        name: 'q',
-        link: 'https://example.com/search',
-      },
-    }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expectedFull)
   })
 
   it('should parse complete feed object (without #text)', () => {
@@ -581,16 +600,37 @@ describe('parseFeed', () => {
         link: 'https://example.com/search',
       },
     }
-    const expected = {
-      title: 'Feed Title',
-      link: 'https://example.com',
-      description: 'Feed Description',
-      image: {
-        title: 'Image Title',
-        link: 'https://example.com',
-        url: 'https://example.com/image.jpg',
-      },
-      items: [
+
+    expect(parseFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete feed object (with array of values)', () => {
+    const value = {
+      channel: [
+        {
+          title: ['Feed Title', 'Alternative Feed Title'],
+          link: ['https://example.com', 'https://example.com/alternate'],
+          description: ['Feed Description', 'Extended Feed Description'],
+        },
+        {
+          title: ['Feed Title 2', 'Alternative Feed Title 2'],
+          link: ['https://example.com/feed2', 'https://example.com/feed2-alternate'],
+          description: ['Feed Description 2', 'Extended Feed Description 2'],
+        },
+      ],
+      image: [
+        {
+          title: 'Image Title',
+          link: 'https://example.com',
+          url: 'https://example.com/image.jpg',
+        },
+        {
+          title: 'Alternative Image Title',
+          link: 'https://example.com/alternate',
+          url: 'https://example.com/alternate-image.jpg',
+        },
+      ],
+      item: [
         {
           title: 'Item 1',
           link: 'https://example.com/item1',
@@ -600,15 +640,23 @@ describe('parseFeed', () => {
           link: 'https://example.com/item2',
         },
       ],
-      textInput: {
-        title: 'Search',
-        description: 'Search this site',
-        name: 'q',
-        link: 'https://example.com/search',
-      },
+      textinput: [
+        {
+          title: 'Search',
+          description: 'Search this site',
+          name: 'q',
+          link: 'https://example.com/search',
+        },
+        {
+          title: 'Advanced Search',
+          description: 'Advanced search options',
+          name: 'query',
+          link: 'https://example.com/advanced-search',
+        },
+      ],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expectedFull)
   })
 
   it('should parse feed with minimal required fields', () => {
@@ -813,7 +861,17 @@ describe('parseFeed', () => {
 })
 
 describe('retrieveFeed', () => {
-  it('should retrieve feed with only required fields', () => {
+  const expectedFull = {
+    title: 'Feed Title',
+    items: [
+      {
+        title: 'Item 1',
+        link: 'https://example.com/item1',
+      },
+    ],
+  }
+
+  it('should retrieve feed with only required fields (with #text)', () => {
     const value = {
       'rdf:rdf': {
         channel: {
@@ -827,16 +885,56 @@ describe('retrieveFeed', () => {
         ],
       },
     }
-    const expected = {
-      title: 'Feed Title',
-      items: [
+
+    expect(retrieveFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should retrieve feed with only required fields (without #text)', () => {
+    const value = {
+      'rdf:rdf': {
+        channel: {
+          title: 'Feed Title',
+        },
+        item: [
+          {
+            title: 'Item 1',
+            link: 'https://example.com/item1',
+          },
+        ],
+      },
+    }
+
+    expect(retrieveFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should retrieve feed with only required fields (with array of values)', () => {
+    const value = {
+      'rdf:rdf': [
         {
-          title: 'Item 1',
-          link: 'https://example.com/item1',
+          channel: {
+            title: 'Feed Title',
+          },
+          item: [
+            {
+              title: 'Item 1',
+              link: 'https://example.com/item1',
+            },
+          ],
+        },
+        {
+          channel: {
+            title: 'Feed Title 2',
+          },
+          item: [
+            {
+              title: 'Item 2',
+              link: 'https://example.com/item1',
+            },
+          ],
         },
       ],
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expectedFull)
   })
 })
