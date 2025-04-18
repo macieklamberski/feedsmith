@@ -4,6 +4,7 @@ import {
   parseDuration,
   parseExplicit,
   parseFeed,
+  parseImage,
   parseItem,
   parseKeywords,
   parseOwner,
@@ -551,6 +552,69 @@ describe('parseDuration', () => {
   })
 })
 
+describe('parseImage', () => {
+  it('should parse image with @href attribute', () => {
+    const value = { '@href': 'https://example.com/image.jpg' }
+    const expected = 'https://example.com/image.jpg'
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should parse image in a non-standard format', () => {
+    const value = 'https://example.com/image.jpg'
+    const expected = 'https://example.com/image.jpg'
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should return undefined when @href is missing', () => {
+    const value = { otherAttr: 'value' }
+
+    expect(parseImage(value)).toBeUndefined()
+  })
+
+  it('should return empty string when @href is empty', () => {
+    const value = { '@href': '' }
+    const expected = ''
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should handle HTML entities in @href', () => {
+    const value = { '@href': 'https://example.com/image&amp;.jpg' }
+    const expected = 'https://example.com/image&.jpg'
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should handle CDATA in @href', () => {
+    const value = { '@href': '<![CDATA[https://example.com/image.jpg]]>' }
+    const expected = 'https://example.com/image.jpg'
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should coerce non-string @href values to string', () => {
+    const value = { '@href': 123 }
+    const expected = '123'
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should return undefined for null or undefined @href', () => {
+    expect(parseImage({ '@href': null })).toBeUndefined()
+    expect(parseImage({ '@href': undefined })).toBeUndefined()
+  })
+
+  it('should return undefined for not supported inputs', () => {
+    expect(parseImage(null)).toBeUndefined()
+    expect(parseImage(undefined)).toBeUndefined()
+    expect(parseImage(true)).toBeUndefined()
+    expect(parseImage([])).toBeUndefined()
+    expect(parseImage(() => {})).toBeUndefined()
+  })
+})
+
 describe('retrieveApplePodcastsVerify', () => {
   it('should return the Apple Podcasts verification string when present (with #text)', () => {
     const value = {
@@ -757,7 +821,7 @@ describe('parseItem', () => {
   it('should parse all iTunes item properties when present (with #text)', () => {
     const value = {
       'itunes:duration': { '#text': '3600' },
-      'itunes:image': 'https://example.com/image.jpg',
+      'itunes:image': { '@href': 'https://example.com/image.jpg' },
       'itunes:explicit': { '#text': 'yes' },
       'itunes:title': { '#text': 'Episode Title' },
       'itunes:episode': { '#text': '42' },
@@ -788,7 +852,7 @@ describe('parseItem', () => {
   it('should parse all iTunes item properties when present (without #text)', () => {
     const value = {
       'itunes:duration': '3600',
-      'itunes:image': 'https://example.com/image.jpg',
+      'itunes:image': { '@href': 'https://example.com/image.jpg' },
       'itunes:explicit': 'yes',
       'itunes:title': 'Episode Title',
       'itunes:episode': '42',
@@ -819,7 +883,7 @@ describe('parseItem', () => {
   it('should parse only the valid properties and omit undefined ones', () => {
     const value = {
       'itunes:duration': { '#text': 'not a number' },
-      'itunes:image': 'https://example.com/image.jpg',
+      'itunes:image': { '@href': 'https://example.com/image.jpg' },
       'itunes:explicit': { '#text': 'clean' },
       'itunes:title': { '#text': 'Episode Title' },
       'itunes:episode': { '#text': 'not a number' },
