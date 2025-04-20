@@ -1,17 +1,15 @@
 import type { ParseFunction } from '../../common/types.js'
-import { hasAnyProps, isObject, omitUndefinedFromObject, parseString } from '../../common/utils.js'
+import { isObject, parseSingularOf, parseTextString, trimObject } from '../../common/utils.js'
 import type { Item } from './types.js'
 
-export const parseItem: ParseFunction<Item> = (value) => {
+export const retrieveItem: ParseFunction<Item> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  const item = {
-    encoded: parseString(value['content:encoded']?.['#text']),
-  }
+  const item = trimObject({
+    encoded: parseSingularOf(value['content:encoded'], parseTextString),
+  })
 
-  if (hasAnyProps(item, ['encoded'])) {
-    return item
-  }
+  return item
 }

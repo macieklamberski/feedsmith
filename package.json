@@ -1,6 +1,6 @@
 {
   "name": "feedsmith",
-  "description": "Modern JavaScript utility for parsing and generating JSON Feed, Atom, RSS, and RDF feeds, with support for Dublin Core, Syndication, iTunes, and many other popular namespaces.",
+  "description": "Robust and fast parser for RSS, Atom, JSON Feed, and RDF feeds, with support for iTunes, Dublin Core, and many other popular namespaces.",
   "repository": {
     "type": "git",
     "url": "https://github.com/macieklamberski/feedsmith.git"
@@ -12,11 +12,12 @@
   "author": "Maciej Lamberski",
   "sideEffects": false,
   "keywords": [
-    "rss-feed",
-    "rss-parser",
-    "rss-generator",
-    "feed-parser",
-    "feed-generator",
+    "rss to json",
+    "rss reader",
+    "rss parser",
+    "rss generator",
+    "feed parser",
+    "feed generator",
     "atom",
     "rss",
     "rdf",
@@ -42,8 +43,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@types/bun": "^1.2.8",
-    "lefthook": "^1.11.7",
+    "@types/bun": "^1.2.9",
+    "lefthook": "^1.11.10",
     "semantic-release": "^24.2.3",
     "typescript": "^5.8.3"
   }

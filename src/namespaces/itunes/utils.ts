@@ -1,17 +1,19 @@
 import type { ParseFunction } from '../../common/types.js'
 import {
-  hasAllProps,
-  hasAnyProps,
-  isNonEmptyObject,
   isNonEmptyStringOrNumber,
   isObject,
-  omitNullishFromArray,
-  omitUndefinedFromObject,
+  isPresent,
   parseArrayOf,
   parseBoolean,
   parseNumber,
+  parseSingularOf,
   parseString,
+  parseTextNumber,
+  parseTextString,
   parseYesNoBoolean,
+  retrieveText,
+  trimArray,
+  trimObject,
 } from '../../common/utils.js'
 import type { Category, Feed, Item, Owner } from './types.js'
 
@@ -25,8 +27,8 @@ export const parseCategory: ParseFunction<Category> = (value) => {
     categories: parseArrayOf(value['itunes:category'], parseCategory),
   }
 
-  if (hasAllProps(category, ['text'])) {
-    return omitUndefinedFromObject(category)
+  if (isPresent(category.text)) {
+    return trimObject(category)
   }
 }
 
@@ -36,12 +38,12 @@ export const parseOwner: ParseFunction<Owner> = (value) => {
   }
 
   const owner = {
-    name: parseString(value['itunes:name']?.['#text']),
-    email: parseString(value['itunes:email']?.['#text']),
+    name: parseSingularOf(value['itunes:name'], parseTextString),
+    email: parseSingularOf(value['itunes:email'], parseTextString),
   }
 
-  if (hasAnyProps(owner, ['name', 'email'])) {
-    return omitUndefinedFromObject(owner)
+  if (isPresent(owner.name) || isPresent(owner.email)) {
+    return trimObject(owner)
   }
 }
 
@@ -80,16 +82,18 @@ export const parseDuration: ParseFunction<number> = (value) => {
   }
 }
 
-export const retrieveApplePodcastsVerify: ParseFunction<string> = (value) => {
+export const parseImage: ParseFunction<string> = (value) => {
+  // Support non-standard format of the image tag where href is not provided in the @href
+  // attribute but rather provided as a node value.
+  if (isNonEmptyStringOrNumber(value)) {
+    return parseString(value)
+  }
+
   if (!isObject(value)) {
     return
   }
 
-  const itunes = parseString(value['itunes:applepodcastsverify']?.['#text'])
-  // TODO: Implement support for <podcast:txt purpose=“applepodcastsverify”>.
-  // On the other hand, shouldn't this be the domain of podcast namespace? Food for thought.
-
-  return itunes
+  return parseString(retrieveText(value['@href']))
 }
 
 export const parseKeywords: ParseFunction<Array<string>> = (value) => {
@@ -97,64 +101,72 @@ export const parseKeywords: ParseFunction<Array<string>> = (value) => {
     return
   }
 
-  const keywords = omitNullishFromArray(
-    parseString(value)
-      ?.split(',')
-      ?.map((keyword) => keyword.trim() || undefined) || [],
-  )
+  const keywords = parseString(value)?.split(',')
 
-  if (keywords.length > 0) {
-    return keywords
+  if (keywords) {
+    return trimArray(keywords, (keyword) => parseString(keyword) || undefined)
   }
 }
 
-export const parseItem: ParseFunction<Item> = (value) => {
+export const retrieveItem: ParseFunction<Item> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  const item = omitUndefinedFromObject({
-    duration: parseDuration(value['itunes:duration']?.['#text']),
-    image: parseString(value['itunes:image']),
-    explicit: parseExplicit(value['itunes:explicit']?.['#text']),
-    title: parseString(value['itunes:title']?.['#text']),
-    episode: parseNumber(value['itunes:episode']?.['#text']),
-    season: parseNumber(value['itunes:season']?.['#text']),
-    episodeTitle: parseString(value['itunes:episodeType']?.['#text']),
-    block: parseYesNoBoolean(value['itunes:block']?.['#text']),
-    summary: parseString(value['itunes:summary']?.['#text']),
-    subtitle: parseString(value['itunes:subtitle']?.['#text']),
-    keywords: parseKeywords(value['itunes:keywords']?.['#text']),
+  const item = trimObject({
+    duration: parseSingularOf(value['itunes:duration'], (value) =>
+      parseDuration(retrieveText(value)),
+    ),
+    image: parseSingularOf(value['itunes:image'], parseImage),
+    explicit: parseSingularOf(value['itunes:explicit'], (value) =>
+      parseExplicit(retrieveText(value)),
+    ),
+    title: parseSingularOf(value['itunes:title'], parseTextString),
+    episode: parseSingularOf(value['itunes:episode'], parseTextNumber),
+    season: parseSingularOf(value['itunes:season'], parseTextNumber),
+    episodeTitle: parseSingularOf(value['itunes:episodetype'], parseTextString),
+    block: parseSingularOf(value['itunes:block'], (value) =>
+      parseYesNoBoolean(retrieveText(value)),
+    ),
+    summary: parseSingularOf(value['itunes:summary'], parseTextString),
+    subtitle: parseSingularOf(value['itunes:subtitle'], parseTextString),
+    keywords: parseSingularOf(value['itunes:keywords'], (value) =>
+      parseKeywords(retrieveText(value)),
+    ),
   })
 
-  if (isNonEmptyObject(item)) {
-    return item
-  }
+  return item
 }
 
-export const parseFeed: ParseFunction<Feed> = (value) => {
+export const retrieveFeed: ParseFunction<Feed> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  const feed = omitUndefinedFromObject({
-    image: parseString(value['itunes:image']?.['@href']),
-    explicit: parseExplicit(value['itunes:explicit']?.['#text']),
-    author: parseString(value['itunes:author']?.['#text']),
-    title: parseString(value['itunes:title']?.['#text']),
-    type: parseString(value['itunes:type']?.['#text']),
-    newFeedUrl: parseString(value['itunes:new-feed-url']?.['#text']),
-    block: parseYesNoBoolean(value['itunes:block']?.['#text']),
-    complete: parseYesNoBoolean(value['itunes:complete']?.['#text']),
-    applePodcastsVerify: retrieveApplePodcastsVerify(value),
+  const feed = trimObject({
+    image: parseSingularOf(value['itunes:image'], parseImage),
+    explicit: parseSingularOf(value['itunes:explicit'], (value) =>
+      parseExplicit(retrieveText(value)),
+    ),
+    author: parseSingularOf(value['itunes:author'], parseTextString),
+    title: parseSingularOf(value['itunes:title'], parseTextString),
+    type: parseSingularOf(value['itunes:type'], parseTextString),
+    newFeedUrl: parseSingularOf(value['itunes:new-feed-url'], parseTextString),
+    block: parseSingularOf(value['itunes:block'], (value) =>
+      parseYesNoBoolean(retrieveText(value)),
+    ),
+    complete: parseSingularOf(value['itunes:complete'], (value) =>
+      parseYesNoBoolean(retrieveText(value)),
+    ),
+    applePodcastsVerify: parseSingularOf(value['itunes:applepodcastsverify'], parseTextString),
     categories: parseArrayOf(value['itunes:category'], parseCategory),
-    owner: parseOwner(value['itunes:owner']),
-    summary: parseString(value['itunes:summary']?.['#text']),
-    subtitle: parseString(value['itunes:subtitle']?.['#text']),
-    keywords: parseKeywords(value['itunes:keywords']?.['#text']),
+    owner: parseSingularOf(value['itunes:owner'], parseOwner),
+    summary: parseSingularOf(value['itunes:summary'], parseTextString),
+    subtitle: parseSingularOf(value['itunes:subtitle'], parseTextString),
+    keywords: parseSingularOf(value['itunes:keywords'], (value) =>
+      parseKeywords(retrieveText(value)),
+    ),
   })
 
-  if (isNonEmptyObject(feed)) {
-    return feed
-  }
+  return feed
 }

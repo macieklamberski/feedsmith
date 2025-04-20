@@ -1953,17 +1953,21 @@ describe('parseBlock', () => {
     expect(parseBlock(value)).toEqual(expected)
   })
 
-  it('should return undefined if value is missing', () => {
-    const value = {
-      '@id': 'spotify',
-    }
-
-    expect(parseBlock(value)).toBeUndefined()
-  })
-
-  it('should return undefined if value is not a valid yes/no string', () => {
+  it('should return false value if not a valid yes/no string', () => {
     const value = {
       '@value': 'invalid',
+      '@id': 'spotify',
+    }
+    const expected = {
+      value: false,
+      id: 'spotify',
+    }
+
+    expect(parseBlock(value)).toEqual(expected)
+  })
+
+  it('should return undefined if value is missing', () => {
+    const value = {
       '@id': 'spotify',
     }
 
@@ -2264,11 +2268,8 @@ describe('parsePodroll', () => {
         { '@medium': 'podcast' },
       ],
     }
-    const expected = {
-      remoteItems: [],
-    }
 
-    expect(parsePodroll(value)).toEqual(expected)
+    expect(parsePodroll(value)).toBeUndefined()
   })
 
   it('should return undefined for empty objects', () => {

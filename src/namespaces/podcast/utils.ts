@@ -1,14 +1,13 @@
 import type { ParseFunction } from '../../common/types.js'
 import {
-  hasAllProps,
-  isNonEmptyObject,
   isObject,
-  omitUndefinedFromObject,
+  isPresent,
   parseArrayOf,
   parseBoolean,
   parseNumber,
   parseString,
   parseYesNoBoolean,
+  trimObject,
 } from '../../common/utils.js'
 import type {
   AlternateEnclosure,
@@ -47,15 +46,15 @@ export const parseTranscript: ParseFunction<Transcript> = (value) => {
     return
   }
 
-  const transcript = omitUndefinedFromObject({
+  const transcript = {
     url: parseString(value['@url']),
     type: parseString(value['@type']),
     language: parseString(value['@language']),
     rel: parseString(value['@rel']),
-  })
+  }
 
-  if (hasAllProps(transcript, ['url', 'type'])) {
-    return transcript
+  if (isPresent(transcript.url) && isPresent(transcript.type)) {
+    return trimObject(transcript)
   }
 }
 
@@ -64,13 +63,13 @@ export const parseLocked: ParseFunction<Locked> = (value) => {
     return
   }
 
-  const locked = omitUndefinedFromObject({
+  const locked = {
     value: parseYesNoBoolean(value['@value']),
     owner: parseString(value['@owner']),
-  })
+  }
 
-  if (hasAllProps(locked, ['value'])) {
-    return locked
+  if (isPresent(locked.value)) {
+    return trimObject(locked)
   }
 }
 
@@ -79,13 +78,13 @@ export const parseFunding: ParseFunction<Funding> = (value) => {
     return
   }
 
-  const funding = omitUndefinedFromObject({
+  const funding = {
     url: parseString(value['@url']),
     display: parseString(value['#text']),
-  })
+  }
 
-  if (hasAllProps(funding, ['url'])) {
-    return funding
+  if (isPresent(funding.url)) {
+    return trimObject(funding)
   }
 }
 
@@ -94,12 +93,12 @@ export const parseChapters: ParseFunction<Chapters> = (value) => {
     return
   }
 
-  const chapters = omitUndefinedFromObject({
+  const chapters = {
     url: parseString(value['@url']),
     type: parseString(value['@type']),
-  })
+  }
 
-  if (hasAllProps(chapters, ['url', 'type'])) {
+  if (isPresent(chapters.url) && isPresent(chapters.type)) {
     return chapters
   }
 }
@@ -109,14 +108,14 @@ export const parseSoundbite: ParseFunction<Soundbite> = (value) => {
     return
   }
 
-  const soundbite = omitUndefinedFromObject({
+  const soundbite = {
     startTime: parseNumber(value['@startTime']),
     duration: parseNumber(value['@duration']),
     display: parseString(value['#text']),
-  })
+  }
 
-  if (hasAllProps(soundbite, ['startTime', 'duration'])) {
-    return soundbite
+  if (isPresent(soundbite.startTime) && isPresent(soundbite.duration)) {
+    return trimObject(soundbite)
   }
 }
 
@@ -125,16 +124,16 @@ export const parsePerson: ParseFunction<Person> = (value) => {
     return
   }
 
-  const person = omitUndefinedFromObject({
+  const person = {
     display: parseString(value['#text']),
     role: parseString(value['@role']),
     group: parseString(value['@group']),
     img: parseString(value['@img']),
     href: parseString(value['@href']),
-  })
+  }
 
-  if (hasAllProps(person, ['display'])) {
-    return person
+  if (isPresent(person.display)) {
+    return trimObject(person)
   }
 }
 
@@ -143,14 +142,14 @@ export const parseLocation: ParseFunction<Location> = (value) => {
     return
   }
 
-  const location = omitUndefinedFromObject({
+  const location = {
     display: parseString(value['#text']),
     geo: parseString(value['@geo']),
     osm: parseString(value['@osm']),
-  })
+  }
 
-  if (hasAllProps(location, ['display'])) {
-    return location
+  if (isPresent(location.display)) {
+    return trimObject(location)
   }
 }
 
@@ -159,13 +158,13 @@ export const parseSeason: ParseFunction<Season> = (value) => {
     return
   }
 
-  const season = omitUndefinedFromObject({
+  const season = {
     number: parseNumber(value['#text']),
     name: parseString(value['@name']),
-  })
+  }
 
-  if (hasAllProps(season, ['number'])) {
-    return season
+  if (isPresent(season.number)) {
+    return trimObject(season)
   }
 }
 
@@ -174,13 +173,13 @@ export const parseEpisode: ParseFunction<Episode> = (value) => {
     return
   }
 
-  const episode = omitUndefinedFromObject({
+  const episode = {
     number: parseNumber(value['@number']),
     display: parseString(value['#text']),
-  })
+  }
 
-  if (hasAllProps(episode, ['number'])) {
-    return episode
+  if (isPresent(episode.number)) {
+    return trimObject(episode)
   }
 }
 
@@ -189,17 +188,17 @@ export const parseTrailer: ParseFunction<Trailer> = (value) => {
     return
   }
 
-  const trailer = omitUndefinedFromObject({
+  const trailer = {
     display: parseString(value['#text']),
     url: parseString(value['@url']),
     pubdate: parseString(value['@pubdate']),
     length: parseNumber(value['@length']),
     type: parseString(value['@type']),
     season: parseNumber(value['@season']),
-  })
+  }
 
-  if (hasAllProps(trailer, ['url', 'pubdate'])) {
-    return trailer
+  if (isPresent(trailer.url) && isPresent(trailer.pubdate)) {
+    return trimObject(trailer)
   }
 }
 
@@ -208,13 +207,13 @@ export const parseLicense: ParseFunction<License> = (value) => {
     return
   }
 
-  const license = omitUndefinedFromObject({
+  const license = {
     display: parseString(value['#text']),
     url: parseString(value['@url']),
-  })
+  }
 
-  if (hasAllProps(license, ['display'])) {
-    return license
+  if (isPresent(license.display)) {
+    return trimObject(license)
   }
 }
 
@@ -223,7 +222,7 @@ export const parseAlternateEnclosure: ParseFunction<AlternateEnclosure> = (value
     return
   }
 
-  const alternateEnclosure = omitUndefinedFromObject({
+  const alternateEnclosure = {
     type: parseString(value['@type']),
     length: parseNumber(value['@length']),
     bitrate: parseNumber(value['@bitrate']),
@@ -235,10 +234,10 @@ export const parseAlternateEnclosure: ParseFunction<AlternateEnclosure> = (value
     default: parseBoolean(value['@default']),
     sources: parseArrayOf(value['podcast:source'], parseSource),
     integrity: parseIntegrity(value['podcast:integrity']),
-  })
+  }
 
-  if (hasAllProps(alternateEnclosure, ['type'])) {
-    return alternateEnclosure
+  if (isPresent(alternateEnclosure.type)) {
+    return trimObject(alternateEnclosure)
   }
 }
 
@@ -247,13 +246,13 @@ export const parseSource: ParseFunction<Source> = (value) => {
     return
   }
 
-  const source = omitUndefinedFromObject({
+  const source = {
     uri: parseString(value['@uri']),
     contentType: parseString(value['@contentType']),
-  })
+  }
 
-  if (hasAllProps(source, ['uri'])) {
-    return source
+  if (isPresent(source.uri)) {
+    return trimObject(source)
   }
 }
 
@@ -262,13 +261,13 @@ export const parseIntegrity: ParseFunction<Integrity> = (value) => {
     return
   }
 
-  const integrity = omitUndefinedFromObject({
+  const integrity = {
     type: parseString(value['@type']),
     value: parseString(value['@value']),
-  })
+  }
 
-  if (hasAllProps(integrity, ['type', 'value'])) {
-    return integrity
+  if (isPresent(integrity.type) && isPresent(integrity.value)) {
+    return trimObject(integrity)
   }
 }
 
@@ -277,16 +276,16 @@ export const parseValue: ParseFunction<Value> = (value) => {
     return
   }
 
-  const valueData = omitUndefinedFromObject({
+  const valueData = {
     type: parseString(value['@type']),
     method: parseString(value['@method']),
     suggested: parseNumber(value['@suggested']),
     valueRecipients: parseArrayOf(value['podcast:valueRecipient'], parseValueRecipient),
     valueTimeSplits: parseArrayOf(value['podcast:valueTimeSplit'], parseValueTimeSplit),
-  })
+  }
 
-  if (hasAllProps(valueData, ['type', 'method'])) {
-    return valueData
+  if (isPresent(valueData.type) && isPresent(valueData.method)) {
+    return trimObject(valueData)
   }
 }
 
@@ -295,7 +294,7 @@ export const parseValueRecipient: ParseFunction<ValueRecipient> = (value) => {
     return
   }
 
-  const valueRecipient = omitUndefinedFromObject({
+  const valueRecipient = {
     name: parseString(value['@name']),
     customKey: parseString(value['@customKey']),
     customValue: parseString(value['@customValue']),
@@ -303,10 +302,14 @@ export const parseValueRecipient: ParseFunction<ValueRecipient> = (value) => {
     address: parseString(value['@address']),
     split: parseNumber(value['@split']),
     fee: parseBoolean(value['@fee']),
-  })
+  }
 
-  if (hasAllProps(valueRecipient, ['type', 'address', 'split'])) {
-    return valueRecipient
+  if (
+    isPresent(valueRecipient.type) &&
+    isPresent(valueRecipient.address) &&
+    isPresent(valueRecipient.split)
+  ) {
+    return trimObject(valueRecipient)
   }
 }
 
@@ -315,13 +318,11 @@ export const parseImages: ParseFunction<Images> = (value) => {
     return
   }
 
-  const images = omitUndefinedFromObject({
+  const images = trimObject({
     srcset: parseString(value['@srcset']),
   })
 
-  if (hasAllProps(images, ['srcset'])) {
-    return images
-  }
+  return images
 }
 
 export const parseLiveItem: ParseFunction<LiveItem> = (value) => {
@@ -343,7 +344,7 @@ export const parseLiveItem: ParseFunction<LiveItem> = (value) => {
     contentlinks: parseArrayOf(value['podcast:contentLink'], parseContentLink),
   }
 
-  if (hasAllProps(liveItem, ['status', 'start'])) {
+  if (isPresent(liveItem.status) && isPresent(liveItem.start)) {
     return liveItem
   }
 }
@@ -353,12 +354,12 @@ export const parseContentLink: ParseFunction<ContentLink> = (value) => {
     return
   }
 
-  const contentLink = omitUndefinedFromObject({
+  const contentLink = {
     href: parseString(value['@href']),
     display: parseString(value['#text']),
-  })
+  }
 
-  if (hasAllProps(contentLink, ['href', 'display'])) {
+  if (isPresent(contentLink.href) && isPresent(contentLink.display)) {
     return contentLink
   }
 }
@@ -368,16 +369,16 @@ export const parseSocialInteract: ParseFunction<SocialInteract> = (value) => {
     return
   }
 
-  const socialInteract = omitUndefinedFromObject({
+  const socialInteract = {
     uri: parseString(value['@uri']),
     protocol: parseString(value['@protocol']),
     accountId: parseString(value['@accountId']),
     accountUrl: parseString(value['@accountUrl']),
     priority: parseNumber(value['@priority']),
-  })
+  }
 
-  if (hasAllProps(socialInteract, ['uri', 'protocol'])) {
-    return socialInteract
+  if (isPresent(socialInteract.uri) && isPresent(socialInteract.protocol)) {
+    return trimObject(socialInteract)
   }
 }
 
@@ -386,13 +387,13 @@ export const parseBlock: ParseFunction<Block> = (value) => {
     return
   }
 
-  const block = omitUndefinedFromObject({
+  const block = {
     value: parseYesNoBoolean(value['@value']),
     id: parseString(value['@id']),
-  })
+  }
 
-  if (hasAllProps(block, ['value'])) {
-    return block
+  if (isPresent(block.value)) {
+    return trimObject(block)
   }
 }
 
@@ -401,13 +402,13 @@ export const parseTxt: ParseFunction<Txt> = (value) => {
     return
   }
 
-  const txt = omitUndefinedFromObject({
+  const txt = {
     display: parseString(value['#text']),
     purpose: parseString(value['@purpose']),
-  })
+  }
 
-  if (hasAllProps(txt, ['display'])) {
-    return txt
+  if (isPresent(txt.display)) {
+    return trimObject(txt)
   }
 }
 
@@ -416,15 +417,15 @@ export const parseRemoteItem: ParseFunction<RemoteItem> = (value) => {
     return
   }
 
-  const remoteItem = omitUndefinedFromObject({
+  const remoteItem = {
     feedGuid: parseString(value['@feedGuid']),
     feedUrl: parseString(value['@feedUrl']),
     itemGuid: parseString(value['@itemGuid']),
     medium: parseString(value['@medium']),
-  })
+  }
 
-  if (hasAllProps(remoteItem, ['feedGuid'])) {
-    return remoteItem
+  if (isPresent(remoteItem.feedGuid)) {
+    return trimObject(remoteItem)
   }
 }
 
@@ -433,13 +434,11 @@ export const parsePodroll: ParseFunction<Podroll> = (value) => {
     return
   }
 
-  const podroll = omitUndefinedFromObject({
+  const podroll = trimObject({
     remoteItems: parseArrayOf(value['podcast:remoteItem'], parseRemoteItem),
   })
 
-  if (isNonEmptyObject(podroll)) {
-    return podroll
-  }
+  return podroll
 }
 
 export const parseUpdateFrequency: ParseFunction<UpdateFrequency> = (value) => {
@@ -447,15 +446,15 @@ export const parseUpdateFrequency: ParseFunction<UpdateFrequency> = (value) => {
     return
   }
 
-  const updateFrequency = omitUndefinedFromObject({
+  const updateFrequency = {
     display: parseString(value['#text']),
     complete: parseBoolean(value['@complete']),
     dtstart: parseString(value['@dtstart']),
     rrule: parseString(value['@rrule']),
-  })
+  }
 
-  if (hasAllProps(updateFrequency, ['display'])) {
-    return updateFrequency
+  if (isPresent(updateFrequency.display)) {
+    return trimObject(updateFrequency)
   }
 }
 
@@ -464,13 +463,11 @@ export const parsePodping: ParseFunction<Podping> = (value) => {
     return
   }
 
-  const podping = omitUndefinedFromObject({
+  const podping = trimObject({
     usesPodping: parseBoolean(value['@usesPodping']),
   })
 
-  if (hasAllProps(podping, ['usesPodping'])) {
-    return podping
-  }
+  return podping
 }
 
 export const parseValueTimeSplit: ParseFunction<ValueTimeSplit> = (value) => {
@@ -478,7 +475,7 @@ export const parseValueTimeSplit: ParseFunction<ValueTimeSplit> = (value) => {
     return
   }
 
-  const valueTimeSplit = omitUndefinedFromObject({
+  const valueTimeSplit = {
     startTime: parseNumber(value['@startTime']),
     duration: parseNumber(value['@duration']),
     remoteStartTime: parseNumber(value['@remoteStartTime']),
@@ -487,10 +484,10 @@ export const parseValueTimeSplit: ParseFunction<ValueTimeSplit> = (value) => {
     // only the first one is taken.
     remoteItem: parseRemoteItem(value['podcast:remoteItem']),
     valueRecipients: parseArrayOf(value['podcast:valueRecipient'], parseValueRecipient),
-  })
+  }
 
-  if (hasAllProps(valueTimeSplit, ['startTime', 'duration'])) {
-    return valueTimeSplit
+  if (isPresent(valueTimeSplit.startTime) && isPresent(valueTimeSplit.duration)) {
+    return trimObject(valueTimeSplit)
   }
 }
 
@@ -499,7 +496,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     return
   }
 
-  const item = omitUndefinedFromObject({
+  const item = trimObject({
     transcripts: parseArrayOf(value['podcast:transcript'], parseTranscript),
     chapters: parseChapters(value['podcast:chapters']),
     soundbites: parseArrayOf(value['podcast:soundbite'], parseSoundbite),
@@ -514,9 +511,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
   })
 
-  if (isNonEmptyObject(item)) {
-    return item
-  }
+  return item
 }
 
 export const parseChannel: ParseFunction<Channel> = (value) => {
@@ -524,7 +519,7 @@ export const parseChannel: ParseFunction<Channel> = (value) => {
     return
   }
 
-  const channel = omitUndefinedFromObject({
+  const channel = trimObject({
     locked: parseLocked(value['podcast:locked']),
     fundings: parseArrayOf(value['podcast:funding'], parseFunding),
     persons: parseArrayOf(value['podcast:person'], parsePerson),
@@ -543,7 +538,5 @@ export const parseChannel: ParseFunction<Channel> = (value) => {
     podping: value['podcast:podping'] ? parsePodping(value['podcast:podping']) : undefined,
   })
 
-  if (isNonEmptyObject(channel)) {
-    return channel
-  }
+  return channel
 }

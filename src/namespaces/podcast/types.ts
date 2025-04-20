@@ -1,33 +1,33 @@
 export type Transcript = {
-  url: string
-  type: string
+  url?: string
+  type?: string
   language?: string
   rel?: string
 }
 
 export type Locked = {
-  value: boolean
+  value?: boolean
   owner?: string
 }
 
 export type Funding = {
-  url: string
+  url?: string
   display?: string
 }
 
 export type Chapters = {
-  url: string
-  type: string
+  url?: string
+  type?: string
 }
 
 export type Soundbite = {
-  startTime: number
-  duration: number
+  startTime?: number
+  duration?: number
   display?: string
 }
 
 export type Person = {
-  display: string // Taken from #text.
+  display?: string // Taken from #text.
   role?: string
   group?: string
   img?: string
@@ -35,37 +35,37 @@ export type Person = {
 }
 
 export type Location = {
-  display: string // Taken from #text.
+  display?: string // Taken from #text.
   geo?: string
   osm?: string
 }
 
 export type Season = {
-  number: number // Taken from #text.
+  number?: number // Taken from #text.
   name?: string
 }
 
 export type Episode = {
-  number: number
+  number?: number
   display?: string
 }
 
 export type Trailer = {
   display?: string // Taken from #text.
-  url: string
-  pubdate: string // RFC2822 date.
+  url?: string
+  pubdate?: string // RFC2822 date.
   length?: number
   type?: string
   season?: number
 }
 
 export type License = {
-  display: string
+  display?: string
   url?: string
 }
 
 export type AlternateEnclosure = {
-  type: string
+  type?: string
   length?: number
   bitrate?: number
   height?: number
@@ -79,18 +79,18 @@ export type AlternateEnclosure = {
 }
 
 export type Source = {
-  uri: string
+  uri?: string
   contentType?: string
 }
 
 export type Integrity = {
-  type: string
-  value: string
+  type?: string
+  value?: string
 }
 
 export type Value = {
-  type: string
-  method: string
+  type?: string
+  method?: string
   suggested?: number
   valueRecipients?: Array<ValueRecipient>
   valueTimeSplits?: Array<ValueTimeSplit>
@@ -100,48 +100,48 @@ export type ValueRecipient = {
   name?: string
   customKey?: string
   customValue?: string
-  type: string
-  address: string
-  split: number
+  type?: string
+  address?: string
+  split?: number
   fee?: boolean
 }
 
 export type Images = {
-  srcset: string
+  srcset?: string
 }
 
 export type LiveItem = Item & {
-  status: string // Spec says: 'pending' | 'live' | 'ended'.
-  start: string // Date in ISO8601.
+  status?: string // Spec says: 'pending' | 'live' | 'ended'.
+  start?: string // Date in ISO8601.
   end?: string // Date in ISO8601.
   contentlinks?: Array<ContentLink>
 }
 
 export type ContentLink = {
-  href: string
-  display: string
+  href?: string
+  display?: string
 }
 
 export type SocialInteract = {
-  uri: string
-  protocol: string
+  uri?: string
+  protocol?: string
   accountId?: string
   accountUrl?: string
   priority?: number
 }
 
 export type Block = {
-  value: boolean
+  value?: boolean
   id?: string
 }
 
 export type Txt = {
-  display: string
+  display?: string
   purpose?: string
 }
 
 export type RemoteItem = {
-  feedGuid: string
+  feedGuid?: string
   feedUrl?: string
   itemGuid?: string
   medium?: string
@@ -159,12 +159,12 @@ export type UpdateFrequency = {
 }
 
 export type Podping = {
-  usesPodping: boolean
+  usesPodping?: boolean
 }
 
 export type ValueTimeSplit = {
-  startTime: number
-  duration: number
+  startTime?: number
+  duration?: number
   remoteStartTime?: number
   remotePercentage?: number
   remoteItem?: RemoteItem

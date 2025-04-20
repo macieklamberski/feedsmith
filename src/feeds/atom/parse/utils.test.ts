@@ -125,34 +125,80 @@ describe('retrievePersonUri', () => {
 })
 
 describe('parsePerson', () => {
-  it('should parse complete person object (Atom 1.0)', () => {
+  const expectedFull = {
+    name: 'John Doe',
+    uri: 'https://example.com/johndoe',
+    email: 'john@example.com',
+  }
+
+  it('should parse complete person object (Atom 1.0) (with #text)', () => {
     const value = {
       name: { '#text': 'John Doe' },
       uri: { '#text': 'https://example.com/johndoe' },
       email: { '#text': 'john@example.com' },
     }
-    const expected = {
+
+    expect(parsePerson(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete person object (Atom 1.0) (without #text)', () => {
+    const value = {
       name: 'John Doe',
       uri: 'https://example.com/johndoe',
       email: 'john@example.com',
     }
 
-    expect(parsePerson(value)).toEqual(expected)
+    expect(parsePerson(value)).toEqual(expectedFull)
   })
 
-  it('should parse complete person object (Atom 0.3)', () => {
+  it('should parse complete person object (Atom 1.0) (with list of values)', () => {
+    const value = {
+      name: ['John Doe', 'Jane Smith'],
+      uri: ['https://example.com/johndoe', 'https://example.com/janesmith'],
+      email: ['john@example.com', 'jane@example.com'],
+    }
+
+    expect(parsePerson(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete person object (Atom 0.3) (with #text)', () => {
     const value = {
       name: { '#text': 'John Doe' },
       url: { '#text': 'https://example.com/johndoe' },
       email: { '#text': 'john@example.com' },
     }
-    const expected = {
+
+    expect(parsePerson(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete person object (Atom 0.3) (without #text)', () => {
+    const value = {
+      name: ['John Doe', 'Jane Smith'],
+      url: ['https://example.com/johndoe', 'https://example.com/janesmith'],
+      email: ['john@example.com', 'jane@example.com'],
+    }
+
+    expect(parsePerson(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete person object (Atom 0.3) (with list of values)', () => {
+    const value = {
       name: 'John Doe',
-      uri: 'https://example.com/johndoe',
+      url: 'https://example.com/johndoe',
       email: 'john@example.com',
     }
 
-    expect(parsePerson(value)).toEqual(expected)
+    expect(parsePerson(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete person object (Atom 0.3) (without #text)', () => {
+    const value = {
+      name: 'John Doe',
+      url: 'https://example.com/johndoe',
+      email: 'john@example.com',
+    }
+
+    expect(parsePerson(value)).toEqual(expectedFull)
   })
 
   it('should parse person with only required name', () => {
@@ -298,7 +344,7 @@ describe('retrieveGeneratorUri', () => {
 })
 
 describe('parseGenerator', () => {
-  it('should parse complete generator object (Atom 1.0)', () => {
+  it('should parse complete generator object (Atom 1.0) (with #text)', () => {
     const value = {
       '#text': 'Example Generator',
       '@uri': 'https://example.com/generator',
@@ -328,10 +374,19 @@ describe('parseGenerator', () => {
     expect(parseGenerator(value)).toEqual(expected)
   })
 
-  it('should parse generator with only required text', () => {
+  it('should parse generator with only required text (with #text)', () => {
     const value = {
       '#text': 'Example Generator',
     }
+    const expected = {
+      text: 'Example Generator',
+    }
+
+    expect(parseGenerator(value)).toEqual(expected)
+  })
+
+  it('should parse generator with only required text (without #text)', () => {
+    const value = 'Example Generator'
     const expected = {
       text: 'Example Generator',
     }
@@ -363,7 +418,6 @@ describe('parseGenerator', () => {
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parseGenerator('not an object')).toBeUndefined()
     expect(parseGenerator(undefined)).toBeUndefined()
     expect(parseGenerator(null)).toBeUndefined()
     expect(parseGenerator([])).toBeUndefined()
@@ -371,7 +425,22 @@ describe('parseGenerator', () => {
 })
 
 describe('parseSource', () => {
-  it('should parse complete source object', () => {
+  const expectedFull = {
+    id: 'urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6',
+    title: 'Example Feed',
+    updated: '2003-12-13T18:30:02Z',
+    authors: [{ name: 'John Doe' }],
+    links: [{ href: 'https://example.com/' }],
+    categories: [{ term: 'technology' }],
+    contributors: [{ name: 'Jane Smith' }],
+    generator: { text: 'Example Generator' },
+    icon: 'https://example.com/favicon.ico',
+    logo: 'https://example.com/logo.png',
+    rights: 'Copyright 2003, Example Corp.',
+    subtitle: 'A blog about examples',
+  }
+
+  it('should parse complete source object (with #text)', () => {
     const value = {
       id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6' },
       title: { '#text': 'Example Feed' },
@@ -386,21 +455,49 @@ describe('parseSource', () => {
       rights: { '#text': 'Copyright 2003, Example Corp.' },
       subtitle: { '#text': 'A blog about examples' },
     }
-    const expected = {
+
+    expect(parseSource(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete source object (without #text)', () => {
+    const value = {
       id: 'urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6',
       title: 'Example Feed',
       updated: '2003-12-13T18:30:02Z',
-      authors: [{ name: 'John Doe' }],
-      links: [{ href: 'https://example.com/' }],
-      categories: [{ term: 'technology' }],
-      contributors: [{ name: 'Jane Smith' }],
-      generator: { text: 'Example Generator' },
+      author: [{ name: { '#text': 'John Doe' } }],
+      link: [{ '@href': 'https://example.com/' }],
+      category: [{ '@term': 'technology' }],
+      contributor: [{ name: { '#text': 'Jane Smith' } }],
+      generator: 'Example Generator',
       icon: 'https://example.com/favicon.ico',
       logo: 'https://example.com/logo.png',
       rights: 'Copyright 2003, Example Corp.',
       subtitle: 'A blog about examples',
     }
-    expect(parseSource(value)).toEqual(expected)
+
+    expect(parseSource(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete source object (with array of values)', () => {
+    const value = {
+      id: [
+        'urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6',
+        'urn:uuid:70b87d90-e4aa-22e9-c94D-1114949f1bf7',
+      ],
+      title: ['Example Feed', 'Alternative Example Feed'],
+      updated: ['2003-12-13T18:30:02Z', '2023-05-21T14:45:30Z'],
+      author: [{ name: { '#text': 'John Doe' } }],
+      link: [{ '@href': 'https://example.com/' }],
+      category: [{ '@term': 'technology' }],
+      contributor: [{ name: { '#text': 'Jane Smith' } }],
+      generator: ['Example Generator', 'Alternative Generator'],
+      icon: ['https://example.com/favicon.ico', 'https://example.com/alternate-favicon.ico'],
+      logo: ['https://example.com/logo.png', 'https://example.com/alternate-logo.png'],
+      rights: ['Copyright 2003, Example Corp.', 'All Rights Reserved 2023, Example Inc.'],
+      subtitle: ['A blog about examples', 'Alternative subtitle for the blog'],
+    }
+
+    expect(parseSource(value)).toEqual(expectedFull)
   })
 
   it('should parse source with minimal properties', () => {
@@ -450,8 +547,9 @@ describe('retrievePublished', () => {
       issued: { '#text': '2023-01-02T12:00:00Z' },
       created: { '#text': '2023-01-03T12:00:00Z' },
     }
+    const expected = '2023-01-01T12:00:00Z'
 
-    expect(retrievePublished(value)).toBe('2023-01-01T12:00:00Z')
+    expect(retrievePublished(value)).toBe(expected)
   })
 
   it('should fall back to issued (Atom 0.3) if published is missing', () => {
@@ -459,8 +557,9 @@ describe('retrievePublished', () => {
       issued: { '#text': '2023-01-02T12:00:00Z' },
       created: { '#text': '2023-01-03T12:00:00Z' },
     }
+    const expected = '2023-01-02T12:00:00Z'
 
-    expect(retrievePublished(value)).toBe('2023-01-02T12:00:00Z')
+    expect(retrievePublished(value)).toBe(expected)
   })
 
   it('should fall back to created (Atom 0.3) if published and issued are missing', () => {
@@ -501,16 +600,18 @@ describe('retrieveUpdated', () => {
       updated: { '#text': '2023-01-01T12:00:00Z' },
       modified: { '#text': '2023-01-02T12:00:00Z' },
     }
+    const expected = '2023-01-01T12:00:00Z'
 
-    expect(retrieveUpdated(value)).toBe('2023-01-01T12:00:00Z')
+    expect(retrieveUpdated(value)).toBe(expected)
   })
 
   it('should fall back to modified (Atom 0.3) if updated is missing', () => {
     const value = {
       modified: { '#text': '2023-01-02T12:00:00Z' },
     }
+    const expected = '2023-01-02T12:00:00Z'
 
-    expect(retrieveUpdated(value)).toBe('2023-01-02T12:00:00Z')
+    expect(retrieveUpdated(value)).toBe(expected)
   })
 
   it('should return undefined if no date fields exist', () => {
@@ -525,8 +626,9 @@ describe('retrieveUpdated', () => {
     const value = {
       updated: { '#text': 20230101 },
     }
+    const expected = '20230101'
 
-    expect(retrieveUpdated(value)).toBe('20230101')
+    expect(retrieveUpdated(value)).toBe(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -543,16 +645,18 @@ describe('retrieveSubtitle', () => {
       subtitle: { '#text': 'Feed subtitle' },
       tagline: { '#text': 'Feed tagline' },
     }
+    const expected = 'Feed subtitle'
 
-    expect(retrieveSubtitle(value)).toBe('Feed subtitle')
+    expect(retrieveSubtitle(value)).toBe(expected)
   })
 
   it('should fall back to tagline (Atom 0.3) if subtitle is missing', () => {
     const value = {
       tagline: { '#text': 'Feed tagline' },
     }
+    const expected = 'Feed tagline'
 
-    expect(retrieveSubtitle(value)).toBe('Feed tagline')
+    expect(retrieveSubtitle(value)).toBe(expected)
   })
 
   it('should return undefined if no subtitle fields exist', () => {
@@ -567,8 +671,9 @@ describe('retrieveSubtitle', () => {
     const value = {
       subtitle: { '#text': 123 },
     }
+    const expected = '123'
 
-    expect(retrieveSubtitle(value)).toBe('123')
+    expect(retrieveSubtitle(value)).toBe(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -580,7 +685,28 @@ describe('retrieveSubtitle', () => {
 })
 
 describe('parseEntry', () => {
-  it('should parse complete entry object', () => {
+  const expectedFull = {
+    id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+    title: 'Entry Title',
+    updated: '2023-01-01T12:00:00Z',
+    authors: [{ name: 'John Doe' }],
+    content: '<p>Entry content</p>',
+    summary: 'Entry summary',
+    published: '2023-01-01T10:00:00Z',
+    links: [
+      { href: 'https://example.com/entry', rel: 'alternate' },
+      { href: 'https://example.com/comments', rel: 'replies' },
+    ],
+    categories: [{ term: 'technology' }, { term: 'web' }],
+    contributors: [{ name: 'Jane Smith' }],
+    rights: 'Copyright 2023',
+    source: {
+      id: 'urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6',
+      title: 'Source Feed',
+    },
+  }
+
+  it('should parse complete entry object (with #text)', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
       title: { '#text': 'Entry Title' },
@@ -601,28 +727,67 @@ describe('parseEntry', () => {
         title: { '#text': 'Source Feed' },
       },
     }
-    const expected = {
+
+    expect(parseEntry(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete entry object (without #text)', () => {
+    const value = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: 'Entry Title',
       updated: '2023-01-01T12:00:00Z',
-      authors: [{ name: 'John Doe' }],
+      author: [{ name: { '#text': 'John Doe' } }],
       content: '<p>Entry content</p>',
       summary: 'Entry summary',
       published: '2023-01-01T10:00:00Z',
-      links: [
-        { href: 'https://example.com/entry', rel: 'alternate' },
-        { href: 'https://example.com/comments', rel: 'replies' },
+      link: [
+        { '@href': 'https://example.com/entry', '@rel': 'alternate' },
+        { '@href': 'https://example.com/comments', '@rel': 'replies' },
       ],
-      categories: [{ term: 'technology' }, { term: 'web' }],
-      contributors: [{ name: 'Jane Smith' }],
+      category: [{ '@term': 'technology' }, { '@term': 'web' }],
+      contributor: [{ name: { '#text': 'Jane Smith' } }],
       rights: 'Copyright 2023',
       source: {
-        id: 'urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6',
-        title: 'Source Feed',
+        id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6' },
+        title: { '#text': 'Source Feed' },
       },
     }
 
-    expect(parseEntry(value)).toEqual(expected)
+    expect(parseEntry(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete entry object (with array of values)', () => {
+    const value = {
+      id: [
+        'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+        'urn:uuid:2335d785-dfc9-5fcc-bbbb-90eb455efa7b',
+      ],
+      title: ['Entry Title', 'Alternative Entry Title'],
+      updated: ['2023-01-01T12:00:00Z', '2023-01-02T15:30:00Z'],
+      author: [{ name: { '#text': 'John Doe' } }],
+      content: ['<p>Entry content</p>', '<p>Alternative entry content</p>'],
+      summary: ['Entry summary', 'Extended entry summary'],
+      published: ['2023-01-01T10:00:00Z', '2023-01-02T09:15:00Z'],
+      link: [
+        { '@href': 'https://example.com/entry', '@rel': 'alternate' },
+        { '@href': 'https://example.com/comments', '@rel': 'replies' },
+      ],
+      category: [{ '@term': 'technology' }, { '@term': 'web' }],
+      contributor: [{ name: { '#text': 'Jane Smith' } }],
+      rights: ['Copyright 2023', 'Copyleft 1999'],
+      source: [
+        {
+          id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6' },
+          title: { '#text': 'Source Feed' },
+        },
+        {
+          id: { '#text': 'urn:uuid:50a76c80-d399-11d9-b91C-23234324aj34' },
+          title: { '#text': 'Source Feed 2' },
+        },
+      ],
+    }
+
+    expect(parseEntry(value)).toEqual(expectedFull)
   })
 
   it('should parse entry with only required fields', () => {
@@ -729,7 +894,39 @@ describe('parseEntry', () => {
 })
 
 describe('parseFeed', () => {
-  it('should parse complete feed object', () => {
+  const expectedFull = {
+    id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
+    title: 'Example Feed',
+    updated: '2023-01-01T12:00:00Z',
+    authors: [{ name: 'John Doe' }],
+    subtitle: 'A subtitle for my feed',
+    links: [
+      { href: 'https://example.com/', rel: 'alternate' },
+      { href: 'https://example.com/feed', rel: 'self' },
+    ],
+    categories: [{ term: 'technology' }, { term: 'web' }],
+    contributors: [{ name: 'Jane Smith' }],
+    generator: { text: 'Example Generator', uri: 'https://example.com/gen', version: '1.0' },
+    icon: 'https://example.com/favicon.ico',
+    logo: 'https://example.com/logo.png',
+    rights: 'Copyright 2023, Example Corp.',
+    entries: [
+      {
+        id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+        title: 'First Entry',
+        updated: '2023-01-01T10:00:00Z',
+        content: '<p>First entry content</p>',
+      },
+      {
+        id: 'urn:uuid:1225c695-cfb8-4ebb-bbbb-80da344efa6a',
+        title: 'Second Entry',
+        updated: '2023-01-02T10:00:00Z',
+        content: '<p>Second entry content</p>',
+      },
+    ],
+  }
+
+  it('should parse complete feed object (with #text)', () => {
     const value = {
       id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
       title: { '#text': 'Example Feed' },
@@ -765,39 +962,98 @@ describe('parseFeed', () => {
         },
       ],
     }
-    const expected = {
+
+    expect(parseFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete feed object (without #text)', () => {
+    const value = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
       title: 'Example Feed',
       updated: '2023-01-01T12:00:00Z',
-      authors: [{ name: 'John Doe' }],
+      author: [{ name: { '#text': 'John Doe' } }],
       subtitle: 'A subtitle for my feed',
-      links: [
-        { href: 'https://example.com/', rel: 'alternate' },
-        { href: 'https://example.com/feed', rel: 'self' },
+      link: [
+        { '@href': 'https://example.com/', '@rel': 'alternate' },
+        { '@href': 'https://example.com/feed', '@rel': 'self' },
       ],
-      categories: [{ term: 'technology' }, { term: 'web' }],
-      contributors: [{ name: 'Jane Smith' }],
-      generator: { text: 'Example Generator', uri: 'https://example.com/gen', version: '1.0' },
+      category: [{ '@term': 'technology' }, { '@term': 'web' }],
+      contributor: [{ name: { '#text': 'Jane Smith' } }],
+      generator: {
+        '#text': 'Example Generator',
+        '@uri': 'https://example.com/gen',
+        '@version': '1.0',
+      },
       icon: 'https://example.com/favicon.ico',
       logo: 'https://example.com/logo.png',
       rights: 'Copyright 2023, Example Corp.',
-      entries: [
+      entry: [
         {
-          id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-          title: 'First Entry',
-          updated: '2023-01-01T10:00:00Z',
-          content: '<p>First entry content</p>',
+          id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+          title: { '#text': 'First Entry' },
+          updated: { '#text': '2023-01-01T10:00:00Z' },
+          content: { '#text': '<p>First entry content</p>' },
         },
         {
-          id: 'urn:uuid:1225c695-cfb8-4ebb-bbbb-80da344efa6a',
-          title: 'Second Entry',
-          updated: '2023-01-02T10:00:00Z',
-          content: '<p>Second entry content</p>',
+          id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-bbbb-80da344efa6a' },
+          title: { '#text': 'Second Entry' },
+          updated: { '#text': '2023-01-02T10:00:00Z' },
+          content: { '#text': '<p>Second entry content</p>' },
         },
       ],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete feed object (with array of values)', () => {
+    const value = {
+      id: [
+        'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
+        'urn:uuid:70b87d90-e4aa-22e9-c94D-1114949f1bf7',
+      ],
+      title: ['Example Feed', 'Alternative Example Feed'],
+      updated: ['2023-01-01T12:00:00Z', '2023-02-15T15:30:00Z'],
+      author: [{ name: { '#text': 'John Doe' } }],
+      subtitle: ['A subtitle for my feed', 'An alternative subtitle for the feed'],
+      link: [
+        { '@href': 'https://example.com/', '@rel': 'alternate' },
+        { '@href': 'https://example.com/feed', '@rel': 'self' },
+      ],
+      category: [{ '@term': 'technology' }, { '@term': 'web' }],
+      contributor: [{ name: { '#text': 'Jane Smith' } }],
+      generator: [
+        {
+          '#text': 'Example Generator',
+          '@uri': 'https://example.com/gen',
+          '@version': '1.0',
+        },
+        {
+          '#text': 'Alternative Generator',
+          '@uri': 'https://example.com/alt-gen',
+          '@version': '2.0',
+        },
+      ],
+      icon: ['https://example.com/favicon.ico', 'https://example.com/alternate-favicon.ico'],
+      logo: ['https://example.com/logo.png', 'https://example.com/alternate-logo.png'],
+      rights: ['Copyright 2023, Example Corp.', 'All Rights Reserved 2023, Example Inc.'],
+      entry: [
+        {
+          id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+          title: { '#text': 'First Entry' },
+          updated: { '#text': '2023-01-01T10:00:00Z' },
+          content: { '#text': '<p>First entry content</p>' },
+        },
+        {
+          id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-bbbb-80da344efa6a' },
+          title: { '#text': 'Second Entry' },
+          updated: { '#text': '2023-01-02T10:00:00Z' },
+          content: { '#text': '<p>Second entry content</p>' },
+        },
+      ],
+    }
+
+    expect(parseFeed(value)).toEqual(expectedFull)
   })
 
   it('should parse feed with only required fields', () => {
