@@ -5,8 +5,10 @@ import {
   parseChapters,
   parseContentLink,
   parseEpisode,
+  parseFeed,
   parseFunding,
   parseIntegrity,
+  parseItem,
   parseLicense,
   parseLocation,
   parseLocked,
@@ -2714,6 +2716,749 @@ describe('parseValueTimeSplit', () => {
   })
 })
 
-// parseItem
+describe('parseItem', () => {
+  it('should parse a complete item with all podcast namespace elements', () => {
+    const value = {
+      'podcast:transcript': {
+        '@url': 'https://example.com/transcript.json',
+        '@type': 'application/json',
+        '@language': 'en',
+      },
+      'podcast:chapters': {
+        '@url': 'https://example.com/chapters.json',
+        '@type': 'application/json',
+      },
+      'podcast:soundbite': [
+        {
+          '@startTime': 60,
+          '@duration': 30,
+          '#text': 'This is a key moment',
+        },
+      ],
+      'podcast:person': [
+        {
+          '#text': 'Jane Doe',
+          '@role': 'host',
+          '@img': 'https://example.com/janedoe.jpg',
+        },
+        {
+          '#text': 'John Smith',
+          '@role': 'guest',
+        },
+      ],
+      'podcast:location': {
+        '#text': 'New York, NY',
+        '@geo': '40.7128,-74.0060',
+      },
+      'podcast:season': {
+        '#text': 2,
+        '@name': 'Second Season',
+      },
+      'podcast:episode': {
+        '@number': 5,
+        '#text': 'The Fifth Episode',
+      },
+      'podcast:license': {
+        '#text': 'CC BY 4.0',
+        '@url': 'https://creativecommons.org/licenses/by/4.0/',
+      },
+      'podcast:alternateEnclosure': [
+        {
+          '@type': 'audio/mpeg',
+          '@length': 12345678,
+          '@bitrate': 128000,
+          'podcast:source': {
+            '@uri': 'https://example.com/episode.mp3',
+          },
+        },
+      ],
+      'podcast:value': {
+        '@type': 'lightning',
+        '@method': 'keysend',
+        '@suggested': 0.00000005,
+        'podcast:valueRecipient': {
+          '@type': 'node',
+          '@address': '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
+          '@split': 100,
+        },
+      },
+      'podcast:socialInteract': {
+        '@uri': 'https://example.com/episodes/1/comments',
+        '@protocol': 'activitypub',
+      },
+      'podcast:txt': {
+        '#text': 'Additional information',
+        '@purpose': 'description',
+      },
+    }
 
-// parseFeed
+    const expected = {
+      transcripts: [
+        {
+          url: 'https://example.com/transcript.json',
+          type: 'application/json',
+          language: 'en',
+        },
+      ],
+      chapters: {
+        url: 'https://example.com/chapters.json',
+        type: 'application/json',
+      },
+      soundbites: [
+        {
+          startTime: 60,
+          duration: 30,
+          display: 'This is a key moment',
+        },
+      ],
+      persons: [
+        {
+          display: 'Jane Doe',
+          role: 'host',
+          img: 'https://example.com/janedoe.jpg',
+        },
+        {
+          display: 'John Smith',
+          role: 'guest',
+        },
+      ],
+      location: {
+        display: 'New York, NY',
+        geo: '40.7128,-74.0060',
+      },
+      season: {
+        number: 2,
+        name: 'Second Season',
+      },
+      episode: {
+        number: 5,
+        display: 'The Fifth Episode',
+      },
+      license: {
+        display: 'CC BY 4.0',
+        url: 'https://creativecommons.org/licenses/by/4.0/',
+      },
+      alternateEnclosures: [
+        {
+          type: 'audio/mpeg',
+          length: 12345678,
+          bitrate: 128000,
+          sources: [
+            {
+              uri: 'https://example.com/episode.mp3',
+            },
+          ],
+        },
+      ],
+      value: {
+        type: 'lightning',
+        method: 'keysend',
+        suggested: 0.00000005,
+        valueRecipients: [
+          {
+            type: 'node',
+            address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
+            split: 100,
+          },
+        ],
+      },
+      socialInteracts: [
+        {
+          uri: 'https://example.com/episodes/1/comments',
+          protocol: 'activitypub',
+        },
+      ],
+      txts: [
+        {
+          display: 'Additional information',
+          purpose: 'description',
+        },
+      ],
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should parse item with single transcript element', () => {
+    const value = {
+      'podcast:transcript': {
+        '@url': 'https://example.com/transcript.json',
+        '@type': 'application/json',
+      },
+    }
+    const expected = {
+      transcripts: [
+        {
+          url: 'https://example.com/transcript.json',
+          type: 'application/json',
+        },
+      ],
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should parse item with multiple transcript elements', () => {
+    const value = {
+      'podcast:transcript': [
+        {
+          '@url': 'https://example.com/transcript.json',
+          '@type': 'application/json',
+          '@language': 'en',
+        },
+        {
+          '@url': 'https://example.com/transcript-es.json',
+          '@type': 'application/json',
+          '@language': 'es',
+        },
+      ],
+    }
+    const expected = {
+      transcripts: [
+        {
+          url: 'https://example.com/transcript.json',
+          type: 'application/json',
+          language: 'en',
+        },
+        {
+          url: 'https://example.com/transcript-es.json',
+          type: 'application/json',
+          language: 'es',
+        },
+      ],
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle invalid transcript elements', () => {
+    const value = {
+      'podcast:transcript': [
+        {
+          '@url': 'https://example.com/transcript.json',
+          '@type': 'application/json',
+        },
+        {
+          '@type': 'application/json', // Missing url.
+        },
+        {
+          '@url': 'https://example.com/transcript2.json', // Missing type.
+        },
+      ],
+    }
+    const expected = {
+      transcripts: [
+        {
+          url: 'https://example.com/transcript.json',
+          type: 'application/json',
+        },
+      ],
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle multiple properties with mixed valid and invalid elements', () => {
+    const value = {
+      'podcast:transcript': {
+        '@url': 'https://example.com/transcript.json',
+        '@type': 'application/json',
+      },
+      'podcast:person': [
+        {
+          '#text': 'Jane Doe',
+          '@role': 'host',
+        },
+        {
+          '@role': 'guest', // Missing name.
+        },
+      ],
+      'podcast:soundbite': [
+        {
+          '@startTime': 60,
+          '@duration': 30,
+          '#text': 'Key moment',
+        },
+        {
+          '@startTime': 120, // Missing duration.
+          '#text': 'Another moment',
+        },
+      ],
+    }
+    const expected = {
+      transcripts: [
+        {
+          url: 'https://example.com/transcript.json',
+          type: 'application/json',
+        },
+      ],
+      persons: [
+        {
+          display: 'Jane Doe',
+          role: 'host',
+        },
+      ],
+      soundbites: [
+        {
+          startTime: 60,
+          duration: 30,
+          display: 'Key moment',
+        },
+      ],
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle coercible values', () => {
+    const value = {
+      'podcast:season': 2,
+      'podcast:episode': {
+        '@number': '5',
+        '#text': 123,
+      },
+      'podcast:soundbite': {
+        '@startTime': '60.5',
+        '@duration': '30.25',
+        '#text': 456,
+      },
+    }
+    const expected = {
+      season: {
+        number: 2,
+      },
+      episode: {
+        number: 5,
+        display: '123',
+      },
+      soundbites: [
+        {
+          startTime: 60.5,
+          duration: 30.25,
+          display: '456',
+        },
+      ],
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty objects', () => {
+    const value = {}
+    expect(parseItem(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(parseItem('not an object')).toBeUndefined()
+    expect(parseItem(undefined)).toBeUndefined()
+    expect(parseItem(null)).toBeUndefined()
+    expect(parseItem([])).toBeUndefined()
+    expect(parseItem(123)).toBeUndefined()
+  })
+
+  it('should return undefined if all parsed properties are undefined', () => {
+    const value = {
+      'podcast:transcript': {
+        '@type': 'application/json', // Missing url.
+      },
+      'podcast:person': {
+        '@role': 'host', // Missing display.
+      },
+    }
+    expect(parseItem(value)).toBeUndefined()
+  })
+})
+
+describe('parseFeed', () => {
+  it('should parse a complete feed with all podcast namespace elements', () => {
+    const value = {
+      'podcast:locked': {
+        '@value': 'yes',
+        '@owner': 'Example Podcaster',
+      },
+      'podcast:funding': [
+        {
+          '@url': 'https://example.com/donate',
+          '#text': 'Support the show',
+        },
+      ],
+      'podcast:person': [
+        {
+          '#text': 'Jane Doe',
+          '@role': 'host',
+          '@img': 'https://example.com/janedoe.jpg',
+        },
+      ],
+      'podcast:location': {
+        '#text': 'San Francisco, CA',
+        '@geo': '37.7749,-122.4194',
+      },
+      'podcast:trailer': {
+        '#text': 'Season 2 Trailer',
+        '@url': 'https://example.com/trailer.mp3',
+        '@pubdate': 'Tue, 10 Jan 2023 12:00:00 GMT',
+        '@length': 12345678,
+        '@type': 'audio/mpeg',
+      },
+      'podcast:license': {
+        '#text': 'CC BY 4.0',
+        '@url': 'https://creativecommons.org/licenses/by/4.0/',
+      },
+      'podcast:guid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+      'podcast:value': {
+        '@type': 'lightning',
+        '@method': 'keysend',
+        '@suggested': 0.00000005,
+        'podcast:valueRecipient': {
+          '@type': 'node',
+          '@address': '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
+          '@split': 100,
+        },
+      },
+      'podcast:medium': 'podcast',
+      'podcast:images': 'https://example.com/images.json',
+      'podcast:liveItem': {
+        '@status': 'live',
+        '@start': '2023-06-15T15:00:00Z',
+        '@end': '2023-06-15T16:00:00Z',
+        'podcast:contentLink': {
+          '@href': 'https://example.com/live',
+          '#text': 'Watch live',
+        },
+      },
+      'podcast:block': {
+        '@value': 'yes',
+        '@id': 'spotify',
+      },
+      'podcast:txt': {
+        '#text': 'Additional podcast information',
+        '@purpose': 'description',
+      },
+      'podcast:remoteItem': {
+        '@feedGuid': 'urn:uuid:8eb78004-d85a-51dc-9126-e291618ca9ae',
+        '@feedUrl': 'https://example.com/feed2.xml',
+      },
+      'podcast:updateFrequency': {
+        '#text': 'Weekly on Mondays',
+        '@complete': 'true',
+      },
+      'podcast:podping': {
+        '@usesPodping': 'true',
+      },
+    }
+
+    const expected = {
+      locked: {
+        value: true,
+        owner: 'Example Podcaster',
+      },
+      fundings: [
+        {
+          url: 'https://example.com/donate',
+          display: 'Support the show',
+        },
+      ],
+      persons: [
+        {
+          display: 'Jane Doe',
+          role: 'host',
+          img: 'https://example.com/janedoe.jpg',
+        },
+      ],
+      location: {
+        display: 'San Francisco, CA',
+        geo: '37.7749,-122.4194',
+      },
+      trailers: [
+        {
+          display: 'Season 2 Trailer',
+          url: 'https://example.com/trailer.mp3',
+          pubdate: 'Tue, 10 Jan 2023 12:00:00 GMT',
+          length: 12345678,
+          type: 'audio/mpeg',
+        },
+      ],
+      license: {
+        display: 'CC BY 4.0',
+        url: 'https://creativecommons.org/licenses/by/4.0/',
+      },
+      guid: 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+      value: {
+        type: 'lightning',
+        method: 'keysend',
+        suggested: 0.00000005,
+        valueRecipients: [
+          {
+            type: 'node',
+            address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
+            split: 100,
+          },
+        ],
+      },
+      medium: 'podcast',
+      images: 'https://example.com/images.json',
+      liveItems: [
+        {
+          status: 'live',
+          start: '2023-06-15T15:00:00Z',
+          end: '2023-06-15T16:00:00Z',
+          contentlinks: [
+            {
+              href: 'https://example.com/live',
+              display: 'Watch live',
+            },
+          ],
+        },
+      ],
+      blocks: [
+        {
+          value: true,
+          id: 'spotify',
+        },
+      ],
+      txts: [
+        {
+          display: 'Additional podcast information',
+          purpose: 'description',
+        },
+      ],
+      remoteItems: [
+        {
+          feedGuid: 'urn:uuid:8eb78004-d85a-51dc-9126-e291618ca9ae',
+          feedUrl: 'https://example.com/feed2.xml',
+        },
+      ],
+      updateFrequency: {
+        display: 'Weekly on Mondays',
+        complete: true,
+      },
+      podping: {
+        usesPodping: true,
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with single funding element', () => {
+    const value = {
+      'podcast:funding': {
+        '@url': 'https://example.com/donate',
+        '#text': 'Support the show',
+      },
+    }
+    const expected = {
+      fundings: [
+        {
+          url: 'https://example.com/donate',
+          display: 'Support the show',
+        },
+      ],
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with multiple funding elements', () => {
+    const value = {
+      'podcast:funding': [
+        {
+          '@url': 'https://example.com/donate',
+          '#text': 'Support the show',
+        },
+        {
+          '@url': 'https://example.com/patreon',
+          '#text': 'Join our Patreon',
+        },
+      ],
+    }
+    const expected = {
+      fundings: [
+        {
+          url: 'https://example.com/donate',
+          display: 'Support the show',
+        },
+        {
+          url: 'https://example.com/patreon',
+          display: 'Join our Patreon',
+        },
+      ],
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle invalid funding elements', () => {
+    const value = {
+      'podcast:funding': [
+        {
+          '@url': 'https://example.com/donate',
+          '#text': 'Support the show',
+        },
+        {
+          '#text': 'Invalid funding', // Missing url.
+        },
+      ],
+    }
+    const expected = {
+      fundings: [
+        {
+          url: 'https://example.com/donate',
+          display: 'Support the show',
+        },
+      ],
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle multiple properties with mixed valid and invalid elements', () => {
+    const value = {
+      'podcast:locked': {
+        '@value': 'yes',
+        '@owner': 'Example Podcaster',
+      },
+      'podcast:funding': [
+        {
+          '@url': 'https://example.com/donate',
+          '#text': 'Support the show',
+        },
+        {
+          '#text': 'Invalid funding', // Missing url.
+        },
+      ],
+      'podcast:person': [
+        {
+          '#text': 'Jane Doe',
+          '@role': 'host',
+        },
+        {
+          '@role': 'guest', // Missing name.
+        },
+      ],
+    }
+    const expected = {
+      locked: {
+        value: true,
+        owner: 'Example Podcaster',
+      },
+      fundings: [
+        {
+          url: 'https://example.com/donate',
+          display: 'Support the show',
+        },
+      ],
+      persons: [
+        {
+          display: 'Jane Doe',
+          role: 'host',
+        },
+      ],
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle coercible values', () => {
+    const value = {
+      'podcast:locked': {
+        '@value': 'true',
+        '@owner': 123,
+      },
+      'podcast:trailer': {
+        '#text': 456,
+        '@url': 'https://example.com/trailer.mp3',
+        '@pubdate': 'Tue, 10 Jan 2023 12:00:00 GMT',
+        '@length': '12345678',
+      },
+      'podcast:medium': 789,
+    }
+    const expected = {
+      locked: {
+        value: true,
+        owner: '123',
+      },
+      trailers: [
+        {
+          display: '456',
+          url: 'https://example.com/trailer.mp3',
+          pubdate: 'Tue, 10 Jan 2023 12:00:00 GMT',
+          length: 12345678,
+        },
+      ],
+      medium: '789',
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty objects', () => {
+    const value = {}
+
+    expect(parseFeed(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(parseFeed('not an object')).toBeUndefined()
+    expect(parseFeed(undefined)).toBeUndefined()
+    expect(parseFeed(null)).toBeUndefined()
+    expect(parseFeed([])).toBeUndefined()
+    expect(parseFeed(123)).toBeUndefined()
+  })
+
+  it('should return undefined if all parsed properties are undefined', () => {
+    const value = {
+      'podcast:funding': {
+        '#text': 'Support the show', // Missing url.
+      },
+      'podcast:person': {
+        '@role': 'host', // Missing display.
+      },
+    }
+    expect(parseFeed(value)).toBeUndefined()
+  })
+
+  it('should parse liveItem with multiple contentLinks', () => {
+    const value = {
+      'podcast:liveItem': {
+        '@status': 'live',
+        '@start': '2023-06-15T15:00:00Z',
+        'podcast:contentLink': [
+          { '@href': 'https://example.com/live', '#text': 'Watch live' },
+          { '@href': 'https://youtube.com/live', '#text': 'Watch on YouTube' },
+        ],
+      },
+    }
+    const expected = {
+      liveItems: [
+        {
+          status: 'live',
+          start: '2023-06-15T15:00:00Z',
+          contentlinks: [
+            { href: 'https://example.com/live', display: 'Watch live' },
+            { href: 'https://youtube.com/live', display: 'Watch on YouTube' },
+          ],
+        },
+      ],
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should parse multiple liveItems', () => {
+    const value = {
+      'podcast:liveItem': [
+        { '@status': 'pending', '@start': '2023-06-15T15:00:00Z' },
+        { '@status': 'live', '@start': '2023-06-16T15:00:00Z' },
+      ],
+    }
+    const expected = {
+      liveItems: [
+        { status: 'pending', start: '2023-06-15T15:00:00Z' },
+        { status: 'live', start: '2023-06-16T15:00:00Z' },
+      ],
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+})

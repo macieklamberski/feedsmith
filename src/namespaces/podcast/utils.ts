@@ -315,14 +315,8 @@ export const parseLiveItem: ParseFunction<LiveItem> = (value) => {
     return
   }
 
-  const item = parseItem(value)
-
-  if (!item) {
-    return
-  }
-
   const liveItem = {
-    ...item,
+    ...parseItem(value),
     status: parseString(value['@status']),
     start: parseString(value['@start']),
     end: parseString(value['@end']),
@@ -503,10 +497,10 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     location: parseLocation(value['podcast:location']),
     trailers: parseArrayOf(value['podcast:trailer'], parseTrailer),
     license: parseLicense(value['podcast:license']),
-    guid: parseString(value['podcast:guid']?.['#text']),
+    guid: parseString(retrieveText(value['podcast:guid'])),
     value: parseValue(value['podcast:value']),
-    medium: parseString(value['podcast:medium']?.['#text']),
-    images: parseString(value['podcast:images']?.['#text']),
+    medium: parseString(retrieveText(value['podcast:medium'])),
+    images: parseString(retrieveText(value['podcast:images'])),
     liveItems: parseArrayOf(value['podcast:liveItem'], parseLiveItem),
     blocks: parseArrayOf(value['podcast:block'], parseBlock),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
