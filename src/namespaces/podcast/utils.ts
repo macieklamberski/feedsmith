@@ -7,15 +7,16 @@ import {
   parseNumber,
   parseString,
   parseYesNoBoolean,
+  retrieveText,
   trimObject,
 } from '../../common/utils.js'
 import type {
   AlternateEnclosure,
   Block,
-  Channel,
   Chapters,
   ContentLink,
   Episode,
+  Feed,
   Funding,
   Images,
   Integrity,
@@ -111,7 +112,7 @@ export const parseSoundbite: ParseFunction<Soundbite> = (value) => {
   const soundbite = {
     startTime: parseNumber(value['@startTime']),
     duration: parseNumber(value['@duration']),
-    display: parseString(value['#text']),
+    display: parseString(retrieveText(value)),
   }
 
   if (isPresent(soundbite.startTime) && isPresent(soundbite.duration)) {
@@ -120,16 +121,12 @@ export const parseSoundbite: ParseFunction<Soundbite> = (value) => {
 }
 
 export const parsePerson: ParseFunction<Person> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
   const person = {
-    display: parseString(value['#text']),
-    role: parseString(value['@role']),
-    group: parseString(value['@group']),
-    img: parseString(value['@img']),
-    href: parseString(value['@href']),
+    display: parseString(retrieveText(value)),
+    role: parseString(value?.['@role']),
+    group: parseString(value?.['@group']),
+    img: parseString(value?.['@img']),
+    href: parseString(value?.['@href']),
   }
 
   if (isPresent(person.display)) {
@@ -138,14 +135,10 @@ export const parsePerson: ParseFunction<Person> = (value) => {
 }
 
 export const parseLocation: ParseFunction<Location> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
   const location = {
-    display: parseString(value['#text']),
-    geo: parseString(value['@geo']),
-    osm: parseString(value['@osm']),
+    display: parseString(retrieveText(value)),
+    geo: parseString(value?.['@geo']),
+    osm: parseString(value?.['@osm']),
   }
 
   if (isPresent(location.display)) {
@@ -154,13 +147,9 @@ export const parseLocation: ParseFunction<Location> = (value) => {
 }
 
 export const parseSeason: ParseFunction<Season> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
   const season = {
-    number: parseNumber(value['#text']),
-    name: parseString(value['@name']),
+    number: parseNumber(retrieveText(value)),
+    name: parseString(value?.['@name']),
   }
 
   if (isPresent(season.number)) {
@@ -175,7 +164,7 @@ export const parseEpisode: ParseFunction<Episode> = (value) => {
 
   const episode = {
     number: parseNumber(value['@number']),
-    display: parseString(value['#text']),
+    display: parseString(retrieveText(value)),
   }
 
   if (isPresent(episode.number)) {
@@ -189,7 +178,7 @@ export const parseTrailer: ParseFunction<Trailer> = (value) => {
   }
 
   const trailer = {
-    display: parseString(value['#text']),
+    display: parseString(retrieveText(value)),
     url: parseString(value['@url']),
     pubdate: parseString(value['@pubdate']),
     length: parseNumber(value['@length']),
@@ -203,13 +192,9 @@ export const parseTrailer: ParseFunction<Trailer> = (value) => {
 }
 
 export const parseLicense: ParseFunction<License> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
   const license = {
-    display: parseString(value['#text']),
-    url: parseString(value['@url']),
+    display: parseString(retrieveText(value)),
+    url: parseString(value?.['@url']),
   }
 
   if (isPresent(license.display)) {
@@ -267,7 +252,7 @@ export const parseIntegrity: ParseFunction<Integrity> = (value) => {
   }
 
   if (isPresent(integrity.type) && isPresent(integrity.value)) {
-    return trimObject(integrity)
+    return integrity
   }
 }
 
@@ -356,7 +341,7 @@ export const parseContentLink: ParseFunction<ContentLink> = (value) => {
 
   const contentLink = {
     href: parseString(value['@href']),
-    display: parseString(value['#text']),
+    display: parseString(retrieveText(value)),
   }
 
   if (isPresent(contentLink.href) && isPresent(contentLink.display)) {
@@ -398,13 +383,9 @@ export const parseBlock: ParseFunction<Block> = (value) => {
 }
 
 export const parseTxt: ParseFunction<Txt> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
   const txt = {
-    display: parseString(value['#text']),
-    purpose: parseString(value['@purpose']),
+    display: parseString(retrieveText(value)),
+    purpose: parseString(value?.['@purpose']),
   }
 
   if (isPresent(txt.display)) {
@@ -442,15 +423,11 @@ export const parsePodroll: ParseFunction<Podroll> = (value) => {
 }
 
 export const parseUpdateFrequency: ParseFunction<UpdateFrequency> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
   const updateFrequency = {
-    display: parseString(value['#text']),
-    complete: parseBoolean(value['@complete']),
-    dtstart: parseString(value['@dtstart']),
-    rrule: parseString(value['@rrule']),
+    display: parseString(retrieveText(value)),
+    complete: parseBoolean(value?.['@complete']),
+    dtstart: parseString(value?.['@dtstart']),
+    rrule: parseString(value?.['@rrule']),
   }
 
   if (isPresent(updateFrequency.display)) {
@@ -514,12 +491,12 @@ export const parseItem: ParseFunction<Item> = (value) => {
   return item
 }
 
-export const parseChannel: ParseFunction<Channel> = (value) => {
+export const parseFeed: ParseFunction<Feed> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  const channel = trimObject({
+  const feed = trimObject({
     locked: parseLocked(value['podcast:locked']),
     fundings: parseArrayOf(value['podcast:funding'], parseFunding),
     persons: parseArrayOf(value['podcast:person'], parsePerson),
@@ -535,8 +512,8 @@ export const parseChannel: ParseFunction<Channel> = (value) => {
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
     remoteItems: parseArrayOf(value['podcast:remoteItem'], parseRemoteItem),
     updateFrequency: parseUpdateFrequency(value['podcast:updateFrequency']),
-    podping: value['podcast:podping'] ? parsePodping(value['podcast:podping']) : undefined,
+    podping: parsePodping(value['podcast:podping']),
   })
 
-  return channel
+  return feed
 }

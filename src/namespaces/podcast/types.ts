@@ -186,7 +186,7 @@ export type Item = {
   txts?: Array<Txt>
 }
 
-export type Channel = {
+export type Feed = {
   locked?: Locked
   fundings?: Array<Funding>
   persons?: Array<Person>
