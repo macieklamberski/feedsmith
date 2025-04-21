@@ -44,7 +44,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/bun": "^1.2.9",
-    "lefthook": "^1.11.10",
+    "lefthook": "^1.11.11",
     "semantic-release": "^24.2.3",
     "typescript": "^5.8.3"
   }
