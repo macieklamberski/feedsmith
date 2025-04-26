@@ -447,8 +447,6 @@ export const parseValueTimeSplit: ParseFunction<ValueTimeSplit> = (value) => {
     duration: parseNumber(value['@duration']),
     remoteStartTime: parseNumber(value['@remotestarttime']),
     remotePercentage: parseNumber(value['@remotepercentage']),
-    // TODO: Make sure that even if the remoteItem is an array (if feed contained multiple items),
-    // only the first one is taken.
     remoteItem: parseSingularOf(value['podcast:remoteitem'], parseRemoteItem),
     valueRecipients: parseArrayOf(value['podcast:valuerecipient'], parseValueRecipient),
   }
