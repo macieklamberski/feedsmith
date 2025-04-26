@@ -61,7 +61,7 @@ Feedsmith maintains the original feed structure in a clean, object-oriented form
 | [Content](http://purl.org/rss/1.0/modules/content/) | `<content:*>` | ✅ | ⏳ |
 | [Slash](http://purl.org/rss/1.0/modules/slash/) | `<slash:*>` | ✅ | ⏳ |
 | [iTunes](http://www.itunes.com/dtds/podcast-1.0.dtd) | `<itunes:*>` | ✅ | ⏳ |
-| [Podcast](https://podcastindex.org/namespace/1.0) | `<podcast:*>` | ⏳ | ⏳ |
+| [Podcast](https://podcastindex.org/namespace/1.0) | `<podcast:*>` | ✅ | ⏳ |
 | [Media RSS](http://search.yahoo.com/mrss/) | `<media:*>` | ⏳ | ⏳ |
 | [Geo RSS](http://www.georss.org/georss) | `<georss:*>` | 📋 | 📋 |
 | [Dublin Core Terms](http://purl.org/dc/terms/) | `<dcterms:*>` | 📋 | 📋 |
