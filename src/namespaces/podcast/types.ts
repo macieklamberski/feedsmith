@@ -27,7 +27,7 @@ export type Soundbite = {
 }
 
 export type Person = {
-  display?: string // Taken from #text.
+  display?: string
   role?: string
   group?: string
   img?: string
@@ -35,13 +35,13 @@ export type Person = {
 }
 
 export type Location = {
-  display?: string // Taken from #text.
+  display?: string
   geo?: string
   osm?: string
 }
 
 export type Season = {
-  number?: number // Taken from #text.
+  number?: number
   name?: string
 }
 
@@ -51,9 +51,9 @@ export type Episode = {
 }
 
 export type Trailer = {
-  display?: string // Taken from #text.
+  display?: string
   url?: string
-  pubdate?: string // RFC2822 date.
+  pubdate?: string
   length?: number
   type?: string
   season?: number
@@ -111,9 +111,9 @@ export type Images = {
 }
 
 export type LiveItem = Item & {
-  status?: string // Spec says: 'pending' | 'live' | 'ended'.
-  start?: string // Date in ISO8601.
-  end?: string // Date in ISO8601.
+  status?: string
+  start?: string
+  end?: string
   contentlinks?: Array<ContentLink>
 }
 
@@ -154,7 +154,7 @@ export type Podroll = {
 export type UpdateFrequency = {
   display?: string
   complete?: boolean
-  dtstart?: string // Date ISO8601.
+  dtstart?: string
   rrule?: string
 }
 
@@ -182,6 +182,7 @@ export type Item = {
   license?: License
   alternateEnclosures?: Array<AlternateEnclosure>
   value?: Value
+  images?: Images
   socialInteracts?: Array<SocialInteract>
   txts?: Array<Txt>
 }
@@ -196,11 +197,12 @@ export type Feed = {
   guid?: string
   value?: Value
   medium?: string
-  images?: string // TODO: Convert it to an array of { url, viewport }?
+  images?: Images
   liveItems?: Array<LiveItem>
   blocks?: Array<Block>
   txts?: Array<Txt>
   remoteItems?: Array<RemoteItem>
+  podroll?: Podroll
   updateFrequency?: UpdateFrequency
   podping?: Podping
 }

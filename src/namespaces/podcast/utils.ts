@@ -60,13 +60,9 @@ export const parseTranscript: ParseFunction<Transcript> = (value) => {
 }
 
 export const parseLocked: ParseFunction<Locked> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
   const locked = {
-    value: parseYesNoBoolean(value['@value']),
-    owner: parseString(value['@owner']),
+    value: parseYesNoBoolean(retrieveText(value)),
+    owner: parseString(value?.['@owner']),
   }
 
   if (isPresent(locked.value)) {
@@ -110,7 +106,7 @@ export const parseSoundbite: ParseFunction<Soundbite> = (value) => {
   }
 
   const soundbite = {
-    startTime: parseNumber(value['@startTime']),
+    startTime: parseNumber(value['@starttime']),
     duration: parseNumber(value['@duration']),
     display: parseString(retrieveText(value)),
   }
@@ -158,17 +154,13 @@ export const parseSeason: ParseFunction<Season> = (value) => {
 }
 
 export const parseEpisode: ParseFunction<Episode> = (value) => {
-  if (!isObject(value)) {
-    return
+  const season = {
+    number: parseNumber(retrieveText(value)),
+    display: parseString(value?.['@display']),
   }
 
-  const episode = {
-    number: parseNumber(value['@number']),
-    display: parseString(retrieveText(value)),
-  }
-
-  if (isPresent(episode.number)) {
-    return trimObject(episode)
+  if (isPresent(season.number)) {
+    return trimObject(season)
   }
 }
 
@@ -186,7 +178,7 @@ export const parseTrailer: ParseFunction<Trailer> = (value) => {
     season: parseNumber(value['@season']),
   }
 
-  if (isPresent(trailer.url) && isPresent(trailer.pubdate)) {
+  if (isPresent(trailer.display) && isPresent(trailer.url) && isPresent(trailer.pubdate)) {
     return trimObject(trailer)
   }
 }
@@ -221,6 +213,7 @@ export const parseAlternateEnclosure: ParseFunction<AlternateEnclosure> = (value
     integrity: parseIntegrity(value['podcast:integrity']),
   }
 
+  // TODO: Consider requiring at least one item in `sources` as per spec.
   if (isPresent(alternateEnclosure.type)) {
     return trimObject(alternateEnclosure)
   }
@@ -233,7 +226,7 @@ export const parseSource: ParseFunction<Source> = (value) => {
 
   const source = {
     uri: parseString(value['@uri']),
-    contentType: parseString(value['@contentType']),
+    contentType: parseString(value['@contenttype']),
   }
 
   if (isPresent(source.uri)) {
@@ -261,16 +254,16 @@ export const parseValue: ParseFunction<Value> = (value) => {
     return
   }
 
-  const valueData = {
+  const parsed = {
     type: parseString(value['@type']),
     method: parseString(value['@method']),
     suggested: parseNumber(value['@suggested']),
-    valueRecipients: parseArrayOf(value['podcast:valueRecipient'], parseValueRecipient),
-    valueTimeSplits: parseArrayOf(value['podcast:valueTimeSplit'], parseValueTimeSplit),
+    valueRecipients: parseArrayOf(value['podcast:valuerecipient'], parseValueRecipient),
+    valueTimeSplits: parseArrayOf(value['podcast:valuetimesplit'], parseValueTimeSplit),
   }
 
-  if (isPresent(valueData.type) && isPresent(valueData.method)) {
-    return trimObject(valueData)
+  if (isPresent(parsed.type) && isPresent(parsed.method)) {
+    return trimObject(parsed)
   }
 }
 
@@ -281,8 +274,8 @@ export const parseValueRecipient: ParseFunction<ValueRecipient> = (value) => {
 
   const valueRecipient = {
     name: parseString(value['@name']),
-    customKey: parseString(value['@customKey']),
-    customValue: parseString(value['@customValue']),
+    customKey: parseString(value['@customkey']),
+    customValue: parseString(value['@customvalue']),
     type: parseString(value['@type']),
     address: parseString(value['@address']),
     split: parseNumber(value['@split']),
@@ -304,6 +297,7 @@ export const parseImages: ParseFunction<Images> = (value) => {
   }
 
   const images = trimObject({
+    // TODO: Convert it to an array of { url, viewport }?
     srcset: parseString(value['@srcset']),
   })
 
@@ -320,7 +314,7 @@ export const parseLiveItem: ParseFunction<LiveItem> = (value) => {
     status: parseString(value['@status']),
     start: parseString(value['@start']),
     end: parseString(value['@end']),
-    contentlinks: parseArrayOf(value['podcast:contentLink'], parseContentLink),
+    contentlinks: parseArrayOf(value['podcast:contentlink'], parseContentLink),
   }
 
   if (isPresent(liveItem.status) && isPresent(liveItem.start)) {
@@ -338,7 +332,7 @@ export const parseContentLink: ParseFunction<ContentLink> = (value) => {
     display: parseString(retrieveText(value)),
   }
 
-  if (isPresent(contentLink.href) && isPresent(contentLink.display)) {
+  if (isPresent(contentLink.href)) {
     return contentLink
   }
 }
@@ -351,24 +345,23 @@ export const parseSocialInteract: ParseFunction<SocialInteract> = (value) => {
   const socialInteract = {
     uri: parseString(value['@uri']),
     protocol: parseString(value['@protocol']),
-    accountId: parseString(value['@accountId']),
-    accountUrl: parseString(value['@accountUrl']),
+    accountId: parseString(value['@accountid']),
+    accountUrl: parseString(value['@accounturl']),
     priority: parseNumber(value['@priority']),
   }
 
-  if (isPresent(socialInteract.uri) && isPresent(socialInteract.protocol)) {
+  // INFO: The specification states that the `uri` is required. However, if the protocol is set
+  // to `disabled`, no other attributes are necessary. To bypass the protocol value check, which
+  // may be invalid, only the protocol is required to ensure consistent behavior.
+  if (isPresent(socialInteract.protocol)) {
     return trimObject(socialInteract)
   }
 }
 
 export const parseBlock: ParseFunction<Block> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
   const block = {
-    value: parseYesNoBoolean(value['@value']),
-    id: parseString(value['@id']),
+    value: parseYesNoBoolean(retrieveText(value)),
+    id: parseString(value?.['@id']),
   }
 
   if (isPresent(block.value)) {
@@ -393,9 +386,9 @@ export const parseRemoteItem: ParseFunction<RemoteItem> = (value) => {
   }
 
   const remoteItem = {
-    feedGuid: parseString(value['@feedGuid']),
-    feedUrl: parseString(value['@feedUrl']),
-    itemGuid: parseString(value['@itemGuid']),
+    feedGuid: parseString(value['@feedguid']),
+    feedUrl: parseString(value['@feedurl']),
+    itemGuid: parseString(value['@itemguid']),
     medium: parseString(value['@medium']),
   }
 
@@ -410,7 +403,7 @@ export const parsePodroll: ParseFunction<Podroll> = (value) => {
   }
 
   const podroll = trimObject({
-    remoteItems: parseArrayOf(value['podcast:remoteItem'], parseRemoteItem),
+    remoteItems: parseArrayOf(value['podcast:remoteitem'], parseRemoteItem),
   })
 
   return podroll
@@ -435,7 +428,7 @@ export const parsePodping: ParseFunction<Podping> = (value) => {
   }
 
   const podping = trimObject({
-    usesPodping: parseBoolean(value['@usesPodping']),
+    usesPodping: parseBoolean(value['@usespodping']),
   })
 
   return podping
@@ -447,14 +440,14 @@ export const parseValueTimeSplit: ParseFunction<ValueTimeSplit> = (value) => {
   }
 
   const valueTimeSplit = {
-    startTime: parseNumber(value['@startTime']),
+    startTime: parseNumber(value['@starttime']),
     duration: parseNumber(value['@duration']),
-    remoteStartTime: parseNumber(value['@remoteStartTime']),
-    remotePercentage: parseNumber(value['@remotePercentage']),
+    remoteStartTime: parseNumber(value['@remotestarttime']),
+    remotePercentage: parseNumber(value['@remotepercentage']),
     // TODO: Make sure that even if the remoteItem is an array (if feed contained multiple items),
     // only the first one is taken.
-    remoteItem: parseRemoteItem(value['podcast:remoteItem']),
-    valueRecipients: parseArrayOf(value['podcast:valueRecipient'], parseValueRecipient),
+    remoteItem: parseRemoteItem(value['podcast:remoteitem']),
+    valueRecipients: parseArrayOf(value['podcast:valuerecipient'], parseValueRecipient),
   }
 
   if (isPresent(valueTimeSplit.startTime) && isPresent(valueTimeSplit.duration)) {
@@ -476,9 +469,10 @@ export const parseItem: ParseFunction<Item> = (value) => {
     season: parseSeason(value['podcast:season']),
     episode: parseEpisode(value['podcast:episode']),
     license: parseLicense(value['podcast:license']),
-    alternateEnclosures: parseArrayOf(value['podcast:alternateEnclosure'], parseAlternateEnclosure),
+    alternateEnclosures: parseArrayOf(value['podcast:alternateenclosure'], parseAlternateEnclosure),
     value: parseValue(value['podcast:value']),
-    socialInteracts: parseArrayOf(value['podcast:socialInteract'], parseSocialInteract),
+    images: parseImages(value['podcast:images']),
+    socialInteracts: parseArrayOf(value['podcast:socialinteract'], parseSocialInteract),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
   })
 
@@ -500,12 +494,13 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     guid: parseString(retrieveText(value['podcast:guid'])),
     value: parseValue(value['podcast:value']),
     medium: parseString(retrieveText(value['podcast:medium'])),
-    images: parseString(retrieveText(value['podcast:images'])),
-    liveItems: parseArrayOf(value['podcast:liveItem'], parseLiveItem),
+    images: parseImages(value['podcast:images']),
+    liveItems: parseArrayOf(value['podcast:liveitem'], parseLiveItem),
     blocks: parseArrayOf(value['podcast:block'], parseBlock),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
-    remoteItems: parseArrayOf(value['podcast:remoteItem'], parseRemoteItem),
-    updateFrequency: parseUpdateFrequency(value['podcast:updateFrequency']),
+    remoteItems: parseArrayOf(value['podcast:remoteitem'], parseRemoteItem),
+    podroll: parsePodroll(value['podcast:podroll']),
+    updateFrequency: parseUpdateFrequency(value['podcast:updatefrequency']),
     podping: parsePodping(value['podcast:podping']),
   })
 

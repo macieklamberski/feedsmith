@@ -7,6 +7,7 @@ import {
   parseEpisode,
   parseFeed,
   parseFunding,
+  parseImages,
   parseIntegrity,
   parseItem,
   parseLicense,
@@ -132,7 +133,7 @@ describe('parseTranscript', () => {
 describe('parseLocked', () => {
   it('should parse complete locked object', () => {
     const value = {
-      '@value': 'yes',
+      '#text': 'yes',
       '@owner': 'Example Podcast Network',
     }
     const expected = {
@@ -143,10 +144,19 @@ describe('parseLocked', () => {
     expect(parseLocked(value)).toEqual(expected)
   })
 
-  it('should parse locked object with only required value field', () => {
+  it('should parse locked object with only required value field (as object)', () => {
     const value = {
-      '@value': 'no',
+      '#text': 'no',
     }
+    const expected = {
+      value: false,
+    }
+
+    expect(parseLocked(value)).toEqual(expected)
+  })
+
+  it('should parse locked object with only required value field (as string)', () => {
+    const value = 'no'
     const expected = {
       value: false,
     }
@@ -156,7 +166,7 @@ describe('parseLocked', () => {
 
   it('should handle coercible values', () => {
     const value = {
-      '@value': 'true',
+      '#text': 'true',
       '@owner': '123',
     }
     const expected = {
@@ -169,7 +179,7 @@ describe('parseLocked', () => {
 
   it('should handle objects with mixed valid and invalid properties', () => {
     const value = {
-      '@value': 'yes',
+      '#text': 'yes',
       '@owner': 'Example Podcast Network',
       '@invalid': 'property',
     }
@@ -205,7 +215,6 @@ describe('parseLocked', () => {
   })
 
   it('should return undefined for not supported input', () => {
-    expect(parseLocked('not an object')).toBeUndefined()
     expect(parseLocked(undefined)).toBeUndefined()
     expect(parseLocked(null)).toBeUndefined()
     expect(parseLocked([])).toBeUndefined()
@@ -390,7 +399,7 @@ describe('parseChapters', () => {
 describe('parseSoundbite', () => {
   it('should parse complete soundbite object', () => {
     const value = {
-      '@startTime': 60,
+      '@starttime': 60,
       '@duration': 30,
       '#text': 'This is a great quote',
     }
@@ -405,7 +414,7 @@ describe('parseSoundbite', () => {
 
   it('should parse soundbite with only required fields', () => {
     const value = {
-      '@startTime': 60,
+      '@starttime': 60,
       '@duration': 30,
     }
     const expected = {
@@ -418,7 +427,7 @@ describe('parseSoundbite', () => {
 
   it('should handle string values that can be coerced to numbers', () => {
     const value = {
-      '@startTime': '60',
+      '@starttime': '60',
       '@duration': '30',
       '#text': 'This is a great quote',
     }
@@ -433,7 +442,7 @@ describe('parseSoundbite', () => {
 
   it('should handle decimal values', () => {
     const value = {
-      '@startTime': 60.5,
+      '@starttime': 60.5,
       '@duration': 30.25,
       '#text': 'This is a great quote',
     }
@@ -448,7 +457,7 @@ describe('parseSoundbite', () => {
 
   it('should handle coercible values', () => {
     const value = {
-      '@startTime': '60.5',
+      '@starttime': '60.5',
       '@duration': '30.25',
       '#text': 123,
     }
@@ -463,7 +472,7 @@ describe('parseSoundbite', () => {
 
   it('should handle objects with mixed valid and invalid properties', () => {
     const value = {
-      '@startTime': 60,
+      '@starttime': 60,
       '@duration': 30,
       '#text': 'This is a great quote',
       '@invalid': 'property',
@@ -488,7 +497,7 @@ describe('parseSoundbite', () => {
 
   it('should return undefined if duration is missing', () => {
     const value = {
-      '@startTime': 60,
+      '@starttime': 60,
       '#text': 'This is a great quote',
     }
 
@@ -497,7 +506,7 @@ describe('parseSoundbite', () => {
 
   it('should return undefined if startTime cannot be parsed as a number', () => {
     const value = {
-      '@startTime': 'not a number',
+      '@starttime': 'not a number',
       '@duration': 30,
       '#text': 'This is a great quote',
     }
@@ -507,7 +516,7 @@ describe('parseSoundbite', () => {
 
   it('should return undefined if duration cannot be parsed as a number', () => {
     const value = {
-      '@startTime': 60,
+      '@starttime': 60,
       '@duration': 'not a number',
       '#text': 'This is a great quote',
     }
@@ -805,7 +814,7 @@ describe('parseSeason', () => {
 
   it('should handle coercible values', () => {
     const value = {
-      '#text': 5,
+      '#text': '5',
       '@name': 123,
     }
     const expected = {
@@ -878,8 +887,8 @@ describe('parseSeason', () => {
 describe('parseEpisode', () => {
   it('should parse complete episode object', () => {
     const value = {
-      '@number': 42,
-      '#text': 'The Answer to Everything',
+      '#text': 42,
+      '@display': 'The Answer to Everything',
     }
     const expected = {
       number: 42,
@@ -891,8 +900,17 @@ describe('parseEpisode', () => {
 
   it('should parse episode with only required number field (as object)', () => {
     const value = {
-      '@number': 42,
+      '#text': 42,
     }
+    const expected = {
+      number: 42,
+    }
+
+    expect(parseEpisode(value)).toEqual(expected)
+  })
+
+  it('should parse episode with only required number field (as string)', () => {
+    const value = '42'
     const expected = {
       number: 42,
     }
@@ -902,8 +920,8 @@ describe('parseEpisode', () => {
 
   it('should handle string values that can be coerced to numbers', () => {
     const value = {
-      '@number': '42',
-      '#text': 'The Answer to Everything',
+      '#text': '42',
+      '@display': 'The Answer to Everything',
     }
     const expected = {
       number: 42,
@@ -915,8 +933,8 @@ describe('parseEpisode', () => {
 
   it('should handle coercible values', () => {
     const value = {
-      '@number': 42,
-      '#text': 123,
+      '#text': 42,
+      '@display': 123,
     }
     const expected = {
       number: 42,
@@ -928,8 +946,8 @@ describe('parseEpisode', () => {
 
   it('should handle objects with mixed valid and invalid properties', () => {
     const value = {
-      '@number': 42,
-      '#text': 'The Answer to Everything',
+      '#text': 42,
+      '@display': 'The Answer to Everything',
       '@invalid': 'property',
     }
     const expected = {
@@ -942,7 +960,7 @@ describe('parseEpisode', () => {
 
   it('should return undefined if number is missing', () => {
     const value = {
-      '#text': 'Missing Number Episode',
+      '@display': 'Missing Number Episode',
     }
 
     expect(parseEpisode(value)).toBeUndefined()
@@ -950,8 +968,8 @@ describe('parseEpisode', () => {
 
   it('should return undefined if number cannot be parsed', () => {
     const value = {
-      '@number': 'not a number',
-      '#text': 'Invalid Episode',
+      '#text': 'not a number',
+      '@display': 'Invalid Episode',
     }
 
     expect(parseEpisode(value)).toBeUndefined()
@@ -973,7 +991,6 @@ describe('parseEpisode', () => {
   })
 
   it('should return undefined for not supported input', () => {
-    expect(parseEpisode('not an object')).toBeUndefined()
     expect(parseEpisode(undefined)).toBeUndefined()
     expect(parseEpisode(null)).toBeUndefined()
     expect(parseEpisode([])).toBeUndefined()
@@ -1004,10 +1021,12 @@ describe('parseTrailer', () => {
 
   it('should parse trailer with only required fields', () => {
     const value = {
+      '#text': 'Season 2 Trailer',
       '@url': 'https://example.com/trailer.mp3',
       '@pubdate': 'Tue, 10 Jan 2023 12:00:00 GMT',
     }
     const expected = {
+      display: 'Season 2 Trailer',
       url: 'https://example.com/trailer.mp3',
       pubdate: 'Tue, 10 Jan 2023 12:00:00 GMT',
     }
@@ -1048,6 +1067,15 @@ describe('parseTrailer', () => {
     }
 
     expect(parseTrailer(value)).toEqual(expected)
+  })
+
+  it('should return undefined if text is missing', () => {
+    const value = {
+      '@url': 'https://example.com/trailer.mp3',
+      '@pubdate': 'Tue, 10 Jan 2023 12:00:00 GMT',
+    }
+
+    expect(parseTrailer(value)).toBeUndefined()
   })
 
   it('should return undefined if url is missing', () => {
@@ -1195,7 +1223,7 @@ describe('parseAlternateEnclosure', () => {
       '@codecs': 'mp3',
       '@default': 'true',
       'podcast:source': [
-        { '@uri': 'https://example.com/episode.mp3', '@contentType': 'audio/mpeg' },
+        { '@uri': 'https://example.com/episode.mp3', '@contenttype': 'audio/mpeg' },
       ],
       'podcast:integrity': {
         '@type': 'sha256',
@@ -1311,7 +1339,7 @@ describe('parseSource', () => {
   it('should parse complete source object', () => {
     const value = {
       '@uri': 'https://example.com/episode.mp3',
-      '@contentType': 'audio/mpeg',
+      '@contenttype': 'audio/mpeg',
     }
     const expected = {
       uri: 'https://example.com/episode.mp3',
@@ -1335,7 +1363,7 @@ describe('parseSource', () => {
   it('should handle coercible values', () => {
     const value = {
       '@uri': 123,
-      '@contentType': 456,
+      '@contenttype': 456,
     }
     const expected = {
       uri: '123',
@@ -1348,7 +1376,7 @@ describe('parseSource', () => {
   it('should handle objects with mixed valid and invalid properties', () => {
     const value = {
       '@uri': 'https://example.com/episode.mp3',
-      '@contentType': 'audio/mpeg',
+      '@contenttype': 'audio/mpeg',
       '@invalid': 'property',
     }
     const expected = {
@@ -1361,7 +1389,7 @@ describe('parseSource', () => {
 
   it('should return undefined if uri is missing', () => {
     const value = {
-      '@contentType': 'audio/mpeg',
+      '@contenttype': 'audio/mpeg',
     }
 
     expect(parseSource(value)).toBeUndefined()
@@ -1476,7 +1504,7 @@ describe('parseValue', () => {
       '@type': 'lightning',
       '@method': 'keysend',
       '@suggested': 0.00000005,
-      'podcast:valueRecipient': [
+      'podcast:valuerecipient': [
         {
           '@type': 'node',
           '@address': '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
@@ -1484,11 +1512,11 @@ describe('parseValue', () => {
           '@name': 'Podcast Host',
         },
       ],
-      'podcast:valueTimeSplit': [
+      'podcast:valuetimesplit': [
         {
-          '@startTime': 60,
+          '@starttime': 60,
           '@duration': 120,
-          'podcast:valueRecipient': {
+          'podcast:valuerecipient': {
             '@type': 'node',
             '@address': '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
             '@split': 100,
@@ -1613,8 +1641,8 @@ describe('parseValueRecipient', () => {
   it('should parse complete valueRecipient object', () => {
     const value = {
       '@name': 'Podcast Host',
-      '@customKey': 'customKeyName',
-      '@customValue': 'customKeyValue',
+      '@customkey': 'customKeyName',
+      '@customvalue': 'customKeyValue',
       '@type': 'node',
       '@address': '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
       '@split': 90,
@@ -1758,6 +1786,66 @@ describe('parseValueRecipient', () => {
   })
 })
 
+describe('parseImages', () => {
+  it('should parse a complete images object with srcset', () => {
+    const value = {
+      '@srcset': 'image-1x.jpg 1x, image-2x.jpg 2x, image-3x.jpg 3x',
+    }
+    const expected = {
+      srcset: 'image-1x.jpg 1x, image-2x.jpg 2x, image-3x.jpg 3x',
+    }
+
+    expect(parseImages(value)).toEqual(expected)
+  })
+
+  it('should handle coercible number values', () => {
+    const value = {
+      '@srcset': 123,
+    }
+    const expected = {
+      srcset: '123',
+    }
+
+    expect(parseImages(value)).toEqual(expected)
+  })
+
+  it('should handle objects with mixed valid and invalid properties', () => {
+    const value = {
+      '@srcset': 'image-1x.jpg 1x, image-2x.jpg 2x',
+      '@invalid': 'property',
+      random: 'value',
+    }
+    const expected = {
+      srcset: 'image-1x.jpg 1x, image-2x.jpg 2x',
+    }
+
+    expect(parseImages(value)).toEqual(expected)
+  })
+
+  it('should return undefined if srcset is missing', () => {
+    const value = {
+      '@someotherproperty': 'value',
+    }
+
+    expect(parseImages(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty objects', () => {
+    const value = {}
+
+    expect(parseImages(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(parseImages('not an object')).toBeUndefined()
+    expect(parseImages(false)).toBeUndefined()
+    expect(parseImages(undefined)).toBeUndefined()
+    expect(parseImages(null)).toBeUndefined()
+    expect(parseImages([])).toBeUndefined()
+    expect(parseImages(123)).toBeUndefined()
+  })
+})
+
 // parseLiveItem
 
 describe('parseContentLink', () => {
@@ -1809,14 +1897,6 @@ describe('parseContentLink', () => {
     expect(parseContentLink(value)).toBeUndefined()
   })
 
-  it('should return undefined if display is missing', () => {
-    const value = {
-      '@href': 'https://example.com/livestream',
-    }
-
-    expect(parseContentLink(value)).toBeUndefined()
-  })
-
   it('should return undefined for empty objects', () => {
     const value = {}
 
@@ -1845,8 +1925,8 @@ describe('parseSocialInteract', () => {
     const value = {
       '@uri': 'https://example.com/episodes/1/comments',
       '@protocol': 'activitypub',
-      '@accountId': 'user@example.com',
-      '@accountUrl': 'https://example.com/users/user',
+      '@accountid': 'user@example.com',
+      '@accounturl': 'https://example.com/users/user',
       '@priority': 1,
     }
     const expected = {
@@ -1862,12 +1942,10 @@ describe('parseSocialInteract', () => {
 
   it('should parse social interact with only required fields', () => {
     const value = {
-      '@uri': 'https://example.com/episodes/1/comments',
-      '@protocol': 'activitypub',
+      '@protocol': 'disabled',
     }
     const expected = {
-      uri: 'https://example.com/episodes/1/comments',
-      protocol: 'activitypub',
+      protocol: 'disabled',
     }
 
     expect(parseSocialInteract(value)).toEqual(expected)
@@ -1902,24 +1980,6 @@ describe('parseSocialInteract', () => {
     expect(parseSocialInteract(value)).toEqual(expected)
   })
 
-  it('should return undefined if uri is missing', () => {
-    const value = {
-      '@protocol': 'activitypub',
-      '@accountId': 'user@example.com',
-    }
-
-    expect(parseSocialInteract(value)).toBeUndefined()
-  })
-
-  it('should return undefined if protocol is missing', () => {
-    const value = {
-      '@uri': 'https://example.com/episodes/1/comments',
-      '@accountId': 'user@example.com',
-    }
-
-    expect(parseSocialInteract(value)).toBeUndefined()
-  })
-
   it('should return undefined for empty objects', () => {
     const value = {}
 
@@ -1946,7 +2006,7 @@ describe('parseSocialInteract', () => {
 describe('parseBlock', () => {
   it('should parse complete block object', () => {
     const value = {
-      '@value': 'yes',
+      '#text': 'yes',
       '@id': 'spotify',
     }
     const expected = {
@@ -1957,10 +2017,19 @@ describe('parseBlock', () => {
     expect(parseBlock(value)).toEqual(expected)
   })
 
-  it('should parse block with only required value field', () => {
+  it('should parse block with only required value field (as object)', () => {
     const value = {
-      '@value': 'yes',
+      '#text': 'yes',
     }
+    const expected = {
+      value: true,
+    }
+
+    expect(parseBlock(value)).toEqual(expected)
+  })
+
+  it('should parse block with only required value field (as string)', () => {
+    const value = 'yes'
     const expected = {
       value: true,
     }
@@ -1970,7 +2039,7 @@ describe('parseBlock', () => {
 
   it('should parse block with only required value field with negative value', () => {
     const value = {
-      '@value': 'no',
+      '#text': 'no',
     }
     const expected = {
       value: false,
@@ -1981,7 +2050,7 @@ describe('parseBlock', () => {
 
   it('should handle objects with mixed valid and invalid properties', () => {
     const value = {
-      '@value': 'yes',
+      '#text': 'yes',
       '@id': 'spotify',
       '@invalid': 'property',
     }
@@ -1995,7 +2064,7 @@ describe('parseBlock', () => {
 
   it('should return false value if not a valid yes/no string', () => {
     const value = {
-      '@value': 'invalid',
+      '#text': 'invalid',
       '@id': 'spotify',
     }
     const expected = {
@@ -2030,7 +2099,6 @@ describe('parseBlock', () => {
   })
 
   it('should return undefined for not supported input', () => {
-    expect(parseBlock('not an object')).toBeUndefined()
     expect(parseBlock(undefined)).toBeUndefined()
     expect(parseBlock(null)).toBeUndefined()
     expect(parseBlock([])).toBeUndefined()
@@ -2131,9 +2199,9 @@ describe('parseTxt', () => {
 describe('parseRemoteItem', () => {
   it('should parse complete remote item object', () => {
     const value = {
-      '@feedGuid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
-      '@feedUrl': 'https://example.com/feed.xml',
-      '@itemGuid': 'urn:uuid:4cef2a1f-9b8e-56fc-ba91-f7e401311de3',
+      '@feedguid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+      '@feedurl': 'https://example.com/feed.xml',
+      '@itemguid': 'urn:uuid:4cef2a1f-9b8e-56fc-ba91-f7e401311de3',
       '@medium': 'podcast',
     }
     const expected = {
@@ -2148,7 +2216,7 @@ describe('parseRemoteItem', () => {
 
   it('should parse remote item with only required feedGuid field', () => {
     const value = {
-      '@feedGuid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+      '@feedguid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
     }
     const expected = {
       feedGuid: 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
@@ -2159,7 +2227,7 @@ describe('parseRemoteItem', () => {
 
   it('should handle coercible number values', () => {
     const value = {
-      '@feedGuid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+      '@feedguid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
       '@medium': 123,
     }
     const expected = {
@@ -2172,8 +2240,8 @@ describe('parseRemoteItem', () => {
 
   it('should handle objects with mixed valid and invalid properties', () => {
     const value = {
-      '@feedGuid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
-      '@feedUrl': 'https://example.com/feed.xml',
+      '@feedguid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+      '@feedurl': 'https://example.com/feed.xml',
       '@invalid': 'property',
     }
     const expected = {
@@ -2186,8 +2254,8 @@ describe('parseRemoteItem', () => {
 
   it('should return undefined if feedGuid is missing', () => {
     const value = {
-      '@feedUrl': 'https://example.com/feed.xml',
-      '@itemGuid': 'urn:uuid:4cef2a1f-9b8e-56fc-ba91-f7e401311de3',
+      '@feedurl': 'https://example.com/feed.xml',
+      '@itemguid': 'urn:uuid:4cef2a1f-9b8e-56fc-ba91-f7e401311de3',
     }
 
     expect(parseRemoteItem(value)).toBeUndefined()
@@ -2219,14 +2287,14 @@ describe('parseRemoteItem', () => {
 describe('parsePodroll', () => {
   it('should parse podroll with remoteItems', () => {
     const value = {
-      'podcast:remoteItem': [
+      'podcast:remoteitem': [
         {
-          '@feedGuid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
-          '@feedUrl': 'https://example.com/feed1.xml',
+          '@feedguid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+          '@feedurl': 'https://example.com/feed1.xml',
         },
         {
-          '@feedGuid': 'urn:uuid:8eb78004-d85a-51dc-9126-e291618ca9ae',
-          '@feedUrl': 'https://example.com/feed2.xml',
+          '@feedguid': 'urn:uuid:8eb78004-d85a-51dc-9126-e291618ca9ae',
+          '@feedurl': 'https://example.com/feed2.xml',
         },
       ],
     }
@@ -2248,9 +2316,9 @@ describe('parsePodroll', () => {
 
   it('should parse podroll with single remoteItem', () => {
     const value = {
-      'podcast:remoteItem': {
-        '@feedGuid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
-        '@feedUrl': 'https://example.com/feed.xml',
+      'podcast:remoteitem': {
+        '@feedguid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+        '@feedurl': 'https://example.com/feed.xml',
       },
     }
     const expected = {
@@ -2267,13 +2335,13 @@ describe('parsePodroll', () => {
 
   it('should filter out invalid remoteItems', () => {
     const value = {
-      'podcast:remoteItem': [
+      'podcast:remoteitem': [
         {
-          '@feedGuid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
-          '@feedUrl': 'https://example.com/feed1.xml',
+          '@feedguid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+          '@feedurl': 'https://example.com/feed1.xml',
         },
         {
-          '@feedUrl': 'https://example.com/feed2.xml',
+          '@feedurl': 'https://example.com/feed2.xml',
         },
       ],
     }
@@ -2291,9 +2359,9 @@ describe('parsePodroll', () => {
 
   it('should handle objects with mixed valid and invalid properties', () => {
     const value = {
-      'podcast:remoteItem': [
+      'podcast:remoteitem': [
         {
-          '@feedGuid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+          '@feedguid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
         },
       ],
       '@invalid': 'property',
@@ -2311,8 +2379,8 @@ describe('parsePodroll', () => {
 
   it('should return undefined if no valid remoteItems exist', () => {
     const value = {
-      'podcast:remoteItem': [
-        { '@feedUrl': 'https://example.com/feed1.xml' },
+      'podcast:remoteitem': [
+        { '@feedurl': 'https://example.com/feed1.xml' },
         { '@medium': 'podcast' },
       ],
     }
@@ -2442,7 +2510,7 @@ describe('parseUpdateFrequency', () => {
 describe('parsePodping', () => {
   it('should parse complete podping object', () => {
     const value = {
-      '@usesPodping': 'true',
+      '@usespodping': 'true',
     }
     const expected = {
       usesPodping: true,
@@ -2453,11 +2521,11 @@ describe('parsePodping', () => {
 
   it('should handle objects with mixed valid and invalid properties', () => {
     const value = {
-      '@usesPodping': 'true',
+      '@usespodping': 'false',
       '@invalid': 'property',
     }
     const expected = {
-      usesPodping: true,
+      usesPodping: false,
     }
 
     expect(parsePodping(value)).toEqual(expected)
@@ -2465,7 +2533,7 @@ describe('parsePodping', () => {
 
   it('should return undefined if usesPodping is missing', () => {
     const value = {
-      '@somethingElse': 'value',
+      '@somethingelse': 'value',
     }
 
     expect(parsePodping(value)).toBeUndefined()
@@ -2497,15 +2565,15 @@ describe('parsePodping', () => {
 describe('parseValueTimeSplit', () => {
   it('should parse complete value time split object', () => {
     const value = {
-      '@startTime': 120.5,
+      '@starttime': 120.5,
       '@duration': 30.0,
-      '@remoteStartTime': 0,
-      '@remotePercentage': 50,
-      'podcast:remoteItem': {
-        '@feedGuid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
-        '@feedUrl': 'https://example.com/feed.xml',
+      '@remotestarttime': 0,
+      '@remotepercentage': 50,
+      'podcast:remoteitem': {
+        '@feedguid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+        '@feedurl': 'https://example.com/feed.xml',
       },
-      'podcast:valueRecipient': [
+      'podcast:valuerecipient': [
         {
           '@type': 'payment',
           '@address': 'example@example.com',
@@ -2546,7 +2614,7 @@ describe('parseValueTimeSplit', () => {
 
   it('should parse value time split with only required fields', () => {
     const value = {
-      '@startTime': 120.5,
+      '@starttime': 120.5,
       '@duration': 30.0,
     }
     const expected = {
@@ -2559,9 +2627,9 @@ describe('parseValueTimeSplit', () => {
 
   it('should handle coercible string values for numbers', () => {
     const value = {
-      '@startTime': '120.5',
+      '@starttime': '120.5',
       '@duration': '30',
-      '@remotePercentage': '50',
+      '@remotepercentage': '50',
     }
     const expected = {
       startTime: 120.5,
@@ -2574,9 +2642,9 @@ describe('parseValueTimeSplit', () => {
 
   it('should handle single value recipient', () => {
     const value = {
-      '@startTime': 120.5,
+      '@starttime': 120.5,
       '@duration': 30.0,
-      'podcast:valueRecipient': {
+      'podcast:valuerecipient': {
         '@type': 'payment',
         '@address': 'example@example.com',
         '@split': 100,
@@ -2599,11 +2667,11 @@ describe('parseValueTimeSplit', () => {
 
   it('should handle remoteItem correctly', () => {
     const value = {
-      '@startTime': 120.5,
+      '@starttime': 120.5,
       '@duration': 30.0,
-      'podcast:remoteItem': {
-        '@feedGuid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
-        '@feedUrl': 'https://example.com/feed.xml',
+      'podcast:remoteitem': {
+        '@feedguid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+        '@feedurl': 'https://example.com/feed.xml',
       },
     }
     const expected = {
@@ -2620,9 +2688,9 @@ describe('parseValueTimeSplit', () => {
 
   it('should filter out invalid value recipients', () => {
     const value = {
-      '@startTime': 120.5,
+      '@starttime': 120.5,
       '@duration': 30.0,
-      'podcast:valueRecipient': [
+      'podcast:valuerecipient': [
         { '@type': 'payment', '@address': 'example@example.com', '@split': '30' },
         { '@type': 'payment' },
         { '@address': 'missing-type@example.com' },
@@ -2646,10 +2714,10 @@ describe('parseValueTimeSplit', () => {
 
   it('should not include invalid remoteItem', () => {
     const value = {
-      '@startTime': 120.5,
+      '@starttime': 120.5,
       '@duration': 30.0,
-      'podcast:remoteItem': {
-        '@feedUrl': 'https://example.com/feed.xml',
+      'podcast:remoteitem': {
+        '@feedurl': 'https://example.com/feed.xml',
       },
     }
     const expected = {
@@ -2662,7 +2730,7 @@ describe('parseValueTimeSplit', () => {
 
   it('should handle objects with mixed valid and invalid properties', () => {
     const value = {
-      '@startTime': 120.5,
+      '@starttime': 120.5,
       '@duration': 30.0,
       '@invalid': 'property',
       random: 'value',
@@ -2678,7 +2746,7 @@ describe('parseValueTimeSplit', () => {
   it('should return undefined if startTime is missing', () => {
     const value = {
       '@duration': 30.0,
-      '@remotePercentage': 50,
+      '@remotepercentage': 50,
     }
 
     expect(parseValueTimeSplit(value)).toBeUndefined()
@@ -2686,8 +2754,8 @@ describe('parseValueTimeSplit', () => {
 
   it('should return undefined if duration is missing', () => {
     const value = {
-      '@startTime': 120.5,
-      '@remotePercentage': 50,
+      '@starttime': 120.5,
+      '@remotepercentage': 50,
     }
 
     expect(parseValueTimeSplit(value)).toBeUndefined()
@@ -2730,7 +2798,7 @@ describe('parseItem', () => {
       },
       'podcast:soundbite': [
         {
-          '@startTime': 60,
+          '@starttime': 60,
           '@duration': 30,
           '#text': 'This is a key moment',
         },
@@ -2755,14 +2823,14 @@ describe('parseItem', () => {
         '@name': 'Second Season',
       },
       'podcast:episode': {
-        '@number': 5,
-        '#text': 'The Fifth Episode',
+        '#text': 5,
+        '@display': 'The Fifth Episode',
       },
       'podcast:license': {
         '#text': 'CC BY 4.0',
         '@url': 'https://creativecommons.org/licenses/by/4.0/',
       },
-      'podcast:alternateEnclosure': [
+      'podcast:alternateenclosure': [
         {
           '@type': 'audio/mpeg',
           '@length': 12345678,
@@ -2776,13 +2844,16 @@ describe('parseItem', () => {
         '@type': 'lightning',
         '@method': 'keysend',
         '@suggested': 0.00000005,
-        'podcast:valueRecipient': {
+        'podcast:valuerecipient': {
           '@type': 'node',
           '@address': '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
           '@split': 100,
         },
       },
-      'podcast:socialInteract': {
+      'podcast:images': {
+        '@srcset': 'image-1x.jpg 1x, image-2x.jpg 2x',
+      },
+      'podcast:socialinteract': {
         '@uri': 'https://example.com/episodes/1/comments',
         '@protocol': 'activitypub',
       },
@@ -2868,6 +2939,9 @@ describe('parseItem', () => {
           protocol: 'activitypub',
         },
       ],
+      images: {
+        srcset: 'image-1x.jpg 1x, image-2x.jpg 2x',
+      },
       txts: [
         {
           display: 'Additional information',
@@ -2975,12 +3049,12 @@ describe('parseItem', () => {
       ],
       'podcast:soundbite': [
         {
-          '@startTime': 60,
+          '@starttime': 60,
           '@duration': 30,
           '#text': 'Key moment',
         },
         {
-          '@startTime': 120, // Missing duration.
+          '@starttime': 120, // Missing duration.
           '#text': 'Another moment',
         },
       ],
@@ -3014,11 +3088,11 @@ describe('parseItem', () => {
     const value = {
       'podcast:season': 2,
       'podcast:episode': {
-        '@number': '5',
-        '#text': 123,
+        '#text': '5',
+        '@display': 123,
       },
       'podcast:soundbite': {
-        '@startTime': '60.5',
+        '@starttime': '60.5',
         '@duration': '30.25',
         '#text': 456,
       },
@@ -3073,7 +3147,7 @@ describe('parseFeed', () => {
   it('should parse a complete feed with all podcast namespace elements', () => {
     const value = {
       'podcast:locked': {
-        '@value': 'yes',
+        '#text': 'yes',
         '@owner': 'Example Podcaster',
       },
       'podcast:funding': [
@@ -3093,13 +3167,15 @@ describe('parseFeed', () => {
         '#text': 'San Francisco, CA',
         '@geo': '37.7749,-122.4194',
       },
-      'podcast:trailer': {
-        '#text': 'Season 2 Trailer',
-        '@url': 'https://example.com/trailer.mp3',
-        '@pubdate': 'Tue, 10 Jan 2023 12:00:00 GMT',
-        '@length': 12345678,
-        '@type': 'audio/mpeg',
-      },
+      'podcast:trailer': [
+        {
+          '#text': 'Season 2 Trailer',
+          '@url': 'https://example.com/trailer.mp3',
+          '@pubdate': 'Tue, 10 Jan 2023 12:00:00 GMT',
+          '@length': 12345678,
+          '@type': 'audio/mpeg',
+        },
+      ],
       'podcast:license': {
         '#text': 'CC BY 4.0',
         '@url': 'https://creativecommons.org/licenses/by/4.0/',
@@ -3109,41 +3185,63 @@ describe('parseFeed', () => {
         '@type': 'lightning',
         '@method': 'keysend',
         '@suggested': 0.00000005,
-        'podcast:valueRecipient': {
+        'podcast:valuerecipient': {
           '@type': 'node',
           '@address': '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
           '@split': 100,
         },
       },
       'podcast:medium': 'podcast',
-      'podcast:images': 'https://example.com/images.json',
-      'podcast:liveItem': {
-        '@status': 'live',
-        '@start': '2023-06-15T15:00:00Z',
-        '@end': '2023-06-15T16:00:00Z',
-        'podcast:contentLink': {
-          '@href': 'https://example.com/live',
-          '#text': 'Watch live',
+      'podcast:images': {
+        '@srcset': 'image-1x.jpg 1x, image-2x.jpg 2x',
+      },
+      'podcast:liveitem': [
+        {
+          '@status': 'live',
+          '@start': '2023-06-15T15:00:00Z',
+          '@end': '2023-06-15T16:00:00Z',
+          'podcast:contentlink': {
+            '@href': 'https://example.com/live',
+            '#text': 'Watch live',
+          },
         },
+      ],
+      'podcast:block': [
+        {
+          '#text': 'yes',
+          '@id': 'spotify',
+        },
+      ],
+      'podcast:txt': [
+        {
+          '#text': 'Additional podcast information',
+          '@purpose': 'description',
+        },
+      ],
+      'podcast:remoteitem': [
+        {
+          '@feedguid': 'urn:uuid:8eb78004-d85a-51dc-9126-e291618ca9ae',
+          '@feedurl': 'https://example.com/feed2.xml',
+        },
+      ],
+      'podcast:podroll': {
+        'podcast:remoteitem': [
+          {
+            '@feedguid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+            '@feedurl': 'https://example.com/feed1.xml',
+          },
+          {
+            '@feedguid': 'urn:uuid:8eb78004-d85a-51dc-9126-e291618ca9ae',
+            '@feedurl': 'https://example.com/feed2.xml',
+          },
+        ],
       },
-      'podcast:block': {
-        '@value': 'yes',
-        '@id': 'spotify',
-      },
-      'podcast:txt': {
-        '#text': 'Additional podcast information',
-        '@purpose': 'description',
-      },
-      'podcast:remoteItem': {
-        '@feedGuid': 'urn:uuid:8eb78004-d85a-51dc-9126-e291618ca9ae',
-        '@feedUrl': 'https://example.com/feed2.xml',
-      },
-      'podcast:updateFrequency': {
+      'podcast:updatefrequency': {
         '#text': 'Weekly on Mondays',
         '@complete': 'true',
       },
       'podcast:podping': {
-        '@usesPodping': 'true',
+        '@usespodping': 'true',
       },
     }
 
@@ -3196,7 +3294,9 @@ describe('parseFeed', () => {
         ],
       },
       medium: 'podcast',
-      images: 'https://example.com/images.json',
+      images: {
+        srcset: 'image-1x.jpg 1x, image-2x.jpg 2x',
+      },
       liveItems: [
         {
           status: 'live',
@@ -3228,6 +3328,18 @@ describe('parseFeed', () => {
           feedUrl: 'https://example.com/feed2.xml',
         },
       ],
+      podroll: {
+        remoteItems: [
+          {
+            feedGuid: 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+            feedUrl: 'https://example.com/feed1.xml',
+          },
+          {
+            feedGuid: 'urn:uuid:8eb78004-d85a-51dc-9126-e291618ca9ae',
+            feedUrl: 'https://example.com/feed2.xml',
+          },
+        ],
+      },
       updateFrequency: {
         display: 'Weekly on Mondays',
         complete: true,
@@ -3315,7 +3427,7 @@ describe('parseFeed', () => {
   it('should handle multiple properties with mixed valid and invalid elements', () => {
     const value = {
       'podcast:locked': {
-        '@value': 'yes',
+        '#text': 'yes',
         '@owner': 'Example Podcaster',
       },
       'podcast:funding': [
@@ -3362,7 +3474,7 @@ describe('parseFeed', () => {
   it('should handle coercible values', () => {
     const value = {
       'podcast:locked': {
-        '@value': 'true',
+        '#text': 'true',
         '@owner': 123,
       },
       'podcast:trailer': {
@@ -3420,10 +3532,10 @@ describe('parseFeed', () => {
 
   it('should parse liveItem with multiple contentLinks', () => {
     const value = {
-      'podcast:liveItem': {
+      'podcast:liveitem': {
         '@status': 'live',
         '@start': '2023-06-15T15:00:00Z',
-        'podcast:contentLink': [
+        'podcast:contentlink': [
           { '@href': 'https://example.com/live', '#text': 'Watch live' },
           { '@href': 'https://youtube.com/live', '#text': 'Watch on YouTube' },
         ],
@@ -3447,7 +3559,7 @@ describe('parseFeed', () => {
 
   it('should parse multiple liveItems', () => {
     const value = {
-      'podcast:liveItem': [
+      'podcast:liveitem': [
         { '@status': 'pending', '@start': '2023-06-15T15:00:00Z' },
         { '@status': 'live', '@start': '2023-06-16T15:00:00Z' },
       ],
