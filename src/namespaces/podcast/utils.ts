@@ -5,7 +5,10 @@ import {
   parseArrayOf,
   parseBoolean,
   parseNumber,
+  parseSingular,
+  parseSingularOf,
   parseString,
+  parseTextString,
   parseYesNoBoolean,
   retrieveText,
   trimObject,
@@ -210,7 +213,7 @@ export const parseAlternateEnclosure: ParseFunction<AlternateEnclosure> = (value
     codecs: parseString(value['@codecs']),
     default: parseBoolean(value['@default']),
     sources: parseArrayOf(value['podcast:source'], parseSource),
-    integrity: parseIntegrity(value['podcast:integrity']),
+    integrity: parseSingularOf(value['podcast:integrity'], parseIntegrity),
   }
 
   // TODO: Consider requiring at least one item in `sources` as per spec.
@@ -446,7 +449,7 @@ export const parseValueTimeSplit: ParseFunction<ValueTimeSplit> = (value) => {
     remotePercentage: parseNumber(value['@remotepercentage']),
     // TODO: Make sure that even if the remoteItem is an array (if feed contained multiple items),
     // only the first one is taken.
-    remoteItem: parseRemoteItem(value['podcast:remoteitem']),
+    remoteItem: parseSingularOf(value['podcast:remoteitem'], parseRemoteItem),
     valueRecipients: parseArrayOf(value['podcast:valuerecipient'], parseValueRecipient),
   }
 
@@ -462,16 +465,16 @@ export const parseItem: ParseFunction<Item> = (value) => {
 
   const item = trimObject({
     transcripts: parseArrayOf(value['podcast:transcript'], parseTranscript),
-    chapters: parseChapters(value['podcast:chapters']),
+    chapters: parseSingularOf(value['podcast:chapters'], parseChapters),
     soundbites: parseArrayOf(value['podcast:soundbite'], parseSoundbite),
     persons: parseArrayOf(value['podcast:person'], parsePerson),
-    location: parseLocation(value['podcast:location']),
-    season: parseSeason(value['podcast:season']),
-    episode: parseEpisode(value['podcast:episode']),
-    license: parseLicense(value['podcast:license']),
+    location: parseSingularOf(value['podcast:location'], parseLocation),
+    season: parseSingularOf(value['podcast:season'], parseSeason),
+    episode: parseSingularOf(value['podcast:episode'], parseEpisode),
+    license: parseSingularOf(value['podcast:license'], parseLicense),
     alternateEnclosures: parseArrayOf(value['podcast:alternateenclosure'], parseAlternateEnclosure),
-    value: parseValue(value['podcast:value']),
-    images: parseImages(value['podcast:images']),
+    value: parseSingularOf(value['podcast:value'], parseValue),
+    images: parseSingularOf(value['podcast:images'], parseImages),
     socialInteracts: parseArrayOf(value['podcast:socialinteract'], parseSocialInteract),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
   })
@@ -485,23 +488,23 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
   }
 
   const feed = trimObject({
-    locked: parseLocked(value['podcast:locked']),
+    locked: parseSingularOf(value['podcast:locked'], parseLocked),
     fundings: parseArrayOf(value['podcast:funding'], parseFunding),
     persons: parseArrayOf(value['podcast:person'], parsePerson),
-    location: parseLocation(value['podcast:location']),
+    location: parseSingularOf(value['podcast:location'], parseLocation),
     trailers: parseArrayOf(value['podcast:trailer'], parseTrailer),
-    license: parseLicense(value['podcast:license']),
-    guid: parseString(retrieveText(value['podcast:guid'])),
-    value: parseValue(value['podcast:value']),
-    medium: parseString(retrieveText(value['podcast:medium'])),
-    images: parseImages(value['podcast:images']),
+    license: parseSingularOf(value['podcast:license'], parseLicense),
+    guid: parseSingularOf(value['podcast:guid'], parseTextString),
+    value: parseSingularOf(value['podcast:value'], parseValue),
+    medium: parseSingularOf(value['podcast:medium'], parseTextString),
+    images: parseSingularOf(value['podcast:images'], parseImages),
     liveItems: parseArrayOf(value['podcast:liveitem'], parseLiveItem),
     blocks: parseArrayOf(value['podcast:block'], parseBlock),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
     remoteItems: parseArrayOf(value['podcast:remoteitem'], parseRemoteItem),
-    podroll: parsePodroll(value['podcast:podroll']),
-    updateFrequency: parseUpdateFrequency(value['podcast:updatefrequency']),
-    podping: parsePodping(value['podcast:podping']),
+    podroll: parseSingularOf(value['podcast:podroll'], parsePodroll),
+    updateFrequency: parseSingularOf(value['podcast:updatefrequency'], parseUpdateFrequency),
+    podping: parseSingularOf(value['podcast:podping'], parsePodping),
   })
 
   return feed

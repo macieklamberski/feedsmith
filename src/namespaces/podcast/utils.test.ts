@@ -790,6 +790,15 @@ describe('parseSeason', () => {
     expect(parseSeason(value)).toEqual(expected)
   })
 
+  it('should parse season with only required number field (as string)', () => {
+    const value = '3'
+    const expected = {
+      number: 3,
+    }
+
+    expect(parseSeason(value)).toEqual(expected)
+  })
+
   it('should parse season with only required number field (as number)', () => {
     const value = 3
     const expected = {
@@ -911,6 +920,15 @@ describe('parseEpisode', () => {
 
   it('should parse episode with only required number field (as string)', () => {
     const value = '42'
+    const expected = {
+      number: 42,
+    }
+
+    expect(parseEpisode(value)).toEqual(expected)
+  })
+
+  it('should parse episode with only required number field (as number)', () => {
+    const value = 42
     const expected = {
       number: 42,
     }
@@ -1211,6 +1229,23 @@ describe('parseLicense', () => {
 })
 
 describe('parseAlternateEnclosure', () => {
+  const expectedFull = {
+    type: 'audio/mpeg',
+    length: 12345678,
+    bitrate: 128000,
+    height: 0,
+    lang: 'en',
+    title: 'MP3 Audio',
+    rel: 'enclosure',
+    codecs: 'mp3',
+    default: true,
+    sources: [{ uri: 'https://example.com/episode.mp3', contentType: 'audio/mpeg' }],
+    integrity: {
+      type: 'sha256',
+      value: '7694f4a66316e53c8cdd9d79c6d6e5152528a9d2de82758bc08b0025a253ac20',
+    },
+  }
+
   it('should parse complete alternateEnclosure object', () => {
     const value = {
       '@type': 'audio/mpeg',
@@ -1230,24 +1265,31 @@ describe('parseAlternateEnclosure', () => {
         '@value': '7694f4a66316e53c8cdd9d79c6d6e5152528a9d2de82758bc08b0025a253ac20',
       },
     }
-    const expected = {
-      type: 'audio/mpeg',
-      length: 12345678,
-      bitrate: 128000,
-      height: 0,
-      lang: 'en',
-      title: 'MP3 Audio',
-      rel: 'enclosure',
-      codecs: 'mp3',
-      default: true,
-      sources: [{ uri: 'https://example.com/episode.mp3', contentType: 'audio/mpeg' }],
-      integrity: {
-        type: 'sha256',
-        value: '7694f4a66316e53c8cdd9d79c6d6e5152528a9d2de82758bc08b0025a253ac20',
-      },
+  })
+
+  it('should parse complete alternateEnclosure object (as array of values)', () => {
+    const value = {
+      '@type': 'audio/mpeg',
+      '@length': 12345678,
+      '@bitrate': 128000,
+      '@height': 0,
+      '@lang': 'en',
+      '@title': 'MP3 Audio',
+      '@rel': 'enclosure',
+      '@codecs': 'mp3',
+      '@default': 'true',
+      'podcast:source': [
+        { '@uri': 'https://example.com/episode.mp3', '@contenttype': 'audio/mpeg' },
+      ],
+      'podcast:integrity': [
+        {
+          '@type': 'sha256',
+          '@value': '7694f4a66316e53c8cdd9d79c6d6e5152528a9d2de82758bc08b0025a253ac20',
+        },
+      ],
     }
 
-    expect(parseAlternateEnclosure(value)).toEqual(expected)
+    expect(parseAlternateEnclosure(value)).toEqual(expectedFull)
   })
 
   it('should parse alternateEnclosure with only required type field', () => {
@@ -2563,6 +2605,29 @@ describe('parsePodping', () => {
 })
 
 describe('parseValueTimeSplit', () => {
+  const expectedFull = {
+    startTime: 120.5,
+    duration: 30.0,
+    remoteStartTime: 0,
+    remotePercentage: 50,
+    remoteItem: {
+      feedGuid: 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+      feedUrl: 'https://example.com/feed.xml',
+    },
+    valueRecipients: [
+      {
+        type: 'payment',
+        address: 'example@example.com',
+        split: 50,
+      },
+      {
+        type: 'payment',
+        address: 'another@example.com',
+        split: 50,
+      },
+    ],
+  }
+
   it('should parse complete value time split object', () => {
     const value = {
       '@starttime': 120.5,
@@ -2586,30 +2651,37 @@ describe('parseValueTimeSplit', () => {
         },
       ],
     }
-    const expected = {
-      startTime: 120.5,
-      duration: 30.0,
-      remoteStartTime: 0,
-      remotePercentage: 50,
-      remoteItem: {
-        feedGuid: 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
-        feedUrl: 'https://example.com/feed.xml',
-      },
-      valueRecipients: [
+
+    expect(parseValueTimeSplit(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete value time split object (as array of values)', () => {
+    const value = {
+      '@starttime': 120.5,
+      '@duration': 30.0,
+      '@remotestarttime': 0,
+      '@remotepercentage': 50,
+      'podcast:remoteitem': [
         {
-          type: 'payment',
-          address: 'example@example.com',
-          split: 50,
+          '@feedguid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+          '@feedurl': 'https://example.com/feed.xml',
+        },
+      ],
+      'podcast:valuerecipient': [
+        {
+          '@type': 'payment',
+          '@address': 'example@example.com',
+          '@split': 50,
         },
         {
-          type: 'payment',
-          address: 'another@example.com',
-          split: 50,
+          '@type': 'payment',
+          '@address': 'another@example.com',
+          '@split': 50,
         },
       ],
     }
 
-    expect(parseValueTimeSplit(value)).toEqual(expected)
+    expect(parseValueTimeSplit(value)).toEqual(expectedFull)
   })
 
   it('should parse value time split with only required fields', () => {
@@ -2785,13 +2857,102 @@ describe('parseValueTimeSplit', () => {
 })
 
 describe('parseItem', () => {
+  const expectedFull = {
+    transcripts: [
+      {
+        url: 'https://example.com/transcript.json',
+        type: 'application/json',
+        language: 'en',
+      },
+    ],
+    chapters: {
+      url: 'https://example.com/chapters.json',
+      type: 'application/json',
+    },
+    soundbites: [
+      {
+        startTime: 60,
+        duration: 30,
+        display: 'This is a key moment',
+      },
+    ],
+    persons: [
+      {
+        display: 'Jane Doe',
+        role: 'host',
+        img: 'https://example.com/janedoe.jpg',
+      },
+      {
+        display: 'John Smith',
+        role: 'guest',
+      },
+    ],
+    location: {
+      display: 'New York, NY',
+      geo: '40.7128,-74.0060',
+    },
+    season: {
+      number: 2,
+      name: 'Second Season',
+    },
+    episode: {
+      number: 5,
+      display: 'The Fifth Episode',
+    },
+    license: {
+      display: 'CC BY 4.0',
+      url: 'https://creativecommons.org/licenses/by/4.0/',
+    },
+    alternateEnclosures: [
+      {
+        type: 'audio/mpeg',
+        length: 12345678,
+        bitrate: 128000,
+        sources: [
+          {
+            uri: 'https://example.com/episode.mp3',
+          },
+        ],
+      },
+    ],
+    value: {
+      type: 'lightning',
+      method: 'keysend',
+      suggested: 0.00000005,
+      valueRecipients: [
+        {
+          type: 'node',
+          address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
+          split: 100,
+        },
+      ],
+    },
+    socialInteracts: [
+      {
+        uri: 'https://example.com/episodes/1/comments',
+        protocol: 'activitypub',
+      },
+    ],
+    images: {
+      srcset: 'image-1x.jpg 1x, image-2x.jpg 2x',
+    },
+    txts: [
+      {
+        display: 'Additional information',
+        purpose: 'description',
+      },
+    ],
+  }
+
   it('should parse a complete item with all podcast namespace elements', () => {
     const value = {
-      'podcast:transcript': {
-        '@url': 'https://example.com/transcript.json',
-        '@type': 'application/json',
-        '@language': 'en',
-      },
+      'podcast:transcript': [
+        {
+          '@url': 'https://example.com/transcript.json',
+          '@type': 'application/json',
+          '@language': 'en',
+        },
+      ],
       'podcast:chapters': {
         '@url': 'https://example.com/chapters.json',
         '@type': 'application/json',
@@ -2853,104 +3014,122 @@ describe('parseItem', () => {
       'podcast:images': {
         '@srcset': 'image-1x.jpg 1x, image-2x.jpg 2x',
       },
-      'podcast:socialinteract': {
-        '@uri': 'https://example.com/episodes/1/comments',
-        '@protocol': 'activitypub',
-      },
-      'podcast:txt': {
-        '#text': 'Additional information',
-        '@purpose': 'description',
-      },
+      'podcast:socialinteract': [
+        {
+          '@uri': 'https://example.com/episodes/1/comments',
+          '@protocol': 'activitypub',
+        },
+      ],
+      'podcast:txt': [
+        {
+          '#text': 'Additional information',
+          '@purpose': 'description',
+        },
+      ],
     }
 
-    const expected = {
-      transcripts: [
+    expect(parseItem(value)).toEqual(expectedFull)
+  })
+
+  it('should parse a complete item with all podcast namespace elements (as array of values)', () => {
+    const value = {
+      'podcast:transcript': [
         {
-          url: 'https://example.com/transcript.json',
-          type: 'application/json',
-          language: 'en',
+          '@url': 'https://example.com/transcript.json',
+          '@type': 'application/json',
+          '@language': 'en',
         },
       ],
-      chapters: {
-        url: 'https://example.com/chapters.json',
-        type: 'application/json',
-      },
-      soundbites: [
+      'podcast:chapters': [
         {
-          startTime: 60,
-          duration: 30,
-          display: 'This is a key moment',
+          '@url': 'https://example.com/chapters.json',
+          '@type': 'application/json',
         },
       ],
-      persons: [
+      'podcast:soundbite': [
         {
-          display: 'Jane Doe',
-          role: 'host',
-          img: 'https://example.com/janedoe.jpg',
-        },
-        {
-          display: 'John Smith',
-          role: 'guest',
+          '@starttime': 60,
+          '@duration': 30,
+          '#text': 'This is a key moment',
         },
       ],
-      location: {
-        display: 'New York, NY',
-        geo: '40.7128,-74.0060',
-      },
-      season: {
-        number: 2,
-        name: 'Second Season',
-      },
-      episode: {
-        number: 5,
-        display: 'The Fifth Episode',
-      },
-      license: {
-        display: 'CC BY 4.0',
-        url: 'https://creativecommons.org/licenses/by/4.0/',
-      },
-      alternateEnclosures: [
+      'podcast:person': [
         {
-          type: 'audio/mpeg',
-          length: 12345678,
-          bitrate: 128000,
-          sources: [
-            {
-              uri: 'https://example.com/episode.mp3',
-            },
-          ],
+          '#text': 'Jane Doe',
+          '@role': 'host',
+          '@img': 'https://example.com/janedoe.jpg',
+        },
+        {
+          '#text': 'John Smith',
+          '@role': 'guest',
         },
       ],
-      value: {
-        type: 'lightning',
-        method: 'keysend',
-        suggested: 0.00000005,
-        valueRecipients: [
-          {
-            type: 'node',
-            address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
-            split: 100,
+      'podcast:location': [
+        {
+          '#text': 'New York, NY',
+          '@geo': '40.7128,-74.0060',
+        },
+      ],
+      'podcast:season': [
+        {
+          '#text': 2,
+          '@name': 'Second Season',
+        },
+      ],
+      'podcast:episode': [
+        {
+          '#text': 5,
+          '@display': 'The Fifth Episode',
+        },
+      ],
+      'podcast:license': [
+        {
+          '#text': 'CC BY 4.0',
+          '@url': 'https://creativecommons.org/licenses/by/4.0/',
+        },
+      ],
+      'podcast:alternateenclosure': [
+        {
+          '@type': 'audio/mpeg',
+          '@length': 12345678,
+          '@bitrate': 128000,
+          'podcast:source': {
+            '@uri': 'https://example.com/episode.mp3',
           },
-        ],
-      },
-      socialInteracts: [
-        {
-          uri: 'https://example.com/episodes/1/comments',
-          protocol: 'activitypub',
         },
       ],
-      images: {
-        srcset: 'image-1x.jpg 1x, image-2x.jpg 2x',
-      },
-      txts: [
+      'podcast:value': [
         {
-          display: 'Additional information',
-          purpose: 'description',
+          '@type': 'lightning',
+          '@method': 'keysend',
+          '@suggested': 0.00000005,
+          'podcast:valuerecipient': {
+            '@type': 'node',
+            '@address': '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
+            '@split': 100,
+          },
+        },
+      ],
+      'podcast:images': [
+        {
+          '@srcset': 'image-1x.jpg 1x, image-2x.jpg 2x',
+        },
+      ],
+      'podcast:socialinteract': [
+        {
+          '@uri': 'https://example.com/episodes/1/comments',
+          '@protocol': 'activitypub',
+        },
+      ],
+      'podcast:txt': [
+        {
+          '#text': 'Additional information',
+          '@purpose': 'description',
         },
       ],
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(parseItem(value)).toEqual(expectedFull)
   })
 
   it('should parse item with single transcript element', () => {
@@ -3144,6 +3323,110 @@ describe('parseItem', () => {
 })
 
 describe('parseFeed', () => {
+  const expectedFull = {
+    locked: {
+      value: true,
+      owner: 'Example Podcaster',
+    },
+    fundings: [
+      {
+        url: 'https://example.com/donate',
+        display: 'Support the show',
+      },
+    ],
+    persons: [
+      {
+        display: 'Jane Doe',
+        role: 'host',
+        img: 'https://example.com/janedoe.jpg',
+      },
+    ],
+    location: {
+      display: 'San Francisco, CA',
+      geo: '37.7749,-122.4194',
+    },
+    trailers: [
+      {
+        display: 'Season 2 Trailer',
+        url: 'https://example.com/trailer.mp3',
+        pubdate: 'Tue, 10 Jan 2023 12:00:00 GMT',
+        length: 12345678,
+        type: 'audio/mpeg',
+      },
+    ],
+    license: {
+      display: 'CC BY 4.0',
+      url: 'https://creativecommons.org/licenses/by/4.0/',
+    },
+    guid: 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+    value: {
+      type: 'lightning',
+      method: 'keysend',
+      suggested: 0.00000005,
+      valueRecipients: [
+        {
+          type: 'node',
+          address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
+          split: 100,
+        },
+      ],
+    },
+    medium: 'podcast',
+    images: {
+      srcset: 'image-1x.jpg 1x, image-2x.jpg 2x',
+    },
+    liveItems: [
+      {
+        status: 'live',
+        start: '2023-06-15T15:00:00Z',
+        end: '2023-06-15T16:00:00Z',
+        contentlinks: [
+          {
+            href: 'https://example.com/live',
+            display: 'Watch live',
+          },
+        ],
+      },
+    ],
+    blocks: [
+      {
+        value: true,
+        id: 'spotify',
+      },
+    ],
+    txts: [
+      {
+        display: 'Additional podcast information',
+        purpose: 'description',
+      },
+    ],
+    remoteItems: [
+      {
+        feedGuid: 'urn:uuid:8eb78004-d85a-51dc-9126-e291618ca9ae',
+        feedUrl: 'https://example.com/feed2.xml',
+      },
+    ],
+    podroll: {
+      remoteItems: [
+        {
+          feedGuid: 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+          feedUrl: 'https://example.com/feed1.xml',
+        },
+        {
+          feedGuid: 'urn:uuid:8eb78004-d85a-51dc-9126-e291618ca9ae',
+          feedUrl: 'https://example.com/feed2.xml',
+        },
+      ],
+    },
+    updateFrequency: {
+      display: 'Weekly on Mondays',
+      complete: true,
+    },
+    podping: {
+      usesPodping: true,
+    },
+  }
+
   it('should parse a complete feed with all podcast namespace elements', () => {
     const value = {
       'podcast:locked': {
@@ -3245,111 +3528,127 @@ describe('parseFeed', () => {
       },
     }
 
-    const expected = {
-      locked: {
-        value: true,
-        owner: 'Example Podcaster',
-      },
-      fundings: [
+    expect(parseFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should parse a complete feed with all podcast namespace elements (as array of values)', () => {
+    const value = {
+      'podcast:locked': [
         {
-          url: 'https://example.com/donate',
-          display: 'Support the show',
+          '#text': 'yes',
+          '@owner': 'Example Podcaster',
         },
       ],
-      persons: [
+      'podcast:funding': [
         {
-          display: 'Jane Doe',
-          role: 'host',
-          img: 'https://example.com/janedoe.jpg',
+          '@url': 'https://example.com/donate',
+          '#text': 'Support the show',
         },
       ],
-      location: {
-        display: 'San Francisco, CA',
-        geo: '37.7749,-122.4194',
-      },
-      trailers: [
+      'podcast:person': [
         {
-          display: 'Season 2 Trailer',
-          url: 'https://example.com/trailer.mp3',
-          pubdate: 'Tue, 10 Jan 2023 12:00:00 GMT',
-          length: 12345678,
-          type: 'audio/mpeg',
+          '#text': 'Jane Doe',
+          '@role': 'host',
+          '@img': 'https://example.com/janedoe.jpg',
         },
       ],
-      license: {
-        display: 'CC BY 4.0',
-        url: 'https://creativecommons.org/licenses/by/4.0/',
-      },
-      guid: 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
-      value: {
-        type: 'lightning',
-        method: 'keysend',
-        suggested: 0.00000005,
-        valueRecipients: [
-          {
-            type: 'node',
-            address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
-            split: 100,
+      'podcast:location': [
+        {
+          '#text': 'San Francisco, CA',
+          '@geo': '37.7749,-122.4194',
+        },
+      ],
+      'podcast:trailer': [
+        {
+          '#text': 'Season 2 Trailer',
+          '@url': 'https://example.com/trailer.mp3',
+          '@pubdate': 'Tue, 10 Jan 2023 12:00:00 GMT',
+          '@length': 12345678,
+          '@type': 'audio/mpeg',
+        },
+      ],
+      'podcast:license': [
+        {
+          '#text': 'CC BY 4.0',
+          '@url': 'https://creativecommons.org/licenses/by/4.0/',
+        },
+      ],
+      'podcast:guid': ['urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd'],
+      'podcast:value': [
+        {
+          '@type': 'lightning',
+          '@method': 'keysend',
+          '@suggested': 0.00000005,
+          'podcast:valuerecipient': {
+            '@type': 'node',
+            '@address': '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
+            '@split': 100,
           },
-        ],
-      },
-      medium: 'podcast',
-      images: {
-        srcset: 'image-1x.jpg 1x, image-2x.jpg 2x',
-      },
-      liveItems: [
+        },
+      ],
+      'podcast:medium': ['podcast'],
+      'podcast:images': [
         {
-          status: 'live',
-          start: '2023-06-15T15:00:00Z',
-          end: '2023-06-15T16:00:00Z',
-          contentlinks: [
+          '@srcset': 'image-1x.jpg 1x, image-2x.jpg 2x',
+        },
+      ],
+      'podcast:liveitem': [
+        {
+          '@status': 'live',
+          '@start': '2023-06-15T15:00:00Z',
+          '@end': '2023-06-15T16:00:00Z',
+          'podcast:contentlink': {
+            '@href': 'https://example.com/live',
+            '#text': 'Watch live',
+          },
+        },
+      ],
+      'podcast:block': [
+        {
+          '#text': 'yes',
+          '@id': 'spotify',
+        },
+      ],
+      'podcast:txt': [
+        {
+          '#text': 'Additional podcast information',
+          '@purpose': 'description',
+        },
+      ],
+      'podcast:remoteitem': [
+        {
+          '@feedguid': 'urn:uuid:8eb78004-d85a-51dc-9126-e291618ca9ae',
+          '@feedurl': 'https://example.com/feed2.xml',
+        },
+      ],
+      'podcast:podroll': [
+        {
+          'podcast:remoteitem': [
             {
-              href: 'https://example.com/live',
-              display: 'Watch live',
+              '@feedguid': 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+              '@feedurl': 'https://example.com/feed1.xml',
+            },
+            {
+              '@feedguid': 'urn:uuid:8eb78004-d85a-51dc-9126-e291618ca9ae',
+              '@feedurl': 'https://example.com/feed2.xml',
             },
           ],
         },
       ],
-      blocks: [
+      'podcast:updatefrequency': [
         {
-          value: true,
-          id: 'spotify',
+          '#text': 'Weekly on Mondays',
+          '@complete': 'true',
         },
       ],
-      txts: [
+      'podcast:podping': [
         {
-          display: 'Additional podcast information',
-          purpose: 'description',
+          '@usespodping': 'true',
         },
       ],
-      remoteItems: [
-        {
-          feedGuid: 'urn:uuid:8eb78004-d85a-51dc-9126-e291618ca9ae',
-          feedUrl: 'https://example.com/feed2.xml',
-        },
-      ],
-      podroll: {
-        remoteItems: [
-          {
-            feedGuid: 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
-            feedUrl: 'https://example.com/feed1.xml',
-          },
-          {
-            feedGuid: 'urn:uuid:8eb78004-d85a-51dc-9126-e291618ca9ae',
-            feedUrl: 'https://example.com/feed2.xml',
-          },
-        ],
-      },
-      updateFrequency: {
-        display: 'Weekly on Mondays',
-        complete: true,
-      },
-      podping: {
-        usesPodping: true,
-      },
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expectedFull)
   })
 
   it('should parse feed with single funding element', () => {
