@@ -11,6 +11,7 @@ import {
   parseIntegrity,
   parseItem,
   parseLicense,
+  parseLiveItem,
   parseLocation,
   parseLocked,
   parsePerson,
@@ -1888,7 +1889,183 @@ describe('parseImages', () => {
   })
 })
 
-// parseLiveItem
+describe('parseLiveItem', () => {
+  it('should parse complete liveItem object', () => {
+    const value = {
+      '@status': 'live',
+      '@start': '2023-06-15T15:00:00Z',
+      '@end': '2023-06-15T16:00:00Z',
+      'podcast:contentlink': [
+        {
+          '@href': 'https://example.com/livestream',
+          '#text': 'Watch our livestream',
+        },
+        {
+          '@href': 'https://example.com/chat',
+          '#text': 'Join the chat',
+        },
+      ],
+      // Below are items from a regular Item object.
+      'podcast:person': [
+        {
+          '#text': 'Jane Doe',
+          '@role': 'host',
+        },
+      ],
+      'podcast:location': {
+        '#text': 'New York, NY',
+        '@geo': '40.7128,-74.0060',
+      },
+    }
+    const expected = {
+      status: 'live',
+      start: '2023-06-15T15:00:00Z',
+      end: '2023-06-15T16:00:00Z',
+      contentlinks: [
+        {
+          href: 'https://example.com/livestream',
+          display: 'Watch our livestream',
+        },
+        {
+          href: 'https://example.com/chat',
+          display: 'Join the chat',
+        },
+      ],
+      persons: [
+        {
+          display: 'Jane Doe',
+          role: 'host',
+        },
+      ],
+      location: {
+        display: 'New York, NY',
+        geo: '40.7128,-74.0060',
+      },
+    }
+
+    expect(parseLiveItem(value)).toEqual(expected)
+  })
+
+  it('should parse liveItem with only required fields', () => {
+    const value = {
+      '@status': 'pending',
+      '@start': '2023-06-15T15:00:00Z',
+    }
+    const expected = {
+      status: 'pending',
+      start: '2023-06-15T15:00:00Z',
+    }
+
+    expect(parseLiveItem(value)).toEqual(expected)
+  })
+
+  it('should parse liveItem with single contentLink as object', () => {
+    const value = {
+      '@status': 'live',
+      '@start': '2023-06-15T15:00:00Z',
+      'podcast:contentlink': {
+        '@href': 'https://example.com/livestream',
+        '#text': 'Watch our livestream',
+      },
+    }
+    const expected = {
+      status: 'live',
+      start: '2023-06-15T15:00:00Z',
+      contentlinks: [
+        {
+          href: 'https://example.com/livestream',
+          display: 'Watch our livestream',
+        },
+      ],
+    }
+
+    expect(parseLiveItem(value)).toEqual(expected)
+  })
+
+  it('should handle coercible values', () => {
+    const value = {
+      '@status': 123,
+      '@start': 456,
+      '@end': 789,
+    }
+    const expected = {
+      status: '123',
+      start: '456',
+      end: '789',
+    }
+
+    expect(parseLiveItem(value)).toEqual(expected)
+  })
+
+  it('should handle objects with mixed valid and invalid properties', () => {
+    const value = {
+      '@status': 'live',
+      '@start': '2023-06-15T15:00:00Z',
+      '@invalid': 'property',
+      'podcast:contentlink': [
+        {
+          '@href': 'https://example.com/livestream',
+          '#text': 'Watch our livestream',
+        },
+        {
+          '#text': 'Invalid link', // Missing href.
+        },
+      ],
+    }
+    const expected = {
+      status: 'live',
+      start: '2023-06-15T15:00:00Z',
+      contentlinks: [
+        {
+          href: 'https://example.com/livestream',
+          display: 'Watch our livestream',
+        },
+      ],
+    }
+
+    expect(parseLiveItem(value)).toEqual(expected)
+  })
+
+  it('should return undefined if status is missing', () => {
+    const value = {
+      '@start': '2023-06-15T15:00:00Z',
+      '@end': '2023-06-15T16:00:00Z',
+    }
+
+    expect(parseLiveItem(value)).toBeUndefined()
+  })
+
+  it('should return undefined if start is missing', () => {
+    const value = {
+      '@status': 'live',
+      '@end': '2023-06-15T16:00:00Z',
+    }
+
+    expect(parseLiveItem(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty objects', () => {
+    const value = {}
+
+    expect(parseLiveItem(value)).toBeUndefined()
+  })
+
+  it('should return undefined for objects with only unrelated properties', () => {
+    const value = {
+      '@unrelated': 'property',
+      random: 'value',
+    }
+
+    expect(parseLiveItem(value)).toBeUndefined()
+  })
+
+  it('should return undefined for not supported input', () => {
+    expect(parseLiveItem('not an object')).toBeUndefined()
+    expect(parseLiveItem(undefined)).toBeUndefined()
+    expect(parseLiveItem(null)).toBeUndefined()
+    expect(parseLiveItem([])).toBeUndefined()
+  })
+})
 
 describe('parseContentLink', () => {
   it('should parse complete content link object', () => {
