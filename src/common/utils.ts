@@ -1,7 +1,7 @@
 import { decodeHTML, decodeXML } from 'entities'
 import type { ParseFunction, Unreliable } from './types.js'
 
-export const isPresent = (value: Unreliable): value is string | number | boolean => {
+export const isPresent = <T>(value: T): value is NonNullable<T> => {
   return value != null
 }
 
@@ -31,9 +31,10 @@ export const trimObject = <T extends Record<string, unknown>>(
 
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
+    const value = object[key]
 
-    if (isPresent(object[key])) {
-      result[key] = object[key]
+    if (isPresent(value)) {
+      result[key] = value
       hasProperties = true
     }
   }
@@ -135,6 +136,18 @@ export const parseBoolean: ParseFunction<boolean> = (value) => {
     const lowercased = value.toLowerCase()
     if (lowercased === 'true') return true
     if (lowercased === 'false') return false
+  }
+}
+
+export const parseYesNoBoolean: ParseFunction<boolean> = (value) => {
+  const boolean = parseBoolean(value)
+
+  if (boolean !== undefined) {
+    return boolean
+  }
+
+  if (typeof value === 'string') {
+    return value.toLowerCase() === 'yes'
   }
 }
 

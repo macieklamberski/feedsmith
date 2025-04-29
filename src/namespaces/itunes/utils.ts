@@ -10,6 +10,7 @@ import {
   parseString,
   parseTextNumber,
   parseTextString,
+  parseYesNoBoolean,
   retrieveText,
   trimArray,
   trimObject,
@@ -43,18 +44,6 @@ export const parseOwner: ParseFunction<Owner> = (value) => {
 
   if (isPresent(owner.name) || isPresent(owner.email)) {
     return trimObject(owner)
-  }
-}
-
-export const parseYesNoBoolean: ParseFunction<boolean> = (value) => {
-  const boolean = parseBoolean(value)
-
-  if (boolean !== undefined) {
-    return boolean
-  }
-
-  if (typeof value === 'string') {
-    return value.toLowerCase() === 'yes'
   }
 }
 

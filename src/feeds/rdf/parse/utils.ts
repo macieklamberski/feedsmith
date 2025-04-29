@@ -5,9 +5,7 @@ import {
   parseArrayOf,
   parseSingular,
   parseSingularOf,
-  parseString,
   parseTextString,
-  retrieveText,
   trimObject,
 } from '../../../common/utils.js'
 import {
@@ -114,7 +112,6 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     atom: retrieveAtomFeed(channel),
     dc: retrieveDcItemOrFeed(channel),
     sy: retrieveSyFeed(channel),
-    itunes: retrieveItunesFeed(channel),
   }
 
   if (isPresent(feed.title)) {

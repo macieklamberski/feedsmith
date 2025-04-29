@@ -22,6 +22,10 @@ import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/utils.js'
+import {
+  retrieveFeed as retrievePodcastFeed,
+  retrieveItem as retrievePodcastItem,
+} from '../../../namespaces/podcast/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
 import type {
@@ -172,6 +176,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     dc: retrieveDcItemOrFeed(value),
     slash: retrieveSlashItem(value),
     itunes: retrieveItunesItem(value),
+    podcast: retrievePodcastItem(value),
   }
 
   if (isPresent(item.title) || isPresent(item.description)) {
@@ -209,6 +214,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     dc: retrieveDcItemOrFeed(value),
     sy: retrieveSyFeed(value),
     itunes: retrieveItunesFeed(value),
+    podcast: retrievePodcastFeed(value),
   }
 
   // INFO: Spec also says about required "description" but this field is not always present

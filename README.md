@@ -53,20 +53,20 @@ Feedsmith maintains the original feed structure in a clean, object-oriented form
 
 ### Namespaces
 
-| Name | Prefix | Parsing | Generating |
-|------|--------|---------|------------|
-| [Atom](http://www.w3.org/2005/Atom) | `<atom:*>`, `<a10:*>` | ✅ | ⏳ |
-| [Dublin Core](http://purl.org/dc/elements/1.1/) | `<dc:*>` | ✅ | ⏳ |
-| [Syndication](http://purl.org/rss/1.0/modules/syndication/) | `<sy:*>` | ✅ | ⏳ |
-| [Content](http://purl.org/rss/1.0/modules/content/) | `<content:*>` | ✅ | ⏳ |
-| [Slash](http://purl.org/rss/1.0/modules/slash/) | `<slash:*>` | ✅ | ⏳ |
-| [iTunes](http://www.itunes.com/dtds/podcast-1.0.dtd) | `<itunes:*>` | ✅ | ⏳ |
-| [Podcast](https://podcastindex.org/namespace/1.0) | `<podcast:*>` | ⏳ | ⏳ |
-| [Media RSS](http://search.yahoo.com/mrss/) | `<media:*>` | ⏳ | ⏳ |
-| [Geo RSS](http://www.georss.org/georss) | `<georss:*>` | 📋 | 📋 |
-| [Dublin Core Terms](http://purl.org/dc/terms/) | `<dcterms:*>` | 📋 | 📋 |
-| [Administrative](https://web.resource.org/rss/1.0/modules/admin/) | `<admin:*>` | 📋 | 📋 |
-| [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) | `<thr:*>` | 📋 | 📋 |
+| Name | Prefix | Supported in | Parsing | Generating |
+|------|--------|--------------|---------|------------|
+| [Atom](http://www.w3.org/2005/Atom) | `<atom:*>`, `<a10:*>` | RSS, RDF | ✅ | ⏳
+| [Dublin Core](http://purl.org/dc/elements/1.1/) | `<dc:*>` | RSS, Atom, RDF | ✅ | ⏳
+| [Syndication](http://purl.org/rss/1.0/modules/syndication/) | `<sy:*>` | RSS, Atom, RDF | ✅ | ⏳
+| [Content](http://purl.org/rss/1.0/modules/content/) | `<content:*>` | RSS, RDF | ✅ | ⏳
+| [Slash](http://purl.org/rss/1.0/modules/slash/) | `<slash:*>` | RSS, Atom, RDF | ✅ | ⏳
+| [iTunes](http://www.itunes.com/dtds/podcast-1.0.dtd) | `<itunes:*>` | RSS, Atom | ✅ | ⏳
+| [Podcast](https://podcastindex.org/namespace/1.0) | `<podcast:*>` | RSS | ✅ | ⏳
+| [Media RSS](http://search.yahoo.com/mrss/) | `<media:*>` | ⏳ | ⏳ | ⏳ |
+| [Geo RSS](http://www.georss.org/georss) | `<georss:*>` | 📋 | 📋 | 📋 |
+| [Dublin Core Terms](http://purl.org/dc/terms/) | `<dcterms:*>` | 📋 | 📋 | 📋 |
+| [Administrative](https://web.resource.org/rss/1.0/modules/admin/) | `<admin:*>` | 📋 | 📋 | 📋 |
+| [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) | `<thr:*>` | 📋 | 📋 | 📋 |
 
 ✅ Available
 &nbsp;&nbsp;·&nbsp;&nbsp;
