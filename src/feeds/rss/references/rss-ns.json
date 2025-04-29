@@ -21,6 +21,153 @@
       },
       "itunes": {
         "explicit": false
+      },
+      "podcast": {
+        "transcripts": [
+          {
+            "url": "https://example.com/episodes/123/transcript.vtt",
+            "type": "text/vtt",
+            "language": "en"
+          },
+          {
+            "url": "https://example.com/episodes/123/transcript.srt",
+            "type": "application/x-subrip",
+            "language": "en",
+            "rel": "captions"
+          }
+        ],
+        "chapters": {
+          "url": "https://example.com/episodes/123/chapters.json",
+          "type": "application/json+chapters"
+        },
+        "soundbites": [
+          {
+            "startTime": 60,
+            "duration": 30,
+            "display": "The key takeaway from this episode"
+          },
+          {
+            "startTime": 120,
+            "duration": 45,
+            "display": "Another important highlight"
+          }
+        ],
+        "persons": [
+          {
+            "display": "Jane Smith",
+            "group": "host",
+            "img": "https://example.com/images/host.jpg",
+            "href": "https://example.com/host"
+          },
+          {
+            "display": "John Doe",
+            "group": "guest",
+            "img": "https://example.com/images/guest.jpg",
+            "href": "https://example.com/guest"
+          },
+          {
+            "display": "Sam Johnson",
+            "role": "producer",
+            "img": "https://example.com/images/producer.jpg",
+            "href": "https://example.com/producer"
+          }
+        ],
+        "location": {
+          "display": "New York City, NY",
+          "geo": "geo:40.7128,-74.0060",
+          "osm": "R8780673"
+        },
+        "season": {
+          "number": 1,
+          "name": "First Season"
+        },
+        "episode": {
+          "number": 1,
+          "display": "Episode 1"
+        },
+        "license": {
+          "display": "CC BY 4.0",
+          "url": "https://creativecommons.org/licenses/by/4.0/"
+        },
+        "alternateEnclosures": [
+          {
+            "type": "audio/mpeg",
+            "length": 24576000,
+            "bitrate": 128000,
+            "title": "MP3 Audio",
+            "default": true,
+            "sources": [
+              {
+                "uri": "https://example.com/episodes/123.mp3"
+              }
+            ],
+            "integrity": {
+              "type": "sri",
+              "value": "sha384-ExampleHashValueABCDEF123456789"
+            }
+          },
+          {
+            "type": "audio/aac",
+            "length": 16384000,
+            "bitrate": 96000,
+            "title": "AAC Audio",
+            "sources": [
+              {
+                "uri": "https://example.com/episodes/123.aac"
+              }
+            ],
+            "integrity": {
+              "type": "sri",
+              "value": "sha384-DifferentHashValue987654321"
+            }
+          }
+        ],
+        "value": {
+          "type": "lightning",
+          "method": "keysend",
+          "suggested": 0.00000002,
+          "valueRecipients": [
+            {
+              "name": "Host",
+              "type": "node",
+              "address": "02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee83420ef254acd7d8e5edf5f16e",
+              "split": 90
+            },
+            {
+              "name": "Guest",
+              "type": "node",
+              "address": "03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a",
+              "split": 10
+            }
+          ]
+        },
+        "images": {
+          "srcset": "https://example.com/images/episode-1000.jpg 1000w, https://example.com/images/episode-600.jpg 600w"
+        },
+        "socialInteracts": [
+          {
+            "protocol": "twitter",
+            "uri": "https://twitter.com/examplepodcast/status/123456789",
+            "accountId": "@examplepodcast",
+            "accountUrl": "https://twitter.com/examplepodcast"
+          },
+          {
+            "protocol": "mastodon",
+            "uri": "https://podcastindex.social/@dave/123456789",
+            "accountId": "@examplepodcast@podcastindex.social",
+            "accountUrl": "https://podcastindex.social/@examplepodcast"
+          }
+        ],
+        "txts": [
+          {
+            "display": "{\"version\": \"1.0.0\", \"chapters\": []}",
+            "purpose": "transcript"
+          },
+          {
+            "display": "Additional text information about this episode",
+            "purpose": "notes"
+          }
+        ]
       }
     }
   ],
@@ -44,6 +191,129 @@
     "owner": {
       "email": "news@example.com",
       "name": "Jack Smith"
+    }
+  },
+  "podcast": {
+    "locked": {
+      "value": true,
+      "owner": "podcast@example.com"
+    },
+    "fundings": [
+      {
+        "display": "Support Our Show",
+        "url": "https://example.com/support"
+      }
+    ],
+    "persons": [
+      {
+        "display": "Jane Smith",
+        "group": "host",
+        "img": "https://example.com/images/host.jpg",
+        "href": "https://example.com/host"
+      },
+      {
+        "display": "John Doe",
+        "group": "guest",
+        "img": "https://example.com/images/guest.jpg",
+        "href": "https://example.com/guest"
+      }
+    ],
+    "location": {
+      "display": "San Francisco, CA",
+      "geo": "geo:37.7749,-122.4194",
+      "osm": "R4163767"
+    },
+    "trailers": [
+      {
+        "display": "Season 1 Trailer",
+        "url": "https://example.com/trailers/season1.mp3",
+        "pubdate": "2025-04-20T08:00:00+02:00",
+        "length": 1048576,
+        "type": "audio/mpeg",
+        "season": 1
+      }
+    ],
+    "license": {
+      "display": "CC BY 4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "guid": "ead4c236-bf58-58c6-a2c6-a6b28d128cb6",
+    "value": {
+      "type": "lightning",
+      "method": "keysend",
+      "suggested": 0.00000005,
+      "valueRecipients": [
+        {
+          "name": "Host",
+          "type": "node",
+          "address": "02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee83420ef254acd7d8e5edf5f16e",
+          "split": 90
+        },
+        {
+          "name": "Producer",
+          "type": "node",
+          "address": "03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a",
+          "split": 10
+        }
+      ]
+    },
+    "medium": "podcast",
+    "images": {
+      "srcset": "https://example.com/images/cover-1000.jpg 1000w, https://example.com/images/cover-600.jpg 600w"
+    },
+    "liveItems": [
+      {
+        "persons": [
+          {
+            "display": "Jane Smith",
+            "group": "host"
+          }
+        ],
+        "status": "live",
+        "start": "2025-04-30T09:00:00+01:00",
+        "end": "2025-04-30T10:00:00+01:00",
+        "contentlinks": [
+          {
+            "href": "https://example.com/live/chat",
+            "display": "Live Chat"
+          }
+        ]
+      }
+    ],
+    "blocks": [{ "value": true }, { "value": false, "id": "test" }],
+    "txts": [
+      {
+        "display": "Additional text information about the podcast",
+        "purpose": "info"
+      }
+    ],
+    "remoteItems": [
+      {
+        "feedGuid": "ead4c236-bf58-58c6-a2c6-a6b28d128cb9",
+        "feedUrl": "https://guest-podcast.example/feed.xml",
+        "itemGuid": "episode-guid-here"
+      }
+    ],
+    "podroll": {
+      "remoteItems": [
+        {
+          "feedGuid": "ead4c236-bf58-58c6-a2c6-a6b28d128cb8",
+          "feedUrl": "https://example.com/related-podcast1.xml"
+        },
+        {
+          "feedGuid": "ead4c236-bf58-58c6-a2c6-a6b28d128cb7",
+          "feedUrl": "https://example.com/related-podcast2.xml"
+        }
+      ]
+    },
+    "updateFrequency": {
+      "display": "Weekly on Fridays",
+      "complete": false,
+      "rrule": "FREQ=WEEKLY;BYDAY=FR",
+      "dtstart": "2025-01-10T08:00:00+01:00"
+    },
+    "podping": {
+      "usesPodping": true
     }
   }
 }

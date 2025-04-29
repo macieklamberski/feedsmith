@@ -313,7 +313,7 @@ export const parseLiveItem: ParseFunction<LiveItem> = (value) => {
   }
 
   const liveItem = {
-    ...parseItem(value),
+    ...retrieveItem(value),
     status: parseString(value['@status']),
     start: parseString(value['@start']),
     end: parseString(value['@end']),
@@ -456,7 +456,7 @@ export const parseValueTimeSplit: ParseFunction<ValueTimeSplit> = (value) => {
   }
 }
 
-export const parseItem: ParseFunction<Item> = (value) => {
+export const retrieveItem: ParseFunction<Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -480,7 +480,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
   return item
 }
 
-export const parseFeed: ParseFunction<Feed> = (value) => {
+export const retrieveFeed: ParseFunction<Feed> = (value) => {
   if (!isObject(value)) {
     return
   }

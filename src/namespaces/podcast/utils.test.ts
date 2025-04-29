@@ -5,11 +5,9 @@ import {
   parseChapters,
   parseContentLink,
   parseEpisode,
-  parseFeed,
   parseFunding,
   parseImages,
   parseIntegrity,
-  parseItem,
   parseLicense,
   parseLiveItem,
   parseLocation,
@@ -29,6 +27,8 @@ import {
   parseValue,
   parseValueRecipient,
   parseValueTimeSplit,
+  retrieveFeed,
+  retrieveItem,
 } from './utils.js'
 
 describe('parseTranscript', () => {
@@ -3033,7 +3033,7 @@ describe('parseValueTimeSplit', () => {
   })
 })
 
-describe('parseItem', () => {
+describe('retrieveItem', () => {
   const expectedFull = {
     transcripts: [
       {
@@ -3205,7 +3205,7 @@ describe('parseItem', () => {
       ],
     }
 
-    expect(parseItem(value)).toEqual(expectedFull)
+    expect(retrieveItem(value)).toEqual(expectedFull)
   })
 
   it('should parse a complete item with all podcast namespace elements (as array of values)', () => {
@@ -3306,7 +3306,7 @@ describe('parseItem', () => {
       ],
     }
 
-    expect(parseItem(value)).toEqual(expectedFull)
+    expect(retrieveItem(value)).toEqual(expectedFull)
   })
 
   it('should parse item with single transcript element', () => {
@@ -3325,7 +3325,7 @@ describe('parseItem', () => {
       ],
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should parse item with multiple transcript elements', () => {
@@ -3358,7 +3358,7 @@ describe('parseItem', () => {
       ],
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should handle invalid transcript elements', () => {
@@ -3385,7 +3385,7 @@ describe('parseItem', () => {
       ],
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should handle multiple properties with mixed valid and invalid elements', () => {
@@ -3437,7 +3437,7 @@ describe('parseItem', () => {
       ],
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -3470,20 +3470,20 @@ describe('parseItem', () => {
       ],
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
     const value = {}
-    expect(parseItem(value)).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object inputs', () => {
-    expect(parseItem('not an object')).toBeUndefined()
-    expect(parseItem(undefined)).toBeUndefined()
-    expect(parseItem(null)).toBeUndefined()
-    expect(parseItem([])).toBeUndefined()
-    expect(parseItem(123)).toBeUndefined()
+    expect(retrieveItem('not an object')).toBeUndefined()
+    expect(retrieveItem(undefined)).toBeUndefined()
+    expect(retrieveItem(null)).toBeUndefined()
+    expect(retrieveItem([])).toBeUndefined()
+    expect(retrieveItem(123)).toBeUndefined()
   })
 
   it('should return undefined if all parsed properties are undefined', () => {
@@ -3495,11 +3495,11 @@ describe('parseItem', () => {
         '@role': 'host', // Missing display.
       },
     }
-    expect(parseItem(value)).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 })
 
-describe('parseFeed', () => {
+describe('retrieveFeed', () => {
   const expectedFull = {
     locked: {
       value: true,
@@ -3705,7 +3705,7 @@ describe('parseFeed', () => {
       },
     }
 
-    expect(parseFeed(value)).toEqual(expectedFull)
+    expect(retrieveFeed(value)).toEqual(expectedFull)
   })
 
   it('should parse a complete feed with all podcast namespace elements (as array of values)', () => {
@@ -3825,7 +3825,7 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value)).toEqual(expectedFull)
+    expect(retrieveFeed(value)).toEqual(expectedFull)
   })
 
   it('should parse feed with single funding element', () => {
@@ -3844,7 +3844,7 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with multiple funding elements', () => {
@@ -3873,7 +3873,7 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should handle invalid funding elements', () => {
@@ -3897,7 +3897,7 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should handle multiple properties with mixed valid and invalid elements', () => {
@@ -3944,7 +3944,7 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -3977,21 +3977,21 @@ describe('parseFeed', () => {
       medium: '789',
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
     const value = {}
 
-    expect(parseFeed(value)).toBeUndefined()
+    expect(retrieveFeed(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object inputs', () => {
-    expect(parseFeed('not an object')).toBeUndefined()
-    expect(parseFeed(undefined)).toBeUndefined()
-    expect(parseFeed(null)).toBeUndefined()
-    expect(parseFeed([])).toBeUndefined()
-    expect(parseFeed(123)).toBeUndefined()
+    expect(retrieveFeed('not an object')).toBeUndefined()
+    expect(retrieveFeed(undefined)).toBeUndefined()
+    expect(retrieveFeed(null)).toBeUndefined()
+    expect(retrieveFeed([])).toBeUndefined()
+    expect(retrieveFeed(123)).toBeUndefined()
   })
 
   it('should return undefined if all parsed properties are undefined', () => {
@@ -4003,7 +4003,7 @@ describe('parseFeed', () => {
         '@role': 'host', // Missing display.
       },
     }
-    expect(parseFeed(value)).toBeUndefined()
+    expect(retrieveFeed(value)).toBeUndefined()
   })
 
   it('should parse liveItem with multiple contentLinks', () => {
@@ -4030,7 +4030,7 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should parse multiple liveItems', () => {
@@ -4047,6 +4047,6 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 })
