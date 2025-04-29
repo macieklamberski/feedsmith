@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@types/benchmark": "^2.1.5",
-    "@types/bun": "^1.2.10",
+    "@types/bun": "^1.2.11",
     "@types/feedme": "^2.0.4",
     "@types/feedparser": "^2.2.8",
     "typescript": "^5.8.3"
