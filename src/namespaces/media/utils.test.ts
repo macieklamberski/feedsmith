@@ -2515,13 +2515,27 @@ describe('parseScenes', () => {
 })
 
 describe('parseLocation', () => {
-  it('TODO: Implement tests for parseLocation once the function is implemented', () => {
-    // Tests will be added when the function is implemented according to:
-    // https://www.rssboard.org/media-rss#media-peerlink
+  it('should parse non-standard string-only version of the location (with #text)', () => {
+    const value = {
+      '#text': 'San Francisco, CA',
+    }
+    const expected = {
+      description: 'San Francisco, CA',
+    }
+
+    expect(parseLocation(value)).toEqual(expected)
+  })
+
+  it('should parse non-standard string-only version of the location (wihout #text)', () => {
+    const value = 'San Francisco, CA'
+    const expected = {
+      description: 'San Francisco, CA',
+    }
+
+    expect(parseLocation(value)).toEqual(expected)
   })
 
   it('should return undefined for not supported input', () => {
-    expect(parseLocation('not an object')).toBeUndefined()
     expect(parseLocation(undefined)).toBeUndefined()
     expect(parseLocation(null)).toBeUndefined()
     expect(parseLocation([])).toBeUndefined()
