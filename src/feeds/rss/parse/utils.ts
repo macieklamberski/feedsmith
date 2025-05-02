@@ -1,4 +1,4 @@
-import type { ParseFunction, Unreliable } from '../../../common/types.js'
+import type { ParseFunction } from '../../../common/types.js'
 import {
   isObject,
   isPresent,
@@ -22,6 +22,7 @@ import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/utils.js'
+import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/utils.js'
 import {
   retrieveFeed as retrievePodcastFeed,
   retrieveItem as retrievePodcastItem,
@@ -177,6 +178,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     slash: retrieveSlashItem(value),
     itunes: retrieveItunesItem(value),
     podcast: retrievePodcastItem(value),
+    media: retrieveMediaItemOrFeed(value),
   }
 
   if (isPresent(item.title) || isPresent(item.description)) {
@@ -215,6 +217,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     sy: retrieveSyFeed(value),
     itunes: retrieveItunesFeed(value),
     podcast: retrievePodcastFeed(value),
+    media: retrieveMediaItemOrFeed(value),
   }
 
   // INFO: Spec also says about required "description" but this field is not always present

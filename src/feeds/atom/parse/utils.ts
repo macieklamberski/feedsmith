@@ -15,6 +15,7 @@ import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/utils.js'
+import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
 import type { ParseFunction } from './types.js'
@@ -193,6 +194,7 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
     dc: options?.partial ? undefined : retrieveDcItemOrFeed(value),
     slash: options?.partial ? undefined : retrieveSlashItem(value),
     itunes: options?.partial ? undefined : retrieveItunesItem(value),
+    media: retrieveMediaItemOrFeed(value),
   })
 
   if (options?.partial || !entry) {
@@ -229,6 +231,7 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
     dc: options?.partial ? undefined : retrieveDcItemOrFeed(value),
     sy: options?.partial ? undefined : retrieveSyFeed(value),
     itunes: options?.partial ? undefined : retrieveItunesFeed(value),
+    media: retrieveMediaItemOrFeed(value),
   })
 
   if (options?.partial || !feed) {
