@@ -17,6 +17,380 @@
         "department": "not-an-ocean-unless-there-are-lobsters",
         "comments": 177,
         "hit_parade": [177, 155, 105, 33, 6, 3, 0]
+      },
+      "media": {
+        "contents": [
+          {
+            "url": "https://example.com/videos/sample1.mp4",
+            "fileSize": 12345678,
+            "type": "video/mp4",
+            "medium": "video",
+            "isDefault": true,
+            "expression": "full",
+            "bitrate": 1500,
+            "framerate": 30,
+            "samplingrate": 44.1,
+            "channels": 2,
+            "duration": 120,
+            "height": 720,
+            "width": 1280,
+            "lang": "en",
+            "title": {
+              "value": "Sample Video Title",
+              "type": "plain"
+            },
+            "description": {
+              "value": "This is a <b>sample video</b> demonstrating media:content",
+              "type": "html"
+            },
+            "keywords": ["sample", "video", "example", "media", "rss"],
+            "thumbnails": [
+              {
+                "url": "https://example.com/thumbnails/sample1.jpg",
+                "width": 320,
+                "height": 180,
+                "time": "00:00:15.000"
+              }
+            ],
+            "categories": [
+              {
+                "name": "Entertainment",
+                "scheme": "http://search.yahoo.com/mrss/category_schema"
+              }
+            ],
+            "hashes": [
+              {
+                "value": "dfdec888b7f38882e8a698d52eaebc04",
+                "algo": "md5"
+              }
+            ],
+            "credits": [
+              {
+                "value": "Jane Smith",
+                "role": "producer",
+                "scheme": "urn:ebu"
+              }
+            ],
+            "ratings": [
+              {
+                "value": "adult",
+                "scheme": "urn:simple"
+              }
+            ],
+            "copyright": {
+              "value": "© 2025 Example Media Inc."
+            },
+            "texts": [
+              {
+                "value": "This is a sample transcript text",
+                "type": "transcript",
+                "lang": "en",
+                "start": "00:00:03",
+                "end": "00:00:10"
+              }
+            ],
+            "restrictions": [
+              {
+                "value": "us ca gb",
+                "relationship": "allow",
+                "type": "country"
+              }
+            ],
+            "community": {
+              "starRating": {
+                "average": 4.5,
+                "count": 2500,
+                "min": 1,
+                "max": 5
+              },
+              "statistics": {
+                "views": 12345,
+                "favorites": 413
+              },
+              "tags": [
+                { "name": "featured", "weight": 1 },
+                { "name": "media", "weight": 1 },
+                { "name": "example", "weight": 1 }
+              ]
+            },
+            "comments": ["Great video!", "Very informative content"],
+            "embed": {
+              "url": "https://example.com/players/embed",
+              "width": 640,
+              "height": 360,
+              "params": [
+                {
+                  "name": "autoplay",
+                  "value": "true"
+                },
+                {
+                  "name": "theme",
+                  "value": "dark"
+                }
+              ]
+            },
+            "responses": ["https://example.com/videos/response1"],
+            "backLinks": ["https://example.com/articles/related"],
+            "status": {
+              "state": "active"
+            },
+            "prices": [
+              {
+                "type": "rent",
+                "price": 2.99,
+                "currency": "USD"
+              }
+            ],
+            "licenses": [
+              {
+                "name": "Standard License",
+                "type": "text/html",
+                "href": "https://example.com/license"
+              }
+            ],
+            "peerLinks": [
+              {
+                "type": "application/torrent",
+                "href": "https://example.com/torrents/sample1.torrent"
+              }
+            ],
+            "locations": [
+              {
+                "description": "Sample Studio"
+              }
+            ],
+            "rights": {
+              "status": "official"
+            },
+            "scenes": [
+              {
+                "title": "Introduction",
+                "description": "Opening sequence",
+                "startTime": "00:00:00",
+                "endTime": "00:00:30"
+              },
+              {
+                "title": "Main Content",
+                "startTime": "00:00:30",
+                "endTime": "00:01:45"
+              }
+            ]
+          }
+        ],
+        "group": {
+          "contents": [
+            {
+              "url": "https://example.com/videos/sample-hd.mp4",
+              "fileSize": 45678912,
+              "type": "video/mp4",
+              "medium": "video",
+              "expression": "full",
+              "bitrate": 5000,
+              "framerate": 60,
+              "duration": 180,
+              "height": 1080,
+              "width": 1920,
+              "lang": "en",
+              "title": {
+                "value": "HD Version (1080p)"
+              }
+            },
+            {
+              "url": "https://example.com/videos/sample-sd.mp4",
+              "fileSize": 23456789,
+              "type": "video/mp4",
+              "medium": "video",
+              "expression": "full",
+              "bitrate": 2500,
+              "framerate": 30,
+              "duration": 180,
+              "height": 720,
+              "width": 1280,
+              "lang": "en",
+              "title": {
+                "value": "SD Version (720p)"
+              }
+            },
+            {
+              "url": "https://example.com/videos/sample.webm",
+              "fileSize": 19876543,
+              "type": "video/webm",
+              "medium": "video",
+              "expression": "full",
+              "bitrate": 2000,
+              "framerate": 30,
+              "duration": 180,
+              "height": 720,
+              "width": 1280,
+              "lang": "en",
+              "title": {
+                "value": "WebM Version"
+              }
+            },
+            {
+              "url": "https://example.com/audio/sample.mp3",
+              "fileSize": 3456789,
+              "type": "audio/mpeg",
+              "medium": "audio",
+              "expression": "full",
+              "bitrate": 320,
+              "samplingrate": 44.1,
+              "channels": 2,
+              "duration": 180,
+              "lang": "en",
+              "title": {
+                "value": "Audio Only Version"
+              }
+            },
+            {
+              "url": "https://example.com/captions/sample-en.srt",
+              "type": "text/srt",
+              "medium": "document",
+              "expression": "sample",
+              "lang": "en",
+              "title": {
+                "value": "English Subtitles"
+              }
+            },
+            {
+              "url": "https://example.com/captions/sample-es.srt",
+              "type": "text/srt",
+              "medium": "document",
+              "expression": "sample",
+              "lang": "es",
+              "title": {
+                "value": "Spanish Subtitles"
+              }
+            }
+          ],
+          "title": {
+            "value": "Multi-Format Content Example"
+          },
+          "description": {
+            "value": "This video is available in multiple formats and resolutions"
+          },
+          "thumbnails": [
+            {
+              "url": "https://example.com/thumbnails/group-main.jpg",
+              "width": 640,
+              "height": 360
+            },
+            {
+              "url": "https://example.com/thumbnails/group-alt.jpg",
+              "width": 1280,
+              "height": 720
+            }
+          ],
+          "keywords": ["group", "multiple", "formats", "resolutions"],
+          "categories": [
+            {
+              "name": "Technology"
+            }
+          ],
+          "ratings": [
+            {
+              "value": "PG",
+              "scheme": "urn:mpaa"
+            }
+          ],
+          "copyright": {
+            "value": "© 2025 Example Media Inc."
+          }
+        },
+        "title": {
+          "value": "Advanced Media Features Demo",
+          "type": "text"
+        },
+        "credits": [
+          {
+            "value": "Michael Chang",
+            "role": "director",
+            "scheme": "urn:ebu"
+          },
+          {
+            "value": "Sarah Johnson",
+            "role": "actor",
+            "scheme": "urn:ebu"
+          },
+          {
+            "value": "Robert Williams",
+            "role": "actor",
+            "scheme": "urn:ebu"
+          }
+        ],
+        "categories": [
+          {
+            "name": "Arts/Movies/Titles/A/",
+            "scheme": "http://dmoz.org"
+          }
+        ],
+        "status": {
+          "state": "active",
+          "reason": "approved"
+        },
+        "thumbnails": [
+          {
+            "url": "https://example.com/thumbnails/adv-1.jpg",
+            "time": "00:00:05.000"
+          },
+          {
+            "url": "https://example.com/thumbnails/adv-2.jpg",
+            "time": "00:01:15.000"
+          },
+          {
+            "url": "https://example.com/thumbnails/adv-3.jpg",
+            "time": "00:02:30.000"
+          }
+        ],
+        "prices": [
+          {
+            "type": "package",
+            "price": 9.99,
+            "currency": "USD",
+            "info": "full access"
+          },
+          {
+            "type": "subscription",
+            "price": 4.99,
+            "currency": "USD",
+            "info": "monthly"
+          }
+        ],
+        "restrictions": [
+          {
+            "value": "us ca gb de fr",
+            "relationship": "allow",
+            "type": "country"
+          },
+          {
+            "value": "true",
+            "relationship": "deny",
+            "type": "sharing"
+          }
+        ],
+        "ratings": [
+          { "value": "PG-13", "scheme": "urn:mpaa" },
+          { "value": "TV-14", "scheme": "urn:v-chip" }
+        ],
+        "community": {
+          "starRating": {
+            "average": 4.8,
+            "count": 12563,
+            "min": 1,
+            "max": 5
+          },
+          "statistics": {
+            "favorites": 3421,
+            "views": 256789
+          },
+          "tags": [
+            { "name": "cinematic", "weight": 1 },
+            { "name": "production", "weight": 1 },
+            { "name": "advanced", "weight": 1 },
+            { "name": "technical", "weight": 1 },
+            { "name": "demo", "weight": 1 }
+          ]
+        }
       }
     }
   ],
@@ -30,5 +404,379 @@
     "updatePeriod": "hourly",
     "updateFrequency": 1,
     "updateBase": "2000-01-01T12:00+00:00"
+  },
+  "media": {
+    "contents": [
+      {
+        "url": "https://example.com/videos/sample1.mp4",
+        "fileSize": 12345678,
+        "type": "video/mp4",
+        "medium": "video",
+        "isDefault": true,
+        "expression": "full",
+        "bitrate": 1500,
+        "framerate": 30,
+        "samplingrate": 44.1,
+        "channels": 2,
+        "duration": 120,
+        "height": 720,
+        "width": 1280,
+        "lang": "en",
+        "title": {
+          "value": "Sample Video Title",
+          "type": "plain"
+        },
+        "description": {
+          "value": "This is a <b>sample video</b> demonstrating media:content",
+          "type": "html"
+        },
+        "keywords": ["sample", "video", "example", "media", "rss"],
+        "thumbnails": [
+          {
+            "url": "https://example.com/thumbnails/sample1.jpg",
+            "width": 320,
+            "height": 180,
+            "time": "00:00:15.000"
+          }
+        ],
+        "categories": [
+          {
+            "name": "Entertainment",
+            "scheme": "http://search.yahoo.com/mrss/category_schema"
+          }
+        ],
+        "hashes": [
+          {
+            "value": "dfdec888b7f38882e8a698d52eaebc04",
+            "algo": "md5"
+          }
+        ],
+        "credits": [
+          {
+            "value": "Jane Smith",
+            "role": "producer",
+            "scheme": "urn:ebu"
+          }
+        ],
+        "ratings": [
+          {
+            "value": "adult",
+            "scheme": "urn:simple"
+          }
+        ],
+        "copyright": {
+          "value": "© 2025 Example Media Inc."
+        },
+        "texts": [
+          {
+            "value": "This is a sample transcript text",
+            "type": "transcript",
+            "lang": "en",
+            "start": "00:00:03",
+            "end": "00:00:10"
+          }
+        ],
+        "restrictions": [
+          {
+            "value": "us ca gb",
+            "relationship": "allow",
+            "type": "country"
+          }
+        ],
+        "community": {
+          "starRating": {
+            "average": 4.5,
+            "count": 2500,
+            "min": 1,
+            "max": 5
+          },
+          "statistics": {
+            "views": 12345,
+            "favorites": 413
+          },
+          "tags": [
+            { "name": "featured", "weight": 1 },
+            { "name": "media", "weight": 1 },
+            { "name": "example", "weight": 1 }
+          ]
+        },
+        "comments": ["Great video!", "Very informative content"],
+        "embed": {
+          "url": "https://example.com/players/embed",
+          "width": 640,
+          "height": 360,
+          "params": [
+            {
+              "name": "autoplay",
+              "value": "true"
+            },
+            {
+              "name": "theme",
+              "value": "dark"
+            }
+          ]
+        },
+        "responses": ["https://example.com/videos/response1"],
+        "backLinks": ["https://example.com/articles/related"],
+        "status": {
+          "state": "active"
+        },
+        "prices": [
+          {
+            "type": "rent",
+            "price": 2.99,
+            "currency": "USD"
+          }
+        ],
+        "licenses": [
+          {
+            "name": "Standard License",
+            "type": "text/html",
+            "href": "https://example.com/license"
+          }
+        ],
+        "peerLinks": [
+          {
+            "type": "application/torrent",
+            "href": "https://example.com/torrents/sample1.torrent"
+          }
+        ],
+        "locations": [
+          {
+            "description": "Sample Studio"
+          }
+        ],
+        "rights": {
+          "status": "official"
+        },
+        "scenes": [
+          {
+            "title": "Introduction",
+            "description": "Opening sequence",
+            "startTime": "00:00:00",
+            "endTime": "00:00:30"
+          },
+          {
+            "title": "Main Content",
+            "startTime": "00:00:30",
+            "endTime": "00:01:45"
+          }
+        ]
+      }
+    ],
+    "group": {
+      "contents": [
+        {
+          "url": "https://example.com/videos/sample-hd.mp4",
+          "fileSize": 45678912,
+          "type": "video/mp4",
+          "medium": "video",
+          "expression": "full",
+          "bitrate": 5000,
+          "framerate": 60,
+          "duration": 180,
+          "height": 1080,
+          "width": 1920,
+          "lang": "en",
+          "title": {
+            "value": "HD Version (1080p)"
+          }
+        },
+        {
+          "url": "https://example.com/videos/sample-sd.mp4",
+          "fileSize": 23456789,
+          "type": "video/mp4",
+          "medium": "video",
+          "expression": "full",
+          "bitrate": 2500,
+          "framerate": 30,
+          "duration": 180,
+          "height": 720,
+          "width": 1280,
+          "lang": "en",
+          "title": {
+            "value": "SD Version (720p)"
+          }
+        },
+        {
+          "url": "https://example.com/videos/sample.webm",
+          "fileSize": 19876543,
+          "type": "video/webm",
+          "medium": "video",
+          "expression": "full",
+          "bitrate": 2000,
+          "framerate": 30,
+          "duration": 180,
+          "height": 720,
+          "width": 1280,
+          "lang": "en",
+          "title": {
+            "value": "WebM Version"
+          }
+        },
+        {
+          "url": "https://example.com/audio/sample.mp3",
+          "fileSize": 3456789,
+          "type": "audio/mpeg",
+          "medium": "audio",
+          "expression": "full",
+          "bitrate": 320,
+          "samplingrate": 44.1,
+          "channels": 2,
+          "duration": 180,
+          "lang": "en",
+          "title": {
+            "value": "Audio Only Version"
+          }
+        },
+        {
+          "url": "https://example.com/captions/sample-en.srt",
+          "type": "text/srt",
+          "medium": "document",
+          "expression": "sample",
+          "lang": "en",
+          "title": {
+            "value": "English Subtitles"
+          }
+        },
+        {
+          "url": "https://example.com/captions/sample-es.srt",
+          "type": "text/srt",
+          "medium": "document",
+          "expression": "sample",
+          "lang": "es",
+          "title": {
+            "value": "Spanish Subtitles"
+          }
+        }
+      ],
+      "title": {
+        "value": "Multi-Format Content Example"
+      },
+      "description": {
+        "value": "This video is available in multiple formats and resolutions"
+      },
+      "thumbnails": [
+        {
+          "url": "https://example.com/thumbnails/group-main.jpg",
+          "width": 640,
+          "height": 360
+        },
+        {
+          "url": "https://example.com/thumbnails/group-alt.jpg",
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "keywords": ["group", "multiple", "formats", "resolutions"],
+      "categories": [
+        {
+          "name": "Technology"
+        }
+      ],
+      "ratings": [
+        {
+          "value": "PG",
+          "scheme": "urn:mpaa"
+        }
+      ],
+      "copyright": {
+        "value": "© 2025 Example Media Inc."
+      }
+    },
+    "title": {
+      "value": "Advanced Media Features Demo",
+      "type": "text"
+    },
+    "credits": [
+      {
+        "value": "Michael Chang",
+        "role": "director",
+        "scheme": "urn:ebu"
+      },
+      {
+        "value": "Sarah Johnson",
+        "role": "actor",
+        "scheme": "urn:ebu"
+      },
+      {
+        "value": "Robert Williams",
+        "role": "actor",
+        "scheme": "urn:ebu"
+      }
+    ],
+    "categories": [
+      {
+        "name": "Arts/Movies/Titles/A/",
+        "scheme": "http://dmoz.org"
+      }
+    ],
+    "status": {
+      "state": "active",
+      "reason": "approved"
+    },
+    "thumbnails": [
+      {
+        "url": "https://example.com/thumbnails/adv-1.jpg",
+        "time": "00:00:05.000"
+      },
+      {
+        "url": "https://example.com/thumbnails/adv-2.jpg",
+        "time": "00:01:15.000"
+      },
+      {
+        "url": "https://example.com/thumbnails/adv-3.jpg",
+        "time": "00:02:30.000"
+      }
+    ],
+    "prices": [
+      {
+        "type": "package",
+        "price": 9.99,
+        "currency": "USD",
+        "info": "full access"
+      },
+      {
+        "type": "subscription",
+        "price": 4.99,
+        "currency": "USD",
+        "info": "monthly"
+      }
+    ],
+    "restrictions": [
+      {
+        "value": "us ca gb de fr",
+        "relationship": "allow",
+        "type": "country"
+      },
+      {
+        "value": "true",
+        "relationship": "deny",
+        "type": "sharing"
+      }
+    ],
+    "ratings": [
+      { "value": "PG-13", "scheme": "urn:mpaa" },
+      { "value": "TV-14", "scheme": "urn:v-chip" }
+    ],
+    "community": {
+      "starRating": {
+        "average": 4.8,
+        "count": 12563,
+        "min": 1,
+        "max": 5
+      },
+      "statistics": {
+        "favorites": 3421,
+        "views": 256789
+      },
+      "tags": [
+        { "name": "cinematic", "weight": 1 },
+        { "name": "production", "weight": 1 },
+        { "name": "advanced", "weight": 1 },
+        { "name": "technical", "weight": 1 },
+        { "name": "demo", "weight": 1 }
+      ]
+    }
   }
 }
