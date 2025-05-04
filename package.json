@@ -5,6 +5,7 @@
     "type": "git",
     "url": "https://github.com/macieklamberski/feedsmith.git"
   },
+  "homepage": "https://feedsmith.dev",
   "bugs": {
     "url": "https://github.com/macieklamberski/feedsmith/issues"
   },
@@ -16,6 +17,7 @@
     "rss reader",
     "rss parser",
     "rss generator",
+    "rss podcast",
     "feed parser",
     "feed generator",
     "atom",
