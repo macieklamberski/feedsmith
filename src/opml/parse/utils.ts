@@ -3,6 +3,7 @@ import {
   isObject,
   parseArrayOf,
   parseBoolean,
+  parseCsvOf,
   parseNumber,
   parseSingularOf,
   parseString,
@@ -12,11 +13,6 @@ import {
   trimObject,
 } from '../../common/utils.js'
 import type { Body, Head, Opml, Outline } from './types.js'
-
-// TODO: Move to /src/common/utils.ts.
-export const parseCsvOf = <T>(value: Unreliable, parse: ParseFunction<T>): Array<T> | undefined => {
-  return parseArrayOf(parseString(value)?.split(','), parse)
-}
 
 export const parseOutline: ParseFunction<Outline> = (value) => {
   if (!isObject(value)) {
@@ -54,7 +50,9 @@ export const parseHead: ParseFunction<Head> = (value) => {
     ownerEmail: parseSingularOf(value.owneremail, parseTextString),
     ownerId: parseSingularOf(value.ownerid, parseTextString),
     docs: parseSingularOf(value.docs, parseTextString),
-    expansionState: parseCsvOf(retrieveText(value.expansionstate), parseNumber),
+    expansionState: parseSingularOf(value.expansionstate, (value) =>
+      parseCsvOf(retrieveText(value), parseNumber),
+    ),
     vertScrollState: parseSingularOf(value.vertscrollstate, parseTextNumber),
     windowTop: parseSingularOf(value.windowtop, parseTextNumber),
     windowLeft: parseSingularOf(value.windowleft, parseTextNumber),

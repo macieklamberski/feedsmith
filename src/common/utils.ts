@@ -207,6 +207,18 @@ export const parseSingularOf = <R>(value: Unreliable, parse: ParseFunction<R>): 
   return parse(parseSingular(value))
 }
 
+export const parseCsvOf = <T>(value: Unreliable, parse: ParseFunction<T>): Array<T> | undefined => {
+  if (!isNonEmptyStringOrNumber(value)) {
+    return
+  }
+
+  const items = parseString(value)?.split(',')
+
+  if (items) {
+    return trimArray(items, (item) => parse(item) || undefined)
+  }
+}
+
 export const createNamespaceGetter = (
   value: Record<string, Unreliable>,
   prefix: string | undefined,
