@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <head>
+    <title>Illustrating the category attribute with cuisine</title>
+    <dateCreated>Sun, 25 Feb 2024 15:45:00 GMT</dateCreated>
+  </head>
+  <body>
+    <outline text="Ramen from Ichiran is the most authentic tonkotsu experience outside Japan." created="Sun, 25 Feb 2024 15:42:18 GMT" category="/Food/Cuisine/Japanese,/Tourism/Asia/Japan"/>
+  </body>
+</opml>

@@ -1,0 +1,66 @@
+{
+  "version": "2.0",
+  "head": {
+    "title": "workspace.examples.generateTestData",
+    "dateCreated": "Fri, 12 Jan 2024 18:30:45 GMT",
+    "dateModified": "Sun, 18 Feb 2024 09:15:22 GMT",
+    "ownerName": "Anna Smith",
+    "ownerEmail": "anna@example.com",
+    "expansionState": [1, 2, 4],
+    "vertScrollState": 1,
+    "windowTop": 70,
+    "windowLeft": 40,
+    "windowBottom": 310,
+    "windowRight": 470
+  },
+  "body": {
+    "outlines": [
+      {
+        "text": "Changes",
+        "isComment": false,
+        "outlines": [
+          {
+            "text": "18/02/2024; 9:15:22 AM by AS",
+            "outlines": [
+              {
+                "text": "Change 'output' to 'export'."
+              }
+            ]
+          },
+          {
+            "text": "25/01/2024; 3:22:15 PM by AS",
+            "isComment": true,
+            "outlines": [
+              {
+                "text": "Create test data by generating JSON files with random user information."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "text": "on createUserData (filename, count)",
+        "outlines": [
+          {
+            "text": "directory.ensurePath (filename)",
+            "isBreakpoint": true
+          },
+          {
+            "text": "file.writeJsonFile (filename, string.generateRandomUsers (count))"
+          }
+        ]
+      },
+      {
+        "text": "local (outputDir = user.app.preferences.dataFolder + 'test\\\\users\\\\')"
+      },
+      {
+        "text": "for i = 1 to 10",
+        "outlines": [
+          {
+            "text": "createUserData (outputDir + 'batch' + i + '.json', random (50, 200))"
+          }
+        ]
+      }
+    ]
+  }
+}

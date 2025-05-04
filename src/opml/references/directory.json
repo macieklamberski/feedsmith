@@ -1,0 +1,53 @@
+{
+  "version": "2.0",
+  "head": {
+    "title": "Tech Blog Directory",
+    "dateCreated": "Mon, 22 Jan 2024 11:22:45 GMT",
+    "dateModified": "Fri, 16 Feb 2024 16:48:32 GMT",
+    "ownerName": "Anna Smith",
+    "ownerEmail": "anna@example.com",
+    "vertScrollState": 1,
+    "windowTop": 100,
+    "windowLeft": 460,
+    "windowBottom": 380,
+    "windowRight": 960
+  },
+  "body": {
+    "outlines": [
+      {
+        "text": "TechCrunch Top 50 Startups",
+        "created": "Fri, 16 Feb 2024 16:48:12 GMT",
+        "type": "link",
+        "url": "http://tech.example.com/blogs/startups50.opml"
+      },
+      {
+        "text": "WebDevCon 2024 Speakers",
+        "created": "Tue, 13 Feb 2024 14:22:18 GMT",
+        "type": "link",
+        "url": "http://static.webdevcon.org/2024/speakers.opml"
+      },
+      {
+        "text": "Sarah Johnson's directory of Tech podcasts",
+        "type": "link",
+        "url": "http://sarahjohnson.com/tech-podcasts.opml"
+      },
+      {
+        "text": "Mark Davis's Developer Tools directory",
+        "type": "link",
+        "url": "http://homepage.example.com/markdavis/tools/devToolsDirectory.opml"
+      },
+      {
+        "text": "DevNews",
+        "created": "Thu, 25 Jan 2024 09:45:30 GMT",
+        "type": "link",
+        "url": "http://dev.news.example.com/index.opml"
+      },
+      {
+        "text": "React Community archive",
+        "created": "Mon, 05 Feb 2024 12:18:45 GMT",
+        "type": "link",
+        "url": "http://react-community.opml.org/index.opml"
+      }
+    ]
+  }
+}
