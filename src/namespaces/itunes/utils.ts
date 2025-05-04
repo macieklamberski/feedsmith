@@ -5,6 +5,7 @@ import {
   isPresent,
   parseArrayOf,
   parseBoolean,
+  parseCsvOf,
   parseNumber,
   parseSingularOf,
   parseString,
@@ -96,18 +97,6 @@ export const parseImage: ParseFunction<string> = (value) => {
   return parseString(retrieveText(value['@href']))
 }
 
-export const parseKeywords: ParseFunction<Array<string>> = (value) => {
-  if (!isNonEmptyStringOrNumber(value)) {
-    return
-  }
-
-  const keywords = parseString(value)?.split(',')
-
-  if (keywords) {
-    return trimArray(keywords, (keyword) => parseString(keyword) || undefined)
-  }
-}
-
 export const retrieveItem: ParseFunction<Item> = (value) => {
   if (!isObject(value)) {
     return
@@ -131,7 +120,7 @@ export const retrieveItem: ParseFunction<Item> = (value) => {
     summary: parseSingularOf(value['itunes:summary'], parseTextString),
     subtitle: parseSingularOf(value['itunes:subtitle'], parseTextString),
     keywords: parseSingularOf(value['itunes:keywords'], (value) =>
-      parseKeywords(retrieveText(value)),
+      parseCsvOf(retrieveText(value), parseString),
     ),
   })
 
@@ -164,7 +153,7 @@ export const retrieveFeed: ParseFunction<Feed> = (value) => {
     summary: parseSingularOf(value['itunes:summary'], parseTextString),
     subtitle: parseSingularOf(value['itunes:subtitle'], parseTextString),
     keywords: parseSingularOf(value['itunes:keywords'], (value) =>
-      parseKeywords(retrieveText(value)),
+      parseCsvOf(retrieveText(value), parseString),
     ),
   })
 

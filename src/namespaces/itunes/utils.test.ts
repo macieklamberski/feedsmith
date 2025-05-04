@@ -4,7 +4,6 @@ import {
   parseDuration,
   parseExplicit,
   parseImage,
-  parseKeywords,
   parseOwner,
   retrieveFeed,
   retrieveItem,
@@ -523,97 +522,6 @@ describe('parseImage', () => {
     expect(parseImage(true)).toBeUndefined()
     expect(parseImage([])).toBeUndefined()
     expect(parseImage(() => {})).toBeUndefined()
-  })
-})
-
-describe('parseKeywords', () => {
-  it('should parse comma-separated keywords string into an array', () => {
-    const value = 'podcast,technology,programming'
-    const expected = ['podcast', 'technology', 'programming']
-
-    expect(parseKeywords(value)).toEqual(expected)
-  })
-
-  it('should handle whitespace around keywords', () => {
-    const value = 'podcast, technology , programming'
-    const expected = ['podcast', 'technology', 'programming']
-
-    expect(parseKeywords(value)).toEqual(expected)
-  })
-
-  it('should handle single keyword', () => {
-    const value = 'podcast'
-    const expected = ['podcast']
-
-    expect(parseKeywords(value)).toEqual(expected)
-  })
-
-  it('should handle single number keyword', () => {
-    const value = 123
-    const expected = ['123']
-
-    expect(parseKeywords(value)).toEqual(expected)
-  })
-
-  it('should handle consecutive commas', () => {
-    const value = 'podcast,,technology,,,programming'
-    const expected = ['podcast', 'technology', 'programming']
-
-    expect(parseKeywords(value)).toEqual(expected)
-  })
-
-  it('should handle keywords with HTML entities', () => {
-    const value = 'podcast,tech &amp; programming,science'
-    const expected = ['podcast', 'tech & programming', 'science']
-
-    expect(parseKeywords(value)).toEqual(expected)
-  })
-
-  it('should handle keywords wrapped in CDATA', () => {
-    const value = '<![CDATA[podcast,technology,programming]]>'
-    const expected = ['podcast', 'technology', 'programming']
-
-    expect(parseKeywords(value)).toEqual(expected)
-  })
-
-  it('should normalize keywords with special characters', () => {
-    const value = 'pod-cast,tech_nology,programming!'
-    const expected = ['pod-cast', 'tech_nology', 'programming!']
-
-    expect(parseKeywords(value)).toEqual(expected)
-  })
-
-  it('should handle case sensitivity', () => {
-    const value = 'Podcast,TECHNOLOGY,Programming'
-    const expected = ['Podcast', 'TECHNOLOGY', 'Programming']
-
-    expect(parseKeywords(value)).toEqual(expected)
-  })
-
-  it('should handle empty keywords (just commas)', () => {
-    const value = ',,'
-
-    expect(parseKeywords(value)).toBeUndefined()
-  })
-
-  it('should handle empty string', () => {
-    const value = ''
-
-    expect(parseKeywords(value)).toBeUndefined()
-  })
-
-  it('should handle string with only whitespace', () => {
-    const value = '   '
-
-    expect(parseKeywords(value)).toBeUndefined()
-  })
-
-  it('should handle non-string values', () => {
-    expect(parseKeywords(true)).toBeUndefined()
-    expect(parseKeywords(null)).toBeUndefined()
-    expect(parseKeywords(undefined)).toBeUndefined()
-    expect(parseKeywords([])).toBeUndefined()
-    expect(parseKeywords({})).toBeUndefined()
   })
 })
 
