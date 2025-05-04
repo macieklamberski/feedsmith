@@ -1,10 +1,11 @@
-import { locales } from '../../../common/config'
-import { parser } from './config'
-import type { Feed } from './types'
-import { retrieveFeed } from './utils'
+import { locales } from '../../../common/config.js'
+import { detectRssFeed } from '../../../index.js'
+import { parser } from './config.js'
+import type { Feed } from './types.js'
+import { retrieveFeed } from './utils.js'
 
 export const parse = (value: unknown): Feed => {
-  if (typeof value !== 'string') {
+  if (!detectRssFeed(value)) {
     throw new Error(locales.invalid)
   }
 

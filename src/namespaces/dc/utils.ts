@@ -1,36 +1,29 @@
-import type { ParseFunction } from '../../common/types'
-import {
-  isNonEmptyObject,
-  isObject,
-  omitUndefinedFromObject,
-  parseString,
-} from '../../common/utils'
-import type { ItemOrFeed } from './types'
+import type { ParseFunction } from '../../common/types.js'
+import { isObject, parseSingularOf, parseTextString, trimObject } from '../../common/utils.js'
+import type { ItemOrFeed } from './types.js'
 
-export const parseItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
+export const retrieveItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  const itemOrFeed = omitUndefinedFromObject({
-    title: parseString(value['dc:title']?.['#text']),
-    creator: parseString(value['dc:creator']?.['#text']),
-    subject: parseString(value['dc:subject']?.['#text']),
-    description: parseString(value['dc:description']?.['#text']),
-    publisher: parseString(value['dc:publisher']?.['#text']),
-    contributor: parseString(value['dc:contributor']?.['#text']),
-    date: parseString(value['dc:date']?.['#text']),
-    type: parseString(value['dc:type']?.['#text']),
-    format: parseString(value['dc:format']?.['#text']),
-    identifier: parseString(value['dc:identifier']?.['#text']),
-    source: parseString(value['dc:source']?.['#text']),
-    language: parseString(value['dc:language']?.['#text']),
-    relation: parseString(value['dc:relation']?.['#text']),
-    coverage: parseString(value['dc:coverage']?.['#text']),
-    rights: parseString(value['dc:rights']?.['#text']),
+  const itemOrFeed = trimObject({
+    title: parseSingularOf(value['dc:title'], parseTextString),
+    creator: parseSingularOf(value['dc:creator'], parseTextString),
+    subject: parseSingularOf(value['dc:subject'], parseTextString),
+    description: parseSingularOf(value['dc:description'], parseTextString),
+    publisher: parseSingularOf(value['dc:publisher'], parseTextString),
+    contributor: parseSingularOf(value['dc:contributor'], parseTextString),
+    date: parseSingularOf(value['dc:date'], parseTextString),
+    type: parseSingularOf(value['dc:type'], parseTextString),
+    format: parseSingularOf(value['dc:format'], parseTextString),
+    identifier: parseSingularOf(value['dc:identifier'], parseTextString),
+    source: parseSingularOf(value['dc:source'], parseTextString),
+    language: parseSingularOf(value['dc:language'], parseTextString),
+    relation: parseSingularOf(value['dc:relation'], parseTextString),
+    coverage: parseSingularOf(value['dc:coverage'], parseTextString),
+    rights: parseSingularOf(value['dc:rights'], parseTextString),
   })
 
-  if (isNonEmptyObject(itemOrFeed)) {
-    return itemOrFeed
-  }
+  return itemOrFeed
 }

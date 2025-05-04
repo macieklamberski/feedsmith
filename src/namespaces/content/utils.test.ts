@@ -1,16 +1,32 @@
 import { describe, expect, it } from 'bun:test'
-import { parseItem } from './utils'
+import { retrieveItem } from './utils.js'
 
-describe('parseItem', () => {
-  it('should parse complete item object with encoded content', () => {
+describe('retrieveItem', () => {
+  const expectedFull = {
+    encoded: '<p>This is encoded content</p>',
+  }
+
+  it('should parse complete item object with encoded content (with #text)', () => {
     const value = {
       'content:encoded': { '#text': '<p>This is encoded content</p>' },
     }
-    const expected = {
-      encoded: '<p>This is encoded content</p>',
+    expect(retrieveItem(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete item object with encoded content (without #text)', () => {
+    const value = {
+      'content:encoded': '<p>This is encoded content</p>',
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete item object with encoded content (with array of values)', () => {
+    const value = {
+      'content:encoded': ['<p>This is encoded content</p>', '<p>Another encoded content</p>'],
+    }
+
+    expect(retrieveItem(value)).toEqual(expectedFull)
   })
 
   it('should handle HTML content in encoded field', () => {
@@ -23,7 +39,7 @@ describe('parseItem', () => {
       encoded: '<h1>Title</h1><p>Paragraph with <strong>bold</strong> text</p>',
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should handle CDATA content in encoded field', () => {
@@ -36,7 +52,7 @@ describe('parseItem', () => {
       encoded: '<h1>Title</h1><p>Paragraph with <strong>bold</strong> text</p>',
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -47,20 +63,20 @@ describe('parseItem', () => {
       encoded: '123',
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    expect(parseItem(value)).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object value', () => {
-    expect(parseItem('not an object')).toBeUndefined()
-    expect(parseItem(undefined)).toBeUndefined()
-    expect(parseItem(null)).toBeUndefined()
-    expect(parseItem([])).toBeUndefined()
+    expect(retrieveItem('not an object')).toBeUndefined()
+    expect(retrieveItem(undefined)).toBeUndefined()
+    expect(retrieveItem(null)).toBeUndefined()
+    expect(retrieveItem([])).toBeUndefined()
   })
 
   it('should handle object with content:encoded but missing #text property', () => {
@@ -68,7 +84,7 @@ describe('parseItem', () => {
       'content:encoded': {},
     }
 
-    expect(parseItem(value)).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 
   it('should handle object with unrelated properties', () => {
@@ -77,7 +93,7 @@ describe('parseItem', () => {
       'something:else': { '#text': 'another value' },
     }
 
-    expect(parseItem(value)).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 
   it('should handle boolean values', () => {
@@ -85,7 +101,7 @@ describe('parseItem', () => {
       'content:encoded': { '#text': true },
     }
 
-    expect(parseItem(value)).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 
   it('should handle empty string in encoded field', () => {
@@ -96,7 +112,7 @@ describe('parseItem', () => {
       encoded: '',
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should handle null in encoded field', () => {
@@ -104,6 +120,6 @@ describe('parseItem', () => {
       'content:encoded': { '#text': null },
     }
 
-    expect(parseItem(value)).toBeUndefined()
+    expect(retrieveItem(value)).toBeUndefined()
   })
 })

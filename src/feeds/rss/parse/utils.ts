@@ -1,21 +1,34 @@
-import type { ParseFunction } from '../../../common/types'
+import type { ParseFunction } from '../../../common/types.js'
 import {
-  hasAllProps,
-  hasAnyProps,
   isObject,
-  omitNullishFromArray,
-  omitUndefinedFromObject,
+  isPresent,
   parseArrayOf,
   parseNumber,
+  parseSingularOf,
   parseString,
-} from '../../../common/utils'
+  parseTextNumber,
+  parseTextString,
+  retrieveText,
+  trimArray,
+  trimObject,
+} from '../../../common/utils.js'
 import {
-  parseEntry as parseAtomEntry,
-  parseFeed as parseAtomFeed,
-} from '../../../namespaces/atom/utils'
-import { parseItem as parseContentItem } from '../../../namespaces/content/utils'
-import { parseItemOrFeed as parseDcItemOrFeed } from '../../../namespaces/dc/utils'
-import { parseFeed as parseSyFeed } from '../../../namespaces/sy/utils'
+  retrieveEntry as retrieveAtomEntry,
+  retrieveFeed as retrieveAtomFeed,
+} from '../../../namespaces/atom/utils.js'
+import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/utils.js'
+import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/utils.js'
+import {
+  retrieveFeed as retrieveItunesFeed,
+  retrieveItem as retrieveItunesItem,
+} from '../../../namespaces/itunes/utils.js'
+import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/utils.js'
+import {
+  retrieveFeed as retrievePodcastFeed,
+  retrieveItem as retrievePodcastItem,
+} from '../../../namespaces/podcast/utils.js'
+import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
+import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
 import type {
   Author,
   Category,
@@ -26,22 +39,27 @@ import type {
   Item,
   Source,
   TextInput,
-} from './types'
+} from './types.js'
 
 export const parseTextInput: ParseFunction<TextInput> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  const textInput = omitUndefinedFromObject({
-    title: parseString(value?.title?.['#text']),
-    description: parseString(value?.description?.['#text']),
-    name: parseString(value?.name?.['#text']),
-    link: parseString(value?.link?.['#text']),
-  })
+  const textInput = {
+    title: parseSingularOf(value.title, parseTextString),
+    description: parseSingularOf(value.description, parseTextString),
+    name: parseSingularOf(value.name, parseTextString),
+    link: parseSingularOf(value.link, parseTextString),
+  }
 
-  if (hasAllProps(textInput, ['title', 'description', 'name', 'link'])) {
-    return textInput
+  if (
+    isPresent(textInput.title) &&
+    isPresent(textInput.description) &&
+    isPresent(textInput.name) &&
+    isPresent(textInput.link)
+  ) {
+    return trimObject(textInput)
   }
 }
 
@@ -50,37 +68,31 @@ export const parseCloud: ParseFunction<Cloud> = (value) => {
     return
   }
 
-  const cloud = omitUndefinedFromObject({
-    domain: parseString(value?.['@domain']),
-    port: parseNumber(value?.['@port']),
-    path: parseString(value?.['@path']),
-    registerProcedure: parseString(value?.['@registerprocedure']),
-    protocol: parseString(value?.['@protocol']),
-  })
+  const cloud = {
+    domain: parseString(value['@domain']),
+    port: parseNumber(value['@port']),
+    path: parseString(value['@path']),
+    registerProcedure: parseString(value['@registerprocedure']),
+    protocol: parseString(value['@protocol']),
+  }
 
-  if (hasAllProps(cloud, ['domain', 'port', 'path', 'registerProcedure', 'protocol'])) {
-    return cloud
+  if (
+    isPresent(cloud.domain) &&
+    isPresent(cloud.port) &&
+    isPresent(cloud.path) &&
+    isPresent(cloud.registerProcedure) &&
+    isPresent(cloud.protocol)
+  ) {
+    return trimObject(cloud)
   }
 }
 
 export const parseSkipHours: ParseFunction<Array<number>> = (value) => {
-  const hours = value?.hour
-
-  if (!Array.isArray(hours)) {
-    return
-  }
-
-  return omitNullishFromArray(hours.map((hour) => parseNumber(hour?.['#text'])))
+  return trimArray(value?.hour, parseTextNumber)
 }
 
 export const parseSkipDays: ParseFunction<Array<string>> = (value) => {
-  const days = value?.day
-
-  if (!Array.isArray(days)) {
-    return
-  }
-
-  return omitNullishFromArray(days.map((hour) => parseString(hour?.['#text'])))
+  return trimArray(value?.day, parseTextString)
 }
 
 export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
@@ -88,29 +100,25 @@ export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
     return
   }
 
-  const enclosure = omitUndefinedFromObject({
+  const enclosure = {
     url: parseString(value['@url']),
     length: parseNumber(value['@length']),
     type: parseString(value['@type']),
-  })
+  }
 
-  if (hasAllProps(enclosure, ['url', 'length', 'type'])) {
-    return enclosure
+  if (isPresent(enclosure.url) && isPresent(enclosure.length) && isPresent(enclosure.type)) {
+    return trimObject(enclosure)
   }
 }
 
 export const parseSource: ParseFunction<Source> = (value) => {
-  if (!isObject(value)) {
-    return
+  const source = {
+    title: parseString(retrieveText(value)),
+    url: parseString(value?.['@url']),
   }
 
-  const source = omitUndefinedFromObject({
-    title: parseString(value?.['#text']),
-    url: parseString(value?.['@url']),
-  })
-
-  if (hasAllProps(source, ['title'])) {
-    return source
+  if (isPresent(source.title)) {
+    return trimObject(source)
   }
 }
 
@@ -119,37 +127,33 @@ export const parseImage: ParseFunction<Image> = (value) => {
     return
   }
 
-  const image = omitUndefinedFromObject({
-    url: parseString(value.url?.['#text']),
-    title: parseString(value.title?.['#text']),
-    link: parseString(value.link?.['#text']),
-    description: parseString(value.description?.['#text']),
-    height: parseNumber(value.height?.['#text']),
-    width: parseNumber(value.width?.['#text']),
-  })
+  const image = {
+    url: parseSingularOf(value.url, parseTextString),
+    title: parseSingularOf(value.title, parseTextString),
+    link: parseSingularOf(value.link, parseTextString),
+    description: parseSingularOf(value.description, parseTextString),
+    height: parseSingularOf(value.height, parseTextNumber),
+    width: parseSingularOf(value.width, parseTextNumber),
+  }
 
-  if (hasAllProps(image, ['url', 'title', 'link'])) {
-    return image
+  if (isPresent(image.url) && isPresent(image.title) && isPresent(image.link)) {
+    return trimObject(image)
   }
 }
 
 export const parseCategory: ParseFunction<Category> = (value) => {
-  if (!isObject(value)) {
-    return
+  const category = {
+    name: parseString(retrieveText(value)),
+    domain: parseString(value?.['@domain']),
   }
 
-  const category = omitUndefinedFromObject({
-    name: parseString(value?.['#text']),
-    domain: parseString(value?.['@domain']),
-  })
-
-  if (category.name) {
-    return category
+  if (isPresent(category.name)) {
+    return trimObject(category)
   }
 }
 
 export const parseAuthor: ParseFunction<Author> = (value) => {
-  return parseString(value?.['#text'])
+  return parseSingularOf(value?.name ?? value, parseTextString)
 }
 
 export const parseItem: ParseFunction<Item> = (value) => {
@@ -157,24 +161,28 @@ export const parseItem: ParseFunction<Item> = (value) => {
     return
   }
 
-  const item = omitUndefinedFromObject({
-    title: parseString(value.title?.['#text']),
-    link: parseString(value.link?.['#text']),
-    description: parseString(value.description?.['#text']),
+  const item = {
+    title: parseSingularOf(value.title, parseTextString),
+    link: parseSingularOf(value.link, parseTextString),
+    description: parseSingularOf(value.description, parseTextString),
     authors: parseArrayOf(value.author, parseAuthor),
     categories: parseArrayOf(value.category, parseCategory),
-    comments: parseString(value.comments?.['#text']),
-    enclosure: parseEnclosure(value.enclosure),
-    guid: parseString(value.guid?.['#text']),
-    pubDate: parseString(value.pubdate?.['#text']),
-    source: parseSource(value.source),
-    content: parseContentItem(value),
-    atom: parseAtomEntry(value),
-    dc: parseDcItemOrFeed(value),
-  })
+    comments: parseSingularOf(value.comments, parseTextString),
+    enclosure: parseSingularOf(value.enclosure, parseEnclosure),
+    guid: parseSingularOf(value.guid, parseTextString),
+    pubDate: parseSingularOf(value.pubdate, parseTextString),
+    source: parseSingularOf(value.source, parseSource),
+    content: retrieveContentItem(value),
+    atom: retrieveAtomEntry(value),
+    dc: retrieveDcItemOrFeed(value),
+    slash: retrieveSlashItem(value),
+    itunes: retrieveItunesItem(value),
+    podcast: retrievePodcastItem(value),
+    media: retrieveMediaItemOrFeed(value),
+  }
 
-  if (hasAnyProps(item, ['title', 'description'])) {
-    return item
+  if (isPresent(item.title) || isPresent(item.description)) {
+    return trimObject(item)
   }
 }
 
@@ -183,43 +191,43 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     return
   }
 
-  const feed = omitUndefinedFromObject({
-    title: parseString(value.title?.['#text']),
-    link: parseString(value.link?.['#text']),
-    description: parseString(value.description?.['#text']),
-    language: parseString(value.language?.['#text']),
-    copyright: parseString(value.copyright?.['#text']),
-    managingEditor: parseString(value.managingeditor?.['#text']),
-    webMaster: parseString(value.webmaster?.['#text']),
-    pubDate: parseString(value.pubdate?.['#text']),
-    lastBuildDate: parseString(value.lastbuilddate?.['#text']),
+  const feed = {
+    title: parseSingularOf(value.title, parseTextString),
+    link: parseSingularOf(value.link, parseTextString),
+    description: parseSingularOf(value.description, parseTextString),
+    language: parseSingularOf(value.language, parseTextString),
+    copyright: parseSingularOf(value.copyright, parseTextString),
+    managingEditor: parseSingularOf(value.managingeditor, parseTextString),
+    webMaster: parseSingularOf(value.webmaster, parseTextString),
+    pubDate: parseSingularOf(value.pubdate, parseTextString),
+    lastBuildDate: parseSingularOf(value.lastbuilddate, parseTextString),
     categories: parseArrayOf(value.category, parseCategory),
-    generator: parseString(value.generator?.['#text']),
-    docs: parseString(value.docs?.['#text']),
-    cloud: parseCloud(value.cloud),
-    ttl: parseNumber(value.ttl?.['#text']),
-    image: parseImage(value.image),
-    rating: parseString(value.rating?.['#text']),
-    textInput: parseTextInput(value.textinput),
-    skipHours: parseSkipHours(value.skiphours),
-    skipDays: parseSkipDays(value.skipdays),
+    generator: parseSingularOf(value.generator, parseTextString),
+    docs: parseSingularOf(value.docs, parseTextString),
+    cloud: parseSingularOf(value.cloud, parseCloud),
+    ttl: parseSingularOf(value.ttl, parseTextNumber),
+    image: parseSingularOf(value.image, parseImage),
+    rating: parseSingularOf(value.rating, parseTextString),
+    textInput: parseSingularOf(value.textinput, parseTextInput),
+    skipHours: parseSingularOf(value.skiphours, parseSkipHours),
+    skipDays: parseSingularOf(value.skipdays, parseSkipDays),
     items: parseArrayOf(value.item, parseItem),
-    atom: parseAtomFeed(value),
-    dc: parseDcItemOrFeed(value),
-    sy: parseSyFeed(value),
-  })
+    atom: retrieveAtomFeed(value),
+    dc: retrieveDcItemOrFeed(value),
+    sy: retrieveSyFeed(value),
+    itunes: retrieveItunesFeed(value),
+    podcast: retrievePodcastFeed(value),
+    media: retrieveMediaItemOrFeed(value),
+  }
 
-  // INFO: Spec also says about required "description" but this field is
-  // not always present in feeds. We can still parse the feed without it.
-  if (hasAllProps(feed, ['title', 'link'])) {
-    return feed
+  // INFO: Spec also says about required "description" but this field is not always present
+  // in feeds. We can still parse the feed without it. In addition, the "link" might be missing
+  // as well when the atom:link rel="self" is present so checking "link" is skipped as well.
+  if (isPresent(feed.title)) {
+    return trimObject(feed)
   }
 }
 
 export const retrieveFeed: ParseFunction<Feed> = (value) => {
-  if (!isObject(value?.rss?.channel)) {
-    return
-  }
-
-  return parseFeed(value.rss.channel)
+  return parseSingularOf(value?.rss?.channel, parseFeed)
 }

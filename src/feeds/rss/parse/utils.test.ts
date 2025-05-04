@@ -12,24 +12,46 @@ import {
   parseSource,
   parseTextInput,
   retrieveFeed,
-} from './utils'
+} from './utils.js'
 
 describe('parseTextInput', () => {
-  it('should handle valid textInput object', () => {
+  const expectedFull = {
+    title: 'Search Title',
+    description: 'Search Description',
+    name: 'searchForm',
+    link: 'https://example.com/search',
+  }
+
+  it('should handle valid textInput object (with #text)', () => {
     const value = {
       title: { '#text': 'Search Title' },
       description: { '#text': 'Search Description' },
       name: { '#text': 'searchForm' },
       link: { '#text': 'https://example.com/search' },
     }
-    const expected = {
+    expect(parseTextInput(value)).toEqual(expectedFull)
+  })
+
+  it('should handle valid textInput object (without #text)', () => {
+    const value = {
       title: 'Search Title',
       description: 'Search Description',
       name: 'searchForm',
       link: 'https://example.com/search',
     }
 
-    expect(parseTextInput(value)).toEqual(expected)
+    expect(parseTextInput(value)).toEqual(expectedFull)
+  })
+
+  it('should handle valid textInput object (with array of values)', () => {
+    const value = {
+      title: ['Search Title', 'Alternative Search Title'],
+      description: ['Search Description', 'Extended Search Description'],
+      name: ['searchForm', 'advancedSearchForm'],
+      link: ['https://example.com/search', 'https://example.com/advanced-search'],
+    }
+
+    expect(parseTextInput(value)).toEqual(expectedFull)
   })
 
   it('should handle partial textInput object', () => {
@@ -112,12 +134,22 @@ describe('parseCloud', () => {
 })
 
 describe('parseSkipHours', () => {
-  it('should parse array of hour objects', () => {
+  it('should parse array of hour objects (with #text)', () => {
     const value = {
       hour: [{ '#text': '0' }, { '#text': '1' }, { '#text': '2' }, { '#text': '23' }],
     }
+    const expected = [0, 1, 2, 23]
 
-    expect(parseSkipHours(value)).toEqual([0, 1, 2, 23])
+    expect(parseSkipHours(value)).toEqual(expected)
+  })
+
+  it('should parse array of hour objects (without #text)', () => {
+    const value = {
+      hour: ['0', '1', '2', '23'],
+    }
+    const expected = [0, 1, 2, 23]
+
+    expect(parseSkipHours(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -149,12 +181,22 @@ describe('parseSkipHours', () => {
 })
 
 describe('parseSkipDays', () => {
-  it('should parse array of day objects', () => {
+  it('should parse array of day objects (with #text)', () => {
     const value = {
       day: [{ '#text': 'Monday' }, { '#text': 'Saturday' }, { '#text': 'Sunday' }],
     }
+    const expected = ['Monday', 'Saturday', 'Sunday']
 
-    expect(parseSkipDays(value)).toEqual(['Monday', 'Saturday', 'Sunday'])
+    expect(parseSkipDays(value)).toEqual(expected)
+  })
+
+  it('should parse array of day objects (without #text)', () => {
+    const value = {
+      day: ['Monday', 'Saturday', 'Sunday'],
+    }
+    const expected = ['Monday', 'Saturday', 'Sunday']
+
+    expect(parseSkipDays(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -238,19 +280,28 @@ describe('parseSource', () => {
       '#text': 'Technology',
       '@url': 'http://example.com/source',
     }
-
-    expect(parseSource(value)).toEqual({
+    const expected = {
       title: 'Technology',
       url: 'http://example.com/source',
-    })
+    }
+
+    expect(parseSource(value)).toEqual(expected)
   })
 
-  it('should handle source with only title', () => {
+  it('should handle source with only title (#with text)', () => {
     const value = {
       '#text': 'Technology',
     }
+    const expected = { title: 'Technology' }
 
-    expect(parseSource(value)).toEqual({ title: 'Technology' })
+    expect(parseSource(value)).toEqual(expected)
+  })
+
+  it('should handle source with only title (without #text)', () => {
+    const value = 'Technology'
+    const expected = { title: 'Technology' }
+
+    expect(parseSource(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -258,8 +309,9 @@ describe('parseSource', () => {
       '#text': 123,
       '@url': true,
     }
+    const expected = { title: '123' }
 
-    expect(parseSource(value)).toEqual({ title: '123' })
+    expect(parseSource(value)).toEqual(expected)
   })
 
   it('should return undefined if title is missing', () => {
@@ -282,7 +334,16 @@ describe('parseSource', () => {
 })
 
 describe('parseImage', () => {
-  it('should parse complete image object (with correct values)', () => {
+  const expectedFull = {
+    url: 'https://example.com/image.jpg',
+    title: 'Example Image',
+    link: 'https://example.com',
+    description: 'Example description',
+    height: 32,
+    width: 32,
+  }
+
+  it('should parse complete image object (with correct values) (with #text)', () => {
     const value = {
       url: { '#text': 'https://example.com/image.jpg' },
       title: { '#text': 'Example Image' },
@@ -291,16 +352,33 @@ describe('parseImage', () => {
       height: { '#text': '32' },
       width: { '#text': '32' },
     }
-    const expected = {
+    expect(parseImage(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete image object (with correct values) (without #text)', () => {
+    const value = {
       url: 'https://example.com/image.jpg',
       title: 'Example Image',
       link: 'https://example.com',
       description: 'Example description',
-      height: 32,
-      width: 32,
+      height: '32',
+      width: '32',
     }
 
-    expect(parseImage(value)).toEqual(expected)
+    expect(parseImage(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete image object (with correct values) (with array of values)', () => {
+    const value = {
+      url: ['https://example.com/image.jpg', 'https://example.com/alternate-image.jpg'],
+      title: ['Example Image', 'Alternative Image Title'],
+      link: ['https://example.com', 'https://example.com/alternate'],
+      description: ['Example description', 'Alternative description'],
+      height: ['32', '64'],
+      width: ['32', '64'],
+    }
+
+    expect(parseImage(value)).toEqual(expectedFull)
   })
 
   it('should handle partial image object', () => {
@@ -338,10 +416,19 @@ describe('parseCategory', () => {
     expect(parseCategory(value)).toEqual(expected)
   })
 
-  it('should handle category with only name', () => {
+  it('should handle category with only name (with #text)', () => {
     const value = {
       '#text': 'Technology',
     }
+    const expected = {
+      name: 'Technology',
+    }
+
+    expect(parseCategory(value)).toEqual(expected)
+  })
+
+  it('should handle category with only name (without #text)', () => {
+    const value = 'Technology'
     const expected = {
       name: 'Technology',
     }
@@ -381,12 +468,30 @@ describe('parseCategory', () => {
 })
 
 describe('parseAuthor', () => {
-  it('should parse author string', () => {
+  it('should parse author string (with #text)', () => {
     const value = {
       '#text': 'John Doe (john@example.com)',
     }
+    const expected = 'John Doe (john@example.com)'
 
-    expect(parseAuthor(value)).toBe('John Doe (john@example.com)')
+    expect(parseAuthor(value)).toBe(expected)
+  })
+
+  it('should parse author string (without #text)', () => {
+    const value = 'John Doe (john@example.com)'
+    const expected = 'John Doe (john@example.com)'
+
+    expect(parseAuthor(value)).toBe(expected)
+  })
+
+  it('should parse author nested under author.name', () => {
+    const value = {
+      name: {
+        '#text': 'John Doe',
+      },
+    }
+
+    expect(parseAuthor(value)).toBe('John Doe')
   })
 
   it('should handle coercible values', () => {
@@ -409,7 +514,27 @@ describe('parseAuthor', () => {
 })
 
 describe('parseItem', () => {
-  it('should parse complete item object', () => {
+  const expectedFull = {
+    title: 'Item Title',
+    link: 'https://example.com/item',
+    description: 'Item Description',
+    authors: ['John Doe (john@example.com)'],
+    categories: [
+      { name: 'Technology', domain: 'http://example.com/categories' },
+      { name: 'Web Development' },
+    ],
+    comments: 'https://example.com/item/comments',
+    enclosure: {
+      url: 'https://example.com/audio.mp3',
+      length: 12345678,
+      type: 'audio/mpeg',
+    },
+    guid: 'https://example.com/guid/1234',
+    pubDate: 'Mon, 15 Mar 2023 12:30:00 GMT',
+    source: { title: 'Example Source', url: 'https://example.com/source.xml' },
+  }
+
+  it('should parse complete item object (with #text)', () => {
     const value = {
       title: { '#text': 'Item Title' },
       link: { '#text': 'https://example.com/item' },
@@ -429,27 +554,66 @@ describe('parseItem', () => {
       pubdate: { '#text': 'Mon, 15 Mar 2023 12:30:00 GMT' },
       source: { '#text': 'Example Source', '@url': 'https://example.com/source.xml' },
     }
-    const expected = {
+
+    expect(parseItem(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete item object (without array of values)', () => {
+    const value = {
+      title: ['Item Title', 'Alternative Item Title'],
+      link: ['https://example.com/item', 'https://example.com/item-alternate'],
+      description: ['Item Description', 'Extended Item Description'],
+      author: ['John Doe (john@example.com)'],
+      category: [
+        { '#text': 'Technology', '@domain': 'http://example.com/categories' },
+        'Web Development',
+      ],
+      comments: ['https://example.com/item/comments', 'https://example.com/item/discussion'],
+      enclosure: [
+        {
+          '@url': 'https://example.com/audio.mp3',
+          '@length': '12345678',
+          '@type': 'audio/mpeg',
+        },
+        {
+          '@url': 'https://example.com/audio-alt.mp3',
+          '@length': '87654321',
+          '@type': 'audio/mpeg',
+        },
+      ],
+      guid: ['https://example.com/guid/1234', 'https://example.com/guid/5678'],
+      pubdate: ['Mon, 15 Mar 2023 12:30:00 GMT', 'Tue, 16 Mar 2023 14:45:00 GMT'],
+      source: [
+        { '#text': 'Example Source', '@url': 'https://example.com/source.xml' },
+        { '#text': 'Alternative Source', '@url': 'https://example.com/alt-source.xml' },
+      ],
+    }
+
+    expect(parseItem(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete item object (without #text)', () => {
+    const value = {
       title: 'Item Title',
       link: 'https://example.com/item',
       description: 'Item Description',
-      authors: ['John Doe (john@example.com)'],
-      categories: [
-        { name: 'Technology', domain: 'http://example.com/categories' },
-        { name: 'Web Development' },
+      author: ['John Doe (john@example.com)'],
+      category: [
+        { '#text': 'Technology', '@domain': 'http://example.com/categories' },
+        'Web Development',
       ],
       comments: 'https://example.com/item/comments',
       enclosure: {
-        url: 'https://example.com/audio.mp3',
-        length: 12345678,
-        type: 'audio/mpeg',
+        '@url': 'https://example.com/audio.mp3',
+        '@length': '12345678',
+        '@type': 'audio/mpeg',
       },
       guid: 'https://example.com/guid/1234',
-      pubDate: 'Mon, 15 Mar 2023 12:30:00 GMT',
-      source: { title: 'Example Source', url: 'https://example.com/source.xml' },
+      pubdate: 'Mon, 15 Mar 2023 12:30:00 GMT',
+      source: { '#text': 'Example Source', '@url': 'https://example.com/source.xml' },
     }
 
-    expect(parseItem(value)).toEqual(expected)
+    expect(parseItem(value)).toEqual(expectedFull)
   })
 
   it('should handle minimal item with title only', () => {
@@ -536,10 +700,73 @@ describe('parseItem', () => {
 
     expect(parseItem(value)).toEqual(expected)
   })
+
+  it('should handle slash namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      'slash:comments': { '#text': '10' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      slash: { comments: 10 },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
 })
 
 describe('parseFeed', () => {
-  it('should parse complete feed object', () => {
+  const expectedFull = {
+    title: 'Feed Title',
+    link: 'https://example.com',
+    description: 'Feed Description',
+    language: 'en-us',
+    copyright: '© 2023 Example',
+    managingEditor: 'editor@example.com',
+    webMaster: 'webmaster@example.com',
+    pubDate: 'Mon, 15 Mar 2023 12:00:00 GMT',
+    lastBuildDate: 'Mon, 15 Mar 2023 13:00:00 GMT',
+    categories: [{ name: 'Technology', domain: 'http://example.com/categories' }],
+    generator: 'Example RSS Generator',
+    docs: 'https://example.com/rss-docs',
+    cloud: {
+      domain: 'rpc.example.com',
+      port: 80,
+      path: '/RPC2',
+      registerProcedure: 'pingMe',
+      protocol: 'soap',
+    },
+    ttl: 60,
+    image: {
+      url: 'https://example.com/image.jpg',
+      title: 'Example Image',
+      link: 'https://example.com',
+      description: 'Some image description',
+    },
+    rating: 'The PICS rating of the feed',
+    textInput: {
+      title: 'Search',
+      description: 'Search this feed',
+      name: 'q',
+      link: 'https://example.com/search',
+    },
+    skipHours: [0, 1],
+    skipDays: ['Saturday', 'Sunday'],
+    items: [
+      {
+        title: 'Item 1 Title',
+        link: 'https://example.com/item1',
+        description: 'Item 1 Description',
+      },
+      {
+        title: 'Item 2 Title',
+        link: 'https://example.com/item2',
+        description: 'Item 2 Description',
+      },
+    ],
+  }
+
+  it('should parse complete feed object (with #text)', () => {
     const value = {
       title: { '#text': 'Feed Title' },
       link: { '#text': 'https://example.com' },
@@ -593,27 +820,32 @@ describe('parseFeed', () => {
         },
       ],
     }
-    const expected = {
+
+    expect(parseFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete feed object (without #text)', () => {
+    const value = {
       title: 'Feed Title',
       link: 'https://example.com',
       description: 'Feed Description',
       language: 'en-us',
       copyright: '© 2023 Example',
-      managingEditor: 'editor@example.com',
-      webMaster: 'webmaster@example.com',
-      pubDate: 'Mon, 15 Mar 2023 12:00:00 GMT',
-      lastBuildDate: 'Mon, 15 Mar 2023 13:00:00 GMT',
-      categories: [{ name: 'Technology', domain: 'http://example.com/categories' }],
+      managingeditor: 'editor@example.com',
+      webmaster: 'webmaster@example.com',
+      pubdate: 'Mon, 15 Mar 2023 12:00:00 GMT',
+      lastbuilddate: 'Mon, 15 Mar 2023 13:00:00 GMT',
+      category: [{ '#text': 'Technology', '@domain': 'http://example.com/categories' }],
       generator: 'Example RSS Generator',
       docs: 'https://example.com/rss-docs',
       cloud: {
-        domain: 'rpc.example.com',
-        port: 80,
-        path: '/RPC2',
-        registerProcedure: 'pingMe',
-        protocol: 'soap',
+        '@domain': 'rpc.example.com',
+        '@port': '80',
+        '@path': '/RPC2',
+        '@registerprocedure': 'pingMe',
+        '@protocol': 'soap',
       },
-      ttl: 60,
+      ttl: '60',
       image: {
         url: 'https://example.com/image.jpg',
         title: 'Example Image',
@@ -621,15 +853,19 @@ describe('parseFeed', () => {
         description: 'Some image description',
       },
       rating: 'The PICS rating of the feed',
-      textInput: {
+      textinput: {
         title: 'Search',
         description: 'Search this feed',
         name: 'q',
         link: 'https://example.com/search',
       },
-      skipHours: [0, 1],
-      skipDays: ['Saturday', 'Sunday'],
-      items: [
+      skiphours: {
+        hour: ['0', '1'],
+      },
+      skipdays: {
+        day: ['Saturday', 'Sunday'],
+      },
+      item: [
         {
           title: 'Item 1 Title',
           link: 'https://example.com/item1',
@@ -643,7 +879,86 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value)).toEqual(expected)
+    expect(parseFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete feed object (with array of values)', () => {
+    const value = {
+      title: ['Feed Title', 'Alternative Feed Title'],
+      link: ['https://example.com', 'https://example.com/alternate'],
+      description: ['Feed Description', 'Extended Feed Description'],
+      language: ['en-us', 'fr-fr'],
+      copyright: ['© 2023 Example', 'Copyright 2023, Example Inc.'],
+      managingeditor: ['editor@example.com', 'chief-editor@example.com'],
+      webmaster: ['webmaster@example.com', 'tech@example.com'],
+      pubdate: ['Mon, 15 Mar 2023 12:00:00 GMT', 'Tue, 16 Mar 2023 12:00:00 GMT'],
+      lastbuilddate: ['Mon, 15 Mar 2023 13:00:00 GMT', 'Tue, 16 Mar 2023 14:00:00 GMT'],
+      category: [{ '#text': 'Technology', '@domain': 'http://example.com/categories' }],
+      generator: ['Example RSS Generator', 'Alternative RSS Generator'],
+      docs: ['https://example.com/rss-docs', 'https://example.com/rss-specification'],
+      cloud: [
+        {
+          '@domain': 'rpc.example.com',
+          '@port': '80',
+          '@path': '/RPC2',
+          '@registerprocedure': 'pingMe',
+          '@protocol': 'soap',
+        },
+        {
+          '@domain': 'rpc2.example.com',
+          '@port': '443',
+          '@path': '/RPC3',
+          '@registerprocedure': 'notifyMe',
+          '@protocol': 'xml-rpc',
+        },
+      ],
+      ttl: ['60', '120'],
+      image: [
+        {
+          url: 'https://example.com/image.jpg',
+          title: 'Example Image',
+          link: 'https://example.com',
+          description: 'Some image description',
+        },
+        {
+          url: 'https://example.com/alternate-image.jpg',
+          title: 'Alternative Image',
+          link: 'https://example.com/alternate',
+          description: 'Alternative image description',
+        },
+      ],
+      rating: ['The PICS rating of the feed', 'Alternative PICS rating'],
+      textinput: [
+        {
+          title: 'Search',
+          description: 'Search this feed',
+          name: 'q',
+          link: 'https://example.com/search',
+        },
+        {
+          title: 'Advanced Search',
+          description: 'Advanced search options',
+          name: 'query',
+          link: 'https://example.com/advanced-search',
+        },
+      ],
+      skiphours: [{ hour: ['0', '1'] }, { hour: ['22', '23'] }],
+      skipdays: [{ day: ['Saturday', 'Sunday'] }, { day: ['Monday', 'Friday'] }],
+      item: [
+        {
+          title: 'Item 1 Title',
+          link: 'https://example.com/item1',
+          description: 'Item 1 Description',
+        },
+        {
+          title: 'Item 2 Title',
+          link: 'https://example.com/item2',
+          description: 'Item 2 Description',
+        },
+      ],
+    }
+
+    expect(parseFeed(value)).toEqual(expectedFull)
   })
 
   it('should handle minimal feed with only required fields', () => {
@@ -659,18 +974,22 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
+  it('should return feed when link is missing', () => {
+    const value = {
+      title: { '#text': 'Feed Title' },
+      description: { '#text': 'Feed Description' },
+    }
+    const expected = {
+      title: 'Feed Title',
+      description: 'Feed Description',
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
   it('should return undefined when title is missing', () => {
     const value = {
       link: { '#text': 'https://example.com' },
-      description: { '#text': 'Feed Description' },
-    }
-
-    expect(parseFeed(value)).toBeUndefined()
-  })
-
-  it('should return undefined when link is missing', () => {
-    const value = {
-      title: { '#text': 'Feed Title' },
       description: { '#text': 'Feed Description' },
     }
 
@@ -824,7 +1143,12 @@ describe('parseFeed', () => {
 })
 
 describe('retrieveFeed', () => {
-  it('should retrieve feed with only required fields', () => {
+  const expectedFull = {
+    title: 'Feed Title',
+    link: 'https://example.com',
+  }
+
+  it('should retrieve feed with only required fields (with #text)', () => {
     const value = {
       rss: {
         channel: {
@@ -833,11 +1157,39 @@ describe('retrieveFeed', () => {
         },
       },
     }
-    const expected = {
-      title: 'Feed Title',
-      link: 'https://example.com',
+
+    expect(retrieveFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should retrieve feed with only required fields (without #text)', () => {
+    const value = {
+      rss: {
+        channel: {
+          title: 'Feed Title',
+          link: 'https://example.com',
+        },
+      },
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should retrieve feed with only required fields (with array of values)', () => {
+    const value = {
+      rss: {
+        channel: [
+          {
+            title: 'Feed Title',
+            link: 'https://example.com',
+          },
+          {
+            title: 'Feed Title 2',
+            link: 'https://example.com/2',
+          },
+        ],
+      },
+    }
+
+    expect(retrieveFeed(value)).toEqual(expectedFull)
   })
 })

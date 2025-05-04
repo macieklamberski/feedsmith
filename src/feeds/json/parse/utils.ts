@@ -1,56 +1,30 @@
-import type { ParseFunction } from '../../../common/types'
+import type { ParseFunction } from '../../../common/types.js'
 import {
-  hasAllProps,
-  hasAnyProps,
-  isNonEmptyObject,
+  createCaseInsensitiveGetter,
   isNonEmptyStringOrNumber,
   isObject,
-  omitNullishFromArray,
-  omitUndefinedFromObject,
+  isPresent,
+  parseArray,
   parseArrayOf,
   parseBoolean,
   parseNumber,
+  parseSingularOf,
   parseString,
-} from '../../../common/utils'
-import type { Attachment, Author, Feed, Hub, Item } from './types'
-
-export const createCaseInsensitiveGetter = (
-  value: Record<string, unknown>,
-): ((lowercaseKey: string) => unknown) => {
-  const keyMap = new Map<string, string>()
-
-  for (const key in value) {
-    if (Object.prototype.hasOwnProperty.call(value, key)) {
-      keyMap.set(key.toLowerCase(), key)
-    }
-  }
-
-  return (lowercaseKey: string) => {
-    const originalKey = keyMap.get(lowercaseKey)
-    return originalKey ? value[originalKey] : undefined
-  }
-}
-
-export const parseTags: ParseFunction<Array<string>> = (value) => {
-  if (Array.isArray(value)) {
-    return omitNullishFromArray(value.map((item) => parseString(item)))
-  }
-
-  if (isNonEmptyStringOrNumber(value)) {
-    return omitNullishFromArray([parseString(value)])
-  }
-}
+  trimArray,
+  trimObject,
+} from '../../../common/utils.js'
+import type { Attachment, Author, Feed, Hub, Item } from './types.js'
 
 export const parseAuthor: ParseFunction<Author> = (value) => {
   if (isObject(value)) {
     const get = createCaseInsensitiveGetter(value)
-    const author = omitUndefinedFromObject({
-      name: parseString(get('name')),
-      url: parseString(get('url')),
-      avatar: parseString(get('avatar')),
+    const author = trimObject({
+      name: parseSingularOf(get('name'), parseString),
+      url: parseSingularOf(get('url'), parseString),
+      avatar: parseSingularOf(get('avatar'), parseString),
     })
 
-    return isNonEmptyObject(author) ? author : undefined
+    return author
   }
 
   if (isNonEmptyStringOrNumber(value)) {
@@ -81,13 +55,13 @@ export const parseHub: ParseFunction<Hub> = (value) => {
   }
 
   const get = createCaseInsensitiveGetter(value)
-  const hub = omitUndefinedFromObject({
-    type: parseString(get('type')),
-    url: parseString(get('url')),
-  })
+  const hub = {
+    type: parseSingularOf(get('type'), parseString),
+    url: parseSingularOf(get('url'), parseString),
+  }
 
-  if (hasAnyProps(hub, ['type', 'url'])) {
-    return hub
+  if (isPresent(hub.type) || isPresent(hub.url)) {
+    return trimObject(hub)
   }
 }
 
@@ -97,17 +71,16 @@ export const parseAttachment: ParseFunction<Attachment> = (value) => {
   }
 
   const get = createCaseInsensitiveGetter(value)
-  const attachment = omitUndefinedFromObject({
-    url: parseString(get('url')),
-    mime_type: parseString(get('mime_type')),
-    title: parseString(get('title')),
-    size_in_bytes: parseNumber(get('size_in_bytes')),
-    duration_in_seconds: parseNumber(get('duration_in_seconds')),
-  })
+  const attachment = {
+    url: parseSingularOf(get('url'), parseString),
+    mime_type: parseSingularOf(get('mime_type'), parseString),
+    title: parseSingularOf(get('title'), parseString),
+    size_in_bytes: parseSingularOf(get('size_in_bytes'), parseNumber),
+    duration_in_seconds: parseSingularOf(get('duration_in_seconds'), parseNumber),
+  }
 
-  // TODO: Consider checking if URL has value before parsing the whole object.
-  if (hasAllProps(attachment, ['url'])) {
-    return attachment
+  if (isPresent(attachment.url)) {
+    return trimObject(attachment)
   }
 }
 
@@ -117,27 +90,26 @@ export const parseItem: ParseFunction<Item> = (value) => {
   }
 
   const get = createCaseInsensitiveGetter(value)
-  const item = omitUndefinedFromObject({
-    id: parseString(get('id')),
-    url: parseString(get('url')),
-    external_url: parseString(get('external_url')),
-    title: parseString(get('title')),
-    content_html: parseString(get('content_html')),
-    content_text: parseString(get('content_text')),
-    summary: parseString(get('summary')),
-    image: parseString(get('image')),
-    banner_image: parseString(get('banner_image')),
-    date_published: parseString(get('date_published')),
-    date_modified: parseString(get('date_modified')),
-    tags: parseTags(get('tags')),
+  const item = {
+    id: parseSingularOf(get('id'), parseString),
+    url: parseSingularOf(get('url'), parseString),
+    external_url: parseSingularOf(get('external_url'), parseString),
+    title: parseSingularOf(get('title'), parseString),
+    content_html: parseSingularOf(get('content_html'), parseString),
+    content_text: parseSingularOf(get('content_text'), parseString),
+    summary: parseSingularOf(get('summary'), parseString),
+    image: parseSingularOf(get('image'), parseString),
+    banner_image: parseSingularOf(get('banner_image'), parseString),
+    date_published: parseSingularOf(get('date_published'), parseString),
+    date_modified: parseSingularOf(get('date_modified'), parseString),
+    tags: parseArrayOf(get('tags'), parseString),
     authors: retrieveAuthors(value),
-    language: parseString(get('language')),
+    language: parseSingularOf(get('language'), parseString),
     attachments: parseArrayOf(get('attachments'), parseAttachment),
-  })
+  }
 
-  // TODO: Consider checking if ID has value before parsing the whole object.
-  if (hasAllProps(item, ['id'])) {
-    return item
+  if (isPresent(item.id)) {
+    return trimObject(item)
   }
 }
 
@@ -147,25 +119,24 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
   }
 
   const get = createCaseInsensitiveGetter(value)
-  const feed = omitUndefinedFromObject({
-    version: parseString(get('version')),
-    title: parseString(get('title')),
-    home_page_url: parseString(get('home_page_url')),
-    feed_url: parseString(get('feed_url')),
-    description: parseString(get('description')),
-    user_comment: parseString(get('user_comment')),
-    next_url: parseString(get('next_url')),
-    icon: parseString(get('icon')),
-    favicon: parseString(get('favicon')),
-    language: parseString(get('language')),
-    expired: parseBoolean(get('expired')),
+  const feed = {
+    version: parseSingularOf(get('version'), parseString),
+    title: parseSingularOf(get('title'), parseString),
+    home_page_url: parseSingularOf(get('home_page_url'), parseString),
+    feed_url: parseSingularOf(get('feed_url'), parseString),
+    description: parseSingularOf(get('description'), parseString),
+    user_comment: parseSingularOf(get('user_comment'), parseString),
+    next_url: parseSingularOf(get('next_url'), parseString),
+    icon: parseSingularOf(get('icon'), parseString),
+    favicon: parseSingularOf(get('favicon'), parseString),
+    language: parseSingularOf(get('language'), parseString),
+    expired: parseSingularOf(get('expired'), parseBoolean),
     hubs: parseArrayOf(get('hubs'), parseHub),
     authors: retrieveAuthors(value),
     items: parseArrayOf(get('items'), parseItem),
-  })
+  }
 
-  // TODO: Consider checking if version, title and items have value before parsing the whole object.
-  if (hasAllProps(feed, ['version', 'title', 'items'])) {
-    return feed
+  if (isPresent(feed.version) && isPresent(feed.title) && isPresent(feed.items)) {
+    return trimObject(feed)
   }
 }

@@ -1,5 +1,5 @@
-import { omitUndefinedFromObject } from '../../../common/utils'
-import type { Feed, Item } from './types'
+import { trimObject } from '../../../common/utils.js'
+import type { Feed, Item } from './types.js'
 
 export const generateRfc3339Date = (date: Date): string => {
   // The only difference between ISO 8601 (produced by toISOString) and RFC 3339 is that
@@ -9,7 +9,7 @@ export const generateRfc3339Date = (date: Date): string => {
 }
 
 export const generateItem = (item: Item) => {
-  return omitUndefinedFromObject({
+  return trimObject({
     ...item,
     date_published: item.date_published ? generateRfc3339Date(item.date_published) : undefined,
     date_modified: item.date_modified ? generateRfc3339Date(item.date_modified) : undefined,

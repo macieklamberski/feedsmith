@@ -5,72 +5,30 @@ import {
   parseFeed,
   parseHub,
   parseItem,
-  parseTags,
   retrieveAuthors,
-} from './utils'
-
-describe('parseTags', () => {
-  it('should handle array of strings', () => {
-    const value = ['javascript', 'typescript']
-
-    expect(parseTags(value)).toEqual(value)
-  })
-
-  it('should handle array of mixed values', () => {
-    const value = ['javascript', true, 123, {}, [], null]
-
-    expect(parseTags(value)).toEqual(['javascript', '123'])
-  })
-
-  it('should handle object', () => {
-    const value = { name: 'javascript' }
-
-    expect(parseTags(value)).toBeUndefined()
-  })
-
-  it('should handle non-empty string', () => {
-    const value = 'javascript'
-
-    expect(parseTags(value)).toEqual([value])
-  })
-
-  it('should handle empty string', () => {
-    const value = ''
-
-    expect(parseTags(value)).toBeUndefined()
-  })
-
-  it('should handle number', () => {
-    const value = 420
-
-    expect(parseTags(value)).toEqual(['420'])
-  })
-
-  it('should handle boolean', () => {
-    const value = true
-
-    expect(parseTags(value)).toBeUndefined()
-  })
-
-  it('should handle null', () => {
-    const value = null
-
-    expect(parseTags(value)).toBeUndefined()
-  })
-
-  it('should return undefined', () => {
-    const value = undefined
-
-    expect(parseTags(value)).toBeUndefined()
-  })
-})
+} from './utils.js'
 
 describe('parseAuthor', () => {
-  it('should handle Author object', () => {
-    const value = { name: 'John', url: 'link', avatar: 123 }
-    const expected = { name: 'John', url: 'link', avatar: '123' }
+  const expectedFull = { name: 'John', url: 'link', avatar: '123' }
 
-    expect(parseAuthor(value)).toEqual(expected)
+  it('should handle Author object (with singular value)', () => {
+    const value = {
+      name: 'John',
+      url: 'link',
+      avatar: 123,
+    }
+
+    expect(parseAuthor(value)).toEqual(expectedFull)
+  })
+
+  it('should handle Author object (with array of values)', () => {
+    const value = {
+      name: ['John', 'Jane'],
+      url: ['link', 'alternate-link'],
+      avatar: [123, 456],
+    }
+
+    expect(parseAuthor(value)).toEqual(expectedFull)
   })
 
   it('should handle non-Author object', () => {
@@ -148,11 +106,18 @@ describe('retrieveAuthors', () => {
 })
 
 describe('parseHub', () => {
-  it('should handle Hub object', () => {
-    const value = { type: 'pub', url: 33 }
-    const expected = { type: 'pub', url: '33' }
+  const expectedFull = { type: 'pub', url: '33' }
 
-    expect(parseHub(value)).toEqual(expected)
+  it('should handle Hub object (with singular value)', () => {
+    const value = { type: 'pub', url: 33 }
+
+    expect(parseHub(value)).toEqual(expectedFull)
+  })
+
+  it('should handle Hub object (with array of values)', () => {
+    const value = { type: ['pub', 'sub'], url: [33, '44'] }
+
+    expect(parseHub(value)).toEqual(expectedFull)
   })
 
   it('should handle non-Hub object', () => {
@@ -199,7 +164,15 @@ describe('parseHub', () => {
 })
 
 describe('parseAttachment', () => {
-  it('should handle attachment object with all valid properties', () => {
+  const expectedFull = {
+    url: 'https://example.com/image.jpg',
+    mime_type: 'image/jpeg',
+    title: 'Sample Image',
+    size_in_bytes: 12345,
+    duration_in_seconds: 60,
+  }
+
+  it('should handle attachment object with all valid properties (with singular value)', () => {
     const value = {
       url: 'https://example.com/image.jpg',
       mime_type: 'image/jpeg',
@@ -207,15 +180,20 @@ describe('parseAttachment', () => {
       size_in_bytes: 12345,
       duration_in_seconds: 60,
     }
-    const expected = {
-      url: 'https://example.com/image.jpg',
-      mime_type: 'image/jpeg',
-      title: 'Sample Image',
-      size_in_bytes: 12345,
-      duration_in_seconds: 60,
+
+    expect(parseAttachment(value)).toEqual(expectedFull)
+  })
+
+  it('should handle attachment object with all valid properties (with array of values)', () => {
+    const value = {
+      url: ['https://example.com/image.jpg', 'https://example.com/alternate-image.jpg'],
+      mime_type: ['image/jpeg', 'image/png'],
+      title: ['Sample Image', 'Alternative Sample Image'],
+      size_in_bytes: [12345, 67890],
+      duration_in_seconds: [60, 120],
     }
 
-    expect(parseAttachment(value)).toEqual(expected)
+    expect(parseAttachment(value)).toEqual(expectedFull)
   })
 
   it('should handle attachment object with only required url property', () => {
@@ -335,25 +313,62 @@ describe('parseAttachment', () => {
 })
 
 describe('parseItem', () => {
-  it('should handle a complete valid item object', () => {
+  const expectedFull = {
+    id: 'item-123',
+    url: 'https://example.com/article',
+    external_url: 'https://external-source.com/article',
+    title: 'Test Article',
+    content_html: '<p>HTML Content</p>',
+    content_text: 'Plain text content',
+    summary: 'Article summary',
+    image: 'https://example.com/image.jpg',
+    banner_image: 'https://example.com/banner.jpg',
+    date_published: '2023-05-15T14:30:00Z',
+    date_modified: '2023-05-16T10:15:00Z',
+    tags: ['test', 'article', 'sample'],
+    authors: [
+      { name: 'John Doe', url: 'https://example.com/john' },
+      { name: 'Jane Smith', url: 'https://example.com/jane' },
+    ],
+    language: 'en',
+    attachments: [
+      {
+        url: 'https://example.com/attachment.pdf',
+        mime_type: 'application/pdf',
+        title: 'PDF Document',
+        size_in_bytes: 12345,
+      },
+    ],
+  }
+
+  it('should handle a complete valid item object (with singular value)', () => {
+    const value = expectedFull
+
+    expect(parseItem(value)).toEqual(expectedFull)
+  })
+
+  it('should handle a complete valid item object (with array of values)', () => {
     const value = {
-      id: 'item-123',
-      url: 'https://example.com/article',
-      external_url: 'https://external-source.com/article',
-      title: 'Test Article',
-      content_html: '<p>HTML Content</p>',
-      content_text: 'Plain text content',
-      summary: 'Article summary',
-      image: 'https://example.com/image.jpg',
-      banner_image: 'https://example.com/banner.jpg',
-      date_published: '2023-05-15T14:30:00Z',
-      date_modified: '2023-05-16T10:15:00Z',
+      id: ['item-123', 'item-456'],
+      url: ['https://example.com/article', 'https://example.com/alternate-article'],
+      external_url: [
+        'https://external-source.com/article',
+        'https://external-source.com/alternate-article',
+      ],
+      title: ['Test Article', 'Alternative Test Article'],
+      content_html: ['<p>HTML Content</p>', '<p>Alternative HTML Content</p>'],
+      content_text: ['Plain text content', 'Alternative plain text content'],
+      summary: ['Article summary', 'Extended article summary'],
+      image: ['https://example.com/image.jpg', 'https://example.com/alternate-image.jpg'],
+      banner_image: ['https://example.com/banner.jpg', 'https://example.com/alternate-banner.jpg'],
+      date_published: ['2023-05-15T14:30:00Z', '2023-05-20T09:45:00Z'],
+      date_modified: ['2023-05-16T10:15:00Z', '2023-05-21T11:30:00Z'],
       tags: ['test', 'article', 'sample'],
       authors: [
         { name: 'John Doe', url: 'https://example.com/john' },
         { name: 'Jane Smith', url: 'https://example.com/jane' },
       ],
-      language: 'en',
+      language: ['en', 'de'],
       attachments: [
         {
           url: 'https://example.com/attachment.pdf',
@@ -364,7 +379,7 @@ describe('parseItem', () => {
       ],
     }
 
-    expect(parseItem(value)).toEqual(value)
+    expect(parseItem(value)).toEqual(expectedFull)
   })
 
   it('should handle an item object with only required id property', () => {
@@ -516,19 +531,65 @@ describe('parseItem', () => {
 })
 
 describe('parseFeed', () => {
-  it('should handle a complete valid feed object', () => {
+  const expectedFull = {
+    version: 'https://jsonfeed.org/version/1.1',
+    title: 'My Example Feed',
+    home_page_url: 'https://example.com/',
+    feed_url: 'https://example.com/feed.json',
+    description: 'A sample feed with example content',
+    user_comment: 'This feed allows you to test the reader',
+    next_url: 'https://example.com/feed/page2.json',
+    icon: 'https://example.com/icon.png',
+    favicon: 'https://example.com/favicon.ico',
+    language: 'en-US',
+    expired: false,
+    hubs: [{ type: 'websub', url: 'https://websub.example.com/' }],
+    authors: [
+      { name: 'John Doe', url: 'https://example.com/john' },
+      { name: 'Jane Smith', url: 'https://example.com/jane' },
+    ],
+    items: [
+      {
+        id: 'item-1',
+        title: 'First Item',
+        content_text: 'Content of first item',
+      },
+      {
+        id: 'item-2',
+        title: 'Second Item',
+        content_html: '<p>Content of second item</p>',
+      },
+    ],
+  }
+
+  it('should handle a complete valid feed object (with singular value)', () => {
+    const value = expectedFull
+
+    expect(parseFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should handle a complete valid feed object (with array of values)', () => {
     const value = {
-      version: 'https://jsonfeed.org/version/1.1',
-      title: 'My Example Feed',
-      home_page_url: 'https://example.com/',
-      feed_url: 'https://example.com/feed.json',
-      description: 'A sample feed with example content',
-      user_comment: 'This feed allows you to test the reader',
-      next_url: 'https://example.com/feed/page2.json',
-      icon: 'https://example.com/icon.png',
-      favicon: 'https://example.com/favicon.ico',
-      language: 'en-US',
-      expired: false,
+      version: ['https://jsonfeed.org/version/1.1', 'https://jsonfeed.org/version/1.0'],
+      title: ['My Example Feed', 'My Alternative Example Feed'],
+      home_page_url: ['https://example.com/', 'https://example.com/home/'],
+      feed_url: ['https://example.com/feed.json', 'https://example.com/alternate-feed.json'],
+      description: [
+        'A sample feed with example content',
+        'An alternative sample feed with different content',
+      ],
+      user_comment: [
+        'This feed allows you to test the reader',
+        'This is an alternative feed for testing purposes',
+      ],
+      next_url: [
+        'https://example.com/feed/page2.json',
+        'https://example.com/feed/alternate-page2.json',
+      ],
+      icon: ['https://example.com/icon.png', 'https://example.com/alternate-icon.png'],
+      favicon: ['https://example.com/favicon.ico', 'https://example.com/alternate-favicon.ico'],
+      language: ['en-US', 'fr-FR'],
+      expired: [false, true],
       hubs: [{ type: 'websub', url: 'https://websub.example.com/' }],
       authors: [
         { name: 'John Doe', url: 'https://example.com/john' },
@@ -548,7 +609,7 @@ describe('parseFeed', () => {
       ],
     }
 
-    expect(parseFeed(value)).toEqual(value)
+    expect(parseFeed(value)).toEqual(expectedFull)
   })
 
   it('should handle a minimal valid feed object with only required properties', () => {
@@ -618,14 +679,14 @@ describe('parseFeed', () => {
     expect(parseFeed(emptyItems)).toBeUndefined()
   })
 
-  it('should return feed object if required properties are defined and empty', () => {
+  it('should return undefined if required properties are defined but empty', () => {
     const value = {
       version: '',
       title: '',
       items: [],
     }
 
-    expect(parseFeed(value)).toEqual(value)
+    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should handle invalid nested properties', () => {

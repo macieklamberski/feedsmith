@@ -1,7 +1,9 @@
-import type { Entry as AtomEntry, Feed as AtomFeed } from '../../../namespaces/atom/types'
-import type { Item as ContentItem } from '../../../namespaces/content/types'
-import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/types'
-import type { Feed as SyFeed } from '../../../namespaces/sy/types'
+import type { Entry as AtomEntry, Feed as AtomFeed } from '../../../namespaces/atom/types.js'
+import type { Item as ContentItem } from '../../../namespaces/content/types.js'
+import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/types.js'
+import type { Feed as ItunesFeed, Item as ItunesItem } from '../../../namespaces/itunes/types.js'
+import type { Item as SlashItem } from '../../../namespaces/slash/types.js'
+import type { Feed as SyFeed } from '../../../namespaces/sy/types.js'
 
 export type Image = {
   title?: string
@@ -9,7 +11,7 @@ export type Image = {
   url?: string
 }
 
-export type Textinput = {
+export type TextInput = {
   title?: string
   description?: string
   name?: string
@@ -23,6 +25,8 @@ export type Item = {
   atom?: AtomEntry
   content?: ContentItem
   dc?: DcItemOrFeed
+  slash?: SlashItem
+  itunes?: ItunesItem
 }
 
 export type Feed = {
@@ -31,8 +35,9 @@ export type Feed = {
   description?: string
   image?: Image
   items?: Array<Item>
-  textinput?: Textinput
+  textInput?: TextInput
   atom?: AtomFeed
   dc?: DcItemOrFeed
   sy?: SyFeed
+  itunes?: ItunesFeed
 }

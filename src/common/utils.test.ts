@@ -1,21 +1,87 @@
 import { describe, expect, it } from 'bun:test'
-import type { ParseFunction } from './types'
+import type { ParseFunction } from './types.js'
 import {
-  hasAllProps,
-  hasAnyProps,
-  isNonEmptyObject,
+  createCaseInsensitiveGetter,
+  createNamespaceGetter,
+  hasEntities,
   isNonEmptyStringOrNumber,
   isObject,
-  omitNullishFromArray,
-  omitUndefinedFromObject,
+  isPresent,
   parseArray,
   parseArrayOf,
   parseBoolean,
   parseNumber,
   parseSingular,
+  parseSingularOf,
   parseString,
+  parseYesNoBoolean,
+  retrieveText,
   stripCdata,
-} from './utils'
+  trimArray,
+  trimObject,
+} from './utils.js'
+
+describe('isPresent', () => {
+  it('should return false for null', () => {
+    expect(isPresent(null)).toBe(false)
+  })
+
+  it('should return false for undefined', () => {
+    expect(isPresent(undefined)).toBe(false)
+  })
+
+  it('should return true for empty string', () => {
+    expect(isPresent('')).toBe(true)
+  })
+
+  it('should return true for zero', () => {
+    expect(isPresent(0)).toBe(true)
+  })
+
+  it('should return true for NaN', () => {
+    expect(isPresent(Number.NaN)).toBe(true)
+  })
+
+  it('should return true for false', () => {
+    expect(isPresent(false)).toBe(true)
+  })
+
+  it('should return true for empty objects', () => {
+    expect(isPresent({})).toBe(true)
+  })
+
+  it('should return true for empty arrays', () => {
+    expect(isPresent([])).toBe(true)
+  })
+
+  it('should return true for string values', () => {
+    expect(isPresent('hello')).toBe(true)
+  })
+
+  it('should return true for number values', () => {
+    expect(isPresent(123)).toBe(true)
+  })
+
+  it('should return true for object values', () => {
+    expect(isPresent({ key: 'value' })).toBe(true)
+  })
+
+  it('should return true for array values', () => {
+    expect(isPresent([1, 2, 3])).toBe(true)
+  })
+
+  it('should return true for function values', () => {
+    expect(isPresent(() => {})).toBe(true)
+  })
+
+  it('should return true for Date objects', () => {
+    expect(isPresent(new Date())).toBe(true)
+  })
+
+  it('should return true for RegExp objects', () => {
+    expect(isPresent(/test/)).toBe(true)
+  })
+})
 
 describe('isObject', () => {
   it('should return true for plain objects', () => {
@@ -72,147 +138,6 @@ describe('isObject', () => {
     // biome-ignore lint/complexity/useRegexLiterals: It's for testing purposes.
     expect(isObject(new RegExp('.'))).toEqual(false)
     expect(isObject(new ArrayBuffer(10))).toEqual(false)
-  })
-})
-
-describe('isNonEmptyObject', () => {
-  it('should return true for non-empty plain objects', () => {
-    expect(isNonEmptyObject({ a: 1 })).toEqual(true)
-    expect(isNonEmptyObject({ key: undefined })).toEqual(true)
-    expect(isNonEmptyObject({ key: null })).toEqual(true)
-    expect(isNonEmptyObject({ toString: () => 'custom' })).toEqual(true)
-  })
-
-  it('should return false for empty plain objects', () => {
-    expect(isNonEmptyObject({})).toEqual(false)
-    expect(isNonEmptyObject(Object.create(Object.prototype))).toEqual(false)
-  })
-
-  it('should return false for arrays', () => {
-    expect(isNonEmptyObject([])).toEqual(false)
-    expect(isNonEmptyObject([1, 2, 3])).toEqual(false)
-    expect(isNonEmptyObject(new Array(5))).toEqual(false)
-  })
-
-  it('should return false for null', () => {
-    expect(isNonEmptyObject(null)).toEqual(false)
-  })
-
-  it('should return false for undefined', () => {
-    expect(isNonEmptyObject(undefined)).toEqual(false)
-  })
-
-  it('should return false for primitive types', () => {
-    expect(isNonEmptyObject(42)).toEqual(false)
-    expect(isNonEmptyObject('string')).toEqual(false)
-    expect(isNonEmptyObject(true)).toEqual(false)
-    expect(isNonEmptyObject(Symbol('sym'))).toEqual(false)
-    expect(isNonEmptyObject(BigInt(123))).toEqual(false)
-  })
-
-  it('should return false for functions', () => {
-    expect(isNonEmptyObject(() => {})).toEqual(false)
-    // biome-ignore lint/complexity/useArrowFunction: It's for testing purposes.
-    expect(isNonEmptyObject(function () {})).toEqual(false)
-    expect(isNonEmptyObject(Math.sin)).toEqual(false)
-  })
-
-  it('should return false for objects with custom prototypes', () => {
-    expect(isNonEmptyObject(Object.create(null))).toEqual(false)
-
-    const protoObj = Object.create({})
-    expect(isNonEmptyObject(protoObj)).toEqual(false)
-
-    class CustomClass {}
-    expect(isNonEmptyObject(new CustomClass())).toEqual(false)
-  })
-
-  it('should return false for built-in objects', () => {
-    expect(isNonEmptyObject(new Date())).toEqual(false)
-    expect(isNonEmptyObject(new Error())).toEqual(false)
-    expect(isNonEmptyObject(new Map())).toEqual(false)
-    expect(isNonEmptyObject(new Set())).toEqual(false)
-    expect(isNonEmptyObject(new WeakMap())).toEqual(false)
-    expect(isNonEmptyObject(new WeakSet())).toEqual(false)
-    // biome-ignore lint/complexity/useRegexLiterals: It's for testing purposes.
-    expect(isNonEmptyObject(new RegExp('.'))).toEqual(false)
-    expect(isNonEmptyObject(new ArrayBuffer(10))).toEqual(false)
-  })
-})
-
-describe('hasAnyProps', () => {
-  it('should return true when any of the specified properties has a defined value', () => {
-    const value = { a: 1, b: 'string', c: false }
-
-    expect(hasAnyProps(value, ['a', 'b'])).toBe(true)
-    expect(hasAnyProps(value, ['a', 'b', 'c'])).toBe(true)
-    // @ts-ignore: This is for testing purposes.
-    expect(hasAnyProps(value, ['a', 'd'])).toBe(true)
-  })
-
-  it('should return false when all specified properties are undefined or do not exist', () => {
-    const value = { a: undefined, b: undefined, c: 1 }
-
-    expect(hasAnyProps(value, ['a', 'b'])).toBe(false)
-    // @ts-ignore: This is for testing purposes.
-    expect(hasAnyProps(value, ['a', 'b', 'd'])).toBe(false)
-    expect(hasAnyProps(value, ['c'])).toBe(true)
-  })
-
-  it('should return false when none of the specified properties exist', () => {
-    const value = { a: 1, b: 'string' }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(hasAnyProps(value, ['c', 'd'])).toBe(false)
-  })
-
-  it('should return false for empty array of props', () => {
-    const value = { a: 1, b: 'string' }
-
-    expect(hasAnyProps(value, [])).toBe(false)
-  })
-
-  it('should handle properties with falsy values correctly', () => {
-    const value = { a: 0, b: '', c: false, d: null, e: undefined }
-
-    expect(hasAnyProps(value, ['a', 'e'])).toBe(true)
-    expect(hasAnyProps(value, ['b', 'c'])).toBe(true)
-    expect(hasAnyProps(value, ['d'])).toBe(true)
-    expect(hasAnyProps(value, ['e'])).toBe(false)
-    // @ts-ignore: This is for testing purposes.
-    expect(hasAnyProps(value, ['f'])).toBe(false)
-  })
-})
-
-describe('hasAllProps', () => {
-  it('should return true when all required properties have defined values', () => {
-    const value = { a: 1, b: 'string', c: false }
-
-    expect(hasAllProps(value, ['a', 'b'])).toBe(true)
-    expect(hasAllProps(value, ['a', 'b', 'c'])).toBe(true)
-    expect(hasAllProps(value, [])).toBe(true)
-  })
-
-  it('should return false when any required property is undefined', () => {
-    const value = { a: 1, b: undefined, c: null }
-
-    expect(hasAllProps(value, ['a', 'b'])).toBe(false)
-    expect(hasAllProps(value, ['a', 'c'])).toBe(true)
-  })
-
-  it('should return false when any required property does not exist', () => {
-    const value = { a: 1, b: 'string' }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(hasAllProps(value, ['a', 'c'])).toBe(false)
-    // @ts-ignore: This is for testing purposes.
-    expect(hasAllProps(value, ['c', 'd'])).toBe(false)
-  })
-
-  it('should handle properties with falsy values correctly', () => {
-    const value = { a: 0, b: '', c: false, d: null }
-
-    expect(hasAllProps(value, ['a', 'b', 'c', 'd'])).toBe(true)
   })
 })
 
@@ -283,29 +208,88 @@ describe('isNonEmptyStringOrNumber', () => {
   })
 })
 
-describe('omitUndefinedFromObject', () => {
-  it('should remove undefined properties from objects', () => {
+describe('retrieveText', () => {
+  it('should extract #text property when present', () => {
+    const value = { '#text': 'Hello world' }
+    expect(retrieveText(value)).toEqual('Hello world')
+  })
+
+  it('should return the original value when #text property is not present', () => {
+    const value = { title: 'Example Title' }
+    expect(retrieveText(value)).toEqual(value)
+  })
+  it('should return #text property even if it has falsy value (except null/undefined)', () => {
+    expect(retrieveText({ '#text': '' })).toEqual('')
+    expect(retrieveText({ '#text': 0 })).toEqual(0)
+    expect(retrieveText({ '#text': false })).toEqual(false)
+  })
+
+  it('should return original value when #text property is null or undefined', () => {
+    const valueWithNullText = { '#text': null, other: 'property' }
+    const valueWithUndefinedText = { '#text': undefined, other: 'property' }
+
+    expect(retrieveText(valueWithNullText)).toEqual(valueWithNullText)
+    expect(retrieveText(valueWithUndefinedText)).toEqual(valueWithUndefinedText)
+  })
+
+  it('should handle nested structures correctly', () => {
+    const nestedObject = { '#text': { nested: 'value' } }
+    const nestedArray = { '#text': [1, 2, 3] }
+
+    expect(retrieveText(nestedObject)).toEqual({ nested: 'value' })
+    expect(retrieveText(nestedArray)).toEqual([1, 2, 3])
+  })
+
+  it('should work with arrays', () => {
+    const array = [1, 2, 3]
+    expect(retrieveText(array)).toEqual(array)
+  })
+
+  it('should work with dates', () => {
+    const date = new Date()
+    expect(retrieveText(date)).toEqual(date)
+  })
+
+  it('should work with functions', () => {
+    const func = () => {}
+    expect(retrieveText(func)).toBe(func)
+  })
+
+  it('should handle object with only #text property', () => {
+    const value = { '#text': 'Text only' }
+    expect(retrieveText(value)).toEqual('Text only')
+  })
+
+  it('should handle object with #text property among others', () => {
+    const value = { '#text': 'Main text', title: 'Title', count: 42 }
+    expect(retrieveText(value)).toEqual('Main text')
+  })
+
+  it('should return primitive values as is', () => {
+    expect(retrieveText('string value')).toEqual('string value')
+    expect(retrieveText(42)).toEqual(42)
+    expect(retrieveText(true)).toEqual(true)
+    expect(retrieveText(false)).toEqual(false)
+  })
+
+  it('should handle null and undefined correctly', () => {
+    expect(retrieveText(null)).toEqual(null)
+    expect(retrieveText(undefined)).toEqual(undefined)
+  })
+})
+
+describe('trimObject', () => {
+  it('should remove nullish properties from objects', () => {
     const input = { a: 1, b: undefined, c: 'string', d: undefined, e: null, f: false, g: 0, h: '' }
-    const expected = { a: 1, c: 'string', e: null, f: false, g: 0, h: '' }
+    const expected = { a: 1, c: 'string', f: false, g: 0, h: '' }
 
-    expect(omitUndefinedFromObject(input)).toEqual(expected)
+    expect(trimObject(input)).toEqual(expected)
   })
 
-  it('should return an empty object when all properties are undefined', () => {
-    const input = { a: undefined, b: undefined, c: undefined }
-    const expected = {}
+  it('should return the same object when no properties are nullish', () => {
+    const input = { a: 1, b: 'string', c: false, d: [], e: {} }
 
-    expect(omitUndefinedFromObject(input)).toEqual(expected)
-  })
-
-  it('should return the same object when no properties are undefined', () => {
-    const input = { a: 1, b: 'string', c: null, d: false, e: [], f: {} }
-
-    expect(omitUndefinedFromObject(input)).toEqual(input)
-  })
-
-  it('should handle empty objects', () => {
-    expect(omitUndefinedFromObject({})).toEqual({})
+    expect(trimObject(input)).toEqual(input)
   })
 
   it('should handle objects with inherited properties', () => {
@@ -314,23 +298,23 @@ describe('omitUndefinedFromObject', () => {
     obj.own = 'property'
     obj.undef = undefined
 
-    expect(omitUndefinedFromObject(obj)).toEqual({ own: 'property' })
+    expect(trimObject(obj)).toEqual({ own: 'property' })
   })
 
   it('should preserve falsy non-undefined values', () => {
-    const input = { a: 0, b: '', c: false, d: null, e: Number.NaN }
+    const input = { a: 0, b: '', c: false, d: Number.NaN }
 
-    expect(omitUndefinedFromObject(input)).toEqual(input)
+    expect(trimObject(input)).toEqual(input)
   })
 
   it('should handle objects with symbol keys', () => {
     const sym = Symbol('test')
     const input = { a: 1, b: undefined, [sym]: 'symbol value' }
 
-    const result = omitUndefinedFromObject(input)
-    expect(result.a).toEqual(1)
-    expect(result.b).toBeUndefined()
-    expect(result[sym]).toBeUndefined() // Symbol keys are not enumerable with for..in.
+    const result = trimObject(input)
+    expect(result?.a).toEqual(1)
+    expect(result?.b).toBeUndefined()
+    expect(result?.[sym]).toBeUndefined() // Symbol keys are not enumerable with for..in.
   })
 
   it('should handle complex nested objects', () => {
@@ -345,7 +329,7 @@ describe('omitUndefinedFromObject', () => {
     }
 
     // The function only removes top-level undefined properties, not those in nested objects.
-    expect(omitUndefinedFromObject(input)).toEqual(expected)
+    expect(trimObject(input)).toEqual(expected)
   })
 
   it('should handle object with getters', () => {
@@ -357,55 +341,129 @@ describe('omitUndefinedFromObject', () => {
         return undefined
       },
     }
+    const result = trimObject(input)
 
-    const result = omitUndefinedFromObject(input)
-    expect(result.a).toEqual(1)
-    expect(result.b).toBeUndefined()
-    expect('b' in result).toBe(false)
+    expect(result?.a).toEqual(1)
+    expect(result?.b).toBeUndefined()
+  })
+
+  it('should return undefined object when all properties are nullish', () => {
+    const input = { a: undefined, b: undefined, c: null }
+
+    expect(trimObject(input)).toBeUndefined()
+  })
+
+  it('should handle empty objects', () => {
+    expect(trimObject({})).toBeUndefined()
   })
 })
 
-describe('omitNullishFromArray', () => {
+describe('trimArray', () => {
   it('should filter out null and undefined values', () => {
-    expect(omitNullishFromArray([1, null, 2, undefined, 3])).toEqual([1, 2, 3])
-    expect(omitNullishFromArray(['a', null, 'b', undefined])).toEqual(['a', 'b'])
-    expect(omitNullishFromArray([null, undefined])).toEqual([])
-  })
-
-  it('should preserve empty arrays', () => {
-    expect(omitNullishFromArray([])).toEqual([])
+    expect(trimArray([1, null, 2, undefined, 3])).toEqual([1, 2, 3])
+    expect(trimArray(['a', null, 'b', undefined])).toEqual(['a', 'b'])
   })
 
   it('should keep falsy values that are not null or undefined', () => {
     const input = [0, '', false, null, undefined, Number.NaN]
     const expected = [0, '', false, Number.NaN]
 
-    expect(omitNullishFromArray(input)).toEqual(expected)
+    expect(trimArray(input)).toEqual(expected)
   })
 
   it('should work with complex objects', () => {
     const value1 = { id: 1 }
     const value2 = { id: 2 }
 
-    expect(omitNullishFromArray([value1, null, value2, undefined])).toEqual([value1, value2])
+    expect(trimArray([value1, null, value2, undefined])).toEqual([value1, value2])
   })
 
   it('should preserve the order of non-nullish elements', () => {
     const value = ['first', null, 'second', undefined, 'third']
     const expected = ['first', 'second', 'third']
 
-    expect(omitNullishFromArray(value)).toEqual(expected)
-  })
-
-  it('should handle arrays with only nullish values', () => {
-    expect(omitNullishFromArray([null, undefined, null])).toEqual([])
+    expect(trimArray(value)).toEqual(expected)
   })
 
   it('should handle mixed type arrays', () => {
     const value = [1, 'string', true, null, { key: 'value' }, undefined, []]
     const expected = [1, 'string', true, { key: 'value' }, []]
 
-    expect(omitNullishFromArray(value)).toEqual(expected)
+    expect(trimArray(value)).toEqual(expected)
+  })
+
+  it('should preserve empty arrays', () => {
+    expect(trimArray([])).toBeUndefined()
+  })
+
+  it('should handle arrays with only nullish values', () => {
+    expect(trimArray([null, undefined, null])).toBeUndefined()
+  })
+
+  describe('with parsing function', () => {
+    it('should apply the parsing function to each element', () => {
+      const value = [1, 2, 3]
+      const expected = ['1', '2', '3']
+      const parseToString = (val: number) => val.toString()
+
+      expect(trimArray(value, parseToString)).toEqual(expected)
+    })
+
+    it('should filter out values that become null or undefined after parsing', () => {
+      const value = [1, 2, 3, 4]
+      const expected = [2, 4]
+      const parseEvenNumbers = (val: number) => (val % 2 === 0 ? val : null)
+
+      expect(trimArray(value, parseEvenNumbers)).toEqual(expected)
+    })
+
+    it('should handle type transformations', () => {
+      const value = [1, 2, 3]
+      const expected = [{ value: 1 }, { value: 2 }, { value: 3 }]
+      const parseToObject = (val: number) => ({ value: val })
+
+      expect(trimArray(value, parseToObject)).toEqual(expected)
+    })
+
+    it('should combine parsing and filtering of nullish values', () => {
+      const value = [1, null, 2, undefined, 3]
+      const expected = [2, 4, 6]
+      const double = (val: number | null | undefined) => {
+        return val !== null && val !== undefined ? val * 2 : val
+      }
+
+      expect(trimArray(value, double)).toEqual(expected)
+    })
+
+    it('should return undefined when parsing results in empty array', () => {
+      const value = [1, 2, 3]
+      const parseToAllNull = () => null
+
+      expect(trimArray(value, parseToAllNull)).toBeUndefined()
+    })
+
+    it('should handle complex parsing logic', () => {
+      const value = ['a', 3, 'b', 6, null, true]
+      const expected = ['A', 'B', 12, true]
+      const parseWithConditions = (val: unknown) => {
+        if (typeof val === 'string') return val.toUpperCase()
+        if (typeof val === 'number' && val > 5) return val * 2
+        if (typeof val === 'number') return null
+        return val
+      }
+
+      expect(trimArray(value, parseWithConditions)).toEqual(expected)
+    })
+
+    it('should handle nested data structures with parsing', () => {
+      const value = [{ items: [1, 2] }, { items: [3, 4] }]
+      const expected = [1, 3]
+      const extractFirstItem = (obj: { items: number[] }) => {
+        return obj.items && obj.items.length > 0 ? obj.items[0] : null
+      }
+
+      expect(trimArray(value, extractFirstItem)).toEqual(expected)
+    })
   })
 })
 
@@ -476,6 +534,81 @@ describe('stripCdata', () => {
   })
 })
 
+describe('hasEntities', () => {
+  it('should detect basic HTML entities', () => {
+    expect(hasEntities('This contains &lt;')).toBe(true)
+    expect(hasEntities('This contains &gt;')).toBe(true)
+    expect(hasEntities('This contains &amp;')).toBe(true)
+    expect(hasEntities('This contains &quot;')).toBe(true)
+    expect(hasEntities('This contains &apos;')).toBe(true)
+  })
+
+  it('should detect named HTML entities', () => {
+    expect(hasEntities('This contains &copy;')).toBe(true)
+    expect(hasEntities('This contains &reg;')).toBe(true)
+    expect(hasEntities('This contains &euro;')).toBe(true)
+    expect(hasEntities('This contains &trade;')).toBe(true)
+    expect(hasEntities('This contains &nbsp;')).toBe(true)
+  })
+
+  it('should detect numeric HTML entities', () => {
+    expect(hasEntities('This contains &#169;')).toBe(true)
+    expect(hasEntities('This contains &#8364;')).toBe(true)
+    expect(hasEntities('This contains &#x00A9;')).toBe(true)
+    expect(hasEntities('This contains &#x20AC;')).toBe(true)
+  })
+
+  it('should detect multiple entities in the same string', () => {
+    expect(hasEntities('This &lt;tag&gt; has multiple &amp; entities')).toBe(true)
+    expect(hasEntities('Copyright &copy; 2023, &reg; trademark')).toBe(true)
+  })
+
+  it('should detect entities in different positions', () => {
+    expect(hasEntities('&lt;p&gt;At the beginning')).toBe(true)
+    expect(hasEntities('In the middle &amp; of the string')).toBe(true)
+    expect(hasEntities('At the end &gt;')).toBe(true)
+  })
+
+  it('should detect nested entities', () => {
+    expect(hasEntities('This contains &amp;lt;')).toBe(true)
+    expect(hasEntities('Complex &amp;amp; nested entities')).toBe(true)
+  })
+
+  it('should detect XML entities', () => {
+    expect(hasEntities('<tag attribute="&apos;value&apos;">')).toBe(true)
+    expect(hasEntities('<![CDATA[content with &lt; entity]]>')).toBe(true)
+  })
+
+  it('should return false when no entities are present', () => {
+    expect(hasEntities('This string has no entities')).toBe(false)
+    expect(hasEntities('Plain <tag> without entities')).toBe(false)
+    expect(hasEntities('Regular & ampersand')).toBe(false)
+    expect(hasEntities('Symbol ; semicolon')).toBe(false)
+  })
+
+  it('should handle strings with ampersand but no semicolon', () => {
+    expect(hasEntities('This & that')).toBe(false)
+    expect(hasEntities('Company & Co.')).toBe(false)
+    expect(hasEntities('A&B Corporation')).toBe(false)
+  })
+
+  it('should handle strings with semicolon but no ampersand', () => {
+    expect(hasEntities('This; that')).toBe(false)
+    expect(hasEntities('List: item1; item2; item3')).toBe(false)
+  })
+
+  it('should return false for unusual cases', () => {
+    expect(hasEntities('& amp;')).toBe(true)
+    expect(hasEntities('&amp')).toBe(false)
+    expect(hasEntities('')).toBe(false)
+  })
+
+  it('should handle cases that might produce false positives', () => {
+    expect(hasEntities('Fish & Chips; best in town')).toBe(true)
+    expect(hasEntities('Salt & pepper; sugar & spice')).toBe(true)
+  })
+})
+
 describe('parseString', () => {
   it('should handle array', () => {
     const value = ['javascript', { another: 'typescript' }]
@@ -501,10 +634,82 @@ describe('parseString', () => {
     expect(parseString(value)).toEqual(value)
   })
 
-  it('should handle HTML entities in string', () => {
-    const value = '&amp;'
+  it('Should handle entities #1', () => {
+    const value =
+      'Testing &lt;b&gt;bold text&lt;/b&gt; and &lt;i&gt;italic text&lt;/i&gt; with &amp;amp; ampersand, &amp;quot; quotes, &amp;apos; apostrophe and &amp;nbsp; non-breaking space.'
+    const expected = `Testing <b>bold text</b> and <i>italic text</i> with & ampersand, " quotes, ' apostrophe and   non-breaking space.`
+    expect(parseString(value)).toEqual(expected)
+  })
 
-    expect(parseString(value)).toEqual('&')
+  it('Should handle entities #2', () => {
+    const value =
+      '<![CDATA[Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.]]>'
+    const expected = `Testing <b>bold text</b> and <i>italic text</i> with & ampersand, " quotes, ' apostrophe and   non-breaking space.`
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #3', () => {
+    const value =
+      'Special chars: &amp;lt; &amp;gt; &amp;euro; € &amp;copy; © &amp;reg; ® &amp;pound; £ &amp;yen; ¥'
+    const expected = 'Special chars: < > € € © © ® ® £ £ ¥ ¥'
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #4', () => {
+    const value = '<![CDATA[Special chars: &lt; &gt; &euro; € &copy; © &reg; ® &pound; £ &yen; ¥]]>'
+    const expected = 'Special chars: < > € € © © ® ® £ £ ¥ ¥'
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #5', () => {
+    const value =
+      'Numeric entities: &amp;#169; &#169; &amp;#8364; &#8364; &amp;#8482; &#8482; &amp;#x2122; &#x2122;'
+    const expected = 'Numeric entities: © © € € ™ ™ ™ ™'
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #6', () => {
+    const value = '<![CDATA[Numeric entities: &#169; &#8364; &#8482; &#x2122;]]>'
+    const expected = 'Numeric entities: © € ™ ™'
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #7', () => {
+    const value =
+      '&lt;p&gt;HTML mixed with entities: &amp;copy; ©, &amp;reg; ®, &amp;#8364; € and &lt;a href=&quot;https://example.com?param1=value1&amp;param2=value2&quot;&gt;URL with ampersand&lt;/a&gt;&lt;/p&gt;'
+    const expected =
+      '<p>HTML mixed with entities: © ©, ® ®, € € and <a href="https://example.com?param1=value1¶m2=value2">URL with ampersand</a></p>'
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #8', () => {
+    const value =
+      '<![CDATA[<p>HTML mixed with entities: &copy; ©, &reg; ®, &#8364; € and <a href="https://example.com?param1=value1&param2=value2">URL with ampersand</a></p>]]>'
+    const expected =
+      '<p>HTML mixed with entities: © ©, ® ®, € € and <a href="https://example.com?param1=value1¶m2=value2">URL with ampersand</a></p>'
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #9', () => {
+    const value =
+      '<![CDATA[Testing CDATA with brackets: [This is in brackets] and <code>if (x > y) { doSomething(); }</code>]]>'
+    const expected =
+      'Testing CDATA with brackets: [This is in brackets] and <code>if (x > y) { doSomething(); }</code>'
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #10', () => {
+    const value =
+      '&lt;script&gt;function test() { if (x &lt; y &amp;&amp; z &gt; 0) { alert(&quot;Hello!&quot;); } }&lt;/script&gt;'
+    const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+    expect(parseString(value)).toEqual(expected)
+  })
+
+  it('Should handle entities #11', () => {
+    const value =
+      '<![CDATA[<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>]]>'
+    const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+    expect(parseString(value)).toEqual(expected)
   })
 
   it('should return number', () => {
@@ -557,6 +762,12 @@ describe('parseNumber', () => {
     expect(parseNumber(value)).toEqual(36.6)
   })
 
+  it('should handle empty string', () => {
+    const value = ''
+
+    expect(parseNumber(value)).toBeUndefined()
+  })
+
   it('should return number', () => {
     const value = 420
 
@@ -583,22 +794,16 @@ describe('parseNumber', () => {
 })
 
 describe('parseBoolean', () => {
-  it('should handle array', () => {
-    const value = ['javascript', { another: 'typescript' }]
+  it('should return boolean true', () => {
+    const value = true
 
-    expect(parseBoolean(value)).toBeUndefined()
+    expect(parseBoolean(value)).toEqual(true)
   })
 
-  it('should handle object', () => {
-    const value = { name: 'javascript' }
+  it('should return boolean false', () => {
+    const value = false
 
-    expect(parseBoolean(value)).toBeUndefined()
-  })
-
-  it('should handle non-boolean string', () => {
-    const value = 'javascript'
-
-    expect(parseBoolean(value)).toBeUndefined()
+    expect(parseBoolean(value)).toEqual(false)
   })
 
   it('should handle true string', () => {
@@ -613,16 +818,34 @@ describe('parseBoolean', () => {
     expect(parseBoolean(value)).toEqual(false)
   })
 
+  it('should handle case insensitive false string', () => {
+    const value = 'FaLse'
+
+    expect(parseBoolean(value)).toEqual(false)
+  })
+
+  it('should handle non-boolean string', () => {
+    const value = 'javascript'
+
+    expect(parseBoolean(value)).toBeUndefined()
+  })
+
   it('should return number', () => {
     const value = 420
 
     expect(parseBoolean(value)).toBeUndefined()
   })
 
-  it('should return boolean', () => {
-    const value = true
+  it('should handle array', () => {
+    const value = ['javascript', { another: 'typescript' }]
 
-    expect(parseBoolean(value)).toEqual(value)
+    expect(parseBoolean(value)).toBeUndefined()
+  })
+
+  it('should handle object', () => {
+    const value = { name: 'javascript' }
+
+    expect(parseBoolean(value)).toBeUndefined()
   })
 
   it('should handle null', () => {
@@ -635,6 +858,98 @@ describe('parseBoolean', () => {
     const value = undefined
 
     expect(parseBoolean(value)).toBeUndefined()
+  })
+})
+
+describe('parseYesNoBoolean', () => {
+  it('should return boolean true', () => {
+    const value = true
+
+    expect(parseYesNoBoolean(value)).toEqual(true)
+  })
+
+  it('should return boolean false', () => {
+    const value = false
+
+    expect(parseYesNoBoolean(value)).toEqual(false)
+  })
+
+  it('should handle true string', () => {
+    const value = 'true'
+
+    expect(parseYesNoBoolean(value)).toEqual(true)
+  })
+
+  it('should handle false string', () => {
+    const value = 'false'
+
+    expect(parseYesNoBoolean(value)).toEqual(false)
+  })
+
+  it('should handle case insensitive false string', () => {
+    const value = 'FaLse'
+
+    expect(parseYesNoBoolean(value)).toEqual(false)
+  })
+
+  it('should handle "yes" string as true', () => {
+    const value = 'yes'
+
+    expect(parseYesNoBoolean(value)).toEqual(true)
+  })
+
+  it('should handle case insensitive "yes" string', () => {
+    const value = 'YeS'
+
+    expect(parseYesNoBoolean(value)).toEqual(true)
+  })
+
+  it('should handle "no" string as false', () => {
+    const value = 'no'
+
+    expect(parseYesNoBoolean(value)).toEqual(false)
+  })
+
+  it('should handle non-"yes" strings as false', () => {
+    const value = 'anything'
+
+    expect(parseYesNoBoolean(value)).toEqual(false)
+  })
+
+  it('should handle empty string as false', () => {
+    const value = ''
+
+    expect(parseYesNoBoolean(value)).toEqual(false)
+  })
+
+  it('should return number as undefined', () => {
+    const value = 420
+
+    expect(parseYesNoBoolean(value)).toBeUndefined()
+  })
+
+  it('should handle array as undefined', () => {
+    const value = ['javascript', { another: 'typescript' }]
+
+    expect(parseYesNoBoolean(value)).toBeUndefined()
+  })
+
+  it('should handle object as undefined', () => {
+    const value = { name: 'javascript' }
+
+    expect(parseYesNoBoolean(value)).toBeUndefined()
+  })
+
+  it('should handle null as undefined', () => {
+    const value = null
+
+    expect(parseYesNoBoolean(value)).toBeUndefined()
+  })
+
+  it('should handle undefined as undefined', () => {
+    const value = undefined
+
+    expect(parseYesNoBoolean(value)).toBeUndefined()
   })
 })
 
@@ -679,6 +994,64 @@ describe('parseSingular', () => {
   it('should handle null and undefined', () => {
     expect(parseSingular(null)).toEqual(null)
     expect(parseSingular(undefined)).toBeUndefined()
+  })
+})
+
+describe('parseSingularOf', () => {
+  it('should apply parse function to the first element of an array', () => {
+    const parseToString: ParseFunction<string> = (value) => {
+      return typeof value === 'number' || typeof value === 'string' ? String(value) : undefined
+    }
+
+    expect(parseSingularOf([1, 2, 3], parseToString)).toEqual('1')
+    expect(parseSingularOf(['a', 'b', 'c'], parseToString)).toEqual('a')
+    expect(parseSingularOf([42, 'text'], parseString)).toEqual('42')
+  })
+
+  it('should apply parse function to non-array values', () => {
+    expect(parseSingularOf(42, parseString)).toEqual('42')
+    expect(parseSingularOf('123', parseNumber)).toEqual(123)
+    expect(parseSingularOf('true', parseBoolean)).toEqual(true)
+  })
+
+  it('should return undefined when the parse function returns undefined', () => {
+    expect(parseSingularOf({}, parseNumber)).toBeUndefined()
+    expect(parseSingularOf('not-a-number', parseNumber)).toBeUndefined()
+    expect(parseSingularOf([{}, 'string'], parseNumber)).toBeUndefined()
+  })
+
+  it('should handle empty arrays', () => {
+    expect(parseSingularOf([], parseString)).toBeUndefined()
+  })
+
+  it('should handle arrays with undefined or null first elements', () => {
+    expect(parseSingularOf([undefined, 1, 2], parseNumber)).toBeUndefined()
+    expect(parseSingularOf([null, 1, 2], parseNumber)).toBeUndefined()
+  })
+
+  it('should preserve the type returned by the parse function', () => {
+    const numberResult = parseSingularOf<number>('42', parseNumber)
+    const stringResult = parseSingularOf<string>(42, parseString)
+    const booleanResult = parseSingularOf<boolean>('true', parseBoolean)
+
+    expect(typeof numberResult).toEqual('number')
+    expect(typeof stringResult).toEqual('string')
+    expect(typeof booleanResult).toEqual('boolean')
+  })
+
+  it('should work with custom parse functions', () => {
+    const parseUpperCase: ParseFunction<string> = (value) => {
+      return typeof value === 'string' ? value.toUpperCase() : undefined
+    }
+
+    expect(parseSingularOf('hello', parseUpperCase)).toEqual('HELLO')
+    expect(parseSingularOf(['hello', 'world'], parseUpperCase)).toEqual('HELLO')
+    expect(parseSingularOf(123, parseUpperCase)).toBeUndefined()
+  })
+
+  it('should handle null and undefined input values', () => {
+    expect(parseSingularOf(null, parseString)).toBeUndefined()
+    expect(parseSingularOf(undefined, parseNumber)).toBeUndefined()
   })
 })
 
@@ -805,5 +1178,233 @@ describe('parseArrayOf', () => {
     const value = undefined
 
     expect(parseArrayOf(value, parser)).toBeUndefined()
+  })
+})
+
+describe('createNamespaceGetter', () => {
+  it('should retrieve value with prefix when prefix is provided', () => {
+    const value = {
+      'ns:key': 'prefixed value',
+      key: 'unprefixed value',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('key')).toEqual('prefixed value')
+  })
+
+  it('should handle empty prefix', () => {
+    const value = {
+      key: 'value',
+    }
+    const get = createNamespaceGetter(value, '')
+
+    expect(get('key')).toEqual('value')
+  })
+
+  it('should handle undefined prefix', () => {
+    const value = {
+      key: 'value',
+    }
+    const get = createNamespaceGetter(value, undefined)
+
+    expect(get('key')).toEqual('value')
+  })
+
+  it('should handle complex objects as values', () => {
+    const complexValue = { nested: 'object' }
+    const value = {
+      'ns:key': complexValue,
+      key: 'simple value',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('key')).toBe(complexValue)
+  })
+
+  it('should handle arrays as values', () => {
+    const arrayValue = [1, 2, 3]
+    const value = {
+      'ns:key': arrayValue,
+      key: 'simple value',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('key')).toBe(arrayValue)
+  })
+
+  it('should handle non-string keys gracefully', () => {
+    const value = {
+      'ns:123': 'numeric key with prefix',
+      '123': 'numeric key',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('123')).toEqual('numeric key with prefix')
+  })
+
+  it('should handle various prefix formats', () => {
+    const value = {
+      'namespace:key': 'value with colon',
+      'namespace-key': 'value with dash',
+      namespace_key: 'value with underscore',
+    }
+
+    const colonGetter = createNamespaceGetter(value, 'namespace:')
+    const dashGetter = createNamespaceGetter(value, 'namespace-')
+    const underscoreGetter = createNamespaceGetter(value, 'namespace_')
+
+    expect(colonGetter('key')).toEqual('value with colon')
+    expect(dashGetter('key')).toEqual('value with dash')
+    expect(underscoreGetter('key')).toEqual('value with underscore')
+  })
+
+  it('should return undefined when prefixed key does not exist', () => {
+    const value = {
+      key: 'unprefixed value',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('key')).toBeUndefined()
+  })
+
+  it('should return undefined for non-existent keys (with prefix)', () => {
+    const value = {
+      'ns:existingKey': 'value',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('nonExistentKey')).toBeUndefined()
+  })
+})
+
+describe('createCaseInsensitiveGetter', () => {
+  it('should retrieve value using case-insensitive key lookup', () => {
+    const value = {
+      Title: 'Example Title',
+      AUTHOR: 'John Doe',
+      content: 'Some content here',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('title')).toEqual('Example Title')
+    expect(get('author')).toEqual('John Doe')
+    expect(get('CONTENT')).toEqual('Some content here')
+  })
+
+  it('should preserve the original value types', () => {
+    const value = {
+      Number: 42,
+      Boolean: true,
+      Object: { key: 'value' },
+      Array: [1, 2, 3],
+      Null: null,
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('number')).toBe(42)
+    expect(get('boolean')).toBe(true)
+    expect(get('object')).toEqual({ key: 'value' })
+    expect(get('array')).toEqual([1, 2, 3])
+    expect(get('null')).toBeNull()
+  })
+
+  it('should handle keys that differ only in case', () => {
+    // Note: In JavaScript objects, keys that differ only in case would overwrite each other
+    // This test verifies that the last key-value pair wins.
+    const value = {
+      key: 'lowercase value',
+      KEY: 'uppercase value',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('key')).toEqual('uppercase value')
+    expect(get('KEY')).toEqual('uppercase value')
+  })
+
+  it('should handle non-string key lookups by coercing to string', () => {
+    const value = {
+      '123': 'numeric key',
+      true: 'boolean key',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('123')).toEqual('numeric key')
+    expect(get('TRUE')).toEqual('boolean key')
+  })
+
+  it('should handle special characters in keys', () => {
+    const value = {
+      'Special-Key': 'with dash',
+      Special_Key: 'with underscore',
+      'Special.Key': 'with dot',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('special-key')).toEqual('with dash')
+    expect(get('SPECIAL_KEY')).toEqual('with underscore')
+    expect(get('special.key')).toEqual('with dot')
+  })
+
+  it('should only consider own properties', () => {
+    const proto = { PrototypeProp: 'from prototype' }
+    const value = Object.create(proto)
+    value.OwnProp = 'own property'
+
+    const get = createCaseInsensitiveGetter(value)
+    expect(get('ownprop')).toEqual('own property')
+    expect(get('prototypeprop')).toBeUndefined()
+  })
+
+  it('should handle Unicode characters correctly', () => {
+    const value = {
+      CaféItem: 'coffee',
+      RÉSUMÉ: 'document',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('caféitem')).toEqual('coffee')
+    expect(get('résumé')).toEqual('document')
+  })
+
+  it('should handle multiple lookups on the same getter', () => {
+    const value = {
+      First: 'first value',
+      Second: 'second value',
+      Third: 'third value',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('first')).toEqual('first value')
+    expect(get('SECOND')).toEqual('second value')
+    expect(get('THiRd')).toEqual('third value')
+  })
+
+  it('should handle undefined values in the object', () => {
+    const value = {
+      DefinedKey: 'defined value',
+      UndefinedKey: undefined,
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('definedkey')).toEqual('defined value')
+    expect(get('undefinedkey')).toBeUndefined()
+    // Make sure we can distinguish between non-existent keys and keys with undefined values.
+    expect('UndefinedKey' in value).toBe(true)
+  })
+
+  it('should return undefined for non-existent keys', () => {
+    const value = {
+      ExistingKey: 'value',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('nonexistentkey')).toBeUndefined()
+  })
+
+  it('should handle empty objects', () => {
+    const value = {}
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('anykey')).toBeUndefined()
   })
 })

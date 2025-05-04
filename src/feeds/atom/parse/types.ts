@@ -1,6 +1,8 @@
-import type { ParseFunction as CommonParseFunction } from '../../../common/types'
-import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/types'
-import type { Feed as SyFeed } from '../../../namespaces/sy/types'
+import type { ParseFunction as CommonParseFunction } from '../../../common/types.js'
+import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/types.js'
+import type { Feed as ItunesFeed, Item as ItunesItem } from '../../../namespaces/itunes/types.js'
+import type { Item as SlashItem } from '../../../namespaces/slash/types.js'
+import type { Feed as SyFeed } from '../../../namespaces/sy/types.js'
 
 export type ParseFunction<R> = CommonParseFunction<R, { prefix?: string; partial?: boolean }>
 
@@ -63,6 +65,8 @@ export type Entry = {
   title?: Text
   updated?: string
   dc?: DcItemOrFeed
+  slash?: SlashItem
+  itunes?: ItunesItem
 }
 
 export type Feed = {
@@ -81,4 +85,5 @@ export type Feed = {
   entries?: Array<Entry>
   dc?: DcItemOrFeed
   sy?: SyFeed
+  itunes?: ItunesFeed
 }

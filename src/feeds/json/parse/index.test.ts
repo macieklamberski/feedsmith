@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
-import { locales } from '../../../common/config'
-import { parse } from './index'
-import type { Feed } from './types'
+import { locales } from '../../../common/config.js'
+import { parse } from './index.js'
+import type { Feed } from './types.js'
 
 describe('parse', () => {
   const validFeedV1 = {

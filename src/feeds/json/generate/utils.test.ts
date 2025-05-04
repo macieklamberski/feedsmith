@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import type { Feed, Item } from './types'
-import { generateFeed, generateItem, generateRfc3339Date } from './utils'
+import { generateFeed, generateItem, generateRfc3339Date } from './utils.js'
 
 describe('generateRfc3339Date', () => {
   it('should correctly format a date in RFC 3339 format', () => {
