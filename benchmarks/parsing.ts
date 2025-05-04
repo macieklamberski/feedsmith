@@ -46,7 +46,7 @@ const rssParser = (feed: string) => {
   return rssParserInstance.parseString(feed)
 }
 
-const jsonFilesStrings = loadFeedFiles('feeds/json', 10)
+const jsonFilesStrings = loadFeedFiles('files/json', 10)
 const jsonFilesObjects = Object.entries(jsonFilesStrings).reduce(
   (jsons, [name, json]) => {
     jsons[name] = JSON.parse(json)
@@ -54,11 +54,11 @@ const jsonFilesObjects = Object.entries(jsonFilesStrings).reduce(
   },
   {} as Record<string, unknown>,
 )
-const rssBigFiles = loadFeedFiles('feeds/rss-big', 10)
-const rssSmallFiles = loadFeedFiles('feeds/rss-small', 50)
-const atomBigFiles = loadFeedFiles('feeds/atom-big', 10)
-const atomSmallFiles = loadFeedFiles('feeds/atom-small', 50)
-const rdfFiles = loadFeedFiles('feeds/rdf', 50)
+const rssBigFiles = loadFeedFiles('files/rss-big', 10)
+const rssSmallFiles = loadFeedFiles('files/rss-small', 50)
+const atomBigFiles = loadFeedFiles('files/atom-big', 10)
+const atomSmallFiles = loadFeedFiles('files/atom-small', 50)
+const rdfFiles = loadFeedFiles('files/rdf', 50)
 
 await runBenchmarks('RSS feed parsing (10 files × 5MB–50MB)', {
   'rss-parser': () => runTest(rssBigFiles, rssParser),
