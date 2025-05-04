@@ -190,6 +190,6 @@ export type Group = {
 } & CommonElements
 
 export type ItemOrFeed = {
-  groups?: Array<Group>
+  group?: Group
   contents?: Array<Content>
 } & CommonElements
