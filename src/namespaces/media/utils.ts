@@ -274,7 +274,7 @@ export const parseParam: ParseFunction<Param> = (value) => {
 
   const param = {
     name: parseString(value['@name']),
-    value: parseString(value['@value']),
+    value: parseString(retrieveText(value)),
   }
 
   if (isPresent(param.name) && isPresent(param.value)) {
@@ -400,10 +400,10 @@ export const parseScene: ParseFunction<Scene> = (value) => {
   }
 
   const scene = {
-    title: parseSingularOf(value.sceneTitle, parseTextString),
-    description: parseSingularOf(value.sceneDescription, parseTextString),
-    startTime: parseSingularOf(value.sceneStartTime, parseTextString),
-    endTime: parseSingularOf(value.sceneEndTime, parseTextString),
+    title: parseSingularOf(value.scenetitle, parseTextString),
+    description: parseSingularOf(value.scenedescription, parseTextString),
+    startTime: parseSingularOf(value.scenestarttime, parseTextString),
+    endTime: parseSingularOf(value.sceneendtime, parseTextString),
   }
 
   return trimObject(scene)
@@ -436,7 +436,7 @@ export const retrieveCommonElements: ParseFunction<CommonElements> = (value) => 
     ratings: retrieveRatings(value),
     title: parseSingularOf(value['media:title'], parseTitleOrDescription),
     description: parseSingularOf(value['media:description'], parseTitleOrDescription),
-    keywords: parseSingularOf(value['itunes:keywords'], (value) =>
+    keywords: parseSingularOf(value['media:keywords'], (value) =>
       parseKeywords(retrieveText(value)),
     ),
     thumbnails: parseArrayOf(value['media:thumbnail'], parseThumbnail),

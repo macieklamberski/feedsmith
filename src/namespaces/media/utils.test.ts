@@ -1500,7 +1500,7 @@ describe('parseParam', () => {
   it('should parse complete param object', () => {
     const value = {
       '@name': 'autoplay',
-      '@value': 'true',
+      '#text': 'true',
     }
     const expected = {
       name: 'autoplay',
@@ -1513,7 +1513,7 @@ describe('parseParam', () => {
   it('should handle coercible number values', () => {
     const value = {
       '@name': 123,
-      '@value': 456,
+      '#text': 456,
     }
     const expected = {
       name: '123',
@@ -1526,7 +1526,7 @@ describe('parseParam', () => {
   it('should handle objects with mixed valid and invalid properties', () => {
     const value = {
       '@name': 'color',
-      '@value': 'blue',
+      '#text': 'blue',
       '@invalid': 'property',
     }
     const expected = {
@@ -1539,7 +1539,7 @@ describe('parseParam', () => {
 
   it('should return undefined if name is missing', () => {
     const value = {
-      '@value': 'some value',
+      '#text': 'some value',
     }
 
     expect(parseParam(value)).toBeUndefined()
@@ -1587,11 +1587,11 @@ describe('parseEmbed', () => {
       'media:param': [
         {
           '@name': 'autoplay',
-          '@value': 'true',
+          '#text': 'true',
         },
         {
           '@name': 'loop',
-          '@value': 'false',
+          '#text': 'false',
         },
       ],
     }
@@ -1630,7 +1630,7 @@ describe('parseEmbed', () => {
       '@url': 'https://example.com/player.html',
       'media:param': {
         '@name': 'theme',
-        '@value': 'dark',
+        '#text': 'dark',
       },
     }
     const expected = {
@@ -1667,13 +1667,13 @@ describe('parseEmbed', () => {
       'media:param': [
         {
           '@name': 'valid',
-          '@value': 'param',
+          '#text': 'param',
         },
         {
           '@name': 'missing-value',
         },
         {
-          '@value': 'missing-name',
+          '#text': 'missing-name',
         },
       ],
     }
@@ -2261,10 +2261,10 @@ describe('parseScene', () => {
 
   it('should parse complete scene object (with #text)', () => {
     const value = {
-      sceneTitle: { '#text': 'Opening Scene' },
-      sceneDescription: { '#text': 'The intro to the episode' },
-      sceneStartTime: { '#text': '00:00:00' },
-      sceneEndTime: { '#text': '00:02:30' },
+      scenetitle: { '#text': 'Opening Scene' },
+      scenedescription: { '#text': 'The intro to the episode' },
+      scenestarttime: { '#text': '00:00:00' },
+      sceneendtime: { '#text': '00:02:30' },
     }
 
     expect(parseScene(value)).toEqual(expectedFull)
@@ -2272,10 +2272,10 @@ describe('parseScene', () => {
 
   it('should parse complete scene object (without #text)', () => {
     const value = {
-      sceneTitle: 'Opening Scene',
-      sceneDescription: 'The intro to the episode',
-      sceneStartTime: '00:00:00',
-      sceneEndTime: '00:02:30',
+      scenetitle: 'Opening Scene',
+      scenedescription: 'The intro to the episode',
+      scenestarttime: '00:00:00',
+      sceneendtime: '00:02:30',
     }
 
     expect(parseScene(value)).toEqual(expectedFull)
@@ -2283,10 +2283,10 @@ describe('parseScene', () => {
 
   it('should parse complete scene object (as array of values)', () => {
     const value = {
-      sceneTitle: ['Opening Scene'],
-      sceneDescription: ['The intro to the episode'],
-      sceneStartTime: ['00:00:00'],
-      sceneEndTime: ['00:02:30'],
+      scenetitle: ['Opening Scene'],
+      scenedescription: ['The intro to the episode'],
+      scenestarttime: ['00:00:00'],
+      sceneendtime: ['00:02:30'],
     }
 
     expect(parseScene(value)).toEqual(expectedFull)
@@ -2294,8 +2294,8 @@ describe('parseScene', () => {
 
   it('should parse scene with partial fields', () => {
     const value = {
-      sceneTitle: 'Interview Section',
-      sceneStartTime: '00:05:00',
+      scenetitle: 'Interview Section',
+      scenestarttime: '00:05:00',
     }
     const expected = {
       title: 'Interview Section',
@@ -2307,8 +2307,8 @@ describe('parseScene', () => {
 
   it('should handle coercible values', () => {
     const value = {
-      sceneTitle: 123,
-      sceneStartTime: 456,
+      scenetitle: 123,
+      scenestarttime: 456,
     }
     const expected = {
       title: '123',
@@ -2320,9 +2320,9 @@ describe('parseScene', () => {
 
   it('should handle objects with mixed valid and invalid properties', () => {
     const value = {
-      sceneTitle: 'Closing Remarks',
-      sceneEndTime: '00:45:00',
-      randomProperty: 'should be ignored',
+      scenetitle: 'Closing Remarks',
+      sceneendtime: '00:45:00',
+      randomproperty: 'should be ignored',
     }
     const expected = {
       title: 'Closing Remarks',
@@ -2334,7 +2334,7 @@ describe('parseScene', () => {
 
   it('should return undefined if no scene properties exist', () => {
     const value = {
-      otherProperty: 'not a scene property',
+      otherproperty: 'not a scene property',
     }
 
     expect(parseScene(value)).toBeUndefined()
@@ -2358,10 +2358,10 @@ describe('parseScenes', () => {
   it('should parse a single scene', () => {
     const value = {
       'media:scene': {
-        sceneTitle: 'Introduction',
-        sceneDescription: 'Opening sequence of the movie',
-        sceneStartTime: '00:00:30',
-        sceneEndTime: '00:01:45',
+        scenetitle: 'Introduction',
+        scenedescription: 'Opening sequence of the movie',
+        scenestarttime: '00:00:30',
+        sceneendtime: '00:01:45',
       },
     }
     const expected = [
@@ -2380,16 +2380,16 @@ describe('parseScenes', () => {
     const value = {
       'media:scene': [
         {
-          sceneTitle: 'Introduction',
-          sceneDescription: 'Opening sequence',
-          sceneStartTime: '00:00:30',
-          sceneEndTime: '00:01:45',
+          scenetitle: 'Introduction',
+          scenedescription: 'Opening sequence',
+          scenestarttime: '00:00:30',
+          sceneendtime: '00:01:45',
         },
         {
-          sceneTitle: 'Conflict',
-          sceneDescription: 'Main character faces a challenge',
-          sceneStartTime: '00:05:10',
-          sceneEndTime: '00:08:30',
+          scenetitle: 'Conflict',
+          scenedescription: 'Main character faces a challenge',
+          scenestarttime: '00:05:10',
+          sceneendtime: '00:08:30',
         },
       ],
     }
@@ -2415,12 +2415,12 @@ describe('parseScenes', () => {
     const value = {
       'media:scene': [
         {
-          sceneTitle: 'Introduction',
-          sceneStartTime: '00:00:30',
+          scenetitle: 'Introduction',
+          scenestarttime: '00:00:30',
         },
         {
-          sceneDescription: 'Closing credits',
-          sceneEndTime: '01:30:00',
+          scenedescription: 'Closing credits',
+          sceneendtime: '01:30:00',
         },
       ],
     }
@@ -2442,8 +2442,8 @@ describe('parseScenes', () => {
     const value = {
       'media:scene': [
         {
-          sceneTitle: 'Valid Scene',
-          sceneStartTime: '00:00:30',
+          scenetitle: 'Valid Scene',
+          scenestarttime: '00:00:30',
         },
         {}, // Empty scene should be filtered out
         null, // Null scene should be filtered out
@@ -2463,8 +2463,8 @@ describe('parseScenes', () => {
   it('should handle coercible values', () => {
     const value = {
       'media:scene': {
-        sceneTitle: 123,
-        sceneStartTime: 456,
+        scenetitle: 123,
+        scenestarttime: 456,
       },
     }
     const expected = [
@@ -2563,7 +2563,7 @@ describe('retrieveCommonElements', () => {
         '#text': 'Sample Description',
         '@type': 'plain',
       },
-      'itunes:keywords': 'keyword1,keyword2,keyword3',
+      'media:keywords': 'keyword1,keyword2,keyword3',
       'media:thumbnail': [
         {
           '@url': 'https://example.com/thumbnail1.jpg',
@@ -2651,7 +2651,7 @@ describe('retrieveCommonElements', () => {
         '@height': 480,
         'media:param': {
           '@name': 'type',
-          '@value': 'application/x-shockwave-flash',
+          '#text': 'application/x-shockwave-flash',
         },
       },
       'media:responses': {
@@ -2696,10 +2696,10 @@ describe('retrieveCommonElements', () => {
       'media:scenes': {
         'media:scene': [
           {
-            sceneTitle: 'Opening Scene',
-            sceneDescription: 'The movie begins',
-            sceneStartTime: '00:00:00',
-            sceneEndTime: '00:02:30',
+            scenetitle: 'Opening Scene',
+            scenedescription: 'The movie begins',
+            scenestarttime: '00:00:00',
+            sceneendtime: '00:02:30',
           },
         ],
       },
@@ -2959,7 +2959,7 @@ describe('retrieveCommonElements', () => {
 
   it('should parse object with keywords', () => {
     const value = {
-      'itunes:keywords': 'keyword1,keyword2,keyword3',
+      'media:keywords': 'keyword1,keyword2,keyword3',
     }
     const expected = {
       keywords: ['keyword1', 'keyword2', 'keyword3'],
@@ -3057,7 +3057,7 @@ describe('retrieveCommonElements', () => {
         'media:param': [
           {
             '@name': 'type',
-            '@value': 'application/x-shockwave-flash',
+            '#text': 'application/x-shockwave-flash',
           },
         ],
       },
@@ -3116,10 +3116,10 @@ describe('retrieveCommonElements', () => {
       'media:scenes': {
         'media:scene': [
           {
-            sceneTitle: 'Opening Scene',
-            sceneDescription: 'The movie begins',
-            sceneStartTime: '00:00:00',
-            sceneEndTime: '00:02:30',
+            scenetitle: 'Opening Scene',
+            scenedescription: 'The movie begins',
+            scenestarttime: '00:00:00',
+            sceneendtime: '00:02:30',
           },
         ],
       },
