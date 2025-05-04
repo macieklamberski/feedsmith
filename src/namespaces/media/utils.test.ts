@@ -1374,7 +1374,7 @@ describe('parseTags', () => {
 describe('parseCommunity', () => {
   it('should parse complete community object', () => {
     const value = {
-      'media:starRating': {
+      'media:starrating': {
         '@average': 4.5,
         '@count': 127,
         '@min': 1,
@@ -1409,7 +1409,7 @@ describe('parseCommunity', () => {
 
   it('should parse community with only starRating', () => {
     const value = {
-      'media:starRating': {
+      'media:starrating': {
         '@average': 3.8,
         '@count': 45,
       },
@@ -1455,7 +1455,7 @@ describe('parseCommunity', () => {
 
   it('should handle mixed valid and invalid properties', () => {
     const value = {
-      'media:starRating': {
+      'media:starrating': {
         '@average': 4.2,
       },
       'media:tags': '',
@@ -1739,7 +1739,7 @@ describe('parseEmbed', () => {
 })
 
 createSimpleArrayParserTests('parseResponses', parseResponses, 'media:response')
-createSimpleArrayParserTests('parseBackLinks', parseBackLinks, 'media:backLink')
+createSimpleArrayParserTests('parseBackLinks', parseBackLinks, 'media:backlink')
 
 describe('parseStatus', () => {
   it('should parse complete status object', () => {
@@ -2630,7 +2630,7 @@ describe('retrieveCommonElements', () => {
         },
       ],
       'media:community': {
-        'media:starRating': {
+        'media:starrating': {
           '@average': 4.5,
           '@count': 150,
           '@min': 1,
@@ -2657,8 +2657,8 @@ describe('retrieveCommonElements', () => {
       'media:responses': {
         'media:response': ['https://example.com/response1', 'https://example.com/response2'],
       },
-      'media:backLinks': {
-        'media:backLink': ['https://example.com/backlink1', 'https://example.com/backlink2'],
+      'media:backlinks': {
+        'media:backlink': ['https://example.com/backlink1', 'https://example.com/backlink2'],
       },
       'media:status': {
         '@state': 'active',
@@ -2677,14 +2677,14 @@ describe('retrieveCommonElements', () => {
         '@type': 'text/html',
         '@href': 'https://creativecommons.org/licenses/by/4.0/',
       },
-      'media:subTitle': [
+      'media:subtitle': [
         {
           '@href': 'https://example.com/subtitles.vtt',
           '@type': 'text/vtt',
           '@lang': 'en',
         },
       ],
-      'media:peerLink': [
+      'media:peerlink': [
         {
           '@href': 'https://example.com/peerlink',
           '@type': 'application/x-bittorrent',
@@ -3007,7 +3007,7 @@ describe('retrieveCommonElements', () => {
   it('should parse object with community', () => {
     const value = {
       'media:community': {
-        'media:starRating': {
+        'media:starrating': {
           '@average': 4.5,
           '@count': 150,
           '@min': 1,
@@ -3205,10 +3205,10 @@ describe('parseContent', () => {
   it('should parse complete content object', () => {
     const value = {
       '@url': 'https://example.com/video.mp4',
-      '@fileSize': 12345678,
+      '@filesize': 12345678,
       '@type': 'video/mp4',
       '@medium': 'video',
-      '@isDefault': 'true',
+      '@isdefault': 'true',
       '@expression': 'full',
       '@bitrate': 1500,
       '@framerate': 30,
@@ -3271,11 +3271,11 @@ describe('parseContent', () => {
   it('should handle coercible values', () => {
     const value = {
       '@url': 'https://example.com/video.mp4',
-      '@fileSize': '12345678',
+      '@filesize': '12345678',
       '@duration': '360',
       '@height': '720',
       '@width': '1280',
-      '@isDefault': 'true',
+      '@isdefault': 'true',
     }
     const expected = {
       url: 'https://example.com/video.mp4',

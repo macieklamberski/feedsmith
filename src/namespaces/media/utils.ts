@@ -255,7 +255,7 @@ export const parseCommunity: ParseFunction<Community> = (value) => {
   }
 
   const community = {
-    starRating: parseSingularOf(value['media:starRating'], parseStarRating),
+    starRating: parseSingularOf(value['media:starrating'], parseStarRating),
     statistics: parseSingularOf(value['media:statistics'], parseStatistics),
     tags: parseSingularOf(value['media:tags'], parseTags),
   }
@@ -304,7 +304,7 @@ export const parseResponses: ParseFunction<Array<string>> = (value) => {
 }
 
 export const parseBackLinks: ParseFunction<Array<string>> = (value) => {
-  return parseArrayOf(value?.['media:backLink'], parseTextString)
+  return parseArrayOf(value?.['media:backlink'], parseTextString)
 }
 
 export const parseStatus: ParseFunction<Status> = (value) => {
@@ -451,12 +451,12 @@ export const retrieveCommonElements: ParseFunction<CommonElements> = (value) => 
     comments: parseSingularOf(value['media:comments'], parseComments),
     embed: parseSingularOf(value['media:embed'], parseEmbed),
     responses: parseSingularOf(value['media:responses'], parseResponses),
-    backLinks: parseSingularOf(value['media:backLinks'], parseBackLinks),
+    backLinks: parseSingularOf(value['media:backlinks'], parseBackLinks),
     status: parseSingularOf(value['media:status'], parseStatus),
     prices: parseArrayOf(value['media:price'], parsePrice),
     licenses: parseArrayOf(value['media:license'], parseLicense),
-    subTitles: parseArrayOf(value['media:subTitle'], parseSubTitle),
-    peerLinks: parseArrayOf(value['media:peerLink'], parsePeerLink),
+    subTitles: parseArrayOf(value['media:subtitle'], parseSubTitle),
+    peerLinks: parseArrayOf(value['media:peerlink'], parsePeerLink),
     locations: parseArrayOf(value['media:location'], parseLocation),
     rights: parseSingularOf(value['media:rights'], parseRights),
     scenes: parseSingularOf(value['media:scenes'], parseScenes),
@@ -472,10 +472,10 @@ export const parseContent: ParseFunction<Content> = (value) => {
 
   const content = {
     url: parseString(value['@url']),
-    fileSize: parseNumber(value['@fileSize']),
+    fileSize: parseNumber(value['@filesize']),
     type: parseString(value['@type']),
     medium: parseString(value['@medium']),
-    isDefault: parseBoolean(value['@isDefault']),
+    isDefault: parseBoolean(value['@isdefault']),
     expression: parseString(value['@expression']),
     bitrate: parseNumber(value['@bitrate']),
     framerate: parseNumber(value['@framerate']),
