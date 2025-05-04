@@ -14,6 +14,108 @@
     <itunes:name>Jack Smith</itunes:name>
     <itunes:email>news@example.com</itunes:email>
   </itunes:owner>
+
+  <!-- Media Namespace: Item/Feed Level Tags -->
+  <media:content url="https://example.com/videos/sample1.mp4" fileSize="12345678" type="video/mp4" medium="video" isDefault="true" expression="full" bitrate="1500" framerate="30" samplingrate="44.1" channels="2" duration="120" height="720" width="1280" lang="en">
+    <media:title type="plain">Sample Video Title</media:title>
+    <media:description type="html">This is a &lt;b&gt;sample video&lt;/b&gt; demonstrating media:content</media:description>
+    <media:keywords>sample, video, example, media, rss</media:keywords>
+    <media:thumbnail url="https://example.com/thumbnails/sample1.jpg" width="320" height="180" time="00:00:15.000"/>
+    <media:category scheme="http://search.yahoo.com/mrss/category_schema">Entertainment</media:category>
+    <media:hash algo="md5">dfdec888b7f38882e8a698d52eaebc04</media:hash>
+    <media:credit role="producer" scheme="urn:ebu">Jane Smith</media:credit>
+    <media:rating scheme="urn:simple">adult</media:rating>
+    <media:copyright>© 2025 Example Media Inc.</media:copyright>
+    <media:text type="transcript" lang="en" start="00:00:03" end="00:00:10">This is a sample transcript text</media:text>
+    <media:restriction relationship="allow" type="country">us ca gb</media:restriction>
+    <media:community>
+      <media:starRating average="4.5" count="2500" min="1" max="5" />
+      <media:statistics views="12345" favorites="413" />
+      <media:tags>featured, media, example</media:tags>
+    </media:community>
+    <media:comments>
+      <media:comment>Great video!</media:comment>
+      <media:comment>Very informative content</media:comment>
+    </media:comments>
+    <media:embed url="https://example.com/players/embed" width="640" height="360">
+      <media:param name="autoplay">true</media:param>
+      <media:param name="theme">dark</media:param>
+    </media:embed>
+    <media:responses>
+      <media:response>https://example.com/videos/response1</media:response>
+    </media:responses>
+    <media:backLinks>
+      <media:backLink>https://example.com/articles/related</media:backLink>
+    </media:backLinks>
+    <media:status state="active" />
+    <media:price type="rent" price="2.99" currency="USD" />
+    <media:license type="text/html" href="https://example.com/license">Standard License</media:license>
+    <media:peerLink type="application/torrent" href="https://example.com/torrents/sample1.torrent" />
+    <media:location>Sample Studio</media:location>
+    <media:rights status="official" />
+    <media:scenes>
+      <media:scene>
+        <sceneTitle>Introduction</sceneTitle>
+        <sceneDescription>Opening sequence</sceneDescription>
+        <sceneStartTime>00:00:00</sceneStartTime>
+        <sceneEndTime>00:00:30</sceneEndTime>
+      </media:scene>
+      <media:scene>
+        <sceneTitle>Main Content</sceneTitle>
+        <sceneStartTime>00:00:30</sceneStartTime>
+        <sceneEndTime>00:01:45</sceneEndTime>
+      </media:scene>
+    </media:scenes>
+  </media:content>
+  <media:group>
+    <media:title>Multi-Format Content Example</media:title>
+    <media:description>This video is available in multiple formats and resolutions</media:description>
+    <media:thumbnail url="https://example.com/thumbnails/group-main.jpg" width="640" height="360" />
+    <media:thumbnail url="https://example.com/thumbnails/group-alt.jpg" width="1280" height="720" />
+    <media:keywords>group, multiple, formats, resolutions</media:keywords>
+    <media:category>Technology</media:category>
+    <media:rating scheme="urn:mpaa">PG</media:rating>
+    <media:copyright>© 2025 Example Media Inc.</media:copyright>
+    <media:content url="https://example.com/videos/sample-hd.mp4" fileSize="45678912" type="video/mp4" medium="video" expression="full" bitrate="5000" framerate="60" duration="180" height="1080" width="1920" lang="en">
+      <media:title>HD Version (1080p)</media:title>
+    </media:content>
+    <media:content url="https://example.com/videos/sample-sd.mp4" fileSize="23456789" type="video/mp4" medium="video" expression="full" bitrate="2500" framerate="30" duration="180" height="720" width="1280" lang="en">
+      <media:title>SD Version (720p)</media:title>
+    </media:content>
+    <media:content url="https://example.com/videos/sample.webm" fileSize="19876543" type="video/webm" medium="video" expression="full" bitrate="2000" framerate="30" duration="180" height="720" width="1280" lang="en">
+      <media:title>WebM Version</media:title>
+    </media:content>
+    <media:content url="https://example.com/audio/sample.mp3" fileSize="3456789" type="audio/mpeg" medium="audio" expression="full" bitrate="320" samplingrate="44.1" channels="2" duration="180" lang="en">
+      <media:title>Audio Only Version</media:title>
+    </media:content>
+    <media:content url="https://example.com/captions/sample-en.srt" type="text/srt" medium="document" expression="sample" lang="en">
+      <media:title>English Subtitles</media:title>
+    </media:content>
+    <media:content url="https://example.com/captions/sample-es.srt" type="text/srt" medium="document" expression="sample" lang="es">
+      <media:title>Spanish Subtitles</media:title>
+    </media:content>
+  </media:group>
+  <media:title type="text">Advanced Media Features Demo</media:title>
+  <media:credit role="director" scheme="urn:ebu">Michael Chang</media:credit>
+  <media:credit role="actor" scheme="urn:ebu">Sarah Johnson</media:credit>
+  <media:credit role="actor" scheme="urn:ebu">Robert Williams</media:credit>
+  <media:category scheme="http://dmoz.org">Arts/Movies/Titles/A/</media:category>
+  <media:status state="active" reason="approved" />
+  <media:thumbnail url="https://example.com/thumbnails/adv-1.jpg" time="00:00:05.000" />
+  <media:thumbnail url="https://example.com/thumbnails/adv-2.jpg" time="00:01:15.000" />
+  <media:thumbnail url="https://example.com/thumbnails/adv-3.jpg" time="00:02:30.000" />
+  <media:price type="package" price="9.99" currency="USD" info="full access">Complete Package</media:price>
+  <media:price type="subscription" price="4.99" currency="USD" info="monthly">Monthly Subscription</media:price>
+  <media:restriction relationship="allow" type="country">us ca gb de fr</media:restriction>
+  <media:restriction relationship="deny" type="sharing">true</media:restriction>
+  <media:rating scheme="urn:mpaa">PG-13</media:rating>
+  <media:rating scheme="urn:v-chip">TV-14</media:rating>
+  <media:community>
+    <media:starRating average="4.8" count="12563" min="1" max="5" />
+    <media:statistics views="256789" favorites="3421" shares="1245" />
+    <media:tags>cinematic, production, advanced, technical, demo</media:tags>
+  </media:community>
+
   <entry>
     <title>Example Entry</title>
     <id>example-entry</id>
@@ -24,5 +126,106 @@
     <slash:comments>177</slash:comments>
     <slash:hit_parade>177,155,105,33,6,3,0</slash:hit_parade>
     <itunes:explicit>false</itunes:explicit>
+
+    <!-- Media Namespace: Item/Feed Level Tags -->
+    <media:content url="https://example.com/videos/sample1.mp4" fileSize="12345678" type="video/mp4" medium="video" isDefault="true" expression="full" bitrate="1500" framerate="30" samplingrate="44.1" channels="2" duration="120" height="720" width="1280" lang="en">
+      <media:title type="plain">Sample Video Title</media:title>
+      <media:description type="html">This is a &lt;b&gt;sample video&lt;/b&gt; demonstrating media:content</media:description>
+      <media:keywords>sample, video, example, media, rss</media:keywords>
+      <media:thumbnail url="https://example.com/thumbnails/sample1.jpg" width="320" height="180" time="00:00:15.000"/>
+      <media:category scheme="http://search.yahoo.com/mrss/category_schema">Entertainment</media:category>
+      <media:hash algo="md5">dfdec888b7f38882e8a698d52eaebc04</media:hash>
+      <media:credit role="producer" scheme="urn:ebu">Jane Smith</media:credit>
+      <media:rating scheme="urn:simple">adult</media:rating>
+      <media:copyright>© 2025 Example Media Inc.</media:copyright>
+      <media:text type="transcript" lang="en" start="00:00:03" end="00:00:10">This is a sample transcript text</media:text>
+      <media:restriction relationship="allow" type="country">us ca gb</media:restriction>
+      <media:community>
+        <media:starRating average="4.5" count="2500" min="1" max="5" />
+        <media:statistics views="12345" favorites="413" />
+        <media:tags>featured, media, example</media:tags>
+      </media:community>
+      <media:comments>
+        <media:comment>Great video!</media:comment>
+        <media:comment>Very informative content</media:comment>
+      </media:comments>
+      <media:embed url="https://example.com/players/embed" width="640" height="360">
+        <media:param name="autoplay">true</media:param>
+        <media:param name="theme">dark</media:param>
+      </media:embed>
+      <media:responses>
+        <media:response>https://example.com/videos/response1</media:response>
+      </media:responses>
+      <media:backLinks>
+        <media:backLink>https://example.com/articles/related</media:backLink>
+      </media:backLinks>
+      <media:status state="active" />
+      <media:price type="rent" price="2.99" currency="USD" />
+      <media:license type="text/html" href="https://example.com/license">Standard License</media:license>
+      <media:peerLink type="application/torrent" href="https://example.com/torrents/sample1.torrent" />
+      <media:location>Sample Studio</media:location>
+      <media:rights status="official" />
+      <media:scenes>
+        <media:scene>
+          <sceneTitle>Introduction</sceneTitle>
+          <sceneDescription>Opening sequence</sceneDescription>
+          <sceneStartTime>00:00:00</sceneStartTime>
+          <sceneEndTime>00:00:30</sceneEndTime>
+        </media:scene>
+        <media:scene>
+          <sceneTitle>Main Content</sceneTitle>
+          <sceneStartTime>00:00:30</sceneStartTime>
+          <sceneEndTime>00:01:45</sceneEndTime>
+        </media:scene>
+      </media:scenes>
+    </media:content>
+    <media:group>
+      <media:title>Multi-Format Content Example</media:title>
+      <media:description>This video is available in multiple formats and resolutions</media:description>
+      <media:thumbnail url="https://example.com/thumbnails/group-main.jpg" width="640" height="360" />
+      <media:thumbnail url="https://example.com/thumbnails/group-alt.jpg" width="1280" height="720" />
+      <media:keywords>group, multiple, formats, resolutions</media:keywords>
+      <media:category>Technology</media:category>
+      <media:rating scheme="urn:mpaa">PG</media:rating>
+      <media:copyright>© 2025 Example Media Inc.</media:copyright>
+      <media:content url="https://example.com/videos/sample-hd.mp4" fileSize="45678912" type="video/mp4" medium="video" expression="full" bitrate="5000" framerate="60" duration="180" height="1080" width="1920" lang="en">
+        <media:title>HD Version (1080p)</media:title>
+      </media:content>
+      <media:content url="https://example.com/videos/sample-sd.mp4" fileSize="23456789" type="video/mp4" medium="video" expression="full" bitrate="2500" framerate="30" duration="180" height="720" width="1280" lang="en">
+        <media:title>SD Version (720p)</media:title>
+      </media:content>
+      <media:content url="https://example.com/videos/sample.webm" fileSize="19876543" type="video/webm" medium="video" expression="full" bitrate="2000" framerate="30" duration="180" height="720" width="1280" lang="en">
+        <media:title>WebM Version</media:title>
+      </media:content>
+      <media:content url="https://example.com/audio/sample.mp3" fileSize="3456789" type="audio/mpeg" medium="audio" expression="full" bitrate="320" samplingrate="44.1" channels="2" duration="180" lang="en">
+        <media:title>Audio Only Version</media:title>
+      </media:content>
+      <media:content url="https://example.com/captions/sample-en.srt" type="text/srt" medium="document" expression="sample" lang="en">
+        <media:title>English Subtitles</media:title>
+      </media:content>
+      <media:content url="https://example.com/captions/sample-es.srt" type="text/srt" medium="document" expression="sample" lang="es">
+        <media:title>Spanish Subtitles</media:title>
+      </media:content>
+    </media:group>
+    <media:title type="text">Advanced Media Features Demo</media:title>
+    <media:credit role="director" scheme="urn:ebu">Michael Chang</media:credit>
+    <media:credit role="actor" scheme="urn:ebu">Sarah Johnson</media:credit>
+    <media:credit role="actor" scheme="urn:ebu">Robert Williams</media:credit>
+    <media:category scheme="http://dmoz.org">Arts/Movies/Titles/A/</media:category>
+    <media:status state="active" reason="approved" />
+    <media:thumbnail url="https://example.com/thumbnails/adv-1.jpg" time="00:00:05.000" />
+    <media:thumbnail url="https://example.com/thumbnails/adv-2.jpg" time="00:01:15.000" />
+    <media:thumbnail url="https://example.com/thumbnails/adv-3.jpg" time="00:02:30.000" />
+    <media:price type="package" price="9.99" currency="USD" info="full access">Complete Package</media:price>
+    <media:price type="subscription" price="4.99" currency="USD" info="monthly">Monthly Subscription</media:price>
+    <media:restriction relationship="allow" type="country">us ca gb de fr</media:restriction>
+    <media:restriction relationship="deny" type="sharing">true</media:restriction>
+    <media:rating scheme="urn:mpaa">PG-13</media:rating>
+    <media:rating scheme="urn:v-chip">TV-14</media:rating>
+    <media:community>
+      <media:starRating average="4.8" count="12563" min="1" max="5" />
+      <media:statistics views="256789" favorites="3421" shares="1245" />
+      <media:tags>cinematic, production, advanced, technical, demo</media:tags>
+    </media:community>
   </entry>
 </feed>

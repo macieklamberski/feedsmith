@@ -30,7 +30,7 @@ Feedsmith maintains the original feed structure in a clean, object-oriented form
 * **Fast parsing** — One of the fastest feed parsers in JavaScript (see [benchmarks](#benchmarks)).
 * **Type-safe API** — TypeScript type definitions are available for each feed format, making it easy to work with the data.
 * **Tree-shakable** — Only include the parts of the library you need, reducing bundle size.
-* **Well-tested** — Comprehensive test suite with over 650 tests and 99% code coverage.
+* **Well-tested** — Comprehensive test suite with 1200+ tests and 99% code coverage.
 
 #### Compatibility
 * Works in Node.js and all modern browsers.
@@ -62,8 +62,8 @@ Feedsmith maintains the original feed structure in a clean, object-oriented form
 | [Slash](http://purl.org/rss/1.0/modules/slash/) | `<slash:*>` | RSS, Atom, RDF | ✅ | ⏳
 | [iTunes](http://www.itunes.com/dtds/podcast-1.0.dtd) | `<itunes:*>` | RSS, Atom | ✅ | ⏳
 | [Podcast](https://podcastindex.org/namespace/1.0) | `<podcast:*>` | RSS | ✅ | ⏳
-| [Media RSS](http://search.yahoo.com/mrss/) | `<media:*>` | ⏳ | ⏳ | ⏳ |
-| [Geo RSS](http://www.georss.org/georss) | `<georss:*>` | 📋 | 📋 | 📋 |
+| [Media RSS](http://search.yahoo.com/mrss/) | `<media:*>` | RSS, Atom, RDF | ✅ | ⏳ |
+| [Geo RSS](http://www.georss.org/georss) | `<georss:*>` | ⏳ | ⏳ | ⏳ |
 | [Dublin Core Terms](http://purl.org/dc/terms/) | `<dcterms:*>` | 📋 | 📋 | 📋 |
 | [Administrative](https://web.resource.org/rss/1.0/modules/admin/) | `<admin:*>` | 📋 | 📋 | 📋 |
 | [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) | `<thr:*>` | 📋 | 📋 | 📋 |

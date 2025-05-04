@@ -18,6 +18,7 @@ import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/utils.js'
+import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
 import type { Feed, Image, Item, TextInput } from './types.js'
@@ -57,6 +58,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     dc: retrieveDcItemOrFeed(value),
     slash: retrieveSlashItem(value),
     itunes: retrieveItunesItem(value),
+    media: retrieveMediaItemOrFeed(value),
   }
 
   if (isPresent(item.title) && isPresent(item.link)) {
@@ -112,6 +114,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     atom: retrieveAtomFeed(channel),
     dc: retrieveDcItemOrFeed(channel),
     sy: retrieveSyFeed(channel),
+    media: retrieveMediaItemOrFeed(channel),
   }
 
   if (isPresent(feed.title)) {
