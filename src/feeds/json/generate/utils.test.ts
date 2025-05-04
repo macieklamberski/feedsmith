@@ -57,10 +57,6 @@ describe('generateItem', () => {
     }
 
     expect(generateItem(value)).toEqual(expected)
-    // biome-ignore lint/suspicious/noExplicitAny: It's for testing purposes.
-    expect((expected as any).date_published).toBeUndefined()
-    // biome-ignore lint/suspicious/noExplicitAny: It's for testing purposes.
-    expect((expected as any).date_modified).toBeUndefined()
   })
 
   it('should omit undefined properties from the item', () => {
@@ -85,7 +81,7 @@ describe('generateItem', () => {
   })
 
   it('should handle item with all properties defined', () => {
-    const item = {
+    const value = {
       id: '1',
       url: 'https://example.com/item/1',
       external_url: 'https://external.com/item/1',
@@ -120,7 +116,7 @@ describe('generateItem', () => {
       attachments: [{ url: 'https://example.com/attachment.pdf', mime_type: 'application/pdf' }],
     }
 
-    expect(generateItem(item)).toEqual(expected)
+    expect(generateItem(value)).toEqual(expected)
   })
 })
 
