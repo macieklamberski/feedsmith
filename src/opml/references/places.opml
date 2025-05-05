@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <head>
+    <title>Places</title>
+    <dateCreated>Mon, 15 Jan 2024 10:45:22 GMT</dateCreated>
+    <dateModified>Sat, 20 Jan 2024 14:32:18 GMT</dateModified>
+    <ownerName>Anna Smith</ownerName>
+    <ownerId>https://annasmith.com</ownerId>
+    <expansionState>1,2,5,8,11,14</expansionState>
+    <vertScrollState>1</vertScrollState>
+    <windowTop>200</windowTop>
+    <windowLeft>300</windowLeft>
+    <windowBottom>600</windowBottom>
+    <windowRight>500</windowRight>
+  </head>
+  <body>
+    <outline text="Countries I've visited">
+      <outline text="France">
+        <outline text="Paris"/>
+        <outline text="Lyon"/>
+      </outline>
+      <outline text="Italy">
+        <outline text="Rome"/>
+        <outline text="Venice"/>
+        <outline text="Florence"/>
+        <outline text="Milan"/>
+      </outline>
+      <outline text="Germany">
+        <outline text="Berlin"/>
+        <outline text="Munich"/>
+      </outline>
+      <outline text="Spain">
+        <outline text="Barcelona"/>
+      </outline>
+      <outline text="Portugal" type="include" url="https://annasmith.com/portugal.opml"/>
+      <outline text="United Kingdom">
+        <outline text="London"/>
+        <outline text="Manchester"/>
+        <outline text="Edinburgh"/>
+      </outline>
+    </outline>
+  </body>
+</opml>

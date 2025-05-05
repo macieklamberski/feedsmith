@@ -5,6 +5,7 @@ import {
   isPresent,
   parseArrayOf,
   parseBoolean,
+  parseCsvOf,
   parseNumber,
   parseSingularOf,
   parseString,
@@ -13,7 +14,6 @@ import {
   trimArray,
   trimObject,
 } from '../../common/utils.js'
-import { parseKeywords } from '../itunes/utils.js'
 import type {
   Category,
   CommonElements,
@@ -90,8 +90,6 @@ export const parseTitleOrDescription: ParseFunction<TitleOrDescription> = (value
     return trimObject(title)
   }
 }
-
-// INFO: parseKeywords is imported from iTunes namespace where it looks exactly the same.
 
 export const parseThumbnail: ParseFunction<Thumbnail> = (value) => {
   if (!isObject(value)) {
@@ -437,7 +435,7 @@ export const retrieveCommonElements: ParseFunction<CommonElements> = (value) => 
     title: parseSingularOf(value['media:title'], parseTitleOrDescription),
     description: parseSingularOf(value['media:description'], parseTitleOrDescription),
     keywords: parseSingularOf(value['media:keywords'], (value) =>
-      parseKeywords(retrieveText(value)),
+      parseCsvOf(retrieveText(value), parseString),
     ),
     thumbnails: parseArrayOf(value['media:thumbnail'], parseThumbnail),
     categories: parseArrayOf(value['media:category'], parseCategory),

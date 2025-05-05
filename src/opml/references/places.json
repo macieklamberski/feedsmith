@@ -1,0 +1,91 @@
+{
+  "version": "2.0",
+  "head": {
+    "title": "Places",
+    "dateCreated": "Mon, 15 Jan 2024 10:45:22 GMT",
+    "dateModified": "Sat, 20 Jan 2024 14:32:18 GMT",
+    "ownerName": "Anna Smith",
+    "ownerId": "https://annasmith.com",
+    "expansionState": [1, 2, 5, 8, 11, 14],
+    "vertScrollState": 1,
+    "windowTop": 200,
+    "windowLeft": 300,
+    "windowBottom": 600,
+    "windowRight": 500
+  },
+  "body": {
+    "outlines": [
+      {
+        "text": "Countries I've visited",
+        "outlines": [
+          {
+            "text": "France",
+            "outlines": [
+              {
+                "text": "Paris"
+              },
+              {
+                "text": "Lyon"
+              }
+            ]
+          },
+          {
+            "text": "Italy",
+            "outlines": [
+              {
+                "text": "Rome"
+              },
+              {
+                "text": "Venice"
+              },
+              {
+                "text": "Florence"
+              },
+              {
+                "text": "Milan"
+              }
+            ]
+          },
+          {
+            "text": "Germany",
+            "outlines": [
+              {
+                "text": "Berlin"
+              },
+              {
+                "text": "Munich"
+              }
+            ]
+          },
+          {
+            "text": "Spain",
+            "outlines": [
+              {
+                "text": "Barcelona"
+              }
+            ]
+          },
+          {
+            "text": "Portugal",
+            "type": "include",
+            "url": "https://annasmith.com/portugal.opml"
+          },
+          {
+            "text": "United Kingdom",
+            "outlines": [
+              {
+                "text": "London"
+              },
+              {
+                "text": "Manchester"
+              },
+              {
+                "text": "Edinburgh"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

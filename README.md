@@ -4,17 +4,17 @@
 [![npm version](https://img.shields.io/npm/v/feedsmith.svg)](https://www.npmjs.com/package/feedsmith)
 [![license](https://img.shields.io/npm/l/feedsmith.svg)](https://github.com/macieklamberski/feedsmith/blob/main/LICENSE)
 
-Robust and fast JavaScript parser for RSS, Atom, JSON Feed, and RDF feeds, with support for popular namespaces. It provides both universal and format-specific parsers that maintain the original feed structure while offering helpful normalization.
+Robust and fast JavaScript parser and generatorfor RSS, Atom, JSON Feed, and RDF feeds, with support for popular namespaces and OPML files. It provides both universal and format-specific parsers that maintain the original feed structure while offering helpful normalization.
 
 Feedsmith maintains the original feed structure in a clean, object-oriented format. It intelligently normalizes legacy elements, providing you with complete access to all feed data without compromising simplicity.
 
-[Features](#supported-feeds-and-namespaces)
+[Features](#supported-formats)
 &nbsp;&nbsp;·&nbsp;&nbsp;
 [Installation](#installation)
 &nbsp;&nbsp;·&nbsp;&nbsp;
-[Parsing feeds](#parsing-feeds)
+[Parsing](#parsing)
 &nbsp;&nbsp;·&nbsp;&nbsp;
-[Generating feeds](#generating-feeds)
+[Generating](#generating)
 &nbsp;&nbsp;·&nbsp;&nbsp;
 [Benchmarks](#benchmarks)
 &nbsp;&nbsp;·&nbsp;&nbsp;
@@ -36,7 +36,14 @@ Feedsmith maintains the original feed structure in a clean, object-oriented form
 * Works in Node.js and all modern browsers.
 * Works with plain JavaScript, you don't need to use TypeScript.
 
-## Supported feeds and namespaces
+## Supported formats
+
+✅ Available
+&nbsp;&nbsp;·&nbsp;&nbsp;
+⌛️ Work in progress
+&nbsp;&nbsp;·&nbsp;&nbsp;
+📋 Planned
+
 
 ### Feeds
 
@@ -46,10 +53,6 @@ Feedsmith maintains the original feed structure in a clean, object-oriented form
 | [Atom](https://tools.ietf.org/html/rfc4287) | 0.3, 1.0 | ✅ | ⏳ |
 | [JSON Feed](https://jsonfeed.org) | 1.0, 1.1 | ✅ | ✅ |
 | [RDF](https://web.resource.org/rss/1.0/spec) | 0.9, 1.0 | ✅ | ⏳ |
-
-✅ Available
-&nbsp;&nbsp;·&nbsp;&nbsp;
-⌛️ Work in progress
 
 ### Namespaces
 
@@ -68,11 +71,11 @@ Feedsmith maintains the original feed structure in a clean, object-oriented form
 | [Administrative](https://web.resource.org/rss/1.0/modules/admin/) | `<admin:*>` | 📋 | 📋 | 📋 |
 | [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) | `<thr:*>` | 📋 | 📋 | 📋 |
 
-✅ Available
-&nbsp;&nbsp;·&nbsp;&nbsp;
-⌛️ Work in progress
-&nbsp;&nbsp;·&nbsp;&nbsp;
-📋 Planned
+### Other
+
+| Format | Versions | Parsing | Generating |
+|--------|----------|---------|------------|
+| [OPML](https://opml.org/) | 1.0, 2.0 | ✅ | ✅ |
 
 ## Installation
 
@@ -80,16 +83,16 @@ Feedsmith maintains the original feed structure in a clean, object-oriented form
 npm install feedsmith
 ```
 
-## Parsing feeds
+## Parsing
 
-### Universal
+### Universal feeds parser
 
 The easiest way to parse any feed is to use the universal `parseFeed` function:
 
 ```ts
 import { parseFeed } from 'feedsmith'
 
-const { type, feed } = parseFeed('feedContent')
+const { type, feed } = parseFeed('feed content')
 
 console.log('Feed type:', type) // → rss, atom, json, rdf
 console.log('Feed title:', feed.title)
@@ -99,7 +102,7 @@ if (type === 'rss') {
 }
 ```
 
-### Dedicated
+### Dedicated feeds parsers
 
 If you know the format in advance, you can use the format-specific parsers:
 
@@ -107,10 +110,10 @@ If you know the format in advance, you can use the format-specific parsers:
 import { parseAtomFeed, parseJsonFeed, parseRssFeed, parseRdfFeed } from 'feedsmith'
 
 // Parse the feed content
-const atomFeed = parseAtomFeed(atomContent)
-const jsonFeed = parseJsonFeed(jsonContent)
-const rssFeed = parseRssFeed(rssContent)
-const rdfFeed = parseRdfFeed(rdfContent)
+const atomFeed = parseAtomFeed('atom content')
+const jsonFeed = parseJsonFeed('json content')
+const rssFeed = parseRssFeed('rss content')
+const rdfFeed = parseRdfFeed('rdf content')
 
 // Then read the TypeScript suggestions for the specific feed type
 rssFeed.title
@@ -119,6 +122,24 @@ rssFeed.dc?.date
 rssFeed.sy?.updateBase
 rssFeed.items?.[0]?.title
 ```
+
+### OPML parser
+
+Parsing OPML files is as simple:
+
+```ts
+import { parseOpml } from 'feedsmith'
+
+// Parse the OPML content
+const opml = parseOpml('opml content')
+
+// Then read the TypeScript suggestions
+opml.head?.title
+opml.body?.outlines?.[0].text
+opml.body?.outlines?.[1].xmlUrl
+```
+
+
 
 ### Returned values
 
@@ -312,11 +333,40 @@ Returns:
 ```
 </details>
 
+<details>
+<summary>Example of an OPML file 📜</summary>
+
+```ts
+import { parseOpml } from 'feedsmith'
+
+const opml = parseOpml(`
+  <?xml version="1.0" encoding="utf-8"?>
+  <opml version="2.0">
+    <head>
+      <title>Tech Sites</title>
+      <dateCreated>Mon, 15 Jan 2024 09:45:30 GMT</dateCreated>
+      <ownerName>Jack Smith</ownerName>
+    </head>
+    <body>
+      <outline text="The Verge" type="rss" xmlUrl="https://www.theverge.com/rss/index.xml" htmlUrl="https://www.theverge.com/" title="The Verge" version="rss" />
+      <outline text="TechCrunch" type="rss" xmlUrl="https://techcrunch.com/feed/" htmlUrl="https://techcrunch.com/" title="TechCrunch" version="rss" />
+    </body>
+  </opml>
+`)
+
+opml.head?.title // → Tech Sites
+opml.body?.outlines?.[0].text // → The Verge
+opml.body?.outlines?.[1].xmlUrl // → https://techcrunch.com/feed/
+
+```
+</details>
+
 For more examples, check the _*/references_ folders in the source code. There, you'll find the complete objects returned from the parser functions for the various feed formats and versions.
 
 * Atom examples: [src/feeds/atom/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/atom/references),
 * RSS examples: [src/feeds/rss/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/rss/references),
 * RDF examples: [src/feeds/rdf/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/rdf/references).
+* OPML examples: [src/opml/references](https://github.com/macieklamberski/feedsmith/blob/main/src/opml/references).
 
 ### Error handling
 
@@ -365,9 +415,49 @@ if (detectRdfFeed(content)) {
 > [!WARNING]
 > Detect functions are designed to quickly identify the feed format by looking for its signature, such as the `<rss>` tag in the case of RSS feeds. However, the function may detect an RSS feed even if it is invalid. The feed will be fully validated only when using the `parseRssFeed` function.
 
-## Generating feeds
+## Generating
 
-The functionality for generating feeds is currently under development and will be gradually introduced for each feed format. For more information, see the [Supported feeds and namespaces](#supported-feeds-and-namespaces).
+### Generating feeds
+
+The functionality for generating feeds is currently under development and will be gradually introduced for each feed format. For more information, see the [Supported formats](#supported-formats).
+
+### Generating OPML
+
+```ts
+import { generateOpml } from 'feedsmith'
+
+const opml = generateOpml({
+  head: {
+    title: 'My Feed',
+    dateCreated: new Date(),
+  },
+  body: {
+    outlines: [
+      {
+        text: 'My Feed',
+        type: 'rss',
+        xmlUrl: 'https://example.com/feed.xml',
+        htmlUrl: 'https://example.com',
+      },
+    ],
+  },
+})
+```
+
+Will output:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <head>
+    <title>My Feed</title>
+    <dateCreated>Fri, 11 Apr 2025 13:05:26 GMT</dateCreated>
+  </head>
+  <body>
+    <outline text="My Feed" type="rss" xmlUrl="https://example.com/feed.xml" htmlUrl="https://example.com"/>
+  </body>
+</opml>
+```
 
 ## Benchmarks
 
@@ -423,7 +513,7 @@ For a quick overview, here are the results of parsing RSS, Atom, and RDF feeds u
 
 ### Why should I use Feedsmith instead of alternative packages?
 
-As stated in the overview section, the key advantage of Feedsmith is that it preserves the original feed structure exactly as provided in each specific feed format.
+The key advantage of Feedsmith is that it preserves the original feed structure exactly as provided in each specific feed format.
 
 Many alternative packages attempt to normalize data by:
 

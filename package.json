@@ -1,10 +1,11 @@
 {
   "name": "feedsmith",
-  "description": "Robust and fast parser for RSS, Atom, JSON Feed, and RDF feeds, with support for Podcast, iTunes, Dublin Core, and many other popular namespaces.",
+  "description": "Robust and fast parser and generator for RSS, Atom, JSON Feed, and RDF feeds, with support for Podcast, iTunes, Dublin Core, and OPML files.",
   "repository": {
     "type": "git",
     "url": "https://github.com/macieklamberski/feedsmith.git"
   },
+  "homepage": "https://feedsmith.dev",
   "bugs": {
     "url": "https://github.com/macieklamberski/feedsmith/issues"
   },
@@ -16,12 +17,16 @@
     "rss reader",
     "rss parser",
     "rss generator",
+    "opml parser",
+    "opml to json",
+    "rss podcast",
     "feed parser",
     "feed generator",
     "atom",
     "rss",
     "rdf",
-    "jsonfeed"
+    "jsonfeed",
+    "opml"
   ],
   "type": "module",
   "exports": {

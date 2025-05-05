@@ -10,6 +10,7 @@ import {
   parseArray,
   parseArrayOf,
   parseBoolean,
+  parseCsvOf,
   parseNumber,
   parseSingular,
   parseSingularOf,
@@ -1178,6 +1179,130 @@ describe('parseArrayOf', () => {
     const value = undefined
 
     expect(parseArrayOf(value, parser)).toBeUndefined()
+  })
+})
+
+describe('parseCsvOf', () => {
+  it('should parse comma-separated string', () => {
+    const value = 'podcast,technology,programming'
+    const expected = ['podcast', 'technology', 'programming']
+
+    expect(parseCsvOf(value, parseString)).toEqual(expected)
+  })
+
+  it('should handle whitespace around keywords', () => {
+    const value = 'podcast, technology , programming'
+    const expected = ['podcast', 'technology', 'programming']
+
+    expect(parseCsvOf(value, parseString)).toEqual(expected)
+  })
+
+  it('should handle single keyword', () => {
+    const value = 'podcast'
+    const expected = ['podcast']
+
+    expect(parseCsvOf(value, parseString)).toEqual(expected)
+  })
+
+  it('should parse comma-separated numbers', () => {
+    const value = '1,2,3,4,5'
+    const expected = [1, 2, 3, 4, 5]
+
+    expect(parseCsvOf(value, parseNumber)).toEqual(expected)
+  })
+
+  it('should handle single number keyword', () => {
+    const value = 123
+    const expected = ['123']
+
+    expect(parseCsvOf(value, parseString)).toEqual(expected)
+  })
+
+  it('should handle consecutive commas', () => {
+    const value = 'podcast,,technology,,,programming'
+    const expected = ['podcast', 'technology', 'programming']
+
+    expect(parseCsvOf(value, parseString)).toEqual(expected)
+  })
+
+  it('should handle keywords with HTML entities', () => {
+    const value = 'podcast,tech &amp; programming,science'
+    const expected = ['podcast', 'tech & programming', 'science']
+
+    expect(parseCsvOf(value, parseString)).toEqual(expected)
+  })
+
+  it('should handle keywords wrapped in CDATA', () => {
+    const value = '<![CDATA[podcast,technology,programming]]>'
+    const expected = ['podcast', 'technology', 'programming']
+
+    expect(parseCsvOf(value, parseString)).toEqual(expected)
+  })
+
+  it('should normalize keywords with special characters', () => {
+    const value = 'pod-cast,tech_nology,programming!'
+    const expected = ['pod-cast', 'tech_nology', 'programming!']
+
+    expect(parseCsvOf(value, parseString)).toEqual(expected)
+  })
+
+  it('should handle case sensitivity', () => {
+    const value = 'Podcast,TECHNOLOGY,Programming'
+    const expected = ['Podcast', 'TECHNOLOGY', 'Programming']
+
+    expect(parseCsvOf(value, parseString)).toEqual(expected)
+  })
+
+  it('should filter out values that cannot be parsed', () => {
+    const value = '1,a,2,b,3'
+    const expected = [1, 2, 3]
+
+    expect(parseCsvOf(value, parseNumber)).toEqual(expected)
+  })
+
+  it('should handle strings with trailing comma', () => {
+    const value = '1,2,3,'
+    const expected = [1, 2, 3]
+
+    expect(parseCsvOf(value, parseNumber)).toEqual(expected)
+  })
+
+  it('should handle strings with only unparseable values', () => {
+    const value = 'a,b,c'
+
+    expect(parseCsvOf(value, parseNumber)).toBeUndefined()
+  })
+
+  it('should handle empty string', () => {
+    const value = ''
+
+    expect(parseCsvOf(value, parseNumber)).toBeUndefined()
+  })
+
+  it('should handle empty keywords (just commas)', () => {
+    const value = ',,'
+
+    expect(parseCsvOf(value, parseString)).toBeUndefined()
+  })
+
+  it('should handle empty string', () => {
+    const value = ''
+
+    expect(parseCsvOf(value, parseString)).toBeUndefined()
+  })
+
+  it('should handle string with only whitespace', () => {
+    const value = '   '
+
+    expect(parseCsvOf(value, parseString)).toBeUndefined()
+  })
+
+  it('should handle non-string values', () => {
+    expect(parseCsvOf(true, parseString)).toBeUndefined()
+    expect(parseCsvOf(null, parseString)).toBeUndefined()
+    expect(parseCsvOf(undefined, parseString)).toBeUndefined()
+    expect(parseCsvOf([], parseString)).toBeUndefined()
+    expect(parseCsvOf({}, parseString)).toBeUndefined()
   })
 })
 

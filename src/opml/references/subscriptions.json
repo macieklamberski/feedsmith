@@ -1,0 +1,144 @@
+{
+  "version": "2.0",
+  "head": {
+    "title": "Tech Sites",
+    "dateCreated": "Mon, 15 Jan 2024 09:45:30 GMT",
+    "dateModified": "Wed, 14 Feb 2024 16:22:15 GMT",
+    "ownerName": "Anna Smith",
+    "ownerEmail": "anna@example.com"
+  },
+  "body": {
+    "outlines": [
+      {
+        "text": "The Verge",
+        "description": "The Verge covers the intersection of technology, science, art, and culture.",
+        "htmlUrl": "https://www.theverge.com/",
+        "language": "unknown",
+        "title": "The Verge",
+        "type": "rss",
+        "version": "RSS2",
+        "xmlUrl": "https://www.theverge.com/rss/index.xml"
+      },
+      {
+        "text": "BBC News - Technology",
+        "description": "Technology news from the BBC",
+        "htmlUrl": "https://www.bbc.com/news/technology",
+        "language": "unknown",
+        "title": "BBC News - Technology",
+        "type": "rss",
+        "version": "RSS2",
+        "xmlUrl": "https://feeds.bbci.co.uk/news/technology/rss.xml"
+      },
+      {
+        "description": "Startup and Technology News",
+        "htmlUrl": "https://techcrunch.com/",
+        "language": "unknown",
+        "text": "TechCrunch",
+        "title": "TechCrunch",
+        "type": "rss",
+        "version": "RSS2",
+        "xmlUrl": "https://techcrunch.com/feed/"
+      },
+      {
+        "description": "Serving the Technologist for more than a decade.",
+        "htmlUrl": "https://arstechnica.com",
+        "language": "unknown",
+        "text": "Ars Technica",
+        "title": "Ars Technica",
+        "type": "rss",
+        "version": "RSS2",
+        "xmlUrl": "https://feeds.arstechnica.com/arstechnica/index"
+      },
+      {
+        "description": "For web designers and developers",
+        "htmlUrl": "https://www.smashingmagazine.com/",
+        "language": "unknown",
+        "text": "Smashing Magazine",
+        "title": "Smashing Magazine",
+        "type": "rss",
+        "version": "RSS2",
+        "xmlUrl": "https://www.smashingmagazine.com/feed/"
+      },
+      {
+        "description": "MIT's journalism on emerging technology",
+        "htmlUrl": "https://www.technologyreview.com/",
+        "language": "unknown",
+        "text": "MIT Technology Review",
+        "title": "MIT Technology Review",
+        "type": "rss",
+        "version": "RSS",
+        "xmlUrl": "https://www.technologyreview.com/feed/"
+      },
+      {
+        "description": "Learn a new word every day from Merriam-Webster",
+        "htmlUrl": "https://www.merriam-webster.com/word-of-the-day",
+        "language": "unknown",
+        "text": "Word of the Day - Merriam-Webster",
+        "title": "Word of the Day - Merriam-Webster",
+        "type": "rss",
+        "version": "RSS",
+        "xmlUrl": "https://www.merriam-webster.com/wotd/feed/rss2"
+      },
+      {
+        "description": "Fast Company is the world's leading progressive business media brand",
+        "htmlUrl": "https://www.fastcompany.com",
+        "language": "unknown",
+        "text": "Fast Company",
+        "title": "Fast Company",
+        "type": "rss",
+        "version": "RSS",
+        "xmlUrl": "https://www.fastcompany.com/feed"
+      },
+      {
+        "description": "Transformative tech coverage that matters",
+        "htmlUrl": "https://venturebeat.com/",
+        "language": "unknown",
+        "text": "VentureBeat",
+        "title": "VentureBeat",
+        "type": "rss",
+        "version": "RSS2",
+        "xmlUrl": "https://venturebeat.com/feed/"
+      },
+      {
+        "description": "Latest technology news, comment and analysis from the Guardian",
+        "htmlUrl": "https://www.theguardian.com/technology",
+        "language": "unknown",
+        "text": "The Guardian - Technology",
+        "title": "The Guardian - Technology",
+        "type": "rss",
+        "version": "RSS2",
+        "xmlUrl": "https://www.theguardian.com/technology/rss"
+      },
+      {
+        "description": "Wired UK brings you the future as it happens",
+        "htmlUrl": "https://www.wired.co.uk/",
+        "language": "unknown",
+        "text": "Wired UK",
+        "title": "Wired UK",
+        "type": "rss",
+        "version": "RSS2",
+        "xmlUrl": "https://www.wired.co.uk/feed/rss"
+      },
+      {
+        "description": "Tips, Tricks, and Techniques on using Cascading Style Sheets.",
+        "htmlUrl": "https://css-tricks.com/",
+        "language": "unknown",
+        "text": "CSS-Tricks",
+        "title": "CSS-Tricks",
+        "type": "rss",
+        "version": "RSS2",
+        "xmlUrl": "https://css-tricks.com/feed/"
+      },
+      {
+        "description": "Links for the intellectually curious, ranked by readers.",
+        "htmlUrl": "https://news.ycombinator.com/",
+        "language": "unknown",
+        "text": "Hacker News",
+        "title": "Hacker News",
+        "type": "rss",
+        "version": "RSS",
+        "xmlUrl": "https://news.ycombinator.com/rss"
+      }
+    ]
+  }
+}
