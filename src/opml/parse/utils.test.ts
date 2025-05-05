@@ -109,7 +109,23 @@ describe('parseOutline', () => {
 })
 
 describe('parseHead', () => {
-  it('should parse complete head object', () => {
+  const expectedFull = {
+    title: 'My OPML Document',
+    dateCreated: 'Mon, 15 Mar 2023 12:00:00 GMT',
+    dateModified: 'Mon, 15 Mar 2023 13:00:00 GMT',
+    ownerName: 'John Doe',
+    ownerEmail: 'john@example.com',
+    ownerId: 'http://example.com/users/john',
+    docs: 'http://example.com/opml-docs',
+    expansionState: [1, 2, 3, 4],
+    vertScrollState: 1,
+    windowTop: 100,
+    windowLeft: 50,
+    windowBottom: 500,
+    windowRight: 700,
+  }
+
+  it('should parse complete head object (with #text)', () => {
     const value = {
       title: { '#text': 'My OPML Document' },
       datecreated: { '#text': 'Mon, 15 Mar 2023 12:00:00 GMT' },
@@ -125,23 +141,48 @@ describe('parseHead', () => {
       windowbottom: { '#text': '500' },
       windowright: { '#text': '700' },
     }
-    const expected = {
+
+    expect(parseHead(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete head object (without #text)', () => {
+    const value = {
       title: 'My OPML Document',
-      dateCreated: 'Mon, 15 Mar 2023 12:00:00 GMT',
-      dateModified: 'Mon, 15 Mar 2023 13:00:00 GMT',
-      ownerName: 'John Doe',
-      ownerEmail: 'john@example.com',
-      ownerId: 'http://example.com/users/john',
+      datecreated: 'Mon, 15 Mar 2023 12:00:00 GMT',
+      datemodified: 'Mon, 15 Mar 2023 13:00:00 GMT',
+      ownername: 'John Doe',
+      owneremail: 'john@example.com',
+      ownerid: 'http://example.com/users/john',
       docs: 'http://example.com/opml-docs',
-      expansionState: [1, 2, 3, 4],
-      vertScrollState: 1,
-      windowTop: 100,
-      windowLeft: 50,
-      windowBottom: 500,
-      windowRight: 700,
+      expansionstate: '1,2,3,4',
+      vertscrollstate: '1',
+      windowtop: '100',
+      windowleft: '50',
+      windowbottom: '500',
+      windowright: '700',
     }
 
-    expect(parseHead(value)).toEqual(expected)
+    expect(parseHead(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete head object (with array of values)', () => {
+    const value = {
+      title: ['My OPML Document', ''],
+      datecreated: ['Mon, 15 Mar 2023 12:00:00 GMT', ''],
+      datemodified: ['Mon, 15 Mar 2023 13:00:00 GMT', ''],
+      ownername: ['John Doe', ''],
+      owneremail: ['john@example.com', ''],
+      ownerid: ['http://example.com/users/john', ''],
+      docs: ['http://example.com/opml-docs', ''],
+      expansionstate: ['1,2,3,4', ''],
+      vertscrollstate: ['1', ''],
+      windowtop: ['100', ''],
+      windowleft: ['50', ''],
+      windowbottom: ['500', ''],
+      windowright: ['700', ''],
+    }
+
+    expect(parseHead(value)).toEqual(expectedFull)
   })
 
   it('should handle partial head object', () => {
