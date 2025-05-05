@@ -4,7 +4,7 @@
 [![npm version](https://img.shields.io/npm/v/feedsmith.svg)](https://www.npmjs.com/package/feedsmith)
 [![license](https://img.shields.io/npm/l/feedsmith.svg)](https://github.com/macieklamberski/feedsmith/blob/main/LICENSE)
 
-Robust and fast JavaScript parser and generatorfor RSS, Atom, JSON Feed, and RDF feeds, with support for popular namespaces and OPML files. It provides both universal and format-specific parsers that maintain the original feed structure while offering helpful normalization.
+Robust and fast JavaScript parser and generator for RSS, Atom, JSON Feed, and RDF feeds, with support for popular namespaces and OPML files. It provides both universal and format-specific parsers that maintain the original feed structure while offering helpful normalization.
 
 Feedsmith maintains the original feed structure in a clean, object-oriented format. It intelligently normalizes legacy elements, providing you with complete access to all feed data without compromising simplicity.
 
@@ -138,8 +138,6 @@ opml.head?.title
 opml.body?.outlines?.[0].text
 opml.body?.outlines?.[1].xmlUrl
 ```
-
-
 
 ### Returned values
 
@@ -417,9 +415,63 @@ if (detectRdfFeed(content)) {
 
 ## Generating
 
-### Generating feeds
+### Generating JSON Feed
 
-The functionality for generating feeds is currently under development and will be gradually introduced for each feed format. For more information, see the [Supported formats](#supported-formats).
+Although JSON feeds are simply JSON objects that can be easily generated manually, the `generateJsonFeed` function provides helpful type hints, which can aid in feed generation. Additionally, you can use Date objects for dates, which are automatically converted to the correct format in the background.
+
+```ts
+import { generateJsonFeed } from 'feedsmith'
+
+const jsonFeed = generateJsonFeed({
+  title: 'My Example Feed',
+  feed_url: 'https://example.com/feed.json',
+  authors: [
+    {
+      name: 'John Doe',
+      url: 'https://example.com/johndoe',
+    },
+  ],
+  items: [
+    {
+      id: '1',
+      content_html: '<p>Hello world</p>',
+      url: 'https://example.com/post/1',
+      title: 'First post',
+      date_published: new Date('2019-03-07T00:00:00+01:00'),
+      language: 'en-US',
+    },
+  ],
+})
+```
+
+Will output:
+
+```json
+{
+  "version": "https://jsonfeed.org/version/1.1",
+  "title": "My Example Feed",
+  "feed_url": "https://example.com/feed.json",
+  "authors": [
+    {
+      "name": "John Doe",
+      "url": "https://example.com/johndoe",
+    },
+  ],
+  "items": [
+    {
+      "id": "1",
+      "content_html": "<p>Hello world</p>",
+      "url": "https://example.com/post/1",
+      "title": "First post",
+      "date_published": "2019-03-06T23:00:00.000Z",
+      "language": "en-US",
+    },
+  ],
+}
+```
+
+> [!NOTE]
+> The functionality for generating the remaining feed formats is currently under development and will be introduced gradually. For more information, see the [Supported formats](#supported-formats).
 
 ### Generating OPML
 
