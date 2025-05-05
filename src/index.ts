@@ -7,6 +7,7 @@ export { detect as detectAtomFeed } from './feeds/atom/detect/index.js'
 
 export { parse as parseJsonFeed } from './feeds/json/parse/index.js'
 export type { Feed as JsonFeed } from './feeds/json/parse/types.js'
+export { generate as generateJsonFeed } from './feeds/json/generate/index.js'
 export { detect as detectJsonFeed } from './feeds/json/detect/index.js'
 
 export { parse as parseRssFeed } from './feeds/rss/parse/index.js'
