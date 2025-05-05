@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <head>
+    <title>Countries</title>
+    <dateCreated>Wed, 10 Jan 2024 14:25:30 GMT</dateCreated>
+    <dateModified>Thu, 22 Feb 2024 18:15:42 GMT</dateModified>
+    <ownerName>Anna Smith</ownerName>
+    <ownerEmail>anna@example.com</ownerEmail>
+    <expansionState>1,6,12,15,17,19</expansionState>
+    <vertScrollState>1</vertScrollState>
+    <windowTop>100</windowTop>
+    <windowLeft>100</windowLeft>
+    <windowBottom>550</windowBottom>
+    <windowRight>470</windowRight>
+  </head>
+  <body>
+    <outline text="European Union">
+      <outline text="Western Europe">
+        <outline text="France"/>
+        <outline text="Belgium"/>
+        <outline text="Netherlands"/>
+        <outline text="Germany">
+          <outline text="Berlin" created="Mon, 15 Feb 2024 12:34:21 GMT"/>
+          <outline text="Munich" created="Mon, 15 Feb 2024 12:34:25 GMT"/>
+          <outline text="Hamburg" created="Mon, 15 Feb 2024 12:34:30 GMT"/>
+          <outline text="Cologne" created="Mon, 15 Feb 2024 12:34:35 GMT"/>
+        </outline>
+        <outline text="Luxembourg"/>
+        <outline text="Austria"/>
+      </outline>
+      <outline text="Eastern Europe">
+        <outline text="Poland"/>
+        <outline text="Hungary"/>
+        <outline text="Romania"/>
+        <outline text="Bulgaria"/>
+        <outline text="Slovakia"/>
+      </outline>
+      <outline text="Northern Europe">
+        <outline text="Denmark"/>
+        <outline text="Sweden"/>
+        <outline text="Finland"/>
+        <outline text="Estonia"/>
+        <outline text="Latvia"/>
+      </outline>
+      <outline text="Southern Europe">
+        <outline text="Italy"/>
+        <outline text="Spain"/>
+        <outline text="Portugal"/>
+        <outline text="Greece"/>
+        <outline text="Malta"/>
+        <outline text="Cyprus"/>
+        <outline text="Croatia"/>
+        <outline text="Slovenia"/>
+      </outline>
+      <outline text="Central Europe">
+        <outline text="Czech Republic"/>
+        <outline text="Lithuania"/>
+        <outline text="Ireland"/>
+      </outline>
+    </outline>
+  </body>
+</opml>

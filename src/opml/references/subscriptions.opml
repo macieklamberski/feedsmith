@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <head>
+    <title>Tech Sites</title>
+    <dateCreated>Mon, 15 Jan 2024 09:45:30 GMT</dateCreated>
+    <dateModified>Wed, 14 Feb 2024 16:22:15 GMT</dateModified>
+    <ownerName>Anna Smith</ownerName>
+    <ownerEmail>anna@example.com</ownerEmail>
+  </head>
+  <body>
+    <outline text="The Verge" type="rss" description="The Verge covers the intersection of technology, science, art, and culture." xmlUrl="https://www.theverge.com/rss/index.xml" htmlUrl="https://www.theverge.com/" language="unknown" title="The Verge" version="RSS2"/>
+    <outline text="BBC News - Technology" type="rss" description="Technology news from the BBC" xmlUrl="https://feeds.bbci.co.uk/news/technology/rss.xml" htmlUrl="https://www.bbc.com/news/technology" language="unknown" title="BBC News - Technology" version="RSS2"/>
+    <outline text="TechCrunch" type="rss" description="Startup and Technology News" xmlUrl="https://techcrunch.com/feed/" htmlUrl="https://techcrunch.com/" language="unknown" title="TechCrunch" version="RSS2"/>
+    <outline text="Ars Technica" type="rss" description="Serving the Technologist for more than a decade." xmlUrl="https://feeds.arstechnica.com/arstechnica/index" htmlUrl="https://arstechnica.com" language="unknown" title="Ars Technica" version="RSS2"/>
+    <outline text="Smashing Magazine" type="rss" description="For web designers and developers" xmlUrl="https://www.smashingmagazine.com/feed/" htmlUrl="https://www.smashingmagazine.com/" language="unknown" title="Smashing Magazine" version="RSS2"/>
+    <outline text="MIT Technology Review" type="rss" description="MIT's journalism on emerging technology" xmlUrl="https://www.technologyreview.com/feed/" htmlUrl="https://www.technologyreview.com/" language="unknown" title="MIT Technology Review" version="RSS"/>
+    <outline text="Word of the Day - Merriam-Webster" type="rss" description="Learn a new word every day from Merriam-Webster" xmlUrl="https://www.merriam-webster.com/wotd/feed/rss2" htmlUrl="https://www.merriam-webster.com/word-of-the-day" language="unknown" title="Word of the Day - Merriam-Webster" version="RSS"/>
+    <outline text="Fast Company" type="rss" description="Fast Company is the world's leading progressive business media brand" xmlUrl="https://www.fastcompany.com/feed" htmlUrl="https://www.fastcompany.com" language="unknown" title="Fast Company" version="RSS"/>
+    <outline text="VentureBeat" type="rss" description="Transformative tech coverage that matters" xmlUrl="https://venturebeat.com/feed/" htmlUrl="https://venturebeat.com/" language="unknown" title="VentureBeat" version="RSS2"/>
+    <outline text="The Guardian - Technology" type="rss" description="Latest technology news, comment and analysis from the Guardian" xmlUrl="https://www.theguardian.com/technology/rss" htmlUrl="https://www.theguardian.com/technology" language="unknown" title="The Guardian - Technology" version="RSS2"/>
+    <outline text="Wired UK" type="rss" description="Wired UK brings you the future as it happens" xmlUrl="https://www.wired.co.uk/feed/rss" htmlUrl="https://www.wired.co.uk/" language="unknown" title="Wired UK" version="RSS2"/>
+    <outline text="CSS-Tricks" type="rss" description="Tips, Tricks, and Techniques on using Cascading Style Sheets." xmlUrl="https://css-tricks.com/feed/" htmlUrl="https://css-tricks.com/" language="unknown" title="CSS-Tricks" version="RSS2"/>
+    <outline text="Hacker News" type="rss" description="Links for the intellectually curious, ranked by readers." xmlUrl="https://news.ycombinator.com/rss" htmlUrl="https://news.ycombinator.com/" language="unknown" title="Hacker News" version="RSS"/>
+  </body>
+</opml>

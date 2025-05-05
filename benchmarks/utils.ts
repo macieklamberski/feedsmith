@@ -1,6 +1,5 @@
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { run } from 'node:test'
 import Benchmark from 'benchmark'
 import { Bench, nToMs } from 'tinybench'
 

@@ -1,0 +1,149 @@
+{
+  "version": "2.0",
+  "head": {
+    "title": "Countries",
+    "dateCreated": "Wed, 10 Jan 2024 14:25:30 GMT",
+    "dateModified": "Thu, 22 Feb 2024 18:15:42 GMT",
+    "ownerName": "Anna Smith",
+    "ownerEmail": "anna@example.com",
+    "expansionState": [1, 6, 12, 15, 17, 19],
+    "vertScrollState": 1,
+    "windowTop": 100,
+    "windowLeft": 100,
+    "windowBottom": 550,
+    "windowRight": 470
+  },
+  "body": {
+    "outlines": [
+      {
+        "text": "European Union",
+        "outlines": [
+          {
+            "text": "Western Europe",
+            "outlines": [
+              {
+                "text": "France"
+              },
+              {
+                "text": "Belgium"
+              },
+              {
+                "text": "Netherlands"
+              },
+              {
+                "text": "Germany",
+                "outlines": [
+                  {
+                    "text": "Berlin",
+                    "created": "Mon, 15 Feb 2024 12:34:21 GMT"
+                  },
+                  {
+                    "text": "Munich",
+                    "created": "Mon, 15 Feb 2024 12:34:25 GMT"
+                  },
+                  {
+                    "text": "Hamburg",
+                    "created": "Mon, 15 Feb 2024 12:34:30 GMT"
+                  },
+                  {
+                    "text": "Cologne",
+                    "created": "Mon, 15 Feb 2024 12:34:35 GMT"
+                  }
+                ]
+              },
+              {
+                "text": "Luxembourg"
+              },
+              {
+                "text": "Austria"
+              }
+            ]
+          },
+          {
+            "text": "Eastern Europe",
+            "outlines": [
+              {
+                "text": "Poland"
+              },
+              {
+                "text": "Hungary"
+              },
+              {
+                "text": "Romania"
+              },
+              {
+                "text": "Bulgaria"
+              },
+              {
+                "text": "Slovakia"
+              }
+            ]
+          },
+          {
+            "text": "Northern Europe",
+            "outlines": [
+              {
+                "text": "Denmark"
+              },
+              {
+                "text": "Sweden"
+              },
+              {
+                "text": "Finland"
+              },
+              {
+                "text": "Estonia"
+              },
+              {
+                "text": "Latvia"
+              }
+            ]
+          },
+          {
+            "text": "Southern Europe",
+            "outlines": [
+              {
+                "text": "Italy"
+              },
+              {
+                "text": "Spain"
+              },
+              {
+                "text": "Portugal"
+              },
+              {
+                "text": "Greece"
+              },
+              {
+                "text": "Malta"
+              },
+              {
+                "text": "Cyprus"
+              },
+              {
+                "text": "Croatia"
+              },
+              {
+                "text": "Slovenia"
+              }
+            ]
+          },
+          {
+            "text": "Central Europe",
+            "outlines": [
+              {
+                "text": "Czech Republic"
+              },
+              {
+                "text": "Lithuania"
+              },
+              {
+                "text": "Ireland"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

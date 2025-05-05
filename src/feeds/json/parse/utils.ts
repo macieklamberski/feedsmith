@@ -4,13 +4,11 @@ import {
   isNonEmptyStringOrNumber,
   isObject,
   isPresent,
-  parseArray,
   parseArrayOf,
   parseBoolean,
   parseNumber,
   parseSingularOf,
   parseString,
-  trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { Attachment, Author, Feed, Hub, Item } from './types.js'

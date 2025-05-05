@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <head>
+    <title>workspace.examples.generateTestData</title>
+    <dateCreated>Fri, 12 Jan 2024 18:30:45 GMT</dateCreated>
+    <dateModified>Sun, 18 Feb 2024 09:15:22 GMT</dateModified>
+    <ownerName>Anna Smith</ownerName>
+    <ownerEmail>anna@example.com</ownerEmail>
+    <expansionState>1,2,4</expansionState>
+    <vertScrollState>1</vertScrollState>
+    <windowTop>70</windowTop>
+    <windowLeft>40</windowLeft>
+    <windowBottom>310</windowBottom>
+    <windowRight>470</windowRight>
+  </head>
+  <body>
+    <outline text="Changes" isComment="false">
+      <outline text="18/02/2024; 9:15:22 AM by AS">
+        <outline text="Change 'output' to 'export'."/>
+      </outline>
+      <outline text="25/01/2024; 3:22:15 PM by AS" isComment="true">
+        <outline text="Create test data by generating JSON files with random user information."/>
+      </outline>
+    </outline>
+    <outline text="on createUserData (filename, count)">
+      <outline text="directory.ensurePath (filename)" isBreakpoint="true"/>
+      <outline text="file.writeJsonFile (filename, string.generateRandomUsers (count))"/>
+    </outline>
+    <outline text="local (outputDir = user.app.preferences.dataFolder + 'test\\users\\')"/>
+    <outline text="for i = 1 to 10">
+      <outline text="createUserData (outputDir + 'batch' + i + '.json', random (50, 200))"/>
+    </outline>
+  </body>
+</opml>
