@@ -14,8 +14,12 @@ export const isObject = (value: Unreliable): value is Record<string, Unreliable>
   )
 }
 
+export const isNonEmptyString = (value: Unreliable): value is string => {
+  return typeof value === 'string' && value !== '' && value.trim() !== ''
+}
+
 export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | number => {
-  return value !== '' && (typeof value === 'string' || typeof value === 'number')
+  return isNonEmptyString(value) || typeof value === 'number'
 }
 
 export const retrieveText = (value: Unreliable): Unreliable => {

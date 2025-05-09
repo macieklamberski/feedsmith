@@ -4,6 +4,7 @@ import {
   createCaseInsensitiveGetter,
   createNamespaceGetter,
   hasEntities,
+  isNonEmptyString,
   isNonEmptyStringOrNumber,
   isObject,
   isPresent,
@@ -142,17 +143,77 @@ describe('isObject', () => {
   })
 })
 
+describe('isNonEmptyString', () => {
+  it('should return true for non-empty strings', () => {
+    expect(isNonEmptyString('hello')).toEqual(true)
+    expect(isNonEmptyString('0')).toEqual(true)
+    expect(isNonEmptyString('undefined')).toEqual(true)
+    expect(isNonEmptyString('null')).toEqual(true)
+  })
+
+  it('should handle edge cases', () => {
+    const stringObject = new String('hello')
+
+    expect(isNonEmptyString(stringObject)).toEqual(false)
+  })
+
+  it('should return false for empty strings', () => {
+    expect(isNonEmptyString('')).toEqual(false)
+    expect(isNonEmptyString(' ')).toEqual(false)
+  })
+
+  it('should return false for number', () => {
+    expect(isNonEmptyString(2)).toEqual(false)
+  })
+
+  it('should return false for arrays', () => {
+    expect(isNonEmptyString([])).toEqual(false)
+    expect(isNonEmptyString([1, 2, 3])).toEqual(false)
+    expect(isNonEmptyString(['hello'])).toEqual(false)
+  })
+
+  it('should return false for objects', () => {
+    expect(isNonEmptyString({})).toEqual(false)
+    expect(isNonEmptyString({ key: 'value' })).toEqual(false)
+    expect(isNonEmptyString(new Date())).toEqual(false)
+  })
+
+  it('should return false for null and undefined', () => {
+    expect(isNonEmptyString(null)).toEqual(false)
+    expect(isNonEmptyString(undefined)).toEqual(false)
+  })
+
+  it('should return false for booleans', () => {
+    expect(isNonEmptyString(true)).toEqual(false)
+    expect(isNonEmptyString(false)).toEqual(false)
+  })
+
+  it('should return false for functions', () => {
+    expect(isNonEmptyString(() => {})).toEqual(false)
+    // biome-ignore lint/complexity/useArrowFunction: It's for testing purposes.
+    expect(isNonEmptyString(function () {})).toEqual(false)
+  })
+
+  it('should return false for symbols', () => {
+    expect(isNonEmptyString(Symbol('test'))).toEqual(false)
+  })
+
+  it('should return false for BigInt', () => {
+    expect(isNonEmptyString(BigInt(123))).toEqual(false)
+  })
+})
+
 describe('isNonEmptyStringOrNumber', () => {
   it('should return true for non-empty strings', () => {
     expect(isNonEmptyStringOrNumber('hello')).toEqual(true)
     expect(isNonEmptyStringOrNumber('0')).toEqual(true)
-    expect(isNonEmptyStringOrNumber(' ')).toEqual(true)
     expect(isNonEmptyStringOrNumber('undefined')).toEqual(true)
     expect(isNonEmptyStringOrNumber('null')).toEqual(true)
   })
 
   it('should return false for empty strings', () => {
     expect(isNonEmptyStringOrNumber('')).toEqual(false)
+    expect(isNonEmptyStringOrNumber(' ')).toEqual(false)
   })
 
   it('should return true for numbers (including zero and negative numbers)', () => {
@@ -162,6 +223,14 @@ describe('isNonEmptyStringOrNumber', () => {
     expect(isNonEmptyStringOrNumber(3.14)).toEqual(true)
     expect(isNonEmptyStringOrNumber(Number.POSITIVE_INFINITY)).toEqual(true)
     expect(isNonEmptyStringOrNumber(Number.NaN)).toEqual(true)
+  })
+
+  it('should handle edge cases', () => {
+    const stringObject = new String('hello')
+    const numberObject = new Number(42)
+
+    expect(isNonEmptyStringOrNumber(stringObject)).toEqual(false)
+    expect(isNonEmptyStringOrNumber(numberObject)).toEqual(false)
   })
 
   it('should return false for arrays', () => {
@@ -198,14 +267,6 @@ describe('isNonEmptyStringOrNumber', () => {
 
   it('should return false for BigInt', () => {
     expect(isNonEmptyStringOrNumber(BigInt(123))).toEqual(false)
-  })
-
-  it('should handle edge cases', () => {
-    const stringObject = new String('hello')
-    const numberObject = new Number(42)
-
-    expect(isNonEmptyStringOrNumber(stringObject)).toEqual(false)
-    expect(isNonEmptyStringOrNumber(numberObject)).toEqual(false)
   })
 })
 
