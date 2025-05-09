@@ -13,7 +13,6 @@ import {
   parseTextString,
   parseYesNoBoolean,
   retrieveText,
-  trimArray,
   trimObject,
 } from '../../common/utils.js'
 import type { Category, Feed, Item, Owner } from './types.js'
