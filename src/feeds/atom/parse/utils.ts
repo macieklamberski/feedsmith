@@ -11,6 +11,7 @@ import {
   trimObject,
 } from '../../../common/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/utils.js'
+import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/utils.js'
 import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
@@ -195,6 +196,7 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
     slash: options?.partial ? undefined : retrieveSlashItem(value),
     itunes: options?.partial ? undefined : retrieveItunesItem(value),
     media: options?.partial ? undefined : retrieveMediaItemOrFeed(value),
+    georss: options?.partial ? undefined : retrieveGeoRssItemOrFeed(value),
   })
 
   if (options?.partial || !entry) {
@@ -232,6 +234,7 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
     sy: options?.partial ? undefined : retrieveSyFeed(value),
     itunes: options?.partial ? undefined : retrieveItunesFeed(value),
     media: options?.partial ? undefined : retrieveMediaItemOrFeed(value),
+    georss: options?.partial ? undefined : retrieveGeoRssItemOrFeed(value),
   })
 
   if (options?.partial || !feed) {

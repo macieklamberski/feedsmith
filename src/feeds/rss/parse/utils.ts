@@ -18,6 +18,7 @@ import {
 } from '../../../namespaces/atom/utils.js'
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/utils.js'
+import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/utils.js'
 import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
@@ -179,6 +180,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     itunes: retrieveItunesItem(value),
     podcast: retrievePodcastItem(value),
     media: retrieveMediaItemOrFeed(value),
+    georss: retrieveGeoRssItemOrFeed(value),
   }
 
   if (isPresent(item.title) || isPresent(item.description)) {
@@ -218,6 +220,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     itunes: retrieveItunesFeed(value),
     podcast: retrievePodcastFeed(value),
     media: retrieveMediaItemOrFeed(value),
+    georss: retrieveGeoRssItemOrFeed(value),
   }
 
   // INFO: Spec also says about required "description" but this field is not always present

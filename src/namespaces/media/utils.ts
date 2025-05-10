@@ -412,8 +412,8 @@ export const parseScenes: ParseFunction<Array<Scene>> = (value) => {
 }
 
 export const parseLocation: ParseFunction<Location> = (value) => {
-  // TODO: Implement parseLocation according to the specification of media:location:
-  // https://www.rssboard.org/media-rss#media-peerlink after implementing GeoRSS support.
+  // TODO: Extend parseLocation according to the specification of media:location:
+  // https://www.rssboard.org/media-rss#media-peerlink after implementing GeoRSS GML support.
 
   // For cases where the location is simply a string within the <media:location> tag.
   if (isNonEmptyStringOrNumber(value) || isObject(value)) {

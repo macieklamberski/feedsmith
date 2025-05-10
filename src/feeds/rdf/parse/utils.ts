@@ -14,6 +14,7 @@ import {
 } from '../../../namespaces/atom/utils.js'
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/utils.js'
+import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/utils.js'
 import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
@@ -59,6 +60,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     slash: retrieveSlashItem(value),
     itunes: retrieveItunesItem(value),
     media: retrieveMediaItemOrFeed(value),
+    georss: retrieveGeoRssItemOrFeed(value),
   }
 
   if (isPresent(item.title) && isPresent(item.link)) {
@@ -115,6 +117,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     dc: retrieveDcItemOrFeed(channel),
     sy: retrieveSyFeed(channel),
     media: retrieveMediaItemOrFeed(channel),
+    georss: retrieveGeoRssItemOrFeed(channel),
   }
 
   if (isPresent(feed.title)) {
