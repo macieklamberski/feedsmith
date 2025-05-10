@@ -9,7 +9,6 @@ import {
   parseTextNumber,
   parseTextString,
   retrieveText,
-  trimArray,
   trimObject,
 } from '../../common/utils.js'
 import type { Box, ItemOrFeed, Line, Point, Polygon } from './types.js'
@@ -75,11 +74,11 @@ export const parsePolygon: ParseFunction<Polygon> = (value) => {
 export const parseBox: ParseFunction<Box> = (value) => {
   const points = parseLatLngPairs(retrieveText(value), { min: 2, max: 2 })
   const box = {
-    lowerLeftCorner: points?.[0],
-    upperRightCorner: points?.[1],
+    lowerCorner: points?.[0],
+    upperCorner: points?.[1],
   }
 
-  if (isPresent(box.lowerLeftCorner) && isPresent(box.upperRightCorner)) {
+  if (isPresent(box.lowerCorner) && isPresent(box.upperCorner)) {
     return box
   }
 }
@@ -94,13 +93,14 @@ export const retrieveItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
     line: parseSingularOf(value['georss:line'], parseLine),
     polygon: parseSingularOf(value['georss:polygon'], parsePolygon),
     box: parseSingularOf(value['georss:box'], parseBox),
-    // TODO: Implement when GML namespace is implemented.
+    // TODO: Implement when (or if) GeoRSS-GML and GML namespace are implemented.
     // where: parseSingularOf(value['georss:where'], parseWhere),
     featureTypeTag: parseSingularOf(value['georss:featuretypetag'], parseTextString),
     relationshipTag: parseSingularOf(value['georss:relationshiptag'], parseTextString),
     featureName: parseSingularOf(value['georss:featurename'], parseTextString),
     elev: parseSingularOf(value['georss:elev'], parseTextNumber),
     floor: parseSingularOf(value['georss:floor'], parseTextNumber),
+    radius: parseSingularOf(value['georss:radius'], parseTextNumber),
   })
 
   return itemOrFeed

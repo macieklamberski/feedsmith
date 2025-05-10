@@ -12,13 +12,8 @@ export type Polygon = {
 }
 
 export type Box = {
-  lowerLeftCorner?: Point
-  upperRightCorner?: Point
-}
-
-export type Where = {
-  // TODO: Implement when GML namespace is implemented.
-  gml?: unknown
+  lowerCorner?: Point
+  upperCorner?: Point
 }
 
 export type ItemOrFeed = {
@@ -26,10 +21,10 @@ export type ItemOrFeed = {
   line?: Line
   polygon?: Polygon
   box?: Box
-  where?: Where
   featureTypeTag?: string
   relationshipTag?: string
   featureName?: string
   elev?: number
   floor?: number
+  radius?: number
 }

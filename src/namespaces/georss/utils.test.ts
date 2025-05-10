@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'bun:test'
-import { parseBox, parseLatLngPairs, parseLine, parsePoint, parsePolygon } from './utils.js'
+import {
+  parseBox,
+  parseLatLngPairs,
+  parseLine,
+  parsePoint,
+  parsePolygon,
+  retrieveItemOrFeed,
+} from './utils.js'
 
 describe('parseLatLngPairs', () => {
   it('should parse a valid string with a exactly 1 lat/lng pair', () => {
@@ -292,8 +299,8 @@ describe('parseBox', () => {
   it('should parse a valid box with exactly 2 points', () => {
     const value = '45.256 -71.92 51.5 -0.12'
     const expected = {
-      lowerLeftCorner: { lat: 45.256, lng: -71.92 },
-      upperRightCorner: { lat: 51.5, lng: -0.12 },
+      lowerCorner: { lat: 45.256, lng: -71.92 },
+      upperCorner: { lat: 51.5, lng: -0.12 },
     }
 
     expect(parseBox(value)).toEqual(expected)
@@ -302,8 +309,8 @@ describe('parseBox', () => {
   it('should handle a box with varied spacing', () => {
     const value = '45.256  -71.92\t51.5 -0.12'
     const expected = {
-      lowerLeftCorner: { lat: 45.256, lng: -71.92 },
-      upperRightCorner: { lat: 51.5, lng: -0.12 },
+      lowerCorner: { lat: 45.256, lng: -71.92 },
+      upperCorner: { lat: 51.5, lng: -0.12 },
     }
 
     expect(parseBox(value)).toEqual(expected)
@@ -348,5 +355,228 @@ describe('parseBox', () => {
     expect(parseBox(null)).toBeUndefined()
     expect(parseBox({})).toBeUndefined()
     expect(parseBox([])).toBeUndefined()
+  })
+})
+
+describe('retrieveItemOrFeed', () => {
+  const expectedFull = {
+    point: { lat: 45.256, lng: -71.92 },
+    line: {
+      points: [
+        { lat: 45.256, lng: -110.45 },
+        { lat: 46.46, lng: -109.48 },
+        { lat: 43.84, lng: -109.86 },
+      ],
+    },
+    polygon: {
+      points: [
+        { lat: 45.256, lng: -110.45 },
+        { lat: 46.46, lng: -109.48 },
+        { lat: 43.84, lng: -109.86 },
+        { lat: 45.256, lng: -110.45 },
+      ],
+    },
+    box: {
+      lowerCorner: { lat: 42.943, lng: -71.032 },
+      upperCorner: { lat: 43.039, lng: -69.856 },
+    },
+    featureTypeTag: 'city',
+    relationshipTag: 'is-centroid-of',
+    featureName: 'Portland',
+    elev: 63,
+    floor: 2,
+    radius: 500,
+  }
+
+  it('should parse a complete itemOrFeed with all GeoRSS properties (with #text)', () => {
+    const value = {
+      'georss:point': { '#text': '45.256 -71.92' },
+      'georss:line': { '#text': '45.256 -110.45 46.46 -109.48 43.84 -109.86' },
+      'georss:polygon': { '#text': '45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45' },
+      'georss:box': { '#text': '42.943 -71.032 43.039 -69.856' },
+      'georss:featuretypetag': { '#text': 'city' },
+      'georss:relationshiptag': { '#text': 'is-centroid-of' },
+      'georss:featurename': { '#text': 'Portland' },
+      'georss:elev': { '#text': '63' },
+      'georss:floor': { '#text': '2' },
+      'georss:radius': { '#text': '500' },
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should parse a complete itemOrFeed with all GeoRSS properties (without #text)', () => {
+    const value = {
+      'georss:point': '45.256 -71.92',
+      'georss:line': '45.256 -110.45 46.46 -109.48 43.84 -109.86',
+      'georss:polygon': '45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45',
+      'georss:box': '42.943 -71.032 43.039 -69.856',
+      'georss:featuretypetag': 'city',
+      'georss:relationshiptag': 'is-centroid-of',
+      'georss:featurename': 'Portland',
+      'georss:elev': '63',
+      'georss:floor': '2',
+      'georss:radius': '500',
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should parse a complete itemOrFeed with all GeoRSS properties (as array of values)', () => {
+    const value = {
+      'georss:point': ['45.256 -71.92'],
+      'georss:line': ['45.256 -110.45 46.46 -109.48 43.84 -109.86'],
+      'georss:polygon': ['45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45'],
+      'georss:box': ['42.943 -71.032 43.039 -69.856'],
+      'georss:featuretypetag': ['city'],
+      'georss:relationshiptag': ['is-centroid-of'],
+      'georss:featurename': ['Portland'],
+      'georss:elev': ['63'],
+      'georss:floor': ['2'],
+      'georss:radius': ['500'],
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should parse itemOrFeed with only point property', () => {
+    const value = {
+      'georss:point': '45.256 -71.92',
+    }
+    const expected = {
+      point: { lat: 45.256, lng: -71.92 },
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should parse itemOrFeed with only line property', () => {
+    const value = {
+      'georss:line': '45.256 -110.45 46.46 -109.48 43.84 -109.86',
+    }
+    const expected = {
+      line: {
+        points: [
+          { lat: 45.256, lng: -110.45 },
+          { lat: 46.46, lng: -109.48 },
+          { lat: 43.84, lng: -109.86 },
+        ],
+      },
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should parse itemOrFeed with only polygon property', () => {
+    const value = {
+      'georss:polygon': '45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45',
+    }
+    const expected = {
+      polygon: {
+        points: [
+          { lat: 45.256, lng: -110.45 },
+          { lat: 46.46, lng: -109.48 },
+          { lat: 43.84, lng: -109.86 },
+          { lat: 45.256, lng: -110.45 },
+        ],
+      },
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should parse itemOrFeed with only box property', () => {
+    const value = {
+      'georss:box': '42.943 -71.032 43.039 -69.856',
+    }
+    const expected = {
+      box: {
+        lowerCorner: { lat: 42.943, lng: -71.032 },
+        upperCorner: { lat: 43.039, lng: -69.856 },
+      },
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should handle coercible number values', () => {
+    const value = {
+      'georss:elev': 63,
+      'georss:floor': 2,
+      'georss:radius': 500,
+    }
+    const expected = {
+      elev: 63,
+      floor: 2,
+      radius: 500,
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should handle coercible string values', () => {
+    const value = {
+      'georss:featuretypetag': 123,
+      'georss:relationshiptag': 456,
+      'georss:featurename': 789,
+    }
+    const expected = {
+      featureTypeTag: '123',
+      relationshipTag: '456',
+      featureName: '789',
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should handle objects with mixed valid and invalid properties', () => {
+    const value = {
+      'georss:point': '45.256 -71.92',
+      'georss:featurename': 'Portland',
+      'invalid:property': 'should be ignored',
+      random: 'value',
+    }
+    const expected = {
+      point: { lat: 45.256, lng: -71.92 },
+      featureName: 'Portland',
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should handle null or undefined property values', () => {
+    const value = {
+      'georss:point': null,
+      'georss:featurename': undefined,
+      'georss:elev': '63',
+    }
+    const expected = {
+      elev: 63,
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty objects', () => {
+    const value = {}
+
+    expect(retrieveItemOrFeed(value)).toBeUndefined()
+  })
+
+  it('should return undefined for objects with only unrelated properties', () => {
+    const value = {
+      unrelated: 'property',
+      random: 'value',
+    }
+
+    expect(retrieveItemOrFeed(value)).toBeUndefined()
+  })
+
+  it('should return undefined for not supported input', () => {
+    expect(retrieveItemOrFeed('not an object')).toBeUndefined()
+    expect(retrieveItemOrFeed(undefined)).toBeUndefined()
+    expect(retrieveItemOrFeed(null)).toBeUndefined()
+    expect(retrieveItemOrFeed([])).toBeUndefined()
+    expect(retrieveItemOrFeed(123)).toBeUndefined()
   })
 })
