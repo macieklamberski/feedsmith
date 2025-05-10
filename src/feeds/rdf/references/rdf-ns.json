@@ -391,6 +391,38 @@
             { "name": "demo", "weight": 1 }
           ]
         }
+      },
+      "georss": {
+        "point": {
+          "lat": 37.78,
+          "lng": -122.42
+        },
+        "line": {
+          "points": [
+            { "lat": 37.78, "lng": -122.42 },
+            { "lat": 37.42, "lng": -122.1 },
+            { "lat": 37.86, "lng": -122.27 }
+          ]
+        },
+        "polygon": {
+          "points": [
+            { "lat": 37.86, "lng": -122.47 },
+            { "lat": 37.86, "lng": -122.37 },
+            { "lat": 37.76, "lng": -122.37 },
+            { "lat": 37.76, "lng": -122.47 },
+            { "lat": 37.86, "lng": -122.47 }
+          ]
+        },
+        "box": {
+          "lowerCorner": { "lat": 37.15, "lng": -122.85 },
+          "upperCorner": { "lat": 38.15, "lng": -121.85 }
+        },
+        "featureTypeTag": "region",
+        "relationshipTag": "contains",
+        "featureName": "San Francisco Bay Area",
+        "elev": 360,
+        "floor": 4,
+        "radius": 50000
       }
     }
   ],
@@ -778,5 +810,37 @@
         { "name": "demo", "weight": 1 }
       ]
     }
+  },
+  "georss": {
+    "point": {
+      "lat": 37.78,
+      "lng": -122.42
+    },
+    "line": {
+      "points": [
+        { "lat": 37.78, "lng": -122.42 },
+        { "lat": 37.42, "lng": -122.1 },
+        { "lat": 37.86, "lng": -122.27 }
+      ]
+    },
+    "polygon": {
+      "points": [
+        { "lat": 37.86, "lng": -122.47 },
+        { "lat": 37.86, "lng": -122.37 },
+        { "lat": 37.76, "lng": -122.37 },
+        { "lat": 37.76, "lng": -122.47 },
+        { "lat": 37.86, "lng": -122.47 }
+      ]
+    },
+    "box": {
+      "lowerCorner": { "lat": 37.15, "lng": -122.85 },
+      "upperCorner": { "lat": 38.15, "lng": -121.85 }
+    },
+    "featureTypeTag": "region",
+    "relationshipTag": "contains",
+    "featureName": "San Francisco Bay Area",
+    "elev": 360,
+    "floor": 4,
+    "radius": 50000
   }
 }
