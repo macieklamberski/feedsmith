@@ -19,10 +19,14 @@ import {
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
+import {
+  retrieveItem as retrieveThrItem,
+  retrieveLink as retrieveThrLink,
+} from '../../../namespaces/thr/utils.js'
 import type { ParseFunction } from './types.js'
 import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types.js'
 
-export const parseLink: ParseFunction<Link> = (value) => {
+export const parseLink: ParseFunction<Link> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -34,6 +38,7 @@ export const parseLink: ParseFunction<Link> = (value) => {
     hreflang: parseString(value['@hreflang']),
     title: parseString(value['@title']),
     length: parseNumber(value['@length']),
+    thr: retrieveThrLink(value),
   }
 
   if (isPresent(link.href)) {
@@ -197,6 +202,7 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
     itunes: options?.partial ? undefined : retrieveItunesItem(value),
     media: options?.partial ? undefined : retrieveMediaItemOrFeed(value),
     georss: options?.partial ? undefined : retrieveGeoRssItemOrFeed(value),
+    thr: options?.partial ? undefined : retrieveThrItem(value),
   })
 
   if (options?.partial || !entry) {
