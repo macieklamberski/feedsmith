@@ -3,6 +3,7 @@ import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/types.js
 import type { Feed as ItunesFeed, Item as ItunesItem } from '../../../namespaces/itunes/types.js'
 import type { Item as SlashItem } from '../../../namespaces/slash/types.js'
 import type { Feed as SyFeed } from '../../../namespaces/sy/types.js'
+import type { Link as ThrLink } from '../../../namespaces/thr/types.js'
 
 export type ParseFunction<R> = CommonParseFunction<R, { prefix?: string; partial?: boolean }>
 
@@ -16,6 +17,7 @@ export type Link = {
   hreflang?: string
   title?: string
   length?: number
+  thr?: ThrLink
 }
 
 export type Person = {

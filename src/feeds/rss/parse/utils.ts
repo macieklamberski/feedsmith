@@ -30,6 +30,7 @@ import {
 } from '../../../namespaces/podcast/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
+import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/utils.js'
 import type {
   Author,
   Category,
@@ -181,6 +182,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     podcast: retrievePodcastItem(value),
     media: retrieveMediaItemOrFeed(value),
     georss: retrieveGeoRssItemOrFeed(value),
+    thr: retrieveThrItem(value),
   }
 
   if (isPresent(item.title) || isPresent(item.description)) {

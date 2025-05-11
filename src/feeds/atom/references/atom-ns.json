@@ -423,7 +423,32 @@
         "elev": 360,
         "floor": 4,
         "radius": 50000
-      }
+      },
+      "thr": {
+        "total": 100,
+        "inReplyTos": [
+          {
+            "ref": "urn:uuid:d5e9c5d0-4c0c-11ec-81d3-0242ac130003",
+            "href": "https://example.com/posts/understanding-xml-namespaces",
+            "type": "application/xhtml+xml"
+          },
+          {
+            "ref": "urn:uuid:e7865b80-4c0c-11ec-81d3-0242ac130003",
+            "href": "https://example.com/posts/understanding-xml-namespaces/comments/1",
+            "type": "application/xhtml+xml"
+          }
+        ]
+      },
+      "links": [
+        {
+          "rel": "replies",
+          "href": "https://example.com/posts/understanding-xml-namespaces/comments/1/replies",
+          "thr": {
+            "count": 2,
+            "updated": "2025-05-10T16:45:00Z"
+          }
+        }
+      ]
     }
   ],
   "dc": {
