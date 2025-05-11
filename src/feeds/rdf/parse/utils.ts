@@ -15,10 +15,6 @@ import {
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/utils.js'
-import {
-  retrieveFeed as retrieveItunesFeed,
-  retrieveItem as retrieveItunesItem,
-} from '../../../namespaces/itunes/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
@@ -58,7 +54,6 @@ export const parseItem: ParseFunction<Item> = (value) => {
     content: retrieveContentItem(value),
     dc: retrieveDcItemOrFeed(value),
     slash: retrieveSlashItem(value),
-    itunes: retrieveItunesItem(value),
     media: retrieveMediaItemOrFeed(value),
     georss: retrieveGeoRssItemOrFeed(value),
   }
