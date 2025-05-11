@@ -1,9 +1,13 @@
 import type { Entry as AtomEntry, Feed as AtomFeed } from '../../../namespaces/atom/types.js'
 import type { Item as ContentItem } from '../../../namespaces/content/types.js'
 import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/types.js'
+import type { ItemOrFeed as GeoRssItemOrFeed } from '../../../namespaces/georss/types.js'
 import type { Feed as ItunesFeed, Item as ItunesItem } from '../../../namespaces/itunes/types.js'
+import type { ItemOrFeed as MediaItemOrFeed } from '../../../namespaces/media/types.js'
+import type { Feed as PodcastFeed, Item as PodcastItem } from '../../../namespaces/podcast/types.js'
 import type { Item as SlashItem } from '../../../namespaces/slash/types.js'
 import type { Feed as SyFeed } from '../../../namespaces/sy/types.js'
+import type { Item as ThrItem } from '../../../namespaces/thr/types.js'
 
 export type Author = string
 
@@ -60,11 +64,15 @@ export type Item = {
   guid?: Guid
   pubDate?: string
   source?: Source
-  atom?: AtomEntry
   content?: ContentItem
+  atom?: AtomEntry
   dc?: DcItemOrFeed
   slash?: SlashItem
   itunes?: ItunesItem
+  podcast?: PodcastItem
+  media?: MediaItemOrFeed
+  georss?: GeoRssItemOrFeed
+  thr?: ThrItem
 }
 
 export type Feed = {
@@ -77,7 +85,6 @@ export type Feed = {
   webMaster?: string
   pubDate?: string
   lastBuildDate?: string
-  authors?: Array<Author>
   categories?: Array<Category>
   generator?: string
   docs?: string
@@ -93,4 +100,7 @@ export type Feed = {
   dc?: DcItemOrFeed
   sy?: SyFeed
   itunes?: ItunesFeed
+  podcast?: PodcastFeed
+  media?: MediaItemOrFeed
+  georss?: GeoRssItemOrFeed
 }

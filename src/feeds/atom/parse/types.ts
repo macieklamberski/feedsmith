@@ -1,9 +1,11 @@
 import type { ParseFunction as CommonParseFunction } from '../../../common/types.js'
 import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/types.js'
+import type { ItemOrFeed as GeoRssItemOrFeed } from '../../../namespaces/georss/types.js'
 import type { Feed as ItunesFeed, Item as ItunesItem } from '../../../namespaces/itunes/types.js'
+import type { ItemOrFeed as MediaItemOrFeed } from '../../../namespaces/media/types.js'
 import type { Item as SlashItem } from '../../../namespaces/slash/types.js'
 import type { Feed as SyFeed } from '../../../namespaces/sy/types.js'
-import type { Link as ThrLink } from '../../../namespaces/thr/types.js'
+import type { Item as ThrItem, Link as ThrLink } from '../../../namespaces/thr/types.js'
 
 export type ParseFunction<R> = CommonParseFunction<R, { prefix?: string; partial?: boolean }>
 
@@ -69,6 +71,9 @@ export type Entry = {
   dc?: DcItemOrFeed
   slash?: SlashItem
   itunes?: ItunesItem
+  media?: MediaItemOrFeed
+  georss?: GeoRssItemOrFeed
+  thr?: ThrItem
 }
 
 export type Feed = {
@@ -88,4 +93,6 @@ export type Feed = {
   dc?: DcItemOrFeed
   sy?: SyFeed
   itunes?: ItunesFeed
+  media?: MediaItemOrFeed
+  georss?: GeoRssItemOrFeed
 }
