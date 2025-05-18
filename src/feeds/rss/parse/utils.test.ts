@@ -5,6 +5,7 @@ import {
   parseCloud,
   parseEnclosure,
   parseFeed,
+  parseGuid,
   parseImage,
   parseItem,
   parseSkipDays,
@@ -274,6 +275,95 @@ describe('parseEnclosure', () => {
   })
 })
 
+describe('parseGuid', () => {
+  it('should parse complete guid object', () => {
+    const value = {
+      '#text': 'https://example.com/posts/123456',
+      '@ispermalink': 'true',
+    }
+    const expected = {
+      value: 'https://example.com/posts/123456',
+      isPermalink: true,
+    }
+
+    expect(parseGuid(value)).toEqual(expected)
+  })
+
+  it('should parse guid with only required value field (as object)', () => {
+    const value = {
+      '#text': 'https://example.com/posts/123456',
+    }
+    const expected = {
+      value: 'https://example.com/posts/123456',
+    }
+
+    expect(parseGuid(value)).toEqual(expected)
+  })
+
+  it('should parse guid with only required value field (as string)', () => {
+    const value = 'https://example.com/posts/123456'
+    const expected = {
+      value: 'https://example.com/posts/123456',
+    }
+
+    expect(parseGuid(value)).toEqual(expected)
+  })
+
+  it('should handle coercible values', () => {
+    const value = {
+      '#text': 123456,
+    }
+    const expected = {
+      value: '123456',
+    }
+
+    expect(parseGuid(value)).toEqual(expected)
+  })
+
+  it('should handle objects with mixed valid and invalid properties', () => {
+    const value = {
+      '#text': 'https://example.com/posts/123456',
+      '@ispermalink': 'false',
+      '@invalid': 'property',
+    }
+    const expected = {
+      value: 'https://example.com/posts/123456',
+      isPermalink: false,
+    }
+
+    expect(parseGuid(value)).toEqual(expected)
+  })
+
+  it('should return undefined if value is missing', () => {
+    const value = {
+      '@ispermalink': 'true',
+    }
+
+    expect(parseGuid(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty objects', () => {
+    const value = {}
+
+    expect(parseGuid(value)).toBeUndefined()
+  })
+
+  it('should return undefined for objects with only unrelated properties', () => {
+    const value = {
+      '@unrelated': 'property',
+      random: 'value',
+    }
+
+    expect(parseGuid(value)).toBeUndefined()
+  })
+
+  it('should return undefined for not supported input', () => {
+    expect(parseGuid(undefined)).toBeUndefined()
+    expect(parseGuid(null)).toBeUndefined()
+    expect(parseGuid([])).toBeUndefined()
+  })
+})
+
 describe('parseSource', () => {
   it('should parse complete source object', () => {
     const value = {
@@ -529,7 +619,7 @@ describe('parseItem', () => {
       length: 12345678,
       type: 'audio/mpeg',
     },
-    guid: 'https://example.com/guid/1234',
+    guid: { value: 'https://example.com/guid/1234' },
     pubDate: 'Mon, 15 Mar 2023 12:30:00 GMT',
     source: { title: 'Example Source', url: 'https://example.com/source.xml' },
   }
@@ -1014,7 +1104,7 @@ describe('parseFeed', () => {
       link: '456',
       ttl: 60,
       categories: [{ name: '789' }],
-      items: [{ title: 'Item Title', guid: '101112' }],
+      items: [{ title: 'Item Title', guid: { value: '101112' } }],
     }
 
     expect(parseFeed(value)).toEqual(expected)
