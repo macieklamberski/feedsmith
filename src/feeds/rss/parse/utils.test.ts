@@ -470,18 +470,22 @@ describe('parseCategory', () => {
 describe('parseAuthor', () => {
   it('should parse author string (with #text)', () => {
     const value = {
-      '#text': 'John Doe (john@example.com)',
+      '#text': 'John Doe',
     }
-    const expected = 'John Doe (john@example.com)'
+    const expected = {
+      name: 'John Doe',
+    }
 
-    expect(parseAuthor(value)).toBe(expected)
+    expect(parseAuthor(value)).toEqual(expected)
   })
 
   it('should parse author string (without #text)', () => {
-    const value = 'John Doe (john@example.com)'
-    const expected = 'John Doe (john@example.com)'
+    const value = 'John Doe'
+    const expected = {
+      name: 'John Doe',
+    }
 
-    expect(parseAuthor(value)).toBe(expected)
+    expect(parseAuthor(value)).toEqual(expected)
   })
 
   it('should parse author nested under author.name', () => {
@@ -490,26 +494,136 @@ describe('parseAuthor', () => {
         '#text': 'John Doe',
       },
     }
+    const expected = {
+      name: 'John Doe',
+    }
 
-    expect(parseAuthor(value)).toBe('John Doe')
+    expect(parseAuthor(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
     const value = {
       '#text': 123,
     }
+    expect(parseAuthor(value)).toEqual({
+      name: '123',
+    })
+  })
 
-    expect(parseAuthor(value)).toBe('123')
+  it('should treat link-only author correctly', () => {
+    const value = 'http://example.com'
+    const expected = {
+      link: 'http://example.com',
+    }
+
+    expect(parseAuthor(value)).toEqual(expected)
+  })
+
+  it('should treat email-only author correctly', () => {
+    const value = 'john@example.com'
+    const expected = {
+      email: 'john@example.com',
+    }
+
+    expect(parseAuthor(value)).toEqual(expected)
+  })
+
+  it('should handle the official RSS author format', () => {
+    const value = 'john@example.org (John Doe)'
+    const expected = {
+      name: 'John Doe',
+      email: 'john@example.org',
+    }
+
+    expect(parseAuthor(value)).toEqual(expected)
+  })
+
+  it('should parse different orderings of elements and bracket styles', () => {
+    const values = [
+      'john@example.com (John Doe) <http://example.com>', // Item order.
+      '<http://example.com> John Doe (john@example.com)', // Item order.
+      'John Doe <http://example.com> (john@example.com)', // Item order.
+      '<john@example.com> <http://example.com> (John Doe)', // Item order.
+      'John Doe [john@example.com] (http://example.com)', // Bracket style.
+      'John Doe (john@example.com) <http://example.com>', // Bracket style.
+      '[http://example.com] John Doe <john@example.com>', // Bracket style.
+      '[john@example.com] John Doe (http://example.com)', // Bracket style.
+    ]
+    const expected = {
+      name: 'John Doe',
+      email: 'john@example.com',
+      link: 'http://example.com',
+    }
+
+    for (const value of values) {
+      expect(parseAuthor(value)).toEqual(expected)
+    }
+  })
+
+  it('should handle cases where name contains bracketed fragment', () => {
+    const value = 'Dr. John Doe [CEO] <john@example.com> (http://example.com)'
+    const expected = {
+      name: 'Dr. John Doe',
+      email: 'john@example.com',
+      link: 'http://example.com',
+    }
+
+    expect(parseAuthor(value)).toEqual(expected)
+  })
+
+  it('should handle cases with URLs or emails being within the normal text without brackets', () => {
+    const values = [
+      'Contact us at support@example.com or sales@example.com',
+      'Visit http://blog.example.com or http://shop.example.com',
+    ]
+
+    for (const value of values) {
+      expect(parseAuthor(value)).toEqual({ name: value })
+    }
+  })
+
+  it('should handle case where brackets contain mixed URL/email and the text', () => {
+    const value = 'John (from http://example.com)'
+    const expected = {
+      name: 'John',
+    }
+
+    expect(parseAuthor(value)).toEqual(expected)
+  })
+
+  it('should handle cases with multiple email-like or URL-like strings', () => {
+    expect(parseAuthor('Primary <primary@example.com> Secondary [secondary@example.com]')).toEqual({
+      name: 'Primary',
+      email: 'primary@example.com',
+    })
+
+    expect(parseAuthor('John (from http://example.com) <john@example.com>')).toEqual({
+      name: 'John',
+      email: 'john@example.com',
+    })
+
+    expect(parseAuthor('Dr. John Doe [CEO] <john@example.com> (http://example.com)')).toEqual({
+      name: 'Dr. John Doe',
+      email: 'john@example.com',
+      link: 'http://example.com',
+    })
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
-
     expect(parseAuthor(value)).toBeUndefined()
   })
 
   it('should return undefined for undefined value', () => {
     expect(parseAuthor(undefined)).toBeUndefined()
+  })
+
+  it('should return undefined for null value', () => {
+    expect(parseAuthor(null)).toBeUndefined()
+  })
+
+  it('should handle empty string', () => {
+    expect(parseAuthor('')).toBeUndefined()
   })
 })
 
@@ -518,7 +632,7 @@ describe('parseItem', () => {
     title: 'Item Title',
     link: 'https://example.com/item',
     description: 'Item Description',
-    authors: ['John Doe (john@example.com)'],
+    authors: [{ name: 'John Doe' }],
     categories: [
       { name: 'Technology', domain: 'http://example.com/categories' },
       { name: 'Web Development' },
@@ -539,7 +653,7 @@ describe('parseItem', () => {
       title: { '#text': 'Item Title' },
       link: { '#text': 'https://example.com/item' },
       description: { '#text': 'Item Description' },
-      author: [{ '#text': 'John Doe (john@example.com)' }],
+      author: [{ '#text': 'John Doe' }],
       category: [
         { '#text': 'Technology', '@domain': 'http://example.com/categories' },
         { '#text': 'Web Development' },
@@ -563,7 +677,7 @@ describe('parseItem', () => {
       title: ['Item Title', 'Alternative Item Title'],
       link: ['https://example.com/item', 'https://example.com/item-alternate'],
       description: ['Item Description', 'Extended Item Description'],
-      author: ['John Doe (john@example.com)'],
+      author: ['John Doe'],
       category: [
         { '#text': 'Technology', '@domain': 'http://example.com/categories' },
         'Web Development',
@@ -597,7 +711,7 @@ describe('parseItem', () => {
       title: 'Item Title',
       link: 'https://example.com/item',
       description: 'Item Description',
-      author: ['John Doe (john@example.com)'],
+      author: ['John Doe'],
       category: [
         { '#text': 'Technology', '@domain': 'http://example.com/categories' },
         'Web Development',
@@ -647,7 +761,7 @@ describe('parseItem', () => {
 
     expect(parseItem(value)).toEqual({
       title: '123',
-      authors: ['456'],
+      authors: [{ name: '456' }],
     })
   })
 
@@ -1081,7 +1195,7 @@ describe('parseFeed', () => {
         {
           title: 'Item 2',
           description: 'Item 2 Description',
-          authors: ['Author 1', 'Author 2'],
+          authors: [{ name: 'Author 1' }, { name: 'Author 2' }],
         },
       ],
       image: {

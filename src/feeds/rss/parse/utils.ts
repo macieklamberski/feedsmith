@@ -1,5 +1,6 @@
 import type { ParseFunction } from '../../../common/types.js'
 import {
+  isNonEmptyString,
   isObject,
   isPresent,
   parseArrayOf,
@@ -31,6 +32,7 @@ import {
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
 import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/utils.js'
+import { parsePerson as parseAtomPerson } from '../../atom/parse/utils.js'
 import type {
   Author,
   Category,
@@ -154,8 +156,49 @@ export const parseCategory: ParseFunction<Category> = (value) => {
   }
 }
 
+const BRACKET_PATTERN = /([^<\[\(]+)|(?:<([^>]*)>)|(?:\[([^\]]*)\])|(?:\(([^)]*)\))/g
+const EMAIL_LIKE_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const URL_LIKE_PATTERN = /^(?:https?:\/\/|www\.)[^\s@]+\.[^\s@]+$/
+
 export const parseAuthor: ParseFunction<Author> = (value) => {
-  return parseSingularOf(value?.name ?? value, parseTextString)
+  // TODO: Use parseAtomPerson for cases where author is a complex element from Atom namespace.
+  const rawAuthor = parseSingularOf(value?.name ?? value, parseTextString)
+
+  if (!isNonEmptyString(rawAuthor)) {
+    return
+  }
+
+  if (EMAIL_LIKE_PATTERN.test(rawAuthor)) {
+    return { email: rawAuthor }
+  }
+
+  if (URL_LIKE_PATTERN.test(rawAuthor)) {
+    return { link: rawAuthor }
+  }
+
+  const author: Author = {
+    name: undefined,
+    email: undefined,
+    link: undefined,
+  }
+
+  for (const match of rawAuthor.matchAll(BRACKET_PATTERN)) {
+    const chunk = parseString(match[1] || match[2] || match[3] || match[4])
+
+    if (!isPresent(chunk)) {
+      continue
+    }
+
+    if (EMAIL_LIKE_PATTERN.test(chunk) && !author.email) {
+      author.email = chunk
+    } else if (URL_LIKE_PATTERN.test(chunk) && !author.link) {
+      author.link = chunk
+    } else if (chunk && !author.name) {
+      author.name = chunk
+    }
+  }
+
+  return trimObject(author)
 }
 
 export const parseItem: ParseFunction<Item> = (value) => {

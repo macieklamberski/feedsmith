@@ -44,7 +44,7 @@
       "title": "First item title",
       "link": "http://example.org/item/1",
       "description": "Watch out for <span style=\"background: url(javascript:window.location='http://example.org/')\"> nasty tricks</span>",
-      "authors": ["mark@example.org"],
+      "authors": [{ "email": "mark@example.org" }],
       "categories": [
         { "name": "Miscellaneous" },
         { "name": "Technology", "domain": "http://www.example.com/categories" }
@@ -63,7 +63,7 @@
       "title": "Second item title",
       "link": "http://example.org/item/2",
       "description": "Watch out for <span style=\"background: url(javascript:window.location='http://example.org/')\"> nasty tricks</span>",
-      "authors": ["mark@example.org"],
+      "authors": [{ "email": "mark@example.org" }],
       "categories": [{ "name": "Miscellaneous" }],
       "comments": "http://example.org/comments/2",
       "enclosure": {
