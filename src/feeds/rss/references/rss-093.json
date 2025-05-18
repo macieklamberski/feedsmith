@@ -4,8 +4,12 @@
   "description": "For documentation <em>only</em>",
   "language": "en",
   "copyright": "Copyright 2004, Mark Pilgrim",
-  "managingEditor": "editor@example.org",
-  "webMaster": "webmaster@example.org",
+  "managingEditor": {
+    "email": "editor@example.org"
+  },
+  "webMaster": {
+    "email": "webmaster@example.org"
+  },
   "pubDate": "Sat, 19 Mar 1988 07:15:00 GMT",
   "lastBuildDate": "Sat, 19 Mar 1988 07:15:00 GMT",
   "categories": [{ "name": "Examples1" }, { "name": "Examples2" }],

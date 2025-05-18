@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'bun:test'
 import {
-  parseAuthor,
   parseCategory,
   parseCloud,
   parseEnclosure,
   parseFeed,
   parseImage,
   parseItem,
+  parsePerson,
   parseSkipDays,
   parseSkipHours,
   parseSource,
@@ -467,7 +467,7 @@ describe('parseCategory', () => {
   })
 })
 
-describe('parseAuthor', () => {
+describe('parsePerson', () => {
   it('should parse author string (with #text)', () => {
     const value = {
       '#text': 'John Doe',
@@ -476,7 +476,7 @@ describe('parseAuthor', () => {
       name: 'John Doe',
     }
 
-    expect(parseAuthor(value)).toEqual(expected)
+    expect(parsePerson(value)).toEqual(expected)
   })
 
   it('should parse author string (without #text)', () => {
@@ -485,7 +485,7 @@ describe('parseAuthor', () => {
       name: 'John Doe',
     }
 
-    expect(parseAuthor(value)).toEqual(expected)
+    expect(parsePerson(value)).toEqual(expected)
   })
 
   it('should parse author nested under author.name', () => {
@@ -498,14 +498,14 @@ describe('parseAuthor', () => {
       name: 'John Doe',
     }
 
-    expect(parseAuthor(value)).toEqual(expected)
+    expect(parsePerson(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
     const value = {
       '#text': 123,
     }
-    expect(parseAuthor(value)).toEqual({
+    expect(parsePerson(value)).toEqual({
       name: '123',
     })
   })
@@ -516,7 +516,7 @@ describe('parseAuthor', () => {
       link: 'http://example.com',
     }
 
-    expect(parseAuthor(value)).toEqual(expected)
+    expect(parsePerson(value)).toEqual(expected)
   })
 
   it('should treat email-only author correctly', () => {
@@ -525,7 +525,7 @@ describe('parseAuthor', () => {
       email: 'john@example.com',
     }
 
-    expect(parseAuthor(value)).toEqual(expected)
+    expect(parsePerson(value)).toEqual(expected)
   })
 
   it('should handle the official RSS author format', () => {
@@ -535,7 +535,7 @@ describe('parseAuthor', () => {
       email: 'john@example.org',
     }
 
-    expect(parseAuthor(value)).toEqual(expected)
+    expect(parsePerson(value)).toEqual(expected)
   })
 
   it('should parse different orderings of elements and bracket styles', () => {
@@ -556,7 +556,7 @@ describe('parseAuthor', () => {
     }
 
     for (const value of values) {
-      expect(parseAuthor(value)).toEqual(expected)
+      expect(parsePerson(value)).toEqual(expected)
     }
   })
 
@@ -568,7 +568,7 @@ describe('parseAuthor', () => {
       link: 'http://example.com',
     }
 
-    expect(parseAuthor(value)).toEqual(expected)
+    expect(parsePerson(value)).toEqual(expected)
   })
 
   it('should handle cases with URLs or emails being within the normal text without brackets', () => {
@@ -578,7 +578,7 @@ describe('parseAuthor', () => {
     ]
 
     for (const value of values) {
-      expect(parseAuthor(value)).toEqual({ name: value })
+      expect(parsePerson(value)).toEqual({ name: value })
     }
   })
 
@@ -588,21 +588,21 @@ describe('parseAuthor', () => {
       name: 'John',
     }
 
-    expect(parseAuthor(value)).toEqual(expected)
+    expect(parsePerson(value)).toEqual(expected)
   })
 
   it('should handle cases with multiple email-like or URL-like strings', () => {
-    expect(parseAuthor('Primary <primary@example.com> Secondary [secondary@example.com]')).toEqual({
+    expect(parsePerson('Primary <primary@example.com> Secondary [secondary@example.com]')).toEqual({
       name: 'Primary',
       email: 'primary@example.com',
     })
 
-    expect(parseAuthor('John (from http://example.com) <john@example.com>')).toEqual({
+    expect(parsePerson('John (from http://example.com) <john@example.com>')).toEqual({
       name: 'John',
       email: 'john@example.com',
     })
 
-    expect(parseAuthor('Dr. John Doe [CEO] <john@example.com> (http://example.com)')).toEqual({
+    expect(parsePerson('Dr. John Doe [CEO] <john@example.com> (http://example.com)')).toEqual({
       name: 'Dr. John Doe',
       email: 'john@example.com',
       link: 'http://example.com',
@@ -611,19 +611,19 @@ describe('parseAuthor', () => {
 
   it('should return undefined for empty object', () => {
     const value = {}
-    expect(parseAuthor(value)).toBeUndefined()
+    expect(parsePerson(value)).toBeUndefined()
   })
 
   it('should return undefined for undefined value', () => {
-    expect(parseAuthor(undefined)).toBeUndefined()
+    expect(parsePerson(undefined)).toBeUndefined()
   })
 
   it('should return undefined for null value', () => {
-    expect(parseAuthor(null)).toBeUndefined()
+    expect(parsePerson(null)).toBeUndefined()
   })
 
   it('should handle empty string', () => {
-    expect(parseAuthor('')).toBeUndefined()
+    expect(parsePerson('')).toBeUndefined()
   })
 })
 
@@ -836,8 +836,8 @@ describe('parseFeed', () => {
     description: 'Feed Description',
     language: 'en-us',
     copyright: '© 2023 Example',
-    managingEditor: 'editor@example.com',
-    webMaster: 'webmaster@example.com',
+    managingEditor: { email: 'editor@example.com' },
+    webMaster: { email: 'webmaster@example.com' },
     pubDate: 'Mon, 15 Mar 2023 12:00:00 GMT',
     lastBuildDate: 'Mon, 15 Mar 2023 13:00:00 GMT',
     categories: [{ name: 'Technology', domain: 'http://example.com/categories' }],
