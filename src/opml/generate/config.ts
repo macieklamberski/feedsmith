@@ -1,10 +1,6 @@
 import { XMLBuilder } from 'fast-xml-parser'
+import { generateConfig } from '../../common/config.js'
 
 export const builder = new XMLBuilder({
-  processEntities: true,
-  ignoreAttributes: false,
-  suppressEmptyNode: true,
-  suppressBooleanAttributes: false,
-  attributeNamePrefix: '@',
-  format: true,
+  ...generateConfig,
 })
