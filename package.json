@@ -50,7 +50,7 @@
     "@biomejs/biome": "^1.9.4",
     "@types/bun": "^1.2.13",
     "lefthook": "^1.11.12",
-    "semantic-release": "^24.2.3",
+    "semantic-release": "^24.2.4",
     "typescript": "^5.8.3"
   }
 }
