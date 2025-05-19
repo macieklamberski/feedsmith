@@ -41,33 +41,6 @@ export const retrieveImage: ParseFunction<Image> = (value) => {
   return parseSingularOf(value?.image, parseImage)
 }
 
-export const parseItem: ParseFunction<Item> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
-  const item = {
-    title: parseSingularOf(value.title, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
-    description: parseSingularOf(value.description, parseTextString),
-    atom: retrieveAtomEntry(value),
-    content: retrieveContentItem(value),
-    dc: retrieveDcItemOrFeed(value),
-    slash: retrieveSlashItem(value),
-    media: retrieveMediaItemOrFeed(value),
-    georss: retrieveGeoRssItemOrFeed(value),
-  }
-
-  if (isPresent(item.title) && isPresent(item.link)) {
-    return trimObject(item)
-  }
-}
-
-export const retrieveItems: ParseFunction<Array<Item>> = (value) => {
-  // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
-  return parseArrayOf(value?.item, parseItem)
-}
-
 export const parseTextInput: ParseFunction<TextInput> = (value) => {
   if (!isObject(value)) {
     return
@@ -93,6 +66,33 @@ export const parseTextInput: ParseFunction<TextInput> = (value) => {
 export const retrieveTextInput: ParseFunction<TextInput> = (value) => {
   // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
   return parseSingularOf(value?.textinput, parseTextInput)
+}
+
+export const parseItem: ParseFunction<Item> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const item = {
+    title: parseSingularOf(value.title, parseTextString),
+    link: parseSingularOf(value.link, parseTextString),
+    description: parseSingularOf(value.description, parseTextString),
+    atom: retrieveAtomEntry(value),
+    content: retrieveContentItem(value),
+    dc: retrieveDcItemOrFeed(value),
+    slash: retrieveSlashItem(value),
+    media: retrieveMediaItemOrFeed(value),
+    georss: retrieveGeoRssItemOrFeed(value),
+  }
+
+  if (isPresent(item.title) && isPresent(item.link)) {
+    return trimObject(item)
+  }
+}
+
+export const retrieveItems: ParseFunction<Array<Item>> = (value) => {
+  // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
+  return parseArrayOf(value?.item, parseItem)
 }
 
 export const parseFeed: ParseFunction<Feed> = (value) => {
