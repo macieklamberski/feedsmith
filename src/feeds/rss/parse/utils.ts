@@ -43,25 +43,18 @@ import type {
   TextInput,
 } from './types.js'
 
-export const parseTextInput: ParseFunction<TextInput> = (value) => {
-  if (!isObject(value)) {
-    return
+export const parsePerson: ParseFunction<Person> = (value) => {
+  return parseSingularOf(value?.name ?? value, parseTextString)
+}
+
+export const parseCategory: ParseFunction<Category> = (value) => {
+  const category = {
+    name: parseString(retrieveText(value)),
+    domain: parseString(value?.['@domain']),
   }
 
-  const textInput = {
-    title: parseSingularOf(value.title, parseTextString),
-    description: parseSingularOf(value.description, parseTextString),
-    name: parseSingularOf(value.name, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
-  }
-
-  if (
-    isPresent(textInput.title) &&
-    isPresent(textInput.description) &&
-    isPresent(textInput.name) &&
-    isPresent(textInput.link)
-  ) {
-    return trimObject(textInput)
+  if (isPresent(category.name)) {
+    return trimObject(category)
   }
 }
 
@@ -86,6 +79,47 @@ export const parseCloud: ParseFunction<Cloud> = (value) => {
     isPresent(cloud.protocol)
   ) {
     return trimObject(cloud)
+  }
+}
+
+export const parseImage: ParseFunction<Image> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const image = {
+    url: parseSingularOf(value.url, parseTextString),
+    title: parseSingularOf(value.title, parseTextString),
+    link: parseSingularOf(value.link, parseTextString),
+    description: parseSingularOf(value.description, parseTextString),
+    height: parseSingularOf(value.height, parseTextNumber),
+    width: parseSingularOf(value.width, parseTextNumber),
+  }
+
+  if (isPresent(image.url) && isPresent(image.title) && isPresent(image.link)) {
+    return trimObject(image)
+  }
+}
+
+export const parseTextInput: ParseFunction<TextInput> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const textInput = {
+    title: parseSingularOf(value.title, parseTextString),
+    description: parseSingularOf(value.description, parseTextString),
+    name: parseSingularOf(value.name, parseTextString),
+    link: parseSingularOf(value.link, parseTextString),
+  }
+
+  if (
+    isPresent(textInput.title) &&
+    isPresent(textInput.description) &&
+    isPresent(textInput.name) &&
+    isPresent(textInput.link)
+  ) {
+    return trimObject(textInput)
   }
 }
 
@@ -122,40 +156,6 @@ export const parseSource: ParseFunction<Source> = (value) => {
   if (isPresent(source.title)) {
     return trimObject(source)
   }
-}
-
-export const parseImage: ParseFunction<Image> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
-  const image = {
-    url: parseSingularOf(value.url, parseTextString),
-    title: parseSingularOf(value.title, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
-    description: parseSingularOf(value.description, parseTextString),
-    height: parseSingularOf(value.height, parseTextNumber),
-    width: parseSingularOf(value.width, parseTextNumber),
-  }
-
-  if (isPresent(image.url) && isPresent(image.title) && isPresent(image.link)) {
-    return trimObject(image)
-  }
-}
-
-export const parseCategory: ParseFunction<Category> = (value) => {
-  const category = {
-    name: parseString(retrieveText(value)),
-    domain: parseString(value?.['@domain']),
-  }
-
-  if (isPresent(category.name)) {
-    return trimObject(category)
-  }
-}
-
-export const parsePerson: ParseFunction<Person> = (value) => {
-  return parseSingularOf(value?.name ?? value, parseTextString)
 }
 
 export const parseItem: ParseFunction<Item> = (value) => {

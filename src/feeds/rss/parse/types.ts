@@ -24,19 +24,6 @@ export type Cloud = {
   protocol?: string
 }
 
-export type Enclosure = {
-  url?: string
-  length?: number
-  type?: string
-}
-
-export type Guid = string
-
-export type Source = {
-  title?: string
-  url?: string
-}
-
 export type Image = {
   url?: string
   title?: string
@@ -51,6 +38,19 @@ export type TextInput = {
   description?: string
   name?: string
   link?: string
+}
+
+export type Enclosure = {
+  url?: string
+  length?: number
+  type?: string
+}
+
+export type Guid = string
+
+export type Source = {
+  title?: string
+  url?: string
 }
 
 export type Item = {
