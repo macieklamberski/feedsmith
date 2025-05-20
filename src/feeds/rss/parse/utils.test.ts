@@ -15,6 +15,227 @@ import {
   retrieveFeed,
 } from './utils.js'
 
+describe('parsePerson', () => {
+  it('should parse author string (with #text)', () => {
+    const value = {
+      '#text': 'John Doe (john@example.com)',
+    }
+    const expected = 'John Doe (john@example.com)'
+
+    expect(parsePerson(value)).toBe(expected)
+  })
+
+  it('should parse author string (without #text)', () => {
+    const value = 'John Doe (john@example.com)'
+    const expected = 'John Doe (john@example.com)'
+
+    expect(parsePerson(value)).toBe(expected)
+  })
+
+  it('should parse author nested under author.name', () => {
+    const value = {
+      name: {
+        '#text': 'John Doe',
+      },
+    }
+
+    expect(parsePerson(value)).toBe('John Doe')
+  })
+
+  it('should handle coercible values', () => {
+    const value = {
+      '#text': 123,
+    }
+
+    expect(parsePerson(value)).toBe('123')
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(parsePerson(value)).toBeUndefined()
+  })
+
+  it('should return undefined for undefined value', () => {
+    expect(parsePerson(undefined)).toBeUndefined()
+  })
+})
+
+describe('parseCategory', () => {
+  it('should parse complete category object', () => {
+    const value = {
+      '#text': 'Technology',
+      '@domain': 'http://example.com/categories',
+    }
+    const expected = {
+      name: 'Technology',
+      domain: 'http://example.com/categories',
+    }
+
+    expect(parseCategory(value)).toEqual(expected)
+  })
+
+  it('should handle category with only name (with #text)', () => {
+    const value = {
+      '#text': 'Technology',
+    }
+    const expected = {
+      name: 'Technology',
+    }
+
+    expect(parseCategory(value)).toEqual(expected)
+  })
+
+  it('should handle category with only name (without #text)', () => {
+    const value = 'Technology'
+    const expected = {
+      name: 'Technology',
+    }
+
+    expect(parseCategory(value)).toEqual(expected)
+  })
+
+  it('should handle coercible values', () => {
+    const value = {
+      '#text': 123,
+      '@domain': true,
+    }
+    const expected = {
+      name: '123',
+    }
+
+    expect(parseCategory(value)).toEqual(expected)
+  })
+
+  it('should return undefined if name is missing', () => {
+    const value = {
+      '@domain': 'http://example.com/categories',
+    }
+
+    expect(parseCategory(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(parseCategory(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object value', () => {
+    expect(parseCategory(null)).toBeUndefined()
+  })
+})
+
+describe('parseCloud', () => {
+  it('should handle valid cloud object (also with coercible values)', () => {
+    const value = {
+      '@domain': 'rpc.example.com',
+      '@port': '80',
+      '@path': '/RPC2',
+      '@registerprocedure': 'pingMe',
+      '@protocol': 'soap',
+    }
+    const expected = {
+      domain: 'rpc.example.com',
+      port: 80,
+      path: '/RPC2',
+      registerProcedure: 'pingMe',
+      protocol: 'soap',
+    }
+
+    expect(parseCloud(value)).toEqual(expected)
+  })
+
+  it('should handle partial cloud object', () => {
+    const value = {
+      '@domain': 'rpc.example.com',
+      '@protocol': 'soap',
+    }
+
+    expect(parseCloud(value)).toBeUndefined()
+  })
+
+  it('should handle empty cloud object', () => {
+    const value = {}
+
+    expect(parseCloud(value)).toBeUndefined()
+  })
+
+  it('should handle non-object value', () => {
+    expect(parseCloud('not an object')).toBeUndefined()
+    expect(parseCloud(undefined)).toBeUndefined()
+  })
+})
+
+describe('parseImage', () => {
+  const expectedFull = {
+    url: 'https://example.com/image.jpg',
+    title: 'Example Image',
+    link: 'https://example.com',
+    description: 'Example description',
+    height: 32,
+    width: 32,
+  }
+
+  it('should parse complete image object (with correct values) (with #text)', () => {
+    const value = {
+      url: { '#text': 'https://example.com/image.jpg' },
+      title: { '#text': 'Example Image' },
+      link: { '#text': 'https://example.com' },
+      description: { '#text': 'Example description' },
+      height: { '#text': '32' },
+      width: { '#text': '32' },
+    }
+    expect(parseImage(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete image object (with correct values) (without #text)', () => {
+    const value = {
+      url: 'https://example.com/image.jpg',
+      title: 'Example Image',
+      link: 'https://example.com',
+      description: 'Example description',
+      height: '32',
+      width: '32',
+    }
+
+    expect(parseImage(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete image object (with correct values) (with array of values)', () => {
+    const value = {
+      url: ['https://example.com/image.jpg', 'https://example.com/alternate-image.jpg'],
+      title: ['Example Image', 'Alternative Image Title'],
+      link: ['https://example.com', 'https://example.com/alternate'],
+      description: ['Example description', 'Alternative description'],
+      height: ['32', '64'],
+      width: ['32', '64'],
+    }
+
+    expect(parseImage(value)).toEqual(expectedFull)
+  })
+
+  it('should handle partial image object', () => {
+    const value = {
+      url: { '#text': 'https://example.com/image.jpg' },
+      title: { '#text': 'Example Image' },
+    }
+
+    expect(parseImage(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object value', () => {
+    expect(parseImage('not an object')).toBeUndefined()
+    expect(parseImage(undefined)).toBeUndefined()
+  })
+
+  it('should handle empty image object', () => {
+    const value = {}
+
+    expect(parseImage(value)).toBeUndefined()
+  })
+})
+
 describe('parseTextInput', () => {
   const expectedFull = {
     title: 'Search Title',
@@ -90,47 +311,6 @@ describe('parseTextInput', () => {
     }
 
     expect(parseTextInput(value)).toEqual(expected)
-  })
-})
-
-describe('parseCloud', () => {
-  it('should handle valid cloud object (also with coercible values)', () => {
-    const value = {
-      '@domain': 'rpc.example.com',
-      '@port': '80',
-      '@path': '/RPC2',
-      '@registerprocedure': 'pingMe',
-      '@protocol': 'soap',
-    }
-    const expected = {
-      domain: 'rpc.example.com',
-      port: 80,
-      path: '/RPC2',
-      registerProcedure: 'pingMe',
-      protocol: 'soap',
-    }
-
-    expect(parseCloud(value)).toEqual(expected)
-  })
-
-  it('should handle partial cloud object', () => {
-    const value = {
-      '@domain': 'rpc.example.com',
-      '@protocol': 'soap',
-    }
-
-    expect(parseCloud(value)).toBeUndefined()
-  })
-
-  it('should handle empty cloud object', () => {
-    const value = {}
-
-    expect(parseCloud(value)).toBeUndefined()
-  })
-
-  it('should handle non-object value', () => {
-    expect(parseCloud('not an object')).toBeUndefined()
-    expect(parseCloud(undefined)).toBeUndefined()
   })
 })
 
@@ -420,186 +600,6 @@ describe('parseSource', () => {
 
   it('should return undefined for non-object value', () => {
     expect(parseSource(null)).toBeUndefined()
-  })
-})
-
-describe('parseImage', () => {
-  const expectedFull = {
-    url: 'https://example.com/image.jpg',
-    title: 'Example Image',
-    link: 'https://example.com',
-    description: 'Example description',
-    height: 32,
-    width: 32,
-  }
-
-  it('should parse complete image object (with correct values) (with #text)', () => {
-    const value = {
-      url: { '#text': 'https://example.com/image.jpg' },
-      title: { '#text': 'Example Image' },
-      link: { '#text': 'https://example.com' },
-      description: { '#text': 'Example description' },
-      height: { '#text': '32' },
-      width: { '#text': '32' },
-    }
-    expect(parseImage(value)).toEqual(expectedFull)
-  })
-
-  it('should parse complete image object (with correct values) (without #text)', () => {
-    const value = {
-      url: 'https://example.com/image.jpg',
-      title: 'Example Image',
-      link: 'https://example.com',
-      description: 'Example description',
-      height: '32',
-      width: '32',
-    }
-
-    expect(parseImage(value)).toEqual(expectedFull)
-  })
-
-  it('should parse complete image object (with correct values) (with array of values)', () => {
-    const value = {
-      url: ['https://example.com/image.jpg', 'https://example.com/alternate-image.jpg'],
-      title: ['Example Image', 'Alternative Image Title'],
-      link: ['https://example.com', 'https://example.com/alternate'],
-      description: ['Example description', 'Alternative description'],
-      height: ['32', '64'],
-      width: ['32', '64'],
-    }
-
-    expect(parseImage(value)).toEqual(expectedFull)
-  })
-
-  it('should handle partial image object', () => {
-    const value = {
-      url: { '#text': 'https://example.com/image.jpg' },
-      title: { '#text': 'Example Image' },
-    }
-
-    expect(parseImage(value)).toBeUndefined()
-  })
-
-  it('should return undefined for non-object value', () => {
-    expect(parseImage('not an object')).toBeUndefined()
-    expect(parseImage(undefined)).toBeUndefined()
-  })
-
-  it('should handle empty image object', () => {
-    const value = {}
-
-    expect(parseImage(value)).toBeUndefined()
-  })
-})
-
-describe('parseCategory', () => {
-  it('should parse complete category object', () => {
-    const value = {
-      '#text': 'Technology',
-      '@domain': 'http://example.com/categories',
-    }
-    const expected = {
-      name: 'Technology',
-      domain: 'http://example.com/categories',
-    }
-
-    expect(parseCategory(value)).toEqual(expected)
-  })
-
-  it('should handle category with only name (with #text)', () => {
-    const value = {
-      '#text': 'Technology',
-    }
-    const expected = {
-      name: 'Technology',
-    }
-
-    expect(parseCategory(value)).toEqual(expected)
-  })
-
-  it('should handle category with only name (without #text)', () => {
-    const value = 'Technology'
-    const expected = {
-      name: 'Technology',
-    }
-
-    expect(parseCategory(value)).toEqual(expected)
-  })
-
-  it('should handle coercible values', () => {
-    const value = {
-      '#text': 123,
-      '@domain': true,
-    }
-    const expected = {
-      name: '123',
-    }
-
-    expect(parseCategory(value)).toEqual(expected)
-  })
-
-  it('should return undefined if name is missing', () => {
-    const value = {
-      '@domain': 'http://example.com/categories',
-    }
-
-    expect(parseCategory(value)).toBeUndefined()
-  })
-
-  it('should return undefined for empty object', () => {
-    const value = {}
-
-    expect(parseCategory(value)).toBeUndefined()
-  })
-
-  it('should return undefined for non-object value', () => {
-    expect(parseCategory(null)).toBeUndefined()
-  })
-})
-
-describe('parsePerson', () => {
-  it('should parse author string (with #text)', () => {
-    const value = {
-      '#text': 'John Doe (john@example.com)',
-    }
-    const expected = 'John Doe (john@example.com)'
-
-    expect(parsePerson(value)).toBe(expected)
-  })
-
-  it('should parse author string (without #text)', () => {
-    const value = 'John Doe (john@example.com)'
-    const expected = 'John Doe (john@example.com)'
-
-    expect(parsePerson(value)).toBe(expected)
-  })
-
-  it('should parse author nested under author.name', () => {
-    const value = {
-      name: {
-        '#text': 'John Doe',
-      },
-    }
-
-    expect(parsePerson(value)).toBe('John Doe')
-  })
-
-  it('should handle coercible values', () => {
-    const value = {
-      '#text': 123,
-    }
-
-    expect(parsePerson(value)).toBe('123')
-  })
-
-  it('should return undefined for empty object', () => {
-    const value = {}
-
-    expect(parsePerson(value)).toBeUndefined()
-  })
-
-  it('should return undefined for undefined value', () => {
-    expect(parsePerson(undefined)).toBeUndefined()
   })
 })
 
