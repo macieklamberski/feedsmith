@@ -3,6 +3,7 @@ import {
   isObject,
   isPresent,
   parseArrayOf,
+  parseBoolean,
   parseNumber,
   parseSingularOf,
   parseString,
@@ -36,6 +37,7 @@ import type {
   Cloud,
   Enclosure,
   Feed,
+  Guid,
   Image,
   Item,
   Person,
@@ -147,6 +149,17 @@ export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
   }
 }
 
+export const parseGuid: ParseFunction<Guid> = (value) => {
+  const source = {
+    value: parseString(retrieveText(value)),
+    isPermalink: parseBoolean(value?.['@ispermalink']),
+  }
+
+  if (isPresent(source.value)) {
+    return trimObject(source)
+  }
+}
+
 export const parseSource: ParseFunction<Source> = (value) => {
   const source = {
     title: parseString(retrieveText(value)),
@@ -171,7 +184,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     categories: parseArrayOf(value.category, parseCategory),
     comments: parseSingularOf(value.comments, parseTextString),
     enclosure: parseSingularOf(value.enclosure, parseEnclosure),
-    guid: parseSingularOf(value.guid, parseTextString),
+    guid: parseSingularOf(value.guid, parseGuid),
     pubDate: parseSingularOf(value.pubdate, parseTextString),
     source: parseSingularOf(value.source, parseSource),
     content: retrieveContentItem(value),

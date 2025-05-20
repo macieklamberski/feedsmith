@@ -46,7 +46,10 @@ export type Enclosure = {
   type?: string
 }
 
-export type Guid = string
+export type Guid = {
+  value?: string
+  isPermalink?: boolean
+}
 
 export type Source = {
   title?: string

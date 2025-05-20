@@ -1,4 +1,4 @@
-import type { X2jOptions } from 'fast-xml-parser'
+import type { X2jOptions, XmlBuilderOptions } from 'fast-xml-parser'
 
 export const parserConfig: X2jOptions = {
   trimValues: false,
@@ -13,6 +13,15 @@ export const parserConfig: X2jOptions = {
   attributeNamePrefix: '@',
   transformTagName: (name) => name.toLowerCase(),
   transformAttributeName: (name) => name.toLowerCase(),
+}
+
+export const generateConfig: XmlBuilderOptions = {
+  processEntities: true,
+  ignoreAttributes: false,
+  suppressEmptyNode: true,
+  suppressBooleanAttributes: false,
+  attributeNamePrefix: '@',
+  format: true,
 }
 
 export const locales = {

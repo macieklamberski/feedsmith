@@ -127,6 +127,119 @@ describe('retrieveImage', () => {
   })
 })
 
+describe('parseTextInput', () => {
+  const expectedFull = {
+    title: 'Search Title',
+    description: 'Search Description',
+    name: 'q',
+    link: 'https://example.com/search',
+  }
+
+  it('should handle complete textInput object (with #text)', () => {
+    const value = {
+      title: { '#text': 'Search Title' },
+      description: { '#text': 'Search Description' },
+      name: { '#text': 'q' },
+      link: { '#text': 'https://example.com/search' },
+    }
+
+    expect(parseTextInput(value)).toEqual(expectedFull)
+  })
+
+  it('should handle complete textInput object (without #text)', () => {
+    const value = {
+      title: 'Search Title',
+      description: 'Search Description',
+      name: 'q',
+      link: 'https://example.com/search',
+    }
+
+    expect(parseTextInput(value)).toEqual(expectedFull)
+  })
+
+  it('should handle complete textInput object (with array of values)', () => {
+    const value = {
+      title: ['Search Title', 'Alternative Search Title'],
+      description: ['Search Description', 'Extended Search Description'],
+      name: ['q', 'query'],
+      link: ['https://example.com/search', 'https://example.com/advanced-search'],
+    }
+
+    expect(parseTextInput(value)).toEqual(expectedFull)
+  })
+
+  it('should handle partial textInput object', () => {
+    const value = {
+      title: { '#text': 'Search Title' },
+      name: { '#text': 'q' },
+    }
+
+    expect(parseTextInput(value)).toBeUndefined()
+  })
+
+  it('should handle coercible values', () => {
+    const value = {
+      title: { '#text': 123 },
+      description: { '#text': 456 },
+      name: { '#text': 789 },
+      link: { '#text': 101 },
+    }
+    const expected = {
+      title: '123',
+      description: '456',
+      name: '789',
+      link: '101',
+    }
+
+    expect(parseTextInput(value)).toEqual(expected)
+  })
+
+  it('should return undefined if not all fields are present', () => {
+    const value = {
+      title: { '#text': 'Search Title' },
+      description: { '#text': 'Search Description' },
+    }
+
+    expect(parseTextInput(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(parseTextInput('not an object')).toBeUndefined()
+    expect(parseTextInput(undefined)).toBeUndefined()
+    expect(parseTextInput(null)).toBeUndefined()
+    expect(parseTextInput([])).toBeUndefined()
+  })
+
+  it('should return undefined for missing textInput property', () => {
+    const value = {
+      someOtherProperty: {},
+    }
+
+    expect(parseTextInput(value)).toBeUndefined()
+  })
+})
+
+describe('retrieveTextInput', () => {
+  it('should retrieve complete textInput object (with #text)', () => {
+    const value = {
+      textinput: {
+        title: { '#text': 'Search Title' },
+        description: { '#text': 'Search Description' },
+        name: { '#text': 'q' },
+        link: { '#text': 'https://example.com/search' },
+      },
+    }
+    const expected = {
+      title: 'Search Title',
+      description: 'Search Description',
+      name: 'q',
+      link: 'https://example.com/search',
+    }
+
+    expect(retrieveTextInput(value)).toEqual(expected)
+  })
+})
+
 describe('parseItem', () => {
   const expectedFull = {
     title: 'Item Title',
@@ -394,119 +507,6 @@ describe('retrieveItems', () => {
     }
 
     expect(retrieveItems(value)).toBeUndefined()
-  })
-})
-
-describe('parseTextInput', () => {
-  const expectedFull = {
-    title: 'Search Title',
-    description: 'Search Description',
-    name: 'q',
-    link: 'https://example.com/search',
-  }
-
-  it('should handle complete textInput object (with #text)', () => {
-    const value = {
-      title: { '#text': 'Search Title' },
-      description: { '#text': 'Search Description' },
-      name: { '#text': 'q' },
-      link: { '#text': 'https://example.com/search' },
-    }
-
-    expect(parseTextInput(value)).toEqual(expectedFull)
-  })
-
-  it('should handle complete textInput object (without #text)', () => {
-    const value = {
-      title: 'Search Title',
-      description: 'Search Description',
-      name: 'q',
-      link: 'https://example.com/search',
-    }
-
-    expect(parseTextInput(value)).toEqual(expectedFull)
-  })
-
-  it('should handle complete textInput object (with array of values)', () => {
-    const value = {
-      title: ['Search Title', 'Alternative Search Title'],
-      description: ['Search Description', 'Extended Search Description'],
-      name: ['q', 'query'],
-      link: ['https://example.com/search', 'https://example.com/advanced-search'],
-    }
-
-    expect(parseTextInput(value)).toEqual(expectedFull)
-  })
-
-  it('should handle partial textInput object', () => {
-    const value = {
-      title: { '#text': 'Search Title' },
-      name: { '#text': 'q' },
-    }
-
-    expect(parseTextInput(value)).toBeUndefined()
-  })
-
-  it('should handle coercible values', () => {
-    const value = {
-      title: { '#text': 123 },
-      description: { '#text': 456 },
-      name: { '#text': 789 },
-      link: { '#text': 101 },
-    }
-    const expected = {
-      title: '123',
-      description: '456',
-      name: '789',
-      link: '101',
-    }
-
-    expect(parseTextInput(value)).toEqual(expected)
-  })
-
-  it('should return undefined if not all fields are present', () => {
-    const value = {
-      title: { '#text': 'Search Title' },
-      description: { '#text': 'Search Description' },
-    }
-
-    expect(parseTextInput(value)).toBeUndefined()
-  })
-
-  it('should return undefined for non-object input', () => {
-    expect(parseTextInput('not an object')).toBeUndefined()
-    expect(parseTextInput(undefined)).toBeUndefined()
-    expect(parseTextInput(null)).toBeUndefined()
-    expect(parseTextInput([])).toBeUndefined()
-  })
-
-  it('should return undefined for missing textInput property', () => {
-    const value = {
-      someOtherProperty: {},
-    }
-
-    expect(parseTextInput(value)).toBeUndefined()
-  })
-})
-
-describe('retrieveTextInput', () => {
-  it('should retrieve complete textInput object (with #text)', () => {
-    const value = {
-      textinput: {
-        title: { '#text': 'Search Title' },
-        description: { '#text': 'Search Description' },
-        name: { '#text': 'q' },
-        link: { '#text': 'https://example.com/search' },
-      },
-    }
-    const expected = {
-      title: 'Search Title',
-      description: 'Search Description',
-      name: 'q',
-      link: 'https://example.com/search',
-    }
-
-    expect(retrieveTextInput(value)).toEqual(expected)
   })
 })
 
