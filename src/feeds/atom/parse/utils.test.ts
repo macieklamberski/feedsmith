@@ -1251,6 +1251,3 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toBeUndefined()
   })
 })
-
-// TODO: Write tests for supporting asNAmespace option.
-// - Should return items with given namespace prefix, allow partial and not use namespaces.
