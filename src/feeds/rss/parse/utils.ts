@@ -32,13 +32,13 @@ import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/uti
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
 import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/utils.js'
 import type {
-  Author,
   Category,
   Cloud,
   Enclosure,
   Feed,
   Image,
   Item,
+  Person,
   Source,
   TextInput,
 } from './types.js'
@@ -154,7 +154,7 @@ export const parseCategory: ParseFunction<Category> = (value) => {
   }
 }
 
-export const parseAuthor: ParseFunction<Author> = (value) => {
+export const parsePerson: ParseFunction<Person> = (value) => {
   return parseSingularOf(value?.name ?? value, parseTextString)
 }
 
@@ -167,7 +167,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     title: parseSingularOf(value.title, parseTextString),
     link: parseSingularOf(value.link, parseTextString),
     description: parseSingularOf(value.description, parseTextString),
-    authors: parseArrayOf(value.author, parseAuthor),
+    authors: parseArrayOf(value.author, parsePerson),
     categories: parseArrayOf(value.category, parseCategory),
     comments: parseSingularOf(value.comments, parseTextString),
     enclosure: parseSingularOf(value.enclosure, parseEnclosure),
@@ -201,8 +201,8 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     description: parseSingularOf(value.description, parseTextString),
     language: parseSingularOf(value.language, parseTextString),
     copyright: parseSingularOf(value.copyright, parseTextString),
-    managingEditor: parseSingularOf(value.managingeditor, parseTextString),
-    webMaster: parseSingularOf(value.webmaster, parseTextString),
+    managingEditor: parseSingularOf(value.managingeditor, parsePerson),
+    webMaster: parseSingularOf(value.webmaster, parsePerson),
     pubDate: parseSingularOf(value.pubdate, parseTextString),
     lastBuildDate: parseSingularOf(value.lastbuilddate, parseTextString),
     categories: parseArrayOf(value.category, parseCategory),

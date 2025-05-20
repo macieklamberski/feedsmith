@@ -9,7 +9,7 @@ import type { Item as SlashItem } from '../../../namespaces/slash/types.js'
 import type { Feed as SyFeed } from '../../../namespaces/sy/types.js'
 import type { Item as ThrItem } from '../../../namespaces/thr/types.js'
 
-export type Author = string
+export type Person = string
 
 export type Category = {
   name?: string
@@ -57,7 +57,7 @@ export type Item = {
   title?: string
   link?: string
   description?: string
-  authors?: Array<Author>
+  authors?: Array<Person>
   categories?: Array<Category>
   comments?: string
   enclosure?: Enclosure
@@ -81,8 +81,8 @@ export type Feed = {
   description?: string
   language?: string
   copyright?: string
-  managingEditor?: string
-  webMaster?: string
+  managingEditor?: Person
+  webMaster?: Person
   pubDate?: string
   lastBuildDate?: string
   categories?: Array<Category>

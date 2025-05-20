@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'bun:test'
 import {
-  parseAuthor,
   parseCategory,
   parseCloud,
   parseEnclosure,
   parseFeed,
   parseImage,
   parseItem,
+  parsePerson,
   parseSkipDays,
   parseSkipHours,
   parseSource,
@@ -467,21 +467,21 @@ describe('parseCategory', () => {
   })
 })
 
-describe('parseAuthor', () => {
+describe('parsePerson', () => {
   it('should parse author string (with #text)', () => {
     const value = {
       '#text': 'John Doe (john@example.com)',
     }
     const expected = 'John Doe (john@example.com)'
 
-    expect(parseAuthor(value)).toBe(expected)
+    expect(parsePerson(value)).toBe(expected)
   })
 
   it('should parse author string (without #text)', () => {
     const value = 'John Doe (john@example.com)'
     const expected = 'John Doe (john@example.com)'
 
-    expect(parseAuthor(value)).toBe(expected)
+    expect(parsePerson(value)).toBe(expected)
   })
 
   it('should parse author nested under author.name', () => {
@@ -491,7 +491,7 @@ describe('parseAuthor', () => {
       },
     }
 
-    expect(parseAuthor(value)).toBe('John Doe')
+    expect(parsePerson(value)).toBe('John Doe')
   })
 
   it('should handle coercible values', () => {
@@ -499,17 +499,17 @@ describe('parseAuthor', () => {
       '#text': 123,
     }
 
-    expect(parseAuthor(value)).toBe('123')
+    expect(parsePerson(value)).toBe('123')
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    expect(parseAuthor(value)).toBeUndefined()
+    expect(parsePerson(value)).toBeUndefined()
   })
 
   it('should return undefined for undefined value', () => {
-    expect(parseAuthor(undefined)).toBeUndefined()
+    expect(parsePerson(undefined)).toBeUndefined()
   })
 })
 
