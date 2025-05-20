@@ -1,5 +1,6 @@
 import type { ParseFunction } from '../../../common/types.js'
 import {
+  isNonEmptyString,
   isObject,
   isPresent,
   parseArrayOf,
@@ -32,8 +33,8 @@ import {
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
 import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/utils.js'
+import { parsePerson as parseAtomPerson } from '../../atom/parse/utils.js'
 import type {
-  Author,
   Category,
   Cloud,
   Enclosure,
@@ -41,6 +42,7 @@ import type {
   Guid,
   Image,
   Item,
+  Person,
   Source,
   TextInput,
 } from './types.js'
@@ -167,8 +169,49 @@ export const parseCategory: ParseFunction<Category> = (value) => {
   }
 }
 
-export const parseAuthor: ParseFunction<Author> = (value) => {
-  return parseSingularOf(value?.name ?? value, parseTextString)
+const BRACKET_PATTERN = /([^<\[\(]+)|(?:<([^>]*)>)|(?:\[([^\]]*)\])|(?:\(([^)]*)\))/g
+const EMAIL_LIKE_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const URL_LIKE_PATTERN = /^(?:https?:\/\/|www\.)[^\s@]+\.[^\s@]+$/
+
+export const parsePerson: ParseFunction<Person> = (value) => {
+  // TODO: Use parseAtomPerson for cases where author is a complex element from Atom namespace.
+  const rawPerson = parseSingularOf(value?.name ?? value, parseTextString)
+
+  if (!isNonEmptyString(rawPerson)) {
+    return
+  }
+
+  if (EMAIL_LIKE_PATTERN.test(rawPerson)) {
+    return { email: rawPerson }
+  }
+
+  if (URL_LIKE_PATTERN.test(rawPerson)) {
+    return { link: rawPerson }
+  }
+
+  const person: Person = {
+    name: undefined,
+    email: undefined,
+    link: undefined,
+  }
+
+  for (const match of rawPerson.matchAll(BRACKET_PATTERN)) {
+    const chunk = parseString(match[1] || match[2] || match[3] || match[4])
+
+    if (!isPresent(chunk)) {
+      continue
+    }
+
+    if (EMAIL_LIKE_PATTERN.test(chunk) && !person.email) {
+      person.email = chunk
+    } else if (URL_LIKE_PATTERN.test(chunk) && !person.link) {
+      person.link = chunk
+    } else if (chunk && !person.name) {
+      person.name = chunk
+    }
+  }
+
+  return trimObject(person)
 }
 
 export const parseItem: ParseFunction<Item> = (value) => {
@@ -180,7 +223,7 @@ export const parseItem: ParseFunction<Item> = (value) => {
     title: parseSingularOf(value.title, parseTextString),
     link: parseSingularOf(value.link, parseTextString),
     description: parseSingularOf(value.description, parseTextString),
-    authors: parseArrayOf(value.author, parseAuthor),
+    authors: parseArrayOf(value.author, parsePerson),
     categories: parseArrayOf(value.category, parseCategory),
     comments: parseSingularOf(value.comments, parseTextString),
     enclosure: parseSingularOf(value.enclosure, parseEnclosure),
@@ -214,8 +257,8 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     description: parseSingularOf(value.description, parseTextString),
     language: parseSingularOf(value.language, parseTextString),
     copyright: parseSingularOf(value.copyright, parseTextString),
-    managingEditor: parseSingularOf(value.managingeditor, parseTextString),
-    webMaster: parseSingularOf(value.webmaster, parseTextString),
+    managingEditor: parseSingularOf(value.managingeditor, parsePerson),
+    webMaster: parseSingularOf(value.webmaster, parsePerson),
     pubDate: parseSingularOf(value.pubdate, parseTextString),
     lastBuildDate: parseSingularOf(value.lastbuilddate, parseTextString),
     categories: parseArrayOf(value.category, parseCategory),
