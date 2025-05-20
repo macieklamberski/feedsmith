@@ -2,7 +2,6 @@ import { XMLParser } from 'fast-xml-parser'
 import { parserConfig } from '../../../common/config.js'
 
 export const stopNodes = [
-  // TODO: What about the namespaces?
   'rss.channel.title',
   'rss.channel.link',
   'rss.channel.description',
@@ -43,6 +42,7 @@ export const stopNodes = [
   'rss.channel.item.guid',
   'rss.channel.item.pubdate',
   'rss.channel.item.source',
+  // TODO: What about the namespaces?
 ]
 
 export const parser = new XMLParser({
