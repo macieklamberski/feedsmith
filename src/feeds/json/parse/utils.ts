@@ -47,22 +47,6 @@ export const retrieveAuthors: ParseFunction<Array<Author>> = (value) => {
   return parsedAuthors?.length ? parsedAuthors : parsedAuthor
 }
 
-export const parseHub: ParseFunction<Hub> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
-  const get = createCaseInsensitiveGetter(value)
-  const hub = {
-    type: parseSingularOf(get('type'), parseString),
-    url: parseSingularOf(get('url'), parseString),
-  }
-
-  if (isPresent(hub.type) || isPresent(hub.url)) {
-    return trimObject(hub)
-  }
-}
-
 export const parseAttachment: ParseFunction<Attachment> = (value) => {
   if (!isObject(value)) {
     return
@@ -108,6 +92,22 @@ export const parseItem: ParseFunction<Item> = (value) => {
 
   if (isPresent(item.id)) {
     return trimObject(item)
+  }
+}
+
+export const parseHub: ParseFunction<Hub> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const get = createCaseInsensitiveGetter(value)
+  const hub = {
+    type: parseSingularOf(get('type'), parseString),
+    url: parseSingularOf(get('url'), parseString),
+  }
+
+  if (isPresent(hub.type) || isPresent(hub.url)) {
+    return trimObject(hub)
   }
 }
 

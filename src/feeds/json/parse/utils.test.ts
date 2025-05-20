@@ -105,64 +105,6 @@ describe('retrieveAuthors', () => {
   })
 })
 
-describe('parseHub', () => {
-  const expectedFull = { type: 'pub', url: '33' }
-
-  it('should handle Hub object (with singular value)', () => {
-    const value = { type: 'pub', url: 33 }
-
-    expect(parseHub(value)).toEqual(expectedFull)
-  })
-
-  it('should handle Hub object (with array of values)', () => {
-    const value = { type: ['pub', 'sub'], url: [33, '44'] }
-
-    expect(parseHub(value)).toEqual(expectedFull)
-  })
-
-  it('should handle non-Hub object', () => {
-    const value = { count: 2 }
-
-    expect(parseHub(value)).toBeUndefined()
-  })
-
-  it('should handle string', () => {
-    const value = 'Alice'
-
-    expect(parseHub(value)).toBeUndefined()
-  })
-
-  it('should handle number', () => {
-    const value = 420
-
-    expect(parseHub(value)).toBeUndefined()
-  })
-
-  it('should handle boolean', () => {
-    const value = true
-
-    expect(parseHub(value)).toBeUndefined()
-  })
-
-  it('should handle null', () => {
-    const value = null
-
-    expect(parseHub(value)).toBeUndefined()
-  })
-
-  it('should return undefined', () => {
-    const value = undefined
-
-    expect(parseHub(value)).toBeUndefined()
-  })
-
-  it('should handle array', () => {
-    const value = ['something']
-
-    expect(parseHub(value)).toBeUndefined()
-  })
-})
-
 describe('parseAttachment', () => {
   const expectedFull = {
     url: 'https://example.com/image.jpg',
@@ -527,6 +469,64 @@ describe('parseItem', () => {
     }
 
     expect(parseItem(value)).toEqual(expected)
+  })
+})
+
+describe('parseHub', () => {
+  const expectedFull = { type: 'pub', url: '33' }
+
+  it('should handle Hub object (with singular value)', () => {
+    const value = { type: 'pub', url: 33 }
+
+    expect(parseHub(value)).toEqual(expectedFull)
+  })
+
+  it('should handle Hub object (with array of values)', () => {
+    const value = { type: ['pub', 'sub'], url: [33, '44'] }
+
+    expect(parseHub(value)).toEqual(expectedFull)
+  })
+
+  it('should handle non-Hub object', () => {
+    const value = { count: 2 }
+
+    expect(parseHub(value)).toBeUndefined()
+  })
+
+  it('should handle string', () => {
+    const value = 'Alice'
+
+    expect(parseHub(value)).toBeUndefined()
+  })
+
+  it('should handle number', () => {
+    const value = 420
+
+    expect(parseHub(value)).toBeUndefined()
+  })
+
+  it('should handle boolean', () => {
+    const value = true
+
+    expect(parseHub(value)).toBeUndefined()
+  })
+
+  it('should handle null', () => {
+    const value = null
+
+    expect(parseHub(value)).toBeUndefined()
+  })
+
+  it('should return undefined', () => {
+    const value = undefined
+
+    expect(parseHub(value)).toBeUndefined()
+  })
+
+  it('should handle array', () => {
+    const value = ['something']
+
+    expect(parseHub(value)).toBeUndefined()
   })
 })
 
