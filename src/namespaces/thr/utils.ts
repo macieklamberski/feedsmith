@@ -9,7 +9,7 @@ import {
   parseTextNumber,
   trimObject,
 } from '../../common/utils.js'
-import type { Feed, InReplyTo, Item, Link } from './types.js'
+import type { InReplyTo, Item, Link } from './types.js'
 
 export const parseInReplyTo: ParseFunction<InReplyTo> = (value) => {
   if (!isObject(value)) {

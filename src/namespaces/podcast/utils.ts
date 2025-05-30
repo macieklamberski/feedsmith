@@ -5,7 +5,6 @@ import {
   parseArrayOf,
   parseBoolean,
   parseNumber,
-  parseSingular,
   parseSingularOf,
   parseString,
   parseTextString,
