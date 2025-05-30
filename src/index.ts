@@ -19,5 +19,5 @@ export type { Feed as RdfFeed } from './feeds/rdf/parse/types.js'
 export { detect as detectRdfFeed } from './feeds/rdf/detect/index.js'
 
 export { parse as parseOpml } from './opml/parse/index.js'
-export type { Opml } from './opml/parse/types.js'
+export type { Opml } from './opml/common/types.js'
 export { generate as generateOpml } from './opml/generate/index.js'

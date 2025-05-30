@@ -1,4 +1,4 @@
-import type { ParseFunction, Unreliable } from '../../common/types.js'
+import type { DeepPartial, ParseFunction } from '../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -12,9 +12,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../common/utils.js'
-import type { Body, Head, Opml, Outline } from './types.js'
+import type { Body, Head, Opml, Outline } from '../common/types.js'
 
-export const parseOutline: ParseFunction<Outline> = (value) => {
+export const parseOutline: ParseFunction<DeepPartial<Outline>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -34,10 +34,10 @@ export const parseOutline: ParseFunction<Outline> = (value) => {
     version: parseString(value['@version']),
     url: parseString(value['@url']),
     outlines: parseArrayOf(value.outline, parseOutline),
-  })
+  }) as DeepPartial<Outline>
 }
 
-export const parseHead: ParseFunction<Head> = (value) => {
+export const parseHead: ParseFunction<DeepPartial<Head<string>>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -58,31 +58,31 @@ export const parseHead: ParseFunction<Head> = (value) => {
     windowLeft: parseSingularOf(value.windowleft, parseTextNumber),
     windowBottom: parseSingularOf(value.windowbottom, parseTextNumber),
     windowRight: parseSingularOf(value.windowright, parseTextNumber),
-  })
+  }) as DeepPartial<Head<string>>
 }
 
-export const parseBody: ParseFunction<Body> = (value) => {
+export const parseBody: ParseFunction<DeepPartial<Body>> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   return trimObject({
     outlines: parseArrayOf(value.outline, parseOutline),
-  })
+  }) as DeepPartial<Body>
 }
 
-export const parseOpml: ParseFunction<Opml> = (value) => {
+export const parseOpml: ParseFunction<DeepPartial<Opml<string>>> = (value) => {
   if (!isObject(value?.opml)) {
     return
   }
 
-  const opml = trimObject({
+  const opml = {
     version: parseString(value.opml['@version']),
     head: parseHead(value.opml.head),
     body: parseBody(value.opml.body),
-  })
+  }
 
   if (opml?.body?.outlines?.length) {
-    return opml
+    return trimObject(opml) as DeepPartial<Opml<string>>
   }
 }
