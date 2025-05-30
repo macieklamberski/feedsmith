@@ -25,13 +25,6 @@ describe('generateRfc822Date', () => {
   it('should return undefined for invalid date string', () => {
     expect(generateRfc822Date('not a date')).toBeUndefined()
   })
-
-  it('should return undefined for non-Date objects', () => {
-    expect(generateRfc822Date(123)).toBeUndefined()
-    expect(generateRfc822Date(null)).toBeUndefined()
-    expect(generateRfc822Date(undefined)).toBeUndefined()
-    expect(generateRfc822Date({})).toBeUndefined()
-  })
 })
 
 describe('generateOutline', () => {
@@ -106,22 +99,6 @@ describe('generateOutline', () => {
     expect(generateOutline(value)).toEqual(expected)
   })
 
-  it('should handle coercible values', () => {
-    const value = {
-      text: 123,
-      type: 456,
-      isComment: 'true',
-      isBreakpoint: 0,
-    }
-    const expected = {
-      '@text': '123',
-      '@type': '456',
-      '@isComment': true,
-    }
-
-    expect(generateOutline(value)).toEqual(expected)
-  })
-
   it('should handle empty outlines array', () => {
     const value = {
       text: 'Parent',
@@ -132,22 +109,6 @@ describe('generateOutline', () => {
     }
 
     expect(generateOutline(value)).toEqual(expected)
-  })
-
-  it('should return undefined for objects without text', () => {
-    const value = {
-      type: 'rss',
-      url: 'https://example.com',
-    }
-
-    expect(generateOutline(value)).toBeUndefined()
-  })
-
-  it('should return undefined for non-object values', () => {
-    expect(generateOutline('not an object')).toBeUndefined()
-    expect(generateOutline(123)).toBeUndefined()
-    expect(generateOutline(null)).toBeUndefined()
-    expect(generateOutline(undefined)).toBeUndefined()
   })
 })
 
@@ -199,20 +160,6 @@ describe('generateHead', () => {
     expect(generateHead(input)).toEqual(expected)
   })
 
-  it('should handle coercible values', () => {
-    const input = {
-      title: 123,
-      vertScrollState: '10.5',
-      windowTop: 'not a number',
-    }
-    const expected = {
-      title: '123',
-      vertScrollState: 10.5,
-    }
-
-    expect(generateHead(input)).toEqual(expected)
-  })
-
   it('should handle empty expansionState array', () => {
     const input = {
       title: 'Test OPML',
@@ -223,13 +170,6 @@ describe('generateHead', () => {
     }
 
     expect(generateHead(input)).toEqual(expected)
-  })
-
-  it('should return undefined for non-object values', () => {
-    expect(generateHead('not an object')).toBeUndefined()
-    expect(generateHead(123)).toBeUndefined()
-    expect(generateHead(null)).toBeUndefined()
-    expect(generateHead(undefined)).toBeUndefined()
   })
 })
 
@@ -279,34 +219,10 @@ describe('generateBody', () => {
     expect(generateBody(input)).toEqual(expected)
   })
 
-  it('should handle single outline (not in array)', () => {
-    const input = {
-      outlines: { text: 'Single Outline' },
-    }
-    const expected = {
-      outline: [{ '@text': 'Single Outline' }],
-    }
-
-    expect(generateBody(input)).toEqual(expected)
-  })
-
   it('should handle empty outlines array', () => {
     const input = {
       outlines: [],
     }
-
-    expect(generateBody(input)).toBeUndefined()
-  })
-
-  it('should return undefined for non-object values', () => {
-    expect(generateBody('not an object')).toBeUndefined()
-    expect(generateBody(123)).toBeUndefined()
-    expect(generateBody(null)).toBeUndefined()
-    expect(generateBody(undefined)).toBeUndefined()
-  })
-
-  it('should return undefined when outlines is missing', () => {
-    const input = {}
 
     expect(generateBody(input)).toBeUndefined()
   })
@@ -384,17 +300,6 @@ describe('generateOpml', () => {
     expect(generateOpml(input)).toEqual(expected)
   })
 
-  it('should handle OPML with only head (no body)', () => {
-    const input = {
-      head: {
-        title: 'Headless OPML',
-      },
-      body: {},
-    }
-
-    expect(generateOpml(input)).toBeUndefined()
-  })
-
   it('should handle OPML with empty body outlines', () => {
     const input = {
       body: {
@@ -403,22 +308,5 @@ describe('generateOpml', () => {
     }
 
     expect(generateOpml(input)).toBeUndefined()
-  })
-
-  it('should handle missing body', () => {
-    const input = {
-      head: {
-        title: 'No Body OPML',
-      },
-    }
-
-    expect(generateOpml(input)).toBeUndefined()
-  })
-
-  it('should handle non-object values', () => {
-    expect(generateOpml('not an object')).toBeUndefined()
-    expect(generateOpml(123)).toBeUndefined()
-    expect(generateOpml(null)).toBeUndefined()
-    expect(generateOpml(undefined)).toBeUndefined()
   })
 })

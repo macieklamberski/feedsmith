@@ -1,14 +1,8 @@
-import type { Unreliable } from '../../common/types.js'
-import {
-  isObject,
-  parseArrayOf,
-  parseBoolean,
-  parseNumber,
-  parseString,
-  trimObject,
-} from '../../common/utils.js'
+import type { GenerateFunction } from '../../common/types.js'
+import { isObject, trimArray, trimObject } from '../../common/utils.js'
+import type { Body, Head, Opml, Outline } from '../common/types.js'
 
-export const generateRfc822Date = (value: Unreliable) => {
+export const generateRfc822Date: GenerateFunction<string | Date> = (value) => {
   if (typeof value === 'string') {
     // biome-ignore lint/style/noParameterAssign: No explanation.
     value = new Date(value)
@@ -19,67 +13,62 @@ export const generateRfc822Date = (value: Unreliable) => {
   }
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: No explanation.
-export const generateOutline = (value: Unreliable): any => {
-  if (!isObject(value)) {
-    return
-  }
-
-  const outline = {
-    '@text': parseString(value.text),
-    '@type': parseString(value.type),
-    '@isComment': parseBoolean(value.isComment),
-    '@isBreakpoint': parseBoolean(value.isBreakpoint),
-    '@created': parseString(value.created),
-    '@category': parseString(value.category),
-    '@description': parseString(value.description),
-    '@xmlUrl': parseString(value.xmlUrl),
-    '@htmlUrl': parseString(value.htmlUrl),
-    '@language': parseString(value.language),
-    '@title': parseString(value.title),
-    '@version': parseString(value.version),
-    '@url': parseString(value.url),
-    outline: parseArrayOf(value.outlines, generateOutline),
-  }
-
-  if (outline['@text'] !== undefined) {
-    return trimObject(outline)
-  }
-}
-
-export const generateHead = (value: Unreliable) => {
+export const generateOutline: GenerateFunction<Outline> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   return trimObject({
-    title: parseString(value.title),
+    '@text': value.text,
+    '@type': value.type,
+    '@isComment': value.isComment,
+    '@isBreakpoint': value.isBreakpoint,
+    '@created': value.created,
+    '@category': value.category,
+    '@description': value.description,
+    '@xmlUrl': value.xmlUrl,
+    '@htmlUrl': value.htmlUrl,
+    '@language': value.language,
+    '@title': value.title,
+    '@version': value.version,
+    '@url': value.url,
+    outline: trimArray(value.outlines)?.map(generateOutline),
+  })
+}
+
+export const generateHead: GenerateFunction<Head<Date>> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  return trimObject({
+    title: value.title,
     dateCreated: generateRfc822Date(value.dateCreated),
     dateModified: generateRfc822Date(value.dateModified),
-    ownerName: parseString(value.ownerName),
-    ownerEmail: parseString(value.ownerEmail),
-    ownerId: parseString(value.ownerId),
-    docs: parseString(value.docs),
-    expansionState: parseArrayOf(value.expansionState, parseNumber)?.join(),
-    vertScrollState: parseNumber(value.vertScrollState),
-    windowTop: parseNumber(value.windowTop),
-    windowLeft: parseNumber(value.windowLeft),
-    windowBottom: parseNumber(value.windowBottom),
-    windowRight: parseNumber(value.windowRight),
+    ownerName: value.ownerName,
+    ownerEmail: value.ownerEmail,
+    ownerId: value.ownerId,
+    docs: value.docs,
+    expansionState: trimArray(value.expansionState)?.join(),
+    vertScrollState: value.vertScrollState,
+    windowTop: value.windowTop,
+    windowLeft: value.windowLeft,
+    windowBottom: value.windowBottom,
+    windowRight: value.windowRight,
   })
 }
 
-export const generateBody = (value: Unreliable) => {
+export const generateBody: GenerateFunction<Body> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   return trimObject({
-    outline: parseArrayOf(value.outlines, generateOutline),
+    outline: trimArray(value.outlines)?.map(generateOutline),
   })
 }
 
-export const generateOpml = (value: Unreliable) => {
+export const generateOpml: GenerateFunction<Opml<Date>> = (value) => {
   if (!isObject(value)) {
     return
   }

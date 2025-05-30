@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'bun:test'
+import type { XMLBuilder } from 'fast-xml-parser'
 import type { ParseFunction } from './types.js'
 import {
   createCaseInsensitiveGetter,
   createNamespaceGetter,
+  generateXml,
   hasEntities,
   isNonEmptyString,
   isNonEmptyStringOrNumber,
@@ -1592,5 +1594,39 @@ describe('createCaseInsensitiveGetter', () => {
     const get = createCaseInsensitiveGetter(value)
 
     expect(get('anykey')).toBeUndefined()
+  })
+})
+
+describe('generateXml', () => {
+  const mockBuilder: XMLBuilder = {
+    build: (value: string) => `<root>${value}</root>`,
+  }
+
+  it('should generate XML with proper declaration header', () => {
+    const value = 'test content'
+    const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
+
+    expect(generateXml(mockBuilder, value)).toEqual(expected)
+  })
+
+  it('should replace single apostrophe entity', () => {
+    const value = 'don&apos;t'
+    const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>don\'t</root>'
+
+    expect(generateXml(mockBuilder, value)).toEqual(expected)
+  })
+
+  it('should replace multiple apostrophe entities', () => {
+    const value = 'don&apos;t worry, it&apos;s fine'
+    const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>don\'t worry, it\'s fine</root>'
+
+    expect(generateXml(mockBuilder, value)).toEqual(expected)
+  })
+
+  it('should handle empty value input', () => {
+    const value = ''
+    const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root></root>'
+
+    expect(generateXml(mockBuilder, value)).toEqual(expected)
   })
 })

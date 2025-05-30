@@ -1,4 +1,5 @@
 import { decodeHTML, decodeXML } from 'entities'
+import type { XMLBuilder } from 'fast-xml-parser'
 import type { ParseFunction, Unreliable } from './types.js'
 
 export const isPresent = <T>(value: T): value is NonNullable<T> => {
@@ -49,7 +50,7 @@ export const trimObject = <T extends Record<string, unknown>>(
 }
 
 export const trimArray = <T, R = T>(
-  value: Array<T>,
+  value: Array<T> | undefined,
   parse?: ParseFunction<R>,
 ): Array<R> | undefined => {
   if (!Array.isArray(value)) {
@@ -253,4 +254,16 @@ export const parseTextString: ParseFunction<string> = (value) => {
 // TODO: Write tests.
 export const parseTextNumber: ParseFunction<number> = (value) => {
   return parseNumber(retrieveText(value))
+}
+
+export const generateXml = (builder: XMLBuilder, value: string): string => {
+  let xml = builder.build(value)
+
+  if (xml.includes('&apos;')) {
+    // TODO: Consider replacing the .replaceAll() call with some more efficent way as using
+    // the current approach with longer XML structures might be memory intensive.
+    xml = xml.replaceAll('&apos;', "'")
+  }
+
+  return `<?xml version="1.0" encoding="utf-8"?>\n${xml}`
 }

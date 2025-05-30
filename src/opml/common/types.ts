@@ -1,5 +1,5 @@
 export type Outline = {
-  text?: string
+  text: string
   type?: string
   isComment?: boolean
   isBreakpoint?: boolean
@@ -15,10 +15,10 @@ export type Outline = {
   outlines?: Array<Outline>
 }
 
-export type Head = {
+export type Head<TDate extends Date | string> = {
   title?: string
-  dateCreated?: string
-  dateModified?: string
+  dateCreated?: TDate
+  dateModified?: TDate
   ownerName?: string
   ownerEmail?: string
   ownerId?: string
@@ -32,10 +32,10 @@ export type Head = {
 }
 
 export type Body = {
-  outlines?: Array<Outline>
+  outlines: Array<Outline>
 }
 
-export type Opml = {
-  head?: Head
-  body?: Body
+export type Opml<TDate extends Date | string> = {
+  head?: Head<TDate>
+  body: Body
 }
