@@ -532,7 +532,6 @@ describe('parseHub', () => {
 
 describe('parseFeed', () => {
   const expectedFull = {
-    version: 'https://jsonfeed.org/version/1.1',
     title: 'My Example Feed',
     home_page_url: 'https://example.com/',
     feed_url: 'https://example.com/feed.json',
@@ -563,7 +562,36 @@ describe('parseFeed', () => {
   }
 
   it('should handle a complete valid feed object (with singular value)', () => {
-    const value = expectedFull
+    const value = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'My Example Feed',
+      home_page_url: 'https://example.com/',
+      feed_url: 'https://example.com/feed.json',
+      description: 'A sample feed with example content',
+      user_comment: 'This feed allows you to test the reader',
+      next_url: 'https://example.com/feed/page2.json',
+      icon: 'https://example.com/icon.png',
+      favicon: 'https://example.com/favicon.ico',
+      language: 'en-US',
+      expired: false,
+      hubs: [{ type: 'websub', url: 'https://websub.example.com/' }],
+      authors: [
+        { name: 'John Doe', url: 'https://example.com/john' },
+        { name: 'Jane Smith', url: 'https://example.com/jane' },
+      ],
+      items: [
+        {
+          id: 'item-1',
+          title: 'First Item',
+          content_text: 'Content of first item',
+        },
+        {
+          id: 'item-2',
+          title: 'Second Item',
+          content_html: '<p>Content of second item</p>',
+        },
+      ],
+    }
 
     expect(parseFeed(value)).toEqual(expectedFull)
   })
@@ -618,8 +646,12 @@ describe('parseFeed', () => {
       title: 'Minimal Feed',
       items: [{ id: 'item-1', content_text: 'Content' }],
     }
+    const expected = {
+      title: 'Minimal Feed',
+      items: [{ id: 'item-1', content_text: 'Content' }],
+    }
 
-    expect(parseFeed(value)).toEqual(value)
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should handle coercible properties correctly in coerce mode', () => {
@@ -631,7 +663,6 @@ describe('parseFeed', () => {
       author: 'John Doe',
     }
     const expected = {
-      version: '123',
       title: '456',
       expired: true,
       authors: [{ name: 'John Doe' }],
@@ -702,7 +733,6 @@ describe('parseFeed', () => {
       ],
     }
     const expected = {
-      version: 'https://jsonfeed.org/version/1.1',
       title: 'Feed with Invalid Properties',
       hubs: [{ type: 'websub', url: 'https://example.com/hub' }],
       items: [{ id: 'item-1' }, { id: 'item-2' }],
@@ -790,7 +820,6 @@ describe('parseFeed', () => {
       ],
     }
     const expected = {
-      version: 'https://jsonfeed.org/version/1.1',
       title: 'Complex Feed',
       description: 'Feed with complex nested structures',
       authors: [{ name: 'Author 1', url: 'https://example.com/author1' }, { name: 'Author 2' }],
