@@ -117,8 +117,8 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
   }
 
   const get = createCaseInsensitiveGetter(value)
+  const version = parseSingularOf(get('version'), parseString)
   const feed = {
-    version: parseSingularOf(get('version'), parseString),
     title: parseSingularOf(get('title'), parseString),
     home_page_url: parseSingularOf(get('home_page_url'), parseString),
     feed_url: parseSingularOf(get('feed_url'), parseString),
@@ -134,7 +134,7 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     items: parseArrayOf(get('items'), parseItem),
   }
 
-  if (isPresent(feed.version) && isPresent(feed.title) && isPresent(feed.items)) {
+  if (version && isPresent(feed.title) && isPresent(feed.items)) {
     return trimObject(feed)
   }
 }

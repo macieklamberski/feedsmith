@@ -69,7 +69,6 @@ describe('parse', () => {
     const result = parse(validFeedV1)
 
     expect(result).toBeDefined()
-    expect(result?.version).toBe('https://jsonfeed.org/version/1')
     expect(result?.title).toBe('My Example Feed')
     expect(result?.authors).toHaveLength(1)
     expect(result?.authors?.[0].name).toBe('John Doe')
@@ -82,7 +81,6 @@ describe('parse', () => {
     const result = parse(validFeedV11)
 
     expect(result).toBeDefined()
-    expect(result?.version).toBe('https://jsonfeed.org/version/1.1')
     expect(result?.title).toBe('My Example Feed')
     expect(result?.items).toHaveLength(1)
     expect(result?.language).toBe('en-US')
@@ -110,7 +108,6 @@ describe('parse', () => {
     const result = parse(minimalFeed)
 
     expect(result).toBeDefined()
-    expect(result?.version).toBe('https://jsonfeed.org/version/1')
     expect(result?.title).toBe('My Example Feed')
     expect(result?.home_page_url).toBeUndefined()
     expect(result?.feed_url).toBeUndefined()
@@ -121,7 +118,6 @@ describe('parse', () => {
     const result = parse(minimalFeedCaseInsensitive)
 
     expect(result).toBeDefined()
-    expect(result?.version).toBe('https://jsonfeed.org/version/1')
     expect(result?.title).toBe('My Example Feed')
     expect(result?.home_page_url).toBeUndefined()
     expect(result?.feed_url).toBeUndefined()
