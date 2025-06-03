@@ -1,5 +1,5 @@
 import { trimObject } from '../../../common/utils.js'
-import type { Feed, Item } from './types.js'
+import type { Feed, Item } from '../common/types.js'
 
 export const generateRfc3339Date = (date: Date): string => {
   // The only difference between ISO 8601 (produced by toISOString) and RFC 3339 is that
@@ -8,7 +8,7 @@ export const generateRfc3339Date = (date: Date): string => {
   return date.toISOString()
 }
 
-export const generateItem = (item: Item) => {
+export const generateItem = (item: Item<Date>) => {
   return trimObject({
     ...item,
     date_published: item.date_published ? generateRfc3339Date(item.date_published) : undefined,
@@ -16,7 +16,7 @@ export const generateItem = (item: Item) => {
   })
 }
 
-export const generateFeed = (feed: Feed) => {
+export const generateFeed = (feed: Feed<Date>) => {
   return {
     version: 'https://jsonfeed.org/version/1.1',
     ...feed,

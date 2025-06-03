@@ -43,7 +43,23 @@ describe('parse', () => {
     }
     const expected = {
       type: 'json' as const,
-      feed: jsonFeed,
+      feed: {
+        title: 'My Example Feed',
+        home_page_url: 'https://example.com/',
+        feed_url: 'https://example.com/feed.json',
+        authors: [{ name: 'John Doe', url: 'https://example.com/johndoe' }],
+        language: 'en-US',
+        items: [
+          {
+            id: '1',
+            content_html: '<p>Hello world</p>',
+            url: 'https://example.com/post/1',
+            title: 'First post',
+            date_published: '2023-01-01T00:00:00Z',
+            language: 'en-US',
+          },
+        ],
+      },
     }
 
     expect(parse(jsonFeed)).toEqual(expected)
