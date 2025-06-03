@@ -2,11 +2,15 @@
 // biome-ignore lint/suspicious/noExplicitAny: Temporary solution until the Unreliable type fixed.
 export type Unreliable = any
 
+export type DateLike = Date | string
+
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Array<infer U>
     ? Array<DeepPartial<U>>
-    : T[P] extends object
-      ? DeepPartial<T[P]>
+    : T[P] extends Record<PropertyKey, unknown>
+      ? T[P] extends CallableFunction | Array<unknown>
+        ? T[P]
+        : DeepPartial<T[P]>
       : T[P]
 }
 

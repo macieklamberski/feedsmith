@@ -1,3 +1,5 @@
+import type { DateLike } from '../../common/types.js'
+
 export type Outline = {
   text: string
   type?: string
@@ -15,7 +17,7 @@ export type Outline = {
   outlines?: Array<Outline>
 }
 
-export type Head<TDate extends Date | string> = {
+export type Head<TDate extends DateLike> = {
   title?: string
   dateCreated?: TDate
   dateModified?: TDate
@@ -35,7 +37,7 @@ export type Body = {
   outlines: Array<Outline>
 }
 
-export type Opml<TDate extends Date | string> = {
+export type Opml<TDate extends DateLike> = {
   head?: Head<TDate>
   body: Body
 }
