@@ -1054,32 +1054,16 @@ describe('parseFeed', () => {
   it('should handle minimal feed with only required fields', () => {
     const value = {
       title: { '#text': 'Feed Title' },
-      link: { '#text': 'https://example.com' },
     }
     const expected = {
       title: 'Feed Title',
-      link: 'https://example.com',
     }
 
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should return feed when link is missing', () => {
+  it('should return undefined when items are missing', () => {
     const value = {
-      title: { '#text': 'Feed Title' },
-      description: { '#text': 'Feed Description' },
-    }
-    const expected = {
-      title: 'Feed Title',
-      description: 'Feed Description',
-    }
-
-    expect(parseFeed(value)).toEqual(expected)
-  })
-
-  it('should return undefined when title is missing', () => {
-    const value = {
-      link: { '#text': 'https://example.com' },
       description: { '#text': 'Feed Description' },
     }
 

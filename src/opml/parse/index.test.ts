@@ -27,7 +27,6 @@ describe('parse', () => {
       </OPML>
     `
     const expected = {
-      version: '2.0',
       head: {
         title: 'Mixed Case Example',
       },
@@ -55,7 +54,6 @@ describe('parse', () => {
       </OPML>
     `
     const expected = {
-      version: '2.0',
       head: {
         title: 'Mixed Case Example',
       },

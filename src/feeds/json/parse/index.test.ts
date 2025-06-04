@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import { locales } from '../../../common/config.js'
+import type { Feed } from '../common/types.js'
 import { parse } from './index.js'
-import type { Feed } from './types.js'
 
 describe('parse', () => {
   const validFeedV1 = {
@@ -111,7 +111,7 @@ describe('parse', () => {
     expect(result?.title).toBe('My Example Feed')
     expect(result?.home_page_url).toBeUndefined()
     expect(result?.feed_url).toBeUndefined()
-    expect((result as Feed).authors).toBeUndefined()
+    expect((result as Feed<string>).authors).toBeUndefined()
   })
 
   it('should handle case insensitive fields', () => {
@@ -121,7 +121,7 @@ describe('parse', () => {
     expect(result?.title).toBe('My Example Feed')
     expect(result?.home_page_url).toBeUndefined()
     expect(result?.feed_url).toBeUndefined()
-    expect((result as Feed).authors).toBeUndefined()
+    expect((result as Feed<string>).authors).toBeUndefined()
   })
 
   it('should throw error for invalid input', () => {

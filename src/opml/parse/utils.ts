@@ -77,7 +77,6 @@ export const parseOpml: ParseFunction<DeepPartial<Opml<string>>> = (value) => {
   }
 
   const opml = {
-    version: parseString(value.opml['@version']),
     head: parseHead(value.opml.head),
     body: parseBody(value.opml.body),
   }

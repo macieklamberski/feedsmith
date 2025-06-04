@@ -11,14 +11,14 @@ import {
 import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
-} from '../../../namespaces/atom/utils.js'
-import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/utils.js'
-import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/utils.js'
-import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/utils.js'
-import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/utils.js'
-import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
-import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
-import type { Feed, Image, Item, TextInput } from './types.js'
+} from '../../../namespaces/atom/parse/utils.js'
+import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
+import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
+import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
+import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
+import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
+import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
+import type { Feed, Image, Item, TextInput } from '../common/types.js'
 
 export const parseImage: ParseFunction<Image> = (value) => {
   if (!isObject(value)) {
@@ -32,7 +32,7 @@ export const parseImage: ParseFunction<Image> = (value) => {
   }
 
   if (isPresent(image.title) && isPresent(image.link)) {
-    return trimObject(image)
+    return trimObject(image) as Image
   }
 }
 
@@ -59,7 +59,7 @@ export const parseTextInput: ParseFunction<TextInput> = (value) => {
     isPresent(textInput.name) &&
     isPresent(textInput.link)
   ) {
-    return trimObject(textInput)
+    return trimObject(textInput) as TextInput
   }
 }
 
@@ -68,7 +68,7 @@ export const retrieveTextInput: ParseFunction<TextInput> = (value) => {
   return parseSingularOf(value?.textinput, parseTextInput)
 }
 
-export const parseItem: ParseFunction<Item> = (value) => {
+export const parseItem: ParseFunction<Item<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -86,16 +86,16 @@ export const parseItem: ParseFunction<Item> = (value) => {
   }
 
   if (isPresent(item.title) && isPresent(item.link)) {
-    return trimObject(item)
+    return trimObject(item) as Item<string>
   }
 }
 
-export const retrieveItems: ParseFunction<Array<Item>> = (value) => {
+export const retrieveItems: ParseFunction<Array<Item<string>>> = (value) => {
   // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
   return parseArrayOf(value?.item, parseItem)
 }
 
-export const parseFeed: ParseFunction<Feed> = (value) => {
+export const parseFeed: ParseFunction<Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -116,10 +116,10 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
   }
 
   if (isPresent(feed.title)) {
-    return trimObject(feed)
+    return trimObject(feed) as Feed<string>
   }
 }
 
-export const retrieveFeed: ParseFunction<Feed> = (value) => {
+export const retrieveFeed: ParseFunction<Feed<string>> = (value) => {
   return parseSingularOf(value?.['rdf:rdf'], parseFeed)
 }

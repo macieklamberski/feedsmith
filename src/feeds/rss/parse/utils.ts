@@ -16,22 +16,22 @@ import {
 import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
-} from '../../../namespaces/atom/utils.js'
-import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/utils.js'
-import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/utils.js'
-import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/utils.js'
+} from '../../../namespaces/atom/parse/utils.js'
+import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
+import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
+import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
-} from '../../../namespaces/itunes/utils.js'
-import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/utils.js'
+} from '../../../namespaces/itunes/parse/utils.js'
+import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
 import {
   retrieveFeed as retrievePodcastFeed,
   retrieveItem as retrievePodcastItem,
-} from '../../../namespaces/podcast/utils.js'
-import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
-import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
-import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/utils.js'
+} from '../../../namespaces/podcast/parse/utils.js'
+import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
+import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
+import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/parse/utils.js'
 import type {
   Category,
   Cloud,
@@ -43,7 +43,7 @@ import type {
   Person,
   Source,
   TextInput,
-} from './types.js'
+} from '../common/types.js'
 
 export const parsePerson: ParseFunction<Person> = (value) => {
   return parseSingularOf(value?.name ?? value, parseTextString)
@@ -56,7 +56,7 @@ export const parseCategory: ParseFunction<Category> = (value) => {
   }
 
   if (isPresent(category.name)) {
-    return trimObject(category)
+    return trimObject(category) as Category
   }
 }
 
@@ -80,7 +80,7 @@ export const parseCloud: ParseFunction<Cloud> = (value) => {
     isPresent(cloud.registerProcedure) &&
     isPresent(cloud.protocol)
   ) {
-    return trimObject(cloud)
+    return trimObject(cloud) as Cloud
   }
 }
 
@@ -99,7 +99,7 @@ export const parseImage: ParseFunction<Image> = (value) => {
   }
 
   if (isPresent(image.url) && isPresent(image.title) && isPresent(image.link)) {
-    return trimObject(image)
+    return trimObject(image) as Image
   }
 }
 
@@ -121,7 +121,7 @@ export const parseTextInput: ParseFunction<TextInput> = (value) => {
     isPresent(textInput.name) &&
     isPresent(textInput.link)
   ) {
-    return trimObject(textInput)
+    return trimObject(textInput) as TextInput
   }
 }
 
@@ -145,7 +145,7 @@ export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
   }
 
   if (isPresent(enclosure.url) && isPresent(enclosure.length) && isPresent(enclosure.type)) {
-    return trimObject(enclosure)
+    return trimObject(enclosure) as Enclosure
   }
 }
 
@@ -156,7 +156,7 @@ export const parseGuid: ParseFunction<Guid> = (value) => {
   }
 
   if (isPresent(source.value)) {
-    return trimObject(source)
+    return trimObject(source) as Guid
   }
 }
 
@@ -167,11 +167,11 @@ export const parseSource: ParseFunction<Source> = (value) => {
   }
 
   if (isPresent(source.title)) {
-    return trimObject(source)
+    return trimObject(source) as Source
   }
 }
 
-export const parseItem: ParseFunction<Item> = (value) => {
+export const parseItem: ParseFunction<Item<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -199,11 +199,11 @@ export const parseItem: ParseFunction<Item> = (value) => {
   }
 
   if (isPresent(item.title) || isPresent(item.description)) {
-    return trimObject(item)
+    return trimObject(item) as Item<string>
   }
 }
 
-export const parseFeed: ParseFunction<Feed> = (value) => {
+export const parseFeed: ParseFunction<Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -242,10 +242,10 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
   // in feeds. We can still parse the feed without it. In addition, the "link" might be missing
   // as well when the atom:link rel="self" is present so checking "link" is skipped as well.
   if (isPresent(feed.title)) {
-    return trimObject(feed)
+    return trimObject(feed) as Feed<string>
   }
 }
 
-export const retrieveFeed: ParseFunction<Feed> = (value) => {
+export const retrieveFeed: ParseFunction<Feed<string>> = (value) => {
   return parseSingularOf(value?.rss?.channel, parseFeed)
 }

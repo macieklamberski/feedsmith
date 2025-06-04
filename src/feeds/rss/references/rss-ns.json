@@ -648,7 +648,7 @@
       {
         "display": "Season 1 Trailer",
         "url": "https://example.com/trailers/season1.mp3",
-        "pubdate": "2025-04-20T08:00:00+02:00",
+        "pubDate": "2025-04-20T08:00:00+02:00",
         "length": 1048576,
         "type": "audio/mpeg",
         "season": 1

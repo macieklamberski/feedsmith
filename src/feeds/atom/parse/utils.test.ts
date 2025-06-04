@@ -1056,13 +1056,22 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expectedFull)
   })
 
-  it('should parse feed with only required fields', () => {
+  it('should parse feed with required ID field', () => {
     const value = {
       id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
-      title: { '#text': 'Example Feed' },
     }
     const expected = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with required title field', () => {
+    const value = {
+      title: { '#text': 'Example Feed' },
+    }
+    const expected = {
       title: 'Example Feed',
     }
 

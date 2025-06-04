@@ -1,10 +1,10 @@
 import { locales } from '../../../common/config.js'
 import { detectRdfFeed } from '../../../index.js'
+import type { Feed } from '../common/types.js'
 import { parser } from './config.js'
-import type { Feed } from './types.js'
 import { retrieveFeed } from './utils.js'
 
-export const parse = (value: unknown): Feed => {
+export const parse = (value: unknown): Feed<string> => {
   if (!detectRdfFeed(value)) {
     throw new Error(locales.invalid)
   }

@@ -11,24 +11,24 @@ import {
   parseString,
   trimObject,
 } from '../../../common/utils.js'
-import type { Attachment, Author, Feed, Hub, Item } from './types.js'
+import type { Attachment, Author, Feed, Hub, Item } from '../common/types.js'
 
 export const parseAuthor: ParseFunction<Author> = (value) => {
   if (isObject(value)) {
     const get = createCaseInsensitiveGetter(value)
-    const author = trimObject({
+    const author = {
       name: parseSingularOf(get('name'), parseString),
       url: parseSingularOf(get('url'), parseString),
       avatar: parseSingularOf(get('avatar'), parseString),
-    })
+    }
 
-    return author
+    return trimObject(author) as Author
   }
 
   if (isNonEmptyStringOrNumber(value)) {
-    return {
+    return trimObject({
       name: parseString(value),
-    }
+    }) as Author
   }
 }
 
@@ -61,12 +61,12 @@ export const parseAttachment: ParseFunction<Attachment> = (value) => {
     duration_in_seconds: parseSingularOf(get('duration_in_seconds'), parseNumber),
   }
 
-  if (isPresent(attachment.url)) {
-    return trimObject(attachment)
+  if (isPresent(attachment.url) && isPresent(attachment.mime_type)) {
+    return trimObject(attachment) as Attachment
   }
 }
 
-export const parseItem: ParseFunction<Item> = (value) => {
+export const parseItem: ParseFunction<Item<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -90,8 +90,8 @@ export const parseItem: ParseFunction<Item> = (value) => {
     attachments: parseArrayOf(get('attachments'), parseAttachment),
   }
 
-  if (isPresent(item.id)) {
-    return trimObject(item)
+  if (isPresent(item.id) && (isPresent(item.content_html) || isPresent(item.content_text))) {
+    return trimObject(item) as Item<string>
   }
 }
 
@@ -106,12 +106,12 @@ export const parseHub: ParseFunction<Hub> = (value) => {
     url: parseSingularOf(get('url'), parseString),
   }
 
-  if (isPresent(hub.type) || isPresent(hub.url)) {
-    return trimObject(hub)
+  if (isPresent(hub.type) && isPresent(hub.url)) {
+    return trimObject(hub) as Hub
   }
 }
 
-export const parseFeed: ParseFunction<Feed> = (value) => {
+export const parseFeed: ParseFunction<Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -135,6 +135,6 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
   }
 
   if (version && isPresent(feed.title) && isPresent(feed.items)) {
-    return trimObject(feed)
+    return trimObject(feed) as Feed<string>
   }
 }
