@@ -342,7 +342,6 @@ describe('parseOpml', () => {
       },
     }
     const expected = {
-      version: '2.0',
       head: {
         title: 'My OPML Document',
         dateModified: 'Mon, 15 Mar 2023 13:00:00 GMT',
@@ -378,7 +377,6 @@ describe('parseOpml', () => {
       },
     }
     const expected = {
-      version: '2.0',
       body: {
         outlines: [{ text: 'Simple Outline' }],
       },
@@ -400,7 +398,6 @@ describe('parseOpml', () => {
       },
     }
     const expected = {
-      version: '2',
       head: {
         title: '123',
       },
