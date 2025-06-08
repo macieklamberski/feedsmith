@@ -1,4 +1,4 @@
-import type { ParseFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '../../../common/types.js'
 import {
   isObject,
   parseSingularOf,
@@ -8,7 +8,7 @@ import {
 } from '../../../common/utils.js'
 import type { Feed } from '../common/types.js'
 
-export const retrieveFeed: ParseFunction<Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -19,5 +19,5 @@ export const retrieveFeed: ParseFunction<Feed<string>> = (value) => {
     updateBase: parseSingularOf(value['sy:updatebase'], parseTextString),
   }
 
-  return trimObject(feed) as Feed<string>
+  return trimObject(feed)
 }

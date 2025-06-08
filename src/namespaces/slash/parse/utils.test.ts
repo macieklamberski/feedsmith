@@ -3,8 +3,8 @@ import { parseHitParade, retrieveItem } from './utils.js'
 
 describe('parseHitParade', () => {
   it('should parse comma-separated hit parade string to array of numbers', () => {
-    const value = '42,38,24,16,8,4,2'
-    const expected = [42, 38, 24, 16, 8, 4, 2]
+    const value = '42,38,24,16,8,4,2,0'
+    const expected = [42, 38, 24, 16, 8, 4, 2, 0]
 
     expect(parseHitParade(value)).toEqual(expected)
   })

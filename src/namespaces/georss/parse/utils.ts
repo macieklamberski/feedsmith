@@ -1,4 +1,4 @@
-import type { ParseFunction, Unreliable } from '../../../common/types.js'
+import type { ParseExactFunction, ParsePartialFunction, Unreliable } from '../../../common/types.js'
 import {
   isNonEmptyString,
   isObject,
@@ -10,6 +10,7 @@ import {
   parseTextString,
   retrieveText,
   trimObject,
+  validateAndTrimObject,
 } from '../../../common/utils.js'
 import type { Box, ItemOrFeed, Line, Point, Polygon } from '../common/types.js'
 
@@ -51,39 +52,37 @@ export const parseLatLngPairs = (
   return points.length > 0 ? points : undefined
 }
 
-export const parsePoint: ParseFunction<Point> = (value) => {
+export const parsePoint: ParseExactFunction<Point> = (value) => {
   return parseLatLngPairs(retrieveText(value), { min: 1, max: 1 })?.[0]
 }
 
-export const parseLine: ParseFunction<Line> = (value) => {
-  const points = parseLatLngPairs(retrieveText(value), { min: 2 })
-
-  if (isPresent(points)) {
-    return { points }
+export const parseLine: ParseExactFunction<Line> = (value) => {
+  const line = {
+    points: parseLatLngPairs(retrieveText(value), { min: 2 }),
   }
+
+  return validateAndTrimObject(line, 'points')
 }
 
-export const parsePolygon: ParseFunction<Polygon> = (value) => {
-  const points = parseLatLngPairs(retrieveText(value), { min: 4 })
-
-  if (isPresent(points)) {
-    return { points }
+export const parsePolygon: ParseExactFunction<Polygon> = (value) => {
+  const polygon = {
+    points: parseLatLngPairs(retrieveText(value), { min: 4 }),
   }
+
+  return validateAndTrimObject(polygon, 'points')
 }
 
-export const parseBox: ParseFunction<Box> = (value) => {
+export const parseBox: ParseExactFunction<Box> = (value) => {
   const points = parseLatLngPairs(retrieveText(value), { min: 2, max: 2 })
   const box = {
     lowerCorner: points?.[0],
     upperCorner: points?.[1],
   }
 
-  if (isPresent(box.lowerCorner) && isPresent(box.upperCorner)) {
-    return box as Box
-  }
+  return validateAndTrimObject(box, 'lowerCorner', 'upperCorner')
 }
 
-export const retrieveItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
+export const retrieveItemOrFeed: ParsePartialFunction<ItemOrFeed> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -103,5 +102,5 @@ export const retrieveItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
     radius: parseSingularOf(value['georss:radius'], parseTextNumber),
   }
 
-  return trimObject(itemOrFeed) as ItemOrFeed
+  return trimObject(itemOrFeed)
 }

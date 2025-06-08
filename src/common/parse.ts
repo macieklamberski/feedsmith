@@ -11,12 +11,13 @@ import type { Feed as RssFeed } from '../feeds/rss/common/types.js'
 import { detect as detectRssFeed } from '../feeds/rss/detect/index.js'
 import { parse as parseRssFeed } from '../feeds/rss/parse/index.js'
 import { locales } from './config.js'
+import type { DeepPartial } from './types.js'
 
 export type Feed =
-  | { type: 'json'; feed: JsonFeed<string> }
-  | { type: 'rss'; feed: RssFeed<string> }
-  | { type: 'atom'; feed: AtomFeed<string> }
-  | { type: 'rdf'; feed: RdfFeed<string> }
+  | { type: 'json'; feed: DeepPartial<JsonFeed<string>> }
+  | { type: 'rss'; feed: DeepPartial<RssFeed<string>> }
+  | { type: 'atom'; feed: DeepPartial<AtomFeed<string>> }
+  | { type: 'rdf'; feed: DeepPartial<RdfFeed<string>> }
 
 export const parse = (value: unknown): Feed => {
   if (detectAtomFeed(value)) {

@@ -1,7 +1,6 @@
-import type { ParseFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '../../../common/types.js'
 import {
   isObject,
-  isPresent,
   parseArrayOf,
   parseSingular,
   parseSingularOf,
@@ -20,7 +19,7 @@ import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/par
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import type { Feed, Image, Item, TextInput } from '../common/types.js'
 
-export const parseImage: ParseFunction<Image> = (value) => {
+export const parseImage: ParsePartialFunction<Image> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -31,17 +30,15 @@ export const parseImage: ParseFunction<Image> = (value) => {
     url: parseSingularOf(value.url, parseTextString),
   }
 
-  if (isPresent(image.title) && isPresent(image.link)) {
-    return trimObject(image) as Image
-  }
+  return trimObject(image)
 }
 
-export const retrieveImage: ParseFunction<Image> = (value) => {
+export const retrieveImage: ParsePartialFunction<Image> = (value) => {
   // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
   return parseSingularOf(value?.image, parseImage)
 }
 
-export const parseTextInput: ParseFunction<TextInput> = (value) => {
+export const parseTextInput: ParsePartialFunction<TextInput> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -53,22 +50,15 @@ export const parseTextInput: ParseFunction<TextInput> = (value) => {
     link: parseSingularOf(value.link, parseTextString),
   }
 
-  if (
-    isPresent(textInput.title) &&
-    isPresent(textInput.description) &&
-    isPresent(textInput.name) &&
-    isPresent(textInput.link)
-  ) {
-    return trimObject(textInput) as TextInput
-  }
+  return trimObject(textInput)
 }
 
-export const retrieveTextInput: ParseFunction<TextInput> = (value) => {
+export const retrieveTextInput: ParsePartialFunction<TextInput> = (value) => {
   // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
   return parseSingularOf(value?.textinput, parseTextInput)
 }
 
-export const parseItem: ParseFunction<Item<string>> = (value) => {
+export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -85,17 +75,15 @@ export const parseItem: ParseFunction<Item<string>> = (value) => {
     georss: retrieveGeoRssItemOrFeed(value),
   }
 
-  if (isPresent(item.title) && isPresent(item.link)) {
-    return trimObject(item) as Item<string>
-  }
+  return trimObject(item)
 }
 
-export const retrieveItems: ParseFunction<Array<Item<string>>> = (value) => {
+export const retrieveItems: ParsePartialFunction<Array<Item<string>>> = (value) => {
   // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
   return parseArrayOf(value?.item, parseItem)
 }
 
-export const parseFeed: ParseFunction<Feed<string>> = (value) => {
+export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -115,11 +103,9 @@ export const parseFeed: ParseFunction<Feed<string>> = (value) => {
     georss: retrieveGeoRssItemOrFeed(channel),
   }
 
-  if (isPresent(feed.title)) {
-    return trimObject(feed) as Feed<string>
-  }
+  return trimObject(feed)
 }
 
-export const retrieveFeed: ParseFunction<Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
   return parseSingularOf(value?.['rdf:rdf'], parseFeed)
 }

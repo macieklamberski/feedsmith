@@ -1,7 +1,7 @@
-import type { DateLike } from '../../common/types.js'
+import type { AnyOf, DateLike } from '../../common/types.js'
 
-export type Outline = {
-  text: string
+export type Outline = AnyOf<{
+  text?: string
   type?: string
   isComment?: boolean
   isBreakpoint?: boolean
@@ -15,9 +15,9 @@ export type Outline = {
   version?: string
   url?: string
   outlines?: Array<Outline>
-}
+}>
 
-export type Head<TDate extends DateLike> = {
+export type Head<TDate extends DateLike> = AnyOf<{
   title?: string
   dateCreated?: TDate
   dateModified?: TDate
@@ -31,13 +31,13 @@ export type Head<TDate extends DateLike> = {
   windowLeft?: number
   windowBottom?: number
   windowRight?: number
-}
+}>
 
-export type Body = {
-  outlines: Array<Outline>
-}
+export type Body = AnyOf<{
+  outlines?: Array<Outline>
+}>
 
-export type Opml<TDate extends DateLike> = {
+export type Opml<TDate extends DateLike> = AnyOf<{
   head?: Head<TDate>
-  body: Body
-}
+  body?: Body
+}>

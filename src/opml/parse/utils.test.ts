@@ -367,6 +367,24 @@ describe('parseOpml', () => {
     expect(parseOpml(value)).toEqual(expected)
   })
 
+  it('should handle minimal opml with only version and head', () => {
+    const value = {
+      opml: {
+        '@version': '2.0',
+        head: {
+          title: 'Test',
+        },
+      },
+    }
+    const expected = {
+      head: {
+        title: 'Test',
+      },
+    }
+
+    expect(parseOpml(value)).toEqual(expected)
+  })
+
   it('should handle minimal opml with only version and body', () => {
     const value = {
       opml: {
@@ -417,6 +435,18 @@ describe('parseOpml', () => {
     expect(parseOpml(value)).toBeUndefined()
   })
 
+  it('should return undefined for empty head and body objects', () => {
+    const value = {
+      opml: {
+        '@version': '2.0',
+        head: {},
+        body: {},
+      },
+    }
+
+    expect(parseOpml(value)).toBeUndefined()
+  })
+
   it('should return undefined for empty opml object', () => {
     const value = {
       opml: {},
@@ -429,19 +459,5 @@ describe('parseOpml', () => {
     expect(parseOpml('not an object')).toBeUndefined()
     expect(parseOpml(undefined)).toBeUndefined()
     expect(parseOpml(null)).toBeUndefined()
-  })
-
-  it('should handle empty body or missing outlines', () => {
-    const value = {
-      opml: {
-        '@version': '2.0',
-        head: {
-          title: { '#text': 'Empty OPML' },
-        },
-        body: {},
-      },
-    }
-
-    expect(parseOpml(value)).toBeUndefined()
   })
 })

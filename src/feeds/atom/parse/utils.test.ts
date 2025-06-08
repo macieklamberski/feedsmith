@@ -226,13 +226,17 @@ describe('parsePerson', () => {
     expect(parsePerson(value)).toEqual(expected)
   })
 
-  it('should return undefined if name is missing', () => {
+  it('should handle partial objects (missing name)', () => {
     const value = {
       uri: { '#text': 'https://example.com/johndoe' },
       email: { '#text': 'john@example.com' },
     }
+    const expected = {
+      uri: 'https://example.com/johndoe',
+      email: 'john@example.com',
+    }
 
-    expect(parsePerson(value)).toBeUndefined()
+    expect(parsePerson(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -284,13 +288,17 @@ describe('parseCategory', () => {
     expect(parseCategory(value)).toEqual(expected)
   })
 
-  it('should return undefined if term is missing', () => {
+  it('should handle partial objects (missing term)', () => {
     const value = {
       '@scheme': 'http://example.com/categories/',
       '@label': 'Technology',
     }
+    const expected = {
+      scheme: 'http://example.com/categories/',
+      label: 'Technology',
+    }
 
-    expect(parseCategory(value)).toBeUndefined()
+    expect(parseCategory(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -408,13 +416,17 @@ describe('parseGenerator', () => {
     expect(parseGenerator(value)).toEqual(expected)
   })
 
-  it('should return undefined if text is missing', () => {
+  it('should handle partial objects (missing text)', () => {
     const value = {
       '@uri': 'https://example.com/generator',
       '@version': '1.0',
     }
+    const expected = {
+      uri: 'https://example.com/generator',
+      version: '1.0',
+    }
 
-    expect(parseGenerator(value)).toBeUndefined()
+    expect(parseGenerator(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -837,22 +849,30 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
-  it('should return undefined if id is missing', () => {
+  it('should handle partial objects (missing id)', () => {
     const value = {
       title: { '#text': 'Entry Title' },
       updated: { '#text': '2023-01-01T12:00:00Z' },
     }
+    const expected = {
+      title: 'Entry Title',
+      updated: '2023-01-01T12:00:00Z',
+    }
 
-    expect(parseEntry(value)).toBeUndefined()
+    expect(parseEntry(value)).toEqual(expected)
   })
 
-  it('should return undefined if title is missing', () => {
+  it('should handle partial objects (missing title)', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
       updated: { '#text': '2023-01-01T12:00:00Z' },
     }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      updated: '2023-01-01T12:00:00Z',
+    }
 
-    expect(parseEntry(value)).toBeUndefined()
+    expect(parseEntry(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -1152,12 +1172,15 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should return undefined if id and title are missing', () => {
+  it('should handle partial objects (missing id and title)', () => {
     const value = {
       updated: { '#text': '2023-01-01T12:00:00Z' },
     }
+    const expected = {
+      updated: '2023-01-01T12:00:00Z',
+    }
 
-    expect(parseFeed(value)).toBeUndefined()
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -1167,7 +1190,7 @@ describe('parseFeed', () => {
     expect(parseFeed([])).toBeUndefined()
   })
 
-  it('should handle entries that are not valid', () => {
+  it('should handle entries that may have partial data', () => {
     const value = {
       id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
       title: { '#text': 'Example Feed' },
@@ -1183,7 +1206,11 @@ describe('parseFeed', () => {
     const expected = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
       title: 'Example Feed',
-      entries: [{ id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a', title: 'Valid Entry' }],
+      entries: [
+        { id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a', title: 'Valid Entry' },
+        { title: 'Invalid Entry' },
+        { id: 'urn:uuid:1225c695-cfb8-4ebb-cccc-80da344efa6a' },
+      ],
     }
 
     expect(parseFeed(value)).toEqual(expected)

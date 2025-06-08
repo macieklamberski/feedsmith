@@ -115,12 +115,19 @@ describe('parseCategory', () => {
     expect(parseCategory(value)).toEqual(expected)
   })
 
-  it('should return undefined if text is missing', () => {
+  it('should return sub-categories if text is missing', () => {
     const value = {
       'itunes:category': [{ '@text': 'Software' }],
     }
+    const expected = {
+      categories: [
+        {
+          text: 'Software',
+        },
+      ],
+    }
 
-    expect(parseCategory(value)).toBeUndefined()
+    expect(parseCategory(value)).toEqual(expected)
   })
 
   it('should omit categories if none are valid', () => {

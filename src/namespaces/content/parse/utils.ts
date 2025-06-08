@@ -1,8 +1,8 @@
-import type { ParseFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '../../../common/types.js'
 import { isObject, parseSingularOf, parseTextString, trimObject } from '../../../common/utils.js'
 import type { Item } from '../common/types.js'
 
-export const retrieveItem: ParseFunction<Item> = (value) => {
+export const retrieveItem: ParsePartialFunction<Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -11,5 +11,5 @@ export const retrieveItem: ParseFunction<Item> = (value) => {
     encoded: parseSingularOf(value['content:encoded'], parseTextString),
   }
 
-  return trimObject(item) as Item
+  return trimObject(item)
 }

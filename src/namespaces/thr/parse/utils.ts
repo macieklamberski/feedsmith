@@ -1,7 +1,6 @@
-import type { ParseFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '../../../common/types.js'
 import {
   isObject,
-  isPresent,
   parseArrayOf,
   parseNumber,
   parseSingularOf,
@@ -11,7 +10,7 @@ import {
 } from '../../../common/utils.js'
 import type { InReplyTo, Item, Link } from '../common/types.js'
 
-export const parseInReplyTo: ParseFunction<InReplyTo> = (value) => {
+export const parseInReplyTo: ParsePartialFunction<InReplyTo> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -23,12 +22,10 @@ export const parseInReplyTo: ParseFunction<InReplyTo> = (value) => {
     source: parseString(value['@source']),
   }
 
-  if (isPresent(inReplyTo.ref)) {
-    return trimObject(inReplyTo) as InReplyTo
-  }
+  return trimObject(inReplyTo)
 }
 
-export const retrieveLink: ParseFunction<Link<string>> = (value) => {
+export const retrieveLink: ParsePartialFunction<Link<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -38,10 +35,10 @@ export const retrieveLink: ParseFunction<Link<string>> = (value) => {
     updated: parseString(value['@thr:updated']),
   }
 
-  return trimObject(link) as Link<string>
+  return trimObject(link)
 }
 
-export const retrieveItem: ParseFunction<Item> = (value) => {
+export const retrieveItem: ParsePartialFunction<Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -51,5 +48,5 @@ export const retrieveItem: ParseFunction<Item> = (value) => {
     inReplyTos: parseArrayOf(value['thr:in-reply-to'], parseInReplyTo),
   }
 
-  return trimObject(item) as Item
+  return trimObject(item)
 }

@@ -4,16 +4,21 @@ export type Unreliable = any
 
 export type DateLike = Date | string
 
-export type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends Array<infer U>
-    ? Array<DeepPartial<U>>
-    : T[P] extends Record<PropertyKey, unknown>
-      ? T[P] extends CallableFunction | Array<unknown>
-        ? T[P]
-        : DeepPartial<T[P]>
-      : T[P]
-}
+export type AnyOf<T> = Partial<{ [P in keyof T]-?: NonNullable<T[P]> }> &
+  { [P in keyof T]-?: Pick<{ [Q in keyof T]-?: NonNullable<T[Q]> }, P> }[keyof T]
 
-export type ParseFunction<R, O = never> = (value: Unreliable, options?: O) => R | undefined
+export type DeepPartial<T> = T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends (...args: unknown[]) => unknown
+    ? T
+    : T extends object
+      ? T extends null
+        ? T
+        : { [P in keyof T]?: DeepPartial<T[P]> }
+      : T
+
+export type ParseExactFunction<R> = (value: Unreliable) => R | undefined
+
+export type ParsePartialFunction<R> = (value: Unreliable) => DeepPartial<R> | undefined
 
 export type GenerateFunction<V> = (value: V | undefined) => Unreliable | undefined

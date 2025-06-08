@@ -91,8 +91,10 @@ export type Item<TDate extends DateLike> = {
 
 export type Feed<TDate extends DateLike> = {
   title: string
+  // INFO: Spec mentions required "link", but the "link" might be missing as well when the
+  // atom:link rel="self" is present so that's why the "link" is not required in this type.
   link?: string
-  description?: string
+  description: string
   language?: string
   copyright?: string
   managingEditor?: Person

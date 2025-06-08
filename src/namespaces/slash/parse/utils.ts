@@ -1,4 +1,4 @@
-import type { ParseFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
   isObject,
@@ -13,7 +13,7 @@ import {
 } from '../../../common/utils.js'
 import type { HitParade, Item } from '../common/types.js'
 
-export const parseHitParade: ParseFunction<HitParade> = (value) => {
+export const parseHitParade: ParsePartialFunction<HitParade> = (value) => {
   if (!isNonEmptyStringOrNumber(value)) {
     return
   }
@@ -25,7 +25,7 @@ export const parseHitParade: ParseFunction<HitParade> = (value) => {
   }
 }
 
-export const retrieveItem: ParseFunction<Item> = (value) => {
+export const retrieveItem: ParsePartialFunction<Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -39,5 +39,5 @@ export const retrieveItem: ParseFunction<Item> = (value) => {
     ),
   }
 
-  return trimObject(item) as Item
+  return trimObject(item)
 }

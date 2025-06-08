@@ -1,7 +1,7 @@
-import type { DateLike } from '../../../common/types.js'
+import type { AnyOf, DateLike } from '../../../common/types.js'
 
-export type Feed<TDate extends DateLike> = {
+export type Feed<TDate extends DateLike> = AnyOf<{
   updatePeriod?: string
   updateFrequency?: number
   updateBase?: TDate // Date: W3C-DTF/ISO 8601.
-}
+}>

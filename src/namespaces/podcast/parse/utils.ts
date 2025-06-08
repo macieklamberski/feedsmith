@@ -1,7 +1,6 @@
-import type { ParseFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '../../../common/types.js'
 import {
   isObject,
-  isPresent,
   parseArrayOf,
   parseBoolean,
   parseNumber,
@@ -44,7 +43,7 @@ import type {
   ValueTimeSplit,
 } from '../common/types.js'
 
-export const parseTranscript: ParseFunction<Transcript> = (value) => {
+export const parseTranscript: ParsePartialFunction<Transcript> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -56,23 +55,19 @@ export const parseTranscript: ParseFunction<Transcript> = (value) => {
     rel: parseString(value['@rel']),
   }
 
-  if (isPresent(transcript.url) && isPresent(transcript.type)) {
-    return trimObject(transcript) as Transcript
-  }
+  return trimObject(transcript)
 }
 
-export const parseLocked: ParseFunction<Locked> = (value) => {
+export const parseLocked: ParsePartialFunction<Locked> = (value) => {
   const locked = {
     value: parseYesNoBoolean(retrieveText(value)),
     owner: parseString(value?.['@owner']),
   }
 
-  if (isPresent(locked.value)) {
-    return trimObject(locked) as Locked
-  }
+  return trimObject(locked)
 }
 
-export const parseFunding: ParseFunction<Funding> = (value) => {
+export const parseFunding: ParsePartialFunction<Funding> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -82,12 +77,10 @@ export const parseFunding: ParseFunction<Funding> = (value) => {
     display: parseString(value['#text']),
   }
 
-  if (isPresent(funding.url)) {
-    return trimObject(funding) as Funding
-  }
+  return trimObject(funding)
 }
 
-export const parseChapters: ParseFunction<Chapters> = (value) => {
+export const parseChapters: ParsePartialFunction<Chapters> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -97,12 +90,10 @@ export const parseChapters: ParseFunction<Chapters> = (value) => {
     type: parseString(value['@type']),
   }
 
-  if (isPresent(chapters.url) && isPresent(chapters.type)) {
-    return chapters as Chapters
-  }
+  return trimObject(chapters)
 }
 
-export const parseSoundbite: ParseFunction<Soundbite> = (value) => {
+export const parseSoundbite: ParsePartialFunction<Soundbite> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -113,12 +104,10 @@ export const parseSoundbite: ParseFunction<Soundbite> = (value) => {
     display: parseString(retrieveText(value)),
   }
 
-  if (isPresent(soundbite.startTime) && isPresent(soundbite.duration)) {
-    return trimObject(soundbite) as Soundbite
-  }
+  return trimObject(soundbite)
 }
 
-export const parsePerson: ParseFunction<Person> = (value) => {
+export const parsePerson: ParsePartialFunction<Person> = (value) => {
   const person = {
     display: parseString(retrieveText(value)),
     role: parseString(value?.['@role']),
@@ -127,46 +116,38 @@ export const parsePerson: ParseFunction<Person> = (value) => {
     href: parseString(value?.['@href']),
   }
 
-  if (isPresent(person.display)) {
-    return trimObject(person) as Person
-  }
+  return trimObject(person)
 }
 
-export const parseLocation: ParseFunction<Location> = (value) => {
+export const parseLocation: ParsePartialFunction<Location> = (value) => {
   const location = {
     display: parseString(retrieveText(value)),
     geo: parseString(value?.['@geo']),
     osm: parseString(value?.['@osm']),
   }
 
-  if (isPresent(location.display)) {
-    return trimObject(location) as Location
-  }
+  return trimObject(location)
 }
 
-export const parseSeason: ParseFunction<Season> = (value) => {
+export const parseSeason: ParsePartialFunction<Season> = (value) => {
   const season = {
     number: parseNumber(retrieveText(value)),
     name: parseString(value?.['@name']),
   }
 
-  if (isPresent(season.number)) {
-    return trimObject(season) as Season
-  }
+  return trimObject(season)
 }
 
-export const parseEpisode: ParseFunction<Episode> = (value) => {
-  const season = {
+export const parseEpisode: ParsePartialFunction<Episode> = (value) => {
+  const episode = {
     number: parseNumber(retrieveText(value)),
     display: parseString(value?.['@display']),
   }
 
-  if (isPresent(season.number)) {
-    return trimObject(season) as Episode
-  }
+  return trimObject(episode)
 }
 
-export const parseTrailer: ParseFunction<Trailer<string>> = (value) => {
+export const parseTrailer: ParsePartialFunction<Trailer<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -180,23 +161,19 @@ export const parseTrailer: ParseFunction<Trailer<string>> = (value) => {
     season: parseNumber(value['@season']),
   }
 
-  if (isPresent(trailer.display) && isPresent(trailer.url) && isPresent(trailer.pubDate)) {
-    return trimObject(trailer) as Trailer<string>
-  }
+  return trimObject(trailer)
 }
 
-export const parseLicense: ParseFunction<License> = (value) => {
+export const parseLicense: ParsePartialFunction<License> = (value) => {
   const license = {
     display: parseString(retrieveText(value)),
     url: parseString(value?.['@url']),
   }
 
-  if (isPresent(license.display)) {
-    return trimObject(license) as License
-  }
+  return trimObject(license)
 }
 
-export const parseAlternateEnclosure: ParseFunction<AlternateEnclosure> = (value) => {
+export const parseAlternateEnclosure: ParsePartialFunction<AlternateEnclosure> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -215,13 +192,10 @@ export const parseAlternateEnclosure: ParseFunction<AlternateEnclosure> = (value
     integrity: parseSingularOf(value['podcast:integrity'], parseIntegrity),
   }
 
-  // TODO: Consider requiring at least one item in `sources` as per spec.
-  if (isPresent(alternateEnclosure.type)) {
-    return trimObject(alternateEnclosure) as AlternateEnclosure
-  }
+  return trimObject(alternateEnclosure)
 }
 
-export const parseSource: ParseFunction<Source> = (value) => {
+export const parseSource: ParsePartialFunction<Source> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -231,12 +205,10 @@ export const parseSource: ParseFunction<Source> = (value) => {
     contentType: parseString(value['@contenttype']),
   }
 
-  if (isPresent(source.uri)) {
-    return trimObject(source) as Source
-  }
+  return trimObject(source)
 }
 
-export const parseIntegrity: ParseFunction<Integrity> = (value) => {
+export const parseIntegrity: ParsePartialFunction<Integrity> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -246,12 +218,10 @@ export const parseIntegrity: ParseFunction<Integrity> = (value) => {
     value: parseString(value['@value']),
   }
 
-  if (isPresent(integrity.type) && isPresent(integrity.value)) {
-    return integrity as Integrity
-  }
+  return trimObject(integrity)
 }
 
-export const parseValue: ParseFunction<Value> = (value) => {
+export const parseValue: ParsePartialFunction<Value> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -264,12 +234,10 @@ export const parseValue: ParseFunction<Value> = (value) => {
     valueTimeSplits: parseArrayOf(value['podcast:valuetimesplit'], parseValueTimeSplit),
   }
 
-  if (isPresent(parsed.type) && isPresent(parsed.method)) {
-    return trimObject(parsed) as Value
-  }
+  return trimObject(parsed)
 }
 
-export const parseValueRecipient: ParseFunction<ValueRecipient> = (value) => {
+export const parseValueRecipient: ParsePartialFunction<ValueRecipient> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -284,16 +252,10 @@ export const parseValueRecipient: ParseFunction<ValueRecipient> = (value) => {
     fee: parseBoolean(value['@fee']),
   }
 
-  if (
-    isPresent(valueRecipient.type) &&
-    isPresent(valueRecipient.address) &&
-    isPresent(valueRecipient.split)
-  ) {
-    return trimObject(valueRecipient) as ValueRecipient
-  }
+  return trimObject(valueRecipient)
 }
 
-export const parseImages: ParseFunction<Images> = (value) => {
+export const parseImages: ParsePartialFunction<Images> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -303,10 +265,10 @@ export const parseImages: ParseFunction<Images> = (value) => {
     srcset: parseString(value['@srcset']),
   }
 
-  return trimObject(images) as Images
+  return trimObject(images)
 }
 
-export const parseLiveItem: ParseFunction<LiveItem<string>> = (value) => {
+export const parseLiveItem: ParsePartialFunction<LiveItem<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -319,12 +281,10 @@ export const parseLiveItem: ParseFunction<LiveItem<string>> = (value) => {
     contentlinks: parseArrayOf(value['podcast:contentlink'], parseContentLink),
   }
 
-  if (isPresent(liveItem.status) && isPresent(liveItem.start)) {
-    return trimObject(liveItem) as LiveItem<string>
-  }
+  return trimObject(liveItem)
 }
 
-export const parseContentLink: ParseFunction<ContentLink> = (value) => {
+export const parseContentLink: ParsePartialFunction<ContentLink> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -334,12 +294,10 @@ export const parseContentLink: ParseFunction<ContentLink> = (value) => {
     display: parseString(retrieveText(value)),
   }
 
-  if (isPresent(contentLink.href)) {
-    return trimObject(contentLink) as ContentLink
-  }
+  return trimObject(contentLink)
 }
 
-export const parseSocialInteract: ParseFunction<SocialInteract> = (value) => {
+export const parseSocialInteract: ParsePartialFunction<SocialInteract> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -352,37 +310,28 @@ export const parseSocialInteract: ParseFunction<SocialInteract> = (value) => {
     priority: parseNumber(value['@priority']),
   }
 
-  // INFO: The specification states that the `uri` is required. However, if the protocol is set
-  // to `disabled`, no other attributes are necessary. To bypass the protocol value check, which
-  // may be invalid, only the protocol is required to ensure consistent behavior.
-  if (isPresent(socialInteract.protocol)) {
-    return trimObject(socialInteract) as SocialInteract
-  }
+  return trimObject(socialInteract)
 }
 
-export const parseBlock: ParseFunction<Block> = (value) => {
+export const parseBlock: ParsePartialFunction<Block> = (value) => {
   const block = {
     value: parseYesNoBoolean(retrieveText(value)),
     id: parseString(value?.['@id']),
   }
 
-  if (isPresent(block.value)) {
-    return trimObject(block) as Block
-  }
+  return trimObject(block)
 }
 
-export const parseTxt: ParseFunction<Txt> = (value) => {
+export const parseTxt: ParsePartialFunction<Txt> = (value) => {
   const txt = {
     display: parseString(retrieveText(value)),
     purpose: parseString(value?.['@purpose']),
   }
 
-  if (isPresent(txt.display)) {
-    return trimObject(txt) as Txt
-  }
+  return trimObject(txt)
 }
 
-export const parseRemoteItem: ParseFunction<RemoteItem> = (value) => {
+export const parseRemoteItem: ParsePartialFunction<RemoteItem> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -394,12 +343,10 @@ export const parseRemoteItem: ParseFunction<RemoteItem> = (value) => {
     medium: parseString(value['@medium']),
   }
 
-  if (isPresent(remoteItem.feedGuid)) {
-    return trimObject(remoteItem) as RemoteItem
-  }
+  return trimObject(remoteItem)
 }
 
-export const parsePodroll: ParseFunction<Podroll> = (value) => {
+export const parsePodroll: ParsePartialFunction<Podroll> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -408,10 +355,10 @@ export const parsePodroll: ParseFunction<Podroll> = (value) => {
     remoteItems: parseArrayOf(value['podcast:remoteitem'], parseRemoteItem),
   }
 
-  return trimObject(podroll) as Podroll
+  return trimObject(podroll)
 }
 
-export const parseUpdateFrequency: ParseFunction<UpdateFrequency<string>> = (value) => {
+export const parseUpdateFrequency: ParsePartialFunction<UpdateFrequency<string>> = (value) => {
   const updateFrequency = {
     display: parseString(retrieveText(value)),
     complete: parseBoolean(value?.['@complete']),
@@ -419,12 +366,10 @@ export const parseUpdateFrequency: ParseFunction<UpdateFrequency<string>> = (val
     rrule: parseString(value?.['@rrule']),
   }
 
-  if (isPresent(updateFrequency.display)) {
-    return trimObject(updateFrequency) as UpdateFrequency<string>
-  }
+  return trimObject(updateFrequency)
 }
 
-export const parsePodping: ParseFunction<Podping> = (value) => {
+export const parsePodping: ParsePartialFunction<Podping> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -433,10 +378,10 @@ export const parsePodping: ParseFunction<Podping> = (value) => {
     usesPodping: parseBoolean(value['@usespodping']),
   }
 
-  return trimObject(podping) as Podping
+  return trimObject(podping)
 }
 
-export const parseValueTimeSplit: ParseFunction<ValueTimeSplit> = (value) => {
+export const parseValueTimeSplit: ParsePartialFunction<ValueTimeSplit> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -450,12 +395,10 @@ export const parseValueTimeSplit: ParseFunction<ValueTimeSplit> = (value) => {
     valueRecipients: parseArrayOf(value['podcast:valuerecipient'], parseValueRecipient),
   }
 
-  if (isPresent(valueTimeSplit.startTime) && isPresent(valueTimeSplit.duration)) {
-    return trimObject(valueTimeSplit) as ValueTimeSplit
-  }
+  return trimObject(valueTimeSplit)
 }
 
-export const retrieveItem: ParseFunction<Item> = (value) => {
+export const retrieveItem: ParsePartialFunction<Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -476,10 +419,10 @@ export const retrieveItem: ParseFunction<Item> = (value) => {
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
   }
 
-  return trimObject(item) as Item
+  return trimObject(item)
 }
 
-export const retrieveFeed: ParseFunction<Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -504,5 +447,5 @@ export const retrieveFeed: ParseFunction<Feed<string>> = (value) => {
     podping: parseSingularOf(value['podcast:podping'], parsePodping),
   }
 
-  return trimObject(feed) as Feed<string>
+  return trimObject(feed)
 }

@@ -190,26 +190,38 @@ describe('parseAttachment', () => {
     expect(parseAttachment(value)).toEqual(value)
   })
 
-  it('should return undefined if url is not present', () => {
+  it('should handle partial objects (missing url)', () => {
     const value = {
       mime_type: 'video/mp4',
       title: 'Sample Video',
       size_in_bytes: 98765,
       duration_in_seconds: 300,
     }
+    const expected = {
+      mime_type: 'video/mp4',
+      title: 'Sample Video',
+      size_in_bytes: 98765,
+      duration_in_seconds: 300,
+    }
 
-    expect(parseAttachment(value)).toBeUndefined()
+    expect(parseAttachment(value)).toEqual(expected)
   })
 
-  it('should return undefined if mime_type is not present', () => {
+  it('should handle partial objects (missing mime_type)', () => {
     const value = {
       url: 'http://example.com/video.mp4',
       title: 'Sample Video',
       size_in_bytes: 98765,
       duration_in_seconds: 300,
     }
+    const expected = {
+      url: 'http://example.com/video.mp4',
+      title: 'Sample Video',
+      size_in_bytes: 98765,
+      duration_in_seconds: 300,
+    }
 
-    expect(parseAttachment(value)).toBeUndefined()
+    expect(parseAttachment(value)).toEqual(expected)
   })
 
   it('should handle array', () => {
@@ -251,14 +263,18 @@ describe('parseAttachment', () => {
     expect(parseAttachment(value)).toBeUndefined()
   })
 
-  it('should handle object with invalid url', () => {
+  it('should handle partial objects (invalid url)', () => {
     const value = {
       url: true,
       mime_type: 'audio/mpeg',
       title: 'Invalid URL Test',
     }
+    const expected = {
+      mime_type: 'audio/mpeg',
+      title: 'Invalid URL Test',
+    }
 
-    expect(parseAttachment(value)).toBeUndefined()
+    expect(parseAttachment(value)).toEqual(expected)
   })
 
   it('should handle object with invalid properties', () => {
@@ -412,22 +428,30 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
-  it('should return undefined if id is not present', () => {
+  it('should handle partial objects (missing id)', () => {
     const value = {
       url: 'https://example.com/article',
       title: 'Article without ID',
       content_text: 'This article has no ID',
     }
+    const expected = {
+      url: 'https://example.com/article',
+      title: 'Article without ID',
+      content_text: 'This article has no ID',
+    }
 
-    expect(parseItem(value)).toBeUndefined()
+    expect(parseItem(value)).toEqual(expected)
   })
 
-  it('should return undefined if content_* is not present', () => {
+  it('should handle partial objects (missing content)', () => {
     const value = {
       id: 'test-item-123',
     }
+    const expected = {
+      id: 'test-item-123',
+    }
 
-    expect(parseItem(value)).toBeUndefined()
+    expect(parseItem(value)).toEqual(expected)
   })
 
   it('should handle id as empty string', () => {
@@ -555,12 +579,15 @@ describe('parseHub', () => {
     expect(parseHub(value)).toEqual(expectedFull)
   })
 
-  it('should handle incomplete Hub object', () => {
+  it('should handle partial objects', () => {
     const noUrl = { type: 'pub' }
     const noType = { url: 'some-url' }
 
-    expect(parseHub(noUrl)).toBeUndefined()
-    expect(parseHub(noType)).toBeUndefined()
+    const expectedNoUrl = { type: 'pub' }
+    const expectedNoType = { url: 'some-url' }
+
+    expect(parseHub(noUrl)).toEqual(expectedNoUrl)
+    expect(parseHub(noType)).toEqual(expectedNoType)
   })
 
   it('should handle non-Hub object', () => {
@@ -716,20 +743,6 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expectedFull)
   })
 
-  it('should handle a minimal valid feed object with only required properties', () => {
-    const value = {
-      version: 'https://jsonfeed.org/version/1.1',
-      title: 'Minimal Feed',
-      items: [{ id: 'item-1', content_text: 'Content' }],
-    }
-    const expected = {
-      title: 'Minimal Feed',
-      items: [{ id: 'item-1', content_text: 'Content' }],
-    }
-
-    expect(parseFeed(value)).toEqual(expected)
-  })
-
   it('should handle coercible properties correctly in coerce mode', () => {
     const value = {
       version: 123,
@@ -748,7 +761,7 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should return undefined if required properties are missing', () => {
+  it('should handle partial objects', () => {
     const missingVersion = {
       title: 'Feed Without Version',
       items: [{ id: 'item-1' }],
@@ -762,38 +775,20 @@ describe('parseFeed', () => {
       title: 'Feed Without Items',
     }
 
-    expect(parseFeed(missingVersion)).toBeUndefined()
-    expect(parseFeed(missingTitle)).toBeUndefined()
-    expect(parseFeed(missingItems)).toBeUndefined()
-  })
-
-  it('should return undefined if required properties are not defined', () => {
-    const emptyVersion = {
-      title: 'Feed With Empty Version',
+    const expectedMissingVersion = {
+      title: 'Feed Without Version',
       items: [{ id: 'item-1' }],
     }
-    const emptyTitle = {
-      version: 'https://jsonfeed.org/version/1.1',
+    const expectedMissingTitle = {
       items: [{ id: 'item-1' }],
     }
-    const emptyItems = {
-      version: 'https://jsonfeed.org/version/1.1',
-      title: 'Feed With Empty Items',
+    const expectedMissingItems = {
+      title: 'Feed Without Items',
     }
 
-    expect(parseFeed(emptyVersion)).toBeUndefined()
-    expect(parseFeed(emptyTitle)).toBeUndefined()
-    expect(parseFeed(emptyItems)).toBeUndefined()
-  })
-
-  it('should return undefined if required properties are defined but empty', () => {
-    const value = {
-      version: '',
-      title: '',
-      items: [],
-    }
-
-    expect(parseFeed(value)).toBeUndefined()
+    expect(parseFeed(missingVersion)).toEqual(expectedMissingVersion)
+    expect(parseFeed(missingTitle)).toEqual(expectedMissingTitle)
+    expect(parseFeed(missingItems)).toEqual(expectedMissingItems)
   })
 
   it('should handle invalid nested properties', () => {

@@ -139,7 +139,6 @@ describe('parse', () => {
   })
 
   it('should handle empty object input', () => {
-    // This will be picked up by JSON Feed parser.
     expect(() => parse({})).toThrowError(locales.invalid)
   })
 

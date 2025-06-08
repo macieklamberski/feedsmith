@@ -1,8 +1,7 @@
-import type { ParseFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
   isObject,
-  isPresent,
   parseArrayOf,
   parseBoolean,
   parseCsvOf,
@@ -17,7 +16,7 @@ import {
 } from '../../../common/utils.js'
 import type { Category, Feed, Item, Owner } from '../common/types.js'
 
-export const parseCategory: ParseFunction<Category> = (value) => {
+export const parseCategory: ParsePartialFunction<Category> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -27,12 +26,10 @@ export const parseCategory: ParseFunction<Category> = (value) => {
     categories: parseArrayOf(value['itunes:category'], parseCategory),
   }
 
-  if (isPresent(category.text)) {
-    return trimObject(category) as Category
-  }
+  return trimObject(category)
 }
 
-export const parseOwner: ParseFunction<Owner> = (value) => {
+export const parseOwner: ParsePartialFunction<Owner> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -42,12 +39,10 @@ export const parseOwner: ParseFunction<Owner> = (value) => {
     email: parseSingularOf(value['itunes:email'], parseTextString),
   }
 
-  if (isPresent(owner.name) || isPresent(owner.email)) {
-    return trimObject(owner) as Owner
-  }
+  return trimObject(owner)
 }
 
-export const parseExplicit: ParseFunction<boolean> = (value) => {
+export const parseExplicit: ParsePartialFunction<boolean> = (value) => {
   const boolean = parseBoolean(value)
 
   if (boolean !== undefined) {
@@ -62,7 +57,7 @@ export const parseExplicit: ParseFunction<boolean> = (value) => {
   }
 }
 
-export const parseDuration: ParseFunction<number> = (value) => {
+export const parseDuration: ParsePartialFunction<number> = (value) => {
   const duration = parseNumber(value)
 
   if (duration !== undefined) {
@@ -82,7 +77,7 @@ export const parseDuration: ParseFunction<number> = (value) => {
   }
 }
 
-export const parseImage: ParseFunction<string> = (value) => {
+export const parseImage: ParsePartialFunction<string> = (value) => {
   // Support non-standard format of the image tag where href is not provided in the @href
   // attribute but rather provided as a node value.
   if (isNonEmptyStringOrNumber(value)) {
@@ -96,7 +91,7 @@ export const parseImage: ParseFunction<string> = (value) => {
   return parseString(value['@href'])
 }
 
-export const retrieveItem: ParseFunction<Item> = (value) => {
+export const retrieveItem: ParsePartialFunction<Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -123,10 +118,10 @@ export const retrieveItem: ParseFunction<Item> = (value) => {
     ),
   }
 
-  return trimObject(item) as Item
+  return trimObject(item)
 }
 
-export const retrieveFeed: ParseFunction<Feed> = (value) => {
+export const retrieveFeed: ParsePartialFunction<Feed> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -156,5 +151,5 @@ export const retrieveFeed: ParseFunction<Feed> = (value) => {
     ),
   }
 
-  return trimObject(feed) as Feed
+  return trimObject(feed)
 }

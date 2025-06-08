@@ -1,7 +1,6 @@
-import type { ParseFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '../../../common/types.js'
 import {
   isObject,
-  isPresent,
   parseArrayOf,
   parseBoolean,
   parseNumber,
@@ -45,22 +44,20 @@ import type {
   TextInput,
 } from '../common/types.js'
 
-export const parsePerson: ParseFunction<Person> = (value) => {
+export const parsePerson: ParsePartialFunction<Person> = (value) => {
   return parseSingularOf(value?.name ?? value, parseTextString)
 }
 
-export const parseCategory: ParseFunction<Category> = (value) => {
+export const parseCategory: ParsePartialFunction<Category> = (value) => {
   const category = {
     name: parseString(retrieveText(value)),
     domain: parseString(value?.['@domain']),
   }
 
-  if (isPresent(category.name)) {
-    return trimObject(category) as Category
-  }
+  return trimObject(category)
 }
 
-export const parseCloud: ParseFunction<Cloud> = (value) => {
+export const parseCloud: ParsePartialFunction<Cloud> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -73,18 +70,10 @@ export const parseCloud: ParseFunction<Cloud> = (value) => {
     protocol: parseString(value['@protocol']),
   }
 
-  if (
-    isPresent(cloud.domain) &&
-    isPresent(cloud.port) &&
-    isPresent(cloud.path) &&
-    isPresent(cloud.registerProcedure) &&
-    isPresent(cloud.protocol)
-  ) {
-    return trimObject(cloud) as Cloud
-  }
+  return trimObject(cloud)
 }
 
-export const parseImage: ParseFunction<Image> = (value) => {
+export const parseImage: ParsePartialFunction<Image> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -98,12 +87,10 @@ export const parseImage: ParseFunction<Image> = (value) => {
     width: parseSingularOf(value.width, parseTextNumber),
   }
 
-  if (isPresent(image.url) && isPresent(image.title) && isPresent(image.link)) {
-    return trimObject(image) as Image
-  }
+  return trimObject(image)
 }
 
-export const parseTextInput: ParseFunction<TextInput> = (value) => {
+export const parseTextInput: ParsePartialFunction<TextInput> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -115,25 +102,18 @@ export const parseTextInput: ParseFunction<TextInput> = (value) => {
     link: parseSingularOf(value.link, parseTextString),
   }
 
-  if (
-    isPresent(textInput.title) &&
-    isPresent(textInput.description) &&
-    isPresent(textInput.name) &&
-    isPresent(textInput.link)
-  ) {
-    return trimObject(textInput) as TextInput
-  }
+  return trimObject(textInput)
 }
 
-export const parseSkipHours: ParseFunction<Array<number>> = (value) => {
+export const parseSkipHours: ParsePartialFunction<Array<number>> = (value) => {
   return trimArray(value?.hour, parseTextNumber)
 }
 
-export const parseSkipDays: ParseFunction<Array<string>> = (value) => {
+export const parseSkipDays: ParsePartialFunction<Array<string>> = (value) => {
   return trimArray(value?.day, parseTextString)
 }
 
-export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
+export const parseEnclosure: ParsePartialFunction<Enclosure> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -144,34 +124,28 @@ export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
     type: parseString(value['@type']),
   }
 
-  if (isPresent(enclosure.url) && isPresent(enclosure.length) && isPresent(enclosure.type)) {
-    return trimObject(enclosure) as Enclosure
-  }
+  return trimObject(enclosure)
 }
 
-export const parseGuid: ParseFunction<Guid> = (value) => {
+export const parseGuid: ParsePartialFunction<Guid> = (value) => {
   const source = {
     value: parseString(retrieveText(value)),
     isPermalink: parseBoolean(value?.['@ispermalink']),
   }
 
-  if (isPresent(source.value)) {
-    return trimObject(source) as Guid
-  }
+  return trimObject(source)
 }
 
-export const parseSource: ParseFunction<Source> = (value) => {
+export const parseSource: ParsePartialFunction<Source> = (value) => {
   const source = {
     title: parseString(retrieveText(value)),
     url: parseString(value?.['@url']),
   }
 
-  if (isPresent(source.title)) {
-    return trimObject(source) as Source
-  }
+  return trimObject(source)
 }
 
-export const parseItem: ParseFunction<Item<string>> = (value) => {
+export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -198,12 +172,10 @@ export const parseItem: ParseFunction<Item<string>> = (value) => {
     thr: retrieveThrItem(value),
   }
 
-  if (isPresent(item.title) || isPresent(item.description)) {
-    return trimObject(item) as Item<string>
-  }
+  return trimObject(item)
 }
 
-export const parseFeed: ParseFunction<Feed<string>> = (value) => {
+export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -238,14 +210,9 @@ export const parseFeed: ParseFunction<Feed<string>> = (value) => {
     georss: retrieveGeoRssItemOrFeed(value),
   }
 
-  // INFO: Spec also says about required "description" but this field is not always present
-  // in feeds. We can still parse the feed without it. In addition, the "link" might be missing
-  // as well when the atom:link rel="self" is present so checking "link" is skipped as well.
-  if (isPresent(feed.title)) {
-    return trimObject(feed) as Feed<string>
-  }
+  return trimObject(feed)
 }
 
-export const retrieveFeed: ParseFunction<Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
   return parseSingularOf(value?.rss?.channel, parseFeed)
 }

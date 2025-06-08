@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import type { ParseFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '../../../common/types.js'
 import {
   parseBackLinks,
   parseCategory,
@@ -38,7 +38,7 @@ import {
 
 const createSimpleArrayParserTests = (
   functionName: string,
-  parserFunction: ParseFunction<Array<string>>,
+  parserFunction: ParsePartialFunction<Array<string>>,
   propertyName: string,
 ) => {
   describe(functionName, () => {
@@ -136,14 +136,6 @@ describe('parseRating', () => {
     }
 
     expect(parseRating(value)).toEqual(expected)
-  })
-
-  it('should return undefined if value is missing', () => {
-    const value = {
-      '@scheme': 'urn:simple',
-    }
-
-    expect(parseRating(value)).toBeUndefined()
   })
 
   it('should return undefined for empty objects', () => {
@@ -253,7 +245,6 @@ describe('retrieveRatings', () => {
           '@scheme': 'urn:simple',
         },
         {
-          // Missing #text value.
           '@scheme': 'urn:mpaa',
         },
       ],
@@ -262,6 +253,9 @@ describe('retrieveRatings', () => {
       {
         value: 'adult',
         scheme: 'urn:simple',
+      },
+      {
+        scheme: 'urn:mpaa',
       },
     ]
 
@@ -372,12 +366,15 @@ describe('parseTitleOrDescription', () => {
     expect(parseTitleOrDescription(value)).toEqual(expected)
   })
 
-  it('should return undefined if value is missing', () => {
+  it('should handle partial objects (missing value)', () => {
     const value = {
       '@type': 'plain',
     }
+    const expected = {
+      type: 'plain',
+    }
 
-    expect(parseTitleOrDescription(value)).toBeUndefined()
+    expect(parseTitleOrDescription(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -479,14 +476,19 @@ describe('parseThumbnail', () => {
     expect(parseThumbnail(value)).toEqual(expected)
   })
 
-  it('should return undefined if url is missing', () => {
+  it('should handle partial objects (missing url)', () => {
     const value = {
       '@height': 480,
       '@width': 640,
       '@time': '00:05:30',
     }
+    const expected = {
+      height: 480,
+      width: 640,
+      time: '00:05:30',
+    }
 
-    expect(parseThumbnail(value)).toBeUndefined()
+    expect(parseThumbnail(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -575,13 +577,17 @@ describe('parseCategory', () => {
     expect(parseCategory(value)).toEqual(expected)
   })
 
-  it('should return undefined if name is missing', () => {
+  it('should handle partial objects (missing name)', () => {
     const value = {
       '@scheme': 'http://example.com/categories',
       '@label': 'Tech News',
     }
+    const expected = {
+      scheme: 'http://example.com/categories',
+      label: 'Tech News',
+    }
 
-    expect(parseCategory(value)).toBeUndefined()
+    expect(parseCategory(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -667,12 +673,15 @@ describe('parseHash', () => {
     expect(parseHash(value)).toEqual(expected)
   })
 
-  it('should return undefined if value is missing', () => {
+  it('should handle partial objects (missing hash)', () => {
     const value = {
       '@algo': 'sha256',
     }
+    const expected = {
+      algo: 'sha256',
+    }
 
-    expect(parseHash(value)).toBeUndefined()
+    expect(parseHash(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -755,13 +764,17 @@ describe('parsePlayer', () => {
     expect(parsePlayer(value)).toEqual(expected)
   })
 
-  it('should return undefined if url is missing', () => {
+  it('should handle partial objects (missing url)', () => {
     const value = {
       '@height': 480,
       '@width': 640,
     }
+    const expected = {
+      height: 480,
+      width: 640,
+    }
 
-    expect(parsePlayer(value)).toBeUndefined()
+    expect(parsePlayer(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -850,13 +863,17 @@ describe('parseCredit', () => {
     expect(parseCredit(value)).toEqual(expected)
   })
 
-  it('should return undefined if value is missing', () => {
+  it('should handle partial objects (missing value)', () => {
     const value = {
       '@role': 'producer',
       '@scheme': 'urn:roles',
     }
+    const expected = {
+      role: 'producer',
+      scheme: 'urn:roles',
+    }
 
-    expect(parseCredit(value)).toBeUndefined()
+    expect(parseCredit(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -942,12 +959,15 @@ describe('parseCopyright', () => {
     expect(parseCopyright(value)).toEqual(expected)
   })
 
-  it('should return undefined if value is missing', () => {
+  it('should handle partial objects (missing value)', () => {
     const value = {
       '@url': 'https://example.com/copyright',
     }
+    const expected = {
+      url: 'https://example.com/copyright',
+    }
 
-    expect(parseCopyright(value)).toBeUndefined()
+    expect(parseCopyright(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -1039,13 +1059,17 @@ describe('parseText', () => {
     expect(parseText(value)).toEqual(expected)
   })
 
-  it('should return undefined if value is missing', () => {
+  it('should handle partial objects (missing value)', () => {
     const value = {
       '@type': 'plain',
       '@lang': 'en',
     }
+    const expected = {
+      type: 'plain',
+      lang: 'en',
+    }
 
-    expect(parseText(value)).toBeUndefined()
+    expect(parseText(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -1108,22 +1132,30 @@ describe('parseRestriction', () => {
     expect(parseRestriction(value)).toEqual(expected)
   })
 
-  it('should return undefined if value is missing', () => {
+  it('should handle partial objects (missing value)', () => {
     const value = {
       '@relationship': 'allow',
       '@type': 'country',
     }
+    const expected = {
+      relationship: 'allow',
+      type: 'country',
+    }
 
-    expect(parseRestriction(value)).toBeUndefined()
+    expect(parseRestriction(value)).toEqual(expected)
   })
 
-  it('should return undefined if relationship is missing', () => {
+  it('should handle partial objects (missing relationship)', () => {
     const value = {
       '#text': 'US',
       '@type': 'country',
     }
+    const expected = {
+      value: 'US',
+      type: 'country',
+    }
 
-    expect(parseRestriction(value)).toBeUndefined()
+    expect(parseRestriction(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -1602,6 +1634,12 @@ describe('parseEmbed', () => {
           name: 'valid',
           value: 'param',
         },
+        {
+          name: 'missing-value',
+        },
+        {
+          value: 'missing-name',
+        },
       ],
     }
 
@@ -1622,13 +1660,17 @@ describe('parseEmbed', () => {
     expect(parseEmbed(value)).toEqual(expected)
   })
 
-  it('should return undefined if url is missing', () => {
+  it('should handle partial objects (missing url)', () => {
     const value = {
       '@width': 640,
       '@height': 480,
     }
+    const expected = {
+      width: 640,
+      height: 480,
+    }
 
-    expect(parseEmbed(value)).toBeUndefined()
+    expect(parseEmbed(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -1697,20 +1739,26 @@ describe('parseParam', () => {
     expect(parseParam(value)).toEqual(expected)
   })
 
-  it('should return undefined if name is missing', () => {
+  it('should handle partial objects (missing name)', () => {
     const value = {
       '#text': 'some value',
     }
+    const expected = {
+      value: 'some value',
+    }
 
-    expect(parseParam(value)).toBeUndefined()
+    expect(parseParam(value)).toEqual(expected)
   })
 
-  it('should return undefined if value is missing', () => {
+  it('should handle partial objects (missing value)', () => {
     const value = {
       '@name': 'some name',
     }
+    const expected = {
+      name: 'some name',
+    }
 
-    expect(parseParam(value)).toBeUndefined()
+    expect(parseParam(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -1793,12 +1841,15 @@ describe('parseStatus', () => {
     expect(parseStatus(value)).toEqual(expected)
   })
 
-  it('should return undefined if state is missing', () => {
+  it('should handle partial objects (missing state)', () => {
     const value = {
       '@reason': 'no state provided',
     }
+    const expected = {
+      reason: 'no state provided',
+    }
 
-    expect(parseStatus(value)).toBeUndefined()
+    expect(parseStatus(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -1972,12 +2023,15 @@ describe('parseLicense', () => {
     expect(parseLicense(value)).toEqual(expected)
   })
 
-  it('should return undefined if both name and href are missing', () => {
+  it('should handle partial objects (missing name and href)', () => {
     const value = {
       '@type': 'cc-by',
     }
+    const expected = {
+      type: 'cc-by',
+    }
 
-    expect(parseLicense(value)).toBeUndefined()
+    expect(parseLicense(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -2058,13 +2112,17 @@ describe('parseSubTitle', () => {
     expect(parseSubTitle(value)).toEqual(expected)
   })
 
-  it('should return undefined if href is missing', () => {
+  it('should handle partial objects (missing href)', () => {
     const value = {
       '@type': 'text/vtt',
       '@lang': 'en',
     }
+    const expected = {
+      type: 'text/vtt',
+      lang: 'en',
+    }
 
-    expect(parseSubTitle(value)).toBeUndefined()
+    expect(parseSubTitle(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -2142,12 +2200,15 @@ describe('parsePeerLink', () => {
     expect(parsePeerLink(value)).toEqual(expected)
   })
 
-  it('should return undefined if href is missing', () => {
+  it('should handle partial objects (missing href)', () => {
     const value = {
       '@type': 'torrent',
     }
+    const expected = {
+      type: 'torrent',
+    }
 
-    expect(parsePeerLink(value)).toBeUndefined()
+    expect(parsePeerLink(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -3293,14 +3354,21 @@ describe('parseContent', () => {
     expect(parseContent(value)).toEqual(expected)
   })
 
-  it('should return undefined if url is missing', () => {
+  it('should handle partial objects (missing url)', () => {
     const value = {
       '@type': 'video/mp4',
       '@medium': 'video',
       'media:title': 'Sample Video',
     }
+    const expected = {
+      type: 'video/mp4',
+      medium: 'video',
+      title: {
+        value: 'Sample Video',
+      },
+    }
 
-    expect(parseContent(value)).toBeUndefined()
+    expect(parseContent(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {

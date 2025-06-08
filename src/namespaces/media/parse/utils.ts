@@ -1,8 +1,7 @@
-import type { ParseFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
   isObject,
-  isPresent,
   parseArrayOf,
   parseBoolean,
   parseCsvOf,
@@ -45,18 +44,16 @@ import type {
   TitleOrDescription,
 } from '../common/types.js'
 
-export const parseRating: ParseFunction<Rating> = (value) => {
+export const parseRating: ParsePartialFunction<Rating> = (value) => {
   const rating = {
     value: parseString(retrieveText(value)),
     scheme: parseString(value?.['@scheme']),
   }
 
-  if (isPresent(rating.value)) {
-    return trimObject(rating) as Rating
-  }
+  return trimObject(rating)
 }
 
-export const retrieveRatings: ParseFunction<Array<Rating>> = (value) => {
+export const retrieveRatings: ParsePartialFunction<Array<Rating>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -80,18 +77,16 @@ export const retrieveRatings: ParseFunction<Array<Rating>> = (value) => {
   }
 }
 
-export const parseTitleOrDescription: ParseFunction<TitleOrDescription> = (value) => {
+export const parseTitleOrDescription: ParsePartialFunction<TitleOrDescription> = (value) => {
   const title = {
     value: parseString(retrieveText(value)),
     type: parseString(value?.['@type']),
   }
 
-  if (isPresent(title.value)) {
-    return trimObject(title) as TitleOrDescription
-  }
+  return trimObject(title)
 }
 
-export const parseThumbnail: ParseFunction<Thumbnail> = (value) => {
+export const parseThumbnail: ParsePartialFunction<Thumbnail> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -103,35 +98,29 @@ export const parseThumbnail: ParseFunction<Thumbnail> = (value) => {
     time: parseString(value['@time']),
   }
 
-  if (isPresent(thumbnail.url)) {
-    return trimObject(thumbnail) as Thumbnail
-  }
+  return trimObject(thumbnail)
 }
 
-export const parseCategory: ParseFunction<Category> = (value) => {
+export const parseCategory: ParsePartialFunction<Category> = (value) => {
   const category = {
     name: parseString(retrieveText(value)),
     scheme: parseString(value?.['@scheme']),
     label: parseString(value?.['@label']),
   }
 
-  if (isPresent(category.name)) {
-    return trimObject(category) as Category
-  }
+  return trimObject(category)
 }
 
-export const parseHash: ParseFunction<Hash> = (value) => {
+export const parseHash: ParsePartialFunction<Hash> = (value) => {
   const hash = {
     value: parseString(retrieveText(value)),
     algo: parseString(value?.['@algo']),
   }
 
-  if (isPresent(hash.value)) {
-    return trimObject(hash) as Hash
-  }
+  return trimObject(hash)
 }
 
-export const parsePlayer: ParseFunction<Player> = (value) => {
+export const parsePlayer: ParsePartialFunction<Player> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -142,35 +131,29 @@ export const parsePlayer: ParseFunction<Player> = (value) => {
     width: parseNumber(value['@width']),
   }
 
-  if (isPresent(player.url)) {
-    return trimObject(player) as Player
-  }
+  return trimObject(player)
 }
 
-export const parseCredit: ParseFunction<Credit> = (value) => {
+export const parseCredit: ParsePartialFunction<Credit> = (value) => {
   const credit = {
     value: parseString(retrieveText(value)),
     role: parseString(value?.['@role']),
     scheme: parseString(value?.['@scheme']),
   }
 
-  if (isPresent(credit.value)) {
-    return trimObject(credit) as Credit
-  }
+  return trimObject(credit)
 }
 
-export const parseCopyright: ParseFunction<Copyright> = (value) => {
+export const parseCopyright: ParsePartialFunction<Copyright> = (value) => {
   const copyright = {
     value: parseString(retrieveText(value)),
     url: parseString(value?.['@url']),
   }
 
-  if (isPresent(copyright.value)) {
-    return trimObject(copyright) as Copyright
-  }
+  return trimObject(copyright)
 }
 
-export const parseText: ParseFunction<Text> = (value) => {
+export const parseText: ParsePartialFunction<Text> = (value) => {
   const text = {
     value: parseString(retrieveText(value)),
     type: parseString(value?.['@type']),
@@ -179,12 +162,10 @@ export const parseText: ParseFunction<Text> = (value) => {
     end: parseString(value?.['@end']),
   }
 
-  if (isPresent(text.value)) {
-    return trimObject(text) as Text
-  }
+  return trimObject(text)
 }
 
-export const parseRestriction: ParseFunction<Restriction> = (value) => {
+export const parseRestriction: ParsePartialFunction<Restriction> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -195,12 +176,10 @@ export const parseRestriction: ParseFunction<Restriction> = (value) => {
     type: parseString(value['@type']),
   }
 
-  if (isPresent(restriction.value) && isPresent(restriction.relationship)) {
-    return trimObject(restriction) as Restriction
-  }
+  return trimObject(restriction)
 }
 
-export const parseCommunity: ParseFunction<Community> = (value) => {
+export const parseCommunity: ParsePartialFunction<Community> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -211,10 +190,10 @@ export const parseCommunity: ParseFunction<Community> = (value) => {
     tags: parseSingularOf(value['media:tags'], parseTags),
   }
 
-  return trimObject(community) as Community
+  return trimObject(community)
 }
 
-export const parseStarRating: ParseFunction<StarRating> = (value) => {
+export const parseStarRating: ParsePartialFunction<StarRating> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -226,10 +205,10 @@ export const parseStarRating: ParseFunction<StarRating> = (value) => {
     max: parseNumber(value['@max']),
   }
 
-  return trimObject(starRating) as StarRating
+  return trimObject(starRating)
 }
 
-export const parseStatistics: ParseFunction<Statistics> = (value) => {
+export const parseStatistics: ParsePartialFunction<Statistics> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -239,10 +218,10 @@ export const parseStatistics: ParseFunction<Statistics> = (value) => {
     favorites: parseNumber(value['@favorites']),
   }
 
-  return trimObject(statistics) as Statistics
+  return trimObject(statistics)
 }
 
-export const parseTags: ParseFunction<Array<Tag>> = (value) => {
+export const parseTags: ParsePartialFunction<Array<Tag>> = (value) => {
   if (!isNonEmptyStringOrNumber(value)) {
     return
   }
@@ -251,7 +230,7 @@ export const parseTags: ParseFunction<Array<Tag>> = (value) => {
 
   if (segments) {
     return trimArray(segments, (segment) => {
-      const split = segment.split(':') as Array<string>
+      const split = segment.split(':')
 
       return {
         name: parseString(split[0]) ?? '',
@@ -261,11 +240,11 @@ export const parseTags: ParseFunction<Array<Tag>> = (value) => {
   }
 }
 
-export const parseComments: ParseFunction<Array<string>> = (value) => {
+export const parseComments: ParsePartialFunction<Array<string>> = (value) => {
   return parseArrayOf(value?.['media:comment'], parseTextString)
 }
 
-export const parseEmbed: ParseFunction<Embed> = (value) => {
+export const parseEmbed: ParsePartialFunction<Embed> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -277,12 +256,10 @@ export const parseEmbed: ParseFunction<Embed> = (value) => {
     params: parseArrayOf(value['media:param'], parseParam),
   }
 
-  if (isPresent(embed.url)) {
-    return trimObject(embed) as Embed
-  }
+  return trimObject(embed)
 }
 
-export const parseParam: ParseFunction<Param> = (value) => {
+export const parseParam: ParsePartialFunction<Param> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -292,20 +269,18 @@ export const parseParam: ParseFunction<Param> = (value) => {
     value: parseString(retrieveText(value)),
   }
 
-  if (isPresent(param.name) && isPresent(param.value)) {
-    return param as Param
-  }
+  return trimObject(param)
 }
 
-export const parseResponses: ParseFunction<Array<string>> = (value) => {
+export const parseResponses: ParsePartialFunction<Array<string>> = (value) => {
   return parseArrayOf(value?.['media:response'], parseTextString)
 }
 
-export const parseBackLinks: ParseFunction<Array<string>> = (value) => {
+export const parseBackLinks: ParsePartialFunction<Array<string>> = (value) => {
   return parseArrayOf(value?.['media:backlink'], parseTextString)
 }
 
-export const parseStatus: ParseFunction<Status> = (value) => {
+export const parseStatus: ParsePartialFunction<Status> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -315,12 +290,10 @@ export const parseStatus: ParseFunction<Status> = (value) => {
     reason: parseString(value['@reason']),
   }
 
-  if (isPresent(status.state)) {
-    return trimObject(status) as Status
-  }
+  return trimObject(status)
 }
 
-export const parsePrice: ParseFunction<Price> = (value) => {
+export const parsePrice: ParsePartialFunction<Price> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -332,22 +305,20 @@ export const parsePrice: ParseFunction<Price> = (value) => {
     currency: parseString(value['@currency']),
   }
 
-  return trimObject(price) as Price
+  return trimObject(price)
 }
 
-export const parseLicense: ParseFunction<License> = (value) => {
+export const parseLicense: ParsePartialFunction<License> = (value) => {
   const license = {
     name: parseString(retrieveText(value)),
     type: parseString(value?.['@type']),
     href: parseString(value?.['@href']),
   }
 
-  if (isPresent(license.name) || isPresent(license.href)) {
-    return trimObject(license) as License
-  }
+  return trimObject(license)
 }
 
-export const parseSubTitle: ParseFunction<SubTitle> = (value) => {
+export const parseSubTitle: ParsePartialFunction<SubTitle> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -358,12 +329,10 @@ export const parseSubTitle: ParseFunction<SubTitle> = (value) => {
     href: parseString(value['@href']),
   }
 
-  if (isPresent(subTitle.href)) {
-    return trimObject(subTitle) as SubTitle
-  }
+  return trimObject(subTitle)
 }
 
-export const parsePeerLink: ParseFunction<PeerLink> = (value) => {
+export const parsePeerLink: ParsePartialFunction<PeerLink> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -373,12 +342,10 @@ export const parsePeerLink: ParseFunction<PeerLink> = (value) => {
     href: parseString(value['@href']),
   }
 
-  if (isPresent(peerLink.href)) {
-    return trimObject(peerLink) as PeerLink
-  }
+  return trimObject(peerLink)
 }
 
-export const parseRights: ParseFunction<Rights> = (value) => {
+export const parseRights: ParsePartialFunction<Rights> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -387,10 +354,10 @@ export const parseRights: ParseFunction<Rights> = (value) => {
     status: parseString(value['@status']),
   }
 
-  return trimObject(rights) as Rights
+  return trimObject(rights)
 }
 
-export const parseScene: ParseFunction<Scene> = (value) => {
+export const parseScene: ParsePartialFunction<Scene> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -402,28 +369,28 @@ export const parseScene: ParseFunction<Scene> = (value) => {
     endTime: parseSingularOf(value.sceneendtime, parseTextString),
   }
 
-  return trimObject(scene) as Scene
+  return trimObject(scene)
 }
 
-export const parseScenes: ParseFunction<Array<Scene>> = (value) => {
+export const parseScenes: ParsePartialFunction<Array<Scene>> = (value) => {
   return parseArrayOf(value?.['media:scene'], parseScene)
 }
 
-export const parseLocation: ParseFunction<Location> = (value) => {
-  // TODO: Extend parseLocation according to the specification of media:location:
-  // https://www.rssboard.org/media-rss#media-peerlink after implementing GeoRSS GML support.
-
+export const parseLocation: ParsePartialFunction<Location> = (value) => {
   // For cases where the location is simply a string within the <media:location> tag.
   if (isNonEmptyStringOrNumber(value) || isObject(value)) {
-    return {
+    const location = {
       description: parseString(retrieveText(value)),
     }
+
+    return trimObject(location)
   }
 
-  return undefined
+  // TODO: Extend parseLocation according to the specification of media:location:
+  // https://www.rssboard.org/media-rss#media-peerlink after implementing GeoRSS GML support.
 }
 
-export const retrieveCommonElements: ParseFunction<CommonElements> = (value) => {
+export const retrieveCommonElements: ParsePartialFunction<CommonElements> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -458,10 +425,10 @@ export const retrieveCommonElements: ParseFunction<CommonElements> = (value) => 
     scenes: parseSingularOf(value['media:scenes'], parseScenes),
   }
 
-  return trimObject(commonElements) as CommonElements
+  return trimObject(commonElements)
 }
 
-export const parseContent: ParseFunction<Content> = (value) => {
+export const parseContent: ParsePartialFunction<Content> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -484,12 +451,10 @@ export const parseContent: ParseFunction<Content> = (value) => {
     ...retrieveCommonElements(value),
   }
 
-  if (isPresent(content.url)) {
-    return trimObject(content) as Content
-  }
+  return trimObject(content)
 }
 
-export const parseGroup: ParseFunction<Group> = (value) => {
+export const parseGroup: ParsePartialFunction<Group> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -499,10 +464,10 @@ export const parseGroup: ParseFunction<Group> = (value) => {
     ...retrieveCommonElements(value),
   }
 
-  return trimObject(group) as Group
+  return trimObject(group)
 }
 
-export const retrieveItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
+export const retrieveItemOrFeed: ParsePartialFunction<ItemOrFeed> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -513,5 +478,5 @@ export const retrieveItemOrFeed: ParseFunction<ItemOrFeed> = (value) => {
     ...retrieveCommonElements(value),
   }
 
-  return trimObject(itemOrFeed) as ItemOrFeed
+  return trimObject(itemOrFeed)
 }

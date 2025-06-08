@@ -1,4 +1,4 @@
-import type { ParseFunction as CommonParseFunction, DateLike } from '../../../common/types.js'
+import type { AnyOf, DateLike, DeepPartial, Unreliable } from '../../../common/types.js'
 import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/common/types.js'
 import type { ItemOrFeed as GeoRssItemOrFeed } from '../../../namespaces/georss/common/types.js'
 import type {
@@ -10,7 +10,10 @@ import type { Item as SlashItem } from '../../../namespaces/slash/common/types.j
 import type { Feed as SyFeed } from '../../../namespaces/sy/common/types.js'
 import type { Item as ThrItem, Link as ThrLink } from '../../../namespaces/thr/common/types.js'
 
-export type ParseFunction<R> = CommonParseFunction<R, { prefix?: string; partial?: boolean }>
+export type ParsePartialFunction<R> = (
+  value: Unreliable,
+  options?: { prefix?: string; asNamespace?: boolean },
+) => DeepPartial<R> | undefined
 
 // For simplicity's sake, a string is used for now, but this may be reconsidered in the future.
 export type Text = string
@@ -43,7 +46,7 @@ export type Generator = {
   version?: string
 }
 
-export type Source<TDate extends DateLike> = {
+export type Source<TDate extends DateLike> = AnyOf<{
   authors?: Array<Person>
   categories?: Array<Category>
   contributors?: Array<Person>
@@ -56,7 +59,7 @@ export type Source<TDate extends DateLike> = {
   subtitle?: Text
   title?: Text
   updated?: string
-}
+}>
 
 export type Entry<TDate extends DateLike> = {
   authors?: Array<Person>
@@ -85,17 +88,17 @@ export type Feed<TDate extends DateLike> = {
   contributors?: Array<Person>
   generator?: Generator
   icon?: string
-  id?: string
+  id: string
   links?: Array<Link<TDate>>
   logo?: string
   rights?: Text
   subtitle?: Text
-  title?: Text
-  updated?: string
+  title: Text
+  updated: string
   entries?: Array<Entry<TDate>>
   dc?: DcItemOrFeed<TDate>
   sy?: SyFeed<TDate>
   itunes?: ItunesFeed
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
-} & ({ id: string } | { title: Text })
+}

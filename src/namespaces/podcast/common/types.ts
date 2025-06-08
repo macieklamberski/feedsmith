@@ -1,4 +1,20 @@
-import type { DateLike } from '../../../common/types.js'
+import type { AnyOf, DateLike } from '../../../common/types.js'
+
+type BaseItem = {
+  transcripts?: Array<Transcript>
+  chapters?: Chapters
+  soundbites?: Array<Soundbite>
+  persons?: Array<Person>
+  location?: Location
+  season?: Season
+  episode?: Episode
+  license?: License
+  alternateEnclosures?: Array<AlternateEnclosure>
+  value?: Value
+  images?: Images
+  socialInteracts?: Array<SocialInteract>
+  txts?: Array<Txt>
+}
 
 export type Transcript = {
   url: string
@@ -108,11 +124,11 @@ export type ValueRecipient = {
   fee?: boolean
 }
 
-export type Images = {
+export type Images = AnyOf<{
   srcset?: string
-}
+}>
 
-export type LiveItem<TDate extends DateLike> = Item & {
+export type LiveItem<TDate extends DateLike> = BaseItem & {
   status: string
   start: TDate // Date: ISO 8601.
   end?: TDate // Date: ISO 8601.
@@ -125,6 +141,9 @@ export type ContentLink = {
 }
 
 export type SocialInteract = {
+  // INFO: The specification states that the `uri` is required. However, if the protocol is set
+  // to `disabled`, no other attributes are necessary. To bypass the protocol value check, which
+  // may be invalid, only the protocol is required to ensure consistent behavior.
   uri?: string
   protocol: string
   accountId?: string
@@ -149,9 +168,9 @@ export type RemoteItem = {
   medium?: string
 }
 
-export type Podroll = {
+export type Podroll = AnyOf<{
   remoteItems?: Array<RemoteItem>
-}
+}>
 
 export type UpdateFrequency<TDate extends DateLike> = {
   display: string
@@ -160,9 +179,9 @@ export type UpdateFrequency<TDate extends DateLike> = {
   rrule?: string
 }
 
-export type Podping = {
+export type Podping = AnyOf<{
   usesPodping?: boolean
-}
+}>
 
 export type ValueTimeSplit = {
   startTime: number
@@ -173,23 +192,9 @@ export type ValueTimeSplit = {
   valueRecipients?: Array<ValueRecipient>
 }
 
-export type Item = {
-  transcripts?: Array<Transcript>
-  chapters?: Chapters
-  soundbites?: Array<Soundbite>
-  persons?: Array<Person>
-  location?: Location
-  season?: Season
-  episode?: Episode
-  license?: License
-  alternateEnclosures?: Array<AlternateEnclosure>
-  value?: Value
-  images?: Images
-  socialInteracts?: Array<SocialInteract>
-  txts?: Array<Txt>
-}
+export type Item = AnyOf<BaseItem>
 
-export type Feed<TDate extends DateLike> = {
+export type Feed<TDate extends DateLike> = AnyOf<{
   locked?: Locked
   fundings?: Array<Funding>
   persons?: Array<Person>
@@ -207,4 +212,4 @@ export type Feed<TDate extends DateLike> = {
   podroll?: Podroll
   updateFrequency?: UpdateFrequency<TDate>
   podping?: Podping
-}
+}>

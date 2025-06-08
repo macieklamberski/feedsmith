@@ -70,16 +70,6 @@ describe('parseInReplyTo', () => {
     expect(parseInReplyTo(value)).toEqual(expected)
   })
 
-  it('should return undefined if ref is missing', () => {
-    const value = {
-      '@href': 'https://example.com/posts/123',
-      '@type': 'application/json',
-      '@source': 'example.com',
-    }
-
-    expect(parseInReplyTo(value)).toBeUndefined()
-  })
-
   it('should return undefined for empty objects', () => {
     const value = {}
 
@@ -327,7 +317,7 @@ describe('retrieveItem', () => {
         },
         {}, // Empty object should be filtered out.
         {
-          '@href': 'https://example.com/posts/456', // Missing ref field.
+          '@href': 'https://example.com/posts/456',
           '@invalid': 'property',
         },
       ],
@@ -339,23 +329,13 @@ describe('retrieveItem', () => {
           ref: 'post-123',
           href: 'https://example.com/posts/123',
         },
-      ],
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should return undefined when no valid properties are present', () => {
-    const value = {
-      'thr:in-reply-to': [
-        {}, // Empty object will be filtered out.
         {
-          '@href': 'https://example.com/posts/456', // Missing ref field.
+          href: 'https://example.com/posts/456',
         },
       ],
     }
 
-    expect(retrieveItem(value)).toBeUndefined()
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {

@@ -90,22 +90,30 @@ describe('parseTranscript', () => {
     expect(parseTranscript(value)).toEqual(expected)
   })
 
-  it('should return undefined if url is missing', () => {
+  it('should handle partial objects (missing url)', () => {
     const value = {
       '@type': 'text/vtt',
       '@language': 'es',
     }
+    const expected = {
+      type: 'text/vtt',
+      language: 'es',
+    }
 
-    expect(parseTranscript(value)).toBeUndefined()
+    expect(parseTranscript(value)).toEqual(expected)
   })
 
-  it('should return undefined if type is missing', () => {
+  it('should handle partial objects (missing type)', () => {
     const value = {
       '@url': 'https://example.com/transcript.vtt',
       '@language': 'fr',
     }
+    const expected = {
+      url: 'https://example.com/transcript.vtt',
+      language: 'fr',
+    }
 
-    expect(parseTranscript(value)).toBeUndefined()
+    expect(parseTranscript(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -192,12 +200,15 @@ describe('parseLocked', () => {
     expect(parseLocked(value)).toEqual(expected)
   })
 
-  it('should return undefined if value is missing', () => {
+  it('should handle partial objects (missing value)', () => {
     const value = {
       '@owner': 'Example Podcast Network',
     }
+    const expected = {
+      owner: 'Example Podcast Network',
+    }
 
-    expect(parseLocked(value)).toBeUndefined()
+    expect(parseLocked(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -286,12 +297,15 @@ describe('parseFunding', () => {
     expect(parseFunding(value)).toEqual(expected)
   })
 
-  it('should return undefined if url is missing', () => {
+  it('should handle partial objects (missing url)', () => {
     const value = {
       '#text': 'Support our podcast',
     }
+    const expected = {
+      display: 'Support our podcast',
+    }
 
-    expect(parseFunding(value)).toBeUndefined()
+    expect(parseFunding(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -358,20 +372,26 @@ describe('parseChapters', () => {
     expect(parseChapters(value)).toEqual(expected)
   })
 
-  it('should return undefined if url is missing', () => {
+  it('should handle partial objects (missing url)', () => {
     const value = {
       '@type': 'application/json',
     }
+    const expected = {
+      type: 'application/json',
+    }
 
-    expect(parseChapters(value)).toBeUndefined()
+    expect(parseChapters(value)).toEqual(expected)
   })
 
-  it('should return undefined if type is missing', () => {
+  it('should handle partial objects (missing type)', () => {
     const value = {
       '@url': 'https://example.com/chapters.json',
     }
+    const expected = {
+      url: 'https://example.com/chapters.json',
+    }
 
-    expect(parseChapters(value)).toBeUndefined()
+    expect(parseChapters(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -487,42 +507,58 @@ describe('parseSoundbite', () => {
     expect(parseSoundbite(value)).toEqual(expected)
   })
 
-  it('should return undefined if startTime is missing', () => {
+  it('should handle partial objects (missing startTime)', () => {
     const value = {
       '@duration': 30,
       '#text': 'This is a great quote',
     }
+    const expected = {
+      duration: 30,
+      display: 'This is a great quote',
+    }
 
-    expect(parseSoundbite(value)).toBeUndefined()
+    expect(parseSoundbite(value)).toEqual(expected)
   })
 
-  it('should return undefined if duration is missing', () => {
+  it('should handle partial objects (missing duration)', () => {
     const value = {
       '@starttime': 60,
       '#text': 'This is a great quote',
     }
+    const expected = {
+      startTime: 60,
+      display: 'This is a great quote',
+    }
 
-    expect(parseSoundbite(value)).toBeUndefined()
+    expect(parseSoundbite(value)).toEqual(expected)
   })
 
-  it('should return undefined if startTime cannot be parsed as a number', () => {
+  it('should handle partial objects (invalid startTime)', () => {
     const value = {
       '@starttime': 'not a number',
       '@duration': 30,
       '#text': 'This is a great quote',
     }
+    const expected = {
+      duration: 30,
+      display: 'This is a great quote',
+    }
 
-    expect(parseSoundbite(value)).toBeUndefined()
+    expect(parseSoundbite(value)).toEqual(expected)
   })
 
-  it('should return undefined if duration cannot be parsed as a number', () => {
+  it('should handle partial objects (invalid duration)', () => {
     const value = {
       '@starttime': 60,
       '@duration': 'not a number',
       '#text': 'This is a great quote',
     }
+    const expected = {
+      startTime: 60,
+      display: 'This is a great quote',
+    }
 
-    expect(parseSoundbite(value)).toBeUndefined()
+    expect(parseSoundbite(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -615,13 +651,17 @@ describe('parsePerson', () => {
     expect(parsePerson(value)).toEqual(expected)
   })
 
-  it('should return undefined if display is missing', () => {
+  it('should handle partial objects (missing display)', () => {
     const value = {
       '@role': 'host',
       '@group': 'main',
     }
+    const expected = {
+      role: 'host',
+      group: 'main',
+    }
 
-    expect(parsePerson(value)).toBeUndefined()
+    expect(parsePerson(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -735,13 +775,17 @@ describe('parseLocation', () => {
     expect(parseLocation(value)).toEqual(expected)
   })
 
-  it('should return undefined if display is missing', () => {
+  it('should handle partial objects (missing display)', () => {
     const value = {
       '@geo': '37.7749,-122.4194',
       '@osm': 'R61317',
     }
+    const expected = {
+      geo: '37.7749,-122.4194',
+      osm: 'R61317',
+    }
 
-    expect(parseLocation(value)).toBeUndefined()
+    expect(parseLocation(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -849,13 +893,16 @@ describe('parseSeason', () => {
     expect(parseSeason(value)).toEqual(expected)
   })
 
-  it('should return undefined if number cannot be parsed (as object)', () => {
+  it('should handle partial objects (invalid number)', () => {
     const value = {
       '#text': 'not a number',
       '@name': 'Invalid Season',
     }
+    const expected = {
+      name: 'Invalid Season',
+    }
 
-    expect(parseSeason(value)).toBeUndefined()
+    expect(parseSeason(value)).toEqual(expected)
   })
 
   it('should return undefined if number cannot be parsed (as string)', () => {
@@ -864,12 +911,15 @@ describe('parseSeason', () => {
     expect(parseSeason(value)).toBeUndefined()
   })
 
-  it('should return undefined if number is missing', () => {
+  it('should handle partial objects (missing number)', () => {
     const value = {
       '@name': 'Missing Number Season',
     }
+    const expected = {
+      name: 'Missing Number Season',
+    }
 
-    expect(parseSeason(value)).toBeUndefined()
+    expect(parseSeason(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -977,21 +1027,27 @@ describe('parseEpisode', () => {
     expect(parseEpisode(value)).toEqual(expected)
   })
 
-  it('should return undefined if number is missing', () => {
+  it('should handle partial objects (missing number)', () => {
     const value = {
       '@display': 'Missing Number Episode',
     }
+    const expected = {
+      display: 'Missing Number Episode',
+    }
 
-    expect(parseEpisode(value)).toBeUndefined()
+    expect(parseEpisode(value)).toEqual(expected)
   })
 
-  it('should return undefined if number cannot be parsed', () => {
+  it('should handle partial objects (invalid number)', () => {
     const value = {
       '#text': 'not a number',
       '@display': 'Invalid Episode',
     }
+    const expected = {
+      display: 'Invalid Episode',
+    }
 
-    expect(parseEpisode(value)).toBeUndefined()
+    expect(parseEpisode(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -1088,31 +1144,43 @@ describe('parseTrailer', () => {
     expect(parseTrailer(value)).toEqual(expected)
   })
 
-  it('should return undefined if text is missing', () => {
+  it('should handle partial objects (missing text)', () => {
     const value = {
       '@url': 'https://example.com/trailer.mp3',
       '@pubdate': 'Tue, 10 Jan 2023 12:00:00 GMT',
     }
+    const expected = {
+      url: 'https://example.com/trailer.mp3',
+      pubDate: 'Tue, 10 Jan 2023 12:00:00 GMT',
+    }
 
-    expect(parseTrailer(value)).toBeUndefined()
+    expect(parseTrailer(value)).toEqual(expected)
   })
 
-  it('should return undefined if url is missing', () => {
+  it('should handle partial objects (missing url)', () => {
     const value = {
       '#text': 'Season 2 Trailer',
       '@pubdate': 'Tue, 10 Jan 2023 12:00:00 GMT',
     }
+    const expected = {
+      display: 'Season 2 Trailer',
+      pubDate: 'Tue, 10 Jan 2023 12:00:00 GMT',
+    }
 
-    expect(parseTrailer(value)).toBeUndefined()
+    expect(parseTrailer(value)).toEqual(expected)
   })
 
-  it('should return undefined if pubdate is missing', () => {
+  it('should handle partial objects (missing pubdate)', () => {
     const value = {
       '#text': 'Season 2 Trailer',
       '@url': 'https://example.com/trailer.mp3',
     }
+    const expected = {
+      display: 'Season 2 Trailer',
+      url: 'https://example.com/trailer.mp3',
+    }
 
-    expect(parseTrailer(value)).toBeUndefined()
+    expect(parseTrailer(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -1199,12 +1267,15 @@ describe('parseLicense', () => {
     expect(parseLicense(value)).toEqual(expected)
   })
 
-  it('should return undefined if display is missing', () => {
+  it('should handle partial objects (missing display)', () => {
     const value = {
       '@url': 'https://creativecommons.org/licenses/by/4.0/',
     }
+    const expected = {
+      url: 'https://creativecommons.org/licenses/by/4.0/',
+    }
 
-    expect(parseLicense(value)).toBeUndefined()
+    expect(parseLicense(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -1346,13 +1417,17 @@ describe('parseAlternateEnclosure', () => {
     expect(parseAlternateEnclosure(value)).toEqual(expected)
   })
 
-  it('should return undefined if type is missing', () => {
+  it('should handle partial objects (missing type)', () => {
     const value = {
       '@length': 12345678,
       '@bitrate': 128000,
     }
+    const expected = {
+      length: 12345678,
+      bitrate: 128000,
+    }
 
-    expect(parseAlternateEnclosure(value)).toBeUndefined()
+    expect(parseAlternateEnclosure(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -1430,12 +1505,15 @@ describe('parseSource', () => {
     expect(parseSource(value)).toEqual(expected)
   })
 
-  it('should return undefined if uri is missing', () => {
+  it('should handle partial objects (missing uri)', () => {
     const value = {
       '@contenttype': 'audio/mpeg',
     }
+    const expected = {
+      contentType: 'audio/mpeg',
+    }
 
-    expect(parseSource(value)).toBeUndefined()
+    expect(parseSource(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -1502,20 +1580,26 @@ describe('parseIntegrity', () => {
     expect(parseIntegrity(value)).toEqual(expected)
   })
 
-  it('should return undefined if type is missing', () => {
+  it('should handle partial objects (missing type)', () => {
     const value = {
       '@value': '7694f4a66316e53c8cdd9d79c6d6e5152528a9d2de82758bc08b0025a253ac20',
     }
+    const expected = {
+      value: '7694f4a66316e53c8cdd9d79c6d6e5152528a9d2de82758bc08b0025a253ac20',
+    }
 
-    expect(parseIntegrity(value)).toBeUndefined()
+    expect(parseIntegrity(value)).toEqual(expected)
   })
 
-  it('should return undefined if value is missing', () => {
+  it('should handle partial objects (missing value)', () => {
     const value = {
       '@type': 'sha256',
     }
+    const expected = {
+      type: 'sha256',
+    }
 
-    expect(parseIntegrity(value)).toBeUndefined()
+    expect(parseIntegrity(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -1639,22 +1723,30 @@ describe('parseValue', () => {
     expect(parseValue(value)).toEqual(expected)
   })
 
-  it('should return undefined if type is missing', () => {
+  it('should handle partial objects (missing type)', () => {
     const value = {
       '@method': 'keysend',
       '@suggested': 0.00000005,
     }
+    const expected = {
+      method: 'keysend',
+      suggested: 0.00000005,
+    }
 
-    expect(parseValue(value)).toBeUndefined()
+    expect(parseValue(value)).toEqual(expected)
   })
 
-  it('should return undefined if method is missing', () => {
+  it('should handle partial objects (missing method)', () => {
     const value = {
       '@type': 'lightning',
       '@suggested': 0.00000005,
     }
+    const expected = {
+      type: 'lightning',
+      suggested: 0.00000005,
+    }
 
-    expect(parseValue(value)).toBeUndefined()
+    expect(parseValue(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -1769,41 +1861,57 @@ describe('parseValueRecipient', () => {
     expect(parseValueRecipient(value)).toEqual(expected)
   })
 
-  it('should return undefined if type is missing', () => {
+  it('should handle partial objects (missing type)', () => {
     const value = {
       '@address': '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
       '@split': 90,
     }
+    const expected = {
+      address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
+      split: 90,
+    }
 
-    expect(parseValueRecipient(value)).toBeUndefined()
+    expect(parseValueRecipient(value)).toEqual(expected)
   })
 
-  it('should return undefined if address is missing', () => {
+  it('should handle partial objects (missing address)', () => {
     const value = {
       '@type': 'node',
       '@split': 90,
     }
+    const expected = {
+      type: 'node',
+      split: 90,
+    }
 
-    expect(parseValueRecipient(value)).toBeUndefined()
+    expect(parseValueRecipient(value)).toEqual(expected)
   })
 
-  it('should return undefined if split is missing', () => {
+  it('should handle partial objects (missing split)', () => {
     const value = {
       '@type': 'node',
       '@address': '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
     }
+    const expected = {
+      type: 'node',
+      address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
+    }
 
-    expect(parseValueRecipient(value)).toBeUndefined()
+    expect(parseValueRecipient(value)).toEqual(expected)
   })
 
-  it('should return undefined if split cannot be parsed as a number', () => {
+  it('should handle partial objects (invalid split)', () => {
     const value = {
       '@type': 'node',
       '@address': '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
       '@split': 'not a number',
     }
+    const expected = {
+      type: 'node',
+      address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
+    }
 
-    expect(parseValueRecipient(value)).toBeUndefined()
+    expect(parseValueRecipient(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -2020,28 +2128,39 @@ describe('parseLiveItem', () => {
           href: 'https://example.com/livestream',
           display: 'Watch our livestream',
         },
+        {
+          display: 'Invalid link',
+        },
       ],
     }
 
     expect(parseLiveItem(value)).toEqual(expected)
   })
 
-  it('should return undefined if status is missing', () => {
+  it('should handle partial objects (missing status)', () => {
     const value = {
       '@start': '2023-06-15T15:00:00Z',
       '@end': '2023-06-15T16:00:00Z',
     }
+    const expected = {
+      start: '2023-06-15T15:00:00Z',
+      end: '2023-06-15T16:00:00Z',
+    }
 
-    expect(parseLiveItem(value)).toBeUndefined()
+    expect(parseLiveItem(value)).toEqual(expected)
   })
 
-  it('should return undefined if start is missing', () => {
+  it('should handle partial objects (missing start)', () => {
     const value = {
       '@status': 'live',
       '@end': '2023-06-15T16:00:00Z',
     }
+    const expected = {
+      status: 'live',
+      end: '2023-06-15T16:00:00Z',
+    }
 
-    expect(parseLiveItem(value)).toBeUndefined()
+    expect(parseLiveItem(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -2108,12 +2227,15 @@ describe('parseContentLink', () => {
     expect(parseContentLink(value)).toEqual(expected)
   })
 
-  it('should return undefined if href is missing', () => {
+  it('should handle partial objects (missing href)', () => {
     const value = {
       '#text': 'Watch our livestream',
     }
+    const expected = {
+      display: 'Watch our livestream',
+    }
 
-    expect(parseContentLink(value)).toBeUndefined()
+    expect(parseContentLink(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -2294,12 +2416,15 @@ describe('parseBlock', () => {
     expect(parseBlock(value)).toEqual(expected)
   })
 
-  it('should return undefined if value is missing', () => {
+  it('should handle partial objects (missing value)', () => {
     const value = {
       '@id': 'spotify',
     }
+    const expected = {
+      id: 'spotify',
+    }
 
-    expect(parseBlock(value)).toBeUndefined()
+    expect(parseBlock(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -2385,12 +2510,15 @@ describe('parseTxt', () => {
     expect(parseTxt(value)).toEqual(expected)
   })
 
-  it('should return undefined if display is missing', () => {
+  it('should handle partial objects (missing display)', () => {
     const value = {
       '@purpose': 'description',
     }
+    const expected = {
+      purpose: 'description',
+    }
 
-    expect(parseTxt(value)).toBeUndefined()
+    expect(parseTxt(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -2471,13 +2599,17 @@ describe('parseRemoteItem', () => {
     expect(parseRemoteItem(value)).toEqual(expected)
   })
 
-  it('should return undefined if feedGuid is missing', () => {
+  it('should handle partial objects (missing feedGuid)', () => {
     const value = {
       '@feedurl': 'https://example.com/feed.xml',
       '@itemguid': 'urn:uuid:4cef2a1f-9b8e-56fc-ba91-f7e401311de3',
     }
+    const expected = {
+      feedUrl: 'https://example.com/feed.xml',
+      itemGuid: 'urn:uuid:4cef2a1f-9b8e-56fc-ba91-f7e401311de3',
+    }
 
-    expect(parseRemoteItem(value)).toBeUndefined()
+    expect(parseRemoteItem(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -2552,7 +2684,7 @@ describe('parsePodroll', () => {
     expect(parsePodroll(value)).toEqual(expected)
   })
 
-  it('should filter out invalid remoteItems', () => {
+  it('should include all remoteItems including partial ones', () => {
     const value = {
       'podcast:remoteitem': [
         {
@@ -2569,6 +2701,9 @@ describe('parsePodroll', () => {
         {
           feedGuid: 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
           feedUrl: 'https://example.com/feed1.xml',
+        },
+        {
+          feedUrl: 'https://example.com/feed2.xml',
         },
       ],
     }
@@ -2596,15 +2731,25 @@ describe('parsePodroll', () => {
     expect(parsePodroll(value)).toEqual(expected)
   })
 
-  it('should return undefined if no valid remoteItems exist', () => {
+  it('should include all remoteItems even if they appear invalid', () => {
     const value = {
       'podcast:remoteitem': [
         { '@feedurl': 'https://example.com/feed1.xml' },
         { '@medium': 'podcast' },
       ],
     }
+    const expected = {
+      remoteItems: [
+        {
+          feedUrl: 'https://example.com/feed1.xml',
+        },
+        {
+          medium: 'podcast',
+        },
+      ],
+    }
 
-    expect(parsePodroll(value)).toBeUndefined()
+    expect(parsePodroll(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -2695,13 +2840,17 @@ describe('parseUpdateFrequency', () => {
     expect(parseUpdateFrequency(value)).toEqual(expected)
   })
 
-  it('should return undefined if display is missing', () => {
+  it('should handle partial objects (missing display)', () => {
     const value = {
       '@complete': 'true',
       '@dtstart': '2023-01-01',
     }
+    const expected = {
+      complete: true,
+      dtstart: '2023-01-01',
+    }
 
-    expect(parseUpdateFrequency(value)).toBeUndefined()
+    expect(parseUpdateFrequency(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -2935,7 +3084,7 @@ describe('parseValueTimeSplit', () => {
     expect(parseValueTimeSplit(value)).toEqual(expected)
   })
 
-  it('should filter out invalid value recipients', () => {
+  it('should include all value recipients including partial ones', () => {
     const value = {
       '@starttime': 120.5,
       '@duration': 30.0,
@@ -2954,14 +3103,19 @@ describe('parseValueTimeSplit', () => {
           address: 'example@example.com',
           split: 30,
         },
+        {
+          type: 'payment',
+        },
+        {
+          address: 'missing-type@example.com',
+        },
       ],
     }
 
-    // @ts-ignore: This is for testing purposes.
     expect(parseValueTimeSplit(value)).toEqual(expected)
   })
 
-  it('should not include invalid remoteItem', () => {
+  it('should include partial remoteItem', () => {
     const value = {
       '@starttime': 120.5,
       '@duration': 30.0,
@@ -2972,6 +3126,9 @@ describe('parseValueTimeSplit', () => {
     const expected = {
       startTime: 120.5,
       duration: 30.0,
+      remoteItem: {
+        feedUrl: 'https://example.com/feed.xml',
+      },
     }
 
     expect(parseValueTimeSplit(value)).toEqual(expected)
@@ -2992,22 +3149,30 @@ describe('parseValueTimeSplit', () => {
     expect(parseValueTimeSplit(value)).toEqual(expected)
   })
 
-  it('should return undefined if startTime is missing', () => {
+  it('should handle partial objects (missing startTime)', () => {
     const value = {
       '@duration': 30.0,
       '@remotepercentage': 50,
     }
+    const expected = {
+      duration: 30.0,
+      remotePercentage: 50,
+    }
 
-    expect(parseValueTimeSplit(value)).toBeUndefined()
+    expect(parseValueTimeSplit(value)).toEqual(expected)
   })
 
-  it('should return undefined if duration is missing', () => {
+  it('should handle partial objects (missing duration)', () => {
     const value = {
       '@starttime': 120.5,
       '@remotepercentage': 50,
     }
+    const expected = {
+      startTime: 120.5,
+      remotePercentage: 50,
+    }
 
-    expect(parseValueTimeSplit(value)).toBeUndefined()
+    expect(parseValueTimeSplit(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -3361,7 +3526,7 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toEqual(expected)
   })
 
-  it('should handle invalid transcript elements', () => {
+  it('should include all transcript elements including partial ones', () => {
     const value = {
       'podcast:transcript': [
         {
@@ -3382,13 +3547,19 @@ describe('retrieveItem', () => {
           url: 'https://example.com/transcript.json',
           type: 'application/json',
         },
+        {
+          type: 'application/json',
+        },
+        {
+          url: 'https://example.com/transcript2.json',
+        },
       ],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
   })
 
-  it('should handle multiple properties with mixed valid and invalid elements', () => {
+  it('should include all elements including partial ones', () => {
     const value = {
       'podcast:transcript': {
         '@url': 'https://example.com/transcript.json',
@@ -3427,12 +3598,19 @@ describe('retrieveItem', () => {
           display: 'Jane Doe',
           role: 'host',
         },
+        {
+          role: 'guest',
+        },
       ],
       soundbites: [
         {
           startTime: 60,
           duration: 30,
           display: 'Key moment',
+        },
+        {
+          startTime: 120,
+          display: 'Another moment',
         },
       ],
     }
@@ -3486,7 +3664,7 @@ describe('retrieveItem', () => {
     expect(retrieveItem(123)).toBeUndefined()
   })
 
-  it('should return undefined if all parsed properties are undefined', () => {
+  it('should include all parsed properties even if partial', () => {
     const value = {
       'podcast:transcript': {
         '@type': 'application/json', // Missing url.
@@ -3495,7 +3673,19 @@ describe('retrieveItem', () => {
         '@role': 'host', // Missing display.
       },
     }
-    expect(retrieveItem(value)).toBeUndefined()
+    const expected = {
+      transcripts: [
+        {
+          type: 'application/json',
+        },
+      ],
+      persons: [
+        {
+          role: 'host',
+        },
+      ],
+    }
+    expect(retrieveItem(value)).toEqual(expected)
   })
 })
 
@@ -3876,7 +4066,7 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
-  it('should handle invalid funding elements', () => {
+  it('should include all funding elements including partial ones', () => {
     const value = {
       'podcast:funding': [
         {
@@ -3884,7 +4074,7 @@ describe('retrieveFeed', () => {
           '#text': 'Support the show',
         },
         {
-          '#text': 'Invalid funding', // Missing url.
+          '#text': 'Partial funding', // Missing url.
         },
       ],
     }
@@ -3894,13 +4084,16 @@ describe('retrieveFeed', () => {
           url: 'https://example.com/donate',
           display: 'Support the show',
         },
+        {
+          display: 'Partial funding',
+        },
       ],
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
-  it('should handle multiple properties with mixed valid and invalid elements', () => {
+  it('should include all elements including partial ones', () => {
     const value = {
       'podcast:locked': {
         '#text': 'yes',
@@ -3935,11 +4128,17 @@ describe('retrieveFeed', () => {
           url: 'https://example.com/donate',
           display: 'Support the show',
         },
+        {
+          display: 'Invalid funding',
+        },
       ],
       persons: [
         {
           display: 'Jane Doe',
           role: 'host',
+        },
+        {
+          role: 'guest',
         },
       ],
     }
@@ -3994,7 +4193,7 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(123)).toBeUndefined()
   })
 
-  it('should return undefined if all parsed properties are undefined', () => {
+  it('should include all parsed properties even if partial', () => {
     const value = {
       'podcast:funding': {
         '#text': 'Support the show', // Missing url.
@@ -4003,7 +4202,19 @@ describe('retrieveFeed', () => {
         '@role': 'host', // Missing display.
       },
     }
-    expect(retrieveFeed(value)).toBeUndefined()
+    const expected = {
+      fundings: [
+        {
+          display: 'Support the show',
+        },
+      ],
+      persons: [
+        {
+          role: 'host',
+        },
+      ],
+    }
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should parse liveItem with multiple contentLinks', () => {

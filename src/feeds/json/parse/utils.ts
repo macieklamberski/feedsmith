@@ -1,9 +1,8 @@
-import type { ParseFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '../../../common/types.js'
 import {
   createCaseInsensitiveGetter,
   isNonEmptyStringOrNumber,
   isObject,
-  isPresent,
   parseArrayOf,
   parseBoolean,
   parseNumber,
@@ -13,7 +12,7 @@ import {
 } from '../../../common/utils.js'
 import type { Attachment, Author, Feed, Hub, Item } from '../common/types.js'
 
-export const parseAuthor: ParseFunction<Author> = (value) => {
+export const parseAuthor: ParsePartialFunction<Author> = (value) => {
   if (isObject(value)) {
     const get = createCaseInsensitiveGetter(value)
     const author = {
@@ -22,17 +21,17 @@ export const parseAuthor: ParseFunction<Author> = (value) => {
       avatar: parseSingularOf(get('avatar'), parseString),
     }
 
-    return trimObject(author) as Author
+    return trimObject(author)
   }
 
   if (isNonEmptyStringOrNumber(value)) {
     return trimObject({
       name: parseString(value),
-    }) as Author
+    })
   }
 }
 
-export const retrieveAuthors: ParseFunction<Array<Author>> = (value) => {
+export const retrieveAuthors: ParsePartialFunction<Array<Author>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -47,7 +46,7 @@ export const retrieveAuthors: ParseFunction<Array<Author>> = (value) => {
   return parsedAuthors?.length ? parsedAuthors : parsedAuthor
 }
 
-export const parseAttachment: ParseFunction<Attachment> = (value) => {
+export const parseAttachment: ParsePartialFunction<Attachment> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -61,12 +60,10 @@ export const parseAttachment: ParseFunction<Attachment> = (value) => {
     duration_in_seconds: parseSingularOf(get('duration_in_seconds'), parseNumber),
   }
 
-  if (isPresent(attachment.url) && isPresent(attachment.mime_type)) {
-    return trimObject(attachment) as Attachment
-  }
+  return trimObject(attachment)
 }
 
-export const parseItem: ParseFunction<Item<string>> = (value) => {
+export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -90,12 +87,10 @@ export const parseItem: ParseFunction<Item<string>> = (value) => {
     attachments: parseArrayOf(get('attachments'), parseAttachment),
   }
 
-  if (isPresent(item.id) && (isPresent(item.content_html) || isPresent(item.content_text))) {
-    return trimObject(item) as Item<string>
-  }
+  return trimObject(item)
 }
 
-export const parseHub: ParseFunction<Hub> = (value) => {
+export const parseHub: ParsePartialFunction<Hub> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -106,18 +101,15 @@ export const parseHub: ParseFunction<Hub> = (value) => {
     url: parseSingularOf(get('url'), parseString),
   }
 
-  if (isPresent(hub.type) && isPresent(hub.url)) {
-    return trimObject(hub) as Hub
-  }
+  return trimObject(hub)
 }
 
-export const parseFeed: ParseFunction<Feed<string>> = (value) => {
+export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const get = createCaseInsensitiveGetter(value)
-  const version = parseSingularOf(get('version'), parseString)
   const feed = {
     title: parseSingularOf(get('title'), parseString),
     home_page_url: parseSingularOf(get('home_page_url'), parseString),
@@ -134,7 +126,5 @@ export const parseFeed: ParseFunction<Feed<string>> = (value) => {
     items: parseArrayOf(get('items'), parseItem),
   }
 
-  if (version && isPresent(feed.title) && isPresent(feed.items)) {
-    return trimObject(feed) as Feed<string>
-  }
+  return trimObject(feed)
 }
