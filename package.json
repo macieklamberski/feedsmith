@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "entities": "^6.0.0",
-    "fast-xml-parser": "^5.2.3"
+    "fast-xml-parser": "^5.2.5"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
