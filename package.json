@@ -43,7 +43,7 @@
     "build": "rm -rf dist && tsc"
   },
   "dependencies": {
-    "entities": "^6.0.0",
+    "entities": "^6.0.1",
     "fast-xml-parser": "^5.2.5"
   },
   "devDependencies": {
