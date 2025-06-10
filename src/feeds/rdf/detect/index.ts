@@ -1,3 +1,19 @@
+import { isNonEmptyString } from '../../../common/utils.js'
+
 export const detect = (value: unknown): value is string => {
-  return typeof value === 'string' && /<rdf:rdf[\s>]/i.test(value)
+  if (!isNonEmptyString(value)) {
+    return false
+  }
+
+  const hasRdfElement = /(?:^|\s|>)\s*<(?:rdf:)?rdf[\s>]/im.test(value)
+
+  if (!hasRdfElement) {
+    return false
+  }
+
+  const hasRdfNamespace = value.includes('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+  const hasRssNamespace = value.includes('http://purl.org/rss/1.0/')
+  const hasRdfElements = /(<(?:rdf:)?(channel|item|title|link|description)[\s>])/i.test(value)
+
+  return hasRdfNamespace || hasRssNamespace || hasRdfElements
 }

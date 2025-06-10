@@ -62,6 +62,87 @@ describe('detect', () => {
     expect(detect(rdfFeed)).toBe(true)
   })
 
+  test('detect RDF feed with multi-line <rdf:RDF> tag', () => {
+    const rdfFeed = `
+      <?xml version="1.0"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+      >
+        <channel rdf:about="http://example.org/">
+          <title>Example Feed</title>
+        </channel>
+      </rdf:RDF>
+    `
+
+    expect(detect(rdfFeed)).toBe(true)
+  })
+
+  test('return false for RDF element in CDATA', () => {
+    const cdataFeed = `
+      <?xml version="1.0"?>
+      <root>
+        <![CDATA[<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><channel><title>Test</title></channel></rdf:RDF>]]>
+      </root>
+    `
+
+    expect(detect(cdataFeed)).toBe(false)
+  })
+
+  test('detect self-closing RDF tag', () => {
+    const selfClosingFeed = `
+      <?xml version="1.0"?>
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" />
+    `
+
+    expect(detect(selfClosingFeed)).toBe(true)
+  })
+
+  test('detect mixed case RDF elements', () => {
+    const mixedCaseFeed = `
+      <rdf:RDF>
+        <CHANNEL rdf:about="http://example.org/">
+          <TITLE>Example Feed</TITLE>
+          <Item>
+            <Description>Test content</Description>
+          </Item>
+        </CHANNEL>
+      </rdf:RDF>
+    `
+
+    expect(detect(mixedCaseFeed)).toBe(true)
+  })
+
+  test('detect minimal RDF feed', () => {
+    const minimalFeed = '<rdf:RDF><channel><title>Test</title></channel></rdf:RDF>'
+
+    expect(detect(minimalFeed)).toBe(true)
+  })
+
+  test('return false for RDF in attribute value', () => {
+    const rdfInAttribute = `
+      <root>
+        <element data="&lt;rdf:RDF&gt;&lt;channel&gt;&lt;title&gt;Test&lt;/title&gt;&lt;/channel&gt;&lt;/rdf:RDF&gt;">
+          <content>Not a feed</content>
+        </element>
+      </root>
+    `
+
+    expect(detect(rdfInAttribute)).toBe(false)
+  })
+
+  test('return false for RDF with wrong namespace and no RDF elements', () => {
+    const wrongNamespace = `
+      <rdf:RDF xmlns:rdf="http://example.com/custom">
+        <heading>Not RDF</heading>
+        <article>Custom content</article>
+      </rdf:RDF>
+    `
+
+    expect(detect(wrongNamespace)).toBe(false)
+  })
+
   test('return false for Atom feed', () => {
     const atomFeed = `
       <?xml version="1.0" encoding="utf-8"?>

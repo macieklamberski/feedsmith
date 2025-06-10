@@ -38,7 +38,7 @@ describe('detect', () => {
     expect(detect(uppercaseFeed)).toBe(true)
   })
 
-  test('detect RDF feed without version attribute', () => {
+  test('detect RSS feed without version attribute', () => {
     const rssFeed = `
       <?xml version="1.0" encoding="utf-8"?>
       <rss>
@@ -54,6 +54,101 @@ describe('detect', () => {
     `
 
     expect(detect(rssFeed)).toBe(true)
+  })
+
+  test('detect RSS feed with multi-line <rss> tag', () => {
+    const rssFeed = `
+      <?xml version="1.0"?>
+      <rss
+        version="2.0"
+        xmlns:content="http://purl.org/rss/1.0/modules/content/"
+        xmlns:atom="http://www.w3.org/2005/Atom"
+      >
+        <channel>
+          <title>Example Feed</title>
+        </channel>
+      </rss>
+    `
+
+    expect(detect(rssFeed)).toBe(true)
+  })
+
+  test('return false for RSS element in CDATA', () => {
+    const cdataFeed = `
+      <?xml version="1.0"?>
+      <root>
+        <![CDATA[<rss version="2.0"><channel><title>Test</title></channel></rss>]]>
+      </root>
+    `
+
+    expect(detect(cdataFeed)).toBe(false)
+  })
+
+  test('detect self-closing RSS tag', () => {
+    const selfClosingFeed = `
+      <?xml version="1.0"?>
+      <rss version="2.0" />
+    `
+
+    expect(detect(selfClosingFeed)).toBe(true)
+  })
+
+  test('detect mixed case RSS elements', () => {
+    const mixedCaseFeed = `
+      <rss version="2.0">
+        <CHANNEL>
+          <TITLE>Example Feed</TITLE>
+          <Item>
+            <Description>Test content</Description>
+          </Item>
+        </CHANNEL>
+      </rss>
+    `
+
+    expect(detect(mixedCaseFeed)).toBe(true)
+  })
+
+  test('detect minimal RSS feed', () => {
+    const minimalFeed = '<rss><channel><title>Test</title></channel></rss>'
+
+    expect(detect(minimalFeed)).toBe(true)
+  })
+
+  test('return false for RSS in attribute value', () => {
+    const rssInAttribute = `
+      <root>
+        <element data="&lt;rss version=&quot;2.0&quot;&gt;&lt;channel&gt;&lt;title&gt;Test&lt;/title&gt;&lt;/channel&gt;&lt;/rss&gt;">
+          <content>Not a feed</content>
+        </element>
+      </root>
+    `
+
+    expect(detect(rssInAttribute)).toBe(false)
+  })
+
+  test('return false for RSS with no version and no RSS elements', () => {
+    const invalidRss = `
+      <rss>
+        <heading>Not RSS</heading>
+        <article>Custom content</article>
+      </rss>
+    `
+
+    expect(detect(invalidRss)).toBe(false)
+  })
+
+  test('detect RSS with various version formats', () => {
+    const versions = [
+      '<rss version="2.0">',
+      "<rss version='0.91'>",
+      '<rss version ="1.0">',
+      '<rss version= "2.0" >',
+    ]
+
+    for (const version of versions) {
+      const feed = `${version}<channel><title>Test</title></channel></rss>`
+      expect(detect(feed)).toBe(true)
+    }
   })
 
   test('return false for Atom feed', () => {

@@ -139,7 +139,7 @@ describe('parse', () => {
   })
 
   it('should handle empty object input', () => {
-    expect(() => parse({})).toThrowError(locales.invalid)
+    expect(() => parse({})).toThrowError(locales.unrecognized)
   })
 
   it('should handle string input', () => {
