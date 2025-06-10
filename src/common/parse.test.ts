@@ -4,7 +4,7 @@ import { parse } from './parse'
 
 describe('parse', () => {
   it('parse valid Atom feed', () => {
-    const atomFeed = `
+    const value = `
       <?xml version="1.0"?>
       <feed xmlns="http://www.w3.org/2005/Atom">
         <title>Feed</title>
@@ -19,11 +19,11 @@ describe('parse', () => {
       },
     }
 
-    expect(parse(atomFeed)).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('parse valid JSON feed', () => {
-    const jsonFeed = {
+    const value = {
       version: 'https://jsonfeed.org/version/1.1',
       title: 'My Example Feed',
       home_page_url: 'https://example.com/',
@@ -62,11 +62,11 @@ describe('parse', () => {
       },
     }
 
-    expect(parse(jsonFeed)).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('parse valid RSS feed', () => {
-    const rssFeed = `
+    const value = `
       <?xml version="1.0"?>
       <rss version="2.0">
         <channel>
@@ -85,11 +85,11 @@ describe('parse', () => {
       },
     }
 
-    expect(parse(rssFeed)).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('parse valid RDF feed', () => {
-    const rdfFeed = `
+    const value = `
       <?xml version="1.0"?>
       <rdf:RDF
         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -119,7 +119,7 @@ describe('parse', () => {
       },
     }
 
-    expect(parse(rdfFeed)).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should throw error for invalid input', () => {
