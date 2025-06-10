@@ -1,3 +1,18 @@
+import { isNonEmptyString } from '../../../common/utils.js'
+
 export const detect = (value: unknown): value is string => {
-  return typeof value === 'string' && /<(?:atom:)?feed[\s>]/i.test(value)
+  if (!isNonEmptyString(value)) {
+    return false
+  }
+
+  const hasFeedElement = /(?:^|\s|>)\s*<(?:atom:)?feed[\s>]/im.test(value)
+
+  if (!hasFeedElement) {
+    return false
+  }
+
+  const hasAtomNamespace = value.includes('http://www.w3.org/2005/Atom')
+  const hasAtomElements = /(<(?:atom:)?(entry|title|link|id|updated|summary)[\s>])/i.test(value)
+
+  return hasAtomNamespace || hasAtomElements
 }

@@ -223,7 +223,7 @@ describe('generate', () => {
       },
     }
 
-    // @ts-ignore: Testing invalid input.
+    // @ts-ignore: This is for testing purposes.
     expect(() => generate(value)).toThrow()
   })
 

@@ -107,12 +107,15 @@ describe('parseCategory', () => {
     expect(parseCategory(value)).toEqual(expected)
   })
 
-  it('should return undefined if name is missing', () => {
+  it('should handle partial objects (missing name)', () => {
     const value = {
       '@domain': 'http://example.com/categories',
     }
+    const expected = {
+      domain: 'http://example.com/categories',
+    }
 
-    expect(parseCategory(value)).toBeUndefined()
+    expect(parseCategory(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
@@ -146,13 +149,17 @@ describe('parseCloud', () => {
     expect(parseCloud(value)).toEqual(expected)
   })
 
-  it('should handle partial cloud object', () => {
+  it('should handle partial objects (missing required fields)', () => {
     const value = {
       '@domain': 'rpc.example.com',
       '@protocol': 'soap',
     }
+    const expected = {
+      domain: 'rpc.example.com',
+      protocol: 'soap',
+    }
 
-    expect(parseCloud(value)).toBeUndefined()
+    expect(parseCloud(value)).toEqual(expected)
   })
 
   it('should handle empty cloud object', () => {
@@ -215,13 +222,17 @@ describe('parseImage', () => {
     expect(parseImage(value)).toEqual(expectedFull)
   })
 
-  it('should handle partial image object', () => {
+  it('should handle partial objects (missing required fields)', () => {
     const value = {
       url: { '#text': 'https://example.com/image.jpg' },
       title: { '#text': 'Example Image' },
     }
+    const expected = {
+      url: 'https://example.com/image.jpg',
+      title: 'Example Image',
+    }
 
-    expect(parseImage(value)).toBeUndefined()
+    expect(parseImage(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object value', () => {
@@ -276,13 +287,17 @@ describe('parseTextInput', () => {
     expect(parseTextInput(value)).toEqual(expectedFull)
   })
 
-  it('should handle partial textInput object', () => {
+  it('should handle partial objects (missing some fields)', () => {
     const value = {
       title: { '#text': 'Search Title' },
       link: { '#text': 'https://example.com/search' },
     }
+    const expected = {
+      title: 'Search Title',
+      link: 'https://example.com/search',
+    }
 
-    expect(parseTextInput(value)).toBeUndefined()
+    expect(parseTextInput(value)).toEqual(expected)
   })
 
   it('should handle empty textInput object', () => {
@@ -424,23 +439,31 @@ describe('parseEnclosure', () => {
     expect(parseEnclosure(value)).toEqual(expected)
   })
 
-  it('should handle partial enclosure object', () => {
+  it('should handle partial objects (missing required fields)', () => {
     const value = {
       '@url': 'https://example.com/audio.mp3',
       '@type': 'audio/mpeg',
     }
+    const expected = {
+      url: 'https://example.com/audio.mp3',
+      type: 'audio/mpeg',
+    }
 
-    expect(parseEnclosure(value)).toBeUndefined()
+    expect(parseEnclosure(value)).toEqual(expected)
   })
 
-  it('should handle coercible values', () => {
+  it('should handle partial objects (with invalid values)', () => {
     const value = {
       '@url': 'https://example.com/audio.mp3',
       '@length': 'not a number',
       '@type': 123,
     }
+    const expected = {
+      url: 'https://example.com/audio.mp3',
+      type: '123',
+    }
 
-    expect(parseEnclosure(value)).toBeUndefined()
+    expect(parseEnclosure(value)).toEqual(expected)
   })
 
   it('should return undefined for missing enclosure', () => {
@@ -514,12 +537,15 @@ describe('parseGuid', () => {
     expect(parseGuid(value)).toEqual(expected)
   })
 
-  it('should return undefined if value is missing', () => {
+  it('should handle partial objects (missing value)', () => {
     const value = {
       '@ispermalink': 'true',
     }
+    const expected = {
+      isPermalink: true,
+    }
 
-    expect(parseGuid(value)).toBeUndefined()
+    expect(parseGuid(value)).toEqual(expected)
   })
 
   it('should return undefined for empty objects', () => {
@@ -584,12 +610,15 @@ describe('parseSource', () => {
     expect(parseSource(value)).toEqual(expected)
   })
 
-  it('should return undefined if title is missing', () => {
+  it('should handle partial objects (missing title)', () => {
     const value = {
       '@url': 'http://example.com/categories',
     }
+    const expected = {
+      url: 'http://example.com/categories',
+    }
 
-    expect(parseSource(value)).toBeUndefined()
+    expect(parseSource(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
@@ -1054,36 +1083,23 @@ describe('parseFeed', () => {
   it('should handle minimal feed with only required fields', () => {
     const value = {
       title: { '#text': 'Feed Title' },
-      link: { '#text': 'https://example.com' },
     }
     const expected = {
       title: 'Feed Title',
-      link: 'https://example.com',
     }
 
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should return feed when link is missing', () => {
+  it('should handle partial objects (missing required fields)', () => {
     const value = {
-      title: { '#text': 'Feed Title' },
       description: { '#text': 'Feed Description' },
     }
     const expected = {
-      title: 'Feed Title',
       description: 'Feed Description',
     }
 
     expect(parseFeed(value)).toEqual(expected)
-  })
-
-  it('should return undefined when title is missing', () => {
-    const value = {
-      link: { '#text': 'https://example.com' },
-      description: { '#text': 'Feed Description' },
-    }
-
-    expect(parseFeed(value)).toBeUndefined()
   })
 
   it('should handle coercible values', () => {

@@ -1,7 +1,6 @@
 import {
   createNamespaceGetter,
   isObject,
-  isPresent,
   parseArrayOf,
   parseNumber,
   parseSingularOf,
@@ -10,23 +9,31 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/utils.js'
-import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/utils.js'
+import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
+import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
-} from '../../../namespaces/itunes/utils.js'
-import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/utils.js'
-import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
-import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
+} from '../../../namespaces/itunes/parse/utils.js'
+import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
+import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
+import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import {
   retrieveItem as retrieveThrItem,
   retrieveLink as retrieveThrLink,
-} from '../../../namespaces/thr/utils.js'
-import type { ParseFunction } from './types.js'
-import type { Category, Entry, Feed, Generator, Link, Person, Source } from './types.js'
+} from '../../../namespaces/thr/parse/utils.js'
+import type {
+  Category,
+  Entry,
+  Feed,
+  Generator,
+  Link,
+  ParsePartialFunction,
+  Person,
+  Source,
+} from '../common/types.js'
 
-export const parseLink: ParseFunction<Link> = (value, options) => {
+export const parseLink: ParsePartialFunction<Link<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -41,12 +48,10 @@ export const parseLink: ParseFunction<Link> = (value, options) => {
     thr: retrieveThrLink(value),
   }
 
-  if (isPresent(link.href)) {
-    return trimObject(link)
-  }
+  return trimObject(link)
 }
 
-export const retrievePersonUri: ParseFunction<string> = (value, options) => {
+export const retrievePersonUri: ParsePartialFunction<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -58,7 +63,7 @@ export const retrievePersonUri: ParseFunction<string> = (value, options) => {
   return uri || url
 }
 
-export const parsePerson: ParseFunction<Person> = (value, options) => {
+export const parsePerson: ParsePartialFunction<Person> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -70,12 +75,10 @@ export const parsePerson: ParseFunction<Person> = (value, options) => {
     email: parseSingularOf(get('email'), parseTextString),
   }
 
-  if (isPresent(person.name)) {
-    return trimObject(person)
-  }
+  return trimObject(person)
 }
 
-export const parseCategory: ParseFunction<Category> = (value) => {
+export const parseCategory: ParsePartialFunction<Category> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -86,12 +89,10 @@ export const parseCategory: ParseFunction<Category> = (value) => {
     label: parseString(value['@label']),
   }
 
-  if (isPresent(category.term)) {
-    return trimObject(category)
-  }
+  return trimObject(category)
 }
 
-export const retrieveGeneratorUri: ParseFunction<string> = (value) => {
+export const retrieveGeneratorUri: ParsePartialFunction<string> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -102,25 +103,23 @@ export const retrieveGeneratorUri: ParseFunction<string> = (value) => {
   return uri || url
 }
 
-export const parseGenerator: ParseFunction<Generator> = (value) => {
+export const parseGenerator: ParsePartialFunction<Generator> = (value) => {
   const generator = {
     text: parseString(retrieveText(value)),
     uri: retrieveGeneratorUri(value),
     version: parseString(value?.['@version']),
   }
 
-  if (isPresent(generator.text)) {
-    return trimObject(generator)
-  }
+  return trimObject(generator)
 }
 
-export const parseSource: ParseFunction<Source> = (value, options) => {
+export const parseSource: ParsePartialFunction<Source<string>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const source = trimObject({
+  const source = {
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
@@ -133,12 +132,12 @@ export const parseSource: ParseFunction<Source> = (value, options) => {
     subtitle: parseSingularOf(get('subtitle'), parseTextString),
     title: parseSingularOf(get('title'), parseTextString),
     updated: retrieveUpdated(value),
-  })
+  }
 
-  return source
+  return trimObject(source)
 }
 
-export const retrievePublished: ParseFunction<string> = (value, options) => {
+export const retrievePublished: ParsePartialFunction<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -154,7 +153,7 @@ export const retrievePublished: ParseFunction<string> = (value, options) => {
   return published || issued || created
 }
 
-export const retrieveUpdated: ParseFunction<string> = (value, options) => {
+export const retrieveUpdated: ParsePartialFunction<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -166,7 +165,7 @@ export const retrieveUpdated: ParseFunction<string> = (value, options) => {
   return updated || modified
 }
 
-export const retrieveSubtitle: ParseFunction<string> = (value, options) => {
+export const retrieveSubtitle: ParsePartialFunction<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -178,13 +177,13 @@ export const retrieveSubtitle: ParseFunction<string> = (value, options) => {
   return subtitle || tagline
 }
 
-export const parseEntry: ParseFunction<Entry> = (value, options) => {
+export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const entry = trimObject({
+  const entry = {
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     content: parseSingularOf(get('content'), parseTextString),
@@ -197,32 +196,24 @@ export const parseEntry: ParseFunction<Entry> = (value, options) => {
     summary: parseSingularOf(get('summary'), parseTextString),
     title: parseSingularOf(get('title'), parseTextString),
     updated: retrieveUpdated(value, options),
-    dc: options?.partial ? undefined : retrieveDcItemOrFeed(value),
-    slash: options?.partial ? undefined : retrieveSlashItem(value),
-    itunes: options?.partial ? undefined : retrieveItunesItem(value),
-    media: options?.partial ? undefined : retrieveMediaItemOrFeed(value),
-    georss: options?.partial ? undefined : retrieveGeoRssItemOrFeed(value),
-    thr: options?.partial ? undefined : retrieveThrItem(value),
-  })
-
-  if (options?.partial || !entry) {
-    return entry
+    dc: options?.asNamespace ? undefined : retrieveDcItemOrFeed(value),
+    slash: options?.asNamespace ? undefined : retrieveSlashItem(value),
+    itunes: options?.asNamespace ? undefined : retrieveItunesItem(value),
+    media: options?.asNamespace ? undefined : retrieveMediaItemOrFeed(value),
+    georss: options?.asNamespace ? undefined : retrieveGeoRssItemOrFeed(value),
+    thr: options?.asNamespace ? undefined : retrieveThrItem(value),
   }
 
-  // INFO: Spec also says about required "updated" but this field is
-  // not always present in entries. We can still parse the entry without it.
-  if (isPresent(entry.id) && isPresent(entry.title)) {
-    return entry
-  }
+  return trimObject(entry)
 }
 
-export const parseFeed: ParseFunction<Feed> = (value, options) => {
+export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const feed = trimObject({
+  const feed = {
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
@@ -236,29 +227,17 @@ export const parseFeed: ParseFunction<Feed> = (value, options) => {
     title: parseSingularOf(get('title'), parseTextString),
     updated: retrieveUpdated(value, options),
     entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options)),
-    dc: options?.partial ? undefined : retrieveDcItemOrFeed(value),
-    sy: options?.partial ? undefined : retrieveSyFeed(value),
-    itunes: options?.partial ? undefined : retrieveItunesFeed(value),
-    media: options?.partial ? undefined : retrieveMediaItemOrFeed(value),
-    georss: options?.partial ? undefined : retrieveGeoRssItemOrFeed(value),
-  })
-
-  if (options?.partial || !feed) {
-    return feed
+    dc: options?.asNamespace ? undefined : retrieveDcItemOrFeed(value),
+    sy: options?.asNamespace ? undefined : retrieveSyFeed(value),
+    itunes: options?.asNamespace ? undefined : retrieveItunesFeed(value),
+    media: options?.asNamespace ? undefined : retrieveMediaItemOrFeed(value),
+    georss: options?.asNamespace ? undefined : retrieveGeoRssItemOrFeed(value),
   }
 
-  // INFO: Spec says about required "id", "title" and "updated". The thing is "updated" is
-  // frequently missing from the feeds and since this field is not strictly necessary to make
-  // the feed make sense, it is not required here. The "ID" field is mostly present, but also
-  // not in 100% of cases. It's not ideal not to have it, but it's not a dealbreaker either,
-  // so if either "id" or "title" is present, the feed is treated as valid.
-  // The "ID" can always fall back to the "title" if it's missing in application's code.
-  if (isPresent(feed.id) || isPresent(feed.title)) {
-    return feed
-  }
+  return trimObject(feed)
 }
 
-export const retrieveFeed: ParseFunction<Feed> = (value) => {
+export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
   const notNamespaced = parseSingularOf(value?.feed, parseFeed)
   const namespaced = parseSingularOf(value?.['atom:feed'], (value) =>
     parseFeed(value, { prefix: 'atom:' }),

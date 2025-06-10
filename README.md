@@ -390,7 +390,7 @@ try {
 
 ### Format detection
 
-You can detect feed formats without parsing them.
+You can detect feed formats without parsing them. Detect functions are designed to quickly identify the feed format by looking for its signature, such as the the root tag, version attribute or feed elements.
 
 ```ts
 import { detectAtomFeed, detectJsonFeed, detectRssFeed, detectRdfFeed } from 'feedsmith'
@@ -411,9 +411,6 @@ if (detectRdfFeed(content)) {
   console.log('This is an RDF feed')
 }
 ```
-
-> [!WARNING]
-> Detect functions are designed to quickly identify the feed format by looking for its signature, such as the `<rss>` tag in the case of RSS feeds. However, the function may detect an RSS feed even if it is invalid. The feed will be fully validated only when using the `parseRssFeed` function.
 
 ## Generating
 

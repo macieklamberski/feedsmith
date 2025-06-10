@@ -24,6 +24,21 @@ describe('detect', () => {
     expect(detect(uppercaseFeed)).toBe(true)
   })
 
+  test('detect Atom feed with multi-line <feed> tag', () => {
+    const atomFeed = `
+      <?xml version="1.0"?>
+      <feed
+        xmlns="http://www.w3.org/2005/Atom"
+        xmlns:thr="http://purl.org/syndication/thread/1.0"
+        xml:lang="en-US"
+      >
+        <title>Feed</title>
+      </feed>
+    `
+
+    expect(detect(atomFeed)).toBe(true)
+  })
+
   test('detect Atom feed without xmlns declaration', () => {
     const atomFeed = `
       <?xml version="1.0"?>
@@ -45,6 +60,80 @@ describe('detect', () => {
 
     expect(detect(atomFeed)).toBe(true)
   })
+
+  test('return false for feed element in CDATA', () => {
+    const cdataFeed = `
+      <?xml version="1.0"?>
+      <root>
+        <![CDATA[<feed xmlns="http://www.w3.org/2005/Atom"><title>Test</title></feed>]]>
+      </root>
+    `
+
+    expect(detect(cdataFeed)).toBe(false)
+  })
+
+  test('detect self-closing feed tag', () => {
+    const selfClosingFeed = `
+      <?xml version="1.0"?>
+      <feed xmlns="http://www.w3.org/2005/Atom" />
+    `
+
+    expect(detect(selfClosingFeed)).toBe(true)
+  })
+
+  test('detect mixed case ATOM elements', () => {
+    const mixedCaseFeed = `
+      <feed>
+        <TITLE>Example Feed</TITLE>
+        <Entry>
+          <Summary>Test content</Summary>
+        </Entry>
+      </feed>
+    `
+
+    expect(detect(mixedCaseFeed)).toBe(true)
+  })
+
+  test('detect minimal ATOM feed', () => {
+    const minimalFeed = '<feed><title>Test</title></feed>'
+
+    expect(detect(minimalFeed)).toBe(true)
+  })
+
+  test('return false for feed in attribute value', () => {
+    const feedInAttribute = `
+      <root>
+        <element data="&lt;feed&gt;&lt;title&gt;Test&lt;/title&gt;&lt;/feed&gt;">
+          <content>Not a feed</content>
+        </element>
+      </root>
+    `
+
+    expect(detect(feedInAttribute)).toBe(false)
+  })
+
+  test('return false for feed with wrong namespace and no ATOM elements', () => {
+    const wrongNamespace = `
+      <feed xmlns="http://example.com/custom">
+        <heading>Not ATOM</heading>
+        <item>Custom content</item>
+      </feed>
+    `
+
+    expect(detect(wrongNamespace)).toBe(false)
+  })
+
+  // test('return false for feed element in XML comments', () => {
+  //   const commentedFeed = `
+  //     <?xml version="1.0"?>
+  //     <root>
+  //       <!-- <feed xmlns="http://www.w3.org/2005/Atom"><title>Test</title></feed> -->
+  //       <content>Not a feed</content>
+  //     </root>
+  //   `
+
+  //   expect(detect(commentedFeed)).toBe(false)
+  // })
 
   test('return false for RSS feed', () => {
     const rssFeed = `

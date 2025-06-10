@@ -31,6 +31,16 @@ describe('parseAuthor', () => {
     expect(parseAuthor(value)).toEqual(expectedFull)
   })
 
+  it('should handle Author object with only one of required fields', () => {
+    const nameOnly = { name: 'John' }
+    const urlOnly = { url: 'link' }
+    const avatarOnly = { avatar: 'http://example.com/avatar.jpg' }
+
+    expect(parseAuthor(nameOnly)).toEqual(nameOnly)
+    expect(parseAuthor(urlOnly)).toEqual(urlOnly)
+    expect(parseAuthor(avatarOnly)).toEqual(avatarOnly)
+  })
+
   it('should handle non-Author object', () => {
     const value = { count: 1 }
 
@@ -141,9 +151,11 @@ describe('parseAttachment', () => {
   it('should handle attachment object with only required url property', () => {
     const value = {
       url: 'https://example.com/file.pdf',
+      mime_type: 'application/pdf',
     }
     const expected = {
       url: 'https://example.com/file.pdf',
+      mime_type: 'application/pdf',
     }
 
     expect(parseAttachment(value)).toEqual(expected)
@@ -178,15 +190,38 @@ describe('parseAttachment', () => {
     expect(parseAttachment(value)).toEqual(value)
   })
 
-  it('should return undefined if url is not present', () => {
+  it('should handle partial objects (missing url)', () => {
     const value = {
       mime_type: 'video/mp4',
       title: 'Sample Video',
       size_in_bytes: 98765,
       duration_in_seconds: 300,
     }
+    const expected = {
+      mime_type: 'video/mp4',
+      title: 'Sample Video',
+      size_in_bytes: 98765,
+      duration_in_seconds: 300,
+    }
 
-    expect(parseAttachment(value)).toBeUndefined()
+    expect(parseAttachment(value)).toEqual(expected)
+  })
+
+  it('should handle partial objects (missing mime_type)', () => {
+    const value = {
+      url: 'http://example.com/video.mp4',
+      title: 'Sample Video',
+      size_in_bytes: 98765,
+      duration_in_seconds: 300,
+    }
+    const expected = {
+      url: 'http://example.com/video.mp4',
+      title: 'Sample Video',
+      size_in_bytes: 98765,
+      duration_in_seconds: 300,
+    }
+
+    expect(parseAttachment(value)).toEqual(expected)
   })
 
   it('should handle array', () => {
@@ -228,26 +263,31 @@ describe('parseAttachment', () => {
     expect(parseAttachment(value)).toBeUndefined()
   })
 
-  it('should handle object with invalid url', () => {
+  it('should handle partial objects (invalid url)', () => {
     const value = {
       url: true,
       mime_type: 'audio/mpeg',
       title: 'Invalid URL Test',
     }
+    const expected = {
+      mime_type: 'audio/mpeg',
+      title: 'Invalid URL Test',
+    }
 
-    expect(parseAttachment(value)).toBeUndefined()
+    expect(parseAttachment(value)).toEqual(expected)
   })
 
   it('should handle object with invalid properties', () => {
     const value = {
       url: 'https://example.com/document.pdf',
-      mime_type: true,
+      mime_type: 'application/pdf',
       title: {},
       size_in_bytes: 'not-a-number',
       duration_in_seconds: false,
     }
     const expected = {
       url: 'https://example.com/document.pdf',
+      mime_type: 'application/pdf',
     }
 
     expect(parseAttachment(value)).toEqual(expected)
@@ -324,22 +364,30 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expectedFull)
   })
 
-  it('should handle an item object with only required id property', () => {
-    const value = {
+  it('should handle an item object with only required fields property', () => {
+    const withHtmlContent = {
       id: 'minimal-item-123',
+      content_html: '<p>Minimal HTML Content</p>',
+    }
+    const withTextContent = {
+      id: 'minimal-item-123',
+      content_text: 'Minimal text content',
     }
 
-    expect(parseItem(value)).toEqual(value)
+    expect(parseItem(withHtmlContent)).toEqual(withHtmlContent)
+    expect(parseItem(withTextContent)).toEqual(withTextContent)
   })
 
   it('should handle an item with author as authors', () => {
     const value = {
       id: 'minimal-item-123',
       author: { name: 'John Doe' },
+      content_text: 'Minimal text content',
     }
     const expected = {
       id: 'minimal-item-123',
       authors: [{ name: 'John Doe' }],
+      content_text: 'Minimal text content',
     }
 
     expect(parseItem(value)).toEqual(expected)
@@ -352,7 +400,14 @@ describe('parseItem', () => {
       title: 45678,
       tags: 'javascript',
       author: 'John Doe',
-      attachments: [{ url: 'https://example.com/file.pdf', size_in_bytes: '5000' }],
+      content_text: 'Minimal text content',
+      attachments: [
+        {
+          url: 'https://example.com/file.pdf',
+          mime_type: 'application/pdf',
+          size_in_bytes: '5000',
+        },
+      ],
     }
     const expected = {
       id: '12345',
@@ -360,25 +415,49 @@ describe('parseItem', () => {
       title: '45678',
       tags: ['javascript'],
       authors: [{ name: 'John Doe' }],
-      attachments: [{ url: 'https://example.com/file.pdf', size_in_bytes: 5000 }],
+      content_text: 'Minimal text content',
+      attachments: [
+        {
+          url: 'https://example.com/file.pdf',
+          mime_type: 'application/pdf',
+          size_in_bytes: 5000,
+        },
+      ],
     }
 
     expect(parseItem(value)).toEqual(expected)
   })
 
-  it('should return undefined if id is not present', () => {
+  it('should handle partial objects (missing id)', () => {
     const value = {
       url: 'https://example.com/article',
       title: 'Article without ID',
       content_text: 'This article has no ID',
     }
+    const expected = {
+      url: 'https://example.com/article',
+      title: 'Article without ID',
+      content_text: 'This article has no ID',
+    }
 
-    expect(parseItem(value)).toBeUndefined()
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle partial objects (missing content)', () => {
+    const value = {
+      id: 'test-item-123',
+    }
+    const expected = {
+      id: 'test-item-123',
+    }
+
+    expect(parseItem(value)).toEqual(expected)
   })
 
   it('should handle id as empty string', () => {
     const value = {
       id: '',
+      content_text: 'Minimal text content',
       url: 'https://example.com/article',
       title: 'Article with empty ID',
     }
@@ -389,16 +468,18 @@ describe('parseItem', () => {
   it('should handle invalid author and attachments', () => {
     const value = {
       id: 'item-invalid-props',
+      content_text: 'Minimal text content',
       author: true,
       attachments: [
         true,
         { not_url: 'missing url field' },
-        { url: 'https://valid.com/attachment.pdf' },
+        { url: 'https://valid.com/attachment.pdf', mime_type: 'application/pdf' },
       ],
     }
     const expected = {
       id: 'item-invalid-props',
-      attachments: [{ url: 'https://valid.com/attachment.pdf' }],
+      content_text: 'Minimal text content',
+      attachments: [{ url: 'https://valid.com/attachment.pdf', mime_type: 'application/pdf' }],
     }
 
     expect(parseItem(value)).toEqual(expected)
@@ -446,6 +527,7 @@ describe('parseItem', () => {
   it('should handle complex nested authors and attachments', () => {
     const value = {
       id: 'complex-item',
+      content_text: 'Minimal text content',
       authors: [
         { name: 'Author 1', url: 'https://example.com/author1' },
         123,
@@ -460,6 +542,7 @@ describe('parseItem', () => {
     }
     const expected = {
       id: 'complex-item',
+      content_text: 'Minimal text content',
       authors: [
         { name: 'Author 1', url: 'https://example.com/author1' },
         { name: '123' },
@@ -473,18 +556,38 @@ describe('parseItem', () => {
 })
 
 describe('parseHub', () => {
-  const expectedFull = { type: 'pub', url: '33' }
+  const expectedFull = {
+    type: 'pub',
+    url: '33',
+  }
 
   it('should handle Hub object (with singular value)', () => {
-    const value = { type: 'pub', url: 33 }
+    const value = {
+      type: 'pub',
+      url: 33,
+    }
 
     expect(parseHub(value)).toEqual(expectedFull)
   })
 
   it('should handle Hub object (with array of values)', () => {
-    const value = { type: ['pub', 'sub'], url: [33, '44'] }
+    const value = {
+      type: ['pub', 'sub'],
+      url: [33, '44'],
+    }
 
     expect(parseHub(value)).toEqual(expectedFull)
+  })
+
+  it('should handle partial objects', () => {
+    const noUrl = { type: 'pub' }
+    const noType = { url: 'some-url' }
+
+    const expectedNoUrl = { type: 'pub' }
+    const expectedNoType = { url: 'some-url' }
+
+    expect(parseHub(noUrl)).toEqual(expectedNoUrl)
+    expect(parseHub(noType)).toEqual(expectedNoType)
   })
 
   it('should handle non-Hub object', () => {
@@ -640,20 +743,6 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expectedFull)
   })
 
-  it('should handle a minimal valid feed object with only required properties', () => {
-    const value = {
-      version: 'https://jsonfeed.org/version/1.1',
-      title: 'Minimal Feed',
-      items: [{ id: 'item-1', content_text: 'Content' }],
-    }
-    const expected = {
-      title: 'Minimal Feed',
-      items: [{ id: 'item-1', content_text: 'Content' }],
-    }
-
-    expect(parseFeed(value)).toEqual(expected)
-  })
-
   it('should handle coercible properties correctly in coerce mode', () => {
     const value = {
       version: 123,
@@ -672,7 +761,7 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should return undefined if required properties are missing', () => {
+  it('should handle partial objects', () => {
     const missingVersion = {
       title: 'Feed Without Version',
       items: [{ id: 'item-1' }],
@@ -686,45 +775,31 @@ describe('parseFeed', () => {
       title: 'Feed Without Items',
     }
 
-    expect(parseFeed(missingVersion)).toBeUndefined()
-    expect(parseFeed(missingTitle)).toBeUndefined()
-    expect(parseFeed(missingItems)).toBeUndefined()
-  })
-
-  it('should return undefined if required properties are not defined', () => {
-    const emptyVersion = {
-      title: 'Feed With Empty Version',
+    const expectedMissingVersion = {
+      title: 'Feed Without Version',
       items: [{ id: 'item-1' }],
     }
-    const emptyTitle = {
-      version: 'https://jsonfeed.org/version/1.1',
+    const expectedMissingTitle = {
       items: [{ id: 'item-1' }],
     }
-    const emptyItems = {
-      version: 'https://jsonfeed.org/version/1.1',
-      title: 'Feed With Empty Items',
+    const expectedMissingItems = {
+      title: 'Feed Without Items',
     }
 
-    expect(parseFeed(emptyVersion)).toBeUndefined()
-    expect(parseFeed(emptyTitle)).toBeUndefined()
-    expect(parseFeed(emptyItems)).toBeUndefined()
-  })
-
-  it('should return undefined if required properties are defined but empty', () => {
-    const value = {
-      version: '',
-      title: '',
-      items: [],
-    }
-
-    expect(parseFeed(value)).toBeUndefined()
+    expect(parseFeed(missingVersion)).toEqual(expectedMissingVersion)
+    expect(parseFeed(missingTitle)).toEqual(expectedMissingTitle)
+    expect(parseFeed(missingItems)).toEqual(expectedMissingItems)
   })
 
   it('should handle invalid nested properties', () => {
     const value = {
       version: 'https://jsonfeed.org/version/1.1',
       title: 'Feed with Invalid Properties',
-      items: [{ id: 'item-1', author: true }, { not_an_id: 'missing id' }, { id: 'item-2' }],
+      items: [
+        { id: 'item-1', author: true, content_text: 'Minimal text content' },
+        { not_an_id: 'missing id' },
+        { id: 'item-2', content_text: 'Minimal text content' },
+      ],
       author: { not_a_name: 'John' },
       hubs: [
         true,
@@ -735,7 +810,10 @@ describe('parseFeed', () => {
     const expected = {
       title: 'Feed with Invalid Properties',
       hubs: [{ type: 'websub', url: 'https://example.com/hub' }],
-      items: [{ id: 'item-1' }, { id: 'item-2' }],
+      items: [
+        { id: 'item-1', content_text: 'Minimal text content' },
+        { id: 'item-2', content_text: 'Minimal text content' },
+      ],
     }
 
     expect(parseFeed(value)).toEqual(expected)
@@ -801,6 +879,7 @@ describe('parseFeed', () => {
       items: [
         {
           id: 'item-1',
+          content_text: 'Minimal text content',
           title: 'Item with attachments',
           attachments: [
             {
@@ -814,6 +893,7 @@ describe('parseFeed', () => {
         },
         {
           id: 'item-2',
+          content_text: 'Minimal text content',
           title: 'Item with tags',
           tags: ['tag1', 123, true, 'tag2'],
         },
@@ -826,6 +906,7 @@ describe('parseFeed', () => {
       items: [
         {
           id: 'item-1',
+          content_text: 'Minimal text content',
           title: 'Item with attachments',
           authors: [{ name: 'Item Author 1' }, { name: 'Item Author 2' }],
           attachments: [
@@ -835,6 +916,7 @@ describe('parseFeed', () => {
         },
         {
           id: 'item-2',
+          content_text: 'Minimal text content',
           title: 'Item with tags',
           tags: ['tag1', '123', 'tag2'],
         },

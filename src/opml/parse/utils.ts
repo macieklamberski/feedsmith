@@ -1,4 +1,4 @@
-import type { DeepPartial, ParseFunction } from '../../common/types.js'
+import type { ParsePartialFunction } from '../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -14,12 +14,12 @@ import {
 } from '../../common/utils.js'
 import type { Body, Head, Opml, Outline } from '../common/types.js'
 
-export const parseOutline: ParseFunction<DeepPartial<Outline>> = (value) => {
+export const parseOutline: ParsePartialFunction<Outline> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  return trimObject({
+  const outline = {
     text: parseString(value['@text']),
     type: parseString(value['@type']),
     isComment: parseBoolean(value['@iscomment']),
@@ -34,15 +34,17 @@ export const parseOutline: ParseFunction<DeepPartial<Outline>> = (value) => {
     version: parseString(value['@version']),
     url: parseString(value['@url']),
     outlines: parseArrayOf(value.outline, parseOutline),
-  }) as DeepPartial<Outline>
+  }
+
+  return trimObject(outline)
 }
 
-export const parseHead: ParseFunction<DeepPartial<Head<string>>> = (value) => {
+export const parseHead: ParsePartialFunction<Head<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  return trimObject({
+  const head = {
     title: parseSingularOf(value.title, parseTextString),
     dateCreated: parseSingularOf(value.datecreated, parseTextString),
     dateModified: parseSingularOf(value.datemodified, parseTextString),
@@ -58,31 +60,32 @@ export const parseHead: ParseFunction<DeepPartial<Head<string>>> = (value) => {
     windowLeft: parseSingularOf(value.windowleft, parseTextNumber),
     windowBottom: parseSingularOf(value.windowbottom, parseTextNumber),
     windowRight: parseSingularOf(value.windowright, parseTextNumber),
-  }) as DeepPartial<Head<string>>
+  }
+
+  return trimObject(head)
 }
 
-export const parseBody: ParseFunction<DeepPartial<Body>> = (value) => {
+export const parseBody: ParsePartialFunction<Body> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  return trimObject({
+  const body = {
     outlines: parseArrayOf(value.outline, parseOutline),
-  }) as DeepPartial<Body>
+  }
+
+  return trimObject(body)
 }
 
-export const parseOpml: ParseFunction<DeepPartial<Opml<string>>> = (value) => {
+export const parseOpml: ParsePartialFunction<Opml<string>> = (value) => {
   if (!isObject(value?.opml)) {
     return
   }
 
   const opml = {
-    version: parseString(value.opml['@version']),
     head: parseHead(value.opml.head),
     body: parseBody(value.opml.body),
   }
 
-  if (opml?.body?.outlines?.length) {
-    return trimObject(opml) as DeepPartial<Opml<string>>
-  }
+  return trimObject(opml)
 }

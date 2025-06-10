@@ -1,6 +1,6 @@
 import { decodeHTML, decodeXML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
-import type { ParseFunction, Unreliable } from './types.js'
+import type { AnyOf, ParseExactFunction, Unreliable } from './types.js'
 
 export const isPresent = <T>(value: T): value is NonNullable<T> => {
   return value != null
@@ -27,9 +27,7 @@ export const retrieveText = (value: Unreliable): Unreliable => {
   return value?.['#text'] ?? value
 }
 
-export const trimObject = <T extends Record<string, unknown>>(
-  object: T,
-): Partial<T> | undefined => {
+export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<T> | undefined => {
   const result: Partial<T> = {}
   const keys: Array<keyof T> = Object.keys(object)
   let hasProperties = false
@@ -45,13 +43,13 @@ export const trimObject = <T extends Record<string, unknown>>(
   }
 
   if (hasProperties) {
-    return result
+    return result as AnyOf<T>
   }
 }
 
 export const trimArray = <T, R = T>(
   value: Array<T> | undefined,
-  parse?: ParseFunction<R>,
+  parse?: ParseExactFunction<R>,
 ): Array<R> | undefined => {
   if (!Array.isArray(value)) {
     return
@@ -70,6 +68,52 @@ export const trimArray = <T, R = T>(
   if (result.length > 0) {
     return result
   }
+}
+
+export type ValidatedAndTrimmedObject<T extends Record<string, unknown>, K extends keyof T> = T & {
+  [P in K]-?: NonNullable<T[P]>
+}
+
+export const validateAndTrimObject = <
+  T extends Record<string, unknown>,
+  K extends keyof T & (string | number),
+>(
+  object: T,
+  ...keys: [K, ...K[]]
+): ValidatedAndTrimmedObject<T, K> | undefined => {
+  switch (keys.length) {
+    case 1:
+      if (!isPresent(object[keys[0]])) return
+      break
+    case 2:
+      if (!isPresent(object[keys[0]])) return
+      if (!isPresent(object[keys[1]])) return
+      break
+    case 3:
+      if (!isPresent(object[keys[0]])) return
+      if (!isPresent(object[keys[1]])) return
+      if (!isPresent(object[keys[2]])) return
+      break
+    case 4:
+      if (!isPresent(object[keys[0]])) return
+      if (!isPresent(object[keys[1]])) return
+      if (!isPresent(object[keys[2]])) return
+      if (!isPresent(object[keys[3]])) return
+      break
+    case 5:
+      if (!isPresent(object[keys[0]])) return
+      if (!isPresent(object[keys[1]])) return
+      if (!isPresent(object[keys[2]])) return
+      if (!isPresent(object[keys[3]])) return
+      if (!isPresent(object[keys[4]])) return
+      break
+    default:
+      for (let i = 0; i < keys.length; i++) {
+        if (!isPresent(object[keys[i]])) return
+      }
+  }
+
+  return trimObject(object) as ValidatedAndTrimmedObject<T, K>
 }
 
 export const stripCdata = (text: Unreliable) => {
@@ -108,7 +152,7 @@ export const hasEntities = (text: string) => {
   return ampIndex !== -1 && text.indexOf(';', ampIndex) !== -1
 }
 
-export const parseString: ParseFunction<string> = (value) => {
+export const parseString: ParseExactFunction<string> = (value) => {
   if (typeof value === 'string') {
     return hasEntities(value)
       ? decodeHTML(decodeXML(stripCdata(value.trim())))
@@ -120,7 +164,7 @@ export const parseString: ParseFunction<string> = (value) => {
   }
 }
 
-export const parseNumber: ParseFunction<number> = (value) => {
+export const parseNumber: ParseExactFunction<number> = (value) => {
   if (typeof value === 'number') {
     return value
   }
@@ -132,7 +176,7 @@ export const parseNumber: ParseFunction<number> = (value) => {
   }
 }
 
-export const parseBoolean: ParseFunction<boolean> = (value) => {
+export const parseBoolean: ParseExactFunction<boolean> = (value) => {
   if (typeof value === 'boolean') {
     return value
   }
@@ -144,7 +188,7 @@ export const parseBoolean: ParseFunction<boolean> = (value) => {
   }
 }
 
-export const parseYesNoBoolean: ParseFunction<boolean> = (value) => {
+export const parseYesNoBoolean: ParseExactFunction<boolean> = (value) => {
   const boolean = parseBoolean(value)
 
   if (boolean !== undefined) {
@@ -156,7 +200,7 @@ export const parseYesNoBoolean: ParseFunction<boolean> = (value) => {
   }
 }
 
-export const parseArray: ParseFunction<Array<Unreliable>> = (value) => {
+export const parseArray: ParseExactFunction<Array<Unreliable>> = (value) => {
   if (Array.isArray(value)) {
     return value
   }
@@ -189,7 +233,7 @@ export const parseArray: ParseFunction<Array<Unreliable>> = (value) => {
 
 export const parseArrayOf = <R>(
   value: Unreliable,
-  parse: ParseFunction<R>,
+  parse: ParseExactFunction<R>,
 ): Array<R> | undefined => {
   const array = parseArray(value)
 
@@ -208,11 +252,17 @@ export const parseSingular = <T>(value: T | Array<T>): T => {
   return Array.isArray(value) ? value[0] : value
 }
 
-export const parseSingularOf = <R>(value: Unreliable, parse: ParseFunction<R>): R | undefined => {
+export const parseSingularOf = <R>(
+  value: Unreliable,
+  parse: ParseExactFunction<R>,
+): R | undefined => {
   return parse(parseSingular(value))
 }
 
-export const parseCsvOf = <T>(value: Unreliable, parse: ParseFunction<T>): Array<T> | undefined => {
+export const parseCsvOf = <T>(
+  value: Unreliable,
+  parse: ParseExactFunction<T>,
+): Array<T> | undefined => {
   if (!isNonEmptyStringOrNumber(value)) {
     return
   }
@@ -247,12 +297,12 @@ export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
 }
 
 // TODO: Write tests.
-export const parseTextString: ParseFunction<string> = (value) => {
+export const parseTextString: ParseExactFunction<string> = (value) => {
   return parseString(retrieveText(value))
 }
 
 // TODO: Write tests.
-export const parseTextNumber: ParseFunction<number> = (value) => {
+export const parseTextNumber: ParseExactFunction<number> = (value) => {
   return parseNumber(retrieveText(value))
 }
 
