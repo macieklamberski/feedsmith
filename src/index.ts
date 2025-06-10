@@ -1,4 +1,3 @@
-export type { Feed } from './common/parse.js'
 export { parse as parseFeed } from './common/parse.js'
 
 export type { Feed as AtomFeed } from './feeds/atom/common/types.js'
