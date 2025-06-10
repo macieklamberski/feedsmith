@@ -43,14 +43,14 @@
     "build": "rm -rf dist && tsc"
   },
   "dependencies": {
-    "entities": "^6.0.0",
-    "fast-xml-parser": "^5.2.3"
+    "entities": "^6.0.1",
+    "fast-xml-parser": "^5.2.5"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@types/bun": "^1.2.13",
+    "@types/bun": "^1.2.15",
     "lefthook": "^1.11.13",
-    "semantic-release": "^24.2.4",
+    "semantic-release": "^24.2.5",
     "typescript": "^5.8.3"
   }
 }
