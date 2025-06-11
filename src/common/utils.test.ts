@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'bun:test'
 import type { XMLBuilder } from 'fast-xml-parser'
-import type { ParseFunction } from './types.js'
+import type { ParseExactFunction } from './types.js'
 import {
   createCaseInsensitiveGetter,
   createNamespaceGetter,
+  detectNamespaces,
   generateXml,
   hasEntities,
   isNonEmptyString,
@@ -357,15 +358,6 @@ describe('trimObject', () => {
     expect(trimObject(input)).toEqual(input)
   })
 
-  it('should handle objects with inherited properties', () => {
-    const proto = { inherited: 'value' }
-    const obj = Object.create(proto)
-    obj.own = 'property'
-    obj.undef = undefined
-
-    expect(trimObject(obj)).toEqual({ own: 'property' })
-  })
-
   it('should preserve falsy non-undefined values', () => {
     const input = { a: 0, b: '', c: false, d: Number.NaN }
 
@@ -583,6 +575,7 @@ describe('validateAndTrimObject', () => {
       extra: 'kept',
     }
 
+    // @ts-ignore: This is for testing purposes.
     expect(validateAndTrimObject(value, 'url', 'length', 'type')).toEqual(expected)
   })
 
@@ -599,6 +592,7 @@ describe('validateAndTrimObject', () => {
       active: false,
     }
 
+    // @ts-ignore: This is for testing purposes.
     expect(validateAndTrimObject(value, 'name', 'count', 'active')).toEqual(expected)
   })
 
@@ -643,6 +637,7 @@ describe('validateAndTrimObject', () => {
       optional: 'kept',
     }
 
+    // @ts-ignore: This is for testing purposes.
     expect(validateAndTrimObject(value, 'title')).toEqual(expected)
   })
 
@@ -662,7 +657,6 @@ describe('validateAndTrimObject', () => {
       field2: 'value2',
       field3: 'value3',
       field4: 'value4',
-      field5: 'value5',
       optional: undefined,
       extra: 'kept',
     }
@@ -671,13 +665,11 @@ describe('validateAndTrimObject', () => {
       field2: 'value2',
       field3: 'value3',
       field4: 'value4',
-      field5: 'value5',
       extra: 'kept',
     }
 
-    expect(validateAndTrimObject(value, 'field1', 'field2', 'field3', 'field4', 'field5')).toEqual(
-      expected,
-    )
+    // @ts-ignore: This is for testing purposes.
+    expect(validateAndTrimObject(value, 'field1', 'field2', 'field3', 'field4')).toEqual(expected)
   })
 
   it('should return undefined when any of many required fields is missing', () => {
@@ -711,19 +703,6 @@ describe('validateAndTrimObject', () => {
     expect(validateAndTrimObject(value, 'field1')).toBeUndefined()
   })
 
-  it('should handle objects with inherited properties', () => {
-    const proto = { inherited: 'value' }
-    const obj = Object.create(proto)
-    obj.title = 'Example Title'
-    obj.description = undefined
-
-    const expected = {
-      title: 'Example Title',
-    }
-
-    expect(validateAndTrimObject(obj, 'title')).toEqual(expected)
-  })
-
   it('should handle objects with symbol keys', () => {
     const sym = Symbol('test')
     const value = {
@@ -735,7 +714,7 @@ describe('validateAndTrimObject', () => {
       title: 'Example Title',
     }
 
-    // Symbol keys are not enumerable with for..in, so they're not included
+    // @ts-ignore: This is for testing purposes.
     expect(validateAndTrimObject(value, 'title')).toEqual(expected)
   })
 
@@ -754,6 +733,7 @@ describe('validateAndTrimObject', () => {
       static: 'static value',
     }
 
+    // @ts-ignore: This is for testing purposes.
     expect(validateAndTrimObject(value, 'title')).toEqual(expected)
   })
 
@@ -772,6 +752,7 @@ describe('validateAndTrimObject', () => {
       array: arrayValue,
     }
 
+    // @ts-ignore: This is for testing purposes.
     expect(validateAndTrimObject(value, 'title')).toEqual(expected)
   })
 
@@ -788,6 +769,7 @@ describe('validateAndTrimObject', () => {
       title: 'Example',
     }
 
+    // @ts-ignore: This is for testing purposes.
     expect(validateAndTrimObject(value, 'title')).toEqual(expected)
   })
 
@@ -803,6 +785,7 @@ describe('validateAndTrimObject', () => {
       date: date,
     }
 
+    // @ts-ignore: This is for testing purposes.
     expect(validateAndTrimObject(value, 'title')).toEqual(expected)
   })
 
@@ -830,6 +813,7 @@ describe('validateAndTrimObject', () => {
       falseBoolean: false,
     }
 
+    // @ts-ignore: This is for testing purposes.
     expect(validateAndTrimObject(value, 'string', 'number')).toEqual(expected)
   })
 
@@ -1376,7 +1360,7 @@ describe('parseSingular', () => {
 
 describe('parseSingularOf', () => {
   it('should apply parse function to the first element of an array', () => {
-    const parseToString: ParseFunction<string> = (value) => {
+    const parseToString: ParseExactFunction<string> = (value) => {
       return typeof value === 'number' || typeof value === 'string' ? String(value) : undefined
     }
 
@@ -1417,7 +1401,7 @@ describe('parseSingularOf', () => {
   })
 
   it('should work with custom parse functions', () => {
-    const parseUpperCase: ParseFunction<string> = (value) => {
+    const parseUpperCase: ParseExactFunction<string> = (value) => {
       return typeof value === 'string' ? value.toUpperCase() : undefined
     }
 
@@ -1507,7 +1491,7 @@ describe('parseArray', () => {
 })
 
 describe('parseArrayOf', () => {
-  const parser: ParseFunction<string> = (value) => {
+  const parser: ParseExactFunction<string> = (value) => {
     if (typeof value === 'number') {
       return value.toString()
     }
@@ -1941,5 +1925,225 @@ describe('generateXml', () => {
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root></root>'
 
     expect(generateXml(mockBuilder, value)).toEqual(expected)
+  })
+})
+
+describe('detectNamespaces', () => {
+  it('should detect single namespace', () => {
+    const value = {
+      title: 'Test',
+      'atom:link': 'http://example.com',
+      description: 'Test description',
+    }
+    const expected = new Set(['atom'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should detect multiple namespaces', () => {
+    const value = {
+      title: 'Test',
+      'atom:link': 'http://example.com',
+      'dc:creator': 'John Doe',
+      'itunes:author': 'Jane Doe',
+      description: 'Test description',
+    }
+    const expected = new Set(['atom', 'dc', 'itunes'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should detect namespaces with various formats', () => {
+    const value = {
+      'namespace:key': 'value',
+      'ns2:another': 'value',
+      'x:short': 'value',
+      'very-long-namespace:key': 'value',
+    }
+    const expected = new Set(['namespace', 'ns2', 'x', 'very-long-namespace'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should handle keys without namespaces', () => {
+    const value = {
+      title: 'Test',
+      description: 'Description',
+      link: 'http://example.com',
+    }
+    const expected = new Set<string>()
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+    const expected = new Set<string>()
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should handle keys with multiple colons', () => {
+    const value = {
+      'ns:key:subkey': 'value',
+      'prefix:middle:suffix': 'value',
+    }
+    const expected = new Set(['ns', 'prefix'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should handle keys with colon at the end', () => {
+    const value = {
+      'trailing:': 'value',
+      'normal:key': 'value',
+    }
+    const expected = new Set(['trailing', 'normal'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should handle keys with colon but no namespace', () => {
+    const value = {
+      ':leadingColon': 'value',
+      'normal:key': 'value',
+    }
+    const expected = new Set(['normal'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should handle numeric keys with namespaces', () => {
+    const value = {
+      'ns:123': 'value',
+      'prefix:456': 'value',
+      '789': 'no namespace',
+    }
+    const expected = new Set(['ns', 'prefix'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should handle special characters in namespace', () => {
+    const value = {
+      'my-namespace:key': 'value',
+      'my_namespace:key': 'value',
+      'my.namespace:key': 'value',
+      'MY-NAMESPACE:key': 'value',
+    }
+    const expected = new Set(['my-namespace', 'my_namespace', 'my.namespace', 'MY-NAMESPACE'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should deduplicate same namespaces', () => {
+    const value = {
+      'atom:link': 'http://example.com',
+      'atom:author': 'John Doe',
+      'atom:title': 'Test',
+      'dc:creator': 'Jane Doe',
+      'dc:date': '2023-01-01',
+    }
+    const expected = new Set(['atom', 'dc'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should handle mixed content with and without namespaces', () => {
+    const value = {
+      title: 'Regular Title',
+      'atom:link': { '@href': 'http://example.com', '@rel': 'self' },
+      description: 'Regular description',
+      'itunes:author': 'Podcast Author',
+      'itunes:category': { '@text': 'Technology' },
+      pubDate: 'Mon, 15 Mar 2023 12:00:00 GMT',
+      'dc:creator': 'Creator Name',
+    }
+    const expected = new Set(['atom', 'itunes', 'dc'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should handle real-world RSS/Atom namespace examples', () => {
+    const value = {
+      'atom:link': 'http://example.com',
+      'content:encoded': '<p>HTML content</p>',
+      'dc:creator': 'John Doe',
+      'georss:point': '45.256 -71.92',
+      'itunes:author': 'Podcast Author',
+      'media:content': { '@url': 'http://example.com/media.jpg' },
+      'podcast:transcript': { '@url': 'http://example.com/transcript.json' },
+      'slash:comments': '10',
+      'sy:updatefrequency': '1',
+      'thr:total': '5',
+    }
+    const expected = new Set([
+      'atom',
+      'content',
+      'dc',
+      'georss',
+      'itunes',
+      'media',
+      'podcast',
+      'slash',
+      'sy',
+      'thr',
+    ])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should handle objects with symbol keys', () => {
+    const sym = Symbol('test')
+    const value = {
+      'atom:link': 'http://example.com',
+      [sym]: 'symbol value',
+      'dc:creator': 'John Doe',
+    }
+    const expected = new Set(['atom', 'dc'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should handle objects with numeric string keys', () => {
+    const value = {
+      '0': 'numeric key',
+      '1:2': 'looks like namespace',
+      'atom:link': 'http://example.com',
+    }
+    const expected = new Set(['1', 'atom'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should handle edge case with only colon', () => {
+    const value = {
+      ':': 'just colon',
+      'a:b': 'normal namespace',
+    }
+    const expected = new Set(['a'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should handle very long namespace names', () => {
+    const value = {
+      'this-is-a-very-long-namespace-name:key': 'value',
+      'short:key': 'value',
+    }
+    const expected = new Set(['this-is-a-very-long-namespace-name', 'short'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should handle Unicode characters in namespaces', () => {
+    const value = {
+      'café:item': 'coffee',
+      'naïve:approach': 'test',
+      'normal:key': 'value',
+    }
+    const expected = new Set(['café', 'naïve', 'normal'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
   })
 })

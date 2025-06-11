@@ -1,5 +1,6 @@
 import {
   createNamespaceGetter,
+  detectNamespaces,
   isObject,
   parseArrayOf,
   parseNumber,
@@ -182,6 +183,7 @@ export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) 
     return
   }
 
+  const namespaces = options?.asNamespace ? undefined : detectNamespaces(value)
   const get = createNamespaceGetter(value, options?.prefix)
   const entry = {
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
@@ -196,12 +198,12 @@ export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) 
     summary: parseSingularOf(get('summary'), parseTextString),
     title: parseSingularOf(get('title'), parseTextString),
     updated: retrieveUpdated(value, options),
-    dc: options?.asNamespace ? undefined : retrieveDcItemOrFeed(value),
-    slash: options?.asNamespace ? undefined : retrieveSlashItem(value),
-    itunes: options?.asNamespace ? undefined : retrieveItunesItem(value),
-    media: options?.asNamespace ? undefined : retrieveMediaItemOrFeed(value),
-    georss: options?.asNamespace ? undefined : retrieveGeoRssItemOrFeed(value),
-    thr: options?.asNamespace ? undefined : retrieveThrItem(value),
+    dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
+    slash: namespaces?.has('slash') ? retrieveSlashItem(value) : undefined,
+    itunes: namespaces?.has('itunes') ? retrieveItunesItem(value) : undefined,
+    media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
+    georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    thr: namespaces?.has('thr') ? retrieveThrItem(value) : undefined,
   }
 
   return trimObject(entry)
@@ -212,6 +214,7 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) =>
     return
   }
 
+  const namespaces = options?.asNamespace ? undefined : detectNamespaces(value)
   const get = createNamespaceGetter(value, options?.prefix)
   const feed = {
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
@@ -227,11 +230,11 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) =>
     title: parseSingularOf(get('title'), parseTextString),
     updated: retrieveUpdated(value, options),
     entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options)),
-    dc: options?.asNamespace ? undefined : retrieveDcItemOrFeed(value),
-    sy: options?.asNamespace ? undefined : retrieveSyFeed(value),
-    itunes: options?.asNamespace ? undefined : retrieveItunesFeed(value),
-    media: options?.asNamespace ? undefined : retrieveMediaItemOrFeed(value),
-    georss: options?.asNamespace ? undefined : retrieveGeoRssItemOrFeed(value),
+    dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
+    sy: namespaces?.has('sy') ? retrieveSyFeed(value) : undefined,
+    itunes: namespaces?.has('itunes') ? retrieveItunesFeed(value) : undefined,
+    media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
+    georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
   }
 
   return trimObject(feed)

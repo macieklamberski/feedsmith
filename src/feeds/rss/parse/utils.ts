@@ -1,5 +1,6 @@
 import type { ParsePartialFunction } from '../../../common/types.js'
 import {
+  detectNamespaces,
   isObject,
   parseArrayOf,
   parseBoolean,
@@ -150,6 +151,7 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
     return
   }
 
+  const namespaces = detectNamespaces(value)
   const item = {
     title: parseSingularOf(value.title, parseTextString),
     link: parseSingularOf(value.link, parseTextString),
@@ -161,15 +163,15 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
     guid: parseSingularOf(value.guid, parseGuid),
     pubDate: parseSingularOf(value.pubdate, parseTextString),
     source: parseSingularOf(value.source, parseSource),
-    content: retrieveContentItem(value),
-    atom: retrieveAtomEntry(value),
-    dc: retrieveDcItemOrFeed(value),
-    slash: retrieveSlashItem(value),
-    itunes: retrieveItunesItem(value),
-    podcast: retrievePodcastItem(value),
-    media: retrieveMediaItemOrFeed(value),
-    georss: retrieveGeoRssItemOrFeed(value),
-    thr: retrieveThrItem(value),
+    content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
+    atom: namespaces.has('atom') ? retrieveAtomEntry(value) : undefined,
+    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
+    slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
+    itunes: namespaces.has('itunes') ? retrieveItunesItem(value) : undefined,
+    podcast: namespaces.has('podcast') ? retrievePodcastItem(value) : undefined,
+    media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
+    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
   }
 
   return trimObject(item)
@@ -180,6 +182,7 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
     return
   }
 
+  const namespaces = detectNamespaces(value)
   const feed = {
     title: parseSingularOf(value.title, parseTextString),
     link: parseSingularOf(value.link, parseTextString),
@@ -201,13 +204,13 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
     skipHours: parseSingularOf(value.skiphours, parseSkipHours),
     skipDays: parseSingularOf(value.skipdays, parseSkipDays),
     items: parseArrayOf(value.item, parseItem),
-    atom: retrieveAtomFeed(value),
-    dc: retrieveDcItemOrFeed(value),
-    sy: retrieveSyFeed(value),
-    itunes: retrieveItunesFeed(value),
-    podcast: retrievePodcastFeed(value),
-    media: retrieveMediaItemOrFeed(value),
-    georss: retrieveGeoRssItemOrFeed(value),
+    atom: namespaces.has('atom') || namespaces.has('a10') ? retrieveAtomFeed(value) : undefined,
+    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
+    sy: namespaces.has('sy') ? retrieveSyFeed(value) : undefined,
+    itunes: namespaces.has('itunes') ? retrieveItunesFeed(value) : undefined,
+    podcast: namespaces.has('podcast') ? retrievePodcastFeed(value) : undefined,
+    media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
+    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
   }
 
   return trimObject(feed)

@@ -29,11 +29,9 @@ export const retrieveText = (value: Unreliable): Unreliable => {
 
 export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<T> | undefined => {
   const result: Partial<T> = {}
-  const keys: Array<keyof T> = Object.keys(object)
   let hasProperties = false
 
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i]
+  for (const key in object) {
     const value = object[key]
 
     if (isPresent(value)) {
@@ -154,9 +152,17 @@ export const hasEntities = (text: string) => {
 
 export const parseString: ParseExactFunction<string> = (value) => {
   if (typeof value === 'string') {
-    return hasEntities(value)
-      ? decodeHTML(decodeXML(stripCdata(value.trim())))
-      : stripCdata(value.trim())
+    let string = stripCdata(value.trim())
+
+    if (hasEntities(string)) {
+      string = decodeXML(string)
+    }
+
+    if (hasEntities(string)) {
+      string = decodeHTML(string)
+    }
+
+    return string
   }
 
   if (typeof value === 'number') {
@@ -183,6 +189,7 @@ export const parseBoolean: ParseExactFunction<boolean> = (value) => {
 
   if (typeof value === 'string') {
     const lowercased = value.toLowerCase()
+
     if (lowercased === 'true') return true
     if (lowercased === 'false') return false
   }
@@ -278,7 +285,18 @@ export const createNamespaceGetter = (
   value: Record<string, Unreliable>,
   prefix: string | undefined,
 ) => {
-  return prefix ? (key: string) => value[prefix + key] : (key: string) => value[key]
+  if (!prefix) return (key: string) => value[key]
+
+  const prefixedKeys = new Map<string, string>()
+
+  return (key: string) => {
+    let prefixedKey = prefixedKeys.get(key)
+    if (!prefixedKey) {
+      prefixedKey = prefix + key
+      prefixedKeys.set(key, prefixedKey)
+    }
+    return value[prefixedKey]
+  }
 }
 
 export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
@@ -316,4 +334,18 @@ export const generateXml = (builder: XMLBuilder, value: string): string => {
   }
 
   return `<?xml version="1.0" encoding="utf-8"?>\n${xml}`
+}
+
+export const detectNamespaces = (value: Record<string, unknown>): Set<string> => {
+  const namespaces = new Set<string>()
+
+  for (const key in value) {
+    const colonIndex = key.indexOf(':')
+
+    if (colonIndex > 0) {
+      namespaces.add(key.substring(0, colonIndex))
+    }
+  }
+
+  return namespaces
 }

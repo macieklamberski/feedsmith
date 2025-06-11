@@ -1,5 +1,6 @@
 import type { ParsePartialFunction } from '../../../common/types.js'
 import {
+  detectNamespaces,
   isObject,
   parseArrayOf,
   parseSingular,
@@ -63,16 +64,17 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
     return
   }
 
+  const namespaces = detectNamespaces(value)
   const item = {
     title: parseSingularOf(value.title, parseTextString),
     link: parseSingularOf(value.link, parseTextString),
     description: parseSingularOf(value.description, parseTextString),
-    atom: retrieveAtomEntry(value),
-    content: retrieveContentItem(value),
-    dc: retrieveDcItemOrFeed(value),
-    slash: retrieveSlashItem(value),
-    media: retrieveMediaItemOrFeed(value),
-    georss: retrieveGeoRssItemOrFeed(value),
+    atom: namespaces.has('atom') || namespaces.has('a10') ? retrieveAtomEntry(value) : undefined,
+    content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
+    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
+    slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
+    media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
+    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
   }
 
   return trimObject(item)
@@ -89,6 +91,7 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
   }
 
   const channel = parseSingular(value.channel)
+  const namespaces = detectNamespaces(channel)
   const feed = {
     title: parseSingularOf(channel?.title, parseTextString),
     link: parseSingularOf(channel?.link, parseTextString),
@@ -96,11 +99,11 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
     image: retrieveImage(value),
     items: retrieveItems(value),
     textInput: retrieveTextInput(value),
-    atom: retrieveAtomFeed(channel),
-    dc: retrieveDcItemOrFeed(channel),
-    sy: retrieveSyFeed(channel),
-    media: retrieveMediaItemOrFeed(channel),
-    georss: retrieveGeoRssItemOrFeed(channel),
+    atom: namespaces.has('atom') || namespaces.has('a10') ? retrieveAtomFeed(channel) : undefined,
+    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel) : undefined,
+    sy: namespaces.has('sy') ? retrieveSyFeed(channel) : undefined,
+    media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
+    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
   }
 
   return trimObject(feed)
