@@ -49,7 +49,7 @@ export const trimArray = <T, R = T>(
   value: Array<T> | undefined,
   parse?: ParseExactFunction<R>,
 ): Array<R> | undefined => {
-  if (!Array.isArray(value)) {
+  if (!Array.isArray(value) || value.length === 0) {
     return
   }
 
@@ -291,10 +291,12 @@ export const createNamespaceGetter = (
 
   return (key: string) => {
     let prefixedKey = prefixedKeys.get(key)
+
     if (!prefixedKey) {
       prefixedKey = prefix + key
       prefixedKeys.set(key, prefixedKey)
     }
+
     return value[prefixedKey]
   }
 }
