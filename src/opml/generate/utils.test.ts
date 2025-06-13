@@ -84,6 +84,34 @@ describe('generateOutline', () => {
 
     expect(generateOutline(value)).toEqual(expected)
   })
+
+  it('should handle empty object in outlines array', () => {
+    const value = {
+      outlines: [{}],
+    }
+
+    // @ts-ignore: This is for testing purposes.
+    expect(generateOutline(value)).toBeUndefined()
+  })
+
+  it('should handle object with only undefined/empty properties', () => {
+    const value = {
+      text: undefined,
+      xmlUrl: undefined,
+    }
+
+    // @ts-ignore: This is for testing purposes.
+    expect(generateOutline(value)).toBeUndefined()
+  })
+
+  it('should handle empty object', () => {
+    // @ts-ignore: This is for testing purposes.
+    expect(generateOutline({})).toBeUndefined()
+  })
+
+  it('should handle non-object inputs gracefully', () => {
+    expect(generateOutline(undefined)).toBeUndefined()
+  })
 })
 
 describe('generateHead', () => {
@@ -134,16 +162,42 @@ describe('generateHead', () => {
     expect(generateHead(input)).toEqual(expected)
   })
 
-  it('should handle empty expansionState array', () => {
+  it('should handle expansionState with array of one zero', () => {
     const input = {
       title: 'Test OPML',
-      expansionState: [],
+      expansionState: [0],
     }
     const expected = {
       title: 'Test OPML',
+      expansionState: '0',
     }
 
     expect(generateHead(input)).toEqual(expected)
+  })
+
+  it('should handle empty expansionState array', () => {
+    const value = {
+      expansionState: [],
+    }
+
+    expect(generateHead(value)).toBeUndefined()
+  })
+
+  it('should handle object with only undefined/empty properties', () => {
+    const value = {
+      title: undefined,
+      ownerName: undefined,
+    }
+
+    expect(generateHead(value)).toBeUndefined()
+  })
+
+  it('should handle empty object', () => {
+    expect(generateHead({})).toBeUndefined()
+  })
+
+  it('should handle non-object inputs gracefully', () => {
+    expect(generateHead(undefined)).toBeUndefined()
   })
 })
 
@@ -199,6 +253,22 @@ describe('generateBody', () => {
     }
 
     expect(generateBody(input)).toBeUndefined()
+  })
+
+  it('should handle object with only undefined/empty properties', () => {
+    const value = {
+      outlines: undefined,
+    }
+
+    expect(generateBody(value)).toBeUndefined()
+  })
+
+  it('should handle empty object', () => {
+    expect(generateBody({})).toBeUndefined()
+  })
+
+  it('should handle non-object inputs gracefully', () => {
+    expect(generateBody(undefined)).toBeUndefined()
   })
 })
 
@@ -282,5 +352,22 @@ describe('generateOpml', () => {
     }
 
     expect(generateOpml(input)).toBeUndefined()
+  })
+
+  it('should handle object with only undefined/empty properties', () => {
+    const value = {
+      outlines: undefined,
+      body: undefined,
+    }
+
+    expect(generateOpml(value)).toBeUndefined()
+  })
+
+  it('should handle empty object', () => {
+    expect(generateOpml({})).toBeUndefined()
+  })
+
+  it('should handle non-object inputs gracefully', () => {
+    expect(generateOpml(undefined)).toBeUndefined()
   })
 })
