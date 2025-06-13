@@ -28,21 +28,21 @@ export const retrieveText = (value: Unreliable): Unreliable => {
 }
 
 export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<T> | undefined => {
-  const result: Partial<T> = {}
-  let hasProperties = false
+  let result: Partial<T> | undefined
 
   for (const key in object) {
     const value = object[key]
 
     if (isPresent(value)) {
+      if (!result) {
+        result = {}
+      }
+
       result[key] = value
-      hasProperties = true
     }
   }
 
-  if (hasProperties) {
-    return result as AnyOf<T>
-  }
+  return result as AnyOf<T> | undefined
 }
 
 export const trimArray = <T, R = T>(
@@ -53,19 +53,21 @@ export const trimArray = <T, R = T>(
     return
   }
 
-  const result: Array<R> = []
+  let result: Array<R> | undefined
 
   for (let i = 0; i < value.length; i++) {
     const item = parse ? parse(value[i]) : value[i]
 
     if (isPresent(item)) {
+      if (!result) {
+        result = []
+      }
+
       result.push(item as R)
     }
   }
 
-  if (result.length > 0) {
-    return result
-  }
+  return result
 }
 
 export type ValidatedAndTrimmedObject<T extends Record<string, unknown>, K extends keyof T> = T & {
