@@ -1,31 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import {
-  generateBody,
-  generateHead,
-  generateOpml,
-  generateOutline,
-  generateRfc822Date,
-} from './utils.js'
-
-describe('generateRfc822Date', () => {
-  it('should format Date object to RFC822 string', () => {
-    const value = new Date('2023-03-15T12:00:00Z')
-    const expected = 'Wed, 15 Mar 2023 12:00:00 GMT'
-
-    expect(generateRfc822Date(value)).toEqual(expected)
-  })
-
-  it('should format valid date string to RFC822 string', () => {
-    const value = '2023-03-15T12:00:00Z'
-    const expected = 'Wed, 15 Mar 2023 12:00:00 GMT'
-
-    expect(generateRfc822Date(value)).toEqual(expected)
-  })
-
-  it('should return undefined for invalid date string', () => {
-    expect(generateRfc822Date('not a date')).toBeUndefined()
-  })
-})
+import { generateBody, generateHead, generateOpml, generateOutline } from './utils.js'
 
 describe('generateOutline', () => {
   it('should generate valid outline object with all properties', () => {

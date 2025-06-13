@@ -5,6 +5,7 @@ import {
   createCaseInsensitiveGetter,
   createNamespaceGetter,
   detectNamespaces,
+  generateRfc822Date,
   generateXml,
   hasEntities,
   isNonEmptyString,
@@ -1925,6 +1926,26 @@ describe('generateXml', () => {
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root></root>'
 
     expect(generateXml(mockBuilder, value)).toEqual(expected)
+  })
+})
+
+describe('generateRfc822Date', () => {
+  it('should format Date object to RFC822 string', () => {
+    const value = new Date('2023-03-15T12:00:00Z')
+    const expected = 'Wed, 15 Mar 2023 12:00:00 GMT'
+
+    expect(generateRfc822Date(value)).toEqual(expected)
+  })
+
+  it('should format valid date string to RFC822 string', () => {
+    const value = '2023-03-15T12:00:00Z'
+    const expected = 'Wed, 15 Mar 2023 12:00:00 GMT'
+
+    expect(generateRfc822Date(value)).toEqual(expected)
+  })
+
+  it('should return undefined for invalid date string', () => {
+    expect(generateRfc822Date('not a date')).toBeUndefined()
   })
 })
 

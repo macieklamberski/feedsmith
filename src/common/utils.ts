@@ -1,6 +1,6 @@
 import { decodeHTML, decodeXML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
-import type { AnyOf, ParseExactFunction, Unreliable } from './types.js'
+import type { AnyOf, GenerateFunction, ParseExactFunction, Unreliable } from './types.js'
 
 export const isPresent = <T>(value: T): value is NonNullable<T> => {
   return value != null
@@ -338,6 +338,17 @@ export const generateXml = (builder: XMLBuilder, value: string): string => {
   }
 
   return `<?xml version="1.0" encoding="utf-8"?>\n${xml}`
+}
+
+export const generateRfc822Date: GenerateFunction<string | Date> = (value) => {
+  if (typeof value === 'string') {
+    // biome-ignore lint/style/noParameterAssign: No explanation.
+    value = new Date(value)
+  }
+
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toUTCString()
+  }
 }
 
 export const detectNamespaces = (value: Record<string, unknown>): Set<string> => {

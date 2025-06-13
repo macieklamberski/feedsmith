@@ -1,17 +1,6 @@
 import type { GenerateFunction } from '../../common/types.js'
-import { isObject, trimArray, trimObject } from '../../common/utils.js'
+import { generateRfc822Date, isObject, trimArray, trimObject } from '../../common/utils.js'
 import type { Body, Head, Opml, Outline } from '../common/types.js'
-
-export const generateRfc822Date: GenerateFunction<string | Date> = (value) => {
-  if (typeof value === 'string') {
-    // biome-ignore lint/style/noParameterAssign: No explanation.
-    value = new Date(value)
-  }
-
-  if (value instanceof Date && !Number.isNaN(value.getTime())) {
-    return value.toUTCString()
-  }
-}
 
 export const generateOutline: GenerateFunction<Outline> = (value) => {
   if (!isObject(value)) {
