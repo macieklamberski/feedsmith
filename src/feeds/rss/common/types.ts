@@ -59,7 +59,7 @@ export type SkipDays = Array<string>
 
 export type Guid = {
   value: string
-  isPermalink?: boolean
+  isPermaLink?: boolean
 }
 
 export type Source = {

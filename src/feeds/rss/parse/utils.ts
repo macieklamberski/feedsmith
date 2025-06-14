@@ -131,7 +131,7 @@ export const parseEnclosure: ParsePartialFunction<Enclosure> = (value) => {
 export const parseGuid: ParsePartialFunction<Guid> = (value) => {
   const source = {
     value: parseString(retrieveText(value)),
-    isPermalink: parseBoolean(value?.['@ispermalink']),
+    isPermaLink: parseBoolean(value?.['@ispermalink']),
   }
 
   return trimObject(source)

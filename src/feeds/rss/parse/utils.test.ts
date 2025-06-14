@@ -486,7 +486,7 @@ describe('parseGuid', () => {
     }
     const expected = {
       value: 'https://example.com/posts/123456',
-      isPermalink: true,
+      isPermaLink: true,
     }
 
     expect(parseGuid(value)).toEqual(expected)
@@ -531,7 +531,7 @@ describe('parseGuid', () => {
     }
     const expected = {
       value: 'https://example.com/posts/123456',
-      isPermalink: false,
+      isPermaLink: false,
     }
 
     expect(parseGuid(value)).toEqual(expected)
@@ -542,7 +542,7 @@ describe('parseGuid', () => {
       '@ispermalink': 'true',
     }
     const expected = {
-      isPermalink: true,
+      isPermaLink: true,
     }
 
     expect(parseGuid(value)).toEqual(expected)
