@@ -54,21 +54,19 @@ export const trimArray = <T, R = T>(
     return
   }
 
-  let result: Array<R> | undefined
+  // Pre-allocation in case of Array is more performant than doing the lazy-allocation
+  // similar to the one used in trimObject.
+  const result: Array<R> = []
 
   for (let i = 0; i < value.length; i++) {
     const item = parse ? parse(value[i]) : value[i]
 
     if (isPresent(item)) {
-      if (!result) {
-        result = []
-      }
-
       result.push(item as R)
     }
   }
 
-  return result
+  return result.length > 0 ? result : undefined
 }
 
 export type ValidatedAndTrimmedObject<T extends Record<string, unknown>, K extends keyof T> = T & {
