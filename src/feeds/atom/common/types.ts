@@ -58,7 +58,7 @@ export type Source<TDate extends DateLike> = AnyOf<{
   rights?: Text
   subtitle?: Text
   title?: Text
-  updated?: string
+  updated?: TDate
 }>
 
 export type Entry<TDate extends DateLike> = {
@@ -68,12 +68,12 @@ export type Entry<TDate extends DateLike> = {
   contributors?: Array<Person>
   id: string
   links?: Array<Link<TDate>>
-  published?: string
+  published?: TDate
   rights?: Text
   source?: Source<TDate>
   summary?: Text
   title: Text
-  updated?: string
+  updated?: TDate
   dc?: DcItemOrFeed<TDate>
   slash?: SlashItem
   itunes?: ItunesItem
@@ -94,7 +94,7 @@ export type Feed<TDate extends DateLike> = {
   rights?: Text
   subtitle?: Text
   title: Text
-  updated: string
+  updated: TDate
   entries?: Array<Entry<TDate>>
   dc?: DcItemOrFeed<TDate>
   sy?: SyFeed<TDate>
