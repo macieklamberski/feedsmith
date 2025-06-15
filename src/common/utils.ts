@@ -309,17 +309,18 @@ export const createNamespaceGetter = (
 }
 
 export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
-  const keyMap = new Map<string, string>()
-
-  for (const key in value) {
-    if (Object.hasOwn(value, key)) {
-      keyMap.set(key.toLowerCase(), key)
-    }
-  }
-
   return (requestedKey: string) => {
-    const originalKey = keyMap.get(requestedKey.toLowerCase())
-    return originalKey ? value[originalKey] : undefined
+    if (requestedKey in value) {
+      return value[requestedKey]
+    }
+
+    const lowerKey = requestedKey.toLowerCase()
+
+    for (const key in value) {
+      if (key.toLowerCase() === lowerKey) {
+        return value[key]
+      }
+    }
   }
 }
 

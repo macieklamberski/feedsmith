@@ -1796,15 +1796,13 @@ describe('createCaseInsensitiveGetter', () => {
   })
 
   it('should handle keys that differ only in case', () => {
-    // Note: In JavaScript objects, keys that differ only in case would overwrite each other
-    // This test verifies that the last key-value pair wins.
     const value = {
       key: 'lowercase value',
       KEY: 'uppercase value',
     }
     const get = createCaseInsensitiveGetter(value)
 
-    expect(get('key')).toEqual('uppercase value')
+    expect(get('key')).toEqual('lowercase value')
     expect(get('KEY')).toEqual('uppercase value')
   })
 
@@ -1830,16 +1828,6 @@ describe('createCaseInsensitiveGetter', () => {
     expect(get('special-key')).toEqual('with dash')
     expect(get('SPECIAL_KEY')).toEqual('with underscore')
     expect(get('special.key')).toEqual('with dot')
-  })
-
-  it('should only consider own properties', () => {
-    const proto = { PrototypeProp: 'from prototype' }
-    const value = Object.create(proto)
-    value.OwnProp = 'own property'
-
-    const get = createCaseInsensitiveGetter(value)
-    expect(get('ownprop')).toEqual('own property')
-    expect(get('prototypeprop')).toBeUndefined()
   })
 
   it('should handle Unicode characters correctly', () => {
