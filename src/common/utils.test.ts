@@ -5,6 +5,7 @@ import {
   createCaseInsensitiveGetter,
   createNamespaceGetter,
   detectNamespaces,
+  generateNamespaceAttrs,
   generateRfc822Date,
   generateXml,
   hasEntities,
@@ -2166,5 +2167,157 @@ describe('detectNamespaces', () => {
     const expected = new Set(['café', 'naïve', 'normal'])
 
     expect(detectNamespaces(value)).toEqual(expected)
+  })
+})
+
+describe('generateNamespaceAttrs', () => {
+  it('should generate namespace attributes for all known namespaces when present', () => {
+    const value = {
+      title: 'Comprehensive Feed',
+      'atom:link': 'http://example.com/feed.xml',
+      'content:encoded': '<p>HTML content</p>',
+      'dc:creator': 'John Doe',
+      'georss:point': '45.256 -71.92',
+      'itunes:author': 'Podcast Author',
+      'media:content': { '@url': 'http://example.com/media.jpg' },
+      'podcast:transcript': { '@url': 'http://example.com/transcript.json' },
+      'slash:comments': '10',
+      'sy:updatePeriod': 'hourly',
+      'thr:total': '5',
+    }
+    const expected = {
+      '@xmlns:atom': 'http://www.w3.org/2005/Atom',
+      '@xmlns:content': 'http://purl.org/rss/1.0/modules/content/',
+      '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+      '@xmlns:georss': 'http://www.georss.org/georss/',
+      '@xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+      '@xmlns:media': 'http://search.yahoo.com/mrss/',
+      '@xmlns:podcast': 'https://podcastindex.org/namespace/1.0',
+      '@xmlns:slash': 'http://purl.org/rss/1.0/modules/slash/',
+      '@xmlns:sy': 'http://purl.org/rss/1.0/modules/syndication/',
+      '@xmlns:thr': 'http://purl.org/syndication/thread/1.0',
+    }
+
+    expect(generateNamespaceAttrs(value)).toEqual(expected)
+  })
+
+  it('should generate namespace attributes for single known namespace', () => {
+    const value = {
+      title: 'Example Feed',
+      'atom:link': 'http://example.com/feed.xml',
+    }
+    const expected = {
+      '@xmlns:atom': 'http://www.w3.org/2005/Atom',
+    }
+
+    expect(generateNamespaceAttrs(value)).toEqual(expected)
+  })
+
+  it('should ignore unknown namespaces and only include known ones', () => {
+    const value = {
+      title: 'Mixed Feed',
+      'atom:link': 'http://example.com/feed.xml',
+      'unknown:namespace': 'ignored value',
+      'dc:creator': 'John Doe',
+      'custom:property': 'also ignored',
+    }
+    const expected = {
+      '@xmlns:atom': 'http://www.w3.org/2005/Atom',
+      '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+    }
+
+    expect(generateNamespaceAttrs(value)).toEqual(expected)
+  })
+
+  it('should handle properties with multiple colons correctly', () => {
+    const value = {
+      title: 'Example Feed',
+      'atom:link:href': 'http://example.com/feed.xml',
+      'dc:creator:name': 'John Doe',
+    }
+    const expected = {
+      '@xmlns:atom': 'http://www.w3.org/2005/Atom',
+      '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+    }
+
+    expect(generateNamespaceAttrs(value)).toEqual(expected)
+  })
+
+  it('should handle properties with colon at the end', () => {
+    const value = {
+      title: 'Example Feed',
+      'atom:': 'trailing colon',
+      'dc:creator': 'John Doe',
+    }
+    const expected = {
+      '@xmlns:atom': 'http://www.w3.org/2005/Atom',
+      '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+    }
+
+    expect(generateNamespaceAttrs(value)).toEqual(expected)
+  })
+
+  it('should ignore properties with colon at the beginning', () => {
+    const value = {
+      title: 'Example Feed',
+      ':leadingColon': 'ignored',
+      'atom:link': 'http://example.com/feed.xml',
+    }
+    const expected = {
+      '@xmlns:atom': 'http://www.w3.org/2005/Atom',
+    }
+
+    expect(generateNamespaceAttrs(value)).toEqual(expected)
+  })
+
+  it('should handle duplicate namespace detection correctly', () => {
+    const value = {
+      'atom:link': 'http://example.com/feed.xml',
+      'atom:author': 'John Doe',
+      'atom:title': 'Example Title',
+      'dc:creator': 'Jane Smith',
+      'dc:date': '2023-01-01',
+    }
+    const expected = {
+      '@xmlns:atom': 'http://www.w3.org/2005/Atom',
+      '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+    }
+
+    expect(generateNamespaceAttrs(value)).toEqual(expected)
+  })
+
+  it('should return undefined when no namespaced properties are present', () => {
+    const value = {
+      title: 'Example Title',
+      description: 'Description without namespaces',
+      link: 'http://example.com',
+      author: 'John Doe',
+    }
+
+    expect(generateNamespaceAttrs(value)).toBeUndefined()
+  })
+
+  it('should return undefined when object has namespaces not in known URLs', () => {
+    const value = {
+      title: 'Example Title',
+      'unknown:namespace': 'some value',
+      'custom:property': 'another value',
+    }
+
+    expect(generateNamespaceAttrs(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty objects', () => {
+    expect(generateNamespaceAttrs({})).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(generateNamespaceAttrs(null)).toBeUndefined()
+    expect(generateNamespaceAttrs(undefined)).toBeUndefined()
+    expect(generateNamespaceAttrs('string')).toBeUndefined()
+    expect(generateNamespaceAttrs(42)).toBeUndefined()
+    expect(generateNamespaceAttrs(true)).toBeUndefined()
+    expect(generateNamespaceAttrs([])).toBeUndefined()
+    expect(generateNamespaceAttrs(() => {})).toBeUndefined()
   })
 })

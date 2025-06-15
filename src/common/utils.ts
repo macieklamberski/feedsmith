@@ -1,5 +1,6 @@
 import { decodeHTML, decodeXML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
+import { namespaceUrls } from './config.js'
 import type { AnyOf, GenerateFunction, ParseExactFunction, Unreliable } from './types.js'
 
 export const isPresent = <T>(value: T): value is NonNullable<T> => {
@@ -332,10 +333,12 @@ export const generateXml = (builder: XMLBuilder, value: string): string => {
   let xml = builder.build(value)
 
   if (xml.includes('&apos;')) {
-    // TODO: Consider replacing the .replaceAll() call with some more efficent way as using
-    // the current approach with longer XML structures might be memory intensive.
-    xml = xml.replaceAll('&apos;', "'")
+    xml = xml.replace(/&apos;/g, "'")
   }
+
+  // if (xml.includes('"/>')) {
+  //   xml = xml.replace(/\"\/>/g, '" />')
+  // }
 
   return `<?xml version="1.0" encoding="utf-8"?>\n${xml}`
 }
@@ -363,4 +366,27 @@ export const detectNamespaces = (value: Record<string, unknown>): Set<string> =>
   }
 
   return namespaces
+}
+
+export const generateNamespaceAttrs = (value: Unreliable): Record<string, string> | undefined => {
+  if (!isObject(value)) {
+    return
+  }
+
+  let namespaceAttrs: Record<string, string> | undefined
+  const valueNamespaces = detectNamespaces(value)
+
+  for (const slug in namespaceUrls) {
+    if (!valueNamespaces.has(slug)) {
+      continue
+    }
+
+    if (!namespaceAttrs) {
+      namespaceAttrs = {}
+    }
+
+    namespaceAttrs[`@xmlns:${slug}`] = namespaceUrls[slug as keyof typeof namespaceUrls]
+  }
+
+  return namespaceAttrs
 }
