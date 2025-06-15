@@ -56,7 +56,7 @@
         "type": "audio/mpeg"
       },
       "guid": {
-        "isPermalink": true,
+        "isPermaLink": true,
         "value": "http://example.org/guid/1"
       },
       "pubDate": "Thu, 05 Sep 2002 0:00:01 GMT",
