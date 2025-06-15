@@ -288,7 +288,9 @@ export const createNamespaceGetter = (
   value: Record<string, Unreliable>,
   prefix: string | undefined,
 ) => {
-  if (!prefix) return (key: string) => value[key]
+  if (!prefix) {
+    return (key: string) => value[key]
+  }
 
   const prefixedKeys = new Map<string, string>()
 
