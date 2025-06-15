@@ -7,6 +7,7 @@ import {
   detectNamespaces,
   generateNamespaceAttrs,
   generateRfc822Date,
+  generateRfc3339Date,
   generateXml,
   hasEntities,
   isNonEmptyString,
@@ -1933,8 +1934,130 @@ describe('generateRfc822Date', () => {
     expect(generateRfc822Date(value)).toEqual(expected)
   })
 
+  it('should handle date string with milliseconds', () => {
+    const value = '2023-05-17T15:02:07.123Z'
+    const expected = 'Wed, 17 May 2023 15:02:07 GMT'
+
+    expect(generateRfc822Date(value)).toEqual(expected)
+  })
+
+  it('should handle date string without milliseconds', () => {
+    const value = '2023-05-17T15:02:07Z'
+    const expected = 'Wed, 17 May 2023 15:02:07 GMT'
+
+    expect(generateRfc822Date(value)).toEqual(expected)
+  })
+
+  it('should handle Date object with milliseconds', () => {
+    const value = new Date('2023-05-17T15:02:07.123Z')
+    const expected = 'Wed, 17 May 2023 15:02:07 GMT'
+
+    expect(generateRfc822Date(value)).toEqual(expected)
+  })
+
+  it('should handle timezone conversion to UTC', () => {
+    const value = new Date('2023-05-17T15:02:07.000+02:00')
+    const expected = 'Wed, 17 May 2023 13:02:07 GMT'
+
+    expect(generateRfc822Date(value)).toEqual(expected)
+  })
+
+  it('should handle edge case dates', () => {
+    const unixEpoch = new Date('1970-01-01T00:00:00.000Z')
+    const expected = 'Thu, 01 Jan 1970 00:00:00 GMT'
+
+    expect(generateRfc822Date(unixEpoch)).toEqual(expected)
+  })
+
+  it('should handle future dates', () => {
+    const futureDate = new Date('2099-12-31T23:59:59.999Z')
+    const expected = 'Thu, 31 Dec 2099 23:59:59 GMT'
+
+    expect(generateRfc822Date(futureDate)).toEqual(expected)
+  })
+
   it('should return undefined for invalid date string', () => {
     expect(generateRfc822Date('not a date')).toBeUndefined()
+  })
+
+  it('should return undefined for invalid Date object', () => {
+    const invalidDate = new Date('invalid')
+    expect(generateRfc822Date(invalidDate)).toBeUndefined()
+  })
+
+  it('should return undefined for undefined', () => {
+    expect(generateRfc822Date(undefined)).toBeUndefined()
+  })
+})
+
+describe('generateRfc3339Date', () => {
+  it('should format Date object to RFC3339 string', () => {
+    const value = new Date('2023-03-15T12:00:00Z')
+    const expected = '2023-03-15T12:00:00.000Z'
+
+    expect(generateRfc3339Date(value)).toEqual(expected)
+  })
+
+  it('should format valid date string to RFC3339 string', () => {
+    const value = '2023-03-15T12:00:00Z'
+    const expected = '2023-03-15T12:00:00.000Z'
+
+    expect(generateRfc3339Date(value)).toEqual(expected)
+  })
+
+  it('should handle date string with milliseconds', () => {
+    const value = '2023-05-17T15:02:07.123Z'
+    const expected = '2023-05-17T15:02:07.123Z'
+
+    expect(generateRfc3339Date(value)).toEqual(expected)
+  })
+
+  it('should handle date string without milliseconds', () => {
+    const value = '2023-05-17T15:02:07Z'
+    const expected = '2023-05-17T15:02:07.000Z'
+
+    expect(generateRfc3339Date(value)).toEqual(expected)
+  })
+
+  it('should handle Date object with milliseconds', () => {
+    const value = new Date('2023-05-17T15:02:07.123Z')
+    const expected = '2023-05-17T15:02:07.123Z'
+
+    expect(generateRfc3339Date(value)).toEqual(expected)
+  })
+
+  it('should handle timezone conversion to UTC', () => {
+    const value = new Date('2023-05-17T15:02:07.000+02:00')
+    const expected = '2023-05-17T13:02:07.000Z'
+
+    expect(generateRfc3339Date(value)).toEqual(expected)
+  })
+
+  it('should handle edge case dates', () => {
+    const unixEpoch = new Date('1970-01-01T00:00:00.000Z')
+    const expected = '1970-01-01T00:00:00.000Z'
+
+    expect(generateRfc3339Date(unixEpoch)).toEqual(expected)
+  })
+
+  it('should handle future dates', () => {
+    const futureDate = new Date('2099-12-31T23:59:59.999Z')
+    const expected = '2099-12-31T23:59:59.999Z'
+
+    expect(generateRfc3339Date(futureDate)).toEqual(expected)
+  })
+
+  it('should return undefined for invalid date string', () => {
+    expect(generateRfc3339Date('not a date')).toBeUndefined()
+  })
+
+  it('should return undefined for invalid Date object', () => {
+    const invalidDate = new Date('invalid')
+    expect(generateRfc3339Date(invalidDate)).toBeUndefined()
+  })
+
+  it('should return undefined for undefined', () => {
+    expect(generateRfc3339Date(undefined)).toBeUndefined()
   })
 })
 
