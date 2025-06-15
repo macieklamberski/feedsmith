@@ -11,6 +11,7 @@ export { detect as detectJsonFeed } from './feeds/json/detect/index.js'
 
 export type { Feed as RssFeed } from './feeds/rss/common/types.js'
 export { parse as parseRssFeed } from './feeds/rss/parse/index.js'
+export { generate as generateRssFeed } from './feeds/rss/generate/index.js'
 export { detect as detectRssFeed } from './feeds/rss/detect/index.js'
 
 export type { Feed as RdfFeed } from './feeds/rdf/common/types.js'
