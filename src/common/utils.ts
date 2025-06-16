@@ -366,16 +366,33 @@ export const generateRfc3339Date: GenerateFunction<string | Date> = (value) => {
   }
 }
 
-export const detectNamespaces = (value: Record<string, unknown>): Set<string> => {
+export const detectNamespaces = (value: unknown): Set<string> => {
   const namespaces = new Set<string>()
 
-  for (const key in value) {
-    const colonIndex = key.indexOf(':')
+  const traverse = (current: unknown): void => {
+    if (Array.isArray(current)) {
+      for (const item of current) {
+        traverse(item)
+      }
 
-    if (colonIndex > 0) {
-      namespaces.add(key.substring(0, colonIndex))
+      return
+    }
+
+    if (isObject(current)) {
+      for (const key in current) {
+        const keyWithoutAt = key.startsWith('@') ? key.substring(1) : key
+        const colonIndex = keyWithoutAt.indexOf(':')
+
+        if (colonIndex > 0) {
+          namespaces.add(keyWithoutAt.substring(0, colonIndex))
+        }
+
+        traverse(current[key])
+      }
     }
   }
+
+  traverse(value)
 
   return namespaces
 }

@@ -2279,6 +2279,59 @@ describe('detectNamespaces', () => {
 
     expect(detectNamespaces(value)).toEqual(expected)
   })
+
+  it('should detect namespaces in nested RSS feed structures', () => {
+    const value = {
+      rss: {
+        '@version': '2.0',
+        channel: {
+          title: 'Tech Podcast',
+          'atom:link': {
+            '@href': 'https://example.com/feed.xml',
+            '@rel': 'self',
+            '@type': 'application/rss+xml',
+          },
+          item: [
+            {
+              title: 'Understanding JavaScript',
+              'dc:creator': 'John Doe',
+              'itunes:duration': '45:30',
+              'slash:comments': '12',
+            },
+            {
+              title: 'React Best Practices',
+              'content:encoded': '<p>In this episode...</p>',
+              'georss:point': '37.7749 -122.4194',
+            },
+          ],
+        },
+      },
+    }
+    const expected = new Set(['atom', 'dc', 'itunes', 'slash', 'content', 'georss'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
+
+  it('should detect threading namespace in link attributes', () => {
+    const value = {
+      rss: {
+        '@version': '2.0',
+        channel: {
+          item: {
+            title: 'Blog Post with Discussion',
+            link: {
+              '@href': 'https://example.com/post/123',
+              '@thr:count': '25',
+              '@thr:updated': '2023-12-15T14:30:00Z',
+            },
+          },
+        },
+      },
+    }
+    const expected = new Set(['thr'])
+
+    expect(detectNamespaces(value)).toEqual(expected)
+  })
 })
 
 describe('generateNamespaceAttrs', () => {
