@@ -2,6 +2,7 @@ export { parse as parseFeed } from './common/parse.js'
 
 export type { Feed as AtomFeed } from './feeds/atom/common/types.js'
 export { parse as parseAtomFeed } from './feeds/atom/parse/index.js'
+export { generate as generateAtomFeed } from './feeds/atom/generate/index.js'
 export { detect as detectAtomFeed } from './feeds/atom/detect/index.js'
 
 export type { Feed as JsonFeed } from './feeds/json/common/types.js'
