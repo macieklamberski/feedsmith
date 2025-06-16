@@ -43,4 +43,42 @@ describe('generate', () => {
 
     expect(generate(input)).toEqual(expected)
   })
+
+  it('should generate RSS with dc namespace', () => {
+    const input = {
+      title: 'Feed with dc namespace',
+      description: 'Test feed with Dublin Core namespace',
+      dc: {
+        creator: 'John Doe',
+        rights: 'Copyright 2023',
+      },
+      items: [
+        {
+          title: 'First item',
+          dc: {
+            creator: 'Jane Smith',
+            date: new Date('2023-01-01T00:00:00Z'),
+          },
+        },
+      ],
+    }
+
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Feed with dc namespace</title>
+    <description>Test feed with Dublin Core namespace</description>
+    <dc:creator>John Doe</dc:creator>
+    <dc:rights>Copyright 2023</dc:rights>
+    <item>
+      <title>First item</title>
+      <dc:creator>Jane Smith</dc:creator>
+      <dc:date>2023-01-01T00:00:00.000Z</dc:date>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(input)).toEqual(expected)
+  })
 })

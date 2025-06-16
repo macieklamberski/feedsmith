@@ -484,6 +484,25 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with dc namespace properties', () => {
+    const value = {
+      title: 'Item with dc namespace',
+      dc: {
+        creator: 'Jane Smith',
+        date: new Date('2023-02-01T00:00:00Z'),
+        rights: 'Copyright 2023',
+      },
+    }
+    const expected = {
+      title: 'Item with dc namespace',
+      'dc:creator': 'Jane Smith',
+      'dc:date': '2023-02-01T00:00:00.000Z',
+      'dc:rights': 'Copyright 2023',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should handle empty arrays', () => {
     const value = {
       title: 'Item with empty arrays',
@@ -743,6 +762,33 @@ describe('generateFeed', () => {
           'sy:updatePeriod': 'hourly',
           'sy:updateFrequency': 2,
           'sy:updateBase': '2023-01-01T00:00:00.000Z',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate dc namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with dc namespace',
+      description: 'Description',
+      dc: {
+        creator: 'John Doe',
+        subject: 'Technology',
+        date: new Date('2023-01-01T00:00:00Z'),
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+        channel: {
+          title: 'Feed with dc namespace',
+          description: 'Description',
+          'dc:creator': 'John Doe',
+          'dc:subject': 'Technology',
+          'dc:date': '2023-01-01T00:00:00.000Z',
         },
       },
     }

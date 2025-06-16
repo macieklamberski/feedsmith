@@ -6,6 +6,7 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import type {
   Category,
@@ -125,6 +126,7 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
     guid: generateGuid(item.guid),
     pubDate: item.pubDate,
     source: generateSource(item.source),
+    ...generateDcItemOrFeed(item.dc),
   })
 }
 
@@ -153,14 +155,14 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     textInput: generateTextInput(feed.textInput),
     skipHours: generateSkipHours(feed.skipHours),
     skipDays: generateSkipDays(feed.skipDays),
-    item: trimArray(feed.items?.map(generateItem)),
     // atom: feed,
-    // dc: feed,
+    ...generateDcItemOrFeed(feed.dc),
     ...generateSyFeed(feed.sy),
     // itunes: feed,
     // podcast: feed,
     // media: feed,
     // georss: feed,
+    item: trimArray(feed.items?.map(generateItem)),
   })
 
   if (!channel) {
