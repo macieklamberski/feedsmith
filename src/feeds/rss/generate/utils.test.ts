@@ -409,7 +409,6 @@ describe('generateSource', () => {
 
 describe('generateItem', () => {
   it('should generate valid item object with all properties', () => {
-    const date = new Date('2023-03-15T12:00:00Z')
     const value = {
       title: 'Example Item',
       link: 'https://example.com/item/123',
@@ -426,7 +425,7 @@ describe('generateItem', () => {
         value: 'https://example.com/item/123',
         isPermaLink: true,
       },
-      pubDate: date,
+      pubDate: new Date('2023-03-15T12:00:00Z'),
       source: {
         title: 'Example Source',
         url: 'https://example.com/feed.xml',
@@ -453,7 +452,7 @@ describe('generateItem', () => {
         '#text': 'https://example.com/item/123',
         '@isPermaLink': true,
       },
-      pubDate: date,
+      pubDate: new Date('2023-03-15T12:00:00Z'),
       source: {
         '#text': 'Example Source',
         '@url': 'https://example.com/feed.xml',
@@ -523,7 +522,6 @@ describe('generateItem', () => {
 
 describe('generateFeed', () => {
   it('should generate complete RSS feed', () => {
-    const date = new Date('2023-03-15T12:00:00Z')
     const value = {
       title: 'Example Feed',
       link: 'https://example.com',
@@ -532,8 +530,8 @@ describe('generateFeed', () => {
       copyright: '© 2023 Example Corp',
       managingEditor: 'editor@example.com (Editor Name)',
       webMaster: 'webmaster@example.com (Webmaster Name)',
-      pubDate: date,
-      lastBuildDate: date,
+      pubDate: new Date('2023-03-15T12:00:00Z'),
+      lastBuildDate: new Date('2023-03-15T12:00:00Z'),
       categories: [{ name: 'Technology' }],
       generator: 'Example Generator',
       docs: 'https://example.com/docs',
@@ -566,15 +564,55 @@ describe('generateFeed', () => {
         },
       ],
     }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        channel: {
+          title: 'Example Feed',
+          link: 'https://example.com',
+          description: 'Example feed description',
+          language: 'en-US',
+          copyright: '© 2023 Example Corp',
+          managingEditor: 'editor@example.com (Editor Name)',
+          webMaster: 'webmaster@example.com (Webmaster Name)',
+          pubDate: 'Wed, 15 Mar 2023 12:00:00 GMT',
+          lastBuildDate: 'Wed, 15 Mar 2023 12:00:00 GMT',
+          category: [{ '@domain': undefined, '#text': 'Technology' }],
+          generator: 'Example Generator',
+          docs: 'https://example.com/docs',
+          cloud: {
+            '@domain': 'rpc.sys.com',
+            '@port': 80,
+            '@path': '/RPC2',
+            '@registerProcedure': 'pingMe',
+            '@protocol': 'soap',
+          },
+          ttl: 60,
+          image: {
+            url: 'https://example.com/logo.png',
+            title: 'Example Logo',
+            link: 'https://example.com',
+          },
+          rating: 'general',
+          textInput: {
+            title: 'Search',
+            description: 'Search our site',
+            name: 'query',
+            link: 'https://example.com/search',
+          },
+          skipHours: { hour: [0, 6, 12, 18] },
+          skipDays: { day: ['Monday', 'Wednesday'] },
+          item: [
+            {
+              title: 'Example Item',
+              description: 'Item description',
+            },
+          ],
+        },
+      },
+    }
 
-    const result = generateFeed(value)
-
-    expect(result).toHaveProperty('rss')
-    expect(result.rss['@version']).toEqual('2.0')
-    expect(result.rss.channel.title).toEqual('Example Feed')
-    expect(result.rss.channel.description).toEqual('Example feed description')
-    expect(result.rss.channel.pubDate).toEqual('Wed, 15 Mar 2023 12:00:00 GMT')
-    expect(result.rss.channel.item).toHaveLength(1)
+    expect(generateFeed(value)).toEqual(expected)
   })
 
   it('should generate RSS with minimal required fields', () => {
@@ -604,12 +642,17 @@ describe('generateFeed', () => {
       skipHours: [],
       skipDays: [],
     }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        channel: {
+          title: 'Feed with empty arrays',
+          description: 'Description',
+        },
+      },
+    }
 
-    const result = generateFeed(value)
-    expect(result.rss.channel.category).toBeUndefined()
-    expect(result.rss.channel.item).toBeUndefined()
-    expect(result.rss.channel.skipHours).toBeUndefined()
-    expect(result.rss.channel.skipDays).toBeUndefined()
+    expect(generateFeed(value)).toEqual(expected)
   })
 
   it('should handle object with only undefined/empty properties', () => {
@@ -641,10 +684,17 @@ describe('generateFeed', () => {
       pubDate: new Date('invalid-date'),
       lastBuildDate: new Date(Number.NaN),
     }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        channel: {
+          title: 'Feed with invalid dates',
+          description: 'Description',
+        },
+      },
+    }
 
-    const result = generateFeed(value)
-    expect(result.rss.channel.pubDate).toBeUndefined()
-    expect(result.rss.channel.lastBuildDate).toBeUndefined()
+    expect(generateFeed(value)).toEqual(expected)
   })
 
   it('should filter out invalid items', () => {
@@ -658,21 +708,45 @@ describe('generateFeed', () => {
         undefined, // Invalid item.
       ],
     }
-
-    // @ts-ignore: This is for testing purposes.
-    const result = generateFeed(value)
-    expect(result.rss.channel.item).toHaveLength(2)
-  })
-
-  it('should handle very long text values', () => {
-    const longText = 'A'.repeat(1000)
-    const value = {
-      title: longText,
-      description: longText,
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        channel: {
+          title: 'Feed with mixed items',
+          description: 'Description',
+          item: [{ title: 'Valid item' }, { description: 'Another valid item' }],
+        },
+      },
     }
 
-    const result = generateFeed(value)
-    expect(result.rss.channel.title).toEqual(longText)
-    expect(result.rss.channel.description).toEqual(longText)
+    // @ts-ignore: This is for testing purposes.
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate sy namespace properties and attributes', () => {
+    const value = {
+      title: 'Feed with sy namespace',
+      description: 'Description',
+      sy: {
+        updatePeriod: 'hourly',
+        updateFrequency: 2,
+        updateBase: new Date('2023-01-01T00:00:00Z'),
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:sy': 'http://purl.org/rss/1.0/modules/syndication/',
+        channel: {
+          title: 'Feed with sy namespace',
+          description: 'Description',
+          'sy:updatePeriod': 'hourly',
+          'sy:updateFrequency': 2,
+          'sy:updateBase': '2023-01-01T00:00:00.000Z',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
   })
 })

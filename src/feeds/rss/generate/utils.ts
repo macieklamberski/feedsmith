@@ -1,5 +1,12 @@
 import type { GenerateFunction } from '../../../common/types.js'
-import { generateRfc822Date, isObject, trimArray, trimObject } from '../../../common/utils.js'
+import {
+  generateNamespaceAttrs,
+  generateRfc822Date,
+  isObject,
+  trimArray,
+  trimObject,
+} from '../../../common/utils.js'
+import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import type {
   Category,
   Cloud,
@@ -149,7 +156,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     item: trimArray(feed.items?.map(generateItem)),
     // atom: feed,
     // dc: feed,
-    // sy: feed,
+    ...generateSyFeed(feed.sy),
     // itunes: feed,
     // podcast: feed,
     // media: feed,
@@ -160,10 +167,12 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     return
   }
 
+  const namespaceAttrs = generateNamespaceAttrs(channel)
+
   return {
     rss: {
       '@version': '2.0',
-      // TODO: When adding namespaces support, make sure to register them properly here.
+      ...namespaceAttrs,
       channel,
     },
   }
