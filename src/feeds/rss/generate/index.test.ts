@@ -81,4 +81,40 @@ describe('generate', () => {
 
     expect(generate(input)).toEqual(expected)
   })
+
+  it('should generate RSS with slash namespace', () => {
+    const input = {
+      title: 'Feed with slash namespace',
+      description: 'Test feed with Slash namespace',
+      items: [
+        {
+          title: 'First item',
+          slash: {
+            section: 'Technology',
+            department: 'News',
+            comments: 42,
+            hit_parade: [1, 2, 3, 4, 5],
+          },
+        },
+      ],
+    }
+
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
+  <channel>
+    <title>Feed with slash namespace</title>
+    <description>Test feed with Slash namespace</description>
+    <item>
+      <title>First item</title>
+      <slash:section>Technology</slash:section>
+      <slash:department>News</slash:department>
+      <slash:comments>42</slash:comments>
+      <slash:hit_parade>1,2,3,4,5</slash:hit_parade>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(input)).toEqual(expected)
+  })
 })

@@ -7,6 +7,7 @@ import {
   trimObject,
 } from '../../../common/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
+import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import type {
   Category,
@@ -127,6 +128,7 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
     pubDate: item.pubDate,
     source: generateSource(item.source),
     ...generateDcItemOrFeed(item.dc),
+    ...generateSlashItem(item.slash),
   })
 }
 

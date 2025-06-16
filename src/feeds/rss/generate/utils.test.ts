@@ -503,6 +503,27 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with slash namespace properties', () => {
+    const value = {
+      title: 'Item with slash namespace',
+      slash: {
+        section: 'Technology',
+        department: 'News',
+        comments: 15,
+        hit_parade: [1, 2, 3],
+      },
+    }
+    const expected = {
+      title: 'Item with slash namespace',
+      'slash:section': 'Technology',
+      'slash:department': 'News',
+      'slash:comments': 15,
+      'slash:hit_parade': '1,2,3',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should handle empty arrays', () => {
     const value = {
       title: 'Item with empty arrays',
