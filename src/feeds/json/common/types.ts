@@ -1,10 +1,10 @@
-import type { AnyOf, DateLike } from '../../../common/types.js'
+import type { DateLike } from '../../../common/types.js'
 
-export type Author = AnyOf<{
+export type Author = {
   name?: string
   url?: string
   avatar?: string
-}>
+}
 
 export type Attachment = {
   url: string
