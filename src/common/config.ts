@@ -22,6 +22,7 @@ export const generateConfig: XmlBuilderOptions = {
   suppressBooleanAttributes: false,
   attributeNamePrefix: '@',
   format: true,
+  cdataPropName: '#cdata',
 }
 
 export const locales = {

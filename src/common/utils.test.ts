@@ -8,6 +8,7 @@ import {
   generateNamespaceAttrs,
   generateRfc822Date,
   generateRfc3339Date,
+  generateString,
   generateXml,
   hasEntities,
   isNonEmptyString,
@@ -2483,5 +2484,60 @@ describe('generateNamespaceAttrs', () => {
     expect(generateNamespaceAttrs(true)).toBeUndefined()
     expect(generateNamespaceAttrs([])).toBeUndefined()
     expect(generateNamespaceAttrs(() => {})).toBeUndefined()
+  })
+})
+
+describe('generateString', () => {
+  it('should wrap HTML content in CDATA object', () => {
+    const value1 = '<p>HTML content</p>'
+    const value2 = 'Text with <strong>bold</strong> formatting'
+    const value3 = 'Content with > greater than'
+    const expected1 = { '#cdata': '<p>HTML content</p>' }
+    const expected2 = { '#cdata': 'Text with <strong>bold</strong> formatting' }
+    const expected3 = { '#cdata': 'Content with > greater than' }
+
+    expect(generateString(value1)).toEqual(expected1)
+    expect(generateString(value2)).toEqual(expected2)
+    expect(generateString(value3)).toEqual(expected3)
+  })
+
+  it('should wrap content with ampersands in CDATA object', () => {
+    const value1 = 'Text with & ampersand'
+    const value2 = 'Multiple & ampersands & here'
+    const expected1 = { '#cdata': 'Text with & ampersand' }
+    const expected2 = { '#cdata': 'Multiple & ampersands & here' }
+
+    expect(generateString(value1)).toEqual(expected1)
+    expect(generateString(value2)).toEqual(expected2)
+  })
+
+  it('should wrap content with CDATA end markers in CDATA object', () => {
+    const value = 'Text with ]]> marker'
+    const expected = { '#cdata': 'Text with ]]> marker' }
+
+    expect(generateString(value)).toEqual(expected)
+  })
+
+  it('should return simple text as string', () => {
+    const value1 = 'Simple text content'
+    const value2 = 'Text with numbers 123 and spaces'
+    const value3 = 'Text with special chars !@#$%^*()_+-='
+    const expected1 = 'Simple text content'
+    const expected2 = 'Text with numbers 123 and spaces'
+    const expected3 = 'Text with special chars !@#$%^*()_+-='
+
+    expect(generateString(value1)).toEqual(expected1)
+    expect(generateString(value2)).toEqual(expected2)
+    expect(generateString(value3)).toEqual(expected3)
+  })
+
+  it('should handle empty string', () => {
+    const value = ''
+
+    expect(generateString(value)).toBeUndefined()
+  })
+
+  it('should handle non-string inputs', () => {
+    expect(generateString(undefined)).toBeUndefined()
   })
 })

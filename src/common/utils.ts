@@ -397,6 +397,18 @@ export const detectNamespaces = (value: unknown): Set<string> => {
   return namespaces
 }
 
+export const generateString: GenerateFunction<string> = (value) => {
+  if (!isNonEmptyString(value)) {
+    return
+  }
+
+  if (value.includes('<') || value.includes('>') || value.includes('&') || value.includes(']]>')) {
+    return { '#cdata': value }
+  }
+
+  return value
+}
+
 export const generateNamespaceAttrs = (value: Unreliable): Record<string, string> | undefined => {
   if (!isObject(value)) {
     return
