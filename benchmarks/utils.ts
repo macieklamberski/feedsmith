@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import Benchmark from 'benchmark'
 import { Bench, nToMs } from 'tinybench'
