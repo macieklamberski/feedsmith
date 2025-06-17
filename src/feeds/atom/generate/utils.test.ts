@@ -85,6 +85,27 @@ describe('generateLink', () => {
   it('should handle non-object inputs gracefully', () => {
     expect(generateLink(undefined)).toBeUndefined()
   })
+
+  it('should generate link with thr namespace attributes', () => {
+    const value = {
+      href: 'https://example.com/comments',
+      rel: 'replies',
+      type: 'application/atom+xml',
+      thr: {
+        count: 5,
+        updated: new Date('2023-03-15T12:00:00Z'),
+      },
+    }
+    const expected = {
+      '@href': 'https://example.com/comments',
+      '@rel': 'replies',
+      '@type': 'application/atom+xml',
+      '@thr:count': 5,
+      '@thr:updated': '2023-03-15T12:00:00.000Z',
+    }
+
+    expect(generateLink(value)).toEqual(expected)
+  })
 })
 
 describe('generatePerson', () => {
@@ -439,6 +460,79 @@ describe('generateEntry', () => {
   it('should handle non-object inputs gracefully', () => {
     expect(generateEntry(undefined)).toBeUndefined()
   })
+
+  it('should generate entry with dc namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with DC namespace',
+      dc: {
+        creator: 'Jane Smith',
+        date: new Date('2023-02-01T00:00:00Z'),
+        rights: 'Copyright 2023',
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with DC namespace',
+      'dc:creator': 'Jane Smith',
+      'dc:date': '2023-02-01T00:00:00.000Z',
+      'dc:rights': 'Copyright 2023',
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
+  it('should generate entry with slash namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Slash namespace',
+      slash: {
+        section: 'Technology',
+        department: 'News',
+        comments: 42,
+        hit_parade: [1, 2, 3, 4, 5],
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Slash namespace',
+      'slash:section': 'Technology',
+      'slash:department': 'News',
+      'slash:comments': 42,
+      'slash:hit_parade': '1,2,3,4,5',
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
+  it('should generate entry with thr namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Threading namespace',
+      thr: {
+        total: 42,
+        inReplyTos: [
+          {
+            ref: 'http://example.com/original-post',
+            href: 'http://example.com/original-post#comment-1',
+          },
+        ],
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Threading namespace',
+      'thr:total': 42,
+      'thr:in-reply-to': [
+        {
+          '@ref': 'http://example.com/original-post',
+          '@href': 'http://example.com/original-post#comment-1',
+        },
+      ],
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -607,5 +701,61 @@ describe('generateFeed', () => {
 
   it('should handle non-object inputs gracefully', () => {
     expect(generateFeed(undefined)).toBeUndefined()
+  })
+
+  it('should generate Atom feed with dc namespace properties', () => {
+    const updatedDate = new Date('2023-03-15T12:00:00Z')
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with DC namespace',
+      updated: updatedDate,
+      dc: {
+        creator: 'John Doe',
+        rights: 'Copyright 2023',
+        date: new Date('2023-01-01T00:00:00Z'),
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+        id: 'https://example.com/feed',
+        title: 'Feed with DC namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        'dc:creator': 'John Doe',
+        'dc:rights': 'Copyright 2023',
+        'dc:date': '2023-01-01T00:00:00.000Z',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with sy namespace properties', () => {
+    const updatedDate = new Date('2023-03-15T12:00:00Z')
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with SY namespace',
+      updated: updatedDate,
+      sy: {
+        updatePeriod: 'hourly',
+        updateFrequency: 2,
+        updateBase: new Date('2023-01-01T00:00:00Z'),
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:sy': 'http://purl.org/rss/1.0/modules/syndication/',
+        id: 'https://example.com/feed',
+        title: 'Feed with SY namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        'sy:updatePeriod': 'hourly',
+        'sy:updateFrequency': 2,
+        'sy:updateBase': '2023-01-01T00:00:00.000Z',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
   })
 })

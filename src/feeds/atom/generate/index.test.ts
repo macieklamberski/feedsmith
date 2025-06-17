@@ -304,4 +304,212 @@ describe('generate', () => {
 
     expect(generate(value)).toEqual(expected)
   })
+
+  it('should generate Atom feed with dc namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with DC namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      dc: {
+        creator: 'John Doe',
+        rights: 'Copyright 2023',
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry with DC',
+          updated: new Date('2023-03-15T12:00:00Z'),
+          dc: {
+            creator: 'Jane Smith',
+            date: new Date('2023-02-01T00:00:00Z'),
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <id>https://example.com/feed</id>
+  <title>Feed with DC namespace</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <dc:creator>John Doe</dc:creator>
+  <dc:rights>Copyright 2023</dc:rights>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry with DC</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
+    <dc:creator>Jane Smith</dc:creator>
+    <dc:date>2023-02-01T00:00:00.000Z</dc:date>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with sy namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with SY namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      sy: {
+        updatePeriod: 'hourly',
+        updateFrequency: 2,
+        updateBase: new Date('2023-01-01T00:00:00Z'),
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/">
+  <id>https://example.com/feed</id>
+  <title>Feed with SY namespace</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <sy:updatePeriod>hourly</sy:updatePeriod>
+  <sy:updateFrequency>2</sy:updateFrequency>
+  <sy:updateBase>2023-01-01T00:00:00.000Z</sy:updateBase>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with slash namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Slash namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry with Slash',
+          updated: new Date('2023-03-15T12:00:00Z'),
+          slash: {
+            section: 'Technology',
+            department: 'News',
+            comments: 42,
+            hit_parade: [1, 2, 3, 4, 5],
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
+  <id>https://example.com/feed</id>
+  <title>Feed with Slash namespace</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry with Slash</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
+    <slash:section>Technology</slash:section>
+    <slash:department>News</slash:department>
+    <slash:comments>42</slash:comments>
+    <slash:hit_parade>1,2,3,4,5</slash:hit_parade>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with thr namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Threading namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Discussion post',
+          updated: new Date('2023-03-15T12:00:00Z'),
+          thr: {
+            total: 42,
+            inReplyTos: [
+              {
+                ref: 'http://example.com/original-post',
+                href: 'http://example.com/original-post#comment-1',
+              },
+            ],
+          },
+          links: [
+            {
+              href: 'https://example.com/comments',
+              rel: 'replies',
+              type: 'application/atom+xml',
+              thr: {
+                count: 5,
+                updated: new Date('2023-03-10T08:00:00Z'),
+              },
+            },
+          ],
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:thr="http://purl.org/syndication/thread/1.0">
+  <id>https://example.com/feed</id>
+  <title>Feed with Threading namespace</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <link href="https://example.com/comments" rel="replies" type="application/atom+xml" thr:count="5" thr:updated="2023-03-10T08:00:00.000Z"/>
+    <title>Discussion post</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
+    <thr:total>42</thr:total>
+    <thr:in-reply-to ref="http://example.com/original-post" href="http://example.com/original-post#comment-1"/>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with multiple namespaces', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with multiple namespaces',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      dc: {
+        creator: 'John Doe',
+        rights: 'Copyright 2023',
+      },
+      sy: {
+        updatePeriod: 'daily',
+        updateFrequency: 1,
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Multi-namespace entry',
+          updated: new Date('2023-03-15T12:00:00Z'),
+          dc: {
+            creator: 'Jane Smith',
+          },
+          slash: {
+            section: 'Technology',
+            comments: 15,
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/">
+  <id>https://example.com/feed</id>
+  <title>Feed with multiple namespaces</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <dc:creator>John Doe</dc:creator>
+  <dc:rights>Copyright 2023</dc:rights>
+  <sy:updatePeriod>daily</sy:updatePeriod>
+  <sy:updateFrequency>1</sy:updateFrequency>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Multi-namespace entry</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
+    <dc:creator>Jane Smith</dc:creator>
+    <slash:section>Technology</slash:section>
+    <slash:comments>15</slash:comments>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
 })

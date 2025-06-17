@@ -1,11 +1,19 @@
 import type { GenerateFunction } from '../../../common/types.js'
 import {
+  generateNamespaceAttrs,
   generateRfc3339Date,
   isNonEmptyString,
   isObject,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
+import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
+import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
+import {
+  generateItem as generateThrItem,
+  generateLink as generateThrLink,
+} from '../../../namespaces/thr/generate/utils.js'
 import type {
   Category,
   Entry,
@@ -37,7 +45,7 @@ export const generateLink: GenerateFunction<Link<Date>> = (link) => {
     '@hreflang': link.hreflang,
     '@title': link.title,
     '@length': link.length,
-    // thr
+    ...generateThrLink(link.thr),
   })
 }
 
@@ -116,12 +124,12 @@ export const generateEntry: GenerateFunction<Entry<Date>> = (entry) => {
     summary: generateText(entry.summary),
     title: generateText(entry.title),
     updated: generateRfc3339Date(entry.updated),
-    // dc
-    // slash
+    ...generateDcItemOrFeed(entry.dc),
+    ...generateSlashItem(entry.slash),
+    ...generateThrItem(entry.thr),
     // itunes
     // media
     // georss
-    // thr
   })
 }
 
@@ -131,7 +139,6 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (value) => {
   }
 
   const feed = trimObject({
-    // TODO: When adding namespaces support, make sure to register them properly here.
     author: trimArray(value.authors?.map(generatePerson)),
     category: trimArray(value.categories?.map(generateCategory)),
     contributor: trimArray(value.contributors?.map(generatePerson)),
@@ -144,9 +151,9 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (value) => {
     subtitle: generateText(value.subtitle),
     title: generateText(value.title),
     updated: generateRfc3339Date(value.updated),
+    ...generateDcItemOrFeed(value.dc),
+    ...generateSyFeed(value.sy),
     entry: trimArray(value.entries?.map(generateEntry)),
-    // dc
-    // sy
     // itunes
     // media
     // georss
@@ -159,6 +166,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (value) => {
   return {
     feed: {
       '@xmlns': 'http://www.w3.org/2005/Atom',
+      ...generateNamespaceAttrs({ feed }),
       ...feed,
     },
   }
