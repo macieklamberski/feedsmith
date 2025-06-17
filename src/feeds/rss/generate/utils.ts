@@ -175,12 +175,10 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     return
   }
 
-  const namespaceAttrs = generateNamespaceAttrs(channel)
-
   return {
     rss: {
       '@version': '2.0',
-      ...namespaceAttrs,
+      ...generateNamespaceAttrs(channel),
       channel,
     },
   }
