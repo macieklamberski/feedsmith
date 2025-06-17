@@ -539,6 +539,33 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with thr namespace properties', () => {
+    const value = {
+      title: 'Item with threading namespace',
+      thr: {
+        total: 42,
+        inReplyTos: [
+          {
+            ref: 'http://example.com/original-post',
+            href: 'http://example.com/original-post#comment-1',
+          },
+        ],
+      },
+    }
+    const expected = {
+      title: 'Item with threading namespace',
+      'thr:total': 42,
+      'thr:in-reply-to': [
+        {
+          '@ref': 'http://example.com/original-post',
+          '@href': 'http://example.com/original-post#comment-1',
+        },
+      ],
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should handle empty arrays', () => {
     const value = {
       title: 'Item with empty arrays',

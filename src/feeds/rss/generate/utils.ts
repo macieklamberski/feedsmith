@@ -10,6 +10,7 @@ import { generateItem as generateContentItem } from '../../../namespaces/content
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
+import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
 import type {
   Category,
   Cloud,
@@ -131,6 +132,7 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
     ...generateContentItem(item.content),
     ...generateDcItemOrFeed(item.dc),
     ...generateSlashItem(item.slash),
+    ...generateThrItem(item.thr),
   })
 }
 

@@ -179,4 +179,41 @@ describe('generate', () => {
 
     expect(generate(input)).toEqual(expected)
   })
+
+  it('should generate RSS with thr namespace', () => {
+    const input = {
+      title: 'Feed with thr namespace',
+      description: 'Test feed with Threading namespace',
+      items: [
+        {
+          title: 'Discussion post',
+          thr: {
+            total: 42,
+            inReplyTos: [
+              {
+                ref: 'http://example.com/original-post',
+                href: 'http://example.com/original-post#comment-1',
+              },
+            ],
+          },
+        },
+      ],
+    }
+
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:thr="http://purl.org/syndication/thread/1.0">
+  <channel>
+    <title>Feed with thr namespace</title>
+    <description>Test feed with Threading namespace</description>
+    <item>
+      <title>Discussion post</title>
+      <thr:total>42</thr:total>
+      <thr:in-reply-to ref="http://example.com/original-post" href="http://example.com/original-post#comment-1"/>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(input)).toEqual(expected)
+  })
 })
