@@ -6,6 +6,7 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import { generateItem as generateContentItem } from '../../../namespaces/content/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
@@ -127,6 +128,7 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
     guid: generateGuid(item.guid),
     pubDate: item.pubDate,
     source: generateSource(item.source),
+    ...generateContentItem(item.content),
     ...generateDcItemOrFeed(item.dc),
     ...generateSlashItem(item.slash),
   })

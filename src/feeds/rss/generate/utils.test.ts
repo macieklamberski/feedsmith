@@ -503,6 +503,21 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with content namespace properties', () => {
+    const value = {
+      title: 'Item with content namespace',
+      content: {
+        encoded: '<p>Full HTML content here</p>',
+      },
+    }
+    const expected = {
+      title: 'Item with content namespace',
+      'content:encoded': { '#cdata': '<p>Full HTML content here</p>' },
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with slash namespace properties', () => {
     const value = {
       title: 'Item with slash namespace',

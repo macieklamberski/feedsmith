@@ -117,4 +117,66 @@ describe('generate', () => {
 
     expect(generate(input)).toEqual(expected)
   })
+
+  it('should generate RSS with content namespace', () => {
+    const input = {
+      title: 'Feed with content namespace',
+      description: 'Test feed with Content namespace',
+      items: [
+        {
+          title: 'First item',
+          content: {
+            encoded: '<p>Full HTML content with <strong>formatting</strong></p>',
+          },
+        },
+      ],
+    }
+
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Feed with content namespace</title>
+    <description>Test feed with Content namespace</description>
+    <item>
+      <title>First item</title>
+      <content:encoded>
+        <![CDATA[<p>Full HTML content with <strong>formatting</strong></p>]]>
+      </content:encoded>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(input)).toEqual(expected)
+  })
+
+  it('should generate RSS with content namespace for simple text', () => {
+    const input = {
+      title: 'Feed with simple content',
+      description: 'Test feed with simple text content',
+      items: [
+        {
+          title: 'Simple item',
+          content: {
+            encoded: 'Simple text content without HTML or special characters',
+          },
+        },
+      ],
+    }
+
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Feed with simple content</title>
+    <description>Test feed with simple text content</description>
+    <item>
+      <title>Simple item</title>
+      <content:encoded>Simple text content without HTML or special characters</content:encoded>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(input)).toEqual(expected)
+  })
 })
