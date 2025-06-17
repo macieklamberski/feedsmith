@@ -1,4 +1,4 @@
-import type { AnyOf, DateLike } from '../../../common/types.js'
+import type { DateLike } from '../../../common/types.js'
 
 export type InReplyTo = {
   ref: string
@@ -7,16 +7,12 @@ export type InReplyTo = {
   source?: string
 }
 
-export type Link<TDate extends DateLike> = AnyOf<{
+export type Link<TDate extends DateLike> = {
   count?: number
   updated?: TDate // Date: RFC 3339/ISO 8601.
-}>
+}
 
-export type Item = AnyOf<{
+export type Item = {
   total?: number
   inReplyTos?: Array<InReplyTo>
-}>
-
-export type Feed = AnyOf<{
-  total?: number
-}>
+}
