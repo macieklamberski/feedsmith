@@ -15,7 +15,7 @@ export type Item = {
   title?: string
   episode?: number
   season?: number
-  episodeTitle?: string
+  episodeType?: string
   block?: boolean
   /** @deprecated Use standard RSS description instead. No longer used by Apple Podcasts. */
   summary?: string

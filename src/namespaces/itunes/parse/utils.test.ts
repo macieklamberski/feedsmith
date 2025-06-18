@@ -540,7 +540,7 @@ describe('retrieveItem', () => {
     title: 'Episode Title',
     episode: 42,
     season: 2,
-    episodeTitle: 'full',
+    episodeType: 'full',
     block: true,
     keywords: ['podcast', 'technology', 'programming'],
     summary: 'A detailed summary of this episode',

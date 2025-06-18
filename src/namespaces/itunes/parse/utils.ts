@@ -107,7 +107,7 @@ export const retrieveItem: ParsePartialFunction<Item> = (value) => {
     title: parseSingularOf(value['itunes:title'], parseTextString),
     episode: parseSingularOf(value['itunes:episode'], parseTextNumber),
     season: parseSingularOf(value['itunes:season'], parseTextNumber),
-    episodeTitle: parseSingularOf(value['itunes:episodetype'], parseTextString),
+    episodeType: parseSingularOf(value['itunes:episodetype'], parseTextString),
     block: parseSingularOf(value['itunes:block'], (value) =>
       parseYesNoBoolean(retrieveText(value)),
     ),
