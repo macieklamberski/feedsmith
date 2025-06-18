@@ -1,6 +1,5 @@
 import type { ParsePartialFunction } from '../../../common/types.js'
 import {
-  createCaseInsensitiveGetter,
   isNonEmptyStringOrNumber,
   isObject,
   parseArrayOf,
@@ -11,6 +10,22 @@ import {
   trimObject,
 } from '../../../common/utils.js'
 import type { Attachment, Author, Feed, Hub, Item } from '../common/types.js'
+
+export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
+  return (requestedKey: string) => {
+    if (requestedKey in value) {
+      return value[requestedKey]
+    }
+
+    const lowerKey = requestedKey.toLowerCase()
+
+    for (const key in value) {
+      if (key.toLowerCase() === lowerKey) {
+        return value[key]
+      }
+    }
+  }
+}
 
 export const parseAuthor: ParsePartialFunction<Author> = (value) => {
   if (isObject(value)) {

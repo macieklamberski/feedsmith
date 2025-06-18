@@ -1,4 +1,5 @@
-import { createCaseInsensitiveGetter, isNonEmptyString, isObject } from '../../../common/utils.js'
+import { isNonEmptyString, isObject } from '../../../common/utils.js'
+import { createCaseInsensitiveGetter } from '../parse/utils.js'
 
 export const detect = (value: unknown): value is object => {
   if (!isObject(value)) {
