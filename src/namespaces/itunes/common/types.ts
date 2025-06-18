@@ -1,16 +1,14 @@
-import type { AnyOf } from '../../../common/types.js'
-
 export type Category = {
   text: string
   categories?: Array<Category>
 }
 
-export type Owner = AnyOf<{
+export type Owner = {
   name?: string
   email?: string
-}>
+}
 
-export type Item = AnyOf<{
+export type Item = {
   duration?: number
   image?: string
   explicit?: boolean
@@ -25,9 +23,9 @@ export type Item = AnyOf<{
   subtitle?: string
   /** @deprecated No longer used for search in Apple Podcasts. */
   keywords?: Array<string>
-}>
+}
 
-export type Feed = AnyOf<{
+export type Feed = {
   image?: string
   categories?: Array<Category>
   explicit?: boolean
@@ -46,4 +44,4 @@ export type Feed = AnyOf<{
   keywords?: Array<string>
   /** @deprecated No longer required for submission to Apple Podcasts. */
   owner?: Owner
-}>
+}
