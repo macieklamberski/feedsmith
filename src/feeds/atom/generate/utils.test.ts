@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import {
+  createNamespaceSetter,
   generateCategory,
   generateEntry,
   generateFeed,
@@ -11,7 +12,39 @@ import {
 } from './utils.js'
 
 describe('createNamespaceSetter', () => {
-  // TODO: Implement tests.
+  it('should return function that adds prefix when prefix is provided', () => {
+    const key = createNamespaceSetter('atom:')
+
+    expect(key('title')).toEqual('atom:title')
+    expect(key('link')).toEqual('atom:link')
+    expect(key('updated')).toEqual('atom:updated')
+  })
+
+  it('should return function that returns key unchanged when prefix is undefined', () => {
+    const key = createNamespaceSetter(undefined)
+
+    expect(key('title')).toEqual('title')
+    expect(key('link')).toEqual('link')
+    expect(key('updated')).toEqual('updated')
+  })
+
+  it('should return function that returns key unchanged when prefix is empty string', () => {
+    const key = createNamespaceSetter('')
+
+    expect(key('title')).toEqual('title')
+    expect(key('link')).toEqual('link')
+    expect(key('updated')).toEqual('updated')
+  })
+
+  it('should handle various key formats correctly', () => {
+    const key = createNamespaceSetter('ns:')
+
+    expect(key('simple')).toEqual('ns:simple')
+    expect(key('camelCase')).toEqual('ns:camelCase')
+    expect(key('kebab-case')).toEqual('ns:kebab-case')
+    expect(key('snake_case')).toEqual('ns:snake_case')
+    expect(key('123numeric')).toEqual('ns:123numeric')
+  })
 })
 
 describe('generateText', () => {
@@ -452,8 +485,86 @@ describe('generateEntry', () => {
     expect(generateEntry(value)).toBeUndefined()
   })
 
-  // TODO: There should also be tests for when the asNamespace option is set to true. In this
-  // case, the returned object will not contain the namespaces.
+  it('should exclude namespace properties when asNamespace is true', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with namespaces',
+      dc: {
+        creator: 'Jane Smith',
+        date: new Date('2023-02-01T00:00:00Z'),
+      },
+      slash: {
+        section: 'Technology',
+        comments: 42,
+      },
+      thr: {
+        total: 5,
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with namespaces',
+    }
+
+    expect(generateEntry(value, { asNamespace: true })).toEqual(expected)
+  })
+
+  it('should include namespace properties when asNamespace is false or undefined', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with namespaces',
+      dc: {
+        creator: 'Jane Smith',
+        date: new Date('2023-02-01T00:00:00Z'),
+      },
+      slash: {
+        section: 'Technology',
+        comments: 42,
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with namespaces',
+      'dc:creator': 'Jane Smith',
+      'dc:date': '2023-02-01T00:00:00.000Z',
+      'slash:section': 'Technology',
+      'slash:comments': 42,
+    }
+
+    expect(generateEntry(value, { asNamespace: false })).toEqual(expected)
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
+  it('should apply prefix when asNamespace is true', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with prefix',
+      updated: new Date('2023-03-15T12:00:00Z'),
+    }
+    const expected = {
+      'atom:id': 'https://example.com/entry/1',
+      'atom:title': 'Entry with prefix',
+      'atom:updated': '2023-03-15T12:00:00.000Z',
+    }
+
+    expect(generateEntry(value, { prefix: 'atom:' })).toEqual(expected)
+  })
+
+  it('should apply prefix and exclude namespaces when asNamespace is true', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with prefix and namespaces',
+      dc: {
+        creator: 'Jane Smith',
+      },
+    }
+    const expected = {
+      'atom:id': 'https://example.com/entry/1',
+      'atom:title': 'Entry with prefix and namespaces',
+    }
+
+    expect(generateEntry(value, { prefix: 'atom:', asNamespace: true })).toEqual(expected)
+  })
 
   it('should handle empty object', () => {
     const value = {}
@@ -660,9 +771,117 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
-  // TODO: There should also be tests for when the asNamespace option is set to true. In this
-  // case, the returned object will not contain the namespaces, namespace attributes and the
-  // 'feed' object will be returned directly.
+  it('should return feed object directly when asNamespace is true', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with asNamespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      dc: {
+        creator: 'Jane Smith',
+        rights: 'Copyright 2023',
+      },
+      sy: {
+        updatePeriod: 'hourly',
+        updateFrequency: 2,
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry 1',
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        id: 'https://example.com/feed',
+        title: 'Feed with asNamespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        entry: [
+          {
+            id: 'https://example.com/entry/1',
+            title: 'Entry 1',
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value, { asNamespace: true })).toEqual(expected)
+  })
+
+  it('should include xmlns attributes and namespaces when asNamespace is false or undefined', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with namespaces',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      dc: {
+        creator: 'Jane Smith',
+        rights: 'Copyright 2023',
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+        id: 'https://example.com/feed',
+        title: 'Feed with namespaces',
+        updated: '2023-03-15T12:00:00.000Z',
+        'dc:creator': 'Jane Smith',
+        'dc:rights': 'Copyright 2023',
+      },
+    }
+
+    expect(generateFeed(value, { asNamespace: false })).toEqual(expected)
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should apply prefix when asNamespace is true', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with prefix',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry 1',
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        'atom:id': 'https://example.com/feed',
+        'atom:title': 'Feed with prefix',
+        'atom:updated': '2023-03-15T12:00:00.000Z',
+        'atom:entry': [
+          {
+            'atom:id': 'https://example.com/entry/1',
+            'atom:title': 'Entry 1',
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value, { prefix: 'atom:', asNamespace: true })).toEqual(expected)
+  })
+
+  it('should apply prefix and exclude xmlns when asNamespace is true', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with prefix and namespaces',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      dc: {
+        creator: 'Jane Smith',
+      },
+    }
+    const expected = {
+      feed: {
+        'atom:id': 'https://example.com/feed',
+        'atom:title': 'Feed with prefix and namespaces',
+        'atom:updated': '2023-03-15T12:00:00.000Z',
+      },
+    }
+
+    expect(generateFeed(value, { prefix: 'atom:', asNamespace: true })).toEqual(expected)
+  })
 
   it('should handle object with only undefined/empty properties', () => {
     const value = {
