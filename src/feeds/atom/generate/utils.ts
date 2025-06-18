@@ -1,4 +1,3 @@
-import type { GenerateFunction } from '../../../common/types.js'
 import {
   generateNamespaceAttrs,
   generateRfc3339Date,
@@ -18,12 +17,17 @@ import type {
   Category,
   Entry,
   Feed,
+  GenerateFunction,
   Generator,
   Link,
   Person,
   Source,
   Text,
 } from '../common/types.js'
+
+export const createNamespaceSetter = (prefix: string | undefined) => {
+  return (key: string) => (prefix ? `${prefix}${key}` : key)
+}
 
 export const generateText: GenerateFunction<Text> = (text) => {
   if (!isNonEmptyString(text)) {
@@ -49,15 +53,17 @@ export const generateLink: GenerateFunction<Link<Date>> = (link) => {
   })
 }
 
-export const generatePerson: GenerateFunction<Person> = (person) => {
+export const generatePerson: GenerateFunction<Person> = (person, options) => {
   if (!isObject(person)) {
     return
   }
 
+  const key = createNamespaceSetter(options?.prefix)
+
   return trimObject({
-    name: person.name,
-    uri: person.uri,
-    email: person.email,
+    [key('name')]: person.name,
+    [key('uri')]: person.uri,
+    [key('email')]: person.email,
   })
 }
 
@@ -85,78 +91,94 @@ export const generateGenerator: GenerateFunction<Generator> = (generator) => {
   })
 }
 
-export const generateSource: GenerateFunction<Source<Date>> = (source) => {
+export const generateSource: GenerateFunction<Source<Date>> = (source, options) => {
   if (!isObject(source)) {
     return
   }
 
+  const key = createNamespaceSetter(options?.prefix)
+
   return trimObject({
-    author: trimArray(source.authors?.map(generatePerson)),
-    category: trimArray(source.categories?.map(generateCategory)),
-    contributor: trimArray(source.contributors?.map(generatePerson)),
-    generator: generateGenerator(source.generator),
-    icon: source.icon,
-    id: source.id,
-    link: trimArray(source.links?.map(generateLink)),
-    logo: source.logo,
-    rights: generateText(source.rights),
-    subtitle: generateText(source.subtitle),
-    title: generateText(source.title),
-    updated: generateRfc3339Date(source.updated),
+    [key('author')]: trimArray(source.authors?.map((author) => generatePerson(author, options))),
+    [key('category')]: trimArray(
+      source.categories?.map((category) => generateCategory(category, options)),
+    ),
+    [key('contributor')]: trimArray(
+      source.contributors?.map((contributor) => generatePerson(contributor, options)),
+    ),
+    [key('generator')]: generateGenerator(source.generator),
+    [key('icon')]: source.icon,
+    [key('id')]: source.id,
+    [key('link')]: trimArray(source.links?.map((link) => generateLink(link, options))),
+    [key('logo')]: source.logo,
+    [key('rights')]: generateText(source.rights),
+    [key('subtitle')]: generateText(source.subtitle),
+    [key('title')]: generateText(source.title),
+    [key('updated')]: generateRfc3339Date(source.updated),
   })
 }
 
-export const generateEntry: GenerateFunction<Entry<Date>> = (entry) => {
+export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => {
   if (!isObject(entry)) {
     return
   }
 
+  const key = createNamespaceSetter(options?.prefix)
+
   return trimObject({
-    author: trimArray(entry.authors?.map(generatePerson)),
-    category: trimArray(entry.categories?.map(generateCategory)),
-    content: generateText(entry.content),
-    contributor: trimArray(entry.contributors?.map(generatePerson)),
-    id: entry.id,
-    link: trimArray(entry.links?.map(generateLink)),
-    published: generateRfc3339Date(entry.published),
-    rights: generateText(entry.rights),
-    source: generateSource(entry.source),
-    summary: generateText(entry.summary),
-    title: generateText(entry.title),
-    updated: generateRfc3339Date(entry.updated),
+    [key('author')]: trimArray(entry.authors?.map((author) => generatePerson(author))),
+    [key('category')]: trimArray(entry.categories?.map((category) => generateCategory(category))),
+    [key('content')]: generateText(entry.content),
+    [key('contributor')]: trimArray(
+      entry.contributors?.map((contributor) => generatePerson(contributor)),
+    ),
+    [key('id')]: entry.id,
+    [key('link')]: trimArray(entry.links?.map((link) => generateLink(link, options))),
+    [key('published')]: generateRfc3339Date(entry.published),
+    [key('rights')]: generateText(entry.rights),
+    [key('source')]: generateSource(entry.source),
+    [key('summary')]: generateText(entry.summary),
+    [key('title')]: generateText(entry.title),
+    [key('updated')]: generateRfc3339Date(entry.updated),
     ...generateDcItemOrFeed(entry.dc),
     ...generateSlashItem(entry.slash),
     ...generateThrItem(entry.thr),
-    // itunes
-    // media
-    // georss
+    // TODO: Add support for itunes namespace here.
+    // TODO: Add support for media namespace here.
+    // TODO: Add support for georss namespace here.
   })
 }
 
-export const generateFeed: GenerateFunction<Feed<Date>> = (value) => {
+export const generateFeed: GenerateFunction<Feed<Date>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
 
+  const key = createNamespaceSetter(options?.prefix)
+
   const feed = trimObject({
-    author: trimArray(value.authors?.map(generatePerson)),
-    category: trimArray(value.categories?.map(generateCategory)),
-    contributor: trimArray(value.contributors?.map(generatePerson)),
-    generator: generateGenerator(value.generator),
-    icon: value.icon,
-    id: value.id,
-    link: trimArray(value.links?.map(generateLink)),
-    logo: value.logo,
-    rights: generateText(value.rights),
-    subtitle: generateText(value.subtitle),
-    title: generateText(value.title),
-    updated: generateRfc3339Date(value.updated),
+    [key('author')]: trimArray(value.authors?.map((author) => generatePerson(author, options))),
+    [key('category')]: trimArray(
+      value.categories?.map((category) => generateCategory(category, options)),
+    ),
+    [key('contributor')]: trimArray(
+      value.contributors?.map((contributor) => generatePerson(contributor, options)),
+    ),
+    [key('generator')]: generateGenerator(value.generator),
+    [key('icon')]: value.icon,
+    [key('id')]: value.id,
+    [key('link')]: trimArray(value.links?.map((link) => generateLink(link, options))),
+    [key('logo')]: value.logo,
+    [key('rights')]: generateText(value.rights),
+    [key('subtitle')]: generateText(value.subtitle),
+    [key('title')]: generateText(value.title),
+    [key('updated')]: generateRfc3339Date(value.updated),
     ...generateDcItemOrFeed(value.dc),
     ...generateSyFeed(value.sy),
-    entry: trimArray(value.entries?.map(generateEntry)),
-    // itunes
-    // media
-    // georss
+    // TODO: Add support for itunes namespace here.
+    // TODO: Add support for media namespace here.
+    // TODO: Add support for georss namespace here.
+    [key('entry')]: trimArray(value.entries?.map((entry) => generateEntry(entry, options))),
   })
 
   if (!feed) {

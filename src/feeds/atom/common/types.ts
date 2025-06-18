@@ -15,6 +15,11 @@ export type ParsePartialFunction<R> = (
   options?: { prefix?: string; asNamespace?: boolean },
 ) => DeepPartial<R> | undefined
 
+export type GenerateFunction<V> = (
+  value: V | undefined,
+  options?: { prefix?: string; asNamespace?: boolean },
+) => Unreliable | undefined
+
 // For simplicity's sake, a string is used for now, but this may be reconsidered in the future.
 export type Text = string
 
