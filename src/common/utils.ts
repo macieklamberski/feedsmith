@@ -286,6 +286,17 @@ export const parseCsvOf = <T>(
   }
 }
 
+export const generateCsvOf = <T>(
+  value: Array<T> | undefined,
+  generate?: GenerateFunction<T>,
+): string | undefined => {
+  if (!Array.isArray(value) || value.length === 0) {
+    return
+  }
+
+  return trimArray(value, generate)?.join()
+}
+
 // TODO: Write tests.
 export const parseTextString: ParseExactFunction<string> = (value) => {
   return parseString(retrieveText(value))
@@ -326,6 +337,14 @@ export const generateRfc3339Date: GenerateFunction<string | Date> = (value) => {
   if (value instanceof Date && !Number.isNaN(value.getTime())) {
     return value.toISOString()
   }
+}
+
+export const generateYesNoBoolean: GenerateFunction<boolean> = (value) => {
+  if (typeof value !== 'boolean') {
+    return
+  }
+
+  return value ? 'yes' : 'no'
 }
 
 export const detectNamespaces = (value: unknown): Set<string> => {

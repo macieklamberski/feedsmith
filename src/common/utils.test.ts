@@ -3,11 +3,13 @@ import type { XMLBuilder } from 'fast-xml-parser'
 import type { ParseExactFunction } from './types.js'
 import {
   detectNamespaces,
+  generateCsvOf,
   generateNamespaceAttrs,
   generateRfc822Date,
   generateRfc3339Date,
   generateString,
   generateXml,
+  generateYesNoBoolean,
   hasEntities,
   isNonEmptyString,
   isNonEmptyStringOrNumber,
@@ -1316,6 +1318,24 @@ describe('parseYesNoBoolean', () => {
   })
 })
 
+describe('generateYesNoBoolean', () => {
+  it('should return "yes" for boolean true', () => {
+    const value = true
+
+    expect(generateYesNoBoolean(value)).toEqual('yes')
+  })
+
+  it('should return "no" for boolean false', () => {
+    const value = false
+
+    expect(generateYesNoBoolean(value)).toEqual('no')
+  })
+
+  it('should return undefined for undefined', () => {
+    expect(generateYesNoBoolean(undefined)).toBeUndefined()
+  })
+})
+
 describe('parseSingular', () => {
   it('should return the first element of an array', () => {
     expect(parseSingular([1, 2, 3])).toEqual(1)
@@ -1665,6 +1685,75 @@ describe('parseCsvOf', () => {
     expect(parseCsvOf(undefined, parseString)).toBeUndefined()
     expect(parseCsvOf([], parseString)).toBeUndefined()
     expect(parseCsvOf({}, parseString)).toBeUndefined()
+  })
+})
+
+describe('generateCsvOf', () => {
+  it('should generate comma-separated string from array', () => {
+    const value = ['podcast', 'technology', 'programming']
+    const expected = 'podcast,technology,programming'
+
+    expect(generateCsvOf(value)).toEqual(expected)
+  })
+
+  it('should generate comma-separated string from numbers', () => {
+    const value = [1, 2, 3, 4, 5]
+    const expected = '1,2,3,4,5'
+
+    expect(generateCsvOf(value)).toEqual(expected)
+  })
+
+  it('should handle single item array', () => {
+    const value = ['podcast']
+    const expected = 'podcast'
+
+    expect(generateCsvOf(value)).toEqual(expected)
+  })
+
+  it('should handle mixed types', () => {
+    const value = [1, 'podcast', true, null]
+    const expected = '1,podcast,true'
+
+    expect(generateCsvOf(value)).toEqual(expected)
+  })
+
+  it('should use generate function when provided', () => {
+    const value = ['  podcast  ', '  technology  ', '  programming  ']
+    const expected = 'podcast,technology,programming'
+
+    expect(generateCsvOf(value, parseString)).toEqual(expected)
+  })
+
+  it('should filter out undefined values with generate function', () => {
+    const value = ['1', 'invalid', '2', 'also invalid', '3']
+    const expected = '1,2,3'
+
+    expect(generateCsvOf(value, parseNumber)).toEqual(expected)
+  })
+
+  it('should return undefined for empty array', () => {
+    const value: Array<string> = []
+
+    expect(generateCsvOf(value)).toBeUndefined()
+  })
+
+  it('should return undefined for undefined value', () => {
+    const value = undefined
+
+    expect(generateCsvOf(value)).toBeUndefined()
+  })
+
+  it('should return undefined when all values are filtered out', () => {
+    const value = ['invalid', 'also invalid', 'still invalid']
+
+    expect(generateCsvOf(value, parseNumber)).toBeUndefined()
+  })
+
+  it('should handle array with falsy values', () => {
+    const value = [0, '', false]
+    const expected = '0,,false'
+
+    expect(generateCsvOf(value)).toEqual(expected)
   })
 })
 

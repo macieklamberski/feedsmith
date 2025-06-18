@@ -1,5 +1,11 @@
 import type { GenerateFunction } from '../../common/types.js'
-import { generateRfc822Date, isObject, trimArray, trimObject } from '../../common/utils.js'
+import {
+  generateCsvOf,
+  generateRfc822Date,
+  isObject,
+  trimArray,
+  trimObject,
+} from '../../common/utils.js'
 import type { Body, Head, Opml, Outline } from '../common/types.js'
 
 export const generateOutline: GenerateFunction<Outline> = (value) => {
@@ -38,7 +44,7 @@ export const generateHead: GenerateFunction<Head<Date>> = (value) => {
     ownerEmail: value.ownerEmail,
     ownerId: value.ownerId,
     docs: value.docs,
-    expansionState: trimArray(value.expansionState)?.join(),
+    expansionState: generateCsvOf(value.expansionState),
     vertScrollState: value.vertScrollState,
     windowTop: value.windowTop,
     windowLeft: value.windowLeft,
