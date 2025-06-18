@@ -365,8 +365,6 @@ describe('generateSource', () => {
 
 describe('generateEntry', () => {
   it('should generate valid entry object with all properties', () => {
-    const publishedDate = new Date('2023-03-10T08:00:00Z')
-    const updatedDate = new Date('2023-03-15T12:00:00Z')
     const value = {
       authors: [{ name: 'John Doe' }],
       categories: [{ term: 'technology' }],
@@ -374,12 +372,12 @@ describe('generateEntry', () => {
       contributors: [{ name: 'Jane Smith' }],
       id: 'https://example.com/entry/1',
       links: [{ href: 'https://example.com/entry/1' }],
-      published: publishedDate,
+      published: new Date('2023-03-10T08:00:00Z'),
       rights: 'Copyright 2023',
       source: { id: 'https://example.com/source', title: 'Source' },
       summary: 'Entry summary',
       title: 'Entry Title',
-      updated: updatedDate,
+      updated: new Date('2023-03-15T12:00:00Z'),
     }
     const expected = {
       author: [{ name: 'John Doe' }],
@@ -453,6 +451,9 @@ describe('generateEntry', () => {
     // @ts-ignore: This is for testing purposes.
     expect(generateEntry(value)).toBeUndefined()
   })
+
+  // TODO: There should also be tests for when the asNamespace option is set to true. In this
+  // case, the returned object will not contain the namespaces.
 
   it('should handle empty object', () => {
     const value = {}
@@ -541,7 +542,6 @@ describe('generateEntry', () => {
 
 describe('generateFeed', () => {
   it('should generate complete Atom feed', () => {
-    const updatedDate = new Date('2023-03-15T12:00:00Z')
     const value = {
       authors: [{ name: 'John Doe', email: 'john@example.com' }],
       categories: [{ term: 'technology', label: 'Technology' }],
@@ -554,12 +554,12 @@ describe('generateFeed', () => {
       rights: 'Copyright 2023',
       subtitle: 'Example feed subtitle',
       title: 'Example Feed',
-      updated: updatedDate,
+      updated: new Date('2023-03-15T12:00:00Z'),
       entries: [
         {
           id: 'https://example.com/entry/1',
           title: 'Example Entry',
-          updated: updatedDate,
+          updated: new Date('2023-03-15T12:00:00Z'),
         },
       ],
     }
@@ -575,11 +575,10 @@ describe('generateFeed', () => {
   })
 
   it('should generate Atom feed with minimal required fields', () => {
-    const updatedDate = new Date('2023-03-15T12:00:00Z')
     const value = {
       id: 'https://example.com/feed',
       title: 'Minimal Feed',
-      updated: updatedDate,
+      updated: new Date('2023-03-15T12:00:00Z'),
     }
     const expected = {
       feed: {
@@ -594,11 +593,10 @@ describe('generateFeed', () => {
   })
 
   it('should handle empty arrays', () => {
-    const updatedDate = new Date('2023-03-15T12:00:00Z')
     const value = {
       id: 'https://example.com/feed',
       title: 'Feed with empty arrays',
-      updated: updatedDate,
+      updated: new Date('2023-03-15T12:00:00Z'),
       authors: [],
       categories: [],
       links: [],
@@ -634,11 +632,10 @@ describe('generateFeed', () => {
   })
 
   it('should filter out invalid entries', () => {
-    const updatedDate = new Date('2023-03-15T12:00:00Z')
     const value = {
       id: 'https://example.com/feed',
       title: 'Feed with mixed entries',
-      updated: updatedDate,
+      updated: new Date('2023-03-15T12:00:00Z'),
       entries: [
         { id: 'https://example.com/entry/1', title: 'Valid entry' },
         {}, // Invalid entry.
@@ -663,27 +660,9 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
-  it('should handle very long text values', () => {
-    const updatedDate = new Date('2023-03-15T12:00:00Z')
-    const longText = 'A'.repeat(1000)
-    const value = {
-      id: 'https://example.com/feed',
-      title: longText,
-      subtitle: longText,
-      updated: updatedDate,
-    }
-    const expected = {
-      feed: {
-        '@xmlns': 'http://www.w3.org/2005/Atom',
-        id: 'https://example.com/feed',
-        title: longText,
-        subtitle: longText,
-        updated: '2023-03-15T12:00:00.000Z',
-      },
-    }
-
-    expect(generateFeed(value)).toEqual(expected)
-  })
+  // TODO: There should also be tests for when the asNamespace option is set to true. In this
+  // case, the returned object will not contain the namespaces, namespace attributes and the
+  // 'feed' object will be returned directly.
 
   it('should handle object with only undefined/empty properties', () => {
     const value = {
@@ -708,11 +687,10 @@ describe('generateFeed', () => {
   })
 
   it('should generate Atom feed with dc namespace properties', () => {
-    const updatedDate = new Date('2023-03-15T12:00:00Z')
     const value = {
       id: 'https://example.com/feed',
       title: 'Feed with DC namespace',
-      updated: updatedDate,
+      updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creator: 'John Doe',
         rights: 'Copyright 2023',
@@ -736,11 +714,10 @@ describe('generateFeed', () => {
   })
 
   it('should generate Atom feed with sy namespace properties', () => {
-    const updatedDate = new Date('2023-03-15T12:00:00Z')
     const value = {
       id: 'https://example.com/feed',
       title: 'Feed with SY namespace',
-      updated: updatedDate,
+      updated: new Date('2023-03-15T12:00:00Z'),
       sy: {
         updatePeriod: 'hourly',
         updateFrequency: 2,

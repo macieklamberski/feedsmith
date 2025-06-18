@@ -600,6 +600,29 @@ describe('generateItem', () => {
   it('should handle non-object inputs gracefully', () => {
     expect(generateItem(undefined)).toBeUndefined()
   })
+
+  it('should generate item with atom namespace properties', () => {
+    const value = {
+      title: 'Item with atom namespace',
+      atom: {
+        id: 'https://example.com/entry/1',
+        title: 'Atom Entry Title',
+        updated: new Date('2023-01-01T00:00:00Z'),
+        content: 'Atom entry content',
+        authors: [{ name: 'John Doe', email: 'john@example.com' }],
+      },
+    }
+    const expected = {
+      title: 'Item with atom namespace',
+      'atom:id': 'https://example.com/entry/1',
+      'atom:title': 'Atom Entry Title',
+      'atom:updated': '2023-01-01T00:00:00.000Z',
+      'atom:content': 'Atom entry content',
+      'atom:author': [{ name: 'John Doe', email: 'john@example.com' }],
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -852,6 +875,47 @@ describe('generateFeed', () => {
           'dc:creator': 'John Doe',
           'dc:subject': 'Technology',
           'dc:date': '2023-01-01T00:00:00.000Z',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate atom namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with atom namespace',
+      description: 'Description',
+      atom: {
+        id: 'https://example.com/feed',
+        title: 'Atom Feed Title',
+        updated: new Date('2023-01-01T00:00:00Z'),
+        links: [
+          {
+            href: 'https://example.com/feed.xml',
+            rel: 'self',
+            type: 'application/atom+xml',
+          },
+        ],
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:atom': 'http://www.w3.org/2005/Atom',
+        channel: {
+          title: 'Feed with atom namespace',
+          description: 'Description',
+          'atom:id': 'https://example.com/feed',
+          'atom:title': 'Atom Feed Title',
+          'atom:updated': '2023-01-01T00:00:00.000Z',
+          'atom:link': [
+            {
+              '@href': 'https://example.com/feed.xml',
+              '@rel': 'self',
+              '@type': 'application/atom+xml',
+            },
+          ],
         },
       },
     }

@@ -124,8 +124,7 @@ export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => 
   }
 
   const key = createNamespaceSetter(options?.prefix)
-
-  return trimObject({
+  const value = trimObject({
     [key('author')]: trimArray(entry.authors?.map((author) => generatePerson(author))),
     [key('category')]: trimArray(entry.categories?.map((category) => generateCategory(category))),
     [key('content')]: generateText(entry.content),
@@ -140,56 +139,83 @@ export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => 
     [key('summary')]: generateText(entry.summary),
     [key('title')]: generateText(entry.title),
     [key('updated')]: generateRfc3339Date(entry.updated),
+  })
+
+  if (!value) {
+    return
+  }
+
+  if (options?.asNamespace) {
+    return value
+  }
+
+  return {
+    ...value,
     ...generateDcItemOrFeed(entry.dc),
     ...generateSlashItem(entry.slash),
     ...generateThrItem(entry.thr),
     // TODO: Add support for itunes namespace here.
     // TODO: Add support for media namespace here.
     // TODO: Add support for georss namespace here.
-  })
+  }
 }
 
-export const generateFeed: GenerateFunction<Feed<Date>> = (value, options) => {
-  if (!isObject(value)) {
+export const generateFeed: GenerateFunction<Feed<Date>> = (feed, options) => {
+  if (!isObject(feed)) {
     return
   }
 
   const key = createNamespaceSetter(options?.prefix)
-
-  const feed = trimObject({
-    [key('author')]: trimArray(value.authors?.map((author) => generatePerson(author, options))),
+  const valueFeed = trimObject({
+    [key('author')]: trimArray(feed.authors?.map((author) => generatePerson(author, options))),
     [key('category')]: trimArray(
-      value.categories?.map((category) => generateCategory(category, options)),
+      feed.categories?.map((category) => generateCategory(category, options)),
     ),
     [key('contributor')]: trimArray(
-      value.contributors?.map((contributor) => generatePerson(contributor, options)),
+      feed.contributors?.map((contributor) => generatePerson(contributor, options)),
     ),
-    [key('generator')]: generateGenerator(value.generator),
-    [key('icon')]: value.icon,
-    [key('id')]: value.id,
-    [key('link')]: trimArray(value.links?.map((link) => generateLink(link, options))),
-    [key('logo')]: value.logo,
-    [key('rights')]: generateText(value.rights),
-    [key('subtitle')]: generateText(value.subtitle),
-    [key('title')]: generateText(value.title),
-    [key('updated')]: generateRfc3339Date(value.updated),
-    ...generateDcItemOrFeed(value.dc),
-    ...generateSyFeed(value.sy),
+    [key('generator')]: generateGenerator(feed.generator),
+    [key('icon')]: feed.icon,
+    [key('id')]: feed.id,
+    [key('link')]: trimArray(feed.links?.map((link) => generateLink(link, options))),
+    [key('logo')]: feed.logo,
+    [key('rights')]: generateText(feed.rights),
+    [key('subtitle')]: generateText(feed.subtitle),
+    [key('title')]: generateText(feed.title),
+    [key('updated')]: generateRfc3339Date(feed.updated),
+  })
+  const valueEntries = trimObject({
+    [key('entry')]: trimArray(feed.entries?.map((entry) => generateEntry(entry, options))),
+  })
+
+  if (!valueFeed && !valueEntries) {
+    return
+  }
+
+  if (options?.asNamespace) {
+    return {
+      feed: {
+        ...valueFeed,
+        ...valueEntries,
+      },
+    }
+  }
+
+  const valueFull = {
+    ...valueFeed,
+    ...generateDcItemOrFeed(feed.dc),
+    ...generateSyFeed(feed.sy),
     // TODO: Add support for itunes namespace here.
     // TODO: Add support for media namespace here.
     // TODO: Add support for georss namespace here.
-    [key('entry')]: trimArray(value.entries?.map((entry) => generateEntry(entry, options))),
-  })
-
-  if (!feed) {
-    return
+    ...valueEntries,
   }
 
   return {
     feed: {
       '@xmlns': 'http://www.w3.org/2005/Atom',
-      ...generateNamespaceAttrs({ feed }),
-      ...feed,
+      ...generateNamespaceAttrs({ value: valueFull }),
+      ...valueFull,
     },
   }
 }

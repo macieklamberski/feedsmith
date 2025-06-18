@@ -216,4 +216,56 @@ describe('generate', () => {
 
     expect(generate(input)).toEqual(expected)
   })
+
+  it('should generate RSS with atom namespace', () => {
+    const input = {
+      title: 'Feed with Atom namespace',
+      description: 'Test feed with Atom namespace elements',
+      atom: {
+        id: 'https://example.com/feed',
+        title: 'Atom Feed Title',
+        updated: new Date('2023-01-01T00:00:00Z'),
+        links: [
+          {
+            href: 'https://example.com/feed.xml',
+            rel: 'self',
+            type: 'application/atom+xml',
+          },
+        ],
+      },
+      items: [
+        {
+          title: 'First item',
+          atom: {
+            id: 'https://example.com/entry/1',
+            title: 'Atom Entry Title',
+            updated: new Date('2023-01-01T00:00:00Z'),
+            content: 'Atom entry content',
+          },
+        },
+      ],
+    }
+
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Feed with Atom namespace</title>
+    <description>Test feed with Atom namespace elements</description>
+    <atom:id>https://example.com/feed</atom:id>
+    <atom:link href="https://example.com/feed.xml" rel="self" type="application/atom+xml"/>
+    <atom:title>Atom Feed Title</atom:title>
+    <atom:updated>2023-01-01T00:00:00.000Z</atom:updated>
+    <item>
+      <title>First item</title>
+      <atom:content>Atom entry content</atom:content>
+      <atom:id>https://example.com/entry/1</atom:id>
+      <atom:title>Atom Entry Title</atom:title>
+      <atom:updated>2023-01-01T00:00:00.000Z</atom:updated>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(input)).toEqual(expected)
+  })
 })

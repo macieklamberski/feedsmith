@@ -6,6 +6,10 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import {
+  generateEntry as generateAtomEntry,
+  generateFeed as generateAtomFeed,
+} from '../../../namespaces/atom/generate/utils.js'
 import { generateItem as generateContentItem } from '../../../namespaces/content/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
@@ -130,8 +134,13 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
     pubDate: item.pubDate,
     source: generateSource(item.source),
     ...generateContentItem(item.content),
+    ...generateAtomEntry(item.atom),
     ...generateDcItemOrFeed(item.dc),
     ...generateSlashItem(item.slash),
+    // TODO: Add support for itunes namespace here.
+    // TODO: Add support for podcast namespace here.
+    // TODO: Add support for media namespace here.
+    // TODO: Add support for georss namespace here.
     ...generateThrItem(item.thr),
   })
 }
@@ -161,13 +170,13 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     textInput: generateTextInput(feed.textInput),
     skipHours: generateSkipHours(feed.skipHours),
     skipDays: generateSkipDays(feed.skipDays),
-    // atom: feed,
+    ...generateAtomFeed(feed.atom),
     ...generateDcItemOrFeed(feed.dc),
     ...generateSyFeed(feed.sy),
-    // itunes: feed,
-    // podcast: feed,
-    // media: feed,
-    // georss: feed,
+    // TODO: Add support for itunes namespace here.
+    // TODO: Add support for podcast namespace here.
+    // TODO: Add support for media namespace here.
+    // TODO: Add support for georss namespace here.
     item: trimArray(feed.items?.map(generateItem)),
   })
 
