@@ -3,7 +3,6 @@ import type { XMLBuilder } from 'fast-xml-parser'
 import type { ParseExactFunction } from './types.js'
 import {
   createCaseInsensitiveGetter,
-  createNamespaceGetter,
   detectNamespaces,
   generateNamespaceAttrs,
   generateRfc822Date,
@@ -1667,102 +1666,6 @@ describe('parseCsvOf', () => {
     expect(parseCsvOf(undefined, parseString)).toBeUndefined()
     expect(parseCsvOf([], parseString)).toBeUndefined()
     expect(parseCsvOf({}, parseString)).toBeUndefined()
-  })
-})
-
-describe('createNamespaceGetter', () => {
-  it('should retrieve value with prefix when prefix is provided', () => {
-    const value = {
-      'ns:key': 'prefixed value',
-      key: 'unprefixed value',
-    }
-    const get = createNamespaceGetter(value, 'ns:')
-
-    expect(get('key')).toEqual('prefixed value')
-  })
-
-  it('should handle empty prefix', () => {
-    const value = {
-      key: 'value',
-    }
-    const get = createNamespaceGetter(value, '')
-
-    expect(get('key')).toEqual('value')
-  })
-
-  it('should handle undefined prefix', () => {
-    const value = {
-      key: 'value',
-    }
-    const get = createNamespaceGetter(value, undefined)
-
-    expect(get('key')).toEqual('value')
-  })
-
-  it('should handle complex objects as values', () => {
-    const complexValue = { nested: 'object' }
-    const value = {
-      'ns:key': complexValue,
-      key: 'simple value',
-    }
-    const get = createNamespaceGetter(value, 'ns:')
-
-    expect(get('key')).toBe(complexValue)
-  })
-
-  it('should handle arrays as values', () => {
-    const arrayValue = [1, 2, 3]
-    const value = {
-      'ns:key': arrayValue,
-      key: 'simple value',
-    }
-    const get = createNamespaceGetter(value, 'ns:')
-
-    expect(get('key')).toBe(arrayValue)
-  })
-
-  it('should handle non-string keys gracefully', () => {
-    const value = {
-      'ns:123': 'numeric key with prefix',
-      '123': 'numeric key',
-    }
-    const get = createNamespaceGetter(value, 'ns:')
-
-    expect(get('123')).toEqual('numeric key with prefix')
-  })
-
-  it('should handle various prefix formats', () => {
-    const value = {
-      'namespace:key': 'value with colon',
-      'namespace-key': 'value with dash',
-      namespace_key: 'value with underscore',
-    }
-
-    const colonGetter = createNamespaceGetter(value, 'namespace:')
-    const dashGetter = createNamespaceGetter(value, 'namespace-')
-    const underscoreGetter = createNamespaceGetter(value, 'namespace_')
-
-    expect(colonGetter('key')).toEqual('value with colon')
-    expect(dashGetter('key')).toEqual('value with dash')
-    expect(underscoreGetter('key')).toEqual('value with underscore')
-  })
-
-  it('should return undefined when prefixed key does not exist', () => {
-    const value = {
-      key: 'unprefixed value',
-    }
-    const get = createNamespaceGetter(value, 'ns:')
-
-    expect(get('key')).toBeUndefined()
-  })
-
-  it('should return undefined for non-existent keys (with prefix)', () => {
-    const value = {
-      'ns:existingKey': 'value',
-    }
-    const get = createNamespaceGetter(value, 'ns:')
-
-    expect(get('nonExistentKey')).toBeUndefined()
   })
 })
 

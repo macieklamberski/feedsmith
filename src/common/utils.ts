@@ -286,28 +286,6 @@ export const parseCsvOf = <T>(
   }
 }
 
-export const createNamespaceGetter = (
-  value: Record<string, Unreliable>,
-  prefix: string | undefined,
-) => {
-  if (!prefix) {
-    return (key: string) => value[key]
-  }
-
-  const prefixedKeys = new Map<string, string>()
-
-  return (key: string) => {
-    let prefixedKey = prefixedKeys.get(key)
-
-    if (!prefixedKey) {
-      prefixedKey = prefix + key
-      prefixedKeys.set(key, prefixedKey)
-    }
-
-    return value[prefixedKey]
-  }
-}
-
 export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
   return (requestedKey: string) => {
     if (requestedKey in value) {

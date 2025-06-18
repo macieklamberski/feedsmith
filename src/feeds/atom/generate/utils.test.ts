@@ -10,6 +10,10 @@ import {
   generateText,
 } from './utils.js'
 
+describe('createNamespaceSetter', () => {
+  // TODO: Implement tests.
+})
+
 describe('generateText', () => {
   it('should pass through non-empty string text', () => {
     const value = 'Hello World'
