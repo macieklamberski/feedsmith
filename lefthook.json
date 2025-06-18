@@ -20,8 +20,14 @@
       }
     }
   },
+  "commit-msg": {
+    "commands": {
+      "commitlint": {
+        "run": "bunx commitlint --config commitlint.json --edit {1}"
+      }
+    }
+  },
   "pre-push": {
-    "parallel": true,
     "commands": {
       "test": {
         "run": "bun test"

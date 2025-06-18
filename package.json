@@ -50,6 +50,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.0",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@types/bun": "^1.2.16",
     "lefthook": "^1.11.14",
     "semantic-release": "^24.2.5",
