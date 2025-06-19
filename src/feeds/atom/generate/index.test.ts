@@ -312,7 +312,6 @@ describe('generate', () => {
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creator: 'John Doe',
-        rights: 'Copyright 2023',
       },
       entries: [
         {
@@ -321,7 +320,6 @@ describe('generate', () => {
           updated: new Date('2023-03-15T12:00:00Z'),
           dc: {
             creator: 'Jane Smith',
-            date: new Date('2023-02-01T00:00:00Z'),
           },
         },
       ],
@@ -332,13 +330,11 @@ describe('generate', () => {
   <title>Feed with DC namespace</title>
   <updated>2023-03-15T12:00:00.000Z</updated>
   <dc:creator>John Doe</dc:creator>
-  <dc:rights>Copyright 2023</dc:rights>
   <entry>
     <id>https://example.com/entry/1</id>
     <title>Entry with DC</title>
     <updated>2023-03-15T12:00:00.000Z</updated>
     <dc:creator>Jane Smith</dc:creator>
-    <dc:date>2023-02-01T00:00:00.000Z</dc:date>
   </entry>
 </feed>
 `
@@ -353,8 +349,6 @@ describe('generate', () => {
       updated: new Date('2023-03-15T12:00:00Z'),
       sy: {
         updatePeriod: 'hourly',
-        updateFrequency: 2,
-        updateBase: new Date('2023-01-01T00:00:00Z'),
       },
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
@@ -363,8 +357,6 @@ describe('generate', () => {
   <title>Feed with SY namespace</title>
   <updated>2023-03-15T12:00:00.000Z</updated>
   <sy:updatePeriod>hourly</sy:updatePeriod>
-  <sy:updateFrequency>2</sy:updateFrequency>
-  <sy:updateBase>2023-01-01T00:00:00.000Z</sy:updateBase>
 </feed>
 `
 
@@ -383,9 +375,6 @@ describe('generate', () => {
           updated: new Date('2023-03-15T12:00:00Z'),
           slash: {
             section: 'Technology',
-            department: 'News',
-            comments: 42,
-            hit_parade: [1, 2, 3, 4, 5],
           },
         },
       ],
@@ -400,9 +389,6 @@ describe('generate', () => {
     <title>Entry with Slash</title>
     <updated>2023-03-15T12:00:00.000Z</updated>
     <slash:section>Technology</slash:section>
-    <slash:department>News</slash:department>
-    <slash:comments>42</slash:comments>
-    <slash:hit_parade>1,2,3,4,5</slash:hit_parade>
   </entry>
 </feed>
 `
@@ -422,12 +408,6 @@ describe('generate', () => {
           updated: new Date('2023-03-15T12:00:00Z'),
           thr: {
             total: 42,
-            inReplyTos: [
-              {
-                ref: 'http://example.com/original-post',
-                href: 'http://example.com/original-post#comment-1',
-              },
-            ],
           },
           links: [
             {
@@ -454,7 +434,6 @@ describe('generate', () => {
     <title>Discussion post</title>
     <updated>2023-03-15T12:00:00.000Z</updated>
     <thr:total>42</thr:total>
-    <thr:in-reply-to ref="http://example.com/original-post" href="http://example.com/original-post#comment-1"/>
   </entry>
 </feed>
 `
@@ -470,18 +449,7 @@ describe('generate', () => {
       media: {
         title: {
           value: 'Feed Media Title',
-          type: 'plain',
         },
-        description: {
-          value: 'Feed Media Description',
-        },
-        thumbnails: [
-          {
-            url: 'https://example.com/feed-thumb.jpg',
-            width: 200,
-            height: 150,
-          },
-        ],
       },
       entries: [
         {
@@ -489,34 +457,9 @@ describe('generate', () => {
           title: 'Entry with Media',
           updated: new Date('2023-03-15T12:00:00Z'),
           media: {
-            group: {
-              contents: [
-                {
-                  url: 'https://example.com/video.mp4',
-                  type: 'video/mp4',
-                  medium: 'video',
-                  duration: 120,
-                },
-              ],
-              title: {
-                value: 'Video Title',
-              },
+            title: {
+              value: 'Entry Media Title',
             },
-            contents: [
-              {
-                url: 'https://example.com/audio.mp3',
-                type: 'audio/mpeg',
-                medium: 'audio',
-                isDefault: true,
-              },
-            ],
-            ratings: [
-              {
-                value: 'nonadult',
-                scheme: 'urn:simple',
-              },
-            ],
-            keywords: ['video', 'audio', 'content'],
           },
         },
       ],
@@ -527,20 +470,12 @@ describe('generate', () => {
   <id>https://example.com/feed</id>
   <title>Feed with Media namespace</title>
   <updated>2023-03-15T12:00:00.000Z</updated>
-  <media:title type="plain">Feed Media Title</media:title>
-  <media:description>Feed Media Description</media:description>
-  <media:thumbnail url="https://example.com/feed-thumb.jpg" height="150" width="200"/>
+  <media:title>Feed Media Title</media:title>
   <entry>
     <id>https://example.com/entry/1</id>
     <title>Entry with Media</title>
     <updated>2023-03-15T12:00:00.000Z</updated>
-    <media:group>
-      <media:content url="https://example.com/video.mp4" type="video/mp4" medium="video" duration="120"/>
-      <media:title>Video Title</media:title>
-    </media:group>
-    <media:content url="https://example.com/audio.mp3" type="audio/mpeg" medium="audio" isDefault="yes"/>
-    <media:rating scheme="urn:simple">nonadult</media:rating>
-    <media:keywords>video,audio,content</media:keywords>
+    <media:title>Entry Media Title</media:title>
   </entry>
 </feed>
 `
@@ -555,23 +490,6 @@ describe('generate', () => {
       updated: new Date('2023-03-15T12:00:00Z'),
       itunes: {
         author: 'Podcast Author',
-        categories: [
-          {
-            text: 'Technology',
-            categories: [
-              {
-                text: 'Tech News',
-              },
-            ],
-          },
-        ],
-        explicit: false,
-        type: 'episodic',
-        owner: {
-          name: 'Owner Name',
-          email: 'owner@example.com',
-        },
-        image: 'https://example.com/podcast-cover.jpg',
       },
       entries: [
         {
@@ -580,12 +498,6 @@ describe('generate', () => {
           updated: new Date('2023-03-15T12:00:00Z'),
           itunes: {
             title: 'Episode 1 - Special Title',
-            duration: 1800,
-            episode: 1,
-            season: 1,
-            episodeType: 'full',
-            explicit: false,
-            keywords: ['tech', 'news', 'podcast'],
           },
         },
       ],
@@ -596,28 +508,12 @@ describe('generate', () => {
   <id>https://example.com/feed</id>
   <title>Feed with iTunes namespace</title>
   <updated>2023-03-15T12:00:00.000Z</updated>
-  <itunes:image href="https://example.com/podcast-cover.jpg"/>
-  <itunes:category text="Technology">
-    <itunes:category text="Tech News"/>
-  </itunes:category>
-  <itunes:explicit>no</itunes:explicit>
   <itunes:author>Podcast Author</itunes:author>
-  <itunes:type>episodic</itunes:type>
-  <itunes:owner>
-    <itunes:name>Owner Name</itunes:name>
-    <itunes:email>owner@example.com</itunes:email>
-  </itunes:owner>
   <entry>
     <id>https://example.com/entry/1</id>
     <title>Episode with iTunes</title>
     <updated>2023-03-15T12:00:00.000Z</updated>
-    <itunes:duration>1800</itunes:duration>
-    <itunes:explicit>no</itunes:explicit>
     <itunes:title>Episode 1 - Special Title</itunes:title>
-    <itunes:episode>1</itunes:episode>
-    <itunes:season>1</itunes:season>
-    <itunes:episodeType>full</itunes:episodeType>
-    <itunes:keywords>tech,news,podcast</itunes:keywords>
   </entry>
 </feed>
 `

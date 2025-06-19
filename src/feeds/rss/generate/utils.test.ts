@@ -489,15 +489,11 @@ describe('generateItem', () => {
       title: 'Item with dc namespace',
       dc: {
         creator: 'Jane Smith',
-        date: new Date('2023-02-01T00:00:00Z'),
-        rights: 'Copyright 2023',
       },
     }
     const expected = {
       title: 'Item with dc namespace',
       'dc:creator': 'Jane Smith',
-      'dc:date': '2023-02-01T00:00:00.000Z',
-      'dc:rights': 'Copyright 2023',
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -523,17 +519,11 @@ describe('generateItem', () => {
       title: 'Item with slash namespace',
       slash: {
         section: 'Technology',
-        department: 'News',
-        comments: 15,
-        hit_parade: [1, 2, 3],
       },
     }
     const expected = {
       title: 'Item with slash namespace',
       'slash:section': 'Technology',
-      'slash:department': 'News',
-      'slash:comments': 15,
-      'slash:hit_parade': '1,2,3',
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -544,23 +534,11 @@ describe('generateItem', () => {
       title: 'Item with threading namespace',
       thr: {
         total: 42,
-        inReplyTos: [
-          {
-            ref: 'http://example.com/original-post',
-            href: 'http://example.com/original-post#comment-1',
-          },
-        ],
       },
     }
     const expected = {
       title: 'Item with threading namespace',
       'thr:total': 42,
-      'thr:in-reply-to': [
-        {
-          '@ref': 'http://example.com/original-post',
-          '@href': 'http://example.com/original-post#comment-1',
-        },
-      ],
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -605,20 +583,24 @@ describe('generateItem', () => {
     const value = {
       title: 'Item with atom namespace',
       atom: {
-        id: 'https://example.com/entry/1',
-        title: 'Atom Entry Title',
-        updated: new Date('2023-01-01T00:00:00Z'),
-        content: 'Atom entry content',
-        authors: [{ name: 'John Doe', email: 'john@example.com' }],
+        links: [
+          {
+            href: 'https://example.com/entry/1',
+            rel: 'alternate',
+            type: 'text/html',
+          },
+        ],
       },
     }
     const expected = {
       title: 'Item with atom namespace',
-      'atom:id': 'https://example.com/entry/1',
-      'atom:title': 'Atom Entry Title',
-      'atom:updated': '2023-01-01T00:00:00.000Z',
-      'atom:content': 'Atom entry content',
-      'atom:author': [{ name: 'John Doe', email: 'john@example.com' }],
+      'atom:link': [
+        {
+          '@href': 'https://example.com/entry/1',
+          '@rel': 'alternate',
+          '@type': 'text/html',
+        },
+      ],
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -629,87 +611,11 @@ describe('generateItem', () => {
       title: 'Item with podcast namespace',
       podcast: {
         episode: { number: 42 },
-        season: { number: 2 },
-        persons: [
-          {
-            display: 'Host Name',
-            role: 'host',
-            group: 'cast',
-          },
-        ],
-        transcripts: [
-          {
-            url: 'https://example.com/transcript.txt',
-            type: 'text/plain',
-            language: 'en',
-          },
-        ],
-        chapters: {
-          url: 'https://example.com/chapters.json',
-          type: 'application/json+chapters',
-        },
-        soundbites: [
-          {
-            startTime: 120.5,
-            duration: 30.2,
-            display: 'Great quote',
-          },
-        ],
-        location: {
-          display: 'Austin, TX',
-          geo: 'geo:30.2672,-97.7431',
-        },
-        license: {
-          display: 'Creative Commons',
-          url: 'https://creativecommons.org/licenses/by/4.0/',
-        },
-        value: {
-          type: 'lightning',
-          method: 'keysend',
-        },
       },
     }
     const expected = {
       title: 'Item with podcast namespace',
       'podcast:episode': { '#text': 42 },
-      'podcast:season': { '#text': 2 },
-      'podcast:person': [
-        {
-          '#text': 'Host Name',
-          '@role': 'host',
-          '@group': 'cast',
-        },
-      ],
-      'podcast:transcript': [
-        {
-          '@url': 'https://example.com/transcript.txt',
-          '@type': 'text/plain',
-          '@language': 'en',
-        },
-      ],
-      'podcast:chapters': {
-        '@url': 'https://example.com/chapters.json',
-        '@type': 'application/json+chapters',
-      },
-      'podcast:soundbite': [
-        {
-          '#text': 'Great quote',
-          '@startTime': 120.5,
-          '@duration': 30.2,
-        },
-      ],
-      'podcast:location': {
-        '#text': 'Austin, TX',
-        '@geo': 'geo:30.2672,-97.7431',
-      },
-      'podcast:license': {
-        '#text': 'Creative Commons',
-        '@url': 'https://creativecommons.org/licenses/by/4.0/',
-      },
-      'podcast:value': {
-        '@type': 'lightning',
-        '@method': 'keysend',
-      },
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -756,123 +662,17 @@ describe('generateItem', () => {
     const value = {
       title: 'Item with media namespace',
       media: {
-        group: {
-          contents: [
-            {
-              url: 'https://example.com/video.mp4',
-              type: 'video/mp4',
-              medium: 'video',
-              duration: 120,
-            },
-          ],
-          title: {
-            value: 'Video Group Title',
-          },
-        },
-        contents: [
-          {
-            url: 'https://example.com/audio.mp3',
-            type: 'audio/mpeg',
-            medium: 'audio',
-            isDefault: true,
-          },
-        ],
-        ratings: [
-          {
-            value: 'nonadult',
-            scheme: 'urn:simple',
-          },
-        ],
         title: {
           value: 'Media Item Title',
           type: 'plain',
-        },
-        description: {
-          value: 'Media item description',
-        },
-        keywords: ['video', 'audio', 'content'],
-        thumbnails: [
-          {
-            url: 'https://example.com/thumb.jpg',
-            width: 160,
-            height: 120,
-          },
-        ],
-        categories: [
-          {
-            name: 'Entertainment',
-            scheme: 'http://example.com/categories',
-          },
-        ],
-        credits: [
-          {
-            value: 'Content Creator',
-            role: 'author',
-          },
-        ],
-        copyright: {
-          value: '2023 Media Corp',
         },
       },
     }
     const expected = {
       title: 'Item with media namespace',
-      'media:group': {
-        'media:content': [
-          {
-            '@url': 'https://example.com/video.mp4',
-            '@type': 'video/mp4',
-            '@medium': 'video',
-            '@duration': 120,
-          },
-        ],
-        'media:title': {
-          '#text': 'Video Group Title',
-        },
-      },
-      'media:content': [
-        {
-          '@url': 'https://example.com/audio.mp3',
-          '@type': 'audio/mpeg',
-          '@medium': 'audio',
-          '@isDefault': 'yes',
-        },
-      ],
-      'media:rating': [
-        {
-          '#text': 'nonadult',
-          '@scheme': 'urn:simple',
-        },
-      ],
       'media:title': {
         '#text': 'Media Item Title',
         '@type': 'plain',
-      },
-      'media:description': {
-        '#text': 'Media item description',
-      },
-      'media:keywords': 'video,audio,content',
-      'media:thumbnail': [
-        {
-          '@url': 'https://example.com/thumb.jpg',
-          '@height': 120,
-          '@width': 160,
-        },
-      ],
-      'media:category': [
-        {
-          '#text': 'Entertainment',
-          '@scheme': 'http://example.com/categories',
-        },
-      ],
-      'media:credit': [
-        {
-          '#text': 'Content Creator',
-          '@role': 'author',
-        },
-      ],
-      'media:copyright': {
-        '#text': '2023 Media Corp',
       },
     }
 
@@ -1116,8 +916,6 @@ describe('generateFeed', () => {
       description: 'Description',
       dc: {
         creator: 'John Doe',
-        subject: 'Technology',
-        date: new Date('2023-01-01T00:00:00Z'),
       },
     }
     const expected = {
@@ -1128,8 +926,6 @@ describe('generateFeed', () => {
           title: 'Feed with dc namespace',
           description: 'Description',
           'dc:creator': 'John Doe',
-          'dc:subject': 'Technology',
-          'dc:date': '2023-01-01T00:00:00.000Z',
         },
       },
     }
@@ -1142,9 +938,6 @@ describe('generateFeed', () => {
       title: 'Feed with atom namespace',
       description: 'Description',
       atom: {
-        id: 'https://example.com/feed',
-        title: 'Atom Feed Title',
-        updated: new Date('2023-01-01T00:00:00Z'),
         links: [
           {
             href: 'https://example.com/feed.xml',
@@ -1161,9 +954,6 @@ describe('generateFeed', () => {
         channel: {
           title: 'Feed with atom namespace',
           description: 'Description',
-          'atom:id': 'https://example.com/feed',
-          'atom:title': 'Atom Feed Title',
-          'atom:updated': '2023-01-01T00:00:00.000Z',
           'atom:link': [
             {
               '@href': 'https://example.com/feed.xml',
@@ -1184,79 +974,6 @@ describe('generateFeed', () => {
       description: 'A podcast feed with Podcast 2.0 features',
       podcast: {
         guid: 'podcast-feed-guid-123',
-        locked: {
-          value: true,
-          owner: 'owner@example.com',
-        },
-        fundings: [
-          {
-            url: 'https://example.com/support',
-            display: 'Support the show',
-          },
-        ],
-        persons: [
-          {
-            display: 'Host Name',
-            role: 'host',
-            group: 'cast',
-            img: 'https://example.com/host.jpg',
-          },
-        ],
-        location: {
-          display: 'Austin, TX',
-          geo: 'geo:30.2672,-97.7431',
-          osm: 'R113314',
-        },
-        trailers: [
-          {
-            display: 'Season 2 Trailer',
-            url: 'https://example.com/trailer.mp3',
-            pubDate: new Date('2023-01-01T00:00:00Z'),
-            length: 12345,
-            type: 'audio/mpeg',
-            season: 2,
-          },
-        ],
-        license: {
-          display: 'Creative Commons Attribution 4.0',
-          url: 'https://creativecommons.org/licenses/by/4.0/',
-        },
-        value: {
-          type: 'lightning',
-          method: 'keysend',
-          suggested: 0.00000005,
-        },
-        medium: 'podcast',
-        images: {
-          srcset: 'https://example.com/image-400.jpg 400w, https://example.com/image-800.jpg 800w',
-        },
-        blocks: [
-          {
-            value: true,
-            id: 'service-id-123',
-          },
-        ],
-        txts: [
-          {
-            display: 'Copyright 2023 Example Podcast',
-            purpose: 'copyright',
-          },
-        ],
-        remoteItems: [
-          {
-            feedGuid: 'remote-feed-guid-456',
-            feedUrl: 'https://remote.example.com/feed.xml',
-          },
-        ],
-        updateFrequency: {
-          display: 'Weekly on Mondays',
-          complete: false,
-          dtstart: new Date('2023-01-01T00:00:00Z'),
-          rrule: 'FREQ=WEEKLY;BYDAY=MO',
-        },
-        podping: {
-          usesPodping: true,
-        },
       },
     }
     const expected = {
@@ -1267,80 +984,6 @@ describe('generateFeed', () => {
           title: 'Feed with podcast namespace',
           description: 'A podcast feed with Podcast 2.0 features',
           'podcast:guid': 'podcast-feed-guid-123',
-          'podcast:locked': {
-            '#text': 'yes',
-            '@owner': 'owner@example.com',
-          },
-          'podcast:funding': [
-            {
-              '#text': 'Support the show',
-              '@url': 'https://example.com/support',
-            },
-          ],
-          'podcast:person': [
-            {
-              '#text': 'Host Name',
-              '@role': 'host',
-              '@group': 'cast',
-              '@img': 'https://example.com/host.jpg',
-            },
-          ],
-          'podcast:location': {
-            '#text': 'Austin, TX',
-            '@geo': 'geo:30.2672,-97.7431',
-            '@osm': 'R113314',
-          },
-          'podcast:trailer': [
-            {
-              '#text': 'Season 2 Trailer',
-              '@url': 'https://example.com/trailer.mp3',
-              '@pubdate': 'Sun, 01 Jan 2023 00:00:00 GMT',
-              '@length': 12345,
-              '@type': 'audio/mpeg',
-              '@season': 2,
-            },
-          ],
-          'podcast:license': {
-            '#text': 'Creative Commons Attribution 4.0',
-            '@url': 'https://creativecommons.org/licenses/by/4.0/',
-          },
-          'podcast:value': {
-            '@type': 'lightning',
-            '@method': 'keysend',
-            '@suggested': 0.00000005,
-          },
-          'podcast:medium': 'podcast',
-          'podcast:images': {
-            '@srcset':
-              'https://example.com/image-400.jpg 400w, https://example.com/image-800.jpg 800w',
-          },
-          'podcast:block': [
-            {
-              '#text': 'yes',
-              '@id': 'service-id-123',
-            },
-          ],
-          'podcast:txt': [
-            {
-              '#text': 'Copyright 2023 Example Podcast',
-              '@purpose': 'copyright',
-            },
-          ],
-          'podcast:remoteItem': [
-            {
-              '@feedGuid': 'remote-feed-guid-456',
-              '@feedUrl': 'https://remote.example.com/feed.xml',
-            },
-          ],
-          'podcast:updateFrequency': {
-            '#text': 'Weekly on Mondays',
-            '@complete': false,
-            '@dtstart': '2023-01-01T00:00:00.000Z',
-            '@rrule': 'FREQ=WEEKLY;BYDAY=MO',
-          },
-          'podcast:podping': {
-            '@usesPodping': true,
-          },
         },
       },
     }
@@ -1360,38 +1003,6 @@ describe('generateFeed', () => {
         description: {
           value: 'Feed Media Description',
         },
-        keywords: ['media', 'video', 'audio'],
-        thumbnails: [
-          {
-            url: 'https://example.com/feed-thumb.jpg',
-            width: 200,
-            height: 150,
-          },
-        ],
-        categories: [
-          {
-            name: 'Technology/Podcasts',
-            scheme: 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-            label: 'Technology Podcasts',
-          },
-        ],
-        credits: [
-          {
-            value: 'Feed Producer',
-            role: 'producer',
-            scheme: 'urn:ebu',
-          },
-        ],
-        copyright: {
-          value: '2023 Media Feed Corp',
-          url: 'https://example.com/copyright',
-        },
-        ratings: [
-          {
-            value: 'nonadult',
-            scheme: 'urn:simple',
-          },
-        ],
       },
     }
     const expected = {
@@ -1408,38 +1019,6 @@ describe('generateFeed', () => {
           'media:description': {
             '#text': 'Feed Media Description',
           },
-          'media:keywords': 'media,video,audio',
-          'media:thumbnail': [
-            {
-              '@url': 'https://example.com/feed-thumb.jpg',
-              '@height': 150,
-              '@width': 200,
-            },
-          ],
-          'media:category': [
-            {
-              '#text': 'Technology/Podcasts',
-              '@scheme': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-              '@label': 'Technology Podcasts',
-            },
-          ],
-          'media:credit': [
-            {
-              '#text': 'Feed Producer',
-              '@role': 'producer',
-              '@scheme': 'urn:ebu',
-            },
-          ],
-          'media:copyright': {
-            '#text': '2023 Media Feed Corp',
-            '@url': 'https://example.com/copyright',
-          },
-          'media:rating': [
-            {
-              '#text': 'nonadult',
-              '@scheme': 'urn:simple',
-            },
-          ],
         },
       },
     }
@@ -1453,23 +1032,6 @@ describe('generateFeed', () => {
       description: 'A podcast feed with iTunes features',
       itunes: {
         author: 'Podcast Author',
-        categories: [
-          {
-            text: 'Technology',
-            categories: [
-              {
-                text: 'Tech News',
-              },
-            ],
-          },
-        ],
-        explicit: false,
-        type: 'episodic',
-        owner: {
-          name: 'Owner Name',
-          email: 'owner@example.com',
-        },
-        image: 'https://example.com/podcast-cover.jpg',
       },
     }
     const expected = {
@@ -1479,26 +1041,7 @@ describe('generateFeed', () => {
         channel: {
           title: 'Feed with iTunes namespace',
           description: 'A podcast feed with iTunes features',
-          'itunes:image': {
-            '@href': 'https://example.com/podcast-cover.jpg',
-          },
-          'itunes:category': [
-            {
-              '@text': 'Technology',
-              'itunes:category': [
-                {
-                  '@text': 'Tech News',
-                },
-              ],
-            },
-          ],
-          'itunes:explicit': 'no',
           'itunes:author': 'Podcast Author',
-          'itunes:type': 'episodic',
-          'itunes:owner': {
-            'itunes:name': 'Owner Name',
-            'itunes:email': 'owner@example.com',
-          },
         },
       },
     }

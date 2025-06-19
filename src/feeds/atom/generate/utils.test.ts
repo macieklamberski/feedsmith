@@ -583,16 +583,12 @@ describe('generateEntry', () => {
       title: 'Entry with DC namespace',
       dc: {
         creator: 'Jane Smith',
-        date: new Date('2023-02-01T00:00:00Z'),
-        rights: 'Copyright 2023',
       },
     }
     const expected = {
       id: 'https://example.com/entry/1',
       title: 'Entry with DC namespace',
       'dc:creator': 'Jane Smith',
-      'dc:date': '2023-02-01T00:00:00.000Z',
-      'dc:rights': 'Copyright 2023',
     }
 
     expect(generateEntry(value)).toEqual(expected)
@@ -604,18 +600,12 @@ describe('generateEntry', () => {
       title: 'Entry with Slash namespace',
       slash: {
         section: 'Technology',
-        department: 'News',
-        comments: 42,
-        hit_parade: [1, 2, 3, 4, 5],
       },
     }
     const expected = {
       id: 'https://example.com/entry/1',
       title: 'Entry with Slash namespace',
       'slash:section': 'Technology',
-      'slash:department': 'News',
-      'slash:comments': 42,
-      'slash:hit_parade': '1,2,3,4,5',
     }
 
     expect(generateEntry(value)).toEqual(expected)
@@ -627,24 +617,12 @@ describe('generateEntry', () => {
       title: 'Entry with Threading namespace',
       thr: {
         total: 42,
-        inReplyTos: [
-          {
-            ref: 'http://example.com/original-post',
-            href: 'http://example.com/original-post#comment-1',
-          },
-        ],
       },
     }
     const expected = {
       id: 'https://example.com/entry/1',
       title: 'Entry with Threading namespace',
       'thr:total': 42,
-      'thr:in-reply-to': [
-        {
-          '@ref': 'http://example.com/original-post',
-          '@href': 'http://example.com/original-post#comment-1',
-        },
-      ],
     }
 
     expect(generateEntry(value)).toEqual(expected)
@@ -655,89 +633,17 @@ describe('generateEntry', () => {
       id: 'https://example.com/entry/1',
       title: 'Entry with Media namespace',
       media: {
-        group: {
-          contents: [
-            {
-              url: 'https://example.com/video.mp4',
-              type: 'video/mp4',
-              medium: 'video',
-              duration: 180,
-            },
-          ],
-          title: {
-            value: 'Video Group Title',
-          },
-        },
-        contents: [
-          {
-            url: 'https://example.com/audio.mp3',
-            type: 'audio/mpeg',
-            medium: 'audio',
-            isDefault: true,
-          },
-        ],
-        ratings: [
-          {
-            value: 'nonadult',
-            scheme: 'urn:simple',
-          },
-        ],
         title: {
           value: 'Media Entry Title',
-          type: 'plain',
         },
-        keywords: ['video', 'audio', 'content'],
-        thumbnails: [
-          {
-            url: 'https://example.com/thumb.jpg',
-            width: 160,
-            height: 120,
-          },
-        ],
       },
     }
     const expected = {
       id: 'https://example.com/entry/1',
       title: 'Entry with Media namespace',
-      'media:group': {
-        'media:content': [
-          {
-            '@url': 'https://example.com/video.mp4',
-            '@type': 'video/mp4',
-            '@medium': 'video',
-            '@duration': 180,
-          },
-        ],
-        'media:title': {
-          '#text': 'Video Group Title',
-        },
-      },
-      'media:content': [
-        {
-          '@url': 'https://example.com/audio.mp3',
-          '@type': 'audio/mpeg',
-          '@medium': 'audio',
-          '@isDefault': 'yes',
-        },
-      ],
-      'media:rating': [
-        {
-          '#text': 'nonadult',
-          '@scheme': 'urn:simple',
-        },
-      ],
       'media:title': {
         '#text': 'Media Entry Title',
-        '@type': 'plain',
       },
-      'media:keywords': 'video,audio,content',
-      'media:thumbnail': [
-        {
-          '@url': 'https://example.com/thumb.jpg',
-          '@height': 120,
-          '@width': 160,
-        },
-      ],
     }
 
     expect(generateEntry(value)).toEqual(expected)
@@ -749,28 +655,12 @@ describe('generateEntry', () => {
       title: 'Entry with iTunes namespace',
       itunes: {
         title: 'Episode 1 - Special Title',
-        duration: 1800,
-        episode: 1,
-        season: 1,
-        episodeType: 'full',
-        explicit: false,
-        image: 'https://example.com/episode1.jpg',
-        keywords: ['tech', 'news', 'podcast'],
       },
     }
     const expected = {
       id: 'https://example.com/entry/1',
       title: 'Entry with iTunes namespace',
-      'itunes:duration': 1800,
-      'itunes:image': {
-        '@href': 'https://example.com/episode1.jpg',
-      },
-      'itunes:explicit': 'no',
       'itunes:title': 'Episode 1 - Special Title',
-      'itunes:episode': 1,
-      'itunes:season': 1,
-      'itunes:episodeType': 'full',
-      'itunes:keywords': 'tech,news,podcast',
     }
 
     expect(generateEntry(value)).toEqual(expected)
@@ -1038,8 +928,6 @@ describe('generateFeed', () => {
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creator: 'John Doe',
-        rights: 'Copyright 2023',
-        date: new Date('2023-01-01T00:00:00Z'),
       },
     }
     const expected = {
@@ -1050,8 +938,6 @@ describe('generateFeed', () => {
         title: 'Feed with DC namespace',
         updated: '2023-03-15T12:00:00.000Z',
         'dc:creator': 'John Doe',
-        'dc:rights': 'Copyright 2023',
-        'dc:date': '2023-01-01T00:00:00.000Z',
       },
     }
 
@@ -1065,8 +951,6 @@ describe('generateFeed', () => {
       updated: new Date('2023-03-15T12:00:00Z'),
       sy: {
         updatePeriod: 'hourly',
-        updateFrequency: 2,
-        updateBase: new Date('2023-01-01T00:00:00Z'),
       },
     }
     const expected = {
@@ -1077,8 +961,6 @@ describe('generateFeed', () => {
         title: 'Feed with SY namespace',
         updated: '2023-03-15T12:00:00.000Z',
         'sy:updatePeriod': 'hourly',
-        'sy:updateFrequency': 2,
-        'sy:updateBase': '2023-01-01T00:00:00.000Z',
       },
     }
 

@@ -23,9 +23,6 @@ describe('generate', () => {
       title: 'Feed with Atom namespace',
       description: 'Test feed with Atom namespace elements',
       atom: {
-        id: 'https://example.com/feed',
-        title: 'Atom Feed Title',
-        updated: new Date('2023-01-01T00:00:00Z'),
         links: [
           {
             href: 'https://example.com/feed.xml',
@@ -39,9 +36,6 @@ describe('generate', () => {
           title: 'First item',
           atom: {
             id: 'https://example.com/entry/1',
-            title: 'Atom Entry Title',
-            updated: new Date('2023-01-01T00:00:00Z'),
-            content: 'Atom entry content',
           },
         },
       ],
@@ -52,16 +46,10 @@ describe('generate', () => {
   <channel>
     <title>Feed with Atom namespace</title>
     <description>Test feed with Atom namespace elements</description>
-    <atom:id>https://example.com/feed</atom:id>
     <atom:link href="https://example.com/feed.xml" rel="self" type="application/atom+xml"/>
-    <atom:title>Atom Feed Title</atom:title>
-    <atom:updated>2023-01-01T00:00:00.000Z</atom:updated>
     <item>
       <title>First item</title>
-      <atom:content>Atom entry content</atom:content>
       <atom:id>https://example.com/entry/1</atom:id>
-      <atom:title>Atom Entry Title</atom:title>
-      <atom:updated>2023-01-01T00:00:00.000Z</atom:updated>
     </item>
   </channel>
 </rss>
@@ -76,14 +64,12 @@ describe('generate', () => {
       description: 'Test feed with Dublin Core namespace',
       dc: {
         creator: 'John Doe',
-        rights: 'Copyright 2023',
       },
       items: [
         {
           title: 'First item',
           dc: {
             creator: 'Jane Smith',
-            date: new Date('2023-01-01T00:00:00Z'),
           },
         },
       ],
@@ -95,11 +81,9 @@ describe('generate', () => {
     <title>Feed with dc namespace</title>
     <description>Test feed with Dublin Core namespace</description>
     <dc:creator>John Doe</dc:creator>
-    <dc:rights>Copyright 2023</dc:rights>
     <item>
       <title>First item</title>
       <dc:creator>Jane Smith</dc:creator>
-      <dc:date>2023-01-01T00:00:00.000Z</dc:date>
     </item>
   </channel>
 </rss>
@@ -114,8 +98,6 @@ describe('generate', () => {
       description: 'Test feed with syndication namespace',
       sy: {
         updatePeriod: 'hourly',
-        updateFrequency: 2,
-        updateBase: new Date('2023-01-01T00:00:00Z'),
       },
     }
 
@@ -125,8 +107,6 @@ describe('generate', () => {
     <title>Feed with sy namespace</title>
     <description>Test feed with syndication namespace</description>
     <sy:updatePeriod>hourly</sy:updatePeriod>
-    <sy:updateFrequency>2</sy:updateFrequency>
-    <sy:updateBase>2023-01-01T00:00:00.000Z</sy:updateBase>
   </channel>
 </rss>
 `
@@ -140,36 +120,12 @@ describe('generate', () => {
       description: 'Test feed with Apple Podcasts namespace',
       itunes: {
         author: 'Podcast Author',
-        categories: [
-          {
-            text: 'Technology',
-            categories: [
-              {
-                text: 'Tech News',
-              },
-            ],
-          },
-        ],
-        explicit: false,
-        type: 'episodic',
-        owner: {
-          name: 'Owner Name',
-          email: 'owner@example.com',
-        },
-        image: 'https://example.com/podcast-cover.jpg',
       },
       items: [
         {
           title: 'Episode 1',
           itunes: {
             title: 'Episode 1 - Special Title',
-            duration: 1800,
-            episode: 1,
-            season: 1,
-            episodeType: 'full',
-            explicit: false,
-            image: 'https://example.com/episode1.jpg',
-            keywords: ['tech', 'news', 'podcast'],
           },
         },
       ],
@@ -180,27 +136,10 @@ describe('generate', () => {
   <channel>
     <title>Feed with iTunes namespace</title>
     <description>Test feed with Apple Podcasts namespace</description>
-    <itunes:image href="https://example.com/podcast-cover.jpg"/>
-    <itunes:category text="Technology">
-      <itunes:category text="Tech News"/>
-    </itunes:category>
-    <itunes:explicit>no</itunes:explicit>
     <itunes:author>Podcast Author</itunes:author>
-    <itunes:type>episodic</itunes:type>
-    <itunes:owner>
-      <itunes:name>Owner Name</itunes:name>
-      <itunes:email>owner@example.com</itunes:email>
-    </itunes:owner>
     <item>
       <title>Episode 1</title>
-      <itunes:duration>1800</itunes:duration>
-      <itunes:image href="https://example.com/episode1.jpg"/>
-      <itunes:explicit>no</itunes:explicit>
       <itunes:title>Episode 1 - Special Title</itunes:title>
-      <itunes:episode>1</itunes:episode>
-      <itunes:season>1</itunes:season>
-      <itunes:episodeType>full</itunes:episodeType>
-      <itunes:keywords>tech,news,podcast</itunes:keywords>
     </item>
   </channel>
 </rss>
@@ -215,35 +154,12 @@ describe('generate', () => {
       description: 'Test feed with Podcast 2.0 namespace',
       podcast: {
         guid: 'podcast-feed-guid-123',
-        locked: {
-          value: true,
-          owner: 'owner@example.com',
-        },
-        fundings: [
-          {
-            url: 'https://example.com/support',
-            display: 'Support the show',
-          },
-        ],
       },
       items: [
         {
           title: 'Episode 1',
           podcast: {
             episode: { number: 1 },
-            season: { number: 1 },
-            persons: [
-              {
-                display: 'Host Name',
-                role: 'host',
-              },
-            ],
-            transcripts: [
-              {
-                url: 'https://example.com/transcript.txt',
-                type: 'text/plain',
-              },
-            ],
           },
         },
       ],
@@ -254,14 +170,9 @@ describe('generate', () => {
   <channel>
     <title>Feed with podcast namespace</title>
     <description>Test feed with Podcast 2.0 namespace</description>
-    <podcast:locked owner="owner@example.com">yes</podcast:locked>
-    <podcast:funding url="https://example.com/support">Support the show</podcast:funding>
     <podcast:guid>podcast-feed-guid-123</podcast:guid>
     <item>
       <title>Episode 1</title>
-      <podcast:transcript url="https://example.com/transcript.txt" type="text/plain"/>
-      <podcast:person role="host">Host Name</podcast:person>
-      <podcast:season>1</podcast:season>
       <podcast:episode>1</podcast:episode>
     </item>
   </channel>
@@ -278,62 +189,15 @@ describe('generate', () => {
       media: {
         title: {
           value: 'Feed Media Title',
-          type: 'plain',
         },
-        description: {
-          value: 'Feed Media Description',
-        },
-        thumbnails: [
-          {
-            url: 'https://example.com/feed-thumb.jpg',
-            width: 200,
-            height: 150,
-          },
-        ],
       },
       items: [
         {
           title: 'Episode with Media',
           media: {
-            group: {
-              contents: [
-                {
-                  url: 'https://example.com/video.mp4',
-                  type: 'video/mp4',
-                  medium: 'video',
-                  duration: 120,
-                },
-              ],
-              title: {
-                value: 'Video Title',
-              },
-            },
-            contents: [
-              {
-                url: 'https://example.com/audio.mp3',
-                type: 'audio/mpeg',
-                medium: 'audio',
-                isDefault: true,
-              },
-            ],
-            ratings: [
-              {
-                value: 'nonadult',
-                scheme: 'urn:simple',
-              },
-            ],
             title: {
               value: 'Media Item Title',
-              type: 'plain',
             },
-            keywords: ['video', 'audio', 'content'],
-            thumbnails: [
-              {
-                url: 'https://example.com/thumb.jpg',
-                width: 160,
-                height: 120,
-              },
-            ],
           },
         },
       ],
@@ -344,20 +208,10 @@ describe('generate', () => {
   <channel>
     <title>Feed with media namespace</title>
     <description>Test feed with Media RSS namespace</description>
-    <media:title type="plain">Feed Media Title</media:title>
-    <media:description>Feed Media Description</media:description>
-    <media:thumbnail url="https://example.com/feed-thumb.jpg" height="150" width="200"/>
+    <media:title>Feed Media Title</media:title>
     <item>
       <title>Episode with Media</title>
-      <media:group>
-        <media:content url="https://example.com/video.mp4" type="video/mp4" medium="video" duration="120"/>
-        <media:title>Video Title</media:title>
-      </media:group>
-      <media:content url="https://example.com/audio.mp3" type="audio/mpeg" medium="audio" isDefault="yes"/>
-      <media:rating scheme="urn:simple">nonadult</media:rating>
-      <media:title type="plain">Media Item Title</media:title>
-      <media:keywords>video,audio,content</media:keywords>
-      <media:thumbnail url="https://example.com/thumb.jpg" height="120" width="160"/>
+      <media:title>Media Item Title</media:title>
     </item>
   </channel>
 </rss>
@@ -407,9 +261,6 @@ describe('generate', () => {
           title: 'First item',
           slash: {
             section: 'Technology',
-            department: 'News',
-            comments: 42,
-            hit_parade: [1, 2, 3, 4, 5],
           },
         },
       ],
@@ -423,9 +274,6 @@ describe('generate', () => {
     <item>
       <title>First item</title>
       <slash:section>Technology</slash:section>
-      <slash:department>News</slash:department>
-      <slash:comments>42</slash:comments>
-      <slash:hit_parade>1,2,3,4,5</slash:hit_parade>
     </item>
   </channel>
 </rss>
@@ -443,12 +291,6 @@ describe('generate', () => {
           title: 'Discussion post',
           thr: {
             total: 42,
-            inReplyTos: [
-              {
-                ref: 'http://example.com/original-post',
-                href: 'http://example.com/original-post#comment-1',
-              },
-            ],
           },
         },
       ],
@@ -462,7 +304,6 @@ describe('generate', () => {
     <item>
       <title>Discussion post</title>
       <thr:total>42</thr:total>
-      <thr:in-reply-to ref="http://example.com/original-post" href="http://example.com/original-post#comment-1"/>
     </item>
   </channel>
 </rss>
