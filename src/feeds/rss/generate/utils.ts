@@ -12,6 +12,10 @@ import {
 } from '../../../namespaces/atom/generate/utils.js'
 import { generateItem as generateContentItem } from '../../../namespaces/content/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
+import {
+  generateFeed as generateItunesFeed,
+  generateItem as generateItunesItem,
+} from '../../../namespaces/itunes/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
@@ -137,7 +141,7 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
     ...generateAtomEntry(item.atom),
     ...generateDcItemOrFeed(item.dc),
     ...generateSlashItem(item.slash),
-    // TODO: Add support for itunes namespace here.
+    ...generateItunesItem(item.itunes),
     // TODO: Add support for podcast namespace here.
     // TODO: Add support for media namespace here.
     // TODO: Add support for georss namespace here.
@@ -173,7 +177,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     ...generateAtomFeed(feed.atom),
     ...generateDcItemOrFeed(feed.dc),
     ...generateSyFeed(feed.sy),
-    // TODO: Add support for itunes namespace here.
+    ...generateItunesFeed(feed.itunes),
     // TODO: Add support for podcast namespace here.
     // TODO: Add support for media namespace here.
     // TODO: Add support for georss namespace here.
