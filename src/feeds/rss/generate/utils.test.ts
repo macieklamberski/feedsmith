@@ -623,6 +623,97 @@ describe('generateItem', () => {
 
     expect(generateItem(value)).toEqual(expected)
   })
+
+  it('should generate item with podcast namespace properties', () => {
+    const value = {
+      title: 'Item with podcast namespace',
+      podcast: {
+        episode: { number: 42 },
+        season: { number: 2 },
+        persons: [
+          {
+            display: 'Host Name',
+            role: 'host',
+            group: 'cast',
+          },
+        ],
+        transcripts: [
+          {
+            url: 'https://example.com/transcript.txt',
+            type: 'text/plain',
+            language: 'en',
+          },
+        ],
+        chapters: {
+          url: 'https://example.com/chapters.json',
+          type: 'application/json+chapters',
+        },
+        soundbites: [
+          {
+            startTime: 120.5,
+            duration: 30.2,
+            display: 'Great quote',
+          },
+        ],
+        location: {
+          display: 'Austin, TX',
+          geo: 'geo:30.2672,-97.7431',
+        },
+        license: {
+          display: 'Creative Commons',
+          url: 'https://creativecommons.org/licenses/by/4.0/',
+        },
+        value: {
+          type: 'lightning',
+          method: 'keysend',
+        },
+      },
+    }
+    const expected = {
+      title: 'Item with podcast namespace',
+      'podcast:episode': { '#text': 42 },
+      'podcast:season': { '#text': 2 },
+      'podcast:person': [
+        {
+          '#text': 'Host Name',
+          '@role': 'host',
+          '@group': 'cast',
+        },
+      ],
+      'podcast:transcript': [
+        {
+          '@url': 'https://example.com/transcript.txt',
+          '@type': 'text/plain',
+          '@language': 'en',
+        },
+      ],
+      'podcast:chapters': {
+        '@url': 'https://example.com/chapters.json',
+        '@type': 'application/json+chapters',
+      },
+      'podcast:soundbite': [
+        {
+          '#text': 'Great quote',
+          '@startTime': 120.5,
+          '@duration': 30.2,
+        },
+      ],
+      'podcast:location': {
+        '#text': 'Austin, TX',
+        '@geo': 'geo:30.2672,-97.7431',
+      },
+      'podcast:license': {
+        '#text': 'Creative Commons',
+        '@url': 'https://creativecommons.org/licenses/by/4.0/',
+      },
+      'podcast:value': {
+        '@type': 'lightning',
+        '@method': 'keysend',
+      },
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -916,6 +1007,176 @@ describe('generateFeed', () => {
               '@type': 'application/atom+xml',
             },
           ],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate podcast namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with podcast namespace',
+      description: 'A podcast feed with Podcast 2.0 features',
+      podcast: {
+        guid: 'podcast-feed-guid-123',
+        locked: {
+          value: true,
+          owner: 'owner@example.com',
+        },
+        fundings: [
+          {
+            url: 'https://example.com/support',
+            display: 'Support the show',
+          },
+        ],
+        persons: [
+          {
+            display: 'Host Name',
+            role: 'host',
+            group: 'cast',
+            img: 'https://example.com/host.jpg',
+          },
+        ],
+        location: {
+          display: 'Austin, TX',
+          geo: 'geo:30.2672,-97.7431',
+          osm: 'R113314',
+        },
+        trailers: [
+          {
+            display: 'Season 2 Trailer',
+            url: 'https://example.com/trailer.mp3',
+            pubDate: new Date('2023-01-01T00:00:00Z'),
+            length: 12345,
+            type: 'audio/mpeg',
+            season: 2,
+          },
+        ],
+        license: {
+          display: 'Creative Commons Attribution 4.0',
+          url: 'https://creativecommons.org/licenses/by/4.0/',
+        },
+        value: {
+          type: 'lightning',
+          method: 'keysend',
+          suggested: 0.00000005,
+        },
+        medium: 'podcast',
+        images: {
+          srcset: 'https://example.com/image-400.jpg 400w, https://example.com/image-800.jpg 800w',
+        },
+        blocks: [
+          {
+            value: true,
+            id: 'service-id-123',
+          },
+        ],
+        txts: [
+          {
+            display: 'Copyright 2023 Example Podcast',
+            purpose: 'copyright',
+          },
+        ],
+        remoteItems: [
+          {
+            feedGuid: 'remote-feed-guid-456',
+            feedUrl: 'https://remote.example.com/feed.xml',
+          },
+        ],
+        updateFrequency: {
+          display: 'Weekly on Mondays',
+          complete: false,
+          dtstart: new Date('2023-01-01T00:00:00Z'),
+          rrule: 'FREQ=WEEKLY;BYDAY=MO',
+        },
+        podping: {
+          usesPodping: true,
+        },
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:podcast': 'https://podcastindex.org/namespace/1.0',
+        channel: {
+          title: 'Feed with podcast namespace',
+          description: 'A podcast feed with Podcast 2.0 features',
+          'podcast:guid': 'podcast-feed-guid-123',
+          'podcast:locked': {
+            '#text': 'yes',
+            '@owner': 'owner@example.com',
+          },
+          'podcast:funding': [
+            {
+              '#text': 'Support the show',
+              '@url': 'https://example.com/support',
+            },
+          ],
+          'podcast:person': [
+            {
+              '#text': 'Host Name',
+              '@role': 'host',
+              '@group': 'cast',
+              '@img': 'https://example.com/host.jpg',
+            },
+          ],
+          'podcast:location': {
+            '#text': 'Austin, TX',
+            '@geo': 'geo:30.2672,-97.7431',
+            '@osm': 'R113314',
+          },
+          'podcast:trailer': [
+            {
+              '#text': 'Season 2 Trailer',
+              '@url': 'https://example.com/trailer.mp3',
+              '@pubdate': 'Sun, 01 Jan 2023 00:00:00 GMT',
+              '@length': 12345,
+              '@type': 'audio/mpeg',
+              '@season': 2,
+            },
+          ],
+          'podcast:license': {
+            '#text': 'Creative Commons Attribution 4.0',
+            '@url': 'https://creativecommons.org/licenses/by/4.0/',
+          },
+          'podcast:value': {
+            '@type': 'lightning',
+            '@method': 'keysend',
+            '@suggested': 0.00000005,
+          },
+          'podcast:medium': 'podcast',
+          'podcast:images': {
+            '@srcset':
+              'https://example.com/image-400.jpg 400w, https://example.com/image-800.jpg 800w',
+          },
+          'podcast:block': [
+            {
+              '#text': 'yes',
+              '@id': 'service-id-123',
+            },
+          ],
+          'podcast:txt': [
+            {
+              '#text': 'Copyright 2023 Example Podcast',
+              '@purpose': 'copyright',
+            },
+          ],
+          'podcast:remoteItem': [
+            {
+              '@feedGuid': 'remote-feed-guid-456',
+              '@feedUrl': 'https://remote.example.com/feed.xml',
+            },
+          ],
+          'podcast:updateFrequency': {
+            '#text': 'Weekly on Mondays',
+            '@complete': false,
+            '@dtstart': '2023-01-01T00:00:00.000Z',
+            '@rrule': 'FREQ=WEEKLY;BYDAY=MO',
+          },
+          'podcast:podping': {
+            '@usesPodping': true,
+          },
         },
       },
     }

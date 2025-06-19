@@ -1,6 +1,6 @@
 import type { AnyOf, DateLike } from '../../../common/types.js'
 
-type BaseItem = {
+export type BaseItem = {
   transcripts?: Array<Transcript>
   chapters?: Chapters
   soundbites?: Array<Soundbite>

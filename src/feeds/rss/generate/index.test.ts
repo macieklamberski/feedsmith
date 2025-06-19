@@ -268,4 +268,66 @@ describe('generate', () => {
 
     expect(generate(input)).toEqual(expected)
   })
+
+  it('should generate RSS with podcast namespace', () => {
+    const input = {
+      title: 'Feed with podcast namespace',
+      description: 'Test feed with Podcast 2.0 namespace',
+      podcast: {
+        guid: 'podcast-feed-guid-123',
+        locked: {
+          value: true,
+          owner: 'owner@example.com',
+        },
+        fundings: [
+          {
+            url: 'https://example.com/support',
+            display: 'Support the show',
+          },
+        ],
+      },
+      items: [
+        {
+          title: 'Episode 1',
+          podcast: {
+            episode: { number: 1 },
+            season: { number: 1 },
+            persons: [
+              {
+                display: 'Host Name',
+                role: 'host',
+              },
+            ],
+            transcripts: [
+              {
+                url: 'https://example.com/transcript.txt',
+                type: 'text/plain',
+              },
+            ],
+          },
+        },
+      ],
+    }
+
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:podcast="https://podcastindex.org/namespace/1.0">
+  <channel>
+    <title>Feed with podcast namespace</title>
+    <description>Test feed with Podcast 2.0 namespace</description>
+    <podcast:locked owner="owner@example.com">yes</podcast:locked>
+    <podcast:funding url="https://example.com/support">Support the show</podcast:funding>
+    <podcast:guid>podcast-feed-guid-123</podcast:guid>
+    <item>
+      <title>Episode 1</title>
+      <podcast:transcript url="https://example.com/transcript.txt" type="text/plain"/>
+      <podcast:person role="host">Host Name</podcast:person>
+      <podcast:season>1</podcast:season>
+      <podcast:episode>1</podcast:episode>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(input)).toEqual(expected)
+  })
 })

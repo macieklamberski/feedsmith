@@ -16,6 +16,10 @@ import {
   generateFeed as generateItunesFeed,
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
+import {
+  generateFeed as generatePodcastFeed,
+  generateItem as generatePodcastItem,
+} from '../../../namespaces/podcast/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
@@ -142,7 +146,7 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
     ...generateDcItemOrFeed(item.dc),
     ...generateSlashItem(item.slash),
     ...generateItunesItem(item.itunes),
-    // TODO: Add support for podcast namespace here.
+    ...generatePodcastItem(item.podcast),
     // TODO: Add support for media namespace here.
     // TODO: Add support for georss namespace here.
     ...generateThrItem(item.thr),
@@ -178,7 +182,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     ...generateDcItemOrFeed(feed.dc),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
-    // TODO: Add support for podcast namespace here.
+    ...generatePodcastFeed(feed.podcast),
     // TODO: Add support for media namespace here.
     // TODO: Add support for georss namespace here.
     item: trimArray(feed.items?.map(generateItem)),
