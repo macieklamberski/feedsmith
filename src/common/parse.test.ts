@@ -3,7 +3,7 @@ import { locales } from './config'
 import { parse } from './parse'
 
 describe('parse', () => {
-  it('parse valid Atom feed', () => {
+  it('should parse valid Atom feed', () => {
     const value = `
       <?xml version="1.0"?>
       <feed xmlns="http://www.w3.org/2005/Atom">
@@ -22,7 +22,7 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
-  it('parse valid JSON feed', () => {
+  it('should parse valid JSON feed', () => {
     const value = {
       version: 'https://jsonfeed.org/version/1.1',
       title: 'My Example Feed',
@@ -65,7 +65,7 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
-  it('parse valid RSS feed', () => {
+  it('should parse valid RSS feed', () => {
     const value = `
       <?xml version="1.0"?>
       <rss version="2.0">
@@ -88,7 +88,7 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
-  it('parse valid RDF feed', () => {
+  it('should parse valid RDF feed', () => {
     const value = `
       <?xml version="1.0"?>
       <rdf:RDF

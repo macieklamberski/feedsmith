@@ -1,8 +1,8 @@
-import { describe, expect, test } from 'bun:test'
+import { describe, expect, it } from 'bun:test'
 import { detect } from './index.js'
 
 describe('detect', () => {
-  test('detect valid Atom feed with xmlns declaration', () => {
+  it('should detect valid Atom feed with xmlns declaration', () => {
     const atomFeed = `
       <?xml version="1.0"?>
       <feed xmlns="http://www.w3.org/2005/Atom">
@@ -13,7 +13,7 @@ describe('detect', () => {
     expect(detect(atomFeed)).toBe(true)
   })
 
-  test('handle case sensitivity correctly', () => {
+  it('should handle case sensitivity correctly', () => {
     const uppercaseFeed = `
       <?xml version="1.0" encoding="utf-8"?>
       <FEED xmlns="http://www.w3.org/2005/Atom">
@@ -24,7 +24,7 @@ describe('detect', () => {
     expect(detect(uppercaseFeed)).toBe(true)
   })
 
-  test('detect Atom feed with multi-line <feed> tag', () => {
+  it('should detect Atom feed with multi-line <feed> tag', () => {
     const atomFeed = `
       <?xml version="1.0"?>
       <feed
@@ -39,7 +39,7 @@ describe('detect', () => {
     expect(detect(atomFeed)).toBe(true)
   })
 
-  test('detect Atom feed without xmlns declaration', () => {
+  it('should detect Atom feed without xmlns declaration', () => {
     const atomFeed = `
       <?xml version="1.0"?>
       <feed>
@@ -50,7 +50,7 @@ describe('detect', () => {
     expect(detect(atomFeed)).toBe(true)
   })
 
-  test('detect Atom feed with namespace prefix', () => {
+  it('should detect Atom feed with namespace prefix', () => {
     const atomFeed = `
       <?xml version="1.0" encoding="utf-8"?>
       <atom:feed xmlns:atom="http://www.w3.org/2005/Atom">
@@ -61,7 +61,7 @@ describe('detect', () => {
     expect(detect(atomFeed)).toBe(true)
   })
 
-  test('return false for feed element in CDATA', () => {
+  it('should return false for feed element in CDATA', () => {
     const cdataFeed = `
       <?xml version="1.0"?>
       <root>
@@ -72,7 +72,7 @@ describe('detect', () => {
     expect(detect(cdataFeed)).toBe(false)
   })
 
-  test('detect self-closing feed tag', () => {
+  it('should detect self-closing feed tag', () => {
     const selfClosingFeed = `
       <?xml version="1.0"?>
       <feed xmlns="http://www.w3.org/2005/Atom" />
@@ -81,7 +81,7 @@ describe('detect', () => {
     expect(detect(selfClosingFeed)).toBe(true)
   })
 
-  test('detect mixed case ATOM elements', () => {
+  it('should detect mixed case ATOM elements', () => {
     const mixedCaseFeed = `
       <feed>
         <TITLE>Example Feed</TITLE>
@@ -94,13 +94,13 @@ describe('detect', () => {
     expect(detect(mixedCaseFeed)).toBe(true)
   })
 
-  test('detect minimal ATOM feed', () => {
+  it('should detect minimal ATOM feed', () => {
     const minimalFeed = '<feed><title>Test</title></feed>'
 
     expect(detect(minimalFeed)).toBe(true)
   })
 
-  test('return false for feed in attribute value', () => {
+  it('should return false for feed in attribute value', () => {
     const feedInAttribute = `
       <root>
         <element data="&lt;feed&gt;&lt;title&gt;Test&lt;/title&gt;&lt;/feed&gt;">
@@ -112,7 +112,7 @@ describe('detect', () => {
     expect(detect(feedInAttribute)).toBe(false)
   })
 
-  test('return false for feed with wrong namespace and no ATOM elements', () => {
+  it('should return false for feed with wrong namespace and no ATOM elements', () => {
     const wrongNamespace = `
       <feed xmlns="http://example.com/custom">
         <heading>Not ATOM</heading>
@@ -123,7 +123,7 @@ describe('detect', () => {
     expect(detect(wrongNamespace)).toBe(false)
   })
 
-  // test('return false for feed element in XML comments', () => {
+  // it('return false for feed element in XML comments', () => {
   //   const commentedFeed = `
   //     <?xml version="1.0"?>
   //     <root>
@@ -135,7 +135,7 @@ describe('detect', () => {
   //   expect(detect(commentedFeed)).toBe(false)
   // })
 
-  test('return false for RSS feed', () => {
+  it('should return false for RSS feed', () => {
     const rssFeed = `
       <?xml version="1.0" encoding="UTF-8" ?>
       <rss version="2.0">
@@ -148,7 +148,7 @@ describe('detect', () => {
     expect(detect(rssFeed)).toBe(false)
   })
 
-  test('return false for RDF feed', () => {
+  it('should return false for RDF feed', () => {
     const rdfFeed = `
       <?xml version="1.0" encoding="UTF-8"?>
       <rdf:RDF
@@ -163,7 +163,7 @@ describe('detect', () => {
     expect(detect(rdfFeed)).toBe(false)
   })
 
-  test('return false for JSON feed', () => {
+  it('should return false for JSON feed', () => {
     const jsonFeed = `
       {
         "version": "https://jsonfeed.org/version/1.1",
@@ -174,7 +174,7 @@ describe('detect', () => {
     expect(detect(jsonFeed)).toBe(false)
   })
 
-  test('return false for plain HTML', () => {
+  it('should return false for plain HTML', () => {
     const html = `
       <!DOCTYPE html>
       <html>
@@ -191,7 +191,7 @@ describe('detect', () => {
     expect(detect(html)).toBe(false)
   })
 
-  test('return false for empty string or non-string value', () => {
+  it('should return false for empty string or non-string value', () => {
     expect(detect('')).toBe(false)
     expect(detect(undefined)).toEqual(false)
     expect(detect(null)).toEqual(false)

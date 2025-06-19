@@ -1,8 +1,8 @@
-import { describe, expect, test } from 'bun:test'
+import { describe, expect, it } from 'bun:test'
 import { detect } from './index.js'
 
 describe('detect', () => {
-  test('detect valid RDF feed with xmlns declaration', () => {
+  it('should detect valid RDF feed with xmlns declaration', () => {
     const rdfFeed = `
       <?xml version="1.0"?>
       <rdf:RDF
@@ -23,7 +23,7 @@ describe('detect', () => {
     expect(detect(rdfFeed)).toBe(true)
   })
 
-  test('handle case sensitivity correctly', () => {
+  it('should handle case sensitivity correctly', () => {
     const uppercaseFeed = `
       <?xml version="1.0"?>
         <RDF:RDF
@@ -44,7 +44,7 @@ describe('detect', () => {
     expect(detect(uppercaseFeed)).toBe(true)
   })
 
-  test('detect RDF feed without xmlns declaration', () => {
+  it('should detect RDF feed without xmlns declaration', () => {
     const rdfFeed = `
       <?xml version="1.0"?>
         <rdf:RDF>
@@ -62,7 +62,7 @@ describe('detect', () => {
     expect(detect(rdfFeed)).toBe(true)
   })
 
-  test('detect RDF feed with multi-line <rdf:RDF> tag', () => {
+  it('should detect RDF feed with multi-line <rdf:RDF> tag', () => {
     const rdfFeed = `
       <?xml version="1.0"?>
       <rdf:RDF
@@ -79,7 +79,7 @@ describe('detect', () => {
     expect(detect(rdfFeed)).toBe(true)
   })
 
-  test('return false for RDF element in CDATA', () => {
+  it('should return false for RDF element in CDATA', () => {
     const cdataFeed = `
       <?xml version="1.0"?>
       <root>
@@ -90,7 +90,7 @@ describe('detect', () => {
     expect(detect(cdataFeed)).toBe(false)
   })
 
-  test('detect self-closing RDF tag', () => {
+  it('should detect self-closing RDF tag', () => {
     const selfClosingFeed = `
       <?xml version="1.0"?>
       <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" />
@@ -99,7 +99,7 @@ describe('detect', () => {
     expect(detect(selfClosingFeed)).toBe(true)
   })
 
-  test('detect mixed case RDF elements', () => {
+  it('should detect mixed case RDF elements', () => {
     const mixedCaseFeed = `
       <rdf:RDF>
         <CHANNEL rdf:about="http://example.org/">
@@ -114,13 +114,13 @@ describe('detect', () => {
     expect(detect(mixedCaseFeed)).toBe(true)
   })
 
-  test('detect minimal RDF feed', () => {
+  it('should detect minimal RDF feed', () => {
     const minimalFeed = '<rdf:RDF><channel><title>Test</title></channel></rdf:RDF>'
 
     expect(detect(minimalFeed)).toBe(true)
   })
 
-  test('return false for RDF in attribute value', () => {
+  it('should return false for RDF in attribute value', () => {
     const rdfInAttribute = `
       <root>
         <element data="&lt;rdf:RDF&gt;&lt;channel&gt;&lt;title&gt;Test&lt;/title&gt;&lt;/channel&gt;&lt;/rdf:RDF&gt;">
@@ -132,7 +132,7 @@ describe('detect', () => {
     expect(detect(rdfInAttribute)).toBe(false)
   })
 
-  test('return false for RDF with wrong namespace and no RDF elements', () => {
+  it('should return false for RDF with wrong namespace and no RDF elements', () => {
     const wrongNamespace = `
       <rdf:RDF xmlns:rdf="http://example.com/custom">
         <heading>Not RDF</heading>
@@ -143,7 +143,7 @@ describe('detect', () => {
     expect(detect(wrongNamespace)).toBe(false)
   })
 
-  test('return false for Atom feed', () => {
+  it('should return false for Atom feed', () => {
     const atomFeed = `
       <?xml version="1.0" encoding="utf-8"?>
       <feed xmlns:atom="http://www.w3.org/2005/Atom">
@@ -154,7 +154,7 @@ describe('detect', () => {
     expect(detect(atomFeed)).toBe(false)
   })
 
-  test('return false for RSS feed', () => {
+  it('should return false for RSS feed', () => {
     const rssFeed = `
       <?xml version="1.0" encoding="UTF-8" ?>
       <rss version="2.0">
@@ -167,7 +167,7 @@ describe('detect', () => {
     expect(detect(rssFeed)).toBe(false)
   })
 
-  test('return false for JSON feed', () => {
+  it('should return false for JSON feed', () => {
     const jsonFeed = `
       {
         "version": "https://jsonfeed.org/version/1.1",
@@ -178,7 +178,7 @@ describe('detect', () => {
     expect(detect(jsonFeed)).toBe(false)
   })
 
-  test('return false for plain HTML', () => {
+  it('should return false for plain HTML', () => {
     const html = `
       <!DOCTYPE html>
       <html>
@@ -195,7 +195,7 @@ describe('detect', () => {
     expect(detect(html)).toBe(false)
   })
 
-  test('return false for empty string or non-string value', () => {
+  it('should return false for empty string or non-string value', () => {
     expect(detect('')).toBe(false)
     expect(detect(undefined)).toEqual(false)
     expect(detect(null)).toEqual(false)

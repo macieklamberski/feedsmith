@@ -1,8 +1,8 @@
-import { describe, expect, test } from 'bun:test'
+import { describe, expect, it } from 'bun:test'
 import { detect } from './index.js'
 
 describe('detect', () => {
-  test('detect valid JSON Feed with version 1.1', () => {
+  it('should detect valid JSON Feed with version 1.1', () => {
     const jsonFeed = {
       version: 'https://jsonfeed.org/version/1.1',
       title: 'Example Feed',
@@ -20,7 +20,7 @@ describe('detect', () => {
     expect(detect(jsonFeed)).toBe(true)
   })
 
-  test('detect valid JSON Feed with version 1.0', () => {
+  it('should detect valid JSON Feed with version 1.0', () => {
     const jsonFeed = {
       version: 'https://jsonfeed.org/version/1',
       title: 'Example Feed',
@@ -30,7 +30,7 @@ describe('detect', () => {
     expect(detect(jsonFeed)).toBe(true)
   })
 
-  test('detect JSON Feed without version but with typical structure', () => {
+  it('should detect JSON Feed without version but with typical structure', () => {
     const jsonFeed = {
       title: 'Example Feed',
       home_page_url: 'https://example.org/',
@@ -45,7 +45,7 @@ describe('detect', () => {
     expect(detect(jsonFeed)).toBe(true)
   })
 
-  test('detect JSON Feed without version but with feed_url', () => {
+  it('should detect JSON Feed without version but with feed_url', () => {
     const jsonFeed = {
       title: 'Example Feed',
       feed_url: 'https://example.org/feed.json',
@@ -55,7 +55,7 @@ describe('detect', () => {
     expect(detect(jsonFeed)).toBe(true)
   })
 
-  test('detect JSON Feed with authors property', () => {
+  it('should detect JSON Feed with authors property', () => {
     const jsonFeed = {
       title: 'Example Feed',
       authors: [
@@ -69,7 +69,7 @@ describe('detect', () => {
     expect(detect(jsonFeed)).toBe(true)
   })
 
-  test('return false for object with only title', () => {
+  it('should return false for object with only title', () => {
     const notFeed = {
       title: 'Just a title',
     }
@@ -77,7 +77,7 @@ describe('detect', () => {
     expect(detect(notFeed)).toBe(false)
   })
 
-  test('return false for object with wrong version', () => {
+  it('should return false for object with wrong version', () => {
     const wrongVersion = {
       version: '2.0',
       title: 'Example Feed',
@@ -87,7 +87,7 @@ describe('detect', () => {
     expect(detect(wrongVersion)).toBe(false)
   })
 
-  test('return false for RSS-like object', () => {
+  it('should return false for RSS-like object', () => {
     const rssLike = {
       channel: {
         title: 'RSS Title',
@@ -98,7 +98,7 @@ describe('detect', () => {
     expect(detect(rssLike)).toBe(false)
   })
 
-  test('return false for generic object', () => {
+  it('should return false for generic object', () => {
     const genericObj = {
       name: 'John',
       age: 30,
@@ -108,11 +108,11 @@ describe('detect', () => {
     expect(detect(genericObj)).toBe(false)
   })
 
-  test('return false for empty object', () => {
+  it('should return false for empty object', () => {
     expect(detect({})).toBe(false)
   })
 
-  test('return false for non-object values', () => {
+  it('should return false for non-object values', () => {
     expect(detect('')).toBe(false)
     expect(detect(undefined)).toBe(false)
     expect(detect(null)).toBe(false)
@@ -121,7 +121,7 @@ describe('detect', () => {
     expect(detect('{"title": "Not parsed"}')).toBe(false)
   })
 
-  test('return false for array (even if it looks like items)', () => {
+  it('should return false for array (even if it looks like items)', () => {
     const itemsArray = [
       {
         id: '1',
