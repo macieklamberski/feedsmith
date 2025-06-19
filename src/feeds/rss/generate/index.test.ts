@@ -134,6 +134,81 @@ describe('generate', () => {
     expect(generate(input)).toEqual(expected)
   })
 
+  it('should generate RSS with itunes namespace', () => {
+    const input = {
+      title: 'Feed with iTunes namespace',
+      description: 'Test feed with Apple Podcasts namespace',
+      itunes: {
+        author: 'Podcast Author',
+        categories: [
+          {
+            text: 'Technology',
+            categories: [
+              {
+                text: 'Tech News',
+              },
+            ],
+          },
+        ],
+        explicit: false,
+        type: 'episodic',
+        owner: {
+          name: 'Owner Name',
+          email: 'owner@example.com',
+        },
+        image: 'https://example.com/podcast-cover.jpg',
+      },
+      items: [
+        {
+          title: 'Episode 1',
+          itunes: {
+            title: 'Episode 1 - Special Title',
+            duration: 1800,
+            episode: 1,
+            season: 1,
+            episodeType: 'full',
+            explicit: false,
+            image: 'https://example.com/episode1.jpg',
+            keywords: ['tech', 'news', 'podcast'],
+          },
+        },
+      ],
+    }
+
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <channel>
+    <title>Feed with iTunes namespace</title>
+    <description>Test feed with Apple Podcasts namespace</description>
+    <itunes:image href="https://example.com/podcast-cover.jpg"/>
+    <itunes:category text="Technology">
+      <itunes:category text="Tech News"/>
+    </itunes:category>
+    <itunes:explicit>no</itunes:explicit>
+    <itunes:author>Podcast Author</itunes:author>
+    <itunes:type>episodic</itunes:type>
+    <itunes:owner>
+      <itunes:name>Owner Name</itunes:name>
+      <itunes:email>owner@example.com</itunes:email>
+    </itunes:owner>
+    <item>
+      <title>Episode 1</title>
+      <itunes:duration>1800</itunes:duration>
+      <itunes:image href="https://example.com/episode1.jpg"/>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:title>Episode 1 - Special Title</itunes:title>
+      <itunes:episode>1</itunes:episode>
+      <itunes:season>1</itunes:season>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:keywords>tech,news,podcast</itunes:keywords>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(input)).toEqual(expected)
+  })
+
   it('should generate RSS with podcast namespace', () => {
     const input = {
       title: 'Feed with podcast namespace',
