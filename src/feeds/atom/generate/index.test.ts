@@ -462,6 +462,92 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with media namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Media namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      media: {
+        title: {
+          value: 'Feed Media Title',
+          type: 'plain',
+        },
+        description: {
+          value: 'Feed Media Description',
+        },
+        thumbnails: [
+          {
+            url: 'https://example.com/feed-thumb.jpg',
+            width: 200,
+            height: 150,
+          },
+        ],
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry with Media',
+          updated: new Date('2023-03-15T12:00:00Z'),
+          media: {
+            group: {
+              contents: [
+                {
+                  url: 'https://example.com/video.mp4',
+                  type: 'video/mp4',
+                  medium: 'video',
+                  duration: 120,
+                },
+              ],
+              title: {
+                value: 'Video Title',
+              },
+            },
+            contents: [
+              {
+                url: 'https://example.com/audio.mp3',
+                type: 'audio/mpeg',
+                medium: 'audio',
+                isDefault: true,
+              },
+            ],
+            ratings: [
+              {
+                value: 'nonadult',
+                scheme: 'urn:simple',
+              },
+            ],
+            keywords: ['video', 'audio', 'content'],
+          },
+        },
+      ],
+    }
+
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+  <id>https://example.com/feed</id>
+  <title>Feed with Media namespace</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <media:title type="plain">Feed Media Title</media:title>
+  <media:description>Feed Media Description</media:description>
+  <media:thumbnail url="https://example.com/feed-thumb.jpg" height="150" width="200"/>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry with Media</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
+    <media:group>
+      <media:content url="https://example.com/video.mp4" type="video/mp4" medium="video" duration="120"/>
+      <media:title>Video Title</media:title>
+    </media:group>
+    <media:content url="https://example.com/audio.mp3" type="audio/mpeg" medium="audio" isDefault="yes"/>
+    <media:rating scheme="urn:simple">nonadult</media:rating>
+    <media:keywords>video,audio,content</media:keywords>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with multiple namespaces', () => {
     const value = {
       id: 'https://example.com/feed',

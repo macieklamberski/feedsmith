@@ -649,6 +649,99 @@ describe('generateEntry', () => {
 
     expect(generateEntry(value)).toEqual(expected)
   })
+
+  it('should generate entry with media namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Media namespace',
+      media: {
+        group: {
+          contents: [
+            {
+              url: 'https://example.com/video.mp4',
+              type: 'video/mp4',
+              medium: 'video',
+              duration: 180,
+            },
+          ],
+          title: {
+            value: 'Video Group Title',
+          },
+        },
+        contents: [
+          {
+            url: 'https://example.com/audio.mp3',
+            type: 'audio/mpeg',
+            medium: 'audio',
+            isDefault: true,
+          },
+        ],
+        ratings: [
+          {
+            value: 'nonadult',
+            scheme: 'urn:simple',
+          },
+        ],
+        title: {
+          value: 'Media Entry Title',
+          type: 'plain',
+        },
+        keywords: ['video', 'audio', 'content'],
+        thumbnails: [
+          {
+            url: 'https://example.com/thumb.jpg',
+            width: 160,
+            height: 120,
+          },
+        ],
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Media namespace',
+      'media:group': {
+        'media:content': [
+          {
+            '@url': 'https://example.com/video.mp4',
+            '@type': 'video/mp4',
+            '@medium': 'video',
+            '@duration': 180,
+          },
+        ],
+        'media:title': {
+          '#text': 'Video Group Title',
+        },
+      },
+      'media:content': [
+        {
+          '@url': 'https://example.com/audio.mp3',
+          '@type': 'audio/mpeg',
+          '@medium': 'audio',
+          '@isDefault': 'yes',
+        },
+      ],
+      'media:rating': [
+        {
+          '#text': 'nonadult',
+          '@scheme': 'urn:simple',
+        },
+      ],
+      'media:title': {
+        '#text': 'Media Entry Title',
+        '@type': 'plain',
+      },
+      'media:keywords': 'video,audio,content',
+      'media:thumbnail': [
+        {
+          '@url': 'https://example.com/thumb.jpg',
+          '@height': 120,
+          '@width': 160,
+        },
+      ],
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -953,6 +1046,91 @@ describe('generateFeed', () => {
         'sy:updatePeriod': 'hourly',
         'sy:updateFrequency': 2,
         'sy:updateBase': '2023-01-01T00:00:00.000Z',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with media namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Media namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      media: {
+        title: {
+          value: 'Feed Media Title',
+          type: 'plain',
+        },
+        description: {
+          value: 'Feed Media Description',
+        },
+        keywords: ['media', 'video', 'audio'],
+        thumbnails: [
+          {
+            url: 'https://example.com/feed-thumb.jpg',
+            width: 200,
+            height: 150,
+          },
+        ],
+        categories: [
+          {
+            name: 'Technology/Podcasts',
+            scheme: 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+            label: 'Technology Podcasts',
+          },
+        ],
+        copyright: {
+          value: '2023 Media Feed Corp',
+          url: 'https://example.com/copyright',
+        },
+        ratings: [
+          {
+            value: 'nonadult',
+            scheme: 'urn:simple',
+          },
+        ],
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:media': 'http://search.yahoo.com/mrss/',
+        id: 'https://example.com/feed',
+        title: 'Feed with Media namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        'media:title': {
+          '#text': 'Feed Media Title',
+          '@type': 'plain',
+        },
+        'media:description': {
+          '#text': 'Feed Media Description',
+        },
+        'media:keywords': 'media,video,audio',
+        'media:thumbnail': [
+          {
+            '@url': 'https://example.com/feed-thumb.jpg',
+            '@height': 150,
+            '@width': 200,
+          },
+        ],
+        'media:category': [
+          {
+            '#text': 'Technology/Podcasts',
+            '@scheme': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+            '@label': 'Technology Podcasts',
+          },
+        ],
+        'media:copyright': {
+          '#text': '2023 Media Feed Corp',
+          '@url': 'https://example.com/copyright',
+        },
+        'media:rating': [
+          {
+            '#text': 'nonadult',
+            '@scheme': 'urn:simple',
+          },
+        ],
       },
     }
 

@@ -11,6 +11,7 @@ import {
   generateFeed as generateItunesFeed,
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
+import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import {
@@ -158,7 +159,7 @@ export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => 
     ...generateDcItemOrFeed(entry.dc),
     ...generateSlashItem(entry.slash),
     ...generateItunesItem(entry.itunes),
-    // TODO: Add support for media namespace here.
+    ...generateMediaItemOrFeed(entry.media),
     // TODO: Add support for georss namespace here.
     ...generateThrItem(entry.thr),
   }
@@ -210,7 +211,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed, options) => {
     ...generateDcItemOrFeed(feed.dc),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
-    // TODO: Add support for media namespace here.
+    ...generateMediaItemOrFeed(feed.media),
     // TODO: Add support for georss namespace here.
     ...valueEntries,
   }
