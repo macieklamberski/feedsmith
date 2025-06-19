@@ -742,6 +742,39 @@ describe('generateEntry', () => {
 
     expect(generateEntry(value)).toEqual(expected)
   })
+
+  it('should generate entry with itunes namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with iTunes namespace',
+      itunes: {
+        title: 'Episode 1 - Special Title',
+        duration: 1800,
+        episode: 1,
+        season: 1,
+        episodeType: 'full',
+        explicit: false,
+        image: 'https://example.com/episode1.jpg',
+        keywords: ['tech', 'news', 'podcast'],
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with iTunes namespace',
+      'itunes:duration': 1800,
+      'itunes:image': {
+        '@href': 'https://example.com/episode1.jpg',
+      },
+      'itunes:explicit': 'no',
+      'itunes:title': 'Episode 1 - Special Title',
+      'itunes:episode': 1,
+      'itunes:season': 1,
+      'itunes:episodeType': 'full',
+      'itunes:keywords': 'tech,news,podcast',
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -1131,6 +1164,65 @@ describe('generateFeed', () => {
             '@scheme': 'urn:simple',
           },
         ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with itunes namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with iTunes namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      itunes: {
+        author: 'Podcast Author',
+        categories: [
+          {
+            text: 'Technology',
+            categories: [
+              {
+                text: 'Tech News',
+              },
+            ],
+          },
+        ],
+        explicit: false,
+        type: 'episodic',
+        owner: {
+          name: 'Owner Name',
+          email: 'owner@example.com',
+        },
+        image: 'https://example.com/podcast-cover.jpg',
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+        id: 'https://example.com/feed',
+        title: 'Feed with iTunes namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        'itunes:image': {
+          '@href': 'https://example.com/podcast-cover.jpg',
+        },
+        'itunes:category': [
+          {
+            '@text': 'Technology',
+            'itunes:category': [
+              {
+                '@text': 'Tech News',
+              },
+            ],
+          },
+        ],
+        'itunes:explicit': 'no',
+        'itunes:author': 'Podcast Author',
+        'itunes:type': 'episodic',
+        'itunes:owner': {
+          'itunes:name': 'Owner Name',
+          'itunes:email': 'owner@example.com',
+        },
       },
     }
 

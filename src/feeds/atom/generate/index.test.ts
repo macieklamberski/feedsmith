@@ -548,6 +548,83 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with itunes namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with iTunes namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      itunes: {
+        author: 'Podcast Author',
+        categories: [
+          {
+            text: 'Technology',
+            categories: [
+              {
+                text: 'Tech News',
+              },
+            ],
+          },
+        ],
+        explicit: false,
+        type: 'episodic',
+        owner: {
+          name: 'Owner Name',
+          email: 'owner@example.com',
+        },
+        image: 'https://example.com/podcast-cover.jpg',
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Episode with iTunes',
+          updated: new Date('2023-03-15T12:00:00Z'),
+          itunes: {
+            title: 'Episode 1 - Special Title',
+            duration: 1800,
+            episode: 1,
+            season: 1,
+            episodeType: 'full',
+            explicit: false,
+            keywords: ['tech', 'news', 'podcast'],
+          },
+        },
+      ],
+    }
+
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <id>https://example.com/feed</id>
+  <title>Feed with iTunes namespace</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <itunes:image href="https://example.com/podcast-cover.jpg"/>
+  <itunes:category text="Technology">
+    <itunes:category text="Tech News"/>
+  </itunes:category>
+  <itunes:explicit>no</itunes:explicit>
+  <itunes:author>Podcast Author</itunes:author>
+  <itunes:type>episodic</itunes:type>
+  <itunes:owner>
+    <itunes:name>Owner Name</itunes:name>
+    <itunes:email>owner@example.com</itunes:email>
+  </itunes:owner>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Episode with iTunes</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
+    <itunes:duration>1800</itunes:duration>
+    <itunes:explicit>no</itunes:explicit>
+    <itunes:title>Episode 1 - Special Title</itunes:title>
+    <itunes:episode>1</itunes:episode>
+    <itunes:season>1</itunes:season>
+    <itunes:episodeType>full</itunes:episodeType>
+    <itunes:keywords>tech,news,podcast</itunes:keywords>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with multiple namespaces', () => {
     const value = {
       id: 'https://example.com/feed',

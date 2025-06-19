@@ -715,6 +715,43 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with itunes namespace properties', () => {
+    const value = {
+      title: 'Item with iTunes namespace',
+      itunes: {
+        title: 'Episode 1 - Special Title',
+        duration: 1800,
+        episode: 1,
+        season: 1,
+        episodeType: 'full',
+        explicit: false,
+        keywords: ['tech', 'news', 'podcast'],
+        subtitle: 'Episode subtitle',
+        summary: 'Episode summary',
+        block: false,
+        image: 'https://example.com/episode-cover.jpg',
+      },
+    }
+    const expected = {
+      title: 'Item with iTunes namespace',
+      'itunes:duration': 1800,
+      'itunes:explicit': 'no',
+      'itunes:title': 'Episode 1 - Special Title',
+      'itunes:episode': 1,
+      'itunes:season': 1,
+      'itunes:episodeType': 'full',
+      'itunes:keywords': 'tech,news,podcast',
+      'itunes:subtitle': 'Episode subtitle',
+      'itunes:summary': 'Episode summary',
+      'itunes:block': 'no',
+      'itunes:image': {
+        '@href': 'https://example.com/episode-cover.jpg',
+      },
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with media namespace properties', () => {
     const value = {
       title: 'Item with media namespace',
@@ -1403,6 +1440,65 @@ describe('generateFeed', () => {
               '@scheme': 'urn:simple',
             },
           ],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate itunes namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with iTunes namespace',
+      description: 'A podcast feed with iTunes features',
+      itunes: {
+        author: 'Podcast Author',
+        categories: [
+          {
+            text: 'Technology',
+            categories: [
+              {
+                text: 'Tech News',
+              },
+            ],
+          },
+        ],
+        explicit: false,
+        type: 'episodic',
+        owner: {
+          name: 'Owner Name',
+          email: 'owner@example.com',
+        },
+        image: 'https://example.com/podcast-cover.jpg',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+        channel: {
+          title: 'Feed with iTunes namespace',
+          description: 'A podcast feed with iTunes features',
+          'itunes:image': {
+            '@href': 'https://example.com/podcast-cover.jpg',
+          },
+          'itunes:category': [
+            {
+              '@text': 'Technology',
+              'itunes:category': [
+                {
+                  '@text': 'Tech News',
+                },
+              ],
+            },
+          ],
+          'itunes:explicit': 'no',
+          'itunes:author': 'Podcast Author',
+          'itunes:type': 'episodic',
+          'itunes:owner': {
+            'itunes:name': 'Owner Name',
+            'itunes:email': 'owner@example.com',
+          },
         },
       },
     }
