@@ -318,6 +318,8 @@ export const generateXml = (builder: XMLBuilder, value: string): string => {
 }
 
 export const generateRfc822Date: GenerateFunction<string | Date> = (value) => {
+  // This function generates RFC 822 format dates which is also compatible with RFC 2822.
+
   if (typeof value === 'string') {
     // biome-ignore lint/style/noParameterAssign: No explanation.
     value = new Date(value)
