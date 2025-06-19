@@ -271,6 +271,101 @@ describe('generate', () => {
     expect(generate(input)).toEqual(expected)
   })
 
+  it('should generate RSS with media namespace', () => {
+    const input = {
+      title: 'Feed with media namespace',
+      description: 'Test feed with Media RSS namespace',
+      media: {
+        title: {
+          value: 'Feed Media Title',
+          type: 'plain',
+        },
+        description: {
+          value: 'Feed Media Description',
+        },
+        thumbnails: [
+          {
+            url: 'https://example.com/feed-thumb.jpg',
+            width: 200,
+            height: 150,
+          },
+        ],
+      },
+      items: [
+        {
+          title: 'Episode with Media',
+          media: {
+            group: {
+              contents: [
+                {
+                  url: 'https://example.com/video.mp4',
+                  type: 'video/mp4',
+                  medium: 'video',
+                  duration: 120,
+                },
+              ],
+              title: {
+                value: 'Video Title',
+              },
+            },
+            contents: [
+              {
+                url: 'https://example.com/audio.mp3',
+                type: 'audio/mpeg',
+                medium: 'audio',
+                isDefault: true,
+              },
+            ],
+            ratings: [
+              {
+                value: 'nonadult',
+                scheme: 'urn:simple',
+              },
+            ],
+            title: {
+              value: 'Media Item Title',
+              type: 'plain',
+            },
+            keywords: ['video', 'audio', 'content'],
+            thumbnails: [
+              {
+                url: 'https://example.com/thumb.jpg',
+                width: 160,
+                height: 120,
+              },
+            ],
+          },
+        },
+      ],
+    }
+
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>Feed with media namespace</title>
+    <description>Test feed with Media RSS namespace</description>
+    <media:title type="plain">Feed Media Title</media:title>
+    <media:description>Feed Media Description</media:description>
+    <media:thumbnail url="https://example.com/feed-thumb.jpg" height="150" width="200"/>
+    <item>
+      <title>Episode with Media</title>
+      <media:group>
+        <media:content url="https://example.com/video.mp4" type="video/mp4" medium="video" duration="120"/>
+        <media:title>Video Title</media:title>
+      </media:group>
+      <media:content url="https://example.com/audio.mp3" type="audio/mpeg" medium="audio" isDefault="yes"/>
+      <media:rating scheme="urn:simple">nonadult</media:rating>
+      <media:title type="plain">Media Item Title</media:title>
+      <media:keywords>video,audio,content</media:keywords>
+      <media:thumbnail url="https://example.com/thumb.jpg" height="120" width="160"/>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(input)).toEqual(expected)
+  })
+
   it('should generate RSS with content namespace', () => {
     const input = {
       title: 'Feed with content namespace',

@@ -714,6 +714,133 @@ describe('generateItem', () => {
 
     expect(generateItem(value)).toEqual(expected)
   })
+
+  it('should generate item with media namespace properties', () => {
+    const value = {
+      title: 'Item with media namespace',
+      media: {
+        group: {
+          contents: [
+            {
+              url: 'https://example.com/video.mp4',
+              type: 'video/mp4',
+              medium: 'video',
+              duration: 120,
+            },
+          ],
+          title: {
+            value: 'Video Group Title',
+          },
+        },
+        contents: [
+          {
+            url: 'https://example.com/audio.mp3',
+            type: 'audio/mpeg',
+            medium: 'audio',
+            isDefault: true,
+          },
+        ],
+        ratings: [
+          {
+            value: 'nonadult',
+            scheme: 'urn:simple',
+          },
+        ],
+        title: {
+          value: 'Media Item Title',
+          type: 'plain',
+        },
+        description: {
+          value: 'Media item description',
+        },
+        keywords: ['video', 'audio', 'content'],
+        thumbnails: [
+          {
+            url: 'https://example.com/thumb.jpg',
+            width: 160,
+            height: 120,
+          },
+        ],
+        categories: [
+          {
+            name: 'Entertainment',
+            scheme: 'http://example.com/categories',
+          },
+        ],
+        credits: [
+          {
+            value: 'Content Creator',
+            role: 'author',
+          },
+        ],
+        copyright: {
+          value: '2023 Media Corp',
+        },
+      },
+    }
+    const expected = {
+      title: 'Item with media namespace',
+      'media:group': {
+        'media:content': [
+          {
+            '@url': 'https://example.com/video.mp4',
+            '@type': 'video/mp4',
+            '@medium': 'video',
+            '@duration': 120,
+          },
+        ],
+        'media:title': {
+          '#text': 'Video Group Title',
+        },
+      },
+      'media:content': [
+        {
+          '@url': 'https://example.com/audio.mp3',
+          '@type': 'audio/mpeg',
+          '@medium': 'audio',
+          '@isDefault': 'yes',
+        },
+      ],
+      'media:rating': [
+        {
+          '#text': 'nonadult',
+          '@scheme': 'urn:simple',
+        },
+      ],
+      'media:title': {
+        '#text': 'Media Item Title',
+        '@type': 'plain',
+      },
+      'media:description': {
+        '#text': 'Media item description',
+      },
+      'media:keywords': 'video,audio,content',
+      'media:thumbnail': [
+        {
+          '@url': 'https://example.com/thumb.jpg',
+          '@height': 120,
+          '@width': 160,
+        },
+      ],
+      'media:category': [
+        {
+          '#text': 'Entertainment',
+          '@scheme': 'http://example.com/categories',
+        },
+      ],
+      'media:credit': [
+        {
+          '#text': 'Content Creator',
+          '@role': 'author',
+        },
+      ],
+      'media:copyright': {
+        '#text': '2023 Media Corp',
+      },
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -1177,6 +1304,105 @@ describe('generateFeed', () => {
           'podcast:podping': {
             '@usesPodping': true,
           },
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate media namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with media namespace',
+      description: 'A media-rich feed with Media RSS features',
+      media: {
+        title: {
+          value: 'Feed Media Title',
+          type: 'plain',
+        },
+        description: {
+          value: 'Feed Media Description',
+        },
+        keywords: ['media', 'video', 'audio'],
+        thumbnails: [
+          {
+            url: 'https://example.com/feed-thumb.jpg',
+            width: 200,
+            height: 150,
+          },
+        ],
+        categories: [
+          {
+            name: 'Technology/Podcasts',
+            scheme: 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+            label: 'Technology Podcasts',
+          },
+        ],
+        credits: [
+          {
+            value: 'Feed Producer',
+            role: 'producer',
+            scheme: 'urn:ebu',
+          },
+        ],
+        copyright: {
+          value: '2023 Media Feed Corp',
+          url: 'https://example.com/copyright',
+        },
+        ratings: [
+          {
+            value: 'nonadult',
+            scheme: 'urn:simple',
+          },
+        ],
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:media': 'http://search.yahoo.com/mrss/',
+        channel: {
+          title: 'Feed with media namespace',
+          description: 'A media-rich feed with Media RSS features',
+          'media:title': {
+            '#text': 'Feed Media Title',
+            '@type': 'plain',
+          },
+          'media:description': {
+            '#text': 'Feed Media Description',
+          },
+          'media:keywords': 'media,video,audio',
+          'media:thumbnail': [
+            {
+              '@url': 'https://example.com/feed-thumb.jpg',
+              '@height': 150,
+              '@width': 200,
+            },
+          ],
+          'media:category': [
+            {
+              '#text': 'Technology/Podcasts',
+              '@scheme': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+              '@label': 'Technology Podcasts',
+            },
+          ],
+          'media:credit': [
+            {
+              '#text': 'Feed Producer',
+              '@role': 'producer',
+              '@scheme': 'urn:ebu',
+            },
+          ],
+          'media:copyright': {
+            '#text': '2023 Media Feed Corp',
+            '@url': 'https://example.com/copyright',
+          },
+          'media:rating': [
+            {
+              '#text': 'nonadult',
+              '@scheme': 'urn:simple',
+            },
+          ],
         },
       },
     }
