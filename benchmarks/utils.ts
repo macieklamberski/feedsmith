@@ -1,17 +1,21 @@
 import { readdirSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import Benchmark from 'benchmark'
 import { Bench, nToMs } from 'tinybench'
 
 export const loadFeedFiles = (dir: string, limit?: number): Record<string, string> => {
-  const files = readdirSync(dir)
+  const benchmarksDir = dirname(fileURLToPath(import.meta.url))
+  const absoluteDir = join(benchmarksDir, dir)
+
+  const files = readdirSync(absoluteDir)
   const result: Record<string, string> = {}
 
   const validFiles = files.filter((file) => !file.startsWith('.') && file !== 'Thumbs.db')
   const limitedFiles = limit ? validFiles.slice(0, limit) : validFiles
 
   for (const file of limitedFiles) {
-    const filePath = join(dir, file)
+    const filePath = join(absoluteDir, file)
     result[file] = readFileSync(filePath, 'utf-8')
   }
 
