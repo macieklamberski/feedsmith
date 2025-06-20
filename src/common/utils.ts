@@ -331,6 +331,8 @@ export const generateRfc822Date: GenerateFunction<string | Date> = (value) => {
 }
 
 export const generateRfc3339Date: GenerateFunction<string | Date> = (value) => {
+  // This function generates RFC 3339 format dates which is also compatible with W3C-DTF.
+
   if (typeof value === 'string') {
     // biome-ignore lint/style/noParameterAssign: No explanation.
     value = new Date(value)
