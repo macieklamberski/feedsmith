@@ -1,127 +1,161 @@
 import { describe, expect, it } from 'bun:test'
 import { locales } from '../../../common/config.js'
-import type { Feed } from '../common/types.js'
 import { parse } from './index.js'
 
 describe('parse', () => {
-  const validFeedV1 = {
-    version: 'https://jsonfeed.org/version/1',
-    title: 'My Example Feed',
-    home_page_url: 'https://example.com/',
-    feed_url: 'https://example.com/feed.json',
-    author: {
-      name: 'John Doe',
-      url: 'https://example.com/johndoe',
-    },
-    items: [
-      {
-        id: '1',
-        content_html: '<p>Hello world</p>',
-        url: 'https://example.com/post/1',
-        title: 'First post',
-        date_published: '2023-01-01T00:00:00Z',
-      },
-    ],
-    custom_field: 'custom value',
-  }
-  const validFeedV11 = {
-    version: 'https://jsonfeed.org/version/1.1',
-    title: 'My Example Feed',
-    home_page_url: 'https://example.com/',
-    feed_url: 'https://example.com/feed.json',
-    authors: [
-      {
+  it('should parse valid JSON Feed v1', () => {
+    const value = {
+      version: 'https://jsonfeed.org/version/1',
+      title: 'My Example Feed',
+      home_page_url: 'https://example.com/',
+      feed_url: 'https://example.com/feed.json',
+      author: {
         name: 'John Doe',
         url: 'https://example.com/johndoe',
       },
-    ],
-    language: 'en-US',
-    items: [
-      {
-        id: '1',
-        content_html: '<p>Hello world</p>',
-        url: 'https://example.com/post/1',
-        title: 'First post',
-        date_published: '2023-01-01T00:00:00Z',
-        language: 'en-US',
-      },
-    ],
-    custom_field: 'custom value',
-  }
-  const feedWithInvalidLinks = {
-    version: 'https://jsonfeed.org/version/1',
-    title: 'My Example Feed',
-    home_page_url: 'invalid-url',
-    items: [{ id: '1', content_html: '<p>Hello world</p>' }],
-  }
-  const minimalFeed = {
-    version: 'https://jsonfeed.org/version/1',
-    title: 'My Example Feed',
-    items: [{ id: '1', content_html: '<p>Hello world</p>' }],
-  }
-  const minimalFeedCaseInsensitive = {
-    vErsIOn: 'https://jsonfeed.org/version/1',
-    TITLE: 'My Example Feed',
-    items: [{ id: '1', content_HTML: '<p>Hello world</p>' }],
-  }
+      items: [
+        {
+          id: '1',
+          content_html: '<p>Hello world</p>',
+          url: 'https://example.com/post/1',
+          title: 'First post',
+          date_published: '2023-01-01T00:00:00Z',
+        },
+      ],
+      custom_field: 'custom value',
+    }
+    const expected = {
+      title: 'My Example Feed',
+      home_page_url: 'https://example.com/',
+      feed_url: 'https://example.com/feed.json',
+      authors: [
+        {
+          name: 'John Doe',
+          url: 'https://example.com/johndoe',
+        },
+      ],
+      items: [
+        {
+          id: '1',
+          content_html: '<p>Hello world</p>',
+          url: 'https://example.com/post/1',
+          title: 'First post',
+          date_published: '2023-01-01T00:00:00Z',
+        },
+      ],
+    }
 
-  it('should parse valid JSON Feed v1', () => {
-    const result = parse(validFeedV1)
-
-    expect(result).toBeDefined()
-    expect(result?.title).toBe('My Example Feed')
-    expect(result?.authors).toHaveLength(1)
-    expect(result?.authors?.[0].name).toBe('John Doe')
-    expect(result?.items).toHaveLength(1)
-    expect(result?.items?.[0].id).toBe('1')
-    expect(result?.items?.[0].content_html).toBe('<p>Hello world</p>')
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should parse valid JSON Feed v1.1', () => {
-    const result = parse(validFeedV11)
+    const value = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'My Example Feed',
+      home_page_url: 'https://example.com/',
+      feed_url: 'https://example.com/feed.json',
+      authors: [
+        {
+          name: 'John Doe',
+          url: 'https://example.com/johndoe',
+        },
+      ],
+      language: 'en-US',
+      items: [
+        {
+          id: '1',
+          content_html: '<p>Hello world</p>',
+          url: 'https://example.com/post/1',
+          title: 'First post',
+          date_published: '2023-01-01T00:00:00Z',
+          language: 'en-US',
+        },
+      ],
+      custom_field: 'custom value',
+    }
+    const expected = {
+      title: 'My Example Feed',
+      home_page_url: 'https://example.com/',
+      feed_url: 'https://example.com/feed.json',
+      language: 'en-US',
+      authors: [
+        {
+          name: 'John Doe',
+          url: 'https://example.com/johndoe',
+        },
+      ],
+      items: [
+        {
+          id: '1',
+          content_html: '<p>Hello world</p>',
+          url: 'https://example.com/post/1',
+          title: 'First post',
+          date_published: '2023-01-01T00:00:00Z',
+          language: 'en-US',
+        },
+      ],
+    }
 
-    expect(result).toBeDefined()
-    expect(result?.title).toBe('My Example Feed')
-    expect(result?.items).toHaveLength(1)
-    expect(result?.language).toBe('en-US')
-    expect(result?.authors).toHaveLength(1)
-    expect(result?.authors?.[0].name).toBe('John Doe')
-    expect(result?.items).toHaveLength(1)
-    expect(result?.items?.[0].id).toBe('1')
-    expect(result?.items?.[0].content_html).toBe('<p>Hello world</p>')
-  })
-
-  it('should not include unregistered custom fields', () => {
-    const result = parse(validFeedV1)
-
-    // biome-ignore lint/suspicious/noExplicitAny: It's for testing purposes.
-    expect((result as any).custom_field).toBeUndefined()
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should parse feed with invalid URLs', () => {
-    const result = parse(feedWithInvalidLinks)
+    const value = {
+      version: 'https://jsonfeed.org/version/1',
+      title: 'My Example Feed',
+      home_page_url: 'invalid-url',
+      items: [{ id: '1', content_html: '<p>Hello world</p>' }],
+    }
+    const expected = {
+      title: 'My Example Feed',
+      home_page_url: 'invalid-url',
+      items: [
+        {
+          id: '1',
+          content_html: '<p>Hello world</p>',
+        },
+      ],
+    }
 
-    expect(result?.home_page_url).toBe('invalid-url')
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should handle missing optional fields', () => {
-    const result = parse(minimalFeed)
+    const value = {
+      version: 'https://jsonfeed.org/version/1',
+      title: 'My Example Feed',
+      items: [{ id: '1', content_html: '<p>Hello world</p>' }],
+    }
+    const expected = {
+      title: 'My Example Feed',
+      items: [
+        {
+          id: '1',
+          content_html: '<p>Hello world</p>',
+        },
+      ],
+    }
 
-    expect(result).toBeDefined()
-    expect(result?.title).toBe('My Example Feed')
-    expect(result?.home_page_url).toBeUndefined()
-    expect(result?.feed_url).toBeUndefined()
-    expect((result as Feed<string>).authors).toBeUndefined()
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should handle case insensitive fields', () => {
-    const result = parse(minimalFeedCaseInsensitive)
+    const value = {
+      vErsIOn: 'https://jsonfeed.org/version/1',
+      TITLE: 'My Example Feed',
+      items: [{ id: '1', content_HTML: '<p>Hello world</p>' }],
+    }
+    const expected = {
+      title: 'My Example Feed',
+      items: [
+        {
+          id: '1',
+          content_html: '<p>Hello world</p>',
+        },
+      ],
+    }
 
-    expect(result).toBeDefined()
-    expect(result?.title).toBe('My Example Feed')
-    expect(result?.home_page_url).toBeUndefined()
-    expect(result?.feed_url).toBeUndefined()
-    expect((result as Feed<string>).authors).toBeUndefined()
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should throw error for invalid input', () => {

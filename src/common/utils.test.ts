@@ -371,11 +371,10 @@ describe('trimObject', () => {
   it('should handle objects with symbol keys', () => {
     const sym = Symbol('test')
     const input = { a: 1, b: undefined, [sym]: 'symbol value' }
+    const expected = { a: 1 }
 
-    const result = trimObject(input)
-    expect(result?.a).toEqual(1)
-    expect(result?.b).toBeUndefined()
-    expect(result?.[sym]).toBeUndefined() // Symbol keys are not enumerable with for..in.
+    // Symbol keys are not enumerable with for..in, so they won't be included.
+    expect(trimObject(input)).toEqual(expected)
   })
 
   it('should handle complex nested objects', () => {
@@ -402,10 +401,9 @@ describe('trimObject', () => {
         return undefined
       },
     }
-    const result = trimObject(input)
+    const expected = { a: 1 }
 
-    expect(result?.a).toEqual(1)
-    expect(result?.b).toBeUndefined()
+    expect(trimObject(input)).toEqual(expected)
   })
 
   it('should return undefined object when all properties are nullish', () => {

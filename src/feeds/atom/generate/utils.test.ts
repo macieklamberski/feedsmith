@@ -690,15 +690,54 @@ describe('generateFeed', () => {
         },
       ],
     }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        id: 'https://example.com/feed',
+        title: 'Example Feed',
+        updated: '2023-03-15T12:00:00.000Z',
+        subtitle: 'Example feed subtitle',
+        rights: 'Copyright 2023',
+        icon: 'https://example.com/icon.png',
+        logo: 'https://example.com/logo.png',
+        author: [
+          {
+            name: 'John Doe',
+            email: 'john@example.com',
+          },
+        ],
+        category: [
+          {
+            '@term': 'technology',
+            '@label': 'Technology',
+          },
+        ],
+        contributor: [
+          {
+            name: 'Jane Smith',
+          },
+        ],
+        generator: {
+          '#text': 'Example Generator',
+          '@version': '1.0',
+        },
+        link: [
+          {
+            '@href': 'https://example.com/feed.xml',
+            '@rel': 'self',
+          },
+        ],
+        entry: [
+          {
+            id: 'https://example.com/entry/1',
+            title: 'Example Entry',
+            updated: '2023-03-15T12:00:00.000Z',
+          },
+        ],
+      },
+    }
 
-    const result = generateFeed(value)
-
-    expect(result).toHaveProperty('feed')
-    expect(result.feed['@xmlns']).toBe('http://www.w3.org/2005/Atom')
-    expect(result.feed.id).toBe('https://example.com/feed')
-    expect(result.feed.title).toBe('Example Feed')
-    expect(result.feed.updated).toBe('2023-03-15T12:00:00.000Z')
-    expect(result.feed.entry).toHaveLength(1)
+    expect(generateFeed(value)).toEqual(expected)
   })
 
   it('should generate Atom feed with minimal required fields', () => {
