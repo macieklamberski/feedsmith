@@ -1,6 +1,6 @@
-import type { AnyOf, DateLike } from '../../../common/types.js'
+import type { DateLike } from '../../../common/types.js'
 
-export type ItemOrFeed<TDate extends DateLike> = AnyOf<{
+export type ItemOrFeed<TDate extends DateLike> = {
   title?: string
   creator?: string
   subject?: string
@@ -16,4 +16,4 @@ export type ItemOrFeed<TDate extends DateLike> = AnyOf<{
   relation?: string
   coverage?: string
   rights?: string
-}>
+}

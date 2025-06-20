@@ -1,4 +1,4 @@
-import type { AnyOf, DateLike, DeepPartial, Unreliable } from '../../../common/types.js'
+import type { DateLike, DeepPartial, Unreliable } from '../../../common/types.js'
 import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/common/types.js'
 import type { ItemOrFeed as GeoRssItemOrFeed } from '../../../namespaces/georss/common/types.js'
 import type {
@@ -51,7 +51,7 @@ export type Generator = {
   version?: string
 }
 
-export type Source<TDate extends DateLike> = AnyOf<{
+export type Source<TDate extends DateLike> = {
   authors?: Array<Person>
   categories?: Array<Category>
   contributors?: Array<Person>
@@ -64,7 +64,7 @@ export type Source<TDate extends DateLike> = AnyOf<{
   subtitle?: Text
   title?: Text
   updated?: TDate
-}>
+}
 
 export type Entry<TDate extends DateLike> = {
   authors?: Array<Person>

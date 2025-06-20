@@ -1,5 +1,3 @@
-import type { AnyOf } from '../../../common/types.js'
-
 export type Point = {
   lat: number
   lng: number
@@ -18,7 +16,7 @@ export type Box = {
   upperCorner: Point
 }
 
-export type ItemOrFeed = AnyOf<{
+export type ItemOrFeed = {
   point?: Point
   line?: Line
   polygon?: Polygon
@@ -29,4 +27,4 @@ export type ItemOrFeed = AnyOf<{
   elev?: number
   floor?: number
   radius?: number
-}>
+}

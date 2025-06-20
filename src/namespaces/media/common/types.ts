@@ -1,5 +1,3 @@
-import type { AnyOf } from '../../../common/types.js'
-
 export type Rating = {
   value: string
   scheme?: string
@@ -59,23 +57,23 @@ export type Restriction = {
   type?: string
 }
 
-export type Community = AnyOf<{
+export type Community = {
   starRating?: StarRating
   statistics?: Statistics
   tags?: Array<Tag>
-}>
+}
 
-export type StarRating = AnyOf<{
+export type StarRating = {
   average?: number
   count?: number
   min?: number
   max?: number
-}>
+}
 
-export type Statistics = AnyOf<{
+export type Statistics = {
   views?: number
   favorites?: number
-}>
+}
 
 export type Tag = {
   name: string
@@ -99,12 +97,12 @@ export type Status = {
   reason?: string
 }
 
-export type Price = AnyOf<{
+export type Price = {
   type?: string
   info?: string
   price?: number
   currency?: string
-}>
+}
 
 export type License = {
   name?: string
@@ -123,24 +121,24 @@ export type PeerLink = {
   href: string
 }
 
-export type Rights = AnyOf<{
+export type Rights = {
   status?: string
-}>
+}
 
-export type Scene = AnyOf<{
+export type Scene = {
   title?: string
   description?: string
   startTime?: string
   endTime?: string
-}>
+}
 
-export type Location = AnyOf<{
+export type Location = {
   description?: string
   start?: string
   end?: string
   lat?: number
   lng?: number
-}>
+}
 
 export type CommonElements = {
   ratings?: Array<Rating>
@@ -187,15 +185,11 @@ export type Content = {
   lang?: string
 } & CommonElements
 
-export type Group = AnyOf<
-  {
-    contents?: Array<Content>
-  } & CommonElements
->
+export type Group = {
+  contents?: Array<Content>
+} & CommonElements
 
-export type ItemOrFeed = AnyOf<
-  {
-    group?: Group
-    contents?: Array<Content>
-  } & CommonElements
->
+export type ItemOrFeed = {
+  group?: Group
+  contents?: Array<Content>
+} & CommonElements

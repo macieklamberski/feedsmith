@@ -1,4 +1,4 @@
-import type { AnyOf, DateLike } from '../../../common/types.js'
+import type { DateLike } from '../../../common/types.js'
 
 export type BaseItem = {
   transcripts?: Array<Transcript>
@@ -124,9 +124,9 @@ export type ValueRecipient = {
   fee?: boolean
 }
 
-export type Images = AnyOf<{
+export type Images = {
   srcset?: string
-}>
+}
 
 export type LiveItem<TDate extends DateLike> = BaseItem & {
   status: string
@@ -168,9 +168,9 @@ export type RemoteItem = {
   medium?: string
 }
 
-export type Podroll = AnyOf<{
+export type Podroll = {
   remoteItems?: Array<RemoteItem>
-}>
+}
 
 export type UpdateFrequency<TDate extends DateLike> = {
   display: string
@@ -179,9 +179,9 @@ export type UpdateFrequency<TDate extends DateLike> = {
   rrule?: string
 }
 
-export type Podping = AnyOf<{
+export type Podping = {
   usesPodping?: boolean
-}>
+}
 
 export type ValueTimeSplit = {
   startTime: number
@@ -192,9 +192,9 @@ export type ValueTimeSplit = {
   valueRecipients?: Array<ValueRecipient>
 }
 
-export type Item = AnyOf<BaseItem>
+export type Item = BaseItem
 
-export type Feed<TDate extends DateLike> = AnyOf<{
+export type Feed<TDate extends DateLike> = {
   locked?: Locked
   fundings?: Array<Funding>
   persons?: Array<Person>
@@ -212,4 +212,4 @@ export type Feed<TDate extends DateLike> = AnyOf<{
   podroll?: Podroll
   updateFrequency?: UpdateFrequency<TDate>
   podping?: Podping
-}>
+}
