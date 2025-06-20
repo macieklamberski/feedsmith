@@ -18,9 +18,9 @@ describe('createCaseInsensitiveGetter', () => {
     }
     const get = createCaseInsensitiveGetter(value)
 
-    expect(get('title')).toEqual('Example Title')
-    expect(get('author')).toEqual('John Doe')
-    expect(get('CONTENT')).toEqual('Some content here')
+    expect(get('title')).toBe('Example Title')
+    expect(get('author')).toBe('John Doe')
+    expect(get('CONTENT')).toBe('Some content here')
   })
 
   it('should preserve the original value types', () => {
@@ -47,8 +47,8 @@ describe('createCaseInsensitiveGetter', () => {
     }
     const get = createCaseInsensitiveGetter(value)
 
-    expect(get('key')).toEqual('lowercase value')
-    expect(get('KEY')).toEqual('uppercase value')
+    expect(get('key')).toBe('lowercase value')
+    expect(get('KEY')).toBe('uppercase value')
   })
 
   it('should handle non-string key lookups by coercing to string', () => {
@@ -58,8 +58,8 @@ describe('createCaseInsensitiveGetter', () => {
     }
     const get = createCaseInsensitiveGetter(value)
 
-    expect(get('123')).toEqual('numeric key')
-    expect(get('TRUE')).toEqual('boolean key')
+    expect(get('123')).toBe('numeric key')
+    expect(get('TRUE')).toBe('boolean key')
   })
 
   it('should handle special characters in keys', () => {
@@ -70,9 +70,9 @@ describe('createCaseInsensitiveGetter', () => {
     }
     const get = createCaseInsensitiveGetter(value)
 
-    expect(get('special-key')).toEqual('with dash')
-    expect(get('SPECIAL_KEY')).toEqual('with underscore')
-    expect(get('special.key')).toEqual('with dot')
+    expect(get('special-key')).toBe('with dash')
+    expect(get('SPECIAL_KEY')).toBe('with underscore')
+    expect(get('special.key')).toBe('with dot')
   })
 
   it('should handle Unicode characters correctly', () => {
@@ -82,8 +82,8 @@ describe('createCaseInsensitiveGetter', () => {
     }
     const get = createCaseInsensitiveGetter(value)
 
-    expect(get('caféitem')).toEqual('coffee')
-    expect(get('résumé')).toEqual('document')
+    expect(get('caféitem')).toBe('coffee')
+    expect(get('résumé')).toBe('document')
   })
 
   it('should handle multiple lookups on the same getter', () => {
@@ -94,9 +94,9 @@ describe('createCaseInsensitiveGetter', () => {
     }
     const get = createCaseInsensitiveGetter(value)
 
-    expect(get('first')).toEqual('first value')
-    expect(get('SECOND')).toEqual('second value')
-    expect(get('THiRd')).toEqual('third value')
+    expect(get('first')).toBe('first value')
+    expect(get('SECOND')).toBe('second value')
+    expect(get('THiRd')).toBe('third value')
   })
 
   it('should handle undefined values in the object', () => {
@@ -106,7 +106,7 @@ describe('createCaseInsensitiveGetter', () => {
     }
     const get = createCaseInsensitiveGetter(value)
 
-    expect(get('definedkey')).toEqual('defined value')
+    expect(get('definedkey')).toBe('defined value')
     expect(get('undefinedkey')).toBeUndefined()
     // Make sure we can distinguish between non-existent keys and keys with undefined values.
     expect('UndefinedKey' in value).toBe(true)

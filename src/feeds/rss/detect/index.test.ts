@@ -207,9 +207,9 @@ describe('detect', () => {
 
   it('should return false for empty string or non-string value', () => {
     expect(detect('')).toBe(false)
-    expect(detect(undefined)).toEqual(false)
-    expect(detect(null)).toEqual(false)
-    expect(detect([])).toEqual(false)
-    expect(detect({})).toEqual(false)
+    expect(detect(undefined)).toBe(false)
+    expect(detect(null)).toBe(false)
+    expect(detect([])).toBe(false)
+    expect(detect({})).toBe(false)
   })
 })

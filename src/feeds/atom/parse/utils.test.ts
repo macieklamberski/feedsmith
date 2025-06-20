@@ -24,7 +24,7 @@ describe('createNamespaceGetter', () => {
     }
     const get = createNamespaceGetter(value, 'ns:')
 
-    expect(get('key')).toEqual('prefixed value')
+    expect(get('key')).toBe('prefixed value')
   })
 
   it('should handle empty prefix', () => {
@@ -33,7 +33,7 @@ describe('createNamespaceGetter', () => {
     }
     const get = createNamespaceGetter(value, '')
 
-    expect(get('key')).toEqual('value')
+    expect(get('key')).toBe('value')
   })
 
   it('should handle undefined prefix', () => {
@@ -42,7 +42,7 @@ describe('createNamespaceGetter', () => {
     }
     const get = createNamespaceGetter(value, undefined)
 
-    expect(get('key')).toEqual('value')
+    expect(get('key')).toBe('value')
   })
 
   it('should handle complex objects as values', () => {
@@ -74,7 +74,7 @@ describe('createNamespaceGetter', () => {
     }
     const get = createNamespaceGetter(value, 'ns:')
 
-    expect(get('123')).toEqual('numeric key with prefix')
+    expect(get('123')).toBe('numeric key with prefix')
   })
 
   it('should handle various prefix formats', () => {
@@ -88,9 +88,9 @@ describe('createNamespaceGetter', () => {
     const dashGetter = createNamespaceGetter(value, 'namespace-')
     const underscoreGetter = createNamespaceGetter(value, 'namespace_')
 
-    expect(colonGetter('key')).toEqual('value with colon')
-    expect(dashGetter('key')).toEqual('value with dash')
-    expect(underscoreGetter('key')).toEqual('value with underscore')
+    expect(colonGetter('key')).toBe('value with colon')
+    expect(dashGetter('key')).toBe('value with dash')
+    expect(underscoreGetter('key')).toBe('value with underscore')
   })
 
   it('should return undefined when prefixed key does not exist', () => {

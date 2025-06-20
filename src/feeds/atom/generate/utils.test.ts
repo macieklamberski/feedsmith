@@ -15,35 +15,35 @@ describe('createNamespaceSetter', () => {
   it('should return function that adds prefix when prefix is provided', () => {
     const key = createNamespaceSetter('atom:')
 
-    expect(key('title')).toEqual('atom:title')
-    expect(key('link')).toEqual('atom:link')
-    expect(key('updated')).toEqual('atom:updated')
+    expect(key('title')).toBe('atom:title')
+    expect(key('link')).toBe('atom:link')
+    expect(key('updated')).toBe('atom:updated')
   })
 
   it('should return function that returns key unchanged when prefix is undefined', () => {
     const key = createNamespaceSetter(undefined)
 
-    expect(key('title')).toEqual('title')
-    expect(key('link')).toEqual('link')
-    expect(key('updated')).toEqual('updated')
+    expect(key('title')).toBe('title')
+    expect(key('link')).toBe('link')
+    expect(key('updated')).toBe('updated')
   })
 
   it('should return function that returns key unchanged when prefix is empty string', () => {
     const key = createNamespaceSetter('')
 
-    expect(key('title')).toEqual('title')
-    expect(key('link')).toEqual('link')
-    expect(key('updated')).toEqual('updated')
+    expect(key('title')).toBe('title')
+    expect(key('link')).toBe('link')
+    expect(key('updated')).toBe('updated')
   })
 
   it('should handle various key formats correctly', () => {
     const key = createNamespaceSetter('ns:')
 
-    expect(key('simple')).toEqual('ns:simple')
-    expect(key('camelCase')).toEqual('ns:camelCase')
-    expect(key('kebab-case')).toEqual('ns:kebab-case')
-    expect(key('snake_case')).toEqual('ns:snake_case')
-    expect(key('123numeric')).toEqual('ns:123numeric')
+    expect(key('simple')).toBe('ns:simple')
+    expect(key('camelCase')).toBe('ns:camelCase')
+    expect(key('kebab-case')).toBe('ns:kebab-case')
+    expect(key('snake_case')).toBe('ns:snake_case')
+    expect(key('123numeric')).toBe('ns:123numeric')
   })
 })
 
@@ -694,10 +694,10 @@ describe('generateFeed', () => {
     const result = generateFeed(value)
 
     expect(result).toHaveProperty('feed')
-    expect(result.feed['@xmlns']).toEqual('http://www.w3.org/2005/Atom')
-    expect(result.feed.id).toEqual('https://example.com/feed')
-    expect(result.feed.title).toEqual('Example Feed')
-    expect(result.feed.updated).toEqual('2023-03-15T12:00:00.000Z')
+    expect(result.feed['@xmlns']).toBe('http://www.w3.org/2005/Atom')
+    expect(result.feed.id).toBe('https://example.com/feed')
+    expect(result.feed.title).toBe('Example Feed')
+    expect(result.feed.updated).toBe('2023-03-15T12:00:00.000Z')
     expect(result.feed.entry).toHaveLength(1)
   })
 

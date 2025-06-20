@@ -288,73 +288,73 @@ describe('parseExplicit', () => {
   it('should return boolean true', () => {
     const value = true
 
-    expect(parseExplicit(value)).toEqual(true)
+    expect(parseExplicit(value)).toBe(true)
   })
 
   it('should return boolean false', () => {
     const value = false
 
-    expect(parseExplicit(value)).toEqual(false)
+    expect(parseExplicit(value)).toBe(false)
   })
 
   it('should handle true string', () => {
     const value = 'true'
 
-    expect(parseExplicit(value)).toEqual(true)
+    expect(parseExplicit(value)).toBe(true)
   })
 
   it('should handle false string', () => {
     const value = 'false'
 
-    expect(parseExplicit(value)).toEqual(false)
+    expect(parseExplicit(value)).toBe(false)
   })
 
   it('should handle "yes" string as true', () => {
     const value = 'yes'
 
-    expect(parseExplicit(value)).toEqual(true)
+    expect(parseExplicit(value)).toBe(true)
   })
 
   it('should handle case insensitive "yes" string', () => {
     const value = 'YeS'
 
-    expect(parseExplicit(value)).toEqual(true)
+    expect(parseExplicit(value)).toBe(true)
   })
 
   it('should handle "explicit" string as true', () => {
     const value = 'explicit'
 
-    expect(parseExplicit(value)).toEqual(true)
+    expect(parseExplicit(value)).toBe(true)
   })
 
   it('should handle case insensitive "explicit" string', () => {
     const value = 'ExPlIcIt'
 
-    expect(parseExplicit(value)).toEqual(true)
+    expect(parseExplicit(value)).toBe(true)
   })
 
   it('should handle "clean" string as false', () => {
     const value = 'clean'
 
-    expect(parseExplicit(value)).toEqual(false)
+    expect(parseExplicit(value)).toBe(false)
   })
 
   it('should handle "f" string as false', () => {
     const value = 'f'
 
-    expect(parseExplicit(value)).toEqual(false)
+    expect(parseExplicit(value)).toBe(false)
   })
 
   it('should handle other non-true strings as false', () => {
     const value = 'anything'
 
-    expect(parseExplicit(value)).toEqual(false)
+    expect(parseExplicit(value)).toBe(false)
   })
 
   it('should handle empty string as false', () => {
     const value = ''
 
-    expect(parseExplicit(value)).toEqual(false)
+    expect(parseExplicit(value)).toBe(false)
   })
 
   it('should return number as undefined', () => {
