@@ -1367,9 +1367,9 @@ describe('parseSingular', () => {
     const stringResult = parseSingular<string>('test')
     const objectResult = parseSingular<{ id: number }>({ id: 1 })
 
-    expect(typeof numberResult).toBe('number')
-    expect(typeof stringResult).toBe('string')
-    expect(typeof objectResult).toBe('object')
+    expect(numberResult).toBeTypeOf('number')
+    expect(stringResult).toBeTypeOf('string')
+    expect(objectResult).toBeTypeOf('object')
   })
 
   it('should handle null and undefined', () => {
@@ -1415,9 +1415,9 @@ describe('parseSingularOf', () => {
     const stringResult = parseSingularOf<string>(42, parseString)
     const booleanResult = parseSingularOf<boolean>('true', parseBoolean)
 
-    expect(typeof numberResult).toBe('number')
-    expect(typeof stringResult).toBe('string')
-    expect(typeof booleanResult).toBe('boolean')
+    expect(numberResult).toBeTypeOf('number')
+    expect(stringResult).toBeTypeOf('string')
+    expect(booleanResult).toBeTypeOf('boolean')
   })
 
   it('should work with custom parse functions', () => {
