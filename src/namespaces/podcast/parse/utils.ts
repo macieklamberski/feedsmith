@@ -3,6 +3,7 @@ import {
   isObject,
   parseArrayOf,
   parseBoolean,
+  parseDate,
   parseNumber,
   parseSingularOf,
   parseString,
@@ -155,7 +156,7 @@ export const parseTrailer: ParsePartialFunction<Trailer<string>> = (value) => {
   const trailer = {
     display: parseString(retrieveText(value)),
     url: parseString(value['@url']),
-    pubDate: parseString(value['@pubdate']),
+    pubDate: parseDate(value['@pubdate']),
     length: parseNumber(value['@length']),
     type: parseString(value['@type']),
     season: parseNumber(value['@season']),
@@ -276,8 +277,8 @@ export const parseLiveItem: ParsePartialFunction<LiveItem<string>> = (value) => 
   const liveItem = {
     ...retrieveItem(value),
     status: parseString(value['@status']),
-    start: parseString(value['@start']),
-    end: parseString(value['@end']),
+    start: parseDate(value['@start']),
+    end: parseDate(value['@end']),
     contentlinks: parseArrayOf(value['podcast:contentlink'], parseContentLink),
   }
 
@@ -362,7 +363,7 @@ export const parseUpdateFrequency: ParsePartialFunction<UpdateFrequency<string>>
   const updateFrequency = {
     display: parseString(retrieveText(value)),
     complete: parseBoolean(value?.['@complete']),
-    dtstart: parseString(value?.['@dtstart']),
+    dtstart: parseDate(value?.['@dtstart']),
     rrule: parseString(value?.['@rrule']),
   }
 

@@ -1,5 +1,12 @@
 import type { ParsePartialFunction } from '../../../common/types.js'
-import { isObject, parseSingularOf, parseTextString, trimObject } from '../../../common/utils.js'
+import {
+  isObject,
+  parseDate,
+  parseSingularOf,
+  parseTextString,
+  retrieveText,
+  trimObject,
+} from '../../../common/utils.js'
 import type { ItemOrFeed } from '../common/types.js'
 
 export const retrieveItemOrFeed: ParsePartialFunction<ItemOrFeed<string>> = (value) => {
@@ -14,7 +21,7 @@ export const retrieveItemOrFeed: ParsePartialFunction<ItemOrFeed<string>> = (val
     description: parseSingularOf(value['dc:description'], parseTextString),
     publisher: parseSingularOf(value['dc:publisher'], parseTextString),
     contributor: parseSingularOf(value['dc:contributor'], parseTextString),
-    date: parseSingularOf(value['dc:date'], parseTextString),
+    date: parseSingularOf(value['dc:date'], (value) => parseDate(retrieveText(value))),
     type: parseSingularOf(value['dc:type'], parseTextString),
     format: parseSingularOf(value['dc:format'], parseTextString),
     identifier: parseSingularOf(value['dc:identifier'], parseTextString),

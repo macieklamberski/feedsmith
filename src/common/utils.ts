@@ -212,6 +212,13 @@ export const parseYesNoBoolean: ParseExactFunction<boolean> = (value) => {
   }
 }
 
+export const parseDate: ParseExactFunction<string> = (value) => {
+  // This function is currently a placeholder for the actual date parsing functionality
+  // which might be added at some point in the future. Currently it just uses treats
+  // the date as string.
+  return parseString(value)
+}
+
 export const parseArray: ParseExactFunction<Array<Unreliable>> = (value) => {
   if (Array.isArray(value)) {
     return value

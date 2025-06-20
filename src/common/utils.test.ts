@@ -19,6 +19,7 @@ import {
   parseArrayOf,
   parseBoolean,
   parseCsvOf,
+  parseDate,
   parseNumber,
   parseSingular,
   parseSingularOf,
@@ -1313,6 +1314,78 @@ describe('parseYesNoBoolean', () => {
     const value = undefined
 
     expect(parseYesNoBoolean(value)).toBeUndefined()
+  })
+})
+
+describe('parseDate', () => {
+  it('should handle valid date strings', () => {
+    const value = '2023-03-15T12:00:00Z'
+    const expected = '2023-03-15T12:00:00Z'
+
+    expect(parseDate(value)).toBe(expected)
+  })
+
+  it('should handle date strings with entities', () => {
+    const value = '2023-03-15T12:00:00&lt;test&gt;'
+    const expected = '2023-03-15T12:00:00<test>'
+
+    expect(parseDate(value)).toBe(expected)
+  })
+
+  it('should handle date strings wrapped in CDATA', () => {
+    const value = '<![CDATA[2023-03-15T12:00:00Z]]>'
+    const expected = '2023-03-15T12:00:00Z'
+
+    expect(parseDate(value)).toBe(expected)
+  })
+
+  it('should handle number input by converting to string', () => {
+    const value = 1679140800000
+
+    expect(parseDate(value)).toBe('1679140800000')
+  })
+
+  it('should handle empty string', () => {
+    const value = ''
+
+    expect(parseDate(value)).toBe('')
+  })
+
+  it('should handle string with whitespace', () => {
+    const value = '  2023-03-15T12:00:00Z  '
+    const expected = '2023-03-15T12:00:00Z'
+
+    expect(parseDate(value)).toBe(expected)
+  })
+
+  it('should return undefined for arrays', () => {
+    const value = ['2023-03-15T12:00:00Z']
+
+    expect(parseDate(value)).toBeUndefined()
+  })
+
+  it('should return undefined for objects', () => {
+    const value = { date: '2023-03-15T12:00:00Z' }
+
+    expect(parseDate(value)).toBeUndefined()
+  })
+
+  it('should return undefined for boolean', () => {
+    const value = true
+
+    expect(parseDate(value)).toBeUndefined()
+  })
+
+  it('should return undefined for null', () => {
+    const value = null
+
+    expect(parseDate(value)).toBeUndefined()
+  })
+
+  it('should return undefined for undefined', () => {
+    const value = undefined
+
+    expect(parseDate(value)).toBeUndefined()
   })
 })
 

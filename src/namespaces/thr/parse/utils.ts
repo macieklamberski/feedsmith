@@ -2,6 +2,7 @@ import type { ParsePartialFunction } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
+  parseDate,
   parseNumber,
   parseSingularOf,
   parseString,
@@ -32,7 +33,7 @@ export const retrieveLink: ParsePartialFunction<Link<string>> = (value) => {
 
   const link = {
     count: parseNumber(value['@thr:count']),
-    updated: parseString(value['@thr:updated']),
+    updated: parseDate(value['@thr:updated']),
   }
 
   return trimObject(link)
