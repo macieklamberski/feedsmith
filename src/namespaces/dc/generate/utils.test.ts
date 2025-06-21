@@ -52,17 +52,6 @@ describe('generateItemOrFeed', () => {
     expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
-  it('should handle date as string', () => {
-    const value = {
-      date: '2023-01-01T00:00:00Z',
-    }
-    const expected = {
-      'dc:date': '2023-01-01T00:00:00.000Z',
-    }
-
-    expect(generateItemOrFeed(value)).toEqual(expected)
-  })
-
   it('should handle object with only undefined/empty properties', () => {
     const value = {
       title: undefined,

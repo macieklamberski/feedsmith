@@ -684,6 +684,25 @@ describe('generateEntry', () => {
 
     expect(generateEntry(value)).toEqual(expected)
   })
+
+  it('should generate entry with dcterms namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with DCTerms namespace',
+      dcterms: {
+        created: new Date('2023-02-01T00:00:00Z'),
+        license: 'MIT License',
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with DCTerms namespace',
+      'dcterms:created': '2023-02-01T00:00:00.000Z',
+      'dcterms:license': 'MIT License',
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -1188,6 +1207,31 @@ describe('generateFeed', () => {
         updated: '2023-03-15T12:00:00.000Z',
         'georss:point': '45.256 -71.92',
         'georss:featureName': 'Boston',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with dcterms namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with DCTerms namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      dcterms: {
+        created: new Date('2023-01-01T00:00:00Z'),
+        license: 'Creative Commons Attribution 4.0',
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:dcterms': 'http://purl.org/dc/terms/',
+        id: 'https://example.com/feed',
+        title: 'Feed with DCTerms namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        'dcterms:created': '2023-01-01T00:00:00.000Z',
+        'dcterms:license': 'Creative Commons Attribution 4.0',
       },
     }
 

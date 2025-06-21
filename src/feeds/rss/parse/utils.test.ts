@@ -832,6 +832,23 @@ describe('parseItem', () => {
 
     expect(parseItem(value)).toEqual(expected)
   })
+
+  it('should handle dcterms namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      'dcterms:created': { '#text': '2023-02-01T00:00:00Z' },
+      'dcterms:license': { '#text': 'MIT License' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      dcterms: {
+        created: '2023-02-01T00:00:00Z',
+        license: 'MIT License',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
 })
 
 describe('parseFeed', () => {
@@ -1242,6 +1259,25 @@ describe('parseFeed', () => {
       title: 'Example Feed',
       link: 'https://example.com',
       sy: { updateFrequency: 5 },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle dcterms namespace', () => {
+    const value = {
+      title: { '#text': 'Example Feed' },
+      link: { '#text': 'https://example.com' },
+      'dcterms:created': { '#text': '2023-01-01T00:00:00Z' },
+      'dcterms:license': { '#text': 'Creative Commons Attribution 4.0' },
+    }
+    const expected = {
+      title: 'Example Feed',
+      link: 'https://example.com',
+      dcterms: {
+        created: '2023-01-01T00:00:00Z',
+        license: 'Creative Commons Attribution 4.0',
+      },
     }
 
     expect(parseFeed(value)).toEqual(expected)

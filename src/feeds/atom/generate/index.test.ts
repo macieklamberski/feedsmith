@@ -342,6 +342,47 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with dcterms namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with DCTerms namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      dcterms: {
+        created: new Date('2023-01-01T00:00:00Z'),
+        license: 'Creative Commons Attribution 4.0',
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry with DCTerms',
+          updated: new Date('2023-03-15T12:00:00Z'),
+          dcterms: {
+            created: new Date('2023-02-01T00:00:00Z'),
+            license: 'MIT License',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dcterms="http://purl.org/dc/terms/">
+  <id>https://example.com/feed</id>
+  <title>Feed with DCTerms namespace</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <dcterms:created>2023-01-01T00:00:00.000Z</dcterms:created>
+  <dcterms:license>Creative Commons Attribution 4.0</dcterms:license>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry with DCTerms</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
+    <dcterms:created>2023-02-01T00:00:00.000Z</dcterms:created>
+    <dcterms:license>MIT License</dcterms:license>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with sy namespace', () => {
     const value = {
       id: 'https://example.com/feed',

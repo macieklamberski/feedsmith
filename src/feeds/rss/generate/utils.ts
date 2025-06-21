@@ -12,6 +12,7 @@ import {
 } from '../../../namespaces/atom/generate/utils.js'
 import { generateItem as generateContentItem } from '../../../namespaces/content/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
+import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
   generateFeed as generateItunesFeed,
@@ -146,6 +147,7 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
     ...generateContentItem(item.content),
     ...generateAtomEntry(item.atom),
     ...generateDcItemOrFeed(item.dc),
+    ...generateDctermsItemOrFeed(item.dcterms),
     ...generateSlashItem(item.slash),
     ...generateItunesItem(item.itunes),
     ...generatePodcastItem(item.podcast),
@@ -182,6 +184,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     skipDays: generateSkipDays(feed.skipDays),
     ...generateAtomFeed(feed.atom),
     ...generateDcItemOrFeed(feed.dc),
+    ...generateDctermsItemOrFeed(feed.dcterms),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
     ...generatePodcastFeed(feed.podcast),
