@@ -4,10 +4,10 @@ import {
   parseArrayOf,
   parseBoolean,
   parseCsvOf,
-  parseDate,
   parseNumber,
   parseSingularOf,
   parseString,
+  parseTextDate,
   parseTextNumber,
   parseTextString,
   retrieveText,
@@ -47,8 +47,8 @@ export const parseHead: ParsePartialFunction<Head<string>> = (value) => {
 
   const head = {
     title: parseSingularOf(value.title, parseTextString),
-    dateCreated: parseSingularOf(value.datecreated, (value) => parseDate(retrieveText(value))),
-    dateModified: parseSingularOf(value.datemodified, (value) => parseDate(retrieveText(value))),
+    dateCreated: parseSingularOf(value.datecreated, parseTextDate),
+    dateModified: parseSingularOf(value.datemodified, parseTextDate),
     ownerName: parseSingularOf(value.ownername, parseTextString),
     ownerEmail: parseSingularOf(value.owneremail, parseTextString),
     ownerId: parseSingularOf(value.ownerid, parseTextString),
