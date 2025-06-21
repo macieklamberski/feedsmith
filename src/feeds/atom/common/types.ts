@@ -1,5 +1,6 @@
 import type { DateLike, DeepPartial, Unreliable } from '../../../common/types.js'
 import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/common/types.js'
+import type { ItemOrFeed as DctermsItemOrFeed } from '../../../namespaces/dcterms/common/types.js'
 import type { ItemOrFeed as GeoRssItemOrFeed } from '../../../namespaces/georss/common/types.js'
 import type {
   Feed as ItunesFeed,
@@ -80,6 +81,7 @@ export type Entry<TDate extends DateLike> = {
   title: Text
   updated?: TDate
   dc?: DcItemOrFeed<TDate>
+  dcterms?: DctermsItemOrFeed<TDate>
   slash?: SlashItem
   itunes?: ItunesItem
   media?: MediaItemOrFeed
@@ -102,6 +104,7 @@ export type Feed<TDate extends DateLike> = {
   updated: TDate
   entries?: Array<Entry<TDate>>
   dc?: DcItemOrFeed<TDate>
+  dcterms?: DctermsItemOrFeed<TDate>
   sy?: SyFeed<TDate>
   itunes?: ItunesFeed
   media?: MediaItemOrFeed

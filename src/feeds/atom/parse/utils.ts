@@ -12,6 +12,7 @@ import {
   trimObject,
 } from '../../../common/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
+import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
   retrieveFeed as retrieveItunesFeed,
@@ -222,6 +223,7 @@ export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) 
     title: parseSingularOf(get('title'), parseTextString),
     updated: retrieveUpdated(value, options),
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
+    dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     slash: namespaces?.has('slash') ? retrieveSlashItem(value) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesItem(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
@@ -254,6 +256,7 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) =>
     updated: retrieveUpdated(value, options),
     entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options)),
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
+    dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     sy: namespaces?.has('sy') ? retrieveSyFeed(value) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesFeed(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
