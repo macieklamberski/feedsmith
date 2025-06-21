@@ -3,12 +3,11 @@ import {
   detectNamespaces,
   isObject,
   parseArrayOf,
-  parseDate,
   parseNumber,
   parseSingularOf,
   parseString,
+  parseTextDate,
   parseTextString,
-  retrieveText,
   trimObject,
 } from '../../../common/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
@@ -168,9 +167,9 @@ export const retrievePublished: ParsePartialFunction<string> = (value, options) 
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const published = parseSingularOf(get('published'), (value) => parseDate(retrieveText(value))) // Atom 1.0.
-  const issued = parseSingularOf(get('issued'), (value) => parseDate(retrieveText(value))) // Atom 0.3.
-  const created = parseSingularOf(get('created'), (value) => parseDate(retrieveText(value))) // Atom 0.3.
+  const published = parseSingularOf(get('published'), parseTextDate) // Atom 1.0.
+  const issued = parseSingularOf(get('issued'), parseTextDate) // Atom 0.3.
+  const created = parseSingularOf(get('created'), parseTextDate) // Atom 0.3.
 
   // The "created" date is not entirely valid as "published date", but if it's there when
   // no other date is present, it's a good-enough fallback especially that it's not present
@@ -184,8 +183,8 @@ export const retrieveUpdated: ParsePartialFunction<string> = (value, options) =>
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const updated = parseSingularOf(get('updated'), (value) => parseDate(retrieveText(value))) // Atom 1.0.
-  const modified = parseSingularOf(get('modified'), (value) => parseDate(retrieveText(value))) // Atom 0.3.
+  const updated = parseSingularOf(get('updated'), parseTextDate) // Atom 1.0.
+  const modified = parseSingularOf(get('modified'), parseTextDate) // Atom 0.3.
 
   return updated || modified
 }
