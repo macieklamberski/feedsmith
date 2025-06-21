@@ -1,28 +1,18 @@
 import type { ParsePartialFunction } from '../../../common/types.js'
 import {
-  isNonEmptyStringOrNumber,
   isObject,
+  parseCsvOf,
   parseNumber,
   parseSingularOf,
-  parseString,
   parseTextNumber,
   parseTextString,
   retrieveText,
-  trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { HitParade, Item } from '../common/types.js'
 
 export const parseHitParade: ParsePartialFunction<HitParade> = (value) => {
-  if (!isNonEmptyStringOrNumber(value)) {
-    return
-  }
-
-  const hitParade = parseString(value)?.split(',')
-
-  if (hitParade) {
-    return trimArray(hitParade, parseNumber)
-  }
+  return parseCsvOf(value, parseNumber)
 }
 
 export const retrieveItem: ParsePartialFunction<Item> = (value) => {

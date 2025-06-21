@@ -289,7 +289,7 @@ export const parseCsvOf = <T>(
   const items = parseString(value)?.split(',')
 
   if (items) {
-    return trimArray(items, (item) => parse(item) || undefined)
+    return trimArray(items, parse)
   }
 }
 
