@@ -7,6 +7,7 @@ import {
   parseNumber,
   parseSingularOf,
   parseString,
+  parseTextNumber,
   parseTextString,
   parseYesNoBoolean,
   retrieveText,
@@ -102,7 +103,7 @@ export const parseSoundbite: ParsePartialFunction<Soundbite> = (value) => {
   const soundbite = {
     startTime: parseNumber(value['@starttime']),
     duration: parseNumber(value['@duration']),
-    display: parseString(retrieveText(value)),
+    display: parseTextString(value),
   }
 
   return trimObject(soundbite)
@@ -110,7 +111,7 @@ export const parseSoundbite: ParsePartialFunction<Soundbite> = (value) => {
 
 export const parsePerson: ParsePartialFunction<Person> = (value) => {
   const person = {
-    display: parseString(retrieveText(value)),
+    display: parseTextString(value),
     role: parseString(value?.['@role']),
     group: parseString(value?.['@group']),
     img: parseString(value?.['@img']),
@@ -122,7 +123,7 @@ export const parsePerson: ParsePartialFunction<Person> = (value) => {
 
 export const parseLocation: ParsePartialFunction<Location> = (value) => {
   const location = {
-    display: parseString(retrieveText(value)),
+    display: parseTextString(value),
     geo: parseString(value?.['@geo']),
     osm: parseString(value?.['@osm']),
   }
@@ -132,7 +133,7 @@ export const parseLocation: ParsePartialFunction<Location> = (value) => {
 
 export const parseSeason: ParsePartialFunction<Season> = (value) => {
   const season = {
-    number: parseNumber(retrieveText(value)),
+    number: parseTextNumber(value),
     name: parseString(value?.['@name']),
   }
 
@@ -141,7 +142,7 @@ export const parseSeason: ParsePartialFunction<Season> = (value) => {
 
 export const parseEpisode: ParsePartialFunction<Episode> = (value) => {
   const episode = {
-    number: parseNumber(retrieveText(value)),
+    number: parseTextNumber(value),
     display: parseString(value?.['@display']),
   }
 
@@ -154,7 +155,7 @@ export const parseTrailer: ParsePartialFunction<Trailer<string>> = (value) => {
   }
 
   const trailer = {
-    display: parseString(retrieveText(value)),
+    display: parseTextString(value),
     url: parseString(value['@url']),
     pubDate: parseDate(value['@pubdate']),
     length: parseNumber(value['@length']),
@@ -167,7 +168,7 @@ export const parseTrailer: ParsePartialFunction<Trailer<string>> = (value) => {
 
 export const parseLicense: ParsePartialFunction<License> = (value) => {
   const license = {
-    display: parseString(retrieveText(value)),
+    display: parseTextString(value),
     url: parseString(value?.['@url']),
   }
 
@@ -292,7 +293,7 @@ export const parseContentLink: ParsePartialFunction<ContentLink> = (value) => {
 
   const contentLink = {
     href: parseString(value['@href']),
-    display: parseString(retrieveText(value)),
+    display: parseTextString(value),
   }
 
   return trimObject(contentLink)
@@ -325,7 +326,7 @@ export const parseBlock: ParsePartialFunction<Block> = (value) => {
 
 export const parseTxt: ParsePartialFunction<Txt> = (value) => {
   const txt = {
-    display: parseString(retrieveText(value)),
+    display: parseTextString(value),
     purpose: parseString(value?.['@purpose']),
   }
 
@@ -361,7 +362,7 @@ export const parsePodroll: ParsePartialFunction<Podroll> = (value) => {
 
 export const parseUpdateFrequency: ParsePartialFunction<UpdateFrequency<string>> = (value) => {
   const updateFrequency = {
-    display: parseString(retrieveText(value)),
+    display: parseTextString(value),
     complete: parseBoolean(value?.['@complete']),
     dtstart: parseDate(value?.['@dtstart']),
     rrule: parseString(value?.['@rrule']),

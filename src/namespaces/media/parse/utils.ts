@@ -10,7 +10,6 @@ import {
   parseString,
   parseTextString,
   retrieveText,
-  trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type {
@@ -46,7 +45,7 @@ import type {
 
 export const parseRating: ParsePartialFunction<Rating> = (value) => {
   const rating = {
-    value: parseString(retrieveText(value)),
+    value: parseTextString(value),
     scheme: parseString(value?.['@scheme']),
   }
 
@@ -79,7 +78,7 @@ export const retrieveRatings: ParsePartialFunction<Array<Rating>> = (value) => {
 
 export const parseTitleOrDescription: ParsePartialFunction<TitleOrDescription> = (value) => {
   const title = {
-    value: parseString(retrieveText(value)),
+    value: parseTextString(value),
     type: parseString(value?.['@type']),
   }
 
@@ -103,7 +102,7 @@ export const parseThumbnail: ParsePartialFunction<Thumbnail> = (value) => {
 
 export const parseCategory: ParsePartialFunction<Category> = (value) => {
   const category = {
-    name: parseString(retrieveText(value)),
+    name: parseTextString(value),
     scheme: parseString(value?.['@scheme']),
     label: parseString(value?.['@label']),
   }
@@ -113,7 +112,7 @@ export const parseCategory: ParsePartialFunction<Category> = (value) => {
 
 export const parseHash: ParsePartialFunction<Hash> = (value) => {
   const hash = {
-    value: parseString(retrieveText(value)),
+    value: parseTextString(value),
     algo: parseString(value?.['@algo']),
   }
 
@@ -136,7 +135,7 @@ export const parsePlayer: ParsePartialFunction<Player> = (value) => {
 
 export const parseCredit: ParsePartialFunction<Credit> = (value) => {
   const credit = {
-    value: parseString(retrieveText(value)),
+    value: parseTextString(value),
     role: parseString(value?.['@role']),
     scheme: parseString(value?.['@scheme']),
   }
@@ -146,7 +145,7 @@ export const parseCredit: ParsePartialFunction<Credit> = (value) => {
 
 export const parseCopyright: ParsePartialFunction<Copyright> = (value) => {
   const copyright = {
-    value: parseString(retrieveText(value)),
+    value: parseTextString(value),
     url: parseString(value?.['@url']),
   }
 
@@ -155,7 +154,7 @@ export const parseCopyright: ParsePartialFunction<Copyright> = (value) => {
 
 export const parseText: ParsePartialFunction<Text> = (value) => {
   const text = {
-    value: parseString(retrieveText(value)),
+    value: parseTextString(value),
     type: parseString(value?.['@type']),
     lang: parseString(value?.['@lang']),
     start: parseString(value?.['@start']),
@@ -171,7 +170,7 @@ export const parseRestriction: ParsePartialFunction<Restriction> = (value) => {
   }
 
   const restriction = {
-    value: parseString(retrieveText(value)),
+    value: parseTextString(value),
     relationship: parseString(value['@relationship']),
     type: parseString(value['@type']),
   }
@@ -222,22 +221,14 @@ export const parseStatistics: ParsePartialFunction<Statistics> = (value) => {
 }
 
 export const parseTags: ParsePartialFunction<Array<Tag>> = (value) => {
-  if (!isNonEmptyStringOrNumber(value)) {
-    return
-  }
+  return parseCsvOf(value, (segment) => {
+    const split = segment.split(':')
 
-  const segments = parseString(value)?.split(',')
-
-  if (segments) {
-    return trimArray(segments, (segment) => {
-      const split = segment.split(':')
-
-      return {
-        name: parseString(split[0]) ?? '',
-        weight: parseNumber(split[1]) ?? 1,
-      }
-    })
-  }
+    return {
+      name: parseString(split[0]) ?? '',
+      weight: parseNumber(split[1]) ?? 1,
+    }
+  })
 }
 
 export const parseComments: ParsePartialFunction<Array<string>> = (value) => {
@@ -266,7 +257,7 @@ export const parseParam: ParsePartialFunction<Param> = (value) => {
 
   const param = {
     name: parseString(value['@name']),
-    value: parseString(retrieveText(value)),
+    value: parseTextString(value),
   }
 
   return trimObject(param)
@@ -310,7 +301,7 @@ export const parsePrice: ParsePartialFunction<Price> = (value) => {
 
 export const parseLicense: ParsePartialFunction<License> = (value) => {
   const license = {
-    name: parseString(retrieveText(value)),
+    name: parseTextString(value),
     type: parseString(value?.['@type']),
     href: parseString(value?.['@href']),
   }
@@ -380,7 +371,7 @@ export const parseLocation: ParsePartialFunction<Location> = (value) => {
   // For cases where the location is simply a string within the <media:location> tag.
   if (isNonEmptyStringOrNumber(value) || isObject(value)) {
     const location = {
-      description: parseString(retrieveText(value)),
+      description: parseTextString(value),
     }
 
     return trimObject(location)

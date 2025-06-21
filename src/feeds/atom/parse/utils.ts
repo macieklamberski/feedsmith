@@ -129,7 +129,7 @@ export const retrieveGeneratorUri: ParsePartialFunction<string> = (value) => {
 
 export const parseGenerator: ParsePartialFunction<Generator> = (value) => {
   const generator = {
-    text: parseString(retrieveText(value)),
+    text: parseTextString(value),
     uri: retrieveGeneratorUri(value),
     version: parseString(value?.['@version']),
   }

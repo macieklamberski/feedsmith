@@ -52,7 +52,7 @@ export const parsePerson: ParsePartialFunction<Person> = (value) => {
 
 export const parseCategory: ParsePartialFunction<Category> = (value) => {
   const category = {
-    name: parseString(retrieveText(value)),
+    name: parseTextString(value),
     domain: parseString(value?.['@domain']),
   }
 
@@ -131,7 +131,7 @@ export const parseEnclosure: ParsePartialFunction<Enclosure> = (value) => {
 
 export const parseGuid: ParsePartialFunction<Guid> = (value) => {
   const source = {
-    value: parseString(retrieveText(value)),
+    value: parseTextString(value),
     isPermaLink: parseBoolean(value?.['@ispermalink']),
   }
 
@@ -140,7 +140,7 @@ export const parseGuid: ParsePartialFunction<Guid> = (value) => {
 
 export const parseSource: ParsePartialFunction<Source> = (value) => {
   const source = {
-    title: parseString(retrieveText(value)),
+    title: parseTextString(value),
     url: parseString(value?.['@url']),
   }
 
