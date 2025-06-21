@@ -360,6 +360,7 @@ export const generateYesNoBoolean: GenerateFunction<boolean> = (value) => {
 
 export const detectNamespaces = (value: unknown): Set<string> => {
   const namespaces = new Set<string>()
+  const seenKeys = new Set<string>()
 
   const traverse = (current: unknown): void => {
     if (Array.isArray(current)) {
@@ -372,11 +373,17 @@ export const detectNamespaces = (value: unknown): Set<string> => {
 
     if (isObject(current)) {
       for (const key in current) {
-        const keyWithoutAt = key.startsWith('@') ? key.substring(1) : key
+        if (seenKeys.has(key)) {
+          continue
+        }
+
+        seenKeys.add(key)
+
+        const keyWithoutAt = key.startsWith('@') ? key.slice(1) : key
         const colonIndex = keyWithoutAt.indexOf(':')
 
         if (colonIndex > 0) {
-          namespaces.add(keyWithoutAt.substring(0, colonIndex))
+          namespaces.add(keyWithoutAt.slice(0, colonIndex))
         }
 
         traverse(current[key])
