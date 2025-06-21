@@ -678,6 +678,23 @@ describe('generateItem', () => {
 
     expect(generateItem(value)).toEqual(expected)
   })
+
+  it('should generate item with georss namespace properties', () => {
+    const value = {
+      title: 'Item with georss namespace',
+      georss: {
+        point: { lat: 45.256, lng: -71.92 },
+        featureName: 'Boston',
+      },
+    }
+    const expected = {
+      title: 'Item with georss namespace',
+      'georss:point': '45.256 -71.92',
+      'georss:featureName': 'Boston',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -1042,6 +1059,31 @@ describe('generateFeed', () => {
           title: 'Feed with iTunes namespace',
           description: 'A podcast feed with iTunes features',
           'itunes:author': 'Podcast Author',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate georss namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with georss namespace',
+      description: 'A feed with geographic data',
+      georss: {
+        point: { lat: 45.256, lng: -71.92 },
+        featureName: 'Boston',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:georss': 'http://www.georss.org/georss/',
+        channel: {
+          title: 'Feed with georss namespace',
+          description: 'A feed with geographic data',
+          'georss:point': '45.256 -71.92',
+          'georss:featureName': 'Boston',
         },
       },
     }

@@ -571,4 +571,43 @@ describe('generate', () => {
 
     expect(generate(value)).toEqual(expected)
   })
+
+  it('should generate Atom feed with georss namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with GeoRSS namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      georss: {
+        point: { lat: 45.256, lng: -71.92 },
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Location entry',
+          updated: new Date('2023-03-15T12:00:00Z'),
+          georss: {
+            point: { lat: 42.3601, lng: -71.0589 },
+            featureName: 'Boston',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:georss="http://www.georss.org/georss/">
+  <id>https://example.com/feed</id>
+  <title>Feed with GeoRSS namespace</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <georss:point>45.256 -71.92</georss:point>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Location entry</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
+    <georss:point>42.3601 -71.0589</georss:point>
+    <georss:featureName>Boston</georss:featureName>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
 })

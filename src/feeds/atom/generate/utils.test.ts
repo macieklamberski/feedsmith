@@ -665,6 +665,25 @@ describe('generateEntry', () => {
 
     expect(generateEntry(value)).toEqual(expected)
   })
+
+  it('should generate entry with georss namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with georss namespace',
+      georss: {
+        point: { lat: 45.256, lng: -71.92 },
+        featureName: 'Boston',
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with georss namespace',
+      'georss:point': '45.256 -71.92',
+      'georss:featureName': 'Boston',
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -1144,6 +1163,31 @@ describe('generateFeed', () => {
           'itunes:name': 'Owner Name',
           'itunes:email': 'owner@example.com',
         },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with georss namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with georss namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      georss: {
+        point: { lat: 45.256, lng: -71.92 },
+        featureName: 'Boston',
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:georss': 'http://www.georss.org/georss/',
+        id: 'https://example.com/feed',
+        title: 'Feed with georss namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        'georss:point': '45.256 -71.92',
+        'georss:featureName': 'Boston',
       },
     }
 

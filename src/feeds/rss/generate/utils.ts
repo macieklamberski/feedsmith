@@ -12,6 +12,7 @@ import {
 } from '../../../namespaces/atom/generate/utils.js'
 import { generateItem as generateContentItem } from '../../../namespaces/content/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
+import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
   generateFeed as generateItunesFeed,
   generateItem as generateItunesItem,
@@ -149,7 +150,7 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
     ...generateItunesItem(item.itunes),
     ...generatePodcastItem(item.podcast),
     ...generateMediaItemOrFeed(item.media),
-    // TODO: Add support for georss namespace here.
+    ...generateGeoRssItemOrFeed(item.georss),
     ...generateThrItem(item.thr),
   })
 }
@@ -185,7 +186,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     ...generateItunesFeed(feed.itunes),
     ...generatePodcastFeed(feed.podcast),
     ...generateMediaItemOrFeed(feed.media),
-    // TODO: Add support for georss namespace here.
+    ...generateGeoRssItemOrFeed(feed.georss),
     item: trimArray(feed.items?.map(generateItem)),
   })
 

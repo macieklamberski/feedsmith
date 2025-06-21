@@ -7,6 +7,7 @@ import {
   trimObject,
 } from '../../../common/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
+import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
   generateFeed as generateItunesFeed,
   generateItem as generateItunesItem,
@@ -160,7 +161,7 @@ export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => 
     ...generateSlashItem(entry.slash),
     ...generateItunesItem(entry.itunes),
     ...generateMediaItemOrFeed(entry.media),
-    // TODO: Add support for georss namespace here.
+    ...generateGeoRssItemOrFeed(entry.georss),
     ...generateThrItem(entry.thr),
   }
 }
@@ -212,7 +213,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed, options) => {
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
     ...generateMediaItemOrFeed(feed.media),
-    // TODO: Add support for georss namespace here.
+    ...generateGeoRssItemOrFeed(feed.georss),
     ...valueEntries,
   }
 

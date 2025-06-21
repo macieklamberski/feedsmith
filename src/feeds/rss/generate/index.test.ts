@@ -311,4 +311,40 @@ describe('generate', () => {
 
     expect(generate(input)).toEqual(expected)
   })
+
+  it('should generate RSS with georss namespace', () => {
+    const input = {
+      title: 'Feed with georss namespace',
+      description: 'Test feed with GeoRSS namespace',
+      georss: {
+        point: { lat: 45.256, lng: -71.92 },
+      },
+      items: [
+        {
+          title: 'Location item',
+          georss: {
+            point: { lat: 42.3601, lng: -71.0589 },
+            featureName: 'Boston',
+          },
+        },
+      ],
+    }
+
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:georss="http://www.georss.org/georss/">
+  <channel>
+    <title>Feed with georss namespace</title>
+    <description>Test feed with GeoRSS namespace</description>
+    <georss:point>45.256 -71.92</georss:point>
+    <item>
+      <title>Location item</title>
+      <georss:point>42.3601 -71.0589</georss:point>
+      <georss:featureName>Boston</georss:featureName>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(input)).toEqual(expected)
+  })
 })

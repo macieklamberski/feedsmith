@@ -271,7 +271,7 @@ describe('parsePolygon', () => {
   it('should return undefined if there are fewer than 4 points', () => {
     const value = '45.256 -71.92 37.8 -122.41 51.5 -0.12'
 
-    // This is three points, but the function requires at least 4
+    // This is three points, but the function requires at least 4.
     expect(parsePolygon(value)).toBeUndefined()
   })
 
