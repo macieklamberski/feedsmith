@@ -974,26 +974,8 @@ describe('hasEntities', () => {
 })
 
 describe('parseString', () => {
-  it('should handle array', () => {
-    const value = ['javascript', { another: 'typescript' }]
-
-    expect(parseString(value)).toBeUndefined()
-  })
-
-  it('should handle object', () => {
-    const value = { name: 'javascript' }
-
-    expect(parseString(value)).toBeUndefined()
-  })
-
   it('should handle non-empty string', () => {
     const value = 'javascript'
-
-    expect(parseString(value)).toEqual(value)
-  })
-
-  it('should handle empty string', () => {
-    const value = ''
 
     expect(parseString(value)).toEqual(value)
   })
@@ -1082,6 +1064,30 @@ describe('parseString', () => {
     expect(parseString(value)).toBe('420')
   })
 
+  it('should handle empty string', () => {
+    const value = ''
+
+    expect(parseString(value)).toBeUndefined()
+  })
+
+  it('should handle only whitespaces string', () => {
+    const value = '     '
+
+    expect(parseString(value)).toBeUndefined()
+  })
+
+  it('should handle array', () => {
+    const value = ['javascript', { another: 'typescript' }]
+
+    expect(parseString(value)).toBeUndefined()
+  })
+
+  it('should handle object', () => {
+    const value = { name: 'javascript' }
+
+    expect(parseString(value)).toBeUndefined()
+  })
+
   it('should return boolean', () => {
     const value = true
 
@@ -1128,6 +1134,12 @@ describe('parseNumber', () => {
 
   it('should handle empty string', () => {
     const value = ''
+
+    expect(parseNumber(value)).toBeUndefined()
+  })
+
+  it('should handle string with only whitespace', () => {
+    const value = '   '
 
     expect(parseNumber(value)).toBeUndefined()
   })
@@ -1280,10 +1292,16 @@ describe('parseYesNoBoolean', () => {
     expect(parseYesNoBoolean(value)).toBe(false)
   })
 
-  it('should handle empty string as false', () => {
+  it('should handle empty string as undefined', () => {
     const value = ''
 
-    expect(parseYesNoBoolean(value)).toBe(false)
+    expect(parseYesNoBoolean(value)).toBeUndefined()
+  })
+
+  it('should handle string with only whitespace as undefined', () => {
+    const value = '   '
+
+    expect(parseYesNoBoolean(value)).toBeUndefined()
   })
 
   it('should return number as undefined', () => {
@@ -1345,17 +1363,23 @@ describe('parseDate', () => {
     expect(parseDate(value)).toBe('1679140800000')
   })
 
-  it('should handle empty string', () => {
-    const value = ''
-
-    expect(parseDate(value)).toBe('')
-  })
-
   it('should handle string with whitespace', () => {
     const value = '  2023-03-15T12:00:00Z  '
     const expected = '2023-03-15T12:00:00Z'
 
     expect(parseDate(value)).toBe(expected)
+  })
+
+  it('should handle empty string', () => {
+    const value = ''
+
+    expect(parseDate(value)).toBeUndefined()
+  })
+
+  it('should handle string with only whitespace', () => {
+    const value = '   '
+
+    expect(parseDate(value)).toBeUndefined()
   })
 
   it('should return undefined for arrays', () => {
@@ -2475,6 +2499,12 @@ describe('generateString', () => {
 
   it('should handle empty string', () => {
     const value = ''
+
+    expect(generateString(value)).toBeUndefined()
+  })
+
+  it('should handle string with only whitespace', () => {
+    const value = '   '
 
     expect(generateString(value)).toBeUndefined()
   })

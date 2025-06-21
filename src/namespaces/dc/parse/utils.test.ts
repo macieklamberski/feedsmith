@@ -172,9 +172,7 @@ describe('retrieveItemOrFeed', () => {
       'dc:description': { '#text': '' },
     }
     const expected = {
-      title: '',
       creator: 'John Doe',
-      description: '',
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)

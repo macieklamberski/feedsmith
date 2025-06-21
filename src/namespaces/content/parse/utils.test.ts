@@ -108,11 +108,8 @@ describe('retrieveItem', () => {
     const value = {
       'content:encoded': { '#text': '' },
     }
-    const expected = {
-      encoded: '',
-    }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItem(value)).toBeUndefined()
   })
 
   it('should handle null in encoded field', () => {

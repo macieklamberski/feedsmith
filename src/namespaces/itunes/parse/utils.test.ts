@@ -104,7 +104,6 @@ describe('parseCategory', () => {
       'itunes:category': [{ '@text': 'Software' }],
     }
     const expected = {
-      text: '',
       categories: [
         {
           text: 'Software',
@@ -211,7 +210,6 @@ describe('parseOwner', () => {
       'itunes:email': { '#text': 'john@example.com' },
     }
     const expected = {
-      name: '',
       email: 'john@example.com',
     }
 
@@ -490,11 +488,10 @@ describe('parseImage', () => {
     expect(parseImage(value)).toBeUndefined()
   })
 
-  it('should return empty string when @href is empty', () => {
+  it('should return undefined when @href is empty', () => {
     const value = { '@href': '' }
-    const expected = ''
 
-    expect(parseImage(value)).toEqual(expected)
+    expect(parseImage(value)).toBeUndefined()
   })
 
   it('should handle HTML entities in @href', () => {

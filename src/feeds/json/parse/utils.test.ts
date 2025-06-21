@@ -307,8 +307,12 @@ describe('parseAttachment', () => {
       mime_type: 'image/png',
       title: 'Empty URL Image',
     }
+    const expected = {
+      mime_type: 'image/png',
+      title: 'Empty URL Image',
+    }
 
-    expect(parseAttachment(value)).toEqual(value)
+    expect(parseAttachment(value)).toEqual(expected)
   })
 
   it('should handle partial objects (missing url)', () => {
@@ -582,8 +586,13 @@ describe('parseItem', () => {
       url: 'https://example.com/article',
       title: 'Article with empty ID',
     }
+    const expected = {
+      content_text: 'Minimal text content',
+      url: 'https://example.com/article',
+      title: 'Article with empty ID',
+    }
 
-    expect(parseItem(value)).toEqual(value)
+    expect(parseItem(value)).toEqual(expected)
   })
 
   it('should handle invalid author and attachments', () => {

@@ -167,7 +167,7 @@ export const parseString: ParseExactFunction<string> = (value) => {
       string = decodeHTML(string)
     }
 
-    return string
+    return string || undefined
   }
 
   if (typeof value === 'number') {
@@ -180,7 +180,7 @@ export const parseNumber: ParseExactFunction<number> = (value) => {
     return value
   }
 
-  if (typeof value === 'string' && value !== '') {
+  if (isNonEmptyString(value)) {
     const numeric = +value
 
     return Number.isNaN(numeric) ? undefined : numeric
@@ -192,7 +192,7 @@ export const parseBoolean: ParseExactFunction<boolean> = (value) => {
     return value
   }
 
-  if (typeof value === 'string') {
+  if (isNonEmptyString(value)) {
     const lowercased = value.toLowerCase()
 
     if (lowercased === 'true') return true
@@ -207,7 +207,7 @@ export const parseYesNoBoolean: ParseExactFunction<boolean> = (value) => {
     return boolean
   }
 
-  if (typeof value === 'string') {
+  if (isNonEmptyString(value)) {
     return value.toLowerCase() === 'yes'
   }
 }

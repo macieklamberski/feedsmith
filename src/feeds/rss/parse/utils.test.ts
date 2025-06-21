@@ -400,7 +400,7 @@ describe('parseSkipDays', () => {
       day: [{ '#text': 'Monday' }, { '#text': 123 }, { '#text': '' }],
     }
 
-    expect(parseSkipDays(value)).toEqual(['Monday', '123', ''])
+    expect(parseSkipDays(value)).toEqual(['Monday', '123'])
   })
 
   it('should return undefined for non-array day', () => {
