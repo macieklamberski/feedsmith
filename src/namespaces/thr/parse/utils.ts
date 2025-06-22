@@ -6,7 +6,7 @@ import {
   parseNumber,
   parseSingularOf,
   parseString,
-  parseTextNumber,
+  retrieveText,
   trimObject,
 } from '../../../common/utils.js'
 import type { InReplyTo, Item, Link } from '../common/types.js'
@@ -45,7 +45,7 @@ export const retrieveItem: ParsePartialFunction<Item> = (value) => {
   }
 
   const item = {
-    total: parseSingularOf(value['thr:total'], parseTextNumber),
+    total: parseSingularOf(value['thr:total'], (value) => parseNumber(retrieveText(value))),
     inReplyTos: parseArrayOf(value['thr:in-reply-to'], parseInReplyTo),
   }
 

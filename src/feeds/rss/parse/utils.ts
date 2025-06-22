@@ -4,12 +4,11 @@ import {
   isObject,
   parseArrayOf,
   parseBoolean,
+  parseDate,
   parseNumber,
   parseSingularOf,
   parseString,
-  parseTextDate,
-  parseTextNumber,
-  parseTextString,
+  retrieveText,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
@@ -47,12 +46,12 @@ import type {
 } from '../common/types.js'
 
 export const parsePerson: ParsePartialFunction<Person> = (value) => {
-  return parseSingularOf(value?.name ?? value, parseTextString)
+  return parseSingularOf(value?.name ?? value, (value) => parseString(retrieveText(value)))
 }
 
 export const parseCategory: ParsePartialFunction<Category> = (value) => {
   const category = {
-    name: parseTextString(value),
+    name: parseString(retrieveText(value)),
     domain: parseString(value?.['@domain']),
   }
 
@@ -81,12 +80,12 @@ export const parseImage: ParsePartialFunction<Image> = (value) => {
   }
 
   const image = {
-    url: parseSingularOf(value.url, parseTextString),
-    title: parseSingularOf(value.title, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
-    description: parseSingularOf(value.description, parseTextString),
-    height: parseSingularOf(value.height, parseTextNumber),
-    width: parseSingularOf(value.width, parseTextNumber),
+    url: parseSingularOf(value.url, (value) => parseString(retrieveText(value))),
+    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
+    description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
+    height: parseSingularOf(value.height, (value) => parseNumber(retrieveText(value))),
+    width: parseSingularOf(value.width, (value) => parseNumber(retrieveText(value))),
   }
 
   return trimObject(image)
@@ -98,21 +97,21 @@ export const parseTextInput: ParsePartialFunction<TextInput> = (value) => {
   }
 
   const textInput = {
-    title: parseSingularOf(value.title, parseTextString),
-    description: parseSingularOf(value.description, parseTextString),
-    name: parseSingularOf(value.name, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
+    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
+    description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
+    name: parseSingularOf(value.name, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
   }
 
   return trimObject(textInput)
 }
 
 export const parseSkipHours: ParsePartialFunction<Array<number>> = (value) => {
-  return trimArray(value?.hour, parseTextNumber)
+  return trimArray(value?.hour, (value) => parseNumber(retrieveText(value)))
 }
 
 export const parseSkipDays: ParsePartialFunction<Array<string>> = (value) => {
-  return trimArray(value?.day, parseTextString)
+  return trimArray(value?.day, (value) => parseString(retrieveText(value)))
 }
 
 export const parseEnclosure: ParsePartialFunction<Enclosure> = (value) => {
@@ -131,7 +130,7 @@ export const parseEnclosure: ParsePartialFunction<Enclosure> = (value) => {
 
 export const parseGuid: ParsePartialFunction<Guid> = (value) => {
   const source = {
-    value: parseTextString(value),
+    value: parseString(retrieveText(value)),
     isPermaLink: parseBoolean(value?.['@ispermalink']),
   }
 
@@ -140,7 +139,7 @@ export const parseGuid: ParsePartialFunction<Guid> = (value) => {
 
 export const parseSource: ParsePartialFunction<Source> = (value) => {
   const source = {
-    title: parseTextString(value),
+    title: parseString(retrieveText(value)),
     url: parseString(value?.['@url']),
   }
 
@@ -154,15 +153,15 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
 
   const namespaces = detectNamespaces(value)
   const item = {
-    title: parseSingularOf(value.title, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
-    description: parseSingularOf(value.description, parseTextString),
+    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
+    description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
     authors: parseArrayOf(value.author, parsePerson),
     categories: parseArrayOf(value.category, parseCategory),
-    comments: parseSingularOf(value.comments, parseTextString),
+    comments: parseSingularOf(value.comments, (value) => parseString(retrieveText(value))),
     enclosure: parseSingularOf(value.enclosure, parseEnclosure),
     guid: parseSingularOf(value.guid, parseGuid),
-    pubDate: parseSingularOf(value.pubdate, parseTextDate),
+    pubDate: parseSingularOf(value.pubdate, (value) => parseDate(retrieveText(value))),
     source: parseSingularOf(value.source, parseSource),
     content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     atom: namespaces.has('atom') ? retrieveAtomEntry(value) : undefined,
@@ -186,22 +185,22 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
 
   const namespaces = detectNamespaces(value)
   const feed = {
-    title: parseSingularOf(value.title, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
-    description: parseSingularOf(value.description, parseTextString),
-    language: parseSingularOf(value.language, parseTextString),
-    copyright: parseSingularOf(value.copyright, parseTextString),
+    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
+    description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
+    language: parseSingularOf(value.language, (value) => parseString(retrieveText(value))),
+    copyright: parseSingularOf(value.copyright, (value) => parseString(retrieveText(value))),
     managingEditor: parseSingularOf(value.managingeditor, parsePerson),
     webMaster: parseSingularOf(value.webmaster, parsePerson),
-    pubDate: parseSingularOf(value.pubdate, parseTextDate),
-    lastBuildDate: parseSingularOf(value.lastbuilddate, parseTextDate),
+    pubDate: parseSingularOf(value.pubdate, (value) => parseDate(retrieveText(value))),
+    lastBuildDate: parseSingularOf(value.lastbuilddate, (value) => parseDate(retrieveText(value))),
     categories: parseArrayOf(value.category, parseCategory),
-    generator: parseSingularOf(value.generator, parseTextString),
-    docs: parseSingularOf(value.docs, parseTextString),
+    generator: parseSingularOf(value.generator, (value) => parseString(retrieveText(value))),
+    docs: parseSingularOf(value.docs, (value) => parseString(retrieveText(value))),
     cloud: parseSingularOf(value.cloud, parseCloud),
-    ttl: parseSingularOf(value.ttl, parseTextNumber),
+    ttl: parseSingularOf(value.ttl, (value) => parseNumber(retrieveText(value))),
     image: parseSingularOf(value.image, parseImage),
-    rating: parseSingularOf(value.rating, parseTextString),
+    rating: parseSingularOf(value.rating, (value) => parseString(retrieveText(value))),
     textInput: parseSingularOf(value.textinput, parseTextInput),
     skipHours: parseSingularOf(value.skiphours, parseSkipHours),
     skipDays: parseSingularOf(value.skipdays, parseSkipDays),

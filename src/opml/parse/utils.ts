@@ -4,12 +4,10 @@ import {
   parseArrayOf,
   parseBoolean,
   parseCsvOf,
+  parseDate,
   parseNumber,
   parseSingularOf,
   parseString,
-  parseTextDate,
-  parseTextNumber,
-  parseTextString,
   retrieveText,
   trimObject,
 } from '../../common/utils.js'
@@ -46,21 +44,23 @@ export const parseHead: ParsePartialFunction<Head<string>> = (value) => {
   }
 
   const head = {
-    title: parseSingularOf(value.title, parseTextString),
-    dateCreated: parseSingularOf(value.datecreated, parseTextDate),
-    dateModified: parseSingularOf(value.datemodified, parseTextDate),
-    ownerName: parseSingularOf(value.ownername, parseTextString),
-    ownerEmail: parseSingularOf(value.owneremail, parseTextString),
-    ownerId: parseSingularOf(value.ownerid, parseTextString),
-    docs: parseSingularOf(value.docs, parseTextString),
+    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
+    dateCreated: parseSingularOf(value.datecreated, (value) => parseDate(retrieveText(value))),
+    dateModified: parseSingularOf(value.datemodified, (value) => parseDate(retrieveText(value))),
+    ownerName: parseSingularOf(value.ownername, (value) => parseString(retrieveText(value))),
+    ownerEmail: parseSingularOf(value.owneremail, (value) => parseString(retrieveText(value))),
+    ownerId: parseSingularOf(value.ownerid, (value) => parseString(retrieveText(value))),
+    docs: parseSingularOf(value.docs, (value) => parseString(retrieveText(value))),
     expansionState: parseSingularOf(value.expansionstate, (value) =>
       parseCsvOf(retrieveText(value), parseNumber),
     ),
-    vertScrollState: parseSingularOf(value.vertscrollstate, parseTextNumber),
-    windowTop: parseSingularOf(value.windowtop, parseTextNumber),
-    windowLeft: parseSingularOf(value.windowleft, parseTextNumber),
-    windowBottom: parseSingularOf(value.windowbottom, parseTextNumber),
-    windowRight: parseSingularOf(value.windowright, parseTextNumber),
+    vertScrollState: parseSingularOf(value.vertscrollstate, (value) =>
+      parseNumber(retrieveText(value)),
+    ),
+    windowTop: parseSingularOf(value.windowtop, (value) => parseNumber(retrieveText(value))),
+    windowLeft: parseSingularOf(value.windowleft, (value) => parseNumber(retrieveText(value))),
+    windowBottom: parseSingularOf(value.windowbottom, (value) => parseNumber(retrieveText(value))),
+    windowRight: parseSingularOf(value.windowright, (value) => parseNumber(retrieveText(value))),
   }
 
   return trimObject(head)

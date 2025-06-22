@@ -5,7 +5,8 @@ import {
   parseArrayOf,
   parseSingular,
   parseSingularOf,
-  parseTextString,
+  parseString,
+  retrieveText,
   trimObject,
 } from '../../../common/utils.js'
 import {
@@ -27,9 +28,9 @@ export const parseImage: ParsePartialFunction<Image> = (value) => {
   }
 
   const image = {
-    title: parseSingularOf(value.title, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
-    url: parseSingularOf(value.url, parseTextString),
+    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
+    url: parseSingularOf(value.url, (value) => parseString(retrieveText(value))),
   }
 
   return trimObject(image)
@@ -46,10 +47,10 @@ export const parseTextInput: ParsePartialFunction<TextInput> = (value) => {
   }
 
   const textInput = {
-    title: parseSingularOf(value.title, parseTextString),
-    description: parseSingularOf(value.description, parseTextString),
-    name: parseSingularOf(value.name, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
+    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
+    description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
+    name: parseSingularOf(value.name, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
   }
 
   return trimObject(textInput)
@@ -67,9 +68,9 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
 
   const namespaces = detectNamespaces(value)
   const item = {
-    title: parseSingularOf(value.title, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
-    description: parseSingularOf(value.description, parseTextString),
+    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
+    description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
     atom: namespaces.has('atom') || namespaces.has('a10') ? retrieveAtomEntry(value) : undefined,
     content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
@@ -95,9 +96,9 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
   const channel = parseSingular(value.channel)
   const namespaces = detectNamespaces(channel)
   const feed = {
-    title: parseSingularOf(channel?.title, parseTextString),
-    link: parseSingularOf(channel?.link, parseTextString),
-    description: parseSingularOf(channel?.description, parseTextString),
+    title: parseSingularOf(channel?.title, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(channel?.link, (value) => parseString(retrieveText(value))),
+    description: parseSingularOf(channel?.description, (value) => parseString(retrieveText(value))),
     image: retrieveImage(value),
     items: retrieveItems(value),
     textInput: retrieveTextInput(value),

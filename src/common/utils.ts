@@ -304,21 +304,6 @@ export const generateCsvOf = <T>(
   return trimArray(value, generate)?.join()
 }
 
-// TODO: Write tests.
-export const parseTextString: ParseExactFunction<string> = (value) => {
-  return parseString(retrieveText(value))
-}
-
-// TODO: Write tests.
-export const parseTextNumber: ParseExactFunction<number> = (value) => {
-  return parseNumber(retrieveText(value))
-}
-
-// TODO: Write tests.
-export const parseTextDate: ParseExactFunction<string> = (value) => {
-  return parseDate(retrieveText(value))
-}
-
 export const generateXml = (builder: XMLBuilder, value: string): string => {
   let xml = builder.build(value)
 

@@ -1,10 +1,11 @@
 import type { ParsePartialFunction } from '../../../common/types.js'
 import {
   isObject,
+  parseDate,
+  parseNumber,
   parseSingularOf,
-  parseTextDate,
-  parseTextNumber,
-  parseTextString,
+  parseString,
+  retrieveText,
   trimObject,
 } from '../../../common/utils.js'
 import type { Feed } from '../common/types.js'
@@ -15,9 +16,13 @@ export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
   }
 
   const feed = {
-    updatePeriod: parseSingularOf(value['sy:updateperiod'], parseTextString),
-    updateFrequency: parseSingularOf(value['sy:updatefrequency'], parseTextNumber),
-    updateBase: parseSingularOf(value['sy:updatebase'], parseTextDate),
+    updatePeriod: parseSingularOf(value['sy:updateperiod'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    updateFrequency: parseSingularOf(value['sy:updatefrequency'], (value) =>
+      parseNumber(retrieveText(value)),
+    ),
+    updateBase: parseSingularOf(value['sy:updatebase'], (value) => parseDate(retrieveText(value))),
   }
 
   return trimObject(feed)

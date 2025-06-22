@@ -4,8 +4,7 @@ import {
   parseCsvOf,
   parseNumber,
   parseSingularOf,
-  parseTextNumber,
-  parseTextString,
+  parseString,
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
@@ -21,9 +20,11 @@ export const retrieveItem: ParsePartialFunction<Item> = (value) => {
   }
 
   const item = {
-    section: parseSingularOf(value['slash:section'], parseTextString),
-    department: parseSingularOf(value['slash:department'], parseTextString),
-    comments: parseSingularOf(value['slash:comments'], parseTextNumber),
+    section: parseSingularOf(value['slash:section'], (value) => parseString(retrieveText(value))),
+    department: parseSingularOf(value['slash:department'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    comments: parseSingularOf(value['slash:comments'], (value) => parseNumber(retrieveText(value))),
     hit_parade: parseSingularOf(value['slash:hit_parade'], (value) =>
       parseHitParade(retrieveText(value)),
     ),

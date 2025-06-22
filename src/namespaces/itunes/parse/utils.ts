@@ -8,8 +8,6 @@ import {
   parseNumber,
   parseSingularOf,
   parseString,
-  parseTextNumber,
-  parseTextString,
   parseYesNoBoolean,
   retrieveText,
   trimObject,
@@ -35,8 +33,8 @@ export const parseOwner: ParsePartialFunction<Owner> = (value) => {
   }
 
   const owner = {
-    name: parseSingularOf(value['itunes:name'], parseTextString),
-    email: parseSingularOf(value['itunes:email'], parseTextString),
+    name: parseSingularOf(value['itunes:name'], (value) => parseString(retrieveText(value))),
+    email: parseSingularOf(value['itunes:email'], (value) => parseString(retrieveText(value))),
   }
 
   return trimObject(owner)
@@ -104,15 +102,19 @@ export const retrieveItem: ParsePartialFunction<Item> = (value) => {
     explicit: parseSingularOf(value['itunes:explicit'], (value) =>
       parseExplicit(retrieveText(value)),
     ),
-    title: parseSingularOf(value['itunes:title'], parseTextString),
-    episode: parseSingularOf(value['itunes:episode'], parseTextNumber),
-    season: parseSingularOf(value['itunes:season'], parseTextNumber),
-    episodeType: parseSingularOf(value['itunes:episodetype'], parseTextString),
+    title: parseSingularOf(value['itunes:title'], (value) => parseString(retrieveText(value))),
+    episode: parseSingularOf(value['itunes:episode'], (value) => parseNumber(retrieveText(value))),
+    season: parseSingularOf(value['itunes:season'], (value) => parseNumber(retrieveText(value))),
+    episodeType: parseSingularOf(value['itunes:episodetype'], (value) =>
+      parseString(retrieveText(value)),
+    ),
     block: parseSingularOf(value['itunes:block'], (value) =>
       parseYesNoBoolean(retrieveText(value)),
     ),
-    summary: parseSingularOf(value['itunes:summary'], parseTextString),
-    subtitle: parseSingularOf(value['itunes:subtitle'], parseTextString),
+    summary: parseSingularOf(value['itunes:summary'], (value) => parseString(retrieveText(value))),
+    subtitle: parseSingularOf(value['itunes:subtitle'], (value) =>
+      parseString(retrieveText(value)),
+    ),
     keywords: parseSingularOf(value['itunes:keywords'], (value) =>
       parseCsvOf(retrieveText(value), parseString),
     ),
@@ -131,21 +133,27 @@ export const retrieveFeed: ParsePartialFunction<Feed> = (value) => {
     explicit: parseSingularOf(value['itunes:explicit'], (value) =>
       parseExplicit(retrieveText(value)),
     ),
-    author: parseSingularOf(value['itunes:author'], parseTextString),
-    title: parseSingularOf(value['itunes:title'], parseTextString),
-    type: parseSingularOf(value['itunes:type'], parseTextString),
-    newFeedUrl: parseSingularOf(value['itunes:new-feed-url'], parseTextString),
+    author: parseSingularOf(value['itunes:author'], (value) => parseString(retrieveText(value))),
+    title: parseSingularOf(value['itunes:title'], (value) => parseString(retrieveText(value))),
+    type: parseSingularOf(value['itunes:type'], (value) => parseString(retrieveText(value))),
+    newFeedUrl: parseSingularOf(value['itunes:new-feed-url'], (value) =>
+      parseString(retrieveText(value)),
+    ),
     block: parseSingularOf(value['itunes:block'], (value) =>
       parseYesNoBoolean(retrieveText(value)),
     ),
     complete: parseSingularOf(value['itunes:complete'], (value) =>
       parseYesNoBoolean(retrieveText(value)),
     ),
-    applePodcastsVerify: parseSingularOf(value['itunes:applepodcastsverify'], parseTextString),
+    applePodcastsVerify: parseSingularOf(value['itunes:applepodcastsverify'], (value) =>
+      parseString(retrieveText(value)),
+    ),
     categories: parseArrayOf(value['itunes:category'], parseCategory),
     owner: parseSingularOf(value['itunes:owner'], parseOwner),
-    summary: parseSingularOf(value['itunes:summary'], parseTextString),
-    subtitle: parseSingularOf(value['itunes:subtitle'], parseTextString),
+    summary: parseSingularOf(value['itunes:summary'], (value) => parseString(retrieveText(value))),
+    subtitle: parseSingularOf(value['itunes:subtitle'], (value) =>
+      parseString(retrieveText(value)),
+    ),
     keywords: parseSingularOf(value['itunes:keywords'], (value) =>
       parseCsvOf(retrieveText(value), parseString),
     ),

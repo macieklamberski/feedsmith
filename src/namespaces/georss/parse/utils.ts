@@ -6,8 +6,7 @@ import {
   parseArrayOf,
   parseNumber,
   parseSingularOf,
-  parseTextNumber,
-  parseTextString,
+  parseString,
   retrieveText,
   trimObject,
   validateAndTrimObject,
@@ -94,12 +93,18 @@ export const retrieveItemOrFeed: ParsePartialFunction<ItemOrFeed> = (value) => {
     box: parseSingularOf(value['georss:box'], parseBox),
     // TODO: Implement when (or if) GeoRSS-GML and GML namespace are implemented.
     // where: parseSingularOf(value['georss:where'], parseWhere),
-    featureTypeTag: parseSingularOf(value['georss:featuretypetag'], parseTextString),
-    relationshipTag: parseSingularOf(value['georss:relationshiptag'], parseTextString),
-    featureName: parseSingularOf(value['georss:featurename'], parseTextString),
-    elev: parseSingularOf(value['georss:elev'], parseTextNumber),
-    floor: parseSingularOf(value['georss:floor'], parseTextNumber),
-    radius: parseSingularOf(value['georss:radius'], parseTextNumber),
+    featureTypeTag: parseSingularOf(value['georss:featuretypetag'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    relationshipTag: parseSingularOf(value['georss:relationshiptag'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    featureName: parseSingularOf(value['georss:featurename'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    elev: parseSingularOf(value['georss:elev'], (value) => parseNumber(retrieveText(value))),
+    floor: parseSingularOf(value['georss:floor'], (value) => parseNumber(retrieveText(value))),
+    radius: parseSingularOf(value['georss:radius'], (value) => parseNumber(retrieveText(value))),
   }
 
   return trimObject(itemOrFeed)

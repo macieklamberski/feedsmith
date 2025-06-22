@@ -3,11 +3,11 @@ import {
   detectNamespaces,
   isObject,
   parseArrayOf,
+  parseDate,
   parseNumber,
   parseSingularOf,
   parseString,
-  parseTextDate,
-  parseTextString,
+  retrieveText,
   trimObject,
 } from '../../../common/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
@@ -81,8 +81,8 @@ export const retrievePersonUri: ParsePartialFunction<string> = (value, options) 
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const uri = parseSingularOf(get('uri'), parseTextString) // Atom 1.0.
-  const url = parseSingularOf(get('url'), parseTextString) // Atom 0.3.
+  const uri = parseSingularOf(get('uri'), (value) => parseString(retrieveText(value))) // Atom 1.0.
+  const url = parseSingularOf(get('url'), (value) => parseString(retrieveText(value))) // Atom 0.3.
 
   return uri || url
 }
@@ -94,9 +94,9 @@ export const parsePerson: ParsePartialFunction<Person> = (value, options) => {
 
   const get = createNamespaceGetter(value, options?.prefix)
   const person = {
-    name: parseSingularOf(get('name'), parseTextString),
+    name: parseSingularOf(get('name'), (value) => parseString(retrieveText(value))),
     uri: retrievePersonUri(value, options),
-    email: parseSingularOf(get('email'), parseTextString),
+    email: parseSingularOf(get('email'), (value) => parseString(retrieveText(value))),
   }
 
   return trimObject(person)
@@ -129,7 +129,7 @@ export const retrieveGeneratorUri: ParsePartialFunction<string> = (value) => {
 
 export const parseGenerator: ParsePartialFunction<Generator> = (value) => {
   const generator = {
-    text: parseTextString(value),
+    text: parseString(retrieveText(value)),
     uri: retrieveGeneratorUri(value),
     version: parseString(value?.['@version']),
   }
@@ -148,13 +148,13 @@ export const parseSource: ParsePartialFunction<Source<string>> = (value, options
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
     generator: parseSingularOf(get('generator'), parseGenerator),
-    icon: parseSingularOf(get('icon'), parseTextString),
-    id: parseSingularOf(get('id'), parseTextString),
+    icon: parseSingularOf(get('icon'), (value) => parseString(retrieveText(value))),
+    id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
-    logo: parseSingularOf(get('logo'), parseTextString),
-    rights: parseSingularOf(get('rights'), parseTextString),
-    subtitle: parseSingularOf(get('subtitle'), parseTextString),
-    title: parseSingularOf(get('title'), parseTextString),
+    logo: parseSingularOf(get('logo'), (value) => parseString(retrieveText(value))),
+    rights: parseSingularOf(get('rights'), (value) => parseString(retrieveText(value))),
+    subtitle: parseSingularOf(get('subtitle'), (value) => parseString(retrieveText(value))),
+    title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
     updated: retrieveUpdated(value),
   }
 
@@ -167,9 +167,9 @@ export const retrievePublished: ParsePartialFunction<string> = (value, options) 
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const published = parseSingularOf(get('published'), parseTextDate) // Atom 1.0.
-  const issued = parseSingularOf(get('issued'), parseTextDate) // Atom 0.3.
-  const created = parseSingularOf(get('created'), parseTextDate) // Atom 0.3.
+  const published = parseSingularOf(get('published'), (value) => parseDate(retrieveText(value))) // Atom 1.0.
+  const issued = parseSingularOf(get('issued'), (value) => parseDate(retrieveText(value))) // Atom 0.3.
+  const created = parseSingularOf(get('created'), (value) => parseDate(retrieveText(value))) // Atom 0.3.
 
   // The "created" date is not entirely valid as "published date", but if it's there when
   // no other date is present, it's a good-enough fallback especially that it's not present
@@ -183,8 +183,8 @@ export const retrieveUpdated: ParsePartialFunction<string> = (value, options) =>
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const updated = parseSingularOf(get('updated'), parseTextDate) // Atom 1.0.
-  const modified = parseSingularOf(get('modified'), parseTextDate) // Atom 0.3.
+  const updated = parseSingularOf(get('updated'), (value) => parseDate(retrieveText(value))) // Atom 1.0.
+  const modified = parseSingularOf(get('modified'), (value) => parseDate(retrieveText(value))) // Atom 0.3.
 
   return updated || modified
 }
@@ -195,8 +195,8 @@ export const retrieveSubtitle: ParsePartialFunction<string> = (value, options) =
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const subtitle = parseSingularOf(get('subtitle'), parseTextString) // Atom 1.0.
-  const tagline = parseSingularOf(get('tagline'), parseTextString) // Atom 0.3.
+  const subtitle = parseSingularOf(get('subtitle'), (value) => parseString(retrieveText(value))) // Atom 1.0.
+  const tagline = parseSingularOf(get('tagline'), (value) => parseString(retrieveText(value))) // Atom 0.3.
 
   return subtitle || tagline
 }
@@ -211,15 +211,15 @@ export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) 
   const entry = {
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
-    content: parseSingularOf(get('content'), parseTextString),
+    content: parseSingularOf(get('content'), (value) => parseString(retrieveText(value))),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
-    id: parseSingularOf(get('id'), parseTextString),
+    id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
     published: retrievePublished(value, options),
-    rights: parseSingularOf(get('rights'), parseTextString),
+    rights: parseSingularOf(get('rights'), (value) => parseString(retrieveText(value))),
     source: parseSingularOf(get('source'), parseSource),
-    summary: parseSingularOf(get('summary'), parseTextString),
-    title: parseSingularOf(get('title'), parseTextString),
+    summary: parseSingularOf(get('summary'), (value) => parseString(retrieveText(value))),
+    title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
     updated: retrieveUpdated(value, options),
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
     dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
@@ -245,13 +245,13 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) =>
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
     generator: parseSingularOf(get('generator'), parseGenerator),
-    icon: parseSingularOf(get('icon'), parseTextString),
-    id: parseSingularOf(get('id'), parseTextString),
+    icon: parseSingularOf(get('icon'), (value) => parseString(retrieveText(value))),
+    id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
-    logo: parseSingularOf(get('logo'), parseTextString),
-    rights: parseSingularOf(get('rights'), parseTextString),
+    logo: parseSingularOf(get('logo'), (value) => parseString(retrieveText(value))),
+    rights: parseSingularOf(get('rights'), (value) => parseString(retrieveText(value))),
     subtitle: retrieveSubtitle(value, options),
-    title: parseSingularOf(get('title'), parseTextString),
+    title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
     updated: retrieveUpdated(value, options),
     entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options)),
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,

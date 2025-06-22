@@ -7,8 +7,6 @@ import {
   parseNumber,
   parseSingularOf,
   parseString,
-  parseTextNumber,
-  parseTextString,
   parseYesNoBoolean,
   retrieveText,
   trimObject,
@@ -103,7 +101,7 @@ export const parseSoundbite: ParsePartialFunction<Soundbite> = (value) => {
   const soundbite = {
     startTime: parseNumber(value['@starttime']),
     duration: parseNumber(value['@duration']),
-    display: parseTextString(value),
+    display: parseString(retrieveText(value)),
   }
 
   return trimObject(soundbite)
@@ -111,7 +109,7 @@ export const parseSoundbite: ParsePartialFunction<Soundbite> = (value) => {
 
 export const parsePerson: ParsePartialFunction<Person> = (value) => {
   const person = {
-    display: parseTextString(value),
+    display: parseString(retrieveText(value)),
     role: parseString(value?.['@role']),
     group: parseString(value?.['@group']),
     img: parseString(value?.['@img']),
@@ -123,7 +121,7 @@ export const parsePerson: ParsePartialFunction<Person> = (value) => {
 
 export const parseLocation: ParsePartialFunction<Location> = (value) => {
   const location = {
-    display: parseTextString(value),
+    display: parseString(retrieveText(value)),
     geo: parseString(value?.['@geo']),
     osm: parseString(value?.['@osm']),
   }
@@ -133,7 +131,7 @@ export const parseLocation: ParsePartialFunction<Location> = (value) => {
 
 export const parseSeason: ParsePartialFunction<Season> = (value) => {
   const season = {
-    number: parseTextNumber(value),
+    number: parseNumber(retrieveText(value)),
     name: parseString(value?.['@name']),
   }
 
@@ -142,7 +140,7 @@ export const parseSeason: ParsePartialFunction<Season> = (value) => {
 
 export const parseEpisode: ParsePartialFunction<Episode> = (value) => {
   const episode = {
-    number: parseTextNumber(value),
+    number: parseNumber(retrieveText(value)),
     display: parseString(value?.['@display']),
   }
 
@@ -155,7 +153,7 @@ export const parseTrailer: ParsePartialFunction<Trailer<string>> = (value) => {
   }
 
   const trailer = {
-    display: parseTextString(value),
+    display: parseString(retrieveText(value)),
     url: parseString(value['@url']),
     pubDate: parseDate(value['@pubdate']),
     length: parseNumber(value['@length']),
@@ -168,7 +166,7 @@ export const parseTrailer: ParsePartialFunction<Trailer<string>> = (value) => {
 
 export const parseLicense: ParsePartialFunction<License> = (value) => {
   const license = {
-    display: parseTextString(value),
+    display: parseString(retrieveText(value)),
     url: parseString(value?.['@url']),
   }
 
@@ -293,7 +291,7 @@ export const parseContentLink: ParsePartialFunction<ContentLink> = (value) => {
 
   const contentLink = {
     href: parseString(value['@href']),
-    display: parseTextString(value),
+    display: parseString(retrieveText(value)),
   }
 
   return trimObject(contentLink)
@@ -326,7 +324,7 @@ export const parseBlock: ParsePartialFunction<Block> = (value) => {
 
 export const parseTxt: ParsePartialFunction<Txt> = (value) => {
   const txt = {
-    display: parseTextString(value),
+    display: parseString(retrieveText(value)),
     purpose: parseString(value?.['@purpose']),
   }
 
@@ -362,7 +360,7 @@ export const parsePodroll: ParsePartialFunction<Podroll> = (value) => {
 
 export const parseUpdateFrequency: ParsePartialFunction<UpdateFrequency<string>> = (value) => {
   const updateFrequency = {
-    display: parseTextString(value),
+    display: parseString(retrieveText(value)),
     complete: parseBoolean(value?.['@complete']),
     dtstart: parseDate(value?.['@dtstart']),
     rrule: parseString(value?.['@rrule']),
@@ -436,9 +434,9 @@ export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
     location: parseSingularOf(value['podcast:location'], parseLocation),
     trailers: parseArrayOf(value['podcast:trailer'], parseTrailer),
     license: parseSingularOf(value['podcast:license'], parseLicense),
-    guid: parseSingularOf(value['podcast:guid'], parseTextString),
+    guid: parseSingularOf(value['podcast:guid'], (value) => parseString(retrieveText(value))),
     value: parseSingularOf(value['podcast:value'], parseValue),
-    medium: parseSingularOf(value['podcast:medium'], parseTextString),
+    medium: parseSingularOf(value['podcast:medium'], (value) => parseString(retrieveText(value))),
     images: parseSingularOf(value['podcast:images'], parseImages),
     liveItems: parseArrayOf(value['podcast:liveitem'], parseLiveItem),
     blocks: parseArrayOf(value['podcast:block'], parseBlock),
