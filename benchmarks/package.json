@@ -2,9 +2,9 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@extractus/feed-extractor": "^7.1.5",
+    "@extractus/feed-extractor": "^7.1.6",
     "@gaphub/feed": "^5.2.4",
-    "@rowanmanning/feed-parser": "^2.0.2",
+    "@rowanmanning/feed-parser": "^2.1.0",
     "@ulisesgascon/rss-feed-parser": "^1.0.1",
     "benchmark": "^2.1.4",
     "feed-read": "^0.0.1",
@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@types/benchmark": "^2.1.5",
-    "@types/bun": "^1.2.12",
+    "@types/bun": "^1.2.17",
     "@types/feedme": "^2.0.4",
     "@types/feedparser": "^2.2.8",
     "typescript": "^5.8.3"
