@@ -12,6 +12,11 @@
         "creator": "Jack Jackson",
         "date": "2022-01-01T12:00+00:00"
       },
+      "dcterms": {
+        "created": "2023-02-01T00:00:00Z",
+        "license": "MIT License",
+        "subject": "Technology"
+      },
       "slash": {
         "section": "articles",
         "department": "not-an-ocean-unless-there-are-lobsters",
@@ -431,6 +436,11 @@
     "description": "This is an example of description.",
     "contributor": "Jane Smith",
     "date": "2022-01-01T12:00+00:00"
+  },
+  "dcterms": {
+    "created": "2023-01-01T00:00:00Z",
+    "license": "Creative Commons Attribution 4.0",
+    "modified": "2023-06-15T14:30:00Z"
   },
   "sy": {
     "updatePeriod": "hourly",

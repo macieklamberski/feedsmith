@@ -92,6 +92,44 @@ describe('generate', () => {
     expect(generate(input)).toEqual(expected)
   })
 
+  it('should generate RSS with dcterms namespace', () => {
+    const input = {
+      title: 'Feed with dcterms namespace',
+      description: 'Test feed with Dublin Core Terms namespace',
+      dcterms: {
+        created: new Date('2023-01-01T00:00:00Z'),
+        license: 'Creative Commons Attribution 4.0',
+      },
+      items: [
+        {
+          title: 'First item',
+          dcterms: {
+            created: new Date('2023-02-01T00:00:00Z'),
+            license: 'MIT License',
+          },
+        },
+      ],
+    }
+
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dcterms="http://purl.org/dc/terms/">
+  <channel>
+    <title>Feed with dcterms namespace</title>
+    <description>Test feed with Dublin Core Terms namespace</description>
+    <dcterms:created>2023-01-01T00:00:00.000Z</dcterms:created>
+    <dcterms:license>Creative Commons Attribution 4.0</dcterms:license>
+    <item>
+      <title>First item</title>
+      <dcterms:created>2023-02-01T00:00:00.000Z</dcterms:created>
+      <dcterms:license>MIT License</dcterms:license>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(input)).toEqual(expected)
+  })
+
   it('should generate RSS with sy namespace', () => {
     const input = {
       title: 'Feed with sy namespace',

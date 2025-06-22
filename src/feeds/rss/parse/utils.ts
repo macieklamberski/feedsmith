@@ -20,6 +20,7 @@ import {
 } from '../../../namespaces/atom/parse/utils.js'
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
+import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
   retrieveFeed as retrieveItunesFeed,
@@ -167,6 +168,7 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
     content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     atom: namespaces.has('atom') ? retrieveAtomEntry(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesItem(value) : undefined,
     podcast: namespaces.has('podcast') ? retrievePodcastItem(value) : undefined,
@@ -207,6 +209,7 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
     items: parseArrayOf(value.item, parseItem),
     atom: namespaces.has('atom') || namespaces.has('a10') ? retrieveAtomFeed(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     sy: namespaces.has('sy') ? retrieveSyFeed(value) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesFeed(value) : undefined,
     podcast: namespaces.has('podcast') ? retrievePodcastFeed(value) : undefined,

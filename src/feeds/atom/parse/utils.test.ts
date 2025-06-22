@@ -1008,6 +1008,25 @@ describe('parseEntry', () => {
 
     expect(parseEntry(value)).toEqual(expected)
   })
+
+  it('should handle dcterms namespace in entry', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'dcterms:created': { '#text': '2023-02-01T00:00:00Z' },
+      'dcterms:license': { '#text': 'MIT License' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Entry',
+      dcterms: {
+        created: '2023-02-01T00:00:00Z',
+        license: 'MIT License',
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
 })
 
 describe('parseFeed', () => {
@@ -1338,6 +1357,25 @@ describe('parseFeed', () => {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: 'Example Feed',
       sy: { updateFrequency: 5 },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle dcterms namespace in feed', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Feed' },
+      'dcterms:created': { '#text': '2023-01-01T00:00:00Z' },
+      'dcterms:license': { '#text': 'Creative Commons Attribution 4.0' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Feed',
+      dcterms: {
+        created: '2023-01-01T00:00:00Z',
+        license: 'Creative Commons Attribution 4.0',
+      },
     }
 
     expect(parseFeed(value)).toEqual(expected)

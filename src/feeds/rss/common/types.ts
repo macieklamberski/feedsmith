@@ -2,6 +2,7 @@ import type { DateLike } from '../../../common/types.js'
 import type { Entry as AtomEntry, Feed as AtomFeed } from '../../../namespaces/atom/common/types.js'
 import type { Item as ContentItem } from '../../../namespaces/content/common/types.js'
 import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/common/types.js'
+import type { ItemOrFeed as DctermsItemOrFeed } from '../../../namespaces/dcterms/common/types.js'
 import type { ItemOrFeed as GeoRssItemOrFeed } from '../../../namespaces/georss/common/types.js'
 import type {
   Feed as ItunesFeed,
@@ -81,6 +82,7 @@ export type Item<TDate extends DateLike> = {
   content?: ContentItem
   atom?: AtomEntry<TDate>
   dc?: DcItemOrFeed<TDate>
+  dcterms?: DctermsItemOrFeed<TDate>
   slash?: SlashItem
   itunes?: ItunesItem
   podcast?: PodcastItem
@@ -114,6 +116,7 @@ export type Feed<TDate extends DateLike> = {
   items?: Array<Item<TDate>>
   atom?: AtomFeed<TDate>
   dc?: DcItemOrFeed<TDate>
+  dcterms?: DctermsItemOrFeed<TDate>
   sy?: SyFeed<TDate>
   itunes?: ItunesFeed
   podcast?: PodcastFeed<TDate>

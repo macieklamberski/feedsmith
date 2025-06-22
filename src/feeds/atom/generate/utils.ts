@@ -7,6 +7,7 @@ import {
   trimObject,
 } from '../../../common/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
+import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
   generateFeed as generateItunesFeed,
@@ -158,6 +159,7 @@ export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => 
   return {
     ...value,
     ...generateDcItemOrFeed(entry.dc),
+    ...generateDctermsItemOrFeed(entry.dcterms),
     ...generateSlashItem(entry.slash),
     ...generateItunesItem(entry.itunes),
     ...generateMediaItemOrFeed(entry.media),
@@ -210,6 +212,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed, options) => {
   const valueFull = {
     ...valueFeed,
     ...generateDcItemOrFeed(feed.dc),
+    ...generateDctermsItemOrFeed(feed.dcterms),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
     ...generateMediaItemOrFeed(feed.media),

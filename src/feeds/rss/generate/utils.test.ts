@@ -544,6 +544,23 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with dcterms namespace properties', () => {
+    const value = {
+      title: 'Item with DCTerms namespace',
+      dcterms: {
+        created: new Date('2023-02-01T00:00:00Z'),
+        license: 'MIT License',
+      },
+    }
+    const expected = {
+      title: 'Item with DCTerms namespace',
+      'dcterms:created': '2023-02-01T00:00:00.000Z',
+      'dcterms:license': 'MIT License',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should handle empty arrays', () => {
     const value = {
       title: 'Item with empty arrays',
@@ -943,6 +960,31 @@ describe('generateFeed', () => {
           title: 'Feed with dc namespace',
           description: 'Description',
           'dc:creator': 'John Doe',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate dcterms namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with DCTerms namespace',
+      description: 'Description',
+      dcterms: {
+        created: new Date('2023-01-01T00:00:00Z'),
+        license: 'Creative Commons Attribution 4.0',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:dcterms': 'http://purl.org/dc/terms/',
+        channel: {
+          title: 'Feed with DCTerms namespace',
+          description: 'Description',
+          'dcterms:created': '2023-01-01T00:00:00.000Z',
+          'dcterms:license': 'Creative Commons Attribution 4.0',
         },
       },
     }

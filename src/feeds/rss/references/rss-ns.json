@@ -13,6 +13,10 @@
         "creator": "Jack Jackson",
         "date": "2022-01-01T12:00+00:00"
       },
+      "dcterms": {
+        "created": "2022-01-01T12:00+00:00",
+        "license": "Creative Commons Attribution 4.0"
+      },
       "slash": {
         "section": "articles",
         "department": "not-an-ocean-unless-there-are-lobsters",
@@ -597,6 +601,10 @@
     "description": "This is an example of description.",
     "contributor": "Jane Smith",
     "date": "2022-01-01T12:00+00:00"
+  },
+  "dcterms": {
+    "created": "2022-01-01T12:00+00:00",
+    "license": "Creative Commons Attribution 4.0"
   },
   "sy": {
     "updatePeriod": "hourly",
