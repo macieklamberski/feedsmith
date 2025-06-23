@@ -1337,6 +1337,8 @@ describe('parseAlternateEnclosure', () => {
         '@value': '7694f4a66316e53c8cdd9d79c6d6e5152528a9d2de82758bc08b0025a253ac20',
       },
     }
+
+    expect(parseAlternateEnclosure(value)).toEqual(expectedFull)
   })
 
   it('should parse complete alternateEnclosure object (with array of values)', () => {
