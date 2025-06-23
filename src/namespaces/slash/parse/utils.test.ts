@@ -75,7 +75,7 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toEqual(expectedFull)
   })
 
-  it('should parse complete slash namespace item (with array of attributes)', () => {
+  it('should parse complete slash namespace item (with array of values)', () => {
     const value = {
       'slash:section': ['technology', 'computers'],
       'slash:department': ['open-source', 'closed-source'],

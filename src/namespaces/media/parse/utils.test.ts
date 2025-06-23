@@ -60,7 +60,7 @@ const createSimpleArrayParserTests = (
       expect(parserFunction(value)).toEqual(expected)
     })
 
-    it('should return undefined when property is missing', () => {
+    it('should return undefined when required property is missing', () => {
       const value = {
         otherProperty: 'value',
       }
@@ -68,7 +68,7 @@ const createSimpleArrayParserTests = (
       expect(parserFunction(value)).toBeUndefined()
     })
 
-    it('should return undefined for not supported input', () => {
+    it('should return undefined for unsupported input', () => {
       expect(parserFunction('not an object')).toBeUndefined()
       expect(parserFunction(undefined)).toBeUndefined()
       expect(parserFunction(null)).toBeUndefined()
@@ -153,7 +153,7 @@ describe('parseRating', () => {
     expect(parseRating(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseRating(undefined)).toBeUndefined()
     expect(parseRating(null)).toBeUndefined()
     expect(parseRating([])).toBeUndefined()
@@ -297,7 +297,7 @@ describe('retrieveRatings', () => {
     expect(retrieveRatings(value)).toBeUndefined()
   })
 
-  it('should return undefined for non-object inputs', () => {
+  it('should return undefined for non-object input', () => {
     expect(retrieveRatings('not an object')).toBeUndefined()
     expect(retrieveRatings(undefined)).toBeUndefined()
     expect(retrieveRatings(null)).toBeUndefined()
@@ -392,7 +392,7 @@ describe('parseTitleOrDescription', () => {
     expect(parseTitleOrDescription(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseTitleOrDescription(undefined)).toBeUndefined()
     expect(parseTitleOrDescription(null)).toBeUndefined()
     expect(parseTitleOrDescription([])).toBeUndefined()
@@ -506,7 +506,7 @@ describe('parseThumbnail', () => {
     expect(parseThumbnail(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseThumbnail('not an object')).toBeUndefined()
     expect(parseThumbnail(undefined)).toBeUndefined()
     expect(parseThumbnail(null)).toBeUndefined()
@@ -605,7 +605,7 @@ describe('parseCategory', () => {
     expect(parseCategory(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseCategory(undefined)).toBeUndefined()
     expect(parseCategory(null)).toBeUndefined()
     expect(parseCategory([])).toBeUndefined()
@@ -699,7 +699,7 @@ describe('parseHash', () => {
     expect(parseHash(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseHash(undefined)).toBeUndefined()
     expect(parseHash(null)).toBeUndefined()
     expect(parseHash([])).toBeUndefined()
@@ -792,7 +792,7 @@ describe('parsePlayer', () => {
     expect(parsePlayer(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parsePlayer('not an object')).toBeUndefined()
     expect(parsePlayer(undefined)).toBeUndefined()
     expect(parsePlayer(null)).toBeUndefined()
@@ -891,7 +891,7 @@ describe('parseCredit', () => {
     expect(parseCredit(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseCredit(undefined)).toBeUndefined()
     expect(parseCredit(null)).toBeUndefined()
     expect(parseCredit([])).toBeUndefined()
@@ -985,7 +985,7 @@ describe('parseCopyright', () => {
     expect(parseCopyright(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseCopyright(undefined)).toBeUndefined()
     expect(parseCopyright(null)).toBeUndefined()
     expect(parseCopyright([])).toBeUndefined()
@@ -1078,7 +1078,7 @@ describe('parseText', () => {
     expect(parseText(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseText(undefined)).toBeUndefined()
     expect(parseText(null)).toBeUndefined()
     expect(parseText([])).toBeUndefined()
@@ -1164,7 +1164,7 @@ describe('parseRestriction', () => {
     expect(parseRestriction(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseRestriction('not an object')).toBeUndefined()
     expect(parseRestriction(undefined)).toBeUndefined()
     expect(parseRestriction(null)).toBeUndefined()
@@ -1285,7 +1285,7 @@ describe('parseCommunity', () => {
     expect(parseCommunity(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseCommunity('not an object')).toBeUndefined()
     expect(parseCommunity(undefined)).toBeUndefined()
     expect(parseCommunity(null)).toBeUndefined()
@@ -1363,7 +1363,7 @@ describe('parseStarRating', () => {
     expect(parseStarRating(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseStarRating('not an object')).toBeUndefined()
     expect(parseStarRating(undefined)).toBeUndefined()
     expect(parseStarRating(null)).toBeUndefined()
@@ -1429,7 +1429,7 @@ describe('parseStatistics', () => {
     expect(parseStatistics(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseStatistics('not an object')).toBeUndefined()
     expect(parseStatistics(undefined)).toBeUndefined()
     expect(parseStatistics(null)).toBeUndefined()
@@ -1517,7 +1517,7 @@ describe('parseTags', () => {
     expect(parseTags(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseTags(undefined)).toBeUndefined()
     expect(parseTags(null)).toBeUndefined()
     expect(parseTags([])).toBeUndefined()
@@ -1688,7 +1688,7 @@ describe('parseEmbed', () => {
     expect(parseEmbed(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseEmbed('not an object')).toBeUndefined()
     expect(parseEmbed(undefined)).toBeUndefined()
     expect(parseEmbed(null)).toBeUndefined()
@@ -1776,7 +1776,7 @@ describe('parseParam', () => {
     expect(parseParam(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseParam('not an object')).toBeUndefined()
     expect(parseParam(undefined)).toBeUndefined()
     expect(parseParam(null)).toBeUndefined()
@@ -1867,7 +1867,7 @@ describe('parseStatus', () => {
     expect(parseStatus(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseStatus('not an object')).toBeUndefined()
     expect(parseStatus(undefined)).toBeUndefined()
     expect(parseStatus(null)).toBeUndefined()
@@ -1939,7 +1939,7 @@ describe('parsePrice', () => {
     expect(parsePrice(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parsePrice('not an object')).toBeUndefined()
     expect(parsePrice(undefined)).toBeUndefined()
     expect(parsePrice(null)).toBeUndefined()
@@ -2049,7 +2049,7 @@ describe('parseLicense', () => {
     expect(parseLicense(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseLicense(undefined)).toBeUndefined()
     expect(parseLicense(null)).toBeUndefined()
     expect(parseLicense([])).toBeUndefined()
@@ -2140,7 +2140,7 @@ describe('parseSubTitle', () => {
     expect(parseSubTitle(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseSubTitle('not an object')).toBeUndefined()
     expect(parseSubTitle(undefined)).toBeUndefined()
     expect(parseSubTitle(null)).toBeUndefined()
@@ -2226,7 +2226,7 @@ describe('parsePeerLink', () => {
     expect(parsePeerLink(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parsePeerLink('not an object')).toBeUndefined()
     expect(parsePeerLink(undefined)).toBeUndefined()
     expect(parsePeerLink(null)).toBeUndefined()
@@ -2283,7 +2283,7 @@ describe('parseRights', () => {
     expect(parseRights(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseRights('not an object')).toBeUndefined()
     expect(parseRights(undefined)).toBeUndefined()
     expect(parseRights(null)).toBeUndefined()
@@ -2386,7 +2386,7 @@ describe('parseScene', () => {
     expect(parseScene(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseScene('not an object')).toBeUndefined()
     expect(parseScene(undefined)).toBeUndefined()
     expect(parseScene(null)).toBeUndefined()
@@ -2546,7 +2546,7 @@ describe('parseScenes', () => {
     expect(parseScenes(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseScenes('not an object')).toBeUndefined()
     expect(parseScenes(undefined)).toBeUndefined()
     expect(parseScenes(null)).toBeUndefined()
@@ -2575,7 +2575,7 @@ describe('parseLocation', () => {
     expect(parseLocation(value)).toEqual(expected)
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseLocation(undefined)).toBeUndefined()
     expect(parseLocation(null)).toBeUndefined()
     expect(parseLocation([])).toBeUndefined()
@@ -3233,7 +3233,7 @@ describe('retrieveCommonElements', () => {
     expect(retrieveCommonElements({})).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(retrieveCommonElements('not an object')).toBeUndefined()
     expect(retrieveCommonElements(undefined)).toBeUndefined()
     expect(retrieveCommonElements(null)).toBeUndefined()
@@ -3375,7 +3375,7 @@ describe('parseContent', () => {
     expect(parseContent({})).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseContent('not an object')).toBeUndefined()
     expect(parseContent(undefined)).toBeUndefined()
     expect(parseContent(null)).toBeUndefined()
@@ -3527,7 +3527,7 @@ describe('parseGroup', () => {
     expect(parseGroup({})).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseGroup('not an object')).toBeUndefined()
     expect(parseGroup(undefined)).toBeUndefined()
     expect(parseGroup(null)).toBeUndefined()
@@ -3692,7 +3692,7 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed({})).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(retrieveItemOrFeed('not an object')).toBeUndefined()
     expect(retrieveItemOrFeed(undefined)).toBeUndefined()
     expect(retrieveItemOrFeed(null)).toBeUndefined()

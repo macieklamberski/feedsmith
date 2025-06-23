@@ -72,7 +72,7 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toBeUndefined()
   })
 
-  it('should return undefined for non-object value', () => {
+  it('should return undefined for non-object input', () => {
     expect(retrieveItem('not an object')).toBeUndefined()
     expect(retrieveItem(undefined)).toBeUndefined()
     expect(retrieveItem(null)).toBeUndefined()

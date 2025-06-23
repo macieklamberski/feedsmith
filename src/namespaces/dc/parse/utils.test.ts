@@ -135,7 +135,7 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(value)).toBeUndefined()
   })
 
-  it('should return undefined for non-object value', () => {
+  it('should return undefined for non-object input', () => {
     expect(retrieveItemOrFeed('not an object')).toBeUndefined()
     expect(retrieveItemOrFeed(undefined)).toBeUndefined()
     expect(retrieveItemOrFeed(null)).toBeUndefined()

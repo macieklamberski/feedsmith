@@ -218,7 +218,7 @@ describe('parseHead', () => {
     expect(parseHead(value)).toBeUndefined()
   })
 
-  it('should return undefined for non-object value', () => {
+  it('should return undefined for non-object input', () => {
     expect(parseHead('not an object')).toBeUndefined()
     expect(parseHead(undefined)).toBeUndefined()
     expect(parseHead(null)).toBeUndefined()
@@ -293,7 +293,7 @@ describe('parseBody', () => {
     expect(parseBody(value)).toEqual(expected)
   })
 
-  it('should return undefined for non-object value', () => {
+  it('should return undefined for non-object input', () => {
     expect(parseBody('not an object')).toBeUndefined()
     expect(parseBody(undefined)).toBeUndefined()
     expect(parseBody(null)).toBeUndefined()
@@ -455,7 +455,7 @@ describe('parseOpml', () => {
     expect(parseOpml(value)).toBeUndefined()
   })
 
-  it('should return undefined for non-object value', () => {
+  it('should return undefined for non-object input', () => {
     expect(parseOpml('not an object')).toBeUndefined()
     expect(parseOpml(undefined)).toBeUndefined()
     expect(parseOpml(null)).toBeUndefined()

@@ -1100,7 +1100,7 @@ describe('parseString', () => {
     expect(parseString(value)).toBeUndefined()
   })
 
-  it('should return undefined', () => {
+  it('should return undefined for undefined input', () => {
     const value = undefined
 
     expect(parseString(value)).toBeUndefined()
@@ -1162,7 +1162,7 @@ describe('parseNumber', () => {
     expect(parseNumber(value)).toBeUndefined()
   })
 
-  it('should return undefined', () => {
+  it('should return undefined for undefined input', () => {
     const value = undefined
 
     expect(parseNumber(value)).toBeUndefined()
@@ -1230,7 +1230,7 @@ describe('parseBoolean', () => {
     expect(parseBoolean(value)).toBeUndefined()
   })
 
-  it('should return undefined', () => {
+  it('should return undefined for undefined input', () => {
     const value = undefined
 
     expect(parseBoolean(value)).toBeUndefined()
@@ -1652,7 +1652,7 @@ describe('parseArrayOf', () => {
     expect(parseArrayOf(value, parser)).toBeUndefined()
   })
 
-  it('should return undefined', () => {
+  it('should return undefined for undefined input', () => {
     const value = undefined
 
     expect(parseArrayOf(value, parser)).toBeUndefined()
@@ -2442,7 +2442,7 @@ describe('generateNamespaceAttrs', () => {
     expect(generateNamespaceAttrs({})).toBeUndefined()
   })
 
-  it('should return undefined for non-object inputs', () => {
+  it('should return undefined for non-object input', () => {
     expect(generateNamespaceAttrs(null)).toBeUndefined()
     expect(generateNamespaceAttrs(undefined)).toBeUndefined()
     expect(generateNamespaceAttrs('string')).toBeUndefined()

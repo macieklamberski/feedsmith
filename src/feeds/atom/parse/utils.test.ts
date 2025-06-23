@@ -248,7 +248,7 @@ describe('parsePerson', () => {
     expect(parsePerson(value)).toEqual(expectedFull)
   })
 
-  it('should parse complete person object (Atom 1.0) (with list of values)', () => {
+  it('should parse complete person object (Atom 1.0) (with array of values)', () => {
     const value = {
       name: ['John Doe', 'Jane Smith'],
       uri: ['https://example.com/johndoe', 'https://example.com/janesmith'],
@@ -270,29 +270,19 @@ describe('parsePerson', () => {
 
   it('should parse complete person object (Atom 0.3) (without #text)', () => {
     const value = {
+      name: 'John Doe',
+      url: 'https://example.com/johndoe',
+      email: 'john@example.com',
+    }
+
+    expect(parsePerson(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete person object (Atom 0.3) (with array of values)', () => {
+    const value = {
       name: ['John Doe', 'Jane Smith'],
       url: ['https://example.com/johndoe', 'https://example.com/janesmith'],
       email: ['john@example.com', 'jane@example.com'],
-    }
-
-    expect(parsePerson(value)).toEqual(expectedFull)
-  })
-
-  it('should parse complete person object (Atom 0.3) (with list of values)', () => {
-    const value = {
-      name: 'John Doe',
-      url: 'https://example.com/johndoe',
-      email: 'john@example.com',
-    }
-
-    expect(parsePerson(value)).toEqual(expectedFull)
-  })
-
-  it('should parse complete person object (Atom 0.3) (without #text)', () => {
-    const value = {
-      name: 'John Doe',
-      url: 'https://example.com/johndoe',
-      email: 'john@example.com',
     }
 
     expect(parsePerson(value)).toEqual(expectedFull)

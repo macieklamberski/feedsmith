@@ -200,7 +200,7 @@ describe('parseAuthor', () => {
     expect(parseAuthor(value)).toBeUndefined()
   })
 
-  it('should return undefined', () => {
+  it('should return undefined for undefined input', () => {
     const value = undefined
 
     expect(parseAuthor(value)).toBeUndefined()
@@ -750,7 +750,7 @@ describe('parseHub', () => {
     expect(parseHub(value)).toBeUndefined()
   })
 
-  it('should return undefined', () => {
+  it('should return undefined for undefined input', () => {
     const value = undefined
 
     expect(parseHub(value)).toBeUndefined()

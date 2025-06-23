@@ -571,7 +571,7 @@ describe('retrieveItems', () => {
     expect(retrieveItems(value)).toEqual(expected)
   })
 
-  it('should return undefined when item property is missing', () => {
+  it('should return undefined when required property is missing', () => {
     const value = {
       someOtherProperty: {},
     }

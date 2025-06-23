@@ -84,7 +84,7 @@ describe('parseLatLngPairs', () => {
     expect(parseLatLngPairs(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseLatLngPairs(undefined)).toBeUndefined()
     expect(parseLatLngPairs(null)).toBeUndefined()
     expect(parseLatLngPairs({})).toBeUndefined()
@@ -139,7 +139,7 @@ describe('parsePoint', () => {
     expect(parsePoint(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parsePoint(3)).toBeUndefined()
     expect(parsePoint(undefined)).toBeUndefined()
     expect(parsePoint(null)).toBeUndefined()
@@ -210,7 +210,7 @@ describe('parseLine', () => {
     expect(parseLine(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseLine(undefined)).toBeUndefined()
     expect(parseLine(null)).toBeUndefined()
     expect(parseLine({})).toBeUndefined()
@@ -287,7 +287,7 @@ describe('parsePolygon', () => {
     expect(parsePolygon(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parsePolygon(undefined)).toBeUndefined()
     expect(parsePolygon(null)).toBeUndefined()
     expect(parsePolygon({})).toBeUndefined()
@@ -350,7 +350,7 @@ describe('parseBox', () => {
     expect(parseBox(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseBox(undefined)).toBeUndefined()
     expect(parseBox(null)).toBeUndefined()
     expect(parseBox({})).toBeUndefined()
@@ -572,7 +572,7 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(retrieveItemOrFeed('not an object')).toBeUndefined()
     expect(retrieveItemOrFeed(undefined)).toBeUndefined()
     expect(retrieveItemOrFeed(null)).toBeUndefined()

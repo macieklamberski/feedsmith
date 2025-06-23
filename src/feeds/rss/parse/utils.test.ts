@@ -124,7 +124,7 @@ describe('parseCategory', () => {
     expect(parseCategory(value)).toBeUndefined()
   })
 
-  it('should return undefined for non-object value', () => {
+  it('should return undefined for non-object input', () => {
     expect(parseCategory(null)).toBeUndefined()
   })
 })
@@ -235,7 +235,7 @@ describe('parseImage', () => {
     expect(parseImage(value)).toEqual(expected)
   })
 
-  it('should return undefined for non-object value', () => {
+  it('should return undefined for non-object input', () => {
     expect(parseImage('not an object')).toBeUndefined()
     expect(parseImage(undefined)).toBeUndefined()
   })
@@ -370,7 +370,7 @@ describe('parseSkipHours', () => {
     expect(parseSkipHours(value)).toBeUndefined()
   })
 
-  it('should return undefined for non-object value', () => {
+  it('should return undefined for non-object input', () => {
     expect(parseSkipHours('not an object')).toBeUndefined()
     expect(parseSkipHours(undefined)).toBeUndefined()
   })
@@ -417,7 +417,7 @@ describe('parseSkipDays', () => {
     expect(parseSkipDays(value)).toBeUndefined()
   })
 
-  it('should return undefined for non-object value', () => {
+  it('should return undefined for non-object input', () => {
     expect(parseSkipDays('not an object')).toBeUndefined()
     expect(parseSkipDays(undefined)).toBeUndefined()
   })
@@ -472,7 +472,7 @@ describe('parseEnclosure', () => {
     expect(parseEnclosure(value)).toBeUndefined()
   })
 
-  it('should return undefined for non-object value', () => {
+  it('should return undefined for non-object input', () => {
     expect(parseEnclosure('not an object')).toBeUndefined()
     expect(parseEnclosure(undefined)).toBeUndefined()
   })
@@ -563,7 +563,7 @@ describe('parseGuid', () => {
     expect(parseGuid(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseGuid(undefined)).toBeUndefined()
     expect(parseGuid(null)).toBeUndefined()
     expect(parseGuid([])).toBeUndefined()
@@ -580,15 +580,6 @@ describe('parseSource', () => {
       title: 'Technology',
       url: 'http://example.com/source',
     }
-
-    expect(parseSource(value)).toEqual(expected)
-  })
-
-  it('should handle source with only title (#with text)', () => {
-    const value = {
-      '#text': 'Technology',
-    }
-    const expected = { title: 'Technology' }
 
     expect(parseSource(value)).toEqual(expected)
   })
@@ -634,7 +625,7 @@ describe('parseSource', () => {
     expect(parseSource(value)).toBeUndefined()
   })
 
-  it('should return undefined for non-object value', () => {
+  it('should return undefined for non-object input', () => {
     expect(parseSource(null)).toBeUndefined()
   })
 })

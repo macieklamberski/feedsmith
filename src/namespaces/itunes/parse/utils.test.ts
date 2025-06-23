@@ -193,7 +193,7 @@ describe('parseOwner', () => {
     expect(parseOwner(value)).toEqual(expected)
   })
 
-  it('should return owner when name is missing', () => {
+  it('should return owner with only email when name is missing', () => {
     const value = {
       'itunes:email': { '#text': 'john@example.com' },
     }
@@ -271,7 +271,7 @@ describe('parseOwner', () => {
     expect(parseOwner(value)).toBeUndefined()
   })
 
-  it('should return undefined for non-object inputs', () => {
+  it('should return undefined for non-object input', () => {
     expect(parseOwner(null)).toBeUndefined()
     expect(parseOwner(undefined)).toBeUndefined()
     expect(parseOwner('string')).toBeUndefined()
@@ -520,7 +520,7 @@ describe('parseImage', () => {
     expect(parseImage({ '@href': undefined })).toBeUndefined()
   })
 
-  it('should return undefined for not supported inputs', () => {
+  it('should return undefined for non-object input', () => {
     expect(parseImage(null)).toBeUndefined()
     expect(parseImage(undefined)).toBeUndefined()
     expect(parseImage(true)).toBeUndefined()
@@ -733,7 +733,7 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toBeUndefined()
   })
 
-  it('should return undefined for non-object inputs', () => {
+  it('should return undefined for non-object input', () => {
     expect(retrieveItem(null)).toBeUndefined()
     expect(retrieveItem(undefined)).toBeUndefined()
     expect(retrieveItem('string')).toBeUndefined()
@@ -1061,7 +1061,7 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toBeUndefined()
   })
 
-  it('should return undefined for non-object inputs', () => {
+  it('should return undefined for non-object input', () => {
     expect(retrieveFeed(null)).toBeUndefined()
     expect(retrieveFeed(undefined)).toBeUndefined()
     expect(retrieveFeed('string')).toBeUndefined()

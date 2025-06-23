@@ -85,7 +85,7 @@ describe('parseInReplyTo', () => {
     expect(parseInReplyTo(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(parseInReplyTo('not an object')).toBeUndefined()
     expect(parseInReplyTo(undefined)).toBeUndefined()
     expect(parseInReplyTo(null)).toBeUndefined()
@@ -171,7 +171,7 @@ describe('retrieveLink', () => {
     expect(retrieveLink(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supported input', () => {
+  it('should return undefined for unsupported input', () => {
     expect(retrieveLink('not an object')).toBeUndefined()
     expect(retrieveLink(undefined)).toBeUndefined()
     expect(retrieveLink(null)).toBeUndefined()
@@ -344,7 +344,7 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toBeUndefined()
   })
 
-  it('should return undefined for non-object inputs', () => {
+  it('should return undefined for non-object input', () => {
     expect(retrieveItem('not an object')).toBeUndefined()
     expect(retrieveItem(undefined)).toBeUndefined()
     expect(retrieveItem(null)).toBeUndefined()
