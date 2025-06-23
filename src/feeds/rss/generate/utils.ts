@@ -26,6 +26,7 @@ import {
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
+import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
 import type {
   Category,
   Cloud,
@@ -154,6 +155,7 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
     ...generateMediaItemOrFeed(item.media),
     ...generateGeoRssItemOrFeed(item.georss),
     ...generateThrItem(item.thr),
+    ...generateWfwItem(item.wfw),
   })
 }
 

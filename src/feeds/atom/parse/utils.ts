@@ -24,6 +24,7 @@ import {
   retrieveItem as retrieveThrItem,
   retrieveLink as retrieveThrLink,
 } from '../../../namespaces/thr/parse/utils.js'
+import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import type {
   Category,
   Entry,
@@ -228,6 +229,7 @@ export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) 
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     thr: namespaces?.has('thr') ? retrieveThrItem(value) : undefined,
+    wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
   }
 
   return trimObject(entry)

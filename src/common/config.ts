@@ -42,4 +42,5 @@ export const namespaceUrls = {
   slash: 'http://purl.org/rss/1.0/modules/slash/',
   sy: 'http://purl.org/rss/1.0/modules/syndication/',
   thr: 'http://purl.org/syndication/thread/1.0',
+  wfw: 'http://wellformedweb.org/CommentAPI/',
 }

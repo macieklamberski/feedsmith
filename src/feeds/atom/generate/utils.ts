@@ -20,6 +20,7 @@ import {
   generateItem as generateThrItem,
   generateLink as generateThrLink,
 } from '../../../namespaces/thr/generate/utils.js'
+import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
 import type {
   Category,
   Entry,
@@ -165,6 +166,7 @@ export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => 
     ...generateMediaItemOrFeed(entry.media),
     ...generateGeoRssItemOrFeed(entry.georss),
     ...generateThrItem(entry.thr),
+    ...generateWfwItem(entry.wfw),
   }
 }
 
