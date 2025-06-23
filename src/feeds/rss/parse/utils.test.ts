@@ -593,6 +593,13 @@ describe('parseSource', () => {
     expect(parseSource(value)).toEqual(expected)
   })
 
+  it('should handle source with only title (with #text)', () => {
+    const value = { '#text': 'Technology' }
+    const expected = { title: 'Technology' }
+
+    expect(parseSource(value)).toEqual(expected)
+  })
+
   it('should handle source with only title (without #text)', () => {
     const value = 'Technology'
     const expected = { title: 'Technology' }

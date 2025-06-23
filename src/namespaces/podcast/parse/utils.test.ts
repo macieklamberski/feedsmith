@@ -1339,7 +1339,7 @@ describe('parseAlternateEnclosure', () => {
     }
   })
 
-  it('should parse complete alternateEnclosure object (as array of values)', () => {
+  it('should parse complete alternateEnclosure object (with array of values)', () => {
     const value = {
       '@type': 'audio/mpeg',
       '@length': 12345678,
@@ -2981,7 +2981,7 @@ describe('parseValueTimeSplit', () => {
     expect(parseValueTimeSplit(value)).toEqual(expectedFull)
   })
 
-  it('should parse complete value time split object (as array of values)', () => {
+  it('should parse complete value time split object (with array of values)', () => {
     const value = {
       '@starttime': 120.5,
       '@duration': 30.0,
@@ -3373,7 +3373,7 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toEqual(expectedFull)
   })
 
-  it('should parse a complete item with all podcast namespace elements (as array of values)', () => {
+  it('should parse a complete item with all podcast namespace elements (with array of values)', () => {
     const value = {
       'podcast:transcript': [
         {
@@ -3898,7 +3898,7 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toEqual(expectedFull)
   })
 
-  it('should parse a complete feed with all podcast namespace elements (as array of values)', () => {
+  it('should parse a complete feed with all podcast namespace elements (with array of values)', () => {
     const value = {
       'podcast:locked': [
         {

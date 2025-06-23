@@ -184,6 +184,89 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(value)).toEqual(expectedFull)
   })
 
+  it('should parse complete item or feed object with all properties (with array of values)', () => {
+    const value = {
+      'dcterms:abstract': ['Sample abstract content', 'Another abstract'],
+      'dcterms:accessrights': ['Open Access', 'Restricted Access'],
+      'dcterms:accrualmethod': ['Manual upload', 'Automatic harvest'],
+      'dcterms:accrualperiodicity': ['Annual', 'Monthly'],
+      'dcterms:accrualpolicy': ['Open submission', 'Moderated submission'],
+      'dcterms:alternative': ['Alternative Title', 'Secondary Title'],
+      'dcterms:audience': ['General Public', 'Researchers'],
+      'dcterms:available': ['2023-06-01T00:00:00Z', '2023-07-01T00:00:00Z'],
+      'dcterms:bibliographiccitation': [
+        'Doe, J. (2023). Sample Work. Publisher.',
+        'Smith, J. (2023). Another Work.',
+      ],
+      'dcterms:conformsto': ['Dublin Core Metadata Terms', 'ISO Standard'],
+      'dcterms:contributor': ['Jane Smith', 'Bob Johnson'],
+      'dcterms:coverage': ['Global', 'Europe'],
+      'dcterms:created': ['2023-05-01T12:00:00Z', '2023-05-02T12:00:00Z'],
+      'dcterms:creator': ['John Doe', 'Jane Doe'],
+      'dcterms:date': ['2023-05-02T08:30:00Z', '2023-05-03T08:30:00Z'],
+      'dcterms:dateaccepted': ['2023-05-10T09:00:00Z', '2023-05-11T09:00:00Z'],
+      'dcterms:datecopyrighted': ['2023-05-15T00:00:00Z', '2023-05-16T00:00:00Z'],
+      'dcterms:datesubmitted': ['2023-05-05T14:30:00Z', '2023-05-06T14:30:00Z'],
+      'dcterms:description': ['A comprehensive description', 'Another description'],
+      'dcterms:educationlevel': ['Graduate level', 'Undergraduate level'],
+      'dcterms:extent': ['250 pages', '300 pages'],
+      'dcterms:format': ['application/pdf', 'text/html'],
+      'dcterms:hasformat': ['https://example.org/formats/pdf', 'https://example.org/formats/html'],
+      'dcterms:haspart': [
+        'https://example.org/parts/chapter1',
+        'https://example.org/parts/chapter2',
+      ],
+      'dcterms:hasversion': ['https://example.org/versions/v2', 'https://example.org/versions/v3'],
+      'dcterms:identifier': ['ISBN:978-0123456789', 'DOI:10.1234/example'],
+      'dcterms:instructionalmethod': ['Online learning', 'In-person learning'],
+      'dcterms:isformatof': [
+        'https://example.org/original',
+        'https://example.org/another-original',
+      ],
+      'dcterms:ispartof': ['https://example.org/collection', 'https://example.org/series'],
+      'dcterms:isreferencedby': [
+        'https://example.org/references/citation1',
+        'https://example.org/references/citation2',
+      ],
+      'dcterms:isreplacedby': [
+        'https://example.org/replacement',
+        'https://example.org/new-replacement',
+      ],
+      'dcterms:isrequiredby': [
+        'https://example.org/dependent',
+        'https://example.org/another-dependent',
+      ],
+      'dcterms:issued': ['2023-05-20T10:00:00Z', '2023-05-21T10:00:00Z'],
+      'dcterms:isversionof': ['https://example.org/original-work', 'https://example.org/base-work'],
+      'dcterms:language': ['en-US', 'en-GB'],
+      'dcterms:license': ['Creative Commons Attribution 4.0', 'MIT License'],
+      'dcterms:mediator': ['Library System', 'Archive System'],
+      'dcterms:medium': ['Digital', 'Print'],
+      'dcterms:modified': ['2023-05-25T16:45:00Z', '2023-05-26T16:45:00Z'],
+      'dcterms:provenance': ['Digitized from original manuscript', 'Scanned from print'],
+      'dcterms:publisher': ['Academic Press', 'University Press'],
+      'dcterms:references': ['https://example.org/ref/source1', 'https://example.org/ref/source2'],
+      'dcterms:relation': ['https://example.org/related', 'https://example.org/also-related'],
+      'dcterms:replaces': [
+        'https://example.org/old-version',
+        'https://example.org/deprecated-version',
+      ],
+      'dcterms:requires': ['https://example.org/prerequisite', 'https://example.org/dependency'],
+      'dcterms:rights': ['Copyright 2023', 'All rights reserved'],
+      'dcterms:rightsholder': ['Example University', 'Example Foundation'],
+      'dcterms:source': ['https://example.org/source', 'https://example.org/origin'],
+      'dcterms:spatial': ['Boston, MA, USA', 'Cambridge, MA, USA'],
+      'dcterms:subject': ['Academic Research', 'Scientific Study'],
+      'dcterms:tableofcontents': ['Chapter 1, Chapter 2, Chapter 3', 'Section 1, Section 2'],
+      'dcterms:temporal': ['2023', '2022-2023'],
+      'dcterms:title': ['Sample Title', 'Alternative Sample Title'],
+      'dcterms:type': ['Text', 'Dataset'],
+      'dcterms:valid': ['2024-05-25T23:59:59Z', '2025-05-25T23:59:59Z'],
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expectedFull)
+  })
+
   it('should parse partial item or feed object with some properties', () => {
     const value = {
       'dcterms:abstract': 'Partial abstract',

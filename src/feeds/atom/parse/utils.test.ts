@@ -464,6 +464,19 @@ describe('parseGenerator', () => {
     expect(parseGenerator(value)).toEqual(expected)
   })
 
+  it('should parse complete generator object (Atom 1.0) (without #text)', () => {
+    const value = {
+      '@uri': 'https://example.com/generator',
+      '@version': '1.0',
+    }
+    const expected = {
+      uri: 'https://example.com/generator',
+      version: '1.0',
+    }
+
+    expect(parseGenerator(value)).toEqual(expected)
+  })
+
   it('should parse complete generator object (Atom 0.3)', () => {
     const value = {
       '#text': 'Example Generator',

@@ -422,7 +422,7 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(value)).toEqual(expectedFull)
   })
 
-  it('should parse a complete itemOrFeed with all GeoRSS properties (as array of values)', () => {
+  it('should parse a complete itemOrFeed with all GeoRSS properties (with array of values)', () => {
     const value = {
       'georss:point': ['45.256 -71.92'],
       'georss:line': ['45.256 -110.45 46.46 -109.48 43.84 -109.86'],

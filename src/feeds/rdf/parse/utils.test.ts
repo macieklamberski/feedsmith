@@ -254,6 +254,25 @@ describe('retrieveTextInput', () => {
 
     expect(retrieveTextInput(value)).toEqual(expected)
   })
+
+  it('should retrieve complete textInput object (without #text)', () => {
+    const value = {
+      textinput: {
+        title: 'Search Title',
+        description: 'Search Description',
+        name: 'q',
+        link: 'https://example.com/search',
+      },
+    }
+    const expected = {
+      title: 'Search Title',
+      description: 'Search Description',
+      name: 'q',
+      link: 'https://example.com/search',
+    }
+
+    expect(retrieveTextInput(value)).toEqual(expected)
+  })
 })
 
 describe('parseItem', () => {

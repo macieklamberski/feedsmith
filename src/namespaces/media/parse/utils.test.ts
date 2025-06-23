@@ -2321,7 +2321,7 @@ describe('parseScene', () => {
     expect(parseScene(value)).toEqual(expectedFull)
   })
 
-  it('should parse complete scene object (as array of values)', () => {
+  it('should parse complete scene object (with array of values)', () => {
     const value = {
       scenetitle: ['Opening Scene'],
       scenedescription: ['The intro to the episode'],
@@ -2566,7 +2566,7 @@ describe('parseLocation', () => {
     expect(parseLocation(value)).toEqual(expected)
   })
 
-  it('should parse non-standard string-only version of the location (wihout #text)', () => {
+  it('should parse non-standard string-only version of the location (without #text)', () => {
     const value = 'San Francisco, CA'
     const expected = {
       description: 'San Francisco, CA',
