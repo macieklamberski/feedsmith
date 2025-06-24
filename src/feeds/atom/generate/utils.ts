@@ -22,6 +22,7 @@ import {
 } from '../../../namespaces/thr/generate/utils.js'
 import type {
   Category,
+  Content,
   Entry,
   Feed,
   GenerateFunction,
@@ -37,11 +38,30 @@ export const createNamespaceSetter = (prefix: string | undefined) => {
 }
 
 export const generateText: GenerateFunction<Text> = (text) => {
-  if (!isNonEmptyString(text)) {
+  if (!isObject(text)) {
     return
   }
 
-  return text
+  if (!isNonEmptyString(text.value)) {
+    return
+  }
+
+  return trimObject({
+    '#text': text.value,
+    '@type': text.type,
+  })
+}
+
+export const generateContent: GenerateFunction<Content> = (content) => {
+  if (!isObject(content)) {
+    return
+  }
+
+  return trimObject({
+    '#text': isNonEmptyString(content.value) ? content.value : undefined,
+    '@type': content.type,
+    '@src': content.src,
+  })
 }
 
 export const generateLink: GenerateFunction<Link<Date>> = (link) => {
@@ -134,7 +154,7 @@ export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => 
   const value = trimObject({
     [key('author')]: trimArray(entry.authors?.map((author) => generatePerson(author))),
     [key('category')]: trimArray(entry.categories?.map((category) => generateCategory(category))),
-    [key('content')]: generateText(entry.content),
+    [key('content')]: generateContent(entry.content),
     [key('contributor')]: trimArray(
       entry.contributors?.map((contributor) => generatePerson(contributor)),
     ),

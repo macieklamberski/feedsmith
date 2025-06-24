@@ -392,6 +392,7 @@ export const generateString: GenerateFunction<string> = (value) => {
   }
 
   if (value.includes('<') || value.includes('>') || value.includes('&') || value.includes(']]>')) {
+    // TODO: Maybe the CDATA could be appended here?
     return { '#cdata': value }
   }
 

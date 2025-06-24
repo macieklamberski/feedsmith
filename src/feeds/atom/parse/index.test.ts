@@ -77,15 +77,15 @@ describe('parse', () => {
       </FeEd>
     `
     const expected = {
-      title: 'Mixed Case Atom Feed',
-      subtitle: 'A test feed with mixed case tags',
+      title: { value: 'Mixed Case Atom Feed' },
+      subtitle: { value: 'A test feed with mixed case tags' },
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
       updated: '2024-01-10T12:00:00Z',
       links: [
         { href: 'https://example.com/', rel: 'alternate' },
         { href: 'https://example.com/atom.xml', rel: 'self' },
       ],
-      rights: 'Copyright 2024, Example Corp',
+      rights: { value: 'Copyright 2024, Example Corp' },
       authors: [
         {
           name: 'John Doe',
@@ -115,25 +115,28 @@ describe('parse', () => {
       logo: 'https://example.com/logo.png',
       entries: [
         {
-          title: 'First Entry',
+          title: { value: 'First Entry' },
           id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
           links: [{ href: 'https://example.com/entry1', rel: 'alternate' }],
           published: '2024-01-01T12:00:00Z',
           updated: '2024-01-02T09:30:00Z',
           authors: [{ name: 'John Doe' }],
-          content: '<p>This is the first entry in a mixed case Atom feed.</p>',
-          summary: 'Summary of the first entry',
+          content: {
+            type: 'html',
+            value: '<p>This is the first entry in a mixed case Atom feed.</p>',
+          },
+          summary: { value: 'Summary of the first entry' },
           categories: [{ term: 'samples', label: 'Samples' }],
         },
         {
-          title: 'Second Entry',
+          title: { value: 'Second Entry' },
           id: 'urn:uuid:1225c695-cfb8-4ebb-bbbb-80da344efa6a',
           links: [{ href: 'https://example.com/entry2', rel: 'alternate' }],
           published: '2024-01-03T14:30:00Z',
           updated: '2024-01-03T15:45:00Z',
           authors: [{ name: 'Jane Smith' }],
-          content: 'This is the second entry in a mixed case Atom feed.',
-          summary: 'Summary of the second entry',
+          content: { type: 'text', value: 'This is the second entry in a mixed case Atom feed.' },
+          summary: { value: 'Summary of the second entry' },
           categories: [{ term: 'docs', label: 'Documentation' }],
         },
       ],
@@ -157,11 +160,11 @@ describe('parse', () => {
     `
     const expected = {
       id: 'example-feed',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       entries: [
         {
           id: 'example-entry',
-          title: 'Example Entry',
+          title: { value: 'Example Entry' },
         },
       ],
     }

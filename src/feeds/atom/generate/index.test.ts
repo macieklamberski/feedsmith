@@ -23,7 +23,7 @@ describe('generate', () => {
   it('should generate minimal valid Atom feed', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: 'Minimal Feed',
+      title: { value: 'Minimal Feed' },
       updated: new Date('2023-03-15T12:00:00Z'),
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
@@ -40,17 +40,17 @@ describe('generate', () => {
   it('should generate Atom feed with entries', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: 'Feed with Entries',
+      title: { value: 'Feed with Entries' },
       updated: new Date('2023-03-15T12:00:00Z'),
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: 'First Entry',
+          title: { value: 'First Entry' },
           updated: new Date('2023-03-15T12:00:00Z'),
         },
         {
           id: 'https://example.com/entry/2',
-          title: 'Second Entry',
+          title: { value: 'Second Entry' },
           updated: new Date('2023-03-15T12:00:00Z'),
         },
       ],
@@ -79,7 +79,7 @@ describe('generate', () => {
   it('should generate Atom feed with author and links', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: 'Feed with Author and Links',
+      title: { value: 'Feed with Author and Links' },
       updated: new Date('2023-03-15T12:00:00Z'),
       authors: [
         {
@@ -122,7 +122,7 @@ describe('generate', () => {
   it('should generate complete Atom feed with all fields', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: 'Complete Atom Feed',
+      title: { value: 'Complete Atom Feed' },
       updated: new Date('2023-03-15T12:00:00Z'),
       authors: [
         {
@@ -151,8 +151,8 @@ describe('generate', () => {
       },
       icon: 'https://example.com/icon.png',
       logo: 'https://example.com/logo.png',
-      rights: 'Copyright 2023 Example Corp',
-      subtitle: 'A complete example feed',
+      rights: { value: 'Copyright 2023 Example Corp' },
+      subtitle: { value: 'A complete example feed' },
       links: [
         {
           href: 'https://example.com/feed.xml',
@@ -163,11 +163,11 @@ describe('generate', () => {
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: 'Complete Entry',
+          title: { value: 'Complete Entry' },
           updated: new Date('2023-03-15T12:00:00Z'),
           published: new Date('2023-03-10T08:00:00Z'),
-          content: 'This is the complete entry content',
-          summary: 'Entry summary',
+          content: { value: 'This is the complete entry content' },
+          summary: { value: 'Entry summary' },
           authors: [
             {
               name: 'Entry Author',
@@ -231,7 +231,7 @@ describe('generate', () => {
   it('should handle empty arrays', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: 'Feed with Empty Arrays',
+      title: { value: 'Feed with Empty Arrays' },
       updated: new Date('2023-03-15T12:00:00Z'),
       authors: [],
       categories: [],
@@ -259,15 +259,15 @@ describe('generate', () => {
     const updatedDate = new Date('2023-03-15T12:00:00Z')
     const value = {
       id: 'https://example.com/feed',
-      title: 'Special & Characters > Need "Escaping"',
+      title: { value: 'Special & Characters > Need "Escaping"' },
       updated: updatedDate,
-      subtitle: 'Content with <tags> & "quotes"',
+      subtitle: { value: 'Content with <tags> & "quotes"' },
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: 'Entry with & Special Characters',
+          title: { value: 'Entry with & Special Characters' },
           updated: updatedDate,
-          content: 'Content with <b>bold</b> & "quoted" text',
+          content: { value: 'Content with <b>bold</b> & "quoted" text' },
         },
       ],
     }
@@ -292,7 +292,7 @@ describe('generate', () => {
   it('should handle invalid dates gracefully', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: 'Feed with Invalid Date',
+      title: { value: 'Feed with Invalid Date' },
       updated: new Date('invalid-date'),
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
@@ -308,7 +308,7 @@ describe('generate', () => {
   it('should generate Atom feed with dc namespace', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: 'Feed with DC namespace',
+      title: { value: 'Feed with DC namespace' },
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creator: 'John Doe',
@@ -316,7 +316,7 @@ describe('generate', () => {
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: 'Entry with DC',
+          title: { value: 'Entry with DC' },
           updated: new Date('2023-03-15T12:00:00Z'),
           dc: {
             creator: 'Jane Smith',
@@ -345,7 +345,7 @@ describe('generate', () => {
   it('should generate Atom feed with dcterms namespace', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: 'Feed with DCTerms namespace',
+      title: { value: 'Feed with DCTerms namespace' },
       updated: new Date('2023-03-15T12:00:00Z'),
       dcterms: {
         created: new Date('2023-01-01T00:00:00Z'),
@@ -354,7 +354,7 @@ describe('generate', () => {
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: 'Entry with DCTerms',
+          title: { value: 'Entry with DCTerms' },
           updated: new Date('2023-03-15T12:00:00Z'),
           dcterms: {
             created: new Date('2023-02-01T00:00:00Z'),
@@ -386,7 +386,7 @@ describe('generate', () => {
   it('should generate Atom feed with sy namespace', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: 'Feed with SY namespace',
+      title: { value: 'Feed with SY namespace' },
       updated: new Date('2023-03-15T12:00:00Z'),
       sy: {
         updatePeriod: 'hourly',
@@ -407,12 +407,12 @@ describe('generate', () => {
   it('should generate Atom feed with slash namespace', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: 'Feed with Slash namespace',
+      title: { value: 'Feed with Slash namespace' },
       updated: new Date('2023-03-15T12:00:00Z'),
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: 'Entry with Slash',
+          title: { value: 'Entry with Slash' },
           updated: new Date('2023-03-15T12:00:00Z'),
           slash: {
             section: 'Technology',
@@ -440,12 +440,12 @@ describe('generate', () => {
   it('should generate Atom feed with thr namespace', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: 'Feed with Threading namespace',
+      title: { value: 'Feed with Threading namespace' },
       updated: new Date('2023-03-15T12:00:00Z'),
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: 'Discussion post',
+          title: { value: 'Discussion post' },
           updated: new Date('2023-03-15T12:00:00Z'),
           thr: {
             total: 42,
@@ -485,7 +485,7 @@ describe('generate', () => {
   it('should generate Atom feed with media namespace', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: 'Feed with Media namespace',
+      title: { value: 'Feed with Media namespace' },
       updated: new Date('2023-03-15T12:00:00Z'),
       media: {
         title: {
@@ -495,7 +495,7 @@ describe('generate', () => {
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: 'Entry with Media',
+          title: { value: 'Entry with Media' },
           updated: new Date('2023-03-15T12:00:00Z'),
           media: {
             title: {
@@ -527,7 +527,7 @@ describe('generate', () => {
   it('should generate Atom feed with itunes namespace', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: 'Feed with iTunes namespace',
+      title: { value: 'Feed with iTunes namespace' },
       updated: new Date('2023-03-15T12:00:00Z'),
       itunes: {
         author: 'Podcast Author',
@@ -535,7 +535,7 @@ describe('generate', () => {
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: 'Episode with iTunes',
+          title: { value: 'Episode with iTunes' },
           updated: new Date('2023-03-15T12:00:00Z'),
           itunes: {
             title: 'Episode 1 - Special Title',
@@ -565,7 +565,7 @@ describe('generate', () => {
   it('should generate Atom feed with multiple namespaces', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: 'Feed with multiple namespaces',
+      title: { value: 'Feed with multiple namespaces' },
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creator: 'John Doe',
@@ -578,7 +578,7 @@ describe('generate', () => {
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: 'Multi-namespace entry',
+          title: { value: 'Multi-namespace entry' },
           updated: new Date('2023-03-15T12:00:00Z'),
           dc: {
             creator: 'Jane Smith',
@@ -616,7 +616,7 @@ describe('generate', () => {
   it('should generate Atom feed with georss namespace', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: 'Feed with GeoRSS namespace',
+      title: { value: 'Feed with GeoRSS namespace' },
       updated: new Date('2023-03-15T12:00:00Z'),
       georss: {
         point: { lat: 45.256, lng: -71.92 },
@@ -624,7 +624,7 @@ describe('generate', () => {
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: 'Location entry',
+          title: { value: 'Location entry' },
           updated: new Date('2023-03-15T12:00:00Z'),
           georss: {
             point: { lat: 42.3601, lng: -71.0589 },

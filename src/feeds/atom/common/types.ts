@@ -21,8 +21,16 @@ export type GenerateFunction<V> = (
   options?: { prefix?: string; asNamespace?: boolean },
 ) => Unreliable | undefined
 
-// For simplicity's sake, a string is used for now, but this may be reconsidered in the future.
-export type Text = string
+export type Text = {
+  value: string
+  type?: string
+}
+
+export type Content = {
+  value?: string
+  type?: string
+  src?: string
+}
 
 export type Link<TDate extends DateLike> = {
   href: string
@@ -70,7 +78,7 @@ export type Source<TDate extends DateLike> = {
 export type Entry<TDate extends DateLike> = {
   authors?: Array<Person>
   categories?: Array<Category>
-  content?: Text
+  content?: Content
   contributors?: Array<Person>
   id: string
   links?: Array<Link<TDate>>
