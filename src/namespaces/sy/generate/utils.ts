@@ -7,9 +7,11 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     return
   }
 
-  return trimObject({
+  const value = {
     'sy:updatePeriod': feed.updatePeriod,
     'sy:updateFrequency': feed.updateFrequency,
     'sy:updateBase': generateRfc3339Date(feed.updateBase),
-  })
+  }
+
+  return trimObject(value)
 }

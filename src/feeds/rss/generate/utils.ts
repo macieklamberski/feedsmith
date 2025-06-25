@@ -50,10 +50,12 @@ export const generateCategory: GenerateFunction<Category> = (category) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@domain': category.domain,
     '#text': category.name,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateCloud: GenerateFunction<Cloud> = (cloud) => {
@@ -61,13 +63,15 @@ export const generateCloud: GenerateFunction<Cloud> = (cloud) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@domain': cloud.domain,
     '@port': cloud.port,
     '@path': cloud.path,
     '@registerProcedure': cloud.registerProcedure,
     '@protocol': cloud.protocol,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateImage: GenerateFunction<Image> = (image) => {
@@ -75,7 +79,9 @@ export const generateImage: GenerateFunction<Image> = (image) => {
     return
   }
 
-  return trimObject(image)
+  const value = image
+
+  return trimObject(value)
 }
 
 export const generateTextInput: GenerateFunction<TextInput> = (textInput) => {
@@ -83,7 +89,9 @@ export const generateTextInput: GenerateFunction<TextInput> = (textInput) => {
     return
   }
 
-  return trimObject(textInput)
+  const value = textInput
+
+  return trimObject(value)
 }
 
 export const generateEnclosure: GenerateFunction<Enclosure> = (enclosure) => {
@@ -91,30 +99,38 @@ export const generateEnclosure: GenerateFunction<Enclosure> = (enclosure) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@url': enclosure.url,
     '@length': enclosure.length,
     '@type': enclosure.type,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateSkipHours: GenerateFunction<SkipHours> = (skipHours) => {
-  return trimObject({
+  const value = {
     hour: trimArray(skipHours),
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateSkipDays: GenerateFunction<SkipDays> = (skipDays) => {
-  return trimObject({
+  const value = {
     day: trimArray(skipDays),
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateGuid: GenerateFunction<Guid> = (guid) => {
-  return trimObject({
+  const value = {
     '#text': guid?.value,
     '@isPermaLink': guid?.isPermaLink,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateSource: GenerateFunction<Source> = (source) => {
@@ -122,10 +138,12 @@ export const generateSource: GenerateFunction<Source> = (source) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': source.title,
     '@url': source.url,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateItem: GenerateFunction<Item<Date>> = (item) => {
@@ -133,7 +151,7 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
     return
   }
 
-  return trimObject({
+  const value = {
     title: item.title,
     link: item.link,
     description: item.description,
@@ -154,7 +172,9 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
     ...generateMediaItemOrFeed(item.media),
     ...generateGeoRssItemOrFeed(item.georss),
     ...generateThrItem(item.thr),
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
@@ -162,7 +182,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     return
   }
 
-  const channel = trimObject({
+  const value = {
     title: feed.title,
     link: feed.link,
     description: feed.description,
@@ -191,17 +211,19 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
     item: trimArray(feed.items?.map(generateItem)),
-  })
+  }
 
-  if (!channel) {
+  const trimmedValue = trimObject(value)
+
+  if (!trimmedValue) {
     return
   }
 
   return {
     rss: {
       '@version': '2.0',
-      ...generateNamespaceAttrs(channel),
-      channel,
+      ...generateNamespaceAttrs(trimmedValue),
+      channel: trimmedValue,
     },
   }
 }

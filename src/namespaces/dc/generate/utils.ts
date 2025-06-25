@@ -7,7 +7,7 @@ export const generateItemOrFeed: GenerateFunction<ItemOrFeed<Date>> = (itemOrFee
     return
   }
 
-  return trimObject({
+  const value = {
     'dc:title': itemOrFeed.title,
     'dc:creator': itemOrFeed.creator,
     'dc:subject': itemOrFeed.subject,
@@ -23,5 +23,7 @@ export const generateItemOrFeed: GenerateFunction<ItemOrFeed<Date>> = (itemOrFee
     'dc:relation': itemOrFeed.relation,
     'dc:coverage': itemOrFeed.coverage,
     'dc:rights': itemOrFeed.rights,
-  })
+  }
+
+  return trimObject(value)
 }

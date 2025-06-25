@@ -7,7 +7,7 @@ export const generateItemOrFeed: GenerateFunction<ItemOrFeed<Date>> = (itemOrFee
     return
   }
 
-  return trimObject({
+  const value = {
     'dcterms:abstract': itemOrFeed.abstract,
     'dcterms:accessrights': itemOrFeed.accessRights,
     'dcterms:accrualmethod': itemOrFeed.accrualMethod,
@@ -63,5 +63,7 @@ export const generateItemOrFeed: GenerateFunction<ItemOrFeed<Date>> = (itemOrFee
     'dcterms:title': itemOrFeed.title,
     'dcterms:type': itemOrFeed.type,
     'dcterms:valid': generateRfc3339Date(itemOrFeed.valid),
-  })
+  }
+
+  return trimObject(value)
 }
