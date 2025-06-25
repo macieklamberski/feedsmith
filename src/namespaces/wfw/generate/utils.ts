@@ -1,5 +1,5 @@
 import type { GenerateFunction } from '../../../common/types.js'
-import { isNonEmptyString, isObject, trimObject } from '../../../common/utils.js'
+import { isObject, trimObject } from '../../../common/utils.js'
 import type { Item } from '../common/types.js'
 
 export const generateItem: GenerateFunction<Item> = (item) => {
@@ -7,8 +7,10 @@ export const generateItem: GenerateFunction<Item> = (item) => {
     return
   }
 
-  return trimObject({
-    'wfw:comment': isNonEmptyString(item.comment) ? item.comment : undefined,
-    'wfw:commentRss': isNonEmptyString(item.commentRss) ? item.commentRss : undefined,
-  })
+  const value = {
+    'wfw:comment': item.comment,
+    'wfw:commentRss': item.commentRss,
+  }
+
+  return trimObject(value)
 }
