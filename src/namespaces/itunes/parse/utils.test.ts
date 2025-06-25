@@ -793,7 +793,7 @@ describe('retrieveFeed', () => {
       'itunes:new-feed-url': { '#text': 'https://example.com/new-feed' },
       'itunes:block': { '#text': 'yes' },
       'itunes:complete': { '#text': 'yes' },
-      'itunes:applepodcastsverify': { '#text': 'verification-code' },
+      'itunes:apple-podcasts-verify': { '#text': 'verification-code' },
       'itunes:category': [
         { '@text': 'Technology' },
         { '@text': 'Business', 'itunes:category': { '@text': 'Entrepreneurship' } },
@@ -820,7 +820,7 @@ describe('retrieveFeed', () => {
       'itunes:new-feed-url': 'https://example.com/new-feed',
       'itunes:block': 'yes',
       'itunes:complete': 'yes',
-      'itunes:applepodcastsverify': 'verification-code',
+      'itunes:apple-podcasts-verify': 'verification-code',
       'itunes:category': [
         { '@text': 'Technology' },
         { '@text': 'Business', 'itunes:category': { '@text': 'Entrepreneurship' } },
@@ -850,7 +850,7 @@ describe('retrieveFeed', () => {
       'itunes:new-feed-url': ['https://example.com/new-feed', 'https://example.com/alternate-feed'],
       'itunes:block': ['yes', 'no'],
       'itunes:complete': ['yes', 'no'],
-      'itunes:applepodcastsverify': ['verification-code', 'secondary-verification-code'],
+      'itunes:apple-podcasts-verify': ['verification-code', 'secondary-verification-code'],
       'itunes:category': [
         { '@text': 'Technology' },
         { '@text': 'Business', 'itunes:category': { '@text': 'Entrepreneurship' } },
@@ -1029,7 +1029,7 @@ describe('retrieveFeed', () => {
   it('should handle Apple Podcasts verification tag', () => {
     const value = {
       'itunes:image': { '@href': 'https://example.com/image.jpg' },
-      'itunes:applepodcastsverify': { '#text': 'verification-code' },
+      'itunes:apple-podcasts-verify': { '#text': 'verification-code' },
     }
     const expected = {
       image: 'https://example.com/image.jpg',
@@ -1081,7 +1081,7 @@ describe('retrieveFeed', () => {
       'itunes:new-feed-url': {},
       'itunes:block': { '#text': {} },
       'itunes:complete': { '#text': [] },
-      'itunes:applepodcastsverify': null,
+      'itunes:apple-podcasts-verify': null,
       'itunes:category': null,
     }
 

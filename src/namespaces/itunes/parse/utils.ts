@@ -145,7 +145,7 @@ export const retrieveFeed: ParsePartialFunction<Feed> = (value) => {
     complete: parseSingularOf(value['itunes:complete'], (value) =>
       parseYesNoBoolean(retrieveText(value)),
     ),
-    applePodcastsVerify: parseSingularOf(value['itunes:applepodcastsverify'], (value) =>
+    applePodcastsVerify: parseSingularOf(value['itunes:apple-podcasts-verify'], (value) =>
       parseString(retrieveText(value)),
     ),
     categories: parseArrayOf(value['itunes:category'], parseCategory),
