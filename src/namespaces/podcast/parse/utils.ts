@@ -278,7 +278,7 @@ export const parseLiveItem: ParsePartialFunction<LiveItem<string>> = (value) => 
     status: parseString(value['@status']),
     start: parseDate(value['@start']),
     end: parseDate(value['@end']),
-    contentlinks: parseArrayOf(value['podcast:contentlink'], parseContentLink),
+    contentLinks: parseArrayOf(value['podcast:contentlink'], parseContentLink),
   }
 
   return trimObject(liveItem)

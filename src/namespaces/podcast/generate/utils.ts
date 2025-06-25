@@ -358,7 +358,7 @@ export const generateLiveItem: GenerateFunction<LiveItem<Date>> = (liveItem) => 
     '@status': liveItem.status,
     '@start': generateRfc3339Date(liveItem.start),
     '@end': generateRfc3339Date(liveItem.end),
-    'podcast:contentLink': trimArray(liveItem.contentlinks?.map(generateContentLink)),
+    'podcast:contentLink': trimArray(liveItem.contentLinks?.map(generateContentLink)),
   }
 
   return trimObject(value)

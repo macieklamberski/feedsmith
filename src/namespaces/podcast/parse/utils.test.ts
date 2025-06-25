@@ -2031,7 +2031,7 @@ describe('parseLiveItem', () => {
       status: 'live',
       start: '2023-06-15T15:00:00Z',
       end: '2023-06-15T16:00:00Z',
-      contentlinks: [
+      contentLinks: [
         {
           href: 'https://example.com/livestream',
           display: 'Watch our livestream',
@@ -2081,7 +2081,7 @@ describe('parseLiveItem', () => {
     const expected = {
       status: 'live',
       start: '2023-06-15T15:00:00Z',
-      contentlinks: [
+      contentLinks: [
         {
           href: 'https://example.com/livestream',
           display: 'Watch our livestream',
@@ -2125,7 +2125,7 @@ describe('parseLiveItem', () => {
     const expected = {
       status: 'live',
       start: '2023-06-15T15:00:00Z',
-      contentlinks: [
+      contentLinks: [
         {
           href: 'https://example.com/livestream',
           display: 'Watch our livestream',
@@ -3749,7 +3749,7 @@ describe('retrieveFeed', () => {
         status: 'live',
         start: '2023-06-15T15:00:00Z',
         end: '2023-06-15T16:00:00Z',
-        contentlinks: [
+        contentLinks: [
           {
             href: 'https://example.com/live',
             display: 'Watch live',
@@ -4235,7 +4235,7 @@ describe('retrieveFeed', () => {
         {
           status: 'live',
           start: '2023-06-15T15:00:00Z',
-          contentlinks: [
+          contentLinks: [
             { href: 'https://example.com/live', display: 'Watch live' },
             { href: 'https://youtube.com/live', display: 'Watch on YouTube' },
           ],
