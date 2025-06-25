@@ -41,9 +41,11 @@ export const parseAuthor: ParsePartialFunction<Author> = (value) => {
   }
 
   if (isNonEmptyStringOrNumber(value)) {
-    return trimObject({
+    const author = {
       name: parseString(value),
-    })
+    }
+
+    return trimObject(author)
   }
 }
 

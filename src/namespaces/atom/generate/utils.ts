@@ -6,10 +6,10 @@ import {
 } from '../../../feeds/atom/generate/utils.js'
 import type { Entry, Feed } from '../common/types.js'
 
-export const generateEntry: GenerateFunction<Entry<Date>> = (value) => {
-  return generateAtomEntry(value as AtomEntry<Date>, { prefix: 'atom:', asNamespace: true })
+export const generateEntry: GenerateFunction<Entry<Date>> = (entry) => {
+  return generateAtomEntry(entry as AtomEntry<Date>, { prefix: 'atom:', asNamespace: true })
 }
 
-export const generateFeed: GenerateFunction<Feed<Date>> = (value) => {
-  return generateAtomFeed(value as AtomFeed<Date>, { prefix: 'atom:', asNamespace: true })?.feed
+export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
+  return generateAtomFeed(feed as AtomFeed<Date>, { prefix: 'atom:', asNamespace: true })?.feed
 }
