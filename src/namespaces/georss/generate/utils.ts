@@ -67,7 +67,7 @@ export const generateItemOrFeed: GenerateFunction<ItemOrFeed> = (itemOrFeed) => 
     return
   }
 
-  return trimObject({
+  const value = {
     'georss:point': generatePoint(itemOrFeed.point),
     'georss:line': generateLine(itemOrFeed.line),
     'georss:polygon': generatePolygon(itemOrFeed.polygon),
@@ -78,5 +78,7 @@ export const generateItemOrFeed: GenerateFunction<ItemOrFeed> = (itemOrFeed) => 
     'georss:elev': itemOrFeed.elev,
     'georss:floor': itemOrFeed.floor,
     'georss:radius': itemOrFeed.radius,
-  })
+  }
+
+  return trimObject(value)
 }

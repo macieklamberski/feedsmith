@@ -1100,7 +1100,7 @@ describe('generateLiveItem', () => {
       status: 'live',
       start: new Date('2023-01-01T10:00:00Z'),
       end: new Date('2023-01-01T11:00:00Z'),
-      contentlinks: [
+      contentLinks: [
         {
           href: 'https://example.com/live-chat',
           display: 'Join Chat',

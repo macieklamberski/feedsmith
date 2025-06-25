@@ -40,28 +40,30 @@ import type {
   ValueTimeSplit,
 } from '../common/types.js'
 
-export const generateBaseItem: GenerateFunction<BaseItem> = (item) => {
-  if (!isObject(item)) {
+export const generateBaseItem: GenerateFunction<BaseItem> = (baseItem) => {
+  if (!isObject(baseItem)) {
     return
   }
 
-  return trimObject({
-    'podcast:transcript': trimArray(item.transcripts?.map(generateTranscript)),
-    'podcast:chapters': generateChapters(item.chapters),
-    'podcast:soundbite': trimArray(item.soundbites?.map(generateSoundbite)),
-    'podcast:person': trimArray(item.persons?.map(generatePerson)),
-    'podcast:location': generateLocation(item.location),
-    'podcast:season': generateSeason(item.season),
-    'podcast:episode': generateEpisode(item.episode),
-    'podcast:license': generateLicense(item.license),
+  const value = {
+    'podcast:transcript': trimArray(baseItem.transcripts?.map(generateTranscript)),
+    'podcast:chapters': generateChapters(baseItem.chapters),
+    'podcast:soundbite': trimArray(baseItem.soundbites?.map(generateSoundbite)),
+    'podcast:person': trimArray(baseItem.persons?.map(generatePerson)),
+    'podcast:location': generateLocation(baseItem.location),
+    'podcast:season': generateSeason(baseItem.season),
+    'podcast:episode': generateEpisode(baseItem.episode),
+    'podcast:license': generateLicense(baseItem.license),
     'podcast:alternateEnclosure': trimArray(
-      item.alternateEnclosures?.map(generateAlternateEnclosure),
+      baseItem.alternateEnclosures?.map(generateAlternateEnclosure),
     ),
-    'podcast:value': generateValue(item.value),
-    'podcast:images': generateImages(item.images),
-    'podcast:socialInteract': trimArray(item.socialInteracts?.map(generateSocialInteract)),
-    'podcast:txt': trimArray(item.txts?.map(generateTxt)),
-  })
+    'podcast:value': generateValue(baseItem.value),
+    'podcast:images': generateImages(baseItem.images),
+    'podcast:socialInteract': trimArray(baseItem.socialInteracts?.map(generateSocialInteract)),
+    'podcast:txt': trimArray(baseItem.txts?.map(generateTxt)),
+  }
+
+  return trimObject(value)
 }
 
 export const generateTranscript: GenerateFunction<Transcript> = (transcript) => {
@@ -69,12 +71,14 @@ export const generateTranscript: GenerateFunction<Transcript> = (transcript) => 
     return
   }
 
-  return trimObject({
+  const value = {
     '@url': transcript.url,
     '@type': transcript.type,
     '@language': transcript.language,
     '@rel': transcript.rel,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateLocked: GenerateFunction<Locked> = (locked) => {
@@ -82,10 +86,12 @@ export const generateLocked: GenerateFunction<Locked> = (locked) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': generateYesNoBoolean(locked.value),
     '@owner': locked.owner,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateFunding: GenerateFunction<Funding> = (funding) => {
@@ -93,10 +99,12 @@ export const generateFunding: GenerateFunction<Funding> = (funding) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': funding.display,
     '@url': funding.url,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateChapters: GenerateFunction<Chapters> = (chapters) => {
@@ -104,10 +112,12 @@ export const generateChapters: GenerateFunction<Chapters> = (chapters) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@url': chapters.url,
     '@type': chapters.type,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateSoundbite: GenerateFunction<Soundbite> = (soundbite) => {
@@ -115,11 +125,13 @@ export const generateSoundbite: GenerateFunction<Soundbite> = (soundbite) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': soundbite.display,
     '@startTime': soundbite.startTime,
     '@duration': soundbite.duration,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generatePerson: GenerateFunction<Person> = (person) => {
@@ -127,13 +139,15 @@ export const generatePerson: GenerateFunction<Person> = (person) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': person.display,
     '@role': person.role,
     '@group': person.group,
     '@img': person.img,
     '@href': person.href,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateLocation: GenerateFunction<Location> = (location) => {
@@ -141,11 +155,13 @@ export const generateLocation: GenerateFunction<Location> = (location) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': location.display,
     '@geo': location.geo,
     '@osm': location.osm,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateSeason: GenerateFunction<Season> = (season) => {
@@ -153,10 +169,12 @@ export const generateSeason: GenerateFunction<Season> = (season) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': season.number,
     '@name': season.name,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateEpisode: GenerateFunction<Episode> = (episode) => {
@@ -164,10 +182,12 @@ export const generateEpisode: GenerateFunction<Episode> = (episode) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': episode.number,
     '@display': episode.display,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateTrailer: GenerateFunction<Trailer<Date>> = (trailer) => {
@@ -175,14 +195,16 @@ export const generateTrailer: GenerateFunction<Trailer<Date>> = (trailer) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': trailer.display,
     '@url': trailer.url,
     '@pubdate': generateRfc822Date(trailer.pubDate),
     '@length': trailer.length,
     '@type': trailer.type,
     '@season': trailer.season,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateLicense: GenerateFunction<License> = (license) => {
@@ -190,10 +212,12 @@ export const generateLicense: GenerateFunction<License> = (license) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': license.display,
     '@url': license.url,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateSource: GenerateFunction<Source> = (source) => {
@@ -201,10 +225,12 @@ export const generateSource: GenerateFunction<Source> = (source) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@uri': source.uri,
     '@contentType': source.contentType,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateIntegrity: GenerateFunction<Integrity> = (integrity) => {
@@ -212,61 +238,73 @@ export const generateIntegrity: GenerateFunction<Integrity> = (integrity) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@type': integrity.type,
     '@value': integrity.value,
-  })
+  }
+
+  return trimObject(value)
 }
 
-export const generateAlternateEnclosure: GenerateFunction<AlternateEnclosure> = (enclosure) => {
-  if (!isObject(enclosure)) {
+export const generateAlternateEnclosure: GenerateFunction<AlternateEnclosure> = (
+  alternateEnclosure,
+) => {
+  if (!isObject(alternateEnclosure)) {
     return
   }
 
-  return trimObject({
-    '@type': enclosure.type,
-    '@length': enclosure.length,
-    '@bitrate': enclosure.bitrate,
-    '@height': enclosure.height,
-    '@lang': enclosure.lang,
-    '@title': enclosure.title,
-    '@rel': enclosure.rel,
-    '@codecs': enclosure.codecs,
-    '@default': enclosure.default,
-    'podcast:source': trimArray(enclosure.sources?.map(generateSource)),
-    'podcast:integrity': generateIntegrity(enclosure.integrity),
-  })
+  const value = {
+    '@type': alternateEnclosure.type,
+    '@length': alternateEnclosure.length,
+    '@bitrate': alternateEnclosure.bitrate,
+    '@height': alternateEnclosure.height,
+    '@lang': alternateEnclosure.lang,
+    '@title': alternateEnclosure.title,
+    '@rel': alternateEnclosure.rel,
+    '@codecs': alternateEnclosure.codecs,
+    '@default': alternateEnclosure.default,
+    'podcast:source': trimArray(alternateEnclosure.sources?.map(generateSource)),
+    'podcast:integrity': generateIntegrity(alternateEnclosure.integrity),
+  }
+
+  return trimObject(value)
 }
 
-export const generateValueRecipient: GenerateFunction<ValueRecipient> = (recipient) => {
-  if (!isObject(recipient)) {
+export const generateValueRecipient: GenerateFunction<ValueRecipient> = (valueRecipient) => {
+  if (!isObject(valueRecipient)) {
     return
   }
 
-  return trimObject({
-    '@name': recipient.name,
-    '@customKey': recipient.customKey,
-    '@customValue': recipient.customValue,
-    '@type': recipient.type,
-    '@address': recipient.address,
-    '@split': recipient.split,
-    '@fee': recipient.fee,
-  })
+  const value = {
+    '@name': valueRecipient.name,
+    '@customKey': valueRecipient.customKey,
+    '@customValue': valueRecipient.customValue,
+    '@type': valueRecipient.type,
+    '@address': valueRecipient.address,
+    '@split': valueRecipient.split,
+    '@fee': valueRecipient.fee,
+  }
+
+  return trimObject(value)
 }
 
-export const generateValueTimeSplit: GenerateFunction<ValueTimeSplit> = (split) => {
-  if (!isObject(split)) {
+export const generateValueTimeSplit: GenerateFunction<ValueTimeSplit> = (valueTimeSplit) => {
+  if (!isObject(valueTimeSplit)) {
     return
   }
 
-  return trimObject({
-    '@startTime': split.startTime,
-    '@duration': split.duration,
-    '@remoteStartTime': split.remoteStartTime,
-    '@remotePercentage': split.remotePercentage,
-    'podcast:remoteItem': generateRemoteItem(split.remoteItem),
-    'podcast:valueRecipient': trimArray(split.valueRecipients?.map(generateValueRecipient)),
-  })
+  const value = {
+    '@startTime': valueTimeSplit.startTime,
+    '@duration': valueTimeSplit.duration,
+    '@remoteStartTime': valueTimeSplit.remoteStartTime,
+    '@remotePercentage': valueTimeSplit.remotePercentage,
+    'podcast:remoteItem': generateRemoteItem(valueTimeSplit.remoteItem),
+    'podcast:valueRecipient': trimArray(
+      valueTimeSplit.valueRecipients?.map(generateValueRecipient),
+    ),
+  }
+
+  return trimObject(value)
 }
 
 export const generateValue: GenerateFunction<Value> = (value) => {
@@ -274,13 +312,15 @@ export const generateValue: GenerateFunction<Value> = (value) => {
     return
   }
 
-  return trimObject({
+  const valueObj = {
     '@type': value.type,
     '@method': value.method,
     '@suggested': value.suggested,
     'podcast:valueRecipient': trimArray(value.valueRecipients?.map(generateValueRecipient)),
     'podcast:valueTimeSplit': trimArray(value.valueTimeSplits?.map(generateValueTimeSplit)),
-  })
+  }
+
+  return trimObject(valueObj)
 }
 
 export const generateImages: GenerateFunction<Images> = (images) => {
@@ -288,20 +328,24 @@ export const generateImages: GenerateFunction<Images> = (images) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@srcset': images.srcset,
-  })
+  }
+
+  return trimObject(value)
 }
 
-export const generateContentLink: GenerateFunction<ContentLink> = (link) => {
-  if (!isObject(link)) {
+export const generateContentLink: GenerateFunction<ContentLink> = (contentLink) => {
+  if (!isObject(contentLink)) {
     return
   }
 
-  return trimObject({
-    '#text': link.display,
-    '@href': link.href,
-  })
+  const value = {
+    '#text': contentLink.display,
+    '@href': contentLink.href,
+  }
+
+  return trimObject(value)
 }
 
 export const generateLiveItem: GenerateFunction<LiveItem<Date>> = (liveItem) => {
@@ -309,27 +353,31 @@ export const generateLiveItem: GenerateFunction<LiveItem<Date>> = (liveItem) => 
     return
   }
 
-  return trimObject({
+  const value = {
     ...generateBaseItem(liveItem),
     '@status': liveItem.status,
     '@start': generateRfc3339Date(liveItem.start),
     '@end': generateRfc3339Date(liveItem.end),
-    'podcast:contentLink': trimArray(liveItem.contentlinks?.map(generateContentLink)),
-  })
+    'podcast:contentLink': trimArray(liveItem.contentLinks?.map(generateContentLink)),
+  }
+
+  return trimObject(value)
 }
 
-export const generateSocialInteract: GenerateFunction<SocialInteract> = (interact) => {
-  if (!isObject(interact)) {
+export const generateSocialInteract: GenerateFunction<SocialInteract> = (socialInteract) => {
+  if (!isObject(socialInteract)) {
     return
   }
 
-  return trimObject({
-    '@uri': interact.uri,
-    '@protocol': interact.protocol,
-    '@accountId': interact.accountId,
-    '@accountUrl': interact.accountUrl,
-    '@priority': interact.priority,
-  })
+  const value = {
+    '@uri': socialInteract.uri,
+    '@protocol': socialInteract.protocol,
+    '@accountId': socialInteract.accountId,
+    '@accountUrl': socialInteract.accountUrl,
+    '@priority': socialInteract.priority,
+  }
+
+  return trimObject(value)
 }
 
 export const generateBlock: GenerateFunction<Block> = (block) => {
@@ -337,10 +385,12 @@ export const generateBlock: GenerateFunction<Block> = (block) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': generateYesNoBoolean(block.value),
     '@id': block.id,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateTxt: GenerateFunction<Txt> = (txt) => {
@@ -348,10 +398,12 @@ export const generateTxt: GenerateFunction<Txt> = (txt) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': txt.display,
     '@purpose': txt.purpose,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateRemoteItem: GenerateFunction<RemoteItem> = (remoteItem) => {
@@ -359,12 +411,14 @@ export const generateRemoteItem: GenerateFunction<RemoteItem> = (remoteItem) => 
     return
   }
 
-  return trimObject({
+  const value = {
     '@feedGuid': remoteItem.feedGuid,
     '@feedUrl': remoteItem.feedUrl,
     '@itemGuid': remoteItem.itemGuid,
     '@medium': remoteItem.medium,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generatePodroll: GenerateFunction<Podroll> = (podroll) => {
@@ -372,22 +426,28 @@ export const generatePodroll: GenerateFunction<Podroll> = (podroll) => {
     return
   }
 
-  return trimObject({
+  const value = {
     'podcast:remoteItem': trimArray(podroll.remoteItems?.map(generateRemoteItem)),
-  })
+  }
+
+  return trimObject(value)
 }
 
-export const generateUpdateFrequency: GenerateFunction<UpdateFrequency<Date>> = (frequency) => {
-  if (!isObject(frequency)) {
+export const generateUpdateFrequency: GenerateFunction<UpdateFrequency<Date>> = (
+  updateFrequency,
+) => {
+  if (!isObject(updateFrequency)) {
     return
   }
 
-  return trimObject({
-    '#text': frequency.display,
-    '@complete': frequency.complete,
-    '@dtstart': generateRfc3339Date(frequency.dtstart),
-    '@rrule': frequency.rrule,
-  })
+  const value = {
+    '#text': updateFrequency.display,
+    '@complete': updateFrequency.complete,
+    '@dtstart': generateRfc3339Date(updateFrequency.dtstart),
+    '@rrule': updateFrequency.rrule,
+  }
+
+  return trimObject(value)
 }
 
 export const generatePodping: GenerateFunction<Podping> = (podping) => {
@@ -395,9 +455,11 @@ export const generatePodping: GenerateFunction<Podping> = (podping) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@usesPodping': podping.usesPodping,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateItem: GenerateFunction<Item> = (item) => {
@@ -413,7 +475,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     return
   }
 
-  return trimObject({
+  const value = {
     'podcast:locked': generateLocked(feed.locked),
     'podcast:funding': trimArray(feed.fundings?.map(generateFunding)),
     'podcast:person': trimArray(feed.persons?.map(generatePerson)),
@@ -431,5 +493,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     'podcast:podroll': generatePodroll(feed.podroll),
     'podcast:updateFrequency': generateUpdateFrequency(feed.updateFrequency),
     'podcast:podping': generatePodping(feed.podping),
-  })
+  }
+
+  return trimObject(value)
 }

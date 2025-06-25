@@ -7,10 +7,12 @@ export const generateItem: GenerateFunction<Item> = (item) => {
     return
   }
 
-  return trimObject({
+  const value = {
     'slash:section': item.section,
     'slash:department': item.department,
     'slash:comments': item.comments,
     'slash:hit_parade': item.hit_parade?.join(','),
-  })
+  }
+
+  return trimObject(value)
 }

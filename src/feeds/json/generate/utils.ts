@@ -9,11 +9,13 @@ export const generateRfc3339Date = (date: Date): string => {
 }
 
 export const generateItem = (item: Item<Date>) => {
-  return trimObject({
+  const value = {
     ...item,
     date_published: item.date_published ? generateRfc3339Date(item.date_published) : undefined,
     date_modified: item.date_modified ? generateRfc3339Date(item.date_modified) : undefined,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateFeed = (feed: Feed<Date>) => {
