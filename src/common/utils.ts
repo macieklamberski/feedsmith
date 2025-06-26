@@ -398,6 +398,12 @@ export const generateString: GenerateFunction<string> = (value) => {
   return value
 }
 
+export const generateNumber: GenerateFunction<number> = (value) => {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value
+  }
+}
+
 export const generateNamespaceAttrs = (value: Unreliable): Record<string, string> | undefined => {
   if (!isObject(value)) {
     return
