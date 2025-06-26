@@ -125,7 +125,7 @@ describe('retrieveItem', () => {
   it('should handle mixed valid and invalid properties', () => {
     const value = {
       'wfw:comment': { '#text': 'https://example.com/post/123/comment' },
-      'wfw:commentrss': { '#text': '' }, // Empty string should be filtered out
+      'wfw:commentrss': { '#text': '' }, // Empty string should be filtered out.
       'other:property': { '#text': 'value' },
     }
     const expected = {
