@@ -56,7 +56,9 @@ describe('generateItem', () => {
       commentRss: 'https://feeds.feedburner.com/blog/comments/456',
     }
     const expected = {
-      'wfw:comment': 'https://blogger.com/comment?blogID=123&postID=456',
+      'wfw:comment': {
+        '#cdata': 'https://blogger.com/comment?blogID=123&postID=456',
+      },
       'wfw:commentRss': 'https://feeds.feedburner.com/blog/comments/456',
     }
 
@@ -112,7 +114,9 @@ describe('generateItem', () => {
       commentRss: 'https://feeds.example.com/posts/123/comments.rss?include=all',
     }
     const expected = {
-      'wfw:comment': 'https://api.example.com/v1/posts/123/comments?format=json&method=POST',
+      'wfw:comment': {
+        '#cdata': 'https://api.example.com/v1/posts/123/comments?format=json&method=POST',
+      },
       'wfw:commentRss': 'https://feeds.example.com/posts/123/comments.rss?include=all',
     }
 
