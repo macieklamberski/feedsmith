@@ -16,8 +16,10 @@ export const isObject = (value: Unreliable): value is Record<string, Unreliable>
   )
 }
 
+const whitespaceOnlyRegex = /^\p{White_Space}*$/u
+
 export const isNonEmptyString = (value: Unreliable): value is string => {
-  return typeof value === 'string' && value !== '' && value.trim() !== ''
+  return typeof value === 'string' && value !== '' && !whitespaceOnlyRegex.test(value)
 }
 
 export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | number => {
@@ -161,10 +163,10 @@ export const parseString: ParseExactFunction<string> = (value) => {
 
     if (hasEntities(string)) {
       string = decodeXML(string)
-    }
 
-    if (hasEntities(string)) {
-      string = decodeHTML(string)
+      if (hasEntities(string)) {
+        string = decodeHTML(string)
+      }
     }
 
     return string || undefined
