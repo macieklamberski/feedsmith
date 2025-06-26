@@ -26,7 +26,7 @@ export const generateCategory: GenerateFunction<Category> = (category) => {
 
   const value = {
     '@text': category.text,
-    'itunes:category': trimArray(category.categories?.map(generateCategory)),
+    'itunes:category': trimArray(category.categories, generateCategory),
   }
 
   return trimObject(value)
@@ -74,7 +74,7 @@ export const generateFeed: GenerateFunction<Feed> = (feed) => {
 
   const value = {
     'itunes:image': generateImage(feed.image),
-    'itunes:category': trimArray(feed.categories?.map(generateCategory)),
+    'itunes:category': trimArray(feed.categories, generateCategory),
     'itunes:explicit': generateYesNoBoolean(feed.explicit),
     'itunes:author': feed.author,
     'itunes:title': feed.title,

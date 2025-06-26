@@ -46,10 +46,10 @@ export const generateBaseItem: GenerateFunction<BaseItem> = (baseItem) => {
   }
 
   const value = {
-    'podcast:transcript': trimArray(baseItem.transcripts?.map(generateTranscript)),
+    'podcast:transcript': trimArray(baseItem.transcripts, generateTranscript),
     'podcast:chapters': generateChapters(baseItem.chapters),
-    'podcast:soundbite': trimArray(baseItem.soundbites?.map(generateSoundbite)),
-    'podcast:person': trimArray(baseItem.persons?.map(generatePerson)),
+    'podcast:soundbite': trimArray(baseItem.soundbites, generateSoundbite),
+    'podcast:person': trimArray(baseItem.persons, generatePerson),
     'podcast:location': generateLocation(baseItem.location),
     'podcast:season': generateSeason(baseItem.season),
     'podcast:episode': generateEpisode(baseItem.episode),
@@ -59,8 +59,8 @@ export const generateBaseItem: GenerateFunction<BaseItem> = (baseItem) => {
     ),
     'podcast:value': generateValue(baseItem.value),
     'podcast:images': generateImages(baseItem.images),
-    'podcast:socialInteract': trimArray(baseItem.socialInteracts?.map(generateSocialInteract)),
-    'podcast:txt': trimArray(baseItem.txts?.map(generateTxt)),
+    'podcast:socialInteract': trimArray(baseItem.socialInteracts, generateSocialInteract),
+    'podcast:txt': trimArray(baseItem.txts, generateTxt),
   }
 
   return trimObject(value)
@@ -263,7 +263,7 @@ export const generateAlternateEnclosure: GenerateFunction<AlternateEnclosure> = 
     '@rel': alternateEnclosure.rel,
     '@codecs': alternateEnclosure.codecs,
     '@default': alternateEnclosure.default,
-    'podcast:source': trimArray(alternateEnclosure.sources?.map(generateSource)),
+    'podcast:source': trimArray(alternateEnclosure.sources, generateSource),
     'podcast:integrity': generateIntegrity(alternateEnclosure.integrity),
   }
 
@@ -316,8 +316,8 @@ export const generateValue: GenerateFunction<Value> = (value) => {
     '@type': value.type,
     '@method': value.method,
     '@suggested': value.suggested,
-    'podcast:valueRecipient': trimArray(value.valueRecipients?.map(generateValueRecipient)),
-    'podcast:valueTimeSplit': trimArray(value.valueTimeSplits?.map(generateValueTimeSplit)),
+    'podcast:valueRecipient': trimArray(value.valueRecipients, generateValueRecipient),
+    'podcast:valueTimeSplit': trimArray(value.valueTimeSplits, generateValueTimeSplit),
   }
 
   return trimObject(valueObj)
@@ -358,7 +358,7 @@ export const generateLiveItem: GenerateFunction<LiveItem<Date>> = (liveItem) => 
     '@status': liveItem.status,
     '@start': generateRfc3339Date(liveItem.start),
     '@end': generateRfc3339Date(liveItem.end),
-    'podcast:contentLink': trimArray(liveItem.contentLinks?.map(generateContentLink)),
+    'podcast:contentLink': trimArray(liveItem.contentLinks, generateContentLink),
   }
 
   return trimObject(value)
@@ -427,7 +427,7 @@ export const generatePodroll: GenerateFunction<Podroll> = (podroll) => {
   }
 
   const value = {
-    'podcast:remoteItem': trimArray(podroll.remoteItems?.map(generateRemoteItem)),
+    'podcast:remoteItem': trimArray(podroll.remoteItems, generateRemoteItem),
   }
 
   return trimObject(value)
@@ -477,19 +477,19 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
 
   const value = {
     'podcast:locked': generateLocked(feed.locked),
-    'podcast:funding': trimArray(feed.fundings?.map(generateFunding)),
-    'podcast:person': trimArray(feed.persons?.map(generatePerson)),
+    'podcast:funding': trimArray(feed.fundings, generateFunding),
+    'podcast:person': trimArray(feed.persons, generatePerson),
     'podcast:location': generateLocation(feed.location),
-    'podcast:trailer': trimArray(feed.trailers?.map(generateTrailer)),
+    'podcast:trailer': trimArray(feed.trailers, generateTrailer),
     'podcast:license': generateLicense(feed.license),
     'podcast:guid': feed.guid,
     'podcast:value': generateValue(feed.value),
     'podcast:medium': feed.medium,
     'podcast:images': generateImages(feed.images),
-    'podcast:liveItem': trimArray(feed.liveItems?.map(generateLiveItem)),
-    'podcast:block': trimArray(feed.blocks?.map(generateBlock)),
-    'podcast:txt': trimArray(feed.txts?.map(generateTxt)),
-    'podcast:remoteItem': trimArray(feed.remoteItems?.map(generateRemoteItem)),
+    'podcast:liveItem': trimArray(feed.liveItems, generateLiveItem),
+    'podcast:block': trimArray(feed.blocks, generateBlock),
+    'podcast:txt': trimArray(feed.txts, generateTxt),
+    'podcast:remoteItem': trimArray(feed.remoteItems, generateRemoteItem),
     'podcast:podroll': generatePodroll(feed.podroll),
     'podcast:updateFrequency': generateUpdateFrequency(feed.updateFrequency),
     'podcast:podping': generatePodping(feed.podping),

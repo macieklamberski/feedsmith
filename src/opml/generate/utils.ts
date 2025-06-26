@@ -27,7 +27,7 @@ export const generateOutline: GenerateFunction<Outline> = (outline) => {
     '@title': outline.title,
     '@version': outline.version,
     '@url': outline.url,
-    outline: trimArray(outline.outlines?.map(generateOutline)),
+    outline: trimArray(outline.outlines, generateOutline),
   }
 
   return trimObject(value)
@@ -63,7 +63,7 @@ export const generateBody: GenerateFunction<Body> = (body) => {
   }
 
   const value = {
-    outline: trimArray(body.outlines?.map(generateOutline)),
+    outline: trimArray(body.outlines, generateOutline),
   }
 
   return trimObject(value)
