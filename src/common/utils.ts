@@ -71,52 +71,6 @@ export const trimArray = <T, R = T>(
   return result.length > 0 ? result : undefined
 }
 
-export type ValidatedAndTrimmedObject<T extends Record<string, unknown>, K extends keyof T> = T & {
-  [P in K]-?: NonNullable<T[P]>
-}
-
-export const validateAndTrimObject = <
-  T extends Record<string, unknown>,
-  K extends keyof T & (string | number),
->(
-  object: T,
-  ...keys: [K, ...K[]]
-): ValidatedAndTrimmedObject<T, K> | undefined => {
-  switch (keys.length) {
-    case 1:
-      if (!isPresent(object[keys[0]])) return
-      break
-    case 2:
-      if (!isPresent(object[keys[0]])) return
-      if (!isPresent(object[keys[1]])) return
-      break
-    case 3:
-      if (!isPresent(object[keys[0]])) return
-      if (!isPresent(object[keys[1]])) return
-      if (!isPresent(object[keys[2]])) return
-      break
-    case 4:
-      if (!isPresent(object[keys[0]])) return
-      if (!isPresent(object[keys[1]])) return
-      if (!isPresent(object[keys[2]])) return
-      if (!isPresent(object[keys[3]])) return
-      break
-    case 5:
-      if (!isPresent(object[keys[0]])) return
-      if (!isPresent(object[keys[1]])) return
-      if (!isPresent(object[keys[2]])) return
-      if (!isPresent(object[keys[3]])) return
-      if (!isPresent(object[keys[4]])) return
-      break
-    default:
-      for (let i = 0; i < keys.length; i++) {
-        if (!isPresent(object[keys[i]])) return
-      }
-  }
-
-  return trimObject(object) as ValidatedAndTrimmedObject<T, K>
-}
-
 const cdataStartTag = '<![CDATA['
 const cdataEndTag = ']]>'
 const cdataRegex = /<!\[CDATA\[([\s\S]*?)\]\]>/g
