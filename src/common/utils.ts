@@ -12,7 +12,7 @@ export const isObject = (value: Unreliable): value is Record<string, Unreliable>
     isPresent(value) &&
     typeof value === 'object' &&
     !Array.isArray(value) &&
-    Object.getPrototypeOf(value) === Object.prototype
+    value.constructor === Object
   )
 }
 
@@ -353,7 +353,7 @@ export const generateYesNoBoolean: GenerateFunction<boolean> = (value) => {
   return value ? 'yes' : 'no'
 }
 
-export const detectNamespaces = (value: unknown): Set<string> => {
+export const detectNamespaces = (value: unknown, recursive = false): Set<string> => {
   const namespaces = new Set<string>()
   const seenKeys = new Set<string>()
 
@@ -381,7 +381,9 @@ export const detectNamespaces = (value: unknown): Set<string> => {
           namespaces.add(keyWithoutAt.slice(0, colonIndex))
         }
 
-        traverse(current[key])
+        if (recursive) {
+          traverse(current[key])
+        }
       }
     }
   }
@@ -415,7 +417,7 @@ export const generateNamespaceAttrs = (value: Unreliable): Record<string, string
   }
 
   let namespaceAttrs: Record<string, string> | undefined
-  const valueNamespaces = detectNamespaces(value)
+  const valueNamespaces = detectNamespaces(value, true)
 
   for (const slug in namespaceUrls) {
     if (!valueNamespaces.has(slug)) {

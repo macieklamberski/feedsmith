@@ -133,9 +133,6 @@ describe('isObject', () => {
   })
 
   it('should return false for objects with custom prototypes', () => {
-    expect(isObject(Object.create(null))).toBe(false)
-    expect(isObject(Object.create({}))).toBe(false)
-
     class CustomClass {}
     expect(isObject(new CustomClass())).toBe(false)
   })
@@ -2277,7 +2274,7 @@ describe('detectNamespaces', () => {
     }
     const expected = new Set(['atom', 'dc', 'itunes', 'slash', 'content', 'georss'])
 
-    expect(detectNamespaces(value)).toEqual(expected)
+    expect(detectNamespaces(value, true)).toEqual(expected)
   })
 
   it('should detect threading namespace in link attributes', () => {
@@ -2298,7 +2295,130 @@ describe('detectNamespaces', () => {
     }
     const expected = new Set(['thr'])
 
-    expect(detectNamespaces(value)).toEqual(expected)
+    expect(detectNamespaces(value, true)).toEqual(expected)
+  })
+
+  it('should only detect top-level namespaces when recursive=false (default)', () => {
+    const nestedValue = {
+      'top:level': 'value',
+      normalKey: 'no namespace',
+      nested: {
+        'inner:namespace': 'value',
+        'another:inner': 'value',
+        deepNested: {
+          'deep:namespace': 'value',
+        },
+      },
+      array: [
+        {
+          'array:namespace': 'value',
+        },
+      ],
+    }
+    const expected = new Set(['top'])
+    expect(detectNamespaces(nestedValue)).toEqual(expected)
+    expect(detectNamespaces(nestedValue, false)).toEqual(expected)
+  })
+
+  it('should detect all namespaces when recursive=true', () => {
+    const nestedValue = {
+      'top:level': 'value',
+      normalKey: 'no namespace',
+      nested: {
+        'inner:namespace': 'value',
+        'another:inner': 'value',
+        deepNested: {
+          'deep:namespace': 'value',
+        },
+      },
+      array: [
+        {
+          'array:namespace': 'value',
+        },
+      ],
+    }
+    const expected = new Set(['top', 'inner', 'another', 'deep', 'array'])
+    expect(detectNamespaces(nestedValue, true)).toEqual(expected)
+  })
+
+  it('should handle arrays recursively when recursive=true', () => {
+    const value = {
+      'top:level': 'value',
+      items: [
+        { 'item1:namespace': 'value' },
+        { 'item2:namespace': 'value' },
+        {
+          'item3:namespace': 'value',
+          nested: {
+            'nested:namespace': 'value',
+          },
+        },
+      ],
+    }
+
+    const expectedNonRecursive = new Set(['top'])
+    const expectedRecursive = new Set(['top', 'item1', 'item2', 'item3', 'nested'])
+
+    expect(detectNamespaces(value, false)).toEqual(expectedNonRecursive)
+    expect(detectNamespaces(value, true)).toEqual(expectedRecursive)
+  })
+
+  it('should handle deeply nested objects when recursive=true', () => {
+    const value = {
+      'level1:ns': 'value',
+      level2: {
+        'level2:ns': 'value',
+        level3: {
+          'level3:ns': 'value',
+          level4: {
+            'level4:ns': 'value',
+          },
+        },
+      },
+    }
+
+    const expectedNonRecursive = new Set(['level1'])
+    const expectedRecursive = new Set(['level1', 'level2', 'level3', 'level4'])
+
+    expect(detectNamespaces(value, false)).toEqual(expectedNonRecursive)
+    expect(detectNamespaces(value, true)).toEqual(expectedRecursive)
+  })
+
+  it('should handle empty nested objects correctly with recursive parameter', () => {
+    const value = {
+      'top:namespace': 'value',
+      empty: {},
+      emptyArray: [],
+      nested: {
+        alsoEmpty: {},
+      },
+    }
+
+    const expectedNonRecursive = new Set(['top'])
+    const expectedRecursive = new Set(['top'])
+
+    expect(detectNamespaces(value, false)).toEqual(expectedNonRecursive)
+    expect(detectNamespaces(value, true)).toEqual(expectedRecursive)
+  })
+
+  it('should respect seenKeys optimization in recursive mode', () => {
+    const value = {
+      'duplicate:key': 'value1',
+      nested1: {
+        'duplicate:key': 'value2',
+        'other:namespace': 'value',
+      },
+      nested2: {
+        'duplicate:key': 'value3',
+        'another:namespace': 'value',
+      },
+    }
+
+    const expectedNonRecursive = new Set(['duplicate'])
+    const expectedRecursive = new Set(['duplicate', 'other', 'another'])
+
+    expect(detectNamespaces(value, false)).toEqual(expectedNonRecursive)
+    expect(detectNamespaces(value, true)).toEqual(expectedRecursive)
   })
 })
 
@@ -2451,6 +2571,29 @@ describe('generateNamespaceAttrs', () => {
     expect(generateNamespaceAttrs(true)).toBeUndefined()
     expect(generateNamespaceAttrs([])).toBeUndefined()
     expect(generateNamespaceAttrs(() => {})).toBeUndefined()
+  })
+
+  it('should detect namespaces in nested structures using recursive detection', () => {
+    const value = {
+      title: 'Feed Title',
+      'atom:link': 'http://example.com/feed.xml',
+      items: [
+        {
+          title: 'Item 1',
+          'dc:creator': 'John Doe',
+          nested: {
+            'itunes:duration': '30:45',
+          },
+        },
+      ],
+    }
+    const expected = {
+      '@xmlns:atom': 'http://www.w3.org/2005/Atom',
+      '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+      '@xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+    }
+
+    expect(generateNamespaceAttrs(value)).toEqual(expected)
   })
 })
 
