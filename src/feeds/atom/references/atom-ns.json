@@ -22,6 +22,10 @@
       "itunes": {
         "explicit": false
       },
+      "yt": {
+        "videoId": "dQw4w9WgXcQ",
+        "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw"
+      },
       "media": {
         "contents": [
           {
@@ -484,6 +488,10 @@
       "email": "news@example.com",
       "name": "Jack Smith"
     }
+  },
+  "yt": {
+    "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw",
+    "playlistId": "PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf"
   },
   "media": {
     "contents": [

@@ -25,6 +25,10 @@ import {
   retrieveLink as retrieveThrLink,
 } from '../../../namespaces/thr/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
+import {
+  retrieveFeed as retrieveYtFeed,
+  retrieveItem as retrieveYtItem,
+} from '../../../namespaces/yt/parse/utils.js'
 import type {
   Category,
   Entry,
@@ -230,6 +234,7 @@ export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) 
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     thr: namespaces?.has('thr') ? retrieveThrItem(value) : undefined,
     wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
+    yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
   }
 
   return trimObject(entry)
@@ -262,6 +267,7 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) =>
     itunes: namespaces?.has('itunes') ? retrieveItunesFeed(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
   }
 
   return trimObject(feed)

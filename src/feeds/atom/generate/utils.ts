@@ -21,6 +21,10 @@ import {
   generateLink as generateThrLink,
 } from '../../../namespaces/thr/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
+import {
+  generateFeed as generateYtFeed,
+  generateItem as generateYtItem,
+} from '../../../namespaces/yt/generate/utils.js'
 import type {
   Category,
   Entry,
@@ -177,6 +181,7 @@ export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => 
     ...generateGeoRssItemOrFeed(entry.georss),
     ...generateThrItem(entry.thr),
     ...generateWfwItem(entry.wfw),
+    ...generateYtItem(entry.yt),
   }
 }
 
@@ -234,6 +239,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed, options) => {
     ...generateItunesFeed(feed.itunes),
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
+    ...generateYtFeed(feed.yt),
     ...valueEntries,
   }
 

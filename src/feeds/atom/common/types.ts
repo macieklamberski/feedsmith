@@ -11,6 +11,7 @@ import type { Item as SlashItem } from '../../../namespaces/slash/common/types.j
 import type { Feed as SyFeed } from '../../../namespaces/sy/common/types.js'
 import type { Item as ThrItem, Link as ThrLink } from '../../../namespaces/thr/common/types.js'
 import type { Item as WfwItem } from '../../../namespaces/wfw/common/types.js'
+import type { Feed as YtFeed, Item as YtItem } from '../../../namespaces/yt/common/types.js'
 
 export type ParsePartialFunction<R> = (
   value: Unreliable,
@@ -89,6 +90,7 @@ export type Entry<TDate extends DateLike> = {
   georss?: GeoRssItemOrFeed
   thr?: ThrItem
   wfw?: WfwItem
+  yt?: YtItem
 }
 
 export type Feed<TDate extends DateLike> = {
@@ -111,4 +113,5 @@ export type Feed<TDate extends DateLike> = {
   itunes?: ItunesFeed
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
+  yt?: YtFeed
 }

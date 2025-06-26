@@ -651,4 +651,82 @@ describe('generate', () => {
 
     expect(generate(value)).toEqual(expected)
   })
+
+  it('should generate Atom feed with YouTube namespace', () => {
+    const value = {
+      id: 'yt:channel:UCuAXFkgsw1L7xaCfnd5JJOw',
+      title: 'YouTube Channel Feed',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      yt: {
+        channelId: 'UCuAXFkgsw1L7xaCfnd5JJOw',
+      },
+      entries: [
+        {
+          id: 'yt:video:dQw4w9WgXcQ',
+          title: 'Example YouTube Video',
+          updated: new Date('2024-01-05T10:30:00Z'),
+          yt: {
+            videoId: 'dQw4w9WgXcQ',
+            channelId: 'UCuAXFkgsw1L7xaCfnd5JJOw',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
+  <id>yt:channel:UCuAXFkgsw1L7xaCfnd5JJOw</id>
+  <title>YouTube Channel Feed</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
+  <entry>
+    <id>yt:video:dQw4w9WgXcQ</id>
+    <title>Example YouTube Video</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+    <yt:videoId>dQw4w9WgXcQ</yt:videoId>
+    <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with YouTube playlist', () => {
+    const value = {
+      id: 'yt:playlist:PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf',
+      title: 'YouTube Playlist Feed',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      yt: {
+        playlistId: 'PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf',
+      },
+      entries: [
+        {
+          id: 'yt:video:OTYFJaT-Glk',
+          title: 'Video in Playlist',
+          updated: new Date('2024-01-08T14:20:00Z'),
+          yt: {
+            videoId: 'OTYFJaT-Glk',
+            channelId: 'UCtNjkMLQQOX251hjGqimx2w',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
+  <id>yt:playlist:PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf</id>
+  <title>YouTube Playlist Feed</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <yt:playlistId>PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf</yt:playlistId>
+  <entry>
+    <id>yt:video:OTYFJaT-Glk</id>
+    <title>Video in Playlist</title>
+    <updated>2024-01-08T14:20:00.000Z</updated>
+    <yt:videoId>OTYFJaT-Glk</yt:videoId>
+    <yt:channelId>UCtNjkMLQQOX251hjGqimx2w</yt:channelId>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
 })
