@@ -5,6 +5,7 @@ import {
   detectNamespaces,
   generateCsvOf,
   generateNamespaceAttrs,
+  generateNumber,
   generateRfc822Date,
   generateRfc3339Date,
   generateString,
@@ -2510,6 +2511,28 @@ describe('generateString', () => {
   })
 
   it('should handle non-string inputs', () => {
+    expect(generateString(undefined)).toBeUndefined()
+  })
+})
+
+describe('generateNumber', () => {
+  it('should return number when input is a number', () => {
+    const values = [0, 42, -123, 3.1343e3, -0.001, Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER]
+
+    for (const value of values) {
+      expect(generateNumber(value)).toBe(value)
+    }
+  })
+
+  it('should return undefined for special number values', () => {
+    const values = [Infinity, -Infinity, NaN]
+
+    for (const value of values) {
+      expect(generateNumber(value)).toBeUndefined()
+    }
+  })
+
+  it('should return undefined for non-number inputs', () => {
     expect(generateString(undefined)).toBeUndefined()
   })
 })

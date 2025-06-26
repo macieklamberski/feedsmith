@@ -16,6 +16,7 @@ import type {
 import type { Item as SlashItem } from '../../../namespaces/slash/common/types.js'
 import type { Feed as SyFeed } from '../../../namespaces/sy/common/types.js'
 import type { Item as ThrItem } from '../../../namespaces/thr/common/types.js'
+import type { Item as WfwItem } from '../../../namespaces/wfw/common/types.js'
 
 export type Person = string
 
@@ -89,6 +90,7 @@ export type Item<TDate extends DateLike> = {
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
   thr?: ThrItem
+  wfw?: WfwItem
 } & ({ title: string } | { description: string })
 
 export type Feed<TDate extends DateLike> = {
