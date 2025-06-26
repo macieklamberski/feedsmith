@@ -64,7 +64,10 @@
         "length": 1069871,
         "type": "audio/mpeg"
       },
-      "guid": "http://example.org/guid/1",
+      "guid": {
+        "isPermaLink": true,
+        "value": "http://example.org/guid/1"
+      },
       "pubDate": "Thu, 05 Sep 2002 0:00:01 GMT",
       "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
     },
@@ -85,7 +88,7 @@
         "length": 1069871,
         "type": "audio/mpeg"
       },
-      "guid": "http://example.org/guid/2",
+      "guid": { "value": "http://example.org/guid/2" },
       "pubDate": "Thu, 05 Sep 2002 0:00:01 GMT",
       "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
     }

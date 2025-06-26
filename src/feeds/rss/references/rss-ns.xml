@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0">
+<rss version="2.0"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:dcterms="http://purl.org/dc/terms/"
+  xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+  xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+  xmlns:podcast="https://podcastindex.org/namespace/1.0"
+  xmlns:media="http://search.yahoo.com/mrss/"
+  xmlns:georss="http://www.georss.org/georss"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+  xmlns:thr="http://purl.org/syndication/thread/1.0"
+  xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+  xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Example Feed</title>
     <link>http://example.org</link>
@@ -7,6 +19,8 @@
     <dc:contributor>Jane Smith</dc:contributor>
     <dc:date>2022-01-01T12:00+00:00</dc:date>
     <dc:description>This is an example of description.</dc:description>
+    <dcterms:created>2022-01-01T12:00+00:00</dcterms:created>
+    <dcterms:license>Creative Commons Attribution 4.0</dcterms:license>
     <sy:updateBase>2000-01-01T12:00+00:00</sy:updateBase>
     <sy:updatePeriod>hourly</sy:updatePeriod>
     <sy:updateFrequency>1</sy:updateFrequency>
@@ -26,11 +40,11 @@
     <podcast:license url="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</podcast:license>
     <podcast:guid>ead4c236-bf58-58c6-a2c6-a6b28d128cb6</podcast:guid>
     <podcast:value type="lightning" method="keysend" suggested="0.00000005000">
-      <podcast:valueRecipient name="Host" address="02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee83420ef254acd7d8e5edf5f16e" split="90" type="node" />
-      <podcast:valueRecipient name="Producer" address="03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a" split="10" type="node" />
+      <podcast:valueRecipient name="Host" address="02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee83420ef254acd7d8e5edf5f16e" split="90" type="node"/>
+      <podcast:valueRecipient name="Producer" address="03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a" split="10" type="node"/>
     </podcast:value>
     <podcast:medium>podcast</podcast:medium>
-    <podcast:images srcset="https://example.com/images/cover-1000.jpg 1000w, https://example.com/images/cover-600.jpg 600w" />
+    <podcast:images srcset="https://example.com/images/cover-1000.jpg 1000w, https://example.com/images/cover-600.jpg 600w"/>
     <podcast:liveItem status="live" start="2025-04-30T09:00:00+01:00" end="2025-04-30T10:00:00+01:00">
       <podcast:person group="host">Jane Smith</podcast:person>
       <podcast:contentLink href="https://example.com/live/chat">Live Chat</podcast:contentLink>
@@ -38,13 +52,13 @@
     <podcast:block>yes</podcast:block>
     <podcast:block id="test">no</podcast:block>
     <podcast:txt purpose="info">Additional text information about the podcast</podcast:txt>
-    <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-a6b28d128cb9" feedUrl="https://guest-podcast.example/feed.xml" itemGuid="episode-guid-here" />
+    <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-a6b28d128cb9" feedUrl="https://guest-podcast.example/feed.xml" itemGuid="episode-guid-here"/>
     <podcast:podroll>
-      <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-a6b28d128cb8" feedUrl="https://example.com/related-podcast1.xml" />
-      <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-a6b28d128cb7" feedUrl="https://example.com/related-podcast2.xml" />
+      <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-a6b28d128cb8" feedUrl="https://example.com/related-podcast1.xml"/>
+      <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-a6b28d128cb7" feedUrl="https://example.com/related-podcast2.xml"/>
     </podcast:podroll>
     <podcast:updateFrequency complete="false" rrule="FREQ=WEEKLY;BYDAY=FR" dtstart="2025-01-10T08:00:00+01:00">Weekly on Fridays</podcast:updateFrequency>
-    <podcast:podping usesPodping="true" />
+    <podcast:podping usesPodping="true"/>
 
     <!-- Media Namespace: Item/Feed Level Tags -->
     <media:content url="https://example.com/videos/sample1.mp4" fileSize="12345678" type="video/mp4" medium="video" isDefault="true" expression="full" bitrate="1500" framerate="30" samplingrate="44.1" channels="2" duration="120" height="720" width="1280" lang="en">
@@ -60,8 +74,8 @@
       <media:text type="transcript" lang="en" start="00:00:03" end="00:00:10">This is a sample transcript text</media:text>
       <media:restriction relationship="allow" type="country">us ca gb</media:restriction>
       <media:community>
-        <media:starRating average="4.5" count="2500" min="1" max="5" />
-        <media:statistics views="12345" favorites="413" />
+        <media:starRating average="4.5" count="2500" min="1" max="5"/>
+        <media:statistics views="12345" favorites="413"/>
         <media:tags>featured, media, example</media:tags>
       </media:community>
       <media:comments>
@@ -78,12 +92,12 @@
       <media:backLinks>
         <media:backLink>https://example.com/articles/related</media:backLink>
       </media:backLinks>
-      <media:status state="active" />
-      <media:price type="rent" price="2.99" currency="USD" />
+      <media:status state="active"/>
+      <media:price type="rent" price="2.99" currency="USD"/>
       <media:license type="text/html" href="https://example.com/license">Standard License</media:license>
-      <media:peerLink type="application/torrent" href="https://example.com/torrents/sample1.torrent" />
+      <media:peerLink type="application/torrent" href="https://example.com/torrents/sample1.torrent"/>
       <media:location>Sample Studio</media:location>
-      <media:rights status="official" />
+      <media:rights status="official"/>
       <media:scenes>
         <media:scene>
           <sceneTitle>Introduction</sceneTitle>
@@ -101,8 +115,8 @@
     <media:group>
       <media:title>Multi-Format Content Example</media:title>
       <media:description>This video is available in multiple formats and resolutions</media:description>
-      <media:thumbnail url="https://example.com/thumbnails/group-main.jpg" width="640" height="360" />
-      <media:thumbnail url="https://example.com/thumbnails/group-alt.jpg" width="1280" height="720" />
+      <media:thumbnail url="https://example.com/thumbnails/group-main.jpg" width="640" height="360"/>
+      <media:thumbnail url="https://example.com/thumbnails/group-alt.jpg" width="1280" height="720"/>
       <media:keywords>group, multiple, formats, resolutions</media:keywords>
       <media:category>Technology</media:category>
       <media:rating scheme="urn:mpaa">PG</media:rating>
@@ -131,10 +145,10 @@
     <media:credit role="actor" scheme="urn:ebu">Sarah Johnson</media:credit>
     <media:credit role="actor" scheme="urn:ebu">Robert Williams</media:credit>
     <media:category scheme="http://dmoz.org">Arts/Movies/Titles/A/</media:category>
-    <media:status state="active" reason="approved" />
-    <media:thumbnail url="https://example.com/thumbnails/adv-1.jpg" time="00:00:05.000" />
-    <media:thumbnail url="https://example.com/thumbnails/adv-2.jpg" time="00:01:15.000" />
-    <media:thumbnail url="https://example.com/thumbnails/adv-3.jpg" time="00:02:30.000" />
+    <media:status state="active" reason="approved"/>
+    <media:thumbnail url="https://example.com/thumbnails/adv-1.jpg" time="00:00:05.000"/>
+    <media:thumbnail url="https://example.com/thumbnails/adv-2.jpg" time="00:01:15.000"/>
+    <media:thumbnail url="https://example.com/thumbnails/adv-3.jpg" time="00:02:30.000"/>
     <media:price type="package" price="9.99" currency="USD" info="full access">Complete Package</media:price>
     <media:price type="subscription" price="4.99" currency="USD" info="monthly">Monthly Subscription</media:price>
     <media:restriction relationship="allow" type="country">us ca gb de fr</media:restriction>
@@ -142,8 +156,8 @@
     <media:rating scheme="urn:mpaa">PG-13</media:rating>
     <media:rating scheme="urn:v-chip">TV-14</media:rating>
     <media:community>
-      <media:starRating average="4.8" count="12563" min="1" max="5" />
-      <media:statistics views="256789" favorites="3421" shares="1245" />
+      <media:starRating average="4.8" count="12563" min="1" max="5"/>
+      <media:statistics views="256789" favorites="3421" shares="1245"/>
       <media:tags>cinematic, production, advanced, technical, demo</media:tags>
     </media:community>
 
@@ -165,6 +179,8 @@
       <content:encoded>This is an example of content.</content:encoded>
       <dc:creator>Jack Jackson</dc:creator>
       <dc:date>2022-01-01T12:00+00:00</dc:date>
+      <dcterms:created>2022-01-01T12:00+00:00</dcterms:created>
+      <dcterms:license>Creative Commons Attribution 4.0</dcterms:license>
       <slash:section>articles</slash:section>
       <slash:department>not-an-ocean-unless-there-are-lobsters</slash:department>
       <slash:comments>177</slash:comments>
@@ -178,9 +194,9 @@
       </author>
 
       <!-- Podcast Namespace: Item Level Tags -->
-      <podcast:transcript url="https://example.com/episodes/123/transcript.vtt" type="text/vtt" language="en" />
-      <podcast:transcript url="https://example.com/episodes/123/transcript.srt" type="application/x-subrip" language="en" rel="captions" />
-      <podcast:chapters url="https://example.com/episodes/123/chapters.json" type="application/json+chapters" />
+      <podcast:transcript url="https://example.com/episodes/123/transcript.vtt" type="text/vtt" language="en"/>
+      <podcast:transcript url="https://example.com/episodes/123/transcript.srt" type="application/x-subrip" language="en" rel="captions"/>
+      <podcast:chapters url="https://example.com/episodes/123/chapters.json" type="application/json+chapters"/>
       <podcast:soundbite startTime="60" duration="30">The key takeaway from this episode</podcast:soundbite>
       <podcast:soundbite startTime="120" duration="45">Another important highlight</podcast:soundbite>
       <podcast:person group="host" img="https://example.com/images/host.jpg" href="https://example.com/host">Jane Smith</podcast:person>
@@ -191,20 +207,20 @@
       <podcast:episode display="Episode 1">1</podcast:episode>
       <podcast:license url="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</podcast:license>
       <podcast:alternateEnclosure type="audio/mpeg" length="24576000" bitrate="128000" title="MP3 Audio" default="true">
-        <podcast:source uri="https://example.com/episodes/123.mp3" />
-        <podcast:integrity type="sri" value="sha384-ExampleHashValueABCDEF123456789" />
+        <podcast:source uri="https://example.com/episodes/123.mp3"/>
+        <podcast:integrity type="sri" value="sha384-ExampleHashValueABCDEF123456789"/>
       </podcast:alternateEnclosure>
       <podcast:alternateEnclosure type="audio/aac" length="16384000" bitrate="96000" title="AAC Audio">
-        <podcast:source uri="https://example.com/episodes/123.aac" />
-        <podcast:integrity type="sri" value="sha384-DifferentHashValue987654321" />
+        <podcast:source uri="https://example.com/episodes/123.aac"/>
+        <podcast:integrity type="sri" value="sha384-DifferentHashValue987654321"/>
       </podcast:alternateEnclosure>
       <podcast:value type="lightning" method="keysend" suggested="0.00000002000">
-        <podcast:valueRecipient name="Host" address="02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee83420ef254acd7d8e5edf5f16e" split="90" type="node" />
-        <podcast:valueRecipient name="Guest" address="03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a" split="10" type="node" />
+        <podcast:valueRecipient name="Host" address="02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee83420ef254acd7d8e5edf5f16e" split="90" type="node"/>
+        <podcast:valueRecipient name="Guest" address="03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a" split="10" type="node"/>
       </podcast:value>
-      <podcast:images srcset="https://example.com/images/episode-1000.jpg 1000w, https://example.com/images/episode-600.jpg 600w" />
-      <podcast:socialInteract protocol="twitter" uri="https://twitter.com/examplepodcast/status/123456789" accountId="@examplepodcast" accountUrl="https://twitter.com/examplepodcast" />
-      <podcast:socialInteract protocol="mastodon" uri="https://podcastindex.social/@dave/123456789" accountId="@examplepodcast@podcastindex.social" accountUrl="https://podcastindex.social/@examplepodcast" />
+      <podcast:images srcset="https://example.com/images/episode-1000.jpg 1000w, https://example.com/images/episode-600.jpg 600w"/>
+      <podcast:socialInteract protocol="twitter" uri="https://twitter.com/examplepodcast/status/123456789" accountId="@examplepodcast" accountUrl="https://twitter.com/examplepodcast"/>
+      <podcast:socialInteract protocol="mastodon" uri="https://podcastindex.social/@dave/123456789" accountId="@examplepodcast@podcastindex.social" accountUrl="https://podcastindex.social/@examplepodcast"/>
       <podcast:txt purpose="transcript">{"version": "1.0.0", "chapters": []}</podcast:txt>
       <podcast:txt purpose="notes">Additional text information about this episode</podcast:txt>
 
@@ -222,8 +238,8 @@
         <media:text type="transcript" lang="en" start="00:00:03" end="00:00:10">This is a sample transcript text</media:text>
         <media:restriction relationship="allow" type="country">us ca gb</media:restriction>
         <media:community>
-          <media:starRating average="4.5" count="2500" min="1" max="5" />
-          <media:statistics views="12345" favorites="413" />
+          <media:starRating average="4.5" count="2500" min="1" max="5"/>
+          <media:statistics views="12345" favorites="413"/>
           <media:tags>featured, media, example</media:tags>
         </media:community>
         <media:comments>
@@ -240,12 +256,12 @@
         <media:backLinks>
           <media:backLink>https://example.com/articles/related</media:backLink>
         </media:backLinks>
-        <media:status state="active" />
-        <media:price type="rent" price="2.99" currency="USD" />
+        <media:status state="active"/>
+        <media:price type="rent" price="2.99" currency="USD"/>
         <media:license type="text/html" href="https://example.com/license">Standard License</media:license>
-        <media:peerLink type="application/torrent" href="https://example.com/torrents/sample1.torrent" />
+        <media:peerLink type="application/torrent" href="https://example.com/torrents/sample1.torrent"/>
         <media:location>Sample Studio</media:location>
-        <media:rights status="official" />
+        <media:rights status="official"/>
         <media:scenes>
           <media:scene>
             <sceneTitle>Introduction</sceneTitle>
@@ -263,8 +279,8 @@
       <media:group>
         <media:title>Multi-Format Content Example</media:title>
         <media:description>This video is available in multiple formats and resolutions</media:description>
-        <media:thumbnail url="https://example.com/thumbnails/group-main.jpg" width="640" height="360" />
-        <media:thumbnail url="https://example.com/thumbnails/group-alt.jpg" width="1280" height="720" />
+        <media:thumbnail url="https://example.com/thumbnails/group-main.jpg" width="640" height="360"/>
+        <media:thumbnail url="https://example.com/thumbnails/group-alt.jpg" width="1280" height="720"/>
         <media:keywords>group, multiple, formats, resolutions</media:keywords>
         <media:category>Technology</media:category>
         <media:rating scheme="urn:mpaa">PG</media:rating>
@@ -293,10 +309,10 @@
       <media:credit role="actor" scheme="urn:ebu">Sarah Johnson</media:credit>
       <media:credit role="actor" scheme="urn:ebu">Robert Williams</media:credit>
       <media:category scheme="http://dmoz.org">Arts/Movies/Titles/A/</media:category>
-      <media:status state="active" reason="approved" />
-      <media:thumbnail url="https://example.com/thumbnails/adv-1.jpg" time="00:00:05.000" />
-      <media:thumbnail url="https://example.com/thumbnails/adv-2.jpg" time="00:01:15.000" />
-      <media:thumbnail url="https://example.com/thumbnails/adv-3.jpg" time="00:02:30.000" />
+      <media:status state="active" reason="approved"/>
+      <media:thumbnail url="https://example.com/thumbnails/adv-1.jpg" time="00:00:05.000"/>
+      <media:thumbnail url="https://example.com/thumbnails/adv-2.jpg" time="00:01:15.000"/>
+      <media:thumbnail url="https://example.com/thumbnails/adv-3.jpg" time="00:02:30.000"/>
       <media:price type="package" price="9.99" currency="USD" info="full access">Complete Package</media:price>
       <media:price type="subscription" price="4.99" currency="USD" info="monthly">Monthly Subscription</media:price>
       <media:restriction relationship="allow" type="country">us ca gb de fr</media:restriction>
@@ -304,8 +320,8 @@
       <media:rating scheme="urn:mpaa">PG-13</media:rating>
       <media:rating scheme="urn:v-chip">TV-14</media:rating>
       <media:community>
-        <media:starRating average="4.8" count="12563" min="1" max="5" />
-        <media:statistics views="256789" favorites="3421" shares="1245" />
+        <media:starRating average="4.8" count="12563" min="1" max="5"/>
+        <media:statistics views="256789" favorites="3421" shares="1245"/>
         <media:tags>cinematic, production, advanced, technical, demo</media:tags>
       </media:community>
 
@@ -326,6 +342,10 @@
       <thr:in-reply-to ref="urn:uuid:d5e9c5d0-4c0c-11ec-81d3-0242ac130003" href="https://example.com/posts/understanding-xml-namespaces" type="application/xhtml+xml"/>
       <thr:in-reply-to ref="urn:uuid:e7865b80-4c0c-11ec-81d3-0242ac130003" href="https://example.com/posts/understanding-xml-namespaces/comments/1" type="application/xhtml+xml"/>
       <link rel="replies" href="https://example.com/posts/understanding-xml-namespaces/comments/1/replies" thr:count="2" thr:updated="2025-05-10T16:45:00Z"/>
+
+      <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
+      <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
+      <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
     </item>
   </channel>
 </rss>

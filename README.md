@@ -1,12 +1,20 @@
 # Feedsmith
 
 [![tests](https://github.com/macieklamberski/feedsmith/actions/workflows/test.yml/badge.svg)](https://github.com/macieklamberski/feedsmith/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/macieklamberski/feedsmith/branch/main/graph/badge.svg)](https://codecov.io/gh/macieklamberski/feedsmith)
 [![npm version](https://img.shields.io/npm/v/feedsmith.svg)](https://www.npmjs.com/package/feedsmith)
 [![license](https://img.shields.io/npm/l/feedsmith.svg)](https://github.com/macieklamberski/feedsmith/blob/main/LICENSE)
 
-Robust and fast JavaScript parser and generator for RSS, Atom, JSON Feed, and RDF feeds, with support for popular namespaces and OPML files. It provides both universal and format-specific parsers that maintain the original feed structure while offering helpful normalization.
+Robust and fast JavaScript parser and generator for RSS, Atom, JSON Feed, and RDF feeds, with support for popular namespaces and OPML files.
 
-Feedsmith maintains the original feed structure in a clean, object-oriented format. It intelligently normalizes legacy elements, providing you with complete access to all feed data without compromising simplicity.
+Feedsmith provides both universal and format-specific parsers that maintain the original feed structure in a clean, object-oriented format while intelligently normalizing legacy elements. Access all feed data without compromising simplicity.
+
+> [!IMPORTANT]
+>
+> You're viewing the README for the next version of Feedsmith, which is in the final stages of development. While the codebase is stable, the API may still undergo slight changes. For production use, it is recommended to use the latest stable version, 1.9.0:
+> ```bash
+> npm install feedsmith@1.9.0
+> ```
 
 [Features](#supported-formats)
 &nbsp;&nbsp;·&nbsp;&nbsp;
@@ -30,7 +38,7 @@ Feedsmith maintains the original feed structure in a clean, object-oriented form
 * **Fast parsing** — One of the fastest feed parsers in JavaScript (see [benchmarks](#benchmarks)).
 * **Type-safe API** — TypeScript type definitions are available for each feed format, making it easy to work with the data.
 * **Tree-shakable** — Only include the parts of the library you need, reducing bundle size.
-* **Well-tested** — Comprehensive test suite with 1200+ tests and 99% code coverage.
+* **Well-tested** — Comprehensive test suite with over 2000 tests and 99% code coverage.
 
 #### Compatibility
 * Works in Node.js and all modern browsers.
@@ -49,8 +57,8 @@ Feedsmith maintains the original feed structure in a clean, object-oriented form
 
 | Format | Versions | Parsing | Generating |
 |--------|----------|---------|------------|
-| [RSS](http://cyber.law.harvard.edu/rss/rss.html) | 0.9x, 2.0 | ✅ | ⏳ |
-| [Atom](https://tools.ietf.org/html/rfc4287) | 0.3, 1.0 | ✅ | ⏳ |
+| [RSS](http://cyber.law.harvard.edu/rss/rss.html) | 0.9x, 2.0 | ✅ | ✅ |
+| [Atom](https://tools.ietf.org/html/rfc4287) | 0.3, 1.0 | ✅ | ✅ |
 | [JSON Feed](https://jsonfeed.org) | 1.0, 1.1 | ✅ | ✅ |
 | [RDF](https://web.resource.org/rss/1.0/spec) | 0.9, 1.0 | ✅ | ⏳ |
 
@@ -58,17 +66,18 @@ Feedsmith maintains the original feed structure in a clean, object-oriented form
 
 | Name | Prefix | Supported in | Parsing | Generating |
 |------|--------|--------------|---------|------------|
-| [Atom](http://www.w3.org/2005/Atom) | `<atom:*>`, `<a10:*>` | RSS, RDF | ✅ | ⏳
-| [Dublin Core](http://purl.org/dc/elements/1.1/) | `<dc:*>` | RSS, Atom, RDF | ✅ | ⏳
-| [Syndication](http://purl.org/rss/1.0/modules/syndication/) | `<sy:*>` | RSS, Atom, RDF | ✅ | ⏳
-| [Content](http://purl.org/rss/1.0/modules/content/) | `<content:*>` | RSS, RDF | ✅ | ⏳
-| [Slash](http://purl.org/rss/1.0/modules/slash/) | `<slash:*>` | RSS, Atom, RDF | ✅ | ⏳
-| [iTunes](http://www.itunes.com/dtds/podcast-1.0.dtd) | `<itunes:*>` | RSS, Atom | ✅ | ⏳
-| [Podcast](https://podcastindex.org/namespace/1.0) | `<podcast:*>` | RSS | ✅ | ⏳
-| [Media RSS](http://search.yahoo.com/mrss/) | `<media:*>` | RSS, Atom, RDF | ✅ | ⏳ |
-| [GeoRSS-Simple](http://www.georss.org/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ⏳ |
-| [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) | `<thr:*>` | RSS, Atom | ✅ | ⏳ |
-| [Dublin Core Terms](http://purl.org/dc/terms/) | `<dcterms:*>` | 📋 | 📋 | 📋 |
+| [Atom](http://www.w3.org/2005/Atom) | `<atom:*>`, `<a10:*>` | RSS, RDF | ✅ | ✅ |
+| [Dublin Core](http://purl.org/dc/elements/1.1/) | `<dc:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Syndication](http://purl.org/rss/1.0/modules/syndication/) | `<sy:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Content](http://purl.org/rss/1.0/modules/content/) | `<content:*>` | RSS, RDF | ✅ | ✅ |
+| [Slash](http://purl.org/rss/1.0/modules/slash/) | `<slash:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [iTunes](http://www.itunes.com/dtds/podcast-1.0.dtd) | `<itunes:*>` | RSS, Atom | ✅ | ✅ |
+| [Podcast](https://podcastindex.org/namespace/1.0) | `<podcast:*>` | RSS | ✅ | ✅ |
+| [Media RSS](http://search.yahoo.com/mrss/) | `<media:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [GeoRSS-Simple](http://www.georss.org/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) | `<thr:*>` | RSS, Atom | ✅ | ✅ |
+| [Dublin Core Terms](http://purl.org/dc/terms/) | `<dcterms:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Well-Formed Web](http://wellformedweb.org/CommentAPI/) | `<wfw:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Administrative](https://web.resource.org/rss/1.0/modules/admin/) | `<admin:*>` | 📋 | 📋 | 📋 |
 | [GML](http://www.opengis.net/gml) | `<gml:*>` | 📋 | 📋 | 📋 |
 | [GeoRSS GML](http://www.opengis.net/gml) | `<georss:*>` | 📋 | 📋 | 📋 |
@@ -390,7 +399,7 @@ try {
 
 ### Format detection
 
-You can detect feed formats without parsing them.
+You can detect feed formats without parsing them. Detect functions are designed to quickly identify the feed format by looking for its signature, such as the the root tag, version attribute or feed elements.
 
 ```ts
 import { detectAtomFeed, detectJsonFeed, detectRssFeed, detectRdfFeed } from 'feedsmith'
@@ -411,9 +420,6 @@ if (detectRdfFeed(content)) {
   console.log('This is an RDF feed')
 }
 ```
-
-> [!WARNING]
-> Detect functions are designed to quickly identify the feed format by looking for its signature, such as the `<rss>` tag in the case of RSS feeds. However, the function may detect an RSS feed even if it is invalid. The feed will be fully validated only when using the `parseRssFeed` function.
 
 ## Generating
 
@@ -522,44 +528,45 @@ A comprehensive set of benchmarks, categorized by various file sizes, is availab
 For a quick overview, here are the results of parsing RSS, Atom, and RDF feeds using various JS packages with Tinybench. Feedsmith's results are marked with an asterisk (`*`).
 
 ```
-📊 RSS feed parsing (50 files × 100KB–5MB)
+📊 RSS feed parsing (100 files × 100KB–5MB)
 ┌───┬───────────────────────────────┬─────────┬──────────────┬──────────┬──────────┬──────┐
 │   │ Package                       │ Ops/sec │ Average (ms) │ Min (ms) │ Max (ms) │ Runs │
 ├───┼───────────────────────────────┼─────────┼──────────────┼──────────┼──────────┼──────┤
-│ 0 │ feedsmith *                   │ 7.34    │ 136.167      │ 128.479  │ 173.223  │ 111  │
-│ 1 │ @rowanmanning/feed-parser     │ 7.16    │ 139.678      │ 128.722  │ 170.903  │ 108  │
-│ 2 │ @ulisesgascon/rss-feed-parser │ 4.14    │ 241.405      │ 230.806  │ 278.534  │ 63   │
-│ 3 │ feedparser                    │ 2.50    │ 399.824      │ 374.049  │ 459.730  │ 38   │
-│ 4 │ @extractus/feed-extractor     │ 2.26    │ 443.065      │ 430.349  │ 460.195  │ 34   │
-│ 5 │ feedme.js                     │ 2.05    │ 487.222      │ 443.837  │ 535.029  │ 31   │
-│ 6 │ rss-parser                    │ 1.66    │ 603.044      │ 573.516  │ 653.683  │ 25   │
-│ 7 │ @gaphub/feed                  │ 0.94    │ 1068.621     │ 995.044  │ 1138.913 │ 15   │
+│ 0 │ feedsmith *                   │ 2.51    │ 398.928      │ 381.489  │ 418.971  │ 38   │
+│ 1 │ @rowanmanning/feed-parser     │ 2.02    │ 494.794      │ 383.502  │ 587.188  │ 31   │
+│ 2 │ @gaphub/feed                  │ 1.50    │ 666.673      │ 617.213  │ 736.102  │ 23   │
+│ 3 │ podcast-feed-parser           │ 1.35    │ 742.541      │ 679.267  │ 800.722  │ 21   │
+│ 4 │ @ulisesgascon/rss-feed-parser │ 1.29    │ 775.179      │ 665.458  │ 827.966  │ 20   │
+│ 5 │ feedparser                    │ 0.97    │ 1032.494     │ 989.692  │ 1116.225 │ 15   │
+│ 6 │ @extractus/feed-extractor     │ 0.79    │ 1269.828     │ 1179.244 │ 1353.901 │ 12   │
+│ 7 │ rss-parser                    │ 0.73    │ 1372.435     │ 1298.374 │ 1420.638 │ 11   │
+│ 8 │ feedme.js                     │ 0.49    │ 2023.101     │ 1345.876 │ 2419.279 │ 8    │
 └───┴───────────────────────────────┴─────────┴──────────────┴──────────┴──────────┴──────┘
 
-📊 Atom feed parsing (50 files × 100KB–5MB)
-┌───┬───────────────────────────┬─────────┬──────────────┬──────────┬──────────┬──────┐
-│   │ Package                   │ Ops/sec │ Average (ms) │ Min (ms) │ Max (ms) │ Runs │
-├───┼───────────────────────────┼─────────┼──────────────┼──────────┼──────────┼──────┤
-│ 0 │ feedsmith *               │ 0.98    │ 1020.035     │ 998.660  │ 1084.180 │ 15   │
-│ 1 │ @gaphub/feed              │ 0.95    │ 1058.126     │ 989.001  │ 1150.486 │ 15   │
-│ 2 │ @rowanmanning/feed-parser │ 0.63    │ 1580.462     │ 1563.357 │ 1607.379 │ 10   │
-│ 3 │ feedparser                │ 0.37    │ 2687.488     │ 2624.427 │ 2751.504 │ 6    │
-│ 4 │ @extractus/feed-extractor │ 0.32    │ 3136.880     │ 3107.170 │ 3228.099 │ 5    │
-│ 5 │ feedme.js                 │ 0.26    │ 3812.545     │ 3759.928 │ 3843.974 │ 4    │
-│ 6 │ rss-parser                │ 0.18    │ 5539.014     │ 5479.560 │ 5609.397 │ 3    │
-└───┴───────────────────────────┴─────────┴──────────────┴──────────┴──────────┴──────┘
+📊 Atom feed parsing (100 files × 100KB–5MB)
+┌───┬───────────────────────────┬─────────┬──────────────┬───────────┬───────────┬──────┐
+│   │ Package                   │ Ops/sec │ Average (ms) │ Min (ms)  │ Max (ms)  │ Runs │
+├───┼───────────────────────────┼─────────┼──────────────┼───────────┼───────────┼──────┤
+│ 0 │ feedsmith *               │ 0.39    │ 2561.561     │ 2458.885  │ 2720.073  │ 6    │
+│ 1 │ @gaphub/feed              │ 0.21    │ 4721.065     │ 4637.063  │ 4794.972  │ 4    │
+│ 2 │ feedparser                │ 0.18    │ 5621.795     │ 5391.998  │ 6014.697  │ 3    │
+│ 3 │ @rowanmanning/feed-parser │ 0.16    │ 6138.957     │ 6060.543  │ 6284.974  │ 3    │
+│ 4 │ @extractus/feed-extractor │ 0.12    │ 8404.189     │ 7921.278  │ 8887.100  │ 2    │
+│ 5 │ feedme.js                 │ 0.11    │ 9351.223     │ 9255.198  │ 9447.248  │ 2    │
+│ 6 │ rss-parser                │ 0.09    │ 10733.468    │ 10648.422 │ 10818.514 │ 2    │
+└───┴───────────────────────────┴─────────┴──────────────┴───────────┴───────────┴──────┘
 
-📊 RDF feed parsing (50 files × 100KB–5MB)
+📊 RDF feed parsing (100 files × 100KB–5MB)
 ┌───┬───────────────────────────┬─────────┬──────────────┬──────────┬──────────┬──────┐
 │   │ Package                   │ Ops/sec │ Average (ms) │ Min (ms) │ Max (ms) │ Runs │
 ├───┼───────────────────────────┼─────────┼──────────────┼──────────┼──────────┼──────┤
-│ 0 │ @rowanmanning/feed-parser │ 13.52   │ 73.990       │ 69.404   │ 89.504   │ 203  │
-│ 1 │ feedsmith *               │ 10.16   │ 98.396       │ 92.418   │ 118.053  │ 153  │
-│ 2 │ @extractus/feed-extractor │ 3.83    │ 260.946      │ 252.991  │ 274.432  │ 58   │
-│ 3 │ feedparser                │ 1.96    │ 509.686      │ 494.823  │ 530.224  │ 30   │
-│ 4 │ feedme.js                 │ 1.40    │ 714.442      │ 661.440  │ 789.395  │ 22   │
-│ 5 │ rss-parser                │ 0.97    │ 1028.245     │ 985.521  │ 1107.122 │ 15   │
-│ 6 │ @gaphub/feed              │ 0.97    │ 1031.579     │ 1008.220 │ 1060.322 │ 15   │
+│ 0 │ @rowanmanning/feed-parser │ 7.26    │ 137.744      │ 125.307  │ 180.434  │ 109  │
+│ 1 │ feedsmith *               │ 5.96    │ 167.865      │ 155.566  │ 196.252  │ 90   │
+│ 2 │ @extractus/feed-extractor │ 1.78    │ 562.474      │ 548.439  │ 589.740  │ 27   │
+│ 3 │ @gaphub/feed              │ 1.25    │ 801.999      │ 742.350  │ 936.478  │ 19   │
+│ 4 │ feedparser                │ 0.90    │ 1112.059     │ 1070.083 │ 1157.291 │ 14   │
+│ 5 │ rss-parser                │ 0.44    │ 2271.298     │ 2229.570 │ 2326.248 │ 7    │
+│ 6 │ feedme.js                 │ 0.26    │ 3907.349     │ 3871.304 │ 3944.783 │ 4    │
 └───┴───────────────────────────┴─────────┴──────────────┴──────────┴──────────┴──────┘
 ```
 

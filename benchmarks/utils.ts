@@ -1,17 +1,21 @@
-import { readFileSync, readdirSync } from 'node:fs'
-import { join } from 'node:path'
+import { readdirSync, readFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import Benchmark from 'benchmark'
-import { Bench, nToMs } from 'tinybench'
+import { Bench } from 'tinybench'
 
 export const loadFeedFiles = (dir: string, limit?: number): Record<string, string> => {
-  const files = readdirSync(dir)
+  const benchmarksDir = dirname(fileURLToPath(import.meta.url))
+  const absoluteDir = join(benchmarksDir, dir)
+
+  const files = readdirSync(absoluteDir)
   const result: Record<string, string> = {}
 
   const validFiles = files.filter((file) => !file.startsWith('.') && file !== 'Thumbs.db')
   const limitedFiles = limit ? validFiles.slice(0, limit) : validFiles
 
   for (const file of limitedFiles) {
-    const filePath = join(dir, file)
+    const filePath = join(absoluteDir, file)
     result[file] = readFileSync(filePath, 'utf-8')
   }
 
@@ -22,9 +26,9 @@ export const runTest = async <T, F = unknown>(
   feeds: Record<string, F>,
   test: (feed: F) => T | Promise<T>,
 ) => {
-  for (const [name, feed] of Object.entries(feeds)) {
+  for (const name in feeds) {
     try {
-      await test(feed)
+      await test(feeds[name])
     } catch (error) {
       console.error(`Error in ${name}:`, error)
     }
@@ -47,16 +51,10 @@ export const runTinybench = async (name: string, tests: Record<string, () => Pro
     name,
     iterations: 1,
     time: 15000,
-    now: () => nToMs(Bun.nanoseconds()),
-    setup: (_task, mode) => {
-      if (mode === 'warmup') {
-        Bun.gc(true)
-      }
-    },
   })
 
-  for (const [name, test] of randomlySortedTests) {
-    bench.add(name, test)
+  for (const [testName, test] of randomlySortedTests) {
+    bench.add(testName, test)
   }
 
   await bench.run()

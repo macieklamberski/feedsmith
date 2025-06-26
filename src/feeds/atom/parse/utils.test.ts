@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import {
+  createNamespaceGetter,
   parseCategory,
   parseEntry,
   parseFeed,
@@ -14,6 +15,102 @@ import {
   retrieveSubtitle,
   retrieveUpdated,
 } from './utils.js'
+
+describe('createNamespaceGetter', () => {
+  it('should retrieve value with prefix when prefix is provided', () => {
+    const value = {
+      'ns:key': 'prefixed value',
+      key: 'unprefixed value',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('key')).toBe('prefixed value')
+  })
+
+  it('should handle empty prefix', () => {
+    const value = {
+      key: 'value',
+    }
+    const get = createNamespaceGetter(value, '')
+
+    expect(get('key')).toBe('value')
+  })
+
+  it('should handle undefined prefix', () => {
+    const value = {
+      key: 'value',
+    }
+    const get = createNamespaceGetter(value, undefined)
+
+    expect(get('key')).toBe('value')
+  })
+
+  it('should handle complex objects as values', () => {
+    const complexValue = { nested: 'object' }
+    const value = {
+      'ns:key': complexValue,
+      key: 'simple value',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('key')).toBe(complexValue)
+  })
+
+  it('should handle arrays as values', () => {
+    const arrayValue = [1, 2, 3]
+    const value = {
+      'ns:key': arrayValue,
+      key: 'simple value',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('key')).toBe(arrayValue)
+  })
+
+  it('should handle non-string keys gracefully', () => {
+    const value = {
+      'ns:123': 'numeric key with prefix',
+      '123': 'numeric key',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('123')).toBe('numeric key with prefix')
+  })
+
+  it('should handle various prefix formats', () => {
+    const value = {
+      'namespace:key': 'value with colon',
+      'namespace-key': 'value with dash',
+      namespace_key: 'value with underscore',
+    }
+
+    const colonGetter = createNamespaceGetter(value, 'namespace:')
+    const dashGetter = createNamespaceGetter(value, 'namespace-')
+    const underscoreGetter = createNamespaceGetter(value, 'namespace_')
+
+    expect(colonGetter('key')).toBe('value with colon')
+    expect(dashGetter('key')).toBe('value with dash')
+    expect(underscoreGetter('key')).toBe('value with underscore')
+  })
+
+  it('should return undefined when prefixed key does not exist', () => {
+    const value = {
+      key: 'unprefixed value',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('key')).toBeUndefined()
+  })
+
+  it('should return undefined for non-existent keys (with prefix)', () => {
+    const value = {
+      'ns:existingKey': 'value',
+    }
+    const get = createNamespaceGetter(value, 'ns:')
+
+    expect(get('nonExistentKey')).toBeUndefined()
+  })
+})
 
 describe('parseLink', () => {
   it('should parse complete link object', () => {
@@ -151,7 +248,7 @@ describe('parsePerson', () => {
     expect(parsePerson(value)).toEqual(expectedFull)
   })
 
-  it('should parse complete person object (Atom 1.0) (with list of values)', () => {
+  it('should parse complete person object (Atom 1.0) (with array of values)', () => {
     const value = {
       name: ['John Doe', 'Jane Smith'],
       uri: ['https://example.com/johndoe', 'https://example.com/janesmith'],
@@ -173,29 +270,19 @@ describe('parsePerson', () => {
 
   it('should parse complete person object (Atom 0.3) (without #text)', () => {
     const value = {
+      name: 'John Doe',
+      url: 'https://example.com/johndoe',
+      email: 'john@example.com',
+    }
+
+    expect(parsePerson(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete person object (Atom 0.3) (with array of values)', () => {
+    const value = {
       name: ['John Doe', 'Jane Smith'],
       url: ['https://example.com/johndoe', 'https://example.com/janesmith'],
       email: ['john@example.com', 'jane@example.com'],
-    }
-
-    expect(parsePerson(value)).toEqual(expectedFull)
-  })
-
-  it('should parse complete person object (Atom 0.3) (with list of values)', () => {
-    const value = {
-      name: 'John Doe',
-      url: 'https://example.com/johndoe',
-      email: 'john@example.com',
-    }
-
-    expect(parsePerson(value)).toEqual(expectedFull)
-  })
-
-  it('should parse complete person object (Atom 0.3) (without #text)', () => {
-    const value = {
-      name: 'John Doe',
-      url: 'https://example.com/johndoe',
-      email: 'john@example.com',
     }
 
     expect(parsePerson(value)).toEqual(expectedFull)
@@ -226,13 +313,17 @@ describe('parsePerson', () => {
     expect(parsePerson(value)).toEqual(expected)
   })
 
-  it('should return undefined if name is missing', () => {
+  it('should handle partial objects (missing name)', () => {
     const value = {
       uri: { '#text': 'https://example.com/johndoe' },
       email: { '#text': 'john@example.com' },
     }
+    const expected = {
+      uri: 'https://example.com/johndoe',
+      email: 'john@example.com',
+    }
 
-    expect(parsePerson(value)).toBeUndefined()
+    expect(parsePerson(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -284,13 +375,17 @@ describe('parseCategory', () => {
     expect(parseCategory(value)).toEqual(expected)
   })
 
-  it('should return undefined if term is missing', () => {
+  it('should handle partial objects (missing term)', () => {
     const value = {
       '@scheme': 'http://example.com/categories/',
       '@label': 'Technology',
     }
+    const expected = {
+      scheme: 'http://example.com/categories/',
+      label: 'Technology',
+    }
 
-    expect(parseCategory(value)).toBeUndefined()
+    expect(parseCategory(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -359,6 +454,19 @@ describe('parseGenerator', () => {
     expect(parseGenerator(value)).toEqual(expected)
   })
 
+  it('should parse complete generator object (Atom 1.0) (without #text)', () => {
+    const value = {
+      '@uri': 'https://example.com/generator',
+      '@version': '1.0',
+    }
+    const expected = {
+      uri: 'https://example.com/generator',
+      version: '1.0',
+    }
+
+    expect(parseGenerator(value)).toEqual(expected)
+  })
+
   it('should parse complete generator object (Atom 0.3)', () => {
     const value = {
       '#text': 'Example Generator',
@@ -408,13 +516,17 @@ describe('parseGenerator', () => {
     expect(parseGenerator(value)).toEqual(expected)
   })
 
-  it('should return undefined if text is missing', () => {
+  it('should handle partial objects (missing text)', () => {
     const value = {
       '@uri': 'https://example.com/generator',
       '@version': '1.0',
     }
+    const expected = {
+      uri: 'https://example.com/generator',
+      version: '1.0',
+    }
 
-    expect(parseGenerator(value)).toBeUndefined()
+    expect(parseGenerator(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -837,22 +949,30 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
-  it('should return undefined if id is missing', () => {
+  it('should handle partial objects (missing id)', () => {
     const value = {
       title: { '#text': 'Entry Title' },
       updated: { '#text': '2023-01-01T12:00:00Z' },
     }
+    const expected = {
+      title: 'Entry Title',
+      updated: '2023-01-01T12:00:00Z',
+    }
 
-    expect(parseEntry(value)).toBeUndefined()
+    expect(parseEntry(value)).toEqual(expected)
   })
 
-  it('should return undefined if title is missing', () => {
+  it('should handle partial objects (missing title)', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
       updated: { '#text': '2023-01-01T12:00:00Z' },
     }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      updated: '2023-01-01T12:00:00Z',
+    }
 
-    expect(parseEntry(value)).toBeUndefined()
+    expect(parseEntry(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -887,6 +1007,25 @@ describe('parseEntry', () => {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: 'Example Entry',
       slash: { comments: 10 },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should handle dcterms namespace in entry', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'dcterms:created': { '#text': '2023-02-01T00:00:00Z' },
+      'dcterms:license': { '#text': 'MIT License' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Entry',
+      dcterms: {
+        created: '2023-02-01T00:00:00Z',
+        license: 'MIT License',
+      },
     }
 
     expect(parseEntry(value)).toEqual(expected)
@@ -1056,13 +1195,22 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expectedFull)
   })
 
-  it('should parse feed with only required fields', () => {
+  it('should parse feed with required ID field', () => {
     const value = {
       id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
-      title: { '#text': 'Example Feed' },
     }
     const expected = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with required title field', () => {
+    const value = {
+      title: { '#text': 'Example Feed' },
+    }
+    const expected = {
       title: 'Example Feed',
     }
 
@@ -1143,12 +1291,15 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should return undefined if id and title are missing', () => {
+  it('should handle partial objects (missing id and title)', () => {
     const value = {
       updated: { '#text': '2023-01-01T12:00:00Z' },
     }
+    const expected = {
+      updated: '2023-01-01T12:00:00Z',
+    }
 
-    expect(parseFeed(value)).toBeUndefined()
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -1158,7 +1309,7 @@ describe('parseFeed', () => {
     expect(parseFeed([])).toBeUndefined()
   })
 
-  it('should handle entries that are not valid', () => {
+  it('should handle entries that may have partial data', () => {
     const value = {
       id: { '#text': 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' },
       title: { '#text': 'Example Feed' },
@@ -1174,7 +1325,11 @@ describe('parseFeed', () => {
     const expected = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
       title: 'Example Feed',
-      entries: [{ id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a', title: 'Valid Entry' }],
+      entries: [
+        { id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a', title: 'Valid Entry' },
+        { title: 'Invalid Entry' },
+        { id: 'urn:uuid:1225c695-cfb8-4ebb-cccc-80da344efa6a' },
+      ],
     }
 
     expect(parseFeed(value)).toEqual(expected)
@@ -1205,6 +1360,25 @@ describe('parseFeed', () => {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: 'Example Feed',
       sy: { updateFrequency: 5 },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle dcterms namespace in feed', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Feed' },
+      'dcterms:created': { '#text': '2023-01-01T00:00:00Z' },
+      'dcterms:license': { '#text': 'Creative Commons Attribution 4.0' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Feed',
+      dcterms: {
+        created: '2023-01-01T00:00:00Z',
+        license: 'Creative Commons Attribution 4.0',
+      },
     }
 
     expect(parseFeed(value)).toEqual(expected)
@@ -1251,6 +1425,3 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toBeUndefined()
   })
 })
-
-// TODO: Write tests for supporting asNAmespace option.
-// - Should return items with given namespace prefix, allow partial and not use namespaces.

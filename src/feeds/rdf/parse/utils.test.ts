@@ -74,22 +74,30 @@ describe('parseImage', () => {
     expect(parseImage(value)).toEqual(expected)
   })
 
-  it('should return undefined if title is missing', () => {
+  it('should handle partial objects (missing title)', () => {
     const value = {
       link: { '#text': 'https://example.com' },
       url: { '#text': 'https://example.com/image.jpg' },
     }
+    const expected = {
+      link: 'https://example.com',
+      url: 'https://example.com/image.jpg',
+    }
 
-    expect(parseImage(value)).toBeUndefined()
+    expect(parseImage(value)).toEqual(expected)
   })
 
-  it('should return undefined if link is missing', () => {
+  it('should handle partial objects (missing link)', () => {
     const value = {
       title: { '#text': 'Image Title' },
       url: { '#text': 'https://example.com/image.jpg' },
     }
+    const expected = {
+      title: 'Image Title',
+      url: 'https://example.com/image.jpg',
+    }
 
-    expect(parseImage(value)).toBeUndefined()
+    expect(parseImage(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -124,6 +132,146 @@ describe('retrieveImage', () => {
     }
 
     expect(retrieveImage(value)).toEqual(expected)
+  })
+})
+
+describe('parseTextInput', () => {
+  const expectedFull = {
+    title: 'Search Title',
+    description: 'Search Description',
+    name: 'q',
+    link: 'https://example.com/search',
+  }
+
+  it('should handle complete textInput object (with #text)', () => {
+    const value = {
+      title: { '#text': 'Search Title' },
+      description: { '#text': 'Search Description' },
+      name: { '#text': 'q' },
+      link: { '#text': 'https://example.com/search' },
+    }
+
+    expect(parseTextInput(value)).toEqual(expectedFull)
+  })
+
+  it('should handle complete textInput object (without #text)', () => {
+    const value = {
+      title: 'Search Title',
+      description: 'Search Description',
+      name: 'q',
+      link: 'https://example.com/search',
+    }
+
+    expect(parseTextInput(value)).toEqual(expectedFull)
+  })
+
+  it('should handle complete textInput object (with array of values)', () => {
+    const value = {
+      title: ['Search Title', 'Alternative Search Title'],
+      description: ['Search Description', 'Extended Search Description'],
+      name: ['q', 'query'],
+      link: ['https://example.com/search', 'https://example.com/advanced-search'],
+    }
+
+    expect(parseTextInput(value)).toEqual(expectedFull)
+  })
+
+  it('should handle partial objects (missing some fields)', () => {
+    const value = {
+      title: { '#text': 'Search Title' },
+      name: { '#text': 'q' },
+    }
+    const expected = {
+      title: 'Search Title',
+      name: 'q',
+    }
+
+    expect(parseTextInput(value)).toEqual(expected)
+  })
+
+  it('should handle coercible values', () => {
+    const value = {
+      title: { '#text': 123 },
+      description: { '#text': 456 },
+      name: { '#text': 789 },
+      link: { '#text': 101 },
+    }
+    const expected = {
+      title: '123',
+      description: '456',
+      name: '789',
+      link: '101',
+    }
+
+    expect(parseTextInput(value)).toEqual(expected)
+  })
+
+  it('should handle partial objects (missing required fields)', () => {
+    const value = {
+      title: { '#text': 'Search Title' },
+      description: { '#text': 'Search Description' },
+    }
+    const expected = {
+      title: 'Search Title',
+      description: 'Search Description',
+    }
+
+    expect(parseTextInput(value)).toEqual(expected)
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(parseTextInput('not an object')).toBeUndefined()
+    expect(parseTextInput(undefined)).toBeUndefined()
+    expect(parseTextInput(null)).toBeUndefined()
+    expect(parseTextInput([])).toBeUndefined()
+  })
+
+  it('should return undefined for missing textInput property', () => {
+    const value = {
+      someOtherProperty: {},
+    }
+
+    expect(parseTextInput(value)).toBeUndefined()
+  })
+})
+
+describe('retrieveTextInput', () => {
+  it('should retrieve complete textInput object (with #text)', () => {
+    const value = {
+      textinput: {
+        title: { '#text': 'Search Title' },
+        description: { '#text': 'Search Description' },
+        name: { '#text': 'q' },
+        link: { '#text': 'https://example.com/search' },
+      },
+    }
+    const expected = {
+      title: 'Search Title',
+      description: 'Search Description',
+      name: 'q',
+      link: 'https://example.com/search',
+    }
+
+    expect(retrieveTextInput(value)).toEqual(expected)
+  })
+
+  it('should retrieve complete textInput object (without #text)', () => {
+    const value = {
+      textinput: {
+        title: 'Search Title',
+        description: 'Search Description',
+        name: 'q',
+        link: 'https://example.com/search',
+      },
+    }
+    const expected = {
+      title: 'Search Title',
+      description: 'Search Description',
+      name: 'q',
+      link: 'https://example.com/search',
+    }
+
+    expect(retrieveTextInput(value)).toEqual(expected)
   })
 })
 
@@ -191,22 +339,30 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
-  it('should return undefined if title is missing', () => {
+  it('should handle partial objects (missing title)', () => {
     const value = {
       link: { '#text': 'https://example.com/item' },
       description: { '#text': 'Item Description' },
     }
+    const expected = {
+      link: 'https://example.com/item',
+      description: 'Item Description',
+    }
 
-    expect(parseItem(value)).toBeUndefined()
+    expect(parseItem(value)).toEqual(expected)
   })
 
-  it('should return undefined if link is missing', () => {
+  it('should handle partial objects (missing link)', () => {
     const value = {
       title: { '#text': 'Item Title' },
       description: { '#text': 'Item Description' },
     }
+    const expected = {
+      title: 'Item Title',
+      description: 'Item Description',
+    }
 
-    expect(parseItem(value)).toBeUndefined()
+    expect(parseItem(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -275,6 +431,25 @@ describe('parseItem', () => {
 
     expect(parseItem(value)).toEqual(expected)
   })
+
+  it('should handle dcterms namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'dcterms:created': { '#text': '2023-02-01T00:00:00Z' },
+      'dcterms:license': { '#text': 'MIT License' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      dcterms: {
+        created: '2023-02-01T00:00:00Z',
+        license: 'MIT License',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
 })
 
 describe('retrieveItems', () => {
@@ -309,7 +484,7 @@ describe('retrieveItems', () => {
     expect(retrieveItems(value)).toEqual(expected)
   })
 
-  it('should filter out invalid items from array', () => {
+  it('should include partial items from array', () => {
     const value = {
       item: [
         {
@@ -330,6 +505,14 @@ describe('retrieveItems', () => {
       {
         title: 'Valid Item',
         link: 'https://example.com/valid',
+      },
+      {
+        title: 'Missing Link',
+        description: 'This item has no link',
+      },
+      {
+        link: 'https://example.com/missing-title',
+        description: 'This item has no title',
       },
     ]
 
@@ -388,125 +571,12 @@ describe('retrieveItems', () => {
     expect(retrieveItems(value)).toEqual(expected)
   })
 
-  it('should return undefined when item property is missing', () => {
+  it('should return undefined when required property is missing', () => {
     const value = {
       someOtherProperty: {},
     }
 
     expect(retrieveItems(value)).toBeUndefined()
-  })
-})
-
-describe('parseTextInput', () => {
-  const expectedFull = {
-    title: 'Search Title',
-    description: 'Search Description',
-    name: 'q',
-    link: 'https://example.com/search',
-  }
-
-  it('should handle complete textInput object (with #text)', () => {
-    const value = {
-      title: { '#text': 'Search Title' },
-      description: { '#text': 'Search Description' },
-      name: { '#text': 'q' },
-      link: { '#text': 'https://example.com/search' },
-    }
-
-    expect(parseTextInput(value)).toEqual(expectedFull)
-  })
-
-  it('should handle complete textInput object (without #text)', () => {
-    const value = {
-      title: 'Search Title',
-      description: 'Search Description',
-      name: 'q',
-      link: 'https://example.com/search',
-    }
-
-    expect(parseTextInput(value)).toEqual(expectedFull)
-  })
-
-  it('should handle complete textInput object (with array of values)', () => {
-    const value = {
-      title: ['Search Title', 'Alternative Search Title'],
-      description: ['Search Description', 'Extended Search Description'],
-      name: ['q', 'query'],
-      link: ['https://example.com/search', 'https://example.com/advanced-search'],
-    }
-
-    expect(parseTextInput(value)).toEqual(expectedFull)
-  })
-
-  it('should handle partial textInput object', () => {
-    const value = {
-      title: { '#text': 'Search Title' },
-      name: { '#text': 'q' },
-    }
-
-    expect(parseTextInput(value)).toBeUndefined()
-  })
-
-  it('should handle coercible values', () => {
-    const value = {
-      title: { '#text': 123 },
-      description: { '#text': 456 },
-      name: { '#text': 789 },
-      link: { '#text': 101 },
-    }
-    const expected = {
-      title: '123',
-      description: '456',
-      name: '789',
-      link: '101',
-    }
-
-    expect(parseTextInput(value)).toEqual(expected)
-  })
-
-  it('should return undefined if not all fields are present', () => {
-    const value = {
-      title: { '#text': 'Search Title' },
-      description: { '#text': 'Search Description' },
-    }
-
-    expect(parseTextInput(value)).toBeUndefined()
-  })
-
-  it('should return undefined for non-object input', () => {
-    expect(parseTextInput('not an object')).toBeUndefined()
-    expect(parseTextInput(undefined)).toBeUndefined()
-    expect(parseTextInput(null)).toBeUndefined()
-    expect(parseTextInput([])).toBeUndefined()
-  })
-
-  it('should return undefined for missing textInput property', () => {
-    const value = {
-      someOtherProperty: {},
-    }
-
-    expect(parseTextInput(value)).toBeUndefined()
-  })
-})
-
-describe('retrieveTextInput', () => {
-  it('should retrieve complete textInput object (with #text)', () => {
-    const value = {
-      textinput: {
-        title: { '#text': 'Search Title' },
-        description: { '#text': 'Search Description' },
-        name: { '#text': 'q' },
-        link: { '#text': 'https://example.com/search' },
-      },
-    }
-    const expected = {
-      title: 'Search Title',
-      description: 'Search Description',
-      name: 'q',
-      link: 'https://example.com/search',
-    }
-
-    expect(retrieveTextInput(value)).toEqual(expected)
   })
 })
 
@@ -710,7 +780,7 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should return undefined if title is missing', () => {
+  it('should handle partial objects (missing title)', () => {
     const value = {
       channel: {
         link: { '#text': 'https://example.com' },
@@ -722,8 +792,17 @@ describe('parseFeed', () => {
         },
       ],
     }
+    const expected = {
+      link: 'https://example.com',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+    }
 
-    expect(parseFeed(value)).toBeUndefined()
+    expect(parseFeed(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object rdf:rdf', () => {
@@ -854,6 +933,37 @@ describe('parseFeed', () => {
         },
       ],
       sy: { updateFrequency: 5 },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle dcterms namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'dcterms:created': { '#text': '2023-01-01T00:00:00Z' },
+        'dcterms:license': { '#text': 'Creative Commons Attribution 4.0' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      dcterms: {
+        created: '2023-01-01T00:00:00Z',
+        license: 'Creative Commons Attribution 4.0',
+      },
     }
 
     expect(parseFeed(value)).toEqual(expected)

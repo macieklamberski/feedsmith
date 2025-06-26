@@ -35,7 +35,9 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "prepare": "lefthook install",
     "lint:tsc": "tsc --pretty --noEmit",
@@ -43,14 +45,16 @@
     "build": "rm -rf dist && tsc"
   },
   "dependencies": {
-    "entities": "^6.0.0",
-    "fast-xml-parser": "^5.2.3"
+    "entities": "^6.0.1",
+    "fast-xml-parser": "^5.2.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@types/bun": "^1.2.13",
-    "lefthook": "^1.11.12",
-    "semantic-release": "^24.2.3",
+    "@biomejs/biome": "^2.0.4",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@types/bun": "^1.2.17",
+    "lefthook": "^1.11.14",
+    "semantic-release": "^24.2.5",
     "typescript": "^5.8.3"
   }
 }

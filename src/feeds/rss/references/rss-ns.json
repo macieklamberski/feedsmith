@@ -13,6 +13,10 @@
         "creator": "Jack Jackson",
         "date": "2022-01-01T12:00+00:00"
       },
+      "dcterms": {
+        "created": "2022-01-01T12:00+00:00",
+        "license": "Creative Commons Attribution 4.0"
+      },
       "slash": {
         "section": "articles",
         "department": "not-an-ocean-unless-there-are-lobsters",
@@ -589,6 +593,10 @@
             "type": "application/xhtml+xml"
           }
         ]
+      },
+      "wfw": {
+        "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
+        "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
       }
     }
   ],
@@ -597,6 +605,10 @@
     "description": "This is an example of description.",
     "contributor": "Jane Smith",
     "date": "2022-01-01T12:00+00:00"
+  },
+  "dcterms": {
+    "created": "2022-01-01T12:00+00:00",
+    "license": "Creative Commons Attribution 4.0"
   },
   "sy": {
     "updatePeriod": "hourly",
@@ -648,7 +660,7 @@
       {
         "display": "Season 1 Trailer",
         "url": "https://example.com/trailers/season1.mp3",
-        "pubdate": "2025-04-20T08:00:00+02:00",
+        "pubDate": "2025-04-20T08:00:00+02:00",
         "length": 1048576,
         "type": "audio/mpeg",
         "season": 1
@@ -693,7 +705,7 @@
         "status": "live",
         "start": "2025-04-30T09:00:00+01:00",
         "end": "2025-04-30T10:00:00+01:00",
-        "contentlinks": [
+        "contentLinks": [
           {
             "href": "https://example.com/live/chat",
             "display": "Live Chat"

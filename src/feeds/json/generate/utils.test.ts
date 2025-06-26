@@ -1,28 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { generateFeed, generateItem, generateRfc3339Date } from './utils.js'
-
-describe('generateRfc3339Date', () => {
-  it('should correctly format a date in RFC 3339 format', () => {
-    const date = new Date('2023-05-17T15:02:07Z')
-    const expected = '2023-05-17T15:02:07.000Z'
-
-    expect(generateRfc3339Date(date)).toBe(expected)
-  })
-
-  it('should handle date with timezone offset', () => {
-    const date = new Date(Date.UTC(2023, 4, 17, 10, 30, 45))
-    const expected = '2023-05-17T10:30:45.000Z'
-
-    expect(generateRfc3339Date(date)).toBe(expected)
-  })
-
-  it('should generate string with correct RFC 3339 format', () => {
-    const date = new Date('2021-01-01T12:00:00Z')
-    const expected = '2021-01-01T12:00:00.000Z'
-
-    expect(generateRfc3339Date(date)).toBe(expected)
-  })
-})
+import { generateFeed, generateItem } from './utils.js'
 
 describe('generateItem', () => {
   it('should convert dates in an item to RFC 3339 format', () => {

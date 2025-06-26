@@ -76,7 +76,7 @@ const testOpmlParser = async (xml: string) => {
 const testNodeOpmlParser = async (xml: string) => {
   let items: unknown
 
-  nodeOpmlParser(xml, (error, result: unknown) => {
+  nodeOpmlParser(xml, (_error, result: unknown) => {
     items = result
   })
 
@@ -86,7 +86,7 @@ const testNodeOpmlParser = async (xml: string) => {
 const testOpmlPackage = async (xml: string) => {
   let items: unknown
 
-  opmlPackage.parse(xml, (error, result: unknown) => {
+  opmlPackage.parse(xml, (_error, result: unknown) => {
     items = result
   })
 
@@ -102,10 +102,10 @@ const jsonFilesObjects = Object.entries(jsonFilesStrings).reduce(
   {} as Record<string, unknown>,
 )
 const rssBigFiles = loadFeedFiles('files/rss-big', 10)
-const rssSmallFiles = loadFeedFiles('files/rss-small', 50)
+const rssSmallFiles = loadFeedFiles('files/rss-small', 100)
 const atomBigFiles = loadFeedFiles('files/atom-big', 10)
-const atomSmallFiles = loadFeedFiles('files/atom-small', 50)
-const rdfFiles = loadFeedFiles('files/rdf', 50)
+const atomSmallFiles = loadFeedFiles('files/atom-small', 100)
+const rdfFiles = loadFeedFiles('files/rdf', 100)
 const opmlFiles = loadFeedFiles('files/opml', 10)
 
 await runBenchmarks('RSS feed parsing (10 files × 5MB–50MB)', {
@@ -120,7 +120,7 @@ await runBenchmarks('RSS feed parsing (10 files × 5MB–50MB)', {
   'feedsmith *': () => runTest(rssBigFiles, parseRssFeed),
 })
 
-await runBenchmarks('RSS feed parsing (50 files × 100KB–5MB)', {
+await runBenchmarks('RSS feed parsing (100 files × 100KB–5MB)', {
   'rss-parser': () => runTest(rssSmallFiles, rssParser),
   '@gaphub/feed': () => runTest(rssSmallFiles, testGaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(rssSmallFiles, rowanmanningFeedParser),
@@ -144,7 +144,7 @@ await runBenchmarks('Atom feed parsing (10 files × 5MB–50MB)', {
   'feedsmith *': () => runTest(atomBigFiles, parseAtomFeed),
 })
 
-await runBenchmarks('Atom feed parsing (50 files × 100KB–5MB)', {
+await runBenchmarks('Atom feed parsing (100 files × 100KB–5MB)', {
   'rss-parser': () => runTest(atomSmallFiles, rssParser),
   '@gaphub/feed': () => runTest(atomSmallFiles, testGaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(atomSmallFiles, rowanmanningFeedParser),
@@ -156,7 +156,7 @@ await runBenchmarks('Atom feed parsing (50 files × 100KB–5MB)', {
   'feedsmith *': () => runTest(atomSmallFiles, parseAtomFeed),
 })
 
-await runBenchmarks('RDF feed parsing (50 files × 100KB–5MB)', {
+await runBenchmarks('RDF feed parsing (100 files × 100KB–5MB)', {
   'rss-parser': () => runTest(rdfFiles, rssParser),
   '@gaphub/feed': () => runTest(rdfFiles, testGaphubFeedParser),
   '@rowanmanning/feed-parser': () => runTest(rdfFiles, rowanmanningFeedParser),
@@ -174,10 +174,10 @@ await runBenchmarks('JSON feed parsing (50 files × 100KB–5MB)', {
 })
 
 await runBenchmarks('OPML parsing (50 files × 100KB–500KB)', {
-  'feedsmith *': () => runTest(opmlFiles, parseOpml),
   '@gaphub/feed': () => runTest(opmlFiles, testGaphubFeedParserOpml),
   'node-opml-parser': () => runTest(opmlFiles, testNodeOpmlParser),
   'opml-to-json': () => runTest(opmlFiles, testOpmlToJson),
   opml: () => runTest(opmlFiles, testOpmlPackage),
   opmlparser: () => runTest(opmlFiles, testOpmlParser),
+  'feedsmith *': () => runTest(opmlFiles, parseOpml),
 })

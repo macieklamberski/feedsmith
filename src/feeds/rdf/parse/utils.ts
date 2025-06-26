@@ -1,125 +1,120 @@
-import type { ParseFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '../../../common/types.js'
 import {
+  detectNamespaces,
   isObject,
-  isPresent,
   parseArrayOf,
   parseSingular,
   parseSingularOf,
-  parseTextString,
+  parseString,
+  retrieveText,
   trimObject,
 } from '../../../common/utils.js'
 import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
-} from '../../../namespaces/atom/utils.js'
-import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/utils.js'
-import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/utils.js'
-import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/utils.js'
-import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/utils.js'
-import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
-import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
-import type { Feed, Image, Item, TextInput } from './types.js'
+} from '../../../namespaces/atom/parse/utils.js'
+import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
+import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
+import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
+import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
+import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
+import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
+import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
+import type { Feed, Image, Item, TextInput } from '../common/types.js'
 
-export const parseImage: ParseFunction<Image> = (value) => {
+export const parseImage: ParsePartialFunction<Image> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const image = {
-    title: parseSingularOf(value.title, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
-    url: parseSingularOf(value.url, parseTextString),
+    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
+    url: parseSingularOf(value.url, (value) => parseString(retrieveText(value))),
   }
 
-  if (isPresent(image.title) && isPresent(image.link)) {
-    return trimObject(image)
-  }
+  return trimObject(image)
 }
 
-export const retrieveImage: ParseFunction<Image> = (value) => {
+export const retrieveImage: ParsePartialFunction<Image> = (value) => {
   // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
   return parseSingularOf(value?.image, parseImage)
 }
 
-export const parseItem: ParseFunction<Item> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
-  const item = {
-    title: parseSingularOf(value.title, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
-    description: parseSingularOf(value.description, parseTextString),
-    atom: retrieveAtomEntry(value),
-    content: retrieveContentItem(value),
-    dc: retrieveDcItemOrFeed(value),
-    slash: retrieveSlashItem(value),
-    media: retrieveMediaItemOrFeed(value),
-    georss: retrieveGeoRssItemOrFeed(value),
-  }
-
-  if (isPresent(item.title) && isPresent(item.link)) {
-    return trimObject(item)
-  }
-}
-
-export const retrieveItems: ParseFunction<Array<Item>> = (value) => {
-  // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
-  return parseArrayOf(value?.item, parseItem)
-}
-
-export const parseTextInput: ParseFunction<TextInput> = (value) => {
+export const parseTextInput: ParsePartialFunction<TextInput> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const textInput = {
-    title: parseSingularOf(value.title, parseTextString),
-    description: parseSingularOf(value.description, parseTextString),
-    name: parseSingularOf(value.name, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
+    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
+    description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
+    name: parseSingularOf(value.name, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
   }
 
-  if (
-    isPresent(textInput.title) &&
-    isPresent(textInput.description) &&
-    isPresent(textInput.name) &&
-    isPresent(textInput.link)
-  ) {
-    return trimObject(textInput)
-  }
+  return trimObject(textInput)
 }
 
-export const retrieveTextInput: ParseFunction<TextInput> = (value) => {
+export const retrieveTextInput: ParsePartialFunction<TextInput> = (value) => {
   // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
   return parseSingularOf(value?.textinput, parseTextInput)
 }
 
-export const parseFeed: ParseFunction<Feed> = (value) => {
+export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const namespaces = detectNamespaces(value)
+  const item = {
+    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
+    description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
+    atom: namespaces.has('atom') || namespaces.has('a10') ? retrieveAtomEntry(value) : undefined,
+    content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
+    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
+    media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
+    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
+  }
+
+  return trimObject(item)
+}
+
+export const retrieveItems: ParsePartialFunction<Array<Item<string>>> = (value) => {
+  // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
+  return parseArrayOf(value?.item, parseItem)
+}
+
+export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const channel = parseSingular(value.channel)
+  const namespaces = detectNamespaces(channel)
   const feed = {
-    title: parseSingularOf(channel?.title, parseTextString),
-    link: parseSingularOf(channel?.link, parseTextString),
-    description: parseSingularOf(channel?.description, parseTextString),
+    title: parseSingularOf(channel?.title, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(channel?.link, (value) => parseString(retrieveText(value))),
+    description: parseSingularOf(channel?.description, (value) => parseString(retrieveText(value))),
     image: retrieveImage(value),
     items: retrieveItems(value),
     textInput: retrieveTextInput(value),
-    atom: retrieveAtomFeed(channel),
-    dc: retrieveDcItemOrFeed(channel),
-    sy: retrieveSyFeed(channel),
-    media: retrieveMediaItemOrFeed(channel),
-    georss: retrieveGeoRssItemOrFeed(channel),
+    atom: namespaces.has('atom') || namespaces.has('a10') ? retrieveAtomFeed(channel) : undefined,
+    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(channel) : undefined,
+    sy: namespaces.has('sy') ? retrieveSyFeed(channel) : undefined,
+    media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
+    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
   }
 
-  if (isPresent(feed.title)) {
-    return trimObject(feed)
-  }
+  return trimObject(feed)
 }
 
-export const retrieveFeed: ParseFunction<Feed> = (value) => {
+export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
   return parseSingularOf(value?.['rdf:rdf'], parseFeed)
 }

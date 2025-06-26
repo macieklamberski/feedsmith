@@ -1,14 +1,13 @@
-import type { ParseFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '../../../common/types.js'
 import {
-  isNonEmptyString,
+  detectNamespaces,
   isObject,
-  isPresent,
   parseArrayOf,
+  parseBoolean,
+  parseDate,
   parseNumber,
   parseSingularOf,
   parseString,
-  parseTextNumber,
-  parseTextString,
   retrieveText,
   trimArray,
   trimObject,
@@ -16,155 +15,48 @@ import {
 import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
-} from '../../../namespaces/atom/utils.js'
-import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/utils.js'
-import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/utils.js'
-import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/utils.js'
+} from '../../../namespaces/atom/parse/utils.js'
+import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
+import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
+import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
-} from '../../../namespaces/itunes/utils.js'
-import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/utils.js'
+} from '../../../namespaces/itunes/parse/utils.js'
+import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
 import {
   retrieveFeed as retrievePodcastFeed,
   retrieveItem as retrievePodcastItem,
-} from '../../../namespaces/podcast/utils.js'
-import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/utils.js'
-import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/utils.js'
-import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/utils.js'
-import { parsePerson as parseAtomPerson } from '../../atom/parse/utils.js'
+} from '../../../namespaces/podcast/parse/utils.js'
+import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
+import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
+import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/parse/utils.js'
+import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import type {
   Category,
   Cloud,
   Enclosure,
   Feed,
+  Guid,
   Image,
   Item,
   Person,
   Source,
   TextInput,
-} from './types.js'
+} from '../common/types.js'
 
-export const parseTextInput: ParseFunction<TextInput> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
-  const textInput = {
-    title: parseSingularOf(value.title, parseTextString),
-    description: parseSingularOf(value.description, parseTextString),
-    name: parseSingularOf(value.name, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
-  }
-
-  if (
-    isPresent(textInput.title) &&
-    isPresent(textInput.description) &&
-    isPresent(textInput.name) &&
-    isPresent(textInput.link)
-  ) {
-    return trimObject(textInput)
-  }
-}
-
-export const parseCloud: ParseFunction<Cloud> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
-  const cloud = {
-    domain: parseString(value['@domain']),
-    port: parseNumber(value['@port']),
-    path: parseString(value['@path']),
-    registerProcedure: parseString(value['@registerprocedure']),
-    protocol: parseString(value['@protocol']),
-  }
-
-  if (
-    isPresent(cloud.domain) &&
-    isPresent(cloud.port) &&
-    isPresent(cloud.path) &&
-    isPresent(cloud.registerProcedure) &&
-    isPresent(cloud.protocol)
-  ) {
-    return trimObject(cloud)
-  }
-}
-
-export const parseSkipHours: ParseFunction<Array<number>> = (value) => {
-  return trimArray(value?.hour, parseTextNumber)
-}
-
-export const parseSkipDays: ParseFunction<Array<string>> = (value) => {
-  return trimArray(value?.day, parseTextString)
-}
-
-export const parseEnclosure: ParseFunction<Enclosure> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
-  const enclosure = {
-    url: parseString(value['@url']),
-    length: parseNumber(value['@length']),
-    type: parseString(value['@type']),
-  }
-
-  if (isPresent(enclosure.url) && isPresent(enclosure.length) && isPresent(enclosure.type)) {
-    return trimObject(enclosure)
-  }
-}
-
-export const parseSource: ParseFunction<Source> = (value) => {
-  const source = {
-    title: parseString(retrieveText(value)),
-    url: parseString(value?.['@url']),
-  }
-
-  if (isPresent(source.title)) {
-    return trimObject(source)
-  }
-}
-
-export const parseImage: ParseFunction<Image> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
-  const image = {
-    url: parseSingularOf(value.url, parseTextString),
-    title: parseSingularOf(value.title, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
-    description: parseSingularOf(value.description, parseTextString),
-    height: parseSingularOf(value.height, parseTextNumber),
-    width: parseSingularOf(value.width, parseTextNumber),
-  }
-
-  if (isPresent(image.url) && isPresent(image.title) && isPresent(image.link)) {
-    return trimObject(image)
-  }
-}
-
-export const parseCategory: ParseFunction<Category> = (value) => {
-  const category = {
-    name: parseString(retrieveText(value)),
-    domain: parseString(value?.['@domain']),
-  }
-
-  if (isPresent(category.name)) {
-    return trimObject(category)
-  }
-}
-
-const BRACKET_PATTERN = /([^<\[\(]+)|(?:<([^>]*)>)|(?:\[([^\]]*)\])|(?:\(([^)]*)\))/g
+const BRACKET_PATTERN = /([^<[(]+)|(?:<([^>]*)>)|(?:\[([^\]]*)\])|(?:\(([^)]*)\))/g
 const EMAIL_LIKE_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const URL_LIKE_PATTERN = /^(?:https?:\/\/|www\.)[^\s@]+\.[^\s@]+$/
 
-export const parsePerson: ParseFunction<Person> = (value) => {
+export const parsePerson: ParsePartialFunction<Person> = (value) => {
   // TODO: Use parseAtomPerson for cases where author is a complex element from Atom namespace.
-  const rawPerson = parseSingularOf(value?.name ?? value, parseTextString)
+  const rawPerson = parseSingularOf(value?.name ?? value, (value) =>
+    parseString(retrieveText(value)),
+  )
 
-  if (!isNonEmptyString(rawPerson)) {
+  if (!rawPerson || typeof rawPerson !== 'string') {
     return
   }
 
@@ -185,7 +77,7 @@ export const parsePerson: ParseFunction<Person> = (value) => {
   for (const match of rawPerson.matchAll(BRACKET_PATTERN)) {
     const chunk = parseString(match[1] || match[2] || match[3] || match[4])
 
-    if (!isPresent(chunk)) {
+    if (!chunk) {
       continue
     }
 
@@ -201,81 +93,176 @@ export const parsePerson: ParseFunction<Person> = (value) => {
   return trimObject(person)
 }
 
-export const parseItem: ParseFunction<Item> = (value) => {
-  if (!isObject(value)) {
-    return
+export const parseCategory: ParsePartialFunction<Category> = (value) => {
+  const category = {
+    name: parseString(retrieveText(value)),
+    domain: parseString(value?.['@domain']),
   }
 
-  const item = {
-    title: parseSingularOf(value.title, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
-    description: parseSingularOf(value.description, parseTextString),
-    authors: parseArrayOf(value.author, parsePerson),
-    categories: parseArrayOf(value.category, parseCategory),
-    comments: parseSingularOf(value.comments, parseTextString),
-    enclosure: parseSingularOf(value.enclosure, parseEnclosure),
-    guid: parseSingularOf(value.guid, parseTextString),
-    pubDate: parseSingularOf(value.pubdate, parseTextString),
-    source: parseSingularOf(value.source, parseSource),
-    content: retrieveContentItem(value),
-    atom: retrieveAtomEntry(value),
-    dc: retrieveDcItemOrFeed(value),
-    slash: retrieveSlashItem(value),
-    itunes: retrieveItunesItem(value),
-    podcast: retrievePodcastItem(value),
-    media: retrieveMediaItemOrFeed(value),
-    georss: retrieveGeoRssItemOrFeed(value),
-    thr: retrieveThrItem(value),
-  }
-
-  if (isPresent(item.title) || isPresent(item.description)) {
-    return trimObject(item)
-  }
+  return trimObject(category)
 }
 
-export const parseFeed: ParseFunction<Feed> = (value) => {
+export const parseCloud: ParsePartialFunction<Cloud> = (value) => {
   if (!isObject(value)) {
     return
   }
 
+  const cloud = {
+    domain: parseString(value['@domain']),
+    port: parseNumber(value['@port']),
+    path: parseString(value['@path']),
+    registerProcedure: parseString(value['@registerprocedure']),
+    protocol: parseString(value['@protocol']),
+  }
+
+  return trimObject(cloud)
+}
+
+export const parseImage: ParsePartialFunction<Image> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const image = {
+    url: parseSingularOf(value.url, (value) => parseString(retrieveText(value))),
+    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
+    description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
+    height: parseSingularOf(value.height, (value) => parseNumber(retrieveText(value))),
+    width: parseSingularOf(value.width, (value) => parseNumber(retrieveText(value))),
+  }
+
+  return trimObject(image)
+}
+
+export const parseTextInput: ParsePartialFunction<TextInput> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const textInput = {
+    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
+    description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
+    name: parseSingularOf(value.name, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
+  }
+
+  return trimObject(textInput)
+}
+
+export const parseSkipHours: ParsePartialFunction<Array<number>> = (value) => {
+  return trimArray(value?.hour, (value) => parseNumber(retrieveText(value)))
+}
+
+export const parseSkipDays: ParsePartialFunction<Array<string>> = (value) => {
+  return trimArray(value?.day, (value) => parseString(retrieveText(value)))
+}
+
+export const parseEnclosure: ParsePartialFunction<Enclosure> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const enclosure = {
+    url: parseString(value['@url']),
+    length: parseNumber(value['@length']),
+    type: parseString(value['@type']),
+  }
+
+  return trimObject(enclosure)
+}
+
+export const parseGuid: ParsePartialFunction<Guid> = (value) => {
+  const source = {
+    value: parseString(retrieveText(value)),
+    isPermaLink: parseBoolean(value?.['@ispermalink']),
+  }
+
+  return trimObject(source)
+}
+
+export const parseSource: ParsePartialFunction<Source> = (value) => {
+  const source = {
+    title: parseString(retrieveText(value)),
+    url: parseString(value?.['@url']),
+  }
+
+  return trimObject(source)
+}
+
+export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const namespaces = detectNamespaces(value)
+  const item = {
+    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
+    description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
+    authors: parseArrayOf(value.author, parsePerson),
+    categories: parseArrayOf(value.category, parseCategory),
+    comments: parseSingularOf(value.comments, (value) => parseString(retrieveText(value))),
+    enclosure: parseSingularOf(value.enclosure, parseEnclosure),
+    guid: parseSingularOf(value.guid, parseGuid),
+    pubDate: parseSingularOf(value.pubdate, (value) => parseDate(retrieveText(value))),
+    source: parseSingularOf(value.source, parseSource),
+    content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
+    atom: namespaces.has('atom') ? retrieveAtomEntry(value) : undefined,
+    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
+    itunes: namespaces.has('itunes') ? retrieveItunesItem(value) : undefined,
+    podcast: namespaces.has('podcast') ? retrievePodcastItem(value) : undefined,
+    media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
+    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
+    wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
+  }
+
+  return trimObject(item)
+}
+
+export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const namespaces = detectNamespaces(value)
   const feed = {
-    title: parseSingularOf(value.title, parseTextString),
-    link: parseSingularOf(value.link, parseTextString),
-    description: parseSingularOf(value.description, parseTextString),
-    language: parseSingularOf(value.language, parseTextString),
-    copyright: parseSingularOf(value.copyright, parseTextString),
+    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
+    description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
+    language: parseSingularOf(value.language, (value) => parseString(retrieveText(value))),
+    copyright: parseSingularOf(value.copyright, (value) => parseString(retrieveText(value))),
     managingEditor: parseSingularOf(value.managingeditor, parsePerson),
     webMaster: parseSingularOf(value.webmaster, parsePerson),
-    pubDate: parseSingularOf(value.pubdate, parseTextString),
-    lastBuildDate: parseSingularOf(value.lastbuilddate, parseTextString),
+    pubDate: parseSingularOf(value.pubdate, (value) => parseDate(retrieveText(value))),
+    lastBuildDate: parseSingularOf(value.lastbuilddate, (value) => parseDate(retrieveText(value))),
     categories: parseArrayOf(value.category, parseCategory),
-    generator: parseSingularOf(value.generator, parseTextString),
-    docs: parseSingularOf(value.docs, parseTextString),
+    generator: parseSingularOf(value.generator, (value) => parseString(retrieveText(value))),
+    docs: parseSingularOf(value.docs, (value) => parseString(retrieveText(value))),
     cloud: parseSingularOf(value.cloud, parseCloud),
-    ttl: parseSingularOf(value.ttl, parseTextNumber),
+    ttl: parseSingularOf(value.ttl, (value) => parseNumber(retrieveText(value))),
     image: parseSingularOf(value.image, parseImage),
-    rating: parseSingularOf(value.rating, parseTextString),
+    rating: parseSingularOf(value.rating, (value) => parseString(retrieveText(value))),
     textInput: parseSingularOf(value.textinput, parseTextInput),
     skipHours: parseSingularOf(value.skiphours, parseSkipHours),
     skipDays: parseSingularOf(value.skipdays, parseSkipDays),
     items: parseArrayOf(value.item, parseItem),
-    atom: retrieveAtomFeed(value),
-    dc: retrieveDcItemOrFeed(value),
-    sy: retrieveSyFeed(value),
-    itunes: retrieveItunesFeed(value),
-    podcast: retrievePodcastFeed(value),
-    media: retrieveMediaItemOrFeed(value),
-    georss: retrieveGeoRssItemOrFeed(value),
+    atom: namespaces.has('atom') || namespaces.has('a10') ? retrieveAtomFeed(value) : undefined,
+    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    sy: namespaces.has('sy') ? retrieveSyFeed(value) : undefined,
+    itunes: namespaces.has('itunes') ? retrieveItunesFeed(value) : undefined,
+    podcast: namespaces.has('podcast') ? retrievePodcastFeed(value) : undefined,
+    media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
+    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
   }
 
-  // INFO: Spec also says about required "description" but this field is not always present
-  // in feeds. We can still parse the feed without it. In addition, the "link" might be missing
-  // as well when the atom:link rel="self" is present so checking "link" is skipped as well.
-  if (isPresent(feed.title)) {
-    return trimObject(feed)
-  }
+  return trimObject(feed)
 }
 
-export const retrieveFeed: ParseFunction<Feed> = (value) => {
+export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
   return parseSingularOf(value?.rss?.channel, parseFeed)
 }

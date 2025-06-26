@@ -1,38 +1,55 @@
-import type { ParseFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '../../../common/types.js'
 import {
-  createCaseInsensitiveGetter,
   isNonEmptyStringOrNumber,
   isObject,
-  isPresent,
   parseArrayOf,
   parseBoolean,
+  parseDate,
   parseNumber,
   parseSingularOf,
   parseString,
   trimObject,
 } from '../../../common/utils.js'
-import type { Attachment, Author, Feed, Hub, Item } from './types.js'
+import type { Attachment, Author, Feed, Hub, Item } from '../common/types.js'
 
-export const parseAuthor: ParseFunction<Author> = (value) => {
-  if (isObject(value)) {
-    const get = createCaseInsensitiveGetter(value)
-    const author = trimObject({
-      name: parseSingularOf(get('name'), parseString),
-      url: parseSingularOf(get('url'), parseString),
-      avatar: parseSingularOf(get('avatar'), parseString),
-    })
+export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
+  return (requestedKey: string) => {
+    if (requestedKey in value) {
+      return value[requestedKey]
+    }
 
-    return author
-  }
+    const lowerKey = requestedKey.toLowerCase()
 
-  if (isNonEmptyStringOrNumber(value)) {
-    return {
-      name: parseString(value),
+    for (const key in value) {
+      if (key.toLowerCase() === lowerKey) {
+        return value[key]
+      }
     }
   }
 }
 
-export const retrieveAuthors: ParseFunction<Array<Author>> = (value) => {
+export const parseAuthor: ParsePartialFunction<Author> = (value) => {
+  if (isObject(value)) {
+    const get = createCaseInsensitiveGetter(value)
+    const author = {
+      name: parseSingularOf(get('name'), parseString),
+      url: parseSingularOf(get('url'), parseString),
+      avatar: parseSingularOf(get('avatar'), parseString),
+    }
+
+    return trimObject(author)
+  }
+
+  if (isNonEmptyStringOrNumber(value)) {
+    const author = {
+      name: parseString(value),
+    }
+
+    return trimObject(author)
+  }
+}
+
+export const retrieveAuthors: ParsePartialFunction<Array<Author>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -47,23 +64,7 @@ export const retrieveAuthors: ParseFunction<Array<Author>> = (value) => {
   return parsedAuthors?.length ? parsedAuthors : parsedAuthor
 }
 
-export const parseHub: ParseFunction<Hub> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
-  const get = createCaseInsensitiveGetter(value)
-  const hub = {
-    type: parseSingularOf(get('type'), parseString),
-    url: parseSingularOf(get('url'), parseString),
-  }
-
-  if (isPresent(hub.type) || isPresent(hub.url)) {
-    return trimObject(hub)
-  }
-}
-
-export const parseAttachment: ParseFunction<Attachment> = (value) => {
+export const parseAttachment: ParsePartialFunction<Attachment> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -77,12 +78,10 @@ export const parseAttachment: ParseFunction<Attachment> = (value) => {
     duration_in_seconds: parseSingularOf(get('duration_in_seconds'), parseNumber),
   }
 
-  if (isPresent(attachment.url)) {
-    return trimObject(attachment)
-  }
+  return trimObject(attachment)
 }
 
-export const parseItem: ParseFunction<Item> = (value) => {
+export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -98,27 +97,38 @@ export const parseItem: ParseFunction<Item> = (value) => {
     summary: parseSingularOf(get('summary'), parseString),
     image: parseSingularOf(get('image'), parseString),
     banner_image: parseSingularOf(get('banner_image'), parseString),
-    date_published: parseSingularOf(get('date_published'), parseString),
-    date_modified: parseSingularOf(get('date_modified'), parseString),
+    date_published: parseSingularOf(get('date_published'), parseDate),
+    date_modified: parseSingularOf(get('date_modified'), parseDate),
     tags: parseArrayOf(get('tags'), parseString),
     authors: retrieveAuthors(value),
     language: parseSingularOf(get('language'), parseString),
     attachments: parseArrayOf(get('attachments'), parseAttachment),
   }
 
-  if (isPresent(item.id)) {
-    return trimObject(item)
-  }
+  return trimObject(item)
 }
 
-export const parseFeed: ParseFunction<Feed> = (value) => {
+export const parseHub: ParsePartialFunction<Hub> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const get = createCaseInsensitiveGetter(value)
+  const hub = {
+    type: parseSingularOf(get('type'), parseString),
+    url: parseSingularOf(get('url'), parseString),
+  }
+
+  return trimObject(hub)
+}
+
+export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const get = createCaseInsensitiveGetter(value)
   const feed = {
-    version: parseSingularOf(get('version'), parseString),
     title: parseSingularOf(get('title'), parseString),
     home_page_url: parseSingularOf(get('home_page_url'), parseString),
     feed_url: parseSingularOf(get('feed_url'), parseString),
@@ -134,7 +144,5 @@ export const parseFeed: ParseFunction<Feed> = (value) => {
     items: parseArrayOf(get('items'), parseItem),
   }
 
-  if (isPresent(feed.version) && isPresent(feed.title) && isPresent(feed.items)) {
-    return trimObject(feed)
-  }
+  return trimObject(feed)
 }

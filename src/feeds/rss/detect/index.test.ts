@@ -1,8 +1,8 @@
-import { describe, expect, test } from 'bun:test'
+import { describe, expect, it } from 'bun:test'
 import { detect } from './index.js'
 
 describe('detect', () => {
-  test('detect valid RSS feed with xmlns declaration', () => {
+  it('should detect valid RSS feed with xmlns declaration', () => {
     const rssFeed = `
       <?xml version="1.0" encoding="utf-8"?>
       <rss version="2.0">
@@ -20,7 +20,7 @@ describe('detect', () => {
     expect(detect(rssFeed)).toBe(true)
   })
 
-  test('handle case sensitivity correctly', () => {
+  it('should handle case sensitivity correctly', () => {
     const uppercaseFeed = `
       <?xml version="1.0" encoding="utf-8"?>
       <RSS version="2.0">
@@ -38,7 +38,7 @@ describe('detect', () => {
     expect(detect(uppercaseFeed)).toBe(true)
   })
 
-  test('detect RDF feed without version attribute', () => {
+  it('should detect RSS feed without version attribute', () => {
     const rssFeed = `
       <?xml version="1.0" encoding="utf-8"?>
       <rss>
@@ -56,7 +56,102 @@ describe('detect', () => {
     expect(detect(rssFeed)).toBe(true)
   })
 
-  test('return false for Atom feed', () => {
+  it('should detect RSS feed with multi-line <rss> tag', () => {
+    const rssFeed = `
+      <?xml version="1.0"?>
+      <rss
+        version="2.0"
+        xmlns:content="http://purl.org/rss/1.0/modules/content/"
+        xmlns:atom="http://www.w3.org/2005/Atom"
+      >
+        <channel>
+          <title>Example Feed</title>
+        </channel>
+      </rss>
+    `
+
+    expect(detect(rssFeed)).toBe(true)
+  })
+
+  it('should return false for RSS element in CDATA', () => {
+    const cdataFeed = `
+      <?xml version="1.0"?>
+      <root>
+        <![CDATA[<rss version="2.0"><channel><title>Test</title></channel></rss>]]>
+      </root>
+    `
+
+    expect(detect(cdataFeed)).toBe(false)
+  })
+
+  it('should detect self-closing RSS tag', () => {
+    const selfClosingFeed = `
+      <?xml version="1.0"?>
+      <rss version="2.0" />
+    `
+
+    expect(detect(selfClosingFeed)).toBe(true)
+  })
+
+  it('should detect mixed case RSS elements', () => {
+    const mixedCaseFeed = `
+      <rss version="2.0">
+        <CHANNEL>
+          <TITLE>Example Feed</TITLE>
+          <Item>
+            <Description>Test content</Description>
+          </Item>
+        </CHANNEL>
+      </rss>
+    `
+
+    expect(detect(mixedCaseFeed)).toBe(true)
+  })
+
+  it('should detect minimal RSS feed', () => {
+    const minimalFeed = '<rss><channel><title>Test</title></channel></rss>'
+
+    expect(detect(minimalFeed)).toBe(true)
+  })
+
+  it('should return false for RSS in attribute value', () => {
+    const rssInAttribute = `
+      <root>
+        <element data="&lt;rss version=&quot;2.0&quot;&gt;&lt;channel&gt;&lt;title&gt;Test&lt;/title&gt;&lt;/channel&gt;&lt;/rss&gt;">
+          <content>Not a feed</content>
+        </element>
+      </root>
+    `
+
+    expect(detect(rssInAttribute)).toBe(false)
+  })
+
+  it('should return false for RSS with no version and no RSS elements', () => {
+    const invalidRss = `
+      <rss>
+        <heading>Not RSS</heading>
+        <article>Custom content</article>
+      </rss>
+    `
+
+    expect(detect(invalidRss)).toBe(false)
+  })
+
+  it('should detect RSS with various version formats', () => {
+    const versions = [
+      '<rss version="2.0">',
+      "<rss version='0.91'>",
+      '<rss version ="1.0">',
+      '<rss version= "2.0" >',
+    ]
+
+    for (const version of versions) {
+      const feed = `${version}<channel><title>Test</title></channel></rss>`
+      expect(detect(feed)).toBe(true)
+    }
+  })
+
+  it('should return false for Atom feed', () => {
     const atomFeed = `
       <?xml version="1.0" encoding="utf-8"?>
       <feed xmlns:atom="http://www.w3.org/2005/Atom">
@@ -67,7 +162,7 @@ describe('detect', () => {
     expect(detect(atomFeed)).toBe(false)
   })
 
-  test('return false for RDF feed', () => {
+  it('should return false for RDF feed', () => {
     const rdfFeed = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rdf:RDF
@@ -82,7 +177,7 @@ describe('detect', () => {
     expect(detect(rdfFeed)).toBe(false)
   })
 
-  test('return false for JSON feed', () => {
+  it('should return false for JSON feed', () => {
     const jsonFeed = `
       {
         "version": "https://jsonfeed.org/version/1.1",
@@ -93,7 +188,7 @@ describe('detect', () => {
     expect(detect(jsonFeed)).toBe(false)
   })
 
-  test('return false for plain HTML', () => {
+  it('should return false for plain HTML', () => {
     const html = `
       <!DOCTYPE html>
       <html>
@@ -110,11 +205,11 @@ describe('detect', () => {
     expect(detect(html)).toBe(false)
   })
 
-  test('return false for empty string or non-string value', () => {
+  it('should return false for empty string or non-string value', () => {
     expect(detect('')).toBe(false)
-    expect(detect(undefined)).toEqual(false)
-    expect(detect(null)).toEqual(false)
-    expect(detect([])).toEqual(false)
-    expect(detect({})).toEqual(false)
+    expect(detect(undefined)).toBe(false)
+    expect(detect(null)).toBe(false)
+    expect(detect([])).toBe(false)
+    expect(detect({})).toBe(false)
   })
 })

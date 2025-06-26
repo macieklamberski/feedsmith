@@ -1,25 +1,24 @@
-import type { ParseFunction, Unreliable } from '../../common/types.js'
+import type { ParsePartialFunction } from '../../common/types.js'
 import {
   isObject,
   parseArrayOf,
   parseBoolean,
   parseCsvOf,
+  parseDate,
   parseNumber,
   parseSingularOf,
   parseString,
-  parseTextNumber,
-  parseTextString,
   retrieveText,
   trimObject,
 } from '../../common/utils.js'
-import type { Body, Head, Opml, Outline } from './types.js'
+import type { Body, Head, Opml, Outline } from '../common/types.js'
 
-export const parseOutline: ParseFunction<Outline> = (value) => {
+export const parseOutline: ParsePartialFunction<Outline> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  return trimObject({
+  const outline = {
     text: parseString(value['@text']),
     type: parseString(value['@type']),
     isComment: parseBoolean(value['@iscomment']),
@@ -34,55 +33,60 @@ export const parseOutline: ParseFunction<Outline> = (value) => {
     version: parseString(value['@version']),
     url: parseString(value['@url']),
     outlines: parseArrayOf(value.outline, parseOutline),
-  })
+  }
+
+  return trimObject(outline)
 }
 
-export const parseHead: ParseFunction<Head> = (value) => {
+export const parseHead: ParsePartialFunction<Head<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  return trimObject({
-    title: parseSingularOf(value.title, parseTextString),
-    dateCreated: parseSingularOf(value.datecreated, parseTextString),
-    dateModified: parseSingularOf(value.datemodified, parseTextString),
-    ownerName: parseSingularOf(value.ownername, parseTextString),
-    ownerEmail: parseSingularOf(value.owneremail, parseTextString),
-    ownerId: parseSingularOf(value.ownerid, parseTextString),
-    docs: parseSingularOf(value.docs, parseTextString),
+  const head = {
+    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
+    dateCreated: parseSingularOf(value.datecreated, (value) => parseDate(retrieveText(value))),
+    dateModified: parseSingularOf(value.datemodified, (value) => parseDate(retrieveText(value))),
+    ownerName: parseSingularOf(value.ownername, (value) => parseString(retrieveText(value))),
+    ownerEmail: parseSingularOf(value.owneremail, (value) => parseString(retrieveText(value))),
+    ownerId: parseSingularOf(value.ownerid, (value) => parseString(retrieveText(value))),
+    docs: parseSingularOf(value.docs, (value) => parseString(retrieveText(value))),
     expansionState: parseSingularOf(value.expansionstate, (value) =>
       parseCsvOf(retrieveText(value), parseNumber),
     ),
-    vertScrollState: parseSingularOf(value.vertscrollstate, parseTextNumber),
-    windowTop: parseSingularOf(value.windowtop, parseTextNumber),
-    windowLeft: parseSingularOf(value.windowleft, parseTextNumber),
-    windowBottom: parseSingularOf(value.windowbottom, parseTextNumber),
-    windowRight: parseSingularOf(value.windowright, parseTextNumber),
-  })
+    vertScrollState: parseSingularOf(value.vertscrollstate, (value) =>
+      parseNumber(retrieveText(value)),
+    ),
+    windowTop: parseSingularOf(value.windowtop, (value) => parseNumber(retrieveText(value))),
+    windowLeft: parseSingularOf(value.windowleft, (value) => parseNumber(retrieveText(value))),
+    windowBottom: parseSingularOf(value.windowbottom, (value) => parseNumber(retrieveText(value))),
+    windowRight: parseSingularOf(value.windowright, (value) => parseNumber(retrieveText(value))),
+  }
+
+  return trimObject(head)
 }
 
-export const parseBody: ParseFunction<Body> = (value) => {
+export const parseBody: ParsePartialFunction<Body> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  return trimObject({
+  const body = {
     outlines: parseArrayOf(value.outline, parseOutline),
-  })
+  }
+
+  return trimObject(body)
 }
 
-export const parseOpml: ParseFunction<Opml> = (value) => {
+export const parseOpml: ParsePartialFunction<Opml<string>> = (value) => {
   if (!isObject(value?.opml)) {
     return
   }
 
-  const opml = trimObject({
-    version: parseString(value.opml['@version']),
+  const opml = {
     head: parseHead(value.opml.head),
     body: parseBody(value.opml.body),
-  })
-
-  if (opml?.body?.outlines?.length) {
-    return opml
   }
+
+  return trimObject(opml)
 }

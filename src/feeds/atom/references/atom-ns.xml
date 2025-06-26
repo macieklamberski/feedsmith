@@ -6,6 +6,8 @@
   <dc:contributor>Jane Smith</dc:contributor>
   <dc:date>2022-01-01T12:00+00:00</dc:date>
   <dc:description>This is an example of description.</dc:description>
+  <dcterms:created>2022-01-01T12:00+00:00</dcterms:created>
+  <dcterms:license>Creative Commons Attribution 4.0</dcterms:license>
   <sy:updateBase>2000-01-01T12:00+00:00</sy:updateBase>
   <sy:updatePeriod>hourly</sy:updatePeriod>
   <sy:updateFrequency>1</sy:updateFrequency>
@@ -133,6 +135,8 @@
     <id>example-entry</id>
     <dc:creator>Jack Jackson</dc:creator>
     <dc:date>2022-01-01T12:00+00:00</dc:date>
+    <dcterms:created>2022-01-01T12:00+00:00</dcterms:created>
+    <dcterms:license>Creative Commons Attribution 4.0</dcterms:license>
     <slash:section>articles</slash:section>
     <slash:department>not-an-ocean-unless-there-are-lobsters</slash:department>
     <slash:comments>177</slash:comments>
@@ -257,5 +261,9 @@
     <thr:in-reply-to ref="urn:uuid:d5e9c5d0-4c0c-11ec-81d3-0242ac130003" href="https://example.com/posts/understanding-xml-namespaces" type="application/xhtml+xml"/>
     <thr:in-reply-to ref="urn:uuid:e7865b80-4c0c-11ec-81d3-0242ac130003" href="https://example.com/posts/understanding-xml-namespaces/comments/1" type="application/xhtml+xml"/>
     <link rel="replies" href="https://example.com/posts/understanding-xml-namespaces/comments/1/replies" thr:count="2" thr:updated="2025-05-10T16:45:00Z"/>
+
+    <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
+    <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
+    <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
   </entry>
 </feed>

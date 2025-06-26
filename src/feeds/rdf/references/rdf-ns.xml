@@ -2,6 +2,14 @@
 <rdf:RDF
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xmlns="http://purl.org/rss/1.0/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:dcterms="http://purl.org/dc/terms/"
+  xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+  xmlns:media="http://search.yahoo.com/mrss/"
+  xmlns:georss="http://www.georss.org/georss"
+  xmlns:wfw="http://wellformedweb.org/CommentAPI/"
 >
   <channel rdf:about="http://example.org/rss">
     <title>Example Feed</title>
@@ -10,6 +18,9 @@
     <dc:contributor>Jane Smith</dc:contributor>
     <dc:date>2022-01-01T12:00+00:00</dc:date>
     <dc:description>This is an example of description.</dc:description>
+    <dcterms:created>2023-01-01T00:00:00Z</dcterms:created>
+    <dcterms:license>Creative Commons Attribution 4.0</dcterms:license>
+    <dcterms:modified>2023-06-15T14:30:00Z</dcterms:modified>
     <sy:updateBase>2000-01-01T12:00+00:00</sy:updateBase>
     <sy:updatePeriod>hourly</sy:updatePeriod>
     <sy:updateFrequency>1</sy:updateFrequency>
@@ -134,6 +145,9 @@
     <content:encoded>This is an example of content.</content:encoded>
     <dc:creator>Jack Jackson</dc:creator>
     <dc:date>2022-01-01T12:00+00:00</dc:date>
+    <dcterms:created>2023-02-01T00:00:00Z</dcterms:created>
+    <dcterms:license>MIT License</dcterms:license>
+    <dcterms:subject>Technology</dcterms:subject>
     <slash:section>articles</slash:section>
     <slash:department>not-an-ocean-unless-there-are-lobsters</slash:department>
     <slash:comments>177</slash:comments>
@@ -251,5 +265,9 @@
     <georss:elev>360</georss:elev>
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
+
+    <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
+    <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
+    <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
   </item>
 </rdf:RDF>
