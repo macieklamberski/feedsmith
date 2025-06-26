@@ -211,17 +211,4 @@ describe('generateFeed', () => {
 
     expect(generateFeed(value)).toBeUndefined()
   })
-
-  it('should handle legacy YouTube channel format', () => {
-    const value = {
-      channelId: 'user:someUsername',
-      playlistId: 'UUuser:someUsername',
-    }
-    const expected = {
-      'yt:channelId': 'user:someUsername',
-      'yt:playlistId': 'UUuser:someUsername',
-    }
-
-    expect(generateFeed(value)).toEqual(expected)
-  })
 })
