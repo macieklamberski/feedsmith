@@ -329,6 +329,9 @@ export const generateRfc822Date: GenerateFunction<string | Date> = (value) => {
 
 export const generateRfc3339Date: GenerateFunction<string | Date> = (value) => {
   // This function generates RFC 3339 format dates which is also compatible with W3C-DTF.
+  // The only difference between ISO 8601 (produced by toISOString) and RFC 3339 is that
+  // RFC 3339 allows a space between date and time parts instead of 'T', but the 'T' format
+  // is actually valid in RFC 3339 as well, so we can just return the ISO string.
 
   if (typeof value === 'string') {
     // biome-ignore lint/style/noParameterAssign: No explanation.
