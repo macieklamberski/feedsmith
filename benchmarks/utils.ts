@@ -70,9 +70,15 @@ export const runTinybench = async (name: string, tests: Record<string, () => Pro
       _rawMean: result?.latency?.mean || Number.MAX_VALUE,
     }))
     .sort((a, b) => a._rawMean - b._rawMean)
-    .map(({ _rawMean, ...rest }) => rest)
 
-  console.table(results)
+  const fastestTime = results[0]?._rawMean || 1
+
+  const resultsWithPerformance = results.map(({ _rawMean, ...rest }, index) => ({
+    ...rest,
+    Performance: index === 0 ? 'baseline' : `${(_rawMean / fastestTime).toFixed(1)}x slower`,
+  }))
+
+  console.table(resultsWithPerformance)
 }
 
 export const runBenchmarkJs = async (name: string, tests: Record<string, () => Promise<void>>) => {
@@ -100,10 +106,18 @@ export const runBenchmarkJs = async (name: string, tests: Record<string, () => P
           'Min (ms)': (Math.min(...benchmark.stats.sample) * 1000).toFixed(3),
           'Max (ms)': (Math.max(...benchmark.stats.sample) * 1000).toFixed(3),
           Runs: benchmark.stats.sample.length,
+          _rawHz: benchmark.hz || Number.MAX_VALUE,
         }))
-        .sort((a, b) => Number.parseFloat(b['Ops/sec']) - Number.parseFloat(a['Ops/sec']))
+        .sort((a, b) => b._rawHz - a._rawHz) // Sort by ops/sec descending (fastest first)
 
-      console.table(results)
+      const fastestHz = results[0]?._rawHz || 1
+
+      const resultsWithPerformance = results.map(({ _rawHz, ...rest }, index) => ({
+        ...rest,
+        Performance: index === 0 ? 'baseline' : `${(fastestHz / _rawHz).toFixed(1)}x slower`,
+      }))
+
+      console.table(resultsWithPerformance)
       resolve()
     })
 

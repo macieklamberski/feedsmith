@@ -56,6 +56,22 @@ export const trimArray = <T, R = T>(
     return
   }
 
+  // Do not re-create the array if it all elements are present and no parsing is required.
+  if (!parse) {
+    let needsTrimming = false
+
+    for (let i = 0; i < value.length; i++) {
+      if (!isPresent(value[i])) {
+        needsTrimming = true
+        break
+      }
+    }
+
+    if (!needsTrimming) {
+      return value as unknown as Array<R>
+    }
+  }
+
   // Pre-allocation in case of Array is more performant than doing the lazy-allocation
   // similar to the one used in trimObject.
   const result: Array<R> = []

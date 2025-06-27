@@ -15,7 +15,7 @@ export const parserConfig: X2jOptions = {
   transformAttributeName: (name) => name.toLowerCase(),
 }
 
-export const generateConfig: XmlBuilderOptions = {
+export const builderConfig: XmlBuilderOptions = {
   processEntities: true,
   ignoreAttributes: false,
   suppressEmptyNode: true,
