@@ -111,7 +111,7 @@
   <itunes:summary>This is a comprehensive summary of the podcast content and what listeners can expect</itunes:summary>
   <itunes:subtitle>A subtitle that provides additional context</itunes:subtitle>
   <itunes:keywords>technology, programming, web development, tutorials</itunes:keywords>
-  <itunes:apple-podcasts-verify>example-verification-key</itunes:apple-podcasts-verify>
+  <itunes:applepodcastsverify>example-verification-key</itunes:applepodcastsverify>
 
   <!-- YouTube Namespace: Feed Level Tags -->
   <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>

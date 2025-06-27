@@ -115,7 +115,7 @@
     <itunes:summary>This is a comprehensive summary of the podcast content and what listeners can expect</itunes:summary>
     <itunes:subtitle>A subtitle that provides additional context</itunes:subtitle>
     <itunes:keywords>technology, programming, web development, tutorials</itunes:keywords>
-    <itunes:apple-podcasts-verify>example-verification-key</itunes:apple-podcasts-verify>
+    <itunes:applepodcastsverify>example-verification-key</itunes:applepodcastsverify>
 
     <!-- Podcast Namespace: Channel Level Tags -->
     <podcast:locked owner="podcast@example.com">yes</podcast:locked>
