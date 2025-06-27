@@ -219,9 +219,7 @@ describe('parse', () => {
       </feed>
     `
     const expected = {
-      title: {
-        value: 'YouTube Channel Feed',
-      },
+      title: { value: 'YouTube Channel Feed' },
       id: 'yt:channel:UCuAXFkgsw1L7xaCfnd5JJOw',
       updated: '2024-01-10T12:00:00Z',
       yt: {
@@ -230,9 +228,7 @@ describe('parse', () => {
       entries: [
         {
           id: 'yt:video:dQw4w9WgXcQ',
-          title: {
-            value: 'Example YouTube Video',
-          },
+          title: { value: 'Example YouTube Video' },
           updated: '2024-01-05T10:30:00Z',
           yt: {
             videoId: 'dQw4w9WgXcQ',
@@ -264,9 +260,7 @@ describe('parse', () => {
       </feed>
     `
     const expected = {
-      title: {
-        value: 'YouTube Playlist Feed',
-      },
+      title: { value: 'YouTube Playlist Feed' },
       id: 'yt:playlist:PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf',
       updated: '2024-01-10T12:00:00Z',
       yt: {
@@ -275,9 +269,7 @@ describe('parse', () => {
       entries: [
         {
           id: 'yt:video:OTYFJaT-Glk',
-          title: {
-            value: 'Video in Playlist',
-          },
+          title: { value: 'Video in Playlist' },
           updated: '2024-01-08T14:20:00Z',
           yt: {
             videoId: 'OTYFJaT-Glk',

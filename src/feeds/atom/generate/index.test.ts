@@ -488,9 +488,7 @@ describe('generate', () => {
       title: { value: 'Feed with Media namespace' },
       updated: new Date('2023-03-15T12:00:00Z'),
       media: {
-        title: {
-          value: 'Feed Media Title',
-        },
+        title: { value: 'Feed Media Title' },
       },
       entries: [
         {
@@ -498,9 +496,7 @@ describe('generate', () => {
           title: { value: 'Entry with Media' },
           updated: new Date('2023-03-15T12:00:00Z'),
           media: {
-            title: {
-              value: 'Entry Media Title',
-            },
+            title: { value: 'Entry Media Title' },
           },
         },
       ],
@@ -655,9 +651,7 @@ describe('generate', () => {
   it('should generate Atom feed with YouTube namespace', () => {
     const value = {
       id: 'yt:channel:UCuAXFkgsw1L7xaCfnd5JJOw',
-      title: {
-        value: 'YouTube Channel Feed',
-      },
+      title: { value: 'YouTube Channel Feed' },
       updated: new Date('2024-01-10T12:00:00Z'),
       yt: {
         channelId: 'UCuAXFkgsw1L7xaCfnd5JJOw',
@@ -665,9 +659,7 @@ describe('generate', () => {
       entries: [
         {
           id: 'yt:video:dQw4w9WgXcQ',
-          title: {
-            value: 'Example YouTube Video',
-          },
+          title: { value: 'Example YouTube Video' },
           updated: new Date('2024-01-05T10:30:00Z'),
           yt: {
             videoId: 'dQw4w9WgXcQ',
@@ -698,9 +690,7 @@ describe('generate', () => {
   it('should generate Atom feed with YouTube playlist', () => {
     const value = {
       id: 'yt:playlist:PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf',
-      title: {
-        value: 'YouTube Playlist Feed',
-      },
+      title: { value: 'YouTube Playlist Feed' },
       updated: new Date('2024-01-10T12:00:00Z'),
       yt: {
         playlistId: 'PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf',
@@ -708,9 +698,7 @@ describe('generate', () => {
       entries: [
         {
           id: 'yt:video:OTYFJaT-Glk',
-          title: {
-            value: 'Video in Playlist',
-          },
+          title: { value: 'Video in Playlist' },
           updated: new Date('2024-01-08T14:20:00Z'),
           yt: {
             videoId: 'OTYFJaT-Glk',
