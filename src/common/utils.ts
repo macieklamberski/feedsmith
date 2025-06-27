@@ -23,7 +23,7 @@ export const isNonEmptyString = (value: Unreliable): value is string => {
 }
 
 export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | number => {
-  return isNonEmptyString(value) || typeof value === 'number'
+  return typeof value === 'number' || isNonEmptyString(value)
 }
 
 export const retrieveText = (value: Unreliable): Unreliable => {
