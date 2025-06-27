@@ -42,10 +42,12 @@ export const generateRating: GenerateFunction<Rating> = (rating) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': rating.value,
     '@scheme': rating.scheme,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateTitleOrDescription: GenerateFunction<TitleOrDescription> = (
@@ -55,10 +57,12 @@ export const generateTitleOrDescription: GenerateFunction<TitleOrDescription> = 
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': titleOrDescription.value,
     '@type': titleOrDescription.type,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateThumbnail: GenerateFunction<Thumbnail> = (thumbnail) => {
@@ -66,12 +70,14 @@ export const generateThumbnail: GenerateFunction<Thumbnail> = (thumbnail) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@url': thumbnail.url,
     '@height': thumbnail.height,
     '@width': thumbnail.width,
     '@time': thumbnail.time,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateCategory: GenerateFunction<Category> = (category) => {
@@ -79,11 +85,13 @@ export const generateCategory: GenerateFunction<Category> = (category) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': category.name,
     '@scheme': category.scheme,
     '@label': category.label,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateHash: GenerateFunction<Hash> = (hash) => {
@@ -91,10 +99,12 @@ export const generateHash: GenerateFunction<Hash> = (hash) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': hash.value,
     '@algo': hash.algo,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generatePlayer: GenerateFunction<Player> = (player) => {
@@ -102,11 +112,13 @@ export const generatePlayer: GenerateFunction<Player> = (player) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@url': player.url,
     '@height': player.height,
     '@width': player.width,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateCredit: GenerateFunction<Credit> = (credit) => {
@@ -114,11 +126,13 @@ export const generateCredit: GenerateFunction<Credit> = (credit) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': credit.value,
     '@role': credit.role,
     '@scheme': credit.scheme,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateCopyright: GenerateFunction<Copyright> = (copyright) => {
@@ -126,10 +140,12 @@ export const generateCopyright: GenerateFunction<Copyright> = (copyright) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': copyright.value,
     '@url': copyright.url,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateText: GenerateFunction<Text> = (text) => {
@@ -137,13 +153,15 @@ export const generateText: GenerateFunction<Text> = (text) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': text.value,
     '@type': text.type,
     '@lang': text.lang,
     '@start': text.start,
     '@end': text.end,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateRestriction: GenerateFunction<Restriction> = (restriction) => {
@@ -151,11 +169,13 @@ export const generateRestriction: GenerateFunction<Restriction> = (restriction) 
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': restriction.value,
     '@relationship': restriction.relationship,
     '@type': restriction.type,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateStarRating: GenerateFunction<StarRating> = (starRating) => {
@@ -163,12 +183,14 @@ export const generateStarRating: GenerateFunction<StarRating> = (starRating) => 
     return
   }
 
-  return trimObject({
+  const value = {
     '@average': starRating.average,
     '@count': starRating.count,
     '@min': starRating.min,
     '@max': starRating.max,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateStatistics: GenerateFunction<Statistics> = (statistics) => {
@@ -176,10 +198,12 @@ export const generateStatistics: GenerateFunction<Statistics> = (statistics) => 
     return
   }
 
-  return trimObject({
+  const value = {
     '@views': statistics.views,
     '@favorites': statistics.favorites,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateTag: GenerateFunction<Tag> = (tag) => {
@@ -195,11 +219,13 @@ export const generateCommunity: GenerateFunction<Community> = (community) => {
     return
   }
 
-  return trimObject({
+  const value = {
     'media:starRating': generateStarRating(community.starRating),
     'media:statistics': generateStatistics(community.statistics),
     'media:tags': generateCsvOf(community.tags, generateTag),
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateComments: GenerateFunction<Array<string>> = (comments) => {
@@ -219,10 +245,12 @@ export const generateParam: GenerateFunction<Param> = (param) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': param.value,
     '@name': param.name,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateEmbed: GenerateFunction<Embed> = (embed) => {
@@ -230,12 +258,14 @@ export const generateEmbed: GenerateFunction<Embed> = (embed) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@url': embed.url,
     '@width': embed.width,
     '@height': embed.height,
-    'media:param': trimArray(embed.params?.map(generateParam)),
-  })
+    'media:param': trimArray(embed.params, generateParam),
+  }
+
+  return trimObject(value)
 }
 
 export const generateStatus: GenerateFunction<Status> = (status) => {
@@ -243,10 +273,12 @@ export const generateStatus: GenerateFunction<Status> = (status) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@state': status.state,
     '@reason': status.reason,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generatePrice: GenerateFunction<Price> = (price) => {
@@ -254,12 +286,14 @@ export const generatePrice: GenerateFunction<Price> = (price) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@type': price.type,
     '@info': price.info,
     '@price': price.price,
     '@currency': price.currency,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateLicense: GenerateFunction<License> = (license) => {
@@ -267,11 +301,13 @@ export const generateLicense: GenerateFunction<License> = (license) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': license.name,
     '@type': license.type,
     '@href': license.href,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateSubTitle: GenerateFunction<SubTitle> = (subTitle) => {
@@ -279,11 +315,13 @@ export const generateSubTitle: GenerateFunction<SubTitle> = (subTitle) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@type': subTitle.type,
     '@lang': subTitle.lang,
     '@href': subTitle.href,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generatePeerLink: GenerateFunction<PeerLink> = (peerLink) => {
@@ -291,10 +329,12 @@ export const generatePeerLink: GenerateFunction<PeerLink> = (peerLink) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@type': peerLink.type,
     '@href': peerLink.href,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateRights: GenerateFunction<Rights> = (rights) => {
@@ -302,9 +342,11 @@ export const generateRights: GenerateFunction<Rights> = (rights) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@status': rights.status,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateScene: GenerateFunction<Scene> = (scene) => {
@@ -312,12 +354,14 @@ export const generateScene: GenerateFunction<Scene> = (scene) => {
     return
   }
 
-  return trimObject({
+  const value = {
     sceneTitle: scene.title,
     sceneDescription: scene.description,
     sceneStartTime: scene.startTime,
     sceneEndTime: scene.endTime,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateLocation: GenerateFunction<Location> = (location) => {
@@ -325,13 +369,15 @@ export const generateLocation: GenerateFunction<Location> = (location) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': location.description,
     '@start': location.start,
     '@end': location.end,
     '@lat': location.lat,
     '@lng': location.lng,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateCommonElements: GenerateFunction<CommonElements> = (elements) => {
@@ -339,33 +385,35 @@ export const generateCommonElements: GenerateFunction<CommonElements> = (element
     return
   }
 
-  return trimObject({
-    'media:rating': trimArray(elements.ratings?.map(generateRating)),
+  const value = {
+    'media:rating': trimArray(elements.ratings, generateRating),
     'media:title': generateTitleOrDescription(elements.title),
     'media:description': generateTitleOrDescription(elements.description),
     'media:keywords': generateCsvOf(elements.keywords),
-    'media:thumbnail': trimArray(elements.thumbnails?.map(generateThumbnail)),
-    'media:category': trimArray(elements.categories?.map(generateCategory)),
-    'media:hash': trimArray(elements.hashes?.map(generateHash)),
+    'media:thumbnail': trimArray(elements.thumbnails, generateThumbnail),
+    'media:category': trimArray(elements.categories, generateCategory),
+    'media:hash': trimArray(elements.hashes, generateHash),
     'media:player': generatePlayer(elements.player),
-    'media:credit': trimArray(elements.credits?.map(generateCredit)),
+    'media:credit': trimArray(elements.credits, generateCredit),
     'media:copyright': generateCopyright(elements.copyright),
-    'media:text': trimArray(elements.texts?.map(generateText)),
-    'media:restriction': trimArray(elements.restrictions?.map(generateRestriction)),
+    'media:text': trimArray(elements.texts, generateText),
+    'media:restriction': trimArray(elements.restrictions, generateRestriction),
     'media:community': generateCommunity(elements.community),
     'media:comment': generateComments(elements.comments),
     'media:embed': generateEmbed(elements.embed),
     'media:response': generateResponses(elements.responses),
     'media:backLink': generateBackLinks(elements.backLinks),
     'media:status': generateStatus(elements.status),
-    'media:price': trimArray(elements.prices?.map(generatePrice)),
-    'media:license': trimArray(elements.licenses?.map(generateLicense)),
-    'media:subTitle': trimArray(elements.subTitles?.map(generateSubTitle)),
-    'media:peerLink': trimArray(elements.peerLinks?.map(generatePeerLink)),
-    'media:location': trimArray(elements.locations?.map(generateLocation)),
+    'media:price': trimArray(elements.prices, generatePrice),
+    'media:license': trimArray(elements.licenses, generateLicense),
+    'media:subTitle': trimArray(elements.subTitles, generateSubTitle),
+    'media:peerLink': trimArray(elements.peerLinks, generatePeerLink),
+    'media:location': trimArray(elements.locations, generateLocation),
     'media:rights': generateRights(elements.rights),
-    'media:scene': trimArray(elements.scenes?.map(generateScene)),
-  })
+    'media:scene': trimArray(elements.scenes, generateScene),
+  }
+
+  return trimObject(value)
 }
 
 export const generateContent: GenerateFunction<Content> = (content) => {
@@ -373,7 +421,7 @@ export const generateContent: GenerateFunction<Content> = (content) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@url': content.url,
     '@fileSize': content.fileSize,
     '@type': content.type,
@@ -389,7 +437,9 @@ export const generateContent: GenerateFunction<Content> = (content) => {
     '@width': content.width,
     '@lang': content.lang,
     ...generateCommonElements(content),
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateGroup: GenerateFunction<Group> = (group) => {
@@ -397,10 +447,12 @@ export const generateGroup: GenerateFunction<Group> = (group) => {
     return
   }
 
-  return trimObject({
-    'media:content': trimArray(group.contents?.map(generateContent)),
+  const value = {
+    'media:content': trimArray(group.contents, generateContent),
     ...generateCommonElements(group),
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateItemOrFeed: GenerateFunction<ItemOrFeed> = (itemOrFeed) => {
@@ -408,9 +460,11 @@ export const generateItemOrFeed: GenerateFunction<ItemOrFeed> = (itemOrFeed) => 
     return
   }
 
-  return trimObject({
+  const value = {
     'media:group': generateGroup(itemOrFeed.group),
-    'media:content': trimArray(itemOrFeed.contents?.map(generateContent)),
+    'media:content': trimArray(itemOrFeed.contents, generateContent),
     ...generateCommonElements(itemOrFeed),
-  })
+  }
+
+  return trimObject(value)
 }

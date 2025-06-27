@@ -20,6 +20,7 @@ import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespa
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
+import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import type { Feed, Image, Item, TextInput } from '../common/types.js'
 
 export const parseImage: ParsePartialFunction<Image> = (value) => {
@@ -78,6 +79,7 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
   }
 
   return trimObject(item)

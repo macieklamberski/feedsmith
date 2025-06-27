@@ -40,6 +40,8 @@ export const parseOwner: ParsePartialFunction<Owner> = (value) => {
   return trimObject(owner)
 }
 
+const explicitOrYesRegex = /^\p{White_Space}*(explicit|yes)\p{White_Space}*$/iu
+
 export const parseExplicit: ParsePartialFunction<boolean> = (value) => {
   const boolean = parseBoolean(value)
 
@@ -48,10 +50,8 @@ export const parseExplicit: ParsePartialFunction<boolean> = (value) => {
   }
 
   if (typeof value === 'string') {
-    const lowercase = value.toLowerCase()
-
     // There are also cases of "clean" and "f", but those are considered false.
-    return lowercase === 'explicit' || lowercase === 'yes'
+    return explicitOrYesRegex.test(value)
   }
 }
 

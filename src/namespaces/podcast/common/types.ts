@@ -132,7 +132,7 @@ export type LiveItem<TDate extends DateLike> = BaseItem & {
   status: string
   start: TDate // Date: ISO 8601.
   end?: TDate // Date: ISO 8601.
-  contentlinks?: Array<ContentLink>
+  contentLinks?: Array<ContentLink>
 }
 
 export type ContentLink = {

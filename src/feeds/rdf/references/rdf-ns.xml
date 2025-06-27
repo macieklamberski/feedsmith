@@ -2,21 +2,110 @@
 <rdf:RDF
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xmlns="http://purl.org/rss/1.0/"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:dcterms="http://purl.org/dc/terms/"
+  xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+  xmlns:media="http://search.yahoo.com/mrss/"
+  xmlns:georss="http://www.georss.org/georss"
+  xmlns:wfw="http://wellformedweb.org/CommentAPI/"
 >
   <channel rdf:about="http://example.org/rss">
     <title>Example Feed</title>
     <link>http://example.org</link>
+
+    <!-- Dublin Core Namespace: Channel Level Tags -->
     <dc:creator>John Doe</dc:creator>
     <dc:contributor>Jane Smith</dc:contributor>
     <dc:date>2022-01-01T12:00+00:00</dc:date>
     <dc:description>This is an example of description.</dc:description>
-    <dcterms:created>2023-01-01T00:00:00Z</dcterms:created>
+    <dc:title>Dublin Core Enhanced Feed Title</dc:title>
+    <dc:subject>Technology, Programming, Web Development</dc:subject>
+    <dc:publisher>Example Publishing Company</dc:publisher>
+    <dc:type>Text</dc:type>
+    <dc:format>application/rdf+xml</dc:format>
+    <dc:identifier>urn:uuid:12345678-1234-1234-1234-123456789abc</dc:identifier>
+    <dc:source>https://example.org/original-source</dc:source>
+    <dc:language>en-US</dc:language>
+    <dc:relation>https://example.org/related-content</dc:relation>
+    <dc:coverage>Global</dc:coverage>
+    <dc:rights>Copyright 2025 Example Publishing Company</dc:rights>
+
+    <!-- Dublin Core Terms Namespace: Channel Level Tags -->
+    <dcterms:created>2022-01-01T12:00+00:00</dcterms:created>
     <dcterms:license>Creative Commons Attribution 4.0</dcterms:license>
-    <dcterms:modified>2023-06-15T14:30:00Z</dcterms:modified>
+    <dcterms:abstract>This is an abstract of the feed content</dcterms:abstract>
+    <dcterms:accessRights>Public access with attribution required</dcterms:accessRights>
+    <dcterms:accrualMethod>Regular updates</dcterms:accrualMethod>
+    <dcterms:accrualPeriodicity>Daily</dcterms:accrualPeriodicity>
+    <dcterms:accrualPolicy>Content added based on editorial calendar</dcterms:accrualPolicy>
+    <dcterms:alternative>Alternative Feed Title</dcterms:alternative>
+    <dcterms:audience>General technology audience</dcterms:audience>
+    <dcterms:available>2022-01-01T12:00+00:00</dcterms:available>
+    <dcterms:bibliographicCitation>Example Feed. (2022). Retrieved from https://example.org</dcterms:bibliographicCitation>
+    <dcterms:conformsTo>RSS 2.0 Specification</dcterms:conformsTo>
+    <dcterms:contributor>Jane Smith</dcterms:contributor>
+    <dcterms:coverage>Global technology topics</dcterms:coverage>
+    <dcterms:creator>John Doe</dcterms:creator>
+    <dcterms:date>2022-01-01T12:00+00:00</dcterms:date>
+    <dcterms:dateAccepted>2022-01-01T12:00+00:00</dcterms:dateAccepted>
+    <dcterms:dateCopyrighted>2022-01-01T12:00+00:00</dcterms:dateCopyrighted>
+    <dcterms:dateSubmitted>2022-01-01T12:00+00:00</dcterms:dateSubmitted>
+    <dcterms:description>Detailed description of the feed content and purpose</dcterms:description>
+    <dcterms:educationLevel>Intermediate to advanced</dcterms:educationLevel>
+    <dcterms:extent>Approximately 1000 words per article</dcterms:extent>
+    <dcterms:format>application/rdf+xml</dcterms:format>
+    <dcterms:hasFormat>https://example.org/feed.atom</dcterms:hasFormat>
+    <dcterms:hasPart>https://example.org/category/tutorials</dcterms:hasPart>
+    <dcterms:hasVersion>2.0</dcterms:hasVersion>
+    <dcterms:identifier>urn:uuid:feed-12345678-1234-1234-1234-123456789abc</dcterms:identifier>
+    <dcterms:instructionalMethod>Practical examples and tutorials</dcterms:instructionalMethod>
+    <dcterms:isFormatOf>https://example.org/original-content</dcterms:isFormatOf>
+    <dcterms:isPartOf>Example Media Network</dcterms:isPartOf>
+    <dcterms:isReferencedBy>https://example.org/references</dcterms:isReferencedBy>
+    <dcterms:isReplacedBy>https://example.org/new-feed</dcterms:isReplacedBy>
+    <dcterms:isRequiredBy>https://example.org/dependent-feeds</dcterms:isRequiredBy>
+    <dcterms:issued>2022-01-01T12:00+00:00</dcterms:issued>
+    <dcterms:isVersionOf>https://example.org/original-feed</dcterms:isVersionOf>
+    <dcterms:language>en-US</dcterms:language>
+    <dcterms:mediator>Content Management System</dcterms:mediator>
+    <dcterms:medium>Digital</dcterms:medium>
+    <dcterms:modified>2023-01-01T12:00+00:00</dcterms:modified>
+    <dcterms:provenance>Originally created by Example Publishing Company</dcterms:provenance>
+    <dcterms:publisher>Example Publishing Company</dcterms:publisher>
+    <dcterms:references>https://example.org/referenced-sources</dcterms:references>
+    <dcterms:relation>https://example.org/related-feeds</dcterms:relation>
+    <dcterms:replaces>https://example.org/old-feed</dcterms:replaces>
+    <dcterms:requires>RSS 2.0 compatible reader</dcterms:requires>
+    <dcterms:rights>Copyright 2025 Example Publishing Company</dcterms:rights>
+    <dcterms:rightsHolder>Example Publishing Company</dcterms:rightsHolder>
+    <dcterms:source>https://example.org/original-source</dcterms:source>
+    <dcterms:spatial>Global</dcterms:spatial>
+    <dcterms:subject>Technology, Programming, Web Development</dcterms:subject>
+    <dcterms:tableOfContents>Latest articles, tutorials, and news</dcterms:tableOfContents>
+    <dcterms:temporal>2022-present</dcterms:temporal>
+    <dcterms:title>Dublin Core Terms Enhanced Feed Title</dcterms:title>
+    <dcterms:type>Text</dcterms:type>
+    <dcterms:valid>2025-12-31T23:59:59+00:00</dcterms:valid>
+
+    <!-- Syndication Namespace: Channel Level Tags -->
     <sy:updateBase>2000-01-01T12:00+00:00</sy:updateBase>
     <sy:updatePeriod>hourly</sy:updatePeriod>
     <sy:updateFrequency>1</sy:updateFrequency>
+
+    <!-- Atom Namespace: Channel Level Tags -->
+    <atom:link href="https://example.org/feed.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="https://example.org/feed.atom" rel="alternate" type="application/atom+xml" title="Atom Feed"/>
+    <atom:link href="https://example.org/" rel="alternate" type="text/html" title="Website"/>
+    <atom:link href="https://example.org/hub" rel="hub"/>
+    <atom:link href="https://example.org/feed-archive" rel="archive" title="Feed Archive"/>
+    <atom:link href="https://example.org/feed-next" rel="next" title="Next Page"/>
+    <atom:link href="https://example.org/feed-prev" rel="prev" title="Previous Page"/>
+    <atom:link href="https://example.org/feed-first" rel="first" title="First Page"/>
+    <atom:link href="https://example.org/feed-last" rel="last" title="Last Page"/>
+    <atom:link href="https://example.org/comments-feed" rel="replies" type="application/rss+xml" title="Comments Feed"/>
 
     <!-- Media Namespace: Item/Feed Level Tags -->
     <media:content url="https://example.com/videos/sample1.mp4" fileSize="12345678" type="video/mp4" medium="video" isDefault="true" expression="full" bitrate="1500" framerate="30" samplingrate="44.1" channels="2" duration="120" height="720" width="1280" lang="en">
@@ -135,12 +224,85 @@
   <item rdf:about="http://example.org/item/1">
     <title>Example Item</title>
     <link>http://example.org/item/1</link>
+
+    <!-- Content Namespace: Item Level Tags -->
     <content:encoded>This is an example of content.</content:encoded>
+
+    <!-- Dublin Core Namespace: Item Level Tags -->
     <dc:creator>Jack Jackson</dc:creator>
+    <dc:contributor>Assistant Editor Mike Thompson</dc:contributor>
     <dc:date>2022-01-01T12:00+00:00</dc:date>
-    <dcterms:created>2023-02-01T00:00:00Z</dcterms:created>
-    <dcterms:license>MIT License</dcterms:license>
-    <dcterms:subject>Technology</dcterms:subject>
+    <dc:description>This article explores advanced concepts in technology</dc:description>
+    <dc:title>Dublin Core Enhanced Item Title</dc:title>
+    <dc:subject>Article, Tutorial, Example</dc:subject>
+    <dc:publisher>Example News Organization</dc:publisher>
+    <dc:type>Article</dc:type>
+    <dc:format>text/html</dc:format>
+    <dc:identifier>urn:uuid:item-98765432-9876-9876-9876-987654321def</dc:identifier>
+    <dc:source>https://example.org/item-source</dc:source>
+    <dc:language>en-US</dc:language>
+    <dc:relation>https://example.org/related-article</dc:relation>
+    <dc:coverage>United States</dc:coverage>
+    <dc:rights>Copyright 2025 Example News Organization</dc:rights>
+
+    <!-- Dublin Core Terms Namespace: Item Level Tags -->
+    <dcterms:created>2022-01-01T12:00+00:00</dcterms:created>
+    <dcterms:license>Creative Commons Attribution 4.0</dcterms:license>
+    <dcterms:abstract>This article explores advanced concepts in technology</dcterms:abstract>
+    <dcterms:accessRights>Public access with attribution required</dcterms:accessRights>
+    <dcterms:accrualMethod>Single publication</dcterms:accrualMethod>
+    <dcterms:accrualPeriodicity>One-time</dcterms:accrualPeriodicity>
+    <dcterms:accrualPolicy>Editorial review required</dcterms:accrualPolicy>
+    <dcterms:alternative>Alternative Item Title</dcterms:alternative>
+    <dcterms:audience>Technical professionals</dcterms:audience>
+    <dcterms:available>2022-01-01T12:00+00:00</dcterms:available>
+    <dcterms:bibliographicCitation>Smith, J. (2022). Example Item. Retrieved from https://example.org/item/1</dcterms:bibliographicCitation>
+    <dcterms:conformsTo>HTML5 standard</dcterms:conformsTo>
+    <dcterms:contributor>Assistant Editor Mike Thompson</dcterms:contributor>
+    <dcterms:coverage>United States technology sector</dcterms:coverage>
+    <dcterms:creator>Jack Jackson</dcterms:creator>
+    <dcterms:date>2022-01-01T12:00+00:00</dcterms:date>
+    <dcterms:dateAccepted>2022-01-01T12:00+00:00</dcterms:dateAccepted>
+    <dcterms:dateCopyrighted>2022-01-01T12:00+00:00</dcterms:dateCopyrighted>
+    <dcterms:dateSubmitted>2022-01-01T12:00+00:00</dcterms:dateSubmitted>
+    <dcterms:description>Detailed description of the example item content and its significance</dcterms:description>
+    <dcterms:educationLevel>Advanced</dcterms:educationLevel>
+    <dcterms:extent>Approximately 2500 words</dcterms:extent>
+    <dcterms:format>text/html</dcterms:format>
+    <dcterms:hasFormat>https://example.org/item/1.pdf</dcterms:hasFormat>
+    <dcterms:hasPart>https://example.org/item/1/section1</dcterms:hasPart>
+    <dcterms:hasVersion>1.1</dcterms:hasVersion>
+    <dcterms:identifier>urn:uuid:item-98765432-9876-9876-9876-987654321def</dcterms:identifier>
+    <dcterms:instructionalMethod>Step-by-step tutorial</dcterms:instructionalMethod>
+    <dcterms:isFormatOf>https://example.org/item-source</dcterms:isFormatOf>
+    <dcterms:isPartOf>Example Article Series</dcterms:isPartOf>
+    <dcterms:isReferencedBy>https://example.org/item/1/citations</dcterms:isReferencedBy>
+    <dcterms:isReplacedBy>https://example.org/item/1/updated</dcterms:isReplacedBy>
+    <dcterms:isRequiredBy>https://example.org/item/1/prerequisites</dcterms:isRequiredBy>
+    <dcterms:issued>2022-01-01T12:00+00:00</dcterms:issued>
+    <dcterms:isVersionOf>https://example.org/item/1/original</dcterms:isVersionOf>
+    <dcterms:language>en-US</dcterms:language>
+    <dcterms:mediator>Editorial Team</dcterms:mediator>
+    <dcterms:medium>Digital</dcterms:medium>
+    <dcterms:modified>2022-06-01T12:00+00:00</dcterms:modified>
+    <dcterms:provenance>Originally published by Example News Organization</dcterms:provenance>
+    <dcterms:publisher>Example News Organization</dcterms:publisher>
+    <dcterms:references>https://example.org/item/1/references</dcterms:references>
+    <dcterms:relation>https://example.org/related-article</dcterms:relation>
+    <dcterms:replaces>https://example.org/item/1/previous</dcterms:replaces>
+    <dcterms:requires>Basic understanding of web technologies</dcterms:requires>
+    <dcterms:rights>Copyright 2025 Example News Organization</dcterms:rights>
+    <dcterms:rightsHolder>Example News Organization</dcterms:rightsHolder>
+    <dcterms:source>https://example.org/item-source</dcterms:source>
+    <dcterms:spatial>United States</dcterms:spatial>
+    <dcterms:subject>Article, Tutorial, Example</dcterms:subject>
+    <dcterms:tableOfContents>Introduction, Main Content, Conclusion</dcterms:tableOfContents>
+    <dcterms:temporal>2022</dcterms:temporal>
+    <dcterms:title>Dublin Core Terms Enhanced Item Title</dcterms:title>
+    <dcterms:type>Article</dcterms:type>
+    <dcterms:valid>2025-12-31T23:59:59+00:00</dcterms:valid>
+
+    <!-- Slash Namespace: Item Level Tags -->
     <slash:section>articles</slash:section>
     <slash:department>not-an-ocean-unless-there-are-lobsters</slash:department>
     <slash:comments>177</slash:comments>
@@ -258,5 +420,9 @@
     <georss:elev>360</georss:elev>
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
+
+    <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
+    <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
+    <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
   </item>
 </rdf:RDF>

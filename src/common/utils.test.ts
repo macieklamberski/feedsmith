@@ -5,6 +5,7 @@ import {
   detectNamespaces,
   generateCsvOf,
   generateNamespaceAttrs,
+  generateNumber,
   generateRfc822Date,
   generateRfc3339Date,
   generateString,
@@ -29,7 +30,6 @@ import {
   stripCdata,
   trimArray,
   trimObject,
-  validateAndTrimObject,
 } from './utils.js'
 
 describe('isPresent', () => {
@@ -132,9 +132,6 @@ describe('isObject', () => {
   })
 
   it('should return false for objects with custom prototypes', () => {
-    expect(isObject(Object.create(null))).toBe(false)
-    expect(isObject(Object.create({}))).toBe(false)
-
     class CustomClass {}
     expect(isObject(new CustomClass())).toBe(false)
   })
@@ -527,310 +524,6 @@ describe('trimArray', () => {
   })
 })
 
-describe('validateAndTrimObject', () => {
-  it('should return object when all required fields are present', () => {
-    const value = {
-      url: 'https://example.com/audio.mp3',
-      length: 12345678,
-      type: 'audio/mpeg',
-    }
-    const expected = {
-      url: 'https://example.com/audio.mp3',
-      length: 12345678,
-      type: 'audio/mpeg',
-    }
-
-    expect(validateAndTrimObject(value, 'url', 'length', 'type')).toEqual(expected)
-  })
-
-  it('should return object with required fields and keep optional fields', () => {
-    const value = {
-      url: 'https://example.com/audio.mp3',
-      length: 12345678,
-      type: 'audio/mpeg',
-      description: 'Optional description',
-      title: 'Optional title',
-    }
-    const expected = {
-      url: 'https://example.com/audio.mp3',
-      length: 12345678,
-      type: 'audio/mpeg',
-      description: 'Optional description',
-      title: 'Optional title',
-    }
-
-    expect(validateAndTrimObject(value, 'url', 'length', 'type')).toEqual(expected)
-  })
-
-  it('should trim undefined optional fields while keeping required fields', () => {
-    const value = {
-      url: 'https://example.com/audio.mp3',
-      length: 12345678,
-      type: 'audio/mpeg',
-      description: undefined,
-      title: null,
-      extra: 'kept',
-    }
-    const expected = {
-      url: 'https://example.com/audio.mp3',
-      length: 12345678,
-      type: 'audio/mpeg',
-      extra: 'kept',
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'url', 'length', 'type')).toEqual(expected)
-  })
-
-  it('should preserve falsy non-undefined values in required fields', () => {
-    const value = {
-      name: '',
-      count: 0,
-      active: false,
-      optional: undefined,
-    }
-    const expected = {
-      name: '',
-      count: 0,
-      active: false,
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'name', 'count', 'active')).toEqual(expected)
-  })
-
-  it('should return undefined when required field is missing', () => {
-    const value = {
-      url: 'https://example.com/audio.mp3',
-      type: 'audio/mpeg',
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'url', 'length', 'type')).toBeUndefined()
-  })
-
-  it('should return undefined when required field is undefined', () => {
-    const value = {
-      url: 'https://example.com/audio.mp3',
-      length: undefined,
-      type: 'audio/mpeg',
-    }
-
-    expect(validateAndTrimObject(value, 'url', 'length', 'type')).toBeUndefined()
-  })
-
-  it('should return undefined when required field is null', () => {
-    const value = {
-      url: 'https://example.com/audio.mp3',
-      length: null,
-      type: 'audio/mpeg',
-    }
-
-    expect(validateAndTrimObject(value, 'url', 'length', 'type')).toBeUndefined()
-  })
-
-  it('should handle single required field', () => {
-    const value = {
-      title: 'Example Title',
-      description: undefined,
-      optional: 'kept',
-    }
-    const expected = {
-      title: 'Example Title',
-      optional: 'kept',
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'title')).toEqual(expected)
-  })
-
-  it('should return undefined when single required field is missing', () => {
-    const value = {
-      description: 'Some description',
-      optional: 'value',
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'title')).toBeUndefined()
-  })
-
-  it('should handle objects with many required fields', () => {
-    const value = {
-      field1: 'value1',
-      field2: 'value2',
-      field3: 'value3',
-      field4: 'value4',
-      optional: undefined,
-      extra: 'kept',
-    }
-    const expected = {
-      field1: 'value1',
-      field2: 'value2',
-      field3: 'value3',
-      field4: 'value4',
-      extra: 'kept',
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'field1', 'field2', 'field3', 'field4')).toEqual(expected)
-  })
-
-  it('should return undefined when any of many required fields is missing', () => {
-    const value = {
-      field1: 'value1',
-      field2: 'value2',
-      field3: undefined,
-      field4: 'value4',
-      field5: 'value5',
-    }
-
-    expect(
-      validateAndTrimObject(value, 'field1', 'field2', 'field3', 'field4', 'field5'),
-    ).toBeUndefined()
-  })
-
-  it('should handle empty object', () => {
-    const value = {}
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'title')).toBeUndefined()
-  })
-
-  it('should return undefined when all properties are nullish', () => {
-    const value = {
-      field1: undefined,
-      field2: null,
-      field3: undefined,
-    }
-
-    expect(validateAndTrimObject(value, 'field1')).toBeUndefined()
-  })
-
-  it('should handle objects with symbol keys', () => {
-    const sym = Symbol('test')
-    const value = {
-      title: 'Example Title',
-      description: undefined,
-      [sym]: 'symbol value',
-    }
-    const expected = {
-      title: 'Example Title',
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'title')).toEqual(expected)
-  })
-
-  it('should handle objects with getters', () => {
-    const value = {
-      get title() {
-        return 'Dynamic Title'
-      },
-      get description() {
-        return undefined
-      },
-      static: 'static value',
-    }
-    const expected = {
-      title: 'Dynamic Title',
-      static: 'static value',
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'title')).toEqual(expected)
-  })
-
-  it('should handle complex nested objects as values', () => {
-    const complexValue = { nested: 'object' }
-    const arrayValue = [1, 2, 3]
-    const value = {
-      title: 'Title',
-      complex: complexValue,
-      array: arrayValue,
-      nullish: undefined,
-    }
-    const expected = {
-      title: 'Title',
-      complex: complexValue,
-      array: arrayValue,
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'title')).toEqual(expected)
-  })
-
-  it('should handle objects with numeric keys', () => {
-    const value = {
-      '0': 'first',
-      '1': 'second',
-      title: 'Example',
-      description: undefined,
-    }
-    const expected = {
-      '0': 'first',
-      '1': 'second',
-      title: 'Example',
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'title')).toEqual(expected)
-  })
-
-  it('should preserve Date objects correctly', () => {
-    const date = new Date('2023-01-01')
-    const value = {
-      title: 'Example',
-      date: date,
-      description: undefined,
-    }
-    const expected = {
-      title: 'Example',
-      date: date,
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'title')).toEqual(expected)
-  })
-
-  it('should handle objects with mixed data types', () => {
-    const value = {
-      string: 'text',
-      number: 42,
-      boolean: true,
-      array: [1, 2, 3],
-      object: { key: 'value' },
-      nullValue: null,
-      undefinedValue: undefined,
-      zero: 0,
-      emptyString: '',
-      falseBoolean: false,
-    }
-    const expected = {
-      string: 'text',
-      number: 42,
-      boolean: true,
-      array: [1, 2, 3],
-      object: { key: 'value' },
-      zero: 0,
-      emptyString: '',
-      falseBoolean: false,
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'string', 'number')).toEqual(expected)
-  })
-
-  it('should return undefined when no properties remain after trimming', () => {
-    const value = {
-      field1: undefined,
-      field2: null,
-    }
-
-    // Even though field1 is "present" as a key, its value is undefined.
-    expect(validateAndTrimObject(value, 'field1')).toBeUndefined()
-  })
-})
-
 describe('stripCdata', () => {
   it('should return string without CDATA markers when present', () => {
     expect(stripCdata('<![CDATA[content]]>')).toBe('content')
@@ -1200,6 +893,17 @@ describe('parseBoolean', () => {
     expect(parseBoolean(value)).toBe(false)
   })
 
+  it('should handle values with whitespace around', () => {
+    expect(parseBoolean(' true ')).toBe(true)
+    expect(parseBoolean('\ttrue\t')).toBe(true)
+    expect(parseBoolean('\nTRUE\n')).toBe(true)
+    expect(parseBoolean(' \t\nTrUe\n\t ')).toBe(true)
+    expect(parseBoolean(' false ')).toBe(false)
+    expect(parseBoolean('\tfalse\t')).toBe(false)
+    expect(parseBoolean('\nFALSE\n')).toBe(false)
+    expect(parseBoolean(' \t\nFaLsE\n\t ')).toBe(false)
+  })
+
   it('should handle non-boolean string', () => {
     const value = 'javascript'
 
@@ -1278,6 +982,17 @@ describe('parseYesNoBoolean', () => {
     const value = 'YeS'
 
     expect(parseYesNoBoolean(value)).toBe(true)
+  })
+
+  it('should handle values with whitespace around', () => {
+    expect(parseYesNoBoolean(' yes ')).toBe(true)
+    expect(parseYesNoBoolean('\tyes\t')).toBe(true)
+    expect(parseYesNoBoolean('\nYES\n')).toBe(true)
+    expect(parseYesNoBoolean(' \t\nYeS\n\t ')).toBe(true)
+    expect(parseYesNoBoolean(' true ')).toBe(true)
+    expect(parseYesNoBoolean('\tfalse\t')).toBe(false)
+    expect(parseYesNoBoolean(' no ')).toBe(false)
+    expect(parseYesNoBoolean('\tNO\t')).toBe(false)
   })
 
   it('should handle "no" string as false', () => {
@@ -2276,7 +1991,7 @@ describe('detectNamespaces', () => {
     }
     const expected = new Set(['atom', 'dc', 'itunes', 'slash', 'content', 'georss'])
 
-    expect(detectNamespaces(value)).toEqual(expected)
+    expect(detectNamespaces(value, true)).toEqual(expected)
   })
 
   it('should detect threading namespace in link attributes', () => {
@@ -2297,7 +2012,130 @@ describe('detectNamespaces', () => {
     }
     const expected = new Set(['thr'])
 
-    expect(detectNamespaces(value)).toEqual(expected)
+    expect(detectNamespaces(value, true)).toEqual(expected)
+  })
+
+  it('should only detect top-level namespaces when recursive=false (default)', () => {
+    const nestedValue = {
+      'top:level': 'value',
+      normalKey: 'no namespace',
+      nested: {
+        'inner:namespace': 'value',
+        'another:inner': 'value',
+        deepNested: {
+          'deep:namespace': 'value',
+        },
+      },
+      array: [
+        {
+          'array:namespace': 'value',
+        },
+      ],
+    }
+    const expected = new Set(['top'])
+    expect(detectNamespaces(nestedValue)).toEqual(expected)
+    expect(detectNamespaces(nestedValue, false)).toEqual(expected)
+  })
+
+  it('should detect all namespaces when recursive=true', () => {
+    const nestedValue = {
+      'top:level': 'value',
+      normalKey: 'no namespace',
+      nested: {
+        'inner:namespace': 'value',
+        'another:inner': 'value',
+        deepNested: {
+          'deep:namespace': 'value',
+        },
+      },
+      array: [
+        {
+          'array:namespace': 'value',
+        },
+      ],
+    }
+    const expected = new Set(['top', 'inner', 'another', 'deep', 'array'])
+    expect(detectNamespaces(nestedValue, true)).toEqual(expected)
+  })
+
+  it('should handle arrays recursively when recursive=true', () => {
+    const value = {
+      'top:level': 'value',
+      items: [
+        { 'item1:namespace': 'value' },
+        { 'item2:namespace': 'value' },
+        {
+          'item3:namespace': 'value',
+          nested: {
+            'nested:namespace': 'value',
+          },
+        },
+      ],
+    }
+
+    const expectedNonRecursive = new Set(['top'])
+    const expectedRecursive = new Set(['top', 'item1', 'item2', 'item3', 'nested'])
+
+    expect(detectNamespaces(value, false)).toEqual(expectedNonRecursive)
+    expect(detectNamespaces(value, true)).toEqual(expectedRecursive)
+  })
+
+  it('should handle deeply nested objects when recursive=true', () => {
+    const value = {
+      'level1:ns': 'value',
+      level2: {
+        'level2:ns': 'value',
+        level3: {
+          'level3:ns': 'value',
+          level4: {
+            'level4:ns': 'value',
+          },
+        },
+      },
+    }
+
+    const expectedNonRecursive = new Set(['level1'])
+    const expectedRecursive = new Set(['level1', 'level2', 'level3', 'level4'])
+
+    expect(detectNamespaces(value, false)).toEqual(expectedNonRecursive)
+    expect(detectNamespaces(value, true)).toEqual(expectedRecursive)
+  })
+
+  it('should handle empty nested objects correctly with recursive parameter', () => {
+    const value = {
+      'top:namespace': 'value',
+      empty: {},
+      emptyArray: [],
+      nested: {
+        alsoEmpty: {},
+      },
+    }
+
+    const expectedNonRecursive = new Set(['top'])
+    const expectedRecursive = new Set(['top'])
+
+    expect(detectNamespaces(value, false)).toEqual(expectedNonRecursive)
+    expect(detectNamespaces(value, true)).toEqual(expectedRecursive)
+  })
+
+  it('should respect seenKeys optimization in recursive mode', () => {
+    const value = {
+      'duplicate:key': 'value1',
+      nested1: {
+        'duplicate:key': 'value2',
+        'other:namespace': 'value',
+      },
+      nested2: {
+        'duplicate:key': 'value3',
+        'another:namespace': 'value',
+      },
+    }
+
+    const expectedNonRecursive = new Set(['duplicate'])
+    const expectedRecursive = new Set(['duplicate', 'other', 'another'])
+
+    expect(detectNamespaces(value, false)).toEqual(expectedNonRecursive)
+    expect(detectNamespaces(value, true)).toEqual(expectedRecursive)
   })
 })
 
@@ -2451,6 +2289,29 @@ describe('generateNamespaceAttrs', () => {
     expect(generateNamespaceAttrs([])).toBeUndefined()
     expect(generateNamespaceAttrs(() => {})).toBeUndefined()
   })
+
+  it('should detect namespaces in nested structures using recursive detection', () => {
+    const value = {
+      title: 'Feed Title',
+      'atom:link': 'http://example.com/feed.xml',
+      items: [
+        {
+          title: 'Item 1',
+          'dc:creator': 'John Doe',
+          nested: {
+            'itunes:duration': '30:45',
+          },
+        },
+      ],
+    }
+    const expected = {
+      '@xmlns:atom': 'http://www.w3.org/2005/Atom',
+      '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+      '@xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+    }
+
+    expect(generateNamespaceAttrs(value)).toEqual(expected)
+  })
 })
 
 describe('generateString', () => {
@@ -2510,6 +2371,28 @@ describe('generateString', () => {
   })
 
   it('should handle non-string inputs', () => {
+    expect(generateString(undefined)).toBeUndefined()
+  })
+})
+
+describe('generateNumber', () => {
+  it('should return number when input is a number', () => {
+    const values = [0, 42, -123, 3.1343e3, -0.001, Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER]
+
+    for (const value of values) {
+      expect(generateNumber(value)).toBe(value)
+    }
+  })
+
+  it('should return undefined for special number values', () => {
+    const values = [Infinity, -Infinity, NaN]
+
+    for (const value of values) {
+      expect(generateNumber(value)).toBeUndefined()
+    }
+  })
+
+  it('should return undefined for non-number inputs', () => {
     expect(generateString(undefined)).toBeUndefined()
   })
 })

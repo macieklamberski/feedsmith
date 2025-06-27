@@ -200,4 +200,94 @@ describe('parse', () => {
   it('should handle number input', () => {
     expect(() => parse(123)).toThrowError(locales.invalid)
   })
+
+  it('should correctly parse Atom feed with YouTube namespace', () => {
+    const input = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
+        <title>YouTube Channel Feed</title>
+        <id>yt:channel:UCuAXFkgsw1L7xaCfnd5JJOw</id>
+        <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
+        <updated>2024-01-10T12:00:00Z</updated>
+        <entry>
+          <id>yt:video:dQw4w9WgXcQ</id>
+          <yt:videoId>dQw4w9WgXcQ</yt:videoId>
+          <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
+          <title>Example YouTube Video</title>
+          <updated>2024-01-05T10:30:00Z</updated>
+        </entry>
+      </feed>
+    `
+    const expected = {
+      title: {
+        value: 'YouTube Channel Feed',
+      },
+      id: 'yt:channel:UCuAXFkgsw1L7xaCfnd5JJOw',
+      updated: '2024-01-10T12:00:00Z',
+      yt: {
+        channelId: 'UCuAXFkgsw1L7xaCfnd5JJOw',
+      },
+      entries: [
+        {
+          id: 'yt:video:dQw4w9WgXcQ',
+          title: {
+            value: 'Example YouTube Video',
+          },
+          updated: '2024-01-05T10:30:00Z',
+          yt: {
+            videoId: 'dQw4w9WgXcQ',
+            channelId: 'UCuAXFkgsw1L7xaCfnd5JJOw',
+          },
+        },
+      ],
+    }
+    const result = parse(input)
+
+    expect(result).toEqual(expected)
+  })
+
+  it('should correctly parse Atom feed with YouTube playlist', () => {
+    const input = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
+        <title>YouTube Playlist Feed</title>
+        <id>yt:playlist:PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf</id>
+        <yt:playlistId>PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf</yt:playlistId>
+        <updated>2024-01-10T12:00:00Z</updated>
+        <entry>
+          <id>yt:video:OTYFJaT-Glk</id>
+          <yt:videoId>OTYFJaT-Glk</yt:videoId>
+          <yt:channelId>UCtNjkMLQQOX251hjGqimx2w</yt:channelId>
+          <title>Video in Playlist</title>
+          <updated>2024-01-08T14:20:00Z</updated>
+        </entry>
+      </feed>
+    `
+    const expected = {
+      title: {
+        value: 'YouTube Playlist Feed',
+      },
+      id: 'yt:playlist:PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf',
+      updated: '2024-01-10T12:00:00Z',
+      yt: {
+        playlistId: 'PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf',
+      },
+      entries: [
+        {
+          id: 'yt:video:OTYFJaT-Glk',
+          title: {
+            value: 'Video in Playlist',
+          },
+          updated: '2024-01-08T14:20:00Z',
+          yt: {
+            videoId: 'OTYFJaT-Glk',
+            channelId: 'UCtNjkMLQQOX251hjGqimx2w',
+          },
+        },
+      ],
+    }
+    const result = parse(input)
+
+    expect(result).toEqual(expected)
+  })
 })

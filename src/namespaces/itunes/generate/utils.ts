@@ -24,10 +24,12 @@ export const generateCategory: GenerateFunction<Category> = (category) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@text': category.text,
-    'itunes:category': trimArray(category.categories?.map(generateCategory)),
-  })
+    'itunes:category': trimArray(category.categories, generateCategory),
+  }
+
+  return trimObject(value)
 }
 
 export const generateOwner: GenerateFunction<Owner> = (owner) => {
@@ -35,10 +37,12 @@ export const generateOwner: GenerateFunction<Owner> = (owner) => {
     return
   }
 
-  return trimObject({
+  const value = {
     'itunes:name': owner.name,
     'itunes:email': owner.email,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateItem: GenerateFunction<Item> = (item) => {
@@ -46,7 +50,7 @@ export const generateItem: GenerateFunction<Item> = (item) => {
     return
   }
 
-  return trimObject({
+  const value = {
     'itunes:duration': item.duration,
     'itunes:image': generateImage(item.image),
     'itunes:explicit': generateYesNoBoolean(item.explicit),
@@ -58,7 +62,9 @@ export const generateItem: GenerateFunction<Item> = (item) => {
     'itunes:summary': item.summary,
     'itunes:subtitle': item.subtitle,
     'itunes:keywords': generateCsvOf(item.keywords),
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateFeed: GenerateFunction<Feed> = (feed) => {
@@ -66,9 +72,9 @@ export const generateFeed: GenerateFunction<Feed> = (feed) => {
     return
   }
 
-  return trimObject({
+  const value = {
     'itunes:image': generateImage(feed.image),
-    'itunes:category': trimArray(feed.categories?.map(generateCategory)),
+    'itunes:category': trimArray(feed.categories, generateCategory),
     'itunes:explicit': generateYesNoBoolean(feed.explicit),
     'itunes:author': feed.author,
     'itunes:title': feed.title,
@@ -76,10 +82,12 @@ export const generateFeed: GenerateFunction<Feed> = (feed) => {
     'itunes:new-feed-url': feed.newFeedUrl,
     'itunes:block': generateYesNoBoolean(feed.block),
     'itunes:complete': generateYesNoBoolean(feed.complete),
-    'itunes:apple-podcasts-verify': feed.applePodcastsVerify,
+    'itunes:applepodcastsverify': feed.applePodcastsVerify,
     'itunes:summary': feed.summary,
     'itunes:subtitle': feed.subtitle,
     'itunes:keywords': generateCsvOf(feed.keywords),
     'itunes:owner': generateOwner(feed.owner),
-  })
+  }
+
+  return trimObject(value)
 }

@@ -20,6 +20,11 @@ import {
   generateItem as generateThrItem,
   generateLink as generateThrLink,
 } from '../../../namespaces/thr/generate/utils.js'
+import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
+import {
+  generateFeed as generateYtFeed,
+  generateItem as generateYtItem,
+} from '../../../namespaces/yt/generate/utils.js'
 import type {
   Category,
   Content,
@@ -69,7 +74,7 @@ export const generateLink: GenerateFunction<Link<Date>> = (link) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@href': link.href,
     '@rel': link.rel,
     '@type': link.type,
@@ -77,7 +82,9 @@ export const generateLink: GenerateFunction<Link<Date>> = (link) => {
     '@title': link.title,
     '@length': link.length,
     ...generateThrLink(link.thr),
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generatePerson: GenerateFunction<Person> = (person, options) => {
@@ -86,12 +93,13 @@ export const generatePerson: GenerateFunction<Person> = (person, options) => {
   }
 
   const key = createNamespaceSetter(options?.prefix)
-
-  return trimObject({
+  const value = {
     [key('name')]: person.name,
     [key('uri')]: person.uri,
     [key('email')]: person.email,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateCategory: GenerateFunction<Category> = (category) => {
@@ -99,11 +107,13 @@ export const generateCategory: GenerateFunction<Category> = (category) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '@term': category.term,
     '@scheme': category.scheme,
     '@label': category.label,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateGenerator: GenerateFunction<Generator> = (generator) => {
@@ -111,11 +121,13 @@ export const generateGenerator: GenerateFunction<Generator> = (generator) => {
     return
   }
 
-  return trimObject({
+  const value = {
     '#text': generator.text,
     '@uri': generator.uri,
     '@version': generator.version,
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateSource: GenerateFunction<Source<Date>> = (source, options) => {
@@ -124,9 +136,8 @@ export const generateSource: GenerateFunction<Source<Date>> = (source, options) 
   }
 
   const key = createNamespaceSetter(options?.prefix)
-
-  return trimObject({
-    [key('author')]: trimArray(source.authors?.map((author) => generatePerson(author, options))),
+  const value = {
+    [key('author')]: trimArray(source.authors, (author) => generatePerson(author, options)),
     [key('category')]: trimArray(
       source.categories?.map((category) => generateCategory(category, options)),
     ),
@@ -136,13 +147,15 @@ export const generateSource: GenerateFunction<Source<Date>> = (source, options) 
     [key('generator')]: generateGenerator(source.generator),
     [key('icon')]: source.icon,
     [key('id')]: source.id,
-    [key('link')]: trimArray(source.links?.map((link) => generateLink(link, options))),
+    [key('link')]: trimArray(source.links, (link) => generateLink(link, options)),
     [key('logo')]: source.logo,
     [key('rights')]: generateText(source.rights),
     [key('subtitle')]: generateText(source.subtitle),
     [key('title')]: generateText(source.title),
     [key('updated')]: generateRfc3339Date(source.updated),
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => {
@@ -151,33 +164,35 @@ export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => 
   }
 
   const key = createNamespaceSetter(options?.prefix)
-  const value = trimObject({
-    [key('author')]: trimArray(entry.authors?.map((author) => generatePerson(author))),
-    [key('category')]: trimArray(entry.categories?.map((category) => generateCategory(category))),
+  const value = {
+    [key('author')]: trimArray(entry.authors, generatePerson),
+    [key('category')]: trimArray(entry.categories, generateCategory),
     [key('content')]: generateContent(entry.content),
     [key('contributor')]: trimArray(
       entry.contributors?.map((contributor) => generatePerson(contributor)),
     ),
     [key('id')]: entry.id,
-    [key('link')]: trimArray(entry.links?.map((link) => generateLink(link, options))),
+    [key('link')]: trimArray(entry.links, (link) => generateLink(link, options)),
     [key('published')]: generateRfc3339Date(entry.published),
     [key('rights')]: generateText(entry.rights),
     [key('source')]: generateSource(entry.source),
     [key('summary')]: generateText(entry.summary),
     [key('title')]: generateText(entry.title),
     [key('updated')]: generateRfc3339Date(entry.updated),
-  })
+  }
 
-  if (!value) {
+  const trimmedValue = trimObject(value)
+
+  if (!trimmedValue) {
     return
   }
 
   if (options?.asNamespace) {
-    return value
+    return trimmedValue
   }
 
   return {
-    ...value,
+    ...trimmedValue,
     ...generateDcItemOrFeed(entry.dc),
     ...generateDctermsItemOrFeed(entry.dcterms),
     ...generateSlashItem(entry.slash),
@@ -185,6 +200,8 @@ export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => 
     ...generateMediaItemOrFeed(entry.media),
     ...generateGeoRssItemOrFeed(entry.georss),
     ...generateThrItem(entry.thr),
+    ...generateWfwItem(entry.wfw),
+    ...generateYtItem(entry.yt),
   }
 }
 
@@ -194,8 +211,8 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed, options) => {
   }
 
   const key = createNamespaceSetter(options?.prefix)
-  const valueFeed = trimObject({
-    [key('author')]: trimArray(feed.authors?.map((author) => generatePerson(author, options))),
+  const feedValue = {
+    [key('author')]: trimArray(feed.authors, (author) => generatePerson(author, options)),
     [key('category')]: trimArray(
       feed.categories?.map((category) => generateCategory(category, options)),
     ),
@@ -205,16 +222,21 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed, options) => {
     [key('generator')]: generateGenerator(feed.generator),
     [key('icon')]: feed.icon,
     [key('id')]: feed.id,
-    [key('link')]: trimArray(feed.links?.map((link) => generateLink(link, options))),
+    [key('link')]: trimArray(feed.links, (link) => generateLink(link, options)),
     [key('logo')]: feed.logo,
     [key('rights')]: generateText(feed.rights),
     [key('subtitle')]: generateText(feed.subtitle),
     [key('title')]: generateText(feed.title),
     [key('updated')]: generateRfc3339Date(feed.updated),
-  })
-  const valueEntries = trimObject({
-    [key('entry')]: trimArray(feed.entries?.map((entry) => generateEntry(entry, options))),
-  })
+  }
+
+  const valueFeed = trimObject(feedValue)
+
+  const entriesValue = {
+    [key('entry')]: trimArray(feed.entries, (entry) => generateEntry(entry, options)),
+  }
+
+  const valueEntries = trimObject(entriesValue)
 
   if (!valueFeed && !valueEntries) {
     return
@@ -237,6 +259,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed, options) => {
     ...generateItunesFeed(feed.itunes),
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
+    ...generateYtFeed(feed.yt),
     ...valueEntries,
   }
 
