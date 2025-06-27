@@ -4,7 +4,7 @@
   "dependencies": {
     "@extractus/feed-extractor": "^7.1.6",
     "@gaphub/feed": "^5.2.4",
-    "@rowanmanning/feed-parser": "^2.1.0",
+    "@rowanmanning/feed-parser": "^2.1.1",
     "@ulisesgascon/rss-feed-parser": "^1.0.1",
     "benchmark": "^2.1.4",
     "feed-read": "^0.0.1",
