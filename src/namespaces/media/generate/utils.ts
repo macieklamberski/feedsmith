@@ -262,7 +262,7 @@ export const generateEmbed: GenerateFunction<Embed> = (embed) => {
     '@url': embed.url,
     '@width': embed.width,
     '@height': embed.height,
-    'media:param': trimArray(embed.params?.map(generateParam)),
+    'media:param': trimArray(embed.params, generateParam),
   }
 
   return trimObject(value)
@@ -386,31 +386,31 @@ export const generateCommonElements: GenerateFunction<CommonElements> = (element
   }
 
   const value = {
-    'media:rating': trimArray(elements.ratings?.map(generateRating)),
+    'media:rating': trimArray(elements.ratings, generateRating),
     'media:title': generateTitleOrDescription(elements.title),
     'media:description': generateTitleOrDescription(elements.description),
     'media:keywords': generateCsvOf(elements.keywords),
-    'media:thumbnail': trimArray(elements.thumbnails?.map(generateThumbnail)),
-    'media:category': trimArray(elements.categories?.map(generateCategory)),
-    'media:hash': trimArray(elements.hashes?.map(generateHash)),
+    'media:thumbnail': trimArray(elements.thumbnails, generateThumbnail),
+    'media:category': trimArray(elements.categories, generateCategory),
+    'media:hash': trimArray(elements.hashes, generateHash),
     'media:player': generatePlayer(elements.player),
-    'media:credit': trimArray(elements.credits?.map(generateCredit)),
+    'media:credit': trimArray(elements.credits, generateCredit),
     'media:copyright': generateCopyright(elements.copyright),
-    'media:text': trimArray(elements.texts?.map(generateText)),
-    'media:restriction': trimArray(elements.restrictions?.map(generateRestriction)),
+    'media:text': trimArray(elements.texts, generateText),
+    'media:restriction': trimArray(elements.restrictions, generateRestriction),
     'media:community': generateCommunity(elements.community),
     'media:comment': generateComments(elements.comments),
     'media:embed': generateEmbed(elements.embed),
     'media:response': generateResponses(elements.responses),
     'media:backLink': generateBackLinks(elements.backLinks),
     'media:status': generateStatus(elements.status),
-    'media:price': trimArray(elements.prices?.map(generatePrice)),
-    'media:license': trimArray(elements.licenses?.map(generateLicense)),
-    'media:subTitle': trimArray(elements.subTitles?.map(generateSubTitle)),
-    'media:peerLink': trimArray(elements.peerLinks?.map(generatePeerLink)),
-    'media:location': trimArray(elements.locations?.map(generateLocation)),
+    'media:price': trimArray(elements.prices, generatePrice),
+    'media:license': trimArray(elements.licenses, generateLicense),
+    'media:subTitle': trimArray(elements.subTitles, generateSubTitle),
+    'media:peerLink': trimArray(elements.peerLinks, generatePeerLink),
+    'media:location': trimArray(elements.locations, generateLocation),
     'media:rights': generateRights(elements.rights),
-    'media:scene': trimArray(elements.scenes?.map(generateScene)),
+    'media:scene': trimArray(elements.scenes, generateScene),
   }
 
   return trimObject(value)
@@ -448,7 +448,7 @@ export const generateGroup: GenerateFunction<Group> = (group) => {
   }
 
   const value = {
-    'media:content': trimArray(group.contents?.map(generateContent)),
+    'media:content': trimArray(group.contents, generateContent),
     ...generateCommonElements(group),
   }
 
@@ -462,7 +462,7 @@ export const generateItemOrFeed: GenerateFunction<ItemOrFeed> = (itemOrFeed) => 
 
   const value = {
     'media:group': generateGroup(itemOrFeed.group),
-    'media:content': trimArray(itemOrFeed.contents?.map(generateContent)),
+    'media:content': trimArray(itemOrFeed.contents, generateContent),
     ...generateCommonElements(itemOrFeed),
   }
 

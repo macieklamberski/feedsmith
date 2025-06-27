@@ -669,6 +669,10 @@
             "type": "application/xhtml+xml"
           }
         ]
+      },
+      "wfw": {
+        "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
+        "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
       }
     }
   ],

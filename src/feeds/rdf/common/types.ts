@@ -7,6 +7,7 @@ import type { ItemOrFeed as GeoRssItemOrFeed } from '../../../namespaces/georss/
 import type { ItemOrFeed as MediaItemOrFeed } from '../../../namespaces/media/common/types.js'
 import type { Item as SlashItem } from '../../../namespaces/slash/common/types.js'
 import type { Feed as SyFeed } from '../../../namespaces/sy/common/types.js'
+import type { Item as WfwItem } from '../../../namespaces/wfw/common/types.js'
 
 export type Image = {
   title: string
@@ -32,6 +33,7 @@ export type Item<TDate extends DateLike> = {
   slash?: SlashItem
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
+  wfw?: WfwItem
 }
 
 export type Feed<TDate extends DateLike> = {

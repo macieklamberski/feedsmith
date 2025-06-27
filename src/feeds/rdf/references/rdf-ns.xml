@@ -2,6 +2,7 @@
 <rdf:RDF
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xmlns="http://purl.org/rss/1.0/"
+  xmlns:atom="http://www.w3.org/2005/Atom"
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:dcterms="http://purl.org/dc/terms/"
   xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
@@ -9,7 +10,7 @@
   xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
   xmlns:media="http://search.yahoo.com/mrss/"
   xmlns:georss="http://www.georss.org/georss"
-  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:wfw="http://wellformedweb.org/CommentAPI/"
 >
   <channel rdf:about="http://example.org/rss">
     <title>Example Feed</title>
@@ -419,5 +420,9 @@
     <georss:elev>360</georss:elev>
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
+
+    <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
+    <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
+    <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
   </item>
 </rdf:RDF>

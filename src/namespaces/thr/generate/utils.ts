@@ -37,7 +37,7 @@ export const generateItem: GenerateFunction<Item> = (item) => {
 
   const value = {
     'thr:total': item.total,
-    'thr:in-reply-to': trimArray(item.inReplyTos?.map(generateInReplyTo)),
+    'thr:in-reply-to': trimArray(item.inReplyTos, generateInReplyTo),
   }
 
   return trimObject(value)

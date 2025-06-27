@@ -98,6 +98,10 @@
         "subtitle": "Episode subtitle with additional context",
         "keywords": ["tutorial", "example", "technology", "programming"]
       },
+      "yt": {
+        "videoId": "dQw4w9WgXcQ",
+        "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw"
+      },
       "media": {
         "contents": [
           {
@@ -519,6 +523,10 @@
           }
         ]
       },
+      "wfw": {
+        "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
+        "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
+      },
       "links": [
         {
           "rel": "replies",
@@ -637,6 +645,10 @@
     "subtitle": "A subtitle that provides additional context",
     "keywords": ["technology", "programming", "web development", "tutorials"],
     "applePodcastsVerify": "example-verification-key"
+  },
+  "yt": {
+    "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw",
+    "playlistId": "PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf"
   },
   "media": {
     "contents": [

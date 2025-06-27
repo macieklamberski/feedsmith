@@ -12,12 +12,14 @@ export const isObject = (value: Unreliable): value is Record<string, Unreliable>
     isPresent(value) &&
     typeof value === 'object' &&
     !Array.isArray(value) &&
-    Object.getPrototypeOf(value) === Object.prototype
+    value.constructor === Object
   )
 }
 
+const whitespaceOnlyRegex = /^\p{White_Space}*$/u
+
 export const isNonEmptyString = (value: Unreliable): value is string => {
-  return typeof value === 'string' && value !== '' && value.trim() !== ''
+  return typeof value === 'string' && value !== '' && !whitespaceOnlyRegex.test(value)
 }
 
 export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | number => {
@@ -54,6 +56,22 @@ export const trimArray = <T, R = T>(
     return
   }
 
+  // Do not re-create the array if it all elements are present and no parsing is required.
+  if (!parse) {
+    let needsTrimming = false
+
+    for (let i = 0; i < value.length; i++) {
+      if (!isPresent(value[i])) {
+        needsTrimming = true
+        break
+      }
+    }
+
+    if (!needsTrimming) {
+      return value as unknown as Array<R>
+    }
+  }
+
   // Pre-allocation in case of Array is more performant than doing the lazy-allocation
   // similar to the one used in trimObject.
   const result: Array<R> = []
@@ -67,52 +85,6 @@ export const trimArray = <T, R = T>(
   }
 
   return result.length > 0 ? result : undefined
-}
-
-export type ValidatedAndTrimmedObject<T extends Record<string, unknown>, K extends keyof T> = T & {
-  [P in K]-?: NonNullable<T[P]>
-}
-
-export const validateAndTrimObject = <
-  T extends Record<string, unknown>,
-  K extends keyof T & (string | number),
->(
-  object: T,
-  ...keys: [K, ...K[]]
-): ValidatedAndTrimmedObject<T, K> | undefined => {
-  switch (keys.length) {
-    case 1:
-      if (!isPresent(object[keys[0]])) return
-      break
-    case 2:
-      if (!isPresent(object[keys[0]])) return
-      if (!isPresent(object[keys[1]])) return
-      break
-    case 3:
-      if (!isPresent(object[keys[0]])) return
-      if (!isPresent(object[keys[1]])) return
-      if (!isPresent(object[keys[2]])) return
-      break
-    case 4:
-      if (!isPresent(object[keys[0]])) return
-      if (!isPresent(object[keys[1]])) return
-      if (!isPresent(object[keys[2]])) return
-      if (!isPresent(object[keys[3]])) return
-      break
-    case 5:
-      if (!isPresent(object[keys[0]])) return
-      if (!isPresent(object[keys[1]])) return
-      if (!isPresent(object[keys[2]])) return
-      if (!isPresent(object[keys[3]])) return
-      if (!isPresent(object[keys[4]])) return
-      break
-    default:
-      for (let i = 0; i < keys.length; i++) {
-        if (!isPresent(object[keys[i]])) return
-      }
-  }
-
-  return trimObject(object) as ValidatedAndTrimmedObject<T, K>
 }
 
 const cdataStartTag = '<![CDATA['
@@ -161,10 +133,10 @@ export const parseString: ParseExactFunction<string> = (value) => {
 
     if (hasEntities(string)) {
       string = decodeXML(string)
-    }
 
-    if (hasEntities(string)) {
-      string = decodeHTML(string)
+      if (hasEntities(string)) {
+        string = decodeHTML(string)
+      }
     }
 
     return string || undefined
@@ -187,16 +159,18 @@ export const parseNumber: ParseExactFunction<number> = (value) => {
   }
 }
 
+const trueRegex = /^\p{White_Space}*true\p{White_Space}*$/iu
+const falseRegex = /^\p{White_Space}*false\p{White_Space}*$/iu
+const yesRegex = /^\p{White_Space}*yes\p{White_Space}*$/iu
+
 export const parseBoolean: ParseExactFunction<boolean> = (value) => {
   if (typeof value === 'boolean') {
     return value
   }
 
   if (isNonEmptyString(value)) {
-    const lowercased = value.toLowerCase()
-
-    if (lowercased === 'true') return true
-    if (lowercased === 'false') return false
+    if (trueRegex.test(value)) return true
+    if (falseRegex.test(value)) return false
   }
 }
 
@@ -208,7 +182,7 @@ export const parseYesNoBoolean: ParseExactFunction<boolean> = (value) => {
   }
 
   if (isNonEmptyString(value)) {
-    return value.toLowerCase() === 'yes'
+    return yesRegex.test(value)
   }
 }
 
@@ -329,6 +303,9 @@ export const generateRfc822Date: GenerateFunction<string | Date> = (value) => {
 
 export const generateRfc3339Date: GenerateFunction<string | Date> = (value) => {
   // This function generates RFC 3339 format dates which is also compatible with W3C-DTF.
+  // The only difference between ISO 8601 (produced by toISOString) and RFC 3339 is that
+  // RFC 3339 allows a space between date and time parts instead of 'T', but the 'T' format
+  // is actually valid in RFC 3339 as well, so we can just return the ISO string.
 
   if (typeof value === 'string') {
     // biome-ignore lint/style/noParameterAssign: No explanation.
@@ -348,7 +325,7 @@ export const generateYesNoBoolean: GenerateFunction<boolean> = (value) => {
   return value ? 'yes' : 'no'
 }
 
-export const detectNamespaces = (value: unknown): Set<string> => {
+export const detectNamespaces = (value: unknown, recursive = false): Set<string> => {
   const namespaces = new Set<string>()
   const seenKeys = new Set<string>()
 
@@ -376,7 +353,9 @@ export const detectNamespaces = (value: unknown): Set<string> => {
           namespaces.add(keyWithoutAt.slice(0, colonIndex))
         }
 
-        traverse(current[key])
+        if (recursive) {
+          traverse(current[key])
+        }
       }
     }
   }
@@ -398,13 +377,19 @@ export const generateString: GenerateFunction<string> = (value) => {
   return value
 }
 
+export const generateNumber: GenerateFunction<number> = (value) => {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value
+  }
+}
+
 export const generateNamespaceAttrs = (value: Unreliable): Record<string, string> | undefined => {
   if (!isObject(value)) {
     return
   }
 
   let namespaceAttrs: Record<string, string> | undefined
-  const valueNamespaces = detectNamespaces(value)
+  const valueNamespaces = detectNamespaces(value, true)
 
   for (const slug in namespaceUrls) {
     if (!valueNamespaces.has(slug)) {

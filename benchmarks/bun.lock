@@ -36,7 +36,7 @@
 
     "@ndaidong/bellajs": ["@ndaidong/bellajs@12.0.1", "", {}, "sha512-1iY42uiHz0cxNMbde7O3zVN+ZX1viOOUOBRt6ht6lkRZbSjwOnFV34Zv4URp3hGzEe6L9Byk7BOq/41H0PzAOQ=="],
 
-    "@rowanmanning/feed-parser": ["@rowanmanning/feed-parser@2.1.0", "", { "dependencies": { "fast-xml-parser": "^5.0.8", "html-entities": "^2.3.3" } }, "sha512-lllSKBq6yBsD2WiAkIGMmSbUR9uXiU7zKycBeMSvFcec73BFPrslpn28Hc0V9IduqeRCVTeC/7eMs9067MLbiw=="],
+    "@rowanmanning/feed-parser": ["@rowanmanning/feed-parser@2.1.1", "", { "dependencies": { "fast-xml-parser": "^5.0.8", "html-entities": "^2.3.3" } }, "sha512-OFxb37OaQ8ki1VQt/FtrDw74nY2epU9He0QOCzkfc/FxbeulCJo7SbZNiDw2ruwnISuO7PhDsZ69DdWzCVEIsA=="],
 
     "@types/benchmark": ["@types/benchmark@2.1.5", "", {}, "sha512-cKio2eFB3v7qmKcvIHLUMw/dIx/8bhWPuzpzRT4unCPRTD8VdA9Zb0afxpcxOqR4PixRS7yT42FqGS8BYL8g1w=="],
 

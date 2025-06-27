@@ -11,6 +11,7 @@
   xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
   xmlns:thr="http://purl.org/syndication/thread/1.0"
   xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:wfw="http://wellformedweb.org/CommentAPI/"
 >
   <channel>
     <title>Example Feed</title>
@@ -516,6 +517,10 @@
       <thr:in-reply-to ref="urn:uuid:d5e9c5d0-4c0c-11ec-81d3-0242ac130003" href="https://example.com/posts/understanding-xml-namespaces" type="application/xhtml+xml"/>
       <thr:in-reply-to ref="urn:uuid:e7865b80-4c0c-11ec-81d3-0242ac130003" href="https://example.com/posts/understanding-xml-namespaces/comments/1" type="application/xhtml+xml"/>
       <link rel="replies" href="https://example.com/posts/understanding-xml-namespaces/comments/1/replies" thr:count="2" thr:updated="2025-05-10T16:45:00Z"/>
+
+      <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
+      <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
+      <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
     </item>
   </channel>
 </rss>

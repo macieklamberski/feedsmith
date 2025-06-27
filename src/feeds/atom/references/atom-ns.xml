@@ -8,6 +8,7 @@
   xmlns:georss="http://www.georss.org/georss"
   xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
   xmlns:thr="http://purl.org/syndication/thread/1.0"
+  xmlns:yt="http://www.youtube.com/xml/schemas/2015"
 >
   <title>Example Feed</title>
   <id>example-feed</id>
@@ -111,6 +112,10 @@
   <itunes:subtitle>A subtitle that provides additional context</itunes:subtitle>
   <itunes:keywords>technology, programming, web development, tutorials</itunes:keywords>
   <itunes:apple-podcasts-verify>example-verification-key</itunes:apple-podcasts-verify>
+
+  <!-- YouTube Namespace: Feed Level Tags -->
+  <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
+  <yt:playlistId>PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf</yt:playlistId>
 
   <!-- Media Namespace: Item/Feed Level Tags -->
   <media:content url="https://example.com/videos/sample1.mp4" fileSize="12345678" type="video/mp4" medium="video" isDefault="true" expression="full" bitrate="1500" framerate="30" samplingrate="44.1" channels="2" duration="120" height="720" width="1280" lang="en">
@@ -322,6 +327,10 @@
     <itunes:subtitle>Episode subtitle with additional context</itunes:subtitle>
     <itunes:keywords>tutorial, example, technology, programming</itunes:keywords>
 
+    <!-- YouTube Namespace: Item Level Tags -->
+    <yt:videoId>dQw4w9WgXcQ</yt:videoId>
+    <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
+
     <!-- Media Namespace: Item/Feed Level Tags -->
     <media:content url="https://example.com/videos/sample1.mp4" fileSize="12345678" type="video/mp4" medium="video" isDefault="true" expression="full" bitrate="1500" framerate="30" samplingrate="44.1" channels="2" duration="120" height="720" width="1280" lang="en">
       <media:title type="plain">Sample Video Title</media:title>
@@ -440,5 +449,9 @@
     <thr:in-reply-to ref="urn:uuid:d5e9c5d0-4c0c-11ec-81d3-0242ac130003" href="https://example.com/posts/understanding-xml-namespaces" type="application/xhtml+xml"/>
     <thr:in-reply-to ref="urn:uuid:e7865b80-4c0c-11ec-81d3-0242ac130003" href="https://example.com/posts/understanding-xml-namespaces/comments/1" type="application/xhtml+xml"/>
     <link rel="replies" href="https://example.com/posts/understanding-xml-namespaces/comments/1/replies" thr:count="2" thr:updated="2025-05-10T16:45:00Z"/>
+
+    <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
+    <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
+    <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
   </entry>
 </feed>

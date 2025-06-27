@@ -26,6 +26,7 @@ import {
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
+import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
 import type {
   Category,
   Cloud,
@@ -155,8 +156,8 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
     title: item.title,
     link: item.link,
     description: item.description,
-    author: trimArray(item.authors?.map(generatePerson)),
-    category: trimArray(item.categories?.map(generateCategory)),
+    author: trimArray(item.authors, generatePerson),
+    category: trimArray(item.categories, generateCategory),
     comments: item.comments,
     enclosure: generateEnclosure(item.enclosure),
     guid: generateGuid(item.guid),
@@ -172,6 +173,7 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
     ...generateMediaItemOrFeed(item.media),
     ...generateGeoRssItemOrFeed(item.georss),
     ...generateThrItem(item.thr),
+    ...generateWfwItem(item.wfw),
   }
 
   return trimObject(value)
@@ -192,7 +194,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     webMaster: generatePerson(feed.webMaster),
     pubDate: generateRfc822Date(feed.pubDate),
     lastBuildDate: generateRfc822Date(feed.lastBuildDate),
-    category: trimArray(feed.categories?.map(generateCategory)),
+    category: trimArray(feed.categories, generateCategory),
     generator: feed.generator,
     docs: feed.docs,
     cloud: generateCloud(feed.cloud),
@@ -210,7 +212,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     ...generatePodcastFeed(feed.podcast),
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
-    item: trimArray(feed.items?.map(generateItem)),
+    item: trimArray(feed.items, generateItem),
   }
 
   const trimmedValue = trimObject(value)
