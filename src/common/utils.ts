@@ -159,16 +159,18 @@ export const parseNumber: ParseExactFunction<number> = (value) => {
   }
 }
 
+const trueRegex = /^\p{White_Space}*true\p{White_Space}*$/iu
+const falseRegex = /^\p{White_Space}*false\p{White_Space}*$/iu
+const yesRegex = /^\p{White_Space}*yes\p{White_Space}*$/iu
+
 export const parseBoolean: ParseExactFunction<boolean> = (value) => {
   if (typeof value === 'boolean') {
     return value
   }
 
   if (isNonEmptyString(value)) {
-    const lowercased = value.toLowerCase()
-
-    if (lowercased === 'true') return true
-    if (lowercased === 'false') return false
+    if (trueRegex.test(value)) return true
+    if (falseRegex.test(value)) return false
   }
 }
 
@@ -180,7 +182,7 @@ export const parseYesNoBoolean: ParseExactFunction<boolean> = (value) => {
   }
 
   if (isNonEmptyString(value)) {
-    return value.toLowerCase() === 'yes'
+    return yesRegex.test(value)
   }
 }
 
