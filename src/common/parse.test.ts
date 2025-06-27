@@ -14,7 +14,7 @@ describe('parse', () => {
     const expected = {
       type: 'atom' as const,
       feed: {
-        title: 'Feed',
+        title: { value: 'Feed' },
         id: 'example-feed',
       },
     }
