@@ -82,7 +82,7 @@ export const generateFeed: GenerateFunction<Feed> = (feed) => {
     'itunes:new-feed-url': feed.newFeedUrl,
     'itunes:block': generateYesNoBoolean(feed.block),
     'itunes:complete': generateYesNoBoolean(feed.complete),
-    'itunes:apple-podcasts-verify': feed.applePodcastsVerify,
+    'itunes:applepodcastsverify': feed.applePodcastsVerify,
     'itunes:summary': feed.summary,
     'itunes:subtitle': feed.subtitle,
     'itunes:keywords': generateCsvOf(feed.keywords),

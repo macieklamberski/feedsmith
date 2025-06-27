@@ -893,6 +893,17 @@ describe('parseBoolean', () => {
     expect(parseBoolean(value)).toBe(false)
   })
 
+  it('should handle values with whitespace around', () => {
+    expect(parseBoolean(' true ')).toBe(true)
+    expect(parseBoolean('\ttrue\t')).toBe(true)
+    expect(parseBoolean('\nTRUE\n')).toBe(true)
+    expect(parseBoolean(' \t\nTrUe\n\t ')).toBe(true)
+    expect(parseBoolean(' false ')).toBe(false)
+    expect(parseBoolean('\tfalse\t')).toBe(false)
+    expect(parseBoolean('\nFALSE\n')).toBe(false)
+    expect(parseBoolean(' \t\nFaLsE\n\t ')).toBe(false)
+  })
+
   it('should handle non-boolean string', () => {
     const value = 'javascript'
 
@@ -971,6 +982,17 @@ describe('parseYesNoBoolean', () => {
     const value = 'YeS'
 
     expect(parseYesNoBoolean(value)).toBe(true)
+  })
+
+  it('should handle values with whitespace around', () => {
+    expect(parseYesNoBoolean(' yes ')).toBe(true)
+    expect(parseYesNoBoolean('\tyes\t')).toBe(true)
+    expect(parseYesNoBoolean('\nYES\n')).toBe(true)
+    expect(parseYesNoBoolean(' \t\nYeS\n\t ')).toBe(true)
+    expect(parseYesNoBoolean(' true ')).toBe(true)
+    expect(parseYesNoBoolean('\tfalse\t')).toBe(false)
+    expect(parseYesNoBoolean(' no ')).toBe(false)
+    expect(parseYesNoBoolean('\tNO\t')).toBe(false)
   })
 
   it('should handle "no" string as false', () => {
