@@ -7,7 +7,6 @@
     "@rowanmanning/feed-parser": "^2.1.1",
     "@ulisesgascon/rss-feed-parser": "^1.0.1",
     "benchmark": "^2.1.4",
-    "feed-read": "^0.0.1",
     "feedme": "^2.0.2",
     "feedparser": "^2.2.10",
     "podcast-feed-parser": "^1.0.4",
