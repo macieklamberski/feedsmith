@@ -3,6 +3,7 @@ import type { XMLBuilder } from 'fast-xml-parser'
 import type { ParseExactFunction } from './types.js'
 import {
   detectNamespaces,
+  generateBoolean,
   generateCsvOf,
   generateNamespaceAttrs,
   generateNumber,
@@ -461,9 +462,8 @@ describe('trimArray', () => {
     it('should apply the parsing function to each element', () => {
       const value = [1, 2, 3]
       const expected = ['1', '2', '3']
-      const parseToString = (val: number) => val.toString()
 
-      expect(trimArray(value, parseToString)).toEqual(expected)
+      expect(trimArray(value, parseString)).toEqual(expected)
     })
 
     it('should filter out values that become null or undefined after parsing', () => {
@@ -1128,6 +1128,24 @@ describe('parseDate', () => {
   })
 })
 
+describe('generateBoolean', () => {
+  it('should return true for boolean true', () => {
+    const value = true
+
+    expect(generateBoolean(value)).toBe(true)
+  })
+
+  it('should return false for boolean false', () => {
+    const value = false
+
+    expect(generateBoolean(value)).toBe(false)
+  })
+
+  it('should return undefined for undefined', () => {
+    expect(generateBoolean(undefined)).toBeUndefined()
+  })
+})
+
 describe('generateYesNoBoolean', () => {
   it('should return "yes" for boolean true', () => {
     const value = true
@@ -1192,12 +1210,8 @@ describe('parseSingular', () => {
 
 describe('parseSingularOf', () => {
   it('should apply parse function to the first element of an array', () => {
-    const parseToString: ParseExactFunction<string> = (value) => {
-      return typeof value === 'number' || typeof value === 'string' ? String(value) : undefined
-    }
-
-    expect(parseSingularOf([1, 2, 3], parseToString)).toBe('1')
-    expect(parseSingularOf(['a', 'b', 'c'], parseToString)).toBe('a')
+    expect(parseSingularOf([1, 2, 3], parseString)).toBe('1')
+    expect(parseSingularOf(['a', 'b', 'c'], parseString)).toBe('a')
     expect(parseSingularOf([42, 'text'], parseString)).toBe('42')
   })
 

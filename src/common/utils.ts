@@ -317,6 +317,12 @@ export const generateRfc3339Date: GenerateFunction<string | Date> = (value) => {
   }
 }
 
+export const generateBoolean: GenerateFunction<boolean> = (value) => {
+  if (typeof value === 'boolean') {
+    return value
+  }
+}
+
 export const generateYesNoBoolean: GenerateFunction<boolean> = (value) => {
   if (typeof value !== 'boolean') {
     return
