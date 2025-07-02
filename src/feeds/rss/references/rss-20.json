@@ -43,7 +43,7 @@
     {
       "title": "First item title",
       "link": "http://example.org/item/1",
-      "description": "Watch out for <span style=\"background: url(javascript:window.location=’http://example.org/’)\"> nasty tricks</span>",
+      "description": "Watch out for <span style=\"background: url(javascript:window.location='http://example.org/')\"> nasty tricks</span>",
       "authors": ["mark@example.org (Mark Pilgrim)"],
       "categories": [
         { "name": "Miscellaneous" },
@@ -59,13 +59,13 @@
         "isPermaLink": true,
         "value": "http://example.org/guid/1"
       },
-      "pubDate": "Thu, 05 Sep 2002 0:00:01 GMT",
+      "pubDate": "Thu, 05 Sep 2002 00:00:01 GMT",
       "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
     },
     {
       "title": "Second item title",
       "link": "http://example.org/item/2",
-      "description": "Watch out for <span style=\"background: url(javascript:window.location=’http://example.org/’)\"> nasty tricks</span>",
+      "description": "Watch out for <span style=\"background: url(javascript:window.location='http://example.org/')\"> nasty tricks</span>",
       "authors": ["mark@example.org (Mark Pilgrim)"],
       "categories": [{ "name": "Miscellaneous" }],
       "comments": "http://example.org/comments/2",
@@ -75,7 +75,7 @@
         "type": "audio/mpeg"
       },
       "guid": { "value": "http://example.org/guid/2" },
-      "pubDate": "Thu, 05 Sep 2002 0:00:01 GMT",
+      "pubDate": "Thu, 05 Sep 2002 00:00:01 GMT",
       "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
     }
   ]

@@ -37,7 +37,6 @@ describe('generateItem', () => {
     }
     const expected = {
       'slash:comments': 5,
-      'slash:hit_parade': '',
     }
 
     expect(generateItem(value)).toEqual(expected)

@@ -1,5 +1,5 @@
 import type { GenerateFunction } from '../../../common/types.js'
-import { generateString, isObject, trimObject } from '../../../common/utils.js'
+import { generateCdataString, isObject, trimObject } from '../../../common/utils.js'
 import type { Item } from '../common/types.js'
 
 export const generateItem: GenerateFunction<Item> = (item) => {
@@ -8,8 +8,8 @@ export const generateItem: GenerateFunction<Item> = (item) => {
   }
 
   const value = {
-    'wfw:comment': generateString(item.comment),
-    'wfw:commentRss': generateString(item.commentRss),
+    'wfw:comment': generateCdataString(item.comment),
+    'wfw:commentRss': generateCdataString(item.commentRss),
   }
 
   return trimObject(value)

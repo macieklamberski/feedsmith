@@ -505,7 +505,6 @@ describe('generateItemOrFeed', () => {
     const expected = {
       'georss:point': '45.256 -71.92',
       'georss:featureTypeTag': 'city',
-      'georss:relationshipTag': '',
       'georss:featureName': 'Valid Name',
     }
 

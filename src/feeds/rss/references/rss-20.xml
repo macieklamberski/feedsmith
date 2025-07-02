@@ -3,7 +3,9 @@
   <channel>
     <title>Sample Feed</title>
     <link>http://example.org/</link>
-    <description>For documentation &lt;em&gt;only&lt;/em&gt;</description>
+    <description>
+      <![CDATA[For documentation <em>only</em>]]>
+    </description>
     <language>en</language>
     <copyright>Copyright 2004, Mark Pilgrim</copyright>
     <managingEditor>editor@example.org</managingEditor>
@@ -46,26 +48,30 @@
     <item>
       <title>First item title</title>
       <link>http://example.org/item/1</link>
-      <description>Watch out for &lt;span style=&quot;background: url(javascript:window.location=’http://example.org/’)&quot;&gt; nasty tricks&lt;/span&gt;</description>
+      <description>
+        <![CDATA[Watch out for <span style="background: url(javascript:window.location='http://example.org/')"> nasty tricks</span>]]>
+      </description>
       <author>mark@example.org (Mark Pilgrim)</author>
       <category>Miscellaneous</category>
       <category domain="http://www.example.com/categories">Technology</category>
       <comments>http://example.org/comments/1</comments>
       <enclosure url="http://example.org/audio/demo.mp3" length="1069871" type="audio/mpeg"/>
       <guid isPermaLink="true">http://example.org/guid/1</guid>
-      <pubDate>Thu, 05 Sep 2002 0:00:01 GMT</pubDate>
+      <pubDate>Thu, 05 Sep 2002 00:00:01 GMT</pubDate>
       <source url="http://www.example.org/links.xml">Example's Realm</source>
     </item>
     <item>
       <title>Second item title</title>
       <link>http://example.org/item/2</link>
-      <description>Watch out for &lt;span style=&quot;background: url(javascript:window.location=’http://example.org/’)&quot;&gt; nasty tricks&lt;/span&gt;</description>
+      <description>
+        <![CDATA[Watch out for <span style="background: url(javascript:window.location='http://example.org/')"> nasty tricks</span>]]>
+      </description>
       <author>mark@example.org (Mark Pilgrim)</author>
       <category>Miscellaneous</category>
       <comments>http://example.org/comments/2</comments>
       <enclosure url="http://example.org/audio/demo.mp3" length="1069871" type="audio/mpeg"/>
       <guid>http://example.org/guid/2</guid>
-      <pubDate>Thu, 05 Sep 2002 0:00:01 GMT</pubDate>
+      <pubDate>Thu, 05 Sep 2002 00:00:01 GMT</pubDate>
       <source url="http://www.example.org/links.xml">Example's Realm</source>
     </item>
   </channel>

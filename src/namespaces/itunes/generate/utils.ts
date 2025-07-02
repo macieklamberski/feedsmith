@@ -1,6 +1,9 @@
 import type { GenerateFunction } from '../../../common/types.js'
 import {
+  generateCdataString,
   generateCsvOf,
+  generateNumber,
+  generatePlainString,
   generateYesNoBoolean,
   isNonEmptyString,
   isObject,
@@ -15,7 +18,7 @@ export const generateImage: GenerateFunction<string> = (image) => {
   }
 
   return {
-    '@href': image,
+    '@href': generatePlainString(image),
   }
 }
 
@@ -25,7 +28,7 @@ export const generateCategory: GenerateFunction<Category> = (category) => {
   }
 
   const value = {
-    '@text': category.text,
+    '@text': generatePlainString(category.text),
     'itunes:category': trimArray(category.categories, generateCategory),
   }
 
@@ -38,8 +41,8 @@ export const generateOwner: GenerateFunction<Owner> = (owner) => {
   }
 
   const value = {
-    'itunes:name': owner.name,
-    'itunes:email': owner.email,
+    'itunes:name': generateCdataString(owner.name),
+    'itunes:email': generateCdataString(owner.email),
   }
 
   return trimObject(value)
@@ -51,16 +54,16 @@ export const generateItem: GenerateFunction<Item> = (item) => {
   }
 
   const value = {
-    'itunes:duration': item.duration,
+    'itunes:duration': generateNumber(item.duration),
     'itunes:image': generateImage(item.image),
     'itunes:explicit': generateYesNoBoolean(item.explicit),
-    'itunes:title': item.title,
-    'itunes:episode': item.episode,
-    'itunes:season': item.season,
-    'itunes:episodeType': item.episodeType,
+    'itunes:title': generateCdataString(item.title),
+    'itunes:episode': generateNumber(item.episode),
+    'itunes:season': generateNumber(item.season),
+    'itunes:episodeType': generateCdataString(item.episodeType),
     'itunes:block': generateYesNoBoolean(item.block),
-    'itunes:summary': item.summary,
-    'itunes:subtitle': item.subtitle,
+    'itunes:summary': generateCdataString(item.summary),
+    'itunes:subtitle': generateCdataString(item.subtitle),
     'itunes:keywords': generateCsvOf(item.keywords),
   }
 
@@ -76,15 +79,15 @@ export const generateFeed: GenerateFunction<Feed> = (feed) => {
     'itunes:image': generateImage(feed.image),
     'itunes:category': trimArray(feed.categories, generateCategory),
     'itunes:explicit': generateYesNoBoolean(feed.explicit),
-    'itunes:author': feed.author,
-    'itunes:title': feed.title,
-    'itunes:type': feed.type,
-    'itunes:new-feed-url': feed.newFeedUrl,
+    'itunes:author': generateCdataString(feed.author),
+    'itunes:title': generateCdataString(feed.title),
+    'itunes:type': generateCdataString(feed.type),
+    'itunes:new-feed-url': generateCdataString(feed.newFeedUrl),
     'itunes:block': generateYesNoBoolean(feed.block),
     'itunes:complete': generateYesNoBoolean(feed.complete),
-    'itunes:applepodcastsverify': feed.applePodcastsVerify,
-    'itunes:summary': feed.summary,
-    'itunes:subtitle': feed.subtitle,
+    'itunes:applepodcastsverify': generateCdataString(feed.applePodcastsVerify),
+    'itunes:summary': generateCdataString(feed.summary),
+    'itunes:subtitle': generateCdataString(feed.subtitle),
     'itunes:keywords': generateCsvOf(feed.keywords),
     'itunes:owner': generateOwner(feed.owner),
   }

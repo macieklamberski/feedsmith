@@ -452,7 +452,7 @@ describe('generateItem', () => {
         '#text': 'https://example.com/item/123',
         '@isPermaLink': true,
       },
-      pubDate: new Date('2023-03-15T12:00:00Z'),
+      pubDate: 'Wed, 15 Mar 2023 12:00:00 GMT',
       source: {
         '#text': 'Example Source',
         '@url': 'https://example.com/feed.xml',

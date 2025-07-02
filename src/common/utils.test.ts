@@ -4,12 +4,13 @@ import type { ParseExactFunction } from './types.js'
 import {
   detectNamespaces,
   generateBoolean,
+  generateCdataString,
   generateCsvOf,
   generateNamespaceAttrs,
   generateNumber,
+  generatePlainString,
   generateRfc822Date,
   generateRfc3339Date,
-  generateString,
   generateXml,
   generateYesNoBoolean,
   hasEntities,
@@ -2355,7 +2356,7 @@ describe('generateNamespaceAttrs', () => {
   })
 })
 
-describe('generateString', () => {
+describe('generateCdataString', () => {
   it('should wrap HTML content in CDATA object', () => {
     const value1 = '<p>HTML content</p>'
     const value2 = 'Text with <strong>bold</strong> formatting'
@@ -2364,9 +2365,9 @@ describe('generateString', () => {
     const expected2 = { '#cdata': 'Text with <strong>bold</strong> formatting' }
     const expected3 = { '#cdata': 'Content with > greater than' }
 
-    expect(generateString(value1)).toEqual(expected1)
-    expect(generateString(value2)).toEqual(expected2)
-    expect(generateString(value3)).toEqual(expected3)
+    expect(generateCdataString(value1)).toEqual(expected1)
+    expect(generateCdataString(value2)).toEqual(expected2)
+    expect(generateCdataString(value3)).toEqual(expected3)
   })
 
   it('should wrap content with ampersands in CDATA object', () => {
@@ -2375,15 +2376,15 @@ describe('generateString', () => {
     const expected1 = { '#cdata': 'Text with & ampersand' }
     const expected2 = { '#cdata': 'Multiple & ampersands & here' }
 
-    expect(generateString(value1)).toEqual(expected1)
-    expect(generateString(value2)).toEqual(expected2)
+    expect(generateCdataString(value1)).toEqual(expected1)
+    expect(generateCdataString(value2)).toEqual(expected2)
   })
 
   it('should wrap content with CDATA end markers in CDATA object', () => {
     const value = 'Text with ]]> marker'
     const expected = { '#cdata': 'Text with ]]> marker' }
 
-    expect(generateString(value)).toEqual(expected)
+    expect(generateCdataString(value)).toEqual(expected)
   })
 
   it('should return simple text as string', () => {
@@ -2394,25 +2395,69 @@ describe('generateString', () => {
     const expected2 = 'Text with numbers 123 and spaces'
     const expected3 = 'Text with special chars !@#$%^*()_+-='
 
-    expect(generateString(value1)).toEqual(expected1)
-    expect(generateString(value2)).toEqual(expected2)
-    expect(generateString(value3)).toEqual(expected3)
+    expect(generateCdataString(value1)).toEqual(expected1)
+    expect(generateCdataString(value2)).toEqual(expected2)
+    expect(generateCdataString(value3)).toEqual(expected3)
   })
 
   it('should handle empty string', () => {
     const value = ''
 
-    expect(generateString(value)).toBeUndefined()
+    expect(generateCdataString(value)).toBeUndefined()
   })
 
   it('should handle string with only whitespace', () => {
     const value = '   '
 
-    expect(generateString(value)).toBeUndefined()
+    expect(generateCdataString(value)).toBeUndefined()
   })
 
   it('should handle non-string inputs', () => {
-    expect(generateString(undefined)).toBeUndefined()
+    expect(generateCdataString(undefined)).toBeUndefined()
+  })
+})
+
+describe('generatePlainString', () => {
+  it('should return trimmed string for simple text', () => {
+    const value1 = 'Simple text content'
+    const value2 = '  Text with spaces  '
+    const value3 = 'Text with special chars !@#$%^*()_+-='
+    const expected1 = 'Simple text content'
+    const expected2 = 'Text with spaces'
+    const expected3 = 'Text with special chars !@#$%^*()_+-='
+
+    expect(generatePlainString(value1)).toEqual(expected1)
+    expect(generatePlainString(value2)).toEqual(expected2)
+    expect(generatePlainString(value3)).toEqual(expected3)
+  })
+
+  it('should return string even if it contains XML characters', () => {
+    const value1 = '<p>HTML content</p>'
+    const value2 = 'Text with & ampersand'
+    const value3 = 'Content with > greater than'
+    const expected1 = '<p>HTML content</p>'
+    const expected2 = 'Text with & ampersand'
+    const expected3 = 'Content with > greater than'
+
+    expect(generatePlainString(value1)).toEqual(expected1)
+    expect(generatePlainString(value2)).toEqual(expected2)
+    expect(generatePlainString(value3)).toEqual(expected3)
+  })
+
+  it('should handle empty string', () => {
+    const value = ''
+
+    expect(generatePlainString(value)).toBeUndefined()
+  })
+
+  it('should handle string with only whitespace', () => {
+    const value = '   '
+
+    expect(generatePlainString(value)).toBeUndefined()
+  })
+
+  it('should handle non-string inputs', () => {
+    expect(generatePlainString(undefined)).toBeUndefined()
   })
 })
 
@@ -2434,7 +2479,7 @@ describe('generateNumber', () => {
   })
 
   it('should return undefined for non-number inputs', () => {
-    expect(generateString(undefined)).toBeUndefined()
+    expect(generateNumber(undefined)).toBeUndefined()
   })
 })
 

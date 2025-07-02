@@ -370,16 +370,24 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
   return namespaces
 }
 
-export const generateString: GenerateFunction<string> = (value) => {
+export const generateCdataString: GenerateFunction<string> = (value) => {
   if (!isNonEmptyString(value)) {
     return
   }
 
   if (value.includes('<') || value.includes('>') || value.includes('&') || value.includes(']]>')) {
-    return { '#cdata': value }
+    return { '#cdata': value.trim() }
   }
 
-  return value
+  return value.trim()
+}
+
+export const generatePlainString: GenerateFunction<string> = (value) => {
+  if (!isNonEmptyString(value)) {
+    return
+  }
+
+  return value.trim()
 }
 
 export const generateNumber: GenerateFunction<number> = (value) => {

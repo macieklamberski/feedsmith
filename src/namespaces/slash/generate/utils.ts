@@ -1,5 +1,11 @@
 import type { GenerateFunction } from '../../../common/types.js'
-import { isObject, trimObject } from '../../../common/utils.js'
+import {
+  generateCdataString,
+  generateCsvOf,
+  generateNumber,
+  isObject,
+  trimObject,
+} from '../../../common/utils.js'
 import type { Item } from '../common/types.js'
 
 export const generateItem: GenerateFunction<Item> = (item) => {
@@ -8,10 +14,10 @@ export const generateItem: GenerateFunction<Item> = (item) => {
   }
 
   const value = {
-    'slash:section': item.section,
-    'slash:department': item.department,
-    'slash:comments': item.comments,
-    'slash:hit_parade': item.hit_parade?.join(','),
+    'slash:section': generateCdataString(item.section),
+    'slash:department': generateCdataString(item.department),
+    'slash:comments': generateNumber(item.comments),
+    'slash:hit_parade': generateCsvOf(item.hit_parade, generateNumber),
   }
 
   return trimObject(value)
