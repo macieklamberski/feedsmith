@@ -1,3 +1,4 @@
+import { namespaceUrls } from '../../../common/config.js'
 import type { GenerateFunction } from '../../../common/types.js'
 import {
   generateNamespaceAttrs,
@@ -224,7 +225,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
   return {
     rss: {
       '@version': '2.0',
-      ...generateNamespaceAttrs(trimmedValue),
+      ...generateNamespaceAttrs(trimmedValue, namespaceUrls),
       channel: trimmedValue,
     },
   }

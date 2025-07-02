@@ -1,6 +1,5 @@
 import { decodeHTML, decodeXML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
-import { namespaceUrls } from './config.js'
 import type { AnyOf, GenerateFunction, ParseExactFunction, Unreliable } from './types.js'
 
 export const isPresent = <T>(value: T): value is NonNullable<T> => {
@@ -383,7 +382,10 @@ export const generateNumber: GenerateFunction<number> = (value) => {
   }
 }
 
-export const generateNamespaceAttrs = (value: Unreliable): Record<string, string> | undefined => {
+export const generateNamespaceAttrs = (
+  value: Unreliable,
+  namespaceUrls: Record<string, string>,
+): Record<string, string> | undefined => {
   if (!isObject(value)) {
     return
   }
@@ -400,7 +402,7 @@ export const generateNamespaceAttrs = (value: Unreliable): Record<string, string
       namespaceAttrs = {}
     }
 
-    namespaceAttrs[`@xmlns:${slug}`] = namespaceUrls[slug as keyof typeof namespaceUrls]
+    namespaceAttrs[`@xmlns:${slug}`] = namespaceUrls[slug]
   }
 
   return namespaceAttrs
