@@ -1,3 +1,4 @@
+import { namespaceUrls } from '../../../common/config.js'
 import {
   generateNamespaceAttrs,
   generateRfc3339Date,
@@ -246,7 +247,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed, options) => {
   return {
     feed: {
       '@xmlns': 'http://www.w3.org/2005/Atom',
-      ...generateNamespaceAttrs({ value: valueFull }),
+      ...generateNamespaceAttrs({ value: valueFull }, namespaceUrls),
       ...valueFull,
     },
   }

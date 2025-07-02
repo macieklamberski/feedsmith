@@ -13,6 +13,7 @@ import {
   generateXml,
   generateYesNoBoolean,
   hasEntities,
+  invertObject,
   isNonEmptyString,
   isNonEmptyStringOrNumber,
   isObject,
@@ -2154,6 +2155,22 @@ describe('detectNamespaces', () => {
 })
 
 describe('generateNamespaceAttrs', () => {
+  const testNamespaceUrls = {
+    atom: 'http://www.w3.org/2005/Atom',
+    content: 'http://purl.org/rss/1.0/modules/content/',
+    dc: 'http://purl.org/dc/elements/1.1/',
+    dcterms: 'http://purl.org/dc/terms/',
+    georss: 'http://www.georss.org/georss/',
+    itunes: 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+    media: 'http://search.yahoo.com/mrss/',
+    podcast: 'https://podcastindex.org/namespace/1.0',
+    slash: 'http://purl.org/rss/1.0/modules/slash/',
+    sy: 'http://purl.org/rss/1.0/modules/syndication/',
+    thr: 'http://purl.org/syndication/thread/1.0',
+    wfw: 'http://wellformedweb.org/CommentAPI/',
+    yt: 'http://www.youtube.com/xml/schemas/2015',
+  }
+
   it('should generate namespace attributes for all known namespaces when present', () => {
     const value = {
       title: 'Comprehensive Feed',
@@ -2181,7 +2198,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:thr': 'http://purl.org/syndication/thread/1.0',
     }
 
-    expect(generateNamespaceAttrs(value)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
   })
 
   it('should generate namespace attributes for single known namespace', () => {
@@ -2193,7 +2210,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:atom': 'http://www.w3.org/2005/Atom',
     }
 
-    expect(generateNamespaceAttrs(value)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
   })
 
   it('should ignore unknown namespaces and only include known ones', () => {
@@ -2209,7 +2226,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
     }
 
-    expect(generateNamespaceAttrs(value)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
   })
 
   it('should handle properties with multiple colons correctly', () => {
@@ -2223,7 +2240,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
     }
 
-    expect(generateNamespaceAttrs(value)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
   })
 
   it('should handle properties with colon at the end', () => {
@@ -2237,7 +2254,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
     }
 
-    expect(generateNamespaceAttrs(value)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
   })
 
   it('should ignore properties with colon at the beginning', () => {
@@ -2250,7 +2267,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:atom': 'http://www.w3.org/2005/Atom',
     }
 
-    expect(generateNamespaceAttrs(value)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
   })
 
   it('should handle duplicate namespace detection correctly', () => {
@@ -2266,7 +2283,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
     }
 
-    expect(generateNamespaceAttrs(value)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
   })
 
   it('should return undefined when no namespaced properties are present', () => {
@@ -2277,7 +2294,7 @@ describe('generateNamespaceAttrs', () => {
       author: 'John Doe',
     }
 
-    expect(generateNamespaceAttrs(value)).toBeUndefined()
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toBeUndefined()
   })
 
   it('should return undefined when object has namespaces not in known URLs', () => {
@@ -2287,21 +2304,21 @@ describe('generateNamespaceAttrs', () => {
       'custom:property': 'another value',
     }
 
-    expect(generateNamespaceAttrs(value)).toBeUndefined()
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toBeUndefined()
   })
 
   it('should return undefined for empty objects', () => {
-    expect(generateNamespaceAttrs({})).toBeUndefined()
+    expect(generateNamespaceAttrs({}, testNamespaceUrls)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(generateNamespaceAttrs(null)).toBeUndefined()
-    expect(generateNamespaceAttrs(undefined)).toBeUndefined()
-    expect(generateNamespaceAttrs('string')).toBeUndefined()
-    expect(generateNamespaceAttrs(42)).toBeUndefined()
-    expect(generateNamespaceAttrs(true)).toBeUndefined()
-    expect(generateNamespaceAttrs([])).toBeUndefined()
-    expect(generateNamespaceAttrs(() => {})).toBeUndefined()
+    expect(generateNamespaceAttrs(null, testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs(undefined, testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs('string', testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs(42, testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs(true, testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs([], testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs(() => {}, testNamespaceUrls)).toBeUndefined()
   })
 
   it('should detect namespaces in nested structures using recursive detection', () => {
@@ -2324,7 +2341,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
     }
 
-    expect(generateNamespaceAttrs(value)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
   })
 })
 
@@ -2408,5 +2425,128 @@ describe('generateNumber', () => {
 
   it('should return undefined for non-number inputs', () => {
     expect(generateString(undefined)).toBeUndefined()
+  })
+})
+
+describe('invertObject', () => {
+  it('should invert simple object with string key-value pairs', () => {
+    const value = {
+      apple: 'fruit',
+      carrot: 'vegetable',
+      salmon: 'fish',
+    }
+    const expected = {
+      fruit: 'apple',
+      vegetable: 'carrot',
+      fish: 'salmon',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+    const expected = {}
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle single key-value pair', () => {
+    const value = { key: 'value' }
+    const expected = { value: 'key' }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle duplicate values by keeping the last occurrence', () => {
+    const value = {
+      first: 'duplicate',
+      second: 'unique',
+      third: 'duplicate',
+      fourth: 'duplicate',
+    }
+    const expected = {
+      duplicate: 'fourth',
+      unique: 'second',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle special characters in keys and values', () => {
+    const value = {
+      'key-with-dash': 'value_with_underscore',
+      'key.with.dots': 'value@with@at',
+      'key:with:colon': 'value/with/slash',
+    }
+    const expected = {
+      value_with_underscore: 'key-with-dash',
+      'value@with@at': 'key.with.dots',
+      'value/with/slash': 'key:with:colon',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace in keys and values', () => {
+    const value = {
+      'key with spaces': 'value with spaces',
+      '  padded  ': '  also padded  ',
+      '\ttab\t': '\nnewline\n',
+    }
+    const expected = {
+      'value with spaces': 'key with spaces',
+      '  also padded  ': '  padded  ',
+      '\nnewline\n': '\ttab\t',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle empty string keys and values', () => {
+    const value = {
+      '': 'empty key',
+      'empty value': '',
+      normal: 'value',
+    }
+    const expected = {
+      'empty key': '',
+      '': 'empty value',
+      value: 'normal',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle Unicode characters', () => {
+    const value = {
+      '🔑': '🎯',
+      café: 'coffee',
+      naïve: 'approach',
+      日本: 'Japan',
+    }
+    const expected = {
+      '🎯': '🔑',
+      coffee: 'café',
+      approach: 'naïve',
+      Japan: '日本',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle case-sensitive keys and values', () => {
+    const value = {
+      ABC: 'xyz',
+      abc: 'XYZ',
+      AbC: 'xYz',
+    }
+    const expected = {
+      xyz: 'ABC',
+      XYZ: 'abc',
+      xYz: 'AbC',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
   })
 })
