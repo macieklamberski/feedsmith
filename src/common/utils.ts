@@ -375,7 +375,12 @@ export const generateCdataString: GenerateFunction<string> = (value) => {
     return
   }
 
-  if (value.includes('<') || value.includes('>') || value.includes('&') || value.includes(']]>')) {
+  if (
+    value.indexOf('<') !== -1 ||
+    value.indexOf('>') !== -1 ||
+    value.indexOf('&') !== -1 ||
+    value.indexOf(']]>') !== -1
+  ) {
     return { '#cdata': value.trim() }
   }
 
