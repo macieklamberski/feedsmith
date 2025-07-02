@@ -49,12 +49,12 @@
     "fast-xml-parser": "^5.2.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.4",
+    "@biomejs/biome": "^2.0.6",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@types/bun": "^1.2.17",
     "lefthook": "^1.11.14",
-    "semantic-release": "^24.2.5",
+    "semantic-release": "^24.2.6",
     "typescript": "^5.8.3"
   }
 }
