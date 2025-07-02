@@ -24,7 +24,7 @@ describe('generateOutline', () => {
       '@type': 'rss',
       '@isComment': true,
       '@isBreakpoint': false,
-      '@created': '2023-03-15',
+      '@created': 'Wed, 15 Mar 2023 00:00:00 GMT',
       '@category': 'Test Category',
       '@description': 'Test Description',
       '@xmlUrl': 'https://example.com/feed.xml',

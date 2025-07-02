@@ -12,7 +12,7 @@ import {
 } from '../../common/utils.js'
 import type { Body, Head, Opml, Outline } from '../common/types.js'
 
-export const generateOutline: GenerateFunction<Outline> = (outline) => {
+export const generateOutline: GenerateFunction<Outline<Date>> = (outline) => {
   if (!isObject(outline)) {
     return
   }
@@ -22,7 +22,7 @@ export const generateOutline: GenerateFunction<Outline> = (outline) => {
     '@type': generatePlainString(outline.type),
     '@isComment': generateBoolean(outline.isComment),
     '@isBreakpoint': generateBoolean(outline.isBreakpoint),
-    '@created': generatePlainString(outline.created),
+    '@created': generateRfc822Date(outline.created),
     '@category': generatePlainString(outline.category),
     '@description': generatePlainString(outline.description),
     '@xmlUrl': generatePlainString(outline.xmlUrl),
@@ -61,7 +61,7 @@ export const generateHead: GenerateFunction<Head<Date>> = (head) => {
   return trimObject(value)
 }
 
-export const generateBody: GenerateFunction<Body> = (body) => {
+export const generateBody: GenerateFunction<Body<Date>> = (body) => {
   if (!isObject(body)) {
     return
   }
