@@ -128,7 +128,7 @@ export const hasEntities = (text: string) => {
 
 export const parseString: ParseExactFunction<string> = (value) => {
   if (typeof value === 'string') {
-    let string = stripCdata(value.trim())
+    let string = stripCdata(value).trim()
 
     if (hasEntities(string)) {
       string = decodeXML(string)

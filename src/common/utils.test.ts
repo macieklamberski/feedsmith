@@ -752,6 +752,16 @@ describe('parseString', () => {
     expect(parseString(value)).toBe(expected)
   })
 
+  it('Should handle empty string in CDATA', () => {
+    const value = '<![CDATA[        ]]>'
+    expect(parseString(value)).toBeUndefined()
+  })
+
+  it('Should trim string in CDATA', () => {
+    const value = '<![CDATA[    test    ]]>'
+    expect(parseString(value)).toBe('test')
+  })
+
   it('should return number', () => {
     const value = 420
 
