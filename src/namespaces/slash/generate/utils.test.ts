@@ -7,7 +7,7 @@ describe('generateItem', () => {
       section: 'Technology',
       department: 'News',
       comments: 42,
-      hit_parade: [1, 2, 3, 4, 5],
+      hitParade: [1, 2, 3, 4, 5],
     }
     const expected = {
       'slash:section': 'Technology',
@@ -33,7 +33,7 @@ describe('generateItem', () => {
   it('should handle empty hit_parade array', () => {
     const value = {
       comments: 5,
-      hit_parade: [],
+      hitParade: [],
     }
     const expected = {
       'slash:comments': 5,
@@ -47,7 +47,7 @@ describe('generateItem', () => {
       section: undefined,
       department: undefined,
       comments: undefined,
-      hit_parade: undefined,
+      hitParade: undefined,
     }
 
     // @ts-ignore: This is for testing purposes.

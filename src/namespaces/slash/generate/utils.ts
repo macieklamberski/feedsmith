@@ -17,7 +17,7 @@ export const generateItem: GenerateFunction<Item> = (item) => {
     'slash:section': generateCdataString(item.section),
     'slash:department': generateCdataString(item.department),
     'slash:comments': generateNumber(item.comments),
-    'slash:hit_parade': generateCsvOf(item.hit_parade, generateNumber),
+    'slash:hit_parade': generateCsvOf(item.hitParade, generateNumber),
   }
 
   return trimObject(value)

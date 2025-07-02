@@ -86,7 +86,7 @@
         "section": "articles",
         "department": "not-an-ocean-unless-there-are-lobsters",
         "comments": 177,
-        "hit_parade": [177, 155, 105, 33, 6, 3, 0]
+        "hitParade": [177, 155, 105, 33, 6, 3, 0]
       },
       "media": {
         "contents": [
