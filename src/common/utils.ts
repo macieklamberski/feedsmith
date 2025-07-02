@@ -405,3 +405,13 @@ export const generateNamespaceAttrs = (value: Unreliable): Record<string, string
 
   return namespaceAttrs
 }
+
+export const invertObject = (object: Record<string, string>): Record<string, string> => {
+  const inverted: Record<string, string> = {}
+
+  for (const key in object) {
+    inverted[object[key]] = key
+  }
+
+  return inverted
+}

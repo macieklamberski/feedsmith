@@ -12,6 +12,7 @@ import {
   generateXml,
   generateYesNoBoolean,
   hasEntities,
+  invertObject,
   isNonEmptyString,
   isNonEmptyStringOrNumber,
   isObject,
@@ -2394,5 +2395,128 @@ describe('generateNumber', () => {
 
   it('should return undefined for non-number inputs', () => {
     expect(generateString(undefined)).toBeUndefined()
+  })
+})
+
+describe('invertObject', () => {
+  it('should invert simple object with string key-value pairs', () => {
+    const value = {
+      apple: 'fruit',
+      carrot: 'vegetable',
+      salmon: 'fish',
+    }
+    const expected = {
+      fruit: 'apple',
+      vegetable: 'carrot',
+      fish: 'salmon',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+    const expected = {}
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle single key-value pair', () => {
+    const value = { key: 'value' }
+    const expected = { value: 'key' }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle duplicate values by keeping the last occurrence', () => {
+    const value = {
+      first: 'duplicate',
+      second: 'unique',
+      third: 'duplicate',
+      fourth: 'duplicate',
+    }
+    const expected = {
+      duplicate: 'fourth',
+      unique: 'second',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle special characters in keys and values', () => {
+    const value = {
+      'key-with-dash': 'value_with_underscore',
+      'key.with.dots': 'value@with@at',
+      'key:with:colon': 'value/with/slash',
+    }
+    const expected = {
+      value_with_underscore: 'key-with-dash',
+      'value@with@at': 'key.with.dots',
+      'value/with/slash': 'key:with:colon',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace in keys and values', () => {
+    const value = {
+      'key with spaces': 'value with spaces',
+      '  padded  ': '  also padded  ',
+      '\ttab\t': '\nnewline\n',
+    }
+    const expected = {
+      'value with spaces': 'key with spaces',
+      '  also padded  ': '  padded  ',
+      '\nnewline\n': '\ttab\t',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle empty string keys and values', () => {
+    const value = {
+      '': 'empty key',
+      'empty value': '',
+      normal: 'value',
+    }
+    const expected = {
+      'empty key': '',
+      '': 'empty value',
+      value: 'normal',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle Unicode characters', () => {
+    const value = {
+      '🔑': '🎯',
+      café: 'coffee',
+      naïve: 'approach',
+      日本: 'Japan',
+    }
+    const expected = {
+      '🎯': '🔑',
+      coffee: 'café',
+      approach: 'naïve',
+      Japan: '日本',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle case-sensitive keys and values', () => {
+    const value = {
+      ABC: 'xyz',
+      abc: 'XYZ',
+      AbC: 'xYz',
+    }
+    const expected = {
+      xyz: 'ABC',
+      XYZ: 'abc',
+      xYz: 'AbC',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
   })
 })
