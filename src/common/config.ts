@@ -1,31 +1,5 @@
 import type { X2jOptions, XmlBuilderOptions } from 'fast-xml-parser'
-
-export const attributeNamePrefix = '@'
-
-export const parserConfig: X2jOptions = {
-  trimValues: false,
-  processEntities: false,
-  htmlEntities: false,
-  parseTagValue: false,
-  parseAttributeValue: false,
-  alwaysCreateTextNode: false,
-  ignoreAttributes: false,
-  ignorePiTags: true,
-  ignoreDeclaration: true,
-  attributeNamePrefix,
-  transformTagName: (name) => name.toLowerCase(),
-  transformAttributeName: (name) => name.toLowerCase(),
-}
-
-export const builderConfig: XmlBuilderOptions = {
-  processEntities: true,
-  ignoreAttributes: false,
-  suppressEmptyNode: true,
-  suppressBooleanAttributes: false,
-  attributeNamePrefix,
-  format: true,
-  cdataPropName: '#cdata',
-}
+import { createFixedStatefulTransforms } from './utils/common.js'
 
 export const locales = {
   unrecognized: 'Unrecognized feed format',
@@ -46,4 +20,28 @@ export const namespaceUrls = {
   thr: 'http://purl.org/syndication/thread/1.0',
   wfw: 'http://wellformedweb.org/CommentAPI/',
   yt: 'http://www.youtube.com/xml/schemas/2015',
+}
+
+export const parserConfig: X2jOptions = {
+  trimValues: false,
+  processEntities: false,
+  htmlEntities: false,
+  parseTagValue: false,
+  parseAttributeValue: false,
+  alwaysCreateTextNode: false,
+  ignoreAttributes: false,
+  ignorePiTags: true,
+  ignoreDeclaration: true,
+  attributeNamePrefix: '@',
+  ...createFixedStatefulTransforms(namespaceUrls),
+}
+
+export const builderConfig: XmlBuilderOptions = {
+  processEntities: true,
+  ignoreAttributes: false,
+  suppressEmptyNode: true,
+  suppressBooleanAttributes: false,
+  attributeNamePrefix: '@',
+  format: true,
+  cdataPropName: '#cdata',
 }
