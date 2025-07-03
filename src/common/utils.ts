@@ -1,5 +1,5 @@
 import { decodeHTML, decodeXML } from 'entities'
-import type { XMLBuilder } from 'fast-xml-parser'
+import { type X2jOptions, type XMLBuilder, XMLParser } from 'fast-xml-parser'
 import type { AnyOf, GenerateFunction, ParseExactFunction, Unreliable } from './types.js'
 
 export const isPresent = <T>(value: T): value is NonNullable<T> => {
@@ -435,4 +435,11 @@ export const invertObject = (object: Record<string, string>): Record<string, str
   }
 
   return inverted
+}
+
+export const createCustomParser = (config?: X2jOptions): XMLParser => {
+  // This will be later used to create isolated namespace normalization context.
+  // TODO: There should be an optional second parameter that will disable
+  // namespace normalization (not needed for OPML).
+  return new XMLParser(config)
 }

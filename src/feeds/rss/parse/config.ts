@@ -1,5 +1,4 @@
-import { XMLParser } from 'fast-xml-parser'
-import { parserConfig } from '../../../common/config.js'
+import { parserConfig as baseParserConfig } from '../../../common/config.js'
 
 export const stopNodes = [
   'rss.channel.title',
@@ -45,7 +44,4 @@ export const stopNodes = [
   // TODO: What about the namespaces?
 ]
 
-export const parser = new XMLParser({
-  ...parserConfig,
-  stopNodes,
-})
+export const parserConfig = { ...baseParserConfig, stopNodes }
