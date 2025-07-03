@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import { locales } from './config'
-import { parse } from './parse'
+import { locales } from './config.js'
+import { parse } from './parse.js'
 
 describe('parse', () => {
   it('should parse valid Atom feed', () => {
