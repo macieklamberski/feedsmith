@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'bun:test'
 import type { XMLBuilder } from 'fast-xml-parser'
+import { XMLParser } from 'fast-xml-parser'
 import type { ParseExactFunction } from './types.js'
 import {
+  createCustomParser,
   detectNamespaces,
   generateBoolean,
   generateCdataString,
@@ -2603,5 +2605,60 @@ describe('invertObject', () => {
     }
 
     expect(invertObject(value)).toEqual(expected)
+  })
+})
+
+describe('createCustomParser', () => {
+  it('should return an XMLParser instance', () => {
+    const parser = createCustomParser()
+
+    expect(parser).toBeInstanceOf(XMLParser)
+  })
+
+  it('should create separate parser instances on each call', () => {
+    const parser1 = createCustomParser()
+    const parser2 = createCustomParser()
+
+    expect(parser1).not.toBe(parser2)
+  })
+
+  it('should merge base config with provided config', () => {
+    const parser = createCustomParser({ trimValues: true, parseTagValue: true })
+    const value = '<test>  value  </test>'
+    const expected = { test: 'value' }
+
+    expect(parser.parse(value)).toEqual(expected)
+  })
+
+  it('should allow custom config to override base config', () => {
+    const parser = createCustomParser({ trimValues: true })
+    const value = '<test>  spaced  </test>'
+    const expected = { test: 'spaced' }
+
+    expect(parser.parse(value)).toEqual(expected)
+  })
+
+  it('should handle stopNodes config', () => {
+    const parser = createCustomParser({ stopNodes: ['test.inner'] })
+    const value = '<test><inner>value</inner></test>'
+    const expected = { test: { inner: 'value' } }
+
+    expect(parser.parse(value)).toEqual(expected)
+  })
+
+  it('should handle attributeNamePrefix config', () => {
+    const parser = createCustomParser({ attributeNamePrefix: '@', ignoreAttributes: false })
+    const value = '<test attr="value">content</test>'
+    const expected = { test: { '@attr': 'value', '#text': 'content' } }
+
+    expect(parser.parse(value)).toEqual(expected)
+  })
+
+  it('should handle empty config object', () => {
+    const parser = createCustomParser()
+    const value = '<simple>test</simple>'
+    const expected = { simple: 'test' }
+
+    expect(parser.parse(value)).toEqual(expected)
   })
 })

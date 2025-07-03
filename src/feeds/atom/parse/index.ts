@@ -1,8 +1,9 @@
 import { locales } from '../../../common/config.js'
 import type { DeepPartial } from '../../../common/types.js'
+import { createCustomParser } from '../../../common/utils.js'
 import { detectAtomFeed } from '../../../index.js'
 import type { Feed } from '../common/types.js'
-import { parser } from './config.js'
+import { parserConfig } from './config.js'
 import { retrieveFeed } from './utils.js'
 
 export const parse = (value: unknown): DeepPartial<Feed<string>> => {
@@ -10,6 +11,7 @@ export const parse = (value: unknown): DeepPartial<Feed<string>> => {
     throw new Error(locales.invalid)
   }
 
+  const parser = createCustomParser(parserConfig)
   const object = parser.parse(value)
   const parsed = retrieveFeed(object)
 
