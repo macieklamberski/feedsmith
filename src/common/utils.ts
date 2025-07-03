@@ -351,7 +351,7 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
 
         seenKeys.add(key)
 
-        const keyWithoutAt = key.startsWith('@') ? key.slice(1) : key
+        const keyWithoutAt = key.indexOf('@') === 0 ? key.slice(1) : key
         const colonIndex = keyWithoutAt.indexOf(':')
 
         if (colonIndex > 0) {
