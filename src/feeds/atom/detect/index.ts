@@ -5,14 +5,15 @@ export const detect = (value: unknown): value is string => {
     return false
   }
 
-  const hasFeedElement = /(?:^|\s|>)\s*<(?:atom:)?feed[\s>]/im.test(value)
+  // Look for feed element (unprefixed or with any prefix)
+  const hasFeedElement = /(?:^|\s|>)\s*<(?:\w+:)?feed[\s>]/im.test(value)
 
   if (!hasFeedElement) {
     return false
   }
 
   const hasAtomNamespace = value.includes('http://www.w3.org/2005/Atom')
-  const hasAtomElements = /(<(?:atom:)?(entry|title|link|id|updated|summary)[\s>])/i.test(value)
+  const hasAtomElements = /(<(?:\w+:)?(entry|title|link|id|updated|summary)[\s>])/i.test(value)
 
   return hasAtomNamespace || hasAtomElements
 }

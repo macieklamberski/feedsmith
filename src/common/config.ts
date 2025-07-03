@@ -1,5 +1,4 @@
 import type { X2jOptions, XmlBuilderOptions } from 'fast-xml-parser'
-import { createFixedStatefulTransforms } from './utils/common.js'
 
 export const locales = {
   unrecognized: 'Unrecognized feed format',
@@ -33,7 +32,8 @@ export const parserConfig: X2jOptions = {
   ignorePiTags: true,
   ignoreDeclaration: true,
   attributeNamePrefix: '@',
-  ...createFixedStatefulTransforms(namespaceUrls),
+  transformTagName: (name) => name.toLowerCase(),
+  transformAttributeName: (name) => name.toLowerCase(),
 }
 
 export const builderConfig: XmlBuilderOptions = {
