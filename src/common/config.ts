@@ -1,7 +1,5 @@
 import type { X2jOptions, XmlBuilderOptions } from 'fast-xml-parser'
 
-export const attributeNamePrefix = '@'
-
 export const parserConfig: X2jOptions = {
   trimValues: false,
   processEntities: false,
@@ -12,7 +10,7 @@ export const parserConfig: X2jOptions = {
   ignoreAttributes: false,
   ignorePiTags: true,
   ignoreDeclaration: true,
-  attributeNamePrefix,
+  attributeNamePrefix: '@',
   transformTagName: (name) => name.toLowerCase(),
   transformAttributeName: (name) => name.toLowerCase(),
 }
@@ -22,7 +20,7 @@ export const builderConfig: XmlBuilderOptions = {
   ignoreAttributes: false,
   suppressEmptyNode: true,
   suppressBooleanAttributes: false,
-  attributeNamePrefix,
+  attributeNamePrefix: '@',
   format: true,
   cdataPropName: '#cdata',
 }
