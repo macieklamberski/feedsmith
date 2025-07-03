@@ -20,7 +20,7 @@ const testGaphubFeedParser = (feed: string) => {
 }
 
 const testGaphubFeedParserOpml = async (xml: string) => {
-  return new GapHubFeedParser().parseOPMLString(xml)
+  return gaphubFeedParserInstance.parseOPMLString(xml)
 }
 
 const testFeedMeJs = (feed: string) => {

@@ -1,5 +1,5 @@
 import type { GenerateFunction } from '../../../common/types.js'
-import { isObject, trimObject } from '../../../common/utils.js'
+import { generateCdataString, generateNumber, isObject, trimObject } from '../../../common/utils.js'
 import type { Box, ItemOrFeed, Line, Point, Polygon } from '../common/types.js'
 
 export const generateLatLngPairs = (
@@ -72,12 +72,12 @@ export const generateItemOrFeed: GenerateFunction<ItemOrFeed> = (itemOrFeed) => 
     'georss:line': generateLine(itemOrFeed.line),
     'georss:polygon': generatePolygon(itemOrFeed.polygon),
     'georss:box': generateBox(itemOrFeed.box),
-    'georss:featureTypeTag': itemOrFeed.featureTypeTag,
-    'georss:relationshipTag': itemOrFeed.relationshipTag,
-    'georss:featureName': itemOrFeed.featureName,
-    'georss:elev': itemOrFeed.elev,
-    'georss:floor': itemOrFeed.floor,
-    'georss:radius': itemOrFeed.radius,
+    'georss:featureTypeTag': generateCdataString(itemOrFeed.featureTypeTag),
+    'georss:relationshipTag': generateCdataString(itemOrFeed.relationshipTag),
+    'georss:featureName': generateCdataString(itemOrFeed.featureName),
+    'georss:elev': generateNumber(itemOrFeed.elev),
+    'georss:floor': generateNumber(itemOrFeed.floor),
+    'georss:radius': generateNumber(itemOrFeed.radius),
   }
 
   return trimObject(value)

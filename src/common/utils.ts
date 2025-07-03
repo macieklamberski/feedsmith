@@ -128,7 +128,7 @@ export const hasEntities = (text: string) => {
 
 export const parseString: ParseExactFunction<string> = (value) => {
   if (typeof value === 'string') {
-    let string = stripCdata(value.trim())
+    let string = stripCdata(value).trim()
 
     if (hasEntities(string)) {
       string = decodeXML(string)
@@ -316,6 +316,12 @@ export const generateRfc3339Date: GenerateFunction<string | Date> = (value) => {
   }
 }
 
+export const generateBoolean: GenerateFunction<boolean> = (value) => {
+  if (typeof value === 'boolean') {
+    return value
+  }
+}
+
 export const generateYesNoBoolean: GenerateFunction<boolean> = (value) => {
   if (typeof value !== 'boolean') {
     return
@@ -364,16 +370,29 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
   return namespaces
 }
 
-export const generateString: GenerateFunction<string> = (value) => {
+export const generateCdataString: GenerateFunction<string> = (value) => {
   if (!isNonEmptyString(value)) {
     return
   }
 
-  if (value.includes('<') || value.includes('>') || value.includes('&') || value.includes(']]>')) {
-    return { '#cdata': value }
+  if (
+    value.indexOf('<') !== -1 ||
+    value.indexOf('>') !== -1 ||
+    value.indexOf('&') !== -1 ||
+    value.indexOf(']]>') !== -1
+  ) {
+    return { '#cdata': value.trim() }
   }
 
-  return value
+  return value.trim()
+}
+
+export const generatePlainString: GenerateFunction<string> = (value) => {
+  if (!isNonEmptyString(value)) {
+    return
+  }
+
+  return value.trim()
 }
 
 export const generateNumber: GenerateFunction<number> = (value) => {

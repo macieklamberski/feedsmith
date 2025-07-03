@@ -3,12 +3,14 @@ import type { XMLBuilder } from 'fast-xml-parser'
 import type { ParseExactFunction } from './types.js'
 import {
   detectNamespaces,
+  generateBoolean,
+  generateCdataString,
   generateCsvOf,
   generateNamespaceAttrs,
   generateNumber,
+  generatePlainString,
   generateRfc822Date,
   generateRfc3339Date,
-  generateString,
   generateXml,
   generateYesNoBoolean,
   hasEntities,
@@ -462,9 +464,8 @@ describe('trimArray', () => {
     it('should apply the parsing function to each element', () => {
       const value = [1, 2, 3]
       const expected = ['1', '2', '3']
-      const parseToString = (val: number) => val.toString()
 
-      expect(trimArray(value, parseToString)).toEqual(expected)
+      expect(trimArray(value, parseString)).toEqual(expected)
     })
 
     it('should filter out values that become null or undefined after parsing', () => {
@@ -750,6 +751,16 @@ describe('parseString', () => {
       '<![CDATA[<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>]]>'
     const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
     expect(parseString(value)).toBe(expected)
+  })
+
+  it('Should handle empty string in CDATA', () => {
+    const value = '<![CDATA[        ]]>'
+    expect(parseString(value)).toBeUndefined()
+  })
+
+  it('Should trim string in CDATA', () => {
+    const value = '<![CDATA[    test    ]]>'
+    expect(parseString(value)).toBe('test')
   })
 
   it('should return number', () => {
@@ -1129,6 +1140,24 @@ describe('parseDate', () => {
   })
 })
 
+describe('generateBoolean', () => {
+  it('should return true for boolean true', () => {
+    const value = true
+
+    expect(generateBoolean(value)).toBe(true)
+  })
+
+  it('should return false for boolean false', () => {
+    const value = false
+
+    expect(generateBoolean(value)).toBe(false)
+  })
+
+  it('should return undefined for undefined', () => {
+    expect(generateBoolean(undefined)).toBeUndefined()
+  })
+})
+
 describe('generateYesNoBoolean', () => {
   it('should return "yes" for boolean true', () => {
     const value = true
@@ -1193,12 +1222,8 @@ describe('parseSingular', () => {
 
 describe('parseSingularOf', () => {
   it('should apply parse function to the first element of an array', () => {
-    const parseToString: ParseExactFunction<string> = (value) => {
-      return typeof value === 'number' || typeof value === 'string' ? String(value) : undefined
-    }
-
-    expect(parseSingularOf([1, 2, 3], parseToString)).toBe('1')
-    expect(parseSingularOf(['a', 'b', 'c'], parseToString)).toBe('a')
+    expect(parseSingularOf([1, 2, 3], parseString)).toBe('1')
+    expect(parseSingularOf(['a', 'b', 'c'], parseString)).toBe('a')
     expect(parseSingularOf([42, 'text'], parseString)).toBe('42')
   })
 
@@ -2331,7 +2356,7 @@ describe('generateNamespaceAttrs', () => {
   })
 })
 
-describe('generateString', () => {
+describe('generateCdataString', () => {
   it('should wrap HTML content in CDATA object', () => {
     const value1 = '<p>HTML content</p>'
     const value2 = 'Text with <strong>bold</strong> formatting'
@@ -2340,9 +2365,9 @@ describe('generateString', () => {
     const expected2 = { '#cdata': 'Text with <strong>bold</strong> formatting' }
     const expected3 = { '#cdata': 'Content with > greater than' }
 
-    expect(generateString(value1)).toEqual(expected1)
-    expect(generateString(value2)).toEqual(expected2)
-    expect(generateString(value3)).toEqual(expected3)
+    expect(generateCdataString(value1)).toEqual(expected1)
+    expect(generateCdataString(value2)).toEqual(expected2)
+    expect(generateCdataString(value3)).toEqual(expected3)
   })
 
   it('should wrap content with ampersands in CDATA object', () => {
@@ -2351,15 +2376,15 @@ describe('generateString', () => {
     const expected1 = { '#cdata': 'Text with & ampersand' }
     const expected2 = { '#cdata': 'Multiple & ampersands & here' }
 
-    expect(generateString(value1)).toEqual(expected1)
-    expect(generateString(value2)).toEqual(expected2)
+    expect(generateCdataString(value1)).toEqual(expected1)
+    expect(generateCdataString(value2)).toEqual(expected2)
   })
 
   it('should wrap content with CDATA end markers in CDATA object', () => {
     const value = 'Text with ]]> marker'
     const expected = { '#cdata': 'Text with ]]> marker' }
 
-    expect(generateString(value)).toEqual(expected)
+    expect(generateCdataString(value)).toEqual(expected)
   })
 
   it('should return simple text as string', () => {
@@ -2370,25 +2395,69 @@ describe('generateString', () => {
     const expected2 = 'Text with numbers 123 and spaces'
     const expected3 = 'Text with special chars !@#$%^*()_+-='
 
-    expect(generateString(value1)).toEqual(expected1)
-    expect(generateString(value2)).toEqual(expected2)
-    expect(generateString(value3)).toEqual(expected3)
+    expect(generateCdataString(value1)).toEqual(expected1)
+    expect(generateCdataString(value2)).toEqual(expected2)
+    expect(generateCdataString(value3)).toEqual(expected3)
   })
 
   it('should handle empty string', () => {
     const value = ''
 
-    expect(generateString(value)).toBeUndefined()
+    expect(generateCdataString(value)).toBeUndefined()
   })
 
   it('should handle string with only whitespace', () => {
     const value = '   '
 
-    expect(generateString(value)).toBeUndefined()
+    expect(generateCdataString(value)).toBeUndefined()
   })
 
   it('should handle non-string inputs', () => {
-    expect(generateString(undefined)).toBeUndefined()
+    expect(generateCdataString(undefined)).toBeUndefined()
+  })
+})
+
+describe('generatePlainString', () => {
+  it('should return trimmed string for simple text', () => {
+    const value1 = 'Simple text content'
+    const value2 = '  Text with spaces  '
+    const value3 = 'Text with special chars !@#$%^*()_+-='
+    const expected1 = 'Simple text content'
+    const expected2 = 'Text with spaces'
+    const expected3 = 'Text with special chars !@#$%^*()_+-='
+
+    expect(generatePlainString(value1)).toEqual(expected1)
+    expect(generatePlainString(value2)).toEqual(expected2)
+    expect(generatePlainString(value3)).toEqual(expected3)
+  })
+
+  it('should return string even if it contains XML characters', () => {
+    const value1 = '<p>HTML content</p>'
+    const value2 = 'Text with & ampersand'
+    const value3 = 'Content with > greater than'
+    const expected1 = '<p>HTML content</p>'
+    const expected2 = 'Text with & ampersand'
+    const expected3 = 'Content with > greater than'
+
+    expect(generatePlainString(value1)).toEqual(expected1)
+    expect(generatePlainString(value2)).toEqual(expected2)
+    expect(generatePlainString(value3)).toEqual(expected3)
+  })
+
+  it('should handle empty string', () => {
+    const value = ''
+
+    expect(generatePlainString(value)).toBeUndefined()
+  })
+
+  it('should handle string with only whitespace', () => {
+    const value = '   '
+
+    expect(generatePlainString(value)).toBeUndefined()
+  })
+
+  it('should handle non-string inputs', () => {
+    expect(generatePlainString(undefined)).toBeUndefined()
   })
 })
 
@@ -2410,7 +2479,7 @@ describe('generateNumber', () => {
   })
 
   it('should return undefined for non-number inputs', () => {
-    expect(generateString(undefined)).toBeUndefined()
+    expect(generateNumber(undefined)).toBeUndefined()
   })
 })
 
