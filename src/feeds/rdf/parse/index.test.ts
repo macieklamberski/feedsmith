@@ -77,4 +77,246 @@ describe('parse', () => {
   it('should handle number input', () => {
     expect(() => parse(123)).toThrowError(locales.invalid)
   })
+
+  describe('namespace normalization integration', () => {
+    it('should handle feeds with no additional namespaces', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://channel.netscape.com/rdf/simple/0.9/">
+          <channel>
+            <title>Simple Feed</title>
+            <link>http://example.com</link>
+            <description>Simple Description</description>
+          </channel>
+          <item rdf:about="http://example.com/item1">
+            <title>Simple Item</title>
+            <link>http://example.com/item1</link>
+            <description>Simple Item Description</description>
+          </item>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'Simple Feed',
+        link: 'http://example.com',
+        description: 'Simple Description',
+        items: [
+          {
+            title: 'Simple Item',
+            link: 'http://example.com/item1',
+            description: 'Simple Item Description',
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle default namespace without primary namespace', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://channel.netscape.com/rdf/simple/0.9/">
+          <channel>
+            <title>Test Feed</title>
+            <link>http://example.com</link>
+            <description>Test Description</description>
+          </channel>
+          <item rdf:about="http://example.com/item1">
+            <title>Test Item</title>
+            <link>http://example.com/item1</link>
+            <description>Test Item Description</description>
+          </item>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'Test Feed',
+        link: 'http://example.com',
+        description: 'Test Description',
+        items: [
+          {
+            title: 'Test Item',
+            link: 'http://example.com/item1',
+            description: 'Test Item Description',
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should normalize custom prefixes to standard prefixes', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://channel.netscape.com/rdf/simple/0.9/" xmlns:custom="http://purl.org/dc/elements/1.1/">
+          <channel>
+            <title>RDF Feed</title>
+            <link>http://example.com</link>
+            <description>RDF Feed Description</description>
+          </channel>
+          <item rdf:about="http://example.com/item1">
+            <title>Item Title</title>
+            <link>http://example.com/item1</link>
+            <description>Item Description</description>
+            <custom:creator>John Doe</custom:creator>
+          </item>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'RDF Feed',
+        link: 'http://example.com',
+        description: 'RDF Feed Description',
+        items: [
+          {
+            title: 'Item Title',
+            link: 'http://example.com/item1',
+            description: 'Item Description',
+            dc: {
+              creator: 'John Doe',
+            },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle namespace declarations in nested elements', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://channel.netscape.com/rdf/simple/0.9/">
+          <channel>
+            <title>RDF Feed</title>
+            <link>http://example.com</link>
+            <description>RDF Feed Description</description>
+          </channel>
+          <item rdf:about="http://example.com/item1" xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <title>Item Title</title>
+            <link>http://example.com/item1</link>
+            <description>Item Description</description>
+            <dc:creator>John Doe</dc:creator>
+            <dc:date>2023-01-01</dc:date>
+          </item>
+          <item rdf:about="http://example.com/item2">
+            <title>Item Without Namespace</title>
+            <link>http://example.com/item2</link>
+            <description>Item Description</description>
+          </item>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'RDF Feed',
+        link: 'http://example.com',
+        description: 'RDF Feed Description',
+        items: [
+          {
+            title: 'Item Title',
+            link: 'http://example.com/item1',
+            description: 'Item Description',
+            dc: {
+              creator: 'John Doe',
+              date: '2023-01-01',
+            },
+          },
+          {
+            title: 'Item Without Namespace',
+            link: 'http://example.com/item2',
+            description: 'Item Description',
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle mixed case with namespace logic', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://channel.netscape.com/rdf/simple/0.9/" xmlns:DC="http://purl.org/dc/elements/1.1/">
+          <CHANNEL>
+            <TITLE>Feed Title</TITLE>
+            <LINK>http://example.com</LINK>
+            <DESCRIPTION>Feed Description</DESCRIPTION>
+          </CHANNEL>
+          <ITEM RDF:about="http://example.com/item1">
+            <TITLE>Item Title</TITLE>
+            <LINK>http://example.com/item1</LINK>
+            <DESCRIPTION>Item Description</DESCRIPTION>
+            <DC:Creator>John Doe</DC:Creator>
+          </ITEM>
+        </RDF:RDF>
+      `
+      const expected = {
+        title: 'Feed Title',
+        link: 'http://example.com',
+        description: 'Feed Description',
+        items: [
+          {
+            title: 'Item Title',
+            link: 'http://example.com/item1',
+            description: 'Item Description',
+            dc: {
+              creator: 'John Doe',
+            },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle self-closing elements with namespace declarations', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://channel.netscape.com/rdf/simple/0.9/">
+          <channel>
+            <title>RDF Feed</title>
+            <link>http://example.com</link>
+            <description>RDF Feed Description</description>
+          </channel>
+          <item rdf:about="http://example.com/item1">
+            <title>Item 1</title>
+            <link>http://example.com/item1</link>
+            <description>Item Description</description>
+            <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://example.com/thumb.jpg"/>
+          </item>
+          <item rdf:about="http://example.com/item2">
+            <title>Item 2</title>
+            <link>http://example.com/item2</link>
+            <description>No media namespace here</description>
+          </item>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'RDF Feed',
+        link: 'http://example.com',
+        description: 'RDF Feed Description',
+        items: [
+          {
+            title: 'Item 1',
+            link: 'http://example.com/item1',
+            description: 'Item Description',
+            media: {
+              thumbnails: [
+                {
+                  url: 'http://example.com/thumb.jpg',
+                },
+              ],
+            },
+          },
+          {
+            title: 'Item 2',
+            link: 'http://example.com/item2',
+            description: 'No media namespace here',
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+  })
 })

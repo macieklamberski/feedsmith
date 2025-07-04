@@ -100,4 +100,213 @@ describe('parse', () => {
   it('should handle number input', () => {
     expect(() => parse(123)).toThrowError(locales.invalid)
   })
+
+  describe('namespace normalization integration', () => {
+    it('should handle feeds with no namespaces', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>Simple Feed</title>
+            <link>http://example.com</link>
+            <description>Simple Description</description>
+            <item>
+              <title>Simple Item</title>
+              <link>http://example.com/item</link>
+              <description>Simple Item Description</description>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Simple Feed',
+        link: 'http://example.com',
+        description: 'Simple Description',
+        items: [
+          {
+            title: 'Simple Item',
+            link: 'http://example.com/item',
+            description: 'Simple Item Description',
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should normalize custom prefixes to standard prefixes', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0" xmlns:custom="http://purl.org/dc/elements/1.1/">
+          <channel>
+            <title>RSS Feed</title>
+            <link>http://example.com</link>
+            <description>RSS Feed Description</description>
+            <item>
+              <title>Item Title</title>
+              <link>http://example.com/item</link>
+              <description>Item Description</description>
+              <custom:creator>John Doe</custom:creator>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'RSS Feed',
+        link: 'http://example.com',
+        description: 'RSS Feed Description',
+        items: [
+          {
+            title: 'Item Title',
+            link: 'http://example.com/item',
+            description: 'Item Description',
+            dc: {
+              creator: 'John Doe',
+            },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle namespace declarations in nested elements', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>RSS Feed</title>
+            <link>http://example.com</link>
+            <description>RSS Feed Description</description>
+            <item xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <title>Item Title</title>
+              <link>http://example.com/item1</link>
+              <description>Item Description</description>
+              <dc:creator>John Doe</dc:creator>
+              <dc:date>2023-01-01</dc:date>
+            </item>
+            <item>
+              <title>Item Without Namespace</title>
+              <link>http://example.com/item2</link>
+              <description>Item Description</description>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'RSS Feed',
+        link: 'http://example.com',
+        description: 'RSS Feed Description',
+        items: [
+          {
+            title: 'Item Title',
+            link: 'http://example.com/item1',
+            description: 'Item Description',
+            dc: {
+              creator: 'John Doe',
+              date: '2023-01-01',
+            },
+          },
+          {
+            title: 'Item Without Namespace',
+            link: 'http://example.com/item2',
+            description: 'Item Description',
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle mixed case with namespace logic', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <RSS version="2.0" xmlns:DC="http://purl.org/dc/elements/1.1/">
+          <Channel>
+            <TITLE>Feed Title</TITLE>
+            <LINK>http://example.com</LINK>
+            <DESCRIPTION>Feed Description</DESCRIPTION>
+            <Item>
+              <Title>Item Title</Title>
+              <Link>http://example.com/item</Link>
+              <Description>Item Description</Description>
+              <DC:Creator>John Doe</DC:Creator>
+            </Item>
+          </Channel>
+        </RSS>
+      `
+      const expected = {
+        title: 'Feed Title',
+        link: 'http://example.com',
+        description: 'Feed Description',
+        items: [
+          {
+            title: 'Item Title',
+            link: 'http://example.com/item',
+            description: 'Item Description',
+            dc: {
+              creator: 'John Doe',
+            },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle self-closing elements with namespace declarations', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>RSS Feed</title>
+            <link>http://example.com</link>
+            <description>RSS Feed Description</description>
+            <item>
+              <title>Item 1</title>
+              <link>http://example.com/item1</link>
+              <description>Item Description</description>
+              <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://example.com/thumb.jpg"/>
+            </item>
+            <item>
+              <title>Item 2</title>
+              <link>http://example.com/item2</link>
+              <description>No media namespace here</description>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'RSS Feed',
+        link: 'http://example.com',
+        description: 'RSS Feed Description',
+        items: [
+          {
+            title: 'Item 1',
+            link: 'http://example.com/item1',
+            description: 'Item Description',
+            media: {
+              thumbnails: [
+                {
+                  url: 'http://example.com/thumb.jpg',
+                },
+              ],
+            },
+          },
+          {
+            title: 'Item 2',
+            link: 'http://example.com/item2',
+            description: 'No media namespace here',
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+  })
 })
