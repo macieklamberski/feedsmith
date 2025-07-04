@@ -279,4 +279,267 @@ describe('parse', () => {
 
     expect(result).toEqual(expected)
   })
+
+  describe('namespace normalization integration', () => {
+    it('should handle feeds with no namespace', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed>
+          <title>Simple Feed</title>
+          <id>urn:uuid:12345</id>
+          <updated>2024-01-01T00:00:00Z</updated>
+          <entry>
+            <title>Simple Entry</title>
+            <id>urn:uuid:67890</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Simple Feed',
+        id: 'urn:uuid:12345',
+        updated: '2024-01-01T00:00:00Z',
+        entries: [
+          {
+            title: 'Simple Entry',
+            id: 'urn:uuid:67890',
+            updated: '2024-01-01T00:00:00Z',
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle default Atom namespace with primary namespace', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <title>Test Feed</title>
+          <id>urn:uuid:12345</id>
+          <updated>2024-01-01T00:00:00Z</updated>
+          <entry>
+            <title>Test Entry</title>
+            <id>urn:uuid:67890</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Test Feed',
+        id: 'urn:uuid:12345',
+        updated: '2024-01-01T00:00:00Z',
+        entries: [
+          {
+            title: 'Test Entry',
+            id: 'urn:uuid:67890',
+            updated: '2024-01-01T00:00:00Z',
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle custom Atom prefix with primary namespace', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <a:feed xmlns:a="http://www.w3.org/2005/Atom">
+          <a:title>Test Feed</a:title>
+          <a:id>urn:uuid:12345</a:id>
+          <a:updated>2024-01-01T00:00:00Z</a:updated>
+          <a:entry>
+            <a:title>Test Entry</a:title>
+            <a:id>urn:uuid:67890</a:id>
+            <a:updated>2024-01-01T00:00:00Z</a:updated>
+          </a:entry>
+        </a:feed>
+      `
+      const expected = {
+        title: 'Test Feed',
+        id: 'urn:uuid:12345',
+        updated: '2024-01-01T00:00:00Z',
+        entries: [
+          {
+            title: 'Test Entry',
+            id: 'urn:uuid:67890',
+            updated: '2024-01-01T00:00:00Z',
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should normalize custom prefixes to standard prefixes', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom" xmlns:custom="http://purl.org/dc/elements/1.1/">
+          <title>Atom Feed</title>
+          <id>urn:uuid:12345</id>
+          <updated>2024-01-01T00:00:00Z</updated>
+          <entry>
+            <title>Entry Title</title>
+            <id>urn:uuid:67890</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <custom:creator>John Doe</custom:creator>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Atom Feed',
+        id: 'urn:uuid:12345',
+        updated: '2024-01-01T00:00:00Z',
+        entries: [
+          {
+            title: 'Entry Title',
+            id: 'urn:uuid:67890',
+            updated: '2024-01-01T00:00:00Z',
+            dc: {
+              creator: 'John Doe',
+            },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle namespace declarations in nested elements', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <title>Atom Feed</title>
+          <id>urn:uuid:12345</id>
+          <updated>2024-01-01T00:00:00Z</updated>
+          <entry xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <title>Entry Title</title>
+            <id>urn:uuid:67890</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <dc:creator>John Doe</dc:creator>
+            <dc:date>2023-01-01</dc:date>
+          </entry>
+          <entry>
+            <title>Entry Without Namespace</title>
+            <id>urn:uuid:abcdef</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Atom Feed',
+        id: 'urn:uuid:12345',
+        updated: '2024-01-01T00:00:00Z',
+        entries: [
+          {
+            title: 'Entry Title',
+            id: 'urn:uuid:67890',
+            updated: '2024-01-01T00:00:00Z',
+            dc: {
+              creator: 'John Doe',
+              date: '2023-01-01',
+            },
+          },
+          {
+            title: 'Entry Without Namespace',
+            id: 'urn:uuid:abcdef',
+            updated: '2024-01-01T00:00:00Z',
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle mixed case with namespace logic', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <FEED xmlns="http://www.w3.org/2005/Atom" xmlns:DC="http://purl.org/dc/elements/1.1/">
+          <TITLE>Feed Title</TITLE>
+          <ID>urn:uuid:12345</ID>
+          <UPDATED>2024-01-01T00:00:00Z</UPDATED>
+          <ENTRY>
+            <TITLE>Entry Title</TITLE>
+            <ID>urn:uuid:67890</ID>
+            <UPDATED>2024-01-01T00:00:00Z</UPDATED>
+            <DC:Creator>John Doe</DC:Creator>
+          </ENTRY>
+        </FEED>
+      `
+      const expected = {
+        title: 'Feed Title',
+        id: 'urn:uuid:12345',
+        updated: '2024-01-01T00:00:00Z',
+        entries: [
+          {
+            title: 'Entry Title',
+            id: 'urn:uuid:67890',
+            updated: '2024-01-01T00:00:00Z',
+            dc: {
+              creator: 'John Doe',
+            },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle self-closing elements with namespace declarations', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <title>Atom Feed</title>
+          <id>urn:uuid:12345</id>
+          <updated>2024-01-01T00:00:00Z</updated>
+          <entry>
+            <title>Entry 1</title>
+            <id>urn:uuid:67890</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://example.com/thumb.jpg"/>
+          </entry>
+          <entry>
+            <title>Entry 2</title>
+            <id>urn:uuid:abcdef</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <summary>No media namespace here</summary>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Atom Feed',
+        id: 'urn:uuid:12345',
+        updated: '2024-01-01T00:00:00Z',
+        entries: [
+          {
+            title: 'Entry 1',
+            id: 'urn:uuid:67890',
+            updated: '2024-01-01T00:00:00Z',
+            media: {
+              thumbnails: [
+                {
+                  url: 'http://example.com/thumb.jpg',
+                },
+              ],
+            },
+          },
+          {
+            title: 'Entry 2',
+            id: 'urn:uuid:abcdef',
+            updated: '2024-01-01T00:00:00Z',
+            summary: 'No media namespace here',
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+  })
 })

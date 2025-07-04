@@ -1,4 +1,5 @@
-import { parserConfig as baseParserConfig } from '../../common/config.js'
+import { XMLParser } from 'fast-xml-parser'
+import { parserConfig } from '../../common/config.js'
 
 export const stopNodes = [
   'opml.head.title',
@@ -17,4 +18,7 @@ export const stopNodes = [
   '*.outline.outline',
 ]
 
-export const parserConfig = { ...baseParserConfig, stopNodes }
+export const parser = new XMLParser({
+  ...parserConfig,
+  stopNodes,
+})
