@@ -11,7 +11,7 @@ export const parse = (value: unknown): DeepPartial<Feed<string>> => {
     throw new Error(locales.invalid)
   }
 
-  const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+  const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.rdf)
 
   const object = parser.parse(value)
   const normalized = normalizeNamespaces(object)

@@ -79,11 +79,11 @@ describe('parse', () => {
   })
 
   describe('namespace normalization integration', () => {
-    it('should handle feeds with no additional namespaces', () => {
+    it('should handle RDF 1.0 feeds with no additional namespaces', () => {
       const input = `
         <?xml version="1.0" encoding="UTF-8"?>
-        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://channel.netscape.com/rdf/simple/0.9/">
-          <channel>
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
+          <channel rdf:about="http://example.com">
             <title>Simple Feed</title>
             <link>http://example.com</link>
             <description>Simple Description</description>
@@ -112,31 +112,31 @@ describe('parse', () => {
       expect(result).toEqual(expected)
     })
 
-    it('should handle default namespace without primary namespace', () => {
+    it('should handle rdf root element without namespace prefix nor definition', () => {
       const input = `
         <?xml version="1.0" encoding="UTF-8"?>
-        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://channel.netscape.com/rdf/simple/0.9/">
+        <rdf>
           <channel>
-            <title>Test Feed</title>
+            <title>RDF Feed</title>
             <link>http://example.com</link>
-            <description>Test Description</description>
+            <description>RDF Feed Description</description>
           </channel>
-          <item rdf:about="http://example.com/item1">
-            <title>Test Item</title>
+          <item about="http://example.com/item1">
+            <title>Item Title</title>
             <link>http://example.com/item1</link>
-            <description>Test Item Description</description>
+            <description>Item Description</description>
           </item>
-        </rdf:RDF>
+        </rdf>
       `
       const expected = {
-        title: 'Test Feed',
+        title: 'RDF Feed',
         link: 'http://example.com',
-        description: 'Test Description',
+        description: 'RDF Feed Description',
         items: [
           {
-            title: 'Test Item',
+            title: 'Item Title',
             link: 'http://example.com/item1',
-            description: 'Test Item Description',
+            description: 'Item Description',
           },
         ],
       }
@@ -145,14 +145,80 @@ describe('parse', () => {
       expect(result).toEqual(expected)
     })
 
-    it('should normalize custom prefixes to standard prefixes', () => {
+    it('should handle RDF 0.9 with non-prefixed root element', () => {
       const input = `
         <?xml version="1.0" encoding="UTF-8"?>
-        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://channel.netscape.com/rdf/simple/0.9/" xmlns:custom="http://purl.org/dc/elements/1.1/">
+        <rdf xmlns="http://channel.netscape.com/rdf/simple/0.9/">
           <channel>
-            <title>RDF Feed</title>
+            <title>RDF 0.9 Feed</title>
             <link>http://example.com</link>
-            <description>RDF Feed Description</description>
+            <description>RDF 0.9 Feed Description</description>
+          </channel>
+          <item about="http://example.com/item1">
+            <title>Item Title</title>
+            <link>http://example.com/item1</link>
+            <description>Item Description</description>
+          </item>
+        </rdf>
+      `
+      const expected = {
+        title: 'RDF 0.9 Feed',
+        link: 'http://example.com',
+        description: 'RDF 0.9 Feed Description',
+        items: [
+          {
+            title: 'Item Title',
+            link: 'http://example.com/item1',
+            description: 'Item Description',
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle RDF 0.9 with default namespace', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://channel.netscape.com/rdf/simple/0.9/">
+          <channel>
+            <title>RDF 0.9 Feed</title>
+            <link>http://example.com</link>
+            <description>RDF 0.9 Description</description>
+          </channel>
+          <item rdf:about="http://example.com/item1">
+            <title>RDF 0.9 Item</title>
+            <link>http://example.com/item1</link>
+            <description>RDF 0.9 Item Description</description>
+          </item>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'RDF 0.9 Feed',
+        link: 'http://example.com',
+        description: 'RDF 0.9 Description',
+        items: [
+          {
+            title: 'RDF 0.9 Item',
+            link: 'http://example.com/item1',
+            description: 'RDF 0.9 Item Description',
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should normalize custom prefixes to standard prefixes in RDF 1.0', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/" xmlns:custom="http://purl.org/dc/elements/1.1/">
+          <channel rdf:about="http://example.com">
+            <title>RDF 1.0 Feed</title>
+            <link>http://example.com</link>
+            <description>RDF 1.0 Feed Description</description>
           </channel>
           <item rdf:about="http://example.com/item1">
             <title>Item Title</title>
@@ -163,9 +229,9 @@ describe('parse', () => {
         </rdf:RDF>
       `
       const expected = {
-        title: 'RDF Feed',
+        title: 'RDF 1.0 Feed',
         link: 'http://example.com',
-        description: 'RDF Feed Description',
+        description: 'RDF 1.0 Feed Description',
         items: [
           {
             title: 'Item Title',
@@ -182,14 +248,14 @@ describe('parse', () => {
       expect(result).toEqual(expected)
     })
 
-    it('should handle namespace declarations in nested elements', () => {
+    it('should handle namespace declarations in nested elements in RDF 0.9', () => {
       const input = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://channel.netscape.com/rdf/simple/0.9/">
           <channel>
-            <title>RDF Feed</title>
+            <title>RDF 0.9 Feed</title>
             <link>http://example.com</link>
-            <description>RDF Feed Description</description>
+            <description>RDF 0.9 Feed Description</description>
           </channel>
           <item rdf:about="http://example.com/item1" xmlns:dc="http://purl.org/dc/elements/1.1/">
             <title>Item Title</title>
@@ -206,9 +272,9 @@ describe('parse', () => {
         </rdf:RDF>
       `
       const expected = {
-        title: 'RDF Feed',
+        title: 'RDF 0.9 Feed',
         link: 'http://example.com',
-        description: 'RDF Feed Description',
+        description: 'RDF 0.9 Feed Description',
         items: [
           {
             title: 'Item Title',
@@ -231,10 +297,10 @@ describe('parse', () => {
       expect(result).toEqual(expected)
     })
 
-    it('should handle mixed case with namespace logic', () => {
+    it('should handle mixed case with namespace logic in RDF 1.0', () => {
       const input = `
         <?xml version="1.0" encoding="UTF-8"?>
-        <RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://channel.netscape.com/rdf/simple/0.9/" xmlns:DC="http://purl.org/dc/elements/1.1/">
+        <RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/" xmlns:DC="http://purl.org/dc/elements/1.1/">
           <CHANNEL>
             <TITLE>Feed Title</TITLE>
             <LINK>http://example.com</LINK>
@@ -268,10 +334,10 @@ describe('parse', () => {
       expect(result).toEqual(expected)
     })
 
-    it('should handle self-closing elements with namespace declarations', () => {
+    it('should handle self-closing elements with namespace declarations in RDF 1.0', () => {
       const input = `
         <?xml version="1.0" encoding="UTF-8"?>
-        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://channel.netscape.com/rdf/simple/0.9/">
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
           <channel>
             <title>RDF Feed</title>
             <link>http://example.com</link>
