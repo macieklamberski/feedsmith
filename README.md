@@ -65,7 +65,7 @@ Feedsmith provides both universal and format-specific parsers that maintain the 
 
 ### Namespaces
 
-| Name | Prefix<sup>*</sup> | Supported in | Parsing | Generating |
+| Name | Prefix[^1] | Supported in | Parsing | Generating |
 |------|---------|--------------|---------|------------|
 | [Atom](http://www.w3.org/2005/Atom) | `<atom:*>` | RSS, RDF | ✅ | ✅ |
 | [Dublin Core](http://purl.org/dc/elements/1.1/) | `<dc:*>` | RSS, Atom, RDF | ✅ | ✅ |
@@ -84,7 +84,7 @@ Feedsmith provides both universal and format-specific parsers that maintain the 
 | [GML](http://www.opengis.net/gml) | `<gml:*>` | 📋 | 📋 | 📋 |
 | [GeoRSS GML](http://www.opengis.net/gml) | `<georss:*>` | 📋 | 📋 | 📋 |
 
-* Custom namespace prefixes are automatically normalized to standard ones (e.g., `<custom:creator>` → `dc.creator`).
+[^1]: Custom namespace prefixes are automatically normalized to standard ones (e.g., `<custom:creator>` → `dc.creator`).
 
 ### Other
 
