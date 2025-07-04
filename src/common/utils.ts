@@ -463,10 +463,10 @@ export const createNamespaceNormalizator = (
     if (isObject(element)) {
       for (const key in element) {
         if (key === '@xmlns') {
-          declarations[''] = element[key] as string
+          declarations[''] = element[key]
         } else if (key.indexOf('@xmlns:') === 0) {
           const prefix = key.substring('@xmlns:'.length)
-          declarations[prefix] = element[key] as string
+          declarations[prefix] = element[key]
         }
       }
     }
