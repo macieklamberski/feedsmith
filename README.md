@@ -33,6 +33,7 @@ Feedsmith provides both universal and format-specific parsers that maintain the 
 #### Leniency
 * **Normalizes legacy elements** ✨ — Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
 * **CaSe INSENsiTive** — Handles fields and attributes in any case (lowercase, uppercase, mixed).
+* **Smart namespace handling** — Automatically normalizes custom namespace prefixes to standard ones (e.g., `<custom:creator>` becomes `dc.creator`).
 
 #### Performance and type-safety
 * **Fast parsing** — One of the fastest feed parsers in JavaScript (see [benchmarks](#benchmarks)).
@@ -64,9 +65,9 @@ Feedsmith provides both universal and format-specific parsers that maintain the 
 
 ### Namespaces
 
-| Name | Prefix | Supported in | Parsing | Generating |
-|------|--------|--------------|---------|------------|
-| [Atom](http://www.w3.org/2005/Atom) | `<atom:*>`, `<a10:*>` | RSS, RDF | ✅ | ✅ |
+| Name | Prefix<sup>*</sup> | Supported in | Parsing | Generating |
+|------|---------|--------------|---------|------------|
+| [Atom](http://www.w3.org/2005/Atom) | `<atom:*>` | RSS, RDF | ✅ | ✅ |
 | [Dublin Core](http://purl.org/dc/elements/1.1/) | `<dc:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Syndication](http://purl.org/rss/1.0/modules/syndication/) | `<sy:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Content](http://purl.org/rss/1.0/modules/content/) | `<content:*>` | RSS, RDF | ✅ | ✅ |
@@ -82,6 +83,8 @@ Feedsmith provides both universal and format-specific parsers that maintain the 
 | [Administrative](https://web.resource.org/rss/1.0/modules/admin/) | `<admin:*>` | 📋 | 📋 | 📋 |
 | [GML](http://www.opengis.net/gml) | `<gml:*>` | 📋 | 📋 | 📋 |
 | [GeoRSS GML](http://www.opengis.net/gml) | `<georss:*>` | 📋 | 📋 | 📋 |
+
+* Custom namespace prefixes are automatically normalized to standard ones (e.g., `<custom:creator>` → `dc.creator`).
 
 ### Other
 
