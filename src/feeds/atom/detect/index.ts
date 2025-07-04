@@ -5,7 +5,6 @@ export const detect = (value: unknown): value is string => {
     return false
   }
 
-  // Look for feed element (unprefixed or with any prefix)
   const hasFeedElement = /(?:^|\s|>)\s*<(?:\w+:)?feed[\s>]/im.test(value)
 
   if (!hasFeedElement) {

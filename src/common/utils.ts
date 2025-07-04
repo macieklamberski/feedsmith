@@ -447,7 +447,6 @@ export const createNamespaceNormalizators = (
 
   const normalize = (name: string, useDefault = false): string => {
     const colonIndex = name.indexOf(':')
-    const lowerName = name.toLowerCase()
 
     // Handle unprefixed elements with default namespace.
     if (colonIndex === -1) {
@@ -456,23 +455,23 @@ export const createNamespaceNormalizators = (
 
         // If the default namespace is the primary namespace, keep unprefixed.
         if (primaryNamespace && context[''] === primaryNamespace) {
-          return lowerName
+          return name
         }
 
         if (context['']) {
           const standardPrefix = namespacesMap[context['']]
 
           if (standardPrefix) {
-            return `${standardPrefix}:${lowerName}`
+            return `${standardPrefix}:${name}`
           }
         }
       }
 
-      return lowerName
+      return name
     }
 
     const prefix = name.substring(0, colonIndex)
-    const unprefixedName = lowerName.substring(colonIndex + 1)
+    const unprefixedName = name.substring(colonIndex + 1)
     const uri = contextStack[contextStack.length - 1][prefix]
 
     if (uri) {
@@ -488,10 +487,11 @@ export const createNamespaceNormalizators = (
       }
     }
 
-    return lowerName
+    return name
   }
 
   const updateTag = (tagName: string, jPath: string, attrs: Record<string, unknown>): string => {
+    const lowerTagName = tagName.toLowerCase()
     const currentDepth = jPath.split('.').length
 
     // Pop contexts from elements at same or deeper depth (self-closing/siblings).
@@ -504,15 +504,14 @@ export const createNamespaceNormalizators = (
     const declarations: Record<string, string> = {}
 
     if (attrs) {
-      if ('@xmlns' in attrs) {
-        declarations[''] = attrs['@xmlns'] as string
-      }
-
       for (const key in attrs) {
-        if (key.indexOf('@xmlns:') === 0) {
-          const prefix = key.substring('@xmlns:'.length)
+        const lowerKey = key.toLowerCase()
 
-          declarations[prefix] = attrs[key] as string
+        if (lowerKey === '@xmlns') {
+          declarations[''] = attrs[lowerKey] as string
+        } else if (lowerKey.indexOf('@xmlns:') === 0) {
+          const prefix = lowerKey.substring('@xmlns:'.length)
+          declarations[prefix] = attrs[lowerKey] as string
         }
       }
     }
@@ -520,15 +519,17 @@ export const createNamespaceNormalizators = (
     // Push new context if namespace declarations was found.
     if (Object.keys(declarations).length > 0) {
       contextStack.push({ ...contextStack[contextStack.length - 1], ...declarations })
-      elementStack.push({ name: tagName, depth: currentDepth })
+      elementStack.push({ name: lowerTagName, depth: currentDepth })
     }
 
-    return normalize(tagName, true)
+    return normalize(lowerTagName, true)
   }
 
   const transformTagName = (tagName: string): string => {
-    if (tagName.indexOf('/') === 0) {
-      const elementName = tagName.substring(1)
+    const lowerTagName = tagName.toLowerCase()
+
+    if (lowerTagName.indexOf('/') === 0) {
+      const elementName = lowerTagName.substring(1)
       const normalizedElementName = normalize(elementName, true)
 
       // Pop context if this element created one.
@@ -539,22 +540,25 @@ export const createNamespaceNormalizators = (
 
       return `/${normalizedElementName}`
     }
-    return normalize(tagName, true)
+
+    return normalize(lowerTagName, true)
   }
 
   const transformAttributeName = (attrName: string): string => {
-    if (attrName.indexOf('@xmlns') === 0) {
-      return attrName
+    const lowerAttrName = attrName.toLowerCase()
+
+    if (lowerAttrName.indexOf('@xmlns') === 0) {
+      return lowerAttrName
     }
 
-    if (attrName.indexOf('@') === 0) {
-      const nameWithoutPrefix = attrName.substring(1)
+    if (lowerAttrName.indexOf('@') === 0) {
+      const nameWithoutPrefix = lowerAttrName.substring(1)
       const normalizedNameWithoutPrefix = normalize(nameWithoutPrefix, false)
 
       return `@${normalizedNameWithoutPrefix}`
     }
 
-    return normalize(attrName, false)
+    return normalize(lowerAttrName, false)
   }
 
   const getCurrentContext = () => ({ ...contextStack[contextStack.length - 1] })
