@@ -32,14 +32,14 @@ Feedsmith provides both universal and format-specific parsers that maintain the 
 
 #### Leniency
 * **Normalizes legacy elements** ✨ — Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
-* **CaSe INSENsiTive** — Handles fields and attributes in any case (lowercase, uppercase, mixed).
-* **Smart namespace handling** — Automatically normalizes custom namespace prefixes to standard ones (e.g., `<custom:creator>` becomes `dc.creator`).
+* **CaSe INSENsiTive** 🐍 — Handles fields and attributes in any case (lowercase, uppercase, mixed).
+* **Smart namespace handling** 🧠 — Automatically normalizes custom namespace prefixes to standard ones (e.g., `<custom:creator>` becomes `dc.creator`).
 
 #### Performance and type-safety
-* **Fast parsing** — One of the fastest feed parsers in JavaScript (see [benchmarks](#benchmarks)).
-* **Type-safe API** — TypeScript type definitions are available for each feed format, making it easy to work with the data.
-* **Tree-shakable** — Only include the parts of the library you need, reducing bundle size.
-* **Well-tested** — Comprehensive test suite with over 2000 tests and 99% code coverage.
+* **Fast parsing** 🏎️ — One of the fastest feed parsers in JavaScript (see [benchmarks](#benchmarks)).
+* **Type-safe API** 🛟 — TypeScript type definitions are available for each feed format, making it easy to work with the data.
+* **Tree-shakable** 🍃 — Only include the parts of the library you need, reducing bundle size.
+* **Well-tested** 🔬 — Comprehensive test suite with over 2000 tests and 99% code coverage.
 
 #### Compatibility
 * Works in Node.js and all modern browsers.
