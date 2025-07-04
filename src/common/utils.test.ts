@@ -2610,45 +2610,27 @@ describe('invertObject', () => {
 
 describe('createNamespaceNormalizator', () => {
   describe('XML parsing integration tests', () => {
-    const baseConfig = {
+    const parser = new XMLParser({
       trimValues: true,
       ignoreAttributes: false,
       ignoreDeclaration: true,
       attributeNamePrefix: '@',
       transformTagName: (name: string) => name.toLowerCase(),
       transformAttributeName: (name: string) => name.toLowerCase(),
-      ignoreText: (text: string) => text.trim() === '',
-    }
-
-    // Helper function to create a parser with namespace normalization
-    const createNamespaceParser = (
-      namespaceUrls: Record<string, string>,
-      primaryNamespace?: string,
-    ) => {
-      const postProcess = createNamespaceNormalizator(namespaceUrls, primaryNamespace)
-      const parser = new XMLParser(baseConfig)
-
-      // Override parse to apply post-processing
-      const originalParse = parser.parse.bind(parser)
-      parser.parse = (xml: string) => {
-        const result = originalParse(xml)
-        return postProcess(result)
-      }
-
-      return parser
-    }
+    })
 
     describe('default namespace handling', () => {
       it('should handle default Atom namespace with primary namespace', () => {
-        const parser = createNamespaceParser(namespaceUrls, namespaceUrls.atom)
-        const value = `
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
+        const value = parser.parse(`
           <?xml version="1.0"?>
           <feed xmlns="http://www.w3.org/2005/Atom">
             <title>Test Feed</title>
             <entry>
               <title>Test Entry</title>
             </entry>
-          </feed>`
+          </feed>
+        `)
         const expected = {
           feed: {
             title: 'Test Feed',
@@ -2659,16 +2641,17 @@ describe('createNamespaceNormalizator', () => {
           },
         }
 
-        expect(parser.parse(value)).toEqual(expected)
+        expect(normalizeNamespaces(value)).toEqual(expected)
       })
 
       it('should handle default namespace without primary namespace', () => {
-        const parser = createNamespaceParser(namespaceUrls)
-        const value = `
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
           <?xml version="1.0"?>
           <feed xmlns="http://www.w3.org/2005/Atom">
             <title>Test Feed</title>
-          </feed>`
+          </feed>
+        `)
         const expected = {
           'atom:feed': {
             'atom:title': 'Test Feed',
@@ -2676,14 +2659,14 @@ describe('createNamespaceNormalizator', () => {
           },
         }
 
-        expect(parser.parse(value)).toEqual(expected)
+        expect(normalizeNamespaces(value)).toEqual(expected)
       })
     })
 
     describe('prefixed namespace handling', () => {
       it('should normalize custom prefixes to standard prefixes', () => {
-        const parser = createNamespaceParser(namespaceUrls)
-        const value = `
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
           <?xml version="1.0"?>
           <rss xmlns:custom="http://purl.org/dc/elements/1.1/">
             <channel>
@@ -2693,7 +2676,8 @@ describe('createNamespaceNormalizator', () => {
                 <custom:creator>John Doe</custom:creator>
               </item>
             </channel>
-          </rss>`
+          </rss>
+        `)
         const expected = {
           rss: {
             channel: {
@@ -2707,19 +2691,20 @@ describe('createNamespaceNormalizator', () => {
           },
         }
 
-        expect(parser.parse(value)).toEqual(expected)
+        expect(normalizeNamespaces(value)).toEqual(expected)
       })
 
       it('should handle custom Atom prefix with primary namespace', () => {
-        const parser = createNamespaceParser(namespaceUrls, namespaceUrls.atom)
-        const value = `
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
+        const value = parser.parse(`
           <?xml version="1.0"?>
           <a:feed xmlns:a="http://www.w3.org/2005/Atom">
             <a:title>Test Feed</a:title>
             <a:entry>
               <a:title>Test Entry</a:title>
             </a:entry>
-          </a:feed>`
+          </a:feed>
+        `)
         const expected = {
           feed: {
             title: 'Test Feed',
@@ -2730,14 +2715,14 @@ describe('createNamespaceNormalizator', () => {
           },
         }
 
-        expect(parser.parse(value)).toEqual(expected)
+        expect(normalizeNamespaces(value)).toEqual(expected)
       })
     })
 
     describe('nested namespace declarations', () => {
       it('should handle namespace declarations in nested elements', () => {
-        const parser = createNamespaceParser(namespaceUrls)
-        const value = `
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
           <?xml version="1.0"?>
           <rss>
             <channel>
@@ -2750,7 +2735,8 @@ describe('createNamespaceNormalizator', () => {
                 <title>Item Without Namespace</title>
               </item>
             </channel>
-          </rss>`
+          </rss>
+        `)
         const expected = {
           rss: {
             channel: {
@@ -2769,15 +2755,15 @@ describe('createNamespaceNormalizator', () => {
           },
         }
 
-        expect(parser.parse(value)).toEqual(expected)
+        expect(normalizeNamespaces(value)).toEqual(expected)
       })
 
       it('should handle namespace redefinition in nested elements', () => {
-        const parser = createNamespaceParser({
+        const normalizeNamespaces = createNamespaceNormalizator({
           v1: 'http://example.com/v1',
           v2: 'http://example.com/v2',
         })
-        const value = `
+        const value = parser.parse(`
           <?xml version="1.0"?>
           <root xmlns:ns="http://example.com/v1">
             <ns:element>Version 1</ns:element>
@@ -2785,7 +2771,8 @@ describe('createNamespaceNormalizator', () => {
               <ns:element>Version 2</ns:element>
             </child>
             <ns:element>Version 1 Again</ns:element>
-          </root>`
+          </root>
+        `)
         const expected = {
           root: {
             'v1:element': ['Version 1', 'Version 1 Again'],
@@ -2797,17 +2784,14 @@ describe('createNamespaceNormalizator', () => {
           },
         }
 
-        expect(parser.parse(value)).toEqual(expected)
+        expect(normalizeNamespaces(value)).toEqual(expected)
       })
     })
 
     describe('mixed case handling', () => {
       it('should normalize element names to lowercase while preserving namespace logic', () => {
-        const parser = new XMLParser({
-          ...baseConfig,
-          ...createNamespaceNormalizator(namespaceUrls),
-        })
-        const value = `
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
           <?xml version="1.0"?>
           <RSS xmlns:DC="http://purl.org/dc/elements/1.1/">
             <Channel>
@@ -2817,7 +2801,8 @@ describe('createNamespaceNormalizator', () => {
                 <DC:Creator>John Doe</DC:Creator>
               </Item>
             </Channel>
-          </RSS>`
+          </RSS>
+        `)
         const expected = {
           rss: {
             channel: {
@@ -2831,17 +2816,14 @@ describe('createNamespaceNormalizator', () => {
           },
         }
 
-        expect(parser.parse(value)).toEqual(expected)
+        expect(normalizeNamespaces(value)).toEqual(expected)
       })
     })
 
     describe('self-closing elements with namespaces', () => {
       it('should handle self-closing elements with namespace declarations', () => {
-        const parser = new XMLParser({
-          ...baseConfig,
-          ...createNamespaceNormalizator(namespaceUrls),
-        })
-        const value = `
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
           <?xml version="1.0"?>
           <rss>
             <channel>
@@ -2854,7 +2836,8 @@ describe('createNamespaceNormalizator', () => {
                 <description>No media namespace here</description>
               </item>
             </channel>
-          </rss>`
+          </rss>
+        `)
         const expected = {
           rss: {
             channel: {
@@ -2875,17 +2858,14 @@ describe('createNamespaceNormalizator', () => {
           },
         }
 
-        expect(parser.parse(value)).toEqual(expected)
+        expect(normalizeNamespaces(value)).toEqual(expected)
       })
     })
 
     describe('multiple namespaces in same document', () => {
       it('should handle multiple namespaces simultaneously', () => {
-        const parser = new XMLParser({
-          ...baseConfig,
-          ...createNamespaceNormalizator(namespaceUrls),
-        })
-        const value = `
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
           <?xml version="1.0"?>
           <rss xmlns:dc="http://purl.org/dc/elements/1.1/"
             xmlns:content="http://purl.org/rss/1.0/modules/content/"
@@ -2903,7 +2883,8 @@ describe('createNamespaceNormalizator', () => {
                 </media:group>
               </item>
             </channel>
-          </rss>`
+          </rss>
+        `)
         const expected = {
           rss: {
             channel: {
@@ -2927,21 +2908,19 @@ describe('createNamespaceNormalizator', () => {
           },
         }
 
-        expect(parser.parse(value)).toEqual(expected)
+        expect(normalizeNamespaces(value)).toEqual(expected)
       })
     })
 
     describe('edge cases', () => {
       it('should handle empty namespace URIs', () => {
-        const parser = new XMLParser({
-          ...baseConfig,
-          ...createNamespaceNormalizator(namespaceUrls),
-        })
-        const value = `
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
           <?xml version="1.0"?>
           <root xmlns="">
             <element>No namespace</element>
-          </root>`
+          </root>
+        `)
         const expected = {
           root: {
             element: 'No namespace',
@@ -2949,19 +2928,17 @@ describe('createNamespaceNormalizator', () => {
           },
         }
 
-        expect(parser.parse(value)).toEqual(expected)
+        expect(normalizeNamespaces(value)).toEqual(expected)
       })
 
       it('should handle unknown namespaces gracefully', () => {
-        const parser = new XMLParser({
-          ...baseConfig,
-          ...createNamespaceNormalizator(namespaceUrls),
-        })
-        const value = `
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
           <?xml version="1.0"?>
           <root xmlns:unknown="http://unknown.example.com/">
             <unknown:element>Unknown namespace</unknown:element>
-          </root>`
+          </root>
+        `)
         const expected = {
           root: {
             'unknown:element': 'Unknown namespace',
@@ -2969,20 +2946,18 @@ describe('createNamespaceNormalizator', () => {
           },
         }
 
-        expect(parser.parse(value)).toEqual(expected)
+        expect(normalizeNamespaces(value)).toEqual(expected)
       })
 
       it('should handle case-insensitive xmlns attributes', () => {
-        const parser = new XMLParser({
-          ...baseConfig,
-          ...createNamespaceNormalizator(namespaceUrls),
-        })
-        const value = `
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
           <?xml version="1.0"?>
           <root XMLNS:DC="http://purl.org/dc/elements/1.1/" xmlns:ATOM="http://www.w3.org/2005/Atom">
             <DC:creator>Author Name</DC:creator>
             <ATOM:title>Title</ATOM:title>
-          </root>`
+          </root>
+        `)
         const expected = {
           root: {
             'dc:creator': 'Author Name',
@@ -2992,15 +2967,12 @@ describe('createNamespaceNormalizator', () => {
           },
         }
 
-        expect(parser.parse(value)).toEqual(expected)
+        expect(normalizeNamespaces(value)).toEqual(expected)
       })
 
       it('should handle complex nesting with namespace inheritance', () => {
-        const parser = new XMLParser({
-          ...baseConfig,
-          ...createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom),
-        })
-        const value = `
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
+        const value = parser.parse(`
           <?xml version="1.0"?>
           <feed xmlns="http://www.w3.org/2005/Atom">
             <entry xmlns:dc="http://purl.org/dc/elements/1.1/">
@@ -3012,7 +2984,8 @@ describe('createNamespaceNormalizator', () => {
                 </xhtml:div>
               </content>
             </entry>
-          </feed>`
+          </feed>
+        `)
         const expected = {
           feed: {
             entry: {
@@ -3030,7 +3003,7 @@ describe('createNamespaceNormalizator', () => {
           },
         }
 
-        expect(parser.parse(value)).toEqual(expected)
+        expect(normalizeNamespaces(value)).toEqual(expected)
       })
     })
   })
