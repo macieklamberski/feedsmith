@@ -437,34 +437,53 @@ export const invertObject = (object: Record<string, string>): Record<string, str
   return inverted
 }
 
-export const createNamespaceNormalizators = (
+export const createNamespaceNormalizator = (
   namespaceUrls: Record<string, string>,
   primaryNamespace?: string,
 ) => {
   const namespacesMap = invertObject(namespaceUrls)
-  const contextStack: Array<Record<string, string>> = [{}]
-  const elementStack: Array<{ name: string; depth: number }> = []
 
-  const normalize = (name: string, useDefault = false): string => {
+  const resolveNamespacePrefix = (uri: string, localName: string, fallback: string): string => {
+    if (primaryNamespace && uri === primaryNamespace) {
+      return localName
+    }
+
+    const standardPrefix = namespacesMap[uri]
+
+    if (standardPrefix) {
+      return `${standardPrefix}:${localName}`
+    }
+
+    return fallback
+  }
+
+  const extractNamespaceDeclarations = (element: Unreliable): Record<string, string> => {
+    const declarations: Record<string, string> = {}
+
+    if (isObject(element)) {
+      for (const key in element) {
+        if (key === '@xmlns') {
+          declarations[''] = element[key] as string
+        } else if (key.indexOf('@xmlns:') === 0) {
+          const prefix = key.substring('@xmlns:'.length)
+          declarations[prefix] = element[key] as string
+        }
+      }
+    }
+
+    return declarations
+  }
+
+  const normalizeWithContext = (
+    name: string,
+    context: Record<string, string>,
+    useDefault = false,
+  ): string => {
     const colonIndex = name.indexOf(':')
 
-    // Handle unprefixed elements with default namespace.
     if (colonIndex === -1) {
-      if (useDefault) {
-        const context = contextStack[contextStack.length - 1]
-
-        // If the default namespace is the primary namespace, keep unprefixed.
-        if (primaryNamespace && context[''] === primaryNamespace) {
-          return name
-        }
-
-        if (context['']) {
-          const standardPrefix = namespacesMap[context['']]
-
-          if (standardPrefix) {
-            return `${standardPrefix}:${name}`
-          }
-        }
+      if (useDefault && context['']) {
+        return resolveNamespacePrefix(context[''], name, name)
       }
 
       return name
@@ -472,104 +491,104 @@ export const createNamespaceNormalizators = (
 
     const prefix = name.substring(0, colonIndex)
     const unprefixedName = name.substring(colonIndex + 1)
-    const uri = contextStack[contextStack.length - 1][prefix]
+    const uri = context[prefix]
 
     if (uri) {
-      // If this namespace is the primary namespace, remove prefix.
-      if (primaryNamespace && uri === primaryNamespace) {
-        return unprefixedName
-      }
-
-      const standardPrefix = namespacesMap[uri]
-
-      if (standardPrefix) {
-        return `${standardPrefix}:${unprefixedName}`
-      }
+      return resolveNamespacePrefix(uri, unprefixedName, name)
     }
 
     return name
   }
 
-  const updateTag = (tagName: string, jPath: string, attrs: Record<string, unknown>): string => {
-    const lowerTagName = tagName.toLowerCase()
-    const currentDepth = jPath.split('.').length
+  const normalizeKey = (key: string, context: Record<string, string>): string => {
+    if (key.indexOf('@') === 0) {
+      const attrName = key.substring(1)
+      const normalizedAttrName = normalizeWithContext(attrName, context, false)
 
-    // Pop contexts from elements at same or deeper depth (self-closing/siblings).
-    while (elementStack.length > 0 && elementStack[elementStack.length - 1].depth >= currentDepth) {
-      contextStack.pop()
-      elementStack.pop()
+      return `@${normalizedAttrName}`
+    } else {
+      return normalizeWithContext(key, context, true)
+    }
+  }
+
+  const traverseAndNormalize = (
+    object: Unreliable,
+    parentContext: Record<string, string> = {},
+  ): Unreliable => {
+    if (!isObject(object)) {
+      return object
     }
 
-    // Extract namespace declarations.
-    const declarations: Record<string, string> = {}
+    if (Array.isArray(object)) {
+      return object.map((item) => traverseAndNormalize(item, parentContext))
+    }
 
-    if (attrs) {
-      for (const key in attrs) {
-        const lowerKey = key.toLowerCase()
+    const normalizedObject: Unreliable = {}
+    const keyGroups: Map<string, Unreliable[]> = new Map()
 
-        if (lowerKey === '@xmlns') {
-          declarations[''] = attrs[lowerKey] as string
-        } else if (lowerKey.indexOf('@xmlns:') === 0) {
-          const prefix = lowerKey.substring('@xmlns:'.length)
-          declarations[prefix] = attrs[lowerKey] as string
-        }
+    for (const key in object) {
+      const value = object[key]
+
+      if (key.indexOf('@xmlns') === 0) {
+        normalizedObject[key] = value
+        continue
+      }
+
+      const declarations = extractNamespaceDeclarations(object)
+      const currentContext = { ...parentContext, ...declarations }
+      const normalizedKey = normalizeKey(key, currentContext)
+      const normalizedValue = traverseAndNormalize(value, currentContext)
+
+      if (!keyGroups.has(normalizedKey)) {
+        keyGroups.set(normalizedKey, [])
+      }
+
+      const group = keyGroups.get(normalizedKey)
+
+      if (group) {
+        group.push(normalizedValue)
       }
     }
 
-    // Push new context if namespace declarations was found.
-    if (Object.keys(declarations).length > 0) {
-      contextStack.push({ ...contextStack[contextStack.length - 1], ...declarations })
-      elementStack.push({ name: lowerTagName, depth: currentDepth })
-    }
-
-    return normalize(lowerTagName, true)
-  }
-
-  const transformTagName = (tagName: string): string => {
-    const lowerTagName = tagName.toLowerCase()
-
-    if (lowerTagName.indexOf('/') === 0) {
-      const elementName = lowerTagName.substring(1)
-      const normalizedElementName = normalize(elementName, true)
-
-      // Pop context if this element created one.
-      if (elementStack.length > 0 && elementStack[elementStack.length - 1].name === elementName) {
-        contextStack.pop()
-        elementStack.pop()
+    for (const [normalizedKey, values] of keyGroups) {
+      if (values.length === 1) {
+        normalizedObject[normalizedKey] = values[0]
+      } else {
+        normalizedObject[normalizedKey] = values
       }
-
-      return `/${normalizedElementName}`
     }
 
-    return normalize(lowerTagName, true)
+    return normalizedObject
   }
 
-  const transformAttributeName = (attrName: string): string => {
-    const lowerAttrName = attrName.toLowerCase()
-
-    if (lowerAttrName.indexOf('@xmlns') === 0) {
-      return lowerAttrName
+  // For the root level, we need to handle the special case where the root element
+  // itself has namespace declarations that apply to its own normalization.
+  const normalizeRoot = (object: Unreliable): Unreliable => {
+    if (!isObject(object)) {
+      return object
     }
 
-    if (lowerAttrName.indexOf('@') === 0) {
-      const nameWithoutPrefix = lowerAttrName.substring(1)
-      const normalizedNameWithoutPrefix = normalize(nameWithoutPrefix, false)
-
-      return `@${normalizedNameWithoutPrefix}`
+    if (Array.isArray(object)) {
+      return object.map((item) => normalizeRoot(item))
     }
 
-    return normalize(lowerAttrName, false)
+    const normalizedObject: Unreliable = {}
+
+    for (const key in object) {
+      const value = object[key]
+
+      // Extract namespace declarations from the value to see if they apply to the key.
+      const declarations = extractNamespaceDeclarations(value)
+      // If this element has declarations, use them to normalize its own key.
+      const normalizedKey = Object.keys(declarations).length ? normalizeKey(key, declarations) : key
+      // Process the value with empty parent context since this is root.
+      const normalizedValue = traverseAndNormalize(value)
+
+      normalizedObject[normalizedKey] = normalizedValue
+    }
+
+    return normalizedObject
   }
 
-  const getCurrentContext = () => ({ ...contextStack[contextStack.length - 1] })
-
-  const getStackDepth = () => contextStack.length
-
-  return {
-    updateTag,
-    transformTagName,
-    transformAttributeName,
-    getCurrentContext,
-    getStackDepth,
-  }
+  return normalizeRoot
 }
