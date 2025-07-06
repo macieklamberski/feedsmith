@@ -1,7 +1,8 @@
 {
   "branches": [
+    "main",
     {
-      "name": "main",
+      "name": "next",
       "channel": "next",
       "prerelease": "next"
     }

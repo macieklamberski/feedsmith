@@ -1,13 +1,15 @@
-name: Release
+name: Prerelease
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - next
 
 jobs:
   test:
     uses: ./.github/workflows/test.yml
 
-  release:
+  prerelease:
     needs: test
     permissions:
       contents: write
@@ -29,7 +31,7 @@ jobs:
       - name: Build package
         run: bun run build
 
-      - name: Release and publish package
+      - name: Release and publish prerelease
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
