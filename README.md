@@ -11,9 +11,10 @@ Feedsmith provides both universal and format-specific parsers that maintain the 
 
 > [!IMPORTANT]
 >
-> You're viewing the README for the next version of Feedsmith, which is in the final stages of development. While the codebase is stable, the API may still undergo slight changes. For production use, it is recommended to use the latest stable version, 1.9.0:
+> You're viewing the README for the next version of Feedsmith (v2.0), which includes major improvements and breaking changes. While the codebase is stable, the API may still undergo slight changes. This version is currently only available through the `next` channel for early testing. For production use, it is recommended to use the latest stable version.
 > ```bash
-> npm install feedsmith@1.9.0
+> npm install feedsmith@latest # Stable version 1.9.0
+> npm install feedsmith@next   # Development version 2.0.0-next.x
 > ```
 
 [Features](#supported-formats)
