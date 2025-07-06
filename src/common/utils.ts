@@ -1,5 +1,5 @@
 import { decodeHTML, decodeXML } from 'entities'
-import { type X2jOptions, type XMLBuilder, XMLParser } from 'fast-xml-parser'
+import type { XMLBuilder } from 'fast-xml-parser'
 import type { AnyOf, GenerateFunction, ParseExactFunction, Unreliable } from './types.js'
 
 export const isPresent = <T>(value: T): value is NonNullable<T> => {
@@ -351,7 +351,7 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
 
         seenKeys.add(key)
 
-        const keyWithoutAt = key.startsWith('@') ? key.slice(1) : key
+        const keyWithoutAt = key.indexOf('@') === 0 ? key.slice(1) : key
         const colonIndex = keyWithoutAt.indexOf(':')
 
         if (colonIndex > 0) {
@@ -437,9 +437,159 @@ export const invertObject = (object: Record<string, string>): Record<string, str
   return inverted
 }
 
-export const createCustomParser = (config?: X2jOptions): XMLParser => {
-  // This will be later used to create isolated namespace normalization context.
-  // TODO: There should be an optional second parameter that will disable
-  // namespace normalization (not needed for OPML).
-  return new XMLParser(config)
+export const createNamespaceNormalizator = (
+  namespaceUrls: Record<string, string>,
+  primaryNamespace?: string,
+) => {
+  const namespacesMap = invertObject(namespaceUrls)
+
+  const resolveNamespacePrefix = (uri: string, localName: string, fallback: string): string => {
+    if (primaryNamespace && uri === primaryNamespace) {
+      return localName
+    }
+
+    const standardPrefix = namespacesMap[uri]
+
+    if (standardPrefix) {
+      return `${standardPrefix}:${localName}`
+    }
+
+    return fallback
+  }
+
+  const extractNamespaceDeclarations = (element: Unreliable): Record<string, string> => {
+    const declarations: Record<string, string> = {}
+
+    if (isObject(element)) {
+      for (const key in element) {
+        if (key === '@xmlns') {
+          declarations[''] = element[key]
+        } else if (key.indexOf('@xmlns:') === 0) {
+          const prefix = key.substring('@xmlns:'.length)
+          declarations[prefix] = element[key]
+        }
+      }
+    }
+
+    return declarations
+  }
+
+  const normalizeWithContext = (
+    name: string,
+    context: Record<string, string>,
+    useDefault = false,
+  ): string => {
+    const colonIndex = name.indexOf(':')
+
+    if (colonIndex === -1) {
+      if (useDefault && context['']) {
+        return resolveNamespacePrefix(context[''], name, name)
+      }
+
+      return name
+    }
+
+    const prefix = name.substring(0, colonIndex)
+    const unprefixedName = name.substring(colonIndex + 1)
+    const uri = context[prefix]
+
+    if (uri) {
+      return resolveNamespacePrefix(uri, unprefixedName, name)
+    }
+
+    return name
+  }
+
+  const normalizeKey = (key: string, context: Record<string, string>): string => {
+    if (key.indexOf('@') === 0) {
+      const attrName = key.substring(1)
+      const normalizedAttrName = normalizeWithContext(attrName, context, false)
+
+      return `@${normalizedAttrName}`
+    } else {
+      return normalizeWithContext(key, context, true)
+    }
+  }
+
+  const traverseAndNormalize = (
+    object: Unreliable,
+    parentContext: Record<string, string> = {},
+  ): Unreliable => {
+    if (!isObject(object)) {
+      return object
+    }
+
+    if (Array.isArray(object)) {
+      return object.map((item) => traverseAndNormalize(item, parentContext))
+    }
+
+    const normalizedObject: Unreliable = {}
+    const keyGroups: Map<string, Unreliable[]> = new Map()
+
+    const declarations = extractNamespaceDeclarations(object)
+    const currentContext = { ...parentContext, ...declarations }
+
+    for (const key in object) {
+      const value = object[key]
+
+      if (key.indexOf('@xmlns') === 0) {
+        normalizedObject[key] = value
+        continue
+      }
+
+      const normalizedKey = normalizeKey(key, currentContext)
+      const normalizedValue = traverseAndNormalize(value, currentContext)
+
+      if (!keyGroups.has(normalizedKey)) {
+        keyGroups.set(normalizedKey, [])
+      }
+
+      const group = keyGroups.get(normalizedKey)
+
+      if (group) {
+        group.push(normalizedValue)
+      }
+    }
+
+    for (const [normalizedKey, values] of keyGroups) {
+      if (values.length === 1) {
+        normalizedObject[normalizedKey] = values[0]
+      } else {
+        normalizedObject[normalizedKey] = values
+      }
+    }
+
+    return normalizedObject
+  }
+
+  // For the root level, we need to handle the special case where the root element
+  // itself has namespace declarations that apply to its own normalization.
+  const normalizeRoot = (object: Unreliable): Unreliable => {
+    if (!isObject(object)) {
+      return object
+    }
+
+    if (Array.isArray(object)) {
+      return object.map(normalizeRoot)
+    }
+
+    const normalizedObject: Unreliable = {}
+
+    for (const key in object) {
+      const value = object[key]
+
+      // Extract namespace declarations from the value to see if they apply to the key.
+      const declarations = extractNamespaceDeclarations(value)
+      // If this element has declarations, use them to normalize its own key.
+      const normalizedKey = Object.keys(declarations).length ? normalizeKey(key, declarations) : key
+      // Process the value with empty parent context since this is root.
+      const normalizedValue = traverseAndNormalize(value)
+
+      normalizedObject[normalizedKey] = normalizedValue
+    }
+
+    return normalizedObject
+  }
+
+  return normalizeRoot
 }

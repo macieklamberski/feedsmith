@@ -116,5 +116,5 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
 }
 
 export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
-  return parseSingularOf(value?.['rdf:rdf'], parseFeed)
+  return parseSingularOf(value?.rdf, parseFeed)
 }

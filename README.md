@@ -32,13 +32,14 @@ Feedsmith provides both universal and format-specific parsers that maintain the 
 
 #### Leniency
 * **Normalizes legacy elements** ✨ — Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
-* **CaSe INSENsiTive** — Handles fields and attributes in any case (lowercase, uppercase, mixed).
+* **CaSe INSENsiTive** 🐍 — Handles fields and attributes in any case (lowercase, uppercase, mixed).
+* **Smart namespace handling** 🧠 — Automatically normalizes custom namespace prefixes to standard ones (e.g., `<custom:creator>` becomes `dc.creator`).
 
 #### Performance and type-safety
-* **Fast parsing** — One of the fastest feed parsers in JavaScript (see [benchmarks](#benchmarks)).
-* **Type-safe API** — TypeScript type definitions are available for each feed format, making it easy to work with the data.
-* **Tree-shakable** — Only include the parts of the library you need, reducing bundle size.
-* **Well-tested** — Comprehensive test suite with over 2000 tests and 99% code coverage.
+* **Fast parsing** 🏎️ — One of the fastest feed parsers in JavaScript (see [benchmarks](#benchmarks)).
+* **Type-safe API** 🛟 — TypeScript type definitions are available for each feed format, making it easy to work with the data.
+* **Tree-shakable** 🍃 — Only include the parts of the library you need, reducing bundle size.
+* **Well-tested** 🔬 — Comprehensive test suite with over 2000 tests and 99% code coverage.
 
 #### Compatibility
 * Works in Node.js and all modern browsers.
@@ -64,9 +65,9 @@ Feedsmith provides both universal and format-specific parsers that maintain the 
 
 ### Namespaces
 
-| Name | Prefix | Supported in | Parsing | Generating |
-|------|--------|--------------|---------|------------|
-| [Atom](http://www.w3.org/2005/Atom) | `<atom:*>`, `<a10:*>` | RSS, RDF | ✅ | ✅ |
+| Name | Prefix[^1] | Supported in | Parsing | Generating |
+|------|---------|--------------|---------|------------|
+| [Atom](http://www.w3.org/2005/Atom) | `<atom:*>` | RSS, RDF | ✅ | ✅ |
 | [Dublin Core](http://purl.org/dc/elements/1.1/) | `<dc:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Syndication](http://purl.org/rss/1.0/modules/syndication/) | `<sy:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Content](http://purl.org/rss/1.0/modules/content/) | `<content:*>` | RSS, RDF | ✅ | ✅ |
@@ -82,6 +83,8 @@ Feedsmith provides both universal and format-specific parsers that maintain the 
 | [Administrative](https://web.resource.org/rss/1.0/modules/admin/) | `<admin:*>` | 📋 | 📋 | 📋 |
 | [GML](http://www.opengis.net/gml) | `<gml:*>` | 📋 | 📋 | 📋 |
 | [GeoRSS GML](http://www.opengis.net/gml) | `<georss:*>` | 📋 | 📋 | 📋 |
+
+[^1]: Custom namespace prefixes are automatically normalized to standard ones (e.g., `<custom:creator>` → `dc.creator`).
 
 ### Other
 

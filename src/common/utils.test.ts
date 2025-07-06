@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'bun:test'
-import type { XMLBuilder } from 'fast-xml-parser'
-import { XMLParser } from 'fast-xml-parser'
+import { type XMLBuilder, XMLParser } from 'fast-xml-parser'
+import { namespaceUrls } from './config.js'
 import type { ParseExactFunction } from './types.js'
 import {
-  createCustomParser,
+  createNamespaceNormalizator,
   detectNamespaces,
   generateBoolean,
   generateCdataString,
@@ -2608,57 +2608,502 @@ describe('invertObject', () => {
   })
 })
 
-describe('createCustomParser', () => {
-  it('should return an XMLParser instance', () => {
-    const parser = createCustomParser()
+describe('createNamespaceNormalizator', () => {
+  describe('XML parsing integration tests', () => {
+    const parser = new XMLParser({
+      trimValues: true,
+      ignoreAttributes: false,
+      ignoreDeclaration: true,
+      attributeNamePrefix: '@',
+      transformTagName: (name: string) => name.toLowerCase(),
+      transformAttributeName: (name: string) => name.toLowerCase(),
+    })
 
-    expect(parser).toBeInstanceOf(XMLParser)
-  })
+    describe('default namespace handling', () => {
+      it('should handle default Atom namespace with primary namespace', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <feed xmlns="http://www.w3.org/2005/Atom">
+            <title>Test Feed</title>
+            <entry>
+              <title>Test Entry</title>
+            </entry>
+          </feed>
+        `)
+        const expected = {
+          feed: {
+            title: 'Test Feed',
+            entry: {
+              title: 'Test Entry',
+            },
+            '@xmlns': 'http://www.w3.org/2005/Atom',
+          },
+        }
 
-  it('should create separate parser instances on each call', () => {
-    const parser1 = createCustomParser()
-    const parser2 = createCustomParser()
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
 
-    expect(parser1).not.toBe(parser2)
-  })
+      it('should handle default namespace without primary namespace', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <feed xmlns="http://www.w3.org/2005/Atom">
+            <title>Test Feed</title>
+          </feed>
+        `)
+        const expected = {
+          'atom:feed': {
+            'atom:title': 'Test Feed',
+            '@xmlns': 'http://www.w3.org/2005/Atom',
+          },
+        }
 
-  it('should merge base config with provided config', () => {
-    const parser = createCustomParser({ trimValues: true, parseTagValue: true })
-    const value = '<test>  value  </test>'
-    const expected = { test: 'value' }
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
 
-    expect(parser.parse(value)).toEqual(expected)
-  })
+    describe('prefixed namespace handling', () => {
+      it('should normalize custom prefixes to standard prefixes', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <rss xmlns:custom="http://purl.org/dc/elements/1.1/">
+            <channel>
+              <title>RSS Feed</title>
+              <item>
+                <title>Item Title</title>
+                <custom:creator>John Doe</custom:creator>
+              </item>
+            </channel>
+          </rss>
+        `)
+        const expected = {
+          rss: {
+            channel: {
+              title: 'RSS Feed',
+              item: {
+                title: 'Item Title',
+                'dc:creator': 'John Doe',
+              },
+            },
+            '@xmlns:custom': 'http://purl.org/dc/elements/1.1/',
+          },
+        }
 
-  it('should allow custom config to override base config', () => {
-    const parser = createCustomParser({ trimValues: true })
-    const value = '<test>  spaced  </test>'
-    const expected = { test: 'spaced' }
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
 
-    expect(parser.parse(value)).toEqual(expected)
-  })
+      it('should handle custom Atom prefix with primary namespace', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <a:feed xmlns:a="http://www.w3.org/2005/Atom">
+            <a:title>Test Feed</a:title>
+            <a:entry>
+              <a:title>Test Entry</a:title>
+            </a:entry>
+          </a:feed>
+        `)
+        const expected = {
+          feed: {
+            title: 'Test Feed',
+            entry: {
+              title: 'Test Entry',
+            },
+            '@xmlns:a': 'http://www.w3.org/2005/Atom',
+          },
+        }
 
-  it('should handle stopNodes config', () => {
-    const parser = createCustomParser({ stopNodes: ['test.inner'] })
-    const value = '<test><inner>value</inner></test>'
-    const expected = { test: { inner: 'value' } }
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
 
-    expect(parser.parse(value)).toEqual(expected)
-  })
+    describe('nested namespace declarations', () => {
+      it('should handle namespace declarations in nested elements', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <rss>
+            <channel>
+              <item xmlns:dc="http://purl.org/dc/elements/1.1/">
+                <title>Item Title</title>
+                <dc:creator>John Doe</dc:creator>
+                <dc:date>2023-01-01</dc:date>
+              </item>
+              <item>
+                <title>Item Without Namespace</title>
+              </item>
+            </channel>
+          </rss>
+        `)
+        const expected = {
+          rss: {
+            channel: {
+              item: [
+                {
+                  title: 'Item Title',
+                  'dc:creator': 'John Doe',
+                  'dc:date': '2023-01-01',
+                  '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+                },
+                {
+                  title: 'Item Without Namespace',
+                },
+              ],
+            },
+          },
+        }
 
-  it('should handle attributeNamePrefix config', () => {
-    const parser = createCustomParser({ attributeNamePrefix: '@', ignoreAttributes: false })
-    const value = '<test attr="value">content</test>'
-    const expected = { test: { '@attr': 'value', '#text': 'content' } }
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
 
-    expect(parser.parse(value)).toEqual(expected)
-  })
+      it('should handle namespace redefinition in nested elements', () => {
+        const normalizeNamespaces = createNamespaceNormalizator({
+          v1: 'http://example.com/v1',
+          v2: 'http://example.com/v2',
+        })
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root xmlns:ns="http://example.com/v1">
+            <ns:element>Version 1</ns:element>
+            <child xmlns:ns="http://example.com/v2">
+              <ns:element>Version 2</ns:element>
+            </child>
+            <ns:element>Version 1 Again</ns:element>
+          </root>
+        `)
+        const expected = {
+          root: {
+            'v1:element': ['Version 1', 'Version 1 Again'],
+            child: {
+              'v2:element': 'Version 2',
+              '@xmlns:ns': 'http://example.com/v2',
+            },
+            '@xmlns:ns': 'http://example.com/v1',
+          },
+        }
 
-  it('should handle empty config object', () => {
-    const parser = createCustomParser()
-    const value = '<simple>test</simple>'
-    const expected = { simple: 'test' }
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
 
-    expect(parser.parse(value)).toEqual(expected)
+    describe('mixed case handling', () => {
+      it('should normalize element names to lowercase while preserving namespace logic', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <RSS xmlns:DC="http://purl.org/dc/elements/1.1/">
+            <Channel>
+              <TITLE>Feed Title</TITLE>
+              <Item>
+                <Title>Item Title</Title>
+                <DC:Creator>John Doe</DC:Creator>
+              </Item>
+            </Channel>
+          </RSS>
+        `)
+        const expected = {
+          rss: {
+            channel: {
+              title: 'Feed Title',
+              item: {
+                title: 'Item Title',
+                'dc:creator': 'John Doe',
+              },
+            },
+            '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
+
+    describe('self-closing elements with namespaces', () => {
+      it('should handle self-closing elements with namespace declarations', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <rss>
+            <channel>
+              <item>
+                <title>Item 1</title>
+                <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://example.com/thumb.jpg"/>
+              </item>
+              <item>
+                <title>Item 2</title>
+                <description>No media namespace here</description>
+              </item>
+            </channel>
+          </rss>
+        `)
+        const expected = {
+          rss: {
+            channel: {
+              item: [
+                {
+                  title: 'Item 1',
+                  'media:thumbnail': {
+                    '@url': 'http://example.com/thumb.jpg',
+                    '@xmlns:media': 'http://search.yahoo.com/mrss/',
+                  },
+                },
+                {
+                  title: 'Item 2',
+                  description: 'No media namespace here',
+                },
+              ],
+            },
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
+
+    describe('multiple namespaces in same document', () => {
+      it('should handle multiple namespaces simultaneously', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <rss
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:content="http://purl.org/rss/1.0/modules/content/"
+            xmlns:media="http://search.yahoo.com/mrss/"
+          >
+            <channel>
+              <item>
+                <title>Multi-namespace Item</title>
+                <dc:creator>John Doe</dc:creator>
+                <dc:date>2023-01-01</dc:date>
+                <content:encoded><![CDATA[Rich content]]></content:encoded>
+                <media:group>
+                  <media:content url="video.mp4" type="video/mp4"/>
+                  <media:description>Video description</media:description>
+                </media:group>
+              </item>
+            </channel>
+          </rss>
+        `)
+        const expected = {
+          rss: {
+            channel: {
+              item: {
+                title: 'Multi-namespace Item',
+                'dc:creator': 'John Doe',
+                'dc:date': '2023-01-01',
+                'content:encoded': 'Rich content',
+                'media:group': {
+                  'media:content': {
+                    '@url': 'video.mp4',
+                    '@type': 'video/mp4',
+                  },
+                  'media:description': 'Video description',
+                },
+              },
+            },
+            '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            '@xmlns:content': 'http://purl.org/rss/1.0/modules/content/',
+            '@xmlns:media': 'http://search.yahoo.com/mrss/',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
+
+    describe('edge cases', () => {
+      it('should handle empty namespace URIs', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root xmlns="">
+            <element>No namespace</element>
+          </root>
+        `)
+        const expected = {
+          root: {
+            element: 'No namespace',
+            '@xmlns': '',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should handle unknown namespaces gracefully', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root xmlns:unknown="http://unknown.example.com/">
+            <unknown:element>Unknown namespace</unknown:element>
+          </root>
+        `)
+        const expected = {
+          root: {
+            'unknown:element': 'Unknown namespace',
+            '@xmlns:unknown': 'http://unknown.example.com/',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should handle case-insensitive xmlns attributes', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root
+            XMLNS:DC="http://purl.org/dc/elements/1.1/"
+            xmlns:ATOM="http://www.w3.org/2005/Atom"
+          >
+            <DC:creator>Author Name</DC:creator>
+            <ATOM:title>Title</ATOM:title>
+          </root>
+        `)
+        const expected = {
+          root: {
+            'dc:creator': 'Author Name',
+            'atom:title': 'Title',
+            '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            '@xmlns:atom': 'http://www.w3.org/2005/Atom',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should handle complex nesting with namespace inheritance', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <feed xmlns="http://www.w3.org/2005/Atom">
+            <entry xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <title>Entry Title</title>
+              <dc:creator>Author</dc:creator>
+              <content xmlns:xhtml="http://www.w3.org/1999/xhtml">
+                <xhtml:div>
+                  <xhtml:p>Rich content</xhtml:p>
+                </xhtml:div>
+              </content>
+            </entry>
+          </feed>
+        `)
+        const expected = {
+          feed: {
+            entry: {
+              title: 'Entry Title',
+              'dc:creator': 'Author',
+              content: {
+                'xhtml:div': {
+                  'xhtml:p': 'Rich content',
+                },
+                '@xmlns:xhtml': 'http://www.w3.org/1999/xhtml',
+              },
+              '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            },
+            '@xmlns': 'http://www.w3.org/2005/Atom',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
+
+    describe('unhappy path scenarios', () => {
+      it('should handle non-object input gracefully', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+
+        expect(normalizeNamespaces(null)).toBe(null)
+        expect(normalizeNamespaces(undefined)).toBe(undefined)
+        expect(normalizeNamespaces('string')).toBe('string')
+        expect(normalizeNamespaces(123)).toBe(123)
+        expect(normalizeNamespaces(true)).toBe(true)
+      })
+
+      it('should handle conflicting namespace declarations in siblings', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root>
+            <item1 xmlns:custom="http://purl.org/dc/elements/1.1/">
+              <custom:creator>Author 1</custom:creator>
+            </item1>
+            <item2 xmlns:custom="http://search.yahoo.com/mrss/">
+              <custom:title>Title 2</custom:title>
+            </item2>
+          </root>
+        `)
+        const expected = {
+          root: {
+            item1: {
+              'dc:creator': 'Author 1',
+              '@xmlns:custom': 'http://purl.org/dc/elements/1.1/',
+            },
+            item2: {
+              'media:title': 'Title 2',
+              '@xmlns:custom': 'http://search.yahoo.com/mrss/',
+            },
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should handle namespace declarations without usage', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:media="http://search.yahoo.com/mrss/"
+          >
+            <title>No namespaced elements</title>
+            <description>Just plain elements</description>
+          </root>
+        `)
+        const expected = {
+          root: {
+            title: 'No namespaced elements',
+            description: 'Just plain elements',
+            '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            '@xmlns:media': 'http://search.yahoo.com/mrss/',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should handle mixed valid and invalid namespace values', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = {
+          root: {
+            '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            '@xmlns:invalid1': '',
+            '@xmlns:invalid2': '   ',
+            '@xmlns:valid': 'http://example.com/',
+            'dc:creator': 'John Doe',
+            'invalid1:element': 'Value 1',
+            'invalid2:element': 'Value 2',
+            'valid:element': 'Value 3',
+          },
+        }
+        const expected = {
+          root: {
+            '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            '@xmlns:invalid1': '',
+            '@xmlns:invalid2': '   ',
+            '@xmlns:valid': 'http://example.com/',
+            'dc:creator': 'John Doe',
+            'invalid1:element': 'Value 1',
+            'invalid2:element': 'Value 2',
+            'valid:element': 'Value 3',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
   })
 })
