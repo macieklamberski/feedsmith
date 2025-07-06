@@ -526,6 +526,9 @@ export const createNamespaceNormalizator = (
     const normalizedObject: Unreliable = {}
     const keyGroups: Map<string, Unreliable[]> = new Map()
 
+    const declarations = extractNamespaceDeclarations(object)
+    const currentContext = { ...parentContext, ...declarations }
+
     for (const key in object) {
       const value = object[key]
 
@@ -534,8 +537,6 @@ export const createNamespaceNormalizator = (
         continue
       }
 
-      const declarations = extractNamespaceDeclarations(object)
-      const currentContext = { ...parentContext, ...declarations }
       const normalizedKey = normalizeKey(key, currentContext)
       const normalizedValue = traverseAndNormalize(value, currentContext)
 
