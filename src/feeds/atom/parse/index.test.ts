@@ -541,5 +541,57 @@ describe('parse', () => {
 
       expect(result).toEqual(expected)
     })
+
+    it('should handle namespace URIs with leading/trailing whitespace', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom"
+              xmlns:dc="  http://purl.org/dc/elements/1.1/  "
+              xmlns:media=" http://search.yahoo.com/mrss/ "
+              xmlns:thr="	http://purl.org/syndication/thread/1.0	">
+          <title>Atom Feed</title>
+          <id>urn:uuid:12345</id>
+          <updated>2024-01-01T00:00:00Z</updated>
+          <entry>
+            <title>Entry Title</title>
+            <id>urn:uuid:67890</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <dc:creator>John Doe</dc:creator>
+            <dc:date>2023-01-01</dc:date>
+            <media:title>Media Title</media:title>
+            <thr:in-reply-to ref="urn:uuid:parent-id" />
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Atom Feed',
+        id: 'urn:uuid:12345',
+        updated: '2024-01-01T00:00:00Z',
+        entries: [
+          {
+            title: 'Entry Title',
+            id: 'urn:uuid:67890',
+            updated: '2024-01-01T00:00:00Z',
+            dc: {
+              creator: 'John Doe',
+              date: '2023-01-01',
+            },
+            media: {
+              title: { value: 'Media Title' },
+            },
+            thr: {
+              inReplyTos: [
+                {
+                  ref: 'urn:uuid:parent-id',
+                },
+              ],
+            },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
   })
 })

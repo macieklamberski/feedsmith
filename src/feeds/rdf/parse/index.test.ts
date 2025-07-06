@@ -384,5 +384,61 @@ describe('parse', () => {
 
       expect(result).toEqual(expected)
     })
+
+    it('should handle namespace URIs with leading/trailing whitespace', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/"
+          xmlns:dc="  http://purl.org/dc/elements/1.1/  "
+          xmlns:sy=" http://purl.org/rss/1.0/modules/syndication/ "
+          xmlns:slash="	http://purl.org/rss/1.0/modules/slash/	">
+          <channel rdf:about="http://example.com">
+            <title>RDF Feed</title>
+            <link>http://example.com</link>
+            <description>RDF Feed Description</description>
+            <dc:creator>Feed Author</dc:creator>
+            <sy:updatePeriod>hourly</sy:updatePeriod>
+          </channel>
+          <item rdf:about="http://example.com/item1">
+            <title>Item Title</title>
+            <link>http://example.com/item1</link>
+            <description>Item Description</description>
+            <dc:creator>John Doe</dc:creator>
+            <dc:date>2023-01-01</dc:date>
+            <slash:comments>42</slash:comments>
+          </item>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'RDF Feed',
+        link: 'http://example.com',
+        description: 'RDF Feed Description',
+        dc: {
+          creator: 'Feed Author',
+        },
+        sy: {
+          updatePeriod: 'hourly',
+        },
+        items: [
+          {
+            title: 'Item Title',
+            link: 'http://example.com/item1',
+            description: 'Item Description',
+            dc: {
+              creator: 'John Doe',
+              date: '2023-01-01',
+            },
+            slash: {
+              comments: 42,
+            },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
   })
 })

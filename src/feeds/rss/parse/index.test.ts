@@ -308,5 +308,57 @@ describe('parse', () => {
 
       expect(result).toEqual(expected)
     })
+
+    it('should handle namespace URIs with leading/trailing whitespace', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0"
+             xmlns:dc="  http://purl.org/dc/elements/1.1/  "
+             xmlns:media=" http://search.yahoo.com/mrss/ "
+             xmlns:content="	http://purl.org/rss/1.0/modules/content/	">
+          <channel>
+            <title>RSS Feed</title>
+            <link>http://example.com</link>
+            <description>RSS Feed Description</description>
+            <item>
+              <title>Item Title</title>
+              <link>http://example.com/item</link>
+              <description>Item Description</description>
+              <dc:creator>John Doe</dc:creator>
+              <dc:date>2023-01-01</dc:date>
+              <media:title>Media Title</media:title>
+              <content:encoded><![CDATA[<p>HTML content</p>]]></content:encoded>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'RSS Feed',
+        link: 'http://example.com',
+        description: 'RSS Feed Description',
+        items: [
+          {
+            title: 'Item Title',
+            link: 'http://example.com/item',
+            description: 'Item Description',
+            dc: {
+              creator: 'John Doe',
+              date: '2023-01-01',
+            },
+            media: {
+              title: {
+                value: 'Media Title',
+              },
+            },
+            content: {
+              encoded: '<p>HTML content</p>',
+            },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
   })
 })
