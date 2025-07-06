@@ -545,10 +545,12 @@ describe('parse', () => {
     it('should handle namespace URIs with leading/trailing whitespace', () => {
       const input = `
         <?xml version="1.0" encoding="UTF-8"?>
-        <feed xmlns="http://www.w3.org/2005/Atom"
-              xmlns:dc="  http://purl.org/dc/elements/1.1/  "
-              xmlns:media=" http://search.yahoo.com/mrss/ "
-              xmlns:thr="	http://purl.org/syndication/thread/1.0	">
+        <feed
+          xmlns="http://www.w3.org/2005/Atom"
+          xmlns:dc="  http://purl.org/dc/elements/1.1/  "
+          xmlns:media=" http://search.yahoo.com/mrss/ "
+          xmlns:thr="	http://purl.org/syndication/thread/1.0	"
+        >
           <title>Atom Feed</title>
           <id>urn:uuid:12345</id>
           <updated>2024-01-01T00:00:00Z</updated>
@@ -586,6 +588,136 @@ describe('parse', () => {
                 },
               ],
             },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle malformed namespace declarations in Atom feeds', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed
+          xmlns="http://www.w3.org/2005/Atom"
+          xmlns:123="http://example.com/invalid"
+          xmlns:dc=""
+        >
+          <title>Atom Feed</title>
+          <id>urn:uuid:12345</id>
+          <updated>2024-01-01T00:00:00Z</updated>
+          <entry>
+            <title>Entry Title</title>
+            <id>urn:uuid:67890</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <dc:creator>Should not normalize (empty URI)</dc:creator>
+            <123:field>Invalid prefix</123:field>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Atom Feed',
+        id: 'urn:uuid:12345',
+        updated: '2024-01-01T00:00:00Z',
+        entries: [
+          {
+            title: 'Entry Title',
+            id: 'urn:uuid:67890',
+            updated: '2024-01-01T00:00:00Z',
+            dc: {
+              creator: 'Should not normalize (empty URI)',
+            },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle Atom feed with wrong default namespace', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed
+          xmlns="http://example.com/not-atom"
+          xmlns:atom="http://www.w3.org/2005/Atom"
+        >
+          <atom:title>Atom Feed with Custom Default NS</atom:title>
+          <atom:id>urn:uuid:12345</atom:id>
+          <atom:updated>2024-01-01T00:00:00Z</atom:updated>
+          <customElement>This is in the wrong default namespace</customElement>
+        </feed>
+      `
+      const expected = {
+        title: 'Atom Feed with Custom Default NS',
+        id: 'urn:uuid:12345',
+        updated: '2024-01-01T00:00:00Z',
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle missing required Atom elements', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed
+          xmlns="http://www.w3.org/2005/Atom"
+          xmlns:dc="http://purl.org/dc/elements/1.1/"
+        >
+          <!-- Missing required id and updated -->
+          <title>Incomplete Feed</title>
+          <entry>
+            <!-- Missing required id, updated -->
+            <title>Incomplete Entry</title>
+            <dc:creator>John Doe</dc:creator>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Incomplete Feed',
+        entries: [
+          {
+            title: 'Incomplete Entry',
+            dc: {
+              creator: 'John Doe',
+            },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle namespace conflicts in nested Atom elements', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <title>Feed Title</title>
+          <id>urn:uuid:feed</id>
+          <updated>2024-01-01T00:00:00Z</updated>
+          <entry
+            xmlns="http://example.com/not-atom"
+            xmlns:atom="http://www.w3.org/2005/Atom"
+          >
+            <atom:title>Entry with different default namespace</atom:title>
+            <atom:id>urn:uuid:entry</atom:id>
+            <atom:updated>2024-01-01T00:00:00Z</atom:updated>
+            <customField>Not in Atom namespace</customField>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Feed Title',
+        id: 'urn:uuid:feed',
+        updated: '2024-01-01T00:00:00Z',
+        entries: [
+          {
+            title: 'Entry with different default namespace',
+            id: 'urn:uuid:entry',
+            updated: '2024-01-01T00:00:00Z',
           },
         ],
       }

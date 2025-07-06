@@ -393,7 +393,8 @@ describe('parse', () => {
           xmlns="http://purl.org/rss/1.0/"
           xmlns:dc="  http://purl.org/dc/elements/1.1/  "
           xmlns:sy=" http://purl.org/rss/1.0/modules/syndication/ "
-          xmlns:slash="	http://purl.org/rss/1.0/modules/slash/	">
+          xmlns:slash="	http://purl.org/rss/1.0/modules/slash/	"
+        >
           <channel rdf:about="http://example.com">
             <title>RDF Feed</title>
             <link>http://example.com</link>
@@ -433,6 +434,147 @@ describe('parse', () => {
             slash: {
               comments: 42,
             },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle malformed namespace declarations in RDF feeds', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/"
+          xmlns:123="http://example.com/invalid"
+          xmlns:dc=""
+        >
+          <channel rdf:about="http://example.com">
+            <title>RDF Feed</title>
+            <link>http://example.com</link>
+            <description>Feed with malformed namespaces</description>
+          </channel>
+          <item rdf:about="http://example.com/item1">
+            <title>Item Title</title>
+            <dc:creator>Should not normalize (empty URI)</dc:creator>
+            <123:field>Invalid prefix</123:field>
+          </item>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'RDF Feed',
+        link: 'http://example.com',
+        description: 'Feed with malformed namespaces',
+        items: [
+          {
+            title: 'Item Title',
+            dc: {
+              creator: 'Should not normalize (empty URI)',
+            },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle RDF with wrong primary namespace', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss:RDF
+          xmlns:rss="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://example.com/not-rss"
+        >
+          <channel rss:about="http://example.com">
+            <title>RDF with wrong namespace</title>
+            <link>http://example.com</link>
+          </channel>
+          <item rss:about="http://example.com/item1">
+            <title>Item Title</title>
+          </item>
+        </rss:RDF>
+      `
+      const expected = {
+        title: 'RDF with wrong namespace',
+        link: 'http://example.com',
+        items: [
+          {
+            title: 'Item Title',
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle missing required RDF elements', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/"
+          xmlns:dc="http://purl.org/dc/elements/1.1/"
+        >
+          <channel rdf:about="">
+            <!-- Missing required elements -->
+            <dc:creator>Channel Author</dc:creator>
+          </channel>
+          <item>
+            <!-- Missing rdf:about attribute -->
+            <title>Item without about</title>
+            <dc:creator>Item Author</dc:creator>
+          </item>
+        </rdf:RDF>
+      `
+      const expected = {
+        dc: {
+          creator: 'Channel Author',
+        },
+        items: [
+          {
+            title: 'Item without about',
+            dc: {
+              creator: 'Item Author',
+            },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle namespace conflicts between RDF versions', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+          <channel
+            rdf:about="http://example.com"
+            xmlns="http://channel.netscape.com/rdf/simple/0.9/"
+          >
+            <title>RDF 0.9 Channel</title>
+            <link>http://example.com</link>
+          </channel>
+          <item
+            rdf:about="http://example.com/item1"
+            xmlns="http://purl.org/rss/1.0/"
+          >
+            <title>RDF 1.0 Item</title>
+            <link>http://example.com/item1</link>
+          </item>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'RDF 0.9 Channel',
+        link: 'http://example.com',
+        items: [
+          {
+            title: 'RDF 1.0 Item',
+            link: 'http://example.com/item1',
           },
         ],
       }

@@ -312,10 +312,12 @@ describe('parse', () => {
     it('should handle namespace URIs with leading/trailing whitespace', () => {
       const input = `
         <?xml version="1.0" encoding="UTF-8"?>
-        <rss version="2.0"
-             xmlns:dc="  http://purl.org/dc/elements/1.1/  "
-             xmlns:media=" http://search.yahoo.com/mrss/ "
-             xmlns:content="	http://purl.org/rss/1.0/modules/content/	">
+        <rss
+          version="2.0"
+          xmlns:dc="  http://purl.org/dc/elements/1.1/  "
+          xmlns:media=" http://search.yahoo.com/mrss/ "
+          xmlns:content="	http://purl.org/rss/1.0/modules/content/	"
+        >
           <channel>
             <title>RSS Feed</title>
             <link>http://example.com</link>
@@ -352,6 +354,120 @@ describe('parse', () => {
             },
             content: {
               encoded: '<p>HTML content</p>',
+            },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle malformed namespace declarations gracefully', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss
+          version="2.0"
+          xmlns:123="http://example.com/invalid"
+          xmlns:="http://example.com/empty"
+          xmlns:dc=""
+        >
+          <channel>
+            <title>RSS Feed</title>
+            <link>http://example.com</link>
+            <description>Feed with malformed namespaces</description>
+            <item>
+              <title>Item Title</title>
+              <dc:creator>Should not be normalized (empty URI)</dc:creator>
+              <123:field>Invalid prefix starting with number</123:field>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'RSS Feed',
+        link: 'http://example.com',
+        description: 'Feed with malformed namespaces',
+        items: [
+          {
+            title: 'Item Title',
+            dc: {
+              creator: 'Should not be normalized (empty URI)',
+            },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle conflicting namespace usage', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>RSS Feed</title>
+            <link>http://example.com</link>
+            <description>Feed with conflicting namespaces</description>
+            <item xmlns:content="http://example.com/wrong-content-namespace/">
+              <title>Item with wrong content namespace</title>
+              <content:encoded>This uses wrong (unknown) namespace URI</content:encoded>
+            </item>
+            <item xmlns:content="http://purl.org/rss/1.0/modules/content/">
+              <title>Item with correct content namespace</title>
+              <content:encoded><![CDATA[<p>Correct namespace</p>]]></content:encoded>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'RSS Feed',
+        link: 'http://example.com',
+        description: 'Feed with conflicting namespaces',
+        items: [
+          {
+            title: 'Item with wrong content namespace',
+            content: {
+              encoded: 'This uses wrong (unknown) namespace URI',
+            },
+          },
+          {
+            title: 'Item with correct content namespace',
+            content: {
+              encoded: '<p>Correct namespace</p>',
+            },
+          },
+        ],
+      }
+      const result = parse(input)
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should handle missing required elements gracefully', () => {
+      const input = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss
+          version="2.0"
+          xmlns:dc="http://purl.org/dc/elements/1.1/"
+        >
+          <channel>
+            <!-- Missing required title, link, description -->
+            <item>
+              <!-- Item with only namespaced elements -->
+              <dc:creator>John Doe</dc:creator>
+              <dc:date>2023-01-01</dc:date>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        items: [
+          {
+            dc: {
+              creator: 'John Doe',
+              date: '2023-01-01',
             },
           },
         ],

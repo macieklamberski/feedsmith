@@ -570,7 +570,7 @@ export const createNamespaceNormalizator = (
     }
 
     if (Array.isArray(object)) {
-      return object.map((item) => normalizeRoot(item))
+      return object.map(normalizeRoot)
     }
 
     const normalizedObject: Unreliable = {}

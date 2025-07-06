@@ -2867,7 +2867,8 @@ describe('createNamespaceNormalizator', () => {
         const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
         const value = parser.parse(`
           <?xml version="1.0"?>
-          <rss xmlns:dc="http://purl.org/dc/elements/1.1/"
+          <rss
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
             xmlns:content="http://purl.org/rss/1.0/modules/content/"
             xmlns:media="http://search.yahoo.com/mrss/"
           >
@@ -2953,7 +2954,10 @@ describe('createNamespaceNormalizator', () => {
         const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
         const value = parser.parse(`
           <?xml version="1.0"?>
-          <root XMLNS:DC="http://purl.org/dc/elements/1.1/" xmlns:ATOM="http://www.w3.org/2005/Atom">
+          <root
+            XMLNS:DC="http://purl.org/dc/elements/1.1/"
+            xmlns:ATOM="http://www.w3.org/2005/Atom"
+          >
             <DC:creator>Author Name</DC:creator>
             <ATOM:title>Title</ATOM:title>
           </root>
@@ -3000,6 +3004,101 @@ describe('createNamespaceNormalizator', () => {
               '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
             },
             '@xmlns': 'http://www.w3.org/2005/Atom',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
+
+    describe('unhappy path scenarios', () => {
+      it('should handle non-object input gracefully', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+
+        expect(normalizeNamespaces(null)).toBe(null)
+        expect(normalizeNamespaces(undefined)).toBe(undefined)
+        expect(normalizeNamespaces('string')).toBe('string')
+        expect(normalizeNamespaces(123)).toBe(123)
+        expect(normalizeNamespaces(true)).toBe(true)
+      })
+
+      it('should handle conflicting namespace declarations in siblings', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root>
+            <item1 xmlns:custom="http://purl.org/dc/elements/1.1/">
+              <custom:creator>Author 1</custom:creator>
+            </item1>
+            <item2 xmlns:custom="http://search.yahoo.com/mrss/">
+              <custom:title>Title 2</custom:title>
+            </item2>
+          </root>
+        `)
+        const expected = {
+          root: {
+            item1: {
+              'dc:creator': 'Author 1',
+              '@xmlns:custom': 'http://purl.org/dc/elements/1.1/',
+            },
+            item2: {
+              'media:title': 'Title 2',
+              '@xmlns:custom': 'http://search.yahoo.com/mrss/',
+            },
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should handle namespace declarations without usage', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:media="http://search.yahoo.com/mrss/"
+          >
+            <title>No namespaced elements</title>
+            <description>Just plain elements</description>
+          </root>
+        `)
+        const expected = {
+          root: {
+            title: 'No namespaced elements',
+            description: 'Just plain elements',
+            '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            '@xmlns:media': 'http://search.yahoo.com/mrss/',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should handle mixed valid and invalid namespace values', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = {
+          root: {
+            '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            '@xmlns:invalid1': '',
+            '@xmlns:invalid2': '   ',
+            '@xmlns:valid': 'http://example.com/',
+            'dc:creator': 'John Doe',
+            'invalid1:element': 'Value 1',
+            'invalid2:element': 'Value 2',
+            'valid:element': 'Value 3',
+          },
+        }
+        const expected = {
+          root: {
+            '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            '@xmlns:invalid1': '',
+            '@xmlns:invalid2': '   ',
+            '@xmlns:valid': 'http://example.com/',
+            'dc:creator': 'John Doe',
+            'invalid1:element': 'Value 1',
+            'invalid2:element': 'Value 2',
+            'valid:element': 'Value 3',
           },
         }
 
