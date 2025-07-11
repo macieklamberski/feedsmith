@@ -904,7 +904,6 @@ describe('parseFeed', () => {
       version: 'https://jsonfeed.org/version/1.1',
       title: 'Feed Without Items',
     }
-
     const expectedMissingVersion = {
       title: 'Feed Without Version',
       items: [{ id: 'item-1' }],

@@ -944,7 +944,6 @@ describe('retrieveFeed', () => {
         'itunes:image': { '@href': 'https://example.com/image.jpg' },
         'itunes:explicit': { '#text': explicitValue },
       }
-
       const expected = {
         image: 'https://example.com/image.jpg',
         explicit: expectedExplicit,

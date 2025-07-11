@@ -152,7 +152,6 @@ describe('parseLink', () => {
       '@type': true,
       '@length': '5000',
     }
-
     const expected = {
       href: 'https://example.com/feed',
       rel: '123',

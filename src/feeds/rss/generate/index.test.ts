@@ -40,7 +40,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
@@ -74,7 +73,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
@@ -110,7 +108,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:dcterms="http://purl.org/dc/terms/">
   <channel>
@@ -138,7 +135,6 @@ describe('generate', () => {
         updatePeriod: 'hourly',
       },
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/">
   <channel>
@@ -168,7 +164,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
   <channel>
@@ -202,7 +197,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:podcast="https://podcastindex.org/namespace/1.0">
   <channel>
@@ -240,7 +234,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
   <channel>
@@ -271,7 +264,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
@@ -303,7 +295,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
   <channel>
@@ -333,7 +324,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:thr="http://purl.org/syndication/thread/1.0">
   <channel>
@@ -367,7 +357,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:georss="http://www.georss.org/georss/">
   <channel>

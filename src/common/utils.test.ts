@@ -2100,7 +2100,6 @@ describe('detectNamespaces', () => {
         },
       ],
     }
-
     const expectedNonRecursive = new Set(['top'])
     const expectedRecursive = new Set(['top', 'item1', 'item2', 'item3', 'nested'])
 
@@ -2121,7 +2120,6 @@ describe('detectNamespaces', () => {
         },
       },
     }
-
     const expectedNonRecursive = new Set(['level1'])
     const expectedRecursive = new Set(['level1', 'level2', 'level3', 'level4'])
 
@@ -2138,7 +2136,6 @@ describe('detectNamespaces', () => {
         alsoEmpty: {},
       },
     }
-
     const expectedNonRecursive = new Set(['top'])
     const expectedRecursive = new Set(['top'])
 
@@ -2158,7 +2155,6 @@ describe('detectNamespaces', () => {
         'another:namespace': 'value',
       },
     }
-
     const expectedNonRecursive = new Set(['duplicate'])
     const expectedRecursive = new Set(['duplicate', 'other', 'another'])
 
