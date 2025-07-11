@@ -19,7 +19,7 @@ describe('generate', () => {
   }
 
   it('should generate RSS with atom namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with Atom namespace',
       description: 'Test feed with Atom namespace elements',
       atom: {
@@ -55,11 +55,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with dc namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with dc namespace',
       description: 'Test feed with Dublin Core namespace',
       dc: {
@@ -89,11 +89,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with dcterms namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with dcterms namespace',
       description: 'Test feed with Dublin Core Terms namespace',
       dcterms: {
@@ -127,11 +127,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with sy namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with sy namespace',
       description: 'Test feed with syndication namespace',
       sy: {
@@ -149,11 +149,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with itunes namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with iTunes namespace',
       description: 'Test feed with Apple Podcasts namespace',
       itunes: {
@@ -183,11 +183,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with podcast namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with podcast namespace',
       description: 'Test feed with Podcast 2.0 namespace',
       podcast: {
@@ -217,11 +217,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with media namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with media namespace',
       description: 'Test feed with Media RSS namespace',
       media: {
@@ -255,11 +255,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with content namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with content namespace',
       description: 'Test feed with Content namespace',
       items: [
@@ -287,11 +287,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with slash namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with slash namespace',
       description: 'Test feed with Slash namespace',
       items: [
@@ -317,11 +317,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with thr namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with thr namespace',
       description: 'Test feed with Threading namespace',
       items: [
@@ -347,11 +347,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with georss namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with georss namespace',
       description: 'Test feed with GeoRSS namespace',
       georss: {
@@ -383,6 +383,6 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 })

@@ -21,7 +21,7 @@ describe('parse', () => {
   }
 
   it('should correctly parse RDF with mixed case tags', async () => {
-    const input = `
+    const value = `
       <?xml version="1.0" encoding="UTF-8" ?>
       <?xml version="1.0"?>
       <RDF:rdf
@@ -45,7 +45,7 @@ describe('parse', () => {
       description: 'the Mozilla Organization web site',
       items: [{ title: 'New Status Updates', link: 'http://www.mozilla.org/status/' }],
     }
-    const result = parse(input)
+    const result = parse(value)
 
     expect(result).toEqual(expectation)
   })
@@ -124,7 +124,7 @@ describe('parse', () => {
 
   describe('namespace normalization integration', () => {
     it('should handle RDF 1.0 feeds with no additional namespaces', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
           <channel rdf:about="http://example.com">
@@ -151,13 +151,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle rdf root element without namespace prefix nor definition', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rdf>
           <channel>
@@ -184,13 +184,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle RDF 0.9 with non-prefixed root element', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rdf xmlns="http://channel.netscape.com/rdf/simple/0.9/">
           <channel>
@@ -217,13 +217,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle RDF 0.9 with default namespace', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://channel.netscape.com/rdf/simple/0.9/">
           <channel>
@@ -250,13 +250,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should normalize custom prefixes to standard prefixes in RDF 1.0', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/" xmlns:custom="http://purl.org/dc/elements/1.1/">
           <channel rdf:about="http://example.com">
@@ -287,13 +287,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle namespace declarations in nested elements in RDF 0.9', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://channel.netscape.com/rdf/simple/0.9/">
           <channel>
@@ -336,13 +336,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle mixed case with namespace logic in RDF 1.0', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/" xmlns:DC="http://purl.org/dc/elements/1.1/">
           <CHANNEL>
@@ -373,13 +373,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle self-closing elements with namespace declarations in RDF 1.0', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
           <channel>
@@ -424,13 +424,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle namespace URIs with leading/trailing whitespace', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rdf:RDF
           xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -481,13 +481,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle malformed namespace declarations in RDF feeds', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rdf:RDF
           xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -520,13 +520,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle RDF with wrong primary namespace', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rss:RDF
           xmlns:rss="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -550,13 +550,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle missing required RDF elements', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rdf:RDF
           xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -587,13 +587,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle namespace conflicts between RDF versions', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <channel
@@ -622,7 +622,7 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })

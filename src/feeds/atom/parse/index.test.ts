@@ -21,7 +21,7 @@ describe('parse', () => {
   }
 
   it('should correctly parse Atom 1.0 feed with mixed case tags', async () => {
-    const input = `
+    const value = `
       <?xml version="1.0" encoding="UTF-8"?>
       <FeEd xmlns="http://www.w3.org/2005/Atom">
         <TiTlE>Mixed Case Atom Feed</TiTlE>
@@ -138,13 +138,13 @@ describe('parse', () => {
         },
       ],
     }
-    const result = parse(input)
+    const result = parse(value)
 
     expect(result).toEqual(expected)
   })
 
   it('should correctly parse namespaced Atom feed', async () => {
-    const input = `
+    const value = `
       <?xml version="1.0" encoding="utf-8"?>
       <atom:feed atom:xmlns="http://www.w3.org/2005/Atom">
         <atom:title>Example Feed</title>
@@ -165,7 +165,7 @@ describe('parse', () => {
         },
       ],
     }
-    const result = parse(input)
+    const result = parse(value)
 
     expect(result).toEqual(expected)
   })
@@ -199,7 +199,7 @@ describe('parse', () => {
   })
 
   it('should correctly parse Atom feed with YouTube namespace', () => {
-    const input = `
+    const value = `
       <?xml version="1.0" encoding="UTF-8"?>
       <feed xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
         <title>YouTube Channel Feed</title>
@@ -234,13 +234,13 @@ describe('parse', () => {
         },
       ],
     }
-    const result = parse(input)
+    const result = parse(value)
 
     expect(result).toEqual(expected)
   })
 
   it('should correctly parse Atom feed with YouTube playlist', () => {
-    const input = `
+    const value = `
       <?xml version="1.0" encoding="UTF-8"?>
       <feed xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
         <title>YouTube Playlist Feed</title>
@@ -275,14 +275,14 @@ describe('parse', () => {
         },
       ],
     }
-    const result = parse(input)
+    const result = parse(value)
 
     expect(result).toEqual(expected)
   })
 
   describe('namespace normalization integration', () => {
     it('should handle feeds with no namespace', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <feed>
           <title>Simple Feed</title>
@@ -307,13 +307,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle default Atom namespace with primary namespace', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <feed xmlns="http://www.w3.org/2005/Atom">
           <title>Test Feed</title>
@@ -338,13 +338,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle custom Atom prefix with primary namespace', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <a:feed xmlns:a="http://www.w3.org/2005/Atom">
           <a:title>Test Feed</a:title>
@@ -369,13 +369,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should normalize custom prefixes to standard prefixes', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <feed xmlns="http://www.w3.org/2005/Atom" xmlns:custom="http://purl.org/dc/elements/1.1/">
           <title>Atom Feed</title>
@@ -404,13 +404,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle namespace declarations in nested elements', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <feed xmlns="http://www.w3.org/2005/Atom">
           <title>Atom Feed</title>
@@ -451,13 +451,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle mixed case with namespace logic', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <FEED xmlns="http://www.w3.org/2005/Atom" xmlns:DC="http://purl.org/dc/elements/1.1/">
           <TITLE>Feed Title</TITLE>
@@ -486,13 +486,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle self-closing elements with namespace declarations', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <feed xmlns="http://www.w3.org/2005/Atom">
           <title>Atom Feed</title>
@@ -537,13 +537,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle namespace URIs with leading/trailing whitespace', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <feed
           xmlns="http://www.w3.org/2005/Atom"
@@ -591,13 +591,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle malformed namespace declarations in Atom feeds', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <feed
           xmlns="http://www.w3.org/2005/Atom"
@@ -631,13 +631,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle Atom feed with wrong default namespace', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <feed
           xmlns="http://example.com/not-atom"
@@ -654,13 +654,13 @@ describe('parse', () => {
         id: 'urn:uuid:12345',
         updated: '2024-01-01T00:00:00Z',
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle missing required Atom elements', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <feed
           xmlns="http://www.w3.org/2005/Atom"
@@ -686,13 +686,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle namespace conflicts in nested Atom elements', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <feed xmlns="http://www.w3.org/2005/Atom">
           <title>Feed Title</title>
@@ -721,7 +721,7 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })

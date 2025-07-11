@@ -25,7 +25,7 @@ describe('parse', () => {
   }
 
   it('should correctly parse RSS with mixed case tags', async () => {
-    const input = `
+    const value = `
       <?xml version="1.0" encoding="UTF-8" ?>
       <rSs version="2.0">
         <ChAnNeL>
@@ -68,7 +68,7 @@ describe('parse', () => {
         },
       ],
     }
-    const result = parse(input)
+    const result = parse(value)
 
     expect(result).toEqual(expectation)
   })
@@ -146,7 +146,7 @@ describe('parse', () => {
 
   describe('namespace normalization integration', () => {
     it('should handle feeds with no namespaces', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rss version="2.0">
           <channel>
@@ -173,13 +173,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should normalize custom prefixes to standard prefixes', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rss version="2.0" xmlns:custom="http://purl.org/dc/elements/1.1/">
           <channel>
@@ -210,13 +210,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle namespace declarations in nested elements', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rss version="2.0">
           <channel>
@@ -259,13 +259,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle mixed case with namespace logic', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <RSS version="2.0" xmlns:DC="http://purl.org/dc/elements/1.1/">
           <Channel>
@@ -296,13 +296,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle self-closing elements with namespace declarations', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rss version="2.0">
           <channel>
@@ -347,13 +347,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle namespace URIs with leading/trailing whitespace', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rss
           version="2.0"
@@ -401,13 +401,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle malformed namespace declarations gracefully', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rss
           version="2.0"
@@ -440,13 +440,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle conflicting namespace usage', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rss version="2.0">
           <channel>
@@ -483,13 +483,13 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })
 
     it('should handle missing required elements gracefully', () => {
-      const input = `
+      const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rss
           version="2.0"
@@ -515,7 +515,7 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(input)
+      const result = parse(value)
 
       expect(result).toEqual(expected)
     })

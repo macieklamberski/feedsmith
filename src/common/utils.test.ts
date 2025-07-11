@@ -353,35 +353,35 @@ describe('retrieveText', () => {
 
 describe('trimObject', () => {
   it('should remove nullish properties from objects', () => {
-    const input = { a: 1, b: undefined, c: 'string', d: undefined, e: null, f: false, g: 0, h: '' }
+    const value = { a: 1, b: undefined, c: 'string', d: undefined, e: null, f: false, g: 0, h: '' }
     const expected = { a: 1, c: 'string', f: false, g: 0, h: '' }
 
-    expect(trimObject(input)).toEqual(expected)
+    expect(trimObject(value)).toEqual(expected)
   })
 
   it('should return the same object when no properties are nullish', () => {
-    const input = { a: 1, b: 'string', c: false, d: [], e: {} }
+    const value = { a: 1, b: 'string', c: false, d: [], e: {} }
 
-    expect(trimObject(input)).toEqual(input)
+    expect(trimObject(value)).toEqual(value)
   })
 
   it('should preserve falsy non-undefined values', () => {
-    const input = { a: 0, b: '', c: false, d: Number.NaN }
+    const value = { a: 0, b: '', c: false, d: Number.NaN }
 
-    expect(trimObject(input)).toEqual(input)
+    expect(trimObject(value)).toEqual(value)
   })
 
   it('should handle objects with symbol keys', () => {
     const sym = Symbol('test')
-    const input = { a: 1, b: undefined, [sym]: 'symbol value' }
+    const value = { a: 1, b: undefined, [sym]: 'symbol value' }
     const expected = { a: 1 }
 
     // Symbol keys are not enumerable with for..in, so they won't be included.
-    expect(trimObject(input)).toEqual(expected)
+    expect(trimObject(value)).toEqual(expected)
   })
 
   it('should handle complex nested objects', () => {
-    const input = {
+    const value = {
       a: { nested: 'value', undef: undefined },
       b: undefined,
       c: [1, undefined, 3],
@@ -392,11 +392,11 @@ describe('trimObject', () => {
     }
 
     // The function only removes top-level undefined properties, not those in nested objects.
-    expect(trimObject(input)).toEqual(expected)
+    expect(trimObject(value)).toEqual(expected)
   })
 
   it('should handle object with getters', () => {
-    const input = {
+    const value = {
       get a() {
         return 1
       },
@@ -406,13 +406,13 @@ describe('trimObject', () => {
     }
     const expected = { a: 1 }
 
-    expect(trimObject(input)).toEqual(expected)
+    expect(trimObject(value)).toEqual(expected)
   })
 
   it('should return undefined object when all properties are nullish', () => {
-    const input = { a: undefined, b: undefined, c: null }
+    const value = { a: undefined, b: undefined, c: null }
 
-    expect(trimObject(input)).toBeUndefined()
+    expect(trimObject(value)).toBeUndefined()
   })
 
   it('should handle empty objects', () => {
@@ -427,10 +427,10 @@ describe('trimArray', () => {
   })
 
   it('should keep falsy values that are not null or undefined', () => {
-    const input = [0, '', false, null, undefined, Number.NaN]
+    const value = [0, '', false, null, undefined, Number.NaN]
     const expected = [0, '', false, Number.NaN]
 
-    expect(trimArray(input)).toEqual(expected)
+    expect(trimArray(value)).toEqual(expected)
   })
 
   it('should work with complex objects', () => {
