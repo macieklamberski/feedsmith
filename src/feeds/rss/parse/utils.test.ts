@@ -193,6 +193,7 @@ describe('parseImage', () => {
       height: { '#text': '32' },
       width: { '#text': '32' },
     }
+
     expect(parseImage(value)).toEqual(expectedFull)
   })
 
@@ -262,6 +263,7 @@ describe('parseTextInput', () => {
       name: { '#text': 'searchForm' },
       link: { '#text': 'https://example.com/search' },
     }
+
     expect(parseTextInput(value)).toEqual(expectedFull)
   })
 

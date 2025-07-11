@@ -161,6 +161,7 @@ describe('parseOwner', () => {
       'itunes:name': { '#text': 'John Doe' },
       'itunes:email': { '#text': 'john@example.com' },
     }
+
     expect(parseOwner(value)).toEqual(expectedFull)
   })
 

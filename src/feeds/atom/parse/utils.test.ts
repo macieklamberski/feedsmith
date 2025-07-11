@@ -618,6 +618,7 @@ describe('parseSource', () => {
     const expected = {
       title: 'Example Feed',
     }
+
     expect(parseSource(value)).toEqual(expected)
   })
 

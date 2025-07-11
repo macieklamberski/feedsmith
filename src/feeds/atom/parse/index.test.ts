@@ -138,9 +138,8 @@ describe('parse', () => {
         },
       ],
     }
-    const result = parse(value)
 
-    expect(result).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should correctly parse namespaced Atom feed', async () => {
@@ -165,9 +164,8 @@ describe('parse', () => {
         },
       ],
     }
-    const result = parse(value)
 
-    expect(result).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should throw error for invalid input', () => {
@@ -234,9 +232,8 @@ describe('parse', () => {
         },
       ],
     }
-    const result = parse(value)
 
-    expect(result).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should correctly parse Atom feed with YouTube playlist', () => {
@@ -275,9 +272,8 @@ describe('parse', () => {
         },
       ],
     }
-    const result = parse(value)
 
-    expect(result).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   describe('namespace normalization integration', () => {
@@ -307,9 +303,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle default Atom namespace with primary namespace', () => {
@@ -338,9 +333,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle custom Atom prefix with primary namespace', () => {
@@ -369,9 +363,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should normalize custom prefixes to standard prefixes', () => {
@@ -404,9 +397,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle namespace declarations in nested elements', () => {
@@ -451,9 +443,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle mixed case with namespace logic', () => {
@@ -486,9 +477,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle self-closing elements with namespace declarations', () => {
@@ -537,9 +527,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle namespace URIs with leading/trailing whitespace', () => {
@@ -591,9 +580,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle malformed namespace declarations in Atom feeds', () => {
@@ -631,9 +619,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle Atom feed with wrong default namespace', () => {
@@ -654,9 +641,8 @@ describe('parse', () => {
         id: 'urn:uuid:12345',
         updated: '2024-01-01T00:00:00Z',
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle missing required Atom elements', () => {
@@ -686,9 +672,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle namespace conflicts in nested Atom elements', () => {
@@ -721,9 +706,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
   })
 })

@@ -61,6 +61,7 @@ describe('retrieveItem', () => {
       'slash:comments': { '#text': '42' },
       'slash:hit_parade': { '#text': '42,38,24,16,8,4,2' },
     }
+
     expect(retrieveItem(value)).toEqual(expectedFull)
   })
 

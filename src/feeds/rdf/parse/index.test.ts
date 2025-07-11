@@ -45,9 +45,8 @@ describe('parse', () => {
       description: 'the Mozilla Organization web site',
       items: [{ title: 'New Status Updates', link: 'http://www.mozilla.org/status/' }],
     }
-    const result = parse(value)
 
-    expect(result).toEqual(expectation)
+    expect(parse(value)).toEqual(expectation)
   })
 
   it('should throw error for invalid input', () => {
@@ -151,9 +150,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle rdf root element without namespace prefix nor definition', () => {
@@ -184,9 +182,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle RDF 0.9 with non-prefixed root element', () => {
@@ -217,9 +214,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle RDF 0.9 with default namespace', () => {
@@ -250,9 +246,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should normalize custom prefixes to standard prefixes in RDF 1.0', () => {
@@ -287,9 +282,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle namespace declarations in nested elements in RDF 0.9', () => {
@@ -336,9 +330,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle mixed case with namespace logic in RDF 1.0', () => {
@@ -373,9 +366,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle self-closing elements with namespace declarations in RDF 1.0', () => {
@@ -424,9 +416,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle namespace URIs with leading/trailing whitespace', () => {
@@ -481,9 +472,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle malformed namespace declarations in RDF feeds', () => {
@@ -520,9 +510,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle RDF with wrong primary namespace', () => {
@@ -550,9 +539,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle missing required RDF elements', () => {
@@ -587,9 +575,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle namespace conflicts between RDF versions', () => {
@@ -622,9 +609,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
   })
 })

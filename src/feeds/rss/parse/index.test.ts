@@ -68,9 +68,8 @@ describe('parse', () => {
         },
       ],
     }
-    const result = parse(value)
 
-    expect(result).toEqual(expectation)
+    expect(parse(value)).toEqual(expectation)
   })
 
   it('should throw error for invalid input', () => {
@@ -173,9 +172,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should normalize custom prefixes to standard prefixes', () => {
@@ -210,9 +208,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle namespace declarations in nested elements', () => {
@@ -259,9 +256,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle mixed case with namespace logic', () => {
@@ -296,9 +292,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle self-closing elements with namespace declarations', () => {
@@ -347,9 +342,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle namespace URIs with leading/trailing whitespace', () => {
@@ -401,9 +395,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle malformed namespace declarations gracefully', () => {
@@ -440,9 +433,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle conflicting namespace usage', () => {
@@ -483,9 +475,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should handle missing required elements gracefully', () => {
@@ -515,9 +506,8 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value)
 
-      expect(result).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
   })
 })

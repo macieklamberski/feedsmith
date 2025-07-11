@@ -3687,6 +3687,7 @@ describe('retrieveItem', () => {
         },
       ],
     }
+
     expect(retrieveItem(value)).toEqual(expected)
   })
 })
@@ -4216,6 +4217,7 @@ describe('retrieveFeed', () => {
         },
       ],
     }
+
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
