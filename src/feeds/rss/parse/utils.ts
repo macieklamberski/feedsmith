@@ -207,7 +207,7 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
     skipHours: parseSingularOf(value.skiphours, parseSkipHours),
     skipDays: parseSingularOf(value.skipdays, parseSkipDays),
     items: parseArrayOf(value.item, parseItem),
-    atom: namespaces.has('atom') || namespaces.has('a10') ? retrieveAtomFeed(value) : undefined,
+    atom: namespaces.has('atom') ? retrieveAtomFeed(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     sy: namespaces.has('sy') ? retrieveSyFeed(value) : undefined,

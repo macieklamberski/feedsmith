@@ -101,6 +101,49 @@ describe('parse', () => {
     expect(() => parse(123)).toThrowError(locales.invalid)
   })
 
+  it('should handle non-standard atom namespace prefix', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rss
+        version="2.0"
+        xmlns:a10="http://www.w3.org/2005/Atom"
+      >
+        <channel>
+          <title>Test Feed</title>
+          <link>https://example.com</link>
+          <description>Test feed description</description>
+          <a10:link href="https://example.com/feed" rel="self" />
+          <item>
+            <title>Test Item</title>
+            <link>https://example.com/item1</link>
+            <description>Test item description</description>
+            <a10:link href="https://example.com/item1" rel="alternate" />
+          </item>
+        </channel>
+      </rss>
+    `
+    const expected = {
+      title: 'Test Feed',
+      link: 'https://example.com',
+      description: 'Test feed description',
+      atom: {
+        links: [{ href: 'https://example.com/feed', rel: 'self' }],
+      },
+      items: [
+        {
+          title: 'Test Item',
+          link: 'https://example.com/item1',
+          description: 'Test item description',
+          atom: {
+            links: [{ href: 'https://example.com/item1', rel: 'alternate' }],
+          },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   describe('namespace normalization integration', () => {
     it('should handle feeds with no namespaces', () => {
       const input = `
