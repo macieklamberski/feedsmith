@@ -641,6 +641,7 @@ describe('parseSource', () => {
     const value = {
       nonExistingProp: { '#text': 'value' },
     }
+
     expect(parseSource(value)).toBeUndefined()
   })
 
