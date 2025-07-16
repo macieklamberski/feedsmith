@@ -42,20 +42,24 @@
     "prepare": "lefthook install",
     "lint:tsc": "tsc --pretty --noEmit",
     "lint:biome": "bunx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
-    "build": "rm -rf dist && tsc"
+    "build": "rm -rf dist && tsc",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
     "entities": "^6.0.1",
     "fast-xml-parser": "^5.2.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.6",
+    "@biomejs/biome": "^2.1.1",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@types/bun": "^1.2.18",
-    "conventional-changelog-conventionalcommits": "^9.0.0",
-    "lefthook": "^1.11.16",
-    "semantic-release": "^24.2.6",
-    "typescript": "^5.8.3"
+    "conventional-changelog-conventionalcommits": "^9.1.0",
+    "lefthook": "^1.12.2",
+    "semantic-release": "^24.2.7",
+    "typescript": "^5.8.3",
+    "vitepress": "^1.6.3"
   }
 }
