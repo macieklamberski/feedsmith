@@ -1,6 +1,13 @@
 import { decodeHTML, decodeXML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
-import type { AnyOf, GenerateFunction, ParseExactFunction, Unreliable } from './types.js'
+import type {
+  AnyOf,
+  GenerateFunction,
+  ParseExactFunction,
+  Unreliable,
+  XmlGenerateOptions,
+  XmlStylesheet,
+} from './types.js'
 
 export const isPresent = <T>(value: T): value is NonNullable<T> => {
   return value != null
@@ -277,14 +284,56 @@ export const generateCsvOf = <T>(
   return trimArray(value, generate)?.join()
 }
 
-export const generateXml = (builder: XMLBuilder, value: string): string => {
-  let xml = builder.build(value)
+export const generateXmlStylesheet = (stylesheet: XmlStylesheet): string | undefined => {
+  const generated = trimObject({
+    type: generatePlainString(stylesheet.type),
+    href: generatePlainString(stylesheet.href),
+    title: generatePlainString(stylesheet.title),
+    media: generatePlainString(stylesheet.media),
+    charset: generatePlainString(stylesheet.charset),
+    alternate: generateYesNoBoolean(stylesheet.alternate),
+  })
 
-  if (xml.includes('&apos;')) {
-    xml = xml.replace(/&apos;/g, "'")
+  if (!generated) {
+    return undefined
   }
 
-  return `<?xml version="1.0" encoding="utf-8"?>\n${xml}`
+  let attributes = ''
+
+  for (const key in generated) {
+    const value = generated[key as keyof typeof generated]
+    if (value !== undefined) {
+      attributes += ` ${key}="${value}"`
+    }
+  }
+
+  return `<?xml-stylesheet${attributes}?>`
+}
+
+export const generateXml = (
+  builder: XMLBuilder,
+  value: string,
+  options?: XmlGenerateOptions,
+): string => {
+  let body = builder.build(value)
+
+  if (body.includes('&apos;')) {
+    body = body.replace(/&apos;/g, "'")
+  }
+
+  let declaration = '<?xml version="1.0" encoding="utf-8"?>'
+
+  if (options?.stylesheets?.length) {
+    for (const stylesheetObject of options.stylesheets) {
+      const stylesheetString = generateXmlStylesheet(stylesheetObject)
+
+      if (stylesheetString) {
+        declaration += `\n${stylesheetString}`
+      }
+    }
+  }
+
+  return `${declaration}\n${body}`
 }
 
 export const generateRfc822Date: GenerateFunction<string | Date> = (value) => {
