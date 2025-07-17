@@ -22,3 +22,16 @@ export type ParseExactFunction<R> = (value: Unreliable) => R | undefined
 export type ParsePartialFunction<R> = (value: Unreliable) => DeepPartial<R> | undefined
 
 export type GenerateFunction<V> = (value: V | undefined) => Unreliable | undefined
+
+export type XmlStylesheet = {
+  type: string
+  href: string
+  title?: string
+  media?: string
+  charset?: string
+  alternate?: boolean
+}
+
+export type XmlGenerateOptions = {
+  stylesheets?: Array<XmlStylesheet>
+}

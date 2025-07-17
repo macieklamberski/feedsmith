@@ -374,4 +374,25 @@ describe('generate', () => {
 
     expect(generate(value)).toEqual(expected)
   })
+
+  it('should generate RSS feed with stylesheets', () => {
+    const value = {
+      title: 'Feed with Stylesheet',
+      description: 'Test feed with stylesheet support',
+    }
+    const options = {
+      stylesheets: [{ type: 'text/xsl', href: '/styles/rss.xsl' }],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/styles/rss.xsl"?>
+<rss version="2.0">
+  <channel>
+    <title>Feed with Stylesheet</title>
+    <description>Test feed with stylesheet support</description>
+  </channel>
+</rss>
+`
+
+    expect(generate(value, options)).toEqual(expected)
+  })
 })
