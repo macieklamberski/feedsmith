@@ -227,6 +227,7 @@ describe('generateItem', () => {
       const expected = {
         'itunes:episodeType': value.episodeType,
       }
+
       expect(generateItem(value)).toEqual(expected)
     }
   })
@@ -389,6 +390,7 @@ describe('generateFeed', () => {
       const expected = {
         'itunes:type': value.type,
       }
+
       expect(generateFeed(value)).toEqual(expected)
     }
   })

@@ -735,4 +735,25 @@ describe('generate', () => {
 
     expect(generate(value)).toEqual(expected)
   })
+
+  it('should generate Atom feed with stylesheets', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Stylesheet',
+      updated: new Date('2023-03-15T12:00:00Z'),
+    }
+    const options = {
+      stylesheets: [{ type: 'text/xsl', href: '/styles/atom.xsl' }],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/styles/atom.xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com/feed</id>
+  <title>Feed with Stylesheet</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+</feed>
+`
+
+    expect(generate(value, options)).toEqual(expected)
+  })
 })

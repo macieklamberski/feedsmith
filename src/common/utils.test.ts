@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import { type XMLBuilder, XMLParser } from 'fast-xml-parser'
 import { namespaceUrls } from './config.js'
-import type { ParseExactFunction } from './types.js'
+import type { ParseExactFunction, XmlGenerateOptions } from './types.js'
 import {
   createNamespaceNormalizator,
   detectNamespaces,
@@ -14,6 +14,7 @@ import {
   generateRfc822Date,
   generateRfc3339Date,
   generateXml,
+  generateXmlStylesheet,
   generateYesNoBoolean,
   hasEntities,
   invertObject,
@@ -138,6 +139,7 @@ describe('isObject', () => {
 
   it('should return false for objects with custom prototypes', () => {
     class CustomClass {}
+
     expect(isObject(new CustomClass())).toBe(false)
   })
 
@@ -284,11 +286,13 @@ describe('isNonEmptyStringOrNumber', () => {
 describe('retrieveText', () => {
   it('should extract #text property when present', () => {
     const value = { '#text': 'Hello world' }
+
     expect(retrieveText(value)).toBe('Hello world')
   })
 
   it('should return the original value when #text property is not present', () => {
     const value = { title: 'Example Title' }
+
     expect(retrieveText(value)).toEqual(value)
   })
   it('should return #text property even if it has falsy value (except null/undefined)', () => {
@@ -325,16 +329,19 @@ describe('retrieveText', () => {
 
   it('should work with functions', () => {
     const func = () => {}
+
     expect(retrieveText(func)).toBe(func)
   })
 
   it('should handle object with only #text property', () => {
     const value = { '#text': 'Text only' }
+
     expect(retrieveText(value)).toBe('Text only')
   })
 
   it('should handle object with #text property among others', () => {
     const value = { '#text': 'Main text', title: 'Title', count: 42 }
+
     expect(retrieveText(value)).toBe('Main text')
   })
 
@@ -1203,6 +1210,7 @@ describe('parseSingular', () => {
 
   it('should handle array-like objects correctly', () => {
     const arrayLike = { 0: 'first', 1: 'second', length: 2 }
+
     expect(parseSingular(arrayLike)).toEqual(arrayLike)
   })
 
@@ -1595,6 +1603,111 @@ describe('generateCsvOf', () => {
   })
 })
 
+describe('generateXmlStylesheet', () => {
+  describe('Required attributes', () => {
+    it('should generate stylesheet with only required attributes', () => {
+      const value = {
+        type: 'text/xsl',
+        href: '/styles/feed.xsl',
+      }
+      const expected = '<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+
+    it('should handle CSS stylesheets', () => {
+      const value = {
+        type: 'text/css',
+        href: 'https://example.com/styles.css',
+      }
+      const expected = '<?xml-stylesheet type="text/css" href="https://example.com/styles.css"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+  })
+
+  describe('Optional attributes', () => {
+    it('should include title when provided', () => {
+      const value = {
+        type: 'text/xsl',
+        href: '/styles/feed.xsl',
+        title: 'Feed Stylesheet',
+      }
+      const expected =
+        '<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl" title="Feed Stylesheet"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+
+    it('should include media when provided', () => {
+      const value = {
+        type: 'text/css',
+        href: '/styles/mobile.css',
+        media: 'screen and (max-width: 768px)',
+      }
+      const expected =
+        '<?xml-stylesheet type="text/css" href="/styles/mobile.css" media="screen and (max-width: 768px)"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+
+    it('should include all provided optional attributes', () => {
+      const value = {
+        type: 'text/xsl',
+        href: '/styles/feed.xsl',
+        title: 'Pretty Feed',
+        media: 'screen',
+        charset: 'utf-8',
+        alternate: false,
+      }
+      const expected =
+        '<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl" title="Pretty Feed" media="screen" charset="utf-8" alternate="no"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+
+    it('should skip undefined optional attributes', () => {
+      const value = {
+        type: 'text/css',
+        href: '/styles/print.css',
+        title: 'Print Styles',
+        media: undefined,
+        charset: undefined,
+        alternate: undefined,
+      }
+      const expected =
+        '<?xml-stylesheet type="text/css" href="/styles/print.css" title="Print Styles"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+  })
+
+  describe('Special characters', () => {
+    it('should handle URLs with query parameters', () => {
+      const value = {
+        type: 'text/xsl',
+        href: '/styles/feed.xsl?version=1.2&theme=dark',
+      }
+      const expected =
+        '<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl?version=1.2&theme=dark"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+
+    it('should handle titles with spaces', () => {
+      const value = {
+        type: 'text/css',
+        href: '/styles/feed.css',
+        title: 'My Custom Feed Style',
+      }
+      const expected =
+        '<?xml-stylesheet type="text/css" href="/styles/feed.css" title="My Custom Feed Style"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+  })
+})
+
 describe('generateXml', () => {
   const mockBuilder: XMLBuilder = {
     build: (value: string) => `<root>${value}</root>`,
@@ -1626,6 +1739,56 @@ describe('generateXml', () => {
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root></root>'
 
     expect(generateXml(mockBuilder, value)).toEqual(expected)
+  })
+
+  it('should include single stylesheet when provided', () => {
+    const value = 'test content'
+    const options: XmlGenerateOptions = {
+      stylesheets: [{ type: 'text/xsl', href: '/styles/feed.xsl' }],
+    }
+    const expected =
+      '<?xml version="1.0" encoding="utf-8"?>\n<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl"?>\n<root>test content</root>'
+
+    expect(generateXml(mockBuilder, value, options)).toEqual(expected)
+  })
+
+  it('should include multiple stylesheets when provided', () => {
+    const value = 'test content'
+    const options: XmlGenerateOptions = {
+      stylesheets: [
+        { type: 'text/xsl', href: '/styles/feed.xsl' },
+        { type: 'text/css', href: '/styles/feed.css', media: 'screen' },
+      ],
+    }
+    const expected =
+      '<?xml version="1.0" encoding="utf-8"?>\n<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl"?>\n<?xml-stylesheet type="text/css" href="/styles/feed.css" media="screen"?>\n<root>test content</root>'
+
+    expect(generateXml(mockBuilder, value, options)).toEqual(expected)
+  })
+
+  it('should generate XML without stylesheets when array is empty', () => {
+    const value = 'test content'
+    const options: XmlGenerateOptions = {
+      stylesheets: [],
+    }
+    const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
+
+    expect(generateXml(mockBuilder, value, options)).toEqual(expected)
+  })
+
+  it('should generate XML without stylesheets when stylesheets is undefined', () => {
+    const value = 'test content'
+    const options: XmlGenerateOptions = {}
+    const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
+
+    expect(generateXml(mockBuilder, value, options)).toEqual(expected)
+  })
+
+  it('should generate XML without stylesheets when options parameter is undefined', () => {
+    const value = 'test content'
+    const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
+
+    expect(generateXml(mockBuilder, value, undefined)).toEqual(expected)
   })
 })
 

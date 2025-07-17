@@ -37,7 +37,7 @@ Feedsmith provides both universal and format-specific parsers that maintain the 
 * **Smart namespace handling** 🧠 — Automatically normalizes custom namespace prefixes to standard ones (e.g., `<custom:creator>` becomes `dc.creator`).
 
 #### Performance and type-safety
-* **Fast parsing** 🏎️ — One of the fastest feed parsers in JavaScript (see [benchmarks](#benchmarks)).
+* **Fast parsing** ⚡ — One of the fastest feed parsers in JavaScript (see [benchmarks](#benchmarks)).
 * **Type-safe API** 🛟 — TypeScript type definitions are available for each feed format, making it easy to work with the data.
 * **Tree-shakable** 🍃 — Only include the parts of the library you need, reducing bundle size.
 * **Well-tested** 🔬 — Comprehensive test suite with over 2000 tests and 99% code coverage.
@@ -53,7 +53,6 @@ Feedsmith provides both universal and format-specific parsers that maintain the 
 ⌛️ Work in progress
 &nbsp;&nbsp;·&nbsp;&nbsp;
 📋 Planned
-
 
 ### Feeds
 
@@ -101,9 +100,9 @@ npm install feedsmith
 
 ## Parsing
 
-### Universal feeds parser
+### Universal feed parser
 
-The easiest way to parse any feed is to use the universal `parseFeed` function:
+The simplest way to parse any feed is to use the universal `parseFeed` function:
 
 ```ts
 import { parseFeed } from 'feedsmith'
@@ -118,7 +117,7 @@ if (type === 'rss') {
 }
 ```
 
-### Dedicated feeds parsers
+### Dedicated feed parsers
 
 If you know the format in advance, you can use the format-specific parsers:
 
@@ -428,9 +427,181 @@ if (detectRdfFeed(content)) {
 
 ## Generating
 
+### Generating RSS Feed
+
+Here's an example of generating an RSS feed.
+
+> [!NOTE]
+> This is a simple example. For a complete list of available fields, see the [RSS type definitions](src/feeds/rss/common/types.ts).
+
+```ts
+import { generateRssFeed } from 'feedsmith'
+
+const rssFeed = generateRssFeed({
+  title: 'My RSS Feed',
+  link: 'https://example.com',
+  description: 'A sample RSS feed with various elements',
+  language: 'en-US',
+  pubDate: new Date('2024-01-15T12:00:00Z'),
+  lastBuildDate: new Date('2024-01-15T12:00:00Z'),
+  generator: 'Feedsmith',
+  managingEditor: 'editor@example.com (John Editor)',
+  webMaster: 'webmaster@example.com (Jane Webmaster)',
+  items: [
+    {
+      title: 'First RSS Item',
+      link: 'https://example.com/post/1',
+      description: 'Description of the first item',
+      pubDate: new Date('2024-01-15T10:00:00Z'),
+      guid: 'https://example.com/post/1',
+      author: 'john@example.com (John Author)',
+      categories: [
+        { name: 'Technology' },
+        { name: 'Programming', domain: 'https://example.com/categories' }
+      ],
+    },
+  ],
+})
+```
+
+Will output:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>My RSS Feed</title>
+    <link>https://example.com</link>
+    <description>A sample RSS feed with various elements</description>
+    <language>en-US</language>
+    <pubDate>Mon, 15 Jan 2024 12:00:00 GMT</pubDate>
+    <lastBuildDate>Mon, 15 Jan 2024 12:00:00 GMT</lastBuildDate>
+    <generator>Feedsmith</generator>
+    <managingEditor>editor@example.com (John Editor)</managingEditor>
+    <webMaster>webmaster@example.com (Jane Webmaster)</webMaster>
+    <item>
+      <title>First RSS Item</title>
+      <link>https://example.com/post/1</link>
+      <description>Description of the first item</description>
+      <pubDate>Mon, 15 Jan 2024 10:00:00 GMT</pubDate>
+      <guid>https://example.com/post/1</guid>
+      <author>john@example.com (John Author)</author>
+      <category>Technology</category>
+      <category domain="https://example.com/categories">Programming</category>
+    </item>
+  </channel>
+</rss>
+```
+
+### Generating Atom Feed
+
+Here's an example of generating an Atom feed.
+
+> [!NOTE]
+> This is a simple example. For a complete list of available fields, see the [Atom type definitions](src/feeds/atom/common/types.ts).
+
+```ts
+import { generateAtomFeed } from 'feedsmith'
+
+const atomFeed = generateAtomFeed({
+  id: 'https://example.com/feed',
+  title: 'My Atom Feed',
+  updated: new Date('2024-01-15T12:00:00Z'),
+  authors: [
+    {
+      name: 'John Author',
+      email: 'john@example.com',
+      uri: 'https://example.com/john',
+    },
+  ],
+  links: [
+    {
+      href: 'https://example.com/feed.xml',
+      rel: 'self',
+      type: 'application/atom+xml',
+    },
+    {
+      href: 'https://example.com',
+      rel: 'alternate',
+      type: 'text/html',
+    },
+  ],
+  subtitle: 'A sample Atom feed with various elements',
+  generator: {
+    text: 'Feedsmith',
+    uri: 'https://github.com/macieklamberski/feedsmith',
+  },
+  entries: [
+    {
+      id: 'https://example.com/entry/1',
+      title: 'First Atom Entry',
+      updated: new Date('2024-01-15T10:00:00Z'),
+      published: new Date('2024-01-15T10:00:00Z'),
+      authors: [
+        {
+          name: 'Jane Writer',
+          email: 'jane@example.com',
+        },
+      ],
+      links: [
+        {
+          href: 'https://example.com/post/1',
+          rel: 'alternate',
+          type: 'text/html',
+        },
+      ],
+      content: '<p>This is the complete content of the first entry.</p>',
+      summary: 'Summary of the first entry',
+      categories: [
+        { term: 'technology', label: 'Technology' },
+        { term: 'programming', scheme: 'https://example.com/categories' }
+      ],
+    },
+  ],
+})
+```
+
+Will output:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com/feed</id>
+  <title>My Atom Feed</title>
+  <updated>2024-01-15T12:00:00.000Z</updated>
+  <author>
+    <name>John Author</name>
+    <email>john@example.com</email>
+    <uri>https://example.com/john</uri>
+  </author>
+  <link href="https://example.com/feed.xml" rel="self" type="application/atom+xml"/>
+  <link href="https://example.com" rel="alternate" type="text/html"/>
+  <subtitle>A sample Atom feed with various elements</subtitle>
+  <generator uri="https://github.com/macieklamberski/feedsmith">Feedsmith</generator>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>First Atom Entry</title>
+    <updated>2024-01-15T10:00:00.000Z</updated>
+    <published>2024-01-15T10:00:00.000Z</published>
+    <author>
+      <name>Jane Writer</name>
+      <email>jane@example.com</email>
+    </author>
+    <link href="https://example.com/post/1" rel="alternate" type="text/html"/>
+    <content>This is the complete content of the first entry.</content>
+    <summary>Summary of the first entry</summary>
+    <category term="technology" label="Technology"/>
+    <category term="programming" scheme="https://example.com/categories"/>
+  </entry>
+</feed>
+```
+
 ### Generating JSON Feed
 
 Although JSON feeds are simply JSON objects that can be easily generated manually, the `generateJsonFeed` function provides helpful type hints, which can aid in feed generation. Additionally, you can use Date objects for dates, which are automatically converted to the correct format in the background.
+
+> [!NOTE]
+> This is a simple example. For a complete list of available fields, see the [JSON Feed type definitions](src/feeds/json/common/types.ts).
 
 ```ts
 import { generateJsonFeed } from 'feedsmith'
@@ -451,7 +622,6 @@ const jsonFeed = generateJsonFeed({
       url: 'https://example.com/post/1',
       title: 'First post',
       date_published: new Date('2019-03-07T00:00:00+01:00'),
-      language: 'en-US',
     },
   ],
 })
@@ -477,16 +647,144 @@ Will output:
       "url": "https://example.com/post/1",
       "title": "First post",
       "date_published": "2019-03-06T23:00:00.000Z",
-      "language": "en-US",
     },
   ],
 }
 ```
 
+### Generating with Namespaces
+
+RSS, Atom, and RDF feeds support various XML namespaces to extend their functionality. Feedsmith automatically includes the appropriate namespace declarations when you add namespace data to your feeds.
+
 > [!NOTE]
-> The functionality for generating the remaining feed formats is currently under development and will be introduced gradually. For more information, see the [Supported formats](#supported-formats).
+> Namespace support varies by feed format. For complete namespace type definitions, see: [Atom](src/namespaces/atom/common/types.ts), [Content](src/namespaces/content/common/types.ts), [Dublin Core](src/namespaces/dc/common/types.ts), [DC Terms](src/namespaces/dcterms/common/types.ts), [GeoRSS](src/namespaces/georss/common/types.ts), [iTunes](src/namespaces/itunes/common/types.ts), [Media](src/namespaces/media/common/types.ts), [Podcast](src/namespaces/podcast/common/types.ts), [Slash](src/namespaces/slash/common/types.ts), [Syndication](src/namespaces/sy/common/types.ts), [Threading](src/namespaces/thr/common/types.ts), [WFW](src/namespaces/wfw/common/types.ts), [YouTube](src/namespaces/yt/common/types.ts).
+
+Here's an example of generating an RSS feed with Dublin Core and iTunes namespaces:
+
+```ts
+import { generateRssFeed } from 'feedsmith'
+
+const rssFeed = generateRssFeed({
+  title: 'My Podcast Feed',
+  link: 'https://example.com/podcast',
+  description: 'A sample podcast with namespace elements',
+  dc: {
+    creator: 'John Podcaster',
+    contributor: 'Jane Producer',
+    date: new Date('2024-01-15T12:00:00Z'),
+    language: 'en-US',
+  },
+  itunes: {
+    author: 'John Podcaster',
+    category: [
+      { text: 'Technology' },
+      { text: 'Education', subcategory: [{ text: 'Courses' }] }
+    ],
+    explicit: false,
+    image: { href: 'https://example.com/artwork.jpg' },
+    summary: 'A technology podcast for curious minds',
+  },
+
+  items: [
+    {
+      title: 'Episode 1: Getting Started',
+      link: 'https://example.com/episode1',
+      description: 'Our first episode covers the basics',
+      pubDate: new Date('2024-01-15T10:00:00Z'),
+      dc: {
+        creator: 'Jane Producer',
+        subject: 'Technology, Programming',
+      },
+      itunes: {
+        author: 'Jane Producer',
+        duration: '00:45:30',
+        explicit: false,
+        episode: 1,
+        episodeType: 'full',
+      },
+    },
+  ],
+})
+```
+
+Will output:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <channel>
+    <title>My Podcast Feed</title>
+    <link>https://example.com/podcast</link>
+    <description>A sample podcast with namespace elements</description>
+    <dc:creator>John Podcaster</dc:creator>
+    <dc:contributor>Jane Producer</dc:contributor>
+    <dc:date>Mon, 15 Jan 2024 12:00:00 GMT</dc:date>
+    <dc:language>en-US</dc:language>
+    <itunes:author>John Podcaster</itunes:author>
+    <itunes:category text="Technology"/>
+    <itunes:category text="Education">
+      <itunes:category text="Courses"/>
+    </itunes:category>
+    <itunes:explicit>false</itunes:explicit>
+    <itunes:image href="https://example.com/artwork.jpg"/>
+    <itunes:summary>A technology podcast for curious minds</itunes:summary>
+    <item>
+      <title>Episode 1: Getting Started</title>
+      <link>https://example.com/episode1</link>
+      <description>Our first episode covers the basics</description>
+      <pubDate>Mon, 15 Jan 2024 10:00:00 GMT</pubDate>
+      <dc:creator>Jane Producer</dc:creator>
+      <dc:subject>Technology, Programming</dc:subject>
+      <itunes:author>Jane Producer</itunes:author>
+      <itunes:duration>00:45:30</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:episode>1</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+  </channel>
+</rss>
+```
+
+### Generating with Stylesheets
+
+XML-based feeds and OPML files support stylesheets to provide custom styling and transformations in browsers and feed readers. Feedsmith automatically adds the appropriate XML processing instructions when you specify stylesheets. For complete stylesheet type definitions, see [`XmlStylesheet` type](src/common/types.ts).
+
+```ts
+import { generateRssFeed } from 'feedsmith'
+
+const rssFeed = generateRssFeed({ /* feed data */ }, {
+  stylesheets: [
+    {
+      type: 'text/xsl',
+      href: '/styles/feed.xsl',
+      title: 'Pretty Feed',
+      media: 'screen',
+    },
+    {
+      type: 'text/css',
+      href: '/styles/feed.css',
+      media: 'screen',
+      alternate: false,
+    },
+  ],
+})
+```
+
+Will output:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl" title="Pretty Feed" media="screen"?>
+<?xml-stylesheet type="text/css" href="/styles/feed.css" media="screen" alternate="no"?>
+<rss version="2.0">
+  <!-- … -->
+</rss>
+```
 
 ### Generating OPML
+
+> [!NOTE]
+> This is a simple example. For a complete list of available fields, see the [OPML type definitions](src/opml/common/types.ts).
 
 ```ts
 import { generateOpml } from 'feedsmith'
