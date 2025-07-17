@@ -138,6 +138,7 @@ describe('isObject', () => {
 
   it('should return false for objects with custom prototypes', () => {
     class CustomClass {}
+
     expect(isObject(new CustomClass())).toBe(false)
   })
 
@@ -284,11 +285,13 @@ describe('isNonEmptyStringOrNumber', () => {
 describe('retrieveText', () => {
   it('should extract #text property when present', () => {
     const value = { '#text': 'Hello world' }
+
     expect(retrieveText(value)).toBe('Hello world')
   })
 
   it('should return the original value when #text property is not present', () => {
     const value = { title: 'Example Title' }
+
     expect(retrieveText(value)).toEqual(value)
   })
   it('should return #text property even if it has falsy value (except null/undefined)', () => {
@@ -325,16 +328,19 @@ describe('retrieveText', () => {
 
   it('should work with functions', () => {
     const func = () => {}
+
     expect(retrieveText(func)).toBe(func)
   })
 
   it('should handle object with only #text property', () => {
     const value = { '#text': 'Text only' }
+
     expect(retrieveText(value)).toBe('Text only')
   })
 
   it('should handle object with #text property among others', () => {
     const value = { '#text': 'Main text', title: 'Title', count: 42 }
+
     expect(retrieveText(value)).toBe('Main text')
   })
 
@@ -1203,6 +1209,7 @@ describe('parseSingular', () => {
 
   it('should handle array-like objects correctly', () => {
     const arrayLike = { 0: 'first', 1: 'second', length: 2 }
+
     expect(parseSingular(arrayLike)).toEqual(arrayLike)
   })
 

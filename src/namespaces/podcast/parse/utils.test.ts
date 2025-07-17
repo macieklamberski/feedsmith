@@ -3655,6 +3655,7 @@ describe('retrieveItem', () => {
 
   it('should return undefined for empty objects', () => {
     const value = {}
+
     expect(retrieveItem(value)).toBeUndefined()
   })
 
