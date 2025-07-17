@@ -745,6 +745,42 @@ Will output:
 </rss>
 ```
 
+### Generating with Stylesheets
+
+XML-based feeds and OPML files support stylesheets to provide custom styling and transformations in browsers and feed readers. Feedsmith automatically adds the appropriate XML processing instructions when you specify stylesheets. For complete stylesheet type definitions, see [`XmlStylesheet` type](src/common/types.ts).
+
+```ts
+import { generateRssFeed } from 'feedsmith'
+
+const rssFeed = generateRssFeed({ /* feed data */ }, {
+  stylesheets: [
+    {
+      type: 'text/xsl',
+      href: '/styles/feed.xsl',
+      title: 'Pretty Feed',
+      media: 'screen',
+    },
+    {
+      type: 'text/css',
+      href: '/styles/feed.css',
+      media: 'screen',
+      alternate: false,
+    },
+  ],
+})
+```
+
+Will output:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl" title="Pretty Feed" media="screen"?>
+<?xml-stylesheet type="text/css" href="/styles/feed.css" media="screen" alternate="no"?>
+<rss version="2.0">
+  <!-- … -->
+</rss>
+```
+
 ### Generating OPML
 
 > [!NOTE]
