@@ -107,12 +107,12 @@ The simplest way to parse any feed is to use the universal `parseFeed` function:
 ```ts
 import { parseFeed } from 'feedsmith'
 
-const { type, feed } = parseFeed('feed content')
+const { format, feed } = parseFeed('feed content')
 
-console.log('Feed type:', type) // → rss, atom, json, rdf
+console.log('Feed format:', format) // → rss, atom, json, rdf
 console.log('Feed title:', feed.title)
 
-if (type === 'rss') {
+if (format === 'rss') {
   console.log('RSS feed link:', feed.link)
 }
 ```
@@ -130,7 +130,7 @@ const jsonFeed = parseJsonFeed('json content')
 const rssFeed = parseRssFeed('rss content')
 const rdfFeed = parseRdfFeed('rdf content')
 
-// Then read the TypeScript suggestions for the specific feed type
+// Then read the TypeScript suggestions for the specific feed format
 rssFeed.title
 rssFeed.dc?.creator
 rssFeed.dc?.date
