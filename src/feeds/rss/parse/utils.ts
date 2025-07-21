@@ -160,7 +160,7 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
     authors: parseArrayOf(value.author, parsePerson),
     categories: parseArrayOf(value.category, parseCategory),
     comments: parseSingularOf(value.comments, (value) => parseString(retrieveText(value))),
-    enclosure: parseSingularOf(value.enclosure, parseEnclosure),
+    enclosures: parseArrayOf(value.enclosure, parseEnclosure),
     guid: parseSingularOf(value.guid, parseGuid),
     pubDate: parseSingularOf(value.pubdate, (value) => parseDate(retrieveText(value))),
     source: parseSingularOf(value.source, parseSource),

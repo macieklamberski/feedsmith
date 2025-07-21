@@ -416,11 +416,13 @@ describe('generateItem', () => {
       authors: ['john.doe@example.com (John Doe)'],
       categories: [{ name: 'Technology', domain: 'https://example.com/categories' }],
       comments: 'https://example.com/item/123/comments',
-      enclosure: {
-        url: 'https://example.com/audio.mp3',
-        length: 12345678,
-        type: 'audio/mpeg',
-      },
+      enclosures: [
+        {
+          url: 'https://example.com/audio.mp3',
+          length: 12345678,
+          type: 'audio/mpeg',
+        },
+      ],
       guid: {
         value: 'https://example.com/item/123',
         isPermaLink: true,
@@ -443,11 +445,13 @@ describe('generateItem', () => {
         },
       ],
       comments: 'https://example.com/item/123/comments',
-      enclosure: {
-        '@url': 'https://example.com/audio.mp3',
-        '@length': 12345678,
-        '@type': 'audio/mpeg',
-      },
+      enclosure: [
+        {
+          '@url': 'https://example.com/audio.mp3',
+          '@length': 12345678,
+          '@type': 'audio/mpeg',
+        },
+      ],
       guid: {
         '#text': 'https://example.com/item/123',
         '@isPermaLink': true,
