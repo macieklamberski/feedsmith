@@ -72,6 +72,90 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expectation)
   })
 
+  it('should parse RSS feed with multiple enclosures per item', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rss version="2.0">
+        <channel>
+          <title>Podcast with Multiple Media Files</title>
+          <link>https://example.com</link>
+          <description>A podcast that provides multiple formats</description>
+          <item>
+            <title>Episode 1: Getting Started</title>
+            <link>https://example.com/episode1</link>
+            <description>First episode with audio, video, and transcript</description>
+            <enclosure url="https://example.com/ep1-audio.mp3" length="15000000" type="audio/mpeg"/>
+            <enclosure url="https://example.com/ep1-video.mp4" length="50000000" type="video/mp4"/>
+            <enclosure url="https://example.com/ep1-transcript.pdf" length="500000" type="application/pdf"/>
+            <pubDate>Mon, 01 Jan 2024 12:00:00 GMT</pubDate>
+            <guid>https://example.com/episode1</guid>
+          </item>
+          <item>
+            <title>Episode 2: Advanced Topics</title>
+            <link>https://example.com/episode2</link>
+            <description>Second episode with multiple audio formats</description>
+            <enclosure url="https://example.com/ep2-high.mp3" length="20000000" type="audio/mpeg"/>
+            <enclosure url="https://example.com/ep2-low.mp3" length="8000000" type="audio/mpeg"/>
+            <pubDate>Mon, 08 Jan 2024 12:00:00 GMT</pubDate>
+            <guid>https://example.com/episode2</guid>
+          </item>
+        </channel>
+      </rss>
+    `
+    const expected = {
+      title: 'Podcast with Multiple Media Files',
+      link: 'https://example.com',
+      description: 'A podcast that provides multiple formats',
+      items: [
+        {
+          title: 'Episode 1: Getting Started',
+          link: 'https://example.com/episode1',
+          description: 'First episode with audio, video, and transcript',
+          enclosures: [
+            {
+              url: 'https://example.com/ep1-audio.mp3',
+              length: 15000000,
+              type: 'audio/mpeg',
+            },
+            {
+              url: 'https://example.com/ep1-video.mp4',
+              length: 50000000,
+              type: 'video/mp4',
+            },
+            {
+              url: 'https://example.com/ep1-transcript.pdf',
+              length: 500000,
+              type: 'application/pdf',
+            },
+          ],
+          pubDate: 'Mon, 01 Jan 2024 12:00:00 GMT',
+          guid: { value: 'https://example.com/episode1' },
+        },
+        {
+          title: 'Episode 2: Advanced Topics',
+          link: 'https://example.com/episode2',
+          description: 'Second episode with multiple audio formats',
+          enclosures: [
+            {
+              url: 'https://example.com/ep2-high.mp3',
+              length: 20000000,
+              type: 'audio/mpeg',
+            },
+            {
+              url: 'https://example.com/ep2-low.mp3',
+              length: 8000000,
+              type: 'audio/mpeg',
+            },
+          ],
+          pubDate: 'Mon, 08 Jan 2024 12:00:00 GMT',
+          guid: { value: 'https://example.com/episode2' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should throw error for invalid input', () => {
     expect(() => parse('not a feed')).toThrowError(locales.invalid)
   })

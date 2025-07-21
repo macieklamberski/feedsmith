@@ -176,7 +176,7 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
     author: trimArray(item.authors, generatePerson),
     category: trimArray(item.categories, generateCategory),
     comments: generateCdataString(item.comments),
-    enclosure: generateEnclosure(item.enclosure),
+    enclosure: trimArray(item.enclosures, generateEnclosure),
     guid: generateGuid(item.guid),
     pubDate: generateRfc822Date(item.pubDate),
     source: generateSource(item.source),

@@ -42,11 +42,13 @@
       "link": "http://example.org/item/1",
       "description": "Watch out for <span style=\"background: url(javascript:window.location='http://example.org/')\"> nasty tricks</span>",
       "categories": [{ "name": "Miscellaneous" }, { "name": "Technology" }],
-      "enclosure": {
-        "url": "http://example.org/audio/demo.mp3",
-        "length": 1069871,
-        "type": "audio/mpeg"
-      },
+      "enclosures": [
+        {
+          "url": "http://example.org/audio/demo.mp3",
+          "length": 1069871,
+          "type": "audio/mpeg"
+        }
+      ],
       "pubDate": "Thu, 05 Sep 2002 0:00:01 GMT",
       "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
     },
@@ -55,11 +57,13 @@
       "link": "http://example.org/item/2",
       "description": "Watch out for <span style=\"background: url(javascript:window.location='http://example.org/')\"> nasty tricks</span>",
       "categories": [{ "name": "Miscellaneous" }],
-      "enclosure": {
-        "url": "http://example.org/audio/demo.mp3",
-        "length": 1069871,
-        "type": "audio/mpeg"
-      },
+      "enclosures": [
+        {
+          "url": "http://example.org/audio/demo.mp3",
+          "length": 1069871,
+          "type": "audio/mpeg"
+        }
+      ],
       "pubDate": "Thu, 05 Sep 2002 0:00:01 GMT",
       "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
     }
