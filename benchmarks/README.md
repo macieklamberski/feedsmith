@@ -2,7 +2,7 @@
 
 Below are the speed benchmarks for popular JavaScript packages for parsing feeds. Feedsmith's results are marked with an asterisk (`*`).
 
-The benchmarks use real-world feeds organized by feed format (RSS, Atom, JSON Feed, RDF) and file size ranges. Each range is tested on 10/50 representative feed files that span the specified size range, providing insight into how each package performs across various scenarios.
+The benchmarks use real-world feeds organized by feed format (RSS, Atom, JSON Feed, RDF) and file size ranges. Each range is tested on 10/100 representative feed files that span the specified size range, providing insight into how each package performs across various scenarios.
 
 Tests performed in both [Tinybench](https://github.com/tinylibs/tinybench) and [Benchmark.js](https://github.com/bestiejs/benchmark.js) with random tests order on every run.
 
@@ -194,11 +194,11 @@ $ bun benchmarks/parsing.ts
 > [!NOTE]
 > It was hard to find libraries for handling JSON Feed, so at this moment only Feedsmith is listed.
 
-## Benchmark Methodology: Lazy vs Eager Parsing
+## Methodology
 
 The parsing benchmarks measure feed parsing libraries under realistic conditions where developers need access to fully parsed data. Some libraries use lazy evaluation (deferring computation until properties are accessed) while others parse everything upfront. To ensure fair comparison, we measure the total time required to produce equivalent, fully-accessible results.
 
-For lazy parsers like @rowanmanning/feed-parser, we call methods such as .toJSON() to force complete evaluation. Without this step, we'd only be measuring the initial setup cost while ignoring the deferred work that still needs to happen when data is accessed.
+For lazy parsers like `@rowanmanning/feed-parser`, we call methods such as .toJSON() to force complete evaluation. Without this step, we'd only be measuring the initial setup cost while ignoring the deferred work that still needs to happen when data is accessed.
 
 This approach reflects typical usage patterns where developers parse feeds to immediately access properties like titles, descriptions, and item lists. Measuring only the initial parsing step for lazy libraries would create misleading comparisons since the computational cost simply shifts to when the data is actually used.
 
