@@ -1,0 +1,75 @@
+# Meet Feedsmith
+
+Robust and fast JavaScript parser and generator for RSS, Atom, JSON Feed, and RDF feeds, with support for popular namespaces and OPML files.
+
+Feedsmith provides both universal and format-specific parsers that maintain the original feed structure in a clean, object-oriented format while intelligently normalizing legacy elements. Access all feed data without compromising simplicity.
+
+## Features
+
+### Core
+
+* **Comprehensive Support** 🎯 — Supports all major feed formats and feed namespaces.
+* **Perserves Structure** 📦 — Parsed feed object maintains the original feed structure making it easy to access the data.
+* **Smart Namespace Handling** 🧠 — Automatically normalizes custom namespace prefixes to standard ones (e.g., `<custom:creator>` becomes `dc.creator`).
+* **Parsing & Generating** 🔩 — You can use one package for both parsing and generating feeds.
+
+### Leniency
+* **Normalizes Legacy Elements** ✨ — Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
+* **CaSe INSENsiTive** 🐍 — Handles fields and attributes in any case (lowercase, uppercase, mixed).
+* **Forgiving** 🤝 — Handles malformed or incomplete feeds gracefully. It will extract whatever valid data it can find and ignore missing or invalid elements. This makes it suitable for use with real-world feeds that may not strictly follow specifications.
+
+### Performance and Type-Safety
+* **Ultrafast parsing** ⚡ — One of the fastest feed parsers in JavaScript ([see benchmarks](/benchmarks)).
+* **Type-safe API** 🛟 — Built with TypeScript from the ground up, it provides complete type definitions for every feed format and namespace.
+* **Tree-shakable** 🍃 — Only include the parts of the library you need, reducing bundle size.
+* **Well-tested** 🔬 — Comprehensive test suite with over 2000 tests and 99% code coverage.
+
+### Compatibility
+* Works in Node.js and modern browsers.
+* Works with plain JavaScript, you don't need to use TypeScript.
+
+## Supported Formats
+
+Feedsmith aims to fully support all major feed formats and namespaces in complete alignment with their specifications.
+
+✅ Available
+&nbsp;&nbsp;·&nbsp;&nbsp;
+⌛️ Work in progress
+&nbsp;&nbsp;·&nbsp;&nbsp;
+📋 Planned
+
+### Feeds
+
+| Format | Versions | Parsing | Generating |
+|--------|----------|---------|------------|
+| [RSS](http://cyber.law.harvard.edu/rss/rss.html) | 0.9x, 2.0 | ✅ | ✅ |
+| [Atom](https://tools.ietf.org/html/rfc4287) | 0.3, 1.0 | ✅ | ✅ |
+| [JSON Feed](https://jsonfeed.org) | 1.0, 1.1 | ✅ | ✅ |
+| [RDF](https://web.resource.org/rss/1.0/spec) | 0.9, 1.0 | ✅ | ⏳ |
+
+### Namespaces
+
+| Name | Prefix | Supported in | Parsing | Generating |
+|------|---------|--------------|---------|------------|
+| [Atom](http://www.w3.org/2005/Atom) | `<atom:*>` | RSS, RDF | ✅ | ✅ |
+| [Dublin Core](http://purl.org/dc/elements/1.1/) | `<dc:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Syndication](http://purl.org/rss/1.0/modules/syndication/) | `<sy:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Content](http://purl.org/rss/1.0/modules/content/) | `<content:*>` | RSS, RDF | ✅ | ✅ |
+| [Slash](http://purl.org/rss/1.0/modules/slash/) | `<slash:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [iTunes](http://www.itunes.com/dtds/podcast-1.0.dtd) | `<itunes:*>` | RSS, Atom | ✅ | ✅ |
+| [Podcast](https://podcastindex.org/namespace/1.0) | `<podcast:*>` | RSS | ✅ | ✅ |
+| [Media RSS](http://search.yahoo.com/mrss/) | `<media:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [GeoRSS-Simple](http://www.georss.org/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) | `<thr:*>` | RSS, Atom | ✅ | ✅ |
+| [Dublin Core Terms](http://purl.org/dc/terms/) | `<dcterms:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Well-Formed Web](http://wellformedweb.org/CommentAPI/) | `<wfw:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [YouTube](https://www.youtube.com/feeds/videos.xml) | `<yt:*>` | Atom | ✅ | ✅ |
+| [Administrative](https://web.resource.org/rss/1.0/modules/admin/) | `<admin:*>` | 📋 | 📋 | 📋 |
+| [GML](http://www.opengis.net/gml) | `<gml:*>` | 📋 | 📋 | 📋 |
+| [GeoRSS GML](http://www.opengis.net/gml) | `<georss:*>` | 📋 | 📋 | 📋 |
+
+### Other
+
+| Format | Versions | Parsing | Generating |
+|--------|----------|---------|------------|
+| [OPML](https://opml.org/) | 1.0, 2.0 | ✅ | ✅ |
