@@ -1,15 +1,20 @@
 import { defineConfig } from 'vitepress'
+import llmstxt from 'vitepress-plugin-llms'
 
 export default defineConfig({
+  vite: {
+    plugins: [llmstxt()],
+  },
   title: 'Feedsmith',
   description:
     'Robust and fast JavaScript parser and generator for RSS, Atom, JSON Feed, and RDF feeds, with support for popular namespaces and OPML files.',
+  lastUpdated: true,
   cleanUrls: true,
   themeConfig: {
     nav: [
       { text: 'Quick Start', link: '/quick-start' },
-      { text: 'Parsing', link: '/parsing' },
-      { text: 'Generating', link: '/generating' },
+      { text: 'Parsing', link: '/parsing/' },
+      { text: 'Generating', link: '/generating/' },
     ],
     sidebar: [
       {

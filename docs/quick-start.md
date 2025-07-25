@@ -104,8 +104,8 @@ try {
 
 ## What's Next?
 
-- **[Parse feeds](/parsing)** — Learn about parsing different formats
-- **[Generate feeds](/generating)** — Create RSS, Atom, and JSON feeds
+- **[Parse feeds](/parsing/)** — Learn about parsing different formats
+- **[Generate feeds](/generating/)** — Create RSS, Atom, and JSON feeds
 - **[Work with namespaces](/parsing/namespaces)** — Access podcast, media, and other metadata
 - **[API Reference](/api)** — Explore all available functions and types
 - **[Benchmarks](/benchmarks)** — See how Feedsmith compares to other libraries
