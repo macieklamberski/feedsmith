@@ -55,7 +55,7 @@
     "@biomejs/biome": "^2.1.2",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@types/bun": "^1.2.18",
+    "@types/bun": "^1.2.19",
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "lefthook": "^1.12.2",
     "semantic-release": "^24.2.7",
