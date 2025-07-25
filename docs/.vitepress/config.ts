@@ -15,9 +15,9 @@ export default defineConfig({
       {
         items: [
           { text: 'Introduction', link: '/' },
-          { text: 'Installation', link: '/installation' },
-          { text: 'Philosophy', link: '/philosophy' },
+          { text: 'Quick Start', link: '/quick-start' },
           { text: 'Benchmarks', link: '/benchmarks' },
+          { text: 'Installation', link: '/installation' },
           {
             text: 'Parsing',
             items: [

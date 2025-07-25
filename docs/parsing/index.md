@@ -87,7 +87,7 @@ opml.body?.outlines
 
 If the feed is unrecognized or invalid, an `Error` will be thrown with a descriptive message.
 
-```ts
+```typescript
 import { parseFeed, parseJsonFeed } from 'feedsmith'
 
 try {
@@ -117,7 +117,7 @@ The objects returned from the parser functions are highly comprehensive, aiming 
 
 ### Atom Feed
 
-```ts
+```typescript
 import { parseAtomFeed } from 'feedsmith'
 
 const atomFeed = parseAtomFeed(`
@@ -174,7 +174,7 @@ Returns:
 
 ### RSS Feed
 
-```ts
+```typescript
 import { parseRssFeed } from 'feedsmith'
 
 const rssFeed = parseRssFeed(`
@@ -285,7 +285,10 @@ Returns:
       },
       "guid": "http://example.org/guid/1",
       "pubDate": "Thu, 05 Sep 2002 0:00:01 GMT",
-      "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
+      "source": {
+        "title": "Example's Realm",
+        "url": "http://www.example.org/links.xml"
+      }
     }
   ]
 }
@@ -293,7 +296,7 @@ Returns:
 
 ### OPML File
 
-```ts
+```typescript
 import { parseOpml } from 'feedsmith'
 
 const opml = parseOpml(`

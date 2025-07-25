@@ -2,7 +2,7 @@
 
 You can quickly detect the feed format without parsing it.
 
-```ts
+```typescript
 import {
   detectAtomFeed,
   detectJsonFeed,
