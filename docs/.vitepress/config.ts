@@ -42,8 +42,17 @@ export default defineConfig({
         ],
       },
       {
-        text: 'API Reference',
-        link: '/api',
+        text: 'Reference',
+        items: [
+          {
+            text: 'API Reference',
+            link: '/api',
+          },
+          {
+            text: 'Migration from 1.x to 2.x',
+            link: '/migration-to-2.x',
+          },
+        ],
       },
     ],
     search: {
