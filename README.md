@@ -148,7 +148,12 @@ if (format === 'rss') {
 If you know the format in advance, you can use the format-specific parsers:
 
 ```typescript
-import { parseAtomFeed, parseJsonFeed, parseRssFeed, parseRdfFeed } from 'feedsmith'
+import {
+  parseAtomFeed,
+  parseJsonFeed,
+  parseRssFeed,
+  parseRdfFeed
+} from 'feedsmith'
 
 // Parse specific formats
 const atomFeed = parseAtomFeed('atom content')
@@ -192,6 +197,12 @@ const rss = generateRssFeed({
 })
 
 console.log(rss) // Complete RSS XML
+
+// You can also generate other formats:
+// - generateAtomFeed() for Atom feeds
+// - generateJsonFeed() for JSON feeds
+// - generateRdfFeed() for RDF feeds
+// - generateOpml() for OPML files
 ```
 
 ### Handle Errors

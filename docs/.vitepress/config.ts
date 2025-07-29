@@ -18,27 +18,27 @@ export default defineConfig({
     ],
     sidebar: [
       {
+        text: 'Getting Started',
         items: [
           { text: 'Introduction', link: '/' },
           { text: 'Quick Start', link: '/quick-start' },
           { text: 'Benchmarks', link: '/benchmarks' },
-          { text: 'Installation', link: '/installation' },
-          {
-            text: 'Parsing',
-            items: [
-              { text: 'Overview', link: '/parsing/' },
-              { text: 'Namespaces', link: '/parsing/namespaces' },
-              { text: 'Dates', link: '/parsing/dates' },
-            ],
-          },
-          {
-            text: 'Generating',
-            items: [
-              { text: 'Overview', link: '/generating/' },
-              { text: 'Styling', link: '/generating/styling' },
-            ],
-          },
-          { text: 'Detecting', link: '/detecting' },
+        ],
+      },
+      {
+        text: 'Parsing',
+        items: [
+          { text: 'Overview', link: '/parsing/' },
+          { text: 'Namespaces', link: '/parsing/namespaces' },
+          { text: 'Dates', link: '/parsing/dates' },
+          { text: 'Detecting', link: '/parsing/detecting' },
+        ],
+      },
+      {
+        text: 'Generating',
+        items: [
+          { text: 'Overview', link: '/generating/' },
+          { text: 'Styling', link: '/generating/styling' },
         ],
       },
       {

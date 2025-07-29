@@ -25,6 +25,14 @@ const opml = generateOpml({ /* opml data */ })
 
 The generation functions return properly formatted strings ready to use. Below are examples of what is generated for each format.
 
+> [!TIP]
+> For more examples, check the _*/references_ folders in the source code. There, you'll find the complete outputs returned from the generate functions for the various feed formats and versions.
+>
+> * Atom examples: [src/feeds/atom/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/atom/references)
+> * RSS examples: [src/feeds/rss/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/rss/references)
+> * RDF examples: [src/feeds/rdf/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/rdf/references)
+> * OPML examples: [src/opml/references](https://github.com/macieklamberski/feedsmith/blob/main/src/opml/references)
+
 ### RSS Feed
 
 ```typescript

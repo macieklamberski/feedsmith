@@ -1,4 +1,4 @@
-# Parsing Overview
+# Parsing Feeds
 
 Feedsmith provides powerful parsing capabilities for various feed formats. The library offers both a universal parser that automatically detects feed formats and dedicated parsers for when you know the format in advance.
 
@@ -41,7 +41,7 @@ The universal parser:
 
 > [!IMPORTANT]
 > The universal parser uses detection functions to identify the feed format. While these work well for most feeds, they might not perfectly detect all valid feeds, especially those with non-standard structures. If you know the feed format in advance, using a dedicated parser is more reliable.
-> See more on the [feed format detection](/detecting).
+> See more on the [feed format detection](/parsing/detecting).
 
 ## Dedicated Feed Parsers
 
@@ -108,12 +108,12 @@ try {
 The objects returned from the parser functions are highly comprehensive, aiming to recreate the actual feed structure and its values, including all the supported namespaces. Below are some examples of what is available.
 
 > [!TIP]
-> For more examples, check the _*/references_ folders in the source code. There, you'll find the complete objects returned from the parser functions for the various feed formats and versions.
+> For more examples, check the _*/references_ folders in the source code. There, you'll find the complete outputs returned from the parse functions for the various feed formats and versions.
 >
-> * Atom examples: [src/feeds/atom/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/atom/references),
-> * RSS examples: [src/feeds/rss/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/rss/references),
-> * RDF examples: [src/feeds/rdf/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/rdf/references).
-> * OPML examples: [src/opml/references](https://github.com/macieklamberski/feedsmith/blob/main/src/opml/references).
+> * Atom examples: [src/feeds/atom/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/atom/references)
+> * RSS examples: [src/feeds/rss/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/rss/references)
+> * RDF examples: [src/feeds/rdf/references](https://github.com/macieklamberski/feedsmith/blob/main/src/feeds/rdf/references)
+> * OPML examples: [src/opml/references](https://github.com/macieklamberski/feedsmith/blob/main/src/opml/references)
 
 ### Atom Feed
 

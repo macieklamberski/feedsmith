@@ -2,11 +2,65 @@
 
 This guide will get you up and running with Feedsmith in just a few minutes.
 
-### Installation
 
-```bash
+## Installation
+
+Feedsmith works in both Node.js and modern browsers as an ES module. It was tested in both environments, ensuring compatibility and reliability.
+
+Install the package using your preferred package manager:
+
+::: code-group
+
+```bash [npm]
 npm install feedsmith
 ```
+
+```bash [yarn]
+yarn add feedsmith
+```
+
+```bash [pnpm]
+pnpm add feedsmith
+```
+
+```bash [bun]
+bun add feedsmith
+```
+
+:::
+
+Or using CDN:
+
+::: code-group
+
+```html [unpkg]
+<script type="module">
+  import { parseFeed } from 'https://unpkg.com/feedsmith@latest/dist/index.js'
+
+  const { type, feed } = parseFeed(feedContent)
+  console.log(feed.title)
+</script>
+```
+
+```html [jsDelivr]
+<script type="module">
+  import { parseFeed } from 'https://cdn.jsdelivr.net/npm/feedsmith@latest/dist/index.js'
+
+  const { type, feed } = parseFeed(feedContent)
+  console.log(feed.title)
+</script>
+```
+
+```html [esm.sh]
+<script type="module">
+  import { parseFeed } from 'https://esm.sh/feedsmith@latest'
+
+  const { type, feed } = parseFeed(feedContent)
+  console.log(feed.title)
+</script>
+```
+
+:::
 
 ## Parse Any Feed
 
@@ -31,7 +85,12 @@ if (format === 'rss') {
 If you know the format in advance, you can use the format-specific parsers:
 
 ```typescript
-import { parseAtomFeed, parseJsonFeed, parseRssFeed, parseRdfFeed } from 'feedsmith'
+import {
+  parseAtomFeed,
+  parseJsonFeed,
+  parseRssFeed,
+  parseRdfFeed
+} from 'feedsmith'
 
 // Parse specific formats
 const atomFeed = parseAtomFeed('atom content')
@@ -77,10 +136,13 @@ const rss = generateRssFeed({
 })
 
 console.log(rss) // Complete RSS XML
-```
 
-> [!NOTE]
-> Analogous to the above examples, you can generate other feed formats using the format-specific functions `generateAtomFeed`, `generateJsonFeed`, `generateRdfFeed` functions, as well as OPML files using `generateOpml`.
+// You can also generate other formats:
+// - generateAtomFeed() for Atom feeds
+// - generateJsonFeed() for JSON feeds
+// - generateRdfFeed() for RDF feeds
+// - generateOpml() for OPML files
+```
 
 ## Error Handling
 
@@ -105,7 +167,7 @@ try {
 ## What's Next?
 
 - **[Parse feeds](/parsing/)** — Learn about parsing different formats
-- **[Generate feeds](/generating/)** — Create RSS, Atom, and JSON feeds
 - **[Work with namespaces](/parsing/namespaces)** — Access podcast, media, and other metadata
+- **[Generate feeds](/generating/)** — Create RSS, Atom, and JSON feeds
 - **[API Reference](/api)** — Explore all available functions and types
 - **[Benchmarks](/benchmarks)** — See how Feedsmith compares to other libraries

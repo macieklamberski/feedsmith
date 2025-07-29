@@ -1,6 +1,6 @@
 # Handling Dates
 
-During the parsing of hundreds of thousands of feeds, it was found that dates appear in various formats. Instead of attempting to parse all of them and risking errors, dates are returned in their original string form. This method allows for the use of a preferred date parsing library or the `Date` object directly.
+Dates in feeds do not always follow a format defined in the specifications, or even any consistent format. Instead of attempting to parse all of them and risking errors, Feedsmith returns dates in their original string form. This method allows for the use of a preferred date parsing library, custom function, or the `Date` object directly.
 
 ### Common Issues with Feed Dates
 
