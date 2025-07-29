@@ -1,3 +1,8 @@
+---
+prev: Quick Start
+next: Parsing › Overview
+---
+
 # Benchmarks
 
 Below are the speed benchmarks for popular JavaScript packages for parsing feeds. Feedsmith's results are marked with an asterisk (`*`).

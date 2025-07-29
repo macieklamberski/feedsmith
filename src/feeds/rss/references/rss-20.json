@@ -62,7 +62,10 @@
         "value": "http://example.org/guid/1"
       },
       "pubDate": "Thu, 05 Sep 2002 00:00:01 GMT",
-      "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
+      "source": {
+        "title": "Example's Realm",
+        "url": "http://www.example.org/links.xml"
+      }
     },
     {
       "title": "Second item title",
@@ -80,7 +83,10 @@
       ],
       "guid": { "value": "http://example.org/guid/2" },
       "pubDate": "Thu, 05 Sep 2002 00:00:01 GMT",
-      "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
+      "source": {
+        "title": "Example's Realm",
+        "url": "http://www.example.org/links.xml"
+      }
     }
   ]
 }

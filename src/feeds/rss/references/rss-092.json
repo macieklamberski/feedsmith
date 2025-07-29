@@ -46,7 +46,10 @@
           "type": "audio/mpeg"
         }
       ],
-      "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
+      "source": {
+        "title": "Example's Realm",
+        "url": "http://www.example.org/links.xml"
+      }
     },
     {
       "title": "Second item title",
@@ -60,7 +63,10 @@
           "type": "audio/mpeg"
         }
       ],
-      "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
+      "source": {
+        "title": "Example's Realm",
+        "url": "http://www.example.org/links.xml"
+      }
     }
   ]
 }
