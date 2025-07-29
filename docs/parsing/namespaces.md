@@ -1,3 +1,8 @@
+---
+prev: Parsing › Overview
+next: Parsing › Dates
+---
+
 # Parsing Namespaces
 
 XML-based feeds (RSS, Atom, RDF) support namespace extensions that add rich metadata beyond the basic feed format. All supported namespaces are automatically parsed and custom prefixes are normalized.

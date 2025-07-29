@@ -1,3 +1,8 @@
+---
+prev: Parsing › Detecting
+next: Generating › Styling
+---
+
 # Generating Feeds
 
 Create RSS, Atom, JSON Feed, and OPML files with full namespace support.

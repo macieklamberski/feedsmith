@@ -1,3 +1,7 @@
+---
+next: Parsing › Namespaces
+---
+
 # Parsing Feeds
 
 Feedsmith provides powerful parsing capabilities for various feed formats. The library offers both a universal parser that automatically detects feed formats and dedicated parsers for when you know the format in advance.

@@ -1,3 +1,8 @@
+---
+prev: Parsing › Dates
+next: Generating › Overview
+---
+
 # Format Detection
 
 You can quickly detect the feed format without parsing it.
