@@ -395,4 +395,85 @@ describe('generate', () => {
 
     expect(generate(value, options)).toEqual(expected)
   })
+
+  it('should generate RSS feed with multiple enclosures per item', () => {
+    const value = {
+      title: 'Podcast with Multiple Media Files',
+      description: 'A podcast that provides multiple formats',
+      items: [
+        {
+          title: 'Episode 1: Getting Started',
+          link: 'https://example.com/episode1',
+          description: 'First episode with audio, video, and transcript',
+          enclosures: [
+            {
+              url: 'https://example.com/ep1-audio.mp3',
+              length: 15000000,
+              type: 'audio/mpeg',
+            },
+            {
+              url: 'https://example.com/ep1-video.mp4',
+              length: 50000000,
+              type: 'video/mp4',
+            },
+            {
+              url: 'https://example.com/ep1-transcript.pdf',
+              length: 500000,
+              type: 'application/pdf',
+            },
+          ],
+          pubDate: new Date('2024-01-01T12:00:00Z'),
+          guid: { value: 'https://example.com/episode1' },
+        },
+        {
+          title: 'Episode 2: Advanced Topics',
+          link: 'https://example.com/episode2',
+          description: 'Second episode with multiple audio formats',
+          enclosures: [
+            {
+              url: 'https://example.com/ep2-high.mp3',
+              length: 20000000,
+              type: 'audio/mpeg',
+            },
+            {
+              url: 'https://example.com/ep2-low.mp3',
+              length: 8000000,
+              type: 'audio/mpeg',
+            },
+          ],
+          pubDate: new Date('2024-01-08T12:00:00Z'),
+          guid: { value: 'https://example.com/episode2' },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Podcast with Multiple Media Files</title>
+    <description>A podcast that provides multiple formats</description>
+    <item>
+      <title>Episode 1: Getting Started</title>
+      <link>https://example.com/episode1</link>
+      <description>First episode with audio, video, and transcript</description>
+      <enclosure url="https://example.com/ep1-audio.mp3" length="15000000" type="audio/mpeg"/>
+      <enclosure url="https://example.com/ep1-video.mp4" length="50000000" type="video/mp4"/>
+      <enclosure url="https://example.com/ep1-transcript.pdf" length="500000" type="application/pdf"/>
+      <guid>https://example.com/episode1</guid>
+      <pubDate>Mon, 01 Jan 2024 12:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Episode 2: Advanced Topics</title>
+      <link>https://example.com/episode2</link>
+      <description>Second episode with multiple audio formats</description>
+      <enclosure url="https://example.com/ep2-high.mp3" length="20000000" type="audio/mpeg"/>
+      <enclosure url="https://example.com/ep2-low.mp3" length="8000000" type="audio/mpeg"/>
+      <guid>https://example.com/episode2</guid>
+      <pubDate>Mon, 08 Jan 2024 12:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
 })
