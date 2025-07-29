@@ -10,6 +10,16 @@ export default defineConfig({
     'Robust and fast JavaScript parser and generator for RSS, Atom, JSON Feed, and RDF feeds, with support for popular namespaces and OPML files.',
   lastUpdated: true,
   cleanUrls: true,
+  head: [
+    [
+      'script',
+      {
+        async: '',
+        src: 'https://umami.lamberski.com/script.js',
+        'data-website-id': 'a9c61323-eaac-4bbb-bd20-b1c6f0d69a3d',
+      },
+    ],
+  ],
   themeConfig: {
     nav: [
       { text: 'Quick Start', link: '/quick-start' },
