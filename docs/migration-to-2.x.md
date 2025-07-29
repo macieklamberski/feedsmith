@@ -106,6 +106,37 @@ type RssFeed<TDate extends DateLike = string> = DeepPartial<{
 3. Consider using type guards for critical properties
 4. The enhanced typing may reveal previously hidden bugs in your code
 
+### RSS Enclosure Structure Change
+
+RSS feed items now support multiple enclosures as an array instead of a single enclosure object.
+
+#### Before (1.x)
+```typescript
+const rssFeed = parseRssFeed(content)
+const enclosure = rssFeed.items?.[0]?.enclosure // single Enclosure object
+if (enclosure) {
+  console.log(enclosure.url)
+  console.log(enclosure.type)
+  console.log(enclosure.length)
+}
+```
+
+#### After (2.x)
+```typescript
+const rssFeed = parseRssFeed(content)
+const enclosures = rssFeed.items?.[0]?.enclosures // Array<Enclosure>
+if (enclosures?.length) {
+  console.log(enclosures[0].url)
+  console.log(enclosures[0].type)
+  console.log(enclosures[0].length)
+}
+```
+
+#### Migration Steps
+1. Replace `item.enclosure` with `item.enclosures?.[0]` for single enclosure access
+2. Update code to handle multiple enclosures by iterating over the `enclosures` array
+3. Check for array length instead of truthy enclosure object
+
 ## New Features
 
 ### Comprehensive Feed Generation
@@ -181,6 +212,7 @@ Use this checklist to ensure a complete migration:
 
 - Update `result.type` to `result.format` in all `parseFeed` calls
 - Change `item.guid` to `item.guid?.value` for RSS feeds
+- Change `item.enclosure` to `item.enclosures?.[0]` for RSS feeds
 - Change `podcast.contentlink` to `podcast.contentLink`
 - Add optional chaining (`?.`) for all feed property access
 - Test with your existing feeds to ensure proper parsing
