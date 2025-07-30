@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "formatter": {
     "useEditorconfig": true,
     "formatWithErrors": true,
@@ -14,7 +14,16 @@
   "linter": {
     "rules": {
       "style": {
-        "noParameterAssign": "warn"
+        "noParameterAssign": "warn",
+        "useConsistentArrayType": {
+          "level": "error",
+          "options": {
+            "syntax": "generic"
+          }
+        }
+      },
+      "complexity": {
+        "useArrowFunction": "error"
       }
     }
   }
