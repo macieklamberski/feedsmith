@@ -59,8 +59,7 @@ describe('generatePerson', () => {
       email: 'john.doe@example.com',
       link: 'https://example.com',
     }
-    // When email and name are present, use standard RSS format and ignore link
-    const expected = 'john.doe@example.com (John Doe)'
+    const expected = 'john.doe@example.com (John Doe) <https://example.com>'
 
     expect(generatePerson(value)).toEqual(expected)
   })

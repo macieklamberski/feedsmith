@@ -55,12 +55,10 @@ export const generatePerson: GenerateFunction<Person> = (person) => {
   const parts: Array<string> = []
 
   if (person.email && person.name) {
-    return `${person.email} (${person.name})`
+    parts.push(`${person.email} (${person.name})`)
   } else if (person.email) {
     parts.push(person.email)
-  }
-
-  if (person.name && !person.email) {
+  } else if (person.name) {
     parts.push(person.name)
   }
 
@@ -68,7 +66,9 @@ export const generatePerson: GenerateFunction<Person> = (person) => {
     parts.push(`<${person.link}>`)
   }
 
-  return parts.length > 0 ? parts.join(' ') : undefined
+  if (parts.length) {
+    return parts.join(' ')
+  }
 }
 
 export const generateCategory: GenerateFunction<Category> = (category) => {
