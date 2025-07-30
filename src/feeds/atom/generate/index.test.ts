@@ -274,13 +274,21 @@ describe('generate', () => {
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>https://example.com/feed</id>
-  <subtitle>Content with &lt;tags&gt; &amp; &quot;quotes&quot;</subtitle>
-  <title>Special &amp; Characters &gt; Need &quot;Escaping&quot;</title>
+  <subtitle>
+    <![CDATA[Content with <tags> & "quotes"]]>
+  </subtitle>
+  <title>
+    <![CDATA[Special & Characters > Need "Escaping"]]>
+  </title>
   <updated>2023-03-15T12:00:00.000Z</updated>
   <entry>
-    <content>Content with &lt;b&gt;bold&lt;/b&gt; &amp; &quot;quoted&quot; text</content>
+    <content>
+      <![CDATA[Content with <b>bold</b> & "quoted" text]]>
+    </content>
     <id>https://example.com/entry/1</id>
-    <title>Entry with &amp; Special Characters</title>
+    <title>
+      <![CDATA[Entry with & Special Characters]]>
+    </title>
     <updated>2023-03-15T12:00:00.000Z</updated>
   </entry>
 </feed>
@@ -505,7 +513,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
   <id>https://example.com/feed</id>
@@ -543,7 +550,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
   <id>https://example.com/feed</id>
@@ -650,5 +656,104 @@ describe('generate', () => {
 `
 
     expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with YouTube namespace', () => {
+    const value = {
+      id: 'yt:channel:UCuAXFkgsw1L7xaCfnd5JJOw',
+      title: 'YouTube Channel Feed',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      yt: {
+        channelId: 'UCuAXFkgsw1L7xaCfnd5JJOw',
+      },
+      entries: [
+        {
+          id: 'yt:video:dQw4w9WgXcQ',
+          title: 'Example YouTube Video',
+          updated: new Date('2024-01-05T10:30:00Z'),
+          yt: {
+            videoId: 'dQw4w9WgXcQ',
+            channelId: 'UCuAXFkgsw1L7xaCfnd5JJOw',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
+  <id>yt:channel:UCuAXFkgsw1L7xaCfnd5JJOw</id>
+  <title>YouTube Channel Feed</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
+  <entry>
+    <id>yt:video:dQw4w9WgXcQ</id>
+    <title>Example YouTube Video</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+    <yt:videoId>dQw4w9WgXcQ</yt:videoId>
+    <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with YouTube playlist', () => {
+    const value = {
+      id: 'yt:playlist:PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf',
+      title: 'YouTube Playlist Feed',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      yt: {
+        playlistId: 'PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf',
+      },
+      entries: [
+        {
+          id: 'yt:video:OTYFJaT-Glk',
+          title: 'Video in Playlist',
+          updated: new Date('2024-01-08T14:20:00Z'),
+          yt: {
+            videoId: 'OTYFJaT-Glk',
+            channelId: 'UCtNjkMLQQOX251hjGqimx2w',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
+  <id>yt:playlist:PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf</id>
+  <title>YouTube Playlist Feed</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <yt:playlistId>PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf</yt:playlistId>
+  <entry>
+    <id>yt:video:OTYFJaT-Glk</id>
+    <title>Video in Playlist</title>
+    <updated>2024-01-08T14:20:00.000Z</updated>
+    <yt:videoId>OTYFJaT-Glk</yt:videoId>
+    <yt:channelId>UCtNjkMLQQOX251hjGqimx2w</yt:channelId>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with stylesheets', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Stylesheet',
+      updated: new Date('2023-03-15T12:00:00Z'),
+    }
+    const options = {
+      stylesheets: [{ type: 'text/xsl', href: '/styles/atom.xsl' }],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/styles/atom.xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com/feed</id>
+  <title>Feed with Stylesheet</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+</feed>
+`
+
+    expect(generate(value, options)).toEqual(expected)
   })
 })

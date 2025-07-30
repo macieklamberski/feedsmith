@@ -24,3 +24,5 @@ tsconfig.tsbuildinfo
 
 # Other
 benchmarks/files
+docs/.vitepress/cache
+docs/.vitepress/dist

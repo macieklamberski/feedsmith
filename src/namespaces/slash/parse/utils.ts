@@ -25,7 +25,7 @@ export const retrieveItem: ParsePartialFunction<Item> = (value) => {
       parseString(retrieveText(value)),
     ),
     comments: parseSingularOf(value['slash:comments'], (value) => parseNumber(retrieveText(value))),
-    hit_parade: parseSingularOf(value['slash:hit_parade'], (value) =>
+    hitParade: parseSingularOf(value['slash:hit_parade'], (value) =>
       parseHitParade(retrieveText(value)),
     ),
   }

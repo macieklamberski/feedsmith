@@ -1,11 +1,11 @@
 import type { DateLike } from '../../common/types.js'
 
-export type Outline = {
+export type Outline<TDate extends DateLike> = {
   text: string
   type?: string
   isComment?: boolean
   isBreakpoint?: boolean
-  created?: string
+  created?: TDate
   category?: string
   description?: string
   xmlUrl?: string
@@ -14,7 +14,7 @@ export type Outline = {
   title?: string
   version?: string
   url?: string
-  outlines?: Array<Outline>
+  outlines?: Array<Outline<TDate>>
 }
 
 export type Head<TDate extends DateLike> = {
@@ -33,11 +33,11 @@ export type Head<TDate extends DateLike> = {
   windowRight?: number
 }
 
-export type Body = {
-  outlines?: Array<Outline>
+export type Body<TDate extends DateLike> = {
+  outlines?: Array<Outline<TDate>>
 }
 
 export type Opml<TDate extends DateLike> = {
   head?: Head<TDate>
-  body?: Body
+  body?: Body<TDate>
 }

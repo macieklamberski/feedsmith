@@ -14,6 +14,7 @@ describe('retrieveFeed', () => {
       'sy:updatefrequency': { '#text': '2' },
       'sy:updatebase': { '#text': '2023-01-01T12:00:00Z' },
     }
+
     expect(retrieveFeed(value)).toEqual(expectedFull)
   })
 

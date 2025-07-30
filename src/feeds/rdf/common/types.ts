@@ -38,8 +38,8 @@ export type Item<TDate extends DateLike> = {
 
 export type Feed<TDate extends DateLike> = {
   title: string
-  link?: string
-  description?: string
+  link: string
+  description: string
   image?: Image
   items?: Array<Item<TDate>>
   textInput?: TextInput

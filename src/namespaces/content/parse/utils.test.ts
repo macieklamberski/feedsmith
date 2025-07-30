@@ -10,6 +10,7 @@ describe('retrieveItem', () => {
     const value = {
       'content:encoded': { '#text': '<p>This is encoded content</p>' },
     }
+
     expect(retrieveItem(value)).toEqual(expectedFull)
   })
 

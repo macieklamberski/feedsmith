@@ -1,5 +1,5 @@
 import { Readable } from 'node:stream'
-import { extractFromXml } from '@extractus/feed-extractor'
+import { extractFromXml as testExtractusFeedExtractor } from '@extractus/feed-extractor'
 import { FeedParser as GapHubFeedParser } from '@gaphub/feed'
 import { parseFeed as rowanmanningFeedParser } from '@rowanmanning/feed-parser'
 import { rssParse as ulisesgasconRssFeedParser } from '@ulisesgascon/rss-feed-parser'
@@ -9,7 +9,7 @@ import nodeOpmlParser from 'node-opml-parser'
 import opmlPackage from 'opml'
 import { opmlToJSON as testOpmlToJson } from 'opml-to-json'
 import OpmlParser from 'opmlparser'
-import { getPodcastFromFeed as podcastFeedParser } from 'podcast-feed-parser'
+import { getPodcastFromFeed as testPodcastFeedParser } from 'podcast-feed-parser'
 import RssParser from 'rss-parser'
 import { parseAtomFeed, parseJsonFeed, parseOpml, parseRdfFeed, parseRssFeed } from '../src/index'
 import { loadFeedFiles, runBenchmarks, runTest } from './utils'
@@ -20,7 +20,7 @@ const testGaphubFeedParser = (feed: string) => {
 }
 
 const testGaphubFeedParserOpml = async (xml: string) => {
-  return new GapHubFeedParser().parseOPMLString(xml)
+  return gaphubFeedParserInstance.parseOPMLString(xml)
 }
 
 const testFeedMeJs = (feed: string) => {
@@ -49,8 +49,15 @@ const testFeedParser = (feed: string) => {
   })
 }
 
+const testRowanmanningFeedParser = (feed: string) => {
+  // To test the same behavior across all parsers, we need to call the toJSON method.
+  // Otherwise, all properties are lazy-loaded on demand, which does not accurately
+  // represent the behavior of other parsers.
+  return rowanmanningFeedParser(feed).toJSON()
+}
+
 const rssParserInstance = new RssParser()
-const rssParser = (feed: string) => {
+const testRssParser = (feed: string) => {
   return rssParserInstance.parseString(feed)
 }
 
@@ -109,35 +116,35 @@ const rdfFiles = loadFeedFiles('files/rdf', 100)
 const opmlFiles = loadFeedFiles('files/opml', 10)
 
 await runBenchmarks('RSS feed parsing (10 files × 5MB–50MB)', {
-  'rss-parser': () => runTest(rssBigFiles, rssParser),
+  'rss-parser': () => runTest(rssBigFiles, testRssParser),
   '@gaphub/feed': () => runTest(rssBigFiles, testGaphubFeedParser),
-  '@rowanmanning/feed-parser': () => runTest(rssBigFiles, rowanmanningFeedParser),
+  '@rowanmanning/feed-parser': () => runTest(rssBigFiles, testRowanmanningFeedParser),
   'feedme.js': () => runTest(rssBigFiles, testFeedMeJs),
-  '@extractus/feed-extractor': () => runTest(rssBigFiles, extractFromXml),
+  '@extractus/feed-extractor': () => runTest(rssBigFiles, testExtractusFeedExtractor),
   '@ulisesgascon/rss-feed-parser': () => runTest(rssBigFiles, ulisesgasconRssFeedParser),
   feedparser: () => runTest(rssBigFiles, testFeedParser),
-  'podcast-feed-parser': () => runTest(rssBigFiles, podcastFeedParser),
+  'podcast-feed-parser': () => runTest(rssBigFiles, testPodcastFeedParser),
   'feedsmith *': () => runTest(rssBigFiles, parseRssFeed),
 })
 
 await runBenchmarks('RSS feed parsing (100 files × 100KB–5MB)', {
-  'rss-parser': () => runTest(rssSmallFiles, rssParser),
+  'rss-parser': () => runTest(rssSmallFiles, testRssParser),
   '@gaphub/feed': () => runTest(rssSmallFiles, testGaphubFeedParser),
-  '@rowanmanning/feed-parser': () => runTest(rssSmallFiles, rowanmanningFeedParser),
+  '@rowanmanning/feed-parser': () => runTest(rssSmallFiles, testRowanmanningFeedParser),
   'feedme.js': () => runTest(rssSmallFiles, testFeedMeJs),
-  '@extractus/feed-extractor': () => runTest(rssSmallFiles, extractFromXml),
+  '@extractus/feed-extractor': () => runTest(rssSmallFiles, testExtractusFeedExtractor),
   '@ulisesgascon/rss-feed-parser': () => runTest(rssSmallFiles, ulisesgasconRssFeedParser),
   feedparser: () => runTest(rssSmallFiles, testFeedParser),
-  'podcast-feed-parser': () => runTest(rssSmallFiles, podcastFeedParser),
+  'podcast-feed-parser': () => runTest(rssSmallFiles, testPodcastFeedParser),
   'feedsmith *': () => runTest(rssSmallFiles, parseRssFeed),
 })
 
 await runBenchmarks('Atom feed parsing (10 files × 5MB–50MB)', {
-  'rss-parser': () => runTest(atomBigFiles, rssParser),
+  'rss-parser': () => runTest(atomBigFiles, testRssParser),
   '@gaphub/feed': () => runTest(atomBigFiles, testGaphubFeedParser),
-  '@rowanmanning/feed-parser': () => runTest(atomBigFiles, rowanmanningFeedParser),
+  '@rowanmanning/feed-parser': () => runTest(atomBigFiles, testRowanmanningFeedParser),
   'feedme.js': () => runTest(atomBigFiles, testFeedMeJs),
-  '@extractus/feed-extractor': () => runTest(atomBigFiles, extractFromXml),
+  '@extractus/feed-extractor': () => runTest(atomBigFiles, testExtractusFeedExtractor),
   // @ulisesgascon/rss-feed-parser — does not support Atom feeds.
   feedparser: () => runTest(atomBigFiles, testFeedParser),
   // podcast-feed-parser — does not support Atom feeds.
@@ -145,11 +152,11 @@ await runBenchmarks('Atom feed parsing (10 files × 5MB–50MB)', {
 })
 
 await runBenchmarks('Atom feed parsing (100 files × 100KB–5MB)', {
-  'rss-parser': () => runTest(atomSmallFiles, rssParser),
+  'rss-parser': () => runTest(atomSmallFiles, testRssParser),
   '@gaphub/feed': () => runTest(atomSmallFiles, testGaphubFeedParser),
-  '@rowanmanning/feed-parser': () => runTest(atomSmallFiles, rowanmanningFeedParser),
+  '@rowanmanning/feed-parser': () => runTest(atomSmallFiles, testRowanmanningFeedParser),
   'feedme.js': () => runTest(atomSmallFiles, testFeedMeJs),
-  '@extractus/feed-extractor': () => runTest(atomSmallFiles, extractFromXml),
+  '@extractus/feed-extractor': () => runTest(atomSmallFiles, testExtractusFeedExtractor),
   // @ulisesgascon/rss-feed-parser — does not support Atom feeds.
   feedparser: () => runTest(atomSmallFiles, testFeedParser),
   // podcast-feed-parser — does not support Atom feeds.
@@ -157,11 +164,11 @@ await runBenchmarks('Atom feed parsing (100 files × 100KB–5MB)', {
 })
 
 await runBenchmarks('RDF feed parsing (100 files × 100KB–5MB)', {
-  'rss-parser': () => runTest(rdfFiles, rssParser),
+  'rss-parser': () => runTest(rdfFiles, testRssParser),
   '@gaphub/feed': () => runTest(rdfFiles, testGaphubFeedParser),
-  '@rowanmanning/feed-parser': () => runTest(rdfFiles, rowanmanningFeedParser),
+  '@rowanmanning/feed-parser': () => runTest(rdfFiles, testRowanmanningFeedParser),
   'feedme.js': () => runTest(rdfFiles, testFeedMeJs),
-  '@extractus/feed-extractor': () => runTest(rdfFiles, extractFromXml),
+  '@extractus/feed-extractor': () => runTest(rdfFiles, testExtractusFeedExtractor),
   // @ulisesgascon/rss-feed-parser — does not support RDF feeds.
   feedparser: () => runTest(rdfFiles, testFeedParser),
   // podcast-feed-parser — does not support RDF feeds.

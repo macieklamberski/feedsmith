@@ -54,14 +54,19 @@
         { "name": "Technology", "domain": "http://www.example.com/categories" }
       ],
       "comments": "http://example.org/comments/1",
-      "enclosure": {
-        "url": "http://example.org/audio/demo.mp3",
-        "length": 1069871,
-        "type": "audio/mpeg"
-      },
+      "enclosures": [
+        {
+          "url": "http://example.org/audio/demo.mp3",
+          "length": 1069871,
+          "type": "audio/mpeg"
+        }
+      ],
       "guid": { "value": "http://example.org/guid/1" },
       "pubDate": "Thu, 05 Sep 2002 0:00:01 GMT",
-      "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
+      "source": {
+        "title": "Example's Realm",
+        "url": "http://www.example.org/links.xml"
+      }
     },
     {
       "title": "Second item title",
@@ -70,14 +75,19 @@
       "authors": [{ "email": "mark@example.org" }],
       "categories": [{ "name": "Miscellaneous" }],
       "comments": "http://example.org/comments/2",
-      "enclosure": {
-        "url": "http://example.org/audio/demo.mp3",
-        "length": 1069871,
-        "type": "audio/mpeg"
-      },
+      "enclosures": [
+        {
+          "url": "http://example.org/audio/demo.mp3",
+          "length": 1069871,
+          "type": "audio/mpeg"
+        }
+      ],
       "guid": { "value": "http://example.org/guid/2" },
       "pubDate": "Thu, 05 Sep 2002 0:00:01 GMT",
-      "source": { "title": "Example's Realm", "url": "http://www.example.org/links.xml" }
+      "source": {
+        "title": "Example's Realm",
+        "url": "http://www.example.org/links.xml"
+      }
     }
   ]
 }

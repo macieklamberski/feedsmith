@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import { locales } from './config'
-import { parse } from './parse'
+import { locales } from './config.js'
+import { parse } from './parse.js'
 
 describe('parse', () => {
   it('should parse valid Atom feed', () => {
@@ -12,7 +12,7 @@ describe('parse', () => {
       </feed>
     `
     const expected = {
-      type: 'atom' as const,
+      format: 'atom' as const,
       feed: {
         title: 'Feed',
         id: 'example-feed',
@@ -42,7 +42,7 @@ describe('parse', () => {
       ],
     }
     const expected = {
-      type: 'json' as const,
+      format: 'json' as const,
       feed: {
         title: 'My Example Feed',
         home_page_url: 'https://example.com/',
@@ -77,7 +77,7 @@ describe('parse', () => {
       </rss>
     `
     const expected = {
-      type: 'rss' as const,
+      format: 'rss' as const,
       feed: {
         title: 'Feed',
         link: 'https://example.com/feed',
@@ -106,7 +106,7 @@ describe('parse', () => {
       </rdf:RDF>
     `
     const expected = {
-      type: 'rdf' as const,
+      format: 'rdf' as const,
       feed: {
         title: 'Example Feed',
         link: 'http://example.org',

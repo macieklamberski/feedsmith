@@ -465,11 +465,13 @@ describe('generateItem', () => {
       authors: [{ name: 'John Doe', email: 'john.doe@example.com' }],
       categories: [{ name: 'Technology', domain: 'https://example.com/categories' }],
       comments: 'https://example.com/item/123/comments',
-      enclosure: {
-        url: 'https://example.com/audio.mp3',
-        length: 12345678,
-        type: 'audio/mpeg',
-      },
+      enclosures: [
+        {
+          url: 'https://example.com/audio.mp3',
+          length: 12345678,
+          type: 'audio/mpeg',
+        },
+      ],
       guid: {
         value: 'https://example.com/item/123',
         isPermaLink: true,
@@ -492,16 +494,18 @@ describe('generateItem', () => {
         },
       ],
       comments: 'https://example.com/item/123/comments',
-      enclosure: {
-        '@url': 'https://example.com/audio.mp3',
-        '@length': 12345678,
-        '@type': 'audio/mpeg',
-      },
+      enclosure: [
+        {
+          '@url': 'https://example.com/audio.mp3',
+          '@length': 12345678,
+          '@type': 'audio/mpeg',
+        },
+      ],
       guid: {
         '#text': 'https://example.com/item/123',
         '@isPermaLink': true,
       },
-      pubDate: new Date('2023-03-15T12:00:00Z'),
+      pubDate: 'Wed, 15 Mar 2023 12:00:00 GMT',
       source: {
         '#text': 'Example Source',
         '@url': 'https://example.com/feed.xml',

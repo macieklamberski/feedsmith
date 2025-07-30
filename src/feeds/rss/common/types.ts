@@ -80,7 +80,7 @@ export type Item<TDate extends DateLike> = {
   authors?: Array<Person>
   categories?: Array<Category>
   comments?: string
-  enclosure?: Enclosure
+  enclosures?: Array<Enclosure>
   guid?: Guid
   pubDate?: TDate
   source?: Source

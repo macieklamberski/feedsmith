@@ -152,7 +152,6 @@ describe('parseLink', () => {
       '@type': true,
       '@length': '5000',
     }
-
     const expected = {
       href: 'https://example.com/feed',
       rel: '123',
@@ -619,6 +618,7 @@ describe('parseSource', () => {
     const expected = {
       title: 'Example Feed',
     }
+
     expect(parseSource(value)).toEqual(expected)
   })
 
@@ -641,6 +641,7 @@ describe('parseSource', () => {
     const value = {
       nonExistingProp: { '#text': 'value' },
     }
+
     expect(parseSource(value)).toBeUndefined()
   })
 

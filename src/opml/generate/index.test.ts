@@ -248,4 +248,25 @@ describe('generate', () => {
 
     expect(generate(opml)).toEqual(expected)
   })
+
+  it('should generate OPML with stylesheets', () => {
+    const value = {
+      body: {
+        outlines: [{ text: 'Simple Outline' }],
+      },
+    }
+    const options = {
+      stylesheets: [{ type: 'text/xsl', href: '/styles/opml.xsl' }],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/styles/opml.xsl"?>
+<opml version="2.0">
+  <body>
+    <outline text="Simple Outline"/>
+  </body>
+</opml>
+`
+
+    expect(generate(value, options)).toEqual(expected)
+  })
 })

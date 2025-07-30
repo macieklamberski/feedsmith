@@ -3655,6 +3655,7 @@ describe('retrieveItem', () => {
 
   it('should return undefined for empty objects', () => {
     const value = {}
+
     expect(retrieveItem(value)).toBeUndefined()
   })
 
@@ -3687,6 +3688,7 @@ describe('retrieveItem', () => {
         },
       ],
     }
+
     expect(retrieveItem(value)).toEqual(expected)
   })
 })
@@ -4216,6 +4218,7 @@ describe('retrieveFeed', () => {
         },
       ],
     }
+
     expect(retrieveFeed(value)).toEqual(expected)
   })
 

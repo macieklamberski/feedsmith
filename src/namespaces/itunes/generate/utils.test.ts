@@ -227,6 +227,7 @@ describe('generateItem', () => {
       const expected = {
         'itunes:episodeType': value.episodeType,
       }
+
       expect(generateItem(value)).toEqual(expected)
     }
   })
@@ -325,7 +326,7 @@ describe('generateFeed', () => {
       'itunes:new-feed-url': 'https://example.com/new-feed',
       'itunes:block': 'no',
       'itunes:complete': 'no',
-      'itunes:apple-podcasts-verify': 'abc123',
+      'itunes:applepodcastsverify': 'abc123',
       'itunes:summary': 'A podcast about technology',
       'itunes:subtitle': 'Tech talks and interviews',
       'itunes:keywords': 'technology,interviews,news',
@@ -389,6 +390,7 @@ describe('generateFeed', () => {
       const expected = {
         'itunes:type': value.type,
       }
+
       expect(generateFeed(value)).toEqual(expected)
     }
   })

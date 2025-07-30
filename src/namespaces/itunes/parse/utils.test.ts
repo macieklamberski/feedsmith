@@ -161,6 +161,7 @@ describe('parseOwner', () => {
       'itunes:name': { '#text': 'John Doe' },
       'itunes:email': { '#text': 'john@example.com' },
     }
+
     expect(parseOwner(value)).toEqual(expectedFull)
   })
 
@@ -319,6 +320,18 @@ describe('parseExplicit', () => {
     expect(parseExplicit(value)).toBe(true)
   })
 
+  it('should handle values with whitespace around', () => {
+    expect(parseExplicit(' yes ')).toBe(true)
+    expect(parseExplicit('\tyes\t')).toBe(true)
+    expect(parseExplicit('\nyes\n')).toBe(true)
+    expect(parseExplicit(' \t\nYES\n\t ')).toBe(true)
+    expect(parseExplicit(' explicit ')).toBe(true)
+    expect(parseExplicit('\texplicit\t')).toBe(true)
+    expect(parseExplicit('\nEXPLICIT\n')).toBe(true)
+    expect(parseExplicit(' true ')).toBe(true)
+    expect(parseExplicit('\tfalse\t')).toBe(false)
+  })
+
   it('should handle "explicit" string as true', () => {
     const value = 'explicit'
 
@@ -329,6 +342,22 @@ describe('parseExplicit', () => {
     const value = 'ExPlIcIt'
 
     expect(parseExplicit(value)).toBe(true)
+  })
+
+  it('should handle "explicit" with whitespace around', () => {
+    expect(parseExplicit(' explicit')).toBe(true)
+    expect(parseExplicit('explicit ')).toBe(true)
+    expect(parseExplicit(' explicit ')).toBe(true)
+    expect(parseExplicit('  explicit  ')).toBe(true)
+    expect(parseExplicit('\texplicit\t')).toBe(true)
+    expect(parseExplicit('\nexplicit\n')).toBe(true)
+    expect(parseExplicit(' \t\nexplicit\n\t ')).toBe(true)
+  })
+
+  it('should handle case insensitive "explicit" with whitespace', () => {
+    expect(parseExplicit(' EXPLICIT ')).toBe(true)
+    expect(parseExplicit('  ExPlIcIt  ')).toBe(true)
+    expect(parseExplicit('\tExplicit\n')).toBe(true)
   })
 
   it('should handle "clean" string as false', () => {
@@ -916,7 +945,6 @@ describe('retrieveFeed', () => {
         'itunes:image': { '@href': 'https://example.com/image.jpg' },
         'itunes:explicit': { '#text': explicitValue },
       }
-
       const expected = {
         image: 'https://example.com/image.jpg',
         explicit: expectedExplicit,

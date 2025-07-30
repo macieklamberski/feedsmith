@@ -1,17 +1,23 @@
 import { describe, expect, it } from 'bun:test'
-import type { XMLBuilder } from 'fast-xml-parser'
-import type { ParseExactFunction } from './types.js'
+import { type XMLBuilder, XMLParser } from 'fast-xml-parser'
+import { namespaceUrls } from './config.js'
+import type { ParseExactFunction, XmlGenerateOptions } from './types.js'
 import {
+  createNamespaceNormalizator,
   detectNamespaces,
+  generateBoolean,
+  generateCdataString,
   generateCsvOf,
   generateNamespaceAttrs,
   generateNumber,
+  generatePlainString,
   generateRfc822Date,
   generateRfc3339Date,
-  generateString,
   generateXml,
+  generateXmlStylesheet,
   generateYesNoBoolean,
   hasEntities,
+  invertObject,
   isNonEmptyString,
   isNonEmptyStringOrNumber,
   isObject,
@@ -30,7 +36,6 @@ import {
   stripCdata,
   trimArray,
   trimObject,
-  validateAndTrimObject,
 } from './utils.js'
 
 describe('isPresent', () => {
@@ -133,10 +138,8 @@ describe('isObject', () => {
   })
 
   it('should return false for objects with custom prototypes', () => {
-    expect(isObject(Object.create(null))).toBe(false)
-    expect(isObject(Object.create({}))).toBe(false)
-
     class CustomClass {}
+
     expect(isObject(new CustomClass())).toBe(false)
   })
 
@@ -283,11 +286,13 @@ describe('isNonEmptyStringOrNumber', () => {
 describe('retrieveText', () => {
   it('should extract #text property when present', () => {
     const value = { '#text': 'Hello world' }
+
     expect(retrieveText(value)).toBe('Hello world')
   })
 
   it('should return the original value when #text property is not present', () => {
     const value = { title: 'Example Title' }
+
     expect(retrieveText(value)).toEqual(value)
   })
   it('should return #text property even if it has falsy value (except null/undefined)', () => {
@@ -324,16 +329,19 @@ describe('retrieveText', () => {
 
   it('should work with functions', () => {
     const func = () => {}
+
     expect(retrieveText(func)).toBe(func)
   })
 
   it('should handle object with only #text property', () => {
     const value = { '#text': 'Text only' }
+
     expect(retrieveText(value)).toBe('Text only')
   })
 
   it('should handle object with #text property among others', () => {
     const value = { '#text': 'Main text', title: 'Title', count: 42 }
+
     expect(retrieveText(value)).toBe('Main text')
   })
 
@@ -352,35 +360,35 @@ describe('retrieveText', () => {
 
 describe('trimObject', () => {
   it('should remove nullish properties from objects', () => {
-    const input = { a: 1, b: undefined, c: 'string', d: undefined, e: null, f: false, g: 0, h: '' }
+    const value = { a: 1, b: undefined, c: 'string', d: undefined, e: null, f: false, g: 0, h: '' }
     const expected = { a: 1, c: 'string', f: false, g: 0, h: '' }
 
-    expect(trimObject(input)).toEqual(expected)
+    expect(trimObject(value)).toEqual(expected)
   })
 
   it('should return the same object when no properties are nullish', () => {
-    const input = { a: 1, b: 'string', c: false, d: [], e: {} }
+    const value = { a: 1, b: 'string', c: false, d: [], e: {} }
 
-    expect(trimObject(input)).toEqual(input)
+    expect(trimObject(value)).toEqual(value)
   })
 
   it('should preserve falsy non-undefined values', () => {
-    const input = { a: 0, b: '', c: false, d: Number.NaN }
+    const value = { a: 0, b: '', c: false, d: Number.NaN }
 
-    expect(trimObject(input)).toEqual(input)
+    expect(trimObject(value)).toEqual(value)
   })
 
   it('should handle objects with symbol keys', () => {
     const sym = Symbol('test')
-    const input = { a: 1, b: undefined, [sym]: 'symbol value' }
+    const value = { a: 1, b: undefined, [sym]: 'symbol value' }
     const expected = { a: 1 }
 
     // Symbol keys are not enumerable with for..in, so they won't be included.
-    expect(trimObject(input)).toEqual(expected)
+    expect(trimObject(value)).toEqual(expected)
   })
 
   it('should handle complex nested objects', () => {
-    const input = {
+    const value = {
       a: { nested: 'value', undef: undefined },
       b: undefined,
       c: [1, undefined, 3],
@@ -391,11 +399,11 @@ describe('trimObject', () => {
     }
 
     // The function only removes top-level undefined properties, not those in nested objects.
-    expect(trimObject(input)).toEqual(expected)
+    expect(trimObject(value)).toEqual(expected)
   })
 
   it('should handle object with getters', () => {
-    const input = {
+    const value = {
       get a() {
         return 1
       },
@@ -405,13 +413,13 @@ describe('trimObject', () => {
     }
     const expected = { a: 1 }
 
-    expect(trimObject(input)).toEqual(expected)
+    expect(trimObject(value)).toEqual(expected)
   })
 
   it('should return undefined object when all properties are nullish', () => {
-    const input = { a: undefined, b: undefined, c: null }
+    const value = { a: undefined, b: undefined, c: null }
 
-    expect(trimObject(input)).toBeUndefined()
+    expect(trimObject(value)).toBeUndefined()
   })
 
   it('should handle empty objects', () => {
@@ -426,10 +434,10 @@ describe('trimArray', () => {
   })
 
   it('should keep falsy values that are not null or undefined', () => {
-    const input = [0, '', false, null, undefined, Number.NaN]
+    const value = [0, '', false, null, undefined, Number.NaN]
     const expected = [0, '', false, Number.NaN]
 
-    expect(trimArray(input)).toEqual(expected)
+    expect(trimArray(value)).toEqual(expected)
   })
 
   it('should work with complex objects', () => {
@@ -465,9 +473,8 @@ describe('trimArray', () => {
     it('should apply the parsing function to each element', () => {
       const value = [1, 2, 3]
       const expected = ['1', '2', '3']
-      const parseToString = (val: number) => val.toString()
 
-      expect(trimArray(value, parseToString)).toEqual(expected)
+      expect(trimArray(value, parseString)).toEqual(expected)
     })
 
     it('should filter out values that become null or undefined after parsing', () => {
@@ -525,310 +532,6 @@ describe('trimArray', () => {
 
       expect(trimArray(value, extractFirstItem)).toEqual(expected)
     })
-  })
-})
-
-describe('validateAndTrimObject', () => {
-  it('should return object when all required fields are present', () => {
-    const value = {
-      url: 'https://example.com/audio.mp3',
-      length: 12345678,
-      type: 'audio/mpeg',
-    }
-    const expected = {
-      url: 'https://example.com/audio.mp3',
-      length: 12345678,
-      type: 'audio/mpeg',
-    }
-
-    expect(validateAndTrimObject(value, 'url', 'length', 'type')).toEqual(expected)
-  })
-
-  it('should return object with required fields and keep optional fields', () => {
-    const value = {
-      url: 'https://example.com/audio.mp3',
-      length: 12345678,
-      type: 'audio/mpeg',
-      description: 'Optional description',
-      title: 'Optional title',
-    }
-    const expected = {
-      url: 'https://example.com/audio.mp3',
-      length: 12345678,
-      type: 'audio/mpeg',
-      description: 'Optional description',
-      title: 'Optional title',
-    }
-
-    expect(validateAndTrimObject(value, 'url', 'length', 'type')).toEqual(expected)
-  })
-
-  it('should trim undefined optional fields while keeping required fields', () => {
-    const value = {
-      url: 'https://example.com/audio.mp3',
-      length: 12345678,
-      type: 'audio/mpeg',
-      description: undefined,
-      title: null,
-      extra: 'kept',
-    }
-    const expected = {
-      url: 'https://example.com/audio.mp3',
-      length: 12345678,
-      type: 'audio/mpeg',
-      extra: 'kept',
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'url', 'length', 'type')).toEqual(expected)
-  })
-
-  it('should preserve falsy non-undefined values in required fields', () => {
-    const value = {
-      name: '',
-      count: 0,
-      active: false,
-      optional: undefined,
-    }
-    const expected = {
-      name: '',
-      count: 0,
-      active: false,
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'name', 'count', 'active')).toEqual(expected)
-  })
-
-  it('should return undefined when required field is missing', () => {
-    const value = {
-      url: 'https://example.com/audio.mp3',
-      type: 'audio/mpeg',
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'url', 'length', 'type')).toBeUndefined()
-  })
-
-  it('should return undefined when required field is undefined', () => {
-    const value = {
-      url: 'https://example.com/audio.mp3',
-      length: undefined,
-      type: 'audio/mpeg',
-    }
-
-    expect(validateAndTrimObject(value, 'url', 'length', 'type')).toBeUndefined()
-  })
-
-  it('should return undefined when required field is null', () => {
-    const value = {
-      url: 'https://example.com/audio.mp3',
-      length: null,
-      type: 'audio/mpeg',
-    }
-
-    expect(validateAndTrimObject(value, 'url', 'length', 'type')).toBeUndefined()
-  })
-
-  it('should handle single required field', () => {
-    const value = {
-      title: 'Example Title',
-      description: undefined,
-      optional: 'kept',
-    }
-    const expected = {
-      title: 'Example Title',
-      optional: 'kept',
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'title')).toEqual(expected)
-  })
-
-  it('should return undefined when single required field is missing', () => {
-    const value = {
-      description: 'Some description',
-      optional: 'value',
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'title')).toBeUndefined()
-  })
-
-  it('should handle objects with many required fields', () => {
-    const value = {
-      field1: 'value1',
-      field2: 'value2',
-      field3: 'value3',
-      field4: 'value4',
-      optional: undefined,
-      extra: 'kept',
-    }
-    const expected = {
-      field1: 'value1',
-      field2: 'value2',
-      field3: 'value3',
-      field4: 'value4',
-      extra: 'kept',
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'field1', 'field2', 'field3', 'field4')).toEqual(expected)
-  })
-
-  it('should return undefined when any of many required fields is missing', () => {
-    const value = {
-      field1: 'value1',
-      field2: 'value2',
-      field3: undefined,
-      field4: 'value4',
-      field5: 'value5',
-    }
-
-    expect(
-      validateAndTrimObject(value, 'field1', 'field2', 'field3', 'field4', 'field5'),
-    ).toBeUndefined()
-  })
-
-  it('should handle empty object', () => {
-    const value = {}
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'title')).toBeUndefined()
-  })
-
-  it('should return undefined when all properties are nullish', () => {
-    const value = {
-      field1: undefined,
-      field2: null,
-      field3: undefined,
-    }
-
-    expect(validateAndTrimObject(value, 'field1')).toBeUndefined()
-  })
-
-  it('should handle objects with symbol keys', () => {
-    const sym = Symbol('test')
-    const value = {
-      title: 'Example Title',
-      description: undefined,
-      [sym]: 'symbol value',
-    }
-    const expected = {
-      title: 'Example Title',
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'title')).toEqual(expected)
-  })
-
-  it('should handle objects with getters', () => {
-    const value = {
-      get title() {
-        return 'Dynamic Title'
-      },
-      get description() {
-        return undefined
-      },
-      static: 'static value',
-    }
-    const expected = {
-      title: 'Dynamic Title',
-      static: 'static value',
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'title')).toEqual(expected)
-  })
-
-  it('should handle complex nested objects as values', () => {
-    const complexValue = { nested: 'object' }
-    const arrayValue = [1, 2, 3]
-    const value = {
-      title: 'Title',
-      complex: complexValue,
-      array: arrayValue,
-      nullish: undefined,
-    }
-    const expected = {
-      title: 'Title',
-      complex: complexValue,
-      array: arrayValue,
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'title')).toEqual(expected)
-  })
-
-  it('should handle objects with numeric keys', () => {
-    const value = {
-      '0': 'first',
-      '1': 'second',
-      title: 'Example',
-      description: undefined,
-    }
-    const expected = {
-      '0': 'first',
-      '1': 'second',
-      title: 'Example',
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'title')).toEqual(expected)
-  })
-
-  it('should preserve Date objects correctly', () => {
-    const date = new Date('2023-01-01')
-    const value = {
-      title: 'Example',
-      date: date,
-      description: undefined,
-    }
-    const expected = {
-      title: 'Example',
-      date: date,
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'title')).toEqual(expected)
-  })
-
-  it('should handle objects with mixed data types', () => {
-    const value = {
-      string: 'text',
-      number: 42,
-      boolean: true,
-      array: [1, 2, 3],
-      object: { key: 'value' },
-      nullValue: null,
-      undefinedValue: undefined,
-      zero: 0,
-      emptyString: '',
-      falseBoolean: false,
-    }
-    const expected = {
-      string: 'text',
-      number: 42,
-      boolean: true,
-      array: [1, 2, 3],
-      object: { key: 'value' },
-      zero: 0,
-      emptyString: '',
-      falseBoolean: false,
-    }
-
-    // @ts-ignore: This is for testing purposes.
-    expect(validateAndTrimObject(value, 'string', 'number')).toEqual(expected)
-  })
-
-  it('should return undefined when no properties remain after trimming', () => {
-    const value = {
-      field1: undefined,
-      field2: null,
-    }
-
-    // Even though field1 is "present" as a key, its value is undefined.
-    expect(validateAndTrimObject(value, 'field1')).toBeUndefined()
   })
 })
 
@@ -1059,6 +762,16 @@ describe('parseString', () => {
     expect(parseString(value)).toBe(expected)
   })
 
+  it('Should handle empty string in CDATA', () => {
+    const value = '<![CDATA[        ]]>'
+    expect(parseString(value)).toBeUndefined()
+  })
+
+  it('Should trim string in CDATA', () => {
+    const value = '<![CDATA[    test    ]]>'
+    expect(parseString(value)).toBe('test')
+  })
+
   it('should return number', () => {
     const value = 420
 
@@ -1201,6 +914,17 @@ describe('parseBoolean', () => {
     expect(parseBoolean(value)).toBe(false)
   })
 
+  it('should handle values with whitespace around', () => {
+    expect(parseBoolean(' true ')).toBe(true)
+    expect(parseBoolean('\ttrue\t')).toBe(true)
+    expect(parseBoolean('\nTRUE\n')).toBe(true)
+    expect(parseBoolean(' \t\nTrUe\n\t ')).toBe(true)
+    expect(parseBoolean(' false ')).toBe(false)
+    expect(parseBoolean('\tfalse\t')).toBe(false)
+    expect(parseBoolean('\nFALSE\n')).toBe(false)
+    expect(parseBoolean(' \t\nFaLsE\n\t ')).toBe(false)
+  })
+
   it('should handle non-boolean string', () => {
     const value = 'javascript'
 
@@ -1279,6 +1003,17 @@ describe('parseYesNoBoolean', () => {
     const value = 'YeS'
 
     expect(parseYesNoBoolean(value)).toBe(true)
+  })
+
+  it('should handle values with whitespace around', () => {
+    expect(parseYesNoBoolean(' yes ')).toBe(true)
+    expect(parseYesNoBoolean('\tyes\t')).toBe(true)
+    expect(parseYesNoBoolean('\nYES\n')).toBe(true)
+    expect(parseYesNoBoolean(' \t\nYeS\n\t ')).toBe(true)
+    expect(parseYesNoBoolean(' true ')).toBe(true)
+    expect(parseYesNoBoolean('\tfalse\t')).toBe(false)
+    expect(parseYesNoBoolean(' no ')).toBe(false)
+    expect(parseYesNoBoolean('\tNO\t')).toBe(false)
   })
 
   it('should handle "no" string as false', () => {
@@ -1414,6 +1149,24 @@ describe('parseDate', () => {
   })
 })
 
+describe('generateBoolean', () => {
+  it('should return true for boolean true', () => {
+    const value = true
+
+    expect(generateBoolean(value)).toBe(true)
+  })
+
+  it('should return false for boolean false', () => {
+    const value = false
+
+    expect(generateBoolean(value)).toBe(false)
+  })
+
+  it('should return undefined for undefined', () => {
+    expect(generateBoolean(undefined)).toBeUndefined()
+  })
+})
+
 describe('generateYesNoBoolean', () => {
   it('should return "yes" for boolean true', () => {
     const value = true
@@ -1457,6 +1210,7 @@ describe('parseSingular', () => {
 
   it('should handle array-like objects correctly', () => {
     const arrayLike = { 0: 'first', 1: 'second', length: 2 }
+
     expect(parseSingular(arrayLike)).toEqual(arrayLike)
   })
 
@@ -1478,12 +1232,8 @@ describe('parseSingular', () => {
 
 describe('parseSingularOf', () => {
   it('should apply parse function to the first element of an array', () => {
-    const parseToString: ParseExactFunction<string> = (value) => {
-      return typeof value === 'number' || typeof value === 'string' ? String(value) : undefined
-    }
-
-    expect(parseSingularOf([1, 2, 3], parseToString)).toBe('1')
-    expect(parseSingularOf(['a', 'b', 'c'], parseToString)).toBe('a')
+    expect(parseSingularOf([1, 2, 3], parseString)).toBe('1')
+    expect(parseSingularOf(['a', 'b', 'c'], parseString)).toBe('a')
     expect(parseSingularOf([42, 'text'], parseString)).toBe('42')
   })
 
@@ -1853,6 +1603,111 @@ describe('generateCsvOf', () => {
   })
 })
 
+describe('generateXmlStylesheet', () => {
+  describe('Required attributes', () => {
+    it('should generate stylesheet with only required attributes', () => {
+      const value = {
+        type: 'text/xsl',
+        href: '/styles/feed.xsl',
+      }
+      const expected = '<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+
+    it('should handle CSS stylesheets', () => {
+      const value = {
+        type: 'text/css',
+        href: 'https://example.com/styles.css',
+      }
+      const expected = '<?xml-stylesheet type="text/css" href="https://example.com/styles.css"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+  })
+
+  describe('Optional attributes', () => {
+    it('should include title when provided', () => {
+      const value = {
+        type: 'text/xsl',
+        href: '/styles/feed.xsl',
+        title: 'Feed Stylesheet',
+      }
+      const expected =
+        '<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl" title="Feed Stylesheet"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+
+    it('should include media when provided', () => {
+      const value = {
+        type: 'text/css',
+        href: '/styles/mobile.css',
+        media: 'screen and (max-width: 768px)',
+      }
+      const expected =
+        '<?xml-stylesheet type="text/css" href="/styles/mobile.css" media="screen and (max-width: 768px)"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+
+    it('should include all provided optional attributes', () => {
+      const value = {
+        type: 'text/xsl',
+        href: '/styles/feed.xsl',
+        title: 'Pretty Feed',
+        media: 'screen',
+        charset: 'utf-8',
+        alternate: false,
+      }
+      const expected =
+        '<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl" title="Pretty Feed" media="screen" charset="utf-8" alternate="no"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+
+    it('should skip undefined optional attributes', () => {
+      const value = {
+        type: 'text/css',
+        href: '/styles/print.css',
+        title: 'Print Styles',
+        media: undefined,
+        charset: undefined,
+        alternate: undefined,
+      }
+      const expected =
+        '<?xml-stylesheet type="text/css" href="/styles/print.css" title="Print Styles"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+  })
+
+  describe('Special characters', () => {
+    it('should handle URLs with query parameters', () => {
+      const value = {
+        type: 'text/xsl',
+        href: '/styles/feed.xsl?version=1.2&theme=dark',
+      }
+      const expected =
+        '<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl?version=1.2&theme=dark"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+
+    it('should handle titles with spaces', () => {
+      const value = {
+        type: 'text/css',
+        href: '/styles/feed.css',
+        title: 'My Custom Feed Style',
+      }
+      const expected =
+        '<?xml-stylesheet type="text/css" href="/styles/feed.css" title="My Custom Feed Style"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+  })
+})
+
 describe('generateXml', () => {
   const mockBuilder: XMLBuilder = {
     build: (value: string) => `<root>${value}</root>`,
@@ -1884,6 +1739,56 @@ describe('generateXml', () => {
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root></root>'
 
     expect(generateXml(mockBuilder, value)).toEqual(expected)
+  })
+
+  it('should include single stylesheet when provided', () => {
+    const value = 'test content'
+    const options: XmlGenerateOptions = {
+      stylesheets: [{ type: 'text/xsl', href: '/styles/feed.xsl' }],
+    }
+    const expected =
+      '<?xml version="1.0" encoding="utf-8"?>\n<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl"?>\n<root>test content</root>'
+
+    expect(generateXml(mockBuilder, value, options)).toEqual(expected)
+  })
+
+  it('should include multiple stylesheets when provided', () => {
+    const value = 'test content'
+    const options: XmlGenerateOptions = {
+      stylesheets: [
+        { type: 'text/xsl', href: '/styles/feed.xsl' },
+        { type: 'text/css', href: '/styles/feed.css', media: 'screen' },
+      ],
+    }
+    const expected =
+      '<?xml version="1.0" encoding="utf-8"?>\n<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl"?>\n<?xml-stylesheet type="text/css" href="/styles/feed.css" media="screen"?>\n<root>test content</root>'
+
+    expect(generateXml(mockBuilder, value, options)).toEqual(expected)
+  })
+
+  it('should generate XML without stylesheets when array is empty', () => {
+    const value = 'test content'
+    const options: XmlGenerateOptions = {
+      stylesheets: [],
+    }
+    const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
+
+    expect(generateXml(mockBuilder, value, options)).toEqual(expected)
+  })
+
+  it('should generate XML without stylesheets when stylesheets is undefined', () => {
+    const value = 'test content'
+    const options: XmlGenerateOptions = {}
+    const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
+
+    expect(generateXml(mockBuilder, value, options)).toEqual(expected)
+  })
+
+  it('should generate XML without stylesheets when options parameter is undefined', () => {
+    const value = 'test content'
+    const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
+
+    expect(generateXml(mockBuilder, value, undefined)).toEqual(expected)
   })
 })
 
@@ -2277,7 +2182,7 @@ describe('detectNamespaces', () => {
     }
     const expected = new Set(['atom', 'dc', 'itunes', 'slash', 'content', 'georss'])
 
-    expect(detectNamespaces(value)).toEqual(expected)
+    expect(detectNamespaces(value, true)).toEqual(expected)
   })
 
   it('should detect threading namespace in link attributes', () => {
@@ -2298,11 +2203,146 @@ describe('detectNamespaces', () => {
     }
     const expected = new Set(['thr'])
 
-    expect(detectNamespaces(value)).toEqual(expected)
+    expect(detectNamespaces(value, true)).toEqual(expected)
+  })
+
+  it('should only detect top-level namespaces when recursive=false (default)', () => {
+    const nestedValue = {
+      'top:level': 'value',
+      normalKey: 'no namespace',
+      nested: {
+        'inner:namespace': 'value',
+        'another:inner': 'value',
+        deepNested: {
+          'deep:namespace': 'value',
+        },
+      },
+      array: [
+        {
+          'array:namespace': 'value',
+        },
+      ],
+    }
+    const expected = new Set(['top'])
+    expect(detectNamespaces(nestedValue)).toEqual(expected)
+    expect(detectNamespaces(nestedValue, false)).toEqual(expected)
+  })
+
+  it('should detect all namespaces when recursive=true', () => {
+    const nestedValue = {
+      'top:level': 'value',
+      normalKey: 'no namespace',
+      nested: {
+        'inner:namespace': 'value',
+        'another:inner': 'value',
+        deepNested: {
+          'deep:namespace': 'value',
+        },
+      },
+      array: [
+        {
+          'array:namespace': 'value',
+        },
+      ],
+    }
+    const expected = new Set(['top', 'inner', 'another', 'deep', 'array'])
+    expect(detectNamespaces(nestedValue, true)).toEqual(expected)
+  })
+
+  it('should handle arrays recursively when recursive=true', () => {
+    const value = {
+      'top:level': 'value',
+      items: [
+        { 'item1:namespace': 'value' },
+        { 'item2:namespace': 'value' },
+        {
+          'item3:namespace': 'value',
+          nested: {
+            'nested:namespace': 'value',
+          },
+        },
+      ],
+    }
+    const expectedNonRecursive = new Set(['top'])
+    const expectedRecursive = new Set(['top', 'item1', 'item2', 'item3', 'nested'])
+
+    expect(detectNamespaces(value, false)).toEqual(expectedNonRecursive)
+    expect(detectNamespaces(value, true)).toEqual(expectedRecursive)
+  })
+
+  it('should handle deeply nested objects when recursive=true', () => {
+    const value = {
+      'level1:ns': 'value',
+      level2: {
+        'level2:ns': 'value',
+        level3: {
+          'level3:ns': 'value',
+          level4: {
+            'level4:ns': 'value',
+          },
+        },
+      },
+    }
+    const expectedNonRecursive = new Set(['level1'])
+    const expectedRecursive = new Set(['level1', 'level2', 'level3', 'level4'])
+
+    expect(detectNamespaces(value, false)).toEqual(expectedNonRecursive)
+    expect(detectNamespaces(value, true)).toEqual(expectedRecursive)
+  })
+
+  it('should handle empty nested objects correctly with recursive parameter', () => {
+    const value = {
+      'top:namespace': 'value',
+      empty: {},
+      emptyArray: [],
+      nested: {
+        alsoEmpty: {},
+      },
+    }
+    const expectedNonRecursive = new Set(['top'])
+    const expectedRecursive = new Set(['top'])
+
+    expect(detectNamespaces(value, false)).toEqual(expectedNonRecursive)
+    expect(detectNamespaces(value, true)).toEqual(expectedRecursive)
+  })
+
+  it('should respect seenKeys optimization in recursive mode', () => {
+    const value = {
+      'duplicate:key': 'value1',
+      nested1: {
+        'duplicate:key': 'value2',
+        'other:namespace': 'value',
+      },
+      nested2: {
+        'duplicate:key': 'value3',
+        'another:namespace': 'value',
+      },
+    }
+    const expectedNonRecursive = new Set(['duplicate'])
+    const expectedRecursive = new Set(['duplicate', 'other', 'another'])
+
+    expect(detectNamespaces(value, false)).toEqual(expectedNonRecursive)
+    expect(detectNamespaces(value, true)).toEqual(expectedRecursive)
   })
 })
 
 describe('generateNamespaceAttrs', () => {
+  const testNamespaceUrls = {
+    atom: 'http://www.w3.org/2005/Atom',
+    content: 'http://purl.org/rss/1.0/modules/content/',
+    dc: 'http://purl.org/dc/elements/1.1/',
+    dcterms: 'http://purl.org/dc/terms/',
+    georss: 'http://www.georss.org/georss/',
+    itunes: 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+    media: 'http://search.yahoo.com/mrss/',
+    podcast: 'https://podcastindex.org/namespace/1.0',
+    slash: 'http://purl.org/rss/1.0/modules/slash/',
+    sy: 'http://purl.org/rss/1.0/modules/syndication/',
+    thr: 'http://purl.org/syndication/thread/1.0',
+    wfw: 'http://wellformedweb.org/CommentAPI/',
+    yt: 'http://www.youtube.com/xml/schemas/2015',
+  }
+
   it('should generate namespace attributes for all known namespaces when present', () => {
     const value = {
       title: 'Comprehensive Feed',
@@ -2330,7 +2370,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:thr': 'http://purl.org/syndication/thread/1.0',
     }
 
-    expect(generateNamespaceAttrs(value)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
   })
 
   it('should generate namespace attributes for single known namespace', () => {
@@ -2342,7 +2382,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:atom': 'http://www.w3.org/2005/Atom',
     }
 
-    expect(generateNamespaceAttrs(value)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
   })
 
   it('should ignore unknown namespaces and only include known ones', () => {
@@ -2358,7 +2398,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
     }
 
-    expect(generateNamespaceAttrs(value)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
   })
 
   it('should handle properties with multiple colons correctly', () => {
@@ -2372,7 +2412,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
     }
 
-    expect(generateNamespaceAttrs(value)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
   })
 
   it('should handle properties with colon at the end', () => {
@@ -2386,7 +2426,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
     }
 
-    expect(generateNamespaceAttrs(value)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
   })
 
   it('should ignore properties with colon at the beginning', () => {
@@ -2399,7 +2439,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:atom': 'http://www.w3.org/2005/Atom',
     }
 
-    expect(generateNamespaceAttrs(value)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
   })
 
   it('should handle duplicate namespace detection correctly', () => {
@@ -2415,7 +2455,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
     }
 
-    expect(generateNamespaceAttrs(value)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
   })
 
   it('should return undefined when no namespaced properties are present', () => {
@@ -2426,7 +2466,7 @@ describe('generateNamespaceAttrs', () => {
       author: 'John Doe',
     }
 
-    expect(generateNamespaceAttrs(value)).toBeUndefined()
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toBeUndefined()
   })
 
   it('should return undefined when object has namespaces not in known URLs', () => {
@@ -2436,25 +2476,48 @@ describe('generateNamespaceAttrs', () => {
       'custom:property': 'another value',
     }
 
-    expect(generateNamespaceAttrs(value)).toBeUndefined()
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toBeUndefined()
   })
 
   it('should return undefined for empty objects', () => {
-    expect(generateNamespaceAttrs({})).toBeUndefined()
+    expect(generateNamespaceAttrs({}, testNamespaceUrls)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(generateNamespaceAttrs(null)).toBeUndefined()
-    expect(generateNamespaceAttrs(undefined)).toBeUndefined()
-    expect(generateNamespaceAttrs('string')).toBeUndefined()
-    expect(generateNamespaceAttrs(42)).toBeUndefined()
-    expect(generateNamespaceAttrs(true)).toBeUndefined()
-    expect(generateNamespaceAttrs([])).toBeUndefined()
-    expect(generateNamespaceAttrs(() => {})).toBeUndefined()
+    expect(generateNamespaceAttrs(null, testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs(undefined, testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs('string', testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs(42, testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs(true, testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs([], testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs(() => {}, testNamespaceUrls)).toBeUndefined()
+  })
+
+  it('should detect namespaces in nested structures using recursive detection', () => {
+    const value = {
+      title: 'Feed Title',
+      'atom:link': 'http://example.com/feed.xml',
+      items: [
+        {
+          title: 'Item 1',
+          'dc:creator': 'John Doe',
+          nested: {
+            'itunes:duration': '30:45',
+          },
+        },
+      ],
+    }
+    const expected = {
+      '@xmlns:atom': 'http://www.w3.org/2005/Atom',
+      '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+      '@xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+    }
+
+    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
   })
 })
 
-describe('generateString', () => {
+describe('generateCdataString', () => {
   it('should wrap HTML content in CDATA object', () => {
     const value1 = '<p>HTML content</p>'
     const value2 = 'Text with <strong>bold</strong> formatting'
@@ -2463,9 +2526,9 @@ describe('generateString', () => {
     const expected2 = { '#cdata': 'Text with <strong>bold</strong> formatting' }
     const expected3 = { '#cdata': 'Content with > greater than' }
 
-    expect(generateString(value1)).toEqual(expected1)
-    expect(generateString(value2)).toEqual(expected2)
-    expect(generateString(value3)).toEqual(expected3)
+    expect(generateCdataString(value1)).toEqual(expected1)
+    expect(generateCdataString(value2)).toEqual(expected2)
+    expect(generateCdataString(value3)).toEqual(expected3)
   })
 
   it('should wrap content with ampersands in CDATA object', () => {
@@ -2474,15 +2537,15 @@ describe('generateString', () => {
     const expected1 = { '#cdata': 'Text with & ampersand' }
     const expected2 = { '#cdata': 'Multiple & ampersands & here' }
 
-    expect(generateString(value1)).toEqual(expected1)
-    expect(generateString(value2)).toEqual(expected2)
+    expect(generateCdataString(value1)).toEqual(expected1)
+    expect(generateCdataString(value2)).toEqual(expected2)
   })
 
   it('should wrap content with CDATA end markers in CDATA object', () => {
     const value = 'Text with ]]> marker'
     const expected = { '#cdata': 'Text with ]]> marker' }
 
-    expect(generateString(value)).toEqual(expected)
+    expect(generateCdataString(value)).toEqual(expected)
   })
 
   it('should return simple text as string', () => {
@@ -2493,25 +2556,69 @@ describe('generateString', () => {
     const expected2 = 'Text with numbers 123 and spaces'
     const expected3 = 'Text with special chars !@#$%^*()_+-='
 
-    expect(generateString(value1)).toEqual(expected1)
-    expect(generateString(value2)).toEqual(expected2)
-    expect(generateString(value3)).toEqual(expected3)
+    expect(generateCdataString(value1)).toEqual(expected1)
+    expect(generateCdataString(value2)).toEqual(expected2)
+    expect(generateCdataString(value3)).toEqual(expected3)
   })
 
   it('should handle empty string', () => {
     const value = ''
 
-    expect(generateString(value)).toBeUndefined()
+    expect(generateCdataString(value)).toBeUndefined()
   })
 
   it('should handle string with only whitespace', () => {
     const value = '   '
 
-    expect(generateString(value)).toBeUndefined()
+    expect(generateCdataString(value)).toBeUndefined()
   })
 
   it('should handle non-string inputs', () => {
-    expect(generateString(undefined)).toBeUndefined()
+    expect(generateCdataString(undefined)).toBeUndefined()
+  })
+})
+
+describe('generatePlainString', () => {
+  it('should return trimmed string for simple text', () => {
+    const value1 = 'Simple text content'
+    const value2 = '  Text with spaces  '
+    const value3 = 'Text with special chars !@#$%^*()_+-='
+    const expected1 = 'Simple text content'
+    const expected2 = 'Text with spaces'
+    const expected3 = 'Text with special chars !@#$%^*()_+-='
+
+    expect(generatePlainString(value1)).toEqual(expected1)
+    expect(generatePlainString(value2)).toEqual(expected2)
+    expect(generatePlainString(value3)).toEqual(expected3)
+  })
+
+  it('should return string even if it contains XML characters', () => {
+    const value1 = '<p>HTML content</p>'
+    const value2 = 'Text with & ampersand'
+    const value3 = 'Content with > greater than'
+    const expected1 = '<p>HTML content</p>'
+    const expected2 = 'Text with & ampersand'
+    const expected3 = 'Content with > greater than'
+
+    expect(generatePlainString(value1)).toEqual(expected1)
+    expect(generatePlainString(value2)).toEqual(expected2)
+    expect(generatePlainString(value3)).toEqual(expected3)
+  })
+
+  it('should handle empty string', () => {
+    const value = ''
+
+    expect(generatePlainString(value)).toBeUndefined()
+  })
+
+  it('should handle string with only whitespace', () => {
+    const value = '   '
+
+    expect(generatePlainString(value)).toBeUndefined()
+  })
+
+  it('should handle non-string inputs', () => {
+    expect(generatePlainString(undefined)).toBeUndefined()
   })
 })
 
@@ -2533,6 +2640,629 @@ describe('generateNumber', () => {
   })
 
   it('should return undefined for non-number inputs', () => {
-    expect(generateString(undefined)).toBeUndefined()
+    expect(generateNumber(undefined)).toBeUndefined()
+  })
+})
+
+describe('invertObject', () => {
+  it('should invert simple object with string key-value pairs', () => {
+    const value = {
+      apple: 'fruit',
+      carrot: 'vegetable',
+      salmon: 'fish',
+    }
+    const expected = {
+      fruit: 'apple',
+      vegetable: 'carrot',
+      fish: 'salmon',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+    const expected = {}
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle single key-value pair', () => {
+    const value = { key: 'value' }
+    const expected = { value: 'key' }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle duplicate values by keeping the last occurrence', () => {
+    const value = {
+      first: 'duplicate',
+      second: 'unique',
+      third: 'duplicate',
+      fourth: 'duplicate',
+    }
+    const expected = {
+      duplicate: 'fourth',
+      unique: 'second',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle special characters in keys and values', () => {
+    const value = {
+      'key-with-dash': 'value_with_underscore',
+      'key.with.dots': 'value@with@at',
+      'key:with:colon': 'value/with/slash',
+    }
+    const expected = {
+      value_with_underscore: 'key-with-dash',
+      'value@with@at': 'key.with.dots',
+      'value/with/slash': 'key:with:colon',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace in keys and values', () => {
+    const value = {
+      'key with spaces': 'value with spaces',
+      '  padded  ': '  also padded  ',
+      '\ttab\t': '\nnewline\n',
+    }
+    const expected = {
+      'value with spaces': 'key with spaces',
+      '  also padded  ': '  padded  ',
+      '\nnewline\n': '\ttab\t',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle empty string keys and values', () => {
+    const value = {
+      '': 'empty key',
+      'empty value': '',
+      normal: 'value',
+    }
+    const expected = {
+      'empty key': '',
+      '': 'empty value',
+      value: 'normal',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle Unicode characters', () => {
+    const value = {
+      '🔑': '🎯',
+      café: 'coffee',
+      naïve: 'approach',
+      日本: 'Japan',
+    }
+    const expected = {
+      '🎯': '🔑',
+      coffee: 'café',
+      approach: 'naïve',
+      Japan: '日本',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+
+  it('should handle case-sensitive keys and values', () => {
+    const value = {
+      ABC: 'xyz',
+      abc: 'XYZ',
+      AbC: 'xYz',
+    }
+    const expected = {
+      xyz: 'ABC',
+      XYZ: 'abc',
+      xYz: 'AbC',
+    }
+
+    expect(invertObject(value)).toEqual(expected)
+  })
+})
+
+describe('createNamespaceNormalizator', () => {
+  describe('XML parsing integration tests', () => {
+    const parser = new XMLParser({
+      trimValues: true,
+      ignoreAttributes: false,
+      ignoreDeclaration: true,
+      attributeNamePrefix: '@',
+      transformTagName: (name: string) => name.toLowerCase(),
+      transformAttributeName: (name: string) => name.toLowerCase(),
+    })
+
+    describe('default namespace handling', () => {
+      it('should handle default Atom namespace with primary namespace', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <feed xmlns="http://www.w3.org/2005/Atom">
+            <title>Test Feed</title>
+            <entry>
+              <title>Test Entry</title>
+            </entry>
+          </feed>
+        `)
+        const expected = {
+          feed: {
+            title: 'Test Feed',
+            entry: {
+              title: 'Test Entry',
+            },
+            '@xmlns': 'http://www.w3.org/2005/Atom',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should handle default namespace without primary namespace', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <feed xmlns="http://www.w3.org/2005/Atom">
+            <title>Test Feed</title>
+          </feed>
+        `)
+        const expected = {
+          'atom:feed': {
+            'atom:title': 'Test Feed',
+            '@xmlns': 'http://www.w3.org/2005/Atom',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
+
+    describe('prefixed namespace handling', () => {
+      it('should normalize custom prefixes to standard prefixes', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <rss xmlns:custom="http://purl.org/dc/elements/1.1/">
+            <channel>
+              <title>RSS Feed</title>
+              <item>
+                <title>Item Title</title>
+                <custom:creator>John Doe</custom:creator>
+              </item>
+            </channel>
+          </rss>
+        `)
+        const expected = {
+          rss: {
+            channel: {
+              title: 'RSS Feed',
+              item: {
+                title: 'Item Title',
+                'dc:creator': 'John Doe',
+              },
+            },
+            '@xmlns:custom': 'http://purl.org/dc/elements/1.1/',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should handle custom Atom prefix with primary namespace', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <a:feed xmlns:a="http://www.w3.org/2005/Atom">
+            <a:title>Test Feed</a:title>
+            <a:entry>
+              <a:title>Test Entry</a:title>
+            </a:entry>
+          </a:feed>
+        `)
+        const expected = {
+          feed: {
+            title: 'Test Feed',
+            entry: {
+              title: 'Test Entry',
+            },
+            '@xmlns:a': 'http://www.w3.org/2005/Atom',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
+
+    describe('nested namespace declarations', () => {
+      it('should handle namespace declarations in nested elements', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <rss>
+            <channel>
+              <item xmlns:dc="http://purl.org/dc/elements/1.1/">
+                <title>Item Title</title>
+                <dc:creator>John Doe</dc:creator>
+                <dc:date>2023-01-01</dc:date>
+              </item>
+              <item>
+                <title>Item Without Namespace</title>
+              </item>
+            </channel>
+          </rss>
+        `)
+        const expected = {
+          rss: {
+            channel: {
+              item: [
+                {
+                  title: 'Item Title',
+                  'dc:creator': 'John Doe',
+                  'dc:date': '2023-01-01',
+                  '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+                },
+                {
+                  title: 'Item Without Namespace',
+                },
+              ],
+            },
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should handle namespace redefinition in nested elements', () => {
+        const normalizeNamespaces = createNamespaceNormalizator({
+          v1: 'http://example.com/v1',
+          v2: 'http://example.com/v2',
+        })
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root xmlns:ns="http://example.com/v1">
+            <ns:element>Version 1</ns:element>
+            <child xmlns:ns="http://example.com/v2">
+              <ns:element>Version 2</ns:element>
+            </child>
+            <ns:element>Version 1 Again</ns:element>
+          </root>
+        `)
+        const expected = {
+          root: {
+            'v1:element': ['Version 1', 'Version 1 Again'],
+            child: {
+              'v2:element': 'Version 2',
+              '@xmlns:ns': 'http://example.com/v2',
+            },
+            '@xmlns:ns': 'http://example.com/v1',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
+
+    describe('mixed case handling', () => {
+      it('should normalize element names to lowercase while preserving namespace logic', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <RSS xmlns:DC="http://purl.org/dc/elements/1.1/">
+            <Channel>
+              <TITLE>Feed Title</TITLE>
+              <Item>
+                <Title>Item Title</Title>
+                <DC:Creator>John Doe</DC:Creator>
+              </Item>
+            </Channel>
+          </RSS>
+        `)
+        const expected = {
+          rss: {
+            channel: {
+              title: 'Feed Title',
+              item: {
+                title: 'Item Title',
+                'dc:creator': 'John Doe',
+              },
+            },
+            '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
+
+    describe('self-closing elements with namespaces', () => {
+      it('should handle self-closing elements with namespace declarations', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <rss>
+            <channel>
+              <item>
+                <title>Item 1</title>
+                <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://example.com/thumb.jpg"/>
+              </item>
+              <item>
+                <title>Item 2</title>
+                <description>No media namespace here</description>
+              </item>
+            </channel>
+          </rss>
+        `)
+        const expected = {
+          rss: {
+            channel: {
+              item: [
+                {
+                  title: 'Item 1',
+                  'media:thumbnail': {
+                    '@url': 'http://example.com/thumb.jpg',
+                    '@xmlns:media': 'http://search.yahoo.com/mrss/',
+                  },
+                },
+                {
+                  title: 'Item 2',
+                  description: 'No media namespace here',
+                },
+              ],
+            },
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
+
+    describe('multiple namespaces in same document', () => {
+      it('should handle multiple namespaces simultaneously', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <rss
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:content="http://purl.org/rss/1.0/modules/content/"
+            xmlns:media="http://search.yahoo.com/mrss/"
+          >
+            <channel>
+              <item>
+                <title>Multi-namespace Item</title>
+                <dc:creator>John Doe</dc:creator>
+                <dc:date>2023-01-01</dc:date>
+                <content:encoded><![CDATA[Rich content]]></content:encoded>
+                <media:group>
+                  <media:content url="video.mp4" type="video/mp4"/>
+                  <media:description>Video description</media:description>
+                </media:group>
+              </item>
+            </channel>
+          </rss>
+        `)
+        const expected = {
+          rss: {
+            channel: {
+              item: {
+                title: 'Multi-namespace Item',
+                'dc:creator': 'John Doe',
+                'dc:date': '2023-01-01',
+                'content:encoded': 'Rich content',
+                'media:group': {
+                  'media:content': {
+                    '@url': 'video.mp4',
+                    '@type': 'video/mp4',
+                  },
+                  'media:description': 'Video description',
+                },
+              },
+            },
+            '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            '@xmlns:content': 'http://purl.org/rss/1.0/modules/content/',
+            '@xmlns:media': 'http://search.yahoo.com/mrss/',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
+
+    describe('edge cases', () => {
+      it('should handle empty namespace URIs', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root xmlns="">
+            <element>No namespace</element>
+          </root>
+        `)
+        const expected = {
+          root: {
+            element: 'No namespace',
+            '@xmlns': '',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should handle unknown namespaces gracefully', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root xmlns:unknown="http://unknown.example.com/">
+            <unknown:element>Unknown namespace</unknown:element>
+          </root>
+        `)
+        const expected = {
+          root: {
+            'unknown:element': 'Unknown namespace',
+            '@xmlns:unknown': 'http://unknown.example.com/',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should handle case-insensitive xmlns attributes', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root
+            XMLNS:DC="http://purl.org/dc/elements/1.1/"
+            xmlns:ATOM="http://www.w3.org/2005/Atom"
+          >
+            <DC:creator>Author Name</DC:creator>
+            <ATOM:title>Title</ATOM:title>
+          </root>
+        `)
+        const expected = {
+          root: {
+            'dc:creator': 'Author Name',
+            'atom:title': 'Title',
+            '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            '@xmlns:atom': 'http://www.w3.org/2005/Atom',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should handle complex nesting with namespace inheritance', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <feed xmlns="http://www.w3.org/2005/Atom">
+            <entry xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <title>Entry Title</title>
+              <dc:creator>Author</dc:creator>
+              <content xmlns:xhtml="http://www.w3.org/1999/xhtml">
+                <xhtml:div>
+                  <xhtml:p>Rich content</xhtml:p>
+                </xhtml:div>
+              </content>
+            </entry>
+          </feed>
+        `)
+        const expected = {
+          feed: {
+            entry: {
+              title: 'Entry Title',
+              'dc:creator': 'Author',
+              content: {
+                'xhtml:div': {
+                  'xhtml:p': 'Rich content',
+                },
+                '@xmlns:xhtml': 'http://www.w3.org/1999/xhtml',
+              },
+              '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            },
+            '@xmlns': 'http://www.w3.org/2005/Atom',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
+
+    describe('unhappy path scenarios', () => {
+      it('should handle non-object input gracefully', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+
+        expect(normalizeNamespaces(null)).toBe(null)
+        expect(normalizeNamespaces(undefined)).toBe(undefined)
+        expect(normalizeNamespaces('string')).toBe('string')
+        expect(normalizeNamespaces(123)).toBe(123)
+        expect(normalizeNamespaces(true)).toBe(true)
+      })
+
+      it('should handle conflicting namespace declarations in siblings', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root>
+            <item1 xmlns:custom="http://purl.org/dc/elements/1.1/">
+              <custom:creator>Author 1</custom:creator>
+            </item1>
+            <item2 xmlns:custom="http://search.yahoo.com/mrss/">
+              <custom:title>Title 2</custom:title>
+            </item2>
+          </root>
+        `)
+        const expected = {
+          root: {
+            item1: {
+              'dc:creator': 'Author 1',
+              '@xmlns:custom': 'http://purl.org/dc/elements/1.1/',
+            },
+            item2: {
+              'media:title': 'Title 2',
+              '@xmlns:custom': 'http://search.yahoo.com/mrss/',
+            },
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should handle namespace declarations without usage', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:media="http://search.yahoo.com/mrss/"
+          >
+            <title>No namespaced elements</title>
+            <description>Just plain elements</description>
+          </root>
+        `)
+        const expected = {
+          root: {
+            title: 'No namespaced elements',
+            description: 'Just plain elements',
+            '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            '@xmlns:media': 'http://search.yahoo.com/mrss/',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should handle mixed valid and invalid namespace values', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const value = {
+          root: {
+            '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            '@xmlns:invalid1': '',
+            '@xmlns:invalid2': '   ',
+            '@xmlns:valid': 'http://example.com/',
+            'dc:creator': 'John Doe',
+            'invalid1:element': 'Value 1',
+            'invalid2:element': 'Value 2',
+            'valid:element': 'Value 3',
+          },
+        }
+        const expected = {
+          root: {
+            '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            '@xmlns:invalid1': '',
+            '@xmlns:invalid2': '   ',
+            '@xmlns:valid': 'http://example.com/',
+            'dc:creator': 'John Doe',
+            'invalid1:element': 'Value 1',
+            'invalid2:element': 'Value 2',
+            'valid:element': 'Value 3',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
   })
 })

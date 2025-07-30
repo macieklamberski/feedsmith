@@ -1,6 +1,11 @@
+import { namespaceUrls } from '../../../common/config.js'
 import type { GenerateFunction } from '../../../common/types.js'
 import {
+  generateBoolean,
+  generateCdataString,
   generateNamespaceAttrs,
+  generateNumber,
+  generatePlainString,
   generateRfc822Date,
   isObject,
   trimArray,
@@ -47,11 +52,9 @@ export const generatePerson: GenerateFunction<Person> = (person) => {
     return
   }
 
-  // Generate RSS-style person string format
-  const parts: string[] = []
+  const parts: Array<string> = []
 
   if (person.email && person.name) {
-    // Standard RSS format: email (name)
     return `${person.email} (${person.name})`
   } else if (person.email) {
     parts.push(person.email)
@@ -74,8 +77,8 @@ export const generateCategory: GenerateFunction<Category> = (category) => {
   }
 
   const value = {
-    '@domain': category.domain,
-    '#text': category.name,
+    '@domain': generatePlainString(category.domain),
+    '#text': generateCdataString(category.name),
   }
 
   return trimObject(value)
@@ -87,11 +90,11 @@ export const generateCloud: GenerateFunction<Cloud> = (cloud) => {
   }
 
   const value = {
-    '@domain': cloud.domain,
-    '@port': cloud.port,
-    '@path': cloud.path,
-    '@registerProcedure': cloud.registerProcedure,
-    '@protocol': cloud.protocol,
+    '@domain': generatePlainString(cloud.domain),
+    '@port': generateNumber(cloud.port),
+    '@path': generatePlainString(cloud.path),
+    '@registerProcedure': generatePlainString(cloud.registerProcedure),
+    '@protocol': generatePlainString(cloud.protocol),
   }
 
   return trimObject(value)
@@ -102,7 +105,14 @@ export const generateImage: GenerateFunction<Image> = (image) => {
     return
   }
 
-  const value = image
+  const value = {
+    url: generateCdataString(image.url),
+    title: generateCdataString(image.title),
+    link: generateCdataString(image.link),
+    description: generateCdataString(image.description),
+    height: generateNumber(image.height),
+    width: generateNumber(image.width),
+  }
 
   return trimObject(value)
 }
@@ -112,7 +122,12 @@ export const generateTextInput: GenerateFunction<TextInput> = (textInput) => {
     return
   }
 
-  const value = textInput
+  const value = {
+    title: generateCdataString(textInput.title),
+    description: generateCdataString(textInput.description),
+    name: generateCdataString(textInput.name),
+    link: generateCdataString(textInput.link),
+  }
 
   return trimObject(value)
 }
@@ -123,9 +138,9 @@ export const generateEnclosure: GenerateFunction<Enclosure> = (enclosure) => {
   }
 
   const value = {
-    '@url': enclosure.url,
-    '@length': enclosure.length,
-    '@type': enclosure.type,
+    '@url': generatePlainString(enclosure.url),
+    '@length': generateNumber(enclosure.length),
+    '@type': generatePlainString(enclosure.type),
   }
 
   return trimObject(value)
@@ -133,7 +148,7 @@ export const generateEnclosure: GenerateFunction<Enclosure> = (enclosure) => {
 
 export const generateSkipHours: GenerateFunction<SkipHours> = (skipHours) => {
   const value = {
-    hour: trimArray(skipHours),
+    hour: trimArray(skipHours, generateNumber),
   }
 
   return trimObject(value)
@@ -141,7 +156,7 @@ export const generateSkipHours: GenerateFunction<SkipHours> = (skipHours) => {
 
 export const generateSkipDays: GenerateFunction<SkipDays> = (skipDays) => {
   const value = {
-    day: trimArray(skipDays),
+    day: trimArray(skipDays, generatePlainString),
   }
 
   return trimObject(value)
@@ -149,8 +164,8 @@ export const generateSkipDays: GenerateFunction<SkipDays> = (skipDays) => {
 
 export const generateGuid: GenerateFunction<Guid> = (guid) => {
   const value = {
-    '#text': guid?.value,
-    '@isPermaLink': guid?.isPermaLink,
+    '#text': generateCdataString(guid?.value),
+    '@isPermaLink': generateBoolean(guid?.isPermaLink),
   }
 
   return trimObject(value)
@@ -162,8 +177,8 @@ export const generateSource: GenerateFunction<Source> = (source) => {
   }
 
   const value = {
-    '#text': source.title,
-    '@url': source.url,
+    '#text': generateCdataString(source.title),
+    '@url': generatePlainString(source.url),
   }
 
   return trimObject(value)
@@ -175,15 +190,15 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
   }
 
   const value = {
-    title: item.title,
-    link: item.link,
-    description: item.description,
-    author: trimArray(item.authors?.map(generatePerson)),
-    category: trimArray(item.categories?.map(generateCategory)),
-    comments: item.comments,
-    enclosure: generateEnclosure(item.enclosure),
+    title: generateCdataString(item.title),
+    link: generateCdataString(item.link),
+    description: generateCdataString(item.description),
+    author: trimArray(item.authors, generatePerson),
+    category: trimArray(item.categories, generateCategory),
+    comments: generateCdataString(item.comments),
+    enclosure: trimArray(item.enclosures, generateEnclosure),
     guid: generateGuid(item.guid),
-    pubDate: item.pubDate,
+    pubDate: generateRfc822Date(item.pubDate),
     source: generateSource(item.source),
     ...generateContentItem(item.content),
     ...generateAtomEntry(item.atom),
@@ -207,22 +222,22 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
   }
 
   const value = {
-    title: feed.title,
-    link: feed.link,
-    description: feed.description,
-    language: feed.language,
-    copyright: feed.copyright,
+    title: generateCdataString(feed.title),
+    link: generateCdataString(feed.link),
+    description: generateCdataString(feed.description),
+    language: generateCdataString(feed.language),
+    copyright: generateCdataString(feed.copyright),
     managingEditor: generatePerson(feed.managingEditor),
     webMaster: generatePerson(feed.webMaster),
     pubDate: generateRfc822Date(feed.pubDate),
     lastBuildDate: generateRfc822Date(feed.lastBuildDate),
-    category: trimArray(feed.categories?.map(generateCategory)),
-    generator: feed.generator,
-    docs: feed.docs,
+    category: trimArray(feed.categories, generateCategory),
+    generator: generateCdataString(feed.generator),
+    docs: generateCdataString(feed.docs),
     cloud: generateCloud(feed.cloud),
-    ttl: feed.ttl,
+    ttl: generateNumber(feed.ttl),
     image: generateImage(feed.image),
-    rating: feed.rating,
+    rating: generateCdataString(feed.rating),
     textInput: generateTextInput(feed.textInput),
     skipHours: generateSkipHours(feed.skipHours),
     skipDays: generateSkipDays(feed.skipDays),
@@ -234,7 +249,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
     ...generatePodcastFeed(feed.podcast),
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
-    item: trimArray(feed.items?.map(generateItem)),
+    item: trimArray(feed.items, generateItem),
   }
 
   const trimmedValue = trimObject(value)
@@ -246,7 +261,7 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
   return {
     rss: {
       '@version': '2.0',
-      ...generateNamespaceAttrs(trimmedValue),
+      ...generateNamespaceAttrs(trimmedValue, namespaceUrls),
       channel: trimmedValue,
     },
   }

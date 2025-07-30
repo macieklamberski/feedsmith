@@ -20,10 +20,10 @@
         <outline text="Belgium"/>
         <outline text="Netherlands"/>
         <outline text="Germany">
-          <outline text="Berlin" created="Mon, 15 Feb 2024 12:34:21 GMT"/>
-          <outline text="Munich" created="Mon, 15 Feb 2024 12:34:25 GMT"/>
-          <outline text="Hamburg" created="Mon, 15 Feb 2024 12:34:30 GMT"/>
-          <outline text="Cologne" created="Mon, 15 Feb 2024 12:34:35 GMT"/>
+          <outline text="Berlin" created="Thu, 15 Feb 2024 12:34:21 GMT"/>
+          <outline text="Munich" created="Thu, 15 Feb 2024 12:34:25 GMT"/>
+          <outline text="Hamburg" created="Thu, 15 Feb 2024 12:34:30 GMT"/>
+          <outline text="Cologne" created="Thu, 15 Feb 2024 12:34:35 GMT"/>
         </outline>
         <outline text="Luxembourg"/>
         <outline text="Austria"/>

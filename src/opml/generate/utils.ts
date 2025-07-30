@@ -1,6 +1,10 @@
 import type { GenerateFunction } from '../../common/types.js'
 import {
+  generateBoolean,
+  generateCdataString,
   generateCsvOf,
+  generateNumber,
+  generatePlainString,
   generateRfc822Date,
   isObject,
   trimArray,
@@ -8,26 +12,26 @@ import {
 } from '../../common/utils.js'
 import type { Body, Head, Opml, Outline } from '../common/types.js'
 
-export const generateOutline: GenerateFunction<Outline> = (outline) => {
+export const generateOutline: GenerateFunction<Outline<Date>> = (outline) => {
   if (!isObject(outline)) {
     return
   }
 
   const value = {
-    '@text': outline.text,
-    '@type': outline.type,
-    '@isComment': outline.isComment,
-    '@isBreakpoint': outline.isBreakpoint,
-    '@created': outline.created,
-    '@category': outline.category,
-    '@description': outline.description,
-    '@xmlUrl': outline.xmlUrl,
-    '@htmlUrl': outline.htmlUrl,
-    '@language': outline.language,
-    '@title': outline.title,
-    '@version': outline.version,
-    '@url': outline.url,
-    outline: trimArray(outline.outlines?.map(generateOutline)),
+    '@text': generatePlainString(outline.text),
+    '@type': generatePlainString(outline.type),
+    '@isComment': generateBoolean(outline.isComment),
+    '@isBreakpoint': generateBoolean(outline.isBreakpoint),
+    '@created': generateRfc822Date(outline.created),
+    '@category': generatePlainString(outline.category),
+    '@description': generatePlainString(outline.description),
+    '@xmlUrl': generatePlainString(outline.xmlUrl),
+    '@htmlUrl': generatePlainString(outline.htmlUrl),
+    '@language': generatePlainString(outline.language),
+    '@title': generatePlainString(outline.title),
+    '@version': generatePlainString(outline.version),
+    '@url': generatePlainString(outline.url),
+    outline: trimArray(outline.outlines, generateOutline),
   }
 
   return trimObject(value)
@@ -39,31 +43,31 @@ export const generateHead: GenerateFunction<Head<Date>> = (head) => {
   }
 
   const value = {
-    title: head.title,
+    title: generateCdataString(head.title),
     dateCreated: generateRfc822Date(head.dateCreated),
     dateModified: generateRfc822Date(head.dateModified),
-    ownerName: head.ownerName,
-    ownerEmail: head.ownerEmail,
-    ownerId: head.ownerId,
-    docs: head.docs,
-    expansionState: generateCsvOf(head.expansionState),
-    vertScrollState: head.vertScrollState,
-    windowTop: head.windowTop,
-    windowLeft: head.windowLeft,
-    windowBottom: head.windowBottom,
-    windowRight: head.windowRight,
+    ownerName: generateCdataString(head.ownerName),
+    ownerEmail: generateCdataString(head.ownerEmail),
+    ownerId: generateCdataString(head.ownerId),
+    docs: generateCdataString(head.docs),
+    expansionState: generateCsvOf(head.expansionState, generateNumber),
+    vertScrollState: generateNumber(head.vertScrollState),
+    windowTop: generateNumber(head.windowTop),
+    windowLeft: generateNumber(head.windowLeft),
+    windowBottom: generateNumber(head.windowBottom),
+    windowRight: generateNumber(head.windowRight),
   }
 
   return trimObject(value)
 }
 
-export const generateBody: GenerateFunction<Body> = (body) => {
+export const generateBody: GenerateFunction<Body<Date>> = (body) => {
   if (!isObject(body)) {
     return
   }
 
   const value = {
-    outline: trimArray(body.outlines?.map(generateOutline)),
+    outline: trimArray(body.outlines, generateOutline),
   }
 
   return trimObject(value)

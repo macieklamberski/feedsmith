@@ -9,7 +9,6 @@ import {
   parseString,
   retrieveText,
   trimObject,
-  validateAndTrimObject,
 } from '../../../common/utils.js'
 import type { Box, ItemOrFeed, Line, Point, Polygon } from '../common/types.js'
 
@@ -56,29 +55,29 @@ export const parsePoint: ParseExactFunction<Point> = (value) => {
 }
 
 export const parseLine: ParseExactFunction<Line> = (value) => {
-  const line = {
-    points: parseLatLngPairs(retrieveText(value), { min: 2 }),
-  }
+  const points = parseLatLngPairs(retrieveText(value), { min: 2 })
 
-  return validateAndTrimObject(line, 'points')
+  if (isPresent(points)) {
+    return { points }
+  }
 }
 
 export const parsePolygon: ParseExactFunction<Polygon> = (value) => {
-  const polygon = {
-    points: parseLatLngPairs(retrieveText(value), { min: 4 }),
-  }
+  const points = parseLatLngPairs(retrieveText(value), { min: 4 })
 
-  return validateAndTrimObject(polygon, 'points')
+  if (isPresent(points)) {
+    return { points }
+  }
 }
 
 export const parseBox: ParseExactFunction<Box> = (value) => {
   const points = parseLatLngPairs(retrieveText(value), { min: 2, max: 2 })
-  const box = {
-    lowerCorner: points?.[0],
-    upperCorner: points?.[1],
-  }
+  const lowerCorner = points?.[0]
+  const upperCorner = points?.[1]
 
-  return validateAndTrimObject(box, 'lowerCorner', 'upperCorner')
+  if (isPresent(lowerCorner) && isPresent(upperCorner)) {
+    return { lowerCorner, upperCorner }
+  }
 }
 
 export const retrieveItemOrFeed: ParsePartialFunction<ItemOrFeed> = (value) => {

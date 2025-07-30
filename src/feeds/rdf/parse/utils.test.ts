@@ -983,7 +983,7 @@ describe('retrieveFeed', () => {
 
   it('should retrieve feed with only required fields (with #text)', () => {
     const value = {
-      'rdf:rdf': {
+      rdf: {
         channel: {
           title: { '#text': 'Feed Title' },
         },
@@ -1001,7 +1001,7 @@ describe('retrieveFeed', () => {
 
   it('should retrieve feed with only required fields (without #text)', () => {
     const value = {
-      'rdf:rdf': {
+      rdf: {
         channel: {
           title: 'Feed Title',
         },
@@ -1019,7 +1019,7 @@ describe('retrieveFeed', () => {
 
   it('should retrieve feed with only required fields (with array of values)', () => {
     const value = {
-      'rdf:rdf': [
+      rdf: [
         {
           channel: {
             title: 'Feed Title',
