@@ -15,11 +15,59 @@ import {
 } from './utils.js'
 
 describe('generatePerson', () => {
-  it('should pass through string person', () => {
-    const value = 'john.doe@example.com (John Doe)'
+  it('should generate standard RSS format when email and name are present', () => {
+    const value = {
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+    }
     const expected = 'john.doe@example.com (John Doe)'
 
     expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should generate name only when just name is present', () => {
+    const value = {
+      name: 'John Doe',
+    }
+    const expected = 'John Doe'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should generate email only when just email is present', () => {
+    const value = {
+      email: 'john.doe@example.com',
+    }
+    const expected = 'john.doe@example.com'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should include link when present with name', () => {
+    const value = {
+      name: 'John Doe',
+      link: 'https://example.com',
+    }
+    const expected = 'John Doe <https://example.com>'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should generate all fields in correct format', () => {
+    const value = {
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      link: 'https://example.com',
+    }
+    const expected = 'john.doe@example.com (John Doe) <https://example.com>'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generatePerson(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs gracefully', () => {
@@ -413,7 +461,7 @@ describe('generateItem', () => {
       title: 'Example Item',
       link: 'https://example.com/item/123',
       description: 'Item description',
-      authors: ['john.doe@example.com (John Doe)'],
+      authors: [{ name: 'John Doe', email: 'john.doe@example.com' }],
       categories: [{ name: 'Technology', domain: 'https://example.com/categories' }],
       comments: 'https://example.com/item/123/comments',
       enclosures: [
@@ -726,8 +774,8 @@ describe('generateFeed', () => {
       description: 'Example feed description',
       language: 'en-US',
       copyright: '© 2023 Example Corp',
-      managingEditor: 'editor@example.com (Editor Name)',
-      webMaster: 'webmaster@example.com (Webmaster Name)',
+      managingEditor: { name: 'Editor Name', email: 'editor@example.com' },
+      webMaster: { name: 'Webmaster Name', email: 'webmaster@example.com' },
       pubDate: new Date('2023-03-15T12:00:00Z'),
       lastBuildDate: new Date('2023-03-15T12:00:00Z'),
       categories: [{ name: 'Technology' }],

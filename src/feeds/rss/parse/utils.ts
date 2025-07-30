@@ -46,8 +46,51 @@ import type {
   TextInput,
 } from '../common/types.js'
 
+const BRACKET_PATTERN = /([^<[(]+)|(?:<([^>]*)>)|(?:\[([^\]]*)\])|(?:\(([^)]*)\))/g
+const EMAIL_LIKE_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const URL_LIKE_PATTERN = /^(?:https?:\/\/|www\.)[^\s@]+\.[^\s@]+$/
+
 export const parsePerson: ParsePartialFunction<Person> = (value) => {
-  return parseSingularOf(value?.name ?? value, (value) => parseString(retrieveText(value)))
+  // TODO: Use parseAtomPerson for cases where author is a complex element from Atom namespace.
+  const rawPerson = parseSingularOf(value?.name ?? value, (value) =>
+    parseString(retrieveText(value)),
+  )
+
+  if (!rawPerson || typeof rawPerson !== 'string') {
+    return
+  }
+
+  if (EMAIL_LIKE_PATTERN.test(rawPerson)) {
+    return { email: rawPerson }
+  }
+
+  if (URL_LIKE_PATTERN.test(rawPerson)) {
+    return { link: rawPerson }
+  }
+
+  const person: Person = {
+    name: undefined,
+    email: undefined,
+    link: undefined,
+  }
+
+  for (const match of rawPerson.matchAll(BRACKET_PATTERN)) {
+    const chunk = parseString(match[1] || match[2] || match[3] || match[4])
+
+    if (!chunk) {
+      continue
+    }
+
+    if (EMAIL_LIKE_PATTERN.test(chunk) && !person.email) {
+      person.email = chunk
+    } else if (URL_LIKE_PATTERN.test(chunk) && !person.link) {
+      person.link = chunk
+    } else if (chunk && !person.name) {
+      person.name = chunk
+    }
+  }
+
+  return trimObject(person)
 }
 
 export const parseCategory: ParsePartialFunction<Category> = (value) => {

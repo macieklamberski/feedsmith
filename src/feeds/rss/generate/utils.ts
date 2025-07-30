@@ -48,7 +48,27 @@ import type {
 } from '../common/types.js'
 
 export const generatePerson: GenerateFunction<Person> = (person) => {
-  return generateCdataString(person)
+  if (!isObject(person)) {
+    return
+  }
+
+  const parts: Array<string> = []
+
+  if (person.email && person.name) {
+    parts.push(`${person.email} (${person.name})`)
+  } else if (person.email) {
+    parts.push(person.email)
+  } else if (person.name) {
+    parts.push(person.name)
+  }
+
+  if (person.link) {
+    parts.push(`<${person.link}>`)
+  }
+
+  if (parts.length) {
+    return parts.join(' ')
+  }
 }
 
 export const generateCategory: GenerateFunction<Category> = (category) => {
