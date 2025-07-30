@@ -24,7 +24,7 @@ describe('generateOutline', () => {
       '@type': 'rss',
       '@isComment': true,
       '@isBreakpoint': false,
-      '@created': '2023-03-15',
+      '@created': 'Wed, 15 Mar 2023 00:00:00 GMT',
       '@category': 'Test Category',
       '@description': 'Test Description',
       '@xmlUrl': 'https://example.com/feed.xml',
@@ -117,7 +117,7 @@ describe('generateOutline', () => {
 describe('generateHead', () => {
   it('should generate head object with all properties', () => {
     const date = new Date('2023-03-15T12:00:00Z')
-    const input = {
+    const value = {
       title: 'Test OPML',
       dateCreated: date,
       dateModified: date,
@@ -148,22 +148,22 @@ describe('generateHead', () => {
       windowRight: 700,
     }
 
-    expect(generateHead(input)).toEqual(expected)
+    expect(generateHead(value)).toEqual(expected)
   })
 
   it('should generate head with minimal properties', () => {
-    const input = {
+    const value = {
       title: 'Minimal Head',
     }
     const expected = {
       title: 'Minimal Head',
     }
 
-    expect(generateHead(input)).toEqual(expected)
+    expect(generateHead(value)).toEqual(expected)
   })
 
   it('should handle expansionState with array of one zero', () => {
-    const input = {
+    const value = {
       title: 'Test OPML',
       expansionState: [0],
     }
@@ -172,7 +172,7 @@ describe('generateHead', () => {
       expansionState: '0',
     }
 
-    expect(generateHead(input)).toEqual(expected)
+    expect(generateHead(value)).toEqual(expected)
   })
 
   it('should handle empty expansionState array', () => {
@@ -203,7 +203,7 @@ describe('generateHead', () => {
 
 describe('generateBody', () => {
   it('should generate body object with outlines', () => {
-    const input = {
+    const value = {
       outlines: [
         {
           text: 'Category 1',
@@ -244,15 +244,15 @@ describe('generateBody', () => {
       ],
     }
 
-    expect(generateBody(input)).toEqual(expected)
+    expect(generateBody(value)).toEqual(expected)
   })
 
   it('should handle empty outlines array', () => {
-    const input = {
+    const value = {
       outlines: [],
     }
 
-    expect(generateBody(input)).toBeUndefined()
+    expect(generateBody(value)).toBeUndefined()
   })
 
   it('should handle object with only undefined/empty properties', () => {
@@ -275,7 +275,7 @@ describe('generateBody', () => {
 describe('generateOpml', () => {
   it('should generate complete OPML object', () => {
     const date = new Date('2023-03-15T12:00:00Z')
-    const input = {
+    const value = {
       head: {
         title: 'Test OPML',
         dateCreated: date,
@@ -323,11 +323,11 @@ describe('generateOpml', () => {
       },
     }
 
-    expect(generateOpml(input)).toEqual(expected)
+    expect(generateOpml(value)).toEqual(expected)
   })
 
   it('should generate OPML with minimal required fields', () => {
-    const input = {
+    const value = {
       body: {
         outlines: [{ text: 'Simple Outline' }],
       },
@@ -341,17 +341,17 @@ describe('generateOpml', () => {
       },
     }
 
-    expect(generateOpml(input)).toEqual(expected)
+    expect(generateOpml(value)).toEqual(expected)
   })
 
   it('should handle OPML with empty body outlines', () => {
-    const input = {
+    const value = {
       body: {
         outlines: [],
       },
     }
 
-    expect(generateOpml(input)).toBeUndefined()
+    expect(generateOpml(value)).toBeUndefined()
   })
 
   it('should handle object with only undefined/empty properties', () => {

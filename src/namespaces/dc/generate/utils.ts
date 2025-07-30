@@ -1,5 +1,10 @@
 import type { GenerateFunction } from '../../../common/types.js'
-import { generateRfc3339Date, isObject, trimObject } from '../../../common/utils.js'
+import {
+  generateCdataString,
+  generateRfc3339Date,
+  isObject,
+  trimObject,
+} from '../../../common/utils.js'
 import type { ItemOrFeed } from '../common/types.js'
 
 export const generateItemOrFeed: GenerateFunction<ItemOrFeed<Date>> = (itemOrFeed) => {
@@ -8,21 +13,21 @@ export const generateItemOrFeed: GenerateFunction<ItemOrFeed<Date>> = (itemOrFee
   }
 
   const value = {
-    'dc:title': itemOrFeed.title,
-    'dc:creator': itemOrFeed.creator,
-    'dc:subject': itemOrFeed.subject,
-    'dc:description': itemOrFeed.description,
-    'dc:publisher': itemOrFeed.publisher,
-    'dc:contributor': itemOrFeed.contributor,
+    'dc:title': generateCdataString(itemOrFeed.title),
+    'dc:creator': generateCdataString(itemOrFeed.creator),
+    'dc:subject': generateCdataString(itemOrFeed.subject),
+    'dc:description': generateCdataString(itemOrFeed.description),
+    'dc:publisher': generateCdataString(itemOrFeed.publisher),
+    'dc:contributor': generateCdataString(itemOrFeed.contributor),
     'dc:date': generateRfc3339Date(itemOrFeed.date),
-    'dc:type': itemOrFeed.type,
-    'dc:format': itemOrFeed.format,
-    'dc:identifier': itemOrFeed.identifier,
-    'dc:source': itemOrFeed.source,
-    'dc:language': itemOrFeed.language,
-    'dc:relation': itemOrFeed.relation,
-    'dc:coverage': itemOrFeed.coverage,
-    'dc:rights': itemOrFeed.rights,
+    'dc:type': generateCdataString(itemOrFeed.type),
+    'dc:format': generateCdataString(itemOrFeed.format),
+    'dc:identifier': generateCdataString(itemOrFeed.identifier),
+    'dc:source': generateCdataString(itemOrFeed.source),
+    'dc:language': generateCdataString(itemOrFeed.language),
+    'dc:relation': generateCdataString(itemOrFeed.relation),
+    'dc:coverage': generateCdataString(itemOrFeed.coverage),
+    'dc:rights': generateCdataString(itemOrFeed.rights),
   }
 
   return trimObject(value)

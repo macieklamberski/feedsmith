@@ -89,7 +89,7 @@ export type Entry<TDate extends DateLike> = {
   source?: Source<TDate>
   summary?: Text
   title: Text
-  updated?: TDate
+  updated: TDate
   dc?: DcItemOrFeed<TDate>
   dcterms?: DctermsItemOrFeed<TDate>
   slash?: SlashItem

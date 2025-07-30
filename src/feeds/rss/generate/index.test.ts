@@ -19,7 +19,7 @@ describe('generate', () => {
   }
 
   it('should generate RSS with atom namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with Atom namespace',
       description: 'Test feed with Atom namespace elements',
       atom: {
@@ -40,7 +40,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
@@ -55,11 +54,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with dc namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with dc namespace',
       description: 'Test feed with Dublin Core namespace',
       dc: {
@@ -74,7 +73,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
@@ -89,11 +87,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with dcterms namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with dcterms namespace',
       description: 'Test feed with Dublin Core Terms namespace',
       dcterms: {
@@ -110,7 +108,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:dcterms="http://purl.org/dc/terms/">
   <channel>
@@ -127,18 +124,17 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with sy namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with sy namespace',
       description: 'Test feed with syndication namespace',
       sy: {
         updatePeriod: 'hourly',
       },
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/">
   <channel>
@@ -149,11 +145,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with itunes namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with iTunes namespace',
       description: 'Test feed with Apple Podcasts namespace',
       itunes: {
@@ -168,7 +164,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
   <channel>
@@ -183,11 +178,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with podcast namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with podcast namespace',
       description: 'Test feed with Podcast 2.0 namespace',
       podcast: {
@@ -202,7 +197,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:podcast="https://podcastindex.org/namespace/1.0">
   <channel>
@@ -217,11 +211,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with media namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with media namespace',
       description: 'Test feed with Media RSS namespace',
       media: {
@@ -240,7 +234,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
   <channel>
@@ -255,11 +248,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with content namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with content namespace',
       description: 'Test feed with Content namespace',
       items: [
@@ -271,7 +264,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
@@ -287,11 +279,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with slash namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with slash namespace',
       description: 'Test feed with Slash namespace',
       items: [
@@ -303,7 +295,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
   <channel>
@@ -317,11 +308,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with thr namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with thr namespace',
       description: 'Test feed with Threading namespace',
       items: [
@@ -333,7 +324,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:thr="http://purl.org/syndication/thread/1.0">
   <channel>
@@ -347,11 +337,11 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with georss namespace', () => {
-    const input = {
+    const value = {
       title: 'Feed with georss namespace',
       description: 'Test feed with GeoRSS namespace',
       georss: {
@@ -367,7 +357,6 @@ describe('generate', () => {
         },
       ],
     }
-
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:georss="http://www.georss.org/georss/">
   <channel>
@@ -383,6 +372,108 @@ describe('generate', () => {
 </rss>
 `
 
-    expect(generate(input)).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with stylesheets', () => {
+    const value = {
+      title: 'Feed with Stylesheet',
+      description: 'Test feed with stylesheet support',
+    }
+    const options = {
+      stylesheets: [{ type: 'text/xsl', href: '/styles/rss.xsl' }],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/styles/rss.xsl"?>
+<rss version="2.0">
+  <channel>
+    <title>Feed with Stylesheet</title>
+    <description>Test feed with stylesheet support</description>
+  </channel>
+</rss>
+`
+
+    expect(generate(value, options)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with multiple enclosures per item', () => {
+    const value = {
+      title: 'Podcast with Multiple Media Files',
+      description: 'A podcast that provides multiple formats',
+      items: [
+        {
+          title: 'Episode 1: Getting Started',
+          link: 'https://example.com/episode1',
+          description: 'First episode with audio, video, and transcript',
+          enclosures: [
+            {
+              url: 'https://example.com/ep1-audio.mp3',
+              length: 15000000,
+              type: 'audio/mpeg',
+            },
+            {
+              url: 'https://example.com/ep1-video.mp4',
+              length: 50000000,
+              type: 'video/mp4',
+            },
+            {
+              url: 'https://example.com/ep1-transcript.pdf',
+              length: 500000,
+              type: 'application/pdf',
+            },
+          ],
+          pubDate: new Date('2024-01-01T12:00:00Z'),
+          guid: { value: 'https://example.com/episode1' },
+        },
+        {
+          title: 'Episode 2: Advanced Topics',
+          link: 'https://example.com/episode2',
+          description: 'Second episode with multiple audio formats',
+          enclosures: [
+            {
+              url: 'https://example.com/ep2-high.mp3',
+              length: 20000000,
+              type: 'audio/mpeg',
+            },
+            {
+              url: 'https://example.com/ep2-low.mp3',
+              length: 8000000,
+              type: 'audio/mpeg',
+            },
+          ],
+          pubDate: new Date('2024-01-08T12:00:00Z'),
+          guid: { value: 'https://example.com/episode2' },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Podcast with Multiple Media Files</title>
+    <description>A podcast that provides multiple formats</description>
+    <item>
+      <title>Episode 1: Getting Started</title>
+      <link>https://example.com/episode1</link>
+      <description>First episode with audio, video, and transcript</description>
+      <enclosure url="https://example.com/ep1-audio.mp3" length="15000000" type="audio/mpeg"/>
+      <enclosure url="https://example.com/ep1-video.mp4" length="50000000" type="video/mp4"/>
+      <enclosure url="https://example.com/ep1-transcript.pdf" length="500000" type="application/pdf"/>
+      <guid>https://example.com/episode1</guid>
+      <pubDate>Mon, 01 Jan 2024 12:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Episode 2: Advanced Topics</title>
+      <link>https://example.com/episode2</link>
+      <description>Second episode with multiple audio formats</description>
+      <enclosure url="https://example.com/ep2-high.mp3" length="20000000" type="audio/mpeg"/>
+      <enclosure url="https://example.com/ep2-low.mp3" length="8000000" type="audio/mpeg"/>
+      <guid>https://example.com/episode2</guid>
+      <pubDate>Mon, 08 Jan 2024 12:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
   })
 })

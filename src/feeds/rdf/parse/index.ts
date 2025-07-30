@@ -1,5 +1,6 @@
-import { locales } from '../../../common/config.js'
+import { locales, namespaceUrls } from '../../../common/config.js'
 import type { DeepPartial } from '../../../common/types.js'
+import { createNamespaceNormalizator } from '../../../common/utils.js'
 import { detectRdfFeed } from '../../../index.js'
 import type { Feed } from '../common/types.js'
 import { parser } from './config.js'
@@ -10,8 +11,11 @@ export const parse = (value: unknown): DeepPartial<Feed<string>> => {
     throw new Error(locales.invalid)
   }
 
+  const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.rdf)
+
   const object = parser.parse(value)
-  const parsed = retrieveFeed(object)
+  const normalized = normalizeNamespaces(object)
+  const parsed = retrieveFeed(normalized)
 
   if (!parsed) {
     throw new Error(locales.invalid)

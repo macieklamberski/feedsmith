@@ -161,6 +161,7 @@ describe('parseOwner', () => {
       'itunes:name': { '#text': 'John Doe' },
       'itunes:email': { '#text': 'john@example.com' },
     }
+
     expect(parseOwner(value)).toEqual(expectedFull)
   })
 
@@ -944,7 +945,6 @@ describe('retrieveFeed', () => {
         'itunes:image': { '@href': 'https://example.com/image.jpg' },
         'itunes:explicit': { '#text': explicitValue },
       }
-
       const expected = {
         image: 'https://example.com/image.jpg',
         explicit: expectedExplicit,

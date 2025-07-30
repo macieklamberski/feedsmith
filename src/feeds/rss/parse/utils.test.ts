@@ -193,6 +193,7 @@ describe('parseImage', () => {
       height: { '#text': '32' },
       width: { '#text': '32' },
     }
+
     expect(parseImage(value)).toEqual(expectedFull)
   })
 
@@ -262,6 +263,7 @@ describe('parseTextInput', () => {
       name: { '#text': 'searchForm' },
       link: { '#text': 'https://example.com/search' },
     }
+
     expect(parseTextInput(value)).toEqual(expectedFull)
   })
 
@@ -641,11 +643,13 @@ describe('parseItem', () => {
       { name: 'Web Development' },
     ],
     comments: 'https://example.com/item/comments',
-    enclosure: {
-      url: 'https://example.com/audio.mp3',
-      length: 12345678,
-      type: 'audio/mpeg',
-    },
+    enclosures: [
+      {
+        url: 'https://example.com/audio.mp3',
+        length: 12345678,
+        type: 'audio/mpeg',
+      },
+    ],
     guid: { value: 'https://example.com/guid/1234' },
     pubDate: 'Mon, 15 Mar 2023 12:30:00 GMT',
     source: { title: 'Example Source', url: 'https://example.com/source.xml' },
@@ -690,11 +694,6 @@ describe('parseItem', () => {
         {
           '@url': 'https://example.com/audio.mp3',
           '@length': '12345678',
-          '@type': 'audio/mpeg',
-        },
-        {
-          '@url': 'https://example.com/audio-alt.mp3',
-          '@length': '87654321',
           '@type': 'audio/mpeg',
         },
       ],
@@ -1193,11 +1192,13 @@ describe('parseFeed', () => {
             { name: 'Category 1' },
             { name: 'Category 2', domain: 'http://example.com/cat' },
           ],
-          enclosure: {
-            url: 'https://example.com/file.mp3',
-            length: 12345,
-            type: 'audio/mpeg',
-          },
+          enclosures: [
+            {
+              url: 'https://example.com/file.mp3',
+              length: 12345,
+              type: 'audio/mpeg',
+            },
+          ],
         },
         {
           title: 'Item 2',

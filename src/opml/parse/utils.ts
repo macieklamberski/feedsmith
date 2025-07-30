@@ -13,7 +13,7 @@ import {
 } from '../../common/utils.js'
 import type { Body, Head, Opml, Outline } from '../common/types.js'
 
-export const parseOutline: ParsePartialFunction<Outline> = (value) => {
+export const parseOutline: ParsePartialFunction<Outline<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -23,7 +23,7 @@ export const parseOutline: ParsePartialFunction<Outline> = (value) => {
     type: parseString(value['@type']),
     isComment: parseBoolean(value['@iscomment']),
     isBreakpoint: parseBoolean(value['@isbreakpoint']),
-    created: parseString(value['@created']),
+    created: parseDate(value['@created']),
     category: parseString(value['@category']),
     description: parseString(value['@description']),
     xmlUrl: parseString(value['@xmlurl']),
@@ -66,7 +66,7 @@ export const parseHead: ParsePartialFunction<Head<string>> = (value) => {
   return trimObject(head)
 }
 
-export const parseBody: ParsePartialFunction<Body> = (value) => {
+export const parseBody: ParsePartialFunction<Body<string>> = (value) => {
   if (!isObject(value)) {
     return
   }

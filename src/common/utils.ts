@@ -1,7 +1,13 @@
 import { decodeHTML, decodeXML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
-import { namespaceUrls } from './config.js'
-import type { AnyOf, GenerateFunction, ParseExactFunction, Unreliable } from './types.js'
+import type {
+  AnyOf,
+  GenerateFunction,
+  ParseExactFunction,
+  Unreliable,
+  XmlGenerateOptions,
+  XmlStylesheet,
+} from './types.js'
 
 export const isPresent = <T>(value: T): value is NonNullable<T> => {
   return value != null
@@ -23,7 +29,7 @@ export const isNonEmptyString = (value: Unreliable): value is string => {
 }
 
 export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | number => {
-  return isNonEmptyString(value) || typeof value === 'number'
+  return typeof value === 'number' || isNonEmptyString(value)
 }
 
 export const retrieveText = (value: Unreliable): Unreliable => {
@@ -129,7 +135,7 @@ export const hasEntities = (text: string) => {
 
 export const parseString: ParseExactFunction<string> = (value) => {
   if (typeof value === 'string') {
-    let string = stripCdata(value.trim())
+    let string = stripCdata(value).trim()
 
     if (hasEntities(string)) {
       string = decodeXML(string)
@@ -278,14 +284,56 @@ export const generateCsvOf = <T>(
   return trimArray(value, generate)?.join()
 }
 
-export const generateXml = (builder: XMLBuilder, value: string): string => {
-  let xml = builder.build(value)
+export const generateXmlStylesheet = (stylesheet: XmlStylesheet): string | undefined => {
+  const generated = trimObject({
+    type: generatePlainString(stylesheet.type),
+    href: generatePlainString(stylesheet.href),
+    title: generatePlainString(stylesheet.title),
+    media: generatePlainString(stylesheet.media),
+    charset: generatePlainString(stylesheet.charset),
+    alternate: generateYesNoBoolean(stylesheet.alternate),
+  })
 
-  if (xml.includes('&apos;')) {
-    xml = xml.replace(/&apos;/g, "'")
+  if (!generated) {
+    return undefined
   }
 
-  return `<?xml version="1.0" encoding="utf-8"?>\n${xml}`
+  let attributes = ''
+
+  for (const key in generated) {
+    const value = generated[key as keyof typeof generated]
+    if (value !== undefined) {
+      attributes += ` ${key}="${value}"`
+    }
+  }
+
+  return `<?xml-stylesheet${attributes}?>`
+}
+
+export const generateXml = (
+  builder: XMLBuilder,
+  value: string,
+  options?: XmlGenerateOptions,
+): string => {
+  let body = builder.build(value)
+
+  if (body.includes('&apos;')) {
+    body = body.replace(/&apos;/g, "'")
+  }
+
+  let declaration = '<?xml version="1.0" encoding="utf-8"?>'
+
+  if (options?.stylesheets?.length) {
+    for (const stylesheetObject of options.stylesheets) {
+      const stylesheetString = generateXmlStylesheet(stylesheetObject)
+
+      if (stylesheetString) {
+        declaration += `\n${stylesheetString}`
+      }
+    }
+  }
+
+  return `${declaration}\n${body}`
 }
 
 export const generateRfc822Date: GenerateFunction<string | Date> = (value) => {
@@ -314,6 +362,12 @@ export const generateRfc3339Date: GenerateFunction<string | Date> = (value) => {
 
   if (value instanceof Date && !Number.isNaN(value.getTime())) {
     return value.toISOString()
+  }
+}
+
+export const generateBoolean: GenerateFunction<boolean> = (value) => {
+  if (typeof value === 'boolean') {
+    return value
   }
 }
 
@@ -346,7 +400,7 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
 
         seenKeys.add(key)
 
-        const keyWithoutAt = key.startsWith('@') ? key.slice(1) : key
+        const keyWithoutAt = key.indexOf('@') === 0 ? key.slice(1) : key
         const colonIndex = keyWithoutAt.indexOf(':')
 
         if (colonIndex > 0) {
@@ -365,17 +419,29 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
   return namespaces
 }
 
-export const generateString: GenerateFunction<string> = (value) => {
+export const generateCdataString: GenerateFunction<string> = (value) => {
   if (!isNonEmptyString(value)) {
     return
   }
 
-  if (value.includes('<') || value.includes('>') || value.includes('&') || value.includes(']]>')) {
-    // TODO: Maybe the CDATA could be appended here?
-    return { '#cdata': value }
+  if (
+    value.indexOf('<') !== -1 ||
+    value.indexOf('>') !== -1 ||
+    value.indexOf('&') !== -1 ||
+    value.indexOf(']]>') !== -1
+  ) {
+    return { '#cdata': value.trim() }
   }
 
-  return value
+  return value.trim()
+}
+
+export const generatePlainString: GenerateFunction<string> = (value) => {
+  if (!isNonEmptyString(value)) {
+    return
+  }
+
+  return value.trim()
 }
 
 export const generateNumber: GenerateFunction<number> = (value) => {
@@ -384,7 +450,10 @@ export const generateNumber: GenerateFunction<number> = (value) => {
   }
 }
 
-export const generateNamespaceAttrs = (value: Unreliable): Record<string, string> | undefined => {
+export const generateNamespaceAttrs = (
+  value: Unreliable,
+  namespaceUrls: Record<string, string>,
+): Record<string, string> | undefined => {
   if (!isObject(value)) {
     return
   }
@@ -401,8 +470,175 @@ export const generateNamespaceAttrs = (value: Unreliable): Record<string, string
       namespaceAttrs = {}
     }
 
-    namespaceAttrs[`@xmlns:${slug}`] = namespaceUrls[slug as keyof typeof namespaceUrls]
+    namespaceAttrs[`@xmlns:${slug}`] = namespaceUrls[slug]
   }
 
   return namespaceAttrs
+}
+
+export const invertObject = (object: Record<string, string>): Record<string, string> => {
+  const inverted: Record<string, string> = {}
+
+  for (const key in object) {
+    inverted[object[key]] = key
+  }
+
+  return inverted
+}
+
+export const createNamespaceNormalizator = (
+  namespaceUrls: Record<string, string>,
+  primaryNamespace?: string,
+) => {
+  const namespacesMap = invertObject(namespaceUrls)
+
+  const resolveNamespacePrefix = (uri: string, localName: string, fallback: string): string => {
+    if (primaryNamespace && uri === primaryNamespace) {
+      return localName
+    }
+
+    const standardPrefix = namespacesMap[uri]
+
+    if (standardPrefix) {
+      return `${standardPrefix}:${localName}`
+    }
+
+    return fallback
+  }
+
+  const extractNamespaceDeclarations = (element: Unreliable): Record<string, string> => {
+    const declarations: Record<string, string> = {}
+
+    if (isObject(element)) {
+      for (const key in element) {
+        if (key === '@xmlns') {
+          declarations[''] = element[key]
+        } else if (key.indexOf('@xmlns:') === 0) {
+          const prefix = key.substring('@xmlns:'.length)
+          declarations[prefix] = element[key]
+        }
+      }
+    }
+
+    return declarations
+  }
+
+  const normalizeWithContext = (
+    name: string,
+    context: Record<string, string>,
+    useDefault = false,
+  ): string => {
+    const colonIndex = name.indexOf(':')
+
+    if (colonIndex === -1) {
+      if (useDefault && context['']) {
+        return resolveNamespacePrefix(context[''], name, name)
+      }
+
+      return name
+    }
+
+    const prefix = name.substring(0, colonIndex)
+    const unprefixedName = name.substring(colonIndex + 1)
+    const uri = context[prefix]
+
+    if (uri) {
+      return resolveNamespacePrefix(uri, unprefixedName, name)
+    }
+
+    return name
+  }
+
+  const normalizeKey = (key: string, context: Record<string, string>): string => {
+    if (key.indexOf('@') === 0) {
+      const attrName = key.substring(1)
+      const normalizedAttrName = normalizeWithContext(attrName, context, false)
+
+      return `@${normalizedAttrName}`
+    } else {
+      return normalizeWithContext(key, context, true)
+    }
+  }
+
+  const traverseAndNormalize = (
+    object: Unreliable,
+    parentContext: Record<string, string> = {},
+  ): Unreliable => {
+    if (!isObject(object)) {
+      return object
+    }
+
+    if (Array.isArray(object)) {
+      return object.map((item) => traverseAndNormalize(item, parentContext))
+    }
+
+    const normalizedObject: Unreliable = {}
+    const keyGroups: Map<string, Unreliable[]> = new Map()
+
+    const declarations = extractNamespaceDeclarations(object)
+    const currentContext = { ...parentContext, ...declarations }
+
+    for (const key in object) {
+      const value = object[key]
+
+      if (key.indexOf('@xmlns') === 0) {
+        normalizedObject[key] = value
+        continue
+      }
+
+      const normalizedKey = normalizeKey(key, currentContext)
+      const normalizedValue = traverseAndNormalize(value, currentContext)
+
+      if (!keyGroups.has(normalizedKey)) {
+        keyGroups.set(normalizedKey, [])
+      }
+
+      const group = keyGroups.get(normalizedKey)
+
+      if (group) {
+        group.push(normalizedValue)
+      }
+    }
+
+    for (const [normalizedKey, values] of keyGroups) {
+      if (values.length === 1) {
+        normalizedObject[normalizedKey] = values[0]
+      } else {
+        normalizedObject[normalizedKey] = values
+      }
+    }
+
+    return normalizedObject
+  }
+
+  // For the root level, we need to handle the special case where the root element
+  // itself has namespace declarations that apply to its own normalization.
+  const normalizeRoot = (object: Unreliable): Unreliable => {
+    if (!isObject(object)) {
+      return object
+    }
+
+    if (Array.isArray(object)) {
+      return object.map(normalizeRoot)
+    }
+
+    const normalizedObject: Unreliable = {}
+
+    for (const key in object) {
+      const value = object[key]
+
+      // Extract namespace declarations from the value to see if they apply to the key.
+      const declarations = extractNamespaceDeclarations(value)
+      // If this element has declarations, use them to normalize its own key.
+      const normalizedKey = Object.keys(declarations).length ? normalizeKey(key, declarations) : key
+      // Process the value with empty parent context since this is root.
+      const normalizedValue = traverseAndNormalize(value)
+
+      normalizedObject[normalizedKey] = normalizedValue
+    }
+
+    return normalizedObject
+  }
+
+  return normalizeRoot
 }

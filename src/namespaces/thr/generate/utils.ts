@@ -1,5 +1,12 @@
 import type { GenerateFunction } from '../../../common/types.js'
-import { generateRfc3339Date, isObject, trimArray, trimObject } from '../../../common/utils.js'
+import {
+  generateNumber,
+  generatePlainString,
+  generateRfc3339Date,
+  isObject,
+  trimArray,
+  trimObject,
+} from '../../../common/utils.js'
 import type { InReplyTo, Item, Link } from '../common/types.js'
 
 export const generateInReplyTo: GenerateFunction<InReplyTo> = (inReplyTo) => {
@@ -8,10 +15,10 @@ export const generateInReplyTo: GenerateFunction<InReplyTo> = (inReplyTo) => {
   }
 
   const value = {
-    '@ref': inReplyTo.ref,
-    '@href': inReplyTo.href,
-    '@type': inReplyTo.type,
-    '@source': inReplyTo.source,
+    '@ref': generatePlainString(inReplyTo.ref),
+    '@href': generatePlainString(inReplyTo.href),
+    '@type': generatePlainString(inReplyTo.type),
+    '@source': generatePlainString(inReplyTo.source),
   }
 
   return trimObject(value)
@@ -23,7 +30,7 @@ export const generateLink: GenerateFunction<Link<Date>> = (link) => {
   }
 
   const value = {
-    '@thr:count': link.count,
+    '@thr:count': generateNumber(link.count),
     '@thr:updated': generateRfc3339Date(link.updated),
   }
 
@@ -36,7 +43,7 @@ export const generateItem: GenerateFunction<Item> = (item) => {
   }
 
   const value = {
-    'thr:total': item.total,
+    'thr:total': generateNumber(item.total),
     'thr:in-reply-to': trimArray(item.inReplyTos, generateInReplyTo),
   }
 
