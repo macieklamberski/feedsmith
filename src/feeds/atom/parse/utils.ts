@@ -1,6 +1,7 @@
 import type { Unreliable } from '../../../common/types.js'
 import {
   detectNamespaces,
+  isNonEmptyString,
   isObject,
   parseArrayOf,
   parseDate,
@@ -31,6 +32,7 @@ import {
 } from '../../../namespaces/yt/parse/utils.js'
 import type {
   Category,
+  Content,
   Entry,
   Feed,
   Generator,
@@ -38,6 +40,7 @@ import type {
   ParsePartialFunction,
   Person,
   Source,
+  Text,
 } from '../common/types.js'
 
 export const createNamespaceGetter = (
@@ -60,6 +63,45 @@ export const createNamespaceGetter = (
 
     return value[prefixedKey]
   }
+}
+
+export const parseText: ParsePartialFunction<Text> = (value) => {
+  if (isNonEmptyString(value)) {
+    const parsed = parseString(value)
+
+    return parsed ? { value: parsed } : undefined
+  }
+
+  if (!isObject(value)) {
+    return
+  }
+
+  const text = {
+    value: parseString(retrieveText(value)),
+    type: parseString(value['@type']),
+  }
+
+  return trimObject(text)
+}
+
+export const parseContent: ParsePartialFunction<Content> = (value) => {
+  if (isNonEmptyString(value)) {
+    const parsed = parseString(value)
+
+    return parsed ? { value: parsed } : undefined
+  }
+
+  if (!isObject(value)) {
+    return
+  }
+
+  const content = {
+    value: parseString(retrieveText(value)),
+    type: parseString(value['@type']),
+    src: parseString(value['@src']),
+  }
+
+  return trimObject(content)
 }
 
 export const parseLink: ParsePartialFunction<Link<string>> = (value) => {
@@ -157,9 +199,9 @@ export const parseSource: ParsePartialFunction<Source<string>> = (value, options
     id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
     logo: parseSingularOf(get('logo'), (value) => parseString(retrieveText(value))),
-    rights: parseSingularOf(get('rights'), (value) => parseString(retrieveText(value))),
-    subtitle: parseSingularOf(get('subtitle'), (value) => parseString(retrieveText(value))),
-    title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
+    rights: parseSingularOf(get('rights'), parseText),
+    subtitle: parseSingularOf(get('subtitle'), parseText),
+    title: parseSingularOf(get('title'), parseText),
     updated: retrieveUpdated(value),
   }
 
@@ -194,14 +236,14 @@ export const retrieveUpdated: ParsePartialFunction<string> = (value, options) =>
   return updated || modified
 }
 
-export const retrieveSubtitle: ParsePartialFunction<string> = (value, options) => {
+export const retrieveSubtitle: ParsePartialFunction<Text> = (value, options) => {
   if (!isObject(value)) {
     return
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const subtitle = parseSingularOf(get('subtitle'), (value) => parseString(retrieveText(value))) // Atom 1.0.
-  const tagline = parseSingularOf(get('tagline'), (value) => parseString(retrieveText(value))) // Atom 0.3.
+  const subtitle = parseSingularOf(get('subtitle'), parseText) // Atom 1.0.
+  const tagline = parseSingularOf(get('tagline'), parseText) // Atom 0.3.
 
   return subtitle || tagline
 }
@@ -216,15 +258,15 @@ export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) 
   const entry = {
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
-    content: parseSingularOf(get('content'), (value) => parseString(retrieveText(value))),
+    content: parseSingularOf(get('content'), parseContent),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
     id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
     published: retrievePublished(value, options),
-    rights: parseSingularOf(get('rights'), (value) => parseString(retrieveText(value))),
+    rights: parseSingularOf(get('rights'), parseText),
     source: parseSingularOf(get('source'), parseSource),
-    summary: parseSingularOf(get('summary'), (value) => parseString(retrieveText(value))),
-    title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
+    summary: parseSingularOf(get('summary'), parseText),
+    title: parseSingularOf(get('title'), parseText),
     updated: retrieveUpdated(value, options),
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
     dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
@@ -256,9 +298,9 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) =>
     id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
     logo: parseSingularOf(get('logo'), (value) => parseString(retrieveText(value))),
-    rights: parseSingularOf(get('rights'), (value) => parseString(retrieveText(value))),
+    rights: parseSingularOf(get('rights'), parseText),
     subtitle: retrieveSubtitle(value, options),
-    title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
+    title: parseSingularOf(get('title'), parseText),
     updated: retrieveUpdated(value, options),
     entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options)),
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,

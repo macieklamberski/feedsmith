@@ -5,6 +5,7 @@ import {
   generateNumber,
   generatePlainString,
   generateRfc3339Date,
+  isNonEmptyString,
   isObject,
   trimArray,
   trimObject,
@@ -30,6 +31,7 @@ import {
 } from '../../../namespaces/yt/generate/utils.js'
 import type {
   Category,
+  Content,
   Entry,
   Feed,
   GenerateFunction,
@@ -45,7 +47,30 @@ export const createNamespaceSetter = (prefix: string | undefined) => {
 }
 
 export const generateText: GenerateFunction<Text> = (text) => {
-  return generateCdataString(text)
+  if (!isObject(text)) {
+    return
+  }
+
+  const value = {
+    '#text': generateCdataString(text.value),
+    '@type': generatePlainString(text.type),
+  }
+
+  return trimObject(value)
+}
+
+export const generateContent: GenerateFunction<Content> = (content) => {
+  if (!isObject(content)) {
+    return
+  }
+
+  const value = {
+    '#text': generateCdataString(content.value),
+    '@type': generatePlainString(content.type),
+    '@src': generatePlainString(content.src),
+  }
+
+  return trimObject(value)
 }
 
 export const generateLink: GenerateFunction<Link<Date>> = (link) => {
@@ -146,7 +171,7 @@ export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => 
   const value = {
     [key('author')]: trimArray(entry.authors, generatePerson),
     [key('category')]: trimArray(entry.categories, generateCategory),
-    [key('content')]: generateText(entry.content),
+    [key('content')]: generateContent(entry.content),
     [key('contributor')]: trimArray(entry.contributors, (contributor) =>
       generatePerson(contributor, options),
     ),
