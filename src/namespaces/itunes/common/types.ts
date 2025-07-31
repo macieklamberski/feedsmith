@@ -1,3 +1,4 @@
+// #region reference
 export type Category = {
   text: string
   categories?: Array<Category>
@@ -45,3 +46,4 @@ export type Feed = {
   /** @deprecated No longer required for submission to Apple Podcasts. */
   owner?: Owner
 }
+// #endregion reference

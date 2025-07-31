@@ -1,4 +1,4 @@
-# API Reference
+# Functions Reference
 
 ## Parsing Functions
 - `parseFeed(content)` - Universal parser for any format

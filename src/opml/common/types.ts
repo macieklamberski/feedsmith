@@ -1,5 +1,6 @@
 import type { DateLike } from '../../common/types.js'
 
+// #region reference
 export type Outline<TDate extends DateLike> = {
   text: string
   type?: string
@@ -41,3 +42,4 @@ export type Opml<TDate extends DateLike> = {
   head?: Head<TDate>
   body?: Body<TDate>
 }
+// #endregion reference

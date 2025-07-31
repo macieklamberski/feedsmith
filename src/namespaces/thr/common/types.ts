@@ -1,5 +1,6 @@
 import type { DateLike } from '../../../common/types.js'
 
+// #region reference
 export type InReplyTo = {
   ref: string
   href?: string
@@ -9,10 +10,11 @@ export type InReplyTo = {
 
 export type Link<TDate extends DateLike> = {
   count?: number
-  updated?: TDate // Date: RFC 3339/ISO 8601.
+  updated?: TDate
 }
 
 export type Item = {
   total?: number
   inReplyTos?: Array<InReplyTo>
 }
+// #endregion reference

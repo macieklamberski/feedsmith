@@ -1,3 +1,4 @@
+// #region reference
 export type Point = {
   lat: number
   lng: number
@@ -28,3 +29,4 @@ export type ItemOrFeed = {
   floor?: number
   radius?: number
 }
+// #endregion reference

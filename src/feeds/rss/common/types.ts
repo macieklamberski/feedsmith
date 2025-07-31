@@ -18,6 +18,7 @@ import type { Feed as SyFeed } from '../../../namespaces/sy/common/types.js'
 import type { Item as ThrItem } from '../../../namespaces/thr/common/types.js'
 import type { Item as WfwItem } from '../../../namespaces/wfw/common/types.js'
 
+// #region reference
 export type Person = string
 
 export type Category = {
@@ -125,3 +126,4 @@ export type Feed<TDate extends DateLike> = {
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
 }
+// #endregion reference
