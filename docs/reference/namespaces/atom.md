@@ -25,7 +25,7 @@ The Atom namespace allows RSS and RDF feeds to include Atom-specific elements, p
 ## Structure
 
 > [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Date Handling](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
+> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 
 <<< @/../src/feeds/atom/common/types.ts#reference
 

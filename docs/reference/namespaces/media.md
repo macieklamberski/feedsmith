@@ -26,7 +26,7 @@ The Media RSS namespace provides rich media metadata for RSS feeds, enabling com
 ## Structure
 
 > [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Date Handling](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
+> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 
 <<< @/../src/namespaces/media/common/types.ts#reference
 
