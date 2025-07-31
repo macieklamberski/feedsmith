@@ -28,7 +28,7 @@ export default defineConfig({
     ],
     sidebar: [
       {
-        text: 'Getting Started',
+        text: 'Get Started',
         items: [
           { text: 'Introduction', link: '/' },
           { text: 'Quick Start', link: '/quick-start' },
@@ -52,17 +52,50 @@ export default defineConfig({
         ],
       },
       {
-        text: 'Reference',
+        text: 'API Reference',
         items: [
           {
-            text: 'API Reference',
-            link: '/api',
+            text: 'Functions',
+            link: '/reference/functions',
           },
           {
-            text: 'Migration from 1.x to 2.x',
-            link: '/migration-to-2.x',
+            text: 'Feeds',
+            collapsed: true,
+            items: [
+              { text: 'RSS', link: '/reference/feeds/rss' },
+              { text: 'Atom', link: '/reference/feeds/atom' },
+              { text: 'JSON Feed', link: '/reference/feeds/json-feed' },
+              { text: 'RDF', link: '/reference/feeds/rdf' },
+            ],
+          },
+          {
+            text: 'Namespaces',
+            collapsed: true,
+            items: [
+              { text: 'Atom', link: '/reference/namespaces/atom' },
+              { text: 'Dublin Core', link: '/reference/namespaces/dc' },
+              { text: 'Syndication', link: '/reference/namespaces/sy' },
+              { text: 'Content', link: '/reference/namespaces/content' },
+              { text: 'Slash', link: '/reference/namespaces/slash' },
+              { text: 'iTunes', link: '/reference/namespaces/itunes' },
+              { text: 'Podcast', link: '/reference/namespaces/podcast' },
+              { text: 'Media RSS', link: '/reference/namespaces/media' },
+              { text: 'GeoRSS-Simple', link: '/reference/namespaces/georss' },
+              { text: 'Atom Threading', link: '/reference/namespaces/thr' },
+              { text: 'Dublin Core Terms', link: '/reference/namespaces/dcterms' },
+              { text: 'Well-Formed Web', link: '/reference/namespaces/wfw' },
+              { text: 'YouTube', link: '/reference/namespaces/yt' },
+            ],
+          },
+          {
+            text: 'OPML',
+            link: '/reference/opml',
           },
         ],
+      },
+      {
+        text: 'Migration from 1.x to 2.x',
+        link: '/migration-to-2.x',
       },
     ],
     search: {
