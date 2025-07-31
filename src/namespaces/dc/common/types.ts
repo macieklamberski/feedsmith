@@ -1,5 +1,6 @@
 import type { DateLike } from '../../../common/types.js'
 
+// #region reference
 export type ItemOrFeed<TDate extends DateLike> = {
   title?: string
   creator?: string
@@ -17,3 +18,4 @@ export type ItemOrFeed<TDate extends DateLike> = {
   coverage?: string
   rights?: string
 }
+// #endregion reference

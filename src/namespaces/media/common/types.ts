@@ -1,3 +1,4 @@
+// #region reference
 export type Rating = {
   value: string
   scheme?: string
@@ -193,3 +194,4 @@ export type ItemOrFeed = {
   group?: Group
   contents?: Array<Content>
 } & CommonElements
+// #endregion reference

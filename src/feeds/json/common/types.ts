@@ -1,5 +1,6 @@
 import type { DateLike } from '../../../common/types.js'
 
+// #region reference
 export type Author = {
   name?: string
   url?: string
@@ -52,3 +53,4 @@ export type Feed<TDate extends DateLike> = {
   authors?: Array<Author>
   items: Array<Item<TDate>>
 }
+// #endregion reference

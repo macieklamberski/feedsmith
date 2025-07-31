@@ -1,5 +1,6 @@
 import type { DateLike } from '../../../common/types.js'
 
+// #region reference
 export type BaseItem = {
   transcripts?: Array<Transcript>
   chapters?: Chapters
@@ -71,7 +72,7 @@ export type Episode = {
 export type Trailer<TDate extends DateLike> = {
   display: string
   url: string
-  pubDate: TDate // Date: RFC 2822.
+  pubDate: TDate
   length?: number
   type?: string
   season?: number
@@ -175,7 +176,7 @@ export type Podroll = {
 export type UpdateFrequency<TDate extends DateLike> = {
   display: string
   complete?: boolean
-  dtstart?: TDate // Date: ISO 8601.
+  dtstart?: TDate
   rrule?: string
 }
 
@@ -213,3 +214,4 @@ export type Feed<TDate extends DateLike> = {
   updateFrequency?: UpdateFrequency<TDate>
   podping?: Podping
 }
+// #endregion reference

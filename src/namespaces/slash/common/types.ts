@@ -1,3 +1,4 @@
+// #region reference
 export type HitParade = Array<number>
 
 export type Item = {
@@ -6,3 +7,4 @@ export type Item = {
   comments?: number
   hitParade?: HitParade
 }
+// #endregion reference

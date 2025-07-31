@@ -1,7 +1,9 @@
 import type { DateLike } from '../../../common/types.js'
 
+// #region reference
 export type Feed<TDate extends DateLike> = {
   updatePeriod?: string
   updateFrequency?: number
-  updateBase?: TDate // Date: W3C-DTF/ISO 8601.
+  updateBase?: TDate
 }
+// #endregion reference

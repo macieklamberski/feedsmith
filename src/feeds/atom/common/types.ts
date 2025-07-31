@@ -23,6 +23,7 @@ export type GenerateFunction<V> = (
   options?: { prefix?: string; asNamespace?: boolean },
 ) => Unreliable | undefined
 
+// #region reference
 // For simplicity's sake, a string is used for now, but this may be reconsidered in the future.
 export type Text = string
 
@@ -115,3 +116,4 @@ export type Feed<TDate extends DateLike> = {
   georss?: GeoRssItemOrFeed
   yt?: YtFeed
 }
+// #endregion reference
