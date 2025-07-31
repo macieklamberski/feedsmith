@@ -1,4 +1,4 @@
-# YouTube Namespace Fields
+# YouTube Namespace Reference
 
 The YouTube namespace provides YouTube-specific metadata for RSS feeds, enabling identification of YouTube videos and channels within RSS feeds.
 

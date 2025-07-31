@@ -1,4 +1,4 @@
-# RSS Feed Fields
+# RSS Feed Reference
 
 RSS (Really Simple Syndication) is one of the most widely used web feed formats. Feedsmith automatically normalizes legacy elements to their modern equivalents.
 

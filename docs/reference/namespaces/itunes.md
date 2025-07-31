@@ -1,4 +1,4 @@
-# iTunes Namespace Fields
+# iTunes Namespace Reference
 
 The iTunes namespace provides podcast-specific metadata for RSS and Atom feeds. This namespace is essential for podcast distribution through Apple Podcasts and other podcast platforms.
 

@@ -1,4 +1,4 @@
-# Atom Feed Fields
+# Atom Feed Reference
 
 Atom is a syndication format based on XML that provides a robust framework for web feeds. Feedsmith provides comprehensive parsing and generation capabilities.
 

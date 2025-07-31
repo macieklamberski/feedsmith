@@ -1,4 +1,4 @@
-# Podcast Namespace Fields
+# Podcast Namespace Reference
 
 The Podcast namespace implements the Podcasting 2.0 specification, providing advanced features for modern podcasting including transcripts, chapters, value streaming, and enhanced metadata.
 

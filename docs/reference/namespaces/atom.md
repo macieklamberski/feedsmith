@@ -1,4 +1,4 @@
-# Atom Namespace Fields
+# Atom Namespace Reference
 
 The Atom namespace allows RSS and RDF feeds to include Atom-specific elements, providing richer metadata and linking capabilities. This namespace provides partial Atom elements that can be embedded within other feed formats.
 

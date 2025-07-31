@@ -1,4 +1,4 @@
-# JSON Feed Fields
+# JSON Feed Reference
 
 JSON Feed is a syndication format based on JSON that provides a simple, straightforward way to publish feeds. Feedsmith provides full parsing and generation capabilities.
 

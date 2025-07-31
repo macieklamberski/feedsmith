@@ -1,4 +1,4 @@
-# Media RSS Namespace Fields
+# Media RSS Namespace Reference
 
 The Media RSS namespace provides rich media metadata for RSS feeds, enabling comprehensive description of multimedia content including videos, images, and audio files.
 
