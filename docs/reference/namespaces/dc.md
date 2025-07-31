@@ -28,25 +28,7 @@ The Dublin Core namespace provides standardized metadata elements for describing
 > [!INFO]
 > `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Date Handling](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 
-```typescript
-export type ItemOrFeed<TDate extends DateLike> = {
-  title?: string
-  creator?: string
-  subject?: string
-  description?: string
-  publisher?: string
-  contributor?: string
-  date?: TDate
-  type?: string
-  format?: string
-  identifier?: string
-  source?: string
-  language?: string
-  relation?: string
-  coverage?: string
-  rights?: string
-}
-```
+<<< @/../src/namespaces/dc/common/types.ts#reference
 
 ## Related
 

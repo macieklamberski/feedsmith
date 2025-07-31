@@ -28,38 +28,7 @@ The GeoRSS-Simple namespace enables geographic tagging of RSS feeds and items, a
 > [!INFO]
 > `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Date Handling](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 
-```typescript
-export type Point = {
-  lat: number
-  lng: number
-}
-
-export type Line = {
-  points: Array<Point>
-}
-
-export type Polygon = {
-  points: Array<Point>
-}
-
-export type Box = {
-  lowerCorner: Point
-  upperCorner: Point
-}
-
-export type ItemOrFeed = {
-  point?: Point
-  line?: Line
-  polygon?: Polygon
-  box?: Box
-  featureTypeTag?: string
-  relationshipTag?: string
-  featureName?: string
-  elev?: number
-  floor?: number
-  radius?: number
-}
-```
+<<< @/../src/namespaces/georss/common/types.ts#reference
 
 ## Related
 

@@ -28,12 +28,7 @@ The Well-Formed Web namespace provides elements for linking to comment feeds and
 > [!INFO]
 > `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Date Handling](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 
-```typescript
-export type Item = {
-  comment?: string
-  commentRss?: string
-}
-```
+<<< @/../src/namespaces/wfw/common/types.ts#reference
 
 ## Related
 

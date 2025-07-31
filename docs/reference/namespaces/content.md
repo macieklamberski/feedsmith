@@ -27,14 +27,7 @@ The Content namespace allows RSS and RDF feeds to include full content alongside
 > [!INFO]
 > `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Date Handling](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 
-```typescript
-export type Item = {
-  encoded?: string
-  // Spec (https://web.resource.org/rss/1.0/modules/content/) also mentions content:items,
-  // but it is not clear what it is used for. Also, it's not widely used so its implementation
-  // will be skipped for now. If it's requested in the future, it can be added here.
-}
-```
+<<< @/../src/namespaces/content/common/types.ts#reference
 
 ## Related
 

@@ -28,13 +28,7 @@ The Syndication namespace provides information about the frequency and timing of
 > [!INFO]
 > `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Date Handling](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 
-```typescript
-export type Feed<TDate extends DateLike> = {
-  updatePeriod?: string
-  updateFrequency?: number
-  updateBase?: TDate
-}
-```
+<<< @/../src/namespaces/sy/common/types.ts#reference
 
 ## Related
 

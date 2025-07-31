@@ -28,16 +28,7 @@ The Slash namespace provides metadata about user engagement, particularly commen
 > [!INFO]
 > `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Date Handling](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 
-```typescript
-export type HitParade = Array<number>
-
-export type Item = {
-  section?: string
-  department?: string
-  comments?: number
-  hitParade?: HitParade
-}
-```
+<<< @/../src/namespaces/slash/common/types.ts#reference
 
 ## Related
 
