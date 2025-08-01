@@ -1,4 +1,4 @@
-import { isNonEmptyString } from '../../../common/utils.js'
+import { isNonEmptyString } from '@/common/utils.js'
 
 export const detect = (value: unknown): value is string => {
   if (!isNonEmptyString(value)) {

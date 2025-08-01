@@ -1,12 +1,6 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
-import {
-  isObject,
-  parseSingularOf,
-  parseString,
-  retrieveText,
-  trimObject,
-} from '../../../common/utils.js'
-import type { Feed, Item } from '../common/types.js'
+import type { ParsePartialFunction } from '@/common/types.js'
+import { isObject, parseSingularOf, parseString, retrieveText, trimObject } from '@/common/utils.js'
+import type { Feed, Item } from '@/namespaces/yt/common/types.js'
 
 export const retrieveItem: ParsePartialFunction<Item> = (value) => {
   if (!isObject(value)) {

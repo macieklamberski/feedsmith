@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '@/common/types.js'
 import {
   detectNamespaces,
   isObject,
@@ -8,20 +8,20 @@ import {
   parseString,
   retrieveText,
   trimObject,
-} from '../../../common/utils.js'
+} from '@/common/utils.js'
+import type { Feed, Image, Item, TextInput } from '@/feeds/rdf/common/types.js'
 import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
-} from '../../../namespaces/atom/parse/utils.js'
-import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
-import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
-import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
-import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
-import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
-import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
-import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
-import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
-import type { Feed, Image, Item, TextInput } from '../common/types.js'
+} from '@/namespaces/atom/parse/utils.js'
+import { retrieveItem as retrieveContentItem } from '@/namespaces/content/parse/utils.js'
+import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '@/namespaces/dc/parse/utils.js'
+import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '@/namespaces/dcterms/parse/utils.js'
+import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '@/namespaces/georss/parse/utils.js'
+import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '@/namespaces/media/parse/utils.js'
+import { retrieveItem as retrieveSlashItem } from '@/namespaces/slash/parse/utils.js'
+import { retrieveFeed as retrieveSyFeed } from '@/namespaces/sy/parse/utils.js'
+import { retrieveItem as retrieveWfwItem } from '@/namespaces/wfw/parse/utils.js'
 
 export const parseImage: ParsePartialFunction<Image> = (value) => {
   if (!isObject(value)) {

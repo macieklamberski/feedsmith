@@ -1,4 +1,4 @@
-import type { DateLike } from '../../common/types.js'
+import type { DateLike } from '@/common/types.js'
 
 // #region reference
 export type Outline<TDate extends DateLike> = {

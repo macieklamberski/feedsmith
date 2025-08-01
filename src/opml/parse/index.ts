@@ -1,5 +1,5 @@
-import type { DeepPartial } from '../../common/types.js'
-import type { Opml } from '../common/types.js'
+import type { DeepPartial } from '@/common/types.js'
+import type { Opml } from '@/opml/common/types.js'
 import { parser } from './config.js'
 import { parseOpml } from './utils.js'
 

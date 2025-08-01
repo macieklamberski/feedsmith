@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../common/types.js'
+import type { ParsePartialFunction } from '@/common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -10,8 +10,8 @@ import {
   parseString,
   retrieveText,
   trimObject,
-} from '../../common/utils.js'
-import type { Body, Head, Opml, Outline } from '../common/types.js'
+} from '@/common/utils.js'
+import type { Body, Head, Opml, Outline } from '@/opml/common/types.js'
 
 export const parseOutline: ParsePartialFunction<Outline<string>> = (value) => {
   if (!isObject(value)) {

@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '@/common/types.js'
 import {
   isNonEmptyStringOrNumber,
   isObject,
@@ -10,7 +10,7 @@ import {
   parseString,
   retrieveText,
   trimObject,
-} from '../../../common/utils.js'
+} from '@/common/utils.js'
 import type {
   Category,
   CommonElements,
@@ -40,7 +40,7 @@ import type {
   Text,
   Thumbnail,
   TitleOrDescription,
-} from '../common/types.js'
+} from '@/namespaces/media/common/types.js'
 
 export const parseRating: ParsePartialFunction<Rating> = (value) => {
   const rating = {

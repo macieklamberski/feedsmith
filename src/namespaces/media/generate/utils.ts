@@ -1,4 +1,4 @@
-import type { GenerateFunction } from '../../../common/types.js'
+import type { GenerateFunction } from '@/common/types.js'
 import {
   generateCdataString,
   generateCsvOf,
@@ -8,7 +8,7 @@ import {
   isObject,
   trimArray,
   trimObject,
-} from '../../../common/utils.js'
+} from '@/common/utils.js'
 import type {
   Category,
   CommonElements,
@@ -38,7 +38,7 @@ import type {
   Text,
   Thumbnail,
   TitleOrDescription,
-} from '../common/types.js'
+} from '@/namespaces/media/common/types.js'
 
 export const generateRating: GenerateFunction<Rating> = (rating) => {
   if (!isObject(rating)) {

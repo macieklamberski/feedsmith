@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '@/common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -10,7 +10,7 @@ import {
   parseYesNoBoolean,
   retrieveText,
   trimObject,
-} from '../../../common/utils.js'
+} from '@/common/utils.js'
 import type {
   AlternateEnclosure,
   Block,
@@ -41,7 +41,7 @@ import type {
   Value,
   ValueRecipient,
   ValueTimeSplit,
-} from '../common/types.js'
+} from '@/namespaces/podcast/common/types.js'
 
 export const parseTranscript: ParsePartialFunction<Transcript> = (value) => {
   if (!isObject(value)) {

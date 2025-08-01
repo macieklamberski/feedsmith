@@ -1,5 +1,5 @@
-import { generateRfc3339Date, trimObject } from '../../../common/utils.js'
-import type { Feed, Item } from '../common/types.js'
+import { generateRfc3339Date, trimObject } from '@/common/utils.js'
+import type { Feed, Item } from '@/feeds/json/common/types.js'
 
 export const generateItem = (item: Item<Date>) => {
   const value = {

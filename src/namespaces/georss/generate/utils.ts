@@ -1,6 +1,6 @@
-import type { GenerateFunction } from '../../../common/types.js'
-import { generateCdataString, generateNumber, isObject, trimObject } from '../../../common/utils.js'
-import type { Box, ItemOrFeed, Line, Point, Polygon } from '../common/types.js'
+import type { GenerateFunction } from '@/common/types.js'
+import { generateCdataString, generateNumber, isObject, trimObject } from '@/common/utils.js'
+import type { Box, ItemOrFeed, Line, Point, Polygon } from '@/namespaces/georss/common/types.js'
 
 export const generateLatLngPairs = (
   points: Array<Point>,

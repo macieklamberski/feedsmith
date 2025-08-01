@@ -1,17 +1,14 @@
-import type { DateLike, DeepPartial, Unreliable } from '../../../common/types.js'
-import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/common/types.js'
-import type { ItemOrFeed as DctermsItemOrFeed } from '../../../namespaces/dcterms/common/types.js'
-import type { ItemOrFeed as GeoRssItemOrFeed } from '../../../namespaces/georss/common/types.js'
-import type {
-  Feed as ItunesFeed,
-  Item as ItunesItem,
-} from '../../../namespaces/itunes/common/types.js'
-import type { ItemOrFeed as MediaItemOrFeed } from '../../../namespaces/media/common/types.js'
-import type { Item as SlashItem } from '../../../namespaces/slash/common/types.js'
-import type { Feed as SyFeed } from '../../../namespaces/sy/common/types.js'
-import type { Item as ThrItem, Link as ThrLink } from '../../../namespaces/thr/common/types.js'
-import type { Item as WfwItem } from '../../../namespaces/wfw/common/types.js'
-import type { Feed as YtFeed, Item as YtItem } from '../../../namespaces/yt/common/types.js'
+import type { DateLike, DeepPartial, Unreliable } from '@/common/types.js'
+import type { ItemOrFeed as DcItemOrFeed } from '@/namespaces/dc/common/types.js'
+import type { ItemOrFeed as DctermsItemOrFeed } from '@/namespaces/dcterms/common/types.js'
+import type { ItemOrFeed as GeoRssItemOrFeed } from '@/namespaces/georss/common/types.js'
+import type { Feed as ItunesFeed, Item as ItunesItem } from '@/namespaces/itunes/common/types.js'
+import type { ItemOrFeed as MediaItemOrFeed } from '@/namespaces/media/common/types.js'
+import type { Item as SlashItem } from '@/namespaces/slash/common/types.js'
+import type { Feed as SyFeed } from '@/namespaces/sy/common/types.js'
+import type { Item as ThrItem, Link as ThrLink } from '@/namespaces/thr/common/types.js'
+import type { Item as WfwItem } from '@/namespaces/wfw/common/types.js'
+import type { Feed as YtFeed, Item as YtItem } from '@/namespaces/yt/common/types.js'
 
 export type ParsePartialFunction<R> = (
   value: Unreliable,

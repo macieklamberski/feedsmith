@@ -1,4 +1,4 @@
-import type { GenerateFunction } from '../../../common/types.js'
+import type { GenerateFunction } from '@/common/types.js'
 import {
   generateCdataString,
   generateCsvOf,
@@ -9,8 +9,8 @@ import {
   isObject,
   trimArray,
   trimObject,
-} from '../../../common/utils.js'
-import type { Category, Feed, Item, Owner } from '../common/types.js'
+} from '@/common/utils.js'
+import type { Category, Feed, Item, Owner } from '@/namespaces/itunes/common/types.js'
 
 export const generateImage: GenerateFunction<string> = (image) => {
   if (!isNonEmptyString(image)) {

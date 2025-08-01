@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '@/common/types.js'
 import {
   parseBackLinks,
   parseCategory,

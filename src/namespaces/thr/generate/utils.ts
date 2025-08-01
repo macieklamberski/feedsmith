@@ -1,4 +1,4 @@
-import type { GenerateFunction } from '../../../common/types.js'
+import type { GenerateFunction } from '@/common/types.js'
 import {
   generateNumber,
   generatePlainString,
@@ -6,8 +6,8 @@ import {
   isObject,
   trimArray,
   trimObject,
-} from '../../../common/utils.js'
-import type { InReplyTo, Item, Link } from '../common/types.js'
+} from '@/common/utils.js'
+import type { InReplyTo, Item, Link } from '@/namespaces/thr/common/types.js'
 
 export const generateInReplyTo: GenerateFunction<InReplyTo> = (inReplyTo) => {
   if (!isObject(inReplyTo)) {

@@ -1,4 +1,4 @@
-import { namespaceUrls } from '../../../common/config.js'
+import { namespaceUrls } from '@/common/config.js'
 import {
   generateCdataString,
   generateNamespaceAttrs,
@@ -8,26 +8,7 @@ import {
   isObject,
   trimArray,
   trimObject,
-} from '../../../common/utils.js'
-import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
-import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
-import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
-import {
-  generateFeed as generateItunesFeed,
-  generateItem as generateItunesItem,
-} from '../../../namespaces/itunes/generate/utils.js'
-import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
-import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
-import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
-import {
-  generateItem as generateThrItem,
-  generateLink as generateThrLink,
-} from '../../../namespaces/thr/generate/utils.js'
-import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
-import {
-  generateFeed as generateYtFeed,
-  generateItem as generateYtItem,
-} from '../../../namespaces/yt/generate/utils.js'
+} from '@/common/utils.js'
 import type {
   Category,
   Entry,
@@ -38,7 +19,26 @@ import type {
   Person,
   Source,
   Text,
-} from '../common/types.js'
+} from '@/feeds/atom/common/types.js'
+import { generateItemOrFeed as generateDcItemOrFeed } from '@/namespaces/dc/generate/utils.js'
+import { generateItemOrFeed as generateDctermsItemOrFeed } from '@/namespaces/dcterms/generate/utils.js'
+import { generateItemOrFeed as generateGeoRssItemOrFeed } from '@/namespaces/georss/generate/utils.js'
+import {
+  generateFeed as generateItunesFeed,
+  generateItem as generateItunesItem,
+} from '@/namespaces/itunes/generate/utils.js'
+import { generateItemOrFeed as generateMediaItemOrFeed } from '@/namespaces/media/generate/utils.js'
+import { generateItem as generateSlashItem } from '@/namespaces/slash/generate/utils.js'
+import { generateFeed as generateSyFeed } from '@/namespaces/sy/generate/utils.js'
+import {
+  generateItem as generateThrItem,
+  generateLink as generateThrLink,
+} from '@/namespaces/thr/generate/utils.js'
+import { generateItem as generateWfwItem } from '@/namespaces/wfw/generate/utils.js'
+import {
+  generateFeed as generateYtFeed,
+  generateItem as generateYtItem,
+} from '@/namespaces/yt/generate/utils.js'
 
 export const createNamespaceSetter = (prefix: string | undefined) => {
   return (key: string) => (prefix ? `${prefix}${key}` : key)

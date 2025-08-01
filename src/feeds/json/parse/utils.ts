@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '@/common/types.js'
 import {
   isNonEmptyStringOrNumber,
   isObject,
@@ -9,8 +9,8 @@ import {
   parseSingularOf,
   parseString,
   trimObject,
-} from '../../../common/utils.js'
-import type { Attachment, Author, Feed, Hub, Item } from '../common/types.js'
+} from '@/common/utils.js'
+import type { Attachment, Author, Feed, Hub, Item } from '@/feeds/json/common/types.js'
 
 export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
   return (requestedKey: string) => {

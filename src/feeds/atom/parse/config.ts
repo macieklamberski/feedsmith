@@ -1,5 +1,5 @@
 import { XMLParser } from 'fast-xml-parser'
-import { parserConfig } from '../../../common/config.js'
+import { parserConfig } from '@/common/config.js'
 
 export const stopNodes = [
   'feed.author.name',

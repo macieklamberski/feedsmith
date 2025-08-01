@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '@/common/types.js'
 import {
   detectNamespaces,
   isObject,
@@ -11,28 +11,7 @@ import {
   retrieveText,
   trimArray,
   trimObject,
-} from '../../../common/utils.js'
-import {
-  retrieveEntry as retrieveAtomEntry,
-  retrieveFeed as retrieveAtomFeed,
-} from '../../../namespaces/atom/parse/utils.js'
-import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
-import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
-import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
-import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
-import {
-  retrieveFeed as retrieveItunesFeed,
-  retrieveItem as retrieveItunesItem,
-} from '../../../namespaces/itunes/parse/utils.js'
-import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
-import {
-  retrieveFeed as retrievePodcastFeed,
-  retrieveItem as retrievePodcastItem,
-} from '../../../namespaces/podcast/parse/utils.js'
-import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
-import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
-import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/parse/utils.js'
-import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
+} from '@/common/utils.js'
 import type {
   Category,
   Cloud,
@@ -44,7 +23,28 @@ import type {
   Person,
   Source,
   TextInput,
-} from '../common/types.js'
+} from '@/feeds/rss/common/types.js'
+import {
+  retrieveEntry as retrieveAtomEntry,
+  retrieveFeed as retrieveAtomFeed,
+} from '@/namespaces/atom/parse/utils.js'
+import { retrieveItem as retrieveContentItem } from '@/namespaces/content/parse/utils.js'
+import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '@/namespaces/dc/parse/utils.js'
+import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '@/namespaces/dcterms/parse/utils.js'
+import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '@/namespaces/georss/parse/utils.js'
+import {
+  retrieveFeed as retrieveItunesFeed,
+  retrieveItem as retrieveItunesItem,
+} from '@/namespaces/itunes/parse/utils.js'
+import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '@/namespaces/media/parse/utils.js'
+import {
+  retrieveFeed as retrievePodcastFeed,
+  retrieveItem as retrievePodcastItem,
+} from '@/namespaces/podcast/parse/utils.js'
+import { retrieveItem as retrieveSlashItem } from '@/namespaces/slash/parse/utils.js'
+import { retrieveFeed as retrieveSyFeed } from '@/namespaces/sy/parse/utils.js'
+import { retrieveItem as retrieveThrItem } from '@/namespaces/thr/parse/utils.js'
+import { retrieveItem as retrieveWfwItem } from '@/namespaces/wfw/parse/utils.js'
 
 export const parsePerson: ParsePartialFunction<Person> = (value) => {
   return parseSingularOf(value?.name ?? value, (value) => parseString(retrieveText(value)))

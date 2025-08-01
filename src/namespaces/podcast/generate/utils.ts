@@ -1,4 +1,4 @@
-import type { GenerateFunction } from '../../../common/types.js'
+import type { GenerateFunction } from '@/common/types.js'
 import {
   generateBoolean,
   generateCdataString,
@@ -10,7 +10,7 @@ import {
   isObject,
   trimArray,
   trimObject,
-} from '../../../common/utils.js'
+} from '@/common/utils.js'
 import type {
   AlternateEnclosure,
   BaseItem,
@@ -42,7 +42,7 @@ import type {
   Value,
   ValueRecipient,
   ValueTimeSplit,
-} from '../common/types.js'
+} from '@/namespaces/podcast/common/types.js'
 
 export const generateBaseItem: GenerateFunction<BaseItem> = (baseItem) => {
   if (!isObject(baseItem)) {

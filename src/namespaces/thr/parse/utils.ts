@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialFunction } from '@/common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -8,8 +8,8 @@ import {
   parseString,
   retrieveText,
   trimObject,
-} from '../../../common/utils.js'
-import type { InReplyTo, Item, Link } from '../common/types.js'
+} from '@/common/utils.js'
+import type { InReplyTo, Item, Link } from '@/namespaces/thr/common/types.js'
 
 export const parseInReplyTo: ParsePartialFunction<InReplyTo> = (value) => {
   if (!isObject(value)) {
