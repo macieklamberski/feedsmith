@@ -9,7 +9,7 @@ export type AnyOf<T> = Partial<{ [P in keyof T]-?: NonNullable<T[P]> }> &
 
 export type DeepPartial<T> = T extends Array<infer U>
   ? Array<DeepPartial<U>>
-  : T extends (...args: unknown[]) => unknown
+  : T extends (...args: Array<unknown>) => unknown
     ? T
     : T extends object
       ? T extends null
