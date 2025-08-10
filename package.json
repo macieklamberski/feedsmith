@@ -52,15 +52,15 @@
     "fast-xml-parser": "^5.2.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.1.2",
+    "@biomejs/biome": "^2.1.4",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@types/bun": "^1.2.19",
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "lefthook": "^1.12.2",
     "semantic-release": "^24.2.7",
-    "typescript": "^5.8.3",
-    "vitepress": "^1.6.3",
-    "vitepress-plugin-llms": "^1.7.1"
+    "typescript": "^5.9.2",
+    "vitepress": "^1.6.4",
+    "vitepress-plugin-llms": "^1.7.2"
   }
 }
