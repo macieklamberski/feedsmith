@@ -90,7 +90,7 @@ describe('generateOutline', () => {
       outlines: [{}],
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateOutline(value)).toBeUndefined()
   })
 
@@ -100,12 +100,12 @@ describe('generateOutline', () => {
       xmlUrl: undefined,
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateOutline(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateOutline({})).toBeUndefined()
   })
 

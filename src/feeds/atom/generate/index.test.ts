@@ -251,7 +251,7 @@ describe('generate', () => {
   it('should throw error for invalid Atom feed structure', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(() => generate(value)).toThrow('Invalid input Atom')
   })
 

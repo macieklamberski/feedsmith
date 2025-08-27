@@ -58,14 +58,14 @@ describe('generateCategory', () => {
       domain: undefined,
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateCategory(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateCategory(value)).toBeUndefined()
   })
 
@@ -103,14 +103,14 @@ describe('generateCloud', () => {
       protocol: undefined,
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateCloud(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateCloud(value)).toBeUndefined()
   })
 
@@ -148,7 +148,7 @@ describe('generateImage', () => {
       link: undefined,
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateImage(value)).toBeUndefined()
   })
 
@@ -183,7 +183,7 @@ describe('generateTextInput', () => {
       link: undefined,
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateTextInput(value)).toBeUndefined()
   })
 
@@ -215,14 +215,14 @@ describe('generateEnclosure', () => {
       type: undefined,
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateEnclosure(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateEnclosure(value)).toBeUndefined()
   })
 
@@ -247,7 +247,7 @@ describe('generateSkipHours', () => {
       hour: [0, 6, 12],
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateSkipHours(value)).toEqual(expected)
   })
 
@@ -263,7 +263,7 @@ describe('generateSkipHours', () => {
       time: undefined,
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateSkipHours(value)).toBeUndefined()
   })
 
@@ -294,7 +294,7 @@ describe('generateSkipDays', () => {
       schedule: undefined,
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateSkipDays(value)).toBeUndefined()
   })
 
@@ -304,7 +304,7 @@ describe('generateSkipDays', () => {
       day: ['Monday', 'Wednesday', 'Friday'],
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateSkipDays(value)).toEqual(expected)
   })
 
@@ -344,14 +344,14 @@ describe('generateGuid', () => {
       isPermaLink: undefined,
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateGuid(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateGuid(value)).toBeUndefined()
   })
 
@@ -391,14 +391,14 @@ describe('generateSource', () => {
       url: undefined,
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateSource(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateSource(value)).toBeUndefined()
   })
 
@@ -585,14 +585,14 @@ describe('generateItem', () => {
       link: undefined,
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(value)).toBeUndefined()
   })
 
@@ -860,14 +860,14 @@ describe('generateFeed', () => {
       link: undefined,
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 
@@ -917,7 +917,7 @@ describe('generateFeed', () => {
       },
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toEqual(expected)
   })
 

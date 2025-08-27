@@ -58,7 +58,7 @@ describe('generateRating', () => {
 
   it('should handle non-object inputs', () => {
     expect(generateRating(undefined)).toBeUndefined()
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateRating('string')).toBeUndefined()
   })
 })
@@ -1787,7 +1787,7 @@ describe('generateItemOrFeed', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateItemOrFeed(value)).toBeUndefined()
   })
 
