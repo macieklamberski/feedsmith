@@ -1,4 +1,4 @@
-import type { GenerateFunction } from '@/common/types.js'
+import type { DateLike, GenerateFunction } from '@/common/types.js'
 import {
   generateBoolean,
   generateCdataString,
@@ -12,7 +12,7 @@ import {
 } from '@/common/utils.js'
 import type { Body, Head, Opml, Outline } from '@/opml/common/types.js'
 
-export const generateOutline: GenerateFunction<Outline<Date>> = (outline) => {
+export const generateOutline: GenerateFunction<Outline<DateLike>> = (outline) => {
   if (!isObject(outline)) {
     return
   }
@@ -37,7 +37,7 @@ export const generateOutline: GenerateFunction<Outline<Date>> = (outline) => {
   return trimObject(value)
 }
 
-export const generateHead: GenerateFunction<Head<Date>> = (head) => {
+export const generateHead: GenerateFunction<Head<DateLike>> = (head) => {
   if (!isObject(head)) {
     return
   }
@@ -61,7 +61,7 @@ export const generateHead: GenerateFunction<Head<Date>> = (head) => {
   return trimObject(value)
 }
 
-export const generateBody: GenerateFunction<Body<Date>> = (body) => {
+export const generateBody: GenerateFunction<Body<DateLike>> = (body) => {
   if (!isObject(body)) {
     return
   }
@@ -73,7 +73,7 @@ export const generateBody: GenerateFunction<Body<Date>> = (body) => {
   return trimObject(value)
 }
 
-export const generateOpml: GenerateFunction<Opml<Date>> = (opml) => {
+export const generateOpml: GenerateFunction<Opml<DateLike>> = (opml) => {
   if (!isObject(opml)) {
     return
   }

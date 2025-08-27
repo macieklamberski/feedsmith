@@ -1,4 +1,5 @@
 import { namespaceUrls } from '@/common/config.js'
+import type { DateLike } from '@/common/types.js'
 import {
   generateCdataString,
   generateNamespaceAttrs,
@@ -48,7 +49,7 @@ export const generateText: GenerateFunction<Text> = (text) => {
   return generateCdataString(text)
 }
 
-export const generateLink: GenerateFunction<Link<Date>> = (link) => {
+export const generateLink: GenerateFunction<Link<DateLike>> = (link) => {
   if (!isObject(link)) {
     return
   }
@@ -109,7 +110,7 @@ export const generateGenerator: GenerateFunction<Generator> = (generator) => {
   return trimObject(value)
 }
 
-export const generateSource: GenerateFunction<Source<Date>> = (source, options) => {
+export const generateSource: GenerateFunction<Source<DateLike>> = (source, options) => {
   if (!isObject(source)) {
     return
   }
@@ -137,7 +138,7 @@ export const generateSource: GenerateFunction<Source<Date>> = (source, options) 
   return trimObject(value)
 }
 
-export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => {
+export const generateEntry: GenerateFunction<Entry<DateLike>> = (entry, options) => {
   if (!isObject(entry)) {
     return
   }
@@ -184,7 +185,7 @@ export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => 
   }
 }
 
-export const generateFeed: GenerateFunction<Feed<Date>> = (feed, options) => {
+export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed, options) => {
   if (!isObject(feed)) {
     return
   }
