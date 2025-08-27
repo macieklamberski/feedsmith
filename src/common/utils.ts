@@ -340,13 +340,25 @@ export const generateXml = (
 export const generateRfc822Date: GenerateFunction<DateLike> = (value) => {
   // This function generates RFC 822 format dates which is also compatible with RFC 2822.
 
-  if (typeof value === 'string') {
-    // biome-ignore lint/style/noParameterAssign: No explanation.
-    value = new Date(value)
+  if (!isPresent(value)) {
+    return
   }
 
-  if (value instanceof Date && !Number.isNaN(value.getTime())) {
-    return value.toUTCString()
+  const isString = typeof value === 'string'
+
+  if (isString && !isNonEmptyString(value)) {
+    return
+  }
+
+  const date = isString ? new Date(value) : value
+  const isValid = !Number.isNaN(date.getTime())
+
+  if (isValid) {
+    return date.toUTCString()
+  }
+
+  if (isString) {
+    return value
   }
 }
 
@@ -356,13 +368,25 @@ export const generateRfc3339Date: GenerateFunction<DateLike> = (value) => {
   // RFC 3339 allows a space between date and time parts instead of 'T', but the 'T' format
   // is actually valid in RFC 3339 as well, so we can just return the ISO string.
 
-  if (typeof value === 'string') {
-    // biome-ignore lint/style/noParameterAssign: No explanation.
-    value = new Date(value)
+  if (!isPresent(value)) {
+    return
   }
 
-  if (value instanceof Date && !Number.isNaN(value.getTime())) {
-    return value.toISOString()
+  const isString = typeof value === 'string'
+
+  if (isString && !isNonEmptyString(value)) {
+    return
+  }
+
+  const date = isString ? new Date(value) : value
+  const isValid = !Number.isNaN(date.getTime())
+
+  if (isValid) {
+    return date.toISOString()
+  }
+
+  if (isString) {
+    return value
   }
 }
 
