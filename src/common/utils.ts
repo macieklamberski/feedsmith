@@ -2,6 +2,7 @@ import { decodeHTML, decodeXML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
 import type {
   AnyOf,
+  DateLike,
   GenerateFunction,
   ParseExactFunction,
   Unreliable,
@@ -336,7 +337,7 @@ export const generateXml = (
   return `${declaration}\n${body}`
 }
 
-export const generateRfc822Date: GenerateFunction<string | Date> = (value) => {
+export const generateRfc822Date: GenerateFunction<DateLike> = (value) => {
   // This function generates RFC 822 format dates which is also compatible with RFC 2822.
 
   if (typeof value === 'string') {
@@ -349,7 +350,7 @@ export const generateRfc822Date: GenerateFunction<string | Date> = (value) => {
   }
 }
 
-export const generateRfc3339Date: GenerateFunction<string | Date> = (value) => {
+export const generateRfc3339Date: GenerateFunction<DateLike> = (value) => {
   // This function generates RFC 3339 format dates which is also compatible with W3C-DTF.
   // The only difference between ISO 8601 (produced by toISOString) and RFC 3339 is that
   // RFC 3339 allows a space between date and time parts instead of 'T', but the 'T' format
@@ -573,7 +574,7 @@ export const createNamespaceNormalizator = (
     }
 
     const normalizedObject: Unreliable = {}
-    const keyGroups: Map<string, Unreliable[]> = new Map()
+    const keyGroups: Map<string, Array<Unreliable>> = new Map()
 
     const declarations = extractNamespaceDeclarations(object)
     const currentContext = { ...parentContext, ...declarations }
