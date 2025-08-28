@@ -315,4 +315,31 @@ describe('generate with lenient mode', () => {
 
     expect(generate(value, { lenient: true })).toEqual(expected)
   })
+
+  it('should preserve invalid date strings in lenient mode', () => {
+    const value = {
+      head: {
+        title: 'Test OPML',
+        dateCreated: 'not-a-valid-date',
+        dateModified: 'also-invalid',
+      },
+      body: {
+        outlines: [{ text: 'Test Outline' }],
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <head>
+    <title>Test OPML</title>
+    <dateCreated>not-a-valid-date</dateCreated>
+    <dateModified>also-invalid</dateModified>
+  </head>
+  <body>
+    <outline text="Test Outline"/>
+  </body>
+</opml>
+`
+
+    expect(generate(value, { lenient: true })).toEqual(expected)
+  })
 })

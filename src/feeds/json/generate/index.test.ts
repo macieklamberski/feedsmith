@@ -93,4 +93,19 @@ describe('generate with lenient mode', () => {
 
     expect(generate(value, { lenient: true })).toEqual(expected)
   })
+
+  it('should preserve invalid date strings in lenient mode', () => {
+    const value = {
+      title: 'Test Feed',
+      date_published: 'not-a-valid-date',
+      items: [],
+    }
+    const expected = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Test Feed',
+      date_published: 'not-a-valid-date',
+    }
+
+    expect(generate(value, { lenient: true })).toEqual(expected)
+  })
 })
