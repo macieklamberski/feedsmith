@@ -88,15 +88,17 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 
 ## Quick Start
 
-This guide will get you up and running with Feedsmith in just a few minutes. For a full overview of all the features, visit the [documentation website](https://feedsmith.dev).
+This guide will get you up and running with Feedsmith in just a few minutes.
 
-> **Upgrading from v1.x?** Check out the [migration guide](https://feedsmith.dev/migration-to-2.x).
+For a full overview of all the features, visit the [documentation website](https://feedsmith.dev).
 
 ### Installation
 
 ```bash
 npm install feedsmith
 ```
+
+> **Upgrading from v1.x?** Check out the [migration guide](https://feedsmith.dev/migration-to-2.x).
 
 ### Parse Any Feed
 
