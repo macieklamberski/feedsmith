@@ -49,6 +49,7 @@ export default defineConfig({
         items: [
           { text: 'Overview', link: '/generating/' },
           { text: 'Styling', link: '/generating/styling' },
+          { text: 'Lenient Mode', link: '/generating/lenient-mode' },
         ],
       },
       {
