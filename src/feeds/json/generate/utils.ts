@@ -1,5 +1,5 @@
 import type { DateLike } from '@/common/types.js'
-import { generateRfc3339Date, trimObject } from '@/common/utils.js'
+import { generateRfc3339Date, trimArray, trimObject } from '@/common/utils.js'
 import type { Feed, Item } from '@/feeds/json/common/types.js'
 
 export const generateItem = (item: Item<DateLike>) => {
@@ -13,9 +13,11 @@ export const generateItem = (item: Item<DateLike>) => {
 }
 
 export const generateFeed = (feed: Feed<DateLike>) => {
-  return {
+  const value = {
     version: 'https://jsonfeed.org/version/1.1',
     ...feed,
-    items: feed.items.map(generateItem),
+    items: trimArray(feed.items, generateItem),
   }
+
+  return trimObject(value)
 }

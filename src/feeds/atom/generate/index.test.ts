@@ -757,3 +757,35 @@ describe('generate', () => {
     expect(generate(value, options)).toEqual(expected)
   })
 })
+
+describe('generate with lenient mode', () => {
+  it('should accept partial feeds with lenient: true', () => {
+    const value = {
+      title: 'Test Feed',
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Test Feed</title>
+</feed>
+`
+
+    expect(generate(value, { lenient: true })).toEqual(expected)
+  })
+
+  it('should accept feeds with string dates in lenient mode', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Test Feed',
+      updated: '2023-01-01T00:00:00.000Z',
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com/feed</id>
+  <title>Test Feed</title>
+  <updated>2023-01-01T00:00:00.000Z</updated>
+</feed>
+`
+
+    expect(generate(value, { lenient: true })).toEqual(expected)
+  })
+})

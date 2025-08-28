@@ -6,7 +6,6 @@ import type {
   GenerateFunction,
   ParseExactFunction,
   Unreliable,
-  XmlGenerateOptions,
   XmlStylesheet,
 } from './types.js'
 
@@ -314,7 +313,7 @@ export const generateXmlStylesheet = (stylesheet: XmlStylesheet): string | undef
 export const generateXml = (
   builder: XMLBuilder,
   value: string,
-  options?: XmlGenerateOptions,
+  options?: { stylesheets?: Array<XmlStylesheet> },
 ): string => {
   let body = builder.build(value)
 

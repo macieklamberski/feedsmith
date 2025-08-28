@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import { type XMLBuilder, XMLParser } from 'fast-xml-parser'
 import { namespaceUrls } from './config.js'
-import type { ParseExactFunction, XmlGenerateOptions } from './types.js'
+import type { ParseExactFunction } from './types.js'
 import {
   createNamespaceNormalizator,
   detectNamespaces,
@@ -1743,7 +1743,7 @@ describe('generateXml', () => {
 
   it('should include single stylesheet when provided', () => {
     const value = 'test content'
-    const options: XmlGenerateOptions = {
+    const options = {
       stylesheets: [{ type: 'text/xsl', href: '/styles/feed.xsl' }],
     }
     const expected =
@@ -1754,7 +1754,7 @@ describe('generateXml', () => {
 
   it('should include multiple stylesheets when provided', () => {
     const value = 'test content'
-    const options: XmlGenerateOptions = {
+    const options = {
       stylesheets: [
         { type: 'text/xsl', href: '/styles/feed.xsl' },
         { type: 'text/css', href: '/styles/feed.css', media: 'screen' },
@@ -1768,7 +1768,7 @@ describe('generateXml', () => {
 
   it('should generate XML without stylesheets when array is empty', () => {
     const value = 'test content'
-    const options: XmlGenerateOptions = {
+    const options = {
       stylesheets: [],
     }
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
@@ -1778,7 +1778,7 @@ describe('generateXml', () => {
 
   it('should generate XML without stylesheets when stylesheets is undefined', () => {
     const value = 'test content'
-    const options: XmlGenerateOptions = {}
+    const options = {}
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
 
     expect(generateXml(mockBuilder, value, options)).toEqual(expected)

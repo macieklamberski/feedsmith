@@ -270,3 +270,49 @@ describe('generate', () => {
     expect(generate(value, options)).toEqual(expected)
   })
 })
+
+describe('generate with lenient mode', () => {
+  it('should accept partial feeds with lenient: true', () => {
+    const value = {
+      body: {
+        outlines: [{ text: 'Test Outline' }],
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <body>
+    <outline text="Test Outline"/>
+  </body>
+</opml>
+`
+
+    expect(generate(value, { lenient: true })).toEqual(expected)
+  })
+
+  it('should accept feeds with string dates in lenient mode', () => {
+    const value = {
+      head: {
+        title: 'Test OPML',
+        dateCreated: '2023-01-01T00:00:00.000Z',
+        dateModified: '2023-01-02T00:00:00.000Z',
+      },
+      body: {
+        outlines: [{ text: 'Test Outline' }],
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <head>
+    <title>Test OPML</title>
+    <dateCreated>Sun, 01 Jan 2023 00:00:00 GMT</dateCreated>
+    <dateModified>Mon, 02 Jan 2023 00:00:00 GMT</dateModified>
+  </head>
+  <body>
+    <outline text="Test Outline"/>
+  </body>
+</opml>
+`
+
+    expect(generate(value, { lenient: true })).toEqual(expected)
+  })
+})
