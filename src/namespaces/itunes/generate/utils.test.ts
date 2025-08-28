@@ -24,9 +24,9 @@ describe('generateImage', () => {
   })
 
   it('should handle non-string inputs', () => {
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateImage(123)).toBeUndefined()
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateImage({})).toBeUndefined()
     expect(generateImage(undefined)).toBeUndefined()
   })
@@ -99,7 +99,7 @@ describe('generateCategory', () => {
   })
 
   it('should handle non-object inputs', () => {
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateCategory('string')).toBeUndefined()
     expect(generateCategory(undefined)).toBeUndefined()
   })
@@ -144,7 +144,7 @@ describe('generateOwner', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateOwner(value)).toBeUndefined()
   })
 
@@ -237,7 +237,7 @@ describe('generateItem', () => {
       keywords: [],
     }
 
-    // @ts-ignore: Testing edge case
+    // @ts-expect-error: Testing edge case
     expect(generateItem(value)).toBeUndefined()
   })
 
@@ -267,14 +267,14 @@ describe('generateItem', () => {
       keywords: undefined,
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(value)).toBeUndefined()
   })
 
@@ -400,7 +400,7 @@ describe('generateFeed', () => {
       categories: [],
     }
 
-    // @ts-ignore: Testing edge case
+    // @ts-expect-error: Testing edge case
     expect(generateFeed(value)).toBeUndefined()
   })
 
@@ -422,14 +422,14 @@ describe('generateFeed', () => {
       owner: undefined,
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 

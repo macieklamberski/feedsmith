@@ -65,7 +65,7 @@ describe('generateTranscript', () => {
 
   it('should handle non-object inputs', () => {
     expect(generateTranscript(undefined)).toBeUndefined()
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateTranscript('string')).toBeUndefined()
   })
 })
@@ -874,7 +874,7 @@ describe('generatePodroll', () => {
       remoteItems: [],
     }
 
-    // @ts-ignore: Testing edge case
+    // @ts-expect-error: Testing edge case
     expect(generatePodroll(value)).toBeUndefined()
   })
 
@@ -1085,7 +1085,7 @@ describe('generateBaseItem', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateBaseItem(value)).toBeUndefined()
   })
 
@@ -1187,7 +1187,7 @@ describe('generateItem', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(value)).toBeUndefined()
   })
 
@@ -1366,7 +1366,7 @@ describe('generateFeed', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 

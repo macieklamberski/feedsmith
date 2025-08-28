@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'bun:test'
+import type { DateLike, DeepPartial } from '@/common/types.js'
+import type { Feed } from '@/feeds/rss/common/types.js'
 import { generate } from './index.js'
 
 describe('generate', () => {
@@ -475,5 +477,157 @@ describe('generate', () => {
 `
 
     expect(generate(value)).toEqual(expected)
+  })
+})
+
+describe('generate with lenient mode', () => {
+  it('should accept partial feeds with lenient: true', () => {
+    const value: DeepPartial<Feed<DateLike>> = {
+      title: 'Test Feed',
+      // Missing required 'description' field.
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test Feed</title>
+  </channel>
+</rss>
+`
+
+    expect(generate(value, { lenient: true })).toEqual(expected)
+  })
+
+  it('should accept feeds with string dates in lenient mode', () => {
+    const value: DeepPartial<Feed<DateLike>> = {
+      title: 'Test Feed',
+      description: 'Test Description',
+      pubDate: '2023-01-01T00:00:00.000Z',
+      items: [
+        {
+          title: 'Test Item',
+          pubDate: 'Mon, 01 Jan 2023 12:00:00 GMT',
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test Feed</title>
+    <description>Test Description</description>
+    <pubDate>Sun, 01 Jan 2023 00:00:00 GMT</pubDate>
+    <item>
+      <title>Test Item</title>
+      <pubDate>Sun, 01 Jan 2023 12:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value, { lenient: true })).toEqual(expected)
+  })
+
+  it('should preserve invalid date strings in lenient mode', () => {
+    const value: DeepPartial<Feed<DateLike>> = {
+      title: 'Test Feed',
+      description: 'Test Description',
+      pubDate: 'not-a-valid-date',
+      items: [
+        {
+          title: 'Test Item',
+          pubDate: 'also-invalid-date',
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test Feed</title>
+    <description>Test Description</description>
+    <pubDate>not-a-valid-date</pubDate>
+    <item>
+      <title>Test Item</title>
+      <pubDate>also-invalid-date</pubDate>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value, { lenient: true })).toEqual(expected)
+  })
+
+  it('should handle deeply nested partial objects', () => {
+    const value: DeepPartial<Feed<DateLike>> = {
+      title: 'Test Feed',
+      items: [
+        {
+          title: 'Item 1',
+          guid: {
+            value: 'guid-1',
+          },
+        },
+      ],
+      image: {
+        url: 'https://example.com/image.png',
+        title: 'Image Title',
+        link: 'https://example.com',
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test Feed</title>
+    <image>
+      <url>https://example.com/image.png</url>
+      <title>Image Title</title>
+      <link>https://example.com</link>
+    </image>
+    <item>
+      <title>Item 1</title>
+      <guid>guid-1</guid>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value, { lenient: true })).toEqual(expected)
+  })
+
+  it('should handle mixed Date objects and string dates', () => {
+    const value: DeepPartial<Feed<DateLike>> = {
+      title: 'Mixed Dates Feed',
+      description: 'Feed with both Date objects and strings',
+      pubDate: new Date('2023-01-01T00:00:00.000Z'),
+      lastBuildDate: '2023-06-01T00:00:00.000Z',
+      items: [
+        {
+          title: 'Item with Date object',
+          pubDate: new Date('2023-02-01T00:00:00.000Z'),
+        },
+        {
+          title: 'Item with string date',
+          pubDate: '2023-03-01T00:00:00.000Z',
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Mixed Dates Feed</title>
+    <description>Feed with both Date objects and strings</description>
+    <pubDate>Sun, 01 Jan 2023 00:00:00 GMT</pubDate>
+    <lastBuildDate>Thu, 01 Jun 2023 00:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Item with Date object</title>
+      <pubDate>Wed, 01 Feb 2023 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Item with string date</title>
+      <pubDate>Wed, 01 Mar 2023 00:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value, { lenient: true })).toEqual(expected)
   })
 })

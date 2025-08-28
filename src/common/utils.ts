@@ -2,10 +2,10 @@ import { decodeHTML, decodeXML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
 import type {
   AnyOf,
+  DateLike,
   GenerateFunction,
   ParseExactFunction,
   Unreliable,
-  XmlGenerateOptions,
   XmlStylesheet,
 } from './types.js'
 
@@ -313,7 +313,7 @@ export const generateXmlStylesheet = (stylesheet: XmlStylesheet): string | undef
 export const generateXml = (
   builder: XMLBuilder,
   value: string,
-  options?: XmlGenerateOptions,
+  options?: { stylesheets?: Array<XmlStylesheet> },
 ): string => {
   let body = builder.build(value)
 
@@ -336,32 +336,56 @@ export const generateXml = (
   return `${declaration}\n${body}`
 }
 
-export const generateRfc822Date: GenerateFunction<string | Date> = (value) => {
+export const generateRfc822Date: GenerateFunction<DateLike> = (value) => {
   // This function generates RFC 822 format dates which is also compatible with RFC 2822.
 
-  if (typeof value === 'string') {
-    // biome-ignore lint/style/noParameterAssign: No explanation.
-    value = new Date(value)
+  if (!isPresent(value)) {
+    return
   }
 
-  if (value instanceof Date && !Number.isNaN(value.getTime())) {
-    return value.toUTCString()
+  const isString = typeof value === 'string'
+
+  if (isString && !isNonEmptyString(value)) {
+    return
+  }
+
+  const date = isString ? new Date(value) : value
+  const isValid = !Number.isNaN(date.getTime())
+
+  if (isValid) {
+    return date.toUTCString()
+  }
+
+  if (isString) {
+    return value
   }
 }
 
-export const generateRfc3339Date: GenerateFunction<string | Date> = (value) => {
+export const generateRfc3339Date: GenerateFunction<DateLike> = (value) => {
   // This function generates RFC 3339 format dates which is also compatible with W3C-DTF.
   // The only difference between ISO 8601 (produced by toISOString) and RFC 3339 is that
   // RFC 3339 allows a space between date and time parts instead of 'T', but the 'T' format
   // is actually valid in RFC 3339 as well, so we can just return the ISO string.
 
-  if (typeof value === 'string') {
-    // biome-ignore lint/style/noParameterAssign: No explanation.
-    value = new Date(value)
+  if (!isPresent(value)) {
+    return
   }
 
-  if (value instanceof Date && !Number.isNaN(value.getTime())) {
-    return value.toISOString()
+  const isString = typeof value === 'string'
+
+  if (isString && !isNonEmptyString(value)) {
+    return
+  }
+
+  const date = isString ? new Date(value) : value
+  const isValid = !Number.isNaN(date.getTime())
+
+  if (isValid) {
+    return date.toISOString()
+  }
+
+  if (isString) {
+    return value
   }
 }
 
@@ -573,7 +597,7 @@ export const createNamespaceNormalizator = (
     }
 
     const normalizedObject: Unreliable = {}
-    const keyGroups: Map<string, Unreliable[]> = new Map()
+    const keyGroups: Map<string, Array<Unreliable>> = new Map()
 
     const declarations = extractNamespaceDeclarations(object)
     const currentContext = { ...parentContext, ...declarations }

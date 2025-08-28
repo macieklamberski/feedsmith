@@ -1,4 +1,4 @@
-import type { GenerateFunction } from '@/common/types.js'
+import type { DateLike, GenerateFunction } from '@/common/types.js'
 import {
   generateBoolean,
   generateCdataString,
@@ -195,7 +195,7 @@ export const generateEpisode: GenerateFunction<Episode> = (episode) => {
   return trimObject(value)
 }
 
-export const generateTrailer: GenerateFunction<Trailer<Date>> = (trailer) => {
+export const generateTrailer: GenerateFunction<Trailer<DateLike>> = (trailer) => {
   if (!isObject(trailer)) {
     return
   }
@@ -351,7 +351,7 @@ export const generateContentLink: GenerateFunction<ContentLink> = (contentLink) 
   return trimObject(value)
 }
 
-export const generateLiveItem: GenerateFunction<LiveItem<Date>> = (liveItem) => {
+export const generateLiveItem: GenerateFunction<LiveItem<DateLike>> = (liveItem) => {
   if (!isObject(liveItem)) {
     return
   }
@@ -436,7 +436,7 @@ export const generatePodroll: GenerateFunction<Podroll> = (podroll) => {
   return trimObject(value)
 }
 
-export const generateUpdateFrequency: GenerateFunction<UpdateFrequency<Date>> = (
+export const generateUpdateFrequency: GenerateFunction<UpdateFrequency<DateLike>> = (
   updateFrequency,
 ) => {
   if (!isObject(updateFrequency)) {
@@ -473,7 +473,7 @@ export const generateItem: GenerateFunction<Item> = (item) => {
   return generateBaseItem(item)
 }
 
-export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
+export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed) => {
   if (!isObject(feed)) {
     return
   }

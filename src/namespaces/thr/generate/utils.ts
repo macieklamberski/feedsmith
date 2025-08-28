@@ -1,4 +1,4 @@
-import type { GenerateFunction } from '@/common/types.js'
+import type { DateLike, GenerateFunction } from '@/common/types.js'
 import {
   generateNumber,
   generatePlainString,
@@ -24,7 +24,7 @@ export const generateInReplyTo: GenerateFunction<InReplyTo> = (inReplyTo) => {
   return trimObject(value)
 }
 
-export const generateLink: GenerateFunction<Link<Date>> = (link) => {
+export const generateLink: GenerateFunction<Link<DateLike>> = (link) => {
   if (!isObject(link)) {
     return
   }

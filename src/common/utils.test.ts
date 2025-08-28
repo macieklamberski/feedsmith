@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import { type XMLBuilder, XMLParser } from 'fast-xml-parser'
 import { namespaceUrls } from './config.js'
-import type { ParseExactFunction, XmlGenerateOptions } from './types.js'
+import type { ParseExactFunction } from './types.js'
 import {
   createNamespaceNormalizator,
   detectNamespaces,
@@ -526,7 +526,7 @@ describe('trimArray', () => {
     it('should handle nested data structures with parsing', () => {
       const value = [{ items: [1, 2] }, { items: [3, 4] }]
       const expected = [1, 3]
-      const extractFirstItem = (obj: { items: number[] }) => {
+      const extractFirstItem = (obj: { items: Array<number> }) => {
         return obj.items && obj.items.length > 0 ? obj.items[0] : null
       }
 
@@ -1743,7 +1743,7 @@ describe('generateXml', () => {
 
   it('should include single stylesheet when provided', () => {
     const value = 'test content'
-    const options: XmlGenerateOptions = {
+    const options = {
       stylesheets: [{ type: 'text/xsl', href: '/styles/feed.xsl' }],
     }
     const expected =
@@ -1754,7 +1754,7 @@ describe('generateXml', () => {
 
   it('should include multiple stylesheets when provided', () => {
     const value = 'test content'
-    const options: XmlGenerateOptions = {
+    const options = {
       stylesheets: [
         { type: 'text/xsl', href: '/styles/feed.xsl' },
         { type: 'text/css', href: '/styles/feed.css', media: 'screen' },
@@ -1768,7 +1768,7 @@ describe('generateXml', () => {
 
   it('should generate XML without stylesheets when array is empty', () => {
     const value = 'test content'
-    const options: XmlGenerateOptions = {
+    const options = {
       stylesheets: [],
     }
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
@@ -1778,7 +1778,7 @@ describe('generateXml', () => {
 
   it('should generate XML without stylesheets when stylesheets is undefined', () => {
     const value = 'test content'
-    const options: XmlGenerateOptions = {}
+    const options = {}
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
 
     expect(generateXml(mockBuilder, value, options)).toEqual(expected)
@@ -1849,8 +1849,10 @@ describe('generateRfc822Date', () => {
     expect(generateRfc822Date(futureDate)).toEqual(expected)
   })
 
-  it('should return undefined for invalid date string', () => {
-    expect(generateRfc822Date('not a date')).toBeUndefined()
+  it('should return original string for invalid date string', () => {
+    expect(generateRfc822Date('not a date')).toEqual('not a date')
+    expect(generateRfc822Date('invalid date string')).toEqual('invalid date string')
+    expect(generateRfc822Date('2023-13-45')).toEqual('2023-13-45')
   })
 
   it('should return undefined for invalid Date object', () => {
@@ -1860,6 +1862,10 @@ describe('generateRfc822Date', () => {
 
   it('should return undefined for undefined', () => {
     expect(generateRfc822Date(undefined)).toBeUndefined()
+  })
+
+  it('should return empty string for empty string', () => {
+    expect(generateRfc822Date('')).toBeUndefined()
   })
 })
 
@@ -1920,8 +1926,10 @@ describe('generateRfc3339Date', () => {
     expect(generateRfc3339Date(futureDate)).toEqual(expected)
   })
 
-  it('should return undefined for invalid date string', () => {
-    expect(generateRfc3339Date('not a date')).toBeUndefined()
+  it('should return original string for invalid date string', () => {
+    expect(generateRfc3339Date('not a date')).toEqual('not a date')
+    expect(generateRfc3339Date('invalid date string')).toEqual('invalid date string')
+    expect(generateRfc3339Date('2023-13-45')).toEqual('2023-13-45')
   })
 
   it('should return undefined for invalid Date object', () => {
@@ -1931,6 +1939,10 @@ describe('generateRfc3339Date', () => {
 
   it('should return undefined for undefined', () => {
     expect(generateRfc3339Date(undefined)).toBeUndefined()
+  })
+
+  it('should return undefined for empty string', () => {
+    expect(generateRfc3339Date('')).toBeUndefined()
   })
 })
 

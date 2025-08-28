@@ -251,7 +251,7 @@ describe('generate', () => {
   it('should throw error for invalid Atom feed structure', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(() => generate(value)).toThrow('Invalid input Atom')
   })
 
@@ -755,5 +755,149 @@ describe('generate', () => {
 `
 
     expect(generate(value, options)).toEqual(expected)
+  })
+})
+
+describe('generate with lenient mode', () => {
+  it('should accept partial feeds with lenient: true', () => {
+    const value = {
+      title: 'Test Feed',
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Test Feed</title>
+</feed>
+`
+
+    expect(generate(value, { lenient: true })).toEqual(expected)
+  })
+
+  it('should accept feeds with string dates in lenient mode', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Test Feed',
+      updated: '2023-01-01T00:00:00.000Z',
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com/feed</id>
+  <title>Test Feed</title>
+  <updated>2023-01-01T00:00:00.000Z</updated>
+</feed>
+`
+
+    expect(generate(value, { lenient: true })).toEqual(expected)
+  })
+
+  it('should preserve invalid date strings in lenient mode', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Invalid Date',
+      updated: 'not-a-valid-date',
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry with invalid date',
+          updated: 'also-invalid-date',
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com/feed</id>
+  <title>Feed with Invalid Date</title>
+  <updated>not-a-valid-date</updated>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry with invalid date</title>
+    <updated>also-invalid-date</updated>
+  </entry>
+</feed>
+`
+
+    expect(generate(value, { lenient: true })).toEqual(expected)
+  })
+
+  it('should handle mixed Date objects and string dates', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Mixed Dates Feed',
+      updated: new Date('2023-01-01T00:00:00.000Z'),
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry with Date object',
+          updated: new Date('2023-02-01T00:00:00.000Z'),
+        },
+        {
+          id: 'https://example.com/entry/2',
+          title: 'Entry with string date',
+          updated: '2023-03-01T00:00:00.000Z',
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com/feed</id>
+  <title>Mixed Dates Feed</title>
+  <updated>2023-01-01T00:00:00.000Z</updated>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry with Date object</title>
+    <updated>2023-02-01T00:00:00.000Z</updated>
+  </entry>
+  <entry>
+    <id>https://example.com/entry/2</id>
+    <title>Entry with string date</title>
+    <updated>2023-03-01T00:00:00.000Z</updated>
+  </entry>
+</feed>
+`
+
+    expect(generate(value, { lenient: true })).toEqual(expected)
+  })
+
+  it('should handle deeply nested partial objects', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Nested Partials',
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry 1',
+          author: [
+            {
+              name: 'John Doe',
+            },
+          ],
+          category: [
+            {
+              term: 'tech',
+              label: 'Technology',
+            },
+          ],
+        },
+        {
+          id: 'https://example.com/entry/2',
+          title: 'Minimal Entry',
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com/feed</id>
+  <title>Feed with Nested Partials</title>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry 1</title>
+  </entry>
+  <entry>
+    <id>https://example.com/entry/2</id>
+    <title>Minimal Entry</title>
+  </entry>
+</feed>
+`
+
+    expect(generate(value, { lenient: true })).toEqual(expected)
   })
 })

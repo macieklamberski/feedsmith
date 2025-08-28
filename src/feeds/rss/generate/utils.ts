@@ -1,5 +1,5 @@
 import { namespaceUrls } from '@/common/config.js'
-import type { GenerateFunction } from '@/common/types.js'
+import type { DateLike, GenerateFunction } from '@/common/types.js'
 import {
   generateBoolean,
   generateCdataString,
@@ -164,7 +164,7 @@ export const generateSource: GenerateFunction<Source> = (source) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateFunction<Item<Date>> = (item) => {
+export const generateItem: GenerateFunction<Item<DateLike>> = (item) => {
   if (!isObject(item)) {
     return
   }
@@ -196,7 +196,7 @@ export const generateItem: GenerateFunction<Item<Date>> = (item) => {
   return trimObject(value)
 }
 
-export const generateFeed: GenerateFunction<Feed<Date>> = (feed) => {
+export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed) => {
   if (!isObject(feed)) {
     return
   }
