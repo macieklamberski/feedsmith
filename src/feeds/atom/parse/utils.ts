@@ -1,4 +1,4 @@
-import type { Unreliable } from '@/common/types.js'
+import type { Unreliable } from '../../../common/types.js'
 import {
   detectNamespaces,
   isObject,
@@ -9,7 +9,26 @@ import {
   parseString,
   retrieveText,
   trimObject,
-} from '@/common/utils.js'
+} from '../../../common/utils.js'
+import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
+import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
+import {
+  retrieveFeed as retrieveItunesFeed,
+  retrieveItem as retrieveItunesItem,
+} from '../../../namespaces/itunes/parse/utils.js'
+import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
+import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
+import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
+import {
+  retrieveItem as retrieveThrItem,
+  retrieveLink as retrieveThrLink,
+} from '../../../namespaces/thr/parse/utils.js'
+import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
+import {
+  retrieveFeed as retrieveYtFeed,
+  retrieveItem as retrieveYtItem,
+} from '../../../namespaces/yt/parse/utils.js'
 import type {
   Category,
   Entry,
@@ -19,26 +38,7 @@ import type {
   ParsePartialFunction,
   Person,
   Source,
-} from '@/feeds/atom/common/types.js'
-import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '@/namespaces/dc/parse/utils.js'
-import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '@/namespaces/dcterms/parse/utils.js'
-import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '@/namespaces/georss/parse/utils.js'
-import {
-  retrieveFeed as retrieveItunesFeed,
-  retrieveItem as retrieveItunesItem,
-} from '@/namespaces/itunes/parse/utils.js'
-import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '@/namespaces/media/parse/utils.js'
-import { retrieveItem as retrieveSlashItem } from '@/namespaces/slash/parse/utils.js'
-import { retrieveFeed as retrieveSyFeed } from '@/namespaces/sy/parse/utils.js'
-import {
-  retrieveItem as retrieveThrItem,
-  retrieveLink as retrieveThrLink,
-} from '@/namespaces/thr/parse/utils.js'
-import { retrieveItem as retrieveWfwItem } from '@/namespaces/wfw/parse/utils.js'
-import {
-  retrieveFeed as retrieveYtFeed,
-  retrieveItem as retrieveYtItem,
-} from '@/namespaces/yt/parse/utils.js'
+} from '../common/types.js'
 
 export const createNamespaceGetter = (
   value: Record<string, Unreliable>,

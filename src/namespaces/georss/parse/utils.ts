@@ -1,4 +1,4 @@
-import type { ParseExactFunction, ParsePartialFunction, Unreliable } from '@/common/types.js'
+import type { ParseExactFunction, ParsePartialFunction, Unreliable } from '../../../common/types.js'
 import {
   isNonEmptyString,
   isObject,
@@ -9,8 +9,8 @@ import {
   parseString,
   retrieveText,
   trimObject,
-} from '@/common/utils.js'
-import type { Box, ItemOrFeed, Line, Point, Polygon } from '@/namespaces/georss/common/types.js'
+} from '../../../common/utils.js'
+import type { Box, ItemOrFeed, Line, Point, Polygon } from '../common/types.js'
 
 export const parseLatLngPairs = (
   value: Unreliable,

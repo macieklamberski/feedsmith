@@ -1,6 +1,6 @@
-import type { GenerateFunction } from '@/common/types.js'
-import { generateCdataString, isObject, trimObject } from '@/common/utils.js'
-import type { Item } from '@/namespaces/content/common/types.js'
+import type { GenerateFunction } from '../../../common/types.js'
+import { generateCdataString, isObject, trimObject } from '../../../common/utils.js'
+import type { Item } from '../common/types.js'
 
 export const generateItem: GenerateFunction<Item> = (item) => {
   if (!isObject(item)) {

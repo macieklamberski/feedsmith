@@ -1,6 +1,6 @@
-import type { DateLike } from '@/common/types.js'
-import { generateRfc3339Date, trimArray, trimObject } from '@/common/utils.js'
-import type { Feed, Item } from '@/feeds/json/common/types.js'
+import type { DateLike } from '../../../common/types.js'
+import { generateRfc3339Date, trimArray, trimObject } from '../../../common/utils.js'
+import type { Feed, Item } from '../common/types.js'
 
 export const generateItem = (item: Item<DateLike>) => {
   const value = {

@@ -1,5 +1,5 @@
-import { namespaceUrls } from '@/common/config.js'
-import type { DateLike, GenerateFunction } from '@/common/types.js'
+import { namespaceUrls } from '../../../common/config.js'
+import type { DateLike, GenerateFunction } from '../../../common/types.js'
 import {
   generateBoolean,
   generateCdataString,
@@ -10,7 +10,28 @@ import {
   isObject,
   trimArray,
   trimObject,
-} from '@/common/utils.js'
+} from '../../../common/utils.js'
+import {
+  generateEntry as generateAtomEntry,
+  generateFeed as generateAtomFeed,
+} from '../../../namespaces/atom/generate/utils.js'
+import { generateItem as generateContentItem } from '../../../namespaces/content/generate/utils.js'
+import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
+import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
+import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
+import {
+  generateFeed as generateItunesFeed,
+  generateItem as generateItunesItem,
+} from '../../../namespaces/itunes/generate/utils.js'
+import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
+import {
+  generateFeed as generatePodcastFeed,
+  generateItem as generatePodcastItem,
+} from '../../../namespaces/podcast/generate/utils.js'
+import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
+import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
+import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
+import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
 import type {
   Category,
   Cloud,
@@ -24,28 +45,7 @@ import type {
   SkipHours,
   Source,
   TextInput,
-} from '@/feeds/rss/common/types.js'
-import {
-  generateEntry as generateAtomEntry,
-  generateFeed as generateAtomFeed,
-} from '@/namespaces/atom/generate/utils.js'
-import { generateItem as generateContentItem } from '@/namespaces/content/generate/utils.js'
-import { generateItemOrFeed as generateDcItemOrFeed } from '@/namespaces/dc/generate/utils.js'
-import { generateItemOrFeed as generateDctermsItemOrFeed } from '@/namespaces/dcterms/generate/utils.js'
-import { generateItemOrFeed as generateGeoRssItemOrFeed } from '@/namespaces/georss/generate/utils.js'
-import {
-  generateFeed as generateItunesFeed,
-  generateItem as generateItunesItem,
-} from '@/namespaces/itunes/generate/utils.js'
-import { generateItemOrFeed as generateMediaItemOrFeed } from '@/namespaces/media/generate/utils.js'
-import {
-  generateFeed as generatePodcastFeed,
-  generateItem as generatePodcastItem,
-} from '@/namespaces/podcast/generate/utils.js'
-import { generateItem as generateSlashItem } from '@/namespaces/slash/generate/utils.js'
-import { generateFeed as generateSyFeed } from '@/namespaces/sy/generate/utils.js'
-import { generateItem as generateThrItem } from '@/namespaces/thr/generate/utils.js'
-import { generateItem as generateWfwItem } from '@/namespaces/wfw/generate/utils.js'
+} from '../common/types.js'
 
 export const generatePerson: GenerateFunction<Person> = (person) => {
   return generateCdataString(person)

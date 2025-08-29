@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '@/common/types.js'
+import type { ParsePartialFunction } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
   isObject,
@@ -11,8 +11,8 @@ import {
   parseYesNoBoolean,
   retrieveText,
   trimObject,
-} from '@/common/utils.js'
-import type { Category, Feed, Item, Owner } from '@/namespaces/itunes/common/types.js'
+} from '../../../common/utils.js'
+import type { Category, Feed, Item, Owner } from '../common/types.js'
 
 export const parseCategory: ParsePartialFunction<Category> = (value) => {
   if (!isObject(value)) {

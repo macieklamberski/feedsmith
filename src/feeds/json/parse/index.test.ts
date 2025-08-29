@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { locales } from '@/common/config.js'
+import { locales } from '../../../common/config.js'
 import { parse } from './index.js'
 
 describe('parse', () => {

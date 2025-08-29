@@ -1,4 +1,4 @@
-import type { DateLike, GenerateFunction } from '@/common/types.js'
+import type { DateLike, GenerateFunction } from '../../common/types.js'
 import {
   generateBoolean,
   generateCdataString,
@@ -9,8 +9,8 @@ import {
   isObject,
   trimArray,
   trimObject,
-} from '@/common/utils.js'
-import type { Body, Head, Opml, Outline } from '@/opml/common/types.js'
+} from '../../common/utils.js'
+import type { Body, Head, Opml, Outline } from '../common/types.js'
 
 export const generateOutline: GenerateFunction<Outline<DateLike>> = (outline) => {
   if (!isObject(outline)) {

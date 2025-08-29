@@ -1,10 +1,10 @@
-import type { DateLike, GenerateFunction } from '@/common/types.js'
-import type { Entry as AtomEntry, Feed as AtomFeed } from '@/feeds/atom/common/types.js'
+import type { DateLike, GenerateFunction } from '../../../common/types.js'
+import type { Entry as AtomEntry, Feed as AtomFeed } from '../../../feeds/atom/common/types.js'
 import {
   generateEntry as generateAtomEntry,
   generateFeed as generateAtomFeed,
-} from '@/feeds/atom/generate/utils.js'
-import type { Entry, Feed } from '@/namespaces/atom/common/types.js'
+} from '../../../feeds/atom/generate/utils.js'
+import type { Entry, Feed } from '../common/types.js'
 
 export const generateEntry: GenerateFunction<Entry<DateLike>> = (entry) => {
   return generateAtomEntry(entry as AtomEntry<DateLike>, { prefix: 'atom:', asNamespace: true })

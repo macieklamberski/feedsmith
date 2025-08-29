@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import type { DateLike, DeepPartial } from '@/common/types.js'
-import type { Feed } from '@/feeds/rss/common/types.js'
+import type { DateLike, DeepPartial } from '../../../common/types.js'
+import type { Feed } from '../common/types.js'
 import { generate } from './index.js'
 
 describe('generate', () => {

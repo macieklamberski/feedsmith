@@ -1,8 +1,8 @@
-import { locales, namespaceUrls } from '@/common/config.js'
-import type { DeepPartial } from '@/common/types.js'
-import { createNamespaceNormalizator } from '@/common/utils.js'
-import type { Feed } from '@/feeds/rdf/common/types.js'
-import { detectRdfFeed } from '@/index.js'
+import { locales, namespaceUrls } from '../../../common/config.js'
+import type { DeepPartial } from '../../../common/types.js'
+import { createNamespaceNormalizator } from '../../../common/utils.js'
+import { detectRdfFeed } from '../../../index.js'
+import type { Feed } from '../common/types.js'
 import { parser } from './config.js'
 import { retrieveFeed } from './utils.js'
 

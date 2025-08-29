@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '@/common/types.js'
+import type { ParsePartialFunction } from '../../../common/types.js'
 import {
   isObject,
   parseDate,
@@ -7,8 +7,8 @@ import {
   parseString,
   retrieveText,
   trimObject,
-} from '@/common/utils.js'
-import type { Feed } from '@/namespaces/sy/common/types.js'
+} from '../../../common/utils.js'
+import type { Feed } from '../common/types.js'
 
 export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
   if (!isObject(value)) {
