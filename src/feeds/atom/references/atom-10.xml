@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xml:base="http://example.org/" xml:lang="en">
+<feed xmlns="http://www.w3.org/2005/Atom">
   <title type="text">Comprehensive Atom 1.0 Example Feed</title>
   <subtitle type="html">A &lt;em&gt;comprehensive&lt;/em&gt; example showing all Atom 1.0 elements</subtitle>
   <link rel="alternate" type="text/html" href="/"/>
@@ -77,7 +77,7 @@
     <summary type="text">
       This is a comprehensive example entry showing all possible Atom 1.0 elements in an entry.
     </summary>
-    <content type="xhtml" xml:base="http://example.org/entry/1" xml:lang="en-US">
+    <content type="xhtml">
       <div xmlns="http://www.w3.org/1999/xhtml">
         <h1>Comprehensive Atom 1.0 Entry</h1>
         <p>This entry demonstrates all possible elements in an Atom 1.0 entry.</p>
@@ -158,14 +158,14 @@
       This entry has multiple authors to demonstrate how multiple author elements can be used.
     </content>
   </entry>
-  <entry xml:lang="fr">
+  <entry>
     <title>Exemple de Contenu en Français</title>
     <id>tag:example.org,2023:entry-6</id>
     <updated>2023-01-10T11:05:00Z</updated>
     <content type="text">
       Cet article est écrit en français pour démontrer l'utilisation de l'attribut xml:lang.
     </content>
-    <summary xml:lang="en">
+    <summary>
       This is an English summary of a French entry to demonstrate language-specific content.
     </summary>
   </entry>
