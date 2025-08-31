@@ -536,7 +536,11 @@
             "updated": "2025-05-10T16:45:00Z"
           }
         }
-      ]
+      ],
+      "xml": {
+        "lang": "fr",
+        "id": "entry-with-xml-attrs"
+      }
     }
   ],
   "dc": {
@@ -1055,5 +1059,9 @@
     "elev": 360,
     "floor": 4,
     "radius": 50000
+  },
+  "xml": {
+    "lang": "en",
+    "base": "http://example.org/"
   }
 }

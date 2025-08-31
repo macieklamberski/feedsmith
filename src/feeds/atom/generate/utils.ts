@@ -25,6 +25,7 @@ import {
   generateLink as generateThrLink,
 } from '../../../namespaces/thr/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
+import { generateItemOrFeed as generateXmlItemOrFeed } from '../../../namespaces/xml/generate/utils.js'
 import {
   generateFeed as generateYtFeed,
   generateItem as generateYtItem,
@@ -182,6 +183,7 @@ export const generateEntry: GenerateFunction<Entry<DateLike>> = (entry, options)
     ...generateThrItem(entry.thr),
     ...generateWfwItem(entry.wfw),
     ...generateYtItem(entry.yt),
+    ...generateXmlItemOrFeed(entry.xml),
   }
 }
 
@@ -240,6 +242,7 @@ export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed, options) =>
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateYtFeed(feed.yt),
+    ...generateXmlItemOrFeed(feed.xml),
     ...valueEntries,
   }
 

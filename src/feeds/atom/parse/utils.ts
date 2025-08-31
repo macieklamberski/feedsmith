@@ -25,6 +25,7 @@ import {
   retrieveLink as retrieveThrLink,
 } from '../../../namespaces/thr/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
+import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
 import {
   retrieveFeed as retrieveYtFeed,
   retrieveItem as retrieveYtItem,
@@ -235,6 +236,7 @@ export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) 
     thr: namespaces?.has('thr') ? retrieveThrItem(value) : undefined,
     wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
+    xml: retrieveXmlItemOrFeed(value),
   }
 
   return trimObject(entry)
@@ -268,6 +270,7 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) =>
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
+    xml: retrieveXmlItemOrFeed(value),
   }
 
   return trimObject(feed)

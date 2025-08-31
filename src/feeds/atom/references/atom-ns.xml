@@ -9,6 +9,8 @@
   xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
   xmlns:thr="http://purl.org/syndication/thread/1.0"
   xmlns:yt="http://www.youtube.com/xml/schemas/2015"
+  xml:lang="en"
+  xml:base="http://example.org/"
 >
   <title>Example Feed</title>
   <id>example-feed</id>
@@ -230,7 +232,7 @@
   <georss:floor>4</georss:floor>
   <georss:radius>50000</georss:radius>
 
-  <entry>
+  <entry xml:lang="fr" xml:id="entry-with-xml-attrs">
     <title>Example Entry</title>
     <id>example-entry</id>
 
