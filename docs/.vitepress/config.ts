@@ -85,6 +85,7 @@ export default defineConfig({
               { text: 'Atom Threading', link: '/reference/namespaces/thr' },
               { text: 'Dublin Core Terms', link: '/reference/namespaces/dcterms' },
               { text: 'Well-Formed Web', link: '/reference/namespaces/wfw' },
+              { text: 'Source', link: '/reference/namespaces/source' },
               { text: 'YouTube', link: '/reference/namespaces/yt' },
             ],
           },

@@ -30,6 +30,10 @@ import {
   retrieveItem as retrievePodcastItem,
 } from '../../../namespaces/podcast/parse/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
+import {
+  retrieveFeed as retrieveSourceFeed,
+  retrieveItem as retrieveSourceItem,
+} from '../../../namespaces/source/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
@@ -175,6 +179,7 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
+    sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
   }
 
   return trimObject(item)
@@ -215,6 +220,7 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
     podcast: namespaces.has('podcast') ? retrievePodcastFeed(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    sourceNs: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,
   }
 
   return trimObject(feed)

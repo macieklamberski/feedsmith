@@ -22,7 +22,8 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
         <a href="/reference/namespaces/georss">GeoRSS-Simple</a>,
         <a href="/reference/namespaces/thr">Atom Threading</a>,
         <a href="/reference/namespaces/dcterms">Dublin Core Terms</a>,
-        <a href="/reference/namespaces/wfw">Well-Formed Web</a>
+        <a href="/reference/namespaces/wfw">Well-Formed Web</a>,
+        <a href="/reference/namespaces/source">Source</a>
       </td>
     </tr>
   </tbody>
