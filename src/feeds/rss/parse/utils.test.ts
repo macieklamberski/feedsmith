@@ -778,19 +778,6 @@ describe('parseItem', () => {
     expect(parseItem(undefined)).toBeUndefined()
   })
 
-  it('should handle atom namespace', () => {
-    const value = {
-      title: { '#text': 'Item 1' },
-      'atom:link': { '@href': 'http://example.com', '@rel': 'self' },
-    }
-    const expected = {
-      title: 'Item 1',
-      atom: { links: [{ href: 'http://example.com', rel: 'self' }] },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
   it('should handle content namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },
@@ -799,6 +786,19 @@ describe('parseItem', () => {
     const expected = {
       title: 'Example Entry',
       content: { encoded: '<div>John Doe</div>' },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle atom namespace', () => {
+    const value = {
+      title: { '#text': 'Item 1' },
+      'atom:link': { '@href': 'http://example.com', '@rel': 'self' },
+    }
+    const expected = {
+      title: 'Item 1',
+      atom: { links: [{ href: 'http://example.com', rel: 'self' }] },
     }
 
     expect(parseItem(value)).toEqual(expected)
@@ -817,6 +817,23 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle dcterms namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      'dcterms:created': { '#text': '2023-02-01T00:00:00Z' },
+      'dcterms:license': { '#text': 'MIT License' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      dcterms: {
+        created: '2023-02-01T00:00:00Z',
+        license: 'MIT License',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle slash namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },
@@ -830,17 +847,114 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
-  it('should handle dcterms namespace', () => {
+  it('should handle itunes namespace', () => {
     const value = {
-      title: { '#text': 'Example Entry' },
-      'dcterms:created': { '#text': '2023-02-01T00:00:00Z' },
-      'dcterms:license': { '#text': 'MIT License' },
+      title: { '#text': 'Podcast Episode' },
+      'itunes:duration': { '#text': '1800' },
+      'itunes:explicit': { '#text': 'no' },
     }
     const expected = {
-      title: 'Example Entry',
-      dcterms: {
-        created: '2023-02-01T00:00:00Z',
-        license: 'MIT License',
+      title: 'Podcast Episode',
+      itunes: {
+        duration: 1800,
+        explicit: false,
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle podcast namespace', () => {
+    const value = {
+      title: { '#text': 'Podcast Episode' },
+      'podcast:transcript': { '@url': 'https://example.com/transcript.txt', '@type': 'text/plain' },
+    }
+    const expected = {
+      title: 'Podcast Episode',
+      podcast: {
+        transcripts: [{ url: 'https://example.com/transcript.txt', type: 'text/plain' }],
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle media namespace', () => {
+    const value = {
+      title: { '#text': 'Media Item' },
+      'media:content': { '@url': 'https://example.com/video.mp4', '@type': 'video/mp4' },
+    }
+    const expected = {
+      title: 'Media Item',
+      media: {
+        contents: [{ url: 'https://example.com/video.mp4', type: 'video/mp4' }],
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle georss namespace', () => {
+    const value = {
+      title: { '#text': 'Location Item' },
+      'georss:point': { '#text': '42.3601 -71.0589' },
+    }
+    const expected = {
+      title: 'Location Item',
+      georss: {
+        point: { lat: 42.3601, lng: -71.0589 },
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle thr namespace', () => {
+    const value = {
+      title: { '#text': 'Reply Item' },
+      'thr:in-reply-to': {
+        '@ref': 'http://example.com/posts/1',
+        '@href': 'http://example.com/posts/1',
+      },
+    }
+    const expected = {
+      title: 'Reply Item',
+      thr: {
+        inReplyTos: [{ ref: 'http://example.com/posts/1', href: 'http://example.com/posts/1' }],
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle wfw namespace', () => {
+    const value = {
+      title: { '#text': 'Blog Post' },
+      'wfw:comment': { '#text': 'https://example.com/comment' },
+      'wfw:commentrss': { '#text': 'https://example.com/comments/feed' },
+    }
+    const expected = {
+      title: 'Blog Post',
+      wfw: {
+        comment: 'https://example.com/comment',
+        commentRss: 'https://example.com/comments/feed',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle source namespace', () => {
+    const value = {
+      title: { '#text': 'Source Item' },
+      'source:markdown': { '#text': '# Example markdown content' },
+      'source:localtime': { '#text': '2024-01-15 10:30:00' },
+    }
+    const expected = {
+      title: 'Source Item',
+      sourceNs: {
+        markdown: '# Example markdown content',
+        localTime: '2024-01-15 10:30:00',
       },
     }
 
@@ -1276,6 +1390,95 @@ describe('parseFeed', () => {
       dcterms: {
         created: '2023-01-01T00:00:00Z',
         license: 'Creative Commons Attribution 4.0',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle itunes namespace', () => {
+    const value = {
+      title: { '#text': 'Podcast Feed' },
+      link: { '#text': 'https://example.com' },
+      'itunes:author': { '#text': 'Podcast Author' },
+      'itunes:category': { '@text': 'Technology' },
+    }
+    const expected = {
+      title: 'Podcast Feed',
+      link: 'https://example.com',
+      itunes: {
+        author: 'Podcast Author',
+        categories: [{ text: 'Technology' }],
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle podcast namespace', () => {
+    const value = {
+      title: { '#text': 'Podcast 2.0 Feed' },
+      link: { '#text': 'https://example.com' },
+      'podcast:guid': { '#text': 'podcast-feed-guid-123' },
+    }
+    const expected = {
+      title: 'Podcast 2.0 Feed',
+      link: 'https://example.com',
+      podcast: {
+        guid: 'podcast-feed-guid-123',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle media namespace', () => {
+    const value = {
+      title: { '#text': 'Media Feed' },
+      link: { '#text': 'https://example.com' },
+      'media:copyright': { '#text': '2024 Example Corp' },
+    }
+    const expected = {
+      title: 'Media Feed',
+      link: 'https://example.com',
+      media: {
+        copyright: { value: '2024 Example Corp' },
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle georss namespace', () => {
+    const value = {
+      title: { '#text': 'Location Feed' },
+      link: { '#text': 'https://example.com' },
+      'georss:point': { '#text': '37.7749 -122.4194' },
+    }
+    const expected = {
+      title: 'Location Feed',
+      link: 'https://example.com',
+      georss: {
+        point: { lat: 37.7749, lng: -122.4194 },
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle source namespace', () => {
+    const value = {
+      title: { '#text': 'Source Feed' },
+      link: { '#text': 'https://example.com' },
+      'source:account': { '@service': 'twitter', '#text': 'johndoe' },
+      'source:blogroll': { '#text': 'https://example.com/blogroll.opml' },
+    }
+    const expected = {
+      title: 'Source Feed',
+      link: 'https://example.com',
+      sourceNs: {
+        accounts: [{ service: 'twitter', value: 'johndoe' }],
+        blogroll: 'https://example.com/blogroll.opml',
       },
     }
 
