@@ -450,6 +450,61 @@ describe('parseItem', () => {
 
     expect(parseItem(value)).toEqual(expected)
   })
+
+  it('should handle media namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'media:content': { '@url': 'http://example.com/video.mp4', '@type': 'video/mp4' },
+      'media:title': { '#text': 'Video Title' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      media: {
+        contents: [{ url: 'http://example.com/video.mp4', type: 'video/mp4' }],
+        title: { value: 'Video Title' },
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle georss namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'georss:point': { '#text': '45.256 -71.92' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      georss: {
+        point: { lat: 45.256, lng: -71.92 },
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle wfw namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'wfw:comment': { '#text': 'https://example.com/comment' },
+      'wfw:commentrss': { '#text': 'https://example.com/comments/feed' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      wfw: {
+        comment: 'https://example.com/comment',
+        commentRss: 'https://example.com/comments/feed',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
 })
 
 describe('retrieveItems', () => {
@@ -963,6 +1018,66 @@ describe('parseFeed', () => {
       dcterms: {
         created: '2023-01-01T00:00:00Z',
         license: 'Creative Commons Attribution 4.0',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle media namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'media:title': { '#text': 'Media Feed Title' },
+        'media:description': { '#text': 'A feed with media content' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      media: {
+        title: { value: 'Media Feed Title' },
+        description: { value: 'A feed with media content' },
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle georss namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'georss:point': { '#text': '40.689 -74.044' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      georss: {
+        point: { lat: 40.689, lng: -74.044 },
       },
     }
 
