@@ -23,13 +23,13 @@ Feedsmith provides both universal and format-specific parsers that maintain the 
 
 ### Core
 
-* **Comprehensive Support** 🎯 — Supports all major feed formats and namespaces.
-* **Preserves Structure** 📦 — Parsed feed object maintains the original feed structure making it easy to access the data.
-* **Smart Namespace Handling** 🧠 — Normalizes custom namespace prefixes to standard ones (e.g., `<custom:creator>` becomes `dc.creator`).
-* **Parsing & Generating** 🔩 — Use one package for both parsing and generating feeds.
+* **Comprehensive support** 🎯 — Supports all major feed formats and namespaces.
+* **Preserves structure** 📦 — Parsed feed object maintains the original feed structure making it easy to access the data.
+* **Smart namespace handling** 🧠 — Normalizes custom namespace prefixes to standard ones (e.g., `<custom:creator>` becomes `dc.creator`).
+* **Parsing & generating** 🔩 — Use one package for both parsing and generating feeds.
 
 ### Leniency
-* **Normalizes Legacy Elements** ✨ — Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
+* **Normalizes legacy elements** ✨ — Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
 * **CaSe INSENsiTive** 🐍 — Handles fields and attributes in any case (lowercase, uppercase, mixed).
 * **Forgiving** 🤝 — Gracefully handles malformed or incomplete feeds and extracts valid data. This makes it suitable for use with real-world feeds that may not strictly follow specifications.
 
