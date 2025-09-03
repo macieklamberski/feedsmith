@@ -737,7 +737,7 @@ describe('generateItem', () => {
   it('should generate item with source namespace properties', () => {
     const value = {
       title: 'Item with source namespace',
-      sourceNs: {
+      src: {
         markdown: '# Example markdown content',
         outlines: ['<outline text="Section 1"/>', '<outline text="Section 2"/>'],
         localTime: '2024-01-15 10:30:00',
@@ -1182,7 +1182,7 @@ describe('generateFeed', () => {
     const value = {
       title: 'Feed with source namespace',
       description: 'A feed with Source namespace features',
-      sourceNs: {
+      src: {
         accounts: [{ service: 'twitter', value: 'johndoe' }, { service: 'github' }],
         likes: { server: 'http://likes.example.com/' },
         blogroll: 'https://example.com/blogroll.opml',

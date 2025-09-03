@@ -674,7 +674,7 @@
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
       },
-      "sourceNs": {
+      "src": {
         "markdown": "# Understanding XML Namespaces - This article explores the power and flexibility of XML namespaces in modern web syndication.",
         "outlines": [
           "<outline text=\"Introduction\"><outline text=\"What are namespaces?\"/></outline>",
@@ -1321,7 +1321,7 @@
     "floor": 4,
     "radius": 50000
   },
-  "sourceNs": {
+  "src": {
     "accounts": [
       { "service": "twitter", "value": "johndoe" },
       { "service": "facebook", "value": "jane.smith" }

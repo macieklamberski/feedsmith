@@ -195,7 +195,7 @@ export const generateItem: GenerateFunction<Item<DateLike>> = (item) => {
     ...generateGeoRssItemOrFeed(item.georss),
     ...generateThrItem(item.thr),
     ...generateWfwItem(item.wfw),
-    ...generateSourceItem(item.sourceNs),
+    ...generateSourceItem(item.src),
   }
 
   return trimObject(value)
@@ -234,7 +234,7 @@ export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed) => {
     ...generatePodcastFeed(feed.podcast),
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
-    ...generateSourceFeed(feed.sourceNs),
+    ...generateSourceFeed(feed.src),
     item: trimArray(feed.items, generateItem),
   }
 

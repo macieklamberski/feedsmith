@@ -96,7 +96,7 @@ export type Item<TDate extends DateLike> = {
   georss?: GeoRssItemOrFeed
   thr?: ThrItem
   wfw?: WfwItem
-  sourceNs?: SourceItem
+  src?: SourceItem
 } & ({ title: string } | { description: string })
 
 export type Feed<TDate extends DateLike> = {
@@ -130,6 +130,6 @@ export type Feed<TDate extends DateLike> = {
   podcast?: PodcastFeed<TDate>
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
-  sourceNs?: SourceFeed
+  src?: SourceFeed
 }
 // #endregion reference
