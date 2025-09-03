@@ -5,7 +5,7 @@
 [![npm version](https://img.shields.io/npm/v/feedsmith.svg)](https://www.npmjs.com/package/feedsmith)
 [![license](https://img.shields.io/npm/l/feedsmith.svg)](https://github.com/macieklamberski/feedsmith/blob/main/LICENSE)
 
-Robust and fast JavaScript parser and generator for RSS, Atom, JSON Feed, and RDF feeds, with support for popular namespaces and OPML files.
+Fast, all‑in‑one JavaScript parser and generator for RSS, Atom, JSON Feed, and RDF feeds, with support for popular namespaces and OPML files.
 
 Feedsmith provides both universal and format-specific parsers that maintain the original feed structure in a clean, object-oriented format while intelligently normalizing legacy elements. Access all feed data without compromising simplicity.
 
@@ -23,18 +23,18 @@ Feedsmith provides both universal and format-specific parsers that maintain the 
 
 ### Core
 
-* **Comprehensive Support** 🎯 — Supports all major feed formats and feed namespaces.
-* **Perserves Structure** 📦 — Parsed feed object maintains the original feed structure making it easy to access the data.
-* **Smart Namespace Handling** 🧠 — Automatically normalizes custom namespace prefixes to standard ones (e.g., `<custom:creator>` becomes `dc.creator`).
-* **Parsing & Generating** 🔩 — You can use one package for both parsing and generating feeds.
+* **Comprehensive Support** 🎯 — Supports all major feed formats and namespaces.
+* **Preserves Structure** 📦 — Parsed feed object maintains the original feed structure making it easy to access the data.
+* **Smart Namespace Handling** 🧠 — Normalizes custom namespace prefixes to standard ones (e.g., `<custom:creator>` becomes `dc.creator`).
+* **Parsing & Generating** 🔩 — Use one package for both parsing and generating feeds.
 
 ### Leniency
 * **Normalizes Legacy Elements** ✨ — Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
 * **CaSe INSENsiTive** 🐍 — Handles fields and attributes in any case (lowercase, uppercase, mixed).
-* **Forgiving** 🤝 — Handles malformed or incomplete feeds gracefully. It will extract whatever valid data it can find and ignore missing or invalid elements. This makes it suitable for use with real-world feeds that may not strictly follow specifications.
+* **Forgiving** 🤝 — Gracefully handles malformed or incomplete feeds and extracts valid data. This makes it suitable for use with real-world feeds that may not strictly follow specifications.
 
 ### Performance and Type-Safety
-* **Ultrafast parsing** ⚡ — One of the fastest feed parsers in JavaScript ([see benchmarks](benchmarks/README.md)).
+* **Ultrafast parsing** ⚡ — One of the fastest JavaScript feed parsers ([see benchmarks](/benchmarks)).
 * **Type-safe API** 🛟 — Built with TypeScript from the ground up, it provides complete type definitions for every feed format and namespace.
 * **Tree-shakable** 🍃 — Only include the parts of the library you need, reducing bundle size.
 * **Well-tested** 🔬 — Comprehensive test suite with over 2000 tests and 99% code coverage.
@@ -98,7 +98,7 @@ For a full overview of all the features, visit the [documentation website](https
 npm install feedsmith
 ```
 
-> **Upgrading from v1.x?** Check out the [migration guide](https://feedsmith.dev/migration-to-2.x).
+> **Migrating from v1.x?** Check out the [migration guide](https://feedsmith.dev/migration-to-2.x).
 
 ### Parse Any Feed
 
