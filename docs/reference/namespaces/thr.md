@@ -9,6 +9,10 @@ The Atom Threading namespace provides elements for representing threaded discuss
       <td><code>http://purl.org/syndication/thread/1.0</code></td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="http://purl.org/syndication/thread/1.0" target="_blank">Threading Extensions</a></td>
+    </tr>
+    <tr>
       <th>Prefix</th>
       <td><code>&lt;thr:*&gt;</code></td>
     </tr>
@@ -18,6 +22,10 @@ The Atom Threading namespace provides elements for representing threaded discuss
         <a href="/reference/feeds/rss">RSS</a>,
         <a href="/reference/feeds/atom">Atom</a>
       </td>
+    </tr>
+    <tr>
+      <th>Property</th>
+      <td><code>thr</code></td>
     </tr>
   </tbody>
 </table>

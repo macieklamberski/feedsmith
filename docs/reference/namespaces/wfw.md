@@ -9,6 +9,10 @@ The Well-Formed Web namespace provides elements for linking to comment feeds and
       <td><code>http://wellformedweb.org/CommentAPI/</code></td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="http://wellformedweb.org/CommentAPI/" target="_blank">Well Formed Web Comment API</a></td>
+    </tr>
+    <tr>
       <th>Prefix</th>
       <td><code>&lt;wfw:*&gt;</code></td>
     </tr>
@@ -19,6 +23,10 @@ The Well-Formed Web namespace provides elements for linking to comment feeds and
         <a href="/reference/feeds/atom">Atom</a>,
         <a href="/reference/feeds/rdf">RDF</a>
       </td>
+    </tr>
+    <tr>
+      <th>Property</th>
+      <td><code>wfw</code></td>
     </tr>
   </tbody>
 </table>

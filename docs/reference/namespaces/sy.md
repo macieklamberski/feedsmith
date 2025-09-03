@@ -9,6 +9,10 @@ The Syndication namespace provides information about the frequency and timing of
       <td><code>http://purl.org/rss/1.0/modules/syndication/</code></td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="http://purl.org/rss/1.0/modules/syndication/" target="_blank">Syndication Module</a></td>
+    </tr>
+    <tr>
       <th>Prefix</th>
       <td><code>&lt;sy:*&gt;</code></td>
     </tr>
@@ -19,6 +23,10 @@ The Syndication namespace provides information about the frequency and timing of
         <a href="/reference/feeds/atom">Atom</a>,
         <a href="/reference/feeds/rdf">RDF</a>
       </td>
+    </tr>
+    <tr>
+      <th>Property</th>
+      <td><code>sy</code></td>
     </tr>
   </tbody>
 </table>
