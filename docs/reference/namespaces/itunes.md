@@ -32,9 +32,6 @@ The iTunes namespace provides podcast-specific metadata for RSS and Atom feeds. 
 
 ## Structure
 
-> [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
-
 <<< @/../src/namespaces/itunes/common/types.ts#reference
 
 ## Related
