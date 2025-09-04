@@ -543,8 +543,8 @@
       <source:markdown># Understanding XML Namespaces - This article explores the power and flexibility of XML namespaces in modern web syndication.</source:markdown>
       <source:outline>&lt;outline text="Introduction"&gt;&lt;outline text="What are namespaces?"/&gt;&lt;/outline&gt;</source:outline>
       <source:outline>&lt;outline text="Implementation"&gt;&lt;outline text="RSS Integration"/&gt;&lt;/outline&gt;</source:outline>
-      <source:localtime>2023-12-25 10:30:00</source:localtime>
-      <source:linkfull>http://example.org/item/1/understanding-xml-namespaces-complete-guide</source:linkfull>
+      <source:localTime>2023-12-25 10:30:00</source:localTime>
+      <source:linkFull>http://example.org/item/1/understanding-xml-namespaces-complete-guide</source:linkFull>
     </item>
   </channel>
 </rss>
