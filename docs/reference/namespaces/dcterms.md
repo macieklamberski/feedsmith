@@ -9,6 +9,10 @@ The Dublin Core Terms namespace provides extended metadata elements based on the
       <td><code>http://purl.org/dc/terms/</code></td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/" target="_blank">Dublin Core Terms</a></td>
+    </tr>
+    <tr>
       <th>Prefix</th>
       <td><code>&lt;dcterms:*&gt;</code></td>
     </tr>
@@ -19,6 +23,10 @@ The Dublin Core Terms namespace provides extended metadata elements based on the
         <a href="/reference/feeds/atom">Atom</a>,
         <a href="/reference/feeds/rdf">RDF</a>
       </td>
+    </tr>
+    <tr>
+      <th>Property</th>
+      <td><code>dcterms</code></td>
     </tr>
   </tbody>
 </table>
