@@ -2,7 +2,7 @@
 
 Below are the speed benchmarks for popular JavaScript packages for parsing feeds. Feedsmith's results are marked with an asterisk (`*`).
 
-The benchmarks use real-world feeds organized by feed format (RSS, Atom, JSON Feed, RDF) and file size ranges. Each range is tested on 10/100 representative feed files that span the specified size range, providing insight into how each package performs across various scenarios.
+The benchmarks use real-world feeds organized by feed format (RSS, Atom, RDF, JSON Feed) and file size ranges. Each range is tested on 10/100 representative feed files that span the specified size range, providing insight into how each package performs across various scenarios.
 
 Tests performed in both [Tinybench](https://github.com/tinylibs/tinybench) and [Benchmark.js](https://github.com/bestiejs/benchmark.js) with random tests order on every run.
 

@@ -1,6 +1,6 @@
 # Meet Feedsmith
 
-Fast, all‑in‑one JavaScript parser and generator for RSS, Atom, JSON Feed, and RDF feeds, with support for popular namespaces and OPML files.
+Fast, all‑in‑one JavaScript parser and generator for RSS, Atom, RDF, and JSON Feed, with support for popular namespaces and OPML files.
 
 Feedsmith offers universal and format‑specific parsers that maintain the original feed structure in a clean, object-oriented format while intelligently normalizing legacy elements. Access all feed data without compromising simplicity.
 
@@ -44,8 +44,8 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 |--------|----------|---------|------------|
 | [RSS](http://cyber.law.harvard.edu/rss/rss.html) | 0.9x, 2.0 | ✅ | ✅ |
 | [Atom](https://tools.ietf.org/html/rfc4287) | 0.3, 1.0 | ✅ | ✅ |
-| [JSON Feed](https://jsonfeed.org) | 1.0, 1.1 | ✅ | ✅ |
 | [RDF](https://web.resource.org/rss/1.0/spec) | 0.9, 1.0 | ✅ | ⏳ |
+| [JSON Feed](https://jsonfeed.org) | 1.0, 1.1 | ✅ | ✅ |
 
 ### Namespaces
 

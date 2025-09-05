@@ -5,7 +5,7 @@
 [![npm version](https://img.shields.io/npm/v/feedsmith.svg)](https://www.npmjs.com/package/feedsmith)
 [![license](https://img.shields.io/npm/l/feedsmith.svg)](https://github.com/macieklamberski/feedsmith/blob/main/LICENSE)
 
-Fast, all‑in‑one JavaScript parser and generator for RSS, Atom, JSON Feed, and RDF feeds, with support for popular namespaces and OPML files.
+Fast, all‑in‑one JavaScript parser and generator for RSS, Atom, RDF, and JSON Feed, with support for popular namespaces and OPML files.
 
 Feedsmith offers universal and format‑specific parsers that maintain the original feed structure in a clean, object-oriented format while intelligently normalizing legacy elements. Access all feed data without compromising simplicity.
 
@@ -59,8 +59,8 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 |--------|----------|---------|------------|
 | [RSS](http://cyber.law.harvard.edu/rss/rss.html) | 0.9x, 2.0 | ✅ | ✅ |
 | [Atom](https://tools.ietf.org/html/rfc4287) | 0.3, 1.0 | ✅ | ✅ |
-| [JSON Feed](https://jsonfeed.org) | 1.0, 1.1 | ✅ | ✅ |
 | [RDF](https://web.resource.org/rss/1.0/spec) | 0.9, 1.0 | ✅ | ⏳ |
+| [JSON Feed](https://jsonfeed.org) | 1.0, 1.1 | ✅ | ✅ |
 
 ### Namespaces
 
@@ -107,7 +107,7 @@ The simplest way to parse any feed is to use the universal `parseFeed` function:
 ```typescript
 import { parseFeed } from 'feedsmith'
 
-// Works with RSS, Atom, JSON Feed, and RDF
+// Works with RSS, Atom, RDF, and JSON Feed
 const { format, feed } = parseFeed(feedContent)
 
 console.log('Feed format:', format) // rss, atom, json, rdf
@@ -176,7 +176,6 @@ console.log(rss) // Complete RSS XML
 // You can also generate other formats:
 // - generateAtomFeed() for Atom feeds
 // - generateJsonFeed() for JSON feeds
-// - generateRdfFeed() for RDF feeds
 // - generateOpml() for OPML files
 ```
 

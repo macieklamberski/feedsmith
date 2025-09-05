@@ -4,8 +4,8 @@
 - `parseFeed(content)` - Universal parser for any format
 - `parseRssFeed(content)` - RSS parser
 - `parseAtomFeed(content)` - Atom parser
-- `parseJsonFeed(content)` - JSON Feed parser
 - `parseRdfFeed(content)` - RDF parser
+- `parseJsonFeed(content)` - JSON Feed parser
 - `parseOpml(content)` - OPML parser
 
 ## Generation Functions
@@ -20,5 +20,5 @@
 ## Detection Functions
 - `detectRssFeed(content)` - Check if content is RSS
 - `detectAtomFeed(content)` - Check if content is Atom
-- `detectJsonFeed(content)` - Check if content is JSON Feed
 - `detectRdfFeed(content)` - Check if content is RDF
+- `detectJsonFeed(content)` - Check if content is JSON Feed

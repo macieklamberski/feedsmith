@@ -40,7 +40,7 @@ result.feed.items?.[0]?.title // Getting Started with Feedsmith
 The universal parser:
 - Automatically detects the feed format using format detection functions
 - Returns an object with `format` and `feed` properties
-- Supports RSS, Atom, JSON Feed, and RDF formats
+- Supports RSS, Atom, RDF, and JSON Feed formats
 - Throws an error for unrecognized or invalid feeds
 
 > [!IMPORTANT]
@@ -55,15 +55,15 @@ When you know the feed format beforehand, use format-specific parsers for better
 import {
   parseRssFeed,
   parseAtomFeed,
-  parseJsonFeed,
-  parseRdfFeed
+  parseRdfFeed,
+  parseJsonFeed
 } from 'feedsmith'
 
 // Parse specific formats
 const rssFeed = parseRssFeed(rssContent)
 const atomFeed = parseAtomFeed(atomContent)
-const jsonFeed = parseJsonFeed(jsonContent)
 const rdfFeed = parseRdfFeed(rdfContent)
+const jsonFeed = parseJsonFeed(jsonContent)
 
 // Then read the TypeScript suggestions for the specific feed format
 rssFeed.title

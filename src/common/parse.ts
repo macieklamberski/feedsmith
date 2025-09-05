@@ -14,26 +14,26 @@ import { locales } from './config.js'
 import type { DeepPartial } from './types.js'
 
 export type Feed =
-  | { format: 'json'; feed: DeepPartial<JsonFeed<string>> }
   | { format: 'rss'; feed: DeepPartial<RssFeed<string>> }
   | { format: 'atom'; feed: DeepPartial<AtomFeed<string>> }
   | { format: 'rdf'; feed: DeepPartial<RdfFeed<string>> }
+  | { format: 'json'; feed: DeepPartial<JsonFeed<string>> }
 
 export const parse = (value: unknown): Feed => {
-  if (detectAtomFeed(value)) {
-    return { format: 'atom', feed: parseAtomFeed(value) }
-  }
-
-  if (detectJsonFeed(value)) {
-    return { format: 'json', feed: parseJsonFeed(value) }
-  }
-
   if (detectRssFeed(value)) {
     return { format: 'rss', feed: parseRssFeed(value) }
   }
 
+  if (detectAtomFeed(value)) {
+    return { format: 'atom', feed: parseAtomFeed(value) }
+  }
+
   if (detectRdfFeed(value)) {
     return { format: 'rdf', feed: parseRdfFeed(value) }
+  }
+
+  if (detectJsonFeed(value)) {
+    return { format: 'json', feed: parseJsonFeed(value) }
   }
 
   throw new Error(locales.unrecognized)

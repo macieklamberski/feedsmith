@@ -69,7 +69,7 @@ The simplest way to parse any feed is to use the universal `parseFeed` function:
 ```typescript
 import { parseFeed } from 'feedsmith'
 
-// Works with RSS, Atom, JSON Feed, and RDF
+// Works with RSS, Atom, RDF, and JSON Feed
 const { format, feed } = parseFeed(feedContent)
 
 console.log('Feed format:', format) // rss, atom, json, rdf
@@ -140,7 +140,6 @@ console.log(rss) // Complete RSS XML
 // You can also generate other formats:
 // - generateAtomFeed() for Atom feeds
 // - generateJsonFeed() for JSON feeds
-// - generateRdfFeed() for RDF feeds
 // - generateOpml() for OPML files
 ```
 
@@ -168,6 +167,6 @@ try {
 
 - **[Parse feeds](/parsing/)** — Learn about parsing different formats
 - **[Work with namespaces](/parsing/namespaces)** — Access podcast, media, and other metadata
-- **[Generate feeds](/generating/)** — Create RSS, Atom, and JSON feeds
+- **[Generate feeds](/generating/)** — Create feeds in various formats
 - **[API Reference](/reference/functions)** — Explore all available functions and types
 - **[Benchmarks](/benchmarks)** — See how Feedsmith compares to other libraries
