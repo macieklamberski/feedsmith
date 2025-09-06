@@ -7,7 +7,7 @@ export default defineConfig({
   },
   title: 'Feedsmith',
   description:
-    'Fast, all‑in‑one JavaScript parser and generator for RSS, Atom, JSON Feed, and RDF feeds, with support for popular namespaces and OPML files.',
+    'Fast, all‑in‑one JavaScript parser and generator for RSS, Atom, RDF, and JSON Feed, with support for popular namespaces and OPML files.',
   lastUpdated: true,
   cleanUrls: true,
   head: [
@@ -65,8 +65,8 @@ export default defineConfig({
             items: [
               { text: 'RSS', link: '/reference/feeds/rss' },
               { text: 'Atom', link: '/reference/feeds/atom' },
-              { text: 'JSON Feed', link: '/reference/feeds/json-feed' },
               { text: 'RDF', link: '/reference/feeds/rdf' },
+              { text: 'JSON Feed', link: '/reference/feeds/json-feed' },
             ],
           },
           {
