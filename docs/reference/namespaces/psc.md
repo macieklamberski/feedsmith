@@ -9,6 +9,10 @@ The Podlove Simple Chapters (PSC) namespace provides structured chapter informat
       <td><code>http://podlove.org/simple-chapters</code></td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="http://podlove.org/simple-chapters/">Podlove Simple Chapters</a></td>
+    </tr>
+    <tr>
       <th>Prefix</th>
       <td><code>&lt;psc:*&gt;</code></td>
     </tr>
@@ -18,6 +22,10 @@ The Podlove Simple Chapters (PSC) namespace provides structured chapter informat
         <a href="/reference/feeds/rss">RSS</a>,
         <a href="/reference/feeds/atom">Atom</a>
       </td>
+    </tr>
+    <tr>
+      <th>Property</th>
+      <td><code>psc</code></td>
     </tr>
   </tbody>
 </table>

@@ -9,12 +9,20 @@ The Podcast namespace implements the Podcasting 2.0 specification, providing adv
       <td><code>https://podcastindex.org/namespace/1.0</code></td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="https://github.com/Podcastindex-org/podcast-namespace" target="_blank">Podcast Namespace 2.0</a></td>
+    </tr>
+    <tr>
       <th>Prefix</th>
       <td><code>&lt;podcast:*&gt;</code></td>
     </tr>
     <tr>
       <th>Available in</th>
       <td><a href="/reference/feeds/rss">RSS</a></td>
+    </tr>
+    <tr>
+      <th>Property</th>
+      <td><code>podcast</code></td>
     </tr>
   </tbody>
 </table>

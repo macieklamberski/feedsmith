@@ -9,6 +9,10 @@ The GeoRSS-Simple namespace enables geographic tagging of RSS feeds and items, a
       <td><code>http://www.georss.org/georss</code></td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="http://www.georss.org/georss" target="_blank">GeoRSS Specification</a></td>
+    </tr>
+    <tr>
       <th>Prefix</th>
       <td><code>&lt;georss:*&gt;</code></td>
     </tr>
@@ -20,13 +24,14 @@ The GeoRSS-Simple namespace enables geographic tagging of RSS feeds and items, a
         <a href="/reference/feeds/rdf">RDF</a>
       </td>
     </tr>
+    <tr>
+      <th>Property</th>
+      <td><code>georss</code></td>
+    </tr>
   </tbody>
 </table>
 
 ## Structure
-
-> [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 
 <<< @/../src/namespaces/georss/common/types.ts#reference
 
