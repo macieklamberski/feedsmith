@@ -4,6 +4,7 @@
   xmlns:dcterms="http://purl.org/dc/terms/"
   xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
   xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+  xmlns:psc="http://podlove.org/simple-chapters"
   xmlns:media="http://search.yahoo.com/mrss/"
   xmlns:georss="http://www.georss.org/georss"
   xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
@@ -326,6 +327,15 @@
     <itunes:summary>This is a detailed summary of the episode content and key takeaways</itunes:summary>
     <itunes:subtitle>Episode subtitle with additional context</itunes:subtitle>
     <itunes:keywords>tutorial, example, technology, programming</itunes:keywords>
+
+    <!-- Podlove Simple Chapters: Entry Level Tags -->
+    <psc:chapters>
+      <psc:chapter start="00:00:00.000" title="Introduction" href="https://example.com/episode/intro" image="https://example.com/images/intro-chapter.jpg"/>
+      <psc:chapter start="00:05:30.000" title="Main Topic Discussion" href="https://example.com/episode/main-topic"/>
+      <psc:chapter start="00:15:45.500" title="Guest Interview" href="https://example.com/episode/interview" image="https://example.com/images/interview-chapter.jpg"/>
+      <psc:chapter start="00:28:12.250" title="Q&amp;A Session"/>
+      <psc:chapter start="00:35:00.000" title="Conclusion and Next Steps" href="https://example.com/episode/conclusion"/>
+    </psc:chapters>
 
     <!-- YouTube Namespace: Item Level Tags -->
     <yt:videoId>dQw4w9WgXcQ</yt:videoId>

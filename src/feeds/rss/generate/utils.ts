@@ -28,6 +28,7 @@ import {
   generateFeed as generatePodcastFeed,
   generateItem as generatePodcastItem,
 } from '../../../namespaces/podcast/generate/utils.js'
+import { generateItem as generatePscItem } from '../../../namespaces/psc/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
@@ -187,6 +188,7 @@ export const generateItem: GenerateFunction<Item<DateLike>> = (item) => {
     ...generateSlashItem(item.slash),
     ...generateItunesItem(item.itunes),
     ...generatePodcastItem(item.podcast),
+    ...generatePscItem(item.psc),
     ...generateMediaItemOrFeed(item.media),
     ...generateGeoRssItemOrFeed(item.georss),
     ...generateThrItem(item.thr),

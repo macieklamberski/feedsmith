@@ -817,6 +817,41 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle psc namespace', () => {
+    const value = {
+      title: { '#text': 'Podcast Episode 1' },
+      'psc:chapters': {
+        'psc:chapter': [
+          {
+            '@start': '00:00:00.000',
+            '@title': 'Introduction',
+          },
+          {
+            '@start': '00:05:30.000',
+            '@title': 'Main Topic',
+          },
+        ],
+      },
+    }
+    const expected = {
+      title: 'Podcast Episode 1',
+      psc: {
+        chapters: [
+          {
+            start: '00:00:00.000',
+            title: 'Introduction',
+          },
+          {
+            start: '00:05:30.000',
+            title: 'Main Topic',
+          },
+        ],
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle slash namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },

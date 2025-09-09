@@ -18,6 +18,7 @@ import {
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
+import { generateItem as generatePscItem } from '../../../namespaces/psc/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import {
@@ -177,6 +178,7 @@ export const generateEntry: GenerateFunction<Entry<DateLike>> = (entry, options)
     ...generateDctermsItemOrFeed(entry.dcterms),
     ...generateSlashItem(entry.slash),
     ...generateItunesItem(entry.itunes),
+    ...generatePscItem(entry.psc),
     ...generateMediaItemOrFeed(entry.media),
     ...generateGeoRssItemOrFeed(entry.georss),
     ...generateThrItem(entry.thr),

@@ -7,6 +7,7 @@ import type {
   Item as ItunesItem,
 } from '../../../namespaces/itunes/common/types.js'
 import type { ItemOrFeed as MediaItemOrFeed } from '../../../namespaces/media/common/types.js'
+import type { Item as PscItem } from '../../../namespaces/psc/common/types.js'
 import type { Item as SlashItem } from '../../../namespaces/slash/common/types.js'
 import type { Feed as SyFeed } from '../../../namespaces/sy/common/types.js'
 import type { Item as ThrItem, Link as ThrLink } from '../../../namespaces/thr/common/types.js'
@@ -87,6 +88,7 @@ export type Entry<TDate extends DateLike> = {
   dcterms?: DctermsItemOrFeed<TDate>
   slash?: SlashItem
   itunes?: ItunesItem
+  psc?: PscItem
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
   thr?: ThrItem

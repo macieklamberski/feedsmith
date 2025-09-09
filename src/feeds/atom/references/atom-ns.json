@@ -98,6 +98,36 @@
         "subtitle": "Episode subtitle with additional context",
         "keywords": ["tutorial", "example", "technology", "programming"]
       },
+      "psc": {
+        "chapters": [
+          {
+            "start": "00:00:00.000",
+            "title": "Introduction",
+            "href": "https://example.com/episode/intro",
+            "image": "https://example.com/images/intro-chapter.jpg"
+          },
+          {
+            "start": "00:05:30.000",
+            "title": "Main Topic Discussion",
+            "href": "https://example.com/episode/main-topic"
+          },
+          {
+            "start": "00:15:45.500",
+            "title": "Guest Interview",
+            "href": "https://example.com/episode/interview",
+            "image": "https://example.com/images/interview-chapter.jpg"
+          },
+          {
+            "start": "00:28:12.250",
+            "title": "Q&A Session"
+          },
+          {
+            "start": "00:35:00.000",
+            "title": "Conclusion and Next Steps",
+            "href": "https://example.com/episode/conclusion"
+          }
+        ]
+      },
       "yt": {
         "videoId": "dQw4w9WgXcQ",
         "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw"

@@ -5,6 +5,7 @@
   xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
   xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
   xmlns:podcast="https://podcastindex.org/namespace/1.0"
+  xmlns:psc="http://podlove.org/simple-chapters"
   xmlns:media="http://search.yahoo.com/mrss/"
   xmlns:georss="http://www.georss.org/georss"
   xmlns:content="http://purl.org/rss/1.0/modules/content/"
@@ -398,6 +399,15 @@
       <podcast:socialInteract protocol="mastodon" uri="https://podcastindex.social/@dave/123456789" accountId="@examplepodcast@podcastindex.social" accountUrl="https://podcastindex.social/@examplepodcast"/>
       <podcast:txt purpose="transcript">{"version": "1.0.0", "chapters": []}</podcast:txt>
       <podcast:txt purpose="notes">Additional text information about this episode</podcast:txt>
+
+      <!-- Podlove Simple Chapters: Item Level Tags -->
+      <psc:chapters>
+        <psc:chapter start="00:00:00.000" title="Introduction" href="https://example.com/episode/intro" image="https://example.com/images/intro-chapter.jpg"/>
+        <psc:chapter start="00:05:30.000" title="Main Topic Discussion" href="https://example.com/episode/main-topic"/>
+        <psc:chapter start="00:15:45.500" title="Guest Interview" href="https://example.com/episode/interview" image="https://example.com/images/interview-chapter.jpg"/>
+        <psc:chapter start="00:28:12.250" title="Q&amp;A Session"/>
+        <psc:chapter start="00:35:00.000" title="Conclusion and Next Steps" href="https://example.com/episode/conclusion"/>
+      </psc:chapters>
 
       <!-- Media Namespace: Item/Feed Level Tags -->
       <media:content url="https://example.com/videos/sample1.mp4" fileSize="12345678" type="video/mp4" medium="video" isDefault="true" expression="full" bitrate="1500" framerate="30" samplingrate="44.1" channels="2" duration="120" height="720" width="1280" lang="en">

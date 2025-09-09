@@ -18,6 +18,7 @@ import {
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
+import { retrieveItem as retrievePscItem } from '../../../namespaces/psc/parse/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import {
@@ -230,6 +231,7 @@ export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) 
     dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     slash: namespaces?.has('slash') ? retrieveSlashItem(value) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesItem(value) : undefined,
+    psc: namespaces?.has('psc') ? retrievePscItem(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     thr: namespaces?.has('thr') ? retrieveThrItem(value) : undefined,
