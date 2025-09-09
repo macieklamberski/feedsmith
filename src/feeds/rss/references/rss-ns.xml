@@ -3,6 +3,7 @@
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:dcterms="http://purl.org/dc/terms/"
   xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+  xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/"
   xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
   xmlns:podcast="https://podcastindex.org/namespace/1.0"
   xmlns:psc="http://podlove.org/simple-chapters"
@@ -96,6 +97,17 @@
     <sy:updateBase>2000-01-01T12:00+00:00</sy:updateBase>
     <sy:updatePeriod>hourly</sy:updatePeriod>
     <sy:updateFrequency>1</sy:updateFrequency>
+
+    <!-- Google Play Podcasts Namespace: Channel Level Tags -->
+    <googleplay:author>Example Podcast Network</googleplay:author>
+    <googleplay:description>A comprehensive podcast about technology and programming</googleplay:description>
+    <googleplay:explicit>No</googleplay:explicit>
+    <googleplay:block>No</googleplay:block>
+    <googleplay:image href="https://example.com/images/googleplay-cover.jpg" />
+    <googleplay:new-feed-url>https://example.com/new-feed.xml</googleplay:new-feed-url>
+    <googleplay:email>contact@example.com</googleplay:email>
+    <googleplay:category text="Technology" />
+    <googleplay:category text="Education" />
 
     <!-- iTunes Namespace: Channel Level Tags -->
     <itunes:category text="Society &amp; Culture">
@@ -347,6 +359,13 @@
       <slash:department>not-an-ocean-unless-there-are-lobsters</slash:department>
       <slash:comments>177</slash:comments>
       <slash:hit_parade>177,155,105,33,6,3,0</slash:hit_parade>
+
+      <!-- Google Play Podcasts Namespace: Item Level Tags -->
+      <googleplay:author>Episode Guest Speaker</googleplay:author>
+      <googleplay:description>A detailed episode about advanced programming techniques</googleplay:description>
+      <googleplay:explicit>No</googleplay:explicit>
+      <googleplay:block>No</googleplay:block>
+      <googleplay:image href="https://example.com/images/episode-googleplay-cover.jpg" />
 
       <!-- iTunes Namespace: Item Level Tags -->
       <itunes:explicit>false</itunes:explicit>

@@ -20,6 +20,10 @@ import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/
 import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
+  generateFeed as generateGooglePlayFeed,
+  generateItem as generateGooglePlayItem,
+} from '../../../namespaces/googleplay/generate/utils.js'
+import {
   generateFeed as generateItunesFeed,
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
@@ -189,6 +193,7 @@ export const generateItem: GenerateFunction<Item<DateLike>> = (item) => {
     ...generateItunesItem(item.itunes),
     ...generatePodcastItem(item.podcast),
     ...generatePscItem(item.psc),
+    ...generateGooglePlayItem(item.googleplay),
     ...generateMediaItemOrFeed(item.media),
     ...generateGeoRssItemOrFeed(item.georss),
     ...generateThrItem(item.thr),
@@ -229,6 +234,7 @@ export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed) => {
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
     ...generatePodcastFeed(feed.podcast),
+    ...generateGooglePlayFeed(feed.googleplay),
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
     item: trimArray(feed.items, generateItem),

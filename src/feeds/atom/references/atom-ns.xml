@@ -93,6 +93,7 @@
   <sy:updatePeriod>hourly</sy:updatePeriod>
   <sy:updateFrequency>1</sy:updateFrequency>
 
+
   <!-- iTunes Namespace: Feed Level Tags -->
   <itunes:category text="Society &amp; Culture">
     <itunes:category text="Philosophy"/>

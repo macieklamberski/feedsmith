@@ -5,6 +5,10 @@ import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/common/t
 import type { ItemOrFeed as DctermsItemOrFeed } from '../../../namespaces/dcterms/common/types.js'
 import type { ItemOrFeed as GeoRssItemOrFeed } from '../../../namespaces/georss/common/types.js'
 import type {
+  Feed as GooglePlayFeed,
+  Item as GooglePlayItem,
+} from '../../../namespaces/googleplay/common/types.js'
+import type {
   Feed as ItunesFeed,
   Item as ItunesItem,
 } from '../../../namespaces/itunes/common/types.js'
@@ -90,6 +94,7 @@ export type Item<TDate extends DateLike> = {
   itunes?: ItunesItem
   podcast?: PodcastItem
   psc?: PscItem
+  googleplay?: GooglePlayItem
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
   thr?: ThrItem
@@ -125,6 +130,7 @@ export type Feed<TDate extends DateLike> = {
   sy?: SyFeed<TDate>
   itunes?: ItunesFeed
   podcast?: PodcastFeed<TDate>
+  googleplay?: GooglePlayFeed
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
 }

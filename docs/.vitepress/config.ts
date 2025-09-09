@@ -81,6 +81,7 @@ export default defineConfig({
               { text: 'iTunes', link: '/reference/namespaces/itunes' },
               { text: 'Podcast', link: '/reference/namespaces/podcast' },
               { text: 'Podlove Simple Chapters', link: '/reference/namespaces/psc' },
+              { text: 'Google Play Podcasts', link: '/reference/namespaces/googleplay' },
               { text: 'Media RSS', link: '/reference/namespaces/media' },
               { text: 'GeoRSS-Simple', link: '/reference/namespaces/georss' },
               { text: 'Atom Threading', link: '/reference/namespaces/thr' },
