@@ -1,18 +1,26 @@
 # Benchmarks
 
-Below are the speed benchmarks for popular JavaScript packages for parsing feeds. Feedsmith's results are marked with an asterisk (`*`).
+This directory contains two distinct benchmark modes:
 
-The benchmarks use real-world feeds organized by feed format (RSS, Atom, RDF, JSON Feed) and file size ranges. Each range is tested on 10/100 representative feed files that span the specified size range, providing insight into how each package performs across various scenarios.
+1. **[JavaScript Benchmarks](#javascript-benchmarks)** - Compare Feedsmith against other JavaScript feed parsing libraries
+2. **[Cross-Language Benchmarks](#cross-language-benchmarks)** - Compare Feedsmith against prominent libraries in other languages
 
-Tests performed in both [Tinybench](https://github.com/tinylibs/tinybench) and [Benchmark.js](https://github.com/bestiejs/benchmark.js) with random tests order on every run.
+One important thing to note is that packages vary in feature support (such as handling specific namespaces or feed formats). The results should be taken with a grain of salt, as direct comparisons aren't always fair.
 
-> [!NOTE]
-> Packages vary in feature support (such as handling specific namespaces or feed formats). The results should be taken with a grain of salt, as direct comparisons aren't always fair.
+---
 
-## Results
+## JavaScript Benchmarks
+
+Speed benchmarks comparing Feedsmith against popular JavaScript packages for parsing feeds. Feedsmith's results are marked with an asterisk (`*`).
+
+The benchmarks use real-world feeds organized by feed format (RSS, Atom, RDF, JSON Feed, OPML) and file size ranges. Each range is tested on representative feed files, providing insight into how each package performs across various scenarios.
+
+Tests performed in both [Tinybench](https://github.com/tinylibs/tinybench) and [Benchmark.js](https://github.com/bestiejs/benchmark.js) with random test order on every run.
+
+### JavaScript Benchmark Results
 
 ```
-$ bun benchmarks/parsing.ts
+$ bun parsing.ts
 
 ⏳ Running: RSS feed parsing (10 files × 5MB–50MB)
 📊 Tinybench results:
@@ -194,7 +202,7 @@ $ bun benchmarks/parsing.ts
 > [!NOTE]
 > It was hard to find libraries for handling JSON Feed, so at this moment only Feedsmith is listed.
 
-## Methodology
+### Methodology
 
 The parsing benchmarks measure feed parsing libraries under realistic conditions where developers need access to fully parsed data. Some libraries use lazy evaluation (deferring computation until properties are accessed) while others parse everything upfront. To ensure fair comparison, we measure the total time required to produce equivalent, fully-accessible results.
 
@@ -203,3 +211,190 @@ For lazy parsers like `@rowanmanning/feed-parser`, we call methods such as .toJS
 This approach reflects typical usage patterns where developers parse feeds to immediately access properties like titles, descriptions, and item lists. Measuring only the initial parsing step for lazy libraries would create misleading comparisons since the computational cost simply shifts to when the data is actually used.
 
 By standardizing on fully-evaluated results, these benchmarks provide realistic performance expectations for applications that need complete feed data processing.
+
+### Running JavaScript Benchmarks
+
+```bash
+# 1. Install dependencies
+bun install
+# 2. Run benchmarks
+bun parsing.ts
+```
+
+---
+
+## Cross-Language Benchmarks
+
+Cross-language performance comparison using [hyperfine](https://github.com/sharkdp/hyperfine) to compare Feedsmith against popular feed parsing libraries in other languages:
+
+- **Ruby**: [Feedjira](https://github.com/feedjira/feedjira)
+- **Python**: [feedparser](https://github.com/kurtmckee/feedparser)
+- **Go**: [gofeed](https://github.com/mmcdole/gofeed)
+- **PHP**: [SimplePie](https://github.com/simplepie/simplepie)
+
+Focuses on core feed formats: **RSS**, **Atom**, and **RDF**.
+
+### Cross-Language Benchmark Results
+
+```
+$ sh parsing.sh
+
+⏳ Running: RSS feed parsing (100 files × 100KB–5MB)
+Benchmark 1: feedsmith *
+  Time (mean ± σ):     510.7 ms ±   1.6 ms    [User: 911.6 ms, System: 51.5 ms]
+  Range (min … max):   508.6 ms … 513.2 ms    10 runs
+
+Benchmark 2: feedjira (ruby)
+  Time (mean ± σ):      1.376 s ±  0.042 s    [User: 1.328 s, System: 0.043 s]
+  Range (min … max):    1.305 s …  1.432 s    10 runs
+
+Benchmark 3: feedparser (python)
+  Time (mean ± σ):      9.349 s ±  0.182 s    [User: 9.198 s, System: 0.126 s]
+  Range (min … max):    9.136 s …  9.706 s    10 runs
+
+Benchmark 4: gofeed (go)
+  Time (mean ± σ):     843.3 ms ±   2.2 ms    [User: 967.0 ms, System: 95.3 ms]
+  Range (min … max):   839.4 ms … 846.6 ms    10 runs
+
+Benchmark 5: simplepie (php)
+  Time (mean ± σ):     526.4 ms ±   3.2 ms    [User: 494.5 ms, System: 24.7 ms]
+  Range (min … max):   523.4 ms … 532.0 ms    10 runs
+
+Summary
+  feedsmith * ran
+    1.03 ± 0.01 times faster than simplepie (php)
+    1.65 ± 0.01 times faster than gofeed (go)
+    2.70 ± 0.08 times faster than feedjira (ruby)
+   18.31 ± 0.36 times faster than feedparser (python)
+
+⏳ Running: RSS feed parsing (10 files × 5MB–50MB)
+Benchmark 1: feedsmith *
+  Time (mean ± σ):      8.082 s ±  0.112 s    [User: 9.550 s, System: 0.512 s]
+  Range (min … max):    7.905 s …  8.254 s    10 runs
+
+Benchmark 2: feedjira (ruby)
+  Time (mean ± σ):     19.694 s ±  0.059 s    [User: 19.250 s, System: 0.437 s]
+  Range (min … max):   19.593 s … 19.791 s    10 runs
+
+Benchmark 3: feedparser (python)
+  Time (mean ± σ):     193.267 s ±  3.239 s    [User: 191.138 s, System: 1.731 s]
+  Range (min … max):   190.205 s … 199.428 s    10 runs
+
+Benchmark 4: gofeed (go)
+  Time (mean ± σ):     14.610 s ±  0.138 s    [User: 15.619 s, System: 0.869 s]
+  Range (min … max):   14.412 s … 14.776 s    10 runs
+
+Benchmark 5: simplepie (php)
+  Time (mean ± σ):      9.739 s ±  0.195 s    [User: 8.610 s, System: 0.967 s]
+  Range (min … max):    9.521 s … 10.103 s    10 runs
+
+Summary
+  feedsmith * ran
+    1.21 ± 0.03 times faster than simplepie (php)
+    1.81 ± 0.03 times faster than gofeed (go)
+    2.44 ± 0.03 times faster than feedjira (ruby)
+   23.91 ± 0.52 times faster than feedparser (python)
+
+⏳ Running: Atom feed parsing (100 files × 100KB–5MB)
+Benchmark 1: feedsmith *
+  Time (mean ± σ):      3.535 s ±  0.065 s    [User: 3.733 s, System: 0.204 s]
+  Range (min … max):    3.400 s …  3.610 s    10 runs
+
+Benchmark 2: feedjira (ruby)
+  Time (mean ± σ):      9.249 s ±  0.137 s    [User: 9.026 s, System: 0.180 s]
+  Range (min … max):    9.033 s …  9.433 s    10 runs
+
+Benchmark 3: feedparser (python)
+  Time (mean ± σ):     96.323 s ±  1.198 s    [User: 95.680 s, System: 0.565 s]
+  Range (min … max):   95.152 s … 98.890 s    10 runs
+
+Benchmark 4: gofeed (go)
+  Time (mean ± σ):      5.550 s ±  0.016 s    [User: 5.661 s, System: 0.307 s]
+  Range (min … max):    5.527 s …  5.571 s    10 runs
+
+Benchmark 5: simplepie (php)
+  Time (mean ± σ):      4.251 s ±  0.027 s    [User: 3.865 s, System: 0.337 s]
+  Range (min … max):    4.216 s …  4.302 s    10 runs
+
+Summary
+  feedsmith * ran
+    1.20 ± 0.02 times faster than simplepie (php)
+    1.57 ± 0.03 times faster than gofeed (go)
+    2.62 ± 0.06 times faster than feedjira (ruby)
+   27.25 ± 0.60 times faster than feedparser (python)
+
+⏳ Running: Atom feed parsing (10 files × 5MB–50MB)
+Benchmark 1: feedsmith *
+  Time (mean ± σ):     28.825 s ±  0.255 s    [User: 28.784 s, System: 0.479 s]
+  Range (min … max):   28.418 s … 29.238 s    10 runs
+
+Benchmark 2: feedjira (ruby)
+  Time (mean ± σ):     17.361 s ±  0.169 s    [User: 16.837 s, System: 0.457 s]
+  Range (min … max):   17.081 s … 17.551 s    10 runs
+
+Benchmark 3: feedparser (python)
+  Time (mean ± σ):     148.009 s ±  1.366 s    [User: 145.473 s, System: 1.858 s]
+  Range (min … max):   146.306 s … 149.844 s    10 runs
+
+Benchmark 4: gofeed (go)
+  Time (mean ± σ):     13.259 s ±  0.170 s    [User: 13.081 s, System: 0.744 s]
+  Range (min … max):   12.940 s … 13.495 s    10 runs
+
+Benchmark 5: simplepie (php)
+  Time (mean ± σ):      7.420 s ±  0.106 s    [User: 6.419 s, System: 0.869 s]
+  Range (min … max):    7.254 s …  7.578 s    10 runs
+
+Summary
+  simplepie (php) ran
+    1.79 ± 0.03 times faster than gofeed (go)
+    2.34 ± 0.04 times faster than feedjira (ruby)
+    3.88 ± 0.07 times faster than feedsmith *
+   19.95 ± 0.34 times faster than feedparser (python)
+
+⏳ Running: RDF feed parsing (100 files × 100KB–5MB)
+Benchmark 1: feedsmith *
+  Time (mean ± σ):     603.4 ms ±   2.8 ms    [User: 760.1 ms, System: 46.3 ms]
+  Range (min … max):   598.4 ms … 607.1 ms    10 runs
+
+Benchmark 2: feedjira (ruby)
+  Time (mean ± σ):      1.006 s ±  0.005 s    [User: 0.961 s, System: 0.043 s]
+  Range (min … max):    0.998 s …  1.014 s    10 runs
+
+Benchmark 3: feedparser (python)
+  Time (mean ± σ):      9.919 s ±  0.036 s    [User: 9.853 s, System: 0.059 s]
+  Range (min … max):    9.880 s …  9.988 s    10 runs
+
+Benchmark 4: gofeed (go)
+  Time (mean ± σ):     940.3 ms ±   2.5 ms    [User: 993.1 ms, System: 67.8 ms]
+  Range (min … max):   938.5 ms … 946.8 ms    10 runs
+
+Benchmark 5: simplepie (php)
+  Time (mean ± σ):     413.6 ms ±   6.4 ms    [User: 373.8 ms, System: 30.7 ms]
+  Range (min … max):   407.1 ms … 425.0 ms    10 runs
+
+Summary
+  simplepie (php) ran
+    1.46 ± 0.02 times faster than feedsmith *
+    2.27 ± 0.04 times faster than gofeed (go)
+    2.43 ± 0.04 times faster than feedjira (ruby)
+   23.98 ± 0.38 times faster than feedparser (python)
+```
+
+### Running Cross-Language Benchmarks
+
+```bash
+# 1. Install system packages
+brew install hyperfine bun ruby python go php composer
+
+# 2. Install language-specific packages
+bundle install
+pip3 install -r requirements.txt
+composer install
+go mod tidy
+
+# 3. Build Go binary
+go build -o parsing-gofeed parsing-gofeed.go
+
+# 4. Run benchmarks
+sh parsing.sh
+```

@@ -21,6 +21,9 @@ export default defineConfig({
     ],
   ],
   themeConfig: {
+    outline: {
+      level: [2, 3],
+    },
     nav: [
       { text: 'Quick Start', link: '/quick-start' },
       { text: 'Parsing', link: '/parsing/' },
