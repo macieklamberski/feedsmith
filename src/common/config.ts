@@ -41,6 +41,7 @@ export const namespaceUrls = {
   podcast: 'https://podcastindex.org/namespace/1.0',
   rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
   slash: 'http://purl.org/rss/1.0/modules/slash/',
+  source: 'http://source.scripting.com/',
   sy: 'http://purl.org/rss/1.0/modules/syndication/',
   thr: 'http://purl.org/syndication/thread/1.0',
   wfw: 'http://wellformedweb.org/CommentAPI/',

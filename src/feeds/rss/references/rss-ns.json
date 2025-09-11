@@ -673,6 +673,15 @@
       "wfw": {
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
+      },
+      "src": {
+        "markdown": "# Understanding XML Namespaces - This article explores the power and flexibility of XML namespaces in modern web syndication.",
+        "outlines": [
+          "<outline text=\"Introduction\"><outline text=\"What are namespaces?\"/></outline>",
+          "<outline text=\"Implementation\"><outline text=\"RSS Integration\"/></outline>"
+        ],
+        "localTime": "2023-12-25 10:30:00",
+        "linkFull": "http://example.org/item/1/understanding-xml-namespaces-complete-guide"
       }
     }
   ],
@@ -1311,5 +1320,25 @@
     "elev": 360,
     "floor": 4,
     "radius": 50000
+  },
+  "src": {
+    "accounts": [
+      { "service": "twitter", "value": "johndoe" },
+      { "service": "facebook", "value": "jane.smith" }
+    ],
+    "likes": { "server": "http://likes.example.com/" },
+    "archive": {
+      "url": "http://example.com/archive",
+      "startDay": "2023-01-01",
+      "endDay": "2023-12-31",
+      "filename": "archive2023.xml"
+    },
+    "subscriptionLists": [
+      { "url": "http://example.com/subscriptions.opml", "value": "follows" },
+      { "url": "http://example.com/reading.opml", "value": "reading list" }
+    ],
+    "cloud": "https://cloudserver.example.com/notify",
+    "blogroll": "https://blog.example.com/blogroll.opml",
+    "self": "http://example.com/feed.xml"
   }
 }

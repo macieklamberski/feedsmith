@@ -9,6 +9,10 @@ The Dublin Core namespace provides standardized metadata elements for describing
       <td><code>http://purl.org/dc/elements/1.1/</code></td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/" target="_blank">Dublin Core Metadata Terms</a></td>
+    </tr>
+    <tr>
       <th>Prefix</th>
       <td><code>&lt;dc:*&gt;</code></td>
     </tr>
@@ -19,6 +23,10 @@ The Dublin Core namespace provides standardized metadata elements for describing
         <a href="/reference/feeds/atom">Atom</a>,
         <a href="/reference/feeds/rdf">RDF</a>
       </td>
+    </tr>
+    <tr>
+      <th>Property</th>
+      <td><code>dc</code></td>
     </tr>
   </tbody>
 </table>

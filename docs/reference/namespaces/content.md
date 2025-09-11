@@ -9,6 +9,10 @@ The Content namespace allows RSS and RDF feeds to include full content alongside
       <td><code>http://purl.org/rss/1.0/modules/content/</code></td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="http://web.resource.org/rss/1.0/modules/content/" target="_blank">RSS 1.0 Content Module</a></td>
+    </tr>
+    <tr>
       <th>Prefix</th>
       <td><code>&lt;content:*&gt;</code></td>
     </tr>
@@ -19,13 +23,14 @@ The Content namespace allows RSS and RDF feeds to include full content alongside
         <a href="/reference/feeds/rdf">RDF</a>
       </td>
     </tr>
+    <tr>
+      <th>Property</th>
+      <td><code>content</code></td>
+    </tr>
   </tbody>
 </table>
 
 ## Structure
-
-> [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 
 <<< @/../src/namespaces/content/common/types.ts#reference
 
