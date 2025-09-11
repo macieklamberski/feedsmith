@@ -4,7 +4,7 @@
     "": {
       "name": "feedsmith",
       "dependencies": {
-        "entities": "^6.0.1",
+        "entities": "^7.0.0",
         "fast-xml-parser": "^5.2.5",
       },
       "devDependencies": {
@@ -14,10 +14,10 @@
         "@types/bun": "^1.2.21",
         "conventional-changelog-conventionalcommits": "^9.1.0",
         "lefthook": "^1.12.4",
-        "semantic-release": "^24.2.7",
+        "semantic-release": "^24.2.8",
         "typescript": "^5.9.2",
         "vitepress": "^1.6.4",
-        "vitepress-plugin-llms": "^1.7.4",
+        "vitepress-plugin-llms": "^1.7.5",
       },
     },
   },
@@ -474,7 +474,7 @@
 
     "emojilib": ["emojilib@2.4.0", "", {}, "sha512-5U0rVMU5Y2n2+ykNLQqMoqklN9ICBT/KsvC1Gz6vqHbz2AXXGkG+Pm5rMWk/8Vjrr/mY9985Hi8DYzn1F09Nyw=="],
 
-    "entities": ["entities@6.0.1", "", {}, "sha512-aN97NXWF6AWBTahfVOIrB/NShkzi5H7F9r1s9mD3cDj4Ko5f2qhhVoYMibXF7GlLveb/D2ioWay8lxI97Ven3g=="],
+    "entities": ["entities@7.0.0", "", {}, "sha512-FDWG5cmEYf2Z00IkYRhbFrwIwvdFKH07uV8dvNy0omp/Qb1xcyCWp2UDtcwJF4QZZvk0sLudP6/hAu42TaqVhQ=="],
 
     "env-ci": ["env-ci@11.1.1", "", { "dependencies": { "execa": "^8.0.0", "java-properties": "^1.0.2" } }, "sha512-mT3ks8F0kwpo7SYNds6nWj0PaRh+qJxIeBVBXAKTN9hphAzZv7s0QAZQbqnB1fAv/r4pJUGE15BV9UrS31FP2w=="],
 
