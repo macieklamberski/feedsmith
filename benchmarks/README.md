@@ -17,7 +17,7 @@ The benchmarks use real-world feeds organized by feed format (RSS, Atom, RDF, JS
 
 Tests performed in both [Tinybench](https://github.com/tinylibs/tinybench) and [Benchmark.js](https://github.com/bestiejs/benchmark.js) with random test order on every run.
 
-### JavaScript Benchmark Results
+### Results
 
 ```
 $ bun parsing.ts
@@ -212,7 +212,7 @@ This approach reflects typical usage patterns where developers parse feeds to im
 
 By standardizing on fully-evaluated results, these benchmarks provide realistic performance expectations for applications that need complete feed data processing.
 
-### Running JavaScript Benchmarks
+### Setup
 
 ```bash
 # 1. Install dependencies
@@ -234,7 +234,7 @@ Cross-language performance comparison using [hyperfine](https://github.com/shark
 
 Focuses on core feed formats: **RSS**, **Atom**, and **RDF**.
 
-### Cross-Language Benchmark Results
+### Results
 
 ```
 $ sh parsing.sh
@@ -380,7 +380,7 @@ Summary
    23.98 ± 0.38 times faster than feedparser (python)
 ```
 
-### Running Cross-Language Benchmarks
+### Setup
 
 ```bash
 # 1. Install system packages
