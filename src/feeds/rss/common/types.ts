@@ -14,6 +14,10 @@ import type {
   Item as PodcastItem,
 } from '../../../namespaces/podcast/common/types.js'
 import type { Item as SlashItem } from '../../../namespaces/slash/common/types.js'
+import type {
+  Feed as SourceFeed,
+  Item as SourceItem,
+} from '../../../namespaces/source/common/types.js'
 import type { Feed as SyFeed } from '../../../namespaces/sy/common/types.js'
 import type { Item as ThrItem } from '../../../namespaces/thr/common/types.js'
 import type { Item as WfwItem } from '../../../namespaces/wfw/common/types.js'
@@ -92,6 +96,7 @@ export type Item<TDate extends DateLike> = {
   georss?: GeoRssItemOrFeed
   thr?: ThrItem
   wfw?: WfwItem
+  src?: SourceItem
 } & ({ title: string } | { description: string })
 
 export type Feed<TDate extends DateLike> = {
@@ -125,5 +130,6 @@ export type Feed<TDate extends DateLike> = {
   podcast?: PodcastFeed<TDate>
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
+  src?: SourceFeed
 }
 // #endregion reference

@@ -12,6 +12,7 @@
   xmlns:thr="http://purl.org/syndication/thread/1.0"
   xmlns:atom="http://www.w3.org/2005/Atom"
   xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+  xmlns:source="http://source.scripting.com/"
 >
   <channel>
     <title>Example Feed</title>
@@ -259,6 +260,22 @@
     <georss:elev>360</georss:elev>
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
+
+    <!-- Source Namespace: Channel Level Tags -->
+    <source:account service="twitter">johndoe</source:account>
+    <source:account service="facebook">jane.smith</source:account>
+    <source:likes server="http://likes.example.com/"/>
+    <source:archive>
+      <source:url>http://example.com/archive</source:url>
+      <source:startDay>2023-01-01</source:startDay>
+      <source:endDay>2023-12-31</source:endDay>
+      <source:filename>archive2023.xml</source:filename>
+    </source:archive>
+    <source:subscriptionList url="http://example.com/subscriptions.opml">follows</source:subscriptionList>
+    <source:subscriptionList url="http://example.com/reading.opml">reading list</source:subscriptionList>
+    <source:cloud>https://cloudserver.example.com/notify</source:cloud>
+    <source:blogroll>https://blog.example.com/blogroll.opml</source:blogroll>
+    <source:self>http://example.com/feed.xml</source:self>
 
     <item>
       <title>Example Item</title>
@@ -521,6 +538,13 @@
       <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
       <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
       <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
+
+      <!-- Source Namespace: Item Level Tags -->
+      <source:markdown># Understanding XML Namespaces - This article explores the power and flexibility of XML namespaces in modern web syndication.</source:markdown>
+      <source:outline>&lt;outline text="Introduction"&gt;&lt;outline text="What are namespaces?"/&gt;&lt;/outline&gt;</source:outline>
+      <source:outline>&lt;outline text="Implementation"&gt;&lt;outline text="RSS Integration"/&gt;&lt;/outline&gt;</source:outline>
+      <source:localTime>2023-12-25 10:30:00</source:localTime>
+      <source:linkFull>http://example.org/item/1/understanding-xml-namespaces-complete-guide</source:linkFull>
     </item>
   </channel>
 </rss>

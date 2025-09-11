@@ -21,6 +21,9 @@ export default defineConfig({
     ],
   ],
   themeConfig: {
+    outline: {
+      level: [2, 3],
+    },
     nav: [
       { text: 'Quick Start', link: '/quick-start' },
       { text: 'Parsing', link: '/parsing/' },
@@ -85,6 +88,7 @@ export default defineConfig({
               { text: 'Atom Threading', link: '/reference/namespaces/thr' },
               { text: 'Dublin Core Terms', link: '/reference/namespaces/dcterms' },
               { text: 'Well-Formed Web', link: '/reference/namespaces/wfw' },
+              { text: 'Source', link: '/reference/namespaces/source' },
               { text: 'YouTube', link: '/reference/namespaces/yt' },
             ],
           },

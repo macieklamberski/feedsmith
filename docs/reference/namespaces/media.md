@@ -9,6 +9,10 @@ The Media RSS namespace provides rich media metadata for RSS feeds, enabling com
       <td><code>http://search.yahoo.com/mrss/</code></td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="https://www.rssboard.org/media-rss" target="_blank">Media RSS Specification</a></td>
+    </tr>
+    <tr>
       <th>Prefix</th>
       <td><code>&lt;media:*&gt;</code></td>
     </tr>
@@ -20,13 +24,14 @@ The Media RSS namespace provides rich media metadata for RSS feeds, enabling com
         <a href="/reference/feeds/rdf">RDF</a>
       </td>
     </tr>
+    <tr>
+      <th>Property</th>
+      <td><code>media</code></td>
+    </tr>
   </tbody>
 </table>
 
 ## Structure
-
-> [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 
 <<< @/../src/namespaces/media/common/types.ts#reference
 

@@ -11,7 +11,13 @@ import { opmlToJSON as testOpmlToJson } from 'opml-to-json'
 import OpmlParser from 'opmlparser'
 import { getPodcastFromFeed as testPodcastFeedParser } from 'podcast-feed-parser'
 import RssParser from 'rss-parser'
-import { parseAtomFeed, parseJsonFeed, parseOpml, parseRdfFeed, parseRssFeed } from '../src/index'
+import {
+  parseAtomFeed,
+  parseJsonFeed,
+  parseOpml,
+  parseRdfFeed,
+  parseRssFeed,
+} from '../../src/index'
 import { loadFeedFiles, runBenchmarks, runTest } from './utils'
 
 const gaphubFeedParserInstance = new GapHubFeedParser()
@@ -34,7 +40,7 @@ const testFeedParser = (feed: string) => {
   return new Promise((resolve, reject) => {
     const stream = Readable.from([feed])
     const feedparser = new FeedParser({})
-    const items: unknown[] = []
+    const items: Array<unknown> = []
 
     feedparser.on('error', (error: Error) => reject(error))
     feedparser.on('readable', function () {
@@ -65,7 +71,7 @@ const testOpmlParser = async (xml: string) => {
   return new Promise((resolve, reject) => {
     const stream = Readable.from([xml])
     const parser = new OpmlParser({})
-    const outlines: unknown[] = []
+    const outlines: Array<unknown> = []
 
     parser.on('error', (error: Error) => reject(error))
     parser.on('readable', function () {
@@ -100,7 +106,7 @@ const testOpmlPackage = async (xml: string) => {
   return items
 }
 
-const jsonFilesStrings = loadFeedFiles('files/json', 10)
+const jsonFilesStrings = loadFeedFiles('../files/json', 10)
 const jsonFilesObjects = Object.entries(jsonFilesStrings).reduce(
   (jsons, [name, json]) => {
     jsons[name] = JSON.parse(json)
@@ -108,12 +114,12 @@ const jsonFilesObjects = Object.entries(jsonFilesStrings).reduce(
   },
   {} as Record<string, unknown>,
 )
-const rssBigFiles = loadFeedFiles('files/rss-big', 10)
-const rssSmallFiles = loadFeedFiles('files/rss-small', 100)
-const atomBigFiles = loadFeedFiles('files/atom-big', 10)
-const atomSmallFiles = loadFeedFiles('files/atom-small', 100)
-const rdfFiles = loadFeedFiles('files/rdf', 100)
-const opmlFiles = loadFeedFiles('files/opml', 10)
+const rssBigFiles = loadFeedFiles('../files/rss-big', 10)
+const rssSmallFiles = loadFeedFiles('../files/rss-small', 100)
+const atomBigFiles = loadFeedFiles('../files/atom-big', 10)
+const atomSmallFiles = loadFeedFiles('../files/atom-small', 100)
+const rdfFiles = loadFeedFiles('../files/rdf', 100)
+const opmlFiles = loadFeedFiles('../files/opml', 10)
 
 await runBenchmarks('RSS feed parsing (10 files × 5MB–50MB)', {
   'rss-parser': () => runTest(rssBigFiles, testRssParser),

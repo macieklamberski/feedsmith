@@ -716,6 +716,47 @@ describe('generateItem', () => {
 
     expect(generateItem(value)).toEqual(expected)
   })
+
+  it('should generate item with wfw namespace properties', () => {
+    const value = {
+      title: 'Item with wfw namespace',
+      wfw: {
+        comment: 'https://example.com/comment',
+        commentRss: 'https://example.com/comments/feed',
+      },
+    }
+    const expected = {
+      title: 'Item with wfw namespace',
+      'wfw:comment': 'https://example.com/comment',
+      'wfw:commentRss': 'https://example.com/comments/feed',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should generate item with source namespace properties', () => {
+    const value = {
+      title: 'Item with source namespace',
+      src: {
+        markdown: '# Example markdown content',
+        outlines: ['<outline text="Section 1"/>', '<outline text="Section 2"/>'],
+        localTime: '2024-01-15 10:30:00',
+        linkFull: 'https://example.com/full-article',
+      },
+    }
+    const expected = {
+      title: 'Item with source namespace',
+      'source:markdown': '# Example markdown content',
+      'source:outline': [
+        { '#cdata': '<outline text="Section 1"/>' },
+        { '#cdata': '<outline text="Section 2"/>' },
+      ],
+      'source:localTime': '2024-01-15 10:30:00',
+      'source:linkFull': 'https://example.com/full-article',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -1130,6 +1171,36 @@ describe('generateFeed', () => {
           description: 'A feed with geographic data',
           'georss:point': '45.256 -71.92',
           'georss:featureName': 'Boston',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate source namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with source namespace',
+      description: 'A feed with Source namespace features',
+      src: {
+        accounts: [{ service: 'twitter', value: 'johndoe' }, { service: 'github' }],
+        likes: { server: 'http://likes.example.com/' },
+        blogroll: 'https://example.com/blogroll.opml',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:source': 'http://source.scripting.com/',
+        channel: {
+          title: 'Feed with source namespace',
+          description: 'A feed with Source namespace features',
+          'source:account': [
+            { '@service': 'twitter', '#text': 'johndoe' },
+            { '@service': 'github' },
+          ],
+          'source:likes': { '@server': 'http://likes.example.com/' },
+          'source:blogroll': 'https://example.com/blogroll.opml',
         },
       },
     }

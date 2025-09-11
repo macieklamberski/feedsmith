@@ -9,6 +9,10 @@ The iTunes namespace provides podcast-specific metadata for RSS and Atom feeds. 
       <td><code>http://www.itunes.com/dtds/podcast-1.0.dtd</code></td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="https://podcasters.apple.com/support/823-podcast-requirements" target="_blank">Apple Podcasts Requirements</a></td>
+    </tr>
+    <tr>
       <th>Prefix</th>
       <td><code>&lt;itunes:*&gt;</code></td>
     </tr>
@@ -19,13 +23,14 @@ The iTunes namespace provides podcast-specific metadata for RSS and Atom feeds. 
         <a href="/reference/feeds/atom">Atom</a>
       </td>
     </tr>
+    <tr>
+      <th>Property</th>
+      <td><code>itunes</code></td>
+    </tr>
   </tbody>
 </table>
 
 ## Structure
-
-> [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 
 <<< @/../src/namespaces/itunes/common/types.ts#reference
 
