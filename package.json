@@ -48,7 +48,7 @@
     "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
-    "entities": "^6.0.1",
+    "entities": "^7.0.0",
     "fast-xml-parser": "^5.2.5"
   },
   "devDependencies": {
@@ -57,7 +57,7 @@
     "@commitlint/config-conventional": "^19.8.1",
     "@types/bun": "^1.2.21",
     "conventional-changelog-conventionalcommits": "^9.1.0",
-    "lefthook": "^1.12.4",
+    "lefthook": "^1.13.0",
     "semantic-release": "^24.2.8",
     "typescript": "^5.9.2",
     "vitepress": "^1.6.4",
