@@ -3,7 +3,7 @@
   "workspaces": {
     "": {
       "dependencies": {
-        "@extractus/feed-extractor": "^7.1.6",
+        "@extractus/feed-extractor": "^7.1.7",
         "@gaphub/feed": "^5.2.4",
         "@rowanmanning/feed-parser": "^2.1.1",
         "@ulisesgascon/rss-feed-parser": "^1.0.1",
@@ -17,14 +17,14 @@
         "opmlparser": "^0.8.0",
         "podcast-feed-parser": "^1.0.4",
         "rss-parser": "^3.13.0",
-        "tinybench": "^4.0.1",
+        "tinybench": "^5.0.1",
       },
       "devDependencies": {
         "@types/benchmark": "^2.1.5",
-        "@types/bun": "^1.2.17",
+        "@types/bun": "^1.2.21",
         "@types/feedme": "^2.0.4",
         "@types/feedparser": "^2.2.8",
-        "typescript": "^5.8.3",
+        "typescript": "^5.9.2",
       },
     },
   },
@@ -245,7 +245,7 @@
 
     "strnum": ["strnum@2.1.1", "", {}, "sha512-7ZvoFTiCnGxBtDqJ//Cu6fWtZtc7Y3x+QOirG15wztbdngGSkht27o2pyGWrVy0b4WAy3jbKmnoK6g5VlVNUUw=="],
 
-    "tinybench": ["tinybench@4.1.0", "", {}, "sha512-8JZoQRJgWWEIIeAmpiNmMHIREmUY3oGX8GRmlmNapLr/qtgMe+K76vM2qabh85hNScnE2lqTVTajVETjuD9Ixg=="],
+    "tinybench": ["tinybench@5.0.1", "", {}, "sha512-aNVgWQZY4veCZLQJRftDA1X9OoLUIjDWNfC90nledkX7Lx205IpSEFYnsu4slyofoPGpJ+NIQj+BNSt4U5edMg=="],
 
     "tough-cookie": ["tough-cookie@2.5.0", "", { "dependencies": { "psl": "^1.1.28", "punycode": "^2.1.1" } }, "sha512-nlLsUzgm1kfLXSXfRZMc1KLAugd4hqJHDTvc2hDIwS3mZAfMEuMbc03SujMF+GEcpaX/qboeycw6iO8JwVv2+g=="],
 

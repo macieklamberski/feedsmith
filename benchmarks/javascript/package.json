@@ -11,7 +11,7 @@
     "feedparser": "^2.2.10",
     "podcast-feed-parser": "^1.0.4",
     "rss-parser": "^3.13.0",
-    "tinybench": "^4.1.0",
+    "tinybench": "^5.0.1",
     "node-opml-parser": "^1.0.0",
     "opml": "^0.5.7",
     "opml-generator": "^1.1.1",
