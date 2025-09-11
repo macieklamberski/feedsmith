@@ -5,7 +5,7 @@ next: Parsing › Overview
 
 # Benchmarks
 
-This directory contains two distinct benchmark modes:
+There are two distinct benchmark modes:
 
 1. **[JavaScript Benchmarks](#javascript-benchmarks)** - Compare Feedsmith against other JavaScript parsing libraries
 2. **[Cross-Language Benchmarks](#cross-language-benchmarks)** - Compare Feedsmith against prominent libraries in other languages
