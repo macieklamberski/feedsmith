@@ -7,7 +7,7 @@ next: Parsing › Detecting
 
 Dates in feeds do not always follow a format defined in the specifications, or even any consistent format. Instead of attempting to parse all of them and risking errors, Feedsmith returns dates in their original string form. This method allows for the use of a preferred date parsing library, custom function, or the `Date` object directly.
 
-### Common Issues with Feed Dates
+### Common Issues
 
 - **RSS**: Should use RFC 2822 format, but many feeds use incorrect formats
 - **Atom**: ISO 8601/RFC 3339 format, generally more consistent but still varies

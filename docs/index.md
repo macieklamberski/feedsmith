@@ -1,3 +1,7 @@
+---
+outline: 2
+---
+
 # Meet Feedsmith
 
 Fast, all‑in‑one JavaScript parser and generator for RSS, Atom, RDF, and JSON Feed, with support for popular namespaces and OPML files.

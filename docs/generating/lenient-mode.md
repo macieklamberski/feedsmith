@@ -96,13 +96,13 @@ const xml = generateRssFeed(feedWithInvalidDates, { lenient: true })
 
 ## When to Use Lenient Mode
 
-### Use lenient mode when:
+### Use lenient mode
 - Processing feeds from external sources (_parse → modify → generate_ workflow)
 - Building feeds incrementally where not all data is available initially
 - Working with legacy feeds that don't strictly follow specifications
 - Migrating or transforming feeds between different systems
 
-### Use strict mode (default) when:
+### Use strict mode (default)
 - Creating new feeds from scratch with complete data
 - You want TypeScript to enforce all spec-required fields
 - Date formatting consistency is critical
