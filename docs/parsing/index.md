@@ -1,5 +1,5 @@
 ---
-next: Parsing › Examples
+next: Parsing › Namespaces
 ---
 
 # Parsing Feeds

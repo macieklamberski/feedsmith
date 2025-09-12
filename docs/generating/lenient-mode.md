@@ -1,6 +1,6 @@
 ---
 prev: Generating › Styling
-next: Reference › Functions
+next: Generating › Examples
 ---
 
 # Lenient Mode

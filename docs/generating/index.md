@@ -1,6 +1,6 @@
 ---
-prev: Parsing › Detecting
-next: Generating › Examples
+prev: Parsing › Examples
+next: Generating › Styling
 ---
 
 # Generating Feeds

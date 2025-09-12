@@ -1,6 +1,6 @@
 ---
-prev: Parsing › Overview
-next: Parsing › Namespaces
+prev: Parsing › Detecting
+next: Generating › Overview
 ---
 
 # Parsing Examples

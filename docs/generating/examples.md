@@ -1,6 +1,6 @@
 ---
-prev: Generating › Overview
-next: Generating › Styling
+prev: Generating › Lenient Mode
+next: Reference › Functions
 ---
 
 # Generating Examples

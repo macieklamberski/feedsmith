@@ -42,19 +42,19 @@ export default defineConfig({
         text: 'Parsing',
         items: [
           { text: 'Overview', link: '/parsing/' },
-          { text: 'Examples', link: '/parsing/examples' },
           { text: 'Namespaces', link: '/parsing/namespaces' },
           { text: 'Dates', link: '/parsing/dates' },
           { text: 'Detecting', link: '/parsing/detecting' },
+          { text: 'Examples', link: '/parsing/examples' },
         ],
       },
       {
         text: 'Generating',
         items: [
           { text: 'Overview', link: '/generating/' },
-          { text: 'Examples', link: '/generating/examples' },
           { text: 'Styling', link: '/generating/styling' },
           { text: 'Lenient Mode', link: '/generating/lenient-mode' },
+          { text: 'Examples', link: '/generating/examples' },
         ],
       },
       {
