@@ -7,8 +7,6 @@ There are two distinct benchmark modes:
 
 One important thing to note is that packages vary in feature support (such as handling specific namespaces or feed formats). The results should be taken with a grain of salt, as direct comparisons aren't always fair.
 
----
-
 ## JavaScript Benchmarks
 
 Speed benchmarks comparing Feedsmith against popular JavaScript packages for parsing feeds. Feedsmith's results are marked with an asterisk (`*`).
@@ -220,8 +218,6 @@ bun install
 # 2. Run benchmarks
 bun parsing.ts
 ```
-
----
 
 ## Cross-Language Benchmarks
 
