@@ -1,5 +1,5 @@
 ---
-prev: Generating › Index
+prev: Generating › Examples
 next: Generating › Lenient Mode
 ---
 
