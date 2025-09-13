@@ -106,3 +106,9 @@ try {
   // Error: Invalid feed format
 }
 ```
+
+## Returned Values
+
+The parsing functions return JavaScript objects representing the feed in its original structure.
+
+For detailed examples of input and output for each feed format, see the [Parsing Examples](/parsing/examples) page.

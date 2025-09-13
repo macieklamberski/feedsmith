@@ -372,9 +372,9 @@ Returns:
 }
 ```
 
-## OPML with Extra Outline Attributes
+### Extra Outline Attributes
 
-OPML files often contain custom attributes for specific applications or feed readers. You can parse these extra attributes by providing an options parameter with the list of attribute names to extract:
+OPML files often contain custom attributes for specific applications or feed readers. You can parse these extra attributes by providing the `extraOutlineAttributes` option with the list of attribute names to extract:
 
 ```typescript
 import { parseOpml } from 'feedsmith'
@@ -410,7 +410,14 @@ const opml = parseOpml(`
     </body>
   </opml>
 `, {
-  extraOutlineAttributes: ['customIcon', 'updateInterval', 'isPrivate', 'tags', 'customColor', 'isPinned']
+  extraOutlineAttributes: [
+    'customIcon',
+    'updateInterval',
+    'isPrivate',
+    'tags',
+    'customColor',
+    'isPinned'
+  ]
 })
 ```
 

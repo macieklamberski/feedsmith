@@ -119,7 +119,7 @@ if (format === 'rss') {
 }
 ```
 
-### Use Format-Specific Parsers
+### Parse Specific Feed Formats
 
 If you know the format in advance, you can use the format-specific parsers:
 

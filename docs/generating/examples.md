@@ -65,6 +65,45 @@ Generates:
 </rss>
 ```
 
+### RSS with Stylesheet
+
+You can add XML stylesheets to make feeds browser-friendly by providing the `stylesheets` option:
+
+```typescript
+import { generateRssFeed } from 'feedsmith'
+
+const rssFeed = generateRssFeed({
+  title: 'My Tech Blog',
+  link: 'https://myblog.com',
+  description: 'Thoughts on web development',
+  items: [
+    {
+      title: 'Hello World',
+      link: 'https://myblog.com/hello',
+      description: 'First post'
+    }
+  ]
+}, {
+  stylesheets: [{
+    type: 'text/xsl',
+    href: '/styles/feed.xsl'
+  }]
+})
+```
+
+Generates (showing first lines):
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl"?>
+<rss version="2.0">
+  <!-- rest of the feed -->
+</rss>
+```
+
+> [!NOTE]
+> For details on stylesheet options and advanced usage, see the [Feed Styling](/generating/styling) guide.
+
 ## Atom Feed
 
 ```typescript
@@ -209,9 +248,9 @@ Generates:
 </opml>
 ```
 
-## OPML with Extra Outline Attributes
+### Extra Outline Attributes
 
-You can generate OPML files with custom outline attributes by providing them in the outline objects and specifying their names in the options parameter:
+You can generate OPML files with custom outline attributes by providing them in the outline objects and specifying their names in the `extraOutlineAttributes` option:
 
 ```typescript
 import { generateOpml } from 'feedsmith'
@@ -278,6 +317,3 @@ Generates:
   </body>
 </opml>
 ```
-
-> [!TIP]
-> The `extraOutlineAttributes` option ensures that only the specified custom attributes are included in the generated XML. Any other properties on the outline objects will be ignored unless they are standard OPML attributes.
