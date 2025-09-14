@@ -33,7 +33,7 @@ const rssFeed = generateRssFeed({
       description: 'Learn the basics of TypeScript and why you should use it',
       pubDate: new Date('2024-01-15T10:00:00Z'),
       guid: 'https://myblog.com/posts/intro-to-typescript',
-      author: 'john@myblog.com (John Doe)',
+      authors: ['john@myblog.com (John Doe)'],
       categories: [{ name: 'TypeScript' }, { name: 'Programming' }]
     }
   ]

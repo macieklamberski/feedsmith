@@ -27,7 +27,7 @@ The Source namespace provides elements for enhanced feed metadata, including soc
   </tbody>
 </table>
 
-## Structure
+## Types
 
 <<< @/../src/namespaces/source/common/types.ts#reference
 

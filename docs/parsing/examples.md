@@ -22,7 +22,10 @@ import { parseAtomFeed } from 'feedsmith'
 
 const atomFeed = parseAtomFeed(`
   <?xml version="1.0" encoding="utf-8"?>
-  <feed xmlns="http://www.w3.org/2005/Atom">
+  <feed xmlns="http://www.w3.org/2005/Atom"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+  >
     <title>Example Feed</title>
     <id>example-feed</id>
     <dc:creator>John Doe</dc:creator>
@@ -178,12 +181,14 @@ Returns:
       "link": "http://example.org/item/1",
       "description": "Some description of the first item.",
       "comments": "http://example.org/comments/1",
-      "enclosure": {
-        "url": "http://example.org/audio/demo.mp3",
-        "length": 1069871,
-        "type": "audio/mpeg"
-      },
-      "guid": "http://example.org/guid/1",
+      "enclosures": [
+        {
+          "url": "http://example.org/audio/demo.mp3",
+          "length": 1069871,
+          "type": "audio/mpeg"
+        }
+      ],
+      "guid": { "value": "http://example.org/guid/1", "isPermaLink": true },
       "pubDate": "Thu, 05 Sep 2002 0:00:01 GMT",
       "source": {
         "title": "Example's Realm",

@@ -37,7 +37,7 @@ Or using CDN:
 <script type="module">
   import { parseFeed } from 'https://unpkg.com/feedsmith@latest/dist/index.js'
 
-  const { type, feed } = parseFeed(feedContent)
+  const { format, feed } = parseFeed(feedContent)
   console.log(feed.title)
 </script>
 ```
@@ -46,7 +46,7 @@ Or using CDN:
 <script type="module">
   import { parseFeed } from 'https://cdn.jsdelivr.net/npm/feedsmith@latest/dist/index.js'
 
-  const { type, feed } = parseFeed(feedContent)
+  const { format, feed } = parseFeed(feedContent)
   console.log(feed.title)
 </script>
 ```
@@ -55,7 +55,7 @@ Or using CDN:
 <script type="module">
   import { parseFeed } from 'https://esm.sh/feedsmith@latest'
 
-  const { type, feed } = parseFeed(feedContent)
+  const { format, feed } = parseFeed(feedContent)
   console.log(feed.title)
 </script>
 ```
@@ -168,5 +168,5 @@ try {
 - **[Parse feeds](/parsing/)** — Learn about parsing different formats
 - **[Work with namespaces](/parsing/namespaces)** — Access podcast, media, and other metadata
 - **[Generate feeds](/generating/)** — Create feeds in various formats
-- **[API Reference](/reference/functions)** — Explore all available functions and types
+- **[API Reference](/reference/)** — Explore all available functions and types
 - **[Benchmarks](/benchmarks)** — See how Feedsmith compares to other libraries

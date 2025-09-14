@@ -61,8 +61,8 @@ export default defineConfig({
         text: 'API Reference',
         items: [
           {
-            text: 'Functions',
-            link: '/reference/functions',
+            text: 'Universal',
+            link: '/reference/',
           },
           {
             text: 'Feeds',

@@ -11,15 +11,75 @@ OPML (Outline Processor Markup Language) is a format for exchanging outline-stru
   </tbody>
 </table>
 
-## Type Definition
+## Functions
+
+### `parseOpml()`
+
+Parses OPML content and returns a typed OPML object.
+
+```typescript
+import { parseOpml } from 'feedsmith'
+
+const opml = parseOpml(xmlContent, {
+  extraOutlineAttributes: ['customIcon', 'updateInterval']
+})
+// Returns: object with all fields optional and dates as strings
+```
+
+#### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `content` | `string` | The OPML XML content to parse |
+| `options` | `object` | Optional parsing settings |
+
+#### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `extraOutlineAttributes` | `string[]` | - | Custom attributes to extract from outline elements (case-insensitive), see [examples](/parsing/examples#extra-outline-attributes) |
+
+#### Returns
+`object` - Parsed OPML with all fields optional and dates as strings
+
+### `generateOpml()`
+
+Generates OPML XML from OPML data.
+
+```typescript
+import { generateOpml } from 'feedsmith'
+
+const xml = generateOpml(opmlData, {
+  lenient: true,
+  stylesheets: [{ type: 'text/xsl', href: '/opml.xsl' }],
+  extraOutlineAttributes: ['customIcon', 'updateInterval']
+})
+```
+
+#### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `data` | `object` | OPML data to generate |
+| `options` | `object` | Optional generation settings |
+
+#### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `lenient` | `boolean` | `false` | Enable lenient mode for relaxed validation, see [Lenient Mode](/generating/lenient-mode) |
+| `stylesheets` | `Stylesheet[]` | - | Add stylesheets for visual formatting, see [Feed Styling](/generating/styling) |
+| `extraOutlineAttributes` | `string[]` | - | Custom attributes to include in outline elements. Only specified attributes are included in generated XML, see [examples](/generating/examples#extra-outline-attributes) |
+
+#### Returns
+`string` - Generated OPML XML
+
+## Types
 
 > [!INFO]
 > `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 
 <<< @/../src/opml/common/types.ts#reference
 
-## Related
-
-- **[Parsing OPML](/parsing/#opml)** - How to parse OPML content
-- **[Generating OPML](/generating/#opml)** - How to create OPML documents
-- **[OPML Detection](/parsing/detecting#opml)** - Detecting OPML format
+> [!INFO]
+> The `Outline` type includes an index signature `[key: string]: unknown` which allows storing any custom attributes alongside the standard OPML properties.
