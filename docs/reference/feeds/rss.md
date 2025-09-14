@@ -29,16 +29,87 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
   </tbody>
 </table>
 
-## Type Definition
+## Functions
+
+### `parseRssFeed()`
+
+Parses RSS feed content and returns a typed RSS object.
+
+```typescript
+import { parseRssFeed } from 'feedsmith'
+
+const rssFeed = parseRssFeed(xmlContent)
+// Returns: object with all fields optional and dates as strings
+```
+
+#### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `content` | `string` | The RSS XML content to parse |
+
+#### Returns
+`object` - Parsed RSS feed with all fields optional and dates as strings
+
+### `generateRssFeed()`
+
+Generates RSS XML from feed data.
+
+```typescript
+import { generateRssFeed } from 'feedsmith'
+
+const xml = generateRssFeed(feedData, {
+  lenient: true,
+  stylesheets: [{ type: 'text/xsl', href: '/feed.xsl' }]
+})
+```
+
+#### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `data` | `object` | RSS feed data to generate |
+| `options` | `object` | Optional generation settings |
+
+#### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `lenient` | `boolean` | `false` | Enable lenient mode for relaxed validation, see [Lenient Mode](/generating/lenient-mode) |
+| `stylesheets` | `Stylesheet[]` | - | Add stylesheets for visual formatting, see [Feed Styling](/generating/styling) |
+
+#### Returns
+`string` - Generated RSS XML
+
+### `detectRssFeed()`
+
+Detects if the provided content is an RSS feed.
+
+#### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `content` | `string` | The content to check |
+
+#### Returns
+`boolean` - `true` if content appears to be RSS format
+
+#### Example
+```typescript
+import { detectRssFeed } from 'feedsmith'
+
+const isRss = detectRssFeed(xmlContent)
+```
+
+## Types
 
 > [!INFO]
 > `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 
 <<< @/../src/feeds/rss/common/types.ts#reference
 
-
 ## Related
 
-- **[Parsing RSS Feeds](/parsing/#rss)** - How to parse RSS content
-- **[Generating RSS Feeds](/generating/#rss)** - How to create RSS feeds
-- **[RSS Detection](/parsing/detecting#rss)** - Detecting RSS format
+- **[Parsing RSS Feeds](/parsing/examples#rss-feed)** - How to parse RSS content
+- **[Generating RSS Feeds](/generating/examples#rss-feed)** - How to create RSS feeds
+- **[RSS Detection](/parsing/detecting)** - Detecting RSS format

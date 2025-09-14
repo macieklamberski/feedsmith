@@ -1,6 +1,6 @@
 ---
 prev: Parsing › Dates
-next: Generating › Overview
+next: Parsing › Examples
 ---
 
 # Format Detection

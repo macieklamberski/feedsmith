@@ -1,4 +1,18 @@
-import type { DateLike } from '../../common/types.js'
+import type { DateLike, DeepPartial, Unreliable } from '../../common/types.js'
+
+export type Options = {
+  extraOutlineAttributes?: Array<string>
+}
+
+export type ParsePartialFunction<R> = (
+  value: Unreliable,
+  options?: Options,
+) => DeepPartial<R> | undefined
+
+export type GenerateFunction<V> = (
+  value: V | undefined,
+  options?: Options,
+) => Unreliable | undefined
 
 // #region reference
 export type Outline<TDate extends DateLike> = {
@@ -16,6 +30,7 @@ export type Outline<TDate extends DateLike> = {
   version?: string
   url?: string
   outlines?: Array<Outline<TDate>>
+  [key: string]: unknown
 }
 
 export type Head<TDate extends DateLike> = {

@@ -25,15 +25,61 @@ RDF (Resource Description Framework) Site Summary is an early XML-based syndicat
   </tbody>
 </table>
 
-## Type Definition
+## Functions
+
+### `parseRdfFeed()`
+
+Parses RDF feed content and returns a typed RDF object.
+
+```typescript
+import { parseRdfFeed } from 'feedsmith'
+
+const rdfFeed = parseRdfFeed(xmlContent)
+// Returns: object with all fields optional and dates as strings
+```
+
+#### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `content` | `string` | The RDF XML content to parse |
+
+#### Returns
+`object` - Parsed RDF feed with all fields optional and dates as strings
+
+### `generateRdfFeed()`
+
+> [!NOTE]
+> RDF feed generation is currently work in progress and not yet available.
+
+### `detectRdfFeed()`
+
+Detects if the provided content is an RDF feed.
+
+#### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `content` | `string` | The content to check |
+
+#### Returns
+`boolean` - `true` if content appears to be RDF format
+
+#### Example
+```typescript
+import { detectRdfFeed } from 'feedsmith'
+
+const isRdf = detectRdfFeed(xmlContent)
+```
+
+## Types
 
 > [!INFO]
 > `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 
 <<< @/../src/feeds/rdf/common/types.ts#reference
 
-
 ## Related
 
-- **[Parsing RDF Feeds](/parsing/#rdf)** - How to parse RDF content
-- **[RDF Detection](/parsing/detecting#rdf)** - Detecting RDF format
+- **[Parsing RDF Feeds](/parsing/examples#rdf-feed)** - How to parse RDF content
+- **[RDF Detection](/parsing/detecting)** - Detecting RDF format

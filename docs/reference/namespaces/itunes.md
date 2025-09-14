@@ -30,7 +30,7 @@ The iTunes namespace provides podcast-specific metadata for RSS and Atom feeds. 
   </tbody>
 </table>
 
-## Structure
+## Types
 
 <<< @/../src/namespaces/itunes/common/types.ts#reference
 

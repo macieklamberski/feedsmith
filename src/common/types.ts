@@ -32,12 +32,15 @@ export type XmlStylesheet = {
   alternate?: boolean
 }
 
-export type XmlGenerateFunction<TStrict, TLenient> = {
-  (value: TStrict, options?: { lenient?: false; stylesheets?: Array<XmlStylesheet> }): string
-  (value: TLenient, options: { lenient: true; stylesheets?: Array<XmlStylesheet> }): string
+export type XmlGenerateFunction<Strict, Lenient, Options = Record<string, never>> = {
+  (
+    value: Strict,
+    options?: Options & { lenient?: false; stylesheets?: Array<XmlStylesheet> },
+  ): string
+  (value: Lenient, options: Options & { lenient: true; stylesheets?: Array<XmlStylesheet> }): string
 }
 
-export type JsonGenerateFunction<TStrict, TLenient> = {
-  (value: TStrict, options?: { lenient?: false }): unknown
-  (value: TLenient, options: { lenient: true }): unknown
+export type JsonGenerateFunction<Strict, Lenient, Options = Record<string, never>> = {
+  (value: Strict, options?: Options & { lenient?: false }): unknown
+  (value: Lenient, options: Options & { lenient: true }): unknown
 }

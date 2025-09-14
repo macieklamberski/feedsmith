@@ -45,6 +45,7 @@ export default defineConfig({
           { text: 'Namespaces', link: '/parsing/namespaces' },
           { text: 'Dates', link: '/parsing/dates' },
           { text: 'Detecting', link: '/parsing/detecting' },
+          { text: 'Examples', link: '/parsing/examples' },
         ],
       },
       {
@@ -53,14 +54,15 @@ export default defineConfig({
           { text: 'Overview', link: '/generating/' },
           { text: 'Styling', link: '/generating/styling' },
           { text: 'Lenient Mode', link: '/generating/lenient-mode' },
+          { text: 'Examples', link: '/generating/examples' },
         ],
       },
       {
         text: 'API Reference',
         items: [
           {
-            text: 'Functions',
-            link: '/reference/functions',
+            text: 'Universal',
+            link: '/reference/',
           },
           {
             text: 'Feeds',

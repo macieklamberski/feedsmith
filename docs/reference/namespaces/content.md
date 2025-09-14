@@ -30,7 +30,7 @@ The Content namespace allows RSS and RDF feeds to include full content alongside
   </tbody>
 </table>
 
-## Structure
+## Types
 
 <<< @/../src/namespaces/content/common/types.ts#reference
 
