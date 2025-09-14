@@ -39,6 +39,7 @@ export const namespaceUrls = {
   itunes: 'http://www.itunes.com/dtds/podcast-1.0.dtd',
   media: 'http://search.yahoo.com/mrss/',
   podcast: 'https://podcastindex.org/namespace/1.0',
+  psc: 'http://podlove.org/simple-chapters',
   rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
   slash: 'http://purl.org/rss/1.0/modules/slash/',
   source: 'http://source.scripting.com/',

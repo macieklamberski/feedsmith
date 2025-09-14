@@ -998,6 +998,43 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
+  it('should handle psc namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Podcast Episode Entry' },
+      'psc:chapters': {
+        'psc:chapter': [
+          {
+            '@start': '00:00:00.000',
+            '@title': 'Introduction',
+          },
+          {
+            '@start': '00:03:15.000',
+            '@title': 'Discussion',
+          },
+        ],
+      },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Podcast Episode Entry',
+      psc: {
+        chapters: [
+          {
+            start: '00:00:00.000',
+            title: 'Introduction',
+          },
+          {
+            start: '00:03:15.000',
+            title: 'Discussion',
+          },
+        ],
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
   it('should handle dcterms namespace in entry', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },

@@ -240,15 +240,35 @@ export const generateCommunity: GenerateFunction<Community> = (community) => {
 }
 
 export const generateComments: GenerateFunction<Array<string>> = (comments) => {
-  return trimArray(comments, generatePlainString)
+  const value = {
+    'media:comment': trimArray(comments, generatePlainString),
+  }
+
+  return trimObject(value)
 }
 
 export const generateResponses: GenerateFunction<Array<string>> = (responses) => {
-  return trimArray(responses, generatePlainString)
+  const value = {
+    'media:response': trimArray(responses, generatePlainString),
+  }
+
+  return trimObject(value)
 }
 
 export const generateBackLinks: GenerateFunction<Array<string>> = (backLinks) => {
-  return trimArray(backLinks, generatePlainString)
+  const value = {
+    'media:backLink': trimArray(backLinks, generatePlainString),
+  }
+
+  return trimObject(value)
+}
+
+export const generateScenes: GenerateFunction<Array<Scene>> = (scenes) => {
+  const value = {
+    'media:scene': trimArray(scenes, generateScene),
+  }
+
+  return trimObject(value)
 }
 
 export const generateParam: GenerateFunction<Param> = (param) => {
@@ -410,10 +430,10 @@ export const generateCommonElements: GenerateFunction<CommonElements> = (element
     'media:text': trimArray(elements.texts, generateText),
     'media:restriction': trimArray(elements.restrictions, generateRestriction),
     'media:community': generateCommunity(elements.community),
-    'media:comment': generateComments(elements.comments),
+    'media:comments': generateComments(elements.comments),
     'media:embed': generateEmbed(elements.embed),
-    'media:response': generateResponses(elements.responses),
-    'media:backLink': generateBackLinks(elements.backLinks),
+    'media:responses': generateResponses(elements.responses),
+    'media:backLinks': generateBackLinks(elements.backLinks),
     'media:status': generateStatus(elements.status),
     'media:price': trimArray(elements.prices, generatePrice),
     'media:license': trimArray(elements.licenses, generateLicense),
@@ -421,7 +441,7 @@ export const generateCommonElements: GenerateFunction<CommonElements> = (element
     'media:peerLink': trimArray(elements.peerLinks, generatePeerLink),
     'media:location': trimArray(elements.locations, generateLocation),
     'media:rights': generateRights(elements.rights),
-    'media:scene': trimArray(elements.scenes, generateScene),
+    'media:scenes': generateScenes(elements.scenes),
   }
 
   return trimObject(value)

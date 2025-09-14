@@ -13,6 +13,7 @@ import type {
   Feed as PodcastFeed,
   Item as PodcastItem,
 } from '../../../namespaces/podcast/common/types.js'
+import type { Item as PscItem } from '../../../namespaces/psc/common/types.js'
 import type { Item as SlashItem } from '../../../namespaces/slash/common/types.js'
 import type {
   Feed as SourceFeed,
@@ -92,6 +93,7 @@ export type Item<TDate extends DateLike> = {
   slash?: SlashItem
   itunes?: ItunesItem
   podcast?: PodcastItem
+  psc?: PscItem
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
   thr?: ThrItem

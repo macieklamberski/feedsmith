@@ -29,6 +29,7 @@ import {
   retrieveFeed as retrievePodcastFeed,
   retrieveItem as retrievePodcastItem,
 } from '../../../namespaces/podcast/parse/utils.js'
+import { retrieveItem as retrievePscItem } from '../../../namespaces/psc/parse/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import {
   retrieveFeed as retrieveSourceFeed,
@@ -175,6 +176,7 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesItem(value) : undefined,
     podcast: namespaces.has('podcast') ? retrievePodcastItem(value) : undefined,
+    psc: namespaces.has('psc') ? retrievePscItem(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
