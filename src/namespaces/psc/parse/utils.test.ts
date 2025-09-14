@@ -43,22 +43,29 @@ describe('parseChapter', () => {
     expect(parseChapter(value)).toEqual(expected)
   })
 
-  it('should return undefined when start attribute is missing', () => {
+  it('should parse chapter without start attribute', () => {
     const value = {
       '@title': 'Introduction',
       '@href': 'https://example.com/intro',
     }
+    const expected = {
+      title: 'Introduction',
+      href: 'https://example.com/intro',
+    }
 
-    expect(parseChapter(value)).toBeUndefined()
+    expect(parseChapter(value)).toEqual(expected)
   })
 
-  it('should return undefined when start attribute is empty', () => {
+  it('should parse chapter with empty start attribute', () => {
     const value = {
       '@start': '',
       '@title': 'Introduction',
     }
+    const expected = {
+      title: 'Introduction',
+    }
 
-    expect(parseChapter(value)).toBeUndefined()
+    expect(parseChapter(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -149,7 +156,7 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toEqual(expected)
   })
 
-  it('should filter out invalid chapters (missing start)', () => {
+  it('should parse all chapters without filtering', () => {
     const value = {
       'psc:chapters': {
         'psc:chapter': [
@@ -158,7 +165,7 @@ describe('retrieveItem', () => {
             '@title': 'Valid Chapter',
           },
           {
-            '@title': 'Invalid Chapter - No Start',
+            '@title': 'Chapter Without Start',
             '@href': 'https://example.com/invalid',
           },
           {
@@ -175,6 +182,10 @@ describe('retrieveItem', () => {
           title: 'Valid Chapter',
         },
         {
+          title: 'Chapter Without Start',
+          href: 'https://example.com/invalid',
+        },
+        {
           start: '00:05:00.000',
           title: 'Another Valid Chapter',
         },
@@ -184,7 +195,7 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toEqual(expected)
   })
 
-  it('should return undefined when no valid chapters exist', () => {
+  it('should parse chapters without start attributes', () => {
     const value = {
       'psc:chapters': {
         'psc:chapter': [
@@ -197,8 +208,18 @@ describe('retrieveItem', () => {
         ],
       },
     }
+    const expected = {
+      chapters: [
+        {
+          title: 'No Start Time',
+        },
+        {
+          href: 'https://example.com/invalid',
+        },
+      ],
+    }
 
-    expect(retrieveItem(value)).toBeUndefined()
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should return undefined when psc:chapters is missing', () => {

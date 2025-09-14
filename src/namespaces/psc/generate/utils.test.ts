@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { generateChapter, generateItem } from './utils.js'
+import { generateChapter, generateChapters, generateItem } from './utils.js'
 
 describe('generateChapter', () => {
   it('should generate valid chapter object with all properties', () => {
@@ -79,6 +79,45 @@ describe('generateChapter', () => {
   })
 })
 
+describe('generateChapters', () => {
+  it('should generate chapters array', () => {
+    const value = [
+      {
+        start: '00:00:00.000',
+        title: 'Introduction',
+      },
+      {
+        start: '00:05:30.000',
+        title: 'Chapter 1',
+      },
+    ]
+    const expected = {
+      'psc:chapter': [
+        {
+          '@start': '00:00:00.000',
+          '@title': 'Introduction',
+        },
+        {
+          '@start': '00:05:30.000',
+          '@title': 'Chapter 1',
+        },
+      ],
+    }
+
+    expect(generateChapters(value)).toEqual(expected)
+  })
+
+  it('should handle empty array', () => {
+    const value = []
+
+    expect(generateChapters(value)).toBeUndefined()
+  })
+
+  it('should handle undefined', () => {
+    expect(generateChapters(undefined)).toBeUndefined()
+  })
+})
+
 describe('generateItem', () => {
   it('should generate valid item object with multiple chapters', () => {
     const value = {
@@ -148,7 +187,7 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
-  it('should filter out invalid chapters (missing start)', () => {
+  it('should generate all chapters without filtering', () => {
     const value = {
       chapters: [
         {
@@ -156,7 +195,7 @@ describe('generateItem', () => {
           title: 'Valid Chapter',
         },
         {
-          title: 'Invalid Chapter - No Start',
+          title: 'Chapter Without Start',
           href: 'https://example.com/invalid',
         },
         {
@@ -173,6 +212,10 @@ describe('generateItem', () => {
             '@title': 'Valid Chapter',
           },
           {
+            '@title': 'Chapter Without Start',
+            '@href': 'https://example.com/invalid',
+          },
+          {
             '@start': '00:05:00.000',
             '@title': 'Another Valid Chapter',
           },
@@ -183,7 +226,7 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
-  it('should return undefined when no valid chapters exist', () => {
+  it('should generate chapters without start attributes', () => {
     const value = {
       chapters: [
         {
@@ -194,8 +237,20 @@ describe('generateItem', () => {
         },
       ],
     }
+    const expected = {
+      'psc:chapters': {
+        'psc:chapter': [
+          {
+            '@title': 'No Start Time',
+          },
+          {
+            '@href': 'https://example.com/invalid',
+          },
+        ],
+      },
+    }
 
-    expect(generateItem(value)).toBeUndefined()
+    expect(generateItem(value)).toEqual(expected)
   })
 
   it('should return undefined when chapters array is empty', () => {
