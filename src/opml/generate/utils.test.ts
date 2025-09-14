@@ -112,6 +112,127 @@ describe('generateOutline', () => {
   it('should handle non-object inputs gracefully', () => {
     expect(generateOutline(undefined)).toBeUndefined()
   })
+
+  describe('custom attributes', () => {
+    it('should generate outline with custom attributes when specified in options', () => {
+      const outline = {
+        text: 'Feed with custom attrs',
+        type: 'rss',
+        xmlUrl: 'https://example.com/feed.xml',
+        customField1: 'value1',
+        customField2: 'value2',
+        rating: '5',
+      }
+      const options = {
+        extraOutlineAttributes: ['customField1', 'customField2', 'rating'],
+      }
+      const result = generateOutline(outline, options)
+
+      expect(result).toEqual({
+        '@text': 'Feed with custom attrs',
+        '@type': 'rss',
+        '@xmlUrl': 'https://example.com/feed.xml',
+        '@customField1': 'value1',
+        '@customField2': 'value2',
+        '@rating': '5',
+      })
+    })
+
+    it('should not include custom attributes when not in options', () => {
+      const outline = {
+        text: 'Feed with custom attrs',
+        type: 'rss',
+        xmlUrl: 'https://example.com/feed.xml',
+        customField1: 'value1',
+        customField2: 'value2',
+        rating: '5',
+      }
+      const result = generateOutline(outline)
+
+      expect(result).toEqual({
+        '@text': 'Feed with custom attrs',
+        '@type': 'rss',
+        '@xmlUrl': 'https://example.com/feed.xml',
+      })
+    })
+
+    it('should handle nested outlines with custom attributes', () => {
+      const outline = {
+        text: 'Parent',
+        customParent: 'parentValue',
+        outlines: [
+          {
+            text: 'Child 1',
+            customChild: 'childValue1',
+          },
+          {
+            text: 'Child 2',
+            customChild: 'childValue2',
+          },
+        ],
+      }
+      const options = {
+        extraOutlineAttributes: ['customParent', 'customChild'],
+      }
+      const result = generateOutline(outline, options)
+
+      expect(result).toEqual({
+        '@text': 'Parent',
+        '@customParent': 'parentValue',
+        outline: [
+          {
+            '@text': 'Child 1',
+            '@customChild': 'childValue1',
+          },
+          {
+            '@text': 'Child 2',
+            '@customChild': 'childValue2',
+          },
+        ],
+      })
+    })
+
+    it('should only include specified custom attributes', () => {
+      const outline = {
+        text: 'Selective',
+        type: 'rss',
+        customField1: 'included',
+        customField2: 'not included',
+        customField3: 'included',
+      }
+      const options = {
+        extraOutlineAttributes: ['customField1', 'customField3'],
+      }
+      const result = generateOutline(outline, options)
+
+      expect(result).toEqual({
+        '@text': 'Selective',
+        '@type': 'rss',
+        '@customField1': 'included',
+        '@customField3': 'included',
+      })
+    })
+
+    it('should handle custom attributes as strings', () => {
+      const outline = {
+        text: 'Test',
+        stringAttr: 'text value',
+        numberAttr: '123',
+        boolAttr: 'true',
+      }
+      const options = {
+        extraOutlineAttributes: ['stringAttr', 'numberAttr', 'boolAttr'],
+      }
+      const result = generateOutline(outline, options)
+
+      expect(result).toEqual({
+        '@text': 'Test',
+        '@stringAttr': 'text value',
+        '@numberAttr': '123',
+        '@boolAttr': 'true',
+      })
+    })
+  })
 })
 
 describe('generateHead', () => {

@@ -27,7 +27,7 @@ The YouTube namespace provides YouTube-specific metadata for RSS feeds, enabling
   </tbody>
 </table>
 
-## Structure
+## Types
 
 <<< @/../src/namespaces/yt/common/types.ts#reference
 

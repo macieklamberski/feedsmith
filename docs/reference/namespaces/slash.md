@@ -31,7 +31,7 @@ The Slash namespace provides metadata about user engagement, particularly commen
   </tbody>
 </table>
 
-## Structure
+## Types
 
 <<< @/../src/namespaces/slash/common/types.ts#reference
 

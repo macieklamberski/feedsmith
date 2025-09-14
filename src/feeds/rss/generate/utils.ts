@@ -30,6 +30,10 @@ import {
 } from '../../../namespaces/podcast/generate/utils.js'
 import { generateItem as generatePscItem } from '../../../namespaces/psc/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
+import {
+  generateFeed as generateSourceFeed,
+  generateItem as generateSourceItem,
+} from '../../../namespaces/source/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
@@ -193,6 +197,7 @@ export const generateItem: GenerateFunction<Item<DateLike>> = (item) => {
     ...generateGeoRssItemOrFeed(item.georss),
     ...generateThrItem(item.thr),
     ...generateWfwItem(item.wfw),
+    ...generateSourceItem(item.src),
   }
 
   return trimObject(value)
@@ -231,6 +236,7 @@ export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed) => {
     ...generatePodcastFeed(feed.podcast),
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
+    ...generateSourceFeed(feed.src),
     item: trimArray(feed.items, generateItem),
   }
 

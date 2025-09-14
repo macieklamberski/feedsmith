@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@extractus/feed-extractor": "^7.1.6",
+    "@extractus/feed-extractor": "^7.1.7",
     "@gaphub/feed": "^5.2.4",
     "@rowanmanning/feed-parser": "^2.1.1",
     "@ulisesgascon/rss-feed-parser": "^1.0.1",
@@ -11,7 +11,7 @@
     "feedparser": "^2.2.10",
     "podcast-feed-parser": "^1.0.4",
     "rss-parser": "^3.13.0",
-    "tinybench": "^4.0.1",
+    "tinybench": "^5.0.1",
     "node-opml-parser": "^1.0.0",
     "opml": "^0.5.7",
     "opml-generator": "^1.1.1",
@@ -20,9 +20,9 @@
   },
   "devDependencies": {
     "@types/benchmark": "^2.1.5",
-    "@types/bun": "^1.2.17",
+    "@types/bun": "^1.2.21",
     "@types/feedme": "^2.0.4",
     "@types/feedparser": "^2.2.8",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.2"
   }
 }

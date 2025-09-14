@@ -377,6 +377,86 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with wfw namespace', () => {
+    const value = {
+      title: 'Feed with wfw namespace',
+      description: 'Test feed with Well-Formed Web namespace',
+      items: [
+        {
+          title: 'Item with comments',
+          wfw: {
+            comment: 'https://example.com/posts/item1/comment',
+            commentRss: 'https://example.com/posts/item1/comments/feed',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:wfw="http://wellformedweb.org/CommentAPI/">
+  <channel>
+    <title>Feed with wfw namespace</title>
+    <description>Test feed with Well-Formed Web namespace</description>
+    <item>
+      <title>Item with comments</title>
+      <wfw:comment>https://example.com/posts/item1/comment</wfw:comment>
+      <wfw:commentRss>https://example.com/posts/item1/comments/feed</wfw:commentRss>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with source namespace', () => {
+    const value = {
+      title: 'Feed with source namespace',
+      description: 'Test feed with Source namespace',
+      src: {
+        accounts: [{ service: 'twitter', value: 'johndoe' }, { service: 'github' }],
+        likes: { server: 'http://likes.example.com/' },
+        blogroll: 'https://blog.example.com/blogroll.opml',
+      },
+      items: [
+        {
+          title: 'Item with source metadata',
+          src: {
+            markdown: '# Example Post - This is markdown content for the post.',
+            outlines: ['<outline text="Section 1"/>', '<outline text="Section 2"/>'],
+            localTime: '2024-01-15 10:30:00',
+            linkFull: 'https://example.com/posts/full-version',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:source="http://source.scripting.com/">
+  <channel>
+    <title>Feed with source namespace</title>
+    <description>Test feed with Source namespace</description>
+    <source:account service="twitter">johndoe</source:account>
+    <source:account service="github"/>
+    <source:likes server="http://likes.example.com/"/>
+    <source:blogroll>https://blog.example.com/blogroll.opml</source:blogroll>
+    <item>
+      <title>Item with source metadata</title>
+      <source:markdown># Example Post - This is markdown content for the post.</source:markdown>
+      <source:outline>
+        <![CDATA[<outline text="Section 1"/>]]>
+      </source:outline>
+      <source:outline>
+        <![CDATA[<outline text="Section 2"/>]]>
+      </source:outline>
+      <source:localTime>2024-01-15 10:30:00</source:localTime>
+      <source:linkFull>https://example.com/posts/full-version</source:linkFull>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS feed with stylesheets', () => {
     const value = {
       title: 'Feed with Stylesheet',

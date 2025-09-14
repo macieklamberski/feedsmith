@@ -31,7 +31,7 @@ The Well-Formed Web namespace provides elements for linking to comment feeds and
   </tbody>
 </table>
 
-## Structure
+## Types
 
 <<< @/../src/namespaces/wfw/common/types.ts#reference
 

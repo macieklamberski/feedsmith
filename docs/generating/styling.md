@@ -1,5 +1,5 @@
 ---
-prev: Generating › Index
+prev: Generating › Overview
 next: Generating › Lenient Mode
 ---
 
@@ -68,22 +68,6 @@ const atomFeed = generateAtomFeed(feedData, {
       href: '/styles/feed.css',
       media: 'screen',
       alternate: false
-    }
-  ]
-})
-```
-
-### OPML with Stylesheet
-
-```typescript
-import { generateOpml } from 'feedsmith'
-
-const opml = generateOpml(opmlData, {
-  stylesheets: [
-    {
-      type: 'text/xsl',
-      href: '/styles/opml.xsl',
-      title: 'OPML Viewer'
     }
   ]
 })
