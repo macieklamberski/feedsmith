@@ -21,6 +21,7 @@ import {
   generateRestriction,
   generateRights,
   generateScene,
+  generateScenes,
   generateStarRating,
   generateStatistics,
   generateStatus,
@@ -436,7 +437,9 @@ describe('generateTag', () => {
 describe('generateComments', () => {
   it('should generate comments array', () => {
     const value = ['Great video!', 'Thanks for sharing']
-    const expected = ['Great video!', 'Thanks for sharing']
+    const expected = {
+      'media:comment': ['Great video!', 'Thanks for sharing'],
+    }
 
     expect(generateComments(value)).toEqual(expected)
   })
@@ -455,7 +458,9 @@ describe('generateComments', () => {
 describe('generateResponses', () => {
   it('should generate responses array', () => {
     const value = ['http://example.com/response1', 'http://example.com/response2']
-    const expected = ['http://example.com/response1', 'http://example.com/response2']
+    const expected = {
+      'media:response': ['http://example.com/response1', 'http://example.com/response2'],
+    }
 
     expect(generateResponses(value)).toEqual(expected)
   })
@@ -474,7 +479,9 @@ describe('generateResponses', () => {
 describe('generateBackLinks', () => {
   it('should generate back links array', () => {
     const value = ['http://example.com/link1', 'http://example.com/link2']
-    const expected = ['http://example.com/link1', 'http://example.com/link2']
+    const expected = {
+      'media:backLink': ['http://example.com/link1', 'http://example.com/link2'],
+    }
 
     expect(generateBackLinks(value)).toEqual(expected)
   })
@@ -487,6 +494,51 @@ describe('generateBackLinks', () => {
 
   it('should handle undefined', () => {
     expect(generateBackLinks(undefined)).toBeUndefined()
+  })
+})
+
+describe('generateScenes', () => {
+  it('should generate scenes array', () => {
+    const value = [
+      {
+        title: 'Introduction',
+        description: 'Opening sequence',
+        startTime: '00:00:00',
+        endTime: '00:00:30',
+      },
+      {
+        title: 'Main Content',
+        startTime: '00:00:30',
+        endTime: '00:01:45',
+      },
+    ]
+    const expected = {
+      'media:scene': [
+        {
+          sceneTitle: 'Introduction',
+          sceneDescription: 'Opening sequence',
+          sceneStartTime: '00:00:00',
+          sceneEndTime: '00:00:30',
+        },
+        {
+          sceneTitle: 'Main Content',
+          sceneStartTime: '00:00:30',
+          sceneEndTime: '00:01:45',
+        },
+      ],
+    }
+
+    expect(generateScenes(value)).toEqual(expected)
+  })
+
+  it('should handle empty array', () => {
+    const value = []
+
+    expect(generateScenes(value)).toBeUndefined()
+  })
+
+  it('should handle undefined', () => {
+    expect(generateScenes(undefined)).toBeUndefined()
   })
 })
 
@@ -1084,7 +1136,9 @@ describe('generateContent', () => {
         },
         'media:tags': 'music:5',
       },
-      'media:comment': ['Great video!', 'Thanks for sharing'],
+      'media:comments': {
+        'media:comment': ['Great video!', 'Thanks for sharing'],
+      },
       'media:embed': {
         '@url': 'http://www.foo.com/player.swf',
         '@width': 512,
@@ -1096,8 +1150,12 @@ describe('generateContent', () => {
           },
         ],
       },
-      'media:response': ['http://example.com/response1'],
-      'media:backLink': ['http://example.com/link1'],
+      'media:responses': {
+        'media:response': ['http://example.com/response1'],
+      },
+      'media:backLinks': {
+        'media:backLink': ['http://example.com/link1'],
+      },
       'media:status': {
         '@state': 'active',
         '@reason': 'approved',
@@ -1142,14 +1200,16 @@ describe('generateContent', () => {
       'media:rights': {
         '@status': 'userCreated',
       },
-      'media:scene': [
-        {
-          sceneTitle: 'Introduction',
-          sceneDescription: 'Opening scene',
-          sceneStartTime: '00:00:00',
-          sceneEndTime: '00:01:30',
-        },
-      ],
+      'media:scenes': {
+        'media:scene': [
+          {
+            sceneTitle: 'Introduction',
+            sceneDescription: 'Opening scene',
+            sceneStartTime: '00:00:00',
+            sceneEndTime: '00:01:30',
+          },
+        ],
+      },
     }
 
     expect(generateContent(value)).toEqual(expected)
@@ -1417,14 +1477,20 @@ describe('generateGroup', () => {
         },
         'media:tags': 'rock:8,alternative:3',
       },
-      'media:comment': ['Love this song!', 'Amazing track'],
+      'media:comments': {
+        'media:comment': ['Love this song!', 'Amazing track'],
+      },
       'media:embed': {
         '@url': 'http://www.foo.com/audio_player.swf',
         '@width': 400,
         '@height': 50,
       },
-      'media:response': ['http://example.com/music_response'],
-      'media:backLink': ['http://example.com/music_link'],
+      'media:responses': {
+        'media:response': ['http://example.com/music_response'],
+      },
+      'media:backLinks': {
+        'media:backLink': ['http://example.com/music_link'],
+      },
       'media:status': {
         '@state': 'active',
       },
@@ -1461,13 +1527,15 @@ describe('generateGroup', () => {
       'media:rights': {
         '@status': 'official',
       },
-      'media:scene': [
-        {
-          sceneTitle: 'Verse 1',
-          sceneStartTime: '00:00:00',
-          sceneEndTime: '00:01:00',
-        },
-      ],
+      'media:scenes': {
+        'media:scene': [
+          {
+            sceneTitle: 'Verse 1',
+            sceneStartTime: '00:00:00',
+            sceneEndTime: '00:01:00',
+          },
+        ],
+      },
     }
 
     expect(generateGroup(value)).toEqual(expected)
@@ -1722,12 +1790,18 @@ describe('generateItemOrFeed', () => {
         },
         'media:tags': 'entertainment:10',
       },
-      'media:comment': ['Great content!'],
+      'media:comments': {
+        'media:comment': ['Great content!'],
+      },
       'media:embed': {
         '@url': 'http://www.foo.com/embed.swf',
       },
-      'media:response': ['http://example.com/response'],
-      'media:backLink': ['http://example.com/backlink'],
+      'media:responses': {
+        'media:response': ['http://example.com/response'],
+      },
+      'media:backLinks': {
+        'media:backLink': ['http://example.com/backlink'],
+      },
       'media:status': {
         '@state': 'published',
       },
@@ -1759,11 +1833,13 @@ describe('generateItemOrFeed', () => {
       'media:rights': {
         '@status': 'copyrighted',
       },
-      'media:scene': [
-        {
-          sceneTitle: 'Opening',
-        },
-      ],
+      'media:scenes': {
+        'media:scene': [
+          {
+            sceneTitle: 'Opening',
+          },
+        ],
+      },
     }
 
     expect(generateItemOrFeed(value)).toEqual(expected)
