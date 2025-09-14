@@ -224,9 +224,9 @@
   <georss:line>37.78 -122.42 37.42 -122.10 37.86 -122.27</georss:line>
   <georss:polygon>37.86 -122.47 37.86 -122.37 37.76 -122.37 37.76 -122.47 37.86 -122.47</georss:polygon>
   <georss:box>37.15 -122.85 38.15 -121.85</georss:box>
-  <georss:featuretypetag>region</georss:featuretypetag>
-  <georss:relationshiptag>contains</georss:relationshiptag>
-  <georss:featurename>San Francisco Bay Area</georss:featurename>
+  <georss:featureTypeTag>region</georss:featureTypeTag>
+  <georss:relationshipTag>contains</georss:relationshipTag>
+  <georss:featureName>San Francisco Bay Area</georss:featureName>
   <georss:elev>360</georss:elev>
   <georss:floor>4</georss:floor>
   <georss:radius>50000</georss:radius>
@@ -447,9 +447,9 @@
     <georss:line>37.78 -122.42 37.42 -122.10 37.86 -122.27</georss:line>
     <georss:polygon>37.86 -122.47 37.86 -122.37 37.76 -122.37 37.76 -122.47 37.86 -122.47</georss:polygon>
     <georss:box>37.15 -122.85 38.15 -121.85</georss:box>
-    <georss:featuretypetag>region</georss:featuretypetag>
-    <georss:relationshiptag>contains</georss:relationshiptag>
-    <georss:featurename>San Francisco Bay Area</georss:featurename>
+    <georss:featureTypeTag>region</georss:featureTypeTag>
+    <georss:relationshipTag>contains</georss:relationshipTag>
+    <georss:featureName>San Francisco Bay Area</georss:featureName>
     <georss:elev>360</georss:elev>
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
