@@ -28,6 +28,6 @@ const opml = generateOpml({ /* opml data */ })
 
 ## Returned Values
 
-The generation functions return properly formatted strings ready to use.
+The generation functions return properly formatted feeds as XML or JSON.
 
 For detailed examples of input and output for each feed format, see the [Generating Examples](/generating/examples) page.
