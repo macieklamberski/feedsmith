@@ -16,7 +16,7 @@
         "description": "Detailed description of the example item content",
         "publisher": "Example News Organization",
         "contributor": "Assistant Editor Mike Thompson",
-        "date": "2022-01-01T12:00+00:00",
+        "date": "2022-01-01T12:00:00.000Z",
         "type": "Article",
         "format": "text/html",
         "identifier": "urn:uuid:98765432-9876-9876-9876-987654321def",
@@ -27,7 +27,7 @@
         "rights": "Copyright 2025 Example News Organization"
       },
       "dcterms": {
-        "created": "2022-01-01T12:00+00:00",
+        "created": "2022-01-01T12:00:00.000Z",
         "license": "Creative Commons Attribution 4.0",
         "abstract": "This article explores advanced concepts in technology",
         "accessRights": "Public access with attribution required",
@@ -36,16 +36,16 @@
         "accrualPolicy": "Editorial review required",
         "alternative": "Alternative Item Title",
         "audience": "Technical professionals",
-        "available": "2022-01-01T12:00+00:00",
+        "available": "2022-01-01T12:00:00.000Z",
         "bibliographicCitation": "Smith, J. (2022). Example Item. Retrieved from https://example.org/item/1",
         "conformsTo": "HTML5 standard",
         "contributor": "Assistant Editor Mike Thompson",
         "coverage": "United States technology sector",
         "creator": "Jack Jackson",
-        "date": "2022-01-01T12:00+00:00",
-        "dateAccepted": "2022-01-01T12:00+00:00",
-        "dateCopyrighted": "2022-01-01T12:00+00:00",
-        "dateSubmitted": "2022-01-01T12:00+00:00",
+        "date": "2022-01-01T12:00:00.000Z",
+        "dateAccepted": "2022-01-01T12:00:00.000Z",
+        "dateCopyrighted": "2022-01-01T12:00:00.000Z",
+        "dateSubmitted": "2022-01-01T12:00:00.000Z",
         "description": "Detailed description of the example item content and its significance",
         "educationLevel": "Advanced",
         "extent": "Approximately 2500 words",
@@ -60,12 +60,12 @@
         "isReferencedBy": "https://example.org/item/1/citations",
         "isReplacedBy": "https://example.org/item/1/updated",
         "isRequiredBy": "https://example.org/item/1/prerequisites",
-        "issued": "2022-01-01T12:00+00:00",
+        "issued": "2022-01-01T12:00:00.000Z",
         "isVersionOf": "https://example.org/item/1/original",
         "language": "en-US",
         "mediator": "Editorial Team",
         "medium": "Digital",
-        "modified": "2022-06-01T12:00+00:00",
+        "modified": "2022-06-01T12:00:00.000Z",
         "provenance": "Originally published by Example News Organization",
         "publisher": "Example News Organization",
         "references": "https://example.org/item/1/references",
@@ -81,7 +81,7 @@
         "temporal": "2022",
         "title": "Dublin Core Terms Enhanced Item Title",
         "type": "Article",
-        "valid": "2025-12-31T23:59:59+00:00"
+        "valid": "2025-12-31T23:59:59.000Z"
       },
       "slash": {
         "section": "articles",
@@ -369,8 +369,8 @@
                 "favorites": 413
               },
               "tags": [
-                { "name": "featured", "weight": 1 },
-                { "name": "media", "weight": 1 },
+                { "name": "featured", "weight": 2 },
+                { "name": "media", "weight": 5 },
                 { "name": "example", "weight": 1 }
               ]
             },
@@ -645,11 +645,11 @@
             "views": 256789
           },
           "tags": [
-            { "name": "cinematic", "weight": 1 },
+            { "name": "cinematic", "weight": 3 },
             { "name": "production", "weight": 1 },
-            { "name": "advanced", "weight": 1 },
-            { "name": "technical", "weight": 1 },
-            { "name": "demo", "weight": 1 }
+            { "name": "advanced", "weight": 4 },
+            { "name": "technical", "weight": 7 },
+            { "name": "demo", "weight": 2 }
           ]
         }
       },
@@ -700,6 +700,18 @@
           }
         ]
       },
+      "atom": {
+        "links": [
+          {
+            "rel": "replies",
+            "href": "https://example.com/posts/understanding-xml-namespaces/comments/1/replies",
+            "thr": {
+              "count": 2,
+              "updated": "2025-05-10T16:45:00.000Z"
+            }
+          }
+        ]
+      },
       "wfw": {
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
@@ -722,7 +734,7 @@
     "description": "This is an example of description.",
     "publisher": "Example Publishing Company",
     "contributor": "Jane Smith",
-    "date": "2022-01-01T12:00+00:00",
+    "date": "2022-01-01T12:00:00.000Z",
     "type": "Text",
     "format": "application/rss+xml",
     "identifier": "urn:uuid:12345678-1234-1234-1234-123456789abc",
@@ -733,7 +745,7 @@
     "rights": "Copyright 2025 Example Publishing Company"
   },
   "dcterms": {
-    "created": "2022-01-01T12:00+00:00",
+    "created": "2022-01-01T12:00:00.000Z",
     "license": "Creative Commons Attribution 4.0",
     "abstract": "This is an abstract of the feed content",
     "accessRights": "Public access with attribution required",
@@ -742,16 +754,16 @@
     "accrualPolicy": "Content added based on editorial calendar",
     "alternative": "Alternative Feed Title",
     "audience": "General technology audience",
-    "available": "2022-01-01T12:00+00:00",
+    "available": "2022-01-01T12:00:00.000Z",
     "bibliographicCitation": "Example Feed. (2022). Retrieved from https://example.org",
     "conformsTo": "RSS 2.0 Specification",
     "contributor": "Jane Smith",
     "coverage": "Global technology topics",
     "creator": "John Doe",
-    "date": "2022-01-01T12:00+00:00",
-    "dateAccepted": "2022-01-01T12:00+00:00",
-    "dateCopyrighted": "2022-01-01T12:00+00:00",
-    "dateSubmitted": "2022-01-01T12:00+00:00",
+    "date": "2022-01-01T12:00:00.000Z",
+    "dateAccepted": "2022-01-01T12:00:00.000Z",
+    "dateCopyrighted": "2022-01-01T12:00:00.000Z",
+    "dateSubmitted": "2022-01-01T12:00:00.000Z",
     "description": "Detailed description of the feed content and purpose",
     "educationLevel": "Intermediate to advanced",
     "extent": "Approximately 1000 words per article",
@@ -766,12 +778,12 @@
     "isReferencedBy": "https://example.org/references",
     "isReplacedBy": "https://example.org/new-feed",
     "isRequiredBy": "https://example.org/dependent-feeds",
-    "issued": "2022-01-01T12:00+00:00",
+    "issued": "2022-01-01T12:00:00.000Z",
     "isVersionOf": "https://example.org/original-feed",
     "language": "en-US",
     "mediator": "Content Management System",
     "medium": "Digital",
-    "modified": "2023-01-01T12:00+00:00",
+    "modified": "2023-01-01T12:00:00.000Z",
     "provenance": "Originally created by Example Publishing Company",
     "publisher": "Example Publishing Company",
     "references": "https://example.org/referenced-sources",
@@ -787,12 +799,12 @@
     "temporal": "2022-present",
     "title": "Dublin Core Terms Enhanced Feed Title",
     "type": "Text",
-    "valid": "2025-12-31T23:59:59+00:00"
+    "valid": "2025-12-31T23:59:59.000Z"
   },
   "sy": {
     "updatePeriod": "hourly",
     "updateFrequency": 1,
-    "updateBase": "2000-01-01T12:00+00:00"
+    "updateBase": "2000-01-01T12:00:00.000Z"
   },
   "itunes": {
     "categories": [
@@ -856,7 +868,7 @@
       {
         "display": "Season 1 Trailer",
         "url": "https://example.com/trailers/season1.mp3",
-        "pubDate": "2025-04-20T08:00:00+02:00",
+        "pubDate": "Sun, 20 Apr 2025 06:00:00 GMT",
         "length": 1048576,
         "type": "audio/mpeg",
         "season": 1
@@ -899,8 +911,8 @@
           }
         ],
         "status": "live",
-        "start": "2025-04-30T09:00:00+01:00",
-        "end": "2025-04-30T10:00:00+01:00",
+        "start": "2025-04-30T08:00:00.000Z",
+        "end": "2025-04-30T09:00:00.000Z",
         "contentLinks": [
           {
             "href": "https://example.com/live/chat",
@@ -939,7 +951,7 @@
       "display": "Weekly on Fridays",
       "complete": false,
       "rrule": "FREQ=WEEKLY;BYDAY=FR",
-      "dtstart": "2025-01-10T08:00:00+01:00"
+      "dtstart": "2025-01-10T07:00:00.000Z"
     },
     "podping": {
       "usesPodping": true
@@ -1035,8 +1047,8 @@
             "favorites": 413
           },
           "tags": [
-            { "name": "featured", "weight": 1 },
-            { "name": "media", "weight": 1 },
+            { "name": "featured", "weight": 2 },
+            { "name": "media", "weight": 5 },
             { "name": "example", "weight": 1 }
           ]
         },
@@ -1311,11 +1323,11 @@
         "views": 256789
       },
       "tags": [
-        { "name": "cinematic", "weight": 1 },
+        { "name": "cinematic", "weight": 3 },
         { "name": "production", "weight": 1 },
-        { "name": "advanced", "weight": 1 },
-        { "name": "technical", "weight": 1 },
-        { "name": "demo", "weight": 1 }
+        { "name": "advanced", "weight": 4 },
+        { "name": "technical", "weight": 7 },
+        { "name": "demo", "weight": 2 }
       ]
     }
   },

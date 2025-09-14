@@ -8,7 +8,7 @@
       "dc": {
         "creator": "Jack Jackson",
         "contributor": "Assistant Editor Mike Thompson",
-        "date": "2022-01-01T12:00+00:00",
+        "date": "2022-01-01T12:00:00.000Z",
         "description": "Detailed description of the example entry content",
         "title": "Dublin Core Enhanced Entry Title",
         "subject": "Article, Tutorial, Example",
@@ -23,7 +23,7 @@
         "rights": "Copyright 2025 Example News Organization"
       },
       "dcterms": {
-        "created": "2022-01-01T12:00+00:00",
+        "created": "2022-01-01T12:00:00.000Z",
         "license": "Creative Commons Attribution 4.0",
         "abstract": "This article explores advanced concepts in technology",
         "accessRights": "Public access with attribution required",
@@ -32,16 +32,16 @@
         "accrualPolicy": "Editorial review required",
         "alternative": "Alternative Item Title",
         "audience": "Technical professionals",
-        "available": "2022-01-01T12:00+00:00",
+        "available": "2022-01-01T12:00:00.000Z",
         "bibliographicCitation": "Smith, J. (2022). Example Item. Retrieved from https://example.org/item/1",
         "conformsTo": "HTML5 standard",
         "contributor": "Assistant Editor Mike Thompson",
         "coverage": "United States technology sector",
         "creator": "Jack Jackson",
-        "date": "2022-01-01T12:00+00:00",
-        "dateAccepted": "2022-01-01T12:00+00:00",
-        "dateCopyrighted": "2022-01-01T12:00+00:00",
-        "dateSubmitted": "2022-01-01T12:00+00:00",
+        "date": "2022-01-01T12:00:00.000Z",
+        "dateAccepted": "2022-01-01T12:00:00.000Z",
+        "dateCopyrighted": "2022-01-01T12:00:00.000Z",
+        "dateSubmitted": "2022-01-01T12:00:00.000Z",
         "description": "Detailed description of the example item content and its significance",
         "educationLevel": "Advanced",
         "extent": "Approximately 2500 words",
@@ -56,12 +56,12 @@
         "isReferencedBy": "https://example.org/item/1/citations",
         "isReplacedBy": "https://example.org/item/1/updated",
         "isRequiredBy": "https://example.org/item/1/prerequisites",
-        "issued": "2022-01-01T12:00+00:00",
+        "issued": "2022-01-01T12:00:00.000Z",
         "isVersionOf": "https://example.org/item/1/original",
         "language": "en-US",
         "mediator": "Editorial Team",
         "medium": "Digital",
-        "modified": "2022-06-01T12:00+00:00",
+        "modified": "2022-06-01T12:00:00.000Z",
         "provenance": "Originally published by Example News Organization",
         "publisher": "Example News Organization",
         "references": "https://example.org/item/1/references",
@@ -77,7 +77,7 @@
         "temporal": "2022",
         "title": "Dublin Core Terms Enhanced Item Title",
         "type": "Article",
-        "valid": "2025-12-31T23:59:59+00:00"
+        "valid": "2025-12-31T23:59:59.000Z"
       },
       "slash": {
         "section": "articles",
@@ -222,8 +222,8 @@
                 "favorites": 413
               },
               "tags": [
-                { "name": "featured", "weight": 1 },
-                { "name": "media", "weight": 1 },
+                { "name": "featured", "weight": 2 },
+                { "name": "media", "weight": 5 },
                 { "name": "example", "weight": 1 }
               ]
             },
@@ -498,11 +498,11 @@
             "views": 256789
           },
           "tags": [
-            { "name": "cinematic", "weight": 1 },
+            { "name": "cinematic", "weight": 3 },
             { "name": "production", "weight": 1 },
-            { "name": "advanced", "weight": 1 },
-            { "name": "technical", "weight": 1 },
-            { "name": "demo", "weight": 1 }
+            { "name": "advanced", "weight": 4 },
+            { "name": "technical", "weight": 7 },
+            { "name": "demo", "weight": 2 }
           ]
         }
       },
@@ -572,7 +572,7 @@
   "dc": {
     "creator": "John Doe",
     "contributor": "Jane Smith",
-    "date": "2022-01-01T12:00+00:00",
+    "date": "2022-01-01T12:00:00.000Z",
     "description": "This is an example of description.",
     "title": "Dublin Core Enhanced Feed Title",
     "subject": "Technology, Programming, Web Development",
@@ -587,7 +587,7 @@
     "rights": "Copyright 2025 Example Publishing Company"
   },
   "dcterms": {
-    "created": "2022-01-01T12:00+00:00",
+    "created": "2022-01-01T12:00:00.000Z",
     "license": "Creative Commons Attribution 4.0",
     "abstract": "This is an abstract of the feed content",
     "accessRights": "Public access with attribution required",
@@ -596,16 +596,16 @@
     "accrualPolicy": "Content added based on editorial calendar",
     "alternative": "Alternative Feed Title",
     "audience": "General technology audience",
-    "available": "2022-01-01T12:00+00:00",
+    "available": "2022-01-01T12:00:00.000Z",
     "bibliographicCitation": "Example Feed. (2022). Retrieved from https://example.org",
     "conformsTo": "RSS 2.0 Specification",
     "contributor": "Jane Smith",
     "coverage": "Global technology topics",
     "creator": "John Doe",
-    "date": "2022-01-01T12:00+00:00",
-    "dateAccepted": "2022-01-01T12:00+00:00",
-    "dateCopyrighted": "2022-01-01T12:00+00:00",
-    "dateSubmitted": "2022-01-01T12:00+00:00",
+    "date": "2022-01-01T12:00:00.000Z",
+    "dateAccepted": "2022-01-01T12:00:00.000Z",
+    "dateCopyrighted": "2022-01-01T12:00:00.000Z",
+    "dateSubmitted": "2022-01-01T12:00:00.000Z",
     "description": "Detailed description of the feed content and purpose",
     "educationLevel": "Intermediate to advanced",
     "extent": "Approximately 1000 words per article",
@@ -620,12 +620,12 @@
     "isReferencedBy": "https://example.org/references",
     "isReplacedBy": "https://example.org/new-feed",
     "isRequiredBy": "https://example.org/dependent-feeds",
-    "issued": "2022-01-01T12:00+00:00",
+    "issued": "2022-01-01T12:00:00.000Z",
     "isVersionOf": "https://example.org/original-feed",
     "language": "en-US",
     "mediator": "Content Management System",
     "medium": "Digital",
-    "modified": "2023-01-01T12:00+00:00",
+    "modified": "2023-01-01T12:00:00.000Z",
     "provenance": "Originally created by Example Publishing Company",
     "publisher": "Example Publishing Company",
     "references": "https://example.org/referenced-sources",
@@ -641,12 +641,12 @@
     "temporal": "2022-present",
     "title": "Dublin Core Terms Enhanced Feed Title",
     "type": "Text",
-    "valid": "2025-12-31T23:59:59+00:00"
+    "valid": "2025-12-31T23:59:59.000Z"
   },
   "sy": {
     "updatePeriod": "hourly",
     "updateFrequency": 1,
-    "updateBase": "2000-01-01T12:00+00:00"
+    "updateBase": "2000-01-01T12:00:00.000Z"
   },
   "itunes": {
     "categories": [
@@ -770,8 +770,8 @@
             "favorites": 413
           },
           "tags": [
-            { "name": "featured", "weight": 1 },
-            { "name": "media", "weight": 1 },
+            { "name": "featured", "weight": 2 },
+            { "name": "media", "weight": 5 },
             { "name": "example", "weight": 1 }
           ]
         },
@@ -1046,11 +1046,11 @@
         "views": 256789
       },
       "tags": [
-        { "name": "cinematic", "weight": 1 },
+        { "name": "cinematic", "weight": 3 },
         { "name": "production", "weight": 1 },
-        { "name": "advanced", "weight": 1 },
-        { "name": "technical", "weight": 1 },
-        { "name": "demo", "weight": 1 }
+        { "name": "advanced", "weight": 4 },
+        { "name": "technical", "weight": 7 },
+        { "name": "demo", "weight": 2 }
       ]
     }
   },

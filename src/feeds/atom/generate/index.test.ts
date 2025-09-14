@@ -2,23 +2,23 @@ import { describe, expect, it } from 'bun:test'
 import { generate } from './index.js'
 
 describe('generate', () => {
-  // TODO: Enable reference tests once advanced features like Text fields being an object of
-  // { value: string, type: 'text' | 'html' | 'xhtml' }
-  // const versions = {
-  //   '10': '1.0',
-  //   // ns: 'with namespaces',
-  // }
+  const versions = {
+    // TODO: Enable reference tests once advanced features like Text fields being an object of
+    // { value: string, type: 'text' | 'html' | 'xhtml' }
+    // '10': '1.0',
+    // ns: 'with namespaces',
+  }
 
-  // for (const [key, label] of Object.entries(versions)) {
-  //   it(`should correctly generate Atom ${label}`, async () => {
-  //     const reference = `${import.meta.dir}/../references/atom-${key}`
-  //     const input = await Bun.file(`${reference}.json`).json()
-  //     const expectation = await Bun.file(`${reference}.xml`).text()
-  //     const result = generate(input)
+  for (const [key, label] of Object.entries(versions)) {
+    it(`should correctly generate Atom ${label}`, async () => {
+      const reference = `${import.meta.dir}/../references/atom-${key}`
+      const input = await Bun.file(`${reference}.json`).json()
+      const expectation = await Bun.file(`${reference}.xml`).text()
+      const result = generate(input)
 
-  //     expect(result).toEqual(expectation)
-  //   })
-  // }
+      expect(result).toEqual(expectation)
+    })
+  }
 
   it('should generate minimal valid Atom feed', () => {
     const value = {
