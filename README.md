@@ -40,7 +40,8 @@ Feedsmith offers universal and format‑specific parsers that maintain the origi
 * **Well-tested** 🔬 — Comprehensive test suite with over 2000 tests and 99% code coverage.
 
 ### Compatibility
-* Works in Node.js and modern browsers.
+* Works in Node.js 14.0.0+ and modern browsers.
+* Supports both CommonJS and ES modules.
 * Works with plain JavaScript, you don't need to use TypeScript.
 
 ## Supported Formats
