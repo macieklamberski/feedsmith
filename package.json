@@ -40,7 +40,9 @@
     }
   },
   "files": [
-    "dist"
+    "dist/*.js",
+    "dist/*.cjs",
+    "dist/*.d.ts"
   ],
   "scripts": {
     "prepare": "lefthook install",
