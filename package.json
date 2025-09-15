@@ -29,10 +29,14 @@
     "opml"
   ],
   "type": "module",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     }
   },
   "files": [
@@ -42,7 +46,7 @@
     "prepare": "lefthook install",
     "lint:tsc": "tsc --pretty --noEmit",
     "lint:biome": "bunx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
-    "build": "rm -rf dist && tsc",
+    "build": "tsdown --format cjs,esm",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
@@ -55,10 +59,11 @@
     "@biomejs/biome": "^2.2.4",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@types/bun": "^1.2.21",
+    "@types/bun": "^1.2.22",
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "lefthook": "^1.13.0",
     "semantic-release": "^24.2.8",
+    "tsdown": "^0.15.1",
     "typescript": "^5.9.2",
     "vitepress": "^1.6.4",
     "vitepress-plugin-llms": "^1.7.5"

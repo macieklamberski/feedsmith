@@ -5,7 +5,7 @@ This guide will get you up and running with Feedsmith in just a few minutes.
 
 ## Installation
 
-Feedsmith works in both Node.js and modern browsers as an ES module. It was tested in both environments, ensuring compatibility and reliability.
+Feedsmith works in both Node.js (14.0.0+) and modern browsers, supporting both CommonJS and ES modules. It was tested in both environments, ensuring compatibility and reliability.
 
 Install the package using your preferred package manager:
 
