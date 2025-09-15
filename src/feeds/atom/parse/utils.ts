@@ -228,13 +228,13 @@ export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) 
     title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
     updated: retrieveUpdated(value, options),
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
-    dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     slash: namespaces?.has('slash') ? retrieveSlashItem(value) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesItem(value) : undefined,
     psc: namespaces?.has('psc') ? retrievePscItem(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     thr: namespaces?.has('thr') ? retrieveThrItem(value) : undefined,
+    dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
   }
@@ -264,11 +264,11 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) =>
     updated: retrieveUpdated(value, options),
     entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options)),
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
-    dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     sy: namespaces?.has('sy') ? retrieveSyFeed(value) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesFeed(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
   }
 

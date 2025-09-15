@@ -133,10 +133,10 @@ import {
 } from 'feedsmith'
 
 // Parse specific formats
-const atomFeed = parseAtomFeed('atom content')
-const jsonFeed = parseJsonFeed('json content')
 const rssFeed = parseRssFeed('rss content')
+const atomFeed = parseAtomFeed('atom content')
 const rdfFeed = parseRdfFeed('rdf content')
+const jsonFeed = parseJsonFeed('json content')
 
 // Access typed data
 rssFeed.title

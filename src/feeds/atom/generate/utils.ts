@@ -175,13 +175,13 @@ export const generateEntry: GenerateFunction<Entry<DateLike>> = (entry, options)
   return {
     ...trimmedValue,
     ...generateDcItemOrFeed(entry.dc),
-    ...generateDctermsItemOrFeed(entry.dcterms),
     ...generateSlashItem(entry.slash),
     ...generateItunesItem(entry.itunes),
     ...generatePscItem(entry.psc),
     ...generateMediaItemOrFeed(entry.media),
     ...generateGeoRssItemOrFeed(entry.georss),
     ...generateThrItem(entry.thr),
+    ...generateDctermsItemOrFeed(entry.dcterms),
     ...generateWfwItem(entry.wfw),
     ...generateYtItem(entry.yt),
   }
@@ -236,11 +236,11 @@ export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed, options) =>
   const valueFull = {
     ...valueFeed,
     ...generateDcItemOrFeed(feed.dc),
-    ...generateDctermsItemOrFeed(feed.dcterms),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
+    ...generateDctermsItemOrFeed(feed.dcterms),
     ...generateYtFeed(feed.yt),
     ...valueEntries,
   }

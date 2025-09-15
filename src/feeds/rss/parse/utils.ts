@@ -169,10 +169,9 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
     guid: parseSingularOf(value.guid, parseGuid),
     pubDate: parseSingularOf(value.pubdate, (value) => parseDate(retrieveText(value))),
     source: parseSingularOf(value.source, parseSource),
-    content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     atom: namespaces.has('atom') ? retrieveAtomEntry(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesItem(value) : undefined,
     podcast: namespaces.has('podcast') ? retrievePodcastItem(value) : undefined,
@@ -180,6 +179,7 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
     src: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
   }
@@ -216,12 +216,12 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
     items: parseArrayOf(value.item, parseItem),
     atom: namespaces.has('atom') ? retrieveAtomFeed(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     sy: namespaces.has('sy') ? retrieveSyFeed(value) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesFeed(value) : undefined,
     podcast: namespaces.has('podcast') ? retrievePodcastFeed(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     src: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,
   }
 

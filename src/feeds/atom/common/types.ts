@@ -85,13 +85,13 @@ export type Entry<TDate extends DateLike> = {
   title: Text
   updated: TDate
   dc?: DcItemOrFeed<TDate>
-  dcterms?: DctermsItemOrFeed<TDate>
   slash?: SlashItem
   itunes?: ItunesItem
   psc?: PscItem
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
   thr?: ThrItem
+  dcterms?: DctermsItemOrFeed<TDate>
   wfw?: WfwItem
   yt?: YtItem
 }
@@ -111,11 +111,11 @@ export type Feed<TDate extends DateLike> = {
   updated: TDate
   entries?: Array<Entry<TDate>>
   dc?: DcItemOrFeed<TDate>
-  dcterms?: DctermsItemOrFeed<TDate>
   sy?: SyFeed<TDate>
   itunes?: ItunesFeed
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
+  dcterms?: DctermsItemOrFeed<TDate>
   yt?: YtFeed
 }
 // #endregion reference

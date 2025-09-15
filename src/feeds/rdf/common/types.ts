@@ -28,12 +28,12 @@ export type Item<TDate extends DateLike> = {
   link: string
   description?: string
   atom?: AtomEntry<TDate>
-  content?: ContentItem
   dc?: DcItemOrFeed<TDate>
-  dcterms?: DctermsItemOrFeed<TDate>
+  content?: ContentItem
   slash?: SlashItem
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
+  dcterms?: DctermsItemOrFeed<TDate>
   wfw?: WfwItem
 }
 
@@ -46,9 +46,9 @@ export type Feed<TDate extends DateLike> = {
   textInput?: TextInput
   atom?: AtomFeed<TDate>
   dc?: DcItemOrFeed<TDate>
-  dcterms?: DctermsItemOrFeed<TDate>
   sy?: SyFeed<TDate>
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
+  dcterms?: DctermsItemOrFeed<TDate>
 }
 // #endregion reference

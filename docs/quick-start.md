@@ -86,17 +86,17 @@ If you know the format in advance, you can use the format-specific parsers:
 
 ```typescript
 import {
-  parseAtomFeed,
-  parseJsonFeed,
   parseRssFeed,
-  parseRdfFeed
+  parseAtomFeed,
+  parseRdfFeed,
+  parseJsonFeed
 } from 'feedsmith'
 
 // Parse specific formats
-const atomFeed = parseAtomFeed('atom content')
-const jsonFeed = parseJsonFeed('json content')
 const rssFeed = parseRssFeed('rss content')
+const atomFeed = parseAtomFeed('atom content')
 const rdfFeed = parseRdfFeed('rdf content')
+const jsonFeed = parseJsonFeed('json content')
 
 // Access typed data
 rssFeed.title

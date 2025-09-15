@@ -86,10 +86,9 @@ export type Item<TDate extends DateLike> = {
   guid?: Guid
   pubDate?: TDate
   source?: Source
-  content?: ContentItem
   atom?: AtomEntry<TDate>
   dc?: DcItemOrFeed<TDate>
-  dcterms?: DctermsItemOrFeed<TDate>
+  content?: ContentItem
   slash?: SlashItem
   itunes?: ItunesItem
   podcast?: PodcastItem
@@ -97,6 +96,7 @@ export type Item<TDate extends DateLike> = {
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
   thr?: ThrItem
+  dcterms?: DctermsItemOrFeed<TDate>
   wfw?: WfwItem
   src?: SourceItem
 } & ({ title: string } | { description: string })
@@ -126,12 +126,12 @@ export type Feed<TDate extends DateLike> = {
   items?: Array<Item<TDate>>
   atom?: AtomFeed<TDate>
   dc?: DcItemOrFeed<TDate>
-  dcterms?: DctermsItemOrFeed<TDate>
   sy?: SyFeed<TDate>
   itunes?: ItunesFeed
   podcast?: PodcastFeed<TDate>
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
+  dcterms?: DctermsItemOrFeed<TDate>
   src?: SourceFeed
 }
 // #endregion reference

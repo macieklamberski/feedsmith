@@ -73,12 +73,12 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
     link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
     description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
     atom: namespaces.has('atom') ? retrieveAtomEntry(value) : undefined,
-    content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
   }
 
@@ -106,10 +106,10 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
     textInput: retrieveTextInput(value),
     atom: namespaces.has('atom') ? retrieveAtomFeed(channel) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(channel) : undefined,
     sy: namespaces.has('sy') ? retrieveSyFeed(channel) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(channel) : undefined,
   }
 
   return trimObject(feed)

@@ -18,8 +18,8 @@ const feed = parseRssFeed(`
   <?xml version="1.0" encoding="UTF-8"?>
   <rss
     version="2.0"
-    xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
   >
     <channel>
       <title>My Podcast</title>
@@ -48,8 +48,8 @@ If the feed contains a known namespace but is using it under a different prefix,
 ```xml
 <!-- Feed with custom prefixes -->
 <rss
-  xmlns:podcast="http://www.itunes.com/dtds/podcast-1.0.dtd"
   xmlns:dublincore="http://purl.org/dc/elements/1.1/"
+  xmlns:podcast="http://www.itunes.com/dtds/podcast-1.0.dtd"
 >
   <channel>
     <podcast:author>John Doe</podcast:author>
