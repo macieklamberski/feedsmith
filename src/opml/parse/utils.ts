@@ -1,4 +1,4 @@
-import type { DeepPartial, ParsePartialFunction } from '../../common/types.js'
+import type { DeepPartial, ParsePartialUtil } from '../../common/types.js'
 import {
   isObject,
   isPresent,
@@ -14,7 +14,7 @@ import {
 } from '../../common/utils.js'
 import type { Body, Head, Opml, Options, Outline } from '../common/types.js'
 
-export const parseOutline: ParsePartialFunction<Outline<string>, Options> = (value, options) => {
+export const parseOutline: ParsePartialUtil<Outline<string>, Options> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -53,7 +53,7 @@ export const parseOutline: ParsePartialFunction<Outline<string>, Options> = (val
   return trimObject(outline) as DeepPartial<Outline<string>> | undefined
 }
 
-export const parseHead: ParsePartialFunction<Head<string>> = (value) => {
+export const parseHead: ParsePartialUtil<Head<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -81,7 +81,7 @@ export const parseHead: ParsePartialFunction<Head<string>> = (value) => {
   return trimObject(head)
 }
 
-export const parseBody: ParsePartialFunction<Body<string>, Options> = (value, options) => {
+export const parseBody: ParsePartialUtil<Body<string>, Options> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -93,7 +93,7 @@ export const parseBody: ParsePartialFunction<Body<string>, Options> = (value, op
   return trimObject(body)
 }
 
-export const parseOpml: ParsePartialFunction<Opml<string>, Options> = (value, options) => {
+export const parseOpml: ParsePartialUtil<Opml<string>, Options> = (value, options) => {
   if (!isObject(value?.opml)) {
     return
   }

@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -9,7 +9,7 @@ import {
 } from '../../../common/utils.js'
 import type { Account, Archive, Feed, Item, Likes, SubscriptionList } from '../common/types.js'
 
-export const parseAccount: ParsePartialFunction<Account> = (value) => {
+export const parseAccount: ParsePartialUtil<Account> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -22,7 +22,7 @@ export const parseAccount: ParsePartialFunction<Account> = (value) => {
   return trimObject(account)
 }
 
-export const parseLikes: ParsePartialFunction<Likes> = (value) => {
+export const parseLikes: ParsePartialUtil<Likes> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -34,7 +34,7 @@ export const parseLikes: ParsePartialFunction<Likes> = (value) => {
   return trimObject(likes)
 }
 
-export const parseArchive: ParsePartialFunction<Archive> = (value) => {
+export const parseArchive: ParsePartialUtil<Archive> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -53,7 +53,7 @@ export const parseArchive: ParsePartialFunction<Archive> = (value) => {
   return trimObject(archive)
 }
 
-export const parseSubscriptionList: ParsePartialFunction<SubscriptionList> = (value) => {
+export const parseSubscriptionList: ParsePartialUtil<SubscriptionList> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -66,7 +66,7 @@ export const parseSubscriptionList: ParsePartialFunction<SubscriptionList> = (va
   return trimObject(subscriptionList)
 }
 
-export const retrieveFeed: ParsePartialFunction<Feed> = (value) => {
+export const retrieveFeed: ParsePartialUtil<Feed> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -86,7 +86,7 @@ export const retrieveFeed: ParsePartialFunction<Feed> = (value) => {
   return trimObject(feed)
 }
 
-export const retrieveItem: ParsePartialFunction<Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<Item> = (value) => {
   if (!isObject(value)) {
     return
   }

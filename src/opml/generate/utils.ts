@@ -1,4 +1,4 @@
-import type { GenerateFunction } from '../../common/types.js'
+import type { GenerateUtil } from '../../common/types.js'
 import {
   generateBoolean,
   generateCdataString,
@@ -13,7 +13,7 @@ import {
 } from '../../common/utils.js'
 import type { Body, Head, Opml, Options, Outline } from '../common/types.js'
 
-export const generateOutline: GenerateFunction<Outline, Options> = (outline, options) => {
+export const generateOutline: GenerateUtil<Outline, Options> = (outline, options) => {
   if (!isObject(outline)) {
     return
   }
@@ -50,7 +50,7 @@ export const generateOutline: GenerateFunction<Outline, Options> = (outline, opt
   return trimObject(value)
 }
 
-export const generateHead: GenerateFunction<Head> = (head) => {
+export const generateHead: GenerateUtil<Head> = (head) => {
   if (!isObject(head)) {
     return
   }
@@ -74,7 +74,7 @@ export const generateHead: GenerateFunction<Head> = (head) => {
   return trimObject(value)
 }
 
-export const generateBody: GenerateFunction<Body, Options> = (body, options) => {
+export const generateBody: GenerateUtil<Body, Options> = (body, options) => {
   if (!isObject(body)) {
     return
   }
@@ -86,7 +86,7 @@ export const generateBody: GenerateFunction<Body, Options> = (body, options) => 
   return trimObject(value)
 }
 
-export const generateOpml: GenerateFunction<Opml, Options> = (opml, options) => {
+export const generateOpml: GenerateUtil<Opml, Options> = (opml, options) => {
   if (!isObject(opml)) {
     return
   }

@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
   parseCsvOf,
@@ -10,11 +10,11 @@ import {
 } from '../../../common/utils.js'
 import type { HitParade, Item } from '../common/types.js'
 
-export const parseHitParade: ParsePartialFunction<HitParade> = (value) => {
+export const parseHitParade: ParsePartialUtil<HitParade> = (value) => {
   return parseCsvOf(value, parseNumber)
 }
 
-export const retrieveItem: ParsePartialFunction<Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<Item> = (value) => {
   if (!isObject(value)) {
     return
   }

@@ -1,4 +1,4 @@
-import type { GenerateFunction } from '../../../common/types.js'
+import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generatePlainString,
@@ -9,7 +9,7 @@ import {
 } from '../../../common/utils.js'
 import type { Account, Archive, Feed, Item, Likes, SubscriptionList } from '../common/types.js'
 
-export const generateAccount: GenerateFunction<Account> = (account) => {
+export const generateAccount: GenerateUtil<Account> = (account) => {
   if (!isObject(account) || !isNonEmptyString(account.service)) {
     return
   }
@@ -22,7 +22,7 @@ export const generateAccount: GenerateFunction<Account> = (account) => {
   return trimObject(value)
 }
 
-export const generateLikes: GenerateFunction<Likes> = (likes) => {
+export const generateLikes: GenerateUtil<Likes> = (likes) => {
   if (!isObject(likes) || !isNonEmptyString(likes.server)) {
     return
   }
@@ -32,7 +32,7 @@ export const generateLikes: GenerateFunction<Likes> = (likes) => {
   }
 }
 
-export const generateArchive: GenerateFunction<Archive> = (archive) => {
+export const generateArchive: GenerateUtil<Archive> = (archive) => {
   if (!isObject(archive) || !isNonEmptyString(archive.url) || !isNonEmptyString(archive.startDay)) {
     return
   }
@@ -47,7 +47,7 @@ export const generateArchive: GenerateFunction<Archive> = (archive) => {
   return trimObject(value)
 }
 
-export const generateSubscriptionList: GenerateFunction<SubscriptionList> = (subscriptionList) => {
+export const generateSubscriptionList: GenerateUtil<SubscriptionList> = (subscriptionList) => {
   if (!isObject(subscriptionList) || !isNonEmptyString(subscriptionList.url)) {
     return
   }
@@ -60,7 +60,7 @@ export const generateSubscriptionList: GenerateFunction<SubscriptionList> = (sub
   return trimObject(value)
 }
 
-export const generateFeed: GenerateFunction<Feed> = (feed) => {
+export const generateFeed: GenerateUtil<Feed> = (feed) => {
   if (!isObject(feed)) {
     return
   }
@@ -78,7 +78,7 @@ export const generateFeed: GenerateFunction<Feed> = (feed) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateFunction<Item> = (item) => {
+export const generateItem: GenerateUtil<Item> = (item) => {
   if (!isObject(item)) {
     return
   }
