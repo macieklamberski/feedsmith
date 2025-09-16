@@ -4,6 +4,10 @@ export type Unreliable = any
 
 export type DateLike = Date | string
 
+export type ExtraFields<F extends ReadonlyArray<string>, V = unknown> = {
+  [K in F[number]]?: V
+}
+
 export type AnyOf<T> = Partial<{ [P in keyof T]-?: NonNullable<T[P]> }> &
   { [P in keyof T]-?: Pick<{ [Q in keyof T]-?: NonNullable<T[Q]> }, P> }[keyof T]
 
@@ -19,9 +23,15 @@ export type DeepPartial<T> = T extends Array<infer U>
 
 export type ParseExactFunction<R> = (value: Unreliable) => R | undefined
 
-export type ParsePartialFunction<R> = (value: Unreliable) => DeepPartial<R> | undefined
+export type ParsePartialFunction<R, O = undefined> = (
+  value: Unreliable,
+  options?: O,
+) => DeepPartial<R> | undefined
 
-export type GenerateFunction<V> = (value: V | undefined) => Unreliable | undefined
+export type GenerateFunction<V, O = undefined> = (
+  value: V | undefined,
+  options?: O,
+) => Unreliable | undefined
 
 export type XmlStylesheet = {
   type: string
@@ -32,15 +42,16 @@ export type XmlStylesheet = {
   alternate?: boolean
 }
 
-export type XmlGenerateFunction<Strict, Lenient, Options = Record<string, never>> = {
-  (
-    value: Strict,
-    options?: Options & { lenient?: false; stylesheets?: Array<XmlStylesheet> },
-  ): string
-  (value: Lenient, options: Options & { lenient: true; stylesheets?: Array<XmlStylesheet> }): string
-}
+export type XmlGenerateFunction<S, L, O = Record<string, never>> = <
+  Lenient extends boolean = false,
+>(
+  value: Lenient extends true ? L : S,
+  options?: O & { lenient?: Lenient; stylesheets?: Array<XmlStylesheet> },
+) => string
 
-export type JsonGenerateFunction<Strict, Lenient, Options = Record<string, never>> = {
-  (value: Strict, options?: Options & { lenient?: false }): unknown
-  (value: Lenient, options: Options & { lenient: true }): unknown
-}
+export type JsonGenerateFunction<S, L, O = Record<string, never>> = <
+  Lenient extends boolean = false,
+>(
+  value: Lenient extends true ? L : S,
+  options?: O & { lenient?: Lenient },
+) => unknown

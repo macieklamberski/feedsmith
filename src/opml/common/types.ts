@@ -1,26 +1,19 @@
-import type { DateLike, DeepPartial, Unreliable } from '../../common/types.js'
+import type { DateLike, ExtraFields } from '../../common/types.js'
 
-export type Options = {
-  extraOutlineAttributes?: Array<string>
+export type Options<A extends ReadonlyArray<string> = ReadonlyArray<string>> = {
+  extraOutlineAttributes?: A
 }
 
-export type ParsePartialFunction<R> = (
-  value: Unreliable,
-  options?: Options,
-) => DeepPartial<R> | undefined
-
-export type GenerateFunction<V> = (
-  value: V | undefined,
-  options?: Options,
-) => Unreliable | undefined
-
 // #region reference
-export type Outline<TDate extends DateLike> = {
+export type Outline<
+  D extends DateLike = DateLike,
+  A extends ReadonlyArray<string> = ReadonlyArray<string>,
+> = {
   text: string
   type?: string
   isComment?: boolean
   isBreakpoint?: boolean
-  created?: TDate
+  created?: D
   category?: string
   description?: string
   xmlUrl?: string
@@ -29,14 +22,13 @@ export type Outline<TDate extends DateLike> = {
   title?: string
   version?: string
   url?: string
-  outlines?: Array<Outline<TDate>>
-  [key: string]: unknown
-}
+  outlines?: Array<Outline<D, A>>
+} & ExtraFields<A>
 
-export type Head<TDate extends DateLike> = {
+export type Head<D extends DateLike = DateLike> = {
   title?: string
-  dateCreated?: TDate
-  dateModified?: TDate
+  dateCreated?: D
+  dateModified?: D
   ownerName?: string
   ownerEmail?: string
   ownerId?: string
@@ -49,12 +41,18 @@ export type Head<TDate extends DateLike> = {
   windowRight?: number
 }
 
-export type Body<TDate extends DateLike> = {
-  outlines?: Array<Outline<TDate>>
+export type Body<
+  D extends DateLike = DateLike,
+  A extends ReadonlyArray<string> = ReadonlyArray<string>,
+> = {
+  outlines?: Array<Outline<D, A>>
 }
 
-export type Opml<TDate extends DateLike> = {
-  head?: Head<TDate>
-  body?: Body<TDate>
+export type Opml<
+  D extends DateLike = DateLike,
+  A extends ReadonlyArray<string> = ReadonlyArray<string>,
+> = {
+  head?: Head<D>
+  body?: Body<D, A>
 }
 // #endregion reference
