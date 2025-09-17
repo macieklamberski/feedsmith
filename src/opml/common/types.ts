@@ -6,14 +6,14 @@ export type Options<A extends ReadonlyArray<string> = ReadonlyArray<string>> = {
 
 // #region reference
 export type Outline<
-  D extends DateLike = DateLike,
+  TDate extends DateLike,
   A extends ReadonlyArray<string> = ReadonlyArray<string>,
 > = {
   text: string
   type?: string
   isComment?: boolean
   isBreakpoint?: boolean
-  created?: D
+  created?: TDate
   category?: string
   description?: string
   xmlUrl?: string
@@ -22,13 +22,13 @@ export type Outline<
   title?: string
   version?: string
   url?: string
-  outlines?: Array<Outline<D, A>>
+  outlines?: Array<Outline<TDate, A>>
 } & ExtraFields<A>
 
-export type Head<D extends DateLike = DateLike> = {
+export type Head<TDate extends DateLike> = {
   title?: string
-  dateCreated?: D
-  dateModified?: D
+  dateCreated?: TDate
+  dateModified?: TDate
   ownerName?: string
   ownerEmail?: string
   ownerId?: string
@@ -42,17 +42,17 @@ export type Head<D extends DateLike = DateLike> = {
 }
 
 export type Body<
-  D extends DateLike = DateLike,
+  TDate extends DateLike,
   A extends ReadonlyArray<string> = ReadonlyArray<string>,
 > = {
-  outlines?: Array<Outline<D, A>>
+  outlines?: Array<Outline<TDate, A>>
 }
 
 export type Opml<
-  D extends DateLike = DateLike,
+  TDate extends DateLike,
   A extends ReadonlyArray<string> = ReadonlyArray<string>,
 > = {
-  head?: Head<D>
-  body?: Body<D, A>
+  head?: Head<TDate>
+  body?: Body<TDate, A>
 }
 // #endregion reference
