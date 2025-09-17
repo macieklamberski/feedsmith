@@ -252,9 +252,7 @@ describe('generateSkipHours', () => {
   })
 
   it('should handle empty array', () => {
-    const value = []
-
-    expect(generateSkipHours(value)).toBeUndefined()
+    expect(generateSkipHours([])).toBeUndefined()
   })
 
   it('should handle object with only undefined/empty properties', () => {
@@ -283,9 +281,7 @@ describe('generateSkipDays', () => {
   })
 
   it('should handle empty array', () => {
-    const value = []
-
-    expect(generateSkipDays(value)).toBeUndefined()
+    expect(generateSkipDays([])).toBeUndefined()
   })
 
   it('should handle object with only undefined/empty properties', () => {

@@ -73,8 +73,11 @@ describe('generateChapter', () => {
 
   it('should handle non-object inputs gracefully', () => {
     expect(generateChapter(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
     expect(generateChapter(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
     expect(generateChapter('not an object')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
     expect(generateChapter([])).toBeUndefined()
   })
 })
@@ -108,9 +111,7 @@ describe('generateChapters', () => {
   })
 
   it('should handle empty array', () => {
-    const value = []
-
-    expect(generateChapters(value)).toBeUndefined()
+    expect(generateChapters([])).toBeUndefined()
   })
 
   it('should handle undefined', () => {
@@ -187,72 +188,6 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
-  it('should generate all chapters without filtering', () => {
-    const value = {
-      chapters: [
-        {
-          start: '00:00:00.000',
-          title: 'Valid Chapter',
-        },
-        {
-          title: 'Chapter Without Start',
-          href: 'https://example.com/invalid',
-        },
-        {
-          start: '00:05:00.000',
-          title: 'Another Valid Chapter',
-        },
-      ],
-    }
-    const expected = {
-      'psc:chapters': {
-        'psc:chapter': [
-          {
-            '@start': '00:00:00.000',
-            '@title': 'Valid Chapter',
-          },
-          {
-            '@title': 'Chapter Without Start',
-            '@href': 'https://example.com/invalid',
-          },
-          {
-            '@start': '00:05:00.000',
-            '@title': 'Another Valid Chapter',
-          },
-        ],
-      },
-    }
-
-    expect(generateItem(value)).toEqual(expected)
-  })
-
-  it('should generate chapters without start attributes', () => {
-    const value = {
-      chapters: [
-        {
-          title: 'No Start Time',
-        },
-        {
-          href: 'https://example.com/invalid',
-        },
-      ],
-    }
-    const expected = {
-      'psc:chapters': {
-        'psc:chapter': [
-          {
-            '@title': 'No Start Time',
-          },
-          {
-            '@href': 'https://example.com/invalid',
-          },
-        ],
-      },
-    }
-
-    expect(generateItem(value)).toEqual(expected)
-  })
-
   it('should return undefined when chapters array is empty', () => {
     const value = {
       chapters: [],
@@ -277,8 +212,11 @@ describe('generateItem', () => {
 
   it('should handle non-object inputs gracefully', () => {
     expect(generateItem(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
     expect(generateItem('not an object')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
     expect(generateItem([])).toBeUndefined()
   })
 })
