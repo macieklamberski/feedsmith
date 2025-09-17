@@ -26,9 +26,7 @@ export type UtilOptions = {
 
 export type ParsePartialUtil<R> = BaseParsePartialUtil<R, UtilOptions>
 
-export type GenerateUtil<V, O extends UtilOptions = UtilOptions> = O extends { asNamespace: true }
-  ? BaseGenerateUtil<DeepPartial<V>, O>
-  : BaseGenerateUtil<V, O>
+export type GenerateUtil<V> = BaseGenerateUtil<DeepPartial<V>, UtilOptions>
 
 // #region reference
 // For simplicity's sake, a string is used for now, but this may be reconsidered in the future.
