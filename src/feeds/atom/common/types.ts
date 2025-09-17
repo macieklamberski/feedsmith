@@ -14,12 +14,12 @@ import type { Item as ThrItem, Link as ThrLink } from '../../../namespaces/thr/c
 import type { Item as WfwItem } from '../../../namespaces/wfw/common/types.js'
 import type { Feed as YtFeed, Item as YtItem } from '../../../namespaces/yt/common/types.js'
 
-export type ParsePartialFunction<R> = (
+export type ParsePartialUtil<R> = (
   value: Unreliable,
   options?: { prefix?: string; asNamespace?: boolean },
 ) => DeepPartial<R> | undefined
 
-export type GenerateFunction<V> = (
+export type GenerateUtil<V> = (
   value: V | undefined,
   options?: { prefix?: string; asNamespace?: boolean },
 ) => Unreliable | undefined
