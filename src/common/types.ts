@@ -11,11 +11,11 @@ export type ExtraFields<F extends ReadonlyArray<string>, V = unknown> = {
 export type AnyOf<T> = Partial<{ [P in keyof T]-?: NonNullable<T[P]> }> &
   { [P in keyof T]-?: Pick<{ [Q in keyof T]-?: NonNullable<T[Q]> }, P> }[keyof T]
 
-export type IsPlainObject<T> = T extends Date
+export type IsPlainObject<T> = T extends Array<unknown>
   ? false
-  : T extends Array<unknown>
+  : T extends (...args: Array<unknown>) => unknown
     ? false
-    : T extends (...args: Array<unknown>) => unknown
+    : T extends Date
       ? false
       : T extends object
         ? T extends null
