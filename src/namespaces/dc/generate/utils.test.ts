@@ -71,14 +71,12 @@ describe('generateItemOrFeed', () => {
       rights: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateItemOrFeed(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateItemOrFeed(value)).toBeUndefined()
   })
 

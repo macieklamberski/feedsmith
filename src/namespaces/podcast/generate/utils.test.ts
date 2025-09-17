@@ -874,7 +874,6 @@ describe('generatePodroll', () => {
       remoteItems: [],
     }
 
-    // @ts-expect-error: Testing edge case
     expect(generatePodroll(value)).toBeUndefined()
   })
 
@@ -1085,7 +1084,6 @@ describe('generateBaseItem', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateBaseItem(value)).toBeUndefined()
   })
 
@@ -1187,7 +1185,6 @@ describe('generateItem', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(value)).toBeUndefined()
   })
 
@@ -1366,7 +1363,6 @@ describe('generateFeed', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 

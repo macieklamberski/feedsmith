@@ -144,7 +144,6 @@ describe('generateOwner', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateOwner(value)).toBeUndefined()
   })
 
@@ -237,7 +236,6 @@ describe('generateItem', () => {
       keywords: [],
     }
 
-    // @ts-expect-error: Testing edge case
     expect(generateItem(value)).toBeUndefined()
   })
 
@@ -267,14 +265,12 @@ describe('generateItem', () => {
       keywords: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(value)).toBeUndefined()
   })
 
@@ -400,7 +396,6 @@ describe('generateFeed', () => {
       categories: [],
     }
 
-    // @ts-expect-error: Testing edge case
     expect(generateFeed(value)).toBeUndefined()
   })
 
@@ -422,14 +417,12 @@ describe('generateFeed', () => {
       owner: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 

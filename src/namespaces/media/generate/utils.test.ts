@@ -1863,7 +1863,6 @@ describe('generateItemOrFeed', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateItemOrFeed(value)).toBeUndefined()
   })
 

@@ -380,14 +380,12 @@ describe('generateSource', () => {
       updated: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateSource(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateSource(value)).toBeUndefined()
   })
 
