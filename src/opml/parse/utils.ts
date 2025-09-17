@@ -1,4 +1,4 @@
-import type { DeepPartial, ParsePartialUtil } from '../../common/types.js'
+import type { ParsePartialUtil } from '../../common/types.js'
 import {
   isObject,
   isPresent,
@@ -12,9 +12,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../common/utils.js'
-import type { Body, Head, Opml, Options, Outline } from '../common/types.js'
+import type { Body, Head, MainOptions, Opml, Outline } from '../common/types.js'
 
-export const parseOutline: ParsePartialUtil<Outline<string>, Options> = (value, options) => {
+export const parseOutline: ParsePartialUtil<Outline<string>, MainOptions> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -48,9 +48,7 @@ export const parseOutline: ParsePartialUtil<Outline<string>, Options> = (value, 
     }
   }
 
-  // TODO: Remove type assertion by creating trimPartialObject utility that returns DeepPartial<T>
-  // instead of AnyOf<T> to match ParsePartialFunction return type expectation.
-  return trimObject(outline) as DeepPartial<Outline<string>> | undefined
+  return trimObject(outline)
 }
 
 export const parseHead: ParsePartialUtil<Head<string>> = (value) => {
@@ -81,7 +79,7 @@ export const parseHead: ParsePartialUtil<Head<string>> = (value) => {
   return trimObject(head)
 }
 
-export const parseBody: ParsePartialUtil<Body<string>, Options> = (value, options) => {
+export const parseBody: ParsePartialUtil<Body<string>, MainOptions> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -93,7 +91,7 @@ export const parseBody: ParsePartialUtil<Body<string>, Options> = (value, option
   return trimObject(body)
 }
 
-export const parseOpml: ParsePartialUtil<Opml<string>, Options> = (value, options) => {
+export const parseOpml: ParsePartialUtil<Opml<string>, MainOptions> = (value, options) => {
   if (!isObject(value?.opml)) {
     return
   }
