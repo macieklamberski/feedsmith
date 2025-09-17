@@ -11,15 +11,23 @@ export type ExtraFields<F extends ReadonlyArray<string>, V = unknown> = {
 export type AnyOf<T> = Partial<{ [P in keyof T]-?: NonNullable<T[P]> }> &
   { [P in keyof T]-?: Pick<{ [Q in keyof T]-?: NonNullable<T[Q]> }, P> }[keyof T]
 
-export type DeepPartial<T> = T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends (...args: Array<unknown>) => unknown
-    ? T
-    : T extends object
-      ? T extends null
-        ? T
-        : { [P in keyof T]?: DeepPartial<T[P]> }
-      : T
+export type IsPlainObject<T> = T extends Date
+  ? false
+  : T extends Array<unknown>
+    ? false
+    : T extends (...args: Array<unknown>) => unknown
+      ? false
+      : T extends object
+        ? T extends null
+          ? false
+          : true
+        : false
+
+export type DeepPartial<T> = IsPlainObject<T> extends true
+  ? { [P in keyof T]?: DeepPartial<T[P]> }
+  : T extends Array<infer U>
+    ? Array<DeepPartial<U>>
+    : T
 
 export type ParseExactUtil<R> = (value: Unreliable) => R | undefined
 
