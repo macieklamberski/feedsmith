@@ -1,4 +1,4 @@
-import type { Unreliable } from '../../../common/types.js'
+import type { DeepPartial, Unreliable } from '../../../common/types.js'
 import {
   detectNamespaces,
   isObject,
@@ -153,7 +153,7 @@ export const parseSource: ParsePartialUtil<Source<string>> = (value, options) =>
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
-    generator: parseSingularOf(get('generator'), parseGenerator),
+    generator: parseSingularOf(get('generator'), (value) => parseGenerator(value, options)),
     icon: parseSingularOf(get('icon'), (value) => parseString(retrieveText(value))),
     id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
@@ -164,7 +164,7 @@ export const parseSource: ParsePartialUtil<Source<string>> = (value, options) =>
     updated: retrieveUpdated(value),
   }
 
-  return trimObject(source)
+  return trimObject(source) as DeepPartial<Source<string>>
 }
 
 export const retrievePublished: ParsePartialUtil<string> = (value, options) => {
@@ -239,7 +239,7 @@ export const parseEntry: ParsePartialUtil<Entry<string>> = (value, options) => {
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
   }
 
-  return trimObject(entry)
+  return trimObject(entry) as DeepPartial<Entry<string>>
 }
 
 export const parseFeed: ParsePartialUtil<Feed<string>> = (value, options) => {
@@ -253,7 +253,7 @@ export const parseFeed: ParsePartialUtil<Feed<string>> = (value, options) => {
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
-    generator: parseSingularOf(get('generator'), parseGenerator),
+    generator: parseSingularOf(get('generator'), (value) => parseGenerator(value, options)),
     icon: parseSingularOf(get('icon'), (value) => parseString(retrieveText(value))),
     id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
@@ -272,7 +272,7 @@ export const parseFeed: ParsePartialUtil<Feed<string>> = (value, options) => {
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
   }
 
-  return trimObject(feed)
+  return trimObject(feed) as DeepPartial<Feed<string>>
 }
 
 export const retrieveFeed: ParsePartialUtil<Feed<string>> = (value) => {

@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { DeepPartial, ParsePartialUtil } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
   isObject,
@@ -417,7 +417,7 @@ export const retrieveCommonElements: ParsePartialUtil<CommonElements> = (value) 
     scenes: parseSingularOf(value['media:scenes'], parseScenes),
   }
 
-  return trimObject(commonElements)
+  return trimObject(commonElements) as DeepPartial<CommonElements>
 }
 
 export const parseContent: ParsePartialUtil<Content> = (value) => {
@@ -470,5 +470,5 @@ export const retrieveItemOrFeed: ParsePartialUtil<ItemOrFeed> = (value) => {
     ...retrieveCommonElements(value),
   }
 
-  return trimObject(itemOrFeed)
+  return trimObject(itemOrFeed) as DeepPartial<ItemOrFeed>
 }

@@ -428,14 +428,16 @@ describe('generateEntry', () => {
     expect(generateEntry(value)).toEqual(expected)
   })
 
-  it('should generate entry with minimal properties (id and title only)', () => {
+  it('should generate entry with minimal properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
       title: 'Minimal Entry',
+      updated: new Date('2023-03-15T12:00:00Z'),
     }
     const expected = {
       id: 'https://example.com/entry/1',
       title: 'Minimal Entry',
+      updated: '2023-03-15T12:00:00.000Z',
     }
 
     expect(generateEntry(value)).toEqual(expected)
@@ -445,6 +447,7 @@ describe('generateEntry', () => {
     const value = {
       id: 'https://example.com/entry/1',
       title: 'Entry with empty arrays',
+      updated: new Date('2023-03-15T12:00:00Z'),
       authors: [],
       categories: [],
       links: [],
@@ -452,6 +455,7 @@ describe('generateEntry', () => {
     const expected = {
       id: 'https://example.com/entry/1',
       title: 'Entry with empty arrays',
+      updated: '2023-03-15T12:00:00.000Z',
     }
 
     expect(generateEntry(value)).toEqual(expected)
@@ -511,6 +515,7 @@ describe('generateEntry', () => {
     const value = {
       id: 'https://example.com/entry/1',
       title: 'Entry with namespaces',
+      updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creator: 'Jane Smith',
         date: new Date('2023-02-01T00:00:00Z'),
@@ -523,6 +528,7 @@ describe('generateEntry', () => {
     const expected = {
       id: 'https://example.com/entry/1',
       title: 'Entry with namespaces',
+      updated: '2023-03-15T12:00:00.000Z',
       'dc:creator': 'Jane Smith',
       'dc:date': '2023-02-01T00:00:00.000Z',
       'slash:section': 'Technology',
@@ -579,6 +585,7 @@ describe('generateEntry', () => {
     const value = {
       id: 'https://example.com/entry/1',
       title: 'Entry with DC namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creator: 'Jane Smith',
       },
@@ -586,6 +593,7 @@ describe('generateEntry', () => {
     const expected = {
       id: 'https://example.com/entry/1',
       title: 'Entry with DC namespace',
+      updated: '2023-03-15T12:00:00.000Z',
       'dc:creator': 'Jane Smith',
     }
 
@@ -596,6 +604,7 @@ describe('generateEntry', () => {
     const value = {
       id: 'https://example.com/entry/1',
       title: 'Entry with Slash namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
       slash: {
         section: 'Technology',
       },
@@ -603,6 +612,7 @@ describe('generateEntry', () => {
     const expected = {
       id: 'https://example.com/entry/1',
       title: 'Entry with Slash namespace',
+      updated: '2023-03-15T12:00:00.000Z',
       'slash:section': 'Technology',
     }
 
@@ -613,6 +623,7 @@ describe('generateEntry', () => {
     const value = {
       id: 'https://example.com/entry/1',
       title: 'Entry with Threading namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
       thr: {
         total: 42,
       },
@@ -620,6 +631,7 @@ describe('generateEntry', () => {
     const expected = {
       id: 'https://example.com/entry/1',
       title: 'Entry with Threading namespace',
+      updated: '2023-03-15T12:00:00.000Z',
       'thr:total': 42,
     }
 
@@ -630,6 +642,7 @@ describe('generateEntry', () => {
     const value = {
       id: 'https://example.com/entry/1',
       title: 'Entry with Media namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
       media: {
         title: {
           value: 'Media Entry Title',
@@ -639,6 +652,7 @@ describe('generateEntry', () => {
     const expected = {
       id: 'https://example.com/entry/1',
       title: 'Entry with Media namespace',
+      updated: '2023-03-15T12:00:00.000Z',
       'media:title': {
         '#text': 'Media Entry Title',
       },
@@ -651,6 +665,7 @@ describe('generateEntry', () => {
     const value = {
       id: 'https://example.com/entry/1',
       title: 'Entry with iTunes namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
       itunes: {
         title: 'Episode 1 - Special Title',
       },
@@ -658,6 +673,7 @@ describe('generateEntry', () => {
     const expected = {
       id: 'https://example.com/entry/1',
       title: 'Entry with iTunes namespace',
+      updated: '2023-03-15T12:00:00.000Z',
       'itunes:title': 'Episode 1 - Special Title',
     }
 
@@ -668,6 +684,7 @@ describe('generateEntry', () => {
     const value = {
       id: 'https://example.com/entry/1',
       title: 'Entry with georss namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
       georss: {
         point: { lat: 45.256, lng: -71.92 },
         featureName: 'Boston',
@@ -676,6 +693,7 @@ describe('generateEntry', () => {
     const expected = {
       id: 'https://example.com/entry/1',
       title: 'Entry with georss namespace',
+      updated: '2023-03-15T12:00:00.000Z',
       'georss:point': '45.256 -71.92',
       'georss:featureName': 'Boston',
     }
@@ -687,6 +705,7 @@ describe('generateEntry', () => {
     const value = {
       id: 'https://example.com/entry/1',
       title: 'Entry with DCTerms namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
       dcterms: {
         created: new Date('2023-02-01T00:00:00Z'),
         license: 'MIT License',
@@ -695,6 +714,7 @@ describe('generateEntry', () => {
     const expected = {
       id: 'https://example.com/entry/1',
       title: 'Entry with DCTerms namespace',
+      updated: '2023-03-15T12:00:00.000Z',
       'dcterms:created': '2023-02-01T00:00:00.000Z',
       'dcterms:license': 'MIT License',
     }

@@ -26,6 +26,7 @@ export type UtilOptions = {
 
 export type ParsePartialUtil<R> = BaseParsePartialUtil<R, UtilOptions>
 
+// The `DeepPartial` type is used as a relaxing measure for cases when `asNamespace` is `true`.
 export type GenerateUtil<V> = BaseGenerateUtil<DeepPartial<V>, UtilOptions>
 
 // #region reference
