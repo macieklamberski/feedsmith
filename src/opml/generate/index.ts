@@ -1,10 +1,10 @@
-import type { DateLike, DeepPartial, XmlGenerateFunction } from '../../common/types.js'
+import type { DateLike, DeepPartial, XmlGenerateMain } from '../../common/types.js'
 import { generateXml } from '../../common/utils.js'
 import type { Opml, Options } from '../common/types.js'
 import { builder } from './config.js'
 import { generateOpml } from './utils.js'
 
-export const generate: XmlGenerateFunction<Opml<Date>, DeepPartial<Opml<DateLike>>, Options> = (
+export const generate: XmlGenerateMain<Opml<Date>, DeepPartial<Opml<DateLike>>, Options> = (
   value,
   options,
 ) => {

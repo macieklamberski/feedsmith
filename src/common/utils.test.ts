@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import { type XMLBuilder, XMLParser } from 'fast-xml-parser'
 import { namespaceUrls } from './config.js'
-import type { ParseExactFunction } from './types.js'
+import type { ParseExactUtil } from './types.js'
 import {
   createNamespaceNormalizator,
   detectNamespaces,
@@ -1269,7 +1269,7 @@ describe('parseSingularOf', () => {
   })
 
   it('should work with custom parse functions', () => {
-    const parseUpperCase: ParseExactFunction<string> = (value) => {
+    const parseUpperCase: ParseExactUtil<string> = (value) => {
       return typeof value === 'string' ? value.toUpperCase() : undefined
     }
 
@@ -1359,7 +1359,7 @@ describe('parseArray', () => {
 })
 
 describe('parseArrayOf', () => {
-  const parser: ParseExactFunction<string> = (value) => {
+  const parser: ParseExactUtil<string> = (value) => {
     if (typeof value === 'number') {
       return value.toString()
     }

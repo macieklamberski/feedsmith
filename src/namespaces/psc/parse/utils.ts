@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -8,7 +8,7 @@ import {
 } from '../../../common/utils.js'
 import type { Chapter, Item } from '../common/types.js'
 
-export const parseChapter: ParsePartialFunction<Chapter> = (value) => {
+export const parseChapter: ParsePartialUtil<Chapter> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -23,11 +23,11 @@ export const parseChapter: ParsePartialFunction<Chapter> = (value) => {
   return trimObject(chapter)
 }
 
-export const parseChapters: ParsePartialFunction<Array<Chapter>> = (value) => {
+export const parseChapters: ParsePartialUtil<Array<Chapter>> = (value) => {
   return parseArrayOf(value?.['psc:chapter'], parseChapter)
 }
 
-export const retrieveItem: ParsePartialFunction<Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<Item> = (value) => {
   if (!isObject(value)) {
     return
   }

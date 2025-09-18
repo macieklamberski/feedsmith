@@ -36,7 +36,7 @@ import type {
   Feed,
   Generator,
   Link,
-  ParsePartialFunction,
+  ParsePartialUtil,
   Person,
   Source,
 } from '../common/types.js'
@@ -63,7 +63,7 @@ export const createNamespaceGetter = (
   }
 }
 
-export const parseLink: ParsePartialFunction<Link<string>> = (value) => {
+export const parseLink: ParsePartialUtil<Link<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -81,7 +81,7 @@ export const parseLink: ParsePartialFunction<Link<string>> = (value) => {
   return trimObject(link)
 }
 
-export const retrievePersonUri: ParsePartialFunction<string> = (value, options) => {
+export const retrievePersonUri: ParsePartialUtil<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -93,7 +93,7 @@ export const retrievePersonUri: ParsePartialFunction<string> = (value, options) 
   return uri || url
 }
 
-export const parsePerson: ParsePartialFunction<Person> = (value, options) => {
+export const parsePerson: ParsePartialUtil<Person> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -108,7 +108,7 @@ export const parsePerson: ParsePartialFunction<Person> = (value, options) => {
   return trimObject(person)
 }
 
-export const parseCategory: ParsePartialFunction<Category> = (value) => {
+export const parseCategory: ParsePartialUtil<Category> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -122,7 +122,7 @@ export const parseCategory: ParsePartialFunction<Category> = (value) => {
   return trimObject(category)
 }
 
-export const retrieveGeneratorUri: ParsePartialFunction<string> = (value) => {
+export const retrieveGeneratorUri: ParsePartialUtil<string> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -133,7 +133,7 @@ export const retrieveGeneratorUri: ParsePartialFunction<string> = (value) => {
   return uri || url
 }
 
-export const parseGenerator: ParsePartialFunction<Generator> = (value) => {
+export const parseGenerator: ParsePartialUtil<Generator> = (value) => {
   const generator = {
     text: parseString(retrieveText(value)),
     uri: retrieveGeneratorUri(value),
@@ -143,7 +143,7 @@ export const parseGenerator: ParsePartialFunction<Generator> = (value) => {
   return trimObject(generator)
 }
 
-export const parseSource: ParsePartialFunction<Source<string>> = (value, options) => {
+export const parseSource: ParsePartialUtil<Source<string>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -167,7 +167,7 @@ export const parseSource: ParsePartialFunction<Source<string>> = (value, options
   return trimObject(source)
 }
 
-export const retrievePublished: ParsePartialFunction<string> = (value, options) => {
+export const retrievePublished: ParsePartialUtil<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -183,7 +183,7 @@ export const retrievePublished: ParsePartialFunction<string> = (value, options) 
   return published || issued || created
 }
 
-export const retrieveUpdated: ParsePartialFunction<string> = (value, options) => {
+export const retrieveUpdated: ParsePartialUtil<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -195,7 +195,7 @@ export const retrieveUpdated: ParsePartialFunction<string> = (value, options) =>
   return updated || modified
 }
 
-export const retrieveSubtitle: ParsePartialFunction<string> = (value, options) => {
+export const retrieveSubtitle: ParsePartialUtil<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -207,7 +207,7 @@ export const retrieveSubtitle: ParsePartialFunction<string> = (value, options) =
   return subtitle || tagline
 }
 
-export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) => {
+export const parseEntry: ParsePartialUtil<Entry<string>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -242,7 +242,7 @@ export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) 
   return trimObject(entry)
 }
 
-export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) => {
+export const parseFeed: ParsePartialUtil<Feed<string>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -275,7 +275,7 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) =>
   return trimObject(feed)
 }
 
-export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialUtil<Feed<string>> = (value) => {
   const notNamespaced = parseSingularOf(value?.feed, parseFeed)
   const namespaced = parseSingularOf(value?.['atom:feed'], (value) =>
     parseFeed(value, { prefix: 'atom:' }),

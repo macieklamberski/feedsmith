@@ -4,15 +4,12 @@ export type Options = {
   extraOutlineAttributes?: Array<string>
 }
 
-export type ParsePartialFunction<R> = (
+export type ParsePartialUtil<R> = (
   value: Unreliable,
   options?: Options,
 ) => DeepPartial<R> | undefined
 
-export type GenerateFunction<V> = (
-  value: V | undefined,
-  options?: Options,
-) => Unreliable | undefined
+export type GenerateUtil<V> = (value: V | undefined, options?: Options) => Unreliable | undefined
 
 // #region reference
 export type Outline<TDate extends DateLike> = {

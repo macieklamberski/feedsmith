@@ -17,11 +17,11 @@ export type DeepPartial<T> = T extends Array<infer U>
         : { [P in keyof T]?: DeepPartial<T[P]> }
       : T
 
-export type ParseExactFunction<R> = (value: Unreliable) => R | undefined
+export type ParseExactUtil<R> = (value: Unreliable) => R | undefined
 
-export type ParsePartialFunction<R> = (value: Unreliable) => DeepPartial<R> | undefined
+export type ParsePartialUtil<R> = (value: Unreliable) => DeepPartial<R> | undefined
 
-export type GenerateFunction<V> = (value: V | undefined) => Unreliable | undefined
+export type GenerateUtil<V> = (value: V | undefined) => Unreliable | undefined
 
 export type XmlStylesheet = {
   type: string
@@ -32,7 +32,7 @@ export type XmlStylesheet = {
   alternate?: boolean
 }
 
-export type XmlGenerateFunction<Strict, Lenient, Options = Record<string, never>> = {
+export type XmlGenerateMain<Strict, Lenient, Options = Record<string, never>> = {
   (
     value: Strict,
     options?: Options & { lenient?: false; stylesheets?: Array<XmlStylesheet> },
@@ -40,7 +40,7 @@ export type XmlGenerateFunction<Strict, Lenient, Options = Record<string, never>
   (value: Lenient, options: Options & { lenient: true; stylesheets?: Array<XmlStylesheet> }): string
 }
 
-export type JsonGenerateFunction<Strict, Lenient, Options = Record<string, never>> = {
+export type JsonGenerateMain<Strict, Lenient, Options = Record<string, never>> = {
   (value: Strict, options?: Options & { lenient?: false }): unknown
   (value: Lenient, options: Options & { lenient: true }): unknown
 }

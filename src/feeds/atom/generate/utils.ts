@@ -34,7 +34,7 @@ import type {
   Category,
   Entry,
   Feed,
-  GenerateFunction,
+  GenerateUtil,
   Generator,
   Link,
   Person,
@@ -46,11 +46,11 @@ export const createNamespaceSetter = (prefix: string | undefined) => {
   return (key: string) => (prefix ? `${prefix}${key}` : key)
 }
 
-export const generateText: GenerateFunction<Text> = (text) => {
+export const generateText: GenerateUtil<Text> = (text) => {
   return generateCdataString(text)
 }
 
-export const generateLink: GenerateFunction<Link<DateLike>> = (link) => {
+export const generateLink: GenerateUtil<Link<DateLike>> = (link) => {
   if (!isObject(link)) {
     return
   }
@@ -68,7 +68,7 @@ export const generateLink: GenerateFunction<Link<DateLike>> = (link) => {
   return trimObject(value)
 }
 
-export const generatePerson: GenerateFunction<Person> = (person, options) => {
+export const generatePerson: GenerateUtil<Person> = (person, options) => {
   if (!isObject(person)) {
     return
   }
@@ -83,7 +83,7 @@ export const generatePerson: GenerateFunction<Person> = (person, options) => {
   return trimObject(value)
 }
 
-export const generateCategory: GenerateFunction<Category> = (category) => {
+export const generateCategory: GenerateUtil<Category> = (category) => {
   if (!isObject(category)) {
     return
   }
@@ -97,7 +97,7 @@ export const generateCategory: GenerateFunction<Category> = (category) => {
   return trimObject(value)
 }
 
-export const generateGenerator: GenerateFunction<Generator> = (generator) => {
+export const generateGenerator: GenerateUtil<Generator> = (generator) => {
   if (!isObject(generator)) {
     return
   }
@@ -111,7 +111,7 @@ export const generateGenerator: GenerateFunction<Generator> = (generator) => {
   return trimObject(value)
 }
 
-export const generateSource: GenerateFunction<Source<DateLike>> = (source, options) => {
+export const generateSource: GenerateUtil<Source<DateLike>> = (source, options) => {
   if (!isObject(source)) {
     return
   }
@@ -139,7 +139,7 @@ export const generateSource: GenerateFunction<Source<DateLike>> = (source, optio
   return trimObject(value)
 }
 
-export const generateEntry: GenerateFunction<Entry<DateLike>> = (entry, options) => {
+export const generateEntry: GenerateUtil<Entry<DateLike>> = (entry, options) => {
   if (!isObject(entry)) {
     return
   }
@@ -187,7 +187,7 @@ export const generateEntry: GenerateFunction<Entry<DateLike>> = (entry, options)
   }
 }
 
-export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed, options) => {
+export const generateFeed: GenerateUtil<Feed<DateLike>> = (feed, options) => {
   if (!isObject(feed)) {
     return
   }

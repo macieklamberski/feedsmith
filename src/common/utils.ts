@@ -3,8 +3,8 @@ import type { XMLBuilder } from 'fast-xml-parser'
 import type {
   AnyOf,
   DateLike,
-  GenerateFunction,
-  ParseExactFunction,
+  GenerateUtil,
+  ParseExactUtil,
   Unreliable,
   XmlStylesheet,
 } from './types.js'
@@ -56,7 +56,7 @@ export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<
 
 export const trimArray = <T, R = T>(
   value: Array<T> | undefined,
-  parse?: ParseExactFunction<R>,
+  parse?: ParseExactUtil<R>,
 ): Array<R> | undefined => {
   if (!Array.isArray(value) || value.length === 0) {
     return
@@ -133,7 +133,7 @@ export const hasEntities = (text: string) => {
   return ampIndex !== -1 && text.indexOf(';', ampIndex) !== -1
 }
 
-export const parseString: ParseExactFunction<string> = (value) => {
+export const parseString: ParseExactUtil<string> = (value) => {
   if (typeof value === 'string') {
     let string = stripCdata(value).trim()
 
@@ -153,7 +153,7 @@ export const parseString: ParseExactFunction<string> = (value) => {
   }
 }
 
-export const parseNumber: ParseExactFunction<number> = (value) => {
+export const parseNumber: ParseExactUtil<number> = (value) => {
   if (typeof value === 'number') {
     return value
   }
@@ -169,7 +169,7 @@ const trueRegex = /^\p{White_Space}*true\p{White_Space}*$/iu
 const falseRegex = /^\p{White_Space}*false\p{White_Space}*$/iu
 const yesRegex = /^\p{White_Space}*yes\p{White_Space}*$/iu
 
-export const parseBoolean: ParseExactFunction<boolean> = (value) => {
+export const parseBoolean: ParseExactUtil<boolean> = (value) => {
   if (typeof value === 'boolean') {
     return value
   }
@@ -180,7 +180,7 @@ export const parseBoolean: ParseExactFunction<boolean> = (value) => {
   }
 }
 
-export const parseYesNoBoolean: ParseExactFunction<boolean> = (value) => {
+export const parseYesNoBoolean: ParseExactUtil<boolean> = (value) => {
   const boolean = parseBoolean(value)
 
   if (boolean !== undefined) {
@@ -192,14 +192,14 @@ export const parseYesNoBoolean: ParseExactFunction<boolean> = (value) => {
   }
 }
 
-export const parseDate: ParseExactFunction<string> = (value) => {
+export const parseDate: ParseExactUtil<string> = (value) => {
   // This function is currently a placeholder for the actual date parsing functionality
   // which might be added at some point in the future. Currently it just uses treats
   // the date as string.
   return parseString(value)
 }
 
-export const parseArray: ParseExactFunction<Array<Unreliable>> = (value) => {
+export const parseArray: ParseExactUtil<Array<Unreliable>> = (value) => {
   if (Array.isArray(value)) {
     return value
   }
@@ -232,7 +232,7 @@ export const parseArray: ParseExactFunction<Array<Unreliable>> = (value) => {
 
 export const parseArrayOf = <R>(
   value: Unreliable,
-  parse: ParseExactFunction<R>,
+  parse: ParseExactUtil<R>,
 ): Array<R> | undefined => {
   const array = parseArray(value)
 
@@ -251,16 +251,13 @@ export const parseSingular = <T>(value: T | Array<T>): T => {
   return Array.isArray(value) ? value[0] : value
 }
 
-export const parseSingularOf = <R>(
-  value: Unreliable,
-  parse: ParseExactFunction<R>,
-): R | undefined => {
+export const parseSingularOf = <R>(value: Unreliable, parse: ParseExactUtil<R>): R | undefined => {
   return parse(parseSingular(value))
 }
 
 export const parseCsvOf = <T>(
   value: Unreliable,
-  parse: ParseExactFunction<T>,
+  parse: ParseExactUtil<T>,
 ): Array<T> | undefined => {
   if (!isNonEmptyStringOrNumber(value)) {
     return
@@ -275,7 +272,7 @@ export const parseCsvOf = <T>(
 
 export const generateCsvOf = <T>(
   value: Array<T> | undefined,
-  generate?: GenerateFunction<T>,
+  generate?: GenerateUtil<T>,
 ): string | undefined => {
   if (!Array.isArray(value) || value.length === 0) {
     return
@@ -336,7 +333,7 @@ export const generateXml = (
   return `${declaration}\n${body}`
 }
 
-export const generateRfc822Date: GenerateFunction<DateLike> = (value) => {
+export const generateRfc822Date: GenerateUtil<DateLike> = (value) => {
   // This function generates RFC 822 format dates which is also compatible with RFC 2822.
 
   if (!isPresent(value)) {
@@ -361,7 +358,7 @@ export const generateRfc822Date: GenerateFunction<DateLike> = (value) => {
   }
 }
 
-export const generateRfc3339Date: GenerateFunction<DateLike> = (value) => {
+export const generateRfc3339Date: GenerateUtil<DateLike> = (value) => {
   // This function generates RFC 3339 format dates which is also compatible with W3C-DTF.
   // The only difference between ISO 8601 (produced by toISOString) and RFC 3339 is that
   // RFC 3339 allows a space between date and time parts instead of 'T', but the 'T' format
@@ -389,13 +386,13 @@ export const generateRfc3339Date: GenerateFunction<DateLike> = (value) => {
   }
 }
 
-export const generateBoolean: GenerateFunction<boolean> = (value) => {
+export const generateBoolean: GenerateUtil<boolean> = (value) => {
   if (typeof value === 'boolean') {
     return value
   }
 }
 
-export const generateYesNoBoolean: GenerateFunction<boolean> = (value) => {
+export const generateYesNoBoolean: GenerateUtil<boolean> = (value) => {
   if (typeof value !== 'boolean') {
     return
   }
@@ -443,7 +440,7 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
   return namespaces
 }
 
-export const generateCdataString: GenerateFunction<string> = (value) => {
+export const generateCdataString: GenerateUtil<string> = (value) => {
   if (!isNonEmptyString(value)) {
     return
   }
@@ -460,7 +457,7 @@ export const generateCdataString: GenerateFunction<string> = (value) => {
   return value.trim()
 }
 
-export const generatePlainString: GenerateFunction<string> = (value) => {
+export const generatePlainString: GenerateUtil<string> = (value) => {
   if (!isNonEmptyString(value)) {
     return
   }
@@ -468,7 +465,7 @@ export const generatePlainString: GenerateFunction<string> = (value) => {
   return value.trim()
 }
 
-export const generateNumber: GenerateFunction<number> = (value) => {
+export const generateNumber: GenerateUtil<number> = (value) => {
   if (typeof value === 'number' && Number.isFinite(value)) {
     return value
   }

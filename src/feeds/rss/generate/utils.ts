@@ -1,5 +1,5 @@
 import { namespaceUrls } from '../../../common/config.js'
-import type { DateLike, GenerateFunction } from '../../../common/types.js'
+import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateBoolean,
   generateCdataString,
@@ -52,11 +52,11 @@ import type {
   TextInput,
 } from '../common/types.js'
 
-export const generatePerson: GenerateFunction<Person> = (person) => {
+export const generatePerson: GenerateUtil<Person> = (person) => {
   return generateCdataString(person)
 }
 
-export const generateCategory: GenerateFunction<Category> = (category) => {
+export const generateCategory: GenerateUtil<Category> = (category) => {
   if (!isObject(category)) {
     return
   }
@@ -69,7 +69,7 @@ export const generateCategory: GenerateFunction<Category> = (category) => {
   return trimObject(value)
 }
 
-export const generateCloud: GenerateFunction<Cloud> = (cloud) => {
+export const generateCloud: GenerateUtil<Cloud> = (cloud) => {
   if (!isObject(cloud)) {
     return
   }
@@ -85,7 +85,7 @@ export const generateCloud: GenerateFunction<Cloud> = (cloud) => {
   return trimObject(value)
 }
 
-export const generateImage: GenerateFunction<Image> = (image) => {
+export const generateImage: GenerateUtil<Image> = (image) => {
   if (!isObject(image)) {
     return
   }
@@ -102,7 +102,7 @@ export const generateImage: GenerateFunction<Image> = (image) => {
   return trimObject(value)
 }
 
-export const generateTextInput: GenerateFunction<TextInput> = (textInput) => {
+export const generateTextInput: GenerateUtil<TextInput> = (textInput) => {
   if (!isObject(textInput)) {
     return
   }
@@ -117,7 +117,7 @@ export const generateTextInput: GenerateFunction<TextInput> = (textInput) => {
   return trimObject(value)
 }
 
-export const generateEnclosure: GenerateFunction<Enclosure> = (enclosure) => {
+export const generateEnclosure: GenerateUtil<Enclosure> = (enclosure) => {
   if (!isObject(enclosure)) {
     return
   }
@@ -131,7 +131,7 @@ export const generateEnclosure: GenerateFunction<Enclosure> = (enclosure) => {
   return trimObject(value)
 }
 
-export const generateSkipHours: GenerateFunction<SkipHours> = (skipHours) => {
+export const generateSkipHours: GenerateUtil<SkipHours> = (skipHours) => {
   const value = {
     hour: trimArray(skipHours, generateNumber),
   }
@@ -139,7 +139,7 @@ export const generateSkipHours: GenerateFunction<SkipHours> = (skipHours) => {
   return trimObject(value)
 }
 
-export const generateSkipDays: GenerateFunction<SkipDays> = (skipDays) => {
+export const generateSkipDays: GenerateUtil<SkipDays> = (skipDays) => {
   const value = {
     day: trimArray(skipDays, generatePlainString),
   }
@@ -147,7 +147,7 @@ export const generateSkipDays: GenerateFunction<SkipDays> = (skipDays) => {
   return trimObject(value)
 }
 
-export const generateGuid: GenerateFunction<Guid> = (guid) => {
+export const generateGuid: GenerateUtil<Guid> = (guid) => {
   const value = {
     '#text': generateCdataString(guid?.value),
     '@isPermaLink': generateBoolean(guid?.isPermaLink),
@@ -156,7 +156,7 @@ export const generateGuid: GenerateFunction<Guid> = (guid) => {
   return trimObject(value)
 }
 
-export const generateSource: GenerateFunction<Source> = (source) => {
+export const generateSource: GenerateUtil<Source> = (source) => {
   if (!isObject(source)) {
     return
   }
@@ -169,7 +169,7 @@ export const generateSource: GenerateFunction<Source> = (source) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateFunction<Item<DateLike>> = (item) => {
+export const generateItem: GenerateUtil<Item<DateLike>> = (item) => {
   if (!isObject(item)) {
     return
   }
@@ -203,7 +203,7 @@ export const generateItem: GenerateFunction<Item<DateLike>> = (item) => {
   return trimObject(value)
 }
 
-export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed) => {
+export const generateFeed: GenerateUtil<Feed<DateLike>> = (feed) => {
   if (!isObject(feed)) {
     return
   }

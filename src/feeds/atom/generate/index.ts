@@ -1,10 +1,10 @@
-import type { DateLike, DeepPartial, XmlGenerateFunction } from '../../../common/types.js'
+import type { DateLike, DeepPartial, XmlGenerateMain } from '../../../common/types.js'
 import { generateXml } from '../../../common/utils.js'
 import type { Feed } from '../common/types.js'
 import { builder } from './config.js'
 import { generateFeed } from './utils.js'
 
-export const generate: XmlGenerateFunction<Feed<Date>, DeepPartial<Feed<DateLike>>> = (
+export const generate: XmlGenerateMain<Feed<Date>, DeepPartial<Feed<DateLike>>> = (
   value,
   options,
 ) => {

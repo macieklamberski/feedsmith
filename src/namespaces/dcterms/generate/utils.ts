@@ -1,4 +1,4 @@
-import type { DateLike, GenerateFunction } from '../../../common/types.js'
+import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generateRfc3339Date,
@@ -7,7 +7,7 @@ import {
 } from '../../../common/utils.js'
 import type { ItemOrFeed } from '../common/types.js'
 
-export const generateItemOrFeed: GenerateFunction<ItemOrFeed<DateLike>> = (itemOrFeed) => {
+export const generateItemOrFeed: GenerateUtil<ItemOrFeed<DateLike>> = (itemOrFeed) => {
   if (!isObject(itemOrFeed)) {
     return
   }

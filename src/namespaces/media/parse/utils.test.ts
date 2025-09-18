@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   parseBackLinks,
   parseCategory,
@@ -38,7 +38,7 @@ import {
 
 const createSimpleArrayParserTests = (
   functionName: string,
-  parserFunction: ParsePartialFunction<Array<string>>,
+  parserFunction: ParsePartialUtil<Array<string>>,
   propertyName: string,
 ) => {
   describe(functionName, () => {

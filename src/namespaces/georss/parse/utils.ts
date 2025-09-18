@@ -1,4 +1,4 @@
-import type { ParseExactFunction, ParsePartialFunction, Unreliable } from '../../../common/types.js'
+import type { ParseExactUtil, ParsePartialUtil, Unreliable } from '../../../common/types.js'
 import {
   isNonEmptyString,
   isObject,
@@ -50,11 +50,11 @@ export const parseLatLngPairs = (
   return points.length > 0 ? points : undefined
 }
 
-export const parsePoint: ParseExactFunction<Point> = (value) => {
+export const parsePoint: ParseExactUtil<Point> = (value) => {
   return parseLatLngPairs(retrieveText(value), { min: 1, max: 1 })?.[0]
 }
 
-export const parseLine: ParseExactFunction<Line> = (value) => {
+export const parseLine: ParseExactUtil<Line> = (value) => {
   const points = parseLatLngPairs(retrieveText(value), { min: 2 })
 
   if (isPresent(points)) {
@@ -62,7 +62,7 @@ export const parseLine: ParseExactFunction<Line> = (value) => {
   }
 }
 
-export const parsePolygon: ParseExactFunction<Polygon> = (value) => {
+export const parsePolygon: ParseExactUtil<Polygon> = (value) => {
   const points = parseLatLngPairs(retrieveText(value), { min: 4 })
 
   if (isPresent(points)) {
@@ -70,7 +70,7 @@ export const parsePolygon: ParseExactFunction<Polygon> = (value) => {
   }
 }
 
-export const parseBox: ParseExactFunction<Box> = (value) => {
+export const parseBox: ParseExactUtil<Box> = (value) => {
   const points = parseLatLngPairs(retrieveText(value), { min: 2, max: 2 })
   const lowerCorner = points?.[0]
   const upperCorner = points?.[1]
@@ -80,7 +80,7 @@ export const parseBox: ParseExactFunction<Box> = (value) => {
   }
 }
 
-export const retrieveItemOrFeed: ParsePartialFunction<ItemOrFeed> = (value) => {
+export const retrieveItemOrFeed: ParsePartialUtil<ItemOrFeed> = (value) => {
   if (!isObject(value)) {
     return
   }
