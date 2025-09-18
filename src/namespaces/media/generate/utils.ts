@@ -1,4 +1,4 @@
-import type { GenerateFunction } from '../../../common/types.js'
+import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generateCsvOf,
@@ -40,7 +40,7 @@ import type {
   TitleOrDescription,
 } from '../common/types.js'
 
-export const generateRating: GenerateFunction<Rating> = (rating) => {
+export const generateRating: GenerateUtil<Rating> = (rating) => {
   if (!isObject(rating)) {
     return
   }
@@ -53,7 +53,7 @@ export const generateRating: GenerateFunction<Rating> = (rating) => {
   return trimObject(value)
 }
 
-export const generateTitleOrDescription: GenerateFunction<TitleOrDescription> = (
+export const generateTitleOrDescription: GenerateUtil<TitleOrDescription> = (
   titleOrDescription,
 ) => {
   if (!isObject(titleOrDescription)) {
@@ -68,7 +68,7 @@ export const generateTitleOrDescription: GenerateFunction<TitleOrDescription> = 
   return trimObject(value)
 }
 
-export const generateThumbnail: GenerateFunction<Thumbnail> = (thumbnail) => {
+export const generateThumbnail: GenerateUtil<Thumbnail> = (thumbnail) => {
   if (!isObject(thumbnail)) {
     return
   }
@@ -83,7 +83,7 @@ export const generateThumbnail: GenerateFunction<Thumbnail> = (thumbnail) => {
   return trimObject(value)
 }
 
-export const generateCategory: GenerateFunction<Category> = (category) => {
+export const generateCategory: GenerateUtil<Category> = (category) => {
   if (!isObject(category)) {
     return
   }
@@ -97,7 +97,7 @@ export const generateCategory: GenerateFunction<Category> = (category) => {
   return trimObject(value)
 }
 
-export const generateHash: GenerateFunction<Hash> = (hash) => {
+export const generateHash: GenerateUtil<Hash> = (hash) => {
   if (!isObject(hash)) {
     return
   }
@@ -110,7 +110,7 @@ export const generateHash: GenerateFunction<Hash> = (hash) => {
   return trimObject(value)
 }
 
-export const generatePlayer: GenerateFunction<Player> = (player) => {
+export const generatePlayer: GenerateUtil<Player> = (player) => {
   if (!isObject(player)) {
     return
   }
@@ -124,7 +124,7 @@ export const generatePlayer: GenerateFunction<Player> = (player) => {
   return trimObject(value)
 }
 
-export const generateCredit: GenerateFunction<Credit> = (credit) => {
+export const generateCredit: GenerateUtil<Credit> = (credit) => {
   if (!isObject(credit)) {
     return
   }
@@ -138,7 +138,7 @@ export const generateCredit: GenerateFunction<Credit> = (credit) => {
   return trimObject(value)
 }
 
-export const generateCopyright: GenerateFunction<Copyright> = (copyright) => {
+export const generateCopyright: GenerateUtil<Copyright> = (copyright) => {
   if (!isObject(copyright)) {
     return
   }
@@ -151,7 +151,7 @@ export const generateCopyright: GenerateFunction<Copyright> = (copyright) => {
   return trimObject(value)
 }
 
-export const generateText: GenerateFunction<Text> = (text) => {
+export const generateText: GenerateUtil<Text> = (text) => {
   if (!isObject(text)) {
     return
   }
@@ -167,7 +167,7 @@ export const generateText: GenerateFunction<Text> = (text) => {
   return trimObject(value)
 }
 
-export const generateRestriction: GenerateFunction<Restriction> = (restriction) => {
+export const generateRestriction: GenerateUtil<Restriction> = (restriction) => {
   if (!isObject(restriction)) {
     return
   }
@@ -181,7 +181,7 @@ export const generateRestriction: GenerateFunction<Restriction> = (restriction) 
   return trimObject(value)
 }
 
-export const generateStarRating: GenerateFunction<StarRating> = (starRating) => {
+export const generateStarRating: GenerateUtil<StarRating> = (starRating) => {
   if (!isObject(starRating)) {
     return
   }
@@ -196,7 +196,7 @@ export const generateStarRating: GenerateFunction<StarRating> = (starRating) => 
   return trimObject(value)
 }
 
-export const generateStatistics: GenerateFunction<Statistics> = (statistics) => {
+export const generateStatistics: GenerateUtil<Statistics> = (statistics) => {
   if (!isObject(statistics)) {
     return
   }
@@ -209,7 +209,7 @@ export const generateStatistics: GenerateFunction<Statistics> = (statistics) => 
   return trimObject(value)
 }
 
-export const generateTag: GenerateFunction<Tag> = (tag) => {
+export const generateTag: GenerateUtil<Tag> = (tag) => {
   if (!isObject(tag)) {
     return
   }
@@ -225,7 +225,7 @@ export const generateTag: GenerateFunction<Tag> = (tag) => {
   return `${name}:${weight}`
 }
 
-export const generateCommunity: GenerateFunction<Community> = (community) => {
+export const generateCommunity: GenerateUtil<Community> = (community) => {
   if (!isObject(community)) {
     return
   }
@@ -239,7 +239,7 @@ export const generateCommunity: GenerateFunction<Community> = (community) => {
   return trimObject(value)
 }
 
-export const generateComments: GenerateFunction<Array<string>> = (comments) => {
+export const generateComments: GenerateUtil<Array<string>> = (comments) => {
   const value = {
     'media:comment': trimArray(comments, generatePlainString),
   }
@@ -247,7 +247,7 @@ export const generateComments: GenerateFunction<Array<string>> = (comments) => {
   return trimObject(value)
 }
 
-export const generateResponses: GenerateFunction<Array<string>> = (responses) => {
+export const generateResponses: GenerateUtil<Array<string>> = (responses) => {
   const value = {
     'media:response': trimArray(responses, generatePlainString),
   }
@@ -255,7 +255,7 @@ export const generateResponses: GenerateFunction<Array<string>> = (responses) =>
   return trimObject(value)
 }
 
-export const generateBackLinks: GenerateFunction<Array<string>> = (backLinks) => {
+export const generateBackLinks: GenerateUtil<Array<string>> = (backLinks) => {
   const value = {
     'media:backLink': trimArray(backLinks, generatePlainString),
   }
@@ -263,7 +263,7 @@ export const generateBackLinks: GenerateFunction<Array<string>> = (backLinks) =>
   return trimObject(value)
 }
 
-export const generateScenes: GenerateFunction<Array<Scene>> = (scenes) => {
+export const generateScenes: GenerateUtil<Array<Scene>> = (scenes) => {
   const value = {
     'media:scene': trimArray(scenes, generateScene),
   }
@@ -271,7 +271,7 @@ export const generateScenes: GenerateFunction<Array<Scene>> = (scenes) => {
   return trimObject(value)
 }
 
-export const generateParam: GenerateFunction<Param> = (param) => {
+export const generateParam: GenerateUtil<Param> = (param) => {
   if (!isObject(param)) {
     return
   }
@@ -284,7 +284,7 @@ export const generateParam: GenerateFunction<Param> = (param) => {
   return trimObject(value)
 }
 
-export const generateEmbed: GenerateFunction<Embed> = (embed) => {
+export const generateEmbed: GenerateUtil<Embed> = (embed) => {
   if (!isObject(embed)) {
     return
   }
@@ -299,7 +299,7 @@ export const generateEmbed: GenerateFunction<Embed> = (embed) => {
   return trimObject(value)
 }
 
-export const generateStatus: GenerateFunction<Status> = (status) => {
+export const generateStatus: GenerateUtil<Status> = (status) => {
   if (!isObject(status)) {
     return
   }
@@ -312,7 +312,7 @@ export const generateStatus: GenerateFunction<Status> = (status) => {
   return trimObject(value)
 }
 
-export const generatePrice: GenerateFunction<Price> = (price) => {
+export const generatePrice: GenerateUtil<Price> = (price) => {
   if (!isObject(price)) {
     return
   }
@@ -327,7 +327,7 @@ export const generatePrice: GenerateFunction<Price> = (price) => {
   return trimObject(value)
 }
 
-export const generateLicense: GenerateFunction<License> = (license) => {
+export const generateLicense: GenerateUtil<License> = (license) => {
   if (!isObject(license)) {
     return
   }
@@ -341,7 +341,7 @@ export const generateLicense: GenerateFunction<License> = (license) => {
   return trimObject(value)
 }
 
-export const generateSubTitle: GenerateFunction<SubTitle> = (subTitle) => {
+export const generateSubTitle: GenerateUtil<SubTitle> = (subTitle) => {
   if (!isObject(subTitle)) {
     return
   }
@@ -355,7 +355,7 @@ export const generateSubTitle: GenerateFunction<SubTitle> = (subTitle) => {
   return trimObject(value)
 }
 
-export const generatePeerLink: GenerateFunction<PeerLink> = (peerLink) => {
+export const generatePeerLink: GenerateUtil<PeerLink> = (peerLink) => {
   if (!isObject(peerLink)) {
     return
   }
@@ -368,7 +368,7 @@ export const generatePeerLink: GenerateFunction<PeerLink> = (peerLink) => {
   return trimObject(value)
 }
 
-export const generateRights: GenerateFunction<Rights> = (rights) => {
+export const generateRights: GenerateUtil<Rights> = (rights) => {
   if (!isObject(rights)) {
     return
   }
@@ -380,7 +380,7 @@ export const generateRights: GenerateFunction<Rights> = (rights) => {
   return trimObject(value)
 }
 
-export const generateScene: GenerateFunction<Scene> = (scene) => {
+export const generateScene: GenerateUtil<Scene> = (scene) => {
   if (!isObject(scene)) {
     return
   }
@@ -395,7 +395,7 @@ export const generateScene: GenerateFunction<Scene> = (scene) => {
   return trimObject(value)
 }
 
-export const generateLocation: GenerateFunction<Location> = (location) => {
+export const generateLocation: GenerateUtil<Location> = (location) => {
   if (!isObject(location)) {
     return
   }
@@ -411,7 +411,7 @@ export const generateLocation: GenerateFunction<Location> = (location) => {
   return trimObject(value)
 }
 
-export const generateCommonElements: GenerateFunction<CommonElements> = (elements) => {
+export const generateCommonElements: GenerateUtil<CommonElements> = (elements) => {
   if (!isObject(elements)) {
     return
   }
@@ -447,7 +447,7 @@ export const generateCommonElements: GenerateFunction<CommonElements> = (element
   return trimObject(value)
 }
 
-export const generateContent: GenerateFunction<Content> = (content) => {
+export const generateContent: GenerateUtil<Content> = (content) => {
   if (!isObject(content)) {
     return
   }
@@ -473,7 +473,7 @@ export const generateContent: GenerateFunction<Content> = (content) => {
   return trimObject(value)
 }
 
-export const generateGroup: GenerateFunction<Group> = (group) => {
+export const generateGroup: GenerateUtil<Group> = (group) => {
   if (!isObject(group)) {
     return
   }
@@ -486,7 +486,7 @@ export const generateGroup: GenerateFunction<Group> = (group) => {
   return trimObject(value)
 }
 
-export const generateItemOrFeed: GenerateFunction<ItemOrFeed> = (itemOrFeed) => {
+export const generateItemOrFeed: GenerateUtil<ItemOrFeed> = (itemOrFeed) => {
   if (!isObject(itemOrFeed)) {
     return
   }

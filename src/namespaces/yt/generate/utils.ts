@@ -1,8 +1,8 @@
-import type { GenerateFunction } from '../../../common/types.js'
+import type { GenerateUtil } from '../../../common/types.js'
 import { generateCdataString, isObject, trimObject } from '../../../common/utils.js'
 import type { Feed, Item } from '../common/types.js'
 
-export const generateItem: GenerateFunction<Item> = (item) => {
+export const generateItem: GenerateUtil<Item> = (item) => {
   if (!isObject(item)) {
     return
   }
@@ -15,7 +15,7 @@ export const generateItem: GenerateFunction<Item> = (item) => {
   return trimObject(value)
 }
 
-export const generateFeed: GenerateFunction<Feed> = (feed) => {
+export const generateFeed: GenerateUtil<Feed> = (feed) => {
   if (!isObject(feed)) {
     return
   }

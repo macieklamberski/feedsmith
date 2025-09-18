@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
   parseSingularOf,
@@ -8,7 +8,7 @@ import {
 } from '../../../common/utils.js'
 import type { Item } from '../common/types.js'
 
-export const retrieveItem: ParsePartialFunction<Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<Item> = (value) => {
   if (!isObject(value)) {
     return
   }

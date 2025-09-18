@@ -1,4 +1,4 @@
-import type { DateLike, GenerateFunction } from '../../../common/types.js'
+import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateBoolean,
   generateCdataString,
@@ -44,7 +44,7 @@ import type {
   ValueTimeSplit,
 } from '../common/types.js'
 
-export const generateBaseItem: GenerateFunction<BaseItem> = (baseItem) => {
+export const generateBaseItem: GenerateUtil<BaseItem> = (baseItem) => {
   if (!isObject(baseItem)) {
     return
   }
@@ -71,7 +71,7 @@ export const generateBaseItem: GenerateFunction<BaseItem> = (baseItem) => {
   return trimObject(value)
 }
 
-export const generateTranscript: GenerateFunction<Transcript> = (transcript) => {
+export const generateTranscript: GenerateUtil<Transcript> = (transcript) => {
   if (!isObject(transcript)) {
     return
   }
@@ -86,7 +86,7 @@ export const generateTranscript: GenerateFunction<Transcript> = (transcript) => 
   return trimObject(value)
 }
 
-export const generateLocked: GenerateFunction<Locked> = (locked) => {
+export const generateLocked: GenerateUtil<Locked> = (locked) => {
   if (!isObject(locked)) {
     return
   }
@@ -99,7 +99,7 @@ export const generateLocked: GenerateFunction<Locked> = (locked) => {
   return trimObject(value)
 }
 
-export const generateFunding: GenerateFunction<Funding> = (funding) => {
+export const generateFunding: GenerateUtil<Funding> = (funding) => {
   if (!isObject(funding)) {
     return
   }
@@ -112,7 +112,7 @@ export const generateFunding: GenerateFunction<Funding> = (funding) => {
   return trimObject(value)
 }
 
-export const generateChapters: GenerateFunction<Chapters> = (chapters) => {
+export const generateChapters: GenerateUtil<Chapters> = (chapters) => {
   if (!isObject(chapters)) {
     return
   }
@@ -125,7 +125,7 @@ export const generateChapters: GenerateFunction<Chapters> = (chapters) => {
   return trimObject(value)
 }
 
-export const generateSoundbite: GenerateFunction<Soundbite> = (soundbite) => {
+export const generateSoundbite: GenerateUtil<Soundbite> = (soundbite) => {
   if (!isObject(soundbite)) {
     return
   }
@@ -139,7 +139,7 @@ export const generateSoundbite: GenerateFunction<Soundbite> = (soundbite) => {
   return trimObject(value)
 }
 
-export const generatePerson: GenerateFunction<Person> = (person) => {
+export const generatePerson: GenerateUtil<Person> = (person) => {
   if (!isObject(person)) {
     return
   }
@@ -155,7 +155,7 @@ export const generatePerson: GenerateFunction<Person> = (person) => {
   return trimObject(value)
 }
 
-export const generateLocation: GenerateFunction<Location> = (location) => {
+export const generateLocation: GenerateUtil<Location> = (location) => {
   if (!isObject(location)) {
     return
   }
@@ -169,7 +169,7 @@ export const generateLocation: GenerateFunction<Location> = (location) => {
   return trimObject(value)
 }
 
-export const generateSeason: GenerateFunction<Season> = (season) => {
+export const generateSeason: GenerateUtil<Season> = (season) => {
   if (!isObject(season)) {
     return
   }
@@ -182,7 +182,7 @@ export const generateSeason: GenerateFunction<Season> = (season) => {
   return trimObject(value)
 }
 
-export const generateEpisode: GenerateFunction<Episode> = (episode) => {
+export const generateEpisode: GenerateUtil<Episode> = (episode) => {
   if (!isObject(episode)) {
     return
   }
@@ -195,7 +195,7 @@ export const generateEpisode: GenerateFunction<Episode> = (episode) => {
   return trimObject(value)
 }
 
-export const generateTrailer: GenerateFunction<Trailer<DateLike>> = (trailer) => {
+export const generateTrailer: GenerateUtil<Trailer<DateLike>> = (trailer) => {
   if (!isObject(trailer)) {
     return
   }
@@ -212,7 +212,7 @@ export const generateTrailer: GenerateFunction<Trailer<DateLike>> = (trailer) =>
   return trimObject(value)
 }
 
-export const generateLicense: GenerateFunction<License> = (license) => {
+export const generateLicense: GenerateUtil<License> = (license) => {
   if (!isObject(license)) {
     return
   }
@@ -225,7 +225,7 @@ export const generateLicense: GenerateFunction<License> = (license) => {
   return trimObject(value)
 }
 
-export const generateSource: GenerateFunction<Source> = (source) => {
+export const generateSource: GenerateUtil<Source> = (source) => {
   if (!isObject(source)) {
     return
   }
@@ -238,7 +238,7 @@ export const generateSource: GenerateFunction<Source> = (source) => {
   return trimObject(value)
 }
 
-export const generateIntegrity: GenerateFunction<Integrity> = (integrity) => {
+export const generateIntegrity: GenerateUtil<Integrity> = (integrity) => {
   if (!isObject(integrity)) {
     return
   }
@@ -251,7 +251,7 @@ export const generateIntegrity: GenerateFunction<Integrity> = (integrity) => {
   return trimObject(value)
 }
 
-export const generateAlternateEnclosure: GenerateFunction<AlternateEnclosure> = (
+export const generateAlternateEnclosure: GenerateUtil<AlternateEnclosure> = (
   alternateEnclosure,
 ) => {
   if (!isObject(alternateEnclosure)) {
@@ -275,7 +275,7 @@ export const generateAlternateEnclosure: GenerateFunction<AlternateEnclosure> = 
   return trimObject(value)
 }
 
-export const generateValueRecipient: GenerateFunction<ValueRecipient> = (valueRecipient) => {
+export const generateValueRecipient: GenerateUtil<ValueRecipient> = (valueRecipient) => {
   if (!isObject(valueRecipient)) {
     return
   }
@@ -293,7 +293,7 @@ export const generateValueRecipient: GenerateFunction<ValueRecipient> = (valueRe
   return trimObject(value)
 }
 
-export const generateValueTimeSplit: GenerateFunction<ValueTimeSplit> = (valueTimeSplit) => {
+export const generateValueTimeSplit: GenerateUtil<ValueTimeSplit> = (valueTimeSplit) => {
   if (!isObject(valueTimeSplit)) {
     return
   }
@@ -310,7 +310,7 @@ export const generateValueTimeSplit: GenerateFunction<ValueTimeSplit> = (valueTi
   return trimObject(value)
 }
 
-export const generateValue: GenerateFunction<Value> = (value) => {
+export const generateValue: GenerateUtil<Value> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -326,7 +326,7 @@ export const generateValue: GenerateFunction<Value> = (value) => {
   return trimObject(valueOut)
 }
 
-export const generateImages: GenerateFunction<Images> = (images) => {
+export const generateImages: GenerateUtil<Images> = (images) => {
   if (!isObject(images)) {
     return
   }
@@ -338,7 +338,7 @@ export const generateImages: GenerateFunction<Images> = (images) => {
   return trimObject(value)
 }
 
-export const generateContentLink: GenerateFunction<ContentLink> = (contentLink) => {
+export const generateContentLink: GenerateUtil<ContentLink> = (contentLink) => {
   if (!isObject(contentLink)) {
     return
   }
@@ -351,7 +351,7 @@ export const generateContentLink: GenerateFunction<ContentLink> = (contentLink) 
   return trimObject(value)
 }
 
-export const generateLiveItem: GenerateFunction<LiveItem<DateLike>> = (liveItem) => {
+export const generateLiveItem: GenerateUtil<LiveItem<DateLike>> = (liveItem) => {
   if (!isObject(liveItem)) {
     return
   }
@@ -367,7 +367,7 @@ export const generateLiveItem: GenerateFunction<LiveItem<DateLike>> = (liveItem)
   return trimObject(value)
 }
 
-export const generateSocialInteract: GenerateFunction<SocialInteract> = (socialInteract) => {
+export const generateSocialInteract: GenerateUtil<SocialInteract> = (socialInteract) => {
   if (!isObject(socialInteract)) {
     return
   }
@@ -383,7 +383,7 @@ export const generateSocialInteract: GenerateFunction<SocialInteract> = (socialI
   return trimObject(value)
 }
 
-export const generateBlock: GenerateFunction<Block> = (block) => {
+export const generateBlock: GenerateUtil<Block> = (block) => {
   if (!isObject(block)) {
     return
   }
@@ -396,7 +396,7 @@ export const generateBlock: GenerateFunction<Block> = (block) => {
   return trimObject(value)
 }
 
-export const generateTxt: GenerateFunction<Txt> = (txt) => {
+export const generateTxt: GenerateUtil<Txt> = (txt) => {
   if (!isObject(txt)) {
     return
   }
@@ -409,7 +409,7 @@ export const generateTxt: GenerateFunction<Txt> = (txt) => {
   return trimObject(value)
 }
 
-export const generateRemoteItem: GenerateFunction<RemoteItem> = (remoteItem) => {
+export const generateRemoteItem: GenerateUtil<RemoteItem> = (remoteItem) => {
   if (!isObject(remoteItem)) {
     return
   }
@@ -424,7 +424,7 @@ export const generateRemoteItem: GenerateFunction<RemoteItem> = (remoteItem) => 
   return trimObject(value)
 }
 
-export const generatePodroll: GenerateFunction<Podroll> = (podroll) => {
+export const generatePodroll: GenerateUtil<Podroll> = (podroll) => {
   if (!isObject(podroll)) {
     return
   }
@@ -436,7 +436,7 @@ export const generatePodroll: GenerateFunction<Podroll> = (podroll) => {
   return trimObject(value)
 }
 
-export const generateUpdateFrequency: GenerateFunction<UpdateFrequency<DateLike>> = (
+export const generateUpdateFrequency: GenerateUtil<UpdateFrequency<DateLike>> = (
   updateFrequency,
 ) => {
   if (!isObject(updateFrequency)) {
@@ -453,7 +453,7 @@ export const generateUpdateFrequency: GenerateFunction<UpdateFrequency<DateLike>
   return trimObject(value)
 }
 
-export const generatePodping: GenerateFunction<Podping> = (podping) => {
+export const generatePodping: GenerateUtil<Podping> = (podping) => {
   if (!isObject(podping)) {
     return
   }
@@ -465,7 +465,7 @@ export const generatePodping: GenerateFunction<Podping> = (podping) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateFunction<Item> = (item) => {
+export const generateItem: GenerateUtil<Item> = (item) => {
   if (!isObject(item)) {
     return
   }
@@ -473,7 +473,7 @@ export const generateItem: GenerateFunction<Item> = (item) => {
   return generateBaseItem(item)
 }
 
-export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed) => {
+export const generateFeed: GenerateUtil<Feed<DateLike>> = (feed) => {
   if (!isObject(feed)) {
     return
   }

@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -43,7 +43,7 @@ import type {
   ValueTimeSplit,
 } from '../common/types.js'
 
-export const parseTranscript: ParsePartialFunction<Transcript> = (value) => {
+export const parseTranscript: ParsePartialUtil<Transcript> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -58,7 +58,7 @@ export const parseTranscript: ParsePartialFunction<Transcript> = (value) => {
   return trimObject(transcript)
 }
 
-export const parseLocked: ParsePartialFunction<Locked> = (value) => {
+export const parseLocked: ParsePartialUtil<Locked> = (value) => {
   const locked = {
     value: parseYesNoBoolean(retrieveText(value)),
     owner: parseString(value?.['@owner']),
@@ -67,7 +67,7 @@ export const parseLocked: ParsePartialFunction<Locked> = (value) => {
   return trimObject(locked)
 }
 
-export const parseFunding: ParsePartialFunction<Funding> = (value) => {
+export const parseFunding: ParsePartialUtil<Funding> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -80,7 +80,7 @@ export const parseFunding: ParsePartialFunction<Funding> = (value) => {
   return trimObject(funding)
 }
 
-export const parseChapters: ParsePartialFunction<Chapters> = (value) => {
+export const parseChapters: ParsePartialUtil<Chapters> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -93,7 +93,7 @@ export const parseChapters: ParsePartialFunction<Chapters> = (value) => {
   return trimObject(chapters)
 }
 
-export const parseSoundbite: ParsePartialFunction<Soundbite> = (value) => {
+export const parseSoundbite: ParsePartialUtil<Soundbite> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -107,7 +107,7 @@ export const parseSoundbite: ParsePartialFunction<Soundbite> = (value) => {
   return trimObject(soundbite)
 }
 
-export const parsePerson: ParsePartialFunction<Person> = (value) => {
+export const parsePerson: ParsePartialUtil<Person> = (value) => {
   const person = {
     display: parseString(retrieveText(value)),
     role: parseString(value?.['@role']),
@@ -119,7 +119,7 @@ export const parsePerson: ParsePartialFunction<Person> = (value) => {
   return trimObject(person)
 }
 
-export const parseLocation: ParsePartialFunction<Location> = (value) => {
+export const parseLocation: ParsePartialUtil<Location> = (value) => {
   const location = {
     display: parseString(retrieveText(value)),
     geo: parseString(value?.['@geo']),
@@ -129,7 +129,7 @@ export const parseLocation: ParsePartialFunction<Location> = (value) => {
   return trimObject(location)
 }
 
-export const parseSeason: ParsePartialFunction<Season> = (value) => {
+export const parseSeason: ParsePartialUtil<Season> = (value) => {
   const season = {
     number: parseNumber(retrieveText(value)),
     name: parseString(value?.['@name']),
@@ -138,7 +138,7 @@ export const parseSeason: ParsePartialFunction<Season> = (value) => {
   return trimObject(season)
 }
 
-export const parseEpisode: ParsePartialFunction<Episode> = (value) => {
+export const parseEpisode: ParsePartialUtil<Episode> = (value) => {
   const episode = {
     number: parseNumber(retrieveText(value)),
     display: parseString(value?.['@display']),
@@ -147,7 +147,7 @@ export const parseEpisode: ParsePartialFunction<Episode> = (value) => {
   return trimObject(episode)
 }
 
-export const parseTrailer: ParsePartialFunction<Trailer<string>> = (value) => {
+export const parseTrailer: ParsePartialUtil<Trailer<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -164,7 +164,7 @@ export const parseTrailer: ParsePartialFunction<Trailer<string>> = (value) => {
   return trimObject(trailer)
 }
 
-export const parseLicense: ParsePartialFunction<License> = (value) => {
+export const parseLicense: ParsePartialUtil<License> = (value) => {
   const license = {
     display: parseString(retrieveText(value)),
     url: parseString(value?.['@url']),
@@ -173,7 +173,7 @@ export const parseLicense: ParsePartialFunction<License> = (value) => {
   return trimObject(license)
 }
 
-export const parseAlternateEnclosure: ParsePartialFunction<AlternateEnclosure> = (value) => {
+export const parseAlternateEnclosure: ParsePartialUtil<AlternateEnclosure> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -195,7 +195,7 @@ export const parseAlternateEnclosure: ParsePartialFunction<AlternateEnclosure> =
   return trimObject(alternateEnclosure)
 }
 
-export const parseSource: ParsePartialFunction<Source> = (value) => {
+export const parseSource: ParsePartialUtil<Source> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -208,7 +208,7 @@ export const parseSource: ParsePartialFunction<Source> = (value) => {
   return trimObject(source)
 }
 
-export const parseIntegrity: ParsePartialFunction<Integrity> = (value) => {
+export const parseIntegrity: ParsePartialUtil<Integrity> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -221,7 +221,7 @@ export const parseIntegrity: ParsePartialFunction<Integrity> = (value) => {
   return trimObject(integrity)
 }
 
-export const parseValue: ParsePartialFunction<Value> = (value) => {
+export const parseValue: ParsePartialUtil<Value> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -237,7 +237,7 @@ export const parseValue: ParsePartialFunction<Value> = (value) => {
   return trimObject(parsed)
 }
 
-export const parseValueRecipient: ParsePartialFunction<ValueRecipient> = (value) => {
+export const parseValueRecipient: ParsePartialUtil<ValueRecipient> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -255,7 +255,7 @@ export const parseValueRecipient: ParsePartialFunction<ValueRecipient> = (value)
   return trimObject(valueRecipient)
 }
 
-export const parseImages: ParsePartialFunction<Images> = (value) => {
+export const parseImages: ParsePartialUtil<Images> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -268,7 +268,7 @@ export const parseImages: ParsePartialFunction<Images> = (value) => {
   return trimObject(images)
 }
 
-export const parseLiveItem: ParsePartialFunction<LiveItem<string>> = (value) => {
+export const parseLiveItem: ParsePartialUtil<LiveItem<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -284,7 +284,7 @@ export const parseLiveItem: ParsePartialFunction<LiveItem<string>> = (value) => 
   return trimObject(liveItem)
 }
 
-export const parseContentLink: ParsePartialFunction<ContentLink> = (value) => {
+export const parseContentLink: ParsePartialUtil<ContentLink> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -297,7 +297,7 @@ export const parseContentLink: ParsePartialFunction<ContentLink> = (value) => {
   return trimObject(contentLink)
 }
 
-export const parseSocialInteract: ParsePartialFunction<SocialInteract> = (value) => {
+export const parseSocialInteract: ParsePartialUtil<SocialInteract> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -313,7 +313,7 @@ export const parseSocialInteract: ParsePartialFunction<SocialInteract> = (value)
   return trimObject(socialInteract)
 }
 
-export const parseBlock: ParsePartialFunction<Block> = (value) => {
+export const parseBlock: ParsePartialUtil<Block> = (value) => {
   const block = {
     value: parseYesNoBoolean(retrieveText(value)),
     id: parseString(value?.['@id']),
@@ -322,7 +322,7 @@ export const parseBlock: ParsePartialFunction<Block> = (value) => {
   return trimObject(block)
 }
 
-export const parseTxt: ParsePartialFunction<Txt> = (value) => {
+export const parseTxt: ParsePartialUtil<Txt> = (value) => {
   const txt = {
     display: parseString(retrieveText(value)),
     purpose: parseString(value?.['@purpose']),
@@ -331,7 +331,7 @@ export const parseTxt: ParsePartialFunction<Txt> = (value) => {
   return trimObject(txt)
 }
 
-export const parseRemoteItem: ParsePartialFunction<RemoteItem> = (value) => {
+export const parseRemoteItem: ParsePartialUtil<RemoteItem> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -346,7 +346,7 @@ export const parseRemoteItem: ParsePartialFunction<RemoteItem> = (value) => {
   return trimObject(remoteItem)
 }
 
-export const parsePodroll: ParsePartialFunction<Podroll> = (value) => {
+export const parsePodroll: ParsePartialUtil<Podroll> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -358,7 +358,7 @@ export const parsePodroll: ParsePartialFunction<Podroll> = (value) => {
   return trimObject(podroll)
 }
 
-export const parseUpdateFrequency: ParsePartialFunction<UpdateFrequency<string>> = (value) => {
+export const parseUpdateFrequency: ParsePartialUtil<UpdateFrequency<string>> = (value) => {
   const updateFrequency = {
     display: parseString(retrieveText(value)),
     complete: parseBoolean(value?.['@complete']),
@@ -369,7 +369,7 @@ export const parseUpdateFrequency: ParsePartialFunction<UpdateFrequency<string>>
   return trimObject(updateFrequency)
 }
 
-export const parsePodping: ParsePartialFunction<Podping> = (value) => {
+export const parsePodping: ParsePartialUtil<Podping> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -381,7 +381,7 @@ export const parsePodping: ParsePartialFunction<Podping> = (value) => {
   return trimObject(podping)
 }
 
-export const parseValueTimeSplit: ParsePartialFunction<ValueTimeSplit> = (value) => {
+export const parseValueTimeSplit: ParsePartialUtil<ValueTimeSplit> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -398,7 +398,7 @@ export const parseValueTimeSplit: ParsePartialFunction<ValueTimeSplit> = (value)
   return trimObject(valueTimeSplit)
 }
 
-export const retrieveItem: ParsePartialFunction<Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -422,7 +422,7 @@ export const retrieveItem: ParsePartialFunction<Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialUtil<Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }

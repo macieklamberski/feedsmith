@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
   isObject,
@@ -14,7 +14,7 @@ import {
 } from '../../../common/utils.js'
 import type { Category, Feed, Item, Owner } from '../common/types.js'
 
-export const parseCategory: ParsePartialFunction<Category> = (value) => {
+export const parseCategory: ParsePartialUtil<Category> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -27,7 +27,7 @@ export const parseCategory: ParsePartialFunction<Category> = (value) => {
   return trimObject(category)
 }
 
-export const parseOwner: ParsePartialFunction<Owner> = (value) => {
+export const parseOwner: ParsePartialUtil<Owner> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -42,7 +42,7 @@ export const parseOwner: ParsePartialFunction<Owner> = (value) => {
 
 const explicitOrYesRegex = /^\p{White_Space}*(explicit|yes)\p{White_Space}*$/iu
 
-export const parseExplicit: ParsePartialFunction<boolean> = (value) => {
+export const parseExplicit: ParsePartialUtil<boolean> = (value) => {
   const boolean = parseBoolean(value)
 
   if (boolean !== undefined) {
@@ -55,7 +55,7 @@ export const parseExplicit: ParsePartialFunction<boolean> = (value) => {
   }
 }
 
-export const parseDuration: ParsePartialFunction<number> = (value) => {
+export const parseDuration: ParsePartialUtil<number> = (value) => {
   const duration = parseNumber(value)
 
   if (duration !== undefined) {
@@ -75,7 +75,7 @@ export const parseDuration: ParsePartialFunction<number> = (value) => {
   }
 }
 
-export const parseImage: ParsePartialFunction<string> = (value) => {
+export const parseImage: ParsePartialUtil<string> = (value) => {
   // Support non-standard format of the image tag where href is not provided in the @href
   // attribute but rather provided as a node value.
   if (isNonEmptyStringOrNumber(value)) {
@@ -89,7 +89,7 @@ export const parseImage: ParsePartialFunction<string> = (value) => {
   return parseString(value['@href'])
 }
 
-export const retrieveItem: ParsePartialFunction<Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -123,7 +123,7 @@ export const retrieveItem: ParsePartialFunction<Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialFunction<Feed> = (value) => {
+export const retrieveFeed: ParsePartialUtil<Feed> = (value) => {
   if (!isObject(value)) {
     return
   }

@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   detectNamespaces,
   isObject,
@@ -51,11 +51,11 @@ import type {
   TextInput,
 } from '../common/types.js'
 
-export const parsePerson: ParsePartialFunction<Person> = (value) => {
+export const parsePerson: ParsePartialUtil<Person> = (value) => {
   return parseSingularOf(value?.name ?? value, (value) => parseString(retrieveText(value)))
 }
 
-export const parseCategory: ParsePartialFunction<Category> = (value) => {
+export const parseCategory: ParsePartialUtil<Category> = (value) => {
   const category = {
     name: parseString(retrieveText(value)),
     domain: parseString(value?.['@domain']),
@@ -64,7 +64,7 @@ export const parseCategory: ParsePartialFunction<Category> = (value) => {
   return trimObject(category)
 }
 
-export const parseCloud: ParsePartialFunction<Cloud> = (value) => {
+export const parseCloud: ParsePartialUtil<Cloud> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -80,7 +80,7 @@ export const parseCloud: ParsePartialFunction<Cloud> = (value) => {
   return trimObject(cloud)
 }
 
-export const parseImage: ParsePartialFunction<Image> = (value) => {
+export const parseImage: ParsePartialUtil<Image> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -97,7 +97,7 @@ export const parseImage: ParsePartialFunction<Image> = (value) => {
   return trimObject(image)
 }
 
-export const parseTextInput: ParsePartialFunction<TextInput> = (value) => {
+export const parseTextInput: ParsePartialUtil<TextInput> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -112,15 +112,15 @@ export const parseTextInput: ParsePartialFunction<TextInput> = (value) => {
   return trimObject(textInput)
 }
 
-export const parseSkipHours: ParsePartialFunction<Array<number>> = (value) => {
+export const parseSkipHours: ParsePartialUtil<Array<number>> = (value) => {
   return trimArray(value?.hour, (value) => parseNumber(retrieveText(value)))
 }
 
-export const parseSkipDays: ParsePartialFunction<Array<string>> = (value) => {
+export const parseSkipDays: ParsePartialUtil<Array<string>> = (value) => {
   return trimArray(value?.day, (value) => parseString(retrieveText(value)))
 }
 
-export const parseEnclosure: ParsePartialFunction<Enclosure> = (value) => {
+export const parseEnclosure: ParsePartialUtil<Enclosure> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -134,7 +134,7 @@ export const parseEnclosure: ParsePartialFunction<Enclosure> = (value) => {
   return trimObject(enclosure)
 }
 
-export const parseGuid: ParsePartialFunction<Guid> = (value) => {
+export const parseGuid: ParsePartialUtil<Guid> = (value) => {
   const source = {
     value: parseString(retrieveText(value)),
     isPermaLink: parseBoolean(value?.['@ispermalink']),
@@ -143,7 +143,7 @@ export const parseGuid: ParsePartialFunction<Guid> = (value) => {
   return trimObject(source)
 }
 
-export const parseSource: ParsePartialFunction<Source> = (value) => {
+export const parseSource: ParsePartialUtil<Source> = (value) => {
   const source = {
     title: parseString(retrieveText(value)),
     url: parseString(value?.['@url']),
@@ -152,7 +152,7 @@ export const parseSource: ParsePartialFunction<Source> = (value) => {
   return trimObject(source)
 }
 
-export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
+export const parseItem: ParsePartialUtil<Item<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -187,7 +187,7 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
   return trimObject(item)
 }
 
-export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
+export const parseFeed: ParsePartialUtil<Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -228,6 +228,6 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
   return trimObject(feed)
 }
 
-export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialUtil<Feed<string>> = (value) => {
   return parseSingularOf(value?.rss?.channel, parseFeed)
 }

@@ -11,9 +11,9 @@ import {
   trimArray,
   trimObject,
 } from '../../common/utils.js'
-import type { Body, GenerateFunction, Head, Opml, Outline } from '../common/types.js'
+import type { Body, GenerateUtil, Head, Opml, Outline } from '../common/types.js'
 
-export const generateOutline: GenerateFunction<Outline<DateLike>> = (outline, options) => {
+export const generateOutline: GenerateUtil<Outline<DateLike>> = (outline, options) => {
   if (!isObject(outline)) {
     return
   }
@@ -50,7 +50,7 @@ export const generateOutline: GenerateFunction<Outline<DateLike>> = (outline, op
   return trimObject(value)
 }
 
-export const generateHead: GenerateFunction<Head<DateLike>> = (head) => {
+export const generateHead: GenerateUtil<Head<DateLike>> = (head) => {
   if (!isObject(head)) {
     return
   }
@@ -74,7 +74,7 @@ export const generateHead: GenerateFunction<Head<DateLike>> = (head) => {
   return trimObject(value)
 }
 
-export const generateBody: GenerateFunction<Body<DateLike>> = (body, options) => {
+export const generateBody: GenerateUtil<Body<DateLike>> = (body, options) => {
   if (!isObject(body)) {
     return
   }
@@ -86,7 +86,7 @@ export const generateBody: GenerateFunction<Body<DateLike>> = (body, options) =>
   return trimObject(value)
 }
 
-export const generateOpml: GenerateFunction<Opml<DateLike>> = (opml, options) => {
+export const generateOpml: GenerateUtil<Opml<DateLike>> = (opml, options) => {
   if (!isObject(opml)) {
     return
   }
