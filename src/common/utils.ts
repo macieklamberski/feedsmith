@@ -15,7 +15,7 @@ export const isPresent = <T>(value: T): value is NonNullable<T> => {
 
 export const isObject = (value: Unreliable): value is Record<string, Unreliable> => {
   return (
-    isPresent(value) &&
+    value != null &&
     typeof value === 'object' &&
     !Array.isArray(value) &&
     value.constructor === Object
