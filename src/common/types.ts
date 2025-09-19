@@ -52,12 +52,21 @@ export type XmlStylesheet = {
   alternate?: boolean
 }
 
+export type XmlGenerateOptions<O, F extends boolean = false> = O & {
+  lenient?: F
+  stylesheets?: Array<XmlStylesheet>
+}
+
+export type JsonGenerateOptions<O, F extends boolean = false> = O & {
+  lenient?: F
+}
+
 export type XmlGenerateMain<S, L, O = Record<string, unknown>> = <F extends boolean = false>(
   value: F extends true ? L : S,
-  options?: O & { lenient?: F; stylesheets?: Array<XmlStylesheet> },
+  options?: XmlGenerateOptions<O, F>,
 ) => string
 
 export type JsonGenerateMain<S, L, O = Record<string, unknown>> = <F extends boolean = false>(
   value: F extends true ? L : S,
-  options?: O & { lenient?: F },
+  options?: JsonGenerateOptions<O, F>,
 ) => unknown
