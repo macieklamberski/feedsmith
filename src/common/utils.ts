@@ -95,37 +95,37 @@ export const trimArray = <T, R = T>(
 
 const cdataStartTag = '<![CDATA['
 const cdataEndTag = ']]>'
-const cdataRegex = /<!\[CDATA\[([\s\S]*?)\]\]>/g
 
 export const stripCdata = (text: Unreliable) => {
   if (typeof text !== 'string') {
     return text
   }
 
-  if (text.indexOf('[CDATA[') === -1) {
+  let currentIndex = text.indexOf(cdataStartTag)
+
+  if (currentIndex === -1) {
     return text
   }
 
-  // For simple cases with only one CDATA section (common case).
-  const startPos = text.indexOf(cdataStartTag)
+  let result = ''
+  let lastIndex = 0
 
-  // If we have just one simple CDATA section, handle it without regex.
-  if (startPos !== -1) {
-    const endPos = text.indexOf(cdataEndTag, startPos + cdataStartTag.length)
-    if (endPos !== -1 && text.indexOf(cdataStartTag, startPos + cdataStartTag.length) === -1) {
-      // Single CDATA section case - avoid regex.
-      return (
-        text.substring(0, startPos) +
-        text.substring(startPos + cdataStartTag.length, endPos) +
-        text.substring(endPos + cdataEndTag.length)
-      )
+  while (currentIndex !== -1) {
+    result += text.substring(lastIndex, currentIndex)
+    lastIndex = text.indexOf(cdataEndTag, currentIndex + 9)
+
+    if (lastIndex === -1) {
+      return text
     }
+
+    result += text.substring(currentIndex + 9, lastIndex)
+    lastIndex += 3
+    currentIndex = text.indexOf(cdataStartTag, lastIndex)
   }
 
-  // Fall back to regex for complex cases with multiple CDATA sections.
-  // Reset lastIndex before use since the regex has global flag.
-  cdataRegex.lastIndex = 0
-  return text.replace(cdataRegex, '$1')
+  result += text.substring(lastIndex)
+
+  return result
 }
 
 export const hasEntities = (text: string) => {
