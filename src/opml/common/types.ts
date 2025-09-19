@@ -1,18 +1,14 @@
-import type { DateLike, DeepPartial, Unreliable } from '../../common/types.js'
+import type { DateLike, ExtraFields } from '../../common/types.js'
 
-export type Options = {
-  extraOutlineAttributes?: Array<string>
+export type MainOptions<A extends ReadonlyArray<string> = ReadonlyArray<string>> = {
+  extraOutlineAttributes?: A
 }
 
-export type ParsePartialUtil<R> = (
-  value: Unreliable,
-  options?: Options,
-) => DeepPartial<R> | undefined
-
-export type GenerateUtil<V> = (value: V | undefined, options?: Options) => Unreliable | undefined
-
 // #region reference
-export type Outline<TDate extends DateLike> = {
+export type Outline<
+  TDate extends DateLike,
+  A extends ReadonlyArray<string> = ReadonlyArray<string>,
+> = {
   text: string
   type?: string
   isComment?: boolean
@@ -26,9 +22,8 @@ export type Outline<TDate extends DateLike> = {
   title?: string
   version?: string
   url?: string
-  outlines?: Array<Outline<TDate>>
-  [key: string]: unknown
-}
+  outlines?: Array<Outline<TDate, A>>
+} & ExtraFields<A>
 
 export type Head<TDate extends DateLike> = {
   title?: string
@@ -46,12 +41,18 @@ export type Head<TDate extends DateLike> = {
   windowRight?: number
 }
 
-export type Body<TDate extends DateLike> = {
-  outlines?: Array<Outline<TDate>>
+export type Body<
+  TDate extends DateLike,
+  A extends ReadonlyArray<string> = ReadonlyArray<string>,
+> = {
+  outlines?: Array<Outline<TDate, A>>
 }
 
-export type Opml<TDate extends DateLike> = {
+export type Opml<
+  TDate extends DateLike,
+  A extends ReadonlyArray<string> = ReadonlyArray<string>,
+> = {
   head?: Head<TDate>
-  body?: Body<TDate>
+  body?: Body<TDate, A>
 }
 // #endregion reference

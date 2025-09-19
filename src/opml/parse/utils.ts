@@ -1,3 +1,4 @@
+import type { ParsePartialUtil } from '../../common/types.js'
 import {
   isObject,
   isPresent,
@@ -11,9 +12,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../common/utils.js'
-import type { Body, Head, Opml, Outline, ParsePartialUtil } from '../common/types.js'
+import type { Body, Head, MainOptions, Opml, Outline } from '../common/types.js'
 
-export const parseOutline: ParsePartialUtil<Outline<string>> = (value, options) => {
+export const parseOutline: ParsePartialUtil<Outline<string>, MainOptions> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -78,7 +79,7 @@ export const parseHead: ParsePartialUtil<Head<string>> = (value) => {
   return trimObject(head)
 }
 
-export const parseBody: ParsePartialUtil<Body<string>> = (value, options) => {
+export const parseBody: ParsePartialUtil<Body<string>, MainOptions> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -90,7 +91,7 @@ export const parseBody: ParsePartialUtil<Body<string>> = (value, options) => {
   return trimObject(body)
 }
 
-export const parseOpml: ParsePartialUtil<Opml<string>> = (value, options) => {
+export const parseOpml: ParsePartialUtil<Opml<string>, MainOptions> = (value, options) => {
   if (!isObject(value?.opml)) {
     return
   }

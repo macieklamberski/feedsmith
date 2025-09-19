@@ -1,14 +1,14 @@
-import type { DateLike, DeepPartial, XmlGenerateMain } from '../../common/types.js'
+import type { DateLike, DeepPartial, XmlGenerateOptions } from '../../common/types.js'
 import { generateXml } from '../../common/utils.js'
-import type { Opml, Options } from '../common/types.js'
+import type { MainOptions, Opml } from '../common/types.js'
 import { builder } from './config.js'
 import { generateOpml } from './utils.js'
 
-export const generate: XmlGenerateMain<Opml<Date>, DeepPartial<Opml<DateLike>>, Options> = (
-  value,
-  options,
-) => {
-  const generated = generateOpml(value as Opml<DateLike>, options)
+export const generate = <A extends ReadonlyArray<string> = [], F extends boolean = false>(
+  value: F extends true ? DeepPartial<Opml<DateLike, A>> : Opml<Date, A>,
+  options?: XmlGenerateOptions<MainOptions<A>, F>,
+): string => {
+  const generated = generateOpml(value as Opml<DateLike, A>, options)
 
   if (!generated) {
     throw new Error('Invalid input OPML')

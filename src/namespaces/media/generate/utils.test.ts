@@ -445,9 +445,7 @@ describe('generateComments', () => {
   })
 
   it('should handle empty array', () => {
-    const value = []
-
-    expect(generateComments(value)).toBeUndefined()
+    expect(generateComments([])).toBeUndefined()
   })
 
   it('should handle undefined', () => {
@@ -466,9 +464,7 @@ describe('generateResponses', () => {
   })
 
   it('should handle empty array', () => {
-    const value = []
-
-    expect(generateResponses(value)).toBeUndefined()
+    expect(generateResponses([])).toBeUndefined()
   })
 
   it('should handle undefined', () => {
@@ -487,9 +483,7 @@ describe('generateBackLinks', () => {
   })
 
   it('should handle empty array', () => {
-    const value = []
-
-    expect(generateBackLinks(value)).toBeUndefined()
+    expect(generateBackLinks([])).toBeUndefined()
   })
 
   it('should handle undefined', () => {
@@ -532,9 +526,7 @@ describe('generateScenes', () => {
   })
 
   it('should handle empty array', () => {
-    const value = []
-
-    expect(generateScenes(value)).toBeUndefined()
+    expect(generateScenes([])).toBeUndefined()
   })
 
   it('should handle undefined', () => {
@@ -1863,7 +1855,6 @@ describe('generateItemOrFeed', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateItemOrFeed(value)).toBeUndefined()
   })
 

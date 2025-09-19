@@ -45,6 +45,7 @@ describe('generateAccount', () => {
 
   it('should return undefined for non-object input', () => {
     expect(generateAccount(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
     expect(generateAccount(null)).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
     expect(generateAccount('not an object')).toBeUndefined()
@@ -232,12 +233,12 @@ describe('generateFeed', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
     expect(generateFeed(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(null)).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
     expect(generateFeed('not an object')).toBeUndefined()
@@ -278,12 +279,12 @@ describe('generateItem', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
     expect(generateItem(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(null)).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
     expect(generateItem('not an object')).toBeUndefined()

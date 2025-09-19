@@ -1,4 +1,8 @@
-import type { DateLike, DeepPartial, Unreliable } from '../../../common/types.js'
+import type {
+  GenerateUtil as BaseGenerateUtil,
+  ParsePartialUtil as BaseParsePartialUtil,
+  DateLike,
+} from '../../../common/types.js'
 import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/common/types.js'
 import type { ItemOrFeed as DctermsItemOrFeed } from '../../../namespaces/dcterms/common/types.js'
 import type { ItemOrFeed as GeoRssItemOrFeed } from '../../../namespaces/georss/common/types.js'
@@ -14,15 +18,15 @@ import type { Item as ThrItem, Link as ThrLink } from '../../../namespaces/thr/c
 import type { Item as WfwItem } from '../../../namespaces/wfw/common/types.js'
 import type { Feed as YtFeed, Item as YtItem } from '../../../namespaces/yt/common/types.js'
 
-export type ParsePartialUtil<R> = (
-  value: Unreliable,
-  options?: { prefix?: string; asNamespace?: boolean },
-) => DeepPartial<R> | undefined
+export type UtilOptions = {
+  prefix?: string
+  asNamespace?: boolean
+}
 
-export type GenerateUtil<V> = (
-  value: V | undefined,
-  options?: { prefix?: string; asNamespace?: boolean },
-) => Unreliable | undefined
+export type ParsePartialUtil<R> = BaseParsePartialUtil<R, UtilOptions>
+
+// The `DeepPartial` type is used as a relaxing measure for cases when `asNamespace` is `true`.
+export type GenerateUtil<V> = BaseGenerateUtil<V, UtilOptions>
 
 // #region reference
 // For simplicity's sake, a string is used for now, but this may be reconsidered in the future.
