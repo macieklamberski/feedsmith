@@ -33,7 +33,7 @@ export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | n
 }
 
 export const retrieveText = (value: Unreliable): Unreliable => {
-  return value && typeof value === 'object' ? (value['#text'] ?? value) : value
+  return value?.['#text'] ?? value
 }
 
 export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<T> | undefined => {
