@@ -2,7 +2,6 @@ import type {
   GenerateUtil as BaseGenerateUtil,
   ParsePartialUtil as BaseParsePartialUtil,
   DateLike,
-  DeepPartial,
 } from '../../../common/types.js'
 import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/common/types.js'
 import type { ItemOrFeed as DctermsItemOrFeed } from '../../../namespaces/dcterms/common/types.js'
@@ -27,7 +26,7 @@ export type UtilOptions = {
 export type ParsePartialUtil<R> = BaseParsePartialUtil<R, UtilOptions>
 
 // The `DeepPartial` type is used as a relaxing measure for cases when `asNamespace` is `true`.
-export type GenerateUtil<V> = BaseGenerateUtil<DeepPartial<V>, UtilOptions>
+export type GenerateUtil<V> = BaseGenerateUtil<V, UtilOptions>
 
 // #region reference
 // For simplicity's sake, a string is used for now, but this may be reconsidered in the future.

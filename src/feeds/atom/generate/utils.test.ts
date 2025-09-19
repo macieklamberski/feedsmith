@@ -508,6 +508,7 @@ describe('generateEntry', () => {
       title: 'Entry with namespaces',
     }
 
+    // @ts-expect-error: When asNamespace: true, values should be treated as DeepPartial.
     expect(generateEntry(value, { asNamespace: true })).toEqual(expected)
   })
 
@@ -567,6 +568,7 @@ describe('generateEntry', () => {
       'atom:title': 'Entry with prefix and namespaces',
     }
 
+    // @ts-expect-error: When asNamespace: true, values should be treated as DeepPartial.
     expect(generateEntry(value, { prefix: 'atom:', asNamespace: true })).toEqual(expected)
   })
 
@@ -916,6 +918,7 @@ describe('generateFeed', () => {
       },
     }
 
+    // @ts-expect-error: When asNamespace: true, values should be treated as DeepPartial.
     expect(generateFeed(value, { asNamespace: true })).toEqual(expected)
   })
 
@@ -949,7 +952,6 @@ describe('generateFeed', () => {
     const value = {
       id: 'https://example.com/feed',
       title: 'Feed with prefix',
-      updated: new Date('2023-03-15T12:00:00Z'),
       entries: [
         {
           id: 'https://example.com/entry/1',
@@ -961,7 +963,6 @@ describe('generateFeed', () => {
       feed: {
         'atom:id': 'https://example.com/feed',
         'atom:title': 'Feed with prefix',
-        'atom:updated': '2023-03-15T12:00:00.000Z',
         'atom:entry': [
           {
             'atom:id': 'https://example.com/entry/1',
@@ -971,6 +972,7 @@ describe('generateFeed', () => {
       },
     }
 
+    // @ts-expect-error: When asNamespace: true, values should be treated as DeepPartial.
     expect(generateFeed(value, { prefix: 'atom:', asNamespace: true })).toEqual(expected)
   })
 
@@ -978,7 +980,6 @@ describe('generateFeed', () => {
     const value = {
       id: 'https://example.com/feed',
       title: 'Feed with prefix and namespaces',
-      updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creator: 'Jane Smith',
       },
@@ -987,10 +988,10 @@ describe('generateFeed', () => {
       feed: {
         'atom:id': 'https://example.com/feed',
         'atom:title': 'Feed with prefix and namespaces',
-        'atom:updated': '2023-03-15T12:00:00.000Z',
       },
     }
 
+    // @ts-expect-error: When asNamespace: true, values should be treated as DeepPartial.
     expect(generateFeed(value, { prefix: 'atom:', asNamespace: true })).toEqual(expected)
   })
 

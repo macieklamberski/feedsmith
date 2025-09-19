@@ -1,4 +1,4 @@
-import type { DeepPartial, ParsePartialUtil } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -192,7 +192,7 @@ export const parseAlternateEnclosure: ParsePartialUtil<AlternateEnclosure> = (va
     integrity: parseSingularOf(value['podcast:integrity'], parseIntegrity),
   }
 
-  return trimObject(alternateEnclosure) as DeepPartial<AlternateEnclosure>
+  return trimObject(alternateEnclosure)
 }
 
 export const parseSource: ParsePartialUtil<Source> = (value) => {
@@ -395,7 +395,7 @@ export const parseValueTimeSplit: ParsePartialUtil<ValueTimeSplit> = (value) => 
     valueRecipients: parseArrayOf(value['podcast:valuerecipient'], parseValueRecipient),
   }
 
-  return trimObject(valueTimeSplit) as DeepPartial<ValueTimeSplit>
+  return trimObject(valueTimeSplit)
 }
 
 export const retrieveItem: ParsePartialUtil<Item> = (value) => {
@@ -419,7 +419,7 @@ export const retrieveItem: ParsePartialUtil<Item> = (value) => {
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
   }
 
-  return trimObject(item) as DeepPartial<Item>
+  return trimObject(item)
 }
 
 export const retrieveFeed: ParsePartialUtil<Feed<string>> = (value) => {
@@ -447,5 +447,5 @@ export const retrieveFeed: ParsePartialUtil<Feed<string>> = (value) => {
     podping: parseSingularOf(value['podcast:podping'], parsePodping),
   }
 
-  return trimObject(feed) as DeepPartial<Feed<string>>
+  return trimObject(feed)
 }

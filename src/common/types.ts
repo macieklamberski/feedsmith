@@ -23,8 +23,10 @@ export type IsPlainObject<T> = T extends Array<unknown>
           : true
         : false
 
+export type RemoveUndefined<T> = T extends undefined ? never : T
+
 export type DeepPartial<T> = IsPlainObject<T> extends true
-  ? { [P in keyof T]?: DeepPartial<T[P]> }
+  ? { [P in keyof T]?: DeepPartial<RemoveUndefined<T[P]>> }
   : T extends Array<infer U>
     ? Array<DeepPartial<U>>
     : T

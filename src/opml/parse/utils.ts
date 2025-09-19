@@ -1,4 +1,4 @@
-import type { DeepPartial, ParsePartialUtil } from '../../common/types.js'
+import type { ParsePartialUtil } from '../../common/types.js'
 import {
   isObject,
   isPresent,
@@ -101,5 +101,5 @@ export const parseOpml: ParsePartialUtil<Opml<string>, MainOptions> = (value, op
     body: parseBody(value.opml.body, options),
   }
 
-  return trimObject(opml) as DeepPartial<Opml<string>>
+  return trimObject(opml)
 }

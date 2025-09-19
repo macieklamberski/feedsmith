@@ -1,4 +1,4 @@
-import type { DeepPartial, Unreliable } from '../../../common/types.js'
+import type { Unreliable } from '../../../common/types.js'
 import {
   detectNamespaces,
   isObject,
@@ -164,7 +164,7 @@ export const parseSource: ParsePartialUtil<Source<string>> = (value, options) =>
     updated: retrieveUpdated(value),
   }
 
-  return trimObject(source) as DeepPartial<Source<string>>
+  return trimObject(source)
 }
 
 export const retrievePublished: ParsePartialUtil<string> = (value, options) => {
@@ -239,7 +239,7 @@ export const parseEntry: ParsePartialUtil<Entry<string>> = (value, options) => {
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
   }
 
-  return trimObject(entry) as DeepPartial<Entry<string>>
+  return trimObject(entry)
 }
 
 export const parseFeed: ParsePartialUtil<Feed<string>> = (value, options) => {
@@ -272,7 +272,7 @@ export const parseFeed: ParsePartialUtil<Feed<string>> = (value, options) => {
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
   }
 
-  return trimObject(feed) as DeepPartial<Feed<string>>
+  return trimObject(feed)
 }
 
 export const retrieveFeed: ParsePartialUtil<Feed<string>> = (value) => {

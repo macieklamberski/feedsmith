@@ -1,4 +1,4 @@
-import type { DeepPartial, ParsePartialUtil } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   detectNamespaces,
   isObject,
@@ -82,7 +82,7 @@ export const parseItem: ParsePartialUtil<Item<string>> = (value) => {
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
   }
 
-  return trimObject(item) as DeepPartial<Item<string>>
+  return trimObject(item)
 }
 
 export const retrieveItems: ParsePartialUtil<Array<Item<string>>> = (value) => {
@@ -112,7 +112,7 @@ export const parseFeed: ParsePartialUtil<Feed<string>> = (value) => {
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(channel) : undefined,
   }
 
-  return trimObject(feed) as DeepPartial<Feed<string>>
+  return trimObject(feed)
 }
 
 export const retrieveFeed: ParsePartialUtil<Feed<string>> = (value) => {

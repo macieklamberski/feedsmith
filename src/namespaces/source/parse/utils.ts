@@ -1,4 +1,4 @@
-import type { DeepPartial, ParsePartialUtil } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -83,7 +83,7 @@ export const retrieveFeed: ParsePartialUtil<Feed> = (value) => {
     self: parseSingularOf(value['source:self'], (value) => parseString(retrieveText(value))),
   }
 
-  return trimObject(feed) as DeepPartial<Feed>
+  return trimObject(feed)
 }
 
 export const retrieveItem: ParsePartialUtil<Item> = (value) => {
