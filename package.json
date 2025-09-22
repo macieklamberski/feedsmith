@@ -60,7 +60,7 @@
     "@commitlint/config-conventional": "^19.8.1",
     "@types/bun": "^1.2.22",
     "conventional-changelog-conventionalcommits": "^9.1.0",
-    "lefthook": "^1.13.0",
+    "lefthook": "^1.13.2",
     "semantic-release": "^24.2.9",
     "tsdown": "^0.15.1",
     "typescript": "^5.9.2",
