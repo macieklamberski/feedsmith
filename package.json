@@ -61,7 +61,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.2.4",
     "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/config-conventional": "^20.0.0",
     "@types/bun": "^1.2.22",
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "lefthook": "^1.13.4",
