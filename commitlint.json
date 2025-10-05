@@ -1,6 +1,3 @@
 {
-  "extends": ["@commitlint/config-conventional"],
-  "rules": {
-    "subject-case": [2, "always", "sentence-case"]
-  }
+  "extends": ["./node_modules/kvalita/configs/commitlint.json"]
 }

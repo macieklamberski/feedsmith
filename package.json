@@ -47,8 +47,6 @@
   ],
   "scripts": {
     "prepare": "lefthook install",
-    "lint:tsc": "tsc --pretty --noEmit",
-    "lint:biome": "bunx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
     "build": "tsdown --format cjs,esm --dts --clean",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
@@ -56,19 +54,13 @@
   },
   "dependencies": {
     "entities": "^7.0.0",
-    "fast-xml-parser": "^5.2.5"
+    "fast-xml-parser": "^5.3.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.4",
-    "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
-    "@types/bun": "^1.2.22",
-    "conventional-changelog-conventionalcommits": "^9.1.0",
-    "lefthook": "^1.13.4",
-    "semantic-release": "^24.2.9",
-    "tsdown": "^0.15.4",
-    "typescript": "^5.9.2",
+    "@types/bun": "^1.2.23",
+    "kvalita": "^1.3.0",
+    "tsdown": "^0.15.6",
     "vitepress": "^1.6.4",
-    "vitepress-plugin-llms": "^1.7.5"
+    "vitepress-plugin-llms": "^1.8.0"
   }
 }
