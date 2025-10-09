@@ -213,8 +213,3 @@ While this approach can be useful for quick reading of feed data, it often resul
 * The library API is inspired by the [FeedKit library for Swift](https://github.com/nmdias/FeedKit).
 * XML parsing is provided by [fast-xml-parser](https://github.com/NaturalIntelligence/fast-xml-parser).
 * HTML entity decoding is handled by [entities](https://github.com/fb55/entities).
-
-## License
-
-Licensed under the [MIT](LICENSE) license.<br/>
-Copyright 2025 Maciej Lamberski
