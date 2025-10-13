@@ -6,13 +6,13 @@ import { parseFeed } from './utils.js'
 
 export const parse = (value: unknown): DeepPartial<Feed<string>> => {
   if (!detectJsonFeed(value)) {
-    throw new Error(locales.invalid)
+    throw new Error(locales.invalidFeedFormat)
   }
 
   const parsed = parseFeed(value)
 
   if (!parsed) {
-    throw new Error(locales.invalid)
+    throw new Error(locales.invalidFeedFormat)
   }
 
   return parsed

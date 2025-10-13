@@ -26,8 +26,12 @@ export const builderConfig: XmlBuilderOptions = {
 }
 
 export const locales = {
-  unrecognized: 'Unrecognized feed format',
-  invalid: 'Invalid feed format',
+  unrecognizedFeedFormat: 'Unrecognized feed format',
+  invalidFeedFormat: 'Invalid feed format',
+  invalidOpmlFormat: 'Invalid OPML format',
+  invalidInputOpml: 'Invalid input OPML',
+  invalidInputAtom: 'Invalid input Atom',
+  invalidInputRss: 'Invalid input RSS',
 }
 
 export const namespaceUrls = {

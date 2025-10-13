@@ -123,31 +123,31 @@ describe('parse', () => {
   })
 
   it('should throw error for invalid input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.unrecognized)
+    expect(() => parse('not a feed')).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle null input', () => {
-    expect(() => parse(null)).toThrowError(locales.unrecognized)
+    expect(() => parse(null)).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle undefined input', () => {
-    expect(() => parse(undefined)).toThrowError(locales.unrecognized)
+    expect(() => parse(undefined)).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle array input', () => {
-    expect(() => parse([])).toThrowError(locales.unrecognized)
+    expect(() => parse([])).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle empty object input', () => {
-    expect(() => parse({})).toThrowError(locales.unrecognized)
+    expect(() => parse({})).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle string input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.unrecognized)
+    expect(() => parse('not a feed')).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle number input', () => {
-    expect(() => parse(123)).toThrowError(locales.unrecognized)
+    expect(() => parse(123)).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   describe('leading/trailing garbage', () => {

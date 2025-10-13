@@ -8,7 +8,7 @@ import { retrieveFeed } from './utils.js'
 
 export const parse = (value: unknown): DeepPartial<Feed<string>> => {
   if (!detectAtomFeed(value)) {
-    throw new Error(locales.invalid)
+    throw new Error(locales.invalidFeedFormat)
   }
 
   const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
@@ -18,7 +18,7 @@ export const parse = (value: unknown): DeepPartial<Feed<string>> => {
   const parsed = retrieveFeed(normalized)
 
   if (!parsed) {
-    throw new Error(locales.invalid)
+    throw new Error(locales.invalidFeedFormat)
   }
 
   return parsed

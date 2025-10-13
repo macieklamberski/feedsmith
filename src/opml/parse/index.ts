@@ -1,3 +1,4 @@
+import { locales } from '../../common/config.js'
 import type { DeepPartial } from '../../common/types.js'
 import type { MainOptions, Opml } from '../common/types.js'
 import { parser } from './config.js'
@@ -11,7 +12,7 @@ export const parse = <const A extends ReadonlyArray<string> = []>(
   const parsed = parseOpml(object, options)
 
   if (!parsed) {
-    throw new Error('Invalid OPML format')
+    throw new Error(locales.invalidOpmlFormat)
   }
 
   return parsed as DeepPartial<Opml<string, A>>

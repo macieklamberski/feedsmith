@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'bun:test'
+import { locales } from '../../../common/config.js'
 import { generate } from './index.js'
 
 describe('generate', () => {
@@ -252,7 +253,7 @@ describe('generate', () => {
     const value = {}
 
     // @ts-expect-error: This is for testing purposes.
-    expect(() => generate(value)).toThrow('Invalid input Atom')
+    expect(() => generate(value)).toThrow(locales.invalidInputAtom)
   })
 
   it('should properly encode special characters in text content', () => {

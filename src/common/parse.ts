@@ -36,5 +36,5 @@ export const parse = (value: unknown): Feed => {
     return { format: 'json', feed: parseJsonFeed(value) }
   }
 
-  throw new Error(locales.unrecognized)
+  throw new Error(locales.unrecognizedFeedFormat)
 }

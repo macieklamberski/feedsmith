@@ -1,3 +1,4 @@
+import { locales } from '../../common/config.js'
 import type { DateLike, DeepPartial, XmlGenerateOptions } from '../../common/types.js'
 import { generateXml } from '../../common/utils.js'
 import type { MainOptions, Opml } from '../common/types.js'
@@ -11,7 +12,7 @@ export const generate = <A extends ReadonlyArray<string> = [], F extends boolean
   const generated = generateOpml(value as Opml<DateLike, A>, options)
 
   if (!generated) {
-    throw new Error('Invalid input OPML')
+    throw new Error(locales.invalidInputOpml)
   }
 
   return generateXml(builder, generated, options)

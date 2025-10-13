@@ -1,3 +1,4 @@
+import { locales } from '../../../common/config.js'
 import type { DateLike, DeepPartial, XmlGenerateMain } from '../../../common/types.js'
 import { generateXml } from '../../../common/utils.js'
 import type { Feed } from '../common/types.js'
@@ -11,7 +12,7 @@ export const generate: XmlGenerateMain<Feed<Date>, DeepPartial<Feed<DateLike>>> 
   const generated = generateFeed(value as Feed<DateLike>)
 
   if (!generated) {
-    throw new Error('Invalid input RSS')
+    throw new Error(locales.invalidInputRss)
   }
 
   return generateXml(builder, generated, options)

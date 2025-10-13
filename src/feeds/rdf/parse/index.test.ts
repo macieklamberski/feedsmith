@@ -50,31 +50,31 @@ describe('parse', () => {
   })
 
   it('should throw error for invalid input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.invalid)
+    expect(() => parse('not a feed')).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle null input', () => {
-    expect(() => parse(null)).toThrowError(locales.invalid)
+    expect(() => parse(null)).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle undefined input', () => {
-    expect(() => parse(undefined)).toThrowError(locales.invalid)
+    expect(() => parse(undefined)).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle array input', () => {
-    expect(() => parse([])).toThrowError(locales.invalid)
+    expect(() => parse([])).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle empty object input', () => {
-    expect(() => parse({})).toThrowError(locales.invalid)
+    expect(() => parse({})).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle string input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.invalid)
+    expect(() => parse('not a feed')).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle number input', () => {
-    expect(() => parse(123)).toThrowError(locales.invalid)
+    expect(() => parse(123)).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle non-standard atom namespace prefix', () => {
