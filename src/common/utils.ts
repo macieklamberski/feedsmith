@@ -525,14 +525,25 @@ export const createNamespaceNormalizator = (
   namespaceUrls: Record<string, string>,
   primaryNamespace?: string,
 ) => {
-  const namespacesMap = invertObject(namespaceUrls)
+  const normalizeUri = (uri: string): string => {
+    return typeof uri === 'string' ? uri.trim().toLowerCase() : uri
+  }
+
+  const namespacesMap: Record<string, string> = {}
+
+  for (const prefix in namespaceUrls) {
+    const normalizedUri = normalizeUri(namespaceUrls[prefix])
+    namespacesMap[normalizedUri] = prefix
+  }
 
   const resolveNamespacePrefix = (uri: string, localName: string, fallback: string): string => {
-    if (primaryNamespace && uri === primaryNamespace) {
+    const normalizedUri = normalizeUri(uri)
+
+    if (primaryNamespace && normalizedUri === normalizeUri(primaryNamespace)) {
       return localName
     }
 
-    const standardPrefix = namespacesMap[uri]
+    const standardPrefix = namespacesMap[normalizedUri]
 
     if (standardPrefix) {
       return `${standardPrefix}:${localName}`
@@ -547,10 +558,10 @@ export const createNamespaceNormalizator = (
     if (isObject(element)) {
       for (const key in element) {
         if (key === '@xmlns') {
-          declarations[''] = element[key]
+          declarations[''] = normalizeUri(element[key])
         } else if (key.indexOf('@xmlns:') === 0) {
           const prefix = key.substring('@xmlns:'.length)
-          declarations[prefix] = element[key]
+          declarations[prefix] = normalizeUri(element[key])
         }
       }
     }
