@@ -593,5 +593,167 @@ describe('parse', () => {
 
       expect(parse(value)).toEqual(expected)
     })
+
+    describe('non-standard namespace URIs', () => {
+      it('should work with HTTPS variant and custom prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:dublincore="https://purl.org/dc/elements/1.1/">
+            <channel>
+              <title>Test</title>
+              <link>http://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Item</title>
+                <dublincore:creator>John</dublincore:creator>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'http://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              dc: {
+                creator: 'John',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should work without trailing slash and custom prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:dublincore="http://purl.org/dc/elements/1.1">
+            <channel>
+              <title>Test</title>
+              <link>http://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Item</title>
+                <dublincore:creator>John</dublincore:creator>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'http://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              dc: {
+                creator: 'John',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should work with uppercase URI and custom prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:dublincore="HTTP://PURL.ORG/DC/ELEMENTS/1.1/">
+            <channel>
+              <title>Test</title>
+              <link>http://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Item</title>
+                <dublincore:creator>John</dublincore:creator>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'http://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              dc: {
+                creator: 'John',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should work with mixed case URI and custom prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:dublincore="Http://Purl.Org/Dc/Elements/1.1/">
+            <channel>
+              <title>Test</title>
+              <link>http://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Item</title>
+                <dublincore:creator>John</dublincore:creator>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'http://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              dc: {
+                creator: 'John',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should work with uppercase HTTPS URI and custom prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:dublincore="HTTPS://PURL.ORG/DC/ELEMENTS/1.1/">
+            <channel>
+              <title>Test</title>
+              <link>http://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Item</title>
+                <dublincore:creator>John</dublincore:creator>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'http://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              dc: {
+                creator: 'John',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+    })
   })
 })

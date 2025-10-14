@@ -3277,4 +3277,96 @@ describe('createNamespaceNormalizator', () => {
       })
     })
   })
+
+  describe('non-standard namespace URIs', () => {
+    it('should work with HTTPS variant and custom prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+      const value = {
+        item: {
+          '@xmlns:dublincore': 'https://purl.org/dc/elements/1.1/',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': 'https://purl.org/dc/elements/1.1/',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+
+    it('should work without trailing slash and custom prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+      const value = {
+        item: {
+          '@xmlns:dublincore': 'http://purl.org/dc/elements/1.1',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': 'http://purl.org/dc/elements/1.1',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+
+    it('should work with uppercase URI and custom prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+      const value = {
+        item: {
+          '@xmlns:dublincore': 'HTTP://PURL.ORG/DC/ELEMENTS/1.1/',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': 'HTTP://PURL.ORG/DC/ELEMENTS/1.1/',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+
+    it('should work with mixed case URI and custom prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+      const value = {
+        item: {
+          '@xmlns:dublincore': 'Http://Purl.Org/Dc/Elements/1.1/',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': 'Http://Purl.Org/Dc/Elements/1.1/',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+
+    it('should work with uppercase HTTPS URI and custom prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+      const value = {
+        item: {
+          '@xmlns:dublincore': 'HTTPS://PURL.ORG/DC/ELEMENTS/1.1/',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': 'HTTPS://PURL.ORG/DC/ELEMENTS/1.1/',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+  })
 })
