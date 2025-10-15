@@ -1,4 +1,4 @@
-import { locales, namespaceUrls } from '../../../common/config.js'
+import { locales, namespaceUris } from '../../../common/config.js'
 import type { DeepPartial } from '../../../common/types.js'
 import { createNamespaceNormalizator } from '../../../common/utils.js'
 import { detectAtomFeed } from '../../../index.js'
@@ -11,7 +11,7 @@ export const parse = (value: unknown): DeepPartial<Feed<string>> => {
     throw new Error(locales.invalidFeedFormat)
   }
 
-  const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
+  const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespaceUris.atom[0])
 
   const object = parser.parse(value)
   const normalized = normalizeNamespaces(object)

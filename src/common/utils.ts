@@ -487,7 +487,7 @@ export const generateNumber: GenerateUtil<number> = (value) => {
 
 export const generateNamespaceAttrs = (
   value: Unreliable,
-  namespaceUrls: Record<string, string>,
+  namespaceUris: Record<string, Array<string>>,
 ): Record<string, string> | undefined => {
   if (!isObject(value)) {
     return
@@ -496,7 +496,7 @@ export const generateNamespaceAttrs = (
   let namespaceAttrs: Record<string, string> | undefined
   const valueNamespaces = detectNamespaces(value, true)
 
-  for (const slug in namespaceUrls) {
+  for (const slug in namespaceUris) {
     if (!valueNamespaces.has(slug)) {
       continue
     }
@@ -505,7 +505,7 @@ export const generateNamespaceAttrs = (
       namespaceAttrs = {}
     }
 
-    namespaceAttrs[`@xmlns:${slug}`] = namespaceUrls[slug]
+    namespaceAttrs[`@xmlns:${slug}`] = namespaceUris[slug][0]
   }
 
   return namespaceAttrs
@@ -522,7 +522,7 @@ export const invertObject = (object: Record<string, string>): Record<string, str
 }
 
 export const createNamespaceNormalizator = (
-  namespaceUrls: Record<string, string>,
+  namespaceUris: Record<string, Array<string>>,
   primaryNamespace?: string,
 ) => {
   const normalizeUri = (uri: string): string => {
@@ -531,9 +531,13 @@ export const createNamespaceNormalizator = (
 
   const namespacesMap: Record<string, string> = {}
 
-  for (const prefix in namespaceUrls) {
-    const normalizedUri = normalizeUri(namespaceUrls[prefix])
-    namespacesMap[normalizedUri] = prefix
+  for (const prefix in namespaceUris) {
+    const uris = namespaceUris[prefix]
+
+    for (const uri of uris) {
+      const normalizedUri = normalizeUri(uri)
+      namespacesMap[normalizedUri] = prefix
+    }
   }
 
   const resolveNamespacePrefix = (uri: string, localName: string, fallback: string): string => {

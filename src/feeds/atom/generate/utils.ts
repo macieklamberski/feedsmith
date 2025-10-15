@@ -1,4 +1,4 @@
-import { namespaceUrls } from '../../../common/config.js'
+import { namespaceUris } from '../../../common/config.js'
 import type { DateLike } from '../../../common/types.js'
 import {
   generateCdataString,
@@ -248,7 +248,7 @@ export const generateFeed: GenerateUtil<Feed<DateLike>> = (feed, options) => {
   return {
     feed: {
       '@xmlns': 'http://www.w3.org/2005/Atom',
-      ...generateNamespaceAttrs({ value: valueFull }, namespaceUrls),
+      ...generateNamespaceAttrs({ value: valueFull }, namespaceUris),
       ...valueFull,
     },
   }
