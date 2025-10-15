@@ -25,8 +25,8 @@ jobs:
 
       - name: Validate PR commits
         run: |
-          npx commitlint \
+          bunx commitlint \
             --from ${{ github.event.pull_request.base.sha }} \
             --to ${{ github.event.pull_request.head.sha }} \
-            --config ./commitlint.json
+            --config ./commitlint.json \
             --verbose
