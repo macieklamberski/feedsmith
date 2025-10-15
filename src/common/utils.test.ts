@@ -3361,5 +3361,23 @@ describe('createNamespaceNormalizator', () => {
 
       expect(normalizeNamespaces(value)).toEqual(expected)
     })
+
+    it('should work with URI containing whitespace around it', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+      const value = {
+        item: {
+          '@xmlns:dublincore': '  http://purl.org/dc/elements/1.1/ ',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': '  http://purl.org/dc/elements/1.1/ ',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
   })
 })

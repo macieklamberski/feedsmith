@@ -880,6 +880,40 @@ describe('parse', () => {
 
         expect(parse(value)).toEqual(expected)
       })
+
+      it('should work with URI containing whitespace around it', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <feed xmlns="http://www.w3.org/2005/Atom" xmlns:dublincore="  http://purl.org/dc/elements/1.1/ ">
+            <title>Test</title>
+            <id>urn:uuid:feed</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <entry>
+              <title>Entry</title>
+              <id>urn:uuid:entry</id>
+              <updated>2024-01-01T00:00:00Z</updated>
+              <dublincore:creator>John</dublincore:creator>
+            </entry>
+          </feed>
+        `
+        const expected = {
+          title: 'Test',
+          id: 'urn:uuid:feed',
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              title: 'Entry',
+              id: 'urn:uuid:entry',
+              updated: '2024-01-01T00:00:00Z',
+              dc: {
+                creator: 'John',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
     })
   })
 })
