@@ -1419,7 +1419,9 @@
     "self": "http://example.com/feed.xml"
   },
   "spotify": {
-    "limit": "10",
+    "limit": {
+      "recentCount": 10
+    },
     "countryOfOrigin": "US"
   }
 }

@@ -1,33 +1,88 @@
 import { describe, expect, it } from 'bun:test'
-import { retrieveFeed } from './utils.js'
+import { parseLimit, retrieveFeed } from './utils.js'
+
+describe('parseLimit', () => {
+  it('should parse limit with recentCount attribute', () => {
+    const value = {
+      '@recentcount': 10,
+    }
+    const expected = {
+      recentCount: 10,
+    }
+
+    expect(parseLimit(value)).toEqual(expected)
+  })
+
+  it('should parse limit with string recentCount attribute', () => {
+    const value = {
+      '@recentcount': '10',
+    }
+    const expected = {
+      recentCount: 10,
+    }
+
+    expect(parseLimit(value)).toEqual(expected)
+  })
+
+  it('should handle missing recentCount attribute', () => {
+    const value = {}
+
+    expect(parseLimit(value)).toBeUndefined()
+  })
+
+  it('should handle invalid numeric values', () => {
+    const value = {
+      '@recentcount': 'not-a-number',
+    }
+
+    expect(parseLimit(value)).toBeUndefined()
+  })
+
+  it('should handle null or undefined recentCount', () => {
+    const value = {
+      '@recentcount': null,
+    }
+
+    expect(parseLimit(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(parseLimit(null)).toBeUndefined()
+    expect(parseLimit(undefined)).toBeUndefined()
+    expect(parseLimit('string')).toBeUndefined()
+    expect(parseLimit(123)).toBeUndefined()
+  })
+})
 
 describe('retrieveFeed', () => {
   const expectedFull = {
-    limit: '10',
+    limit: {
+      recentCount: 10,
+    },
     countryOfOrigin: 'US',
   }
 
-  it('should parse all Spotify feed properties when present (with #text)', () => {
+  it('should parse all Spotify feed properties when present', () => {
     const value = {
-      'spotify:limit': { '#text': '10' },
+      'spotify:limit': { '@recentcount': 10 },
       'spotify:countryoforigin': { '#text': 'US' },
     }
 
     expect(retrieveFeed(value)).toEqual(expectedFull)
   })
 
-  it('should parse all Spotify feed properties when present (without #text)', () => {
+  it('should parse limit with string recentCount and countryOfOrigin without #text', () => {
     const value = {
-      'spotify:limit': '10',
+      'spotify:limit': { '@recentcount': '10' },
       'spotify:countryoforigin': 'US',
     }
 
     expect(retrieveFeed(value)).toEqual(expectedFull)
   })
 
-  it('should parse all Spotify feed properties when present (with array of values)', () => {
+  it('should parse limit from array of values (uses first)', () => {
     const value = {
-      'spotify:limit': ['10', '20'],
+      'spotify:limit': [{ '@recentcount': 10 }, { '@recentcount': 20 }],
       'spotify:countryoforigin': ['US', 'GB'],
     }
 
@@ -36,10 +91,12 @@ describe('retrieveFeed', () => {
 
   it('should parse only limit when countryOfOrigin is missing', () => {
     const value = {
-      'spotify:limit': { '#text': '10' },
+      'spotify:limit': { '@recentcount': 10 },
     }
     const expected = {
-      limit: '10',
+      limit: {
+        recentCount: 10,
+      },
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -56,45 +113,49 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
-  it('should handle HTML entities in text content', () => {
+  it('should handle HTML entities in countryOfOrigin text content', () => {
     const value = {
-      'spotify:limit': { '#text': '10&amp;20' },
+      'spotify:limit': { '@recentcount': 10 },
       'spotify:countryoforigin': { '#text': 'US&amp;GB' },
     }
     const expected = {
-      limit: '10&20',
+      limit: {
+        recentCount: 10,
+      },
       countryOfOrigin: 'US&GB',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
-  it('should handle CDATA sections in text content', () => {
+  it('should handle CDATA sections in countryOfOrigin text content', () => {
     const value = {
-      'spotify:limit': { '#text': '<![CDATA[10]]>' },
+      'spotify:limit': { '@recentcount': 10 },
       'spotify:countryoforigin': { '#text': '<![CDATA[US]]>' },
     }
     const expected = {
-      limit: '10',
+      limit: {
+        recentCount: 10,
+      },
       countryOfOrigin: 'US',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
-  it('should handle non-string values by coercing to strings', () => {
+  it('should handle limit without valid recentCount', () => {
     const value = {
-      'spotify:limit': { '#text': 123 },
-      'spotify:countryoforigin': { '#text': true },
+      'spotify:limit': { '@recentcount': 'invalid' },
+      'spotify:countryoforigin': { '#text': 'US' },
     }
     const expected = {
-      limit: '123',
+      countryOfOrigin: 'US',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
-  it('should handle missing #text properties', () => {
+  it('should handle missing attributes and #text properties', () => {
     const value = {
       'spotify:limit': {},
       'spotify:countryoforigin': {},
@@ -139,24 +200,31 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toBeUndefined()
   })
 
-  it('should handle empty string values', () => {
+  it('should handle empty string values in countryOfOrigin', () => {
     const value = {
-      'spotify:limit': { '#text': '' },
-      'spotify:countryoforigin': { '#text': 'US' },
+      'spotify:limit': { '@recentcount': 10 },
+      'spotify:countryoforigin': { '#text': '' },
     }
     const expected = {
-      countryOfOrigin: 'US',
+      limit: {
+        recentCount: 10,
+      },
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
-  it('should handle whitespace-only values', () => {
+  it('should handle whitespace-only values in countryOfOrigin', () => {
     const value = {
-      'spotify:limit': { '#text': '   ' },
+      'spotify:limit': { '@recentcount': 10 },
       'spotify:countryoforigin': { '#text': '\t\n' },
     }
+    const expected = {
+      limit: {
+        recentCount: 10,
+      },
+    }
 
-    expect(retrieveFeed(value)).toBeUndefined()
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 })

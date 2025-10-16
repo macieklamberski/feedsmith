@@ -270,7 +270,7 @@
     <source:self>http://example.com/feed.xml</source:self>
 
     <!-- Spotify Namespace: Channel Level Tags -->
-    <spotify:limit>10</spotify:limit>
+    <spotify:limit recentCount="10"/>
     <spotify:countryOfOrigin>US</spotify:countryOfOrigin>
 
     <item>
