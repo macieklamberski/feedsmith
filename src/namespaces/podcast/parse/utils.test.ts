@@ -3070,6 +3070,32 @@ describe('parsePublisher', () => {
     expect(parsePublisher(value)).toBeUndefined()
   })
 
+  it('should handle multiple remoteItem elements by taking the first one', () => {
+    const value = {
+      'podcast:remoteitem': [
+        {
+          '@feedguid': 'urn:uuid:first-publisher',
+          '@feedurl': 'https://first.example.com/feed.xml',
+          '@medium': 'publisher',
+        },
+        {
+          '@feedguid': 'urn:uuid:second-publisher',
+          '@feedurl': 'https://second.example.com/feed.xml',
+          '@medium': 'publisher',
+        },
+      ],
+    }
+    const expected = {
+      remoteItem: {
+        feedGuid: 'urn:uuid:first-publisher',
+        feedUrl: 'https://first.example.com/feed.xml',
+        medium: 'publisher',
+      },
+    }
+
+    expect(parsePublisher(value)).toEqual(expected)
+  })
+
   it('should return undefined for unsupported input', () => {
     expect(parsePublisher('not an object')).toBeUndefined()
     expect(parsePublisher(undefined)).toBeUndefined()
