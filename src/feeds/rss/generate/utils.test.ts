@@ -1161,7 +1161,7 @@ describe('generateFeed', () => {
     const expected = {
       rss: {
         '@version': '2.0',
-        '@xmlns:georss': 'http://www.georss.org/georss/',
+        '@xmlns:georss': 'http://www.georss.org/georss',
         channel: {
           title: 'Feed with georss namespace',
           description: 'A feed with geographic data',

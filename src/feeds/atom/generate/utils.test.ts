@@ -1220,7 +1220,7 @@ describe('generateFeed', () => {
     const expected = {
       feed: {
         '@xmlns': 'http://www.w3.org/2005/Atom',
-        '@xmlns:georss': 'http://www.georss.org/georss/',
+        '@xmlns:georss': 'http://www.georss.org/georss',
         id: 'https://example.com/feed',
         title: 'Feed with georss namespace',
         updated: '2023-03-15T12:00:00.000Z',

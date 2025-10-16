@@ -1,4 +1,4 @@
-import { namespaceUrls } from '../../../common/config.js'
+import { namespaceUris } from '../../../common/config.js'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateBoolean,
@@ -249,7 +249,7 @@ export const generateFeed: GenerateUtil<Feed<DateLike>> = (feed) => {
   return {
     rss: {
       '@version': '2.0',
-      ...generateNamespaceAttrs(trimmedValue, namespaceUrls),
+      ...generateNamespaceAttrs(trimmedValue, namespaceUris),
       channel: trimmedValue,
     },
   }

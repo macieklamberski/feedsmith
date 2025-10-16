@@ -15,6 +15,7 @@ import type {
   AlternateEnclosure,
   Block,
   Chapters,
+  Chat,
   ContentLink,
   Episode,
   Feed,
@@ -29,6 +30,7 @@ import type {
   Person,
   Podping,
   Podroll,
+  Publisher,
   RemoteItem,
   Season,
   SocialInteract,
@@ -313,6 +315,21 @@ export const parseSocialInteract: ParsePartialUtil<SocialInteract> = (value) => 
   return trimObject(socialInteract)
 }
 
+export const parseChat: ParsePartialUtil<Chat> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const chat = {
+    server: parseString(value['@server']),
+    protocol: parseString(value['@protocol']),
+    accountId: parseString(value['@accountid']),
+    space: parseString(value['@space']),
+  }
+
+  return trimObject(chat)
+}
+
 export const parseBlock: ParsePartialUtil<Block> = (value) => {
   const block = {
     value: parseYesNoBoolean(retrieveText(value)),
@@ -381,6 +398,18 @@ export const parsePodping: ParsePartialUtil<Podping> = (value) => {
   return trimObject(podping)
 }
 
+export const parsePublisher: ParsePartialUtil<Publisher> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const publisher = {
+    remoteItem: parseSingularOf(value['podcast:remoteitem'], parseRemoteItem),
+  }
+
+  return trimObject(publisher)
+}
+
 export const parseValueTimeSplit: ParsePartialUtil<ValueTimeSplit> = (value) => {
   if (!isObject(value)) {
     return
@@ -417,6 +446,7 @@ export const retrieveItem: ParsePartialUtil<Item> = (value) => {
     images: parseSingularOf(value['podcast:images'], parseImages),
     socialInteracts: parseArrayOf(value['podcast:socialinteract'], parseSocialInteract),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
+    chats: parseArrayOf(value['podcast:chat'], parseChat),
   }
 
   return trimObject(item)
@@ -445,6 +475,8 @@ export const retrieveFeed: ParsePartialUtil<Feed<string>> = (value) => {
     podroll: parseSingularOf(value['podcast:podroll'], parsePodroll),
     updateFrequency: parseSingularOf(value['podcast:updatefrequency'], parseUpdateFrequency),
     podping: parseSingularOf(value['podcast:podping'], parsePodping),
+    chats: parseArrayOf(value['podcast:chat'], parseChat),
+    publisher: parseSingularOf(value['podcast:publisher'], parsePublisher),
   }
 
   return trimObject(feed)

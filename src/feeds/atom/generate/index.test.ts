@@ -641,7 +641,7 @@ describe('generate', () => {
       ],
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:georss="http://www.georss.org/georss/">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:georss="http://www.georss.org/georss">
   <id>https://example.com/feed</id>
   <title>Feed with GeoRSS namespace</title>
   <updated>2023-03-15T12:00:00.000Z</updated>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:georss="http://www.georss.org/georss/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:psc="http://podlove.org/simple-chapters" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:source="http://source.scripting.com/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:wfw="http://wellformedweb.org/CommentAPI/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:georss="http://www.georss.org/georss" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:psc="http://podlove.org/simple-chapters" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:source="http://source.scripting.com/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:wfw="http://wellformedweb.org/CommentAPI/">
   <channel>
     <title>Example Feed</title>
     <link>http://example.org</link>
@@ -122,6 +122,7 @@
     <podcast:liveItem status="live" start="2025-04-30T08:00:00.000Z" end="2025-04-30T09:00:00.000Z">
       <podcast:person group="host">Jane Smith</podcast:person>
       <podcast:contentLink href="https://example.com/live/chat">Live Chat</podcast:contentLink>
+      <podcast:chat server="live.example.com" protocol="matrix" accountId="@livepodcast:live.example.com" space="#live-episode"/>
     </podcast:liveItem>
     <podcast:block>yes</podcast:block>
     <podcast:block id="test">no</podcast:block>
@@ -133,6 +134,11 @@
     </podcast:podroll>
     <podcast:updateFrequency complete="false" dtstart="2025-01-10T07:00:00.000Z" rrule="FREQ=WEEKLY;BYDAY=FR">Weekly on Fridays</podcast:updateFrequency>
     <podcast:podping usesPodping="true"/>
+    <podcast:chat server="irc.example.com" protocol="irc" accountId="examplepodcast" space="#general"/>
+    <podcast:chat server="matrix.example.org" protocol="matrix" accountId="@examplepodcast:matrix.org"/>
+    <podcast:publisher>
+      <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-publisher-feed-guid" feedUrl="https://publisher.example.com/feed.xml" medium="publisher"/>
+    </podcast:publisher>
 
     <!-- Media Namespace: Channel Level Tags -->
     <media:group>
@@ -397,6 +403,7 @@
       <podcast:socialInteract uri="https://podcastindex.social/@dave/123456789" protocol="mastodon" accountId="@examplepodcast@podcastindex.social" accountUrl="https://podcastindex.social/@examplepodcast"/>
       <podcast:txt purpose="transcript">{"version": "1.0.0", "chapters": []}</podcast:txt>
       <podcast:txt purpose="notes">Additional text information about this episode</podcast:txt>
+      <podcast:chat server="chat.example.com" protocol="xmpp" accountId="episode@conference.example.com"/>
 
       <!-- Podlove Simple Chapters: Item Level Tags -->
       <psc:chapters>
