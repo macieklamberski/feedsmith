@@ -253,6 +253,49 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should correctly generate elements with attributes and CDATA content', () => {
+    const value = {
+      title: 'CDATA with Attributes Test',
+      description: 'Test feed for CDATA nesting fix',
+      items: [
+        {
+          title: 'Test Item',
+          categories: [
+            {
+              name: 'Technology & Science',
+              domain: 'example.com',
+            },
+          ],
+          media: {
+            description: {
+              value: '<p>HTML content with <strong>tags</strong> & special chars</p>',
+              type: 'html',
+            },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>CDATA with Attributes Test</title>
+    <description>Test feed for CDATA nesting fix</description>
+    <item>
+      <title>Test Item</title>
+      <category domain="example.com">
+        <![CDATA[Technology & Science]]>
+      </category>
+      <media:description type="html">
+        <![CDATA[<p>HTML content with <strong>tags</strong> & special chars</p>]]>
+      </media:description>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with content namespace', () => {
     const value = {
       title: 'Feed with content namespace',

@@ -7,6 +7,7 @@ import {
   generateNumber,
   generatePlainString,
   generateRfc822Date,
+  generateTextOrCdataString,
   isObject,
   trimArray,
   trimObject,
@@ -63,7 +64,7 @@ export const generateCategory: GenerateUtil<Category> = (category) => {
 
   const value = {
     '@domain': generatePlainString(category.domain),
-    '#text': generateCdataString(category.name),
+    ...generateTextOrCdataString(category.name),
   }
 
   return trimObject(value)
@@ -149,7 +150,7 @@ export const generateSkipDays: GenerateUtil<SkipDays> = (skipDays) => {
 
 export const generateGuid: GenerateUtil<Guid> = (guid) => {
   const value = {
-    '#text': generateCdataString(guid?.value),
+    ...generateTextOrCdataString(guid?.value),
     '@isPermaLink': generateBoolean(guid?.isPermaLink),
   }
 
@@ -162,7 +163,7 @@ export const generateSource: GenerateUtil<Source> = (source) => {
   }
 
   const value = {
-    '#text': generateCdataString(source.title),
+    ...generateTextOrCdataString(source.title),
     '@url': generatePlainString(source.url),
   }
 
