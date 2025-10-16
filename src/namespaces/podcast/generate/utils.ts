@@ -16,6 +16,7 @@ import type {
   BaseItem,
   Block,
   Chapters,
+  Chat,
   ContentLink,
   Episode,
   Feed,
@@ -30,6 +31,7 @@ import type {
   Person,
   Podping,
   Podroll,
+  Publisher,
   RemoteItem,
   Season,
   SocialInteract,
@@ -66,6 +68,7 @@ export const generateBaseItem: GenerateUtil<BaseItem> = (baseItem) => {
     'podcast:images': generateImages(baseItem.images),
     'podcast:socialInteract': trimArray(baseItem.socialInteracts, generateSocialInteract),
     'podcast:txt': trimArray(baseItem.txts, generateTxt),
+    'podcast:chat': trimArray(baseItem.chats, generateChat),
   }
 
   return trimObject(value)
@@ -383,6 +386,21 @@ export const generateSocialInteract: GenerateUtil<SocialInteract> = (socialInter
   return trimObject(value)
 }
 
+export const generateChat: GenerateUtil<Chat> = (chat) => {
+  if (!isObject(chat)) {
+    return
+  }
+
+  const value = {
+    '@server': generatePlainString(chat.server),
+    '@protocol': generatePlainString(chat.protocol),
+    '@accountId': generatePlainString(chat.accountId),
+    '@space': generatePlainString(chat.space),
+  }
+
+  return trimObject(value)
+}
+
 export const generateBlock: GenerateUtil<Block> = (block) => {
   if (!isObject(block)) {
     return
@@ -465,6 +483,18 @@ export const generatePodping: GenerateUtil<Podping> = (podping) => {
   return trimObject(value)
 }
 
+export const generatePublisher: GenerateUtil<Publisher> = (publisher) => {
+  if (!isObject(publisher)) {
+    return
+  }
+
+  const value = {
+    'podcast:remoteItem': generateRemoteItem(publisher.remoteItem),
+  }
+
+  return trimObject(value)
+}
+
 export const generateItem: GenerateUtil<Item> = (item) => {
   if (!isObject(item)) {
     return
@@ -496,6 +526,8 @@ export const generateFeed: GenerateUtil<Feed<DateLike>> = (feed) => {
     'podcast:podroll': generatePodroll(feed.podroll),
     'podcast:updateFrequency': generateUpdateFrequency(feed.updateFrequency),
     'podcast:podping': generatePodping(feed.podping),
+    'podcast:chat': trimArray(feed.chats, generateChat),
+    'podcast:publisher': generatePublisher(feed.publisher),
   }
 
   return trimObject(value)
