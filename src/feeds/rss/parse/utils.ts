@@ -30,6 +30,10 @@ import {
   retrieveItem as retrievePodcastItem,
 } from '../../../namespaces/podcast/parse/utils.js'
 import { retrieveItem as retrievePscItem } from '../../../namespaces/psc/parse/utils.js'
+import {
+  retrieveFeed as retrieveRawvoiceFeed,
+  retrieveItem as retrieveRawvoiceItem,
+} from '../../../namespaces/rawvoice/parse/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import {
   retrieveFeed as retrieveSourceFeed,
@@ -182,6 +186,7 @@ export const parseItem: ParsePartialUtil<Item<string>> = (value) => {
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
     src: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
+    rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceItem(value) : undefined,
   }
 
   return trimObject(item)
@@ -223,6 +228,7 @@ export const parseFeed: ParsePartialUtil<Feed<string>> = (value) => {
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     src: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,
+    rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceFeed(value) : undefined,
   }
 
   return trimObject(feed)
