@@ -125,6 +125,16 @@ export const namespaceUris = {
     'http://source.scripting.com',
     'https://source.scripting.com',
   ],
+  feedpress: [
+    'https://feed.press/xmlns', // Official URI.
+    'http://feed.press/xmlns',
+    'https://feed.press/xmlns/',
+    'http://feed.press/xmlns/',
+    'https://feedpress.com/xmlns',
+    'http://feedpress.com/xmlns',
+    'https://feedpress.com/xmlns/',
+    'http://feedpress.com/xmlns/',
+  ],
   yt: [
     'http://www.youtube.com/xml/schemas/2015', // Official URI.
     'https://www.youtube.com/xml/schemas/2015',

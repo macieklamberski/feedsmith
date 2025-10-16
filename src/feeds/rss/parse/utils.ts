@@ -19,6 +19,7 @@ import {
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import { retrieveFeed as retrieveFeedPressFeed } from '../../../namespaces/feedpress/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
   retrieveFeed as retrieveItunesFeed,
@@ -222,6 +223,7 @@ export const parseFeed: ParsePartialUtil<Feed<string>> = (value) => {
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(value) : undefined,
     src: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,
   }
 

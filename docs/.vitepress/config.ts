@@ -92,6 +92,7 @@ export default defineConfig({
               { text: 'Dublin Core Terms', link: '/reference/namespaces/dcterms' },
               { text: 'Well-Formed Web', link: '/reference/namespaces/wfw' },
               { text: 'Source', link: '/reference/namespaces/source' },
+              { text: 'FeedPress', link: '/reference/namespaces/feedpress' },
               { text: 'YouTube', link: '/reference/namespaces/yt' },
             ],
           },
