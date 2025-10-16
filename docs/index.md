@@ -63,6 +63,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Slash](http://purl.org/rss/1.0/modules/slash/) | `<slash:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [iTunes](http://www.itunes.com/dtds/podcast-1.0.dtd) | `<itunes:*>` | RSS, Atom | ✅ | ✅ |
 | [Podcast](https://podcastindex.org/namespace/1.0) | `<podcast:*>` | RSS | ✅ | ✅ |
+| [RawVoice](https://blubrry.com/developer/rawvoice-rss/) | `<rawvoice:*>` | RSS | ✅ | ✅ |
 | [Podlove Simple Chapters](http://podlove.org/simple-chapters) | `<psc:*>` | RSS, Atom | ✅ | ✅ |
 | [Media RSS](http://search.yahoo.com/mrss/) | `<media:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [GeoRSS-Simple](http://www.georss.org/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |

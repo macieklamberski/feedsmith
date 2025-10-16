@@ -29,6 +29,10 @@ import {
   generateItem as generatePodcastItem,
 } from '../../../namespaces/podcast/generate/utils.js'
 import { generateItem as generatePscItem } from '../../../namespaces/psc/generate/utils.js'
+import {
+  generateFeed as generateRawvoiceFeed,
+  generateItem as generateRawvoiceItem,
+} from '../../../namespaces/rawvoice/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import {
   generateFeed as generateSourceFeed,
@@ -198,6 +202,7 @@ export const generateItem: GenerateUtil<Item<DateLike>> = (item) => {
     ...generateDctermsItemOrFeed(item.dcterms),
     ...generateWfwItem(item.wfw),
     ...generateSourceItem(item.src),
+    ...generateRawvoiceItem(item.rawvoice),
   }
 
   return trimObject(value)
@@ -237,6 +242,7 @@ export const generateFeed: GenerateUtil<Feed<DateLike>> = (feed) => {
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateDctermsItemOrFeed(feed.dcterms),
     ...generateSourceFeed(feed.src),
+    ...generateRawvoiceFeed(feed.rawvoice),
     item: trimArray(feed.items, generateItem),
   }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:georss="http://www.georss.org/georss" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:psc="http://podlove.org/simple-chapters" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:source="http://source.scripting.com/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:wfw="http://wellformedweb.org/CommentAPI/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:georss="http://www.georss.org/georss" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:psc="http://podlove.org/simple-chapters" xmlns:rawvoice="https://blubrry.com/developer/rawvoice-rss" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:source="http://source.scripting.com/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:wfw="http://wellformedweb.org/CommentAPI/">
   <channel>
     <title>Example Feed</title>
     <link>http://example.org</link>
@@ -268,6 +268,16 @@
     <source:cloud>https://cloudserver.example.com/notify</source:cloud>
     <source:blogroll>https://blog.example.com/blogroll.opml</source:blogroll>
     <source:self>http://example.com/feed.xml</source:self>
+
+    <!-- RawVoice Namespace: Channel Level Tags -->
+    <rawvoice:rating tv="TV-14">TV-14</rawvoice:rating>
+    <rawvoice:location>San Francisco, CA</rawvoice:location>
+    <rawvoice:frequency>Weekly</rawvoice:frequency>
+    <rawvoice:liveEmbed><![CDATA[<iframe src="https://live.example.com/embed" width="600" height="400"></iframe>]]></rawvoice:liveEmbed>
+    <rawvoice:liveStream schedule="Mon, 15 Jan 2024 10:00:00 GMT" duration="7200" type="audio">https://example.com/live</rawvoice:liveStream>
+    <rawvoice:httpLiveStream schedule="Mon, 15 Jan 2024 10:00:00 GMT" duration="3600">https://live.example.com/stream.m3u8</rawvoice:httpLiveStream>
+    <rawvoice:mycast>yes</rawvoice:mycast>
+    <rawvoice:subscribe feed="https://example.com/feed/podcast/" itunes="https://itunes.apple.com/us/podcast/example-podcast/id123456789" spotify="https://open.spotify.com/show/exampleshow123"/>
 
     <item>
       <title>Example Item</title>
@@ -542,6 +552,14 @@
       <source:outline>&lt;outline text="Implementation"&gt;&lt;outline text="RSS Integration"/&gt;&lt;/outline&gt;</source:outline>
       <source:localTime>2023-12-25 10:30:00</source:localTime>
       <source:linkFull>http://example.org/item/1/understanding-xml-namespaces-complete-guide</source:linkFull>
+
+      <!-- RawVoice Namespace: Item Level Tags -->
+      <rawvoice:poster url="https://example.com/episode-poster.jpg"/>
+      <rawvoice:isHd>yes</rawvoice:isHd>
+      <rawvoice:embed><![CDATA[<iframe src="https://player.example.com/video/12345" width="640" height="360" frameborder="0" allowfullscreen></iframe>]]></rawvoice:embed>
+      <rawvoice:webm src="https://example.com/video.webm" type="video/webm" length="10485760"/>
+      <rawvoice:mp4 src="https://example.com/video.mp4" type="video/mp4" length="15728640"/>
+      <rawvoice:metamark type="ad" link="https://example.com/ad" position="120" duration="30">ad-123456</rawvoice:metamark>
     </item>
   </channel>
 </rss>
