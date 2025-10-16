@@ -34,6 +34,7 @@ import {
   generateFeed as generateSourceFeed,
   generateItem as generateSourceItem,
 } from '../../../namespaces/source/generate/utils.js'
+import { generateFeed as generateSpotifyFeed } from '../../../namespaces/spotify/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
@@ -237,6 +238,7 @@ export const generateFeed: GenerateUtil<Feed<DateLike>> = (feed) => {
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateDctermsItemOrFeed(feed.dcterms),
     ...generateSourceFeed(feed.src),
+    ...generateSpotifyFeed(feed.spotify),
     item: trimArray(feed.items, generateItem),
   }
 
