@@ -15,6 +15,7 @@ export type BaseItem = {
   images?: Images
   socialInteracts?: Array<SocialInteract>
   txts?: Array<Txt>
+  chats?: Array<Chat>
 }
 
 export type Transcript = {
@@ -152,6 +153,13 @@ export type SocialInteract = {
   priority?: number
 }
 
+export type Chat = {
+  server: string
+  protocol: string
+  accountId?: string
+  space?: string
+}
+
 export type Block = {
   value: boolean
   id?: string
@@ -184,6 +192,10 @@ export type Podping = {
   usesPodping?: boolean
 }
 
+export type Publisher = {
+  remoteItem?: RemoteItem
+}
+
 export type ValueTimeSplit = {
   startTime: number
   duration: number
@@ -213,5 +225,7 @@ export type Feed<TDate extends DateLike> = {
   podroll?: Podroll
   updateFrequency?: UpdateFrequency<TDate>
   podping?: Podping
+  chats?: Array<Chat>
+  publisher?: Publisher
 }
 // #endregion reference

@@ -247,6 +247,13 @@
             "display": "Additional text information about this episode",
             "purpose": "notes"
           }
+        ],
+        "chats": [
+          {
+            "server": "chat.example.com",
+            "protocol": "xmpp",
+            "accountId": "episode@conference.example.com"
+          }
         ]
       },
       "psc": {
@@ -918,6 +925,14 @@
             "href": "https://example.com/live/chat",
             "display": "Live Chat"
           }
+        ],
+        "chats": [
+          {
+            "server": "live.example.com",
+            "protocol": "matrix",
+            "accountId": "@livepodcast:live.example.com",
+            "space": "#live-episode"
+          }
         ]
       }
     ],
@@ -955,6 +970,26 @@
     },
     "podping": {
       "usesPodping": true
+    },
+    "chats": [
+      {
+        "server": "irc.example.com",
+        "protocol": "irc",
+        "accountId": "examplepodcast",
+        "space": "#general"
+      },
+      {
+        "server": "matrix.example.org",
+        "protocol": "matrix",
+        "accountId": "@examplepodcast:matrix.org"
+      }
+    ],
+    "publisher": {
+      "remoteItem": {
+        "feedGuid": "ead4c236-bf58-58c6-a2c6-publisher-feed-guid",
+        "feedUrl": "https://publisher.example.com/feed.xml",
+        "medium": "publisher"
+      }
     }
   },
   "media": {

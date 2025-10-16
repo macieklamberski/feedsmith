@@ -3,6 +3,7 @@ import {
   parseAlternateEnclosure,
   parseBlock,
   parseChapters,
+  parseChat,
   parseContentLink,
   parseEpisode,
   parseFunding,
@@ -15,6 +16,7 @@ import {
   parsePerson,
   parsePodping,
   parsePodroll,
+  parsePublisher,
   parseRemoteItem,
   parseSeason,
   parseSocialInteract,
@@ -2346,6 +2348,74 @@ describe('parseSocialInteract', () => {
   })
 })
 
+describe('parseChat', () => {
+  it('should parse complete chat object', () => {
+    const value = {
+      '@server': 'irc.example.com',
+      '@protocol': 'irc',
+      '@accountid': 'user123',
+      '@space': 'general',
+    }
+    const expected = {
+      server: 'irc.example.com',
+      protocol: 'irc',
+      accountId: 'user123',
+      space: 'general',
+    }
+
+    expect(parseChat(value)).toEqual(expected)
+  })
+
+  it('should parse chat with only required fields', () => {
+    const value = {
+      '@server': 'matrix.example.org',
+      '@protocol': 'matrix',
+    }
+    const expected = {
+      server: 'matrix.example.org',
+      protocol: 'matrix',
+    }
+
+    expect(parseChat(value)).toEqual(expected)
+  })
+
+  it('should handle objects with mixed valid and invalid properties', () => {
+    const value = {
+      '@server': 'xmpp.example.com',
+      '@protocol': 'xmpp',
+      '@invalid': 'property',
+    }
+    const expected = {
+      server: 'xmpp.example.com',
+      protocol: 'xmpp',
+    }
+
+    expect(parseChat(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty objects', () => {
+    const value = {}
+
+    expect(parseChat(value)).toBeUndefined()
+  })
+
+  it('should return undefined for objects with only unrelated properties', () => {
+    const value = {
+      '@unrelated': 'property',
+      random: 'value',
+    }
+
+    expect(parseChat(value)).toBeUndefined()
+  })
+
+  it('should return undefined for unsupported input', () => {
+    expect(parseChat('not an object')).toBeUndefined()
+    expect(parseChat(undefined)).toBeUndefined()
+    expect(parseChat(null)).toBeUndefined()
+    expect(parseChat([])).toBeUndefined()
+  })
+})
+
 describe('parseBlock', () => {
   it('should parse complete block object', () => {
     const value = {
@@ -2929,6 +2999,82 @@ describe('parsePodping', () => {
     expect(parsePodping(undefined)).toBeUndefined()
     expect(parsePodping(null)).toBeUndefined()
     expect(parsePodping([])).toBeUndefined()
+  })
+})
+
+describe('parsePublisher', () => {
+  it('should parse complete publisher object', () => {
+    const value = {
+      'podcast:remoteitem': {
+        '@feedguid': 'urn:uuid:publisher-guid-123',
+        '@feedurl': 'https://publisher.example.com/feed.xml',
+        '@medium': 'publisher',
+      },
+    }
+    const expected = {
+      remoteItem: {
+        feedGuid: 'urn:uuid:publisher-guid-123',
+        feedUrl: 'https://publisher.example.com/feed.xml',
+        medium: 'publisher',
+      },
+    }
+
+    expect(parsePublisher(value)).toEqual(expected)
+  })
+
+  it('should parse publisher with minimal remoteItem', () => {
+    const value = {
+      'podcast:remoteitem': {
+        '@feedguid': 'urn:uuid:minimal-publisher',
+      },
+    }
+    const expected = {
+      remoteItem: {
+        feedGuid: 'urn:uuid:minimal-publisher',
+      },
+    }
+
+    expect(parsePublisher(value)).toEqual(expected)
+  })
+
+  it('should handle objects with mixed valid and invalid properties', () => {
+    const value = {
+      'podcast:remoteitem': {
+        '@feedguid': 'urn:uuid:publisher-guid-456',
+        '@feedurl': 'https://publisher.example.com/feed.xml',
+      },
+      '@invalid': 'property',
+    }
+    const expected = {
+      remoteItem: {
+        feedGuid: 'urn:uuid:publisher-guid-456',
+        feedUrl: 'https://publisher.example.com/feed.xml',
+      },
+    }
+
+    expect(parsePublisher(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty objects', () => {
+    const value = {}
+
+    expect(parsePublisher(value)).toBeUndefined()
+  })
+
+  it('should return undefined for objects with only unrelated properties', () => {
+    const value = {
+      '@unrelated': 'property',
+      random: 'value',
+    }
+
+    expect(parsePublisher(value)).toBeUndefined()
+  })
+
+  it('should return undefined for unsupported input', () => {
+    expect(parsePublisher('not an object')).toBeUndefined()
+    expect(parsePublisher(undefined)).toBeUndefined()
+    expect(parsePublisher(null)).toBeUndefined()
+    expect(parsePublisher([])).toBeUndefined()
   })
 })
 
