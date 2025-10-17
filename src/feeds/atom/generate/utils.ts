@@ -6,6 +6,7 @@ import {
   generateNumber,
   generatePlainString,
   generateRfc3339Date,
+  generateTextOrCdataString,
   isObject,
   trimArray,
   trimObject,
@@ -103,7 +104,7 @@ export const generateGenerator: GenerateUtil<Generator> = (generator) => {
   }
 
   const value = {
-    '#text': generateCdataString(generator.text),
+    ...generateTextOrCdataString(generator.text),
     '@uri': generatePlainString(generator.uri),
     '@version': generatePlainString(generator.version),
   }
