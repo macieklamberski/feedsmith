@@ -19,6 +19,6 @@ export { detect as detectRssFeed } from './feeds/rss/detect/index.js'
 export { generate as generateRssFeed } from './feeds/rss/generate/index.js'
 export { parse as parseRssFeed } from './feeds/rss/parse/index.js'
 
-export type { Opml } from './opml/common/types.js'
+export type { Opml, Outline } from './opml/common/types.js'
 export { generate as generateOpml } from './opml/generate/index.js'
 export { parse as parseOpml } from './opml/parse/index.js'
