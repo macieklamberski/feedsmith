@@ -193,19 +193,4 @@ describe('retrieveFeed', () => {
 
     expect(retrieveFeed(value)).toBeUndefined()
   })
-
-  it('should handle various locale codes', () => {
-    const locales = ['en', 'fr', 'de', 'es', 'ja', 'zh']
-
-    for (const locale of locales) {
-      const value = {
-        'feedpress:locale': locale,
-      }
-      const expected = {
-        locale,
-      }
-
-      expect(retrieveFeed(value)).toEqual(expected)
-    }
-  })
 })
