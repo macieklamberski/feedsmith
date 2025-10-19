@@ -4,6 +4,7 @@ import {
   generateNumber,
   generatePlainString,
   generateRfc822Date,
+  generateTextOrCdataString,
   isObject,
   trimObject,
 } from '../../../common/utils.js'
@@ -24,7 +25,7 @@ export const generateRating: GenerateUtil<Rating> = (rating) => {
   }
 
   const value = {
-    '#text': generateCdataString(rating.value),
+    ...generateTextOrCdataString(rating.value),
     '@tv': generatePlainString(rating.tv),
     '@movie': generatePlainString(rating.movie),
   }
@@ -38,7 +39,7 @@ export const generateLiveStream: GenerateUtil<LiveStream<DateLike>> = (liveStrea
   }
 
   const value = {
-    '#text': generateCdataString(liveStream.url),
+    ...generateTextOrCdataString(liveStream.url),
     '@schedule': generateRfc822Date(liveStream.schedule),
     '@duration': generatePlainString(liveStream.duration),
     '@type': generatePlainString(liveStream.type),
@@ -95,7 +96,7 @@ export const generateMetamark: GenerateUtil<Metamark> = (metamark) => {
   }
 
   const value = {
-    '#text': generateCdataString(metamark.value),
+    ...generateTextOrCdataString(metamark.value),
     '@type': generatePlainString(metamark.type),
     '@link': generatePlainString(metamark.link),
     '@position': generateNumber(metamark.position),
