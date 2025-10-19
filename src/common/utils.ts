@@ -471,6 +471,16 @@ export const generateCdataString: GenerateUtil<string> = (value) => {
   return value.trim()
 }
 
+export const generateTextOrCdataString: GenerateUtil<string> = (value) => {
+  const result = generateCdataString(value)
+
+  if (!result || isObject(result)) {
+    return result
+  }
+
+  return { '#text': result }
+}
+
 export const generatePlainString: GenerateUtil<string> = (value) => {
   if (!isNonEmptyString(value)) {
     return

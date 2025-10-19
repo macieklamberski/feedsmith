@@ -87,6 +87,7 @@ export default defineConfig({
               { text: 'Podcast', link: '/reference/namespaces/podcast' },
               { text: 'RawVoice', link: '/reference/namespaces/rawvoice' },
               { text: 'Podlove Simple Chapters', link: '/reference/namespaces/psc' },
+              { text: 'Spotify', link: '/reference/namespaces/spotify' },
               { text: 'Media RSS', link: '/reference/namespaces/media' },
               { text: 'GeoRSS-Simple', link: '/reference/namespaces/georss' },
               { text: 'Atom Threading', link: '/reference/namespaces/thr' },

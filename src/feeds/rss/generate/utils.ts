@@ -7,6 +7,7 @@ import {
   generateNumber,
   generatePlainString,
   generateRfc822Date,
+  generateTextOrCdataString,
   isObject,
   trimArray,
   trimObject,
@@ -38,6 +39,7 @@ import {
   generateFeed as generateSourceFeed,
   generateItem as generateSourceItem,
 } from '../../../namespaces/source/generate/utils.js'
+import { generateFeed as generateSpotifyFeed } from '../../../namespaces/spotify/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
@@ -67,7 +69,7 @@ export const generateCategory: GenerateUtil<Category> = (category) => {
 
   const value = {
     '@domain': generatePlainString(category.domain),
-    '#text': generateCdataString(category.name),
+    ...generateTextOrCdataString(category.name),
   }
 
   return trimObject(value)
@@ -153,7 +155,7 @@ export const generateSkipDays: GenerateUtil<SkipDays> = (skipDays) => {
 
 export const generateGuid: GenerateUtil<Guid> = (guid) => {
   const value = {
-    '#text': generateCdataString(guid?.value),
+    ...generateTextOrCdataString(guid?.value),
     '@isPermaLink': generateBoolean(guid?.isPermaLink),
   }
 
@@ -166,7 +168,7 @@ export const generateSource: GenerateUtil<Source> = (source) => {
   }
 
   const value = {
-    '#text': generateCdataString(source.title),
+    ...generateTextOrCdataString(source.title),
     '@url': generatePlainString(source.url),
   }
 
@@ -243,6 +245,7 @@ export const generateFeed: GenerateUtil<Feed<DateLike>> = (feed) => {
     ...generateDctermsItemOrFeed(feed.dcterms),
     ...generateSourceFeed(feed.src),
     ...generateRawvoiceFeed(feed.rawvoice),
+    ...generateSpotifyFeed(feed.spotify),
     item: trimArray(feed.items, generateItem),
   }
 

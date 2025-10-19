@@ -2,6 +2,7 @@ import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generatePlainString,
+  generateTextOrCdataString,
   isNonEmptyString,
   isObject,
   trimArray,
@@ -16,7 +17,7 @@ export const generateAccount: GenerateUtil<Account> = (account) => {
 
   const value = {
     '@service': account.service,
-    '#text': generatePlainString(account.value),
+    ...generateTextOrCdataString(account.value),
   }
 
   return trimObject(value)
@@ -54,7 +55,7 @@ export const generateSubscriptionList: GenerateUtil<SubscriptionList> = (subscri
 
   const value = {
     '@url': subscriptionList.url,
-    '#text': generatePlainString(subscriptionList.value),
+    ...generateTextOrCdataString(subscriptionList.value),
   }
 
   return trimObject(value)

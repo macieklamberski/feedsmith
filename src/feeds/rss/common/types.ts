@@ -23,6 +23,7 @@ import type {
   Feed as SourceFeed,
   Item as SourceItem,
 } from '../../../namespaces/source/common/types.js'
+import type { Feed as SpotifyFeed } from '../../../namespaces/spotify/common/types.js'
 import type { Feed as SyFeed } from '../../../namespaces/sy/common/types.js'
 import type { Item as ThrItem } from '../../../namespaces/thr/common/types.js'
 import type { Item as WfwItem } from '../../../namespaces/wfw/common/types.js'
@@ -139,5 +140,6 @@ export type Feed<TDate extends DateLike> = {
   dcterms?: DctermsItemOrFeed<TDate>
   src?: SourceFeed
   rawvoice?: RawvoiceFeed<TDate>
+  spotify?: SpotifyFeed
 }
 // #endregion reference
