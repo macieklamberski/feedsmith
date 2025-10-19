@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:georss="http://www.georss.org/georss" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:psc="http://podlove.org/simple-chapters" xmlns:rawvoice="https://blubrry.com/developer/rawvoice-rss" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:source="http://source.scripting.com/" xmlns:spotify="http://www.spotify.com/ns/rss" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:wfw="http://wellformedweb.org/CommentAPI/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:feedpress="https://feed.press/xmlns" xmlns:georss="http://www.georss.org/georss" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:psc="http://podlove.org/simple-chapters" xmlns:rawvoice="https://blubrry.com/developer/rawvoice-rss" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:source="http://source.scripting.com/" xmlns:spotify="http://www.spotify.com/ns/rss" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:wfw="http://wellformedweb.org/CommentAPI/">
   <channel>
     <title>Example Feed</title>
     <link>http://example.org</link>
@@ -268,6 +268,13 @@
     <source:cloud>https://cloudserver.example.com/notify</source:cloud>
     <source:blogroll>https://blog.example.com/blogroll.opml</source:blogroll>
     <source:self>http://example.com/feed.xml</source:self>
+
+    <!-- FeedPress Namespace: Channel Level Tags -->
+    <feedpress:link>https://feedpress.com/examplepodcast</feedpress:link>
+    <feedpress:newsletterId>newsletter123456</feedpress:newsletterId>
+    <feedpress:locale>en</feedpress:locale>
+    <feedpress:podcastId>1234567890</feedpress:podcastId>
+    <feedpress:cssFile>https://example.com/custom-feed-styles.css</feedpress:cssFile>
 
     <!-- RawVoice Namespace: Channel Level Tags -->
     <rawvoice:rating tv="TV-14">TV-14</rawvoice:rating>

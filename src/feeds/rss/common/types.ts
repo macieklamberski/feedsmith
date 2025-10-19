@@ -3,6 +3,7 @@ import type { Entry as AtomEntry, Feed as AtomFeed } from '../../../namespaces/a
 import type { Item as ContentItem } from '../../../namespaces/content/common/types.js'
 import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/common/types.js'
 import type { ItemOrFeed as DctermsItemOrFeed } from '../../../namespaces/dcterms/common/types.js'
+import type { Feed as FeedPressFeed } from '../../../namespaces/feedpress/common/types.js'
 import type { ItemOrFeed as GeoRssItemOrFeed } from '../../../namespaces/georss/common/types.js'
 import type {
   Feed as ItunesFeed,
@@ -138,6 +139,7 @@ export type Feed<TDate extends DateLike> = {
   media?: MediaItemOrFeed
   georss?: GeoRssItemOrFeed
   dcterms?: DctermsItemOrFeed<TDate>
+  feedpress?: FeedPressFeed
   src?: SourceFeed
   rawvoice?: RawvoiceFeed<TDate>
   spotify?: SpotifyFeed

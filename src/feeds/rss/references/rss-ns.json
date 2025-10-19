@@ -1442,6 +1442,13 @@
     "blogroll": "https://blog.example.com/blogroll.opml",
     "self": "http://example.com/feed.xml"
   },
+  "feedpress": {
+    "link": "https://feedpress.com/examplepodcast",
+    "newsletterId": "newsletter123456",
+    "locale": "en",
+    "podcastId": "1234567890",
+    "cssFile": "https://example.com/custom-feed-styles.css"
+  },
   "rawvoice": {
     "rating": {
       "value": "TV-14",
