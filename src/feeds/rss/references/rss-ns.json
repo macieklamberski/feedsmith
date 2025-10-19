@@ -1417,5 +1417,11 @@
     "cloud": "https://cloudserver.example.com/notify",
     "blogroll": "https://blog.example.com/blogroll.opml",
     "self": "http://example.com/feed.xml"
+  },
+  "spotify": {
+    "limit": {
+      "recentCount": 10
+    },
+    "countryOfOrigin": "US"
   }
 }
