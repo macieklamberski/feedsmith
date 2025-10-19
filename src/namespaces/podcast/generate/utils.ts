@@ -6,6 +6,7 @@ import {
   generatePlainString,
   generateRfc822Date,
   generateRfc3339Date,
+  generateTextOrCdataString,
   generateYesNoBoolean,
   isObject,
   trimArray,
@@ -108,7 +109,7 @@ export const generateFunding: GenerateUtil<Funding> = (funding) => {
   }
 
   const value = {
-    '#text': generateCdataString(funding.display),
+    ...generateTextOrCdataString(funding.display),
     '@url': generatePlainString(funding.url),
   }
 
@@ -134,7 +135,7 @@ export const generateSoundbite: GenerateUtil<Soundbite> = (soundbite) => {
   }
 
   const value = {
-    '#text': generateCdataString(soundbite.display),
+    ...generateTextOrCdataString(soundbite.display),
     '@startTime': generateNumber(soundbite.startTime),
     '@duration': generateNumber(soundbite.duration),
   }
@@ -148,7 +149,7 @@ export const generatePerson: GenerateUtil<Person> = (person) => {
   }
 
   const value = {
-    '#text': generateCdataString(person.display),
+    ...generateTextOrCdataString(person.display),
     '@role': generatePlainString(person.role),
     '@group': generatePlainString(person.group),
     '@img': generatePlainString(person.img),
@@ -164,7 +165,7 @@ export const generateLocation: GenerateUtil<Location> = (location) => {
   }
 
   const value = {
-    '#text': generateCdataString(location.display),
+    ...generateTextOrCdataString(location.display),
     '@geo': generatePlainString(location.geo),
     '@osm': generatePlainString(location.osm),
   }
@@ -204,7 +205,7 @@ export const generateTrailer: GenerateUtil<Trailer<DateLike>> = (trailer) => {
   }
 
   const value = {
-    '#text': generateCdataString(trailer.display),
+    ...generateTextOrCdataString(trailer.display),
     '@url': generatePlainString(trailer.url),
     '@pubdate': generateRfc822Date(trailer.pubDate),
     '@length': generateNumber(trailer.length),
@@ -221,7 +222,7 @@ export const generateLicense: GenerateUtil<License> = (license) => {
   }
 
   const value = {
-    '#text': generateCdataString(license.display),
+    ...generateTextOrCdataString(license.display),
     '@url': generatePlainString(license.url),
   }
 
@@ -347,7 +348,7 @@ export const generateContentLink: GenerateUtil<ContentLink> = (contentLink) => {
   }
 
   const value = {
-    '#text': generateCdataString(contentLink.display),
+    ...generateTextOrCdataString(contentLink.display),
     '@href': generatePlainString(contentLink.href),
   }
 
@@ -420,7 +421,7 @@ export const generateTxt: GenerateUtil<Txt> = (txt) => {
   }
 
   const value = {
-    '#text': generateCdataString(txt.display),
+    ...generateTextOrCdataString(txt.display),
     '@purpose': generatePlainString(txt.purpose),
   }
 
@@ -462,7 +463,7 @@ export const generateUpdateFrequency: GenerateUtil<UpdateFrequency<DateLike>> = 
   }
 
   const value = {
-    '#text': generateCdataString(updateFrequency.display),
+    ...generateTextOrCdataString(updateFrequency.display),
     '@complete': generateBoolean(updateFrequency.complete),
     '@dtstart': generateRfc3339Date(updateFrequency.dtstart),
     '@rrule': generatePlainString(updateFrequency.rrule),

@@ -31,11 +31,16 @@ import {
   retrieveItem as retrievePodcastItem,
 } from '../../../namespaces/podcast/parse/utils.js'
 import { retrieveItem as retrievePscItem } from '../../../namespaces/psc/parse/utils.js'
+import {
+  retrieveFeed as retrieveRawvoiceFeed,
+  retrieveItem as retrieveRawvoiceItem,
+} from '../../../namespaces/rawvoice/parse/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import {
   retrieveFeed as retrieveSourceFeed,
   retrieveItem as retrieveSourceItem,
 } from '../../../namespaces/source/parse/utils.js'
+import { retrieveFeed as retrieveSpotifyFeed } from '../../../namespaces/spotify/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
@@ -183,6 +188,7 @@ export const parseItem: ParsePartialUtil<Item<string>> = (value) => {
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
     src: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
+    rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceItem(value) : undefined,
   }
 
   return trimObject(item)
@@ -225,6 +231,8 @@ export const parseFeed: ParsePartialUtil<Feed<string>> = (value) => {
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(value) : undefined,
     src: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,
+    rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceFeed(value) : undefined,
+    spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(value) : undefined,
   }
 
   return trimObject(feed)

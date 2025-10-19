@@ -4,6 +4,7 @@ import {
   generateCsvOf,
   generateNumber,
   generatePlainString,
+  generateTextOrCdataString,
   generateYesNoBoolean,
   isObject,
   trimArray,
@@ -46,7 +47,7 @@ export const generateRating: GenerateUtil<Rating> = (rating) => {
   }
 
   const value = {
-    '#text': generateCdataString(rating.value),
+    ...generateTextOrCdataString(rating.value),
     '@scheme': generatePlainString(rating.scheme),
   }
 
@@ -61,7 +62,7 @@ export const generateTitleOrDescription: GenerateUtil<TitleOrDescription> = (
   }
 
   const value = {
-    '#text': generateCdataString(titleOrDescription.value),
+    ...generateTextOrCdataString(titleOrDescription.value),
     '@type': generatePlainString(titleOrDescription.type),
   }
 
@@ -89,7 +90,7 @@ export const generateCategory: GenerateUtil<Category> = (category) => {
   }
 
   const value = {
-    '#text': generateCdataString(category.name),
+    ...generateTextOrCdataString(category.name),
     '@scheme': generatePlainString(category.scheme),
     '@label': generatePlainString(category.label),
   }
@@ -103,7 +104,7 @@ export const generateHash: GenerateUtil<Hash> = (hash) => {
   }
 
   const value = {
-    '#text': generateCdataString(hash.value),
+    ...generateTextOrCdataString(hash.value),
     '@algo': generatePlainString(hash.algo),
   }
 
@@ -130,7 +131,7 @@ export const generateCredit: GenerateUtil<Credit> = (credit) => {
   }
 
   const value = {
-    '#text': generateCdataString(credit.value),
+    ...generateTextOrCdataString(credit.value),
     '@role': generatePlainString(credit.role),
     '@scheme': generatePlainString(credit.scheme),
   }
@@ -144,7 +145,7 @@ export const generateCopyright: GenerateUtil<Copyright> = (copyright) => {
   }
 
   const value = {
-    '#text': generateCdataString(copyright.value),
+    ...generateTextOrCdataString(copyright.value),
     '@url': generatePlainString(copyright.url),
   }
 
@@ -157,7 +158,7 @@ export const generateText: GenerateUtil<Text> = (text) => {
   }
 
   const value = {
-    '#text': generateCdataString(text.value),
+    ...generateTextOrCdataString(text.value),
     '@type': generatePlainString(text.type),
     '@lang': generatePlainString(text.lang),
     '@start': generatePlainString(text.start),
@@ -173,7 +174,7 @@ export const generateRestriction: GenerateUtil<Restriction> = (restriction) => {
   }
 
   const value = {
-    '#text': generateCdataString(restriction.value),
+    ...generateTextOrCdataString(restriction.value),
     '@relationship': generatePlainString(restriction.relationship),
     '@type': generatePlainString(restriction.type),
   }
@@ -277,7 +278,7 @@ export const generateParam: GenerateUtil<Param> = (param) => {
   }
 
   const value = {
-    '#text': generateCdataString(param.value),
+    ...generateTextOrCdataString(param.value),
     '@name': generatePlainString(param.name),
   }
 
@@ -333,7 +334,7 @@ export const generateLicense: GenerateUtil<License> = (license) => {
   }
 
   const value = {
-    '#text': generateCdataString(license.name),
+    ...generateTextOrCdataString(license.name),
     '@type': generatePlainString(license.type),
     '@href': generatePlainString(license.href),
   }
@@ -401,7 +402,7 @@ export const generateLocation: GenerateUtil<Location> = (location) => {
   }
 
   const value = {
-    '#text': generateCdataString(location.description),
+    ...generateTextOrCdataString(location.description),
     '@start': generatePlainString(location.start),
     '@end': generatePlainString(location.end),
     '@lat': generateNumber(location.lat),

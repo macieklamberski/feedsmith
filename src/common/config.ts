@@ -141,8 +141,24 @@ export const namespaceUris = {
     'http://www.youtube.com/xml/schemas/2015/',
     'https://www.youtube.com/xml/schemas/2015/',
   ],
+  spotify: [
+    'http://www.spotify.com/ns/rss', // Official URI.
+    'https://www.spotify.com/ns/rss',
+    'http://www.spotify.com/ns/rss/',
+    'https://www.spotify.com/ns/rss/',
+  ],
   rdf: [
     'http://www.w3.org/1999/02/22-rdf-syntax-ns#', // Official URI.
     'https://www.w3.org/1999/02/22-rdf-syntax-ns#',
+  ],
+  rawvoice: [
+    'https://blubrry.com/developer/rawvoice-rss', // Official URI.
+    'http://blubrry.com/developer/rawvoice-rss',
+    'https://blubrry.com/developer/rawvoice-rss/',
+    'http://blubrry.com/developer/rawvoice-rss/',
+    'http://www.rawvoice.com/rawvoiceRssModule',
+    'https://www.rawvoice.com/rawvoiceRssModule',
+    'http://www.rawvoice.com/rawvoiceRssModule/',
+    'https://www.rawvoice.com/rawvoiceRssModule/',
   ],
 }
