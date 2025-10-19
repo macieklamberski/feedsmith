@@ -85,6 +85,7 @@ export default defineConfig({
               { text: 'Slash', link: '/reference/namespaces/slash' },
               { text: 'iTunes', link: '/reference/namespaces/itunes' },
               { text: 'Podcast', link: '/reference/namespaces/podcast' },
+              { text: 'RawVoice', link: '/reference/namespaces/rawvoice' },
               { text: 'Podlove Simple Chapters', link: '/reference/namespaces/psc' },
               { text: 'Spotify', link: '/reference/namespaces/spotify' },
               { text: 'Media RSS', link: '/reference/namespaces/media' },

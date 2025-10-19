@@ -14,6 +14,10 @@ import type {
   Item as PodcastItem,
 } from '../../../namespaces/podcast/common/types.js'
 import type { Item as PscItem } from '../../../namespaces/psc/common/types.js'
+import type {
+  Feed as RawvoiceFeed,
+  Item as RawvoiceItem,
+} from '../../../namespaces/rawvoice/common/types.js'
 import type { Item as SlashItem } from '../../../namespaces/slash/common/types.js'
 import type {
   Feed as SourceFeed,
@@ -100,6 +104,7 @@ export type Item<TDate extends DateLike> = {
   dcterms?: DctermsItemOrFeed<TDate>
   wfw?: WfwItem
   src?: SourceItem
+  rawvoice?: RawvoiceItem
 } & ({ title: string } | { description: string })
 
 export type Feed<TDate extends DateLike> = {
@@ -134,6 +139,7 @@ export type Feed<TDate extends DateLike> = {
   georss?: GeoRssItemOrFeed
   dcterms?: DctermsItemOrFeed<TDate>
   src?: SourceFeed
+  rawvoice?: RawvoiceFeed<TDate>
   spotify?: SpotifyFeed
 }
 // #endregion reference
