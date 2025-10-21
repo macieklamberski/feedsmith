@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { parseBody, parseHead, parseOpml, parseOutline } from './utils.js'
+import { parseBody, parseDocument, parseHead, parseOutline } from './utils.js'
 
 describe('parseOutline', () => {
   it('should handle valid outline object', () => {
@@ -421,7 +421,7 @@ describe('parseBody', () => {
   })
 })
 
-describe('parseOpml', () => {
+describe('parseDocument', () => {
   it('should parse complete opml document', () => {
     const value = {
       opml: {
@@ -479,7 +479,7 @@ describe('parseOpml', () => {
       },
     }
 
-    expect(parseOpml(value)).toEqual(expected)
+    expect(parseDocument(value)).toEqual(expected)
   })
 
   it('should handle minimal opml with only version and head', () => {
@@ -497,7 +497,7 @@ describe('parseOpml', () => {
       },
     }
 
-    expect(parseOpml(value)).toEqual(expected)
+    expect(parseDocument(value)).toEqual(expected)
   })
 
   it('should handle minimal opml with only version and body', () => {
@@ -515,7 +515,7 @@ describe('parseOpml', () => {
       },
     }
 
-    expect(parseOpml(value)).toEqual(expected)
+    expect(parseDocument(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -539,7 +539,7 @@ describe('parseOpml', () => {
       },
     }
 
-    expect(parseOpml(value)).toEqual(expected)
+    expect(parseDocument(value)).toEqual(expected)
   })
 
   it('should return undefined for invalid opml structure', () => {
@@ -547,7 +547,7 @@ describe('parseOpml', () => {
       notOpml: {},
     }
 
-    expect(parseOpml(value)).toBeUndefined()
+    expect(parseDocument(value)).toBeUndefined()
   })
 
   it('should return undefined for empty head and body objects', () => {
@@ -559,7 +559,7 @@ describe('parseOpml', () => {
       },
     }
 
-    expect(parseOpml(value)).toBeUndefined()
+    expect(parseDocument(value)).toBeUndefined()
   })
 
   it('should return undefined for empty opml object', () => {
@@ -567,12 +567,12 @@ describe('parseOpml', () => {
       opml: {},
     }
 
-    expect(parseOpml(value)).toBeUndefined()
+    expect(parseDocument(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parseOpml('not an object')).toBeUndefined()
-    expect(parseOpml(undefined)).toBeUndefined()
-    expect(parseOpml(null)).toBeUndefined()
+    expect(parseDocument('not an object')).toBeUndefined()
+    expect(parseDocument(undefined)).toBeUndefined()
+    expect(parseDocument(null)).toBeUndefined()
   })
 })
