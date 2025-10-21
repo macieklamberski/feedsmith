@@ -185,15 +185,38 @@ console.log(rss) // Complete RSS XML
 // - generateOpml() for OPML files
 ```
 
-### Handle Errors
+### Error Handling
+
+If the feed is unrecognized or invalid, an `Error` will be thrown with a descriptive message.
 
 ```typescript
+import { parseFeed, parseJsonFeed } from 'feedsmith'
+
 try {
-  const { format, feed } = parseFeed(content)
-  // Use the feed
+  const universalFeed = parseFeed('<not-a-feed></not-a-feed>')
 } catch (error) {
-  console.error('Invalid feed:', error.message)
+  // Error: Unrecognized feed format
 }
+
+try {
+  const jsonFeed = parseJsonFeed('{}')
+} catch (error) {
+  // Error: Invalid feed format
+}
+```
+
+### TypeScript Types
+
+Feedsmith provides comprehensive TypeScript types for all feed formats:
+
+```typescript
+import type { Rss, Atom, Json, Opml } from 'feedsmith/types'
+
+// Access all types for a format
+type Feed = Rss.Feed
+type Item = Rss.Item
+type Category = Rss.Category
+type Enclosure = Rss.Enclosure
 ```
 
 ## Why Feedsmith?
