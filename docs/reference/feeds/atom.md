@@ -101,6 +101,23 @@ const isAtom = detectAtomFeed(xmlContent)
 
 ## Types
 
+All Atom types are available under the `Atom` namespace:
+
+```typescript
+import type { Atom } from 'feedsmith/types'
+
+// Access any type from the definitions below
+type Feed = Atom.Feed<Date>
+type Entry = Atom.Entry<Date>
+type Link = Atom.Link
+type Person = Atom.Person
+// … see type definitions below for all available types
+```
+
+See the [TypeScript guide](/typescript) for usage examples.
+
+### Type Definitions
+
 > [!INFO]
 > `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 

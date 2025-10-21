@@ -163,6 +163,22 @@ try {
 }
 ```
 
+## TypeScript Types
+
+Feedsmith provides comprehensive TypeScript types for all feed formats:
+
+```typescript
+import type { Rss, Atom, Json, Opml } from 'feedsmith/types'
+
+// Access all types for a format
+type Feed = Rss.Feed
+type Item = Rss.Item
+type Category = Rss.Category
+type Enclosure = Rss.Enclosure
+```
+
+Each format exports its complete type system, including nested types and namespace types. See the [TypeScript guide](/typescript) for details.
+
 ## What's Next?
 
 - **[Parse feeds](/parsing/)** — Learn about parsing different formats

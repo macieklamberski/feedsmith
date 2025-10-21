@@ -40,6 +40,16 @@
         "default": "./dist/index.cjs"
       }
     },
+    "./types": {
+      "import": {
+        "types": "./dist/types.d.ts",
+        "default": "./dist/types.js"
+      },
+      "require": {
+        "types": "./dist/types.d.cts",
+        "default": "./dist/types.cjs"
+      }
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -47,7 +57,7 @@
   ],
   "scripts": {
     "prepare": "lefthook install",
-    "build": "tsdown --format cjs,esm --dts --clean",
+    "build": "tsdown src/index.ts src/types.ts --format cjs,esm --dts --clean",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
