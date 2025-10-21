@@ -82,7 +82,7 @@ All OPML types are available under the `Opml` namespace:
 import type { Opml } from 'feedsmith/types'
 
 // Access any type from the definitions below
-type OpmlDocument = Opml.Opml<Date>
+type Document = Opml.Document<Date>
 type Head = Opml.Head<Date>
 type Body = Opml.Body<Date>
 type Outline = Opml.Outline<Date>

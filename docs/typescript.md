@@ -38,7 +38,7 @@ type Author = Json.Author
 type RdfFeed = Rdf.Feed
 
 // OPML types
-type OpmlDoc = Opml.Opml
+type Document = Opml.Document
 type Outline = Opml.Outline
 ```
 

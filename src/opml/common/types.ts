@@ -48,7 +48,7 @@ export type Body<
   outlines?: Array<Outline<TDate, A>>
 }
 
-export type Opml<
+export type Document<
   TDate extends DateLike,
   A extends ReadonlyArray<string> = ReadonlyArray<string>,
 > = {

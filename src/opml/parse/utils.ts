@@ -12,7 +12,7 @@ import {
   retrieveText,
   trimObject,
 } from '../../common/utils.js'
-import type { Body, Head, MainOptions, Opml, Outline } from '../common/types.js'
+import type { Body, Document, Head, MainOptions, Outline } from '../common/types.js'
 
 export const parseOutline: ParsePartialUtil<Outline<string>, MainOptions> = (value, options) => {
   if (!isObject(value)) {
@@ -91,7 +91,7 @@ export const parseBody: ParsePartialUtil<Body<string>, MainOptions> = (value, op
   return trimObject(body)
 }
 
-export const parseOpml: ParsePartialUtil<Opml<string>, MainOptions> = (value, options) => {
+export const parseDocument: ParsePartialUtil<Document<string>, MainOptions> = (value, options) => {
   if (!isObject(value?.opml)) {
     return
   }

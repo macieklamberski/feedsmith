@@ -11,7 +11,7 @@ import {
   trimArray,
   trimObject,
 } from '../../common/utils.js'
-import type { Body, Head, MainOptions, Opml, Outline } from '../common/types.js'
+import type { Body, Document, Head, MainOptions, Outline } from '../common/types.js'
 
 export const generateOutline: GenerateUtil<Outline<DateLike>, MainOptions> = (outline, options) => {
   if (!isObject(outline)) {
@@ -86,7 +86,7 @@ export const generateBody: GenerateUtil<Body<DateLike>, MainOptions> = (body, op
   return trimObject(value)
 }
 
-export const generateOpml: GenerateUtil<Opml<DateLike>, MainOptions> = (opml, options) => {
+export const generateDocument: GenerateUtil<Document<DateLike>, MainOptions> = (opml, options) => {
   if (!isObject(opml)) {
     return
   }
