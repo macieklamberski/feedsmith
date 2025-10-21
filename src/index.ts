@@ -31,9 +31,9 @@ export { generate as generateRssFeed } from './feeds/rss/generate/index.js'
 export { parse as parseRssFeed } from './feeds/rss/parse/index.js'
 
 /** @deprecated Use `import type { Opml } from 'feedsmith/types'` and access as `Opml.Document` instead. */
-export type Opml<TDate extends DateLike, A extends ReadonlyArray<string> = []> = OpmlDocumentType<
-  TDate,
-  A
->
+export type Opml<
+  TDate extends DateLike,
+  A extends ReadonlyArray<string> = ReadonlyArray<string>,
+> = OpmlDocumentType<TDate, A>
 export { generate as generateOpml } from './opml/generate/index.js'
 export { parse as parseOpml } from './opml/parse/index.js'

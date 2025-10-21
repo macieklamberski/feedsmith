@@ -4,7 +4,7 @@ import type { Document, MainOptions } from '../common/types.js'
 import { parser } from './config.js'
 import { parseDocument } from './utils.js'
 
-export const parse = <const A extends ReadonlyArray<string> = []>(
+export const parse = <const A extends ReadonlyArray<string> = ReadonlyArray<string>>(
   value: string,
   options?: MainOptions<A>,
 ): DeepPartial<Document<string, A>> => {
