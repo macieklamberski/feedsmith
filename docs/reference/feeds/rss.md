@@ -104,6 +104,23 @@ const isRss = detectRssFeed(xmlContent)
 
 ## Types
 
+All RSS types are available under the `Rss` namespace:
+
+```typescript
+import type { Rss } from 'feedsmith/types'
+
+// Access any type from the definitions below
+type Feed = Rss.Feed<Date>
+type Item = Rss.Item<Date>
+type Category = Rss.Category
+type Enclosure = Rss.Enclosure
+// … see type definitions below for all available types
+```
+
+See the [TypeScript guide](/typescript) for usage examples.
+
+### Type Definitions
+
 > [!INFO]
 > `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 

@@ -87,6 +87,23 @@ const isJsonFeed = detectJsonFeed(jsonContent)
 
 ## Types
 
+All JSON Feed types are available under the `Json` namespace:
+
+```typescript
+import type { Json } from 'feedsmith/types'
+
+// Access any type from the definitions below
+type Feed = Json.Feed<Date>
+type Item = Json.Item<Date>
+type Author = Json.Author
+type Attachment = Json.Attachment
+// … see type definitions below for all available types
+```
+
+See the [TypeScript guide](/typescript) for usage examples.
+
+### Type Definitions
+
 > [!INFO]
 > `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 
