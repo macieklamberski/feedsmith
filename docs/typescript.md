@@ -63,21 +63,20 @@ feed.items?.[0]?.enclosures // Enclosure[] | undefined
 
 ### Working with DeepPartial
 
-Parse results have all fields marked as optional because feed content can be incomplete or missing. Feedsmith uses the `DeepPartial` utility type to represent this:
+Parse results have all fields marked as optional because feed content can be incomplete or missing. Use the `DeepPartial` utility type to recreate the same type that parse functions return:
 
 ```typescript
 import type { Rss, DeepPartial } from 'feedsmith/types'
 import { parseRssFeed } from 'feedsmith'
 
-// Parse results are deeply partial - all fields optional
-const feed: DeepPartial<Rss.Feed<string>> = parseRssFeed(xmlContent)
+const feed = parseRssFeed(xmlContent)
 
-// When passing to functions, use DeepPartial
 function processFeed(feed: DeepPartial<Rss.Feed<string>>) {
-  // Handle optional fields
-  if (feed.title) {
-    console.log(feed.title)
-  }
+  console.log(feed.title) // string | undefined
+}
+
+function processItem(item: DeepPartial<Rss.Item<string>>) {
+  console.log(item.title) // string | undefined
 }
 
 processFeed(feed)
