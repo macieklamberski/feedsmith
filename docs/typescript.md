@@ -65,7 +65,7 @@ feed.items?.[0]?.enclosures // Enclosure[] | undefined
 
 The `DeepPartial` type recursively makes all properties optional, including nested objects and arrays. This accurately represents the reality of parsed feeds where any field might be missing.
 
-Use `DeepPartial` to recreate the same type that parse functions return:
+Use it to recreate the same type that parse functions return:
 
 ```typescript
 import type { Rss, DeepPartial } from 'feedsmith/types'
