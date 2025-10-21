@@ -12,7 +12,7 @@ Feedsmith is built with TypeScript and provides comprehensive type definitions f
 All types are available through the `feedsmith/types` export:
 
 ```typescript
-import type { Rss, Atom, Json, Rdf, Opml } from 'feedsmith/types'
+import type { Rss, Atom, Json, Rdf, Opml, DeepPartial } from 'feedsmith/types'
 ```
 
 Each namespace contains the complete type system for that format:
@@ -60,6 +60,30 @@ feed.items?.[0]?.enclosures // Enclosure[] | undefined
 
 > [!NOTE]
 > Explicit typing is usually not required when parsing since the parse functions already return properly typed objects. TypeScript will automatically infer the correct types.
+
+### Working with DeepPartial
+
+Parse results have all fields marked as optional because feed content can be incomplete or missing. Feedsmith uses the `DeepPartial` utility type to represent this:
+
+```typescript
+import type { Rss, DeepPartial } from 'feedsmith/types'
+import { parseRssFeed } from 'feedsmith'
+
+// Parse results are deeply partial - all fields optional
+const feed: DeepPartial<Rss.Feed<string>> = parseRssFeed(xmlContent)
+
+// When passing to functions, use DeepPartial
+function processFeed(feed: DeepPartial<Rss.Feed<string>>) {
+  // Handle optional fields
+  if (feed.title) {
+    console.log(feed.title)
+  }
+}
+
+processFeed(feed)
+```
+
+The `DeepPartial` type recursively makes all properties optional, including nested objects and arrays. This accurately represents the reality of parsed feeds where any field might be missing.
 
 ## Using Types with Generating
 
