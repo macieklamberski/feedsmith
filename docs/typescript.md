@@ -12,7 +12,7 @@ Feedsmith is built with TypeScript and provides comprehensive type definitions f
 All types are available through the `feedsmith/types` export:
 
 ```typescript
-import type { Rss, Atom, Json, Rdf, Opml, DeepPartial } from 'feedsmith/types'
+import type { Rss, Atom, Json, Rdf, Opml } from 'feedsmith/types'
 ```
 
 Each namespace contains the complete type system for that format:
