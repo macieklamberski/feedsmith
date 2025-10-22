@@ -25,101 +25,102 @@ export type UtilOptions = {
 
 export type ParsePartialUtil<R> = BaseParsePartialUtil<R, UtilOptions>
 
-// The `DeepPartial` type is used as a relaxing measure for cases when `asNamespace` is `true`.
 export type GenerateUtil<V> = BaseGenerateUtil<V, UtilOptions>
 
 // #region reference
-// For simplicity's sake, a string is used for now, but this may be reconsidered in the future.
-export type Text = string
+export namespace Atom {
+  // For simplicity's sake, a string is used for now, but this may be reconsidered in the future.
+  export type Text = string
 
-export type Link<TDate extends DateLike> = {
-  href: string
-  rel?: string
-  type?: string
-  hreflang?: string
-  title?: string
-  length?: number
-  thr?: ThrLink<TDate>
-}
+  export type Link<TDate extends DateLike> = {
+    href: string
+    rel?: string
+    type?: string
+    hreflang?: string
+    title?: string
+    length?: number
+    thr?: ThrLink<TDate>
+  }
 
-export type Person = {
-  name: string
-  uri?: string
-  email?: string
-}
+  export type Person = {
+    name: string
+    uri?: string
+    email?: string
+  }
 
-export type Category = {
-  term: string
-  scheme?: string
-  label?: string
-}
+  export type Category = {
+    term: string
+    scheme?: string
+    label?: string
+  }
 
-export type Generator = {
-  text: string
-  uri?: string
-  version?: string
-}
+  export type Generator = {
+    text: string
+    uri?: string
+    version?: string
+  }
 
-export type Source<TDate extends DateLike> = {
-  authors?: Array<Person>
-  categories?: Array<Category>
-  contributors?: Array<Person>
-  generator?: Generator
-  icon?: string
-  id?: string
-  links?: Array<Link<TDate>>
-  logo?: string
-  rights?: Text
-  subtitle?: Text
-  title?: Text
-  updated?: TDate
-}
+  export type Source<TDate extends DateLike> = {
+    authors?: Array<Person>
+    categories?: Array<Category>
+    contributors?: Array<Person>
+    generator?: Generator
+    icon?: string
+    id?: string
+    links?: Array<Link<TDate>>
+    logo?: string
+    rights?: Text
+    subtitle?: Text
+    title?: Text
+    updated?: TDate
+  }
 
-export type Entry<TDate extends DateLike> = {
-  authors?: Array<Person>
-  categories?: Array<Category>
-  content?: Text
-  contributors?: Array<Person>
-  id: string
-  links?: Array<Link<TDate>>
-  published?: TDate
-  rights?: Text
-  source?: Source<TDate>
-  summary?: Text
-  title: Text
-  updated: TDate
-  dc?: DcItemOrFeed<TDate>
-  slash?: SlashItem
-  itunes?: ItunesItem
-  psc?: PscItem
-  media?: MediaItemOrFeed
-  georss?: GeoRssItemOrFeed
-  thr?: ThrItem
-  dcterms?: DctermsItemOrFeed<TDate>
-  wfw?: WfwItem
-  yt?: YtItem
-}
+  export type Entry<TDate extends DateLike> = {
+    authors?: Array<Person>
+    categories?: Array<Category>
+    content?: Text
+    contributors?: Array<Person>
+    id: string
+    links?: Array<Link<TDate>>
+    published?: TDate
+    rights?: Text
+    source?: Source<TDate>
+    summary?: Text
+    title: Text
+    updated: TDate
+    dc?: DcItemOrFeed<TDate>
+    slash?: SlashItem
+    itunes?: ItunesItem
+    psc?: PscItem
+    media?: MediaItemOrFeed
+    georss?: GeoRssItemOrFeed
+    thr?: ThrItem
+    dcterms?: DctermsItemOrFeed<TDate>
+    wfw?: WfwItem
+    yt?: YtItem
+  }
 
-export type Feed<TDate extends DateLike> = {
-  authors?: Array<Person>
-  categories?: Array<Category>
-  contributors?: Array<Person>
-  generator?: Generator
-  icon?: string
-  id: string
-  links?: Array<Link<TDate>>
-  logo?: string
-  rights?: Text
-  subtitle?: Text
-  title: Text
-  updated: TDate
-  entries?: Array<Entry<TDate>>
-  dc?: DcItemOrFeed<TDate>
-  sy?: SyFeed<TDate>
-  itunes?: ItunesFeed
-  media?: MediaItemOrFeed
-  georss?: GeoRssItemOrFeed
-  dcterms?: DctermsItemOrFeed<TDate>
-  yt?: YtFeed
+  export type Feed<TDate extends DateLike> = {
+    authors?: Array<Person>
+    categories?: Array<Category>
+    contributors?: Array<Person>
+    generator?: Generator
+    icon?: string
+    id: string
+    links?: Array<Link<TDate>>
+    logo?: string
+    rights?: Text
+    subtitle?: Text
+    title: Text
+    updated: TDate
+    entries?: Array<Entry<TDate>>
+    dc?: DcItemOrFeed<TDate>
+    sy?: SyFeed<TDate>
+    itunes?: ItunesFeed
+    media?: MediaItemOrFeed
+    georss?: GeoRssItemOrFeed
+    dcterms?: DctermsItemOrFeed<TDate>
+    yt?: YtFeed
+  }
 }
 // #endregion reference

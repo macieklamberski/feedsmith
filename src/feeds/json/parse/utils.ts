@@ -10,7 +10,7 @@ import {
   parseString,
   trimObject,
 } from '../../../common/utils.js'
-import type { Attachment, Author, Feed, Hub, Item } from '../common/types.js'
+import type { Json } from '../common/types.js'
 
 export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
   return (requestedKey: string) => {
@@ -28,7 +28,7 @@ export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
   }
 }
 
-export const parseAuthor: ParsePartialUtil<Author> = (value) => {
+export const parseAuthor: ParsePartialUtil<Json.Author> = (value) => {
   if (isObject(value)) {
     const get = createCaseInsensitiveGetter(value)
     const author = {
@@ -49,7 +49,7 @@ export const parseAuthor: ParsePartialUtil<Author> = (value) => {
   }
 }
 
-export const retrieveAuthors: ParsePartialUtil<Array<Author>> = (value) => {
+export const retrieveAuthors: ParsePartialUtil<Array<Json.Author>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -64,7 +64,7 @@ export const retrieveAuthors: ParsePartialUtil<Array<Author>> = (value) => {
   return parsedAuthors?.length ? parsedAuthors : parsedAuthor
 }
 
-export const parseAttachment: ParsePartialUtil<Attachment> = (value) => {
+export const parseAttachment: ParsePartialUtil<Json.Attachment> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -81,7 +81,7 @@ export const parseAttachment: ParsePartialUtil<Attachment> = (value) => {
   return trimObject(attachment)
 }
 
-export const parseItem: ParsePartialUtil<Item<string>> = (value) => {
+export const parseItem: ParsePartialUtil<Json.Item<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -108,7 +108,7 @@ export const parseItem: ParsePartialUtil<Item<string>> = (value) => {
   return trimObject(item)
 }
 
-export const parseHub: ParsePartialUtil<Hub> = (value) => {
+export const parseHub: ParsePartialUtil<Json.Hub> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -122,7 +122,7 @@ export const parseHub: ParsePartialUtil<Hub> = (value) => {
   return trimObject(hub)
 }
 
-export const parseFeed: ParsePartialUtil<Feed<string>> = (value) => {
+export const parseFeed: ParsePartialUtil<Json.Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }

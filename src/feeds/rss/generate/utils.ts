@@ -44,26 +44,13 @@ import { generateFeed as generateSpotifyFeed } from '../../../namespaces/spotify
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
-import type {
-  Category,
-  Cloud,
-  Enclosure,
-  Feed,
-  Guid,
-  Image,
-  Item,
-  Person,
-  SkipDays,
-  SkipHours,
-  Source,
-  TextInput,
-} from '../common/types.js'
+import type { Rss } from '../common/types.js'
 
-export const generatePerson: GenerateUtil<Person> = (person) => {
+export const generatePerson: GenerateUtil<Rss.Person> = (person) => {
   return generateCdataString(person)
 }
 
-export const generateCategory: GenerateUtil<Category> = (category) => {
+export const generateCategory: GenerateUtil<Rss.Category> = (category) => {
   if (!isObject(category)) {
     return
   }
@@ -76,7 +63,7 @@ export const generateCategory: GenerateUtil<Category> = (category) => {
   return trimObject(value)
 }
 
-export const generateCloud: GenerateUtil<Cloud> = (cloud) => {
+export const generateCloud: GenerateUtil<Rss.Cloud> = (cloud) => {
   if (!isObject(cloud)) {
     return
   }
@@ -92,7 +79,7 @@ export const generateCloud: GenerateUtil<Cloud> = (cloud) => {
   return trimObject(value)
 }
 
-export const generateImage: GenerateUtil<Image> = (image) => {
+export const generateImage: GenerateUtil<Rss.Image> = (image) => {
   if (!isObject(image)) {
     return
   }
@@ -109,7 +96,7 @@ export const generateImage: GenerateUtil<Image> = (image) => {
   return trimObject(value)
 }
 
-export const generateTextInput: GenerateUtil<TextInput> = (textInput) => {
+export const generateTextInput: GenerateUtil<Rss.TextInput> = (textInput) => {
   if (!isObject(textInput)) {
     return
   }
@@ -124,7 +111,7 @@ export const generateTextInput: GenerateUtil<TextInput> = (textInput) => {
   return trimObject(value)
 }
 
-export const generateEnclosure: GenerateUtil<Enclosure> = (enclosure) => {
+export const generateEnclosure: GenerateUtil<Rss.Enclosure> = (enclosure) => {
   if (!isObject(enclosure)) {
     return
   }
@@ -138,7 +125,7 @@ export const generateEnclosure: GenerateUtil<Enclosure> = (enclosure) => {
   return trimObject(value)
 }
 
-export const generateSkipHours: GenerateUtil<SkipHours> = (skipHours) => {
+export const generateSkipHours: GenerateUtil<Rss.SkipHours> = (skipHours) => {
   const value = {
     hour: trimArray(skipHours, generateNumber),
   }
@@ -146,7 +133,7 @@ export const generateSkipHours: GenerateUtil<SkipHours> = (skipHours) => {
   return trimObject(value)
 }
 
-export const generateSkipDays: GenerateUtil<SkipDays> = (skipDays) => {
+export const generateSkipDays: GenerateUtil<Rss.SkipDays> = (skipDays) => {
   const value = {
     day: trimArray(skipDays, generatePlainString),
   }
@@ -154,7 +141,7 @@ export const generateSkipDays: GenerateUtil<SkipDays> = (skipDays) => {
   return trimObject(value)
 }
 
-export const generateGuid: GenerateUtil<Guid> = (guid) => {
+export const generateGuid: GenerateUtil<Rss.Guid> = (guid) => {
   const value = {
     ...generateTextOrCdataString(guid?.value),
     '@isPermaLink': generateBoolean(guid?.isPermaLink),
@@ -163,7 +150,7 @@ export const generateGuid: GenerateUtil<Guid> = (guid) => {
   return trimObject(value)
 }
 
-export const generateSource: GenerateUtil<Source> = (source) => {
+export const generateSource: GenerateUtil<Rss.Source> = (source) => {
   if (!isObject(source)) {
     return
   }
@@ -176,7 +163,7 @@ export const generateSource: GenerateUtil<Source> = (source) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateUtil<Item<DateLike>> = (item) => {
+export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
   if (!isObject(item)) {
     return
   }
@@ -211,7 +198,7 @@ export const generateItem: GenerateUtil<Item<DateLike>> = (item) => {
   return trimObject(value)
 }
 
-export const generateFeed: GenerateUtil<Feed<DateLike>> = (feed) => {
+export const generateFeed: GenerateUtil<Rss.Feed<DateLike>> = (feed) => {
   if (!isObject(feed)) {
     return
   }

@@ -10,45 +10,47 @@ import type { Feed as SyFeed } from '../../../namespaces/sy/common/types.js'
 import type { Item as WfwItem } from '../../../namespaces/wfw/common/types.js'
 
 // #region reference
-export type Image = {
-  title: string
-  link: string
-  url?: string
-}
+export namespace Rdf {
+  export type Image = {
+    title: string
+    link: string
+    url?: string
+  }
 
-export type TextInput = {
-  title: string
-  description: string
-  name: string
-  link: string
-}
+  export type TextInput = {
+    title: string
+    description: string
+    name: string
+    link: string
+  }
 
-export type Item<TDate extends DateLike> = {
-  title: string
-  link: string
-  description?: string
-  atom?: AtomEntry<TDate>
-  dc?: DcItemOrFeed<TDate>
-  content?: ContentItem
-  slash?: SlashItem
-  media?: MediaItemOrFeed
-  georss?: GeoRssItemOrFeed
-  dcterms?: DctermsItemOrFeed<TDate>
-  wfw?: WfwItem
-}
+  export type Item<TDate extends DateLike> = {
+    title: string
+    link: string
+    description?: string
+    atom?: AtomEntry<TDate>
+    dc?: DcItemOrFeed<TDate>
+    content?: ContentItem
+    slash?: SlashItem
+    media?: MediaItemOrFeed
+    georss?: GeoRssItemOrFeed
+    dcterms?: DctermsItemOrFeed<TDate>
+    wfw?: WfwItem
+  }
 
-export type Feed<TDate extends DateLike> = {
-  title: string
-  link: string
-  description: string
-  image?: Image
-  items?: Array<Item<TDate>>
-  textInput?: TextInput
-  atom?: AtomFeed<TDate>
-  dc?: DcItemOrFeed<TDate>
-  sy?: SyFeed<TDate>
-  media?: MediaItemOrFeed
-  georss?: GeoRssItemOrFeed
-  dcterms?: DctermsItemOrFeed<TDate>
+  export type Feed<TDate extends DateLike> = {
+    title: string
+    link: string
+    description: string
+    image?: Image
+    items?: Array<Item<TDate>>
+    textInput?: TextInput
+    atom?: AtomFeed<TDate>
+    dc?: DcItemOrFeed<TDate>
+    sy?: SyFeed<TDate>
+    media?: MediaItemOrFeed
+    georss?: GeoRssItemOrFeed
+    dcterms?: DctermsItemOrFeed<TDate>
+  }
 }
 // #endregion reference
