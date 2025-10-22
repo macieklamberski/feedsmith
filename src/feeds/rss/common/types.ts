@@ -93,7 +93,7 @@ export namespace Rss {
     thr?: Thr.Item
     dcterms?: Dcterms.ItemOrFeed<TDate>
     wfw?: Wfw.Item
-    src?: Source.Item
+    sourceNs?: Source.Item
     rawvoice?: Rawvoice.Item
   } & ({ title: string } | { description: string })
 
@@ -129,7 +129,7 @@ export namespace Rss {
     georss?: Georss.ItemOrFeed
     dcterms?: Dcterms.ItemOrFeed<TDate>
     feedpress?: Feedpress.Feed
-    src?: Source.Feed
+    sourceNs?: Source.Feed
     rawvoice?: Rawvoice.Feed<TDate>
     spotify?: Spotify.Feed
   }
