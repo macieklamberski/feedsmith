@@ -8,18 +8,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type {
-  AlternateEnclosure,
-  Feed,
-  Item,
-  LiveStream,
-  Metamark,
-  Poster,
-  Rating,
-  Subscribe,
-} from '../common/types.js'
+import type { RawvoiceNs } from '../common/types.js'
 
-export const parseRating: ParsePartialUtil<Rating> = (value) => {
+export const parseRating: ParsePartialUtil<RawvoiceNs.Rating> = (value) => {
   const rating = {
     value: parseString(retrieveText(value)),
     tv: parseString(value?.['@tv']),
@@ -29,7 +20,7 @@ export const parseRating: ParsePartialUtil<Rating> = (value) => {
   return trimObject(rating)
 }
 
-export const parseLiveStream: ParsePartialUtil<LiveStream<string>> = (value) => {
+export const parseLiveStream: ParsePartialUtil<RawvoiceNs.LiveStream<string>> = (value) => {
   const liveStream = {
     url: parseString(retrieveText(value)),
     schedule: parseDate(value?.['@schedule']),
@@ -40,7 +31,7 @@ export const parseLiveStream: ParsePartialUtil<LiveStream<string>> = (value) => 
   return trimObject(liveStream)
 }
 
-export const parsePoster: ParsePartialUtil<Poster> = (value) => {
+export const parsePoster: ParsePartialUtil<RawvoiceNs.Poster> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -52,7 +43,7 @@ export const parsePoster: ParsePartialUtil<Poster> = (value) => {
   return trimObject(poster)
 }
 
-export const parseAlternateEnclosure: ParsePartialUtil<AlternateEnclosure> = (value) => {
+export const parseAlternateEnclosure: ParsePartialUtil<RawvoiceNs.AlternateEnclosure> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -66,12 +57,12 @@ export const parseAlternateEnclosure: ParsePartialUtil<AlternateEnclosure> = (va
   return trimObject(alternateEnclosure)
 }
 
-export const parseSubscribe: ParsePartialUtil<Subscribe> = (value) => {
+export const parseSubscribe: ParsePartialUtil<RawvoiceNs.Subscribe> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  const subscribe: Subscribe = {}
+  const subscribe: RawvoiceNs.Subscribe = {}
 
   for (const key in value) {
     if (key.startsWith('@')) {
@@ -86,7 +77,7 @@ export const parseSubscribe: ParsePartialUtil<Subscribe> = (value) => {
   return trimObject(subscribe)
 }
 
-export const parseMetamark: ParsePartialUtil<Metamark> = (value) => {
+export const parseMetamark: ParsePartialUtil<RawvoiceNs.Metamark> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -102,7 +93,7 @@ export const parseMetamark: ParsePartialUtil<Metamark> = (value) => {
   return trimObject(metamark)
 }
 
-export const retrieveItem: ParsePartialUtil<Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<RawvoiceNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -119,7 +110,7 @@ export const retrieveItem: ParsePartialUtil<Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialUtil<Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialUtil<RawvoiceNs.Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }

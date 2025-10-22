@@ -1,10 +1,12 @@
 // #region reference
-export type Limit = {
-  recentCount?: number
-}
+export namespace SpotifyNs {
+  export type Limit = {
+    recentCount?: number
+  }
 
-export type Feed = {
-  limit?: Limit
-  countryOfOrigin?: string
+  export type Feed = {
+    limit?: Limit
+    countryOfOrigin?: string
+  }
 }
 // #endregion reference

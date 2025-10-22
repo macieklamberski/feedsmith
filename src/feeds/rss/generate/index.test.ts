@@ -455,7 +455,7 @@ describe('generate', () => {
     const value = {
       title: 'Feed with source namespace',
       description: 'Test feed with Source namespace',
-      src: {
+      sourceNs: {
         accounts: [{ service: 'twitter', value: 'johndoe' }, { service: 'github' }],
         likes: { server: 'http://likes.example.com/' },
         blogroll: 'https://blog.example.com/blogroll.opml',
@@ -463,7 +463,7 @@ describe('generate', () => {
       items: [
         {
           title: 'Item with source metadata',
-          src: {
+          sourceNs: {
             markdown: '# Example Post - This is markdown content for the post.',
             outlines: ['<outline text="Section 1"/>', '<outline text="Section 2"/>'],
             localTime: '2024-01-15 10:30:00',

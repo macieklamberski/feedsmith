@@ -8,13 +8,13 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { HitParade, Item } from '../common/types.js'
+import type { SlashNs } from '../common/types.js'
 
-export const parseHitParade: ParsePartialUtil<HitParade> = (value) => {
+export const parseHitParade: ParsePartialUtil<SlashNs.HitParade> = (value) => {
   return parseCsvOf(value, parseNumber)
 }
 
-export const retrieveItem: ParsePartialUtil<Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<SlashNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }

@@ -6,9 +6,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { Item } from '../common/types.js'
+import type { ContentNs } from '../common/types.js'
 
-export const retrieveItem: ParsePartialUtil<Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<ContentNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }

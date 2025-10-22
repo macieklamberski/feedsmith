@@ -12,9 +12,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { Category, Feed, Item, Owner } from '../common/types.js'
+import type { ItunesNs } from '../common/types.js'
 
-export const parseCategory: ParsePartialUtil<Category> = (value) => {
+export const parseCategory: ParsePartialUtil<ItunesNs.Category> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -27,7 +27,7 @@ export const parseCategory: ParsePartialUtil<Category> = (value) => {
   return trimObject(category)
 }
 
-export const parseOwner: ParsePartialUtil<Owner> = (value) => {
+export const parseOwner: ParsePartialUtil<ItunesNs.Owner> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -89,7 +89,7 @@ export const parseImage: ParsePartialUtil<string> = (value) => {
   return parseString(value['@href'])
 }
 
-export const retrieveItem: ParsePartialUtil<Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<ItunesNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -123,7 +123,7 @@ export const retrieveItem: ParsePartialUtil<Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialUtil<Feed> = (value) => {
+export const retrieveFeed: ParsePartialUtil<ItunesNs.Feed> = (value) => {
   if (!isObject(value)) {
     return
   }

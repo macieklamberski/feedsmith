@@ -176,7 +176,7 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
     thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
-    src: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
+    sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceItem(value) : undefined,
   }
 
@@ -219,7 +219,7 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(value) : undefined,
-    src: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,
+    sourceNs: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceFeed(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(value) : undefined,
   }

@@ -8,9 +8,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { Feed } from '../common/types.js'
+import type { SyNs } from '../common/types.js'
 
-export const retrieveFeed: ParsePartialUtil<Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialUtil<SyNs.Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }

@@ -191,7 +191,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
     ...generateThrItem(item.thr),
     ...generateDctermsItemOrFeed(item.dcterms),
     ...generateWfwItem(item.wfw),
-    ...generateSourceItem(item.src),
+    ...generateSourceItem(item.sourceNs),
     ...generateRawVoiceItem(item.rawvoice),
   }
 
@@ -232,7 +232,7 @@ export const generateFeed: GenerateUtil<Rss.Feed<DateLike>> = (feed) => {
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateDctermsItemOrFeed(feed.dcterms),
     ...generateFeedPressFeed(feed.feedpress),
-    ...generateSourceFeed(feed.src),
+    ...generateSourceFeed(feed.sourceNs),
     ...generateRawVoiceFeed(feed.rawvoice),
     ...generateSpotifyFeed(feed.spotify),
     item: trimArray(feed.items, generateItem),

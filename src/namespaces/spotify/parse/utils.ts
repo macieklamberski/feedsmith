@@ -7,9 +7,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { Feed, Limit } from '../common/types.js'
+import type { SpotifyNs } from '../common/types.js'
 
-export const parseLimit: ParsePartialUtil<Limit> = (value) => {
+export const parseLimit: ParsePartialUtil<SpotifyNs.Limit> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -21,7 +21,7 @@ export const parseLimit: ParsePartialUtil<Limit> = (value) => {
   return trimObject(limit)
 }
 
-export const retrieveFeed: ParsePartialUtil<Feed> = (value) => {
+export const retrieveFeed: ParsePartialUtil<SpotifyNs.Feed> = (value) => {
   if (!isObject(value)) {
     return
   }
