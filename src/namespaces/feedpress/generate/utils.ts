@@ -1,8 +1,8 @@
 import type { GenerateUtil } from '../../../common/types.js'
 import { generateCdataString, isObject, trimObject } from '../../../common/utils.js'
-import type { Feed } from '../common/types.js'
+import type { Feedpress } from '../common/types.js'
 
-export const generateFeed: GenerateUtil<Feed> = (feed) => {
+export const generateFeed: GenerateUtil<Feedpress.Feed> = (feed) => {
   if (!isObject(feed)) {
     return
   }

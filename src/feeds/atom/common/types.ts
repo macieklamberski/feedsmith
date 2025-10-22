@@ -3,20 +3,17 @@ import type {
   ParsePartialUtil as BaseParsePartialUtil,
   DateLike,
 } from '../../../common/types.js'
-import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/common/types.js'
-import type { ItemOrFeed as DctermsItemOrFeed } from '../../../namespaces/dcterms/common/types.js'
-import type { ItemOrFeed as GeoRssItemOrFeed } from '../../../namespaces/georss/common/types.js'
-import type {
-  Feed as ItunesFeed,
-  Item as ItunesItem,
-} from '../../../namespaces/itunes/common/types.js'
-import type { ItemOrFeed as MediaItemOrFeed } from '../../../namespaces/media/common/types.js'
-import type { Item as PscItem } from '../../../namespaces/psc/common/types.js'
-import type { Item as SlashItem } from '../../../namespaces/slash/common/types.js'
-import type { Feed as SyFeed } from '../../../namespaces/sy/common/types.js'
-import type { Item as ThrItem, Link as ThrLink } from '../../../namespaces/thr/common/types.js'
-import type { Item as WfwItem } from '../../../namespaces/wfw/common/types.js'
-import type { Feed as YtFeed, Item as YtItem } from '../../../namespaces/yt/common/types.js'
+import type { Dc } from '../../../namespaces/dc/common/types.js'
+import type { Dcterms } from '../../../namespaces/dcterms/common/types.js'
+import type { Georss } from '../../../namespaces/georss/common/types.js'
+import type { Itunes } from '../../../namespaces/itunes/common/types.js'
+import type { Media } from '../../../namespaces/media/common/types.js'
+import type { Psc } from '../../../namespaces/psc/common/types.js'
+import type { Slash } from '../../../namespaces/slash/common/types.js'
+import type { Sy } from '../../../namespaces/sy/common/types.js'
+import type { Thr } from '../../../namespaces/thr/common/types.js'
+import type { Wfw } from '../../../namespaces/wfw/common/types.js'
+import type { Yt } from '../../../namespaces/yt/common/types.js'
 
 export type UtilOptions = {
   prefix?: string
@@ -39,7 +36,7 @@ export namespace Atom {
     hreflang?: string
     title?: string
     length?: number
-    thr?: ThrLink<TDate>
+    thr?: Thr.Link<TDate>
   }
 
   export type Person = {
@@ -88,16 +85,16 @@ export namespace Atom {
     summary?: Text
     title: Text
     updated: TDate
-    dc?: DcItemOrFeed<TDate>
-    slash?: SlashItem
-    itunes?: ItunesItem
-    psc?: PscItem
-    media?: MediaItemOrFeed
-    georss?: GeoRssItemOrFeed
-    thr?: ThrItem
-    dcterms?: DctermsItemOrFeed<TDate>
-    wfw?: WfwItem
-    yt?: YtItem
+    dc?: Dc.ItemOrFeed<TDate>
+    slash?: Slash.Item
+    itunes?: Itunes.Item
+    psc?: Psc.Item
+    media?: Media.ItemOrFeed
+    georss?: Georss.ItemOrFeed
+    thr?: Thr.Item
+    dcterms?: Dcterms.ItemOrFeed<TDate>
+    wfw?: Wfw.Item
+    yt?: Yt.Item
   }
 
   export type Feed<TDate extends DateLike> = {
@@ -114,13 +111,13 @@ export namespace Atom {
     title: Text
     updated: TDate
     entries?: Array<Entry<TDate>>
-    dc?: DcItemOrFeed<TDate>
-    sy?: SyFeed<TDate>
-    itunes?: ItunesFeed
-    media?: MediaItemOrFeed
-    georss?: GeoRssItemOrFeed
-    dcterms?: DctermsItemOrFeed<TDate>
-    yt?: YtFeed
+    dc?: Dc.ItemOrFeed<TDate>
+    sy?: Sy.Feed<TDate>
+    itunes?: Itunes.Feed
+    media?: Media.ItemOrFeed
+    georss?: Georss.ItemOrFeed
+    dcterms?: Dcterms.ItemOrFeed<TDate>
+    yt?: Yt.Feed
   }
 }
 // #endregion reference

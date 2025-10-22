@@ -9,9 +9,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { InReplyTo, Item, Link } from '../common/types.js'
+import type { Thr } from '../common/types.js'
 
-export const parseInReplyTo: ParsePartialUtil<InReplyTo> = (value) => {
+export const parseInReplyTo: ParsePartialUtil<Thr.InReplyTo> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -26,7 +26,7 @@ export const parseInReplyTo: ParsePartialUtil<InReplyTo> = (value) => {
   return trimObject(inReplyTo)
 }
 
-export const retrieveLink: ParsePartialUtil<Link<string>> = (value) => {
+export const retrieveLink: ParsePartialUtil<Thr.Link<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -39,7 +39,7 @@ export const retrieveLink: ParsePartialUtil<Link<string>> = (value) => {
   return trimObject(link)
 }
 
-export const retrieveItem: ParsePartialUtil<Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<Thr.Item> = (value) => {
   if (!isObject(value)) {
     return
   }

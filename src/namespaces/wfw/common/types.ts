@@ -1,6 +1,8 @@
 // #region reference
-export type Item = {
-  comment?: string
-  commentRss?: string
+export namespace Wfw {
+  export type Item = {
+    comment?: string
+    commentRss?: string
+  }
 }
 // #endregion reference

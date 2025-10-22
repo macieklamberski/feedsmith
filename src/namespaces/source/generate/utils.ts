@@ -8,9 +8,9 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
-import type { Account, Archive, Feed, Item, Likes, SubscriptionList } from '../common/types.js'
+import type { Source } from '../common/types.js'
 
-export const generateAccount: GenerateUtil<Account> = (account) => {
+export const generateAccount: GenerateUtil<Source.Account> = (account) => {
   if (!isObject(account) || !isNonEmptyString(account.service)) {
     return
   }
@@ -23,7 +23,7 @@ export const generateAccount: GenerateUtil<Account> = (account) => {
   return trimObject(value)
 }
 
-export const generateLikes: GenerateUtil<Likes> = (likes) => {
+export const generateLikes: GenerateUtil<Source.Likes> = (likes) => {
   if (!isObject(likes) || !isNonEmptyString(likes.server)) {
     return
   }
@@ -33,7 +33,7 @@ export const generateLikes: GenerateUtil<Likes> = (likes) => {
   }
 }
 
-export const generateArchive: GenerateUtil<Archive> = (archive) => {
+export const generateArchive: GenerateUtil<Source.Archive> = (archive) => {
   if (!isObject(archive) || !isNonEmptyString(archive.url) || !isNonEmptyString(archive.startDay)) {
     return
   }
@@ -48,7 +48,9 @@ export const generateArchive: GenerateUtil<Archive> = (archive) => {
   return trimObject(value)
 }
 
-export const generateSubscriptionList: GenerateUtil<SubscriptionList> = (subscriptionList) => {
+export const generateSubscriptionList: GenerateUtil<Source.SubscriptionList> = (
+  subscriptionList,
+) => {
   if (!isObject(subscriptionList) || !isNonEmptyString(subscriptionList.url)) {
     return
   }
@@ -61,7 +63,7 @@ export const generateSubscriptionList: GenerateUtil<SubscriptionList> = (subscri
   return trimObject(value)
 }
 
-export const generateFeed: GenerateUtil<Feed> = (feed) => {
+export const generateFeed: GenerateUtil<Source.Feed> = (feed) => {
   if (!isObject(feed)) {
     return
   }
@@ -79,7 +81,7 @@ export const generateFeed: GenerateUtil<Feed> = (feed) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateUtil<Item> = (item) => {
+export const generateItem: GenerateUtil<Source.Item> = (item) => {
   if (!isObject(item)) {
     return
   }

@@ -7,9 +7,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { Account, Archive, Feed, Item, Likes, SubscriptionList } from '../common/types.js'
+import type { Source } from '../common/types.js'
 
-export const parseAccount: ParsePartialUtil<Account> = (value) => {
+export const parseAccount: ParsePartialUtil<Source.Account> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -22,7 +22,7 @@ export const parseAccount: ParsePartialUtil<Account> = (value) => {
   return trimObject(account)
 }
 
-export const parseLikes: ParsePartialUtil<Likes> = (value) => {
+export const parseLikes: ParsePartialUtil<Source.Likes> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -34,7 +34,7 @@ export const parseLikes: ParsePartialUtil<Likes> = (value) => {
   return trimObject(likes)
 }
 
-export const parseArchive: ParsePartialUtil<Archive> = (value) => {
+export const parseArchive: ParsePartialUtil<Source.Archive> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -53,7 +53,7 @@ export const parseArchive: ParsePartialUtil<Archive> = (value) => {
   return trimObject(archive)
 }
 
-export const parseSubscriptionList: ParsePartialUtil<SubscriptionList> = (value) => {
+export const parseSubscriptionList: ParsePartialUtil<Source.SubscriptionList> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -66,7 +66,7 @@ export const parseSubscriptionList: ParsePartialUtil<SubscriptionList> = (value)
   return trimObject(subscriptionList)
 }
 
-export const retrieveFeed: ParsePartialUtil<Feed> = (value) => {
+export const retrieveFeed: ParsePartialUtil<Source.Feed> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -86,7 +86,7 @@ export const retrieveFeed: ParsePartialUtil<Feed> = (value) => {
   return trimObject(feed)
 }
 
-export const retrieveItem: ParsePartialUtil<Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<Source.Item> = (value) => {
   if (!isObject(value)) {
     return
   }

@@ -8,18 +8,9 @@ import {
   isObject,
   trimObject,
 } from '../../../common/utils.js'
-import type {
-  AlternateEnclosure,
-  Feed,
-  Item,
-  LiveStream,
-  Metamark,
-  Poster,
-  Rating,
-  Subscribe,
-} from '../common/types.js'
+import type { Rawvoice } from '../common/types.js'
 
-export const generateRating: GenerateUtil<Rating> = (rating) => {
+export const generateRating: GenerateUtil<Rawvoice.Rating> = (rating) => {
   if (!isObject(rating)) {
     return
   }
@@ -33,7 +24,7 @@ export const generateRating: GenerateUtil<Rating> = (rating) => {
   return trimObject(value)
 }
 
-export const generateLiveStream: GenerateUtil<LiveStream<DateLike>> = (liveStream) => {
+export const generateLiveStream: GenerateUtil<Rawvoice.LiveStream<DateLike>> = (liveStream) => {
   if (!isObject(liveStream)) {
     return
   }
@@ -48,7 +39,7 @@ export const generateLiveStream: GenerateUtil<LiveStream<DateLike>> = (liveStrea
   return trimObject(value)
 }
 
-export const generatePoster: GenerateUtil<Poster> = (poster) => {
+export const generatePoster: GenerateUtil<Rawvoice.Poster> = (poster) => {
   if (!isObject(poster)) {
     return
   }
@@ -60,7 +51,7 @@ export const generatePoster: GenerateUtil<Poster> = (poster) => {
   return trimObject(value)
 }
 
-export const generateAlternateEnclosure: GenerateUtil<AlternateEnclosure> = (
+export const generateAlternateEnclosure: GenerateUtil<Rawvoice.AlternateEnclosure> = (
   alternateEnclosure,
 ) => {
   if (!isObject(alternateEnclosure)) {
@@ -76,12 +67,12 @@ export const generateAlternateEnclosure: GenerateUtil<AlternateEnclosure> = (
   return trimObject(value)
 }
 
-export const generateSubscribe: GenerateUtil<Subscribe> = (subscribe) => {
+export const generateSubscribe: GenerateUtil<Rawvoice.Subscribe> = (subscribe) => {
   if (!isObject(subscribe)) {
     return
   }
 
-  const value: Subscribe = {}
+  const value: Rawvoice.Subscribe = {}
 
   for (const key in subscribe) {
     value[`@${key}`] = generatePlainString(subscribe[key])
@@ -90,7 +81,7 @@ export const generateSubscribe: GenerateUtil<Subscribe> = (subscribe) => {
   return trimObject(value)
 }
 
-export const generateMetamark: GenerateUtil<Metamark> = (metamark) => {
+export const generateMetamark: GenerateUtil<Rawvoice.Metamark> = (metamark) => {
   if (!isObject(metamark)) {
     return
   }
@@ -106,7 +97,7 @@ export const generateMetamark: GenerateUtil<Metamark> = (metamark) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateUtil<Item> = (item) => {
+export const generateItem: GenerateUtil<Rawvoice.Item> = (item) => {
   if (!isObject(item)) {
     return
   }
@@ -123,7 +114,7 @@ export const generateItem: GenerateUtil<Item> = (item) => {
   return trimObject(value)
 }
 
-export const generateFeed: GenerateUtil<Feed<DateLike>> = (feed) => {
+export const generateFeed: GenerateUtil<Rawvoice.Feed<DateLike>> = (feed) => {
   if (!isObject(feed)) {
     return
   }

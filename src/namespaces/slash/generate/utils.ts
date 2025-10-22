@@ -6,9 +6,9 @@ import {
   isObject,
   trimObject,
 } from '../../../common/utils.js'
-import type { Item } from '../common/types.js'
+import type { Slash } from '../common/types.js'
 
-export const generateItem: GenerateUtil<Item> = (item) => {
+export const generateItem: GenerateUtil<Slash.Item> = (item) => {
   if (!isObject(item)) {
     return
   }
