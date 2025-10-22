@@ -1,5 +1,5 @@
 // #region reference
-export namespace Wfw {
+export namespace WfwNs {
   export type Item = {
     comment?: string
     commentRss?: string

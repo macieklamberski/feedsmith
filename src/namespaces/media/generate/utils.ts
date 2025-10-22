@@ -10,9 +10,9 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
-import type { Media } from '../common/types.js'
+import type { MediaNs } from '../common/types.js'
 
-export const generateRating: GenerateUtil<Media.Rating> = (rating) => {
+export const generateRating: GenerateUtil<MediaNs.Rating> = (rating) => {
   if (!isObject(rating)) {
     return
   }
@@ -25,7 +25,7 @@ export const generateRating: GenerateUtil<Media.Rating> = (rating) => {
   return trimObject(value)
 }
 
-export const generateTitleOrDescription: GenerateUtil<Media.TitleOrDescription> = (
+export const generateTitleOrDescription: GenerateUtil<MediaNs.TitleOrDescription> = (
   titleOrDescription,
 ) => {
   if (!isObject(titleOrDescription)) {
@@ -40,7 +40,7 @@ export const generateTitleOrDescription: GenerateUtil<Media.TitleOrDescription> 
   return trimObject(value)
 }
 
-export const generateThumbnail: GenerateUtil<Media.Thumbnail> = (thumbnail) => {
+export const generateThumbnail: GenerateUtil<MediaNs.Thumbnail> = (thumbnail) => {
   if (!isObject(thumbnail)) {
     return
   }
@@ -55,7 +55,7 @@ export const generateThumbnail: GenerateUtil<Media.Thumbnail> = (thumbnail) => {
   return trimObject(value)
 }
 
-export const generateCategory: GenerateUtil<Media.Category> = (category) => {
+export const generateCategory: GenerateUtil<MediaNs.Category> = (category) => {
   if (!isObject(category)) {
     return
   }
@@ -69,7 +69,7 @@ export const generateCategory: GenerateUtil<Media.Category> = (category) => {
   return trimObject(value)
 }
 
-export const generateHash: GenerateUtil<Media.Hash> = (hash) => {
+export const generateHash: GenerateUtil<MediaNs.Hash> = (hash) => {
   if (!isObject(hash)) {
     return
   }
@@ -82,7 +82,7 @@ export const generateHash: GenerateUtil<Media.Hash> = (hash) => {
   return trimObject(value)
 }
 
-export const generatePlayer: GenerateUtil<Media.Player> = (player) => {
+export const generatePlayer: GenerateUtil<MediaNs.Player> = (player) => {
   if (!isObject(player)) {
     return
   }
@@ -96,7 +96,7 @@ export const generatePlayer: GenerateUtil<Media.Player> = (player) => {
   return trimObject(value)
 }
 
-export const generateCredit: GenerateUtil<Media.Credit> = (credit) => {
+export const generateCredit: GenerateUtil<MediaNs.Credit> = (credit) => {
   if (!isObject(credit)) {
     return
   }
@@ -110,7 +110,7 @@ export const generateCredit: GenerateUtil<Media.Credit> = (credit) => {
   return trimObject(value)
 }
 
-export const generateCopyright: GenerateUtil<Media.Copyright> = (copyright) => {
+export const generateCopyright: GenerateUtil<MediaNs.Copyright> = (copyright) => {
   if (!isObject(copyright)) {
     return
   }
@@ -123,7 +123,7 @@ export const generateCopyright: GenerateUtil<Media.Copyright> = (copyright) => {
   return trimObject(value)
 }
 
-export const generateText: GenerateUtil<Media.Text> = (text) => {
+export const generateText: GenerateUtil<MediaNs.Text> = (text) => {
   if (!isObject(text)) {
     return
   }
@@ -139,7 +139,7 @@ export const generateText: GenerateUtil<Media.Text> = (text) => {
   return trimObject(value)
 }
 
-export const generateRestriction: GenerateUtil<Media.Restriction> = (restriction) => {
+export const generateRestriction: GenerateUtil<MediaNs.Restriction> = (restriction) => {
   if (!isObject(restriction)) {
     return
   }
@@ -153,7 +153,7 @@ export const generateRestriction: GenerateUtil<Media.Restriction> = (restriction
   return trimObject(value)
 }
 
-export const generateStarRating: GenerateUtil<Media.StarRating> = (starRating) => {
+export const generateStarRating: GenerateUtil<MediaNs.StarRating> = (starRating) => {
   if (!isObject(starRating)) {
     return
   }
@@ -168,7 +168,7 @@ export const generateStarRating: GenerateUtil<Media.StarRating> = (starRating) =
   return trimObject(value)
 }
 
-export const generateStatistics: GenerateUtil<Media.Statistics> = (statistics) => {
+export const generateStatistics: GenerateUtil<MediaNs.Statistics> = (statistics) => {
   if (!isObject(statistics)) {
     return
   }
@@ -181,7 +181,7 @@ export const generateStatistics: GenerateUtil<Media.Statistics> = (statistics) =
   return trimObject(value)
 }
 
-export const generateTag: GenerateUtil<Media.Tag> = (tag) => {
+export const generateTag: GenerateUtil<MediaNs.Tag> = (tag) => {
   if (!isObject(tag)) {
     return
   }
@@ -197,7 +197,7 @@ export const generateTag: GenerateUtil<Media.Tag> = (tag) => {
   return `${name}:${weight}`
 }
 
-export const generateCommunity: GenerateUtil<Media.Community> = (community) => {
+export const generateCommunity: GenerateUtil<MediaNs.Community> = (community) => {
   if (!isObject(community)) {
     return
   }
@@ -235,7 +235,7 @@ export const generateBackLinks: GenerateUtil<Array<string>> = (backLinks) => {
   return trimObject(value)
 }
 
-export const generateScenes: GenerateUtil<Array<Media.Scene>> = (scenes) => {
+export const generateScenes: GenerateUtil<Array<MediaNs.Scene>> = (scenes) => {
   const value = {
     'media:scene': trimArray(scenes, generateScene),
   }
@@ -243,7 +243,7 @@ export const generateScenes: GenerateUtil<Array<Media.Scene>> = (scenes) => {
   return trimObject(value)
 }
 
-export const generateParam: GenerateUtil<Media.Param> = (param) => {
+export const generateParam: GenerateUtil<MediaNs.Param> = (param) => {
   if (!isObject(param)) {
     return
   }
@@ -256,7 +256,7 @@ export const generateParam: GenerateUtil<Media.Param> = (param) => {
   return trimObject(value)
 }
 
-export const generateEmbed: GenerateUtil<Media.Embed> = (embed) => {
+export const generateEmbed: GenerateUtil<MediaNs.Embed> = (embed) => {
   if (!isObject(embed)) {
     return
   }
@@ -271,7 +271,7 @@ export const generateEmbed: GenerateUtil<Media.Embed> = (embed) => {
   return trimObject(value)
 }
 
-export const generateStatus: GenerateUtil<Media.Status> = (status) => {
+export const generateStatus: GenerateUtil<MediaNs.Status> = (status) => {
   if (!isObject(status)) {
     return
   }
@@ -284,7 +284,7 @@ export const generateStatus: GenerateUtil<Media.Status> = (status) => {
   return trimObject(value)
 }
 
-export const generatePrice: GenerateUtil<Media.Price> = (price) => {
+export const generatePrice: GenerateUtil<MediaNs.Price> = (price) => {
   if (!isObject(price)) {
     return
   }
@@ -299,7 +299,7 @@ export const generatePrice: GenerateUtil<Media.Price> = (price) => {
   return trimObject(value)
 }
 
-export const generateLicense: GenerateUtil<Media.License> = (license) => {
+export const generateLicense: GenerateUtil<MediaNs.License> = (license) => {
   if (!isObject(license)) {
     return
   }
@@ -313,7 +313,7 @@ export const generateLicense: GenerateUtil<Media.License> = (license) => {
   return trimObject(value)
 }
 
-export const generateSubTitle: GenerateUtil<Media.SubTitle> = (subTitle) => {
+export const generateSubTitle: GenerateUtil<MediaNs.SubTitle> = (subTitle) => {
   if (!isObject(subTitle)) {
     return
   }
@@ -327,7 +327,7 @@ export const generateSubTitle: GenerateUtil<Media.SubTitle> = (subTitle) => {
   return trimObject(value)
 }
 
-export const generatePeerLink: GenerateUtil<Media.PeerLink> = (peerLink) => {
+export const generatePeerLink: GenerateUtil<MediaNs.PeerLink> = (peerLink) => {
   if (!isObject(peerLink)) {
     return
   }
@@ -340,7 +340,7 @@ export const generatePeerLink: GenerateUtil<Media.PeerLink> = (peerLink) => {
   return trimObject(value)
 }
 
-export const generateRights: GenerateUtil<Media.Rights> = (rights) => {
+export const generateRights: GenerateUtil<MediaNs.Rights> = (rights) => {
   if (!isObject(rights)) {
     return
   }
@@ -352,7 +352,7 @@ export const generateRights: GenerateUtil<Media.Rights> = (rights) => {
   return trimObject(value)
 }
 
-export const generateScene: GenerateUtil<Media.Scene> = (scene) => {
+export const generateScene: GenerateUtil<MediaNs.Scene> = (scene) => {
   if (!isObject(scene)) {
     return
   }
@@ -367,7 +367,7 @@ export const generateScene: GenerateUtil<Media.Scene> = (scene) => {
   return trimObject(value)
 }
 
-export const generateLocation: GenerateUtil<Media.Location> = (location) => {
+export const generateLocation: GenerateUtil<MediaNs.Location> = (location) => {
   if (!isObject(location)) {
     return
   }
@@ -383,7 +383,7 @@ export const generateLocation: GenerateUtil<Media.Location> = (location) => {
   return trimObject(value)
 }
 
-export const generateCommonElements: GenerateUtil<Media.CommonElements> = (elements) => {
+export const generateCommonElements: GenerateUtil<MediaNs.CommonElements> = (elements) => {
   if (!isObject(elements)) {
     return
   }
@@ -419,7 +419,7 @@ export const generateCommonElements: GenerateUtil<Media.CommonElements> = (eleme
   return trimObject(value)
 }
 
-export const generateContent: GenerateUtil<Media.Content> = (content) => {
+export const generateContent: GenerateUtil<MediaNs.Content> = (content) => {
   if (!isObject(content)) {
     return
   }
@@ -445,7 +445,7 @@ export const generateContent: GenerateUtil<Media.Content> = (content) => {
   return trimObject(value)
 }
 
-export const generateGroup: GenerateUtil<Media.Group> = (group) => {
+export const generateGroup: GenerateUtil<MediaNs.Group> = (group) => {
   if (!isObject(group)) {
     return
   }
@@ -458,7 +458,7 @@ export const generateGroup: GenerateUtil<Media.Group> = (group) => {
   return trimObject(value)
 }
 
-export const generateItemOrFeed: GenerateUtil<Media.ItemOrFeed> = (itemOrFeed) => {
+export const generateItemOrFeed: GenerateUtil<MediaNs.ItemOrFeed> = (itemOrFeed) => {
   if (!isObject(itemOrFeed)) {
     return
   }

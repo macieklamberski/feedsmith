@@ -6,9 +6,9 @@ import {
   parseString,
   trimObject,
 } from '../../../common/utils.js'
-import type { Psc } from '../common/types.js'
+import type { PscNs } from '../common/types.js'
 
-export const parseChapter: ParsePartialUtil<Psc.Chapter> = (value) => {
+export const parseChapter: ParsePartialUtil<PscNs.Chapter> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -23,11 +23,11 @@ export const parseChapter: ParsePartialUtil<Psc.Chapter> = (value) => {
   return trimObject(chapter)
 }
 
-export const parseChapters: ParsePartialUtil<Array<Psc.Chapter>> = (value) => {
+export const parseChapters: ParsePartialUtil<Array<PscNs.Chapter>> = (value) => {
   return parseArrayOf(value?.['psc:chapter'], parseChapter)
 }
 
-export const retrieveItem: ParsePartialUtil<Psc.Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<PscNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }

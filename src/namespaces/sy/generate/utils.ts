@@ -6,9 +6,9 @@ import {
   isObject,
   trimObject,
 } from '../../../common/utils.js'
-import type { Sy } from '../common/types.js'
+import type { SyNs } from '../common/types.js'
 
-export const generateFeed: GenerateUtil<Sy.Feed<DateLike>> = (feed) => {
+export const generateFeed: GenerateUtil<SyNs.Feed<DateLike>> = (feed) => {
   if (!isObject(feed)) {
     return
   }

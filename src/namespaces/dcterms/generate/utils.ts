@@ -5,9 +5,9 @@ import {
   isObject,
   trimObject,
 } from '../../../common/utils.js'
-import type { Dcterms } from '../common/types.js'
+import type { DctermsNs } from '../common/types.js'
 
-export const generateItemOrFeed: GenerateUtil<Dcterms.ItemOrFeed<DateLike>> = (itemOrFeed) => {
+export const generateItemOrFeed: GenerateUtil<DctermsNs.ItemOrFeed<DateLike>> = (itemOrFeed) => {
   if (!isObject(itemOrFeed)) {
     return
   }

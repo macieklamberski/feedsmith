@@ -1,8 +1,8 @@
 import type { GenerateUtil } from '../../../common/types.js'
 import { generatePlainString, isObject, trimArray, trimObject } from '../../../common/utils.js'
-import type { Psc } from '../common/types.js'
+import type { PscNs } from '../common/types.js'
 
-export const generateChapter: GenerateUtil<Psc.Chapter> = (chapter) => {
+export const generateChapter: GenerateUtil<PscNs.Chapter> = (chapter) => {
   if (!isObject(chapter)) {
     return
   }
@@ -17,7 +17,7 @@ export const generateChapter: GenerateUtil<Psc.Chapter> = (chapter) => {
   return trimObject(value)
 }
 
-export const generateChapters: GenerateUtil<Array<Psc.Chapter>> = (chapters) => {
+export const generateChapters: GenerateUtil<Array<PscNs.Chapter>> = (chapters) => {
   const value = {
     'psc:chapter': trimArray(chapters, generateChapter),
   }
@@ -25,7 +25,7 @@ export const generateChapters: GenerateUtil<Array<Psc.Chapter>> = (chapters) => 
   return trimObject(value)
 }
 
-export const generateItem: GenerateUtil<Psc.Item> = (item) => {
+export const generateItem: GenerateUtil<PscNs.Item> = (item) => {
   if (!isObject(item)) {
     return
   }

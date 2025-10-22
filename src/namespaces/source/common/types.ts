@@ -1,5 +1,5 @@
 // #region reference
-export namespace Source {
+export namespace SourceNs {
   export type Account = {
     service: string
     value?: string

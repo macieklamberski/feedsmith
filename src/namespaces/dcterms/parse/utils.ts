@@ -7,9 +7,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { Dcterms } from '../common/types.js'
+import type { DctermsNs } from '../common/types.js'
 
-export const retrieveItemOrFeed: ParsePartialUtil<Dcterms.ItemOrFeed<string>> = (value) => {
+export const retrieveItemOrFeed: ParsePartialUtil<DctermsNs.ItemOrFeed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }

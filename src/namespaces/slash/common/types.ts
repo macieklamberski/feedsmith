@@ -1,5 +1,5 @@
 // #region reference
-export namespace Slash {
+export namespace SlashNs {
   export type HitParade = Array<number>
 
   export type Item = {

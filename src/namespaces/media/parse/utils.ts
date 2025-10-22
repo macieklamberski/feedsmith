@@ -11,9 +11,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { Media } from '../common/types.js'
+import type { MediaNs } from '../common/types.js'
 
-export const parseRating: ParsePartialUtil<Media.Rating> = (value) => {
+export const parseRating: ParsePartialUtil<MediaNs.Rating> = (value) => {
   const rating = {
     value: ((value) => parseString(retrieveText(value)))(value),
     scheme: parseString(value?.['@scheme']),
@@ -22,7 +22,7 @@ export const parseRating: ParsePartialUtil<Media.Rating> = (value) => {
   return trimObject(rating)
 }
 
-export const retrieveRatings: ParsePartialUtil<Array<Media.Rating>> = (value) => {
+export const retrieveRatings: ParsePartialUtil<Array<MediaNs.Rating>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -46,7 +46,7 @@ export const retrieveRatings: ParsePartialUtil<Array<Media.Rating>> = (value) =>
   }
 }
 
-export const parseTitleOrDescription: ParsePartialUtil<Media.TitleOrDescription> = (value) => {
+export const parseTitleOrDescription: ParsePartialUtil<MediaNs.TitleOrDescription> = (value) => {
   const title = {
     value: ((value) => parseString(retrieveText(value)))(value),
     type: parseString(value?.['@type']),
@@ -55,7 +55,7 @@ export const parseTitleOrDescription: ParsePartialUtil<Media.TitleOrDescription>
   return trimObject(title)
 }
 
-export const parseThumbnail: ParsePartialUtil<Media.Thumbnail> = (value) => {
+export const parseThumbnail: ParsePartialUtil<MediaNs.Thumbnail> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -70,7 +70,7 @@ export const parseThumbnail: ParsePartialUtil<Media.Thumbnail> = (value) => {
   return trimObject(thumbnail)
 }
 
-export const parseCategory: ParsePartialUtil<Media.Category> = (value) => {
+export const parseCategory: ParsePartialUtil<MediaNs.Category> = (value) => {
   const category = {
     name: ((value) => parseString(retrieveText(value)))(value),
     scheme: parseString(value?.['@scheme']),
@@ -80,7 +80,7 @@ export const parseCategory: ParsePartialUtil<Media.Category> = (value) => {
   return trimObject(category)
 }
 
-export const parseHash: ParsePartialUtil<Media.Hash> = (value) => {
+export const parseHash: ParsePartialUtil<MediaNs.Hash> = (value) => {
   const hash = {
     value: ((value) => parseString(retrieveText(value)))(value),
     algo: parseString(value?.['@algo']),
@@ -89,7 +89,7 @@ export const parseHash: ParsePartialUtil<Media.Hash> = (value) => {
   return trimObject(hash)
 }
 
-export const parsePlayer: ParsePartialUtil<Media.Player> = (value) => {
+export const parsePlayer: ParsePartialUtil<MediaNs.Player> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -103,7 +103,7 @@ export const parsePlayer: ParsePartialUtil<Media.Player> = (value) => {
   return trimObject(player)
 }
 
-export const parseCredit: ParsePartialUtil<Media.Credit> = (value) => {
+export const parseCredit: ParsePartialUtil<MediaNs.Credit> = (value) => {
   const credit = {
     value: ((value) => parseString(retrieveText(value)))(value),
     role: parseString(value?.['@role']),
@@ -113,7 +113,7 @@ export const parseCredit: ParsePartialUtil<Media.Credit> = (value) => {
   return trimObject(credit)
 }
 
-export const parseCopyright: ParsePartialUtil<Media.Copyright> = (value) => {
+export const parseCopyright: ParsePartialUtil<MediaNs.Copyright> = (value) => {
   const copyright = {
     value: ((value) => parseString(retrieveText(value)))(value),
     url: parseString(value?.['@url']),
@@ -122,7 +122,7 @@ export const parseCopyright: ParsePartialUtil<Media.Copyright> = (value) => {
   return trimObject(copyright)
 }
 
-export const parseText: ParsePartialUtil<Media.Text> = (value) => {
+export const parseText: ParsePartialUtil<MediaNs.Text> = (value) => {
   const text = {
     value: ((value) => parseString(retrieveText(value)))(value),
     type: parseString(value?.['@type']),
@@ -134,7 +134,7 @@ export const parseText: ParsePartialUtil<Media.Text> = (value) => {
   return trimObject(text)
 }
 
-export const parseRestriction: ParsePartialUtil<Media.Restriction> = (value) => {
+export const parseRestriction: ParsePartialUtil<MediaNs.Restriction> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -148,7 +148,7 @@ export const parseRestriction: ParsePartialUtil<Media.Restriction> = (value) => 
   return trimObject(restriction)
 }
 
-export const parseCommunity: ParsePartialUtil<Media.Community> = (value) => {
+export const parseCommunity: ParsePartialUtil<MediaNs.Community> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -162,7 +162,7 @@ export const parseCommunity: ParsePartialUtil<Media.Community> = (value) => {
   return trimObject(community)
 }
 
-export const parseStarRating: ParsePartialUtil<Media.StarRating> = (value) => {
+export const parseStarRating: ParsePartialUtil<MediaNs.StarRating> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -177,7 +177,7 @@ export const parseStarRating: ParsePartialUtil<Media.StarRating> = (value) => {
   return trimObject(starRating)
 }
 
-export const parseStatistics: ParsePartialUtil<Media.Statistics> = (value) => {
+export const parseStatistics: ParsePartialUtil<MediaNs.Statistics> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -190,7 +190,7 @@ export const parseStatistics: ParsePartialUtil<Media.Statistics> = (value) => {
   return trimObject(statistics)
 }
 
-export const parseTags: ParsePartialUtil<Array<Media.Tag>> = (value) => {
+export const parseTags: ParsePartialUtil<Array<MediaNs.Tag>> = (value) => {
   return parseCsvOf(value, (segment) => {
     const split = segment.split(':')
 
@@ -205,7 +205,7 @@ export const parseComments: ParsePartialUtil<Array<string>> = (value) => {
   return parseArrayOf(value?.['media:comment'], (value) => parseString(retrieveText(value)))
 }
 
-export const parseEmbed: ParsePartialUtil<Media.Embed> = (value) => {
+export const parseEmbed: ParsePartialUtil<MediaNs.Embed> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -220,7 +220,7 @@ export const parseEmbed: ParsePartialUtil<Media.Embed> = (value) => {
   return trimObject(embed)
 }
 
-export const parseParam: ParsePartialUtil<Media.Param> = (value) => {
+export const parseParam: ParsePartialUtil<MediaNs.Param> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -241,7 +241,7 @@ export const parseBackLinks: ParsePartialUtil<Array<string>> = (value) => {
   return parseArrayOf(value?.['media:backlink'], (value) => parseString(retrieveText(value)))
 }
 
-export const parseStatus: ParsePartialUtil<Media.Status> = (value) => {
+export const parseStatus: ParsePartialUtil<MediaNs.Status> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -254,7 +254,7 @@ export const parseStatus: ParsePartialUtil<Media.Status> = (value) => {
   return trimObject(status)
 }
 
-export const parsePrice: ParsePartialUtil<Media.Price> = (value) => {
+export const parsePrice: ParsePartialUtil<MediaNs.Price> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -269,7 +269,7 @@ export const parsePrice: ParsePartialUtil<Media.Price> = (value) => {
   return trimObject(price)
 }
 
-export const parseLicense: ParsePartialUtil<Media.License> = (value) => {
+export const parseLicense: ParsePartialUtil<MediaNs.License> = (value) => {
   const license = {
     name: ((value) => parseString(retrieveText(value)))(value),
     type: parseString(value?.['@type']),
@@ -279,7 +279,7 @@ export const parseLicense: ParsePartialUtil<Media.License> = (value) => {
   return trimObject(license)
 }
 
-export const parseSubTitle: ParsePartialUtil<Media.SubTitle> = (value) => {
+export const parseSubTitle: ParsePartialUtil<MediaNs.SubTitle> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -293,7 +293,7 @@ export const parseSubTitle: ParsePartialUtil<Media.SubTitle> = (value) => {
   return trimObject(subTitle)
 }
 
-export const parsePeerLink: ParsePartialUtil<Media.PeerLink> = (value) => {
+export const parsePeerLink: ParsePartialUtil<MediaNs.PeerLink> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -306,7 +306,7 @@ export const parsePeerLink: ParsePartialUtil<Media.PeerLink> = (value) => {
   return trimObject(peerLink)
 }
 
-export const parseRights: ParsePartialUtil<Media.Rights> = (value) => {
+export const parseRights: ParsePartialUtil<MediaNs.Rights> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -318,7 +318,7 @@ export const parseRights: ParsePartialUtil<Media.Rights> = (value) => {
   return trimObject(rights)
 }
 
-export const parseScene: ParsePartialUtil<Media.Scene> = (value) => {
+export const parseScene: ParsePartialUtil<MediaNs.Scene> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -335,11 +335,11 @@ export const parseScene: ParsePartialUtil<Media.Scene> = (value) => {
   return trimObject(scene)
 }
 
-export const parseScenes: ParsePartialUtil<Array<Media.Scene>> = (value) => {
+export const parseScenes: ParsePartialUtil<Array<MediaNs.Scene>> = (value) => {
   return parseArrayOf(value?.['media:scene'], parseScene)
 }
 
-export const parseLocation: ParsePartialUtil<Media.Location> = (value) => {
+export const parseLocation: ParsePartialUtil<MediaNs.Location> = (value) => {
   // For cases where the location is simply a string within the <media:location> tag.
   if (isNonEmptyStringOrNumber(value) || isObject(value)) {
     const location = {
@@ -353,7 +353,7 @@ export const parseLocation: ParsePartialUtil<Media.Location> = (value) => {
   // https://www.rssboard.org/media-rss#media-peerlink after implementing GeoRSS GML support.
 }
 
-export const retrieveCommonElements: ParsePartialUtil<Media.CommonElements> = (value) => {
+export const retrieveCommonElements: ParsePartialUtil<MediaNs.CommonElements> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -391,7 +391,7 @@ export const retrieveCommonElements: ParsePartialUtil<Media.CommonElements> = (v
   return trimObject(commonElements)
 }
 
-export const parseContent: ParsePartialUtil<Media.Content> = (value) => {
+export const parseContent: ParsePartialUtil<MediaNs.Content> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -417,7 +417,7 @@ export const parseContent: ParsePartialUtil<Media.Content> = (value) => {
   return trimObject(content)
 }
 
-export const parseGroup: ParsePartialUtil<Media.Group> = (value) => {
+export const parseGroup: ParsePartialUtil<MediaNs.Group> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -430,7 +430,7 @@ export const parseGroup: ParsePartialUtil<Media.Group> = (value) => {
   return trimObject(group)
 }
 
-export const retrieveItemOrFeed: ParsePartialUtil<Media.ItemOrFeed> = (value) => {
+export const retrieveItemOrFeed: ParsePartialUtil<MediaNs.ItemOrFeed> = (value) => {
   if (!isObject(value)) {
     return
   }

@@ -1,5 +1,5 @@
 // #region reference
-export namespace Media {
+export namespace MediaNs {
   export type Rating = {
     value: string
     scheme?: string
@@ -142,6 +142,7 @@ export namespace Media {
     lng?: number
   }
 
+  /** @internal Shared elements available across Content, Group, ItemOrFeed types. */
   export type CommonElements = {
     ratings?: Array<Rating>
     title?: TitleOrDescription

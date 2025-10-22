@@ -1,7 +1,7 @@
 import type { DateLike } from '../../../common/types.js'
 
 // #region reference
-export namespace Thr {
+export namespace ThrNs {
   export type InReplyTo = {
     ref: string
     href?: string

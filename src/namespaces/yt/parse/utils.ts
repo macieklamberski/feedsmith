@@ -6,9 +6,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { Yt } from '../common/types.js'
+import type { YtNs } from '../common/types.js'
 
-export const retrieveItem: ParsePartialUtil<Yt.Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<YtNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -21,7 +21,7 @@ export const retrieveItem: ParsePartialUtil<Yt.Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialUtil<Yt.Feed> = (value) => {
+export const retrieveFeed: ParsePartialUtil<YtNs.Feed> = (value) => {
   if (!isObject(value)) {
     return
   }

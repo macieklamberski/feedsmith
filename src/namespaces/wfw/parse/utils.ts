@@ -6,9 +6,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { Wfw } from '../common/types.js'
+import type { WfwNs } from '../common/types.js'
 
-export const retrieveItem: ParsePartialUtil<Wfw.Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<WfwNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }

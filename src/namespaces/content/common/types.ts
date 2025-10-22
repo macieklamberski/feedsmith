@@ -1,5 +1,5 @@
 // #region reference
-export namespace Content {
+export namespace ContentNs {
   export type Item = {
     encoded?: string
   }

@@ -8,9 +8,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { Rawvoice } from '../common/types.js'
+import type { RawvoiceNs } from '../common/types.js'
 
-export const parseRating: ParsePartialUtil<Rawvoice.Rating> = (value) => {
+export const parseRating: ParsePartialUtil<RawvoiceNs.Rating> = (value) => {
   const rating = {
     value: parseString(retrieveText(value)),
     tv: parseString(value?.['@tv']),
@@ -20,7 +20,7 @@ export const parseRating: ParsePartialUtil<Rawvoice.Rating> = (value) => {
   return trimObject(rating)
 }
 
-export const parseLiveStream: ParsePartialUtil<Rawvoice.LiveStream<string>> = (value) => {
+export const parseLiveStream: ParsePartialUtil<RawvoiceNs.LiveStream<string>> = (value) => {
   const liveStream = {
     url: parseString(retrieveText(value)),
     schedule: parseDate(value?.['@schedule']),
@@ -31,7 +31,7 @@ export const parseLiveStream: ParsePartialUtil<Rawvoice.LiveStream<string>> = (v
   return trimObject(liveStream)
 }
 
-export const parsePoster: ParsePartialUtil<Rawvoice.Poster> = (value) => {
+export const parsePoster: ParsePartialUtil<RawvoiceNs.Poster> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -43,7 +43,7 @@ export const parsePoster: ParsePartialUtil<Rawvoice.Poster> = (value) => {
   return trimObject(poster)
 }
 
-export const parseAlternateEnclosure: ParsePartialUtil<Rawvoice.AlternateEnclosure> = (value) => {
+export const parseAlternateEnclosure: ParsePartialUtil<RawvoiceNs.AlternateEnclosure> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -57,12 +57,12 @@ export const parseAlternateEnclosure: ParsePartialUtil<Rawvoice.AlternateEnclosu
   return trimObject(alternateEnclosure)
 }
 
-export const parseSubscribe: ParsePartialUtil<Rawvoice.Subscribe> = (value) => {
+export const parseSubscribe: ParsePartialUtil<RawvoiceNs.Subscribe> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  const subscribe: Rawvoice.Subscribe = {}
+  const subscribe: RawvoiceNs.Subscribe = {}
 
   for (const key in value) {
     if (key.startsWith('@')) {
@@ -77,7 +77,7 @@ export const parseSubscribe: ParsePartialUtil<Rawvoice.Subscribe> = (value) => {
   return trimObject(subscribe)
 }
 
-export const parseMetamark: ParsePartialUtil<Rawvoice.Metamark> = (value) => {
+export const parseMetamark: ParsePartialUtil<RawvoiceNs.Metamark> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -93,7 +93,7 @@ export const parseMetamark: ParsePartialUtil<Rawvoice.Metamark> = (value) => {
   return trimObject(metamark)
 }
 
-export const retrieveItem: ParsePartialUtil<Rawvoice.Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<RawvoiceNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -110,7 +110,7 @@ export const retrieveItem: ParsePartialUtil<Rawvoice.Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialUtil<Rawvoice.Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialUtil<RawvoiceNs.Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }

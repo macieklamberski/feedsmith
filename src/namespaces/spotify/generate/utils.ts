@@ -1,8 +1,8 @@
 import type { GenerateUtil } from '../../../common/types.js'
 import { generateCdataString, generateNumber, isObject, trimObject } from '../../../common/utils.js'
-import type { Spotify } from '../common/types.js'
+import type { SpotifyNs } from '../common/types.js'
 
-export const generateLimit: GenerateUtil<Spotify.Limit> = (limit) => {
+export const generateLimit: GenerateUtil<SpotifyNs.Limit> = (limit) => {
   if (!isObject(limit)) {
     return
   }
@@ -14,7 +14,7 @@ export const generateLimit: GenerateUtil<Spotify.Limit> = (limit) => {
   return trimObject(value)
 }
 
-export const generateFeed: GenerateUtil<Spotify.Feed> = (feed) => {
+export const generateFeed: GenerateUtil<SpotifyNs.Feed> = (feed) => {
   if (!isObject(feed)) {
     return
   }

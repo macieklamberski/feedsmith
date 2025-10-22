@@ -8,9 +8,9 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
-import type { Source } from '../common/types.js'
+import type { SourceNs } from '../common/types.js'
 
-export const generateAccount: GenerateUtil<Source.Account> = (account) => {
+export const generateAccount: GenerateUtil<SourceNs.Account> = (account) => {
   if (!isObject(account) || !isNonEmptyString(account.service)) {
     return
   }
@@ -23,7 +23,7 @@ export const generateAccount: GenerateUtil<Source.Account> = (account) => {
   return trimObject(value)
 }
 
-export const generateLikes: GenerateUtil<Source.Likes> = (likes) => {
+export const generateLikes: GenerateUtil<SourceNs.Likes> = (likes) => {
   if (!isObject(likes) || !isNonEmptyString(likes.server)) {
     return
   }
@@ -33,7 +33,7 @@ export const generateLikes: GenerateUtil<Source.Likes> = (likes) => {
   }
 }
 
-export const generateArchive: GenerateUtil<Source.Archive> = (archive) => {
+export const generateArchive: GenerateUtil<SourceNs.Archive> = (archive) => {
   if (!isObject(archive) || !isNonEmptyString(archive.url) || !isNonEmptyString(archive.startDay)) {
     return
   }
@@ -48,7 +48,7 @@ export const generateArchive: GenerateUtil<Source.Archive> = (archive) => {
   return trimObject(value)
 }
 
-export const generateSubscriptionList: GenerateUtil<Source.SubscriptionList> = (
+export const generateSubscriptionList: GenerateUtil<SourceNs.SubscriptionList> = (
   subscriptionList,
 ) => {
   if (!isObject(subscriptionList) || !isNonEmptyString(subscriptionList.url)) {
@@ -63,7 +63,7 @@ export const generateSubscriptionList: GenerateUtil<Source.SubscriptionList> = (
   return trimObject(value)
 }
 
-export const generateFeed: GenerateUtil<Source.Feed> = (feed) => {
+export const generateFeed: GenerateUtil<SourceNs.Feed> = (feed) => {
   if (!isObject(feed)) {
     return
   }
@@ -81,7 +81,7 @@ export const generateFeed: GenerateUtil<Source.Feed> = (feed) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateUtil<Source.Item> = (item) => {
+export const generateItem: GenerateUtil<SourceNs.Item> = (item) => {
   if (!isObject(item)) {
     return
   }

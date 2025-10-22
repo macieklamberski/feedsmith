@@ -10,7 +10,7 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
-import type { Itunes } from '../common/types.js'
+import type { ItunesNs } from '../common/types.js'
 
 export const generateImage: GenerateUtil<string> = (image) => {
   if (!isNonEmptyString(image)) {
@@ -22,7 +22,7 @@ export const generateImage: GenerateUtil<string> = (image) => {
   }
 }
 
-export const generateCategory: GenerateUtil<Itunes.Category> = (category) => {
+export const generateCategory: GenerateUtil<ItunesNs.Category> = (category) => {
   if (!isObject(category)) {
     return
   }
@@ -35,7 +35,7 @@ export const generateCategory: GenerateUtil<Itunes.Category> = (category) => {
   return trimObject(value)
 }
 
-export const generateOwner: GenerateUtil<Itunes.Owner> = (owner) => {
+export const generateOwner: GenerateUtil<ItunesNs.Owner> = (owner) => {
   if (!isObject(owner)) {
     return
   }
@@ -48,7 +48,7 @@ export const generateOwner: GenerateUtil<Itunes.Owner> = (owner) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateUtil<Itunes.Item> = (item) => {
+export const generateItem: GenerateUtil<ItunesNs.Item> = (item) => {
   if (!isObject(item)) {
     return
   }
@@ -70,7 +70,7 @@ export const generateItem: GenerateUtil<Itunes.Item> = (item) => {
   return trimObject(value)
 }
 
-export const generateFeed: GenerateUtil<Itunes.Feed> = (feed) => {
+export const generateFeed: GenerateUtil<ItunesNs.Feed> = (feed) => {
   if (!isObject(feed)) {
     return
   }

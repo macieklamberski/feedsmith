@@ -1,7 +1,7 @@
 import type { DateLike } from '../../../common/types.js'
 
 // #region reference
-export namespace Rawvoice {
+export namespace RawvoiceNs {
   export type Rating = {
     value?: string
     tv?: string

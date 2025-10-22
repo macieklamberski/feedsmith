@@ -1,7 +1,8 @@
 import type { DateLike } from '../../../common/types.js'
 
 // #region reference
-export namespace Podcast {
+export namespace PodcastNs {
+  /** @internal Common properties shared by Item and LiveItem. */
   export type BaseItem = {
     transcripts?: Array<Transcript>
     chapters?: Chapters

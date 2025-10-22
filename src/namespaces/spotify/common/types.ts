@@ -1,5 +1,5 @@
 // #region reference
-export namespace Spotify {
+export namespace SpotifyNs {
   export type Limit = {
     recentCount?: number
   }

@@ -1,9 +1,9 @@
 import type { GenerateUtil } from '../../../common/types.js'
 import { generateCdataString, generateNumber, isObject, trimObject } from '../../../common/utils.js'
-import type { Georss } from '../common/types.js'
+import type { GeorssNs } from '../common/types.js'
 
 export const generateLatLngPairs = (
-  points: Array<Georss.Point>,
+  points: Array<GeorssNs.Point>,
   pairsCount?: { min?: number; max?: number },
 ): string | undefined => {
   const coordinates: Array<string> = []
@@ -30,7 +30,7 @@ export const generateLatLngPairs = (
   return coordinates.join(' ')
 }
 
-export const generatePoint: GenerateUtil<Georss.Point> = (point) => {
+export const generatePoint: GenerateUtil<GeorssNs.Point> = (point) => {
   if (!isObject(point)) {
     return
   }
@@ -38,7 +38,7 @@ export const generatePoint: GenerateUtil<Georss.Point> = (point) => {
   return generateLatLngPairs([point], { min: 1, max: 1 })
 }
 
-export const generateLine: GenerateUtil<Georss.Line> = (line) => {
+export const generateLine: GenerateUtil<GeorssNs.Line> = (line) => {
   if (!isObject(line)) {
     return
   }
@@ -46,7 +46,7 @@ export const generateLine: GenerateUtil<Georss.Line> = (line) => {
   return generateLatLngPairs(line.points, { min: 2 })
 }
 
-export const generatePolygon: GenerateUtil<Georss.Polygon> = (polygon) => {
+export const generatePolygon: GenerateUtil<GeorssNs.Polygon> = (polygon) => {
   if (!isObject(polygon)) {
     return
   }
@@ -54,7 +54,7 @@ export const generatePolygon: GenerateUtil<Georss.Polygon> = (polygon) => {
   return generateLatLngPairs(polygon.points, { min: 4 })
 }
 
-export const generateBox: GenerateUtil<Georss.Box> = (box) => {
+export const generateBox: GenerateUtil<GeorssNs.Box> = (box) => {
   if (!isObject(box) || !box.lowerCorner || !box.upperCorner) {
     return
   }
@@ -62,7 +62,7 @@ export const generateBox: GenerateUtil<Georss.Box> = (box) => {
   return generateLatLngPairs([box.lowerCorner, box.upperCorner], { min: 2, max: 2 })
 }
 
-export const generateItemOrFeed: GenerateUtil<Georss.ItemOrFeed> = (itemOrFeed) => {
+export const generateItemOrFeed: GenerateUtil<GeorssNs.ItemOrFeed> = (itemOrFeed) => {
   if (!isObject(itemOrFeed)) {
     return
   }

@@ -1,5 +1,5 @@
 // #region reference
-export namespace Psc {
+export namespace PscNs {
   export type Chapter = {
     start: string
     title?: string

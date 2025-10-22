@@ -1,5 +1,5 @@
 // #region reference
-export namespace Yt {
+export namespace YtNs {
   export type Item = {
     videoId?: string
     channelId?: string

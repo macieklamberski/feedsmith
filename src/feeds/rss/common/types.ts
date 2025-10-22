@@ -1,21 +1,21 @@
 import type { DateLike } from '../../../common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
-import type { Content } from '../../../namespaces/content/common/types.js'
-import type { Dc } from '../../../namespaces/dc/common/types.js'
-import type { Dcterms } from '../../../namespaces/dcterms/common/types.js'
-import type { Feedpress } from '../../../namespaces/feedpress/common/types.js'
-import type { Georss } from '../../../namespaces/georss/common/types.js'
-import type { Itunes } from '../../../namespaces/itunes/common/types.js'
-import type { Media } from '../../../namespaces/media/common/types.js'
-import type { Podcast } from '../../../namespaces/podcast/common/types.js'
-import type { Psc } from '../../../namespaces/psc/common/types.js'
-import type { Rawvoice } from '../../../namespaces/rawvoice/common/types.js'
-import type { Slash } from '../../../namespaces/slash/common/types.js'
-import type { Source } from '../../../namespaces/source/common/types.js'
-import type { Spotify } from '../../../namespaces/spotify/common/types.js'
-import type { Sy } from '../../../namespaces/sy/common/types.js'
-import type { Thr } from '../../../namespaces/thr/common/types.js'
-import type { Wfw } from '../../../namespaces/wfw/common/types.js'
+import type { ContentNs } from '../../../namespaces/content/common/types.js'
+import type { DcNs } from '../../../namespaces/dc/common/types.js'
+import type { DctermsNs } from '../../../namespaces/dcterms/common/types.js'
+import type { FeedpressNs } from '../../../namespaces/feedpress/common/types.js'
+import type { GeorssNs } from '../../../namespaces/georss/common/types.js'
+import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
+import type { MediaNs } from '../../../namespaces/media/common/types.js'
+import type { PodcastNs } from '../../../namespaces/podcast/common/types.js'
+import type { PscNs } from '../../../namespaces/psc/common/types.js'
+import type { RawvoiceNs } from '../../../namespaces/rawvoice/common/types.js'
+import type { SlashNs } from '../../../namespaces/slash/common/types.js'
+import type { SourceNs } from '../../../namespaces/source/common/types.js'
+import type { SpotifyNs } from '../../../namespaces/spotify/common/types.js'
+import type { SyNs } from '../../../namespaces/sy/common/types.js'
+import type { ThrNs } from '../../../namespaces/thr/common/types.js'
+import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 
 // #region reference
 export namespace Rss {
@@ -82,19 +82,19 @@ export namespace Rss {
     pubDate?: TDate
     source?: Source
     atom?: AtomNs.Entry<TDate>
-    dc?: Dc.ItemOrFeed<TDate>
-    content?: Content.Item
-    slash?: Slash.Item
-    itunes?: Itunes.Item
-    podcast?: Podcast.Item
-    psc?: Psc.Item
-    media?: Media.ItemOrFeed
-    georss?: Georss.ItemOrFeed
-    thr?: Thr.Item
-    dcterms?: Dcterms.ItemOrFeed<TDate>
-    wfw?: Wfw.Item
-    sourceNs?: Source.Item
-    rawvoice?: Rawvoice.Item
+    dc?: DcNs.ItemOrFeed<TDate>
+    content?: ContentNs.Item
+    slash?: SlashNs.Item
+    itunes?: ItunesNs.Item
+    podcast?: PodcastNs.Item
+    psc?: PscNs.Item
+    media?: MediaNs.ItemOrFeed
+    georss?: GeorssNs.ItemOrFeed
+    thr?: ThrNs.Item
+    dcterms?: DctermsNs.ItemOrFeed<TDate>
+    wfw?: WfwNs.Item
+    sourceNs?: SourceNs.Item
+    rawvoice?: RawvoiceNs.Item
   } & ({ title: string } | { description: string })
 
   export type Feed<TDate extends DateLike> = {
@@ -121,17 +121,17 @@ export namespace Rss {
     skipDays?: Array<string>
     items?: Array<Item<TDate>>
     atom?: AtomNs.Feed<TDate>
-    dc?: Dc.ItemOrFeed<TDate>
-    sy?: Sy.Feed<TDate>
-    itunes?: Itunes.Feed
-    podcast?: Podcast.Feed<TDate>
-    media?: Media.ItemOrFeed
-    georss?: Georss.ItemOrFeed
-    dcterms?: Dcterms.ItemOrFeed<TDate>
-    feedpress?: Feedpress.Feed
-    sourceNs?: Source.Feed
-    rawvoice?: Rawvoice.Feed<TDate>
-    spotify?: Spotify.Feed
+    dc?: DcNs.ItemOrFeed<TDate>
+    sy?: SyNs.Feed<TDate>
+    itunes?: ItunesNs.Feed
+    podcast?: PodcastNs.Feed<TDate>
+    media?: MediaNs.ItemOrFeed
+    georss?: GeorssNs.ItemOrFeed
+    dcterms?: DctermsNs.ItemOrFeed<TDate>
+    feedpress?: FeedpressNs.Feed
+    sourceNs?: SourceNs.Feed
+    rawvoice?: RawvoiceNs.Feed<TDate>
+    spotify?: SpotifyNs.Feed
   }
 }
 // #endregion reference

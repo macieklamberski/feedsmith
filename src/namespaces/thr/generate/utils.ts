@@ -7,9 +7,9 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
-import type { Thr } from '../common/types.js'
+import type { ThrNs } from '../common/types.js'
 
-export const generateInReplyTo: GenerateUtil<Thr.InReplyTo> = (inReplyTo) => {
+export const generateInReplyTo: GenerateUtil<ThrNs.InReplyTo> = (inReplyTo) => {
   if (!isObject(inReplyTo)) {
     return
   }
@@ -24,7 +24,7 @@ export const generateInReplyTo: GenerateUtil<Thr.InReplyTo> = (inReplyTo) => {
   return trimObject(value)
 }
 
-export const generateLink: GenerateUtil<Thr.Link<DateLike>> = (link) => {
+export const generateLink: GenerateUtil<ThrNs.Link<DateLike>> = (link) => {
   if (!isObject(link)) {
     return
   }
@@ -37,7 +37,7 @@ export const generateLink: GenerateUtil<Thr.Link<DateLike>> = (link) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateUtil<Thr.Item> = (item) => {
+export const generateItem: GenerateUtil<ThrNs.Item> = (item) => {
   if (!isObject(item)) {
     return
   }
