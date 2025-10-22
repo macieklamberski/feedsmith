@@ -57,7 +57,7 @@
   ],
   "scripts": {
     "prepare": "lefthook install",
-    "build": "tsdown src/index.ts src/types.ts --format cjs,esm --dts --clean",
+    "build": "tsdown src/index.ts src/types.ts --format cjs,esm --dts --clean --unbundle",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
