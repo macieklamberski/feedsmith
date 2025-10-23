@@ -2776,10 +2776,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('default namespace handling', () => {
       it('should handle default Atom namespace with primary namespace', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(
-          namespaceUris,
-          namespaceUris.atom[0],
-        )
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, 'atom')
         const value = parser.parse(`
           <?xml version="1.0"?>
           <feed xmlns="http://www.w3.org/2005/Atom">
@@ -2853,10 +2850,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle custom Atom prefix with primary namespace', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(
-          namespaceUris,
-          namespaceUris.atom[0],
-        )
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, 'atom')
         const value = parser.parse(`
           <?xml version="1.0"?>
           <a:feed xmlns:a="http://www.w3.org/2005/Atom">
@@ -3136,10 +3130,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle complex nesting with namespace inheritance', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(
-          namespaceUris,
-          namespaceUris.atom[0],
-        )
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, 'atom')
         const value = parser.parse(`
           <?xml version="1.0"?>
           <feed xmlns="http://www.w3.org/2005/Atom">

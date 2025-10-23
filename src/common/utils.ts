@@ -531,9 +531,9 @@ export const invertObject = (object: Record<string, string>): Record<string, str
   return inverted
 }
 
-export const createNamespaceNormalizator = (
-  namespaceUris: Record<string, Array<string>>,
-  primaryNamespace?: string,
+export const createNamespaceNormalizator = <T extends Record<string, Array<string>>>(
+  namespaceUris: T,
+  primaryNamespace?: keyof T,
 ) => {
   const normalizeUri = (uri: string): string => {
     return typeof uri === 'string' ? uri.trim().toLowerCase() : uri
@@ -550,10 +550,15 @@ export const createNamespaceNormalizator = (
     }
   }
 
+  const primaryNamespaceUris =
+    primaryNamespace && namespaceUris[primaryNamespace]
+      ? namespaceUris[primaryNamespace].map(normalizeUri)
+      : undefined
+
   const resolveNamespacePrefix = (uri: string, localName: string, fallback: string): string => {
     const normalizedUri = normalizeUri(uri)
 
-    if (primaryNamespace && normalizedUri === normalizeUri(primaryNamespace)) {
+    if (primaryNamespaceUris?.includes(normalizedUri)) {
       return localName
     }
 
@@ -615,9 +620,9 @@ export const createNamespaceNormalizator = (
       const normalizedAttrName = normalizeWithContext(attrName, context, false)
 
       return `@${normalizedAttrName}`
-    } else {
-      return normalizeWithContext(key, context, true)
     }
+
+    return normalizeWithContext(key, context, true)
   }
 
   const traverseAndNormalize = (
@@ -661,11 +666,7 @@ export const createNamespaceNormalizator = (
     }
 
     for (const [normalizedKey, values] of keyGroups) {
-      if (values.length === 1) {
-        normalizedObject[normalizedKey] = values[0]
-      } else {
-        normalizedObject[normalizedKey] = values
-      }
+      normalizedObject[normalizedKey] = values.length === 1 ? values[0] : values
     }
 
     return normalizedObject
