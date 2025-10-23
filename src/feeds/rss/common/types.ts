@@ -1,5 +1,6 @@
 import type { DateLike } from '../../../common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
+import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { ContentNs } from '../../../namespaces/content/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DctermsNs } from '../../../namespaces/dcterms/common/types.js'
@@ -82,6 +83,7 @@ export namespace Rss {
     pubDate?: TDate
     source?: Source
     atom?: AtomNs.Entry<TDate>
+    cc?: CcNs.ItemOrFeed
     dc?: DcNs.ItemOrFeed<TDate>
     content?: ContentNs.Item
     slash?: SlashNs.Item
@@ -121,6 +123,7 @@ export namespace Rss {
     skipDays?: Array<string>
     items?: Array<Item<TDate>>
     atom?: AtomNs.Feed<TDate>
+    cc?: CcNs.ItemOrFeed
     dc?: DcNs.ItemOrFeed<TDate>
     sy?: SyNs.Feed<TDate>
     itunes?: ItunesNs.Feed

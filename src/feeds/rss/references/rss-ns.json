@@ -9,6 +9,10 @@
       "content": {
         "encoded": "This is an example of content."
       },
+      "cc": {
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "morePermissions": "https://example.com/additional-permissions"
+      },
       "dc": {
         "title": "Dublin Core Enhanced Item Title",
         "creator": "Jack Jackson",
@@ -758,6 +762,10 @@
       }
     }
   ],
+  "cc": {
+    "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "morePermissions": "https://example.com/commercial-license"
+  },
   "dc": {
     "title": "Dublin Core Enhanced Feed Title",
     "creator": "John Doe",

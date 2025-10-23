@@ -161,4 +161,10 @@ export const namespaceUris = {
     'http://www.rawvoice.com/rawvoiceRssModule/',
     'https://www.rawvoice.com/rawvoiceRssModule/',
   ],
+  cc: [
+    'http://creativecommons.org/ns#', // Official URI.
+    'https://creativecommons.org/ns#',
+    'http://web.resource.org/cc/',
+    'https://web.resource.org/cc/',
+  ],
 }
