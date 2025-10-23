@@ -112,6 +112,14 @@ export const namespaceUris = {
     'https://purl.org/dc/terms/',
     'http://purl.org/dc/terms',
     'https://purl.org/dc/terms',
+    'http://dublincore.org/documents/dcmi-terms/',
+    'https://dublincore.org/documents/dcmi-terms/',
+    'http://dublincore.org/documents/dcmi-terms',
+    'https://dublincore.org/documents/dcmi-terms',
+    'http://dublincore.org/specifications/dublin-core/dcmi-terms/',
+    'https://dublincore.org/specifications/dublin-core/dcmi-terms/',
+    'http://dublincore.org/specifications/dublin-core/dcmi-terms',
+    'https://dublincore.org/specifications/dublin-core/dcmi-terms',
   ],
   wfw: [
     'http://wellformedweb.org/CommentAPI/', // Official URI.
