@@ -219,8 +219,10 @@
   <!-- Creative Commons Namespace: Feed Level Tags -->
   <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
 
+  <!-- YouTube Namespace: Feed Level Tags -->
   <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
   <yt:playlistId>PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf</yt:playlistId>
+
   <entry>
     <id>example-entry</id>
     <link href="https://example.com/posts/understanding-xml-namespaces/comments/1/replies" rel="replies" thr:count="2" thr:updated="2025-05-10T16:45:00Z"/>
@@ -327,6 +329,8 @@
       <psc:chapter start="00:28:12.250" title="Q&amp;A Session"/>
       <psc:chapter start="00:35:00.000" title="Conclusion and Next Steps" href="https://example.com/episode/conclusion"/>
     </psc:chapters>
+
+    <!-- Media Namespace: Entry Level Tags -->
     <media:group>
       <media:content url="https://example.com/videos/sample-hd.mp4" fileSize="45678912" type="video/mp4" medium="video" expression="full" bitrate="5000" framerate="60" duration="180" height="1080" width="1920" lang="en">
         <media:title>HD Version (1080p)</media:title>
@@ -426,6 +430,8 @@
     <media:status state="active" reason="approved"/>
     <media:price type="package" info="full access" price="9.99" currency="USD"/>
     <media:price type="subscription" info="monthly" price="4.99" currency="USD"/>
+
+    <!-- GeoRSS-Simple Namespace: Entry Level Tags -->
     <georss:point>37.78 -122.42</georss:point>
     <georss:line>37.78 -122.42 37.42 -122.1 37.86 -122.27</georss:line>
     <georss:polygon>37.86 -122.47 37.86 -122.37 37.76 -122.37 37.76 -122.47 37.86 -122.47</georss:polygon>
@@ -436,11 +442,17 @@
     <georss:elev>360</georss:elev>
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
+
+    <!-- Atom Threading Namespace: Entry Level Tags -->
     <thr:total>100</thr:total>
     <thr:in-reply-to ref="urn:uuid:d5e9c5d0-4c0c-11ec-81d3-0242ac130003" href="https://example.com/posts/understanding-xml-namespaces" type="application/xhtml+xml"/>
     <thr:in-reply-to ref="urn:uuid:e7865b80-4c0c-11ec-81d3-0242ac130003" href="https://example.com/posts/understanding-xml-namespaces/comments/1" type="application/xhtml+xml"/>
+
+    <!-- Well Formed Web CommentAPI Namespace: Entry Level Tags -->
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
     <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
+
+    <!-- YouTube Namespace: Entry Level Tags -->
     <yt:videoId>dQw4w9WgXcQ</yt:videoId>
     <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
   </entry>
