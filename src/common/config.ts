@@ -206,7 +206,7 @@ export const namespaceUris = {
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(
   (prefixes, [prefix, uris]) => {
     for (const uri of uris) {
-      const normalizedUri = uri.trim().toLowerCase()
+      const normalizedUri = uri.toLowerCase()
       prefixes[normalizedUri] = prefix.toLowerCase()
     }
 
