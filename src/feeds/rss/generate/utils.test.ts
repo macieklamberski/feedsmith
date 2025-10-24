@@ -1203,4 +1203,27 @@ describe('generateFeed', () => {
 
     expect(generateFeed(value)).toEqual(expected)
   })
+
+  it('should generate creativecommons namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with Creative Commons namespace',
+      description: 'A feed with Creative Commons license',
+      creativecommons: {
+        license: 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:creativecommons': 'http://backend.userland.com/creativeCommonsRssModule',
+        channel: {
+          title: 'Feed with Creative Commons namespace',
+          description: 'A feed with Creative Commons license',
+          'creativecommons:license': 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
 })

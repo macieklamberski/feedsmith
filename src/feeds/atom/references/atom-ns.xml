@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:georss="http://www.georss.org/georss" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" xmlns:psc="http://podlove.org/simple-chapters" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:psc="http://podlove.org/simple-chapters" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:creativecommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
   <id>example-feed</id>
   <title>Example Feed</title>
 
@@ -19,63 +19,6 @@
   <dc:relation>https://example.org/related-content</dc:relation>
   <dc:coverage>Global</dc:coverage>
   <dc:rights>Copyright 2025 Example Publishing Company</dc:rights>
-
-  <!-- Dublin Core Terms Namespace: Feed Level Tags -->
-  <dcterms:abstract>This is an abstract of the feed content</dcterms:abstract>
-  <dcterms:accessRights>Public access with attribution required</dcterms:accessRights>
-  <dcterms:accrualMethod>Regular updates</dcterms:accrualMethod>
-  <dcterms:accrualPeriodicity>Daily</dcterms:accrualPeriodicity>
-  <dcterms:accrualPolicy>Content added based on editorial calendar</dcterms:accrualPolicy>
-  <dcterms:alternative>Alternative Feed Title</dcterms:alternative>
-  <dcterms:audience>General technology audience</dcterms:audience>
-  <dcterms:available>2022-01-01T12:00:00.000Z</dcterms:available>
-  <dcterms:bibliographicCitation>Example Feed. (2022). Retrieved from https://example.org</dcterms:bibliographicCitation>
-  <dcterms:conformsTo>RSS 2.0 Specification</dcterms:conformsTo>
-  <dcterms:contributor>Jane Smith</dcterms:contributor>
-  <dcterms:coverage>Global technology topics</dcterms:coverage>
-  <dcterms:created>2022-01-01T12:00:00.000Z</dcterms:created>
-  <dcterms:creator>John Doe</dcterms:creator>
-  <dcterms:date>2022-01-01T12:00:00.000Z</dcterms:date>
-  <dcterms:dateAccepted>2022-01-01T12:00:00.000Z</dcterms:dateAccepted>
-  <dcterms:dateCopyrighted>2022-01-01T12:00:00.000Z</dcterms:dateCopyrighted>
-  <dcterms:dateSubmitted>2022-01-01T12:00:00.000Z</dcterms:dateSubmitted>
-  <dcterms:description>Detailed description of the feed content and purpose</dcterms:description>
-  <dcterms:educationLevel>Intermediate to advanced</dcterms:educationLevel>
-  <dcterms:extent>Approximately 1000 words per article</dcterms:extent>
-  <dcterms:format>application/atom+xml</dcterms:format>
-  <dcterms:hasFormat>https://example.org/feed.atom</dcterms:hasFormat>
-  <dcterms:hasPart>https://example.org/category/tutorials</dcterms:hasPart>
-  <dcterms:hasVersion>2.0</dcterms:hasVersion>
-  <dcterms:identifier>urn:uuid:feed-12345678-1234-1234-1234-123456789abc</dcterms:identifier>
-  <dcterms:instructionalMethod>Practical examples and tutorials</dcterms:instructionalMethod>
-  <dcterms:isFormatOf>https://example.org/original-content</dcterms:isFormatOf>
-  <dcterms:isPartOf>Example Media Network</dcterms:isPartOf>
-  <dcterms:isReferencedBy>https://example.org/references</dcterms:isReferencedBy>
-  <dcterms:isReplacedBy>https://example.org/new-feed</dcterms:isReplacedBy>
-  <dcterms:isRequiredBy>https://example.org/dependent-feeds</dcterms:isRequiredBy>
-  <dcterms:issued>2022-01-01T12:00:00.000Z</dcterms:issued>
-  <dcterms:isVersionOf>https://example.org/original-feed</dcterms:isVersionOf>
-  <dcterms:language>en-US</dcterms:language>
-  <dcterms:license>Creative Commons Attribution 4.0</dcterms:license>
-  <dcterms:mediator>Content Management System</dcterms:mediator>
-  <dcterms:medium>Digital</dcterms:medium>
-  <dcterms:modified>2023-01-01T12:00:00.000Z</dcterms:modified>
-  <dcterms:provenance>Originally created by Example Publishing Company</dcterms:provenance>
-  <dcterms:publisher>Example Publishing Company</dcterms:publisher>
-  <dcterms:references>https://example.org/referenced-sources</dcterms:references>
-  <dcterms:relation>https://example.org/related-feeds</dcterms:relation>
-  <dcterms:replaces>https://example.org/old-feed</dcterms:replaces>
-  <dcterms:requires>RSS 2.0 compatible reader</dcterms:requires>
-  <dcterms:rights>Copyright 2025 Example Publishing Company</dcterms:rights>
-  <dcterms:rightsHolder>Example Publishing Company</dcterms:rightsHolder>
-  <dcterms:source>https://example.org/original-source</dcterms:source>
-  <dcterms:spatial>Global</dcterms:spatial>
-  <dcterms:subject>Technology, Programming, Web Development</dcterms:subject>
-  <dcterms:tableOfContents>Latest articles, tutorials, and news</dcterms:tableOfContents>
-  <dcterms:temporal>2022-present</dcterms:temporal>
-  <dcterms:title>Dublin Core Terms Enhanced Feed Title</dcterms:title>
-  <dcterms:type>Text</dcterms:type>
-  <dcterms:valid>2025-12-31T23:59:59.000Z</dcterms:valid>
 
   <!-- Syndication Namespace: Feed Level Tags -->
   <sy:updatePeriod>hourly</sy:updatePeriod>
@@ -215,6 +158,67 @@
   <georss:elev>360</georss:elev>
   <georss:floor>4</georss:floor>
   <georss:radius>50000</georss:radius>
+
+  <!-- Dublin Core Terms Namespace: Feed Level Tags -->
+  <dcterms:abstract>This is an abstract of the feed content</dcterms:abstract>
+  <dcterms:accessRights>Public access with attribution required</dcterms:accessRights>
+  <dcterms:accrualMethod>Regular updates</dcterms:accrualMethod>
+  <dcterms:accrualPeriodicity>Daily</dcterms:accrualPeriodicity>
+  <dcterms:accrualPolicy>Content added based on editorial calendar</dcterms:accrualPolicy>
+  <dcterms:alternative>Alternative Feed Title</dcterms:alternative>
+  <dcterms:audience>General technology audience</dcterms:audience>
+  <dcterms:available>2022-01-01T12:00:00.000Z</dcterms:available>
+  <dcterms:bibliographicCitation>Example Feed. (2022). Retrieved from https://example.org</dcterms:bibliographicCitation>
+  <dcterms:conformsTo>RSS 2.0 Specification</dcterms:conformsTo>
+  <dcterms:contributor>Jane Smith</dcterms:contributor>
+  <dcterms:coverage>Global technology topics</dcterms:coverage>
+  <dcterms:created>2022-01-01T12:00:00.000Z</dcterms:created>
+  <dcterms:creator>John Doe</dcterms:creator>
+  <dcterms:date>2022-01-01T12:00:00.000Z</dcterms:date>
+  <dcterms:dateAccepted>2022-01-01T12:00:00.000Z</dcterms:dateAccepted>
+  <dcterms:dateCopyrighted>2022-01-01T12:00:00.000Z</dcterms:dateCopyrighted>
+  <dcterms:dateSubmitted>2022-01-01T12:00:00.000Z</dcterms:dateSubmitted>
+  <dcterms:description>Detailed description of the feed content and purpose</dcterms:description>
+  <dcterms:educationLevel>Intermediate to advanced</dcterms:educationLevel>
+  <dcterms:extent>Approximately 1000 words per article</dcterms:extent>
+  <dcterms:format>application/atom+xml</dcterms:format>
+  <dcterms:hasFormat>https://example.org/feed.atom</dcterms:hasFormat>
+  <dcterms:hasPart>https://example.org/category/tutorials</dcterms:hasPart>
+  <dcterms:hasVersion>2.0</dcterms:hasVersion>
+  <dcterms:identifier>urn:uuid:feed-12345678-1234-1234-1234-123456789abc</dcterms:identifier>
+  <dcterms:instructionalMethod>Practical examples and tutorials</dcterms:instructionalMethod>
+  <dcterms:isFormatOf>https://example.org/original-content</dcterms:isFormatOf>
+  <dcterms:isPartOf>Example Media Network</dcterms:isPartOf>
+  <dcterms:isReferencedBy>https://example.org/references</dcterms:isReferencedBy>
+  <dcterms:isReplacedBy>https://example.org/new-feed</dcterms:isReplacedBy>
+  <dcterms:isRequiredBy>https://example.org/dependent-feeds</dcterms:isRequiredBy>
+  <dcterms:issued>2022-01-01T12:00:00.000Z</dcterms:issued>
+  <dcterms:isVersionOf>https://example.org/original-feed</dcterms:isVersionOf>
+  <dcterms:language>en-US</dcterms:language>
+  <dcterms:license>Creative Commons Attribution 4.0</dcterms:license>
+  <dcterms:mediator>Content Management System</dcterms:mediator>
+  <dcterms:medium>Digital</dcterms:medium>
+  <dcterms:modified>2023-01-01T12:00:00.000Z</dcterms:modified>
+  <dcterms:provenance>Originally created by Example Publishing Company</dcterms:provenance>
+  <dcterms:publisher>Example Publishing Company</dcterms:publisher>
+  <dcterms:references>https://example.org/referenced-sources</dcterms:references>
+  <dcterms:relation>https://example.org/related-feeds</dcterms:relation>
+  <dcterms:replaces>https://example.org/old-feed</dcterms:replaces>
+  <dcterms:requires>RSS 2.0 compatible reader</dcterms:requires>
+  <dcterms:rights>Copyright 2025 Example Publishing Company</dcterms:rights>
+  <dcterms:rightsHolder>Example Publishing Company</dcterms:rightsHolder>
+  <dcterms:source>https://example.org/original-source</dcterms:source>
+  <dcterms:spatial>Global</dcterms:spatial>
+  <dcterms:subject>Technology, Programming, Web Development</dcterms:subject>
+  <dcterms:tableOfContents>Latest articles, tutorials, and news</dcterms:tableOfContents>
+  <dcterms:temporal>2022-present</dcterms:temporal>
+  <dcterms:title>Dublin Core Terms Enhanced Feed Title</dcterms:title>
+  <dcterms:type>Text</dcterms:type>
+  <dcterms:valid>2025-12-31T23:59:59.000Z</dcterms:valid>
+
+  <!-- Creative Commons Namespace: Feed Level Tags -->
+  <creativecommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativecommons:license>
+
   <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
   <yt:playlistId>PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf</yt:playlistId>
   <entry>

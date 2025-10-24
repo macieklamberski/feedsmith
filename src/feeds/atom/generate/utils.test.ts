@@ -1256,4 +1256,27 @@ describe('generateFeed', () => {
 
     expect(generateFeed(value)).toEqual(expected)
   })
+
+  it('should generate Atom feed with creativecommons namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Creative Commons namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      creativecommons: {
+        license: 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:creativecommons': 'http://backend.userland.com/creativeCommonsRssModule',
+        id: 'https://example.com/feed',
+        title: 'Feed with Creative Commons namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        'creativecommons:license': 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
 })
