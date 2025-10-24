@@ -206,6 +206,8 @@ export const namespaceUris = {
     'https://creativecommons.org/ns#',
     'http://web.resource.org/cc/',
     'https://web.resource.org/cc/',
+    'http://web.resource.org/cc',
+    'https://web.resource.org/cc',
   ],
 }
 

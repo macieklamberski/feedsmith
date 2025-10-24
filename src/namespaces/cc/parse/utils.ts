@@ -14,7 +14,6 @@ export const retrieveItemOrFeed: ParsePartialUtil<CcNs.ItemOrFeed> = (value) => 
   }
 
   const result = {
-    // Work Properties
     license: parseSingularOf(value['cc:license'], (value) => parseString(retrieveText(value))),
     morePermissions: parseSingularOf(value['cc:morepermissions'], (value) =>
       parseString(retrieveText(value)),
@@ -28,8 +27,6 @@ export const retrieveItemOrFeed: ParsePartialUtil<CcNs.ItemOrFeed> = (value) => 
     useGuidelines: parseSingularOf(value['cc:useguidelines'], (value) =>
       parseString(retrieveText(value)),
     ),
-
-    // License Properties
     permits: parseSingularOf(value['cc:permits'], (value) => parseString(retrieveText(value))),
     requires: parseSingularOf(value['cc:requires'], (value) => parseString(retrieveText(value))),
     prohibits: parseSingularOf(value['cc:prohibits'], (value) => parseString(retrieveText(value))),

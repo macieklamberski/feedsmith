@@ -8,14 +8,11 @@ export const generateItemOrFeed: GenerateUtil<CcNs.ItemOrFeed> = (data) => {
   }
 
   const value = {
-    // Work Properties
     'cc:license': generateCdataString(data.license),
     'cc:morePermissions': generateCdataString(data.morePermissions),
     'cc:attributionName': generateCdataString(data.attributionName),
     'cc:attributionURL': generateCdataString(data.attributionURL),
     'cc:useGuidelines': generateCdataString(data.useGuidelines),
-
-    // License Properties
     'cc:permits': generateCdataString(data.permits),
     'cc:requires': generateCdataString(data.requires),
     'cc:prohibits': generateCdataString(data.prohibits),
