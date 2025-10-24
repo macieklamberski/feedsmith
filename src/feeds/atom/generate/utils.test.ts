@@ -745,6 +745,27 @@ describe('generateEntry', () => {
     expect(generateEntry(value)).toEqual(expected)
   })
 
+  it('should generate entry with ccREL namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with ccREL namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+        morePermissions: 'https://example.com/additional-permissions',
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with ccREL namespace',
+      updated: '2023-03-15T12:00:00.000Z',
+      'cc:license': 'https://creativecommons.org/licenses/by/4.0/',
+      'cc:morePermissions': 'https://example.com/additional-permissions',
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
   it('should generate entry with psc namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
@@ -1327,6 +1348,31 @@ describe('generateFeed', () => {
         updated: '2023-03-15T12:00:00.000Z',
         'dcterms:created': '2023-01-01T00:00:00.000Z',
         'dcterms:license': 'Creative Commons Attribution 4.0',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with ccREL namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with ccREL namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      cc: {
+        license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+        morePermissions: 'https://example.com/commercial-license',
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:cc': 'http://creativecommons.org/ns#',
+        id: 'https://example.com/feed',
+        title: 'Feed with ccREL namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        'cc:license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+        'cc:morePermissions': 'https://example.com/commercial-license',
       },
     }
 

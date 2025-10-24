@@ -659,6 +659,45 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with ccREL namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with ccREL',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      cc: {
+        license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+        morePermissions: 'https://example.com/commercial-license',
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry with ccREL',
+          updated: new Date('2023-03-15T12:00:00Z'),
+          cc: {
+            license: 'https://creativecommons.org/licenses/by/4.0/',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:cc="http://creativecommons.org/ns#">
+  <id>https://example.com/feed</id>
+  <title>Feed with ccREL</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
+  <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry with ccREL</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
+    <cc:license>https://creativecommons.org/licenses/by/4.0/</cc:license>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with creativecommons namespace', () => {
     const value = {
       id: 'https://example.com/feed',

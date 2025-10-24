@@ -754,6 +754,23 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with ccREL namespace properties', () => {
+    const value = {
+      title: 'Item with ccREL namespace',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+        morePermissions: 'https://example.com/additional-permissions',
+      },
+    }
+    const expected = {
+      title: 'Item with ccREL namespace',
+      'cc:license': 'https://creativecommons.org/licenses/by/4.0/',
+      'cc:morePermissions': 'https://example.com/additional-permissions',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with psc namespace properties', () => {
     const value = {
       title: 'Item with PSC chapters',
@@ -1248,6 +1265,31 @@ describe('generateFeed', () => {
           ],
           'source:likes': { '@server': 'http://likes.example.com/' },
           'source:blogroll': 'https://example.com/blogroll.opml',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate ccREL namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with ccREL namespace',
+      description: 'A feed with ccREL license',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+        morePermissions: 'https://example.com/commercial-license',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:cc': 'http://creativecommons.org/ns#',
+        channel: {
+          title: 'Feed with ccREL namespace',
+          description: 'A feed with ccREL license',
+          'cc:license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+          'cc:morePermissions': 'https://example.com/commercial-license',
         },
       },
     }
