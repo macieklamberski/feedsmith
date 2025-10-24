@@ -192,3 +192,15 @@ export const namespaceUris = {
     'https://www.rawvoice.com/rawvoiceRssModule/',
   ],
 }
+
+export const namespacePrefixes = Object.entries(namespaceUris).reduce(
+  (prefixes, [prefix, uris]) => {
+    for (const uri of uris) {
+      const normalizedUri = uri.trim().toLowerCase()
+      prefixes[normalizedUri] = prefix
+    }
+
+    return prefixes
+  },
+  {} as Record<string, string>,
+)

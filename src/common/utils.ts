@@ -533,36 +533,26 @@ export const invertObject = (object: Record<string, string>): Record<string, str
 
 export const createNamespaceNormalizator = <T extends Record<string, Array<string>>>(
   namespaceUris: T,
+  namespacePrefixes: Record<string, string>,
   primaryNamespace?: keyof T,
 ) => {
-  const normalizeUri = (uri: string): string => {
+  const normalizeNamespaceUri = (uri: string): string => {
     return typeof uri === 'string' ? uri.trim().toLowerCase() : uri
-  }
-
-  const namespacesMap: Record<string, string> = {}
-
-  for (const prefix in namespaceUris) {
-    const uris = namespaceUris[prefix]
-
-    for (const uri of uris) {
-      const normalizedUri = normalizeUri(uri)
-      namespacesMap[normalizedUri] = prefix
-    }
   }
 
   const primaryNamespaceUris =
     primaryNamespace && namespaceUris[primaryNamespace]
-      ? namespaceUris[primaryNamespace].map(normalizeUri)
+      ? namespaceUris[primaryNamespace].map(normalizeNamespaceUri)
       : undefined
 
   const resolveNamespacePrefix = (uri: string, localName: string, fallback: string): string => {
-    const normalizedUri = normalizeUri(uri)
+    const normalizedUri = normalizeNamespaceUri(uri)
 
     if (primaryNamespaceUris?.includes(normalizedUri)) {
       return localName
     }
 
-    const standardPrefix = namespacesMap[normalizedUri]
+    const standardPrefix = namespacePrefixes[normalizedUri]
 
     if (standardPrefix) {
       return `${standardPrefix}:${localName}`
@@ -577,10 +567,10 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
     if (isObject(element)) {
       for (const key in element) {
         if (key === '@xmlns') {
-          declarations[''] = normalizeUri(element[key])
+          declarations[''] = normalizeNamespaceUri(element[key])
         } else if (key.indexOf('@xmlns:') === 0) {
           const prefix = key.substring('@xmlns:'.length)
-          declarations[prefix] = normalizeUri(element[key])
+          declarations[prefix] = normalizeNamespaceUri(element[key])
         }
       }
     }
