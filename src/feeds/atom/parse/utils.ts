@@ -261,7 +261,7 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) =
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
-    creativecommons: namespaces?.has('creativecommons')
+    creativeCommons: namespaces?.has('creativecommons')
       ? retrieveCreativecommonsFeed(value)
       : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,

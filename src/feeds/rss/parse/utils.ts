@@ -219,7 +219,7 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
-    creativecommons: namespaces.has('creativecommons')
+    creativeCommons: namespaces.has('creativecommons')
       ? retrieveCreativecommonsFeed(value)
       : undefined,
     feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(value) : undefined,

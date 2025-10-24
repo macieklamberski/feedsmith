@@ -118,7 +118,7 @@ export namespace Atom {
     media?: MediaNs.ItemOrFeed
     georss?: GeorssNs.ItemOrFeed
     dcterms?: DctermsNs.ItemOrFeed<TDate>
-    creativecommons?: CreativecommonsNs.Feed
+    creativeCommons?: CreativecommonsNs.Feed
     yt?: YtNs.Feed
   }
 }

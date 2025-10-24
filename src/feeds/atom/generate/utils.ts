@@ -233,7 +233,7 @@ export const generateFeed: GenerateUtil<Atom.Feed<DateLike>> = (feed, options) =
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateDctermsItemOrFeed(feed.dcterms),
-    ...generateCreativecommonsFeed(feed.creativecommons),
+    ...generateCreativecommonsFeed(feed.creativeCommons),
     ...generateYtFeed(feed.yt),
     ...valueEntries,
   }

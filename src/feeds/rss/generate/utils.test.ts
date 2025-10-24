@@ -1259,7 +1259,7 @@ describe('generateFeed', () => {
     const value = {
       title: 'Feed with Creative Commons namespace',
       description: 'A feed with Creative Commons license',
-      creativecommons: {
+      creativeCommons: {
         license: 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
       },
     }

@@ -22,7 +22,7 @@ The Creative Commons namespace provides elements for specifying the license unde
     </tr>
     <tr>
       <th>Property</th>
-      <td><code>creativecommons</code></td>
+      <td><code>creativeCommons</code></td>
     </tr>
   </tbody>
 </table>

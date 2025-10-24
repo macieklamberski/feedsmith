@@ -504,7 +504,7 @@ describe('generate', () => {
     const value = {
       title: 'Feed with creativecommons namespace',
       description: 'Test feed with Creative Commons namespace',
-      creativecommons: {
+      creativeCommons: {
         license: 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
       },
     }

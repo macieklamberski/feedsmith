@@ -664,7 +664,7 @@ describe('generate', () => {
       id: 'https://example.com/feed',
       title: 'Feed with Creative Commons',
       updated: new Date('2024-01-10T12:00:00Z'),
-      creativecommons: {
+      creativeCommons: {
         license: 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
       },
     }

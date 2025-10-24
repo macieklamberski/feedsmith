@@ -129,7 +129,7 @@ export namespace Rss {
     media?: MediaNs.ItemOrFeed
     georss?: GeorssNs.ItemOrFeed
     dcterms?: DctermsNs.ItemOrFeed<TDate>
-    creativecommons?: CreativecommonsNs.Feed
+    creativeCommons?: CreativecommonsNs.Feed
     feedpress?: FeedpressNs.Feed
     sourceNs?: SourceNs.Feed
     rawvoice?: RawvoiceNs.Feed<TDate>
