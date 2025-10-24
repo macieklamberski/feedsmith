@@ -1442,6 +1442,9 @@
     "blogroll": "https://blog.example.com/blogroll.opml",
     "self": "http://example.com/feed.xml"
   },
+  "creativeCommons": {
+    "license": "http://creativecommons.org/licenses/by-nc-nd/2.0/"
+  },
   "feedpress": {
     "link": "https://feedpress.com/examplepodcast",
     "newsletterId": "newsletter123456",

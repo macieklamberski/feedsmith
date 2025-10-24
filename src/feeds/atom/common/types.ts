@@ -3,6 +3,7 @@ import type {
   ParsePartialUtil as BaseParsePartialUtil,
   DateLike,
 } from '../../../common/types.js'
+import type { CreativecommonsNs } from '../../../namespaces/creativecommons/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DctermsNs } from '../../../namespaces/dcterms/common/types.js'
 import type { GeorssNs } from '../../../namespaces/georss/common/types.js'
@@ -117,6 +118,7 @@ export namespace Atom {
     media?: MediaNs.ItemOrFeed
     georss?: GeorssNs.ItemOrFeed
     dcterms?: DctermsNs.ItemOrFeed<TDate>
+    creativeCommons?: CreativecommonsNs.Feed
     yt?: YtNs.Feed
   }
 }

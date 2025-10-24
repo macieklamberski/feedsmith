@@ -506,8 +506,8 @@ export const generateNamespaceAttrs = (
   let namespaceAttrs: Record<string, string> | undefined
   const valueNamespaces = detectNamespaces(value, true)
 
-  for (const slug in namespaceUris) {
-    if (!valueNamespaces.has(slug)) {
+  for (const prefix in namespaceUris) {
+    if (!valueNamespaces.has(prefix)) {
       continue
     }
 
@@ -515,7 +515,7 @@ export const generateNamespaceAttrs = (
       namespaceAttrs = {}
     }
 
-    namespaceAttrs[`@xmlns:${slug}`] = namespaceUris[slug][0]
+    namespaceAttrs[`@xmlns:${prefix}`] = namespaceUris[prefix][0]
   }
 
   return namespaceAttrs

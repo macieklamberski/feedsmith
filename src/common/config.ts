@@ -69,6 +69,16 @@ export const namespaceUris = {
     'http://purl.org/rss/1.0/modules/content',
     'https://purl.org/rss/1.0/modules/content',
   ],
+  creativeCommons: [
+    'http://backend.userland.com/creativeCommonsRssModule', // Official URI.
+    'https://backend.userland.com/creativeCommonsRssModule',
+    'http://backend.userland.com/creativeCommonsRssModule/',
+    'https://backend.userland.com/creativeCommonsRssModule/',
+    'http://cyber.law.harvard.edu/rss/creativeCommonsRssModule.html',
+    'https://cyber.law.harvard.edu/rss/creativeCommonsRssModule.html',
+    'http://cyber.law.harvard.edu/rss/creativeCommonsRssModule',
+    'https://cyber.law.harvard.edu/rss/creativeCommonsRssModule',
+  ],
   slash: [
     'http://purl.org/rss/1.0/modules/slash/', // Official URI.
     'https://purl.org/rss/1.0/modules/slash/',
@@ -196,8 +206,8 @@ export const namespaceUris = {
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(
   (prefixes, [prefix, uris]) => {
     for (const uri of uris) {
-      const normalizedUri = uri.trim().toLowerCase()
-      prefixes[normalizedUri] = prefix
+      const normalizedUri = uri.toLowerCase()
+      prefixes[normalizedUri] = prefix.toLowerCase()
     }
 
     return prefixes
