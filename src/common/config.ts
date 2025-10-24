@@ -36,16 +36,26 @@ export const locales = {
 
 export const namespaceUris = {
   atom: [
-    'http://www.w3.org/2005/Atom', // Official URI.
+    'http://www.w3.org/2005/Atom', // Official URI (Atom 1.0).
     'https://www.w3.org/2005/Atom',
     'http://www.w3.org/2005/Atom/',
     'https://www.w3.org/2005/Atom/',
+    'http://purl.org/atom/ns#', // Official URI (Atom 0.3).
+    'https://purl.org/atom/ns#',
   ],
   dc: [
     'http://purl.org/dc/elements/1.1/', // Official URI.
     'https://purl.org/dc/elements/1.1/',
     'http://purl.org/dc/elements/1.1',
     'https://purl.org/dc/elements/1.1',
+    'http://dublincore.org/documents/dcmi-namespace/',
+    'https://dublincore.org/documents/dcmi-namespace/',
+    'http://dublincore.org/documents/dcmi-namespace',
+    'https://dublincore.org/documents/dcmi-namespace',
+    'http://purl.org/dc/elements/1.0/',
+    'https://purl.org/dc/elements/1.0/',
+    'http://purl.org/dc/elements/1.0',
+    'https://purl.org/dc/elements/1.0',
   ],
   sy: [
     'http://purl.org/rss/1.0/modules/syndication/', // Official URI.
@@ -94,6 +104,14 @@ export const namespaceUris = {
     'http://www.rssboard.org/media-rss/',
     'https://www.rssboard.org/media-rss',
     'https://www.rssboard.org/media-rss/',
+    'http://search.yahoo.com/searchmonkey/media/',
+    'https://search.yahoo.com/searchmonkey/media/',
+    'http://search.yahoo.com/searchmonkey/media',
+    'https://search.yahoo.com/searchmonkey/media',
+    'http://tools.search.yahoo.com/mrss/',
+    'https://tools.search.yahoo.com/mrss/',
+    'http://tools.search.yahoo.com/mrss',
+    'https://tools.search.yahoo.com/mrss',
   ],
   georss: [
     'http://www.georss.org/georss', // Official URI.
@@ -106,6 +124,10 @@ export const namespaceUris = {
     'https://purl.org/syndication/thread/1.0',
     'http://purl.org/syndication/thread/1.0/',
     'https://purl.org/syndication/thread/1.0/',
+    'http://purl.org/rss/1.0/modules/threading/',
+    'https://purl.org/rss/1.0/modules/threading/',
+    'http://purl.org/rss/1.0/modules/threading',
+    'https://purl.org/rss/1.0/modules/threading',
   ],
   dcterms: [
     'http://purl.org/dc/terms/', // Official URI.
@@ -170,3 +192,15 @@ export const namespaceUris = {
     'https://www.rawvoice.com/rawvoiceRssModule/',
   ],
 }
+
+export const namespacePrefixes = Object.entries(namespaceUris).reduce(
+  (prefixes, [prefix, uris]) => {
+    for (const uri of uris) {
+      const normalizedUri = uri.trim().toLowerCase()
+      prefixes[normalizedUri] = prefix
+    }
+
+    return prefixes
+  },
+  {} as Record<string, string>,
+)
