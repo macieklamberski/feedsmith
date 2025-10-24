@@ -69,7 +69,7 @@ export const namespaceUris = {
     'http://purl.org/rss/1.0/modules/content',
     'https://purl.org/rss/1.0/modules/content',
   ],
-  creativecommons: [
+  creativeCommons: [
     'http://backend.userland.com/creativeCommonsRssModule', // Official URI.
     'https://backend.userland.com/creativeCommonsRssModule',
     'http://backend.userland.com/creativeCommonsRssModule/',
@@ -207,7 +207,7 @@ export const namespacePrefixes = Object.entries(namespaceUris).reduce(
   (prefixes, [prefix, uris]) => {
     for (const uri of uris) {
       const normalizedUri = uri.trim().toLowerCase()
-      prefixes[normalizedUri] = prefix
+      prefixes[normalizedUri] = prefix.toLowerCase()
     }
 
     return prefixes

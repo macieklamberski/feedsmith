@@ -509,11 +509,11 @@ describe('generate', () => {
       },
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:creativecommons="http://backend.userland.com/creativeCommonsRssModule">
+<rss version="2.0" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule">
   <channel>
     <title>Feed with creativecommons namespace</title>
     <description>Test feed with Creative Commons namespace</description>
-    <creativecommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativecommons:license>
+    <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
   </channel>
 </rss>
 `

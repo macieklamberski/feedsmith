@@ -8,7 +8,7 @@ export const generateFeed: GenerateUtil<CreativecommonsNs.Feed> = (feed) => {
   }
 
   const value = {
-    'creativecommons:license': generateCdataString(feed.license),
+    'creativeCommons:license': generateCdataString(feed.license),
   }
 
   return trimObject(value)

@@ -7,7 +7,7 @@ describe('generateFeed', () => {
       license: 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
     }
     const expected = {
-      'creativecommons:license': 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+      'creativeCommons:license': 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -18,7 +18,7 @@ describe('generateFeed', () => {
       license: 'http://creativecommons.org/licenses?type=by&version=2.0',
     }
     const expected = {
-      'creativecommons:license': {
+      'creativeCommons:license': {
         '#cdata': 'http://creativecommons.org/licenses?type=by&version=2.0',
       },
     }

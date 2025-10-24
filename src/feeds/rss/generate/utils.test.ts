@@ -1266,11 +1266,11 @@ describe('generateFeed', () => {
     const expected = {
       rss: {
         '@version': '2.0',
-        '@xmlns:creativecommons': 'http://backend.userland.com/creativeCommonsRssModule',
+        '@xmlns:creativeCommons': 'http://backend.userland.com/creativeCommonsRssModule',
         channel: {
           title: 'Feed with Creative Commons namespace',
           description: 'A feed with Creative Commons license',
-          'creativecommons:license': 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+          'creativeCommons:license': 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
         },
       },
     }
