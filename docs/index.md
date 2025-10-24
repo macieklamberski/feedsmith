@@ -73,6 +73,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Well-Formed Web](http://wellformedweb.org/CommentAPI/) | `<wfw:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Source](http://source.scripting.com/) | `<source:*>` | RSS | ✅ | ✅ |
 | [ccREL](http://creativecommons.org/ns#) | `<cc:*>` | RSS, Atom | ✅ | ✅ |
+| [Creative Commons](http://backend.userland.com/creativeCommonsRssModule) | `<creativeCommons:*>` | RSS, Atom | ✅ | ✅ |
 | [FeedPress](https://feedpress.com/xmlns) | `<feedpress:*>` | RSS | ✅ | ✅ |
 | [YouTube](https://www.youtube.com/feeds/videos.xml) | `<yt:*>` | Atom | ✅ | ✅ |
 

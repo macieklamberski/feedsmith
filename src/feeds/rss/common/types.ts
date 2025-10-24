@@ -2,6 +2,7 @@ import type { DateLike } from '../../../common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
 import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { ContentNs } from '../../../namespaces/content/common/types.js'
+import type { CreativecommonsNs } from '../../../namespaces/creativecommons/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DctermsNs } from '../../../namespaces/dcterms/common/types.js'
 import type { FeedpressNs } from '../../../namespaces/feedpress/common/types.js'
@@ -131,6 +132,7 @@ export namespace Rss {
     media?: MediaNs.ItemOrFeed
     georss?: GeorssNs.ItemOrFeed
     dcterms?: DctermsNs.ItemOrFeed<TDate>
+    creativeCommons?: CreativecommonsNs.Feed
     feedpress?: FeedpressNs.Feed
     sourceNs?: SourceNs.Feed
     rawvoice?: RawvoiceNs.Feed<TDate>

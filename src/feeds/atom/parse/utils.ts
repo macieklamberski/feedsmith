@@ -11,6 +11,7 @@ import {
   trimObject,
 } from '../../../common/utils.js'
 import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
+import { retrieveFeed as retrieveCreativecommonsFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
@@ -263,6 +264,9 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) =
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    creativeCommons: namespaces?.has('creativecommons')
+      ? retrieveCreativecommonsFeed(value)
+      : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
   }
 

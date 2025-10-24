@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { locales } from '../../../common/config.js'
+import { locales, namespaceUris } from '../../../common/config.js'
 import { parse } from './index.js'
 
 describe('parse', () => {
@@ -829,6 +829,44 @@ describe('parse', () => {
 
         expect(parse(value)).toEqual(expected)
       })
+    })
+
+    describe('RDF namespace URI variants', () => {
+      const expected = {
+        title: 'Test Feed',
+        link: 'http://example.com',
+        description: 'Test Description',
+        items: [
+          {
+            title: 'Test Item',
+            link: 'http://example.com/item1',
+          },
+        ],
+      }
+
+      for (const uri of namespaceUris.rdf) {
+        it(`should parse RDF feed with namespace URI: ${uri}`, () => {
+          const value = `
+            <?xml version="1.0" encoding="UTF-8"?>
+            <rdf:RDF
+              xmlns:rdf="${uri}"
+              xmlns="http://purl.org/rss/1.0/"
+            >
+              <channel rdf:about="http://example.com">
+                <title>Test Feed</title>
+                <link>http://example.com</link>
+                <description>Test Description</description>
+              </channel>
+              <item rdf:about="http://example.com/item1">
+                <title>Test Item</title>
+                <link>http://example.com/item1</link>
+              </item>
+            </rdf:RDF>
+          `
+
+          expect(parse(value)).toEqual(expected)
+        })
+      }
     })
   })
 })

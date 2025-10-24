@@ -96,6 +96,7 @@ export default defineConfig({
               { text: 'Well-Formed Web', link: '/reference/namespaces/wfw' },
               { text: 'Source', link: '/reference/namespaces/source' },
               { text: 'ccREL', link: '/reference/namespaces/cc' },
+              { text: 'Creative Commons', link: '/reference/namespaces/creativecommons' },
               { text: 'FeedPress', link: '/reference/namespaces/feedpress' },
               { text: 'YouTube', link: '/reference/namespaces/yt' },
             ],

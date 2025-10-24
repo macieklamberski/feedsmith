@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:cc="http://creativecommons.org/ns#" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:feedpress="https://feed.press/xmlns" xmlns:georss="http://www.georss.org/georss" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:psc="http://podlove.org/simple-chapters" xmlns:rawvoice="https://blubrry.com/developer/rawvoice-rss" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:source="http://source.scripting.com/" xmlns:spotify="http://www.spotify.com/ns/rss" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:wfw="http://wellformedweb.org/CommentAPI/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:rawvoice="https://blubrry.com/developer/rawvoice-rss" xmlns:psc="http://podlove.org/simple-chapters" xmlns:spotify="http://www.spotify.com/ns/rss" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:source="http://source.scripting.com/" xmlns:cc="http://creativecommons.org/ns#" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:feedpress="https://feed.press/xmlns">
   <channel>
     <title>Example Feed</title>
     <link>http://example.org</link>
-
-    <!-- Creative Commons Namespace: Channel Level Tags -->
-    <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
-    <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
 
     <!-- Dublin Core Namespace: Channel Level Tags -->
     <dc:title>Dublin Core Enhanced Feed Title</dc:title>
@@ -273,6 +269,22 @@
     <source:blogroll>https://blog.example.com/blogroll.opml</source:blogroll>
     <source:self>http://example.com/feed.xml</source:self>
 
+    <!-- ccREL Namespace: Channel Level Tags -->
+    <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
+    <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
+    <cc:attributionName>Example Publishing Company</cc:attributionName>
+    <cc:attributionURL>https://example.com/</cc:attributionURL>
+    <cc:useGuidelines>https://example.com/usage-guidelines</cc:useGuidelines>
+    <cc:permits>http://creativecommons.org/ns#Reproduction</cc:permits>
+    <cc:requires>http://creativecommons.org/ns#Attribution</cc:requires>
+    <cc:prohibits>http://creativecommons.org/ns#CommercialUse</cc:prohibits>
+    <cc:jurisdiction>http://creativecommons.org/international/us/</cc:jurisdiction>
+    <cc:legalcode>https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode</cc:legalcode>
+    <cc:deprecatedOn>2025-12-31</cc:deprecatedOn>
+
+    <!-- Creative Commons Namespace: Channel Level Tags -->
+    <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
+
     <!-- FeedPress Namespace: Channel Level Tags -->
     <feedpress:link>https://feedpress.com/examplepodcast</feedpress:link>
     <feedpress:newsletterId>newsletter123456</feedpress:newsletterId>
@@ -305,9 +317,18 @@
       <!-- Atom Namespace: Item Level Tags -->
       <atom:link href="https://example.com/posts/understanding-xml-namespaces/comments/1/replies" rel="replies" thr:count="2" thr:updated="2025-05-10T16:45:00.000Z"/>
 
-      <!-- Creative Commons Namespace: Item Level Tags -->
+      <!-- ccREL Namespace: Item Level Tags -->
       <cc:license>https://creativecommons.org/licenses/by/4.0/</cc:license>
       <cc:morePermissions>https://example.com/additional-permissions</cc:morePermissions>
+      <cc:attributionName>Jack Jackson</cc:attributionName>
+      <cc:attributionURL>https://example.com/authors/jack-jackson</cc:attributionURL>
+      <cc:useGuidelines>https://example.com/article-usage-guidelines</cc:useGuidelines>
+      <cc:permits>http://creativecommons.org/ns#Reproduction</cc:permits>
+      <cc:requires>http://creativecommons.org/ns#Attribution</cc:requires>
+      <cc:prohibits>http://creativecommons.org/ns#CommercialUse</cc:prohibits>
+      <cc:jurisdiction>http://creativecommons.org/international/us/</cc:jurisdiction>
+      <cc:legalcode>https://creativecommons.org/licenses/by/4.0/legalcode</cc:legalcode>
+      <cc:deprecatedOn>2026-12-31</cc:deprecatedOn>
 
       <!-- Dublin Core Namespace: Item Level Tags -->
       <dc:title>Dublin Core Enhanced Item Title</dc:title>

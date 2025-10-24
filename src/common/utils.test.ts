@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { type XMLBuilder, XMLParser } from 'fast-xml-parser'
-import { namespaceUris } from './config.js'
+import { namespacePrefixes, namespaceUris } from './config.js'
 import type { ParseExactUtil } from './types.js'
 import {
   createNamespaceNormalizator,
@@ -2778,7 +2778,8 @@ describe('createNamespaceNormalizator', () => {
       it('should handle default Atom namespace with primary namespace', () => {
         const normalizeNamespaces = createNamespaceNormalizator(
           namespaceUris,
-          namespaceUris.atom[0],
+          namespacePrefixes,
+          'atom',
         )
         const value = parser.parse(`
           <?xml version="1.0"?>
@@ -2803,7 +2804,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle default namespace without primary namespace', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <feed xmlns="http://www.w3.org/2005/Atom">
@@ -2823,7 +2824,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('prefixed namespace handling', () => {
       it('should normalize custom prefixes to standard prefixes', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <rss xmlns:custom="http://purl.org/dc/elements/1.1/">
@@ -2855,7 +2856,8 @@ describe('createNamespaceNormalizator', () => {
       it('should handle custom Atom prefix with primary namespace', () => {
         const normalizeNamespaces = createNamespaceNormalizator(
           namespaceUris,
-          namespaceUris.atom[0],
+          namespacePrefixes,
+          'atom',
         )
         const value = parser.parse(`
           <?xml version="1.0"?>
@@ -2882,7 +2884,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('nested namespace declarations', () => {
       it('should handle namespace declarations in nested elements', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <rss>
@@ -2920,10 +2922,16 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle namespace redefinition in nested elements', () => {
-        const normalizeNamespaces = createNamespaceNormalizator({
-          v1: ['http://example.com/v1'],
-          v2: ['http://example.com/v2'],
-        })
+        const normalizeNamespaces = createNamespaceNormalizator(
+          {
+            v1: ['http://example.com/v1'],
+            v2: ['http://example.com/v2'],
+          },
+          {
+            'http://example.com/v1': 'v1',
+            'http://example.com/v2': 'v2',
+          },
+        )
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root xmlns:ns="http://example.com/v1">
@@ -2951,7 +2959,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('mixed case handling', () => {
       it('should normalize element names to lowercase while preserving namespace logic', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <RSS xmlns:DC="http://purl.org/dc/elements/1.1/">
@@ -2983,7 +2991,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('self-closing elements with namespaces', () => {
       it('should handle self-closing elements with namespace declarations', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <rss>
@@ -3025,7 +3033,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('multiple namespaces in same document', () => {
       it('should handle multiple namespaces simultaneously', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <rss
@@ -3076,7 +3084,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('edge cases', () => {
       it('should handle empty namespace URIs', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root xmlns="">
@@ -3094,7 +3102,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle unknown namespaces gracefully', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root xmlns:unknown="http://unknown.example.com/">
@@ -3112,7 +3120,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle case-insensitive xmlns attributes', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root
@@ -3138,7 +3146,8 @@ describe('createNamespaceNormalizator', () => {
       it('should handle complex nesting with namespace inheritance', () => {
         const normalizeNamespaces = createNamespaceNormalizator(
           namespaceUris,
-          namespaceUris.atom[0],
+          namespacePrefixes,
+          'atom',
         )
         const value = parser.parse(`
           <?xml version="1.0"?>
@@ -3177,7 +3186,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('unhappy path scenarios', () => {
       it('should handle non-object input gracefully', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
 
         expect(normalizeNamespaces(null)).toBe(null)
         expect(normalizeNamespaces(undefined)).toBe(undefined)
@@ -3187,7 +3196,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle conflicting namespace declarations in siblings', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root>
@@ -3216,7 +3225,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle namespace declarations without usage', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root
@@ -3240,7 +3249,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle mixed valid and invalid namespace values', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = {
           root: {
             '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
@@ -3273,7 +3282,7 @@ describe('createNamespaceNormalizator', () => {
 
   describe('non-standard namespace URIs', () => {
     it('should work with HTTPS variant and custom prefix', () => {
-      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
       const value = {
         item: {
           '@xmlns:dublincore': 'https://purl.org/dc/elements/1.1/',
@@ -3291,7 +3300,7 @@ describe('createNamespaceNormalizator', () => {
     })
 
     it('should work without trailing slash and custom prefix', () => {
-      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
       const value = {
         item: {
           '@xmlns:dublincore': 'http://purl.org/dc/elements/1.1',
@@ -3309,7 +3318,7 @@ describe('createNamespaceNormalizator', () => {
     })
 
     it('should work with uppercase URI and custom prefix', () => {
-      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
       const value = {
         item: {
           '@xmlns:dublincore': 'HTTP://PURL.ORG/DC/ELEMENTS/1.1/',
@@ -3327,7 +3336,7 @@ describe('createNamespaceNormalizator', () => {
     })
 
     it('should work with mixed case URI and custom prefix', () => {
-      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
       const value = {
         item: {
           '@xmlns:dublincore': 'Http://Purl.Org/Dc/Elements/1.1/',
@@ -3345,7 +3354,7 @@ describe('createNamespaceNormalizator', () => {
     })
 
     it('should work with uppercase HTTPS URI and custom prefix', () => {
-      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
       const value = {
         item: {
           '@xmlns:dublincore': 'HTTPS://PURL.ORG/DC/ELEMENTS/1.1/',
@@ -3363,7 +3372,7 @@ describe('createNamespaceNormalizator', () => {
     })
 
     it('should work with URI containing whitespace around it', () => {
-      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris)
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
       const value = {
         item: {
           '@xmlns:dublincore': '  http://purl.org/dc/elements/1.1/ ',

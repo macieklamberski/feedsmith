@@ -11,7 +11,16 @@
       },
       "cc": {
         "license": "https://creativecommons.org/licenses/by/4.0/",
-        "morePermissions": "https://example.com/additional-permissions"
+        "morePermissions": "https://example.com/additional-permissions",
+        "attributionName": "Jack Jackson",
+        "attributionURL": "https://example.com/authors/jack-jackson",
+        "useGuidelines": "https://example.com/article-usage-guidelines",
+        "permits": "http://creativecommons.org/ns#Reproduction",
+        "requires": "http://creativecommons.org/ns#Attribution",
+        "prohibits": "http://creativecommons.org/ns#CommercialUse",
+        "jurisdiction": "http://creativecommons.org/international/us/",
+        "legalcode": "https://creativecommons.org/licenses/by/4.0/legalcode",
+        "deprecatedOn": "2026-12-31"
       },
       "dc": {
         "title": "Dublin Core Enhanced Item Title",
@@ -764,7 +773,16 @@
   ],
   "cc": {
     "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-    "morePermissions": "https://example.com/commercial-license"
+    "morePermissions": "https://example.com/commercial-license",
+    "attributionName": "Example Publishing Company",
+    "attributionURL": "https://example.com/",
+    "useGuidelines": "https://example.com/usage-guidelines",
+    "permits": "http://creativecommons.org/ns#Reproduction",
+    "requires": "http://creativecommons.org/ns#Attribution",
+    "prohibits": "http://creativecommons.org/ns#CommercialUse",
+    "jurisdiction": "http://creativecommons.org/international/us/",
+    "legalcode": "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode",
+    "deprecatedOn": "2025-12-31"
   },
   "dc": {
     "title": "Dublin Core Enhanced Feed Title",
@@ -1449,6 +1467,9 @@
     "cloud": "https://cloudserver.example.com/notify",
     "blogroll": "https://blog.example.com/blogroll.opml",
     "self": "http://example.com/feed.xml"
+  },
+  "creativeCommons": {
+    "license": "http://creativecommons.org/licenses/by-nc-nd/2.0/"
   },
   "feedpress": {
     "link": "https://feedpress.com/examplepodcast",
