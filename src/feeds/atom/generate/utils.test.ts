@@ -723,6 +723,82 @@ describe('generateEntry', () => {
 
     expect(generateEntry(value)).toEqual(expected)
   })
+
+  it('should generate entry with wfw namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with WFW namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      wfw: {
+        comment: 'https://example.com/comments/1',
+        commentRss: 'https://example.com/comments/1/feed',
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with WFW namespace',
+      updated: '2023-03-15T12:00:00.000Z',
+      'wfw:comment': 'https://example.com/comments/1',
+      'wfw:commentRss': 'https://example.com/comments/1/feed',
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
+  it('should generate entry with psc namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with PSC chapters',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      psc: {
+        chapters: [
+          { start: '00:00:00', title: 'Introduction', href: 'https://example.com/intro' },
+          { start: '00:05:30', title: 'Main Content' },
+        ],
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with PSC chapters',
+      updated: '2023-03-15T12:00:00.000Z',
+      'psc:chapters': {
+        'psc:chapter': [
+          {
+            '@start': '00:00:00',
+            '@title': 'Introduction',
+            '@href': 'https://example.com/intro',
+          },
+          {
+            '@start': '00:05:30',
+            '@title': 'Main Content',
+          },
+        ],
+      },
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
+  it('should generate entry with yt namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with YouTube namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      yt: {
+        videoId: 'dQw4w9WgXcQ',
+        channelId: 'UC123456789',
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with YouTube namespace',
+      updated: '2023-03-15T12:00:00.000Z',
+      'yt:videoId': 'dQw4w9WgXcQ',
+      'yt:channelId': 'UC123456789',
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -1274,6 +1350,31 @@ describe('generateFeed', () => {
         title: 'Feed with Creative Commons namespace',
         updated: '2023-03-15T12:00:00.000Z',
         'creativecommons:license': 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with yt namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with YouTube namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      yt: {
+        channelId: 'UC123456789',
+        playlistId: 'PL123456789',
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:yt': 'http://www.youtube.com/xml/schemas/2015',
+        id: 'https://example.com/feed',
+        title: 'Feed with YouTube namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        'yt:channelId': 'UC123456789',
+        'yt:playlistId': 'PL123456789',
       },
     }
 

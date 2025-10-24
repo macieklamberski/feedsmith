@@ -753,6 +753,57 @@ describe('generateItem', () => {
 
     expect(generateItem(value)).toEqual(expected)
   })
+
+  it('should generate item with psc namespace properties', () => {
+    const value = {
+      title: 'Item with PSC chapters',
+      psc: {
+        chapters: [
+          { start: '00:00:00', title: 'Introduction', href: 'https://example.com/intro' },
+          { start: '00:05:30', title: 'Main Content' },
+        ],
+      },
+    }
+    const expected = {
+      title: 'Item with PSC chapters',
+      'psc:chapters': {
+        'psc:chapter': [
+          {
+            '@start': '00:00:00',
+            '@title': 'Introduction',
+            '@href': 'https://example.com/intro',
+          },
+          {
+            '@start': '00:05:30',
+            '@title': 'Main Content',
+          },
+        ],
+      },
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should generate item with rawvoice namespace properties', () => {
+    const value = {
+      title: 'Item with RawVoice properties',
+      rawvoice: {
+        poster: {
+          url: 'https://example.com/poster.jpg',
+        },
+        isHd: 'yes',
+      },
+    }
+    const expected = {
+      title: 'Item with RawVoice properties',
+      'rawvoice:poster': {
+        '@url': 'https://example.com/poster.jpg',
+      },
+      'rawvoice:isHd': 'yes',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -1220,6 +1271,83 @@ describe('generateFeed', () => {
           title: 'Feed with Creative Commons namespace',
           description: 'A feed with Creative Commons license',
           'creativecommons:license': 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate feedpress namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with FeedPress namespace',
+      description: 'A feed with FeedPress properties',
+      feedpress: {
+        link: 'https://feed.press/example',
+        newsletterId: '12345',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:feedpress': 'https://feed.press/xmlns',
+        channel: {
+          title: 'Feed with FeedPress namespace',
+          description: 'A feed with FeedPress properties',
+          'feedpress:link': 'https://feed.press/example',
+          'feedpress:newsletterId': '12345',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate rawvoice namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with RawVoice namespace',
+      description: 'A feed with RawVoice properties',
+      rawvoice: {
+        rating: {
+          value: 'TV-PG',
+        },
+        frequency: 'weekly',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:rawvoice': 'https://blubrry.com/developer/rawvoice-rss',
+        channel: {
+          title: 'Feed with RawVoice namespace',
+          description: 'A feed with RawVoice properties',
+          'rawvoice:rating': {
+            '#text': 'TV-PG',
+          },
+          'rawvoice:frequency': 'weekly',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate spotify namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with Spotify namespace',
+      description: 'A feed with Spotify properties',
+      spotify: {
+        countryOfOrigin: 'US',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:spotify': 'http://www.spotify.com/ns/rss',
+        channel: {
+          title: 'Feed with Spotify namespace',
+          description: 'A feed with Spotify properties',
+          'spotify:countryOfOrigin': 'US',
         },
       },
     }
