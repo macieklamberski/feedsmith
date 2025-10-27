@@ -1,8 +1,17 @@
 #!/bin/bash
 set -e
 
+FAILED=0
+
 run_test() {
-  eval "$2" > /dev/null 2>&1 && echo "✅ $1" || echo "❌ $1"
+  local output
+  if output=$(eval "$2" 2>&1); then
+    echo "✅ $1"
+  else
+    echo "❌ $1"
+    echo "$output"
+    FAILED=1
+  fi
 }
 
 # TypeScript
@@ -30,3 +39,5 @@ done
 for type in esm cjs; do
   run_test "vite/$type" "bunx vite build bundler/$type"
 done
+
+exit $FAILED
