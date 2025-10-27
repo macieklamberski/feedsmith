@@ -41,7 +41,10 @@ import {
   retrieveFeed as retrieveSourceFeed,
   retrieveItem as retrieveSourceItem,
 } from '../../../namespaces/source/parse/utils.js'
-import { retrieveFeed as retrieveSpotifyFeed } from '../../../namespaces/spotify/parse/utils.js'
+import {
+  retrieveFeed as retrieveSpotifyFeed,
+  retrieveItem as retrieveSpotifyItem,
+} from '../../../namespaces/spotify/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
@@ -182,6 +185,7 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceItem(value) : undefined,
+    spotify: namespaces.has('spotify') ? retrieveSpotifyItem(value) : undefined,
   }
 
   return trimObject(item)

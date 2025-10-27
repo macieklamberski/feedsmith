@@ -41,7 +41,10 @@ import {
   generateFeed as generateSourceFeed,
   generateItem as generateSourceItem,
 } from '../../../namespaces/source/generate/utils.js'
-import { generateFeed as generateSpotifyFeed } from '../../../namespaces/spotify/generate/utils.js'
+import {
+  generateFeed as generateSpotifyFeed,
+  generateItem as generateSpotifyItem,
+} from '../../../namespaces/spotify/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
@@ -195,6 +198,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
     ...generateWfwItem(item.wfw),
     ...generateSourceItem(item.sourceNs),
     ...generateRawVoiceItem(item.rawvoice),
+    ...generateSpotifyItem(item.spotify),
   }
 
   return trimObject(value)

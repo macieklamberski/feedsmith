@@ -293,6 +293,10 @@
     <!-- Spotify Namespace: Channel Level Tags -->
     <spotify:limit recentCount="10"/>
     <spotify:countryOfOrigin>US</spotify:countryOfOrigin>
+    <spotify:access>
+      <partner id="2zkvpokj55bj2sCHxCejJs"/>
+      <sandbox enabled="true"/>
+    </spotify:access>
 
     <item>
       <title>Example Item</title>
@@ -578,6 +582,11 @@
       <rawvoice:webm src="https://example.com/video.webm" type="video/webm" length="10485760"/>
       <rawvoice:mp4 src="https://example.com/video.mp4" type="video/mp4" length="15728640"/>
       <rawvoice:metamark type="ad" link="https://example.com/ad" position="120" duration="30">ad-123456</rawvoice:metamark>
+
+      <!-- Spotify Namespace: Item Level Tags -->
+      <spotify:access>
+        <entitlement name="premium_content"/>
+      </spotify:access>
     </item>
   </channel>
 </rss>
