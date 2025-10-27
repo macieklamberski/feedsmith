@@ -215,6 +215,7 @@ By standardizing on fully-evaluated results, these benchmarks provide realistic 
 ```bash
 # 1. Install dependencies
 bun install
+
 # 2. Run benchmarks
 bun parsing.ts
 ```

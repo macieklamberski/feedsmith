@@ -1,6 +1,6 @@
 # @feedsmith/compatibility
 
-Compatibility test suite for the [feedsmith](../feedsmith) package, validating correct module resolution and type definitions across all common consumer environments.
+Compatibility test suite for the [feedsmith](../) package, validating correct module resolution and type definitions across all common consumer environments.
 
 ## Purpose
 
@@ -13,14 +13,14 @@ This test suite validates that feedsmith's dual ESM/CJS package exports work cor
 ## Quick Start
 
 ```bash
-# Install dependencies
+# 1. Install dependencies
 bun install
 
-# Run all tests
+# 2. Run all tests
 ./test.sh
 ```
 
-## Test Coverage: 22 Scenarios
+## Test Coverage: 16 Scenarios
 
 ### TypeScript - 9 scenarios
 
@@ -45,29 +45,15 @@ bun install
 - **cjs-package**: `.mts` and `.cts` files in CJS package context
 - **mixed-package**: `.ts`, `.mts`, and `.cts` coexisting
 
-### JavaScript Runtime - 4 scenarios
+### JavaScript Runtime - 2 scenarios
 
-- **esm**: `index.js` (follows package type) and `index.mjs` (explicit ESM)
-- **cjs**: `index.js` (follows package type) and `index.cjs` (explicit CJS)
+- **esm**: runs both `index.js` (follows package type) and `index.mjs` (explicit ESM)
+- **cjs**: runs both `index.js` (follows package type) and `index.cjs` (explicit CJS)
 
 ### Bundler - 2 scenarios
 
-- **Vite ESM**: TypeScript entry with `import` syntax
-- **Vite CJS**: JavaScript entry with `require()` syntax
-
-## What Each Test Validates
-
-Each test imports and uses:
-- **Functions**: `parseFeed()`, `generateRssFeed()`
-- **Types**: `Rss.Feed<Date>` (modern), `RssFeed<Date>` (legacy)
-
-This validates:
-1. ✅ Package exports resolve correctly
-2. ✅ TypeScript finds the right `.d.ts` / `.d.cts` files
-3. ✅ Both modern and legacy import patterns work
-4. ✅ Functions execute without runtime errors
-
-**Note:** This is a **package compatibility test suite**, not comprehensive feature testing. If these minimal imports work, the package exports are configured correctly.
+- **Vite ESM**: TypeScript entry (`index.ts`) with `import` syntax
+- **Vite CJS**: CommonJS entry (`index.cjs`) with `require()` syntax
 
 ## Real-World Coverage
 
@@ -77,24 +63,3 @@ These scenarios cover common consumer setups:
 - **Vite, webpack, Rollup**: `bundler` configs
 - **Pure JavaScript**: `javascript` configs
 - **Dual-module packages**: `explicit` configs
-
-## CI/CD Integration
-
-```bash
-cd feedsmith-tests
-bun install
-./test.sh
-```
-
-All tests must pass before releasing.
-
-## Architecture
-
-Uses Bun workspaces for efficient dependency management:
-- Shared dependencies (TypeScript, Vite) hoisted to root
-- Each test is an isolated workspace package
-- feedsmith linked from parent directory
-
-## License
-
-MIT
