@@ -172,7 +172,7 @@ export namespace MediaNs {
   }
 
   export type Content = {
-    url: string
+    url?: string
     fileSize?: number
     type?: string
     medium?: string

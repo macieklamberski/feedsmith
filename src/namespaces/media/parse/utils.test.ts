@@ -3297,7 +3297,7 @@ describe('parseContent', () => {
     expect(parseContent(value)).toEqual(expected)
   })
 
-  it('should parse content with only required url field', () => {
+  it('should parse content with only url field', () => {
     const value = {
       '@url': 'https://example.com/video.mp4',
     }
