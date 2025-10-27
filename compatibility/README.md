@@ -1,6 +1,6 @@
-# @feedsmith/compatibility
+# Compatibility
 
-Compatibility test suite for the [feedsmith](../) package, validating correct module resolution and type definitions across all common consumer environments.
+Test suite validating correct module resolution and type definitions across all common consumer environments.
 
 ## Purpose
 
@@ -31,7 +31,7 @@ bun install
 - `moduleResolution: "bundler"`
 
 **modern-cjs** (`"type": "commonjs"`) - 4 configs
-- `module: "commonjs"` + `moduleResolution: "node"` ⭐ (fixes [#126](https://github.com/macieklamberski/feedsmith/issues/126))
+- `module: "commonjs"` + `moduleResolution: "node"`
 - `module: "node16"` + `moduleResolution: "node16"`
 - `module: "nodenext"` + `moduleResolution: "nodenext"`
 - `module: "esnext"` + `moduleResolution: "bundler"`
