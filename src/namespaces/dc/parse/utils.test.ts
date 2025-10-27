@@ -3,22 +3,6 @@ import { retrieveItemOrFeed } from './utils.js'
 
 describe('retrieveItemOrFeed', () => {
   const expectedFull = {
-    // Singular fields (deprecated, first value for backward compatibility)
-    title: 'Sample Title',
-    creator: 'John Doe',
-    subject: 'Test Subject',
-    description: 'This is a description',
-    publisher: 'Test Publisher',
-    contributor: 'Jane Smith',
-    date: '2023-05-15T09:30:00Z',
-    type: 'Article',
-    format: 'text/html',
-    identifier: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-    source: 'https://example.org/source',
-    language: 'en-US',
-    relation: 'https://example.org/related',
-    coverage: 'Worldwide',
-    // Plural fields (correct - all values)
     titles: ['Sample Title'],
     creators: ['John Doe'],
     subjects: ['Test Subject'],
@@ -34,6 +18,20 @@ describe('retrieveItemOrFeed', () => {
     relations: ['https://example.org/related'],
     coverages: ['Worldwide'],
     rights: ['Copyright 2023, All rights reserved'],
+    title: 'Sample Title',
+    creator: 'John Doe',
+    subject: 'Test Subject',
+    description: 'This is a description',
+    publisher: 'Test Publisher',
+    contributor: 'Jane Smith',
+    date: '2023-05-15T09:30:00Z',
+    type: 'Article',
+    format: 'text/html',
+    identifier: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+    source: 'https://example.org/source',
+    language: 'en-US',
+    relation: 'https://example.org/related',
+    coverage: 'Worldwide',
   }
 
   it('should parse complete item or feed object with all properties (with #text)', () => {
