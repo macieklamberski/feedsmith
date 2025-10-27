@@ -11,7 +11,7 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
-import { generateFeed as generateCreativecommonsFeed } from '../../../namespaces/creativecommons/generate/utils.js'
+import { generateItemOrFeed as generateCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
@@ -174,6 +174,7 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
     ...generateGeoRssItemOrFeed(entry.georss),
     ...generateThrItem(entry.thr),
     ...generateDctermsItemOrFeed(entry.dcterms),
+    ...generateCreativecommonsItemOrFeed(entry.creativeCommons),
     ...generateWfwItem(entry.wfw),
     ...generateYtItem(entry.yt),
   }
@@ -233,7 +234,7 @@ export const generateFeed: GenerateUtil<Atom.Feed<DateLike>> = (feed, options) =
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateDctermsItemOrFeed(feed.dcterms),
-    ...generateCreativecommonsFeed(feed.creativeCommons),
+    ...generateCreativecommonsItemOrFeed(feed.creativeCommons),
     ...generateYtFeed(feed.yt),
     ...valueEntries,
   }

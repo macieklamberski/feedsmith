@@ -567,6 +567,9 @@
       <source:localTime>2023-12-25 10:30:00</source:localTime>
       <source:linkFull>http://example.org/item/1/understanding-xml-namespaces-complete-guide</source:linkFull>
 
+      <!-- Creative Commons Namespace: Item Level Tags -->
+      <creativeCommons:license>http://creativecommons.org/licenses/by-sa/4.0/</creativeCommons:license>
+
       <!-- RawVoice Namespace: Item Level Tags -->
       <rawvoice:poster url="https://example.com/episode-poster.jpg"/>
       <rawvoice:isHd>yes</rawvoice:isHd>

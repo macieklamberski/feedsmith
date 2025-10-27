@@ -85,6 +85,7 @@ export namespace Rss {
     atom?: AtomNs.Entry<TDate>
     dc?: DcNs.ItemOrFeed<TDate>
     content?: ContentNs.Item
+    creativeCommons?: CreativecommonsNs.ItemOrFeed
     slash?: SlashNs.Item
     itunes?: ItunesNs.Item
     podcast?: PodcastNs.Item
@@ -129,7 +130,7 @@ export namespace Rss {
     media?: MediaNs.ItemOrFeed
     georss?: GeorssNs.ItemOrFeed
     dcterms?: DctermsNs.ItemOrFeed<TDate>
-    creativeCommons?: CreativecommonsNs.Feed
+    creativeCommons?: CreativecommonsNs.ItemOrFeed
     feedpress?: FeedpressNs.Feed
     sourceNs?: SourceNs.Feed
     rawvoice?: RawvoiceNs.Feed<TDate>

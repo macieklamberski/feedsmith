@@ -1,14 +1,14 @@
 import type { GenerateUtil } from '../../../common/types.js'
-import { generateCdataString, isObject, trimObject } from '../../../common/utils.js'
+import { generateCdataString, isObject, trimArray, trimObject } from '../../../common/utils.js'
 import type { CreativecommonsNs } from '../common/types.js'
 
-export const generateFeed: GenerateUtil<CreativecommonsNs.Feed> = (feed) => {
-  if (!isObject(feed)) {
+export const generateItemOrFeed: GenerateUtil<CreativecommonsNs.ItemOrFeed> = (itemOrFeed) => {
+  if (!isObject(itemOrFeed)) {
     return
   }
 
   const value = {
-    'creativeCommons:license': generateCdataString(feed.license),
+    'creativeCommons:license': trimArray(itemOrFeed.licenses, generateCdataString),
   }
 
   return trimObject(value)

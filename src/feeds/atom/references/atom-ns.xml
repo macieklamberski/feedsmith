@@ -452,6 +452,9 @@
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
     <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
 
+    <!-- Creative Commons Namespace: Entry Level Tags -->
+    <creativeCommons:license>http://creativecommons.org/licenses/by-sa/4.0/</creativeCommons:license>
+
     <!-- YouTube Namespace: Entry Level Tags -->
     <yt:videoId>dQw4w9WgXcQ</yt:videoId>
     <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>

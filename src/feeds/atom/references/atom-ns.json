@@ -622,6 +622,9 @@
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
       },
+      "creativeCommons": {
+        "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]
+      },
       "links": [
         {
           "rel": "replies",
@@ -772,7 +775,7 @@
     "valid": "2025-12-31T23:59:59.000Z"
   },
   "creativeCommons": {
-    "license": "http://creativecommons.org/licenses/by-nc-nd/2.0/"
+    "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
   },
   "sy": {
     "updatePeriod": "hourly",

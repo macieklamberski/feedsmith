@@ -830,6 +830,9 @@
         "localTime": "2023-12-25 10:30:00",
         "linkFull": "http://example.org/item/1/understanding-xml-namespaces-complete-guide"
       },
+      "creativeCommons": {
+        "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]
+      },
       "rawvoice": {
         "poster": {
           "url": "https://example.com/episode-poster.jpg"
@@ -1646,7 +1649,7 @@
     "self": "http://example.com/feed.xml"
   },
   "creativeCommons": {
-    "license": "http://creativecommons.org/licenses/by-nc-nd/2.0/"
+    "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
   },
   "feedpress": {
     "link": "https://feedpress.com/examplepodcast",

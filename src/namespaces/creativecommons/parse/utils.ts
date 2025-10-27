@@ -1,23 +1,23 @@
 import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
-  parseSingularOf,
+  parseArrayOf,
   parseString,
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
 import type { CreativecommonsNs } from '../common/types.js'
 
-export const retrieveFeed: ParsePartialUtil<CreativecommonsNs.Feed> = (value) => {
+export const retrieveItemOrFeed: ParsePartialUtil<CreativecommonsNs.ItemOrFeed> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  const feed = {
-    license: parseSingularOf(value['creativecommons:license'], (value) =>
+  const itemOrFeed = {
+    licenses: parseArrayOf(value['creativecommons:license'], (value) =>
       parseString(retrieveText(value)),
     ),
   }
 
-  return trimObject(feed)
+  return trimObject(itemOrFeed)
 }

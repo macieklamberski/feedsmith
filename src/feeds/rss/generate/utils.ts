@@ -17,7 +17,7 @@ import {
   generateFeed as generateAtomFeed,
 } from '../../../namespaces/atom/generate/utils.js'
 import { generateItem as generateContentItem } from '../../../namespaces/content/generate/utils.js'
-import { generateFeed as generateCreativecommonsFeed } from '../../../namespaces/creativecommons/generate/utils.js'
+import { generateItemOrFeed as generateCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
 import { generateFeed as generateFeedPressFeed } from '../../../namespaces/feedpress/generate/utils.js'
@@ -183,6 +183,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
     ...generateAtomEntry(item.atom),
     ...generateDcItemOrFeed(item.dc),
     ...generateContentItem(item.content),
+    ...generateCreativecommonsItemOrFeed(item.creativeCommons),
     ...generateSlashItem(item.slash),
     ...generateItunesItem(item.itunes),
     ...generatePodcastItem(item.podcast),
@@ -232,7 +233,7 @@ export const generateFeed: GenerateUtil<Rss.Feed<DateLike>> = (feed) => {
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateDctermsItemOrFeed(feed.dcterms),
-    ...generateCreativecommonsFeed(feed.creativeCommons),
+    ...generateCreativecommonsItemOrFeed(feed.creativeCommons),
     ...generateFeedPressFeed(feed.feedpress),
     ...generateSourceFeed(feed.sourceNs),
     ...generateRawVoiceFeed(feed.rawvoice),

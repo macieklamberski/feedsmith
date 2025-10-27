@@ -1260,7 +1260,7 @@ describe('generateFeed', () => {
       title: 'Feed with Creative Commons namespace',
       description: 'A feed with Creative Commons license',
       creativeCommons: {
-        license: 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+        licenses: ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
       },
     }
     const expected = {
@@ -1270,7 +1270,7 @@ describe('generateFeed', () => {
         channel: {
           title: 'Feed with Creative Commons namespace',
           description: 'A feed with Creative Commons license',
-          'creativeCommons:license': 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+          'creativeCommons:license': ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
         },
       },
     }
