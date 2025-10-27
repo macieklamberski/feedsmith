@@ -174,6 +174,10 @@ export const namespaceUris = {
     'http://feedpress.com/xmlns',
     'https://feedpress.com/xmlns/',
     'http://feedpress.com/xmlns/',
+    'http://feedpress.it/xmlns',
+    'https://feedpress.it/xmlns',
+    'http://feedpress.it/xmlns/',
+    'https://feedpress.it/xmlns/',
   ],
   yt: [
     'http://www.youtube.com/xml/schemas/2015', // Official URI.
