@@ -7,8 +7,11 @@ jobs:
   test:
     uses: ./.github/workflows/test.yml
 
+  compatibility:
+    uses: ./.github/workflows/compatibility.yml
+
   release:
-    needs: test
+    needs: [test, compatibility]
     permissions:
       contents: write
       issues: write
@@ -24,7 +27,7 @@ jobs:
           registry-url: https://registry.npmjs.org
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile --ignore-scripts
 
       - name: Build package
         run: bun run build

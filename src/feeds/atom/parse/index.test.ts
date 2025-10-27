@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { locales } from '../../../common/config.js'
+import { locales, namespaceUris } from '../../../common/config.js'
 import { parse } from './index.js'
 
 describe('parse', () => {
@@ -716,6 +716,247 @@ describe('parse', () => {
       }
 
       expect(parse(value)).toEqual(expected)
+    })
+
+    describe('non-standard namespace URIs', () => {
+      it('should work with HTTPS variant and custom prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <feed xmlns="http://www.w3.org/2005/Atom" xmlns:dublincore="https://purl.org/dc/elements/1.1/">
+            <title>Test</title>
+            <id>urn:uuid:feed</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <entry>
+              <title>Entry</title>
+              <id>urn:uuid:entry</id>
+              <updated>2024-01-01T00:00:00Z</updated>
+              <dublincore:creator>John</dublincore:creator>
+            </entry>
+          </feed>
+        `
+        const expected = {
+          title: 'Test',
+          id: 'urn:uuid:feed',
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              title: 'Entry',
+              id: 'urn:uuid:entry',
+              updated: '2024-01-01T00:00:00Z',
+              dc: {
+                creator: 'John',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should work without trailing slash and custom prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <feed xmlns="http://www.w3.org/2005/Atom" xmlns:dublincore="http://purl.org/dc/elements/1.1">
+            <title>Test</title>
+            <id>urn:uuid:feed</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <entry>
+              <title>Entry</title>
+              <id>urn:uuid:entry</id>
+              <updated>2024-01-01T00:00:00Z</updated>
+              <dublincore:creator>John</dublincore:creator>
+            </entry>
+          </feed>
+        `
+        const expected = {
+          title: 'Test',
+          id: 'urn:uuid:feed',
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              title: 'Entry',
+              id: 'urn:uuid:entry',
+              updated: '2024-01-01T00:00:00Z',
+              dc: {
+                creator: 'John',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should work with uppercase URI and custom prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <feed xmlns="http://www.w3.org/2005/Atom" xmlns:dublincore="HTTP://PURL.ORG/DC/ELEMENTS/1.1/">
+            <title>Test</title>
+            <id>urn:uuid:feed</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <entry>
+              <title>Entry</title>
+              <id>urn:uuid:entry</id>
+              <updated>2024-01-01T00:00:00Z</updated>
+              <dublincore:creator>John</dublincore:creator>
+            </entry>
+          </feed>
+        `
+        const expected = {
+          title: 'Test',
+          id: 'urn:uuid:feed',
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              title: 'Entry',
+              id: 'urn:uuid:entry',
+              updated: '2024-01-01T00:00:00Z',
+              dc: {
+                creator: 'John',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should work with mixed case URI and custom prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <feed xmlns="http://www.w3.org/2005/Atom" xmlns:dublincore="Http://Purl.Org/Dc/Elements/1.1/">
+            <title>Test</title>
+            <id>urn:uuid:feed</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <entry>
+              <title>Entry</title>
+              <id>urn:uuid:entry</id>
+              <updated>2024-01-01T00:00:00Z</updated>
+              <dublincore:creator>John</dublincore:creator>
+            </entry>
+          </feed>
+        `
+        const expected = {
+          title: 'Test',
+          id: 'urn:uuid:feed',
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              title: 'Entry',
+              id: 'urn:uuid:entry',
+              updated: '2024-01-01T00:00:00Z',
+              dc: {
+                creator: 'John',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should work with uppercase HTTPS URI and custom prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <feed xmlns="http://www.w3.org/2005/Atom" xmlns:dublincore="HTTPS://PURL.ORG/DC/ELEMENTS/1.1/">
+            <title>Test</title>
+            <id>urn:uuid:feed</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <entry>
+              <title>Entry</title>
+              <id>urn:uuid:entry</id>
+              <updated>2024-01-01T00:00:00Z</updated>
+              <dublincore:creator>John</dublincore:creator>
+            </entry>
+          </feed>
+        `
+        const expected = {
+          title: 'Test',
+          id: 'urn:uuid:feed',
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              title: 'Entry',
+              id: 'urn:uuid:entry',
+              updated: '2024-01-01T00:00:00Z',
+              dc: {
+                creator: 'John',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should work with URI containing whitespace around it', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <feed xmlns="http://www.w3.org/2005/Atom" xmlns:dublincore="  http://purl.org/dc/elements/1.1/ ">
+            <title>Test</title>
+            <id>urn:uuid:feed</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <entry>
+              <title>Entry</title>
+              <id>urn:uuid:entry</id>
+              <updated>2024-01-01T00:00:00Z</updated>
+              <dublincore:creator>John</dublincore:creator>
+            </entry>
+          </feed>
+        `
+        const expected = {
+          title: 'Test',
+          id: 'urn:uuid:feed',
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              title: 'Entry',
+              id: 'urn:uuid:entry',
+              updated: '2024-01-01T00:00:00Z',
+              dc: {
+                creator: 'John',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+    })
+
+    describe('Atom namespace URI variants', () => {
+      const expected = {
+        title: 'Test Feed',
+        id: 'urn:uuid:feed-id',
+        updated: '2024-01-01T00:00:00Z',
+        entries: [
+          {
+            title: 'Test Entry',
+            id: 'urn:uuid:entry-id',
+            updated: '2024-01-01T00:00:00Z',
+          },
+        ],
+      }
+
+      for (const uri of namespaceUris.atom) {
+        it(`should parse Atom feed with namespace URI: ${uri}`, () => {
+          const value = `
+            <?xml version="1.0" encoding="UTF-8"?>
+            <feed xmlns="${uri}">
+              <title>Test Feed</title>
+              <id>urn:uuid:feed-id</id>
+              <updated>2024-01-01T00:00:00Z</updated>
+              <entry>
+                <title>Test Entry</title>
+                <id>urn:uuid:entry-id</id>
+                <updated>2024-01-01T00:00:00Z</updated>
+              </entry>
+            </feed>
+          `
+
+          expect(parse(value)).toEqual(expected)
+        })
+      }
     })
   })
 })

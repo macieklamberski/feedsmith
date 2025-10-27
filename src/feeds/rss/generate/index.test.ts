@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import type { DateLike, DeepPartial } from '../../../common/types.js'
-import type { Feed } from '../common/types.js'
+import type { Rss } from '../common/types.js'
 import { generate } from './index.js'
 
 describe('generate', () => {
@@ -253,6 +253,49 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should correctly generate elements with attributes and CDATA content', () => {
+    const value = {
+      title: 'CDATA with Attributes Test',
+      description: 'Test feed for CDATA nesting fix',
+      items: [
+        {
+          title: 'Test Item',
+          categories: [
+            {
+              name: 'Technology & Science',
+              domain: 'example.com',
+            },
+          ],
+          media: {
+            description: {
+              value: '<p>HTML content with <strong>tags</strong> & special chars</p>',
+              type: 'html',
+            },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>CDATA with Attributes Test</title>
+    <description>Test feed for CDATA nesting fix</description>
+    <item>
+      <title>Test Item</title>
+      <category domain="example.com">
+        <![CDATA[Technology & Science]]>
+      </category>
+      <media:description type="html">
+        <![CDATA[<p>HTML content with <strong>tags</strong> & special chars</p>]]>
+      </media:description>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with content namespace', () => {
     const value = {
       title: 'Feed with content namespace',
@@ -360,7 +403,7 @@ describe('generate', () => {
       ],
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:georss="http://www.georss.org/georss/">
+<rss version="2.0" xmlns:georss="http://www.georss.org/georss">
   <channel>
     <title>Feed with georss namespace</title>
     <description>Test feed with GeoRSS namespace</description>
@@ -412,7 +455,7 @@ describe('generate', () => {
     const value = {
       title: 'Feed with source namespace',
       description: 'Test feed with Source namespace',
-      src: {
+      sourceNs: {
         accounts: [{ service: 'twitter', value: 'johndoe' }, { service: 'github' }],
         likes: { server: 'http://likes.example.com/' },
         blogroll: 'https://blog.example.com/blogroll.opml',
@@ -420,7 +463,7 @@ describe('generate', () => {
       items: [
         {
           title: 'Item with source metadata',
-          src: {
+          sourceNs: {
             markdown: '# Example Post - This is markdown content for the post.',
             outlines: ['<outline text="Section 1"/>', '<outline text="Section 2"/>'],
             localTime: '2024-01-15 10:30:00',
@@ -450,6 +493,145 @@ describe('generate', () => {
       <source:localTime>2024-01-15 10:30:00</source:localTime>
       <source:linkFull>https://example.com/posts/full-version</source:linkFull>
     </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with creativecommons namespace', () => {
+    const value = {
+      title: 'Feed with creativecommons namespace',
+      description: 'Test feed with Creative Commons namespace',
+      creativeCommons: {
+        license: 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule">
+  <channel>
+    <title>Feed with creativecommons namespace</title>
+    <description>Test feed with Creative Commons namespace</description>
+    <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with feedpress namespace', () => {
+    const value = {
+      title: 'Feed with feedpress namespace',
+      description: 'Test feed with FeedPress namespace',
+      feedpress: {
+        link: 'https://feed.press/example',
+        newsletterId: '12345',
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:feedpress="https://feed.press/xmlns">
+  <channel>
+    <title>Feed with feedpress namespace</title>
+    <description>Test feed with FeedPress namespace</description>
+    <feedpress:link>https://feed.press/example</feedpress:link>
+    <feedpress:newsletterId>12345</feedpress:newsletterId>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with psc namespace', () => {
+    const value = {
+      title: 'Feed with psc namespace',
+      description: 'Test feed with Podlove Simple Chapters',
+      items: [
+        {
+          title: 'Episode with chapters',
+          psc: {
+            chapters: [
+              { start: '00:00:00', title: 'Introduction' },
+              { start: '00:05:30', title: 'Main Content', href: 'https://example.com/chapter2' },
+            ],
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:psc="http://podlove.org/simple-chapters">
+  <channel>
+    <title>Feed with psc namespace</title>
+    <description>Test feed with Podlove Simple Chapters</description>
+    <item>
+      <title>Episode with chapters</title>
+      <psc:chapters>
+        <psc:chapter start="00:00:00" title="Introduction"/>
+        <psc:chapter start="00:05:30" title="Main Content" href="https://example.com/chapter2"/>
+      </psc:chapters>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with rawvoice namespace', () => {
+    const value = {
+      title: 'Feed with rawvoice namespace',
+      description: 'Test feed with RawVoice namespace',
+      rawvoice: {
+        rating: {
+          value: 'TV-PG',
+        },
+        frequency: 'weekly',
+      },
+      items: [
+        {
+          title: 'Episode with poster',
+          rawvoice: {
+            poster: {
+              url: 'https://example.com/poster.jpg',
+            },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:rawvoice="https://blubrry.com/developer/rawvoice-rss">
+  <channel>
+    <title>Feed with rawvoice namespace</title>
+    <description>Test feed with RawVoice namespace</description>
+    <rawvoice:rating>TV-PG</rawvoice:rating>
+    <rawvoice:frequency>weekly</rawvoice:frequency>
+    <item>
+      <title>Episode with poster</title>
+      <rawvoice:poster url="https://example.com/poster.jpg"/>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with spotify namespace', () => {
+    const value = {
+      title: 'Feed with spotify namespace',
+      description: 'Test feed with Spotify namespace',
+      spotify: {
+        countryOfOrigin: 'US',
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:spotify="http://www.spotify.com/ns/rss">
+  <channel>
+    <title>Feed with spotify namespace</title>
+    <description>Test feed with Spotify namespace</description>
+    <spotify:countryOfOrigin>US</spotify:countryOfOrigin>
   </channel>
 </rss>
 `
@@ -562,7 +744,7 @@ describe('generate', () => {
 
 describe('generate with lenient mode', () => {
   it('should accept partial feeds with lenient: true', () => {
-    const value: DeepPartial<Feed<DateLike>> = {
+    const value: DeepPartial<Rss.Feed<DateLike>> = {
       title: 'Test Feed',
       // Missing required 'description' field.
     }
@@ -578,7 +760,7 @@ describe('generate with lenient mode', () => {
   })
 
   it('should accept feeds with string dates in lenient mode', () => {
-    const value: DeepPartial<Feed<DateLike>> = {
+    const value: DeepPartial<Rss.Feed<DateLike>> = {
       title: 'Test Feed',
       description: 'Test Description',
       pubDate: '2023-01-01T00:00:00.000Z',
@@ -607,7 +789,7 @@ describe('generate with lenient mode', () => {
   })
 
   it('should preserve invalid date strings in lenient mode', () => {
-    const value: DeepPartial<Feed<DateLike>> = {
+    const value: DeepPartial<Rss.Feed<DateLike>> = {
       title: 'Test Feed',
       description: 'Test Description',
       pubDate: 'not-a-valid-date',
@@ -636,7 +818,7 @@ describe('generate with lenient mode', () => {
   })
 
   it('should handle deeply nested partial objects', () => {
-    const value: DeepPartial<Feed<DateLike>> = {
+    const value: DeepPartial<Rss.Feed<DateLike>> = {
       title: 'Test Feed',
       items: [
         {
@@ -673,7 +855,7 @@ describe('generate with lenient mode', () => {
   })
 
   it('should handle mixed Date objects and string dates', () => {
-    const value: DeepPartial<Feed<DateLike>> = {
+    const value: DeepPartial<Rss.Feed<DateLike>> = {
       title: 'Mixed Dates Feed',
       description: 'Feed with both Date objects and strings',
       pubDate: new Date('2023-01-01T00:00:00.000Z'),

@@ -20,6 +20,7 @@ Feedsmith offers universal and format‑specific parsers that maintain the origi
 ### Leniency
 * **Normalizes legacy elements** ✨ — Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
 * **CaSe INSENsiTive** 🐍 — Handles fields and attributes in any case (lowercase, uppercase, mixed).
+* **Namespace URI tolerance** 🔧 — Accepts non-official namespace URIs (HTTPS variants, case variations, trailing slashes, whitespace).
 * **Forgiving** 🤝 — Gracefully handles malformed or incomplete feeds and extracts valid data. This makes it suitable for use with real-world feeds that may not strictly follow specifications.
 
 ### Performance and Type-Safety
@@ -62,13 +63,17 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Slash](http://purl.org/rss/1.0/modules/slash/) | `<slash:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [iTunes](http://www.itunes.com/dtds/podcast-1.0.dtd) | `<itunes:*>` | RSS, Atom | ✅ | ✅ |
 | [Podcast](https://podcastindex.org/namespace/1.0) | `<podcast:*>` | RSS | ✅ | ✅ |
+| [RawVoice](https://blubrry.com/developer/rawvoice-rss/) | `<rawvoice:*>` | RSS | ✅ | ✅ |
 | [Podlove Simple Chapters](http://podlove.org/simple-chapters) | `<psc:*>` | RSS, Atom | ✅ | ✅ |
+| [Spotify](http://www.spotify.com/ns/rss) | `<spotify:*>` | RSS | ✅ | ✅ |
 | [Media RSS](http://search.yahoo.com/mrss/) | `<media:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [GeoRSS-Simple](http://www.georss.org/georss/) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [GeoRSS-Simple](http://www.georss.org/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) | `<thr:*>` | RSS, Atom | ✅ | ✅ |
 | [Dublin Core Terms](http://purl.org/dc/terms/) | `<dcterms:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Well-Formed Web](http://wellformedweb.org/CommentAPI/) | `<wfw:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Source](http://source.scripting.com/) | `<source:*>` | RSS | ✅ | ✅ |
+| [Creative Commons](http://backend.userland.com/creativeCommonsRssModule) | `<creativeCommons:*>` | RSS, Atom | ✅ | ✅ |
+| [FeedPress](https://feedpress.com/xmlns) | `<feedpress:*>` | RSS | ✅ | ✅ |
 | [YouTube](https://www.youtube.com/feeds/videos.xml) | `<yt:*>` | Atom | ✅ | ✅ |
 
 ### Other

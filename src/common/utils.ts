@@ -471,6 +471,16 @@ export const generateCdataString: GenerateUtil<string> = (value) => {
   return value.trim()
 }
 
+export const generateTextOrCdataString: GenerateUtil<string> = (value) => {
+  const result = generateCdataString(value)
+
+  if (!result || isObject(result)) {
+    return result
+  }
+
+  return { '#text': result }
+}
+
 export const generatePlainString: GenerateUtil<string> = (value) => {
   if (!isNonEmptyString(value)) {
     return
@@ -487,7 +497,7 @@ export const generateNumber: GenerateUtil<number> = (value) => {
 
 export const generateNamespaceAttrs = (
   value: Unreliable,
-  namespaceUrls: Record<string, string>,
+  namespaceUris: Record<string, Array<string>>,
 ): Record<string, string> | undefined => {
   if (!isObject(value)) {
     return
@@ -496,8 +506,8 @@ export const generateNamespaceAttrs = (
   let namespaceAttrs: Record<string, string> | undefined
   const valueNamespaces = detectNamespaces(value, true)
 
-  for (const slug in namespaceUrls) {
-    if (!valueNamespaces.has(slug)) {
+  for (const prefix in namespaceUris) {
+    if (!valueNamespaces.has(prefix)) {
       continue
     }
 
@@ -505,7 +515,7 @@ export const generateNamespaceAttrs = (
       namespaceAttrs = {}
     }
 
-    namespaceAttrs[`@xmlns:${slug}`] = namespaceUrls[slug]
+    namespaceAttrs[`@xmlns:${prefix}`] = namespaceUris[prefix][0]
   }
 
   return namespaceAttrs
@@ -521,18 +531,28 @@ export const invertObject = (object: Record<string, string>): Record<string, str
   return inverted
 }
 
-export const createNamespaceNormalizator = (
-  namespaceUrls: Record<string, string>,
-  primaryNamespace?: string,
+export const createNamespaceNormalizator = <T extends Record<string, Array<string>>>(
+  namespaceUris: T,
+  namespacePrefixes: Record<string, string>,
+  primaryNamespace?: keyof T,
 ) => {
-  const namespacesMap = invertObject(namespaceUrls)
+  const normalizeNamespaceUri = (uri: string): string => {
+    return typeof uri === 'string' ? uri.trim().toLowerCase() : uri
+  }
+
+  const primaryNamespaceUris =
+    primaryNamespace && namespaceUris[primaryNamespace]
+      ? namespaceUris[primaryNamespace].map(normalizeNamespaceUri)
+      : undefined
 
   const resolveNamespacePrefix = (uri: string, localName: string, fallback: string): string => {
-    if (primaryNamespace && uri === primaryNamespace) {
+    const normalizedUri = normalizeNamespaceUri(uri)
+
+    if (primaryNamespaceUris?.includes(normalizedUri)) {
       return localName
     }
 
-    const standardPrefix = namespacesMap[uri]
+    const standardPrefix = namespacePrefixes[normalizedUri]
 
     if (standardPrefix) {
       return `${standardPrefix}:${localName}`
@@ -547,10 +567,10 @@ export const createNamespaceNormalizator = (
     if (isObject(element)) {
       for (const key in element) {
         if (key === '@xmlns') {
-          declarations[''] = element[key]
+          declarations[''] = normalizeNamespaceUri(element[key])
         } else if (key.indexOf('@xmlns:') === 0) {
           const prefix = key.substring('@xmlns:'.length)
-          declarations[prefix] = element[key]
+          declarations[prefix] = normalizeNamespaceUri(element[key])
         }
       }
     }
@@ -590,9 +610,9 @@ export const createNamespaceNormalizator = (
       const normalizedAttrName = normalizeWithContext(attrName, context, false)
 
       return `@${normalizedAttrName}`
-    } else {
-      return normalizeWithContext(key, context, true)
     }
+
+    return normalizeWithContext(key, context, true)
   }
 
   const traverseAndNormalize = (
@@ -636,11 +656,7 @@ export const createNamespaceNormalizator = (
     }
 
     for (const [normalizedKey, values] of keyGroups) {
-      if (values.length === 1) {
-        normalizedObject[normalizedKey] = values[0]
-      } else {
-        normalizedObject[normalizedKey] = values
-      }
+      normalizedObject[normalizedKey] = values.length === 1 ? values[0] : values
     }
 
     return normalizedObject

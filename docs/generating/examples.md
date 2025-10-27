@@ -104,6 +104,38 @@ Generates (showing first lines):
 > [!NOTE]
 > For details on stylesheet options and advanced usage, see the [Feed Styling](/generating/styling) guide.
 
+### Using TypeScript
+
+Build type-safe RSS feeds using the exported types:
+
+```typescript
+import type { Rss } from 'feedsmith/types'
+import { generateRssFeed } from 'feedsmith'
+
+// Define items with full type safety
+const items: Array<Rss.Item<Date>> = [{
+  title: 'New Episode',
+  description: 'Episode description',
+  enclosures: [{
+    url: 'https://example.com/audio.mp3',
+    length: 12345678,
+    type: 'audio/mpeg'
+  }]
+}]
+
+// Build the feed
+const feed: Rss.Feed<Date> = {
+  title: 'My Podcast',
+  link: 'https://example.com',
+  description: 'A podcast',
+  items
+}
+
+const xml = generateRssFeed(feed)
+```
+
+For more details on using types, see the [TypeScript guide](/typescript).
+
 ## Atom Feed
 
 ```typescript

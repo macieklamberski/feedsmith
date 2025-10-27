@@ -262,6 +262,13 @@
             "display": "Additional text information about this episode",
             "purpose": "notes"
           }
+        ],
+        "chats": [
+          {
+            "server": "chat.example.com",
+            "protocol": "xmpp",
+            "accountId": "episode@conference.example.com"
+          }
         ]
       },
       "psc": {
@@ -731,7 +738,7 @@
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
       },
-      "src": {
+      "sourceNs": {
         "markdown": "# Understanding XML Namespaces - This article explores the power and flexibility of XML namespaces in modern web syndication.",
         "outlines": [
           "<outline text=\"Introduction\"><outline text=\"What are namespaces?\"/></outline>",
@@ -739,6 +746,30 @@
         ],
         "localTime": "2023-12-25 10:30:00",
         "linkFull": "http://example.org/item/1/understanding-xml-namespaces-complete-guide"
+      },
+      "rawvoice": {
+        "poster": {
+          "url": "https://example.com/episode-poster.jpg"
+        },
+        "isHd": "yes",
+        "embed": "<iframe src=\"https://player.example.com/video/12345\" width=\"640\" height=\"360\" frameborder=\"0\" allowfullscreen></iframe>",
+        "webm": {
+          "src": "https://example.com/video.webm",
+          "type": "video/webm",
+          "length": 10485760
+        },
+        "mp4": {
+          "src": "https://example.com/video.mp4",
+          "type": "video/mp4",
+          "length": 15728640
+        },
+        "metamark": {
+          "type": "ad",
+          "link": "https://example.com/ad",
+          "position": 120,
+          "duration": 30,
+          "value": "ad-123456"
+        }
       }
     }
   ],
@@ -948,6 +979,14 @@
             "href": "https://example.com/live/chat",
             "display": "Live Chat"
           }
+        ],
+        "chats": [
+          {
+            "server": "live.example.com",
+            "protocol": "matrix",
+            "accountId": "@livepodcast:live.example.com",
+            "space": "#live-episode"
+          }
         ]
       }
     ],
@@ -985,6 +1024,26 @@
     },
     "podping": {
       "usesPodping": true
+    },
+    "chats": [
+      {
+        "server": "irc.example.com",
+        "protocol": "irc",
+        "accountId": "examplepodcast",
+        "space": "#general"
+      },
+      {
+        "server": "matrix.example.org",
+        "protocol": "matrix",
+        "accountId": "@examplepodcast:matrix.org"
+      }
+    ],
+    "publisher": {
+      "remoteItem": {
+        "feedGuid": "ead4c236-bf58-58c6-a2c6-publisher-feed-guid",
+        "feedUrl": "https://publisher.example.com/feed.xml",
+        "medium": "publisher"
+      }
     }
   },
   "media": {
@@ -1393,7 +1452,7 @@
     "floor": 4,
     "radius": 50000
   },
-  "src": {
+  "sourceNs": {
     "accounts": [
       { "service": "twitter", "value": "johndoe" },
       { "service": "facebook", "value": "jane.smith" }
@@ -1412,5 +1471,47 @@
     "cloud": "https://cloudserver.example.com/notify",
     "blogroll": "https://blog.example.com/blogroll.opml",
     "self": "http://example.com/feed.xml"
+  },
+  "creativeCommons": {
+    "license": "http://creativecommons.org/licenses/by-nc-nd/2.0/"
+  },
+  "feedpress": {
+    "link": "https://feedpress.com/examplepodcast",
+    "newsletterId": "newsletter123456",
+    "locale": "en",
+    "podcastId": "1234567890",
+    "cssFile": "https://example.com/custom-feed-styles.css"
+  },
+  "rawvoice": {
+    "rating": {
+      "value": "TV-14",
+      "tv": "TV-14"
+    },
+    "location": "San Francisco, CA",
+    "frequency": "Weekly",
+    "liveEmbed": "<iframe src=\"https://live.example.com/embed\" width=\"600\" height=\"400\"></iframe>",
+    "liveStream": {
+      "url": "https://example.com/live",
+      "schedule": "Mon, 15 Jan 2024 10:00:00 GMT",
+      "duration": "7200",
+      "type": "audio"
+    },
+    "httpLiveStream": {
+      "url": "https://live.example.com/stream.m3u8",
+      "schedule": "Mon, 15 Jan 2024 10:00:00 GMT",
+      "duration": "3600"
+    },
+    "mycast": "yes",
+    "subscribe": {
+      "feed": "https://example.com/feed/podcast/",
+      "itunes": "https://itunes.apple.com/us/podcast/example-podcast/id123456789",
+      "spotify": "https://open.spotify.com/show/exampleshow123"
+    }
+  },
+  "spotify": {
+    "limit": {
+      "recentCount": 10
+    },
+    "countryOfOrigin": "US"
   }
 }

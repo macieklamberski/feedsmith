@@ -3,30 +3,29 @@ import {
   generateCdataString,
   generateRfc3339Date,
   isObject,
+  isPresent,
   trimObject,
 } from '../../../common/utils.js'
-import type { ItemOrFeed } from '../common/types.js'
+import type { DcNs } from '../common/types.js'
 
-export const generateItemOrFeed: GenerateUtil<ItemOrFeed<DateLike>> = (itemOrFeed) => {
+export const generateItemOrFeed: GenerateUtil<DcNs.ItemOrFeed<DateLike>> = (itemOrFeed) => {
   if (!isObject(itemOrFeed)) {
     return
   }
 
-  // Helper to generate array of elements or fallback to singular
-  const generateArray = (
-    pluralValues: Array<string | DateLike> | undefined,
-    singularValue: string | DateLike | undefined,
-    generator: (v: string | DateLike) => unknown,
+  // TODO: Remove this once deprecated singular fields are removed in next major version.
+  const generateArray = <V>(
+    pluralValues: Array<V> | undefined,
+    singularValue: V | undefined,
+    generator: (value: V) => unknown,
   ) => {
-    // Prefer plural values if available
-    if (pluralValues && pluralValues.length > 0) {
+    if (isPresent(pluralValues)) {
       return pluralValues.map(generator)
     }
-    // Fallback to singular for backward compatibility
-    if (singularValue !== undefined) {
+
+    if (isPresent(singularValue)) {
       return generator(singularValue)
     }
-    return undefined
   }
 
   const value = {
@@ -56,7 +55,7 @@ export const generateItemOrFeed: GenerateUtil<ItemOrFeed<DateLike>> = (itemOrFee
     'dc:language': generateArray(itemOrFeed.languages, itemOrFeed.language, generateCdataString),
     'dc:relation': generateArray(itemOrFeed.relations, itemOrFeed.relation, generateCdataString),
     'dc:coverage': generateArray(itemOrFeed.coverages, itemOrFeed.coverage, generateCdataString),
-    'dc:rights': generateArray(itemOrFeed.rights_, itemOrFeed.rights, generateCdataString),
+    'dc:rights': generateArray(itemOrFeed.rights, undefined, generateCdataString),
   }
 
   return trimObject(value)

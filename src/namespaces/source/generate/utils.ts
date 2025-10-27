@@ -2,27 +2,28 @@ import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generatePlainString,
+  generateTextOrCdataString,
   isNonEmptyString,
   isObject,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
-import type { Account, Archive, Feed, Item, Likes, SubscriptionList } from '../common/types.js'
+import type { SourceNs } from '../common/types.js'
 
-export const generateAccount: GenerateUtil<Account> = (account) => {
+export const generateAccount: GenerateUtil<SourceNs.Account> = (account) => {
   if (!isObject(account) || !isNonEmptyString(account.service)) {
     return
   }
 
   const value = {
     '@service': account.service,
-    '#text': generatePlainString(account.value),
+    ...generateTextOrCdataString(account.value),
   }
 
   return trimObject(value)
 }
 
-export const generateLikes: GenerateUtil<Likes> = (likes) => {
+export const generateLikes: GenerateUtil<SourceNs.Likes> = (likes) => {
   if (!isObject(likes) || !isNonEmptyString(likes.server)) {
     return
   }
@@ -32,7 +33,7 @@ export const generateLikes: GenerateUtil<Likes> = (likes) => {
   }
 }
 
-export const generateArchive: GenerateUtil<Archive> = (archive) => {
+export const generateArchive: GenerateUtil<SourceNs.Archive> = (archive) => {
   if (!isObject(archive) || !isNonEmptyString(archive.url) || !isNonEmptyString(archive.startDay)) {
     return
   }
@@ -47,20 +48,22 @@ export const generateArchive: GenerateUtil<Archive> = (archive) => {
   return trimObject(value)
 }
 
-export const generateSubscriptionList: GenerateUtil<SubscriptionList> = (subscriptionList) => {
+export const generateSubscriptionList: GenerateUtil<SourceNs.SubscriptionList> = (
+  subscriptionList,
+) => {
   if (!isObject(subscriptionList) || !isNonEmptyString(subscriptionList.url)) {
     return
   }
 
   const value = {
     '@url': subscriptionList.url,
-    '#text': generatePlainString(subscriptionList.value),
+    ...generateTextOrCdataString(subscriptionList.value),
   }
 
   return trimObject(value)
 }
 
-export const generateFeed: GenerateUtil<Feed> = (feed) => {
+export const generateFeed: GenerateUtil<SourceNs.Feed> = (feed) => {
   if (!isObject(feed)) {
     return
   }
@@ -78,7 +81,7 @@ export const generateFeed: GenerateUtil<Feed> = (feed) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateUtil<Item> = (item) => {
+export const generateItem: GenerateUtil<SourceNs.Item> = (item) => {
   if (!isObject(item)) {
     return
   }

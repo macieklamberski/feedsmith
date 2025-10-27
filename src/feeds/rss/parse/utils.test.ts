@@ -987,7 +987,7 @@ describe('parseItem', () => {
     }
     const expected = {
       title: 'Source Item',
-      src: {
+      sourceNs: {
         markdown: '# Example markdown content',
         localTime: '2024-01-15 10:30:00',
       },
@@ -1511,7 +1511,7 @@ describe('parseFeed', () => {
     const expected = {
       title: 'Source Feed',
       link: 'https://example.com',
-      src: {
+      sourceNs: {
         accounts: [{ service: 'twitter', value: 'johndoe' }],
         blogroll: 'https://example.com/blogroll.opml',
       },

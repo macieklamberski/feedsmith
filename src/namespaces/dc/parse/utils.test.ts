@@ -18,7 +18,6 @@ describe('retrieveItemOrFeed', () => {
     language: 'en-US',
     relation: 'https://example.org/related',
     coverage: 'Worldwide',
-    rights: 'Copyright 2023, All rights reserved',
     // Plural fields (correct - all values)
     titles: ['Sample Title'],
     creators: ['John Doe'],
@@ -34,7 +33,7 @@ describe('retrieveItemOrFeed', () => {
     languages: ['en-US'],
     relations: ['https://example.org/related'],
     coverages: ['Worldwide'],
-    rights_: ['Copyright 2023, All rights reserved'],
+    rights: ['Copyright 2023, All rights reserved'],
   }
 
   it('should parse complete item or feed object with all properties (with #text)', () => {
@@ -119,7 +118,6 @@ describe('retrieveItemOrFeed', () => {
       language: 'en-US',
       relation: 'https://example.org/related',
       coverage: 'Worldwide',
-      rights: 'Copyright 2023, All rights reserved',
       // Plural fields (all values)
       titles: ['Sample Title', 'Alternative Title'],
       creators: ['John Doe', 'Richard Roe'],
@@ -138,7 +136,7 @@ describe('retrieveItemOrFeed', () => {
       languages: ['en-US', 'fr-FR'],
       relations: ['https://example.org/related', 'https://example.org/also-related'],
       coverages: ['Worldwide', 'North America'],
-      rights_: ['Copyright 2023, All rights reserved', 'Creative Commons BY-NC-SA 4.0'],
+      rights: ['Copyright 2023, All rights reserved', 'Creative Commons BY-NC-SA 4.0'],
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)

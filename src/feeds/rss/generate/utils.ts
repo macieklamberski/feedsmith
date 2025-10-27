@@ -1,4 +1,4 @@
-import { namespaceUrls } from '../../../common/config.js'
+import { namespaceUris } from '../../../common/config.js'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateBoolean,
@@ -7,6 +7,7 @@ import {
   generateNumber,
   generatePlainString,
   generateRfc822Date,
+  generateTextOrCdataString,
   isObject,
   trimArray,
   trimObject,
@@ -16,8 +17,10 @@ import {
   generateFeed as generateAtomFeed,
 } from '../../../namespaces/atom/generate/utils.js'
 import { generateItem as generateContentItem } from '../../../namespaces/content/generate/utils.js'
+import { generateFeed as generateCreativecommonsFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
+import { generateFeed as generateFeedPressFeed } from '../../../namespaces/feedpress/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
   generateFeed as generateItunesFeed,
@@ -29,47 +32,39 @@ import {
   generateItem as generatePodcastItem,
 } from '../../../namespaces/podcast/generate/utils.js'
 import { generateItem as generatePscItem } from '../../../namespaces/psc/generate/utils.js'
+import {
+  generateFeed as generateRawVoiceFeed,
+  generateItem as generateRawVoiceItem,
+} from '../../../namespaces/rawvoice/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import {
   generateFeed as generateSourceFeed,
   generateItem as generateSourceItem,
 } from '../../../namespaces/source/generate/utils.js'
+import { generateFeed as generateSpotifyFeed } from '../../../namespaces/spotify/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
-import type {
-  Category,
-  Cloud,
-  Enclosure,
-  Feed,
-  Guid,
-  Image,
-  Item,
-  Person,
-  SkipDays,
-  SkipHours,
-  Source,
-  TextInput,
-} from '../common/types.js'
+import type { Rss } from '../common/types.js'
 
-export const generatePerson: GenerateUtil<Person> = (person) => {
+export const generatePerson: GenerateUtil<Rss.Person> = (person) => {
   return generateCdataString(person)
 }
 
-export const generateCategory: GenerateUtil<Category> = (category) => {
+export const generateCategory: GenerateUtil<Rss.Category> = (category) => {
   if (!isObject(category)) {
     return
   }
 
   const value = {
     '@domain': generatePlainString(category.domain),
-    '#text': generateCdataString(category.name),
+    ...generateTextOrCdataString(category.name),
   }
 
   return trimObject(value)
 }
 
-export const generateCloud: GenerateUtil<Cloud> = (cloud) => {
+export const generateCloud: GenerateUtil<Rss.Cloud> = (cloud) => {
   if (!isObject(cloud)) {
     return
   }
@@ -85,7 +80,7 @@ export const generateCloud: GenerateUtil<Cloud> = (cloud) => {
   return trimObject(value)
 }
 
-export const generateImage: GenerateUtil<Image> = (image) => {
+export const generateImage: GenerateUtil<Rss.Image> = (image) => {
   if (!isObject(image)) {
     return
   }
@@ -102,7 +97,7 @@ export const generateImage: GenerateUtil<Image> = (image) => {
   return trimObject(value)
 }
 
-export const generateTextInput: GenerateUtil<TextInput> = (textInput) => {
+export const generateTextInput: GenerateUtil<Rss.TextInput> = (textInput) => {
   if (!isObject(textInput)) {
     return
   }
@@ -117,7 +112,7 @@ export const generateTextInput: GenerateUtil<TextInput> = (textInput) => {
   return trimObject(value)
 }
 
-export const generateEnclosure: GenerateUtil<Enclosure> = (enclosure) => {
+export const generateEnclosure: GenerateUtil<Rss.Enclosure> = (enclosure) => {
   if (!isObject(enclosure)) {
     return
   }
@@ -131,7 +126,7 @@ export const generateEnclosure: GenerateUtil<Enclosure> = (enclosure) => {
   return trimObject(value)
 }
 
-export const generateSkipHours: GenerateUtil<SkipHours> = (skipHours) => {
+export const generateSkipHours: GenerateUtil<Rss.SkipHours> = (skipHours) => {
   const value = {
     hour: trimArray(skipHours, generateNumber),
   }
@@ -139,7 +134,7 @@ export const generateSkipHours: GenerateUtil<SkipHours> = (skipHours) => {
   return trimObject(value)
 }
 
-export const generateSkipDays: GenerateUtil<SkipDays> = (skipDays) => {
+export const generateSkipDays: GenerateUtil<Rss.SkipDays> = (skipDays) => {
   const value = {
     day: trimArray(skipDays, generatePlainString),
   }
@@ -147,29 +142,29 @@ export const generateSkipDays: GenerateUtil<SkipDays> = (skipDays) => {
   return trimObject(value)
 }
 
-export const generateGuid: GenerateUtil<Guid> = (guid) => {
+export const generateGuid: GenerateUtil<Rss.Guid> = (guid) => {
   const value = {
-    '#text': generateCdataString(guid?.value),
+    ...generateTextOrCdataString(guid?.value),
     '@isPermaLink': generateBoolean(guid?.isPermaLink),
   }
 
   return trimObject(value)
 }
 
-export const generateSource: GenerateUtil<Source> = (source) => {
+export const generateSource: GenerateUtil<Rss.Source> = (source) => {
   if (!isObject(source)) {
     return
   }
 
   const value = {
-    '#text': generateCdataString(source.title),
+    ...generateTextOrCdataString(source.title),
     '@url': generatePlainString(source.url),
   }
 
   return trimObject(value)
 }
 
-export const generateItem: GenerateUtil<Item<DateLike>> = (item) => {
+export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
   if (!isObject(item)) {
     return
   }
@@ -197,13 +192,14 @@ export const generateItem: GenerateUtil<Item<DateLike>> = (item) => {
     ...generateThrItem(item.thr),
     ...generateDctermsItemOrFeed(item.dcterms),
     ...generateWfwItem(item.wfw),
-    ...generateSourceItem(item.src),
+    ...generateSourceItem(item.sourceNs),
+    ...generateRawVoiceItem(item.rawvoice),
   }
 
   return trimObject(value)
 }
 
-export const generateFeed: GenerateUtil<Feed<DateLike>> = (feed) => {
+export const generateFeed: GenerateUtil<Rss.Feed<DateLike>> = (feed) => {
   if (!isObject(feed)) {
     return
   }
@@ -236,7 +232,11 @@ export const generateFeed: GenerateUtil<Feed<DateLike>> = (feed) => {
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateDctermsItemOrFeed(feed.dcterms),
-    ...generateSourceFeed(feed.src),
+    ...generateCreativecommonsFeed(feed.creativeCommons),
+    ...generateFeedPressFeed(feed.feedpress),
+    ...generateSourceFeed(feed.sourceNs),
+    ...generateRawVoiceFeed(feed.rawvoice),
+    ...generateSpotifyFeed(feed.spotify),
     item: trimArray(feed.items, generateItem),
   }
 
@@ -249,7 +249,7 @@ export const generateFeed: GenerateUtil<Feed<DateLike>> = (feed) => {
   return {
     rss: {
       '@version': '2.0',
-      ...generateNamespaceAttrs(trimmedValue, namespaceUrls),
+      ...generateNamespaceAttrs(trimmedValue, namespaceUris),
       channel: trimmedValue,
     },
   }

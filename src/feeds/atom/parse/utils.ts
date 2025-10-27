@@ -10,6 +10,7 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
+import { retrieveFeed as retrieveCreativecommonsFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
@@ -30,16 +31,7 @@ import {
   retrieveFeed as retrieveYtFeed,
   retrieveItem as retrieveYtItem,
 } from '../../../namespaces/yt/parse/utils.js'
-import type {
-  Category,
-  Entry,
-  Feed,
-  Generator,
-  Link,
-  ParsePartialUtil,
-  Person,
-  Source,
-} from '../common/types.js'
+import type { Atom, ParsePartialUtil } from '../common/types.js'
 
 export const createNamespaceGetter = (
   value: Record<string, Unreliable>,
@@ -63,7 +55,7 @@ export const createNamespaceGetter = (
   }
 }
 
-export const parseLink: ParsePartialUtil<Link<string>> = (value) => {
+export const parseLink: ParsePartialUtil<Atom.Link<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -93,7 +85,7 @@ export const retrievePersonUri: ParsePartialUtil<string> = (value, options) => {
   return uri || url
 }
 
-export const parsePerson: ParsePartialUtil<Person> = (value, options) => {
+export const parsePerson: ParsePartialUtil<Atom.Person> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -108,7 +100,7 @@ export const parsePerson: ParsePartialUtil<Person> = (value, options) => {
   return trimObject(person)
 }
 
-export const parseCategory: ParsePartialUtil<Category> = (value) => {
+export const parseCategory: ParsePartialUtil<Atom.Category> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -133,7 +125,7 @@ export const retrieveGeneratorUri: ParsePartialUtil<string> = (value) => {
   return uri || url
 }
 
-export const parseGenerator: ParsePartialUtil<Generator> = (value) => {
+export const parseGenerator: ParsePartialUtil<Atom.Generator> = (value) => {
   const generator = {
     text: parseString(retrieveText(value)),
     uri: retrieveGeneratorUri(value),
@@ -143,7 +135,7 @@ export const parseGenerator: ParsePartialUtil<Generator> = (value) => {
   return trimObject(generator)
 }
 
-export const parseSource: ParsePartialUtil<Source<string>> = (value, options) => {
+export const parseSource: ParsePartialUtil<Atom.Source<string>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -207,7 +199,7 @@ export const retrieveSubtitle: ParsePartialUtil<string> = (value, options) => {
   return subtitle || tagline
 }
 
-export const parseEntry: ParsePartialUtil<Entry<string>> = (value, options) => {
+export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -242,7 +234,7 @@ export const parseEntry: ParsePartialUtil<Entry<string>> = (value, options) => {
   return trimObject(entry)
 }
 
-export const parseFeed: ParsePartialUtil<Feed<string>> = (value, options) => {
+export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -269,13 +261,16 @@ export const parseFeed: ParsePartialUtil<Feed<string>> = (value, options) => {
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    creativeCommons: namespaces?.has('creativecommons')
+      ? retrieveCreativecommonsFeed(value)
+      : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
   }
 
   return trimObject(feed)
 }
 
-export const retrieveFeed: ParsePartialUtil<Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialUtil<Atom.Feed<string>> = (value) => {
   const notNamespaced = parseSingularOf(value?.feed, parseFeed)
   const namespaced = parseSingularOf(value?.['atom:feed'], (value) =>
     parseFeed(value, { prefix: 'atom:' }),

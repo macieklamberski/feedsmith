@@ -12,9 +12,12 @@ import {
   retrieveText,
   trimObject,
 } from '../../common/utils.js'
-import type { Body, Head, MainOptions, Opml, Outline } from '../common/types.js'
+import type { MainOptions, Opml } from '../common/types.js'
 
-export const parseOutline: ParsePartialUtil<Outline<string>, MainOptions> = (value, options) => {
+export const parseOutline: ParsePartialUtil<Opml.Outline<string>, MainOptions> = (
+  value,
+  options,
+) => {
   if (!isObject(value)) {
     return
   }
@@ -51,7 +54,7 @@ export const parseOutline: ParsePartialUtil<Outline<string>, MainOptions> = (val
   return trimObject(outline)
 }
 
-export const parseHead: ParsePartialUtil<Head<string>> = (value) => {
+export const parseHead: ParsePartialUtil<Opml.Head<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -79,7 +82,7 @@ export const parseHead: ParsePartialUtil<Head<string>> = (value) => {
   return trimObject(head)
 }
 
-export const parseBody: ParsePartialUtil<Body<string>, MainOptions> = (value, options) => {
+export const parseBody: ParsePartialUtil<Opml.Body<string>, MainOptions> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -91,7 +94,10 @@ export const parseBody: ParsePartialUtil<Body<string>, MainOptions> = (value, op
   return trimObject(body)
 }
 
-export const parseOpml: ParsePartialUtil<Opml<string>, MainOptions> = (value, options) => {
+export const parseDocument: ParsePartialUtil<Opml.Document<string>, MainOptions> = (
+  value,
+  options,
+) => {
   if (!isObject(value?.opml)) {
     return
   }

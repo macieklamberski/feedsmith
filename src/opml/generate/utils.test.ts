@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { generateBody, generateHead, generateOpml, generateOutline } from './utils.js'
+import { generateBody, generateDocument, generateHead, generateOutline } from './utils.js'
 
 describe('generateOutline', () => {
   it('should generate valid outline object with all properties', () => {
@@ -393,7 +393,7 @@ describe('generateBody', () => {
   })
 })
 
-describe('generateOpml', () => {
+describe('generateDocument', () => {
   it('should generate complete OPML object', () => {
     const date = new Date('2023-03-15T12:00:00Z')
     const value = {
@@ -444,7 +444,7 @@ describe('generateOpml', () => {
       },
     }
 
-    expect(generateOpml(value)).toEqual(expected)
+    expect(generateDocument(value)).toEqual(expected)
   })
 
   it('should generate OPML with minimal required fields', () => {
@@ -462,7 +462,7 @@ describe('generateOpml', () => {
       },
     }
 
-    expect(generateOpml(value)).toEqual(expected)
+    expect(generateDocument(value)).toEqual(expected)
   })
 
   it('should handle OPML with empty body outlines', () => {
@@ -472,7 +472,7 @@ describe('generateOpml', () => {
       },
     }
 
-    expect(generateOpml(value)).toBeUndefined()
+    expect(generateDocument(value)).toBeUndefined()
   })
 
   it('should handle object with only undefined/empty properties', () => {
@@ -481,14 +481,14 @@ describe('generateOpml', () => {
       body: undefined,
     }
 
-    expect(generateOpml(value)).toBeUndefined()
+    expect(generateDocument(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
-    expect(generateOpml({})).toBeUndefined()
+    expect(generateDocument({})).toBeUndefined()
   })
 
   it('should handle non-object inputs gracefully', () => {
-    expect(generateOpml(undefined)).toBeUndefined()
+    expect(generateDocument(undefined)).toBeUndefined()
   })
 })

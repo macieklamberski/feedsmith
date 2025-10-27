@@ -18,7 +18,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        run: bun install --ignore-scripts
+        run: bun install --frozen-lockfile --ignore-scripts
 
       - name: Run tests with coverage
         run: bun test --coverage --coverage-reporter=lcov

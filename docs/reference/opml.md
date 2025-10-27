@@ -76,6 +76,23 @@ const xml = generateOpml(opmlData, {
 
 ## Types
 
+All OPML types are available under the `Opml` namespace:
+
+```typescript
+import type { Opml } from 'feedsmith/types'
+
+// Access any type from the definitions below
+type Document = Opml.Document<Date>
+type Head = Opml.Head<Date>
+type Body = Opml.Body<Date>
+type Outline = Opml.Outline<Date>
+// … see type definitions below for all available types
+```
+
+See the [TypeScript guide](/typescript) for usage examples.
+
+### Type Definitions
+
 > [!INFO]
 > `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
 

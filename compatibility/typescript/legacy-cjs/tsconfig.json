@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": false,
+    "declaration": true,
+    "outDir": "dist"
+  },
+  "include": ["*.ts", "*.cts", "*.mts"]
+}

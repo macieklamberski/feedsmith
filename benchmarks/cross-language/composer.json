@@ -1,5 +1,5 @@
 {
   "require": {
-    "simplepie/simplepie": "^1.8"
+    "simplepie/simplepie": "^1.9"
   }
 }

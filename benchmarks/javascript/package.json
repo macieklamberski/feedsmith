@@ -20,9 +20,9 @@
   },
   "devDependencies": {
     "@types/benchmark": "^2.1.5",
-    "@types/bun": "^1.2.21",
+    "@types/bun": "^1.3.0",
     "@types/feedme": "^2.0.4",
     "@types/feedparser": "^2.2.8",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   }
 }

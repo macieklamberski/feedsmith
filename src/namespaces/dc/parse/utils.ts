@@ -8,9 +8,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { ItemOrFeed } from '../common/types.js'
+import type { DcNs } from '../common/types.js'
 
-export const retrieveItemOrFeed: ParsePartialUtil<ItemOrFeed<string>> = (value) => {
+export const retrieveItemOrFeed: ParsePartialUtil<DcNs.ItemOrFeed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -37,7 +37,6 @@ export const retrieveItemOrFeed: ParsePartialUtil<ItemOrFeed<string>> = (value) 
     language: parseSingularOf(value['dc:language'], (value) => parseString(retrieveText(value))),
     relation: parseSingularOf(value['dc:relation'], (value) => parseString(retrieveText(value))),
     coverage: parseSingularOf(value['dc:coverage'], (value) => parseString(retrieveText(value))),
-    rights: parseSingularOf(value['dc:rights'], (value) => parseString(retrieveText(value))),
 
     // Plural fields (correct - all DC elements are repeatable, returns all values)
     titles: parseArrayOf(value['dc:title'], (value) => parseString(retrieveText(value))),
@@ -58,7 +57,7 @@ export const retrieveItemOrFeed: ParsePartialUtil<ItemOrFeed<string>> = (value) 
     languages: parseArrayOf(value['dc:language'], (value) => parseString(retrieveText(value))),
     relations: parseArrayOf(value['dc:relation'], (value) => parseString(retrieveText(value))),
     coverages: parseArrayOf(value['dc:coverage'], (value) => parseString(retrieveText(value))),
-    rights_: parseArrayOf(value['dc:rights'], (value) => parseString(retrieveText(value))),
+    rights: parseArrayOf(value['dc:rights'], (value) => parseString(retrieveText(value))),
   }
 
   return trimObject(itemOrFeed)
