@@ -192,14 +192,14 @@ export const namespaceUris = {
     'https://www.w3.org/1999/02/22-rdf-syntax-ns#',
   ],
   rawvoice: [
-    'https://blubrry.com/developer/rawvoice-rss', // Official URI.
+    'http://www.rawvoice.com/rawvoiceRssModule/', // Official URI.
+    'https://www.rawvoice.com/rawvoiceRssModule/',
+    'http://www.rawvoice.com/rawvoiceRssModule',
+    'https://www.rawvoice.com/rawvoiceRssModule',
+    'https://blubrry.com/developer/rawvoice-rss',
     'http://blubrry.com/developer/rawvoice-rss',
     'https://blubrry.com/developer/rawvoice-rss/',
     'http://blubrry.com/developer/rawvoice-rss/',
-    'http://www.rawvoice.com/rawvoiceRssModule',
-    'https://www.rawvoice.com/rawvoiceRssModule',
-    'http://www.rawvoice.com/rawvoiceRssModule/',
-    'https://www.rawvoice.com/rawvoiceRssModule/',
   ],
 }
 

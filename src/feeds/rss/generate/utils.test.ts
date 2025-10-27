@@ -1317,7 +1317,7 @@ describe('generateFeed', () => {
     const expected = {
       rss: {
         '@version': '2.0',
-        '@xmlns:rawvoice': 'https://blubrry.com/developer/rawvoice-rss',
+        '@xmlns:rawvoice': 'http://www.rawvoice.com/rawvoiceRssModule/',
         channel: {
           title: 'Feed with RawVoice namespace',
           description: 'A feed with RawVoice properties',

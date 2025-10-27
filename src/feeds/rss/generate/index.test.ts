@@ -601,7 +601,7 @@ describe('generate', () => {
       ],
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:rawvoice="https://blubrry.com/developer/rawvoice-rss">
+<rss version="2.0" xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/">
   <channel>
     <title>Feed with rawvoice namespace</title>
     <description>Test feed with RawVoice namespace</description>
