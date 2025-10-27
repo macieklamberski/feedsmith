@@ -1,6 +1,7 @@
 import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
+  parseArrayOf,
   parseDate,
   parseNumber,
   parseSingularOf,
@@ -104,7 +105,7 @@ export const retrieveItem: ParsePartialUtil<RawvoiceNs.Item> = (value) => {
     embed: parseSingularOf(value['rawvoice:embed'], (value) => parseString(retrieveText(value))),
     webm: parseSingularOf(value['rawvoice:webm'], parseAlternateEnclosure),
     mp4: parseSingularOf(value['rawvoice:mp4'], parseAlternateEnclosure),
-    metamark: parseSingularOf(value['rawvoice:metamark'], parseMetamark),
+    metamarks: parseArrayOf(value['rawvoice:metamark'], parseMetamark),
   }
 
   return trimObject(item)

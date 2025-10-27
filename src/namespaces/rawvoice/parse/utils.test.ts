@@ -18,13 +18,15 @@ describe('retrieveItem', () => {
       type: 'video/mp4',
       length: 2048,
     },
-    metamark: {
-      type: 'ad',
-      link: 'https://example.com/ad',
-      position: 120,
-      duration: 30,
-      value: 'ad-123456',
-    },
+    metamarks: [
+      {
+        type: 'ad',
+        link: 'https://example.com/ad',
+        position: 120,
+        duration: 30,
+        value: 'ad-123456',
+      },
+    ],
   }
 
   it('should parse complete item object with all properties (with #text)', () => {
@@ -198,13 +200,15 @@ describe('retrieveItem', () => {
       },
     }
     const expected = {
-      metamark: {
-        type: 'ad',
-        link: 'https://example.com/ad',
-        position: 120,
-        duration: 30,
-        value: 'ad-123456',
-      },
+      metamarks: [
+        {
+          type: 'ad',
+          link: 'https://example.com/ad',
+          position: 120,
+          duration: 30,
+          value: 'ad-123456',
+        },
+      ],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -218,10 +222,12 @@ describe('retrieveItem', () => {
       },
     }
     const expected = {
-      metamark: {
-        type: 'comment',
-        position: 60,
-      },
+      metamarks: [
+        {
+          type: 'comment',
+          position: 60,
+        },
+      ],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -234,9 +240,11 @@ describe('retrieveItem', () => {
       },
     }
     const expected = {
-      metamark: {
-        value: 'Chapter marker text',
-      },
+      metamarks: [
+        {
+          value: 'Chapter marker text',
+        },
+      ],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -251,11 +259,13 @@ describe('retrieveItem', () => {
       },
     }
     const expected = {
-      metamark: {
-        type: 'video',
-        position: 180,
-        duration: 45,
-      },
+      metamarks: [
+        {
+          type: 'video',
+          position: 180,
+          duration: 45,
+        },
+      ],
     }
 
     expect(retrieveItem(value)).toEqual(expected)

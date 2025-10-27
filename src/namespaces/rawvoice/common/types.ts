@@ -54,7 +54,7 @@ export namespace RawvoiceNs {
     embed?: string
     webm?: AlternateEnclosure
     mp4?: AlternateEnclosure
-    metamark?: Metamark
+    metamarks?: Array<Metamark>
   }
 }
 // #endregion reference

@@ -6,6 +6,7 @@ import {
   generateRfc822Date,
   generateTextOrCdataString,
   isObject,
+  trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { RawvoiceNs } from '../common/types.js'
@@ -108,7 +109,7 @@ export const generateItem: GenerateUtil<RawvoiceNs.Item> = (item) => {
     'rawvoice:embed': generateCdataString(item.embed),
     'rawvoice:webm': generateAlternateEnclosure(item.webm),
     'rawvoice:mp4': generateAlternateEnclosure(item.mp4),
-    'rawvoice:metamark': generateMetamark(item.metamark),
+    'rawvoice:metamark': trimArray(item.metamarks, generateMetamark),
   }
 
   return trimObject(value)

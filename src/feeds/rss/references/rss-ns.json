@@ -846,13 +846,15 @@
           "type": "video/mp4",
           "length": 15728640
         },
-        "metamark": {
-          "type": "ad",
-          "link": "https://example.com/ad",
-          "position": 120,
-          "duration": 30,
-          "value": "ad-123456"
-        }
+        "metamarks": [
+          {
+            "type": "ad",
+            "link": "https://example.com/ad",
+            "position": 120,
+            "duration": 30,
+            "value": "ad-123456"
+          }
+        ]
       }
     }
   ],
