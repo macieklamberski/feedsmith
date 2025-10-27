@@ -19,33 +19,33 @@ export namespace DcNs {
     coverages?: Array<string>
     rights?: Array<string>
 
-    /** @deprecated Use `titles` (plural) instead. Dublin Core elements are repeatable. */
+    /** @deprecated Use `titles` (array) instead. Dublin Core fields are repeatable. */
     title?: string
-    /** @deprecated Use `creators` (plural) instead. Dublin Core elements are repeatable. */
+    /** @deprecated Use `creators` (array) instead. Dublin Core fields are repeatable. */
     creator?: string
-    /** @deprecated Use `subjects` (plural) instead. Dublin Core elements are repeatable. */
+    /** @deprecated Use `subjects` (array) instead. Dublin Core fields are repeatable. */
     subject?: string
-    /** @deprecated Use `descriptions` (plural) instead. Dublin Core elements are repeatable. */
+    /** @deprecated Use `descriptions` (array) instead. Dublin Core fields are repeatable. */
     description?: string
-    /** @deprecated Use `publishers` (plural) instead. Dublin Core elements are repeatable. */
+    /** @deprecated Use `publishers` (array) instead. Dublin Core fields are repeatable. */
     publisher?: string
-    /** @deprecated Use `contributors` (plural) instead. Dublin Core elements are repeatable. */
+    /** @deprecated Use `contributors` (array) instead. Dublin Core fields are repeatable. */
     contributor?: string
-    /** @deprecated Use `dates` (plural) instead. Dublin Core elements are repeatable. */
+    /** @deprecated Use `dates` (array) instead. Dublin Core fields are repeatable. */
     date?: TDate
-    /** @deprecated Use `types` (plural) instead. Dublin Core elements are repeatable. */
+    /** @deprecated Use `types` (array) instead. Dublin Core fields are repeatable. */
     type?: string
-    /** @deprecated Use `formats` (plural) instead. Dublin Core elements are repeatable. */
+    /** @deprecated Use `formats` (array) instead. Dublin Core fields are repeatable. */
     format?: string
-    /** @deprecated Use `identifiers` (plural) instead. Dublin Core elements are repeatable. */
+    /** @deprecated Use `identifiers` (array) instead. Dublin Core fields are repeatable. */
     identifier?: string
-    /** @deprecated Use `sources` (plural) instead. Dublin Core elements are repeatable. */
+    /** @deprecated Use `sources` (array) instead. Dublin Core fields are repeatable. */
     source?: string
-    /** @deprecated Use `languages` (plural) instead. Dublin Core elements are repeatable. */
+    /** @deprecated Use `languages` (array) instead. Dublin Core fields are repeatable. */
     language?: string
-    /** @deprecated Use `relations` (plural) instead. Dublin Core elements are repeatable. */
+    /** @deprecated Use `relations` (array) instead. Dublin Core fields are repeatable. */
     relation?: string
-    /** @deprecated Use `coverages` (plural) instead. Dublin Core elements are repeatable. */
+    /** @deprecated Use `coverages` (array) instead. Dublin Core fields are repeatable. */
     coverage?: string
   }
 }
