@@ -44,7 +44,7 @@ export namespace ItunesNs {
     subtitle?: string
     /** @deprecated No longer used for search in Apple Podcasts. */
     keywords?: Array<string>
-    /** @deprecated No longer required for submission to Apple Podcasts. */
+    /** @deprecated No longer supported by Apple Podcasts. */
     owner?: Owner
   }
 }
