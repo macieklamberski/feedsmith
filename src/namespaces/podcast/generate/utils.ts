@@ -1,48 +1,20 @@
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
+  generateArrayOrSingular,
   generateBoolean,
   generateCdataString,
   generateNumber,
   generatePlainString,
   generateRfc822Date,
   generateRfc3339Date,
+  generateSingularOrArray,
   generateTextOrCdataString,
   generateYesNoBoolean,
   isObject,
-  isPresent,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { PodcastNs } from '../common/types.js'
-
-// TODO: Remove this once deprecated fields are removed in next major version.
-const generateArrayOrSingular = <V>(
-  pluralValues: Array<V> | undefined,
-  singularValue: V | undefined,
-  generator: (value: V) => unknown,
-) => {
-  if (isPresent(pluralValues)) {
-    return trimArray(pluralValues.map(generator))
-  }
-
-  if (isPresent(singularValue)) {
-    return generator(singularValue)
-  }
-}
-
-const generateSingularOrArray = <V>(
-  singularValue: V | undefined,
-  pluralValues: Array<V> | undefined,
-  generator: (value: V) => unknown,
-) => {
-  if (isPresent(singularValue)) {
-    return generator(singularValue)
-  }
-
-  if (isPresent(pluralValues)) {
-    return trimArray(pluralValues.map(generator))
-  }
-}
 
 export const generateBaseItem: GenerateUtil<PodcastNs.BaseItem> = (baseItem) => {
   if (!isObject(baseItem)) {
