@@ -4,6 +4,7 @@ import {
   generateRfc3339Date,
   isObject,
   isPresent,
+  trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { DcNs } from '../common/types.js'
@@ -20,7 +21,7 @@ export const generateItemOrFeed: GenerateUtil<DcNs.ItemOrFeed<DateLike>> = (item
     generator: (value: V) => unknown,
   ) => {
     if (isPresent(pluralValues)) {
-      return pluralValues.map(generator)
+      return trimArray(pluralValues.map(generator))
     }
 
     if (isPresent(singularValue)) {

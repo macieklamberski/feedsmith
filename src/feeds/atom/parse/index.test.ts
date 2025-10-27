@@ -745,6 +745,7 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
@@ -779,6 +780,7 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
@@ -813,6 +815,7 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
@@ -847,6 +850,7 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
@@ -881,6 +885,7 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
@@ -915,6 +920,7 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],

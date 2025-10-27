@@ -20,7 +20,6 @@
         "language": "en-US",
         "relation": "https://example.org/related-entry",
         "coverage": "United States",
-        "rights": "Copyright 2025 Example News Organization",
         "titles": ["Dublin Core Enhanced Entry Title"],
         "creators": ["Jack Jackson"],
         "subjects": ["Article, Tutorial, Example"],
@@ -35,7 +34,7 @@
         "languages": ["en-US"],
         "relations": ["https://example.org/related-entry"],
         "coverages": ["United States"],
-        "rights_": ["Copyright 2025 Example News Organization"]
+        "rights": ["Copyright 2025 Example News Organization"]
       },
       "dcterms": {
         "created": "2022-01-01T12:00:00.000Z",
@@ -599,7 +598,6 @@
     "language": "en-US",
     "relation": "https://example.org/related-content",
     "coverage": "Global",
-    "rights": "Copyright 2025 Example Publishing Company",
     "titles": ["Dublin Core Enhanced Feed Title"],
     "creators": ["John Doe"],
     "subjects": ["Technology, Programming, Web Development"],
@@ -614,7 +612,7 @@
     "languages": ["en-US"],
     "relations": ["https://example.org/related-content"],
     "coverages": ["Global"],
-    "rights_": ["Copyright 2025 Example Publishing Company"]
+    "rights": ["Copyright 2025 Example Publishing Company"]
   },
   "dcterms": {
     "created": "2022-01-01T12:00:00.000Z",

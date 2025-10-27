@@ -652,6 +652,7 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
@@ -688,6 +689,7 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
@@ -724,6 +726,7 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
@@ -760,6 +763,7 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
@@ -796,6 +800,7 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
@@ -832,6 +837,7 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
