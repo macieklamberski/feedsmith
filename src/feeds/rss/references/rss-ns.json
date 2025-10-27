@@ -217,6 +217,13 @@
             "href": "https://example.com/producer"
           }
         ],
+        "locations": [
+          {
+            "display": "New York City, NY",
+            "geo": "geo:40.7128,-74.0060",
+            "osm": "R8780673"
+          }
+        ],
         "location": {
           "display": "New York City, NY",
           "geo": "geo:40.7128,-74.0060",
@@ -267,6 +274,27 @@
             }
           }
         ],
+        "values": [
+          {
+            "type": "lightning",
+            "method": "keysend",
+            "suggested": 0.00000002,
+            "valueRecipients": [
+              {
+                "name": "Host",
+                "type": "node",
+                "address": "02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee83420ef254acd7d8e5edf5f16e",
+                "split": 90
+              },
+              {
+                "name": "Guest",
+                "type": "node",
+                "address": "03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a",
+                "split": 10
+              }
+            ]
+          }
+        ],
         "value": {
           "type": "lightning",
           "method": "keysend",
@@ -313,6 +341,11 @@
             "purpose": "notes"
           }
         ],
+        "chat": {
+          "server": "chat.example.com",
+          "protocol": "xmpp",
+          "accountId": "episode@conference.example.com"
+        },
         "chats": [
           {
             "server": "chat.example.com",
@@ -1018,6 +1051,13 @@
         "href": "https://example.com/guest"
       }
     ],
+    "locations": [
+      {
+        "display": "San Francisco, CA",
+        "geo": "geo:37.7749,-122.4194",
+        "osm": "R4163767"
+      }
+    ],
     "location": {
       "display": "San Francisco, CA",
       "geo": "geo:37.7749,-122.4194",
@@ -1038,6 +1078,27 @@
       "url": "https://creativecommons.org/licenses/by/4.0/"
     },
     "guid": "ead4c236-bf58-58c6-a2c6-a6b28d128cb6",
+    "values": [
+      {
+        "type": "lightning",
+        "method": "keysend",
+        "suggested": 0.00000005,
+        "valueRecipients": [
+          {
+            "name": "Host",
+            "type": "node",
+            "address": "02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee83420ef254acd7d8e5edf5f16e",
+            "split": 90
+          },
+          {
+            "name": "Producer",
+            "type": "node",
+            "address": "03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a",
+            "split": 10
+          }
+        ]
+      }
+    ],
     "value": {
       "type": "lightning",
       "method": "keysend",
@@ -1078,6 +1139,12 @@
             "display": "Live Chat"
           }
         ],
+        "chat": {
+          "server": "live.example.com",
+          "protocol": "matrix",
+          "accountId": "@livepodcast:live.example.com",
+          "space": "#live-episode"
+        },
         "chats": [
           {
             "server": "live.example.com",
@@ -1122,6 +1189,12 @@
     },
     "podping": {
       "usesPodping": true
+    },
+    "chat": {
+      "server": "irc.example.com",
+      "protocol": "irc",
+      "accountId": "examplepodcast",
+      "space": "#general"
     },
     "chats": [
       {

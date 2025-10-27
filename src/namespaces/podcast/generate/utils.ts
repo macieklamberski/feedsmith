@@ -9,10 +9,40 @@ import {
   generateTextOrCdataString,
   generateYesNoBoolean,
   isObject,
+  isPresent,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { PodcastNs } from '../common/types.js'
+
+// TODO: Remove this once deprecated fields are removed in next major version.
+const generateArrayOrSingular = <V>(
+  pluralValues: Array<V> | undefined,
+  singularValue: V | undefined,
+  generator: (value: V) => unknown,
+) => {
+  if (isPresent(pluralValues)) {
+    return trimArray(pluralValues.map(generator))
+  }
+
+  if (isPresent(singularValue)) {
+    return generator(singularValue)
+  }
+}
+
+const generateSingularOrArray = <V>(
+  singularValue: V | undefined,
+  pluralValues: Array<V> | undefined,
+  generator: (value: V) => unknown,
+) => {
+  if (isPresent(singularValue)) {
+    return generator(singularValue)
+  }
+
+  if (isPresent(pluralValues)) {
+    return trimArray(pluralValues.map(generator))
+  }
+}
 
 export const generateBaseItem: GenerateUtil<PodcastNs.BaseItem> = (baseItem) => {
   if (!isObject(baseItem)) {
@@ -24,7 +54,11 @@ export const generateBaseItem: GenerateUtil<PodcastNs.BaseItem> = (baseItem) => 
     'podcast:chapters': generateChapters(baseItem.chapters),
     'podcast:soundbite': trimArray(baseItem.soundbites, generateSoundbite),
     'podcast:person': trimArray(baseItem.persons, generatePerson),
-    'podcast:location': generateLocation(baseItem.location),
+    'podcast:location': generateArrayOrSingular(
+      baseItem.locations,
+      baseItem.location,
+      generateLocation,
+    ),
     'podcast:season': generateSeason(baseItem.season),
     'podcast:episode': generateEpisode(baseItem.episode),
     'podcast:license': generateLicense(baseItem.license),
@@ -32,11 +66,11 @@ export const generateBaseItem: GenerateUtil<PodcastNs.BaseItem> = (baseItem) => 
       baseItem.alternateEnclosures,
       generateAlternateEnclosure,
     ),
-    'podcast:value': generateValue(baseItem.value),
+    'podcast:value': generateArrayOrSingular(baseItem.values, baseItem.value, generateValue),
     'podcast:images': generateImages(baseItem.images),
     'podcast:socialInteract': trimArray(baseItem.socialInteracts, generateSocialInteract),
     'podcast:txt': trimArray(baseItem.txts, generateTxt),
-    'podcast:chat': trimArray(baseItem.chats, generateChat),
+    'podcast:chat': generateSingularOrArray(baseItem.chat, baseItem.chats, generateChat),
   }
 
   return trimObject(value)
@@ -480,11 +514,11 @@ export const generateFeed: GenerateUtil<PodcastNs.Feed<DateLike>> = (feed) => {
     'podcast:locked': generateLocked(feed.locked),
     'podcast:funding': trimArray(feed.fundings, generateFunding),
     'podcast:person': trimArray(feed.persons, generatePerson),
-    'podcast:location': generateLocation(feed.location),
+    'podcast:location': generateArrayOrSingular(feed.locations, feed.location, generateLocation),
     'podcast:trailer': trimArray(feed.trailers, generateTrailer),
     'podcast:license': generateLicense(feed.license),
     'podcast:guid': generateCdataString(feed.guid),
-    'podcast:value': generateValue(feed.value),
+    'podcast:value': generateArrayOrSingular(feed.values, feed.value, generateValue),
     'podcast:medium': generateCdataString(feed.medium),
     'podcast:images': generateImages(feed.images),
     'podcast:liveItem': trimArray(feed.liveItems, generateLiveItem),
@@ -494,7 +528,7 @@ export const generateFeed: GenerateUtil<PodcastNs.Feed<DateLike>> = (feed) => {
     'podcast:podroll': generatePodroll(feed.podroll),
     'podcast:updateFrequency': generateUpdateFrequency(feed.updateFrequency),
     'podcast:podping': generatePodping(feed.podping),
-    'podcast:chat': trimArray(feed.chats, generateChat),
+    'podcast:chat': generateSingularOrArray(feed.chat, feed.chats, generateChat),
     'podcast:publisher': generatePublisher(feed.publisher),
   }
 
