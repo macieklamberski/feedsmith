@@ -389,6 +389,7 @@
       <itunes:duration>1800</itunes:duration>
       <itunes:image href="https://example.com/images/episode-cover.jpg"/>
       <itunes:explicit>false</itunes:explicit>
+      <itunes:author>John Doe</itunes:author>
       <itunes:title>iTunes Enhanced Episode Title</itunes:title>
       <itunes:episode>1</itunes:episode>
       <itunes:season>1</itunes:season>

@@ -14,6 +14,7 @@ export namespace ItunesNs {
     duration?: number
     image?: string
     explicit?: boolean
+    author?: string
     title?: string
     episode?: number
     season?: number

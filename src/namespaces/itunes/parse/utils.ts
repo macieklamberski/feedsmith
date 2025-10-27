@@ -102,6 +102,7 @@ export const retrieveItem: ParsePartialUtil<ItunesNs.Item> = (value) => {
     explicit: parseSingularOf(value['itunes:explicit'], (value) =>
       parseExplicit(retrieveText(value)),
     ),
+    author: parseSingularOf(value['itunes:author'], (value) => parseString(retrieveText(value))),
     title: parseSingularOf(value['itunes:title'], (value) => parseString(retrieveText(value))),
     episode: parseSingularOf(value['itunes:episode'], (value) => parseNumber(retrieveText(value))),
     season: parseSingularOf(value['itunes:season'], (value) => parseNumber(retrieveText(value))),

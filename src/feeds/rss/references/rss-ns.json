@@ -155,9 +155,10 @@
         "hitParade": [177, 155, 105, 33, 6, 3, 0]
       },
       "itunes": {
-        "explicit": false,
         "duration": 1800,
         "image": "https://example.com/images/episode-cover.jpg",
+        "explicit": false,
+        "author": "John Doe",
         "title": "iTunes Enhanced Episode Title",
         "episode": 1,
         "season": 1,
