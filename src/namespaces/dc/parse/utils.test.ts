@@ -3,6 +3,7 @@ import { retrieveItemOrFeed } from './utils.js'
 
 describe('retrieveItemOrFeed', () => {
   const expectedFull = {
+    // Singular fields (deprecated, first value for backward compatibility)
     title: 'Sample Title',
     creator: 'John Doe',
     subject: 'Test Subject',
@@ -17,7 +18,22 @@ describe('retrieveItemOrFeed', () => {
     language: 'en-US',
     relation: 'https://example.org/related',
     coverage: 'Worldwide',
-    rights: 'Copyright 2023, All rights reserved',
+    // Plural fields (correct - all values)
+    titles: ['Sample Title'],
+    creators: ['John Doe'],
+    subjects: ['Test Subject'],
+    descriptions: ['This is a description'],
+    publishers: ['Test Publisher'],
+    contributors: ['Jane Smith'],
+    dates: ['2023-05-15T09:30:00Z'],
+    types: ['Article'],
+    formats: ['text/html'],
+    identifiers: ['urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a'],
+    sources: ['https://example.org/source'],
+    languages: ['en-US'],
+    relations: ['https://example.org/related'],
+    coverages: ['Worldwide'],
+    rights: ['Copyright 2023, All rights reserved'],
   }
 
   it('should parse complete item or feed object with all properties (with #text)', () => {
@@ -86,7 +102,44 @@ describe('retrieveItemOrFeed', () => {
       'dc:rights': ['Copyright 2023, All rights reserved', 'Creative Commons BY-NC-SA 4.0'],
     }
 
-    expect(retrieveItemOrFeed(value)).toEqual(expectedFull)
+    const expected = {
+      // Singular fields (first value for backward compatibility)
+      title: 'Sample Title',
+      creator: 'John Doe',
+      subject: 'Test Subject',
+      description: 'This is a description',
+      publisher: 'Test Publisher',
+      contributor: 'Jane Smith',
+      date: '2023-05-15T09:30:00Z',
+      type: 'Article',
+      format: 'text/html',
+      identifier: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      source: 'https://example.org/source',
+      language: 'en-US',
+      relation: 'https://example.org/related',
+      coverage: 'Worldwide',
+      // Plural fields (all values)
+      titles: ['Sample Title', 'Alternative Title'],
+      creators: ['John Doe', 'Richard Roe'],
+      subjects: ['Test Subject', 'Secondary Subject'],
+      descriptions: ['This is a description', 'This is an alternative description'],
+      publishers: ['Test Publisher', 'Another Publisher'],
+      contributors: ['Jane Smith', 'Alice Johnson'],
+      dates: ['2023-05-15T09:30:00Z', '2023-06-20T14:45:00Z'],
+      types: ['Article', 'Blog Post'],
+      formats: ['text/html', 'application/pdf'],
+      identifiers: [
+        'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+        'urn:uuid:2335d785-dfc9-5fcc-bbbb-90eb455efa7b',
+      ],
+      sources: ['https://example.org/source', 'https://example.org/alternate-source'],
+      languages: ['en-US', 'fr-FR'],
+      relations: ['https://example.org/related', 'https://example.org/also-related'],
+      coverages: ['Worldwide', 'North America'],
+      rights: ['Copyright 2023, All rights reserved', 'Creative Commons BY-NC-SA 4.0'],
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should handle partial dublincore object with common properties', () => {
@@ -99,6 +152,9 @@ describe('retrieveItemOrFeed', () => {
       title: 'Sample Title',
       creator: 'John Doe',
       date: '2023-05-15T09:30:00Z',
+      titles: ['Sample Title'],
+      creators: ['John Doe'],
+      dates: ['2023-05-15T09:30:00Z'],
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
@@ -110,6 +166,7 @@ describe('retrieveItemOrFeed', () => {
     }
     const expected = {
       title: 'Only Title',
+      titles: ['Only Title'],
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
@@ -124,6 +181,8 @@ describe('retrieveItemOrFeed', () => {
     const expected = {
       title: '123',
       identifier: '456',
+      titles: ['123'],
+      identifiers: ['456'],
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
@@ -160,6 +219,8 @@ describe('retrieveItemOrFeed', () => {
     const expected = {
       creator: 'John Doe',
       date: '2023-01-01T12:00:00Z',
+      creators: ['John Doe'],
+      dates: ['2023-01-01T12:00:00Z'],
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
@@ -173,6 +234,7 @@ describe('retrieveItemOrFeed', () => {
     }
     const expected = {
       creator: 'John Doe',
+      creators: ['John Doe'],
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
@@ -186,6 +248,7 @@ describe('retrieveItemOrFeed', () => {
     }
     const expected = {
       creator: 'John Doe',
+      creators: ['John Doe'],
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
@@ -199,6 +262,8 @@ describe('retrieveItemOrFeed', () => {
     const expected = {
       identifier: '12345',
       language: 'en',
+      identifiers: ['12345'],
+      languages: ['en'],
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
