@@ -436,9 +436,12 @@ export const retrieveItemOrFeed: ParsePartialUtil<MediaNs.ItemOrFeed> = (value) 
   }
 
   const itemOrFeed = {
-    group: parseSingularOf(value['media:group'], parseGroup),
+    groups: parseArrayOf(value['media:group'], parseGroup),
     contents: parseArrayOf(value['media:content'], parseContent),
     ...retrieveCommonElements(value),
+
+    // Deprecated field for backward compatibility.
+    group: parseSingularOf(value['media:group'], parseGroup),
   }
 
   return trimObject(itemOrFeed)

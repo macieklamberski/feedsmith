@@ -3586,6 +3586,23 @@ describe('retrieveItemOrFeed', () => {
           value: 'Group Title',
         },
       },
+      groups: [
+        {
+          contents: [
+            {
+              url: 'https://example.com/video-hd.mp4',
+              type: 'video/mp4',
+            },
+            {
+              url: 'https://example.com/video-sd.mp4',
+              type: 'video/mp4',
+            },
+          ],
+          title: {
+            value: 'Group Title',
+          },
+        },
+      ],
       contents: [
         {
           url: 'https://example.com/audio.mp3',
@@ -3635,6 +3652,19 @@ describe('retrieveItemOrFeed', () => {
           value: 'Group Title',
         },
       },
+      groups: [
+        {
+          contents: [
+            {
+              url: 'https://example.com/video-hd.mp4',
+              type: 'video/mp4',
+            },
+          ],
+          title: {
+            value: 'Group Title',
+          },
+        },
+      ],
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
