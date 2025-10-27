@@ -80,6 +80,6 @@
     "kvalita": "^1.3.0",
     "tsdown": "^0.15.9",
     "vitepress": "^1.6.4",
-    "vitepress-plugin-llms": "^1.8.0"
+    "vitepress-plugin-llms": "^1.8.1"
   }
 }
