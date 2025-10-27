@@ -1,0 +1,5 @@
+{
+  "name": "@feedsmith/compatibility-javascript-cjs",
+  "private": true,
+  "type": "commonjs"
+}

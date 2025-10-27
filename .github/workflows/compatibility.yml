@@ -1,0 +1,32 @@
+name: Compatibility
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_call:
+
+jobs:
+  compatibility:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install Feedsmith dependencies
+        run: bun install --frozen-lockfile --ignore-scripts
+
+      - name: Build Feedsmith package
+        run: bun run build
+
+      - name: Install compatibility test dependencies
+        working-directory: compatibility
+        run: bun install --frozen-lockfile --ignore-scripts
+
+      - name: Run compatibility tests
+        working-directory: compatibility
+        run: ./test.sh
