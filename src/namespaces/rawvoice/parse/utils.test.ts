@@ -303,6 +303,10 @@ describe('retrieveFeed', () => {
     location: 'San Francisco, CA',
     frequency: 'Weekly',
     mycast: 'yes',
+    donate: {
+      href: 'https://example.com/donate',
+      value: 'Support the show',
+    },
   }
 
   it('should parse complete feed object with all properties (with #text)', () => {
@@ -336,6 +340,10 @@ describe('retrieveFeed', () => {
       'rawvoice:location': { '#text': 'San Francisco, CA' },
       'rawvoice:frequency': { '#text': 'Weekly' },
       'rawvoice:mycast': { '#text': 'yes' },
+      'rawvoice:donate': {
+        '#text': 'Support the show',
+        '@href': 'https://example.com/donate',
+      },
     }
 
     expect(retrieveFeed(value)).toEqual(expectedFull)
@@ -372,6 +380,10 @@ describe('retrieveFeed', () => {
       'rawvoice:location': 'San Francisco, CA',
       'rawvoice:frequency': 'Weekly',
       'rawvoice:mycast': 'yes',
+      'rawvoice:donate': {
+        '#text': 'Support the show',
+        '@href': 'https://example.com/donate',
+      },
     }
 
     expect(retrieveFeed(value)).toEqual(expectedFull)
@@ -508,6 +520,104 @@ describe('retrieveFeed', () => {
     const expected = {
       subscribe: {
         feed: 'https://example.com/feed/',
+      },
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse donate with href and value', () => {
+    const value = {
+      'rawvoice:donate': {
+        '#text': 'Support the show',
+        '@href': 'https://example.com/donate',
+      },
+    }
+    const expected = {
+      donate: {
+        href: 'https://example.com/donate',
+        value: 'Support the show',
+      },
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse donate with only href (no value)', () => {
+    const value = {
+      'rawvoice:donate': {
+        '@href': 'https://example.com/donate',
+      },
+    }
+    const expected = {
+      donate: {
+        href: 'https://example.com/donate',
+      },
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should handle donate with HTML entities in value', () => {
+    const value = {
+      'rawvoice:donate': {
+        '#text': 'Support &amp; Donate',
+        '@href': 'https://example.com/donate',
+      },
+    }
+    const expected = {
+      donate: {
+        href: 'https://example.com/donate',
+        value: 'Support & Donate',
+      },
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should handle donate with CDATA section in value', () => {
+    const value = {
+      'rawvoice:donate': {
+        '#text': '<![CDATA[Support & Donate]]>',
+        '@href': 'https://example.com/donate',
+      },
+    }
+    const expected = {
+      donate: {
+        href: 'https://example.com/donate',
+        value: 'Support & Donate',
+      },
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should handle donate with empty value', () => {
+    const value = {
+      'rawvoice:donate': {
+        '#text': '',
+        '@href': 'https://example.com/donate',
+      },
+    }
+    const expected = {
+      donate: {
+        href: 'https://example.com/donate',
+      },
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should handle donate with whitespace-only value', () => {
+    const value = {
+      'rawvoice:donate': {
+        '#text': '   ',
+        '@href': 'https://example.com/donate',
+      },
+    }
+    const expected = {
+      donate: {
+        href: 'https://example.com/donate',
       },
     }
 

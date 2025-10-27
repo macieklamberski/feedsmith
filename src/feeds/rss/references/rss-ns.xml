@@ -288,6 +288,7 @@
     <rawvoice:httpLiveStream schedule="Mon, 15 Jan 2024 10:00:00 GMT" duration="3600">https://live.example.com/stream.m3u8</rawvoice:httpLiveStream>
     <rawvoice:mycast>yes</rawvoice:mycast>
     <rawvoice:subscribe feed="https://example.com/feed/podcast/" itunes="https://itunes.apple.com/us/podcast/example-podcast/id123456789" spotify="https://open.spotify.com/show/exampleshow123"/>
+    <rawvoice:donate href="https://example.com/donate">Support the Podcast</rawvoice:donate>
 
     <!-- Spotify Namespace: Channel Level Tags -->
     <spotify:limit recentCount="10"/>

@@ -94,6 +94,19 @@ export const parseMetamark: ParsePartialUtil<RawvoiceNs.Metamark> = (value) => {
   return trimObject(metamark)
 }
 
+export const parseDonate: ParsePartialUtil<RawvoiceNs.Donate> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const donate = {
+    href: parseString(value['@href']),
+    value: parseString(retrieveText(value)),
+  }
+
+  return trimObject(donate)
+}
+
 export const retrieveItem: ParsePartialUtil<RawvoiceNs.Item> = (value) => {
   if (!isObject(value)) {
     return
@@ -133,6 +146,7 @@ export const retrieveFeed: ParsePartialUtil<RawvoiceNs.Feed<string>> = (value) =
     ),
     mycast: parseSingularOf(value['rawvoice:mycast'], (value) => parseString(retrieveText(value))),
     subscribe: parseSingularOf(value['rawvoice:subscribe'], parseSubscribe),
+    donate: parseSingularOf(value['rawvoice:donate'], parseDonate),
   }
 
   return trimObject(feed)

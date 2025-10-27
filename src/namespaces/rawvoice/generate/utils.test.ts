@@ -376,4 +376,101 @@ describe('generateFeed', () => {
 
     expect(generateFeed(value)).toEqual(expected)
   })
+
+  it('should generate donate with href and value', () => {
+    const value = {
+      donate: {
+        href: 'https://example.com/donate',
+        value: 'Support the show',
+      },
+    }
+    const expected = {
+      'rawvoice:donate': {
+        '#text': 'Support the show',
+        '@href': 'https://example.com/donate',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate donate with only href (no value)', () => {
+    const value = {
+      donate: {
+        href: 'https://example.com/donate',
+      },
+    }
+    const expected = {
+      'rawvoice:donate': {
+        '@href': 'https://example.com/donate',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate donate with special characters in value', () => {
+    const value = {
+      donate: {
+        href: 'https://example.com/donate',
+        value: 'Support & Donate',
+      },
+    }
+    const expected = {
+      'rawvoice:donate': {
+        '#cdata': 'Support & Donate',
+        '@href': 'https://example.com/donate',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should filter out empty donate value', () => {
+    const value = {
+      donate: {
+        href: 'https://example.com/donate',
+        value: '',
+      },
+    }
+    const expected = {
+      'rawvoice:donate': {
+        '@href': 'https://example.com/donate',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should filter out whitespace-only donate value', () => {
+    const value = {
+      donate: {
+        href: 'https://example.com/donate',
+        value: '   ',
+      },
+    }
+    const expected = {
+      'rawvoice:donate': {
+        '@href': 'https://example.com/donate',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should handle donate with undefined value', () => {
+    const value = {
+      donate: {
+        href: 'https://example.com/donate',
+        value: undefined,
+      },
+    }
+    const expected = {
+      'rawvoice:donate': {
+        '@href': 'https://example.com/donate',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
 })

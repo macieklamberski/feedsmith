@@ -1926,6 +1926,10 @@
       "feed": "https://example.com/feed/podcast/",
       "itunes": "https://itunes.apple.com/us/podcast/example-podcast/id123456789",
       "spotify": "https://open.spotify.com/show/exampleshow123"
+    },
+    "donate": {
+      "href": "https://example.com/donate",
+      "value": "Support the Podcast"
     }
   },
   "spotify": {

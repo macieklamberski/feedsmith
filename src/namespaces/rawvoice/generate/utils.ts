@@ -98,6 +98,19 @@ export const generateMetamark: GenerateUtil<RawvoiceNs.Metamark> = (metamark) =>
   return trimObject(value)
 }
 
+export const generateDonate: GenerateUtil<RawvoiceNs.Donate> = (donate) => {
+  if (!isObject(donate)) {
+    return
+  }
+
+  const value = {
+    ...generateTextOrCdataString(donate.value),
+    '@href': generatePlainString(donate.href),
+  }
+
+  return trimObject(value)
+}
+
 export const generateItem: GenerateUtil<RawvoiceNs.Item> = (item) => {
   if (!isObject(item)) {
     return
@@ -131,6 +144,7 @@ export const generateFeed: GenerateUtil<RawvoiceNs.Feed<DateLike>> = (feed) => {
     'rawvoice:frequency': generateCdataString(feed.frequency),
     'rawvoice:mycast': generateCdataString(feed.mycast),
     'rawvoice:subscribe': generateSubscribe(feed.subscribe),
+    'rawvoice:donate': generateDonate(feed.donate),
   }
 
   return trimObject(value)
