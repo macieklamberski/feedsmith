@@ -278,6 +278,7 @@ describe('parse', () => {
             description: 'Item Description',
             dc: {
               creator: 'John Doe',
+              creators: ['John Doe'],
             },
           },
         ],
@@ -320,7 +321,9 @@ describe('parse', () => {
             description: 'Item Description',
             dc: {
               creator: 'John Doe',
+              creators: ['John Doe'],
               date: '2023-01-01',
+              dates: ['2023-01-01'],
             },
           },
           {
@@ -362,6 +365,7 @@ describe('parse', () => {
             description: 'Item Description',
             dc: {
               creator: 'John Doe',
+              creators: ['John Doe'],
             },
           },
         ],
@@ -453,6 +457,7 @@ describe('parse', () => {
         description: 'RDF Feed Description',
         dc: {
           creator: 'Feed Author',
+          creators: ['Feed Author'],
         },
         sy: {
           updatePeriod: 'hourly',
@@ -464,7 +469,9 @@ describe('parse', () => {
             description: 'Item Description',
             dc: {
               creator: 'John Doe',
+              creators: ['John Doe'],
               date: '2023-01-01',
+              dates: ['2023-01-01'],
             },
             slash: {
               comments: 42,
@@ -506,6 +513,7 @@ describe('parse', () => {
             title: 'Item Title',
             dc: {
               creator: 'Should not normalize (empty URI)',
+              creators: ['Should not normalize (empty URI)'],
             },
           },
         ],
@@ -565,12 +573,14 @@ describe('parse', () => {
       const expected = {
         dc: {
           creator: 'Channel Author',
+          creators: ['Channel Author'],
         },
         items: [
           {
             title: 'Item without about',
             dc: {
               creator: 'Item Author',
+              creators: ['Item Author'],
             },
           },
         ],
@@ -642,6 +652,7 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
@@ -678,6 +689,7 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
@@ -714,6 +726,7 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
@@ -750,6 +763,7 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
@@ -786,6 +800,7 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
@@ -822,6 +837,7 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creator: 'John',
+                creators: ['John'],
               },
             },
           ],
