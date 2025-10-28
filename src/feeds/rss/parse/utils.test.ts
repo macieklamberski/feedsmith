@@ -811,7 +811,10 @@ describe('parseItem', () => {
     }
     const expected = {
       title: 'Example Entry',
-      dc: { creator: 'John Doe' },
+      dc: {
+        creator: 'John Doe',
+        creators: ['John Doe'],
+      },
     }
 
     expect(parseItem(value)).toEqual(expected)
@@ -1391,7 +1394,10 @@ describe('parseFeed', () => {
     const expected = {
       title: 'Feed Title',
       link: 'https://example.com',
-      dc: { creator: 'John Doe' },
+      dc: {
+        creator: 'John Doe',
+        creators: ['John Doe'],
+      },
     }
 
     expect(parseFeed(value)).toEqual(expected)
