@@ -992,7 +992,10 @@ describe('parseEntry', () => {
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: 'Example Entry',
-      dc: { creator: 'John Doe', creators: ['John Doe'] },
+      dc: {
+        creator: 'John Doe',
+        creators: ['John Doe'],
+      },
     }
 
     expect(parseEntry(value)).toEqual(expected)
@@ -1493,7 +1496,10 @@ describe('parseFeed', () => {
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: 'Example Feed',
-      dc: { creator: 'John Doe', creators: ['John Doe'] },
+      dc: {
+        creator: 'John Doe',
+        creators: ['John Doe'],
+      },
     }
 
     expect(parseFeed(value)).toEqual(expected)
