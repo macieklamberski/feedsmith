@@ -101,7 +101,6 @@ describe('retrieveItemOrFeed', () => {
     }
 
     const expected = {
-      // Singular fields (first value for backward compatibility)
       title: 'Sample Title',
       creator: 'John Doe',
       subject: 'Test Subject',
@@ -116,7 +115,6 @@ describe('retrieveItemOrFeed', () => {
       language: 'en-US',
       relation: 'https://example.org/related',
       coverage: 'Worldwide',
-      // Plural fields (all values)
       titles: ['Sample Title', 'Alternative Title'],
       creators: ['John Doe', 'Richard Roe'],
       subjects: ['Test Subject', 'Secondary Subject'],
