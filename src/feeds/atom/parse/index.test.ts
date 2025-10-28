@@ -393,7 +393,6 @@ describe('parse', () => {
             updated: '2024-01-01T00:00:00Z',
             dc: {
               creator: 'John Doe',
-              creators: ['John Doe'],
             },
           },
         ],
@@ -434,9 +433,7 @@ describe('parse', () => {
             updated: '2024-01-01T00:00:00Z',
             dc: {
               creator: 'John Doe',
-              creators: ['John Doe'],
               date: '2023-01-01',
-              dates: ['2023-01-01'],
             },
           },
           {
@@ -476,7 +473,6 @@ describe('parse', () => {
             updated: '2024-01-01T00:00:00Z',
             dc: {
               creator: 'John Doe',
-              creators: ['John Doe'],
             },
           },
         ],
@@ -569,9 +565,7 @@ describe('parse', () => {
             updated: '2024-01-01T00:00:00Z',
             dc: {
               creator: 'John Doe',
-              creators: ['John Doe'],
               date: '2023-01-01',
-              dates: ['2023-01-01'],
             },
             media: {
               title: { value: 'Media Title' },
@@ -621,7 +615,6 @@ describe('parse', () => {
             updated: '2024-01-01T00:00:00Z',
             dc: {
               creator: 'Should not normalize (empty URI)',
-              creators: ['Should not normalize (empty URI)'],
             },
           },
         ],
@@ -675,7 +668,6 @@ describe('parse', () => {
             title: 'Incomplete Entry',
             dc: {
               creator: 'John Doe',
-              creators: ['John Doe'],
             },
           },
         ],
@@ -745,7 +737,6 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creator: 'John',
-                creators: ['John'],
               },
             },
           ],
@@ -780,7 +771,6 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creator: 'John',
-                creators: ['John'],
               },
             },
           ],
@@ -815,7 +805,6 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creator: 'John',
-                creators: ['John'],
               },
             },
           ],
@@ -850,7 +839,6 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creator: 'John',
-                creators: ['John'],
               },
             },
           ],
@@ -885,7 +873,6 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creator: 'John',
-                creators: ['John'],
               },
             },
           ],
@@ -920,7 +907,6 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creator: 'John',
-                creators: ['John'],
               },
             },
           ],

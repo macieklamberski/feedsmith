@@ -10,21 +10,6 @@
         "encoded": "This is an example of content."
       },
       "dc": {
-        "titles": ["Dublin Core Enhanced Item Title"],
-        "creators": ["Jack Jackson"],
-        "subjects": ["Article, Tutorial, Example"],
-        "descriptions": ["Detailed description of the example item content"],
-        "publishers": ["Example News Organization"],
-        "contributors": ["Assistant Editor Mike Thompson"],
-        "dates": ["2022-01-01T12:00:00.000Z"],
-        "types": ["Article"],
-        "formats": ["text/html"],
-        "identifiers": ["urn:uuid:98765432-9876-9876-9876-987654321def"],
-        "sources": ["https://example.org/item-source"],
-        "languages": ["en-US"],
-        "relations": ["https://example.org/related-article"],
-        "coverages": ["United States"],
-        "rights": ["Copyright 2025 Example News Organization"],
         "title": "Dublin Core Enhanced Item Title",
         "creator": "Jack Jackson",
         "subject": "Article, Tutorial, Example",
@@ -38,7 +23,8 @@
         "source": "https://example.org/item-source",
         "language": "en-US",
         "relation": "https://example.org/related-article",
-        "coverage": "United States"
+        "coverage": "United States",
+        "rights": "Copyright 2025 Example News Organization"
       },
       "dcterms": {
         "created": "2022-01-01T12:00:00.000Z",
@@ -941,21 +927,6 @@
     }
   ],
   "dc": {
-    "titles": ["Dublin Core Enhanced Feed Title"],
-    "creators": ["John Doe"],
-    "subjects": ["Technology, Programming, Web Development"],
-    "descriptions": ["This is an example of description."],
-    "publishers": ["Example Publishing Company"],
-    "contributors": ["Jane Smith"],
-    "dates": ["2022-01-01T12:00:00.000Z"],
-    "types": ["Text"],
-    "formats": ["application/rss+xml"],
-    "identifiers": ["urn:uuid:12345678-1234-1234-1234-123456789abc"],
-    "sources": ["https://example.org/original-source"],
-    "languages": ["en-US"],
-    "relations": ["https://example.org/related-content"],
-    "coverages": ["Global"],
-    "rights": ["Copyright 2025 Example Publishing Company"],
     "title": "Dublin Core Enhanced Feed Title",
     "creator": "John Doe",
     "subject": "Technology, Programming, Web Development",
@@ -969,7 +940,8 @@
     "source": "https://example.org/original-source",
     "language": "en-US",
     "relation": "https://example.org/related-content",
-    "coverage": "Global"
+    "coverage": "Global",
+    "rights": "Copyright 2025 Example Publishing Company"
   },
   "dcterms": {
     "created": "2022-01-01T12:00:00.000Z",
