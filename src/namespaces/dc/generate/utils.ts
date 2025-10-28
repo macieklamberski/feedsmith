@@ -1,10 +1,9 @@
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
+  generateArrayOrSingular,
   generateCdataString,
   generateRfc3339Date,
   isObject,
-  isPresent,
-  trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { DcNs } from '../common/types.js'
@@ -14,49 +13,66 @@ export const generateItemOrFeed: GenerateUtil<DcNs.ItemOrFeed<DateLike>> = (item
     return
   }
 
-  // TODO: Remove this once deprecated singular fields are removed in next major version.
-  const generateArray = <V>(
-    pluralValues: Array<V> | undefined,
-    singularValue: V | undefined,
-    generator: (value: V) => unknown,
-  ) => {
-    if (isPresent(pluralValues)) {
-      return trimArray(pluralValues.map(generator))
-    }
-
-    if (isPresent(singularValue)) {
-      return generator(singularValue)
-    }
-  }
-
   const value = {
-    'dc:title': generateArray(itemOrFeed.titles, itemOrFeed.title, generateCdataString),
-    'dc:creator': generateArray(itemOrFeed.creators, itemOrFeed.creator, generateCdataString),
-    'dc:subject': generateArray(itemOrFeed.subjects, itemOrFeed.subject, generateCdataString),
-    'dc:description': generateArray(
+    'dc:title': generateArrayOrSingular(itemOrFeed.titles, itemOrFeed.title, generateCdataString),
+    'dc:creator': generateArrayOrSingular(
+      itemOrFeed.creators,
+      itemOrFeed.creator,
+      generateCdataString,
+    ),
+    'dc:subject': generateArrayOrSingular(
+      itemOrFeed.subjects,
+      itemOrFeed.subject,
+      generateCdataString,
+    ),
+    'dc:description': generateArrayOrSingular(
       itemOrFeed.descriptions,
       itemOrFeed.description,
       generateCdataString,
     ),
-    'dc:publisher': generateArray(itemOrFeed.publishers, itemOrFeed.publisher, generateCdataString),
-    'dc:contributor': generateArray(
+    'dc:publisher': generateArrayOrSingular(
+      itemOrFeed.publishers,
+      itemOrFeed.publisher,
+      generateCdataString,
+    ),
+    'dc:contributor': generateArrayOrSingular(
       itemOrFeed.contributors,
       itemOrFeed.contributor,
       generateCdataString,
     ),
-    'dc:date': generateArray(itemOrFeed.dates, itemOrFeed.date, generateRfc3339Date),
-    'dc:type': generateArray(itemOrFeed.types, itemOrFeed.type, generateCdataString),
-    'dc:format': generateArray(itemOrFeed.formats, itemOrFeed.format, generateCdataString),
-    'dc:identifier': generateArray(
+    'dc:date': generateArrayOrSingular(itemOrFeed.dates, itemOrFeed.date, generateRfc3339Date),
+    'dc:type': generateArrayOrSingular(itemOrFeed.types, itemOrFeed.type, generateCdataString),
+    'dc:format': generateArrayOrSingular(
+      itemOrFeed.formats,
+      itemOrFeed.format,
+      generateCdataString,
+    ),
+    'dc:identifier': generateArrayOrSingular(
       itemOrFeed.identifiers,
       itemOrFeed.identifier,
       generateCdataString,
     ),
-    'dc:source': generateArray(itemOrFeed.sources, itemOrFeed.source, generateCdataString),
-    'dc:language': generateArray(itemOrFeed.languages, itemOrFeed.language, generateCdataString),
-    'dc:relation': generateArray(itemOrFeed.relations, itemOrFeed.relation, generateCdataString),
-    'dc:coverage': generateArray(itemOrFeed.coverages, itemOrFeed.coverage, generateCdataString),
-    'dc:rights': generateArray(itemOrFeed.rights, undefined, generateCdataString),
+    'dc:source': generateArrayOrSingular(
+      itemOrFeed.sources,
+      itemOrFeed.source,
+      generateCdataString,
+    ),
+    'dc:language': generateArrayOrSingular(
+      itemOrFeed.languages,
+      itemOrFeed.language,
+      generateCdataString,
+    ),
+    'dc:relation': generateArrayOrSingular(
+      itemOrFeed.relations,
+      itemOrFeed.relation,
+      generateCdataString,
+    ),
+    'dc:coverage': generateArrayOrSingular(
+      itemOrFeed.coverages,
+      itemOrFeed.coverage,
+      generateCdataString,
+    ),
+    'dc:rights': generateArrayOrSingular(itemOrFeed.rights, undefined, generateCdataString),
   }
 
   return trimObject(value)
