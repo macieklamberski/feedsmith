@@ -981,6 +981,13 @@
             "value": "ad-123456"
           }
         ]
+      },
+      "spotify": {
+        "access": {
+          "entitlement": {
+            "name": "premium_content"
+          }
+        }
       }
     }
   ],
@@ -1937,6 +1944,14 @@
     "limit": {
       "recentCount": 10
     },
-    "countryOfOrigin": "US"
+    "countryOfOrigin": "US",
+    "access": {
+      "partner": {
+        "id": "2zkvpokj55bj2sCHxCejJs"
+      },
+      "sandbox": {
+        "enabled": true
+      }
+    }
   }
 }

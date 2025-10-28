@@ -97,6 +97,7 @@ export namespace Rss {
     wfw?: WfwNs.Item
     sourceNs?: SourceNs.Item
     rawvoice?: RawvoiceNs.Item
+    spotify?: SpotifyNs.Item
   } & ({ title: string } | { description: string })
 
   export type Feed<TDate extends DateLike> = {
