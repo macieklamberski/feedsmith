@@ -1049,6 +1049,8 @@ describe('parseEntry', () => {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: 'Example Entry',
       dcterms: {
+        createds: ['2023-02-01T00:00:00Z'],
+        licenses: ['MIT License'],
         created: '2023-02-01T00:00:00Z',
         license: 'MIT License',
       },
@@ -1531,6 +1533,8 @@ describe('parseFeed', () => {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: 'Example Feed',
       dcterms: {
+        createds: ['2023-01-01T00:00:00Z'],
+        licenses: ['Creative Commons Attribution 4.0'],
         created: '2023-01-01T00:00:00Z',
         license: 'Creative Commons Attribution 4.0',
       },
