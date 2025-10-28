@@ -1,6 +1,7 @@
 import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
+  parseArrayOf,
   parseDate,
   parseNumber,
   parseSingularOf,
@@ -93,6 +94,19 @@ export const parseMetamark: ParsePartialUtil<RawvoiceNs.Metamark> = (value) => {
   return trimObject(metamark)
 }
 
+export const parseDonate: ParsePartialUtil<RawvoiceNs.Donate> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const donate = {
+    href: parseString(value['@href']),
+    value: parseString(retrieveText(value)),
+  }
+
+  return trimObject(donate)
+}
+
 export const retrieveItem: ParsePartialUtil<RawvoiceNs.Item> = (value) => {
   if (!isObject(value)) {
     return
@@ -104,7 +118,7 @@ export const retrieveItem: ParsePartialUtil<RawvoiceNs.Item> = (value) => {
     embed: parseSingularOf(value['rawvoice:embed'], (value) => parseString(retrieveText(value))),
     webm: parseSingularOf(value['rawvoice:webm'], parseAlternateEnclosure),
     mp4: parseSingularOf(value['rawvoice:mp4'], parseAlternateEnclosure),
-    metamark: parseSingularOf(value['rawvoice:metamark'], parseMetamark),
+    metamarks: parseArrayOf(value['rawvoice:metamark'], parseMetamark),
   }
 
   return trimObject(item)
@@ -132,6 +146,7 @@ export const retrieveFeed: ParsePartialUtil<RawvoiceNs.Feed<string>> = (value) =
     ),
     mycast: parseSingularOf(value['rawvoice:mycast'], (value) => parseString(retrieveText(value))),
     subscribe: parseSingularOf(value['rawvoice:subscribe'], parseSubscribe),
+    donate: parseSingularOf(value['rawvoice:donate'], parseDonate),
   }
 
   return trimObject(feed)

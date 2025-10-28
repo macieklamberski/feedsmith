@@ -17,7 +17,7 @@ import {
   retrieveFeed as retrieveAtomFeed,
 } from '../../../namespaces/atom/parse/utils.js'
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
-import { retrieveFeed as retrieveCreativecommonsFeed } from '../../../namespaces/creativecommons/parse/utils.js'
+import { retrieveItemOrFeed as retrieveCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
 import { retrieveFeed as retrieveFeedPressFeed } from '../../../namespaces/feedpress/parse/utils.js'
@@ -168,6 +168,9 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
     atom: namespaces.has('atom') ? retrieveAtomEntry(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
     content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
+    creativeCommons: namespaces.has('creativecommons')
+      ? retrieveCreativecommonsItemOrFeed(value)
+      : undefined,
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesItem(value) : undefined,
     podcast: namespaces.has('podcast') ? retrievePodcastItem(value) : undefined,
@@ -220,7 +223,7 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     creativeCommons: namespaces.has('creativecommons')
-      ? retrieveCreativecommonsFeed(value)
+      ? retrieveCreativecommonsItemOrFeed(value)
       : undefined,
     feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(value) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,

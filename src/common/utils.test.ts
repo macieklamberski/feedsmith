@@ -5,6 +5,7 @@ import type { ParseExactUtil } from './types.js'
 import {
   createNamespaceNormalizator,
   detectNamespaces,
+  generateArrayOrSingular,
   generateBoolean,
   generateCdataString,
   generateCsvOf,
@@ -13,6 +14,7 @@ import {
   generatePlainString,
   generateRfc822Date,
   generateRfc3339Date,
+  generateSingularOrArray,
   generateXml,
   generateXmlStylesheet,
   generateYesNoBoolean,
@@ -3388,5 +3390,192 @@ describe('createNamespaceNormalizator', () => {
 
       expect(normalizeNamespaces(value)).toEqual(expected)
     })
+  })
+})
+
+describe('generateArrayOrSingular', () => {
+  it('should prioritize plural values over singular values', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateArrayOrSingular(['a', 'b', 'c'], 'x', generator)
+
+    expect(result).toEqual(['A', 'B', 'C'])
+  })
+
+  it('should use singular value when plural is undefined', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateArrayOrSingular(undefined, 'x', generator)
+
+    expect(result).toEqual('X')
+  })
+
+  it('should return undefined when both values are undefined', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateArrayOrSingular(undefined, undefined, generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should filter out undefined results from array', () => {
+    const generator = (value: string | undefined) => (value === 'skip' ? undefined : value)
+    const result = generateArrayOrSingular(['a', 'skip', 'b'], 'x', generator)
+
+    expect(result).toEqual(['a', 'b'])
+  })
+
+  it('should return undefined when all array items generate undefined', () => {
+    const generator = () => undefined
+    const result = generateArrayOrSingular(['a', 'b'], 'x', generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should work with generateCdataString', () => {
+    const result = generateArrayOrSingular(
+      ['<p>HTML</p>', 'Plain text'],
+      undefined,
+      generateCdataString,
+    )
+
+    expect(result).toEqual([{ '#cdata': '<p>HTML</p>' }, 'Plain text'])
+  })
+
+  it('should work with generatePlainString', () => {
+    const result = generateArrayOrSingular(['  value1  ', 'value2'], undefined, generatePlainString)
+
+    expect(result).toEqual(['value1', 'value2'])
+  })
+
+  it('should work with generateNumber', () => {
+    const result = generateArrayOrSingular([42, 100], undefined, generateNumber)
+
+    expect(result).toEqual([42, 100])
+  })
+
+  it('should handle empty plural array', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateArrayOrSingular([], 'x', generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should handle singular value that generates undefined', () => {
+    const generator = (value: string) => (value === 'skip' ? undefined : value)
+    const result = generateArrayOrSingular(undefined, 'skip', generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should preserve order of array elements', () => {
+    const generator = (value: number) => value * 2
+    const result = generateArrayOrSingular([1, 2, 3, 4, 5], 99, generator)
+
+    expect(result).toEqual([2, 4, 6, 8, 10])
+  })
+
+  it('should work with complex object transformations', () => {
+    const generator = (value: string) => ({ name: value, length: value.length })
+    const result = generateArrayOrSingular(['foo', 'bar'], 'baz', generator)
+
+    expect(result).toEqual([
+      { name: 'foo', length: 3 },
+      { name: 'bar', length: 3 },
+    ])
+  })
+
+  it('should ignore singular when plural is empty array', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateArrayOrSingular([], 'x', generator)
+
+    expect(result).toBeUndefined()
+  })
+})
+
+describe('generateSingularOrArray', () => {
+  it('should prioritize singular value over plural values', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateSingularOrArray('x', ['a', 'b', 'c'], generator)
+
+    expect(result).toEqual('X')
+  })
+
+  it('should use plural values when singular is undefined', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateSingularOrArray(undefined, ['a', 'b', 'c'], generator)
+
+    expect(result).toEqual(['A', 'B', 'C'])
+  })
+
+  it('should return undefined when both values are undefined', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateSingularOrArray(undefined, undefined, generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should filter out undefined results from array', () => {
+    const generator = (value: string | undefined) => (value === 'skip' ? undefined : value)
+    const result = generateSingularOrArray(undefined, ['a', 'skip', 'b'], generator)
+
+    expect(result).toEqual(['a', 'b'])
+  })
+
+  it('should return undefined when all array items generate undefined', () => {
+    const generator = () => undefined
+    const result = generateSingularOrArray(undefined, ['a', 'b'], generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should work with generateCdataString', () => {
+    const result = generateSingularOrArray('<p>HTML</p>', undefined, generateCdataString)
+
+    expect(result).toEqual({ '#cdata': '<p>HTML</p>' })
+  })
+
+  it('should work with generatePlainString', () => {
+    const result = generateSingularOrArray('  value  ', undefined, generatePlainString)
+
+    expect(result).toEqual('value')
+  })
+
+  it('should work with generateNumber', () => {
+    const result = generateSingularOrArray(42, undefined, generateNumber)
+
+    expect(result).toEqual(42)
+  })
+
+  it('should handle empty plural array', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateSingularOrArray(undefined, [], generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should handle singular value that generates undefined', () => {
+    const generator = (value: string) => (value === 'skip' ? undefined : value)
+    const result = generateSingularOrArray('skip', ['a', 'b'], generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should preserve order of array elements when using plural', () => {
+    const generator = (value: number) => value * 2
+    const result = generateSingularOrArray(undefined, [1, 2, 3, 4, 5], generator)
+
+    expect(result).toEqual([2, 4, 6, 8, 10])
+  })
+
+  it('should work with complex object transformations', () => {
+    const generator = (value: string) => ({ name: value, length: value.length })
+    const result = generateSingularOrArray('foo', undefined, generator)
+
+    expect(result).toEqual({ name: 'foo', length: 3 })
+  })
+
+  it('should ignore plural when singular is defined', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateSingularOrArray('x', ['a', 'b', 'c'], generator)
+
+    expect(result).toEqual('X')
   })
 })

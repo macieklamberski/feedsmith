@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:rawvoice="https://blubrry.com/developer/rawvoice-rss" xmlns:psc="http://podlove.org/simple-chapters" xmlns:spotify="http://www.spotify.com/ns/rss" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:source="http://source.scripting.com/" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:feedpress="https://feed.press/xmlns">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/" xmlns:psc="http://podlove.org/simple-chapters" xmlns:spotify="http://www.spotify.com/ns/rss" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:source="http://source.scripting.com/" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:feedpress="https://feed.press/xmlns">
   <channel>
     <title>Example Feed</title>
     <link>http://example.org</link>
@@ -288,6 +288,7 @@
     <rawvoice:httpLiveStream schedule="Mon, 15 Jan 2024 10:00:00 GMT" duration="3600">https://live.example.com/stream.m3u8</rawvoice:httpLiveStream>
     <rawvoice:mycast>yes</rawvoice:mycast>
     <rawvoice:subscribe feed="https://example.com/feed/podcast/" itunes="https://itunes.apple.com/us/podcast/example-podcast/id123456789" spotify="https://open.spotify.com/show/exampleshow123"/>
+    <rawvoice:donate href="https://example.com/donate">Support the Podcast</rawvoice:donate>
 
     <!-- Spotify Namespace: Channel Level Tags -->
     <spotify:limit recentCount="10"/>
@@ -388,6 +389,7 @@
       <itunes:duration>1800</itunes:duration>
       <itunes:image href="https://example.com/images/episode-cover.jpg"/>
       <itunes:explicit>false</itunes:explicit>
+      <itunes:author>John Doe</itunes:author>
       <itunes:title>iTunes Enhanced Episode Title</itunes:title>
       <itunes:episode>1</itunes:episode>
       <itunes:season>1</itunes:season>
@@ -566,6 +568,9 @@
       <source:outline>&lt;outline text="Implementation"&gt;&lt;outline text="RSS Integration"/&gt;&lt;/outline&gt;</source:outline>
       <source:localTime>2023-12-25 10:30:00</source:localTime>
       <source:linkFull>http://example.org/item/1/understanding-xml-namespaces-complete-guide</source:linkFull>
+
+      <!-- Creative Commons Namespace: Item Level Tags -->
+      <creativeCommons:license>http://creativecommons.org/licenses/by-sa/4.0/</creativeCommons:license>
 
       <!-- RawVoice Namespace: Item Level Tags -->
       <rawvoice:poster url="https://example.com/episode-poster.jpg"/>

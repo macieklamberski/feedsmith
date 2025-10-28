@@ -1,10 +1,9 @@
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
+  generateArrayOrSingular,
   generateCdataString,
   generateRfc3339Date,
   isObject,
-  isPresent,
-  trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { DctermsNs } from '../common/types.js'
@@ -14,217 +13,270 @@ export const generateItemOrFeed: GenerateUtil<DctermsNs.ItemOrFeed<DateLike>> = 
     return
   }
 
-  // TODO: Remove this once deprecated singular fields are removed in next major version.
-  const generateArray = <V>(
-    pluralValues: Array<V> | undefined,
-    singularValue: V | undefined,
-    generator: (value: V) => unknown,
-  ) => {
-    if (isPresent(pluralValues)) {
-      return trimArray(pluralValues.map(generator))
-    }
-
-    if (isPresent(singularValue)) {
-      return generator(singularValue)
-    }
-  }
-
   const value = {
-    'dcterms:abstract': generateArray(
+    'dcterms:abstract': generateArrayOrSingular(
       itemOrFeed.abstracts,
       itemOrFeed.abstract,
       generateCdataString,
     ),
-    'dcterms:accessRights': generateArray(itemOrFeed.accessRights, undefined, generateCdataString),
-    'dcterms:accrualMethod': generateArray(
+    'dcterms:accessRights': generateArrayOrSingular(
+      itemOrFeed.accessRights,
+      undefined,
+      generateCdataString,
+    ),
+    'dcterms:accrualMethod': generateArrayOrSingular(
       itemOrFeed.accrualMethods,
       itemOrFeed.accrualMethod,
       generateCdataString,
     ),
-    'dcterms:accrualPeriodicity': generateArray(
+    'dcterms:accrualPeriodicity': generateArrayOrSingular(
       itemOrFeed.accrualPeriodicities,
       itemOrFeed.accrualPeriodicity,
       generateCdataString,
     ),
-    'dcterms:accrualPolicy': generateArray(
+    'dcterms:accrualPolicy': generateArrayOrSingular(
       itemOrFeed.accrualPolicies,
       itemOrFeed.accrualPolicy,
       generateCdataString,
     ),
-    'dcterms:alternative': generateArray(
+    'dcterms:alternative': generateArrayOrSingular(
       itemOrFeed.alternatives,
       itemOrFeed.alternative,
       generateCdataString,
     ),
-    'dcterms:audience': generateArray(
+    'dcterms:audience': generateArrayOrSingular(
       itemOrFeed.audiences,
       itemOrFeed.audience,
       generateCdataString,
     ),
-    'dcterms:available': generateArray(
+    'dcterms:available': generateArrayOrSingular(
       itemOrFeed.availables,
       itemOrFeed.available,
       generateRfc3339Date,
     ),
-    'dcterms:bibliographicCitation': generateArray(
+    'dcterms:bibliographicCitation': generateArrayOrSingular(
       itemOrFeed.bibliographicCitations,
       itemOrFeed.bibliographicCitation,
       generateCdataString,
     ),
-    'dcterms:conformsTo': generateArray(
+    'dcterms:conformsTo': generateArrayOrSingular(
       itemOrFeed.conformsTos,
       itemOrFeed.conformsTo,
       generateCdataString,
     ),
-    'dcterms:contributor': generateArray(
+    'dcterms:contributor': generateArrayOrSingular(
       itemOrFeed.contributors,
       itemOrFeed.contributor,
       generateCdataString,
     ),
-    'dcterms:coverage': generateArray(
+    'dcterms:coverage': generateArrayOrSingular(
       itemOrFeed.coverages,
       itemOrFeed.coverage,
       generateCdataString,
     ),
-    'dcterms:created': generateArray(itemOrFeed.createds, itemOrFeed.created, generateRfc3339Date),
-    'dcterms:creator': generateArray(itemOrFeed.creators, itemOrFeed.creator, generateCdataString),
-    'dcterms:date': generateArray(itemOrFeed.dates, itemOrFeed.date, generateRfc3339Date),
-    'dcterms:dateAccepted': generateArray(
+    'dcterms:created': generateArrayOrSingular(
+      itemOrFeed.createds,
+      itemOrFeed.created,
+      generateRfc3339Date,
+    ),
+    'dcterms:creator': generateArrayOrSingular(
+      itemOrFeed.creators,
+      itemOrFeed.creator,
+      generateCdataString,
+    ),
+    'dcterms:date': generateArrayOrSingular(itemOrFeed.dates, itemOrFeed.date, generateRfc3339Date),
+    'dcterms:dateAccepted': generateArrayOrSingular(
       itemOrFeed.dateAccepteds,
       itemOrFeed.dateAccepted,
       generateRfc3339Date,
     ),
-    'dcterms:dateCopyrighted': generateArray(
+    'dcterms:dateCopyrighted': generateArrayOrSingular(
       itemOrFeed.dateCopyrighteds,
       itemOrFeed.dateCopyrighted,
       generateRfc3339Date,
     ),
-    'dcterms:dateSubmitted': generateArray(
+    'dcterms:dateSubmitted': generateArrayOrSingular(
       itemOrFeed.dateSubmitteds,
       itemOrFeed.dateSubmitted,
       generateRfc3339Date,
     ),
-    'dcterms:description': generateArray(
+    'dcterms:description': generateArrayOrSingular(
       itemOrFeed.descriptions,
       itemOrFeed.description,
       generateCdataString,
     ),
-    'dcterms:educationLevel': generateArray(
+    'dcterms:educationLevel': generateArrayOrSingular(
       itemOrFeed.educationLevels,
       itemOrFeed.educationLevel,
       generateCdataString,
     ),
-    'dcterms:extent': generateArray(itemOrFeed.extents, itemOrFeed.extent, generateCdataString),
-    'dcterms:format': generateArray(itemOrFeed.formats, itemOrFeed.format, generateCdataString),
-    'dcterms:hasFormat': generateArray(
+    'dcterms:extent': generateArrayOrSingular(
+      itemOrFeed.extents,
+      itemOrFeed.extent,
+      generateCdataString,
+    ),
+    'dcterms:format': generateArrayOrSingular(
+      itemOrFeed.formats,
+      itemOrFeed.format,
+      generateCdataString,
+    ),
+    'dcterms:hasFormat': generateArrayOrSingular(
       itemOrFeed.hasFormats,
       itemOrFeed.hasFormat,
       generateCdataString,
     ),
-    'dcterms:hasPart': generateArray(itemOrFeed.hasParts, itemOrFeed.hasPart, generateCdataString),
-    'dcterms:hasVersion': generateArray(
+    'dcterms:hasPart': generateArrayOrSingular(
+      itemOrFeed.hasParts,
+      itemOrFeed.hasPart,
+      generateCdataString,
+    ),
+    'dcterms:hasVersion': generateArrayOrSingular(
       itemOrFeed.hasVersions,
       itemOrFeed.hasVersion,
       generateCdataString,
     ),
-    'dcterms:identifier': generateArray(
+    'dcterms:identifier': generateArrayOrSingular(
       itemOrFeed.identifiers,
       itemOrFeed.identifier,
       generateCdataString,
     ),
-    'dcterms:instructionalMethod': generateArray(
+    'dcterms:instructionalMethod': generateArrayOrSingular(
       itemOrFeed.instructionalMethods,
       itemOrFeed.instructionalMethod,
       generateCdataString,
     ),
-    'dcterms:isFormatOf': generateArray(
+    'dcterms:isFormatOf': generateArrayOrSingular(
       itemOrFeed.isFormatOfs,
       itemOrFeed.isFormatOf,
       generateCdataString,
     ),
-    'dcterms:isPartOf': generateArray(
+    'dcterms:isPartOf': generateArrayOrSingular(
       itemOrFeed.isPartOfs,
       itemOrFeed.isPartOf,
       generateCdataString,
     ),
-    'dcterms:isReferencedBy': generateArray(
+    'dcterms:isReferencedBy': generateArrayOrSingular(
       itemOrFeed.isReferencedBys,
       itemOrFeed.isReferencedBy,
       generateCdataString,
     ),
-    'dcterms:isReplacedBy': generateArray(
+    'dcterms:isReplacedBy': generateArrayOrSingular(
       itemOrFeed.isReplacedBys,
       itemOrFeed.isReplacedBy,
       generateCdataString,
     ),
-    'dcterms:isRequiredBy': generateArray(
+    'dcterms:isRequiredBy': generateArrayOrSingular(
       itemOrFeed.isRequiredBys,
       itemOrFeed.isRequiredBy,
       generateCdataString,
     ),
-    'dcterms:issued': generateArray(itemOrFeed.issueds, itemOrFeed.issued, generateRfc3339Date),
-    'dcterms:isVersionOf': generateArray(
+    'dcterms:issued': generateArrayOrSingular(
+      itemOrFeed.issueds,
+      itemOrFeed.issued,
+      generateRfc3339Date,
+    ),
+    'dcterms:isVersionOf': generateArrayOrSingular(
       itemOrFeed.isVersionOfs,
       itemOrFeed.isVersionOf,
       generateCdataString,
     ),
-    'dcterms:language': generateArray(
+    'dcterms:language': generateArrayOrSingular(
       itemOrFeed.languages,
       itemOrFeed.language,
       generateCdataString,
     ),
-    'dcterms:license': generateArray(itemOrFeed.licenses, itemOrFeed.license, generateCdataString),
-    'dcterms:mediator': generateArray(
+    'dcterms:license': generateArrayOrSingular(
+      itemOrFeed.licenses,
+      itemOrFeed.license,
+      generateCdataString,
+    ),
+    'dcterms:mediator': generateArrayOrSingular(
       itemOrFeed.mediators,
       itemOrFeed.mediator,
       generateCdataString,
     ),
-    'dcterms:medium': generateArray(itemOrFeed.mediums, itemOrFeed.medium, generateCdataString),
-    'dcterms:modified': generateArray(
+    'dcterms:medium': generateArrayOrSingular(
+      itemOrFeed.mediums,
+      itemOrFeed.medium,
+      generateCdataString,
+    ),
+    'dcterms:modified': generateArrayOrSingular(
       itemOrFeed.modifieds,
       itemOrFeed.modified,
       generateRfc3339Date,
     ),
-    'dcterms:provenance': generateArray(
+    'dcterms:provenance': generateArrayOrSingular(
       itemOrFeed.provenances,
       itemOrFeed.provenance,
       generateCdataString,
     ),
-    'dcterms:publisher': generateArray(
+    'dcterms:publisher': generateArrayOrSingular(
       itemOrFeed.publishers,
       itemOrFeed.publisher,
       generateCdataString,
     ),
-    'dcterms:references': generateArray(itemOrFeed.references, undefined, generateCdataString),
-    'dcterms:relation': generateArray(
+    'dcterms:references': generateArrayOrSingular(
+      itemOrFeed.references,
+      undefined,
+      generateCdataString,
+    ),
+    'dcterms:relation': generateArrayOrSingular(
       itemOrFeed.relations,
       itemOrFeed.relation,
       generateCdataString,
     ),
-    'dcterms:replaces': generateArray(itemOrFeed.replaces, undefined, generateCdataString),
-    'dcterms:requires': generateArray(itemOrFeed.requires, undefined, generateCdataString),
-    'dcterms:rights': generateArray(itemOrFeed.rights, undefined, generateCdataString),
-    'dcterms:rightsHolder': generateArray(
+    'dcterms:replaces': generateArrayOrSingular(
+      itemOrFeed.replaces,
+      undefined,
+      generateCdataString,
+    ),
+    'dcterms:requires': generateArrayOrSingular(
+      itemOrFeed.requires,
+      undefined,
+      generateCdataString,
+    ),
+    'dcterms:rights': generateArrayOrSingular(itemOrFeed.rights, undefined, generateCdataString),
+    'dcterms:rightsHolder': generateArrayOrSingular(
       itemOrFeed.rightsHolders,
       itemOrFeed.rightsHolder,
       generateCdataString,
     ),
-    'dcterms:source': generateArray(itemOrFeed.sources, itemOrFeed.source, generateCdataString),
-    'dcterms:spatial': generateArray(itemOrFeed.spatials, itemOrFeed.spatial, generateCdataString),
-    'dcterms:subject': generateArray(itemOrFeed.subjects, itemOrFeed.subject, generateCdataString),
-    'dcterms:tableOfContents': generateArray(
+    'dcterms:source': generateArrayOrSingular(
+      itemOrFeed.sources,
+      itemOrFeed.source,
+      generateCdataString,
+    ),
+    'dcterms:spatial': generateArrayOrSingular(
+      itemOrFeed.spatials,
+      itemOrFeed.spatial,
+      generateCdataString,
+    ),
+    'dcterms:subject': generateArrayOrSingular(
+      itemOrFeed.subjects,
+      itemOrFeed.subject,
+      generateCdataString,
+    ),
+    'dcterms:tableOfContents': generateArrayOrSingular(
       itemOrFeed.tableOfContents,
       undefined,
       generateCdataString,
     ),
-    'dcterms:temporal': generateArray(
+    'dcterms:temporal': generateArrayOrSingular(
       itemOrFeed.temporals,
       itemOrFeed.temporal,
       generateCdataString,
     ),
-    'dcterms:title': generateArray(itemOrFeed.titles, itemOrFeed.title, generateCdataString),
-    'dcterms:type': generateArray(itemOrFeed.types, itemOrFeed.type, generateCdataString),
-    'dcterms:valid': generateArray(itemOrFeed.valids, itemOrFeed.valid, generateRfc3339Date),
+    'dcterms:title': generateArrayOrSingular(
+      itemOrFeed.titles,
+      itemOrFeed.title,
+      generateCdataString,
+    ),
+    'dcterms:type': generateArrayOrSingular(itemOrFeed.types, itemOrFeed.type, generateCdataString),
+    'dcterms:valid': generateArrayOrSingular(
+      itemOrFeed.valids,
+      itemOrFeed.valid,
+      generateRfc3339Date,
+    ),
   }
 
   return trimObject(value)

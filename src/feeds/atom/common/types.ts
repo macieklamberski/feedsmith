@@ -94,6 +94,7 @@ export namespace Atom {
     georss?: GeorssNs.ItemOrFeed
     thr?: ThrNs.Item
     dcterms?: DctermsNs.ItemOrFeed<TDate>
+    creativeCommons?: CreativecommonsNs.ItemOrFeed
     wfw?: WfwNs.Item
     yt?: YtNs.Item
   }
@@ -118,7 +119,7 @@ export namespace Atom {
     media?: MediaNs.ItemOrFeed
     georss?: GeorssNs.ItemOrFeed
     dcterms?: DctermsNs.ItemOrFeed<TDate>
-    creativeCommons?: CreativecommonsNs.Feed
+    creativeCommons?: CreativecommonsNs.ItemOrFeed
     yt?: YtNs.Feed
   }
 }

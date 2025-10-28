@@ -2049,6 +2049,12 @@ describe('parseLiveItem', () => {
           role: 'host',
         },
       ],
+      locations: [
+        {
+          display: 'New York, NY',
+          geo: '40.7128,-74.0060',
+        },
+      ],
       location: {
         display: 'New York, NY',
         geo: '40.7128,-74.0060',
@@ -3403,10 +3409,12 @@ describe('retrieveItem', () => {
         role: 'guest',
       },
     ],
-    location: {
-      display: 'New York, NY',
-      geo: '40.7128,-74.0060',
-    },
+    locations: [
+      {
+        display: 'New York, NY',
+        geo: '40.7128,-74.0060',
+      },
+    ],
     season: {
       number: 2,
       name: 'Second Season',
@@ -3431,18 +3439,20 @@ describe('retrieveItem', () => {
         ],
       },
     ],
-    value: {
-      type: 'lightning',
-      method: 'keysend',
-      suggested: 0.00000005,
-      valueRecipients: [
-        {
-          type: 'node',
-          address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
-          split: 100,
-        },
-      ],
-    },
+    values: [
+      {
+        type: 'lightning',
+        method: 'keysend',
+        suggested: 0.00000005,
+        valueRecipients: [
+          {
+            type: 'node',
+            address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
+            split: 100,
+          },
+        ],
+      },
+    ],
     socialInteracts: [
       {
         uri: 'https://example.com/episodes/1/comments',
@@ -3458,6 +3468,22 @@ describe('retrieveItem', () => {
         purpose: 'description',
       },
     ],
+    location: {
+      display: 'New York, NY',
+      geo: '40.7128,-74.0060',
+    },
+    value: {
+      type: 'lightning',
+      method: 'keysend',
+      suggested: 0.00000005,
+      valueRecipients: [
+        {
+          type: 'node',
+          address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
+          split: 100,
+        },
+      ],
+    },
   }
 
   it('should parse a complete item with all podcast namespace elements', () => {
@@ -3884,6 +3910,12 @@ describe('retrieveFeed', () => {
         img: 'https://example.com/janedoe.jpg',
       },
     ],
+    locations: [
+      {
+        display: 'San Francisco, CA',
+        geo: '37.7749,-122.4194',
+      },
+    ],
     location: {
       display: 'San Francisco, CA',
       geo: '37.7749,-122.4194',
@@ -3902,6 +3934,20 @@ describe('retrieveFeed', () => {
       url: 'https://creativecommons.org/licenses/by/4.0/',
     },
     guid: 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+    values: [
+      {
+        type: 'lightning',
+        method: 'keysend',
+        suggested: 0.00000005,
+        valueRecipients: [
+          {
+            type: 'node',
+            address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
+            split: 100,
+          },
+        ],
+      },
+    ],
     value: {
       type: 'lightning',
       method: 'keysend',

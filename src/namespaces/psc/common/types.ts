@@ -2,7 +2,7 @@
 export namespace PscNs {
   export type Chapter = {
     start: string
-    title?: string
+    title: string
     href?: string
     image?: string
   }
