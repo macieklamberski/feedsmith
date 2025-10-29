@@ -49,7 +49,7 @@ export namespace RawvoiceNs {
     liveStream?: LiveStream<TDate>
     location?: string
     frequency?: string
-    mycast?: string
+    mycast?: boolean
     subscribe?: Subscribe
     donate?: Donate
   }

@@ -240,7 +240,7 @@ describe('generateFeed', () => {
       },
       location: 'San Francisco, CA',
       frequency: 'Weekly',
-      mycast: 'yes',
+      mycast: true,
     }
     const expected = {
       'rawvoice:rating': {
@@ -287,6 +287,19 @@ describe('generateFeed', () => {
     }
     const expected = {
       'rawvoice:location': 'Boston, MA',
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should handle false boolean value', () => {
+    const value = {
+      mycast: false,
+      location: 'New York, NY',
+    }
+    const expected = {
+      'rawvoice:mycast': 'no',
+      'rawvoice:location': 'New York, NY',
     }
 
     expect(generateFeed(value)).toEqual(expected)

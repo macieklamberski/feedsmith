@@ -143,7 +143,7 @@ export const generateFeed: GenerateUtil<RawvoiceNs.Feed<DateLike>> = (feed) => {
     'rawvoice:liveStream': generateLiveStream(feed.liveStream),
     'rawvoice:location': generateCdataString(feed.location),
     'rawvoice:frequency': generateCdataString(feed.frequency),
-    'rawvoice:mycast': generateCdataString(feed.mycast),
+    'rawvoice:mycast': generateYesNoBoolean(feed.mycast),
     'rawvoice:subscribe': generateSubscribe(feed.subscribe),
     'rawvoice:donate': generateDonate(feed.donate),
   }

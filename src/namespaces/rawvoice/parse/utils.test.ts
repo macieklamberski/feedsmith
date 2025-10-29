@@ -302,7 +302,7 @@ describe('retrieveFeed', () => {
     },
     location: 'San Francisco, CA',
     frequency: 'Weekly',
-    mycast: 'yes',
+    mycast: true,
     donate: {
       href: 'https://example.com/donate',
       value: 'Support the show',

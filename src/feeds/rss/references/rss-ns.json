@@ -1801,7 +1801,7 @@
       "schedule": "Mon, 15 Jan 2024 10:00:00 GMT",
       "duration": "3600"
     },
-    "mycast": "yes",
+    "mycast": true,
     "subscribe": {
       "feed": "https://example.com/feed/podcast/",
       "itunes": "https://itunes.apple.com/us/podcast/example-podcast/id123456789",

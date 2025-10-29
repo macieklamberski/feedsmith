@@ -147,7 +147,9 @@ export const retrieveFeed: ParsePartialUtil<RawvoiceNs.Feed<string>> = (value) =
     frequency: parseSingularOf(value['rawvoice:frequency'], (value) =>
       parseString(retrieveText(value)),
     ),
-    mycast: parseSingularOf(value['rawvoice:mycast'], (value) => parseString(retrieveText(value))),
+    mycast: parseSingularOf(value['rawvoice:mycast'], (value) =>
+      parseYesNoBoolean(retrieveText(value)),
+    ),
     subscribe: parseSingularOf(value['rawvoice:subscribe'], parseSubscribe),
     donate: parseSingularOf(value['rawvoice:donate'], parseDonate),
   }
