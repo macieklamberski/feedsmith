@@ -5,6 +5,7 @@ import {
   generatePlainString,
   generateRfc822Date,
   generateTextOrCdataString,
+  generateYesNoBoolean,
   isObject,
   trimArray,
   trimObject,
@@ -118,7 +119,7 @@ export const generateItem: GenerateUtil<RawvoiceNs.Item> = (item) => {
 
   const value = {
     'rawvoice:poster': generatePoster(item.poster),
-    'rawvoice:isHd': generateCdataString(item.isHd),
+    'rawvoice:isHd': generateYesNoBoolean(item.isHd),
     'rawvoice:embed': generateCdataString(item.embed),
     'rawvoice:webm': generateAlternateEnclosure(item.webm),
     'rawvoice:mp4': generateAlternateEnclosure(item.mp4),

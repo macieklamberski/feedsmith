@@ -7,7 +7,7 @@ describe('generateItem', () => {
       poster: {
         url: 'https://example.com/poster.jpg',
       },
-      isHd: 'yes',
+      isHd: true,
       embed: '<iframe src="https://example.com/embed"></iframe>',
       webm: {
         src: 'https://example.com/video.webm',
@@ -78,12 +78,13 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
-  it('should filter out empty string values', () => {
+  it('should handle false boolean value', () => {
     const value = {
-      isHd: '',
+      isHd: false,
       embed: '<div>content</div>',
     }
     const expected = {
+      'rawvoice:isHd': 'no',
       'rawvoice:embed': {
         '#cdata': '<div>content</div>',
       },

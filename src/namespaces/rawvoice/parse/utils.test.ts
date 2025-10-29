@@ -6,7 +6,7 @@ describe('retrieveItem', () => {
     poster: {
       url: 'https://example.com/poster.jpg',
     },
-    isHd: 'yes',
+    isHd: true,
     embed: '<iframe src="https://example.com/embed"></iframe>',
     webm: {
       src: 'https://example.com/video.webm',
@@ -170,7 +170,7 @@ describe('retrieveItem', () => {
       'other:property': { '#text': 'value' },
     }
     const expected = {
-      isHd: 'yes',
+      isHd: true,
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -182,7 +182,7 @@ describe('retrieveItem', () => {
       'rawvoice:embed': ['<div>first</div>', '<div>second</div>'],
     }
     const expected = {
-      isHd: 'yes',
+      isHd: true,
       embed: '<div>first</div>',
     }
 

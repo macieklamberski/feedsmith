@@ -791,7 +791,7 @@ describe('generateItem', () => {
         poster: {
           url: 'https://example.com/poster.jpg',
         },
-        isHd: 'yes',
+        isHd: true,
       },
     }
     const expected = {

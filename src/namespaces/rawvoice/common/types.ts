@@ -56,7 +56,7 @@ export namespace RawvoiceNs {
 
   export type Item = {
     poster?: Poster
-    isHd?: string
+    isHd?: boolean
     embed?: string
     webm?: AlternateEnclosure
     mp4?: AlternateEnclosure

@@ -6,6 +6,7 @@ import {
   parseNumber,
   parseSingularOf,
   parseString,
+  parseYesNoBoolean,
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
@@ -114,7 +115,9 @@ export const retrieveItem: ParsePartialUtil<RawvoiceNs.Item> = (value) => {
 
   const item = {
     poster: parseSingularOf(value['rawvoice:poster'], parsePoster),
-    isHd: parseSingularOf(value['rawvoice:ishd'], (value) => parseString(retrieveText(value))),
+    isHd: parseSingularOf(value['rawvoice:ishd'], (value) =>
+      parseYesNoBoolean(retrieveText(value)),
+    ),
     embed: parseSingularOf(value['rawvoice:embed'], (value) => parseString(retrieveText(value))),
     webm: parseSingularOf(value['rawvoice:webm'], parseAlternateEnclosure),
     mp4: parseSingularOf(value['rawvoice:mp4'], parseAlternateEnclosure),

@@ -895,7 +895,7 @@
         "poster": {
           "url": "https://example.com/episode-poster.jpg"
         },
-        "isHd": "yes",
+        "isHd": true,
         "embed": "<iframe src=\"https://player.example.com/video/12345\" width=\"640\" height=\"360\" frameborder=\"0\" allowfullscreen></iframe>",
         "webm": {
           "src": "https://example.com/video.webm",
