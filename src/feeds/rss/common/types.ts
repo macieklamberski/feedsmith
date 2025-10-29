@@ -68,7 +68,7 @@ export namespace Rss {
 
   export type Source = {
     title: string
-    url?: string
+    url: string
   }
 
   export type Item<TDate extends DateLike> = {

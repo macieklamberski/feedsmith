@@ -370,12 +370,14 @@ describe('generateSource', () => {
     expect(generateSource(value)).toEqual(expected)
   })
 
-  it('should generate source with minimal properties', () => {
+  it('should generate source with all required properties', () => {
     const value = {
       title: 'Example Source',
+      url: 'https://example.com/feed.xml',
     }
     const expected = {
       '#text': 'Example Source',
+      '@url': 'https://example.com/feed.xml',
     }
 
     expect(generateSource(value)).toEqual(expected)
