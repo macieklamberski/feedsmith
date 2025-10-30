@@ -79,6 +79,19 @@
         "type": "Article",
         "valid": "2025-12-31T23:59:59.000Z"
       },
+      "cc": {
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "morePermissions": "https://example.com/additional-permissions",
+        "attributionName": "Jack Jackson",
+        "attributionURL": "https://example.com/authors/jack-jackson",
+        "useGuidelines": "https://example.com/article-usage-guidelines",
+        "permits": "http://creativecommons.org/ns#Reproduction",
+        "requires": "http://creativecommons.org/ns#Attribution",
+        "prohibits": "http://creativecommons.org/ns#CommercialUse",
+        "jurisdiction": "http://creativecommons.org/international/us/",
+        "legalcode": "https://creativecommons.org/licenses/by/4.0/legalcode",
+        "deprecatedOn": "2026-12-31"
+      },
       "slash": {
         "section": "articles",
         "department": "not-an-ocean-unless-there-are-lobsters",
@@ -642,6 +655,19 @@
     "title": "Dublin Core Terms Enhanced Feed Title",
     "type": "Text",
     "valid": "2025-12-31T23:59:59.000Z"
+  },
+  "cc": {
+    "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "morePermissions": "https://example.com/commercial-license",
+    "attributionName": "Example Publishing Company",
+    "attributionURL": "https://example.com/",
+    "useGuidelines": "https://example.com/usage-guidelines",
+    "permits": "http://creativecommons.org/ns#Reproduction",
+    "requires": "http://creativecommons.org/ns#Attribution",
+    "prohibits": "http://creativecommons.org/ns#CommercialUse",
+    "jurisdiction": "http://creativecommons.org/international/us/",
+    "legalcode": "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode",
+    "deprecatedOn": "2025-12-31"
   },
   "creativeCommons": {
     "license": "http://creativecommons.org/licenses/by-nc-nd/2.0/"
