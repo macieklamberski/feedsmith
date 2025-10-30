@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:psc="http://podlove.org/simple-chapters" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:psc="http://podlove.org/simple-chapters" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:cc="http://creativecommons.org/ns#" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
   <id>example-feed</id>
   <title>Example Feed</title>
 
@@ -216,6 +216,19 @@
   <dcterms:type>Text</dcterms:type>
   <dcterms:valid>2025-12-31T23:59:59.000Z</dcterms:valid>
 
+  <!-- ccREL Namespace: Feed Level Tags -->
+  <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
+  <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
+  <cc:attributionName>Example Publishing Company</cc:attributionName>
+  <cc:attributionURL>https://example.com/</cc:attributionURL>
+  <cc:useGuidelines>https://example.com/usage-guidelines</cc:useGuidelines>
+  <cc:permits>http://creativecommons.org/ns#Reproduction</cc:permits>
+  <cc:requires>http://creativecommons.org/ns#Attribution</cc:requires>
+  <cc:prohibits>http://creativecommons.org/ns#CommercialUse</cc:prohibits>
+  <cc:jurisdiction>http://creativecommons.org/international/us/</cc:jurisdiction>
+  <cc:legalcode>https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode</cc:legalcode>
+  <cc:deprecatedOn>2025-12-31</cc:deprecatedOn>
+
   <!-- Creative Commons Namespace: Feed Level Tags -->
   <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
 
@@ -301,6 +314,19 @@
     <dcterms:title>Dublin Core Terms Enhanced Item Title</dcterms:title>
     <dcterms:type>Article</dcterms:type>
     <dcterms:valid>2025-12-31T23:59:59.000Z</dcterms:valid>
+
+    <!-- ccREL Namespace: Entry Level Tags -->
+    <cc:license>https://creativecommons.org/licenses/by/4.0/</cc:license>
+    <cc:morePermissions>https://example.com/additional-permissions</cc:morePermissions>
+    <cc:attributionName>Jack Jackson</cc:attributionName>
+    <cc:attributionURL>https://example.com/authors/jack-jackson</cc:attributionURL>
+    <cc:useGuidelines>https://example.com/article-usage-guidelines</cc:useGuidelines>
+    <cc:permits>http://creativecommons.org/ns#Reproduction</cc:permits>
+    <cc:requires>http://creativecommons.org/ns#Attribution</cc:requires>
+    <cc:prohibits>http://creativecommons.org/ns#CommercialUse</cc:prohibits>
+    <cc:jurisdiction>http://creativecommons.org/international/us/</cc:jurisdiction>
+    <cc:legalcode>https://creativecommons.org/licenses/by/4.0/legalcode</cc:legalcode>
+    <cc:deprecatedOn>2026-12-31</cc:deprecatedOn>
 
     <!-- Slash Namespace: Entry Level Tags -->
     <slash:section>articles</slash:section>

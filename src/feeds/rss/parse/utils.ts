@@ -16,6 +16,7 @@ import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
 } from '../../../namespaces/atom/parse/utils.js'
+import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
@@ -169,6 +170,7 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
     pubDate: parseSingularOf(value.pubdate, (value) => parseDate(retrieveText(value))),
     source: parseSingularOf(value.source, parseSource),
     atom: namespaces.has('atom') ? retrieveAtomEntry(value) : undefined,
+    cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
     content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     creativeCommons: namespaces.has('creativecommons')
@@ -219,6 +221,7 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
     skipDays: parseSingularOf(value.skipdays, parseSkipDays),
     items: parseArrayOf(value.item, parseItem),
     atom: namespaces.has('atom') ? retrieveAtomFeed(value) : undefined,
+    cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
     sy: namespaces.has('sy') ? retrieveSyFeed(value) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesFeed(value) : undefined,

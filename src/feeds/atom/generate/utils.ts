@@ -11,6 +11,7 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
 import { generateItemOrFeed as generateCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
@@ -166,6 +167,7 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
 
   return {
     ...trimmedValue,
+    ...generateCc(entry.cc),
     ...generateDcItemOrFeed(entry.dc),
     ...generateSlashItem(entry.slash),
     ...generateItunesItem(entry.itunes),
@@ -228,6 +230,7 @@ export const generateFeed: GenerateUtil<Atom.Feed<DateLike>> = (feed, options) =
 
   const valueFull = {
     ...valueFeed,
+    ...generateCc(feed.cc),
     ...generateDcItemOrFeed(feed.dc),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),

@@ -206,6 +206,14 @@ export const namespaceUris = {
     'https://blubrry.com/developer/rawvoice-rss/',
     'http://blubrry.com/developer/rawvoice-rss/',
   ],
+  cc: [
+    'http://creativecommons.org/ns#', // Official URI.
+    'https://creativecommons.org/ns#',
+    'http://web.resource.org/cc/',
+    'https://web.resource.org/cc/',
+    'http://web.resource.org/cc',
+    'https://web.resource.org/cc',
+  ],
 }
 
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(

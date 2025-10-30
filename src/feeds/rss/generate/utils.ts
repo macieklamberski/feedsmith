@@ -16,6 +16,7 @@ import {
   generateEntry as generateAtomEntry,
   generateFeed as generateAtomFeed,
 } from '../../../namespaces/atom/generate/utils.js'
+import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
 import { generateItem as generateContentItem } from '../../../namespaces/content/generate/utils.js'
 import { generateItemOrFeed as generateCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
@@ -184,6 +185,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
     pubDate: generateRfc822Date(item.pubDate),
     source: generateSource(item.source),
     ...generateAtomEntry(item.atom),
+    ...generateCc(item.cc),
     ...generateDcItemOrFeed(item.dc),
     ...generateContentItem(item.content),
     ...generateCreativecommonsItemOrFeed(item.creativeCommons),
@@ -230,6 +232,7 @@ export const generateFeed: GenerateUtil<Rss.Feed<DateLike>> = (feed) => {
     skipHours: generateSkipHours(feed.skipHours),
     skipDays: generateSkipDays(feed.skipDays),
     ...generateAtomFeed(feed.atom),
+    ...generateCc(feed.cc),
     ...generateDcItemOrFeed(feed.dc),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),

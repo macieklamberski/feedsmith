@@ -500,6 +500,41 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with ccREL namespace', () => {
+    const value = {
+      title: 'Feed with ccREL namespace',
+      description: 'Test feed with ccREL namespace',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+        morePermissions: 'https://example.com/commercial-license',
+      },
+      items: [
+        {
+          title: 'Item with ccREL',
+          cc: {
+            license: 'https://creativecommons.org/licenses/by/4.0/',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:cc="http://creativecommons.org/ns#">
+  <channel>
+    <title>Feed with ccREL namespace</title>
+    <description>Test feed with ccREL namespace</description>
+    <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
+    <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
+    <item>
+      <title>Item with ccREL</title>
+      <cc:license>https://creativecommons.org/licenses/by/4.0/</cc:license>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with creativecommons namespace', () => {
     const value = {
       title: 'Feed with creativecommons namespace',

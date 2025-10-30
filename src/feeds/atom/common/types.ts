@@ -3,6 +3,7 @@ import type {
   ParsePartialUtil as BaseParsePartialUtil,
   DateLike,
 } from '../../../common/types.js'
+import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { CreativecommonsNs } from '../../../namespaces/creativecommons/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DctermsNs } from '../../../namespaces/dcterms/common/types.js'
@@ -86,6 +87,7 @@ export namespace Atom {
     summary?: Text
     title: Text
     updated: TDate
+    cc?: CcNs.ItemOrFeed
     dc?: DcNs.ItemOrFeed<TDate>
     slash?: SlashNs.Item
     itunes?: ItunesNs.Item
@@ -113,6 +115,7 @@ export namespace Atom {
     title: Text
     updated: TDate
     entries?: Array<Entry<TDate>>
+    cc?: CcNs.ItemOrFeed
     dc?: DcNs.ItemOrFeed<TDate>
     sy?: SyNs.Feed<TDate>
     itunes?: ItunesNs.Feed
