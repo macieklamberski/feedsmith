@@ -57,6 +57,7 @@ export const generateItem: GenerateUtil<ItunesNs.Item> = (item) => {
     'itunes:duration': generateNumber(item.duration),
     'itunes:image': generateImage(item.image),
     'itunes:explicit': generateYesNoBoolean(item.explicit),
+    'itunes:author': generateCdataString(item.author),
     'itunes:title': generateCdataString(item.title),
     'itunes:episode': generateNumber(item.episode),
     'itunes:season': generateNumber(item.season),

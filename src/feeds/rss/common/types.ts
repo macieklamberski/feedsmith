@@ -87,6 +87,7 @@ export namespace Rss {
     cc?: CcNs.ItemOrFeed
     dc?: DcNs.ItemOrFeed<TDate>
     content?: ContentNs.Item
+    creativeCommons?: CreativecommonsNs.ItemOrFeed
     slash?: SlashNs.Item
     itunes?: ItunesNs.Item
     podcast?: PodcastNs.Item
@@ -98,6 +99,7 @@ export namespace Rss {
     wfw?: WfwNs.Item
     sourceNs?: SourceNs.Item
     rawvoice?: RawvoiceNs.Item
+    spotify?: SpotifyNs.Item
   } & ({ title: string } | { description: string })
 
   export type Feed<TDate extends DateLike> = {
@@ -132,7 +134,7 @@ export namespace Rss {
     media?: MediaNs.ItemOrFeed
     georss?: GeorssNs.ItemOrFeed
     dcterms?: DctermsNs.ItemOrFeed<TDate>
-    creativeCommons?: CreativecommonsNs.Feed
+    creativeCommons?: CreativecommonsNs.ItemOrFeed
     feedpress?: FeedpressNs.Feed
     sourceNs?: SourceNs.Feed
     rawvoice?: RawvoiceNs.Feed<TDate>

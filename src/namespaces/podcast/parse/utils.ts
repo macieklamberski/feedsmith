@@ -407,15 +407,20 @@ export const retrieveItem: ParsePartialUtil<PodcastNs.Item> = (value) => {
     chapters: parseSingularOf(value['podcast:chapters'], parseChapters),
     soundbites: parseArrayOf(value['podcast:soundbite'], parseSoundbite),
     persons: parseArrayOf(value['podcast:person'], parsePerson),
-    location: parseSingularOf(value['podcast:location'], parseLocation),
+    locations: parseArrayOf(value['podcast:location'], parseLocation),
     season: parseSingularOf(value['podcast:season'], parseSeason),
     episode: parseSingularOf(value['podcast:episode'], parseEpisode),
     license: parseSingularOf(value['podcast:license'], parseLicense),
     alternateEnclosures: parseArrayOf(value['podcast:alternateenclosure'], parseAlternateEnclosure),
-    value: parseSingularOf(value['podcast:value'], parseValue),
+    values: parseArrayOf(value['podcast:value'], parseValue),
     images: parseSingularOf(value['podcast:images'], parseImages),
     socialInteracts: parseArrayOf(value['podcast:socialinteract'], parseSocialInteract),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
+    chat: parseSingularOf(value['podcast:chat'], parseChat),
+
+    // Deprecated fields for backward compatibility.
+    location: parseSingularOf(value['podcast:location'], parseLocation),
+    value: parseSingularOf(value['podcast:value'], parseValue),
     chats: parseArrayOf(value['podcast:chat'], parseChat),
   }
 
@@ -431,11 +436,11 @@ export const retrieveFeed: ParsePartialUtil<PodcastNs.Feed<string>> = (value) =>
     locked: parseSingularOf(value['podcast:locked'], parseLocked),
     fundings: parseArrayOf(value['podcast:funding'], parseFunding),
     persons: parseArrayOf(value['podcast:person'], parsePerson),
-    location: parseSingularOf(value['podcast:location'], parseLocation),
+    locations: parseArrayOf(value['podcast:location'], parseLocation),
     trailers: parseArrayOf(value['podcast:trailer'], parseTrailer),
     license: parseSingularOf(value['podcast:license'], parseLicense),
     guid: parseSingularOf(value['podcast:guid'], (value) => parseString(retrieveText(value))),
-    value: parseSingularOf(value['podcast:value'], parseValue),
+    values: parseArrayOf(value['podcast:value'], parseValue),
     medium: parseSingularOf(value['podcast:medium'], (value) => parseString(retrieveText(value))),
     images: parseSingularOf(value['podcast:images'], parseImages),
     liveItems: parseArrayOf(value['podcast:liveitem'], parseLiveItem),
@@ -445,8 +450,13 @@ export const retrieveFeed: ParsePartialUtil<PodcastNs.Feed<string>> = (value) =>
     podroll: parseSingularOf(value['podcast:podroll'], parsePodroll),
     updateFrequency: parseSingularOf(value['podcast:updatefrequency'], parseUpdateFrequency),
     podping: parseSingularOf(value['podcast:podping'], parsePodping),
-    chats: parseArrayOf(value['podcast:chat'], parseChat),
+    chat: parseSingularOf(value['podcast:chat'], parseChat),
     publisher: parseSingularOf(value['podcast:publisher'], parsePublisher),
+
+    // Deprecated fields for backward compatibility.
+    location: parseSingularOf(value['podcast:location'], parseLocation),
+    value: parseSingularOf(value['podcast:value'], parseValue),
+    chats: parseArrayOf(value['podcast:chat'], parseChat),
   }
 
   return trimObject(feed)

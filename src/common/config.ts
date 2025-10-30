@@ -94,6 +94,7 @@ export const namespaceUris = {
     'http://podcastindex.org/namespace/1.0',
     'https://podcastindex.org/namespace/1.0/',
     'http://podcastindex.org/namespace/1.0/',
+    'https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/1.0.md',
   ],
   psc: [
     'http://podlove.org/simple-chapters', // Official URI.
@@ -174,6 +175,10 @@ export const namespaceUris = {
     'http://feedpress.com/xmlns',
     'https://feedpress.com/xmlns/',
     'http://feedpress.com/xmlns/',
+    'http://feedpress.it/xmlns',
+    'https://feedpress.it/xmlns',
+    'http://feedpress.it/xmlns/',
+    'https://feedpress.it/xmlns/',
   ],
   yt: [
     'http://www.youtube.com/xml/schemas/2015', // Official URI.
@@ -192,14 +197,14 @@ export const namespaceUris = {
     'https://www.w3.org/1999/02/22-rdf-syntax-ns#',
   ],
   rawvoice: [
-    'https://blubrry.com/developer/rawvoice-rss', // Official URI.
+    'http://www.rawvoice.com/rawvoiceRssModule/', // Official URI.
+    'https://www.rawvoice.com/rawvoiceRssModule/',
+    'http://www.rawvoice.com/rawvoiceRssModule',
+    'https://www.rawvoice.com/rawvoiceRssModule',
+    'https://blubrry.com/developer/rawvoice-rss',
     'http://blubrry.com/developer/rawvoice-rss',
     'https://blubrry.com/developer/rawvoice-rss/',
     'http://blubrry.com/developer/rawvoice-rss/',
-    'http://www.rawvoice.com/rawvoiceRssModule',
-    'https://www.rawvoice.com/rawvoiceRssModule',
-    'http://www.rawvoice.com/rawvoiceRssModule/',
-    'https://www.rawvoice.com/rawvoiceRssModule/',
   ],
   cc: [
     'http://creativecommons.org/ns#', // Official URI.

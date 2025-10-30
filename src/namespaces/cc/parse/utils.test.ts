@@ -3,9 +3,66 @@ import { retrieveItemOrFeed, retrieveValue } from './utils.js'
 
 describe('retrieveValue', () => {
   it('should return string value directly', () => {
-    expect(retrieveValue('https://creativecommons.org/licenses/by/4.0/')).toBe(
-      'https://creativecommons.org/licenses/by/4.0/',
-    )
+    const value = 'https://creativecommons.org/licenses/by/4.0/'
+    const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+    expect(retrieveValue(value)).toBe(expected)
+  })
+
+  it('should extract value from @rdf:resource attribute', () => {
+    const value = {
+      '@rdf:resource': 'https://creativecommons.org/licenses/by/4.0/',
+    }
+    const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+    expect(retrieveValue(value)).toBe(expected)
+  })
+
+  it('should extract value from #text property', () => {
+    const value = {
+      '#text': 'https://creativecommons.org/licenses/by/4.0/',
+    }
+    const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+    expect(retrieveValue(value)).toBe(expected)
+  })
+
+  it('should handle HTML entities in #text', () => {
+    const value = {
+      '#text': 'https://example.com?foo=bar&amp;baz=qux',
+    }
+    const expected = 'https://example.com?foo=bar&baz=qux'
+
+    expect(retrieveValue(value)).toBe(expected)
+  })
+
+  it('should handle CDATA sections', () => {
+    const value = {
+      '#text': '<![CDATA[https://creativecommons.org/licenses/by/4.0/]]>',
+    }
+    const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+    expect(retrieveValue(value)).toBe(expected)
+  })
+
+  it('should prefer @rdf:resource over #text when both present', () => {
+    const value = {
+      '@rdf:resource': 'https://creativecommons.org/licenses/by/4.0/',
+      '#text': 'https://example.com/other-license',
+    }
+    const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+    expect(retrieveValue(value)).toBe(expected)
+  })
+
+  it('should fall back to #text when @rdf:resource is empty', () => {
+    const value = {
+      '@rdf:resource': '',
+      '#text': 'https://creativecommons.org/licenses/by/4.0/',
+    }
+    const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+    expect(retrieveValue(value)).toBe(expected)
   })
 
   it('should return undefined for empty string', () => {
@@ -14,56 +71,6 @@ describe('retrieveValue', () => {
 
   it('should return undefined for whitespace-only string', () => {
     expect(retrieveValue('   ')).toBeUndefined()
-  })
-
-  it('should extract value from @rdf:resource attribute', () => {
-    const value = {
-      '@rdf:resource': 'https://creativecommons.org/licenses/by/4.0/',
-    }
-
-    expect(retrieveValue(value)).toBe('https://creativecommons.org/licenses/by/4.0/')
-  })
-
-  it('should extract value from #text property', () => {
-    const value = {
-      '#text': 'https://creativecommons.org/licenses/by/4.0/',
-    }
-
-    expect(retrieveValue(value)).toBe('https://creativecommons.org/licenses/by/4.0/')
-  })
-
-  it('should handle HTML entities in #text', () => {
-    const value = {
-      '#text': 'https://example.com?foo=bar&amp;baz=qux',
-    }
-
-    expect(retrieveValue(value)).toBe('https://example.com?foo=bar&baz=qux')
-  })
-
-  it('should handle CDATA sections', () => {
-    const value = {
-      '#text': '<![CDATA[https://creativecommons.org/licenses/by/4.0/]]>',
-    }
-
-    expect(retrieveValue(value)).toBe('https://creativecommons.org/licenses/by/4.0/')
-  })
-
-  it('should prefer @rdf:resource over #text when both present', () => {
-    const value = {
-      '@rdf:resource': 'https://creativecommons.org/licenses/by/4.0/',
-      '#text': 'https://example.com/other-license',
-    }
-
-    expect(retrieveValue(value)).toBe('https://creativecommons.org/licenses/by/4.0/')
-  })
-
-  it('should fall back to #text when @rdf:resource is empty', () => {
-    const value = {
-      '@rdf:resource': '',
-      '#text': 'https://creativecommons.org/licenses/by/4.0/',
-    }
-
-    expect(retrieveValue(value)).toBe('https://creativecommons.org/licenses/by/4.0/')
   })
 
   it('should return undefined for null', () => {

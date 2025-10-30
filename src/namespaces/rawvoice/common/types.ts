@@ -35,6 +35,11 @@ export namespace RawvoiceNs {
     value?: string
   }
 
+  export type Donate = {
+    href: string
+    value?: string
+  }
+
   export type Feed<TDate extends DateLike> = {
     rating?: Rating
     liveEmbed?: string
@@ -44,17 +49,18 @@ export namespace RawvoiceNs {
     liveStream?: LiveStream<TDate>
     location?: string
     frequency?: string
-    mycast?: string
+    mycast?: boolean
     subscribe?: Subscribe
+    donate?: Donate
   }
 
   export type Item = {
     poster?: Poster
-    isHd?: string
+    isHd?: boolean
     embed?: string
     webm?: AlternateEnclosure
     mp4?: AlternateEnclosure
-    metamark?: Metamark
+    metamarks?: Array<Metamark>
   }
 }
 // #endregion reference

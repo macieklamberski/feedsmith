@@ -1,0 +1,14 @@
+{
+  "lockfileVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "feedsmith-tests-typescript-modern-esm",
+      "dependencies": {
+        "feedsmith": "link:../../../feedsmith"
+      }
+    }
+  },
+  "packages": {
+    "feedsmith": ["feedsmith@link:../../../feedsmith", {}]
+  }
+}

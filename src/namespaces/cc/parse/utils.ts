@@ -1,6 +1,5 @@
 import type { ParsePartialUtil, Unreliable } from '../../../common/types.js'
 import {
-  isNonEmptyString,
   isObject,
   parseSingularOf,
   parseString,
@@ -9,30 +8,15 @@ import {
 } from '../../../common/utils.js'
 import type { CcNs } from '../common/types.js'
 
-/**
- * Retrieves value from either rdf:resource attribute or element text content.
- * Supports both RDF pattern (<cc:license rdf:resource="..."/>) and
- * simple pattern (<cc:license>...</cc:license>).
- */
 export const retrieveValue = (value: Unreliable): string | undefined => {
-  // Try parsing as direct string value first (handles simple element content)
-  const directString = parseString(value)
-  if (directString) {
-    return directString
+  if (isObject(value)) {
+    const resource = parseString(value['@rdf:resource'])
+
+    if (resource) {
+      return resource
+    }
   }
 
-  // Not a direct string, check if it's an object with attributes or text nodes
-  if (!isObject(value)) {
-    return
-  }
-
-  // Check for rdf:resource attribute (RDF/RSS 1.0 pattern)
-  const resource = value['@rdf:resource']
-  if (isNonEmptyString(resource)) {
-    return resource
-  }
-
-  // Fall back to extracting text content (handles #text nodes, CDATA, etc.)
   return parseString(retrieveText(value))
 }
 

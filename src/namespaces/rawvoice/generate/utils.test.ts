@@ -7,7 +7,7 @@ describe('generateItem', () => {
       poster: {
         url: 'https://example.com/poster.jpg',
       },
-      isHd: 'yes',
+      isHd: true,
       embed: '<iframe src="https://example.com/embed"></iframe>',
       webm: {
         src: 'https://example.com/video.webm',
@@ -19,13 +19,15 @@ describe('generateItem', () => {
         type: 'video/mp4',
         length: 2048,
       },
-      metamark: {
-        type: 'ad',
-        link: 'https://example.com/ad',
-        position: 120,
-        duration: 30,
-        value: 'ad-123456',
-      },
+      metamarks: [
+        {
+          type: 'ad',
+          link: 'https://example.com/ad',
+          position: 120,
+          duration: 30,
+          value: 'ad-123456',
+        },
+      ],
     }
     const expected = {
       'rawvoice:poster': {
@@ -45,13 +47,15 @@ describe('generateItem', () => {
         '@type': 'video/mp4',
         '@length': 2048,
       },
-      'rawvoice:metamark': {
-        '#text': 'ad-123456',
-        '@type': 'ad',
-        '@link': 'https://example.com/ad',
-        '@position': 120,
-        '@duration': 30,
-      },
+      'rawvoice:metamark': [
+        {
+          '#text': 'ad-123456',
+          '@type': 'ad',
+          '@link': 'https://example.com/ad',
+          '@position': 120,
+          '@duration': 30,
+        },
+      ],
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -74,12 +78,13 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
-  it('should filter out empty string values', () => {
+  it('should handle false boolean value', () => {
     const value = {
-      isHd: '',
+      isHd: false,
       embed: '<div>content</div>',
     }
     const expected = {
+      'rawvoice:isHd': 'no',
       'rawvoice:embed': {
         '#cdata': '<div>content</div>',
       },
@@ -105,7 +110,7 @@ describe('generateItem', () => {
       embed: undefined,
       webm: undefined,
       mp4: undefined,
-      metamark: undefined,
+      metamarks: undefined,
     }
 
     expect(generateItem(value)).toBeUndefined()
@@ -113,22 +118,26 @@ describe('generateItem', () => {
 
   it('should generate metamark with all attributes', () => {
     const value = {
-      metamark: {
-        type: 'ad',
-        link: 'https://example.com/ad',
-        position: 120,
-        duration: 30,
-        value: 'ad-123456',
-      },
+      metamarks: [
+        {
+          type: 'ad',
+          link: 'https://example.com/ad',
+          position: 120,
+          duration: 30,
+          value: 'ad-123456',
+        },
+      ],
     }
     const expected = {
-      'rawvoice:metamark': {
-        '#text': 'ad-123456',
-        '@type': 'ad',
-        '@link': 'https://example.com/ad',
-        '@position': 120,
-        '@duration': 30,
-      },
+      'rawvoice:metamark': [
+        {
+          '#text': 'ad-123456',
+          '@type': 'ad',
+          '@link': 'https://example.com/ad',
+          '@position': 120,
+          '@duration': 30,
+        },
+      ],
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -136,16 +145,20 @@ describe('generateItem', () => {
 
   it('should generate metamark with only required attributes', () => {
     const value = {
-      metamark: {
-        type: 'comment',
-        position: 60,
-      },
+      metamarks: [
+        {
+          type: 'comment',
+          position: 60,
+        },
+      ],
     }
     const expected = {
-      'rawvoice:metamark': {
-        '@type': 'comment',
-        '@position': 60,
-      },
+      'rawvoice:metamark': [
+        {
+          '@type': 'comment',
+          '@position': 60,
+        },
+      ],
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -153,14 +166,18 @@ describe('generateItem', () => {
 
   it('should generate metamark with value only', () => {
     const value = {
-      metamark: {
-        value: 'Chapter marker text',
-      },
+      metamarks: [
+        {
+          value: 'Chapter marker text',
+        },
+      ],
     }
     const expected = {
-      'rawvoice:metamark': {
-        '#text': 'Chapter marker text',
-      },
+      'rawvoice:metamark': [
+        {
+          '#text': 'Chapter marker text',
+        },
+      ],
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -168,20 +185,24 @@ describe('generateItem', () => {
 
   it('should filter out undefined metamark attributes', () => {
     const value = {
-      metamark: {
-        type: 'video',
-        link: undefined,
-        position: 180,
-        duration: undefined,
-        value: 'Video marker',
-      },
+      metamarks: [
+        {
+          type: 'video',
+          link: undefined,
+          position: 180,
+          duration: undefined,
+          value: 'Video marker',
+        },
+      ],
     }
     const expected = {
-      'rawvoice:metamark': {
-        '#text': 'Video marker',
-        '@type': 'video',
-        '@position': 180,
-      },
+      'rawvoice:metamark': [
+        {
+          '#text': 'Video marker',
+          '@type': 'video',
+          '@position': 180,
+        },
+      ],
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -219,7 +240,7 @@ describe('generateFeed', () => {
       },
       location: 'San Francisco, CA',
       frequency: 'Weekly',
-      mycast: 'yes',
+      mycast: true,
     }
     const expected = {
       'rawvoice:rating': {
@@ -266,6 +287,19 @@ describe('generateFeed', () => {
     }
     const expected = {
       'rawvoice:location': 'Boston, MA',
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should handle false boolean value', () => {
+    const value = {
+      mycast: false,
+      location: 'New York, NY',
+    }
+    const expected = {
+      'rawvoice:mycast': 'no',
+      'rawvoice:location': 'New York, NY',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -351,6 +385,103 @@ describe('generateFeed', () => {
     const expected = {
       'rawvoice:subscribe': {
         '@feed': 'https://example.com/feed/',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate donate with href and value', () => {
+    const value = {
+      donate: {
+        href: 'https://example.com/donate',
+        value: 'Support the show',
+      },
+    }
+    const expected = {
+      'rawvoice:donate': {
+        '#text': 'Support the show',
+        '@href': 'https://example.com/donate',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate donate with only href (no value)', () => {
+    const value = {
+      donate: {
+        href: 'https://example.com/donate',
+      },
+    }
+    const expected = {
+      'rawvoice:donate': {
+        '@href': 'https://example.com/donate',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate donate with special characters in value', () => {
+    const value = {
+      donate: {
+        href: 'https://example.com/donate',
+        value: 'Support & Donate',
+      },
+    }
+    const expected = {
+      'rawvoice:donate': {
+        '#cdata': 'Support & Donate',
+        '@href': 'https://example.com/donate',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should filter out empty donate value', () => {
+    const value = {
+      donate: {
+        href: 'https://example.com/donate',
+        value: '',
+      },
+    }
+    const expected = {
+      'rawvoice:donate': {
+        '@href': 'https://example.com/donate',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should filter out whitespace-only donate value', () => {
+    const value = {
+      donate: {
+        href: 'https://example.com/donate',
+        value: '   ',
+      },
+    }
+    const expected = {
+      'rawvoice:donate': {
+        '@href': 'https://example.com/donate',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should handle donate with undefined value', () => {
+    const value = {
+      donate: {
+        href: 'https://example.com/donate',
+        value: undefined,
+      },
+    }
+    const expected = {
+      'rawvoice:donate': {
+        '@href': 'https://example.com/donate',
       },
     }
 

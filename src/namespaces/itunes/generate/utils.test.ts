@@ -158,6 +158,7 @@ describe('generateItem', () => {
       duration: 1800,
       image: 'https://example.com/episode-image.jpg',
       explicit: true,
+      author: 'John Doe',
       title: 'Episode Title',
       episode: 5,
       season: 2,
@@ -173,6 +174,7 @@ describe('generateItem', () => {
         '@href': 'https://example.com/episode-image.jpg',
       },
       'itunes:explicit': 'yes',
+      'itunes:author': 'John Doe',
       'itunes:title': 'Episode Title',
       'itunes:episode': 5,
       'itunes:season': 2,
@@ -250,11 +252,47 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with only author', () => {
+    const value = {
+      author: 'Jane Smith',
+    }
+    const expected = {
+      'itunes:author': 'Jane Smith',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should handle empty string in author', () => {
+    const value = {
+      author: '',
+      title: 'Episode Title',
+    }
+    const expected = {
+      'itunes:title': 'Episode Title',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace-only string in author', () => {
+    const value = {
+      author: '   ',
+      title: 'Episode Title',
+    }
+    const expected = {
+      'itunes:title': 'Episode Title',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should handle object with all undefined properties', () => {
     const value = {
       duration: undefined,
       image: undefined,
       explicit: undefined,
+      author: undefined,
       title: undefined,
       episode: undefined,
       season: undefined,

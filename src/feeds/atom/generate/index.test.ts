@@ -704,7 +704,7 @@ describe('generate', () => {
       title: 'Feed with Creative Commons',
       updated: new Date('2024-01-10T12:00:00Z'),
       creativeCommons: {
-        license: 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+        licenses: ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
       },
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>

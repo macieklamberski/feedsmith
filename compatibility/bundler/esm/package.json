@@ -1,0 +1,5 @@
+{
+  "name": "@feedsmith/compatibility-bundler-esm",
+  "private": true,
+  "type": "module"
+}

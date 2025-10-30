@@ -11,7 +11,7 @@ import {
   trimObject,
 } from '../../../common/utils.js'
 import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
-import { retrieveFeed as retrieveCreativecommonsFeed } from '../../../namespaces/creativecommons/parse/utils.js'
+import { retrieveItemOrFeed as retrieveCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
@@ -229,6 +229,9 @@ export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options)
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     thr: namespaces?.has('thr') ? retrieveThrItem(value) : undefined,
     dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    creativeCommons: namespaces?.has('creativecommons')
+      ? retrieveCreativecommonsItemOrFeed(value)
+      : undefined,
     wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
   }
@@ -265,7 +268,7 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) =
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     creativeCommons: namespaces?.has('creativecommons')
-      ? retrieveCreativecommonsFeed(value)
+      ? retrieveCreativecommonsItemOrFeed(value)
       : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
   }

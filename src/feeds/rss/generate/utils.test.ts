@@ -808,7 +808,7 @@ describe('generateItem', () => {
         poster: {
           url: 'https://example.com/poster.jpg',
         },
-        isHd: 'yes',
+        isHd: true,
       },
     }
     const expected = {
@@ -1302,7 +1302,7 @@ describe('generateFeed', () => {
       title: 'Feed with Creative Commons namespace',
       description: 'A feed with Creative Commons license',
       creativeCommons: {
-        license: 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+        licenses: ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
       },
     }
     const expected = {
@@ -1312,7 +1312,7 @@ describe('generateFeed', () => {
         channel: {
           title: 'Feed with Creative Commons namespace',
           description: 'A feed with Creative Commons license',
-          'creativeCommons:license': 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+          'creativeCommons:license': ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
         },
       },
     }
@@ -1359,7 +1359,7 @@ describe('generateFeed', () => {
     const expected = {
       rss: {
         '@version': '2.0',
-        '@xmlns:rawvoice': 'https://blubrry.com/developer/rawvoice-rss',
+        '@xmlns:rawvoice': 'http://www.rawvoice.com/rawvoiceRssModule/',
         channel: {
           title: 'Feed with RawVoice namespace',
           description: 'A feed with RawVoice properties',

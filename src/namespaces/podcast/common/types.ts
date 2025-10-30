@@ -8,15 +8,22 @@ export namespace PodcastNs {
     chapters?: Chapters
     soundbites?: Array<Soundbite>
     persons?: Array<Person>
-    location?: Location
+    locations?: Array<Location>
     season?: Season
     episode?: Episode
     license?: License
     alternateEnclosures?: Array<AlternateEnclosure>
-    value?: Value
+    values?: Array<Value>
     images?: Images
     socialInteracts?: Array<SocialInteract>
     txts?: Array<Txt>
+    chat?: Chat
+
+    /** @deprecated Use `locations` (array) instead. Multiple podcast:location elements are allowed per specification. */
+    location?: Location
+    /** @deprecated Use `values` (array) instead. Multiple podcast:value elements are allowed per specification. */
+    value?: Value
+    /** @deprecated Use `chat` (singular) instead. Only one podcast:chat element is allowed per specification. */
     chats?: Array<Chat>
   }
 
@@ -213,11 +220,11 @@ export namespace PodcastNs {
     locked?: Locked
     fundings?: Array<Funding>
     persons?: Array<Person>
-    location?: Location
+    locations?: Array<Location>
     trailers?: Array<Trailer<TDate>>
     license?: License
     guid?: string
-    value?: Value
+    values?: Array<Value>
     medium?: string
     images?: Images
     liveItems?: Array<LiveItem<TDate>>
@@ -227,8 +234,15 @@ export namespace PodcastNs {
     podroll?: Podroll
     updateFrequency?: UpdateFrequency<TDate>
     podping?: Podping
-    chats?: Array<Chat>
+    chat?: Chat
     publisher?: Publisher
+
+    /** @deprecated Use `locations` (array) instead. Multiple podcast:location elements are allowed per specification. */
+    location?: Location
+    /** @deprecated Use `values` (array) instead. Multiple podcast:value elements are allowed per specification. */
+    value?: Value
+    /** @deprecated Use `chat` (singular) instead. Only one podcast:chat element is allowed per specification. */
+    chats?: Array<Chat>
   }
 }
 // #endregion reference

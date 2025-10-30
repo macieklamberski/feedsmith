@@ -19,25 +19,14 @@ describe('generateChapter', () => {
     expect(generateChapter(value)).toEqual(expected)
   })
 
-  it('should generate chapter with only required start property', () => {
+  it('should generate chapter with only required properties', () => {
     const value = {
       start: '00:01:30.500',
+      title: 'Chapter 2',
     }
     const expected = {
       '@start': '00:01:30.500',
-    }
-
-    expect(generateChapter(value)).toEqual(expected)
-  })
-
-  it('should generate chapter with start and title only', () => {
-    const value = {
-      start: '00:05:00.000',
-      title: 'Chapter 1',
-    }
-    const expected = {
-      '@start': '00:05:00.000',
-      '@title': 'Chapter 1',
+      '@title': 'Chapter 2',
     }
 
     expect(generateChapter(value)).toEqual(expected)
@@ -46,12 +35,13 @@ describe('generateChapter', () => {
   it('should handle undefined optional properties', () => {
     const value = {
       start: '00:00:00.000',
-      title: undefined,
+      title: 'Chapter Title',
       href: undefined,
       image: undefined,
     }
     const expected = {
       '@start': '00:00:00.000',
+      '@title': 'Chapter Title',
     }
 
     expect(generateChapter(value)).toEqual(expected)
@@ -60,12 +50,13 @@ describe('generateChapter', () => {
   it('should handle empty strings in optional properties', () => {
     const value = {
       start: '00:00:00.000',
-      title: '',
+      title: 'Chapter Title',
       href: '',
       image: '',
     }
     const expected = {
       '@start': '00:00:00.000',
+      '@title': 'Chapter Title',
     }
 
     expect(generateChapter(value)).toEqual(expected)

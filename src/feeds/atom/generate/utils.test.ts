@@ -1385,7 +1385,7 @@ describe('generateFeed', () => {
       title: 'Feed with Creative Commons namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       creativeCommons: {
-        license: 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+        licenses: ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
       },
     }
     const expected = {
@@ -1395,7 +1395,7 @@ describe('generateFeed', () => {
         id: 'https://example.com/feed',
         title: 'Feed with Creative Commons namespace',
         updated: '2023-03-15T12:00:00.000Z',
-        'creativeCommons:license': 'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+        'creativeCommons:license': ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
       },
     }
 

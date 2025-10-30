@@ -79,7 +79,7 @@ export namespace MediaNs {
 
   export type Tag = {
     name: string
-    weight: number
+    weight?: number
   }
 
   export type Embed = {
@@ -172,7 +172,7 @@ export namespace MediaNs {
   }
 
   export type Content = {
-    url: string
+    url?: string
     fileSize?: number
     type?: string
     medium?: string
@@ -193,8 +193,11 @@ export namespace MediaNs {
   } & CommonElements
 
   export type ItemOrFeed = {
-    group?: Group
+    groups?: Array<Group>
     contents?: Array<Content>
+
+    /** @deprecated Use `groups` (array) instead. Multiple media:group elements are allowed per specification. */
+    group?: Group
   } & CommonElements
 }
 // #endregion reference

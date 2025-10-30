@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": false,
+    "declaration": true,
+    "outDir": "dist"
+  },
+  "include": ["*.ts", "*.cts", "*.mts"]
+}

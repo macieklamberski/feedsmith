@@ -5,7 +5,9 @@ import {
   generatePlainString,
   generateRfc822Date,
   generateTextOrCdataString,
+  generateYesNoBoolean,
   isObject,
+  trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { RawvoiceNs } from '../common/types.js'
@@ -97,6 +99,19 @@ export const generateMetamark: GenerateUtil<RawvoiceNs.Metamark> = (metamark) =>
   return trimObject(value)
 }
 
+export const generateDonate: GenerateUtil<RawvoiceNs.Donate> = (donate) => {
+  if (!isObject(donate)) {
+    return
+  }
+
+  const value = {
+    ...generateTextOrCdataString(donate.value),
+    '@href': generatePlainString(donate.href),
+  }
+
+  return trimObject(value)
+}
+
 export const generateItem: GenerateUtil<RawvoiceNs.Item> = (item) => {
   if (!isObject(item)) {
     return
@@ -104,11 +119,11 @@ export const generateItem: GenerateUtil<RawvoiceNs.Item> = (item) => {
 
   const value = {
     'rawvoice:poster': generatePoster(item.poster),
-    'rawvoice:isHd': generateCdataString(item.isHd),
+    'rawvoice:isHd': generateYesNoBoolean(item.isHd),
     'rawvoice:embed': generateCdataString(item.embed),
     'rawvoice:webm': generateAlternateEnclosure(item.webm),
     'rawvoice:mp4': generateAlternateEnclosure(item.mp4),
-    'rawvoice:metamark': generateMetamark(item.metamark),
+    'rawvoice:metamark': trimArray(item.metamarks, generateMetamark),
   }
 
   return trimObject(value)
@@ -128,8 +143,9 @@ export const generateFeed: GenerateUtil<RawvoiceNs.Feed<DateLike>> = (feed) => {
     'rawvoice:liveStream': generateLiveStream(feed.liveStream),
     'rawvoice:location': generateCdataString(feed.location),
     'rawvoice:frequency': generateCdataString(feed.frequency),
-    'rawvoice:mycast': generateCdataString(feed.mycast),
+    'rawvoice:mycast': generateYesNoBoolean(feed.mycast),
     'rawvoice:subscribe': generateSubscribe(feed.subscribe),
+    'rawvoice:donate': generateDonate(feed.donate),
   }
 
   return trimObject(value)

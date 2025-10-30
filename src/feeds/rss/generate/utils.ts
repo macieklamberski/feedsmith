@@ -18,7 +18,7 @@ import {
 } from '../../../namespaces/atom/generate/utils.js'
 import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
 import { generateItem as generateContentItem } from '../../../namespaces/content/generate/utils.js'
-import { generateFeed as generateCreativecommonsFeed } from '../../../namespaces/creativecommons/generate/utils.js'
+import { generateItemOrFeed as generateCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
 import { generateFeed as generateFeedPressFeed } from '../../../namespaces/feedpress/generate/utils.js'
@@ -42,7 +42,10 @@ import {
   generateFeed as generateSourceFeed,
   generateItem as generateSourceItem,
 } from '../../../namespaces/source/generate/utils.js'
-import { generateFeed as generateSpotifyFeed } from '../../../namespaces/spotify/generate/utils.js'
+import {
+  generateFeed as generateSpotifyFeed,
+  generateItem as generateSpotifyItem,
+} from '../../../namespaces/spotify/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
@@ -185,6 +188,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
     ...generateCc(item.cc),
     ...generateDcItemOrFeed(item.dc),
     ...generateContentItem(item.content),
+    ...generateCreativecommonsItemOrFeed(item.creativeCommons),
     ...generateSlashItem(item.slash),
     ...generateItunesItem(item.itunes),
     ...generatePodcastItem(item.podcast),
@@ -196,6 +200,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
     ...generateWfwItem(item.wfw),
     ...generateSourceItem(item.sourceNs),
     ...generateRawVoiceItem(item.rawvoice),
+    ...generateSpotifyItem(item.spotify),
   }
 
   return trimObject(value)
@@ -235,7 +240,7 @@ export const generateFeed: GenerateUtil<Rss.Feed<DateLike>> = (feed) => {
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateDctermsItemOrFeed(feed.dcterms),
-    ...generateCreativecommonsFeed(feed.creativeCommons),
+    ...generateCreativecommonsItemOrFeed(feed.creativeCommons),
     ...generateFeedPressFeed(feed.feedpress),
     ...generateSourceFeed(feed.sourceNs),
     ...generateRawVoiceFeed(feed.rawvoice),
