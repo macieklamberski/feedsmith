@@ -102,6 +102,52 @@ describe('retrieveItem', () => {
 
     expect(retrieveItem(value)).toEqual(expected)
   })
+
+  it('should parse item with @rdf:resource attributes', () => {
+    const value = {
+      'pingback:server': {
+        '@rdf:resource': 'https://example.com/pingback',
+      },
+      'pingback:target': {
+        '@rdf:resource': 'https://example.com/post/123',
+      },
+    }
+    const expected = {
+      server: 'https://example.com/pingback',
+      target: 'https://example.com/post/123',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should prefer @rdf:resource over #text when both present', () => {
+    const value = {
+      'pingback:server': {
+        '@rdf:resource': 'https://example.com/pingback',
+        '#text': 'https://example.com/other',
+      },
+    }
+    const expected = {
+      server: 'https://example.com/pingback',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse mixed @rdf:resource and text content', () => {
+    const value = {
+      'pingback:server': {
+        '@rdf:resource': 'https://example.com/pingback',
+      },
+      'pingback:target': 'https://example.com/post/123',
+    }
+    const expected = {
+      server: 'https://example.com/pingback',
+      target: 'https://example.com/post/123',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
 })
 
 describe('retrieveFeed', () => {
@@ -173,6 +219,33 @@ describe('retrieveFeed', () => {
     }
     const expected = {
       to: 'https://example.com/service1',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with @rdf:resource attribute', () => {
+    const value = {
+      'pingback:to': {
+        '@rdf:resource': 'https://example.com/pingback-service',
+      },
+    }
+    const expected = {
+      to: 'https://example.com/pingback-service',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should prefer @rdf:resource over #text when both present', () => {
+    const value = {
+      'pingback:to': {
+        '@rdf:resource': 'https://example.com/pingback-service',
+        '#text': 'https://example.com/other-service',
+      },
+    }
+    const expected = {
+      to: 'https://example.com/pingback-service',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
