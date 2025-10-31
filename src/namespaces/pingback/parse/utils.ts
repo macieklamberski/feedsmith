@@ -3,7 +3,7 @@ import {
   isObject,
   parseSingularOf,
   parseString,
-  retrieveText,
+  retrieveRdfResourceOrText,
   trimObject,
 } from '../../../common/utils.js'
 import type { PingbackNs } from '../common/types.js'
@@ -14,8 +14,12 @@ export const retrieveItem: ParsePartialUtil<PingbackNs.Item> = (value) => {
   }
 
   const item = {
-    server: parseSingularOf(value['pingback:server'], (value) => parseString(retrieveText(value))),
-    target: parseSingularOf(value['pingback:target'], (value) => parseString(retrieveText(value))),
+    server: parseSingularOf(value['pingback:server'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    target: parseSingularOf(value['pingback:target'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
   }
 
   return trimObject(item)
@@ -27,7 +31,9 @@ export const retrieveFeed: ParsePartialUtil<PingbackNs.Feed> = (value) => {
   }
 
   const feed = {
-    to: parseSingularOf(value['pingback:to'], (value) => parseString(retrieveText(value))),
+    to: parseSingularOf(value['pingback:to'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
   }
 
   return trimObject(feed)
