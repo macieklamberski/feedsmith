@@ -4,7 +4,7 @@ import {
   parseArrayOf,
   parseSingularOf,
   parseString,
-  retrieveText,
+  retrieveRdfResourceOrText,
   trimObject,
 } from '../../../common/utils.js'
 import type { TrackbackNs } from '../common/types.js'
@@ -15,8 +15,12 @@ export const retrieveItem: ParsePartialUtil<TrackbackNs.Item> = (value) => {
   }
 
   const item = {
-    ping: parseSingularOf(value['trackback:ping'], (value) => parseString(retrieveText(value))),
-    about: parseArrayOf(value['trackback:about'], (value) => parseString(retrieveText(value))),
+    ping: parseSingularOf(value['trackback:ping'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    about: parseArrayOf(value['trackback:about'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
   }
 
   return trimObject(item)

@@ -198,4 +198,98 @@ describe('retrieveItem', () => {
 
     expect(retrieveItem(value)).toEqual(expected)
   })
+
+  it('should parse item with @rdf:resource attributes', () => {
+    const value = {
+      'trackback:ping': {
+        '@rdf:resource': 'https://example.com/trackback/123',
+      },
+      'trackback:about': [
+        {
+          '@rdf:resource': 'https://blog1.com/trackback/456',
+        },
+        {
+          '@rdf:resource': 'https://blog2.com/trackback/789',
+        },
+      ],
+    }
+    const expected = {
+      ping: 'https://example.com/trackback/123',
+      about: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should prefer @rdf:resource over #text when both present', () => {
+    const value = {
+      'trackback:ping': {
+        '@rdf:resource': 'https://example.com/trackback/123',
+        '#text': 'https://example.com/other',
+      },
+    }
+    const expected = {
+      ping: 'https://example.com/trackback/123',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse mixed @rdf:resource and text content', () => {
+    const value = {
+      'trackback:ping': {
+        '@rdf:resource': 'https://example.com/trackback/123',
+      },
+      'trackback:about': ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+    }
+    const expected = {
+      ping: 'https://example.com/trackback/123',
+      about: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should handle about array with mixed @rdf:resource and text values', () => {
+    const value = {
+      'trackback:about': [
+        {
+          '@rdf:resource': 'https://blog1.com/trackback/456',
+        },
+        'https://blog2.com/trackback/789',
+        {
+          '#text': 'https://blog3.com/trackback/abc',
+        },
+      ],
+    }
+    const expected = {
+      about: [
+        'https://blog1.com/trackback/456',
+        'https://blog2.com/trackback/789',
+        'https://blog3.com/trackback/abc',
+      ],
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should prefer @rdf:resource over #text in about array items', () => {
+    const value = {
+      'trackback:about': [
+        {
+          '@rdf:resource': 'https://blog1.com/trackback/456',
+          '#text': 'https://blog1.com/other',
+        },
+        {
+          '@rdf:resource': 'https://blog2.com/trackback/789',
+          '#text': 'https://blog2.com/other',
+        },
+      ],
+    }
+    const expected = {
+      about: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
 })
