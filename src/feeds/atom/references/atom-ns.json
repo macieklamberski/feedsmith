@@ -111,6 +111,15 @@
         "subtitle": "Episode subtitle with additional context",
         "keywords": ["tutorial", "example", "technology", "programming"]
       },
+      "googleplay": {
+        "author": "Episode Author",
+        "description": "Plain-text episode description for Google Play Podcasts",
+        "explicit": "clean",
+        "block": false,
+        "image": {
+          "href": "https://example.com/images/episode-googleplay.jpg"
+        }
+      },
       "psc": {
         "chapters": [
           {
@@ -829,6 +838,18 @@
     "subtitle": "A subtitle that provides additional context",
     "keywords": ["technology", "programming", "web development", "tutorials"],
     "applePodcastsVerify": "example-verification-key"
+  },
+  "googleplay": {
+    "author": "Podcast Creator",
+    "description": "This is a plain-text description for Google Play Podcasts",
+    "explicit": false,
+    "block": false,
+    "image": {
+      "href": "https://example.com/images/googleplay-cover.jpg"
+    },
+    "categories": ["Technology"],
+    "email": "podcaster@example.com",
+    "newFeedUrl": "https://example.com/new-podcast-feed.xml"
   },
   "yt": {
     "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw",

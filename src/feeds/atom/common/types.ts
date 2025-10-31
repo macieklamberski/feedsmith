@@ -8,6 +8,7 @@ import type { CreativecommonsNs } from '../../../namespaces/creativecommons/comm
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DctermsNs } from '../../../namespaces/dcterms/common/types.js'
 import type { GeorssNs } from '../../../namespaces/georss/common/types.js'
+import type { GoogleplayNs } from '../../../namespaces/googleplay/common/types.js'
 import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { PscNs } from '../../../namespaces/psc/common/types.js'
@@ -91,6 +92,7 @@ export namespace Atom {
     dc?: DcNs.ItemOrFeed<TDate>
     slash?: SlashNs.Item
     itunes?: ItunesNs.Item
+    googleplay?: GoogleplayNs.Item
     psc?: PscNs.Item
     media?: MediaNs.ItemOrFeed
     georss?: GeorssNs.ItemOrFeed
@@ -119,6 +121,7 @@ export namespace Atom {
     dc?: DcNs.ItemOrFeed<TDate>
     sy?: SyNs.Feed<TDate>
     itunes?: ItunesNs.Feed
+    googleplay?: GoogleplayNs.Feed
     media?: MediaNs.ItemOrFeed
     georss?: GeorssNs.ItemOrFeed
     dcterms?: DctermsNs.ItemOrFeed<TDate>

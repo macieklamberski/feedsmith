@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:psc="http://podlove.org/simple-chapters" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:cc="http://creativecommons.org/ns#" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/" xmlns:psc="http://podlove.org/simple-chapters" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:cc="http://creativecommons.org/ns#" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
   <id>example-feed</id>
   <title>Example Feed</title>
 
@@ -46,6 +46,16 @@
     <itunes:name>Jack Smith</itunes:name>
     <itunes:email>news@example.com</itunes:email>
   </itunes:owner>
+
+  <!-- Google Play Podcasts Namespace: Feed Level Tags -->
+  <googleplay:author>Podcast Creator</googleplay:author>
+  <googleplay:description>This is a plain-text description for Google Play Podcasts</googleplay:description>
+  <googleplay:explicit>no</googleplay:explicit>
+  <googleplay:block>no</googleplay:block>
+  <googleplay:image href="https://example.com/images/googleplay-cover.jpg"/>
+  <googleplay:category text="Technology"/>
+  <googleplay:email>podcaster@example.com</googleplay:email>
+  <googleplay:new-feed-url>https://example.com/new-podcast-feed.xml</googleplay:new-feed-url>
 
   <!-- Media Namespace: Feed Level Tags -->
   <media:group>
@@ -347,6 +357,13 @@
     <itunes:summary>This is a detailed summary of the episode content and key takeaways</itunes:summary>
     <itunes:subtitle>Episode subtitle with additional context</itunes:subtitle>
     <itunes:keywords>tutorial,example,technology,programming</itunes:keywords>
+
+    <!-- Google Play Podcasts Namespace: Entry Level Tags -->
+    <googleplay:author>Episode Author</googleplay:author>
+    <googleplay:description>Plain-text episode description for Google Play Podcasts</googleplay:description>
+    <googleplay:explicit>clean</googleplay:explicit>
+    <googleplay:block>no</googleplay:block>
+    <googleplay:image href="https://example.com/images/episode-googleplay.jpg"/>
 
     <!-- Podlove Simple Chapters Namespace: Entry Level Tags -->
     <psc:chapters>
