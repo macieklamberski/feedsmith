@@ -789,6 +789,27 @@ describe('generateEntry', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate entry with trackback namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Trackback namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      trackback: {
+        ping: 'https://example.com/trackback/123',
+        about: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Trackback namespace',
+      updated: '2023-03-15T12:00:00.000Z',
+      'trackback:ping': 'https://example.com/trackback/123',
+      'trackback:about': ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
   it('should generate entry with ccREL namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
