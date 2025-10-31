@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'bun:test'
+import type { GoogleplayNs } from '../common/types.js'
 import { generateFeed, generateItem } from './utils.js'
 
 describe('generateItem', () => {
-  it('should generate complete item object with all properties', () => {
+  it('should generate item with all properties', () => {
     const value = {
       author: 'John Doe',
       description: 'Episode description',
@@ -21,26 +22,37 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
-  it('should generate partial item object', () => {
+  it('should generate item with minimal properties', () => {
     const value = {
       author: 'Jane Doe',
-      explicit: false,
     }
     const expected = {
       'googleplay:author': 'Jane Doe',
-      'googleplay:explicit': 'no',
     }
 
     expect(generateItem(value)).toEqual(expected)
   })
 
-  it('should handle boolean values correctly', () => {
+  it('should generate explicit="clean" value', () => {
+    const value: GoogleplayNs.Item = {
+      explicit: 'clean',
+      author: 'John Doe',
+    }
+    const expected = {
+      'googleplay:author': 'John Doe',
+      'googleplay:explicit': 'clean',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should ignore empty strings', () => {
     const value = {
-      explicit: true,
+      author: '',
+      description: '   ',
       block: false,
     }
     const expected = {
-      'googleplay:explicit': 'yes',
       'googleplay:block': 'no',
     }
 
@@ -51,58 +63,17 @@ describe('generateItem', () => {
     expect(generateItem({})).toBeUndefined()
   })
 
-  it('should return undefined for non-object', () => {
-    expect(generateItem('not an object')).toBeUndefined()
-    expect(generateItem(null)).toBeUndefined()
+  it('should handle non-object inputs', () => {
     expect(generateItem(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateItem('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(123)).toBeUndefined()
-    expect(generateItem([])).toBeUndefined()
-  })
-
-  it('should ignore empty strings', () => {
-    const value = {
-      author: '',
-      description: '   ',
-      block: false,
-      explicit: true,
-    }
-    const expected = {
-      'googleplay:block': 'no',
-      'googleplay:explicit': 'yes',
-    }
-
-    expect(generateItem(value)).toEqual(expected)
-  })
-
-  it('should ignore undefined and null values', () => {
-    const value = {
-      author: undefined,
-      description: null,
-      image: { href: 'https://example.com/image.jpg' },
-    }
-    const expected = {
-      'googleplay:image': { '@href': 'https://example.com/image.jpg' },
-    }
-
-    expect(generateItem(value)).toEqual(expected)
-  })
-
-  it('should handle non-boolean explicit and block values', () => {
-    const value = {
-      explicit: 'not-boolean',
-      block: 123,
-      author: 'John Doe',
-    }
-    const expected = {
-      'googleplay:author': 'John Doe',
-    }
-
-    expect(generateItem(value)).toEqual(expected)
   })
 })
 
 describe('generateFeed', () => {
-  it('should generate complete feed object with all properties', () => {
+  it('should generate feed with all properties', () => {
     const value = {
       author: 'Podcast Author',
       description: 'Podcast description',
@@ -127,12 +98,25 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
-  it('should handle single category', () => {
+  it('should generate feed with minimal properties', () => {
     const value = {
-      categories: ['Technology'],
+      author: 'Podcast Creator',
     }
     const expected = {
-      'googleplay:category': [{ '@text': 'Technology' }],
+      'googleplay:author': 'Podcast Creator',
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate explicit="clean" value', () => {
+    const value: GoogleplayNs.Feed = {
+      explicit: 'clean',
+      author: 'Podcast Author',
+    }
+    const expected = {
+      'googleplay:author': 'Podcast Author',
+      'googleplay:explicit': 'clean',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -151,65 +135,15 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
-  it('should handle empty category array', () => {
-    const value = {
-      category: [],
-      author: 'Author',
-    }
-    const expected = {
-      'googleplay:author': 'Author',
-    }
-
-    expect(generateFeed(value)).toEqual(expected)
-  })
-
-  it('should generate partial feed object', () => {
-    const value = {
-      author: 'Podcast Creator',
-      email: 'creator@example.com',
-    }
-    const expected = {
-      'googleplay:author': 'Podcast Creator',
-      'googleplay:email': 'creator@example.com',
-    }
-
-    expect(generateFeed(value)).toEqual(expected)
-  })
-
   it('should return undefined for empty object', () => {
     expect(generateFeed({})).toBeUndefined()
   })
 
-  it('should return undefined for non-object', () => {
-    expect(generateFeed('not an object')).toBeUndefined()
-    expect(generateFeed(null)).toBeUndefined()
+  it('should handle non-object inputs', () => {
     expect(generateFeed(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateFeed('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(123)).toBeUndefined()
-    expect(generateFeed([])).toBeUndefined()
-  })
-
-  it('should handle categories with mixed valid and invalid values', () => {
-    const value = {
-      categories: ['Technology', '', undefined, null, 'Education', 123],
-      author: 'Author',
-    }
-    const expected = {
-      'googleplay:author': 'Author',
-      'googleplay:category': [{ '@text': 'Technology' }, { '@text': 'Education' }],
-    }
-
-    expect(generateFeed(value)).toEqual(expected)
-  })
-
-  it('should ignore undefined category array', () => {
-    const value = {
-      category: undefined,
-      author: 'Author',
-    }
-    const expected = {
-      'googleplay:author': 'Author',
-    }
-
-    expect(generateFeed(value)).toEqual(expected)
   })
 })

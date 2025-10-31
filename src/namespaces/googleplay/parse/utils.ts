@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -8,9 +8,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { Feed, Image, Item } from '../common/types.js'
+import type { GoogleplayNs } from '../common/types.js'
 
-export const parseImage: ParsePartialFunction<Image> = (value) => {
+export const parseImage: ParsePartialUtil<GoogleplayNs.Image> = (value) => {
   if (isObject(value) && value['@href']) {
     const image = {
       href: parseString(value['@href']),
@@ -29,7 +29,7 @@ export const parseImage: ParsePartialFunction<Image> = (value) => {
   }
 }
 
-export const parseCategory: ParsePartialFunction<string> = (value) => {
+export const parseCategory: ParsePartialUtil<string> = (value) => {
   if (isObject(value) && value['@text']) {
     return parseString(value['@text'])
   }
@@ -37,7 +37,17 @@ export const parseCategory: ParsePartialFunction<string> = (value) => {
   return parseString(retrieveText(value))
 }
 
-export const retrieveItem: ParsePartialFunction<Item> = (value) => {
+export const parseExplicit: ParsePartialUtil<boolean | 'clean'> = (value) => {
+  const explicit = retrieveText(value)?.trim().toLowerCase()
+
+  if (explicit === 'clean') {
+    return explicit
+  }
+
+  return parseYesNoBoolean(value)
+}
+
+export const retrieveItem: ParsePartialUtil<GoogleplayNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -49,9 +59,7 @@ export const retrieveItem: ParsePartialFunction<Item> = (value) => {
     description: parseSingularOf(value['googleplay:description'], (value) =>
       parseString(retrieveText(value)),
     ),
-    explicit: parseSingularOf(value['googleplay:explicit'], (value) =>
-      parseYesNoBoolean(retrieveText(value)),
-    ),
+    explicit: parseSingularOf(value['googleplay:explicit'], parseExplicit),
     block: parseSingularOf(value['googleplay:block'], (value) =>
       parseYesNoBoolean(retrieveText(value)),
     ),
@@ -61,7 +69,7 @@ export const retrieveItem: ParsePartialFunction<Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialFunction<Feed> = (value) => {
+export const retrieveFeed: ParsePartialUtil<GoogleplayNs.Feed> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -73,9 +81,7 @@ export const retrieveFeed: ParsePartialFunction<Feed> = (value) => {
     description: parseSingularOf(value['googleplay:description'], (value) =>
       parseString(retrieveText(value)),
     ),
-    explicit: parseSingularOf(value['googleplay:explicit'], (value) =>
-      parseYesNoBoolean(retrieveText(value)),
-    ),
+    explicit: parseSingularOf(value['googleplay:explicit'], parseExplicit),
     block: parseSingularOf(value['googleplay:block'], (value) =>
       parseYesNoBoolean(retrieveText(value)),
     ),

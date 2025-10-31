@@ -1,4 +1,4 @@
-import type { GenerateFunction } from '../../../common/types.js'
+import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generatePlainString,
@@ -7,9 +7,9 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
-import type { Feed, Image, Item } from '../common/types.js'
+import type { GoogleplayNs } from '../common/types.js'
 
-const generateImage: GenerateFunction<Image> = (image) => {
+const generateImage: GenerateUtil<GoogleplayNs.Image> = (image) => {
   if (!isObject(image)) {
     return
   }
@@ -21,7 +21,7 @@ const generateImage: GenerateFunction<Image> = (image) => {
   return trimObject(value)
 }
 
-const generateCategory: GenerateFunction<string> = (category) => {
+const generateCategory: GenerateUtil<string> = (category) => {
   const value = {
     '@text': generatePlainString(category),
   }
@@ -29,7 +29,15 @@ const generateCategory: GenerateFunction<string> = (category) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateFunction<Item> = (item) => {
+const generateExplicit: GenerateUtil<boolean | 'clean'> = (explicit) => {
+  if (explicit === 'clean') {
+    return explicit
+  }
+
+  return generateYesNoBoolean(explicit)
+}
+
+export const generateItem: GenerateUtil<GoogleplayNs.Item> = (item) => {
   if (!isObject(item)) {
     return
   }
@@ -37,13 +45,13 @@ export const generateItem: GenerateFunction<Item> = (item) => {
   return trimObject({
     'googleplay:author': generatePlainString(item.author),
     'googleplay:description': generateCdataString(item.description),
-    'googleplay:explicit': generateYesNoBoolean(item.explicit),
+    'googleplay:explicit': generateExplicit(item.explicit),
     'googleplay:block': generateYesNoBoolean(item.block),
     'googleplay:image': generateImage(item.image),
   })
 }
 
-export const generateFeed: GenerateFunction<Feed> = (feed) => {
+export const generateFeed: GenerateUtil<GoogleplayNs.Feed> = (feed) => {
   if (!isObject(feed)) {
     return
   }
@@ -51,7 +59,7 @@ export const generateFeed: GenerateFunction<Feed> = (feed) => {
   return trimObject({
     'googleplay:author': generatePlainString(feed.author),
     'googleplay:description': generateCdataString(feed.description),
-    'googleplay:explicit': generateYesNoBoolean(feed.explicit),
+    'googleplay:explicit': generateExplicit(feed.explicit),
     'googleplay:block': generateYesNoBoolean(feed.block),
     'googleplay:image': generateImage(feed.image),
     'googleplay:new-feed-url': generatePlainString(feed.newFeedUrl),

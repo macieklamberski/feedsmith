@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'bun:test'
+import type { GoogleplayNs } from '../common/types.js'
 import { retrieveFeed, retrieveItem } from './utils.js'
 
 describe('retrieveItem', () => {
@@ -53,6 +54,28 @@ describe('retrieveItem', () => {
     const expected = {
       explicit: true,
       block: false,
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should handle explicit="clean" value', () => {
+    const value = {
+      'googleplay:explicit': 'clean',
+    }
+    const expected: GoogleplayNs.Item = {
+      explicit: 'clean',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should handle explicit="clean" with different casing', () => {
+    const value = {
+      'googleplay:explicit': 'CLEAN',
+    }
+    const expected: GoogleplayNs.Item = {
+      explicit: 'clean',
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -200,6 +223,28 @@ describe('retrieveFeed', () => {
     }
     const expected = {
       categories: ['Technology', 'Education'],
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should handle explicit="clean" value at feed level', () => {
+    const value = {
+      'googleplay:explicit': 'clean',
+    }
+    const expected: GoogleplayNs.Feed = {
+      explicit: 'clean',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should handle explicit="clean" with whitespace and casing', () => {
+    const value = {
+      'googleplay:explicit': '  Clean  ',
+    }
+    const expected: GoogleplayNs.Feed = {
+      explicit: 'clean',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
