@@ -10,6 +10,7 @@ import type { DctermsNs } from '../../../namespaces/dcterms/common/types.js'
 import type { GeorssNs } from '../../../namespaces/georss/common/types.js'
 import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
+import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
 import type { PscNs } from '../../../namespaces/psc/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
 import type { SyNs } from '../../../namespaces/sy/common/types.js'
@@ -99,6 +100,7 @@ export namespace Atom {
     creativeCommons?: CreativecommonsNs.ItemOrFeed
     wfw?: WfwNs.Item
     yt?: YtNs.Item
+    pingback?: PingbackNs.Item
   }
 
   export type Feed<TDate extends DateLike> = {
@@ -124,6 +126,7 @@ export namespace Atom {
     dcterms?: DctermsNs.ItemOrFeed<TDate>
     creativeCommons?: CreativecommonsNs.ItemOrFeed
     yt?: YtNs.Feed
+    pingback?: PingbackNs.Feed
   }
 }
 // #endregion reference

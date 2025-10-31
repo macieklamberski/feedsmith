@@ -451,6 +451,41 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with pingback namespace', () => {
+    const value = {
+      title: 'Feed with pingback namespace',
+      description: 'Test feed with Pingback namespace',
+      pingback: {
+        to: 'https://example.com/pingback-service',
+      },
+      items: [
+        {
+          title: 'First item',
+          pingback: {
+            server: 'https://example.com/xmlrpc.php',
+            target: 'https://referenced-blog.com/article',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:pingback="http://purl.org/net/pingback/">
+  <channel>
+    <title>Feed with pingback namespace</title>
+    <description>Test feed with Pingback namespace</description>
+    <pingback:to>https://example.com/pingback-service</pingback:to>
+    <item>
+      <title>First item</title>
+      <pingback:server>https://example.com/xmlrpc.php</pingback:server>
+      <pingback:target>https://referenced-blog.com/article</pingback:target>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with source namespace', () => {
     const value = {
       title: 'Feed with source namespace',

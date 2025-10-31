@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:psc="http://podlove.org/simple-chapters" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:cc="http://creativecommons.org/ns#" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:psc="http://podlove.org/simple-chapters" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:pingback="http://purl.org/net/pingback/" xmlns:cc="http://creativecommons.org/ns#" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
   <id>example-feed</id>
   <title>Example Feed</title>
 
@@ -215,6 +215,9 @@
   <dcterms:title>Dublin Core Terms Enhanced Feed Title</dcterms:title>
   <dcterms:type>Text</dcterms:type>
   <dcterms:valid>2025-12-31T23:59:59.000Z</dcterms:valid>
+
+  <!-- Pingback Namespace: Feed Level Tags -->
+  <pingback:to>https://example.com/pingback-service</pingback:to>
 
   <!-- ccREL Namespace: Feed Level Tags -->
   <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
@@ -477,6 +480,10 @@
     <!-- Well Formed Web CommentAPI Namespace: Entry Level Tags -->
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
     <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
+
+    <!-- Pingback Namespace: Entry Level Tags -->
+    <pingback:server>https://example.com/xmlrpc.php</pingback:server>
+    <pingback:target>https://referenced-blog.com/article</pingback:target>
 
     <!-- Creative Commons Namespace: Entry Level Tags -->
     <creativeCommons:license>http://creativecommons.org/licenses/by-sa/4.0/</creativeCommons:license>
