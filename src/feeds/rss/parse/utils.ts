@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   detectNamespaces,
   isObject,
@@ -16,9 +16,12 @@ import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
 } from '../../../namespaces/atom/parse/utils.js'
+import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
+import { retrieveItemOrFeed as retrieveCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import { retrieveFeed as retrieveFeedPressFeed } from '../../../namespaces/feedpress/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
   retrieveFeed as retrieveGooglePlayFeed,
@@ -34,28 +37,29 @@ import {
   retrieveItem as retrievePodcastItem,
 } from '../../../namespaces/podcast/parse/utils.js'
 import { retrieveItem as retrievePscItem } from '../../../namespaces/psc/parse/utils.js'
+import {
+  retrieveFeed as retrieveRawvoiceFeed,
+  retrieveItem as retrieveRawvoiceItem,
+} from '../../../namespaces/rawvoice/parse/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
+import {
+  retrieveFeed as retrieveSourceFeed,
+  retrieveItem as retrieveSourceItem,
+} from '../../../namespaces/source/parse/utils.js'
+import {
+  retrieveFeed as retrieveSpotifyFeed,
+  retrieveItem as retrieveSpotifyItem,
+} from '../../../namespaces/spotify/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
-import type {
-  Category,
-  Cloud,
-  Enclosure,
-  Feed,
-  Guid,
-  Image,
-  Item,
-  Person,
-  Source,
-  TextInput,
-} from '../common/types.js'
+import type { Rss } from '../common/types.js'
 
-export const parsePerson: ParsePartialFunction<Person> = (value) => {
+export const parsePerson: ParsePartialUtil<Rss.Person> = (value) => {
   return parseSingularOf(value?.name ?? value, (value) => parseString(retrieveText(value)))
 }
 
-export const parseCategory: ParsePartialFunction<Category> = (value) => {
+export const parseCategory: ParsePartialUtil<Rss.Category> = (value) => {
   const category = {
     name: parseString(retrieveText(value)),
     domain: parseString(value?.['@domain']),
@@ -64,7 +68,7 @@ export const parseCategory: ParsePartialFunction<Category> = (value) => {
   return trimObject(category)
 }
 
-export const parseCloud: ParsePartialFunction<Cloud> = (value) => {
+export const parseCloud: ParsePartialUtil<Rss.Cloud> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -80,7 +84,7 @@ export const parseCloud: ParsePartialFunction<Cloud> = (value) => {
   return trimObject(cloud)
 }
 
-export const parseImage: ParsePartialFunction<Image> = (value) => {
+export const parseImage: ParsePartialUtil<Rss.Image> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -97,7 +101,7 @@ export const parseImage: ParsePartialFunction<Image> = (value) => {
   return trimObject(image)
 }
 
-export const parseTextInput: ParsePartialFunction<TextInput> = (value) => {
+export const parseTextInput: ParsePartialUtil<Rss.TextInput> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -112,15 +116,15 @@ export const parseTextInput: ParsePartialFunction<TextInput> = (value) => {
   return trimObject(textInput)
 }
 
-export const parseSkipHours: ParsePartialFunction<Array<number>> = (value) => {
+export const parseSkipHours: ParsePartialUtil<Array<number>> = (value) => {
   return trimArray(value?.hour, (value) => parseNumber(retrieveText(value)))
 }
 
-export const parseSkipDays: ParsePartialFunction<Array<string>> = (value) => {
+export const parseSkipDays: ParsePartialUtil<Array<string>> = (value) => {
   return trimArray(value?.day, (value) => parseString(retrieveText(value)))
 }
 
-export const parseEnclosure: ParsePartialFunction<Enclosure> = (value) => {
+export const parseEnclosure: ParsePartialUtil<Rss.Enclosure> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -134,7 +138,7 @@ export const parseEnclosure: ParsePartialFunction<Enclosure> = (value) => {
   return trimObject(enclosure)
 }
 
-export const parseGuid: ParsePartialFunction<Guid> = (value) => {
+export const parseGuid: ParsePartialUtil<Rss.Guid> = (value) => {
   const source = {
     value: parseString(retrieveText(value)),
     isPermaLink: parseBoolean(value?.['@ispermalink']),
@@ -143,7 +147,7 @@ export const parseGuid: ParsePartialFunction<Guid> = (value) => {
   return trimObject(source)
 }
 
-export const parseSource: ParsePartialFunction<Source> = (value) => {
+export const parseSource: ParsePartialUtil<Rss.Source> = (value) => {
   const source = {
     title: parseString(retrieveText(value)),
     url: parseString(value?.['@url']),
@@ -152,7 +156,7 @@ export const parseSource: ParsePartialFunction<Source> = (value) => {
   return trimObject(source)
 }
 
-export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
+export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -169,10 +173,13 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
     guid: parseSingularOf(value.guid, parseGuid),
     pubDate: parseSingularOf(value.pubdate, (value) => parseDate(retrieveText(value))),
     source: parseSingularOf(value.source, parseSource),
-    content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     atom: namespaces.has('atom') ? retrieveAtomEntry(value) : undefined,
+    cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
+    creativeCommons: namespaces.has('creativecommons')
+      ? retrieveCreativecommonsItemOrFeed(value)
+      : undefined,
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesItem(value) : undefined,
     podcast: namespaces.has('podcast') ? retrievePodcastItem(value) : undefined,
@@ -181,13 +188,17 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
+    sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
+    rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceItem(value) : undefined,
+    spotify: namespaces.has('spotify') ? retrieveSpotifyItem(value) : undefined,
   }
 
   return trimObject(item)
 }
 
-export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
+export const parseFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -215,19 +226,27 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
     skipDays: parseSingularOf(value.skipdays, parseSkipDays),
     items: parseArrayOf(value.item, parseItem),
     atom: namespaces.has('atom') ? retrieveAtomFeed(value) : undefined,
+    cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     sy: namespaces.has('sy') ? retrieveSyFeed(value) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesFeed(value) : undefined,
     podcast: namespaces.has('podcast') ? retrievePodcastFeed(value) : undefined,
     googleplay: namespaces.has('googleplay') ? retrieveGooglePlayFeed(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    creativeCommons: namespaces.has('creativecommons')
+      ? retrieveCreativecommonsItemOrFeed(value)
+      : undefined,
+    feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(value) : undefined,
+    sourceNs: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,
+    rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceFeed(value) : undefined,
+    spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(value) : undefined,
   }
 
   return trimObject(feed)
 }
 
-export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
   return parseSingularOf(value?.rss?.channel, parseFeed)
 }

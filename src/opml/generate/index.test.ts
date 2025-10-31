@@ -223,7 +223,6 @@ describe('generate', () => {
       },
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(() => generate(value)).toThrow()
   })
 
@@ -341,5 +340,66 @@ describe('generate with lenient mode', () => {
 `
 
     expect(generate(value, { lenient: true })).toEqual(expected)
+  })
+
+  describe('custom attributes', () => {
+    it('should generate OPML with custom attributes when specified in options', () => {
+      const opml = {
+        head: {
+          title: 'Test OPML',
+        },
+        body: {
+          outlines: [
+            {
+              text: 'Feed 1',
+              type: 'rss',
+              xmlUrl: 'https://feed1.com/rss',
+              customRating: '5',
+              customTags: 'tech,news',
+            },
+          ],
+        },
+      }
+      const options = {
+        extraOutlineAttributes: ['customRating', 'customTags'],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <head>
+    <title>Test OPML</title>
+  </head>
+  <body>
+    <outline text="Feed 1" type="rss" xmlUrl="https://feed1.com/rss" customRating="5" customTags="tech,news"/>
+  </body>
+</opml>
+`
+
+      expect(generate(opml, options)).toEqual(expected)
+    })
+
+    it('should not include custom attributes when not specified in options', () => {
+      const opml = {
+        body: {
+          outlines: [
+            {
+              text: 'Feed',
+              type: 'rss',
+              xmlUrl: 'https://feed.com/rss',
+              customRating: '5',
+              customTags: 'tech',
+            },
+          ],
+        },
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <body>
+    <outline text="Feed" type="rss" xmlUrl="https://feed.com/rss"/>
+  </body>
+</opml>
+`
+
+      expect(generate(opml)).toEqual(expected)
+    })
   })
 })

@@ -22,12 +22,12 @@ The Source namespace provides elements for enhanced feed metadata, including soc
     </tr>
     <tr>
       <th>Property</th>
-      <td><code>src</code> (due to conflict with RSS's <code>source</code> element)</td>
+      <td><code>sourceNs</code> (due to conflict with RSS's <code>source</code> element)</td>
     </tr>
   </tbody>
 </table>
 
-## Structure
+## Types
 
 <<< @/../src/namespaces/source/common/types.ts#reference
 

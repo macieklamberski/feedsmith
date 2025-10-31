@@ -10,6 +10,8 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
+import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
+import { retrieveItemOrFeed as retrieveCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
@@ -30,16 +32,7 @@ import {
   retrieveFeed as retrieveYtFeed,
   retrieveItem as retrieveYtItem,
 } from '../../../namespaces/yt/parse/utils.js'
-import type {
-  Category,
-  Entry,
-  Feed,
-  Generator,
-  Link,
-  ParsePartialFunction,
-  Person,
-  Source,
-} from '../common/types.js'
+import type { Atom, ParsePartialUtil } from '../common/types.js'
 
 export const createNamespaceGetter = (
   value: Record<string, Unreliable>,
@@ -63,7 +56,7 @@ export const createNamespaceGetter = (
   }
 }
 
-export const parseLink: ParsePartialFunction<Link<string>> = (value) => {
+export const parseLink: ParsePartialUtil<Atom.Link<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -81,7 +74,7 @@ export const parseLink: ParsePartialFunction<Link<string>> = (value) => {
   return trimObject(link)
 }
 
-export const retrievePersonUri: ParsePartialFunction<string> = (value, options) => {
+export const retrievePersonUri: ParsePartialUtil<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -93,7 +86,7 @@ export const retrievePersonUri: ParsePartialFunction<string> = (value, options) 
   return uri || url
 }
 
-export const parsePerson: ParsePartialFunction<Person> = (value, options) => {
+export const parsePerson: ParsePartialUtil<Atom.Person> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -108,7 +101,7 @@ export const parsePerson: ParsePartialFunction<Person> = (value, options) => {
   return trimObject(person)
 }
 
-export const parseCategory: ParsePartialFunction<Category> = (value) => {
+export const parseCategory: ParsePartialUtil<Atom.Category> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -122,7 +115,7 @@ export const parseCategory: ParsePartialFunction<Category> = (value) => {
   return trimObject(category)
 }
 
-export const retrieveGeneratorUri: ParsePartialFunction<string> = (value) => {
+export const retrieveGeneratorUri: ParsePartialUtil<string> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -133,7 +126,7 @@ export const retrieveGeneratorUri: ParsePartialFunction<string> = (value) => {
   return uri || url
 }
 
-export const parseGenerator: ParsePartialFunction<Generator> = (value) => {
+export const parseGenerator: ParsePartialUtil<Atom.Generator> = (value) => {
   const generator = {
     text: parseString(retrieveText(value)),
     uri: retrieveGeneratorUri(value),
@@ -143,7 +136,7 @@ export const parseGenerator: ParsePartialFunction<Generator> = (value) => {
   return trimObject(generator)
 }
 
-export const parseSource: ParsePartialFunction<Source<string>> = (value, options) => {
+export const parseSource: ParsePartialUtil<Atom.Source<string>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -153,7 +146,7 @@ export const parseSource: ParsePartialFunction<Source<string>> = (value, options
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
-    generator: parseSingularOf(get('generator'), parseGenerator),
+    generator: parseSingularOf(get('generator'), (value) => parseGenerator(value, options)),
     icon: parseSingularOf(get('icon'), (value) => parseString(retrieveText(value))),
     id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
@@ -167,7 +160,7 @@ export const parseSource: ParsePartialFunction<Source<string>> = (value, options
   return trimObject(source)
 }
 
-export const retrievePublished: ParsePartialFunction<string> = (value, options) => {
+export const retrievePublished: ParsePartialUtil<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -183,7 +176,7 @@ export const retrievePublished: ParsePartialFunction<string> = (value, options) 
   return published || issued || created
 }
 
-export const retrieveUpdated: ParsePartialFunction<string> = (value, options) => {
+export const retrieveUpdated: ParsePartialUtil<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -195,7 +188,7 @@ export const retrieveUpdated: ParsePartialFunction<string> = (value, options) =>
   return updated || modified
 }
 
-export const retrieveSubtitle: ParsePartialFunction<string> = (value, options) => {
+export const retrieveSubtitle: ParsePartialUtil<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -207,7 +200,7 @@ export const retrieveSubtitle: ParsePartialFunction<string> = (value, options) =
   return subtitle || tagline
 }
 
-export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) => {
+export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -227,14 +220,18 @@ export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) 
     summary: parseSingularOf(get('summary'), (value) => parseString(retrieveText(value))),
     title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
     updated: retrieveUpdated(value, options),
+    cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
-    dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     slash: namespaces?.has('slash') ? retrieveSlashItem(value) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesItem(value) : undefined,
     psc: namespaces?.has('psc') ? retrievePscItem(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     thr: namespaces?.has('thr') ? retrieveThrItem(value) : undefined,
+    dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    creativeCommons: namespaces?.has('creativecommons')
+      ? retrieveCreativecommonsItemOrFeed(value)
+      : undefined,
     wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
   }
@@ -242,7 +239,7 @@ export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) 
   return trimObject(entry)
 }
 
-export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) => {
+export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -253,7 +250,7 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) =>
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
-    generator: parseSingularOf(get('generator'), parseGenerator),
+    generator: parseSingularOf(get('generator'), (value) => parseGenerator(value, options)),
     icon: parseSingularOf(get('icon'), (value) => parseString(retrieveText(value))),
     id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
@@ -263,19 +260,23 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) =>
     title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
     updated: retrieveUpdated(value, options),
     entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options)),
+    cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
-    dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     sy: namespaces?.has('sy') ? retrieveSyFeed(value) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesFeed(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    creativeCommons: namespaces?.has('creativecommons')
+      ? retrieveCreativecommonsItemOrFeed(value)
+      : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
   }
 
   return trimObject(feed)
 }
 
-export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialUtil<Atom.Feed<string>> = (value) => {
   const notNamespaced = parseSingularOf(value?.feed, parseFeed)
   const namespaced = parseSingularOf(value?.['atom:feed'], (value) =>
     parseFeed(value, { prefix: 'atom:' }),

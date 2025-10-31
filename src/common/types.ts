@@ -4,24 +4,44 @@ export type Unreliable = any
 
 export type DateLike = Date | string
 
+export type ExtraFields<F extends ReadonlyArray<string>, V = unknown> = {
+  [K in F[number]]?: V
+}
+
 export type AnyOf<T> = Partial<{ [P in keyof T]-?: NonNullable<T[P]> }> &
   { [P in keyof T]-?: Pick<{ [Q in keyof T]-?: NonNullable<T[Q]> }, P> }[keyof T]
 
-export type DeepPartial<T> = T extends Array<infer U>
-  ? Array<DeepPartial<U>>
+export type IsPlainObject<T> = T extends Array<unknown>
+  ? false
   : T extends (...args: Array<unknown>) => unknown
-    ? T
-    : T extends object
-      ? T extends null
-        ? T
-        : { [P in keyof T]?: DeepPartial<T[P]> }
-      : T
+    ? false
+    : T extends Date
+      ? false
+      : T extends object
+        ? T extends null
+          ? false
+          : true
+        : false
 
-export type ParseExactFunction<R> = (value: Unreliable) => R | undefined
+export type RemoveUndefined<T> = T extends undefined ? never : T
 
-export type ParsePartialFunction<R> = (value: Unreliable) => DeepPartial<R> | undefined
+export type DeepPartial<T> = IsPlainObject<T> extends true
+  ? { [P in keyof T]?: DeepPartial<RemoveUndefined<T[P]>> }
+  : T extends Array<infer U>
+    ? Array<DeepPartial<U>>
+    : T
 
-export type GenerateFunction<V> = (value: V | undefined) => Unreliable | undefined
+export type ParseExactUtil<R> = (value: Unreliable) => R | undefined
+
+export type ParsePartialUtil<R, O = undefined> = (
+  value: Unreliable,
+  options?: O,
+) => DeepPartial<R> | undefined
+
+export type GenerateUtil<V, O = undefined> = (
+  value: V | undefined,
+  options?: O,
+) => Unreliable | undefined
 
 export type XmlStylesheet = {
   type: string
@@ -32,12 +52,21 @@ export type XmlStylesheet = {
   alternate?: boolean
 }
 
-export type XmlGenerateFunction<TStrict, TLenient> = {
-  (value: TStrict, options?: { lenient?: false; stylesheets?: Array<XmlStylesheet> }): string
-  (value: TLenient, options: { lenient: true; stylesheets?: Array<XmlStylesheet> }): string
+export type XmlGenerateOptions<O, F extends boolean = false> = O & {
+  lenient?: F
+  stylesheets?: Array<XmlStylesheet>
 }
 
-export type JsonGenerateFunction<TStrict, TLenient> = {
-  (value: TStrict, options?: { lenient?: false }): unknown
-  (value: TLenient, options: { lenient: true }): unknown
+export type JsonGenerateOptions<O, F extends boolean = false> = O & {
+  lenient?: F
 }
+
+export type XmlGenerateMain<S, L, O = Record<string, unknown>> = <F extends boolean = false>(
+  value: F extends true ? L : S,
+  options?: XmlGenerateOptions<O, F>,
+) => string
+
+export type JsonGenerateMain<S, L, O = Record<string, unknown>> = <F extends boolean = false>(
+  value: F extends true ? L : S,
+  options?: JsonGenerateOptions<O, F>,
+) => unknown

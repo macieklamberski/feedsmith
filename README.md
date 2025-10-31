@@ -1,11 +1,10 @@
 # Feedsmith
 
-[![tests](https://github.com/macieklamberski/feedsmith/actions/workflows/test.yml/badge.svg)](https://github.com/macieklamberski/feedsmith/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/macieklamberski/feedsmith/branch/main/graph/badge.svg)](https://codecov.io/gh/macieklamberski/feedsmith)
 [![npm version](https://img.shields.io/npm/v/feedsmith.svg)](https://www.npmjs.com/package/feedsmith)
 [![license](https://img.shields.io/npm/l/feedsmith.svg)](https://github.com/macieklamberski/feedsmith/blob/main/LICENSE)
 
-Fast, all‑in‑one JavaScript parser and generator for RSS, Atom, RDF, and JSON Feed, with support for popular namespaces and OPML files.
+Fast, all‑in‑one JavaScript feed parser and generator for RSS, Atom, RDF, and JSON Feed, with support for popular namespaces and OPML files.
 
 Feedsmith offers universal and format‑specific parsers that maintain the original feed structure in a clean, object-oriented format while intelligently normalizing legacy elements. Access all feed data without compromising simplicity.
 
@@ -31,6 +30,7 @@ Feedsmith offers universal and format‑specific parsers that maintain the origi
 ### Leniency
 * **Normalizes legacy elements** ✨ — Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
 * **CaSe INSENsiTive** 🐍 — Handles fields and attributes in any case (lowercase, uppercase, mixed).
+* **Namespace URI tolerance** 🔧 — Accepts non-official namespace URIs (HTTPS variants, case variations, trailing slashes, whitespace).
 * **Forgiving** 🤝 — Gracefully handles malformed or incomplete feeds and extracts valid data. This makes it suitable for use with real-world feeds that may not strictly follow specifications.
 
 ### Performance and Type-Safety
@@ -40,7 +40,8 @@ Feedsmith offers universal and format‑specific parsers that maintain the origi
 * **Well-tested** 🔬 — Comprehensive test suite with over 2000 tests and 99% code coverage.
 
 ### Compatibility
-* Works in Node.js and modern browsers.
+* Works in Node.js 14.0.0+ and modern browsers.
+* Supports both CommonJS and ES modules.
 * Works with plain JavaScript, you don't need to use TypeScript.
 
 ## Supported Formats
@@ -73,13 +74,19 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Slash](http://purl.org/rss/1.0/modules/slash/) | `<slash:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [iTunes](http://www.itunes.com/dtds/podcast-1.0.dtd) | `<itunes:*>` | RSS, Atom | ✅ | ✅ |
 | [Podcast](https://podcastindex.org/namespace/1.0) | `<podcast:*>` | RSS | ✅ | ✅ |
+| [RawVoice](https://blubrry.com/developer/rawvoice-rss/) | `<rawvoice:*>` | RSS | ✅ | ✅ |
 | [Podlove Simple Chapters](http://podlove.org/simple-chapters) | `<psc:*>` | RSS, Atom | ✅ | ✅ |
 | [Google Play Podcasts](https://www.google.com/schemas/play-podcasts/1.0/) | `<googleplay:*>` | RSS, Atom | ✅ | ✅ |
+| [Spotify](http://www.spotify.com/ns/rss) | `<spotify:*>` | RSS | ✅ | ✅ |
 | [Media RSS](http://search.yahoo.com/mrss/) | `<media:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [GeoRSS-Simple](http://www.georss.org/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) | `<thr:*>` | RSS, Atom | ✅ | ✅ |
 | [Dublin Core Terms](http://purl.org/dc/terms/) | `<dcterms:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Well-Formed Web](http://wellformedweb.org/CommentAPI/) | `<wfw:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Source](http://source.scripting.com/) | `<source:*>` | RSS | ✅ | ✅ |
+| [ccREL](http://creativecommons.org/ns#) | `<cc:*>` | RSS, Atom | ✅ | ✅ |
+| [Creative Commons](http://backend.userland.com/creativeCommonsRssModule) | `<creativeCommons:*>` | RSS, Atom | ✅ | ✅ |
+| [FeedPress](https://feedpress.com/xmlns) | `<feedpress:*>` | RSS | ✅ | ✅ |
 | [YouTube](https://www.youtube.com/feeds/videos.xml) | `<yt:*>` | Atom | ✅ | ✅ |
 
 ### Other
@@ -120,7 +127,7 @@ if (format === 'rss') {
 }
 ```
 
-### Use Format-Specific Parsers
+### Parse Specific Feed Formats
 
 If you know the format in advance, you can use the format-specific parsers:
 
@@ -133,10 +140,10 @@ import {
 } from 'feedsmith'
 
 // Parse specific formats
-const atomFeed = parseAtomFeed('atom content')
-const jsonFeed = parseJsonFeed('json content')
 const rssFeed = parseRssFeed('rss content')
+const atomFeed = parseAtomFeed('atom content')
 const rdfFeed = parseRdfFeed('rdf content')
+const jsonFeed = parseJsonFeed('json content')
 
 // Access typed data
 rssFeed.title
@@ -181,15 +188,38 @@ console.log(rss) // Complete RSS XML
 // - generateOpml() for OPML files
 ```
 
-### Handle Errors
+### Error Handling
+
+If the feed is unrecognized or invalid, an `Error` will be thrown with a descriptive message.
 
 ```typescript
+import { parseFeed, parseJsonFeed } from 'feedsmith'
+
 try {
-  const { format, feed } = parseFeed(content)
-  // Use the feed
+  const universalFeed = parseFeed('<not-a-feed></not-a-feed>')
 } catch (error) {
-  console.error('Invalid feed:', error.message)
+  // Error: Unrecognized feed format
 }
+
+try {
+  const jsonFeed = parseJsonFeed('{}')
+} catch (error) {
+  // Error: Invalid feed format
+}
+```
+
+### TypeScript Types
+
+Feedsmith provides comprehensive TypeScript types for all feed formats:
+
+```typescript
+import type { Rss, Atom, Json, Opml } from 'feedsmith/types'
+
+// Access all types for a format
+type Feed = Rss.Feed
+type Item = Rss.Item
+type Category = Rss.Category
+type Enclosure = Rss.Enclosure
 ```
 
 ## Why Feedsmith?
@@ -212,8 +242,3 @@ While this approach can be useful for quick reading of feed data, it often resul
 * The library API is inspired by the [FeedKit library for Swift](https://github.com/nmdias/FeedKit).
 * XML parsing is provided by [fast-xml-parser](https://github.com/NaturalIntelligence/fast-xml-parser).
 * HTML entity decoding is handled by [entities](https://github.com/fb55/entities).
-
-## License
-
-Licensed under the [MIT](LICENSE) license.<br/>
-Copyright 2025 Maciej Lamberski

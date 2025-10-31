@@ -1,4 +1,4 @@
-import { namespaceUrls } from '../../../common/config.js'
+import { namespaceUris } from '../../../common/config.js'
 import type { DateLike } from '../../../common/types.js'
 import {
   generateCdataString,
@@ -6,10 +6,13 @@ import {
   generateNumber,
   generatePlainString,
   generateRfc3339Date,
+  generateTextOrCdataString,
   isObject,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
+import { generateItemOrFeed as generateCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
@@ -30,27 +33,17 @@ import {
   generateFeed as generateYtFeed,
   generateItem as generateYtItem,
 } from '../../../namespaces/yt/generate/utils.js'
-import type {
-  Category,
-  Entry,
-  Feed,
-  GenerateFunction,
-  Generator,
-  Link,
-  Person,
-  Source,
-  Text,
-} from '../common/types.js'
+import type { Atom, GenerateUtil } from '../common/types.js'
 
 export const createNamespaceSetter = (prefix: string | undefined) => {
   return (key: string) => (prefix ? `${prefix}${key}` : key)
 }
 
-export const generateText: GenerateFunction<Text> = (text) => {
+export const generateText: GenerateUtil<Atom.Text> = (text) => {
   return generateCdataString(text)
 }
 
-export const generateLink: GenerateFunction<Link<DateLike>> = (link) => {
+export const generateLink: GenerateUtil<Atom.Link<DateLike>> = (link) => {
   if (!isObject(link)) {
     return
   }
@@ -68,7 +61,7 @@ export const generateLink: GenerateFunction<Link<DateLike>> = (link) => {
   return trimObject(value)
 }
 
-export const generatePerson: GenerateFunction<Person> = (person, options) => {
+export const generatePerson: GenerateUtil<Atom.Person> = (person, options) => {
   if (!isObject(person)) {
     return
   }
@@ -83,7 +76,7 @@ export const generatePerson: GenerateFunction<Person> = (person, options) => {
   return trimObject(value)
 }
 
-export const generateCategory: GenerateFunction<Category> = (category) => {
+export const generateCategory: GenerateUtil<Atom.Category> = (category) => {
   if (!isObject(category)) {
     return
   }
@@ -97,13 +90,13 @@ export const generateCategory: GenerateFunction<Category> = (category) => {
   return trimObject(value)
 }
 
-export const generateGenerator: GenerateFunction<Generator> = (generator) => {
+export const generateGenerator: GenerateUtil<Atom.Generator> = (generator) => {
   if (!isObject(generator)) {
     return
   }
 
   const value = {
-    '#text': generateCdataString(generator.text),
+    ...generateTextOrCdataString(generator.text),
     '@uri': generatePlainString(generator.uri),
     '@version': generatePlainString(generator.version),
   }
@@ -111,7 +104,7 @@ export const generateGenerator: GenerateFunction<Generator> = (generator) => {
   return trimObject(value)
 }
 
-export const generateSource: GenerateFunction<Source<DateLike>> = (source, options) => {
+export const generateSource: GenerateUtil<Atom.Source<DateLike>> = (source, options) => {
   if (!isObject(source)) {
     return
   }
@@ -139,7 +132,7 @@ export const generateSource: GenerateFunction<Source<DateLike>> = (source, optio
   return trimObject(value)
 }
 
-export const generateEntry: GenerateFunction<Entry<DateLike>> = (entry, options) => {
+export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options) => {
   if (!isObject(entry)) {
     return
   }
@@ -174,20 +167,22 @@ export const generateEntry: GenerateFunction<Entry<DateLike>> = (entry, options)
 
   return {
     ...trimmedValue,
+    ...generateCc(entry.cc),
     ...generateDcItemOrFeed(entry.dc),
-    ...generateDctermsItemOrFeed(entry.dcterms),
     ...generateSlashItem(entry.slash),
     ...generateItunesItem(entry.itunes),
     ...generatePscItem(entry.psc),
     ...generateMediaItemOrFeed(entry.media),
     ...generateGeoRssItemOrFeed(entry.georss),
     ...generateThrItem(entry.thr),
+    ...generateDctermsItemOrFeed(entry.dcterms),
+    ...generateCreativecommonsItemOrFeed(entry.creativeCommons),
     ...generateWfwItem(entry.wfw),
     ...generateYtItem(entry.yt),
   }
 }
 
-export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed, options) => {
+export const generateFeed: GenerateUtil<Atom.Feed<DateLike>> = (feed, options) => {
   if (!isObject(feed)) {
     return
   }
@@ -235,12 +230,14 @@ export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed, options) =>
 
   const valueFull = {
     ...valueFeed,
+    ...generateCc(feed.cc),
     ...generateDcItemOrFeed(feed.dc),
-    ...generateDctermsItemOrFeed(feed.dcterms),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
+    ...generateDctermsItemOrFeed(feed.dcterms),
+    ...generateCreativecommonsItemOrFeed(feed.creativeCommons),
     ...generateYtFeed(feed.yt),
     ...valueEntries,
   }
@@ -248,7 +245,7 @@ export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed, options) =>
   return {
     feed: {
       '@xmlns': 'http://www.w3.org/2005/Atom',
-      ...generateNamespaceAttrs({ value: valueFull }, namespaceUrls),
+      ...generateNamespaceAttrs({ value: valueFull }, namespaceUris),
       ...valueFull,
     },
   }

@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   detectNamespaces,
   isObject,
@@ -21,9 +21,9 @@ import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespac
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
-import type { Feed, Image, Item, TextInput } from '../common/types.js'
+import type { Rdf } from '../common/types.js'
 
-export const parseImage: ParsePartialFunction<Image> = (value) => {
+export const parseImage: ParsePartialUtil<Rdf.Image> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -37,12 +37,12 @@ export const parseImage: ParsePartialFunction<Image> = (value) => {
   return trimObject(image)
 }
 
-export const retrieveImage: ParsePartialFunction<Image> = (value) => {
+export const retrieveImage: ParsePartialUtil<Rdf.Image> = (value) => {
   // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
   return parseSingularOf(value?.image, parseImage)
 }
 
-export const parseTextInput: ParsePartialFunction<TextInput> = (value) => {
+export const parseTextInput: ParsePartialUtil<Rdf.TextInput> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -57,12 +57,12 @@ export const parseTextInput: ParsePartialFunction<TextInput> = (value) => {
   return trimObject(textInput)
 }
 
-export const retrieveTextInput: ParsePartialFunction<TextInput> = (value) => {
+export const retrieveTextInput: ParsePartialUtil<Rdf.TextInput> = (value) => {
   // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
   return parseSingularOf(value?.textinput, parseTextInput)
 }
 
-export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
+export const parseItem: ParsePartialUtil<Rdf.Item<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -73,24 +73,24 @@ export const parseItem: ParsePartialFunction<Item<string>> = (value) => {
     link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
     description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
     atom: namespaces.has('atom') ? retrieveAtomEntry(value) : undefined,
-    content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
   }
 
   return trimObject(item)
 }
 
-export const retrieveItems: ParsePartialFunction<Array<Item<string>>> = (value) => {
+export const retrieveItems: ParsePartialUtil<Array<Rdf.Item<string>>> = (value) => {
   // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
   return parseArrayOf(value?.item, parseItem)
 }
 
-export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
+export const parseFeed: ParsePartialUtil<Rdf.Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -106,15 +106,15 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value) => {
     textInput: retrieveTextInput(value),
     atom: namespaces.has('atom') ? retrieveAtomFeed(channel) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(channel) : undefined,
     sy: namespaces.has('sy') ? retrieveSyFeed(channel) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(channel) : undefined,
   }
 
   return trimObject(feed)
 }
 
-export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialUtil<Rdf.Feed<string>> = (value) => {
   return parseSingularOf(value?.rdf, parseFeed)
 }

@@ -1,7 +1,9 @@
-import type { DateLike, DeepPartial, JsonGenerateFunction } from '../../../common/types.js'
-import type { Feed } from '../common/types.js'
+import type { DateLike, DeepPartial, JsonGenerateMain } from '../../../common/types.js'
+import type { Json } from '../common/types.js'
 import { generateFeed } from './utils.js'
 
-export const generate: JsonGenerateFunction<Feed<Date>, DeepPartial<Feed<DateLike>>> = (value) => {
-  return generateFeed(value as Feed<Date | DateLike>)
+export const generate: JsonGenerateMain<Json.Feed<Date>, DeepPartial<Json.Feed<DateLike>>> = (
+  value,
+) => {
+  return generateFeed(value as Json.Feed<DateLike>)
 }

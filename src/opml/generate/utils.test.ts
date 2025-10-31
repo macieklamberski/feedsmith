@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { generateBody, generateHead, generateOpml, generateOutline } from './utils.js'
+import { generateBody, generateDocument, generateHead, generateOutline } from './utils.js'
 
 describe('generateOutline', () => {
   it('should generate valid outline object with all properties', () => {
@@ -111,6 +111,127 @@ describe('generateOutline', () => {
 
   it('should handle non-object inputs gracefully', () => {
     expect(generateOutline(undefined)).toBeUndefined()
+  })
+
+  describe('custom attributes', () => {
+    it('should generate outline with custom attributes when specified in options', () => {
+      const outline = {
+        text: 'Feed with custom attrs',
+        type: 'rss',
+        xmlUrl: 'https://example.com/feed.xml',
+        customField1: 'value1',
+        customField2: 'value2',
+        rating: '5',
+      }
+      const options = {
+        extraOutlineAttributes: ['customField1', 'customField2', 'rating'],
+      }
+      const result = generateOutline(outline, options)
+
+      expect(result).toEqual({
+        '@text': 'Feed with custom attrs',
+        '@type': 'rss',
+        '@xmlUrl': 'https://example.com/feed.xml',
+        '@customField1': 'value1',
+        '@customField2': 'value2',
+        '@rating': '5',
+      })
+    })
+
+    it('should not include custom attributes when not in options', () => {
+      const outline = {
+        text: 'Feed with custom attrs',
+        type: 'rss',
+        xmlUrl: 'https://example.com/feed.xml',
+        customField1: 'value1',
+        customField2: 'value2',
+        rating: '5',
+      }
+      const result = generateOutline(outline)
+
+      expect(result).toEqual({
+        '@text': 'Feed with custom attrs',
+        '@type': 'rss',
+        '@xmlUrl': 'https://example.com/feed.xml',
+      })
+    })
+
+    it('should handle nested outlines with custom attributes', () => {
+      const outline = {
+        text: 'Parent',
+        customParent: 'parentValue',
+        outlines: [
+          {
+            text: 'Child 1',
+            customChild: 'childValue1',
+          },
+          {
+            text: 'Child 2',
+            customChild: 'childValue2',
+          },
+        ],
+      }
+      const options = {
+        extraOutlineAttributes: ['customParent', 'customChild'],
+      }
+      const result = generateOutline(outline, options)
+
+      expect(result).toEqual({
+        '@text': 'Parent',
+        '@customParent': 'parentValue',
+        outline: [
+          {
+            '@text': 'Child 1',
+            '@customChild': 'childValue1',
+          },
+          {
+            '@text': 'Child 2',
+            '@customChild': 'childValue2',
+          },
+        ],
+      })
+    })
+
+    it('should only include specified custom attributes', () => {
+      const outline = {
+        text: 'Selective',
+        type: 'rss',
+        customField1: 'included',
+        customField2: 'not included',
+        customField3: 'included',
+      }
+      const options = {
+        extraOutlineAttributes: ['customField1', 'customField3'],
+      }
+      const result = generateOutline(outline, options)
+
+      expect(result).toEqual({
+        '@text': 'Selective',
+        '@type': 'rss',
+        '@customField1': 'included',
+        '@customField3': 'included',
+      })
+    })
+
+    it('should handle custom attributes as strings', () => {
+      const outline = {
+        text: 'Test',
+        stringAttr: 'text value',
+        numberAttr: '123',
+        boolAttr: 'true',
+      }
+      const options = {
+        extraOutlineAttributes: ['stringAttr', 'numberAttr', 'boolAttr'],
+      }
+      const result = generateOutline(outline, options)
+
+      expect(result).toEqual({
+        '@text': 'Test',
+        '@stringAttr': 'text value',
+        '@numberAttr': '123',
+        '@boolAttr': 'true',
+      })
+    })
   })
 })
 
@@ -272,7 +393,7 @@ describe('generateBody', () => {
   })
 })
 
-describe('generateOpml', () => {
+describe('generateDocument', () => {
   it('should generate complete OPML object', () => {
     const date = new Date('2023-03-15T12:00:00Z')
     const value = {
@@ -323,7 +444,7 @@ describe('generateOpml', () => {
       },
     }
 
-    expect(generateOpml(value)).toEqual(expected)
+    expect(generateDocument(value)).toEqual(expected)
   })
 
   it('should generate OPML with minimal required fields', () => {
@@ -341,7 +462,7 @@ describe('generateOpml', () => {
       },
     }
 
-    expect(generateOpml(value)).toEqual(expected)
+    expect(generateDocument(value)).toEqual(expected)
   })
 
   it('should handle OPML with empty body outlines', () => {
@@ -351,7 +472,7 @@ describe('generateOpml', () => {
       },
     }
 
-    expect(generateOpml(value)).toBeUndefined()
+    expect(generateDocument(value)).toBeUndefined()
   })
 
   it('should handle object with only undefined/empty properties', () => {
@@ -360,14 +481,14 @@ describe('generateOpml', () => {
       body: undefined,
     }
 
-    expect(generateOpml(value)).toBeUndefined()
+    expect(generateDocument(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
-    expect(generateOpml({})).toBeUndefined()
+    expect(generateDocument({})).toBeUndefined()
   })
 
   it('should handle non-object inputs gracefully', () => {
-    expect(generateOpml(undefined)).toBeUndefined()
+    expect(generateDocument(undefined)).toBeUndefined()
   })
 })

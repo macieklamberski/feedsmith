@@ -252,9 +252,7 @@ describe('generateSkipHours', () => {
   })
 
   it('should handle empty array', () => {
-    const value = []
-
-    expect(generateSkipHours(value)).toBeUndefined()
+    expect(generateSkipHours([])).toBeUndefined()
   })
 
   it('should handle object with only undefined/empty properties', () => {
@@ -283,9 +281,7 @@ describe('generateSkipDays', () => {
   })
 
   it('should handle empty array', () => {
-    const value = []
-
-    expect(generateSkipDays(value)).toBeUndefined()
+    expect(generateSkipDays([])).toBeUndefined()
   })
 
   it('should handle object with only undefined/empty properties', () => {
@@ -716,6 +712,115 @@ describe('generateItem', () => {
 
     expect(generateItem(value)).toEqual(expected)
   })
+
+  it('should generate item with wfw namespace properties', () => {
+    const value = {
+      title: 'Item with wfw namespace',
+      wfw: {
+        comment: 'https://example.com/comment',
+        commentRss: 'https://example.com/comments/feed',
+      },
+    }
+    const expected = {
+      title: 'Item with wfw namespace',
+      'wfw:comment': 'https://example.com/comment',
+      'wfw:commentRss': 'https://example.com/comments/feed',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should generate item with source namespace properties', () => {
+    const value = {
+      title: 'Item with source namespace',
+      sourceNs: {
+        markdown: '# Example markdown content',
+        outlines: ['<outline text="Section 1"/>', '<outline text="Section 2"/>'],
+        localTime: '2024-01-15 10:30:00',
+        linkFull: 'https://example.com/full-article',
+      },
+    }
+    const expected = {
+      title: 'Item with source namespace',
+      'source:markdown': '# Example markdown content',
+      'source:outline': [
+        { '#cdata': '<outline text="Section 1"/>' },
+        { '#cdata': '<outline text="Section 2"/>' },
+      ],
+      'source:localTime': '2024-01-15 10:30:00',
+      'source:linkFull': 'https://example.com/full-article',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should generate item with ccREL namespace properties', () => {
+    const value = {
+      title: 'Item with ccREL namespace',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+        morePermissions: 'https://example.com/additional-permissions',
+      },
+    }
+    const expected = {
+      title: 'Item with ccREL namespace',
+      'cc:license': 'https://creativecommons.org/licenses/by/4.0/',
+      'cc:morePermissions': 'https://example.com/additional-permissions',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should generate item with psc namespace properties', () => {
+    const value = {
+      title: 'Item with PSC chapters',
+      psc: {
+        chapters: [
+          { start: '00:00:00', title: 'Introduction', href: 'https://example.com/intro' },
+          { start: '00:05:30', title: 'Main Content' },
+        ],
+      },
+    }
+    const expected = {
+      title: 'Item with PSC chapters',
+      'psc:chapters': {
+        'psc:chapter': [
+          {
+            '@start': '00:00:00',
+            '@title': 'Introduction',
+            '@href': 'https://example.com/intro',
+          },
+          {
+            '@start': '00:05:30',
+            '@title': 'Main Content',
+          },
+        ],
+      },
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should generate item with rawvoice namespace properties', () => {
+    const value = {
+      title: 'Item with RawVoice properties',
+      rawvoice: {
+        poster: {
+          url: 'https://example.com/poster.jpg',
+        },
+        isHd: true,
+      },
+    }
+    const expected = {
+      title: 'Item with RawVoice properties',
+      'rawvoice:poster': {
+        '@url': 'https://example.com/poster.jpg',
+      },
+      'rawvoice:isHd': 'yes',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -1124,12 +1229,167 @@ describe('generateFeed', () => {
     const expected = {
       rss: {
         '@version': '2.0',
-        '@xmlns:georss': 'http://www.georss.org/georss/',
+        '@xmlns:georss': 'http://www.georss.org/georss',
         channel: {
           title: 'Feed with georss namespace',
           description: 'A feed with geographic data',
           'georss:point': '45.256 -71.92',
           'georss:featureName': 'Boston',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate source namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with source namespace',
+      description: 'A feed with Source namespace features',
+      sourceNs: {
+        accounts: [{ service: 'twitter', value: 'johndoe' }, { service: 'github' }],
+        likes: { server: 'http://likes.example.com/' },
+        blogroll: 'https://example.com/blogroll.opml',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:source': 'http://source.scripting.com/',
+        channel: {
+          title: 'Feed with source namespace',
+          description: 'A feed with Source namespace features',
+          'source:account': [
+            { '@service': 'twitter', '#text': 'johndoe' },
+            { '@service': 'github' },
+          ],
+          'source:likes': { '@server': 'http://likes.example.com/' },
+          'source:blogroll': 'https://example.com/blogroll.opml',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate ccREL namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with ccREL namespace',
+      description: 'A feed with ccREL license',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+        morePermissions: 'https://example.com/commercial-license',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:cc': 'http://creativecommons.org/ns#',
+        channel: {
+          title: 'Feed with ccREL namespace',
+          description: 'A feed with ccREL license',
+          'cc:license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+          'cc:morePermissions': 'https://example.com/commercial-license',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate creativecommons namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with Creative Commons namespace',
+      description: 'A feed with Creative Commons license',
+      creativeCommons: {
+        licenses: ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:creativeCommons': 'http://backend.userland.com/creativeCommonsRssModule',
+        channel: {
+          title: 'Feed with Creative Commons namespace',
+          description: 'A feed with Creative Commons license',
+          'creativeCommons:license': ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate feedpress namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with FeedPress namespace',
+      description: 'A feed with FeedPress properties',
+      feedpress: {
+        link: 'https://feed.press/example',
+        newsletterId: '12345',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:feedpress': 'https://feed.press/xmlns',
+        channel: {
+          title: 'Feed with FeedPress namespace',
+          description: 'A feed with FeedPress properties',
+          'feedpress:link': 'https://feed.press/example',
+          'feedpress:newsletterId': '12345',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate rawvoice namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with RawVoice namespace',
+      description: 'A feed with RawVoice properties',
+      rawvoice: {
+        rating: {
+          value: 'TV-PG',
+        },
+        frequency: 'weekly',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:rawvoice': 'http://www.rawvoice.com/rawvoiceRssModule/',
+        channel: {
+          title: 'Feed with RawVoice namespace',
+          description: 'A feed with RawVoice properties',
+          'rawvoice:rating': {
+            '#text': 'TV-PG',
+          },
+          'rawvoice:frequency': 'weekly',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate spotify namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with Spotify namespace',
+      description: 'A feed with Spotify properties',
+      spotify: {
+        countryOfOrigin: 'US',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:spotify': 'http://www.spotify.com/ns/rss',
+        channel: {
+          title: 'Feed with Spotify namespace',
+          description: 'A feed with Spotify properties',
+          'spotify:countryOfOrigin': 'US',
         },
       },
     }

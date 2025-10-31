@@ -31,7 +31,7 @@ The Media RSS namespace provides rich media metadata for RSS feeds, enabling com
   </tbody>
 </table>
 
-## Structure
+## Types
 
 <<< @/../src/namespaces/media/common/types.ts#reference
 

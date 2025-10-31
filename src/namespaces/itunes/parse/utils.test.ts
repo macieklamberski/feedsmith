@@ -563,6 +563,7 @@ describe('retrieveItem', () => {
     duration: 3600,
     image: 'https://example.com/image.jpg',
     explicit: true,
+    author: 'John Doe',
     title: 'Episode Title',
     episode: 42,
     season: 2,
@@ -578,6 +579,7 @@ describe('retrieveItem', () => {
       'itunes:duration': { '#text': '3600' },
       'itunes:image': { '@href': 'https://example.com/image.jpg' },
       'itunes:explicit': { '#text': 'yes' },
+      'itunes:author': { '#text': 'John Doe' },
       'itunes:title': { '#text': 'Episode Title' },
       'itunes:episode': { '#text': '42' },
       'itunes:season': { '#text': '2' },
@@ -596,6 +598,7 @@ describe('retrieveItem', () => {
       'itunes:duration': '3600',
       'itunes:image': { '@href': 'https://example.com/image.jpg' },
       'itunes:explicit': 'yes',
+      'itunes:author': 'John Doe',
       'itunes:title': 'Episode Title',
       'itunes:episode': '42',
       'itunes:season': '2',
@@ -617,6 +620,7 @@ describe('retrieveItem', () => {
         { '@href': 'https://example.com/alternate-image.jpg' },
       ],
       'itunes:explicit': ['yes', 'no'],
+      'itunes:author': ['John Doe', 'Jane Smith'],
       'itunes:title': ['Episode Title', 'Alternative Episode Title'],
       'itunes:episode': ['42', '43'],
       'itunes:season': ['2', '3'],
@@ -752,6 +756,66 @@ describe('retrieveItem', () => {
     }
 
     expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse author with #text wrapper', () => {
+    const value = {
+      'itunes:author': { '#text': 'John Doe' },
+    }
+    const expected = {
+      author: 'John Doe',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse author without #text wrapper', () => {
+    const value = {
+      'itunes:author': 'Jane Smith',
+    }
+    const expected = {
+      author: 'Jane Smith',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should handle HTML entities in author', () => {
+    const value = {
+      'itunes:author': { '#text': 'John &amp; Jane' },
+    }
+    const expected = {
+      author: 'John & Jane',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should handle CDATA sections in author', () => {
+    const value = {
+      'itunes:author': { '#text': '<![CDATA[John <Smith> Doe]]>' },
+    }
+    const expected = {
+      author: 'John <Smith> Doe',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should handle empty string author', () => {
+    const value = {
+      'itunes:author': '',
+    }
+
+    expect(retrieveItem(value)).toBeUndefined()
+  })
+
+  it('should handle whitespace-only author', () => {
+    const value = {
+      'itunes:author': '   ',
+    }
+
+    expect(retrieveItem(value)).toBeUndefined()
   })
 
   it('should return undefined when no valid item properties are present', () => {

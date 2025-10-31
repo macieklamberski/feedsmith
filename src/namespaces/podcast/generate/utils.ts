@@ -1,50 +1,22 @@
-import type { DateLike, GenerateFunction } from '../../../common/types.js'
+import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
+  generateArrayOrSingular,
   generateBoolean,
   generateCdataString,
   generateNumber,
   generatePlainString,
   generateRfc822Date,
   generateRfc3339Date,
+  generateSingularOrArray,
+  generateTextOrCdataString,
   generateYesNoBoolean,
   isObject,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
-import type {
-  AlternateEnclosure,
-  BaseItem,
-  Block,
-  Chapters,
-  ContentLink,
-  Episode,
-  Feed,
-  Funding,
-  Images,
-  Integrity,
-  Item,
-  License,
-  LiveItem,
-  Location,
-  Locked,
-  Person,
-  Podping,
-  Podroll,
-  RemoteItem,
-  Season,
-  SocialInteract,
-  Soundbite,
-  Source,
-  Trailer,
-  Transcript,
-  Txt,
-  UpdateFrequency,
-  Value,
-  ValueRecipient,
-  ValueTimeSplit,
-} from '../common/types.js'
+import type { PodcastNs } from '../common/types.js'
 
-export const generateBaseItem: GenerateFunction<BaseItem> = (baseItem) => {
+export const generateBaseItem: GenerateUtil<PodcastNs.BaseItem> = (baseItem) => {
   if (!isObject(baseItem)) {
     return
   }
@@ -54,7 +26,11 @@ export const generateBaseItem: GenerateFunction<BaseItem> = (baseItem) => {
     'podcast:chapters': generateChapters(baseItem.chapters),
     'podcast:soundbite': trimArray(baseItem.soundbites, generateSoundbite),
     'podcast:person': trimArray(baseItem.persons, generatePerson),
-    'podcast:location': generateLocation(baseItem.location),
+    'podcast:location': generateArrayOrSingular(
+      baseItem.locations,
+      baseItem.location,
+      generateLocation,
+    ),
     'podcast:season': generateSeason(baseItem.season),
     'podcast:episode': generateEpisode(baseItem.episode),
     'podcast:license': generateLicense(baseItem.license),
@@ -62,16 +38,17 @@ export const generateBaseItem: GenerateFunction<BaseItem> = (baseItem) => {
       baseItem.alternateEnclosures,
       generateAlternateEnclosure,
     ),
-    'podcast:value': generateValue(baseItem.value),
+    'podcast:value': generateArrayOrSingular(baseItem.values, baseItem.value, generateValue),
     'podcast:images': generateImages(baseItem.images),
     'podcast:socialInteract': trimArray(baseItem.socialInteracts, generateSocialInteract),
     'podcast:txt': trimArray(baseItem.txts, generateTxt),
+    'podcast:chat': generateSingularOrArray(baseItem.chat, baseItem.chats, generateChat),
   }
 
   return trimObject(value)
 }
 
-export const generateTranscript: GenerateFunction<Transcript> = (transcript) => {
+export const generateTranscript: GenerateUtil<PodcastNs.Transcript> = (transcript) => {
   if (!isObject(transcript)) {
     return
   }
@@ -86,7 +63,7 @@ export const generateTranscript: GenerateFunction<Transcript> = (transcript) => 
   return trimObject(value)
 }
 
-export const generateLocked: GenerateFunction<Locked> = (locked) => {
+export const generateLocked: GenerateUtil<PodcastNs.Locked> = (locked) => {
   if (!isObject(locked)) {
     return
   }
@@ -99,20 +76,20 @@ export const generateLocked: GenerateFunction<Locked> = (locked) => {
   return trimObject(value)
 }
 
-export const generateFunding: GenerateFunction<Funding> = (funding) => {
+export const generateFunding: GenerateUtil<PodcastNs.Funding> = (funding) => {
   if (!isObject(funding)) {
     return
   }
 
   const value = {
-    '#text': generateCdataString(funding.display),
+    ...generateTextOrCdataString(funding.display),
     '@url': generatePlainString(funding.url),
   }
 
   return trimObject(value)
 }
 
-export const generateChapters: GenerateFunction<Chapters> = (chapters) => {
+export const generateChapters: GenerateUtil<PodcastNs.Chapters> = (chapters) => {
   if (!isObject(chapters)) {
     return
   }
@@ -125,13 +102,13 @@ export const generateChapters: GenerateFunction<Chapters> = (chapters) => {
   return trimObject(value)
 }
 
-export const generateSoundbite: GenerateFunction<Soundbite> = (soundbite) => {
+export const generateSoundbite: GenerateUtil<PodcastNs.Soundbite> = (soundbite) => {
   if (!isObject(soundbite)) {
     return
   }
 
   const value = {
-    '#text': generateCdataString(soundbite.display),
+    ...generateTextOrCdataString(soundbite.display),
     '@startTime': generateNumber(soundbite.startTime),
     '@duration': generateNumber(soundbite.duration),
   }
@@ -139,13 +116,13 @@ export const generateSoundbite: GenerateFunction<Soundbite> = (soundbite) => {
   return trimObject(value)
 }
 
-export const generatePerson: GenerateFunction<Person> = (person) => {
+export const generatePerson: GenerateUtil<PodcastNs.Person> = (person) => {
   if (!isObject(person)) {
     return
   }
 
   const value = {
-    '#text': generateCdataString(person.display),
+    ...generateTextOrCdataString(person.display),
     '@role': generatePlainString(person.role),
     '@group': generatePlainString(person.group),
     '@img': generatePlainString(person.img),
@@ -155,13 +132,13 @@ export const generatePerson: GenerateFunction<Person> = (person) => {
   return trimObject(value)
 }
 
-export const generateLocation: GenerateFunction<Location> = (location) => {
+export const generateLocation: GenerateUtil<PodcastNs.Location> = (location) => {
   if (!isObject(location)) {
     return
   }
 
   const value = {
-    '#text': generateCdataString(location.display),
+    ...generateTextOrCdataString(location.display),
     '@geo': generatePlainString(location.geo),
     '@osm': generatePlainString(location.osm),
   }
@@ -169,7 +146,7 @@ export const generateLocation: GenerateFunction<Location> = (location) => {
   return trimObject(value)
 }
 
-export const generateSeason: GenerateFunction<Season> = (season) => {
+export const generateSeason: GenerateUtil<PodcastNs.Season> = (season) => {
   if (!isObject(season)) {
     return
   }
@@ -182,7 +159,7 @@ export const generateSeason: GenerateFunction<Season> = (season) => {
   return trimObject(value)
 }
 
-export const generateEpisode: GenerateFunction<Episode> = (episode) => {
+export const generateEpisode: GenerateUtil<PodcastNs.Episode> = (episode) => {
   if (!isObject(episode)) {
     return
   }
@@ -195,13 +172,13 @@ export const generateEpisode: GenerateFunction<Episode> = (episode) => {
   return trimObject(value)
 }
 
-export const generateTrailer: GenerateFunction<Trailer<DateLike>> = (trailer) => {
+export const generateTrailer: GenerateUtil<PodcastNs.Trailer<DateLike>> = (trailer) => {
   if (!isObject(trailer)) {
     return
   }
 
   const value = {
-    '#text': generateCdataString(trailer.display),
+    ...generateTextOrCdataString(trailer.display),
     '@url': generatePlainString(trailer.url),
     '@pubdate': generateRfc822Date(trailer.pubDate),
     '@length': generateNumber(trailer.length),
@@ -212,20 +189,20 @@ export const generateTrailer: GenerateFunction<Trailer<DateLike>> = (trailer) =>
   return trimObject(value)
 }
 
-export const generateLicense: GenerateFunction<License> = (license) => {
+export const generateLicense: GenerateUtil<PodcastNs.License> = (license) => {
   if (!isObject(license)) {
     return
   }
 
   const value = {
-    '#text': generateCdataString(license.display),
+    ...generateTextOrCdataString(license.display),
     '@url': generatePlainString(license.url),
   }
 
   return trimObject(value)
 }
 
-export const generateSource: GenerateFunction<Source> = (source) => {
+export const generateSource: GenerateUtil<PodcastNs.Source> = (source) => {
   if (!isObject(source)) {
     return
   }
@@ -238,7 +215,7 @@ export const generateSource: GenerateFunction<Source> = (source) => {
   return trimObject(value)
 }
 
-export const generateIntegrity: GenerateFunction<Integrity> = (integrity) => {
+export const generateIntegrity: GenerateUtil<PodcastNs.Integrity> = (integrity) => {
   if (!isObject(integrity)) {
     return
   }
@@ -251,7 +228,7 @@ export const generateIntegrity: GenerateFunction<Integrity> = (integrity) => {
   return trimObject(value)
 }
 
-export const generateAlternateEnclosure: GenerateFunction<AlternateEnclosure> = (
+export const generateAlternateEnclosure: GenerateUtil<PodcastNs.AlternateEnclosure> = (
   alternateEnclosure,
 ) => {
   if (!isObject(alternateEnclosure)) {
@@ -275,7 +252,7 @@ export const generateAlternateEnclosure: GenerateFunction<AlternateEnclosure> = 
   return trimObject(value)
 }
 
-export const generateValueRecipient: GenerateFunction<ValueRecipient> = (valueRecipient) => {
+export const generateValueRecipient: GenerateUtil<PodcastNs.ValueRecipient> = (valueRecipient) => {
   if (!isObject(valueRecipient)) {
     return
   }
@@ -293,7 +270,7 @@ export const generateValueRecipient: GenerateFunction<ValueRecipient> = (valueRe
   return trimObject(value)
 }
 
-export const generateValueTimeSplit: GenerateFunction<ValueTimeSplit> = (valueTimeSplit) => {
+export const generateValueTimeSplit: GenerateUtil<PodcastNs.ValueTimeSplit> = (valueTimeSplit) => {
   if (!isObject(valueTimeSplit)) {
     return
   }
@@ -310,7 +287,7 @@ export const generateValueTimeSplit: GenerateFunction<ValueTimeSplit> = (valueTi
   return trimObject(value)
 }
 
-export const generateValue: GenerateFunction<Value> = (value) => {
+export const generateValue: GenerateUtil<PodcastNs.Value> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -326,7 +303,7 @@ export const generateValue: GenerateFunction<Value> = (value) => {
   return trimObject(valueOut)
 }
 
-export const generateImages: GenerateFunction<Images> = (images) => {
+export const generateImages: GenerateUtil<PodcastNs.Images> = (images) => {
   if (!isObject(images)) {
     return
   }
@@ -338,20 +315,20 @@ export const generateImages: GenerateFunction<Images> = (images) => {
   return trimObject(value)
 }
 
-export const generateContentLink: GenerateFunction<ContentLink> = (contentLink) => {
+export const generateContentLink: GenerateUtil<PodcastNs.ContentLink> = (contentLink) => {
   if (!isObject(contentLink)) {
     return
   }
 
   const value = {
-    '#text': generateCdataString(contentLink.display),
+    ...generateTextOrCdataString(contentLink.display),
     '@href': generatePlainString(contentLink.href),
   }
 
   return trimObject(value)
 }
 
-export const generateLiveItem: GenerateFunction<LiveItem<DateLike>> = (liveItem) => {
+export const generateLiveItem: GenerateUtil<PodcastNs.LiveItem<DateLike>> = (liveItem) => {
   if (!isObject(liveItem)) {
     return
   }
@@ -367,7 +344,7 @@ export const generateLiveItem: GenerateFunction<LiveItem<DateLike>> = (liveItem)
   return trimObject(value)
 }
 
-export const generateSocialInteract: GenerateFunction<SocialInteract> = (socialInteract) => {
+export const generateSocialInteract: GenerateUtil<PodcastNs.SocialInteract> = (socialInteract) => {
   if (!isObject(socialInteract)) {
     return
   }
@@ -383,7 +360,22 @@ export const generateSocialInteract: GenerateFunction<SocialInteract> = (socialI
   return trimObject(value)
 }
 
-export const generateBlock: GenerateFunction<Block> = (block) => {
+export const generateChat: GenerateUtil<PodcastNs.Chat> = (chat) => {
+  if (!isObject(chat)) {
+    return
+  }
+
+  const value = {
+    '@server': generatePlainString(chat.server),
+    '@protocol': generatePlainString(chat.protocol),
+    '@accountId': generatePlainString(chat.accountId),
+    '@space': generatePlainString(chat.space),
+  }
+
+  return trimObject(value)
+}
+
+export const generateBlock: GenerateUtil<PodcastNs.Block> = (block) => {
   if (!isObject(block)) {
     return
   }
@@ -396,20 +388,20 @@ export const generateBlock: GenerateFunction<Block> = (block) => {
   return trimObject(value)
 }
 
-export const generateTxt: GenerateFunction<Txt> = (txt) => {
+export const generateTxt: GenerateUtil<PodcastNs.Txt> = (txt) => {
   if (!isObject(txt)) {
     return
   }
 
   const value = {
-    '#text': generateCdataString(txt.display),
+    ...generateTextOrCdataString(txt.display),
     '@purpose': generatePlainString(txt.purpose),
   }
 
   return trimObject(value)
 }
 
-export const generateRemoteItem: GenerateFunction<RemoteItem> = (remoteItem) => {
+export const generateRemoteItem: GenerateUtil<PodcastNs.RemoteItem> = (remoteItem) => {
   if (!isObject(remoteItem)) {
     return
   }
@@ -424,7 +416,7 @@ export const generateRemoteItem: GenerateFunction<RemoteItem> = (remoteItem) => 
   return trimObject(value)
 }
 
-export const generatePodroll: GenerateFunction<Podroll> = (podroll) => {
+export const generatePodroll: GenerateUtil<PodcastNs.Podroll> = (podroll) => {
   if (!isObject(podroll)) {
     return
   }
@@ -436,7 +428,7 @@ export const generatePodroll: GenerateFunction<Podroll> = (podroll) => {
   return trimObject(value)
 }
 
-export const generateUpdateFrequency: GenerateFunction<UpdateFrequency<DateLike>> = (
+export const generateUpdateFrequency: GenerateUtil<PodcastNs.UpdateFrequency<DateLike>> = (
   updateFrequency,
 ) => {
   if (!isObject(updateFrequency)) {
@@ -444,7 +436,7 @@ export const generateUpdateFrequency: GenerateFunction<UpdateFrequency<DateLike>
   }
 
   const value = {
-    '#text': generateCdataString(updateFrequency.display),
+    ...generateTextOrCdataString(updateFrequency.display),
     '@complete': generateBoolean(updateFrequency.complete),
     '@dtstart': generateRfc3339Date(updateFrequency.dtstart),
     '@rrule': generatePlainString(updateFrequency.rrule),
@@ -453,7 +445,7 @@ export const generateUpdateFrequency: GenerateFunction<UpdateFrequency<DateLike>
   return trimObject(value)
 }
 
-export const generatePodping: GenerateFunction<Podping> = (podping) => {
+export const generatePodping: GenerateUtil<PodcastNs.Podping> = (podping) => {
   if (!isObject(podping)) {
     return
   }
@@ -465,7 +457,19 @@ export const generatePodping: GenerateFunction<Podping> = (podping) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateFunction<Item> = (item) => {
+export const generatePublisher: GenerateUtil<PodcastNs.Publisher> = (publisher) => {
+  if (!isObject(publisher)) {
+    return
+  }
+
+  const value = {
+    'podcast:remoteItem': generateRemoteItem(publisher.remoteItem),
+  }
+
+  return trimObject(value)
+}
+
+export const generateItem: GenerateUtil<PodcastNs.Item> = (item) => {
   if (!isObject(item)) {
     return
   }
@@ -473,7 +477,7 @@ export const generateItem: GenerateFunction<Item> = (item) => {
   return generateBaseItem(item)
 }
 
-export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed) => {
+export const generateFeed: GenerateUtil<PodcastNs.Feed<DateLike>> = (feed) => {
   if (!isObject(feed)) {
     return
   }
@@ -482,11 +486,11 @@ export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed) => {
     'podcast:locked': generateLocked(feed.locked),
     'podcast:funding': trimArray(feed.fundings, generateFunding),
     'podcast:person': trimArray(feed.persons, generatePerson),
-    'podcast:location': generateLocation(feed.location),
+    'podcast:location': generateArrayOrSingular(feed.locations, feed.location, generateLocation),
     'podcast:trailer': trimArray(feed.trailers, generateTrailer),
     'podcast:license': generateLicense(feed.license),
     'podcast:guid': generateCdataString(feed.guid),
-    'podcast:value': generateValue(feed.value),
+    'podcast:value': generateArrayOrSingular(feed.values, feed.value, generateValue),
     'podcast:medium': generateCdataString(feed.medium),
     'podcast:images': generateImages(feed.images),
     'podcast:liveItem': trimArray(feed.liveItems, generateLiveItem),
@@ -496,6 +500,8 @@ export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed) => {
     'podcast:podroll': generatePodroll(feed.podroll),
     'podcast:updateFrequency': generateUpdateFrequency(feed.updateFrequency),
     'podcast:podping': generatePodping(feed.podping),
+    'podcast:chat': generateSingularOrArray(feed.chat, feed.chats, generateChat),
+    'podcast:publisher': generatePublisher(feed.publisher),
   }
 
   return trimObject(value)

@@ -1,8 +1,8 @@
-import type { GenerateFunction } from '../../../common/types.js'
+import type { GenerateUtil } from '../../../common/types.js'
 import { generateCdataString, isObject, trimObject } from '../../../common/utils.js'
-import type { Item } from '../common/types.js'
+import type { WfwNs } from '../common/types.js'
 
-export const generateItem: GenerateFunction<Item> = (item) => {
+export const generateItem: GenerateUtil<WfwNs.Item> = (item) => {
   if (!isObject(item)) {
     return
   }

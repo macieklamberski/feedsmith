@@ -1,6 +1,7 @@
-import type { ParsePartialFunction } from '../../common/types.js'
+import type { ParsePartialUtil } from '../../common/types.js'
 import {
   isObject,
+  isPresent,
   parseArrayOf,
   parseBoolean,
   parseCsvOf,
@@ -11,14 +12,17 @@ import {
   retrieveText,
   trimObject,
 } from '../../common/utils.js'
-import type { Body, Head, Opml, Outline } from '../common/types.js'
+import type { MainOptions, Opml } from '../common/types.js'
 
-export const parseOutline: ParsePartialFunction<Outline<string>> = (value) => {
+export const parseOutline: ParsePartialUtil<Opml.Outline<string>, MainOptions> = (
+  value,
+  options,
+) => {
   if (!isObject(value)) {
     return
   }
 
-  const outline = {
+  const outline: Record<string, unknown> = {
     text: parseString(value['@text']),
     type: parseString(value['@type']),
     isComment: parseBoolean(value['@iscomment']),
@@ -32,13 +36,25 @@ export const parseOutline: ParsePartialFunction<Outline<string>> = (value) => {
     title: parseString(value['@title']),
     version: parseString(value['@version']),
     url: parseString(value['@url']),
-    outlines: parseArrayOf(value.outline, parseOutline),
+    outlines: parseArrayOf(value.outline, (value) => parseOutline(value, options)),
+  }
+
+  if (options?.extraOutlineAttributes) {
+    for (const attribute of options.extraOutlineAttributes) {
+      const attributeKey = `@${attribute.toLowerCase()}`
+
+      if (!isPresent(value[attributeKey])) {
+        continue
+      }
+
+      outline[attribute] = parseString(value[attributeKey])
+    }
   }
 
   return trimObject(outline)
 }
 
-export const parseHead: ParsePartialFunction<Head<string>> = (value) => {
+export const parseHead: ParsePartialUtil<Opml.Head<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -66,26 +82,29 @@ export const parseHead: ParsePartialFunction<Head<string>> = (value) => {
   return trimObject(head)
 }
 
-export const parseBody: ParsePartialFunction<Body<string>> = (value) => {
+export const parseBody: ParsePartialUtil<Opml.Body<string>, MainOptions> = (value, options) => {
   if (!isObject(value)) {
     return
   }
 
   const body = {
-    outlines: parseArrayOf(value.outline, parseOutline),
+    outlines: parseArrayOf(value.outline, (value) => parseOutline(value, options)),
   }
 
   return trimObject(body)
 }
 
-export const parseOpml: ParsePartialFunction<Opml<string>> = (value) => {
+export const parseDocument: ParsePartialUtil<Opml.Document<string>, MainOptions> = (
+  value,
+  options,
+) => {
   if (!isObject(value?.opml)) {
     return
   }
 
   const opml = {
     head: parseHead(value.opml.head),
-    body: parseBody(value.opml.body),
+    body: parseBody(value.opml.body, options),
   }
 
   return trimObject(opml)

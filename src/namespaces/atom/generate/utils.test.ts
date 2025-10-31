@@ -39,7 +39,6 @@ describe('generateEntry', () => {
   })
 
   it('should handle empty object', () => {
-    // @ts-expect-error: Testing invalid input
     expect(generateEntry({})).toBeUndefined()
   })
 
@@ -85,7 +84,6 @@ describe('generateFeed', () => {
   })
 
   it('should handle empty object', () => {
-    // @ts-expect-error: Testing invalid input
     expect(generateFeed({})).toBeUndefined()
   })
 

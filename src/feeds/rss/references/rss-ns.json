@@ -9,6 +9,19 @@
       "content": {
         "encoded": "This is an example of content."
       },
+      "cc": {
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "morePermissions": "https://example.com/additional-permissions",
+        "attributionName": "Jack Jackson",
+        "attributionURL": "https://example.com/authors/jack-jackson",
+        "useGuidelines": "https://example.com/article-usage-guidelines",
+        "permits": "http://creativecommons.org/ns#Reproduction",
+        "requires": "http://creativecommons.org/ns#Attribution",
+        "prohibits": "http://creativecommons.org/ns#CommercialUse",
+        "jurisdiction": "http://creativecommons.org/international/us/",
+        "legalcode": "https://creativecommons.org/licenses/by/4.0/legalcode",
+        "deprecatedOn": "2026-12-31"
+      },
       "dc": {
         "title": "Dublin Core Enhanced Item Title",
         "creator": "Jack Jackson",
@@ -16,7 +29,7 @@
         "description": "Detailed description of the example item content",
         "publisher": "Example News Organization",
         "contributor": "Assistant Editor Mike Thompson",
-        "date": "2022-01-01T12:00+00:00",
+        "date": "2022-01-01T12:00:00.000Z",
         "type": "Article",
         "format": "text/html",
         "identifier": "urn:uuid:98765432-9876-9876-9876-987654321def",
@@ -27,7 +40,7 @@
         "rights": "Copyright 2025 Example News Organization"
       },
       "dcterms": {
-        "created": "2022-01-01T12:00+00:00",
+        "created": "2022-01-01T12:00:00.000Z",
         "license": "Creative Commons Attribution 4.0",
         "abstract": "This article explores advanced concepts in technology",
         "accessRights": "Public access with attribution required",
@@ -36,16 +49,16 @@
         "accrualPolicy": "Editorial review required",
         "alternative": "Alternative Item Title",
         "audience": "Technical professionals",
-        "available": "2022-01-01T12:00+00:00",
+        "available": "2022-01-01T12:00:00.000Z",
         "bibliographicCitation": "Smith, J. (2022). Example Item. Retrieved from https://example.org/item/1",
         "conformsTo": "HTML5 standard",
         "contributor": "Assistant Editor Mike Thompson",
         "coverage": "United States technology sector",
         "creator": "Jack Jackson",
-        "date": "2022-01-01T12:00+00:00",
-        "dateAccepted": "2022-01-01T12:00+00:00",
-        "dateCopyrighted": "2022-01-01T12:00+00:00",
-        "dateSubmitted": "2022-01-01T12:00+00:00",
+        "date": "2022-01-01T12:00:00.000Z",
+        "dateAccepted": "2022-01-01T12:00:00.000Z",
+        "dateCopyrighted": "2022-01-01T12:00:00.000Z",
+        "dateSubmitted": "2022-01-01T12:00:00.000Z",
         "description": "Detailed description of the example item content and its significance",
         "educationLevel": "Advanced",
         "extent": "Approximately 2500 words",
@@ -60,12 +73,12 @@
         "isReferencedBy": "https://example.org/item/1/citations",
         "isReplacedBy": "https://example.org/item/1/updated",
         "isRequiredBy": "https://example.org/item/1/prerequisites",
-        "issued": "2022-01-01T12:00+00:00",
+        "issued": "2022-01-01T12:00:00.000Z",
         "isVersionOf": "https://example.org/item/1/original",
         "language": "en-US",
         "mediator": "Editorial Team",
         "medium": "Digital",
-        "modified": "2022-06-01T12:00+00:00",
+        "modified": "2022-06-01T12:00:00.000Z",
         "provenance": "Originally published by Example News Organization",
         "publisher": "Example News Organization",
         "references": "https://example.org/item/1/references",
@@ -81,7 +94,7 @@
         "temporal": "2022",
         "title": "Dublin Core Terms Enhanced Item Title",
         "type": "Article",
-        "valid": "2025-12-31T23:59:59+00:00"
+        "valid": "2025-12-31T23:59:59.000Z"
       },
       "slash": {
         "section": "articles",
@@ -99,9 +112,10 @@
         }
       },
       "itunes": {
-        "explicit": false,
         "duration": 1800,
         "image": "https://example.com/images/episode-cover.jpg",
+        "explicit": false,
+        "author": "John Doe",
         "title": "iTunes Enhanced Episode Title",
         "episode": 1,
         "season": 1,
@@ -161,6 +175,13 @@
             "href": "https://example.com/producer"
           }
         ],
+        "locations": [
+          {
+            "display": "New York City, NY",
+            "geo": "geo:40.7128,-74.0060",
+            "osm": "R8780673"
+          }
+        ],
         "location": {
           "display": "New York City, NY",
           "geo": "geo:40.7128,-74.0060",
@@ -211,6 +232,27 @@
             }
           }
         ],
+        "values": [
+          {
+            "type": "lightning",
+            "method": "keysend",
+            "suggested": 0.00000002,
+            "valueRecipients": [
+              {
+                "name": "Host",
+                "type": "node",
+                "address": "02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee83420ef254acd7d8e5edf5f16e",
+                "split": 90
+              },
+              {
+                "name": "Guest",
+                "type": "node",
+                "address": "03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a",
+                "split": 10
+              }
+            ]
+          }
+        ],
         "value": {
           "type": "lightning",
           "method": "keysend",
@@ -255,6 +297,18 @@
           {
             "display": "Additional text information about this episode",
             "purpose": "notes"
+          }
+        ],
+        "chat": {
+          "server": "chat.example.com",
+          "protocol": "xmpp",
+          "accountId": "episode@conference.example.com"
+        },
+        "chats": [
+          {
+            "server": "chat.example.com",
+            "protocol": "xmpp",
+            "accountId": "episode@conference.example.com"
           }
         ]
       },
@@ -378,8 +432,8 @@
                 "favorites": 413
               },
               "tags": [
-                { "name": "featured", "weight": 1 },
-                { "name": "media", "weight": 1 },
+                { "name": "featured", "weight": 2 },
+                { "name": "media", "weight": 5 },
                 { "name": "example", "weight": 1 }
               ]
             },
@@ -567,6 +621,128 @@
             "value": "© 2025 Example Media Inc."
           }
         },
+        "groups": [
+          {
+            "contents": [
+              {
+                "url": "https://example.com/videos/sample-hd.mp4",
+                "fileSize": 45678912,
+                "type": "video/mp4",
+                "medium": "video",
+                "expression": "full",
+                "bitrate": 5000,
+                "framerate": 60,
+                "duration": 180,
+                "height": 1080,
+                "width": 1920,
+                "lang": "en",
+                "title": {
+                  "value": "HD Version (1080p)"
+                }
+              },
+              {
+                "url": "https://example.com/videos/sample-sd.mp4",
+                "fileSize": 23456789,
+                "type": "video/mp4",
+                "medium": "video",
+                "expression": "full",
+                "bitrate": 2500,
+                "framerate": 30,
+                "duration": 180,
+                "height": 720,
+                "width": 1280,
+                "lang": "en",
+                "title": {
+                  "value": "SD Version (720p)"
+                }
+              },
+              {
+                "url": "https://example.com/videos/sample.webm",
+                "fileSize": 19876543,
+                "type": "video/webm",
+                "medium": "video",
+                "expression": "full",
+                "bitrate": 2000,
+                "framerate": 30,
+                "duration": 180,
+                "height": 720,
+                "width": 1280,
+                "lang": "en",
+                "title": {
+                  "value": "WebM Version"
+                }
+              },
+              {
+                "url": "https://example.com/audio/sample.mp3",
+                "fileSize": 3456789,
+                "type": "audio/mpeg",
+                "medium": "audio",
+                "expression": "full",
+                "bitrate": 320,
+                "samplingrate": 44.1,
+                "channels": 2,
+                "duration": 180,
+                "lang": "en",
+                "title": {
+                  "value": "Audio Only Version"
+                }
+              },
+              {
+                "url": "https://example.com/captions/sample-en.srt",
+                "type": "text/srt",
+                "medium": "document",
+                "expression": "sample",
+                "lang": "en",
+                "title": {
+                  "value": "English Subtitles"
+                }
+              },
+              {
+                "url": "https://example.com/captions/sample-es.srt",
+                "type": "text/srt",
+                "medium": "document",
+                "expression": "sample",
+                "lang": "es",
+                "title": {
+                  "value": "Spanish Subtitles"
+                }
+              }
+            ],
+            "title": {
+              "value": "Multi-Format Content Example"
+            },
+            "description": {
+              "value": "This video is available in multiple formats and resolutions"
+            },
+            "thumbnails": [
+              {
+                "url": "https://example.com/thumbnails/group-main.jpg",
+                "width": 640,
+                "height": 360
+              },
+              {
+                "url": "https://example.com/thumbnails/group-alt.jpg",
+                "width": 1280,
+                "height": 720
+              }
+            ],
+            "keywords": ["group", "multiple", "formats", "resolutions"],
+            "categories": [
+              {
+                "name": "Technology"
+              }
+            ],
+            "ratings": [
+              {
+                "value": "PG",
+                "scheme": "urn:mpaa"
+              }
+            ],
+            "copyright": {
+              "value": "© 2025 Example Media Inc."
+            }
+          }
+        ],
         "title": {
           "value": "Advanced Media Features Demo",
           "type": "text"
@@ -654,11 +830,11 @@
             "views": 256789
           },
           "tags": [
-            { "name": "cinematic", "weight": 1 },
+            { "name": "cinematic", "weight": 3 },
             { "name": "production", "weight": 1 },
-            { "name": "advanced", "weight": 1 },
-            { "name": "technical", "weight": 1 },
-            { "name": "demo", "weight": 1 }
+            { "name": "advanced", "weight": 4 },
+            { "name": "technical", "weight": 7 },
+            { "name": "demo", "weight": 2 }
           ]
         }
       },
@@ -709,12 +885,82 @@
           }
         ]
       },
+      "atom": {
+        "links": [
+          {
+            "rel": "replies",
+            "href": "https://example.com/posts/understanding-xml-namespaces/comments/1/replies",
+            "thr": {
+              "count": 2,
+              "updated": "2025-05-10T16:45:00.000Z"
+            }
+          }
+        ]
+      },
       "wfw": {
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
+      },
+      "sourceNs": {
+        "markdown": "# Understanding XML Namespaces - This article explores the power and flexibility of XML namespaces in modern web syndication.",
+        "outlines": [
+          "<outline text=\"Introduction\"><outline text=\"What are namespaces?\"/></outline>",
+          "<outline text=\"Implementation\"><outline text=\"RSS Integration\"/></outline>"
+        ],
+        "localTime": "2023-12-25 10:30:00",
+        "linkFull": "http://example.org/item/1/understanding-xml-namespaces-complete-guide"
+      },
+      "creativeCommons": {
+        "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]
+      },
+      "rawvoice": {
+        "poster": {
+          "url": "https://example.com/episode-poster.jpg"
+        },
+        "isHd": true,
+        "embed": "<iframe src=\"https://player.example.com/video/12345\" width=\"640\" height=\"360\" frameborder=\"0\" allowfullscreen></iframe>",
+        "webm": {
+          "src": "https://example.com/video.webm",
+          "type": "video/webm",
+          "length": 10485760
+        },
+        "mp4": {
+          "src": "https://example.com/video.mp4",
+          "type": "video/mp4",
+          "length": 15728640
+        },
+        "metamarks": [
+          {
+            "type": "ad",
+            "link": "https://example.com/ad",
+            "position": 120,
+            "duration": 30,
+            "value": "ad-123456"
+          }
+        ]
+      },
+      "spotify": {
+        "access": {
+          "entitlement": {
+            "name": "premium_content"
+          }
+        }
       }
     }
   ],
+  "cc": {
+    "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "morePermissions": "https://example.com/commercial-license",
+    "attributionName": "Example Publishing Company",
+    "attributionURL": "https://example.com/",
+    "useGuidelines": "https://example.com/usage-guidelines",
+    "permits": "http://creativecommons.org/ns#Reproduction",
+    "requires": "http://creativecommons.org/ns#Attribution",
+    "prohibits": "http://creativecommons.org/ns#CommercialUse",
+    "jurisdiction": "http://creativecommons.org/international/us/",
+    "legalcode": "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode",
+    "deprecatedOn": "2025-12-31"
+  },
   "dc": {
     "title": "Dublin Core Enhanced Feed Title",
     "creator": "John Doe",
@@ -722,7 +968,7 @@
     "description": "This is an example of description.",
     "publisher": "Example Publishing Company",
     "contributor": "Jane Smith",
-    "date": "2022-01-01T12:00+00:00",
+    "date": "2022-01-01T12:00:00.000Z",
     "type": "Text",
     "format": "application/rss+xml",
     "identifier": "urn:uuid:12345678-1234-1234-1234-123456789abc",
@@ -733,7 +979,7 @@
     "rights": "Copyright 2025 Example Publishing Company"
   },
   "dcterms": {
-    "created": "2022-01-01T12:00+00:00",
+    "created": "2022-01-01T12:00:00.000Z",
     "license": "Creative Commons Attribution 4.0",
     "abstract": "This is an abstract of the feed content",
     "accessRights": "Public access with attribution required",
@@ -742,16 +988,16 @@
     "accrualPolicy": "Content added based on editorial calendar",
     "alternative": "Alternative Feed Title",
     "audience": "General technology audience",
-    "available": "2022-01-01T12:00+00:00",
+    "available": "2022-01-01T12:00:00.000Z",
     "bibliographicCitation": "Example Feed. (2022). Retrieved from https://example.org",
     "conformsTo": "RSS 2.0 Specification",
     "contributor": "Jane Smith",
     "coverage": "Global technology topics",
     "creator": "John Doe",
-    "date": "2022-01-01T12:00+00:00",
-    "dateAccepted": "2022-01-01T12:00+00:00",
-    "dateCopyrighted": "2022-01-01T12:00+00:00",
-    "dateSubmitted": "2022-01-01T12:00+00:00",
+    "date": "2022-01-01T12:00:00.000Z",
+    "dateAccepted": "2022-01-01T12:00:00.000Z",
+    "dateCopyrighted": "2022-01-01T12:00:00.000Z",
+    "dateSubmitted": "2022-01-01T12:00:00.000Z",
     "description": "Detailed description of the feed content and purpose",
     "educationLevel": "Intermediate to advanced",
     "extent": "Approximately 1000 words per article",
@@ -766,12 +1012,12 @@
     "isReferencedBy": "https://example.org/references",
     "isReplacedBy": "https://example.org/new-feed",
     "isRequiredBy": "https://example.org/dependent-feeds",
-    "issued": "2022-01-01T12:00+00:00",
+    "issued": "2022-01-01T12:00:00.000Z",
     "isVersionOf": "https://example.org/original-feed",
     "language": "en-US",
     "mediator": "Content Management System",
     "medium": "Digital",
-    "modified": "2023-01-01T12:00+00:00",
+    "modified": "2023-01-01T12:00:00.000Z",
     "provenance": "Originally created by Example Publishing Company",
     "publisher": "Example Publishing Company",
     "references": "https://example.org/referenced-sources",
@@ -787,12 +1033,12 @@
     "temporal": "2022-present",
     "title": "Dublin Core Terms Enhanced Feed Title",
     "type": "Text",
-    "valid": "2025-12-31T23:59:59+00:00"
+    "valid": "2025-12-31T23:59:59.000Z"
   },
   "sy": {
     "updatePeriod": "hourly",
     "updateFrequency": 1,
-    "updateBase": "2000-01-01T12:00+00:00"
+    "updateBase": "2000-01-01T12:00:00.000Z"
   },
   "googleplay": {
     "author": "Example Podcast Network",
@@ -859,6 +1105,13 @@
         "href": "https://example.com/guest"
       }
     ],
+    "locations": [
+      {
+        "display": "San Francisco, CA",
+        "geo": "geo:37.7749,-122.4194",
+        "osm": "R4163767"
+      }
+    ],
     "location": {
       "display": "San Francisco, CA",
       "geo": "geo:37.7749,-122.4194",
@@ -868,7 +1121,7 @@
       {
         "display": "Season 1 Trailer",
         "url": "https://example.com/trailers/season1.mp3",
-        "pubDate": "2025-04-20T08:00:00+02:00",
+        "pubDate": "Sun, 20 Apr 2025 06:00:00 GMT",
         "length": 1048576,
         "type": "audio/mpeg",
         "season": 1
@@ -879,6 +1132,27 @@
       "url": "https://creativecommons.org/licenses/by/4.0/"
     },
     "guid": "ead4c236-bf58-58c6-a2c6-a6b28d128cb6",
+    "values": [
+      {
+        "type": "lightning",
+        "method": "keysend",
+        "suggested": 0.00000005,
+        "valueRecipients": [
+          {
+            "name": "Host",
+            "type": "node",
+            "address": "02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee83420ef254acd7d8e5edf5f16e",
+            "split": 90
+          },
+          {
+            "name": "Producer",
+            "type": "node",
+            "address": "03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a",
+            "split": 10
+          }
+        ]
+      }
+    ],
     "value": {
       "type": "lightning",
       "method": "keysend",
@@ -911,12 +1185,26 @@
           }
         ],
         "status": "live",
-        "start": "2025-04-30T09:00:00+01:00",
-        "end": "2025-04-30T10:00:00+01:00",
+        "start": "2025-04-30T08:00:00.000Z",
+        "end": "2025-04-30T09:00:00.000Z",
         "contentLinks": [
           {
             "href": "https://example.com/live/chat",
             "display": "Live Chat"
+          }
+        ],
+        "chat": {
+          "server": "live.example.com",
+          "protocol": "matrix",
+          "accountId": "@livepodcast:live.example.com",
+          "space": "#live-episode"
+        },
+        "chats": [
+          {
+            "server": "live.example.com",
+            "protocol": "matrix",
+            "accountId": "@livepodcast:live.example.com",
+            "space": "#live-episode"
           }
         ]
       }
@@ -951,10 +1239,36 @@
       "display": "Weekly on Fridays",
       "complete": false,
       "rrule": "FREQ=WEEKLY;BYDAY=FR",
-      "dtstart": "2025-01-10T08:00:00+01:00"
+      "dtstart": "2025-01-10T07:00:00.000Z"
     },
     "podping": {
       "usesPodping": true
+    },
+    "chat": {
+      "server": "irc.example.com",
+      "protocol": "irc",
+      "accountId": "examplepodcast",
+      "space": "#general"
+    },
+    "chats": [
+      {
+        "server": "irc.example.com",
+        "protocol": "irc",
+        "accountId": "examplepodcast",
+        "space": "#general"
+      },
+      {
+        "server": "matrix.example.org",
+        "protocol": "matrix",
+        "accountId": "@examplepodcast:matrix.org"
+      }
+    ],
+    "publisher": {
+      "remoteItem": {
+        "feedGuid": "ead4c236-bf58-58c6-a2c6-publisher-feed-guid",
+        "feedUrl": "https://publisher.example.com/feed.xml",
+        "medium": "publisher"
+      }
     }
   },
   "media": {
@@ -1047,8 +1361,8 @@
             "favorites": 413
           },
           "tags": [
-            { "name": "featured", "weight": 1 },
-            { "name": "media", "weight": 1 },
+            { "name": "featured", "weight": 2 },
+            { "name": "media", "weight": 5 },
             { "name": "example", "weight": 1 }
           ]
         },
@@ -1236,6 +1550,128 @@
         "value": "© 2025 Example Media Inc."
       }
     },
+    "groups": [
+      {
+        "contents": [
+          {
+            "url": "https://example.com/videos/sample-hd.mp4",
+            "fileSize": 45678912,
+            "type": "video/mp4",
+            "medium": "video",
+            "expression": "full",
+            "bitrate": 5000,
+            "framerate": 60,
+            "duration": 180,
+            "height": 1080,
+            "width": 1920,
+            "lang": "en",
+            "title": {
+              "value": "HD Version (1080p)"
+            }
+          },
+          {
+            "url": "https://example.com/videos/sample-sd.mp4",
+            "fileSize": 23456789,
+            "type": "video/mp4",
+            "medium": "video",
+            "expression": "full",
+            "bitrate": 2500,
+            "framerate": 30,
+            "duration": 180,
+            "height": 720,
+            "width": 1280,
+            "lang": "en",
+            "title": {
+              "value": "SD Version (720p)"
+            }
+          },
+          {
+            "url": "https://example.com/videos/sample.webm",
+            "fileSize": 19876543,
+            "type": "video/webm",
+            "medium": "video",
+            "expression": "full",
+            "bitrate": 2000,
+            "framerate": 30,
+            "duration": 180,
+            "height": 720,
+            "width": 1280,
+            "lang": "en",
+            "title": {
+              "value": "WebM Version"
+            }
+          },
+          {
+            "url": "https://example.com/audio/sample.mp3",
+            "fileSize": 3456789,
+            "type": "audio/mpeg",
+            "medium": "audio",
+            "expression": "full",
+            "bitrate": 320,
+            "samplingrate": 44.1,
+            "channels": 2,
+            "duration": 180,
+            "lang": "en",
+            "title": {
+              "value": "Audio Only Version"
+            }
+          },
+          {
+            "url": "https://example.com/captions/sample-en.srt",
+            "type": "text/srt",
+            "medium": "document",
+            "expression": "sample",
+            "lang": "en",
+            "title": {
+              "value": "English Subtitles"
+            }
+          },
+          {
+            "url": "https://example.com/captions/sample-es.srt",
+            "type": "text/srt",
+            "medium": "document",
+            "expression": "sample",
+            "lang": "es",
+            "title": {
+              "value": "Spanish Subtitles"
+            }
+          }
+        ],
+        "title": {
+          "value": "Multi-Format Content Example"
+        },
+        "description": {
+          "value": "This video is available in multiple formats and resolutions"
+        },
+        "thumbnails": [
+          {
+            "url": "https://example.com/thumbnails/group-main.jpg",
+            "width": 640,
+            "height": 360
+          },
+          {
+            "url": "https://example.com/thumbnails/group-alt.jpg",
+            "width": 1280,
+            "height": 720
+          }
+        ],
+        "keywords": ["group", "multiple", "formats", "resolutions"],
+        "categories": [
+          {
+            "name": "Technology"
+          }
+        ],
+        "ratings": [
+          {
+            "value": "PG",
+            "scheme": "urn:mpaa"
+          }
+        ],
+        "copyright": {
+          "value": "© 2025 Example Media Inc."
+        }
+      }
+    ],
     "title": {
       "value": "Advanced Media Features Demo",
       "type": "text"
@@ -1323,11 +1759,11 @@
         "views": 256789
       },
       "tags": [
-        { "name": "cinematic", "weight": 1 },
+        { "name": "cinematic", "weight": 3 },
         { "name": "production", "weight": 1 },
-        { "name": "advanced", "weight": 1 },
-        { "name": "technical", "weight": 1 },
-        { "name": "demo", "weight": 1 }
+        { "name": "advanced", "weight": 4 },
+        { "name": "technical", "weight": 7 },
+        { "name": "demo", "weight": 2 }
       ]
     }
   },
@@ -1362,5 +1798,79 @@
     "elev": 360,
     "floor": 4,
     "radius": 50000
+  },
+  "sourceNs": {
+    "accounts": [
+      { "service": "twitter", "value": "johndoe" },
+      { "service": "facebook", "value": "jane.smith" }
+    ],
+    "likes": { "server": "http://likes.example.com/" },
+    "archive": {
+      "url": "http://example.com/archive",
+      "startDay": "2023-01-01",
+      "endDay": "2023-12-31",
+      "filename": "archive2023.xml"
+    },
+    "subscriptionLists": [
+      { "url": "http://example.com/subscriptions.opml", "value": "follows" },
+      { "url": "http://example.com/reading.opml", "value": "reading list" }
+    ],
+    "cloud": "https://cloudserver.example.com/notify",
+    "blogroll": "https://blog.example.com/blogroll.opml",
+    "self": "http://example.com/feed.xml"
+  },
+  "creativeCommons": {
+    "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
+  },
+  "feedpress": {
+    "link": "https://feedpress.com/examplepodcast",
+    "newsletterId": "newsletter123456",
+    "locale": "en",
+    "podcastId": "1234567890",
+    "cssFile": "https://example.com/custom-feed-styles.css"
+  },
+  "rawvoice": {
+    "rating": {
+      "value": "TV-14",
+      "tv": "TV-14"
+    },
+    "location": "San Francisco, CA",
+    "frequency": "Weekly",
+    "liveEmbed": "<iframe src=\"https://live.example.com/embed\" width=\"600\" height=\"400\"></iframe>",
+    "liveStream": {
+      "url": "https://example.com/live",
+      "schedule": "Mon, 15 Jan 2024 10:00:00 GMT",
+      "duration": "7200",
+      "type": "audio"
+    },
+    "httpLiveStream": {
+      "url": "https://live.example.com/stream.m3u8",
+      "schedule": "Mon, 15 Jan 2024 10:00:00 GMT",
+      "duration": "3600"
+    },
+    "mycast": true,
+    "subscribe": {
+      "feed": "https://example.com/feed/podcast/",
+      "itunes": "https://itunes.apple.com/us/podcast/example-podcast/id123456789",
+      "spotify": "https://open.spotify.com/show/exampleshow123"
+    },
+    "donate": {
+      "href": "https://example.com/donate",
+      "value": "Support the Podcast"
+    }
+  },
+  "spotify": {
+    "limit": {
+      "recentCount": 10
+    },
+    "countryOfOrigin": "US",
+    "access": {
+      "partner": {
+        "id": "2zkvpokj55bj2sCHxCejJs"
+      },
+      "sandbox": {
+        "enabled": true
+      }
+    }
   }
 }

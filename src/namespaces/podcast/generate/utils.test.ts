@@ -4,6 +4,7 @@ import {
   generateBaseItem,
   generateBlock,
   generateChapters,
+  generateChat,
   generateContentLink,
   generateEpisode,
   generateFeed,
@@ -18,6 +19,7 @@ import {
   generatePerson,
   generatePodping,
   generatePodroll,
+  generatePublisher,
   generateRemoteItem,
   generateSeason,
   generateSocialInteract,
@@ -745,6 +747,42 @@ describe('generateSocialInteract', () => {
   })
 })
 
+describe('generateChat', () => {
+  it('should generate chat with all properties', () => {
+    const value = {
+      server: 'irc.example.com',
+      protocol: 'irc',
+      accountId: 'user123',
+      space: 'general',
+    }
+    const expected = {
+      '@server': 'irc.example.com',
+      '@protocol': 'irc',
+      '@accountId': 'user123',
+      '@space': 'general',
+    }
+
+    expect(generateChat(value)).toEqual(expected)
+  })
+
+  it('should generate chat with minimal properties', () => {
+    const value = {
+      server: 'matrix.example.org',
+      protocol: 'matrix',
+    }
+    const expected = {
+      '@server': 'matrix.example.org',
+      '@protocol': 'matrix',
+    }
+
+    expect(generateChat(value)).toEqual(expected)
+  })
+
+  it('should handle non-object inputs', () => {
+    expect(generateChat(undefined)).toBeUndefined()
+  })
+})
+
 describe('generateBlock', () => {
   it('should generate block with all properties', () => {
     const value = {
@@ -874,7 +912,6 @@ describe('generatePodroll', () => {
       remoteItems: [],
     }
 
-    // @ts-expect-error: Testing edge case
     expect(generatePodroll(value)).toBeUndefined()
   })
 
@@ -942,6 +979,46 @@ describe('generatePodping', () => {
 
   it('should handle non-object inputs', () => {
     expect(generatePodping(undefined)).toBeUndefined()
+  })
+})
+
+describe('generatePublisher', () => {
+  it('should generate publisher with complete remoteItem', () => {
+    const value = {
+      remoteItem: {
+        feedGuid: 'urn:uuid:publisher-guid-123',
+        feedUrl: 'https://publisher.example.com/feed.xml',
+        medium: 'publisher',
+      },
+    }
+    const expected = {
+      'podcast:remoteItem': {
+        '@feedGuid': 'urn:uuid:publisher-guid-123',
+        '@feedUrl': 'https://publisher.example.com/feed.xml',
+        '@medium': 'publisher',
+      },
+    }
+
+    expect(generatePublisher(value)).toEqual(expected)
+  })
+
+  it('should generate publisher with minimal remoteItem', () => {
+    const value = {
+      remoteItem: {
+        feedGuid: 'urn:uuid:minimal-publisher',
+      },
+    }
+    const expected = {
+      'podcast:remoteItem': {
+        '@feedGuid': 'urn:uuid:minimal-publisher',
+      },
+    }
+
+    expect(generatePublisher(value)).toEqual(expected)
+  })
+
+  it('should handle non-object inputs', () => {
+    expect(generatePublisher(undefined)).toBeUndefined()
   })
 })
 
@@ -1085,7 +1162,6 @@ describe('generateBaseItem', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateBaseItem(value)).toBeUndefined()
   })
 
@@ -1187,7 +1263,6 @@ describe('generateItem', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(value)).toBeUndefined()
   })
 
@@ -1366,7 +1441,6 @@ describe('generateFeed', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 

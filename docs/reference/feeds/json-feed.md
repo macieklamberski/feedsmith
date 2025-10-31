@@ -15,7 +15,94 @@ JSON Feed is a syndication format based on JSON that provides a simple, straight
   </tbody>
 </table>
 
-## Type Definition
+## Functions
+
+### `parseJsonFeed()`
+
+Parses JSON Feed content and returns a typed JSON Feed object.
+
+```typescript
+import { parseJsonFeed } from 'feedsmith'
+
+const jsonFeed = parseJsonFeed(jsonContent)
+// Returns: object with all fields optional and dates as strings
+```
+
+#### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `content` | `string` | The JSON Feed content to parse |
+
+#### Returns
+`object` - Parsed JSON Feed with all fields optional and dates as strings
+
+### `generateJsonFeed()`
+
+Generates JSON Feed from feed data.
+
+```typescript
+import { generateJsonFeed } from 'feedsmith'
+
+const json = generateJsonFeed(feedData, {
+  lenient: true
+})
+```
+
+#### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `data` | `object` | JSON Feed data to generate |
+| `options` | `object` | Optional generation settings |
+
+#### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `lenient` | `boolean` | `false` | Enable lenient mode for relaxed validation, see [Lenient Mode](/generating/lenient-mode) |
+
+#### Returns
+`object` - Generated JSON Feed
+
+### `detectJsonFeed()`
+
+Detects if the provided content is a JSON Feed.
+
+#### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `content` | `string` | The content to check |
+
+#### Returns
+`boolean` - `true` if content appears to be JSON Feed format
+
+#### Example
+```typescript
+import { detectJsonFeed } from 'feedsmith'
+
+const isJsonFeed = detectJsonFeed(jsonContent)
+```
+
+## Types
+
+All JSON Feed types are available under the `Json` namespace:
+
+```typescript
+import type { Json } from 'feedsmith/types'
+
+// Access any type from the definitions below
+type Feed = Json.Feed<Date>
+type Item = Json.Item<Date>
+type Author = Json.Author
+type Attachment = Json.Attachment
+// … see type definitions below for all available types
+```
+
+See the [TypeScript guide](/typescript) for usage examples.
+
+### Type Definitions
 
 > [!INFO]
 > `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
@@ -24,6 +111,6 @@ JSON Feed is a syndication format based on JSON that provides a simple, straight
 
 ## Related
 
-- **[Parsing JSON Feeds](/parsing/#json-feed)** - How to parse JSON Feed content
-- **[Generating JSON Feeds](/generating/#json-feed)** - How to create JSON feeds
-- **[JSON Feed Detection](/parsing/detecting#json-feed)** - Detecting JSON Feed format
+- **[Parsing JSON Feeds](/parsing/examples#json-feed)** - How to parse JSON Feed content
+- **[Generating JSON Feeds](/generating/examples#json-feed)** - How to create JSON feeds
+- **[JSON Feed Detection](/parsing/detecting)** - Detecting JSON Feed format

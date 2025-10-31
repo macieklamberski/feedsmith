@@ -1,0 +1,22 @@
+{
+  "name": "@feedsmith/compatibility",
+  "private": true,
+  "workspaces": [
+    "typescript/modern-esm",
+    "typescript/modern-cjs",
+    "typescript/legacy-cjs",
+    "explicit-modules/esm-package",
+    "explicit-modules/cjs-package",
+    "explicit-modules/mixed-package",
+    "javascript/esm",
+    "javascript/cjs",
+    "bundler/esm",
+    "bundler/cjs"
+  ],
+  "devDependencies": {
+    "@types/bun": "^1.3.1",
+    "feedsmith": "file:..",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12"
+  }
+}

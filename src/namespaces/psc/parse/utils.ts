@@ -1,46 +1,39 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
   parseSingularOf,
   parseString,
-  retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { Chapter, Item } from '../common/types.js'
+import type { PscNs } from '../common/types.js'
 
-export const parseChapter: ParsePartialFunction<Chapter> = (value) => {
+export const parseChapter: ParsePartialUtil<PscNs.Chapter> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const chapter = {
-    start: parseString(value['@start']),
-    title: parseSingularOf(value['@title'], (value) => parseString(value)),
-    href: parseSingularOf(value['@href'], (value) => parseString(value)),
-    image: parseSingularOf(value['@image'], (value) => parseString(value)),
-  }
-
-  if (!chapter.start) {
-    return
+    start: parseSingularOf(value['@start'], parseString),
+    title: parseSingularOf(value['@title'], parseString),
+    href: parseSingularOf(value['@href'], parseString),
+    image: parseSingularOf(value['@image'], parseString),
   }
 
   return trimObject(chapter)
 }
 
-export const retrieveItem: ParsePartialFunction<Item> = (value) => {
+export const parseChapters: ParsePartialUtil<Array<PscNs.Chapter>> = (value) => {
+  return parseArrayOf(value?.['psc:chapter'], parseChapter)
+}
+
+export const retrieveItem: ParsePartialUtil<PscNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const item = {
-    chapters: parseSingularOf(value['psc:chapters'], (chapters) => {
-      if (!isObject(chapters)) {
-        return
-      }
-
-      return parseArrayOf(chapters['psc:chapter'], parseChapter)
-    }),
+    chapters: parseSingularOf(value['psc:chapters'], parseChapters),
   }
 
   return trimObject(item)

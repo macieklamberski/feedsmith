@@ -7,7 +7,7 @@ export default defineConfig({
   },
   title: 'Feedsmith',
   description:
-    'Fast, all‑in‑one JavaScript parser and generator for RSS, Atom, RDF, and JSON Feed, with support for popular namespaces and OPML files.',
+    'Fast, all‑in‑one JavaScript feed parser and generator for RSS, Atom, RDF, and JSON Feed, with support for popular namespaces and OPML files.',
   lastUpdated: true,
   cleanUrls: true,
   head: [
@@ -21,6 +21,9 @@ export default defineConfig({
     ],
   ],
   themeConfig: {
+    outline: {
+      level: [2, 3],
+    },
     nav: [
       { text: 'Quick Start', link: '/quick-start' },
       { text: 'Parsing', link: '/parsing/' },
@@ -32,6 +35,7 @@ export default defineConfig({
         items: [
           { text: 'Introduction', link: '/' },
           { text: 'Quick Start', link: '/quick-start' },
+          { text: 'TypeScript', link: '/typescript' },
           { text: 'Benchmarks', link: '/benchmarks' },
         ],
       },
@@ -42,6 +46,7 @@ export default defineConfig({
           { text: 'Namespaces', link: '/parsing/namespaces' },
           { text: 'Dates', link: '/parsing/dates' },
           { text: 'Detecting', link: '/parsing/detecting' },
+          { text: 'Examples', link: '/parsing/examples' },
         ],
       },
       {
@@ -50,14 +55,15 @@ export default defineConfig({
           { text: 'Overview', link: '/generating/' },
           { text: 'Styling', link: '/generating/styling' },
           { text: 'Lenient Mode', link: '/generating/lenient-mode' },
+          { text: 'Examples', link: '/generating/examples' },
         ],
       },
       {
         text: 'API Reference',
         items: [
           {
-            text: 'Functions',
-            link: '/reference/functions',
+            text: 'Universal',
+            link: '/reference/',
           },
           {
             text: 'Feeds',
@@ -80,13 +86,19 @@ export default defineConfig({
               { text: 'Slash', link: '/reference/namespaces/slash' },
               { text: 'iTunes', link: '/reference/namespaces/itunes' },
               { text: 'Podcast', link: '/reference/namespaces/podcast' },
+              { text: 'RawVoice', link: '/reference/namespaces/rawvoice' },
               { text: 'Podlove Simple Chapters', link: '/reference/namespaces/psc' },
               { text: 'Google Play Podcasts', link: '/reference/namespaces/googleplay' },
+              { text: 'Spotify', link: '/reference/namespaces/spotify' },
               { text: 'Media RSS', link: '/reference/namespaces/media' },
               { text: 'GeoRSS-Simple', link: '/reference/namespaces/georss' },
               { text: 'Atom Threading', link: '/reference/namespaces/thr' },
               { text: 'Dublin Core Terms', link: '/reference/namespaces/dcterms' },
               { text: 'Well-Formed Web', link: '/reference/namespaces/wfw' },
+              { text: 'Source', link: '/reference/namespaces/source' },
+              { text: 'ccREL', link: '/reference/namespaces/cc' },
+              { text: 'Creative Commons', link: '/reference/namespaces/creativecommons' },
+              { text: 'FeedPress', link: '/reference/namespaces/feedpress' },
               { text: 'YouTube', link: '/reference/namespaces/yt' },
             ],
           },

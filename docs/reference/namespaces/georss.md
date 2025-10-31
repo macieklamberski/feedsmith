@@ -31,7 +31,7 @@ The GeoRSS-Simple namespace enables geographic tagging of RSS feeds and items, a
   </tbody>
 </table>
 
-## Structure
+## Types
 
 <<< @/../src/namespaces/georss/common/types.ts#reference
 

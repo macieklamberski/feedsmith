@@ -18,8 +18,8 @@ const feed = parseRssFeed(`
   <?xml version="1.0" encoding="UTF-8"?>
   <rss
     version="2.0"
-    xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
   >
     <channel>
       <title>My Podcast</title>
@@ -48,8 +48,8 @@ If the feed contains a known namespace but is using it under a different prefix,
 ```xml
 <!-- Feed with custom prefixes -->
 <rss
-  xmlns:podcast="http://www.itunes.com/dtds/podcast-1.0.dtd"
   xmlns:dublincore="http://purl.org/dc/elements/1.1/"
+  xmlns:podcast="http://www.itunes.com/dtds/podcast-1.0.dtd"
 >
   <channel>
     <podcast:author>John Doe</podcast:author>
@@ -63,6 +63,26 @@ If the feed contains a known namespace but is using it under a different prefix,
 feed.itunes?.author // "John Doe" - podcast: prefix normalized to itunes:
 feed.dc?.creator // "John Doe" - creator: prefix normalized to dc:
 ```
+
+## Namespace URI Tolerance
+
+Feedsmith accepts namespace URIs even when they don't exactly match the official specification. This makes it compatible with real-world feeds that may use variations:
+
+```xml
+<!-- HTTPS instead of HTTP -->
+<rss xmlns:dc="https://purl.org/dc/elements/1.1/">
+
+<!-- Different capitalization -->
+<rss xmlns:dc="HTTP://PURL.ORG/DC/ELEMENTS/1.1/">
+
+<!-- With or without trailing slash -->
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd/">
+
+<!-- Whitespace around URI -->
+<rss xmlns:dc="  http://purl.org/dc/elements/1.1/  ">
+```
+
+All of these variations are automatically recognized and normalized, so you can reliably access namespace data regardless of how the feed declares it.
 
 ## Supported Namespaces
 

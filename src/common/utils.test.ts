@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'bun:test'
 import { type XMLBuilder, XMLParser } from 'fast-xml-parser'
-import { namespaceUrls } from './config.js'
-import type { ParseExactFunction } from './types.js'
+import { namespacePrefixes, namespaceUris } from './config.js'
+import type { ParseExactUtil } from './types.js'
 import {
   createNamespaceNormalizator,
   detectNamespaces,
+  generateArrayOrSingular,
   generateBoolean,
   generateCdataString,
   generateCsvOf,
@@ -13,6 +14,7 @@ import {
   generatePlainString,
   generateRfc822Date,
   generateRfc3339Date,
+  generateSingularOrArray,
   generateXml,
   generateXmlStylesheet,
   generateYesNoBoolean,
@@ -1269,7 +1271,7 @@ describe('parseSingularOf', () => {
   })
 
   it('should work with custom parse functions', () => {
-    const parseUpperCase: ParseExactFunction<string> = (value) => {
+    const parseUpperCase: ParseExactUtil<string> = (value) => {
       return typeof value === 'string' ? value.toUpperCase() : undefined
     }
 
@@ -1359,7 +1361,7 @@ describe('parseArray', () => {
 })
 
 describe('parseArrayOf', () => {
-  const parser: ParseExactFunction<string> = (value) => {
+  const parser: ParseExactUtil<string> = (value) => {
     if (typeof value === 'number') {
       return value.toString()
     }
@@ -2339,22 +2341,6 @@ describe('detectNamespaces', () => {
 })
 
 describe('generateNamespaceAttrs', () => {
-  const testNamespaceUrls = {
-    atom: 'http://www.w3.org/2005/Atom',
-    content: 'http://purl.org/rss/1.0/modules/content/',
-    dc: 'http://purl.org/dc/elements/1.1/',
-    dcterms: 'http://purl.org/dc/terms/',
-    georss: 'http://www.georss.org/georss/',
-    itunes: 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-    media: 'http://search.yahoo.com/mrss/',
-    podcast: 'https://podcastindex.org/namespace/1.0',
-    slash: 'http://purl.org/rss/1.0/modules/slash/',
-    sy: 'http://purl.org/rss/1.0/modules/syndication/',
-    thr: 'http://purl.org/syndication/thread/1.0',
-    wfw: 'http://wellformedweb.org/CommentAPI/',
-    yt: 'http://www.youtube.com/xml/schemas/2015',
-  }
-
   it('should generate namespace attributes for all known namespaces when present', () => {
     const value = {
       title: 'Comprehensive Feed',
@@ -2373,7 +2359,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:atom': 'http://www.w3.org/2005/Atom',
       '@xmlns:content': 'http://purl.org/rss/1.0/modules/content/',
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-      '@xmlns:georss': 'http://www.georss.org/georss/',
+      '@xmlns:georss': 'http://www.georss.org/georss',
       '@xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
       '@xmlns:media': 'http://search.yahoo.com/mrss/',
       '@xmlns:podcast': 'https://podcastindex.org/namespace/1.0',
@@ -2382,7 +2368,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:thr': 'http://purl.org/syndication/thread/1.0',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, namespaceUris)).toEqual(expected)
   })
 
   it('should generate namespace attributes for single known namespace', () => {
@@ -2394,7 +2380,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:atom': 'http://www.w3.org/2005/Atom',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, namespaceUris)).toEqual(expected)
   })
 
   it('should ignore unknown namespaces and only include known ones', () => {
@@ -2410,7 +2396,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, namespaceUris)).toEqual(expected)
   })
 
   it('should handle properties with multiple colons correctly', () => {
@@ -2424,7 +2410,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, namespaceUris)).toEqual(expected)
   })
 
   it('should handle properties with colon at the end', () => {
@@ -2438,7 +2424,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, namespaceUris)).toEqual(expected)
   })
 
   it('should ignore properties with colon at the beginning', () => {
@@ -2451,7 +2437,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:atom': 'http://www.w3.org/2005/Atom',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, namespaceUris)).toEqual(expected)
   })
 
   it('should handle duplicate namespace detection correctly', () => {
@@ -2467,7 +2453,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, namespaceUris)).toEqual(expected)
   })
 
   it('should return undefined when no namespaced properties are present', () => {
@@ -2478,7 +2464,7 @@ describe('generateNamespaceAttrs', () => {
       author: 'John Doe',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs(value, namespaceUris)).toBeUndefined()
   })
 
   it('should return undefined when object has namespaces not in known URLs', () => {
@@ -2488,21 +2474,21 @@ describe('generateNamespaceAttrs', () => {
       'custom:property': 'another value',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs(value, namespaceUris)).toBeUndefined()
   })
 
   it('should return undefined for empty objects', () => {
-    expect(generateNamespaceAttrs({}, testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs({}, namespaceUris)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(generateNamespaceAttrs(null, testNamespaceUrls)).toBeUndefined()
-    expect(generateNamespaceAttrs(undefined, testNamespaceUrls)).toBeUndefined()
-    expect(generateNamespaceAttrs('string', testNamespaceUrls)).toBeUndefined()
-    expect(generateNamespaceAttrs(42, testNamespaceUrls)).toBeUndefined()
-    expect(generateNamespaceAttrs(true, testNamespaceUrls)).toBeUndefined()
-    expect(generateNamespaceAttrs([], testNamespaceUrls)).toBeUndefined()
-    expect(generateNamespaceAttrs(() => {}, testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs(null, namespaceUris)).toBeUndefined()
+    expect(generateNamespaceAttrs(undefined, namespaceUris)).toBeUndefined()
+    expect(generateNamespaceAttrs('string', namespaceUris)).toBeUndefined()
+    expect(generateNamespaceAttrs(42, namespaceUris)).toBeUndefined()
+    expect(generateNamespaceAttrs(true, namespaceUris)).toBeUndefined()
+    expect(generateNamespaceAttrs([], namespaceUris)).toBeUndefined()
+    expect(generateNamespaceAttrs(() => {}, namespaceUris)).toBeUndefined()
   })
 
   it('should detect namespaces in nested structures using recursive detection', () => {
@@ -2525,7 +2511,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, namespaceUris)).toEqual(expected)
   })
 })
 
@@ -2792,7 +2778,11 @@ describe('createNamespaceNormalizator', () => {
 
     describe('default namespace handling', () => {
       it('should handle default Atom namespace with primary namespace', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
+        const normalizeNamespaces = createNamespaceNormalizator(
+          namespaceUris,
+          namespacePrefixes,
+          'atom',
+        )
         const value = parser.parse(`
           <?xml version="1.0"?>
           <feed xmlns="http://www.w3.org/2005/Atom">
@@ -2816,7 +2806,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle default namespace without primary namespace', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <feed xmlns="http://www.w3.org/2005/Atom">
@@ -2836,7 +2826,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('prefixed namespace handling', () => {
       it('should normalize custom prefixes to standard prefixes', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <rss xmlns:custom="http://purl.org/dc/elements/1.1/">
@@ -2866,7 +2856,11 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle custom Atom prefix with primary namespace', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
+        const normalizeNamespaces = createNamespaceNormalizator(
+          namespaceUris,
+          namespacePrefixes,
+          'atom',
+        )
         const value = parser.parse(`
           <?xml version="1.0"?>
           <a:feed xmlns:a="http://www.w3.org/2005/Atom">
@@ -2892,7 +2886,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('nested namespace declarations', () => {
       it('should handle namespace declarations in nested elements', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <rss>
@@ -2930,10 +2924,16 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle namespace redefinition in nested elements', () => {
-        const normalizeNamespaces = createNamespaceNormalizator({
-          v1: 'http://example.com/v1',
-          v2: 'http://example.com/v2',
-        })
+        const normalizeNamespaces = createNamespaceNormalizator(
+          {
+            v1: ['http://example.com/v1'],
+            v2: ['http://example.com/v2'],
+          },
+          {
+            'http://example.com/v1': 'v1',
+            'http://example.com/v2': 'v2',
+          },
+        )
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root xmlns:ns="http://example.com/v1">
@@ -2961,7 +2961,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('mixed case handling', () => {
       it('should normalize element names to lowercase while preserving namespace logic', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <RSS xmlns:DC="http://purl.org/dc/elements/1.1/">
@@ -2993,7 +2993,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('self-closing elements with namespaces', () => {
       it('should handle self-closing elements with namespace declarations', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <rss>
@@ -3035,7 +3035,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('multiple namespaces in same document', () => {
       it('should handle multiple namespaces simultaneously', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <rss
@@ -3086,7 +3086,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('edge cases', () => {
       it('should handle empty namespace URIs', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root xmlns="">
@@ -3104,7 +3104,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle unknown namespaces gracefully', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root xmlns:unknown="http://unknown.example.com/">
@@ -3122,7 +3122,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle case-insensitive xmlns attributes', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root
@@ -3146,7 +3146,11 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle complex nesting with namespace inheritance', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
+        const normalizeNamespaces = createNamespaceNormalizator(
+          namespaceUris,
+          namespacePrefixes,
+          'atom',
+        )
         const value = parser.parse(`
           <?xml version="1.0"?>
           <feed xmlns="http://www.w3.org/2005/Atom">
@@ -3184,7 +3188,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('unhappy path scenarios', () => {
       it('should handle non-object input gracefully', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
 
         expect(normalizeNamespaces(null)).toBe(null)
         expect(normalizeNamespaces(undefined)).toBe(undefined)
@@ -3194,7 +3198,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle conflicting namespace declarations in siblings', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root>
@@ -3223,7 +3227,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle namespace declarations without usage', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root
@@ -3247,7 +3251,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle mixed valid and invalid namespace values', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = {
           root: {
             '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
@@ -3276,5 +3280,302 @@ describe('createNamespaceNormalizator', () => {
         expect(normalizeNamespaces(value)).toEqual(expected)
       })
     })
+  })
+
+  describe('non-standard namespace URIs', () => {
+    it('should work with HTTPS variant and custom prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        item: {
+          '@xmlns:dublincore': 'https://purl.org/dc/elements/1.1/',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': 'https://purl.org/dc/elements/1.1/',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+
+    it('should work without trailing slash and custom prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        item: {
+          '@xmlns:dublincore': 'http://purl.org/dc/elements/1.1',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': 'http://purl.org/dc/elements/1.1',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+
+    it('should work with uppercase URI and custom prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        item: {
+          '@xmlns:dublincore': 'HTTP://PURL.ORG/DC/ELEMENTS/1.1/',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': 'HTTP://PURL.ORG/DC/ELEMENTS/1.1/',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+
+    it('should work with mixed case URI and custom prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        item: {
+          '@xmlns:dublincore': 'Http://Purl.Org/Dc/Elements/1.1/',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': 'Http://Purl.Org/Dc/Elements/1.1/',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+
+    it('should work with uppercase HTTPS URI and custom prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        item: {
+          '@xmlns:dublincore': 'HTTPS://PURL.ORG/DC/ELEMENTS/1.1/',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': 'HTTPS://PURL.ORG/DC/ELEMENTS/1.1/',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+
+    it('should work with URI containing whitespace around it', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        item: {
+          '@xmlns:dublincore': '  http://purl.org/dc/elements/1.1/ ',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': '  http://purl.org/dc/elements/1.1/ ',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+  })
+})
+
+describe('generateArrayOrSingular', () => {
+  it('should prioritize plural values over singular values', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateArrayOrSingular(['a', 'b', 'c'], 'x', generator)
+
+    expect(result).toEqual(['A', 'B', 'C'])
+  })
+
+  it('should use singular value when plural is undefined', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateArrayOrSingular(undefined, 'x', generator)
+
+    expect(result).toEqual('X')
+  })
+
+  it('should return undefined when both values are undefined', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateArrayOrSingular(undefined, undefined, generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should filter out undefined results from array', () => {
+    const generator = (value: string | undefined) => (value === 'skip' ? undefined : value)
+    const result = generateArrayOrSingular(['a', 'skip', 'b'], 'x', generator)
+
+    expect(result).toEqual(['a', 'b'])
+  })
+
+  it('should return undefined when all array items generate undefined', () => {
+    const generator = () => undefined
+    const result = generateArrayOrSingular(['a', 'b'], 'x', generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should work with generateCdataString', () => {
+    const result = generateArrayOrSingular(
+      ['<p>HTML</p>', 'Plain text'],
+      undefined,
+      generateCdataString,
+    )
+
+    expect(result).toEqual([{ '#cdata': '<p>HTML</p>' }, 'Plain text'])
+  })
+
+  it('should work with generatePlainString', () => {
+    const result = generateArrayOrSingular(['  value1  ', 'value2'], undefined, generatePlainString)
+
+    expect(result).toEqual(['value1', 'value2'])
+  })
+
+  it('should work with generateNumber', () => {
+    const result = generateArrayOrSingular([42, 100], undefined, generateNumber)
+
+    expect(result).toEqual([42, 100])
+  })
+
+  it('should handle empty plural array', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateArrayOrSingular([], 'x', generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should handle singular value that generates undefined', () => {
+    const generator = (value: string) => (value === 'skip' ? undefined : value)
+    const result = generateArrayOrSingular(undefined, 'skip', generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should preserve order of array elements', () => {
+    const generator = (value: number) => value * 2
+    const result = generateArrayOrSingular([1, 2, 3, 4, 5], 99, generator)
+
+    expect(result).toEqual([2, 4, 6, 8, 10])
+  })
+
+  it('should work with complex object transformations', () => {
+    const generator = (value: string) => ({ name: value, length: value.length })
+    const result = generateArrayOrSingular(['foo', 'bar'], 'baz', generator)
+
+    expect(result).toEqual([
+      { name: 'foo', length: 3 },
+      { name: 'bar', length: 3 },
+    ])
+  })
+
+  it('should ignore singular when plural is empty array', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateArrayOrSingular([], 'x', generator)
+
+    expect(result).toBeUndefined()
+  })
+})
+
+describe('generateSingularOrArray', () => {
+  it('should prioritize singular value over plural values', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateSingularOrArray('x', ['a', 'b', 'c'], generator)
+
+    expect(result).toEqual('X')
+  })
+
+  it('should use plural values when singular is undefined', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateSingularOrArray(undefined, ['a', 'b', 'c'], generator)
+
+    expect(result).toEqual(['A', 'B', 'C'])
+  })
+
+  it('should return undefined when both values are undefined', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateSingularOrArray(undefined, undefined, generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should filter out undefined results from array', () => {
+    const generator = (value: string | undefined) => (value === 'skip' ? undefined : value)
+    const result = generateSingularOrArray(undefined, ['a', 'skip', 'b'], generator)
+
+    expect(result).toEqual(['a', 'b'])
+  })
+
+  it('should return undefined when all array items generate undefined', () => {
+    const generator = () => undefined
+    const result = generateSingularOrArray(undefined, ['a', 'b'], generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should work with generateCdataString', () => {
+    const result = generateSingularOrArray('<p>HTML</p>', undefined, generateCdataString)
+
+    expect(result).toEqual({ '#cdata': '<p>HTML</p>' })
+  })
+
+  it('should work with generatePlainString', () => {
+    const result = generateSingularOrArray('  value  ', undefined, generatePlainString)
+
+    expect(result).toEqual('value')
+  })
+
+  it('should work with generateNumber', () => {
+    const result = generateSingularOrArray(42, undefined, generateNumber)
+
+    expect(result).toEqual(42)
+  })
+
+  it('should handle empty plural array', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateSingularOrArray(undefined, [], generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should handle singular value that generates undefined', () => {
+    const generator = (value: string) => (value === 'skip' ? undefined : value)
+    const result = generateSingularOrArray('skip', ['a', 'b'], generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should preserve order of array elements when using plural', () => {
+    const generator = (value: number) => value * 2
+    const result = generateSingularOrArray(undefined, [1, 2, 3, 4, 5], generator)
+
+    expect(result).toEqual([2, 4, 6, 8, 10])
+  })
+
+  it('should work with complex object transformations', () => {
+    const generator = (value: string) => ({ name: value, length: value.length })
+    const result = generateSingularOrArray('foo', undefined, generator)
+
+    expect(result).toEqual({ name: 'foo', length: 3 })
+  })
+
+  it('should ignore plural when singular is defined', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateSingularOrArray('x', ['a', 'b', 'c'], generator)
+
+    expect(result).toEqual('X')
   })
 })

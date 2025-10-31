@@ -1035,6 +1035,25 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
+  it('should handle dcterms namespace in entry', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'dcterms:created': { '#text': '2023-02-01T00:00:00Z' },
+      'dcterms:license': { '#text': 'MIT License' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Entry',
+      dcterms: {
+        created: '2023-02-01T00:00:00Z',
+        license: 'MIT License',
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
   it('should handle slash namespace', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
@@ -1050,19 +1069,111 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
-  it('should handle dcterms namespace in entry', () => {
+  it('should handle itunes namespace', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
       title: { '#text': 'Example Entry' },
-      'dcterms:created': { '#text': '2023-02-01T00:00:00Z' },
-      'dcterms:license': { '#text': 'MIT License' },
+      'itunes:duration': { '#text': '3600' },
+      'itunes:explicit': { '#text': 'false' },
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: 'Example Entry',
-      dcterms: {
-        created: '2023-02-01T00:00:00Z',
-        license: 'MIT License',
+      itunes: {
+        duration: 3600,
+        explicit: false,
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should handle media namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'media:content': { '@url': 'https://example.com/video.mp4', '@type': 'video/mp4' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Entry',
+      media: {
+        contents: [{ url: 'https://example.com/video.mp4', type: 'video/mp4' }],
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should handle georss namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'georss:point': { '#text': '42.3601 -71.0589' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Entry',
+      georss: {
+        point: { lat: 42.3601, lng: -71.0589 },
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should handle thr namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'thr:in-reply-to': {
+        '@ref': 'http://example.com/posts/1',
+        '@href': 'http://example.com/posts/1',
+      },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Entry',
+      thr: {
+        inReplyTos: [{ ref: 'http://example.com/posts/1', href: 'http://example.com/posts/1' }],
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should handle wfw namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'wfw:comment': { '#text': 'https://example.com/comment' },
+      'wfw:commentrss': { '#text': 'https://example.com/comments/feed' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Entry',
+      wfw: {
+        comment: 'https://example.com/comment',
+        commentRss: 'https://example.com/comments/feed',
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should handle yt namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'yt:videoid': { '#text': 'abc123' },
+      'yt:channelid': { '#text': 'UCexample' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Entry',
+      yt: {
+        videoId: 'abc123',
+        channelId: 'UCexample',
       },
     }
 
@@ -1416,6 +1527,23 @@ describe('parseFeed', () => {
       dcterms: {
         created: '2023-01-01T00:00:00Z',
         license: 'Creative Commons Attribution 4.0',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle yt namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Feed' },
+      'yt:channelid': { '#text': 'UCexample' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Feed',
+      yt: {
+        channelId: 'UCexample',
       },
     }
 

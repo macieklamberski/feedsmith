@@ -1,15 +1,9 @@
-import type { GenerateFunction } from '../../../common/types.js'
-import {
-  generatePlainString,
-  isNonEmptyString,
-  isObject,
-  trimArray,
-  trimObject,
-} from '../../../common/utils.js'
-import type { Chapter, Item } from '../common/types.js'
+import type { GenerateUtil } from '../../../common/types.js'
+import { generatePlainString, isObject, trimArray, trimObject } from '../../../common/utils.js'
+import type { PscNs } from '../common/types.js'
 
-export const generateChapter: GenerateFunction<Chapter> = (chapter) => {
-  if (!isObject(chapter) || !isNonEmptyString(chapter.start)) {
+export const generateChapter: GenerateUtil<PscNs.Chapter> = (chapter) => {
+  if (!isObject(chapter)) {
     return
   }
 
@@ -23,19 +17,20 @@ export const generateChapter: GenerateFunction<Chapter> = (chapter) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateFunction<Item> = (item) => {
+export const generateChapters: GenerateUtil<Array<PscNs.Chapter>> = (chapters) => {
+  const value = {
+    'psc:chapter': trimArray(chapters, generateChapter),
+  }
+
+  return trimObject(value)
+}
+
+export const generateItem: GenerateUtil<PscNs.Item> = (item) => {
   if (!isObject(item)) {
     return
   }
 
-  const chapters = trimArray(item.chapters, generateChapter)
-  if (!chapters || chapters.length === 0) {
-    return
-  }
-
   return trimObject({
-    'psc:chapters': {
-      'psc:chapter': chapters,
-    },
+    'psc:chapters': generateChapters(item.chapters),
   })
 }

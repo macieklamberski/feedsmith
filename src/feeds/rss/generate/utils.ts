@@ -1,5 +1,5 @@
-import { namespaceUrls } from '../../../common/config.js'
-import type { DateLike, GenerateFunction } from '../../../common/types.js'
+import { namespaceUris } from '../../../common/config.js'
+import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateBoolean,
   generateCdataString,
@@ -7,6 +7,7 @@ import {
   generateNumber,
   generatePlainString,
   generateRfc822Date,
+  generateTextOrCdataString,
   isObject,
   trimArray,
   trimObject,
@@ -15,9 +16,12 @@ import {
   generateEntry as generateAtomEntry,
   generateFeed as generateAtomFeed,
 } from '../../../namespaces/atom/generate/utils.js'
+import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
 import { generateItem as generateContentItem } from '../../../namespaces/content/generate/utils.js'
+import { generateItemOrFeed as generateCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
+import { generateFeed as generateFeedPressFeed } from '../../../namespaces/feedpress/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
   generateFeed as generateGooglePlayFeed,
@@ -33,43 +37,42 @@ import {
   generateItem as generatePodcastItem,
 } from '../../../namespaces/podcast/generate/utils.js'
 import { generateItem as generatePscItem } from '../../../namespaces/psc/generate/utils.js'
+import {
+  generateFeed as generateRawVoiceFeed,
+  generateItem as generateRawVoiceItem,
+} from '../../../namespaces/rawvoice/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
+import {
+  generateFeed as generateSourceFeed,
+  generateItem as generateSourceItem,
+} from '../../../namespaces/source/generate/utils.js'
+import {
+  generateFeed as generateSpotifyFeed,
+  generateItem as generateSpotifyItem,
+} from '../../../namespaces/spotify/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
-import type {
-  Category,
-  Cloud,
-  Enclosure,
-  Feed,
-  Guid,
-  Image,
-  Item,
-  Person,
-  SkipDays,
-  SkipHours,
-  Source,
-  TextInput,
-} from '../common/types.js'
+import type { Rss } from '../common/types.js'
 
-export const generatePerson: GenerateFunction<Person> = (person) => {
+export const generatePerson: GenerateUtil<Rss.Person> = (person) => {
   return generateCdataString(person)
 }
 
-export const generateCategory: GenerateFunction<Category> = (category) => {
+export const generateCategory: GenerateUtil<Rss.Category> = (category) => {
   if (!isObject(category)) {
     return
   }
 
   const value = {
     '@domain': generatePlainString(category.domain),
-    '#text': generateCdataString(category.name),
+    ...generateTextOrCdataString(category.name),
   }
 
   return trimObject(value)
 }
 
-export const generateCloud: GenerateFunction<Cloud> = (cloud) => {
+export const generateCloud: GenerateUtil<Rss.Cloud> = (cloud) => {
   if (!isObject(cloud)) {
     return
   }
@@ -85,7 +88,7 @@ export const generateCloud: GenerateFunction<Cloud> = (cloud) => {
   return trimObject(value)
 }
 
-export const generateImage: GenerateFunction<Image> = (image) => {
+export const generateImage: GenerateUtil<Rss.Image> = (image) => {
   if (!isObject(image)) {
     return
   }
@@ -102,7 +105,7 @@ export const generateImage: GenerateFunction<Image> = (image) => {
   return trimObject(value)
 }
 
-export const generateTextInput: GenerateFunction<TextInput> = (textInput) => {
+export const generateTextInput: GenerateUtil<Rss.TextInput> = (textInput) => {
   if (!isObject(textInput)) {
     return
   }
@@ -117,7 +120,7 @@ export const generateTextInput: GenerateFunction<TextInput> = (textInput) => {
   return trimObject(value)
 }
 
-export const generateEnclosure: GenerateFunction<Enclosure> = (enclosure) => {
+export const generateEnclosure: GenerateUtil<Rss.Enclosure> = (enclosure) => {
   if (!isObject(enclosure)) {
     return
   }
@@ -131,7 +134,7 @@ export const generateEnclosure: GenerateFunction<Enclosure> = (enclosure) => {
   return trimObject(value)
 }
 
-export const generateSkipHours: GenerateFunction<SkipHours> = (skipHours) => {
+export const generateSkipHours: GenerateUtil<Rss.SkipHours> = (skipHours) => {
   const value = {
     hour: trimArray(skipHours, generateNumber),
   }
@@ -139,7 +142,7 @@ export const generateSkipHours: GenerateFunction<SkipHours> = (skipHours) => {
   return trimObject(value)
 }
 
-export const generateSkipDays: GenerateFunction<SkipDays> = (skipDays) => {
+export const generateSkipDays: GenerateUtil<Rss.SkipDays> = (skipDays) => {
   const value = {
     day: trimArray(skipDays, generatePlainString),
   }
@@ -147,29 +150,29 @@ export const generateSkipDays: GenerateFunction<SkipDays> = (skipDays) => {
   return trimObject(value)
 }
 
-export const generateGuid: GenerateFunction<Guid> = (guid) => {
+export const generateGuid: GenerateUtil<Rss.Guid> = (guid) => {
   const value = {
-    '#text': generateCdataString(guid?.value),
+    ...generateTextOrCdataString(guid?.value),
     '@isPermaLink': generateBoolean(guid?.isPermaLink),
   }
 
   return trimObject(value)
 }
 
-export const generateSource: GenerateFunction<Source> = (source) => {
+export const generateSource: GenerateUtil<Rss.Source> = (source) => {
   if (!isObject(source)) {
     return
   }
 
   const value = {
-    '#text': generateCdataString(source.title),
+    ...generateTextOrCdataString(source.title),
     '@url': generatePlainString(source.url),
   }
 
   return trimObject(value)
 }
 
-export const generateItem: GenerateFunction<Item<DateLike>> = (item) => {
+export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
   if (!isObject(item)) {
     return
   }
@@ -185,10 +188,11 @@ export const generateItem: GenerateFunction<Item<DateLike>> = (item) => {
     guid: generateGuid(item.guid),
     pubDate: generateRfc822Date(item.pubDate),
     source: generateSource(item.source),
-    ...generateContentItem(item.content),
     ...generateAtomEntry(item.atom),
+    ...generateCc(item.cc),
     ...generateDcItemOrFeed(item.dc),
-    ...generateDctermsItemOrFeed(item.dcterms),
+    ...generateContentItem(item.content),
+    ...generateCreativecommonsItemOrFeed(item.creativeCommons),
     ...generateSlashItem(item.slash),
     ...generateItunesItem(item.itunes),
     ...generatePodcastItem(item.podcast),
@@ -197,13 +201,17 @@ export const generateItem: GenerateFunction<Item<DateLike>> = (item) => {
     ...generateMediaItemOrFeed(item.media),
     ...generateGeoRssItemOrFeed(item.georss),
     ...generateThrItem(item.thr),
+    ...generateDctermsItemOrFeed(item.dcterms),
     ...generateWfwItem(item.wfw),
+    ...generateSourceItem(item.sourceNs),
+    ...generateRawVoiceItem(item.rawvoice),
+    ...generateSpotifyItem(item.spotify),
   }
 
   return trimObject(value)
 }
 
-export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed) => {
+export const generateFeed: GenerateUtil<Rss.Feed<DateLike>> = (feed) => {
   if (!isObject(feed)) {
     return
   }
@@ -229,14 +237,20 @@ export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed) => {
     skipHours: generateSkipHours(feed.skipHours),
     skipDays: generateSkipDays(feed.skipDays),
     ...generateAtomFeed(feed.atom),
+    ...generateCc(feed.cc),
     ...generateDcItemOrFeed(feed.dc),
-    ...generateDctermsItemOrFeed(feed.dcterms),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
     ...generatePodcastFeed(feed.podcast),
     ...generateGooglePlayFeed(feed.googleplay),
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
+    ...generateDctermsItemOrFeed(feed.dcterms),
+    ...generateCreativecommonsItemOrFeed(feed.creativeCommons),
+    ...generateFeedPressFeed(feed.feedpress),
+    ...generateSourceFeed(feed.sourceNs),
+    ...generateRawVoiceFeed(feed.rawvoice),
+    ...generateSpotifyFeed(feed.spotify),
     item: trimArray(feed.items, generateItem),
   }
 
@@ -249,7 +263,7 @@ export const generateFeed: GenerateFunction<Feed<DateLike>> = (feed) => {
   return {
     rss: {
       '@version': '2.0',
-      ...generateNamespaceAttrs(trimmedValue, namespaceUrls),
+      ...generateNamespaceAttrs(trimmedValue, namespaceUris),
       channel: trimmedValue,
     },
   }
