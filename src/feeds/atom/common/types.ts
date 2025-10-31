@@ -15,6 +15,7 @@ import type { PscNs } from '../../../namespaces/psc/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
 import type { SyNs } from '../../../namespaces/sy/common/types.js'
 import type { ThrNs } from '../../../namespaces/thr/common/types.js'
+import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 import type { YtNs } from '../../../namespaces/yt/common/types.js'
 
@@ -101,6 +102,7 @@ export namespace Atom {
     wfw?: WfwNs.Item
     yt?: YtNs.Item
     pingback?: PingbackNs.Item
+    trackback?: TrackbackNs.Item
   }
 
   export type Feed<TDate extends DateLike> = {

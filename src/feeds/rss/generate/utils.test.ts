@@ -747,6 +747,23 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with trackback namespace properties', () => {
+    const value = {
+      title: 'Item with trackback namespace',
+      trackback: {
+        ping: 'https://example.com/trackback/123',
+        about: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      },
+    }
+    const expected = {
+      title: 'Item with trackback namespace',
+      'trackback:ping': 'https://example.com/trackback/123',
+      'trackback:about': ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with source namespace properties', () => {
     const value = {
       title: 'Item with source namespace',
