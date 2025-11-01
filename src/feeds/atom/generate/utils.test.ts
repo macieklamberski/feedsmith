@@ -778,7 +778,7 @@ describe('generateEntry', () => {
     const expected = {
       feed: {
         '@xmlns': 'http://www.w3.org/2005/Atom',
-        '@xmlns:pingback': 'http://purl.org/net/pingback/',
+        '@xmlns:pingback': 'http://madskills.com/public/xml/rss/module/pingback/',
         id: 'https://example.com/feed',
         title: 'Feed with Pingback namespace',
         updated: '2023-03-15T12:00:00.000Z',
