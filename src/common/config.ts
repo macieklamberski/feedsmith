@@ -222,6 +222,12 @@ export const namespaceUris = {
     'http://a9.com/-/spec/opensearchrss/1.0/', // Official URI (legacy).
     'https://a9.com/-/spec/opensearchrss/1.0/',
   ],
+  arxiv: [
+    'http://arxiv.org/schemas/atom', // Official URI.
+    'https://arxiv.org/schemas/atom',
+    'http://arxiv.org/schemas/atom/',
+    'https://arxiv.org/schemas/atom/',
+  ],
 }
 
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(
