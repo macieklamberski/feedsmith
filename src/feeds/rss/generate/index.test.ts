@@ -674,6 +674,45 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS feed with googleplay namespace', () => {
+    const value = {
+      title: 'Feed with GooglePlay namespace',
+      description: 'Test feed with Google Play Podcasts namespace',
+      googleplay: {
+        author: 'Podcast Creator',
+        explicit: false,
+      },
+      items: [
+        {
+          title: 'Episode with GooglePlay',
+          description: 'Episode description',
+          googleplay: {
+            author: 'Episode Author',
+            explicit: 'clean' as const,
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/">
+  <channel>
+    <title>Feed with GooglePlay namespace</title>
+    <description>Test feed with Google Play Podcasts namespace</description>
+    <googleplay:author>Podcast Creator</googleplay:author>
+    <googleplay:explicit>no</googleplay:explicit>
+    <item>
+      <title>Episode with GooglePlay</title>
+      <description>Episode description</description>
+      <googleplay:author>Episode Author</googleplay:author>
+      <googleplay:explicit>clean</googleplay:explicit>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS feed with stylesheets', () => {
     const value = {
       title: 'Feed with Stylesheet',

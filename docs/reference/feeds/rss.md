@@ -19,6 +19,7 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
         <a href="/reference/namespaces/itunes">iTunes</a>,
         <a href="/reference/namespaces/podcast">Podcast</a>,
         <a href="/reference/namespaces/psc">Podlove Simple Chapters</a>,
+        <a href="/reference/namespaces/googleplay">Google Play Podcasts</a>,
         <a href="/reference/namespaces/media">Media RSS</a>,
         <a href="/reference/namespaces/georss">GeoRSS-Simple</a>,
         <a href="/reference/namespaces/thr">Atom Threading</a>,

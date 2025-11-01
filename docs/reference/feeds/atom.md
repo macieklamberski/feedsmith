@@ -16,6 +16,7 @@ Atom is a syndication format based on XML that provides a robust framework for w
         <a href="/reference/namespaces/slash">Slash</a>,
         <a href="/reference/namespaces/itunes">iTunes</a>,
         <a href="/reference/namespaces/psc">Podlove Simple Chapters</a>,
+        <a href="/reference/namespaces/googleplay">Google Play Podcasts</a>,
         <a href="/reference/namespaces/media">Media RSS</a>,
         <a href="/reference/namespaces/georss">GeoRSS-Simple</a>,
         <a href="/reference/namespaces/thr">Atom Threading</a>,

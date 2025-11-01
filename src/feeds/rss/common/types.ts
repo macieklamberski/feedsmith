@@ -7,6 +7,7 @@ import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DctermsNs } from '../../../namespaces/dcterms/common/types.js'
 import type { FeedpressNs } from '../../../namespaces/feedpress/common/types.js'
 import type { GeorssNs } from '../../../namespaces/georss/common/types.js'
+import type { GoogleplayNs } from '../../../namespaces/googleplay/common/types.js'
 import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { PodcastNs } from '../../../namespaces/podcast/common/types.js'
@@ -92,6 +93,7 @@ export namespace Rss {
     itunes?: ItunesNs.Item
     podcast?: PodcastNs.Item
     psc?: PscNs.Item
+    googleplay?: GoogleplayNs.Item
     media?: MediaNs.ItemOrFeed
     georss?: GeorssNs.ItemOrFeed
     thr?: ThrNs.Item
@@ -131,6 +133,7 @@ export namespace Rss {
     sy?: SyNs.Feed<TDate>
     itunes?: ItunesNs.Feed
     podcast?: PodcastNs.Feed<TDate>
+    googleplay?: GoogleplayNs.Feed
     media?: MediaNs.ItemOrFeed
     georss?: GeorssNs.ItemOrFeed
     dcterms?: DctermsNs.ItemOrFeed<TDate>

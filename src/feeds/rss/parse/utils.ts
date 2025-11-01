@@ -24,6 +24,10 @@ import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namesp
 import { retrieveFeed as retrieveFeedPressFeed } from '../../../namespaces/feedpress/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
+  retrieveFeed as retrieveGooglePlayFeed,
+  retrieveItem as retrieveGooglePlayItem,
+} from '../../../namespaces/googleplay/parse/utils.js'
+import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/parse/utils.js'
@@ -180,6 +184,7 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
     itunes: namespaces.has('itunes') ? retrieveItunesItem(value) : undefined,
     podcast: namespaces.has('podcast') ? retrievePodcastItem(value) : undefined,
     psc: namespaces.has('psc') ? retrievePscItem(value) : undefined,
+    googleplay: namespaces.has('googleplay') ? retrieveGooglePlayItem(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
@@ -226,6 +231,7 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
     sy: namespaces.has('sy') ? retrieveSyFeed(value) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesFeed(value) : undefined,
     podcast: namespaces.has('podcast') ? retrievePodcastFeed(value) : undefined,
+    googleplay: namespaces.has('googleplay') ? retrieveGooglePlayFeed(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,

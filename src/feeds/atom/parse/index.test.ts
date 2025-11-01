@@ -710,6 +710,48 @@ describe('parse', () => {
       expect(parse(value)).toEqual(expected)
     })
 
+    it('should parse Atom feed with googleplay namespace', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom" xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/">
+          <title>Feed with GooglePlay</title>
+          <id>urn:uuid:feed-id</id>
+          <updated>2024-01-01T00:00:00Z</updated>
+          <googleplay:author>Podcast Creator</googleplay:author>
+          <googleplay:explicit>no</googleplay:explicit>
+          <entry>
+            <title>Episode with GooglePlay</title>
+            <id>urn:uuid:entry-id</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <googleplay:author>Episode Author</googleplay:author>
+            <googleplay:explicit>clean</googleplay:explicit>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Feed with GooglePlay',
+        id: 'urn:uuid:feed-id',
+        updated: '2024-01-01T00:00:00Z',
+        googleplay: {
+          author: 'Podcast Creator',
+          explicit: false,
+        },
+        entries: [
+          {
+            title: 'Episode with GooglePlay',
+            id: 'urn:uuid:entry-id',
+            updated: '2024-01-01T00:00:00Z',
+            googleplay: {
+              author: 'Episode Author',
+              explicit: 'clean' as const,
+            },
+          },
+        ],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
     describe('non-standard namespace URIs', () => {
       it('should work with HTTPS variant and custom prefix', () => {
         const value = `
