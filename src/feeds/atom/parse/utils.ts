@@ -10,6 +10,7 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
+import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
@@ -238,6 +239,7 @@ export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options)
       : undefined,
     wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
+    admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackItem(value) : undefined,
   }
 
@@ -276,6 +278,7 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) =
       ? retrieveCreativecommonsItemOrFeed(value)
       : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
+    admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackFeed(value) : undefined,
   }
 

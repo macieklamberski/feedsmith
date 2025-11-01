@@ -505,6 +505,29 @@ describe('parseItem', () => {
 
     expect(parseItem(value)).toEqual(expected)
   })
+
+  it('should handle admin namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'admin:errorreportsto': {
+        '@rdf:resource': 'mailto:admin@example.com',
+      },
+      'admin:generatoragent': {
+        '@rdf:resource': 'http://www.example.com/generator/1.0',
+      },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      admin: {
+        errorReportsTo: 'mailto:admin@example.com',
+        generatorAgent: 'http://www.example.com/generator/1.0',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
 })
 
 describe('retrieveItems', () => {
@@ -1078,6 +1101,41 @@ describe('parseFeed', () => {
       ],
       georss: {
         point: { lat: 40.689, lng: -74.044 },
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle admin namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'admin:errorreportsto': {
+          '@rdf:resource': 'mailto:webmaster@example.com',
+        },
+        'admin:generatoragent': {
+          '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+        },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
       },
     }
 

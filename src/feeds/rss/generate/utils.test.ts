@@ -730,6 +730,27 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with admin namespace properties', () => {
+    const value = {
+      title: 'Item with admin namespace',
+      admin: {
+        errorReportsTo: 'mailto:admin@example.com',
+        generatorAgent: 'http://www.example.com/generator/1.0',
+      },
+    }
+    const expected = {
+      title: 'Item with admin namespace',
+      'admin:errorReportsTo': {
+        '@rdf:resource': 'mailto:admin@example.com',
+      },
+      'admin:generatorAgent': {
+        '@rdf:resource': 'http://www.example.com/generator/1.0',
+      },
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with pingback namespace properties', () => {
     const value = {
       title: 'Item with pingback namespace',
@@ -1378,6 +1399,36 @@ describe('generateFeed', () => {
           description: 'A feed with FeedPress properties',
           'feedpress:link': 'https://feed.press/example',
           'feedpress:newsletterId': '12345',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate admin namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with admin namespace',
+      description: 'A feed with admin properties',
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:admin': 'http://webns.net/mvcb/',
+        '@xmlns:rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        channel: {
+          title: 'Feed with admin namespace',
+          description: 'A feed with admin properties',
+          'admin:errorReportsTo': {
+            '@rdf:resource': 'mailto:webmaster@example.com',
+          },
+          'admin:generatorAgent': {
+            '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+          },
         },
       },
     }

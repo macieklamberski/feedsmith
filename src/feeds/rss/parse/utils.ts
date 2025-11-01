@@ -12,6 +12,7 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
 import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
@@ -189,6 +190,7 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
     thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
+    admin: namespaces.has('admin') ? retrieveAdminFeed(value) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceItem(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyItem(value) : undefined,
@@ -238,6 +240,7 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
       ? retrieveCreativecommonsItemOrFeed(value)
       : undefined,
     feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(value) : undefined,
+    admin: namespaces.has('admin') ? retrieveAdminFeed(value) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceFeed(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(value) : undefined,

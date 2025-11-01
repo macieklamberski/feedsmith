@@ -614,6 +614,43 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with admin namespace', () => {
+    const value = {
+      title: 'Feed with admin namespace',
+      description: 'Test feed with admin namespace',
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+      items: [
+        {
+          title: 'Item with admin',
+          admin: {
+            errorReportsTo: 'mailto:admin@example.com',
+            generatorAgent: 'http://www.example.com/generator/1.0',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:admin="http://webns.net/mvcb/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <channel>
+    <title>Feed with admin namespace</title>
+    <description>Test feed with admin namespace</description>
+    <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
+    <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+    <item>
+      <title>Item with admin</title>
+      <admin:errorReportsTo rdf:resource="mailto:admin@example.com"/>
+      <admin:generatorAgent rdf:resource="http://www.example.com/generator/1.0"/>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with psc namespace', () => {
     const value = {
       title: 'Feed with psc namespace',

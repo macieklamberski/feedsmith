@@ -619,6 +619,10 @@
       "wfw": {
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
+      },
+      "admin": {
+        "errorReportsTo": "mailto:admin@example.com",
+        "generatorAgent": "http://www.example.com/generator/1.0"
       }
     }
   ],
@@ -1284,5 +1288,9 @@
     "elev": 360,
     "floor": 4,
     "radius": 50000
+  },
+  "admin": {
+    "errorReportsTo": "mailto:webmaster@example.com",
+    "generatorAgent": "http://www.movabletype.org/?v=3.2"
   }
 }

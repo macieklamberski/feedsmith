@@ -12,6 +12,7 @@ import {
   generateNamespaceAttrs,
   generateNumber,
   generatePlainString,
+  generateRdfResource,
   generateRfc822Date,
   generateRfc3339Date,
   generateSingularOrArray,
@@ -2842,6 +2843,94 @@ describe('generateNumber', () => {
 
   it('should return undefined for non-number inputs', () => {
     expect(generateNumber(undefined)).toBeUndefined()
+  })
+})
+
+describe('generateRdfResource', () => {
+  it('should generate object with @rdf:resource attribute for valid string', () => {
+    const value = 'https://example.com/resource'
+    const expected = {
+      '@rdf:resource': 'https://example.com/resource',
+    }
+
+    expect(generateRdfResource(value, generatePlainString)).toEqual(expected)
+  })
+
+  it('should generate object with @rdf:resource for mailto URI', () => {
+    const value = 'mailto:admin@example.com'
+    const expected = {
+      '@rdf:resource': 'mailto:admin@example.com',
+    }
+
+    expect(generateRdfResource(value, generatePlainString)).toEqual(expected)
+  })
+
+  it('should trim whitespace via generate function', () => {
+    const value = '  https://example.com/resource  '
+    const expected = {
+      '@rdf:resource': 'https://example.com/resource',
+    }
+
+    expect(generateRdfResource(value, generatePlainString)).toEqual(expected)
+  })
+
+  it('should return undefined for empty string', () => {
+    expect(generateRdfResource('', generatePlainString)).toBeUndefined()
+  })
+
+  it('should return undefined for whitespace-only string', () => {
+    expect(generateRdfResource('   ', generatePlainString)).toBeUndefined()
+  })
+
+  it('should return undefined for undefined value', () => {
+    expect(generateRdfResource(undefined, generatePlainString)).toBeUndefined()
+  })
+
+  it('should work with custom generate function', () => {
+    const customGenerate = (value: string | undefined): string | undefined => {
+      return value ? value.toUpperCase() : undefined
+    }
+    const value = 'https://example.com'
+    const expected = {
+      '@rdf:resource': 'HTTPS://EXAMPLE.COM',
+    }
+
+    expect(generateRdfResource(value, customGenerate)).toEqual(expected)
+  })
+
+  it('should return undefined when generate function returns undefined', () => {
+    const alwaysUndefined = (): undefined => undefined
+    const value = 'https://example.com'
+
+    expect(generateRdfResource(value, alwaysUndefined)).toBeUndefined()
+  })
+
+  it('should return rdf:resource with empty string if generate function returns it', () => {
+    const returnsEmpty = (): string => ''
+    const value = 'https://example.com'
+    const expected = {
+      '@rdf:resource': '',
+    }
+
+    expect(generateRdfResource(value, returnsEmpty)).toEqual(expected)
+  })
+
+  it('should handle number values with generateNumber', () => {
+    const value = 42
+    const expected = {
+      '@rdf:resource': 42,
+    }
+
+    expect(generateRdfResource(value, generateNumber)).toEqual(expected)
+  })
+
+  it('should preserve special characters in URIs', () => {
+    const value = 'https://example.com/path?foo=bar&baz=qux#anchor'
+    const expected = {
+      '@rdf:resource': 'https://example.com/path?foo=bar&baz=qux#anchor',
+    }
+
+    expect(generateRdfResource(value, generatePlainString)).toEqual(expected)
   })
 })
 

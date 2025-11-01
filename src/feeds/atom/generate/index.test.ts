@@ -832,6 +832,47 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with admin namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Admin',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry with Admin',
+          updated: new Date('2024-01-05T10:30:00Z'),
+          admin: {
+            errorReportsTo: 'mailto:admin@example.com',
+            generatorAgent: 'http://www.example.com/generator/1.0',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:admin="http://webns.net/mvcb/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <id>https://example.com/feed</id>
+  <title>Feed with Admin</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
+  <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry with Admin</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+    <admin:errorReportsTo rdf:resource="mailto:admin@example.com"/>
+    <admin:generatorAgent rdf:resource="http://www.example.com/generator/1.0"/>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with YouTube namespace', () => {
     const value = {
       id: 'yt:channel:UCuAXFkgsw1L7xaCfnd5JJOw',

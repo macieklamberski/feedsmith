@@ -1161,6 +1161,29 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
+  it('should handle admin namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'admin:errorreportsto': {
+        '@rdf:resource': 'mailto:admin@example.com',
+      },
+      'admin:generatoragent': {
+        '@rdf:resource': 'http://www.example.com/generator/1.0',
+      },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Entry',
+      admin: {
+        errorReportsTo: 'mailto:admin@example.com',
+        generatorAgent: 'http://www.example.com/generator/1.0',
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
   it('should handle yt namespace', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
@@ -1544,6 +1567,29 @@ describe('parseFeed', () => {
       title: 'Example Feed',
       yt: {
         channelId: 'UCexample',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle admin namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Feed' },
+      'admin:errorreportsto': {
+        '@rdf:resource': 'mailto:webmaster@example.com',
+      },
+      'admin:generatoragent': {
+        '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+      },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Feed',
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
       },
     }
 
