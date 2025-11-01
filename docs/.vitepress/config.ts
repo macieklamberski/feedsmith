@@ -94,6 +94,7 @@ export default defineConfig({
               { text: 'Atom Threading', link: '/reference/namespaces/thr' },
               { text: 'Dublin Core Terms', link: '/reference/namespaces/dcterms' },
               { text: 'Well-Formed Web', link: '/reference/namespaces/wfw' },
+              { text: 'Pingback', link: '/reference/namespaces/pingback' },
               { text: 'Source', link: '/reference/namespaces/source' },
               { text: 'ccREL', link: '/reference/namespaces/cc' },
               { text: 'Creative Commons', link: '/reference/namespaces/creativecommons' },

@@ -692,6 +692,10 @@
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
       },
+      "pingback": {
+        "server": "https://example.com/xmlrpc.php",
+        "target": "https://referenced-blog.com/article"
+      },
       "creativeCommons": {
         "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]
       },
@@ -796,6 +800,9 @@
   },
   "creativeCommons": {
     "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
+  },
+  "pingback": {
+    "to": "https://example.com/pingback-service"
   },
   "sy": {
     "updatePeriod": "hourly",

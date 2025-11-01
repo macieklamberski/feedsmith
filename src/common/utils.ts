@@ -36,6 +36,21 @@ export const retrieveText = (value: Unreliable): Unreliable => {
   return value?.['#text'] ?? value
 }
 
+export const retrieveRdfResourceOrText = <T>(
+  value: Unreliable,
+  parse: (value: Unreliable) => T | undefined,
+): T | undefined => {
+  if (isObject(value)) {
+    const resource = parse(value['@rdf:resource'])
+
+    if (isPresent(resource)) {
+      return resource
+    }
+  }
+
+  return parse(retrieveText(value))
+}
+
 export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<T> | undefined => {
   let result: Partial<T> | undefined
 

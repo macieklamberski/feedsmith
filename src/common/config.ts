@@ -214,6 +214,12 @@ export const namespaceUris = {
     'http://web.resource.org/cc',
     'https://web.resource.org/cc',
   ],
+  pingback: [
+    'http://madskills.com/public/xml/rss/module/pingback/', // Official URI.
+    'https://madskills.com/public/xml/rss/module/pingback/',
+    'http://madskills.com/public/xml/rss/module/pingback',
+    'https://madskills.com/public/xml/rss/module/pingback',
+  ],
 }
 
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(

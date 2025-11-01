@@ -29,6 +29,10 @@ import {
 } from '../../../namespaces/itunes/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
 import {
+  generateFeed as generatePingbackFeed,
+  generateItem as generatePingbackItem,
+} from '../../../namespaces/pingback/generate/utils.js'
+import {
   generateFeed as generatePodcastFeed,
   generateItem as generatePodcastItem,
 } from '../../../namespaces/podcast/generate/utils.js'
@@ -201,6 +205,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
     ...generateSourceItem(item.sourceNs),
     ...generateRawVoiceItem(item.rawvoice),
     ...generateSpotifyItem(item.spotify),
+    ...generatePingbackItem(item.pingback),
   }
 
   return trimObject(value)
@@ -245,6 +250,7 @@ export const generateFeed: GenerateUtil<Rss.Feed<DateLike>> = (feed) => {
     ...generateSourceFeed(feed.sourceNs),
     ...generateRawVoiceFeed(feed.rawvoice),
     ...generateSpotifyFeed(feed.spotify),
+    ...generatePingbackFeed(feed.pingback),
     item: trimArray(feed.items, generateItem),
   }
 

@@ -730,6 +730,23 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with pingback namespace properties', () => {
+    const value = {
+      title: 'Item with pingback namespace',
+      pingback: {
+        server: 'https://example.com/xmlrpc.php',
+        target: 'https://referenced-blog.com/article',
+      },
+    }
+    const expected = {
+      title: 'Item with pingback namespace',
+      'pingback:server': 'https://example.com/xmlrpc.php',
+      'pingback:target': 'https://referenced-blog.com/article',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with source namespace properties', () => {
     const value = {
       title: 'Item with source namespace',
@@ -1235,6 +1252,29 @@ describe('generateFeed', () => {
           description: 'A feed with geographic data',
           'georss:point': '45.256 -71.92',
           'georss:featureName': 'Boston',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate pingback namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with pingback namespace',
+      description: 'A feed with Pingback service endpoint',
+      pingback: {
+        to: 'https://example.com/pingback-service',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:pingback': 'http://madskills.com/public/xml/rss/module/pingback/',
+        channel: {
+          title: 'Feed with pingback namespace',
+          description: 'A feed with Pingback service endpoint',
+          'pingback:to': 'https://example.com/pingback-service',
         },
       },
     }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/" xmlns:psc="http://podlove.org/simple-chapters" xmlns:spotify="http://www.spotify.com/ns/rss" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:source="http://source.scripting.com/" xmlns:cc="http://creativecommons.org/ns#" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:feedpress="https://feed.press/xmlns">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/" xmlns:psc="http://podlove.org/simple-chapters" xmlns:spotify="http://www.spotify.com/ns/rss" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/" xmlns:source="http://source.scripting.com/" xmlns:cc="http://creativecommons.org/ns#" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:feedpress="https://feed.press/xmlns">
   <channel>
     <title>Example Feed</title>
     <link>http://example.org</link>
@@ -252,6 +252,9 @@
     <georss:elev>360</georss:elev>
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
+
+    <!-- Pingback Namespace: Channel Level Tags -->
+    <pingback:to>https://example.com/pingback-service</pingback:to>
 
     <!-- Source Namespace: Channel Level Tags -->
     <source:account service="twitter">johndoe</source:account>
@@ -591,6 +594,10 @@
       <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
       <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
       <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
+
+      <!-- Pingback Namespace: Item Level Tags -->
+      <pingback:server>https://example.com/xmlrpc.php</pingback:server>
+      <pingback:target>https://referenced-blog.com/article</pingback:target>
 
       <!-- Source Namespace: Item Level Tags -->
       <source:markdown># Understanding XML Namespaces - This article explores the power and flexibility of XML namespaces in modern web syndication.</source:markdown>
