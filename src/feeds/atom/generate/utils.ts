@@ -11,6 +11,10 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import {
+  generateAuthor as generateArxivAuthor,
+  generateEntry as generateArxivEntry,
+} from '../../../namespaces/arxiv/generate/utils.js'
 import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
 import { generateItemOrFeed as generateCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
@@ -72,6 +76,7 @@ export const generatePerson: GenerateUtil<Atom.Person> = (person, options) => {
     [key('name')]: generateCdataString(person.name),
     [key('uri')]: generateCdataString(person.uri),
     [key('email')]: generateCdataString(person.email),
+    ...generateArxivAuthor(person.arxiv),
   }
 
   return trimObject(value)
@@ -168,6 +173,7 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
 
   return {
     ...trimmedValue,
+    ...generateArxivEntry(entry.arxiv),
     ...generateCc(entry.cc),
     ...generateDcItemOrFeed(entry.dc),
     ...generateSlashItem(entry.slash),

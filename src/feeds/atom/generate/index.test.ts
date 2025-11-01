@@ -744,6 +744,55 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with arxiv namespace', () => {
+    const value = {
+      id: 'http://arxiv.org/api/query',
+      title: 'arXiv Query Results',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      entries: [
+        {
+          id: 'http://arxiv.org/abs/2403.12345v1',
+          title: 'Example Paper',
+          updated: new Date('2024-03-15T12:00:00Z'),
+          authors: [
+            {
+              name: 'John Doe',
+              arxiv: {
+                affiliation: 'MIT',
+              },
+            },
+          ],
+          arxiv: {
+            comment: '23 pages, 8 figures',
+            journalRef: 'Eur.Phys.J. C31 (2003) 17-29',
+            doi: '10.1234/example',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:arxiv="http://arxiv.org/schemas/atom">
+  <id>http://arxiv.org/api/query</id>
+  <title>arXiv Query Results</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <entry>
+    <author>
+      <name>John Doe</name>
+      <arxiv:affiliation>MIT</arxiv:affiliation>
+    </author>
+    <id>http://arxiv.org/abs/2403.12345v1</id>
+    <title>Example Paper</title>
+    <updated>2024-03-15T12:00:00.000Z</updated>
+    <arxiv:comment>23 pages, 8 figures</arxiv:comment>
+    <arxiv:journal_ref>Eur.Phys.J. C31 (2003) 17-29</arxiv:journal_ref>
+    <arxiv:doi>10.1234/example</arxiv:doi>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with psc namespace', () => {
     const value = {
       id: 'https://example.com/podcast',

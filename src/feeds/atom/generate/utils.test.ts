@@ -1439,6 +1439,69 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with arxiv namespace properties', () => {
+    const value = {
+      id: 'http://arxiv.org/api/query',
+      title: 'arXiv Query Results',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      entries: [
+        {
+          id: 'http://arxiv.org/abs/2403.12345v1',
+          title: 'Example Paper',
+          updated: new Date('2024-03-15T12:00:00Z'),
+          authors: [
+            {
+              name: 'John Doe',
+              arxiv: {
+                affiliation: 'MIT',
+              },
+            },
+          ],
+          arxiv: {
+            comment: '23 pages, 8 figures',
+            doi: '10.1234/example',
+            primaryCategory: {
+              term: 'cs.LG',
+              scheme: 'http://arxiv.org/schemas/atom',
+              label: 'Machine Learning',
+            },
+          },
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:arxiv': 'http://arxiv.org/schemas/atom',
+        id: 'http://arxiv.org/api/query',
+        title: 'arXiv Query Results',
+        updated: '2024-01-10T12:00:00.000Z',
+        entry: [
+          {
+            author: [
+              {
+                name: 'John Doe',
+                'arxiv:affiliation': 'MIT',
+              },
+            ],
+            id: 'http://arxiv.org/abs/2403.12345v1',
+            title: 'Example Paper',
+            updated: '2024-03-15T12:00:00.000Z',
+            'arxiv:comment': '23 pages, 8 figures',
+            'arxiv:doi': '10.1234/example',
+            'arxiv:primary_category': {
+              '@term': 'cs.LG',
+              '@scheme': 'http://arxiv.org/schemas/atom',
+              '@label': 'Machine Learning',
+            },
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with yt namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
