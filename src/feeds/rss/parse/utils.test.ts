@@ -979,6 +979,27 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle admin namespace', () => {
+    const value = {
+      title: { '#text': 'Admin Item' },
+      'admin:errorreportsto': {
+        '@rdf:resource': 'mailto:admin@example.com',
+      },
+      'admin:generatoragent': {
+        '@rdf:resource': 'http://www.example.com/generator/1.0',
+      },
+    }
+    const expected = {
+      title: 'Admin Item',
+      admin: {
+        errorReportsTo: 'mailto:admin@example.com',
+        generatorAgent: 'http://www.example.com/generator/1.0',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle source namespace', () => {
     const value = {
       title: { '#text': 'Source Item' },
@@ -1514,6 +1535,29 @@ describe('parseFeed', () => {
       sourceNs: {
         accounts: [{ service: 'twitter', value: 'johndoe' }],
         blogroll: 'https://example.com/blogroll.opml',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle admin namespace', () => {
+    const value = {
+      title: { '#text': 'Admin Feed' },
+      link: { '#text': 'https://example.com' },
+      'admin:errorreportsto': {
+        '@rdf:resource': 'mailto:webmaster@example.com',
+      },
+      'admin:generatoragent': {
+        '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+      },
+    }
+    const expected = {
+      title: 'Admin Feed',
+      link: 'https://example.com',
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
       },
     }
 

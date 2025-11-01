@@ -1,4 +1,5 @@
 import type { DateLike } from '../../../common/types.js'
+import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
 import type { ContentNs } from '../../../namespaces/content/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
@@ -36,6 +37,7 @@ export namespace Rdf {
     georss?: GeorssNs.ItemOrFeed
     dcterms?: DctermsNs.ItemOrFeed<TDate>
     wfw?: WfwNs.Item
+    admin?: AdminNs.Feed
   }
 
   export type Feed<TDate extends DateLike> = {
@@ -51,6 +53,7 @@ export namespace Rdf {
     media?: MediaNs.ItemOrFeed
     georss?: GeorssNs.ItemOrFeed
     dcterms?: DctermsNs.ItemOrFeed<TDate>
+    admin?: AdminNs.Feed
   }
 }
 // #endregion reference

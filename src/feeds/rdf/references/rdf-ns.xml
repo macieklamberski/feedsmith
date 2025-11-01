@@ -11,6 +11,7 @@
   xmlns:media="http://search.yahoo.com/mrss/"
   xmlns:georss="http://www.georss.org/georss"
   xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+  xmlns:admin="http://webns.net/mvcb/"
 >
   <channel rdf:about="http://example.org/rss">
     <title>Example Feed</title>
@@ -219,6 +220,10 @@
     <georss:elev>360</georss:elev>
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
+
+    <!-- Admin Namespace: Channel Level Tags -->
+    <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
+    <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
   </channel>
 
   <item rdf:about="http://example.org/item/1">
@@ -424,5 +429,9 @@
     <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
     <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
+
+    <!-- Admin Namespace: Item Level Tags -->
+    <admin:errorReportsTo rdf:resource="mailto:admin@example.com"/>
+    <admin:generatorAgent rdf:resource="http://www.example.com/generator/1.0"/>
   </item>
 </rdf:RDF>

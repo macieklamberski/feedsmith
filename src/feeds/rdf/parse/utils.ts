@@ -9,6 +9,7 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
+import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
 import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
@@ -80,6 +81,7 @@ export const parseItem: ParsePartialUtil<Rdf.Item<string>> = (value) => {
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
+    admin: namespaces.has('admin') ? retrieveAdminFeed(value) : undefined,
   }
 
   return trimObject(item)
@@ -110,6 +112,7 @@ export const parseFeed: ParsePartialUtil<Rdf.Feed<string>> = (value) => {
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(channel) : undefined,
+    admin: namespaces.has('admin') ? retrieveAdminFeed(channel) : undefined,
   }
 
   return trimObject(feed)

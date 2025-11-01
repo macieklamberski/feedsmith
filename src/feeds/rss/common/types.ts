@@ -1,4 +1,5 @@
 import type { DateLike } from '../../../common/types.js'
+import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
 import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { ContentNs } from '../../../namespaces/content/common/types.js'
@@ -98,6 +99,7 @@ export namespace Rss {
     thr?: ThrNs.Item
     dcterms?: DctermsNs.ItemOrFeed<TDate>
     wfw?: WfwNs.Item
+    admin?: AdminNs.Feed
     sourceNs?: SourceNs.Item
     rawvoice?: RawvoiceNs.Item
     spotify?: SpotifyNs.Item
@@ -138,6 +140,7 @@ export namespace Rss {
     dcterms?: DctermsNs.ItemOrFeed<TDate>
     creativeCommons?: CreativecommonsNs.ItemOrFeed
     feedpress?: FeedpressNs.Feed
+    admin?: AdminNs.Feed
     sourceNs?: SourceNs.Feed
     rawvoice?: RawvoiceNs.Feed<TDate>
     spotify?: SpotifyNs.Feed
