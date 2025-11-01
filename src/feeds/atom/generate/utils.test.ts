@@ -1402,6 +1402,43 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with opensearch namespace properties', () => {
+    const value = {
+      id: 'http://example.com/search',
+      title: 'Search Results',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      opensearch: {
+        totalResults: 1000,
+        startIndex: 21,
+        itemsPerPage: 10,
+        query: {
+          role: 'request',
+          searchTerms: 'quantum computing',
+        },
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:opensearch': 'http://a9.com/-/spec/opensearch/1.1/',
+        id: 'http://example.com/search',
+        title: 'Search Results',
+        updated: '2024-01-10T12:00:00.000Z',
+        'opensearch:totalResults': 1000,
+        'opensearch:startIndex': 21,
+        'opensearch:itemsPerPage': 10,
+        'opensearch:Query': [
+          {
+            '@role': 'request',
+            '@searchTerms': 'quantum computing',
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with yt namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',

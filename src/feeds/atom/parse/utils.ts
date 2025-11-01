@@ -20,6 +20,7 @@ import {
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
+import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
 import { retrieveItem as retrievePscItem } from '../../../namespaces/psc/parse/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
@@ -270,6 +271,7 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) =
     creativeCommons: namespaces?.has('creativecommons')
       ? retrieveCreativecommonsItemOrFeed(value)
       : undefined,
+    opensearch: namespaces?.has('opensearch') ? retrieveOpenSearchFeed(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
   }
 

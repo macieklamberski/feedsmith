@@ -1345,6 +1345,43 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate opensearch namespace properties for feed', () => {
+    const value = {
+      title: 'Search Results',
+      description: 'Search results feed',
+      opensearch: {
+        totalResults: 1000,
+        startIndex: 21,
+        itemsPerPage: 10,
+        query: {
+          role: 'request',
+          searchTerms: 'quantum computing',
+        },
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:opensearch': 'http://a9.com/-/spec/opensearch/1.1/',
+        channel: {
+          title: 'Search Results',
+          description: 'Search results feed',
+          'opensearch:totalResults': 1000,
+          'opensearch:startIndex': 21,
+          'opensearch:itemsPerPage': 10,
+          'opensearch:Query': [
+            {
+              '@role': 'request',
+              '@searchTerms': 'quantum computing',
+            },
+          ],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate rawvoice namespace properties and attributes for feed', () => {
     const value = {
       title: 'Feed with RawVoice namespace',

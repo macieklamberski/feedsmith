@@ -719,6 +719,31 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with opensearch namespace', () => {
+    const value = {
+      id: 'http://example.com/search',
+      title: 'Search Results',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      opensearch: {
+        totalResults: 1000,
+        startIndex: 0,
+        itemsPerPage: 10,
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">
+  <id>http://example.com/search</id>
+  <title>Search Results</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <opensearch:totalResults>1000</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with psc namespace', () => {
     const value = {
       id: 'https://example.com/podcast',
