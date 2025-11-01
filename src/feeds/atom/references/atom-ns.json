@@ -801,12 +801,6 @@
     "totalResults": 1000,
     "startIndex": 0,
     "itemsPerPage": 10,
-    "query": {
-      "role": "request",
-      "searchTerms": "quantum computing",
-      "startIndex": 0,
-      "count": 10
-    },
     "queries": [
       {
         "role": "request",

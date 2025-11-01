@@ -1411,10 +1411,12 @@ describe('generateFeed', () => {
         totalResults: 1000,
         startIndex: 21,
         itemsPerPage: 10,
-        query: {
-          role: 'request',
-          searchTerms: 'quantum computing',
-        },
+        queries: [
+          {
+            role: 'request',
+            searchTerms: 'quantum computing',
+          },
+        ],
       },
     }
     const expected = {
