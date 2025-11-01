@@ -98,6 +98,7 @@ export default defineConfig({
               { text: 'ccREL', link: '/reference/namespaces/cc' },
               { text: 'Creative Commons', link: '/reference/namespaces/creativecommons' },
               { text: 'FeedPress', link: '/reference/namespaces/feedpress' },
+              { text: 'OpenSearch', link: '/reference/namespaces/opensearch' },
               { text: 'YouTube', link: '/reference/namespaces/yt' },
             ],
           },

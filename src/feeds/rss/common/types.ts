@@ -9,6 +9,7 @@ import type { FeedpressNs } from '../../../namespaces/feedpress/common/types.js'
 import type { GeorssNs } from '../../../namespaces/georss/common/types.js'
 import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
+import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
 import type { PodcastNs } from '../../../namespaces/podcast/common/types.js'
 import type { PscNs } from '../../../namespaces/psc/common/types.js'
 import type { RawvoiceNs } from '../../../namespaces/rawvoice/common/types.js'
@@ -136,6 +137,7 @@ export namespace Rss {
     dcterms?: DctermsNs.ItemOrFeed<TDate>
     creativeCommons?: CreativecommonsNs.ItemOrFeed
     feedpress?: FeedpressNs.Feed
+    opensearch?: OpenSearchNs.Feed
     sourceNs?: SourceNs.Feed
     rawvoice?: RawvoiceNs.Feed<TDate>
     spotify?: SpotifyNs.Feed
