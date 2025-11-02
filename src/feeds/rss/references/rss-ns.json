@@ -892,10 +892,6 @@
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
       },
-      "admin": {
-        "errorReportsTo": "mailto:admin@example.com",
-        "generatorAgent": "http://www.example.com/generator/1.0"
-      },
       "pingback": {
         "server": "https://example.com/xmlrpc.php",
         "target": "https://referenced-blog.com/article"

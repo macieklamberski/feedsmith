@@ -789,31 +789,6 @@ describe('generateEntry', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
-  it('should generate entry with admin namespace properties', () => {
-    const value = {
-      id: 'https://example.com/entry/1',
-      title: 'Entry with Admin namespace',
-      updated: new Date('2023-03-15T12:00:00Z'),
-      admin: {
-        errorReportsTo: 'mailto:admin@example.com',
-        generatorAgent: 'http://www.example.com/generator/1.0',
-      },
-    }
-    const expected = {
-      id: 'https://example.com/entry/1',
-      title: 'Entry with Admin namespace',
-      updated: '2023-03-15T12:00:00.000Z',
-      'admin:errorReportsTo': {
-        '@rdf:resource': 'mailto:admin@example.com',
-      },
-      'admin:generatorAgent': {
-        '@rdf:resource': 'http://www.example.com/generator/1.0',
-      },
-    }
-
-    expect(generateEntry(value)).toEqual(expected)
-  })
-
   it('should generate entry with trackback namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',

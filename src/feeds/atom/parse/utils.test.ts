@@ -1161,29 +1161,6 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
-  it('should handle admin namespace', () => {
-    const value = {
-      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
-      title: { '#text': 'Example Entry' },
-      'admin:errorreportsto': {
-        '@rdf:resource': 'mailto:admin@example.com',
-      },
-      'admin:generatoragent': {
-        '@rdf:resource': 'http://www.example.com/generator/1.0',
-      },
-    }
-    const expected = {
-      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
-      admin: {
-        errorReportsTo: 'mailto:admin@example.com',
-        generatorAgent: 'http://www.example.com/generator/1.0',
-      },
-    }
-
-    expect(parseEntry(value)).toEqual(expected)
-  })
-
   it('should handle yt namespace', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },

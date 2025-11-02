@@ -489,10 +489,6 @@
     <pingback:server>https://example.com/xmlrpc.php</pingback:server>
     <pingback:target>https://referenced-blog.com/article</pingback:target>
 
-    <!-- Admin Namespace: Entry Level Tags -->
-    <admin:errorReportsTo rdf:resource="mailto:admin@example.com"/>
-    <admin:generatorAgent rdf:resource="http://www.example.com/generator/1.0"/>
-
     <!-- Trackback Namespace: Entry Level Tags -->
     <trackback:ping>https://example.com/trackback/123</trackback:ping>
     <trackback:about>https://blog1.com/trackback/456</trackback:about>

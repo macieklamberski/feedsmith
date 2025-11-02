@@ -730,27 +730,6 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
-  it('should generate item with admin namespace properties', () => {
-    const value = {
-      title: 'Item with admin namespace',
-      admin: {
-        errorReportsTo: 'mailto:admin@example.com',
-        generatorAgent: 'http://www.example.com/generator/1.0',
-      },
-    }
-    const expected = {
-      title: 'Item with admin namespace',
-      'admin:errorReportsTo': {
-        '@rdf:resource': 'mailto:admin@example.com',
-      },
-      'admin:generatorAgent': {
-        '@rdf:resource': 'http://www.example.com/generator/1.0',
-      },
-    }
-
-    expect(generateItem(value)).toEqual(expected)
-  })
-
   it('should generate item with pingback namespace properties', () => {
     const value = {
       title: 'Item with pingback namespace',

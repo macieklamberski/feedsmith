@@ -844,12 +844,8 @@ describe('generate', () => {
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: 'Entry with Admin',
+          title: 'Entry without Admin',
           updated: new Date('2024-01-05T10:30:00Z'),
-          admin: {
-            errorReportsTo: 'mailto:admin@example.com',
-            generatorAgent: 'http://www.example.com/generator/1.0',
-          },
         },
       ],
     }
@@ -862,10 +858,8 @@ describe('generate', () => {
   <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
   <entry>
     <id>https://example.com/entry/1</id>
-    <title>Entry with Admin</title>
+    <title>Entry without Admin</title>
     <updated>2024-01-05T10:30:00.000Z</updated>
-    <admin:errorReportsTo rdf:resource="mailto:admin@example.com"/>
-    <admin:generatorAgent rdf:resource="http://www.example.com/generator/1.0"/>
   </entry>
 </feed>
 `

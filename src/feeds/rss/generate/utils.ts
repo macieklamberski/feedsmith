@@ -204,7 +204,6 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
     ...generateThrItem(item.thr),
     ...generateDctermsItemOrFeed(item.dcterms),
     ...generateWfwItem(item.wfw),
-    ...generateAdminFeed(item.admin),
     ...generateSourceItem(item.sourceNs),
     ...generateRawVoiceItem(item.rawvoice),
     ...generateSpotifyItem(item.spotify),

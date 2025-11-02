@@ -185,7 +185,6 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
     ...generateCreativecommonsItemOrFeed(entry.creativeCommons),
     ...generateWfwItem(entry.wfw),
     ...generateYtItem(entry.yt),
-    ...generateAdminFeed(entry.admin),
     ...generatePingbackItem(entry.pingback),
     ...generateTrackbackItem(entry.trackback),
   }

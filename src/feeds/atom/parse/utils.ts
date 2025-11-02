@@ -240,7 +240,6 @@ export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options)
       : undefined,
     wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
-    admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces?.has('trackback') ? retrieveTrackbackItem(value) : undefined,
   }

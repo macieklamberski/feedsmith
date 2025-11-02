@@ -599,10 +599,6 @@
       <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
       <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
 
-      <!-- Admin Namespace: Item Level Tags -->
-      <admin:errorReportsTo rdf:resource="mailto:admin@example.com"/>
-      <admin:generatorAgent rdf:resource="http://www.example.com/generator/1.0"/>
-
       <!-- Pingback Namespace: Item Level Tags -->
       <pingback:server>https://example.com/xmlrpc.php</pingback:server>
       <pingback:target>https://referenced-blog.com/article</pingback:target>

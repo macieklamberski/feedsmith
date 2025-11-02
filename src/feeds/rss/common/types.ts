@@ -100,7 +100,6 @@ export namespace Rss {
     thr?: ThrNs.Item
     dcterms?: DctermsNs.ItemOrFeed<TDate>
     wfw?: WfwNs.Item
-    admin?: AdminNs.Feed
     sourceNs?: SourceNs.Item
     rawvoice?: RawvoiceNs.Item
     spotify?: SpotifyNs.Item

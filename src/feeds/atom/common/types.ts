@@ -102,7 +102,6 @@ export namespace Atom {
     creativeCommons?: CreativecommonsNs.ItemOrFeed
     wfw?: WfwNs.Item
     yt?: YtNs.Item
-    admin?: AdminNs.Feed
     pingback?: PingbackNs.Item
     trackback?: TrackbackNs.Item
   }
