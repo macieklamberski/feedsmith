@@ -696,6 +696,10 @@
         "server": "https://example.com/xmlrpc.php",
         "target": "https://referenced-blog.com/article"
       },
+      "trackback": {
+        "ping": "https://example.com/trackback/123",
+        "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
+      },
       "creativeCommons": {
         "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]
       },

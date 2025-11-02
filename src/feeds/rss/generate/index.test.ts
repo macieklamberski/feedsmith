@@ -486,6 +486,38 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with trackback namespace', () => {
+    const value = {
+      title: 'Feed with trackback namespace',
+      description: 'Test feed with Trackback namespace',
+      items: [
+        {
+          title: 'First item',
+          trackback: {
+            ping: 'https://example.com/trackback/123',
+            abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+  <channel>
+    <title>Feed with trackback namespace</title>
+    <description>Test feed with Trackback namespace</description>
+    <item>
+      <title>First item</title>
+      <trackback:ping>https://example.com/trackback/123</trackback:ping>
+      <trackback:about>https://blog1.com/trackback/456</trackback:about>
+      <trackback:about>https://blog2.com/trackback/789</trackback:about>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with source namespace', () => {
     const value = {
       title: 'Feed with source namespace',
