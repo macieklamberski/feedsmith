@@ -22,6 +22,7 @@ import { retrieveItemOrFeed as retrieveCreativecommonsItemOrFeed } from '../../.
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
 import { retrieveFeed as retrieveFeedPressFeed } from '../../../namespaces/feedpress/parse/utils.js'
+import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces/geo/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
   retrieveFeed as retrieveItunesFeed,
@@ -182,6 +183,7 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
     psc: namespaces.has('psc') ? retrievePscItem(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
@@ -228,6 +230,7 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
     podcast: namespaces.has('podcast') ? retrievePodcastFeed(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     creativeCommons: namespaces.has('creativecommons')
       ? retrieveCreativecommonsItemOrFeed(value)

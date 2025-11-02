@@ -351,6 +351,29 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with geo namespace', () => {
+    const value = {
+      id: 'http://example.com/feed',
+      title: 'Example City Feed',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      geo: {
+        lat: 37.7749,
+        long: -122.4194,
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
+  <id>http://example.com/feed</id>
+  <title>Example City Feed</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <geo:lat>37.7749</geo:lat>
+  <geo:long>-122.4194</geo:long>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with dcterms namespace', () => {
     const value = {
       id: 'https://example.com/feed',

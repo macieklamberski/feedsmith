@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:psc="http://podlove.org/simple-chapters" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:cc="http://creativecommons.org/ns#" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:psc="http://podlove.org/simple-chapters" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:cc="http://creativecommons.org/ns#" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
   <id>example-feed</id>
   <title>Example Feed</title>
 
@@ -158,6 +158,11 @@
   <georss:elev>360</georss:elev>
   <georss:floor>4</georss:floor>
   <georss:radius>50000</georss:radius>
+
+  <!-- W3C Basic Geo Namespace: Feed Level Tags -->
+  <geo:lat>37.7749</geo:lat>
+  <geo:long>-122.4194</geo:long>
+  <geo:alt>10.5</geo:alt>
 
   <!-- Dublin Core Terms Namespace: Feed Level Tags -->
   <dcterms:abstract>This is an abstract of the feed content</dcterms:abstract>
@@ -456,6 +461,11 @@
     <media:status state="active" reason="approved"/>
     <media:price type="package" info="full access" price="9.99" currency="USD"/>
     <media:price type="subscription" info="monthly" price="4.99" currency="USD"/>
+
+    <!-- W3C Basic Geo Namespace: Entry Level Tags -->
+    <geo:lat>37.8199</geo:lat>
+    <geo:long>-122.4783</geo:long>
+    <geo:alt>67.0</geo:alt>
 
     <!-- GeoRSS-Simple Namespace: Entry Level Tags -->
     <georss:point>37.78 -122.42</georss:point>

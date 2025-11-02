@@ -90,6 +90,7 @@ export default defineConfig({
               { text: 'Podlove Simple Chapters', link: '/reference/namespaces/psc' },
               { text: 'Spotify', link: '/reference/namespaces/spotify' },
               { text: 'Media RSS', link: '/reference/namespaces/media' },
+              { text: 'W3C Basic Geo', link: '/reference/namespaces/geo' },
               { text: 'GeoRSS-Simple', link: '/reference/namespaces/georss' },
               { text: 'Atom Threading', link: '/reference/namespaces/thr' },
               { text: 'Dublin Core Terms', link: '/reference/namespaces/dcterms' },

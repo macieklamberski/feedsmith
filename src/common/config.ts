@@ -130,6 +130,10 @@ export const namespaceUris = {
     'https://www.georss.org/georss',
     'https://www.georss.org/georss/',
   ],
+  geo: [
+    'http://www.w3.org/2003/01/geo/wgs84_pos#', // Official URI.
+    'https://www.w3.org/2003/01/geo/wgs84_pos#',
+  ],
   thr: [
     'http://purl.org/syndication/thread/1.0', // Official URI.
     'https://purl.org/syndication/thread/1.0',

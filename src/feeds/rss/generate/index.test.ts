@@ -420,6 +420,62 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with geo namespace', () => {
+    const value = {
+      title: 'Location Feed',
+      description: 'Feed with W3C Basic Geo',
+      geo: {
+        lat: 37.7749,
+        long: -122.4194,
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
+  <channel>
+    <title>Location Feed</title>
+    <description>Feed with W3C Basic Geo</description>
+    <geo:lat>37.7749</geo:lat>
+    <geo:long>-122.4194</geo:long>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS item with geo coordinates including altitude', () => {
+    const value = {
+      title: 'Altitude Feed',
+      description: 'High altitude locations',
+      items: [
+        {
+          title: 'High Altitude Location',
+          geo: {
+            lat: 28.0026,
+            long: 86.8528,
+            alt: 5364,
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
+  <channel>
+    <title>Altitude Feed</title>
+    <description>High altitude locations</description>
+    <item>
+      <title>High Altitude Location</title>
+      <geo:lat>28.0026</geo:lat>
+      <geo:long>86.8528</geo:long>
+      <geo:alt>5364</geo:alt>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with wfw namespace', () => {
     const value = {
       title: 'Feed with wfw namespace',
