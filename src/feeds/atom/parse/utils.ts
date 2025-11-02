@@ -20,6 +20,10 @@ import {
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
+import {
+  retrieveFeed as retrievePingbackFeed,
+  retrieveItem as retrievePingbackItem,
+} from '../../../namespaces/pingback/parse/utils.js'
 import { retrieveItem as retrievePscItem } from '../../../namespaces/psc/parse/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
@@ -234,6 +238,7 @@ export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options)
       : undefined,
     wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
+    pingback: namespaces?.has('pingback') ? retrievePingbackItem(value) : undefined,
   }
 
   return trimObject(entry)
@@ -271,6 +276,7 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) =
       ? retrieveCreativecommonsItemOrFeed(value)
       : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
+    pingback: namespaces?.has('pingback') ? retrievePingbackFeed(value) : undefined,
   }
 
   return trimObject(feed)

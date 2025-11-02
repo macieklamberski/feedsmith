@@ -793,6 +793,45 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with pingback namespace', () => {
+    const value = {
+      id: 'https://example.com/blog',
+      title: 'Blog with Pingback',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      pingback: {
+        to: 'https://example.com/pingback-service',
+      },
+      entries: [
+        {
+          id: 'https://example.com/post/1',
+          title: 'Post with Pingback',
+          updated: new Date('2024-01-05T10:30:00Z'),
+          pingback: {
+            server: 'https://example.com/xmlrpc.php',
+            target: 'https://referenced-blog.com/article',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/">
+  <id>https://example.com/blog</id>
+  <title>Blog with Pingback</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <pingback:to>https://example.com/pingback-service</pingback:to>
+  <entry>
+    <id>https://example.com/post/1</id>
+    <title>Post with Pingback</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+    <pingback:server>https://example.com/xmlrpc.php</pingback:server>
+    <pingback:target>https://referenced-blog.com/article</pingback:target>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with YouTube namespace', () => {
     const value = {
       id: 'yt:channel:UCuAXFkgsw1L7xaCfnd5JJOw',

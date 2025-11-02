@@ -745,6 +745,50 @@ describe('generateEntry', () => {
     expect(generateEntry(value)).toEqual(expected)
   })
 
+  it('should generate entry with pingback namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Pingback namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      pingback: {
+        server: 'https://example.com/xmlrpc.php',
+        target: 'https://referenced-blog.com/article',
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Pingback namespace',
+      updated: '2023-03-15T12:00:00.000Z',
+      'pingback:server': 'https://example.com/xmlrpc.php',
+      'pingback:target': 'https://referenced-blog.com/article',
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
+  it('should generate feed with pingback namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Pingback namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      pingback: {
+        to: 'https://example.com/pingback-service',
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:pingback': 'http://madskills.com/public/xml/rss/module/pingback/',
+        id: 'https://example.com/feed',
+        title: 'Feed with Pingback namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        'pingback:to': 'https://example.com/pingback-service',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate entry with ccREL namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',

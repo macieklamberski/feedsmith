@@ -21,6 +21,10 @@ import {
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
+import {
+  generateFeed as generatePingbackFeed,
+  generateItem as generatePingbackItem,
+} from '../../../namespaces/pingback/generate/utils.js'
 import { generateItem as generatePscItem } from '../../../namespaces/psc/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
@@ -179,6 +183,7 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
     ...generateCreativecommonsItemOrFeed(entry.creativeCommons),
     ...generateWfwItem(entry.wfw),
     ...generateYtItem(entry.yt),
+    ...generatePingbackItem(entry.pingback),
   }
 }
 
@@ -239,6 +244,7 @@ export const generateFeed: GenerateUtil<Atom.Feed<DateLike>> = (feed, options) =
     ...generateDctermsItemOrFeed(feed.dcterms),
     ...generateCreativecommonsItemOrFeed(feed.creativeCommons),
     ...generateYtFeed(feed.yt),
+    ...generatePingbackFeed(feed.pingback),
     ...valueEntries,
   }
 

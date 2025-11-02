@@ -29,6 +29,10 @@ import {
 } from '../../../namespaces/itunes/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
 import {
+  retrieveFeed as retrievePingbackFeed,
+  retrieveItem as retrievePingbackItem,
+} from '../../../namespaces/pingback/parse/utils.js'
+import {
   retrieveFeed as retrievePodcastFeed,
   retrieveItem as retrievePodcastItem,
 } from '../../../namespaces/podcast/parse/utils.js'
@@ -188,6 +192,7 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
     sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceItem(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyItem(value) : undefined,
+    pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
   }
 
   return trimObject(item)
@@ -236,6 +241,7 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
     sourceNs: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceFeed(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(value) : undefined,
+    pingback: namespaces.has('pingback') ? retrievePingbackFeed(value) : undefined,
   }
 
   return trimObject(feed)
