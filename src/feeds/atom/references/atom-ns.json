@@ -698,7 +698,7 @@
       },
       "trackback": {
         "ping": "https://example.com/trackback/123",
-        "about": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
+        "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
       },
       "creativeCommons": {
         "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]

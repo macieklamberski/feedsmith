@@ -844,7 +844,7 @@ describe('generate', () => {
           updated: new Date('2024-01-05T10:30:00Z'),
           trackback: {
             ping: 'https://example.com/trackback/123',
-            about: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+            abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
           },
         },
       ],

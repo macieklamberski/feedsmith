@@ -9,7 +9,7 @@ describe('retrieveItem', () => {
     }
     const expected = {
       ping: 'https://example.com/trackback/123',
-      about: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -31,7 +31,7 @@ describe('retrieveItem', () => {
       'trackback:about': ['https://blog1.com/trackback/456'],
     }
     const expected = {
-      about: ['https://blog1.com/trackback/456'],
+      abouts: ['https://blog1.com/trackback/456'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -42,7 +42,7 @@ describe('retrieveItem', () => {
       'trackback:about': 'https://blog1.com/trackback/456',
     }
     const expected = {
-      about: ['https://blog1.com/trackback/456'],
+      abouts: ['https://blog1.com/trackback/456'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -57,7 +57,7 @@ describe('retrieveItem', () => {
       ],
     }
     const expected = {
-      about: [
+      abouts: [
         'https://blog1.com/trackback/456',
         'https://blog2.com/trackback/789',
         'https://blog3.com/trackback/abc',
@@ -86,7 +86,7 @@ describe('retrieveItem', () => {
       ],
     }
     const expected = {
-      about: ['https://blog1.com/track?id=1&key=abc', 'https://blog2.com/track?id=2&key=def'],
+      abouts: ['https://blog1.com/track?id=1&key=abc', 'https://blog2.com/track?id=2&key=def'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -111,7 +111,7 @@ describe('retrieveItem', () => {
       ],
     }
     const expected = {
-      about: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -123,7 +123,7 @@ describe('retrieveItem', () => {
       'trackback:about': ['https://blog1.com/trackback/456'],
     }
     const expected = {
-      about: ['https://blog1.com/trackback/456'],
+      abouts: ['https://blog1.com/trackback/456'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -134,7 +134,7 @@ describe('retrieveItem', () => {
       'trackback:about': ['', 'https://blog1.com/trackback/456', ''],
     }
     const expected = {
-      about: ['https://blog1.com/trackback/456'],
+      abouts: ['https://blog1.com/trackback/456'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -179,7 +179,7 @@ describe('retrieveItem', () => {
       ],
     }
     const expected = {
-      about: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -193,7 +193,7 @@ describe('retrieveItem', () => {
       ],
     }
     const expected = {
-      about: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -215,7 +215,7 @@ describe('retrieveItem', () => {
     }
     const expected = {
       ping: 'https://example.com/trackback/123',
-      about: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -244,7 +244,7 @@ describe('retrieveItem', () => {
     }
     const expected = {
       ping: 'https://example.com/trackback/123',
-      about: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -263,7 +263,7 @@ describe('retrieveItem', () => {
       ],
     }
     const expected = {
-      about: [
+      abouts: [
         'https://blog1.com/trackback/456',
         'https://blog2.com/trackback/789',
         'https://blog3.com/trackback/abc',
@@ -287,7 +287,7 @@ describe('retrieveItem', () => {
       ],
     }
     const expected = {
-      about: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)

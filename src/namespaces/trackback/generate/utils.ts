@@ -9,7 +9,7 @@ export const generateItem: GenerateUtil<TrackbackNs.Item> = (item) => {
 
   const value = {
     'trackback:ping': generateCdataString(item.ping),
-    'trackback:about': trimArray(item.about, generateCdataString),
+    'trackback:about': trimArray(item.abouts, generateCdataString),
   }
 
   return trimObject(value)

@@ -752,7 +752,7 @@ describe('generateItem', () => {
       title: 'Item with trackback namespace',
       trackback: {
         ping: 'https://example.com/trackback/123',
-        about: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+        abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
       },
     }
     const expected = {

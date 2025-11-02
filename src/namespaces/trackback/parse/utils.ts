@@ -18,7 +18,7 @@ export const retrieveItem: ParsePartialUtil<TrackbackNs.Item> = (value) => {
     ping: parseSingularOf(value['trackback:ping'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
     ),
-    about: parseArrayOf(value['trackback:about'], (value) =>
+    abouts: parseArrayOf(value['trackback:about'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
     ),
   }

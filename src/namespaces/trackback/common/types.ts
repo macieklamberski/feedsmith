@@ -2,7 +2,7 @@
 export namespace TrackbackNs {
   export type Item = {
     ping?: string
-    about?: Array<string>
+    abouts?: Array<string>
   }
 }
 // #endregion reference

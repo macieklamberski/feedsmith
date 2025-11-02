@@ -796,7 +796,7 @@ describe('generateEntry', () => {
       updated: new Date('2023-03-15T12:00:00Z'),
       trackback: {
         ping: 'https://example.com/trackback/123',
-        about: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+        abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
       },
     }
     const expected = {

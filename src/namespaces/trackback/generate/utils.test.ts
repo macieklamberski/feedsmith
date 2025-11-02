@@ -5,7 +5,7 @@ describe('generateItem', () => {
   it('should generate item with all properties', () => {
     const value = {
       ping: 'https://example.com/trackback/123',
-      about: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
     }
     const expected = {
       'trackback:ping': 'https://example.com/trackback/123',
@@ -28,7 +28,7 @@ describe('generateItem', () => {
 
   it('should generate item with only about property', () => {
     const value = {
-      about: ['https://blog1.com/trackback/456'],
+      abouts: ['https://blog1.com/trackback/456'],
     }
     const expected = {
       'trackback:about': ['https://blog1.com/trackback/456'],
@@ -39,7 +39,7 @@ describe('generateItem', () => {
 
   it('should generate item with single about value', () => {
     const value = {
-      about: ['https://blog1.com/trackback/456'],
+      abouts: ['https://blog1.com/trackback/456'],
     }
     const expected = {
       'trackback:about': ['https://blog1.com/trackback/456'],
@@ -50,7 +50,7 @@ describe('generateItem', () => {
 
   it('should generate item with multiple about values', () => {
     const value = {
-      about: [
+      abouts: [
         'https://blog1.com/trackback/456',
         'https://blog2.com/trackback/789',
         'https://blog3.com/trackback/abc',
@@ -80,7 +80,7 @@ describe('generateItem', () => {
 
   it('should handle special characters in about array', () => {
     const value = {
-      about: ['https://blog1.com/track?id=1&key=abc', 'https://blog2.com/track?id=2&key=def'],
+      abouts: ['https://blog1.com/track?id=1&key=abc', 'https://blog2.com/track?id=2&key=def'],
     }
     const expected = {
       'trackback:about': [
@@ -95,7 +95,7 @@ describe('generateItem', () => {
   it('should handle empty strings', () => {
     const value = {
       ping: '',
-      about: ['https://blog1.com/trackback/456'],
+      abouts: ['https://blog1.com/trackback/456'],
     }
     const expected = {
       'trackback:about': ['https://blog1.com/trackback/456'],
@@ -106,7 +106,7 @@ describe('generateItem', () => {
 
   it('should handle empty strings in about array', () => {
     const value = {
-      about: ['', 'https://blog1.com/trackback/456', ''],
+      abouts: ['', 'https://blog1.com/trackback/456', ''],
     }
     const expected = {
       'trackback:about': ['https://blog1.com/trackback/456'],
@@ -125,7 +125,7 @@ describe('generateItem', () => {
 
   it('should handle whitespace-only strings in about array', () => {
     const value = {
-      about: ['   ', '  ', '\t'],
+      abouts: ['   ', '  ', '\t'],
     }
 
     expect(generateItem(value)).toBeUndefined()
@@ -149,7 +149,7 @@ describe('generateItem', () => {
 
   it('should handle mixed valid and invalid values in about array', () => {
     const value = {
-      about: ['https://blog1.com/trackback/456', '', '   ', 'https://blog2.com/trackback/789'],
+      abouts: ['https://blog1.com/trackback/456', '', '   ', 'https://blog2.com/trackback/789'],
     }
     const expected = {
       'trackback:about': ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
@@ -161,7 +161,7 @@ describe('generateItem', () => {
   it('should handle empty about array', () => {
     const value = {
       ping: 'https://example.com/trackback/123',
-      about: [],
+      abouts: [],
     }
     const expected = {
       'trackback:ping': 'https://example.com/trackback/123',
