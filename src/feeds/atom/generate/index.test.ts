@@ -1035,4 +1035,82 @@ describe('generate with lenient mode', () => {
 
     expect(generate(value, { lenient: true })).toEqual(expected)
   })
+
+  it('should generate Atom feed with app namespace', () => {
+    const value = {
+      id: 'http://example.com/blog',
+      title: 'My Blog',
+      updated: new Date('2024-03-15T16:00:00Z'),
+      entries: [
+        {
+          id: 'http://example.com/blog/post/1',
+          title: 'Article',
+          updated: new Date('2024-03-15T16:00:00Z'),
+          app: {
+            edited: new Date('2024-03-15T14:30:00Z'),
+            control: {
+              draft: false,
+            },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:app="http://www.w3.org/2007/app">
+  <id>http://example.com/blog</id>
+  <title>My Blog</title>
+  <updated>2024-03-15T16:00:00.000Z</updated>
+  <entry>
+    <id>http://example.com/blog/post/1</id>
+    <title>Article</title>
+    <updated>2024-03-15T16:00:00.000Z</updated>
+    <app:edited>2024-03-15T14:30:00.000Z</app:edited>
+    <app:control>
+      <app:draft>no</app:draft>
+    </app:control>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom entry with draft status', () => {
+    const value = {
+      id: 'http://example.com/blog',
+      title: 'Blog',
+      updated: new Date('2024-03-15T16:00:00Z'),
+      entries: [
+        {
+          id: 'http://example.com/blog/draft',
+          title: 'Draft Article',
+          updated: new Date('2024-03-15T15:00:00Z'),
+          app: {
+            edited: new Date('2024-03-15T15:00:00Z'),
+            control: {
+              draft: true,
+            },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:app="http://www.w3.org/2007/app">
+  <id>http://example.com/blog</id>
+  <title>Blog</title>
+  <updated>2024-03-15T16:00:00.000Z</updated>
+  <entry>
+    <id>http://example.com/blog/draft</id>
+    <title>Draft Article</title>
+    <updated>2024-03-15T15:00:00.000Z</updated>
+    <app:edited>2024-03-15T15:00:00.000Z</app:edited>
+    <app:control>
+      <app:draft>yes</app:draft>
+    </app:control>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
 })

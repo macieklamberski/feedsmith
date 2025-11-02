@@ -91,6 +91,7 @@ export default defineConfig({
               { text: 'Spotify', link: '/reference/namespaces/spotify' },
               { text: 'Media RSS', link: '/reference/namespaces/media' },
               { text: 'GeoRSS-Simple', link: '/reference/namespaces/georss' },
+              { text: 'Atom Publishing Protocol', link: '/reference/namespaces/app' },
               { text: 'Atom Threading', link: '/reference/namespaces/thr' },
               { text: 'Dublin Core Terms', link: '/reference/namespaces/dcterms' },
               { text: 'Well-Formed Web', link: '/reference/namespaces/wfw' },

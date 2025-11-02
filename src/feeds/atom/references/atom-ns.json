@@ -5,6 +5,12 @@
     {
       "id": "example-entry",
       "title": "Example Entry",
+      "app": {
+        "edited": "2024-03-15T14:30:00.000Z",
+        "control": {
+          "draft": true
+        }
+      },
       "dc": {
         "creator": "Jack Jackson",
         "contributor": "Assistant Editor Mike Thompson",
