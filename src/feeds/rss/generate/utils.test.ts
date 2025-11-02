@@ -1287,7 +1287,7 @@ describe('generateFeed', () => {
     const expected = {
       rss: {
         '@version': '2.0',
-        '@xmlns:pingback': 'http://purl.org/net/pingback/',
+        '@xmlns:pingback': 'http://madskills.com/public/xml/rss/module/pingback/',
         channel: {
           title: 'Feed with pingback namespace',
           description: 'A feed with Pingback service endpoint',

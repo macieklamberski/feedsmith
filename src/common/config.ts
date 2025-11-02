@@ -215,11 +215,7 @@ export const namespaceUris = {
     'https://web.resource.org/cc',
   ],
   pingback: [
-    'http://purl.org/net/pingback/', // Official URI.
-    'https://purl.org/net/pingback/',
-    'http://purl.org/net/pingback',
-    'https://purl.org/net/pingback',
-    'http://madskills.com/public/xml/rss/module/pingback/',
+    'http://madskills.com/public/xml/rss/module/pingback/', // Official URI.
     'https://madskills.com/public/xml/rss/module/pingback/',
     'http://madskills.com/public/xml/rss/module/pingback',
     'https://madskills.com/public/xml/rss/module/pingback',

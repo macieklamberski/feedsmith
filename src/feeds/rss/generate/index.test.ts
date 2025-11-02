@@ -469,7 +469,7 @@ describe('generate', () => {
       ],
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:pingback="http://purl.org/net/pingback/">
+<rss version="2.0" xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/">
   <channel>
     <title>Feed with pingback namespace</title>
     <description>Test feed with Pingback namespace</description>

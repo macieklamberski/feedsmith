@@ -1,7 +1,6 @@
 import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
-  generatePlainString,
   generateTextOrCdataString,
   isNonEmptyString,
   isObject,
@@ -41,8 +40,8 @@ export const generateArchive: GenerateUtil<SourceNs.Archive> = (archive) => {
   const value = {
     'source:url': archive.url,
     'source:startDay': archive.startDay,
-    'source:endDay': generatePlainString(archive.endDay),
-    'source:filename': generatePlainString(archive.filename),
+    'source:endDay': generateCdataString(archive.endDay),
+    'source:filename': generateCdataString(archive.filename),
   }
 
   return trimObject(value)
@@ -73,9 +72,9 @@ export const generateFeed: GenerateUtil<SourceNs.Feed> = (feed) => {
     'source:likes': generateLikes(feed.likes),
     'source:archive': generateArchive(feed.archive),
     'source:subscriptionList': trimArray(feed.subscriptionLists, generateSubscriptionList),
-    'source:cloud': generatePlainString(feed.cloud),
-    'source:blogroll': generatePlainString(feed.blogroll),
-    'source:self': generatePlainString(feed.self),
+    'source:cloud': generateCdataString(feed.cloud),
+    'source:blogroll': generateCdataString(feed.blogroll),
+    'source:self': generateCdataString(feed.self),
   }
 
   return trimObject(value)
@@ -89,8 +88,8 @@ export const generateItem: GenerateUtil<SourceNs.Item> = (item) => {
   const value = {
     'source:markdown': generateCdataString(item.markdown),
     'source:outline': trimArray(item.outlines, generateCdataString),
-    'source:localTime': generatePlainString(item.localTime),
-    'source:linkFull': generatePlainString(item.linkFull),
+    'source:localTime': generateCdataString(item.localTime),
+    'source:linkFull': generateCdataString(item.linkFull),
   }
 
   return trimObject(value)

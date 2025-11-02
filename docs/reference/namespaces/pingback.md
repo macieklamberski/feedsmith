@@ -6,11 +6,11 @@ The Pingback namespace provides a mechanism for notifying websites when content 
   <tbody>
     <tr>
       <th>Namespace URI</th>
-      <td><code>http://purl.org/net/pingback/</code></td>
+      <td><code>http://madskills.com/public/xml/rss/module/pingback/</code></td>
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://www.w3.org/wiki/Pingback" target="_blank">Pingback Specification (W3C Wiki)</a></td>
+      <td>Pingback RSS Module (madskills.com)</td>
     </tr>
     <tr>
       <th>Prefix</th>
