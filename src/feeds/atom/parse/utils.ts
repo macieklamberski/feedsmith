@@ -32,6 +32,7 @@ import {
   retrieveItem as retrieveThrItem,
   retrieveLink as retrieveThrLink,
 } from '../../../namespaces/thr/parse/utils.js'
+import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import {
   retrieveFeed as retrieveYtFeed,
@@ -241,6 +242,7 @@ export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options)
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
     admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackItem(value) : undefined,
+    trackback: namespaces?.has('trackback') ? retrieveTrackbackItem(value) : undefined,
   }
 
   return trimObject(entry)

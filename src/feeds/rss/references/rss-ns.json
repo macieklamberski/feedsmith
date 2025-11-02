@@ -900,6 +900,10 @@
         "server": "https://example.com/xmlrpc.php",
         "target": "https://referenced-blog.com/article"
       },
+      "trackback": {
+        "ping": "https://example.com/trackback/123",
+        "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
+      },
       "sourceNs": {
         "markdown": "# Understanding XML Namespaces - This article explores the power and flexibility of XML namespaces in modern web syndication.",
         "outlines": [

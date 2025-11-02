@@ -778,7 +778,7 @@ describe('generateEntry', () => {
     const expected = {
       feed: {
         '@xmlns': 'http://www.w3.org/2005/Atom',
-        '@xmlns:pingback': 'http://purl.org/net/pingback/',
+        '@xmlns:pingback': 'http://madskills.com/public/xml/rss/module/pingback/',
         id: 'https://example.com/feed',
         title: 'Feed with Pingback namespace',
         updated: '2023-03-15T12:00:00.000Z',
@@ -809,6 +809,27 @@ describe('generateEntry', () => {
       'admin:generatorAgent': {
         '@rdf:resource': 'http://www.example.com/generator/1.0',
       },
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
+  it('should generate entry with trackback namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Trackback namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      trackback: {
+        ping: 'https://example.com/trackback/123',
+        abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Trackback namespace',
+      updated: '2023-03-15T12:00:00.000Z',
+      'trackback:ping': 'https://example.com/trackback/123',
+      'trackback:about': ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
     }
 
     expect(generateEntry(value)).toEqual(expected)

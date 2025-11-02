@@ -700,6 +700,10 @@
         "errorReportsTo": "mailto:admin@example.com",
         "generatorAgent": "http://www.example.com/generator/1.0"
       },
+      "trackback": {
+        "ping": "https://example.com/trackback/123",
+        "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
+      },
       "creativeCommons": {
         "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]
       },

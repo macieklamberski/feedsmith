@@ -53,6 +53,7 @@ import {
 } from '../../../namespaces/spotify/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/parse/utils.js'
+import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import type { Rss } from '../common/types.js'
 
@@ -195,6 +196,7 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
     rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceItem(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyItem(value) : undefined,
     pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
+    trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
   }
 
   return trimObject(item)

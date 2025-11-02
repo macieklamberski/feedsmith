@@ -19,6 +19,7 @@ import type { SourceNs } from '../../../namespaces/source/common/types.js'
 import type { SpotifyNs } from '../../../namespaces/spotify/common/types.js'
 import type { SyNs } from '../../../namespaces/sy/common/types.js'
 import type { ThrNs } from '../../../namespaces/thr/common/types.js'
+import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 
 // #region reference
@@ -104,6 +105,7 @@ export namespace Rss {
     rawvoice?: RawvoiceNs.Item
     spotify?: SpotifyNs.Item
     pingback?: PingbackNs.Item
+    trackback?: TrackbackNs.Item
   } & ({ title: string } | { description: string })
 
   export type Feed<TDate extends DateLike> = {

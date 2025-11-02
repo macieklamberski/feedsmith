@@ -814,7 +814,7 @@ describe('generate', () => {
       ],
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:pingback="http://purl.org/net/pingback/">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/">
   <id>https://example.com/blog</id>
   <title>Blog with Pingback</title>
   <updated>2024-01-10T12:00:00.000Z</updated>
@@ -866,6 +866,42 @@ describe('generate', () => {
     <updated>2024-01-05T10:30:00.000Z</updated>
     <admin:errorReportsTo rdf:resource="mailto:admin@example.com"/>
     <admin:generatorAgent rdf:resource="http://www.example.com/generator/1.0"/>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with trackback namespace', () => {
+    const value = {
+      id: 'https://example.com/blog',
+      title: 'Blog with Trackback',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      entries: [
+        {
+          id: 'https://example.com/post/1',
+          title: 'Post with Trackback',
+          updated: new Date('2024-01-05T10:30:00Z'),
+          trackback: {
+            ping: 'https://example.com/trackback/123',
+            abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+  <id>https://example.com/blog</id>
+  <title>Blog with Trackback</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <entry>
+    <id>https://example.com/post/1</id>
+    <title>Post with Trackback</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+    <trackback:ping>https://example.com/trackback/123</trackback:ping>
+    <trackback:about>https://blog1.com/trackback/456</trackback:about>
+    <trackback:about>https://blog2.com/trackback/789</trackback:about>
   </entry>
 </feed>
 `

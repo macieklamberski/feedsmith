@@ -96,6 +96,7 @@ export default defineConfig({
               { text: 'Well-Formed Web', link: '/reference/namespaces/wfw' },
               { text: 'Admin', link: '/reference/namespaces/admin' },
               { text: 'Pingback', link: '/reference/namespaces/pingback' },
+              { text: 'Trackback', link: '/reference/namespaces/trackback' },
               { text: 'Source', link: '/reference/namespaces/source' },
               { text: 'ccREL', link: '/reference/namespaces/cc' },
               { text: 'Creative Commons', link: '/reference/namespaces/creativecommons' },

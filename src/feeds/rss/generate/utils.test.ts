@@ -768,6 +768,23 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with trackback namespace properties', () => {
+    const value = {
+      title: 'Item with trackback namespace',
+      trackback: {
+        ping: 'https://example.com/trackback/123',
+        abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      },
+    }
+    const expected = {
+      title: 'Item with trackback namespace',
+      'trackback:ping': 'https://example.com/trackback/123',
+      'trackback:about': ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with source namespace properties', () => {
     const value = {
       title: 'Item with source namespace',
@@ -1291,7 +1308,7 @@ describe('generateFeed', () => {
     const expected = {
       rss: {
         '@version': '2.0',
-        '@xmlns:pingback': 'http://purl.org/net/pingback/',
+        '@xmlns:pingback': 'http://madskills.com/public/xml/rss/module/pingback/',
         channel: {
           title: 'Feed with pingback namespace',
           description: 'A feed with Pingback service endpoint',

@@ -53,6 +53,7 @@ import {
 } from '../../../namespaces/spotify/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
+import { generateItem as generateTrackbackItem } from '../../../namespaces/trackback/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
 import type { Rss } from '../common/types.js'
 
@@ -145,7 +146,7 @@ export const generateSkipHours: GenerateUtil<Rss.SkipHours> = (skipHours) => {
 
 export const generateSkipDays: GenerateUtil<Rss.SkipDays> = (skipDays) => {
   const value = {
-    day: trimArray(skipDays, generatePlainString),
+    day: trimArray(skipDays, generateCdataString),
   }
 
   return trimObject(value)
@@ -208,6 +209,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
     ...generateRawVoiceItem(item.rawvoice),
     ...generateSpotifyItem(item.spotify),
     ...generatePingbackItem(item.pingback),
+    ...generateTrackbackItem(item.trackback),
   }
 
   return trimObject(value)

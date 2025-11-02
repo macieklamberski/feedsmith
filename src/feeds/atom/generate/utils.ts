@@ -33,6 +33,7 @@ import {
   generateItem as generateThrItem,
   generateLink as generateThrLink,
 } from '../../../namespaces/thr/generate/utils.js'
+import { generateItem as generateTrackbackItem } from '../../../namespaces/trackback/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
 import {
   generateFeed as generateYtFeed,
@@ -186,6 +187,7 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
     ...generateYtItem(entry.yt),
     ...generateAdminFeed(entry.admin),
     ...generatePingbackItem(entry.pingback),
+    ...generateTrackbackItem(entry.trackback),
   }
 }
 
