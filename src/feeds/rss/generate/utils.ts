@@ -26,6 +26,10 @@ import { generateFeed as generateFeedPressFeed } from '../../../namespaces/feedp
 import { generateItemOrFeed as generateGeoItemOrFeed } from '../../../namespaces/geo/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
+  generateFeed as generateGooglePlayFeed,
+  generateItem as generateGooglePlayItem,
+} from '../../../namespaces/googleplay/generate/utils.js'
+import {
   generateFeed as generateItunesFeed,
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
@@ -201,6 +205,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
     ...generateItunesItem(item.itunes),
     ...generatePodcastItem(item.podcast),
     ...generatePscItem(item.psc),
+    ...generateGooglePlayItem(item.googleplay),
     ...generateMediaItemOrFeed(item.media),
     ...generateGeoRssItemOrFeed(item.georss),
     ...generateGeoItemOrFeed(item.geo),
@@ -248,6 +253,7 @@ export const generateFeed: GenerateUtil<Rss.Feed<DateLike>> = (feed) => {
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
     ...generatePodcastFeed(feed.podcast),
+    ...generateGooglePlayFeed(feed.googleplay),
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateGeoItemOrFeed(feed.geo),

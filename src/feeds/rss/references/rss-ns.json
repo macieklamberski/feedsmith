@@ -102,6 +102,15 @@
         "comments": 177,
         "hitParade": [177, 155, 105, 33, 6, 3, 0]
       },
+      "googleplay": {
+        "author": "Episode Guest Speaker",
+        "description": "A detailed episode about advanced programming techniques",
+        "explicit": false,
+        "block": false,
+        "image": {
+          "href": "https://example.com/images/episode-googleplay-cover.jpg"
+        }
+      },
       "itunes": {
         "duration": 1800,
         "image": "https://example.com/images/episode-cover.jpg",
@@ -1043,6 +1052,18 @@
     "updatePeriod": "hourly",
     "updateFrequency": 1,
     "updateBase": "2000-01-01T12:00:00.000Z"
+  },
+  "googleplay": {
+    "author": "Example Podcast Network",
+    "description": "A comprehensive podcast about technology and programming",
+    "explicit": false,
+    "block": false,
+    "image": {
+      "href": "https://example.com/images/googleplay-cover.jpg"
+    },
+    "newFeedUrl": "https://example.com/new-feed.xml",
+    "email": "contact@example.com",
+    "categories": ["Technology", "Education"]
   },
   "itunes": {
     "categories": [

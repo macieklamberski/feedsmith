@@ -23,6 +23,10 @@ import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namesp
 import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces/geo/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
+  retrieveFeed as retrieveGoogleplayFeed,
+  retrieveItem as retrieveGoogleplayItem,
+} from '../../../namespaces/googleplay/parse/utils.js'
+import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/parse/utils.js'
@@ -241,6 +245,7 @@ export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options)
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
     slash: namespaces?.has('slash') ? retrieveSlashItem(value) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesItem(value) : undefined,
+    googleplay: namespaces?.has('googleplay') ? retrieveGoogleplayItem(value) : undefined,
     psc: namespaces?.has('psc') ? retrievePscItem(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
@@ -284,6 +289,7 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) =
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
     sy: namespaces?.has('sy') ? retrieveSyFeed(value) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesFeed(value) : undefined,
+    googleplay: namespaces?.has('googleplay') ? retrieveGoogleplayFeed(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     geo: namespaces?.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,

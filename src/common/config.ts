@@ -202,6 +202,12 @@ export const namespaceUris = {
     'http://www.youtube.com/xml/schemas/2015/',
     'https://www.youtube.com/xml/schemas/2015/',
   ],
+  googleplay: [
+    'https://www.google.com/schemas/play-podcasts/1.0/', // Official URI.
+    'http://www.google.com/schemas/play-podcasts/1.0/',
+    'https://www.google.com/schemas/play-podcasts/1.0',
+    'http://www.google.com/schemas/play-podcasts/1.0',
+  ],
   spotify: [
     'http://www.spotify.com/ns/rss', // Official URI.
     'https://www.spotify.com/ns/rss',

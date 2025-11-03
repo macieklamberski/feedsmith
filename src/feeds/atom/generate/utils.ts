@@ -24,6 +24,10 @@ import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namesp
 import { generateItemOrFeed as generateGeoItemOrFeed } from '../../../namespaces/geo/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
+  generateFeed as generateGoogleplayFeed,
+  generateItem as generateGoogleplayItem,
+} from '../../../namespaces/googleplay/generate/utils.js'
+import {
   generateFeed as generateItunesFeed,
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
@@ -187,6 +191,7 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
     ...generateDcItemOrFeed(entry.dc),
     ...generateSlashItem(entry.slash),
     ...generateItunesItem(entry.itunes),
+    ...generateGoogleplayItem(entry.googleplay),
     ...generatePscItem(entry.psc),
     ...generateMediaItemOrFeed(entry.media),
     ...generateGeoRssItemOrFeed(entry.georss),
@@ -253,6 +258,7 @@ export const generateFeed: GenerateUtil<Atom.Feed<DateLike>> = (feed, options) =
     ...generateDcItemOrFeed(feed.dc),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
+    ...generateGoogleplayFeed(feed.googleplay),
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateGeoItemOrFeed(feed.geo),

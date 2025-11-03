@@ -88,6 +88,7 @@ export default defineConfig({
               { text: 'Podcast', link: '/reference/namespaces/podcast' },
               { text: 'RawVoice', link: '/reference/namespaces/rawvoice' },
               { text: 'Podlove Simple Chapters', link: '/reference/namespaces/psc' },
+              { text: 'Google Play Podcasts', link: '/reference/namespaces/googleplay' },
               { text: 'Spotify', link: '/reference/namespaces/spotify' },
               { text: 'Media RSS', link: '/reference/namespaces/media' },
               { text: 'W3C Basic Geo', link: '/reference/namespaces/geo' },

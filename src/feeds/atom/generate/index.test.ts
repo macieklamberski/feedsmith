@@ -592,6 +592,47 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with googleplay namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with GooglePlay namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      googleplay: {
+        author: 'Podcast Creator',
+        explicit: false,
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Episode with GooglePlay',
+          updated: new Date('2023-03-15T12:00:00Z'),
+          googleplay: {
+            author: 'Episode Author',
+            explicit: 'clean' as const,
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/">
+  <id>https://example.com/feed</id>
+  <title>Feed with GooglePlay namespace</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <googleplay:author>Podcast Creator</googleplay:author>
+  <googleplay:explicit>no</googleplay:explicit>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Episode with GooglePlay</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
+    <googleplay:author>Episode Author</googleplay:author>
+    <googleplay:explicit>clean</googleplay:explicit>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with multiple namespaces', () => {
     const value = {
       id: 'https://example.com/feed',
