@@ -18,21 +18,21 @@ import {
   generateEntry as generateArxivEntry,
 } from '../../../namespaces/arxiv/generate/utils.js'
 import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
-import { generateItemOrFeed as generateCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
+import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
 import { generateItemOrFeed as generateGeoItemOrFeed } from '../../../namespaces/geo/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
-  generateFeed as generateGoogleplayFeed,
-  generateItem as generateGoogleplayItem,
+  generateFeed as generateGooglePlayFeed,
+  generateItem as generateGooglePlayItem,
 } from '../../../namespaces/googleplay/generate/utils.js'
 import {
   generateFeed as generateItunesFeed,
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
-import { generateFeed as generateOpensearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
+import { generateFeed as generateOpenSearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
 import {
   generateFeed as generatePingbackFeed,
   generateItem as generatePingbackItem,
@@ -191,14 +191,14 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
     ...generateDcItemOrFeed(entry.dc),
     ...generateSlashItem(entry.slash),
     ...generateItunesItem(entry.itunes),
-    ...generateGoogleplayItem(entry.googleplay),
+    ...generateGooglePlayItem(entry.googleplay),
     ...generatePscItem(entry.psc),
     ...generateMediaItemOrFeed(entry.media),
     ...generateGeoRssItemOrFeed(entry.georss),
     ...generateGeoItemOrFeed(entry.geo),
     ...generateThrItem(entry.thr),
     ...generateDctermsItemOrFeed(entry.dcterms),
-    ...generateCreativecommonsItemOrFeed(entry.creativeCommons),
+    ...generateCreativeCommonsItemOrFeed(entry.creativeCommons),
     ...generateWfwItem(entry.wfw),
     ...generateYtItem(entry.yt),
     ...generatePingbackItem(entry.pingback),
@@ -258,13 +258,13 @@ export const generateFeed: GenerateUtil<Atom.Feed<DateLike>> = (feed, options) =
     ...generateDcItemOrFeed(feed.dc),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
-    ...generateGoogleplayFeed(feed.googleplay),
+    ...generateGooglePlayFeed(feed.googleplay),
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateGeoItemOrFeed(feed.geo),
     ...generateDctermsItemOrFeed(feed.dcterms),
-    ...generateCreativecommonsItemOrFeed(feed.creativeCommons),
-    ...generateOpensearchFeed(feed.opensearch),
+    ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
+    ...generateOpenSearchFeed(feed.opensearch),
     ...generateYtFeed(feed.yt),
     ...generateAdminFeed(feed.admin),
     ...generatePingbackFeed(feed.pingback),

@@ -1,5 +1,5 @@
 // #region reference
-export namespace CreativecommonsNs {
+export namespace CreativeCommonsNs {
   export type ItemOrFeed = {
     licenses?: Array<string>
   }

@@ -6,9 +6,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { CreativecommonsNs } from '../common/types.js'
+import type { CreativeCommonsNs } from '../common/types.js'
 
-export const retrieveItemOrFeed: ParsePartialUtil<CreativecommonsNs.ItemOrFeed> = (value) => {
+export const retrieveItemOrFeed: ParsePartialUtil<CreativeCommonsNs.ItemOrFeed> = (value) => {
   if (!isObject(value)) {
     return
   }

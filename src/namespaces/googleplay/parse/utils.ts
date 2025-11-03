@@ -8,9 +8,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { GoogleplayNs } from '../common/types.js'
+import type { GooglePlayNs } from '../common/types.js'
 
-export const parseImage: ParsePartialUtil<GoogleplayNs.Image> = (value) => {
+export const parseImage: ParsePartialUtil<GooglePlayNs.Image> = (value) => {
   if (isObject(value) && value['@href']) {
     const image = {
       href: parseString(value['@href']),
@@ -47,7 +47,7 @@ export const parseExplicit: ParsePartialUtil<boolean | 'clean'> = (value) => {
   return parseYesNoBoolean(value)
 }
 
-export const retrieveItem: ParsePartialUtil<GoogleplayNs.Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<GooglePlayNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -69,7 +69,7 @@ export const retrieveItem: ParsePartialUtil<GoogleplayNs.Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialUtil<GoogleplayNs.Feed> = (value) => {
+export const retrieveFeed: ParsePartialUtil<GooglePlayNs.Feed> = (value) => {
   if (!isObject(value)) {
     return
   }

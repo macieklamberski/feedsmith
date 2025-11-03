@@ -7,9 +7,9 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
-import type { GoogleplayNs } from '../common/types.js'
+import type { GooglePlayNs } from '../common/types.js'
 
-const generateImage: GenerateUtil<GoogleplayNs.Image> = (image) => {
+const generateImage: GenerateUtil<GooglePlayNs.Image> = (image) => {
   if (!isObject(image)) {
     return
   }
@@ -37,7 +37,7 @@ const generateExplicit: GenerateUtil<boolean | 'clean'> = (explicit) => {
   return generateYesNoBoolean(explicit)
 }
 
-export const generateItem: GenerateUtil<GoogleplayNs.Item> = (item) => {
+export const generateItem: GenerateUtil<GooglePlayNs.Item> = (item) => {
   if (!isObject(item)) {
     return
   }
@@ -51,7 +51,7 @@ export const generateItem: GenerateUtil<GoogleplayNs.Item> = (item) => {
   })
 }
 
-export const generateFeed: GenerateUtil<GoogleplayNs.Feed> = (feed) => {
+export const generateFeed: GenerateUtil<GooglePlayNs.Feed> = (feed) => {
   if (!isObject(feed)) {
     return
   }

@@ -1,5 +1,5 @@
 // #region reference
-export namespace GeorssNs {
+export namespace GeoRssNs {
   export type Point = {
     lat: number
     lng: number

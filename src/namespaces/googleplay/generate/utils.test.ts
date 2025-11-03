@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import type { GoogleplayNs } from '../common/types.js'
+import type { GooglePlayNs } from '../common/types.js'
 import { generateFeed, generateItem } from './utils.js'
 
 describe('generateItem', () => {
@@ -34,7 +34,7 @@ describe('generateItem', () => {
   })
 
   it('should generate explicit="clean" value', () => {
-    const value: GoogleplayNs.Item = {
+    const value: GooglePlayNs.Item = {
       explicit: 'clean',
       author: 'John Doe',
     }
@@ -110,7 +110,7 @@ describe('generateFeed', () => {
   })
 
   it('should generate explicit="clean" value', () => {
-    const value: GoogleplayNs.Feed = {
+    const value: GooglePlayNs.Feed = {
       explicit: 'clean',
       author: 'Podcast Author',
     }

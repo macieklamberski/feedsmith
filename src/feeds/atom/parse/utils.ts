@@ -17,21 +17,21 @@ import {
   retrieveEntry as retrieveArxivEntry,
 } from '../../../namespaces/arxiv/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
-import { retrieveItemOrFeed as retrieveCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
+import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces/geo/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
-  retrieveFeed as retrieveGoogleplayFeed,
-  retrieveItem as retrieveGoogleplayItem,
+  retrieveFeed as retrieveGooglePlayFeed,
+  retrieveItem as retrieveGooglePlayItem,
 } from '../../../namespaces/googleplay/parse/utils.js'
 import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
-import { retrieveFeed as retrieveOpensearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
+import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
 import {
   retrieveFeed as retrievePingbackFeed,
   retrieveItem as retrievePingbackItem,
@@ -245,7 +245,7 @@ export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options)
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
     slash: namespaces?.has('slash') ? retrieveSlashItem(value) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesItem(value) : undefined,
-    googleplay: namespaces?.has('googleplay') ? retrieveGoogleplayItem(value) : undefined,
+    googleplay: namespaces?.has('googleplay') ? retrieveGooglePlayItem(value) : undefined,
     psc: namespaces?.has('psc') ? retrievePscItem(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
@@ -253,7 +253,7 @@ export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options)
     thr: namespaces?.has('thr') ? retrieveThrItem(value) : undefined,
     dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     creativeCommons: namespaces?.has('creativecommons')
-      ? retrieveCreativecommonsItemOrFeed(value)
+      ? retrieveCreativeCommonsItemOrFeed(value)
       : undefined,
     wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
@@ -289,15 +289,15 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) =
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
     sy: namespaces?.has('sy') ? retrieveSyFeed(value) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesFeed(value) : undefined,
-    googleplay: namespaces?.has('googleplay') ? retrieveGoogleplayFeed(value) : undefined,
+    googleplay: namespaces?.has('googleplay') ? retrieveGooglePlayFeed(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     geo: namespaces?.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     creativeCommons: namespaces?.has('creativecommons')
-      ? retrieveCreativecommonsItemOrFeed(value)
+      ? retrieveCreativeCommonsItemOrFeed(value)
       : undefined,
-    opensearch: namespaces?.has('opensearch') ? retrieveOpensearchFeed(value) : undefined,
+    opensearch: namespaces?.has('opensearch') ? retrieveOpenSearchFeed(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
     admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackFeed(value) : undefined,
