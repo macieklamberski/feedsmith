@@ -81,7 +81,6 @@ export const parseItem: ParsePartialUtil<Rdf.Item<string>> = (value) => {
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
-    admin: namespaces.has('admin') ? retrieveAdminFeed(value) : undefined,
   }
 
   return trimObject(item)

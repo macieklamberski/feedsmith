@@ -37,7 +37,6 @@ export namespace Rdf {
     georss?: GeorssNs.ItemOrFeed
     dcterms?: DctermsNs.ItemOrFeed<TDate>
     wfw?: WfwNs.Item
-    admin?: AdminNs.Feed
   }
 
   export type Feed<TDate extends DateLike> = {

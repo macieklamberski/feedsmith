@@ -429,9 +429,5 @@
     <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
     <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
-
-    <!-- Admin Namespace: Item Level Tags -->
-    <admin:errorReportsTo rdf:resource="mailto:admin@example.com"/>
-    <admin:generatorAgent rdf:resource="http://www.example.com/generator/1.0"/>
   </item>
 </rdf:RDF>

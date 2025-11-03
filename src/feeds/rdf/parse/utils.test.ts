@@ -505,29 +505,6 @@ describe('parseItem', () => {
 
     expect(parseItem(value)).toEqual(expected)
   })
-
-  it('should handle admin namespace', () => {
-    const value = {
-      title: { '#text': 'Example Entry' },
-      link: { '#text': 'http://example.com' },
-      'admin:errorreportsto': {
-        '@rdf:resource': 'mailto:admin@example.com',
-      },
-      'admin:generatoragent': {
-        '@rdf:resource': 'http://www.example.com/generator/1.0',
-      },
-    }
-    const expected = {
-      title: 'Example Entry',
-      link: 'http://example.com',
-      admin: {
-        errorReportsTo: 'mailto:admin@example.com',
-        generatorAgent: 'http://www.example.com/generator/1.0',
-      },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
 })
 
 describe('retrieveItems', () => {
