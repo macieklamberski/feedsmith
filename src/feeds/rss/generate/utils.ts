@@ -147,7 +147,7 @@ export const generateSkipHours: GenerateUtil<Rss.SkipHours> = (skipHours) => {
 
 export const generateSkipDays: GenerateUtil<Rss.SkipDays> = (skipDays) => {
   const value = {
-    day: trimArray(skipDays, generatePlainString),
+    day: trimArray(skipDays, generateCdataString),
   }
 
   return trimObject(value)

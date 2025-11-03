@@ -730,6 +730,40 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with pingback namespace properties', () => {
+    const value = {
+      title: 'Item with pingback namespace',
+      pingback: {
+        server: 'https://example.com/xmlrpc.php',
+        target: 'https://referenced-blog.com/article',
+      },
+    }
+    const expected = {
+      title: 'Item with pingback namespace',
+      'pingback:server': 'https://example.com/xmlrpc.php',
+      'pingback:target': 'https://referenced-blog.com/article',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should generate item with trackback namespace properties', () => {
+    const value = {
+      title: 'Item with trackback namespace',
+      trackback: {
+        ping: 'https://example.com/trackback/123',
+        abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      },
+    }
+    const expected = {
+      title: 'Item with trackback namespace',
+      'trackback:ping': 'https://example.com/trackback/123',
+      'trackback:about': ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with source namespace properties', () => {
     const value = {
       title: 'Item with source namespace',
@@ -1338,6 +1372,59 @@ describe('generateFeed', () => {
           description: 'A feed with FeedPress properties',
           'feedpress:link': 'https://feed.press/example',
           'feedpress:newsletterId': '12345',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate pingback namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with pingback namespace',
+      description: 'A feed with Pingback service endpoint',
+      pingback: {
+        to: 'https://example.com/pingback-service',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:pingback': 'http://madskills.com/public/xml/rss/module/pingback/',
+        channel: {
+          title: 'Feed with pingback namespace',
+          description: 'A feed with Pingback service endpoint',
+          'pingback:to': 'https://example.com/pingback-service',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate admin namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with admin namespace',
+      description: 'A feed with admin properties',
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:admin': 'http://webns.net/mvcb/',
+        '@xmlns:rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        channel: {
+          title: 'Feed with admin namespace',
+          description: 'A feed with admin properties',
+          'admin:errorReportsTo': {
+            '@rdf:resource': 'mailto:webmaster@example.com',
+          },
+          'admin:generatorAgent': {
+            '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+          },
         },
       },
     }
