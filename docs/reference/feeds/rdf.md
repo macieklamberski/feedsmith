@@ -17,9 +17,10 @@ RDF (Resource Description Framework) Site Summary is an early XML-based syndicat
         <a href="/reference/namespaces/content">Content</a>,
         <a href="/reference/namespaces/slash">Slash</a>,
         <a href="/reference/namespaces/media">Media RSS</a>,
-        <a href="/reference/namespaces/georss">GeoRSS-Simple</a>,
+        <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
         <a href="/reference/namespaces/dcterms">Dublin Core Terms</a>,
-        <a href="/reference/namespaces/wfw">Well-Formed Web</a>
+        <a href="/reference/namespaces/wfw">Comment API</a>,
+        <a href="/reference/namespaces/admin">Administrative</a>
       </td>
     </tr>
   </tbody>
@@ -50,7 +51,7 @@ const rdfFeed = parseRdfFeed(xmlContent)
 ### `generateRdfFeed()`
 
 > [!NOTE]
-> RDF feed generation is currently work in progress and not yet available.
+> RDF feed generation is planned but not yet available.
 
 ### `detectRdfFeed()`
 

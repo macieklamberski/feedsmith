@@ -1,6 +1,6 @@
-# Well-Formed Web Namespace Reference
+# Comment API Namespace Reference
 
-The Well-Formed Web namespace provides elements for linking to comment feeds and comment posting interfaces, enabling better integration between feeds and commenting systems.
+The Comment API namespace provides elements for linking to comment feeds and comment posting interfaces, enabling better integration between feeds and commenting systems.
 
 <table>
   <tbody>
