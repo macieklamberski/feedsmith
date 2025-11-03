@@ -1276,6 +1276,29 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate pingback namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with pingback namespace',
+      description: 'A feed with Pingback service endpoint',
+      pingback: {
+        to: 'https://example.com/pingback-service',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:pingback': 'http://madskills.com/public/xml/rss/module/pingback/',
+        channel: {
+          title: 'Feed with pingback namespace',
+          description: 'A feed with Pingback service endpoint',
+          'pingback:to': 'https://example.com/pingback-service',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate source namespace properties and attributes for feed', () => {
     const value = {
       title: 'Feed with source namespace',
@@ -1372,29 +1395,6 @@ describe('generateFeed', () => {
           description: 'A feed with FeedPress properties',
           'feedpress:link': 'https://feed.press/example',
           'feedpress:newsletterId': '12345',
-        },
-      },
-    }
-
-    expect(generateFeed(value)).toEqual(expected)
-  })
-
-  it('should generate pingback namespace properties and attributes for feed', () => {
-    const value = {
-      title: 'Feed with pingback namespace',
-      description: 'A feed with Pingback service endpoint',
-      pingback: {
-        to: 'https://example.com/pingback-service',
-      },
-    }
-    const expected = {
-      rss: {
-        '@version': '2.0',
-        '@xmlns:pingback': 'http://madskills.com/public/xml/rss/module/pingback/',
-        channel: {
-          title: 'Feed with pingback namespace',
-          description: 'A feed with Pingback service endpoint',
-          'pingback:to': 'https://example.com/pingback-service',
         },
       },
     }
