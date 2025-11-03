@@ -812,6 +812,19 @@
     "errorReportsTo": "mailto:webmaster@example.com",
     "generatorAgent": "http://www.movabletype.org/?v=3.2"
   },
+  "opensearch": {
+    "totalResults": 1000,
+    "startIndex": 0,
+    "itemsPerPage": 10,
+    "queries": [
+      {
+        "role": "request",
+        "searchTerms": "quantum computing",
+        "startIndex": 0,
+        "count": 10
+      }
+    ]
+  },
   "sy": {
     "updatePeriod": "hourly",
     "updateFrequency": 1,

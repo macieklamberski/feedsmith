@@ -29,6 +29,7 @@ import {
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
+import { generateFeed as generateOpensearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
 import {
   generateFeed as generatePingbackFeed,
   generateItem as generatePingbackItem,
@@ -250,6 +251,7 @@ export const generateFeed: GenerateUtil<Rss.Feed<DateLike>> = (feed) => {
     ...generateDctermsItemOrFeed(feed.dcterms),
     ...generateCreativecommonsItemOrFeed(feed.creativeCommons),
     ...generateFeedPressFeed(feed.feedpress),
+    ...generateOpensearchFeed(feed.opensearch),
     ...generateAdminFeed(feed.admin),
     ...generateSourceFeed(feed.sourceNs),
     ...generateRawVoiceFeed(feed.rawvoice),

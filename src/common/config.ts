@@ -220,6 +220,14 @@ export const namespaceUris = {
     'http://web.resource.org/cc',
     'https://web.resource.org/cc',
   ],
+  opensearch: [
+    'http://a9.com/-/spec/opensearch/1.1/', // Official URI (OpenSearch 1.1).
+    'https://a9.com/-/spec/opensearch/1.1/',
+    'http://a9.com/-/spec/opensearch/1.0/', // Official URI (OpenSearch 1.0).
+    'https://a9.com/-/spec/opensearch/1.0/',
+    'http://a9.com/-/spec/opensearchrss/1.0/', // Official URI (legacy).
+    'https://a9.com/-/spec/opensearchrss/1.0/',
+  ],
   pingback: [
     'http://madskills.com/public/xml/rss/module/pingback/', // Official URI.
     'https://madskills.com/public/xml/rss/module/pingback/',

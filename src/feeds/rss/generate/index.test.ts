@@ -677,6 +677,31 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with opensearch namespace', () => {
+    const value = {
+      title: 'Search Results',
+      description: 'Search results feed',
+      opensearch: {
+        totalResults: 1000,
+        startIndex: 0,
+        itemsPerPage: 10,
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">
+  <channel>
+    <title>Search Results</title>
+    <description>Search results feed</description>
+    <opensearch:totalResults>1000</opensearch:totalResults>
+    <opensearch:startIndex>0</opensearch:startIndex>
+    <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with psc namespace', () => {
     const value = {
       title: 'Feed with psc namespace',
