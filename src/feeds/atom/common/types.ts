@@ -7,15 +7,15 @@ import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AppNs } from '../../../namespaces/app/common/types.js'
 import type { ArxivNs } from '../../../namespaces/arxiv/common/types.js'
 import type { CcNs } from '../../../namespaces/cc/common/types.js'
-import type { CreativecommonsNs } from '../../../namespaces/creativecommons/common/types.js'
+import type { CreativeCommonsNs } from '../../../namespaces/creativecommons/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
-import type { DctermsNs } from '../../../namespaces/dcterms/common/types.js'
+import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
 import type { GeoNs } from '../../../namespaces/geo/common/types.js'
-import type { GeorssNs } from '../../../namespaces/georss/common/types.js'
-import type { GoogleplayNs } from '../../../namespaces/googleplay/common/types.js'
+import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
+import type { GooglePlayNs } from '../../../namespaces/googleplay/common/types.js'
 import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
-import type { OpensearchNs } from '../../../namespaces/opensearch/common/types.js'
+import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
 import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
 import type { PscNs } from '../../../namespaces/psc/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
@@ -102,14 +102,14 @@ export namespace Atom {
     dc?: DcNs.ItemOrFeed<TDate>
     slash?: SlashNs.Item
     itunes?: ItunesNs.Item
-    googleplay?: GoogleplayNs.Item
+    googleplay?: GooglePlayNs.Item
     psc?: PscNs.Item
     media?: MediaNs.ItemOrFeed
-    georss?: GeorssNs.ItemOrFeed
+    georss?: GeoRssNs.ItemOrFeed
     geo?: GeoNs.ItemOrFeed
     thr?: ThrNs.Item
-    dcterms?: DctermsNs.ItemOrFeed<TDate>
-    creativeCommons?: CreativecommonsNs.ItemOrFeed
+    dcterms?: DcTermsNs.ItemOrFeed<TDate>
+    creativeCommons?: CreativeCommonsNs.ItemOrFeed
     wfw?: WfwNs.Item
     yt?: YtNs.Item
     pingback?: PingbackNs.Item
@@ -134,13 +134,13 @@ export namespace Atom {
     dc?: DcNs.ItemOrFeed<TDate>
     sy?: SyNs.Feed<TDate>
     itunes?: ItunesNs.Feed
-    googleplay?: GoogleplayNs.Feed
+    googleplay?: GooglePlayNs.Feed
     media?: MediaNs.ItemOrFeed
-    georss?: GeorssNs.ItemOrFeed
+    georss?: GeoRssNs.ItemOrFeed
     geo?: GeoNs.ItemOrFeed
-    dcterms?: DctermsNs.ItemOrFeed<TDate>
-    creativeCommons?: CreativecommonsNs.ItemOrFeed
-    opensearch?: OpensearchNs.Feed
+    dcterms?: DcTermsNs.ItemOrFeed<TDate>
+    creativeCommons?: CreativeCommonsNs.ItemOrFeed
+    opensearch?: OpenSearchNs.Feed
     yt?: YtNs.Feed
     admin?: AdminNs.Feed
     pingback?: PingbackNs.Feed

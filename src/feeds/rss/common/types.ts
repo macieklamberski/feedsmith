@@ -3,20 +3,20 @@ import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
 import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { ContentNs } from '../../../namespaces/content/common/types.js'
-import type { CreativecommonsNs } from '../../../namespaces/creativecommons/common/types.js'
+import type { CreativeCommonsNs } from '../../../namespaces/creativecommons/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
-import type { DctermsNs } from '../../../namespaces/dcterms/common/types.js'
-import type { FeedpressNs } from '../../../namespaces/feedpress/common/types.js'
+import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
+import type { FeedPressNs } from '../../../namespaces/feedpress/common/types.js'
 import type { GeoNs } from '../../../namespaces/geo/common/types.js'
-import type { GeorssNs } from '../../../namespaces/georss/common/types.js'
-import type { GoogleplayNs } from '../../../namespaces/googleplay/common/types.js'
+import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
+import type { GooglePlayNs } from '../../../namespaces/googleplay/common/types.js'
 import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
-import type { OpensearchNs } from '../../../namespaces/opensearch/common/types.js'
+import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
 import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
 import type { PodcastNs } from '../../../namespaces/podcast/common/types.js'
 import type { PscNs } from '../../../namespaces/psc/common/types.js'
-import type { RawvoiceNs } from '../../../namespaces/rawvoice/common/types.js'
+import type { RawVoiceNs } from '../../../namespaces/rawvoice/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
 import type { SourceNs } from '../../../namespaces/source/common/types.js'
 import type { SpotifyNs } from '../../../namespaces/spotify/common/types.js'
@@ -93,20 +93,20 @@ export namespace Rss {
     cc?: CcNs.ItemOrFeed
     dc?: DcNs.ItemOrFeed<TDate>
     content?: ContentNs.Item
-    creativeCommons?: CreativecommonsNs.ItemOrFeed
+    creativeCommons?: CreativeCommonsNs.ItemOrFeed
     slash?: SlashNs.Item
     itunes?: ItunesNs.Item
     podcast?: PodcastNs.Item
     psc?: PscNs.Item
-    googleplay?: GoogleplayNs.Item
+    googleplay?: GooglePlayNs.Item
     media?: MediaNs.ItemOrFeed
-    georss?: GeorssNs.ItemOrFeed
+    georss?: GeoRssNs.ItemOrFeed
     geo?: GeoNs.ItemOrFeed
     thr?: ThrNs.Item
-    dcterms?: DctermsNs.ItemOrFeed<TDate>
+    dcterms?: DcTermsNs.ItemOrFeed<TDate>
     wfw?: WfwNs.Item
     sourceNs?: SourceNs.Item
-    rawvoice?: RawvoiceNs.Item
+    rawvoice?: RawVoiceNs.Item
     spotify?: SpotifyNs.Item
     pingback?: PingbackNs.Item
     trackback?: TrackbackNs.Item
@@ -141,17 +141,17 @@ export namespace Rss {
     sy?: SyNs.Feed<TDate>
     itunes?: ItunesNs.Feed
     podcast?: PodcastNs.Feed<TDate>
-    googleplay?: GoogleplayNs.Feed
+    googleplay?: GooglePlayNs.Feed
     media?: MediaNs.ItemOrFeed
-    georss?: GeorssNs.ItemOrFeed
+    georss?: GeoRssNs.ItemOrFeed
     geo?: GeoNs.ItemOrFeed
-    dcterms?: DctermsNs.ItemOrFeed<TDate>
-    creativeCommons?: CreativecommonsNs.ItemOrFeed
-    feedpress?: FeedpressNs.Feed
-    opensearch?: OpensearchNs.Feed
+    dcterms?: DcTermsNs.ItemOrFeed<TDate>
+    creativeCommons?: CreativeCommonsNs.ItemOrFeed
+    feedpress?: FeedPressNs.Feed
+    opensearch?: OpenSearchNs.Feed
     admin?: AdminNs.Feed
     sourceNs?: SourceNs.Feed
-    rawvoice?: RawvoiceNs.Feed<TDate>
+    rawvoice?: RawVoiceNs.Feed<TDate>
     spotify?: SpotifyNs.Feed
     pingback?: PingbackNs.Feed
   }

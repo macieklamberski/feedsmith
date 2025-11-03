@@ -19,7 +19,7 @@ import {
 } from '../../../namespaces/atom/generate/utils.js'
 import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
 import { generateItem as generateContentItem } from '../../../namespaces/content/generate/utils.js'
-import { generateItemOrFeed as generateCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
+import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
 import { generateFeed as generateFeedPressFeed } from '../../../namespaces/feedpress/generate/utils.js'
@@ -34,7 +34,7 @@ import {
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
-import { generateFeed as generateOpensearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
+import { generateFeed as generateOpenSearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
 import {
   generateFeed as generatePingbackFeed,
   generateItem as generatePingbackItem,
@@ -200,7 +200,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
     ...generateCc(item.cc),
     ...generateDcItemOrFeed(item.dc),
     ...generateContentItem(item.content),
-    ...generateCreativecommonsItemOrFeed(item.creativeCommons),
+    ...generateCreativeCommonsItemOrFeed(item.creativeCommons),
     ...generateSlashItem(item.slash),
     ...generateItunesItem(item.itunes),
     ...generatePodcastItem(item.podcast),
@@ -258,9 +258,9 @@ export const generateFeed: GenerateUtil<Rss.Feed<DateLike>> = (feed) => {
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateGeoItemOrFeed(feed.geo),
     ...generateDctermsItemOrFeed(feed.dcterms),
-    ...generateCreativecommonsItemOrFeed(feed.creativeCommons),
+    ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
     ...generateFeedPressFeed(feed.feedpress),
-    ...generateOpensearchFeed(feed.opensearch),
+    ...generateOpenSearchFeed(feed.opensearch),
     ...generateAdminFeed(feed.admin),
     ...generateSourceFeed(feed.sourceNs),
     ...generateRawVoiceFeed(feed.rawvoice),

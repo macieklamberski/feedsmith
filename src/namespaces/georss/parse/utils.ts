@@ -10,12 +10,12 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { GeorssNs } from '../common/types.js'
+import type { GeoRssNs } from '../common/types.js'
 
 export const parseLatLngPairs = (
   value: Unreliable,
   pairsCount?: { min?: number; max?: number },
-): Array<GeorssNs.Point> | undefined => {
+): Array<GeoRssNs.Point> | undefined => {
   if (!isNonEmptyString(value)) {
     return
   }
@@ -36,7 +36,7 @@ export const parseLatLngPairs = (
     return
   }
 
-  const points: Array<GeorssNs.Point> = []
+  const points: Array<GeoRssNs.Point> = []
 
   for (let i = 0; i < numericParts.length; i += 2) {
     const lat = numericParts[i]
@@ -50,11 +50,11 @@ export const parseLatLngPairs = (
   return points.length > 0 ? points : undefined
 }
 
-export const parsePoint: ParseExactUtil<GeorssNs.Point> = (value) => {
+export const parsePoint: ParseExactUtil<GeoRssNs.Point> = (value) => {
   return parseLatLngPairs(retrieveText(value), { min: 1, max: 1 })?.[0]
 }
 
-export const parseLine: ParseExactUtil<GeorssNs.Line> = (value) => {
+export const parseLine: ParseExactUtil<GeoRssNs.Line> = (value) => {
   const points = parseLatLngPairs(retrieveText(value), { min: 2 })
 
   if (isPresent(points)) {
@@ -62,7 +62,7 @@ export const parseLine: ParseExactUtil<GeorssNs.Line> = (value) => {
   }
 }
 
-export const parsePolygon: ParseExactUtil<GeorssNs.Polygon> = (value) => {
+export const parsePolygon: ParseExactUtil<GeoRssNs.Polygon> = (value) => {
   const points = parseLatLngPairs(retrieveText(value), { min: 4 })
 
   if (isPresent(points)) {
@@ -70,7 +70,7 @@ export const parsePolygon: ParseExactUtil<GeorssNs.Polygon> = (value) => {
   }
 }
 
-export const parseBox: ParseExactUtil<GeorssNs.Box> = (value) => {
+export const parseBox: ParseExactUtil<GeoRssNs.Box> = (value) => {
   const points = parseLatLngPairs(retrieveText(value), { min: 2, max: 2 })
   const lowerCorner = points?.[0]
   const upperCorner = points?.[1]
@@ -80,7 +80,7 @@ export const parseBox: ParseExactUtil<GeorssNs.Box> = (value) => {
   }
 }
 
-export const retrieveItemOrFeed: ParsePartialUtil<GeorssNs.ItemOrFeed> = (value) => {
+export const retrieveItemOrFeed: ParsePartialUtil<GeoRssNs.ItemOrFeed> = (value) => {
   if (!isObject(value)) {
     return
   }

@@ -8,9 +8,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { OpensearchNs } from '../common/types.js'
+import type { OpenSearchNs } from '../common/types.js'
 
-export const parseQuery: ParsePartialUtil<OpensearchNs.Query> = (value) => {
+export const parseQuery: ParsePartialUtil<OpenSearchNs.Query> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -29,7 +29,7 @@ export const parseQuery: ParsePartialUtil<OpensearchNs.Query> = (value) => {
   return trimObject(query)
 }
 
-export const retrieveFeed: ParsePartialUtil<OpensearchNs.Feed> = (value) => {
+export const retrieveFeed: ParsePartialUtil<OpenSearchNs.Feed> = (value) => {
   if (!isObject(value)) {
     return
   }

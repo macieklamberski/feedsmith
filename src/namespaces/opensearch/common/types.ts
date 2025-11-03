@@ -1,5 +1,5 @@
 // #region reference
-export namespace OpensearchNs {
+export namespace OpenSearchNs {
   export type Query = {
     role: string
     searchTerms?: string

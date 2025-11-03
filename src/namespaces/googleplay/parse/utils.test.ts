@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import type { GoogleplayNs } from '../common/types.js'
+import type { GooglePlayNs } from '../common/types.js'
 import { retrieveFeed, retrieveItem } from './utils.js'
 
 describe('retrieveItem', () => {
@@ -63,7 +63,7 @@ describe('retrieveItem', () => {
     const value = {
       'googleplay:explicit': 'clean',
     }
-    const expected: GoogleplayNs.Item = {
+    const expected: GooglePlayNs.Item = {
       explicit: 'clean',
     }
 
@@ -74,7 +74,7 @@ describe('retrieveItem', () => {
     const value = {
       'googleplay:explicit': 'CLEAN',
     }
-    const expected: GoogleplayNs.Item = {
+    const expected: GooglePlayNs.Item = {
       explicit: 'clean',
     }
 
@@ -232,7 +232,7 @@ describe('retrieveFeed', () => {
     const value = {
       'googleplay:explicit': 'clean',
     }
-    const expected: GoogleplayNs.Feed = {
+    const expected: GooglePlayNs.Feed = {
       explicit: 'clean',
     }
 
@@ -243,7 +243,7 @@ describe('retrieveFeed', () => {
     const value = {
       'googleplay:explicit': '  Clean  ',
     }
-    const expected: GoogleplayNs.Feed = {
+    const expected: GooglePlayNs.Feed = {
       explicit: 'clean',
     }
 

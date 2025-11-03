@@ -1,5 +1,5 @@
 // #region reference
-export namespace GoogleplayNs {
+export namespace GooglePlayNs {
   export type Image = {
     href: string
   }
