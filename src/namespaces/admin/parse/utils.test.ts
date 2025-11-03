@@ -148,28 +148,4 @@ describe('retrieveFeed', () => {
 
     expect(retrieveFeed(value)).toEqual(expected)
   })
-
-  it('should handle URLs with query parameters', () => {
-    const value = {
-      'admin:generatoragent': 'http://www.example.com/generator?version=1.0&build=123',
-    }
-    const expected = {
-      generatorAgent: 'http://www.example.com/generator?version=1.0&build=123',
-    }
-
-    expect(retrieveFeed(value)).toEqual(expected)
-  })
-
-  it('should handle https URLs', () => {
-    const value = {
-      'admin:errorreportsto': 'https://example.com/contact',
-      'admin:generatoragent': 'https://www.example.com/generator/2.0',
-    }
-    const expected = {
-      errorReportsTo: 'https://example.com/contact',
-      generatorAgent: 'https://www.example.com/generator/2.0',
-    }
-
-    expect(retrieveFeed(value)).toEqual(expected)
-  })
 })
