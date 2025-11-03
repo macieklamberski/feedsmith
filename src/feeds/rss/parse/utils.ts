@@ -12,6 +12,7 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
 import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
@@ -22,6 +23,7 @@ import { retrieveItemOrFeed as retrieveCreativecommonsItemOrFeed } from '../../.
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
 import { retrieveFeed as retrieveFeedPressFeed } from '../../../namespaces/feedpress/parse/utils.js'
+import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces/geo/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
   retrieveFeed as retrieveGooglePlayFeed,
@@ -32,6 +34,11 @@ import {
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
+import { retrieveFeed as retrieveOpensearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
+import {
+  retrieveFeed as retrievePingbackFeed,
+  retrieveItem as retrievePingbackItem,
+} from '../../../namespaces/pingback/parse/utils.js'
 import {
   retrieveFeed as retrievePodcastFeed,
   retrieveItem as retrievePodcastItem,
@@ -52,6 +59,7 @@ import {
 } from '../../../namespaces/spotify/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/parse/utils.js'
+import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import type { Rss } from '../common/types.js'
 
@@ -187,12 +195,15 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
     googleplay: namespaces.has('googleplay') ? retrieveGooglePlayItem(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceItem(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyItem(value) : undefined,
+    pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
+    trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
   }
 
   return trimObject(item)
@@ -234,14 +245,18 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
     googleplay: namespaces.has('googleplay') ? retrieveGooglePlayFeed(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     creativeCommons: namespaces.has('creativecommons')
       ? retrieveCreativecommonsItemOrFeed(value)
       : undefined,
     feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(value) : undefined,
+    opensearch: namespaces.has('opensearch') ? retrieveOpensearchFeed(value) : undefined,
+    admin: namespaces.has('admin') ? retrieveAdminFeed(value) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceFeed(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(value) : undefined,
+    pingback: namespaces.has('pingback') ? retrievePingbackFeed(value) : undefined,
   }
 
   return trimObject(feed)

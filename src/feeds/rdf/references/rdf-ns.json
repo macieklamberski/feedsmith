@@ -1284,5 +1284,9 @@
     "elev": 360,
     "floor": 4,
     "radius": 50000
+  },
+  "admin": {
+    "errorReportsTo": "mailto:webmaster@example.com",
+    "generatorAgent": "http://www.movabletype.org/?v=3.2"
   }
 }

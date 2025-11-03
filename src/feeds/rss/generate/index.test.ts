@@ -420,6 +420,62 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with geo namespace', () => {
+    const value = {
+      title: 'Location Feed',
+      description: 'Feed with W3C Basic Geo',
+      geo: {
+        lat: 37.7749,
+        long: -122.4194,
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
+  <channel>
+    <title>Location Feed</title>
+    <description>Feed with W3C Basic Geo</description>
+    <geo:lat>37.7749</geo:lat>
+    <geo:long>-122.4194</geo:long>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS item with geo coordinates including altitude', () => {
+    const value = {
+      title: 'Altitude Feed',
+      description: 'High altitude locations',
+      items: [
+        {
+          title: 'High Altitude Location',
+          geo: {
+            lat: 28.0026,
+            long: 86.8528,
+            alt: 5364,
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
+  <channel>
+    <title>Altitude Feed</title>
+    <description>High altitude locations</description>
+    <item>
+      <title>High Altitude Location</title>
+      <geo:lat>28.0026</geo:lat>
+      <geo:long>86.8528</geo:long>
+      <geo:alt>5364</geo:alt>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with wfw namespace', () => {
     const value = {
       title: 'Feed with wfw namespace',
@@ -443,6 +499,73 @@ describe('generate', () => {
       <title>Item with comments</title>
       <wfw:comment>https://example.com/posts/item1/comment</wfw:comment>
       <wfw:commentRss>https://example.com/posts/item1/comments/feed</wfw:commentRss>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with pingback namespace', () => {
+    const value = {
+      title: 'Feed with pingback namespace',
+      description: 'Test feed with Pingback namespace',
+      pingback: {
+        to: 'https://example.com/pingback-service',
+      },
+      items: [
+        {
+          title: 'First item',
+          pingback: {
+            server: 'https://example.com/xmlrpc.php',
+            target: 'https://referenced-blog.com/article',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/">
+  <channel>
+    <title>Feed with pingback namespace</title>
+    <description>Test feed with Pingback namespace</description>
+    <pingback:to>https://example.com/pingback-service</pingback:to>
+    <item>
+      <title>First item</title>
+      <pingback:server>https://example.com/xmlrpc.php</pingback:server>
+      <pingback:target>https://referenced-blog.com/article</pingback:target>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with trackback namespace', () => {
+    const value = {
+      title: 'Feed with trackback namespace',
+      description: 'Test feed with Trackback namespace',
+      items: [
+        {
+          title: 'First item',
+          trackback: {
+            ping: 'https://example.com/trackback/123',
+            abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+  <channel>
+    <title>Feed with trackback namespace</title>
+    <description>Test feed with Trackback namespace</description>
+    <item>
+      <title>First item</title>
+      <trackback:ping>https://example.com/trackback/123</trackback:ping>
+      <trackback:about>https://blog1.com/trackback/456</trackback:about>
+      <trackback:about>https://blog2.com/trackback/789</trackback:about>
     </item>
   </channel>
 </rss>
@@ -572,6 +695,62 @@ describe('generate', () => {
     <description>Test feed with FeedPress namespace</description>
     <feedpress:link>https://feed.press/example</feedpress:link>
     <feedpress:newsletterId>12345</feedpress:newsletterId>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with admin namespace', () => {
+    const value = {
+      title: 'Feed with admin namespace',
+      description: 'Test feed with admin namespace',
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+      items: [
+        {
+          title: 'Item title',
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:admin="http://webns.net/mvcb/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <channel>
+    <title>Feed with admin namespace</title>
+    <description>Test feed with admin namespace</description>
+    <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
+    <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+    <item>
+      <title>Item title</title>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with opensearch namespace', () => {
+    const value = {
+      title: 'Search Results',
+      description: 'Search results feed',
+      opensearch: {
+        totalResults: 1000,
+        startIndex: 0,
+        itemsPerPage: 10,
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">
+  <channel>
+    <title>Search Results</title>
+    <description>Search results feed</description>
+    <opensearch:totalResults>1000</opensearch:totalResults>
+    <opensearch:startIndex>0</opensearch:startIndex>
+    <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
   </channel>
 </rss>
 `
