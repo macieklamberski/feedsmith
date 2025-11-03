@@ -51,7 +51,7 @@ const rdfFeed = parseRdfFeed(xmlContent)
 ### `generateRdfFeed()`
 
 > [!NOTE]
-> RDF feed generation is currently work in progress and not yet available.
+> RDF feed generation is planned but not yet available.
 
 ### `detectRdfFeed()`
 

@@ -60,7 +60,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 |--------|----------|---------|------------|
 | [RSS](http://cyber.law.harvard.edu/rss/rss.html) | 0.9x, 2.0 | ✅ | ✅ |
 | [Atom](https://tools.ietf.org/html/rfc4287) | 0.3, 1.0 | ✅ | ✅ |
-| [RDF](https://web.resource.org/rss/1.0/spec) | 0.9, 1.0 | ✅ | ⏳ |
+| [RDF](https://web.resource.org/rss/1.0/spec) | 0.9, 1.0 | ✅ | 📋 |
 | [JSON Feed](https://jsonfeed.org) | 1.0, 1.1 | ✅ | ✅ |
 
 ### Namespaces
