@@ -6,9 +6,9 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
-import type { OpenSearchNs } from '../common/types.js'
+import type { OpensearchNs } from '../common/types.js'
 
-export const generateQuery: GenerateUtil<OpenSearchNs.Query> = (query) => {
+export const generateQuery: GenerateUtil<OpensearchNs.Query> = (query) => {
   if (!isObject(query)) {
     return
   }
@@ -27,7 +27,7 @@ export const generateQuery: GenerateUtil<OpenSearchNs.Query> = (query) => {
   return trimObject(value)
 }
 
-export const generateFeed: GenerateUtil<OpenSearchNs.Feed> = (feed) => {
+export const generateFeed: GenerateUtil<OpensearchNs.Feed> = (feed) => {
   if (!isObject(feed)) {
     return
   }

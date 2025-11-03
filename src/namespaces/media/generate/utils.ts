@@ -214,7 +214,7 @@ export const generateCommunity: GenerateUtil<MediaNs.Community> = (community) =>
 
 export const generateComments: GenerateUtil<Array<string>> = (comments) => {
   const value = {
-    'media:comment': trimArray(comments, generatePlainString),
+    'media:comment': trimArray(comments, generateCdataString),
   }
 
   return trimObject(value)
@@ -222,7 +222,7 @@ export const generateComments: GenerateUtil<Array<string>> = (comments) => {
 
 export const generateResponses: GenerateUtil<Array<string>> = (responses) => {
   const value = {
-    'media:response': trimArray(responses, generatePlainString),
+    'media:response': trimArray(responses, generateCdataString),
   }
 
   return trimObject(value)
@@ -230,7 +230,7 @@ export const generateResponses: GenerateUtil<Array<string>> = (responses) => {
 
 export const generateBackLinks: GenerateUtil<Array<string>> = (backLinks) => {
   const value = {
-    'media:backLink': trimArray(backLinks, generatePlainString),
+    'media:backLink': trimArray(backLinks, generateCdataString),
   }
 
   return trimObject(value)

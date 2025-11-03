@@ -451,6 +451,73 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with pingback namespace', () => {
+    const value = {
+      title: 'Feed with pingback namespace',
+      description: 'Test feed with Pingback namespace',
+      pingback: {
+        to: 'https://example.com/pingback-service',
+      },
+      items: [
+        {
+          title: 'First item',
+          pingback: {
+            server: 'https://example.com/xmlrpc.php',
+            target: 'https://referenced-blog.com/article',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/">
+  <channel>
+    <title>Feed with pingback namespace</title>
+    <description>Test feed with Pingback namespace</description>
+    <pingback:to>https://example.com/pingback-service</pingback:to>
+    <item>
+      <title>First item</title>
+      <pingback:server>https://example.com/xmlrpc.php</pingback:server>
+      <pingback:target>https://referenced-blog.com/article</pingback:target>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with trackback namespace', () => {
+    const value = {
+      title: 'Feed with trackback namespace',
+      description: 'Test feed with Trackback namespace',
+      items: [
+        {
+          title: 'First item',
+          trackback: {
+            ping: 'https://example.com/trackback/123',
+            abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+  <channel>
+    <title>Feed with trackback namespace</title>
+    <description>Test feed with Trackback namespace</description>
+    <item>
+      <title>First item</title>
+      <trackback:ping>https://example.com/trackback/123</trackback:ping>
+      <trackback:about>https://blog1.com/trackback/456</trackback:about>
+      <trackback:about>https://blog2.com/trackback/789</trackback:about>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with source namespace', () => {
     const value = {
       title: 'Feed with source namespace',
@@ -572,6 +639,37 @@ describe('generate', () => {
     <description>Test feed with FeedPress namespace</description>
     <feedpress:link>https://feed.press/example</feedpress:link>
     <feedpress:newsletterId>12345</feedpress:newsletterId>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with admin namespace', () => {
+    const value = {
+      title: 'Feed with admin namespace',
+      description: 'Test feed with admin namespace',
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+      items: [
+        {
+          title: 'Item title',
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:admin="http://webns.net/mvcb/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <channel>
+    <title>Feed with admin namespace</title>
+    <description>Test feed with admin namespace</description>
+    <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
+    <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+    <item>
+      <title>Item title</title>
+    </item>
   </channel>
 </rss>
 `

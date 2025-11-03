@@ -713,6 +713,14 @@
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
       },
+      "pingback": {
+        "server": "https://example.com/xmlrpc.php",
+        "target": "https://referenced-blog.com/article"
+      },
+      "trackback": {
+        "ping": "https://example.com/trackback/123",
+        "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
+      },
       "creativeCommons": {
         "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]
       },
@@ -817,6 +825,13 @@
   },
   "creativeCommons": {
     "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
+  },
+  "pingback": {
+    "to": "https://example.com/pingback-service"
+  },
+  "admin": {
+    "errorReportsTo": "mailto:webmaster@example.com",
+    "generatorAgent": "http://www.movabletype.org/?v=3.2"
   },
   "opensearch": {
     "totalResults": 1000,
