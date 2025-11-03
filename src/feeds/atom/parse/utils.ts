@@ -21,7 +21,7 @@ import {
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
-import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
+import { retrieveFeed as retrieveOpensearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
 import {
   retrieveFeed as retrievePingbackFeed,
   retrieveItem as retrievePingbackItem,
@@ -279,7 +279,7 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) =
     creativeCommons: namespaces?.has('creativecommons')
       ? retrieveCreativecommonsItemOrFeed(value)
       : undefined,
-    opensearch: namespaces?.has('opensearch') ? retrieveOpenSearchFeed(value) : undefined,
+    opensearch: namespaces?.has('opensearch') ? retrieveOpensearchFeed(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
     admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackFeed(value) : undefined,

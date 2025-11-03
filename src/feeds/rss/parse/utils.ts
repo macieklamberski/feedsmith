@@ -29,7 +29,7 @@ import {
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
-import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
+import { retrieveFeed as retrieveOpensearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
 import {
   retrieveFeed as retrievePingbackFeed,
   retrieveItem as retrievePingbackItem,
@@ -242,7 +242,7 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
       ? retrieveCreativecommonsItemOrFeed(value)
       : undefined,
     feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(value) : undefined,
-    opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(value) : undefined,
+    opensearch: namespaces.has('opensearch') ? retrieveOpensearchFeed(value) : undefined,
     admin: namespaces.has('admin') ? retrieveAdminFeed(value) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceFeed(value) : undefined,

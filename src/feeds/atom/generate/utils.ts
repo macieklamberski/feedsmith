@@ -22,7 +22,7 @@ import {
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
-import { generateFeed as generateOpenSearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
+import { generateFeed as generateOpensearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
 import {
   generateFeed as generatePingbackFeed,
   generateItem as generatePingbackItem,
@@ -247,7 +247,7 @@ export const generateFeed: GenerateUtil<Atom.Feed<DateLike>> = (feed, options) =
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateDctermsItemOrFeed(feed.dcterms),
     ...generateCreativecommonsItemOrFeed(feed.creativeCommons),
-    ...generateOpenSearchFeed(feed.opensearch),
+    ...generateOpensearchFeed(feed.opensearch),
     ...generateYtFeed(feed.yt),
     ...generateAdminFeed(feed.admin),
     ...generatePingbackFeed(feed.pingback),
