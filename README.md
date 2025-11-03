@@ -73,20 +73,20 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Content](http://purl.org/rss/1.0/modules/content/) | `<content:*>` | RSS, RDF | ✅ | ✅ |
 | [Slash](http://purl.org/rss/1.0/modules/slash/) | `<slash:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [iTunes](http://www.itunes.com/dtds/podcast-1.0.dtd) | `<itunes:*>` | RSS, Atom | ✅ | ✅ |
-| [Podcast](https://podcastindex.org/namespace/1.0) | `<podcast:*>` | RSS | ✅ | ✅ |
+| [Podcast Index](https://podcastindex.org/namespace/1.0) | `<podcast:*>` | RSS | ✅ | ✅ |
 | [RawVoice](https://blubrry.com/developer/rawvoice-rss/) | `<rawvoice:*>` | RSS | ✅ | ✅ |
 | [Podlove Simple Chapters](http://podlove.org/simple-chapters) | `<psc:*>` | RSS, Atom | ✅ | ✅ |
-| [Google Play Podcasts](https://www.google.com/schemas/play-podcasts/1.0/) | `<googleplay:*>` | RSS, Atom | ✅ | ✅ |
+| [Google Play Podcast](https://www.google.com/schemas/play-podcasts/1.0/) | `<googleplay:*>` | RSS, Atom | ✅ | ✅ |
 | [Spotify](http://www.spotify.com/ns/rss) | `<spotify:*>` | RSS | ✅ | ✅ |
 | [Media RSS](http://search.yahoo.com/mrss/) | `<media:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [W3C Basic Geo](http://www.w3.org/2003/01/geo/wgs84_pos#) | `<geo:*>` | RSS, Atom | ✅ | ✅ |
-| [GeoRSS-Simple](http://www.georss.org/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [GeoRSS Simple](http://www.georss.org/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) | `<thr:*>` | RSS, Atom | ✅ | ✅ |
 | [Atom Publishing Protocol](http://www.w3.org/2007/app) | `<app:*>` | Atom | ✅ | ✅ |
 | [Dublin Core Terms](http://purl.org/dc/terms/) | `<dcterms:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [Well-Formed Web](http://wellformedweb.org/CommentAPI/) | `<wfw:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [Admin](http://webns.net/mvcb/) | `<admin:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [Pingback](http://purl.org/net/pingback/) | `<pingback:*>` | RSS, Atom | ✅ | ✅ |
+| [Comment API](http://wellformedweb.org/CommentAPI/) | `<wfw:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Administrative](http://webns.net/mvcb/) | `<admin:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Pingback](http://madskills.com/public/xml/rss/module/pingback/) | `<pingback:*>` | RSS, Atom | ✅ | ✅ |
 | [Trackback](http://madskills.com/public/xml/rss/module/trackback/) | `<trackback:*>` | RSS, Atom | ✅ | ✅ |
 | [Source](http://source.scripting.com/) | `<source:*>` | RSS | ✅ | ✅ |
 | [ccREL](http://creativecommons.org/ns#) | `<cc:*>` | RSS, Atom | ✅ | ✅ |
