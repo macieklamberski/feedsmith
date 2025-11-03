@@ -818,6 +818,116 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with pingback namespace', () => {
+    const value = {
+      id: 'https://example.com/blog',
+      title: 'Blog with Pingback',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      pingback: {
+        to: 'https://example.com/pingback-service',
+      },
+      entries: [
+        {
+          id: 'https://example.com/post/1',
+          title: 'Post with Pingback',
+          updated: new Date('2024-01-05T10:30:00Z'),
+          pingback: {
+            server: 'https://example.com/xmlrpc.php',
+            target: 'https://referenced-blog.com/article',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/">
+  <id>https://example.com/blog</id>
+  <title>Blog with Pingback</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <pingback:to>https://example.com/pingback-service</pingback:to>
+  <entry>
+    <id>https://example.com/post/1</id>
+    <title>Post with Pingback</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+    <pingback:server>https://example.com/xmlrpc.php</pingback:server>
+    <pingback:target>https://referenced-blog.com/article</pingback:target>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with admin namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Admin',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry title',
+          updated: new Date('2024-01-05T10:30:00Z'),
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:admin="http://webns.net/mvcb/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <id>https://example.com/feed</id>
+  <title>Feed with Admin</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
+  <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry title</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with trackback namespace', () => {
+    const value = {
+      id: 'https://example.com/blog',
+      title: 'Blog with Trackback',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      entries: [
+        {
+          id: 'https://example.com/post/1',
+          title: 'Post with Trackback',
+          updated: new Date('2024-01-05T10:30:00Z'),
+          trackback: {
+            ping: 'https://example.com/trackback/123',
+            abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+  <id>https://example.com/blog</id>
+  <title>Blog with Trackback</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <entry>
+    <id>https://example.com/post/1</id>
+    <title>Post with Trackback</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+    <trackback:ping>https://example.com/trackback/123</trackback:ping>
+    <trackback:about>https://blog1.com/trackback/456</trackback:about>
+    <trackback:about>https://blog2.com/trackback/789</trackback:about>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with YouTube namespace', () => {
     const value = {
       id: 'yt:channel:UCuAXFkgsw1L7xaCfnd5JJOw',

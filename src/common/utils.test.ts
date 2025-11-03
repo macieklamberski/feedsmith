@@ -12,6 +12,7 @@ import {
   generateNamespaceAttrs,
   generateNumber,
   generatePlainString,
+  generateRdfResource,
   generateRfc822Date,
   generateRfc3339Date,
   generateSingularOrArray,
@@ -34,6 +35,7 @@ import {
   parseSingularOf,
   parseString,
   parseYesNoBoolean,
+  retrieveRdfResourceOrText,
   retrieveText,
   stripCdata,
   trimArray,
@@ -357,6 +359,208 @@ describe('retrieveText', () => {
   it('should handle null and undefined correctly', () => {
     expect(retrieveText(null)).toBeNull()
     expect(retrieveText(undefined)).toBeUndefined()
+  })
+})
+
+describe('retrieveRdfResourceOrText', () => {
+  describe('with parseString', () => {
+    it('should parse direct string value', () => {
+      const value = 'https://creativecommons.org/licenses/by/4.0/'
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should extract value from @rdf:resource attribute', () => {
+      const value = {
+        '@rdf:resource': 'https://creativecommons.org/licenses/by/4.0/',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should extract value from #text property', () => {
+      const value = {
+        '#text': 'https://creativecommons.org/licenses/by/4.0/',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should handle HTML entities in @rdf:resource', () => {
+      const value = {
+        '@rdf:resource': 'https://example.com?foo=bar&amp;baz=qux',
+      }
+      const expected = 'https://example.com?foo=bar&baz=qux'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should handle HTML entities in #text', () => {
+      const value = {
+        '#text': 'https://example.com?foo=bar&amp;baz=qux',
+      }
+      const expected = 'https://example.com?foo=bar&baz=qux'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should handle CDATA sections in @rdf:resource', () => {
+      const value = {
+        '@rdf:resource': '<![CDATA[https://creativecommons.org/licenses/by/4.0/]]>',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should handle CDATA sections in #text', () => {
+      const value = {
+        '#text': '<![CDATA[https://creativecommons.org/licenses/by/4.0/]]>',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should prefer @rdf:resource over #text when both present', () => {
+      const value = {
+        '@rdf:resource': 'https://creativecommons.org/licenses/by/4.0/',
+        '#text': 'https://example.com/other-license',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should fall back to #text when @rdf:resource is empty', () => {
+      const value = {
+        '@rdf:resource': '',
+        '#text': 'https://creativecommons.org/licenses/by/4.0/',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should fall back to #text when @rdf:resource is whitespace-only', () => {
+      const value = {
+        '@rdf:resource': '   ',
+        '#text': 'https://creativecommons.org/licenses/by/4.0/',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should return undefined for empty string', () => {
+      expect(retrieveRdfResourceOrText('', parseString)).toBeUndefined()
+    })
+
+    it('should return undefined for whitespace-only string', () => {
+      expect(retrieveRdfResourceOrText('   ', parseString)).toBeUndefined()
+    })
+
+    it('should return undefined for null', () => {
+      expect(retrieveRdfResourceOrText(null, parseString)).toBeUndefined()
+    })
+
+    it('should return undefined for undefined', () => {
+      expect(retrieveRdfResourceOrText(undefined, parseString)).toBeUndefined()
+    })
+
+    it('should return undefined for empty object', () => {
+      expect(retrieveRdfResourceOrText({}, parseString)).toBeUndefined()
+    })
+
+    it('should return undefined when both @rdf:resource and #text are empty', () => {
+      const value = {
+        '@rdf:resource': '',
+        '#text': '',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBeUndefined()
+    })
+
+    it('should handle object without @rdf:resource or #text', () => {
+      const value = {
+        otherProperty: 'some value',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBeUndefined()
+    })
+
+    it('should trim whitespace from values', () => {
+      const value = {
+        '@rdf:resource': '  https://example.com/license  ',
+      }
+      const expected = 'https://example.com/license'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+  })
+
+  describe('with parseNumber', () => {
+    it('should parse number from @rdf:resource', () => {
+      const value = {
+        '@rdf:resource': '42',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseNumber)).toBe(42)
+    })
+
+    it('should parse number from #text', () => {
+      const value = {
+        '#text': '123.45',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseNumber)).toBe(123.45)
+    })
+
+    it('should return undefined for non-numeric @rdf:resource', () => {
+      const value = {
+        '@rdf:resource': 'not a number',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseNumber)).toBeUndefined()
+    })
+
+    it('should prefer @rdf:resource over #text for numbers', () => {
+      const value = {
+        '@rdf:resource': '42',
+        '#text': '100',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseNumber)).toBe(42)
+    })
+  })
+
+  describe('with custom parse function', () => {
+    it('should apply custom parse logic', () => {
+      const customParse = (value: unknown): string | undefined => {
+        const str = parseString(value)
+        return str ? str.toUpperCase() : undefined
+      }
+
+      const value = {
+        '@rdf:resource': 'hello world',
+      }
+
+      expect(retrieveRdfResourceOrText(value, customParse)).toBe('HELLO WORLD')
+    })
+
+    it('should handle parse function returning undefined', () => {
+      const alwaysUndefined = (): undefined => undefined
+
+      const value = {
+        '@rdf:resource': 'test',
+        '#text': 'fallback',
+      }
+
+      expect(retrieveRdfResourceOrText(value, alwaysUndefined)).toBeUndefined()
+    })
   })
 })
 
@@ -2639,6 +2843,94 @@ describe('generateNumber', () => {
 
   it('should return undefined for non-number inputs', () => {
     expect(generateNumber(undefined)).toBeUndefined()
+  })
+})
+
+describe('generateRdfResource', () => {
+  it('should generate object with @rdf:resource attribute for valid string', () => {
+    const value = 'https://example.com/resource'
+    const expected = {
+      '@rdf:resource': 'https://example.com/resource',
+    }
+
+    expect(generateRdfResource(value, generatePlainString)).toEqual(expected)
+  })
+
+  it('should generate object with @rdf:resource for mailto URI', () => {
+    const value = 'mailto:admin@example.com'
+    const expected = {
+      '@rdf:resource': 'mailto:admin@example.com',
+    }
+
+    expect(generateRdfResource(value, generatePlainString)).toEqual(expected)
+  })
+
+  it('should trim whitespace via generate function', () => {
+    const value = '  https://example.com/resource  '
+    const expected = {
+      '@rdf:resource': 'https://example.com/resource',
+    }
+
+    expect(generateRdfResource(value, generatePlainString)).toEqual(expected)
+  })
+
+  it('should return undefined for empty string', () => {
+    expect(generateRdfResource('', generatePlainString)).toBeUndefined()
+  })
+
+  it('should return undefined for whitespace-only string', () => {
+    expect(generateRdfResource('   ', generatePlainString)).toBeUndefined()
+  })
+
+  it('should return undefined for undefined value', () => {
+    expect(generateRdfResource(undefined, generatePlainString)).toBeUndefined()
+  })
+
+  it('should work with custom generate function', () => {
+    const customGenerate = (value: string | undefined): string | undefined => {
+      return value ? value.toUpperCase() : undefined
+    }
+    const value = 'https://example.com'
+    const expected = {
+      '@rdf:resource': 'HTTPS://EXAMPLE.COM',
+    }
+
+    expect(generateRdfResource(value, customGenerate)).toEqual(expected)
+  })
+
+  it('should return undefined when generate function returns undefined', () => {
+    const alwaysUndefined = (): undefined => undefined
+    const value = 'https://example.com'
+
+    expect(generateRdfResource(value, alwaysUndefined)).toBeUndefined()
+  })
+
+  it('should return rdf:resource with empty string if generate function returns it', () => {
+    const returnsEmpty = (): string => ''
+    const value = 'https://example.com'
+    const expected = {
+      '@rdf:resource': '',
+    }
+
+    expect(generateRdfResource(value, returnsEmpty)).toEqual(expected)
+  })
+
+  it('should handle number values with generateNumber', () => {
+    const value = 42
+    const expected = {
+      '@rdf:resource': 42,
+    }
+
+    expect(generateRdfResource(value, generateNumber)).toEqual(expected)
+  })
+
+  it('should preserve special characters in URIs', () => {
+    const value = 'https://example.com/path?foo=bar&baz=qux#anchor'
+    const expected = {
+      '@rdf:resource': 'https://example.com/path?foo=bar&baz=qux#anchor',
+    }
+
+    expect(generateRdfResource(value, generatePlainString)).toEqual(expected)
   })
 })
 

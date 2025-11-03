@@ -797,6 +797,13 @@
   "creativeCommons": {
     "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
   },
+  "admin": {
+    "errorReportsTo": "mailto:webmaster@example.com",
+    "generatorAgent": "http://www.movabletype.org/?v=3.2"
+  },
+  "pingback": {
+    "to": "https://example.com/pingback-service"
+  },
   "opensearch": {
     "totalResults": 1000,
     "startIndex": 0,

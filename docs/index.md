@@ -71,6 +71,9 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) | `<thr:*>` | RSS, Atom | ✅ | ✅ |
 | [Dublin Core Terms](http://purl.org/dc/terms/) | `<dcterms:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Well-Formed Web](http://wellformedweb.org/CommentAPI/) | `<wfw:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Admin](http://webns.net/mvcb/) | `<admin:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Pingback](http://purl.org/net/pingback/) | `<pingback:*>` | RSS, Atom | ✅ | ✅ |
+| [Trackback](http://madskills.com/public/xml/rss/module/trackback/) | `<trackback:*>` | RSS, Atom | ✅ | ✅ |
 | [Source](http://source.scripting.com/) | `<source:*>` | RSS | ✅ | ✅ |
 | [ccREL](http://creativecommons.org/ns#) | `<cc:*>` | RSS, Atom | ✅ | ✅ |
 | [Creative Commons](http://backend.userland.com/creativeCommonsRssModule) | `<creativeCommons:*>` | RSS, Atom | ✅ | ✅ |

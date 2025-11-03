@@ -3,6 +3,7 @@ import type {
   ParsePartialUtil as BaseParsePartialUtil,
   DateLike,
 } from '../../../common/types.js'
+import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { CreativecommonsNs } from '../../../namespaces/creativecommons/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
@@ -11,10 +12,12 @@ import type { GeorssNs } from '../../../namespaces/georss/common/types.js'
 import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
+import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
 import type { PscNs } from '../../../namespaces/psc/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
 import type { SyNs } from '../../../namespaces/sy/common/types.js'
 import type { ThrNs } from '../../../namespaces/thr/common/types.js'
+import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 import type { YtNs } from '../../../namespaces/yt/common/types.js'
 
@@ -100,6 +103,8 @@ export namespace Atom {
     creativeCommons?: CreativecommonsNs.ItemOrFeed
     wfw?: WfwNs.Item
     yt?: YtNs.Item
+    pingback?: PingbackNs.Item
+    trackback?: TrackbackNs.Item
   }
 
   export type Feed<TDate extends DateLike> = {
@@ -125,7 +130,9 @@ export namespace Atom {
     dcterms?: DctermsNs.ItemOrFeed<TDate>
     creativeCommons?: CreativecommonsNs.ItemOrFeed
     opensearch?: OpenSearchNs.Feed
+    admin?: AdminNs.Feed
     yt?: YtNs.Feed
+    pingback?: PingbackNs.Feed
   }
 }
 // #endregion reference

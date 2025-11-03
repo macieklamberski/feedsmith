@@ -232,6 +232,13 @@
   <!-- Creative Commons Namespace: Feed Level Tags -->
   <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
 
+  <!-- Admin Namespace: Feed Level Tags -->
+  <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
+  <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+
+  <!-- Pingback Namespace: Feed Level Tags -->
+  <pingback:to>https://example.com/pingback-service</pingback:to>
+
   <!-- OpenSearch Namespace: Feed Level Tags -->
   <opensearch:totalResults>1000</opensearch:totalResults>
   <opensearch:startIndex>0</opensearch:startIndex>

@@ -12,6 +12,7 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import { generateFeed as generateAdminFeed } from '../../../namespaces/admin/generate/utils.js'
 import {
   generateEntry as generateAtomEntry,
   generateFeed as generateAtomFeed,
@@ -29,6 +30,10 @@ import {
 } from '../../../namespaces/itunes/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
 import { generateFeed as generateOpenSearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
+import {
+  generateFeed as generatePingbackFeed,
+  generateItem as generatePingbackItem,
+} from '../../../namespaces/pingback/generate/utils.js'
 import {
   generateFeed as generatePodcastFeed,
   generateItem as generatePodcastItem,
@@ -49,6 +54,7 @@ import {
 } from '../../../namespaces/spotify/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
+import { generateItem as generateTrackbackItem } from '../../../namespaces/trackback/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
 import type { Rss } from '../common/types.js'
 
@@ -202,6 +208,8 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
     ...generateSourceItem(item.sourceNs),
     ...generateRawVoiceItem(item.rawvoice),
     ...generateSpotifyItem(item.spotify),
+    ...generatePingbackItem(item.pingback),
+    ...generateTrackbackItem(item.trackback),
   }
 
   return trimObject(value)
@@ -244,9 +252,11 @@ export const generateFeed: GenerateUtil<Rss.Feed<DateLike>> = (feed) => {
     ...generateCreativecommonsItemOrFeed(feed.creativeCommons),
     ...generateFeedPressFeed(feed.feedpress),
     ...generateOpenSearchFeed(feed.opensearch),
+    ...generateAdminFeed(feed.admin),
     ...generateSourceFeed(feed.sourceNs),
     ...generateRawVoiceFeed(feed.rawvoice),
     ...generateSpotifyFeed(feed.spotify),
+    ...generatePingbackFeed(feed.pingback),
     item: trimArray(feed.items, generateItem),
   }
 

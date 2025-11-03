@@ -11,6 +11,7 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import { generateFeed as generateAdminFeed } from '../../../namespaces/admin/generate/utils.js'
 import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
 import { generateItemOrFeed as generateCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
@@ -22,6 +23,10 @@ import {
 } from '../../../namespaces/itunes/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
 import { generateFeed as generateOpenSearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
+import {
+  generateFeed as generatePingbackFeed,
+  generateItem as generatePingbackItem,
+} from '../../../namespaces/pingback/generate/utils.js'
 import { generateItem as generatePscItem } from '../../../namespaces/psc/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
@@ -29,6 +34,7 @@ import {
   generateItem as generateThrItem,
   generateLink as generateThrLink,
 } from '../../../namespaces/thr/generate/utils.js'
+import { generateItem as generateTrackbackItem } from '../../../namespaces/trackback/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
 import {
   generateFeed as generateYtFeed,
@@ -180,6 +186,8 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
     ...generateCreativecommonsItemOrFeed(entry.creativeCommons),
     ...generateWfwItem(entry.wfw),
     ...generateYtItem(entry.yt),
+    ...generatePingbackItem(entry.pingback),
+    ...generateTrackbackItem(entry.trackback),
   }
 }
 
@@ -241,6 +249,8 @@ export const generateFeed: GenerateUtil<Atom.Feed<DateLike>> = (feed, options) =
     ...generateCreativecommonsItemOrFeed(feed.creativeCommons),
     ...generateOpenSearchFeed(feed.opensearch),
     ...generateYtFeed(feed.yt),
+    ...generateAdminFeed(feed.admin),
+    ...generatePingbackFeed(feed.pingback),
     ...valueEntries,
   }
 

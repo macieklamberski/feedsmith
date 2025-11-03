@@ -12,6 +12,7 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
 import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
@@ -29,6 +30,10 @@ import {
 } from '../../../namespaces/itunes/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
 import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
+import {
+  retrieveFeed as retrievePingbackFeed,
+  retrieveItem as retrievePingbackItem,
+} from '../../../namespaces/pingback/parse/utils.js'
 import {
   retrieveFeed as retrievePodcastFeed,
   retrieveItem as retrievePodcastItem,
@@ -49,6 +54,7 @@ import {
 } from '../../../namespaces/spotify/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/parse/utils.js'
+import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import type { Rss } from '../common/types.js'
 
@@ -189,6 +195,8 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
     sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceItem(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyItem(value) : undefined,
+    pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
+    trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
   }
 
   return trimObject(item)
@@ -235,9 +243,11 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
       : undefined,
     feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(value) : undefined,
     opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(value) : undefined,
+    admin: namespaces.has('admin') ? retrieveAdminFeed(value) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceFeed(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(value) : undefined,
+    pingback: namespaces.has('pingback') ? retrievePingbackFeed(value) : undefined,
   }
 
   return trimObject(feed)
