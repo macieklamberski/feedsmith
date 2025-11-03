@@ -1,24 +1,12 @@
-import type { ParsePartialUtil, Unreliable } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
   parseSingularOf,
   parseString,
-  retrieveText,
+  retrieveRdfResourceOrText,
   trimObject,
 } from '../../../common/utils.js'
 import type { CcNs } from '../common/types.js'
-
-export const retrieveValue = (value: Unreliable): string | undefined => {
-  if (isObject(value)) {
-    const resource = parseString(value['@rdf:resource'])
-
-    if (resource) {
-      return resource
-    }
-  }
-
-  return parseString(retrieveText(value))
-}
 
 export const retrieveItemOrFeed: ParsePartialUtil<CcNs.ItemOrFeed> = (value) => {
   if (!isObject(value)) {
@@ -26,17 +14,39 @@ export const retrieveItemOrFeed: ParsePartialUtil<CcNs.ItemOrFeed> = (value) => 
   }
 
   const result = {
-    license: parseSingularOf(value['cc:license'], retrieveValue),
-    morePermissions: parseSingularOf(value['cc:morepermissions'], retrieveValue),
-    attributionName: parseSingularOf(value['cc:attributionname'], retrieveValue),
-    attributionURL: parseSingularOf(value['cc:attributionurl'], retrieveValue),
-    useGuidelines: parseSingularOf(value['cc:useguidelines'], retrieveValue),
-    permits: parseSingularOf(value['cc:permits'], retrieveValue),
-    requires: parseSingularOf(value['cc:requires'], retrieveValue),
-    prohibits: parseSingularOf(value['cc:prohibits'], retrieveValue),
-    jurisdiction: parseSingularOf(value['cc:jurisdiction'], retrieveValue),
-    legalcode: parseSingularOf(value['cc:legalcode'], retrieveValue),
-    deprecatedOn: parseSingularOf(value['cc:deprecatedon'], retrieveValue),
+    license: parseSingularOf(value['cc:license'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    morePermissions: parseSingularOf(value['cc:morepermissions'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    attributionName: parseSingularOf(value['cc:attributionname'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    attributionURL: parseSingularOf(value['cc:attributionurl'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    useGuidelines: parseSingularOf(value['cc:useguidelines'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    permits: parseSingularOf(value['cc:permits'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    requires: parseSingularOf(value['cc:requires'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    prohibits: parseSingularOf(value['cc:prohibits'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    jurisdiction: parseSingularOf(value['cc:jurisdiction'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    legalcode: parseSingularOf(value['cc:legalcode'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    deprecatedOn: parseSingularOf(value['cc:deprecatedon'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
   }
 
   return trimObject(result)

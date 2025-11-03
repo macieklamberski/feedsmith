@@ -5,6 +5,27 @@
     {
       "id": "example-entry",
       "title": "Example Entry",
+      "authors": [
+        {
+          "name": "H1 Collaboration"
+        },
+        {
+          "name": "John Doe",
+          "arxiv": {
+            "affiliation": "New Mexico State University"
+          }
+        }
+      ],
+      "arxiv": {
+        "comment": "23 pages, 8 figures and 4 tables",
+        "journalRef": "Eur.Phys.J. C31 (2003) 17-29",
+        "doi": "10.1529/biophysj.104.047340",
+        "primaryCategory": {
+          "term": "hep-ex",
+          "scheme": "http://arxiv.org/schemas/atom",
+          "label": "High Energy Physics - Experiment"
+        }
+      },
       "dc": {
         "creator": "Jack Jackson",
         "contributor": "Assistant Editor Mike Thompson",
@@ -697,6 +718,14 @@
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
       },
+      "pingback": {
+        "server": "https://example.com/xmlrpc.php",
+        "target": "https://referenced-blog.com/article"
+      },
+      "trackback": {
+        "ping": "https://example.com/trackback/123",
+        "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
+      },
       "creativeCommons": {
         "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]
       },
@@ -801,6 +830,26 @@
   },
   "creativeCommons": {
     "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
+  },
+  "pingback": {
+    "to": "https://example.com/pingback-service"
+  },
+  "admin": {
+    "errorReportsTo": "mailto:webmaster@example.com",
+    "generatorAgent": "http://www.movabletype.org/?v=3.2"
+  },
+  "opensearch": {
+    "totalResults": 1000,
+    "startIndex": 0,
+    "itemsPerPage": 10,
+    "queries": [
+      {
+        "role": "request",
+        "searchTerms": "quantum computing",
+        "startIndex": 0,
+        "count": 10
+      }
+    ]
   },
   "sy": {
     "updatePeriod": "hourly",
