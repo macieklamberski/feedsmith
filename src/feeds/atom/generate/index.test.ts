@@ -766,6 +766,11 @@ describe('generate', () => {
             comment: '23 pages, 8 figures',
             journalRef: 'Eur.Phys.J. C31 (2003) 17-29',
             doi: '10.1234/example',
+            primaryCategory: {
+              term: 'cs.LG',
+              scheme: 'http://arxiv.org/schemas/atom',
+              label: 'Machine Learning',
+            },
           },
         },
       ],
@@ -786,6 +791,7 @@ describe('generate', () => {
     <arxiv:comment>23 pages, 8 figures</arxiv:comment>
     <arxiv:journal_ref>Eur.Phys.J. C31 (2003) 17-29</arxiv:journal_ref>
     <arxiv:doi>10.1234/example</arxiv:doi>
+    <arxiv:primary_category term="cs.LG" scheme="http://arxiv.org/schemas/atom" label="Machine Learning"/>
   </entry>
 </feed>
 `
