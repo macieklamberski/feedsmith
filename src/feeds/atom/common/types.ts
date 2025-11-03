@@ -3,6 +3,7 @@ import type {
   ParsePartialUtil as BaseParsePartialUtil,
   DateLike,
 } from '../../../common/types.js'
+import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { CreativecommonsNs } from '../../../namespaces/creativecommons/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
@@ -128,6 +129,7 @@ export namespace Atom {
     dcterms?: DctermsNs.ItemOrFeed<TDate>
     creativeCommons?: CreativecommonsNs.ItemOrFeed
     yt?: YtNs.Feed
+    admin?: AdminNs.Feed
     pingback?: PingbackNs.Feed
   }
 }

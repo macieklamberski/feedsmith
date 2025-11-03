@@ -1402,6 +1402,36 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate admin namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with admin namespace',
+      description: 'A feed with admin properties',
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:admin': 'http://webns.net/mvcb/',
+        '@xmlns:rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        channel: {
+          title: 'Feed with admin namespace',
+          description: 'A feed with admin properties',
+          'admin:errorReportsTo': {
+            '@rdf:resource': 'mailto:webmaster@example.com',
+          },
+          'admin:generatorAgent': {
+            '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+          },
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate rawvoice namespace properties and attributes for feed', () => {
     const value = {
       title: 'Feed with RawVoice namespace',

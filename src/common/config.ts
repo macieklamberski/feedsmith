@@ -35,6 +35,12 @@ export const locales = {
 }
 
 export const namespaceUris = {
+  admin: [
+    'http://webns.net/mvcb/', // Official URI.
+    'https://webns.net/mvcb/',
+    'http://webns.net/mvcb',
+    'https://webns.net/mvcb',
+  ],
   atom: [
     'http://www.w3.org/2005/Atom', // Official URI (Atom 1.0).
     'https://www.w3.org/2005/Atom',

@@ -12,6 +12,7 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
 import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
@@ -240,6 +241,7 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
       ? retrieveCreativecommonsItemOrFeed(value)
       : undefined,
     feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(value) : undefined,
+    admin: namespaces.has('admin') ? retrieveAdminFeed(value) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawvoiceFeed(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(value) : undefined,

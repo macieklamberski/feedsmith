@@ -1519,6 +1519,29 @@ describe('parseFeed', () => {
 
     expect(parseFeed(value)).toEqual(expected)
   })
+
+  it('should handle admin namespace', () => {
+    const value = {
+      title: { '#text': 'Admin Feed' },
+      link: { '#text': 'https://example.com' },
+      'admin:errorreportsto': {
+        '@rdf:resource': 'mailto:webmaster@example.com',
+      },
+      'admin:generatoragent': {
+        '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+      },
+    }
+    const expected = {
+      title: 'Admin Feed',
+      link: 'https://example.com',
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
 })
 
 describe('retrieveFeed', () => {

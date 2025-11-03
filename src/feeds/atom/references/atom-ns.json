@@ -808,6 +808,10 @@
   "pingback": {
     "to": "https://example.com/pingback-service"
   },
+  "admin": {
+    "errorReportsTo": "mailto:webmaster@example.com",
+    "generatorAgent": "http://www.movabletype.org/?v=3.2"
+  },
   "sy": {
     "updatePeriod": "hourly",
     "updateFrequency": 1,

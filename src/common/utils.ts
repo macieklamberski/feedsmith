@@ -41,7 +41,13 @@ export const retrieveRdfResourceOrText = <T>(
   parse: (value: Unreliable) => T | undefined,
 ): T | undefined => {
   if (isObject(value)) {
-    const resource = parse(value['@rdf:resource'])
+    const rdfResource = parse(value['@rdf:resource'])
+
+    if (isPresent(rdfResource)) {
+      return rdfResource
+    }
+
+    const resource = parse(value['@resource'])
 
     if (isPresent(resource)) {
       return resource
@@ -537,6 +543,21 @@ export const generatePlainString: GenerateUtil<string> = (value) => {
 export const generateNumber: GenerateUtil<number> = (value) => {
   if (typeof value === 'number' && Number.isFinite(value)) {
     return value
+  }
+}
+
+export const generateRdfResource = <T, R>(
+  value: T,
+  generate: (value: T) => R | undefined,
+): { '@rdf:resource': R } | undefined => {
+  const rdfResource = generate(value)
+
+  if (!isPresent(rdfResource)) {
+    return
+  }
+
+  return {
+    '@rdf:resource': rdfResource,
   }
 }
 

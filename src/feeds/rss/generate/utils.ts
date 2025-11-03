@@ -12,6 +12,7 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import { generateFeed as generateAdminFeed } from '../../../namespaces/admin/generate/utils.js'
 import {
   generateEntry as generateAtomEntry,
   generateFeed as generateAtomFeed,
@@ -249,6 +250,7 @@ export const generateFeed: GenerateUtil<Rss.Feed<DateLike>> = (feed) => {
     ...generateDctermsItemOrFeed(feed.dcterms),
     ...generateCreativecommonsItemOrFeed(feed.creativeCommons),
     ...generateFeedPressFeed(feed.feedpress),
+    ...generateAdminFeed(feed.admin),
     ...generateSourceFeed(feed.sourceNs),
     ...generateRawVoiceFeed(feed.rawvoice),
     ...generateSpotifyFeed(feed.spotify),

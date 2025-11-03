@@ -94,6 +94,7 @@ export default defineConfig({
               { text: 'Atom Threading', link: '/reference/namespaces/thr' },
               { text: 'Dublin Core Terms', link: '/reference/namespaces/dcterms' },
               { text: 'Well-Formed Web', link: '/reference/namespaces/wfw' },
+              { text: 'Admin', link: '/reference/namespaces/admin' },
               { text: 'Pingback', link: '/reference/namespaces/pingback' },
               { text: 'Trackback', link: '/reference/namespaces/trackback' },
               { text: 'Source', link: '/reference/namespaces/source' },
