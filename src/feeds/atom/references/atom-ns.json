@@ -5,6 +5,27 @@
     {
       "id": "example-entry",
       "title": "Example Entry",
+      "authors": [
+        {
+          "name": "H1 Collaboration"
+        },
+        {
+          "name": "John Doe",
+          "arxiv": {
+            "affiliation": "New Mexico State University"
+          }
+        }
+      ],
+      "arxiv": {
+        "comment": "23 pages, 8 figures and 4 tables",
+        "journalRef": "Eur.Phys.J. C31 (2003) 17-29",
+        "doi": "10.1529/biophysj.104.047340",
+        "primaryCategory": {
+          "term": "hep-ex",
+          "scheme": "http://arxiv.org/schemas/atom",
+          "label": "High Energy Physics - Experiment"
+        }
+      },
       "dc": {
         "creator": "Jack Jackson",
         "contributor": "Assistant Editor Mike Thompson",

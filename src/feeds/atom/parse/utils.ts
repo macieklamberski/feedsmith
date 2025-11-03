@@ -11,6 +11,10 @@ import {
   trimObject,
 } from '../../../common/utils.js'
 import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
+import {
+  retrieveAuthor as retrieveArxivAuthor,
+  retrieveEntry as retrieveArxivEntry,
+} from '../../../namespaces/arxiv/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
@@ -98,11 +102,13 @@ export const parsePerson: ParsePartialUtil<Atom.Person> = (value, options) => {
     return
   }
 
+  const namespaces = options?.asNamespace ? undefined : detectNamespaces(value)
   const get = createNamespaceGetter(value, options?.prefix)
   const person = {
     name: parseSingularOf(get('name'), (value) => parseString(retrieveText(value))),
     uri: retrievePersonUri(value, options),
     email: parseSingularOf(get('email'), (value) => parseString(retrieveText(value))),
+    arxiv: namespaces?.has('arxiv') ? retrieveArxivAuthor(value) : undefined,
   }
 
   return trimObject(person)
@@ -227,6 +233,7 @@ export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options)
     summary: parseSingularOf(get('summary'), (value) => parseString(retrieveText(value))),
     title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
     updated: retrieveUpdated(value, options),
+    arxiv: namespaces?.has('arxiv') ? retrieveArxivEntry(value) : undefined,
     cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
     slash: namespaces?.has('slash') ? retrieveSlashItem(value) : undefined,

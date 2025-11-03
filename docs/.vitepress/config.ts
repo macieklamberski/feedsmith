@@ -102,6 +102,7 @@ export default defineConfig({
               { text: 'Creative Commons', link: '/reference/namespaces/creativecommons' },
               { text: 'FeedPress', link: '/reference/namespaces/feedpress' },
               { text: 'OpenSearch', link: '/reference/namespaces/opensearch' },
+              { text: 'arXiv', link: '/reference/namespaces/arxiv' },
               { text: 'YouTube', link: '/reference/namespaces/yt' },
             ],
           },
