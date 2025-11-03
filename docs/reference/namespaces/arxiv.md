@@ -33,4 +33,6 @@ arXiv is an extension namespace for the arXiv preprint repository API, providing
 
 ## Related
 
+- **[Dublin Core](/reference/namespaces/dc)** - Standard metadata for scholarly content
+- **[Dublin Core Terms](/reference/namespaces/dcterms)** - Extended metadata vocabulary
 - **[Parsing Namespaces](/parsing/namespaces)** - How namespace parsing works
