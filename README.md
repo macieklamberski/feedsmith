@@ -78,6 +78,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Podlove Simple Chapters](http://podlove.org/simple-chapters) | `<psc:*>` | RSS, Atom | ✅ | ✅ |
 | [Spotify](http://www.spotify.com/ns/rss) | `<spotify:*>` | RSS | ✅ | ✅ |
 | [Media RSS](http://search.yahoo.com/mrss/) | `<media:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [W3C Basic Geo](http://www.w3.org/2003/01/geo/wgs84_pos#) | `<geo:*>` | RSS, Atom | ✅ | ✅ |
 | [GeoRSS-Simple](http://www.georss.org/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) | `<thr:*>` | RSS, Atom | ✅ | ✅ |
 | [Dublin Core Terms](http://purl.org/dc/terms/) | `<dcterms:*>` | RSS, Atom, RDF | ✅ | ✅ |

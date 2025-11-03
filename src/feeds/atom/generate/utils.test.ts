@@ -1424,6 +1424,51 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with geo namespace properties', () => {
+    const value = {
+      id: 'http://example.com/feed',
+      title: 'Locations Feed',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      geo: {
+        lat: 37.7749,
+        long: -122.4194,
+      },
+      entries: [
+        {
+          id: 'http://example.com/entry/1',
+          title: 'Example Place',
+          updated: new Date('2024-01-10T12:00:00Z'),
+          geo: {
+            lat: 37.808,
+            long: -122.4177,
+          },
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:geo': 'http://www.w3.org/2003/01/geo/wgs84_pos#',
+        id: 'http://example.com/feed',
+        title: 'Locations Feed',
+        updated: '2024-01-10T12:00:00.000Z',
+        'geo:lat': 37.7749,
+        'geo:long': -122.4194,
+        entry: [
+          {
+            id: 'http://example.com/entry/1',
+            title: 'Example Place',
+            updated: '2024-01-10T12:00:00.000Z',
+            'geo:lat': 37.808,
+            'geo:long': -122.4177,
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with dcterms namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',

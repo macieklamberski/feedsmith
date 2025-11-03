@@ -713,6 +713,25 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with geo namespace properties', () => {
+    const value = {
+      title: 'Example Location',
+      geo: {
+        lat: 37.8199,
+        long: -122.4783,
+        alt: 67.0,
+      },
+    }
+    const expected = {
+      title: 'Example Location',
+      'geo:lat': 37.8199,
+      'geo:long': -122.4783,
+      'geo:alt': 67,
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with wfw namespace properties', () => {
     const value = {
       title: 'Item with wfw namespace',
@@ -1516,6 +1535,49 @@ describe('generateFeed', () => {
           title: 'Feed with Spotify namespace',
           description: 'A feed with Spotify properties',
           'spotify:countryOfOrigin': 'US',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with geo namespace properties', () => {
+    const value = {
+      title: 'Example City Feed',
+      description: 'Feed with geographic coordinates',
+      geo: {
+        lat: 37.7749,
+        long: -122.4194,
+      },
+      items: [
+        {
+          title: 'Example Location',
+          geo: {
+            lat: 37.8199,
+            long: -122.4783,
+            alt: 67.0,
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:geo': 'http://www.w3.org/2003/01/geo/wgs84_pos#',
+        channel: {
+          title: 'Example City Feed',
+          description: 'Feed with geographic coordinates',
+          'geo:lat': 37.7749,
+          'geo:long': -122.4194,
+          item: [
+            {
+              title: 'Example Location',
+              'geo:lat': 37.8199,
+              'geo:long': -122.4783,
+              'geo:alt': 67,
+            },
+          ],
         },
       },
     }

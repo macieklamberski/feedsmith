@@ -9,6 +9,7 @@ import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { CreativecommonsNs } from '../../../namespaces/creativecommons/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DctermsNs } from '../../../namespaces/dcterms/common/types.js'
+import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeorssNs } from '../../../namespaces/georss/common/types.js'
 import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
@@ -101,6 +102,7 @@ export namespace Atom {
     psc?: PscNs.Item
     media?: MediaNs.ItemOrFeed
     georss?: GeorssNs.ItemOrFeed
+    geo?: GeoNs.ItemOrFeed
     thr?: ThrNs.Item
     dcterms?: DctermsNs.ItemOrFeed<TDate>
     creativeCommons?: CreativecommonsNs.ItemOrFeed
@@ -130,6 +132,7 @@ export namespace Atom {
     itunes?: ItunesNs.Feed
     media?: MediaNs.ItemOrFeed
     georss?: GeorssNs.ItemOrFeed
+    geo?: GeoNs.ItemOrFeed
     dcterms?: DctermsNs.ItemOrFeed<TDate>
     creativeCommons?: CreativecommonsNs.ItemOrFeed
     opensearch?: OpensearchNs.Feed

@@ -861,6 +861,11 @@
         "floor": 4,
         "radius": 50000
       },
+      "geo": {
+        "lat": 37.8199,
+        "long": -122.4783,
+        "alt": 67.0
+      },
       "thr": {
         "total": 100,
         "inReplyTos": [
@@ -1785,6 +1790,11 @@
     "elev": 360,
     "floor": 4,
     "radius": 50000
+  },
+  "geo": {
+    "lat": 37.7749,
+    "long": -122.4194,
+    "alt": 10.5
   },
   "admin": {
     "errorReportsTo": "mailto:webmaster@example.com",
