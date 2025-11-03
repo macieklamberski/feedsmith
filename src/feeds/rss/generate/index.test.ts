@@ -656,7 +656,7 @@ describe('generate', () => {
       },
       items: [
         {
-          title: 'Item without admin',
+          title: 'Item title',
         },
       ],
     }
@@ -668,7 +668,7 @@ describe('generate', () => {
     <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
     <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
     <item>
-      <title>Item without admin</title>
+      <title>Item title</title>
     </item>
   </channel>
 </rss>

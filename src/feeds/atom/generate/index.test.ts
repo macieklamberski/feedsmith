@@ -844,7 +844,7 @@ describe('generate', () => {
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: 'Entry without Admin',
+          title: 'Entry title',
           updated: new Date('2024-01-05T10:30:00Z'),
         },
       ],
@@ -858,7 +858,7 @@ describe('generate', () => {
   <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
   <entry>
     <id>https://example.com/entry/1</id>
-    <title>Entry without Admin</title>
+    <title>Entry title</title>
     <updated>2024-01-05T10:30:00.000Z</updated>
   </entry>
 </feed>
