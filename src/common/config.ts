@@ -35,6 +35,12 @@ export const locales = {
 }
 
 export const namespaceUris = {
+  admin: [
+    'http://webns.net/mvcb/', // Official URI.
+    'https://webns.net/mvcb/',
+    'http://webns.net/mvcb',
+    'https://webns.net/mvcb',
+  ],
   atom: [
     'http://www.w3.org/2005/Atom', // Official URI (Atom 1.0).
     'https://www.w3.org/2005/Atom',
@@ -133,6 +139,10 @@ export const namespaceUris = {
     'https://www.georss.org/georss',
     'https://www.georss.org/georss/',
   ],
+  geo: [
+    'http://www.w3.org/2003/01/geo/wgs84_pos#', // Official URI.
+    'https://www.w3.org/2003/01/geo/wgs84_pos#',
+  ],
   thr: [
     'http://purl.org/syndication/thread/1.0', // Official URI.
     'https://purl.org/syndication/thread/1.0',
@@ -216,6 +226,32 @@ export const namespaceUris = {
     'https://web.resource.org/cc/',
     'http://web.resource.org/cc',
     'https://web.resource.org/cc',
+  ],
+  opensearch: [
+    'http://a9.com/-/spec/opensearch/1.1/', // Official URI (OpenSearch 1.1).
+    'https://a9.com/-/spec/opensearch/1.1/',
+    'http://a9.com/-/spec/opensearch/1.0/', // Official URI (OpenSearch 1.0).
+    'https://a9.com/-/spec/opensearch/1.0/',
+    'http://a9.com/-/spec/opensearchrss/1.0/', // Official URI (legacy).
+    'https://a9.com/-/spec/opensearchrss/1.0/',
+  ],
+  arxiv: [
+    'http://arxiv.org/schemas/atom', // Official URI.
+    'https://arxiv.org/schemas/atom',
+    'http://arxiv.org/schemas/atom/',
+    'https://arxiv.org/schemas/atom/',
+  ],
+  pingback: [
+    'http://madskills.com/public/xml/rss/module/pingback/', // Official URI.
+    'https://madskills.com/public/xml/rss/module/pingback/',
+    'http://madskills.com/public/xml/rss/module/pingback',
+    'https://madskills.com/public/xml/rss/module/pingback',
+  ],
+  trackback: [
+    'http://madskills.com/public/xml/rss/module/trackback/', // Official URI.
+    'https://madskills.com/public/xml/rss/module/trackback/',
+    'http://madskills.com/public/xml/rss/module/trackback',
+    'https://madskills.com/public/xml/rss/module/trackback',
   ],
 }
 

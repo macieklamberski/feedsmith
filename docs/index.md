@@ -67,15 +67,21 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Podlove Simple Chapters](http://podlove.org/simple-chapters) | `<psc:*>` | RSS, Atom | ✅ | ✅ |
 | [Spotify](http://www.spotify.com/ns/rss) | `<spotify:*>` | RSS | ✅ | ✅ |
 | [Media RSS](http://search.yahoo.com/mrss/) | `<media:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [W3C Basic Geo](http://www.w3.org/2003/01/geo/wgs84_pos#) | `<geo:*>` | RSS, Atom | ✅ | ✅ |
 | [GeoRSS-Simple](http://www.georss.org/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Atom Publishing Protocol](http://www.w3.org/2007/app) | `<app:*>` | Atom | ✅ | ✅ |
 | [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) | `<thr:*>` | RSS, Atom | ✅ | ✅ |
 | [Dublin Core Terms](http://purl.org/dc/terms/) | `<dcterms:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Well-Formed Web](http://wellformedweb.org/CommentAPI/) | `<wfw:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Admin](http://webns.net/mvcb/) | `<admin:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Pingback](http://purl.org/net/pingback/) | `<pingback:*>` | RSS, Atom | ✅ | ✅ |
+| [Trackback](http://madskills.com/public/xml/rss/module/trackback/) | `<trackback:*>` | RSS, Atom | ✅ | ✅ |
 | [Source](http://source.scripting.com/) | `<source:*>` | RSS | ✅ | ✅ |
 | [ccREL](http://creativecommons.org/ns#) | `<cc:*>` | RSS, Atom | ✅ | ✅ |
 | [Creative Commons](http://backend.userland.com/creativeCommonsRssModule) | `<creativeCommons:*>` | RSS, Atom | ✅ | ✅ |
 | [FeedPress](https://feedpress.com/xmlns) | `<feedpress:*>` | RSS | ✅ | ✅ |
+| [OpenSearch](http://a9.com/-/spec/opensearch/1.1/) | `<opensearch:*>` | RSS, Atom | ✅ | ✅ |
+| [arXiv](http://arxiv.org/schemas/atom) | `<arxiv:*>` | Atom | ✅ | ✅ |
 | [YouTube](https://www.youtube.com/feeds/videos.xml) | `<yt:*>` | Atom | ✅ | ✅ |
 
 ### Other

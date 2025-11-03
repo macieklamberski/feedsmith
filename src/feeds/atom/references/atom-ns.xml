@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:app="http://www.w3.org/2007/app" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:psc="http://podlove.org/simple-chapters" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:cc="http://creativecommons.org/ns#" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:psc="http://podlove.org/simple-chapters" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/" xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/" xmlns:admin="http://webns.net/mvcb/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cc="http://creativecommons.org/ns#" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns:app="http://www.w3.org/2007/app" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
   <id>example-feed</id>
   <title>Example Feed</title>
 
@@ -159,6 +159,11 @@
   <georss:floor>4</georss:floor>
   <georss:radius>50000</georss:radius>
 
+  <!-- W3C Basic Geo Namespace: Feed Level Tags -->
+  <geo:lat>37.7749</geo:lat>
+  <geo:long>-122.4194</geo:long>
+  <geo:alt>10.5</geo:alt>
+
   <!-- Dublin Core Terms Namespace: Feed Level Tags -->
   <dcterms:abstract>This is an abstract of the feed content</dcterms:abstract>
   <dcterms:accessRights>Public access with attribution required</dcterms:accessRights>
@@ -216,6 +221,13 @@
   <dcterms:type>Text</dcterms:type>
   <dcterms:valid>2025-12-31T23:59:59.000Z</dcterms:valid>
 
+  <!-- Pingback Namespace: Feed Level Tags -->
+  <pingback:to>https://example.com/pingback-service</pingback:to>
+
+  <!-- Admin Namespace: Feed Level Tags -->
+  <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
+  <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+
   <!-- ccREL Namespace: Feed Level Tags -->
   <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
   <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
@@ -232,6 +244,12 @@
   <!-- Creative Commons Namespace: Feed Level Tags -->
   <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
 
+  <!-- OpenSearch Namespace: Feed Level Tags -->
+  <opensearch:totalResults>1000</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:Query role="request" searchTerms="quantum computing" startIndex="0" count="10"/>
+
   <!-- YouTube Namespace: Feed Level Tags -->
   <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
   <yt:playlistId>PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf</yt:playlistId>
@@ -240,6 +258,21 @@
     <id>example-entry</id>
     <link href="https://example.com/posts/understanding-xml-namespaces/comments/1/replies" rel="replies" thr:count="2" thr:updated="2025-05-10T16:45:00Z"/>
     <title>Example Entry</title>
+    <author>
+      <name>H1 Collaboration</name>
+    </author>
+    <author>
+      <name>John Doe</name>
+
+      <!-- arXiv Namespace: Author Level Tags -->
+      <arxiv:affiliation>New Mexico State University</arxiv:affiliation>
+    </author>
+
+    <!-- arXiv Namespace: Entry Level Tags -->
+    <arxiv:comment>23 pages, 8 figures and 4 tables</arxiv:comment>
+    <arxiv:journal_ref>Eur.Phys.J. C31 (2003) 17-29</arxiv:journal_ref>
+    <arxiv:doi>10.1529/biophysj.104.047340</arxiv:doi>
+    <arxiv:primary_category term="hep-ex" scheme="http://arxiv.org/schemas/atom" label="High Energy Physics - Experiment"/>
 
     <!-- Atom Publishing Protocol Namespace: Entry Level Tags -->
     <app:edited>2024-03-15T14:30:00.000Z</app:edited>
@@ -463,6 +496,11 @@
     <media:price type="package" info="full access" price="9.99" currency="USD"/>
     <media:price type="subscription" info="monthly" price="4.99" currency="USD"/>
 
+    <!-- W3C Basic Geo Namespace: Entry Level Tags -->
+    <geo:lat>37.8199</geo:lat>
+    <geo:long>-122.4783</geo:long>
+    <geo:alt>67.0</geo:alt>
+
     <!-- GeoRSS-Simple Namespace: Entry Level Tags -->
     <georss:point>37.78 -122.42</georss:point>
     <georss:line>37.78 -122.42 37.42 -122.1 37.86 -122.27</georss:line>
@@ -483,6 +521,15 @@
     <!-- Well Formed Web CommentAPI Namespace: Entry Level Tags -->
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
     <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
+
+    <!-- Pingback Namespace: Entry Level Tags -->
+    <pingback:server>https://example.com/xmlrpc.php</pingback:server>
+    <pingback:target>https://referenced-blog.com/article</pingback:target>
+
+    <!-- Trackback Namespace: Entry Level Tags -->
+    <trackback:ping>https://example.com/trackback/123</trackback:ping>
+    <trackback:about>https://blog1.com/trackback/456</trackback:about>
+    <trackback:about>https://blog2.com/trackback/789</trackback:about>
 
     <!-- Creative Commons Namespace: Entry Level Tags -->
     <creativeCommons:license>http://creativecommons.org/licenses/by-sa/4.0/</creativeCommons:license>

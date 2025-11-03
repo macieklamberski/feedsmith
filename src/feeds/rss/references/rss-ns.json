@@ -861,6 +861,11 @@
         "floor": 4,
         "radius": 50000
       },
+      "geo": {
+        "lat": 37.8199,
+        "long": -122.4783,
+        "alt": 67.0
+      },
       "thr": {
         "total": 100,
         "inReplyTos": [
@@ -891,6 +896,14 @@
       "wfw": {
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
+      },
+      "pingback": {
+        "server": "https://example.com/xmlrpc.php",
+        "target": "https://referenced-blog.com/article"
+      },
+      "trackback": {
+        "ping": "https://example.com/trackback/123",
+        "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
       },
       "sourceNs": {
         "markdown": "# Understanding XML Namespaces - This article explores the power and flexibility of XML namespaces in modern web syndication.",
@@ -1778,6 +1791,18 @@
     "floor": 4,
     "radius": 50000
   },
+  "geo": {
+    "lat": 37.7749,
+    "long": -122.4194,
+    "alt": 10.5
+  },
+  "admin": {
+    "errorReportsTo": "mailto:webmaster@example.com",
+    "generatorAgent": "http://www.movabletype.org/?v=3.2"
+  },
+  "pingback": {
+    "to": "https://example.com/pingback-service"
+  },
   "sourceNs": {
     "accounts": [
       { "service": "twitter", "value": "johndoe" },
@@ -1807,6 +1832,19 @@
     "locale": "en",
     "podcastId": "1234567890",
     "cssFile": "https://example.com/custom-feed-styles.css"
+  },
+  "opensearch": {
+    "totalResults": 1000,
+    "startIndex": 21,
+    "itemsPerPage": 10,
+    "queries": [
+      {
+        "role": "request",
+        "searchTerms": "quantum computing",
+        "startIndex": 21,
+        "count": 10
+      }
+    ]
   },
   "rawvoice": {
     "rating": {
