@@ -1668,4 +1668,61 @@ describe('generateFeed', () => {
 
     expect(generateFeed(value)).toEqual(expected)
   })
+
+  it('should generate Atom feed with app namespace properties', () => {
+    const value = {
+      id: 'http://example.com/blog',
+      title: 'My Blog',
+      updated: new Date('2024-03-15T16:00:00Z'),
+      entries: [
+        {
+          id: 'http://example.com/blog/post/1',
+          title: 'Published Post',
+          updated: new Date('2024-03-15T16:00:00Z'),
+          app: {
+            edited: new Date('2024-03-15T14:30:00Z'),
+          },
+        },
+        {
+          id: 'http://example.com/blog/post/2',
+          title: 'Draft Post',
+          updated: new Date('2024-03-15T15:00:00Z'),
+          app: {
+            edited: new Date('2024-03-15T15:00:00Z'),
+            control: {
+              draft: true,
+            },
+          },
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:app': 'http://www.w3.org/2007/app',
+        id: 'http://example.com/blog',
+        title: 'My Blog',
+        updated: '2024-03-15T16:00:00.000Z',
+        entry: [
+          {
+            id: 'http://example.com/blog/post/1',
+            title: 'Published Post',
+            updated: '2024-03-15T16:00:00.000Z',
+            'app:edited': '2024-03-15T14:30:00.000Z',
+          },
+          {
+            id: 'http://example.com/blog/post/2',
+            title: 'Draft Post',
+            updated: '2024-03-15T15:00:00.000Z',
+            'app:edited': '2024-03-15T15:00:00.000Z',
+            'app:control': {
+              'app:draft': 'yes',
+            },
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
 })

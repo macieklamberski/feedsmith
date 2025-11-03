@@ -93,6 +93,7 @@ export default defineConfig({
               { text: 'W3C Basic Geo', link: '/reference/namespaces/geo' },
               { text: 'GeoRSS-Simple', link: '/reference/namespaces/georss' },
               { text: 'Atom Threading', link: '/reference/namespaces/thr' },
+              { text: 'Atom Publishing Protocol', link: '/reference/namespaces/app' },
               { text: 'Dublin Core Terms', link: '/reference/namespaces/dcterms' },
               { text: 'Well-Formed Web', link: '/reference/namespaces/wfw' },
               { text: 'Admin', link: '/reference/namespaces/admin' },

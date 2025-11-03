@@ -4,6 +4,7 @@ import type {
   DateLike,
 } from '../../../common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
+import type { AppNs } from '../../../namespaces/app/common/types.js'
 import type { ArxivNs } from '../../../namespaces/arxiv/common/types.js'
 import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { CreativecommonsNs } from '../../../namespaces/creativecommons/common/types.js'
@@ -94,6 +95,7 @@ export namespace Atom {
     summary?: Text
     title: Text
     updated: TDate
+    app?: AppNs.Entry<TDate>
     arxiv?: ArxivNs.Entry
     cc?: CcNs.ItemOrFeed
     dc?: DcNs.ItemOrFeed<TDate>

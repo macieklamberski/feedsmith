@@ -12,6 +12,7 @@ import {
   trimObject,
 } from '../../../common/utils.js'
 import { generateFeed as generateAdminFeed } from '../../../namespaces/admin/generate/utils.js'
+import { generateEntry as generateAppEntry } from '../../../namespaces/app/generate/utils.js'
 import {
   generateAuthor as generateArxivAuthor,
   generateEntry as generateArxivEntry,
@@ -180,6 +181,7 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
 
   return {
     ...trimmedValue,
+    ...generateAppEntry(entry.app),
     ...generateArxivEntry(entry.arxiv),
     ...generateCc(entry.cc),
     ...generateDcItemOrFeed(entry.dc),

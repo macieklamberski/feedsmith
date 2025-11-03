@@ -16,6 +16,12 @@
           }
         }
       ],
+      "app": {
+        "edited": "2024-03-15T14:30:00.000Z",
+        "control": {
+          "draft": true
+        }
+      },
       "arxiv": {
         "comment": "23 pages, 8 figures and 4 tables",
         "journalRef": "Eur.Phys.J. C31 (2003) 17-29",

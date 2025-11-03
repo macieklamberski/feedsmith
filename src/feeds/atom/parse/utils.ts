@@ -11,6 +11,7 @@ import {
   trimObject,
 } from '../../../common/utils.js'
 import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
+import { retrieveEntry as retrieveAppEntry } from '../../../namespaces/app/parse/utils.js'
 import {
   retrieveAuthor as retrieveArxivAuthor,
   retrieveEntry as retrieveArxivEntry,
@@ -234,6 +235,7 @@ export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options)
     summary: parseSingularOf(get('summary'), (value) => parseString(retrieveText(value))),
     title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
     updated: retrieveUpdated(value, options),
+    app: namespaces?.has('app') ? retrieveAppEntry(value) : undefined,
     arxiv: namespaces?.has('arxiv') ? retrieveArxivEntry(value) : undefined,
     cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
