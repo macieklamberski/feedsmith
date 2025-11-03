@@ -280,8 +280,8 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) =
       ? retrieveCreativecommonsItemOrFeed(value)
       : undefined,
     opensearch: namespaces?.has('opensearch') ? retrieveOpenSearchFeed(value) : undefined,
-    admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
+    admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackFeed(value) : undefined,
   }
 

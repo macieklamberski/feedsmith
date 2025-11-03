@@ -130,8 +130,8 @@ export namespace Atom {
     dcterms?: DctermsNs.ItemOrFeed<TDate>
     creativeCommons?: CreativecommonsNs.ItemOrFeed
     opensearch?: OpenSearchNs.Feed
-    admin?: AdminNs.Feed
     yt?: YtNs.Feed
+    admin?: AdminNs.Feed
     pingback?: PingbackNs.Feed
   }
 }

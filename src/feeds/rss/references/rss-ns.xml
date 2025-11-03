@@ -605,6 +605,15 @@
       <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
       <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
 
+      <!-- Pingback Namespace: Item Level Tags -->
+      <pingback:server>https://example.com/xmlrpc.php</pingback:server>
+      <pingback:target>https://referenced-blog.com/article</pingback:target>
+
+      <!-- Trackback Namespace: Item Level Tags -->
+      <trackback:ping>https://example.com/trackback/123</trackback:ping>
+      <trackback:about>https://blog1.com/trackback/456</trackback:about>
+      <trackback:about>https://blog2.com/trackback/789</trackback:about>
+
       <!-- Source Namespace: Item Level Tags -->
       <source:markdown># Understanding XML Namespaces - This article explores the power and flexibility of XML namespaces in modern web syndication.</source:markdown>
       <source:outline>&lt;outline text="Introduction"&gt;&lt;outline text="What are namespaces?"/&gt;&lt;/outline&gt;</source:outline>
@@ -627,15 +636,6 @@
       <spotify:access>
         <entitlement name="premium_content"/>
       </spotify:access>
-
-      <!-- Pingback Namespace: Item Level Tags -->
-      <pingback:server>https://example.com/xmlrpc.php</pingback:server>
-      <pingback:target>https://referenced-blog.com/article</pingback:target>
-
-      <!-- Trackback Namespace: Item Level Tags -->
-      <trackback:ping>https://example.com/trackback/123</trackback:ping>
-      <trackback:about>https://blog1.com/trackback/456</trackback:about>
-      <trackback:about>https://blog2.com/trackback/789</trackback:about>
     </item>
   </channel>
 </rss>
