@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/" xmlns:psc="http://podlove.org/simple-chapters" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/" xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/" xmlns:admin="http://webns.net/mvcb/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cc="http://creativecommons.org/ns#" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns:app="http://www.w3.org/2007/app" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
+<feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:dc="http://purl.org/dc/elements/1.1/"
+      xmlns:dcterms="http://purl.org/dc/terms/"
+      xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+      xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+      xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+      xmlns:psc="http://podlove.org/simple-chapters"
+      xmlns:media="http://search.yahoo.com/mrss/"
+      xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/"
+      xmlns:arxiv="http://arxiv.org/schemas/atom"
+      xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
+      xmlns:cc="http://creativecommons.org/ns#"
+      xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule"
+      xmlns:thr="http://purl.org/syndication/thread/1.0"
+      xmlns:app="http://www.w3.org/2007/app"
+      xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+      xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
+      xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+      xmlns:admin="http://webns.net/mvcb/"
+      xmlns:yt="http://www.youtube.com/xml/schemas/2015"
+      xmlns:georss="http://www.georss.org/georss"
+      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
   <id>example-feed</id>
   <title>Example Feed</title>
 
