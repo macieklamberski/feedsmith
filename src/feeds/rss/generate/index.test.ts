@@ -92,6 +92,56 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with object author format', () => {
+    const value = {
+      title: 'Feed with object author',
+      description: 'Test feed with object author format',
+      managingEditor: {
+        name: 'Editor Name',
+        email: 'editor@example.com',
+      },
+      webMaster: {
+        name: 'Webmaster',
+        email: 'webmaster@example.com',
+      },
+      items: [
+        {
+          title: 'First item',
+          authors: [
+            {
+              name: 'John Doe',
+              email: 'john@example.com',
+            },
+            {
+              name: 'Jane Smith',
+            },
+            {
+              email: 'noreply@example.com',
+            },
+          ],
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Feed with object author</title>
+    <description>Test feed with object author format</description>
+    <managingEditor>editor@example.com (Editor Name)</managingEditor>
+    <webMaster>webmaster@example.com (Webmaster)</webMaster>
+    <item>
+      <title>First item</title>
+      <author>john@example.com (John Doe)</author>
+      <author>Jane Smith</author>
+      <author>noreply@example.com</author>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with dcterms namespace', () => {
     const value = {
       title: 'Feed with dcterms namespace',

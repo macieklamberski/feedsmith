@@ -22,6 +22,89 @@ describe('generatePerson', () => {
     expect(generatePerson(value)).toEqual(expected)
   })
 
+  it('should generate person with both name and email', () => {
+    const value = {
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+    }
+    const expected = 'john.doe@example.com (John Doe)'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should generate person with only name', () => {
+    const value = {
+      name: 'John Doe',
+    }
+    const expected = 'John Doe'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should generate person with only email', () => {
+    const value = {
+      email: 'john.doe@example.com',
+    }
+    const expected = 'john.doe@example.com'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generatePerson(value)).toBeUndefined()
+  })
+
+  it('should handle object with empty strings', () => {
+    const value = {
+      name: '',
+      email: '',
+    }
+    const expected = undefined
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should trim whitespace around name and email', () => {
+    const value = {
+      name: '  John Doe  ',
+      email: '  john@example.com  ',
+    }
+    const expected = 'john@example.com (John Doe)'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace-only name with valid email', () => {
+    const value = {
+      name: '   ',
+      email: 'john@example.com',
+    }
+    const expected = 'john@example.com'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace-only email with valid name', () => {
+    const value = {
+      name: 'John Doe',
+      email: '   ',
+    }
+    const expected = 'John Doe'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace-only for both fields', () => {
+    const value = {
+      name: '   ',
+      email: '  ',
+    }
+
+    expect(generatePerson(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs gracefully', () => {
     expect(generatePerson(undefined)).toBeUndefined()
   })

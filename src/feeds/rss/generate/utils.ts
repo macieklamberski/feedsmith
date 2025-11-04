@@ -63,7 +63,26 @@ import { generateItem as generateTrackbackItem } from '../../../namespaces/track
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
 import type { Rss } from '../common/types.js'
 
-export const generatePerson: GenerateUtil<Rss.Person> = (person) => {
+export const generatePerson: GenerateUtil<Rss.PersonLike> = (person) => {
+  if (isObject(person)) {
+    const name = generatePlainString(person.name)
+    const email = generatePlainString(person.email)
+
+    if (email && name) {
+      return generateCdataString(`${email} (${name})`)
+    }
+
+    if (name) {
+      return generateCdataString(name)
+    }
+
+    if (email) {
+      return generateCdataString(email)
+    }
+
+    return
+  }
+
   return generateCdataString(person)
 }
 
@@ -180,7 +199,7 @@ export const generateSource: GenerateUtil<Rss.Source> = (source) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
+export const generateItem: GenerateUtil<Rss.Item<DateLike, Rss.PersonLike>> = (item) => {
   if (!isObject(item)) {
     return
   }
@@ -222,7 +241,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
   return trimObject(value)
 }
 
-export const generateFeed: GenerateUtil<Rss.Feed<DateLike>> = (feed) => {
+export const generateFeed: GenerateUtil<Rss.Feed<DateLike, Rss.PersonLike>> = (feed) => {
   if (!isObject(feed)) {
     return
   }

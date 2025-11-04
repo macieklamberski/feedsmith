@@ -27,6 +27,9 @@ import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 
 // #region reference
 export namespace Rss {
+  /** @internal Intermediary type before Person refactoring. Do not use downstream. */
+  export type PersonLike = string | { name?: string; email?: string }
+
   export type Person = string
 
   export type Category = {
@@ -78,11 +81,11 @@ export namespace Rss {
     url?: string
   }
 
-  export type Item<TDate extends DateLike> = {
+  export type Item<TDate extends DateLike, TPerson extends PersonLike = Person> = {
     title?: string
     link?: string
     description?: string
-    authors?: Array<Person>
+    authors?: Array<TPerson>
     categories?: Array<Category>
     comments?: string
     enclosures?: Array<Enclosure>
@@ -112,7 +115,7 @@ export namespace Rss {
     trackback?: TrackbackNs.Item
   } & ({ title: string } | { description: string })
 
-  export type Feed<TDate extends DateLike> = {
+  export type Feed<TDate extends DateLike, TPerson extends PersonLike = Person> = {
     title: string
     // INFO: Spec mentions required "link", but the "link" might be missing as well when the
     // atom:link rel="self" is present so that's why the "link" is not required in this type.
@@ -120,8 +123,8 @@ export namespace Rss {
     description: string
     language?: string
     copyright?: string
-    managingEditor?: Person
-    webMaster?: Person
+    managingEditor?: TPerson
+    webMaster?: TPerson
     pubDate?: TDate
     lastBuildDate?: TDate
     categories?: Array<Category>
@@ -134,7 +137,7 @@ export namespace Rss {
     textInput?: TextInput
     skipHours?: Array<number>
     skipDays?: Array<string>
-    items?: Array<Item<TDate>>
+    items?: Array<Item<TDate, TPerson>>
     atom?: AtomNs.Feed<TDate>
     cc?: CcNs.ItemOrFeed
     dc?: DcNs.ItemOrFeed<TDate>
