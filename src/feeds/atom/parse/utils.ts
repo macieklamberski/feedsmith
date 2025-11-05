@@ -78,6 +78,7 @@ export const parseLink: ParsePartialUtil<Atom.Link<string>> = (value) => {
     return
   }
 
+  const namespaces = detectNamespaces(value)
   const link = {
     href: parseString(value['@href']),
     rel: parseString(value['@rel']),
@@ -85,7 +86,7 @@ export const parseLink: ParsePartialUtil<Atom.Link<string>> = (value) => {
     hreflang: parseString(value['@hreflang']),
     title: parseString(value['@title']),
     length: parseNumber(value['@length']),
-    thr: retrieveThrLink(value),
+    thr: namespaces.has('thr') ? retrieveThrLink(value) : undefined,
   }
 
   return trimObject(link)
