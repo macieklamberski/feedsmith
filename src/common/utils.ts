@@ -584,16 +584,6 @@ export const generateNamespaceAttrs = (
   return namespaceAttrs
 }
 
-export const invertObject = (object: Record<string, string>): Record<string, string> => {
-  const inverted: Record<string, string> = {}
-
-  for (const key in object) {
-    inverted[object[key]] = key
-  }
-
-  return inverted
-}
-
 export const createNamespaceNormalizator = <T extends Record<string, Array<string>>>(
   namespaceUris: T,
   namespacePrefixes: Record<string, string>,
