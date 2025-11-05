@@ -486,7 +486,7 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
 
         seenKeys.add(key)
 
-        const keyWithoutAt = key.indexOf('@') === 0 ? key.slice(1) : key
+        const keyWithoutAt = key.charCodeAt(0) === 64 ? key.slice(1) : key
         const colonIndex = keyWithoutAt.indexOf(':')
 
         if (colonIndex > 0) {
@@ -658,7 +658,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
   }
 
   const normalizeKey = (key: string, context: Record<string, string>): string => {
-    if (key.indexOf('@') === 0) {
+    if (key.charCodeAt(0) === 64) {
       const attrName = key.substring(1)
       const normalizedAttrName = normalizeWithContext(attrName, context, false)
 
