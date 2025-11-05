@@ -505,17 +505,14 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
   return namespaces
 }
 
+const cdataSpecialCharsRegex = /[<>&]|]]>/
+
 export const generateCdataString: GenerateUtil<string> = (value) => {
   if (!isNonEmptyString(value)) {
     return
   }
 
-  if (
-    value.indexOf('<') !== -1 ||
-    value.indexOf('>') !== -1 ||
-    value.indexOf('&') !== -1 ||
-    value.indexOf(']]>') !== -1
-  ) {
+  if (cdataSpecialCharsRegex.test(value)) {
     return { '#cdata': value.trim() }
   }
 
