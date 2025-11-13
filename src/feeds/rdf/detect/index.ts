@@ -5,7 +5,7 @@ export const detect = (value: unknown): value is string => {
     return false
   }
 
-  const hasRdfElement = /(?:^|\s|>)\s*<(?:\w+:)?rdf[\s>]/im.test(value)
+  const hasRdfElement = /(?:^|[\s>])<(?:\w+:)?rdf[\s>]/im.test(value)
 
   if (!hasRdfElement) {
     return false
