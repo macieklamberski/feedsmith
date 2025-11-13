@@ -142,6 +142,56 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should handle alternating case entries', async () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom">
+        <title>Test Feed</title>
+        <id>urn:uuid:test-feed</id>
+        <updated>2024-01-10T12:00:00Z</updated>
+        <entry>
+          <title>First</title>
+          <id>urn:uuid:1</id>
+          <updated>2024-01-01T12:00:00Z</updated>
+        </entry>
+        <ENTRY>
+          <title>Second</title>
+          <id>urn:uuid:2</id>
+          <updated>2024-01-02T12:00:00Z</updated>
+        </ENTRY>
+        <entry>
+          <title>Third</title>
+          <id>urn:uuid:3</id>
+          <updated>2024-01-03T12:00:00Z</updated>
+        </entry>
+      </feed>
+    `
+    const expected = {
+      title: 'Test Feed',
+      id: 'urn:uuid:test-feed',
+      updated: '2024-01-10T12:00:00Z',
+      entries: [
+        {
+          title: 'First',
+          id: 'urn:uuid:1',
+          updated: '2024-01-01T12:00:00Z',
+        },
+        {
+          title: 'Second',
+          id: 'urn:uuid:2',
+          updated: '2024-01-02T12:00:00Z',
+        },
+        {
+          title: 'Third',
+          id: 'urn:uuid:3',
+          updated: '2024-01-03T12:00:00Z',
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should correctly parse namespaced Atom feed', async () => {
     const value = `
       <?xml version="1.0" encoding="utf-8"?>

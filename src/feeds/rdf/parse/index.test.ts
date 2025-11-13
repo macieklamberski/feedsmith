@@ -869,4 +869,34 @@ describe('parse', () => {
       }
     })
   })
+
+  it('should handle alternating case items', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
+        <channel>
+          <title>Test Feed</title>
+          <link>http://example.com</link>
+          <description>Testing alternating case items</description>
+        </channel>
+        <item rdf:about="http://example.com/1">
+          <title>First</title>
+        </item>
+        <ITEM rdf:about="http://example.com/2">
+          <title>Second</title>
+        </ITEM>
+        <item rdf:about="http://example.com/3">
+          <title>Third</title>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Test Feed',
+      link: 'http://example.com',
+      description: 'Testing alternating case items',
+      items: [{ title: 'First' }, { title: 'Second' }, { title: 'Third' }],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
 })

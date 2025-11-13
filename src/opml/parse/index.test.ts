@@ -72,6 +72,32 @@ describe('parse', () => {
     expect(parse(mixedCaseOpml)).toEqual(expected)
   })
 
+  it('should handle alternating case outlines', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <opml version="2.0">
+        <head>
+          <title>Test Feed</title>
+        </head>
+        <body>
+          <outline text="First" />
+          <OUTLINE text="Second" />
+          <outline text="Third" />
+        </body>
+      </opml>
+    `
+    const expected = {
+      head: {
+        title: 'Test Feed',
+      },
+      body: {
+        outlines: [{ text: 'First' }, { text: 'Second' }, { text: 'Third' }],
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should handle empty string input', () => {
     const value = ''
 

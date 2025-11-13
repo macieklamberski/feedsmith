@@ -72,6 +72,36 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expectation)
   })
 
+  it('should handle alternating case items', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rss version="2.0">
+        <channel>
+          <title>Test Feed</title>
+          <link>https://example.com</link>
+          <description>Testing alternating case items</description>
+          <item>
+            <title>First</title>
+          </item>
+          <ITEM>
+            <title>Second</title>
+          </ITEM>
+          <item>
+            <title>Third</title>
+          </item>
+        </channel>
+      </rss>
+    `
+    const expectation = {
+      title: 'Test Feed',
+      link: 'https://example.com',
+      description: 'Testing alternating case items',
+      items: [{ title: 'First' }, { title: 'Second' }, { title: 'Third' }],
+    }
+
+    expect(parse(value)).toEqual(expectation)
+  })
+
   it('should parse RSS feed with multiple enclosures per item', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
