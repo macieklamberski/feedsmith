@@ -1,6 +1,6 @@
-import type { DateLike, ExtraFields } from '../../common/types.js'
+import type { DateLike, ExtraFields, ParseOptions } from '../../common/types.js'
 
-export type MainOptions<A extends ReadonlyArray<string> = ReadonlyArray<string>> = {
+export type MainOptions<A extends ReadonlyArray<string> = ReadonlyArray<string>> = ParseOptions & {
   extraOutlineAttributes?: A
 }
 

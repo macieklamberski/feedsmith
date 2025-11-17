@@ -1,4 +1,4 @@
-import type { Unreliable } from '../../../common/types.js'
+import type { ParseOptions, Unreliable } from '../../../common/types.js'
 import {
   detectNamespaces,
   isObject,
@@ -285,7 +285,7 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) =
     subtitle: retrieveSubtitle(value, options),
     title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
     updated: retrieveUpdated(value, options),
-    entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options)),
+    entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options), options?.maxItems),
     cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
     sy: namespaces?.has('sy') ? retrieveSyFeed(value) : undefined,
@@ -307,10 +307,10 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) =
   return trimObject(feed)
 }
 
-export const retrieveFeed: ParsePartialUtil<Atom.Feed<string>> = (value) => {
-  const notNamespaced = parseSingularOf(value?.feed, parseFeed)
+export const retrieveFeed = (value: Unreliable, options?: ParseOptions) => {
+  const notNamespaced = parseSingularOf(value?.feed, (value) => parseFeed(value, options))
   const namespaced = parseSingularOf(value?.['atom:feed'], (value) =>
-    parseFeed(value, { prefix: 'atom:' }),
+    parseFeed(value, { ...options, prefix: 'atom:' }),
   )
 
   return notNamespaced || namespaced

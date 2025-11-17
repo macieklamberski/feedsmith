@@ -24,6 +24,7 @@ import {
   isNonEmptyStringOrNumber,
   isObject,
   isPresent,
+  limitArray,
   parseArray,
   parseArrayOf,
   parseBoolean,
@@ -1612,6 +1613,53 @@ describe('parseArrayOf', () => {
     const value = undefined
 
     expect(parseArrayOf(value, parser)).toBeUndefined()
+  })
+})
+
+describe('limitArray', () => {
+  it('should return original array when limit is undefined', () => {
+    const value = [1, 2, 3, 4, 5]
+    const expected = [1, 2, 3, 4, 5]
+
+    expect(limitArray(value, undefined)).toEqual(expected)
+  })
+
+  it('should return first N items when limit is provided', () => {
+    const value = [1, 2, 3, 4, 5]
+    const expected = [1, 2, 3]
+
+    expect(limitArray(value, 3)).toEqual(expected)
+  })
+
+  it('should return empty array when limit is 0', () => {
+    const value = [1, 2, 3, 4, 5]
+
+    expect(limitArray(value, 0)).toEqual([])
+  })
+
+  it('should return all items when limit exceeds array length', () => {
+    const value = [1, 2, 3]
+    const expected = [1, 2, 3]
+
+    expect(limitArray(value, 10)).toEqual(expected)
+  })
+
+  it('should handle empty array', () => {
+    const value: Array<number> = []
+
+    expect(limitArray(value, 5)).toEqual([])
+  })
+
+  it('should handle single item array with limit 1', () => {
+    const value = [1]
+
+    expect(limitArray(value, 1)).toEqual([1])
+  })
+
+  it('should handle single item array with limit 0', () => {
+    const value = [1]
+
+    expect(limitArray(value, 0)).toEqual([])
   })
 })
 

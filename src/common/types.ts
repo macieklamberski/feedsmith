@@ -43,6 +43,10 @@ export type GenerateUtil<V, O = undefined> = (
   options?: O,
 ) => Unreliable | undefined
 
+export type ParseOptions = {
+  maxItems?: number
+}
+
 export type XmlStylesheet = {
   type: string
   href: string

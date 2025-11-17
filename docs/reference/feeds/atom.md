@@ -48,6 +48,9 @@ import { parseAtomFeed } from 'feedsmith'
 
 const atomFeed = parseAtomFeed(xmlContent)
 // Returns: object with all fields optional and dates as strings
+
+// Limit number of entries parsed
+const atomFeed = parseAtomFeed(xmlContent, { maxItems: 10 })
 ```
 
 #### Parameters
@@ -55,6 +58,13 @@ const atomFeed = parseAtomFeed(xmlContent)
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `content` | `string` | The Atom XML content to parse |
+| `options` | `object` | Optional parsing settings |
+
+#### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `maxItems` | `number` | - | Limit the number of entries parsed. Use `0` to skip entries entirely, useful when only feed metadata is needed |
 
 #### Returns
 `object` - Parsed Atom feed with all fields optional and dates as strings

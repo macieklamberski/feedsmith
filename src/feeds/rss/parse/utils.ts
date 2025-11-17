@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { ParseOptions, ParsePartialUtil } from '../../../common/types.js'
 import {
   detectNamespaces,
   isObject,
@@ -209,7 +209,7 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
   return trimObject(item)
 }
 
-export const parseFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
+export const parseFeed: ParsePartialUtil<Rss.Feed<string>, ParseOptions> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -235,7 +235,7 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
     textInput: parseSingularOf(value.textinput, parseTextInput),
     skipHours: parseSingularOf(value.skiphours, parseSkipHours),
     skipDays: parseSingularOf(value.skipdays, parseSkipDays),
-    items: parseArrayOf(value.item, parseItem),
+    items: parseArrayOf(value.item, parseItem, options?.maxItems),
     atom: namespaces.has('atom') ? retrieveAtomFeed(value) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
@@ -262,6 +262,6 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
   return trimObject(feed)
 }
 
-export const retrieveFeed: ParsePartialUtil<Rss.Feed<string>> = (value) => {
-  return parseSingularOf(value?.rss?.channel, parseFeed)
+export const retrieveFeed: ParsePartialUtil<Rss.Feed<string>, ParseOptions> = (value, options) => {
+  return parseSingularOf(value?.rss?.channel, (value) => parseFeed(value, options))
 }

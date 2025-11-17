@@ -298,18 +298,31 @@ export const parseArray: ParseExactUtil<Array<Unreliable>> = (value) => {
 export const parseArrayOf = <R>(
   value: Unreliable,
   parse: ParseExactUtil<R>,
+  limit?: number,
 ): Array<R> | undefined => {
   const array = parseArray(value)
 
   if (array) {
-    return trimArray(array, parse)
+    return trimArray(limitArray(array, limit), parse)
   }
 
   const parsed = parse(value)
 
-  if (parsed) {
+  if (parsed && (limit === undefined || limit > 0)) {
     return [parsed]
   }
+}
+
+export const limitArray = <T>(array: Array<T>, limit: number | undefined): Array<T> => {
+  if (limit === undefined) {
+    return array
+  }
+
+  if (limit === 0) {
+    return []
+  }
+
+  return array.slice(0, limit)
 }
 
 export const parseSingular = <T>(value: T | Array<T>): T => {
