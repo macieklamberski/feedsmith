@@ -185,4 +185,73 @@ describe('parse', () => {
   it('should handle number input', () => {
     expect(() => parse(123)).toThrowError(locales.invalidFeedFormat)
   })
+
+  describe('with maxItems option', () => {
+    const commonValue = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Test Feed',
+      items: [
+        {
+          id: '1',
+          content_text: 'Item 1',
+        },
+        {
+          id: '2',
+          content_text: 'Item 2',
+        },
+        {
+          id: '3',
+          content_text: 'Item 3',
+        },
+      ],
+    }
+
+    it('should limit items to specified number', () => {
+      const expected = {
+        title: 'Test Feed',
+        items: [
+          {
+            id: '1',
+            content_text: 'Item 1',
+          },
+          {
+            id: '2',
+            content_text: 'Item 2',
+          },
+        ],
+      }
+
+      expect(parse(commonValue, { maxItems: 2 })).toEqual(expected)
+    })
+
+    it('should skip all items when maxItems is 0', () => {
+      const expected = {
+        title: 'Test Feed',
+      }
+
+      expect(parse(commonValue, { maxItems: 0 })).toEqual(expected)
+    })
+
+    it('should return all items when maxItems is undefined', () => {
+      const expected = {
+        title: 'Test Feed',
+        items: [
+          {
+            id: '1',
+            content_text: 'Item 1',
+          },
+          {
+            id: '2',
+            content_text: 'Item 2',
+          },
+          {
+            id: '3',
+            content_text: 'Item 3',
+          },
+        ],
+      }
+
+      expect(parse(commonValue, { maxItems: undefined })).toEqual(expected)
+    })
+  })
 })
