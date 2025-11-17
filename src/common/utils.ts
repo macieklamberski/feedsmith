@@ -314,7 +314,7 @@ export const parseArrayOf = <R>(
 }
 
 export const limitArray = <T>(array: Array<T>, limit: number | undefined): Array<T> => {
-  if (limit === undefined) {
+  if (limit === undefined || limit < 0) {
     return array
   }
 

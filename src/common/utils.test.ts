@@ -1661,6 +1661,20 @@ describe('limitArray', () => {
 
     expect(limitArray(value, 0)).toEqual([])
   })
+
+  it('should return original array when limit is negative', () => {
+    const value = [1, 2, 3, 4, 5]
+    const expected = [1, 2, 3, 4, 5]
+
+    expect(limitArray(value, -1)).toEqual(expected)
+  })
+
+  it('should return original array when limit is large negative number', () => {
+    const value = [1, 2, 3, 4, 5]
+    const expected = [1, 2, 3, 4, 5]
+
+    expect(limitArray(value, -10)).toEqual(expected)
+  })
 })
 
 describe('parseCsvOf', () => {
