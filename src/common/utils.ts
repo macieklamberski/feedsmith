@@ -300,16 +300,14 @@ export const parseArrayOf = <R>(
   parse: ParseExactUtil<R>,
   limit?: number,
 ): Array<R> | undefined => {
-  const array = parseArray(value)
+  let array = parseArray(value)
+
+  if (!array && isPresent(value)) {
+    array = [value]
+  }
 
   if (array) {
     return trimArray(limitArray(array, limit), parse)
-  }
-
-  const parsed = parse(value)
-
-  if (parsed && (limit === undefined || limit > 0)) {
-    return [parsed]
   }
 }
 
