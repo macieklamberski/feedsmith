@@ -5,6 +5,3 @@ updates:
     schedule:
       interval: weekly
     target-branch: main
-    commit-message:
-      prefix: Bump
-      prefix-development: Bump
