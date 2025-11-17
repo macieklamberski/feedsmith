@@ -1118,6 +1118,99 @@ describe('parseFeed', () => {
 
     expect(parseFeed(value)).toEqual(expected)
   })
+
+  it('should limit items to specified maxItems', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Test Feed' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+        {
+          title: { '#text': 'Item 2' },
+          link: { '#text': 'https://example.com/item2' },
+        },
+        {
+          title: { '#text': 'Item 3' },
+          link: { '#text': 'https://example.com/item3' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Test Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+        {
+          title: 'Item 2',
+          link: 'https://example.com/item2',
+        },
+      ],
+    }
+
+    expect(parseFeed(value, { maxItems: 2 })).toEqual(expected)
+  })
+
+  it('should skip all items when maxItems is 0', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Test Feed' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+        {
+          title: { '#text': 'Item 2' },
+          link: { '#text': 'https://example.com/item2' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Test Feed',
+    }
+
+    expect(parseFeed(value, { maxItems: 0 })).toEqual(expected)
+  })
+
+  it('should return all items when maxItems is undefined', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Test Feed' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+        {
+          title: { '#text': 'Item 2' },
+          link: { '#text': 'https://example.com/item2' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Test Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+        {
+          title: 'Item 2',
+          link: 'https://example.com/item2',
+        },
+      ],
+    }
+
+    expect(parseFeed(value, { maxItems: undefined })).toEqual(expected)
+  })
 })
 
 describe('retrieveFeed', () => {

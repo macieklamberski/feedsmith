@@ -37,6 +37,9 @@ import { parseRdfFeed } from 'feedsmith'
 
 const rdfFeed = parseRdfFeed(xmlContent)
 // Returns: object with all fields optional and dates as strings
+
+// Limit number of items parsed
+const rdfFeed = parseRdfFeed(xmlContent, { maxItems: 10 })
 ```
 
 #### Parameters
@@ -44,6 +47,13 @@ const rdfFeed = parseRdfFeed(xmlContent)
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `content` | `string` | The RDF XML content to parse |
+| `options` | `object` | Optional parsing settings |
+
+#### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `maxItems` | `number` | - | Limit the number of items parsed. Use `0` to skip items entirely, useful when only feed metadata is needed |
 
 #### Returns
 `object` - Parsed RDF feed with all fields optional and dates as strings

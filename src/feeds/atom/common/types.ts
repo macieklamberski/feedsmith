@@ -2,6 +2,7 @@ import type {
   GenerateUtil as BaseGenerateUtil,
   ParsePartialUtil as BaseParsePartialUtil,
   DateLike,
+  ParseOptions,
 } from '../../../common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AppNs } from '../../../namespaces/app/common/types.js'
@@ -25,7 +26,7 @@ import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 import type { YtNs } from '../../../namespaces/yt/common/types.js'
 
-export type UtilOptions = {
+export type UtilOptions = ParseOptions & {
   prefix?: string
   asNamespace?: boolean
 }

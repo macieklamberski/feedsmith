@@ -1042,5 +1042,90 @@ describe('parse', () => {
         })
       }
     })
+
+    describe('with maxItems option', () => {
+      const commonValue = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <title>Test Feed</title>
+          <id>urn:uuid:feed-id</id>
+          <updated>2024-01-01T00:00:00Z</updated>
+          <entry>
+            <title>Entry 1</title>
+            <id>urn:uuid:entry-1</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+          </entry>
+          <entry>
+            <title>Entry 2</title>
+            <id>urn:uuid:entry-2</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+          </entry>
+          <entry>
+            <title>Entry 3</title>
+            <id>urn:uuid:entry-3</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+          </entry>
+        </feed>
+      `
+
+      it('should limit entries to specified number', () => {
+        const expected = {
+          title: 'Test Feed',
+          id: 'urn:uuid:feed-id',
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              title: 'Entry 1',
+              id: 'urn:uuid:entry-1',
+              updated: '2024-01-01T00:00:00Z',
+            },
+            {
+              title: 'Entry 2',
+              id: 'urn:uuid:entry-2',
+              updated: '2024-01-01T00:00:00Z',
+            },
+          ],
+        }
+
+        expect(parse(commonValue, { maxItems: 2 })).toEqual(expected)
+      })
+
+      it('should skip all entries when maxItems is 0', () => {
+        const expected = {
+          title: 'Test Feed',
+          id: 'urn:uuid:feed-id',
+          updated: '2024-01-01T00:00:00Z',
+        }
+
+        expect(parse(commonValue, { maxItems: 0 })).toEqual(expected)
+      })
+
+      it('should return all entries when maxItems is undefined', () => {
+        const expected = {
+          title: 'Test Feed',
+          id: 'urn:uuid:feed-id',
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              title: 'Entry 1',
+              id: 'urn:uuid:entry-1',
+              updated: '2024-01-01T00:00:00Z',
+            },
+            {
+              title: 'Entry 2',
+              id: 'urn:uuid:entry-2',
+              updated: '2024-01-01T00:00:00Z',
+            },
+            {
+              title: 'Entry 3',
+              id: 'urn:uuid:entry-3',
+              updated: '2024-01-01T00:00:00Z',
+            },
+          ],
+        }
+
+        expect(parse(commonValue, { maxItems: undefined })).toEqual(expected)
+      })
+    })
   })
 })

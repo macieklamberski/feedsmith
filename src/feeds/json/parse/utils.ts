@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { ParseOptions, ParsePartialUtil } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
   isObject,
@@ -122,7 +122,7 @@ export const parseHub: ParsePartialUtil<Json.Hub> = (value) => {
   return trimObject(hub)
 }
 
-export const parseFeed: ParsePartialUtil<Json.Feed<string>> = (value) => {
+export const parseFeed: ParsePartialUtil<Json.Feed<string>, ParseOptions> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -141,7 +141,7 @@ export const parseFeed: ParsePartialUtil<Json.Feed<string>> = (value) => {
     expired: parseSingularOf(get('expired'), parseBoolean),
     hubs: parseArrayOf(get('hubs'), parseHub),
     authors: retrieveAuthors(value),
-    items: parseArrayOf(get('items'), parseItem),
+    items: parseArrayOf(get('items'), parseItem, options?.maxItems),
   }
 
   return trimObject(feed)

@@ -899,4 +899,79 @@ describe('parse', () => {
 
     expect(parse(value)).toEqual(expected)
   })
+
+  describe('with maxItems option', () => {
+    const commonValue = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
+        <channel>
+          <title>Test Feed</title>
+          <link>http://example.com</link>
+        </channel>
+        <item>
+          <title>Item 1</title>
+          <link>http://example.com/1</link>
+        </item>
+        <item>
+          <title>Item 2</title>
+          <link>http://example.com/2</link>
+        </item>
+        <item>
+          <title>Item 3</title>
+          <link>http://example.com/3</link>
+        </item>
+      </rdf:RDF>
+    `
+
+    it('should limit items to specified number', () => {
+      const expected = {
+        title: 'Test Feed',
+        link: 'http://example.com',
+        items: [
+          {
+            title: 'Item 1',
+            link: 'http://example.com/1',
+          },
+          {
+            title: 'Item 2',
+            link: 'http://example.com/2',
+          },
+        ],
+      }
+
+      expect(parse(commonValue, { maxItems: 2 })).toEqual(expected)
+    })
+
+    it('should skip all items when maxItems is 0', () => {
+      const expected = {
+        title: 'Test Feed',
+        link: 'http://example.com',
+      }
+
+      expect(parse(commonValue, { maxItems: 0 })).toEqual(expected)
+    })
+
+    it('should return all items when maxItems is undefined', () => {
+      const expected = {
+        title: 'Test Feed',
+        link: 'http://example.com',
+        items: [
+          {
+            title: 'Item 1',
+            link: 'http://example.com/1',
+          },
+          {
+            title: 'Item 2',
+            link: 'http://example.com/2',
+          },
+          {
+            title: 'Item 3',
+            link: 'http://example.com/3',
+          },
+        ],
+      }
+
+      expect(parse(commonValue, { maxItems: undefined })).toEqual(expected)
+    })
+  })
 })

@@ -24,6 +24,15 @@ const opml = parseOpml(xmlContent, {
   extraOutlineAttributes: ['customIcon', 'updateInterval']
 })
 // Returns: object with all fields optional and dates as strings
+
+// Limit number of outlines parsed
+const opml = parseOpml(xmlContent, { maxItems: 5 })
+
+// Combine both options
+const opml = parseOpml(xmlContent, {
+  maxItems: 5,
+  extraOutlineAttributes: ['customIcon', 'updateInterval']
+})
 ```
 
 #### Parameters
@@ -37,6 +46,7 @@ const opml = parseOpml(xmlContent, {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
+| `maxItems` | `number` | - | Limit the number of outlines parsed. Use `0` to skip outlines entirely, useful when only OPML metadata is needed |
 | `extraOutlineAttributes` | `string[]` | - | Custom attributes to extract from outline elements (case-insensitive), see [examples](/parsing/examples#extra-outline-attributes) |
 
 #### Returns

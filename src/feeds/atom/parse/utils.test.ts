@@ -1572,6 +1572,99 @@ describe('parseFeed', () => {
 
     expect(parseFeed(value)).toEqual(expected)
   })
+
+  it('should limit entries to specified maxItems', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:feed-id' },
+      title: { '#text': 'Test Feed' },
+      entry: [
+        {
+          id: { '#text': 'urn:uuid:entry-1' },
+          title: { '#text': 'Entry 1' },
+        },
+        {
+          id: { '#text': 'urn:uuid:entry-2' },
+          title: { '#text': 'Entry 2' },
+        },
+        {
+          id: { '#text': 'urn:uuid:entry-3' },
+          title: { '#text': 'Entry 3' },
+        },
+      ],
+    }
+    const expected = {
+      id: 'urn:uuid:feed-id',
+      title: 'Test Feed',
+      entries: [
+        {
+          id: 'urn:uuid:entry-1',
+          title: 'Entry 1',
+        },
+        {
+          id: 'urn:uuid:entry-2',
+          title: 'Entry 2',
+        },
+      ],
+    }
+
+    expect(parseFeed(value, { maxItems: 2 })).toEqual(expected)
+  })
+
+  it('should skip all entries when maxItems is 0', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:feed-id' },
+      title: { '#text': 'Test Feed' },
+      entry: [
+        {
+          id: { '#text': 'urn:uuid:entry-1' },
+          title: { '#text': 'Entry 1' },
+        },
+        {
+          id: { '#text': 'urn:uuid:entry-2' },
+          title: { '#text': 'Entry 2' },
+        },
+      ],
+    }
+    const expected = {
+      id: 'urn:uuid:feed-id',
+      title: 'Test Feed',
+    }
+
+    expect(parseFeed(value, { maxItems: 0 })).toEqual(expected)
+  })
+
+  it('should return all entries when maxItems is undefined', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:feed-id' },
+      title: { '#text': 'Test Feed' },
+      entry: [
+        {
+          id: { '#text': 'urn:uuid:entry-1' },
+          title: { '#text': 'Entry 1' },
+        },
+        {
+          id: { '#text': 'urn:uuid:entry-2' },
+          title: { '#text': 'Entry 2' },
+        },
+      ],
+    }
+    const expected = {
+      id: 'urn:uuid:feed-id',
+      title: 'Test Feed',
+      entries: [
+        {
+          id: 'urn:uuid:entry-1',
+          title: 'Entry 1',
+        },
+        {
+          id: 'urn:uuid:entry-2',
+          title: 'Entry 2',
+        },
+      ],
+    }
+
+    expect(parseFeed(value, { maxItems: undefined })).toEqual(expected)
+  })
 })
 
 describe('retrieveFeed', () => {

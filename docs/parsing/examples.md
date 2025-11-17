@@ -464,3 +464,103 @@ Returns:
 
 > [!NOTE]
 > Extra attributes are case-insensitive when parsing. The attribute `customIcon` will match `customicon`, `CustomIcon`, or any other case variation in the XML.
+
+## Limiting items with maxItems
+
+The `maxItems` option allows you to control how many items/entries/outlines are parsed. This is particularly useful when you only need feed metadata or want to process large feeds more efficiently.
+
+### Limiting RSS Items
+
+```typescript
+import { parseRssFeed } from 'feedsmith'
+
+const rssFeed = parseRssFeed(`
+  <?xml version="1.0" encoding="utf-8"?>
+  <rss version="2.0">
+    <channel>
+      <title>My Blog</title>
+      <link>https://example.com</link>
+      <description>A blog about web development</description>
+      <item>
+        <title>First Post</title>
+        <link>https://example.com/1</link>
+        <description>First post content</description>
+      </item>
+      <item>
+        <title>Second Post</title>
+        <link>https://example.com/2</link>
+        <description>Second post content</description>
+      </item>
+      <item>
+        <title>Third Post</title>
+        <link>https://example.com/3</link>
+        <description>Third post content</description>
+      </item>
+    </channel>
+  </rss>
+`, { maxItems: 2 })
+```
+
+Returns:
+
+```json
+{
+  "title": "My Blog",
+  "link": "https://example.com",
+  "description": "A blog about web development",
+  "items": [
+    {
+      "title": "First Post",
+      "link": "https://example.com/1",
+      "description": "First post content"
+    },
+    {
+      "title": "Second Post",
+      "link": "https://example.com/2",
+      "description": "Second post content"
+    }
+  ]
+}
+```
+
+> [!TIP]
+> Only the first 2 items are parsed. The third item is completely skipped during parsing, improving performance for large feeds.
+
+### Parsing Feed Metadata Only
+
+When you only need feed-level information and want to skip all items entirely, use `maxItems: 0`:
+
+```typescript
+import { parseRssFeed } from 'feedsmith'
+
+const rssFeed = parseRssFeed(`
+  <?xml version="1.0" encoding="utf-8"?>
+  <rss version="2.0">
+    <channel>
+      <title>My Blog</title>
+      <link>https://example.com</link>
+      <description>A blog about web development</description>
+      <item>
+        <title>First Post</title>
+        <link>https://example.com/1</link>
+        <description>First post content</description>
+      </item>
+      <item>
+        <title>Second Post</title>
+        <link>https://example.com/2</link>
+        <description>Second post content</description>
+      </item>
+    </channel>
+  </rss>
+`, { maxItems: 0 })
+```
+
+Returns:
+
+```json
+{
+  "title": "My Blog",
+  "link": "https://example.com",
+  "description": "A blog about web development"
+}
+```

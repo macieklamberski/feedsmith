@@ -818,4 +818,89 @@ describe('parse', () => {
       })
     })
   })
+
+  describe('with maxItems option', () => {
+    it('should limit items to specified number', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>Test Feed</title>
+            <link>https://example.com</link>
+            <description>Testing maxItems option</description>
+            <item>
+              <title>First</title>
+            </item>
+            <item>
+              <title>Second</title>
+            </item>
+            <item>
+              <title>Third</title>
+            </item>
+            <item>
+              <title>Fourth</title>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test Feed',
+        link: 'https://example.com',
+        description: 'Testing maxItems option',
+        items: [{ title: 'First' }, { title: 'Second' }],
+      }
+
+      expect(parse(value, { maxItems: 2 })).toEqual(expected)
+    })
+
+    it('should skip all items when maxItems is 0', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>Test Feed</title>
+            <link>https://example.com</link>
+            <description>Testing maxItems with 0</description>
+            <item>
+              <title>First</title>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test Feed',
+        link: 'https://example.com',
+        description: 'Testing maxItems with 0',
+      }
+
+      expect(parse(value, { maxItems: 0 })).toEqual(expected)
+    })
+
+    it('should return all items when maxItems is undefined', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>Test Feed</title>
+            <link>https://example.com</link>
+            <description>Testing without maxItems</description>
+            <item>
+              <title>First</title>
+            </item>
+            <item>
+              <title>Second</title>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test Feed',
+        link: 'https://example.com',
+        description: 'Testing without maxItems',
+        items: [{ title: 'First' }, { title: 'Second' }],
+      }
+
+      expect(parse(value, { maxItems: undefined })).toEqual(expected)
+    })
+  })
 })

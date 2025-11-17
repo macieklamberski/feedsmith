@@ -52,6 +52,9 @@ import { parseRssFeed } from 'feedsmith'
 
 const rssFeed = parseRssFeed(xmlContent)
 // Returns: object with all fields optional and dates as strings
+
+// Limit number of items parsed
+const rssFeed = parseRssFeed(xmlContent, { maxItems: 10 })
 ```
 
 #### Parameters
@@ -59,6 +62,13 @@ const rssFeed = parseRssFeed(xmlContent)
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `content` | `string` | The RSS XML content to parse |
+| `options` | `object` | Optional parsing settings |
+
+#### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `maxItems` | `number` | - | Limit the number of items parsed. Use `0` to skip items entirely, useful when only feed metadata is needed |
 
 #### Returns
 `object` - Parsed RSS feed with all fields optional and dates as strings
