@@ -17,6 +17,7 @@ describe('retrieveItemOrFeed', () => {
     languages: ['en-US'],
     relations: ['https://example.org/related'],
     coverages: ['Worldwide'],
+    rights: ['Copyright 2023, All rights reserved'],
     title: 'Sample Title',
     creator: 'John Doe',
     subject: 'Test Subject',
@@ -31,7 +32,6 @@ describe('retrieveItemOrFeed', () => {
     language: 'en-US',
     relation: 'https://example.org/related',
     coverage: 'Worldwide',
-    rights: 'Copyright 2023, All rights reserved',
   }
 
   it('should parse complete item or feed object with all properties (with #text)', () => {
@@ -132,7 +132,7 @@ describe('retrieveItemOrFeed', () => {
       languages: ['en-US', 'fr-FR'],
       relations: ['https://example.org/related', 'https://example.org/also-related'],
       coverages: ['Worldwide', 'North America'],
-      rights: 'Copyright 2023, All rights reserved',
+      rights: ['Copyright 2023, All rights reserved', 'Creative Commons BY-NC-SA 4.0'],
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)

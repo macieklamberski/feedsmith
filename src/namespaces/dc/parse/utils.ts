@@ -34,6 +34,7 @@ export const retrieveItemOrFeed: ParsePartialUtil<DcNs.ItemOrFeed<string>> = (va
     languages: parseArrayOf(value['dc:language'], (value) => parseString(retrieveText(value))),
     relations: parseArrayOf(value['dc:relation'], (value) => parseString(retrieveText(value))),
     coverages: parseArrayOf(value['dc:coverage'], (value) => parseString(retrieveText(value))),
+    rights: parseArrayOf(value['dc:rights'], (value) => parseString(retrieveText(value))),
 
     // Deprecated fields for backward compatibility.
     title: parseSingularOf(value['dc:title'], (value) => parseString(retrieveText(value))),
@@ -56,7 +57,6 @@ export const retrieveItemOrFeed: ParsePartialUtil<DcNs.ItemOrFeed<string>> = (va
     language: parseSingularOf(value['dc:language'], (value) => parseString(retrieveText(value))),
     relation: parseSingularOf(value['dc:relation'], (value) => parseString(retrieveText(value))),
     coverage: parseSingularOf(value['dc:coverage'], (value) => parseString(retrieveText(value))),
-    rights: parseSingularOf(value['dc:rights'], (value) => parseString(retrieveText(value))),
   }
 
   return trimObject(itemOrFeed)

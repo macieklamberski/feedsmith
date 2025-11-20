@@ -18,7 +18,6 @@ describe('generateItemOrFeed', () => {
       language: 'en-US',
       relation: 'https://example.com/related',
       coverage: 'Global',
-      rights: 'Copyright 2023',
     }
     const expected = {
       'dc:title': 'Test Title',
@@ -35,7 +34,6 @@ describe('generateItemOrFeed', () => {
       'dc:language': 'en-US',
       'dc:relation': 'https://example.com/related',
       'dc:coverage': 'Global',
-      'dc:rights': 'Copyright 2023',
     }
 
     expect(generateItemOrFeed(value)).toEqual(expected)

@@ -967,7 +967,7 @@ describe('generateFeed', () => {
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creator: 'Jane Smith',
-        rights: 'Copyright 2023',
+        rights: ['Copyright 2023'],
       },
       sy: {
         updatePeriod: 'hourly',
@@ -1005,7 +1005,7 @@ describe('generateFeed', () => {
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creator: 'Jane Smith',
-        rights: 'Copyright 2023',
+        rights: ['Copyright 2023'],
       },
     }
     const expected = {
@@ -1016,7 +1016,7 @@ describe('generateFeed', () => {
         title: 'Feed with namespaces',
         updated: '2023-03-15T12:00:00.000Z',
         'dc:creator': 'Jane Smith',
-        'dc:rights': 'Copyright 2023',
+        'dc:rights': ['Copyright 2023'],
       },
     }
 
