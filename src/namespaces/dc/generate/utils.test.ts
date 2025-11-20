@@ -18,6 +18,7 @@ describe('generateItemOrFeed', () => {
       language: 'en-US',
       relation: 'https://example.com/related',
       coverage: 'Global',
+      rights: 'Copyright 2023',
     }
     const expected = {
       'dc:title': 'Test Title',
@@ -34,6 +35,7 @@ describe('generateItemOrFeed', () => {
       'dc:language': 'en-US',
       'dc:relation': 'https://example.com/related',
       'dc:coverage': 'Global',
+      'dc:rights': 'Copyright 2023',
     }
 
     expect(generateItemOrFeed(value)).toEqual(expected)
@@ -55,7 +57,6 @@ describe('generateItemOrFeed', () => {
       languages: ['en-US'],
       relations: ['https://example.com/related'],
       coverages: ['Global'],
-      rights: ['Copyright 2023'],
     }
     const expected = {
       'dc:title': ['Test Title'],
@@ -72,7 +73,6 @@ describe('generateItemOrFeed', () => {
       'dc:language': ['en-US'],
       'dc:relation': ['https://example.com/related'],
       'dc:coverage': ['Global'],
-      'dc:rights': ['Copyright 2023'],
     }
 
     expect(generateItemOrFeed(value)).toEqual(expected)
@@ -94,7 +94,6 @@ describe('generateItemOrFeed', () => {
       languages: ['en-US', 'fr-FR'],
       relations: ['https://example.com/related', 'https://example.com/also-related'],
       coverages: ['Global', 'North America'],
-      rights: ['Copyright 2023', 'CC BY-NC-SA 4.0'],
     }
     const expected = {
       'dc:title': ['Test Title', 'Alternative Title'],
@@ -111,7 +110,6 @@ describe('generateItemOrFeed', () => {
       'dc:language': ['en-US', 'fr-FR'],
       'dc:relation': ['https://example.com/related', 'https://example.com/also-related'],
       'dc:coverage': ['Global', 'North America'],
-      'dc:rights': ['Copyright 2023', 'CC BY-NC-SA 4.0'],
     }
 
     expect(generateItemOrFeed(value)).toEqual(expected)

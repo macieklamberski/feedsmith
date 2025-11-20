@@ -72,7 +72,7 @@ export const generateItemOrFeed: GenerateUtil<DcNs.ItemOrFeed<DateLike>> = (item
       itemOrFeed.coverage,
       generateCdataString,
     ),
-    'dc:rights': generateArrayOrSingular(itemOrFeed.rights, undefined, generateCdataString),
+    'dc:rights': generateCdataString(itemOrFeed.rights),
   }
 
   return trimObject(value)

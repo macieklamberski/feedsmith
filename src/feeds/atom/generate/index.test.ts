@@ -576,7 +576,7 @@ describe('generate', () => {
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creator: 'John Doe',
-        rights: ['Copyright 2023'],
+        rights: 'Copyright 2023',
       },
       sy: {
         updatePeriod: 'daily',
