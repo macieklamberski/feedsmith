@@ -46,7 +46,7 @@ export namespace DcNs {
     relation?: string
     /** @deprecated Use `coverages` (array) instead. Dublin Core fields are repeatable. */
     coverage?: string
-    /** @deprecated This field type will be changed to array next major version of the package. Dublin Core fields are repeatable. */
+    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core fields are repeatable. */
     rights?: string
   }
 }
