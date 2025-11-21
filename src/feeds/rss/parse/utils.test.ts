@@ -812,8 +812,8 @@ describe('parseItem', () => {
     const expected = {
       title: 'Example Entry',
       dc: {
-        creator: 'John Doe',
         creators: ['John Doe'],
+        creator: 'John Doe',
       },
     }
 
@@ -1395,8 +1395,8 @@ describe('parseFeed', () => {
       title: 'Feed Title',
       link: 'https://example.com',
       dc: {
-        creator: 'John Doe',
         creators: ['John Doe'],
+        creator: 'John Doe',
       },
     }
 

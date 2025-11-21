@@ -412,8 +412,8 @@ describe('parseItem', () => {
       title: 'Example Entry',
       link: 'http://example.com',
       dc: {
-        creator: 'John Doe',
         creators: ['John Doe'],
+        creator: 'John Doe',
       },
     }
 
@@ -964,8 +964,8 @@ describe('parseFeed', () => {
         },
       ],
       dc: {
-        creator: 'John Doe',
         creators: ['John Doe'],
+        creator: 'John Doe',
       },
     }
 
