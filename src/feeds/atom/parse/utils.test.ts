@@ -993,8 +993,8 @@ describe('parseEntry', () => {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: 'Example Entry',
       dc: {
-        creator: 'John Doe',
         creators: ['John Doe'],
+        creator: 'John Doe',
       },
     }
 
@@ -1497,8 +1497,8 @@ describe('parseFeed', () => {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: 'Example Feed',
       dc: {
-        creator: 'John Doe',
         creators: ['John Doe'],
+        creator: 'John Doe',
       },
     }
 
