@@ -287,8 +287,8 @@ describe('parse', () => {
             link: 'http://example.com/item',
             description: 'Item Description',
             dc: {
-              creator: 'John Doe',
               creators: ['John Doe'],
+              creator: 'John Doe',
             },
           },
         ],
@@ -330,10 +330,10 @@ describe('parse', () => {
             link: 'http://example.com/item1',
             description: 'Item Description',
             dc: {
-              creator: 'John Doe',
               creators: ['John Doe'],
-              date: '2023-01-01',
               dates: ['2023-01-01'],
+              creator: 'John Doe',
+              date: '2023-01-01',
             },
           },
           {
@@ -374,8 +374,8 @@ describe('parse', () => {
             link: 'http://example.com/item',
             description: 'Item Description',
             dc: {
-              creator: 'John Doe',
               creators: ['John Doe'],
+              creator: 'John Doe',
             },
           },
         ],
@@ -469,10 +469,10 @@ describe('parse', () => {
             link: 'http://example.com/item',
             description: 'Item Description',
             dc: {
-              creator: 'John Doe',
               creators: ['John Doe'],
-              date: '2023-01-01',
               dates: ['2023-01-01'],
+              creator: 'John Doe',
+              date: '2023-01-01',
             },
             media: {
               title: {
@@ -518,8 +518,8 @@ describe('parse', () => {
           {
             title: 'Item Title',
             dc: {
-              creator: 'Should not be normalized (empty URI)',
               creators: ['Should not be normalized (empty URI)'],
+              creator: 'Should not be normalized (empty URI)',
             },
           },
         ],
@@ -591,10 +591,10 @@ describe('parse', () => {
         items: [
           {
             dc: {
-              creator: 'John Doe',
               creators: ['John Doe'],
-              date: '2023-01-01',
               dates: ['2023-01-01'],
+              creator: 'John Doe',
+              date: '2023-01-01',
             },
           },
         ],
@@ -627,8 +627,8 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
-                creator: 'John',
                 creators: ['John'],
+                creator: 'John',
               },
             },
           ],
@@ -660,8 +660,8 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
-                creator: 'John',
                 creators: ['John'],
+                creator: 'John',
               },
             },
           ],
@@ -693,8 +693,8 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
-                creator: 'John',
                 creators: ['John'],
+                creator: 'John',
               },
             },
           ],
@@ -726,8 +726,8 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
-                creator: 'John',
                 creators: ['John'],
+                creator: 'John',
               },
             },
           ],
@@ -759,8 +759,8 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
-                creator: 'John',
                 creators: ['John'],
+                creator: 'John',
               },
             },
           ],
@@ -792,8 +792,8 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
-                creator: 'John',
                 creators: ['John'],
+                creator: 'John',
               },
             },
           ],
