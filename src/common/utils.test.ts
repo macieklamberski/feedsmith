@@ -3456,6 +3456,53 @@ describe('createNamespaceNormalizator', () => {
         expect(normalizeNamespaces(value)).toEqual(expected)
       })
 
+      it('should normalize when standard prefix used by unknown namespace', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root
+            xmlns:atom="http://example.com/unknown"
+            xmlns:feed="http://www.w3.org/2005/Atom"
+          >
+            <atom:unknown>ignored</atom:unknown>
+            <feed:title>Test Title</feed:title>
+          </root>
+        `)
+        const expected = {
+          root: {
+            'atom:unknown': 'ignored',
+            'atom:title': 'Test Title',
+            '@xmlns:atom': 'http://example.com/unknown',
+            '@xmlns:feed': 'http://www.w3.org/2005/Atom',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should normalize multiple conflicts with same namespace URI', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root
+            xmlns:dc1="http://purl.org/dc/elements/1.1/"
+            xmlns:dc2="http://purl.org/dc/elements/1.1"
+          >
+            <dc1:creator>John Doe</dc1:creator>
+            <dc2:creator>Jane Smith</dc2:creator>
+          </root>
+        `)
+        const expected = {
+          root: {
+            'dc:creator': ['John Doe', 'Jane Smith'],
+            '@xmlns:dc1': 'http://purl.org/dc/elements/1.1/',
+            '@xmlns:dc2': 'http://purl.org/dc/elements/1.1',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
       it('should handle namespace declarations without usage', () => {
         const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
