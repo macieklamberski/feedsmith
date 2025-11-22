@@ -3,6 +3,19 @@ import { retrieveItemOrFeed } from './utils.js'
 
 describe('retrieveItemOrFeed', () => {
   const expectedFull = {
+    titles: ['Sample Title'],
+    creators: ['John Doe'],
+    subjects: ['Test Subject'],
+    descriptions: ['This is a description'],
+    publishers: ['Test Publisher'],
+    contributors: ['Jane Smith'],
+    dates: ['2023-05-15T09:30:00Z'],
+    types: ['Article'],
+    formats: ['text/html'],
+    identifiers: ['urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a'],
+    sources: ['https://example.org/source'],
+    languages: ['en-US'],
+    relations: ['https://example.org/related'],
     title: 'Sample Title',
     creator: 'John Doe',
     subject: 'Test Subject',
@@ -85,8 +98,41 @@ describe('retrieveItemOrFeed', () => {
       'dc:coverage': ['Worldwide', 'North America'],
       'dc:rights': ['Copyright 2023, All rights reserved', 'Creative Commons BY-NC-SA 4.0'],
     }
+    const expected = {
+      titles: ['Sample Title', 'Alternative Title'],
+      creators: ['John Doe', 'Richard Roe'],
+      subjects: ['Test Subject', 'Secondary Subject'],
+      descriptions: ['This is a description', 'This is an alternative description'],
+      publishers: ['Test Publisher', 'Another Publisher'],
+      contributors: ['Jane Smith', 'Alice Johnson'],
+      dates: ['2023-05-15T09:30:00Z', '2023-06-20T14:45:00Z'],
+      types: ['Article', 'Blog Post'],
+      formats: ['text/html', 'application/pdf'],
+      identifiers: [
+        'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+        'urn:uuid:2335d785-dfc9-5fcc-bbbb-90eb455efa7b',
+      ],
+      sources: ['https://example.org/source', 'https://example.org/alternate-source'],
+      languages: ['en-US', 'fr-FR'],
+      relations: ['https://example.org/related', 'https://example.org/also-related'],
+      title: 'Sample Title',
+      creator: 'John Doe',
+      subject: 'Test Subject',
+      description: 'This is a description',
+      publisher: 'Test Publisher',
+      contributor: 'Jane Smith',
+      date: '2023-05-15T09:30:00Z',
+      type: 'Article',
+      format: 'text/html',
+      identifier: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      source: 'https://example.org/source',
+      language: 'en-US',
+      relation: 'https://example.org/related',
+      coverage: 'Worldwide',
+      rights: 'Copyright 2023, All rights reserved',
+    }
 
-    expect(retrieveItemOrFeed(value)).toEqual(expectedFull)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should handle partial dublincore object with common properties', () => {
@@ -96,6 +142,9 @@ describe('retrieveItemOrFeed', () => {
       'dc:date': { '#text': '2023-05-15T09:30:00Z' },
     }
     const expected = {
+      titles: ['Sample Title'],
+      creators: ['John Doe'],
+      dates: ['2023-05-15T09:30:00Z'],
       title: 'Sample Title',
       creator: 'John Doe',
       date: '2023-05-15T09:30:00Z',
@@ -109,6 +158,7 @@ describe('retrieveItemOrFeed', () => {
       'dc:title': { '#text': 'Only Title' },
     }
     const expected = {
+      titles: ['Only Title'],
       title: 'Only Title',
     }
 
@@ -122,6 +172,8 @@ describe('retrieveItemOrFeed', () => {
       'dc:identifier': { '#text': 456 },
     }
     const expected = {
+      titles: ['123'],
+      identifiers: ['456'],
       title: '123',
       identifier: '456',
     }
@@ -158,6 +210,8 @@ describe('retrieveItemOrFeed', () => {
       'dc:date': { '#text': '2023-01-01T12:00:00Z' },
     }
     const expected = {
+      creators: ['John Doe'],
+      dates: ['2023-01-01T12:00:00Z'],
       creator: 'John Doe',
       date: '2023-01-01T12:00:00Z',
     }
@@ -172,6 +226,7 @@ describe('retrieveItemOrFeed', () => {
       'dc:description': { '#text': '' },
     }
     const expected = {
+      creators: ['John Doe'],
       creator: 'John Doe',
     }
 
@@ -185,6 +240,7 @@ describe('retrieveItemOrFeed', () => {
       'dc:date': { '#text': undefined },
     }
     const expected = {
+      creators: ['John Doe'],
       creator: 'John Doe',
     }
 
@@ -197,6 +253,8 @@ describe('retrieveItemOrFeed', () => {
       'dc:language': { '#text': 'en' },
     }
     const expected = {
+      identifiers: ['12345'],
+      languages: ['en'],
       identifier: '12345',
       language: 'en',
     }

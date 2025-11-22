@@ -277,6 +277,7 @@ describe('parse', () => {
             link: 'http://example.com/item1',
             description: 'Item Description',
             dc: {
+              creators: ['John Doe'],
               creator: 'John Doe',
             },
           },
@@ -319,6 +320,8 @@ describe('parse', () => {
             link: 'http://example.com/item1',
             description: 'Item Description',
             dc: {
+              creators: ['John Doe'],
+              dates: ['2023-01-01'],
               creator: 'John Doe',
               date: '2023-01-01',
             },
@@ -361,6 +364,7 @@ describe('parse', () => {
             link: 'http://example.com/item1',
             description: 'Item Description',
             dc: {
+              creators: ['John Doe'],
               creator: 'John Doe',
             },
           },
@@ -452,6 +456,7 @@ describe('parse', () => {
         link: 'http://example.com',
         description: 'RDF Feed Description',
         dc: {
+          creators: ['Feed Author'],
           creator: 'Feed Author',
         },
         sy: {
@@ -463,6 +468,8 @@ describe('parse', () => {
             link: 'http://example.com/item1',
             description: 'Item Description',
             dc: {
+              creators: ['John Doe'],
+              dates: ['2023-01-01'],
               creator: 'John Doe',
               date: '2023-01-01',
             },
@@ -505,6 +512,7 @@ describe('parse', () => {
           {
             title: 'Item Title',
             dc: {
+              creators: ['Should not normalize (empty URI)'],
               creator: 'Should not normalize (empty URI)',
             },
           },
@@ -564,12 +572,14 @@ describe('parse', () => {
       `
       const expected = {
         dc: {
+          creators: ['Channel Author'],
           creator: 'Channel Author',
         },
         items: [
           {
             title: 'Item without about',
             dc: {
+              creators: ['Item Author'],
               creator: 'Item Author',
             },
           },
@@ -641,6 +651,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -677,6 +688,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -713,6 +725,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -749,6 +762,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -785,6 +799,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -821,6 +836,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
