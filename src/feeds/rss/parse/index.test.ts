@@ -317,6 +317,7 @@ describe('parse', () => {
             link: 'http://example.com/item',
             description: 'Item Description',
             dc: {
+              creators: ['John Doe'],
               creator: 'John Doe',
             },
           },
@@ -359,6 +360,8 @@ describe('parse', () => {
             link: 'http://example.com/item1',
             description: 'Item Description',
             dc: {
+              creators: ['John Doe'],
+              dates: ['2023-01-01'],
               creator: 'John Doe',
               date: '2023-01-01',
             },
@@ -401,6 +404,7 @@ describe('parse', () => {
             link: 'http://example.com/item',
             description: 'Item Description',
             dc: {
+              creators: ['John Doe'],
               creator: 'John Doe',
             },
           },
@@ -495,6 +499,8 @@ describe('parse', () => {
             link: 'http://example.com/item',
             description: 'Item Description',
             dc: {
+              creators: ['John Doe'],
+              dates: ['2023-01-01'],
               creator: 'John Doe',
               date: '2023-01-01',
             },
@@ -542,6 +548,7 @@ describe('parse', () => {
           {
             title: 'Item Title',
             dc: {
+              creators: ['Should not be normalized (empty URI)'],
               creator: 'Should not be normalized (empty URI)',
             },
           },
@@ -614,6 +621,8 @@ describe('parse', () => {
         items: [
           {
             dc: {
+              creators: ['John Doe'],
+              dates: ['2023-01-01'],
               creator: 'John Doe',
               date: '2023-01-01',
             },
@@ -648,6 +657,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -680,6 +690,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -712,6 +723,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -744,6 +756,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -776,6 +789,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -808,6 +822,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
