@@ -886,6 +886,214 @@ describe('parse', () => {
     })
   })
 
+  it('should parse RDF with dcterms namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:dcterms="http://purl.org/dc/terms/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with DCTerms</title>
+          <link>http://example.com</link>
+          <description>Test feed with Dublin Core Terms namespace</description>
+          <dcterms:created>2023-01-01T00:00:00.000Z</dcterms:created>
+          <dcterms:license>Creative Commons Attribution 4.0</dcterms:license>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>First item</title>
+          <link>http://example.com/item1</link>
+          <dcterms:created>2023-02-01T00:00:00.000Z</dcterms:created>
+          <dcterms:license>MIT License</dcterms:license>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with DCTerms',
+      link: 'http://example.com',
+      description: 'Test feed with Dublin Core Terms namespace',
+      dcterms: {
+        created: '2023-01-01T00:00:00.000Z',
+        license: 'Creative Commons Attribution 4.0',
+      },
+      items: [
+        {
+          title: 'First item',
+          link: 'http://example.com/item1',
+          dcterms: {
+            created: '2023-02-01T00:00:00.000Z',
+            license: 'MIT License',
+          },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse RDF with content namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:content="http://purl.org/rss/1.0/modules/content/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with Content namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with Content namespace</description>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>First item</title>
+          <link>http://example.com/item1</link>
+          <content:encoded><![CDATA[<p>Full HTML content with <strong>formatting</strong></p>]]></content:encoded>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with Content namespace',
+      link: 'http://example.com',
+      description: 'Test feed with Content namespace',
+      items: [
+        {
+          title: 'First item',
+          link: 'http://example.com/item1',
+          content: {
+            encoded: '<p>Full HTML content with <strong>formatting</strong></p>',
+          },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse RDF with wfw namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with WFW namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with Well-Formed Web namespace</description>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item with comments</title>
+          <link>http://example.com/item1</link>
+          <wfw:comment>https://example.com/posts/item1/comment</wfw:comment>
+          <wfw:commentRss>https://example.com/posts/item1/comments/feed</wfw:commentRss>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with WFW namespace',
+      link: 'http://example.com',
+      description: 'Test feed with Well-Formed Web namespace',
+      items: [
+        {
+          title: 'Item with comments',
+          link: 'http://example.com/item1',
+          wfw: {
+            comment: 'https://example.com/posts/item1/comment',
+            commentRss: 'https://example.com/posts/item1/comments/feed',
+          },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse RDF with admin namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:admin="http://webns.net/mvcb/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with Admin namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with Administrative namespace</description>
+          <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
+          <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item title</title>
+          <link>http://example.com/item1</link>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with Admin namespace',
+      link: 'http://example.com',
+      description: 'Test feed with Administrative namespace',
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+      items: [
+        {
+          title: 'Item title',
+          link: 'http://example.com/item1',
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse RDF with georss namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:georss="http://www.georss.org/georss"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with GeoRSS namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with GeoRSS namespace</description>
+          <georss:point>45.256 -71.92</georss:point>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Location item</title>
+          <link>http://example.com/item1</link>
+          <georss:point>42.3601 -71.0589</georss:point>
+          <georss:featureName>Boston</georss:featureName>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with GeoRSS namespace',
+      link: 'http://example.com',
+      description: 'Test feed with GeoRSS namespace',
+      georss: {
+        point: { lat: 45.256, lng: -71.92 },
+      },
+      items: [
+        {
+          title: 'Location item',
+          link: 'http://example.com/item1',
+          georss: {
+            point: { lat: 42.3601, lng: -71.0589 },
+            featureName: 'Boston',
+          },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should handle alternating case items', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
