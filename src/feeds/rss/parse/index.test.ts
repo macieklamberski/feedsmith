@@ -816,6 +816,42 @@ describe('parse', () => {
 
         expect(parse(value)).toEqual(expected)
       })
+
+      it('should work with DC Terms namespace', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:dcterms="http://purl.org/dc/terms/">
+            <channel>
+              <title>Test</title>
+              <link>http://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Item</title>
+                <dcterms:creator>Jane Doe</dcterms:creator>
+                <dcterms:title>DC Terms Title</dcterms:title>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'http://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              dcterms: {
+                creators: ['Jane Doe'],
+                titles: ['DC Terms Title'],
+                creator: 'Jane Doe',
+                title: 'DC Terms Title',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
     })
   })
 

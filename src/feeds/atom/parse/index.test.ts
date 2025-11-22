@@ -1006,6 +1006,44 @@ describe('parse', () => {
 
         expect(parse(value)).toEqual(expected)
       })
+
+      it('should work with DC Terms namespace', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <feed xmlns="http://www.w3.org/2005/Atom" xmlns:dcterms="http://purl.org/dc/terms/">
+            <title>Test</title>
+            <id>urn:uuid:feed</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <entry>
+              <title>Entry</title>
+              <id>urn:uuid:entry</id>
+              <updated>2024-01-01T00:00:00Z</updated>
+              <dcterms:creator>Jane Doe</dcterms:creator>
+              <dcterms:title>DC Terms Title</dcterms:title>
+            </entry>
+          </feed>
+        `
+        const expected = {
+          title: 'Test',
+          id: 'urn:uuid:feed',
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              title: 'Entry',
+              id: 'urn:uuid:entry',
+              updated: '2024-01-01T00:00:00Z',
+              dcterms: {
+                creators: ['Jane Doe'],
+                titles: ['DC Terms Title'],
+                creator: 'Jane Doe',
+                title: 'DC Terms Title',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
     })
 
     describe('Atom namespace URI variants', () => {

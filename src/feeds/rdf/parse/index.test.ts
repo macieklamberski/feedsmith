@@ -829,6 +829,46 @@ describe('parse', () => {
 
         expect(parse(value)).toEqual(expected)
       })
+
+      it('should work with DC Terms namespace', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rdf:RDF
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns="http://purl.org/rss/1.0/"
+            xmlns:dcterms="http://purl.org/dc/terms/"
+          >
+            <channel rdf:about="http://example.com">
+              <title>Test</title>
+              <link>http://example.com</link>
+              <description>Test</description>
+            </channel>
+            <item rdf:about="http://example.com/item1">
+              <title>Item</title>
+              <dcterms:creator>Jane Doe</dcterms:creator>
+              <dcterms:title>DC Terms Title</dcterms:title>
+            </item>
+          </rdf:RDF>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'http://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              dcterms: {
+                creators: ['Jane Doe'],
+                titles: ['DC Terms Title'],
+                creator: 'Jane Doe',
+                title: 'DC Terms Title',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
     })
 
     describe('RDF namespace URI variants', () => {
