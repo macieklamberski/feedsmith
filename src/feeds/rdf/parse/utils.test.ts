@@ -443,8 +443,9 @@ describe('parseItem', () => {
       title: 'Example Entry',
       link: 'http://example.com',
       dcterms: {
-        created: '2023-02-01T00:00:00Z',
+        licenses: ['MIT License'],
         license: 'MIT License',
+        created: '2023-02-01T00:00:00Z',
       },
     }
 
@@ -1016,8 +1017,9 @@ describe('parseFeed', () => {
         },
       ],
       dcterms: {
-        created: '2023-01-01T00:00:00Z',
+        licenses: ['Creative Commons Attribution 4.0'],
         license: 'Creative Commons Attribution 4.0',
+        created: '2023-01-01T00:00:00Z',
       },
     }
 
