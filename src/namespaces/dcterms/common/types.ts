@@ -40,6 +40,8 @@ export namespace DcTermsNs {
 
     /** @deprecated Use `abstracts` (array) instead. Dublin Core Terms fields are repeatable. */
     abstract?: string
+    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
+    accessRights?: string
     /** @deprecated Use `accrualMethods` (array) instead. Dublin Core Terms fields are repeatable. */
     accrualMethod?: string
     /** @deprecated Use `accrualPeriodicities` (array) instead. Dublin Core Terms fields are repeatable. */
@@ -50,16 +52,28 @@ export namespace DcTermsNs {
     alternative?: string
     /** @deprecated Use `audiences` (array) instead. Dublin Core Terms fields are repeatable. */
     audience?: string
+    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
+    available?: TDate
     /** @deprecated Use `bibliographicCitations` (array) instead. Dublin Core Terms fields are repeatable. */
     bibliographicCitation?: string
+    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
+    conformsTo?: string
     /** @deprecated Use `contributors` (array) instead. Dublin Core Terms fields are repeatable. */
     contributor?: string
     /** @deprecated Use `coverages` (array) instead. Dublin Core Terms fields are repeatable. */
     coverage?: string
+    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
+    created?: TDate
     /** @deprecated Use `creators` (array) instead. Dublin Core Terms fields are repeatable. */
     creator?: string
     /** @deprecated Use `dates` (array) instead. Dublin Core Terms fields are repeatable. */
     date?: TDate
+    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
+    dateAccepted?: TDate
+    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
+    dateCopyrighted?: TDate
+    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
+    dateSubmitted?: TDate
     /** @deprecated Use `descriptions` (array) instead. Dublin Core Terms fields are repeatable. */
     description?: string
     /** @deprecated Use `educationLevels` (array) instead. Dublin Core Terms fields are repeatable. */
@@ -78,49 +92,6 @@ export namespace DcTermsNs {
     identifier?: string
     /** @deprecated Use `instructionalMethods` (array) instead. Dublin Core Terms fields are repeatable. */
     instructionalMethod?: string
-    /** @deprecated Use `languages` (array) instead. Dublin Core Terms fields are repeatable. */
-    language?: string
-    /** @deprecated Use `licenses` (array) instead. Dublin Core Terms fields are repeatable. */
-    license?: string
-    /** @deprecated Use `mediators` (array) instead. Dublin Core Terms fields are repeatable. */
-    mediator?: string
-    /** @deprecated Use `mediums` (array) instead. Dublin Core Terms fields are repeatable. */
-    medium?: string
-    /** @deprecated Use `provenances` (array) instead. Dublin Core Terms fields are repeatable. */
-    provenance?: string
-    /** @deprecated Use `publishers` (array) instead. Dublin Core Terms fields are repeatable. */
-    publisher?: string
-    /** @deprecated Use `relations` (array) instead. Dublin Core Terms fields are repeatable. */
-    relation?: string
-    /** @deprecated Use `rightsHolders` (array) instead. Dublin Core Terms fields are repeatable. */
-    rightsHolder?: string
-    /** @deprecated Use `sources` (array) instead. Dublin Core Terms fields are repeatable. */
-    source?: string
-    /** @deprecated Use `spatials` (array) instead. Dublin Core Terms fields are repeatable. */
-    spatial?: string
-    /** @deprecated Use `subjects` (array) instead. Dublin Core Terms fields are repeatable. */
-    subject?: string
-    /** @deprecated Use `temporals` (array) instead. Dublin Core Terms fields are repeatable. */
-    temporal?: string
-    /** @deprecated Use `titles` (array) instead. Dublin Core Terms fields are repeatable. */
-    title?: string
-    /** @deprecated Use `types` (array) instead. Dublin Core Terms fields are repeatable. */
-    type?: string
-
-    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
-    accessRights?: string
-    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
-    available?: TDate
-    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
-    conformsTo?: string
-    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
-    created?: TDate
-    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
-    dateAccepted?: TDate
-    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
-    dateCopyrighted?: TDate
-    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
-    dateSubmitted?: TDate
     /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
     isFormatOf?: string
     /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
@@ -135,18 +106,46 @@ export namespace DcTermsNs {
     issued?: TDate
     /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
     isVersionOf?: string
+    /** @deprecated Use `languages` (array) instead. Dublin Core Terms fields are repeatable. */
+    language?: string
+    /** @deprecated Use `licenses` (array) instead. Dublin Core Terms fields are repeatable. */
+    license?: string
+    /** @deprecated Use `mediators` (array) instead. Dublin Core Terms fields are repeatable. */
+    mediator?: string
+    /** @deprecated Use `mediums` (array) instead. Dublin Core Terms fields are repeatable. */
+    medium?: string
     /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
     modified?: TDate
+    /** @deprecated Use `provenances` (array) instead. Dublin Core Terms fields are repeatable. */
+    provenance?: string
+    /** @deprecated Use `publishers` (array) instead. Dublin Core Terms fields are repeatable. */
+    publisher?: string
     /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
     references?: string
+    /** @deprecated Use `relations` (array) instead. Dublin Core Terms fields are repeatable. */
+    relation?: string
     /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
     replaces?: string
     /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
     requires?: string
     /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
     rights?: string
+    /** @deprecated Use `rightsHolders` (array) instead. Dublin Core Terms fields are repeatable. */
+    rightsHolder?: string
+    /** @deprecated Use `sources` (array) instead. Dublin Core Terms fields are repeatable. */
+    source?: string
+    /** @deprecated Use `spatials` (array) instead. Dublin Core Terms fields are repeatable. */
+    spatial?: string
+    /** @deprecated Use `subjects` (array) instead. Dublin Core Terms fields are repeatable. */
+    subject?: string
     /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
     tableOfContents?: string
+    /** @deprecated Use `temporals` (array) instead. Dublin Core Terms fields are repeatable. */
+    temporal?: string
+    /** @deprecated Use `titles` (array) instead. Dublin Core Terms fields are repeatable. */
+    title?: string
+    /** @deprecated Use `types` (array) instead. Dublin Core Terms fields are repeatable. */
+    type?: string
     /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core Terms fields are repeatable. */
     valid?: TDate
   }
