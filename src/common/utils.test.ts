@@ -1974,6 +1974,40 @@ describe('generateXmlStylesheet', () => {
       expect(generateXmlStylesheet(value)).toBe(expected)
     })
   })
+
+  describe('Edge cases', () => {
+    it('should return undefined when all fields are empty strings', () => {
+      const value = {
+        type: '',
+        href: '',
+        title: '',
+        media: '',
+        charset: '',
+      }
+
+      expect(generateXmlStylesheet(value)).toBeUndefined()
+    })
+
+    it('should return undefined when all fields are whitespace', () => {
+      const value = {
+        type: '   ',
+        href: '  ',
+      }
+
+      expect(generateXmlStylesheet(value)).toBeUndefined()
+    })
+
+    it('should return undefined when all fields are undefined', () => {
+      const value = {
+        type: undefined,
+        href: undefined,
+        title: undefined,
+      }
+
+      // @ts-expect-error: This is for testing purposes.
+      expect(generateXmlStylesheet(value)).toBeUndefined()
+    })
+  })
 })
 
 describe('generateXml', () => {
