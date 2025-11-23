@@ -99,6 +99,81 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse JSON Feed from string', () => {
+    const value = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'My Example Feed',
+      items: [
+        {
+          id: '1',
+          content_html: '<p>Hello world</p>',
+        },
+      ],
+    })
+    const expected = {
+      title: 'My Example Feed',
+      items: [
+        {
+          id: '1',
+          content_html: '<p>Hello world</p>',
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse JSON Feed from string with leading whitespace', () => {
+    const json = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Feed with whitespace',
+      items: [{ id: '1', content_text: 'Test' }],
+    })
+    const value = `  ${json}`
+    const expected = {
+      title: 'Feed with whitespace',
+      items: [{ id: '1', content_text: 'Test' }],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse JSON Feed from string with trailing whitespace', () => {
+    const json = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Feed with whitespace',
+      items: [{ id: '1', content_text: 'Test' }],
+    })
+    const value = `${json}  `
+    const expected = {
+      title: 'Feed with whitespace',
+      items: [{ id: '1', content_text: 'Test' }],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse JSON Feed from string with whitespace on both ends', () => {
+    const json = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Feed with whitespace',
+      items: [{ id: '1', content_text: 'Test' }],
+    })
+    const value = `  ${json}  `
+    const expected = {
+      title: 'Feed with whitespace',
+      items: [{ id: '1', content_text: 'Test' }],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should handle malformed JSON string', () => {
+    const value = '{"version":"https://jsonfeed.org/version/1.1","title":"Malformed'
+
+    expect(() => parse(value)).toThrowError(locales.invalidFeedFormat)
+  })
+
   it('should parse feed with invalid URLs', () => {
     const value = {
       version: 'https://jsonfeed.org/version/1',
