@@ -757,3 +757,24 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
 
   return normalizeRoot
 }
+
+export const parseJsonObject = (value: unknown): unknown => {
+  if (isObject(value)) {
+    return value
+  }
+
+  if (!isNonEmptyString(value) || value.length < 2) {
+    return
+  }
+
+  const startsWithBrace = value.charAt(0) === '{' || /^\s*\{/.test(value)
+  const endsWithBrace = value.charAt(value.length - 1) === '}' || /\}\s*$/.test(value)
+
+  if (!startsWithBrace || !endsWithBrace) {
+    return
+  }
+
+  try {
+    return JSON.parse(value)
+  } catch {}
+}

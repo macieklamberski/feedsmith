@@ -12,6 +12,7 @@ import { detect as detectRssFeed } from '../feeds/rss/detect/index.js'
 import { parse as parseRssFeed } from '../feeds/rss/parse/index.js'
 import { locales } from './config.js'
 import type { DeepPartial, ParseOptions } from './types.js'
+import { parseJsonObject } from './utils.js'
 
 export type Parse = (
   value: unknown,
@@ -35,8 +36,10 @@ export const parse: Parse = (value, options) => {
     return { format: 'rdf', feed: parseRdfFeed(value, options) }
   }
 
-  if (detectJsonFeed(value)) {
-    return { format: 'json', feed: parseJsonFeed(value, options) }
+  const json = parseJsonObject(value)
+
+  if (detectJsonFeed(json)) {
+    return { format: 'json', feed: parseJsonFeed(json, options) }
   }
 
   throw new Error(locales.unrecognizedFeedFormat)
