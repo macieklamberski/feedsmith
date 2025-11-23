@@ -30,6 +30,7 @@ import {
   parseBoolean,
   parseCsvOf,
   parseDate,
+  parseJsonObject,
   parseNumber,
   parseSingular,
   parseSingularOf,
@@ -3854,5 +3855,79 @@ describe('generateSingularOrArray', () => {
     const result = generateSingularOrArray('x', ['a', 'b', 'c'], generator)
 
     expect(result).toEqual('X')
+  })
+})
+
+describe('parseJsonObject', () => {
+  it('should return object unchanged when input is object', () => {
+    const value = { title: 'Test', count: 42 }
+
+    expect(parseJsonObject(value)).toEqual(value)
+  })
+
+  it('should parse valid JSON string', () => {
+    const value = '{"title":"Test","count":42}'
+    const expected = { title: 'Test', count: 42 }
+
+    expect(parseJsonObject(value)).toEqual(expected)
+  })
+
+  it('should parse JSON string with whitespace on start', () => {
+    const value = '  {"title":"Test"}'
+    const expected = { title: 'Test' }
+
+    expect(parseJsonObject(value)).toEqual(expected)
+  })
+
+  it('should parse JSON string with whitespace on end', () => {
+    const value = '{"title":"Test"}  '
+    const expected = { title: 'Test' }
+
+    expect(parseJsonObject(value)).toEqual(expected)
+  })
+
+  it('should parse JSON string with whitespace on both ends', () => {
+    const value = '  {"title":"Test"}  '
+    const expected = { title: 'Test' }
+
+    expect(parseJsonObject(value)).toEqual(expected)
+  })
+
+  it('should return undefined for array string', () => {
+    const value = '[1,2,3]'
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for XML string', () => {
+    const value = '<rss><channel><title>Test</title></channel></rss>'
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for plain text', () => {
+    const value = 'not json'
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for malformed JSON', () => {
+    const value = '{"title":"Test"'
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty string', () => {
+    const value = ''
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(parseJsonObject(123)).toBeUndefined()
+    expect(parseJsonObject(true)).toBeUndefined()
+    expect(parseJsonObject(null)).toBeUndefined()
+    expect(parseJsonObject(undefined)).toBeUndefined()
+    expect(parseJsonObject([1, 2, 3])).toBeUndefined()
   })
 })
