@@ -776,7 +776,5 @@ export const parseJsonObject = (value: unknown): unknown => {
 
   try {
     return JSON.parse(value)
-  } catch {
-    return
-  }
+  } catch {}
 }

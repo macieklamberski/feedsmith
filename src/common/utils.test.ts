@@ -3899,6 +3899,12 @@ describe('parseJsonObject', () => {
     expect(parseJsonObject(value)).toBeUndefined()
   })
 
+  it('should return undefined for array string with whitespace', () => {
+    const value = '   [1,2,3]   '
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
   it('should return undefined for XML string', () => {
     const value = '<rss><channel><title>Test</title></channel></rss>'
 
