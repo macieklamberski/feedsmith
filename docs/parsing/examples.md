@@ -324,6 +324,33 @@ Returns:
 }
 ```
 
+### Parsing JSON Objects
+
+In addition to parsing JSON strings, `parseJsonFeed()` also accepts JavaScript objects directly. This is useful when you already have a parsed JSON object:
+
+```typescript
+import { parseJsonFeed } from 'feedsmith'
+
+const feedObject = {
+  version: 'https://jsonfeed.org/version/1.1',
+  title: 'My Blog',
+  home_page_url: 'https://example.com/',
+  items: [
+    {
+      id: '1',
+      title: 'First Post',
+      content_text: 'Hello world!',
+      url: 'https://example.com/posts/1',
+      date_published: '2024-01-15T12:00:00Z'
+    }
+  ]
+}
+
+const jsonFeed = parseJsonFeed(feedObject)
+```
+
+This works the same way for all JSON Feed detection and parsing functions: `detectJsonFeed()`, `parseJsonFeed()`, and the universal `parse()` function.
+
 ## OPML
 
 ```typescript
