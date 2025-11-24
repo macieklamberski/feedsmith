@@ -9,6 +9,7 @@ import {
   parseString,
   parseYesNoBoolean,
   retrieveText,
+  trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { PodcastNs } from '../common/types.js'
@@ -225,17 +226,53 @@ export const parseValueRecipient: ParsePartialUtil<PodcastNs.ValueRecipient> = (
   return trimObject(valueRecipient)
 }
 
-export const parseImages: ParsePartialUtil<PodcastNs.Images> = (value) => {
+export const parseImage: ParsePartialUtil<PodcastNs.Image> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  const images = {
-    // TODO: Convert it to an array of { url, viewport }?
-    srcset: parseString(value['@srcset']),
+  const image = {
+    href: parseString(value['@href']),
+    alt: parseString(value['@alt']),
+    aspectRatio: parseString(value['@aspect-ratio']),
+    width: parseNumber(value['@width']),
+    height: parseNumber(value['@height']),
+    type: parseString(value['@type']),
+    purpose: parseString(value['@purpose']),
   }
 
-  return trimObject(images)
+  return trimObject(image)
+}
+
+export const parseImages: ParsePartialUtil<Array<PodcastNs.Image>> = (value) => {
+  const srcset = parseString(value?.['@srcset'])
+
+  if (!srcset) {
+    return
+  }
+
+  const images = []
+  const segments = srcset.split(',')
+
+  for (const segment of segments) {
+    const [href, width] = segment.trim().split(/\s+/)
+
+    const image = {
+      href: parseString(href),
+      width: parseNumber(width?.replace(/w$/, '')),
+    }
+
+    images.push(image)
+  }
+
+  return trimArray(images, trimObject)
+}
+
+export const retrieveImages: ParsePartialUtil<Array<PodcastNs.Image>> = (value) => {
+  return (
+    parseArrayOf(value['podcast:image'], parseImage) ??
+    parseSingularOf(value['podcast:images'], parseImages)
+  )
 }
 
 export const parseLiveItem: ParsePartialUtil<PodcastNs.LiveItem<string>> = (value) => {
@@ -413,7 +450,7 @@ export const retrieveItem: ParsePartialUtil<PodcastNs.Item> = (value) => {
     license: parseSingularOf(value['podcast:license'], parseLicense),
     alternateEnclosures: parseArrayOf(value['podcast:alternateenclosure'], parseAlternateEnclosure),
     values: parseArrayOf(value['podcast:value'], parseValue),
-    images: parseSingularOf(value['podcast:images'], parseImages),
+    images: retrieveImages(value),
     socialInteracts: parseArrayOf(value['podcast:socialinteract'], parseSocialInteract),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
     chat: parseSingularOf(value['podcast:chat'], parseChat),
@@ -442,7 +479,7 @@ export const retrieveFeed: ParsePartialUtil<PodcastNs.Feed<string>> = (value) =>
     guid: parseSingularOf(value['podcast:guid'], (value) => parseString(retrieveText(value))),
     values: parseArrayOf(value['podcast:value'], parseValue),
     medium: parseSingularOf(value['podcast:medium'], (value) => parseString(retrieveText(value))),
-    images: parseSingularOf(value['podcast:images'], parseImages),
+    images: retrieveImages(value),
     liveItems: parseArrayOf(value['podcast:liveitem'], parseLiveItem),
     blocks: parseArrayOf(value['podcast:block'], parseBlock),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),

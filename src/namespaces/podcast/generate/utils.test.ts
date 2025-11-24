@@ -9,7 +9,7 @@ import {
   generateEpisode,
   generateFeed,
   generateFunding,
-  generateImages,
+  generateImage,
   generateIntegrity,
   generateItem,
   generateLicense,
@@ -664,20 +664,43 @@ describe('generateValue', () => {
   })
 })
 
-describe('generateImages', () => {
-  it('should generate images with srcset', () => {
+describe('generateImage', () => {
+  it('should generate image with all properties', () => {
     const value = {
-      srcset: 'https://example.com/image-400.jpg 400w, https://example.com/image-800.jpg 800w',
+      href: 'https://example.com/image.jpg',
+      alt: 'Example Image',
+      aspectRatio: '16/9',
+      width: 1200,
+      height: 630,
+      type: 'image/jpeg',
+      purpose: 'social',
     }
     const expected = {
-      '@srcset': 'https://example.com/image-400.jpg 400w, https://example.com/image-800.jpg 800w',
+      '@href': 'https://example.com/image.jpg',
+      '@alt': 'Example Image',
+      '@aspect-ratio': '16/9',
+      '@width': 1200,
+      '@height': 630,
+      '@type': 'image/jpeg',
+      '@purpose': 'social',
     }
 
-    expect(generateImages(value)).toEqual(expected)
+    expect(generateImage(value)).toEqual(expected)
+  })
+
+  it('should generate image with only required href', () => {
+    const value = {
+      href: 'https://example.com/image.jpg',
+    }
+    const expected = {
+      '@href': 'https://example.com/image.jpg',
+    }
+
+    expect(generateImage(value)).toEqual(expected)
   })
 
   it('should handle non-object inputs', () => {
-    expect(generateImages(undefined)).toBeUndefined()
+    expect(generateImage(undefined)).toBeUndefined()
   })
 })
 
@@ -1068,9 +1091,11 @@ describe('generateBaseItem', () => {
         type: 'lightning',
         method: 'keysend',
       },
-      images: {
-        srcset: 'https://example.com/image.jpg',
-      },
+      images: [
+        {
+          href: 'https://example.com/image.jpg',
+        },
+      ],
       socialInteracts: [
         {
           protocol: 'activitypub',
@@ -1126,9 +1151,11 @@ describe('generateBaseItem', () => {
         '@type': 'lightning',
         '@method': 'keysend',
       },
-      'podcast:images': {
-        '@srcset': 'https://example.com/image.jpg',
-      },
+      'podcast:image': [
+        {
+          '@href': 'https://example.com/image.jpg',
+        },
+      ],
       'podcast:socialInteract': [
         {
           '@protocol': 'activitypub',
@@ -1309,9 +1336,11 @@ describe('generateFeed', () => {
         method: 'keysend',
       },
       medium: 'podcast',
-      images: {
-        srcset: 'https://example.com/image.jpg',
-      },
+      images: [
+        {
+          href: 'https://example.com/image.jpg',
+        },
+      ],
       liveItems: [
         {
           status: 'live',
@@ -1384,9 +1413,11 @@ describe('generateFeed', () => {
         '@method': 'keysend',
       },
       'podcast:medium': 'podcast',
-      'podcast:images': {
-        '@srcset': 'https://example.com/image.jpg',
-      },
+      'podcast:image': [
+        {
+          '@href': 'https://example.com/image.jpg',
+        },
+      ],
       'podcast:liveItem': [
         {
           '@status': 'live',
