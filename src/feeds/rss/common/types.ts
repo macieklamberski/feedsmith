@@ -1,6 +1,7 @@
 import type { DateLike } from '../../../common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
+import type { BlogChannelNs } from '../../../namespaces/blogchannel/common/types.js'
 import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { ContentNs } from '../../../namespaces/content/common/types.js'
 import type { CreativeCommonsNs } from '../../../namespaces/creativecommons/common/types.js'
@@ -154,6 +155,7 @@ export namespace Rss {
     opensearch?: OpenSearchNs.Feed
     admin?: AdminNs.Feed
     sourceNs?: SourceNs.Feed
+    blogChannel?: BlogChannelNs.Feed
     rawvoice?: RawVoiceNs.Feed<TDate>
     spotify?: SpotifyNs.Feed
     pingback?: PingbackNs.Feed

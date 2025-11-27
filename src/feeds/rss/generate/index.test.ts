@@ -673,6 +673,31 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with blogChannel namespace', () => {
+    const value = {
+      title: 'Feed with blogChannel namespace',
+      description: 'Test feed with blogChannel namespace',
+      blogChannel: {
+        blogRoll: 'http://example.com/blogroll.opml',
+        blink: 'http://recommended-site.com/',
+        mySubscriptions: 'http://example.com/subscriptions.opml',
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:blogChannel="http://backend.userland.com/blogChannelModule">
+  <channel>
+    <title>Feed with blogChannel namespace</title>
+    <description>Test feed with blogChannel namespace</description>
+    <blogChannel:blogRoll>http://example.com/blogroll.opml</blogChannel:blogRoll>
+    <blogChannel:blink>http://recommended-site.com/</blogChannel:blink>
+    <blogChannel:mySubscriptions>http://example.com/subscriptions.opml</blogChannel:mySubscriptions>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with ccREL namespace', () => {
     const value = {
       title: 'Feed with ccREL namespace',
