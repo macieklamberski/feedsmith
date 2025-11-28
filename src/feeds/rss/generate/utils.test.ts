@@ -1431,6 +1431,33 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate blogChannel namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with blogChannel namespace',
+      description: 'A feed with blogChannel properties',
+      blogChannel: {
+        blogRoll: 'http://example.com/blogroll.opml',
+        blink: 'http://recommended-site.com/',
+        mySubscriptions: 'http://example.com/subscriptions.opml',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:blogChannel': 'http://backend.userland.com/blogChannelModule',
+        channel: {
+          title: 'Feed with blogChannel namespace',
+          description: 'A feed with blogChannel properties',
+          'blogChannel:blogRoll': 'http://example.com/blogroll.opml',
+          'blogChannel:blink': 'http://recommended-site.com/',
+          'blogChannel:mySubscriptions': 'http://example.com/subscriptions.opml',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate ccREL namespace properties and attributes for feed', () => {
     const value = {
       title: 'Feed with ccREL namespace',

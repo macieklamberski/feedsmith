@@ -24,6 +24,7 @@
      xmlns:pingback="http://purl.org/net/pingback/"
      xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
      xmlns:source="http://source.scripting.com/"
+     xmlns:blogChannel="http://backend.userland.com/blogChannelModule"
      xmlns:georss="http://www.georss.org/georss"
      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -319,6 +320,11 @@
     <source:cloud>https://cloudserver.example.com/notify</source:cloud>
     <source:blogroll>https://blog.example.com/blogroll.opml</source:blogroll>
     <source:self>http://example.com/feed.xml</source:self>
+
+    <!-- blogChannel Namespace: Channel Level Tags -->
+    <blogChannel:blogRoll>http://example.com/blogroll.opml</blogChannel:blogRoll>
+    <blogChannel:blink>http://recommended-site.com/</blogChannel:blink>
+    <blogChannel:mySubscriptions>http://example.com/subscriptions.opml</blogChannel:mySubscriptions>
 
     <!-- ccREL Namespace: Channel Level Tags -->
     <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>

@@ -17,6 +17,7 @@ import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
 } from '../../../namespaces/atom/parse/utils.js'
+import { retrieveFeed as retrieveBlogChannelFeed } from '../../../namespaces/blogchannel/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
@@ -254,6 +255,7 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>, ParseOptions> = (valu
     opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(value) : undefined,
     admin: namespaces.has('admin') ? retrieveAdminFeed(value) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,
+    blogChannel: namespaces.has('blogchannel') ? retrieveBlogChannelFeed(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceFeed(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(value) : undefined,
     pingback: namespaces.has('pingback') ? retrievePingbackFeed(value) : undefined,

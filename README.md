@@ -92,6 +92,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Pingback](http://madskills.com/public/xml/rss/module/pingback/) | `<pingback:*>` | RSS, Atom | ✅ | ✅ |
 | [Trackback](http://madskills.com/public/xml/rss/module/trackback/) | `<trackback:*>` | RSS, Atom | ✅ | ✅ |
 | [Source](http://source.scripting.com/) | `<source:*>` | RSS | ✅ | ✅ |
+| [blogChannel](http://backend.userland.com/blogChannelModule) | `<blogChannel:*>` | RSS | ✅ | ✅ |
 | [YouTube](https://www.youtube.com/feeds/videos.xml) | `<yt:*>` | Atom | ✅ | ✅ |
 | [W3C Basic Geo](http://www.w3.org/2003/01/geo/wgs84_pos#) | `<geo:*>` | RSS, Atom | ✅ | ✅ |
 | [GeoRSS Simple](http://www.georss.org/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |

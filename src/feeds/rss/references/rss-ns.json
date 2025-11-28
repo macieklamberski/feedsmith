@@ -1940,6 +1940,11 @@
     "blogroll": "https://blog.example.com/blogroll.opml",
     "self": "http://example.com/feed.xml"
   },
+  "blogChannel": {
+    "blogRoll": "http://example.com/blogroll.opml",
+    "blink": "http://recommended-site.com/",
+    "mySubscriptions": "http://example.com/subscriptions.opml"
+  },
   "creativeCommons": {
     "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
   },

@@ -49,6 +49,12 @@ export const namespaceUris = {
     'http://purl.org/atom/ns#', // Official URI (Atom 0.3).
     'https://purl.org/atom/ns#',
   ],
+  blogChannel: [
+    'http://backend.userland.com/blogChannelModule', // Official URI.
+    'https://backend.userland.com/blogChannelModule',
+    'http://backend.userland.com/blogChannelModule/',
+    'https://backend.userland.com/blogChannelModule/',
+  ],
   app: [
     'http://www.w3.org/2007/app', // Official URI.
     'https://www.w3.org/2007/app',
