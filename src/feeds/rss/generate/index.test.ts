@@ -179,6 +179,41 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with prism namespace', () => {
+    const value = {
+      title: 'Feed with prism namespace',
+      description: 'Test feed with PRISM namespace',
+      prism: {
+        issn: '0028-0836',
+      },
+      items: [
+        {
+          title: 'First item',
+          prism: {
+            doi: '10.1038/s41586-023-05842-x',
+            startingPage: '425',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:prism="http://prismstandard.org/namespaces/basic/3.0/">
+  <channel>
+    <title>Feed with prism namespace</title>
+    <description>Test feed with PRISM namespace</description>
+    <prism:issn>0028-0836</prism:issn>
+    <item>
+      <title>First item</title>
+      <prism:doi>10.1038/s41586-023-05842-x</prism:doi>
+      <prism:startingPage>425</prism:startingPage>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with sy namespace', () => {
     const value = {
       title: 'Feed with sy namespace',
