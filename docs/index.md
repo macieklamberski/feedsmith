@@ -71,6 +71,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [RawVoice](https://blubrry.com/developer/rawvoice-rss/) | `<rawvoice:*>` | RSS | ✅ | ✅ |
 | [FeedPress](https://feedpress.com/xmlns) | `<feedpress:*>` | RSS | ✅ | ✅ |
 | [arXiv](http://arxiv.org/schemas/atom) | `<arxiv:*>` | Atom | ✅ | ✅ |
+| [PRISM](http://prismstandard.org/namespaces/basic/3.0/) | `<prism:*>` | RSS | ✅ | ✅ |
 | [OpenSearch](http://a9.com/-/spec/opensearch/1.1/) | `<opensearch:*>` | RSS, Atom | ✅ | ✅ |
 | [ccREL](http://creativecommons.org/ns#) | `<cc:*>` | RSS, Atom | ✅ | ✅ |
 | [Creative Commons](http://backend.userland.com/creativeCommonsRssModule) | `<creativeCommons:*>` | RSS, Atom | ✅ | ✅ |

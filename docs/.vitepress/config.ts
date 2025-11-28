@@ -94,6 +94,7 @@ export default defineConfig({
               { text: 'RawVoice', link: '/reference/namespaces/rawvoice' },
               { text: 'FeedPress', link: '/reference/namespaces/feedpress' },
               { text: 'arXiv', link: '/reference/namespaces/arxiv' },
+              { text: 'PRISM', link: '/reference/namespaces/prism' },
               { text: 'OpenSearch', link: '/reference/namespaces/opensearch' },
               { text: 'ccREL', link: '/reference/namespaces/cc' },
               { text: 'Creative Commons', link: '/reference/namespaces/creativecommons' },
