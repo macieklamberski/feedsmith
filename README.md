@@ -63,7 +63,13 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [RDF](https://web.resource.org/rss/1.0/spec) | 0.9, 1.0 | ✅ | 📋 |
 | [JSON Feed](https://jsonfeed.org) | 1.0, 1.1 | ✅ | ✅ |
 
-### Namespaces
+### Other
+
+| Format | Versions | Parsing | Generating |
+|--------|----------|---------|------------|
+| [OPML](https://opml.org/) | 1.0, 2.0 | ✅ | ✅ |
+
+### Feed Namespaces
 
 | Name | Prefix | Supported in | Parsing | Generating |
 |------|---------|--------------|---------|------------|
@@ -96,12 +102,6 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [YouTube](https://www.youtube.com/feeds/videos.xml) | `<yt:*>` | Atom | ✅ | ✅ |
 | [W3C Basic Geo](http://www.w3.org/2003/01/geo/wgs84_pos#) | `<geo:*>` | RSS, Atom | ✅ | ✅ |
 | [GeoRSS Simple](http://www.georss.org/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
-
-### Other
-
-| Format | Versions | Parsing | Generating |
-|--------|----------|---------|------------|
-| [OPML](https://opml.org/) | 1.0, 2.0 | ✅ | ✅ |
 
 ## Quick Start
 
