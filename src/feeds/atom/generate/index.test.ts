@@ -252,7 +252,6 @@ describe('generate', () => {
   it('should throw error for invalid Atom feed structure', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(() => generate(value)).toThrow(locales.invalidInputAtom)
   })
 

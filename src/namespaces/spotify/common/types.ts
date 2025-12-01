@@ -5,11 +5,11 @@ export namespace SpotifyNs {
   }
 
   export type Partner = {
-    id: string
+    id?: string // Required in spec.
   }
 
   export type Sandbox = {
-    enabled: boolean
+    enabled?: boolean // Required in spec.
   }
 
   export type FeedAccess = {
@@ -18,7 +18,7 @@ export namespace SpotifyNs {
   }
 
   export type Entitlement = {
-    name: string
+    name?: string // Required in spec.
   }
 
   export type ItemAccess = {

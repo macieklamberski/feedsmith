@@ -28,35 +28,35 @@ export namespace PodcastNs {
   }
 
   export type Transcript = {
-    url: string
-    type: string
+    url?: string // Required in spec.
+    type?: string // Required in spec.
     language?: string
     rel?: string
   }
 
   export type Locked = {
-    value: boolean
+    value?: boolean // Required in spec.
     owner?: string
   }
 
   export type Funding = {
-    url: string
+    url?: string // Required in spec.
     display?: string
   }
 
   export type Chapters = {
-    url: string
-    type: string
+    url?: string // Required in spec.
+    type?: string // Required in spec.
   }
 
   export type Soundbite = {
-    startTime: number
-    duration: number
+    startTime?: number // Required in spec.
+    duration?: number // Required in spec.
     display?: string
   }
 
   export type Person = {
-    display: string
+    display?: string // Required in spec.
     role?: string
     group?: string
     img?: string
@@ -64,37 +64,37 @@ export namespace PodcastNs {
   }
 
   export type Location = {
-    display: string
+    display?: string // Required in spec.
     geo?: string
     osm?: string
   }
 
   export type Season = {
-    number: number
+    number?: number // Required in spec.
     name?: string
   }
 
   export type Episode = {
-    number: number
+    number?: number // Required in spec.
     display?: string
   }
 
   export type Trailer<TDate extends DateLike> = {
-    display: string
-    url: string
-    pubDate: TDate
+    display?: string // Required in spec.
+    url?: string // Required in spec.
+    pubDate?: TDate // Required in spec.
     length?: number
     type?: string
     season?: number
   }
 
   export type License = {
-    display: string
+    display?: string // Required in spec.
     url?: string
   }
 
   export type AlternateEnclosure = {
-    type: string
+    type?: string // Required in spec.
     length?: number
     bitrate?: number
     height?: number
@@ -108,18 +108,18 @@ export namespace PodcastNs {
   }
 
   export type Source = {
-    uri: string
+    uri?: string // Required in spec.
     contentType?: string
   }
 
   export type Integrity = {
-    type: string
-    value: string
+    type?: string // Required in spec.
+    value?: string // Required in spec.
   }
 
   export type Value = {
-    type: string
-    method: string
+    type?: string // Required in spec.
+    method?: string // Required in spec.
     suggested?: number
     valueRecipients?: Array<ValueRecipient>
     valueTimeSplits?: Array<ValueTimeSplit>
@@ -129,9 +129,9 @@ export namespace PodcastNs {
     name?: string
     customKey?: string
     customValue?: string
-    type: string
-    address: string
-    split: number
+    type?: string // Required in spec.
+    address?: string // Required in spec.
+    split?: number // Required in spec.
     fee?: boolean
   }
 
@@ -140,14 +140,14 @@ export namespace PodcastNs {
   }
 
   export type LiveItem<TDate extends DateLike> = BaseItem & {
-    status: string
-    start: TDate // Date: ISO 8601.
+    status?: string // Required in spec.
+    start?: TDate // Required in spec. Date: ISO 8601.
     end?: TDate // Date: ISO 8601.
     contentLinks?: Array<ContentLink>
   }
 
   export type ContentLink = {
-    href: string
+    href?: string // Required in spec.
     display?: string
   }
 
@@ -156,31 +156,31 @@ export namespace PodcastNs {
     // to `disabled`, no other attributes are necessary. To bypass the protocol value check, which
     // may be invalid, only the protocol is required to ensure consistent behavior.
     uri?: string
-    protocol: string
+    protocol?: string // Required in spec.
     accountId?: string
     accountUrl?: string
     priority?: number
   }
 
   export type Chat = {
-    server: string
-    protocol: string
+    server?: string // Required in spec.
+    protocol?: string // Required in spec.
     accountId?: string
     space?: string
   }
 
   export type Block = {
-    value: boolean
+    value?: boolean // Required in spec.
     id?: string
   }
 
   export type Txt = {
-    display: string
+    display?: string // Required in spec.
     purpose?: string
   }
 
   export type RemoteItem = {
-    feedGuid: string
+    feedGuid?: string // Required in spec.
     feedUrl?: string
     itemGuid?: string
     medium?: string
@@ -191,7 +191,7 @@ export namespace PodcastNs {
   }
 
   export type UpdateFrequency<TDate extends DateLike> = {
-    display: string
+    display?: string // Required in spec.
     complete?: boolean
     dtstart?: TDate
     rrule?: string
@@ -206,8 +206,8 @@ export namespace PodcastNs {
   }
 
   export type ValueTimeSplit = {
-    startTime: number
-    duration: number
+    startTime?: number // Required in spec.
+    duration?: number // Required in spec.
     remoteStartTime?: number
     remotePercentage?: number
     remoteItem?: RemoteItem

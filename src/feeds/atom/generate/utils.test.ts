@@ -108,14 +108,12 @@ describe('generateLink', () => {
       type: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateLink(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateLink(value)).toBeUndefined()
   })
 
@@ -179,14 +177,12 @@ describe('generatePerson', () => {
       email: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generatePerson(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generatePerson(value)).toBeUndefined()
   })
 
@@ -229,14 +225,12 @@ describe('generateCategory', () => {
       label: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateCategory(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateCategory(value)).toBeUndefined()
   })
 
@@ -279,14 +273,12 @@ describe('generateGenerator', () => {
       version: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateGenerator(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateGenerator(value)).toBeUndefined()
   })
 
@@ -483,7 +475,6 @@ describe('generateEntry', () => {
       content: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateEntry(value)).toBeUndefined()
   })
 
@@ -508,7 +499,6 @@ describe('generateEntry', () => {
       title: 'Entry with namespaces',
     }
 
-    // @ts-expect-error: When asNamespace: true, values should be treated as DeepPartial.
     expect(generateEntry(value, { asNamespace: true })).toEqual(expected)
   })
 
@@ -568,14 +558,12 @@ describe('generateEntry', () => {
       'atom:title': 'Entry with prefix and namespaces',
     }
 
-    // @ts-expect-error: When asNamespace: true, values should be treated as DeepPartial.
     expect(generateEntry(value, { prefix: 'atom:', asNamespace: true })).toEqual(expected)
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateEntry(value)).toBeUndefined()
   })
 
@@ -1110,7 +1098,6 @@ describe('generateFeed', () => {
       },
     }
 
-    // @ts-expect-error: When asNamespace: true, values should be treated as DeepPartial.
     expect(generateFeed(value, { asNamespace: true })).toEqual(expected)
   })
 
@@ -1164,7 +1151,6 @@ describe('generateFeed', () => {
       },
     }
 
-    // @ts-expect-error: When asNamespace: true, values should be treated as DeepPartial.
     expect(generateFeed(value, { prefix: 'atom:', asNamespace: true })).toEqual(expected)
   })
 
@@ -1183,7 +1169,6 @@ describe('generateFeed', () => {
       },
     }
 
-    // @ts-expect-error: When asNamespace: true, values should be treated as DeepPartial.
     expect(generateFeed(value, { prefix: 'atom:', asNamespace: true })).toEqual(expected)
   })
 
@@ -1194,14 +1179,12 @@ describe('generateFeed', () => {
       updated: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 

@@ -1,7 +1,7 @@
 // #region reference
 export namespace GooglePlayNs {
   export type Image = {
-    href: string
+    href?: string // Required in spec.
   }
 
   export type Item = {

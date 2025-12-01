@@ -25,6 +25,10 @@ export type IsPlainObject<T> = T extends Array<unknown>
 
 export type RemoveUndefined<T> = T extends undefined ? never : T
 
+/**
+ * @deprecated No longer needed as all feed type fields are now optional.
+ * This type is kept for backwards compatibility but will be removed in a future version.
+ */
 export type DeepPartial<T> = IsPlainObject<T> extends true
   ? { [P in keyof T]?: DeepPartial<RemoveUndefined<T[P]>> }
   : T extends Array<infer U>
@@ -33,10 +37,7 @@ export type DeepPartial<T> = IsPlainObject<T> extends true
 
 export type ParseExactUtil<R> = (value: Unreliable) => R | undefined
 
-export type ParsePartialUtil<R, O = undefined> = (
-  value: Unreliable,
-  options?: O,
-) => DeepPartial<R> | undefined
+export type ParsePartialUtil<R, O = undefined> = (value: Unreliable, options?: O) => R | undefined
 
 export type GenerateUtil<V, O = undefined> = (
   value: V | undefined,

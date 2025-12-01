@@ -1,52 +1,52 @@
 // #region reference
 export namespace MediaNs {
   export type Rating = {
-    value: string
+    value?: string // Required in spec.
     scheme?: string
   }
 
   export type TitleOrDescription = {
-    value: string
+    value?: string // Required in spec.
     type?: string
   }
 
   export type Thumbnail = {
-    url: string
+    url?: string // Required in spec.
     height?: number
     width?: number
     time?: string
   }
 
   export type Category = {
-    name: string
+    name?: string // Required in spec.
     scheme?: string
     label?: string
   }
 
   export type Hash = {
-    value: string
+    value?: string // Required in spec.
     algo?: string
   }
 
   export type Player = {
-    url: string
+    url?: string // Required in spec.
     height?: number
     width?: number
   }
 
   export type Credit = {
-    value: string
+    value?: string // Required in spec.
     role?: string
     scheme?: string
   }
 
   export type Copyright = {
-    value: string
+    value?: string // Required in spec.
     url?: string
   }
 
   export type Text = {
-    value: string
+    value?: string // Required in spec.
     type?: string
     lang?: string
     start?: string
@@ -54,8 +54,8 @@ export namespace MediaNs {
   }
 
   export type Restriction = {
-    value: string
-    relationship: string
+    value?: string // Required in spec.
+    relationship?: string // Required in spec.
     type?: string
   }
 
@@ -78,24 +78,24 @@ export namespace MediaNs {
   }
 
   export type Tag = {
-    name: string
+    name?: string // Required in spec.
     weight?: number
   }
 
   export type Embed = {
-    url: string
+    url?: string // Required in spec.
     width?: number
     height?: number
     params?: Array<Param>
   }
 
   export type Param = {
-    name: string
-    value: string
+    name?: string // Required in spec.
+    value?: string // Required in spec.
   }
 
   export type Status = {
-    state: string
+    state?: string // Required in spec.
     reason?: string
   }
 
@@ -107,20 +107,20 @@ export namespace MediaNs {
   }
 
   export type License = {
-    name?: string
+    name?: string // At least one of name or href is required in spec.
     type?: string
-    href?: string
-  } & ({ name: string } | { href: string })
+    href?: string // At least one of name or href is required in spec.
+  }
 
   export type SubTitle = {
     type?: string
     lang?: string
-    href: string
+    href?: string // Required in spec.
   }
 
   export type PeerLink = {
     type?: string
-    href: string
+    href?: string // Required in spec.
   }
 
   export type Rights = {
