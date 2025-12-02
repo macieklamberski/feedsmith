@@ -44,6 +44,10 @@ import {
   generateFeed as generatePodcastFeed,
   generateItem as generatePodcastItem,
 } from '../../../namespaces/podcast/generate/utils.js'
+import {
+  generateFeed as generatePrismFeed,
+  generateItem as generatePrismItem,
+} from '../../../namespaces/prism/generate/utils.js'
 import { generateItem as generatePscItem } from '../../../namespaces/psc/generate/utils.js'
 import {
   generateFeed as generateRawVoiceFeed,
@@ -231,6 +235,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike, Rss.PersonLike>> = (i
     ...generateGeoItemOrFeed(item.geo),
     ...generateThrItem(item.thr),
     ...generateDctermsItemOrFeed(item.dcterms),
+    ...generatePrismItem(item.prism),
     ...generateWfwItem(item.wfw),
     ...generateSourceItem(item.sourceNs),
     ...generateRawVoiceItem(item.rawvoice),
@@ -278,6 +283,7 @@ export const generateFeed: GenerateUtil<Rss.Feed<DateLike, Rss.PersonLike>> = (f
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateGeoItemOrFeed(feed.geo),
     ...generateDctermsItemOrFeed(feed.dcterms),
+    ...generatePrismFeed(feed.prism),
     ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
     ...generateFeedPressFeed(feed.feedpress),
     ...generateOpenSearchFeed(feed.opensearch),

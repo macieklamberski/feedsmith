@@ -95,6 +95,7 @@ export default defineConfig({
               { text: 'FeedPress', link: '/reference/namespaces/feedpress' },
               { text: 'arXiv', link: '/reference/namespaces/arxiv' },
               { text: 'OpenSearch', link: '/reference/namespaces/opensearch' },
+              { text: 'PRISM', link: '/reference/namespaces/prism' },
               { text: 'ccREL', link: '/reference/namespaces/cc' },
               { text: 'Creative Commons', link: '/reference/namespaces/creativecommons' },
               { text: 'Atom Threading', link: '/reference/namespaces/thr' },

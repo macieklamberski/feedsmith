@@ -644,6 +644,27 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with prism namespace properties', () => {
+    const value = {
+      title: 'Item with PRISM namespace',
+      prism: {
+        doi: '10.1038/s41586-023-05842-x',
+        volume: '615',
+        startingPage: '425',
+        endingPage: '432',
+      },
+    }
+    const expected = {
+      title: 'Item with PRISM namespace',
+      'prism:doi': '10.1038/s41586-023-05842-x',
+      'prism:volume': '615',
+      'prism:startingPage': '425',
+      'prism:endingPage': '432',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should handle empty arrays', () => {
     const value = {
       title: 'Item with empty arrays',
@@ -1230,6 +1251,35 @@ describe('generateFeed', () => {
           description: 'Description',
           'dcterms:created': '2023-01-01T00:00:00.000Z',
           'dcterms:license': 'Creative Commons Attribution 4.0',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate prism namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with PRISM namespace',
+      description: 'Description',
+      prism: {
+        publicationName: 'Nature',
+        issn: '0028-0836',
+        volume: '615',
+        publicationDates: [new Date('2023-03-15T00:00:00Z')],
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:prism': 'http://prismstandard.org/namespaces/basic/3.0/',
+        channel: {
+          title: 'Feed with PRISM namespace',
+          description: 'Description',
+          'prism:publicationName': 'Nature',
+          'prism:issn': '0028-0836',
+          'prism:volume': '615',
+          'prism:publicationDate': ['2023-03-15T00:00:00.000Z'],
         },
       },
     }

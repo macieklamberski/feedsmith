@@ -16,6 +16,7 @@ import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
 import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
 import type { PodcastNs } from '../../../namespaces/podcast/common/types.js'
+import type { PrismNs } from '../../../namespaces/prism/common/types.js'
 import type { PscNs } from '../../../namespaces/psc/common/types.js'
 import type { RawVoiceNs } from '../../../namespaces/rawvoice/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
@@ -108,6 +109,7 @@ export namespace Rss {
     geo?: GeoNs.ItemOrFeed
     thr?: ThrNs.Item
     dcterms?: DcTermsNs.ItemOrFeed<TDate>
+    prism?: PrismNs.Item<TDate>
     wfw?: WfwNs.Item
     sourceNs?: SourceNs.Item
     rawvoice?: RawVoiceNs.Item
@@ -150,6 +152,7 @@ export namespace Rss {
     georss?: GeoRssNs.ItemOrFeed
     geo?: GeoNs.ItemOrFeed
     dcterms?: DcTermsNs.ItemOrFeed<TDate>
+    prism?: PrismNs.Feed<TDate>
     creativeCommons?: CreativeCommonsNs.ItemOrFeed
     feedpress?: FeedPressNs.Feed
     opensearch?: OpenSearchNs.Feed
