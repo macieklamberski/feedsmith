@@ -10,7 +10,7 @@ export namespace Opml {
     TDate extends DateLike,
     A extends ReadonlyArray<string> = ReadonlyArray<string>,
   > = {
-    text: string
+    text?: string // Required in spec.
     type?: string
     isComment?: boolean
     isBreakpoint?: boolean

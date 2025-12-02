@@ -1,7 +1,7 @@
 // #region reference
 export namespace OpenSearchNs {
   export type Query = {
-    role: string
+    role?: string // Required in spec.
     searchTerms?: string
     count?: number
     startIndex?: number

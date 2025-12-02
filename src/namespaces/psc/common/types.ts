@@ -1,8 +1,8 @@
 // #region reference
 export namespace PscNs {
   export type Chapter = {
-    start: string
-    title: string
+    start?: string // Required in spec.
+    title?: string // Required in spec.
     href?: string
     image?: string
   }

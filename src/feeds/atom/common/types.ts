@@ -41,7 +41,7 @@ export namespace Atom {
   export type Text = string
 
   export type Link<TDate extends DateLike> = {
-    href: string
+    href?: string // Required in spec.
     rel?: string
     type?: string
     hreflang?: string
@@ -51,20 +51,20 @@ export namespace Atom {
   }
 
   export type Person = {
-    name: string
+    name?: string // Required in spec.
     uri?: string
     email?: string
     arxiv?: ArxivNs.Author
   }
 
   export type Category = {
-    term: string
+    term?: string // Required in spec.
     scheme?: string
     label?: string
   }
 
   export type Generator = {
-    text: string
+    text?: string // Required in spec.
     uri?: string
     version?: string
   }
@@ -89,14 +89,14 @@ export namespace Atom {
     categories?: Array<Category>
     content?: Text
     contributors?: Array<Person>
-    id: string
+    id?: string // Required in spec.
     links?: Array<Link<TDate>>
     published?: TDate
     rights?: Text
     source?: Source<TDate>
     summary?: Text
-    title: Text
-    updated: TDate
+    title?: Text // Required in spec.
+    updated?: TDate // Required in spec.
     app?: AppNs.Entry<TDate>
     arxiv?: ArxivNs.Entry
     cc?: CcNs.ItemOrFeed
@@ -123,13 +123,13 @@ export namespace Atom {
     contributors?: Array<Person>
     generator?: Generator
     icon?: string
-    id: string
+    id?: string // Required in spec.
     links?: Array<Link<TDate>>
     logo?: string
     rights?: Text
     subtitle?: Text
-    title: Text
-    updated: TDate
+    title?: Text // Required in spec.
+    updated?: TDate // Required in spec.
     entries?: Array<Entry<TDate>>
     cc?: CcNs.ItemOrFeed
     dc?: DcNs.ItemOrFeed<TDate>

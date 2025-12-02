@@ -1,7 +1,7 @@
 // #region reference
 export namespace ItunesNs {
   export type Category = {
-    text: string
+    text?: string // Required in spec.
     categories?: Array<Category>
   }
 

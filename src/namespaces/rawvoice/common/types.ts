@@ -25,7 +25,7 @@ export namespace RawVoiceNs {
     length?: number
   }
 
-  export type Subscribe = Record<string, string>
+  export type Subscribe = Partial<Record<string, string>>
 
   export type Metamark = {
     type?: string
@@ -36,7 +36,7 @@ export namespace RawVoiceNs {
   }
 
   export type Donate = {
-    href: string
+    href?: string // Required in spec.
     value?: string
   }
 
