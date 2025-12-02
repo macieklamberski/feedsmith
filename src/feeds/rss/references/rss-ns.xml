@@ -158,7 +158,8 @@
       <podcast:valueRecipient name="Producer" type="node" address="03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a" split="10"/>
     </podcast:value>
     <podcast:medium>podcast</podcast:medium>
-    <podcast:images srcset="https://example.com/images/cover-1000.jpg 1000w, https://example.com/images/cover-600.jpg 600w"/>
+    <podcast:image href="https://example.com/images/cover-artwork.jpg" alt="Podcast Cover Art" aspect-ratio="1/1" width="3000" purpose="artwork"/>
+    <podcast:image href="https://example.com/images/cover-social.jpg" alt="Social Media Preview" aspect-ratio="16/9" width="1200" height="630" type="image/jpeg" purpose="social"/>
     <podcast:liveItem status="live" start="2025-04-30T08:00:00.000Z" end="2025-04-30T09:00:00.000Z">
       <podcast:person group="host">Jane Smith</podcast:person>
       <podcast:contentLink href="https://example.com/live/chat">Live Chat</podcast:contentLink>
@@ -524,7 +525,8 @@
         <podcast:valueRecipient name="Host" type="node" address="02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee83420ef254acd7d8e5edf5f16e" split="90"/>
         <podcast:valueRecipient name="Guest" type="node" address="03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a" split="10"/>
       </podcast:value>
-      <podcast:images srcset="https://example.com/images/episode-1000.jpg 1000w, https://example.com/images/episode-600.jpg 600w"/>
+      <podcast:image href="https://example.com/images/episode-artwork.jpg" alt="Episode 1 Artwork" aspect-ratio="1/1" width="3000" purpose="artwork"/>
+      <podcast:image href="https://example.com/images/episode-social.jpg" alt="Episode 1 Social Preview" aspect-ratio="16/9" width="1200" height="630" type="image/jpeg" purpose="social"/>
       <podcast:socialInteract uri="https://twitter.com/examplepodcast/status/123456789" protocol="twitter" accountId="@examplepodcast" accountUrl="https://twitter.com/examplepodcast"/>
       <podcast:socialInteract uri="https://podcastindex.social/@dave/123456789" protocol="mastodon" accountId="@examplepodcast@podcastindex.social" accountUrl="https://podcastindex.social/@examplepodcast"/>
       <podcast:txt purpose="transcript">{"version": "1.0.0", "chapters": []}</podcast:txt>
