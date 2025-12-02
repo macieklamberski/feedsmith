@@ -10,7 +10,7 @@ The PRISM (Publishing Requirements for Industry Standard Metadata) namespace pro
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="http://www.prismstandard.org/specifications/" target="_blank">PRISM Specification</a></td>
+      <td><a href="https://www.w3.org/submissions/prism/" target="_blank">PRISM Specification</a></td>
     </tr>
     <tr>
       <th>Prefix</th>
