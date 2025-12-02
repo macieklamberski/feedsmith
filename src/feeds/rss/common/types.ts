@@ -79,7 +79,7 @@ export namespace Rss {
 
   export type Source = {
     title?: string // Required in spec.
-    url?: string
+    url?: string // Required in spec.
   }
 
   export type Item<TDate extends DateLike, TPerson extends PersonLike = Person> = {
