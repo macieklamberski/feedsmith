@@ -321,9 +321,24 @@
             }
           ]
         },
-        "images": {
-          "srcset": "https://example.com/images/episode-1000.jpg 1000w, https://example.com/images/episode-600.jpg 600w"
-        },
+        "images": [
+          {
+            "href": "https://example.com/images/episode-artwork.jpg",
+            "alt": "Episode 1 Artwork",
+            "aspectRatio": "1/1",
+            "width": 3000,
+            "purpose": "artwork"
+          },
+          {
+            "href": "https://example.com/images/episode-social.jpg",
+            "alt": "Episode 1 Social Preview",
+            "aspectRatio": "16/9",
+            "width": 1200,
+            "height": 630,
+            "type": "image/jpeg",
+            "purpose": "social"
+          }
+        ],
         "socialInteracts": [
           {
             "protocol": "twitter",
@@ -1282,9 +1297,24 @@
       ]
     },
     "medium": "podcast",
-    "images": {
-      "srcset": "https://example.com/images/cover-1000.jpg 1000w, https://example.com/images/cover-600.jpg 600w"
-    },
+    "images": [
+      {
+        "href": "https://example.com/images/cover-artwork.jpg",
+        "alt": "Podcast Cover Art",
+        "aspectRatio": "1/1",
+        "width": 3000,
+        "purpose": "artwork"
+      },
+      {
+        "href": "https://example.com/images/cover-social.jpg",
+        "alt": "Social Media Preview",
+        "aspectRatio": "16/9",
+        "width": 1200,
+        "height": 630,
+        "type": "image/jpeg",
+        "purpose": "social"
+      }
+    ],
     "liveItems": [
       {
         "persons": [
