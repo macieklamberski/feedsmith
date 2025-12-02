@@ -3592,6 +3592,63 @@ describe('createNamespaceNormalizator', () => {
         expect(normalizeNamespaces(value)).toEqual(expected)
       })
     })
+
+    describe('RDF primary namespace handling', () => {
+      it('should normalize RDF namespace elements and attributes including arrays', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(
+          namespaceUris,
+          namespacePrefixes,
+          'rdf',
+        )
+        const value = parser.parse(`
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rdf:RDF
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns="http://purl.org/rss/1.0/"
+          >
+            <channel rdf:about="http://example.com">
+              <title>Test Feed</title>
+              <items>
+                <rdf:Seq>
+                  <rdf:li resource="http://example.com/item1"/>
+                  <rdf:li rdf:resource="http://example.com/item2"/>
+                </rdf:Seq>
+              </items>
+            </channel>
+            <item rdf:about="http://example.com/item1">
+              <title>Item 1</title>
+            </item>
+            <item rdf:about="http://example.com/item2">
+              <title>Item 2</title>
+            </item>
+          </rdf:RDF>
+        `)
+        const expected = {
+          rdf: {
+            '@xmlns:rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+            '@xmlns': 'http://purl.org/rss/1.0/',
+            channel: {
+              title: 'Test Feed',
+              items: {
+                seq: {
+                  li: [
+                    { '@resource': 'http://example.com/item1' },
+                    { '@resource': 'http://example.com/item2' },
+                  ],
+                },
+              },
+              '@about': 'http://example.com',
+            },
+            item: [
+              { title: 'Item 1', '@about': 'http://example.com/item1' },
+              { title: 'Item 2', '@about': 'http://example.com/item2' },
+            ],
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
   })
 
   describe('non-standard namespace URIs', () => {

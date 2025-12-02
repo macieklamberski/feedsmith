@@ -683,12 +683,13 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
     object: Unreliable,
     parentContext: Record<string, string> = {},
   ): Unreliable => {
-    if (!isObject(object)) {
-      return object
-    }
-
+    // Check arrays first since isObject() excludes arrays.
     if (Array.isArray(object)) {
       return object.map((item) => traverseAndNormalize(item, parentContext))
+    }
+
+    if (!isObject(object)) {
+      return object
     }
 
     const normalizedObject: Unreliable = {}
