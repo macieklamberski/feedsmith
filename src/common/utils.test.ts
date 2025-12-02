@@ -12,6 +12,7 @@ import {
   generateNamespaceAttrs,
   generateNumber,
   generatePlainString,
+  generateRdfResource,
   generateRfc822Date,
   generateRfc3339Date,
   generateSingularOrArray,
@@ -19,21 +20,23 @@ import {
   generateXmlStylesheet,
   generateYesNoBoolean,
   hasEntities,
-  invertObject,
   isNonEmptyString,
   isNonEmptyStringOrNumber,
   isObject,
   isPresent,
+  limitArray,
   parseArray,
   parseArrayOf,
   parseBoolean,
   parseCsvOf,
   parseDate,
+  parseJsonObject,
   parseNumber,
   parseSingular,
   parseSingularOf,
   parseString,
   parseYesNoBoolean,
+  retrieveRdfResourceOrText,
   retrieveText,
   stripCdata,
   trimArray,
@@ -357,6 +360,208 @@ describe('retrieveText', () => {
   it('should handle null and undefined correctly', () => {
     expect(retrieveText(null)).toBeNull()
     expect(retrieveText(undefined)).toBeUndefined()
+  })
+})
+
+describe('retrieveRdfResourceOrText', () => {
+  describe('with parseString', () => {
+    it('should parse direct string value', () => {
+      const value = 'https://creativecommons.org/licenses/by/4.0/'
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should extract value from @rdf:resource attribute', () => {
+      const value = {
+        '@rdf:resource': 'https://creativecommons.org/licenses/by/4.0/',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should extract value from #text property', () => {
+      const value = {
+        '#text': 'https://creativecommons.org/licenses/by/4.0/',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should handle HTML entities in @rdf:resource', () => {
+      const value = {
+        '@rdf:resource': 'https://example.com?foo=bar&amp;baz=qux',
+      }
+      const expected = 'https://example.com?foo=bar&baz=qux'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should handle HTML entities in #text', () => {
+      const value = {
+        '#text': 'https://example.com?foo=bar&amp;baz=qux',
+      }
+      const expected = 'https://example.com?foo=bar&baz=qux'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should handle CDATA sections in @rdf:resource', () => {
+      const value = {
+        '@rdf:resource': '<![CDATA[https://creativecommons.org/licenses/by/4.0/]]>',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should handle CDATA sections in #text', () => {
+      const value = {
+        '#text': '<![CDATA[https://creativecommons.org/licenses/by/4.0/]]>',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should prefer @rdf:resource over #text when both present', () => {
+      const value = {
+        '@rdf:resource': 'https://creativecommons.org/licenses/by/4.0/',
+        '#text': 'https://example.com/other-license',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should fall back to #text when @rdf:resource is empty', () => {
+      const value = {
+        '@rdf:resource': '',
+        '#text': 'https://creativecommons.org/licenses/by/4.0/',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should fall back to #text when @rdf:resource is whitespace-only', () => {
+      const value = {
+        '@rdf:resource': '   ',
+        '#text': 'https://creativecommons.org/licenses/by/4.0/',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should return undefined for empty string', () => {
+      expect(retrieveRdfResourceOrText('', parseString)).toBeUndefined()
+    })
+
+    it('should return undefined for whitespace-only string', () => {
+      expect(retrieveRdfResourceOrText('   ', parseString)).toBeUndefined()
+    })
+
+    it('should return undefined for null', () => {
+      expect(retrieveRdfResourceOrText(null, parseString)).toBeUndefined()
+    })
+
+    it('should return undefined for undefined', () => {
+      expect(retrieveRdfResourceOrText(undefined, parseString)).toBeUndefined()
+    })
+
+    it('should return undefined for empty object', () => {
+      expect(retrieveRdfResourceOrText({}, parseString)).toBeUndefined()
+    })
+
+    it('should return undefined when both @rdf:resource and #text are empty', () => {
+      const value = {
+        '@rdf:resource': '',
+        '#text': '',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBeUndefined()
+    })
+
+    it('should handle object without @rdf:resource or #text', () => {
+      const value = {
+        otherProperty: 'some value',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBeUndefined()
+    })
+
+    it('should trim whitespace from values', () => {
+      const value = {
+        '@rdf:resource': '  https://example.com/license  ',
+      }
+      const expected = 'https://example.com/license'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+  })
+
+  describe('with parseNumber', () => {
+    it('should parse number from @rdf:resource', () => {
+      const value = {
+        '@rdf:resource': '42',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseNumber)).toBe(42)
+    })
+
+    it('should parse number from #text', () => {
+      const value = {
+        '#text': '123.45',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseNumber)).toBe(123.45)
+    })
+
+    it('should return undefined for non-numeric @rdf:resource', () => {
+      const value = {
+        '@rdf:resource': 'not a number',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseNumber)).toBeUndefined()
+    })
+
+    it('should prefer @rdf:resource over #text for numbers', () => {
+      const value = {
+        '@rdf:resource': '42',
+        '#text': '100',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseNumber)).toBe(42)
+    })
+  })
+
+  describe('with custom parse function', () => {
+    it('should apply custom parse logic', () => {
+      const customParse = (value: unknown): string | undefined => {
+        const str = parseString(value)
+        return str ? str.toUpperCase() : undefined
+      }
+
+      const value = {
+        '@rdf:resource': 'hello world',
+      }
+
+      expect(retrieveRdfResourceOrText(value, customParse)).toBe('HELLO WORLD')
+    })
+
+    it('should handle parse function returning undefined', () => {
+      const alwaysUndefined = (): undefined => undefined
+
+      const value = {
+        '@rdf:resource': 'test',
+        '#text': 'fallback',
+      }
+
+      expect(retrieveRdfResourceOrText(value, alwaysUndefined)).toBeUndefined()
+    })
   })
 })
 
@@ -1412,6 +1617,67 @@ describe('parseArrayOf', () => {
   })
 })
 
+describe('limitArray', () => {
+  it('should return original array when limit is undefined', () => {
+    const value = [1, 2, 3, 4, 5]
+    const expected = [1, 2, 3, 4, 5]
+
+    expect(limitArray(value, undefined)).toEqual(expected)
+  })
+
+  it('should return first N items when limit is provided', () => {
+    const value = [1, 2, 3, 4, 5]
+    const expected = [1, 2, 3]
+
+    expect(limitArray(value, 3)).toEqual(expected)
+  })
+
+  it('should return empty array when limit is 0', () => {
+    const value = [1, 2, 3, 4, 5]
+
+    expect(limitArray(value, 0)).toEqual([])
+  })
+
+  it('should return all items when limit exceeds array length', () => {
+    const value = [1, 2, 3]
+    const expected = [1, 2, 3]
+
+    expect(limitArray(value, 10)).toEqual(expected)
+  })
+
+  it('should handle empty array', () => {
+    const value: Array<number> = []
+
+    expect(limitArray(value, 5)).toEqual([])
+  })
+
+  it('should handle single item array with limit 1', () => {
+    const value = [1]
+
+    expect(limitArray(value, 1)).toEqual([1])
+  })
+
+  it('should handle single item array with limit 0', () => {
+    const value = [1]
+
+    expect(limitArray(value, 0)).toEqual([])
+  })
+
+  it('should return original array when limit is negative', () => {
+    const value = [1, 2, 3, 4, 5]
+    const expected = [1, 2, 3, 4, 5]
+
+    expect(limitArray(value, -1)).toEqual(expected)
+  })
+
+  it('should return original array when limit is large negative number', () => {
+    const value = [1, 2, 3, 4, 5]
+    const expected = [1, 2, 3, 4, 5]
+
+    expect(limitArray(value, -10)).toEqual(expected)
+  })
+})
+
 describe('parseCsvOf', () => {
   it('should parse comma-separated string', () => {
     const value = 'podcast,technology,programming'
@@ -1706,6 +1972,40 @@ describe('generateXmlStylesheet', () => {
         '<?xml-stylesheet type="text/css" href="/styles/feed.css" title="My Custom Feed Style"?>'
 
       expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+  })
+
+  describe('Edge cases', () => {
+    it('should return undefined when all fields are empty strings', () => {
+      const value = {
+        type: '',
+        href: '',
+        title: '',
+        media: '',
+        charset: '',
+      }
+
+      expect(generateXmlStylesheet(value)).toBeUndefined()
+    })
+
+    it('should return undefined when all fields are whitespace', () => {
+      const value = {
+        type: '   ',
+        href: '  ',
+      }
+
+      expect(generateXmlStylesheet(value)).toBeUndefined()
+    })
+
+    it('should return undefined when all fields are undefined', () => {
+      const value = {
+        type: undefined,
+        href: undefined,
+        title: undefined,
+      }
+
+      // @ts-expect-error: This is for testing purposes.
+      expect(generateXmlStylesheet(value)).toBeUndefined()
     })
   })
 })
@@ -2642,126 +2942,91 @@ describe('generateNumber', () => {
   })
 })
 
-describe('invertObject', () => {
-  it('should invert simple object with string key-value pairs', () => {
-    const value = {
-      apple: 'fruit',
-      carrot: 'vegetable',
-      salmon: 'fish',
-    }
+describe('generateRdfResource', () => {
+  it('should generate object with @rdf:resource attribute for valid string', () => {
+    const value = 'https://example.com/resource'
     const expected = {
-      fruit: 'apple',
-      vegetable: 'carrot',
-      fish: 'salmon',
+      '@rdf:resource': 'https://example.com/resource',
     }
 
-    expect(invertObject(value)).toEqual(expected)
+    expect(generateRdfResource(value, generatePlainString)).toEqual(expected)
   })
 
-  it('should handle empty object', () => {
-    const value = {}
-    const expected = {}
-
-    expect(invertObject(value)).toEqual(expected)
-  })
-
-  it('should handle single key-value pair', () => {
-    const value = { key: 'value' }
-    const expected = { value: 'key' }
-
-    expect(invertObject(value)).toEqual(expected)
-  })
-
-  it('should handle duplicate values by keeping the last occurrence', () => {
-    const value = {
-      first: 'duplicate',
-      second: 'unique',
-      third: 'duplicate',
-      fourth: 'duplicate',
-    }
+  it('should generate object with @rdf:resource for mailto URI', () => {
+    const value = 'mailto:admin@example.com'
     const expected = {
-      duplicate: 'fourth',
-      unique: 'second',
+      '@rdf:resource': 'mailto:admin@example.com',
     }
 
-    expect(invertObject(value)).toEqual(expected)
+    expect(generateRdfResource(value, generatePlainString)).toEqual(expected)
   })
 
-  it('should handle special characters in keys and values', () => {
-    const value = {
-      'key-with-dash': 'value_with_underscore',
-      'key.with.dots': 'value@with@at',
-      'key:with:colon': 'value/with/slash',
-    }
+  it('should trim whitespace via generate function', () => {
+    const value = '  https://example.com/resource  '
     const expected = {
-      value_with_underscore: 'key-with-dash',
-      'value@with@at': 'key.with.dots',
-      'value/with/slash': 'key:with:colon',
+      '@rdf:resource': 'https://example.com/resource',
     }
 
-    expect(invertObject(value)).toEqual(expected)
+    expect(generateRdfResource(value, generatePlainString)).toEqual(expected)
   })
 
-  it('should handle whitespace in keys and values', () => {
-    const value = {
-      'key with spaces': 'value with spaces',
-      '  padded  ': '  also padded  ',
-      '\ttab\t': '\nnewline\n',
-    }
-    const expected = {
-      'value with spaces': 'key with spaces',
-      '  also padded  ': '  padded  ',
-      '\nnewline\n': '\ttab\t',
-    }
-
-    expect(invertObject(value)).toEqual(expected)
+  it('should return undefined for empty string', () => {
+    expect(generateRdfResource('', generatePlainString)).toBeUndefined()
   })
 
-  it('should handle empty string keys and values', () => {
-    const value = {
-      '': 'empty key',
-      'empty value': '',
-      normal: 'value',
-    }
-    const expected = {
-      'empty key': '',
-      '': 'empty value',
-      value: 'normal',
-    }
-
-    expect(invertObject(value)).toEqual(expected)
+  it('should return undefined for whitespace-only string', () => {
+    expect(generateRdfResource('   ', generatePlainString)).toBeUndefined()
   })
 
-  it('should handle Unicode characters', () => {
-    const value = {
-      '🔑': '🎯',
-      café: 'coffee',
-      naïve: 'approach',
-      日本: 'Japan',
-    }
-    const expected = {
-      '🎯': '🔑',
-      coffee: 'café',
-      approach: 'naïve',
-      Japan: '日本',
-    }
-
-    expect(invertObject(value)).toEqual(expected)
+  it('should return undefined for undefined value', () => {
+    expect(generateRdfResource(undefined, generatePlainString)).toBeUndefined()
   })
 
-  it('should handle case-sensitive keys and values', () => {
-    const value = {
-      ABC: 'xyz',
-      abc: 'XYZ',
-      AbC: 'xYz',
+  it('should work with custom generate function', () => {
+    const customGenerate = (value: string | undefined): string | undefined => {
+      return value ? value.toUpperCase() : undefined
     }
+    const value = 'https://example.com'
     const expected = {
-      xyz: 'ABC',
-      XYZ: 'abc',
-      xYz: 'AbC',
+      '@rdf:resource': 'HTTPS://EXAMPLE.COM',
     }
 
-    expect(invertObject(value)).toEqual(expected)
+    expect(generateRdfResource(value, customGenerate)).toEqual(expected)
+  })
+
+  it('should return undefined when generate function returns undefined', () => {
+    const alwaysUndefined = (): undefined => undefined
+    const value = 'https://example.com'
+
+    expect(generateRdfResource(value, alwaysUndefined)).toBeUndefined()
+  })
+
+  it('should return rdf:resource with empty string if generate function returns it', () => {
+    const returnsEmpty = (): string => ''
+    const value = 'https://example.com'
+    const expected = {
+      '@rdf:resource': '',
+    }
+
+    expect(generateRdfResource(value, returnsEmpty)).toEqual(expected)
+  })
+
+  it('should handle number values with generateNumber', () => {
+    const value = 42
+    const expected = {
+      '@rdf:resource': 42,
+    }
+
+    expect(generateRdfResource(value, generateNumber)).toEqual(expected)
+  })
+
+  it('should preserve special characters in URIs', () => {
+    const value = 'https://example.com/path?foo=bar&baz=qux#anchor'
+    const expected = {
+      '@rdf:resource': 'https://example.com/path?foo=bar&baz=qux#anchor',
+    }
+
+    expect(generateRdfResource(value, generatePlainString)).toEqual(expected)
   })
 })
 
@@ -3226,6 +3491,53 @@ describe('createNamespaceNormalizator', () => {
         expect(normalizeNamespaces(value)).toEqual(expected)
       })
 
+      it('should normalize when standard prefix used by unknown namespace', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root
+            xmlns:atom="http://example.com/unknown"
+            xmlns:feed="http://www.w3.org/2005/Atom"
+          >
+            <atom:unknown>ignored</atom:unknown>
+            <feed:title>Test Title</feed:title>
+          </root>
+        `)
+        const expected = {
+          root: {
+            'atom:unknown': 'ignored',
+            'atom:title': 'Test Title',
+            '@xmlns:atom': 'http://example.com/unknown',
+            '@xmlns:feed': 'http://www.w3.org/2005/Atom',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should normalize multiple conflicts with same namespace URI', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root
+            xmlns:dc1="http://purl.org/dc/elements/1.1/"
+            xmlns:dc2="http://purl.org/dc/elements/1.1"
+          >
+            <dc1:creator>John Doe</dc1:creator>
+            <dc2:creator>Jane Smith</dc2:creator>
+          </root>
+        `)
+        const expected = {
+          root: {
+            'dc:creator': ['John Doe', 'Jane Smith'],
+            '@xmlns:dc1': 'http://purl.org/dc/elements/1.1/',
+            '@xmlns:dc2': 'http://purl.org/dc/elements/1.1',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
       it('should handle namespace declarations without usage', () => {
         const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
@@ -3577,5 +3889,85 @@ describe('generateSingularOrArray', () => {
     const result = generateSingularOrArray('x', ['a', 'b', 'c'], generator)
 
     expect(result).toEqual('X')
+  })
+})
+
+describe('parseJsonObject', () => {
+  it('should return object unchanged when input is object', () => {
+    const value = { title: 'Test', count: 42 }
+
+    expect(parseJsonObject(value)).toEqual(value)
+  })
+
+  it('should parse valid JSON string', () => {
+    const value = '{"title":"Test","count":42}'
+    const expected = { title: 'Test', count: 42 }
+
+    expect(parseJsonObject(value)).toEqual(expected)
+  })
+
+  it('should parse JSON string with whitespace on start', () => {
+    const value = '  {"title":"Test"}'
+    const expected = { title: 'Test' }
+
+    expect(parseJsonObject(value)).toEqual(expected)
+  })
+
+  it('should parse JSON string with whitespace on end', () => {
+    const value = '{"title":"Test"}  '
+    const expected = { title: 'Test' }
+
+    expect(parseJsonObject(value)).toEqual(expected)
+  })
+
+  it('should parse JSON string with whitespace on both ends', () => {
+    const value = '  {"title":"Test"}  '
+    const expected = { title: 'Test' }
+
+    expect(parseJsonObject(value)).toEqual(expected)
+  })
+
+  it('should return undefined for array string', () => {
+    const value = '[1,2,3]'
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for array string with whitespace', () => {
+    const value = '   [1,2,3]   '
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for XML string', () => {
+    const value = '<rss><channel><title>Test</title></channel></rss>'
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for plain text', () => {
+    const value = 'not json'
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for malformed JSON', () => {
+    const value = '{"title":"Test"'
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty string', () => {
+    const value = ''
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(parseJsonObject(123)).toBeUndefined()
+    expect(parseJsonObject(true)).toBeUndefined()
+    expect(parseJsonObject(null)).toBeUndefined()
+    expect(parseJsonObject(undefined)).toBeUndefined()
+    expect(parseJsonObject([1, 2, 3])).toBeUndefined()
   })
 })

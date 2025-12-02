@@ -17,14 +17,25 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
         <a href="/reference/namespaces/content">Content</a>,
         <a href="/reference/namespaces/slash">Slash</a>,
         <a href="/reference/namespaces/itunes">iTunes</a>,
-        <a href="/reference/namespaces/podcast">Podcast</a>,
+        <a href="/reference/namespaces/podcast">Podcast Index</a>,
+        <a href="/reference/namespaces/rawvoice">RawVoice</a>,
         <a href="/reference/namespaces/psc">Podlove Simple Chapters</a>,
+        <a href="/reference/namespaces/googleplay">Google Play Podcast</a>,
+        <a href="/reference/namespaces/spotify">Spotify</a>,
         <a href="/reference/namespaces/media">Media RSS</a>,
-        <a href="/reference/namespaces/georss">GeoRSS-Simple</a>,
+        <a href="/reference/namespaces/geo">W3C Basic Geo</a>,
+        <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
         <a href="/reference/namespaces/thr">Atom Threading</a>,
         <a href="/reference/namespaces/dcterms">Dublin Core Terms</a>,
-        <a href="/reference/namespaces/wfw">Well-Formed Web</a>,
-        <a href="/reference/namespaces/source">Source</a>
+        <a href="/reference/namespaces/wfw">Comment API</a>,
+        <a href="/reference/namespaces/admin">Administrative</a>,
+        <a href="/reference/namespaces/pingback">Pingback</a>,
+        <a href="/reference/namespaces/trackback">Trackback</a>,
+        <a href="/reference/namespaces/source">Source</a>,
+        <a href="/reference/namespaces/cc">ccREL</a>,
+        <a href="/reference/namespaces/creativecommons">Creative Commons</a>,
+        <a href="/reference/namespaces/feedpress">FeedPress</a>,
+        <a href="/reference/namespaces/opensearch">OpenSearch</a>
       </td>
     </tr>
   </tbody>
@@ -41,6 +52,9 @@ import { parseRssFeed } from 'feedsmith'
 
 const rssFeed = parseRssFeed(xmlContent)
 // Returns: object with all fields optional and dates as strings
+
+// Limit number of items parsed
+const rssFeed = parseRssFeed(xmlContent, { maxItems: 10 })
 ```
 
 #### Parameters
@@ -48,6 +62,13 @@ const rssFeed = parseRssFeed(xmlContent)
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `content` | `string` | The RSS XML content to parse |
+| `options` | `object` | Optional parsing settings |
+
+#### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `maxItems` | `number` | - | Limit the number of items parsed. Use `0` to skip items entirely, useful when only feed metadata is needed |
 
 #### Returns
 `object` - Parsed RSS feed with all fields optional and dates as strings

@@ -1,6 +1,6 @@
-# GeoRSS-Simple Namespace Reference
+# GeoRSS Simple Namespace Reference
 
-The GeoRSS-Simple namespace enables geographic tagging of RSS feeds and items, allowing publishers to associate location information with their content.
+The GeoRSS Simple namespace enables geographic tagging of RSS feeds and items, allowing publishers to associate location information with their content.
 
 <table>
   <tbody>

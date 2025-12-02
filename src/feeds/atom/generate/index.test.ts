@@ -351,6 +351,29 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with geo namespace', () => {
+    const value = {
+      id: 'http://example.com/feed',
+      title: 'Example City Feed',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      geo: {
+        lat: 37.7749,
+        long: -122.4194,
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
+  <id>http://example.com/feed</id>
+  <title>Example City Feed</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <geo:lat>37.7749</geo:lat>
+  <geo:long>-122.4194</geo:long>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with dcterms namespace', () => {
     const value = {
       id: 'https://example.com/feed',
@@ -569,6 +592,47 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with googleplay namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with GooglePlay namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      googleplay: {
+        author: 'Podcast Creator',
+        explicit: false,
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Episode with GooglePlay',
+          updated: new Date('2023-03-15T12:00:00Z'),
+          googleplay: {
+            author: 'Episode Author',
+            explicit: 'clean' as const,
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/">
+  <id>https://example.com/feed</id>
+  <title>Feed with GooglePlay namespace</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <googleplay:author>Podcast Creator</googleplay:author>
+  <googleplay:explicit>no</googleplay:explicit>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Episode with GooglePlay</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
+    <googleplay:author>Episode Author</googleplay:author>
+    <googleplay:explicit>clean</googleplay:explicit>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with multiple namespaces', () => {
     const value = {
       id: 'https://example.com/feed',
@@ -576,7 +640,7 @@ describe('generate', () => {
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creator: 'John Doe',
-        rights: ['Copyright 2023'],
+        rights: 'Copyright 2023',
       },
       sy: {
         updatePeriod: 'daily',
@@ -659,6 +723,45 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with ccREL namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with ccREL',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      cc: {
+        license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+        morePermissions: 'https://example.com/commercial-license',
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry with ccREL',
+          updated: new Date('2023-03-15T12:00:00Z'),
+          cc: {
+            license: 'https://creativecommons.org/licenses/by/4.0/',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:cc="http://creativecommons.org/ns#">
+  <id>https://example.com/feed</id>
+  <title>Feed with ccREL</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
+  <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry with ccREL</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
+    <cc:license>https://creativecommons.org/licenses/by/4.0/</cc:license>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with creativecommons namespace', () => {
     const value = {
       id: 'https://example.com/feed',
@@ -674,6 +777,86 @@ describe('generate', () => {
   <title>Feed with Creative Commons</title>
   <updated>2024-01-10T12:00:00.000Z</updated>
   <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with opensearch namespace', () => {
+    const value = {
+      id: 'http://example.com/search',
+      title: 'Search Results',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      opensearch: {
+        totalResults: 1000,
+        startIndex: 0,
+        itemsPerPage: 10,
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">
+  <id>http://example.com/search</id>
+  <title>Search Results</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <opensearch:totalResults>1000</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with arxiv namespace', () => {
+    const value = {
+      id: 'http://arxiv.org/api/query',
+      title: 'arXiv Query Results',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      entries: [
+        {
+          id: 'http://arxiv.org/abs/2403.12345v1',
+          title: 'Example Paper',
+          updated: new Date('2024-03-15T12:00:00Z'),
+          authors: [
+            {
+              name: 'John Doe',
+              arxiv: {
+                affiliation: 'MIT',
+              },
+            },
+          ],
+          arxiv: {
+            comment: '23 pages, 8 figures',
+            journalRef: 'Eur.Phys.J. C31 (2003) 17-29',
+            doi: '10.1234/example',
+            primaryCategory: {
+              term: 'cs.LG',
+              scheme: 'http://arxiv.org/schemas/atom',
+              label: 'Machine Learning',
+            },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:arxiv="http://arxiv.org/schemas/atom">
+  <id>http://arxiv.org/api/query</id>
+  <title>arXiv Query Results</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <entry>
+    <author>
+      <name>John Doe</name>
+      <arxiv:affiliation>MIT</arxiv:affiliation>
+    </author>
+    <id>http://arxiv.org/abs/2403.12345v1</id>
+    <title>Example Paper</title>
+    <updated>2024-03-15T12:00:00.000Z</updated>
+    <arxiv:comment>23 pages, 8 figures</arxiv:comment>
+    <arxiv:journal_ref>Eur.Phys.J. C31 (2003) 17-29</arxiv:journal_ref>
+    <arxiv:doi>10.1234/example</arxiv:doi>
+    <arxiv:primary_category term="cs.LG" scheme="http://arxiv.org/schemas/atom" label="Machine Learning"/>
+  </entry>
 </feed>
 `
 
@@ -747,6 +930,116 @@ describe('generate', () => {
     <updated>2024-01-05T10:30:00.000Z</updated>
     <wfw:comment>https://example.com/posts/1/comment</wfw:comment>
     <wfw:commentRss>https://example.com/posts/1/comments/feed</wfw:commentRss>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with pingback namespace', () => {
+    const value = {
+      id: 'https://example.com/blog',
+      title: 'Blog with Pingback',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      pingback: {
+        to: 'https://example.com/pingback-service',
+      },
+      entries: [
+        {
+          id: 'https://example.com/post/1',
+          title: 'Post with Pingback',
+          updated: new Date('2024-01-05T10:30:00Z'),
+          pingback: {
+            server: 'https://example.com/xmlrpc.php',
+            target: 'https://referenced-blog.com/article',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/">
+  <id>https://example.com/blog</id>
+  <title>Blog with Pingback</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <pingback:to>https://example.com/pingback-service</pingback:to>
+  <entry>
+    <id>https://example.com/post/1</id>
+    <title>Post with Pingback</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+    <pingback:server>https://example.com/xmlrpc.php</pingback:server>
+    <pingback:target>https://referenced-blog.com/article</pingback:target>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with admin namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Admin',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry title',
+          updated: new Date('2024-01-05T10:30:00Z'),
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:admin="http://webns.net/mvcb/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <id>https://example.com/feed</id>
+  <title>Feed with Admin</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
+  <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry title</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with trackback namespace', () => {
+    const value = {
+      id: 'https://example.com/blog',
+      title: 'Blog with Trackback',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      entries: [
+        {
+          id: 'https://example.com/post/1',
+          title: 'Post with Trackback',
+          updated: new Date('2024-01-05T10:30:00Z'),
+          trackback: {
+            ping: 'https://example.com/trackback/123',
+            abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+  <id>https://example.com/blog</id>
+  <title>Blog with Trackback</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <entry>
+    <id>https://example.com/post/1</id>
+    <title>Post with Trackback</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+    <trackback:ping>https://example.com/trackback/123</trackback:ping>
+    <trackback:about>https://blog1.com/trackback/456</trackback:about>
+    <trackback:about>https://blog2.com/trackback/789</trackback:about>
   </entry>
 </feed>
 `
@@ -995,5 +1288,83 @@ describe('generate with lenient mode', () => {
 `
 
     expect(generate(value, { lenient: true })).toEqual(expected)
+  })
+
+  it('should generate Atom feed with app namespace', () => {
+    const value = {
+      id: 'http://example.com/blog',
+      title: 'My Blog',
+      updated: new Date('2024-03-15T16:00:00Z'),
+      entries: [
+        {
+          id: 'http://example.com/blog/post/1',
+          title: 'Article',
+          updated: new Date('2024-03-15T16:00:00Z'),
+          app: {
+            edited: new Date('2024-03-15T14:30:00Z'),
+            control: {
+              draft: false,
+            },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:app="http://www.w3.org/2007/app">
+  <id>http://example.com/blog</id>
+  <title>My Blog</title>
+  <updated>2024-03-15T16:00:00.000Z</updated>
+  <entry>
+    <id>http://example.com/blog/post/1</id>
+    <title>Article</title>
+    <updated>2024-03-15T16:00:00.000Z</updated>
+    <app:edited>2024-03-15T14:30:00.000Z</app:edited>
+    <app:control>
+      <app:draft>no</app:draft>
+    </app:control>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom entry with draft status', () => {
+    const value = {
+      id: 'http://example.com/blog',
+      title: 'Blog',
+      updated: new Date('2024-03-15T16:00:00Z'),
+      entries: [
+        {
+          id: 'http://example.com/blog/draft',
+          title: 'Draft Article',
+          updated: new Date('2024-03-15T15:00:00Z'),
+          app: {
+            edited: new Date('2024-03-15T15:00:00Z'),
+            control: {
+              draft: true,
+            },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:app="http://www.w3.org/2007/app">
+  <id>http://example.com/blog</id>
+  <title>Blog</title>
+  <updated>2024-03-15T16:00:00.000Z</updated>
+  <entry>
+    <id>http://example.com/blog/draft</id>
+    <title>Draft Article</title>
+    <updated>2024-03-15T15:00:00.000Z</updated>
+    <app:edited>2024-03-15T15:00:00.000Z</app:edited>
+    <app:control>
+      <app:draft>yes</app:draft>
+    </app:control>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
   })
 })

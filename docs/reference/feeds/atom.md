@@ -16,11 +16,21 @@ Atom is a syndication format based on XML that provides a robust framework for w
         <a href="/reference/namespaces/slash">Slash</a>,
         <a href="/reference/namespaces/itunes">iTunes</a>,
         <a href="/reference/namespaces/psc">Podlove Simple Chapters</a>,
+        <a href="/reference/namespaces/googleplay">Google Play Podcast</a>,
         <a href="/reference/namespaces/media">Media RSS</a>,
-        <a href="/reference/namespaces/georss">GeoRSS-Simple</a>,
+        <a href="/reference/namespaces/geo">W3C Basic Geo</a>,
+        <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
         <a href="/reference/namespaces/thr">Atom Threading</a>,
+        <a href="/reference/namespaces/app">Atom Publishing Protocol</a>,
         <a href="/reference/namespaces/dcterms">Dublin Core Terms</a>,
-        <a href="/reference/namespaces/wfw">Well-Formed Web</a>,
+        <a href="/reference/namespaces/wfw">Comment API</a>,
+        <a href="/reference/namespaces/admin">Administrative</a>,
+        <a href="/reference/namespaces/pingback">Pingback</a>,
+        <a href="/reference/namespaces/trackback">Trackback</a>,
+        <a href="/reference/namespaces/cc">ccREL</a>,
+        <a href="/reference/namespaces/creativecommons">Creative Commons</a>,
+        <a href="/reference/namespaces/opensearch">OpenSearch</a>,
+        <a href="/reference/namespaces/arxiv">arXiv</a>,
         <a href="/reference/namespaces/yt">YouTube</a>
       </td>
     </tr>
@@ -38,6 +48,9 @@ import { parseAtomFeed } from 'feedsmith'
 
 const atomFeed = parseAtomFeed(xmlContent)
 // Returns: object with all fields optional and dates as strings
+
+// Limit number of entries parsed
+const atomFeed = parseAtomFeed(xmlContent, { maxItems: 10 })
 ```
 
 #### Parameters
@@ -45,6 +58,13 @@ const atomFeed = parseAtomFeed(xmlContent)
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `content` | `string` | The Atom XML content to parse |
+| `options` | `object` | Optional parsing settings |
+
+#### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `maxItems` | `number` | - | Limit the number of entries parsed. Use `0` to skip entries entirely, useful when only feed metadata is needed |
 
 #### Returns
 `object` - Parsed Atom feed with all fields optional and dates as strings

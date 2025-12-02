@@ -1,7 +1,7 @@
 import type { DateLike } from '../../../common/types.js'
 
 // #region reference
-export namespace RawvoiceNs {
+export namespace RawVoiceNs {
   export type Rating = {
     value?: string
     tv?: string
@@ -49,14 +49,14 @@ export namespace RawvoiceNs {
     liveStream?: LiveStream<TDate>
     location?: string
     frequency?: string
-    mycast?: string
+    mycast?: boolean
     subscribe?: Subscribe
     donate?: Donate
   }
 
   export type Item = {
     poster?: Poster
-    isHd?: string
+    isHd?: boolean
     embed?: string
     webm?: AlternateEnclosure
     mp4?: AlternateEnclosure

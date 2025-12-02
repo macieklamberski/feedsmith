@@ -84,6 +84,10 @@ Feedsmith accepts namespace URIs even when they don't exactly match the official
 
 All of these variations are automatically recognized and normalized, so you can reliably access namespace data regardless of how the feed declares it.
 
+## Alternative URI Variants
+
+Real-world feeds often use unofficial namespace URI variants. These include HTTPS instead of HTTP, trailing slashes added or removed, or alternative domain paths. Feedsmith recognizes these variations to ensure broad compatibility. See the [complete list of recognized URI variants](https://github.com/macieklamberski/feedsmith/blob/main/src/common/config.ts#L37).
+
 ## Supported Namespaces
 
 For a complete list of supported namespaces and their compatibility with different feed formats, see the [supported formats](/#supported-formats) section.

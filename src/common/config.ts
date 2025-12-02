@@ -35,6 +35,12 @@ export const locales = {
 }
 
 export const namespaceUris = {
+  admin: [
+    'http://webns.net/mvcb/', // Official URI.
+    'https://webns.net/mvcb/',
+    'http://webns.net/mvcb',
+    'https://webns.net/mvcb',
+  ],
   atom: [
     'http://www.w3.org/2005/Atom', // Official URI (Atom 1.0).
     'https://www.w3.org/2005/Atom',
@@ -42,6 +48,18 @@ export const namespaceUris = {
     'https://www.w3.org/2005/Atom/',
     'http://purl.org/atom/ns#', // Official URI (Atom 0.3).
     'https://purl.org/atom/ns#',
+  ],
+  blogChannel: [
+    'http://backend.userland.com/blogChannelModule', // Official URI.
+    'https://backend.userland.com/blogChannelModule',
+    'http://backend.userland.com/blogChannelModule/',
+    'https://backend.userland.com/blogChannelModule/',
+  ],
+  app: [
+    'http://www.w3.org/2007/app', // Official URI.
+    'https://www.w3.org/2007/app',
+    'http://www.w3.org/2007/app/',
+    'https://www.w3.org/2007/app/',
   ],
   dc: [
     'http://purl.org/dc/elements/1.1/', // Official URI.
@@ -94,6 +112,7 @@ export const namespaceUris = {
     'http://podcastindex.org/namespace/1.0',
     'https://podcastindex.org/namespace/1.0/',
     'http://podcastindex.org/namespace/1.0/',
+    'https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/1.0.md',
   ],
   psc: [
     'http://podlove.org/simple-chapters', // Official URI.
@@ -128,6 +147,10 @@ export const namespaceUris = {
     'http://www.georss.org/georss/',
     'https://www.georss.org/georss',
     'https://www.georss.org/georss/',
+  ],
+  geo: [
+    'http://www.w3.org/2003/01/geo/wgs84_pos#', // Official URI.
+    'https://www.w3.org/2003/01/geo/wgs84_pos#',
   ],
   thr: [
     'http://purl.org/syndication/thread/1.0', // Official URI.
@@ -185,6 +208,14 @@ export const namespaceUris = {
     'http://www.youtube.com/xml/schemas/2015/',
     'https://www.youtube.com/xml/schemas/2015/',
   ],
+  googleplay: [
+    'https://www.google.com/schemas/play-podcasts/1.0/', // Official URI.
+    'http://www.google.com/schemas/play-podcasts/1.0/',
+    'https://www.google.com/schemas/play-podcasts/1.0',
+    'http://www.google.com/schemas/play-podcasts/1.0',
+    'https://www.google.com/schemas/play-podcasts/1.0/play-podcasts.xsd',
+    'http://www.google.com/schemas/play-podcasts/1.0/play-podcasts.xsd',
+  ],
   spotify: [
     'http://www.spotify.com/ns/rss', // Official URI.
     'https://www.spotify.com/ns/rss',
@@ -204,6 +235,40 @@ export const namespaceUris = {
     'http://blubrry.com/developer/rawvoice-rss',
     'https://blubrry.com/developer/rawvoice-rss/',
     'http://blubrry.com/developer/rawvoice-rss/',
+  ],
+  cc: [
+    'http://creativecommons.org/ns#', // Official URI.
+    'https://creativecommons.org/ns#',
+    'http://web.resource.org/cc/',
+    'https://web.resource.org/cc/',
+    'http://web.resource.org/cc',
+    'https://web.resource.org/cc',
+  ],
+  opensearch: [
+    'http://a9.com/-/spec/opensearch/1.1/', // Official URI (OpenSearch 1.1).
+    'https://a9.com/-/spec/opensearch/1.1/',
+    'http://a9.com/-/spec/opensearch/1.0/', // Official URI (OpenSearch 1.0).
+    'https://a9.com/-/spec/opensearch/1.0/',
+    'http://a9.com/-/spec/opensearchrss/1.0/', // Official URI (legacy).
+    'https://a9.com/-/spec/opensearchrss/1.0/',
+  ],
+  arxiv: [
+    'http://arxiv.org/schemas/atom', // Official URI.
+    'https://arxiv.org/schemas/atom',
+    'http://arxiv.org/schemas/atom/',
+    'https://arxiv.org/schemas/atom/',
+  ],
+  pingback: [
+    'http://madskills.com/public/xml/rss/module/pingback/', // Official URI.
+    'https://madskills.com/public/xml/rss/module/pingback/',
+    'http://madskills.com/public/xml/rss/module/pingback',
+    'https://madskills.com/public/xml/rss/module/pingback',
+  ],
+  trackback: [
+    'http://madskills.com/public/xml/rss/module/trackback/', // Official URI.
+    'https://madskills.com/public/xml/rss/module/trackback/',
+    'http://madskills.com/public/xml/rss/module/trackback',
+    'https://madskills.com/public/xml/rss/module/trackback',
   ],
 }
 

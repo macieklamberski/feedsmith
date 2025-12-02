@@ -6,9 +6,9 @@ import {
   isObject,
   trimObject,
 } from '../../../common/utils.js'
-import type { DctermsNs } from '../common/types.js'
+import type { DcTermsNs } from '../common/types.js'
 
-export const generateItemOrFeed: GenerateUtil<DctermsNs.ItemOrFeed<DateLike>> = (itemOrFeed) => {
+export const generateItemOrFeed: GenerateUtil<DcTermsNs.ItemOrFeed<DateLike>> = (itemOrFeed) => {
   if (!isObject(itemOrFeed)) {
     return
   }
@@ -19,11 +19,7 @@ export const generateItemOrFeed: GenerateUtil<DctermsNs.ItemOrFeed<DateLike>> = 
       itemOrFeed.abstract,
       generateCdataString,
     ),
-    'dcterms:accessRights': generateArrayOrSingular(
-      itemOrFeed.accessRights,
-      undefined,
-      generateCdataString,
-    ),
+    'dcterms:accessRights': generateCdataString(itemOrFeed.accessRights),
     'dcterms:accrualMethod': generateArrayOrSingular(
       itemOrFeed.accrualMethods,
       itemOrFeed.accrualMethod,
@@ -49,21 +45,13 @@ export const generateItemOrFeed: GenerateUtil<DctermsNs.ItemOrFeed<DateLike>> = 
       itemOrFeed.audience,
       generateCdataString,
     ),
-    'dcterms:available': generateArrayOrSingular(
-      itemOrFeed.availables,
-      itemOrFeed.available,
-      generateRfc3339Date,
-    ),
+    'dcterms:available': generateRfc3339Date(itemOrFeed.available),
     'dcterms:bibliographicCitation': generateArrayOrSingular(
       itemOrFeed.bibliographicCitations,
       itemOrFeed.bibliographicCitation,
       generateCdataString,
     ),
-    'dcterms:conformsTo': generateArrayOrSingular(
-      itemOrFeed.conformsTos,
-      itemOrFeed.conformsTo,
-      generateCdataString,
-    ),
+    'dcterms:conformsTo': generateCdataString(itemOrFeed.conformsTo),
     'dcterms:contributor': generateArrayOrSingular(
       itemOrFeed.contributors,
       itemOrFeed.contributor,
@@ -74,32 +62,16 @@ export const generateItemOrFeed: GenerateUtil<DctermsNs.ItemOrFeed<DateLike>> = 
       itemOrFeed.coverage,
       generateCdataString,
     ),
-    'dcterms:created': generateArrayOrSingular(
-      itemOrFeed.createds,
-      itemOrFeed.created,
-      generateRfc3339Date,
-    ),
+    'dcterms:created': generateRfc3339Date(itemOrFeed.created),
     'dcterms:creator': generateArrayOrSingular(
       itemOrFeed.creators,
       itemOrFeed.creator,
       generateCdataString,
     ),
     'dcterms:date': generateArrayOrSingular(itemOrFeed.dates, itemOrFeed.date, generateRfc3339Date),
-    'dcterms:dateAccepted': generateArrayOrSingular(
-      itemOrFeed.dateAccepteds,
-      itemOrFeed.dateAccepted,
-      generateRfc3339Date,
-    ),
-    'dcterms:dateCopyrighted': generateArrayOrSingular(
-      itemOrFeed.dateCopyrighteds,
-      itemOrFeed.dateCopyrighted,
-      generateRfc3339Date,
-    ),
-    'dcterms:dateSubmitted': generateArrayOrSingular(
-      itemOrFeed.dateSubmitteds,
-      itemOrFeed.dateSubmitted,
-      generateRfc3339Date,
-    ),
+    'dcterms:dateAccepted': generateRfc3339Date(itemOrFeed.dateAccepted),
+    'dcterms:dateCopyrighted': generateRfc3339Date(itemOrFeed.dateCopyrighted),
+    'dcterms:dateSubmitted': generateRfc3339Date(itemOrFeed.dateSubmitted),
     'dcterms:description': generateArrayOrSingular(
       itemOrFeed.descriptions,
       itemOrFeed.description,
@@ -145,41 +117,13 @@ export const generateItemOrFeed: GenerateUtil<DctermsNs.ItemOrFeed<DateLike>> = 
       itemOrFeed.instructionalMethod,
       generateCdataString,
     ),
-    'dcterms:isFormatOf': generateArrayOrSingular(
-      itemOrFeed.isFormatOfs,
-      itemOrFeed.isFormatOf,
-      generateCdataString,
-    ),
-    'dcterms:isPartOf': generateArrayOrSingular(
-      itemOrFeed.isPartOfs,
-      itemOrFeed.isPartOf,
-      generateCdataString,
-    ),
-    'dcterms:isReferencedBy': generateArrayOrSingular(
-      itemOrFeed.isReferencedBys,
-      itemOrFeed.isReferencedBy,
-      generateCdataString,
-    ),
-    'dcterms:isReplacedBy': generateArrayOrSingular(
-      itemOrFeed.isReplacedBys,
-      itemOrFeed.isReplacedBy,
-      generateCdataString,
-    ),
-    'dcterms:isRequiredBy': generateArrayOrSingular(
-      itemOrFeed.isRequiredBys,
-      itemOrFeed.isRequiredBy,
-      generateCdataString,
-    ),
-    'dcterms:issued': generateArrayOrSingular(
-      itemOrFeed.issueds,
-      itemOrFeed.issued,
-      generateRfc3339Date,
-    ),
-    'dcterms:isVersionOf': generateArrayOrSingular(
-      itemOrFeed.isVersionOfs,
-      itemOrFeed.isVersionOf,
-      generateCdataString,
-    ),
+    'dcterms:isFormatOf': generateCdataString(itemOrFeed.isFormatOf),
+    'dcterms:isPartOf': generateCdataString(itemOrFeed.isPartOf),
+    'dcterms:isReferencedBy': generateCdataString(itemOrFeed.isReferencedBy),
+    'dcterms:isReplacedBy': generateCdataString(itemOrFeed.isReplacedBy),
+    'dcterms:isRequiredBy': generateCdataString(itemOrFeed.isRequiredBy),
+    'dcterms:issued': generateRfc3339Date(itemOrFeed.issued),
+    'dcterms:isVersionOf': generateCdataString(itemOrFeed.isVersionOf),
     'dcterms:language': generateArrayOrSingular(
       itemOrFeed.languages,
       itemOrFeed.language,
@@ -200,11 +144,7 @@ export const generateItemOrFeed: GenerateUtil<DctermsNs.ItemOrFeed<DateLike>> = 
       itemOrFeed.medium,
       generateCdataString,
     ),
-    'dcterms:modified': generateArrayOrSingular(
-      itemOrFeed.modifieds,
-      itemOrFeed.modified,
-      generateRfc3339Date,
-    ),
+    'dcterms:modified': generateRfc3339Date(itemOrFeed.modified),
     'dcterms:provenance': generateArrayOrSingular(
       itemOrFeed.provenances,
       itemOrFeed.provenance,
@@ -215,27 +155,15 @@ export const generateItemOrFeed: GenerateUtil<DctermsNs.ItemOrFeed<DateLike>> = 
       itemOrFeed.publisher,
       generateCdataString,
     ),
-    'dcterms:references': generateArrayOrSingular(
-      itemOrFeed.references,
-      undefined,
-      generateCdataString,
-    ),
+    'dcterms:references': generateCdataString(itemOrFeed.references),
     'dcterms:relation': generateArrayOrSingular(
       itemOrFeed.relations,
       itemOrFeed.relation,
       generateCdataString,
     ),
-    'dcterms:replaces': generateArrayOrSingular(
-      itemOrFeed.replaces,
-      undefined,
-      generateCdataString,
-    ),
-    'dcterms:requires': generateArrayOrSingular(
-      itemOrFeed.requires,
-      undefined,
-      generateCdataString,
-    ),
-    'dcterms:rights': generateArrayOrSingular(itemOrFeed.rights, undefined, generateCdataString),
+    'dcterms:replaces': generateCdataString(itemOrFeed.replaces),
+    'dcterms:requires': generateCdataString(itemOrFeed.requires),
+    'dcterms:rights': generateCdataString(itemOrFeed.rights),
     'dcterms:rightsHolder': generateArrayOrSingular(
       itemOrFeed.rightsHolders,
       itemOrFeed.rightsHolder,
@@ -256,11 +184,7 @@ export const generateItemOrFeed: GenerateUtil<DctermsNs.ItemOrFeed<DateLike>> = 
       itemOrFeed.subject,
       generateCdataString,
     ),
-    'dcterms:tableOfContents': generateArrayOrSingular(
-      itemOrFeed.tableOfContents,
-      undefined,
-      generateCdataString,
-    ),
+    'dcterms:tableOfContents': generateCdataString(itemOrFeed.tableOfContents),
     'dcterms:temporal': generateArrayOrSingular(
       itemOrFeed.temporals,
       itemOrFeed.temporal,
@@ -272,11 +196,7 @@ export const generateItemOrFeed: GenerateUtil<DctermsNs.ItemOrFeed<DateLike>> = 
       generateCdataString,
     ),
     'dcterms:type': generateArrayOrSingular(itemOrFeed.types, itemOrFeed.type, generateCdataString),
-    'dcterms:valid': generateArrayOrSingular(
-      itemOrFeed.valids,
-      itemOrFeed.valid,
-      generateRfc3339Date,
-    ),
+    'dcterms:valid': generateRfc3339Date(itemOrFeed.valid),
   }
 
   return trimObject(value)

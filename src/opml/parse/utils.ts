@@ -88,7 +88,11 @@ export const parseBody: ParsePartialUtil<Opml.Body<string>, MainOptions> = (valu
   }
 
   const body = {
-    outlines: parseArrayOf(value.outline, (value) => parseOutline(value, options)),
+    outlines: parseArrayOf(
+      value.outline,
+      (value) => parseOutline(value, options),
+      options?.maxItems,
+    ),
   }
 
   return trimObject(body)

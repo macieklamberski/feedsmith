@@ -7,7 +7,7 @@ describe('generateItem', () => {
       poster: {
         url: 'https://example.com/poster.jpg',
       },
-      isHd: 'yes',
+      isHd: true,
       embed: '<iframe src="https://example.com/embed"></iframe>',
       webm: {
         src: 'https://example.com/video.webm',
@@ -78,12 +78,13 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
-  it('should filter out empty string values', () => {
+  it('should handle false boolean value', () => {
     const value = {
-      isHd: '',
+      isHd: false,
       embed: '<div>content</div>',
     }
     const expected = {
+      'rawvoice:isHd': 'no',
       'rawvoice:embed': {
         '#cdata': '<div>content</div>',
       },
@@ -239,7 +240,7 @@ describe('generateFeed', () => {
       },
       location: 'San Francisco, CA',
       frequency: 'Weekly',
-      mycast: 'yes',
+      mycast: true,
     }
     const expected = {
       'rawvoice:rating': {
@@ -286,6 +287,19 @@ describe('generateFeed', () => {
     }
     const expected = {
       'rawvoice:location': 'Boston, MA',
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should handle false boolean value', () => {
+    const value = {
+      mycast: false,
+      location: 'New York, NY',
+    }
+    const expected = {
+      'rawvoice:mycast': 'no',
+      'rawvoice:location': 'New York, NY',
     }
 
     expect(generateFeed(value)).toEqual(expected)

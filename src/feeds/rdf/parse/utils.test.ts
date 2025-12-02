@@ -412,8 +412,8 @@ describe('parseItem', () => {
       title: 'Example Entry',
       link: 'http://example.com',
       dc: {
-        creator: 'John Doe',
         creators: ['John Doe'],
+        creator: 'John Doe',
       },
     }
 
@@ -446,10 +446,9 @@ describe('parseItem', () => {
       title: 'Example Entry',
       link: 'http://example.com',
       dcterms: {
-        createds: ['2023-02-01T00:00:00Z'],
         licenses: ['MIT License'],
-        created: '2023-02-01T00:00:00Z',
         license: 'MIT License',
+        created: '2023-02-01T00:00:00Z',
       },
     }
 
@@ -966,8 +965,8 @@ describe('parseFeed', () => {
         },
       ],
       dc: {
-        creator: 'John Doe',
         creators: ['John Doe'],
+        creator: 'John Doe',
       },
     }
 
@@ -1024,10 +1023,9 @@ describe('parseFeed', () => {
         },
       ],
       dcterms: {
-        createds: ['2023-01-01T00:00:00Z'],
         licenses: ['Creative Commons Attribution 4.0'],
-        created: '2023-01-01T00:00:00Z',
         license: 'Creative Commons Attribution 4.0',
+        created: '2023-01-01T00:00:00Z',
       },
     }
 
@@ -1092,6 +1090,134 @@ describe('parseFeed', () => {
     }
 
     expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle admin namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'admin:errorreportsto': {
+          '@rdf:resource': 'mailto:webmaster@example.com',
+        },
+        'admin:generatoragent': {
+          '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+        },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should limit items to specified maxItems', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Test Feed' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+        {
+          title: { '#text': 'Item 2' },
+          link: { '#text': 'https://example.com/item2' },
+        },
+        {
+          title: { '#text': 'Item 3' },
+          link: { '#text': 'https://example.com/item3' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Test Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+        {
+          title: 'Item 2',
+          link: 'https://example.com/item2',
+        },
+      ],
+    }
+
+    expect(parseFeed(value, { maxItems: 2 })).toEqual(expected)
+  })
+
+  it('should skip all items when maxItems is 0', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Test Feed' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+        {
+          title: { '#text': 'Item 2' },
+          link: { '#text': 'https://example.com/item2' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Test Feed',
+    }
+
+    expect(parseFeed(value, { maxItems: 0 })).toEqual(expected)
+  })
+
+  it('should return all items when maxItems is undefined', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Test Feed' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+        {
+          title: { '#text': 'Item 2' },
+          link: { '#text': 'https://example.com/item2' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Test Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+        {
+          title: 'Item 2',
+          link: 'https://example.com/item2',
+        },
+      ],
+    }
+
+    expect(parseFeed(value, { maxItems: undefined })).toEqual(expected)
   })
 })
 

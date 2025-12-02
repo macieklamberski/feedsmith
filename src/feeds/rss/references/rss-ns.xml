@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/" xmlns:psc="http://podlove.org/simple-chapters" xmlns:spotify="http://www.spotify.com/ns/rss" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:source="http://source.scripting.com/" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:feedpress="https://feed.press/xmlns">
+<rss version="2.0"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:dcterms="http://purl.org/dc/terms/"
+     xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+     xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+     xmlns:podcast="https://podcastindex.org/namespace/1.0"
+     xmlns:psc="http://podlove.org/simple-chapters"
+     xmlns:media="http://search.yahoo.com/mrss/"
+     xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/"
+     xmlns:spotify="http://www.spotify.com/ns/rss"
+     xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/"
+     xmlns:feedpress="https://feed.press/xmlns"
+     xmlns:arxiv="http://arxiv.org/schemas/atom"
+     xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
+     xmlns:cc="http://creativecommons.org/ns#"
+     xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule"
+     xmlns:thr="http://purl.org/syndication/thread/1.0"
+     xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+     xmlns:admin="http://webns.net/mvcb/"
+     xmlns:pingback="http://purl.org/net/pingback/"
+     xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+     xmlns:source="http://source.scripting.com/"
+     xmlns:blogChannel="http://backend.userland.com/blogChannelModule"
+     xmlns:georss="http://www.georss.org/georss"
+     xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
   <channel>
     <title>Example Feed</title>
     <link>http://example.org</link>
@@ -82,6 +111,17 @@
     <sy:updatePeriod>hourly</sy:updatePeriod>
     <sy:updateFrequency>1</sy:updateFrequency>
     <sy:updateBase>2000-01-01T12:00:00.000Z</sy:updateBase>
+
+    <!-- Google Play Podcasts Namespace: Channel Level Tags -->
+    <googleplay:author>Example Podcast Network</googleplay:author>
+    <googleplay:description>A comprehensive podcast about technology and programming</googleplay:description>
+    <googleplay:explicit>No</googleplay:explicit>
+    <googleplay:block>No</googleplay:block>
+    <googleplay:image href="https://example.com/images/googleplay-cover.jpg" />
+    <googleplay:new-feed-url>https://example.com/new-feed.xml</googleplay:new-feed-url>
+    <googleplay:email>contact@example.com</googleplay:email>
+    <googleplay:category text="Technology" />
+    <googleplay:category text="Education" />
 
     <!-- iTunes Namespace: Channel Level Tags -->
     <itunes:image href="https://example.com/images/podcast-cover.jpg"/>
@@ -254,6 +294,18 @@
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
 
+    <!-- W3C Basic Geo Namespace: Channel Level Tags -->
+    <geo:lat>37.7749</geo:lat>
+    <geo:long>-122.4194</geo:long>
+    <geo:alt>10.5</geo:alt>
+
+    <!-- Admin Namespace: Channel Level Tags -->
+    <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
+    <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+
+    <!-- Pingback Namespace: Channel Level Tags -->
+    <pingback:to>https://example.com/pingback-service</pingback:to>
+
     <!-- Source Namespace: Channel Level Tags -->
     <source:account service="twitter">johndoe</source:account>
     <source:account service="facebook">jane.smith</source:account>
@@ -270,6 +322,24 @@
     <source:blogroll>https://blog.example.com/blogroll.opml</source:blogroll>
     <source:self>http://example.com/feed.xml</source:self>
 
+    <!-- blogChannel Namespace: Channel Level Tags -->
+    <blogChannel:blogRoll>http://example.com/blogroll.opml</blogChannel:blogRoll>
+    <blogChannel:blink>http://recommended-site.com/</blogChannel:blink>
+    <blogChannel:mySubscriptions>http://example.com/subscriptions.opml</blogChannel:mySubscriptions>
+
+    <!-- ccREL Namespace: Channel Level Tags -->
+    <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
+    <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
+    <cc:attributionName>Example Publishing Company</cc:attributionName>
+    <cc:attributionURL>https://example.com/</cc:attributionURL>
+    <cc:useGuidelines>https://example.com/usage-guidelines</cc:useGuidelines>
+    <cc:permits>http://creativecommons.org/ns#Reproduction</cc:permits>
+    <cc:requires>http://creativecommons.org/ns#Attribution</cc:requires>
+    <cc:prohibits>http://creativecommons.org/ns#CommercialUse</cc:prohibits>
+    <cc:jurisdiction>http://creativecommons.org/international/us/</cc:jurisdiction>
+    <cc:legalcode>https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode</cc:legalcode>
+    <cc:deprecatedOn>2025-12-31</cc:deprecatedOn>
+
     <!-- Creative Commons Namespace: Channel Level Tags -->
     <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
 
@@ -279,6 +349,12 @@
     <feedpress:locale>en</feedpress:locale>
     <feedpress:podcastId>1234567890</feedpress:podcastId>
     <feedpress:cssFile>https://example.com/custom-feed-styles.css</feedpress:cssFile>
+
+    <!-- OpenSearch Namespace: Channel Level Tags -->
+    <opensearch:totalResults>1000</opensearch:totalResults>
+    <opensearch:startIndex>21</opensearch:startIndex>
+    <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+    <opensearch:Query role="request" searchTerms="quantum computing" startIndex="21" count="10"/>
 
     <!-- RawVoice Namespace: Channel Level Tags -->
     <rawvoice:rating tv="TV-14">TV-14</rawvoice:rating>
@@ -309,6 +385,19 @@
 
       <!-- Atom Namespace: Item Level Tags -->
       <atom:link href="https://example.com/posts/understanding-xml-namespaces/comments/1/replies" rel="replies" thr:count="2" thr:updated="2025-05-10T16:45:00.000Z"/>
+
+      <!-- ccREL Namespace: Item Level Tags -->
+      <cc:license>https://creativecommons.org/licenses/by/4.0/</cc:license>
+      <cc:morePermissions>https://example.com/additional-permissions</cc:morePermissions>
+      <cc:attributionName>Jack Jackson</cc:attributionName>
+      <cc:attributionURL>https://example.com/authors/jack-jackson</cc:attributionURL>
+      <cc:useGuidelines>https://example.com/article-usage-guidelines</cc:useGuidelines>
+      <cc:permits>http://creativecommons.org/ns#Reproduction</cc:permits>
+      <cc:requires>http://creativecommons.org/ns#Attribution</cc:requires>
+      <cc:prohibits>http://creativecommons.org/ns#CommercialUse</cc:prohibits>
+      <cc:jurisdiction>http://creativecommons.org/international/us/</cc:jurisdiction>
+      <cc:legalcode>https://creativecommons.org/licenses/by/4.0/legalcode</cc:legalcode>
+      <cc:deprecatedOn>2026-12-31</cc:deprecatedOn>
 
       <!-- Dublin Core Namespace: Item Level Tags -->
       <dc:title>Dublin Core Enhanced Item Title</dc:title>
@@ -389,6 +478,13 @@
       <slash:department>not-an-ocean-unless-there-are-lobsters</slash:department>
       <slash:comments>177</slash:comments>
       <slash:hit_parade>177,155,105,33,6,3,0</slash:hit_parade>
+
+      <!-- Google Play Podcasts Namespace: Item Level Tags -->
+      <googleplay:author>Episode Guest Speaker</googleplay:author>
+      <googleplay:description>A detailed episode about advanced programming techniques</googleplay:description>
+      <googleplay:explicit>No</googleplay:explicit>
+      <googleplay:block>No</googleplay:block>
+      <googleplay:image href="https://example.com/images/episode-googleplay-cover.jpg" />
 
       <!-- iTunes Namespace: Item Level Tags -->
       <itunes:duration>1800</itunes:duration>
@@ -559,6 +655,11 @@
       <georss:floor>4</georss:floor>
       <georss:radius>50000</georss:radius>
 
+      <!-- W3C Basic Geo Namespace: Item Level Tags -->
+      <geo:lat>37.8199</geo:lat>
+      <geo:long>-122.4783</geo:long>
+      <geo:alt>67.0</geo:alt>
+
       <!-- Atom Threading Namespace: Item Level Tags -->
       <thr:total>100</thr:total>
       <thr:in-reply-to ref="urn:uuid:d5e9c5d0-4c0c-11ec-81d3-0242ac130003" href="https://example.com/posts/understanding-xml-namespaces" type="application/xhtml+xml"/>
@@ -567,6 +668,15 @@
       <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
       <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
       <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
+
+      <!-- Pingback Namespace: Item Level Tags -->
+      <pingback:server>https://example.com/xmlrpc.php</pingback:server>
+      <pingback:target>https://referenced-blog.com/article</pingback:target>
+
+      <!-- Trackback Namespace: Item Level Tags -->
+      <trackback:ping>https://example.com/trackback/123</trackback:ping>
+      <trackback:about>https://blog1.com/trackback/456</trackback:about>
+      <trackback:about>https://blog2.com/trackback/789</trackback:about>
 
       <!-- Source Namespace: Item Level Tags -->
       <source:markdown># Understanding XML Namespaces - This article explores the power and flexibility of XML namespaces in modern web syndication.</source:markdown>

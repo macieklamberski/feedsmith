@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:psc="http://podlove.org/simple-chapters" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:yt="http://www.youtube.com/xml/schemas/2015">
+<feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:dc="http://purl.org/dc/elements/1.1/"
+      xmlns:dcterms="http://purl.org/dc/terms/"
+      xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+      xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+      xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+      xmlns:psc="http://podlove.org/simple-chapters"
+      xmlns:media="http://search.yahoo.com/mrss/"
+      xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/"
+      xmlns:arxiv="http://arxiv.org/schemas/atom"
+      xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
+      xmlns:cc="http://creativecommons.org/ns#"
+      xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule"
+      xmlns:thr="http://purl.org/syndication/thread/1.0"
+      xmlns:app="http://www.w3.org/2007/app"
+      xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+      xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
+      xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+      xmlns:admin="http://webns.net/mvcb/"
+      xmlns:yt="http://www.youtube.com/xml/schemas/2015"
+      xmlns:georss="http://www.georss.org/georss"
+      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
   <id>example-feed</id>
   <title>Example Feed</title>
 
@@ -25,6 +48,7 @@
   <sy:updateFrequency>1</sy:updateFrequency>
   <sy:updateBase>2000-01-01T12:00:00.000Z</sy:updateBase>
 
+
   <!-- iTunes Namespace: Feed Level Tags -->
   <itunes:image href="https://example.com/images/podcast-cover.jpg"/>
   <itunes:category text="Society &amp; Culture">
@@ -45,6 +69,16 @@
     <itunes:name>Jack Smith</itunes:name>
     <itunes:email>news@example.com</itunes:email>
   </itunes:owner>
+
+  <!-- Google Play Podcasts Namespace: Feed Level Tags -->
+  <googleplay:author>Podcast Creator</googleplay:author>
+  <googleplay:description>This is a plain-text description for Google Play Podcasts</googleplay:description>
+  <googleplay:explicit>no</googleplay:explicit>
+  <googleplay:block>no</googleplay:block>
+  <googleplay:image href="https://example.com/images/googleplay-cover.jpg"/>
+  <googleplay:category text="Technology"/>
+  <googleplay:email>podcaster@example.com</googleplay:email>
+  <googleplay:new-feed-url>https://example.com/new-podcast-feed.xml</googleplay:new-feed-url>
 
   <!-- Media Namespace: Feed Level Tags -->
   <media:group>
@@ -159,6 +193,11 @@
   <georss:floor>4</georss:floor>
   <georss:radius>50000</georss:radius>
 
+  <!-- W3C Basic Geo Namespace: Feed Level Tags -->
+  <geo:lat>37.7749</geo:lat>
+  <geo:long>-122.4194</geo:long>
+  <geo:alt>10.5</geo:alt>
+
   <!-- Dublin Core Terms Namespace: Feed Level Tags -->
   <dcterms:abstract>This is an abstract of the feed content</dcterms:abstract>
   <dcterms:accessRights>Public access with attribution required</dcterms:accessRights>
@@ -216,8 +255,34 @@
   <dcterms:type>Text</dcterms:type>
   <dcterms:valid>2025-12-31T23:59:59.000Z</dcterms:valid>
 
+  <!-- Pingback Namespace: Feed Level Tags -->
+  <pingback:to>https://example.com/pingback-service</pingback:to>
+
+  <!-- Admin Namespace: Feed Level Tags -->
+  <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
+  <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+
+  <!-- ccREL Namespace: Feed Level Tags -->
+  <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
+  <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
+  <cc:attributionName>Example Publishing Company</cc:attributionName>
+  <cc:attributionURL>https://example.com/</cc:attributionURL>
+  <cc:useGuidelines>https://example.com/usage-guidelines</cc:useGuidelines>
+  <cc:permits>http://creativecommons.org/ns#Reproduction</cc:permits>
+  <cc:requires>http://creativecommons.org/ns#Attribution</cc:requires>
+  <cc:prohibits>http://creativecommons.org/ns#CommercialUse</cc:prohibits>
+  <cc:jurisdiction>http://creativecommons.org/international/us/</cc:jurisdiction>
+  <cc:legalcode>https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode</cc:legalcode>
+  <cc:deprecatedOn>2025-12-31</cc:deprecatedOn>
+
   <!-- Creative Commons Namespace: Feed Level Tags -->
   <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
+
+  <!-- OpenSearch Namespace: Feed Level Tags -->
+  <opensearch:totalResults>1000</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:Query role="request" searchTerms="quantum computing" startIndex="0" count="10"/>
 
   <!-- YouTube Namespace: Feed Level Tags -->
   <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
@@ -227,6 +292,27 @@
     <id>example-entry</id>
     <link href="https://example.com/posts/understanding-xml-namespaces/comments/1/replies" rel="replies" thr:count="2" thr:updated="2025-05-10T16:45:00Z"/>
     <title>Example Entry</title>
+    <author>
+      <name>H1 Collaboration</name>
+    </author>
+    <author>
+      <name>John Doe</name>
+
+      <!-- arXiv Namespace: Author Level Tags -->
+      <arxiv:affiliation>New Mexico State University</arxiv:affiliation>
+    </author>
+
+    <!-- arXiv Namespace: Entry Level Tags -->
+    <arxiv:comment>23 pages, 8 figures and 4 tables</arxiv:comment>
+    <arxiv:journal_ref>Eur.Phys.J. C31 (2003) 17-29</arxiv:journal_ref>
+    <arxiv:doi>10.1529/biophysj.104.047340</arxiv:doi>
+    <arxiv:primary_category term="hep-ex" scheme="http://arxiv.org/schemas/atom" label="High Energy Physics - Experiment"/>
+
+    <!-- Atom Publishing Protocol Namespace: Entry Level Tags -->
+    <app:edited>2024-03-15T14:30:00.000Z</app:edited>
+    <app:control>
+      <app:draft>yes</app:draft>
+    </app:control>
 
     <!-- Dublin Core Namespace: Entry Level Tags -->
     <dc:title>Dublin Core Enhanced Entry Title</dc:title>
@@ -302,6 +388,19 @@
     <dcterms:type>Article</dcterms:type>
     <dcterms:valid>2025-12-31T23:59:59.000Z</dcterms:valid>
 
+    <!-- ccREL Namespace: Entry Level Tags -->
+    <cc:license>https://creativecommons.org/licenses/by/4.0/</cc:license>
+    <cc:morePermissions>https://example.com/additional-permissions</cc:morePermissions>
+    <cc:attributionName>Jack Jackson</cc:attributionName>
+    <cc:attributionURL>https://example.com/authors/jack-jackson</cc:attributionURL>
+    <cc:useGuidelines>https://example.com/article-usage-guidelines</cc:useGuidelines>
+    <cc:permits>http://creativecommons.org/ns#Reproduction</cc:permits>
+    <cc:requires>http://creativecommons.org/ns#Attribution</cc:requires>
+    <cc:prohibits>http://creativecommons.org/ns#CommercialUse</cc:prohibits>
+    <cc:jurisdiction>http://creativecommons.org/international/us/</cc:jurisdiction>
+    <cc:legalcode>https://creativecommons.org/licenses/by/4.0/legalcode</cc:legalcode>
+    <cc:deprecatedOn>2026-12-31</cc:deprecatedOn>
+
     <!-- Slash Namespace: Entry Level Tags -->
     <slash:section>articles</slash:section>
     <slash:department>not-an-ocean-unless-there-are-lobsters</slash:department>
@@ -320,6 +419,13 @@
     <itunes:summary>This is a detailed summary of the episode content and key takeaways</itunes:summary>
     <itunes:subtitle>Episode subtitle with additional context</itunes:subtitle>
     <itunes:keywords>tutorial,example,technology,programming</itunes:keywords>
+
+    <!-- Google Play Podcasts Namespace: Entry Level Tags -->
+    <googleplay:author>Episode Author</googleplay:author>
+    <googleplay:description>Plain-text episode description for Google Play Podcasts</googleplay:description>
+    <googleplay:explicit>clean</googleplay:explicit>
+    <googleplay:block>no</googleplay:block>
+    <googleplay:image href="https://example.com/images/episode-googleplay.jpg"/>
 
     <!-- Podlove Simple Chapters Namespace: Entry Level Tags -->
     <psc:chapters>
@@ -431,6 +537,11 @@
     <media:price type="package" info="full access" price="9.99" currency="USD"/>
     <media:price type="subscription" info="monthly" price="4.99" currency="USD"/>
 
+    <!-- W3C Basic Geo Namespace: Entry Level Tags -->
+    <geo:lat>37.8199</geo:lat>
+    <geo:long>-122.4783</geo:long>
+    <geo:alt>67.0</geo:alt>
+
     <!-- GeoRSS-Simple Namespace: Entry Level Tags -->
     <georss:point>37.78 -122.42</georss:point>
     <georss:line>37.78 -122.42 37.42 -122.1 37.86 -122.27</georss:line>
@@ -451,6 +562,15 @@
     <!-- Well Formed Web CommentAPI Namespace: Entry Level Tags -->
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
     <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
+
+    <!-- Pingback Namespace: Entry Level Tags -->
+    <pingback:server>https://example.com/xmlrpc.php</pingback:server>
+    <pingback:target>https://referenced-blog.com/article</pingback:target>
+
+    <!-- Trackback Namespace: Entry Level Tags -->
+    <trackback:ping>https://example.com/trackback/123</trackback:ping>
+    <trackback:about>https://blog1.com/trackback/456</trackback:about>
+    <trackback:about>https://blog2.com/trackback/789</trackback:about>
 
     <!-- Creative Commons Namespace: Entry Level Tags -->
     <creativeCommons:license>http://creativecommons.org/licenses/by-sa/4.0/</creativeCommons:license>

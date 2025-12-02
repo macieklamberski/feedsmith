@@ -812,8 +812,8 @@ describe('parseItem', () => {
     const expected = {
       title: 'Example Entry',
       dc: {
-        creator: 'John Doe',
         creators: ['John Doe'],
+        creator: 'John Doe',
       },
     }
 
@@ -864,10 +864,9 @@ describe('parseItem', () => {
     const expected = {
       title: 'Example Entry',
       dcterms: {
-        createds: ['2023-02-01T00:00:00Z'],
         licenses: ['MIT License'],
-        created: '2023-02-01T00:00:00Z',
         license: 'MIT License',
+        created: '2023-02-01T00:00:00Z',
       },
     }
 
@@ -1397,8 +1396,8 @@ describe('parseFeed', () => {
       title: 'Feed Title',
       link: 'https://example.com',
       dc: {
-        creator: 'John Doe',
         creators: ['John Doe'],
+        creator: 'John Doe',
       },
     }
 
@@ -1431,10 +1430,9 @@ describe('parseFeed', () => {
       title: 'Example Feed',
       link: 'https://example.com',
       dcterms: {
-        createds: ['2023-01-01T00:00:00Z'],
         licenses: ['Creative Commons Attribution 4.0'],
-        created: '2023-01-01T00:00:00Z',
         license: 'Creative Commons Attribution 4.0',
+        created: '2023-01-01T00:00:00Z',
       },
     }
 
@@ -1524,6 +1522,29 @@ describe('parseFeed', () => {
       sourceNs: {
         accounts: [{ service: 'twitter', value: 'johndoe' }],
         blogroll: 'https://example.com/blogroll.opml',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle admin namespace', () => {
+    const value = {
+      title: { '#text': 'Admin Feed' },
+      link: { '#text': 'https://example.com' },
+      'admin:errorreportsto': {
+        '@rdf:resource': 'mailto:webmaster@example.com',
+      },
+      'admin:generatoragent': {
+        '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+      },
+    }
+    const expected = {
+      title: 'Admin Feed',
+      link: 'https://example.com',
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
       },
     }
 

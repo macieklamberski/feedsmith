@@ -22,6 +22,89 @@ describe('generatePerson', () => {
     expect(generatePerson(value)).toEqual(expected)
   })
 
+  it('should generate person with both name and email', () => {
+    const value = {
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+    }
+    const expected = 'john.doe@example.com (John Doe)'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should generate person with only name', () => {
+    const value = {
+      name: 'John Doe',
+    }
+    const expected = 'John Doe'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should generate person with only email', () => {
+    const value = {
+      email: 'john.doe@example.com',
+    }
+    const expected = 'john.doe@example.com'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generatePerson(value)).toBeUndefined()
+  })
+
+  it('should handle object with empty strings', () => {
+    const value = {
+      name: '',
+      email: '',
+    }
+    const expected = undefined
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should trim whitespace around name and email', () => {
+    const value = {
+      name: '  John Doe  ',
+      email: '  john@example.com  ',
+    }
+    const expected = 'john@example.com (John Doe)'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace-only name with valid email', () => {
+    const value = {
+      name: '   ',
+      email: 'john@example.com',
+    }
+    const expected = 'john@example.com'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace-only email with valid name', () => {
+    const value = {
+      name: 'John Doe',
+      email: '   ',
+    }
+    const expected = 'John Doe'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace-only for both fields', () => {
+    const value = {
+      name: '   ',
+      email: '  ',
+    }
+
+    expect(generatePerson(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs gracefully', () => {
     expect(generatePerson(undefined)).toBeUndefined()
   })
@@ -713,6 +796,25 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with geo namespace properties', () => {
+    const value = {
+      title: 'Example Location',
+      geo: {
+        lat: 37.8199,
+        long: -122.4783,
+        alt: 67.0,
+      },
+    }
+    const expected = {
+      title: 'Example Location',
+      'geo:lat': 37.8199,
+      'geo:long': -122.4783,
+      'geo:alt': 67,
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with wfw namespace properties', () => {
     const value = {
       title: 'Item with wfw namespace',
@@ -725,6 +827,40 @@ describe('generateItem', () => {
       title: 'Item with wfw namespace',
       'wfw:comment': 'https://example.com/comment',
       'wfw:commentRss': 'https://example.com/comments/feed',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should generate item with pingback namespace properties', () => {
+    const value = {
+      title: 'Item with pingback namespace',
+      pingback: {
+        server: 'https://example.com/xmlrpc.php',
+        target: 'https://referenced-blog.com/article',
+      },
+    }
+    const expected = {
+      title: 'Item with pingback namespace',
+      'pingback:server': 'https://example.com/xmlrpc.php',
+      'pingback:target': 'https://referenced-blog.com/article',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should generate item with trackback namespace properties', () => {
+    const value = {
+      title: 'Item with trackback namespace',
+      trackback: {
+        ping: 'https://example.com/trackback/123',
+        abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      },
+    }
+    const expected = {
+      title: 'Item with trackback namespace',
+      'trackback:ping': 'https://example.com/trackback/123',
+      'trackback:about': ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -749,6 +885,23 @@ describe('generateItem', () => {
       ],
       'source:localTime': '2024-01-15 10:30:00',
       'source:linkFull': 'https://example.com/full-article',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should generate item with ccREL namespace properties', () => {
+    const value = {
+      title: 'Item with ccREL namespace',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+        morePermissions: 'https://example.com/additional-permissions',
+      },
+    }
+    const expected = {
+      title: 'Item with ccREL namespace',
+      'cc:license': 'https://creativecommons.org/licenses/by/4.0/',
+      'cc:morePermissions': 'https://example.com/additional-permissions',
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -791,7 +944,7 @@ describe('generateItem', () => {
         poster: {
           url: 'https://example.com/poster.jpg',
         },
-        isHd: 'yes',
+        isHd: true,
       },
     }
     const expected = {
@@ -1225,6 +1378,29 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate pingback namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with pingback namespace',
+      description: 'A feed with Pingback service endpoint',
+      pingback: {
+        to: 'https://example.com/pingback-service',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:pingback': 'http://madskills.com/public/xml/rss/module/pingback/',
+        channel: {
+          title: 'Feed with pingback namespace',
+          description: 'A feed with Pingback service endpoint',
+          'pingback:to': 'https://example.com/pingback-service',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate source namespace properties and attributes for feed', () => {
     const value = {
       title: 'Feed with source namespace',
@@ -1248,6 +1424,58 @@ describe('generateFeed', () => {
           ],
           'source:likes': { '@server': 'http://likes.example.com/' },
           'source:blogroll': 'https://example.com/blogroll.opml',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate blogChannel namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with blogChannel namespace',
+      description: 'A feed with blogChannel properties',
+      blogChannel: {
+        blogRoll: 'http://example.com/blogroll.opml',
+        blink: 'http://recommended-site.com/',
+        mySubscriptions: 'http://example.com/subscriptions.opml',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:blogChannel': 'http://backend.userland.com/blogChannelModule',
+        channel: {
+          title: 'Feed with blogChannel namespace',
+          description: 'A feed with blogChannel properties',
+          'blogChannel:blogRoll': 'http://example.com/blogroll.opml',
+          'blogChannel:blink': 'http://recommended-site.com/',
+          'blogChannel:mySubscriptions': 'http://example.com/subscriptions.opml',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate ccREL namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with ccREL namespace',
+      description: 'A feed with ccREL license',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+        morePermissions: 'https://example.com/commercial-license',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:cc': 'http://creativecommons.org/ns#',
+        channel: {
+          title: 'Feed with ccREL namespace',
+          description: 'A feed with ccREL license',
+          'cc:license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+          'cc:morePermissions': 'https://example.com/commercial-license',
         },
       },
     }
@@ -1303,6 +1531,75 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate admin namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with admin namespace',
+      description: 'A feed with admin properties',
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:admin': 'http://webns.net/mvcb/',
+        '@xmlns:rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        channel: {
+          title: 'Feed with admin namespace',
+          description: 'A feed with admin properties',
+          'admin:errorReportsTo': {
+            '@rdf:resource': 'mailto:webmaster@example.com',
+          },
+          'admin:generatorAgent': {
+            '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+          },
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate opensearch namespace properties for feed', () => {
+    const value = {
+      title: 'Search Results',
+      description: 'Search results feed',
+      opensearch: {
+        totalResults: 1000,
+        startIndex: 21,
+        itemsPerPage: 10,
+        queries: [
+          {
+            role: 'request',
+            searchTerms: 'quantum computing',
+          },
+        ],
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:opensearch': 'http://a9.com/-/spec/opensearch/1.1/',
+        channel: {
+          title: 'Search Results',
+          description: 'Search results feed',
+          'opensearch:totalResults': 1000,
+          'opensearch:startIndex': 21,
+          'opensearch:itemsPerPage': 10,
+          'opensearch:Query': [
+            {
+              '@role': 'request',
+              '@searchTerms': 'quantum computing',
+            },
+          ],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate rawvoice namespace properties and attributes for feed', () => {
     const value = {
       title: 'Feed with RawVoice namespace',
@@ -1348,6 +1645,49 @@ describe('generateFeed', () => {
           title: 'Feed with Spotify namespace',
           description: 'A feed with Spotify properties',
           'spotify:countryOfOrigin': 'US',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with geo namespace properties', () => {
+    const value = {
+      title: 'Example City Feed',
+      description: 'Feed with geographic coordinates',
+      geo: {
+        lat: 37.7749,
+        long: -122.4194,
+      },
+      items: [
+        {
+          title: 'Example Location',
+          geo: {
+            lat: 37.8199,
+            long: -122.4783,
+            alt: 67.0,
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:geo': 'http://www.w3.org/2003/01/geo/wgs84_pos#',
+        channel: {
+          title: 'Example City Feed',
+          description: 'Feed with geographic coordinates',
+          'geo:lat': 37.7749,
+          'geo:long': -122.4194,
+          item: [
+            {
+              title: 'Example Location',
+              'geo:lat': 37.8199,
+              'geo:long': -122.4783,
+              'geo:alt': 67,
+            },
+          ],
         },
       },
     }

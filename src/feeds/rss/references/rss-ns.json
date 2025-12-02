@@ -9,6 +9,19 @@
       "content": {
         "encoded": "This is an example of content."
       },
+      "cc": {
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "morePermissions": "https://example.com/additional-permissions",
+        "attributionName": "Jack Jackson",
+        "attributionURL": "https://example.com/authors/jack-jackson",
+        "useGuidelines": "https://example.com/article-usage-guidelines",
+        "permits": "http://creativecommons.org/ns#Reproduction",
+        "requires": "http://creativecommons.org/ns#Attribution",
+        "prohibits": "http://creativecommons.org/ns#CommercialUse",
+        "jurisdiction": "http://creativecommons.org/international/us/",
+        "legalcode": "https://creativecommons.org/licenses/by/4.0/legalcode",
+        "deprecatedOn": "2026-12-31"
+      },
       "dc": {
         "titles": ["Dublin Core Enhanced Item Title"],
         "creators": ["Jack Jackson"],
@@ -23,8 +36,6 @@
         "sources": ["https://example.org/item-source"],
         "languages": ["en-US"],
         "relations": ["https://example.org/related-article"],
-        "coverages": ["United States"],
-        "rights": ["Copyright 2025 Example News Organization"],
         "title": "Dublin Core Enhanced Item Title",
         "creator": "Jack Jackson",
         "subject": "Article, Tutorial, Example",
@@ -38,29 +49,23 @@
         "source": "https://example.org/item-source",
         "language": "en-US",
         "relation": "https://example.org/related-article",
-        "coverage": "United States"
+        "coverage": "United States",
+        "rights": "Copyright 2025 Example News Organization"
       },
       "dcterms": {
         "abstracts": ["This article explores advanced concepts in technology"],
-        "accessRights": ["Public access with attribution required"],
         "accrualMethods": ["Single publication"],
         "accrualPeriodicities": ["One-time"],
         "accrualPolicies": ["Editorial review required"],
         "alternatives": ["Alternative Item Title"],
         "audiences": ["Technical professionals"],
-        "availables": ["2022-01-01T12:00:00.000Z"],
         "bibliographicCitations": [
           "Smith, J. (2022). Example Item. Retrieved from https://example.org/item/1"
         ],
-        "conformsTos": ["HTML5 standard"],
         "contributors": ["Assistant Editor Mike Thompson"],
         "coverages": ["United States technology sector"],
-        "createds": ["2022-01-01T12:00:00.000Z"],
         "creators": ["Jack Jackson"],
         "dates": ["2022-01-01T12:00:00.000Z"],
-        "dateAccepteds": ["2022-01-01T12:00:00.000Z"],
-        "dateCopyrighteds": ["2022-01-01T12:00:00.000Z"],
-        "dateSubmitteds": ["2022-01-01T12:00:00.000Z"],
         "descriptions": ["Detailed description of the example item content and its significance"],
         "educationLevels": ["Advanced"],
         "extents": ["Approximately 2500 words"],
@@ -70,35 +75,24 @@
         "hasVersions": ["1.1"],
         "identifiers": ["urn:uuid:item-98765432-9876-9876-9876-987654321def"],
         "instructionalMethods": ["Step-by-step tutorial"],
-        "isFormatOfs": ["https://example.org/item-source"],
-        "isPartOfs": ["Example Article Series"],
-        "isReferencedBys": ["https://example.org/item/1/citations"],
-        "isReplacedBys": ["https://example.org/item/1/updated"],
-        "isRequiredBys": ["https://example.org/item/1/prerequisites"],
-        "issueds": ["2022-01-01T12:00:00.000Z"],
-        "isVersionOfs": ["https://example.org/item/1/original"],
         "languages": ["en-US"],
         "licenses": ["Creative Commons Attribution 4.0"],
         "mediators": ["Editorial Team"],
         "mediums": ["Digital"],
-        "modifieds": ["2022-06-01T12:00:00.000Z"],
         "provenances": ["Originally published by Example News Organization"],
         "publishers": ["Example News Organization"],
-        "references": ["https://example.org/item/1/references"],
         "relations": ["https://example.org/related-article"],
-        "replaces": ["https://example.org/item/1/previous"],
-        "requires": ["Basic understanding of web technologies"],
-        "rights": ["Copyright 2025 Example News Organization"],
         "rightsHolders": ["Example News Organization"],
         "sources": ["https://example.org/item-source"],
         "spatials": ["United States"],
         "subjects": ["Article, Tutorial, Example"],
-        "tableOfContents": ["Introduction, Main Content, Conclusion"],
         "temporals": ["2022"],
         "titles": ["Dublin Core Terms Enhanced Item Title"],
         "types": ["Article"],
-        "valids": ["2025-12-31T23:59:59.000Z"],
+        "created": "2022-01-01T12:00:00.000Z",
+        "license": "Creative Commons Attribution 4.0",
         "abstract": "This article explores advanced concepts in technology",
+        "accessRights": "Public access with attribution required",
         "accrualMethod": "Single publication",
         "accrualPeriodicity": "One-time",
         "accrualPolicy": "Editorial review required",
@@ -109,7 +103,6 @@
         "conformsTo": "HTML5 standard",
         "contributor": "Assistant Editor Mike Thompson",
         "coverage": "United States technology sector",
-        "created": "2022-01-01T12:00:00.000Z",
         "creator": "Jack Jackson",
         "date": "2022-01-01T12:00:00.000Z",
         "dateAccepted": "2022-01-01T12:00:00.000Z",
@@ -132,17 +125,21 @@
         "issued": "2022-01-01T12:00:00.000Z",
         "isVersionOf": "https://example.org/item/1/original",
         "language": "en-US",
-        "license": "Creative Commons Attribution 4.0",
         "mediator": "Editorial Team",
         "medium": "Digital",
         "modified": "2022-06-01T12:00:00.000Z",
         "provenance": "Originally published by Example News Organization",
         "publisher": "Example News Organization",
+        "references": "https://example.org/item/1/references",
         "relation": "https://example.org/related-article",
+        "replaces": "https://example.org/item/1/previous",
+        "requires": "Basic understanding of web technologies",
+        "rights": "Copyright 2025 Example News Organization",
         "rightsHolder": "Example News Organization",
         "source": "https://example.org/item-source",
         "spatial": "United States",
         "subject": "Article, Tutorial, Example",
+        "tableOfContents": "Introduction, Main Content, Conclusion",
         "temporal": "2022",
         "title": "Dublin Core Terms Enhanced Item Title",
         "type": "Article",
@@ -153,6 +150,15 @@
         "department": "not-an-ocean-unless-there-are-lobsters",
         "comments": 177,
         "hitParade": [177, 155, 105, 33, 6, 3, 0]
+      },
+      "googleplay": {
+        "author": "Episode Guest Speaker",
+        "description": "A detailed episode about advanced programming techniques",
+        "explicit": false,
+        "block": false,
+        "image": {
+          "href": "https://example.com/images/episode-googleplay-cover.jpg"
+        }
       },
       "itunes": {
         "duration": 1800,
@@ -928,6 +934,11 @@
         "floor": 4,
         "radius": 50000
       },
+      "geo": {
+        "lat": 37.8199,
+        "long": -122.4783,
+        "alt": 67.0
+      },
       "thr": {
         "total": 100,
         "inReplyTos": [
@@ -959,6 +970,14 @@
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
       },
+      "pingback": {
+        "server": "https://example.com/xmlrpc.php",
+        "target": "https://referenced-blog.com/article"
+      },
+      "trackback": {
+        "ping": "https://example.com/trackback/123",
+        "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
+      },
       "sourceNs": {
         "markdown": "# Understanding XML Namespaces - This article explores the power and flexibility of XML namespaces in modern web syndication.",
         "outlines": [
@@ -975,7 +994,7 @@
         "poster": {
           "url": "https://example.com/episode-poster.jpg"
         },
-        "isHd": "yes",
+        "isHd": true,
         "embed": "<iframe src=\"https://player.example.com/video/12345\" width=\"640\" height=\"360\" frameborder=\"0\" allowfullscreen></iframe>",
         "webm": {
           "src": "https://example.com/video.webm",
@@ -1006,6 +1025,19 @@
       }
     }
   ],
+  "cc": {
+    "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "morePermissions": "https://example.com/commercial-license",
+    "attributionName": "Example Publishing Company",
+    "attributionURL": "https://example.com/",
+    "useGuidelines": "https://example.com/usage-guidelines",
+    "permits": "http://creativecommons.org/ns#Reproduction",
+    "requires": "http://creativecommons.org/ns#Attribution",
+    "prohibits": "http://creativecommons.org/ns#CommercialUse",
+    "jurisdiction": "http://creativecommons.org/international/us/",
+    "legalcode": "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode",
+    "deprecatedOn": "2025-12-31"
+  },
   "dc": {
     "titles": ["Dublin Core Enhanced Feed Title"],
     "creators": ["John Doe"],
@@ -1020,8 +1052,6 @@
     "sources": ["https://example.org/original-source"],
     "languages": ["en-US"],
     "relations": ["https://example.org/related-content"],
-    "coverages": ["Global"],
-    "rights": ["Copyright 2025 Example Publishing Company"],
     "title": "Dublin Core Enhanced Feed Title",
     "creator": "John Doe",
     "subject": "Technology, Programming, Web Development",
@@ -1035,27 +1065,21 @@
     "source": "https://example.org/original-source",
     "language": "en-US",
     "relation": "https://example.org/related-content",
-    "coverage": "Global"
+    "coverage": "Global",
+    "rights": "Copyright 2025 Example Publishing Company"
   },
   "dcterms": {
     "abstracts": ["This is an abstract of the feed content"],
-    "accessRights": ["Public access with attribution required"],
     "accrualMethods": ["Regular updates"],
     "accrualPeriodicities": ["Daily"],
     "accrualPolicies": ["Content added based on editorial calendar"],
     "alternatives": ["Alternative Feed Title"],
     "audiences": ["General technology audience"],
-    "availables": ["2022-01-01T12:00:00.000Z"],
     "bibliographicCitations": ["Example Feed. (2022). Retrieved from https://example.org"],
-    "conformsTos": ["RSS 2.0 Specification"],
     "contributors": ["Jane Smith"],
     "coverages": ["Global technology topics"],
-    "createds": ["2022-01-01T12:00:00.000Z"],
     "creators": ["John Doe"],
     "dates": ["2022-01-01T12:00:00.000Z"],
-    "dateAccepteds": ["2022-01-01T12:00:00.000Z"],
-    "dateCopyrighteds": ["2022-01-01T12:00:00.000Z"],
-    "dateSubmitteds": ["2022-01-01T12:00:00.000Z"],
     "descriptions": ["Detailed description of the feed content and purpose"],
     "educationLevels": ["Intermediate to advanced"],
     "extents": ["Approximately 1000 words per article"],
@@ -1065,35 +1089,24 @@
     "hasVersions": ["2.0"],
     "identifiers": ["urn:uuid:feed-12345678-1234-1234-1234-123456789abc"],
     "instructionalMethods": ["Practical examples and tutorials"],
-    "isFormatOfs": ["https://example.org/original-content"],
-    "isPartOfs": ["Example Media Network"],
-    "isReferencedBys": ["https://example.org/references"],
-    "isReplacedBys": ["https://example.org/new-feed"],
-    "isRequiredBys": ["https://example.org/dependent-feeds"],
-    "issueds": ["2022-01-01T12:00:00.000Z"],
-    "isVersionOfs": ["https://example.org/original-feed"],
     "languages": ["en-US"],
     "licenses": ["Creative Commons Attribution 4.0"],
     "mediators": ["Content Management System"],
     "mediums": ["Digital"],
-    "modifieds": ["2023-01-01T12:00:00.000Z"],
     "provenances": ["Originally created by Example Publishing Company"],
     "publishers": ["Example Publishing Company"],
-    "references": ["https://example.org/referenced-sources"],
     "relations": ["https://example.org/related-feeds"],
-    "replaces": ["https://example.org/old-feed"],
-    "requires": ["RSS 2.0 compatible reader"],
-    "rights": ["Copyright 2025 Example Publishing Company"],
     "rightsHolders": ["Example Publishing Company"],
     "sources": ["https://example.org/original-source"],
     "spatials": ["Global"],
     "subjects": ["Technology, Programming, Web Development"],
-    "tableOfContents": ["Latest articles, tutorials, and news"],
     "temporals": ["2022-present"],
     "titles": ["Dublin Core Terms Enhanced Feed Title"],
     "types": ["Text"],
-    "valids": ["2025-12-31T23:59:59.000Z"],
+    "created": "2022-01-01T12:00:00.000Z",
+    "license": "Creative Commons Attribution 4.0",
     "abstract": "This is an abstract of the feed content",
+    "accessRights": "Public access with attribution required",
     "accrualMethod": "Regular updates",
     "accrualPeriodicity": "Daily",
     "accrualPolicy": "Content added based on editorial calendar",
@@ -1104,7 +1117,6 @@
     "conformsTo": "RSS 2.0 Specification",
     "contributor": "Jane Smith",
     "coverage": "Global technology topics",
-    "created": "2022-01-01T12:00:00.000Z",
     "creator": "John Doe",
     "date": "2022-01-01T12:00:00.000Z",
     "dateAccepted": "2022-01-01T12:00:00.000Z",
@@ -1127,17 +1139,21 @@
     "issued": "2022-01-01T12:00:00.000Z",
     "isVersionOf": "https://example.org/original-feed",
     "language": "en-US",
-    "license": "Creative Commons Attribution 4.0",
     "mediator": "Content Management System",
     "medium": "Digital",
     "modified": "2023-01-01T12:00:00.000Z",
     "provenance": "Originally created by Example Publishing Company",
     "publisher": "Example Publishing Company",
+    "references": "https://example.org/referenced-sources",
     "relation": "https://example.org/related-feeds",
+    "replaces": "https://example.org/old-feed",
+    "requires": "RSS 2.0 compatible reader",
+    "rights": "Copyright 2025 Example Publishing Company",
     "rightsHolder": "Example Publishing Company",
     "source": "https://example.org/original-source",
     "spatial": "Global",
     "subject": "Technology, Programming, Web Development",
+    "tableOfContents": "Latest articles, tutorials, and news",
     "temporal": "2022-present",
     "title": "Dublin Core Terms Enhanced Feed Title",
     "type": "Text",
@@ -1147,6 +1163,18 @@
     "updatePeriod": "hourly",
     "updateFrequency": 1,
     "updateBase": "2000-01-01T12:00:00.000Z"
+  },
+  "googleplay": {
+    "author": "Example Podcast Network",
+    "description": "A comprehensive podcast about technology and programming",
+    "explicit": false,
+    "block": false,
+    "image": {
+      "href": "https://example.com/images/googleplay-cover.jpg"
+    },
+    "newFeedUrl": "https://example.com/new-feed.xml",
+    "email": "contact@example.com",
+    "categories": ["Technology", "Education"]
   },
   "itunes": {
     "categories": [
@@ -1910,6 +1938,18 @@
     "floor": 4,
     "radius": 50000
   },
+  "geo": {
+    "lat": 37.7749,
+    "long": -122.4194,
+    "alt": 10.5
+  },
+  "admin": {
+    "errorReportsTo": "mailto:webmaster@example.com",
+    "generatorAgent": "http://www.movabletype.org/?v=3.2"
+  },
+  "pingback": {
+    "to": "https://example.com/pingback-service"
+  },
   "sourceNs": {
     "accounts": [
       { "service": "twitter", "value": "johndoe" },
@@ -1930,6 +1970,11 @@
     "blogroll": "https://blog.example.com/blogroll.opml",
     "self": "http://example.com/feed.xml"
   },
+  "blogChannel": {
+    "blogRoll": "http://example.com/blogroll.opml",
+    "blink": "http://recommended-site.com/",
+    "mySubscriptions": "http://example.com/subscriptions.opml"
+  },
   "creativeCommons": {
     "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
   },
@@ -1939,6 +1984,19 @@
     "locale": "en",
     "podcastId": "1234567890",
     "cssFile": "https://example.com/custom-feed-styles.css"
+  },
+  "opensearch": {
+    "totalResults": 1000,
+    "startIndex": 21,
+    "itemsPerPage": 10,
+    "queries": [
+      {
+        "role": "request",
+        "searchTerms": "quantum computing",
+        "startIndex": 21,
+        "count": 10
+      }
+    ]
   },
   "rawvoice": {
     "rating": {
@@ -1959,7 +2017,7 @@
       "schedule": "Mon, 15 Jan 2024 10:00:00 GMT",
       "duration": "3600"
     },
-    "mycast": "yes",
+    "mycast": true,
     "subscribe": {
       "feed": "https://example.com/feed/podcast/",
       "itunes": "https://itunes.apple.com/us/podcast/example-podcast/id123456789",

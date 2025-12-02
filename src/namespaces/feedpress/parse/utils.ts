@@ -6,9 +6,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { FeedpressNs } from '../common/types.js'
+import type { FeedPressNs } from '../common/types.js'
 
-export const retrieveFeed: ParsePartialUtil<FeedpressNs.Feed> = (value) => {
+export const retrieveFeed: ParsePartialUtil<FeedPressNs.Feed> = (value) => {
   if (!isObject(value)) {
     return
   }

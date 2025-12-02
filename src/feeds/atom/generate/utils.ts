@@ -11,15 +11,32 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
-import { generateItemOrFeed as generateCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
+import { generateFeed as generateAdminFeed } from '../../../namespaces/admin/generate/utils.js'
+import { generateEntry as generateAppEntry } from '../../../namespaces/app/generate/utils.js'
+import {
+  generateAuthor as generateArxivAuthor,
+  generateEntry as generateArxivEntry,
+} from '../../../namespaces/arxiv/generate/utils.js'
+import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
+import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
+import { generateItemOrFeed as generateGeoItemOrFeed } from '../../../namespaces/geo/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
+import {
+  generateFeed as generateGooglePlayFeed,
+  generateItem as generateGooglePlayItem,
+} from '../../../namespaces/googleplay/generate/utils.js'
 import {
   generateFeed as generateItunesFeed,
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
+import { generateFeed as generateOpenSearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
+import {
+  generateFeed as generatePingbackFeed,
+  generateItem as generatePingbackItem,
+} from '../../../namespaces/pingback/generate/utils.js'
 import { generateItem as generatePscItem } from '../../../namespaces/psc/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
@@ -27,6 +44,7 @@ import {
   generateItem as generateThrItem,
   generateLink as generateThrLink,
 } from '../../../namespaces/thr/generate/utils.js'
+import { generateItem as generateTrackbackItem } from '../../../namespaces/trackback/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
 import {
   generateFeed as generateYtFeed,
@@ -70,6 +88,7 @@ export const generatePerson: GenerateUtil<Atom.Person> = (person, options) => {
     [key('name')]: generateCdataString(person.name),
     [key('uri')]: generateCdataString(person.uri),
     [key('email')]: generateCdataString(person.email),
+    ...generateArxivAuthor(person.arxiv),
   }
 
   return trimObject(value)
@@ -166,17 +185,24 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
 
   return {
     ...trimmedValue,
+    ...generateAppEntry(entry.app),
+    ...generateArxivEntry(entry.arxiv),
+    ...generateCc(entry.cc),
     ...generateDcItemOrFeed(entry.dc),
     ...generateSlashItem(entry.slash),
     ...generateItunesItem(entry.itunes),
+    ...generateGooglePlayItem(entry.googleplay),
     ...generatePscItem(entry.psc),
     ...generateMediaItemOrFeed(entry.media),
     ...generateGeoRssItemOrFeed(entry.georss),
+    ...generateGeoItemOrFeed(entry.geo),
     ...generateThrItem(entry.thr),
     ...generateDctermsItemOrFeed(entry.dcterms),
-    ...generateCreativecommonsItemOrFeed(entry.creativeCommons),
+    ...generateCreativeCommonsItemOrFeed(entry.creativeCommons),
     ...generateWfwItem(entry.wfw),
     ...generateYtItem(entry.yt),
+    ...generatePingbackItem(entry.pingback),
+    ...generateTrackbackItem(entry.trackback),
   }
 }
 
@@ -228,14 +254,20 @@ export const generateFeed: GenerateUtil<Atom.Feed<DateLike>> = (feed, options) =
 
   const valueFull = {
     ...valueFeed,
+    ...generateCc(feed.cc),
     ...generateDcItemOrFeed(feed.dc),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
+    ...generateGooglePlayFeed(feed.googleplay),
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
+    ...generateGeoItemOrFeed(feed.geo),
     ...generateDctermsItemOrFeed(feed.dcterms),
-    ...generateCreativecommonsItemOrFeed(feed.creativeCommons),
+    ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
+    ...generateOpenSearchFeed(feed.opensearch),
     ...generateYtFeed(feed.yt),
+    ...generateAdminFeed(feed.admin),
+    ...generatePingbackFeed(feed.pingback),
     ...valueEntries,
   }
 

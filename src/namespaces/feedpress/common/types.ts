@@ -1,5 +1,5 @@
 // #region reference
-export namespace FeedpressNs {
+export namespace FeedPressNs {
   export type Feed = {
     link?: string
     newsletterId?: string

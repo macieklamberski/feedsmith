@@ -745,6 +745,122 @@ describe('generateEntry', () => {
     expect(generateEntry(value)).toEqual(expected)
   })
 
+  it('should generate entry with pingback namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Pingback namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      pingback: {
+        server: 'https://example.com/xmlrpc.php',
+        target: 'https://referenced-blog.com/article',
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Pingback namespace',
+      updated: '2023-03-15T12:00:00.000Z',
+      'pingback:server': 'https://example.com/xmlrpc.php',
+      'pingback:target': 'https://referenced-blog.com/article',
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
+  it('should generate feed with pingback namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Pingback namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      pingback: {
+        to: 'https://example.com/pingback-service',
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:pingback': 'http://madskills.com/public/xml/rss/module/pingback/',
+        id: 'https://example.com/feed',
+        title: 'Feed with Pingback namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        'pingback:to': 'https://example.com/pingback-service',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate entry with trackback namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Trackback namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      trackback: {
+        ping: 'https://example.com/trackback/123',
+        abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Trackback namespace',
+      updated: '2023-03-15T12:00:00.000Z',
+      'trackback:ping': 'https://example.com/trackback/123',
+      'trackback:about': ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
+  it('should generate feed with admin namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Admin namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:admin': 'http://webns.net/mvcb/',
+        '@xmlns:rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        id: 'https://example.com/feed',
+        title: 'Feed with Admin namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        'admin:errorReportsTo': {
+          '@rdf:resource': 'mailto:webmaster@example.com',
+        },
+        'admin:generatorAgent': {
+          '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate entry with ccREL namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with ccREL namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+        morePermissions: 'https://example.com/additional-permissions',
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with ccREL namespace',
+      updated: '2023-03-15T12:00:00.000Z',
+      'cc:license': 'https://creativecommons.org/licenses/by/4.0/',
+      'cc:morePermissions': 'https://example.com/additional-permissions',
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
   it('should generate entry with psc namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
@@ -1005,7 +1121,7 @@ describe('generateFeed', () => {
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creator: 'Jane Smith',
-        rights: ['Copyright 2023'],
+        rights: 'Copyright 2023',
       },
     }
     const expected = {
@@ -1016,7 +1132,7 @@ describe('generateFeed', () => {
         title: 'Feed with namespaces',
         updated: '2023-03-15T12:00:00.000Z',
         'dc:creator': 'Jane Smith',
-        'dc:rights': ['Copyright 2023'],
+        'dc:rights': 'Copyright 2023',
       },
     }
 
@@ -1308,6 +1424,51 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with geo namespace properties', () => {
+    const value = {
+      id: 'http://example.com/feed',
+      title: 'Locations Feed',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      geo: {
+        lat: 37.7749,
+        long: -122.4194,
+      },
+      entries: [
+        {
+          id: 'http://example.com/entry/1',
+          title: 'Example Place',
+          updated: new Date('2024-01-10T12:00:00Z'),
+          geo: {
+            lat: 37.808,
+            long: -122.4177,
+          },
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:geo': 'http://www.w3.org/2003/01/geo/wgs84_pos#',
+        id: 'http://example.com/feed',
+        title: 'Locations Feed',
+        updated: '2024-01-10T12:00:00.000Z',
+        'geo:lat': 37.7749,
+        'geo:long': -122.4194,
+        entry: [
+          {
+            id: 'http://example.com/entry/1',
+            title: 'Example Place',
+            updated: '2024-01-10T12:00:00.000Z',
+            'geo:lat': 37.808,
+            'geo:long': -122.4177,
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with dcterms namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
@@ -1327,6 +1488,31 @@ describe('generateFeed', () => {
         updated: '2023-03-15T12:00:00.000Z',
         'dcterms:created': '2023-01-01T00:00:00.000Z',
         'dcterms:license': 'Creative Commons Attribution 4.0',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with ccREL namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with ccREL namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      cc: {
+        license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+        morePermissions: 'https://example.com/commercial-license',
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:cc': 'http://creativecommons.org/ns#',
+        id: 'https://example.com/feed',
+        title: 'Feed with ccREL namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        'cc:license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+        'cc:morePermissions': 'https://example.com/commercial-license',
       },
     }
 
@@ -1356,6 +1542,108 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with opensearch namespace properties', () => {
+    const value = {
+      id: 'http://example.com/search',
+      title: 'Search Results',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      opensearch: {
+        totalResults: 1000,
+        startIndex: 21,
+        itemsPerPage: 10,
+        queries: [
+          {
+            role: 'request',
+            searchTerms: 'quantum computing',
+          },
+        ],
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:opensearch': 'http://a9.com/-/spec/opensearch/1.1/',
+        id: 'http://example.com/search',
+        title: 'Search Results',
+        updated: '2024-01-10T12:00:00.000Z',
+        'opensearch:totalResults': 1000,
+        'opensearch:startIndex': 21,
+        'opensearch:itemsPerPage': 10,
+        'opensearch:Query': [
+          {
+            '@role': 'request',
+            '@searchTerms': 'quantum computing',
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with arxiv namespace properties', () => {
+    const value = {
+      id: 'http://arxiv.org/api/query',
+      title: 'arXiv Query Results',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      entries: [
+        {
+          id: 'http://arxiv.org/abs/2403.12345v1',
+          title: 'Example Paper',
+          updated: new Date('2024-03-15T12:00:00Z'),
+          authors: [
+            {
+              name: 'John Doe',
+              arxiv: {
+                affiliation: 'MIT',
+              },
+            },
+          ],
+          arxiv: {
+            comment: '23 pages, 8 figures',
+            doi: '10.1234/example',
+            primaryCategory: {
+              term: 'cs.LG',
+              scheme: 'http://arxiv.org/schemas/atom',
+              label: 'Machine Learning',
+            },
+          },
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:arxiv': 'http://arxiv.org/schemas/atom',
+        id: 'http://arxiv.org/api/query',
+        title: 'arXiv Query Results',
+        updated: '2024-01-10T12:00:00.000Z',
+        entry: [
+          {
+            author: [
+              {
+                name: 'John Doe',
+                'arxiv:affiliation': 'MIT',
+              },
+            ],
+            id: 'http://arxiv.org/abs/2403.12345v1',
+            title: 'Example Paper',
+            updated: '2024-03-15T12:00:00.000Z',
+            'arxiv:comment': '23 pages, 8 figures',
+            'arxiv:doi': '10.1234/example',
+            'arxiv:primary_category': {
+              '@term': 'cs.LG',
+              '@scheme': 'http://arxiv.org/schemas/atom',
+              '@label': 'Machine Learning',
+            },
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with yt namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
@@ -1375,6 +1663,63 @@ describe('generateFeed', () => {
         updated: '2023-03-15T12:00:00.000Z',
         'yt:channelId': 'UC123456789',
         'yt:playlistId': 'PL123456789',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with app namespace properties', () => {
+    const value = {
+      id: 'http://example.com/blog',
+      title: 'My Blog',
+      updated: new Date('2024-03-15T16:00:00Z'),
+      entries: [
+        {
+          id: 'http://example.com/blog/post/1',
+          title: 'Published Post',
+          updated: new Date('2024-03-15T16:00:00Z'),
+          app: {
+            edited: new Date('2024-03-15T14:30:00Z'),
+          },
+        },
+        {
+          id: 'http://example.com/blog/post/2',
+          title: 'Draft Post',
+          updated: new Date('2024-03-15T15:00:00Z'),
+          app: {
+            edited: new Date('2024-03-15T15:00:00Z'),
+            control: {
+              draft: true,
+            },
+          },
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:app': 'http://www.w3.org/2007/app',
+        id: 'http://example.com/blog',
+        title: 'My Blog',
+        updated: '2024-03-15T16:00:00.000Z',
+        entry: [
+          {
+            id: 'http://example.com/blog/post/1',
+            title: 'Published Post',
+            updated: '2024-03-15T16:00:00.000Z',
+            'app:edited': '2024-03-15T14:30:00.000Z',
+          },
+          {
+            id: 'http://example.com/blog/post/2',
+            title: 'Draft Post',
+            updated: '2024-03-15T15:00:00.000Z',
+            'app:edited': '2024-03-15T15:00:00.000Z',
+            'app:control': {
+              'app:draft': 'yes',
+            },
+          },
+        ],
       },
     }
 

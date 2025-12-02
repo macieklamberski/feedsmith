@@ -13,6 +13,13 @@ Universal parser that automatically detects feed format and parses accordingly.
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `content` | `string` | The feed content to parse (XML or JSON) |
+| `options` | `object` | Optional parsing settings |
+
+#### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `maxItems` | `number` | - | Limit the number of items/entries parsed. Use `0` to skip items entirely, useful when only feed metadata is needed |
 
 #### Returns
 `object` - Object containing:
@@ -24,6 +31,12 @@ Universal parser that automatically detects feed format and parses accordingly.
 import { parseFeed } from 'feedsmith'
 
 const { format, feed } = parseFeed(feedContent)
+
+// Limit number of items parsed
+const { format, feed } = parseFeed(feedContent, { maxItems: 5 })
+
+// Parse only feed metadata (skip all items)
+const { format, feed } = parseFeed(feedContent, { maxItems: 0 })
 ```
 
 > [!IMPORTANT]

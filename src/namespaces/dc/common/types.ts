@@ -16,9 +16,6 @@ export namespace DcNs {
     sources?: Array<string>
     languages?: Array<string>
     relations?: Array<string>
-    coverages?: Array<string>
-    rights?: Array<string>
-
     /** @deprecated Use `titles` (array) instead. Dublin Core fields are repeatable. */
     title?: string
     /** @deprecated Use `creators` (array) instead. Dublin Core fields are repeatable. */
@@ -45,8 +42,10 @@ export namespace DcNs {
     language?: string
     /** @deprecated Use `relations` (array) instead. Dublin Core fields are repeatable. */
     relation?: string
-    /** @deprecated Use `coverages` (array) instead. Dublin Core fields are repeatable. */
+    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core fields are repeatable. */
     coverage?: string
+    /** @deprecated This field type will be changed to array in the next major version of the package. Dublin Core fields are repeatable. */
+    rights?: string
   }
 }
 // #endregion reference

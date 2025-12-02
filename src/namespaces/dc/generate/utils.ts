@@ -67,12 +67,8 @@ export const generateItemOrFeed: GenerateUtil<DcNs.ItemOrFeed<DateLike>> = (item
       itemOrFeed.relation,
       generateCdataString,
     ),
-    'dc:coverage': generateArrayOrSingular(
-      itemOrFeed.coverages,
-      itemOrFeed.coverage,
-      generateCdataString,
-    ),
-    'dc:rights': generateArrayOrSingular(itemOrFeed.rights, undefined, generateCdataString),
+    'dc:coverage': generateCdataString(itemOrFeed.coverage),
+    'dc:rights': generateCdataString(itemOrFeed.rights),
   }
 
   return trimObject(value)

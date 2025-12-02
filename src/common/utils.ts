@@ -36,6 +36,27 @@ export const retrieveText = (value: Unreliable): Unreliable => {
   return value?.['#text'] ?? value
 }
 
+export const retrieveRdfResourceOrText = <T>(
+  value: Unreliable,
+  parse: (value: Unreliable) => T | undefined,
+): T | undefined => {
+  if (isObject(value)) {
+    const rdfResource = parse(value['@rdf:resource'])
+
+    if (isPresent(rdfResource)) {
+      return rdfResource
+    }
+
+    const resource = parse(value['@resource'])
+
+    if (isPresent(resource)) {
+      return resource
+    }
+  }
+
+  return parse(retrieveText(value))
+}
+
 export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<T> | undefined => {
   let result: Partial<T> | undefined
 
@@ -277,18 +298,29 @@ export const parseArray: ParseExactUtil<Array<Unreliable>> = (value) => {
 export const parseArrayOf = <R>(
   value: Unreliable,
   parse: ParseExactUtil<R>,
+  limit?: number,
 ): Array<R> | undefined => {
-  const array = parseArray(value)
+  let array = parseArray(value)
+
+  if (!array && isPresent(value)) {
+    array = [value]
+  }
 
   if (array) {
-    return trimArray(array, parse)
+    return trimArray(limitArray(array, limit), parse)
+  }
+}
+
+export const limitArray = <T>(array: Array<T>, limit: number | undefined): Array<T> => {
+  if (limit === undefined || limit < 0) {
+    return array
   }
 
-  const parsed = parse(value)
-
-  if (parsed) {
-    return [parsed]
+  if (limit === 0) {
+    return []
   }
+
+  return array.slice(0, limit)
 }
 
 export const parseSingular = <T>(value: T | Array<T>): T => {
@@ -465,7 +497,7 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
 
         seenKeys.add(key)
 
-        const keyWithoutAt = key.indexOf('@') === 0 ? key.slice(1) : key
+        const keyWithoutAt = key.charCodeAt(0) === 64 ? key.slice(1) : key
         const colonIndex = keyWithoutAt.indexOf(':')
 
         if (colonIndex > 0) {
@@ -484,17 +516,14 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
   return namespaces
 }
 
+const cdataSpecialCharsRegex = /[<>&]|]]>/
+
 export const generateCdataString: GenerateUtil<string> = (value) => {
   if (!isNonEmptyString(value)) {
     return
   }
 
-  if (
-    value.indexOf('<') !== -1 ||
-    value.indexOf('>') !== -1 ||
-    value.indexOf('&') !== -1 ||
-    value.indexOf(']]>') !== -1
-  ) {
+  if (cdataSpecialCharsRegex.test(value)) {
     return { '#cdata': value.trim() }
   }
 
@@ -525,6 +554,21 @@ export const generateNumber: GenerateUtil<number> = (value) => {
   }
 }
 
+export const generateRdfResource = <T, R>(
+  value: T,
+  generate: (value: T) => R | undefined,
+): { '@rdf:resource': R } | undefined => {
+  const rdfResource = generate(value)
+
+  if (!isPresent(rdfResource)) {
+    return
+  }
+
+  return {
+    '@rdf:resource': rdfResource,
+  }
+}
+
 export const generateNamespaceAttrs = (
   value: Unreliable,
   namespaceUris: Record<string, Array<string>>,
@@ -549,16 +593,6 @@ export const generateNamespaceAttrs = (
   }
 
   return namespaceAttrs
-}
-
-export const invertObject = (object: Record<string, string>): Record<string, string> => {
-  const inverted: Record<string, string> = {}
-
-  for (const key in object) {
-    inverted[object[key]] = key
-  }
-
-  return inverted
 }
 
 export const createNamespaceNormalizator = <T extends Record<string, Array<string>>>(
@@ -635,7 +669,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
   }
 
   const normalizeKey = (key: string, context: Record<string, string>): string => {
-    if (key.indexOf('@') === 0) {
+    if (key.charCodeAt(0) === 64) {
       const attrName = key.substring(1)
       const normalizedAttrName = normalizeWithContext(attrName, context, false)
 
@@ -722,4 +756,25 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
   }
 
   return normalizeRoot
+}
+
+export const parseJsonObject = (value: unknown): unknown => {
+  if (isObject(value)) {
+    return value
+  }
+
+  if (!isNonEmptyString(value) || value.length < 2) {
+    return
+  }
+
+  const startsWithBrace = value.charAt(0) === '{' || /^\s*\{/.test(value)
+  const endsWithBrace = value.charAt(value.length - 1) === '}' || /\}\s*$/.test(value)
+
+  if (!startsWithBrace || !endsWithBrace) {
+    return
+  }
+
+  try {
+    return JSON.parse(value)
+  } catch {}
 }
