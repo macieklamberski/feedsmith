@@ -141,7 +141,7 @@ export namespace PodcastNs {
   }
 
   export type Image = {
-    href: string
+    href?: string // Required in spec.
     alt?: string
     aspectRatio?: string
     width?: number
