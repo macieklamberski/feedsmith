@@ -22,11 +22,11 @@ describe('retrieveFeed', () => {
       eIssn: '1476-4687',
       volume: '615',
       number: '7952',
-      publicationDate: '2023-03-15',
+      publicationDates: ['2023-03-15'],
       aggregationType: 'journal',
       publishingFrequency: 'weekly',
-      url: 'https://www.nature.com',
-      teaser: 'A short promotional description',
+      urls: ['https://www.nature.com'],
+      teasers: ['A short promotional description'],
       keywords: ['science', 'research'],
     }
 
@@ -55,7 +55,7 @@ describe('retrieveFeed', () => {
       'prism:genre': ['article', 'review'],
       'prism:channel': ['web', 'print'],
       'prism:ticker': ['AAPL', 'GOOGL'],
-      'prism:timeperiod': ['2023-Q1', '2023-Q2'],
+      'prism:timeperiod': '2023-Q1',
     }
     const expected = {
       isbns: ['978-0-123456-78-9', '978-0-987654-32-1'],
@@ -63,7 +63,7 @@ describe('retrieveFeed', () => {
       genres: ['article', 'review'],
       channels: ['web', 'print'],
       tickers: ['AAPL', 'GOOGL'],
-      timePeriods: ['2023-Q1', '2023-Q2'],
+      timePeriod: '2023-Q1',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -72,7 +72,7 @@ describe('retrieveFeed', () => {
   it('should parse feed with date fields', () => {
     const value = {
       'prism:coverdate': '2023-03-01',
-      'prism:publicationdate': '2023-03-15T10:00:00Z',
+      'prism:publicationdate': ['2023-03-15T10:00:00Z'],
       'prism:creationdate': '2023-02-20',
       'prism:modificationdate': '2023-03-10T14:30:00Z',
       'prism:killdate': '2024-03-15',
@@ -81,7 +81,7 @@ describe('retrieveFeed', () => {
     }
     const expected = {
       coverDate: '2023-03-01',
-      publicationDate: '2023-03-15T10:00:00Z',
+      publicationDates: ['2023-03-15T10:00:00Z'],
       creationDate: '2023-02-20',
       modificationDate: '2023-03-10T14:30:00Z',
       killDate: '2024-03-15',
@@ -128,24 +128,26 @@ describe('retrieveFeed', () => {
       'prism:subchannel1': 'news',
       'prism:subchannel2': 'science',
       'prism:section': 'front-page',
+      'prism:subsection1': 'highlights',
       'prism:subsection2': 'featured',
-      'prism:platform': 'desktop',
+      'prism:platform': ['desktop'],
       'prism:originplatform': ['print', 'digital'],
       'prism:device': 'tablet',
       'prism:complianceprofile': 'PRISM 3.0',
-      'prism:sellingagency': 'Agency1',
+      'prism:sellingagency': ['Agency1'],
     }
     const expected = {
       channels: ['web'],
       subchannel1: 'news',
       subchannel2: 'science',
-      sections: ['front-page'],
+      section: 'front-page',
+      subsection1: 'highlights',
       subsection2: 'featured',
-      platform: 'desktop',
+      platforms: ['desktop'],
       originPlatforms: ['print', 'digital'],
       device: 'tablet',
       complianceProfile: 'PRISM 3.0',
-      sellingAgency: 'Agency1',
+      sellingAgencies: ['Agency1'],
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -158,8 +160,8 @@ describe('retrieveFeed', () => {
       'prism:industry': ['Technology'],
       'prism:location': ['New York', 'London'],
       'prism:object': ['Particle Accelerator'],
-      'prism:profession': ['Scientist'],
-      'prism:sport': ['Tennis'],
+      'prism:profession': 'Scientist',
+      'prism:sport': 'Tennis',
     }
     const expected = {
       academicFields: ['Physics', 'Chemistry'],
@@ -167,8 +169,8 @@ describe('retrieveFeed', () => {
       industries: ['Technology'],
       locations: ['New York', 'London'],
       objects: ['Particle Accelerator'],
-      professions: ['Scientist'],
-      sports: ['Tennis'],
+      profession: 'Scientist',
+      sport: 'Tennis',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -183,9 +185,128 @@ describe('retrieveFeed', () => {
     }
     const expected = {
       seriesTitle: 'Science Series',
-      seriesNumber: '42',
+      seriesNumber: 42,
       uspsNumber: '123-456',
       versionIdentifier: 'v1.0.0',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with issue fields', () => {
+    const value = {
+      'prism:issueidentifier': '2023-03-15',
+      'prism:issuename': 'Spring Issue',
+      'prism:issueteaser': 'Special coverage of breakthrough discoveries',
+      'prism:issuetype': 'regular',
+    }
+    const expected = {
+      issueIdentifier: '2023-03-15',
+      issueName: 'Spring Issue',
+      issueTeaser: 'Special coverage of breakthrough discoveries',
+      issueType: 'regular',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with additional date fields', () => {
+    const value = {
+      'prism:coverdisplaydate': 'March 15, 2023',
+      'prism:publicationdisplaydate': ['Spring 2023'],
+      'prism:datereceived': '2023-01-15',
+      'prism:onsaleday': ['wednesday', 'friday'],
+      'prism:copyrightyear': ['2023', '2024'],
+    }
+    const expected = {
+      coverDisplayDate: 'March 15, 2023',
+      publicationDisplayDates: ['Spring 2023'],
+      dateReceived: '2023-01-15',
+      onSaleDays: ['wednesday', 'friday'],
+      copyrightYears: ['2023', '2024'],
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with content and title fields', () => {
+    const value = {
+      'prism:edition': 'International',
+      'prism:contenttype': 'article',
+      'prism:alternatetitle': ['Nature Journal', 'Nature Magazine'],
+      'prism:subtitle': ['The International Weekly Journal of Science'],
+    }
+    const expected = {
+      edition: 'International',
+      contentType: 'article',
+      alternateTitles: ['Nature Journal', 'Nature Magazine'],
+      subtitles: ['The International Weekly Journal of Science'],
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with catalog and product fields', () => {
+    const value = {
+      'prism:bookedition': ['First Edition', 'Second Edition'],
+      'prism:nationalcatalognumber': 'NC12345',
+      'prism:productcode': ['NAT-2023-615', 'NAT-2023-616'],
+    }
+    const expected = {
+      bookEditions: ['First Edition', 'Second Edition'],
+      nationalCatalogNumber: 'NC12345',
+      productCodes: ['NAT-2023-615', 'NAT-2023-616'],
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with subchannel3-4 and subsection3-4', () => {
+    const value = {
+      'prism:subchannel3': 'biology',
+      'prism:subchannel4': 'molecular',
+      'prism:subsection3': 'editors-picks',
+      'prism:subsection4': 'trending',
+    }
+    const expected = {
+      subchannel3: 'biology',
+      subchannel4: 'molecular',
+      subsection3: 'editors-picks',
+      subsection4: 'trending',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with organization and entity fields', () => {
+    const value = {
+      'prism:corporateentity': ['Springer Nature', 'Nature Research'],
+      'prism:distributor': 'Nature Publishing Group',
+      'prism:organization': ['Nature Research'],
+      'prism:person': ['Dr. Jane Smith', 'Dr. John Doe'],
+    }
+    const expected = {
+      corporateEntities: ['Springer Nature', 'Nature Research'],
+      distributor: 'Nature Publishing Group',
+      organizations: ['Nature Research'],
+      persons: ['Dr. Jane Smith', 'Dr. John Doe'],
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with blog and link fields', () => {
+    const value = {
+      'prism:blogtitle': 'Nature News Blog',
+      'prism:blogurl': 'https://www.nature.com/news/blog',
+      'prism:link': ['https://www.nature.com/nature'],
+      'prism:rating': ['A+', 'Excellent'],
+    }
+    const expected = {
+      blogTitle: 'Nature News Blog',
+      blogURL: 'https://www.nature.com/news/blog',
+      links: ['https://www.nature.com/nature'],
+      ratings: ['A+', 'Excellent'],
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -233,12 +354,12 @@ describe('retrieveItem', () => {
     }
     const expected = {
       doi: '10.1038/s41586-023-05842-x',
-      url: 'https://www.nature.com/articles/s41586-023-05842-x',
+      urls: ['https://www.nature.com/articles/s41586-023-05842-x'],
       volume: '615',
       number: '7952',
       startingPage: '425',
       endingPage: '432',
-      publicationDate: '2023-03-15',
+      publicationDates: ['2023-03-15'],
       keywords: ['quantum', 'computing'],
       genres: ['research-article'],
     }
@@ -293,7 +414,7 @@ describe('retrieveItem', () => {
       publicationName: 'Journal of Science',
       issn: '1234-5678',
       eIssn: '8765-4321',
-      sections: ['Research'],
+      section: 'Research',
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -327,7 +448,7 @@ describe('retrieveItem', () => {
       'prism:supplementstartingpage': 'S1',
     }
     const expected = {
-      supplementTitle: 'Supplementary Materials',
+      supplementTitles: ['Supplementary Materials'],
       supplementDisplayID: 'S1',
       supplementStartingPage: 'S1',
     }
@@ -350,6 +471,23 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toEqual(expected)
   })
 
+  it('should parse item with PAM/PSV dual-level fields', () => {
+    const value = {
+      'prism:publicationdisplaydate': ['March 15, 2023', 'Spring 2023'],
+      'prism:rating': ['PG-13', 'TV-14'],
+      'prism:timeperiod': '2023-Q1',
+      'prism:ticker': ['AAPL', 'GOOGL'],
+    }
+    const expected = {
+      publicationDisplayDates: ['March 15, 2023', 'Spring 2023'],
+      ratings: ['PG-13', 'TV-14'],
+      timePeriod: '2023-Q1',
+      tickers: ['AAPL', 'GOOGL'],
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
   it('should parse item with date fields', () => {
     const value = {
       'prism:publicationdate': '2023-03-15',
@@ -359,7 +497,7 @@ describe('retrieveItem', () => {
       'prism:killdate': '2024-03-15',
     }
     const expected = {
-      publicationDate: '2023-03-15',
+      publicationDates: ['2023-03-15'],
       creationDate: '2023-02-01T09:00:00Z',
       modificationDate: '2023-03-10',
       dateReceived: '2023-01-15',
@@ -396,6 +534,74 @@ describe('retrieveItem', () => {
       copyright: '© 2023 Author',
       expirationDate: '2024-01-01',
       rightsAgent: 'CCC',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse item with content and title fields', () => {
+    const value = {
+      'prism:edition': 'International',
+      'prism:contenttype': 'research-article',
+      'prism:alternatetitle': ['Alternative Title 1', 'Alternative Title 2'],
+      'prism:subtitle': ['A Comprehensive Study'],
+      'prism:teaser': ['Brief summary of the article'],
+      'prism:copyrightyear': ['2023', '2024'],
+    }
+    const expected = {
+      edition: 'International',
+      contentType: 'research-article',
+      alternateTitles: ['Alternative Title 1', 'Alternative Title 2'],
+      subtitles: ['A Comprehensive Study'],
+      teasers: ['Brief summary of the article'],
+      copyrightYears: ['2023', '2024'],
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse item with platform fields', () => {
+    const value = {
+      'prism:platform': ['desktop', 'mobile', 'tablet'],
+      'prism:device': 'smartphone',
+    }
+    const expected = {
+      platforms: ['desktop', 'mobile', 'tablet'],
+      device: 'smartphone',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse item with subject classification fields', () => {
+    const value = {
+      'prism:academicfield': ['Quantum Physics', 'Computer Science'],
+      'prism:event': ['Annual Conference 2023'],
+      'prism:industry': ['Technology', 'Healthcare'],
+      'prism:location': ['Cambridge', 'Boston'],
+      'prism:object': ['Quantum Computer'],
+      'prism:profession': 'Researcher',
+      'prism:sport': 'Cycling',
+    }
+    const expected = {
+      academicFields: ['Quantum Physics', 'Computer Science'],
+      events: ['Annual Conference 2023'],
+      industries: ['Technology', 'Healthcare'],
+      locations: ['Cambridge', 'Boston'],
+      objects: ['Quantum Computer'],
+      profession: 'Researcher',
+      sport: 'Cycling',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse item with link fields', () => {
+    const value = {
+      'prism:link': ['https://example.com/related1', 'https://example.com/related2'],
+    }
+    const expected = {
+      links: ['https://example.com/related1', 'https://example.com/related2'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)

@@ -48,10 +48,10 @@ export const retrieveFeed: ParsePartialUtil<PrismNs.Feed<string>> = (value) => {
     coverDisplayDate: parseSingularOf(value['prism:coverdisplaydate'], (value) =>
       parseString(retrieveText(value)),
     ),
-    publicationDate: parseSingularOf(value['prism:publicationdate'], (value) =>
+    publicationDates: parseArrayOf(value['prism:publicationdate'], (value) =>
       parseDate(retrieveText(value)),
     ),
-    publicationDisplayDate: parseSingularOf(value['prism:publicationdisplaydate'], (value) =>
+    publicationDisplayDates: parseArrayOf(value['prism:publicationdisplaydate'], (value) =>
       parseString(retrieveText(value)),
     ),
     creationDate: parseSingularOf(value['prism:creationdate'], (value) =>
@@ -79,13 +79,13 @@ export const retrieveFeed: ParsePartialUtil<PrismNs.Feed<string>> = (value) => {
       parseString(retrieveText(value)),
     ),
     subtitles: parseArrayOf(value['prism:subtitle'], (value) => parseString(retrieveText(value))),
-    teaser: parseSingularOf(value['prism:teaser'], (value) => parseString(retrieveText(value))),
+    teasers: parseArrayOf(value['prism:teaser'], (value) => parseString(retrieveText(value))),
     keywords: parseArrayOf(value['prism:keyword'], (value) => parseString(retrieveText(value))),
     seriesTitle: parseSingularOf(value['prism:seriestitle'], (value) =>
       parseString(retrieveText(value)),
     ),
     seriesNumber: parseSingularOf(value['prism:seriesnumber'], (value) =>
-      parseString(retrieveText(value)),
+      parseNumber(retrieveText(value)),
     ),
     bookEditions: parseArrayOf(value['prism:bookedition'], (value) =>
       parseString(retrieveText(value)),
@@ -115,7 +115,10 @@ export const retrieveFeed: ParsePartialUtil<PrismNs.Feed<string>> = (value) => {
     subchannel4: parseSingularOf(value['prism:subchannel4'], (value) =>
       parseString(retrieveText(value)),
     ),
-    sections: parseArrayOf(value['prism:section'], (value) => parseString(retrieveText(value))),
+    section: parseSingularOf(value['prism:section'], (value) => parseString(retrieveText(value))),
+    subsection1: parseSingularOf(value['prism:subsection1'], (value) =>
+      parseString(retrieveText(value)),
+    ),
     subsection2: parseSingularOf(value['prism:subsection2'], (value) =>
       parseString(retrieveText(value)),
     ),
@@ -131,14 +134,14 @@ export const retrieveFeed: ParsePartialUtil<PrismNs.Feed<string>> = (value) => {
     distributor: parseSingularOf(value['prism:distributor'], (value) =>
       parseString(retrieveText(value)),
     ),
-    sellingAgency: parseSingularOf(value['prism:sellingagency'], (value) =>
+    sellingAgencies: parseArrayOf(value['prism:sellingagency'], (value) =>
       parseString(retrieveText(value)),
     ),
     organizations: parseArrayOf(value['prism:organization'], (value) =>
       parseString(retrieveText(value)),
     ),
     persons: parseArrayOf(value['prism:person'], (value) => parseString(retrieveText(value))),
-    platform: parseSingularOf(value['prism:platform'], (value) => parseString(retrieveText(value))),
+    platforms: parseArrayOf(value['prism:platform'], (value) => parseString(retrieveText(value))),
     originPlatforms: parseArrayOf(value['prism:originplatform'], (value) =>
       parseString(retrieveText(value)),
     ),
@@ -151,12 +154,12 @@ export const retrieveFeed: ParsePartialUtil<PrismNs.Feed<string>> = (value) => {
     ),
     blogURL: parseSingularOf(value['prism:blogurl'], (value) => parseString(retrieveText(value))),
     links: parseArrayOf(value['prism:link'], (value) => parseString(retrieveText(value))),
-    url: parseSingularOf(value['prism:url'], (value) => parseString(retrieveText(value))),
+    urls: parseArrayOf(value['prism:url'], (value) => parseString(retrieveText(value))),
     byteCount: parseSingularOf(value['prism:bytecount'], (value) =>
       parseNumber(retrieveText(value)),
     ),
     ratings: parseArrayOf(value['prism:rating'], (value) => parseString(retrieveText(value))),
-    timePeriods: parseArrayOf(value['prism:timeperiod'], (value) =>
+    timePeriod: parseSingularOf(value['prism:timeperiod'], (value) =>
       parseString(retrieveText(value)),
     ),
     versionIdentifier: parseSingularOf(value['prism:versionidentifier'], (value) =>
@@ -171,10 +174,10 @@ export const retrieveFeed: ParsePartialUtil<PrismNs.Feed<string>> = (value) => {
     industries: parseArrayOf(value['prism:industry'], (value) => parseString(retrieveText(value))),
     locations: parseArrayOf(value['prism:location'], (value) => parseString(retrieveText(value))),
     objects: parseArrayOf(value['prism:object'], (value) => parseString(retrieveText(value))),
-    professions: parseArrayOf(value['prism:profession'], (value) =>
+    profession: parseSingularOf(value['prism:profession'], (value) =>
       parseString(retrieveText(value)),
     ),
-    sports: parseArrayOf(value['prism:sport'], (value) => parseString(retrieveText(value))),
+    sport: parseSingularOf(value['prism:sport'], (value) => parseString(retrieveText(value))),
     embargoDate: parseSingularOf(value['prism:embargodate'], (value) =>
       parseDate(retrieveText(value)),
     ),
@@ -204,11 +207,11 @@ export const retrieveItem: ParsePartialUtil<PrismNs.Item<string>> = (value) => {
     issn: parseSingularOf(value['prism:issn'], (value) => parseString(retrieveText(value))),
     eIssn: parseSingularOf(value['prism:eissn'], (value) => parseString(retrieveText(value))),
     doi: parseSingularOf(value['prism:doi'], (value) => parseString(retrieveText(value))),
-    url: parseSingularOf(value['prism:url'], (value) => parseString(retrieveText(value))),
+    urls: parseArrayOf(value['prism:url'], (value) => parseString(retrieveText(value))),
     volume: parseSingularOf(value['prism:volume'], (value) => parseString(retrieveText(value))),
     number: parseSingularOf(value['prism:number'], (value) => parseString(retrieveText(value))),
     edition: parseSingularOf(value['prism:edition'], (value) => parseString(retrieveText(value))),
-    sections: parseArrayOf(value['prism:section'], (value) => parseString(retrieveText(value))),
+    section: parseSingularOf(value['prism:section'], (value) => parseString(retrieveText(value))),
     startingPage: parseSingularOf(value['prism:startingpage'], (value) =>
       parseString(retrieveText(value)),
     ),
@@ -227,8 +230,11 @@ export const retrieveItem: ParsePartialUtil<PrismNs.Item<string>> = (value) => {
     samplePageRange: parseSingularOf(value['prism:samplepagerange'], (value) =>
       parseString(retrieveText(value)),
     ),
-    publicationDate: parseSingularOf(value['prism:publicationdate'], (value) =>
+    publicationDates: parseArrayOf(value['prism:publicationdate'], (value) =>
       parseDate(retrieveText(value)),
+    ),
+    publicationDisplayDates: parseArrayOf(value['prism:publicationdisplaydate'], (value) =>
+      parseString(retrieveText(value)),
     ),
     creationDate: parseSingularOf(value['prism:creationdate'], (value) =>
       parseDate(retrieveText(value)),
@@ -251,7 +257,7 @@ export const retrieveItem: ParsePartialUtil<PrismNs.Item<string>> = (value) => {
       parseString(retrieveText(value)),
     ),
     subtitles: parseArrayOf(value['prism:subtitle'], (value) => parseString(retrieveText(value))),
-    teaser: parseSingularOf(value['prism:teaser'], (value) => parseString(retrieveText(value))),
+    teasers: parseArrayOf(value['prism:teaser'], (value) => parseString(retrieveText(value))),
     keywords: parseArrayOf(value['prism:keyword'], (value) => parseString(retrieveText(value))),
     corporateEntities: parseArrayOf(value['prism:corporateentity'], (value) =>
       parseString(retrieveText(value)),
@@ -260,7 +266,7 @@ export const retrieveItem: ParsePartialUtil<PrismNs.Item<string>> = (value) => {
       parseString(retrieveText(value)),
     ),
     persons: parseArrayOf(value['prism:person'], (value) => parseString(retrieveText(value))),
-    platform: parseSingularOf(value['prism:platform'], (value) => parseString(retrieveText(value))),
+    platforms: parseArrayOf(value['prism:platform'], (value) => parseString(retrieveText(value))),
     device: parseSingularOf(value['prism:device'], (value) => parseString(retrieveText(value))),
     academicFields: parseArrayOf(value['prism:academicfield'], (value) =>
       parseString(retrieveText(value)),
@@ -269,10 +275,10 @@ export const retrieveItem: ParsePartialUtil<PrismNs.Item<string>> = (value) => {
     industries: parseArrayOf(value['prism:industry'], (value) => parseString(retrieveText(value))),
     locations: parseArrayOf(value['prism:location'], (value) => parseString(retrieveText(value))),
     objects: parseArrayOf(value['prism:object'], (value) => parseString(retrieveText(value))),
-    professions: parseArrayOf(value['prism:profession'], (value) =>
+    profession: parseSingularOf(value['prism:profession'], (value) =>
       parseString(retrieveText(value)),
     ),
-    sports: parseArrayOf(value['prism:sport'], (value) => parseString(retrieveText(value))),
+    sport: parseSingularOf(value['prism:sport'], (value) => parseString(retrieveText(value))),
     hasAlternatives: parseArrayOf(value['prism:hasalternative'], (value) =>
       parseString(retrieveText(value)),
     ),
@@ -291,7 +297,7 @@ export const retrieveItem: ParsePartialUtil<PrismNs.Item<string>> = (value) => {
     isTranslationOf: parseSingularOf(value['prism:istranslationof'], (value) =>
       parseString(retrieveText(value)),
     ),
-    supplementTitle: parseSingularOf(value['prism:supplementtitle'], (value) =>
+    supplementTitles: parseArrayOf(value['prism:supplementtitle'], (value) =>
       parseString(retrieveText(value)),
     ),
     supplementDisplayID: parseSingularOf(value['prism:supplementdisplayid'], (value) =>
@@ -307,9 +313,14 @@ export const retrieveItem: ParsePartialUtil<PrismNs.Item<string>> = (value) => {
     byteCount: parseSingularOf(value['prism:bytecount'], (value) =>
       parseNumber(retrieveText(value)),
     ),
+    ratings: parseArrayOf(value['prism:rating'], (value) => parseString(retrieveText(value))),
+    timePeriod: parseSingularOf(value['prism:timeperiod'], (value) =>
+      parseString(retrieveText(value)),
+    ),
     versionIdentifier: parseSingularOf(value['prism:versionidentifier'], (value) =>
       parseString(retrieveText(value)),
     ),
+    tickers: parseArrayOf(value['prism:ticker'], (value) => parseString(retrieveText(value))),
     embargoDate: parseSingularOf(value['prism:embargodate'], (value) =>
       parseDate(retrieveText(value)),
     ),

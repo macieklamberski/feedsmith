@@ -109,22 +109,88 @@
 
     <!-- PRISM Namespace: Channel Level Tags -->
     <prism:publicationName>Nature</prism:publicationName>
-    <prism:aggregationType>journal</prism:aggregationType>
     <prism:issn>0028-0836</prism:issn>
     <prism:eIssn>1476-4687</prism:eIssn>
     <prism:isbn>978-0-12-345678-9</prism:isbn>
+    <prism:issueIdentifier>2023-03-15</prism:issueIdentifier>
+    <prism:issueName>Spring Issue</prism:issueName>
+    <prism:issueTeaser>Special coverage of breakthrough discoveries</prism:issueTeaser>
+    <prism:issueType>regular</prism:issueType>
     <prism:volume>615</prism:volume>
     <prism:number>7952</prism:number>
     <prism:edition>International</prism:edition>
-    <prism:coverDate>2023-03-15</prism:coverDate>
+    <prism:aggregateIssueNumber>8500</prism:aggregateIssueNumber>
+    <prism:aggregationType>journal</prism:aggregationType>
+    <prism:coverDate>2023-03-15T00:00:00.000Z</prism:coverDate>
     <prism:coverDisplayDate>March 15, 2023</prism:coverDisplayDate>
     <prism:publicationDate>2023-03-15T00:00:00.000Z</prism:publicationDate>
-    <prism:copyright>© 2023 Springer Nature</prism:copyright>
-    <prism:rightsAgent>Springer Nature Rights</prism:rightsAgent>
+    <prism:publicationDisplayDate>Spring 2023</prism:publicationDisplayDate>
+    <prism:creationDate>2023-02-01T00:00:00.000Z</prism:creationDate>
+    <prism:modificationDate>2023-03-10T00:00:00.000Z</prism:modificationDate>
+    <prism:dateReceived>2023-01-15T00:00:00.000Z</prism:dateReceived>
+    <prism:onSaleDate>2023-03-01T00:00:00.000Z</prism:onSaleDate>
+    <prism:onSaleDay>wednesday</prism:onSaleDay>
+    <prism:offSaleDate>2023-04-01T00:00:00.000Z</prism:offSaleDate>
+    <prism:killDate>2024-03-15T00:00:00.000Z</prism:killDate>
+    <prism:copyrightYear>2023</prism:copyrightYear>
+    <prism:contentType>article</prism:contentType>
+    <prism:alternateTitle>Nature Journal</prism:alternateTitle>
+    <prism:subtitle>The International Weekly Journal of Science</prism:subtitle>
+    <prism:teaser>Leading scientific research and discoveries</prism:teaser>
+    <prism:keyword>science</prism:keyword>
+    <prism:keyword>research</prism:keyword>
+    <prism:seriesTitle>Nature Research Journals</prism:seriesTitle>
+    <prism:seriesNumber>1</prism:seriesNumber>
+    <prism:bookEdition>First Edition</prism:bookEdition>
+    <prism:nationalCatalogNumber>NC12345</prism:nationalCatalogNumber>
+    <prism:productCode>NAT-2023-615</prism:productCode>
+    <prism:uspsNumber>123-456</prism:uspsNumber>
+    <prism:publishingFrequency>weekly</prism:publishingFrequency>
+    <prism:channel>web</prism:channel>
+    <prism:channel>print</prism:channel>
+    <prism:subchannel1>news</prism:subchannel1>
+    <prism:subchannel2>science</prism:subchannel2>
+    <prism:subchannel3>biology</prism:subchannel3>
+    <prism:subchannel4>molecular</prism:subchannel4>
+    <prism:section>front-page</prism:section>
+    <prism:subsection1>highlights</prism:subsection1>
+    <prism:subsection2>featured</prism:subsection2>
+    <prism:subsection3>editors-picks</prism:subsection3>
+    <prism:subsection4>trending</prism:subsection4>
+    <prism:corporateEntity>Springer Nature</prism:corporateEntity>
     <prism:distributor>Nature Publishing Group</prism:distributor>
-    <prism:issueName>Spring Issue</prism:issueName>
+    <prism:sellingAgency>Scientific Publishers Inc.</prism:sellingAgency>
+    <prism:organization>Nature Research</prism:organization>
+    <prism:person>Dr. Jane Smith</prism:person>
+    <prism:platform>desktop</prism:platform>
+    <prism:platform>mobile</prism:platform>
+    <prism:originPlatform>print</prism:originPlatform>
+    <prism:originPlatform>digital</prism:originPlatform>
+    <prism:device>tablet</prism:device>
+    <prism:complianceProfile>PRISM 3.0</prism:complianceProfile>
+    <prism:blogTitle>Nature News Blog</prism:blogTitle>
+    <prism:blogURL>https://www.nature.com/news/blog</prism:blogURL>
+    <prism:link>https://www.nature.com/nature</prism:link>
+    <prism:url>https://www.nature.com</prism:url>
+    <prism:byteCount>1048576</prism:byteCount>
+    <prism:rating>A+</prism:rating>
+    <prism:timePeriod>2023-Q1</prism:timePeriod>
+    <prism:versionIdentifier>v2023.03</prism:versionIdentifier>
+    <prism:ticker>SPRN</prism:ticker>
+    <prism:academicField>Biology</prism:academicField>
+    <prism:academicField>Chemistry</prism:academicField>
+    <prism:event>Annual Science Conference 2023</prism:event>
     <prism:genre>Research Article</prism:genre>
     <prism:industry>Publishing</prism:industry>
+    <prism:industry>Science</prism:industry>
+    <prism:location>London, UK</prism:location>
+    <prism:object>Scientific Research</prism:object>
+    <prism:profession>Scientist</prism:profession>
+    <prism:sport>none</prism:sport>
+    <prism:embargoDate>2023-03-01T00:00:00.000Z</prism:embargoDate>
+    <prism:copyright>© 2023 Springer Nature</prism:copyright>
+    <prism:expirationDate>2025-03-15T00:00:00.000Z</prism:expirationDate>
+    <prism:rightsAgent>Springer Nature Rights</prism:rightsAgent>
 
     <!-- Syndication Namespace: Channel Level Tags -->
     <sy:updatePeriod>hourly</sy:updatePeriod>
@@ -487,32 +553,69 @@
       <dcterms:valid>2025-12-31T23:59:59.000Z</dcterms:valid>
 
       <!-- PRISM Namespace: Item Level Tags -->
+      <prism:publicationName>Nature</prism:publicationName>
+      <prism:issn>0028-0836</prism:issn>
+      <prism:eIssn>1476-4687</prism:eIssn>
       <prism:doi>10.1038/s41586-023-05842-x</prism:doi>
       <prism:url>https://www.nature.com/articles/s41586-023-05842-x</prism:url>
+      <prism:volume>615</prism:volume>
+      <prism:number>7952</prism:number>
+      <prism:edition>International</prism:edition>
       <prism:section>Research</prism:section>
       <prism:startingPage>425</prism:startingPage>
       <prism:endingPage>432</prism:endingPage>
       <prism:pageRange>425-432</prism:pageRange>
-      <prism:wordCount>5500</prism:wordCount>
-      <prism:byteCount>35000</prism:byteCount>
-      <prism:teaser>Groundbreaking research reveals new insights into cellular mechanisms</prism:teaser>
-      <prism:keyword>molecular biology</prism:keyword>
-      <prism:hasAlternative>https://www.nature.com/articles/s41586-023-05842-x.pdf</prism:hasAlternative>
-      <prism:isAlternativeOf>https://doi.org/10.1038/s41586-023-05842-x</prism:isAlternativeOf>
-      <prism:hasCorrection>https://www.nature.com/articles/s41586-023-06000-1</prism:hasCorrection>
-      <prism:isCorrectionOf>https://www.nature.com/articles/s41586-023-05800-1</prism:isCorrectionOf>
-      <prism:hasTranslation>https://www.nature.com/articles/s41586-023-05842-x/de</prism:hasTranslation>
-      <prism:isTranslationOf>https://www.nature.com/articles/s41586-023-05842-x/en</prism:isTranslationOf>
-      <prism:event>Annual Science Conference 2023</prism:event>
-      <prism:location>Boston, MA</prism:location>
-      <prism:person>Dr. Jane Smith</prism:person>
-      <prism:organization>Massachusetts Institute of Technology</prism:organization>
-      <prism:object>Gene expression dataset</prism:object>
+      <prism:pageCount>8</prism:pageCount>
+      <prism:pageProgressionDirection>LTR</prism:pageProgressionDirection>
+      <prism:samplePageRange>425-427</prism:samplePageRange>
+      <prism:publicationDate>2023-03-15T00:00:00.000Z</prism:publicationDate>
+      <prism:publicationDisplayDate>March 15, 2023</prism:publicationDisplayDate>
       <prism:creationDate>2023-01-15T00:00:00.000Z</prism:creationDate>
       <prism:modificationDate>2023-03-10T00:00:00.000Z</prism:modificationDate>
+      <prism:dateReceived>2023-01-01T00:00:00.000Z</prism:dateReceived>
       <prism:killDate>2033-03-15T00:00:00.000Z</prism:killDate>
-      <prism:expirationDate>2028-03-15T00:00:00.000Z</prism:expirationDate>
+      <prism:copyrightYear>2023</prism:copyrightYear>
+      <prism:contentType>research-article</prism:contentType>
+      <prism:genre>original-research</prism:genre>
+      <prism:alternateTitle>Breakthrough Discovery in Cellular Biology</prism:alternateTitle>
+      <prism:subtitle>New Insights into Cellular Mechanisms</prism:subtitle>
+      <prism:teaser>Groundbreaking research reveals new insights into cellular mechanisms</prism:teaser>
+      <prism:keyword>molecular biology</prism:keyword>
+      <prism:keyword>cellular mechanisms</prism:keyword>
+      <prism:corporateEntity>Nature Research</prism:corporateEntity>
+      <prism:organization>Massachusetts Institute of Technology</prism:organization>
+      <prism:person>Dr. Jane Smith</prism:person>
+      <prism:person>Dr. John Doe</prism:person>
+      <prism:platform>web</prism:platform>
+      <prism:device>desktop</prism:device>
+      <prism:academicField>Biology</prism:academicField>
+      <prism:academicField>Biochemistry</prism:academicField>
+      <prism:event>Annual Science Conference 2023</prism:event>
+      <prism:industry>Biotechnology</prism:industry>
+      <prism:location>Boston, MA</prism:location>
+      <prism:object>Gene expression dataset</prism:object>
+      <prism:profession>Research Scientist</prism:profession>
+      <prism:sport>none</prism:sport>
+      <prism:hasAlternative>https://www.nature.com/articles/s41586-023-05842-x.pdf</prism:hasAlternative>
+      <prism:hasCorrection>https://www.nature.com/articles/s41586-023-06000-1</prism:hasCorrection>
+      <prism:hasTranslation>https://www.nature.com/articles/s41586-023-05842-x/de</prism:hasTranslation>
+      <prism:isAlternativeOf>https://doi.org/10.1038/s41586-023-05842-x</prism:isAlternativeOf>
+      <prism:isCorrectionOf>https://www.nature.com/articles/s41586-023-05800-1</prism:isCorrectionOf>
+      <prism:isTranslationOf>https://www.nature.com/articles/s41586-023-05842-x/en</prism:isTranslationOf>
+      <prism:supplementTitle>Supplementary Materials</prism:supplementTitle>
+      <prism:supplementDisplayID>S1</prism:supplementDisplayID>
+      <prism:supplementStartingPage>S1</prism:supplementStartingPage>
+      <prism:link>https://www.nature.com/articles/s41586-023-05842-x/full</prism:link>
+      <prism:wordCount>5500</prism:wordCount>
+      <prism:byteCount>35000</prism:byteCount>
+      <prism:rating>peer-reviewed</prism:rating>
+      <prism:timePeriod>2023-Q1</prism:timePeriod>
+      <prism:versionIdentifier>v1.0</prism:versionIdentifier>
+      <prism:ticker>SPRN</prism:ticker>
       <prism:embargoDate>2023-03-15T00:00:00.000Z</prism:embargoDate>
+      <prism:copyright>© 2023 Springer Nature</prism:copyright>
+      <prism:expirationDate>2028-03-15T00:00:00.000Z</prism:expirationDate>
+      <prism:rightsAgent>Copyright Clearance Center</prism:rightsAgent>
 
       <!-- Slash Namespace: Item Level Tags -->
       <slash:section>articles</slash:section>

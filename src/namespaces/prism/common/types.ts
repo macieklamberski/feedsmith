@@ -18,8 +18,8 @@ export namespace PrismNs {
     aggregationType?: string
     coverDate?: TDate
     coverDisplayDate?: string
-    publicationDate?: TDate
-    publicationDisplayDate?: string
+    publicationDates?: Array<TDate>
+    publicationDisplayDates?: Array<string>
     creationDate?: TDate
     modificationDate?: TDate
     dateReceived?: TDate
@@ -31,10 +31,10 @@ export namespace PrismNs {
     contentType?: string
     alternateTitles?: Array<string>
     subtitles?: Array<string>
-    teaser?: string
+    teasers?: Array<string>
     keywords?: Array<string>
     seriesTitle?: string
-    seriesNumber?: string
+    seriesNumber?: number
     bookEditions?: Array<string>
     nationalCatalogNumber?: string
     productCodes?: Array<string>
@@ -45,26 +45,27 @@ export namespace PrismNs {
     subchannel2?: string
     subchannel3?: string
     subchannel4?: string
-    sections?: Array<string>
+    section?: string
+    subsection1?: string
     subsection2?: string
     subsection3?: string
     subsection4?: string
     corporateEntities?: Array<string>
     distributor?: string
-    sellingAgency?: string
+    sellingAgencies?: Array<string>
     organizations?: Array<string>
     persons?: Array<string>
-    platform?: string
+    platforms?: Array<string>
     originPlatforms?: Array<string>
     device?: string
     complianceProfile?: string
     blogTitle?: string
     blogURL?: string
     links?: Array<string>
-    url?: string
+    urls?: Array<string>
     byteCount?: number
     ratings?: Array<string>
-    timePeriods?: Array<string>
+    timePeriod?: string
     versionIdentifier?: string
     tickers?: Array<string>
     academicFields?: Array<string>
@@ -73,8 +74,8 @@ export namespace PrismNs {
     industries?: Array<string>
     locations?: Array<string>
     objects?: Array<string>
-    professions?: Array<string>
-    sports?: Array<string>
+    profession?: string
+    sport?: string
     /** @deprecated Since PRISM 3.0. Use pur:embargoDate instead. */
     embargoDate?: TDate
     /** @deprecated Since PRISM 3.0. Use pur:copyrightDate instead. */
@@ -90,18 +91,19 @@ export namespace PrismNs {
     issn?: string
     eIssn?: string
     doi?: string
-    url?: string
+    urls?: Array<string>
     volume?: string
     number?: string
     edition?: string
-    sections?: Array<string>
+    section?: string
     startingPage?: string
     endingPage?: string
     pageRange?: string
     pageCount?: number
     pageProgressionDirection?: string
     samplePageRange?: string
-    publicationDate?: TDate
+    publicationDates?: Array<TDate>
+    publicationDisplayDates?: Array<string>
     creationDate?: TDate
     modificationDate?: TDate
     dateReceived?: TDate
@@ -111,33 +113,36 @@ export namespace PrismNs {
     genres?: Array<string>
     alternateTitles?: Array<string>
     subtitles?: Array<string>
-    teaser?: string
+    teasers?: Array<string>
     keywords?: Array<string>
     corporateEntities?: Array<string>
     organizations?: Array<string>
     persons?: Array<string>
-    platform?: string
+    platforms?: Array<string>
     device?: string
     academicFields?: Array<string>
     events?: Array<string>
     industries?: Array<string>
     locations?: Array<string>
     objects?: Array<string>
-    professions?: Array<string>
-    sports?: Array<string>
+    profession?: string
+    sport?: string
     hasAlternatives?: Array<string>
     hasCorrections?: Array<string>
     hasTranslations?: Array<string>
     isAlternativeOf?: Array<string>
     isCorrectionOf?: Array<string>
     isTranslationOf?: string
-    supplementTitle?: string
+    supplementTitles?: Array<string>
     supplementDisplayID?: string
     supplementStartingPage?: string
     links?: Array<string>
     wordCount?: number
     byteCount?: number
+    ratings?: Array<string>
+    timePeriod?: string
     versionIdentifier?: string
+    tickers?: Array<string>
     /** @deprecated Since PRISM 3.0. Use pur:embargoDate instead. */
     embargoDate?: TDate
     /** @deprecated Since PRISM 3.0. Use pur:copyrightDate instead. */
