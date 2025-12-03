@@ -19,6 +19,7 @@ import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/
 import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
+import { retrieveAbout as retrieveRdfAbout } from '../../../namespaces/rdf/parse/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
@@ -33,6 +34,7 @@ export const parseImage: ParsePartialUtil<Rdf.Image> = (value) => {
     title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
     link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
     url: parseSingularOf(value.url, (value) => parseString(retrieveText(value))),
+    rdf: retrieveRdfAbout(value),
   }
 
   return trimObject(image)
@@ -53,6 +55,7 @@ export const parseTextInput: ParsePartialUtil<Rdf.TextInput> = (value) => {
     description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
     name: parseSingularOf(value.name, (value) => parseString(retrieveText(value))),
     link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
+    rdf: retrieveRdfAbout(value),
   }
 
   return trimObject(textInput)
@@ -73,6 +76,7 @@ export const parseItem: ParsePartialUtil<Rdf.Item<string>> = (value) => {
     title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
     link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
     description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
+    rdf: retrieveRdfAbout(value),
     atom: namespaces.has('atom') ? retrieveAtomEntry(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
     content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
@@ -108,6 +112,7 @@ export const parseFeed: ParsePartialUtil<Rdf.Feed<string>, ParseOptions> = (valu
     image: retrieveImage(value),
     items: retrieveItems(value, options),
     textInput: retrieveTextInput(value),
+    rdf: retrieveRdfAbout(channel),
     atom: namespaces.has('atom') ? retrieveAtomFeed(channel) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel) : undefined,
     sy: namespaces.has('sy') ? retrieveSyFeed(channel) : undefined,

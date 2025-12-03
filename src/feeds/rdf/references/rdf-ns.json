@@ -668,6 +668,9 @@
       "wfw": {
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
+      },
+      "rdf": {
+        "about": "http://example.org/item/1"
       }
     }
   ],
@@ -1384,5 +1387,8 @@
   "admin": {
     "errorReportsTo": "mailto:webmaster@example.com",
     "generatorAgent": "http://www.movabletype.org/?v=3.2"
+  },
+  "rdf": {
+    "about": "http://example.org/rss"
   }
 }
