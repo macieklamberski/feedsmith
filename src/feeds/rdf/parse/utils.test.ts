@@ -133,6 +133,91 @@ describe('retrieveImage', () => {
 
     expect(retrieveImage(value)).toEqual(expected)
   })
+
+  it('should retrieve image using ToC reference', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        image: { '@resource': 'http://example.com/image' },
+      },
+      image: {
+        '@about': 'http://example.com/image',
+        title: 'Logo',
+        url: 'http://example.com/logo.png',
+      },
+    }
+    const expected = {
+      title: 'Logo',
+      url: 'http://example.com/logo.png',
+    }
+
+    expect(retrieveImage(value)).toEqual(expected)
+  })
+
+  it('should retrieve correct image when multiple images exist', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        image: { '@resource': 'http://example.com/image2' },
+      },
+      image: [
+        {
+          '@about': 'http://example.com/image1',
+          title: 'First Image',
+          url: 'http://example.com/first.png',
+        },
+        {
+          '@about': 'http://example.com/image2',
+          title: 'Second Image',
+          url: 'http://example.com/second.png',
+        },
+      ],
+    }
+    const expected = {
+      title: 'Second Image',
+      url: 'http://example.com/second.png',
+    }
+
+    expect(retrieveImage(value)).toEqual(expected)
+  })
+
+  it('should fall back to direct parsing when no ToC reference', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+      },
+      image: {
+        title: 'Fallback Image',
+        url: 'http://example.com/fallback.png',
+      },
+    }
+    const expected = {
+      title: 'Fallback Image',
+      url: 'http://example.com/fallback.png',
+    }
+
+    expect(retrieveImage(value)).toEqual(expected)
+  })
+
+  it('should fall back to direct parsing when referenced image not found', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        image: { '@resource': 'http://example.com/missing' },
+      },
+      image: {
+        '@about': 'http://example.com/other',
+        title: 'Other Image',
+        url: 'http://example.com/other.png',
+      },
+    }
+    const expected = {
+      title: 'Other Image',
+      url: 'http://example.com/other.png',
+    }
+
+    expect(retrieveImage(value)).toEqual(expected)
+  })
 })
 
 describe('parseTextInput', () => {
@@ -269,6 +354,91 @@ describe('retrieveTextInput', () => {
       description: 'Search Description',
       name: 'q',
       link: 'https://example.com/search',
+    }
+
+    expect(retrieveTextInput(value)).toEqual(expected)
+  })
+
+  it('should retrieve textInput using ToC reference', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        textinput: { '@resource': 'http://example.com/search' },
+      },
+      textinput: {
+        '@about': 'http://example.com/search',
+        title: 'Search',
+        name: 'q',
+      },
+    }
+    const expected = {
+      title: 'Search',
+      name: 'q',
+    }
+
+    expect(retrieveTextInput(value)).toEqual(expected)
+  })
+
+  it('should retrieve correct textInput when multiple exist', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        textinput: { '@resource': 'http://example.com/search2' },
+      },
+      textinput: [
+        {
+          '@about': 'http://example.com/search1',
+          title: 'Search 1',
+          name: 'q1',
+        },
+        {
+          '@about': 'http://example.com/search2',
+          title: 'Search 2',
+          name: 'q2',
+        },
+      ],
+    }
+    const expected = {
+      title: 'Search 2',
+      name: 'q2',
+    }
+
+    expect(retrieveTextInput(value)).toEqual(expected)
+  })
+
+  it('should fall back to direct parsing when no ToC reference', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+      },
+      textinput: {
+        title: 'Fallback Search',
+        name: 'query',
+      },
+    }
+    const expected = {
+      title: 'Fallback Search',
+      name: 'query',
+    }
+
+    expect(retrieveTextInput(value)).toEqual(expected)
+  })
+
+  it('should fall back to direct parsing when referenced textInput not found', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        textinput: { '@resource': 'http://example.com/missing' },
+      },
+      textinput: {
+        '@about': 'http://example.com/other',
+        title: 'Other Search',
+        name: 'q',
+      },
+    }
+    const expected = {
+      title: 'Other Search',
+      name: 'q',
     }
 
     expect(retrieveTextInput(value)).toEqual(expected)
@@ -636,6 +806,381 @@ describe('retrieveItems', () => {
     }
 
     expect(retrieveItems(value)).toBeUndefined()
+  })
+
+  it('should retrieve items using ToC references', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/item1' },
+              { '@resource': 'http://example.com/item2' },
+            ],
+          },
+        },
+      },
+      item: [
+        {
+          '@about': 'http://example.com/item1',
+          title: 'First Item',
+          link: 'http://example.com/item1',
+        },
+        {
+          '@about': 'http://example.com/item2',
+          title: 'Second Item',
+          link: 'http://example.com/item2',
+        },
+      ],
+    }
+    const expected = [
+      {
+        title: 'First Item',
+        link: 'http://example.com/item1',
+      },
+      {
+        title: 'Second Item',
+        link: 'http://example.com/item2',
+      },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should return items in ToC order not document order', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/item2' },
+              { '@resource': 'http://example.com/item1' },
+            ],
+          },
+        },
+      },
+      item: [
+        {
+          '@about': 'http://example.com/item1',
+          title: 'First in Document',
+        },
+        {
+          '@about': 'http://example.com/item2',
+          title: 'Second in Document',
+        },
+      ],
+    }
+    const expected = [
+      {
+        title: 'Second in Document',
+      },
+      {
+        title: 'First in Document',
+      },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should handle single li element in ToC', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: { '@resource': 'http://example.com/item1' },
+          },
+        },
+      },
+      item: {
+        '@about': 'http://example.com/item1',
+        title: 'Single Item',
+      },
+    }
+    const expected = [
+      {
+        title: 'Single Item',
+      },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should skip items not found in document', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/item1' },
+              { '@resource': 'http://example.com/missing' },
+              { '@resource': 'http://example.com/item2' },
+            ],
+          },
+        },
+      },
+      item: [
+        {
+          '@about': 'http://example.com/item1',
+          title: 'First Item',
+        },
+        {
+          '@about': 'http://example.com/item2',
+          title: 'Second Item',
+        },
+      ],
+    }
+    const expected = [
+      {
+        title: 'First Item',
+      },
+      {
+        title: 'Second Item',
+      },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should fall back to direct parsing when no ToC', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+      },
+      item: [
+        {
+          title: 'Direct Item 1',
+        },
+        {
+          title: 'Direct Item 2',
+        },
+      ],
+    }
+    const expected = [
+      {
+        title: 'Direct Item 1',
+      },
+      {
+        title: 'Direct Item 2',
+      },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should skip invalid ToC references and return only valid items', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/item1' },
+              { '@resource': 'http://example.com/missing' },
+              { '@resource': 'http://example.com/item2' },
+            ],
+          },
+        },
+      },
+      item: [
+        {
+          '@about': 'http://example.com/item1',
+          title: 'First Item',
+        },
+        {
+          '@about': 'http://example.com/item2',
+          title: 'Second Item',
+        },
+      ],
+    }
+    const expected = [
+      {
+        title: 'First Item',
+      },
+      {
+        title: 'Second Item',
+      },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should fall back to direct parsing when all ToC references missing', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/missing1' },
+              { '@resource': 'http://example.com/missing2' },
+            ],
+          },
+        },
+      },
+      item: [
+        {
+          '@about': 'http://example.com/item1',
+          title: 'Fallback Item',
+        },
+      ],
+    }
+    const expected = [
+      {
+        title: 'Fallback Item',
+      },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should respect maxItems option with ToC', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/item1' },
+              { '@resource': 'http://example.com/item2' },
+              { '@resource': 'http://example.com/item3' },
+            ],
+          },
+        },
+      },
+      item: [
+        { '@about': 'http://example.com/item1', title: 'Item 1' },
+        { '@about': 'http://example.com/item2', title: 'Item 2' },
+        { '@about': 'http://example.com/item3', title: 'Item 3' },
+      ],
+    }
+    const expected = [{ title: 'Item 1' }, { title: 'Item 2' }]
+
+    expect(retrieveItems(value, { maxItems: 2 })).toEqual(expected)
+  })
+
+  it('should limit ToC references before parsing (not after)', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/missing' },
+              { '@resource': 'http://example.com/item1' },
+              { '@resource': 'http://example.com/item2' },
+              { '@resource': 'http://example.com/item3' },
+            ],
+          },
+        },
+      },
+      item: [
+        { '@about': 'http://example.com/item1', title: 'Item 1' },
+        { '@about': 'http://example.com/item2', title: 'Item 2' },
+        { '@about': 'http://example.com/item3', title: 'Item 3' },
+      ],
+    }
+    // maxItems=2 limits ToC refs first: [missing, item1]
+    // After parsing: [item1] (missing is skipped)
+    // NOT [item1, item2] (which would happen if we parsed all then sliced)
+    const expected = [{ title: 'Item 1' }]
+
+    expect(retrieveItems(value, { maxItems: 2 })).toEqual(expected)
+  })
+
+  describe('ToC edge cases', () => {
+    it('should fall back when items has no seq', () => {
+      const value = {
+        channel: { items: {} },
+        item: [{ title: 'Direct Item' }],
+      }
+
+      expect(retrieveItems(value)).toEqual([{ title: 'Direct Item' }])
+    })
+
+    it('should fall back when seq has no li', () => {
+      const value = {
+        channel: { items: { seq: {} } },
+        item: [{ title: 'Direct Item' }],
+      }
+
+      expect(retrieveItems(value)).toEqual([{ title: 'Direct Item' }])
+    })
+
+    it('should fall back when li is empty array', () => {
+      const value = {
+        channel: { items: { seq: { li: [] } } },
+        item: [{ title: 'Direct Item' }],
+      }
+
+      expect(retrieveItems(value)).toEqual([{ title: 'Direct Item' }])
+    })
+
+    it('should fall back when items is string', () => {
+      const value = {
+        channel: { items: 'invalid' },
+        item: [{ title: 'Direct Item' }],
+      }
+
+      expect(retrieveItems(value)).toEqual([{ title: 'Direct Item' }])
+    })
+
+    it('should fall back when items is number', () => {
+      const value = {
+        channel: { items: 123 },
+        item: [{ title: 'Direct Item' }],
+      }
+
+      expect(retrieveItems(value)).toEqual([{ title: 'Direct Item' }])
+    })
+
+    it('should fall back when seq is string', () => {
+      const value = {
+        channel: { items: { seq: 'invalid' } },
+        item: [{ title: 'Direct Item' }],
+      }
+
+      expect(retrieveItems(value)).toEqual([{ title: 'Direct Item' }])
+    })
+
+    it('should fall back when seq is number', () => {
+      const value = {
+        channel: { items: { seq: 456 } },
+        item: [{ title: 'Direct Item' }],
+      }
+
+      expect(retrieveItems(value)).toEqual([{ title: 'Direct Item' }])
+    })
+
+    it('should fall back when li contains only invalid types', () => {
+      const value = {
+        channel: { items: { seq: { li: ['string', 123, null] } } },
+        item: [{ title: 'Direct Item' }],
+      }
+
+      expect(retrieveItems(value)).toEqual([{ title: 'Direct Item' }])
+    })
+
+    it('should fall back when channel is string', () => {
+      const value = {
+        channel: 'invalid',
+        item: [{ title: 'Direct Item' }],
+      }
+
+      expect(retrieveItems(value)).toEqual([{ title: 'Direct Item' }])
+    })
+
+    it('should fall back when channel is null', () => {
+      const value = {
+        channel: null,
+        item: [{ title: 'Direct Item' }],
+      }
+
+      expect(retrieveItems(value)).toEqual([{ title: 'Direct Item' }])
+    })
   })
 })
 
