@@ -1,4 +1,5 @@
 import type { DateLike } from '../../../common/types.js'
+import type { AcastNs } from '../../../namespaces/acast/common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
 import type { BlogChannelNs } from '../../../namespaces/blogchannel/common/types.js'
@@ -116,6 +117,7 @@ export namespace Rss {
     spotify?: SpotifyNs.Item
     pingback?: PingbackNs.Item
     trackback?: TrackbackNs.Item
+    acast?: AcastNs.Item
   } & ({ title: string } | { description: string })
 
   export type Feed<TDate extends DateLike, TPerson extends PersonLike = Person> = {
@@ -162,6 +164,7 @@ export namespace Rss {
     rawvoice?: RawVoiceNs.Feed<TDate>
     spotify?: SpotifyNs.Feed
     pingback?: PingbackNs.Feed
+    acast?: AcastNs.Feed
   }
 }
 // #endregion reference

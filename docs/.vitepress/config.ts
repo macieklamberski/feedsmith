@@ -91,6 +91,7 @@ export default defineConfig({
               { text: 'Media RSS', link: '/reference/namespaces/media' },
               { text: 'Google Play Podcast', link: '/reference/namespaces/googleplay' },
               { text: 'Spotify', link: '/reference/namespaces/spotify' },
+              { text: 'Acast', link: '/reference/namespaces/acast' },
               { text: 'RawVoice', link: '/reference/namespaces/rawvoice' },
               { text: 'FeedPress', link: '/reference/namespaces/feedpress' },
               { text: 'arXiv', link: '/reference/namespaces/arxiv' },

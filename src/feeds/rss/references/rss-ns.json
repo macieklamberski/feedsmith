@@ -1084,6 +1084,12 @@
             "name": "premium_content"
           }
         }
+      },
+      "acast": {
+        "episodeId": "6918f06ee42e3466f29467f9",
+        "showId": "664fde3eda02bb0012bad909",
+        "episodeUrl": "jonathan-blow-on-programming-language-design",
+        "settings": "FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC"
       }
     }
   ],
@@ -2182,5 +2188,21 @@
         "enabled": true
       }
     }
+  },
+  "acast": {
+    "showId": "664fde3eda02bb0012bad909",
+    "showUrl": "software-unscripted",
+    "signature": {
+      "key": "EXAMPLE_KEY",
+      "algorithm": "aes-256-cbc",
+      "value": "wbG1Z7+6h9QOi+CR1Dv0uQ=="
+    },
+    "settings": "FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB",
+    "network": {
+      "id": "664fdd227c6b200013652ed6",
+      "slug": "richard-feldman-664fdd227c6b200013652ed6",
+      "value": "Richard Feldman"
+    },
+    "importedFeed": "https://feeds.resonaterecordings.com/software-unscripted"
   }
 }

@@ -308,6 +308,12 @@ export const namespaceUris = {
     'http://purl.org/rss/1.0/modules/prism',
     'https://purl.org/rss/1.0/modules/prism',
   ],
+  acast: [
+    'https://schema.acast.com/1.0/', // Official URI.
+    'http://schema.acast.com/1.0/',
+    'https://schema.acast.com/1.0',
+    'http://schema.acast.com/1.0',
+  ],
 }
 
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(
