@@ -4,14 +4,14 @@ import { generateFeed, generateItem, generateNetwork, generateSignature } from '
 describe('generateSignature', () => {
   it('should generate signature with all properties', () => {
     const value = {
-      key: 'EXAMPLE_KEY',
+      key: 'signature-key-123',
       algorithm: 'aes-256-cbc',
-      value: 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+      value: 'U2lnbmF0dXJlVmFsdWU=',
     }
     const expected = {
-      '@key': 'EXAMPLE_KEY',
+      '@key': 'signature-key-123',
       '@algorithm': 'aes-256-cbc',
-      '#text': 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+      '#text': 'U2lnbmF0dXJlVmFsdWU=',
     }
 
     expect(generateSignature(value)).toEqual(expected)
@@ -19,11 +19,11 @@ describe('generateSignature', () => {
 
   it('should generate signature with only key and algorithm', () => {
     const value = {
-      key: 'EXAMPLE_KEY',
+      key: 'signature-key-123',
       algorithm: 'aes-256-cbc',
     }
     const expected = {
-      '@key': 'EXAMPLE_KEY',
+      '@key': 'signature-key-123',
       '@algorithm': 'aes-256-cbc',
     }
 
@@ -32,10 +32,10 @@ describe('generateSignature', () => {
 
   it('should generate signature with only value', () => {
     const value = {
-      value: 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+      value: 'U2lnbmF0dXJlVmFsdWU=',
     }
     const expected = {
-      '#text': 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+      '#text': 'U2lnbmF0dXJlVmFsdWU=',
     }
 
     expect(generateSignature(value)).toEqual(expected)
@@ -82,14 +82,14 @@ describe('generateSignature', () => {
 describe('generateNetwork', () => {
   it('should generate network with all properties', () => {
     const value = {
-      id: '664fdd227c6b200013652ed6',
-      slug: 'richard-feldman-664fdd227c6b200013652ed6',
-      value: 'Richard Feldman',
+      id: 'net123abc456def789ghi012',
+      slug: 'example-network-net123abc456',
+      value: 'Example Network',
     }
     const expected = {
-      '@id': '664fdd227c6b200013652ed6',
-      '@slug': 'richard-feldman-664fdd227c6b200013652ed6',
-      '#text': 'Richard Feldman',
+      '@id': 'net123abc456def789ghi012',
+      '@slug': 'example-network-net123abc456',
+      '#text': 'Example Network',
     }
 
     expect(generateNetwork(value)).toEqual(expected)
@@ -97,11 +97,11 @@ describe('generateNetwork', () => {
 
   it('should generate network with only id and slug', () => {
     const value = {
-      id: '664fdd227c6b200013652ed6',
+      id: 'net123abc456def789ghi012',
       slug: 'network-slug',
     }
     const expected = {
-      '@id': '664fdd227c6b200013652ed6',
+      '@id': 'net123abc456def789ghi012',
       '@slug': 'network-slug',
     }
 
@@ -160,36 +160,36 @@ describe('generateNetwork', () => {
 describe('generateFeed', () => {
   it('should generate feed with all properties', () => {
     const value = {
-      showId: '664fde3eda02bb0012bad909',
-      showUrl: 'software-unscripted',
+      showId: 'abc123def456ghi789jkl012',
+      showUrl: 'example-podcast',
       signature: {
-        key: 'EXAMPLE_KEY',
+        key: 'signature-key-123',
         algorithm: 'aes-256-cbc',
-        value: 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+        value: 'U2lnbmF0dXJlVmFsdWU=',
       },
-      settings: 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
+      settings: 'RW5jcnlwdGVkU2V0dGluZ3NEYXRhQmFzZTY0',
       network: {
-        id: '664fdd227c6b200013652ed6',
-        slug: 'richard-feldman-664fdd227c6b200013652ed6',
-        value: 'Richard Feldman',
+        id: 'net123abc456def789ghi012',
+        slug: 'example-network-net123abc456',
+        value: 'Example Network',
       },
-      importedFeed: 'https://feeds.resonaterecordings.com/software-unscripted',
+      importedFeed: 'https://example.com/original-feed',
     }
     const expected = {
-      'acast:showId': '664fde3eda02bb0012bad909',
-      'acast:showUrl': 'software-unscripted',
+      'acast:showId': 'abc123def456ghi789jkl012',
+      'acast:showUrl': 'example-podcast',
       'acast:signature': {
-        '@key': 'EXAMPLE_KEY',
+        '@key': 'signature-key-123',
         '@algorithm': 'aes-256-cbc',
-        '#text': 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+        '#text': 'U2lnbmF0dXJlVmFsdWU=',
       },
-      'acast:settings': 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
+      'acast:settings': 'RW5jcnlwdGVkU2V0dGluZ3NEYXRhQmFzZTY0',
       'acast:network': {
-        '@id': '664fdd227c6b200013652ed6',
-        '@slug': 'richard-feldman-664fdd227c6b200013652ed6',
-        '#text': 'Richard Feldman',
+        '@id': 'net123abc456def789ghi012',
+        '@slug': 'example-network-net123abc456',
+        '#text': 'Example Network',
       },
-      'acast:importedFeed': 'https://feeds.resonaterecordings.com/software-unscripted',
+      'acast:importedFeed': 'https://example.com/original-feed',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -197,10 +197,10 @@ describe('generateFeed', () => {
 
   it('should generate feed with only showId', () => {
     const value = {
-      showId: '664fde3eda02bb0012bad909',
+      showId: 'abc123def456ghi789jkl012',
     }
     const expected = {
-      'acast:showId': '664fde3eda02bb0012bad909',
+      'acast:showId': 'abc123def456ghi789jkl012',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -208,10 +208,10 @@ describe('generateFeed', () => {
 
   it('should generate feed with only showUrl', () => {
     const value = {
-      showUrl: 'software-unscripted',
+      showUrl: 'example-podcast',
     }
     const expected = {
-      'acast:showUrl': 'software-unscripted',
+      'acast:showUrl': 'example-podcast',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -220,13 +220,13 @@ describe('generateFeed', () => {
   it('should generate feed with only signature', () => {
     const value = {
       signature: {
-        key: 'EXAMPLE_KEY',
+        key: 'signature-key-123',
         algorithm: 'aes-256-cbc',
       },
     }
     const expected = {
       'acast:signature': {
-        '@key': 'EXAMPLE_KEY',
+        '@key': 'signature-key-123',
         '@algorithm': 'aes-256-cbc',
       },
     }
@@ -236,10 +236,10 @@ describe('generateFeed', () => {
 
   it('should generate feed with only settings', () => {
     const value = {
-      settings: 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
+      settings: 'RW5jcnlwdGVkU2V0dGluZ3NEYXRhQmFzZTY0',
     }
     const expected = {
-      'acast:settings': 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
+      'acast:settings': 'RW5jcnlwdGVkU2V0dGluZ3NEYXRhQmFzZTY0',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -248,13 +248,13 @@ describe('generateFeed', () => {
   it('should generate feed with only network', () => {
     const value = {
       network: {
-        id: '664fdd227c6b200013652ed6',
+        id: 'net123abc456def789ghi012',
         value: 'Network Name',
       },
     }
     const expected = {
       'acast:network': {
-        '@id': '664fdd227c6b200013652ed6',
+        '@id': 'net123abc456def789ghi012',
         '#text': 'Network Name',
       },
     }
@@ -264,10 +264,10 @@ describe('generateFeed', () => {
 
   it('should generate feed with only importedFeed', () => {
     const value = {
-      importedFeed: 'https://feeds.resonaterecordings.com/software-unscripted',
+      importedFeed: 'https://example.com/original-feed',
     }
     const expected = {
-      'acast:importedFeed': 'https://feeds.resonaterecordings.com/software-unscripted',
+      'acast:importedFeed': 'https://example.com/original-feed',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -275,10 +275,10 @@ describe('generateFeed', () => {
 
   it('should handle UUID format showId', () => {
     const value = {
-      showId: '9d5c107b-68d6-4c1b-8c80-45ee6a84c947',
+      showId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
     }
     const expected = {
-      'acast:showId': '9d5c107b-68d6-4c1b-8c80-45ee6a84c947',
+      'acast:showId': 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -287,10 +287,10 @@ describe('generateFeed', () => {
   it('should handle empty strings', () => {
     const value = {
       showId: '',
-      showUrl: 'software-unscripted',
+      showUrl: 'example-podcast',
     }
     const expected = {
-      'acast:showUrl': 'software-unscripted',
+      'acast:showUrl': 'example-podcast',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -336,14 +336,14 @@ describe('generateFeed', () => {
 
   it('should handle partial feed data', () => {
     const value = {
-      showId: '664fde3eda02bb0012bad909',
-      showUrl: 'software-unscripted',
-      importedFeed: 'https://feeds.resonaterecordings.com/software-unscripted',
+      showId: 'abc123def456ghi789jkl012',
+      showUrl: 'example-podcast',
+      importedFeed: 'https://example.com/original-feed',
     }
     const expected = {
-      'acast:showId': '664fde3eda02bb0012bad909',
-      'acast:showUrl': 'software-unscripted',
-      'acast:importedFeed': 'https://feeds.resonaterecordings.com/software-unscripted',
+      'acast:showId': 'abc123def456ghi789jkl012',
+      'acast:showUrl': 'example-podcast',
+      'acast:importedFeed': 'https://example.com/original-feed',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -352,13 +352,13 @@ describe('generateFeed', () => {
   it('should handle mixed empty and valid strings', () => {
     const value = {
       showId: '',
-      showUrl: 'software-unscripted',
+      showUrl: 'example-podcast',
       settings: '   ',
-      importedFeed: 'https://feeds.resonaterecordings.com/software-unscripted',
+      importedFeed: 'https://example.com/original-feed',
     }
     const expected = {
-      'acast:showUrl': 'software-unscripted',
-      'acast:importedFeed': 'https://feeds.resonaterecordings.com/software-unscripted',
+      'acast:showUrl': 'example-podcast',
+      'acast:importedFeed': 'https://example.com/original-feed',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -368,16 +368,16 @@ describe('generateFeed', () => {
 describe('generateItem', () => {
   it('should generate item with all properties', () => {
     const value = {
-      episodeId: '6918f06ee42e3466f29467f9',
-      showId: '664fde3eda02bb0012bad909',
-      episodeUrl: 'jonathan-blow-on-programming-language-design',
-      settings: 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+      episodeId: 'ep1234abc567def890ghi123',
+      showId: 'abc123def456ghi789jkl012',
+      episodeUrl: 'example-episode-title',
+      settings: 'RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA==',
     }
     const expected = {
-      'acast:episodeId': '6918f06ee42e3466f29467f9',
-      'acast:showId': '664fde3eda02bb0012bad909',
-      'acast:episodeUrl': 'jonathan-blow-on-programming-language-design',
-      'acast:settings': 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+      'acast:episodeId': 'ep1234abc567def890ghi123',
+      'acast:showId': 'abc123def456ghi789jkl012',
+      'acast:episodeUrl': 'example-episode-title',
+      'acast:settings': 'RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA==',
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -385,10 +385,10 @@ describe('generateItem', () => {
 
   it('should generate item with only episodeId', () => {
     const value = {
-      episodeId: '6918f06ee42e3466f29467f9',
+      episodeId: 'ep1234abc567def890ghi123',
     }
     const expected = {
-      'acast:episodeId': '6918f06ee42e3466f29467f9',
+      'acast:episodeId': 'ep1234abc567def890ghi123',
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -396,10 +396,10 @@ describe('generateItem', () => {
 
   it('should generate item with only showId', () => {
     const value = {
-      showId: '664fde3eda02bb0012bad909',
+      showId: 'abc123def456ghi789jkl012',
     }
     const expected = {
-      'acast:showId': '664fde3eda02bb0012bad909',
+      'acast:showId': 'abc123def456ghi789jkl012',
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -407,10 +407,10 @@ describe('generateItem', () => {
 
   it('should generate item with only episodeUrl', () => {
     const value = {
-      episodeUrl: 'jonathan-blow-on-programming-language-design',
+      episodeUrl: 'example-episode-title',
     }
     const expected = {
-      'acast:episodeUrl': 'jonathan-blow-on-programming-language-design',
+      'acast:episodeUrl': 'example-episode-title',
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -418,10 +418,10 @@ describe('generateItem', () => {
 
   it('should generate item with only settings', () => {
     const value = {
-      settings: 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+      settings: 'RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA==',
     }
     const expected = {
-      'acast:settings': 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+      'acast:settings': 'RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA==',
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -430,10 +430,10 @@ describe('generateItem', () => {
   it('should handle empty strings', () => {
     const value = {
       episodeId: '',
-      showId: '664fde3eda02bb0012bad909',
+      showId: 'abc123def456ghi789jkl012',
     }
     const expected = {
-      'acast:showId': '664fde3eda02bb0012bad909',
+      'acast:showId': 'abc123def456ghi789jkl012',
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -477,12 +477,12 @@ describe('generateItem', () => {
 
   it('should handle partial item data', () => {
     const value = {
-      episodeId: '6918f06ee42e3466f29467f9',
-      showId: '664fde3eda02bb0012bad909',
+      episodeId: 'ep1234abc567def890ghi123',
+      showId: 'abc123def456ghi789jkl012',
     }
     const expected = {
-      'acast:episodeId': '6918f06ee42e3466f29467f9',
-      'acast:showId': '664fde3eda02bb0012bad909',
+      'acast:episodeId': 'ep1234abc567def890ghi123',
+      'acast:showId': 'abc123def456ghi789jkl012',
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -491,13 +491,13 @@ describe('generateItem', () => {
   it('should handle mixed empty and valid strings', () => {
     const value = {
       episodeId: '',
-      showId: '664fde3eda02bb0012bad909',
+      showId: 'abc123def456ghi789jkl012',
       episodeUrl: '   ',
-      settings: 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+      settings: 'RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA==',
     }
     const expected = {
-      'acast:showId': '664fde3eda02bb0012bad909',
-      'acast:settings': 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+      'acast:showId': 'abc123def456ghi789jkl012',
+      'acast:settings': 'RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA==',
     }
 
     expect(generateItem(value)).toEqual(expected)

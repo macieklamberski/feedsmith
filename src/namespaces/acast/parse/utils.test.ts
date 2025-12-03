@@ -4,14 +4,14 @@ import { parseNetwork, parseSignature, retrieveFeed, retrieveItem } from './util
 describe('parseSignature', () => {
   it('should parse signature with all properties', () => {
     const value = {
-      '@key': 'EXAMPLE_KEY',
+      '@key': 'signature-key-123',
       '@algorithm': 'aes-256-cbc',
-      '#text': 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+      '#text': 'U2lnbmF0dXJlVmFsdWU=',
     }
     const expected = {
-      key: 'EXAMPLE_KEY',
+      key: 'signature-key-123',
       algorithm: 'aes-256-cbc',
-      value: 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+      value: 'U2lnbmF0dXJlVmFsdWU=',
     }
 
     expect(parseSignature(value)).toEqual(expected)
@@ -19,11 +19,11 @@ describe('parseSignature', () => {
 
   it('should parse signature with only key and algorithm', () => {
     const value = {
-      '@key': 'EXAMPLE_KEY',
+      '@key': 'signature-key-123',
       '@algorithm': 'aes-256-cbc',
     }
     const expected = {
-      key: 'EXAMPLE_KEY',
+      key: 'signature-key-123',
       algorithm: 'aes-256-cbc',
     }
 
@@ -32,10 +32,10 @@ describe('parseSignature', () => {
 
   it('should parse signature with only value', () => {
     const value = {
-      '#text': 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+      '#text': 'U2lnbmF0dXJlVmFsdWU=',
     }
     const expected = {
-      value: 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+      value: 'U2lnbmF0dXJlVmFsdWU=',
     }
 
     expect(parseSignature(value)).toEqual(expected)
@@ -57,14 +57,14 @@ describe('parseSignature', () => {
 describe('parseNetwork', () => {
   it('should parse network with all properties', () => {
     const value = {
-      '@id': '664fdd227c6b200013652ed6',
-      '@slug': 'richard-feldman-664fdd227c6b200013652ed6',
-      '#text': 'Richard Feldman',
+      '@id': 'net123abc456def789ghi012',
+      '@slug': 'example-network-net123abc456',
+      '#text': 'Example Network',
     }
     const expected = {
-      id: '664fdd227c6b200013652ed6',
-      slug: 'richard-feldman-664fdd227c6b200013652ed6',
-      value: 'Richard Feldman',
+      id: 'net123abc456def789ghi012',
+      slug: 'example-network-net123abc456',
+      value: 'Example Network',
     }
 
     expect(parseNetwork(value)).toEqual(expected)
@@ -72,11 +72,11 @@ describe('parseNetwork', () => {
 
   it('should parse network with only id and slug', () => {
     const value = {
-      '@id': '664fdd227c6b200013652ed6',
+      '@id': 'net123abc456def789ghi012',
       '@slug': 'network-slug',
     }
     const expected = {
-      id: '664fdd227c6b200013652ed6',
+      id: 'net123abc456def789ghi012',
       slug: 'network-slug',
     }
 
@@ -109,40 +109,40 @@ describe('parseNetwork', () => {
 
 describe('retrieveFeed', () => {
   const expectedFull = {
-    showId: '664fde3eda02bb0012bad909',
-    showUrl: 'software-unscripted',
+    showId: 'abc123def456ghi789jkl012',
+    showUrl: 'example-podcast',
     signature: {
-      key: 'EXAMPLE_KEY',
+      key: 'signature-key-123',
       algorithm: 'aes-256-cbc',
-      value: 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+      value: 'U2lnbmF0dXJlVmFsdWU=',
     },
-    settings: 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
+    settings: 'RW5jcnlwdGVkU2V0dGluZ3NEYXRhQmFzZTY0',
     network: {
-      id: '664fdd227c6b200013652ed6',
-      slug: 'richard-feldman-664fdd227c6b200013652ed6',
-      value: 'Richard Feldman',
+      id: 'net123abc456def789ghi012',
+      slug: 'example-network-net123abc456',
+      value: 'Example Network',
     },
-    importedFeed: 'https://feeds.resonaterecordings.com/software-unscripted',
+    importedFeed: 'https://example.com/original-feed',
   }
 
   it('should parse all Acast feed properties when present (with #text)', () => {
     const value = {
-      'acast:showid': { '#text': '664fde3eda02bb0012bad909' },
-      'acast:showurl': { '#text': 'software-unscripted' },
+      'acast:showid': { '#text': 'abc123def456ghi789jkl012' },
+      'acast:showurl': { '#text': 'example-podcast' },
       'acast:signature': {
-        '@key': 'EXAMPLE_KEY',
+        '@key': 'signature-key-123',
         '@algorithm': 'aes-256-cbc',
-        '#text': 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+        '#text': 'U2lnbmF0dXJlVmFsdWU=',
       },
       'acast:settings': {
-        '#text': 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
+        '#text': 'RW5jcnlwdGVkU2V0dGluZ3NEYXRhQmFzZTY0',
       },
       'acast:network': {
-        '@id': '664fdd227c6b200013652ed6',
-        '@slug': 'richard-feldman-664fdd227c6b200013652ed6',
-        '#text': 'Richard Feldman',
+        '@id': 'net123abc456def789ghi012',
+        '@slug': 'example-network-net123abc456',
+        '#text': 'Example Network',
       },
-      'acast:importedfeed': { '#text': 'https://feeds.resonaterecordings.com/software-unscripted' },
+      'acast:importedfeed': { '#text': 'https://example.com/original-feed' },
     }
 
     expect(retrieveFeed(value)).toEqual(expectedFull)
@@ -150,20 +150,20 @@ describe('retrieveFeed', () => {
 
   it('should parse all Acast feed properties when present (without #text)', () => {
     const value = {
-      'acast:showid': '664fde3eda02bb0012bad909',
-      'acast:showurl': 'software-unscripted',
+      'acast:showid': 'abc123def456ghi789jkl012',
+      'acast:showurl': 'example-podcast',
       'acast:signature': {
-        '@key': 'EXAMPLE_KEY',
+        '@key': 'signature-key-123',
         '@algorithm': 'aes-256-cbc',
-        '#text': 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+        '#text': 'U2lnbmF0dXJlVmFsdWU=',
       },
-      'acast:settings': 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
+      'acast:settings': 'RW5jcnlwdGVkU2V0dGluZ3NEYXRhQmFzZTY0',
       'acast:network': {
-        '@id': '664fdd227c6b200013652ed6',
-        '@slug': 'richard-feldman-664fdd227c6b200013652ed6',
-        '#text': 'Richard Feldman',
+        '@id': 'net123abc456def789ghi012',
+        '@slug': 'example-network-net123abc456',
+        '#text': 'Example Network',
       },
-      'acast:importedfeed': 'https://feeds.resonaterecordings.com/software-unscripted',
+      'acast:importedfeed': 'https://example.com/original-feed',
     }
 
     expect(retrieveFeed(value)).toEqual(expectedFull)
@@ -171,30 +171,24 @@ describe('retrieveFeed', () => {
 
   it('should parse feed properties from arrays (uses first)', () => {
     const value = {
-      'acast:showid': ['664fde3eda02bb0012bad909', 'another-id'],
-      'acast:showurl': ['software-unscripted', 'another-url'],
+      'acast:showid': ['abc123def456ghi789jkl012', 'another-id'],
+      'acast:showurl': ['example-podcast', 'another-url'],
       'acast:signature': [
         {
-          '@key': 'EXAMPLE_KEY',
+          '@key': 'signature-key-123',
           '@algorithm': 'aes-256-cbc',
-          '#text': 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+          '#text': 'U2lnbmF0dXJlVmFsdWU=',
         },
       ],
-      'acast:settings': [
-        'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
-        'other-settings',
-      ],
+      'acast:settings': ['RW5jcnlwdGVkU2V0dGluZ3NEYXRhQmFzZTY0', 'other-settings'],
       'acast:network': [
         {
-          '@id': '664fdd227c6b200013652ed6',
-          '@slug': 'richard-feldman-664fdd227c6b200013652ed6',
-          '#text': 'Richard Feldman',
+          '@id': 'net123abc456def789ghi012',
+          '@slug': 'example-network-net123abc456',
+          '#text': 'Example Network',
         },
       ],
-      'acast:importedfeed': [
-        'https://feeds.resonaterecordings.com/software-unscripted',
-        'https://other.feed.com',
-      ],
+      'acast:importedfeed': ['https://example.com/original-feed', 'https://other.feed.com'],
     }
 
     expect(retrieveFeed(value)).toEqual(expectedFull)
@@ -202,10 +196,10 @@ describe('retrieveFeed', () => {
 
   it('should parse feed with only showId', () => {
     const value = {
-      'acast:showid': '664fde3eda02bb0012bad909',
+      'acast:showid': 'abc123def456ghi789jkl012',
     }
     const expected = {
-      showId: '664fde3eda02bb0012bad909',
+      showId: 'abc123def456ghi789jkl012',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -213,10 +207,10 @@ describe('retrieveFeed', () => {
 
   it('should parse feed with only showUrl', () => {
     const value = {
-      'acast:showurl': 'software-unscripted',
+      'acast:showurl': 'example-podcast',
     }
     const expected = {
-      showUrl: 'software-unscripted',
+      showUrl: 'example-podcast',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -225,13 +219,13 @@ describe('retrieveFeed', () => {
   it('should parse feed with only signature', () => {
     const value = {
       'acast:signature': {
-        '@key': 'EXAMPLE_KEY',
+        '@key': 'signature-key-123',
         '@algorithm': 'aes-256-cbc',
       },
     }
     const expected = {
       signature: {
-        key: 'EXAMPLE_KEY',
+        key: 'signature-key-123',
         algorithm: 'aes-256-cbc',
       },
     }
@@ -241,10 +235,10 @@ describe('retrieveFeed', () => {
 
   it('should parse feed with only settings', () => {
     const value = {
-      'acast:settings': 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
+      'acast:settings': 'RW5jcnlwdGVkU2V0dGluZ3NEYXRhQmFzZTY0',
     }
     const expected = {
-      settings: 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
+      settings: 'RW5jcnlwdGVkU2V0dGluZ3NEYXRhQmFzZTY0',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -253,13 +247,13 @@ describe('retrieveFeed', () => {
   it('should parse feed with only network', () => {
     const value = {
       'acast:network': {
-        '@id': '664fdd227c6b200013652ed6',
+        '@id': 'net123abc456def789ghi012',
         '#text': 'Network Name',
       },
     }
     const expected = {
       network: {
-        id: '664fdd227c6b200013652ed6',
+        id: 'net123abc456def789ghi012',
         value: 'Network Name',
       },
     }
@@ -269,10 +263,10 @@ describe('retrieveFeed', () => {
 
   it('should parse feed with only importedFeed', () => {
     const value = {
-      'acast:importedfeed': 'https://feeds.resonaterecordings.com/software-unscripted',
+      'acast:importedfeed': 'https://example.com/original-feed',
     }
     const expected = {
-      importedFeed: 'https://feeds.resonaterecordings.com/software-unscripted',
+      importedFeed: 'https://example.com/original-feed',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -280,10 +274,10 @@ describe('retrieveFeed', () => {
 
   it('should handle UUID format showId', () => {
     const value = {
-      'acast:showid': '9d5c107b-68d6-4c1b-8c80-45ee6a84c947',
+      'acast:showid': 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
     }
     const expected = {
-      showId: '9d5c107b-68d6-4c1b-8c80-45ee6a84c947',
+      showId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -362,10 +356,10 @@ describe('retrieveFeed', () => {
   it('should handle empty string values', () => {
     const value = {
       'acast:showid': { '#text': '' },
-      'acast:showurl': { '#text': 'software-unscripted' },
+      'acast:showurl': { '#text': 'example-podcast' },
     }
     const expected = {
-      showUrl: 'software-unscripted',
+      showUrl: 'example-podcast',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -383,19 +377,19 @@ describe('retrieveFeed', () => {
 
 describe('retrieveItem', () => {
   const expectedFull = {
-    episodeId: '6918f06ee42e3466f29467f9',
-    showId: '664fde3eda02bb0012bad909',
-    episodeUrl: 'jonathan-blow-on-programming-language-design',
-    settings: 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+    episodeId: 'ep1234abc567def890ghi123',
+    showId: 'abc123def456ghi789jkl012',
+    episodeUrl: 'example-episode-title',
+    settings: 'RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA==',
   }
 
   it('should parse all Acast item properties when present (with #text)', () => {
     const value = {
-      'acast:episodeid': { '#text': '6918f06ee42e3466f29467f9' },
-      'acast:showid': { '#text': '664fde3eda02bb0012bad909' },
-      'acast:episodeurl': { '#text': 'jonathan-blow-on-programming-language-design' },
+      'acast:episodeid': { '#text': 'ep1234abc567def890ghi123' },
+      'acast:showid': { '#text': 'abc123def456ghi789jkl012' },
+      'acast:episodeurl': { '#text': 'example-episode-title' },
       'acast:settings': {
-        '#text': 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+        '#text': 'RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA==',
       },
     }
 
@@ -404,10 +398,10 @@ describe('retrieveItem', () => {
 
   it('should parse all Acast item properties when present (without #text)', () => {
     const value = {
-      'acast:episodeid': '6918f06ee42e3466f29467f9',
-      'acast:showid': '664fde3eda02bb0012bad909',
-      'acast:episodeurl': 'jonathan-blow-on-programming-language-design',
-      'acast:settings': 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+      'acast:episodeid': 'ep1234abc567def890ghi123',
+      'acast:showid': 'abc123def456ghi789jkl012',
+      'acast:episodeurl': 'example-episode-title',
+      'acast:settings': 'RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA==',
     }
 
     expect(retrieveItem(value)).toEqual(expectedFull)
@@ -415,13 +409,10 @@ describe('retrieveItem', () => {
 
   it('should parse item properties from arrays (uses first)', () => {
     const value = {
-      'acast:episodeid': ['6918f06ee42e3466f29467f9', 'another-id'],
-      'acast:showid': ['664fde3eda02bb0012bad909', 'another-show'],
-      'acast:episodeurl': ['jonathan-blow-on-programming-language-design', 'other-url'],
-      'acast:settings': [
-        'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
-        'other-settings',
-      ],
+      'acast:episodeid': ['ep1234abc567def890ghi123', 'another-id'],
+      'acast:showid': ['abc123def456ghi789jkl012', 'another-show'],
+      'acast:episodeurl': ['example-episode-title', 'other-url'],
+      'acast:settings': ['RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA==', 'other-settings'],
     }
 
     expect(retrieveItem(value)).toEqual(expectedFull)
@@ -429,10 +420,10 @@ describe('retrieveItem', () => {
 
   it('should parse item with only episodeId', () => {
     const value = {
-      'acast:episodeid': '6918f06ee42e3466f29467f9',
+      'acast:episodeid': 'ep1234abc567def890ghi123',
     }
     const expected = {
-      episodeId: '6918f06ee42e3466f29467f9',
+      episodeId: 'ep1234abc567def890ghi123',
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -440,10 +431,10 @@ describe('retrieveItem', () => {
 
   it('should parse item with only showId', () => {
     const value = {
-      'acast:showid': '664fde3eda02bb0012bad909',
+      'acast:showid': 'abc123def456ghi789jkl012',
     }
     const expected = {
-      showId: '664fde3eda02bb0012bad909',
+      showId: 'abc123def456ghi789jkl012',
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -451,10 +442,10 @@ describe('retrieveItem', () => {
 
   it('should parse item with only episodeUrl', () => {
     const value = {
-      'acast:episodeurl': 'jonathan-blow-on-programming-language-design',
+      'acast:episodeurl': 'example-episode-title',
     }
     const expected = {
-      episodeUrl: 'jonathan-blow-on-programming-language-design',
+      episodeUrl: 'example-episode-title',
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -462,10 +453,10 @@ describe('retrieveItem', () => {
 
   it('should parse item with only settings', () => {
     const value = {
-      'acast:settings': 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+      'acast:settings': 'RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA==',
     }
     const expected = {
-      settings: 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+      settings: 'RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA==',
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -542,10 +533,10 @@ describe('retrieveItem', () => {
   it('should handle empty string values', () => {
     const value = {
       'acast:episodeid': { '#text': '' },
-      'acast:showid': { '#text': '664fde3eda02bb0012bad909' },
+      'acast:showid': { '#text': 'abc123def456ghi789jkl012' },
     }
     const expected = {
-      showId: '664fde3eda02bb0012bad909',
+      showId: 'abc123def456ghi789jkl012',
     }
 
     expect(retrieveItem(value)).toEqual(expected)
