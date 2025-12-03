@@ -7,6 +7,7 @@ import {
   parseSingularOf,
   parseString,
   retrieveText,
+  trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
@@ -25,6 +26,28 @@ import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/uti
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import type { Rdf } from '../common/types.js'
 
+const retrieveByAbout = (elements: unknown, resourceUri: string | undefined): unknown => {
+  if (!resourceUri) {
+    return
+  }
+
+  const array = Array.isArray(elements) ? elements : [elements]
+
+  return array.find((el) => el?.['@about'] === resourceUri)
+}
+
+const findByTocReference = (value: unknown, property: string): unknown => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const channel = parseSingular(value.channel)
+  const resourceRef = parseSingular(channel?.[property])
+  const resourceUri = parseString(resourceRef?.['@resource'])
+
+  return retrieveByAbout(value[property], resourceUri)
+}
+
 export const parseImage: ParsePartialUtil<Rdf.Image> = (value) => {
   if (!isObject(value)) {
     return
@@ -41,8 +64,7 @@ export const parseImage: ParsePartialUtil<Rdf.Image> = (value) => {
 }
 
 export const retrieveImage: ParsePartialUtil<Rdf.Image> = (value) => {
-  // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
-  return parseSingularOf(value?.image, parseImage)
+  return parseImage(findByTocReference(value, 'image')) ?? parseSingularOf(value?.image, parseImage)
 }
 
 export const parseTextInput: ParsePartialUtil<Rdf.TextInput> = (value) => {
@@ -62,8 +84,10 @@ export const parseTextInput: ParsePartialUtil<Rdf.TextInput> = (value) => {
 }
 
 export const retrieveTextInput: ParsePartialUtil<Rdf.TextInput> = (value) => {
-  // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
-  return parseSingularOf(value?.textinput, parseTextInput)
+  return (
+    parseTextInput(findByTocReference(value, 'textinput')) ??
+    parseSingularOf(value?.textinput, parseTextInput)
+  )
 }
 
 export const parseItem: ParsePartialUtil<Rdf.Item<string>> = (value) => {
@@ -94,7 +118,27 @@ export const retrieveItems: ParsePartialUtil<Array<Rdf.Item<string>>, ParseOptio
   value,
   options,
 ) => {
-  // Prepared for https://github.com/macieklamberski/feedsmith/issues/1.
+  if (!isObject(value)) {
+    return
+  }
+
+  const channel = parseSingular(value.channel)
+  const tocItems = parseSingular(channel?.items)
+  const itemsSeq = parseSingular(tocItems?.seq)
+  const itemUris = parseArrayOf(
+    itemsSeq?.li,
+    (li) => parseString(li?.['@resource']),
+    options?.maxItems,
+  )
+  const items = trimArray(
+    itemUris?.map((uri) => retrieveByAbout(value.item, uri)),
+    parseItem,
+  )
+
+  if (items?.length) {
+    return items
+  }
+
   return parseArrayOf(value?.item, parseItem, options?.maxItems)
 }
 
