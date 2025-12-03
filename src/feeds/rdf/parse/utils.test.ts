@@ -218,6 +218,13 @@ describe('retrieveImage', () => {
 
     expect(retrieveImage(value)).toEqual(expected)
   })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(retrieveImage('string')).toBeUndefined()
+    expect(retrieveImage(123)).toBeUndefined()
+    expect(retrieveImage(null)).toBeUndefined()
+    expect(retrieveImage(undefined)).toBeUndefined()
+  })
 })
 
 describe('parseTextInput', () => {
