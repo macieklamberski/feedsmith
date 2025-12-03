@@ -164,6 +164,7 @@ describe('retrieveImage', () => {
     const expected = {
       title: 'Logo',
       url: 'http://example.com/logo.png',
+      rdf: { about: 'http://example.com/image' },
     }
 
     expect(retrieveImage(value)).toEqual(expected)
@@ -191,6 +192,7 @@ describe('retrieveImage', () => {
     const expected = {
       title: 'Second Image',
       url: 'http://example.com/second.png',
+      rdf: { about: 'http://example.com/image2' },
     }
 
     expect(retrieveImage(value)).toEqual(expected)
@@ -229,6 +231,7 @@ describe('retrieveImage', () => {
     const expected = {
       title: 'Other Image',
       url: 'http://example.com/other.png',
+      rdf: { about: 'http://example.com/other' },
     }
 
     expect(retrieveImage(value)).toEqual(expected)
@@ -415,6 +418,7 @@ describe('retrieveTextInput', () => {
     const expected = {
       title: 'Search',
       name: 'q',
+      rdf: { about: 'http://example.com/search' },
     }
 
     expect(retrieveTextInput(value)).toEqual(expected)
@@ -442,6 +446,7 @@ describe('retrieveTextInput', () => {
     const expected = {
       title: 'Search 2',
       name: 'q2',
+      rdf: { about: 'http://example.com/search2' },
     }
 
     expect(retrieveTextInput(value)).toEqual(expected)
@@ -480,6 +485,7 @@ describe('retrieveTextInput', () => {
     const expected = {
       title: 'Other Search',
       name: 'q',
+      rdf: { about: 'http://example.com/other' },
     }
 
     expect(retrieveTextInput(value)).toEqual(expected)
@@ -911,10 +917,12 @@ describe('retrieveItems', () => {
       {
         title: 'First Item',
         link: 'http://example.com/item1',
+        rdf: { about: 'http://example.com/item1' },
       },
       {
         title: 'Second Item',
         link: 'http://example.com/item2',
+        rdf: { about: 'http://example.com/item2' },
       },
     ]
 
@@ -948,9 +956,11 @@ describe('retrieveItems', () => {
     const expected = [
       {
         title: 'Second in Document',
+        rdf: { about: 'http://example.com/item2' },
       },
       {
         title: 'First in Document',
+        rdf: { about: 'http://example.com/item1' },
       },
     ]
 
@@ -975,6 +985,7 @@ describe('retrieveItems', () => {
     const expected = [
       {
         title: 'Single Item',
+        rdf: { about: 'http://example.com/item1' },
       },
     ]
 
@@ -1009,9 +1020,11 @@ describe('retrieveItems', () => {
     const expected = [
       {
         title: 'First Item',
+        rdf: { about: 'http://example.com/item1' },
       },
       {
         title: 'Second Item',
+        rdf: { about: 'http://example.com/item2' },
       },
     ]
 
@@ -1072,9 +1085,11 @@ describe('retrieveItems', () => {
     const expected = [
       {
         title: 'First Item',
+        rdf: { about: 'http://example.com/item1' },
       },
       {
         title: 'Second Item',
+        rdf: { about: 'http://example.com/item2' },
       },
     ]
 
@@ -1104,6 +1119,7 @@ describe('retrieveItems', () => {
     const expected = [
       {
         title: 'Fallback Item',
+        rdf: { about: 'http://example.com/item1' },
       },
     ]
 
@@ -1130,7 +1146,10 @@ describe('retrieveItems', () => {
         { '@about': 'http://example.com/item3', title: 'Item 3' },
       ],
     }
-    const expected = [{ title: 'Item 1' }, { title: 'Item 2' }]
+    const expected = [
+      { title: 'Item 1', rdf: { about: 'http://example.com/item1' } },
+      { title: 'Item 2', rdf: { about: 'http://example.com/item2' } },
+    ]
 
     expect(retrieveItems(value, { maxItems: 2 })).toEqual(expected)
   })
@@ -1159,7 +1178,7 @@ describe('retrieveItems', () => {
     // maxItems=2 limits ToC refs first: [missing, item1]
     // After parsing: [item1] (missing is skipped)
     // NOT [item1, item2] (which would happen if we parsed all then sliced)
-    const expected = [{ title: 'Item 1' }]
+    const expected = [{ title: 'Item 1', rdf: { about: 'http://example.com/item1' } }]
 
     expect(retrieveItems(value, { maxItems: 2 })).toEqual(expected)
   })
