@@ -43,7 +43,13 @@ describe('parse', () => {
       title: 'Mozilla Dot Org',
       link: 'http://www.mozilla.org',
       description: 'the Mozilla Organization web site',
-      items: [{ title: 'New Status Updates', link: 'http://www.mozilla.org/status/' }],
+      items: [
+        {
+          title: 'New Status Updates',
+          link: 'http://www.mozilla.org/status/',
+          rdf: { about: 'http://example.org/item1' },
+        },
+      ],
     }
 
     expect(parse(value)).toEqual(expectation)
@@ -106,6 +112,7 @@ describe('parse', () => {
       atom: {
         links: [{ href: 'https://example.com/feed', rel: 'self' }],
       },
+      rdf: { about: 'http://example.com' },
       items: [
         {
           title: 'Test Item',
@@ -114,6 +121,7 @@ describe('parse', () => {
           atom: {
             links: [{ href: 'https://example.com/item1', rel: 'alternate' }],
           },
+          rdf: { about: 'http://example.com/item1' },
         },
       ],
     }
@@ -142,11 +150,13 @@ describe('parse', () => {
         title: 'Simple Feed',
         link: 'http://example.com',
         description: 'Simple Description',
+        rdf: { about: 'http://example.com' },
         items: [
           {
             title: 'Simple Item',
             link: 'http://example.com/item1',
             description: 'Simple Item Description',
+            rdf: { about: 'http://example.com/item1' },
           },
         ],
       }
@@ -179,6 +189,7 @@ describe('parse', () => {
             title: 'Item Title',
             link: 'http://example.com/item1',
             description: 'Item Description',
+            rdf: { about: 'http://example.com/item1' },
           },
         ],
       }
@@ -211,6 +222,7 @@ describe('parse', () => {
             title: 'Item Title',
             link: 'http://example.com/item1',
             description: 'Item Description',
+            rdf: { about: 'http://example.com/item1' },
           },
         ],
       }
@@ -243,6 +255,7 @@ describe('parse', () => {
             title: 'RDF 0.9 Item',
             link: 'http://example.com/item1',
             description: 'RDF 0.9 Item Description',
+            rdf: { about: 'http://example.com/item1' },
           },
         ],
       }
@@ -271,6 +284,7 @@ describe('parse', () => {
         title: 'RDF 1.0 Feed',
         link: 'http://example.com',
         description: 'RDF 1.0 Feed Description',
+        rdf: { about: 'http://example.com' },
         items: [
           {
             title: 'Item Title',
@@ -280,6 +294,7 @@ describe('parse', () => {
               creators: ['John Doe'],
               creator: 'John Doe',
             },
+            rdf: { about: 'http://example.com/item1' },
           },
         ],
       }
@@ -325,11 +340,13 @@ describe('parse', () => {
               creator: 'John Doe',
               date: '2023-01-01',
             },
+            rdf: { about: 'http://example.com/item1' },
           },
           {
             title: 'Item Without Namespace',
             link: 'http://example.com/item2',
             description: 'Item Description',
+            rdf: { about: 'http://example.com/item2' },
           },
         ],
       }
@@ -367,6 +384,7 @@ describe('parse', () => {
               creators: ['John Doe'],
               creator: 'John Doe',
             },
+            rdf: { about: 'http://example.com/item1' },
           },
         ],
       }
@@ -412,11 +430,13 @@ describe('parse', () => {
                 },
               ],
             },
+            rdf: { about: 'http://example.com/item1' },
           },
           {
             title: 'Item 2',
             link: 'http://example.com/item2',
             description: 'No media namespace here',
+            rdf: { about: 'http://example.com/item2' },
           },
         ],
       }
@@ -462,6 +482,7 @@ describe('parse', () => {
         sy: {
           updatePeriod: 'hourly',
         },
+        rdf: { about: 'http://example.com' },
         items: [
           {
             title: 'Item Title',
@@ -476,6 +497,7 @@ describe('parse', () => {
             slash: {
               comments: 42,
             },
+            rdf: { about: 'http://example.com/item1' },
           },
         ],
       }
@@ -508,6 +530,7 @@ describe('parse', () => {
         title: 'RDF Feed',
         link: 'http://example.com',
         description: 'Feed with malformed namespaces',
+        rdf: { about: 'http://example.com' },
         items: [
           {
             title: 'Item Title',
@@ -515,6 +538,7 @@ describe('parse', () => {
               creators: ['Should not normalize (empty URI)'],
               creator: 'Should not normalize (empty URI)',
             },
+            rdf: { about: 'http://example.com/item1' },
           },
         ],
       }
@@ -541,9 +565,11 @@ describe('parse', () => {
       const expected = {
         title: 'RDF with wrong namespace',
         link: 'http://example.com',
+        rdf: { about: 'http://example.com' },
         items: [
           {
             title: 'Item Title',
+            rdf: { about: 'http://example.com/item1' },
           },
         ],
       }
@@ -612,10 +638,12 @@ describe('parse', () => {
       const expected = {
         title: 'RDF 0.9 Channel',
         link: 'http://example.com',
+        rdf: { about: 'http://example.com' },
         items: [
           {
             title: 'RDF 1.0 Item',
             link: 'http://example.com/item1',
+            rdf: { about: 'http://example.com/item1' },
           },
         ],
       }
@@ -647,6 +675,7 @@ describe('parse', () => {
           title: 'Test',
           link: 'http://example.com',
           description: 'Test',
+          rdf: { about: 'http://example.com' },
           items: [
             {
               title: 'Item',
@@ -654,6 +683,7 @@ describe('parse', () => {
                 creators: ['John'],
                 creator: 'John',
               },
+              rdf: { about: 'http://example.com/item1' },
             },
           ],
         }
@@ -684,6 +714,7 @@ describe('parse', () => {
           title: 'Test',
           link: 'http://example.com',
           description: 'Test',
+          rdf: { about: 'http://example.com' },
           items: [
             {
               title: 'Item',
@@ -691,6 +722,7 @@ describe('parse', () => {
                 creators: ['John'],
                 creator: 'John',
               },
+              rdf: { about: 'http://example.com/item1' },
             },
           ],
         }
@@ -721,6 +753,7 @@ describe('parse', () => {
           title: 'Test',
           link: 'http://example.com',
           description: 'Test',
+          rdf: { about: 'http://example.com' },
           items: [
             {
               title: 'Item',
@@ -728,6 +761,7 @@ describe('parse', () => {
                 creators: ['John'],
                 creator: 'John',
               },
+              rdf: { about: 'http://example.com/item1' },
             },
           ],
         }
@@ -758,6 +792,7 @@ describe('parse', () => {
           title: 'Test',
           link: 'http://example.com',
           description: 'Test',
+          rdf: { about: 'http://example.com' },
           items: [
             {
               title: 'Item',
@@ -765,6 +800,7 @@ describe('parse', () => {
                 creators: ['John'],
                 creator: 'John',
               },
+              rdf: { about: 'http://example.com/item1' },
             },
           ],
         }
@@ -795,6 +831,7 @@ describe('parse', () => {
           title: 'Test',
           link: 'http://example.com',
           description: 'Test',
+          rdf: { about: 'http://example.com' },
           items: [
             {
               title: 'Item',
@@ -802,6 +839,7 @@ describe('parse', () => {
                 creators: ['John'],
                 creator: 'John',
               },
+              rdf: { about: 'http://example.com/item1' },
             },
           ],
         }
@@ -832,6 +870,7 @@ describe('parse', () => {
           title: 'Test',
           link: 'http://example.com',
           description: 'Test',
+          rdf: { about: 'http://example.com' },
           items: [
             {
               title: 'Item',
@@ -839,6 +878,7 @@ describe('parse', () => {
                 creators: ['John'],
                 creator: 'John',
               },
+              rdf: { about: 'http://example.com/item1' },
             },
           ],
         }
@@ -870,6 +910,7 @@ describe('parse', () => {
           title: 'Test',
           link: 'http://example.com',
           description: 'Test',
+          rdf: { about: 'http://example.com' },
           items: [
             {
               title: 'Item',
@@ -879,6 +920,7 @@ describe('parse', () => {
                 creator: 'Jane Doe',
                 title: 'DC Terms Title',
               },
+              rdf: { about: 'http://example.com/item1' },
             },
           ],
         }
@@ -892,10 +934,12 @@ describe('parse', () => {
         title: 'Test Feed',
         link: 'http://example.com',
         description: 'Test Description',
+        rdf: { about: 'http://example.com' },
         items: [
           {
             title: 'Test Item',
             link: 'http://example.com/item1',
+            rdf: { about: 'http://example.com/item1' },
           },
         ],
       }
@@ -958,6 +1002,7 @@ describe('parse', () => {
         licenses: ['Creative Commons Attribution 4.0'],
         license: 'Creative Commons Attribution 4.0',
       },
+      rdf: { about: 'http://example.com' },
       items: [
         {
           title: 'First item',
@@ -967,6 +1012,7 @@ describe('parse', () => {
             licenses: ['MIT License'],
             license: 'MIT License',
           },
+          rdf: { about: 'http://example.com/item1' },
         },
       ],
     }
@@ -998,6 +1044,7 @@ describe('parse', () => {
       title: 'Feed with Content namespace',
       link: 'http://example.com',
       description: 'Test feed with Content namespace',
+      rdf: { about: 'http://example.com' },
       items: [
         {
           title: 'First item',
@@ -1005,6 +1052,7 @@ describe('parse', () => {
           content: {
             encoded: '<p>Full HTML content with <strong>formatting</strong></p>',
           },
+          rdf: { about: 'http://example.com/item1' },
         },
       ],
     }
@@ -1037,6 +1085,7 @@ describe('parse', () => {
       title: 'Feed with WFW namespace',
       link: 'http://example.com',
       description: 'Test feed with Well-Formed Web namespace',
+      rdf: { about: 'http://example.com' },
       items: [
         {
           title: 'Item with comments',
@@ -1045,6 +1094,7 @@ describe('parse', () => {
             comment: 'https://example.com/posts/item1/comment',
             commentRss: 'https://example.com/posts/item1/comments/feed',
           },
+          rdf: { about: 'http://example.com/item1' },
         },
       ],
     }
@@ -1081,10 +1131,12 @@ describe('parse', () => {
         errorReportsTo: 'mailto:webmaster@example.com',
         generatorAgent: 'http://www.movabletype.org/?v=3.2',
       },
+      rdf: { about: 'http://example.com' },
       items: [
         {
           title: 'Item title',
           link: 'http://example.com/item1',
+          rdf: { about: 'http://example.com/item1' },
         },
       ],
     }
@@ -1121,6 +1173,7 @@ describe('parse', () => {
       georss: {
         point: { lat: 45.256, lng: -71.92 },
       },
+      rdf: { about: 'http://example.com' },
       items: [
         {
           title: 'Location item',
@@ -1129,6 +1182,7 @@ describe('parse', () => {
             point: { lat: 42.3601, lng: -71.0589 },
             featureName: 'Boston',
           },
+          rdf: { about: 'http://example.com/item1' },
         },
       ],
     }
@@ -1160,7 +1214,11 @@ describe('parse', () => {
       title: 'Test Feed',
       link: 'http://example.com',
       description: 'Testing alternating case items',
-      items: [{ title: 'First' }, { title: 'Second' }, { title: 'Third' }],
+      items: [
+        { title: 'First', rdf: { about: 'http://example.com/1' } },
+        { title: 'Second', rdf: { about: 'http://example.com/2' } },
+        { title: 'Third', rdf: { about: 'http://example.com/3' } },
+      ],
     }
 
     expect(parse(value)).toEqual(expected)

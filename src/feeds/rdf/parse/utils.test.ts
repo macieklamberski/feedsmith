@@ -114,6 +114,21 @@ describe('parseImage', () => {
 
     expect(parseImage(value)).toBeUndefined()
   })
+
+  it('should handle rdf namespace attributes', () => {
+    const value = {
+      '@rdf:about': 'http://example.com/image',
+      title: { '#text': 'Image Title' },
+      link: { '#text': 'https://example.com' },
+    }
+    const expected = {
+      title: 'Image Title',
+      link: 'https://example.com',
+      rdf: { about: 'http://example.com/image' },
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
 })
 
 describe('retrieveImage', () => {
@@ -232,6 +247,25 @@ describe('parseTextInput', () => {
     }
 
     expect(parseTextInput(value)).toBeUndefined()
+  })
+
+  it('should handle rdf namespace attributes', () => {
+    const value = {
+      '@rdf:about': 'http://example.com/search',
+      title: { '#text': 'Search Title' },
+      description: { '#text': 'Search Description' },
+      name: { '#text': 'q' },
+      link: { '#text': 'https://example.com/search' },
+    }
+    const expected = {
+      title: 'Search Title',
+      description: 'Search Description',
+      name: 'q',
+      link: 'https://example.com/search',
+      rdf: { about: 'http://example.com/search' },
+    }
+
+    expect(parseTextInput(value)).toEqual(expected)
   })
 })
 
@@ -504,6 +538,38 @@ describe('parseItem', () => {
       wfw: {
         comment: 'https://example.com/comment',
         commentRss: 'https://example.com/comments/feed',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle rdf namespace attributes', () => {
+    const value = {
+      '@rdf:about': 'http://example.com/item/1',
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      rdf: { about: 'http://example.com/item/1' },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle rdf:about attribute on item', () => {
+    const value = {
+      '@rdf:about': 'http://example.com/item/1',
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      rdf: {
+        about: 'http://example.com/item/1',
       },
     }
 
@@ -1122,6 +1188,33 @@ describe('parseFeed', () => {
         errorReportsTo: 'mailto:webmaster@example.com',
         generatorAgent: 'http://www.movabletype.org/?v=3.2',
       },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle rdf namespace attributes on channel', () => {
+    const value = {
+      channel: {
+        '@rdf:about': 'http://example.com/feed',
+        title: { '#text': 'Example Feed' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      rdf: { about: 'http://example.com/feed' },
     }
 
     expect(parseFeed(value)).toEqual(expected)
