@@ -35,7 +35,9 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
         <a href="/reference/namespaces/cc">ccREL</a>,
         <a href="/reference/namespaces/creativecommons">Creative Commons</a>,
         <a href="/reference/namespaces/feedpress">FeedPress</a>,
-        <a href="/reference/namespaces/opensearch">OpenSearch</a>
+        <a href="/reference/namespaces/opensearch">OpenSearch</a>,
+        <a href="/reference/namespaces/blogchannel">blogChannel</a>,
+        <a href="/reference/namespaces/prism">PRISM</a>
       </td>
     </tr>
   </tbody>
