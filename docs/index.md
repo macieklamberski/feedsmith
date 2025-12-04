@@ -62,38 +62,38 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 
 | Name | Prefix | Supported in | Parsing | Generating |
 |------|---------|--------------|---------|------------|
-| [Atom](http://www.w3.org/2005/Atom) | `<atom:*>` | RSS, RDF | ✅ | ✅ |
-| [Dublin Core](http://purl.org/dc/elements/1.1/) | `<dc:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [Dublin Core Terms](http://purl.org/dc/terms/) | `<dcterms:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [Syndication](http://purl.org/rss/1.0/modules/syndication/) | `<sy:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [Content](http://purl.org/rss/1.0/modules/content/) | `<content:*>` | RSS, RDF | ✅ | ✅ |
-| [Slash](http://purl.org/rss/1.0/modules/slash/) | `<slash:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [iTunes](http://www.itunes.com/dtds/podcast-1.0.dtd) | `<itunes:*>` | RSS, Atom | ✅ | ✅ |
-| [Podcast Index](https://podcastindex.org/namespace/1.0) | `<podcast:*>` | RSS | ✅ | ✅ |
-| [Podlove Simple Chapters](http://podlove.org/simple-chapters) | `<psc:*>` | RSS, Atom | ✅ | ✅ |
-| [Media RSS](http://search.yahoo.com/mrss/) | `<media:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [Google Play Podcast](https://www.google.com/schemas/play-podcasts/1.0/) | `<googleplay:*>` | RSS, Atom | ✅ | ✅ |
-| [Spotify](http://www.spotify.com/ns/rss) | `<spotify:*>` | RSS | ✅ | ✅ |
-| [Acast](https://schema.acast.com/1.0/) | `<acast:*>` | RSS | ✅ | ✅ |
-| [RawVoice](https://blubrry.com/developer/rawvoice-rss/) | `<rawvoice:*>` | RSS | ✅ | ✅ |
-| [FeedPress](https://feedpress.com/xmlns) | `<feedpress:*>` | RSS | ✅ | ✅ |
-| [arXiv](http://arxiv.org/schemas/atom) | `<arxiv:*>` | Atom | ✅ | ✅ |
-| [OpenSearch](http://a9.com/-/spec/opensearch/1.1/) | `<opensearch:*>` | RSS, Atom | ✅ | ✅ |
-| [PRISM](https://www.w3.org/submissions/prism/) | `<prism:*>` | RSS | ✅ | ✅ |
-| [ccREL](http://creativecommons.org/ns#) | `<cc:*>` | RSS, Atom | ✅ | ✅ |
-| [Creative Commons](http://backend.userland.com/creativeCommonsRssModule) | `<creativeCommons:*>` | RSS, Atom | ✅ | ✅ |
-| [Atom Threading](https://www.ietf.org/rfc/rfc4685.txt) | `<thr:*>` | RSS, Atom | ✅ | ✅ |
-| [Atom Publishing Protocol](http://www.w3.org/2007/app) | `<app:*>` | Atom | ✅ | ✅ |
-| [Comment API](http://wellformedweb.org/CommentAPI/) | `<wfw:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [Administrative](http://webns.net/mvcb/) | `<admin:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [Pingback](http://madskills.com/public/xml/rss/module/pingback/) | `<pingback:*>` | RSS, Atom | ✅ | ✅ |
-| [Trackback](http://madskills.com/public/xml/rss/module/trackback/) | `<trackback:*>` | RSS, Atom | ✅ | ✅ |
-| [Source](http://source.scripting.com/) | `<source:*>` | RSS | ✅ | ✅ |
-| [blogChannel](http://backend.userland.com/blogChannelModule) | `<blogChannel:*>` | RSS | ✅ | ✅ |
-| [YouTube](https://www.youtube.com/feeds/videos.xml) | `<yt:*>` | Atom | ✅ | ✅ |
-| [W3C Basic Geo](http://www.w3.org/2003/01/geo/wgs84_pos#) | `<geo:*>` | RSS, Atom | ✅ | ✅ |
-| [GeoRSS Simple](http://www.georss.org/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [RDF](http://www.w3.org/1999/02/22-rdf-syntax-ns#) | `<rdf:*>` | RDF | ✅ | ✅ |
+| [Atom](/reference/namespaces/atom) | `<atom:*>` | RSS, RDF | ✅ | ✅ |
+| [Dublin Core](/reference/namespaces/dc) | `<dc:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Dublin Core Terms](/reference/namespaces/dcterms) | `<dcterms:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Syndication](/reference/namespaces/sy) | `<sy:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Content](/reference/namespaces/content) | `<content:*>` | RSS, RDF | ✅ | ✅ |
+| [Slash](/reference/namespaces/slash) | `<slash:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [iTunes](/reference/namespaces/itunes) | `<itunes:*>` | RSS, Atom | ✅ | ✅ |
+| [Podcast Index](/reference/namespaces/podcast) | `<podcast:*>` | RSS | ✅ | ✅ |
+| [Podlove Simple Chapters](/reference/namespaces/psc) | `<psc:*>` | RSS, Atom | ✅ | ✅ |
+| [Media RSS](/reference/namespaces/media) | `<media:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Google Play Podcast](/reference/namespaces/googleplay) | `<googleplay:*>` | RSS, Atom | ✅ | ✅ |
+| [Spotify](/reference/namespaces/spotify) | `<spotify:*>` | RSS | ✅ | ✅ |
+| [Acast](/reference/namespaces/acast) | `<acast:*>` | RSS | ✅ | ✅ |
+| [RawVoice](/reference/namespaces/rawvoice) | `<rawvoice:*>` | RSS | ✅ | ✅ |
+| [FeedPress](/reference/namespaces/feedpress) | `<feedpress:*>` | RSS | ✅ | ✅ |
+| [arXiv](/reference/namespaces/arxiv) | `<arxiv:*>` | Atom | ✅ | ✅ |
+| [OpenSearch](/reference/namespaces/opensearch) | `<opensearch:*>` | RSS, Atom | ✅ | ✅ |
+| [PRISM](/reference/namespaces/prism) | `<prism:*>` | RSS | ✅ | ✅ |
+| [ccREL](/reference/namespaces/cc) | `<cc:*>` | RSS, Atom | ✅ | ✅ |
+| [Creative Commons](/reference/namespaces/creativecommons) | `<creativeCommons:*>` | RSS, Atom | ✅ | ✅ |
+| [Atom Threading](/reference/namespaces/thr) | `<thr:*>` | RSS, Atom | ✅ | ✅ |
+| [Atom Publishing Protocol](/reference/namespaces/app) | `<app:*>` | Atom | ✅ | ✅ |
+| [Comment API](/reference/namespaces/wfw) | `<wfw:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Administrative](/reference/namespaces/admin) | `<admin:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Pingback](/reference/namespaces/pingback) | `<pingback:*>` | RSS, Atom | ✅ | ✅ |
+| [Trackback](/reference/namespaces/trackback) | `<trackback:*>` | RSS, Atom | ✅ | ✅ |
+| [Source](/reference/namespaces/source) | `<source:*>` | RSS | ✅ | ✅ |
+| [blogChannel](/reference/namespaces/blogchannel) | `<blogChannel:*>` | RSS | ✅ | ✅ |
+| [YouTube](/reference/namespaces/yt) | `<yt:*>` | Atom | ✅ | ✅ |
+| [W3C Basic Geo](/reference/namespaces/geo) | `<geo:*>` | RSS, Atom | ✅ | ✅ |
+| [GeoRSS Simple](/reference/namespaces/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [RDF](/reference/namespaces/rdf) | `<rdf:*>` | RDF | ✅ | ✅ |
 
 ## Why Feedsmith?
 

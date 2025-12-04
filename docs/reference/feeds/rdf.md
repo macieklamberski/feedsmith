@@ -9,6 +9,10 @@ RDF (Resource Description Framework) Site Summary is an early XML-based syndicat
       <td>0.9, 1.0</td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="https://web.resource.org/rss/1.0/spec" target="_blank">RSS 1.0 Specification</a></td>
+    </tr>
+    <tr>
       <th>Namespaces</th>
       <td>
         <a href="/reference/namespaces/rdf">RDF</a>,

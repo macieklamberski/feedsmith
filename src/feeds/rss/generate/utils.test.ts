@@ -978,6 +978,65 @@ describe('generateItem', () => {
 
     expect(generateItem(value)).toEqual(expected)
   })
+
+  it('should generate item with creativecommons namespace properties', () => {
+    const value = {
+      title: 'Item with Creative Commons license',
+      creativeCommons: {
+        licenses: ['http://creativecommons.org/licenses/by-sa/4.0/'],
+      },
+    }
+    const expected = {
+      title: 'Item with Creative Commons license',
+      'creativeCommons:license': ['http://creativecommons.org/licenses/by-sa/4.0/'],
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should generate item with googleplay namespace properties', () => {
+    const value = {
+      title: 'Item with Google Play properties',
+      googleplay: {
+        author: 'Episode Guest Speaker',
+        description: 'A detailed episode description',
+        explicit: false,
+        block: false,
+      },
+    }
+    const expected = {
+      title: 'Item with Google Play properties',
+      'googleplay:author': 'Episode Guest Speaker',
+      'googleplay:description': 'A detailed episode description',
+      'googleplay:explicit': 'no',
+      'googleplay:block': 'no',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should generate item with spotify namespace properties', () => {
+    const value = {
+      title: 'Item with Spotify access',
+      spotify: {
+        access: {
+          entitlement: {
+            name: 'premium_content',
+          },
+        },
+      },
+    }
+    const expected = {
+      title: 'Item with Spotify access',
+      'spotify:access': {
+        entitlement: {
+          '@name': 'premium_content',
+        },
+      },
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -1826,6 +1885,217 @@ describe('generateFeed', () => {
               'acast:settings': 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
             },
           ],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with blogChannel namespace properties', () => {
+    const value = {
+      title: 'Blog Feed',
+      description: 'A feed with blogChannel properties',
+      blogChannel: {
+        blogRoll: 'http://example.com/blogroll.opml',
+        blink: 'http://recommended-site.com/',
+        mySubscriptions: 'http://example.com/subscriptions.opml',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:blogChannel': 'http://backend.userland.com/blogChannelModule',
+        channel: {
+          title: 'Blog Feed',
+          description: 'A feed with blogChannel properties',
+          'blogChannel:blogRoll': 'http://example.com/blogroll.opml',
+          'blogChannel:blink': 'http://recommended-site.com/',
+          'blogChannel:mySubscriptions': 'http://example.com/subscriptions.opml',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with feedpress namespace properties', () => {
+    const value = {
+      title: 'Podcast Feed',
+      description: 'A feed with FeedPress properties',
+      feedpress: {
+        link: 'https://feedpress.com/examplepodcast',
+        newsletterId: 'newsletter123456',
+        locale: 'en',
+        podcastId: '1234567890',
+        cssFile: 'https://example.com/custom-feed-styles.css',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:feedpress': 'https://feed.press/xmlns',
+        channel: {
+          title: 'Podcast Feed',
+          description: 'A feed with FeedPress properties',
+          'feedpress:link': 'https://feedpress.com/examplepodcast',
+          'feedpress:newsletterId': 'newsletter123456',
+          'feedpress:locale': 'en',
+          'feedpress:podcastId': '1234567890',
+          'feedpress:cssFile': 'https://example.com/custom-feed-styles.css',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with googleplay namespace properties', () => {
+    const value = {
+      title: 'Podcast Feed',
+      description: 'A feed with Google Play properties',
+      googleplay: {
+        author: 'Example Podcast Network',
+        description: 'A comprehensive podcast description',
+        explicit: false,
+        email: 'contact@example.com',
+        categories: ['Technology', 'Education'],
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:googleplay': 'https://www.google.com/schemas/play-podcasts/1.0/',
+        channel: {
+          title: 'Podcast Feed',
+          description: 'A feed with Google Play properties',
+          'googleplay:author': 'Example Podcast Network',
+          'googleplay:description': 'A comprehensive podcast description',
+          'googleplay:explicit': 'no',
+          'googleplay:email': 'contact@example.com',
+          'googleplay:category': [{ '@text': 'Technology' }, { '@text': 'Education' }],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with opensearch namespace properties', () => {
+    const value = {
+      title: 'Search Results Feed',
+      description: 'A feed with OpenSearch properties',
+      opensearch: {
+        totalResults: 1000,
+        startIndex: 21,
+        itemsPerPage: 10,
+        queries: [
+          {
+            role: 'request',
+            searchTerms: 'quantum computing',
+            startIndex: 21,
+            count: 10,
+          },
+        ],
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:opensearch': 'http://a9.com/-/spec/opensearch/1.1/',
+        channel: {
+          title: 'Search Results Feed',
+          description: 'A feed with OpenSearch properties',
+          'opensearch:totalResults': 1000,
+          'opensearch:startIndex': 21,
+          'opensearch:itemsPerPage': 10,
+          'opensearch:Query': [
+            {
+              '@role': 'request',
+              '@searchTerms': 'quantum computing',
+              '@startIndex': 21,
+              '@count': 10,
+            },
+          ],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with spotify namespace properties', () => {
+    const value = {
+      title: 'Podcast Feed',
+      description: 'A feed with Spotify properties',
+      spotify: {
+        limit: {
+          recentCount: 10,
+        },
+        countryOfOrigin: 'US',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:spotify': 'http://www.spotify.com/ns/rss',
+        channel: {
+          title: 'Podcast Feed',
+          description: 'A feed with Spotify properties',
+          'spotify:limit': {
+            '@recentCount': 10,
+          },
+          'spotify:countryOfOrigin': 'US',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with ccREL namespace properties', () => {
+    const value = {
+      title: 'Licensed Feed',
+      description: 'A feed with ccREL properties',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+        attributionName: 'Example Publishing Company',
+        attributionURL: 'https://example.com/',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:cc': 'http://creativecommons.org/ns#',
+        channel: {
+          title: 'Licensed Feed',
+          description: 'A feed with ccREL properties',
+          'cc:license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+          'cc:attributionName': 'Example Publishing Company',
+          'cc:attributionURL': 'https://example.com/',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with creativecommons namespace properties', () => {
+    const value = {
+      title: 'Licensed Feed',
+      description: 'A feed with Creative Commons properties',
+      creativeCommons: {
+        licenses: ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:creativeCommons': 'http://backend.userland.com/creativeCommonsRssModule',
+        channel: {
+          title: 'Licensed Feed',
+          description: 'A feed with Creative Commons properties',
+          'creativeCommons:license': ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
         },
       },
     }

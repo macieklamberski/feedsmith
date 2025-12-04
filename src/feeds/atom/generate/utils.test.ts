@@ -915,6 +915,50 @@ describe('generateEntry', () => {
 
     expect(generateEntry(value)).toEqual(expected)
   })
+
+  it('should generate entry with creativecommons namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Creative Commons namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      creativeCommons: {
+        licenses: ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Creative Commons namespace',
+      updated: '2023-03-15T12:00:00.000Z',
+      'creativeCommons:license': ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
+  it('should generate entry with googleplay namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Google Play namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      googleplay: {
+        author: 'Episode Guest Speaker',
+        description: 'A detailed episode description',
+        explicit: false,
+        block: false,
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Google Play namespace',
+      updated: '2023-03-15T12:00:00.000Z',
+      'googleplay:author': 'Episode Guest Speaker',
+      'googleplay:description': 'A detailed episode description',
+      'googleplay:explicit': 'no',
+      'googleplay:block': 'no',
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -1720,6 +1764,43 @@ describe('generateFeed', () => {
             },
           },
         ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with googleplay namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Podcast with Google Play namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      googleplay: {
+        author: 'Podcast Host',
+        description: 'A great podcast about technology',
+        explicit: false,
+        block: false,
+        email: 'podcast@example.com',
+        image: { href: 'https://example.com/podcast.jpg' },
+        categories: ['Technology', 'Science'],
+        newFeedUrl: 'https://example.com/new-feed.xml',
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:googleplay': 'https://www.google.com/schemas/play-podcasts/1.0/',
+        id: 'https://example.com/feed',
+        title: 'Podcast with Google Play namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        'googleplay:author': 'Podcast Host',
+        'googleplay:description': 'A great podcast about technology',
+        'googleplay:explicit': 'no',
+        'googleplay:block': 'no',
+        'googleplay:image': { '@href': 'https://example.com/podcast.jpg' },
+        'googleplay:new-feed-url': 'https://example.com/new-feed.xml',
+        'googleplay:email': 'podcast@example.com',
+        'googleplay:category': [{ '@text': 'Technology' }, { '@text': 'Science' }],
       },
     }
 
