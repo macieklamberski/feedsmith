@@ -31,27 +31,7 @@ bun add feedsmith
 
 Or using CDN:
 
-::: code-group
-
-```html [unpkg]
-<script type="module">
-  import { parseFeed } from 'https://unpkg.com/feedsmith@latest/dist/index.js'
-
-  const { format, feed } = parseFeed(feedContent)
-  console.log(feed.title)
-</script>
-```
-
-```html [jsDelivr]
-<script type="module">
-  import { parseFeed } from 'https://cdn.jsdelivr.net/npm/feedsmith@latest/dist/index.js'
-
-  const { format, feed } = parseFeed(feedContent)
-  console.log(feed.title)
-</script>
-```
-
-```html [esm.sh]
+```html
 <script type="module">
   import { parseFeed } from 'https://esm.sh/feedsmith@latest'
 
@@ -59,8 +39,6 @@ Or using CDN:
   console.log(feed.title)
 </script>
 ```
-
-:::
 
 ## Parse Any Feed
 
