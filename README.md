@@ -58,16 +58,16 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 
 | Format | Versions | Parsing | Generating |
 |--------|----------|---------|------------|
-| [RSS](http://cyber.law.harvard.edu/rss/rss.html) | 0.9x, 2.0 | ✅ | ✅ |
-| [Atom](https://tools.ietf.org/html/rfc4287) | 0.3, 1.0 | ✅ | ✅ |
-| [RDF](https://web.resource.org/rss/1.0/spec) | 0.9, 1.0 | ✅ | 📋 |
-| [JSON Feed](https://jsonfeed.org) | 1.0, 1.1 | ✅ | ✅ |
+| [RSS](https://feedsmith.dev/reference/feeds/rss) | 0.9x, 2.0 | ✅ | ✅ |
+| [Atom](https://feedsmith.dev/reference/feeds/atom) | 0.3, 1.0 | ✅ | ✅ |
+| [RDF](https://feedsmith.dev/reference/feeds/rdf) | 0.9, 1.0 | ✅ | 📋 |
+| [JSON Feed](https://feedsmith.dev/reference/feeds/json) | 1.0, 1.1 | ✅ | ✅ |
 
 ### Other
 
 | Format | Versions | Parsing | Generating |
 |--------|----------|---------|------------|
-| [OPML](https://opml.org/) | 1.0, 2.0 | ✅ | ✅ |
+| [OPML](https://feedsmith.dev/reference/other/opml) | 1.0, 2.0 | ✅ | ✅ |
 
 ### Feed Namespaces
 
