@@ -74,6 +74,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Media RSS](/reference/namespaces/media) | `<media:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Google Play Podcast](/reference/namespaces/googleplay) | `<googleplay:*>` | RSS, Atom | ✅ | ✅ |
 | [Spotify](/reference/namespaces/spotify) | `<spotify:*>` | RSS | ✅ | ✅ |
+| [Acast](/reference/namespaces/acast) | `<acast:*>` | RSS | ✅ | ✅ |
 | [RawVoice](/reference/namespaces/rawvoice) | `<rawvoice:*>` | RSS | ✅ | ✅ |
 | [FeedPress](/reference/namespaces/feedpress) | `<feedpress:*>` | RSS | ✅ | ✅ |
 | [arXiv](/reference/namespaces/arxiv) | `<arxiv:*>` | Atom | ✅ | ✅ |

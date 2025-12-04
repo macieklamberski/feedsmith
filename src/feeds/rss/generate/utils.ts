@@ -12,6 +12,10 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import {
+  generateFeed as generateAcastFeed,
+  generateItem as generateAcastItem,
+} from '../../../namespaces/acast/generate/utils.js'
 import { generateFeed as generateAdminFeed } from '../../../namespaces/admin/generate/utils.js'
 import {
   generateEntry as generateAtomEntry,
@@ -242,6 +246,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike, Rss.PersonLike>> = (i
     ...generateSpotifyItem(item.spotify),
     ...generatePingbackItem(item.pingback),
     ...generateTrackbackItem(item.trackback),
+    ...generateAcastItem(item.acast),
   }
 
   return trimObject(value)
@@ -293,6 +298,7 @@ export const generateFeed: GenerateUtil<Rss.Feed<DateLike, Rss.PersonLike>> = (f
     ...generateRawVoiceFeed(feed.rawvoice),
     ...generateSpotifyFeed(feed.spotify),
     ...generatePingbackFeed(feed.pingback),
+    ...generateAcastFeed(feed.acast),
     item: trimArray(feed.items, generateItem),
   }
 

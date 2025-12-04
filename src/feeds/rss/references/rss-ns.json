@@ -1084,6 +1084,12 @@
             "name": "premium_content"
           }
         }
+      },
+      "acast": {
+        "episodeId": "ep1234abc567def890ghi123",
+        "showId": "abc123def456ghi789jkl012",
+        "episodeUrl": "example-episode-title",
+        "settings": "RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA=="
       }
     }
   ],
@@ -2182,5 +2188,21 @@
         "enabled": true
       }
     }
+  },
+  "acast": {
+    "showId": "abc123def456ghi789jkl012",
+    "showUrl": "example-podcast",
+    "signature": {
+      "key": "signature-key-123",
+      "algorithm": "aes-256-cbc",
+      "value": "U2lnbmF0dXJlVmFsdWU="
+    },
+    "settings": "RW5jcnlwdGVkU2V0dGluZ3NEYXRhQmFzZTY0",
+    "network": {
+      "id": "net123abc456def789ghi012",
+      "slug": "example-network-net123abc456",
+      "value": "Example Network"
+    },
+    "importedFeed": "https://example.com/original-feed"
   }
 }

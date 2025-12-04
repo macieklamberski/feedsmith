@@ -1804,6 +1804,94 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate acast namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with Acast namespace',
+      description: 'A feed with Acast properties',
+      acast: {
+        showId: '664fde3eda02bb0012bad909',
+        showUrl: 'software-unscripted',
+        signature: {
+          key: 'EXAMPLE_KEY',
+          algorithm: 'aes-256-cbc',
+          value: 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+        },
+        settings: 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
+        network: {
+          id: '664fdd227c6b200013652ed6',
+          slug: 'richard-feldman-664fdd227c6b200013652ed6',
+          value: 'Richard Feldman',
+        },
+        importedFeed: 'https://feeds.resonaterecordings.com/software-unscripted',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:acast': 'https://schema.acast.com/1.0/',
+        channel: {
+          title: 'Feed with Acast namespace',
+          description: 'A feed with Acast properties',
+          'acast:showId': '664fde3eda02bb0012bad909',
+          'acast:showUrl': 'software-unscripted',
+          'acast:signature': {
+            '@key': 'EXAMPLE_KEY',
+            '@algorithm': 'aes-256-cbc',
+            '#text': 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+          },
+          'acast:settings': 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
+          'acast:network': {
+            '@id': '664fdd227c6b200013652ed6',
+            '@slug': 'richard-feldman-664fdd227c6b200013652ed6',
+            '#text': 'Richard Feldman',
+          },
+          'acast:importedFeed': 'https://feeds.resonaterecordings.com/software-unscripted',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate acast namespace properties for item', () => {
+    const value = {
+      title: 'Feed with Acast items',
+      description: 'A feed with Acast item properties',
+      items: [
+        {
+          title: 'Episode with Acast metadata',
+          acast: {
+            episodeId: '6918f06ee42e3466f29467f9',
+            showId: '664fde3eda02bb0012bad909',
+            episodeUrl: 'jonathan-blow-on-programming-language-design',
+            settings: 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:acast': 'https://schema.acast.com/1.0/',
+        channel: {
+          title: 'Feed with Acast items',
+          description: 'A feed with Acast item properties',
+          item: [
+            {
+              title: 'Episode with Acast metadata',
+              'acast:episodeId': '6918f06ee42e3466f29467f9',
+              'acast:showId': '664fde3eda02bb0012bad909',
+              'acast:episodeUrl': 'jonathan-blow-on-programming-language-design',
+              'acast:settings': 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+            },
+          ],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate RSS feed with blogChannel namespace properties', () => {
     const value = {
       title: 'Blog Feed',

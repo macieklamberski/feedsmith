@@ -29,6 +29,7 @@
      xmlns:georss="http://www.georss.org/georss"
      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:acast="https://schema.acast.com/1.0/"
 >
   <channel>
     <title>Example Feed</title>
@@ -461,6 +462,14 @@
       <sandbox enabled="true"/>
     </spotify:access>
 
+    <!-- Acast Namespace: Channel Level Tags -->
+    <acast:showId>abc123def456ghi789jkl012</acast:showId>
+    <acast:showUrl>example-podcast</acast:showUrl>
+    <acast:signature key="signature-key-123" algorithm="aes-256-cbc">U2lnbmF0dXJlVmFsdWU=</acast:signature>
+    <acast:settings>RW5jcnlwdGVkU2V0dGluZ3NEYXRhQmFzZTY0</acast:settings>
+    <acast:network id="net123abc456def789ghi012" slug="example-network-net123abc456">Example Network</acast:network>
+    <acast:importedFeed>https://example.com/original-feed</acast:importedFeed>
+
     <item>
       <title>Example Item</title>
       <link>http://example.org/item/1</link>
@@ -851,6 +860,12 @@
       <spotify:access>
         <entitlement name="premium_content"/>
       </spotify:access>
+
+      <!-- Acast Namespace: Item Level Tags -->
+      <acast:episodeId>ep1234abc567def890ghi123</acast:episodeId>
+      <acast:showId>abc123def456ghi789jkl012</acast:showId>
+      <acast:episodeUrl>example-episode-title</acast:episodeUrl>
+      <acast:settings>RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA==</acast:settings>
     </item>
   </channel>
 </rss>
