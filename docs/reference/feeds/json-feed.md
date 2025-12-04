@@ -9,6 +9,10 @@ JSON Feed is a syndication format based on JSON that provides a simple, straight
       <td>1.0, 1.1</td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="https://www.jsonfeed.org/version/1.1/" target="_blank">JSON Feed 1.1 Specification</a></td>
+    </tr>
+    <tr>
       <th>Namespaces</th>
       <td>None (JSON-based format)</td>
     </tr>

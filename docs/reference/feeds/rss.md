@@ -9,6 +9,10 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
       <td>0.9x, 2.0</td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="https://www.rssboard.org/rss-specification" target="_blank">RSS 2.0 Specification</a></td>
+    </tr>
+    <tr>
       <th>Namespaces</th>
       <td>
         <a href="/reference/namespaces/atom">Atom</a>,
