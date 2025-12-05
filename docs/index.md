@@ -50,13 +50,13 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [RSS](/reference/feeds/rss) | 0.9x, 2.0 | ✅ | ✅ |
 | [Atom](/reference/feeds/atom) | 0.3, 1.0 | ✅ | ✅ |
 | [RDF](/reference/feeds/rdf) | 0.9, 1.0 | ✅ | 📋 |
-| [JSON Feed](/reference/feeds/json) | 1.0, 1.1 | ✅ | ✅ |
+| [JSON Feed](/reference/feeds/json-feed) | 1.0, 1.1 | ✅ | ✅ |
 
 ### Other
 
 | Format | Versions | Parsing | Generating |
 |--------|----------|---------|------------|
-| [OPML](/reference/other/opml) | 1.0, 2.0 | ✅ | ✅ |
+| [OPML](/reference/opml) | 1.0, 2.0 | ✅ | ✅ |
 
 ### Feed Namespaces
 
