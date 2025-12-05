@@ -1146,21 +1146,8 @@ describe('generate', () => {
   })
 })
 
-describe('generate with lenient mode', () => {
-  it('should accept partial feeds with lenient: true', () => {
-    const value = {
-      title: 'Test Feed',
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Test Feed</title>
-</feed>
-`
-
-    expect(generate(value, { lenient: true })).toEqual(expected)
-  })
-
-  it('should accept feeds with string dates in lenient mode', () => {
+describe('leniency', () => {
+  it('should accept feeds with string dates', () => {
     const value = {
       id: 'https://example.com/feed',
       title: 'Test Feed',
@@ -1174,10 +1161,10 @@ describe('generate with lenient mode', () => {
 </feed>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should preserve invalid date strings in lenient mode', () => {
+  it('should preserve invalid date strings', () => {
     const value = {
       id: 'https://example.com/feed',
       title: 'Feed with Invalid Date',
@@ -1203,7 +1190,7 @@ describe('generate with lenient mode', () => {
 </feed>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should handle mixed Date objects and string dates', () => {
@@ -1242,53 +1229,11 @@ describe('generate with lenient mode', () => {
 </feed>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
+})
 
-  it('should handle deeply nested partial objects', () => {
-    const value = {
-      id: 'https://example.com/feed',
-      title: 'Feed with Nested Partials',
-      entries: [
-        {
-          id: 'https://example.com/entry/1',
-          title: 'Entry 1',
-          author: [
-            {
-              name: 'John Doe',
-            },
-          ],
-          category: [
-            {
-              term: 'tech',
-              label: 'Technology',
-            },
-          ],
-        },
-        {
-          id: 'https://example.com/entry/2',
-          title: 'Minimal Entry',
-        },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <id>https://example.com/feed</id>
-  <title>Feed with Nested Partials</title>
-  <entry>
-    <id>https://example.com/entry/1</id>
-    <title>Entry 1</title>
-  </entry>
-  <entry>
-    <id>https://example.com/entry/2</id>
-    <title>Minimal Entry</title>
-  </entry>
-</feed>
-`
-
-    expect(generate(value, { lenient: true })).toEqual(expected)
-  })
-
+describe('generate with app namespace', () => {
   it('should generate Atom feed with app namespace', () => {
     const value = {
       id: 'http://example.com/blog',

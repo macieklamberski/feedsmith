@@ -270,25 +270,8 @@ describe('generate', () => {
   })
 })
 
-describe('generate with lenient mode', () => {
-  it('should accept partial feeds with lenient: true', () => {
-    const value = {
-      body: {
-        outlines: [{ text: 'Test Outline' }],
-      },
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<opml version="2.0">
-  <body>
-    <outline text="Test Outline"/>
-  </body>
-</opml>
-`
-
-    expect(generate(value, { lenient: true })).toEqual(expected)
-  })
-
-  it('should accept feeds with string dates in lenient mode', () => {
+describe('leniency', () => {
+  it('should accept feeds with string dates', () => {
     const value = {
       head: {
         title: 'Test OPML',
@@ -312,10 +295,10 @@ describe('generate with lenient mode', () => {
 </opml>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should preserve invalid date strings in lenient mode', () => {
+  it('should preserve invalid date strings', () => {
     const value = {
       head: {
         title: 'Test OPML',
@@ -339,7 +322,7 @@ describe('generate with lenient mode', () => {
 </opml>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   describe('custom attributes', () => {
