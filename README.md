@@ -56,8 +56,8 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 
 ### Feeds
 
-| Format | Versions | Parsing | Generating |
-|--------|----------|---------|------------|
+| Format | Versions | Parse | Generate |
+|--------|----------|-------|----------|
 | [RSS](https://feedsmith.dev/reference/feeds/rss) | 0.9x, 2.0 | ✅ | ✅ |
 | [Atom](https://feedsmith.dev/reference/feeds/atom) | 0.3, 1.0 | ✅ | ✅ |
 | [RDF](https://feedsmith.dev/reference/feeds/rdf) | 0.9, 1.0 | ✅ | 📋 |
@@ -65,14 +65,14 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 
 ### Other
 
-| Format | Versions | Parsing | Generating |
-|--------|----------|---------|------------|
+| Format | Versions | Parse | Generate |
+|--------|----------|-------|----------|
 | [OPML](https://feedsmith.dev/reference/other/opml) | 1.0, 2.0 | ✅ | ✅ |
 
 ### Feed Namespaces
 
-| Name | Prefix | Supported in | Parsing | Generating |
-|------|---------|--------------|---------|------------|
+| Name | Prefix | Supported in | Parse | Generate |
+|------|---------|--------------|-------|----------|
 | [Atom](https://feedsmith.dev/reference/namespaces/atom) | `<atom:*>` | RSS, RDF | ✅ | ✅ |
 | [Dublin Core](https://feedsmith.dev/reference/namespaces/dc) | `<dc:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Dublin Core Terms](https://feedsmith.dev/reference/namespaces/dcterms) | `<dcterms:*>` | RSS, Atom, RDF | ✅ | ✅ |
