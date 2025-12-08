@@ -896,6 +896,7 @@ describe('parseString', () => {
     const value =
       'Testing &lt;b&gt;bold text&lt;/b&gt; and &lt;i&gt;italic text&lt;/i&gt; with &amp;amp; ampersand, &amp;quot; quotes, &amp;apos; apostrophe and &amp;nbsp; non-breaking space.'
     const expected = `Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.`
+
     expect(parseString(value)).toBe(expected)
   })
 
@@ -904,6 +905,7 @@ describe('parseString', () => {
     const value =
       '<![CDATA[Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.]]>'
     const expected = `Testing <b>bold text</b> and <i>italic text</i> with & ampersand, " quotes, ' apostrophe and   non-breaking space.`
+
     expect(parseString(value)).toBe(expected)
   })
 
@@ -912,6 +914,7 @@ describe('parseString', () => {
     const value =
       'Special chars: &amp;lt; &amp;gt; &amp;euro; € &amp;copy; © &amp;reg; ® &amp;pound; £ &amp;yen; ¥'
     const expected = 'Special chars: &lt; &gt; &euro; € &copy; © &reg; ® &pound; £ &yen; ¥'
+
     expect(parseString(value)).toBe(expected)
   })
 
@@ -919,6 +922,7 @@ describe('parseString', () => {
     // Decode special char entities inside CDATA sections.
     const value = '<![CDATA[Special chars: &lt; &gt; &euro; € &copy; © &reg; ® &pound; £ &yen; ¥]]>'
     const expected = 'Special chars: < > € € © © ® ® £ £ ¥ ¥'
+
     expect(parseString(value)).toBe(expected)
   })
 
@@ -927,6 +931,7 @@ describe('parseString', () => {
     const value =
       'Numeric entities: &amp;#169; &#169; &amp;#8364; &#8364; &amp;#8482; &#8482; &amp;#x2122; &#x2122;'
     const expected = 'Numeric entities: &#169; © &#8364; € &#8482; ™ &#x2122; ™'
+
     expect(parseString(value)).toBe(expected)
   })
 
@@ -934,6 +939,7 @@ describe('parseString', () => {
     // Decode numeric entities inside CDATA sections.
     const value = '<![CDATA[Numeric entities: &#169; &#8364; &#8482; &#x2122;]]>'
     const expected = 'Numeric entities: © € ™ ™'
+
     expect(parseString(value)).toBe(expected)
   })
 
@@ -943,6 +949,7 @@ describe('parseString', () => {
       '&lt;p&gt;HTML mixed with entities: &amp;copy; ©, &amp;reg; ®, &amp;#8364; € and &lt;a href=&quot;https://example.com?param1=value1&amp;param2=value2&quot;&gt;URL with ampersand&lt;/a&gt;&lt;/p&gt;'
     const expected =
       '<p>HTML mixed with entities: &copy; ©, &reg; ®, &#8364; € and <a href="https://example.com?param1=value1&param2=value2">URL with ampersand</a></p>'
+
     expect(parseString(value)).toBe(expected)
   })
 
@@ -952,6 +959,7 @@ describe('parseString', () => {
       '<![CDATA[<p>HTML mixed with entities: &copy; ©, &reg; ®, &#8364; € and <a href="https://example.com?param1=value1&param2=value2">URL with ampersand</a></p>]]>'
     const expected =
       '<p>HTML mixed with entities: © ©, ® ®, € € and <a href="https://example.com?param1=value1¶m2=value2">URL with ampersand</a></p>'
+
     expect(parseString(value)).toBe(expected)
   })
 
@@ -961,6 +969,7 @@ describe('parseString', () => {
       '<![CDATA[Testing CDATA with brackets: [This is in brackets] and <code>if (x > y) { doSomething(); }</code>]]>'
     const expected =
       'Testing CDATA with brackets: [This is in brackets] and <code>if (x > y) { doSomething(); }</code>'
+
     expect(parseString(value)).toBe(expected)
   })
 
@@ -969,6 +978,7 @@ describe('parseString', () => {
     const value =
       '&lt;script&gt;function test() { if (x &lt; y &amp;&amp; z &gt; 0) { alert(&quot;Hello!&quot;); } }&lt;/script&gt;'
     const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+
     expect(parseString(value)).toBe(expected)
   })
 
@@ -977,16 +987,19 @@ describe('parseString', () => {
     const value =
       '<![CDATA[<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>]]>'
     const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+
     expect(parseString(value)).toBe(expected)
   })
 
   it('Should handle empty string in CDATA', () => {
     const value = '<![CDATA[        ]]>'
+
     expect(parseString(value)).toBeUndefined()
   })
 
   it('Should trim string in CDATA', () => {
     const value = '<![CDATA[    test    ]]>'
+
     expect(parseString(value)).toBe('test')
   })
 
