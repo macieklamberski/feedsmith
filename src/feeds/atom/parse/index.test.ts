@@ -1180,4 +1180,141 @@ describe('parse', () => {
       })
     })
   })
+
+  it('should correctly parse Atom feed with OPDS catalog entry', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom" xmlns:opds="http://opds-spec.org/2010/catalog">
+        <title>Example OPDS Catalog</title>
+        <id>urn:uuid:example-catalog</id>
+        <updated>2024-01-15T12:00:00Z</updated>
+        <entry>
+          <title>Example Book</title>
+          <id>urn:isbn:9780000000001</id>
+          <updated>2024-01-15T12:00:00Z</updated>
+          <link href="https://example.com/book.epub" rel="http://opds-spec.org/acquisition/buy" type="application/epub+zip">
+            <opds:price currencycode="USD">9.99</opds:price>
+          </link>
+          <link href="https://example.com/cover.jpg" rel="http://opds-spec.org/image" type="image/jpeg"/>
+        </entry>
+      </feed>
+    `
+    const expected = {
+      title: 'Example OPDS Catalog',
+      id: 'urn:uuid:example-catalog',
+      updated: '2024-01-15T12:00:00Z',
+      entries: [
+        {
+          title: 'Example Book',
+          id: 'urn:isbn:9780000000001',
+          updated: '2024-01-15T12:00:00Z',
+          links: [
+            {
+              href: 'https://example.com/book.epub',
+              rel: 'http://opds-spec.org/acquisition/buy',
+              type: 'application/epub+zip',
+              opds: {
+                prices: [{ value: 9.99, currencyCode: 'USD' }],
+              },
+            },
+            {
+              href: 'https://example.com/cover.jpg',
+              rel: 'http://opds-spec.org/image',
+              type: 'image/jpeg',
+            },
+          ],
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should correctly parse Atom feed with OPDS faceted navigation', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom" xmlns:opds="http://opds-spec.org/2010/catalog">
+        <title>Catalog with Facets</title>
+        <id>urn:uuid:catalog-facets</id>
+        <updated>2024-01-15T12:00:00Z</updated>
+        <link href="https://example.com/catalog?sort=author" rel="http://opds-spec.org/facet" opds:facetGroup="Sort" opds:activeFacet="true"/>
+        <link href="https://example.com/catalog?sort=title" rel="http://opds-spec.org/facet" opds:facetGroup="Sort" opds:activeFacet="false"/>
+      </feed>
+    `
+    const expected = {
+      title: 'Catalog with Facets',
+      id: 'urn:uuid:catalog-facets',
+      updated: '2024-01-15T12:00:00Z',
+      links: [
+        {
+          href: 'https://example.com/catalog?sort=author',
+          rel: 'http://opds-spec.org/facet',
+          opds: {
+            facetGroup: 'Sort',
+            activeFacet: true,
+          },
+        },
+        {
+          href: 'https://example.com/catalog?sort=title',
+          rel: 'http://opds-spec.org/facet',
+          opds: {
+            facetGroup: 'Sort',
+            activeFacet: false,
+          },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should correctly parse Atom feed with OPDS indirect acquisition', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom" xmlns:opds="http://opds-spec.org/2010/catalog">
+        <title>Catalog with Indirect Acquisition</title>
+        <id>urn:uuid:catalog-indirect</id>
+        <updated>2024-01-15T12:00:00Z</updated>
+        <entry>
+          <title>Book via Checkout</title>
+          <id>urn:isbn:9780000000002</id>
+          <updated>2024-01-15T12:00:00Z</updated>
+          <link href="https://example.com/checkout" rel="http://opds-spec.org/acquisition" type="text/html">
+            <opds:indirectAcquisition type="application/epub+zip">
+              <opds:indirectAcquisition type="application/x-mobipocket-ebook"/>
+            </opds:indirectAcquisition>
+          </link>
+        </entry>
+      </feed>
+    `
+    const expected = {
+      title: 'Catalog with Indirect Acquisition',
+      id: 'urn:uuid:catalog-indirect',
+      updated: '2024-01-15T12:00:00Z',
+      entries: [
+        {
+          title: 'Book via Checkout',
+          id: 'urn:isbn:9780000000002',
+          updated: '2024-01-15T12:00:00Z',
+          links: [
+            {
+              href: 'https://example.com/checkout',
+              rel: 'http://opds-spec.org/acquisition',
+              type: 'text/html',
+              opds: {
+                indirectAcquisitions: [
+                  {
+                    type: 'application/epub+zip',
+                    indirectAcquisitions: [{ type: 'application/x-mobipocket-ebook' }],
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
 })

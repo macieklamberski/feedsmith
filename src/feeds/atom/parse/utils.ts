@@ -31,6 +31,7 @@ import {
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
+import { retrieveLink as retrieveOpdsLink } from '../../../namespaces/opds/parse/utils.js'
 import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
 import {
   retrieveFeed as retrievePingbackFeed,
@@ -87,6 +88,7 @@ export const parseLink: ParsePartialUtil<Atom.Link<string>> = (value) => {
     title: parseString(value['@title']),
     length: parseNumber(value['@length']),
     thr: namespaces.has('thr') ? retrieveThrLink(value) : undefined,
+    opds: namespaces.has('opds') ? retrieveOpdsLink(value) : undefined,
   }
 
   return trimObject(link)

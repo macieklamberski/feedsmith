@@ -314,6 +314,12 @@ export const namespaceUris = {
     'https://schema.acast.com/1.0',
     'http://schema.acast.com/1.0',
   ],
+  opds: [
+    'http://opds-spec.org/2010/catalog', // Official URI.
+    'https://opds-spec.org/2010/catalog',
+    'http://opds-spec.org/2010/catalog/',
+    'https://opds-spec.org/2010/catalog/',
+  ],
 }
 
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(

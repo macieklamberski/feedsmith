@@ -16,6 +16,7 @@ import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { GooglePlayNs } from '../../../namespaces/googleplay/common/types.js'
 import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
+import type { OpdsNs } from '../../../namespaces/opds/common/types.js'
 import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
 import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
 import type { PscNs } from '../../../namespaces/psc/common/types.js'
@@ -48,6 +49,7 @@ export namespace Atom {
     title?: string
     length?: number
     thr?: ThrNs.Link<TDate>
+    opds?: OpdsNs.Link
   }
 
   export type Person = {

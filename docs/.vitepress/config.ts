@@ -108,6 +108,7 @@ export default defineConfig({
               { text: 'Source', link: '/reference/namespaces/source' },
               { text: 'blogChannel', link: '/reference/namespaces/blogchannel' },
               { text: 'YouTube', link: '/reference/namespaces/yt' },
+              { text: 'OPDS', link: '/reference/namespaces/opds' },
               { text: 'W3C Basic Geo', link: '/reference/namespaces/geo' },
               { text: 'GeoRSS Simple', link: '/reference/namespaces/georss' },
               { text: 'RDF', link: '/reference/namespaces/rdf' },

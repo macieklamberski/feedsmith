@@ -14,7 +14,6 @@ export const stopNodes = [
   'feed.generator',
   'feed.icon',
   'feed.id',
-  'feed.link',
   'feed.logo',
   'feed.rights',
   'feed.subtitle',
@@ -33,7 +32,6 @@ export const stopNodes = [
   'feed.entry.contributor.url', // Atom 0.3.
   'feed.entry.contributor.email',
   'feed.entry.id',
-  'feed.entry.link',
   'feed.entry.published',
   'feed.entry.issued', // Atom 0.3.
   'feed.entry.created', // Atom 0.3.
@@ -50,7 +48,6 @@ export const stopNodes = [
   'feed.entry.source.generator',
   'feed.entry.source.icon',
   'feed.entry.source.id',
-  'feed.entry.source.link',
   'feed.entry.source.logo',
   'feed.entry.source.rights',
   'feed.entry.source.subtitle',
