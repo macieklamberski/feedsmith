@@ -801,6 +801,39 @@
             "count": 2,
             "updated": "2025-05-10T16:45:00Z"
           }
+        },
+        {
+          "href": "https://example.com/book.epub",
+          "rel": "http://opds-spec.org/acquisition/buy",
+          "type": "application/epub+zip",
+          "opds": {
+            "prices": [
+              { "value": 9.99, "currencyCode": "USD" },
+              { "value": 8.49, "currencyCode": "EUR" }
+            ]
+          }
+        },
+        {
+          "href": "https://example.com/borrow",
+          "rel": "http://opds-spec.org/acquisition/borrow",
+          "type": "application/atom+xml;type=entry;profile=opds-catalog",
+          "opds": {
+            "indirectAcquisitions": [
+              {
+                "type": "application/vnd.adobe.adept+xml",
+                "indirectAcquisitions": [{ "type": "application/epub+zip" }]
+              }
+            ]
+          }
+        },
+        {
+          "href": "https://example.com/catalog?sort=new",
+          "rel": "http://opds-spec.org/facet",
+          "title": "New Releases",
+          "opds": {
+            "facetGroup": "Sort By",
+            "activeFacet": true
+          }
         }
       ]
     }
