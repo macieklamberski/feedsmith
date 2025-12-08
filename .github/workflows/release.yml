@@ -33,16 +33,17 @@ jobs:
         with:
           ref: ${{ inputs.branch }}
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
+          node-version: 24
           registry-url: https://registry.npmjs.org
 
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
       - name: Install dependencies
-        run: bun install --frozen-lockfile --ignore-scripts
+        run: bun install --frozen-lockfile
 
       - name: Build package
         run: bun run build
@@ -50,4 +51,4 @@ jobs:
       - name: Release and publish package
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bunx semantic-release --extends ./release.json
+        run: bunx semantic-release --extends kvalita/semantic-release
