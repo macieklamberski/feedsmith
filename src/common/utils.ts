@@ -1,4 +1,4 @@
-import { decodeHTML, decodeXML } from 'entities'
+import { decodeHTML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
 import type {
   AnyOf,
@@ -203,11 +203,7 @@ export const parseString: ParseExactUtil<string> = (value) => {
     }
 
     if (hasEntities(string)) {
-      string = decodeXML(string)
-
-      if (hasEntities(string)) {
-        string = decodeHTML(string)
-      }
+      string = decodeHTML(string)
     }
 
     return string || undefined
