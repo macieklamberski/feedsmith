@@ -3,7 +3,7 @@ RUN apk add --no-cache git
 WORKDIR /app
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile --ignore-scripts
-COPY . ./
+COPY . .
 RUN bun run docs:build
 
 FROM nginx:alpine
