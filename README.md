@@ -22,22 +22,22 @@ Feedsmith offers universal and format‑specific parsers that maintain the origi
 
 ### Core
 
-* **Comprehensive support** 🎯 — Supports all major feed formats and namespaces.
-* **Preserves structure** 📦 — Parsed feed object maintains the original feed structure making it easy to access the data.
-* **Smart namespace handling** 🧠 — Normalizes custom namespace prefixes to standard ones (e.g., `<custom:creator>` becomes `dc.creator`).
-* **Parsing & generating** 🔩 — Use one package for both parsing and generating feeds.
+* **Comprehensive support** — Supports all major feed formats and namespaces.
+* **Preserves structure** — Parsed feed object maintains the original feed structure making it easy to access the data.
+* **Smart namespace handling** — Normalizes custom namespace prefixes to standard ones (e.g., `<custom:creator>` becomes `dc.creator`).
+* **Parsing & generating** — Use one package for both parsing and generating feeds.
 
 ### Leniency
-* **Normalizes legacy elements** ✨ — Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
-* **CaSe INSENsiTive** 🐍 — Handles fields and attributes in any case (lowercase, uppercase, mixed).
-* **Namespace URI tolerance** 🔧 — Accepts non-official namespace URIs (HTTPS variants, case variations, trailing slashes, whitespace).
-* **Forgiving** 🤝 — Gracefully handles malformed or incomplete feeds and extracts valid data. This makes it suitable for use with real-world feeds that may not strictly follow specifications.
+* **Normalizes legacy elements** — Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
+* **CaSe INSENsiTive** — Handles fields and attributes in any case (lowercase, uppercase, mixed).
+* **Namespace URI tolerance** — Accepts non-official namespace URIs (HTTPS variants, case variations, trailing slashes, whitespace).
+* **Forgiving** — Gracefully handles malformed or incomplete feeds and extracts valid data. This makes it suitable for use with real-world feeds that may not strictly follow specifications.
 
 ### Performance and Type-Safety
-* **Ultrafast parsing** ⚡ — One of the fastest JavaScript feed parsers ([see benchmarks](/benchmarks)).
-* **Type-safe API** 🛟 — Built with TypeScript from the ground up, it provides complete type definitions for every feed format and namespace.
-* **Tree-shakable** 🍃 — Only include the parts of the library you need, reducing bundle size.
-* **Well-tested** 🔬 — Comprehensive test suite with over 2000 tests and 99% code coverage.
+* **Ultrafast parsing** — One of the fastest JavaScript feed parsers ([see benchmarks](/benchmarks)).
+* **Type-safe API** — Built with TypeScript from the ground up, it provides complete type definitions for every feed format and namespace.
+* **Tree-shakable** — Only include the parts of the library you need, reducing bundle size.
+* **Well-tested** — Comprehensive test suite with over 2000 tests and 99% code coverage.
 
 ### Compatibility
 * Works in Node.js 14.0.0+ and modern browsers.
