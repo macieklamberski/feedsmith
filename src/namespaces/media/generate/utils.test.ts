@@ -3,6 +3,7 @@ import {
   generateBackLinks,
   generateCategory,
   generateComments,
+  generateCommonElements,
   generateContent,
   generateCopyright,
   generateCredit,
@@ -427,6 +428,33 @@ describe('generateTag', () => {
     const expected = 'music:5'
 
     expect(generateTag(value)).toEqual(expected)
+  })
+
+  it('should generate tag with default weight when not provided', () => {
+    const value = {
+      name: 'video',
+    }
+    const expected = 'video:1'
+
+    expect(generateTag(value)).toEqual(expected)
+  })
+
+  it('should return undefined when name is empty', () => {
+    const value = {
+      name: '',
+      weight: 5,
+    }
+
+    expect(generateTag(value)).toBeUndefined()
+  })
+
+  it('should return undefined when name is whitespace only', () => {
+    const value = {
+      name: '   ',
+      weight: 5,
+    }
+
+    expect(generateTag(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -1860,5 +1888,15 @@ describe('generateItemOrFeed', () => {
 
   it('should handle non-object inputs', () => {
     expect(generateItemOrFeed(undefined)).toBeUndefined()
+  })
+})
+
+describe('generateCommonElements', () => {
+  it('should return undefined for non-object input', () => {
+    expect(generateCommonElements(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateCommonElements('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateCommonElements(null)).toBeUndefined()
   })
 })

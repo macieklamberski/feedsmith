@@ -234,6 +234,12 @@ describe('retrieveAuthors', () => {
 
     expect(retrieveAuthors(value)).toEqual([{ name: 'Jane' }])
   })
+
+  it('should return undefined for non-object input', () => {
+    expect(retrieveAuthors(undefined)).toBeUndefined()
+    expect(retrieveAuthors('string')).toBeUndefined()
+    expect(retrieveAuthors(null)).toBeUndefined()
+  })
 })
 
 describe('parseAttachment', () => {
