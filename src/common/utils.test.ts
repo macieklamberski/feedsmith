@@ -38,7 +38,6 @@ import {
   parseYesNoBoolean,
   retrieveRdfResourceOrText,
   retrieveText,
-  stripCdata,
   trimArray,
   trimObject,
 } from './utils.js'
@@ -742,73 +741,6 @@ describe('trimArray', () => {
   })
 })
 
-describe('stripCdata', () => {
-  it('should return string without CDATA markers when present', () => {
-    expect(stripCdata('<![CDATA[content]]>')).toBe('content')
-    expect(stripCdata('prefix<![CDATA[content]]>suffix')).toBe('prefixcontentsuffix')
-    expect(stripCdata('<![CDATA[]]>')).toBe('')
-  })
-
-  it('should handle multiple CDATA sections in a single string', () => {
-    expect(stripCdata('<![CDATA[first]]>middle<![CDATA[second]]>')).toBe('firstmiddlesecond')
-    expect(stripCdata('start<![CDATA[one]]>between<![CDATA[two]]>end')).toEqual(
-      'startonebetweentwoend',
-    )
-    expect(stripCdata('<![CDATA[a]]><![CDATA[b]]><![CDATA[c]]>')).toBe('abc')
-  })
-
-  it('should return the original string when no CDATA markers are present', () => {
-    expect(stripCdata('regular text')).toBe('regular text')
-    expect(stripCdata('')).toBe('')
-    expect(stripCdata('text with <tags> but no CDATA')).toBe('text with <tags> but no CDATA')
-  })
-
-  it('should handle CDATA with special XML characters', () => {
-    expect(stripCdata('<![CDATA[<div>HTML content</div>]]>')).toBe('<div>HTML content</div>')
-    expect(stripCdata('<![CDATA[&lt;p&gt;encoded entities&lt;/p&gt;]]>')).toEqual(
-      '&lt;p&gt;encoded entities&lt;/p&gt;',
-    )
-    expect(stripCdata('<![CDATA[5 < 10 && 10 > 5]]>')).toBe('5 < 10 && 10 > 5')
-  })
-
-  it('should handle CDATA with newlines and whitespace', () => {
-    expect(stripCdata('<![CDATA[\n  multiline\n  content\n]]>')).toEqual(
-      '\n  multiline\n  content\n',
-    )
-    expect(stripCdata('<![CDATA[   space   ]]>')).toBe('   space   ')
-    expect(stripCdata('  <![CDATA[trimming]]>  ')).toBe('  trimming  ')
-  })
-
-  it('should handle malformed or partial CDATA properly', () => {
-    expect(stripCdata('Incomplete <![CDATA[content')).toBe('Incomplete <![CDATA[content')
-    expect(stripCdata('Missing end content]]>')).toBe('Missing end content]]>')
-    expect(stripCdata('<![CDATA[nested <![CDATA[content]]>]]>')).toEqual(
-      'nested <![CDATA[content]]>',
-    )
-  })
-
-  it('should handle case-sensitivity properly', () => {
-    expect(stripCdata('<![cdata[lowercase]]>')).toBe('<![cdata[lowercase]]>')
-    expect(stripCdata('<![CDATA[correct case]]>')).toBe('correct case')
-  })
-
-  it('should handle empty values correctly', () => {
-    expect(stripCdata('')).toBe('')
-    expect(stripCdata('   ')).toBe('   ')
-  })
-
-  it('should return the same value for non-string inputs', () => {
-    expect(stripCdata(null)).toBeNull()
-    expect(stripCdata(undefined)).toBeUndefined()
-    expect(stripCdata(123)).toEqual(123)
-    expect(stripCdata(true)).toBe(true)
-    expect(stripCdata(false)).toBe(false)
-    expect(stripCdata([])).toEqual([])
-    expect(stripCdata({})).toEqual({})
-    expect(stripCdata(() => {})).toBeTypeOf('function')
-  })
-})
-
 describe('hasEntities', () => {
   it('should detect basic HTML entities', () => {
     expect(hasEntities('This contains &lt;')).toBe(true)
@@ -891,8 +823,7 @@ describe('parseString', () => {
     expect(parseString(value)).toEqual(value)
   })
 
-  it('Should handle entities #1', () => {
-    // Single-pass decode of double-escaped named entities like &amp;amp; to &amp;.
+  it('should handle entities #1: no CDATA', () => {
     const value =
       'Testing &lt;b&gt;bold text&lt;/b&gt; and &lt;i&gt;italic text&lt;/i&gt; with &amp;amp; ampersand, &amp;quot; quotes, &amp;apos; apostrophe and &amp;nbsp; non-breaking space.'
     const expected = `Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.`
@@ -900,17 +831,16 @@ describe('parseString', () => {
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #2', () => {
-    // Decode named HTML entities inside CDATA sections.
+  it('should handle entities #2: with CDATA', () => {
     const value =
       '<![CDATA[Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.]]>'
-    const expected = `Testing <b>bold text</b> and <i>italic text</i> with & ampersand, " quotes, ' apostrophe and   non-breaking space.`
+    const expected =
+      'Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.'
 
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #3', () => {
-    // Single-pass decode of double-escaped special char entities like &amp;lt; to &lt;.
+  it('should handle entities #3: no CDATA', () => {
     const value =
       'Special chars: &amp;lt; &amp;gt; &amp;euro; € &amp;copy; © &amp;reg; ® &amp;pound; £ &amp;yen; ¥'
     const expected = 'Special chars: &lt; &gt; &euro; € &copy; © &reg; ® &pound; £ &yen; ¥'
@@ -918,16 +848,14 @@ describe('parseString', () => {
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #4', () => {
-    // Decode special char entities inside CDATA sections.
+  it('should handle entities #4: with CDATA', () => {
     const value = '<![CDATA[Special chars: &lt; &gt; &euro; € &copy; © &reg; ® &pound; £ &yen; ¥]]>'
-    const expected = 'Special chars: < > € € © © ® ® £ £ ¥ ¥'
+    const expected = 'Special chars: &lt; &gt; &euro; € &copy; © &reg; ® &pound; £ &yen; ¥'
 
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #5', () => {
-    // Single-pass decode of double-escaped numeric entities like &amp;#169; to &#169;.
+  it('should handle entities #5: no CDATA', () => {
     const value =
       'Numeric entities: &amp;#169; &#169; &amp;#8364; &#8364; &amp;#8482; &#8482; &amp;#x2122; &#x2122;'
     const expected = 'Numeric entities: &#169; © &#8364; € &#8482; ™ &#x2122; ™'
@@ -935,16 +863,14 @@ describe('parseString', () => {
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #6', () => {
-    // Decode numeric entities inside CDATA sections.
+  it('should handle entities #6: with CDATA', () => {
     const value = '<![CDATA[Numeric entities: &#169; &#8364; &#8482; &#x2122;]]>'
-    const expected = 'Numeric entities: © € ™ ™'
+    const expected = 'Numeric entities: &#169; &#8364; &#8482; &#x2122;'
 
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #7', () => {
-    // Single-pass decode of complex HTML with mixed double-escaped entities.
+  it('should handle entities #7: no CDATA', () => {
     const value =
       '&lt;p&gt;HTML mixed with entities: &amp;copy; ©, &amp;reg; ®, &amp;#8364; € and &lt;a href=&quot;https://example.com?param1=value1&amp;param2=value2&quot;&gt;URL with ampersand&lt;/a&gt;&lt;/p&gt;'
     const expected =
@@ -953,18 +879,59 @@ describe('parseString', () => {
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #8', () => {
-    // Decode complex HTML with mixed entities inside CDATA sections.
+  it('should handle entities #8: with CDATA', () => {
     const value =
       '<![CDATA[<p>HTML mixed with entities: &copy; ©, &reg; ®, &#8364; € and <a href="https://example.com?param1=value1&param2=value2">URL with ampersand</a></p>]]>'
     const expected =
-      '<p>HTML mixed with entities: © ©, ® ®, € € and <a href="https://example.com?param1=value1¶m2=value2">URL with ampersand</a></p>'
+      '<p>HTML mixed with entities: &copy; ©, &reg; ®, &#8364; € and <a href="https://example.com?param1=value1&param2=value2">URL with ampersand</a></p>'
 
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #9', () => {
-    // Preserve brackets and code syntax inside CDATA sections.
+  it('should handle entities #9: no CDATA', () => {
+    const value =
+      '&lt;script&gt;function test() { if (x &lt; y &amp;&amp; z &gt; 0) { alert(&quot;Hello!&quot;); } }&lt;/script&gt;'
+    const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
+  it('should handle entities #10: with CDATA', () => {
+    const value =
+      '<![CDATA[<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>]]>'
+    const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
+  it('should handle entities #11: with mixed content', () => {
+    const value = '&lt;prefix&gt;<![CDATA[&lt;cdata&gt;]]>&lt;suffix&gt;'
+    const expected = '<prefix>&lt;cdata&gt;<suffix>'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
+  it('should handle entities #12: with multiple CDATA blocks', () => {
+    const value =
+      'start &amp; <![CDATA[first &amp;]]> middle &amp; <![CDATA[second &amp;]]> end &amp;'
+    const expected = 'start & first &amp; middle & second &amp; end &'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
+  it('should handle empty string in CDATA', () => {
+    const value = '<![CDATA[        ]]>'
+
+    expect(parseString(value)).toBeUndefined()
+  })
+
+  it('should trim string in CDATA', () => {
+    const value = '<![CDATA[    test    ]]>'
+
+    expect(parseString(value)).toBe('test')
+  })
+
+  it('should preserve brackets and code syntax inside CDATA', () => {
     const value =
       '<![CDATA[Testing CDATA with brackets: [This is in brackets] and <code>if (x > y) { doSomething(); }</code>]]>'
     const expected =
@@ -1011,52 +978,38 @@ describe('parseString', () => {
     expect(parseString(value)).toBe('test')
   })
 
-  it('should return number', () => {
+  it('should return number as string', () => {
     const value = 420
 
     expect(parseString(value)).toBe('420')
   })
 
-  it('should handle empty string', () => {
-    const value = ''
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for empty string', () => {
+    expect(parseString('')).toBeUndefined()
   })
 
-  it('should handle only whitespaces string', () => {
-    const value = '     '
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for whitespace-only string', () => {
+    expect(parseString('     ')).toBeUndefined()
   })
 
-  it('should handle array', () => {
-    const value = ['javascript', { another: 'typescript' }]
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for array', () => {
+    expect(parseString(['javascript', { another: 'typescript' }])).toBeUndefined()
   })
 
-  it('should handle object', () => {
-    const value = { name: 'javascript' }
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for object', () => {
+    expect(parseString({ name: 'javascript' })).toBeUndefined()
   })
 
-  it('should return boolean', () => {
-    const value = true
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for boolean', () => {
+    expect(parseString(true)).toBeUndefined()
   })
 
-  it('should handle null', () => {
-    const value = null
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for null', () => {
+    expect(parseString(null)).toBeUndefined()
   })
 
-  it('should return undefined for undefined input', () => {
-    const value = undefined
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for undefined', () => {
+    expect(parseString(undefined)).toBeUndefined()
   })
 })
 

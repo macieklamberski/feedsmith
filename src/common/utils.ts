@@ -147,41 +147,48 @@ export const generateSingularOrArray = <V>(
 const cdataStartTag = '<![CDATA['
 const cdataEndTag = ']]>'
 
-export const stripCdata = (text: Unreliable) => {
-  if (typeof text !== 'string') {
-    return text
-  }
+export const hasEntities = (text: string) => {
+  const ampIndex = text.indexOf('&')
+  return ampIndex !== -1 && text.indexOf(';', ampIndex) !== -1
+}
+
+const decodeWithCdata = (text: string): string => {
+  // Per XML spec, CDATA content should be passed through verbatim without entity decoding.
+  // Text outside CDATA should have entities decoded normally.
 
   let currentIndex = text.indexOf(cdataStartTag)
 
   if (currentIndex === -1) {
-    return text
+    return hasEntities(text) ? decodeHTML(text) : text
   }
 
   let result = ''
   let lastIndex = 0
 
   while (currentIndex !== -1) {
-    result += text.substring(lastIndex, currentIndex)
-    lastIndex = text.indexOf(cdataEndTag, currentIndex + 9)
+    // Decode entities in text before CDATA.
+    const textBefore = text.substring(lastIndex, currentIndex)
+    result += hasEntities(textBefore) ? decodeHTML(textBefore) : textBefore
 
-    if (lastIndex === -1) {
-      return text
+    // Find end of CDATA section.
+    const endIndex = text.indexOf(cdataEndTag, currentIndex + 9)
+
+    if (endIndex === -1) {
+      // Malformed - return original text decoded.
+      return hasEntities(text) ? decodeHTML(text) : text
     }
 
-    result += text.substring(currentIndex + 9, lastIndex)
-    lastIndex += 3
+    // Add CDATA content verbatim (without markers).
+    result += text.substring(currentIndex + 9, endIndex)
+    lastIndex = endIndex + 3
     currentIndex = text.indexOf(cdataStartTag, lastIndex)
   }
 
-  result += text.substring(lastIndex)
+  // Decode entities in remaining text after last CDATA.
+  const textAfter = text.substring(lastIndex)
+  result += hasEntities(textAfter) ? decodeHTML(textAfter) : textAfter
 
   return result
-}
-
-export const hasEntities = (text: string) => {
-  const ampIndex = text.indexOf('&')
-  return ampIndex !== -1 && text.indexOf(';', ampIndex) !== -1
 }
 
 export const parseString: ParseExactUtil<string> = (value) => {
@@ -190,21 +197,7 @@ export const parseString: ParseExactUtil<string> = (value) => {
       return
     }
 
-    let string = value
-
-    if (value.indexOf(cdataStartTag) !== -1) {
-      string = stripCdata(value)
-    }
-
-    string = string.trim()
-
-    if (string === '') {
-      return
-    }
-
-    if (hasEntities(string)) {
-      string = decodeHTML(string)
-    }
+    const string = decodeWithCdata(value).trim()
 
     return string || undefined
   }
