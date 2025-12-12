@@ -940,6 +940,44 @@ describe('parseString', () => {
     expect(parseString(value)).toBe(expected)
   })
 
+  it('Should handle entities #10', () => {
+    // Decode escaped script tag with entities in non-CDATA content.
+    const value =
+      '&lt;script&gt;function test() { if (x &lt; y &amp;&amp; z &gt; 0) { alert(&quot;Hello!&quot;); } }&lt;/script&gt;'
+    const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
+  it('Should handle entities #11', () => {
+    // Preserve script tag content inside CDATA sections.
+    const value =
+      '<![CDATA[<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>]]>'
+    const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
+  it('should decode only one layer of triple-escaped entities', () => {
+    expect(parseString('&amp;amp;amp;')).toBe('&amp;amp;')
+  })
+
+  it('should handle mixed single and double escaped entities', () => {
+    expect(parseString('&lt; and &amp;lt;')).toBe('< and &lt;')
+  })
+
+  it('Should handle empty string in CDATA', () => {
+    const value = '<![CDATA[        ]]>'
+
+    expect(parseString(value)).toBeUndefined()
+  })
+
+  it('Should trim string in CDATA', () => {
+    const value = '<![CDATA[    test    ]]>'
+
+    expect(parseString(value)).toBe('test')
+  })
+
   it('should return number as string', () => {
     const value = 420
 
