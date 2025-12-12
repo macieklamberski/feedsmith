@@ -1023,6 +1023,148 @@ describe('parseString', () => {
   it('should return undefined for undefined', () => {
     expect(parseString(undefined)).toBeUndefined()
   })
+
+  describe('XML spec compliance', () => {
+    // XML §4.1: Character and Entity References (outside CDATA)
+    describe('entity references outside CDATA (XML §4.1)', () => {
+      const cases = [
+        { value: '&lt;', expected: '<', name: '&lt; to <' },
+        { value: '&gt;', expected: '>', name: '&gt; to >' },
+        { value: '&amp;', expected: '&', name: '&amp; to &' },
+        { value: '&quot;', expected: '"', name: '&quot; to "' },
+        { value: '&apos;', expected: "'", name: "&apos; to '" },
+        { value: '&#169;', expected: '©', name: 'decimal char ref &#169; to ©' },
+        { value: '&#x00A9;', expected: '©', name: 'hex char ref &#x00A9; to ©' },
+      ]
+
+      for (const { value, expected, name } of cases) {
+        it(`should decode ${name}`, () => {
+          expect(parseString(value)).toBe(expected)
+        })
+      }
+    })
+
+    // Single-decode behavior (prevents double-decoding data corruption)
+    describe('single-decode behavior (no double-decoding)', () => {
+      const cases = [
+        { value: '&amp;lt;', expected: '&lt;', name: '&amp;lt; to &lt; (not <)' },
+        { value: '&amp;amp;', expected: '&amp;', name: '&amp;amp; to &amp; (not &)' },
+        { value: '&amp;#169;', expected: '&#169;', name: '&amp;#169; to &#169; (not ©)' },
+        { value: '&amp;amp;amp;', expected: '&amp;amp;', name: 'triple-escaped &amp;amp;amp;' },
+        { value: '&lt; and &amp;lt;', expected: '< and &lt;', name: 'mixed single and double' },
+      ]
+
+      for (const { value, expected, name } of cases) {
+        it(`should decode ${name}`, () => {
+          expect(parseString(value)).toBe(expected)
+        })
+      }
+    })
+
+    // XML §2.7: CDATA Sections (verbatim passthrough)
+    describe('CDATA verbatim passthrough (XML §2.7)', () => {
+      const cases = [
+        { value: '<![CDATA[&lt;]]>', expected: '&lt;', name: '&lt; inside CDATA' },
+        { value: '<![CDATA[&amp;]]>', expected: '&amp;', name: '&amp; inside CDATA' },
+        { value: '<![CDATA[&#169;]]>', expected: '&#169;', name: '&#169; inside CDATA' },
+        { value: '<![CDATA[<div>]]>', expected: '<div>', name: 'literal < inside CDATA' },
+        { value: '<![CDATA[a && b]]>', expected: 'a && b', name: 'literal & inside CDATA' },
+        { value: '<![CDATA[]]]]>', expected: ']]', name: ']] inside CDATA (only ]]> ends it)' },
+      ]
+
+      for (const { value, expected, name } of cases) {
+        it(`should preserve ${name}`, () => {
+          expect(parseString(value)).toBe(expected)
+        })
+      }
+    })
+
+    // Mixed content: outside decoded, inside verbatim
+    describe('mixed content (CDATA + regular text)', () => {
+      const cases = [
+        {
+          value: '&lt;a&gt;<![CDATA[&lt;b&gt;]]>&lt;c&gt;',
+          expected: '<a>&lt;b&gt;<c>',
+          name: 'decode outside, preserve inside',
+        },
+        {
+          value: 'x &amp; <![CDATA[y &amp;]]> z &amp;',
+          expected: 'x & y &amp; z &',
+          name: '&amp; decoded outside, preserved inside',
+        },
+        {
+          value: '<![CDATA[first]]><![CDATA[second]]>',
+          expected: 'firstsecond',
+          name: 'multiple CDATA blocks concatenate',
+        },
+        {
+          value: '&lt;prefix&gt;<![CDATA[&lt;cdata&gt;]]>&lt;suffix&gt;',
+          expected: '<prefix>&lt;cdata&gt;<suffix>',
+          name: 'escaped tags outside, preserved inside',
+        },
+      ]
+
+      for (const { value, expected, name } of cases) {
+        it(`should handle ${name}`, () => {
+          expect(parseString(value)).toBe(expected)
+        })
+      }
+    })
+
+    // Real-world feed examples (from feed-parser issue #209)
+    describe('real-world feed examples', () => {
+      const cases = [
+        {
+          value:
+            '<![CDATA[<pre class="code-block"><code>&lt;div&gt;\n  &lt;a&gt;1&lt;/a&gt;\n&lt;/div&gt;</code></pre>]]>',
+          expected:
+            '<pre class="code-block"><code>&lt;div&gt;\n  &lt;a&gt;1&lt;/a&gt;\n&lt;/div&gt;</code></pre>',
+          name: 'CSS-Tricks: code block with escaped HTML inside CDATA',
+        },
+        {
+          value:
+            '&lt;p&gt;Everyone knows the &lt;code&gt;&amp;lt;input&amp;gt;&lt;/code&gt; element&lt;/p&gt;',
+          expected: '<p>Everyone knows the <code>&lt;input&gt;</code> element</p>',
+          name: 'HTML-tip: double-escaped code example without CDATA',
+        },
+        {
+          value:
+            '&lt;li&gt;&lt;code&gt;&amp;lt;bluesky-likes&amp;gt;&lt;/code&gt; — displays likes&lt;/li&gt;',
+          expected: '<li><code>&lt;bluesky-likes&gt;</code> — displays likes</li>',
+          name: 'Lea Verou: double-escaped custom element',
+        },
+        {
+          value:
+            '<![CDATA[<p>Visit <a href="https://example.com?ref=podcast&amp;utm=rss">us</a></p>]]>',
+          expected: '<p>Visit <a href="https://example.com?ref=podcast&amp;utm=rss">us</a></p>',
+          name: 'Podcast: URL with &amp; in CDATA',
+        },
+        {
+          value:
+            '<![CDATA[<pre><code>&lt;Button onClick={() =&gt; alert()}&gt;Click&lt;/Button&gt;</code></pre>]]>',
+          expected:
+            '<pre><code>&lt;Button onClick={() =&gt; alert()}&gt;Click&lt;/Button&gt;</code></pre>',
+          name: 'Programming blog: escaped JSX in CDATA',
+        },
+        {
+          value: 'Learn about &amp;lt;template&amp;gt; and &amp;lt;slot&amp;gt; elements',
+          expected: 'Learn about &lt;template&gt; and &lt;slot&gt; elements',
+          name: 'WordPress: double-encoded HTML tags',
+        },
+        {
+          value: '<![CDATA[<p>Use <code>&lt;script type="module"&gt;</code> for ES modules</p>]]>',
+          expected: '<p>Use <code>&lt;script type="module"&gt;</code> for ES modules</p>',
+          name: 'Docs: multiple escaped script tags in CDATA',
+        },
+      ]
+
+      for (const { value, expected, name } of cases) {
+        it(`should handle ${name}`, () => {
+          expect(parseString(value)).toBe(expected)
+        })
+      }
+    })
+  })
 })
 
 describe('parseNumber', () => {
