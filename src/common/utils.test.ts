@@ -966,6 +966,18 @@ describe('parseString', () => {
     expect(parseString('&lt; and &amp;lt;')).toBe('< and &lt;')
   })
 
+  it('should handle malformed CDATA without closing tag', () => {
+    const value = '<![CDATA[content without closing tag'
+
+    expect(parseString(value)).toBe('<![CDATA[content without closing tag')
+  })
+
+  it('should handle malformed CDATA without closing tag with entities', () => {
+    const value = '<![CDATA[content &amp; more'
+
+    expect(parseString(value)).toBe('<![CDATA[content & more')
+  })
+
   it('Should handle empty string in CDATA', () => {
     const value = '<![CDATA[        ]]>'
 
