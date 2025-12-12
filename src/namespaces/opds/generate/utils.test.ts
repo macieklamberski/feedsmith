@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'bun:test'
-import { generateIndirectAcquisition, generateLink, generatePrice } from './utils.js'
+import {
+  generateAvailability,
+  generateCopies,
+  generateHolds,
+  generateIndirectAcquisition,
+  generateLink,
+  generatePrice,
+} from './utils.js'
 
 describe('generatePrice', () => {
   it('should generate price with all properties', () => {
@@ -183,6 +190,219 @@ describe('generateIndirectAcquisition', () => {
   })
 })
 
+describe('generateAvailability', () => {
+  it('should generate availability with all properties', () => {
+    const value = {
+      status: 'available',
+      since: '2023-01-01T00:00:00Z',
+      until: '2023-12-31T23:59:59Z',
+    }
+    const expected = {
+      '@status': 'available',
+      '@since': '2023-01-01T00:00:00Z',
+      '@until': '2023-12-31T23:59:59Z',
+    }
+
+    expect(generateAvailability(value)).toEqual(expected)
+  })
+
+  it('should generate availability with status only', () => {
+    const value = {
+      status: 'unavailable',
+    }
+    const expected = {
+      '@status': 'unavailable',
+    }
+
+    expect(generateAvailability(value)).toEqual(expected)
+  })
+
+  it('should generate availability with status and since', () => {
+    const value = {
+      status: 'reserved',
+      since: '2023-06-15T10:00:00Z',
+    }
+    const expected = {
+      '@status': 'reserved',
+      '@since': '2023-06-15T10:00:00Z',
+    }
+
+    expect(generateAvailability(value)).toEqual(expected)
+  })
+
+  it('should generate availability with status and until', () => {
+    const value = {
+      status: 'ready',
+      until: '2023-07-01T00:00:00Z',
+    }
+    const expected = {
+      '@status': 'ready',
+      '@until': '2023-07-01T00:00:00Z',
+    }
+
+    expect(generateAvailability(value)).toEqual(expected)
+  })
+
+  it('should return undefined when status is missing', () => {
+    const value = {
+      since: '2023-01-01T00:00:00Z',
+      until: '2023-12-31T23:59:59Z',
+    }
+
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateAvailability(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateAvailability(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateAvailability('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateAvailability(123)).toBeUndefined()
+    expect(generateAvailability(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateAvailability(null)).toBeUndefined()
+  })
+})
+
+describe('generateHolds', () => {
+  it('should generate holds with all properties', () => {
+    const value = {
+      total: 10,
+      position: 3,
+    }
+    const expected = {
+      '@total': 10,
+      '@position': 3,
+    }
+
+    expect(generateHolds(value)).toEqual(expected)
+  })
+
+  it('should generate holds with total only', () => {
+    const value = {
+      total: 5,
+    }
+    const expected = {
+      '@total': 5,
+    }
+
+    expect(generateHolds(value)).toEqual(expected)
+  })
+
+  it('should generate holds with position only', () => {
+    const value = {
+      position: 2,
+    }
+    const expected = {
+      '@position': 2,
+    }
+
+    expect(generateHolds(value)).toEqual(expected)
+  })
+
+  it('should generate holds with zero values', () => {
+    const value = {
+      total: 0,
+      position: 0,
+    }
+    const expected = {
+      '@total': 0,
+      '@position': 0,
+    }
+
+    expect(generateHolds(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(generateHolds(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateHolds('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateHolds(123)).toBeUndefined()
+    expect(generateHolds(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateHolds(null)).toBeUndefined()
+  })
+})
+
+describe('generateCopies', () => {
+  it('should generate copies with all properties', () => {
+    const value = {
+      total: 20,
+      available: 5,
+    }
+    const expected = {
+      '@total': 20,
+      '@available': 5,
+    }
+
+    expect(generateCopies(value)).toEqual(expected)
+  })
+
+  it('should generate copies with total only', () => {
+    const value = {
+      total: 10,
+    }
+    const expected = {
+      '@total': 10,
+    }
+
+    expect(generateCopies(value)).toEqual(expected)
+  })
+
+  it('should generate copies with available only', () => {
+    const value = {
+      available: 3,
+    }
+    const expected = {
+      '@available': 3,
+    }
+
+    expect(generateCopies(value)).toEqual(expected)
+  })
+
+  it('should generate copies with zero values', () => {
+    const value = {
+      total: 5,
+      available: 0,
+    }
+    const expected = {
+      '@total': 5,
+      '@available': 0,
+    }
+
+    expect(generateCopies(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(generateCopies(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateCopies('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateCopies(123)).toBeUndefined()
+    expect(generateCopies(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateCopies(null)).toBeUndefined()
+  })
+})
+
 describe('generateLink', () => {
   it('should generate link with all OPDS properties', () => {
     const value = {
@@ -193,6 +413,9 @@ describe('generateLink', () => {
       indirectAcquisitions: [{ type: 'application/epub+zip' }],
       facetGroup: 'Price',
       activeFacet: true,
+      availability: { status: 'available' },
+      holds: { total: 5, position: 2 },
+      copies: { total: 10, available: 3 },
     }
     const expected = {
       'opds:price': [
@@ -202,6 +425,9 @@ describe('generateLink', () => {
       'opds:indirectAcquisition': [{ '@type': 'application/epub+zip' }],
       '@opds:facetGroup': 'Price',
       '@opds:activeFacet': true,
+      'opds:availability': { '@status': 'available' },
+      'opds:holds': { '@total': 5, '@position': 2 },
+      'opds:copies': { '@total': 10, '@available': 3 },
     }
 
     expect(generateLink(value)).toEqual(expected)

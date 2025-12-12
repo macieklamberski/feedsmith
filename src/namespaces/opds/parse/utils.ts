@@ -4,6 +4,7 @@ import {
   parseArrayOf,
   parseBoolean,
   parseNumber,
+  parseSingularOf,
   parseString,
   retrieveText,
   trimObject,
@@ -47,6 +48,52 @@ export const parseIndirectAcquisition: ParsePartialUtil<OpdsNs.IndirectAcquisiti
   return trimObject(indirectAcquisition) as OpdsNs.IndirectAcquisition
 }
 
+export const parseAvailability: ParsePartialUtil<OpdsNs.Availability> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const status = parseString(value['@status'])
+
+  if (status === undefined) {
+    return
+  }
+
+  const availability = {
+    status,
+    since: parseString(value['@since']),
+    until: parseString(value['@until']),
+  }
+
+  return trimObject(availability) as OpdsNs.Availability
+}
+
+export const parseHolds: ParsePartialUtil<OpdsNs.Holds> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const holds = {
+    total: parseNumber(value['@total']),
+    position: parseNumber(value['@position']),
+  }
+
+  return trimObject(holds)
+}
+
+export const parseCopies: ParsePartialUtil<OpdsNs.Copies> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const copies = {
+    total: parseNumber(value['@total']),
+    available: parseNumber(value['@available']),
+  }
+
+  return trimObject(copies)
+}
+
 export const retrieveLink: ParsePartialUtil<OpdsNs.Link> = (value) => {
   if (!isObject(value)) {
     return
@@ -57,6 +104,9 @@ export const retrieveLink: ParsePartialUtil<OpdsNs.Link> = (value) => {
     indirectAcquisitions: parseArrayOf(value['opds:indirectacquisition'], parseIndirectAcquisition),
     facetGroup: parseString(value['@opds:facetgroup']),
     activeFacet: parseBoolean(value['@opds:activefacet']),
+    availability: parseSingularOf(value['opds:availability'], parseAvailability),
+    holds: parseSingularOf(value['opds:holds'], parseHolds),
+    copies: parseSingularOf(value['opds:copies'], parseCopies),
   }
 
   return trimObject(link)
