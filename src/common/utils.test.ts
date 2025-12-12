@@ -991,6 +991,14 @@ describe('parseString', () => {
     expect(parseString(value)).toBe(expected)
   })
 
+  it('should decode only one layer of triple-escaped entities', () => {
+    expect(parseString('&amp;amp;amp;')).toBe('&amp;amp;')
+  })
+
+  it('should handle mixed single and double escaped entities', () => {
+    expect(parseString('&lt; and &amp;lt;')).toBe('< and &lt;')
+  })
+
   it('Should handle empty string in CDATA', () => {
     const value = '<![CDATA[        ]]>'
 
