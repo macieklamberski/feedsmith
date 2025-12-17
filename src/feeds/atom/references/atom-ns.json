@@ -834,6 +834,26 @@
             "facetGroup": "Sort By",
             "activeFacet": true
           }
+        },
+        {
+          "href": "https://example.com/borrow/123",
+          "rel": "http://opds-spec.org/acquisition/borrow",
+          "type": "application/atom+xml;type=entry;profile=opds-catalog",
+          "opds": {
+            "availability": {
+              "status": "available",
+              "since": "2024-01-01T00:00:00Z",
+              "until": "2024-12-31T23:59:59Z"
+            },
+            "holds": {
+              "total": 5,
+              "position": 2
+            },
+            "copies": {
+              "total": 3,
+              "available": 1
+            }
+          }
         }
       ]
     }
