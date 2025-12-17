@@ -591,5 +591,10 @@
       </opds:indirectAcquisition>
     </link>
     <link href="https://example.com/catalog?sort=new" rel="http://opds-spec.org/facet" title="New Releases" opds:facetGroup="Sort By" opds:activeFacet="true"/>
+    <link href="https://example.com/borrow/123" rel="http://opds-spec.org/acquisition/borrow" type="application/atom+xml;type=entry;profile=opds-catalog">
+      <opds:availability status="available" since="2024-01-01T00:00:00Z" until="2024-12-31T23:59:59Z"/>
+      <opds:holds total="5" position="2"/>
+      <opds:copies total="3" available="1"/>
+    </link>
   </entry>
 </feed>
