@@ -1,85 +1,85 @@
 {
-  "name": "feedsmith",
-  "description": "Fast, all‑in‑one feed parser and generator for RSS, Atom, RDF, and JSON Feed, with support for Podcast, iTunes, Dublin Core, and OPML files.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/macieklamberski/feedsmith.git"
-  },
-  "homepage": "https://feedsmith.dev",
-  "bugs": {
-    "url": "https://github.com/macieklamberski/feedsmith/issues"
-  },
-  "license": "MIT",
-  "author": "Maciej Lamberski",
-  "sideEffects": false,
-  "keywords": [
-    "rss to json",
-    "rss reader",
-    "rss parser",
-    "rss generator",
-    "opml parser",
-    "opml to json",
-    "rss podcast",
-    "feed parser",
-    "feed generator",
-    "atom",
-    "rss",
-    "rdf",
-    "jsonfeed",
-    "opml"
-  ],
-  "type": "module",
-  "main": "./dist/index.cjs",
-  "types": "./dist/index.d.cts",
-  "typesVersions": {
-    "*": {
-      "types": [
-        "./dist/types.d.ts"
-      ]
-    }
-  },
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
-    },
-    "./types": {
-      "import": {
-        "types": "./dist/types.d.ts",
-        "default": "./dist/types.js"
-      },
-      "require": {
-        "types": "./dist/types.d.cts",
-        "default": "./dist/types.cjs"
-      }
-    },
-    "./package.json": "./package.json"
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "prepare": "lefthook install",
-    "build": "tsdown src/index.ts src/types.ts --format cjs,esm --dts --clean --unbundle --no-fixed-extension",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
-  },
-  "dependencies": {
-    "entities": "^7.0.0",
-    "fast-xml-parser": "^5.3.3"
-  },
-  "devDependencies": {
-    "@types/bun": "^1.3.5",
-    "kvalita": "^1.8.0",
-    "tsdown": "^0.17.4",
-    "vitepress": "^1.6.4",
-    "vitepress-plugin-llms": "^1.9.3"
-  }
+	"name": "feedsmith",
+	"description": "Fast, all‑in‑one feed parser and generator for RSS, Atom, RDF, and JSON Feed, with support for Podcast, iTunes, Dublin Core, and OPML files.",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/macieklamberski/feedsmith.git"
+	},
+	"homepage": "https://feedsmith.dev",
+	"bugs": {
+		"url": "https://github.com/macieklamberski/feedsmith/issues"
+	},
+	"license": "MIT",
+	"author": "Maciej Lamberski",
+	"sideEffects": false,
+	"keywords": [
+		"rss to json",
+		"rss reader",
+		"rss parser",
+		"rss generator",
+		"opml parser",
+		"opml to json",
+		"rss podcast",
+		"feed parser",
+		"feed generator",
+		"atom",
+		"rss",
+		"rdf",
+		"jsonfeed",
+		"opml"
+	],
+	"type": "module",
+	"main": "./dist/index.cjs",
+	"types": "./dist/index.d.cts",
+	"typesVersions": {
+		"*": {
+			"types": [
+				"./dist/types.d.ts"
+			]
+		}
+	},
+	"exports": {
+		".": {
+			"import": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.js"
+			},
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			}
+		},
+		"./types": {
+			"import": {
+				"types": "./dist/types.d.ts",
+				"default": "./dist/types.js"
+			},
+			"require": {
+				"types": "./dist/types.d.cts",
+				"default": "./dist/types.cjs"
+			}
+		},
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"prepare": "lefthook install",
+		"build": "tsdown src/index.ts src/types.ts --format cjs,esm --dts --clean --unbundle --no-fixed-extension",
+		"docs:dev": "vitepress dev docs",
+		"docs:build": "vitepress build docs",
+		"docs:preview": "vitepress preview docs"
+	},
+	"dependencies": {
+		"entities": "^7.0.0",
+		"fast-xml-parser": "^5.3.3"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.3.5",
+		"kvalita": "^1.8.0",
+		"tsdown": "^0.18.1",
+		"vitepress": "^1.6.4",
+		"vitepress-plugin-llms": "^1.9.3"
+	}
 }
