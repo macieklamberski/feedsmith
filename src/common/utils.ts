@@ -467,7 +467,7 @@ export const generateYesNoBoolean: GenerateUtil<boolean> = (value) => {
 
 export const detectNamespaces = (value: unknown, recursive = false): Set<string> => {
   const namespaces = new Set<string>()
-  const seenKeys = new Set<string>()
+  const seenKeys = recursive ? new Set<string>() : undefined
 
   const traverse = (current: unknown): void => {
     if (Array.isArray(current)) {
@@ -480,11 +480,11 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
 
     if (isObject(current)) {
       for (const key in current) {
-        if (seenKeys.has(key)) {
+        if (seenKeys?.has(key)) {
           continue
         }
 
-        seenKeys.add(key)
+        seenKeys?.add(key)
 
         const keyWithoutAt = key.charCodeAt(0) === 64 ? key.slice(1) : key
         const colonIndex = keyWithoutAt.indexOf(':')
