@@ -171,7 +171,7 @@ const decodeWithCdata = (text: string): string => {
     result += hasEntities(textBefore) ? decodeHTML(textBefore) : textBefore
 
     // Find end of CDATA section.
-    const endIndex = text.indexOf(cdataEndTag, currentIndex + 9)
+    const endIndex = text.indexOf(cdataEndTag, currentIndex + cdataStartTag.length)
 
     if (endIndex === -1) {
       // Malformed - return original text decoded.
@@ -179,8 +179,8 @@ const decodeWithCdata = (text: string): string => {
     }
 
     // Add CDATA content verbatim (without markers).
-    result += text.substring(currentIndex + 9, endIndex)
-    lastIndex = endIndex + 3
+    result += text.substring(currentIndex + cdataStartTag.length, endIndex)
+    lastIndex = endIndex + cdataEndTag.length
     currentIndex = text.indexOf(cdataStartTag, lastIndex)
   }
 
