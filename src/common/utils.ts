@@ -681,11 +681,16 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
       return object
     }
 
-    const normalizedObject: Unreliable = {}
-    const keyGroups: Map<string, Array<Unreliable>> = new Map()
-
     const declarations = extractNamespaceDeclarations(object)
-    const currentContext = { ...parentContext, ...declarations }
+    // Avoid object spread if no new declarations (common case).
+    let hasDeclarations = false
+    for (const _ in declarations) {
+      hasDeclarations = true
+      break
+    }
+    const currentContext = hasDeclarations ? { ...parentContext, ...declarations } : parentContext
+
+    const normalizedObject: Unreliable = {}
 
     for (const key in object) {
       const value = object[key]
@@ -698,19 +703,17 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
       const normalizedKey = normalizeKey(key, currentContext)
       const normalizedValue = traverseAndNormalize(value, currentContext)
 
-      if (!keyGroups.has(normalizedKey)) {
-        keyGroups.set(normalizedKey, [])
+      // Handle key collisions inline (rare: different prefixes mapping to same namespace).
+      if (normalizedKey in normalizedObject) {
+        const existing = normalizedObject[normalizedKey]
+        if (Array.isArray(existing)) {
+          existing.push(normalizedValue)
+        } else {
+          normalizedObject[normalizedKey] = [existing, normalizedValue]
+        }
+      } else {
+        normalizedObject[normalizedKey] = normalizedValue
       }
-
-      const group = keyGroups.get(normalizedKey)
-
-      if (group) {
-        group.push(normalizedValue)
-      }
-    }
-
-    for (const [normalizedKey, values] of keyGroups) {
-      normalizedObject[normalizedKey] = values.length === 1 ? values[0] : values
     }
 
     return normalizedObject
