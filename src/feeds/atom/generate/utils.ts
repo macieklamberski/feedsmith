@@ -32,6 +32,7 @@ import {
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
+import { generateLink as generateOpdsLink } from '../../../namespaces/opds/generate/utils.js'
 import { generateFeed as generateOpenSearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
 import {
   generateFeed as generatePingbackFeed,
@@ -73,6 +74,7 @@ export const generateLink: GenerateUtil<Atom.Link<DateLike>> = (link) => {
     '@title': generatePlainString(link.title),
     '@length': generateNumber(link.length),
     ...generateThrLink(link.thr),
+    ...generateOpdsLink(link.opds),
   }
 
   return trimObject(value)

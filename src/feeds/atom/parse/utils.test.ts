@@ -176,6 +176,112 @@ describe('parseLink', () => {
     expect(parseLink(null)).toBeUndefined()
     expect(parseLink([])).toBeUndefined()
   })
+
+  it('should parse link with OPDS prices', () => {
+    const value = {
+      '@href': 'https://example.com/book.epub',
+      '@rel': 'http://opds-spec.org/acquisition/buy',
+      '@type': 'application/epub+zip',
+      '@xmlns:opds': 'http://opds-spec.org/2010/catalog',
+      'opds:price': [
+        { '#text': '9.99', '@currencycode': 'USD' },
+        { '#text': '8.99', '@currencycode': 'EUR' },
+      ],
+    }
+    const expected = {
+      href: 'https://example.com/book.epub',
+      rel: 'http://opds-spec.org/acquisition/buy',
+      type: 'application/epub+zip',
+      opds: {
+        prices: [
+          { value: 9.99, currencyCode: 'USD' },
+          { value: 8.99, currencyCode: 'EUR' },
+        ],
+      },
+    }
+
+    expect(parseLink(value)).toEqual(expected)
+  })
+
+  it('should parse link with OPDS indirect acquisition', () => {
+    const value = {
+      '@href': 'https://example.com/loan',
+      '@rel': 'http://opds-spec.org/acquisition/borrow',
+      '@type': 'application/atom+xml;type=entry;profile=opds-catalog',
+      '@xmlns:opds': 'http://opds-spec.org/2010/catalog',
+      'opds:indirectacquisition': {
+        '@type': 'application/vnd.adobe.adept+xml',
+        'opds:indirectacquisition': {
+          '@type': 'application/epub+zip',
+        },
+      },
+    }
+    const expected = {
+      href: 'https://example.com/loan',
+      rel: 'http://opds-spec.org/acquisition/borrow',
+      type: 'application/atom+xml;type=entry;profile=opds-catalog',
+      opds: {
+        indirectAcquisitions: [
+          {
+            type: 'application/vnd.adobe.adept+xml',
+            indirectAcquisitions: [{ type: 'application/epub+zip' }],
+          },
+        ],
+      },
+    }
+
+    expect(parseLink(value)).toEqual(expected)
+  })
+
+  it('should parse link with OPDS facet attributes', () => {
+    const value = {
+      '@href': 'https://example.com/catalog?sort=new',
+      '@rel': 'http://opds-spec.org/facet',
+      '@title': 'New Releases',
+      '@xmlns:opds': 'http://opds-spec.org/2010/catalog',
+      '@opds:facetgroup': 'Sort By',
+      '@opds:activefacet': 'true',
+    }
+    const expected = {
+      href: 'https://example.com/catalog?sort=new',
+      rel: 'http://opds-spec.org/facet',
+      title: 'New Releases',
+      opds: {
+        facetGroup: 'Sort By',
+        activeFacet: true,
+      },
+    }
+
+    expect(parseLink(value)).toEqual(expected)
+  })
+
+  it('should parse link with complete OPDS properties', () => {
+    const value = {
+      '@href': 'https://example.com/book.epub',
+      '@rel': 'http://opds-spec.org/acquisition/buy',
+      '@type': 'application/epub+zip',
+      '@xmlns:opds': 'http://opds-spec.org/2010/catalog',
+      'opds:price': { '#text': '14.99', '@currencycode': 'USD' },
+      'opds:indirectacquisition': {
+        '@type': 'application/vnd.adobe.adept+xml',
+      },
+      '@opds:facetgroup': 'Price',
+      '@opds:activefacet': 'false',
+    }
+    const expected = {
+      href: 'https://example.com/book.epub',
+      rel: 'http://opds-spec.org/acquisition/buy',
+      type: 'application/epub+zip',
+      opds: {
+        prices: [{ value: 14.99, currencyCode: 'USD' }],
+        indirectAcquisitions: [{ type: 'application/vnd.adobe.adept+xml' }],
+        facetGroup: 'Price',
+        activeFacet: false,
+      },
+    }
+
+    expect(parseLink(value)).toEqual(expected)
+  })
 })
 
 describe('retrievePersonUri', () => {
