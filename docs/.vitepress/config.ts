@@ -35,7 +35,6 @@ export default defineConfig({
         items: [
           { text: 'Introduction', link: '/' },
           { text: 'Quick Start', link: '/quick-start' },
-          { text: 'TypeScript', link: '/typescript' },
           { text: 'Benchmarks', link: '/benchmarks' },
         ],
       },
@@ -116,6 +115,10 @@ export default defineConfig({
           {
             text: 'OPML',
             link: '/reference/opml',
+          },
+          {
+            text: 'TypeScript',
+            link: '/reference/typescript',
           },
         ],
       },
