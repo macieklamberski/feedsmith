@@ -68,8 +68,7 @@
     "prepare": "lefthook install",
     "build": "tsdown src/index.ts src/types.ts --format cjs,esm --dts --clean --unbundle --no-fixed-extension",
     "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:build": "vitepress build docs"
   },
   "dependencies": {
     "entities": "^7.0.0",
