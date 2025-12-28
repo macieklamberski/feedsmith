@@ -33,7 +33,7 @@ Feedsmith offers universal and format‑specific parsers that maintain the origi
 * **Namespace URI tolerance** — Accepts non-official namespace URIs (HTTPS variants, case variations, trailing slashes, whitespace).
 * **Forgiving** — Gracefully handles malformed or incomplete feeds and extracts valid data. This makes it suitable for use with real-world feeds that may not strictly follow specifications.
 
-### Performance and Type-Safety
+### Performance
 * **Ultrafast parsing** — One of the fastest JavaScript feed parsers ([see benchmarks](/benchmarks)).
 * **Type-safe API** — Built with TypeScript from the ground up, it provides complete type definitions for every feed format and namespace.
 * **Tree-shakable** — Only include the parts of the library you need, reducing bundle size.
