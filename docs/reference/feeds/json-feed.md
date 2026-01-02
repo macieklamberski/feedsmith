@@ -114,7 +114,7 @@ type Attachment = Json.Attachment
 // … see type definitions below for all available types
 ```
 
-See the [TypeScript guide](/typescript) for usage examples.
+See the [TypeScript guide](/reference/typescript) for usage examples.
 
 ### Type Definitions
 

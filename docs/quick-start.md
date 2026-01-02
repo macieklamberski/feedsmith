@@ -155,7 +155,7 @@ type Category = Rss.Category
 type Enclosure = Rss.Enclosure
 ```
 
-Each format exports its complete type system, including nested types and namespace types. See the [TypeScript guide](/typescript) for details.
+Each format exports its complete type system, including nested types and namespace types. See the [TypeScript guide](/reference/typescript) for details.
 
 ## What's Next?
 
