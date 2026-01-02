@@ -15,7 +15,7 @@ export default defineConfig({
       'script',
       {
         async: '',
-        src: 'https://umami.lamberski.com/script.js',
+        src: 'https://stats.lamberski.com/script.js',
         'data-website-id': 'a9c61323-eaac-4bbb-bd20-b1c6f0d69a3d',
       },
     ],
