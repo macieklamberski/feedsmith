@@ -23,3 +23,6 @@ benchmarks/**/go.sum
 benchmarks/**/composer.lock
 benchmarks/**/Gemfile.lock
 benchmarks/**/parsing-gofeed
+
+# Development
+plans
