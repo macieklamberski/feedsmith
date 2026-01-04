@@ -59,18 +59,7 @@ export const createNamespaceGetter = (
     return (key: string) => value[key]
   }
 
-  const prefixedKeys = new Map<string, string>()
-
-  return (key: string) => {
-    let prefixedKey = prefixedKeys.get(key)
-
-    if (!prefixedKey) {
-      prefixedKey = prefix + key
-      prefixedKeys.set(key, prefixedKey)
-    }
-
-    return value[prefixedKey]
-  }
+  return (key: string) => value[prefix + key]
 }
 
 export const parseLink: ParsePartialUtil<Atom.Link<string>> = (value) => {

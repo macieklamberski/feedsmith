@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { generateFeed, generateItem } from './utils.js'
+import { generateFeed, generateItem, generateMetamark } from './utils.js'
 
 describe('generateItem', () => {
   it('should generate valid item object with all properties', () => {
@@ -206,6 +206,16 @@ describe('generateItem', () => {
     }
 
     expect(generateItem(value)).toEqual(expected)
+  })
+})
+
+describe('generateMetamark', () => {
+  it('should return undefined for non-object input', () => {
+    expect(generateMetamark(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateMetamark('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateMetamark(null)).toBeUndefined()
   })
 })
 

@@ -1,8 +1,3 @@
----
-prev: Quick Start
-next: Benchmarks
----
-
 # TypeScript
 
 Feedsmith is built with TypeScript and provides comprehensive type definitions for all feed formats and namespaces.

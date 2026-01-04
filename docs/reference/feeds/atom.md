@@ -9,6 +9,10 @@ Atom is a syndication format based on XML that provides a robust framework for w
       <td>0.3, 1.0</td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="https://tools.ietf.org/html/rfc4287" target="_blank">RFC 4287 - Atom Syndication Format</a></td>
+    </tr>
+    <tr>
       <th>Namespaces</th>
       <td>
         <a href="/reference/namespaces/dc">Dublin Core</a>,
@@ -134,7 +138,7 @@ type Person = Atom.Person
 // … see type definitions below for all available types
 ```
 
-See the [TypeScript guide](/typescript) for usage examples.
+See the [TypeScript guide](/reference/typescript) for usage examples.
 
 ### Type Definitions
 

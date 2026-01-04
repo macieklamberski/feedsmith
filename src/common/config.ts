@@ -270,6 +270,50 @@ export const namespaceUris = {
     'http://madskills.com/public/xml/rss/module/trackback',
     'https://madskills.com/public/xml/rss/module/trackback',
   ],
+  prism: [
+    'http://prismstandard.org/namespaces/basic/3.0/', // Official URI (PRISM 3.0).
+    'https://prismstandard.org/namespaces/basic/3.0/',
+    'http://prismstandard.org/namespaces/basic/3.0',
+    'https://prismstandard.org/namespaces/basic/3.0',
+    'http://prismstandard.org/namespaces/basic/2.2/', // PRISM 2.2.
+    'https://prismstandard.org/namespaces/basic/2.2/',
+    'http://prismstandard.org/namespaces/basic/2.2',
+    'https://prismstandard.org/namespaces/basic/2.2',
+    'http://prismstandard.org/namespaces/basic/2.1/', // PRISM 2.1.
+    'https://prismstandard.org/namespaces/basic/2.1/',
+    'http://prismstandard.org/namespaces/basic/2.1',
+    'https://prismstandard.org/namespaces/basic/2.1',
+    'http://prismstandard.org/namespaces/basic/2.0/', // PRISM 2.0.
+    'https://prismstandard.org/namespaces/basic/2.0/',
+    'http://prismstandard.org/namespaces/basic/2.0',
+    'https://prismstandard.org/namespaces/basic/2.0',
+    'http://prismstandard.org/namespaces/2.0/basic/', // PRISM 2.0 (alternative path).
+    'https://prismstandard.org/namespaces/2.0/basic/',
+    'http://prismstandard.org/namespaces/2.0/basic',
+    'https://prismstandard.org/namespaces/2.0/basic',
+    'http://prismstandard.org/namespaces/1.2/basic/', // PRISM 1.2 (most common).
+    'https://prismstandard.org/namespaces/1.2/basic/',
+    'http://prismstandard.org/namespaces/1.2/basic',
+    'https://prismstandard.org/namespaces/1.2/basic',
+    'http://prismstandard.org/namespaces/1.1/basic/', // PRISM 1.1.
+    'https://prismstandard.org/namespaces/1.1/basic/',
+    'http://prismstandard.org/namespaces/1.1/basic',
+    'https://prismstandard.org/namespaces/1.1/basic',
+    'http://prismstandard.org/namespaces/1.0/basic/', // PRISM 1.0.
+    'https://prismstandard.org/namespaces/1.0/basic/',
+    'http://prismstandard.org/namespaces/1.0/basic',
+    'https://prismstandard.org/namespaces/1.0/basic',
+    'http://purl.org/rss/1.0/modules/prism/', // Legacy purl.org URI.
+    'https://purl.org/rss/1.0/modules/prism/',
+    'http://purl.org/rss/1.0/modules/prism',
+    'https://purl.org/rss/1.0/modules/prism',
+  ],
+  acast: [
+    'https://schema.acast.com/1.0/', // Official URI.
+    'http://schema.acast.com/1.0/',
+    'https://schema.acast.com/1.0',
+    'http://schema.acast.com/1.0',
+  ],
 }
 
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(
