@@ -14,7 +14,7 @@ export namespace PodcastNs {
     license?: License
     alternateEnclosures?: Array<AlternateEnclosure>
     values?: Array<Value>
-    images?: Images
+    images?: Array<Image>
     socialInteracts?: Array<SocialInteract>
     txts?: Array<Txt>
     chat?: Chat
@@ -135,8 +135,19 @@ export namespace PodcastNs {
     fee?: boolean
   }
 
+  /** @internal Legacy type for parsing podcast:images with srcset attribute. */
   export type Images = {
     srcset?: string
+  }
+
+  export type Image = {
+    href?: string // Required in spec.
+    alt?: string
+    aspectRatio?: string
+    width?: number
+    height?: number
+    type?: string
+    purpose?: string
   }
 
   export type LiveItem<TDate extends DateLike> = BaseItem & {
@@ -226,7 +237,7 @@ export namespace PodcastNs {
     guid?: string
     values?: Array<Value>
     medium?: string
-    images?: Images
+    images?: Array<Image>
     liveItems?: Array<LiveItem<TDate>>
     blocks?: Array<Block>
     txts?: Array<Txt>

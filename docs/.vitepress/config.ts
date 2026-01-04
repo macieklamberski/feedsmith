@@ -1,10 +1,6 @@
 import { defineConfig } from 'vitepress'
-import llmstxt from 'vitepress-plugin-llms'
 
 export default defineConfig({
-  vite: {
-    plugins: [llmstxt()],
-  },
   title: 'Feedsmith',
   description:
     'Fast, all‑in‑one JavaScript feed parser and generator for RSS, Atom, RDF, and JSON Feed, with support for popular namespaces and OPML files.',
@@ -15,7 +11,7 @@ export default defineConfig({
       'script',
       {
         async: '',
-        src: 'https://umami.lamberski.com/script.js',
+        src: 'https://stats.lamberski.com/script.js',
         'data-website-id': 'a9c61323-eaac-4bbb-bd20-b1c6f0d69a3d',
       },
     ],
@@ -35,7 +31,6 @@ export default defineConfig({
         items: [
           { text: 'Introduction', link: '/' },
           { text: 'Quick Start', link: '/quick-start' },
-          { text: 'TypeScript', link: '/typescript' },
           { text: 'Benchmarks', link: '/benchmarks' },
         ],
       },
@@ -90,10 +85,12 @@ export default defineConfig({
               { text: 'Media RSS', link: '/reference/namespaces/media' },
               { text: 'Google Play Podcast', link: '/reference/namespaces/googleplay' },
               { text: 'Spotify', link: '/reference/namespaces/spotify' },
+              { text: 'Acast', link: '/reference/namespaces/acast' },
               { text: 'RawVoice', link: '/reference/namespaces/rawvoice' },
               { text: 'FeedPress', link: '/reference/namespaces/feedpress' },
               { text: 'arXiv', link: '/reference/namespaces/arxiv' },
               { text: 'OpenSearch', link: '/reference/namespaces/opensearch' },
+              { text: 'PRISM', link: '/reference/namespaces/prism' },
               { text: 'ccREL', link: '/reference/namespaces/cc' },
               { text: 'Creative Commons', link: '/reference/namespaces/creativecommons' },
               { text: 'Atom Threading', link: '/reference/namespaces/thr' },
@@ -107,11 +104,16 @@ export default defineConfig({
               { text: 'YouTube', link: '/reference/namespaces/yt' },
               { text: 'W3C Basic Geo', link: '/reference/namespaces/geo' },
               { text: 'GeoRSS Simple', link: '/reference/namespaces/georss' },
+              { text: 'RDF', link: '/reference/namespaces/rdf' },
             ],
           },
           {
             text: 'OPML',
             link: '/reference/opml',
+          },
+          {
+            text: 'TypeScript',
+            link: '/reference/typescript',
           },
         ],
       },

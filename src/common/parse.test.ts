@@ -211,8 +211,10 @@ describe('parse', () => {
           {
             title: 'Example Item',
             link: 'http://example.org/item/1',
+            rdf: { about: 'http://example.org/item/1' },
           },
         ],
+        rdf: { about: 'http://example.org/rss' },
       },
     }
 
@@ -348,8 +350,10 @@ describe('parse', () => {
             {
               title: 'Example Item',
               link: 'http://example.org/item/1',
+              rdf: { about: 'http://example.org/item/1' },
             },
           ],
+          rdf: { about: 'http://example.org/rss' },
         },
       }
 

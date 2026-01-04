@@ -134,7 +134,7 @@ const feed: Rss.Feed<Date> = {
 const xml = generateRssFeed(feed)
 ```
 
-For more details on using types, see the [TypeScript guide](/typescript).
+For more details on using types, see the [TypeScript guide](/reference/typescript).
 
 ## Atom Feed
 

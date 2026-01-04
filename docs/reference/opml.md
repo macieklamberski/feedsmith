@@ -8,6 +8,10 @@ OPML (Outline Processor Markup Language) is a format for exchanging outline-stru
       <th>Versions</th>
       <td>1.0, 2.0</td>
     </tr>
+    <tr>
+      <th>Specification</th>
+      <td><a href="https://opml.org/spec2.opml" target="_blank">OPML 2.0 Specification</a></td>
+    </tr>
   </tbody>
 </table>
 
@@ -97,7 +101,7 @@ type Outline = Opml.Outline<Date>
 // … see type definitions below for all available types
 ```
 
-See the [TypeScript guide](/typescript) for usage examples.
+See the [TypeScript guide](/reference/typescript) for usage examples.
 
 ### Type Definitions
 

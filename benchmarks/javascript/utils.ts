@@ -66,7 +66,7 @@ export const runTinybench = async (name: string, tests: Record<string, () => Pro
       'Average (ms)': result?.latency?.mean ? result.latency.mean.toFixed(3) : 'n/a',
       'Min (ms)': result?.latency?.min ? result.latency.min.toFixed(3) : 'n/a',
       'Max (ms)': result?.latency?.max ? result.latency.max.toFixed(3) : 'n/a',
-      Runs: result?.latency?.samples.length || 0,
+      Runs: result?.latency?.samplesCount ?? 0,
       _rawMean: result?.latency?.mean || Number.MAX_VALUE,
     }))
     .sort((a, b) => a._rawMean - b._rawMean)

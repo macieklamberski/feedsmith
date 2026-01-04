@@ -12,6 +12,10 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import {
+  retrieveFeed as retrieveAcastFeed,
+  retrieveItem as retrieveAcastItem,
+} from '../../../namespaces/acast/parse/utils.js'
 import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
 import {
   retrieveEntry as retrieveAtomEntry,
@@ -44,6 +48,10 @@ import {
   retrieveFeed as retrievePodcastFeed,
   retrieveItem as retrievePodcastItem,
 } from '../../../namespaces/podcast/parse/utils.js'
+import {
+  retrieveFeed as retrievePrismFeed,
+  retrieveItem as retrievePrismItem,
+} from '../../../namespaces/prism/parse/utils.js'
 import { retrieveItem as retrievePscItem } from '../../../namespaces/psc/parse/utils.js'
 import {
   retrieveFeed as retrieveRawVoiceFeed,
@@ -199,12 +207,14 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    prism: namespaces.has('prism') ? retrievePrismItem(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceItem(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyItem(value) : undefined,
     pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
+    acast: namespaces.has('acast') ? retrieveAcastItem(value) : undefined,
   }
 
   return trimObject(item)
@@ -248,6 +258,7 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>, ParseOptions> = (valu
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    prism: namespaces.has('prism') ? retrievePrismFeed(value) : undefined,
     creativeCommons: namespaces.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(value)
       : undefined,
@@ -259,6 +270,7 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>, ParseOptions> = (valu
     rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceFeed(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(value) : undefined,
     pingback: namespaces.has('pingback') ? retrievePingbackFeed(value) : undefined,
+    acast: namespaces.has('acast') ? retrieveAcastFeed(value) : undefined,
   }
 
   return trimObject(feed)

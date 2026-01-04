@@ -1,4 +1,4 @@
-import { decodeHTML, decodeXML } from 'entities'
+import { decodeHTML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
 import type {
   AnyOf,
@@ -147,41 +147,48 @@ export const generateSingularOrArray = <V>(
 const cdataStartTag = '<![CDATA['
 const cdataEndTag = ']]>'
 
-export const stripCdata = (text: Unreliable) => {
-  if (typeof text !== 'string') {
-    return text
-  }
+export const hasEntities = (text: string) => {
+  const ampIndex = text.indexOf('&')
+  return ampIndex !== -1 && text.indexOf(';', ampIndex) !== -1
+}
+
+const decodeWithCdata = (text: string): string => {
+  // Per XML spec, CDATA content should be passed through verbatim without entity decoding.
+  // Text outside CDATA should have entities decoded normally.
 
   let currentIndex = text.indexOf(cdataStartTag)
 
   if (currentIndex === -1) {
-    return text
+    return hasEntities(text) ? decodeHTML(text) : text
   }
 
   let result = ''
   let lastIndex = 0
 
   while (currentIndex !== -1) {
-    result += text.substring(lastIndex, currentIndex)
-    lastIndex = text.indexOf(cdataEndTag, currentIndex + 9)
+    // Decode entities in text before CDATA.
+    const textBefore = text.substring(lastIndex, currentIndex)
+    result += hasEntities(textBefore) ? decodeHTML(textBefore) : textBefore
 
-    if (lastIndex === -1) {
-      return text
+    // Find end of CDATA section.
+    const endIndex = text.indexOf(cdataEndTag, currentIndex + cdataStartTag.length)
+
+    if (endIndex === -1) {
+      // Malformed - return original text decoded.
+      return hasEntities(text) ? decodeHTML(text) : text
     }
 
-    result += text.substring(currentIndex + 9, lastIndex)
-    lastIndex += 3
+    // Add CDATA content verbatim (without markers).
+    result += text.substring(currentIndex + cdataStartTag.length, endIndex)
+    lastIndex = endIndex + cdataEndTag.length
     currentIndex = text.indexOf(cdataStartTag, lastIndex)
   }
 
-  result += text.substring(lastIndex)
+  // Decode entities in remaining text after last CDATA.
+  const textAfter = text.substring(lastIndex)
+  result += hasEntities(textAfter) ? decodeHTML(textAfter) : textAfter
 
   return result
-}
-
-export const hasEntities = (text: string) => {
-  const ampIndex = text.indexOf('&')
-  return ampIndex !== -1 && text.indexOf(';', ampIndex) !== -1
 }
 
 export const parseString: ParseExactUtil<string> = (value) => {
@@ -190,25 +197,7 @@ export const parseString: ParseExactUtil<string> = (value) => {
       return
     }
 
-    let string = value
-
-    if (value.indexOf(cdataStartTag) !== -1) {
-      string = stripCdata(value)
-    }
-
-    string = string.trim()
-
-    if (string === '') {
-      return
-    }
-
-    if (hasEntities(string)) {
-      string = decodeXML(string)
-
-      if (hasEntities(string)) {
-        string = decodeHTML(string)
-      }
-    }
+    const string = decodeWithCdata(value).trim()
 
     return string || undefined
   }
@@ -478,7 +467,7 @@ export const generateYesNoBoolean: GenerateUtil<boolean> = (value) => {
 
 export const detectNamespaces = (value: unknown, recursive = false): Set<string> => {
   const namespaces = new Set<string>()
-  const seenKeys = new Set<string>()
+  const seenKeys = recursive ? new Set<string>() : undefined
 
   const traverse = (current: unknown): void => {
     if (Array.isArray(current)) {
@@ -491,11 +480,11 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
 
     if (isObject(current)) {
       for (const key in current) {
-        if (seenKeys.has(key)) {
+        if (seenKeys?.has(key)) {
           continue
         }
 
-        seenKeys.add(key)
+        seenKeys?.add(key)
 
         const keyWithoutAt = key.charCodeAt(0) === 64 ? key.slice(1) : key
         const colonIndex = keyWithoutAt.indexOf(':')
@@ -683,19 +672,25 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
     object: Unreliable,
     parentContext: Record<string, string> = {},
   ): Unreliable => {
-    if (!isObject(object)) {
-      return object
-    }
-
+    // Check arrays first since isObject() excludes arrays.
     if (Array.isArray(object)) {
       return object.map((item) => traverseAndNormalize(item, parentContext))
     }
 
-    const normalizedObject: Unreliable = {}
-    const keyGroups: Map<string, Array<Unreliable>> = new Map()
+    if (!isObject(object)) {
+      return object
+    }
 
     const declarations = extractNamespaceDeclarations(object)
-    const currentContext = { ...parentContext, ...declarations }
+    // Avoid object spread if no new declarations (common case).
+    let hasDeclarations = false
+    for (const _ in declarations) {
+      hasDeclarations = true
+      break
+    }
+    const currentContext = hasDeclarations ? { ...parentContext, ...declarations } : parentContext
+
+    const normalizedObject: Unreliable = {}
 
     for (const key in object) {
       const value = object[key]
@@ -708,19 +703,17 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
       const normalizedKey = normalizeKey(key, currentContext)
       const normalizedValue = traverseAndNormalize(value, currentContext)
 
-      if (!keyGroups.has(normalizedKey)) {
-        keyGroups.set(normalizedKey, [])
+      // Handle key collisions inline (rare: different prefixes mapping to same namespace).
+      if (normalizedKey in normalizedObject) {
+        const existing = normalizedObject[normalizedKey]
+        if (Array.isArray(existing)) {
+          existing.push(normalizedValue)
+        } else {
+          normalizedObject[normalizedKey] = [existing, normalizedValue]
+        }
+      } else {
+        normalizedObject[normalizedKey] = normalizedValue
       }
-
-      const group = keyGroups.get(normalizedKey)
-
-      if (group) {
-        group.push(normalizedValue)
-      }
-    }
-
-    for (const [normalizedKey, values] of keyGroups) {
-      normalizedObject[normalizedKey] = values.length === 1 ? values[0] : values
     }
 
     return normalizedObject

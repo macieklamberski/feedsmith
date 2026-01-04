@@ -38,7 +38,6 @@ import {
   parseYesNoBoolean,
   retrieveRdfResourceOrText,
   retrieveText,
-  stripCdata,
   trimArray,
   trimObject,
 } from './utils.js'
@@ -742,73 +741,6 @@ describe('trimArray', () => {
   })
 })
 
-describe('stripCdata', () => {
-  it('should return string without CDATA markers when present', () => {
-    expect(stripCdata('<![CDATA[content]]>')).toBe('content')
-    expect(stripCdata('prefix<![CDATA[content]]>suffix')).toBe('prefixcontentsuffix')
-    expect(stripCdata('<![CDATA[]]>')).toBe('')
-  })
-
-  it('should handle multiple CDATA sections in a single string', () => {
-    expect(stripCdata('<![CDATA[first]]>middle<![CDATA[second]]>')).toBe('firstmiddlesecond')
-    expect(stripCdata('start<![CDATA[one]]>between<![CDATA[two]]>end')).toEqual(
-      'startonebetweentwoend',
-    )
-    expect(stripCdata('<![CDATA[a]]><![CDATA[b]]><![CDATA[c]]>')).toBe('abc')
-  })
-
-  it('should return the original string when no CDATA markers are present', () => {
-    expect(stripCdata('regular text')).toBe('regular text')
-    expect(stripCdata('')).toBe('')
-    expect(stripCdata('text with <tags> but no CDATA')).toBe('text with <tags> but no CDATA')
-  })
-
-  it('should handle CDATA with special XML characters', () => {
-    expect(stripCdata('<![CDATA[<div>HTML content</div>]]>')).toBe('<div>HTML content</div>')
-    expect(stripCdata('<![CDATA[&lt;p&gt;encoded entities&lt;/p&gt;]]>')).toEqual(
-      '&lt;p&gt;encoded entities&lt;/p&gt;',
-    )
-    expect(stripCdata('<![CDATA[5 < 10 && 10 > 5]]>')).toBe('5 < 10 && 10 > 5')
-  })
-
-  it('should handle CDATA with newlines and whitespace', () => {
-    expect(stripCdata('<![CDATA[\n  multiline\n  content\n]]>')).toEqual(
-      '\n  multiline\n  content\n',
-    )
-    expect(stripCdata('<![CDATA[   space   ]]>')).toBe('   space   ')
-    expect(stripCdata('  <![CDATA[trimming]]>  ')).toBe('  trimming  ')
-  })
-
-  it('should handle malformed or partial CDATA properly', () => {
-    expect(stripCdata('Incomplete <![CDATA[content')).toBe('Incomplete <![CDATA[content')
-    expect(stripCdata('Missing end content]]>')).toBe('Missing end content]]>')
-    expect(stripCdata('<![CDATA[nested <![CDATA[content]]>]]>')).toEqual(
-      'nested <![CDATA[content]]>',
-    )
-  })
-
-  it('should handle case-sensitivity properly', () => {
-    expect(stripCdata('<![cdata[lowercase]]>')).toBe('<![cdata[lowercase]]>')
-    expect(stripCdata('<![CDATA[correct case]]>')).toBe('correct case')
-  })
-
-  it('should handle empty values correctly', () => {
-    expect(stripCdata('')).toBe('')
-    expect(stripCdata('   ')).toBe('   ')
-  })
-
-  it('should return the same value for non-string inputs', () => {
-    expect(stripCdata(null)).toBeNull()
-    expect(stripCdata(undefined)).toBeUndefined()
-    expect(stripCdata(123)).toEqual(123)
-    expect(stripCdata(true)).toBe(true)
-    expect(stripCdata(false)).toBe(false)
-    expect(stripCdata([])).toEqual([])
-    expect(stripCdata({})).toEqual({})
-    expect(stripCdata(() => {})).toBeTypeOf('function')
-  })
-})
-
 describe('hasEntities', () => {
   it('should detect basic HTML entities', () => {
     expect(hasEntities('This contains &lt;')).toBe(true)
@@ -891,140 +823,347 @@ describe('parseString', () => {
     expect(parseString(value)).toEqual(value)
   })
 
-  it('Should handle entities #1', () => {
+  it('should handle entities #1: no CDATA', () => {
     const value =
       'Testing &lt;b&gt;bold text&lt;/b&gt; and &lt;i&gt;italic text&lt;/i&gt; with &amp;amp; ampersand, &amp;quot; quotes, &amp;apos; apostrophe and &amp;nbsp; non-breaking space.'
-    const expected = `Testing <b>bold text</b> and <i>italic text</i> with & ampersand, " quotes, ' apostrophe and   non-breaking space.`
+    const expected = `Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.`
+
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #2', () => {
+  it('should handle entities #2: with CDATA', () => {
     const value =
       '<![CDATA[Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.]]>'
-    const expected = `Testing <b>bold text</b> and <i>italic text</i> with & ampersand, " quotes, ' apostrophe and   non-breaking space.`
+    const expected =
+      'Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.'
+
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #3', () => {
+  it('should handle entities #3: no CDATA', () => {
     const value =
       'Special chars: &amp;lt; &amp;gt; &amp;euro; € &amp;copy; © &amp;reg; ® &amp;pound; £ &amp;yen; ¥'
-    const expected = 'Special chars: < > € € © © ® ® £ £ ¥ ¥'
+    const expected = 'Special chars: &lt; &gt; &euro; € &copy; © &reg; ® &pound; £ &yen; ¥'
+
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #4', () => {
+  it('should handle entities #4: with CDATA', () => {
     const value = '<![CDATA[Special chars: &lt; &gt; &euro; € &copy; © &reg; ® &pound; £ &yen; ¥]]>'
-    const expected = 'Special chars: < > € € © © ® ® £ £ ¥ ¥'
+    const expected = 'Special chars: &lt; &gt; &euro; € &copy; © &reg; ® &pound; £ &yen; ¥'
+
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #5', () => {
+  it('should handle entities #5: no CDATA', () => {
     const value =
       'Numeric entities: &amp;#169; &#169; &amp;#8364; &#8364; &amp;#8482; &#8482; &amp;#x2122; &#x2122;'
-    const expected = 'Numeric entities: © © € € ™ ™ ™ ™'
+    const expected = 'Numeric entities: &#169; © &#8364; € &#8482; ™ &#x2122; ™'
+
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #6', () => {
+  it('should handle entities #6: with CDATA', () => {
     const value = '<![CDATA[Numeric entities: &#169; &#8364; &#8482; &#x2122;]]>'
-    const expected = 'Numeric entities: © € ™ ™'
+    const expected = 'Numeric entities: &#169; &#8364; &#8482; &#x2122;'
+
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #7', () => {
+  it('should handle entities #7: no CDATA', () => {
     const value =
       '&lt;p&gt;HTML mixed with entities: &amp;copy; ©, &amp;reg; ®, &amp;#8364; € and &lt;a href=&quot;https://example.com?param1=value1&amp;param2=value2&quot;&gt;URL with ampersand&lt;/a&gt;&lt;/p&gt;'
     const expected =
-      '<p>HTML mixed with entities: © ©, ® ®, € € and <a href="https://example.com?param1=value1¶m2=value2">URL with ampersand</a></p>'
+      '<p>HTML mixed with entities: &copy; ©, &reg; ®, &#8364; € and <a href="https://example.com?param1=value1&param2=value2">URL with ampersand</a></p>'
+
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #8', () => {
+  it('should handle entities #8: with CDATA', () => {
     const value =
       '<![CDATA[<p>HTML mixed with entities: &copy; ©, &reg; ®, &#8364; € and <a href="https://example.com?param1=value1&param2=value2">URL with ampersand</a></p>]]>'
     const expected =
-      '<p>HTML mixed with entities: © ©, ® ®, € € and <a href="https://example.com?param1=value1¶m2=value2">URL with ampersand</a></p>'
+      '<p>HTML mixed with entities: &copy; ©, &reg; ®, &#8364; € and <a href="https://example.com?param1=value1&param2=value2">URL with ampersand</a></p>'
+
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #9', () => {
+  it('should handle entities #9: no CDATA', () => {
+    const value =
+      '&lt;script&gt;function test() { if (x &lt; y &amp;&amp; z &gt; 0) { alert(&quot;Hello!&quot;); } }&lt;/script&gt;'
+    const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
+  it('should handle entities #10: with CDATA', () => {
+    const value =
+      '<![CDATA[<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>]]>'
+    const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
+  it('should handle entities #11: with mixed content', () => {
+    const value = '&lt;prefix&gt;<![CDATA[&lt;cdata&gt;]]>&lt;suffix&gt;'
+    const expected = '<prefix>&lt;cdata&gt;<suffix>'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
+  it('should handle entities #12: with multiple CDATA blocks', () => {
+    const value =
+      'start &amp; <![CDATA[first &amp;]]> middle &amp; <![CDATA[second &amp;]]> end &amp;'
+    const expected = 'start & first &amp; middle & second &amp; end &'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
+  it('should handle empty string in CDATA', () => {
+    const value = '<![CDATA[        ]]>'
+
+    expect(parseString(value)).toBeUndefined()
+  })
+
+  it('should trim string in CDATA', () => {
+    const value = '<![CDATA[    test    ]]>'
+
+    expect(parseString(value)).toBe('test')
+  })
+
+  it('should preserve brackets and code syntax inside CDATA', () => {
     const value =
       '<![CDATA[Testing CDATA with brackets: [This is in brackets] and <code>if (x > y) { doSomething(); }</code>]]>'
     const expected =
       'Testing CDATA with brackets: [This is in brackets] and <code>if (x > y) { doSomething(); }</code>'
+
     expect(parseString(value)).toBe(expected)
   })
 
   it('Should handle entities #10', () => {
+    // Decode escaped script tag with entities in non-CDATA content.
     const value =
       '&lt;script&gt;function test() { if (x &lt; y &amp;&amp; z &gt; 0) { alert(&quot;Hello!&quot;); } }&lt;/script&gt;'
     const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+
     expect(parseString(value)).toBe(expected)
   })
 
   it('Should handle entities #11', () => {
+    // Preserve script tag content inside CDATA sections.
     const value =
       '<![CDATA[<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>]]>'
     const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+
     expect(parseString(value)).toBe(expected)
+  })
+
+  it('should decode only one layer of triple-escaped entities', () => {
+    expect(parseString('&amp;amp;amp;')).toBe('&amp;amp;')
+  })
+
+  it('should handle mixed single and double escaped entities', () => {
+    expect(parseString('&lt; and &amp;lt;')).toBe('< and &lt;')
+  })
+
+  it('should handle malformed CDATA without closing tag', () => {
+    const value = '<![CDATA[content without closing tag'
+
+    expect(parseString(value)).toBe('<![CDATA[content without closing tag')
+  })
+
+  it('should handle malformed CDATA without closing tag with entities', () => {
+    const value = '<![CDATA[content &amp; more'
+
+    expect(parseString(value)).toBe('<![CDATA[content & more')
   })
 
   it('Should handle empty string in CDATA', () => {
     const value = '<![CDATA[        ]]>'
+
     expect(parseString(value)).toBeUndefined()
   })
 
   it('Should trim string in CDATA', () => {
     const value = '<![CDATA[    test    ]]>'
+
     expect(parseString(value)).toBe('test')
   })
 
-  it('should return number', () => {
+  it('should return number as string', () => {
     const value = 420
 
     expect(parseString(value)).toBe('420')
   })
 
-  it('should handle empty string', () => {
-    const value = ''
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for empty string', () => {
+    expect(parseString('')).toBeUndefined()
   })
 
-  it('should handle only whitespaces string', () => {
-    const value = '     '
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for whitespace-only string', () => {
+    expect(parseString('     ')).toBeUndefined()
   })
 
-  it('should handle array', () => {
-    const value = ['javascript', { another: 'typescript' }]
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for array', () => {
+    expect(parseString(['javascript', { another: 'typescript' }])).toBeUndefined()
   })
 
-  it('should handle object', () => {
-    const value = { name: 'javascript' }
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for object', () => {
+    expect(parseString({ name: 'javascript' })).toBeUndefined()
   })
 
-  it('should return boolean', () => {
-    const value = true
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for boolean', () => {
+    expect(parseString(true)).toBeUndefined()
   })
 
-  it('should handle null', () => {
-    const value = null
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for null', () => {
+    expect(parseString(null)).toBeUndefined()
   })
 
-  it('should return undefined for undefined input', () => {
-    const value = undefined
+  it('should return undefined for undefined', () => {
+    expect(parseString(undefined)).toBeUndefined()
+  })
 
-    expect(parseString(value)).toBeUndefined()
+  describe('XML spec compliance', () => {
+    // XML §4.1: Character and Entity References (outside CDATA)
+    describe('entity references outside CDATA (XML §4.1)', () => {
+      const cases = [
+        { value: '&lt;', expected: '<', name: '&lt; to <' },
+        { value: '&gt;', expected: '>', name: '&gt; to >' },
+        { value: '&amp;', expected: '&', name: '&amp; to &' },
+        { value: '&quot;', expected: '"', name: '&quot; to "' },
+        { value: '&apos;', expected: "'", name: "&apos; to '" },
+        { value: '&#169;', expected: '©', name: 'decimal char ref &#169; to ©' },
+        { value: '&#x00A9;', expected: '©', name: 'hex char ref &#x00A9; to ©' },
+      ]
+
+      for (const { value, expected, name } of cases) {
+        it(`should decode ${name}`, () => {
+          expect(parseString(value)).toBe(expected)
+        })
+      }
+    })
+
+    // Single-decode behavior (prevents double-decoding data corruption)
+    describe('single-decode behavior (no double-decoding)', () => {
+      const cases = [
+        { value: '&amp;lt;', expected: '&lt;', name: '&amp;lt; to &lt; (not <)' },
+        { value: '&amp;amp;', expected: '&amp;', name: '&amp;amp; to &amp; (not &)' },
+        { value: '&amp;#169;', expected: '&#169;', name: '&amp;#169; to &#169; (not ©)' },
+        { value: '&amp;amp;amp;', expected: '&amp;amp;', name: 'triple-escaped &amp;amp;amp;' },
+        { value: '&lt; and &amp;lt;', expected: '< and &lt;', name: 'mixed single and double' },
+      ]
+
+      for (const { value, expected, name } of cases) {
+        it(`should decode ${name}`, () => {
+          expect(parseString(value)).toBe(expected)
+        })
+      }
+    })
+
+    // XML §2.7: CDATA Sections (verbatim passthrough)
+    describe('CDATA verbatim passthrough (XML §2.7)', () => {
+      const cases = [
+        { value: '<![CDATA[&lt;]]>', expected: '&lt;', name: '&lt; inside CDATA' },
+        { value: '<![CDATA[&amp;]]>', expected: '&amp;', name: '&amp; inside CDATA' },
+        { value: '<![CDATA[&#169;]]>', expected: '&#169;', name: '&#169; inside CDATA' },
+        { value: '<![CDATA[<div>]]>', expected: '<div>', name: 'literal < inside CDATA' },
+        { value: '<![CDATA[a && b]]>', expected: 'a && b', name: 'literal & inside CDATA' },
+        { value: '<![CDATA[]]]]>', expected: ']]', name: ']] inside CDATA (only ]]> ends it)' },
+      ]
+
+      for (const { value, expected, name } of cases) {
+        it(`should preserve ${name}`, () => {
+          expect(parseString(value)).toBe(expected)
+        })
+      }
+    })
+
+    // Mixed content: outside decoded, inside verbatim
+    describe('mixed content (CDATA + regular text)', () => {
+      const cases = [
+        {
+          value: '&lt;a&gt;<![CDATA[&lt;b&gt;]]>&lt;c&gt;',
+          expected: '<a>&lt;b&gt;<c>',
+          name: 'decode outside, preserve inside',
+        },
+        {
+          value: 'x &amp; <![CDATA[y &amp;]]> z &amp;',
+          expected: 'x & y &amp; z &',
+          name: '&amp; decoded outside, preserved inside',
+        },
+        {
+          value: '<![CDATA[first]]><![CDATA[second]]>',
+          expected: 'firstsecond',
+          name: 'multiple CDATA blocks concatenate',
+        },
+        {
+          value: '&lt;prefix&gt;<![CDATA[&lt;cdata&gt;]]>&lt;suffix&gt;',
+          expected: '<prefix>&lt;cdata&gt;<suffix>',
+          name: 'escaped tags outside, preserved inside',
+        },
+      ]
+
+      for (const { value, expected, name } of cases) {
+        it(`should handle ${name}`, () => {
+          expect(parseString(value)).toBe(expected)
+        })
+      }
+    })
+
+    // Real-world feed examples (from feed-parser issue #209)
+    describe('real-world feed examples', () => {
+      const cases = [
+        {
+          value:
+            '<![CDATA[<pre class="code-block"><code>&lt;div&gt;\n  &lt;a&gt;1&lt;/a&gt;\n&lt;/div&gt;</code></pre>]]>',
+          expected:
+            '<pre class="code-block"><code>&lt;div&gt;\n  &lt;a&gt;1&lt;/a&gt;\n&lt;/div&gt;</code></pre>',
+          name: 'CSS-Tricks: code block with escaped HTML inside CDATA',
+        },
+        {
+          value:
+            '&lt;p&gt;Everyone knows the &lt;code&gt;&amp;lt;input&amp;gt;&lt;/code&gt; element&lt;/p&gt;',
+          expected: '<p>Everyone knows the <code>&lt;input&gt;</code> element</p>',
+          name: 'HTML-tip: double-escaped code example without CDATA',
+        },
+        {
+          value:
+            '&lt;li&gt;&lt;code&gt;&amp;lt;bluesky-likes&amp;gt;&lt;/code&gt; — displays likes&lt;/li&gt;',
+          expected: '<li><code>&lt;bluesky-likes&gt;</code> — displays likes</li>',
+          name: 'Lea Verou: double-escaped custom element',
+        },
+        {
+          value:
+            '<![CDATA[<p>Visit <a href="https://example.com?ref=podcast&amp;utm=rss">us</a></p>]]>',
+          expected: '<p>Visit <a href="https://example.com?ref=podcast&amp;utm=rss">us</a></p>',
+          name: 'Podcast: URL with &amp; in CDATA',
+        },
+        {
+          value:
+            '<![CDATA[<pre><code>&lt;Button onClick={() =&gt; alert()}&gt;Click&lt;/Button&gt;</code></pre>]]>',
+          expected:
+            '<pre><code>&lt;Button onClick={() =&gt; alert()}&gt;Click&lt;/Button&gt;</code></pre>',
+          name: 'Programming blog: escaped JSX in CDATA',
+        },
+        {
+          value: 'Learn about &amp;lt;template&amp;gt; and &amp;lt;slot&amp;gt; elements',
+          expected: 'Learn about &lt;template&gt; and &lt;slot&gt; elements',
+          name: 'WordPress: double-encoded HTML tags',
+        },
+        {
+          value: '<![CDATA[<p>Use <code>&lt;script type="module"&gt;</code> for ES modules</p>]]>',
+          expected: '<p>Use <code>&lt;script type="module"&gt;</code> for ES modules</p>',
+          name: 'Docs: multiple escaped script tags in CDATA',
+        },
+      ]
+
+      for (const { value, expected, name } of cases) {
+        it(`should handle ${name}`, () => {
+          expect(parseString(value)).toBe(expected)
+        })
+      }
+    })
   })
 })
 
@@ -3586,6 +3725,63 @@ describe('createNamespaceNormalizator', () => {
             'invalid1:element': 'Value 1',
             'invalid2:element': 'Value 2',
             'valid:element': 'Value 3',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
+
+    describe('RDF primary namespace handling', () => {
+      it('should normalize RDF namespace elements and attributes including arrays', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(
+          namespaceUris,
+          namespacePrefixes,
+          'rdf',
+        )
+        const value = parser.parse(`
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rdf:RDF
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns="http://purl.org/rss/1.0/"
+          >
+            <channel rdf:about="http://example.com">
+              <title>Test Feed</title>
+              <items>
+                <rdf:Seq>
+                  <rdf:li resource="http://example.com/item1"/>
+                  <rdf:li rdf:resource="http://example.com/item2"/>
+                </rdf:Seq>
+              </items>
+            </channel>
+            <item rdf:about="http://example.com/item1">
+              <title>Item 1</title>
+            </item>
+            <item rdf:about="http://example.com/item2">
+              <title>Item 2</title>
+            </item>
+          </rdf:RDF>
+        `)
+        const expected = {
+          rdf: {
+            '@xmlns:rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+            '@xmlns': 'http://purl.org/rss/1.0/',
+            channel: {
+              title: 'Test Feed',
+              items: {
+                seq: {
+                  li: [
+                    { '@resource': 'http://example.com/item1' },
+                    { '@resource': 'http://example.com/item2' },
+                  ],
+                },
+              },
+              '@about': 'http://example.com',
+            },
+            item: [
+              { title: 'Item 1', '@about': 'http://example.com/item1' },
+              { title: 'Item 2', '@about': 'http://example.com/item2' },
+            ],
           },
         }
 

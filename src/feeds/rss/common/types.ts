@@ -1,4 +1,5 @@
 import type { DateLike } from '../../../common/types.js'
+import type { AcastNs } from '../../../namespaces/acast/common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
 import type { BlogChannelNs } from '../../../namespaces/blogchannel/common/types.js'
@@ -16,6 +17,7 @@ import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
 import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
 import type { PodcastNs } from '../../../namespaces/podcast/common/types.js'
+import type { PrismNs } from '../../../namespaces/prism/common/types.js'
 import type { PscNs } from '../../../namespaces/psc/common/types.js'
 import type { RawVoiceNs } from '../../../namespaces/rawvoice/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
@@ -79,7 +81,7 @@ export namespace Rss {
 
   export type Source = {
     title?: string // Required in spec.
-    url?: string
+    url?: string // Required in spec.
   }
 
   export type Item<TDate extends DateLike, TPerson extends PersonLike = Person> = {
@@ -108,12 +110,14 @@ export namespace Rss {
     geo?: GeoNs.ItemOrFeed
     thr?: ThrNs.Item
     dcterms?: DcTermsNs.ItemOrFeed<TDate>
+    prism?: PrismNs.Item<TDate>
     wfw?: WfwNs.Item
     sourceNs?: SourceNs.Item
     rawvoice?: RawVoiceNs.Item
     spotify?: SpotifyNs.Item
     pingback?: PingbackNs.Item
     trackback?: TrackbackNs.Item
+    acast?: AcastNs.Item
   }
 
   export type Feed<TDate extends DateLike, TPerson extends PersonLike = Person> = {
@@ -148,6 +152,7 @@ export namespace Rss {
     georss?: GeoRssNs.ItemOrFeed
     geo?: GeoNs.ItemOrFeed
     dcterms?: DcTermsNs.ItemOrFeed<TDate>
+    prism?: PrismNs.Feed<TDate>
     creativeCommons?: CreativeCommonsNs.ItemOrFeed
     feedpress?: FeedPressNs.Feed
     opensearch?: OpenSearchNs.Feed
@@ -157,6 +162,7 @@ export namespace Rss {
     rawvoice?: RawVoiceNs.Feed<TDate>
     spotify?: SpotifyNs.Feed
     pingback?: PingbackNs.Feed
+    acast?: AcastNs.Feed
   }
 }
 // #endregion reference

@@ -179,6 +179,41 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with prism namespace', () => {
+    const value = {
+      title: 'Feed with prism namespace',
+      description: 'Test feed with PRISM namespace',
+      prism: {
+        issn: '0028-0836',
+      },
+      items: [
+        {
+          title: 'First item',
+          prism: {
+            doi: '10.1038/s41586-023-05842-x',
+            startingPage: '425',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:prism="http://prismstandard.org/namespaces/basic/3.0/">
+  <channel>
+    <title>Feed with prism namespace</title>
+    <description>Test feed with PRISM namespace</description>
+    <prism:issn>0028-0836</prism:issn>
+    <item>
+      <title>First item</title>
+      <prism:doi>10.1038/s41586-023-05842-x</prism:doi>
+      <prism:startingPage>425</prism:startingPage>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with sy namespace', () => {
     const value = {
       title: 'Feed with sy namespace',
@@ -1212,6 +1247,63 @@ describe('leniency', () => {
     <item>
       <title>Item with string date</title>
       <pubDate>Wed, 01 Mar 2023 00:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with acast namespace', () => {
+    const value = {
+      title: 'Feed with acast namespace',
+      description: 'Test feed with Acast namespace',
+      acast: {
+        showId: '664fde3eda02bb0012bad909',
+        showUrl: 'software-unscripted',
+        signature: {
+          key: 'EXAMPLE_KEY',
+          algorithm: 'aes-256-cbc',
+          value: 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+        },
+        settings: 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
+        network: {
+          id: '664fdd227c6b200013652ed6',
+          slug: 'richard-feldman-664fdd227c6b200013652ed6',
+          value: 'Richard Feldman',
+        },
+        importedFeed: 'https://feeds.resonaterecordings.com/software-unscripted',
+      },
+      items: [
+        {
+          title: 'Episode with Acast metadata',
+          acast: {
+            episodeId: '6918f06ee42e3466f29467f9',
+            showId: '664fde3eda02bb0012bad909',
+            episodeUrl: 'jonathan-blow-on-programming-language-design',
+            settings: 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:acast="https://schema.acast.com/1.0/">
+  <channel>
+    <title>Feed with acast namespace</title>
+    <description>Test feed with Acast namespace</description>
+    <acast:showId>664fde3eda02bb0012bad909</acast:showId>
+    <acast:showUrl>software-unscripted</acast:showUrl>
+    <acast:signature key="EXAMPLE_KEY" algorithm="aes-256-cbc">wbG1Z7+6h9QOi+CR1Dv0uQ==</acast:signature>
+    <acast:settings>FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB</acast:settings>
+    <acast:network id="664fdd227c6b200013652ed6" slug="richard-feldman-664fdd227c6b200013652ed6">Richard Feldman</acast:network>
+    <acast:importedFeed>https://feeds.resonaterecordings.com/software-unscripted</acast:importedFeed>
+    <item>
+      <title>Episode with Acast metadata</title>
+      <acast:episodeId>6918f06ee42e3466f29467f9</acast:episodeId>
+      <acast:showId>664fde3eda02bb0012bad909</acast:showId>
+      <acast:episodeUrl>jonathan-blow-on-programming-language-design</acast:episodeUrl>
+      <acast:settings>FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC</acast:settings>
     </item>
   </channel>
 </rss>
