@@ -25,7 +25,7 @@ export namespace RawVoiceNs {
     length?: number
   }
 
-  export type Subscribe = Record<string, string | undefined>
+  export type Subscribe = Record<string, string>
 
   export type Metamark = {
     type?: string
