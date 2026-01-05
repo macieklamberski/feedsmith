@@ -37,12 +37,12 @@ export type XmlGenerateOptions<O = Record<string, unknown>> = O & {
   stylesheets?: Array<XmlStylesheet>
 }
 
-export type JsonGenerateOptions<O = Record<string, unknown>> = O
-
 export type XmlGenerateMain<V, O = Record<string, unknown>> = (
   value: V,
   options?: XmlGenerateOptions<O>,
 ) => string
+
+export type JsonGenerateOptions<O = Record<string, unknown>> = O
 
 export type JsonGenerateMain<V, O = Record<string, unknown>> = (
   value: V,
