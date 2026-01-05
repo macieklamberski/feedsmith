@@ -36,38 +36,38 @@ export namespace Rss {
   export type Person = string
 
   export type Category = {
-    name: string
+    name?: string // Required in spec.
     domain?: string
   }
 
   export type Cloud = {
-    domain: string
-    port: number
-    path: string
-    registerProcedure: string
-    protocol: string
+    domain?: string // Required in spec.
+    port?: number // Required in spec.
+    path?: string // Required in spec.
+    registerProcedure?: string // Required in spec.
+    protocol?: string // Required in spec.
   }
 
   export type Image = {
-    url: string
-    title: string
-    link: string
+    url?: string // Required in spec.
+    title?: string // Required in spec.
+    link?: string // Required in spec.
     description?: string
     height?: number
     width?: number
   }
 
   export type TextInput = {
-    title: string
-    description: string
-    name: string
-    link: string
+    title?: string // Required in spec.
+    description?: string // Required in spec.
+    name?: string // Required in spec.
+    link?: string // Required in spec.
   }
 
   export type Enclosure = {
-    url: string
-    length: number
-    type: string
+    url?: string // Required in spec.
+    length?: number // Required in spec.
+    type?: string // Required in spec.
   }
 
   export type SkipHours = Array<number>
@@ -75,19 +75,19 @@ export namespace Rss {
   export type SkipDays = Array<string>
 
   export type Guid = {
-    value: string
+    value?: string // Required in spec.
     isPermaLink?: boolean
   }
 
   export type Source = {
-    title: string
-    url?: string
+    title?: string // Required in spec.
+    url?: string // Required in spec.
   }
 
   export type Item<TDate extends DateLike, TPerson extends PersonLike = Person> = {
-    title?: string
+    title?: string // At least one of title or description is required in spec.
     link?: string
-    description?: string
+    description?: string // At least one of title or description is required in spec.
     authors?: Array<TPerson>
     categories?: Array<Category>
     comments?: string
@@ -118,14 +118,12 @@ export namespace Rss {
     pingback?: PingbackNs.Item
     trackback?: TrackbackNs.Item
     acast?: AcastNs.Item
-  } & ({ title: string } | { description: string })
+  }
 
   export type Feed<TDate extends DateLike, TPerson extends PersonLike = Person> = {
-    title: string
-    // INFO: Spec mentions required "link", but the "link" might be missing as well when the
-    // atom:link rel="self" is present so that's why the "link" is not required in this type.
-    link?: string
-    description: string
+    title?: string // Required in spec.
+    link?: string // Required in spec (but may be missing when atom:link rel="self" is present).
+    description?: string // Required in spec.
     language?: string
     copyright?: string
     managingEditor?: TPerson

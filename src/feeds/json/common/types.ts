@@ -9,20 +9,20 @@ export namespace Json {
   }
 
   export type Attachment = {
-    url: string
-    mime_type: string
+    url?: string // Required in spec.
+    mime_type?: string // Required in spec.
     title?: string
     size_in_bytes?: number
     duration_in_seconds?: number
   }
 
   export type Item<TDate extends DateLike> = {
-    id: string
+    id?: string // Required in spec.
     url?: string
     external_url?: string
     title?: string
-    content_html?: string
-    content_text?: string
+    content_html?: string // At least one of content_html or content_text is required in spec.
+    content_text?: string // At least one of content_html or content_text is required in spec.
     summary?: string
     image?: string
     banner_image?: string
@@ -32,15 +32,15 @@ export namespace Json {
     authors?: Array<Author>
     language?: string
     attachments?: Array<Attachment>
-  } & ({ content_html: string } | { content_text: string })
+  }
 
   export type Hub = {
-    type: string
-    url: string
+    type?: string // Required in spec.
+    url?: string // Required in spec.
   }
 
   export type Feed<TDate extends DateLike> = {
-    title: string
+    title?: string // Required in spec.
     home_page_url?: string
     feed_url?: string
     description?: string
@@ -52,7 +52,7 @@ export namespace Json {
     expired?: boolean
     hubs?: Array<Hub>
     authors?: Array<Author>
-    items: Array<Item<TDate>>
+    items?: Array<Item<TDate>> // Required in spec.
   }
 }
 // #endregion reference

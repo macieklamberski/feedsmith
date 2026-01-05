@@ -1,4 +1,3 @@
-export type { DeepPartial } from './common/types.js'
 export type { Atom } from './feeds/atom/common/types.js'
 export type { Json } from './feeds/json/common/types.js'
 export type { Rdf } from './feeds/rdf/common/types.js'

@@ -11,32 +11,9 @@ export type ExtraFields<F extends ReadonlyArray<string>, V = unknown> = {
 export type AnyOf<T> = Partial<{ [P in keyof T]-?: NonNullable<T[P]> }> &
   { [P in keyof T]-?: Pick<{ [Q in keyof T]-?: NonNullable<T[Q]> }, P> }[keyof T]
 
-export type IsPlainObject<T> = T extends Array<unknown>
-  ? false
-  : T extends (...args: Array<unknown>) => unknown
-    ? false
-    : T extends Date
-      ? false
-      : T extends object
-        ? T extends null
-          ? false
-          : true
-        : false
-
-export type RemoveUndefined<T> = T extends undefined ? never : T
-
-export type DeepPartial<T> = IsPlainObject<T> extends true
-  ? { [P in keyof T]?: DeepPartial<RemoveUndefined<T[P]>> }
-  : T extends Array<infer U>
-    ? Array<DeepPartial<U>>
-    : T
-
 export type ParseExactUtil<R> = (value: Unreliable) => R | undefined
 
-export type ParsePartialUtil<R, O = undefined> = (
-  value: Unreliable,
-  options?: O,
-) => DeepPartial<R> | undefined
+export type ParsePartialUtil<R, O = undefined> = (value: Unreliable, options?: O) => R | undefined
 
 export type GenerateUtil<V, O = undefined> = (
   value: V | undefined,
@@ -56,21 +33,18 @@ export type XmlStylesheet = {
   alternate?: boolean
 }
 
-export type XmlGenerateOptions<O, F extends boolean = false> = O & {
-  lenient?: F
+export type XmlGenerateOptions<O = Record<string, unknown>> = O & {
   stylesheets?: Array<XmlStylesheet>
 }
 
-export type JsonGenerateOptions<O, F extends boolean = false> = O & {
-  lenient?: F
-}
-
-export type XmlGenerateMain<S, L, O = Record<string, unknown>> = <F extends boolean = false>(
-  value: F extends true ? L : S,
-  options?: XmlGenerateOptions<O, F>,
+export type XmlGenerateMain<V, O = Record<string, unknown>> = (
+  value: V,
+  options?: XmlGenerateOptions<O>,
 ) => string
 
-export type JsonGenerateMain<S, L, O = Record<string, unknown>> = <F extends boolean = false>(
-  value: F extends true ? L : S,
-  options?: JsonGenerateOptions<O, F>,
+export type JsonGenerateOptions<O = Record<string, unknown>> = O
+
+export type JsonGenerateMain<V, O = Record<string, unknown>> = (
+  value: V,
+  options?: JsonGenerateOptions<O>,
 ) => unknown

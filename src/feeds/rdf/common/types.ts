@@ -14,23 +14,23 @@ import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 // #region reference
 export namespace Rdf {
   export type Image = {
-    title: string
-    link: string
+    title?: string // Required in spec.
+    link?: string // Required in spec.
     url?: string
     rdf?: RdfNs.About
   }
 
   export type TextInput = {
-    title: string
-    description: string
-    name: string
-    link: string
+    title?: string // Required in spec.
+    description?: string // Required in spec.
+    name?: string // Required in spec.
+    link?: string // Required in spec.
     rdf?: RdfNs.About
   }
 
   export type Item<TDate extends DateLike> = {
-    title: string
-    link: string
+    title?: string // Required in spec.
+    link?: string // Required in spec.
     description?: string
     rdf?: RdfNs.About
     atom?: AtomNs.Entry<TDate>
@@ -44,9 +44,9 @@ export namespace Rdf {
   }
 
   export type Feed<TDate extends DateLike> = {
-    title: string
-    link: string
-    description: string
+    title?: string // Required in spec.
+    link?: string // Required in spec.
+    description?: string // Required in spec.
     image?: Image
     items?: Array<Item<TDate>>
     textInput?: TextInput
