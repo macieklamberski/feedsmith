@@ -87,7 +87,6 @@ Generates RSS XML from feed data.
 import { generateRssFeed } from 'feedsmith'
 
 const xml = generateRssFeed(feedData, {
-  lenient: true,
   stylesheets: [{ type: 'text/xsl', href: '/feed.xsl' }]
 })
 ```
@@ -103,7 +102,6 @@ const xml = generateRssFeed(feedData, {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `lenient` | `boolean` | `false` | Enable lenient mode for relaxed validation, see [Lenient Mode](/generating/lenient-mode) |
 | `stylesheets` | `Stylesheet[]` | - | Add stylesheets for visual formatting, see [Feed Styling](/generating/styling) |
 
 #### Returns

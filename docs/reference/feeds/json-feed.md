@@ -58,9 +58,7 @@ Generates JSON Feed from feed data.
 ```typescript
 import { generateJsonFeed } from 'feedsmith'
 
-const json = generateJsonFeed(feedData, {
-  lenient: true
-})
+const json = generateJsonFeed(feedData)
 ```
 
 #### Parameters
@@ -68,13 +66,6 @@ const json = generateJsonFeed(feedData, {
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `data` | `object` | JSON Feed data to generate |
-| `options` | `object` | Optional generation settings |
-
-#### Options
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `lenient` | `boolean` | `false` | Enable lenient mode for relaxed validation, see [Lenient Mode](/generating/lenient-mode) |
 
 #### Returns
 `object` - Generated JSON Feed

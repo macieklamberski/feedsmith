@@ -1288,7 +1288,9 @@ describe('generate edge cases', () => {
 
     expect(generate(value)).toEqual(expected)
   })
+})
 
+describe('generate with app namespace', () => {
   it('should generate Atom feed with app namespace', () => {
     const value = {
       id: 'http://example.com/blog',
