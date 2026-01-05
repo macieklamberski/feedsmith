@@ -270,8 +270,25 @@ describe('generate', () => {
   })
 })
 
-describe('leniency', () => {
-  it('should accept feeds with string dates', () => {
+describe('generate with partial and string dates', () => {
+  it('should accept partial documents', () => {
+    const value = {
+      body: {
+        outlines: [{ text: 'Test Outline' }],
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <body>
+    <outline text="Test Outline"/>
+  </body>
+</opml>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should accept string dates', () => {
     const value = {
       head: {
         title: 'Test OPML',

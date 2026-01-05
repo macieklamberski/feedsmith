@@ -1146,7 +1146,20 @@ describe('generate', () => {
   })
 })
 
-describe('leniency', () => {
+describe('generate edge cases', () => {
+  it('should accept partial feeds', () => {
+    const value = {
+      title: 'Test Feed',
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Test Feed</title>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should accept feeds with string dates', () => {
     const value = {
       id: 'https://example.com/feed',
@@ -1225,6 +1238,50 @@ describe('leniency', () => {
     <id>https://example.com/entry/2</id>
     <title>Entry with string date</title>
     <updated>2023-03-01T00:00:00.000Z</updated>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should handle deeply nested partial objects', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Nested Partials',
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry 1',
+          author: [
+            {
+              name: 'John Doe',
+            },
+          ],
+          category: [
+            {
+              term: 'tech',
+              label: 'Technology',
+            },
+          ],
+        },
+        {
+          id: 'https://example.com/entry/2',
+          title: 'Minimal Entry',
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com/feed</id>
+  <title>Feed with Nested Partials</title>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry 1</title>
+  </entry>
+  <entry>
+    <id>https://example.com/entry/2</id>
+    <title>Minimal Entry</title>
   </entry>
 </feed>
 `

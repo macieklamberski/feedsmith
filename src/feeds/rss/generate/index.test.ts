@@ -1105,7 +1105,7 @@ describe('generate', () => {
   })
 })
 
-describe('leniency', () => {
+describe('generate edge cases', () => {
   it('should accept partial feeds', () => {
     const value: Rss.Feed<DateLike> = {
       title: 'Test Feed',

@@ -53,7 +53,19 @@ describe('generate', () => {
   })
 })
 
-describe('leniency', () => {
+describe('generate edge cases', () => {
+  it('should accept partial feeds', () => {
+    const value = {
+      title: 'Test Feed',
+    }
+    const expected = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Test Feed',
+    }
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should accept feeds with string dates', () => {
     const value = {
       title: 'Test Feed',
