@@ -11,17 +11,20 @@ export type ExtraFields<F extends ReadonlyArray<string>, V = unknown> = {
 export type AnyOf<T> = Partial<{ [P in keyof T]-?: NonNullable<T[P]> }> &
   { [P in keyof T]-?: Pick<{ [Q in keyof T]-?: NonNullable<T[Q]> }, P> }[keyof T]
 
-export type IsPlainObject<T> = T extends Array<unknown>
-  ? false
-  : T extends (...args: Array<unknown>) => unknown
+export type IsPlainObject<T> =
+  T extends Array<unknown>
     ? false
-    : T extends Date
+    : T extends (...args: Array<unknown>) => unknown
       ? false
-      : T extends object
-        ? T extends null
+      : T extends (...args: Array<unknown>) => unknown
+        ? false
+        : T extends Date
           ? false
-          : true
-        : false
+          : T extends object
+            ? T extends null
+              ? false
+              : true
+            : false
 
 export type RemoveUndefined<T> = T extends undefined ? never : T
 
@@ -29,11 +32,12 @@ export type RemoveUndefined<T> = T extends undefined ? never : T
  * @deprecated No longer needed as all feed type fields are now optional.
  * This type is kept for backwards compatibility but will be removed in a future version.
  */
-export type DeepPartial<T> = IsPlainObject<T> extends true
-  ? { [P in keyof T]?: DeepPartial<RemoveUndefined<T[P]>> }
-  : T extends Array<infer U>
-    ? Array<DeepPartial<U>>
-    : T
+export type DeepPartial<T> =
+  IsPlainObject<T> extends true
+    ? { [P in keyof T]?: DeepPartial<RemoveUndefined<T[P]>> }
+    : T extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : T
 
 export type ParseExactUtil<R> = (value: Unreliable) => R | undefined
 
@@ -57,21 +61,18 @@ export type XmlStylesheet = {
   alternate?: boolean
 }
 
-export type XmlGenerateOptions<O, F extends boolean = false> = O & {
-  lenient?: F
+export type XmlGenerateOptions<O = Record<string, unknown>> = O & {
   stylesheets?: Array<XmlStylesheet>
 }
 
-export type JsonGenerateOptions<O, F extends boolean = false> = O & {
-  lenient?: F
-}
-
-export type XmlGenerateMain<S, L, O = Record<string, unknown>> = <F extends boolean = false>(
-  value: F extends true ? L : S,
-  options?: XmlGenerateOptions<O, F>,
+export type XmlGenerateMain<V, O = Record<string, unknown>> = (
+  value: V,
+  options?: XmlGenerateOptions<O>,
 ) => string
 
-export type JsonGenerateMain<S, L, O = Record<string, unknown>> = <F extends boolean = false>(
-  value: F extends true ? L : S,
-  options?: JsonGenerateOptions<O, F>,
+export type JsonGenerateOptions<O = Record<string, unknown>> = O
+
+export type JsonGenerateMain<V, O = Record<string, unknown>> = (
+  value: V,
+  options?: JsonGenerateOptions<O>,
 ) => unknown
