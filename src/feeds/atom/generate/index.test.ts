@@ -1146,8 +1146,8 @@ describe('generate', () => {
   })
 })
 
-describe('generate with lenient mode', () => {
-  it('should accept partial feeds with lenient: true', () => {
+describe('generate edge cases', () => {
+  it('should accept partial feeds', () => {
     const value = {
       title: 'Test Feed',
     }
@@ -1157,10 +1157,10 @@ describe('generate with lenient mode', () => {
 </feed>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should accept feeds with string dates in lenient mode', () => {
+  it('should accept feeds with string dates', () => {
     const value = {
       id: 'https://example.com/feed',
       title: 'Test Feed',
@@ -1174,10 +1174,10 @@ describe('generate with lenient mode', () => {
 </feed>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should preserve invalid date strings in lenient mode', () => {
+  it('should preserve invalid date strings', () => {
     const value = {
       id: 'https://example.com/feed',
       title: 'Feed with Invalid Date',
@@ -1203,7 +1203,7 @@ describe('generate with lenient mode', () => {
 </feed>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should handle mixed Date objects and string dates', () => {
@@ -1242,7 +1242,7 @@ describe('generate with lenient mode', () => {
 </feed>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should handle deeply nested partial objects', () => {
@@ -1286,7 +1286,7 @@ describe('generate with lenient mode', () => {
 </feed>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate Atom feed with app namespace', () => {

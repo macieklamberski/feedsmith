@@ -14,5 +14,5 @@ export const parse = <const A extends ReadonlyArray<string> = ReadonlyArray<stri
     throw new Error(locales.invalidOpmlFormat)
   }
 
-  return parsed as Opml.Document<string, A>
+  return parsed
 }

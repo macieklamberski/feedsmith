@@ -1105,11 +1105,10 @@ describe('generate', () => {
   })
 })
 
-describe('generate with lenient mode', () => {
-  it('should accept partial feeds with lenient: true', () => {
+describe('generate edge cases', () => {
+  it('should accept partial feeds', () => {
     const value: Rss.Feed<DateLike> = {
       title: 'Test Feed',
-      // Missing required 'description' field.
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
@@ -1119,10 +1118,10 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should accept feeds with string dates in lenient mode', () => {
+  it('should accept feeds with string dates', () => {
     const value: Rss.Feed<DateLike> = {
       title: 'Test Feed',
       description: 'Test Description',
@@ -1148,10 +1147,10 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should preserve invalid date strings in lenient mode', () => {
+  it('should preserve invalid date strings', () => {
     const value: Rss.Feed<DateLike> = {
       title: 'Test Feed',
       description: 'Test Description',
@@ -1177,7 +1176,7 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should handle deeply nested partial objects', () => {
@@ -1214,7 +1213,7 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should handle mixed Date objects and string dates', () => {
@@ -1253,7 +1252,7 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with acast namespace', () => {
