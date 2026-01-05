@@ -11,34 +11,6 @@ export type ExtraFields<F extends ReadonlyArray<string>, V = unknown> = {
 export type AnyOf<T> = Partial<{ [P in keyof T]-?: NonNullable<T[P]> }> &
   { [P in keyof T]-?: Pick<{ [Q in keyof T]-?: NonNullable<T[Q]> }, P> }[keyof T]
 
-export type IsPlainObject<T> =
-  T extends Array<unknown>
-    ? false
-    : T extends (...args: Array<unknown>) => unknown
-      ? false
-      : T extends (...args: Array<unknown>) => unknown
-        ? false
-        : T extends Date
-          ? false
-          : T extends object
-            ? T extends null
-              ? false
-              : true
-            : false
-
-export type RemoveUndefined<T> = T extends undefined ? never : T
-
-/**
- * @deprecated No longer needed as all feed type fields are now optional.
- * This type is kept for backwards compatibility but will be removed in a future version.
- */
-export type DeepPartial<T> =
-  IsPlainObject<T> extends true
-    ? { [P in keyof T]?: DeepPartial<RemoveUndefined<T[P]>> }
-    : T extends Array<infer U>
-      ? Array<DeepPartial<U>>
-      : T
-
 export type ParseExactUtil<R> = (value: Unreliable) => R | undefined
 
 export type ParsePartialUtil<R, O = undefined> = (value: Unreliable, options?: O) => R | undefined
