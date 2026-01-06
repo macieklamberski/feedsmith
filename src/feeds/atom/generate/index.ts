@@ -5,8 +5,11 @@ import type { Atom } from '../common/types.js'
 import { builder } from './config.js'
 import { generateFeed } from './utils.js'
 
-export const generate: XmlGenerateMain<Atom.Feed<DateLike>> = (value, options) => {
-  const generated = generateFeed(value)
+export const generate: XmlGenerateMain<Atom.Feed<DateLike>, Atom.Feed<Date, true>> = (
+  value,
+  options,
+) => {
+  const generated = generateFeed(value as Atom.Feed<DateLike>)
 
   if (!generated) {
     throw new Error(locales.invalidInputAtom)

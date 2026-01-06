@@ -96,6 +96,7 @@ const xml = generateAtomFeed(feedData, {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
+| `strict` | `boolean` | `false` | Enable strict mode for spec-required field validation, see [Strict Mode](/generating/strict-mode) |
 | `stylesheets` | `Stylesheet[]` | - | Add stylesheets for visual formatting, see [Feed Styling](/generating/styling) |
 
 #### Returns
