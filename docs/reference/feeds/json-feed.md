@@ -66,6 +66,13 @@ const json = generateJsonFeed(feedData)
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `data` | `object` | JSON Feed data to generate |
+| `options` | `object` | Optional generation settings |
+
+#### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `strict` | `boolean` | `false` | Enable strict mode for spec-required field validation, see [Strict Mode](/generating/strict-mode) |
 
 #### Returns
 `object` - Generated JSON Feed

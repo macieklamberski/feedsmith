@@ -80,6 +80,7 @@ const xml = generateOpml(opmlData, {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
+| `strict` | `boolean` | `false` | Enable strict mode for spec-required field validation, see [Strict Mode](/generating/strict-mode) |
 | `stylesheets` | `Stylesheet[]` | - | Add stylesheets for visual formatting, see [Feed Styling](/generating/styling) |
 | `extraOutlineAttributes` | `string[]` | - | Custom attributes to include in outline elements. Only specified attributes are included in generated XML, see [examples](/generating/examples#extra-outline-attributes) |
 

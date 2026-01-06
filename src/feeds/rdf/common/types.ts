@@ -1,4 +1,4 @@
-import type { DateLike } from '../../../common/types.js'
+import type { DateLike, Requirable, Strict } from '../../../common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
 import type { ContentNs } from '../../../namespaces/content/common/types.js'
@@ -13,51 +13,63 @@ import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 
 // #region reference
 export namespace Rdf {
-  export type Image = {
-    title?: string // Required in spec.
-    link?: string // Required in spec.
-    url?: string
-    rdf?: RdfNs.About
-  }
+  export type Image<TStrict extends boolean = false> = Strict<
+    {
+      title: Requirable<string> // Required in spec.
+      link: Requirable<string> // Required in spec.
+      url?: string
+      rdf?: RdfNs.About
+    },
+    TStrict
+  >
 
-  export type TextInput = {
-    title?: string // Required in spec.
-    description?: string // Required in spec.
-    name?: string // Required in spec.
-    link?: string // Required in spec.
-    rdf?: RdfNs.About
-  }
+  export type TextInput<TStrict extends boolean = false> = Strict<
+    {
+      title: Requirable<string> // Required in spec.
+      description: Requirable<string> // Required in spec.
+      name: Requirable<string> // Required in spec.
+      link: Requirable<string> // Required in spec.
+      rdf?: RdfNs.About
+    },
+    TStrict
+  >
 
-  export type Item<TDate extends DateLike> = {
-    title?: string // Required in spec.
-    link?: string // Required in spec.
-    description?: string
-    rdf?: RdfNs.About
-    atom?: AtomNs.Entry<TDate>
-    dc?: DcNs.ItemOrFeed<TDate>
-    content?: ContentNs.Item
-    slash?: SlashNs.Item
-    media?: MediaNs.ItemOrFeed
-    georss?: GeoRssNs.ItemOrFeed
-    dcterms?: DcTermsNs.ItemOrFeed<TDate>
-    wfw?: WfwNs.Item
-  }
+  export type Item<TDate extends DateLike, TStrict extends boolean = false> = Strict<
+    {
+      title: Requirable<string> // Required in spec.
+      link: Requirable<string> // Required in spec.
+      description?: string
+      rdf?: RdfNs.About
+      atom?: AtomNs.Entry<TDate>
+      dc?: DcNs.ItemOrFeed<TDate>
+      content?: ContentNs.Item
+      slash?: SlashNs.Item
+      media?: MediaNs.ItemOrFeed<TStrict>
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
+      wfw?: WfwNs.Item
+    },
+    TStrict
+  >
 
-  export type Feed<TDate extends DateLike> = {
-    title?: string // Required in spec.
-    link?: string // Required in spec.
-    description?: string // Required in spec.
-    image?: Image
-    items?: Array<Item<TDate>>
-    textInput?: TextInput
-    rdf?: RdfNs.About
-    atom?: AtomNs.Feed<TDate>
-    dc?: DcNs.ItemOrFeed<TDate>
-    sy?: SyNs.Feed<TDate>
-    media?: MediaNs.ItemOrFeed
-    georss?: GeoRssNs.ItemOrFeed
-    dcterms?: DcTermsNs.ItemOrFeed<TDate>
-    admin?: AdminNs.Feed
-  }
+  export type Feed<TDate extends DateLike, TStrict extends boolean = false> = Strict<
+    {
+      title: Requirable<string> // Required in spec.
+      link: Requirable<string> // Required in spec.
+      description: Requirable<string> // Required in spec.
+      image?: Image<TStrict>
+      items?: Array<Item<TDate, TStrict>>
+      textInput?: TextInput<TStrict>
+      rdf?: RdfNs.About
+      atom?: AtomNs.Feed<TDate>
+      dc?: DcNs.ItemOrFeed<TDate>
+      sy?: SyNs.Feed<TDate>
+      media?: MediaNs.ItemOrFeed<TStrict>
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
+      admin?: AdminNs.Feed
+    },
+    TStrict
+  >
 }
 // #endregion reference
