@@ -873,12 +873,14 @@ describe('generateRemoteItem', () => {
       feedUrl: 'https://remote.example.com/feed.xml',
       itemGuid: 'remote-item-guid-456',
       medium: 'music',
+      title: 'Example Podcast',
     }
     const expected = {
       '@feedGuid': 'remote-feed-guid-123',
       '@feedUrl': 'https://remote.example.com/feed.xml',
       '@itemGuid': 'remote-item-guid-456',
       '@medium': 'music',
+      '@title': 'Example Podcast',
     }
 
     expect(generateRemoteItem(value)).toEqual(expected)
