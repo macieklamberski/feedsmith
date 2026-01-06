@@ -10,17 +10,17 @@ export namespace RawVoiceNs {
 
   export type LiveStream<TDate extends DateLike> = {
     url?: string
-    schedule?: TDate
-    duration?: string
+    schedule: TDate
+    duration: string
     type?: string
   }
 
   export type Poster = {
-    url?: string
+    url: string
   }
 
   export type AlternateEnclosure = {
-    src?: string
+    src: string
     type?: string
     length?: number
   }
