@@ -139,7 +139,7 @@ export namespace Rss {
       prism?: PrismNs.Item<TDate>
       wfw?: WfwNs.Item
       sourceNs?: SourceNs.Item
-      rawvoice?: RawVoiceNs.Item
+      rawvoice?: RawVoiceNs.Item<TStrict>
       spotify?: SpotifyNs.Item<TStrict>
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
