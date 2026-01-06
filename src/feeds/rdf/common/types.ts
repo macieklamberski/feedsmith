@@ -17,7 +17,7 @@ export namespace Rdf {
     {
       title: Requirable<string> // Required in spec.
       link: Requirable<string> // Required in spec.
-      url?: string
+      url: Requirable<string> // Required in spec.
       rdf?: RdfNs.About
     },
     TStrict
