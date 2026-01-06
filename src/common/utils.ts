@@ -589,8 +589,21 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
   namespacePrefixes: Record<string, string>,
   primaryNamespace?: keyof T,
 ) => {
+  const normalizedUriCache = new Map<string, string>()
+
   const normalizeNamespaceUri = (uri: string): string => {
-    return typeof uri === 'string' ? uri.trim().toLowerCase() : uri
+    if (typeof uri !== 'string') {
+      return uri
+    }
+
+    let normalized = normalizedUriCache.get(uri)
+
+    if (normalized === undefined) {
+      normalized = uri.trim().toLowerCase()
+      normalizedUriCache.set(uri, normalized)
+    }
+
+    return normalized
   }
 
   const primaryNamespaceUris =

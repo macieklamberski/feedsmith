@@ -65,8 +65,10 @@ export namespace PodcastNs {
 
   export type Location = {
     display?: string // Required in spec.
+    rel?: string
     geo?: string
     osm?: string
+    country?: string
   }
 
   export type Season = {
@@ -195,6 +197,7 @@ export namespace PodcastNs {
     feedUrl?: string
     itemGuid?: string
     medium?: string
+    title?: string
   }
 
   export type Podroll = {

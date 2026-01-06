@@ -93,8 +93,10 @@ export const parsePerson: ParsePartialUtil<PodcastNs.Person> = (value) => {
 export const parseLocation: ParsePartialUtil<PodcastNs.Location> = (value) => {
   const location = {
     display: parseString(retrieveText(value)),
+    rel: parseString(value?.['@rel']),
     geo: parseString(value?.['@geo']),
     osm: parseString(value?.['@osm']),
+    country: parseString(value?.['@country']),
   }
 
   return trimObject(location)
@@ -363,6 +365,7 @@ export const parseRemoteItem: ParsePartialUtil<PodcastNs.RemoteItem> = (value) =
     feedUrl: parseString(value['@feedurl']),
     itemGuid: parseString(value['@itemguid']),
     medium: parseString(value['@medium']),
+    title: parseString(value['@title']),
   }
 
   return trimObject(remoteItem)
