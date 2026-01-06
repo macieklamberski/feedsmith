@@ -3601,6 +3601,26 @@ describe('createNamespaceNormalizator', () => {
         expect(normalizeNamespaces(true)).toBe(true)
       })
 
+      it('should handle non-string xmlns values gracefully', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+        const value = {
+          root: {
+            '@xmlns': 123,
+            '@xmlns:dc': null,
+            'dc:creator': 'Author',
+          },
+        }
+        const expected = {
+          root: {
+            '@xmlns': 123,
+            '@xmlns:dc': null,
+            'dc:creator': 'Author',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
       it('should handle conflicting namespace declarations in siblings', () => {
         const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`

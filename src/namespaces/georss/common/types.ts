@@ -1,21 +1,21 @@
 // #region reference
 export namespace GeoRssNs {
   export type Point = {
-    lat: number
-    lng: number
+    lat?: number // Required in spec.
+    lng?: number // Required in spec.
   }
 
   export type Line = {
-    points: Array<Point>
+    points?: Array<Point> // Required in spec.
   }
 
   export type Polygon = {
-    points: Array<Point>
+    points?: Array<Point> // Required in spec.
   }
 
   export type Box = {
-    lowerCorner: Point
-    upperCorner: Point
+    lowerCorner?: Point // Required in spec.
+    upperCorner?: Point // Required in spec.
   }
 
   export type ItemOrFeed = {

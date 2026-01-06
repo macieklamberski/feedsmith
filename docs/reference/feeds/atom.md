@@ -81,7 +81,6 @@ Generates Atom XML from feed data.
 import { generateAtomFeed } from 'feedsmith'
 
 const xml = generateAtomFeed(feedData, {
-  lenient: true,
   stylesheets: [{ type: 'text/xsl', href: '/feed.xsl' }]
 })
 ```
@@ -97,7 +96,6 @@ const xml = generateAtomFeed(feedData, {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `lenient` | `boolean` | `false` | Enable lenient mode for relaxed validation, see [Lenient Mode](/generating/lenient-mode) |
 | `stylesheets` | `Stylesheet[]` | - | Add stylesheets for visual formatting, see [Feed Styling](/generating/styling) |
 
 #### Returns

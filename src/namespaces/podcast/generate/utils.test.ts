@@ -225,13 +225,17 @@ describe('generateLocation', () => {
   it('should generate location with all properties', () => {
     const value = {
       display: 'Austin, TX',
+      rel: 'creator',
       geo: 'geo:30.2672,-97.7431',
       osm: 'R113314',
+      country: 'US',
     }
     const expected = {
       '#text': 'Austin, TX',
+      '@rel': 'creator',
       '@geo': 'geo:30.2672,-97.7431',
       '@osm': 'R113314',
+      '@country': 'US',
     }
 
     expect(generateLocation(value)).toEqual(expected)

@@ -36,7 +36,7 @@ export namespace RawVoiceNs {
   }
 
   export type Donate = {
-    href: string
+    href?: string // Required in spec.
     value?: string
   }
 

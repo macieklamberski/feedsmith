@@ -64,7 +64,6 @@ Generates OPML XML from OPML data.
 import { generateOpml } from 'feedsmith'
 
 const xml = generateOpml(opmlData, {
-  lenient: true,
   stylesheets: [{ type: 'text/xsl', href: '/opml.xsl' }],
   extraOutlineAttributes: ['customIcon', 'updateInterval']
 })
@@ -81,7 +80,6 @@ const xml = generateOpml(opmlData, {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `lenient` | `boolean` | `false` | Enable lenient mode for relaxed validation, see [Lenient Mode](/generating/lenient-mode) |
 | `stylesheets` | `Stylesheet[]` | - | Add stylesheets for visual formatting, see [Feed Styling](/generating/styling) |
 | `extraOutlineAttributes` | `string[]` | - | Custom attributes to include in outline elements. Only specified attributes are included in generated XML, see [examples](/generating/examples#extra-outline-attributes) |
 
