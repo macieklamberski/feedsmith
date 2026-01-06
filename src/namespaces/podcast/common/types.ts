@@ -65,8 +65,10 @@ export namespace PodcastNs {
 
   export type Location = {
     display: string
+    rel?: string
     geo?: string
     osm?: string
+    country?: string
   }
 
   export type Season = {

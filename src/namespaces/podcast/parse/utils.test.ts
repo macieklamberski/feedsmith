@@ -694,13 +694,17 @@ describe('parseLocation', () => {
   it('should parse complete location object', () => {
     const value = {
       '#text': 'San Francisco, CA',
+      '@rel': 'subject',
       '@geo': '37.7749,-122.4194',
       '@osm': 'R61317',
+      '@country': 'US',
     }
     const expected = {
       display: 'San Francisco, CA',
+      rel: 'subject',
       geo: '37.7749,-122.4194',
       osm: 'R61317',
+      country: 'US',
     }
 
     expect(parseLocation(value)).toEqual(expected)

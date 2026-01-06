@@ -236,7 +236,7 @@
     <podcast:funding url="https://example.com/support">Support Our Show</podcast:funding>
     <podcast:person group="host" img="https://example.com/images/host.jpg" href="https://example.com/host">Jane Smith</podcast:person>
     <podcast:person group="guest" img="https://example.com/images/guest.jpg" href="https://example.com/guest">John Doe</podcast:person>
-    <podcast:location geo="geo:37.7749,-122.4194" osm="R4163767">San Francisco, CA</podcast:location>
+    <podcast:location rel="creator" geo="geo:37.7749,-122.4194" osm="R4163767" country="US">San Francisco, CA</podcast:location>
     <podcast:trailer url="https://example.com/trailers/season1.mp3" pubdate="Sun, 20 Apr 2025 06:00:00 GMT" length="1048576" type="audio/mpeg" season="1">Season 1 Trailer</podcast:trailer>
     <podcast:license url="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</podcast:license>
     <podcast:guid>ead4c236-bf58-58c6-a2c6-a6b28d128cb6</podcast:guid>
@@ -669,7 +669,7 @@
       <podcast:person group="host" img="https://example.com/images/host.jpg" href="https://example.com/host">Jane Smith</podcast:person>
       <podcast:person group="guest" img="https://example.com/images/guest.jpg" href="https://example.com/guest">John Doe</podcast:person>
       <podcast:person role="producer" img="https://example.com/images/producer.jpg" href="https://example.com/producer">Sam Johnson</podcast:person>
-      <podcast:location geo="geo:40.7128,-74.0060" osm="R8780673">New York City, NY</podcast:location>
+      <podcast:location rel="subject" geo="geo:40.7128,-74.0060" osm="R8780673" country="US">New York City, NY</podcast:location>
       <podcast:season name="First Season">1</podcast:season>
       <podcast:episode display="Episode 1">1</podcast:episode>
       <podcast:license url="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</podcast:license>

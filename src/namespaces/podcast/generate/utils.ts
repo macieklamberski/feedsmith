@@ -139,8 +139,10 @@ export const generateLocation: GenerateUtil<PodcastNs.Location> = (location) => 
 
   const value = {
     ...generateTextOrCdataString(location.display),
+    '@rel': generatePlainString(location.rel),
     '@geo': generatePlainString(location.geo),
     '@osm': generatePlainString(location.osm),
+    '@country': generatePlainString(location.country),
   }
 
   return trimObject(value)

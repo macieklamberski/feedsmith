@@ -289,14 +289,18 @@
         "locations": [
           {
             "display": "New York City, NY",
+            "rel": "subject",
             "geo": "geo:40.7128,-74.0060",
-            "osm": "R8780673"
+            "osm": "R8780673",
+            "country": "US"
           }
         ],
         "location": {
           "display": "New York City, NY",
+          "rel": "subject",
           "geo": "geo:40.7128,-74.0060",
-          "osm": "R8780673"
+          "osm": "R8780673",
+          "country": "US"
         },
         "season": {
           "number": 1,
@@ -1379,14 +1383,18 @@
     "locations": [
       {
         "display": "San Francisco, CA",
+        "rel": "creator",
         "geo": "geo:37.7749,-122.4194",
-        "osm": "R4163767"
+        "osm": "R4163767",
+        "country": "US"
       }
     ],
     "location": {
       "display": "San Francisco, CA",
+      "rel": "creator",
       "geo": "geo:37.7749,-122.4194",
-      "osm": "R4163767"
+      "osm": "R4163767",
+      "country": "US"
     },
     "trailers": [
       {
