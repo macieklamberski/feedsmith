@@ -2887,12 +2887,14 @@ describe('parseRemoteItem', () => {
       '@feedurl': 'https://example.com/feed.xml',
       '@itemguid': 'urn:uuid:4cef2a1f-9b8e-56fc-ba91-f7e401311de3',
       '@medium': 'podcast',
+      '@title': 'Example Podcast',
     }
     const expected = {
       feedGuid: 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
       feedUrl: 'https://example.com/feed.xml',
       itemGuid: 'urn:uuid:4cef2a1f-9b8e-56fc-ba91-f7e401311de3',
       medium: 'podcast',
+      title: 'Example Podcast',
     }
 
     expect(parseRemoteItem(value)).toEqual(expected)

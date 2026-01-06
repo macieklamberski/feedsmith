@@ -255,7 +255,7 @@
     <podcast:block>yes</podcast:block>
     <podcast:block id="test">no</podcast:block>
     <podcast:txt purpose="info">Additional text information about the podcast</podcast:txt>
-    <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-a6b28d128cb9" feedUrl="https://guest-podcast.example/feed.xml" itemGuid="episode-guid-here"/>
+    <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-a6b28d128cb9" feedUrl="https://guest-podcast.example/feed.xml" itemGuid="episode-guid-here" title="Guest Podcast Episode"/>
     <podcast:podroll>
       <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-a6b28d128cb8" feedUrl="https://example.com/related-podcast1.xml"/>
       <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-a6b28d128cb7" feedUrl="https://example.com/related-podcast2.xml"/>

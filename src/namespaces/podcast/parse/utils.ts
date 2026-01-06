@@ -363,6 +363,7 @@ export const parseRemoteItem: ParsePartialUtil<PodcastNs.RemoteItem> = (value) =
     feedUrl: parseString(value['@feedurl']),
     itemGuid: parseString(value['@itemguid']),
     medium: parseString(value['@medium']),
+    title: parseString(value['@title']),
   }
 
   return trimObject(remoteItem)

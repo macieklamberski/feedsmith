@@ -417,6 +417,7 @@ export const generateRemoteItem: GenerateUtil<PodcastNs.RemoteItem> = (remoteIte
     '@feedUrl': generatePlainString(remoteItem.feedUrl),
     '@itemGuid': generatePlainString(remoteItem.itemGuid),
     '@medium': generatePlainString(remoteItem.medium),
+    '@title': generatePlainString(remoteItem.title),
   }
 
   return trimObject(value)

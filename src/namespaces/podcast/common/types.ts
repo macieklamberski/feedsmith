@@ -195,6 +195,7 @@ export namespace PodcastNs {
     feedUrl?: string
     itemGuid?: string
     medium?: string
+    title?: string
   }
 
   export type Podroll = {
