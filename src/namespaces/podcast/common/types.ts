@@ -84,8 +84,10 @@ export namespace PodcastNs {
   export type Location<TStrict extends boolean = false> = Strict<
     {
       display: Requirable<string> // Required in spec.
+      rel?: string
       geo?: string
       osm?: string
+      country?: string
     },
     TStrict
   >
@@ -269,6 +271,7 @@ export namespace PodcastNs {
       feedUrl?: string
       itemGuid?: string
       medium?: string
+      title?: string
     },
     TStrict
   >

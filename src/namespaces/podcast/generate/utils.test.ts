@@ -225,13 +225,17 @@ describe('generateLocation', () => {
   it('should generate location with all properties', () => {
     const value = {
       display: 'Austin, TX',
+      rel: 'creator',
       geo: 'geo:30.2672,-97.7431',
       osm: 'R113314',
+      country: 'US',
     }
     const expected = {
       '#text': 'Austin, TX',
+      '@rel': 'creator',
       '@geo': 'geo:30.2672,-97.7431',
       '@osm': 'R113314',
+      '@country': 'US',
     }
 
     expect(generateLocation(value)).toEqual(expected)
@@ -873,12 +877,14 @@ describe('generateRemoteItem', () => {
       feedUrl: 'https://remote.example.com/feed.xml',
       itemGuid: 'remote-item-guid-456',
       medium: 'music',
+      title: 'Example Podcast',
     }
     const expected = {
       '@feedGuid': 'remote-feed-guid-123',
       '@feedUrl': 'https://remote.example.com/feed.xml',
       '@itemGuid': 'remote-item-guid-456',
       '@medium': 'music',
+      '@title': 'Example Podcast',
     }
 
     expect(generateRemoteItem(value)).toEqual(expected)

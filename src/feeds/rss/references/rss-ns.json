@@ -289,14 +289,18 @@
         "locations": [
           {
             "display": "New York City, NY",
+            "rel": "subject",
             "geo": "geo:40.7128,-74.0060",
-            "osm": "R8780673"
+            "osm": "R8780673",
+            "country": "US"
           }
         ],
         "location": {
           "display": "New York City, NY",
+          "rel": "subject",
           "geo": "geo:40.7128,-74.0060",
-          "osm": "R8780673"
+          "osm": "R8780673",
+          "country": "US"
         },
         "season": {
           "number": 1,
@@ -1379,14 +1383,18 @@
     "locations": [
       {
         "display": "San Francisco, CA",
+        "rel": "creator",
         "geo": "geo:37.7749,-122.4194",
-        "osm": "R4163767"
+        "osm": "R4163767",
+        "country": "US"
       }
     ],
     "location": {
       "display": "San Francisco, CA",
+      "rel": "creator",
       "geo": "geo:37.7749,-122.4194",
-      "osm": "R4163767"
+      "osm": "R4163767",
+      "country": "US"
     },
     "trailers": [
       {
@@ -1506,7 +1514,8 @@
       {
         "feedGuid": "ead4c236-bf58-58c6-a2c6-a6b28d128cb9",
         "feedUrl": "https://guest-podcast.example/feed.xml",
-        "itemGuid": "episode-guid-here"
+        "itemGuid": "episode-guid-here",
+        "title": "Guest Podcast Episode"
       }
     ],
     "podroll": {

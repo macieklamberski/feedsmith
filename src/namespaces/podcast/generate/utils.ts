@@ -139,8 +139,10 @@ export const generateLocation: GenerateUtil<PodcastNs.Location> = (location) => 
 
   const value = {
     ...generateTextOrCdataString(location.display),
+    '@rel': generatePlainString(location.rel),
     '@geo': generatePlainString(location.geo),
     '@osm': generatePlainString(location.osm),
+    '@country': generatePlainString(location.country),
   }
 
   return trimObject(value)
@@ -417,6 +419,7 @@ export const generateRemoteItem: GenerateUtil<PodcastNs.RemoteItem> = (remoteIte
     '@feedUrl': generatePlainString(remoteItem.feedUrl),
     '@itemGuid': generatePlainString(remoteItem.itemGuid),
     '@medium': generatePlainString(remoteItem.medium),
+    '@title': generatePlainString(remoteItem.title),
   }
 
   return trimObject(value)
