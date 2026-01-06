@@ -119,8 +119,11 @@ export default defineConfig({
         ],
       },
       {
-        text: 'Migration from 1.x to 2.x',
-        link: '/migration-to-2.x',
+        text: 'Migration',
+        items: [
+          { text: 'From 2.x to 3.x', link: '/migration/v2-to-v3' },
+          { text: 'From 1.x to 2.x', link: '/migration/v1-to-v2' },
+        ],
       },
     ],
     search: {
