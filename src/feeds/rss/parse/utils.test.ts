@@ -811,7 +811,10 @@ describe('parseItem', () => {
     }
     const expected = {
       title: 'Example Entry',
-      dc: { creator: 'John Doe' },
+      dc: {
+        creators: ['John Doe'],
+        creator: 'John Doe',
+      },
     }
 
     expect(parseItem(value)).toEqual(expected)
@@ -861,8 +864,9 @@ describe('parseItem', () => {
     const expected = {
       title: 'Example Entry',
       dcterms: {
-        created: '2023-02-01T00:00:00Z',
+        licenses: ['MIT License'],
         license: 'MIT License',
+        created: '2023-02-01T00:00:00Z',
       },
     }
 
@@ -1391,7 +1395,10 @@ describe('parseFeed', () => {
     const expected = {
       title: 'Feed Title',
       link: 'https://example.com',
-      dc: { creator: 'John Doe' },
+      dc: {
+        creators: ['John Doe'],
+        creator: 'John Doe',
+      },
     }
 
     expect(parseFeed(value)).toEqual(expected)
@@ -1423,8 +1430,9 @@ describe('parseFeed', () => {
       title: 'Example Feed',
       link: 'https://example.com',
       dcterms: {
-        created: '2023-01-01T00:00:00Z',
+        licenses: ['Creative Commons Attribution 4.0'],
         license: 'Creative Commons Attribution 4.0',
+        created: '2023-01-01T00:00:00Z',
       },
     }
 
@@ -1514,6 +1522,29 @@ describe('parseFeed', () => {
       sourceNs: {
         accounts: [{ service: 'twitter', value: 'johndoe' }],
         blogroll: 'https://example.com/blogroll.opml',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle admin namespace', () => {
+    const value = {
+      title: { '#text': 'Admin Feed' },
+      link: { '#text': 'https://example.com' },
+      'admin:errorreportsto': {
+        '@rdf:resource': 'mailto:webmaster@example.com',
+      },
+      'admin:generatoragent': {
+        '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+      },
+    }
+    const expected = {
+      title: 'Admin Feed',
+      link: 'https://example.com',
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
       },
     }
 

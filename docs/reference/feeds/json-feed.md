@@ -9,6 +9,10 @@ JSON Feed is a syndication format based on JSON that provides a simple, straight
       <td>1.0, 1.1</td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="https://www.jsonfeed.org/version/1.1/" target="_blank">JSON Feed 1.1 Specification</a></td>
+    </tr>
+    <tr>
       <th>Namespaces</th>
       <td>None (JSON-based format)</td>
     </tr>
@@ -26,6 +30,9 @@ import { parseJsonFeed } from 'feedsmith'
 
 const jsonFeed = parseJsonFeed(jsonContent)
 // Returns: object with all fields optional and dates as strings
+
+// Limit number of items parsed
+const jsonFeed = parseJsonFeed(jsonContent, { maxItems: 10 })
 ```
 
 #### Parameters
@@ -33,6 +40,13 @@ const jsonFeed = parseJsonFeed(jsonContent)
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `content` | `string` | The JSON Feed content to parse |
+| `options` | `object` | Optional parsing settings |
+
+#### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `maxItems` | `number` | - | Limit the number of items parsed. Use `0` to skip items entirely, useful when only feed metadata is needed |
 
 #### Returns
 `object` - Parsed JSON Feed with all fields optional and dates as strings
@@ -44,9 +58,7 @@ Generates JSON Feed from feed data.
 ```typescript
 import { generateJsonFeed } from 'feedsmith'
 
-const json = generateJsonFeed(feedData, {
-  lenient: true
-})
+const json = generateJsonFeed(feedData)
 ```
 
 #### Parameters
@@ -60,7 +72,7 @@ const json = generateJsonFeed(feedData, {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `lenient` | `boolean` | `false` | Enable lenient mode for relaxed validation, see [Lenient Mode](/generating/lenient-mode) |
+| `strict` | `boolean` | `false` | Enable strict mode for spec-required field validation, see [Strict Mode](/generating/strict-mode) |
 
 #### Returns
 `object` - Generated JSON Feed
@@ -100,7 +112,7 @@ type Attachment = Json.Attachment
 // … see type definitions below for all available types
 ```
 
-See the [TypeScript guide](/typescript) for usage examples.
+See the [TypeScript guide](/reference/typescript) for usage examples.
 
 ### Type Definitions
 

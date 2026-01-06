@@ -7,6 +7,7 @@ node_modules
 
 # Build
 dist
+coverage
 
 # Debug
 tsconfig.tsbuildinfo
@@ -22,3 +23,6 @@ benchmarks/**/go.sum
 benchmarks/**/composer.lock
 benchmarks/**/Gemfile.lock
 benchmarks/**/parsing-gofeed
+
+# Development
+plans

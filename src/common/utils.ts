@@ -1,4 +1,4 @@
-import { decodeHTML, decodeXML } from 'entities'
+import { decodeHTML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
 import type {
   AnyOf,
@@ -34,6 +34,27 @@ export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | n
 
 export const retrieveText = (value: Unreliable): Unreliable => {
   return value?.['#text'] ?? value
+}
+
+export const retrieveRdfResourceOrText = <T>(
+  value: Unreliable,
+  parse: (value: Unreliable) => T | undefined,
+): T | undefined => {
+  if (isObject(value)) {
+    const rdfResource = parse(value['@rdf:resource'])
+
+    if (isPresent(rdfResource)) {
+      return rdfResource
+    }
+
+    const resource = parse(value['@resource'])
+
+    if (isPresent(resource)) {
+      return resource
+    }
+  }
+
+  return parse(retrieveText(value))
 }
 
 export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<T> | undefined => {
@@ -126,41 +147,48 @@ export const generateSingularOrArray = <V>(
 const cdataStartTag = '<![CDATA['
 const cdataEndTag = ']]>'
 
-export const stripCdata = (text: Unreliable) => {
-  if (typeof text !== 'string') {
-    return text
-  }
+export const hasEntities = (text: string) => {
+  const ampIndex = text.indexOf('&')
+  return ampIndex !== -1 && text.indexOf(';', ampIndex) !== -1
+}
+
+const decodeWithCdata = (text: string): string => {
+  // Per XML spec, CDATA content should be passed through verbatim without entity decoding.
+  // Text outside CDATA should have entities decoded normally.
 
   let currentIndex = text.indexOf(cdataStartTag)
 
   if (currentIndex === -1) {
-    return text
+    return hasEntities(text) ? decodeHTML(text) : text
   }
 
   let result = ''
   let lastIndex = 0
 
   while (currentIndex !== -1) {
-    result += text.substring(lastIndex, currentIndex)
-    lastIndex = text.indexOf(cdataEndTag, currentIndex + 9)
+    // Decode entities in text before CDATA.
+    const textBefore = text.substring(lastIndex, currentIndex)
+    result += hasEntities(textBefore) ? decodeHTML(textBefore) : textBefore
 
-    if (lastIndex === -1) {
-      return text
+    // Find end of CDATA section.
+    const endIndex = text.indexOf(cdataEndTag, currentIndex + cdataStartTag.length)
+
+    if (endIndex === -1) {
+      // Malformed - return original text decoded.
+      return hasEntities(text) ? decodeHTML(text) : text
     }
 
-    result += text.substring(currentIndex + 9, lastIndex)
-    lastIndex += 3
+    // Add CDATA content verbatim (without markers).
+    result += text.substring(currentIndex + cdataStartTag.length, endIndex)
+    lastIndex = endIndex + cdataEndTag.length
     currentIndex = text.indexOf(cdataStartTag, lastIndex)
   }
 
-  result += text.substring(lastIndex)
+  // Decode entities in remaining text after last CDATA.
+  const textAfter = text.substring(lastIndex)
+  result += hasEntities(textAfter) ? decodeHTML(textAfter) : textAfter
 
   return result
-}
-
-export const hasEntities = (text: string) => {
-  const ampIndex = text.indexOf('&')
-  return ampIndex !== -1 && text.indexOf(';', ampIndex) !== -1
 }
 
 export const parseString: ParseExactUtil<string> = (value) => {
@@ -169,25 +197,7 @@ export const parseString: ParseExactUtil<string> = (value) => {
       return
     }
 
-    let string = value
-
-    if (value.indexOf(cdataStartTag) !== -1) {
-      string = stripCdata(value)
-    }
-
-    string = string.trim()
-
-    if (string === '') {
-      return
-    }
-
-    if (hasEntities(string)) {
-      string = decodeXML(string)
-
-      if (hasEntities(string)) {
-        string = decodeHTML(string)
-      }
-    }
+    const string = decodeWithCdata(value).trim()
 
     return string || undefined
   }
@@ -277,18 +287,29 @@ export const parseArray: ParseExactUtil<Array<Unreliable>> = (value) => {
 export const parseArrayOf = <R>(
   value: Unreliable,
   parse: ParseExactUtil<R>,
+  limit?: number,
 ): Array<R> | undefined => {
-  const array = parseArray(value)
+  let array = parseArray(value)
+
+  if (!array && isPresent(value)) {
+    array = [value]
+  }
 
   if (array) {
-    return trimArray(array, parse)
+    return trimArray(limitArray(array, limit), parse)
+  }
+}
+
+export const limitArray = <T>(array: Array<T>, limit: number | undefined): Array<T> => {
+  if (limit === undefined || limit < 0) {
+    return array
   }
 
-  const parsed = parse(value)
-
-  if (parsed) {
-    return [parsed]
+  if (limit === 0) {
+    return []
   }
+
+  return array.slice(0, limit)
 }
 
 export const parseSingular = <T>(value: T | Array<T>): T => {
@@ -446,7 +467,7 @@ export const generateYesNoBoolean: GenerateUtil<boolean> = (value) => {
 
 export const detectNamespaces = (value: unknown, recursive = false): Set<string> => {
   const namespaces = new Set<string>()
-  const seenKeys = new Set<string>()
+  const seenKeys = recursive ? new Set<string>() : undefined
 
   const traverse = (current: unknown): void => {
     if (Array.isArray(current)) {
@@ -459,13 +480,13 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
 
     if (isObject(current)) {
       for (const key in current) {
-        if (seenKeys.has(key)) {
+        if (seenKeys?.has(key)) {
           continue
         }
 
-        seenKeys.add(key)
+        seenKeys?.add(key)
 
-        const keyWithoutAt = key.indexOf('@') === 0 ? key.slice(1) : key
+        const keyWithoutAt = key.charCodeAt(0) === 64 ? key.slice(1) : key
         const colonIndex = keyWithoutAt.indexOf(':')
 
         if (colonIndex > 0) {
@@ -484,17 +505,14 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
   return namespaces
 }
 
+const cdataSpecialCharsRegex = /[<>&]|]]>/
+
 export const generateCdataString: GenerateUtil<string> = (value) => {
   if (!isNonEmptyString(value)) {
     return
   }
 
-  if (
-    value.indexOf('<') !== -1 ||
-    value.indexOf('>') !== -1 ||
-    value.indexOf('&') !== -1 ||
-    value.indexOf(']]>') !== -1
-  ) {
+  if (cdataSpecialCharsRegex.test(value)) {
     return { '#cdata': value.trim() }
   }
 
@@ -525,6 +543,21 @@ export const generateNumber: GenerateUtil<number> = (value) => {
   }
 }
 
+export const generateRdfResource = <T, R>(
+  value: T,
+  generate: (value: T) => R | undefined,
+): { '@rdf:resource': R } | undefined => {
+  const rdfResource = generate(value)
+
+  if (!isPresent(rdfResource)) {
+    return
+  }
+
+  return {
+    '@rdf:resource': rdfResource,
+  }
+}
+
 export const generateNamespaceAttrs = (
   value: Unreliable,
   namespaceUris: Record<string, Array<string>>,
@@ -551,23 +584,26 @@ export const generateNamespaceAttrs = (
   return namespaceAttrs
 }
 
-export const invertObject = (object: Record<string, string>): Record<string, string> => {
-  const inverted: Record<string, string> = {}
-
-  for (const key in object) {
-    inverted[object[key]] = key
-  }
-
-  return inverted
-}
-
 export const createNamespaceNormalizator = <T extends Record<string, Array<string>>>(
   namespaceUris: T,
   namespacePrefixes: Record<string, string>,
   primaryNamespace?: keyof T,
 ) => {
+  const normalizedUriCache = new Map<string, string>()
+
   const normalizeNamespaceUri = (uri: string): string => {
-    return typeof uri === 'string' ? uri.trim().toLowerCase() : uri
+    if (typeof uri !== 'string') {
+      return uri
+    }
+
+    let normalized = normalizedUriCache.get(uri)
+
+    if (normalized === undefined) {
+      normalized = uri.trim().toLowerCase()
+      normalizedUriCache.set(uri, normalized)
+    }
+
+    return normalized
   }
 
   const primaryNamespaceUris =
@@ -635,7 +671,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
   }
 
   const normalizeKey = (key: string, context: Record<string, string>): string => {
-    if (key.indexOf('@') === 0) {
+    if (key.charCodeAt(0) === 64) {
       const attrName = key.substring(1)
       const normalizedAttrName = normalizeWithContext(attrName, context, false)
 
@@ -649,19 +685,25 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
     object: Unreliable,
     parentContext: Record<string, string> = {},
   ): Unreliable => {
-    if (!isObject(object)) {
-      return object
-    }
-
+    // Check arrays first since isObject() excludes arrays.
     if (Array.isArray(object)) {
       return object.map((item) => traverseAndNormalize(item, parentContext))
     }
 
-    const normalizedObject: Unreliable = {}
-    const keyGroups: Map<string, Array<Unreliable>> = new Map()
+    if (!isObject(object)) {
+      return object
+    }
 
     const declarations = extractNamespaceDeclarations(object)
-    const currentContext = { ...parentContext, ...declarations }
+    // Avoid object spread if no new declarations (common case).
+    let hasDeclarations = false
+    for (const _ in declarations) {
+      hasDeclarations = true
+      break
+    }
+    const currentContext = hasDeclarations ? { ...parentContext, ...declarations } : parentContext
+
+    const normalizedObject: Unreliable = {}
 
     for (const key in object) {
       const value = object[key]
@@ -674,19 +716,17 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
       const normalizedKey = normalizeKey(key, currentContext)
       const normalizedValue = traverseAndNormalize(value, currentContext)
 
-      if (!keyGroups.has(normalizedKey)) {
-        keyGroups.set(normalizedKey, [])
+      // Handle key collisions inline (rare: different prefixes mapping to same namespace).
+      if (normalizedKey in normalizedObject) {
+        const existing = normalizedObject[normalizedKey]
+        if (Array.isArray(existing)) {
+          existing.push(normalizedValue)
+        } else {
+          normalizedObject[normalizedKey] = [existing, normalizedValue]
+        }
+      } else {
+        normalizedObject[normalizedKey] = normalizedValue
       }
-
-      const group = keyGroups.get(normalizedKey)
-
-      if (group) {
-        group.push(normalizedValue)
-      }
-    }
-
-    for (const [normalizedKey, values] of keyGroups) {
-      normalizedObject[normalizedKey] = values.length === 1 ? values[0] : values
     }
 
     return normalizedObject
@@ -722,4 +762,25 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
   }
 
   return normalizeRoot
+}
+
+export const parseJsonObject = (value: unknown): unknown => {
+  if (isObject(value)) {
+    return value
+  }
+
+  if (!isNonEmptyString(value) || value.length < 2) {
+    return
+  }
+
+  const startsWithBrace = value.charAt(0) === '{' || /^\s*\{/.test(value)
+  const endsWithBrace = value.charAt(value.length - 1) === '}' || /\}\s*$/.test(value)
+
+  if (!startsWithBrace || !endsWithBrace) {
+    return
+  }
+
+  try {
+    return JSON.parse(value)
+  } catch {}
 }

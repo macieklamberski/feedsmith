@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { generateFeed, generateItem } from './utils.js'
+import { generateFeed, generateItem, generateMetamark } from './utils.js'
 
 describe('generateItem', () => {
   it('should generate valid item object with all properties', () => {
@@ -209,6 +209,16 @@ describe('generateItem', () => {
   })
 })
 
+describe('generateMetamark', () => {
+  it('should return undefined for non-object input', () => {
+    expect(generateMetamark(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateMetamark('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateMetamark(null)).toBeUndefined()
+  })
+})
+
 describe('generateFeed', () => {
   it('should generate valid feed object with all properties', () => {
     const value = {
@@ -240,7 +250,7 @@ describe('generateFeed', () => {
       },
       location: 'San Francisco, CA',
       frequency: 'Weekly',
-      mycast: 'yes',
+      mycast: true,
     }
     const expected = {
       'rawvoice:rating': {
@@ -287,6 +297,19 @@ describe('generateFeed', () => {
     }
     const expected = {
       'rawvoice:location': 'Boston, MA',
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should handle false boolean value', () => {
+    const value = {
+      mycast: false,
+      location: 'New York, NY',
+    }
+    const expected = {
+      'rawvoice:mycast': 'no',
+      'rawvoice:location': 'New York, NY',
     }
 
     expect(generateFeed(value)).toEqual(expected)

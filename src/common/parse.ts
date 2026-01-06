@@ -11,31 +11,35 @@ import type { Rss } from '../feeds/rss/common/types.js'
 import { detect as detectRssFeed } from '../feeds/rss/detect/index.js'
 import { parse as parseRssFeed } from '../feeds/rss/parse/index.js'
 import { locales } from './config.js'
-import type { DeepPartial } from './types.js'
+import type { ParseOptions } from './types.js'
+import { parseJsonObject } from './utils.js'
 
 export type Parse = (
   value: unknown,
+  options?: ParseOptions,
 ) =>
-  | { format: 'rss'; feed: DeepPartial<Rss.Feed<string>> }
-  | { format: 'atom'; feed: DeepPartial<Atom.Feed<string>> }
-  | { format: 'rdf'; feed: DeepPartial<Rdf.Feed<string>> }
-  | { format: 'json'; feed: DeepPartial<Json.Feed<string>> }
+  | { format: 'rss'; feed: Rss.Feed<string> }
+  | { format: 'atom'; feed: Atom.Feed<string> }
+  | { format: 'rdf'; feed: Rdf.Feed<string> }
+  | { format: 'json'; feed: Json.Feed<string> }
 
-export const parse: Parse = (value) => {
+export const parse: Parse = (value, options) => {
   if (detectRssFeed(value)) {
-    return { format: 'rss', feed: parseRssFeed(value) }
+    return { format: 'rss', feed: parseRssFeed(value, options) }
   }
 
   if (detectAtomFeed(value)) {
-    return { format: 'atom', feed: parseAtomFeed(value) }
+    return { format: 'atom', feed: parseAtomFeed(value, options) }
   }
 
   if (detectRdfFeed(value)) {
-    return { format: 'rdf', feed: parseRdfFeed(value) }
+    return { format: 'rdf', feed: parseRdfFeed(value, options) }
   }
 
-  if (detectJsonFeed(value)) {
-    return { format: 'json', feed: parseJsonFeed(value) }
+  const json = parseJsonObject(value)
+
+  if (detectJsonFeed(json)) {
+    return { format: 'json', feed: parseJsonFeed(json, options) }
   }
 
   throw new Error(locales.unrecognizedFeedFormat)

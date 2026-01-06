@@ -1,8 +1,3 @@
----
-prev: Quick Start
-next: Benchmarks
----
-
 # TypeScript
 
 Feedsmith is built with TypeScript and provides comprehensive type definitions for all feed formats and namespaces.
@@ -60,29 +55,6 @@ feed.items?.[0]?.enclosures // Enclosure[] | undefined
 
 > [!NOTE]
 > Explicit typing is usually not required when parsing since the parse functions already return properly typed objects. TypeScript will automatically infer the correct types.
-
-### Working with DeepPartial
-
-The `DeepPartial` type recursively makes all properties optional, including nested objects and arrays. This accurately represents the reality of parsed feeds where any field might be missing.
-
-Use it to recreate the same type that parse functions return:
-
-```typescript
-import type { Rss, DeepPartial } from 'feedsmith/types'
-import { parseRssFeed } from 'feedsmith'
-
-const feed = parseRssFeed(xmlContent)
-
-function processFeed(feed: DeepPartial<Rss.Feed<string>>) {
-  console.log(feed.title) // string | undefined
-}
-
-function processItem(item: DeepPartial<Rss.Item<string>>) {
-  console.log(item.title) // string | undefined
-}
-
-processFeed(feed)
-```
 
 ## Using Types with Generating
 

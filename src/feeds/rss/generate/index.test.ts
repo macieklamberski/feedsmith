@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import type { DateLike, DeepPartial } from '../../../common/types.js'
+import type { DateLike } from '../../../common/types.js'
 import type { Rss } from '../common/types.js'
 import { generate } from './index.js'
 
@@ -92,6 +92,56 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with object author format', () => {
+    const value = {
+      title: 'Feed with object author',
+      description: 'Test feed with object author format',
+      managingEditor: {
+        name: 'Editor Name',
+        email: 'editor@example.com',
+      },
+      webMaster: {
+        name: 'Webmaster',
+        email: 'webmaster@example.com',
+      },
+      items: [
+        {
+          title: 'First item',
+          authors: [
+            {
+              name: 'John Doe',
+              email: 'john@example.com',
+            },
+            {
+              name: 'Jane Smith',
+            },
+            {
+              email: 'noreply@example.com',
+            },
+          ],
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Feed with object author</title>
+    <description>Test feed with object author format</description>
+    <managingEditor>editor@example.com (Editor Name)</managingEditor>
+    <webMaster>webmaster@example.com (Webmaster)</webMaster>
+    <item>
+      <title>First item</title>
+      <author>john@example.com (John Doe)</author>
+      <author>Jane Smith</author>
+      <author>noreply@example.com</author>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with dcterms namespace', () => {
     const value = {
       title: 'Feed with dcterms namespace',
@@ -121,6 +171,41 @@ describe('generate', () => {
       <title>First item</title>
       <dcterms:created>2023-02-01T00:00:00.000Z</dcterms:created>
       <dcterms:license>MIT License</dcterms:license>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with prism namespace', () => {
+    const value = {
+      title: 'Feed with prism namespace',
+      description: 'Test feed with PRISM namespace',
+      prism: {
+        issn: '0028-0836',
+      },
+      items: [
+        {
+          title: 'First item',
+          prism: {
+            doi: '10.1038/s41586-023-05842-x',
+            startingPage: '425',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:prism="http://prismstandard.org/namespaces/basic/3.0/">
+  <channel>
+    <title>Feed with prism namespace</title>
+    <description>Test feed with PRISM namespace</description>
+    <prism:issn>0028-0836</prism:issn>
+    <item>
+      <title>First item</title>
+      <prism:doi>10.1038/s41586-023-05842-x</prism:doi>
+      <prism:startingPage>425</prism:startingPage>
     </item>
   </channel>
 </rss>
@@ -420,6 +505,62 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with geo namespace', () => {
+    const value = {
+      title: 'Location Feed',
+      description: 'Feed with W3C Basic Geo',
+      geo: {
+        lat: 37.7749,
+        long: -122.4194,
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
+  <channel>
+    <title>Location Feed</title>
+    <description>Feed with W3C Basic Geo</description>
+    <geo:lat>37.7749</geo:lat>
+    <geo:long>-122.4194</geo:long>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS item with geo coordinates including altitude', () => {
+    const value = {
+      title: 'Altitude Feed',
+      description: 'High altitude locations',
+      items: [
+        {
+          title: 'High Altitude Location',
+          geo: {
+            lat: 28.0026,
+            long: 86.8528,
+            alt: 5364,
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
+  <channel>
+    <title>Altitude Feed</title>
+    <description>High altitude locations</description>
+    <item>
+      <title>High Altitude Location</title>
+      <geo:lat>28.0026</geo:lat>
+      <geo:long>86.8528</geo:long>
+      <geo:alt>5364</geo:alt>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with wfw namespace', () => {
     const value = {
       title: 'Feed with wfw namespace',
@@ -443,6 +584,73 @@ describe('generate', () => {
       <title>Item with comments</title>
       <wfw:comment>https://example.com/posts/item1/comment</wfw:comment>
       <wfw:commentRss>https://example.com/posts/item1/comments/feed</wfw:commentRss>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with pingback namespace', () => {
+    const value = {
+      title: 'Feed with pingback namespace',
+      description: 'Test feed with Pingback namespace',
+      pingback: {
+        to: 'https://example.com/pingback-service',
+      },
+      items: [
+        {
+          title: 'First item',
+          pingback: {
+            server: 'https://example.com/xmlrpc.php',
+            target: 'https://referenced-blog.com/article',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/">
+  <channel>
+    <title>Feed with pingback namespace</title>
+    <description>Test feed with Pingback namespace</description>
+    <pingback:to>https://example.com/pingback-service</pingback:to>
+    <item>
+      <title>First item</title>
+      <pingback:server>https://example.com/xmlrpc.php</pingback:server>
+      <pingback:target>https://referenced-blog.com/article</pingback:target>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with trackback namespace', () => {
+    const value = {
+      title: 'Feed with trackback namespace',
+      description: 'Test feed with Trackback namespace',
+      items: [
+        {
+          title: 'First item',
+          trackback: {
+            ping: 'https://example.com/trackback/123',
+            abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+  <channel>
+    <title>Feed with trackback namespace</title>
+    <description>Test feed with Trackback namespace</description>
+    <item>
+      <title>First item</title>
+      <trackback:ping>https://example.com/trackback/123</trackback:ping>
+      <trackback:about>https://blog1.com/trackback/456</trackback:about>
+      <trackback:about>https://blog2.com/trackback/789</trackback:about>
     </item>
   </channel>
 </rss>
@@ -500,6 +708,66 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with blogChannel namespace', () => {
+    const value = {
+      title: 'Feed with blogChannel namespace',
+      description: 'Test feed with blogChannel namespace',
+      blogChannel: {
+        blogRoll: 'http://example.com/blogroll.opml',
+        blink: 'http://recommended-site.com/',
+        mySubscriptions: 'http://example.com/subscriptions.opml',
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:blogChannel="http://backend.userland.com/blogChannelModule">
+  <channel>
+    <title>Feed with blogChannel namespace</title>
+    <description>Test feed with blogChannel namespace</description>
+    <blogChannel:blogRoll>http://example.com/blogroll.opml</blogChannel:blogRoll>
+    <blogChannel:blink>http://recommended-site.com/</blogChannel:blink>
+    <blogChannel:mySubscriptions>http://example.com/subscriptions.opml</blogChannel:mySubscriptions>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with ccREL namespace', () => {
+    const value = {
+      title: 'Feed with ccREL namespace',
+      description: 'Test feed with ccREL namespace',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+        morePermissions: 'https://example.com/commercial-license',
+      },
+      items: [
+        {
+          title: 'Item with ccREL',
+          cc: {
+            license: 'https://creativecommons.org/licenses/by/4.0/',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:cc="http://creativecommons.org/ns#">
+  <channel>
+    <title>Feed with ccREL namespace</title>
+    <description>Test feed with ccREL namespace</description>
+    <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
+    <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
+    <item>
+      <title>Item with ccREL</title>
+      <cc:license>https://creativecommons.org/licenses/by/4.0/</cc:license>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with creativecommons namespace', () => {
     const value = {
       title: 'Feed with creativecommons namespace',
@@ -537,6 +805,62 @@ describe('generate', () => {
     <description>Test feed with FeedPress namespace</description>
     <feedpress:link>https://feed.press/example</feedpress:link>
     <feedpress:newsletterId>12345</feedpress:newsletterId>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with admin namespace', () => {
+    const value = {
+      title: 'Feed with admin namespace',
+      description: 'Test feed with admin namespace',
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+      items: [
+        {
+          title: 'Item title',
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:admin="http://webns.net/mvcb/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <channel>
+    <title>Feed with admin namespace</title>
+    <description>Test feed with admin namespace</description>
+    <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
+    <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+    <item>
+      <title>Item title</title>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with opensearch namespace', () => {
+    const value = {
+      title: 'Search Results',
+      description: 'Search results feed',
+      opensearch: {
+        totalResults: 1000,
+        startIndex: 0,
+        itemsPerPage: 10,
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">
+  <channel>
+    <title>Search Results</title>
+    <description>Search results feed</description>
+    <opensearch:totalResults>1000</opensearch:totalResults>
+    <opensearch:startIndex>0</opensearch:startIndex>
+    <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
   </channel>
 </rss>
 `
@@ -632,6 +956,45 @@ describe('generate', () => {
     <title>Feed with spotify namespace</title>
     <description>Test feed with Spotify namespace</description>
     <spotify:countryOfOrigin>US</spotify:countryOfOrigin>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with googleplay namespace', () => {
+    const value = {
+      title: 'Feed with GooglePlay namespace',
+      description: 'Test feed with Google Play Podcasts namespace',
+      googleplay: {
+        author: 'Podcast Creator',
+        explicit: false,
+      },
+      items: [
+        {
+          title: 'Episode with GooglePlay',
+          description: 'Episode description',
+          googleplay: {
+            author: 'Episode Author',
+            explicit: 'clean' as const,
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/">
+  <channel>
+    <title>Feed with GooglePlay namespace</title>
+    <description>Test feed with Google Play Podcasts namespace</description>
+    <googleplay:author>Podcast Creator</googleplay:author>
+    <googleplay:explicit>no</googleplay:explicit>
+    <item>
+      <title>Episode with GooglePlay</title>
+      <description>Episode description</description>
+      <googleplay:author>Episode Author</googleplay:author>
+      <googleplay:explicit>clean</googleplay:explicit>
+    </item>
   </channel>
 </rss>
 `
@@ -742,11 +1105,97 @@ describe('generate', () => {
   })
 })
 
-describe('generate with lenient mode', () => {
-  it('should accept partial feeds with lenient: true', () => {
-    const value: DeepPartial<Rss.Feed<DateLike>> = {
+describe('strict mode', () => {
+  it('should require title, link, description in strict mode', () => {
+    // @ts-expect-error: This is for testing purposes.
+    generate({ title: 'Test' }, { strict: true })
+  })
+
+  it('should accept feed with all required fields in strict mode', () => {
+    generate({ title: 'Test', link: 'https://example.com', description: 'Desc' }, { strict: true })
+  })
+
+  it('should require nested type fields in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [
+          {
+            title: 'Item',
+            description: 'Desc',
+            // @ts-expect-error: This is for testing purposes.
+            enclosures: [{ url: 'https://example.com/file.mp3' }],
+          },
+        ],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept nested types with all required fields in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [
+          {
+            title: 'Item',
+            enclosures: [{ url: 'https://example.com/file.mp3', length: 1000, type: 'audio/mpeg' }],
+          },
+        ],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept item with only title in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [{ title: 'Item Title' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept item with only description in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [{ description: 'Item Description' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept item with both title and description in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [{ title: 'Item Title', description: 'Item Description' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept partial feed in lenient mode', () => {
+    generate({ title: 'Test' })
+  })
+})
+
+describe('generate edge cases', () => {
+  it('should accept partial feeds', () => {
+    const value: Rss.Feed<DateLike> = {
       title: 'Test Feed',
-      // Missing required 'description' field.
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
@@ -756,11 +1205,11 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should accept feeds with string dates in lenient mode', () => {
-    const value: DeepPartial<Rss.Feed<DateLike>> = {
+  it('should accept feeds with string dates', () => {
+    const value: Rss.Feed<DateLike> = {
       title: 'Test Feed',
       description: 'Test Description',
       pubDate: '2023-01-01T00:00:00.000Z',
@@ -785,11 +1234,11 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should preserve invalid date strings in lenient mode', () => {
-    const value: DeepPartial<Rss.Feed<DateLike>> = {
+  it('should preserve invalid date strings', () => {
+    const value: Rss.Feed<DateLike> = {
       title: 'Test Feed',
       description: 'Test Description',
       pubDate: 'not-a-valid-date',
@@ -814,11 +1263,11 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should handle deeply nested partial objects', () => {
-    const value: DeepPartial<Rss.Feed<DateLike>> = {
+    const value: Rss.Feed<DateLike> = {
       title: 'Test Feed',
       items: [
         {
@@ -851,11 +1300,11 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should handle mixed Date objects and string dates', () => {
-    const value: DeepPartial<Rss.Feed<DateLike>> = {
+    const value: Rss.Feed<DateLike> = {
       title: 'Mixed Dates Feed',
       description: 'Feed with both Date objects and strings',
       pubDate: new Date('2023-01-01T00:00:00.000Z'),
@@ -890,6 +1339,63 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with acast namespace', () => {
+    const value = {
+      title: 'Feed with acast namespace',
+      description: 'Test feed with Acast namespace',
+      acast: {
+        showId: '664fde3eda02bb0012bad909',
+        showUrl: 'software-unscripted',
+        signature: {
+          key: 'EXAMPLE_KEY',
+          algorithm: 'aes-256-cbc',
+          value: 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+        },
+        settings: 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
+        network: {
+          id: '664fdd227c6b200013652ed6',
+          slug: 'richard-feldman-664fdd227c6b200013652ed6',
+          value: 'Richard Feldman',
+        },
+        importedFeed: 'https://feeds.resonaterecordings.com/software-unscripted',
+      },
+      items: [
+        {
+          title: 'Episode with Acast metadata',
+          acast: {
+            episodeId: '6918f06ee42e3466f29467f9',
+            showId: '664fde3eda02bb0012bad909',
+            episodeUrl: 'jonathan-blow-on-programming-language-design',
+            settings: 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:acast="https://schema.acast.com/1.0/">
+  <channel>
+    <title>Feed with acast namespace</title>
+    <description>Test feed with Acast namespace</description>
+    <acast:showId>664fde3eda02bb0012bad909</acast:showId>
+    <acast:showUrl>software-unscripted</acast:showUrl>
+    <acast:signature key="EXAMPLE_KEY" algorithm="aes-256-cbc">wbG1Z7+6h9QOi+CR1Dv0uQ==</acast:signature>
+    <acast:settings>FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB</acast:settings>
+    <acast:network id="664fdd227c6b200013652ed6" slug="richard-feldman-664fdd227c6b200013652ed6">Richard Feldman</acast:network>
+    <acast:importedFeed>https://feeds.resonaterecordings.com/software-unscripted</acast:importedFeed>
+    <item>
+      <title>Episode with Acast metadata</title>
+      <acast:episodeId>6918f06ee42e3466f29467f9</acast:episodeId>
+      <acast:showId>664fde3eda02bb0012bad909</acast:showId>
+      <acast:episodeUrl>jonathan-blow-on-programming-language-design</acast:episodeUrl>
+      <acast:settings>FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC</acast:settings>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
   })
 })

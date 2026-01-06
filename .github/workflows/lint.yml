@@ -1,4 +1,4 @@
-name: Lint PR
+name: Lint
 
 on:
   pull_request:
@@ -6,6 +6,8 @@ on:
 
 jobs:
   lint:
+    # Disable for dependabot PRs due https://github.com/dependabot/dependabot-core/issues/11705.
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

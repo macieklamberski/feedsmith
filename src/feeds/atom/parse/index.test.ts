@@ -142,6 +142,56 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should handle alternating case entries', async () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom">
+        <title>Test Feed</title>
+        <id>urn:uuid:test-feed</id>
+        <updated>2024-01-10T12:00:00Z</updated>
+        <entry>
+          <title>First</title>
+          <id>urn:uuid:1</id>
+          <updated>2024-01-01T12:00:00Z</updated>
+        </entry>
+        <ENTRY>
+          <title>Second</title>
+          <id>urn:uuid:2</id>
+          <updated>2024-01-02T12:00:00Z</updated>
+        </ENTRY>
+        <entry>
+          <title>Third</title>
+          <id>urn:uuid:3</id>
+          <updated>2024-01-03T12:00:00Z</updated>
+        </entry>
+      </feed>
+    `
+    const expected = {
+      title: 'Test Feed',
+      id: 'urn:uuid:test-feed',
+      updated: '2024-01-10T12:00:00Z',
+      entries: [
+        {
+          title: 'First',
+          id: 'urn:uuid:1',
+          updated: '2024-01-01T12:00:00Z',
+        },
+        {
+          title: 'Second',
+          id: 'urn:uuid:2',
+          updated: '2024-01-02T12:00:00Z',
+        },
+        {
+          title: 'Third',
+          id: 'urn:uuid:3',
+          updated: '2024-01-03T12:00:00Z',
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should correctly parse namespaced Atom feed', async () => {
     const value = `
       <?xml version="1.0" encoding="utf-8"?>
@@ -392,6 +442,7 @@ describe('parse', () => {
             id: 'urn:uuid:67890',
             updated: '2024-01-01T00:00:00Z',
             dc: {
+              creators: ['John Doe'],
               creator: 'John Doe',
             },
           },
@@ -432,6 +483,8 @@ describe('parse', () => {
             id: 'urn:uuid:67890',
             updated: '2024-01-01T00:00:00Z',
             dc: {
+              creators: ['John Doe'],
+              dates: ['2023-01-01'],
               creator: 'John Doe',
               date: '2023-01-01',
             },
@@ -472,6 +525,7 @@ describe('parse', () => {
             id: 'urn:uuid:67890',
             updated: '2024-01-01T00:00:00Z',
             dc: {
+              creators: ['John Doe'],
               creator: 'John Doe',
             },
           },
@@ -564,6 +618,8 @@ describe('parse', () => {
             id: 'urn:uuid:67890',
             updated: '2024-01-01T00:00:00Z',
             dc: {
+              creators: ['John Doe'],
+              dates: ['2023-01-01'],
               creator: 'John Doe',
               date: '2023-01-01',
             },
@@ -614,6 +670,7 @@ describe('parse', () => {
             id: 'urn:uuid:67890',
             updated: '2024-01-01T00:00:00Z',
             dc: {
+              creators: ['Should not normalize (empty URI)'],
               creator: 'Should not normalize (empty URI)',
             },
           },
@@ -667,6 +724,7 @@ describe('parse', () => {
           {
             title: 'Incomplete Entry',
             dc: {
+              creators: ['John Doe'],
               creator: 'John Doe',
             },
           },
@@ -710,6 +768,48 @@ describe('parse', () => {
       expect(parse(value)).toEqual(expected)
     })
 
+    it('should parse Atom feed with googleplay namespace', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom" xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/">
+          <title>Feed with GooglePlay</title>
+          <id>urn:uuid:feed-id</id>
+          <updated>2024-01-01T00:00:00Z</updated>
+          <googleplay:author>Podcast Creator</googleplay:author>
+          <googleplay:explicit>no</googleplay:explicit>
+          <entry>
+            <title>Episode with GooglePlay</title>
+            <id>urn:uuid:entry-id</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <googleplay:author>Episode Author</googleplay:author>
+            <googleplay:explicit>clean</googleplay:explicit>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Feed with GooglePlay',
+        id: 'urn:uuid:feed-id',
+        updated: '2024-01-01T00:00:00Z',
+        googleplay: {
+          author: 'Podcast Creator',
+          explicit: false,
+        },
+        entries: [
+          {
+            title: 'Episode with GooglePlay',
+            id: 'urn:uuid:entry-id',
+            updated: '2024-01-01T00:00:00Z',
+            googleplay: {
+              author: 'Episode Author',
+              explicit: 'clean' as const,
+            },
+          },
+        ],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
     describe('non-standard namespace URIs', () => {
       it('should work with HTTPS variant and custom prefix', () => {
         const value = `
@@ -736,6 +836,7 @@ describe('parse', () => {
               id: 'urn:uuid:entry',
               updated: '2024-01-01T00:00:00Z',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -770,6 +871,7 @@ describe('parse', () => {
               id: 'urn:uuid:entry',
               updated: '2024-01-01T00:00:00Z',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -804,6 +906,7 @@ describe('parse', () => {
               id: 'urn:uuid:entry',
               updated: '2024-01-01T00:00:00Z',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -838,6 +941,7 @@ describe('parse', () => {
               id: 'urn:uuid:entry',
               updated: '2024-01-01T00:00:00Z',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -872,6 +976,7 @@ describe('parse', () => {
               id: 'urn:uuid:entry',
               updated: '2024-01-01T00:00:00Z',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -906,7 +1011,46 @@ describe('parse', () => {
               id: 'urn:uuid:entry',
               updated: '2024-01-01T00:00:00Z',
               dc: {
+                creators: ['John'],
                 creator: 'John',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should work with DC Terms namespace', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <feed xmlns="http://www.w3.org/2005/Atom" xmlns:dcterms="http://purl.org/dc/terms/">
+            <title>Test</title>
+            <id>urn:uuid:feed</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <entry>
+              <title>Entry</title>
+              <id>urn:uuid:entry</id>
+              <updated>2024-01-01T00:00:00Z</updated>
+              <dcterms:creator>Jane Doe</dcterms:creator>
+              <dcterms:title>DC Terms Title</dcterms:title>
+            </entry>
+          </feed>
+        `
+        const expected = {
+          title: 'Test',
+          id: 'urn:uuid:feed',
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              title: 'Entry',
+              id: 'urn:uuid:entry',
+              updated: '2024-01-01T00:00:00Z',
+              dcterms: {
+                creators: ['Jane Doe'],
+                titles: ['DC Terms Title'],
+                creator: 'Jane Doe',
+                title: 'DC Terms Title',
               },
             },
           ],
@@ -949,6 +1093,91 @@ describe('parse', () => {
           expect(parse(value)).toEqual(expected)
         })
       }
+    })
+
+    describe('with maxItems option', () => {
+      const commonValue = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <title>Test Feed</title>
+          <id>urn:uuid:feed-id</id>
+          <updated>2024-01-01T00:00:00Z</updated>
+          <entry>
+            <title>Entry 1</title>
+            <id>urn:uuid:entry-1</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+          </entry>
+          <entry>
+            <title>Entry 2</title>
+            <id>urn:uuid:entry-2</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+          </entry>
+          <entry>
+            <title>Entry 3</title>
+            <id>urn:uuid:entry-3</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+          </entry>
+        </feed>
+      `
+
+      it('should limit entries to specified number', () => {
+        const expected = {
+          title: 'Test Feed',
+          id: 'urn:uuid:feed-id',
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              title: 'Entry 1',
+              id: 'urn:uuid:entry-1',
+              updated: '2024-01-01T00:00:00Z',
+            },
+            {
+              title: 'Entry 2',
+              id: 'urn:uuid:entry-2',
+              updated: '2024-01-01T00:00:00Z',
+            },
+          ],
+        }
+
+        expect(parse(commonValue, { maxItems: 2 })).toEqual(expected)
+      })
+
+      it('should skip all entries when maxItems is 0', () => {
+        const expected = {
+          title: 'Test Feed',
+          id: 'urn:uuid:feed-id',
+          updated: '2024-01-01T00:00:00Z',
+        }
+
+        expect(parse(commonValue, { maxItems: 0 })).toEqual(expected)
+      })
+
+      it('should return all entries when maxItems is undefined', () => {
+        const expected = {
+          title: 'Test Feed',
+          id: 'urn:uuid:feed-id',
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              title: 'Entry 1',
+              id: 'urn:uuid:entry-1',
+              updated: '2024-01-01T00:00:00Z',
+            },
+            {
+              title: 'Entry 2',
+              id: 'urn:uuid:entry-2',
+              updated: '2024-01-01T00:00:00Z',
+            },
+            {
+              title: 'Entry 3',
+              id: 'urn:uuid:entry-3',
+              updated: '2024-01-01T00:00:00Z',
+            },
+          ],
+        }
+
+        expect(parse(commonValue, { maxItems: undefined })).toEqual(expected)
+      })
     })
   })
 })

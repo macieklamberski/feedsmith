@@ -35,6 +35,12 @@ export const locales = {
 }
 
 export const namespaceUris = {
+  admin: [
+    'http://webns.net/mvcb/', // Official URI.
+    'https://webns.net/mvcb/',
+    'http://webns.net/mvcb',
+    'https://webns.net/mvcb',
+  ],
   atom: [
     'http://www.w3.org/2005/Atom', // Official URI (Atom 1.0).
     'https://www.w3.org/2005/Atom',
@@ -42,6 +48,18 @@ export const namespaceUris = {
     'https://www.w3.org/2005/Atom/',
     'http://purl.org/atom/ns#', // Official URI (Atom 0.3).
     'https://purl.org/atom/ns#',
+  ],
+  blogChannel: [
+    'http://backend.userland.com/blogChannelModule', // Official URI.
+    'https://backend.userland.com/blogChannelModule',
+    'http://backend.userland.com/blogChannelModule/',
+    'https://backend.userland.com/blogChannelModule/',
+  ],
+  app: [
+    'http://www.w3.org/2007/app', // Official URI.
+    'https://www.w3.org/2007/app',
+    'http://www.w3.org/2007/app/',
+    'https://www.w3.org/2007/app/',
   ],
   dc: [
     'http://purl.org/dc/elements/1.1/', // Official URI.
@@ -130,6 +148,10 @@ export const namespaceUris = {
     'https://www.georss.org/georss',
     'https://www.georss.org/georss/',
   ],
+  geo: [
+    'http://www.w3.org/2003/01/geo/wgs84_pos#', // Official URI.
+    'https://www.w3.org/2003/01/geo/wgs84_pos#',
+  ],
   thr: [
     'http://purl.org/syndication/thread/1.0', // Official URI.
     'https://purl.org/syndication/thread/1.0',
@@ -186,6 +208,14 @@ export const namespaceUris = {
     'http://www.youtube.com/xml/schemas/2015/',
     'https://www.youtube.com/xml/schemas/2015/',
   ],
+  googleplay: [
+    'https://www.google.com/schemas/play-podcasts/1.0/', // Official URI.
+    'http://www.google.com/schemas/play-podcasts/1.0/',
+    'https://www.google.com/schemas/play-podcasts/1.0',
+    'http://www.google.com/schemas/play-podcasts/1.0',
+    'https://www.google.com/schemas/play-podcasts/1.0/play-podcasts.xsd',
+    'http://www.google.com/schemas/play-podcasts/1.0/play-podcasts.xsd',
+  ],
   spotify: [
     'http://www.spotify.com/ns/rss', // Official URI.
     'https://www.spotify.com/ns/rss',
@@ -205,6 +235,84 @@ export const namespaceUris = {
     'http://blubrry.com/developer/rawvoice-rss',
     'https://blubrry.com/developer/rawvoice-rss/',
     'http://blubrry.com/developer/rawvoice-rss/',
+  ],
+  cc: [
+    'http://creativecommons.org/ns#', // Official URI.
+    'https://creativecommons.org/ns#',
+    'http://web.resource.org/cc/',
+    'https://web.resource.org/cc/',
+    'http://web.resource.org/cc',
+    'https://web.resource.org/cc',
+  ],
+  opensearch: [
+    'http://a9.com/-/spec/opensearch/1.1/', // Official URI (OpenSearch 1.1).
+    'https://a9.com/-/spec/opensearch/1.1/',
+    'http://a9.com/-/spec/opensearch/1.0/', // Official URI (OpenSearch 1.0).
+    'https://a9.com/-/spec/opensearch/1.0/',
+    'http://a9.com/-/spec/opensearchrss/1.0/', // Official URI (legacy).
+    'https://a9.com/-/spec/opensearchrss/1.0/',
+  ],
+  arxiv: [
+    'http://arxiv.org/schemas/atom', // Official URI.
+    'https://arxiv.org/schemas/atom',
+    'http://arxiv.org/schemas/atom/',
+    'https://arxiv.org/schemas/atom/',
+  ],
+  pingback: [
+    'http://madskills.com/public/xml/rss/module/pingback/', // Official URI.
+    'https://madskills.com/public/xml/rss/module/pingback/',
+    'http://madskills.com/public/xml/rss/module/pingback',
+    'https://madskills.com/public/xml/rss/module/pingback',
+  ],
+  trackback: [
+    'http://madskills.com/public/xml/rss/module/trackback/', // Official URI.
+    'https://madskills.com/public/xml/rss/module/trackback/',
+    'http://madskills.com/public/xml/rss/module/trackback',
+    'https://madskills.com/public/xml/rss/module/trackback',
+  ],
+  prism: [
+    'http://prismstandard.org/namespaces/basic/3.0/', // Official URI (PRISM 3.0).
+    'https://prismstandard.org/namespaces/basic/3.0/',
+    'http://prismstandard.org/namespaces/basic/3.0',
+    'https://prismstandard.org/namespaces/basic/3.0',
+    'http://prismstandard.org/namespaces/basic/2.2/', // PRISM 2.2.
+    'https://prismstandard.org/namespaces/basic/2.2/',
+    'http://prismstandard.org/namespaces/basic/2.2',
+    'https://prismstandard.org/namespaces/basic/2.2',
+    'http://prismstandard.org/namespaces/basic/2.1/', // PRISM 2.1.
+    'https://prismstandard.org/namespaces/basic/2.1/',
+    'http://prismstandard.org/namespaces/basic/2.1',
+    'https://prismstandard.org/namespaces/basic/2.1',
+    'http://prismstandard.org/namespaces/basic/2.0/', // PRISM 2.0.
+    'https://prismstandard.org/namespaces/basic/2.0/',
+    'http://prismstandard.org/namespaces/basic/2.0',
+    'https://prismstandard.org/namespaces/basic/2.0',
+    'http://prismstandard.org/namespaces/2.0/basic/', // PRISM 2.0 (alternative path).
+    'https://prismstandard.org/namespaces/2.0/basic/',
+    'http://prismstandard.org/namespaces/2.0/basic',
+    'https://prismstandard.org/namespaces/2.0/basic',
+    'http://prismstandard.org/namespaces/1.2/basic/', // PRISM 1.2 (most common).
+    'https://prismstandard.org/namespaces/1.2/basic/',
+    'http://prismstandard.org/namespaces/1.2/basic',
+    'https://prismstandard.org/namespaces/1.2/basic',
+    'http://prismstandard.org/namespaces/1.1/basic/', // PRISM 1.1.
+    'https://prismstandard.org/namespaces/1.1/basic/',
+    'http://prismstandard.org/namespaces/1.1/basic',
+    'https://prismstandard.org/namespaces/1.1/basic',
+    'http://prismstandard.org/namespaces/1.0/basic/', // PRISM 1.0.
+    'https://prismstandard.org/namespaces/1.0/basic/',
+    'http://prismstandard.org/namespaces/1.0/basic',
+    'https://prismstandard.org/namespaces/1.0/basic',
+    'http://purl.org/rss/1.0/modules/prism/', // Legacy purl.org URI.
+    'https://purl.org/rss/1.0/modules/prism/',
+    'http://purl.org/rss/1.0/modules/prism',
+    'https://purl.org/rss/1.0/modules/prism',
+  ],
+  acast: [
+    'https://schema.acast.com/1.0/', // Official URI.
+    'http://schema.acast.com/1.0/',
+    'https://schema.acast.com/1.0',
+    'http://schema.acast.com/1.0',
   ],
 }
 

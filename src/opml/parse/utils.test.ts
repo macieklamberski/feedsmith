@@ -419,6 +419,67 @@ describe('parseBody', () => {
 
     expect(parseBody(value)).toBeUndefined()
   })
+
+  describe('with maxItems option', () => {
+    const commonValue = {
+      outline: [
+        {
+          '@text': 'Outline 1',
+          '@type': 'rss',
+        },
+        {
+          '@text': 'Outline 2',
+          '@type': 'rss',
+        },
+        {
+          '@text': 'Outline 3',
+          '@type': 'rss',
+        },
+      ],
+    }
+
+    it('should limit outlines to specified number', () => {
+      const expected = {
+        outlines: [
+          {
+            text: 'Outline 1',
+            type: 'rss',
+          },
+          {
+            text: 'Outline 2',
+            type: 'rss',
+          },
+        ],
+      }
+
+      expect(parseBody(commonValue, { maxItems: 2 })).toEqual(expected)
+    })
+
+    it('should skip all outlines when maxItems is 0', () => {
+      expect(parseBody(commonValue, { maxItems: 0 })).toBeUndefined()
+    })
+
+    it('should return all outlines when maxItems is undefined', () => {
+      const expected = {
+        outlines: [
+          {
+            text: 'Outline 1',
+            type: 'rss',
+          },
+          {
+            text: 'Outline 2',
+            type: 'rss',
+          },
+          {
+            text: 'Outline 3',
+            type: 'rss',
+          },
+        ],
+      }
+
+      expect(parseBody(commonValue, { maxItems: undefined })).toEqual(expected)
+    })
+  })
 })
 
 describe('parseDocument', () => {

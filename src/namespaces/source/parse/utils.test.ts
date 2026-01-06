@@ -176,6 +176,12 @@ describe('parseSubscriptionList', () => {
 
     expect(parseSubscriptionList(value)).toEqual(expected)
   })
+
+  it('should return undefined for non-object input', () => {
+    expect(parseSubscriptionList(undefined)).toBeUndefined()
+    expect(parseSubscriptionList('string')).toBeUndefined()
+    expect(parseSubscriptionList(null)).toBeUndefined()
+  })
 })
 
 describe('retrieveFeed', () => {

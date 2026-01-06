@@ -10,9 +10,9 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
-import type { RawvoiceNs } from '../common/types.js'
+import type { RawVoiceNs } from '../common/types.js'
 
-export const generateRating: GenerateUtil<RawvoiceNs.Rating> = (rating) => {
+export const generateRating: GenerateUtil<RawVoiceNs.Rating> = (rating) => {
   if (!isObject(rating)) {
     return
   }
@@ -26,7 +26,7 @@ export const generateRating: GenerateUtil<RawvoiceNs.Rating> = (rating) => {
   return trimObject(value)
 }
 
-export const generateLiveStream: GenerateUtil<RawvoiceNs.LiveStream<DateLike>> = (liveStream) => {
+export const generateLiveStream: GenerateUtil<RawVoiceNs.LiveStream<DateLike>> = (liveStream) => {
   if (!isObject(liveStream)) {
     return
   }
@@ -41,7 +41,7 @@ export const generateLiveStream: GenerateUtil<RawvoiceNs.LiveStream<DateLike>> =
   return trimObject(value)
 }
 
-export const generatePoster: GenerateUtil<RawvoiceNs.Poster> = (poster) => {
+export const generatePoster: GenerateUtil<RawVoiceNs.Poster> = (poster) => {
   if (!isObject(poster)) {
     return
   }
@@ -53,7 +53,7 @@ export const generatePoster: GenerateUtil<RawvoiceNs.Poster> = (poster) => {
   return trimObject(value)
 }
 
-export const generateAlternateEnclosure: GenerateUtil<RawvoiceNs.AlternateEnclosure> = (
+export const generateAlternateEnclosure: GenerateUtil<RawVoiceNs.AlternateEnclosure> = (
   alternateEnclosure,
 ) => {
   if (!isObject(alternateEnclosure)) {
@@ -69,12 +69,12 @@ export const generateAlternateEnclosure: GenerateUtil<RawvoiceNs.AlternateEnclos
   return trimObject(value)
 }
 
-export const generateSubscribe: GenerateUtil<RawvoiceNs.Subscribe> = (subscribe) => {
+export const generateSubscribe: GenerateUtil<RawVoiceNs.Subscribe> = (subscribe) => {
   if (!isObject(subscribe)) {
     return
   }
 
-  const value: RawvoiceNs.Subscribe = {}
+  const value: RawVoiceNs.Subscribe = {}
 
   for (const key in subscribe) {
     value[`@${key}`] = generatePlainString(subscribe[key])
@@ -83,7 +83,7 @@ export const generateSubscribe: GenerateUtil<RawvoiceNs.Subscribe> = (subscribe)
   return trimObject(value)
 }
 
-export const generateMetamark: GenerateUtil<RawvoiceNs.Metamark> = (metamark) => {
+export const generateMetamark: GenerateUtil<RawVoiceNs.Metamark> = (metamark) => {
   if (!isObject(metamark)) {
     return
   }
@@ -99,7 +99,7 @@ export const generateMetamark: GenerateUtil<RawvoiceNs.Metamark> = (metamark) =>
   return trimObject(value)
 }
 
-export const generateDonate: GenerateUtil<RawvoiceNs.Donate> = (donate) => {
+export const generateDonate: GenerateUtil<RawVoiceNs.Donate> = (donate) => {
   if (!isObject(donate)) {
     return
   }
@@ -112,7 +112,7 @@ export const generateDonate: GenerateUtil<RawvoiceNs.Donate> = (donate) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateUtil<RawvoiceNs.Item> = (item) => {
+export const generateItem: GenerateUtil<RawVoiceNs.Item> = (item) => {
   if (!isObject(item)) {
     return
   }
@@ -129,7 +129,7 @@ export const generateItem: GenerateUtil<RawvoiceNs.Item> = (item) => {
   return trimObject(value)
 }
 
-export const generateFeed: GenerateUtil<RawvoiceNs.Feed<DateLike>> = (feed) => {
+export const generateFeed: GenerateUtil<RawVoiceNs.Feed<DateLike>> = (feed) => {
   if (!isObject(feed)) {
     return
   }
@@ -143,7 +143,7 @@ export const generateFeed: GenerateUtil<RawvoiceNs.Feed<DateLike>> = (feed) => {
     'rawvoice:liveStream': generateLiveStream(feed.liveStream),
     'rawvoice:location': generateCdataString(feed.location),
     'rawvoice:frequency': generateCdataString(feed.frequency),
-    'rawvoice:mycast': generateCdataString(feed.mycast),
+    'rawvoice:mycast': generateYesNoBoolean(feed.mycast),
     'rawvoice:subscribe': generateSubscribe(feed.subscribe),
     'rawvoice:donate': generateDonate(feed.donate),
   }

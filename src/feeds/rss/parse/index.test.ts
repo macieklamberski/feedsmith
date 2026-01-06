@@ -72,6 +72,36 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expectation)
   })
 
+  it('should handle alternating case items', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rss version="2.0">
+        <channel>
+          <title>Test Feed</title>
+          <link>https://example.com</link>
+          <description>Testing alternating case items</description>
+          <item>
+            <title>First</title>
+          </item>
+          <ITEM>
+            <title>Second</title>
+          </ITEM>
+          <item>
+            <title>Third</title>
+          </item>
+        </channel>
+      </rss>
+    `
+    const expectation = {
+      title: 'Test Feed',
+      link: 'https://example.com',
+      description: 'Testing alternating case items',
+      items: [{ title: 'First' }, { title: 'Second' }, { title: 'Third' }],
+    }
+
+    expect(parse(value)).toEqual(expectation)
+  })
+
   it('should parse RSS feed with multiple enclosures per item', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
@@ -287,6 +317,7 @@ describe('parse', () => {
             link: 'http://example.com/item',
             description: 'Item Description',
             dc: {
+              creators: ['John Doe'],
               creator: 'John Doe',
             },
           },
@@ -329,6 +360,8 @@ describe('parse', () => {
             link: 'http://example.com/item1',
             description: 'Item Description',
             dc: {
+              creators: ['John Doe'],
+              dates: ['2023-01-01'],
               creator: 'John Doe',
               date: '2023-01-01',
             },
@@ -371,6 +404,7 @@ describe('parse', () => {
             link: 'http://example.com/item',
             description: 'Item Description',
             dc: {
+              creators: ['John Doe'],
               creator: 'John Doe',
             },
           },
@@ -465,6 +499,8 @@ describe('parse', () => {
             link: 'http://example.com/item',
             description: 'Item Description',
             dc: {
+              creators: ['John Doe'],
+              dates: ['2023-01-01'],
               creator: 'John Doe',
               date: '2023-01-01',
             },
@@ -512,6 +548,7 @@ describe('parse', () => {
           {
             title: 'Item Title',
             dc: {
+              creators: ['Should not be normalized (empty URI)'],
               creator: 'Should not be normalized (empty URI)',
             },
           },
@@ -584,6 +621,8 @@ describe('parse', () => {
         items: [
           {
             dc: {
+              creators: ['John Doe'],
+              dates: ['2023-01-01'],
               creator: 'John Doe',
               date: '2023-01-01',
             },
@@ -618,6 +657,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -650,6 +690,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -682,6 +723,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -714,6 +756,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -746,6 +789,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -778,6 +822,7 @@ describe('parse', () => {
             {
               title: 'Item',
               dc: {
+                creators: ['John'],
                 creator: 'John',
               },
             },
@@ -786,6 +831,127 @@ describe('parse', () => {
 
         expect(parse(value)).toEqual(expected)
       })
+
+      it('should work with DC Terms namespace', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:dcterms="http://purl.org/dc/terms/">
+            <channel>
+              <title>Test</title>
+              <link>http://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Item</title>
+                <dcterms:creator>Jane Doe</dcterms:creator>
+                <dcterms:title>DC Terms Title</dcterms:title>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'http://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              dcterms: {
+                creators: ['Jane Doe'],
+                titles: ['DC Terms Title'],
+                creator: 'Jane Doe',
+                title: 'DC Terms Title',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+    })
+  })
+
+  describe('with maxItems option', () => {
+    it('should limit items to specified number', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>Test Feed</title>
+            <link>https://example.com</link>
+            <description>Testing maxItems option</description>
+            <item>
+              <title>First</title>
+            </item>
+            <item>
+              <title>Second</title>
+            </item>
+            <item>
+              <title>Third</title>
+            </item>
+            <item>
+              <title>Fourth</title>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test Feed',
+        link: 'https://example.com',
+        description: 'Testing maxItems option',
+        items: [{ title: 'First' }, { title: 'Second' }],
+      }
+
+      expect(parse(value, { maxItems: 2 })).toEqual(expected)
+    })
+
+    it('should skip all items when maxItems is 0', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>Test Feed</title>
+            <link>https://example.com</link>
+            <description>Testing maxItems with 0</description>
+            <item>
+              <title>First</title>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test Feed',
+        link: 'https://example.com',
+        description: 'Testing maxItems with 0',
+      }
+
+      expect(parse(value, { maxItems: 0 })).toEqual(expected)
+    })
+
+    it('should return all items when maxItems is undefined', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>Test Feed</title>
+            <link>https://example.com</link>
+            <description>Testing without maxItems</description>
+            <item>
+              <title>First</title>
+            </item>
+            <item>
+              <title>Second</title>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test Feed',
+        link: 'https://example.com',
+        description: 'Testing without maxItems',
+        items: [{ title: 'First' }, { title: 'Second' }],
+      }
+
+      expect(parse(value, { maxItems: undefined })).toEqual(expected)
     })
   })
 })

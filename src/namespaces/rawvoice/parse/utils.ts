@@ -10,9 +10,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { RawvoiceNs } from '../common/types.js'
+import type { RawVoiceNs } from '../common/types.js'
 
-export const parseRating: ParsePartialUtil<RawvoiceNs.Rating> = (value) => {
+export const parseRating: ParsePartialUtil<RawVoiceNs.Rating> = (value) => {
   const rating = {
     value: parseString(retrieveText(value)),
     tv: parseString(value?.['@tv']),
@@ -22,7 +22,7 @@ export const parseRating: ParsePartialUtil<RawvoiceNs.Rating> = (value) => {
   return trimObject(rating)
 }
 
-export const parseLiveStream: ParsePartialUtil<RawvoiceNs.LiveStream<string>> = (value) => {
+export const parseLiveStream: ParsePartialUtil<RawVoiceNs.LiveStream<string>> = (value) => {
   const liveStream = {
     url: parseString(retrieveText(value)),
     schedule: parseDate(value?.['@schedule']),
@@ -33,7 +33,7 @@ export const parseLiveStream: ParsePartialUtil<RawvoiceNs.LiveStream<string>> = 
   return trimObject(liveStream)
 }
 
-export const parsePoster: ParsePartialUtil<RawvoiceNs.Poster> = (value) => {
+export const parsePoster: ParsePartialUtil<RawVoiceNs.Poster> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -45,7 +45,7 @@ export const parsePoster: ParsePartialUtil<RawvoiceNs.Poster> = (value) => {
   return trimObject(poster)
 }
 
-export const parseAlternateEnclosure: ParsePartialUtil<RawvoiceNs.AlternateEnclosure> = (value) => {
+export const parseAlternateEnclosure: ParsePartialUtil<RawVoiceNs.AlternateEnclosure> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -59,12 +59,12 @@ export const parseAlternateEnclosure: ParsePartialUtil<RawvoiceNs.AlternateEnclo
   return trimObject(alternateEnclosure)
 }
 
-export const parseSubscribe: ParsePartialUtil<RawvoiceNs.Subscribe> = (value) => {
+export const parseSubscribe: ParsePartialUtil<RawVoiceNs.Subscribe> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  const subscribe: RawvoiceNs.Subscribe = {}
+  const subscribe: RawVoiceNs.Subscribe = {}
 
   for (const key in value) {
     if (key.startsWith('@')) {
@@ -79,7 +79,7 @@ export const parseSubscribe: ParsePartialUtil<RawvoiceNs.Subscribe> = (value) =>
   return trimObject(subscribe)
 }
 
-export const parseMetamark: ParsePartialUtil<RawvoiceNs.Metamark> = (value) => {
+export const parseMetamark: ParsePartialUtil<RawVoiceNs.Metamark> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -95,7 +95,7 @@ export const parseMetamark: ParsePartialUtil<RawvoiceNs.Metamark> = (value) => {
   return trimObject(metamark)
 }
 
-export const parseDonate: ParsePartialUtil<RawvoiceNs.Donate> = (value) => {
+export const parseDonate: ParsePartialUtil<RawVoiceNs.Donate> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -108,7 +108,7 @@ export const parseDonate: ParsePartialUtil<RawvoiceNs.Donate> = (value) => {
   return trimObject(donate)
 }
 
-export const retrieveItem: ParsePartialUtil<RawvoiceNs.Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<RawVoiceNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -127,7 +127,7 @@ export const retrieveItem: ParsePartialUtil<RawvoiceNs.Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialUtil<RawvoiceNs.Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialUtil<RawVoiceNs.Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -147,7 +147,9 @@ export const retrieveFeed: ParsePartialUtil<RawvoiceNs.Feed<string>> = (value) =
     frequency: parseSingularOf(value['rawvoice:frequency'], (value) =>
       parseString(retrieveText(value)),
     ),
-    mycast: parseSingularOf(value['rawvoice:mycast'], (value) => parseString(retrieveText(value))),
+    mycast: parseSingularOf(value['rawvoice:mycast'], (value) =>
+      parseYesNoBoolean(retrieveText(value)),
+    ),
     subscribe: parseSingularOf(value['rawvoice:subscribe'], parseSubscribe),
     donate: parseSingularOf(value['rawvoice:donate'], parseDonate),
   }

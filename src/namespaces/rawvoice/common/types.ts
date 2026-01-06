@@ -1,7 +1,7 @@
-import type { DateLike } from '../../../common/types.js'
+import type { DateLike, Requirable, Strict } from '../../../common/types.js'
 
 // #region reference
-export namespace RawvoiceNs {
+export namespace RawVoiceNs {
   export type Rating = {
     value?: string
     tv?: string
@@ -35,12 +35,15 @@ export namespace RawvoiceNs {
     value?: string
   }
 
-  export type Donate = {
-    href: string
-    value?: string
-  }
+  export type Donate<TStrict extends boolean = false> = Strict<
+    {
+      href: Requirable<string> // Required in spec.
+      value?: string
+    },
+    TStrict
+  >
 
-  export type Feed<TDate extends DateLike> = {
+  export type Feed<TDate extends DateLike, TStrict extends boolean = false> = {
     rating?: Rating
     liveEmbed?: string
     flashLiveStream?: LiveStream<TDate>
@@ -49,9 +52,9 @@ export namespace RawvoiceNs {
     liveStream?: LiveStream<TDate>
     location?: string
     frequency?: string
-    mycast?: string
+    mycast?: boolean
     subscribe?: Subscribe
-    donate?: Donate
+    donate?: Donate<TStrict>
   }
 
   export type Item = {

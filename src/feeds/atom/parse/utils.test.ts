@@ -992,7 +992,10 @@ describe('parseEntry', () => {
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: 'Example Entry',
-      dc: { creator: 'John Doe' },
+      dc: {
+        creators: ['John Doe'],
+        creator: 'John Doe',
+      },
     }
 
     expect(parseEntry(value)).toEqual(expected)
@@ -1046,8 +1049,9 @@ describe('parseEntry', () => {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: 'Example Entry',
       dcterms: {
-        created: '2023-02-01T00:00:00Z',
+        licenses: ['MIT License'],
         license: 'MIT License',
+        created: '2023-02-01T00:00:00Z',
       },
     }
 
@@ -1493,7 +1497,10 @@ describe('parseFeed', () => {
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: 'Example Feed',
-      dc: { creator: 'John Doe' },
+      dc: {
+        creators: ['John Doe'],
+        creator: 'John Doe',
+      },
     }
 
     expect(parseFeed(value)).toEqual(expected)
@@ -1525,8 +1532,9 @@ describe('parseFeed', () => {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: 'Example Feed',
       dcterms: {
-        created: '2023-01-01T00:00:00Z',
+        licenses: ['Creative Commons Attribution 4.0'],
         license: 'Creative Commons Attribution 4.0',
+        created: '2023-01-01T00:00:00Z',
       },
     }
 
@@ -1548,6 +1556,122 @@ describe('parseFeed', () => {
     }
 
     expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle admin namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Feed' },
+      'admin:errorreportsto': {
+        '@rdf:resource': 'mailto:webmaster@example.com',
+      },
+      'admin:generatoragent': {
+        '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+      },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: 'Example Feed',
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should limit entries to specified maxItems', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:feed-id' },
+      title: { '#text': 'Test Feed' },
+      entry: [
+        {
+          id: { '#text': 'urn:uuid:entry-1' },
+          title: { '#text': 'Entry 1' },
+        },
+        {
+          id: { '#text': 'urn:uuid:entry-2' },
+          title: { '#text': 'Entry 2' },
+        },
+        {
+          id: { '#text': 'urn:uuid:entry-3' },
+          title: { '#text': 'Entry 3' },
+        },
+      ],
+    }
+    const expected = {
+      id: 'urn:uuid:feed-id',
+      title: 'Test Feed',
+      entries: [
+        {
+          id: 'urn:uuid:entry-1',
+          title: 'Entry 1',
+        },
+        {
+          id: 'urn:uuid:entry-2',
+          title: 'Entry 2',
+        },
+      ],
+    }
+
+    expect(parseFeed(value, { maxItems: 2 })).toEqual(expected)
+  })
+
+  it('should skip all entries when maxItems is 0', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:feed-id' },
+      title: { '#text': 'Test Feed' },
+      entry: [
+        {
+          id: { '#text': 'urn:uuid:entry-1' },
+          title: { '#text': 'Entry 1' },
+        },
+        {
+          id: { '#text': 'urn:uuid:entry-2' },
+          title: { '#text': 'Entry 2' },
+        },
+      ],
+    }
+    const expected = {
+      id: 'urn:uuid:feed-id',
+      title: 'Test Feed',
+    }
+
+    expect(parseFeed(value, { maxItems: 0 })).toEqual(expected)
+  })
+
+  it('should return all entries when maxItems is undefined', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:feed-id' },
+      title: { '#text': 'Test Feed' },
+      entry: [
+        {
+          id: { '#text': 'urn:uuid:entry-1' },
+          title: { '#text': 'Entry 1' },
+        },
+        {
+          id: { '#text': 'urn:uuid:entry-2' },
+          title: { '#text': 'Entry 2' },
+        },
+      ],
+    }
+    const expected = {
+      id: 'urn:uuid:feed-id',
+      title: 'Test Feed',
+      entries: [
+        {
+          id: 'urn:uuid:entry-1',
+          title: 'Entry 1',
+        },
+        {
+          id: 'urn:uuid:entry-2',
+          title: 'Entry 2',
+        },
+      ],
+    }
+
+    expect(parseFeed(value, { maxItems: undefined })).toEqual(expected)
   })
 })
 

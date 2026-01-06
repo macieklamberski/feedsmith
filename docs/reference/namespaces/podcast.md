@@ -1,6 +1,6 @@
-# Podcast Namespace Reference
+# Podcast Index Namespace Reference
 
-The Podcast namespace implements the Podcasting 2.0 specification, providing advanced features for modern podcasting including transcripts, chapters, value streaming, and enhanced metadata.
+The Podcast Index namespace implements the Podcasting 2.0 specification, providing advanced features for modern podcasting including transcripts, chapters, value streaming, and enhanced metadata.
 
 <table>
   <tbody>

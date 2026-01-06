@@ -8,6 +8,10 @@ OPML (Outline Processor Markup Language) is a format for exchanging outline-stru
       <th>Versions</th>
       <td>1.0, 2.0</td>
     </tr>
+    <tr>
+      <th>Specification</th>
+      <td><a href="https://opml.org/spec2.opml" target="_blank">OPML 2.0 Specification</a></td>
+    </tr>
   </tbody>
 </table>
 
@@ -24,6 +28,15 @@ const opml = parseOpml(xmlContent, {
   extraOutlineAttributes: ['customIcon', 'updateInterval']
 })
 // Returns: object with all fields optional and dates as strings
+
+// Limit number of outlines parsed
+const opml = parseOpml(xmlContent, { maxItems: 5 })
+
+// Combine both options
+const opml = parseOpml(xmlContent, {
+  maxItems: 5,
+  extraOutlineAttributes: ['customIcon', 'updateInterval']
+})
 ```
 
 #### Parameters
@@ -37,6 +50,7 @@ const opml = parseOpml(xmlContent, {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
+| `maxItems` | `number` | - | Limit the number of outlines parsed. Use `0` to skip outlines entirely, useful when only OPML metadata is needed |
 | `extraOutlineAttributes` | `string[]` | - | Custom attributes to extract from outline elements (case-insensitive), see [examples](/parsing/examples#extra-outline-attributes) |
 
 #### Returns
@@ -50,7 +64,6 @@ Generates OPML XML from OPML data.
 import { generateOpml } from 'feedsmith'
 
 const xml = generateOpml(opmlData, {
-  lenient: true,
   stylesheets: [{ type: 'text/xsl', href: '/opml.xsl' }],
   extraOutlineAttributes: ['customIcon', 'updateInterval']
 })
@@ -67,7 +80,7 @@ const xml = generateOpml(opmlData, {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `lenient` | `boolean` | `false` | Enable lenient mode for relaxed validation, see [Lenient Mode](/generating/lenient-mode) |
+| `strict` | `boolean` | `false` | Enable strict mode for spec-required field validation, see [Strict Mode](/generating/strict-mode) |
 | `stylesheets` | `Stylesheet[]` | - | Add stylesheets for visual formatting, see [Feed Styling](/generating/styling) |
 | `extraOutlineAttributes` | `string[]` | - | Custom attributes to include in outline elements. Only specified attributes are included in generated XML, see [examples](/generating/examples#extra-outline-attributes) |
 
@@ -89,7 +102,7 @@ type Outline = Opml.Outline<Date>
 // … see type definitions below for all available types
 ```
 
-See the [TypeScript guide](/typescript) for usage examples.
+See the [TypeScript guide](/reference/typescript) for usage examples.
 
 ### Type Definitions
 

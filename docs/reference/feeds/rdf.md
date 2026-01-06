@@ -9,17 +9,23 @@ RDF (Resource Description Framework) Site Summary is an early XML-based syndicat
       <td>0.9, 1.0</td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="https://web.resource.org/rss/1.0/spec" target="_blank">RSS 1.0 Specification</a></td>
+    </tr>
+    <tr>
       <th>Namespaces</th>
       <td>
+        <a href="/reference/namespaces/rdf">RDF</a>,
         <a href="/reference/namespaces/atom">Atom</a>,
         <a href="/reference/namespaces/dc">Dublin Core</a>,
         <a href="/reference/namespaces/sy">Syndication</a>,
         <a href="/reference/namespaces/content">Content</a>,
         <a href="/reference/namespaces/slash">Slash</a>,
         <a href="/reference/namespaces/media">Media RSS</a>,
-        <a href="/reference/namespaces/georss">GeoRSS-Simple</a>,
+        <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
         <a href="/reference/namespaces/dcterms">Dublin Core Terms</a>,
-        <a href="/reference/namespaces/wfw">Well-Formed Web</a>
+        <a href="/reference/namespaces/wfw">Comment API</a>,
+        <a href="/reference/namespaces/admin">Administrative</a>
       </td>
     </tr>
   </tbody>
@@ -36,6 +42,9 @@ import { parseRdfFeed } from 'feedsmith'
 
 const rdfFeed = parseRdfFeed(xmlContent)
 // Returns: object with all fields optional and dates as strings
+
+// Limit number of items parsed
+const rdfFeed = parseRdfFeed(xmlContent, { maxItems: 10 })
 ```
 
 #### Parameters
@@ -43,6 +52,13 @@ const rdfFeed = parseRdfFeed(xmlContent)
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `content` | `string` | The RDF XML content to parse |
+| `options` | `object` | Optional parsing settings |
+
+#### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `maxItems` | `number` | - | Limit the number of items parsed. Use `0` to skip items entirely, useful when only feed metadata is needed |
 
 #### Returns
 `object` - Parsed RDF feed with all fields optional and dates as strings
@@ -50,7 +66,7 @@ const rdfFeed = parseRdfFeed(xmlContent)
 ### `generateRdfFeed()`
 
 > [!NOTE]
-> RDF feed generation is currently work in progress and not yet available.
+> RDF feed generation is planned but not yet available.
 
 ### `detectRdfFeed()`
 
@@ -87,7 +103,7 @@ type TextInput = Rdf.TextInput
 // … see type definitions below for all available types
 ```
 
-See the [TypeScript guide](/typescript) for usage examples.
+See the [TypeScript guide](/reference/typescript) for usage examples.
 
 ### Type Definitions
 

@@ -1,4 +1,4 @@
-import type { Unreliable } from '../../../common/types.js'
+import type { ParseOptions, Unreliable } from '../../../common/types.js'
 import {
   detectNamespaces,
   isObject,
@@ -10,15 +10,32 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import { retrieveItemOrFeed as retrieveCreativecommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
+import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
+import { retrieveEntry as retrieveAppEntry } from '../../../namespaces/app/parse/utils.js'
+import {
+  retrieveAuthor as retrieveArxivAuthor,
+  retrieveEntry as retrieveArxivEntry,
+} from '../../../namespaces/arxiv/parse/utils.js'
+import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
+import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces/geo/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
+import {
+  retrieveFeed as retrieveGooglePlayFeed,
+  retrieveItem as retrieveGooglePlayItem,
+} from '../../../namespaces/googleplay/parse/utils.js'
 import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
+import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
+import {
+  retrieveFeed as retrievePingbackFeed,
+  retrieveItem as retrievePingbackItem,
+} from '../../../namespaces/pingback/parse/utils.js'
 import { retrieveItem as retrievePscItem } from '../../../namespaces/psc/parse/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
@@ -26,6 +43,7 @@ import {
   retrieveItem as retrieveThrItem,
   retrieveLink as retrieveThrLink,
 } from '../../../namespaces/thr/parse/utils.js'
+import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import {
   retrieveFeed as retrieveYtFeed,
@@ -41,18 +59,7 @@ export const createNamespaceGetter = (
     return (key: string) => value[key]
   }
 
-  const prefixedKeys = new Map<string, string>()
-
-  return (key: string) => {
-    let prefixedKey = prefixedKeys.get(key)
-
-    if (!prefixedKey) {
-      prefixedKey = prefix + key
-      prefixedKeys.set(key, prefixedKey)
-    }
-
-    return value[prefixedKey]
-  }
+  return (key: string) => value[prefix + key]
 }
 
 export const parseLink: ParsePartialUtil<Atom.Link<string>> = (value) => {
@@ -60,6 +67,7 @@ export const parseLink: ParsePartialUtil<Atom.Link<string>> = (value) => {
     return
   }
 
+  const namespaces = detectNamespaces(value)
   const link = {
     href: parseString(value['@href']),
     rel: parseString(value['@rel']),
@@ -67,7 +75,7 @@ export const parseLink: ParsePartialUtil<Atom.Link<string>> = (value) => {
     hreflang: parseString(value['@hreflang']),
     title: parseString(value['@title']),
     length: parseNumber(value['@length']),
-    thr: retrieveThrLink(value),
+    thr: namespaces.has('thr') ? retrieveThrLink(value) : undefined,
   }
 
   return trimObject(link)
@@ -90,11 +98,13 @@ export const parsePerson: ParsePartialUtil<Atom.Person> = (value, options) => {
     return
   }
 
+  const namespaces = options?.asNamespace ? undefined : detectNamespaces(value)
   const get = createNamespaceGetter(value, options?.prefix)
   const person = {
     name: parseSingularOf(get('name'), (value) => parseString(retrieveText(value))),
     uri: retrievePersonUri(value, options),
     email: parseSingularOf(get('email'), (value) => parseString(retrieveText(value))),
+    arxiv: namespaces?.has('arxiv') ? retrieveArxivAuthor(value) : undefined,
   }
 
   return trimObject(person)
@@ -219,19 +229,26 @@ export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options)
     summary: parseSingularOf(get('summary'), (value) => parseString(retrieveText(value))),
     title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
     updated: retrieveUpdated(value, options),
+    app: namespaces?.has('app') ? retrieveAppEntry(value) : undefined,
+    arxiv: namespaces?.has('arxiv') ? retrieveArxivEntry(value) : undefined,
+    cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
     slash: namespaces?.has('slash') ? retrieveSlashItem(value) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesItem(value) : undefined,
+    googleplay: namespaces?.has('googleplay') ? retrieveGooglePlayItem(value) : undefined,
     psc: namespaces?.has('psc') ? retrievePscItem(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    geo: namespaces?.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     thr: namespaces?.has('thr') ? retrieveThrItem(value) : undefined,
     dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     creativeCommons: namespaces?.has('creativecommons')
-      ? retrieveCreativecommonsItemOrFeed(value)
+      ? retrieveCreativeCommonsItemOrFeed(value)
       : undefined,
     wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
+    pingback: namespaces?.has('pingback') ? retrievePingbackItem(value) : undefined,
+    trackback: namespaces?.has('trackback') ? retrieveTrackbackItem(value) : undefined,
   }
 
   return trimObject(entry)
@@ -257,26 +274,32 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) =
     subtitle: retrieveSubtitle(value, options),
     title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
     updated: retrieveUpdated(value, options),
-    entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options)),
+    entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options), options?.maxItems),
+    cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
     sy: namespaces?.has('sy') ? retrieveSyFeed(value) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesFeed(value) : undefined,
+    googleplay: namespaces?.has('googleplay') ? retrieveGooglePlayFeed(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    geo: namespaces?.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     creativeCommons: namespaces?.has('creativecommons')
-      ? retrieveCreativecommonsItemOrFeed(value)
+      ? retrieveCreativeCommonsItemOrFeed(value)
       : undefined,
+    opensearch: namespaces?.has('opensearch') ? retrieveOpenSearchFeed(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
+    admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
+    pingback: namespaces?.has('pingback') ? retrievePingbackFeed(value) : undefined,
   }
 
   return trimObject(feed)
 }
 
-export const retrieveFeed: ParsePartialUtil<Atom.Feed<string>> = (value) => {
-  const notNamespaced = parseSingularOf(value?.feed, parseFeed)
+export const retrieveFeed = (value: Unreliable, options?: ParseOptions) => {
+  const notNamespaced = parseSingularOf(value?.feed, (value) => parseFeed(value, options))
   const namespaced = parseSingularOf(value?.['atom:feed'], (value) =>
-    parseFeed(value, { prefix: 'atom:' }),
+    parseFeed(value, { ...options, prefix: 'atom:' }),
   )
 
   return notNamespaced || namespaced

@@ -65,6 +65,103 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse JSON feed from string', () => {
+    const value = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'My Example Feed',
+      home_page_url: 'https://example.com/',
+      items: [
+        {
+          id: '1',
+          content_html: '<p>Hello world</p>',
+          title: 'First post',
+        },
+      ],
+    })
+    const expected = {
+      format: 'json' as const,
+      feed: {
+        title: 'My Example Feed',
+        home_page_url: 'https://example.com/',
+        items: [
+          {
+            id: '1',
+            content_html: '<p>Hello world</p>',
+            title: 'First post',
+          },
+        ],
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse JSON feed from string with leading whitespace', () => {
+    const json = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Feed with whitespace',
+      items: [{ id: '1', content_text: 'Test' }],
+    })
+    const value = `  ${json}`
+    const expected = {
+      format: 'json' as const,
+      feed: {
+        title: 'Feed with whitespace',
+        items: [{ id: '1', content_text: 'Test' }],
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse JSON feed from string with trailing whitespace', () => {
+    const json = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Feed with whitespace',
+      items: [{ id: '1', content_text: 'Test' }],
+    })
+    const value = `${json}  `
+    const expected = {
+      format: 'json' as const,
+      feed: {
+        title: 'Feed with whitespace',
+        items: [{ id: '1', content_text: 'Test' }],
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse JSON feed from string with whitespace on both ends', () => {
+    const json = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Feed with whitespace',
+      items: [{ id: '1', content_text: 'Test' }],
+    })
+    const value = `  ${json}  `
+    const expected = {
+      format: 'json' as const,
+      feed: {
+        title: 'Feed with whitespace',
+        items: [{ id: '1', content_text: 'Test' }],
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should reject malformed JSON string', () => {
+    const value = '{"version":"https://jsonfeed.org/version/1.1","title":"Malformed'
+
+    expect(() => parse(value)).toThrowError(locales.unrecognizedFeedFormat)
+  })
+
+  it('should reject JSON array string', () => {
+    const value = '[{"version":"https://jsonfeed.org/version/1.1"}]'
+
+    expect(() => parse(value)).toThrowError(locales.unrecognizedFeedFormat)
+  })
+
   it('should parse valid RSS feed', () => {
     const value = `
       <?xml version="1.0"?>
@@ -114,8 +211,10 @@ describe('parse', () => {
           {
             title: 'Example Item',
             link: 'http://example.org/item/1',
+            rdf: { about: 'http://example.org/item/1' },
           },
         ],
+        rdf: { about: 'http://example.org/rss' },
       },
     }
 
@@ -251,8 +350,10 @@ describe('parse', () => {
             {
               title: 'Example Item',
               link: 'http://example.org/item/1',
+              rdf: { about: 'http://example.org/item/1' },
             },
           ],
+          rdf: { about: 'http://example.org/rss' },
         },
       }
 

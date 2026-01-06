@@ -39,7 +39,7 @@ export const generateBaseItem: GenerateUtil<PodcastNs.BaseItem> = (baseItem) => 
       generateAlternateEnclosure,
     ),
     'podcast:value': generateArrayOrSingular(baseItem.values, baseItem.value, generateValue),
-    'podcast:images': generateImages(baseItem.images),
+    'podcast:image': trimArray(baseItem.images, generateImage),
     'podcast:socialInteract': trimArray(baseItem.socialInteracts, generateSocialInteract),
     'podcast:txt': trimArray(baseItem.txts, generateTxt),
     'podcast:chat': generateSingularOrArray(baseItem.chat, baseItem.chats, generateChat),
@@ -139,8 +139,10 @@ export const generateLocation: GenerateUtil<PodcastNs.Location> = (location) => 
 
   const value = {
     ...generateTextOrCdataString(location.display),
+    '@rel': generatePlainString(location.rel),
     '@geo': generatePlainString(location.geo),
     '@osm': generatePlainString(location.osm),
+    '@country': generatePlainString(location.country),
   }
 
   return trimObject(value)
@@ -303,13 +305,19 @@ export const generateValue: GenerateUtil<PodcastNs.Value> = (value) => {
   return trimObject(valueOut)
 }
 
-export const generateImages: GenerateUtil<PodcastNs.Images> = (images) => {
-  if (!isObject(images)) {
+export const generateImage: GenerateUtil<PodcastNs.Image> = (image) => {
+  if (!isObject(image)) {
     return
   }
 
   const value = {
-    '@srcset': generatePlainString(images.srcset),
+    '@href': generatePlainString(image.href),
+    '@alt': generatePlainString(image.alt),
+    '@aspect-ratio': generatePlainString(image.aspectRatio),
+    '@width': generateNumber(image.width),
+    '@height': generateNumber(image.height),
+    '@type': generatePlainString(image.type),
+    '@purpose': generatePlainString(image.purpose),
   }
 
   return trimObject(value)
@@ -411,6 +419,7 @@ export const generateRemoteItem: GenerateUtil<PodcastNs.RemoteItem> = (remoteIte
     '@feedUrl': generatePlainString(remoteItem.feedUrl),
     '@itemGuid': generatePlainString(remoteItem.itemGuid),
     '@medium': generatePlainString(remoteItem.medium),
+    '@title': generatePlainString(remoteItem.title),
   }
 
   return trimObject(value)
@@ -492,7 +501,7 @@ export const generateFeed: GenerateUtil<PodcastNs.Feed<DateLike>> = (feed) => {
     'podcast:guid': generateCdataString(feed.guid),
     'podcast:value': generateArrayOrSingular(feed.values, feed.value, generateValue),
     'podcast:medium': generateCdataString(feed.medium),
-    'podcast:images': generateImages(feed.images),
+    'podcast:image': trimArray(feed.images, generateImage),
     'podcast:liveItem': trimArray(feed.liveItems, generateLiveItem),
     'podcast:block': trimArray(feed.blocks, generateBlock),
     'podcast:txt': trimArray(feed.txts, generateTxt),

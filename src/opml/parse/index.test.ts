@@ -72,6 +72,32 @@ describe('parse', () => {
     expect(parse(mixedCaseOpml)).toEqual(expected)
   })
 
+  it('should handle alternating case outlines', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <opml version="2.0">
+        <head>
+          <title>Test Feed</title>
+        </head>
+        <body>
+          <outline text="First" />
+          <OUTLINE text="Second" />
+          <outline text="Third" />
+        </body>
+      </opml>
+    `
+    const expected = {
+      head: {
+        title: 'Test Feed',
+      },
+      body: {
+        outlines: [{ text: 'First' }, { text: 'Second' }, { text: 'Third' }],
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should handle empty string input', () => {
     const value = ''
 
@@ -158,6 +184,78 @@ describe('parse', () => {
       }
 
       expect(parse(opmlString)).toEqual(expected)
+    })
+  })
+
+  describe('with maxItems option', () => {
+    const commonValue = `<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>Test OPML</title>
+  </head>
+  <body>
+    <outline text="Outline 1" type="rss" />
+    <outline text="Outline 2" type="rss" />
+    <outline text="Outline 3" type="rss" />
+  </body>
+</opml>`
+
+    it('should limit outlines to specified number', () => {
+      const expected = {
+        head: {
+          title: 'Test OPML',
+        },
+        body: {
+          outlines: [
+            {
+              text: 'Outline 1',
+              type: 'rss',
+            },
+            {
+              text: 'Outline 2',
+              type: 'rss',
+            },
+          ],
+        },
+      }
+
+      expect(parse(commonValue, { maxItems: 2 })).toEqual(expected)
+    })
+
+    it('should skip all outlines when maxItems is 0', () => {
+      const expected = {
+        head: {
+          title: 'Test OPML',
+        },
+      }
+
+      expect(parse(commonValue, { maxItems: 0 })).toEqual(expected)
+    })
+
+    it('should return all outlines when maxItems is undefined', () => {
+      const expected = {
+        head: {
+          title: 'Test OPML',
+        },
+        body: {
+          outlines: [
+            {
+              text: 'Outline 1',
+              type: 'rss',
+            },
+            {
+              text: 'Outline 2',
+              type: 'rss',
+            },
+            {
+              text: 'Outline 3',
+              type: 'rss',
+            },
+          ],
+        },
+      }
+
+      expect(parse(commonValue, { maxItems: undefined })).toEqual(expected)
     })
   })
 })

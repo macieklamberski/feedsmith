@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { retrieveFeed, retrieveItem } from './utils.js'
+import { parseMetamark, retrieveFeed, retrieveItem } from './utils.js'
 
 describe('retrieveItem', () => {
   const expectedFull = {
@@ -302,7 +302,7 @@ describe('retrieveFeed', () => {
     },
     location: 'San Francisco, CA',
     frequency: 'Weekly',
-    mycast: 'yes',
+    mycast: true,
     donate: {
       href: 'https://example.com/donate',
       value: 'Support the show',
@@ -622,5 +622,13 @@ describe('retrieveFeed', () => {
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
+  })
+})
+
+describe('parseMetamark', () => {
+  it('should return undefined for non-object input', () => {
+    expect(parseMetamark(undefined)).toBeUndefined()
+    expect(parseMetamark('string')).toBeUndefined()
+    expect(parseMetamark(null)).toBeUndefined()
   })
 })

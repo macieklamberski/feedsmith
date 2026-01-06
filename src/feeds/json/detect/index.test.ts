@@ -118,7 +118,38 @@ describe('detect', () => {
     expect(detect(null)).toBe(false)
     expect(detect([])).toBe(false)
     expect(detect(123)).toBe(false)
-    expect(detect('{"title": "Not parsed"}')).toBe(false)
+  })
+
+  it('should detect JSON Feed from JSON string', () => {
+    const json = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Example Feed',
+      items: [],
+    })
+
+    expect(detect(json)).toBe(true)
+  })
+
+  it('should detect JSON Feed from JSON string without version', () => {
+    const json = JSON.stringify({
+      title: 'Example Feed',
+      home_page_url: 'https://example.org/',
+      items: [],
+    })
+
+    expect(detect(json)).toBe(true)
+  })
+
+  it('should return false for invalid JSON string', () => {
+    expect(detect('{"title": "Not valid JSON')).toBe(false)
+  })
+
+  it('should return false for JSON string with non-feed structure', () => {
+    const json = JSON.stringify({
+      title: 'Just a title',
+    })
+
+    expect(detect(json)).toBe(false)
   })
 
   it('should return false for array (even if it looks like items)', () => {

@@ -9,6 +9,10 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
       <td>0.9x, 2.0</td>
     </tr>
     <tr>
+      <th>Specification</th>
+      <td><a href="https://www.rssboard.org/rss-specification" target="_blank">RSS 2.0 Specification</a></td>
+    </tr>
+    <tr>
       <th>Namespaces</th>
       <td>
         <a href="/reference/namespaces/atom">Atom</a>,
@@ -17,14 +21,27 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
         <a href="/reference/namespaces/content">Content</a>,
         <a href="/reference/namespaces/slash">Slash</a>,
         <a href="/reference/namespaces/itunes">iTunes</a>,
-        <a href="/reference/namespaces/podcast">Podcast</a>,
+        <a href="/reference/namespaces/podcast">Podcast Index</a>,
+        <a href="/reference/namespaces/rawvoice">RawVoice</a>,
         <a href="/reference/namespaces/psc">Podlove Simple Chapters</a>,
+        <a href="/reference/namespaces/googleplay">Google Play Podcast</a>,
+        <a href="/reference/namespaces/spotify">Spotify</a>,
         <a href="/reference/namespaces/media">Media RSS</a>,
-        <a href="/reference/namespaces/georss">GeoRSS-Simple</a>,
+        <a href="/reference/namespaces/geo">W3C Basic Geo</a>,
+        <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
         <a href="/reference/namespaces/thr">Atom Threading</a>,
         <a href="/reference/namespaces/dcterms">Dublin Core Terms</a>,
-        <a href="/reference/namespaces/wfw">Well-Formed Web</a>,
-        <a href="/reference/namespaces/source">Source</a>
+        <a href="/reference/namespaces/wfw">Comment API</a>,
+        <a href="/reference/namespaces/admin">Administrative</a>,
+        <a href="/reference/namespaces/pingback">Pingback</a>,
+        <a href="/reference/namespaces/trackback">Trackback</a>,
+        <a href="/reference/namespaces/source">Source</a>,
+        <a href="/reference/namespaces/cc">ccREL</a>,
+        <a href="/reference/namespaces/creativecommons">Creative Commons</a>,
+        <a href="/reference/namespaces/feedpress">FeedPress</a>,
+        <a href="/reference/namespaces/opensearch">OpenSearch</a>,
+        <a href="/reference/namespaces/blogchannel">blogChannel</a>,
+        <a href="/reference/namespaces/prism">PRISM</a>
       </td>
     </tr>
   </tbody>
@@ -41,6 +58,9 @@ import { parseRssFeed } from 'feedsmith'
 
 const rssFeed = parseRssFeed(xmlContent)
 // Returns: object with all fields optional and dates as strings
+
+// Limit number of items parsed
+const rssFeed = parseRssFeed(xmlContent, { maxItems: 10 })
 ```
 
 #### Parameters
@@ -48,6 +68,13 @@ const rssFeed = parseRssFeed(xmlContent)
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `content` | `string` | The RSS XML content to parse |
+| `options` | `object` | Optional parsing settings |
+
+#### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `maxItems` | `number` | - | Limit the number of items parsed. Use `0` to skip items entirely, useful when only feed metadata is needed |
 
 #### Returns
 `object` - Parsed RSS feed with all fields optional and dates as strings
@@ -60,7 +87,6 @@ Generates RSS XML from feed data.
 import { generateRssFeed } from 'feedsmith'
 
 const xml = generateRssFeed(feedData, {
-  lenient: true,
   stylesheets: [{ type: 'text/xsl', href: '/feed.xsl' }]
 })
 ```
@@ -76,7 +102,7 @@ const xml = generateRssFeed(feedData, {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `lenient` | `boolean` | `false` | Enable lenient mode for relaxed validation, see [Lenient Mode](/generating/lenient-mode) |
+| `strict` | `boolean` | `false` | Enable strict mode for spec-required field validation, see [Strict Mode](/generating/strict-mode) |
 | `stylesheets` | `Stylesheet[]` | - | Add stylesheets for visual formatting, see [Feed Styling](/generating/styling) |
 
 #### Returns
@@ -117,7 +143,7 @@ type Enclosure = Rss.Enclosure
 // … see type definitions below for all available types
 ```
 
-See the [TypeScript guide](/typescript) for usage examples.
+See the [TypeScript guide](/reference/typescript) for usage examples.
 
 ### Type Definitions
 

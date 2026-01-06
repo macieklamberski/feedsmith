@@ -1,5 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/" xmlns:psc="http://podlove.org/simple-chapters" xmlns:spotify="http://www.spotify.com/ns/rss" xmlns:media="http://search.yahoo.com/mrss/" xmlns:georss="http://www.georss.org/georss" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:source="http://source.scripting.com/" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule" xmlns:feedpress="https://feed.press/xmlns">
+<rss version="2.0"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:dcterms="http://purl.org/dc/terms/"
+     xmlns:prism="http://prismstandard.org/namespaces/basic/3.0/"
+     xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+     xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+     xmlns:podcast="https://podcastindex.org/namespace/1.0"
+     xmlns:psc="http://podlove.org/simple-chapters"
+     xmlns:media="http://search.yahoo.com/mrss/"
+     xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/"
+     xmlns:spotify="http://www.spotify.com/ns/rss"
+     xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/"
+     xmlns:feedpress="https://feed.press/xmlns"
+     xmlns:arxiv="http://arxiv.org/schemas/atom"
+     xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
+     xmlns:cc="http://creativecommons.org/ns#"
+     xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule"
+     xmlns:thr="http://purl.org/syndication/thread/1.0"
+     xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+     xmlns:admin="http://webns.net/mvcb/"
+     xmlns:pingback="http://purl.org/net/pingback/"
+     xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+     xmlns:source="http://source.scripting.com/"
+     xmlns:blogChannel="http://backend.userland.com/blogChannelModule"
+     xmlns:georss="http://www.georss.org/georss"
+     xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:acast="https://schema.acast.com/1.0/"
+>
   <channel>
     <title>Example Feed</title>
     <link>http://example.org</link>
@@ -78,10 +109,106 @@
     <dcterms:type>Text</dcterms:type>
     <dcterms:valid>2025-12-31T23:59:59.000Z</dcterms:valid>
 
+    <!-- PRISM Namespace: Channel Level Tags -->
+    <prism:publicationName>Nature</prism:publicationName>
+    <prism:issn>0028-0836</prism:issn>
+    <prism:eIssn>1476-4687</prism:eIssn>
+    <prism:isbn>978-0-12-345678-9</prism:isbn>
+    <prism:issueIdentifier>2023-03-15</prism:issueIdentifier>
+    <prism:issueName>Spring Issue</prism:issueName>
+    <prism:issueTeaser>Special coverage of breakthrough discoveries</prism:issueTeaser>
+    <prism:issueType>regular</prism:issueType>
+    <prism:volume>615</prism:volume>
+    <prism:number>7952</prism:number>
+    <prism:edition>International</prism:edition>
+    <prism:aggregateIssueNumber>8500</prism:aggregateIssueNumber>
+    <prism:aggregationType>journal</prism:aggregationType>
+    <prism:coverDate>2023-03-15T00:00:00.000Z</prism:coverDate>
+    <prism:coverDisplayDate>March 15, 2023</prism:coverDisplayDate>
+    <prism:publicationDate>2023-03-15T00:00:00.000Z</prism:publicationDate>
+    <prism:publicationDisplayDate>Spring 2023</prism:publicationDisplayDate>
+    <prism:creationDate>2023-02-01T00:00:00.000Z</prism:creationDate>
+    <prism:modificationDate>2023-03-10T00:00:00.000Z</prism:modificationDate>
+    <prism:dateReceived>2023-01-15T00:00:00.000Z</prism:dateReceived>
+    <prism:onSaleDate>2023-03-01T00:00:00.000Z</prism:onSaleDate>
+    <prism:onSaleDay>wednesday</prism:onSaleDay>
+    <prism:offSaleDate>2023-04-01T00:00:00.000Z</prism:offSaleDate>
+    <prism:killDate>2024-03-15T00:00:00.000Z</prism:killDate>
+    <prism:copyrightYear>2023</prism:copyrightYear>
+    <prism:contentType>article</prism:contentType>
+    <prism:alternateTitle>Nature Journal</prism:alternateTitle>
+    <prism:subtitle>The International Weekly Journal of Science</prism:subtitle>
+    <prism:teaser>Leading scientific research and discoveries</prism:teaser>
+    <prism:keyword>science</prism:keyword>
+    <prism:keyword>research</prism:keyword>
+    <prism:seriesTitle>Nature Research Journals</prism:seriesTitle>
+    <prism:seriesNumber>1</prism:seriesNumber>
+    <prism:bookEdition>First Edition</prism:bookEdition>
+    <prism:nationalCatalogNumber>NC12345</prism:nationalCatalogNumber>
+    <prism:productCode>NAT-2023-615</prism:productCode>
+    <prism:uspsNumber>123-456</prism:uspsNumber>
+    <prism:publishingFrequency>weekly</prism:publishingFrequency>
+    <prism:channel>web</prism:channel>
+    <prism:channel>print</prism:channel>
+    <prism:subchannel1>news</prism:subchannel1>
+    <prism:subchannel2>science</prism:subchannel2>
+    <prism:subchannel3>biology</prism:subchannel3>
+    <prism:subchannel4>molecular</prism:subchannel4>
+    <prism:section>front-page</prism:section>
+    <prism:subsection1>highlights</prism:subsection1>
+    <prism:subsection2>featured</prism:subsection2>
+    <prism:subsection3>editors-picks</prism:subsection3>
+    <prism:subsection4>trending</prism:subsection4>
+    <prism:corporateEntity>Springer Nature</prism:corporateEntity>
+    <prism:distributor>Nature Publishing Group</prism:distributor>
+    <prism:sellingAgency>Scientific Publishers Inc.</prism:sellingAgency>
+    <prism:organization>Nature Research</prism:organization>
+    <prism:person>Dr. Jane Smith</prism:person>
+    <prism:platform>desktop</prism:platform>
+    <prism:platform>mobile</prism:platform>
+    <prism:originPlatform>print</prism:originPlatform>
+    <prism:originPlatform>digital</prism:originPlatform>
+    <prism:device>tablet</prism:device>
+    <prism:complianceProfile>PRISM 3.0</prism:complianceProfile>
+    <prism:blogTitle>Nature News Blog</prism:blogTitle>
+    <prism:blogURL>https://www.nature.com/news/blog</prism:blogURL>
+    <prism:link>https://www.nature.com/nature</prism:link>
+    <prism:url>https://www.nature.com</prism:url>
+    <prism:byteCount>1048576</prism:byteCount>
+    <prism:rating>A+</prism:rating>
+    <prism:timePeriod>2023-Q1</prism:timePeriod>
+    <prism:versionIdentifier>v2023.03</prism:versionIdentifier>
+    <prism:ticker>SPRN</prism:ticker>
+    <prism:academicField>Biology</prism:academicField>
+    <prism:academicField>Chemistry</prism:academicField>
+    <prism:event>Annual Science Conference 2023</prism:event>
+    <prism:genre>Research Article</prism:genre>
+    <prism:industry>Publishing</prism:industry>
+    <prism:industry>Science</prism:industry>
+    <prism:location>London, UK</prism:location>
+    <prism:object>Scientific Research</prism:object>
+    <prism:profession>Scientist</prism:profession>
+    <prism:sport>none</prism:sport>
+    <prism:embargoDate>2023-03-01T00:00:00.000Z</prism:embargoDate>
+    <prism:copyright>© 2023 Springer Nature</prism:copyright>
+    <prism:expirationDate>2025-03-15T00:00:00.000Z</prism:expirationDate>
+    <prism:rightsAgent>Springer Nature Rights</prism:rightsAgent>
+
     <!-- Syndication Namespace: Channel Level Tags -->
     <sy:updatePeriod>hourly</sy:updatePeriod>
     <sy:updateFrequency>1</sy:updateFrequency>
     <sy:updateBase>2000-01-01T12:00:00.000Z</sy:updateBase>
+
+    <!-- Google Play Podcasts Namespace: Channel Level Tags -->
+    <googleplay:author>Example Podcast Network</googleplay:author>
+    <googleplay:description>A comprehensive podcast about technology and programming</googleplay:description>
+    <googleplay:explicit>No</googleplay:explicit>
+    <googleplay:block>No</googleplay:block>
+    <googleplay:image href="https://example.com/images/googleplay-cover.jpg" />
+    <googleplay:new-feed-url>https://example.com/new-feed.xml</googleplay:new-feed-url>
+    <googleplay:email>contact@example.com</googleplay:email>
+    <googleplay:category text="Technology" />
+    <googleplay:category text="Education" />
 
     <!-- iTunes Namespace: Channel Level Tags -->
     <itunes:image href="https://example.com/images/podcast-cover.jpg"/>
@@ -109,7 +236,7 @@
     <podcast:funding url="https://example.com/support">Support Our Show</podcast:funding>
     <podcast:person group="host" img="https://example.com/images/host.jpg" href="https://example.com/host">Jane Smith</podcast:person>
     <podcast:person group="guest" img="https://example.com/images/guest.jpg" href="https://example.com/guest">John Doe</podcast:person>
-    <podcast:location geo="geo:37.7749,-122.4194" osm="R4163767">San Francisco, CA</podcast:location>
+    <podcast:location rel="creator" geo="geo:37.7749,-122.4194" osm="R4163767" country="US">San Francisco, CA</podcast:location>
     <podcast:trailer url="https://example.com/trailers/season1.mp3" pubdate="Sun, 20 Apr 2025 06:00:00 GMT" length="1048576" type="audio/mpeg" season="1">Season 1 Trailer</podcast:trailer>
     <podcast:license url="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</podcast:license>
     <podcast:guid>ead4c236-bf58-58c6-a2c6-a6b28d128cb6</podcast:guid>
@@ -118,7 +245,8 @@
       <podcast:valueRecipient name="Producer" type="node" address="03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a" split="10"/>
     </podcast:value>
     <podcast:medium>podcast</podcast:medium>
-    <podcast:images srcset="https://example.com/images/cover-1000.jpg 1000w, https://example.com/images/cover-600.jpg 600w"/>
+    <podcast:image href="https://example.com/images/cover-artwork.jpg" alt="Podcast Cover Art" aspect-ratio="1/1" width="3000" purpose="artwork"/>
+    <podcast:image href="https://example.com/images/cover-social.jpg" alt="Social Media Preview" aspect-ratio="16/9" width="1200" height="630" type="image/jpeg" purpose="social"/>
     <podcast:liveItem status="live" start="2025-04-30T08:00:00.000Z" end="2025-04-30T09:00:00.000Z">
       <podcast:person group="host">Jane Smith</podcast:person>
       <podcast:contentLink href="https://example.com/live/chat">Live Chat</podcast:contentLink>
@@ -127,7 +255,7 @@
     <podcast:block>yes</podcast:block>
     <podcast:block id="test">no</podcast:block>
     <podcast:txt purpose="info">Additional text information about the podcast</podcast:txt>
-    <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-a6b28d128cb9" feedUrl="https://guest-podcast.example/feed.xml" itemGuid="episode-guid-here"/>
+    <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-a6b28d128cb9" feedUrl="https://guest-podcast.example/feed.xml" itemGuid="episode-guid-here" title="Guest Podcast Episode"/>
     <podcast:podroll>
       <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-a6b28d128cb8" feedUrl="https://example.com/related-podcast1.xml"/>
       <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-a6b28d128cb7" feedUrl="https://example.com/related-podcast2.xml"/>
@@ -253,6 +381,18 @@
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
 
+    <!-- W3C Basic Geo Namespace: Channel Level Tags -->
+    <geo:lat>37.7749</geo:lat>
+    <geo:long>-122.4194</geo:long>
+    <geo:alt>10.5</geo:alt>
+
+    <!-- Admin Namespace: Channel Level Tags -->
+    <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
+    <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+
+    <!-- Pingback Namespace: Channel Level Tags -->
+    <pingback:to>https://example.com/pingback-service</pingback:to>
+
     <!-- Source Namespace: Channel Level Tags -->
     <source:account service="twitter">johndoe</source:account>
     <source:account service="facebook">jane.smith</source:account>
@@ -269,6 +409,24 @@
     <source:blogroll>https://blog.example.com/blogroll.opml</source:blogroll>
     <source:self>http://example.com/feed.xml</source:self>
 
+    <!-- blogChannel Namespace: Channel Level Tags -->
+    <blogChannel:blogRoll>http://example.com/blogroll.opml</blogChannel:blogRoll>
+    <blogChannel:blink>http://recommended-site.com/</blogChannel:blink>
+    <blogChannel:mySubscriptions>http://example.com/subscriptions.opml</blogChannel:mySubscriptions>
+
+    <!-- ccREL Namespace: Channel Level Tags -->
+    <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
+    <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
+    <cc:attributionName>Example Publishing Company</cc:attributionName>
+    <cc:attributionURL>https://example.com/</cc:attributionURL>
+    <cc:useGuidelines>https://example.com/usage-guidelines</cc:useGuidelines>
+    <cc:permits>http://creativecommons.org/ns#Reproduction</cc:permits>
+    <cc:requires>http://creativecommons.org/ns#Attribution</cc:requires>
+    <cc:prohibits>http://creativecommons.org/ns#CommercialUse</cc:prohibits>
+    <cc:jurisdiction>http://creativecommons.org/international/us/</cc:jurisdiction>
+    <cc:legalcode>https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode</cc:legalcode>
+    <cc:deprecatedOn>2025-12-31</cc:deprecatedOn>
+
     <!-- Creative Commons Namespace: Channel Level Tags -->
     <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
 
@@ -278,6 +436,12 @@
     <feedpress:locale>en</feedpress:locale>
     <feedpress:podcastId>1234567890</feedpress:podcastId>
     <feedpress:cssFile>https://example.com/custom-feed-styles.css</feedpress:cssFile>
+
+    <!-- OpenSearch Namespace: Channel Level Tags -->
+    <opensearch:totalResults>1000</opensearch:totalResults>
+    <opensearch:startIndex>21</opensearch:startIndex>
+    <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+    <opensearch:Query role="request" searchTerms="quantum computing" startIndex="21" count="10"/>
 
     <!-- RawVoice Namespace: Channel Level Tags -->
     <rawvoice:rating tv="TV-14">TV-14</rawvoice:rating>
@@ -298,6 +462,14 @@
       <sandbox enabled="true"/>
     </spotify:access>
 
+    <!-- Acast Namespace: Channel Level Tags -->
+    <acast:showId>abc123def456ghi789jkl012</acast:showId>
+    <acast:showUrl>example-podcast</acast:showUrl>
+    <acast:signature key="signature-key-123" algorithm="aes-256-cbc">U2lnbmF0dXJlVmFsdWU=</acast:signature>
+    <acast:settings>RW5jcnlwdGVkU2V0dGluZ3NEYXRhQmFzZTY0</acast:settings>
+    <acast:network id="net123abc456def789ghi012" slug="example-network-net123abc456">Example Network</acast:network>
+    <acast:importedFeed>https://example.com/original-feed</acast:importedFeed>
+
     <item>
       <title>Example Item</title>
       <link>http://example.org/item/1</link>
@@ -308,6 +480,19 @@
 
       <!-- Atom Namespace: Item Level Tags -->
       <atom:link href="https://example.com/posts/understanding-xml-namespaces/comments/1/replies" rel="replies" thr:count="2" thr:updated="2025-05-10T16:45:00.000Z"/>
+
+      <!-- ccREL Namespace: Item Level Tags -->
+      <cc:license>https://creativecommons.org/licenses/by/4.0/</cc:license>
+      <cc:morePermissions>https://example.com/additional-permissions</cc:morePermissions>
+      <cc:attributionName>Jack Jackson</cc:attributionName>
+      <cc:attributionURL>https://example.com/authors/jack-jackson</cc:attributionURL>
+      <cc:useGuidelines>https://example.com/article-usage-guidelines</cc:useGuidelines>
+      <cc:permits>http://creativecommons.org/ns#Reproduction</cc:permits>
+      <cc:requires>http://creativecommons.org/ns#Attribution</cc:requires>
+      <cc:prohibits>http://creativecommons.org/ns#CommercialUse</cc:prohibits>
+      <cc:jurisdiction>http://creativecommons.org/international/us/</cc:jurisdiction>
+      <cc:legalcode>https://creativecommons.org/licenses/by/4.0/legalcode</cc:legalcode>
+      <cc:deprecatedOn>2026-12-31</cc:deprecatedOn>
 
       <!-- Dublin Core Namespace: Item Level Tags -->
       <dc:title>Dublin Core Enhanced Item Title</dc:title>
@@ -383,11 +568,83 @@
       <dcterms:type>Article</dcterms:type>
       <dcterms:valid>2025-12-31T23:59:59.000Z</dcterms:valid>
 
+      <!-- PRISM Namespace: Item Level Tags -->
+      <prism:publicationName>Nature</prism:publicationName>
+      <prism:issn>0028-0836</prism:issn>
+      <prism:eIssn>1476-4687</prism:eIssn>
+      <prism:doi>10.1038/s41586-023-05842-x</prism:doi>
+      <prism:url>https://www.nature.com/articles/s41586-023-05842-x</prism:url>
+      <prism:volume>615</prism:volume>
+      <prism:number>7952</prism:number>
+      <prism:edition>International</prism:edition>
+      <prism:section>Research</prism:section>
+      <prism:startingPage>425</prism:startingPage>
+      <prism:endingPage>432</prism:endingPage>
+      <prism:pageRange>425-432</prism:pageRange>
+      <prism:pageCount>8</prism:pageCount>
+      <prism:pageProgressionDirection>LTR</prism:pageProgressionDirection>
+      <prism:samplePageRange>425-427</prism:samplePageRange>
+      <prism:publicationDate>2023-03-15T00:00:00.000Z</prism:publicationDate>
+      <prism:publicationDisplayDate>March 15, 2023</prism:publicationDisplayDate>
+      <prism:creationDate>2023-01-15T00:00:00.000Z</prism:creationDate>
+      <prism:modificationDate>2023-03-10T00:00:00.000Z</prism:modificationDate>
+      <prism:dateReceived>2023-01-01T00:00:00.000Z</prism:dateReceived>
+      <prism:killDate>2033-03-15T00:00:00.000Z</prism:killDate>
+      <prism:copyrightYear>2023</prism:copyrightYear>
+      <prism:contentType>research-article</prism:contentType>
+      <prism:genre>original-research</prism:genre>
+      <prism:alternateTitle>Breakthrough Discovery in Cellular Biology</prism:alternateTitle>
+      <prism:subtitle>New Insights into Cellular Mechanisms</prism:subtitle>
+      <prism:teaser>Groundbreaking research reveals new insights into cellular mechanisms</prism:teaser>
+      <prism:keyword>molecular biology</prism:keyword>
+      <prism:keyword>cellular mechanisms</prism:keyword>
+      <prism:corporateEntity>Nature Research</prism:corporateEntity>
+      <prism:organization>Massachusetts Institute of Technology</prism:organization>
+      <prism:person>Dr. Jane Smith</prism:person>
+      <prism:person>Dr. John Doe</prism:person>
+      <prism:platform>web</prism:platform>
+      <prism:device>desktop</prism:device>
+      <prism:academicField>Biology</prism:academicField>
+      <prism:academicField>Biochemistry</prism:academicField>
+      <prism:event>Annual Science Conference 2023</prism:event>
+      <prism:industry>Biotechnology</prism:industry>
+      <prism:location>Boston, MA</prism:location>
+      <prism:object>Gene expression dataset</prism:object>
+      <prism:profession>Research Scientist</prism:profession>
+      <prism:sport>none</prism:sport>
+      <prism:hasAlternative>https://www.nature.com/articles/s41586-023-05842-x.pdf</prism:hasAlternative>
+      <prism:hasCorrection>https://www.nature.com/articles/s41586-023-06000-1</prism:hasCorrection>
+      <prism:hasTranslation>https://www.nature.com/articles/s41586-023-05842-x/de</prism:hasTranslation>
+      <prism:isAlternativeOf>https://doi.org/10.1038/s41586-023-05842-x</prism:isAlternativeOf>
+      <prism:isCorrectionOf>https://www.nature.com/articles/s41586-023-05800-1</prism:isCorrectionOf>
+      <prism:isTranslationOf>https://www.nature.com/articles/s41586-023-05842-x/en</prism:isTranslationOf>
+      <prism:supplementTitle>Supplementary Materials</prism:supplementTitle>
+      <prism:supplementDisplayID>S1</prism:supplementDisplayID>
+      <prism:supplementStartingPage>S1</prism:supplementStartingPage>
+      <prism:link>https://www.nature.com/articles/s41586-023-05842-x/full</prism:link>
+      <prism:wordCount>5500</prism:wordCount>
+      <prism:byteCount>35000</prism:byteCount>
+      <prism:rating>peer-reviewed</prism:rating>
+      <prism:timePeriod>2023-Q1</prism:timePeriod>
+      <prism:versionIdentifier>v1.0</prism:versionIdentifier>
+      <prism:ticker>SPRN</prism:ticker>
+      <prism:embargoDate>2023-03-15T00:00:00.000Z</prism:embargoDate>
+      <prism:copyright>© 2023 Springer Nature</prism:copyright>
+      <prism:expirationDate>2028-03-15T00:00:00.000Z</prism:expirationDate>
+      <prism:rightsAgent>Copyright Clearance Center</prism:rightsAgent>
+
       <!-- Slash Namespace: Item Level Tags -->
       <slash:section>articles</slash:section>
       <slash:department>not-an-ocean-unless-there-are-lobsters</slash:department>
       <slash:comments>177</slash:comments>
       <slash:hit_parade>177,155,105,33,6,3,0</slash:hit_parade>
+
+      <!-- Google Play Podcasts Namespace: Item Level Tags -->
+      <googleplay:author>Episode Guest Speaker</googleplay:author>
+      <googleplay:description>A detailed episode about advanced programming techniques</googleplay:description>
+      <googleplay:explicit>No</googleplay:explicit>
+      <googleplay:block>No</googleplay:block>
+      <googleplay:image href="https://example.com/images/episode-googleplay-cover.jpg" />
 
       <!-- iTunes Namespace: Item Level Tags -->
       <itunes:duration>1800</itunes:duration>
@@ -412,7 +669,7 @@
       <podcast:person group="host" img="https://example.com/images/host.jpg" href="https://example.com/host">Jane Smith</podcast:person>
       <podcast:person group="guest" img="https://example.com/images/guest.jpg" href="https://example.com/guest">John Doe</podcast:person>
       <podcast:person role="producer" img="https://example.com/images/producer.jpg" href="https://example.com/producer">Sam Johnson</podcast:person>
-      <podcast:location geo="geo:40.7128,-74.0060" osm="R8780673">New York City, NY</podcast:location>
+      <podcast:location rel="subject" geo="geo:40.7128,-74.0060" osm="R8780673" country="US">New York City, NY</podcast:location>
       <podcast:season name="First Season">1</podcast:season>
       <podcast:episode display="Episode 1">1</podcast:episode>
       <podcast:license url="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</podcast:license>
@@ -428,7 +685,8 @@
         <podcast:valueRecipient name="Host" type="node" address="02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee83420ef254acd7d8e5edf5f16e" split="90"/>
         <podcast:valueRecipient name="Guest" type="node" address="03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a" split="10"/>
       </podcast:value>
-      <podcast:images srcset="https://example.com/images/episode-1000.jpg 1000w, https://example.com/images/episode-600.jpg 600w"/>
+      <podcast:image href="https://example.com/images/episode-artwork.jpg" alt="Episode 1 Artwork" aspect-ratio="1/1" width="3000" purpose="artwork"/>
+      <podcast:image href="https://example.com/images/episode-social.jpg" alt="Episode 1 Social Preview" aspect-ratio="16/9" width="1200" height="630" type="image/jpeg" purpose="social"/>
       <podcast:socialInteract uri="https://twitter.com/examplepodcast/status/123456789" protocol="twitter" accountId="@examplepodcast" accountUrl="https://twitter.com/examplepodcast"/>
       <podcast:socialInteract uri="https://podcastindex.social/@dave/123456789" protocol="mastodon" accountId="@examplepodcast@podcastindex.social" accountUrl="https://podcastindex.social/@examplepodcast"/>
       <podcast:txt purpose="transcript">{"version": "1.0.0", "chapters": []}</podcast:txt>
@@ -557,6 +815,11 @@
       <georss:floor>4</georss:floor>
       <georss:radius>50000</georss:radius>
 
+      <!-- W3C Basic Geo Namespace: Item Level Tags -->
+      <geo:lat>37.8199</geo:lat>
+      <geo:long>-122.4783</geo:long>
+      <geo:alt>67.0</geo:alt>
+
       <!-- Atom Threading Namespace: Item Level Tags -->
       <thr:total>100</thr:total>
       <thr:in-reply-to ref="urn:uuid:d5e9c5d0-4c0c-11ec-81d3-0242ac130003" href="https://example.com/posts/understanding-xml-namespaces" type="application/xhtml+xml"/>
@@ -565,6 +828,15 @@
       <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
       <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
       <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
+
+      <!-- Pingback Namespace: Item Level Tags -->
+      <pingback:server>https://example.com/xmlrpc.php</pingback:server>
+      <pingback:target>https://referenced-blog.com/article</pingback:target>
+
+      <!-- Trackback Namespace: Item Level Tags -->
+      <trackback:ping>https://example.com/trackback/123</trackback:ping>
+      <trackback:about>https://blog1.com/trackback/456</trackback:about>
+      <trackback:about>https://blog2.com/trackback/789</trackback:about>
 
       <!-- Source Namespace: Item Level Tags -->
       <source:markdown># Understanding XML Namespaces - This article explores the power and flexibility of XML namespaces in modern web syndication.</source:markdown>
@@ -588,6 +860,12 @@
       <spotify:access>
         <entitlement name="premium_content"/>
       </spotify:access>
+
+      <!-- Acast Namespace: Item Level Tags -->
+      <acast:episodeId>ep1234abc567def890ghi123</acast:episodeId>
+      <acast:showId>abc123def456ghi789jkl012</acast:showId>
+      <acast:episodeUrl>example-episode-title</acast:episodeUrl>
+      <acast:settings>RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA==</acast:settings>
     </item>
   </channel>
 </rss>

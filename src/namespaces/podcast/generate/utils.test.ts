@@ -9,7 +9,7 @@ import {
   generateEpisode,
   generateFeed,
   generateFunding,
-  generateImages,
+  generateImage,
   generateIntegrity,
   generateItem,
   generateLicense,
@@ -225,13 +225,17 @@ describe('generateLocation', () => {
   it('should generate location with all properties', () => {
     const value = {
       display: 'Austin, TX',
+      rel: 'creator',
       geo: 'geo:30.2672,-97.7431',
       osm: 'R113314',
+      country: 'US',
     }
     const expected = {
       '#text': 'Austin, TX',
+      '@rel': 'creator',
       '@geo': 'geo:30.2672,-97.7431',
       '@osm': 'R113314',
+      '@country': 'US',
     }
 
     expect(generateLocation(value)).toEqual(expected)
@@ -664,20 +668,43 @@ describe('generateValue', () => {
   })
 })
 
-describe('generateImages', () => {
-  it('should generate images with srcset', () => {
+describe('generateImage', () => {
+  it('should generate image with all properties', () => {
     const value = {
-      srcset: 'https://example.com/image-400.jpg 400w, https://example.com/image-800.jpg 800w',
+      href: 'https://example.com/image.jpg',
+      alt: 'Example Image',
+      aspectRatio: '16/9',
+      width: 1200,
+      height: 630,
+      type: 'image/jpeg',
+      purpose: 'social',
     }
     const expected = {
-      '@srcset': 'https://example.com/image-400.jpg 400w, https://example.com/image-800.jpg 800w',
+      '@href': 'https://example.com/image.jpg',
+      '@alt': 'Example Image',
+      '@aspect-ratio': '16/9',
+      '@width': 1200,
+      '@height': 630,
+      '@type': 'image/jpeg',
+      '@purpose': 'social',
     }
 
-    expect(generateImages(value)).toEqual(expected)
+    expect(generateImage(value)).toEqual(expected)
+  })
+
+  it('should generate image with only required href', () => {
+    const value = {
+      href: 'https://example.com/image.jpg',
+    }
+    const expected = {
+      '@href': 'https://example.com/image.jpg',
+    }
+
+    expect(generateImage(value)).toEqual(expected)
   })
 
   it('should handle non-object inputs', () => {
-    expect(generateImages(undefined)).toBeUndefined()
+    expect(generateImage(undefined)).toBeUndefined()
   })
 })
 
@@ -850,12 +877,14 @@ describe('generateRemoteItem', () => {
       feedUrl: 'https://remote.example.com/feed.xml',
       itemGuid: 'remote-item-guid-456',
       medium: 'music',
+      title: 'Example Podcast',
     }
     const expected = {
       '@feedGuid': 'remote-feed-guid-123',
       '@feedUrl': 'https://remote.example.com/feed.xml',
       '@itemGuid': 'remote-item-guid-456',
       '@medium': 'music',
+      '@title': 'Example Podcast',
     }
 
     expect(generateRemoteItem(value)).toEqual(expected)
@@ -1068,9 +1097,11 @@ describe('generateBaseItem', () => {
         type: 'lightning',
         method: 'keysend',
       },
-      images: {
-        srcset: 'https://example.com/image.jpg',
-      },
+      images: [
+        {
+          href: 'https://example.com/image.jpg',
+        },
+      ],
       socialInteracts: [
         {
           protocol: 'activitypub',
@@ -1126,9 +1157,11 @@ describe('generateBaseItem', () => {
         '@type': 'lightning',
         '@method': 'keysend',
       },
-      'podcast:images': {
-        '@srcset': 'https://example.com/image.jpg',
-      },
+      'podcast:image': [
+        {
+          '@href': 'https://example.com/image.jpg',
+        },
+      ],
       'podcast:socialInteract': [
         {
           '@protocol': 'activitypub',
@@ -1309,9 +1342,11 @@ describe('generateFeed', () => {
         method: 'keysend',
       },
       medium: 'podcast',
-      images: {
-        srcset: 'https://example.com/image.jpg',
-      },
+      images: [
+        {
+          href: 'https://example.com/image.jpg',
+        },
+      ],
       liveItems: [
         {
           status: 'live',
@@ -1384,9 +1419,11 @@ describe('generateFeed', () => {
         '@method': 'keysend',
       },
       'podcast:medium': 'podcast',
-      'podcast:images': {
-        '@srcset': 'https://example.com/image.jpg',
-      },
+      'podcast:image': [
+        {
+          '@href': 'https://example.com/image.jpg',
+        },
+      ],
       'podcast:liveItem': [
         {
           '@status': 'live',
