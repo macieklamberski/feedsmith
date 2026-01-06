@@ -8,22 +8,31 @@ export namespace RawVoiceNs {
     movie?: string
   }
 
-  export type LiveStream<TDate extends DateLike> = {
-    url?: string
-    schedule?: TDate
-    duration?: string
-    type?: string
-  }
+  export type LiveStream<TDate extends DateLike, TStrict extends boolean = false> = Strict<
+    {
+      url?: string
+      schedule: Requirable<TDate> // Required in spec.
+      duration: Requirable<string> // Required in spec.
+      type?: string
+    },
+    TStrict
+  >
 
-  export type Poster = {
-    url?: string
-  }
+  export type Poster<TStrict extends boolean = false> = Strict<
+    {
+      url: Requirable<string> // Required in spec.
+    },
+    TStrict
+  >
 
-  export type AlternateEnclosure = {
-    src?: string
-    type?: string
-    length?: number
-  }
+  export type AlternateEnclosure<TStrict extends boolean = false> = Strict<
+    {
+      src: Requirable<string> // Required in spec.
+      type?: string
+      length?: number
+    },
+    TStrict
+  >
 
   export type Subscribe = Record<string, string>
 
@@ -46,10 +55,10 @@ export namespace RawVoiceNs {
   export type Feed<TDate extends DateLike, TStrict extends boolean = false> = {
     rating?: Rating
     liveEmbed?: string
-    flashLiveStream?: LiveStream<TDate>
-    httpLiveStream?: LiveStream<TDate>
-    shoutcastLiveStream?: LiveStream<TDate>
-    liveStream?: LiveStream<TDate>
+    flashLiveStream?: LiveStream<TDate, TStrict>
+    httpLiveStream?: LiveStream<TDate, TStrict>
+    shoutcastLiveStream?: LiveStream<TDate, TStrict>
+    liveStream?: LiveStream<TDate, TStrict>
     location?: string
     frequency?: string
     mycast?: boolean
@@ -57,12 +66,12 @@ export namespace RawVoiceNs {
     donate?: Donate<TStrict>
   }
 
-  export type Item = {
-    poster?: Poster
+  export type Item<TStrict extends boolean = false> = {
+    poster?: Poster<TStrict>
     isHd?: boolean
     embed?: string
-    webm?: AlternateEnclosure
-    mp4?: AlternateEnclosure
+    webm?: AlternateEnclosure<TStrict>
+    mp4?: AlternateEnclosure<TStrict>
     metamarks?: Array<Metamark>
   }
 }
