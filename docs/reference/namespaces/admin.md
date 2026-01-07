@@ -1,4 +1,4 @@
-# Administrative Reference
+# Administrative Namespace Reference
 
 The Administrative namespace (MVCB - Meta Vocabulary for Community Building) provides administrative metadata about RSS/RDF feeds, enabling better identification of feed generators and error reporting contacts.
 
