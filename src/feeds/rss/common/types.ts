@@ -27,6 +27,7 @@ import type { SyNs } from '../../../namespaces/sy/common/types.js'
 import type { ThrNs } from '../../../namespaces/thr/common/types.js'
 import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
+import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 
 // #region reference
 export namespace Rss {
@@ -118,6 +119,7 @@ export namespace Rss {
     pingback?: PingbackNs.Item
     trackback?: TrackbackNs.Item
     acast?: AcastNs.Item
+    xml?: XmlNs.ItemOrFeed
   }
 
   export type Feed<TDate extends DateLike, TPerson extends PersonLike = Person> = {
@@ -163,6 +165,7 @@ export namespace Rss {
     spotify?: SpotifyNs.Feed
     pingback?: PingbackNs.Feed
     acast?: AcastNs.Feed
+    xml?: XmlNs.ItemOrFeed
   }
 }
 // #endregion reference

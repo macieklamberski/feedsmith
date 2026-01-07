@@ -24,6 +24,7 @@ import { retrieveAbout as retrieveRdfAbout } from '../../../namespaces/rdf/parse
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
+import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
 import type { Rdf } from '../common/types.js'
 
 const retrieveByAbout = (elements: unknown, resourceUri: string | undefined): unknown => {
@@ -109,6 +110,7 @@ export const parseItem: ParsePartialUtil<Rdf.Item<string>> = (value) => {
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
+    xml: retrieveXmlItemOrFeed(value),
   }
 
   return trimObject(item)
@@ -164,6 +166,7 @@ export const parseFeed: ParsePartialUtil<Rdf.Feed<string>, ParseOptions> = (valu
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(channel) : undefined,
     admin: namespaces.has('admin') ? retrieveAdminFeed(channel) : undefined,
+    xml: retrieveXmlItemOrFeed(value),
   }
 
   return trimObject(feed)

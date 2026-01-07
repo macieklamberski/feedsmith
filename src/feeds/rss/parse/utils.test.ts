@@ -1053,7 +1053,7 @@ describe('parseFeed', () => {
   }
 
   it('should parse complete feed object (with #text)', () => {
-    const value = {
+    const channel = {
       title: { '#text': 'Feed Title' },
       link: { '#text': 'https://example.com' },
       description: { '#text': 'Feed Description' },
@@ -1106,12 +1106,13 @@ describe('parseFeed', () => {
         },
       ],
     }
+    const value = { channel }
 
     expect(parseFeed(value)).toEqual(expectedFull)
   })
 
   it('should parse complete feed object (without #text)', () => {
-    const value = {
+    const channel = {
       title: 'Feed Title',
       link: 'https://example.com',
       description: 'Feed Description',
@@ -1164,12 +1165,13 @@ describe('parseFeed', () => {
         },
       ],
     }
+    const value = { channel }
 
     expect(parseFeed(value)).toEqual(expectedFull)
   })
 
   it('should parse complete feed object (with array of values)', () => {
-    const value = {
+    const channel = {
       title: ['Feed Title', 'Alternative Feed Title'],
       link: ['https://example.com', 'https://example.com/alternate'],
       description: ['Feed Description', 'Extended Feed Description'],
@@ -1243,13 +1245,16 @@ describe('parseFeed', () => {
         },
       ],
     }
+    const value = { channel }
 
     expect(parseFeed(value)).toEqual(expectedFull)
   })
 
   it('should handle minimal feed with only required fields', () => {
     const value = {
-      title: { '#text': 'Feed Title' },
+      channel: {
+        title: { '#text': 'Feed Title' },
+      },
     }
     const expected = {
       title: 'Feed Title',
@@ -1259,9 +1264,10 @@ describe('parseFeed', () => {
   })
 
   it('should handle partial objects (missing required fields)', () => {
-    const value = {
+    const channel = {
       description: { '#text': 'Feed Description' },
     }
+    const value = { channel }
     const expected = {
       description: 'Feed Description',
     }
@@ -1270,7 +1276,7 @@ describe('parseFeed', () => {
   })
 
   it('should handle coercible values', () => {
-    const value = {
+    const channel = {
       title: { '#text': 123 },
       link: { '#text': 456 },
       ttl: { '#text': '60' },
@@ -1282,6 +1288,7 @@ describe('parseFeed', () => {
         },
       ],
     }
+    const value = { channel }
     const expected = {
       title: '123',
       link: '456',
@@ -1305,7 +1312,7 @@ describe('parseFeed', () => {
   })
 
   it('should handle complex nested structures', () => {
-    const value = {
+    const channel = {
       title: { '#text': 'Feed Title' },
       link: { '#text': 'https://example.com' },
       item: [
@@ -1335,6 +1342,7 @@ describe('parseFeed', () => {
         width: { '#text': '32' },
       },
     }
+    const value = { channel }
     const expected = {
       title: 'Feed Title',
       link: 'https://example.com',
@@ -1372,11 +1380,12 @@ describe('parseFeed', () => {
   })
 
   it('should handle atom namespace', () => {
-    const value = {
+    const channel = {
       title: { '#text': 'Feed Title' },
       link: { '#text': 'https://example.com' },
       'atom:link': { '@href': 'http://example.com', '@rel': 'self' },
     }
+    const value = { channel }
     const expected = {
       title: 'Feed Title',
       link: 'https://example.com',
@@ -1387,11 +1396,12 @@ describe('parseFeed', () => {
   })
 
   it('should handle dc namespace', () => {
-    const value = {
+    const channel = {
       title: { '#text': 'Feed Title' },
       link: { '#text': 'https://example.com' },
       'dc:creator': { '#text': 'John Doe' },
     }
+    const value = { channel }
     const expected = {
       title: 'Feed Title',
       link: 'https://example.com',
@@ -1405,11 +1415,12 @@ describe('parseFeed', () => {
   })
 
   it('should handle sy namespace', () => {
-    const value = {
+    const channel = {
       title: { '#text': 'Example Feed' },
       link: { '#text': 'https://example.com' },
       'sy:updatefrequency': { '#text': '5' },
     }
+    const value = { channel }
     const expected = {
       title: 'Example Feed',
       link: 'https://example.com',
@@ -1420,12 +1431,13 @@ describe('parseFeed', () => {
   })
 
   it('should handle dcterms namespace', () => {
-    const value = {
+    const channel = {
       title: { '#text': 'Example Feed' },
       link: { '#text': 'https://example.com' },
       'dcterms:created': { '#text': '2023-01-01T00:00:00Z' },
       'dcterms:license': { '#text': 'Creative Commons Attribution 4.0' },
     }
+    const value = { channel }
     const expected = {
       title: 'Example Feed',
       link: 'https://example.com',
@@ -1440,12 +1452,13 @@ describe('parseFeed', () => {
   })
 
   it('should handle itunes namespace', () => {
-    const value = {
+    const channel = {
       title: { '#text': 'Podcast Feed' },
       link: { '#text': 'https://example.com' },
       'itunes:author': { '#text': 'Podcast Author' },
       'itunes:category': { '@text': 'Technology' },
     }
+    const value = { channel }
     const expected = {
       title: 'Podcast Feed',
       link: 'https://example.com',
@@ -1459,11 +1472,12 @@ describe('parseFeed', () => {
   })
 
   it('should handle podcast namespace', () => {
-    const value = {
+    const channel = {
       title: { '#text': 'Podcast 2.0 Feed' },
       link: { '#text': 'https://example.com' },
       'podcast:guid': { '#text': 'podcast-feed-guid-123' },
     }
+    const value = { channel }
     const expected = {
       title: 'Podcast 2.0 Feed',
       link: 'https://example.com',
@@ -1476,11 +1490,12 @@ describe('parseFeed', () => {
   })
 
   it('should handle media namespace', () => {
-    const value = {
+    const channel = {
       title: { '#text': 'Media Feed' },
       link: { '#text': 'https://example.com' },
       'media:copyright': { '#text': '2024 Example Corp' },
     }
+    const value = { channel }
     const expected = {
       title: 'Media Feed',
       link: 'https://example.com',
@@ -1493,11 +1508,12 @@ describe('parseFeed', () => {
   })
 
   it('should handle georss namespace', () => {
-    const value = {
+    const channel = {
       title: { '#text': 'Location Feed' },
       link: { '#text': 'https://example.com' },
       'georss:point': { '#text': '37.7749 -122.4194' },
     }
+    const value = { channel }
     const expected = {
       title: 'Location Feed',
       link: 'https://example.com',
@@ -1510,12 +1526,13 @@ describe('parseFeed', () => {
   })
 
   it('should handle source namespace', () => {
-    const value = {
+    const channel = {
       title: { '#text': 'Source Feed' },
       link: { '#text': 'https://example.com' },
       'source:account': { '@service': 'twitter', '#text': 'johndoe' },
       'source:blogroll': { '#text': 'https://example.com/blogroll.opml' },
     }
+    const value = { channel }
     const expected = {
       title: 'Source Feed',
       link: 'https://example.com',
@@ -1529,7 +1546,7 @@ describe('parseFeed', () => {
   })
 
   it('should handle admin namespace', () => {
-    const value = {
+    const channel = {
       title: { '#text': 'Admin Feed' },
       link: { '#text': 'https://example.com' },
       'admin:errorreportsto': {
@@ -1539,6 +1556,7 @@ describe('parseFeed', () => {
         '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
       },
     }
+    const value = { channel }
     const expected = {
       title: 'Admin Feed',
       link: 'https://example.com',
