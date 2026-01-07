@@ -30,33 +30,6 @@ describe('generateItemOrFeed', () => {
     expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
-  it('should handle object with only undefined/empty properties', () => {
-    const value = {
-      lang: undefined,
-      base: undefined,
-      space: undefined,
-      id: undefined,
-    }
-
-    expect(generateItemOrFeed(value)).toBeUndefined()
-  })
-
-  it('should handle empty object', () => {
-    const value = {}
-
-    expect(generateItemOrFeed(value)).toBeUndefined()
-  })
-
-  it('should handle non-object inputs gracefully', () => {
-    expect(generateItemOrFeed(undefined)).toBeUndefined()
-    // @ts-expect-error: This is for testing purposes.
-    expect(generateItemOrFeed(null)).toBeUndefined()
-    // @ts-expect-error: This is for testing purposes.
-    expect(generateItemOrFeed('not an object')).toBeUndefined()
-    // @ts-expect-error: This is for testing purposes.
-    expect(generateItemOrFeed([])).toBeUndefined()
-  })
-
   it('should filter out empty string values', () => {
     const value = {
       lang: '',
@@ -98,5 +71,32 @@ describe('generateItemOrFeed', () => {
 
     // @ts-expect-error: This is for testing purposes.
     expect(generateItemOrFeed(value)).toBeUndefined()
+  })
+
+  it('should handle object with only undefined/empty properties', () => {
+    const value = {
+      lang: undefined,
+      base: undefined,
+      space: undefined,
+      id: undefined,
+    }
+
+    expect(generateItemOrFeed(value)).toBeUndefined()
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateItemOrFeed(value)).toBeUndefined()
+  })
+
+  it('should handle non-object inputs gracefully', () => {
+    expect(generateItemOrFeed(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateItemOrFeed(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateItemOrFeed('not an object')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateItemOrFeed([])).toBeUndefined()
   })
 })

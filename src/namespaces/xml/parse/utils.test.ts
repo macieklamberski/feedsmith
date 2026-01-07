@@ -63,6 +63,23 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
+  it('should ignore non-XML namespace attributes', () => {
+    const value = {
+      '@xml:lang': 'en-US',
+      '@href': 'http://example.com',
+      '@title': 'Some title',
+      '@rel': 'alternate',
+      '@xml:base': 'http://example.org/',
+      '@type': 'text/html',
+    }
+    const expected = {
+      lang: 'en-US',
+      base: 'http://example.org/',
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
   it('should handle coercible values', () => {
     const value = {
       '@xml:lang': 'en',
@@ -77,28 +94,19 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
-  it('should return undefined for empty object', () => {
-    const value = {}
-
-    expect(retrieveItemOrFeed(value)).toBeUndefined()
-  })
-
-  it('should return undefined for non-object input', () => {
-    expect(retrieveItemOrFeed('not an object')).toBeUndefined()
-    expect(retrieveItemOrFeed(undefined)).toBeUndefined()
-    expect(retrieveItemOrFeed(null)).toBeUndefined()
-    expect(retrieveItemOrFeed([])).toBeUndefined()
-  })
-
-  it('should return undefined when no XML namespace properties can be parsed', () => {
+  it('should handle boolean-like values', () => {
     const value = {
-      'other:property': 'value',
-      'unknown:field': 'data',
-      '@href': 'http://example.com',
-      '@title': 'Not XML namespace',
+      '@xml:lang': false,
+      '@xml:base': true,
+      '@xml:space': 0,
+      '@xml:id': 1,
+    }
+    const expected = {
+      space: '0',
+      id: '1',
     }
 
-    expect(retrieveItemOrFeed(value)).toBeUndefined()
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should handle objects with empty string values', () => {
@@ -142,35 +150,27 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(value)).toBeUndefined()
   })
 
-  it('should ignore non-XML namespace attributes', () => {
-    const value = {
-      '@xml:lang': 'en-US',
-      '@href': 'http://example.com',
-      '@title': 'Some title',
-      '@rel': 'alternate',
-      '@xml:base': 'http://example.org/',
-      '@type': 'text/html',
-    }
-    const expected = {
-      lang: 'en-US',
-      base: 'http://example.org/',
-    }
+  it('should return undefined for empty object', () => {
+    const value = {}
 
-    expect(retrieveItemOrFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toBeUndefined()
   })
 
-  it('should handle boolean-like values', () => {
+  it('should return undefined when no XML namespace properties can be parsed', () => {
     const value = {
-      '@xml:lang': false,
-      '@xml:base': true,
-      '@xml:space': 0,
-      '@xml:id': 1,
-    }
-    const expected = {
-      space: '0',
-      id: '1',
+      'other:property': 'value',
+      'unknown:field': 'data',
+      '@href': 'http://example.com',
+      '@title': 'Not XML namespace',
     }
 
-    expect(retrieveItemOrFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(retrieveItemOrFeed('not an object')).toBeUndefined()
+    expect(retrieveItemOrFeed(undefined)).toBeUndefined()
+    expect(retrieveItemOrFeed(null)).toBeUndefined()
+    expect(retrieveItemOrFeed([])).toBeUndefined()
   })
 })
