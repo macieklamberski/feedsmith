@@ -134,6 +134,12 @@ const validateFeed = (feed: Rss.Feed<Date>) => {
 1. Add runtime validation if you relied on TypeScript to enforce required fields
 2. Use optional chaining (`?.`) when accessing properties that were previously required
 
+## New Features
+
+### XML Namespace Support
+
+Version 3.x adds support for the [XML namespace](/reference/namespaces/xml) (`xml:*` attributes) in RSS, Atom, and RDF feeds. The `xml` property is available on both feed and item levels, providing access to `xml:lang`, `xml:base`, `xml:space`, and `xml:id` attributes.
+
 ## Migration Checklist
 
 Use this checklist to ensure a complete migration:

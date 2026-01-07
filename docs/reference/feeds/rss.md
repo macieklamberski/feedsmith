@@ -15,6 +15,7 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
     <tr>
       <th>Namespaces</th>
       <td>
+        <a href="/reference/namespaces/xml">XML</a>,
         <a href="/reference/namespaces/atom">Atom</a>,
         <a href="/reference/namespaces/dc">Dublin Core</a>,
         <a href="/reference/namespaces/sy">Syndication</a>,

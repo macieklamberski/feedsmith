@@ -90,6 +90,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [W3C Basic Geo](/reference/namespaces/geo) | `<geo:*>` | RSS, Atom | ✅ | ✅ |
 | [GeoRSS Simple](/reference/namespaces/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [RDF](/reference/namespaces/rdf) | `<rdf:*>` | RDF | ✅ | ✅ |
+| [XML](/reference/namespaces/xml) | `<xml:*>` | RSS, Atom, RDF | ✅ | ✅ |
 
 ## Why Feedsmith?
 

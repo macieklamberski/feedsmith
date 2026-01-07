@@ -15,6 +15,7 @@ RDF (Resource Description Framework) Site Summary is an early XML-based syndicat
     <tr>
       <th>Namespaces</th>
       <td>
+        <a href="/reference/namespaces/xml">XML</a>,
         <a href="/reference/namespaces/rdf">RDF</a>,
         <a href="/reference/namespaces/atom">Atom</a>,
         <a href="/reference/namespaces/dc">Dublin Core</a>,

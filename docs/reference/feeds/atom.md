@@ -15,6 +15,7 @@ Atom is a syndication format based on XML that provides a robust framework for w
     <tr>
       <th>Namespaces</th>
       <td>
+        <a href="/reference/namespaces/xml">XML</a>,
         <a href="/reference/namespaces/dc">Dublin Core</a>,
         <a href="/reference/namespaces/sy">Syndication</a>,
         <a href="/reference/namespaces/slash">Slash</a>,
