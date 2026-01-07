@@ -1,38 +1,49 @@
+import type { Requirable, Strict } from '../../../common/types.js'
+
 // #region reference
 export namespace SpotifyNs {
   export type Limit = {
     recentCount?: number
   }
 
-  export type Partner = {
-    id?: string // Required in spec.
+  export type Partner<TStrict extends boolean = false> = Strict<
+    {
+      id: Requirable<string> // Required in spec.
+    },
+    TStrict
+  >
+
+  export type Sandbox<TStrict extends boolean = false> = Strict<
+    {
+      enabled: Requirable<boolean> // Required in spec.
+    },
+    TStrict
+  >
+
+  export type FeedAccess<TStrict extends boolean = false> = {
+    partner?: Partner<TStrict>
+    sandbox?: Sandbox<TStrict>
   }
 
-  export type Sandbox = {
-    enabled?: boolean // Required in spec.
+  export type Entitlement<TStrict extends boolean = false> = Strict<
+    {
+      name: Requirable<string> // Required in spec.
+    },
+    TStrict
+  >
+
+  export type ItemAccess<TStrict extends boolean = false> = {
+    entitlement?: Entitlement<TStrict>
   }
 
-  export type FeedAccess = {
-    partner?: Partner
-    sandbox?: Sandbox
-  }
-
-  export type Entitlement = {
-    name?: string // Required in spec.
-  }
-
-  export type ItemAccess = {
-    entitlement?: Entitlement
-  }
-
-  export type Feed = {
+  export type Feed<TStrict extends boolean = false> = {
     limit?: Limit
     countryOfOrigin?: string
-    access?: FeedAccess
+    access?: FeedAccess<TStrict>
   }
 
-  export type Item = {
-    access?: ItemAccess
+  export type Item<TStrict extends boolean = false> = {
+    access?: ItemAccess<TStrict>
   }
 }
 // #endregion reference

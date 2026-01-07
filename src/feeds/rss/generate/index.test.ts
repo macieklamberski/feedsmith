@@ -1105,6 +1105,93 @@ describe('generate', () => {
   })
 })
 
+describe('strict mode', () => {
+  it('should require title, link, description in strict mode', () => {
+    // @ts-expect-error: This is for testing purposes.
+    generate({ title: 'Test' }, { strict: true })
+  })
+
+  it('should accept feed with all required fields in strict mode', () => {
+    generate({ title: 'Test', link: 'https://example.com', description: 'Desc' }, { strict: true })
+  })
+
+  it('should require nested type fields in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [
+          {
+            title: 'Item',
+            description: 'Desc',
+            // @ts-expect-error: This is for testing purposes.
+            enclosures: [{ url: 'https://example.com/file.mp3' }],
+          },
+        ],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept nested types with all required fields in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [
+          {
+            title: 'Item',
+            enclosures: [{ url: 'https://example.com/file.mp3', length: 1000, type: 'audio/mpeg' }],
+          },
+        ],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept item with only title in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [{ title: 'Item Title' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept item with only description in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [{ description: 'Item Description' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept item with both title and description in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [{ title: 'Item Title', description: 'Item Description' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept partial feed in lenient mode', () => {
+    generate({ title: 'Test' })
+  })
+})
+
 describe('generate edge cases', () => {
   it('should accept partial feeds', () => {
     const value: Rss.Feed<DateLike> = {

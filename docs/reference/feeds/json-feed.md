@@ -66,6 +66,13 @@ const json = generateJsonFeed(feedData)
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `data` | `object` | JSON Feed data to generate |
+| `options` | `object` | Optional generation settings |
+
+#### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `strict` | `boolean` | `false` | Enable strict mode for spec-required field validation, see [Strict Mode](/generating/strict-mode) |
 
 #### Returns
 `object` - Generated JSON Feed
@@ -110,7 +117,7 @@ See the [TypeScript guide](/reference/typescript) for usage examples.
 ### Type Definitions
 
 > [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
+> For details on type parameters (`TDate`, `TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tdate).
 
 <<< @/../src/feeds/json/common/types.ts#reference
 

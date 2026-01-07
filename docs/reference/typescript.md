@@ -131,9 +131,9 @@ const feed: Rss.Feed<Date> = {
 const xml = generateRssFeed(feed)
 ```
 
-## The TDate Parameter
+## The TDate Parameter {#tdate}
 
-The `TDate` generic parameter indicates how dates are represented in feed the typed objects. This differentiation is currently needed as Feedsmith intentionally does not parse dates ([see related page in the docs](/parsing/dates)).
+The `TDate` generic parameter indicates how dates are represented in the typed objects. This differentiation is needed as Feedsmith intentionally does not parse dates (see [Handling Dates](/parsing/dates)).
 
 In general, use:
 - `Type<string>` when parsing
@@ -152,3 +152,24 @@ const generated: Rss.Feed<Date> = {
   items: []
 }
 ```
+
+## The TStrict Parameter {#tstrict}
+
+The `TStrict` generic parameter controls whether specification-required fields are enforced at compile time. When you pass `{ strict: true }` to generate functions, TypeScript uses the strict variant of the type, making required fields mandatory.
+
+See [Strict Mode](/generating/strict-mode) for usage details.
+
+### Requirable Markers {#requirable}
+
+In type definitions, fields wrapped in `Requirable<T>` become mandatory when strict mode is enabled:
+
+```typescript
+// Type definition (simplified)
+type Enclosure<TStrict> = Strict<{
+  url: Requirable<string>     // Required in strict mode
+  length: Requirable<number>  // Required in strict mode
+  type: Requirable<string>    // Required in strict mode
+}, TStrict>
+```
+
+Look for `Requirable<...>` in reference documentation to identify which fields become required in strict mode.

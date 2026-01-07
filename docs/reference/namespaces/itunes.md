@@ -32,6 +32,9 @@ The iTunes namespace provides podcast-specific metadata for RSS and Atom feeds. 
 
 ## Types
 
+> [!INFO]
+> For details on type parameters (`TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tstrict).
+
 <<< @/../src/namespaces/itunes/common/types.ts#reference
 
 ## Related

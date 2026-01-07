@@ -49,6 +49,7 @@ export default defineConfig({
         items: [
           { text: 'Overview', link: '/generating/' },
           { text: 'Styling', link: '/generating/styling' },
+          { text: 'Strict Mode', link: '/generating/strict-mode' },
           { text: 'Examples', link: '/generating/examples' },
         ],
       },

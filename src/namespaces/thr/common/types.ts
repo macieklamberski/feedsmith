@@ -1,22 +1,25 @@
-import type { DateLike } from '../../../common/types.js'
+import type { DateLike, Requirable, Strict } from '../../../common/types.js'
 
 // #region reference
 export namespace ThrNs {
-  export type InReplyTo = {
-    ref?: string // Required in spec.
-    href?: string
-    type?: string
-    source?: string
-  }
+  export type InReplyTo<TStrict extends boolean = false> = Strict<
+    {
+      ref: Requirable<string> // Required in spec.
+      href?: string
+      type?: string
+      source?: string
+    },
+    TStrict
+  >
 
   export type Link<TDate extends DateLike> = {
     count?: number
     updated?: TDate
   }
 
-  export type Item = {
+  export type Item<TStrict extends boolean = false> = {
     total?: number
-    inReplyTos?: Array<InReplyTo>
+    inReplyTos?: Array<InReplyTo<TStrict>>
   }
 }
 // #endregion reference

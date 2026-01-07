@@ -33,6 +33,9 @@ The Media RSS namespace provides rich media metadata for RSS feeds, enabling com
 
 ## Types
 
+> [!INFO]
+> For details on type parameters (`TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tstrict).
+
 <<< @/../src/namespaces/media/common/types.ts#reference
 
 ## Related

@@ -32,6 +32,9 @@ The Podlove Simple Chapters (PSC) namespace provides structured chapter informat
 
 ## Structure
 
+> [!INFO]
+> For details on type parameters (`TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tstrict).
+
 <<< @/../src/namespaces/psc/common/types.ts#reference
 
 ## Related

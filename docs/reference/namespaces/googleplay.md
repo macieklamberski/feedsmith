@@ -32,6 +32,9 @@ The Google Play Podcast namespace provides podcast-specific metadata for feed an
 
 ## Structure
 
+> [!INFO]
+> For details on type parameters (`TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tstrict).
+
 <<< @/../src/namespaces/googleplay/common/types.ts#reference
 
 ## Related
