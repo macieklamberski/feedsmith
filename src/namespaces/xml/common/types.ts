@@ -8,5 +8,3 @@ export namespace XmlNs {
   }
 }
 // #endregion reference
-
-export type ItemOrFeed = XmlNs.ItemOrFeed

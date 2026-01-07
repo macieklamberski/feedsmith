@@ -1,8 +1,8 @@
 import type { GenerateUtil } from '../../../common/types.js'
 import { generatePlainString, isObject, trimObject } from '../../../common/utils.js'
-import type { ItemOrFeed } from '../common/types.js'
+import type { XmlNs } from '../common/types.js'
 
-export const generateItemOrFeed: GenerateUtil<ItemOrFeed> = (itemOrFeed) => {
+export const generateItemOrFeed: GenerateUtil<XmlNs.ItemOrFeed> = (itemOrFeed) => {
   if (!isObject(itemOrFeed)) {
     return
   }
