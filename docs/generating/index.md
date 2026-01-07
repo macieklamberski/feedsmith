@@ -5,11 +5,7 @@ next: Generating › Styling
 
 # Generating Feeds
 
-Create RSS, Atom, JSON Feed, and OPML files with full namespace support.
-
-## Overview
-
-Feed generation is straightforward - provide the feed data and get back a properly formatted string:
+Create RSS, Atom, JSON Feed, and OPML files with full namespace support. Just provide the feed data and get back a properly formatted string:
 
 ```typescript
 import {
