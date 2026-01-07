@@ -9,7 +9,7 @@ Enable compile-time validation of required fields when generating feeds.
 
 ## Overview
 
-By default, Feedsmith is lenient - all fields are optional to accommodate real-world feeds that may not follow specifications exactly. Strict mode enforces specification-required fields at compile time, catching missing data before runtime.
+By default, Feedsmith is lenient — all fields are optional to accommodate real-world feeds that may not follow specifications exactly. When strict mode is enabled, TypeScript will enforce fields that are required by the specification. This validation happens at compile time only, not at runtime.
 
 ```typescript
 import { generateRssFeed } from 'feedsmith'
