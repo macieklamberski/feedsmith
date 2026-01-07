@@ -1251,11 +1251,10 @@ describe('parseFeed', () => {
   })
 
   it('should handle minimal feed with only required fields', () => {
-    const value = {
-      channel: {
-        title: { '#text': 'Feed Title' },
-      },
+    const channel = {
+      title: { '#text': 'Feed Title' },
     }
+    const value = { channel }
     const expected = {
       title: 'Feed Title',
     }
