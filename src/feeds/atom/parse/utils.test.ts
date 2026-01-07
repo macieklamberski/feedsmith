@@ -114,6 +114,110 @@ describe('createNamespaceGetter', () => {
   })
 })
 
+describe('parseText', () => {
+  it('should parse simple string value', () => {
+    const value = 'Simple text'
+    const expected = { value: 'Simple text' }
+
+    expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should parse object with text content', () => {
+    const value = { '#text': 'Text content' }
+    const expected = { value: 'Text content' }
+
+    expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should parse object with text and type', () => {
+    const value = { '#text': 'HTML content', '@type': 'html' }
+    const expected = { value: 'HTML content', type: 'html' }
+
+    expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should handle xhtml type', () => {
+    const value = { '#text': '<p>XHTML content</p>', '@type': 'xhtml' }
+    const expected = { value: '<p>XHTML content</p>', type: 'xhtml' }
+
+    expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty string', () => {
+    expect(parseText('')).toBeUndefined()
+  })
+
+  it('should return undefined for whitespace-only string', () => {
+    expect(parseText('   ')).toBeUndefined()
+  })
+
+  it('should return undefined for non-object, non-string input', () => {
+    expect(parseText(null)).toBeUndefined()
+    expect(parseText(undefined)).toBeUndefined()
+    expect(parseText(123)).toBeUndefined()
+  })
+
+  it('should return undefined for object with empty text', () => {
+    const value = { '#text': '' }
+
+    expect(parseText(value)).toBeUndefined()
+  })
+})
+
+describe('parseContent', () => {
+  it('should parse simple string value', () => {
+    const value = 'Simple content'
+    const expected = { value: 'Simple content' }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should parse object with text content', () => {
+    const value = { '#text': 'Content text' }
+    const expected = { value: 'Content text' }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should parse object with text, type and src', () => {
+    const value = {
+      '#text': 'Content text',
+      '@type': 'html',
+      '@src': 'https://example.com/content',
+    }
+    const expected = {
+      value: 'Content text',
+      type: 'html',
+      src: 'https://example.com/content',
+    }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should parse content with only src attribute', () => {
+    const value = {
+      '@type': 'video/mp4',
+      '@src': 'https://example.com/video.mp4',
+    }
+    const expected = {
+      type: 'video/mp4',
+      src: 'https://example.com/video.mp4',
+    }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty string', () => {
+    expect(parseContent('')).toBeUndefined()
+  })
+
+  it('should return undefined for non-object, non-string input', () => {
+    expect(parseContent(null)).toBeUndefined()
+    expect(parseContent(undefined)).toBeUndefined()
+    expect(parseContent(123)).toBeUndefined()
+  })
+})
+
 describe('parseLink', () => {
   it('should parse complete link object', () => {
     const value = {
@@ -994,7 +1098,67 @@ describe('parseEntry', () => {
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: { value: 'Example Entry' },
-      dc: { creator: 'John Doe' },
+      dc: {
+        creators: ['John Doe'],
+        creator: 'John Doe',
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should handle psc namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Podcast Episode Entry' },
+      'psc:chapters': {
+        'psc:chapter': [
+          {
+            '@start': '00:00:00.000',
+            '@title': 'Introduction',
+          },
+          {
+            '@start': '00:03:15.000',
+            '@title': 'Discussion',
+          },
+        ],
+      },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Podcast Episode Entry' },
+      psc: {
+        chapters: [
+          {
+            start: '00:00:00.000',
+            title: 'Introduction',
+          },
+          {
+            start: '00:03:15.000',
+            title: 'Discussion',
+          },
+        ],
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should handle dcterms namespace in entry', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'dcterms:created': { '#text': '2023-02-01T00:00:00Z' },
+      'dcterms:license': { '#text': 'MIT License' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Example Entry' },
+      dcterms: {
+        licenses: ['MIT License'],
+        license: 'MIT License',
+        created: '2023-02-01T00:00:00Z',
+      },
     }
 
     expect(parseEntry(value)).toEqual(expected)
@@ -1015,19 +1179,111 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
-  it('should handle dcterms namespace in entry', () => {
+  it('should handle itunes namespace', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
       title: { '#text': 'Example Entry' },
-      'dcterms:created': { '#text': '2023-02-01T00:00:00Z' },
-      'dcterms:license': { '#text': 'MIT License' },
+      'itunes:duration': { '#text': '3600' },
+      'itunes:explicit': { '#text': 'false' },
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: { value: 'Example Entry' },
-      dcterms: {
-        created: '2023-02-01T00:00:00Z',
-        license: 'MIT License',
+      itunes: {
+        duration: 3600,
+        explicit: false,
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should handle media namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'media:content': { '@url': 'https://example.com/video.mp4', '@type': 'video/mp4' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Example Entry' },
+      media: {
+        contents: [{ url: 'https://example.com/video.mp4', type: 'video/mp4' }],
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should handle georss namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'georss:point': { '#text': '42.3601 -71.0589' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Example Entry' },
+      georss: {
+        point: { lat: 42.3601, lng: -71.0589 },
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should handle thr namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'thr:in-reply-to': {
+        '@ref': 'http://example.com/posts/1',
+        '@href': 'http://example.com/posts/1',
+      },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Example Entry' },
+      thr: {
+        inReplyTos: [{ ref: 'http://example.com/posts/1', href: 'http://example.com/posts/1' }],
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should handle wfw namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'wfw:comment': { '#text': 'https://example.com/comment' },
+      'wfw:commentrss': { '#text': 'https://example.com/comments/feed' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Example Entry' },
+      wfw: {
+        comment: 'https://example.com/comment',
+        commentRss: 'https://example.com/comments/feed',
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should handle yt namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'yt:videoid': { '#text': 'abc123' },
+      'yt:channelid': { '#text': 'UCexample' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Example Entry' },
+      yt: {
+        videoId: 'abc123',
+        channelId: 'UCexample',
       },
     }
 
@@ -1347,7 +1603,10 @@ describe('parseFeed', () => {
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: { value: 'Example Feed' },
-      dc: { creator: 'John Doe' },
+      dc: {
+        creators: ['John Doe'],
+        creator: 'John Doe',
+      },
     }
 
     expect(parseFeed(value)).toEqual(expected)
@@ -1379,12 +1638,146 @@ describe('parseFeed', () => {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: { value: 'Example Feed' },
       dcterms: {
-        created: '2023-01-01T00:00:00Z',
+        licenses: ['Creative Commons Attribution 4.0'],
         license: 'Creative Commons Attribution 4.0',
+        created: '2023-01-01T00:00:00Z',
       },
     }
 
     expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle yt namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Feed' },
+      'yt:channelid': { '#text': 'UCexample' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Example Feed' },
+      yt: {
+        channelId: 'UCexample',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle admin namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Feed' },
+      'admin:errorreportsto': {
+        '@rdf:resource': 'mailto:webmaster@example.com',
+      },
+      'admin:generatoragent': {
+        '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+      },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Example Feed' },
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should limit entries to specified maxItems', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:feed-id' },
+      title: { '#text': 'Test Feed' },
+      entry: [
+        {
+          id: { '#text': 'urn:uuid:entry-1' },
+          title: { '#text': 'Entry 1' },
+        },
+        {
+          id: { '#text': 'urn:uuid:entry-2' },
+          title: { '#text': 'Entry 2' },
+        },
+        {
+          id: { '#text': 'urn:uuid:entry-3' },
+          title: { '#text': 'Entry 3' },
+        },
+      ],
+    }
+    const expected = {
+      id: 'urn:uuid:feed-id',
+      title: { value: 'Test Feed' },
+      entries: [
+        {
+          id: 'urn:uuid:entry-1',
+          title: { value: 'Entry 1' },
+        },
+        {
+          id: 'urn:uuid:entry-2',
+          title: { value: 'Entry 2' },
+        },
+      ],
+    }
+
+    expect(parseFeed(value, { maxItems: 2 })).toEqual(expected)
+  })
+
+  it('should skip all entries when maxItems is 0', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:feed-id' },
+      title: { '#text': 'Test Feed' },
+      entry: [
+        {
+          id: { '#text': 'urn:uuid:entry-1' },
+          title: { '#text': 'Entry 1' },
+        },
+        {
+          id: { '#text': 'urn:uuid:entry-2' },
+          title: { '#text': 'Entry 2' },
+        },
+      ],
+    }
+    const expected = {
+      id: 'urn:uuid:feed-id',
+      title: { value: 'Test Feed' },
+    }
+
+    expect(parseFeed(value, { maxItems: 0 })).toEqual(expected)
+  })
+
+  it('should return all entries when maxItems is undefined', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:feed-id' },
+      title: { '#text': 'Test Feed' },
+      entry: [
+        {
+          id: { '#text': 'urn:uuid:entry-1' },
+          title: { '#text': 'Entry 1' },
+        },
+        {
+          id: { '#text': 'urn:uuid:entry-2' },
+          title: { '#text': 'Entry 2' },
+        },
+      ],
+    }
+    const expected = {
+      id: 'urn:uuid:feed-id',
+      title: { value: 'Test Feed' },
+      entries: [
+        {
+          id: 'urn:uuid:entry-1',
+          title: { value: 'Entry 1' },
+        },
+        {
+          id: 'urn:uuid:entry-2',
+          title: { value: 'Entry 2' },
+        },
+      ],
+    }
+
+    expect(parseFeed(value, { maxItems: undefined })).toEqual(expected)
   })
 })
 
@@ -1426,161 +1819,5 @@ describe('retrieveFeed', () => {
     }
 
     expect(retrieveFeed(value)).toBeUndefined()
-  })
-})
-
-describe('parseText', () => {
-  it('should parse simple string value', () => {
-    const value = 'Simple text'
-    const expected = { value: 'Simple text' }
-
-    expect(parseText(value)).toEqual(expected)
-  })
-
-  it('should parse object with text content', () => {
-    const value = { '#text': 'Text content' }
-    const expected = { value: 'Text content' }
-
-    expect(parseText(value)).toEqual(expected)
-  })
-
-  it('should parse object with type attribute', () => {
-    const value = {
-      '#text': 'HTML content',
-      '@type': 'html',
-    }
-    const expected = {
-      value: 'HTML content',
-      type: 'html',
-    }
-
-    expect(parseText(value)).toEqual(expected)
-  })
-
-  it('should parse object with xhtml type', () => {
-    const value = {
-      '#text': 'XHTML content',
-      '@type': 'xhtml',
-    }
-    const expected = {
-      value: 'XHTML content',
-      type: 'xhtml',
-    }
-
-    expect(parseText(value)).toEqual(expected)
-  })
-
-  it('should parse object with text type', () => {
-    const value = {
-      '#text': 'Plain text',
-      '@type': 'text',
-    }
-    const expected = {
-      value: 'Plain text',
-      type: 'text',
-    }
-
-    expect(parseText(value)).toEqual(expected)
-  })
-
-  it('should return undefined for non-object/non-string values', () => {
-    expect(parseText(null)).toBeUndefined()
-    expect(parseText(undefined)).toBeUndefined()
-    expect(parseText(123)).toBeUndefined()
-  })
-
-  it('should return undefined for empty text content', () => {
-    const value = { '#text': '' }
-    expect(parseText(value)).toBeUndefined()
-  })
-})
-
-describe('parseContent', () => {
-  it('should parse simple string value', () => {
-    const value = 'Simple content'
-    const expected = { value: 'Simple content' }
-
-    expect(parseContent(value)).toEqual(expected)
-  })
-
-  it('should parse object with text content', () => {
-    const value = { '#text': 'Content text' }
-    const expected = { value: 'Content text' }
-
-    expect(parseContent(value)).toEqual(expected)
-  })
-
-  it('should parse object with type attribute', () => {
-    const value = {
-      '#text': 'HTML content',
-      '@type': 'text/html',
-    }
-    const expected = {
-      value: 'HTML content',
-      type: 'text/html',
-    }
-
-    expect(parseContent(value)).toEqual(expected)
-  })
-
-  it('should parse object with src attribute', () => {
-    const value = {
-      '@src': 'http://example.com/content.html',
-      '@type': 'text/html',
-    }
-    const expected = {
-      src: 'http://example.com/content.html',
-      type: 'text/html',
-    }
-
-    expect(parseContent(value)).toEqual(expected)
-  })
-
-  it('should parse object with all attributes', () => {
-    const value = {
-      '#text': 'Fallback content',
-      '@type': 'application/xml',
-      '@src': 'http://example.com/data.xml',
-    }
-    const expected = {
-      value: 'Fallback content',
-      type: 'application/xml',
-      src: 'http://example.com/data.xml',
-    }
-
-    expect(parseContent(value)).toEqual(expected)
-  })
-
-  it('should accept any MIME type', () => {
-    const value = {
-      '#text': 'Binary data',
-      '@type': 'image/png',
-    }
-    const expected = {
-      value: 'Binary data',
-      type: 'image/png',
-    }
-
-    expect(parseContent(value)).toEqual(expected)
-  })
-
-  it('should return undefined for non-object/non-string values', () => {
-    expect(parseContent(null)).toBeUndefined()
-    expect(parseContent(undefined)).toBeUndefined()
-    expect(parseContent(123)).toBeUndefined()
-  })
-
-  it('should parse object with only src attribute (content by reference)', () => {
-    const value = { '@src': 'http://example.com/content.txt' }
-    const expected = { src: 'http://example.com/content.txt' }
-
-    expect(parseContent(value)).toEqual(expected)
-  })
-
-  it('should handle empty text content with attributes', () => {
-    const value = { '#text': '', '@type': 'text/plain' }
-    const expected = { type: 'text/plain' }
-
-    expect(parseContent(value)).toEqual(expected)
   })
 })

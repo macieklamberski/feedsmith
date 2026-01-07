@@ -1,0 +1,152 @@
+import type { DateLike, GenerateUtil } from '../../../common/types.js'
+import {
+  generateCdataString,
+  generateNumber,
+  generatePlainString,
+  generateRfc822Date,
+  generateTextOrCdataString,
+  generateYesNoBoolean,
+  isObject,
+  trimArray,
+  trimObject,
+} from '../../../common/utils.js'
+import type { RawVoiceNs } from '../common/types.js'
+
+export const generateRating: GenerateUtil<RawVoiceNs.Rating> = (rating) => {
+  if (!isObject(rating)) {
+    return
+  }
+
+  const value = {
+    ...generateTextOrCdataString(rating.value),
+    '@tv': generatePlainString(rating.tv),
+    '@movie': generatePlainString(rating.movie),
+  }
+
+  return trimObject(value)
+}
+
+export const generateLiveStream: GenerateUtil<RawVoiceNs.LiveStream<DateLike>> = (liveStream) => {
+  if (!isObject(liveStream)) {
+    return
+  }
+
+  const value = {
+    ...generateTextOrCdataString(liveStream.url),
+    '@schedule': generateRfc822Date(liveStream.schedule),
+    '@duration': generatePlainString(liveStream.duration),
+    '@type': generatePlainString(liveStream.type),
+  }
+
+  return trimObject(value)
+}
+
+export const generatePoster: GenerateUtil<RawVoiceNs.Poster> = (poster) => {
+  if (!isObject(poster)) {
+    return
+  }
+
+  const value = {
+    '@url': generatePlainString(poster.url),
+  }
+
+  return trimObject(value)
+}
+
+export const generateAlternateEnclosure: GenerateUtil<RawVoiceNs.AlternateEnclosure> = (
+  alternateEnclosure,
+) => {
+  if (!isObject(alternateEnclosure)) {
+    return
+  }
+
+  const value = {
+    '@src': generatePlainString(alternateEnclosure.src),
+    '@type': generatePlainString(alternateEnclosure.type),
+    '@length': generateNumber(alternateEnclosure.length),
+  }
+
+  return trimObject(value)
+}
+
+export const generateSubscribe: GenerateUtil<RawVoiceNs.Subscribe> = (subscribe) => {
+  if (!isObject(subscribe)) {
+    return
+  }
+
+  const value: RawVoiceNs.Subscribe = {}
+
+  for (const key in subscribe) {
+    value[`@${key}`] = generatePlainString(subscribe[key])
+  }
+
+  return trimObject(value)
+}
+
+export const generateMetamark: GenerateUtil<RawVoiceNs.Metamark> = (metamark) => {
+  if (!isObject(metamark)) {
+    return
+  }
+
+  const value = {
+    ...generateTextOrCdataString(metamark.value),
+    '@type': generatePlainString(metamark.type),
+    '@link': generatePlainString(metamark.link),
+    '@position': generateNumber(metamark.position),
+    '@duration': generateNumber(metamark.duration),
+  }
+
+  return trimObject(value)
+}
+
+export const generateDonate: GenerateUtil<RawVoiceNs.Donate> = (donate) => {
+  if (!isObject(donate)) {
+    return
+  }
+
+  const value = {
+    ...generateTextOrCdataString(donate.value),
+    '@href': generatePlainString(donate.href),
+  }
+
+  return trimObject(value)
+}
+
+export const generateItem: GenerateUtil<RawVoiceNs.Item> = (item) => {
+  if (!isObject(item)) {
+    return
+  }
+
+  const value = {
+    'rawvoice:poster': generatePoster(item.poster),
+    'rawvoice:isHd': generateYesNoBoolean(item.isHd),
+    'rawvoice:embed': generateCdataString(item.embed),
+    'rawvoice:webm': generateAlternateEnclosure(item.webm),
+    'rawvoice:mp4': generateAlternateEnclosure(item.mp4),
+    'rawvoice:metamark': trimArray(item.metamarks, generateMetamark),
+  }
+
+  return trimObject(value)
+}
+
+export const generateFeed: GenerateUtil<RawVoiceNs.Feed<DateLike>> = (feed) => {
+  if (!isObject(feed)) {
+    return
+  }
+
+  const value = {
+    'rawvoice:rating': generateRating(feed.rating),
+    'rawvoice:liveEmbed': generateCdataString(feed.liveEmbed),
+    'rawvoice:flashLiveStream': generateLiveStream(feed.flashLiveStream),
+    'rawvoice:httpLiveStream': generateLiveStream(feed.httpLiveStream),
+    'rawvoice:shoutcastLiveStream': generateLiveStream(feed.shoutcastLiveStream),
+    'rawvoice:liveStream': generateLiveStream(feed.liveStream),
+    'rawvoice:location': generateCdataString(feed.location),
+    'rawvoice:frequency': generateCdataString(feed.frequency),
+    'rawvoice:mycast': generateYesNoBoolean(feed.mycast),
+    'rawvoice:subscribe': generateSubscribe(feed.subscribe),
+    'rawvoice:donate': generateDonate(feed.donate),
+  }
+
+  return trimObject(value)
+}

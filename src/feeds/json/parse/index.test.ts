@@ -99,6 +99,81 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse JSON Feed from string', () => {
+    const value = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'My Example Feed',
+      items: [
+        {
+          id: '1',
+          content_html: '<p>Hello world</p>',
+        },
+      ],
+    })
+    const expected = {
+      title: 'My Example Feed',
+      items: [
+        {
+          id: '1',
+          content_html: '<p>Hello world</p>',
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse JSON Feed from string with leading whitespace', () => {
+    const json = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Feed with whitespace',
+      items: [{ id: '1', content_text: 'Test' }],
+    })
+    const value = `  ${json}`
+    const expected = {
+      title: 'Feed with whitespace',
+      items: [{ id: '1', content_text: 'Test' }],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse JSON Feed from string with trailing whitespace', () => {
+    const json = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Feed with whitespace',
+      items: [{ id: '1', content_text: 'Test' }],
+    })
+    const value = `${json}  `
+    const expected = {
+      title: 'Feed with whitespace',
+      items: [{ id: '1', content_text: 'Test' }],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse JSON Feed from string with whitespace on both ends', () => {
+    const json = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Feed with whitespace',
+      items: [{ id: '1', content_text: 'Test' }],
+    })
+    const value = `  ${json}  `
+    const expected = {
+      title: 'Feed with whitespace',
+      items: [{ id: '1', content_text: 'Test' }],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should handle malformed JSON string', () => {
+    const value = '{"version":"https://jsonfeed.org/version/1.1","title":"Malformed'
+
+    expect(() => parse(value)).toThrowError(locales.invalidFeedFormat)
+  })
+
   it('should parse feed with invalid URLs', () => {
     const value = {
       version: 'https://jsonfeed.org/version/1',
@@ -159,30 +234,99 @@ describe('parse', () => {
   })
 
   it('should throw error for invalid input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.invalid)
+    expect(() => parse('not a feed')).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle null input', () => {
-    expect(() => parse(null)).toThrowError(locales.invalid)
+    expect(() => parse(null)).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle undefined input', () => {
-    expect(() => parse(undefined)).toThrowError(locales.invalid)
+    expect(() => parse(undefined)).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle array input', () => {
-    expect(() => parse([])).toThrowError(locales.invalid)
+    expect(() => parse([])).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle empty object input', () => {
-    expect(() => parse({})).toThrowError(locales.invalid)
+    expect(() => parse({})).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle string input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.invalid)
+    expect(() => parse('not a feed')).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle number input', () => {
-    expect(() => parse(123)).toThrowError(locales.invalid)
+    expect(() => parse(123)).toThrowError(locales.invalidFeedFormat)
+  })
+
+  describe('with maxItems option', () => {
+    const commonValue = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Test Feed',
+      items: [
+        {
+          id: '1',
+          content_text: 'Item 1',
+        },
+        {
+          id: '2',
+          content_text: 'Item 2',
+        },
+        {
+          id: '3',
+          content_text: 'Item 3',
+        },
+      ],
+    }
+
+    it('should limit items to specified number', () => {
+      const expected = {
+        title: 'Test Feed',
+        items: [
+          {
+            id: '1',
+            content_text: 'Item 1',
+          },
+          {
+            id: '2',
+            content_text: 'Item 2',
+          },
+        ],
+      }
+
+      expect(parse(commonValue, { maxItems: 2 })).toEqual(expected)
+    })
+
+    it('should skip all items when maxItems is 0', () => {
+      const expected = {
+        title: 'Test Feed',
+      }
+
+      expect(parse(commonValue, { maxItems: 0 })).toEqual(expected)
+    })
+
+    it('should return all items when maxItems is undefined', () => {
+      const expected = {
+        title: 'Test Feed',
+        items: [
+          {
+            id: '1',
+            content_text: 'Item 1',
+          },
+          {
+            id: '2',
+            content_text: 'Item 2',
+          },
+          {
+            id: '3',
+            content_text: 'Item 3',
+          },
+        ],
+      }
+
+      expect(parse(commonValue, { maxItems: undefined })).toEqual(expected)
+    })
   })
 })

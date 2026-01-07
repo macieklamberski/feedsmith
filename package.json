@@ -1,6 +1,6 @@
 {
   "name": "feedsmith",
-  "description": "Robust and fast parser and generator for RSS, Atom, JSON Feed, and RDF feeds, with support for Podcast, iTunes, Dublin Core, and OPML files.",
+  "description": "Fast, all‑in‑one feed parser and generator for RSS, Atom, RDF, and JSON Feed, with support for Podcast, iTunes, Dublin Core, and OPML files.",
   "repository": {
     "type": "git",
     "url": "https://github.com/macieklamberski/feedsmith.git"
@@ -29,38 +29,55 @@
     "opml"
   ],
   "type": "module",
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.cts",
+  "typesVersions": {
+    "*": {
+      "types": [
+        "./dist/types.d.ts"
+      ]
+    }
+  },
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./types": {
+      "import": {
+        "types": "./dist/types.d.ts",
+        "default": "./dist/types.js"
+      },
+      "require": {
+        "types": "./dist/types.d.cts",
+        "default": "./dist/types.cjs"
+      }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"
   ],
   "scripts": {
     "prepare": "lefthook install",
-    "lint:tsc": "tsc --pretty --noEmit",
-    "lint:biome": "bunx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
-    "build": "rm -rf dist && tsc",
+    "build": "tsdown src/index.ts src/types.ts --format cjs,esm --dts --clean --unbundle --no-fixed-extension",
     "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:build": "vitepress build docs"
   },
   "dependencies": {
-    "entities": "^6.0.1",
-    "fast-xml-parser": "^5.2.5"
+    "entities": "^7.0.0",
+    "fast-xml-parser": "^5.3.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.1.2",
-    "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
-    "@types/bun": "^1.2.19",
-    "conventional-changelog-conventionalcommits": "^9.1.0",
-    "lefthook": "^1.12.2",
-    "semantic-release": "^24.2.7",
-    "typescript": "^5.8.3",
-    "vitepress": "^1.6.3",
-    "vitepress-plugin-llms": "^1.7.1"
+    "@types/bun": "^1.3.5",
+    "kvalita": "^1.9.0",
+    "tsdown": "^0.18.4",
+    "vitepress": "^1.6.4"
   }
 }

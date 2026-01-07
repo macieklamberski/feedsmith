@@ -41,6 +41,91 @@ describe('generateItemOrFeed', () => {
     expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
+  it('should generate valid itemOrFeed object with all plural properties (single values)', () => {
+    const value = {
+      titles: ['Test Title'],
+      creators: ['John Doe'],
+      subjects: ['Technology'],
+      descriptions: ['A test description'],
+      publishers: ['Test Publisher'],
+      contributors: ['Jane Smith'],
+      dates: [new Date('2023-01-01T00:00:00Z')],
+      types: ['Text'],
+      formats: ['text/html'],
+      identifiers: ['test-id-123'],
+      sources: ['Test Source'],
+      languages: ['en-US'],
+      relations: ['https://example.com/related'],
+    }
+    const expected = {
+      'dc:title': ['Test Title'],
+      'dc:creator': ['John Doe'],
+      'dc:subject': ['Technology'],
+      'dc:description': ['A test description'],
+      'dc:publisher': ['Test Publisher'],
+      'dc:contributor': ['Jane Smith'],
+      'dc:date': ['2023-01-01T00:00:00.000Z'],
+      'dc:type': ['Text'],
+      'dc:format': ['text/html'],
+      'dc:identifier': ['test-id-123'],
+      'dc:source': ['Test Source'],
+      'dc:language': ['en-US'],
+      'dc:relation': ['https://example.com/related'],
+    }
+
+    expect(generateItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should generate valid itemOrFeed object with plural properties (multiple values)', () => {
+    const value = {
+      titles: ['Test Title', 'Alternative Title'],
+      creators: ['John Doe', 'Jane Smith'],
+      subjects: ['Technology', 'Science'],
+      descriptions: ['A test description', 'Another description'],
+      publishers: ['Test Publisher', 'Secondary Publisher'],
+      contributors: ['Alice', 'Bob'],
+      dates: [new Date('2023-01-01T00:00:00Z'), new Date('2023-06-15T12:00:00Z')],
+      types: ['Text', 'Article'],
+      formats: ['text/html', 'application/pdf'],
+      identifiers: ['test-id-123', 'test-id-456'],
+      sources: ['Test Source', 'Another Source'],
+      languages: ['en-US', 'fr-FR'],
+      relations: ['https://example.com/related', 'https://example.com/also-related'],
+    }
+    const expected = {
+      'dc:title': ['Test Title', 'Alternative Title'],
+      'dc:creator': ['John Doe', 'Jane Smith'],
+      'dc:subject': ['Technology', 'Science'],
+      'dc:description': ['A test description', 'Another description'],
+      'dc:publisher': ['Test Publisher', 'Secondary Publisher'],
+      'dc:contributor': ['Alice', 'Bob'],
+      'dc:date': ['2023-01-01T00:00:00.000Z', '2023-06-15T12:00:00.000Z'],
+      'dc:type': ['Text', 'Article'],
+      'dc:format': ['text/html', 'application/pdf'],
+      'dc:identifier': ['test-id-123', 'test-id-456'],
+      'dc:source': ['Test Source', 'Another Source'],
+      'dc:language': ['en-US', 'fr-FR'],
+      'dc:relation': ['https://example.com/related', 'https://example.com/also-related'],
+    }
+
+    expect(generateItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should prefer plural fields over singular when both are provided', () => {
+    const value = {
+      titles: ['Plural Title 1', 'Plural Title 2'],
+      creators: ['Plural Creator'],
+      title: 'Singular Title',
+      creator: 'Singular Creator',
+    }
+    const expected = {
+      'dc:title': ['Plural Title 1', 'Plural Title 2'],
+      'dc:creator': ['Plural Creator'],
+    }
+
+    expect(generateItemOrFeed(value)).toEqual(expected)
+  })
+
   it('should generate itemOrFeed with minimal properties', () => {
     const value = {
       title: 'Minimal Title',
@@ -54,6 +139,19 @@ describe('generateItemOrFeed', () => {
 
   it('should handle object with only undefined/empty properties', () => {
     const value = {
+      titles: undefined,
+      creators: undefined,
+      subjects: undefined,
+      descriptions: undefined,
+      publishers: undefined,
+      contributors: undefined,
+      dates: undefined,
+      types: undefined,
+      formats: undefined,
+      identifiers: undefined,
+      sources: undefined,
+      languages: undefined,
+      relations: undefined,
       title: undefined,
       creator: undefined,
       subject: undefined,
@@ -71,14 +169,25 @@ describe('generateItemOrFeed', () => {
       rights: undefined,
     }
 
-    // @ts-ignore: This is for testing purposes.
     expect(generateItemOrFeed(value)).toBeUndefined()
+  })
+
+  it('should handle empty arrays in plural fields', () => {
+    const value = {
+      titles: [],
+      creators: ['John Doe'],
+      subjects: [],
+    }
+    const expected = {
+      'dc:creator': ['John Doe'],
+    }
+
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
     expect(generateItemOrFeed(value)).toBeUndefined()
   })
 

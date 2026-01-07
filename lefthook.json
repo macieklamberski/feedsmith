@@ -1,32 +1,9 @@
 {
-  "$schema": "https://json.schemastore.org/lefthook.json",
-  "pre-commit": {
-    "parallel": true,
-    "commands": {
-      "typescript": {
-        "glob": "*.{ts,tsx}",
-        "run": "npm run lint:tsc && npm run lint:biome {staged_files}",
-        "stage_fixed": true
-      },
-      "javascript": {
-        "glob": "*.{js,jsx}",
-        "run": "npm run lint:biome {staged_files}",
-        "stage_fixed": true
-      },
-      "json": {
-        "glob": "*.json",
-        "run": "npm run lint:biome {staged_files}",
-        "stage_fixed": true
-      }
-    }
-  },
-  "commit-msg": {
-    "commands": {
-      "commitlint": {
-        "run": "bunx commitlint --config commitlint.json --edit {1}"
-      }
-    }
-  },
+  "extends": [
+    "node_modules/kvalita/configs/lefthook-biome.json",
+    "node_modules/kvalita/configs/lefthook-typescript.json",
+    "node_modules/kvalita/configs/lefthook-commitlint.json"
+  ],
   "pre-push": {
     "commands": {
       "test": {

@@ -1,40 +1,46 @@
-import type { Feed as AtomFeed } from '../feeds/atom/common/types.js'
+import type { Atom } from '../feeds/atom/common/types.js'
 import { detect as detectAtomFeed } from '../feeds/atom/detect/index.js'
 import { parse as parseAtomFeed } from '../feeds/atom/parse/index.js'
-import type { Feed as JsonFeed } from '../feeds/json/common/types.js'
+import type { Json } from '../feeds/json/common/types.js'
 import { detect as detectJsonFeed } from '../feeds/json/detect/index.js'
 import { parse as parseJsonFeed } from '../feeds/json/parse/index.js'
-import type { Feed as RdfFeed } from '../feeds/rdf/common/types.js'
+import type { Rdf } from '../feeds/rdf/common/types.js'
 import { detect as detectRdfFeed } from '../feeds/rdf/detect/index.js'
 import { parse as parseRdfFeed } from '../feeds/rdf/parse/index.js'
-import type { Feed as RssFeed } from '../feeds/rss/common/types.js'
+import type { Rss } from '../feeds/rss/common/types.js'
 import { detect as detectRssFeed } from '../feeds/rss/detect/index.js'
 import { parse as parseRssFeed } from '../feeds/rss/parse/index.js'
 import { locales } from './config.js'
-import type { DeepPartial } from './types.js'
+import type { ParseOptions } from './types.js'
+import { parseJsonObject } from './utils.js'
 
-export type Feed =
-  | { format: 'json'; feed: DeepPartial<JsonFeed<string>> }
-  | { format: 'rss'; feed: DeepPartial<RssFeed<string>> }
-  | { format: 'atom'; feed: DeepPartial<AtomFeed<string>> }
-  | { format: 'rdf'; feed: DeepPartial<RdfFeed<string>> }
+export type Parse = (
+  value: unknown,
+  options?: ParseOptions,
+) =>
+  | { format: 'rss'; feed: Rss.Feed<string> }
+  | { format: 'atom'; feed: Atom.Feed<string> }
+  | { format: 'rdf'; feed: Rdf.Feed<string> }
+  | { format: 'json'; feed: Json.Feed<string> }
 
-export const parse = (value: unknown): Feed => {
-  if (detectAtomFeed(value)) {
-    return { format: 'atom', feed: parseAtomFeed(value) }
-  }
-
-  if (detectJsonFeed(value)) {
-    return { format: 'json', feed: parseJsonFeed(value) }
-  }
-
+export const parse: Parse = (value, options) => {
   if (detectRssFeed(value)) {
-    return { format: 'rss', feed: parseRssFeed(value) }
+    return { format: 'rss', feed: parseRssFeed(value, options) }
+  }
+
+  if (detectAtomFeed(value)) {
+    return { format: 'atom', feed: parseAtomFeed(value, options) }
   }
 
   if (detectRdfFeed(value)) {
-    return { format: 'rdf', feed: parseRdfFeed(value) }
+    return { format: 'rdf', feed: parseRdfFeed(value, options) }
   }
 
-  throw new Error(locales.unrecognized)
+  const json = parseJsonObject(value)
+
+  if (detectJsonFeed(json)) {
+    return { format: 'json', feed: parseJsonFeed(json, options) }
+  }
+
+  throw new Error(locales.unrecognizedFeedFormat)
 }

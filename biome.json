@@ -1,21 +1,3 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
-  "formatter": {
-    "useEditorconfig": true,
-    "formatWithErrors": true,
-    "lineWidth": 100
-  },
-  "javascript": {
-    "formatter": {
-      "semicolons": "asNeeded",
-      "quoteStyle": "single"
-    }
-  },
-  "linter": {
-    "rules": {
-      "style": {
-        "noParameterAssign": "warn"
-      }
-    }
-  }
+  "extends": ["kvalita/biome"]
 }

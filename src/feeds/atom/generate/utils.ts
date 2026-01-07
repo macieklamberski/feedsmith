@@ -1,79 +1,123 @@
-import { namespaceUrls } from '../../../common/config.js'
+import { namespaceUris } from '../../../common/config.js'
+import type { DateLike } from '../../../common/types.js'
 import {
   generateCdataString,
   generateNamespaceAttrs,
   generateNumber,
   generatePlainString,
   generateRfc3339Date,
-  isNonEmptyString,
+  generateTextOrCdataString,
   isObject,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
+import { generateFeed as generateAdminFeed } from '../../../namespaces/admin/generate/utils.js'
+import { generateEntry as generateAppEntry } from '../../../namespaces/app/generate/utils.js'
+import {
+  generateAuthor as generateArxivAuthor,
+  generateEntry as generateArxivEntry,
+} from '../../../namespaces/arxiv/generate/utils.js'
+import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
+import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
+import { generateItemOrFeed as generateGeoItemOrFeed } from '../../../namespaces/geo/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
+import {
+  generateFeed as generateGooglePlayFeed,
+  generateItem as generateGooglePlayItem,
+} from '../../../namespaces/googleplay/generate/utils.js'
 import {
   generateFeed as generateItunesFeed,
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
+import { generateFeed as generateOpenSearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
+import {
+  generateFeed as generatePingbackFeed,
+  generateItem as generatePingbackItem,
+} from '../../../namespaces/pingback/generate/utils.js'
+import { generateItem as generatePscItem } from '../../../namespaces/psc/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import {
   generateItem as generateThrItem,
   generateLink as generateThrLink,
 } from '../../../namespaces/thr/generate/utils.js'
+import { generateItem as generateTrackbackItem } from '../../../namespaces/trackback/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
 import {
   generateFeed as generateYtFeed,
   generateItem as generateYtItem,
 } from '../../../namespaces/yt/generate/utils.js'
-import type {
-  Category,
-  Content,
-  Entry,
-  Feed,
-  GenerateFunction,
-  Generator,
-  Link,
-  Person,
-  Source,
-  Text,
-} from '../common/types.js'
+import type { Atom, GenerateUtil } from '../common/types.js'
 
 export const createNamespaceSetter = (prefix: string | undefined) => {
   return (key: string) => (prefix ? `${prefix}${key}` : key)
 }
 
-export const generateText: GenerateFunction<Text> = (text) => {
+export const generateText: GenerateUtil<Atom.Text> = (text) => {
   if (!isObject(text)) {
     return
   }
 
-  const value = {
-    '#text': generateCdataString(text.value),
-    '@type': generatePlainString(text.type),
+  const textContent = generateCdataString(text.value)
+  const typeAttr = generatePlainString(text.type)
+
+  // If no type attribute, return text/CDATA content directly
+  if (!typeAttr) {
+    return textContent
   }
 
-  return trimObject(value)
+  // If type attribute is present, need to combine with text content
+  if (isObject(textContent)) {
+    // CDATA case: { '#cdata': value }
+    return trimObject({
+      ...textContent,
+      '@type': typeAttr,
+    })
+  }
+
+  // Plain text case
+  return trimObject({
+    '#text': textContent,
+    '@type': typeAttr,
+  })
 }
 
-export const generateContent: GenerateFunction<Content> = (content) => {
+export const generateContent: GenerateUtil<Atom.Content> = (content) => {
   if (!isObject(content)) {
     return
   }
 
-  const value = {
-    '#text': generateCdataString(content.value),
-    '@type': generatePlainString(content.type),
-    '@src': generatePlainString(content.src),
+  const textContent = generateCdataString(content.value)
+  const typeAttr = generatePlainString(content.type)
+  const srcAttr = generatePlainString(content.src)
+
+  // If no type or src attributes, return text/CDATA content directly
+  if (!typeAttr && !srcAttr) {
+    return textContent
   }
 
-  return trimObject(value)
+  // If type or src attributes are present, need to combine with text content
+  if (isObject(textContent)) {
+    // CDATA case: { '#cdata': value }
+    return trimObject({
+      ...textContent,
+      '@type': typeAttr,
+      '@src': srcAttr,
+    })
+  }
+
+  // Plain text case (or no text content for src-only)
+  return trimObject({
+    '#text': textContent,
+    '@type': typeAttr,
+    '@src': srcAttr,
+  })
 }
 
-export const generateLink: GenerateFunction<Link<Date>> = (link) => {
+export const generateLink: GenerateUtil<Atom.Link<DateLike>> = (link) => {
   if (!isObject(link)) {
     return
   }
@@ -91,7 +135,7 @@ export const generateLink: GenerateFunction<Link<Date>> = (link) => {
   return trimObject(value)
 }
 
-export const generatePerson: GenerateFunction<Person> = (person, options) => {
+export const generatePerson: GenerateUtil<Atom.Person> = (person, options) => {
   if (!isObject(person)) {
     return
   }
@@ -101,12 +145,13 @@ export const generatePerson: GenerateFunction<Person> = (person, options) => {
     [key('name')]: generateCdataString(person.name),
     [key('uri')]: generateCdataString(person.uri),
     [key('email')]: generateCdataString(person.email),
+    ...generateArxivAuthor(person.arxiv),
   }
 
   return trimObject(value)
 }
 
-export const generateCategory: GenerateFunction<Category> = (category) => {
+export const generateCategory: GenerateUtil<Atom.Category> = (category) => {
   if (!isObject(category)) {
     return
   }
@@ -120,13 +165,13 @@ export const generateCategory: GenerateFunction<Category> = (category) => {
   return trimObject(value)
 }
 
-export const generateGenerator: GenerateFunction<Generator> = (generator) => {
+export const generateGenerator: GenerateUtil<Atom.Generator> = (generator) => {
   if (!isObject(generator)) {
     return
   }
 
   const value = {
-    '#text': generateCdataString(generator.text),
+    ...generateTextOrCdataString(generator.text),
     '@uri': generatePlainString(generator.uri),
     '@version': generatePlainString(generator.version),
   }
@@ -134,7 +179,7 @@ export const generateGenerator: GenerateFunction<Generator> = (generator) => {
   return trimObject(value)
 }
 
-export const generateSource: GenerateFunction<Source<Date>> = (source, options) => {
+export const generateSource: GenerateUtil<Atom.Source<DateLike>> = (source, options) => {
   if (!isObject(source)) {
     return
   }
@@ -162,7 +207,7 @@ export const generateSource: GenerateFunction<Source<Date>> = (source, options) 
   return trimObject(value)
 }
 
-export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => {
+export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options) => {
   if (!isObject(entry)) {
     return
   }
@@ -197,19 +242,28 @@ export const generateEntry: GenerateFunction<Entry<Date>> = (entry, options) => 
 
   return {
     ...trimmedValue,
+    ...generateAppEntry(entry.app),
+    ...generateArxivEntry(entry.arxiv),
+    ...generateCc(entry.cc),
     ...generateDcItemOrFeed(entry.dc),
-    ...generateDctermsItemOrFeed(entry.dcterms),
     ...generateSlashItem(entry.slash),
     ...generateItunesItem(entry.itunes),
+    ...generateGooglePlayItem(entry.googleplay),
+    ...generatePscItem(entry.psc),
     ...generateMediaItemOrFeed(entry.media),
     ...generateGeoRssItemOrFeed(entry.georss),
+    ...generateGeoItemOrFeed(entry.geo),
     ...generateThrItem(entry.thr),
+    ...generateDctermsItemOrFeed(entry.dcterms),
+    ...generateCreativeCommonsItemOrFeed(entry.creativeCommons),
     ...generateWfwItem(entry.wfw),
     ...generateYtItem(entry.yt),
+    ...generatePingbackItem(entry.pingback),
+    ...generateTrackbackItem(entry.trackback),
   }
 }
 
-export const generateFeed: GenerateFunction<Feed<Date>> = (feed, options) => {
+export const generateFeed: GenerateUtil<Atom.Feed<DateLike>> = (feed, options) => {
   if (!isObject(feed)) {
     return
   }
@@ -257,20 +311,27 @@ export const generateFeed: GenerateFunction<Feed<Date>> = (feed, options) => {
 
   const valueFull = {
     ...valueFeed,
+    ...generateCc(feed.cc),
     ...generateDcItemOrFeed(feed.dc),
-    ...generateDctermsItemOrFeed(feed.dcterms),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
+    ...generateGooglePlayFeed(feed.googleplay),
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
+    ...generateGeoItemOrFeed(feed.geo),
+    ...generateDctermsItemOrFeed(feed.dcterms),
+    ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
+    ...generateOpenSearchFeed(feed.opensearch),
     ...generateYtFeed(feed.yt),
+    ...generateAdminFeed(feed.admin),
+    ...generatePingbackFeed(feed.pingback),
     ...valueEntries,
   }
 
   return {
     feed: {
       '@xmlns': 'http://www.w3.org/2005/Atom',
-      ...generateNamespaceAttrs({ value: valueFull }, namespaceUrls),
+      ...generateNamespaceAttrs({ value: valueFull }, namespaceUris),
       ...valueFull,
     },
   }

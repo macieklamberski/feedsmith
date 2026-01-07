@@ -1,11 +1,11 @@
-import { decodeHTML, decodeXML } from 'entities'
+import { decodeHTML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
 import type {
   AnyOf,
-  GenerateFunction,
-  ParseExactFunction,
+  DateLike,
+  GenerateUtil,
+  ParseExactUtil,
   Unreliable,
-  XmlGenerateOptions,
   XmlStylesheet,
 } from './types.js'
 
@@ -15,7 +15,7 @@ export const isPresent = <T>(value: T): value is NonNullable<T> => {
 
 export const isObject = (value: Unreliable): value is Record<string, Unreliable> => {
   return (
-    isPresent(value) &&
+    value != null &&
     typeof value === 'object' &&
     !Array.isArray(value) &&
     value.constructor === Object
@@ -34,6 +34,27 @@ export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | n
 
 export const retrieveText = (value: Unreliable): Unreliable => {
   return value?.['#text'] ?? value
+}
+
+export const retrieveRdfResourceOrText = <T>(
+  value: Unreliable,
+  parse: (value: Unreliable) => T | undefined,
+): T | undefined => {
+  if (isObject(value)) {
+    const rdfResource = parse(value['@rdf:resource'])
+
+    if (isPresent(rdfResource)) {
+      return rdfResource
+    }
+
+    const resource = parse(value['@resource'])
+
+    if (isPresent(resource)) {
+      return resource
+    }
+  }
+
+  return parse(retrieveText(value))
 }
 
 export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<T> | undefined => {
@@ -56,7 +77,7 @@ export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<
 
 export const trimArray = <T, R = T>(
   value: Array<T> | undefined,
-  parse?: ParseExactFunction<R>,
+  parse?: ParseExactUtil<R>,
 ): Array<R> | undefined => {
   if (!Array.isArray(value) || value.length === 0) {
     return
@@ -93,57 +114,90 @@ export const trimArray = <T, R = T>(
   return result.length > 0 ? result : undefined
 }
 
+// TODO: Remove this once deprecated fields are removed in next major version.
+export const generateArrayOrSingular = <V>(
+  pluralValues: Array<V> | undefined,
+  singularValue: V | undefined,
+  generator: (value: V) => unknown,
+) => {
+  if (isPresent(pluralValues)) {
+    return trimArray(pluralValues.map(generator))
+  }
+
+  if (isPresent(singularValue)) {
+    return generator(singularValue)
+  }
+}
+
+// TODO: Remove this once deprecated fields are removed in next major version.
+export const generateSingularOrArray = <V>(
+  singularValue: V | undefined,
+  pluralValues: Array<V> | undefined,
+  generator: (value: V) => unknown,
+) => {
+  if (isPresent(singularValue)) {
+    return generator(singularValue)
+  }
+
+  if (isPresent(pluralValues)) {
+    return trimArray(pluralValues.map(generator))
+  }
+}
+
 const cdataStartTag = '<![CDATA['
 const cdataEndTag = ']]>'
-const cdataRegex = /<!\[CDATA\[([\s\S]*?)\]\]>/g
-
-export const stripCdata = (text: Unreliable) => {
-  if (typeof text !== 'string') {
-    return text
-  }
-
-  if (text.indexOf('[CDATA[') === -1) {
-    return text
-  }
-
-  // For simple cases with only one CDATA section (common case).
-  const startPos = text.indexOf(cdataStartTag)
-
-  // If we have just one simple CDATA section, handle it without regex.
-  if (startPos !== -1) {
-    const endPos = text.indexOf(cdataEndTag, startPos + cdataStartTag.length)
-    if (endPos !== -1 && text.indexOf(cdataStartTag, startPos + cdataStartTag.length) === -1) {
-      // Single CDATA section case - avoid regex.
-      return (
-        text.substring(0, startPos) +
-        text.substring(startPos + cdataStartTag.length, endPos) +
-        text.substring(endPos + cdataEndTag.length)
-      )
-    }
-  }
-
-  // Fall back to regex for complex cases with multiple CDATA sections.
-  // Reset lastIndex before use since the regex has global flag.
-  cdataRegex.lastIndex = 0
-  return text.replace(cdataRegex, '$1')
-}
 
 export const hasEntities = (text: string) => {
   const ampIndex = text.indexOf('&')
   return ampIndex !== -1 && text.indexOf(';', ampIndex) !== -1
 }
 
-export const parseString: ParseExactFunction<string> = (value) => {
-  if (typeof value === 'string') {
-    let string = stripCdata(value).trim()
+const decodeWithCdata = (text: string): string => {
+  // Per XML spec, CDATA content should be passed through verbatim without entity decoding.
+  // Text outside CDATA should have entities decoded normally.
 
-    if (hasEntities(string)) {
-      string = decodeXML(string)
+  let currentIndex = text.indexOf(cdataStartTag)
 
-      if (hasEntities(string)) {
-        string = decodeHTML(string)
-      }
+  if (currentIndex === -1) {
+    return hasEntities(text) ? decodeHTML(text) : text
+  }
+
+  let result = ''
+  let lastIndex = 0
+
+  while (currentIndex !== -1) {
+    // Decode entities in text before CDATA.
+    const textBefore = text.substring(lastIndex, currentIndex)
+    result += hasEntities(textBefore) ? decodeHTML(textBefore) : textBefore
+
+    // Find end of CDATA section.
+    const endIndex = text.indexOf(cdataEndTag, currentIndex + cdataStartTag.length)
+
+    if (endIndex === -1) {
+      // Malformed - return original text decoded.
+      return hasEntities(text) ? decodeHTML(text) : text
     }
+
+    // Add CDATA content verbatim (without markers).
+    result += text.substring(currentIndex + cdataStartTag.length, endIndex)
+    lastIndex = endIndex + cdataEndTag.length
+    currentIndex = text.indexOf(cdataStartTag, lastIndex)
+  }
+
+  // Decode entities in remaining text after last CDATA.
+  const textAfter = text.substring(lastIndex)
+  result += hasEntities(textAfter) ? decodeHTML(textAfter) : textAfter
+
+  return result
+}
+
+export const parseString: ParseExactUtil<string> = (value) => {
+  if (typeof value === 'string') {
+    if (value === '') {
+      return
+    }
+
+    const string = decodeWithCdata(value).trim()
 
     return string || undefined
   }
@@ -153,7 +207,7 @@ export const parseString: ParseExactFunction<string> = (value) => {
   }
 }
 
-export const parseNumber: ParseExactFunction<number> = (value) => {
+export const parseNumber: ParseExactUtil<number> = (value) => {
   if (typeof value === 'number') {
     return value
   }
@@ -169,7 +223,7 @@ const trueRegex = /^\p{White_Space}*true\p{White_Space}*$/iu
 const falseRegex = /^\p{White_Space}*false\p{White_Space}*$/iu
 const yesRegex = /^\p{White_Space}*yes\p{White_Space}*$/iu
 
-export const parseBoolean: ParseExactFunction<boolean> = (value) => {
+export const parseBoolean: ParseExactUtil<boolean> = (value) => {
   if (typeof value === 'boolean') {
     return value
   }
@@ -180,7 +234,7 @@ export const parseBoolean: ParseExactFunction<boolean> = (value) => {
   }
 }
 
-export const parseYesNoBoolean: ParseExactFunction<boolean> = (value) => {
+export const parseYesNoBoolean: ParseExactUtil<boolean> = (value) => {
   const boolean = parseBoolean(value)
 
   if (boolean !== undefined) {
@@ -192,14 +246,14 @@ export const parseYesNoBoolean: ParseExactFunction<boolean> = (value) => {
   }
 }
 
-export const parseDate: ParseExactFunction<string> = (value) => {
+export const parseDate: ParseExactUtil<string> = (value) => {
   // This function is currently a placeholder for the actual date parsing functionality
   // which might be added at some point in the future. Currently it just uses treats
   // the date as string.
   return parseString(value)
 }
 
-export const parseArray: ParseExactFunction<Array<Unreliable>> = (value) => {
+export const parseArray: ParseExactUtil<Array<Unreliable>> = (value) => {
   if (Array.isArray(value)) {
     return value
   }
@@ -232,35 +286,43 @@ export const parseArray: ParseExactFunction<Array<Unreliable>> = (value) => {
 
 export const parseArrayOf = <R>(
   value: Unreliable,
-  parse: ParseExactFunction<R>,
+  parse: ParseExactUtil<R>,
+  limit?: number,
 ): Array<R> | undefined => {
-  const array = parseArray(value)
+  let array = parseArray(value)
+
+  if (!array && isPresent(value)) {
+    array = [value]
+  }
 
   if (array) {
-    return trimArray(array, parse)
+    return trimArray(limitArray(array, limit), parse)
+  }
+}
+
+export const limitArray = <T>(array: Array<T>, limit: number | undefined): Array<T> => {
+  if (limit === undefined || limit < 0) {
+    return array
   }
 
-  const parsed = parse(value)
-
-  if (parsed) {
-    return [parsed]
+  if (limit === 0) {
+    return []
   }
+
+  return array.slice(0, limit)
 }
 
 export const parseSingular = <T>(value: T | Array<T>): T => {
   return Array.isArray(value) ? value[0] : value
 }
 
-export const parseSingularOf = <R>(
-  value: Unreliable,
-  parse: ParseExactFunction<R>,
-): R | undefined => {
+export const parseSingularOf = <R>(value: Unreliable, parse: ParseExactUtil<R>): R | undefined => {
   return parse(parseSingular(value))
 }
 
 export const parseCsvOf = <T>(
   value: Unreliable,
-  parse: ParseExactFunction<T>,
+  parse: ParseExactUtil<T>,
 ): Array<T> | undefined => {
   if (!isNonEmptyStringOrNumber(value)) {
     return
@@ -275,7 +337,7 @@ export const parseCsvOf = <T>(
 
 export const generateCsvOf = <T>(
   value: Array<T> | undefined,
-  generate?: GenerateFunction<T>,
+  generate?: GenerateUtil<T>,
 ): string | undefined => {
   if (!Array.isArray(value) || value.length === 0) {
     return
@@ -313,7 +375,7 @@ export const generateXmlStylesheet = (stylesheet: XmlStylesheet): string | undef
 export const generateXml = (
   builder: XMLBuilder,
   value: string,
-  options?: XmlGenerateOptions,
+  options?: { stylesheets?: Array<XmlStylesheet> },
 ): string => {
   let body = builder.build(value)
 
@@ -336,42 +398,66 @@ export const generateXml = (
   return `${declaration}\n${body}`
 }
 
-export const generateRfc822Date: GenerateFunction<string | Date> = (value) => {
+export const generateRfc822Date: GenerateUtil<DateLike> = (value) => {
   // This function generates RFC 822 format dates which is also compatible with RFC 2822.
 
-  if (typeof value === 'string') {
-    // biome-ignore lint/style/noParameterAssign: No explanation.
-    value = new Date(value)
+  if (!isPresent(value)) {
+    return
   }
 
-  if (value instanceof Date && !Number.isNaN(value.getTime())) {
-    return value.toUTCString()
+  const isString = typeof value === 'string'
+
+  if (isString && !isNonEmptyString(value)) {
+    return
+  }
+
+  const date = isString ? new Date(value) : value
+  const isValid = !Number.isNaN(date.getTime())
+
+  if (isValid) {
+    return date.toUTCString()
+  }
+
+  if (isString) {
+    return value
   }
 }
 
-export const generateRfc3339Date: GenerateFunction<string | Date> = (value) => {
+export const generateRfc3339Date: GenerateUtil<DateLike> = (value) => {
   // This function generates RFC 3339 format dates which is also compatible with W3C-DTF.
   // The only difference between ISO 8601 (produced by toISOString) and RFC 3339 is that
   // RFC 3339 allows a space between date and time parts instead of 'T', but the 'T' format
   // is actually valid in RFC 3339 as well, so we can just return the ISO string.
 
-  if (typeof value === 'string') {
-    // biome-ignore lint/style/noParameterAssign: No explanation.
-    value = new Date(value)
+  if (!isPresent(value)) {
+    return
   }
 
-  if (value instanceof Date && !Number.isNaN(value.getTime())) {
-    return value.toISOString()
+  const isString = typeof value === 'string'
+
+  if (isString && !isNonEmptyString(value)) {
+    return
+  }
+
+  const date = isString ? new Date(value) : value
+  const isValid = !Number.isNaN(date.getTime())
+
+  if (isValid) {
+    return date.toISOString()
+  }
+
+  if (isString) {
+    return value
   }
 }
 
-export const generateBoolean: GenerateFunction<boolean> = (value) => {
+export const generateBoolean: GenerateUtil<boolean> = (value) => {
   if (typeof value === 'boolean') {
     return value
   }
 }
 
-export const generateYesNoBoolean: GenerateFunction<boolean> = (value) => {
+export const generateYesNoBoolean: GenerateUtil<boolean> = (value) => {
   if (typeof value !== 'boolean') {
     return
   }
@@ -381,7 +467,7 @@ export const generateYesNoBoolean: GenerateFunction<boolean> = (value) => {
 
 export const detectNamespaces = (value: unknown, recursive = false): Set<string> => {
   const namespaces = new Set<string>()
-  const seenKeys = new Set<string>()
+  const seenKeys = recursive ? new Set<string>() : undefined
 
   const traverse = (current: unknown): void => {
     if (Array.isArray(current)) {
@@ -394,13 +480,13 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
 
     if (isObject(current)) {
       for (const key in current) {
-        if (seenKeys.has(key)) {
+        if (seenKeys?.has(key)) {
           continue
         }
 
-        seenKeys.add(key)
+        seenKeys?.add(key)
 
-        const keyWithoutAt = key.indexOf('@') === 0 ? key.slice(1) : key
+        const keyWithoutAt = key.charCodeAt(0) === 64 ? key.slice(1) : key
         const colonIndex = keyWithoutAt.indexOf(':')
 
         if (colonIndex > 0) {
@@ -419,24 +505,31 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
   return namespaces
 }
 
-export const generateCdataString: GenerateFunction<string> = (value) => {
+const cdataSpecialCharsRegex = /[<>&]|]]>/
+
+export const generateCdataString: GenerateUtil<string> = (value) => {
   if (!isNonEmptyString(value)) {
     return
   }
 
-  if (
-    value.indexOf('<') !== -1 ||
-    value.indexOf('>') !== -1 ||
-    value.indexOf('&') !== -1 ||
-    value.indexOf(']]>') !== -1
-  ) {
+  if (cdataSpecialCharsRegex.test(value)) {
     return { '#cdata': value.trim() }
   }
 
   return value.trim()
 }
 
-export const generatePlainString: GenerateFunction<string> = (value) => {
+export const generateTextOrCdataString: GenerateUtil<string> = (value) => {
+  const result = generateCdataString(value)
+
+  if (!result || isObject(result)) {
+    return result
+  }
+
+  return { '#text': result }
+}
+
+export const generatePlainString: GenerateUtil<string> = (value) => {
   if (!isNonEmptyString(value)) {
     return
   }
@@ -444,15 +537,30 @@ export const generatePlainString: GenerateFunction<string> = (value) => {
   return value.trim()
 }
 
-export const generateNumber: GenerateFunction<number> = (value) => {
+export const generateNumber: GenerateUtil<number> = (value) => {
   if (typeof value === 'number' && Number.isFinite(value)) {
     return value
   }
 }
 
+export const generateRdfResource = <T, R>(
+  value: T,
+  generate: (value: T) => R | undefined,
+): { '@rdf:resource': R } | undefined => {
+  const rdfResource = generate(value)
+
+  if (!isPresent(rdfResource)) {
+    return
+  }
+
+  return {
+    '@rdf:resource': rdfResource,
+  }
+}
+
 export const generateNamespaceAttrs = (
   value: Unreliable,
-  namespaceUrls: Record<string, string>,
+  namespaceUris: Record<string, Array<string>>,
 ): Record<string, string> | undefined => {
   if (!isObject(value)) {
     return
@@ -461,8 +569,8 @@ export const generateNamespaceAttrs = (
   let namespaceAttrs: Record<string, string> | undefined
   const valueNamespaces = detectNamespaces(value, true)
 
-  for (const slug in namespaceUrls) {
-    if (!valueNamespaces.has(slug)) {
+  for (const prefix in namespaceUris) {
+    if (!valueNamespaces.has(prefix)) {
       continue
     }
 
@@ -470,34 +578,47 @@ export const generateNamespaceAttrs = (
       namespaceAttrs = {}
     }
 
-    namespaceAttrs[`@xmlns:${slug}`] = namespaceUrls[slug]
+    namespaceAttrs[`@xmlns:${prefix}`] = namespaceUris[prefix][0]
   }
 
   return namespaceAttrs
 }
 
-export const invertObject = (object: Record<string, string>): Record<string, string> => {
-  const inverted: Record<string, string> = {}
+export const createNamespaceNormalizator = <T extends Record<string, Array<string>>>(
+  namespaceUris: T,
+  namespacePrefixes: Record<string, string>,
+  primaryNamespace?: keyof T,
+) => {
+  const normalizedUriCache = new Map<string, string>()
 
-  for (const key in object) {
-    inverted[object[key]] = key
+  const normalizeNamespaceUri = (uri: string): string => {
+    if (typeof uri !== 'string') {
+      return uri
+    }
+
+    let normalized = normalizedUriCache.get(uri)
+
+    if (normalized === undefined) {
+      normalized = uri.trim().toLowerCase()
+      normalizedUriCache.set(uri, normalized)
+    }
+
+    return normalized
   }
 
-  return inverted
-}
-
-export const createNamespaceNormalizator = (
-  namespaceUrls: Record<string, string>,
-  primaryNamespace?: string,
-) => {
-  const namespacesMap = invertObject(namespaceUrls)
+  const primaryNamespaceUris =
+    primaryNamespace && namespaceUris[primaryNamespace]
+      ? namespaceUris[primaryNamespace].map(normalizeNamespaceUri)
+      : undefined
 
   const resolveNamespacePrefix = (uri: string, localName: string, fallback: string): string => {
-    if (primaryNamespace && uri === primaryNamespace) {
+    const normalizedUri = normalizeNamespaceUri(uri)
+
+    if (primaryNamespaceUris?.includes(normalizedUri)) {
       return localName
     }
 
-    const standardPrefix = namespacesMap[uri]
+    const standardPrefix = namespacePrefixes[normalizedUri]
 
     if (standardPrefix) {
       return `${standardPrefix}:${localName}`
@@ -512,10 +633,10 @@ export const createNamespaceNormalizator = (
     if (isObject(element)) {
       for (const key in element) {
         if (key === '@xmlns') {
-          declarations[''] = element[key]
+          declarations[''] = normalizeNamespaceUri(element[key])
         } else if (key.indexOf('@xmlns:') === 0) {
           const prefix = key.substring('@xmlns:'.length)
-          declarations[prefix] = element[key]
+          declarations[prefix] = normalizeNamespaceUri(element[key])
         }
       }
     }
@@ -550,33 +671,39 @@ export const createNamespaceNormalizator = (
   }
 
   const normalizeKey = (key: string, context: Record<string, string>): string => {
-    if (key.indexOf('@') === 0) {
+    if (key.charCodeAt(0) === 64) {
       const attrName = key.substring(1)
       const normalizedAttrName = normalizeWithContext(attrName, context, false)
 
       return `@${normalizedAttrName}`
-    } else {
-      return normalizeWithContext(key, context, true)
     }
+
+    return normalizeWithContext(key, context, true)
   }
 
   const traverseAndNormalize = (
     object: Unreliable,
     parentContext: Record<string, string> = {},
   ): Unreliable => {
-    if (!isObject(object)) {
-      return object
-    }
-
+    // Check arrays first since isObject() excludes arrays.
     if (Array.isArray(object)) {
       return object.map((item) => traverseAndNormalize(item, parentContext))
     }
 
-    const normalizedObject: Unreliable = {}
-    const keyGroups: Map<string, Unreliable[]> = new Map()
+    if (!isObject(object)) {
+      return object
+    }
 
     const declarations = extractNamespaceDeclarations(object)
-    const currentContext = { ...parentContext, ...declarations }
+    // Avoid object spread if no new declarations (common case).
+    let hasDeclarations = false
+    for (const _ in declarations) {
+      hasDeclarations = true
+      break
+    }
+    const currentContext = hasDeclarations ? { ...parentContext, ...declarations } : parentContext
+
+    const normalizedObject: Unreliable = {}
 
     for (const key in object) {
       const value = object[key]
@@ -589,22 +716,16 @@ export const createNamespaceNormalizator = (
       const normalizedKey = normalizeKey(key, currentContext)
       const normalizedValue = traverseAndNormalize(value, currentContext)
 
-      if (!keyGroups.has(normalizedKey)) {
-        keyGroups.set(normalizedKey, [])
-      }
-
-      const group = keyGroups.get(normalizedKey)
-
-      if (group) {
-        group.push(normalizedValue)
-      }
-    }
-
-    for (const [normalizedKey, values] of keyGroups) {
-      if (values.length === 1) {
-        normalizedObject[normalizedKey] = values[0]
+      // Handle key collisions inline (rare: different prefixes mapping to same namespace).
+      if (normalizedKey in normalizedObject) {
+        const existing = normalizedObject[normalizedKey]
+        if (Array.isArray(existing)) {
+          existing.push(normalizedValue)
+        } else {
+          normalizedObject[normalizedKey] = [existing, normalizedValue]
+        }
       } else {
-        normalizedObject[normalizedKey] = values
+        normalizedObject[normalizedKey] = normalizedValue
       }
     }
 
@@ -641,4 +762,25 @@ export const createNamespaceNormalizator = (
   }
 
   return normalizeRoot
+}
+
+export const parseJsonObject = (value: unknown): unknown => {
+  if (isObject(value)) {
+    return value
+  }
+
+  if (!isNonEmptyString(value) || value.length < 2) {
+    return
+  }
+
+  const startsWithBrace = value.charAt(0) === '{' || /^\s*\{/.test(value)
+  const endsWithBrace = value.charAt(value.length - 1) === '}' || /\}\s*$/.test(value)
+
+  if (!startsWithBrace || !endsWithBrace) {
+    return
+  }
+
+  try {
+    return JSON.parse(value)
+  } catch {}
 }

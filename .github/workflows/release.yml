@@ -2,26 +2,45 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to release'
+        required: true
+        default: 'main'
+        type: choice
+        options:
+          - main
+          - next
 
 jobs:
   test:
     uses: ./.github/workflows/test.yml
 
+  compatibility:
+    uses: ./.github/workflows/compatibility.yml
+
   release:
-    needs: test
+    needs: [test, compatibility]
     permissions:
       contents: write
       issues: write
       pull-requests: write
+      id-token: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
-        with:
-          registry-url: https://registry.npmjs.org
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
@@ -31,6 +50,5 @@ jobs:
 
       - name: Release and publish package
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bunx semantic-release --extends ./release.json
+        run: bunx semantic-release --extends kvalita/semantic-release

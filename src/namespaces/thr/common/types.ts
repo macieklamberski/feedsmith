@@ -1,18 +1,22 @@
 import type { DateLike } from '../../../common/types.js'
 
-export type InReplyTo = {
-  ref: string
-  href?: string
-  type?: string
-  source?: string
-}
+// #region reference
+export namespace ThrNs {
+  export type InReplyTo = {
+    ref?: string // Required in spec.
+    href?: string
+    type?: string
+    source?: string
+  }
 
-export type Link<TDate extends DateLike> = {
-  count?: number
-  updated?: TDate // Date: RFC 3339/ISO 8601.
-}
+  export type Link<TDate extends DateLike> = {
+    count?: number
+    updated?: TDate
+  }
 
-export type Item = {
-  total?: number
-  inReplyTos?: Array<InReplyTo>
+  export type Item = {
+    total?: number
+    inReplyTos?: Array<InReplyTo>
+  }
 }
+// #endregion reference

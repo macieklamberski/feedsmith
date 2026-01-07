@@ -51,7 +51,7 @@ describe('generateLatLngPairs', () => {
     ]
     const expected = '45.256 -71.92 46.46 -71.781'
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateLatLngPairs(value)).toBe(expected)
   })
 
@@ -64,7 +64,6 @@ describe('generateLatLngPairs', () => {
     ]
     const expected = '45.256 -71.92 47 -70'
 
-    // @ts-ignore: This is for testing purposes.
     expect(generateLatLngPairs(value)).toBe(expected)
   })
 
@@ -95,7 +94,7 @@ describe('generateLatLngPairs', () => {
       { lat: null, lng: undefined },
     ]
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateLatLngPairs(value)).toBeUndefined()
   })
 
@@ -141,21 +140,19 @@ describe('generatePoint', () => {
   it('should return undefined for missing lat', () => {
     const value = { lng: -71.92 }
 
-    // @ts-ignore: This is for testing purposes.
     expect(generatePoint(value)).toBeUndefined()
   })
 
   it('should return undefined for missing lng', () => {
     const value = { lat: 45.256 }
 
-    // @ts-ignore: This is for testing purposes.
     expect(generatePoint(value)).toBeUndefined()
   })
 
   it('should return undefined for string coordinates', () => {
     const value = { lat: '45.256', lng: '-71.92' }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generatePoint(value)).toBeUndefined()
   })
 
@@ -200,7 +197,7 @@ describe('generateLine', () => {
     }
     const expected = '45.256 -71.92 46.46 -71.781'
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateLine(value)).toBe(expected)
   })
 
@@ -221,7 +218,7 @@ describe('generateLine', () => {
   it('should return undefined for non-array points', () => {
     const value = { points: 'not an array' }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateLine(value)).toBeUndefined()
   })
 
@@ -237,7 +234,7 @@ describe('generateLine', () => {
       ],
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateLine(value)).toBeUndefined()
   })
 })
@@ -284,7 +281,7 @@ describe('generatePolygon', () => {
     }
     const expected = '45.256 -71.92 46.46 -71.781 43.84 -79.81 45.256 -71.92'
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generatePolygon(value)).toBe(expected)
   })
 
@@ -297,7 +294,7 @@ describe('generatePolygon', () => {
       ],
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generatePolygon(value)).toBeUndefined()
   })
 
@@ -360,7 +357,6 @@ describe('generateBox', () => {
       upperCorner: { lat: 43.039, lng: -69.856 },
     }
 
-    // @ts-ignore: This is for testing purposes.
     expect(generateBox(value)).toBeUndefined()
   })
 
@@ -369,7 +365,6 @@ describe('generateBox', () => {
       lowerCorner: { lat: 42.943, lng: -71.032 },
     }
 
-    // @ts-ignore: This is for testing purposes.
     expect(generateBox(value)).toBeUndefined()
   })
 
@@ -379,7 +374,7 @@ describe('generateBox', () => {
       upperCorner: { lat: 43.039, lng: -69.856 },
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateBox(value)).toBeUndefined()
   })
 
@@ -389,7 +384,7 @@ describe('generateBox', () => {
       upperCorner: { lat: 43.039, lng: -69.856 },
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateBox(value)).toBeUndefined()
   })
 
@@ -469,7 +464,7 @@ describe('generateItemOrFeed', () => {
       'georss:elev': 0,
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
@@ -508,7 +503,7 @@ describe('generateItemOrFeed', () => {
       'georss:featureName': 'Valid Name',
     }
 
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateItemOrFeed(value)).toEqual(expected)
   })
 })

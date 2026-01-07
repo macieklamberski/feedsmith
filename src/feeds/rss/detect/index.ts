@@ -5,7 +5,7 @@ export const detect = (value: unknown): value is string => {
     return false
   }
 
-  const hasRssElement = /(?:^|\s|>)\s*<(?:\w+:)?rss[\s>]/im.test(value)
+  const hasRssElement = /(?:^|[\s>])<(?:\w+:)?rss[\s>]/im.test(value)
 
   if (!hasRssElement) {
     return false

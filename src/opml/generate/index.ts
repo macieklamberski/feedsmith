@@ -1,14 +1,18 @@
-import type { XmlGenerateOptions } from '../../common/types.js'
+import { locales } from '../../common/config.js'
+import type { DateLike, XmlGenerateOptions } from '../../common/types.js'
 import { generateXml } from '../../common/utils.js'
-import type { Opml } from '../common/types.js'
+import type { MainOptions, Opml } from '../common/types.js'
 import { builder } from './config.js'
-import { generateOpml } from './utils.js'
+import { generateDocument } from './utils.js'
 
-export const generate = (value: Opml<Date>, options?: XmlGenerateOptions) => {
-  const generated = generateOpml(value)
+export const generate = <A extends ReadonlyArray<string> = []>(
+  value: Opml.Document<DateLike, A>,
+  options?: XmlGenerateOptions<MainOptions<A>>,
+): string => {
+  const generated = generateDocument(value, options)
 
   if (!generated) {
-    throw new Error('Invalid input OPML')
+    throw new Error(locales.invalidInputOpml)
   }
 
   return generateXml(builder, generated, options)

@@ -1,4 +1,4 @@
-import type { Unreliable } from '../../../common/types.js'
+import type { ParseOptions, Unreliable } from '../../../common/types.js'
 import {
   detectNamespaces,
   isNonEmptyString,
@@ -11,37 +11,46 @@ import {
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
+import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
+import { retrieveEntry as retrieveAppEntry } from '../../../namespaces/app/parse/utils.js'
+import {
+  retrieveAuthor as retrieveArxivAuthor,
+  retrieveEntry as retrieveArxivEntry,
+} from '../../../namespaces/arxiv/parse/utils.js'
+import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
+import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces/geo/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
+import {
+  retrieveFeed as retrieveGooglePlayFeed,
+  retrieveItem as retrieveGooglePlayItem,
+} from '../../../namespaces/googleplay/parse/utils.js'
 import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
+import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
+import {
+  retrieveFeed as retrievePingbackFeed,
+  retrieveItem as retrievePingbackItem,
+} from '../../../namespaces/pingback/parse/utils.js'
+import { retrieveItem as retrievePscItem } from '../../../namespaces/psc/parse/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import {
   retrieveItem as retrieveThrItem,
   retrieveLink as retrieveThrLink,
 } from '../../../namespaces/thr/parse/utils.js'
+import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import {
   retrieveFeed as retrieveYtFeed,
   retrieveItem as retrieveYtItem,
 } from '../../../namespaces/yt/parse/utils.js'
-import type {
-  Category,
-  Content,
-  Entry,
-  Feed,
-  Generator,
-  Link,
-  ParsePartialFunction,
-  Person,
-  Source,
-  Text,
-} from '../common/types.js'
+import type { Atom, ParsePartialUtil } from '../common/types.js'
 
 export const createNamespaceGetter = (
   value: Record<string, Unreliable>,
@@ -51,21 +60,10 @@ export const createNamespaceGetter = (
     return (key: string) => value[key]
   }
 
-  const prefixedKeys = new Map<string, string>()
-
-  return (key: string) => {
-    let prefixedKey = prefixedKeys.get(key)
-
-    if (!prefixedKey) {
-      prefixedKey = prefix + key
-      prefixedKeys.set(key, prefixedKey)
-    }
-
-    return value[prefixedKey]
-  }
+  return (key: string) => value[prefix + key]
 }
 
-export const parseText: ParsePartialFunction<Text> = (value) => {
+export const parseText: ParsePartialUtil<Atom.Text> = (value) => {
   if (isNonEmptyString(value)) {
     const parsed = parseString(value)
 
@@ -76,15 +74,21 @@ export const parseText: ParsePartialFunction<Text> = (value) => {
     return
   }
 
+  const parsedValue = parseString(retrieveText(value))
+
+  if (!parsedValue) {
+    return
+  }
+
   const text = {
-    value: parseString(retrieveText(value)),
+    value: parsedValue,
     type: parseString(value['@type']),
   }
 
-  return trimObject(text)
+  return trimObject(text) as Atom.Text
 }
 
-export const parseContent: ParsePartialFunction<Content> = (value) => {
+export const parseContent: ParsePartialUtil<Atom.Content> = (value) => {
   if (isNonEmptyString(value)) {
     const parsed = parseString(value)
 
@@ -104,11 +108,12 @@ export const parseContent: ParsePartialFunction<Content> = (value) => {
   return trimObject(content)
 }
 
-export const parseLink: ParsePartialFunction<Link<string>> = (value) => {
+export const parseLink: ParsePartialUtil<Atom.Link<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
 
+  const namespaces = detectNamespaces(value)
   const link = {
     href: parseString(value['@href']),
     rel: parseString(value['@rel']),
@@ -116,13 +121,13 @@ export const parseLink: ParsePartialFunction<Link<string>> = (value) => {
     hreflang: parseString(value['@hreflang']),
     title: parseString(value['@title']),
     length: parseNumber(value['@length']),
-    thr: retrieveThrLink(value),
+    thr: namespaces.has('thr') ? retrieveThrLink(value) : undefined,
   }
 
   return trimObject(link)
 }
 
-export const retrievePersonUri: ParsePartialFunction<string> = (value, options) => {
+export const retrievePersonUri: ParsePartialUtil<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -134,22 +139,24 @@ export const retrievePersonUri: ParsePartialFunction<string> = (value, options) 
   return uri || url
 }
 
-export const parsePerson: ParsePartialFunction<Person> = (value, options) => {
+export const parsePerson: ParsePartialUtil<Atom.Person> = (value, options) => {
   if (!isObject(value)) {
     return
   }
 
+  const namespaces = options?.asNamespace ? undefined : detectNamespaces(value)
   const get = createNamespaceGetter(value, options?.prefix)
   const person = {
     name: parseSingularOf(get('name'), (value) => parseString(retrieveText(value))),
     uri: retrievePersonUri(value, options),
     email: parseSingularOf(get('email'), (value) => parseString(retrieveText(value))),
+    arxiv: namespaces?.has('arxiv') ? retrieveArxivAuthor(value) : undefined,
   }
 
   return trimObject(person)
 }
 
-export const parseCategory: ParsePartialFunction<Category> = (value) => {
+export const parseCategory: ParsePartialUtil<Atom.Category> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -163,7 +170,7 @@ export const parseCategory: ParsePartialFunction<Category> = (value) => {
   return trimObject(category)
 }
 
-export const retrieveGeneratorUri: ParsePartialFunction<string> = (value) => {
+export const retrieveGeneratorUri: ParsePartialUtil<string> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -174,7 +181,7 @@ export const retrieveGeneratorUri: ParsePartialFunction<string> = (value) => {
   return uri || url
 }
 
-export const parseGenerator: ParsePartialFunction<Generator> = (value) => {
+export const parseGenerator: ParsePartialUtil<Atom.Generator> = (value) => {
   const generator = {
     text: parseString(retrieveText(value)),
     uri: retrieveGeneratorUri(value),
@@ -184,7 +191,7 @@ export const parseGenerator: ParsePartialFunction<Generator> = (value) => {
   return trimObject(generator)
 }
 
-export const parseSource: ParsePartialFunction<Source<string>> = (value, options) => {
+export const parseSource: ParsePartialUtil<Atom.Source<string>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -194,7 +201,7 @@ export const parseSource: ParsePartialFunction<Source<string>> = (value, options
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
-    generator: parseSingularOf(get('generator'), parseGenerator),
+    generator: parseSingularOf(get('generator'), (value) => parseGenerator(value, options)),
     icon: parseSingularOf(get('icon'), (value) => parseString(retrieveText(value))),
     id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
@@ -208,7 +215,7 @@ export const parseSource: ParsePartialFunction<Source<string>> = (value, options
   return trimObject(source)
 }
 
-export const retrievePublished: ParsePartialFunction<string> = (value, options) => {
+export const retrievePublished: ParsePartialUtil<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -224,7 +231,7 @@ export const retrievePublished: ParsePartialFunction<string> = (value, options) 
   return published || issued || created
 }
 
-export const retrieveUpdated: ParsePartialFunction<string> = (value, options) => {
+export const retrieveUpdated: ParsePartialUtil<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -236,7 +243,7 @@ export const retrieveUpdated: ParsePartialFunction<string> = (value, options) =>
   return updated || modified
 }
 
-export const retrieveSubtitle: ParsePartialFunction<Text> = (value, options) => {
+export const retrieveSubtitle: ParsePartialUtil<Atom.Text> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -248,7 +255,7 @@ export const retrieveSubtitle: ParsePartialFunction<Text> = (value, options) => 
   return subtitle || tagline
 }
 
-export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) => {
+export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -268,21 +275,32 @@ export const parseEntry: ParsePartialFunction<Entry<string>> = (value, options) 
     summary: parseSingularOf(get('summary'), parseText),
     title: parseSingularOf(get('title'), parseText),
     updated: retrieveUpdated(value, options),
+    app: namespaces?.has('app') ? retrieveAppEntry(value) : undefined,
+    arxiv: namespaces?.has('arxiv') ? retrieveArxivEntry(value) : undefined,
+    cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
-    dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     slash: namespaces?.has('slash') ? retrieveSlashItem(value) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesItem(value) : undefined,
+    googleplay: namespaces?.has('googleplay') ? retrieveGooglePlayItem(value) : undefined,
+    psc: namespaces?.has('psc') ? retrievePscItem(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    geo: namespaces?.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     thr: namespaces?.has('thr') ? retrieveThrItem(value) : undefined,
+    dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    creativeCommons: namespaces?.has('creativecommons')
+      ? retrieveCreativeCommonsItemOrFeed(value)
+      : undefined,
     wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
+    pingback: namespaces?.has('pingback') ? retrievePingbackItem(value) : undefined,
+    trackback: namespaces?.has('trackback') ? retrieveTrackbackItem(value) : undefined,
   }
 
   return trimObject(entry)
 }
 
-export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) => {
+export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -293,7 +311,7 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) =>
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
-    generator: parseSingularOf(get('generator'), parseGenerator),
+    generator: parseSingularOf(get('generator'), (value) => parseGenerator(value, options)),
     icon: parseSingularOf(get('icon'), (value) => parseString(retrieveText(value))),
     id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
@@ -302,23 +320,32 @@ export const parseFeed: ParsePartialFunction<Feed<string>> = (value, options) =>
     subtitle: retrieveSubtitle(value, options),
     title: parseSingularOf(get('title'), parseText),
     updated: retrieveUpdated(value, options),
-    entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options)),
+    entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options), options?.maxItems),
+    cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
-    dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
     sy: namespaces?.has('sy') ? retrieveSyFeed(value) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesFeed(value) : undefined,
+    googleplay: namespaces?.has('googleplay') ? retrieveGooglePlayFeed(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    geo: namespaces?.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
+    dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    creativeCommons: namespaces?.has('creativecommons')
+      ? retrieveCreativeCommonsItemOrFeed(value)
+      : undefined,
+    opensearch: namespaces?.has('opensearch') ? retrieveOpenSearchFeed(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
+    admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
+    pingback: namespaces?.has('pingback') ? retrievePingbackFeed(value) : undefined,
   }
 
   return trimObject(feed)
 }
 
-export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
-  const notNamespaced = parseSingularOf(value?.feed, parseFeed)
+export const retrieveFeed = (value: Unreliable, options?: ParseOptions) => {
+  const notNamespaced = parseSingularOf(value?.feed, (value) => parseFeed(value, options))
   const namespaced = parseSingularOf(value?.['atom:feed'], (value) =>
-    parseFeed(value, { prefix: 'atom:' }),
+    parseFeed(value, { ...options, prefix: 'atom:' }),
   )
 
   return notNamespaced || namespaced

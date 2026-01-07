@@ -18,13 +18,13 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        run: bun install
+        run: bun install --frozen-lockfile --ignore-scripts
 
       - name: Run tests with coverage
         run: bun test --coverage --coverage-reporter=lcov
 
       - name: Upload coverage to Codecov
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

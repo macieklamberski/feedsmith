@@ -1,24 +1,88 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
+  parseArrayOf,
   parseDate,
   parseSingularOf,
   parseString,
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
-import type { ItemOrFeed } from '../common/types.js'
+import type { DcTermsNs } from '../common/types.js'
 
-export const retrieveItemOrFeed: ParsePartialFunction<ItemOrFeed<string>> = (value) => {
+export const retrieveItemOrFeed: ParsePartialUtil<DcTermsNs.ItemOrFeed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
 
   const itemOrFeed = {
-    abstract: parseSingularOf(value['dcterms:abstract'], (value) =>
+    abstracts: parseArrayOf(value['dcterms:abstract'], (value) => parseString(retrieveText(value))),
+    accrualMethods: parseArrayOf(value['dcterms:accrualmethod'], (value) =>
       parseString(retrieveText(value)),
     ),
-    accessRights: parseSingularOf(value['dcterms:accessrights'], (value) =>
+    accrualPeriodicities: parseArrayOf(value['dcterms:accrualperiodicity'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    accrualPolicies: parseArrayOf(value['dcterms:accrualpolicy'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    alternatives: parseArrayOf(value['dcterms:alternative'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    audiences: parseArrayOf(value['dcterms:audience'], (value) => parseString(retrieveText(value))),
+    bibliographicCitations: parseArrayOf(value['dcterms:bibliographiccitation'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    contributors: parseArrayOf(value['dcterms:contributor'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    coverages: parseArrayOf(value['dcterms:coverage'], (value) => parseString(retrieveText(value))),
+    creators: parseArrayOf(value['dcterms:creator'], (value) => parseString(retrieveText(value))),
+    dates: parseArrayOf(value['dcterms:date'], (value) => parseDate(retrieveText(value))),
+    descriptions: parseArrayOf(value['dcterms:description'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    educationLevels: parseArrayOf(value['dcterms:educationlevel'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    extents: parseArrayOf(value['dcterms:extent'], (value) => parseString(retrieveText(value))),
+    formats: parseArrayOf(value['dcterms:format'], (value) => parseString(retrieveText(value))),
+    hasFormats: parseArrayOf(value['dcterms:hasformat'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    hasParts: parseArrayOf(value['dcterms:haspart'], (value) => parseString(retrieveText(value))),
+    hasVersions: parseArrayOf(value['dcterms:hasversion'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    identifiers: parseArrayOf(value['dcterms:identifier'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    instructionalMethods: parseArrayOf(value['dcterms:instructionalmethod'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    languages: parseArrayOf(value['dcterms:language'], (value) => parseString(retrieveText(value))),
+    licenses: parseArrayOf(value['dcterms:license'], (value) => parseString(retrieveText(value))),
+    mediators: parseArrayOf(value['dcterms:mediator'], (value) => parseString(retrieveText(value))),
+    mediums: parseArrayOf(value['dcterms:medium'], (value) => parseString(retrieveText(value))),
+    provenances: parseArrayOf(value['dcterms:provenance'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    publishers: parseArrayOf(value['dcterms:publisher'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    relations: parseArrayOf(value['dcterms:relation'], (value) => parseString(retrieveText(value))),
+    rightsHolders: parseArrayOf(value['dcterms:rightsholder'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    sources: parseArrayOf(value['dcterms:source'], (value) => parseString(retrieveText(value))),
+    spatials: parseArrayOf(value['dcterms:spatial'], (value) => parseString(retrieveText(value))),
+    subjects: parseArrayOf(value['dcterms:subject'], (value) => parseString(retrieveText(value))),
+    temporals: parseArrayOf(value['dcterms:temporal'], (value) => parseString(retrieveText(value))),
+    titles: parseArrayOf(value['dcterms:title'], (value) => parseString(retrieveText(value))),
+    types: parseArrayOf(value['dcterms:type'], (value) => parseString(retrieveText(value))),
+
+    // Deprecated fields for backward compatibility.
+    abstract: parseSingularOf(value['dcterms:abstract'], (value) =>
       parseString(retrieveText(value)),
     ),
     accrualMethod: parseSingularOf(value['dcterms:accrualmethod'], (value) =>
@@ -36,13 +100,7 @@ export const retrieveItemOrFeed: ParsePartialFunction<ItemOrFeed<string>> = (val
     audience: parseSingularOf(value['dcterms:audience'], (value) =>
       parseString(retrieveText(value)),
     ),
-    available: parseSingularOf(value['dcterms:available'], (value) =>
-      parseDate(retrieveText(value)),
-    ),
     bibliographicCitation: parseSingularOf(value['dcterms:bibliographiccitation'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    conformsTo: parseSingularOf(value['dcterms:conformsto'], (value) =>
       parseString(retrieveText(value)),
     ),
     contributor: parseSingularOf(value['dcterms:contributor'], (value) =>
@@ -51,18 +109,8 @@ export const retrieveItemOrFeed: ParsePartialFunction<ItemOrFeed<string>> = (val
     coverage: parseSingularOf(value['dcterms:coverage'], (value) =>
       parseString(retrieveText(value)),
     ),
-    created: parseSingularOf(value['dcterms:created'], (value) => parseDate(retrieveText(value))),
     creator: parseSingularOf(value['dcterms:creator'], (value) => parseString(retrieveText(value))),
     date: parseSingularOf(value['dcterms:date'], (value) => parseDate(retrieveText(value))),
-    dateAccepted: parseSingularOf(value['dcterms:dateaccepted'], (value) =>
-      parseDate(retrieveText(value)),
-    ),
-    dateCopyrighted: parseSingularOf(value['dcterms:datecopyrighted'], (value) =>
-      parseDate(retrieveText(value)),
-    ),
-    dateSubmitted: parseSingularOf(value['dcterms:datesubmitted'], (value) =>
-      parseDate(retrieveText(value)),
-    ),
     description: parseSingularOf(value['dcterms:description'], (value) =>
       parseString(retrieveText(value)),
     ),
@@ -84,6 +132,55 @@ export const retrieveItemOrFeed: ParsePartialFunction<ItemOrFeed<string>> = (val
     instructionalMethod: parseSingularOf(value['dcterms:instructionalmethod'], (value) =>
       parseString(retrieveText(value)),
     ),
+    language: parseSingularOf(value['dcterms:language'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    license: parseSingularOf(value['dcterms:license'], (value) => parseString(retrieveText(value))),
+    mediator: parseSingularOf(value['dcterms:mediator'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    medium: parseSingularOf(value['dcterms:medium'], (value) => parseString(retrieveText(value))),
+    provenance: parseSingularOf(value['dcterms:provenance'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    publisher: parseSingularOf(value['dcterms:publisher'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    relation: parseSingularOf(value['dcterms:relation'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    rightsHolder: parseSingularOf(value['dcterms:rightsholder'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    source: parseSingularOf(value['dcterms:source'], (value) => parseString(retrieveText(value))),
+    spatial: parseSingularOf(value['dcterms:spatial'], (value) => parseString(retrieveText(value))),
+    subject: parseSingularOf(value['dcterms:subject'], (value) => parseString(retrieveText(value))),
+    temporal: parseSingularOf(value['dcterms:temporal'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    title: parseSingularOf(value['dcterms:title'], (value) => parseString(retrieveText(value))),
+    type: parseSingularOf(value['dcterms:type'], (value) => parseString(retrieveText(value))),
+
+    // Singular-only fields (no plural variants).
+    accessRights: parseSingularOf(value['dcterms:accessrights'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    available: parseSingularOf(value['dcterms:available'], (value) =>
+      parseDate(retrieveText(value)),
+    ),
+    conformsTo: parseSingularOf(value['dcterms:conformsto'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    created: parseSingularOf(value['dcterms:created'], (value) => parseDate(retrieveText(value))),
+    dateAccepted: parseSingularOf(value['dcterms:dateaccepted'], (value) =>
+      parseDate(retrieveText(value)),
+    ),
+    dateCopyrighted: parseSingularOf(value['dcterms:datecopyrighted'], (value) =>
+      parseDate(retrieveText(value)),
+    ),
+    dateSubmitted: parseSingularOf(value['dcterms:datesubmitted'], (value) =>
+      parseDate(retrieveText(value)),
+    ),
     isFormatOf: parseSingularOf(value['dcterms:isformatof'], (value) =>
       parseString(retrieveText(value)),
     ),
@@ -103,25 +200,8 @@ export const retrieveItemOrFeed: ParsePartialFunction<ItemOrFeed<string>> = (val
     isVersionOf: parseSingularOf(value['dcterms:isversionof'], (value) =>
       parseString(retrieveText(value)),
     ),
-    language: parseSingularOf(value['dcterms:language'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    license: parseSingularOf(value['dcterms:license'], (value) => parseString(retrieveText(value))),
-    mediator: parseSingularOf(value['dcterms:mediator'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    medium: parseSingularOf(value['dcterms:medium'], (value) => parseString(retrieveText(value))),
     modified: parseSingularOf(value['dcterms:modified'], (value) => parseDate(retrieveText(value))),
-    provenance: parseSingularOf(value['dcterms:provenance'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    publisher: parseSingularOf(value['dcterms:publisher'], (value) =>
-      parseString(retrieveText(value)),
-    ),
     references: parseSingularOf(value['dcterms:references'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    relation: parseSingularOf(value['dcterms:relation'], (value) =>
       parseString(retrieveText(value)),
     ),
     replaces: parseSingularOf(value['dcterms:replaces'], (value) =>
@@ -131,20 +211,9 @@ export const retrieveItemOrFeed: ParsePartialFunction<ItemOrFeed<string>> = (val
       parseString(retrieveText(value)),
     ),
     rights: parseSingularOf(value['dcterms:rights'], (value) => parseString(retrieveText(value))),
-    rightsHolder: parseSingularOf(value['dcterms:rightsholder'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    source: parseSingularOf(value['dcterms:source'], (value) => parseString(retrieveText(value))),
-    spatial: parseSingularOf(value['dcterms:spatial'], (value) => parseString(retrieveText(value))),
-    subject: parseSingularOf(value['dcterms:subject'], (value) => parseString(retrieveText(value))),
     tableOfContents: parseSingularOf(value['dcterms:tableofcontents'], (value) =>
       parseString(retrieveText(value)),
     ),
-    temporal: parseSingularOf(value['dcterms:temporal'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    title: parseSingularOf(value['dcterms:title'], (value) => parseString(retrieveText(value))),
-    type: parseSingularOf(value['dcterms:type'], (value) => parseString(retrieveText(value))),
     valid: parseSingularOf(value['dcterms:valid'], (value) => parseDate(retrieveText(value))),
   }
 

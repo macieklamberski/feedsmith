@@ -38,7 +38,6 @@ describe('generateItem', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
     expect(generateItem(value)).toBeUndefined()
   })
 

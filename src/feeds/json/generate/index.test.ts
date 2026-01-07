@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { generate } from './index'
+import { generate } from './index.js'
 
 describe('generate', () => {
   it('should generate valid JSON Feed v1.1', () => {
@@ -47,6 +47,63 @@ describe('generate', () => {
           language: 'en-US',
         },
       ],
+    }
+
+    expect(generate(value)).toEqual(expected)
+  })
+})
+
+describe('generate edge cases', () => {
+  it('should accept partial feeds', () => {
+    const value = {
+      title: 'Test Feed',
+    }
+    const expected = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Test Feed',
+    }
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should accept feeds with string dates', () => {
+    const value = {
+      title: 'Test Feed',
+      date_published: '2023-01-01T00:00:00.000Z',
+      items: [
+        {
+          id: '1',
+          title: 'Test Item',
+          date_published: '2023-01-02T00:00:00.000Z',
+        },
+      ],
+    }
+    const expected = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Test Feed',
+      date_published: '2023-01-01T00:00:00.000Z',
+      items: [
+        {
+          id: '1',
+          title: 'Test Item',
+          date_published: '2023-01-02T00:00:00.000Z',
+        },
+      ],
+    }
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should preserve invalid date strings', () => {
+    const value = {
+      title: 'Test Feed',
+      date_published: 'not-a-valid-date',
+      items: [],
+    }
+    const expected = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Test Feed',
+      date_published: 'not-a-valid-date',
     }
 
     expect(generate(value)).toEqual(expected)

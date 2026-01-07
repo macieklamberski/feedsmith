@@ -3,9 +3,11 @@ import {
   parseAlternateEnclosure,
   parseBlock,
   parseChapters,
+  parseChat,
   parseContentLink,
   parseEpisode,
   parseFunding,
+  parseImage,
   parseImages,
   parseIntegrity,
   parseLicense,
@@ -15,6 +17,7 @@ import {
   parsePerson,
   parsePodping,
   parsePodroll,
+  parsePublisher,
   parseRemoteItem,
   parseSeason,
   parseSocialInteract,
@@ -28,6 +31,7 @@ import {
   parseValueRecipient,
   parseValueTimeSplit,
   retrieveFeed,
+  retrieveImages,
   retrieveItem,
 } from './utils.js'
 
@@ -690,13 +694,17 @@ describe('parseLocation', () => {
   it('should parse complete location object', () => {
     const value = {
       '#text': 'San Francisco, CA',
+      '@rel': 'subject',
       '@geo': '37.7749,-122.4194',
       '@osm': 'R61317',
+      '@country': 'US',
     }
     const expected = {
       display: 'San Francisco, CA',
+      rel: 'subject',
       geo: '37.7749,-122.4194',
       osm: 'R61317',
+      country: 'US',
     }
 
     expect(parseLocation(value)).toEqual(expected)
@@ -1939,51 +1947,238 @@ describe('parseValueRecipient', () => {
   })
 })
 
-describe('parseImages', () => {
-  it('should parse a complete images object with srcset', () => {
+describe('parseImage', () => {
+  it('should parse a complete image object with all properties', () => {
     const value = {
-      '@srcset': 'image-1x.jpg 1x, image-2x.jpg 2x, image-3x.jpg 3x',
+      '@href': 'https://example.com/image.jpg',
+      '@alt': 'Example Image',
+      '@aspect-ratio': '16/9',
+      '@width': 1200,
+      '@height': 630,
+      '@type': 'image/jpeg',
+      '@purpose': 'social',
     }
     const expected = {
-      srcset: 'image-1x.jpg 1x, image-2x.jpg 2x, image-3x.jpg 3x',
+      href: 'https://example.com/image.jpg',
+      alt: 'Example Image',
+      aspectRatio: '16/9',
+      width: 1200,
+      height: 630,
+      type: 'image/jpeg',
+      purpose: 'social',
     }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should parse image with only required href', () => {
+    const value = {
+      '@href': 'https://example.com/image.jpg',
+    }
+    const expected = {
+      href: 'https://example.com/image.jpg',
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should handle coercible number values for width/height', () => {
+    const value = {
+      '@href': 'https://example.com/image.jpg',
+      '@width': '1200',
+      '@height': '630',
+    }
+    const expected = {
+      href: 'https://example.com/image.jpg',
+      width: 1200,
+      height: 630,
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should parse image even if href is missing', () => {
+    const value = {
+      '@alt': 'Image without href',
+    }
+    const expected = {
+      alt: 'Image without href',
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty objects', () => {
+    const value = {}
+
+    expect(parseImage(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(parseImage('not an object')).toBeUndefined()
+    expect(parseImage(undefined)).toBeUndefined()
+  })
+})
+
+describe('parseImages', () => {
+  it('should parse srcset with width descriptors', () => {
+    const value = {
+      '@srcset': 'https://example.com/image-600.jpg 600w, https://example.com/image-1200.jpg 1200w',
+    }
+    const expected = [
+      {
+        href: 'https://example.com/image-600.jpg',
+        width: 600,
+      },
+      {
+        href: 'https://example.com/image-1200.jpg',
+        width: 1200,
+      },
+    ]
 
     expect(parseImages(value)).toEqual(expected)
   })
 
-  it('should handle coercible number values', () => {
+  it('should parse srcset with multiple images and various widths', () => {
+    const value = {
+      '@srcset':
+        'https://example.com/image-400.jpg 400w, https://example.com/image-800.jpg 800w, https://example.com/image-1600.jpg 1600w',
+    }
+    const expected = [
+      {
+        href: 'https://example.com/image-400.jpg',
+        width: 400,
+      },
+      {
+        href: 'https://example.com/image-800.jpg',
+        width: 800,
+      },
+      {
+        href: 'https://example.com/image-1600.jpg',
+        width: 1600,
+      },
+    ]
+
+    expect(parseImages(value)).toEqual(expected)
+  })
+
+  it('should parse srcset without width descriptors', () => {
+    const value = {
+      '@srcset': 'https://example.com/image1.jpg, https://example.com/image2.jpg',
+    }
+    const expected = [
+      {
+        href: 'https://example.com/image1.jpg',
+      },
+      {
+        href: 'https://example.com/image2.jpg',
+      },
+    ]
+
+    expect(parseImages(value)).toEqual(expected)
+  })
+
+  it('should handle srcset with extra whitespace', () => {
+    const value = {
+      '@srcset':
+        '  https://example.com/image1.jpg  600w  ,  https://example.com/image2.jpg  1200w  ',
+    }
+    const expected = [
+      {
+        href: 'https://example.com/image1.jpg',
+        width: 600,
+      },
+      {
+        href: 'https://example.com/image2.jpg',
+        width: 1200,
+      },
+    ]
+
+    expect(parseImages(value)).toEqual(expected)
+  })
+
+  it('should handle srcset with single image', () => {
+    const value = {
+      '@srcset': 'https://example.com/image.jpg 1200w',
+    }
+    const expected = [
+      {
+        href: 'https://example.com/image.jpg',
+        width: 1200,
+      },
+    ]
+
+    expect(parseImages(value)).toEqual(expected)
+  })
+
+  it('should handle invalid width descriptors by omitting width', () => {
+    const value = {
+      '@srcset': 'https://example.com/image1.jpg invalidw, https://example.com/image2.jpg 1200w',
+    }
+    const expected = [
+      {
+        href: 'https://example.com/image1.jpg',
+      },
+      {
+        href: 'https://example.com/image2.jpg',
+        width: 1200,
+      },
+    ]
+
+    expect(parseImages(value)).toEqual(expected)
+  })
+
+  it('should handle non-numeric width descriptors', () => {
+    const value = {
+      '@srcset': 'https://example.com/image.jpg abcw',
+    }
+    const expected = [
+      {
+        href: 'https://example.com/image.jpg',
+      },
+    ]
+
+    expect(parseImages(value)).toEqual(expected)
+  })
+
+  it('should handle coercible number srcset', () => {
     const value = {
       '@srcset': 123,
     }
-    const expected = {
-      srcset: '123',
-    }
-
-    expect(parseImages(value)).toEqual(expected)
-  })
-
-  it('should handle objects with mixed valid and invalid properties', () => {
-    const value = {
-      '@srcset': 'image-1x.jpg 1x, image-2x.jpg 2x',
-      '@invalid': 'property',
-      random: 'value',
-    }
-    const expected = {
-      srcset: 'image-1x.jpg 1x, image-2x.jpg 2x',
-    }
+    const expected = [
+      {
+        href: '123',
+      },
+    ]
 
     expect(parseImages(value)).toEqual(expected)
   })
 
   it('should return undefined if srcset is missing', () => {
     const value = {
-      '@someotherproperty': 'value',
+      '@other': 'property',
     }
 
     expect(parseImages(value)).toBeUndefined()
   })
 
-  it('should return undefined for empty objects', () => {
+  it('should return undefined for empty srcset', () => {
+    const value = {
+      '@srcset': '',
+    }
+
+    expect(parseImages(value)).toBeUndefined()
+  })
+
+  it('should return undefined for whitespace-only srcset', () => {
+    const value = {
+      '@srcset': '   ',
+    }
+
+    expect(parseImages(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty object', () => {
     const value = {}
 
     expect(parseImages(value)).toBeUndefined()
@@ -1991,11 +2186,81 @@ describe('parseImages', () => {
 
   it('should return undefined for non-object input', () => {
     expect(parseImages('not an object')).toBeUndefined()
-    expect(parseImages(false)).toBeUndefined()
     expect(parseImages(undefined)).toBeUndefined()
-    expect(parseImages(null)).toBeUndefined()
-    expect(parseImages([])).toBeUndefined()
-    expect(parseImages(123)).toBeUndefined()
+  })
+})
+
+describe('retrieveImages', () => {
+  it('should parse new podcast:image format', () => {
+    const value = {
+      'podcast:image': [
+        {
+          '@href': 'https://example.com/image1.jpg',
+          '@alt': 'Image 1',
+        },
+        {
+          '@href': 'https://example.com/image2.jpg',
+        },
+      ],
+    }
+    const expected = [
+      {
+        href: 'https://example.com/image1.jpg',
+        alt: 'Image 1',
+      },
+      {
+        href: 'https://example.com/image2.jpg',
+      },
+    ]
+
+    expect(retrieveImages(value)).toEqual(expected)
+  })
+
+  it('should parse legacy podcast:images srcset format as fallback', () => {
+    const value = {
+      'podcast:images': {
+        '@srcset':
+          'https://example.com/image-600.jpg 600w, https://example.com/image-1200.jpg 1200w',
+      },
+    }
+    const expected = [
+      {
+        href: 'https://example.com/image-600.jpg',
+        width: 600,
+      },
+      {
+        href: 'https://example.com/image-1200.jpg',
+        width: 1200,
+      },
+    ]
+
+    expect(retrieveImages(value)).toEqual(expected)
+  })
+
+  it('should prefer new podcast:image over legacy podcast:images', () => {
+    const value = {
+      'podcast:image': {
+        '@href': 'https://example.com/new-image.jpg',
+      },
+      'podcast:images': {
+        '@srcset': 'https://example.com/old-image.jpg 600w',
+      },
+    }
+    const expected = [
+      {
+        href: 'https://example.com/new-image.jpg',
+      },
+    ]
+
+    expect(retrieveImages(value)).toEqual(expected)
+  })
+
+  it('should return undefined when neither format is present', () => {
+    const value = {
+      'podcast:other': 'value',
+    }
+
+    expect(retrieveImages(value)).toBeUndefined()
   })
 })
 
@@ -2045,6 +2310,12 @@ describe('parseLiveItem', () => {
         {
           display: 'Jane Doe',
           role: 'host',
+        },
+      ],
+      locations: [
+        {
+          display: 'New York, NY',
+          geo: '40.7128,-74.0060',
         },
       ],
       location: {
@@ -2346,6 +2617,74 @@ describe('parseSocialInteract', () => {
   })
 })
 
+describe('parseChat', () => {
+  it('should parse complete chat object', () => {
+    const value = {
+      '@server': 'irc.example.com',
+      '@protocol': 'irc',
+      '@accountid': 'user123',
+      '@space': 'general',
+    }
+    const expected = {
+      server: 'irc.example.com',
+      protocol: 'irc',
+      accountId: 'user123',
+      space: 'general',
+    }
+
+    expect(parseChat(value)).toEqual(expected)
+  })
+
+  it('should parse chat with only required fields', () => {
+    const value = {
+      '@server': 'matrix.example.org',
+      '@protocol': 'matrix',
+    }
+    const expected = {
+      server: 'matrix.example.org',
+      protocol: 'matrix',
+    }
+
+    expect(parseChat(value)).toEqual(expected)
+  })
+
+  it('should handle objects with mixed valid and invalid properties', () => {
+    const value = {
+      '@server': 'xmpp.example.com',
+      '@protocol': 'xmpp',
+      '@invalid': 'property',
+    }
+    const expected = {
+      server: 'xmpp.example.com',
+      protocol: 'xmpp',
+    }
+
+    expect(parseChat(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty objects', () => {
+    const value = {}
+
+    expect(parseChat(value)).toBeUndefined()
+  })
+
+  it('should return undefined for objects with only unrelated properties', () => {
+    const value = {
+      '@unrelated': 'property',
+      random: 'value',
+    }
+
+    expect(parseChat(value)).toBeUndefined()
+  })
+
+  it('should return undefined for unsupported input', () => {
+    expect(parseChat('not an object')).toBeUndefined()
+    expect(parseChat(undefined)).toBeUndefined()
+    expect(parseChat(null)).toBeUndefined()
+    expect(parseChat([])).toBeUndefined()
+  })
+})
+
 describe('parseBlock', () => {
   it('should parse complete block object', () => {
     const value = {
@@ -2552,12 +2891,14 @@ describe('parseRemoteItem', () => {
       '@feedurl': 'https://example.com/feed.xml',
       '@itemguid': 'urn:uuid:4cef2a1f-9b8e-56fc-ba91-f7e401311de3',
       '@medium': 'podcast',
+      '@title': 'Example Podcast',
     }
     const expected = {
       feedGuid: 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
       feedUrl: 'https://example.com/feed.xml',
       itemGuid: 'urn:uuid:4cef2a1f-9b8e-56fc-ba91-f7e401311de3',
       medium: 'podcast',
+      title: 'Example Podcast',
     }
 
     expect(parseRemoteItem(value)).toEqual(expected)
@@ -2932,6 +3273,108 @@ describe('parsePodping', () => {
   })
 })
 
+describe('parsePublisher', () => {
+  it('should parse complete publisher object', () => {
+    const value = {
+      'podcast:remoteitem': {
+        '@feedguid': 'urn:uuid:publisher-guid-123',
+        '@feedurl': 'https://publisher.example.com/feed.xml',
+        '@medium': 'publisher',
+      },
+    }
+    const expected = {
+      remoteItem: {
+        feedGuid: 'urn:uuid:publisher-guid-123',
+        feedUrl: 'https://publisher.example.com/feed.xml',
+        medium: 'publisher',
+      },
+    }
+
+    expect(parsePublisher(value)).toEqual(expected)
+  })
+
+  it('should parse publisher with minimal remoteItem', () => {
+    const value = {
+      'podcast:remoteitem': {
+        '@feedguid': 'urn:uuid:minimal-publisher',
+      },
+    }
+    const expected = {
+      remoteItem: {
+        feedGuid: 'urn:uuid:minimal-publisher',
+      },
+    }
+
+    expect(parsePublisher(value)).toEqual(expected)
+  })
+
+  it('should handle objects with mixed valid and invalid properties', () => {
+    const value = {
+      'podcast:remoteitem': {
+        '@feedguid': 'urn:uuid:publisher-guid-456',
+        '@feedurl': 'https://publisher.example.com/feed.xml',
+      },
+      '@invalid': 'property',
+    }
+    const expected = {
+      remoteItem: {
+        feedGuid: 'urn:uuid:publisher-guid-456',
+        feedUrl: 'https://publisher.example.com/feed.xml',
+      },
+    }
+
+    expect(parsePublisher(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty objects', () => {
+    const value = {}
+
+    expect(parsePublisher(value)).toBeUndefined()
+  })
+
+  it('should return undefined for objects with only unrelated properties', () => {
+    const value = {
+      '@unrelated': 'property',
+      random: 'value',
+    }
+
+    expect(parsePublisher(value)).toBeUndefined()
+  })
+
+  it('should handle multiple remoteItem elements by taking the first one', () => {
+    const value = {
+      'podcast:remoteitem': [
+        {
+          '@feedguid': 'urn:uuid:first-publisher',
+          '@feedurl': 'https://first.example.com/feed.xml',
+          '@medium': 'publisher',
+        },
+        {
+          '@feedguid': 'urn:uuid:second-publisher',
+          '@feedurl': 'https://second.example.com/feed.xml',
+          '@medium': 'publisher',
+        },
+      ],
+    }
+    const expected = {
+      remoteItem: {
+        feedGuid: 'urn:uuid:first-publisher',
+        feedUrl: 'https://first.example.com/feed.xml',
+        medium: 'publisher',
+      },
+    }
+
+    expect(parsePublisher(value)).toEqual(expected)
+  })
+
+  it('should return undefined for unsupported input', () => {
+    expect(parsePublisher('not an object')).toBeUndefined()
+    expect(parsePublisher(undefined)).toBeUndefined()
+    expect(parsePublisher(null)).toBeUndefined()
+    expect(parsePublisher([])).toBeUndefined()
+  })
+})
+
 describe('parseValueTimeSplit', () => {
   const expectedFull = {
     startTime: 120.5,
@@ -3231,10 +3674,12 @@ describe('retrieveItem', () => {
         role: 'guest',
       },
     ],
-    location: {
-      display: 'New York, NY',
-      geo: '40.7128,-74.0060',
-    },
+    locations: [
+      {
+        display: 'New York, NY',
+        geo: '40.7128,-74.0060',
+      },
+    ],
     season: {
       number: 2,
       name: 'Second Season',
@@ -3259,6 +3704,44 @@ describe('retrieveItem', () => {
         ],
       },
     ],
+    values: [
+      {
+        type: 'lightning',
+        method: 'keysend',
+        suggested: 0.00000005,
+        valueRecipients: [
+          {
+            type: 'node',
+            address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
+            split: 100,
+          },
+        ],
+      },
+    ],
+    socialInteracts: [
+      {
+        uri: 'https://example.com/episodes/1/comments',
+        protocol: 'activitypub',
+      },
+    ],
+    images: [
+      {
+        href: 'image-1x.jpg',
+      },
+      {
+        href: 'image-2x.jpg',
+      },
+    ],
+    txts: [
+      {
+        display: 'Additional information',
+        purpose: 'description',
+      },
+    ],
+    location: {
+      display: 'New York, NY',
+      geo: '40.7128,-74.0060',
+    },
     value: {
       type: 'lightning',
       method: 'keysend',
@@ -3271,21 +3754,6 @@ describe('retrieveItem', () => {
         },
       ],
     },
-    socialInteracts: [
-      {
-        uri: 'https://example.com/episodes/1/comments',
-        protocol: 'activitypub',
-      },
-    ],
-    images: {
-      srcset: 'image-1x.jpg 1x, image-2x.jpg 2x',
-    },
-    txts: [
-      {
-        display: 'Additional information',
-        purpose: 'description',
-      },
-    ],
   }
 
   it('should parse a complete item with all podcast namespace elements', () => {
@@ -3712,6 +4180,12 @@ describe('retrieveFeed', () => {
         img: 'https://example.com/janedoe.jpg',
       },
     ],
+    locations: [
+      {
+        display: 'San Francisco, CA',
+        geo: '37.7749,-122.4194',
+      },
+    ],
     location: {
       display: 'San Francisco, CA',
       geo: '37.7749,-122.4194',
@@ -3730,6 +4204,20 @@ describe('retrieveFeed', () => {
       url: 'https://creativecommons.org/licenses/by/4.0/',
     },
     guid: 'urn:uuid:fdafc891-1b24-59de-85bc-a41f6fad5dbd',
+    values: [
+      {
+        type: 'lightning',
+        method: 'keysend',
+        suggested: 0.00000005,
+        valueRecipients: [
+          {
+            type: 'node',
+            address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
+            split: 100,
+          },
+        ],
+      },
+    ],
     value: {
       type: 'lightning',
       method: 'keysend',
@@ -3743,9 +4231,14 @@ describe('retrieveFeed', () => {
       ],
     },
     medium: 'podcast',
-    images: {
-      srcset: 'image-1x.jpg 1x, image-2x.jpg 2x',
-    },
+    images: [
+      {
+        href: 'image-1x.jpg',
+      },
+      {
+        href: 'image-2x.jpg',
+      },
+    ],
     liveItems: [
       {
         status: 'live',

@@ -1,12 +1,14 @@
-import { isNonEmptyString, isObject } from '../../../common/utils.js'
+import { isNonEmptyString, isObject, parseJsonObject } from '../../../common/utils.js'
 import { createCaseInsensitiveGetter } from '../parse/utils.js'
 
 export const detect = (value: unknown): value is object => {
-  if (!isObject(value)) {
+  const json = parseJsonObject(value)
+
+  if (!isObject(json)) {
     return false
   }
 
-  const get = createCaseInsensitiveGetter(value)
+  const get = createCaseInsensitiveGetter(json)
   const version = get('version')
 
   if (isNonEmptyString(version)) {

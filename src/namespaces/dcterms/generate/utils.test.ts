@@ -132,8 +132,164 @@ describe('generateItemOrFeed', () => {
     expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
+  it('should generate valid itemOrFeed object with all plural properties (single values)', () => {
+    const value = {
+      abstracts: ['Sample abstract'],
+      accrualMethods: ['Manual upload'],
+      accrualPeriodicities: ['Annual'],
+      accrualPolicies: ['Open submission'],
+      alternatives: ['Alternative Title'],
+      audiences: ['General Public'],
+      bibliographicCitations: ['Doe, J. (2023). Sample Work.'],
+      contributors: ['Jane Smith'],
+      coverages: ['Global'],
+      creators: ['John Doe'],
+      dates: [new Date('2023-05-02T08:30:00Z')],
+      descriptions: ['A comprehensive description'],
+      educationLevels: ['Graduate level'],
+      extents: ['250 pages'],
+      formats: ['application/pdf'],
+      hasFormats: ['https://example.org/formats/pdf'],
+      hasParts: ['https://example.org/parts/chapter1'],
+      hasVersions: ['https://example.org/versions/v2'],
+      identifiers: ['ISBN:978-0123456789'],
+      instructionalMethods: ['Online learning'],
+      languages: ['en-US'],
+      licenses: ['Creative Commons Attribution 4.0'],
+      mediators: ['Library System'],
+      mediums: ['Digital'],
+      provenances: ['Digitized from original manuscript'],
+      publishers: ['Academic Press'],
+      relations: ['https://example.org/related'],
+      rightsHolders: ['Example University'],
+      sources: ['https://example.org/source'],
+      spatials: ['Boston, MA, USA'],
+      subjects: ['Academic Research'],
+      temporals: ['2023'],
+      titles: ['Sample Title'],
+      types: ['Text'],
+    }
+    const expected = {
+      'dcterms:abstract': ['Sample abstract'],
+      'dcterms:accrualMethod': ['Manual upload'],
+      'dcterms:accrualPeriodicity': ['Annual'],
+      'dcterms:accrualPolicy': ['Open submission'],
+      'dcterms:alternative': ['Alternative Title'],
+      'dcterms:audience': ['General Public'],
+      'dcterms:bibliographicCitation': ['Doe, J. (2023). Sample Work.'],
+      'dcterms:contributor': ['Jane Smith'],
+      'dcterms:coverage': ['Global'],
+      'dcterms:creator': ['John Doe'],
+      'dcterms:date': ['2023-05-02T08:30:00.000Z'],
+      'dcterms:description': ['A comprehensive description'],
+      'dcterms:educationLevel': ['Graduate level'],
+      'dcterms:extent': ['250 pages'],
+      'dcterms:format': ['application/pdf'],
+      'dcterms:hasFormat': ['https://example.org/formats/pdf'],
+      'dcterms:hasPart': ['https://example.org/parts/chapter1'],
+      'dcterms:hasVersion': ['https://example.org/versions/v2'],
+      'dcterms:identifier': ['ISBN:978-0123456789'],
+      'dcterms:instructionalMethod': ['Online learning'],
+      'dcterms:language': ['en-US'],
+      'dcterms:license': ['Creative Commons Attribution 4.0'],
+      'dcterms:mediator': ['Library System'],
+      'dcterms:medium': ['Digital'],
+      'dcterms:provenance': ['Digitized from original manuscript'],
+      'dcterms:publisher': ['Academic Press'],
+      'dcterms:relation': ['https://example.org/related'],
+      'dcterms:rightsHolder': ['Example University'],
+      'dcterms:source': ['https://example.org/source'],
+      'dcterms:spatial': ['Boston, MA, USA'],
+      'dcterms:subject': ['Academic Research'],
+      'dcterms:temporal': ['2023'],
+      'dcterms:title': ['Sample Title'],
+      'dcterms:type': ['Text'],
+    }
+
+    expect(generateItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should generate valid itemOrFeed object with plural properties (multiple values)', () => {
+    const value = {
+      abstracts: ['First abstract', 'Second abstract'],
+      creators: ['John Doe', 'Jane Smith'],
+      dates: [new Date('2023-01-01T00:00:00Z'), new Date('2023-02-01T00:00:00Z')],
+      titles: ['Main Title', 'Alternative Title'],
+    }
+    const expected = {
+      'dcterms:abstract': ['First abstract', 'Second abstract'],
+      'dcterms:creator': ['John Doe', 'Jane Smith'],
+      'dcterms:date': ['2023-01-01T00:00:00.000Z', '2023-02-01T00:00:00.000Z'],
+      'dcterms:title': ['Main Title', 'Alternative Title'],
+    }
+
+    expect(generateItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should prefer plural fields over singular when both are provided', () => {
+    const value = {
+      abstracts: ['Plural Abstract 1', 'Plural Abstract 2'],
+      creators: ['Plural Creator'],
+      abstract: 'Singular Abstract',
+      creator: 'Singular Creator',
+    }
+    const expected = {
+      'dcterms:abstract': ['Plural Abstract 1', 'Plural Abstract 2'],
+      'dcterms:creator': ['Plural Creator'],
+    }
+
+    expect(generateItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should handle empty arrays in plural fields', () => {
+    const value = {
+      abstracts: [],
+      creators: ['John Doe'],
+      subjects: [],
+    }
+    const expected = {
+      'dcterms:creator': ['John Doe'],
+    }
+
+    expect(generateItemOrFeed(value)).toEqual(expected)
+  })
+
   it('should handle object with only undefined/empty properties', () => {
     const value = {
+      abstracts: undefined,
+      accrualMethods: undefined,
+      accrualPeriodicities: undefined,
+      accrualPolicies: undefined,
+      alternatives: undefined,
+      audiences: undefined,
+      bibliographicCitations: undefined,
+      contributors: undefined,
+      coverages: undefined,
+      creators: undefined,
+      dates: undefined,
+      descriptions: undefined,
+      educationLevels: undefined,
+      extents: undefined,
+      formats: undefined,
+      hasFormats: undefined,
+      hasParts: undefined,
+      hasVersions: undefined,
+      identifiers: undefined,
+      instructionalMethods: undefined,
+      languages: undefined,
+      licenses: undefined,
+      mediators: undefined,
+      mediums: undefined,
+      provenances: undefined,
+      publishers: undefined,
+      relations: undefined,
+      rightsHolders: undefined,
+      sources: undefined,
+      spatials: undefined,
+      subjects: undefined,
+      temporals: undefined,
+      titles: undefined,
+      types: undefined,
       abstract: undefined,
       accessRights: undefined,
       accrualMethod: undefined,

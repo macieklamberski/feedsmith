@@ -4,24 +4,25 @@ export type Unreliable = any
 
 export type DateLike = Date | string
 
+export type ExtraFields<F extends ReadonlyArray<string>, V = unknown> = {
+  [K in F[number]]?: V
+}
+
 export type AnyOf<T> = Partial<{ [P in keyof T]-?: NonNullable<T[P]> }> &
   { [P in keyof T]-?: Pick<{ [Q in keyof T]-?: NonNullable<T[Q]> }, P> }[keyof T]
 
-export type DeepPartial<T> = T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends (...args: unknown[]) => unknown
-    ? T
-    : T extends object
-      ? T extends null
-        ? T
-        : { [P in keyof T]?: DeepPartial<T[P]> }
-      : T
+export type ParseExactUtil<R> = (value: Unreliable) => R | undefined
 
-export type ParseExactFunction<R> = (value: Unreliable) => R | undefined
+export type ParsePartialUtil<R, O = undefined> = (value: Unreliable, options?: O) => R | undefined
 
-export type ParsePartialFunction<R> = (value: Unreliable) => DeepPartial<R> | undefined
+export type GenerateUtil<V, O = undefined> = (
+  value: V | undefined,
+  options?: O,
+) => Unreliable | undefined
 
-export type GenerateFunction<V> = (value: V | undefined) => Unreliable | undefined
+export type ParseOptions = {
+  maxItems?: number
+}
 
 export type XmlStylesheet = {
   type: string
@@ -32,6 +33,18 @@ export type XmlStylesheet = {
   alternate?: boolean
 }
 
-export type XmlGenerateOptions = {
+export type XmlGenerateOptions<O = Record<string, unknown>> = O & {
   stylesheets?: Array<XmlStylesheet>
 }
+
+export type XmlGenerateMain<V, O = Record<string, unknown>> = (
+  value: V,
+  options?: XmlGenerateOptions<O>,
+) => string
+
+export type JsonGenerateOptions<O = Record<string, unknown>> = O
+
+export type JsonGenerateMain<V, O = Record<string, unknown>> = (
+  value: V,
+  options?: JsonGenerateOptions<O>,
+) => unknown

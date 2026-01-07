@@ -1,52 +1,63 @@
 import type { DateLike } from '../../../common/types.js'
-import type { Entry as AtomEntry, Feed as AtomFeed } from '../../../namespaces/atom/common/types.js'
-import type { Item as ContentItem } from '../../../namespaces/content/common/types.js'
-import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/common/types.js'
-import type { ItemOrFeed as DctermsItemOrFeed } from '../../../namespaces/dcterms/common/types.js'
-import type { ItemOrFeed as GeoRssItemOrFeed } from '../../../namespaces/georss/common/types.js'
-import type { ItemOrFeed as MediaItemOrFeed } from '../../../namespaces/media/common/types.js'
-import type { Item as SlashItem } from '../../../namespaces/slash/common/types.js'
-import type { Feed as SyFeed } from '../../../namespaces/sy/common/types.js'
-import type { Item as WfwItem } from '../../../namespaces/wfw/common/types.js'
+import type { AdminNs } from '../../../namespaces/admin/common/types.js'
+import type { AtomNs } from '../../../namespaces/atom/common/types.js'
+import type { ContentNs } from '../../../namespaces/content/common/types.js'
+import type { DcNs } from '../../../namespaces/dc/common/types.js'
+import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
+import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
+import type { MediaNs } from '../../../namespaces/media/common/types.js'
+import type { RdfNs } from '../../../namespaces/rdf/common/types.js'
+import type { SlashNs } from '../../../namespaces/slash/common/types.js'
+import type { SyNs } from '../../../namespaces/sy/common/types.js'
+import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 
-export type Image = {
-  title: string
-  link: string
-  url?: string
-}
+// #region reference
+export namespace Rdf {
+  export type Image = {
+    title?: string // Required in spec.
+    link?: string // Required in spec.
+    url?: string
+    rdf?: RdfNs.About
+  }
 
-export type TextInput = {
-  title: string
-  description: string
-  name: string
-  link: string
-}
+  export type TextInput = {
+    title?: string // Required in spec.
+    description?: string // Required in spec.
+    name?: string // Required in spec.
+    link?: string // Required in spec.
+    rdf?: RdfNs.About
+  }
 
-export type Item<TDate extends DateLike> = {
-  title: string
-  link: string
-  description?: string
-  atom?: AtomEntry<TDate>
-  content?: ContentItem
-  dc?: DcItemOrFeed<TDate>
-  dcterms?: DctermsItemOrFeed<TDate>
-  slash?: SlashItem
-  media?: MediaItemOrFeed
-  georss?: GeoRssItemOrFeed
-  wfw?: WfwItem
-}
+  export type Item<TDate extends DateLike> = {
+    title?: string // Required in spec.
+    link?: string // Required in spec.
+    description?: string
+    rdf?: RdfNs.About
+    atom?: AtomNs.Entry<TDate>
+    dc?: DcNs.ItemOrFeed<TDate>
+    content?: ContentNs.Item
+    slash?: SlashNs.Item
+    media?: MediaNs.ItemOrFeed
+    georss?: GeoRssNs.ItemOrFeed
+    dcterms?: DcTermsNs.ItemOrFeed<TDate>
+    wfw?: WfwNs.Item
+  }
 
-export type Feed<TDate extends DateLike> = {
-  title: string
-  link: string
-  description: string
-  image?: Image
-  items?: Array<Item<TDate>>
-  textInput?: TextInput
-  atom?: AtomFeed<TDate>
-  dc?: DcItemOrFeed<TDate>
-  dcterms?: DctermsItemOrFeed<TDate>
-  sy?: SyFeed<TDate>
-  media?: MediaItemOrFeed
-  georss?: GeoRssItemOrFeed
+  export type Feed<TDate extends DateLike> = {
+    title?: string // Required in spec.
+    link?: string // Required in spec.
+    description?: string // Required in spec.
+    image?: Image
+    items?: Array<Item<TDate>>
+    textInput?: TextInput
+    rdf?: RdfNs.About
+    atom?: AtomNs.Feed<TDate>
+    dc?: DcNs.ItemOrFeed<TDate>
+    sy?: SyNs.Feed<TDate>
+    media?: MediaNs.ItemOrFeed
+    georss?: GeoRssNs.ItemOrFeed
+    dcterms?: DcTermsNs.ItemOrFeed<TDate>
+    admin?: AdminNs.Feed
+  }
 }
+// #endregion reference

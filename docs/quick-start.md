@@ -5,7 +5,7 @@ This guide will get you up and running with Feedsmith in just a few minutes.
 
 ## Installation
 
-Feedsmith works in both Node.js and modern browsers as an ES module. It was tested in both environments, ensuring compatibility and reliability.
+Feedsmith works in both Node.js (14.0.0+) and modern browsers, supporting both CommonJS and ES modules. It was tested in both environments, ensuring compatibility and reliability.
 
 Install the package using your preferred package manager:
 
@@ -31,36 +31,14 @@ bun add feedsmith
 
 Or using CDN:
 
-::: code-group
-
-```html [unpkg]
-<script type="module">
-  import { parseFeed } from 'https://unpkg.com/feedsmith@latest/dist/index.js'
-
-  const { type, feed } = parseFeed(feedContent)
-  console.log(feed.title)
-</script>
-```
-
-```html [jsDelivr]
-<script type="module">
-  import { parseFeed } from 'https://cdn.jsdelivr.net/npm/feedsmith@latest/dist/index.js'
-
-  const { type, feed } = parseFeed(feedContent)
-  console.log(feed.title)
-</script>
-```
-
-```html [esm.sh]
+```html
 <script type="module">
   import { parseFeed } from 'https://esm.sh/feedsmith@latest'
 
-  const { type, feed } = parseFeed(feedContent)
+  const { format, feed } = parseFeed(feedContent)
   console.log(feed.title)
 </script>
 ```
-
-:::
 
 ## Parse Any Feed
 
@@ -69,7 +47,7 @@ The simplest way to parse any feed is to use the universal `parseFeed` function:
 ```typescript
 import { parseFeed } from 'feedsmith'
 
-// Works with RSS, Atom, JSON Feed, and RDF
+// Works with RSS, Atom, RDF, and JSON Feed
 const { format, feed } = parseFeed(feedContent)
 
 console.log('Feed format:', format) // rss, atom, json, rdf
@@ -80,23 +58,23 @@ if (format === 'rss') {
 }
 ```
 
-## Format-Specific Parsers
+## Parse Specific Feed Formats
 
 If you know the format in advance, you can use the format-specific parsers:
 
 ```typescript
 import {
-  parseAtomFeed,
-  parseJsonFeed,
   parseRssFeed,
-  parseRdfFeed
+  parseAtomFeed,
+  parseRdfFeed,
+  parseJsonFeed
 } from 'feedsmith'
 
 // Parse specific formats
-const atomFeed = parseAtomFeed('atom content')
-const jsonFeed = parseJsonFeed('json content')
 const rssFeed = parseRssFeed('rss content')
+const atomFeed = parseAtomFeed('atom content')
 const rdfFeed = parseRdfFeed('rdf content')
+const jsonFeed = parseJsonFeed('json content')
 
 // Access typed data
 rssFeed.title
@@ -140,7 +118,6 @@ console.log(rss) // Complete RSS XML
 // You can also generate other formats:
 // - generateAtomFeed() for Atom feeds
 // - generateJsonFeed() for JSON feeds
-// - generateRdfFeed() for RDF feeds
 // - generateOpml() for OPML files
 ```
 
@@ -164,10 +141,26 @@ try {
 }
 ```
 
+## TypeScript Types
+
+Feedsmith provides comprehensive TypeScript types for all feed formats:
+
+```typescript
+import type { Rss, Atom, Json, Opml } from 'feedsmith/types'
+
+// Access all types for a format
+type Feed = Rss.Feed
+type Item = Rss.Item
+type Category = Rss.Category
+type Enclosure = Rss.Enclosure
+```
+
+Each format exports its complete type system, including nested types and namespace types. See the [TypeScript guide](/reference/typescript) for details.
+
 ## What's Next?
 
 - **[Parse feeds](/parsing/)** — Learn about parsing different formats
 - **[Work with namespaces](/parsing/namespaces)** — Access podcast, media, and other metadata
-- **[Generate feeds](/generating/)** — Create RSS, Atom, and JSON feeds
-- **[API Reference](/api)** — Explore all available functions and types
+- **[Generate feeds](/generating/)** — Create feeds in various formats
+- **[API Reference](/reference/)** — Explore all available functions and types
 - **[Benchmarks](/benchmarks)** — See how Feedsmith compares to other libraries

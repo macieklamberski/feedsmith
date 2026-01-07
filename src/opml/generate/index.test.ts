@@ -223,7 +223,6 @@ describe('generate', () => {
       },
     }
 
-    // @ts-ignore: This is for testing purposes.
     expect(() => generate(value)).toThrow()
   })
 
@@ -268,5 +267,139 @@ describe('generate', () => {
 `
 
     expect(generate(value, options)).toEqual(expected)
+  })
+})
+
+describe('generate with partial and string dates', () => {
+  it('should accept partial documents', () => {
+    const value = {
+      body: {
+        outlines: [{ text: 'Test Outline' }],
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <body>
+    <outline text="Test Outline"/>
+  </body>
+</opml>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should accept string dates', () => {
+    const value = {
+      head: {
+        title: 'Test OPML',
+        dateCreated: '2023-01-01T00:00:00.000Z',
+        dateModified: '2023-01-02T00:00:00.000Z',
+      },
+      body: {
+        outlines: [{ text: 'Test Outline' }],
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <head>
+    <title>Test OPML</title>
+    <dateCreated>Sun, 01 Jan 2023 00:00:00 GMT</dateCreated>
+    <dateModified>Mon, 02 Jan 2023 00:00:00 GMT</dateModified>
+  </head>
+  <body>
+    <outline text="Test Outline"/>
+  </body>
+</opml>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should preserve invalid date strings', () => {
+    const value = {
+      head: {
+        title: 'Test OPML',
+        dateCreated: 'not-a-valid-date',
+        dateModified: 'also-invalid',
+      },
+      body: {
+        outlines: [{ text: 'Test Outline' }],
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <head>
+    <title>Test OPML</title>
+    <dateCreated>not-a-valid-date</dateCreated>
+    <dateModified>also-invalid</dateModified>
+  </head>
+  <body>
+    <outline text="Test Outline"/>
+  </body>
+</opml>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  describe('custom attributes', () => {
+    it('should generate OPML with custom attributes when specified in options', () => {
+      const opml = {
+        head: {
+          title: 'Test OPML',
+        },
+        body: {
+          outlines: [
+            {
+              text: 'Feed 1',
+              type: 'rss',
+              xmlUrl: 'https://feed1.com/rss',
+              customRating: '5',
+              customTags: 'tech,news',
+            },
+          ],
+        },
+      }
+      const options = {
+        extraOutlineAttributes: ['customRating', 'customTags'],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <head>
+    <title>Test OPML</title>
+  </head>
+  <body>
+    <outline text="Feed 1" type="rss" xmlUrl="https://feed1.com/rss" customRating="5" customTags="tech,news"/>
+  </body>
+</opml>
+`
+
+      expect(generate(opml, options)).toEqual(expected)
+    })
+
+    it('should not include custom attributes when not specified in options', () => {
+      const opml = {
+        body: {
+          outlines: [
+            {
+              text: 'Feed',
+              type: 'rss',
+              xmlUrl: 'https://feed.com/rss',
+              customRating: '5',
+              customTags: 'tech',
+            },
+          ],
+        },
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <body>
+    <outline text="Feed" type="rss" xmlUrl="https://feed.com/rss"/>
+  </body>
+</opml>
+`
+
+      expect(generate(opml)).toEqual(expected)
+    })
   })
 })

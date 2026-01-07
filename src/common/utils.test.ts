@@ -1,39 +1,43 @@
 import { describe, expect, it } from 'bun:test'
 import { type XMLBuilder, XMLParser } from 'fast-xml-parser'
-import { namespaceUrls } from './config.js'
-import type { ParseExactFunction, XmlGenerateOptions } from './types.js'
+import { namespacePrefixes, namespaceUris } from './config.js'
+import type { ParseExactUtil } from './types.js'
 import {
   createNamespaceNormalizator,
   detectNamespaces,
+  generateArrayOrSingular,
   generateBoolean,
   generateCdataString,
   generateCsvOf,
   generateNamespaceAttrs,
   generateNumber,
   generatePlainString,
+  generateRdfResource,
   generateRfc822Date,
   generateRfc3339Date,
+  generateSingularOrArray,
   generateXml,
   generateXmlStylesheet,
   generateYesNoBoolean,
   hasEntities,
-  invertObject,
   isNonEmptyString,
   isNonEmptyStringOrNumber,
   isObject,
   isPresent,
+  limitArray,
   parseArray,
   parseArrayOf,
   parseBoolean,
   parseCsvOf,
   parseDate,
+  parseJsonObject,
   parseNumber,
   parseSingular,
   parseSingularOf,
   parseString,
   parseYesNoBoolean,
+  retrieveRdfResourceOrText,
   retrieveText,
-  stripCdata,
   trimArray,
   trimObject,
 } from './utils.js'
@@ -358,6 +362,208 @@ describe('retrieveText', () => {
   })
 })
 
+describe('retrieveRdfResourceOrText', () => {
+  describe('with parseString', () => {
+    it('should parse direct string value', () => {
+      const value = 'https://creativecommons.org/licenses/by/4.0/'
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should extract value from @rdf:resource attribute', () => {
+      const value = {
+        '@rdf:resource': 'https://creativecommons.org/licenses/by/4.0/',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should extract value from #text property', () => {
+      const value = {
+        '#text': 'https://creativecommons.org/licenses/by/4.0/',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should handle HTML entities in @rdf:resource', () => {
+      const value = {
+        '@rdf:resource': 'https://example.com?foo=bar&amp;baz=qux',
+      }
+      const expected = 'https://example.com?foo=bar&baz=qux'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should handle HTML entities in #text', () => {
+      const value = {
+        '#text': 'https://example.com?foo=bar&amp;baz=qux',
+      }
+      const expected = 'https://example.com?foo=bar&baz=qux'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should handle CDATA sections in @rdf:resource', () => {
+      const value = {
+        '@rdf:resource': '<![CDATA[https://creativecommons.org/licenses/by/4.0/]]>',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should handle CDATA sections in #text', () => {
+      const value = {
+        '#text': '<![CDATA[https://creativecommons.org/licenses/by/4.0/]]>',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should prefer @rdf:resource over #text when both present', () => {
+      const value = {
+        '@rdf:resource': 'https://creativecommons.org/licenses/by/4.0/',
+        '#text': 'https://example.com/other-license',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should fall back to #text when @rdf:resource is empty', () => {
+      const value = {
+        '@rdf:resource': '',
+        '#text': 'https://creativecommons.org/licenses/by/4.0/',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should fall back to #text when @rdf:resource is whitespace-only', () => {
+      const value = {
+        '@rdf:resource': '   ',
+        '#text': 'https://creativecommons.org/licenses/by/4.0/',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should return undefined for empty string', () => {
+      expect(retrieveRdfResourceOrText('', parseString)).toBeUndefined()
+    })
+
+    it('should return undefined for whitespace-only string', () => {
+      expect(retrieveRdfResourceOrText('   ', parseString)).toBeUndefined()
+    })
+
+    it('should return undefined for null', () => {
+      expect(retrieveRdfResourceOrText(null, parseString)).toBeUndefined()
+    })
+
+    it('should return undefined for undefined', () => {
+      expect(retrieveRdfResourceOrText(undefined, parseString)).toBeUndefined()
+    })
+
+    it('should return undefined for empty object', () => {
+      expect(retrieveRdfResourceOrText({}, parseString)).toBeUndefined()
+    })
+
+    it('should return undefined when both @rdf:resource and #text are empty', () => {
+      const value = {
+        '@rdf:resource': '',
+        '#text': '',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBeUndefined()
+    })
+
+    it('should handle object without @rdf:resource or #text', () => {
+      const value = {
+        otherProperty: 'some value',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBeUndefined()
+    })
+
+    it('should trim whitespace from values', () => {
+      const value = {
+        '@rdf:resource': '  https://example.com/license  ',
+      }
+      const expected = 'https://example.com/license'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+  })
+
+  describe('with parseNumber', () => {
+    it('should parse number from @rdf:resource', () => {
+      const value = {
+        '@rdf:resource': '42',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseNumber)).toBe(42)
+    })
+
+    it('should parse number from #text', () => {
+      const value = {
+        '#text': '123.45',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseNumber)).toBe(123.45)
+    })
+
+    it('should return undefined for non-numeric @rdf:resource', () => {
+      const value = {
+        '@rdf:resource': 'not a number',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseNumber)).toBeUndefined()
+    })
+
+    it('should prefer @rdf:resource over #text for numbers', () => {
+      const value = {
+        '@rdf:resource': '42',
+        '#text': '100',
+      }
+
+      expect(retrieveRdfResourceOrText(value, parseNumber)).toBe(42)
+    })
+  })
+
+  describe('with custom parse function', () => {
+    it('should apply custom parse logic', () => {
+      const customParse = (value: unknown): string | undefined => {
+        const str = parseString(value)
+        return str ? str.toUpperCase() : undefined
+      }
+
+      const value = {
+        '@rdf:resource': 'hello world',
+      }
+
+      expect(retrieveRdfResourceOrText(value, customParse)).toBe('HELLO WORLD')
+    })
+
+    it('should handle parse function returning undefined', () => {
+      const alwaysUndefined = (): undefined => undefined
+
+      const value = {
+        '@rdf:resource': 'test',
+        '#text': 'fallback',
+      }
+
+      expect(retrieveRdfResourceOrText(value, alwaysUndefined)).toBeUndefined()
+    })
+  })
+})
+
 describe('trimObject', () => {
   it('should remove nullish properties from objects', () => {
     const value = { a: 1, b: undefined, c: 'string', d: undefined, e: null, f: false, g: 0, h: '' }
@@ -526,79 +732,12 @@ describe('trimArray', () => {
     it('should handle nested data structures with parsing', () => {
       const value = [{ items: [1, 2] }, { items: [3, 4] }]
       const expected = [1, 3]
-      const extractFirstItem = (obj: { items: number[] }) => {
+      const extractFirstItem = (obj: { items: Array<number> }) => {
         return obj.items && obj.items.length > 0 ? obj.items[0] : null
       }
 
       expect(trimArray(value, extractFirstItem)).toEqual(expected)
     })
-  })
-})
-
-describe('stripCdata', () => {
-  it('should return string without CDATA markers when present', () => {
-    expect(stripCdata('<![CDATA[content]]>')).toBe('content')
-    expect(stripCdata('prefix<![CDATA[content]]>suffix')).toBe('prefixcontentsuffix')
-    expect(stripCdata('<![CDATA[]]>')).toBe('')
-  })
-
-  it('should handle multiple CDATA sections in a single string', () => {
-    expect(stripCdata('<![CDATA[first]]>middle<![CDATA[second]]>')).toBe('firstmiddlesecond')
-    expect(stripCdata('start<![CDATA[one]]>between<![CDATA[two]]>end')).toEqual(
-      'startonebetweentwoend',
-    )
-    expect(stripCdata('<![CDATA[a]]><![CDATA[b]]><![CDATA[c]]>')).toBe('abc')
-  })
-
-  it('should return the original string when no CDATA markers are present', () => {
-    expect(stripCdata('regular text')).toBe('regular text')
-    expect(stripCdata('')).toBe('')
-    expect(stripCdata('text with <tags> but no CDATA')).toBe('text with <tags> but no CDATA')
-  })
-
-  it('should handle CDATA with special XML characters', () => {
-    expect(stripCdata('<![CDATA[<div>HTML content</div>]]>')).toBe('<div>HTML content</div>')
-    expect(stripCdata('<![CDATA[&lt;p&gt;encoded entities&lt;/p&gt;]]>')).toEqual(
-      '&lt;p&gt;encoded entities&lt;/p&gt;',
-    )
-    expect(stripCdata('<![CDATA[5 < 10 && 10 > 5]]>')).toBe('5 < 10 && 10 > 5')
-  })
-
-  it('should handle CDATA with newlines and whitespace', () => {
-    expect(stripCdata('<![CDATA[\n  multiline\n  content\n]]>')).toEqual(
-      '\n  multiline\n  content\n',
-    )
-    expect(stripCdata('<![CDATA[   space   ]]>')).toBe('   space   ')
-    expect(stripCdata('  <![CDATA[trimming]]>  ')).toBe('  trimming  ')
-  })
-
-  it('should handle malformed or partial CDATA properly', () => {
-    expect(stripCdata('Incomplete <![CDATA[content')).toBe('Incomplete <![CDATA[content')
-    expect(stripCdata('Missing end content]]>')).toBe('Missing end content]]>')
-    expect(stripCdata('<![CDATA[nested <![CDATA[content]]>]]>')).toEqual(
-      'nested <![CDATA[content]]>',
-    )
-  })
-
-  it('should handle case-sensitivity properly', () => {
-    expect(stripCdata('<![cdata[lowercase]]>')).toBe('<![cdata[lowercase]]>')
-    expect(stripCdata('<![CDATA[correct case]]>')).toBe('correct case')
-  })
-
-  it('should handle empty values correctly', () => {
-    expect(stripCdata('')).toBe('')
-    expect(stripCdata('   ')).toBe('   ')
-  })
-
-  it('should return the same value for non-string inputs', () => {
-    expect(stripCdata(null)).toBeNull()
-    expect(stripCdata(undefined)).toBeUndefined()
-    expect(stripCdata(123)).toEqual(123)
-    expect(stripCdata(true)).toBe(true)
-    expect(stripCdata(false)).toBe(false)
-    expect(stripCdata([])).toEqual([])
-    expect(stripCdata({})).toEqual({})
-    expect(stripCdata(() => {})).toBeTypeOf('function')
   })
 })
 
@@ -684,140 +823,347 @@ describe('parseString', () => {
     expect(parseString(value)).toEqual(value)
   })
 
-  it('Should handle entities #1', () => {
+  it('should handle entities #1: no CDATA', () => {
     const value =
       'Testing &lt;b&gt;bold text&lt;/b&gt; and &lt;i&gt;italic text&lt;/i&gt; with &amp;amp; ampersand, &amp;quot; quotes, &amp;apos; apostrophe and &amp;nbsp; non-breaking space.'
-    const expected = `Testing <b>bold text</b> and <i>italic text</i> with & ampersand, " quotes, ' apostrophe and   non-breaking space.`
+    const expected = `Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.`
+
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #2', () => {
+  it('should handle entities #2: with CDATA', () => {
     const value =
       '<![CDATA[Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.]]>'
-    const expected = `Testing <b>bold text</b> and <i>italic text</i> with & ampersand, " quotes, ' apostrophe and   non-breaking space.`
+    const expected =
+      'Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.'
+
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #3', () => {
+  it('should handle entities #3: no CDATA', () => {
     const value =
       'Special chars: &amp;lt; &amp;gt; &amp;euro; € &amp;copy; © &amp;reg; ® &amp;pound; £ &amp;yen; ¥'
-    const expected = 'Special chars: < > € € © © ® ® £ £ ¥ ¥'
+    const expected = 'Special chars: &lt; &gt; &euro; € &copy; © &reg; ® &pound; £ &yen; ¥'
+
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #4', () => {
+  it('should handle entities #4: with CDATA', () => {
     const value = '<![CDATA[Special chars: &lt; &gt; &euro; € &copy; © &reg; ® &pound; £ &yen; ¥]]>'
-    const expected = 'Special chars: < > € € © © ® ® £ £ ¥ ¥'
+    const expected = 'Special chars: &lt; &gt; &euro; € &copy; © &reg; ® &pound; £ &yen; ¥'
+
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #5', () => {
+  it('should handle entities #5: no CDATA', () => {
     const value =
       'Numeric entities: &amp;#169; &#169; &amp;#8364; &#8364; &amp;#8482; &#8482; &amp;#x2122; &#x2122;'
-    const expected = 'Numeric entities: © © € € ™ ™ ™ ™'
+    const expected = 'Numeric entities: &#169; © &#8364; € &#8482; ™ &#x2122; ™'
+
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #6', () => {
+  it('should handle entities #6: with CDATA', () => {
     const value = '<![CDATA[Numeric entities: &#169; &#8364; &#8482; &#x2122;]]>'
-    const expected = 'Numeric entities: © € ™ ™'
+    const expected = 'Numeric entities: &#169; &#8364; &#8482; &#x2122;'
+
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #7', () => {
+  it('should handle entities #7: no CDATA', () => {
     const value =
       '&lt;p&gt;HTML mixed with entities: &amp;copy; ©, &amp;reg; ®, &amp;#8364; € and &lt;a href=&quot;https://example.com?param1=value1&amp;param2=value2&quot;&gt;URL with ampersand&lt;/a&gt;&lt;/p&gt;'
     const expected =
-      '<p>HTML mixed with entities: © ©, ® ®, € € and <a href="https://example.com?param1=value1¶m2=value2">URL with ampersand</a></p>'
+      '<p>HTML mixed with entities: &copy; ©, &reg; ®, &#8364; € and <a href="https://example.com?param1=value1&param2=value2">URL with ampersand</a></p>'
+
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #8', () => {
+  it('should handle entities #8: with CDATA', () => {
     const value =
       '<![CDATA[<p>HTML mixed with entities: &copy; ©, &reg; ®, &#8364; € and <a href="https://example.com?param1=value1&param2=value2">URL with ampersand</a></p>]]>'
     const expected =
-      '<p>HTML mixed with entities: © ©, ® ®, € € and <a href="https://example.com?param1=value1¶m2=value2">URL with ampersand</a></p>'
+      '<p>HTML mixed with entities: &copy; ©, &reg; ®, &#8364; € and <a href="https://example.com?param1=value1&param2=value2">URL with ampersand</a></p>'
+
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #9', () => {
+  it('should handle entities #9: no CDATA', () => {
+    const value =
+      '&lt;script&gt;function test() { if (x &lt; y &amp;&amp; z &gt; 0) { alert(&quot;Hello!&quot;); } }&lt;/script&gt;'
+    const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
+  it('should handle entities #10: with CDATA', () => {
+    const value =
+      '<![CDATA[<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>]]>'
+    const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
+  it('should handle entities #11: with mixed content', () => {
+    const value = '&lt;prefix&gt;<![CDATA[&lt;cdata&gt;]]>&lt;suffix&gt;'
+    const expected = '<prefix>&lt;cdata&gt;<suffix>'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
+  it('should handle entities #12: with multiple CDATA blocks', () => {
+    const value =
+      'start &amp; <![CDATA[first &amp;]]> middle &amp; <![CDATA[second &amp;]]> end &amp;'
+    const expected = 'start & first &amp; middle & second &amp; end &'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
+  it('should handle empty string in CDATA', () => {
+    const value = '<![CDATA[        ]]>'
+
+    expect(parseString(value)).toBeUndefined()
+  })
+
+  it('should trim string in CDATA', () => {
+    const value = '<![CDATA[    test    ]]>'
+
+    expect(parseString(value)).toBe('test')
+  })
+
+  it('should preserve brackets and code syntax inside CDATA', () => {
     const value =
       '<![CDATA[Testing CDATA with brackets: [This is in brackets] and <code>if (x > y) { doSomething(); }</code>]]>'
     const expected =
       'Testing CDATA with brackets: [This is in brackets] and <code>if (x > y) { doSomething(); }</code>'
+
     expect(parseString(value)).toBe(expected)
   })
 
   it('Should handle entities #10', () => {
+    // Decode escaped script tag with entities in non-CDATA content.
     const value =
       '&lt;script&gt;function test() { if (x &lt; y &amp;&amp; z &gt; 0) { alert(&quot;Hello!&quot;); } }&lt;/script&gt;'
     const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+
     expect(parseString(value)).toBe(expected)
   })
 
   it('Should handle entities #11', () => {
+    // Preserve script tag content inside CDATA sections.
     const value =
       '<![CDATA[<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>]]>'
     const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
+
     expect(parseString(value)).toBe(expected)
+  })
+
+  it('should decode only one layer of triple-escaped entities', () => {
+    expect(parseString('&amp;amp;amp;')).toBe('&amp;amp;')
+  })
+
+  it('should handle mixed single and double escaped entities', () => {
+    expect(parseString('&lt; and &amp;lt;')).toBe('< and &lt;')
+  })
+
+  it('should handle malformed CDATA without closing tag', () => {
+    const value = '<![CDATA[content without closing tag'
+
+    expect(parseString(value)).toBe('<![CDATA[content without closing tag')
+  })
+
+  it('should handle malformed CDATA without closing tag with entities', () => {
+    const value = '<![CDATA[content &amp; more'
+
+    expect(parseString(value)).toBe('<![CDATA[content & more')
   })
 
   it('Should handle empty string in CDATA', () => {
     const value = '<![CDATA[        ]]>'
+
     expect(parseString(value)).toBeUndefined()
   })
 
   it('Should trim string in CDATA', () => {
     const value = '<![CDATA[    test    ]]>'
+
     expect(parseString(value)).toBe('test')
   })
 
-  it('should return number', () => {
+  it('should return number as string', () => {
     const value = 420
 
     expect(parseString(value)).toBe('420')
   })
 
-  it('should handle empty string', () => {
-    const value = ''
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for empty string', () => {
+    expect(parseString('')).toBeUndefined()
   })
 
-  it('should handle only whitespaces string', () => {
-    const value = '     '
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for whitespace-only string', () => {
+    expect(parseString('     ')).toBeUndefined()
   })
 
-  it('should handle array', () => {
-    const value = ['javascript', { another: 'typescript' }]
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for array', () => {
+    expect(parseString(['javascript', { another: 'typescript' }])).toBeUndefined()
   })
 
-  it('should handle object', () => {
-    const value = { name: 'javascript' }
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for object', () => {
+    expect(parseString({ name: 'javascript' })).toBeUndefined()
   })
 
-  it('should return boolean', () => {
-    const value = true
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for boolean', () => {
+    expect(parseString(true)).toBeUndefined()
   })
 
-  it('should handle null', () => {
-    const value = null
-
-    expect(parseString(value)).toBeUndefined()
+  it('should return undefined for null', () => {
+    expect(parseString(null)).toBeUndefined()
   })
 
-  it('should return undefined for undefined input', () => {
-    const value = undefined
+  it('should return undefined for undefined', () => {
+    expect(parseString(undefined)).toBeUndefined()
+  })
 
-    expect(parseString(value)).toBeUndefined()
+  describe('XML spec compliance', () => {
+    // XML §4.1: Character and Entity References (outside CDATA)
+    describe('entity references outside CDATA (XML §4.1)', () => {
+      const cases = [
+        { value: '&lt;', expected: '<', name: '&lt; to <' },
+        { value: '&gt;', expected: '>', name: '&gt; to >' },
+        { value: '&amp;', expected: '&', name: '&amp; to &' },
+        { value: '&quot;', expected: '"', name: '&quot; to "' },
+        { value: '&apos;', expected: "'", name: "&apos; to '" },
+        { value: '&#169;', expected: '©', name: 'decimal char ref &#169; to ©' },
+        { value: '&#x00A9;', expected: '©', name: 'hex char ref &#x00A9; to ©' },
+      ]
+
+      for (const { value, expected, name } of cases) {
+        it(`should decode ${name}`, () => {
+          expect(parseString(value)).toBe(expected)
+        })
+      }
+    })
+
+    // Single-decode behavior (prevents double-decoding data corruption)
+    describe('single-decode behavior (no double-decoding)', () => {
+      const cases = [
+        { value: '&amp;lt;', expected: '&lt;', name: '&amp;lt; to &lt; (not <)' },
+        { value: '&amp;amp;', expected: '&amp;', name: '&amp;amp; to &amp; (not &)' },
+        { value: '&amp;#169;', expected: '&#169;', name: '&amp;#169; to &#169; (not ©)' },
+        { value: '&amp;amp;amp;', expected: '&amp;amp;', name: 'triple-escaped &amp;amp;amp;' },
+        { value: '&lt; and &amp;lt;', expected: '< and &lt;', name: 'mixed single and double' },
+      ]
+
+      for (const { value, expected, name } of cases) {
+        it(`should decode ${name}`, () => {
+          expect(parseString(value)).toBe(expected)
+        })
+      }
+    })
+
+    // XML §2.7: CDATA Sections (verbatim passthrough)
+    describe('CDATA verbatim passthrough (XML §2.7)', () => {
+      const cases = [
+        { value: '<![CDATA[&lt;]]>', expected: '&lt;', name: '&lt; inside CDATA' },
+        { value: '<![CDATA[&amp;]]>', expected: '&amp;', name: '&amp; inside CDATA' },
+        { value: '<![CDATA[&#169;]]>', expected: '&#169;', name: '&#169; inside CDATA' },
+        { value: '<![CDATA[<div>]]>', expected: '<div>', name: 'literal < inside CDATA' },
+        { value: '<![CDATA[a && b]]>', expected: 'a && b', name: 'literal & inside CDATA' },
+        { value: '<![CDATA[]]]]>', expected: ']]', name: ']] inside CDATA (only ]]> ends it)' },
+      ]
+
+      for (const { value, expected, name } of cases) {
+        it(`should preserve ${name}`, () => {
+          expect(parseString(value)).toBe(expected)
+        })
+      }
+    })
+
+    // Mixed content: outside decoded, inside verbatim
+    describe('mixed content (CDATA + regular text)', () => {
+      const cases = [
+        {
+          value: '&lt;a&gt;<![CDATA[&lt;b&gt;]]>&lt;c&gt;',
+          expected: '<a>&lt;b&gt;<c>',
+          name: 'decode outside, preserve inside',
+        },
+        {
+          value: 'x &amp; <![CDATA[y &amp;]]> z &amp;',
+          expected: 'x & y &amp; z &',
+          name: '&amp; decoded outside, preserved inside',
+        },
+        {
+          value: '<![CDATA[first]]><![CDATA[second]]>',
+          expected: 'firstsecond',
+          name: 'multiple CDATA blocks concatenate',
+        },
+        {
+          value: '&lt;prefix&gt;<![CDATA[&lt;cdata&gt;]]>&lt;suffix&gt;',
+          expected: '<prefix>&lt;cdata&gt;<suffix>',
+          name: 'escaped tags outside, preserved inside',
+        },
+      ]
+
+      for (const { value, expected, name } of cases) {
+        it(`should handle ${name}`, () => {
+          expect(parseString(value)).toBe(expected)
+        })
+      }
+    })
+
+    // Real-world feed examples (from feed-parser issue #209)
+    describe('real-world feed examples', () => {
+      const cases = [
+        {
+          value:
+            '<![CDATA[<pre class="code-block"><code>&lt;div&gt;\n  &lt;a&gt;1&lt;/a&gt;\n&lt;/div&gt;</code></pre>]]>',
+          expected:
+            '<pre class="code-block"><code>&lt;div&gt;\n  &lt;a&gt;1&lt;/a&gt;\n&lt;/div&gt;</code></pre>',
+          name: 'CSS-Tricks: code block with escaped HTML inside CDATA',
+        },
+        {
+          value:
+            '&lt;p&gt;Everyone knows the &lt;code&gt;&amp;lt;input&amp;gt;&lt;/code&gt; element&lt;/p&gt;',
+          expected: '<p>Everyone knows the <code>&lt;input&gt;</code> element</p>',
+          name: 'HTML-tip: double-escaped code example without CDATA',
+        },
+        {
+          value:
+            '&lt;li&gt;&lt;code&gt;&amp;lt;bluesky-likes&amp;gt;&lt;/code&gt; — displays likes&lt;/li&gt;',
+          expected: '<li><code>&lt;bluesky-likes&gt;</code> — displays likes</li>',
+          name: 'Lea Verou: double-escaped custom element',
+        },
+        {
+          value:
+            '<![CDATA[<p>Visit <a href="https://example.com?ref=podcast&amp;utm=rss">us</a></p>]]>',
+          expected: '<p>Visit <a href="https://example.com?ref=podcast&amp;utm=rss">us</a></p>',
+          name: 'Podcast: URL with &amp; in CDATA',
+        },
+        {
+          value:
+            '<![CDATA[<pre><code>&lt;Button onClick={() =&gt; alert()}&gt;Click&lt;/Button&gt;</code></pre>]]>',
+          expected:
+            '<pre><code>&lt;Button onClick={() =&gt; alert()}&gt;Click&lt;/Button&gt;</code></pre>',
+          name: 'Programming blog: escaped JSX in CDATA',
+        },
+        {
+          value: 'Learn about &amp;lt;template&amp;gt; and &amp;lt;slot&amp;gt; elements',
+          expected: 'Learn about &lt;template&gt; and &lt;slot&gt; elements',
+          name: 'WordPress: double-encoded HTML tags',
+        },
+        {
+          value: '<![CDATA[<p>Use <code>&lt;script type="module"&gt;</code> for ES modules</p>]]>',
+          expected: '<p>Use <code>&lt;script type="module"&gt;</code> for ES modules</p>',
+          name: 'Docs: multiple escaped script tags in CDATA',
+        },
+      ]
+
+      for (const { value, expected, name } of cases) {
+        it(`should handle ${name}`, () => {
+          expect(parseString(value)).toBe(expected)
+        })
+      }
+    })
   })
 })
 
@@ -1269,7 +1615,7 @@ describe('parseSingularOf', () => {
   })
 
   it('should work with custom parse functions', () => {
-    const parseUpperCase: ParseExactFunction<string> = (value) => {
+    const parseUpperCase: ParseExactUtil<string> = (value) => {
       return typeof value === 'string' ? value.toUpperCase() : undefined
     }
 
@@ -1359,7 +1705,7 @@ describe('parseArray', () => {
 })
 
 describe('parseArrayOf', () => {
-  const parser: ParseExactFunction<string> = (value) => {
+  const parser: ParseExactUtil<string> = (value) => {
     if (typeof value === 'number') {
       return value.toString()
     }
@@ -1407,6 +1753,67 @@ describe('parseArrayOf', () => {
     const value = undefined
 
     expect(parseArrayOf(value, parser)).toBeUndefined()
+  })
+})
+
+describe('limitArray', () => {
+  it('should return original array when limit is undefined', () => {
+    const value = [1, 2, 3, 4, 5]
+    const expected = [1, 2, 3, 4, 5]
+
+    expect(limitArray(value, undefined)).toEqual(expected)
+  })
+
+  it('should return first N items when limit is provided', () => {
+    const value = [1, 2, 3, 4, 5]
+    const expected = [1, 2, 3]
+
+    expect(limitArray(value, 3)).toEqual(expected)
+  })
+
+  it('should return empty array when limit is 0', () => {
+    const value = [1, 2, 3, 4, 5]
+
+    expect(limitArray(value, 0)).toEqual([])
+  })
+
+  it('should return all items when limit exceeds array length', () => {
+    const value = [1, 2, 3]
+    const expected = [1, 2, 3]
+
+    expect(limitArray(value, 10)).toEqual(expected)
+  })
+
+  it('should handle empty array', () => {
+    const value: Array<number> = []
+
+    expect(limitArray(value, 5)).toEqual([])
+  })
+
+  it('should handle single item array with limit 1', () => {
+    const value = [1]
+
+    expect(limitArray(value, 1)).toEqual([1])
+  })
+
+  it('should handle single item array with limit 0', () => {
+    const value = [1]
+
+    expect(limitArray(value, 0)).toEqual([])
+  })
+
+  it('should return original array when limit is negative', () => {
+    const value = [1, 2, 3, 4, 5]
+    const expected = [1, 2, 3, 4, 5]
+
+    expect(limitArray(value, -1)).toEqual(expected)
+  })
+
+  it('should return original array when limit is large negative number', () => {
+    const value = [1, 2, 3, 4, 5]
+    const expected = [1, 2, 3, 4, 5]
+
+    expect(limitArray(value, -10)).toEqual(expected)
   })
 })
 
@@ -1706,6 +2113,40 @@ describe('generateXmlStylesheet', () => {
       expect(generateXmlStylesheet(value)).toBe(expected)
     })
   })
+
+  describe('Edge cases', () => {
+    it('should return undefined when all fields are empty strings', () => {
+      const value = {
+        type: '',
+        href: '',
+        title: '',
+        media: '',
+        charset: '',
+      }
+
+      expect(generateXmlStylesheet(value)).toBeUndefined()
+    })
+
+    it('should return undefined when all fields are whitespace', () => {
+      const value = {
+        type: '   ',
+        href: '  ',
+      }
+
+      expect(generateXmlStylesheet(value)).toBeUndefined()
+    })
+
+    it('should return undefined when all fields are undefined', () => {
+      const value = {
+        type: undefined,
+        href: undefined,
+        title: undefined,
+      }
+
+      // @ts-expect-error: This is for testing purposes.
+      expect(generateXmlStylesheet(value)).toBeUndefined()
+    })
+  })
 })
 
 describe('generateXml', () => {
@@ -1743,7 +2184,7 @@ describe('generateXml', () => {
 
   it('should include single stylesheet when provided', () => {
     const value = 'test content'
-    const options: XmlGenerateOptions = {
+    const options = {
       stylesheets: [{ type: 'text/xsl', href: '/styles/feed.xsl' }],
     }
     const expected =
@@ -1754,7 +2195,7 @@ describe('generateXml', () => {
 
   it('should include multiple stylesheets when provided', () => {
     const value = 'test content'
-    const options: XmlGenerateOptions = {
+    const options = {
       stylesheets: [
         { type: 'text/xsl', href: '/styles/feed.xsl' },
         { type: 'text/css', href: '/styles/feed.css', media: 'screen' },
@@ -1768,7 +2209,7 @@ describe('generateXml', () => {
 
   it('should generate XML without stylesheets when array is empty', () => {
     const value = 'test content'
-    const options: XmlGenerateOptions = {
+    const options = {
       stylesheets: [],
     }
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
@@ -1778,7 +2219,7 @@ describe('generateXml', () => {
 
   it('should generate XML without stylesheets when stylesheets is undefined', () => {
     const value = 'test content'
-    const options: XmlGenerateOptions = {}
+    const options = {}
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
 
     expect(generateXml(mockBuilder, value, options)).toEqual(expected)
@@ -1849,8 +2290,10 @@ describe('generateRfc822Date', () => {
     expect(generateRfc822Date(futureDate)).toEqual(expected)
   })
 
-  it('should return undefined for invalid date string', () => {
-    expect(generateRfc822Date('not a date')).toBeUndefined()
+  it('should return original string for invalid date string', () => {
+    expect(generateRfc822Date('not a date')).toEqual('not a date')
+    expect(generateRfc822Date('invalid date string')).toEqual('invalid date string')
+    expect(generateRfc822Date('2023-13-45')).toEqual('2023-13-45')
   })
 
   it('should return undefined for invalid Date object', () => {
@@ -1860,6 +2303,10 @@ describe('generateRfc822Date', () => {
 
   it('should return undefined for undefined', () => {
     expect(generateRfc822Date(undefined)).toBeUndefined()
+  })
+
+  it('should return empty string for empty string', () => {
+    expect(generateRfc822Date('')).toBeUndefined()
   })
 })
 
@@ -1920,8 +2367,10 @@ describe('generateRfc3339Date', () => {
     expect(generateRfc3339Date(futureDate)).toEqual(expected)
   })
 
-  it('should return undefined for invalid date string', () => {
-    expect(generateRfc3339Date('not a date')).toBeUndefined()
+  it('should return original string for invalid date string', () => {
+    expect(generateRfc3339Date('not a date')).toEqual('not a date')
+    expect(generateRfc3339Date('invalid date string')).toEqual('invalid date string')
+    expect(generateRfc3339Date('2023-13-45')).toEqual('2023-13-45')
   })
 
   it('should return undefined for invalid Date object', () => {
@@ -1931,6 +2380,10 @@ describe('generateRfc3339Date', () => {
 
   it('should return undefined for undefined', () => {
     expect(generateRfc3339Date(undefined)).toBeUndefined()
+  })
+
+  it('should return undefined for empty string', () => {
+    expect(generateRfc3339Date('')).toBeUndefined()
   })
 })
 
@@ -2327,22 +2780,6 @@ describe('detectNamespaces', () => {
 })
 
 describe('generateNamespaceAttrs', () => {
-  const testNamespaceUrls = {
-    atom: 'http://www.w3.org/2005/Atom',
-    content: 'http://purl.org/rss/1.0/modules/content/',
-    dc: 'http://purl.org/dc/elements/1.1/',
-    dcterms: 'http://purl.org/dc/terms/',
-    georss: 'http://www.georss.org/georss/',
-    itunes: 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-    media: 'http://search.yahoo.com/mrss/',
-    podcast: 'https://podcastindex.org/namespace/1.0',
-    slash: 'http://purl.org/rss/1.0/modules/slash/',
-    sy: 'http://purl.org/rss/1.0/modules/syndication/',
-    thr: 'http://purl.org/syndication/thread/1.0',
-    wfw: 'http://wellformedweb.org/CommentAPI/',
-    yt: 'http://www.youtube.com/xml/schemas/2015',
-  }
-
   it('should generate namespace attributes for all known namespaces when present', () => {
     const value = {
       title: 'Comprehensive Feed',
@@ -2361,7 +2798,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:atom': 'http://www.w3.org/2005/Atom',
       '@xmlns:content': 'http://purl.org/rss/1.0/modules/content/',
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-      '@xmlns:georss': 'http://www.georss.org/georss/',
+      '@xmlns:georss': 'http://www.georss.org/georss',
       '@xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
       '@xmlns:media': 'http://search.yahoo.com/mrss/',
       '@xmlns:podcast': 'https://podcastindex.org/namespace/1.0',
@@ -2370,7 +2807,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:thr': 'http://purl.org/syndication/thread/1.0',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, namespaceUris)).toEqual(expected)
   })
 
   it('should generate namespace attributes for single known namespace', () => {
@@ -2382,7 +2819,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:atom': 'http://www.w3.org/2005/Atom',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, namespaceUris)).toEqual(expected)
   })
 
   it('should ignore unknown namespaces and only include known ones', () => {
@@ -2398,7 +2835,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, namespaceUris)).toEqual(expected)
   })
 
   it('should handle properties with multiple colons correctly', () => {
@@ -2412,7 +2849,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, namespaceUris)).toEqual(expected)
   })
 
   it('should handle properties with colon at the end', () => {
@@ -2426,7 +2863,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, namespaceUris)).toEqual(expected)
   })
 
   it('should ignore properties with colon at the beginning', () => {
@@ -2439,7 +2876,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:atom': 'http://www.w3.org/2005/Atom',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, namespaceUris)).toEqual(expected)
   })
 
   it('should handle duplicate namespace detection correctly', () => {
@@ -2455,7 +2892,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, namespaceUris)).toEqual(expected)
   })
 
   it('should return undefined when no namespaced properties are present', () => {
@@ -2466,7 +2903,7 @@ describe('generateNamespaceAttrs', () => {
       author: 'John Doe',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs(value, namespaceUris)).toBeUndefined()
   })
 
   it('should return undefined when object has namespaces not in known URLs', () => {
@@ -2476,21 +2913,21 @@ describe('generateNamespaceAttrs', () => {
       'custom:property': 'another value',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs(value, namespaceUris)).toBeUndefined()
   })
 
   it('should return undefined for empty objects', () => {
-    expect(generateNamespaceAttrs({}, testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs({}, namespaceUris)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(generateNamespaceAttrs(null, testNamespaceUrls)).toBeUndefined()
-    expect(generateNamespaceAttrs(undefined, testNamespaceUrls)).toBeUndefined()
-    expect(generateNamespaceAttrs('string', testNamespaceUrls)).toBeUndefined()
-    expect(generateNamespaceAttrs(42, testNamespaceUrls)).toBeUndefined()
-    expect(generateNamespaceAttrs(true, testNamespaceUrls)).toBeUndefined()
-    expect(generateNamespaceAttrs([], testNamespaceUrls)).toBeUndefined()
-    expect(generateNamespaceAttrs(() => {}, testNamespaceUrls)).toBeUndefined()
+    expect(generateNamespaceAttrs(null, namespaceUris)).toBeUndefined()
+    expect(generateNamespaceAttrs(undefined, namespaceUris)).toBeUndefined()
+    expect(generateNamespaceAttrs('string', namespaceUris)).toBeUndefined()
+    expect(generateNamespaceAttrs(42, namespaceUris)).toBeUndefined()
+    expect(generateNamespaceAttrs(true, namespaceUris)).toBeUndefined()
+    expect(generateNamespaceAttrs([], namespaceUris)).toBeUndefined()
+    expect(generateNamespaceAttrs(() => {}, namespaceUris)).toBeUndefined()
   })
 
   it('should detect namespaces in nested structures using recursive detection', () => {
@@ -2513,7 +2950,7 @@ describe('generateNamespaceAttrs', () => {
       '@xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
     }
 
-    expect(generateNamespaceAttrs(value, testNamespaceUrls)).toEqual(expected)
+    expect(generateNamespaceAttrs(value, namespaceUris)).toEqual(expected)
   })
 })
 
@@ -2644,126 +3081,91 @@ describe('generateNumber', () => {
   })
 })
 
-describe('invertObject', () => {
-  it('should invert simple object with string key-value pairs', () => {
-    const value = {
-      apple: 'fruit',
-      carrot: 'vegetable',
-      salmon: 'fish',
-    }
+describe('generateRdfResource', () => {
+  it('should generate object with @rdf:resource attribute for valid string', () => {
+    const value = 'https://example.com/resource'
     const expected = {
-      fruit: 'apple',
-      vegetable: 'carrot',
-      fish: 'salmon',
+      '@rdf:resource': 'https://example.com/resource',
     }
 
-    expect(invertObject(value)).toEqual(expected)
+    expect(generateRdfResource(value, generatePlainString)).toEqual(expected)
   })
 
-  it('should handle empty object', () => {
-    const value = {}
-    const expected = {}
-
-    expect(invertObject(value)).toEqual(expected)
-  })
-
-  it('should handle single key-value pair', () => {
-    const value = { key: 'value' }
-    const expected = { value: 'key' }
-
-    expect(invertObject(value)).toEqual(expected)
-  })
-
-  it('should handle duplicate values by keeping the last occurrence', () => {
-    const value = {
-      first: 'duplicate',
-      second: 'unique',
-      third: 'duplicate',
-      fourth: 'duplicate',
-    }
+  it('should generate object with @rdf:resource for mailto URI', () => {
+    const value = 'mailto:admin@example.com'
     const expected = {
-      duplicate: 'fourth',
-      unique: 'second',
+      '@rdf:resource': 'mailto:admin@example.com',
     }
 
-    expect(invertObject(value)).toEqual(expected)
+    expect(generateRdfResource(value, generatePlainString)).toEqual(expected)
   })
 
-  it('should handle special characters in keys and values', () => {
-    const value = {
-      'key-with-dash': 'value_with_underscore',
-      'key.with.dots': 'value@with@at',
-      'key:with:colon': 'value/with/slash',
-    }
+  it('should trim whitespace via generate function', () => {
+    const value = '  https://example.com/resource  '
     const expected = {
-      value_with_underscore: 'key-with-dash',
-      'value@with@at': 'key.with.dots',
-      'value/with/slash': 'key:with:colon',
+      '@rdf:resource': 'https://example.com/resource',
     }
 
-    expect(invertObject(value)).toEqual(expected)
+    expect(generateRdfResource(value, generatePlainString)).toEqual(expected)
   })
 
-  it('should handle whitespace in keys and values', () => {
-    const value = {
-      'key with spaces': 'value with spaces',
-      '  padded  ': '  also padded  ',
-      '\ttab\t': '\nnewline\n',
-    }
-    const expected = {
-      'value with spaces': 'key with spaces',
-      '  also padded  ': '  padded  ',
-      '\nnewline\n': '\ttab\t',
-    }
-
-    expect(invertObject(value)).toEqual(expected)
+  it('should return undefined for empty string', () => {
+    expect(generateRdfResource('', generatePlainString)).toBeUndefined()
   })
 
-  it('should handle empty string keys and values', () => {
-    const value = {
-      '': 'empty key',
-      'empty value': '',
-      normal: 'value',
-    }
-    const expected = {
-      'empty key': '',
-      '': 'empty value',
-      value: 'normal',
-    }
-
-    expect(invertObject(value)).toEqual(expected)
+  it('should return undefined for whitespace-only string', () => {
+    expect(generateRdfResource('   ', generatePlainString)).toBeUndefined()
   })
 
-  it('should handle Unicode characters', () => {
-    const value = {
-      '🔑': '🎯',
-      café: 'coffee',
-      naïve: 'approach',
-      日本: 'Japan',
-    }
-    const expected = {
-      '🎯': '🔑',
-      coffee: 'café',
-      approach: 'naïve',
-      Japan: '日本',
-    }
-
-    expect(invertObject(value)).toEqual(expected)
+  it('should return undefined for undefined value', () => {
+    expect(generateRdfResource(undefined, generatePlainString)).toBeUndefined()
   })
 
-  it('should handle case-sensitive keys and values', () => {
-    const value = {
-      ABC: 'xyz',
-      abc: 'XYZ',
-      AbC: 'xYz',
+  it('should work with custom generate function', () => {
+    const customGenerate = (value: string | undefined): string | undefined => {
+      return value ? value.toUpperCase() : undefined
     }
+    const value = 'https://example.com'
     const expected = {
-      xyz: 'ABC',
-      XYZ: 'abc',
-      xYz: 'AbC',
+      '@rdf:resource': 'HTTPS://EXAMPLE.COM',
     }
 
-    expect(invertObject(value)).toEqual(expected)
+    expect(generateRdfResource(value, customGenerate)).toEqual(expected)
+  })
+
+  it('should return undefined when generate function returns undefined', () => {
+    const alwaysUndefined = (): undefined => undefined
+    const value = 'https://example.com'
+
+    expect(generateRdfResource(value, alwaysUndefined)).toBeUndefined()
+  })
+
+  it('should return rdf:resource with empty string if generate function returns it', () => {
+    const returnsEmpty = (): string => ''
+    const value = 'https://example.com'
+    const expected = {
+      '@rdf:resource': '',
+    }
+
+    expect(generateRdfResource(value, returnsEmpty)).toEqual(expected)
+  })
+
+  it('should handle number values with generateNumber', () => {
+    const value = 42
+    const expected = {
+      '@rdf:resource': 42,
+    }
+
+    expect(generateRdfResource(value, generateNumber)).toEqual(expected)
+  })
+
+  it('should preserve special characters in URIs', () => {
+    const value = 'https://example.com/path?foo=bar&baz=qux#anchor'
+    const expected = {
+      '@rdf:resource': 'https://example.com/path?foo=bar&baz=qux#anchor',
+    }
+
+    expect(generateRdfResource(value, generatePlainString)).toEqual(expected)
   })
 })
 
@@ -2780,7 +3182,11 @@ describe('createNamespaceNormalizator', () => {
 
     describe('default namespace handling', () => {
       it('should handle default Atom namespace with primary namespace', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
+        const normalizeNamespaces = createNamespaceNormalizator(
+          namespaceUris,
+          namespacePrefixes,
+          'atom',
+        )
         const value = parser.parse(`
           <?xml version="1.0"?>
           <feed xmlns="http://www.w3.org/2005/Atom">
@@ -2804,7 +3210,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle default namespace without primary namespace', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <feed xmlns="http://www.w3.org/2005/Atom">
@@ -2824,7 +3230,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('prefixed namespace handling', () => {
       it('should normalize custom prefixes to standard prefixes', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <rss xmlns:custom="http://purl.org/dc/elements/1.1/">
@@ -2854,7 +3260,11 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle custom Atom prefix with primary namespace', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
+        const normalizeNamespaces = createNamespaceNormalizator(
+          namespaceUris,
+          namespacePrefixes,
+          'atom',
+        )
         const value = parser.parse(`
           <?xml version="1.0"?>
           <a:feed xmlns:a="http://www.w3.org/2005/Atom">
@@ -2880,7 +3290,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('nested namespace declarations', () => {
       it('should handle namespace declarations in nested elements', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <rss>
@@ -2918,10 +3328,16 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle namespace redefinition in nested elements', () => {
-        const normalizeNamespaces = createNamespaceNormalizator({
-          v1: 'http://example.com/v1',
-          v2: 'http://example.com/v2',
-        })
+        const normalizeNamespaces = createNamespaceNormalizator(
+          {
+            v1: ['http://example.com/v1'],
+            v2: ['http://example.com/v2'],
+          },
+          {
+            'http://example.com/v1': 'v1',
+            'http://example.com/v2': 'v2',
+          },
+        )
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root xmlns:ns="http://example.com/v1">
@@ -2949,7 +3365,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('mixed case handling', () => {
       it('should normalize element names to lowercase while preserving namespace logic', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <RSS xmlns:DC="http://purl.org/dc/elements/1.1/">
@@ -2981,7 +3397,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('self-closing elements with namespaces', () => {
       it('should handle self-closing elements with namespace declarations', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <rss>
@@ -3023,7 +3439,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('multiple namespaces in same document', () => {
       it('should handle multiple namespaces simultaneously', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <rss
@@ -3074,7 +3490,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('edge cases', () => {
       it('should handle empty namespace URIs', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root xmlns="">
@@ -3092,7 +3508,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle unknown namespaces gracefully', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root xmlns:unknown="http://unknown.example.com/">
@@ -3110,7 +3526,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle case-insensitive xmlns attributes', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root
@@ -3134,7 +3550,11 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle complex nesting with namespace inheritance', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls, namespaceUrls.atom)
+        const normalizeNamespaces = createNamespaceNormalizator(
+          namespaceUris,
+          namespacePrefixes,
+          'atom',
+        )
         const value = parser.parse(`
           <?xml version="1.0"?>
           <feed xmlns="http://www.w3.org/2005/Atom">
@@ -3172,7 +3592,7 @@ describe('createNamespaceNormalizator', () => {
 
     describe('unhappy path scenarios', () => {
       it('should handle non-object input gracefully', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
 
         expect(normalizeNamespaces(null)).toBe(null)
         expect(normalizeNamespaces(undefined)).toBe(undefined)
@@ -3181,8 +3601,28 @@ describe('createNamespaceNormalizator', () => {
         expect(normalizeNamespaces(true)).toBe(true)
       })
 
+      it('should handle non-string xmlns values gracefully', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+        const value = {
+          root: {
+            '@xmlns': 123,
+            '@xmlns:dc': null,
+            'dc:creator': 'Author',
+          },
+        }
+        const expected = {
+          root: {
+            '@xmlns': 123,
+            '@xmlns:dc': null,
+            'dc:creator': 'Author',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
       it('should handle conflicting namespace declarations in siblings', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root>
@@ -3210,8 +3650,55 @@ describe('createNamespaceNormalizator', () => {
         expect(normalizeNamespaces(value)).toEqual(expected)
       })
 
+      it('should normalize when standard prefix used by unknown namespace', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root
+            xmlns:atom="http://example.com/unknown"
+            xmlns:feed="http://www.w3.org/2005/Atom"
+          >
+            <atom:unknown>ignored</atom:unknown>
+            <feed:title>Test Title</feed:title>
+          </root>
+        `)
+        const expected = {
+          root: {
+            'atom:unknown': 'ignored',
+            'atom:title': 'Test Title',
+            '@xmlns:atom': 'http://example.com/unknown',
+            '@xmlns:feed': 'http://www.w3.org/2005/Atom',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should normalize multiple conflicts with same namespace URI', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+        const value = parser.parse(`
+          <?xml version="1.0"?>
+          <root
+            xmlns:dc1="http://purl.org/dc/elements/1.1/"
+            xmlns:dc2="http://purl.org/dc/elements/1.1"
+          >
+            <dc1:creator>John Doe</dc1:creator>
+            <dc2:creator>Jane Smith</dc2:creator>
+          </root>
+        `)
+        const expected = {
+          root: {
+            'dc:creator': ['John Doe', 'Jane Smith'],
+            '@xmlns:dc1': 'http://purl.org/dc/elements/1.1/',
+            '@xmlns:dc2': 'http://purl.org/dc/elements/1.1',
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
       it('should handle namespace declarations without usage', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = parser.parse(`
           <?xml version="1.0"?>
           <root
@@ -3235,7 +3722,7 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle mixed valid and invalid namespace values', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(namespaceUrls)
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
         const value = {
           root: {
             '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
@@ -3264,5 +3751,439 @@ describe('createNamespaceNormalizator', () => {
         expect(normalizeNamespaces(value)).toEqual(expected)
       })
     })
+
+    describe('RDF primary namespace handling', () => {
+      it('should normalize RDF namespace elements and attributes including arrays', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(
+          namespaceUris,
+          namespacePrefixes,
+          'rdf',
+        )
+        const value = parser.parse(`
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rdf:RDF
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns="http://purl.org/rss/1.0/"
+          >
+            <channel rdf:about="http://example.com">
+              <title>Test Feed</title>
+              <items>
+                <rdf:Seq>
+                  <rdf:li resource="http://example.com/item1"/>
+                  <rdf:li rdf:resource="http://example.com/item2"/>
+                </rdf:Seq>
+              </items>
+            </channel>
+            <item rdf:about="http://example.com/item1">
+              <title>Item 1</title>
+            </item>
+            <item rdf:about="http://example.com/item2">
+              <title>Item 2</title>
+            </item>
+          </rdf:RDF>
+        `)
+        const expected = {
+          rdf: {
+            '@xmlns:rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+            '@xmlns': 'http://purl.org/rss/1.0/',
+            channel: {
+              title: 'Test Feed',
+              items: {
+                seq: {
+                  li: [
+                    { '@resource': 'http://example.com/item1' },
+                    { '@resource': 'http://example.com/item2' },
+                  ],
+                },
+              },
+              '@about': 'http://example.com',
+            },
+            item: [
+              { title: 'Item 1', '@about': 'http://example.com/item1' },
+              { title: 'Item 2', '@about': 'http://example.com/item2' },
+            ],
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+    })
+  })
+
+  describe('non-standard namespace URIs', () => {
+    it('should work with HTTPS variant and custom prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        item: {
+          '@xmlns:dublincore': 'https://purl.org/dc/elements/1.1/',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': 'https://purl.org/dc/elements/1.1/',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+
+    it('should work without trailing slash and custom prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        item: {
+          '@xmlns:dublincore': 'http://purl.org/dc/elements/1.1',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': 'http://purl.org/dc/elements/1.1',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+
+    it('should work with uppercase URI and custom prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        item: {
+          '@xmlns:dublincore': 'HTTP://PURL.ORG/DC/ELEMENTS/1.1/',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': 'HTTP://PURL.ORG/DC/ELEMENTS/1.1/',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+
+    it('should work with mixed case URI and custom prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        item: {
+          '@xmlns:dublincore': 'Http://Purl.Org/Dc/Elements/1.1/',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': 'Http://Purl.Org/Dc/Elements/1.1/',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+
+    it('should work with uppercase HTTPS URI and custom prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        item: {
+          '@xmlns:dublincore': 'HTTPS://PURL.ORG/DC/ELEMENTS/1.1/',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': 'HTTPS://PURL.ORG/DC/ELEMENTS/1.1/',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+
+    it('should work with URI containing whitespace around it', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        item: {
+          '@xmlns:dublincore': '  http://purl.org/dc/elements/1.1/ ',
+          'dublincore:creator': 'John',
+        },
+      }
+      const expected = {
+        item: {
+          '@xmlns:dublincore': '  http://purl.org/dc/elements/1.1/ ',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toEqual(expected)
+    })
+  })
+})
+
+describe('generateArrayOrSingular', () => {
+  it('should prioritize plural values over singular values', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateArrayOrSingular(['a', 'b', 'c'], 'x', generator)
+
+    expect(result).toEqual(['A', 'B', 'C'])
+  })
+
+  it('should use singular value when plural is undefined', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateArrayOrSingular(undefined, 'x', generator)
+
+    expect(result).toEqual('X')
+  })
+
+  it('should return undefined when both values are undefined', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateArrayOrSingular(undefined, undefined, generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should filter out undefined results from array', () => {
+    const generator = (value: string | undefined) => (value === 'skip' ? undefined : value)
+    const result = generateArrayOrSingular(['a', 'skip', 'b'], 'x', generator)
+
+    expect(result).toEqual(['a', 'b'])
+  })
+
+  it('should return undefined when all array items generate undefined', () => {
+    const generator = () => undefined
+    const result = generateArrayOrSingular(['a', 'b'], 'x', generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should work with generateCdataString', () => {
+    const result = generateArrayOrSingular(
+      ['<p>HTML</p>', 'Plain text'],
+      undefined,
+      generateCdataString,
+    )
+
+    expect(result).toEqual([{ '#cdata': '<p>HTML</p>' }, 'Plain text'])
+  })
+
+  it('should work with generatePlainString', () => {
+    const result = generateArrayOrSingular(['  value1  ', 'value2'], undefined, generatePlainString)
+
+    expect(result).toEqual(['value1', 'value2'])
+  })
+
+  it('should work with generateNumber', () => {
+    const result = generateArrayOrSingular([42, 100], undefined, generateNumber)
+
+    expect(result).toEqual([42, 100])
+  })
+
+  it('should handle empty plural array', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateArrayOrSingular([], 'x', generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should handle singular value that generates undefined', () => {
+    const generator = (value: string) => (value === 'skip' ? undefined : value)
+    const result = generateArrayOrSingular(undefined, 'skip', generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should preserve order of array elements', () => {
+    const generator = (value: number) => value * 2
+    const result = generateArrayOrSingular([1, 2, 3, 4, 5], 99, generator)
+
+    expect(result).toEqual([2, 4, 6, 8, 10])
+  })
+
+  it('should work with complex object transformations', () => {
+    const generator = (value: string) => ({ name: value, length: value.length })
+    const result = generateArrayOrSingular(['foo', 'bar'], 'baz', generator)
+
+    expect(result).toEqual([
+      { name: 'foo', length: 3 },
+      { name: 'bar', length: 3 },
+    ])
+  })
+
+  it('should ignore singular when plural is empty array', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateArrayOrSingular([], 'x', generator)
+
+    expect(result).toBeUndefined()
+  })
+})
+
+describe('generateSingularOrArray', () => {
+  it('should prioritize singular value over plural values', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateSingularOrArray('x', ['a', 'b', 'c'], generator)
+
+    expect(result).toEqual('X')
+  })
+
+  it('should use plural values when singular is undefined', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateSingularOrArray(undefined, ['a', 'b', 'c'], generator)
+
+    expect(result).toEqual(['A', 'B', 'C'])
+  })
+
+  it('should return undefined when both values are undefined', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateSingularOrArray(undefined, undefined, generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should filter out undefined results from array', () => {
+    const generator = (value: string | undefined) => (value === 'skip' ? undefined : value)
+    const result = generateSingularOrArray(undefined, ['a', 'skip', 'b'], generator)
+
+    expect(result).toEqual(['a', 'b'])
+  })
+
+  it('should return undefined when all array items generate undefined', () => {
+    const generator = () => undefined
+    const result = generateSingularOrArray(undefined, ['a', 'b'], generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should work with generateCdataString', () => {
+    const result = generateSingularOrArray('<p>HTML</p>', undefined, generateCdataString)
+
+    expect(result).toEqual({ '#cdata': '<p>HTML</p>' })
+  })
+
+  it('should work with generatePlainString', () => {
+    const result = generateSingularOrArray('  value  ', undefined, generatePlainString)
+
+    expect(result).toEqual('value')
+  })
+
+  it('should work with generateNumber', () => {
+    const result = generateSingularOrArray(42, undefined, generateNumber)
+
+    expect(result).toEqual(42)
+  })
+
+  it('should handle empty plural array', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateSingularOrArray(undefined, [], generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should handle singular value that generates undefined', () => {
+    const generator = (value: string) => (value === 'skip' ? undefined : value)
+    const result = generateSingularOrArray('skip', ['a', 'b'], generator)
+
+    expect(result).toBeUndefined()
+  })
+
+  it('should preserve order of array elements when using plural', () => {
+    const generator = (value: number) => value * 2
+    const result = generateSingularOrArray(undefined, [1, 2, 3, 4, 5], generator)
+
+    expect(result).toEqual([2, 4, 6, 8, 10])
+  })
+
+  it('should work with complex object transformations', () => {
+    const generator = (value: string) => ({ name: value, length: value.length })
+    const result = generateSingularOrArray('foo', undefined, generator)
+
+    expect(result).toEqual({ name: 'foo', length: 3 })
+  })
+
+  it('should ignore plural when singular is defined', () => {
+    const generator = (value: string) => value.toUpperCase()
+    const result = generateSingularOrArray('x', ['a', 'b', 'c'], generator)
+
+    expect(result).toEqual('X')
+  })
+})
+
+describe('parseJsonObject', () => {
+  it('should return object unchanged when input is object', () => {
+    const value = { title: 'Test', count: 42 }
+
+    expect(parseJsonObject(value)).toEqual(value)
+  })
+
+  it('should parse valid JSON string', () => {
+    const value = '{"title":"Test","count":42}'
+    const expected = { title: 'Test', count: 42 }
+
+    expect(parseJsonObject(value)).toEqual(expected)
+  })
+
+  it('should parse JSON string with whitespace on start', () => {
+    const value = '  {"title":"Test"}'
+    const expected = { title: 'Test' }
+
+    expect(parseJsonObject(value)).toEqual(expected)
+  })
+
+  it('should parse JSON string with whitespace on end', () => {
+    const value = '{"title":"Test"}  '
+    const expected = { title: 'Test' }
+
+    expect(parseJsonObject(value)).toEqual(expected)
+  })
+
+  it('should parse JSON string with whitespace on both ends', () => {
+    const value = '  {"title":"Test"}  '
+    const expected = { title: 'Test' }
+
+    expect(parseJsonObject(value)).toEqual(expected)
+  })
+
+  it('should return undefined for array string', () => {
+    const value = '[1,2,3]'
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for array string with whitespace', () => {
+    const value = '   [1,2,3]   '
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for XML string', () => {
+    const value = '<rss><channel><title>Test</title></channel></rss>'
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for plain text', () => {
+    const value = 'not json'
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for malformed JSON', () => {
+    const value = '{"title":"Test"'
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty string', () => {
+    const value = ''
+
+    expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(parseJsonObject(123)).toBeUndefined()
+    expect(parseJsonObject(true)).toBeUndefined()
+    expect(parseJsonObject(null)).toBeUndefined()
+    expect(parseJsonObject(undefined)).toBeUndefined()
+    expect(parseJsonObject([1, 2, 3])).toBeUndefined()
   })
 })

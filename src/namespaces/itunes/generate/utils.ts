@@ -1,4 +1,4 @@
-import type { GenerateFunction } from '../../../common/types.js'
+import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generateCsvOf,
@@ -10,9 +10,9 @@ import {
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
-import type { Category, Feed, Item, Owner } from '../common/types.js'
+import type { ItunesNs } from '../common/types.js'
 
-export const generateImage: GenerateFunction<string> = (image) => {
+export const generateImage: GenerateUtil<string> = (image) => {
   if (!isNonEmptyString(image)) {
     return
   }
@@ -22,7 +22,7 @@ export const generateImage: GenerateFunction<string> = (image) => {
   }
 }
 
-export const generateCategory: GenerateFunction<Category> = (category) => {
+export const generateCategory: GenerateUtil<ItunesNs.Category> = (category) => {
   if (!isObject(category)) {
     return
   }
@@ -35,7 +35,7 @@ export const generateCategory: GenerateFunction<Category> = (category) => {
   return trimObject(value)
 }
 
-export const generateOwner: GenerateFunction<Owner> = (owner) => {
+export const generateOwner: GenerateUtil<ItunesNs.Owner> = (owner) => {
   if (!isObject(owner)) {
     return
   }
@@ -48,7 +48,7 @@ export const generateOwner: GenerateFunction<Owner> = (owner) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateFunction<Item> = (item) => {
+export const generateItem: GenerateUtil<ItunesNs.Item> = (item) => {
   if (!isObject(item)) {
     return
   }
@@ -57,6 +57,7 @@ export const generateItem: GenerateFunction<Item> = (item) => {
     'itunes:duration': generateNumber(item.duration),
     'itunes:image': generateImage(item.image),
     'itunes:explicit': generateYesNoBoolean(item.explicit),
+    'itunes:author': generateCdataString(item.author),
     'itunes:title': generateCdataString(item.title),
     'itunes:episode': generateNumber(item.episode),
     'itunes:season': generateNumber(item.season),
@@ -70,7 +71,7 @@ export const generateItem: GenerateFunction<Item> = (item) => {
   return trimObject(value)
 }
 
-export const generateFeed: GenerateFunction<Feed> = (feed) => {
+export const generateFeed: GenerateUtil<ItunesNs.Feed> = (feed) => {
   if (!isObject(feed)) {
     return
   }

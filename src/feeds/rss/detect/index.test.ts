@@ -212,4 +212,18 @@ describe('detect', () => {
     expect(detect([])).toBe(false)
     expect(detect({})).toBe(false)
   })
+
+  it('should handle large HTML files without catastrophic backtracking', () => {
+    const scriptTag = '<script>function test() { return true; }</script>'
+    const largeHtmlLine = `<!DOCTYPE html><html><head>${scriptTag.repeat(100000)}</head><body><h1>Test</h1></body></html>`
+
+    const startTime = Date.now()
+    const result = detect(largeHtmlLine)
+    const endTime = Date.now()
+    // Should complete in less than 100ms (previously took minutes/hours).
+    const completeTime = endTime - startTime
+
+    expect(result).toBe(false)
+    expect(completeTime).toBeLessThan(100)
+  })
 })

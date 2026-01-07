@@ -104,7 +104,6 @@ describe('generateItem', () => {
       ],
     }
 
-    // @ts-ignore: This is for testing purposes.
     expect(generateItem(value)).toEqual(expected)
   })
 

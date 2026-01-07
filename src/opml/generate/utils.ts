@@ -1,4 +1,4 @@
-import type { GenerateFunction } from '../../common/types.js'
+import type { DateLike, GenerateUtil } from '../../common/types.js'
 import {
   generateBoolean,
   generateCdataString,
@@ -7,17 +7,21 @@ import {
   generatePlainString,
   generateRfc822Date,
   isObject,
+  isPresent,
   trimArray,
   trimObject,
 } from '../../common/utils.js'
-import type { Body, Head, Opml, Outline } from '../common/types.js'
+import type { MainOptions, Opml } from '../common/types.js'
 
-export const generateOutline: GenerateFunction<Outline<Date>> = (outline) => {
+export const generateOutline: GenerateUtil<Opml.Outline<DateLike>, MainOptions> = (
+  outline,
+  options,
+) => {
   if (!isObject(outline)) {
     return
   }
 
-  const value = {
+  const value: Record<string, unknown> = {
     '@text': generatePlainString(outline.text),
     '@type': generatePlainString(outline.type),
     '@isComment': generateBoolean(outline.isComment),
@@ -31,13 +35,25 @@ export const generateOutline: GenerateFunction<Outline<Date>> = (outline) => {
     '@title': generatePlainString(outline.title),
     '@version': generatePlainString(outline.version),
     '@url': generatePlainString(outline.url),
-    outline: trimArray(outline.outlines, generateOutline),
+    outline: trimArray(outline.outlines, (item) => generateOutline(item, options)),
+  }
+
+  if (options?.extraOutlineAttributes) {
+    for (const attribute of options.extraOutlineAttributes) {
+      const attributeKey = `@${attribute}`
+
+      if (!isPresent(outline[attribute])) {
+        continue
+      }
+
+      value[attributeKey] = generatePlainString(outline[attribute] as string)
+    }
   }
 
   return trimObject(value)
 }
 
-export const generateHead: GenerateFunction<Head<Date>> = (head) => {
+export const generateHead: GenerateUtil<Opml.Head<DateLike>> = (head) => {
   if (!isObject(head)) {
     return
   }
@@ -61,19 +77,22 @@ export const generateHead: GenerateFunction<Head<Date>> = (head) => {
   return trimObject(value)
 }
 
-export const generateBody: GenerateFunction<Body<Date>> = (body) => {
+export const generateBody: GenerateUtil<Opml.Body<DateLike>, MainOptions> = (body, options) => {
   if (!isObject(body)) {
     return
   }
 
   const value = {
-    outline: trimArray(body.outlines, generateOutline),
+    outline: trimArray(body.outlines, (item) => generateOutline(item, options)),
   }
 
   return trimObject(value)
 }
 
-export const generateOpml: GenerateFunction<Opml<Date>> = (opml) => {
+export const generateDocument: GenerateUtil<Opml.Document<DateLike>, MainOptions> = (
+  opml,
+  options,
+) => {
   if (!isObject(opml)) {
     return
   }
@@ -81,7 +100,7 @@ export const generateOpml: GenerateFunction<Opml<Date>> = (opml) => {
   const value = trimObject({
     '@version': '2.0',
     head: generateHead(opml.head),
-    body: generateBody(opml.body),
+    body: generateBody(opml.body, options),
   })
 
   if (value?.body !== undefined) {

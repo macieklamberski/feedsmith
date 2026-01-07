@@ -1,4 +1,4 @@
-import type { ParsePartialFunction } from '../../../common/types.js'
+import type { ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -9,41 +9,12 @@ import {
   parseString,
   parseYesNoBoolean,
   retrieveText,
+  trimArray,
   trimObject,
 } from '../../../common/utils.js'
-import type {
-  AlternateEnclosure,
-  Block,
-  Chapters,
-  ContentLink,
-  Episode,
-  Feed,
-  Funding,
-  Images,
-  Integrity,
-  Item,
-  License,
-  LiveItem,
-  Location,
-  Locked,
-  Person,
-  Podping,
-  Podroll,
-  RemoteItem,
-  Season,
-  SocialInteract,
-  Soundbite,
-  Source,
-  Trailer,
-  Transcript,
-  Txt,
-  UpdateFrequency,
-  Value,
-  ValueRecipient,
-  ValueTimeSplit,
-} from '../common/types.js'
+import type { PodcastNs } from '../common/types.js'
 
-export const parseTranscript: ParsePartialFunction<Transcript> = (value) => {
+export const parseTranscript: ParsePartialUtil<PodcastNs.Transcript> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -58,7 +29,7 @@ export const parseTranscript: ParsePartialFunction<Transcript> = (value) => {
   return trimObject(transcript)
 }
 
-export const parseLocked: ParsePartialFunction<Locked> = (value) => {
+export const parseLocked: ParsePartialUtil<PodcastNs.Locked> = (value) => {
   const locked = {
     value: parseYesNoBoolean(retrieveText(value)),
     owner: parseString(value?.['@owner']),
@@ -67,7 +38,7 @@ export const parseLocked: ParsePartialFunction<Locked> = (value) => {
   return trimObject(locked)
 }
 
-export const parseFunding: ParsePartialFunction<Funding> = (value) => {
+export const parseFunding: ParsePartialUtil<PodcastNs.Funding> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -80,7 +51,7 @@ export const parseFunding: ParsePartialFunction<Funding> = (value) => {
   return trimObject(funding)
 }
 
-export const parseChapters: ParsePartialFunction<Chapters> = (value) => {
+export const parseChapters: ParsePartialUtil<PodcastNs.Chapters> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -93,7 +64,7 @@ export const parseChapters: ParsePartialFunction<Chapters> = (value) => {
   return trimObject(chapters)
 }
 
-export const parseSoundbite: ParsePartialFunction<Soundbite> = (value) => {
+export const parseSoundbite: ParsePartialUtil<PodcastNs.Soundbite> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -107,7 +78,7 @@ export const parseSoundbite: ParsePartialFunction<Soundbite> = (value) => {
   return trimObject(soundbite)
 }
 
-export const parsePerson: ParsePartialFunction<Person> = (value) => {
+export const parsePerson: ParsePartialUtil<PodcastNs.Person> = (value) => {
   const person = {
     display: parseString(retrieveText(value)),
     role: parseString(value?.['@role']),
@@ -119,17 +90,19 @@ export const parsePerson: ParsePartialFunction<Person> = (value) => {
   return trimObject(person)
 }
 
-export const parseLocation: ParsePartialFunction<Location> = (value) => {
+export const parseLocation: ParsePartialUtil<PodcastNs.Location> = (value) => {
   const location = {
     display: parseString(retrieveText(value)),
+    rel: parseString(value?.['@rel']),
     geo: parseString(value?.['@geo']),
     osm: parseString(value?.['@osm']),
+    country: parseString(value?.['@country']),
   }
 
   return trimObject(location)
 }
 
-export const parseSeason: ParsePartialFunction<Season> = (value) => {
+export const parseSeason: ParsePartialUtil<PodcastNs.Season> = (value) => {
   const season = {
     number: parseNumber(retrieveText(value)),
     name: parseString(value?.['@name']),
@@ -138,7 +111,7 @@ export const parseSeason: ParsePartialFunction<Season> = (value) => {
   return trimObject(season)
 }
 
-export const parseEpisode: ParsePartialFunction<Episode> = (value) => {
+export const parseEpisode: ParsePartialUtil<PodcastNs.Episode> = (value) => {
   const episode = {
     number: parseNumber(retrieveText(value)),
     display: parseString(value?.['@display']),
@@ -147,7 +120,7 @@ export const parseEpisode: ParsePartialFunction<Episode> = (value) => {
   return trimObject(episode)
 }
 
-export const parseTrailer: ParsePartialFunction<Trailer<string>> = (value) => {
+export const parseTrailer: ParsePartialUtil<PodcastNs.Trailer<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -164,7 +137,7 @@ export const parseTrailer: ParsePartialFunction<Trailer<string>> = (value) => {
   return trimObject(trailer)
 }
 
-export const parseLicense: ParsePartialFunction<License> = (value) => {
+export const parseLicense: ParsePartialUtil<PodcastNs.License> = (value) => {
   const license = {
     display: parseString(retrieveText(value)),
     url: parseString(value?.['@url']),
@@ -173,7 +146,7 @@ export const parseLicense: ParsePartialFunction<License> = (value) => {
   return trimObject(license)
 }
 
-export const parseAlternateEnclosure: ParsePartialFunction<AlternateEnclosure> = (value) => {
+export const parseAlternateEnclosure: ParsePartialUtil<PodcastNs.AlternateEnclosure> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -195,7 +168,7 @@ export const parseAlternateEnclosure: ParsePartialFunction<AlternateEnclosure> =
   return trimObject(alternateEnclosure)
 }
 
-export const parseSource: ParsePartialFunction<Source> = (value) => {
+export const parseSource: ParsePartialUtil<PodcastNs.Source> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -208,7 +181,7 @@ export const parseSource: ParsePartialFunction<Source> = (value) => {
   return trimObject(source)
 }
 
-export const parseIntegrity: ParsePartialFunction<Integrity> = (value) => {
+export const parseIntegrity: ParsePartialUtil<PodcastNs.Integrity> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -221,7 +194,7 @@ export const parseIntegrity: ParsePartialFunction<Integrity> = (value) => {
   return trimObject(integrity)
 }
 
-export const parseValue: ParsePartialFunction<Value> = (value) => {
+export const parseValue: ParsePartialUtil<PodcastNs.Value> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -237,7 +210,7 @@ export const parseValue: ParsePartialFunction<Value> = (value) => {
   return trimObject(parsed)
 }
 
-export const parseValueRecipient: ParsePartialFunction<ValueRecipient> = (value) => {
+export const parseValueRecipient: ParsePartialUtil<PodcastNs.ValueRecipient> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -255,20 +228,56 @@ export const parseValueRecipient: ParsePartialFunction<ValueRecipient> = (value)
   return trimObject(valueRecipient)
 }
 
-export const parseImages: ParsePartialFunction<Images> = (value) => {
+export const parseImage: ParsePartialUtil<PodcastNs.Image> = (value) => {
   if (!isObject(value)) {
     return
   }
 
-  const images = {
-    // TODO: Convert it to an array of { url, viewport }?
-    srcset: parseString(value['@srcset']),
+  const image = {
+    href: parseString(value['@href']),
+    alt: parseString(value['@alt']),
+    aspectRatio: parseString(value['@aspect-ratio']),
+    width: parseNumber(value['@width']),
+    height: parseNumber(value['@height']),
+    type: parseString(value['@type']),
+    purpose: parseString(value['@purpose']),
   }
 
-  return trimObject(images)
+  return trimObject(image)
 }
 
-export const parseLiveItem: ParsePartialFunction<LiveItem<string>> = (value) => {
+export const parseImages: ParsePartialUtil<Array<PodcastNs.Image>> = (value) => {
+  const srcset = parseString(value?.['@srcset'])
+
+  if (!srcset) {
+    return
+  }
+
+  const images = []
+  const segments = srcset.split(',')
+
+  for (const segment of segments) {
+    const [href, width] = segment.trim().split(/\s+/)
+
+    const image = {
+      href: parseString(href),
+      width: parseNumber(width?.replace(/w$/, '')),
+    }
+
+    images.push(image)
+  }
+
+  return trimArray(images, trimObject)
+}
+
+export const retrieveImages: ParsePartialUtil<Array<PodcastNs.Image>> = (value) => {
+  return (
+    parseArrayOf(value['podcast:image'], parseImage) ??
+    parseSingularOf(value['podcast:images'], parseImages)
+  )
+}
+
+export const parseLiveItem: ParsePartialUtil<PodcastNs.LiveItem<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -284,7 +293,7 @@ export const parseLiveItem: ParsePartialFunction<LiveItem<string>> = (value) => 
   return trimObject(liveItem)
 }
 
-export const parseContentLink: ParsePartialFunction<ContentLink> = (value) => {
+export const parseContentLink: ParsePartialUtil<PodcastNs.ContentLink> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -297,7 +306,7 @@ export const parseContentLink: ParsePartialFunction<ContentLink> = (value) => {
   return trimObject(contentLink)
 }
 
-export const parseSocialInteract: ParsePartialFunction<SocialInteract> = (value) => {
+export const parseSocialInteract: ParsePartialUtil<PodcastNs.SocialInteract> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -313,7 +322,22 @@ export const parseSocialInteract: ParsePartialFunction<SocialInteract> = (value)
   return trimObject(socialInteract)
 }
 
-export const parseBlock: ParsePartialFunction<Block> = (value) => {
+export const parseChat: ParsePartialUtil<PodcastNs.Chat> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const chat = {
+    server: parseString(value['@server']),
+    protocol: parseString(value['@protocol']),
+    accountId: parseString(value['@accountid']),
+    space: parseString(value['@space']),
+  }
+
+  return trimObject(chat)
+}
+
+export const parseBlock: ParsePartialUtil<PodcastNs.Block> = (value) => {
   const block = {
     value: parseYesNoBoolean(retrieveText(value)),
     id: parseString(value?.['@id']),
@@ -322,7 +346,7 @@ export const parseBlock: ParsePartialFunction<Block> = (value) => {
   return trimObject(block)
 }
 
-export const parseTxt: ParsePartialFunction<Txt> = (value) => {
+export const parseTxt: ParsePartialUtil<PodcastNs.Txt> = (value) => {
   const txt = {
     display: parseString(retrieveText(value)),
     purpose: parseString(value?.['@purpose']),
@@ -331,7 +355,7 @@ export const parseTxt: ParsePartialFunction<Txt> = (value) => {
   return trimObject(txt)
 }
 
-export const parseRemoteItem: ParsePartialFunction<RemoteItem> = (value) => {
+export const parseRemoteItem: ParsePartialUtil<PodcastNs.RemoteItem> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -341,12 +365,13 @@ export const parseRemoteItem: ParsePartialFunction<RemoteItem> = (value) => {
     feedUrl: parseString(value['@feedurl']),
     itemGuid: parseString(value['@itemguid']),
     medium: parseString(value['@medium']),
+    title: parseString(value['@title']),
   }
 
   return trimObject(remoteItem)
 }
 
-export const parsePodroll: ParsePartialFunction<Podroll> = (value) => {
+export const parsePodroll: ParsePartialUtil<PodcastNs.Podroll> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -358,7 +383,9 @@ export const parsePodroll: ParsePartialFunction<Podroll> = (value) => {
   return trimObject(podroll)
 }
 
-export const parseUpdateFrequency: ParsePartialFunction<UpdateFrequency<string>> = (value) => {
+export const parseUpdateFrequency: ParsePartialUtil<PodcastNs.UpdateFrequency<string>> = (
+  value,
+) => {
   const updateFrequency = {
     display: parseString(retrieveText(value)),
     complete: parseBoolean(value?.['@complete']),
@@ -369,7 +396,7 @@ export const parseUpdateFrequency: ParsePartialFunction<UpdateFrequency<string>>
   return trimObject(updateFrequency)
 }
 
-export const parsePodping: ParsePartialFunction<Podping> = (value) => {
+export const parsePodping: ParsePartialUtil<PodcastNs.Podping> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -381,7 +408,19 @@ export const parsePodping: ParsePartialFunction<Podping> = (value) => {
   return trimObject(podping)
 }
 
-export const parseValueTimeSplit: ParsePartialFunction<ValueTimeSplit> = (value) => {
+export const parsePublisher: ParsePartialUtil<PodcastNs.Publisher> = (value) => {
+  if (!isObject(value)) {
+    return
+  }
+
+  const publisher = {
+    remoteItem: parseSingularOf(value['podcast:remoteitem'], parseRemoteItem),
+  }
+
+  return trimObject(publisher)
+}
+
+export const parseValueTimeSplit: ParsePartialUtil<PodcastNs.ValueTimeSplit> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -398,7 +437,7 @@ export const parseValueTimeSplit: ParsePartialFunction<ValueTimeSplit> = (value)
   return trimObject(valueTimeSplit)
 }
 
-export const retrieveItem: ParsePartialFunction<Item> = (value) => {
+export const retrieveItem: ParsePartialUtil<PodcastNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -408,21 +447,27 @@ export const retrieveItem: ParsePartialFunction<Item> = (value) => {
     chapters: parseSingularOf(value['podcast:chapters'], parseChapters),
     soundbites: parseArrayOf(value['podcast:soundbite'], parseSoundbite),
     persons: parseArrayOf(value['podcast:person'], parsePerson),
-    location: parseSingularOf(value['podcast:location'], parseLocation),
+    locations: parseArrayOf(value['podcast:location'], parseLocation),
     season: parseSingularOf(value['podcast:season'], parseSeason),
     episode: parseSingularOf(value['podcast:episode'], parseEpisode),
     license: parseSingularOf(value['podcast:license'], parseLicense),
     alternateEnclosures: parseArrayOf(value['podcast:alternateenclosure'], parseAlternateEnclosure),
-    value: parseSingularOf(value['podcast:value'], parseValue),
-    images: parseSingularOf(value['podcast:images'], parseImages),
+    values: parseArrayOf(value['podcast:value'], parseValue),
+    images: retrieveImages(value),
     socialInteracts: parseArrayOf(value['podcast:socialinteract'], parseSocialInteract),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
+    chat: parseSingularOf(value['podcast:chat'], parseChat),
+
+    // Deprecated fields for backward compatibility.
+    location: parseSingularOf(value['podcast:location'], parseLocation),
+    value: parseSingularOf(value['podcast:value'], parseValue),
+    chats: parseArrayOf(value['podcast:chat'], parseChat),
   }
 
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialUtil<PodcastNs.Feed<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -431,13 +476,13 @@ export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
     locked: parseSingularOf(value['podcast:locked'], parseLocked),
     fundings: parseArrayOf(value['podcast:funding'], parseFunding),
     persons: parseArrayOf(value['podcast:person'], parsePerson),
-    location: parseSingularOf(value['podcast:location'], parseLocation),
+    locations: parseArrayOf(value['podcast:location'], parseLocation),
     trailers: parseArrayOf(value['podcast:trailer'], parseTrailer),
     license: parseSingularOf(value['podcast:license'], parseLicense),
     guid: parseSingularOf(value['podcast:guid'], (value) => parseString(retrieveText(value))),
-    value: parseSingularOf(value['podcast:value'], parseValue),
+    values: parseArrayOf(value['podcast:value'], parseValue),
     medium: parseSingularOf(value['podcast:medium'], (value) => parseString(retrieveText(value))),
-    images: parseSingularOf(value['podcast:images'], parseImages),
+    images: retrieveImages(value),
     liveItems: parseArrayOf(value['podcast:liveitem'], parseLiveItem),
     blocks: parseArrayOf(value['podcast:block'], parseBlock),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
@@ -445,6 +490,13 @@ export const retrieveFeed: ParsePartialFunction<Feed<string>> = (value) => {
     podroll: parseSingularOf(value['podcast:podroll'], parsePodroll),
     updateFrequency: parseSingularOf(value['podcast:updatefrequency'], parseUpdateFrequency),
     podping: parseSingularOf(value['podcast:podping'], parsePodping),
+    chat: parseSingularOf(value['podcast:chat'], parseChat),
+    publisher: parseSingularOf(value['podcast:publisher'], parsePublisher),
+
+    // Deprecated fields for backward compatibility.
+    location: parseSingularOf(value['podcast:location'], parseLocation),
+    value: parseSingularOf(value['podcast:value'], parseValue),
+    chats: parseArrayOf(value['podcast:chat'], parseChat),
   }
 
   return trimObject(feed)

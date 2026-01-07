@@ -1,125 +1,158 @@
-import type { DateLike, DeepPartial, Unreliable } from '../../../common/types.js'
-import type { ItemOrFeed as DcItemOrFeed } from '../../../namespaces/dc/common/types.js'
-import type { ItemOrFeed as DctermsItemOrFeed } from '../../../namespaces/dcterms/common/types.js'
-import type { ItemOrFeed as GeoRssItemOrFeed } from '../../../namespaces/georss/common/types.js'
 import type {
-  Feed as ItunesFeed,
-  Item as ItunesItem,
-} from '../../../namespaces/itunes/common/types.js'
-import type { ItemOrFeed as MediaItemOrFeed } from '../../../namespaces/media/common/types.js'
-import type { Item as SlashItem } from '../../../namespaces/slash/common/types.js'
-import type { Feed as SyFeed } from '../../../namespaces/sy/common/types.js'
-import type { Item as ThrItem, Link as ThrLink } from '../../../namespaces/thr/common/types.js'
-import type { Item as WfwItem } from '../../../namespaces/wfw/common/types.js'
-import type { Feed as YtFeed, Item as YtItem } from '../../../namespaces/yt/common/types.js'
+  GenerateUtil as BaseGenerateUtil,
+  ParsePartialUtil as BaseParsePartialUtil,
+  DateLike,
+  ParseOptions,
+} from '../../../common/types.js'
+import type { AdminNs } from '../../../namespaces/admin/common/types.js'
+import type { AppNs } from '../../../namespaces/app/common/types.js'
+import type { ArxivNs } from '../../../namespaces/arxiv/common/types.js'
+import type { CcNs } from '../../../namespaces/cc/common/types.js'
+import type { CreativeCommonsNs } from '../../../namespaces/creativecommons/common/types.js'
+import type { DcNs } from '../../../namespaces/dc/common/types.js'
+import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
+import type { GeoNs } from '../../../namespaces/geo/common/types.js'
+import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
+import type { GooglePlayNs } from '../../../namespaces/googleplay/common/types.js'
+import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
+import type { MediaNs } from '../../../namespaces/media/common/types.js'
+import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
+import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
+import type { PscNs } from '../../../namespaces/psc/common/types.js'
+import type { SlashNs } from '../../../namespaces/slash/common/types.js'
+import type { SyNs } from '../../../namespaces/sy/common/types.js'
+import type { ThrNs } from '../../../namespaces/thr/common/types.js'
+import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
+import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
+import type { YtNs } from '../../../namespaces/yt/common/types.js'
 
-export type ParsePartialFunction<R> = (
-  value: Unreliable,
-  options?: { prefix?: string; asNamespace?: boolean },
-) => DeepPartial<R> | undefined
-
-export type GenerateFunction<V> = (
-  value: V | undefined,
-  options?: { prefix?: string; asNamespace?: boolean },
-) => Unreliable | undefined
-
-export type Text = {
-  value: string
-  type?: string
+export type UtilOptions = ParseOptions & {
+  prefix?: string
+  asNamespace?: boolean
 }
 
-export type Content = {
-  value?: string
-  type?: string
-  src?: string
-}
+export type ParsePartialUtil<R> = BaseParsePartialUtil<R, UtilOptions>
 
-export type Link<TDate extends DateLike> = {
-  href: string
-  rel?: string
-  type?: string
-  hreflang?: string
-  title?: string
-  length?: number
-  thr?: ThrLink<TDate>
-}
+export type GenerateUtil<V> = BaseGenerateUtil<V, UtilOptions>
 
-export type Person = {
-  name: string
-  uri?: string
-  email?: string
-}
+// #region reference
+export namespace Atom {
+  export type Text = {
+    value: string
+    type?: string
+  }
 
-export type Category = {
-  term: string
-  scheme?: string
-  label?: string
-}
+  export type Content = {
+    value?: string
+    type?: string
+    src?: string
+  }
 
-export type Generator = {
-  text: string
-  uri?: string
-  version?: string
-}
+  export type Link<TDate extends DateLike> = {
+    href?: string // Required in spec.
+    rel?: string
+    type?: string
+    hreflang?: string
+    title?: string
+    length?: number
+    thr?: ThrNs.Link<TDate>
+  }
 
-export type Source<TDate extends DateLike> = {
-  authors?: Array<Person>
-  categories?: Array<Category>
-  contributors?: Array<Person>
-  generator?: Generator
-  icon?: string
-  id?: string
-  links?: Array<Link<TDate>>
-  logo?: string
-  rights?: Text
-  subtitle?: Text
-  title?: Text
-  updated?: TDate
-}
+  export type Person = {
+    name?: string // Required in spec.
+    uri?: string
+    email?: string
+    arxiv?: ArxivNs.Author
+  }
 
-export type Entry<TDate extends DateLike> = {
-  authors?: Array<Person>
-  categories?: Array<Category>
-  content?: Content
-  contributors?: Array<Person>
-  id: string
-  links?: Array<Link<TDate>>
-  published?: TDate
-  rights?: Text
-  source?: Source<TDate>
-  summary?: Text
-  title: Text
-  updated: TDate
-  dc?: DcItemOrFeed<TDate>
-  dcterms?: DctermsItemOrFeed<TDate>
-  slash?: SlashItem
-  itunes?: ItunesItem
-  media?: MediaItemOrFeed
-  georss?: GeoRssItemOrFeed
-  thr?: ThrItem
-  wfw?: WfwItem
-  yt?: YtItem
-}
+  export type Category = {
+    term?: string // Required in spec.
+    scheme?: string
+    label?: string
+  }
 
-export type Feed<TDate extends DateLike> = {
-  authors?: Array<Person>
-  categories?: Array<Category>
-  contributors?: Array<Person>
-  generator?: Generator
-  icon?: string
-  id: string
-  links?: Array<Link<TDate>>
-  logo?: string
-  rights?: Text
-  subtitle?: Text
-  title: Text
-  updated: TDate
-  entries?: Array<Entry<TDate>>
-  dc?: DcItemOrFeed<TDate>
-  dcterms?: DctermsItemOrFeed<TDate>
-  sy?: SyFeed<TDate>
-  itunes?: ItunesFeed
-  media?: MediaItemOrFeed
-  georss?: GeoRssItemOrFeed
-  yt?: YtFeed
+  export type Generator = {
+    text?: string // Required in spec.
+    uri?: string
+    version?: string
+  }
+
+  export type Source<TDate extends DateLike> = {
+    authors?: Array<Person>
+    categories?: Array<Category>
+    contributors?: Array<Person>
+    generator?: Generator
+    icon?: string
+    id?: string
+    links?: Array<Link<TDate>>
+    logo?: string
+    rights?: Text
+    subtitle?: Text
+    title?: Text
+    updated?: TDate
+  }
+
+  export type Entry<TDate extends DateLike> = {
+    authors?: Array<Person>
+    categories?: Array<Category>
+    content?: Content
+    contributors?: Array<Person>
+    id?: string // Required in spec.
+    links?: Array<Link<TDate>>
+    published?: TDate
+    rights?: Text
+    source?: Source<TDate>
+    summary?: Text
+    title?: Text // Required in spec.
+    updated?: TDate // Required in spec.
+    app?: AppNs.Entry<TDate>
+    arxiv?: ArxivNs.Entry
+    cc?: CcNs.ItemOrFeed
+    dc?: DcNs.ItemOrFeed<TDate>
+    slash?: SlashNs.Item
+    itunes?: ItunesNs.Item
+    googleplay?: GooglePlayNs.Item
+    psc?: PscNs.Item
+    media?: MediaNs.ItemOrFeed
+    georss?: GeoRssNs.ItemOrFeed
+    geo?: GeoNs.ItemOrFeed
+    thr?: ThrNs.Item
+    dcterms?: DcTermsNs.ItemOrFeed<TDate>
+    creativeCommons?: CreativeCommonsNs.ItemOrFeed
+    wfw?: WfwNs.Item
+    yt?: YtNs.Item
+    pingback?: PingbackNs.Item
+    trackback?: TrackbackNs.Item
+  }
+
+  export type Feed<TDate extends DateLike> = {
+    authors?: Array<Person>
+    categories?: Array<Category>
+    contributors?: Array<Person>
+    generator?: Generator
+    icon?: string
+    id?: string // Required in spec.
+    links?: Array<Link<TDate>>
+    logo?: string
+    rights?: Text
+    subtitle?: Text
+    title?: Text // Required in spec.
+    updated?: TDate // Required in spec.
+    entries?: Array<Entry<TDate>>
+    cc?: CcNs.ItemOrFeed
+    dc?: DcNs.ItemOrFeed<TDate>
+    sy?: SyNs.Feed<TDate>
+    itunes?: ItunesNs.Feed
+    googleplay?: GooglePlayNs.Feed
+    media?: MediaNs.ItemOrFeed
+    georss?: GeoRssNs.ItemOrFeed
+    geo?: GeoNs.ItemOrFeed
+    dcterms?: DcTermsNs.ItemOrFeed<TDate>
+    creativeCommons?: CreativeCommonsNs.ItemOrFeed
+    opensearch?: OpenSearchNs.Feed
+    yt?: YtNs.Feed
+    admin?: AdminNs.Feed
+    pingback?: PingbackNs.Feed
+  }
 }
+// #endregion reference

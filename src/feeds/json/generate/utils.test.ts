@@ -212,7 +212,6 @@ describe('generateFeed', () => {
     const expected = {
       version: 'https://jsonfeed.org/version/1.1',
       title: 'Empty Feed',
-      items: [],
     }
 
     expect(generateFeed(value)).toEqual(expected)

@@ -4,11 +4,12 @@ import {
   generateBaseItem,
   generateBlock,
   generateChapters,
+  generateChat,
   generateContentLink,
   generateEpisode,
   generateFeed,
   generateFunding,
-  generateImages,
+  generateImage,
   generateIntegrity,
   generateItem,
   generateLicense,
@@ -18,6 +19,7 @@ import {
   generatePerson,
   generatePodping,
   generatePodroll,
+  generatePublisher,
   generateRemoteItem,
   generateSeason,
   generateSocialInteract,
@@ -65,7 +67,7 @@ describe('generateTranscript', () => {
 
   it('should handle non-object inputs', () => {
     expect(generateTranscript(undefined)).toBeUndefined()
-    // @ts-ignore: This is for testing purposes.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateTranscript('string')).toBeUndefined()
   })
 })
@@ -223,13 +225,17 @@ describe('generateLocation', () => {
   it('should generate location with all properties', () => {
     const value = {
       display: 'Austin, TX',
+      rel: 'creator',
       geo: 'geo:30.2672,-97.7431',
       osm: 'R113314',
+      country: 'US',
     }
     const expected = {
       '#text': 'Austin, TX',
+      '@rel': 'creator',
       '@geo': 'geo:30.2672,-97.7431',
       '@osm': 'R113314',
+      '@country': 'US',
     }
 
     expect(generateLocation(value)).toEqual(expected)
@@ -662,20 +668,43 @@ describe('generateValue', () => {
   })
 })
 
-describe('generateImages', () => {
-  it('should generate images with srcset', () => {
+describe('generateImage', () => {
+  it('should generate image with all properties', () => {
     const value = {
-      srcset: 'https://example.com/image-400.jpg 400w, https://example.com/image-800.jpg 800w',
+      href: 'https://example.com/image.jpg',
+      alt: 'Example Image',
+      aspectRatio: '16/9',
+      width: 1200,
+      height: 630,
+      type: 'image/jpeg',
+      purpose: 'social',
     }
     const expected = {
-      '@srcset': 'https://example.com/image-400.jpg 400w, https://example.com/image-800.jpg 800w',
+      '@href': 'https://example.com/image.jpg',
+      '@alt': 'Example Image',
+      '@aspect-ratio': '16/9',
+      '@width': 1200,
+      '@height': 630,
+      '@type': 'image/jpeg',
+      '@purpose': 'social',
     }
 
-    expect(generateImages(value)).toEqual(expected)
+    expect(generateImage(value)).toEqual(expected)
+  })
+
+  it('should generate image with only required href', () => {
+    const value = {
+      href: 'https://example.com/image.jpg',
+    }
+    const expected = {
+      '@href': 'https://example.com/image.jpg',
+    }
+
+    expect(generateImage(value)).toEqual(expected)
   })
 
   it('should handle non-object inputs', () => {
-    expect(generateImages(undefined)).toBeUndefined()
+    expect(generateImage(undefined)).toBeUndefined()
   })
 })
 
@@ -742,6 +771,42 @@ describe('generateSocialInteract', () => {
 
   it('should handle non-object inputs', () => {
     expect(generateSocialInteract(undefined)).toBeUndefined()
+  })
+})
+
+describe('generateChat', () => {
+  it('should generate chat with all properties', () => {
+    const value = {
+      server: 'irc.example.com',
+      protocol: 'irc',
+      accountId: 'user123',
+      space: 'general',
+    }
+    const expected = {
+      '@server': 'irc.example.com',
+      '@protocol': 'irc',
+      '@accountId': 'user123',
+      '@space': 'general',
+    }
+
+    expect(generateChat(value)).toEqual(expected)
+  })
+
+  it('should generate chat with minimal properties', () => {
+    const value = {
+      server: 'matrix.example.org',
+      protocol: 'matrix',
+    }
+    const expected = {
+      '@server': 'matrix.example.org',
+      '@protocol': 'matrix',
+    }
+
+    expect(generateChat(value)).toEqual(expected)
+  })
+
+  it('should handle non-object inputs', () => {
+    expect(generateChat(undefined)).toBeUndefined()
   })
 })
 
@@ -812,12 +877,14 @@ describe('generateRemoteItem', () => {
       feedUrl: 'https://remote.example.com/feed.xml',
       itemGuid: 'remote-item-guid-456',
       medium: 'music',
+      title: 'Example Podcast',
     }
     const expected = {
       '@feedGuid': 'remote-feed-guid-123',
       '@feedUrl': 'https://remote.example.com/feed.xml',
       '@itemGuid': 'remote-item-guid-456',
       '@medium': 'music',
+      '@title': 'Example Podcast',
     }
 
     expect(generateRemoteItem(value)).toEqual(expected)
@@ -874,7 +941,6 @@ describe('generatePodroll', () => {
       remoteItems: [],
     }
 
-    // @ts-ignore: Testing edge case
     expect(generatePodroll(value)).toBeUndefined()
   })
 
@@ -945,6 +1011,46 @@ describe('generatePodping', () => {
   })
 })
 
+describe('generatePublisher', () => {
+  it('should generate publisher with complete remoteItem', () => {
+    const value = {
+      remoteItem: {
+        feedGuid: 'urn:uuid:publisher-guid-123',
+        feedUrl: 'https://publisher.example.com/feed.xml',
+        medium: 'publisher',
+      },
+    }
+    const expected = {
+      'podcast:remoteItem': {
+        '@feedGuid': 'urn:uuid:publisher-guid-123',
+        '@feedUrl': 'https://publisher.example.com/feed.xml',
+        '@medium': 'publisher',
+      },
+    }
+
+    expect(generatePublisher(value)).toEqual(expected)
+  })
+
+  it('should generate publisher with minimal remoteItem', () => {
+    const value = {
+      remoteItem: {
+        feedGuid: 'urn:uuid:minimal-publisher',
+      },
+    }
+    const expected = {
+      'podcast:remoteItem': {
+        '@feedGuid': 'urn:uuid:minimal-publisher',
+      },
+    }
+
+    expect(generatePublisher(value)).toEqual(expected)
+  })
+
+  it('should handle non-object inputs', () => {
+    expect(generatePublisher(undefined)).toBeUndefined()
+  })
+})
+
 describe('generateBaseItem', () => {
   it('should generate base item with all properties', () => {
     const value = {
@@ -991,9 +1097,11 @@ describe('generateBaseItem', () => {
         type: 'lightning',
         method: 'keysend',
       },
-      images: {
-        srcset: 'https://example.com/image.jpg',
-      },
+      images: [
+        {
+          href: 'https://example.com/image.jpg',
+        },
+      ],
       socialInteracts: [
         {
           protocol: 'activitypub',
@@ -1049,9 +1157,11 @@ describe('generateBaseItem', () => {
         '@type': 'lightning',
         '@method': 'keysend',
       },
-      'podcast:images': {
-        '@srcset': 'https://example.com/image.jpg',
-      },
+      'podcast:image': [
+        {
+          '@href': 'https://example.com/image.jpg',
+        },
+      ],
       'podcast:socialInteract': [
         {
           '@protocol': 'activitypub',
@@ -1085,7 +1195,6 @@ describe('generateBaseItem', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
     expect(generateBaseItem(value)).toBeUndefined()
   })
 
@@ -1187,7 +1296,6 @@ describe('generateItem', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
     expect(generateItem(value)).toBeUndefined()
   })
 
@@ -1234,9 +1342,11 @@ describe('generateFeed', () => {
         method: 'keysend',
       },
       medium: 'podcast',
-      images: {
-        srcset: 'https://example.com/image.jpg',
-      },
+      images: [
+        {
+          href: 'https://example.com/image.jpg',
+        },
+      ],
       liveItems: [
         {
           status: 'live',
@@ -1309,9 +1419,11 @@ describe('generateFeed', () => {
         '@method': 'keysend',
       },
       'podcast:medium': 'podcast',
-      'podcast:images': {
-        '@srcset': 'https://example.com/image.jpg',
-      },
+      'podcast:image': [
+        {
+          '@href': 'https://example.com/image.jpg',
+        },
+      ],
       'podcast:liveItem': [
         {
           '@status': 'live',
@@ -1366,7 +1478,6 @@ describe('generateFeed', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-ignore: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 

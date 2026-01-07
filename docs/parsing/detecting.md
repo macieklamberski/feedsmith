@@ -1,6 +1,6 @@
 ---
 prev: Parsing › Dates
-next: Generating › Overview
+next: Parsing › Examples
 ---
 
 # Format Detection
@@ -9,26 +9,26 @@ You can quickly detect the feed format without parsing it.
 
 ```typescript
 import {
-  detectAtomFeed,
-  detectJsonFeed,
   detectRssFeed,
-  detectRdfFeed
+  detectAtomFeed,
+  detectRdfFeed,
+  detectJsonFeed
 } from 'feedsmith'
-
-if (detectAtomFeed(content)) {
-  console.log('This is an Atom feed')
-}
-
-if (detectJsonFeed(content)) {
-  console.log('This is a JSON feed')
-}
 
 if (detectRssFeed(content)) {
   console.log('This is an RSS feed')
 }
 
+if (detectAtomFeed(content)) {
+  console.log('This is an Atom feed')
+}
+
 if (detectRdfFeed(content)) {
   console.log('This is an RDF feed')
+}
+
+if (detectJsonFeed(content)) {
+  console.log('This is a JSON feed')
 }
 ```
 

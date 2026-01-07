@@ -1,26 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:dcterms="http://purl.org/dc/terms/"
-  xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
-  xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
-  xmlns:media="http://search.yahoo.com/mrss/"
-  xmlns:georss="http://www.georss.org/georss"
-  xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
-  xmlns:thr="http://purl.org/syndication/thread/1.0"
-  xmlns:yt="http://www.youtube.com/xml/schemas/2015"
+      xmlns:dc="http://purl.org/dc/elements/1.1/"
+      xmlns:dcterms="http://purl.org/dc/terms/"
+      xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+      xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+      xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+      xmlns:psc="http://podlove.org/simple-chapters"
+      xmlns:media="http://search.yahoo.com/mrss/"
+      xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/"
+      xmlns:arxiv="http://arxiv.org/schemas/atom"
+      xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
+      xmlns:cc="http://creativecommons.org/ns#"
+      xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule"
+      xmlns:thr="http://purl.org/syndication/thread/1.0"
+      xmlns:app="http://www.w3.org/2007/app"
+      xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+      xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
+      xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+      xmlns:admin="http://webns.net/mvcb/"
+      xmlns:yt="http://www.youtube.com/xml/schemas/2015"
+      xmlns:georss="http://www.georss.org/georss"
+      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
-  <title>Example Feed</title>
   <id>example-feed</id>
+  <title>Example Feed</title>
 
   <!-- Dublin Core Namespace: Feed Level Tags -->
-  <dc:creator>John Doe</dc:creator>
-  <dc:contributor>Jane Smith</dc:contributor>
-  <dc:date>2022-01-01T12:00+00:00</dc:date>
-  <dc:description>This is an example of description.</dc:description>
   <dc:title>Dublin Core Enhanced Feed Title</dc:title>
+  <dc:creator>John Doe</dc:creator>
   <dc:subject>Technology, Programming, Web Development</dc:subject>
+  <dc:description>This is an example of description.</dc:description>
   <dc:publisher>Example Publishing Company</dc:publisher>
+  <dc:contributor>Jane Smith</dc:contributor>
+  <dc:date>2022-01-01T12:00:00.000Z</dc:date>
   <dc:type>Text</dc:type>
   <dc:format>application/atom+xml</dc:format>
   <dc:identifier>urn:uuid:12345678-1234-1234-1234-123456789abc</dc:identifier>
@@ -30,154 +43,45 @@
   <dc:coverage>Global</dc:coverage>
   <dc:rights>Copyright 2025 Example Publishing Company</dc:rights>
 
-  <!-- Dublin Core Terms Namespace: Feed Level Tags -->
-  <dcterms:created>2022-01-01T12:00+00:00</dcterms:created>
-  <dcterms:license>Creative Commons Attribution 4.0</dcterms:license>
-  <dcterms:abstract>This is an abstract of the feed content</dcterms:abstract>
-  <dcterms:accessRights>Public access with attribution required</dcterms:accessRights>
-  <dcterms:accrualMethod>Regular updates</dcterms:accrualMethod>
-  <dcterms:accrualPeriodicity>Daily</dcterms:accrualPeriodicity>
-  <dcterms:accrualPolicy>Content added based on editorial calendar</dcterms:accrualPolicy>
-  <dcterms:alternative>Alternative Feed Title</dcterms:alternative>
-  <dcterms:audience>General technology audience</dcterms:audience>
-  <dcterms:available>2022-01-01T12:00+00:00</dcterms:available>
-  <dcterms:bibliographicCitation>Example Feed. (2022). Retrieved from https://example.org</dcterms:bibliographicCitation>
-  <dcterms:conformsTo>RSS 2.0 Specification</dcterms:conformsTo>
-  <dcterms:contributor>Jane Smith</dcterms:contributor>
-  <dcterms:coverage>Global technology topics</dcterms:coverage>
-  <dcterms:creator>John Doe</dcterms:creator>
-  <dcterms:date>2022-01-01T12:00+00:00</dcterms:date>
-  <dcterms:dateAccepted>2022-01-01T12:00+00:00</dcterms:dateAccepted>
-  <dcterms:dateCopyrighted>2022-01-01T12:00+00:00</dcterms:dateCopyrighted>
-  <dcterms:dateSubmitted>2022-01-01T12:00+00:00</dcterms:dateSubmitted>
-  <dcterms:description>Detailed description of the feed content and purpose</dcterms:description>
-  <dcterms:educationLevel>Intermediate to advanced</dcterms:educationLevel>
-  <dcterms:extent>Approximately 1000 words per article</dcterms:extent>
-  <dcterms:format>application/atom+xml</dcterms:format>
-  <dcterms:hasFormat>https://example.org/feed.atom</dcterms:hasFormat>
-  <dcterms:hasPart>https://example.org/category/tutorials</dcterms:hasPart>
-  <dcterms:hasVersion>2.0</dcterms:hasVersion>
-  <dcterms:identifier>urn:uuid:feed-12345678-1234-1234-1234-123456789abc</dcterms:identifier>
-  <dcterms:instructionalMethod>Practical examples and tutorials</dcterms:instructionalMethod>
-  <dcterms:isFormatOf>https://example.org/original-content</dcterms:isFormatOf>
-  <dcterms:isPartOf>Example Media Network</dcterms:isPartOf>
-  <dcterms:isReferencedBy>https://example.org/references</dcterms:isReferencedBy>
-  <dcterms:isReplacedBy>https://example.org/new-feed</dcterms:isReplacedBy>
-  <dcterms:isRequiredBy>https://example.org/dependent-feeds</dcterms:isRequiredBy>
-  <dcterms:issued>2022-01-01T12:00+00:00</dcterms:issued>
-  <dcterms:isVersionOf>https://example.org/original-feed</dcterms:isVersionOf>
-  <dcterms:language>en-US</dcterms:language>
-  <dcterms:mediator>Content Management System</dcterms:mediator>
-  <dcterms:medium>Digital</dcterms:medium>
-  <dcterms:modified>2023-01-01T12:00+00:00</dcterms:modified>
-  <dcterms:provenance>Originally created by Example Publishing Company</dcterms:provenance>
-  <dcterms:publisher>Example Publishing Company</dcterms:publisher>
-  <dcterms:references>https://example.org/referenced-sources</dcterms:references>
-  <dcterms:relation>https://example.org/related-feeds</dcterms:relation>
-  <dcterms:replaces>https://example.org/old-feed</dcterms:replaces>
-  <dcterms:requires>RSS 2.0 compatible reader</dcterms:requires>
-  <dcterms:rights>Copyright 2025 Example Publishing Company</dcterms:rights>
-  <dcterms:rightsHolder>Example Publishing Company</dcterms:rightsHolder>
-  <dcterms:source>https://example.org/original-source</dcterms:source>
-  <dcterms:spatial>Global</dcterms:spatial>
-  <dcterms:subject>Technology, Programming, Web Development</dcterms:subject>
-  <dcterms:tableOfContents>Latest articles, tutorials, and news</dcterms:tableOfContents>
-  <dcterms:temporal>2022-present</dcterms:temporal>
-  <dcterms:title>Dublin Core Terms Enhanced Feed Title</dcterms:title>
-  <dcterms:type>Text</dcterms:type>
-  <dcterms:valid>2025-12-31T23:59:59+00:00</dcterms:valid>
-
   <!-- Syndication Namespace: Feed Level Tags -->
-  <sy:updateBase>2000-01-01T12:00+00:00</sy:updateBase>
   <sy:updatePeriod>hourly</sy:updatePeriod>
   <sy:updateFrequency>1</sy:updateFrequency>
+  <sy:updateBase>2000-01-01T12:00:00.000Z</sy:updateBase>
+
 
   <!-- iTunes Namespace: Feed Level Tags -->
+  <itunes:image href="https://example.com/images/podcast-cover.jpg"/>
   <itunes:category text="Society &amp; Culture">
     <itunes:category text="Philosophy"/>
   </itunes:category>
-  <itunes:owner>
-    <itunes:name>Jack Smith</itunes:name>
-    <itunes:email>news@example.com</itunes:email>
-  </itunes:owner>
-  <itunes:image>https://example.com/images/podcast-cover.jpg</itunes:image>
-  <itunes:explicit>false</itunes:explicit>
+  <itunes:explicit>no</itunes:explicit>
   <itunes:author>John Doe</itunes:author>
   <itunes:title>iTunes Enhanced Podcast Title</itunes:title>
   <itunes:type>episodic</itunes:type>
   <itunes:new-feed-url>https://example.com/new-feed-url.xml</itunes:new-feed-url>
-  <itunes:block>false</itunes:block>
-  <itunes:complete>false</itunes:complete>
+  <itunes:block>no</itunes:block>
+  <itunes:complete>no</itunes:complete>
+  <itunes:applepodcastsverify>example-verification-key</itunes:applepodcastsverify>
   <itunes:summary>This is a comprehensive summary of the podcast content and what listeners can expect</itunes:summary>
   <itunes:subtitle>A subtitle that provides additional context</itunes:subtitle>
-  <itunes:keywords>technology, programming, web development, tutorials</itunes:keywords>
-  <itunes:applepodcastsverify>example-verification-key</itunes:applepodcastsverify>
+  <itunes:keywords>technology,programming,web development,tutorials</itunes:keywords>
+  <itunes:owner>
+    <itunes:name>Jack Smith</itunes:name>
+    <itunes:email>news@example.com</itunes:email>
+  </itunes:owner>
 
-  <!-- YouTube Namespace: Feed Level Tags -->
-  <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
-  <yt:playlistId>PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf</yt:playlistId>
+  <!-- Google Play Podcasts Namespace: Feed Level Tags -->
+  <googleplay:author>Podcast Creator</googleplay:author>
+  <googleplay:description>This is a plain-text description for Google Play Podcasts</googleplay:description>
+  <googleplay:explicit>no</googleplay:explicit>
+  <googleplay:block>no</googleplay:block>
+  <googleplay:image href="https://example.com/images/googleplay-cover.jpg"/>
+  <googleplay:category text="Technology"/>
+  <googleplay:email>podcaster@example.com</googleplay:email>
+  <googleplay:new-feed-url>https://example.com/new-podcast-feed.xml</googleplay:new-feed-url>
 
-  <!-- Media Namespace: Item/Feed Level Tags -->
-  <media:content url="https://example.com/videos/sample1.mp4" fileSize="12345678" type="video/mp4" medium="video" isDefault="true" expression="full" bitrate="1500" framerate="30" samplingrate="44.1" channels="2" duration="120" height="720" width="1280" lang="en">
-    <media:title type="plain">Sample Video Title</media:title>
-    <media:description type="html">This is a &lt;b&gt;sample video&lt;/b&gt; demonstrating media:content</media:description>
-    <media:keywords>sample, video, example, media, rss</media:keywords>
-    <media:thumbnail url="https://example.com/thumbnails/sample1.jpg" width="320" height="180" time="00:00:15.000"/>
-    <media:category scheme="http://search.yahoo.com/mrss/category_schema">Entertainment</media:category>
-    <media:hash algo="md5">dfdec888b7f38882e8a698d52eaebc04</media:hash>
-    <media:credit role="producer" scheme="urn:ebu">Jane Smith</media:credit>
-    <media:rating scheme="urn:simple">adult</media:rating>
-    <media:copyright>© 2025 Example Media Inc.</media:copyright>
-    <media:text type="transcript" lang="en" start="00:00:03" end="00:00:10">This is a sample transcript text</media:text>
-    <media:restriction relationship="allow" type="country">us ca gb</media:restriction>
-    <media:community>
-      <media:starRating average="4.5" count="2500" min="1" max="5" />
-      <media:statistics views="12345" favorites="413" />
-      <media:tags>featured, media, example</media:tags>
-    </media:community>
-    <media:comments>
-      <media:comment>Great video!</media:comment>
-      <media:comment>Very informative content</media:comment>
-    </media:comments>
-    <media:embed url="https://example.com/players/embed" width="640" height="360">
-      <media:param name="autoplay">true</media:param>
-      <media:param name="theme">dark</media:param>
-    </media:embed>
-    <media:responses>
-      <media:response>https://example.com/videos/response1</media:response>
-    </media:responses>
-    <media:backLinks>
-      <media:backLink>https://example.com/articles/related</media:backLink>
-    </media:backLinks>
-    <media:status state="active" />
-    <media:price type="rent" price="2.99" currency="USD" />
-    <media:license type="text/html" href="https://example.com/license">Standard License</media:license>
-    <media:peerLink type="application/torrent" href="https://example.com/torrents/sample1.torrent" />
-    <media:location>Sample Studio</media:location>
-    <media:rights status="official" />
-    <media:scenes>
-      <media:scene>
-        <sceneTitle>Introduction</sceneTitle>
-        <sceneDescription>Opening sequence</sceneDescription>
-        <sceneStartTime>00:00:00</sceneStartTime>
-        <sceneEndTime>00:00:30</sceneEndTime>
-      </media:scene>
-      <media:scene>
-        <sceneTitle>Main Content</sceneTitle>
-        <sceneStartTime>00:00:30</sceneStartTime>
-        <sceneEndTime>00:01:45</sceneEndTime>
-      </media:scene>
-    </media:scenes>
-  </media:content>
+  <!-- Media Namespace: Feed Level Tags -->
   <media:group>
-    <media:title>Multi-Format Content Example</media:title>
-    <media:description>This video is available in multiple formats and resolutions</media:description>
-    <media:thumbnail url="https://example.com/thumbnails/group-main.jpg" width="640" height="360" />
-    <media:thumbnail url="https://example.com/thumbnails/group-alt.jpg" width="1280" height="720" />
-    <media:keywords>group, multiple, formats, resolutions</media:keywords>
-    <media:category>Technology</media:category>
-    <media:rating scheme="urn:mpaa">PG</media:rating>
-    <media:copyright>© 2025 Example Media Inc.</media:copyright>
     <media:content url="https://example.com/videos/sample-hd.mp4" fileSize="45678912" type="video/mp4" medium="video" expression="full" bitrate="5000" framerate="60" duration="180" height="1080" width="1920" lang="en">
       <media:title>HD Version (1080p)</media:title>
     </media:content>
@@ -196,52 +100,228 @@
     <media:content url="https://example.com/captions/sample-es.srt" type="text/srt" medium="document" expression="sample" lang="es">
       <media:title>Spanish Subtitles</media:title>
     </media:content>
+    <media:rating scheme="urn:mpaa">PG</media:rating>
+    <media:title>Multi-Format Content Example</media:title>
+    <media:description>This video is available in multiple formats and resolutions</media:description>
+    <media:keywords>group,multiple,formats,resolutions</media:keywords>
+    <media:thumbnail url="https://example.com/thumbnails/group-main.jpg" height="360" width="640"/>
+    <media:thumbnail url="https://example.com/thumbnails/group-alt.jpg" height="720" width="1280"/>
+    <media:category>Technology</media:category>
+    <media:copyright>© 2025 Example Media Inc.</media:copyright>
   </media:group>
+  <media:content url="https://example.com/videos/sample1.mp4" fileSize="12345678" type="video/mp4" medium="video" isDefault="true" expression="full" bitrate="1500" framerate="30" samplingrate="44.1" channels="2" duration="120" height="720" width="1280" lang="en">
+    <media:rating scheme="urn:simple">adult</media:rating>
+    <media:title type="plain">Sample Video Title</media:title>
+    <media:description type="html">This is a &lt;b&gt;sample video&lt;/b&gt; demonstrating media:content</media:description>
+    <media:keywords>sample,video,example,media,rss</media:keywords>
+    <media:thumbnail url="https://example.com/thumbnails/sample1.jpg" height="180" width="320" time="00:00:15.000"/>
+    <media:category scheme="http://search.yahoo.com/mrss/category_schema">Entertainment</media:category>
+    <media:hash algo="md5">dfdec888b7f38882e8a698d52eaebc04</media:hash>
+    <media:credit role="producer" scheme="urn:ebu">Jane Smith</media:credit>
+    <media:copyright>© 2025 Example Media Inc.</media:copyright>
+    <media:text type="transcript" lang="en" start="00:00:03" end="00:00:10">This is a sample transcript text</media:text>
+    <media:restriction relationship="allow" type="country">us ca gb</media:restriction>
+    <media:community>
+      <media:starRating average="4.5" count="2500" min="1" max="5"/>
+      <media:statistics views="12345" favorites="413"/>
+      <media:tags>featured:2,media:5,example:1</media:tags>
+    </media:community>
+    <media:comments>
+      <media:comment>Great video!</media:comment>
+      <media:comment>Very informative content</media:comment>
+    </media:comments>
+    <media:embed url="https://example.com/players/embed" width="640" height="360">
+      <media:param name="autoplay">true</media:param>
+      <media:param name="theme">dark</media:param>
+    </media:embed>
+    <media:responses>
+      <media:response>https://example.com/videos/response1</media:response>
+    </media:responses>
+    <media:backLinks>
+      <media:backLink>https://example.com/articles/related</media:backLink>
+    </media:backLinks>
+    <media:status state="active"/>
+    <media:price type="rent" price="2.99" currency="USD"/>
+    <media:license type="text/html" href="https://example.com/license">Standard License</media:license>
+    <media:peerLink type="application/torrent" href="https://example.com/torrents/sample1.torrent"/>
+    <media:location>Sample Studio</media:location>
+    <media:rights status="official"/>
+    <media:scenes>
+      <media:scene>
+        <sceneTitle>Introduction</sceneTitle>
+        <sceneDescription>Opening sequence</sceneDescription>
+        <sceneStartTime>00:00:00</sceneStartTime>
+        <sceneEndTime>00:00:30</sceneEndTime>
+      </media:scene>
+      <media:scene>
+        <sceneTitle>Main Content</sceneTitle>
+        <sceneStartTime>00:00:30</sceneStartTime>
+        <sceneEndTime>00:01:45</sceneEndTime>
+      </media:scene>
+    </media:scenes>
+  </media:content>
+  <media:rating scheme="urn:mpaa">PG-13</media:rating>
+  <media:rating scheme="urn:v-chip">TV-14</media:rating>
   <media:title type="text">Advanced Media Features Demo</media:title>
+  <media:thumbnail url="https://example.com/thumbnails/adv-1.jpg" time="00:00:05.000"/>
+  <media:thumbnail url="https://example.com/thumbnails/adv-2.jpg" time="00:01:15.000"/>
+  <media:thumbnail url="https://example.com/thumbnails/adv-3.jpg" time="00:02:30.000"/>
+  <media:category scheme="http://dmoz.org">Arts/Movies/Titles/A/</media:category>
   <media:credit role="director" scheme="urn:ebu">Michael Chang</media:credit>
   <media:credit role="actor" scheme="urn:ebu">Sarah Johnson</media:credit>
   <media:credit role="actor" scheme="urn:ebu">Robert Williams</media:credit>
-  <media:category scheme="http://dmoz.org">Arts/Movies/Titles/A/</media:category>
-  <media:status state="active" reason="approved" />
-  <media:thumbnail url="https://example.com/thumbnails/adv-1.jpg" time="00:00:05.000" />
-  <media:thumbnail url="https://example.com/thumbnails/adv-2.jpg" time="00:01:15.000" />
-  <media:thumbnail url="https://example.com/thumbnails/adv-3.jpg" time="00:02:30.000" />
-  <media:price type="package" price="9.99" currency="USD" info="full access">Complete Package</media:price>
-  <media:price type="subscription" price="4.99" currency="USD" info="monthly">Monthly Subscription</media:price>
   <media:restriction relationship="allow" type="country">us ca gb de fr</media:restriction>
   <media:restriction relationship="deny" type="sharing">true</media:restriction>
-  <media:rating scheme="urn:mpaa">PG-13</media:rating>
-  <media:rating scheme="urn:v-chip">TV-14</media:rating>
   <media:community>
-    <media:starRating average="4.8" count="12563" min="1" max="5" />
-    <media:statistics views="256789" favorites="3421" shares="1245" />
-    <media:tags>cinematic, production, advanced, technical, demo</media:tags>
+    <media:starRating average="4.8" count="12563" min="1" max="5"/>
+    <media:statistics views="256789" favorites="3421"/>
+    <media:tags>cinematic:3,production:1,advanced:4,technical:7,demo:2</media:tags>
   </media:community>
+  <media:status state="active" reason="approved"/>
+  <media:price type="package" info="full access" price="9.99" currency="USD"/>
+  <media:price type="subscription" info="monthly" price="4.99" currency="USD"/>
 
-  <!-- GeoRSS-Simple Namespace: Item/Feed Level Tags (while not typical, included are all values for testing) -->
+  <!-- GeoRSS-Simple Namespace: Feed Level Tags -->
   <georss:point>37.78 -122.42</georss:point>
-  <georss:line>37.78 -122.42 37.42 -122.10 37.86 -122.27</georss:line>
+  <georss:line>37.78 -122.42 37.42 -122.1 37.86 -122.27</georss:line>
   <georss:polygon>37.86 -122.47 37.86 -122.37 37.76 -122.37 37.76 -122.47 37.86 -122.47</georss:polygon>
   <georss:box>37.15 -122.85 38.15 -121.85</georss:box>
-  <georss:featuretypetag>region</georss:featuretypetag>
-  <georss:relationshiptag>contains</georss:relationshiptag>
-  <georss:featurename>San Francisco Bay Area</georss:featurename>
+  <georss:featureTypeTag>region</georss:featureTypeTag>
+  <georss:relationshipTag>contains</georss:relationshipTag>
+  <georss:featureName>San Francisco Bay Area</georss:featureName>
   <georss:elev>360</georss:elev>
   <georss:floor>4</georss:floor>
   <georss:radius>50000</georss:radius>
 
+  <!-- W3C Basic Geo Namespace: Feed Level Tags -->
+  <geo:lat>37.7749</geo:lat>
+  <geo:long>-122.4194</geo:long>
+  <geo:alt>10.5</geo:alt>
+
+  <!-- Dublin Core Terms Namespace: Feed Level Tags -->
+  <dcterms:abstract>This is an abstract of the feed content</dcterms:abstract>
+  <dcterms:accessRights>Public access with attribution required</dcterms:accessRights>
+  <dcterms:accrualMethod>Regular updates</dcterms:accrualMethod>
+  <dcterms:accrualPeriodicity>Daily</dcterms:accrualPeriodicity>
+  <dcterms:accrualPolicy>Content added based on editorial calendar</dcterms:accrualPolicy>
+  <dcterms:alternative>Alternative Feed Title</dcterms:alternative>
+  <dcterms:audience>General technology audience</dcterms:audience>
+  <dcterms:available>2022-01-01T12:00:00.000Z</dcterms:available>
+  <dcterms:bibliographicCitation>Example Feed. (2022). Retrieved from https://example.org</dcterms:bibliographicCitation>
+  <dcterms:conformsTo>RSS 2.0 Specification</dcterms:conformsTo>
+  <dcterms:contributor>Jane Smith</dcterms:contributor>
+  <dcterms:coverage>Global technology topics</dcterms:coverage>
+  <dcterms:created>2022-01-01T12:00:00.000Z</dcterms:created>
+  <dcterms:creator>John Doe</dcterms:creator>
+  <dcterms:date>2022-01-01T12:00:00.000Z</dcterms:date>
+  <dcterms:dateAccepted>2022-01-01T12:00:00.000Z</dcterms:dateAccepted>
+  <dcterms:dateCopyrighted>2022-01-01T12:00:00.000Z</dcterms:dateCopyrighted>
+  <dcterms:dateSubmitted>2022-01-01T12:00:00.000Z</dcterms:dateSubmitted>
+  <dcterms:description>Detailed description of the feed content and purpose</dcterms:description>
+  <dcterms:educationLevel>Intermediate to advanced</dcterms:educationLevel>
+  <dcterms:extent>Approximately 1000 words per article</dcterms:extent>
+  <dcterms:format>application/atom+xml</dcterms:format>
+  <dcterms:hasFormat>https://example.org/feed.atom</dcterms:hasFormat>
+  <dcterms:hasPart>https://example.org/category/tutorials</dcterms:hasPart>
+  <dcterms:hasVersion>2.0</dcterms:hasVersion>
+  <dcterms:identifier>urn:uuid:feed-12345678-1234-1234-1234-123456789abc</dcterms:identifier>
+  <dcterms:instructionalMethod>Practical examples and tutorials</dcterms:instructionalMethod>
+  <dcterms:isFormatOf>https://example.org/original-content</dcterms:isFormatOf>
+  <dcterms:isPartOf>Example Media Network</dcterms:isPartOf>
+  <dcterms:isReferencedBy>https://example.org/references</dcterms:isReferencedBy>
+  <dcterms:isReplacedBy>https://example.org/new-feed</dcterms:isReplacedBy>
+  <dcterms:isRequiredBy>https://example.org/dependent-feeds</dcterms:isRequiredBy>
+  <dcterms:issued>2022-01-01T12:00:00.000Z</dcterms:issued>
+  <dcterms:isVersionOf>https://example.org/original-feed</dcterms:isVersionOf>
+  <dcterms:language>en-US</dcterms:language>
+  <dcterms:license>Creative Commons Attribution 4.0</dcterms:license>
+  <dcterms:mediator>Content Management System</dcterms:mediator>
+  <dcterms:medium>Digital</dcterms:medium>
+  <dcterms:modified>2023-01-01T12:00:00.000Z</dcterms:modified>
+  <dcterms:provenance>Originally created by Example Publishing Company</dcterms:provenance>
+  <dcterms:publisher>Example Publishing Company</dcterms:publisher>
+  <dcterms:references>https://example.org/referenced-sources</dcterms:references>
+  <dcterms:relation>https://example.org/related-feeds</dcterms:relation>
+  <dcterms:replaces>https://example.org/old-feed</dcterms:replaces>
+  <dcterms:requires>RSS 2.0 compatible reader</dcterms:requires>
+  <dcterms:rights>Copyright 2025 Example Publishing Company</dcterms:rights>
+  <dcterms:rightsHolder>Example Publishing Company</dcterms:rightsHolder>
+  <dcterms:source>https://example.org/original-source</dcterms:source>
+  <dcterms:spatial>Global</dcterms:spatial>
+  <dcterms:subject>Technology, Programming, Web Development</dcterms:subject>
+  <dcterms:tableOfContents>Latest articles, tutorials, and news</dcterms:tableOfContents>
+  <dcterms:temporal>2022-present</dcterms:temporal>
+  <dcterms:title>Dublin Core Terms Enhanced Feed Title</dcterms:title>
+  <dcterms:type>Text</dcterms:type>
+  <dcterms:valid>2025-12-31T23:59:59.000Z</dcterms:valid>
+
+  <!-- Pingback Namespace: Feed Level Tags -->
+  <pingback:to>https://example.com/pingback-service</pingback:to>
+
+  <!-- Admin Namespace: Feed Level Tags -->
+  <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
+  <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+
+  <!-- ccREL Namespace: Feed Level Tags -->
+  <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
+  <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
+  <cc:attributionName>Example Publishing Company</cc:attributionName>
+  <cc:attributionURL>https://example.com/</cc:attributionURL>
+  <cc:useGuidelines>https://example.com/usage-guidelines</cc:useGuidelines>
+  <cc:permits>http://creativecommons.org/ns#Reproduction</cc:permits>
+  <cc:requires>http://creativecommons.org/ns#Attribution</cc:requires>
+  <cc:prohibits>http://creativecommons.org/ns#CommercialUse</cc:prohibits>
+  <cc:jurisdiction>http://creativecommons.org/international/us/</cc:jurisdiction>
+  <cc:legalcode>https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode</cc:legalcode>
+  <cc:deprecatedOn>2025-12-31</cc:deprecatedOn>
+
+  <!-- Creative Commons Namespace: Feed Level Tags -->
+  <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
+
+  <!-- OpenSearch Namespace: Feed Level Tags -->
+  <opensearch:totalResults>1000</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:Query role="request" searchTerms="quantum computing" startIndex="0" count="10"/>
+
+  <!-- YouTube Namespace: Feed Level Tags -->
+  <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
+  <yt:playlistId>PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf</yt:playlistId>
+
   <entry>
-    <title>Example Entry</title>
     <id>example-entry</id>
+    <link href="https://example.com/posts/understanding-xml-namespaces/comments/1/replies" rel="replies" thr:count="2" thr:updated="2025-05-10T16:45:00Z"/>
+    <title>Example Entry</title>
+    <author>
+      <name>H1 Collaboration</name>
+    </author>
+    <author>
+      <name>John Doe</name>
+
+      <!-- arXiv Namespace: Author Level Tags -->
+      <arxiv:affiliation>New Mexico State University</arxiv:affiliation>
+    </author>
+
+    <!-- arXiv Namespace: Entry Level Tags -->
+    <arxiv:comment>23 pages, 8 figures and 4 tables</arxiv:comment>
+    <arxiv:journal_ref>Eur.Phys.J. C31 (2003) 17-29</arxiv:journal_ref>
+    <arxiv:doi>10.1529/biophysj.104.047340</arxiv:doi>
+    <arxiv:primary_category term="hep-ex" scheme="http://arxiv.org/schemas/atom" label="High Energy Physics - Experiment"/>
+
+    <!-- Atom Publishing Protocol Namespace: Entry Level Tags -->
+    <app:edited>2024-03-15T14:30:00.000Z</app:edited>
+    <app:control>
+      <app:draft>yes</app:draft>
+    </app:control>
 
     <!-- Dublin Core Namespace: Entry Level Tags -->
-    <dc:creator>Jack Jackson</dc:creator>
-    <dc:contributor>Assistant Editor Mike Thompson</dc:contributor>
-    <dc:date>2022-01-01T12:00+00:00</dc:date>
-    <dc:description>Detailed description of the example entry content</dc:description>
     <dc:title>Dublin Core Enhanced Entry Title</dc:title>
+    <dc:creator>Jack Jackson</dc:creator>
     <dc:subject>Article, Tutorial, Example</dc:subject>
+    <dc:description>Detailed description of the example entry content</dc:description>
     <dc:publisher>Example News Organization</dc:publisher>
+    <dc:contributor>Assistant Editor Mike Thompson</dc:contributor>
+    <dc:date>2022-01-01T12:00:00.000Z</dc:date>
     <dc:type>Article</dc:type>
     <dc:format>application/xhtml+xml</dc:format>
     <dc:identifier>urn:uuid:98765432-9876-9876-9876-987654321def</dc:identifier>
@@ -252,8 +332,6 @@
     <dc:rights>Copyright 2025 Example News Organization</dc:rights>
 
     <!-- Dublin Core Terms Namespace: Entry Level Tags -->
-    <dcterms:created>2022-01-01T12:00+00:00</dcterms:created>
-    <dcterms:license>Creative Commons Attribution 4.0</dcterms:license>
     <dcterms:abstract>This article explores advanced concepts in technology</dcterms:abstract>
     <dcterms:accessRights>Public access with attribution required</dcterms:accessRights>
     <dcterms:accrualMethod>Single publication</dcterms:accrualMethod>
@@ -261,16 +339,17 @@
     <dcterms:accrualPolicy>Editorial review required</dcterms:accrualPolicy>
     <dcterms:alternative>Alternative Item Title</dcterms:alternative>
     <dcterms:audience>Technical professionals</dcterms:audience>
-    <dcterms:available>2022-01-01T12:00+00:00</dcterms:available>
+    <dcterms:available>2022-01-01T12:00:00.000Z</dcterms:available>
     <dcterms:bibliographicCitation>Smith, J. (2022). Example Item. Retrieved from https://example.org/item/1</dcterms:bibliographicCitation>
     <dcterms:conformsTo>HTML5 standard</dcterms:conformsTo>
     <dcterms:contributor>Assistant Editor Mike Thompson</dcterms:contributor>
     <dcterms:coverage>United States technology sector</dcterms:coverage>
+    <dcterms:created>2022-01-01T12:00:00.000Z</dcterms:created>
     <dcterms:creator>Jack Jackson</dcterms:creator>
-    <dcterms:date>2022-01-01T12:00+00:00</dcterms:date>
-    <dcterms:dateAccepted>2022-01-01T12:00+00:00</dcterms:dateAccepted>
-    <dcterms:dateCopyrighted>2022-01-01T12:00+00:00</dcterms:dateCopyrighted>
-    <dcterms:dateSubmitted>2022-01-01T12:00+00:00</dcterms:dateSubmitted>
+    <dcterms:date>2022-01-01T12:00:00.000Z</dcterms:date>
+    <dcterms:dateAccepted>2022-01-01T12:00:00.000Z</dcterms:dateAccepted>
+    <dcterms:dateCopyrighted>2022-01-01T12:00:00.000Z</dcterms:dateCopyrighted>
+    <dcterms:dateSubmitted>2022-01-01T12:00:00.000Z</dcterms:dateSubmitted>
     <dcterms:description>Detailed description of the example item content and its significance</dcterms:description>
     <dcterms:educationLevel>Advanced</dcterms:educationLevel>
     <dcterms:extent>Approximately 2500 words</dcterms:extent>
@@ -285,12 +364,13 @@
     <dcterms:isReferencedBy>https://example.org/item/1/citations</dcterms:isReferencedBy>
     <dcterms:isReplacedBy>https://example.org/item/1/updated</dcterms:isReplacedBy>
     <dcterms:isRequiredBy>https://example.org/item/1/prerequisites</dcterms:isRequiredBy>
-    <dcterms:issued>2022-01-01T12:00+00:00</dcterms:issued>
+    <dcterms:issued>2022-01-01T12:00:00.000Z</dcterms:issued>
     <dcterms:isVersionOf>https://example.org/item/1/original</dcterms:isVersionOf>
     <dcterms:language>en-US</dcterms:language>
+    <dcterms:license>Creative Commons Attribution 4.0</dcterms:license>
     <dcterms:mediator>Editorial Team</dcterms:mediator>
     <dcterms:medium>Digital</dcterms:medium>
-    <dcterms:modified>2022-06-01T12:00+00:00</dcterms:modified>
+    <dcterms:modified>2022-06-01T12:00:00.000Z</dcterms:modified>
     <dcterms:provenance>Originally published by Example News Organization</dcterms:provenance>
     <dcterms:publisher>Example News Organization</dcterms:publisher>
     <dcterms:references>https://example.org/item/1/references</dcterms:references>
@@ -306,7 +386,20 @@
     <dcterms:temporal>2022</dcterms:temporal>
     <dcterms:title>Dublin Core Terms Enhanced Item Title</dcterms:title>
     <dcterms:type>Article</dcterms:type>
-    <dcterms:valid>2025-12-31T23:59:59+00:00</dcterms:valid>
+    <dcterms:valid>2025-12-31T23:59:59.000Z</dcterms:valid>
+
+    <!-- ccREL Namespace: Entry Level Tags -->
+    <cc:license>https://creativecommons.org/licenses/by/4.0/</cc:license>
+    <cc:morePermissions>https://example.com/additional-permissions</cc:morePermissions>
+    <cc:attributionName>Jack Jackson</cc:attributionName>
+    <cc:attributionURL>https://example.com/authors/jack-jackson</cc:attributionURL>
+    <cc:useGuidelines>https://example.com/article-usage-guidelines</cc:useGuidelines>
+    <cc:permits>http://creativecommons.org/ns#Reproduction</cc:permits>
+    <cc:requires>http://creativecommons.org/ns#Attribution</cc:requires>
+    <cc:prohibits>http://creativecommons.org/ns#CommercialUse</cc:prohibits>
+    <cc:jurisdiction>http://creativecommons.org/international/us/</cc:jurisdiction>
+    <cc:legalcode>https://creativecommons.org/licenses/by/4.0/legalcode</cc:legalcode>
+    <cc:deprecatedOn>2026-12-31</cc:deprecatedOn>
 
     <!-- Slash Namespace: Entry Level Tags -->
     <slash:section>articles</slash:section>
@@ -315,83 +408,36 @@
     <slash:hit_parade>177,155,105,33,6,3,0</slash:hit_parade>
 
     <!-- iTunes Namespace: Entry Level Tags -->
-    <itunes:explicit>false</itunes:explicit>
     <itunes:duration>1800</itunes:duration>
-    <itunes:image>https://example.com/images/episode-cover.jpg</itunes:image>
+    <itunes:image href="https://example.com/images/episode-cover.jpg"/>
+    <itunes:explicit>no</itunes:explicit>
     <itunes:title>iTunes Enhanced Episode Title</itunes:title>
     <itunes:episode>1</itunes:episode>
     <itunes:season>1</itunes:season>
     <itunes:episodeType>full</itunes:episodeType>
-    <itunes:block>false</itunes:block>
+    <itunes:block>no</itunes:block>
     <itunes:summary>This is a detailed summary of the episode content and key takeaways</itunes:summary>
     <itunes:subtitle>Episode subtitle with additional context</itunes:subtitle>
-    <itunes:keywords>tutorial, example, technology, programming</itunes:keywords>
+    <itunes:keywords>tutorial,example,technology,programming</itunes:keywords>
 
-    <!-- YouTube Namespace: Item Level Tags -->
-    <yt:videoId>dQw4w9WgXcQ</yt:videoId>
-    <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
+    <!-- Google Play Podcasts Namespace: Entry Level Tags -->
+    <googleplay:author>Episode Author</googleplay:author>
+    <googleplay:description>Plain-text episode description for Google Play Podcasts</googleplay:description>
+    <googleplay:explicit>clean</googleplay:explicit>
+    <googleplay:block>no</googleplay:block>
+    <googleplay:image href="https://example.com/images/episode-googleplay.jpg"/>
 
-    <!-- Media Namespace: Item/Feed Level Tags -->
-    <media:content url="https://example.com/videos/sample1.mp4" fileSize="12345678" type="video/mp4" medium="video" isDefault="true" expression="full" bitrate="1500" framerate="30" samplingrate="44.1" channels="2" duration="120" height="720" width="1280" lang="en">
-      <media:title type="plain">Sample Video Title</media:title>
-      <media:description type="html">This is a &lt;b&gt;sample video&lt;/b&gt; demonstrating media:content</media:description>
-      <media:keywords>sample, video, example, media, rss</media:keywords>
-      <media:thumbnail url="https://example.com/thumbnails/sample1.jpg" width="320" height="180" time="00:00:15.000"/>
-      <media:category scheme="http://search.yahoo.com/mrss/category_schema">Entertainment</media:category>
-      <media:hash algo="md5">dfdec888b7f38882e8a698d52eaebc04</media:hash>
-      <media:credit role="producer" scheme="urn:ebu">Jane Smith</media:credit>
-      <media:rating scheme="urn:simple">adult</media:rating>
-      <media:copyright>© 2025 Example Media Inc.</media:copyright>
-      <media:text type="transcript" lang="en" start="00:00:03" end="00:00:10">This is a sample transcript text</media:text>
-      <media:restriction relationship="allow" type="country">us ca gb</media:restriction>
-      <media:community>
-        <media:starRating average="4.5" count="2500" min="1" max="5" />
-        <media:statistics views="12345" favorites="413" />
-        <media:tags>featured, media, example</media:tags>
-      </media:community>
-      <media:comments>
-        <media:comment>Great video!</media:comment>
-        <media:comment>Very informative content</media:comment>
-      </media:comments>
-      <media:embed url="https://example.com/players/embed" width="640" height="360">
-        <media:param name="autoplay">true</media:param>
-        <media:param name="theme">dark</media:param>
-      </media:embed>
-      <media:responses>
-        <media:response>https://example.com/videos/response1</media:response>
-      </media:responses>
-      <media:backLinks>
-        <media:backLink>https://example.com/articles/related</media:backLink>
-      </media:backLinks>
-      <media:status state="active" />
-      <media:price type="rent" price="2.99" currency="USD" />
-      <media:license type="text/html" href="https://example.com/license">Standard License</media:license>
-      <media:peerLink type="application/torrent" href="https://example.com/torrents/sample1.torrent" />
-      <media:location>Sample Studio</media:location>
-      <media:rights status="official" />
-      <media:scenes>
-        <media:scene>
-          <sceneTitle>Introduction</sceneTitle>
-          <sceneDescription>Opening sequence</sceneDescription>
-          <sceneStartTime>00:00:00</sceneStartTime>
-          <sceneEndTime>00:00:30</sceneEndTime>
-        </media:scene>
-        <media:scene>
-          <sceneTitle>Main Content</sceneTitle>
-          <sceneStartTime>00:00:30</sceneStartTime>
-          <sceneEndTime>00:01:45</sceneEndTime>
-        </media:scene>
-      </media:scenes>
-    </media:content>
+    <!-- Podlove Simple Chapters Namespace: Entry Level Tags -->
+    <psc:chapters>
+      <psc:chapter start="00:00:00.000" title="Introduction" href="https://example.com/episode/intro" image="https://example.com/images/intro-chapter.jpg"/>
+      <psc:chapter start="00:05:30.000" title="Main Topic Discussion" href="https://example.com/episode/main-topic"/>
+      <psc:chapter start="00:15:45.500" title="Guest Interview" href="https://example.com/episode/interview" image="https://example.com/images/interview-chapter.jpg"/>
+      <psc:chapter start="00:28:12.250" title="Q&amp;A Session"/>
+      <psc:chapter start="00:35:00.000" title="Conclusion and Next Steps" href="https://example.com/episode/conclusion"/>
+    </psc:chapters>
+
+    <!-- Media Namespace: Entry Level Tags -->
     <media:group>
-      <media:title>Multi-Format Content Example</media:title>
-      <media:description>This video is available in multiple formats and resolutions</media:description>
-      <media:thumbnail url="https://example.com/thumbnails/group-main.jpg" width="640" height="360" />
-      <media:thumbnail url="https://example.com/thumbnails/group-alt.jpg" width="1280" height="720" />
-      <media:keywords>group, multiple, formats, resolutions</media:keywords>
-      <media:category>Technology</media:category>
-      <media:rating scheme="urn:mpaa">PG</media:rating>
-      <media:copyright>© 2025 Example Media Inc.</media:copyright>
       <media:content url="https://example.com/videos/sample-hd.mp4" fileSize="45678912" type="video/mp4" medium="video" expression="full" bitrate="5000" framerate="60" duration="180" height="1080" width="1920" lang="en">
         <media:title>HD Version (1080p)</media:title>
       </media:content>
@@ -410,48 +456,127 @@
       <media:content url="https://example.com/captions/sample-es.srt" type="text/srt" medium="document" expression="sample" lang="es">
         <media:title>Spanish Subtitles</media:title>
       </media:content>
+      <media:rating scheme="urn:mpaa">PG</media:rating>
+      <media:title>Multi-Format Content Example</media:title>
+      <media:description>This video is available in multiple formats and resolutions</media:description>
+      <media:keywords>group,multiple,formats,resolutions</media:keywords>
+      <media:thumbnail url="https://example.com/thumbnails/group-main.jpg" height="360" width="640"/>
+      <media:thumbnail url="https://example.com/thumbnails/group-alt.jpg" height="720" width="1280"/>
+      <media:category>Technology</media:category>
+      <media:copyright>© 2025 Example Media Inc.</media:copyright>
     </media:group>
+    <media:content url="https://example.com/videos/sample1.mp4" fileSize="12345678" type="video/mp4" medium="video" isDefault="true" expression="full" bitrate="1500" framerate="30" samplingrate="44.1" channels="2" duration="120" height="720" width="1280" lang="en">
+      <media:rating scheme="urn:simple">adult</media:rating>
+      <media:title type="plain">Sample Video Title</media:title>
+      <media:description type="html">This is a &lt;b&gt;sample video&lt;/b&gt; demonstrating media:content</media:description>
+      <media:keywords>sample,video,example,media,rss</media:keywords>
+      <media:thumbnail url="https://example.com/thumbnails/sample1.jpg" height="180" width="320" time="00:00:15.000"/>
+      <media:category scheme="http://search.yahoo.com/mrss/category_schema">Entertainment</media:category>
+      <media:hash algo="md5">dfdec888b7f38882e8a698d52eaebc04</media:hash>
+      <media:credit role="producer" scheme="urn:ebu">Jane Smith</media:credit>
+      <media:copyright>© 2025 Example Media Inc.</media:copyright>
+      <media:text type="transcript" lang="en" start="00:00:03" end="00:00:10">This is a sample transcript text</media:text>
+      <media:restriction relationship="allow" type="country">us ca gb</media:restriction>
+      <media:community>
+        <media:starRating average="4.5" count="2500" min="1" max="5"/>
+        <media:statistics views="12345" favorites="413"/>
+        <media:tags>featured:2,media:5,example:1</media:tags>
+      </media:community>
+      <media:comments>
+        <media:comment>Great video!</media:comment>
+        <media:comment>Very informative content</media:comment>
+      </media:comments>
+      <media:embed url="https://example.com/players/embed" width="640" height="360">
+        <media:param name="autoplay">true</media:param>
+        <media:param name="theme">dark</media:param>
+      </media:embed>
+      <media:responses>
+        <media:response>https://example.com/videos/response1</media:response>
+      </media:responses>
+      <media:backLinks>
+        <media:backLink>https://example.com/articles/related</media:backLink>
+      </media:backLinks>
+      <media:status state="active"/>
+      <media:price type="rent" price="2.99" currency="USD"/>
+      <media:license type="text/html" href="https://example.com/license">Standard License</media:license>
+      <media:peerLink type="application/torrent" href="https://example.com/torrents/sample1.torrent"/>
+      <media:location>Sample Studio</media:location>
+      <media:rights status="official"/>
+      <media:scenes>
+        <media:scene>
+          <sceneTitle>Introduction</sceneTitle>
+          <sceneDescription>Opening sequence</sceneDescription>
+          <sceneStartTime>00:00:00</sceneStartTime>
+          <sceneEndTime>00:00:30</sceneEndTime>
+        </media:scene>
+        <media:scene>
+          <sceneTitle>Main Content</sceneTitle>
+          <sceneStartTime>00:00:30</sceneStartTime>
+          <sceneEndTime>00:01:45</sceneEndTime>
+        </media:scene>
+      </media:scenes>
+    </media:content>
+    <media:rating scheme="urn:mpaa">PG-13</media:rating>
+    <media:rating scheme="urn:v-chip">TV-14</media:rating>
     <media:title type="text">Advanced Media Features Demo</media:title>
+    <media:thumbnail url="https://example.com/thumbnails/adv-1.jpg" time="00:00:05.000"/>
+    <media:thumbnail url="https://example.com/thumbnails/adv-2.jpg" time="00:01:15.000"/>
+    <media:thumbnail url="https://example.com/thumbnails/adv-3.jpg" time="00:02:30.000"/>
+    <media:category scheme="http://dmoz.org">Arts/Movies/Titles/A/</media:category>
     <media:credit role="director" scheme="urn:ebu">Michael Chang</media:credit>
     <media:credit role="actor" scheme="urn:ebu">Sarah Johnson</media:credit>
     <media:credit role="actor" scheme="urn:ebu">Robert Williams</media:credit>
-    <media:category scheme="http://dmoz.org">Arts/Movies/Titles/A/</media:category>
-    <media:status state="active" reason="approved" />
-    <media:thumbnail url="https://example.com/thumbnails/adv-1.jpg" time="00:00:05.000" />
-    <media:thumbnail url="https://example.com/thumbnails/adv-2.jpg" time="00:01:15.000" />
-    <media:thumbnail url="https://example.com/thumbnails/adv-3.jpg" time="00:02:30.000" />
-    <media:price type="package" price="9.99" currency="USD" info="full access">Complete Package</media:price>
-    <media:price type="subscription" price="4.99" currency="USD" info="monthly">Monthly Subscription</media:price>
     <media:restriction relationship="allow" type="country">us ca gb de fr</media:restriction>
     <media:restriction relationship="deny" type="sharing">true</media:restriction>
-    <media:rating scheme="urn:mpaa">PG-13</media:rating>
-    <media:rating scheme="urn:v-chip">TV-14</media:rating>
     <media:community>
-      <media:starRating average="4.8" count="12563" min="1" max="5" />
-      <media:statistics views="256789" favorites="3421" shares="1245" />
-      <media:tags>cinematic, production, advanced, technical, demo</media:tags>
+      <media:starRating average="4.8" count="12563" min="1" max="5"/>
+      <media:statistics views="256789" favorites="3421"/>
+      <media:tags>cinematic:3,production:1,advanced:4,technical:7,demo:2</media:tags>
     </media:community>
+    <media:status state="active" reason="approved"/>
+    <media:price type="package" info="full access" price="9.99" currency="USD"/>
+    <media:price type="subscription" info="monthly" price="4.99" currency="USD"/>
 
-    <!-- GeoRSS-Simple Namespace: Item/Feed Level Tags (while not typical, included are all values for testing) -->
+    <!-- W3C Basic Geo Namespace: Entry Level Tags -->
+    <geo:lat>37.8199</geo:lat>
+    <geo:long>-122.4783</geo:long>
+    <geo:alt>67.0</geo:alt>
+
+    <!-- GeoRSS-Simple Namespace: Entry Level Tags -->
     <georss:point>37.78 -122.42</georss:point>
-    <georss:line>37.78 -122.42 37.42 -122.10 37.86 -122.27</georss:line>
+    <georss:line>37.78 -122.42 37.42 -122.1 37.86 -122.27</georss:line>
     <georss:polygon>37.86 -122.47 37.86 -122.37 37.76 -122.37 37.76 -122.47 37.86 -122.47</georss:polygon>
     <georss:box>37.15 -122.85 38.15 -121.85</georss:box>
-    <georss:featuretypetag>region</georss:featuretypetag>
-    <georss:relationshiptag>contains</georss:relationshiptag>
-    <georss:featurename>San Francisco Bay Area</georss:featurename>
+    <georss:featureTypeTag>region</georss:featureTypeTag>
+    <georss:relationshipTag>contains</georss:relationshipTag>
+    <georss:featureName>San Francisco Bay Area</georss:featureName>
     <georss:elev>360</georss:elev>
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
 
-    <!-- Atom Threading Namespace: Item Level Tags -->
+    <!-- Atom Threading Namespace: Entry Level Tags -->
     <thr:total>100</thr:total>
     <thr:in-reply-to ref="urn:uuid:d5e9c5d0-4c0c-11ec-81d3-0242ac130003" href="https://example.com/posts/understanding-xml-namespaces" type="application/xhtml+xml"/>
     <thr:in-reply-to ref="urn:uuid:e7865b80-4c0c-11ec-81d3-0242ac130003" href="https://example.com/posts/understanding-xml-namespaces/comments/1" type="application/xhtml+xml"/>
-    <link rel="replies" href="https://example.com/posts/understanding-xml-namespaces/comments/1/replies" thr:count="2" thr:updated="2025-05-10T16:45:00Z"/>
 
-    <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
+    <!-- Well Formed Web CommentAPI Namespace: Entry Level Tags -->
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
     <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
+
+    <!-- Pingback Namespace: Entry Level Tags -->
+    <pingback:server>https://example.com/xmlrpc.php</pingback:server>
+    <pingback:target>https://referenced-blog.com/article</pingback:target>
+
+    <!-- Trackback Namespace: Entry Level Tags -->
+    <trackback:ping>https://example.com/trackback/123</trackback:ping>
+    <trackback:about>https://blog1.com/trackback/456</trackback:about>
+    <trackback:about>https://blog2.com/trackback/789</trackback:about>
+
+    <!-- Creative Commons Namespace: Entry Level Tags -->
+    <creativeCommons:license>http://creativecommons.org/licenses/by-sa/4.0/</creativeCommons:license>
+
+    <!-- YouTube Namespace: Entry Level Tags -->
+    <yt:videoId>dQw4w9WgXcQ</yt:videoId>
+    <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
   </entry>
 </feed>
