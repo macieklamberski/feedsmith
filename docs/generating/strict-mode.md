@@ -118,7 +118,6 @@ generateRssFeed(
 **Use lenient mode (default) when:**
 - Processing feeds from external sources
 - Migrating existing feeds that may be incomplete
-- Rapid prototyping where convenience matters more than correctness
 
 ## Related
 

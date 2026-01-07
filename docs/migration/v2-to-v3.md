@@ -15,9 +15,9 @@ npm install feedsmith@latest
 
 ## Breaking Changes
 
-### Default Behavior Inverted
+### Strict Mode Now Opt-In
 
-In 2.x, generate functions were strict by default and required `{ lenient: true }` for optional fields. In 3.x, this is inverted: functions are lenient by default and accept `{ strict: true }` for compile-time validation.
+In 2.x, generate functions enforced spec-required fields by default and required `{ lenient: true }` to make all fields optional. In 3.x, this is inverted: all fields are optional by default and `{ strict: true }` enables compile-time validation of spec-required fields.
 
 #### Before (2.x)
 ```typescript
