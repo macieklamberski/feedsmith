@@ -11,24 +11,32 @@ export type ExtraFields<F extends ReadonlyArray<string>, V = unknown> = {
 export type AnyOf<T> = Partial<{ [P in keyof T]-?: NonNullable<T[P]> }> &
   { [P in keyof T]-?: Pick<{ [Q in keyof T]-?: NonNullable<T[Q]> }, P> }[keyof T]
 
-export type IsPlainObject<T> = T extends Array<unknown>
-  ? false
-  : T extends (...args: Array<unknown>) => unknown
+export type IsPlainObject<T> =
+  T extends Array<unknown>
     ? false
-    : T extends Date
+    : T extends (...args: Array<unknown>) => unknown
       ? false
-      : T extends object
-        ? T extends null
-          ? false
-          : true
-        : false
+      : T extends Date
+        ? false
+        : T extends object
+          ? T extends null
+            ? false
+            : true
+          : false
 
 export type RemoveUndefined<T> = T extends undefined ? never : T
 
-export type DeepPartial<T> = IsPlainObject<T> extends true
-  ? { [P in keyof T]?: DeepPartial<RemoveUndefined<T[P]>> }
-  : T extends Array<infer U>
-    ? Array<DeepPartial<U>>
+export type DeepPartial<T> =
+  IsPlainObject<T> extends true
+    ? { [P in keyof T]?: DeepPartial<RemoveUndefined<T[P]>> }
+    : T extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : T
+
+export type DeepOmit<T, K extends string> = T extends Array<infer U>
+  ? Array<DeepOmit<U, K>>
+  : T extends object
+    ? Pick<{ [P in keyof T]: DeepOmit<T[P], K> }, Exclude<keyof T, K>>
     : T
 
 export type ParseExactUtil<R> = (value: Unreliable) => R | undefined
