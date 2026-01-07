@@ -37,8 +37,16 @@ export type GenerateUtil<V> = BaseGenerateUtil<V, UtilOptions>
 
 // #region reference
 export namespace Atom {
-  // For simplicity's sake, a string is used for now, but this may be reconsidered in the future.
-  export type Text = string
+  export type Text = {
+    value: string
+    type?: string
+  }
+
+  export type Content = {
+    value?: string
+    type?: string
+    src?: string
+  }
 
   export type Link<TDate extends DateLike> = {
     href?: string // Required in spec.
@@ -87,7 +95,7 @@ export namespace Atom {
   export type Entry<TDate extends DateLike> = {
     authors?: Array<Person>
     categories?: Array<Category>
-    content?: Text
+    content?: Content
     contributors?: Array<Person>
     id?: string // Required in spec.
     links?: Array<Link<TDate>>
