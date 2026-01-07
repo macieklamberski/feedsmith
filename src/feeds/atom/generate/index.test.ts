@@ -1146,6 +1146,73 @@ describe('generate', () => {
   })
 })
 
+describe('strict mode', () => {
+  it('should require id, title, updated in strict mode', () => {
+    // @ts-expect-error: This is for testing purposes.
+    generate({ title: 'Test' }, { strict: true })
+  })
+
+  it('should accept feed with all required fields in strict mode', () => {
+    generate({ id: 'https://example.com', title: 'Test', updated: new Date() }, { strict: true })
+  })
+
+  it('should require entry fields in strict mode', () => {
+    generate(
+      {
+        id: 'https://example.com',
+        title: 'Test',
+        updated: new Date(),
+        // @ts-expect-error: This is for testing purposes.
+        entries: [{ id: 'https://example.com/1' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept entries with all required fields in strict mode', () => {
+    generate(
+      {
+        id: 'https://example.com',
+        title: 'Test',
+        updated: new Date(),
+        entries: [{ id: 'https://example.com/1', title: 'Entry', updated: new Date() }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should require nested type fields in strict mode', () => {
+    generate(
+      {
+        id: 'https://example.com',
+        title: 'Test',
+        updated: new Date(),
+        // @ts-expect-error: This is for testing purposes.
+        links: [{ rel: 'self' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept nested types with all required fields in strict mode', () => {
+    generate(
+      {
+        id: 'https://example.com',
+        title: 'Test',
+        updated: new Date(),
+        links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
+        authors: [{ name: 'John Doe' }],
+        categories: [{ term: 'tech' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept partial feed in lenient mode', () => {
+    generate({ title: 'Test' })
+  })
+})
+
 describe('generate edge cases', () => {
   it('should accept partial feeds', () => {
     const value = {

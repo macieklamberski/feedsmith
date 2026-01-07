@@ -270,6 +270,72 @@ describe('generate', () => {
   })
 })
 
+describe('strict mode', () => {
+  it('should require outline text in strict mode', () => {
+    generate(
+      {
+        body: {
+          // @ts-expect-error: This is for testing purposes.
+          outlines: [{ type: 'rss', xmlUrl: 'https://example.com/feed.xml' }],
+        },
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept outlines with text in strict mode', () => {
+    generate(
+      {
+        body: {
+          outlines: [{ text: 'Feed', type: 'rss', xmlUrl: 'https://example.com/feed.xml' }],
+        },
+      },
+      { strict: true },
+    )
+  })
+
+  it('should require nested outline text in strict mode', () => {
+    generate(
+      {
+        body: {
+          outlines: [
+            {
+              text: 'Category',
+              // @ts-expect-error: This is for testing purposes.
+              outlines: [{ type: 'rss', xmlUrl: 'https://example.com/feed.xml' }],
+            },
+          ],
+        },
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept nested outlines with text in strict mode', () => {
+    generate(
+      {
+        body: {
+          outlines: [
+            {
+              text: 'Category',
+              outlines: [{ text: 'Feed', type: 'rss', xmlUrl: 'https://example.com/feed.xml' }],
+            },
+          ],
+        },
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept partial document in lenient mode', () => {
+    generate({
+      body: {
+        outlines: [{ type: 'rss', xmlUrl: 'https://example.com/feed.xml' }],
+      },
+    })
+  })
+})
+
 describe('generate with partial and string dates', () => {
   it('should accept partial documents', () => {
     const value = {
