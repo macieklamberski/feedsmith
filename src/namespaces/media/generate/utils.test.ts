@@ -1584,17 +1584,19 @@ describe('generateGroup', () => {
 describe('generateItemOrFeed', () => {
   it('should generate item with all properties', () => {
     const value = {
-      group: {
-        contents: [
-          {
-            url: 'http://www.foo.com/video.mp4',
-            type: 'video/mp4',
+      groups: [
+        {
+          contents: [
+            {
+              url: 'http://www.foo.com/video.mp4',
+              type: 'video/mp4',
+            },
+          ],
+          title: {
+            value: 'Video Group',
           },
-        ],
-        title: {
-          value: 'Video Group',
         },
-      },
+      ],
       contents: [
         {
           url: 'http://www.foo.com/audio.mp3',
@@ -1722,17 +1724,19 @@ describe('generateItemOrFeed', () => {
       ],
     }
     const expected = {
-      'media:group': {
-        'media:content': [
-          {
-            '@url': 'http://www.foo.com/video.mp4',
-            '@type': 'video/mp4',
+      'media:group': [
+        {
+          'media:content': [
+            {
+              '@url': 'http://www.foo.com/video.mp4',
+              '@type': 'video/mp4',
+            },
+          ],
+          'media:title': {
+            '#text': 'Video Group',
           },
-        ],
-        'media:title': {
-          '#text': 'Video Group',
         },
-      },
+      ],
       'media:content': [
         {
           '@url': 'http://www.foo.com/audio.mp3',
