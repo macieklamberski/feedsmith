@@ -917,8 +917,6 @@ describe('parse', () => {
               dcterms: {
                 creators: ['Jane Doe'],
                 titles: ['DC Terms Title'],
-                creator: 'Jane Doe',
-                title: 'DC Terms Title',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -998,9 +996,8 @@ describe('parse', () => {
       link: 'http://example.com',
       description: 'Test feed with Dublin Core Terms namespace',
       dcterms: {
-        created: '2023-01-01T00:00:00.000Z',
+        created: ['2023-01-01T00:00:00.000Z'],
         licenses: ['Creative Commons Attribution 4.0'],
-        license: 'Creative Commons Attribution 4.0',
       },
       rdf: { about: 'http://example.com' },
       items: [
@@ -1008,9 +1005,8 @@ describe('parse', () => {
           title: 'First item',
           link: 'http://example.com/item1',
           dcterms: {
-            created: '2023-02-01T00:00:00.000Z',
+            created: ['2023-02-01T00:00:00.000Z'],
             licenses: ['MIT License'],
-            license: 'MIT License',
           },
           rdf: { about: 'http://example.com/item1' },
         },
