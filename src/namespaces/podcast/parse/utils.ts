@@ -457,11 +457,6 @@ export const retrieveItem: ParsePartialUtil<PodcastNs.Item> = (value) => {
     socialInteracts: parseArrayOf(value['podcast:socialinteract'], parseSocialInteract),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
     chat: parseSingularOf(value['podcast:chat'], parseChat),
-
-    // Deprecated fields for backward compatibility.
-    location: parseSingularOf(value['podcast:location'], parseLocation),
-    value: parseSingularOf(value['podcast:value'], parseValue),
-    chats: parseArrayOf(value['podcast:chat'], parseChat),
   }
 
   return trimObject(item)
@@ -492,11 +487,6 @@ export const retrieveFeed: ParsePartialUtil<PodcastNs.Feed<string>> = (value) =>
     podping: parseSingularOf(value['podcast:podping'], parsePodping),
     chat: parseSingularOf(value['podcast:chat'], parseChat),
     publisher: parseSingularOf(value['podcast:publisher'], parsePublisher),
-
-    // Deprecated fields for backward compatibility.
-    location: parseSingularOf(value['podcast:location'], parseLocation),
-    value: parseSingularOf(value['podcast:value'], parseValue),
-    chats: parseArrayOf(value['podcast:chat'], parseChat),
   }
 
   return trimObject(feed)

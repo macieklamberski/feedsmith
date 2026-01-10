@@ -1,13 +1,11 @@
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
-  generateArrayOrSingular,
   generateBoolean,
   generateCdataString,
   generateNumber,
   generatePlainString,
   generateRfc822Date,
   generateRfc3339Date,
-  generateSingularOrArray,
   generateTextOrCdataString,
   generateYesNoBoolean,
   isObject,
@@ -26,11 +24,7 @@ export const generateBaseItem: GenerateUtil<PodcastNs.BaseItem> = (baseItem) => 
     'podcast:chapters': generateChapters(baseItem.chapters),
     'podcast:soundbite': trimArray(baseItem.soundbites, generateSoundbite),
     'podcast:person': trimArray(baseItem.persons, generatePerson),
-    'podcast:location': generateArrayOrSingular(
-      baseItem.locations,
-      baseItem.location,
-      generateLocation,
-    ),
+    'podcast:location': trimArray(baseItem.locations, generateLocation),
     'podcast:season': generateSeason(baseItem.season),
     'podcast:episode': generateEpisode(baseItem.episode),
     'podcast:license': generateLicense(baseItem.license),
@@ -38,11 +32,11 @@ export const generateBaseItem: GenerateUtil<PodcastNs.BaseItem> = (baseItem) => 
       baseItem.alternateEnclosures,
       generateAlternateEnclosure,
     ),
-    'podcast:value': generateArrayOrSingular(baseItem.values, baseItem.value, generateValue),
+    'podcast:value': trimArray(baseItem.values, generateValue),
     'podcast:image': trimArray(baseItem.images, generateImage),
     'podcast:socialInteract': trimArray(baseItem.socialInteracts, generateSocialInteract),
     'podcast:txt': trimArray(baseItem.txts, generateTxt),
-    'podcast:chat': generateSingularOrArray(baseItem.chat, baseItem.chats, generateChat),
+    'podcast:chat': baseItem.chat ? generateChat(baseItem.chat) : undefined,
   }
 
   return trimObject(value)
@@ -495,11 +489,11 @@ export const generateFeed: GenerateUtil<PodcastNs.Feed<DateLike>> = (feed) => {
     'podcast:locked': generateLocked(feed.locked),
     'podcast:funding': trimArray(feed.fundings, generateFunding),
     'podcast:person': trimArray(feed.persons, generatePerson),
-    'podcast:location': generateArrayOrSingular(feed.locations, feed.location, generateLocation),
+    'podcast:location': trimArray(feed.locations, generateLocation),
     'podcast:trailer': trimArray(feed.trailers, generateTrailer),
     'podcast:license': generateLicense(feed.license),
     'podcast:guid': generateCdataString(feed.guid),
-    'podcast:value': generateArrayOrSingular(feed.values, feed.value, generateValue),
+    'podcast:value': trimArray(feed.values, generateValue),
     'podcast:medium': generateCdataString(feed.medium),
     'podcast:image': trimArray(feed.images, generateImage),
     'podcast:liveItem': trimArray(feed.liveItems, generateLiveItem),
@@ -509,7 +503,7 @@ export const generateFeed: GenerateUtil<PodcastNs.Feed<DateLike>> = (feed) => {
     'podcast:podroll': generatePodroll(feed.podroll),
     'podcast:updateFrequency': generateUpdateFrequency(feed.updateFrequency),
     'podcast:podping': generatePodping(feed.podping),
-    'podcast:chat': generateSingularOrArray(feed.chat, feed.chats, generateChat),
+    'podcast:chat': feed.chat ? generateChat(feed.chat) : undefined,
     'podcast:publisher': generatePublisher(feed.publisher),
   }
 
