@@ -133,6 +133,39 @@ const strictFeed: Rss.Feed<Date, Rss.Person, true> = {
 1. If you relied on TypeScript to enforce required fields, add `true` as the last type parameter
 2. Alternatively, add runtime validation for required fields
 
+### Dublin Core Namespace: Singular Fields Removed
+
+All deprecated singular fields have been removed from `DcNs.ItemOrFeed`. Per the [Dublin Core specification](https://www.dublincore.org/specifications/dublin-core/dces/), all elements are repeatable and now use plural array forms only.
+
+#### Before (2.x)
+```typescript
+import type { DcNs } from 'feedsmith/types'
+
+const dc: DcNs.ItemOrFeed<string> = {
+  title: 'Document Title',
+  creator: 'John Doe',
+  date: '2024-01-01',
+  subject: 'Technology',
+}
+```
+
+#### After (3.x)
+```typescript
+import type { DcNs } from 'feedsmith/types'
+
+const dc: DcNs.ItemOrFeed<string> = {
+  titles: ['Document Title'],
+  creators: ['John Doe'],
+  dates: ['2024-01-01'],
+  subjects: ['Technology'],
+}
+```
+
+#### Migration Steps
+1. Replace all singular fields with their plural equivalents (e.g., `title` → `titles`, `creator` → `creators`)
+2. Wrap values in arrays
+3. If accessing values, use `dc.titles?.[0]` instead of `dc.title`
+
 ## Migration Checklist
 
 Use this checklist to ensure a complete migration:
@@ -141,4 +174,5 @@ Use this checklist to ensure a complete migration:
 - Add `{ strict: true }` where you need compile-time validation of required fields
 - Remove `DeepPartial` from imports
 - Update type parameters if using strict types directly (add `true` as last parameter)
+- Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
 - Test feed generation to ensure output is correct
