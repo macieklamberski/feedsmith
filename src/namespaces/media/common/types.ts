@@ -245,9 +245,6 @@ export namespace MediaNs {
   export type ItemOrFeed<TStrict extends boolean = false> = {
     groups?: Array<Group<TStrict>>
     contents?: Array<Content<TStrict>>
-
-    /** @deprecated Use `groups` (array) instead. Multiple media:group elements are allowed per specification. */
-    group?: Group<TStrict>
   } & CommonElements<TStrict>
 }
 // #endregion reference
