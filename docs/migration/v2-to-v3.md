@@ -133,6 +133,39 @@ const strictFeed: Rss.Feed<Date, Rss.Person, true> = {
 1. If you relied on TypeScript to enforce required fields, add `true` as the last type parameter
 2. Alternatively, add runtime validation for required fields
 
+### Media Namespace: Deprecated Field Removed
+
+The deprecated `group` field has been removed from `MediaNs.ItemOrFeed` to align with the [Media RSS specification](https://www.rssboard.org/media-rss):
+- `group` → `groups` (spec allows multiple `media:group` elements)
+
+#### Before (2.x)
+```typescript
+import type { MediaNs } from 'feedsmith/types'
+
+const media: MediaNs.ItemOrFeed = {
+  group: {
+    contents: [{ url: 'https://example.com/video.mp4' }],
+  },
+}
+```
+
+#### After (3.x)
+```typescript
+import type { MediaNs } from 'feedsmith/types'
+
+const media: MediaNs.ItemOrFeed = {
+  groups: [
+    {
+      contents: [{ url: 'https://example.com/video.mp4' }],
+    },
+  ],
+}
+```
+
+#### Migration Steps
+1. Replace `group` with `groups` (wrap the object in an array)
+2. If you were accessing `media.group`, change to `media.groups?.[0]`
+
 ### Dublin Core Namespace: Singular Fields Removed
 
 All deprecated singular fields have been removed from `DcNs.ItemOrFeed`. Per the [Dublin Core specification](https://www.dublincore.org/specifications/dublin-core/dces/), all elements are repeatable and now use plural array forms only.
@@ -178,5 +211,6 @@ Use this checklist to ensure a complete migration:
 - Add `{ strict: true }` where you need compile-time validation of required fields
 - Remove `DeepPartial` from imports
 - Update type parameters if using strict types directly (add `true` as last parameter)
+- Replace `media.group` with `media.groups` array
 - Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
 - Test feed generation to ensure output is correct
