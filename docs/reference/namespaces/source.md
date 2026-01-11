@@ -29,6 +29,9 @@ The Source namespace provides elements for enhanced feed metadata, including soc
 
 ## Types
 
+> [!INFO]
+> For details on type parameters (`TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tstrict).
+
 <<< @/../src/namespaces/source/common/types.ts#reference
 
 ## Related

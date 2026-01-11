@@ -29,6 +29,9 @@ Extends Atom feeds with elements for content management workflows.
 
 ## Types
 
+> [!INFO]
+> For details on type parameters (`TDate`), see [TypeScript Reference](/reference/typescript#tdate).
+
 <<< @/../src/namespaces/app/common/types.ts#reference
 
 ## Related

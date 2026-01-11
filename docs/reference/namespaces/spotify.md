@@ -29,6 +29,9 @@ The Spotify namespace provides podcast-specific metadata for Spotify's podcast p
 
 ## Types
 
+> [!INFO]
+> For details on type parameters (`TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tstrict).
+
 <<< @/../src/namespaces/spotify/common/types.ts#reference
 
 ## Related

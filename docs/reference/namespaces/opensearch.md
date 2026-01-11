@@ -29,6 +29,9 @@ The OpenSearch namespace provides elements for communicating search metadata and
 
 ## Types
 
+> [!INFO]
+> For details on type parameters (`TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tstrict).
+
 <<< @/../src/namespaces/opensearch/common/types.ts#reference
 
 ## Related

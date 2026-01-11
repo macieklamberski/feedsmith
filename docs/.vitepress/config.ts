@@ -49,7 +49,7 @@ export default defineConfig({
         items: [
           { text: 'Overview', link: '/generating/' },
           { text: 'Styling', link: '/generating/styling' },
-          { text: 'Lenient Mode', link: '/generating/lenient-mode' },
+          { text: 'Strict Mode', link: '/generating/strict-mode' },
           { text: 'Examples', link: '/generating/examples' },
         ],
       },
@@ -120,7 +120,10 @@ export default defineConfig({
       },
       {
         text: 'Migration',
-        items: [{ text: 'From 1.x to 2.x', link: '/migration/v1-to-v2' }],
+        items: [
+          { text: 'From 2.x to 3.x', link: '/migration/v2-to-v3' },
+          { text: 'From 1.x to 2.x', link: '/migration/v1-to-v2' },
+        ],
       },
     ],
     search: {

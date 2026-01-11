@@ -33,6 +33,9 @@ The GeoRSS Simple namespace enables geographic tagging of RSS feeds and items, a
 
 ## Types
 
+> [!INFO]
+> For details on type parameters (`TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tstrict).
+
 <<< @/../src/namespaces/georss/common/types.ts#reference
 
 ## Related

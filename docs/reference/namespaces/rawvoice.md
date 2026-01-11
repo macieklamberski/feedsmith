@@ -31,6 +31,9 @@ The RawVoice namespace provides elements for enhanced podcast and video content 
 
 ## Types
 
+> [!INFO]
+> For details on type parameters (`TDate`, `TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tdate).
+
 <<< @/../src/namespaces/rawvoice/common/types.ts#reference
 
 ## Related

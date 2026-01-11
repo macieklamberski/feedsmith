@@ -70,7 +70,6 @@ describe('generateQuery', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateQuery(value)).toBeUndefined()
   })
 
