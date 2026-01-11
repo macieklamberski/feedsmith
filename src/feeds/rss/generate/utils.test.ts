@@ -621,14 +621,14 @@ describe('generateItem', () => {
     const value = {
       title: 'Item with DCTerms namespace',
       dcterms: {
-        created: new Date('2023-02-01T00:00:00Z'),
-        license: 'MIT License',
+        created: [new Date('2023-02-01T00:00:00Z')],
+        licenses: ['MIT License'],
       },
     }
     const expected = {
       title: 'Item with DCTerms namespace',
-      'dcterms:created': '2023-02-01T00:00:00.000Z',
-      'dcterms:license': 'MIT License',
+      'dcterms:created': ['2023-02-01T00:00:00.000Z'],
+      'dcterms:license': ['MIT License'],
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -1283,8 +1283,8 @@ describe('generateFeed', () => {
       title: 'Feed with DCTerms namespace',
       description: 'Description',
       dcterms: {
-        created: new Date('2023-01-01T00:00:00Z'),
-        license: 'Creative Commons Attribution 4.0',
+        created: [new Date('2023-01-01T00:00:00Z')],
+        licenses: ['Creative Commons Attribution 4.0'],
       },
     }
     const expected = {
@@ -1294,8 +1294,8 @@ describe('generateFeed', () => {
         channel: {
           title: 'Feed with DCTerms namespace',
           description: 'Description',
-          'dcterms:created': '2023-01-01T00:00:00.000Z',
-          'dcterms:license': 'Creative Commons Attribution 4.0',
+          'dcterms:created': ['2023-01-01T00:00:00.000Z'],
+          'dcterms:license': ['Creative Commons Attribution 4.0'],
         },
       },
     }

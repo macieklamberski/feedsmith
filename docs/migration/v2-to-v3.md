@@ -238,6 +238,43 @@ const dc: DcNs.ItemOrFeed<string> = {
 2. Wrap all values in arrays, including fields that kept their name (`coverage`, `rights`)
 3. If accessing values, use `dc.titles?.[0]` or `dc.coverage?.[0]` instead of singular access
 
+### Dublin Core Terms Namespace: Singular Fields Removed
+
+All deprecated singular fields have been removed from `DcTermsNs.ItemOrFeed`. Per the [Dublin Core specification](https://www.dublincore.org/specifications/dublin-core/dcmi-terms/), all elements are repeatable and now use plural array forms only.
+
+This includes two types of changes:
+- Singular fields renamed to plural (e.g., `title` → `titles`, `creator` → `creators`)
+- Fields that kept their name but changed from singular to array: `accessRights`, `available`, `conformsTo`, `created`, `dateAccepted`, `dateCopyrighted`, `dateSubmitted`, `isFormatOf`, `isPartOf`, `isReferencedBy`, `isReplacedBy`, `isRequiredBy`, `issued`, `isVersionOf`, `modified`, `references`, `replaces`, `requires`, `rights`, `tableOfContents`, `valid`
+
+#### Before (2.x)
+```typescript
+import type { DcTermsNs } from 'feedsmith/types'
+
+const dcterms: DcTermsNs.ItemOrFeed<string> = {
+  title: 'Document Title',
+  creator: 'John Doe',
+  created: '2024-01-01',
+  modified: '2024-06-15',
+}
+```
+
+#### After (3.x)
+```typescript
+import type { DcTermsNs } from 'feedsmith/types'
+
+const dcterms: DcTermsNs.ItemOrFeed<string> = {
+  titles: ['Document Title'],
+  creators: ['John Doe'],
+  created: ['2024-01-01'],
+  modified: ['2024-06-15'],
+}
+```
+
+#### Migration Steps
+1. Replace singular fields with their plural equivalents (e.g., `title` → `titles`)
+2. Wrap all values in arrays, including fields that kept their name (e.g., `created`, `modified`)
+3. If accessing values, use `dcterms.titles?.[0]` or `dcterms.created?.[0]` instead of singular access
+
 ## Migration Checklist
 
 Use this checklist to ensure a complete migration:
@@ -249,4 +286,5 @@ Use this checklist to ensure a complete migration:
 - Replace Media namespace deprecated field (`group` → `groups`)
 - Replace Podcast namespace deprecated fields (`location` → `locations`, `value` → `values`, `chats` → `chat`)
 - Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
+- Replace Dublin Core Terms singular fields with plural arrays (e.g., `title` → `titles`)
 - Test feed generation to ensure output is correct

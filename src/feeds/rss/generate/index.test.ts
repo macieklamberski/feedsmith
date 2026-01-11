@@ -147,15 +147,15 @@ describe('generate', () => {
       title: 'Feed with dcterms namespace',
       description: 'Test feed with Dublin Core Terms namespace',
       dcterms: {
-        created: new Date('2023-01-01T00:00:00Z'),
-        license: 'Creative Commons Attribution 4.0',
+        created: [new Date('2023-01-01T00:00:00Z')],
+        licenses: ['Creative Commons Attribution 4.0'],
       },
       items: [
         {
           title: 'First item',
           dcterms: {
-            created: new Date('2023-02-01T00:00:00Z'),
-            license: 'MIT License',
+            created: [new Date('2023-02-01T00:00:00Z')],
+            licenses: ['MIT License'],
           },
         },
       ],
