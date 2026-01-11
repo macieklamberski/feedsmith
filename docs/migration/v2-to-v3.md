@@ -133,6 +133,39 @@ const strictFeed: Rss.Feed<Date, Rss.Person, true> = {
 1. If you relied on TypeScript to enforce required fields, add `true` as the last type parameter
 2. Alternatively, add runtime validation for required fields
 
+### Dublin Core Terms Namespace: Singular Fields Removed
+
+All deprecated singular fields have been removed from `DcTermsNs.ItemOrFeed`. Per the [Dublin Core specification](https://www.dublincore.org/specifications/dublin-core/dcmi-terms/), all elements are repeatable and now use plural array forms only.
+
+#### Before (2.x)
+```typescript
+import type { DcTermsNs } from 'feedsmith/types'
+
+const dcterms: DcTermsNs.ItemOrFeed<string> = {
+  title: 'Document Title',
+  creator: 'John Doe',
+  created: '2024-01-01',
+  modified: '2024-06-15',
+}
+```
+
+#### After (3.x)
+```typescript
+import type { DcTermsNs } from 'feedsmith/types'
+
+const dcterms: DcTermsNs.ItemOrFeed<string> = {
+  titles: ['Document Title'],
+  creators: ['John Doe'],
+  created: ['2024-01-01'],
+  modified: ['2024-06-15'],
+}
+```
+
+#### Migration Steps
+1. Replace all singular fields with their plural equivalents (e.g., `title` → `titles`, `creator` → `creators`)
+2. Wrap values in arrays
+3. If accessing values, use `dcterms.titles?.[0]` instead of `dcterms.title`
+
 ## Migration Checklist
 
 Use this checklist to ensure a complete migration:
@@ -141,4 +174,5 @@ Use this checklist to ensure a complete migration:
 - Add `{ strict: true }` where you need compile-time validation of required fields
 - Remove `DeepPartial` from imports
 - Update type parameters if using strict types directly (add `true` as last parameter)
+- Replace Dublin Core Terms singular fields with plural arrays (e.g., `title` → `titles`)
 - Test feed generation to ensure output is correct
