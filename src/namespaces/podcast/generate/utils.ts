@@ -36,7 +36,7 @@ export const generateBaseItem: GenerateUtil<PodcastNs.BaseItem> = (baseItem) => 
     'podcast:image': trimArray(baseItem.images, generateImage),
     'podcast:socialInteract': trimArray(baseItem.socialInteracts, generateSocialInteract),
     'podcast:txt': trimArray(baseItem.txts, generateTxt),
-    'podcast:chat': baseItem.chat ? generateChat(baseItem.chat) : undefined,
+    'podcast:chat': generateChat(baseItem.chat),
   }
 
   return trimObject(value)
@@ -503,7 +503,7 @@ export const generateFeed: GenerateUtil<PodcastNs.Feed<DateLike>> = (feed) => {
     'podcast:podroll': generatePodroll(feed.podroll),
     'podcast:updateFrequency': generateUpdateFrequency(feed.updateFrequency),
     'podcast:podping': generatePodping(feed.podping),
-    'podcast:chat': feed.chat ? generateChat(feed.chat) : undefined,
+    'podcast:chat': generateChat(feed.chat),
     'podcast:publisher': generatePublisher(feed.publisher),
   }
 
