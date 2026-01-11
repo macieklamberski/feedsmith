@@ -137,6 +137,10 @@ const strictFeed: Rss.Feed<Date, Rss.Person, true> = {
 
 All deprecated singular fields have been removed from `DcTermsNs.ItemOrFeed`. Per the [Dublin Core specification](https://www.dublincore.org/specifications/dublin-core/dcmi-terms/), all elements are repeatable and now use plural array forms only.
 
+This includes two types of changes:
+- Singular fields renamed to plural (e.g., `title` → `titles`, `creator` → `creators`)
+- Fields that kept their name but changed from singular to array: `accessRights`, `available`, `conformsTo`, `created`, `dateAccepted`, `dateCopyrighted`, `dateSubmitted`, `isFormatOf`, `isPartOf`, `isReferencedBy`, `isReplacedBy`, `isRequiredBy`, `issued`, `isVersionOf`, `modified`, `references`, `replaces`, `requires`, `rights`, `tableOfContents`, `valid`
+
 #### Before (2.x)
 ```typescript
 import type { DcTermsNs } from 'feedsmith/types'
@@ -162,9 +166,9 @@ const dcterms: DcTermsNs.ItemOrFeed<string> = {
 ```
 
 #### Migration Steps
-1. Replace all singular fields with their plural equivalents (e.g., `title` → `titles`, `creator` → `creators`)
-2. Wrap values in arrays
-3. If accessing values, use `dcterms.titles?.[0]` instead of `dcterms.title`
+1. Replace singular fields with their plural equivalents (e.g., `title` → `titles`)
+2. Wrap all values in arrays, including fields that kept their name (e.g., `created`, `modified`)
+3. If accessing values, use `dcterms.titles?.[0]` or `dcterms.created?.[0]` instead of singular access
 
 ## Migration Checklist
 
