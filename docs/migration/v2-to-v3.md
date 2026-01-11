@@ -137,9 +137,9 @@ const strictFeed: Rss.Feed<Date, Rss.Person, true> = {
 
 Deprecated fields have been removed from `PodcastNs.Item` and `PodcastNs.Feed` to align with the [Podcasting 2.0 specification](https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/1.0.md):
 
-- `location` (singular) removed → use `locations` (array)
-- `value` (singular) removed → use `values` (array)
-- `chats` (array) removed → use `chat` (singular)
+- `location` → `locations` (spec allows multiple `podcast:location` elements)
+- `value` → `values` (spec allows multiple `podcast:value` elements)
+- `chats` → `chat` (spec allows only one `podcast:chat` element)
 
 #### Before (2.x)
 ```typescript
@@ -164,9 +164,9 @@ const podcast: PodcastNs.Item = {
 ```
 
 #### Migration Steps
-1. Replace `location` with `locations` (wrap the object in an array)
-2. Replace `value` with `values` (wrap the object in an array)
-3. Replace `chats` with `chat` (use first element if you had multiple)
+1. Replace `location` with `locations` (wrap in array)
+2. Replace `value` with `values` (wrap in array)
+3. Replace `chats` with `chat` (use `chats[0]` if you had multiple)
 
 ## Migration Checklist
 
