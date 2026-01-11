@@ -64,13 +64,13 @@ describe('generate', () => {
       title: 'Feed with dc namespace',
       description: 'Test feed with Dublin Core namespace',
       dc: {
-        creator: 'John Doe',
+        creators: ['John Doe'],
       },
       items: [
         {
           title: 'First item',
           dc: {
-            creator: 'Jane Smith',
+            creators: ['Jane Smith'],
           },
         },
       ],

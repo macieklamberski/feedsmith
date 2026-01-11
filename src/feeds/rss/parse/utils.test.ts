@@ -813,7 +813,6 @@ describe('parseItem', () => {
       title: 'Example Entry',
       dc: {
         creators: ['John Doe'],
-        creator: 'John Doe',
       },
     }
 
@@ -1397,7 +1396,6 @@ describe('parseFeed', () => {
       link: 'https://example.com',
       dc: {
         creators: ['John Doe'],
-        creator: 'John Doe',
       },
     }
 
