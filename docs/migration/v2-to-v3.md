@@ -133,6 +133,41 @@ const strictFeed: Rss.Feed<Date, Rss.Person, true> = {
 1. If you relied on TypeScript to enforce required fields, add `true` as the last type parameter
 2. Alternatively, add runtime validation for required fields
 
+### Podcast Namespace: Deprecated Fields Removed
+
+Deprecated fields have been removed from `PodcastNs.Item` and `PodcastNs.Feed` to align with the [Podcasting 2.0 specification](https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/1.0.md):
+
+- `location` (singular) removed → use `locations` (array)
+- `value` (singular) removed → use `values` (array)
+- `chats` (array) removed → use `chat` (singular)
+
+#### Before (2.x)
+```typescript
+import type { PodcastNs } from 'feedsmith/types'
+
+const podcast: PodcastNs.Item = {
+  location: { name: 'New York' },
+  value: { type: 'lightning', method: 'keysend' },
+  chats: [{ server: 'irc.example.com', protocol: 'irc' }],
+}
+```
+
+#### After (3.x)
+```typescript
+import type { PodcastNs } from 'feedsmith/types'
+
+const podcast: PodcastNs.Item = {
+  locations: [{ name: 'New York' }],
+  values: [{ type: 'lightning', method: 'keysend' }],
+  chat: { server: 'irc.example.com', protocol: 'irc' },
+}
+```
+
+#### Migration Steps
+1. Replace `location` with `locations` (wrap the object in an array)
+2. Replace `value` with `values` (wrap the object in an array)
+3. Replace `chats` with `chat` (use first element if you had multiple)
+
 ## Migration Checklist
 
 Use this checklist to ensure a complete migration:
@@ -141,4 +176,5 @@ Use this checklist to ensure a complete migration:
 - Add `{ strict: true }` where you need compile-time validation of required fields
 - Remove `DeepPartial` from imports
 - Update type parameters if using strict types directly (add `true` as last parameter)
+- Replace Podcast namespace deprecated fields (`location` → `locations`, `value` → `values`, `chats` → `chat`)
 - Test feed generation to ensure output is correct
