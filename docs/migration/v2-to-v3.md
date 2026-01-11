@@ -137,6 +137,10 @@ const strictFeed: Rss.Feed<Date, Rss.Person, true> = {
 
 All deprecated singular fields have been removed from `DcNs.ItemOrFeed`. Per the [Dublin Core specification](https://www.dublincore.org/specifications/dublin-core/dces/), all elements are repeatable and now use plural array forms only.
 
+This includes two types of changes:
+- Singular fields renamed to plural (e.g., `title` → `titles`, `creator` → `creators`)
+- Fields that kept their name but changed from singular to array: `coverage`, `rights`
+
 #### Before (2.x)
 ```typescript
 import type { DcNs } from 'feedsmith/types'
@@ -144,8 +148,8 @@ import type { DcNs } from 'feedsmith/types'
 const dc: DcNs.ItemOrFeed<string> = {
   title: 'Document Title',
   creator: 'John Doe',
-  date: '2024-01-01',
-  subject: 'Technology',
+  coverage: 'Worldwide',
+  rights: 'Copyright 2024',
 }
 ```
 
@@ -156,15 +160,15 @@ import type { DcNs } from 'feedsmith/types'
 const dc: DcNs.ItemOrFeed<string> = {
   titles: ['Document Title'],
   creators: ['John Doe'],
-  dates: ['2024-01-01'],
-  subjects: ['Technology'],
+  coverage: ['Worldwide'],
+  rights: ['Copyright 2024'],
 }
 ```
 
 #### Migration Steps
-1. Replace all singular fields with their plural equivalents (e.g., `title` → `titles`, `creator` → `creators`)
-2. Wrap values in arrays
-3. If accessing values, use `dc.titles?.[0]` instead of `dc.title`
+1. Replace singular fields with their plural equivalents (e.g., `title` → `titles`)
+2. Wrap all values in arrays, including fields that kept their name (`coverage`, `rights`)
+3. If accessing values, use `dc.titles?.[0]` or `dc.coverage?.[0]` instead of singular access
 
 ## Migration Checklist
 
