@@ -133,9 +133,10 @@ const strictFeed: Rss.Feed<Date, Rss.Person, true> = {
 1. If you relied on TypeScript to enforce required fields, add `true` as the last type parameter
 2. Alternatively, add runtime validation for required fields
 
-### Media Namespace: `group` Field Removed
+### Media Namespace: Deprecated Field Removed
 
-The deprecated singular `group` field has been removed from `MediaNs.ItemOrFeed`. Use the `groups` array instead, which correctly represents the [Media RSS specification](https://www.rssboard.org/media-rss) allowing multiple `<media:group>` elements per item.
+The deprecated `group` field has been removed from `MediaNs.ItemOrFeed` to align with the [Media RSS specification](https://www.rssboard.org/media-rss):
+- `group` → `groups` (spec allows multiple `media:group` elements)
 
 #### Before (2.x)
 ```typescript
