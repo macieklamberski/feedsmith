@@ -292,7 +292,6 @@ describe('parse', () => {
             description: 'Item Description',
             dc: {
               creators: ['John Doe'],
-              creator: 'John Doe',
             },
             rdf: { about: 'http://example.com/item1' },
           },
@@ -337,8 +336,6 @@ describe('parse', () => {
             dc: {
               creators: ['John Doe'],
               dates: ['2023-01-01'],
-              creator: 'John Doe',
-              date: '2023-01-01',
             },
             rdf: { about: 'http://example.com/item1' },
           },
@@ -382,7 +379,6 @@ describe('parse', () => {
             description: 'Item Description',
             dc: {
               creators: ['John Doe'],
-              creator: 'John Doe',
             },
             rdf: { about: 'http://example.com/item1' },
           },
@@ -477,7 +473,6 @@ describe('parse', () => {
         description: 'RDF Feed Description',
         dc: {
           creators: ['Feed Author'],
-          creator: 'Feed Author',
         },
         sy: {
           updatePeriod: 'hourly',
@@ -491,8 +486,6 @@ describe('parse', () => {
             dc: {
               creators: ['John Doe'],
               dates: ['2023-01-01'],
-              creator: 'John Doe',
-              date: '2023-01-01',
             },
             slash: {
               comments: 42,
@@ -536,7 +529,6 @@ describe('parse', () => {
             title: 'Item Title',
             dc: {
               creators: ['Should not normalize (empty URI)'],
-              creator: 'Should not normalize (empty URI)',
             },
             rdf: { about: 'http://example.com/item1' },
           },
@@ -599,14 +591,12 @@ describe('parse', () => {
       const expected = {
         dc: {
           creators: ['Channel Author'],
-          creator: 'Channel Author',
         },
         items: [
           {
             title: 'Item without about',
             dc: {
               creators: ['Item Author'],
-              creator: 'Item Author',
             },
           },
         ],
@@ -681,7 +671,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -720,7 +709,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -759,7 +747,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -798,7 +785,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -837,7 +823,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -876,7 +861,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -1217,11 +1201,8 @@ describe('parse', () => {
       description: 'Test feed with Dublin Core namespace',
       dc: {
         creators: ['John Doe'],
-        creator: 'John Doe',
         publishers: ['Example Publishing'],
-        publisher: 'Example Publishing',
         languages: ['en-US'],
-        language: 'en-US',
       },
       rdf: { about: 'http://example.com' },
       items: [
@@ -1230,11 +1211,8 @@ describe('parse', () => {
           link: 'http://example.com/item1',
           dc: {
             creators: ['Jane Smith'],
-            creator: 'Jane Smith',
             dates: ['2023-01-15T10:00:00Z'],
-            date: '2023-01-15T10:00:00Z',
             subjects: ['Technology'],
-            subject: 'Technology',
           },
           rdf: { about: 'http://example.com/item1' },
         },

@@ -133,6 +133,111 @@ const strictFeed: Rss.Feed<Date, Rss.Person, true> = {
 1. If you relied on TypeScript to enforce required fields, add `true` as the last type parameter
 2. Alternatively, add runtime validation for required fields
 
+### Media Namespace: Deprecated Field Removed
+
+The deprecated `group` field has been removed from `MediaNs.ItemOrFeed` to align with the [Media RSS specification](https://www.rssboard.org/media-rss):
+- `group` → `groups` (spec allows multiple `media:group` elements)
+
+#### Before (2.x)
+```typescript
+import type { MediaNs } from 'feedsmith/types'
+
+const media: MediaNs.ItemOrFeed = {
+  group: {
+    contents: [{ url: 'https://example.com/video.mp4' }],
+  },
+}
+```
+
+#### After (3.x)
+```typescript
+import type { MediaNs } from 'feedsmith/types'
+
+const media: MediaNs.ItemOrFeed = {
+  groups: [
+    {
+      contents: [{ url: 'https://example.com/video.mp4' }],
+    },
+  ],
+}
+```
+
+#### Migration Steps
+1. Replace `group` with `groups` (wrap the object in an array)
+2. If you were accessing `media.group`, change to `media.groups?.[0]`
+
+### Podcast Namespace: Deprecated Fields Removed
+
+Deprecated fields have been removed from `PodcastNs.Item` and `PodcastNs.Feed` to align with the [Podcasting 2.0 specification](https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/1.0.md):
+
+- `location` → `locations` (spec allows multiple `podcast:location` elements)
+- `value` → `values` (spec allows multiple `podcast:value` elements)
+- `chats` → `chat` (spec allows only one `podcast:chat` element)
+
+#### Before (2.x)
+```typescript
+import type { PodcastNs } from 'feedsmith/types'
+
+const podcast: PodcastNs.Item = {
+  location: { name: 'New York' },
+  value: { type: 'lightning', method: 'keysend' },
+  chats: [{ server: 'irc.example.com', protocol: 'irc' }],
+}
+```
+
+#### After (3.x)
+```typescript
+import type { PodcastNs } from 'feedsmith/types'
+
+const podcast: PodcastNs.Item = {
+  locations: [{ name: 'New York' }],
+  values: [{ type: 'lightning', method: 'keysend' }],
+  chat: { server: 'irc.example.com', protocol: 'irc' },
+}
+```
+
+#### Migration Steps
+1. Replace `location` with `locations` (wrap in array)
+2. Replace `value` with `values` (wrap in array)
+3. Replace `chats` with `chat` (use `chats[0]` if you had multiple)
+
+### Dublin Core Namespace: Singular Fields Removed
+
+All deprecated singular fields have been removed from `DcNs.ItemOrFeed`. Per the [Dublin Core specification](https://www.dublincore.org/specifications/dublin-core/dces/), all elements are repeatable and now use plural array forms only.
+
+This includes two types of changes:
+- Singular fields renamed to plural (e.g., `title` → `titles`, `creator` → `creators`)
+- Fields that kept their name but changed from singular to array: `coverage`, `rights`
+
+#### Before (2.x)
+```typescript
+import type { DcNs } from 'feedsmith/types'
+
+const dc: DcNs.ItemOrFeed<string> = {
+  title: 'Document Title',
+  creator: 'John Doe',
+  coverage: 'Worldwide',
+  rights: 'Copyright 2024',
+}
+```
+
+#### After (3.x)
+```typescript
+import type { DcNs } from 'feedsmith/types'
+
+const dc: DcNs.ItemOrFeed<string> = {
+  titles: ['Document Title'],
+  creators: ['John Doe'],
+  coverage: ['Worldwide'],
+  rights: ['Copyright 2024'],
+}
+```
+
+#### Migration Steps
+1. Replace singular fields with their plural equivalents (e.g., `title` → `titles`)
+2. Wrap all values in arrays, including fields that kept their name (`coverage`, `rights`)
+3. If accessing values, use `dc.titles?.[0]` or `dc.coverage?.[0]` instead of singular access
+
 ### Dublin Core Terms Namespace: Singular Fields Removed
 
 All deprecated singular fields have been removed from `DcTermsNs.ItemOrFeed`. Per the [Dublin Core specification](https://www.dublincore.org/specifications/dublin-core/dcmi-terms/), all elements are repeatable and now use plural array forms only.
@@ -178,5 +283,8 @@ Use this checklist to ensure a complete migration:
 - Add `{ strict: true }` where you need compile-time validation of required fields
 - Remove `DeepPartial` from imports
 - Update type parameters if using strict types directly (add `true` as last parameter)
+- Replace Media namespace deprecated field (`group` → `groups`)
+- Replace Podcast namespace deprecated fields (`location` → `locations`, `value` → `values`, `chats` → `chat`)
+- Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
 - Replace Dublin Core Terms singular fields with plural arrays (e.g., `title` → `titles`)
 - Test feed generation to ensure output is correct

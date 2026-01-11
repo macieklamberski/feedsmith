@@ -18,13 +18,6 @@ export namespace PodcastNs {
     socialInteracts?: Array<SocialInteract<TStrict>>
     txts?: Array<Txt<TStrict>>
     chat?: Chat<TStrict>
-
-    /** @deprecated Use `locations` (array) instead. Multiple podcast:location elements are allowed per specification. */
-    location?: Location<TStrict>
-    /** @deprecated Use `values` (array) instead. Multiple podcast:value elements are allowed per specification. */
-    value?: Value<TStrict>
-    /** @deprecated Use `chat` (singular) instead. Only one podcast:chat element is allowed per specification. */
-    chats?: Array<Chat<TStrict>>
   }
 
   export type Transcript<TStrict extends boolean = false> = Strict<
@@ -332,13 +325,6 @@ export namespace PodcastNs {
     podping?: Podping
     chat?: Chat<TStrict>
     publisher?: Publisher<TStrict>
-
-    /** @deprecated Use `locations` (array) instead. Multiple podcast:location elements are allowed per specification. */
-    location?: Location<TStrict>
-    /** @deprecated Use `values` (array) instead. Multiple podcast:value elements are allowed per specification. */
-    value?: Value<TStrict>
-    /** @deprecated Use `chat` (singular) instead. Only one podcast:chat element is allowed per specification. */
-    chats?: Array<Chat<TStrict>>
   }
 }
 // #endregion reference

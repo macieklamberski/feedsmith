@@ -46,21 +46,8 @@
         "sources": ["https://example.org/entry-source"],
         "languages": ["en-US"],
         "relations": ["https://example.org/related-entry"],
-        "creator": "Jack Jackson",
-        "contributor": "Assistant Editor Mike Thompson",
-        "date": "2022-01-01T12:00:00.000Z",
-        "description": "Detailed description of the example entry content",
-        "title": "Dublin Core Enhanced Entry Title",
-        "subject": "Article, Tutorial, Example",
-        "publisher": "Example News Organization",
-        "type": "Article",
-        "format": "application/xhtml+xml",
-        "identifier": "urn:uuid:98765432-9876-9876-9876-987654321def",
-        "source": "https://example.org/entry-source",
-        "language": "en-US",
-        "relation": "https://example.org/related-entry",
-        "coverage": "United States",
-        "rights": "Copyright 2025 Example News Organization"
+        "coverage": ["United States"],
+        "rights": ["Copyright 2025 Example News Organization"]
       },
       "dcterms": {
         "abstracts": ["This article explores advanced concepts in technology"],
@@ -355,126 +342,6 @@
             ]
           }
         ],
-        "group": {
-          "contents": [
-            {
-              "url": "https://example.com/videos/sample-hd.mp4",
-              "fileSize": 45678912,
-              "type": "video/mp4",
-              "medium": "video",
-              "expression": "full",
-              "bitrate": 5000,
-              "framerate": 60,
-              "duration": 180,
-              "height": 1080,
-              "width": 1920,
-              "lang": "en",
-              "title": {
-                "value": "HD Version (1080p)"
-              }
-            },
-            {
-              "url": "https://example.com/videos/sample-sd.mp4",
-              "fileSize": 23456789,
-              "type": "video/mp4",
-              "medium": "video",
-              "expression": "full",
-              "bitrate": 2500,
-              "framerate": 30,
-              "duration": 180,
-              "height": 720,
-              "width": 1280,
-              "lang": "en",
-              "title": {
-                "value": "SD Version (720p)"
-              }
-            },
-            {
-              "url": "https://example.com/videos/sample.webm",
-              "fileSize": 19876543,
-              "type": "video/webm",
-              "medium": "video",
-              "expression": "full",
-              "bitrate": 2000,
-              "framerate": 30,
-              "duration": 180,
-              "height": 720,
-              "width": 1280,
-              "lang": "en",
-              "title": {
-                "value": "WebM Version"
-              }
-            },
-            {
-              "url": "https://example.com/audio/sample.mp3",
-              "fileSize": 3456789,
-              "type": "audio/mpeg",
-              "medium": "audio",
-              "expression": "full",
-              "bitrate": 320,
-              "samplingrate": 44.1,
-              "channels": 2,
-              "duration": 180,
-              "lang": "en",
-              "title": {
-                "value": "Audio Only Version"
-              }
-            },
-            {
-              "url": "https://example.com/captions/sample-en.srt",
-              "type": "text/srt",
-              "medium": "document",
-              "expression": "sample",
-              "lang": "en",
-              "title": {
-                "value": "English Subtitles"
-              }
-            },
-            {
-              "url": "https://example.com/captions/sample-es.srt",
-              "type": "text/srt",
-              "medium": "document",
-              "expression": "sample",
-              "lang": "es",
-              "title": {
-                "value": "Spanish Subtitles"
-              }
-            }
-          ],
-          "title": {
-            "value": "Multi-Format Content Example"
-          },
-          "description": {
-            "value": "This video is available in multiple formats and resolutions"
-          },
-          "thumbnails": [
-            {
-              "url": "https://example.com/thumbnails/group-main.jpg",
-              "width": 640,
-              "height": 360
-            },
-            {
-              "url": "https://example.com/thumbnails/group-alt.jpg",
-              "width": 1280,
-              "height": 720
-            }
-          ],
-          "keywords": ["group", "multiple", "formats", "resolutions"],
-          "categories": [
-            {
-              "name": "Technology"
-            }
-          ],
-          "ratings": [
-            {
-              "value": "PG",
-              "scheme": "urn:mpaa"
-            }
-          ],
-          "copyright": {
-            "value": "© 2025 Example Media Inc."
-          }
-        },
         "groups": [
           {
             "contents": [
@@ -785,21 +652,8 @@
     "sources": ["https://example.org/original-source"],
     "languages": ["en-US"],
     "relations": ["https://example.org/related-content"],
-    "creator": "John Doe",
-    "contributor": "Jane Smith",
-    "date": "2022-01-01T12:00:00.000Z",
-    "description": "This is an example of description.",
-    "title": "Dublin Core Enhanced Feed Title",
-    "subject": "Technology, Programming, Web Development",
-    "publisher": "Example Publishing Company",
-    "type": "Text",
-    "format": "application/atom+xml",
-    "identifier": "urn:uuid:12345678-1234-1234-1234-123456789abc",
-    "source": "https://example.org/original-source",
-    "language": "en-US",
-    "relation": "https://example.org/related-content",
-    "coverage": "Global",
-    "rights": "Copyright 2025 Example Publishing Company"
+    "coverage": ["Global"],
+    "rights": ["Copyright 2025 Example Publishing Company"]
   },
   "dcterms": {
     "abstracts": ["This is an abstract of the feed content"],
@@ -1102,126 +956,6 @@
         ]
       }
     ],
-    "group": {
-      "contents": [
-        {
-          "url": "https://example.com/videos/sample-hd.mp4",
-          "fileSize": 45678912,
-          "type": "video/mp4",
-          "medium": "video",
-          "expression": "full",
-          "bitrate": 5000,
-          "framerate": 60,
-          "duration": 180,
-          "height": 1080,
-          "width": 1920,
-          "lang": "en",
-          "title": {
-            "value": "HD Version (1080p)"
-          }
-        },
-        {
-          "url": "https://example.com/videos/sample-sd.mp4",
-          "fileSize": 23456789,
-          "type": "video/mp4",
-          "medium": "video",
-          "expression": "full",
-          "bitrate": 2500,
-          "framerate": 30,
-          "duration": 180,
-          "height": 720,
-          "width": 1280,
-          "lang": "en",
-          "title": {
-            "value": "SD Version (720p)"
-          }
-        },
-        {
-          "url": "https://example.com/videos/sample.webm",
-          "fileSize": 19876543,
-          "type": "video/webm",
-          "medium": "video",
-          "expression": "full",
-          "bitrate": 2000,
-          "framerate": 30,
-          "duration": 180,
-          "height": 720,
-          "width": 1280,
-          "lang": "en",
-          "title": {
-            "value": "WebM Version"
-          }
-        },
-        {
-          "url": "https://example.com/audio/sample.mp3",
-          "fileSize": 3456789,
-          "type": "audio/mpeg",
-          "medium": "audio",
-          "expression": "full",
-          "bitrate": 320,
-          "samplingrate": 44.1,
-          "channels": 2,
-          "duration": 180,
-          "lang": "en",
-          "title": {
-            "value": "Audio Only Version"
-          }
-        },
-        {
-          "url": "https://example.com/captions/sample-en.srt",
-          "type": "text/srt",
-          "medium": "document",
-          "expression": "sample",
-          "lang": "en",
-          "title": {
-            "value": "English Subtitles"
-          }
-        },
-        {
-          "url": "https://example.com/captions/sample-es.srt",
-          "type": "text/srt",
-          "medium": "document",
-          "expression": "sample",
-          "lang": "es",
-          "title": {
-            "value": "Spanish Subtitles"
-          }
-        }
-      ],
-      "title": {
-        "value": "Multi-Format Content Example"
-      },
-      "description": {
-        "value": "This video is available in multiple formats and resolutions"
-      },
-      "thumbnails": [
-        {
-          "url": "https://example.com/thumbnails/group-main.jpg",
-          "width": 640,
-          "height": 360
-        },
-        {
-          "url": "https://example.com/thumbnails/group-alt.jpg",
-          "width": 1280,
-          "height": 720
-        }
-      ],
-      "keywords": ["group", "multiple", "formats", "resolutions"],
-      "categories": [
-        {
-          "name": "Technology"
-        }
-      ],
-      "ratings": [
-        {
-          "value": "PG",
-          "scheme": "urn:mpaa"
-        }
-      ],
-      "copyright": {
-        "value": "© 2025 Example Media Inc."
-      }
-    },
     "groups": [
       {
         "contents": [
