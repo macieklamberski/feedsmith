@@ -1,4 +1,8 @@
-# W3C Basic Geo Namespace Reference
+---
+title: "Reference: W3C Basic Geo Namespace"
+---
+
+# W3C Basic Geo Namespace
 
 The W3C Basic Geo (WGS84 lat/long) Vocabulary provides a simple way to represent geographic coordinates in RSS and Atom feeds using the WGS84 geodetic reference datum.
 

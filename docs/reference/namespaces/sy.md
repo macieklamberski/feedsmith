@@ -1,4 +1,8 @@
-# Syndication Namespace Reference
+---
+title: "Reference: Syndication Namespace"
+---
+
+# Syndication Namespace
 
 The Syndication namespace provides information about the frequency and timing of feed updates. It helps aggregators understand how often to check for new content.
 

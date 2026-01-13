@@ -1,4 +1,8 @@
-# RDF Namespace Reference
+---
+title: "Reference: RDF Namespace"
+---
+
+# RDF Namespace
 
 Built-in namespace for RDF feeds exposing standard RDF metadata.
 

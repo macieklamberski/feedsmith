@@ -1,6 +1,5 @@
 ---
-prev: Quick Start
-next: Parsing › Overview
+title: Parsing Benchmarks
 ---
 
 <!--@include: ../benchmarks/README.md-->

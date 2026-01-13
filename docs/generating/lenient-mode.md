@@ -1,6 +1,5 @@
 ---
-prev: Generating › Styling
-next: Generating › Examples
+title: "Generating Feeds: Lenient Mode"
 ---
 
 # Lenient Mode

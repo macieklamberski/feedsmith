@@ -1,12 +1,26 @@
 import { defineConfig } from 'vitepress'
 
+const hostname = 'https://feedsmith.dev'
+
 export default defineConfig({
   title: 'Feedsmith',
+  titleTemplate: ':title',
   description:
     'Fast, all‑in‑one JavaScript feed parser and generator for RSS, Atom, RDF, and JSON Feed, with support for popular namespaces and OPML files.',
   lastUpdated: true,
   cleanUrls: true,
+  sitemap: {
+    hostname,
+  },
+  transformHead: ({ pageData }) => {
+    const canonicalUrl = `${hostname}/${pageData.relativePath}`
+      .replace(/index\.md$/, '')
+      .replace(/\.md$/, '')
+
+    return [['link', { rel: 'canonical', href: canonicalUrl }]]
+  },
   head: [
+    ['meta', { property: 'og:site_name', content: 'Feedsmith' }],
     [
       'script',
       {

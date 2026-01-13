@@ -1,4 +1,8 @@
-# Acast Namespace Reference
+---
+title: "Reference: Acast Namespace"
+---
+
+# Acast Namespace
 
 The Acast namespace provides podcast-specific metadata for Acast's podcast hosting platform, including show and episode identifiers, encrypted settings, and network information.
 

@@ -1,6 +1,5 @@
 ---
-prev: Generating › Lenient Mode
-next: Reference › Functions
+title: "Generating Feeds: Examples"
 ---
 
 # Generating Examples

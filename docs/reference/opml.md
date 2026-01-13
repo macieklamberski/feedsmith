@@ -1,4 +1,8 @@
-# OPML Reference
+---
+title: "Reference: OPML"
+---
+
+# OPML
 
 OPML (Outline Processor Markup Language) is a format for exchanging outline-structured information, commonly used for sharing feed subscription lists.
 
