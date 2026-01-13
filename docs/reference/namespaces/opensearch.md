@@ -1,4 +1,8 @@
-# OpenSearch Namespace Reference
+---
+title: "Reference: OpenSearch Namespace"
+---
+
+# OpenSearch Namespace
 
 The OpenSearch namespace provides elements for communicating search metadata and pagination information in RSS and Atom feeds. It enables search engines and APIs to publish search results in standard syndication formats.
 

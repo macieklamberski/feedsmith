@@ -1,3 +1,7 @@
+---
+title: "Reference: Universal Functions"
+---
+
 # Universal Functions
 
 Universal functions that work across all feed formats.

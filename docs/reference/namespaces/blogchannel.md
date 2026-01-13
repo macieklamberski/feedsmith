@@ -1,4 +1,8 @@
-# blogChannel Namespace Reference
+---
+title: "Reference: blogChannel Namespace"
+---
+
+# blogChannel Namespace
 
 The blogChannel namespace is an RSS 2.0 module for weblogging applications, providing metadata about blog-related content such as blogrolls, recommended links, and subscription lists.
 

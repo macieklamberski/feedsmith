@@ -1,4 +1,8 @@
-# Creative Commons Namespace Reference
+---
+title: "Reference: Creative Commons Namespace"
+---
+
+# Creative Commons Namespace
 
 The Creative Commons namespace provides elements for specifying the license under which the feed content is distributed. This allows content creators to clearly indicate their licensing terms using Creative Commons or other license URLs.
 

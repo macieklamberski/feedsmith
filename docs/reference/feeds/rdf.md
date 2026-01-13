@@ -1,4 +1,8 @@
-# RDF Feed Reference
+---
+title: "Reference: RDF Feed"
+---
+
+# RDF Feed
 
 RDF (Resource Description Framework) Site Summary is an early XML-based syndication format that uses RDF metadata. Feedsmith provides full parsing capabilities.
 

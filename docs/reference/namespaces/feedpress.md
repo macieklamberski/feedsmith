@@ -1,4 +1,8 @@
-# FeedPress Namespace Reference
+---
+title: "Reference: FeedPress Namespace"
+---
+
+# FeedPress Namespace
 
 The FeedPress namespace provides elements for FeedPress-specific feed metadata, including podcast identifiers, newsletter identifiers, locale information, and custom CSS file references.
 

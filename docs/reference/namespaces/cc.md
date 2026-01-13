@@ -1,4 +1,8 @@
-# ccREL Namespace Reference
+---
+title: "Reference: ccREL Namespace"
+---
+
+# ccREL Namespace
 
 The Creative Commons Rights Expression Language (ccREL) enables RSS and Atom feeds to declare copyright licenses and additional permissions for feed content.
 

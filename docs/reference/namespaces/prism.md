@@ -1,4 +1,8 @@
-# PRISM Namespace Reference
+---
+title: "Reference: PRISM Namespace"
+---
+
+# PRISM Namespace
 
 The PRISM (Publishing Requirements for Industry Standard Metadata) namespace provides comprehensive metadata elements for scholarly and academic publishing, including bibliographic information, page ranges, DOIs, and publication details.
 
