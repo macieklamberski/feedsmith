@@ -1,3 +1,7 @@
+---
+title: "Reference: RawVoice Namespace"
+---
+
 # RawVoice Namespace Reference
 
 The RawVoice namespace provides elements for enhanced podcast and video content delivery, including live streaming, video formats, and episode metadata.

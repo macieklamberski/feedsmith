@@ -1,4 +1,8 @@
-# Migration from 1.x to 2.x
+---
+title: Migrating from 1.x to 2.x
+---
+
+# Migrating from 1.x to 2.x
 
 This guide covers all breaking changes and new features when upgrading from Feedsmith 1.x to 2.x. Each breaking change is detailed with specific upgrade steps and examples.
 

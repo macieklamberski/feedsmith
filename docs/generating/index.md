@@ -1,6 +1,5 @@
 ---
-prev: Parsing › Examples
-next: Generating › Styling
+title: Generating Feeds
 ---
 
 # Generating Feeds

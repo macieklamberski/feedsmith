@@ -1,3 +1,7 @@
+---
+title: "Reference: Google Play Podcast Namespace"
+---
+
 # Google Play Podcast Namespace Reference
 
 The Google Play Podcast namespace provides podcast-specific metadata for feed and episode information optimized for Google Play's podcast platform, including author details, content descriptions, and content policies.

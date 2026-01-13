@@ -1,9 +1,8 @@
 ---
-prev: Generating › Overview
-next: Generating › Lenient Mode
+title: "Generating Feeds: Styling"
 ---
 
-# Feed Styling
+# Styling Feeds
 
 XML-based feeds (RSS, Atom) and OPML files support stylesheets to provide custom styling and transformations in browsers and feed readers.
 
