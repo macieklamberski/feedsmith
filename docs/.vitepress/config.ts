@@ -29,6 +29,10 @@ export default defineConfig({
       { text: 'Quick Start', link: '/quick-start' },
       { text: 'Parsing', link: '/parsing/' },
       { text: 'Generating', link: '/generating/' },
+      {
+        text: 'v3.0 (Next)',
+        items: [{ text: 'v2.0', link: 'https://feedsmith.dev' }],
+      },
     ],
     sidebar: [
       {
