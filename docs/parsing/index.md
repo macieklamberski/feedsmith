@@ -1,5 +1,5 @@
 ---
-next: Parsing › Namespaces
+title: Parsing Feeds
 ---
 
 # Parsing Feeds

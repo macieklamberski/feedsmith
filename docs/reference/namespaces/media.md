@@ -1,3 +1,7 @@
+---
+title: "Reference: Media RSS Namespace"
+---
+
 # Media RSS Namespace Reference
 
 The Media RSS namespace provides rich media metadata for RSS feeds, enabling comprehensive description of multimedia content including videos, images, and audio files.
@@ -32,6 +36,9 @@ The Media RSS namespace provides rich media metadata for RSS feeds, enabling com
 </table>
 
 ## Types
+
+> [!INFO]
+> For details on type parameters (`TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tstrict).
 
 <<< @/../src/namespaces/media/common/types.ts#reference
 

@@ -3571,21 +3571,6 @@ describe('retrieveItemOrFeed', () => {
       },
     }
     const expected = {
-      group: {
-        contents: [
-          {
-            url: 'https://example.com/video-hd.mp4',
-            type: 'video/mp4',
-          },
-          {
-            url: 'https://example.com/video-sd.mp4',
-            type: 'video/mp4',
-          },
-        ],
-        title: {
-          value: 'Group Title',
-        },
-      },
       groups: [
         {
           contents: [
@@ -3641,17 +3626,6 @@ describe('retrieveItemOrFeed', () => {
       },
     }
     const expected = {
-      group: {
-        contents: [
-          {
-            url: 'https://example.com/video-hd.mp4',
-            type: 'video/mp4',
-          },
-        ],
-        title: {
-          value: 'Group Title',
-        },
-      },
       groups: [
         {
           contents: [

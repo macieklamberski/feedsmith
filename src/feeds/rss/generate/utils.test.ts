@@ -141,14 +141,12 @@ describe('generateCategory', () => {
       domain: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateCategory(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateCategory(value)).toBeUndefined()
   })
 
@@ -186,14 +184,12 @@ describe('generateCloud', () => {
       protocol: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateCloud(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateCloud(value)).toBeUndefined()
   })
 
@@ -231,7 +227,6 @@ describe('generateImage', () => {
       link: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateImage(value)).toBeUndefined()
   })
 
@@ -266,7 +261,6 @@ describe('generateTextInput', () => {
       link: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateTextInput(value)).toBeUndefined()
   })
 
@@ -298,14 +292,12 @@ describe('generateEnclosure', () => {
       type: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateEnclosure(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateEnclosure(value)).toBeUndefined()
   })
 
@@ -423,14 +415,12 @@ describe('generateGuid', () => {
       isPermaLink: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateGuid(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateGuid(value)).toBeUndefined()
   })
 
@@ -453,12 +443,14 @@ describe('generateSource', () => {
     expect(generateSource(value)).toEqual(expected)
   })
 
-  it('should generate source with minimal properties', () => {
+  it('should generate source with all required properties', () => {
     const value = {
       title: 'Example Source',
+      url: 'https://example.com/feed.xml',
     }
     const expected = {
       '#text': 'Example Source',
+      '@url': 'https://example.com/feed.xml',
     }
 
     expect(generateSource(value)).toEqual(expected)
@@ -470,14 +462,12 @@ describe('generateSource', () => {
       url: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateSource(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateSource(value)).toBeUndefined()
   })
 
@@ -685,14 +675,12 @@ describe('generateItem', () => {
       link: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(value)).toBeUndefined()
   })
 
@@ -1181,14 +1169,12 @@ describe('generateFeed', () => {
       link: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 

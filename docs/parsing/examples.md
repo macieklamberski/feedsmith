@@ -1,6 +1,5 @@
 ---
-prev: Parsing › Detecting
-next: Generating › Overview
+title: "Parsing Feeds: Examples"
 ---
 
 # Parsing Examples

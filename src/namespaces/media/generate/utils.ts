@@ -1,6 +1,5 @@
 import type { GenerateUtil } from '../../../common/types.js'
 import {
-  generateArrayOrSingular,
   generateCdataString,
   generateCsvOf,
   generateNumber,
@@ -465,7 +464,7 @@ export const generateItemOrFeed: GenerateUtil<MediaNs.ItemOrFeed> = (itemOrFeed)
   }
 
   const value = {
-    'media:group': generateArrayOrSingular(itemOrFeed.groups, itemOrFeed.group, generateGroup),
+    'media:group': trimArray(itemOrFeed.groups, generateGroup),
     'media:content': trimArray(itemOrFeed.contents, generateContent),
     ...generateCommonElements(itemOrFeed),
   }

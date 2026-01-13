@@ -1,3 +1,7 @@
+---
+title: Quick Start
+---
+
 # Quick Start
 
 This guide will get you up and running with Feedsmith in just a few minutes.

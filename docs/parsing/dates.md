@@ -1,6 +1,5 @@
 ---
-prev: Parsing › Namespaces
-next: Parsing › Detecting
+title: "Parsing Feeds: Handling Dates"
 ---
 
 # Handling Dates

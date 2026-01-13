@@ -1,12 +1,26 @@
 import { defineConfig } from 'vitepress'
 
+const hostname = 'https://feedsmith.dev'
+
 export default defineConfig({
   title: 'Feedsmith',
+  titleTemplate: ':title',
   description:
     'Fast, all‑in‑one JavaScript feed parser and generator for RSS, Atom, RDF, and JSON Feed, with support for popular namespaces and OPML files.',
   lastUpdated: true,
   cleanUrls: true,
+  sitemap: {
+    hostname,
+  },
+  transformHead: ({ pageData }) => {
+    const canonicalUrl = `${hostname}/${pageData.relativePath}`
+      .replace(/index\.md$/, '')
+      .replace(/\.md$/, '')
+
+    return [['link', { rel: 'canonical', href: canonicalUrl }]]
+  },
   head: [
+    ['meta', { property: 'og:site_name', content: 'Feedsmith' }],
     [
       'script',
       {
@@ -24,6 +38,10 @@ export default defineConfig({
       { text: 'Quick Start', link: '/quick-start' },
       { text: 'Parsing', link: '/parsing/' },
       { text: 'Generating', link: '/generating/' },
+      {
+        text: 'v3.0 (Next)',
+        items: [{ text: 'v2.0', link: 'https://feedsmith.dev' }],
+      },
     ],
     sidebar: [
       {
@@ -49,7 +67,7 @@ export default defineConfig({
         items: [
           { text: 'Overview', link: '/generating/' },
           { text: 'Styling', link: '/generating/styling' },
-          { text: 'Lenient Mode', link: '/generating/lenient-mode' },
+          { text: 'Strict Mode', link: '/generating/strict-mode' },
           { text: 'Examples', link: '/generating/examples' },
         ],
       },
@@ -120,7 +138,10 @@ export default defineConfig({
       },
       {
         text: 'Migration',
-        items: [{ text: 'From 1.x to 2.x', link: '/migration/v1-to-v2' }],
+        items: [
+          { text: 'From 2.x to 3.x', link: '/migration/v2-to-v3' },
+          { text: 'From 1.x to 2.x', link: '/migration/v1-to-v2' },
+        ],
       },
     ],
     search: {

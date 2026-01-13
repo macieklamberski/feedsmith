@@ -28,8 +28,8 @@ type NsKeys =
 
 // #region reference
 export namespace AtomNs {
-  export type Entry<TDate extends DateLike> = Partial<DeepOmit<Atom.Entry<TDate>, NsKeys>>
+  export type Entry<TDate extends DateLike> = DeepOmit<Atom.Entry<TDate>, NsKeys>
 
-  export type Feed<TDate extends DateLike> = Partial<DeepOmit<Atom.Feed<TDate>, NsKeys>>
+  export type Feed<TDate extends DateLike> = DeepOmit<Atom.Feed<TDate>, NsKeys>
 }
 // #endregion reference

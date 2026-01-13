@@ -1,3 +1,7 @@
+---
+title: "Reference: GeoRSS Simple Namespace"
+---
+
 # GeoRSS Simple Namespace Reference
 
 The GeoRSS Simple namespace enables geographic tagging of RSS feeds and items, allowing publishers to associate location information with their content.
@@ -32,6 +36,9 @@ The GeoRSS Simple namespace enables geographic tagging of RSS feeds and items, a
 </table>
 
 ## Types
+
+> [!INFO]
+> For details on type parameters (`TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tstrict).
 
 <<< @/../src/namespaces/georss/common/types.ts#reference
 

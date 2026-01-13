@@ -1,3 +1,7 @@
+---
+title: "Reference: Slash Namespace"
+---
+
 # Slash Namespace Reference
 
 The Slash namespace provides metadata about user engagement, particularly comment counts. Originally created by Slashdot, it's now widely used to indicate discussion activity on feed items.

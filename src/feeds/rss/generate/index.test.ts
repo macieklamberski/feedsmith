@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import type { DateLike, DeepPartial } from '../../../common/types.js'
+import type { DateLike } from '../../../common/types.js'
 import type { Rss } from '../common/types.js'
 import { generate } from './index.js'
 
@@ -1105,11 +1105,97 @@ describe('generate', () => {
   })
 })
 
-describe('generate with lenient mode', () => {
-  it('should accept partial feeds with lenient: true', () => {
-    const value: DeepPartial<Rss.Feed<DateLike>> = {
+describe('strict mode', () => {
+  it('should require title, link, description in strict mode', () => {
+    // @ts-expect-error: This is for testing purposes.
+    generate({ title: 'Test' }, { strict: true })
+  })
+
+  it('should accept feed with all required fields in strict mode', () => {
+    generate({ title: 'Test', link: 'https://example.com', description: 'Desc' }, { strict: true })
+  })
+
+  it('should require nested type fields in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [
+          {
+            title: 'Item',
+            description: 'Desc',
+            // @ts-expect-error: This is for testing purposes.
+            enclosures: [{ url: 'https://example.com/file.mp3' }],
+          },
+        ],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept nested types with all required fields in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [
+          {
+            title: 'Item',
+            enclosures: [{ url: 'https://example.com/file.mp3', length: 1000, type: 'audio/mpeg' }],
+          },
+        ],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept item with only title in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [{ title: 'Item Title' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept item with only description in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [{ description: 'Item Description' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept item with both title and description in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [{ title: 'Item Title', description: 'Item Description' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept partial feed in lenient mode', () => {
+    generate({ title: 'Test' })
+  })
+})
+
+describe('generate edge cases', () => {
+  it('should accept partial feeds', () => {
+    const value: Rss.Feed<DateLike> = {
       title: 'Test Feed',
-      // Missing required 'description' field.
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
@@ -1119,11 +1205,11 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should accept feeds with string dates in lenient mode', () => {
-    const value: DeepPartial<Rss.Feed<DateLike>> = {
+  it('should accept feeds with string dates', () => {
+    const value: Rss.Feed<DateLike> = {
       title: 'Test Feed',
       description: 'Test Description',
       pubDate: '2023-01-01T00:00:00.000Z',
@@ -1148,11 +1234,11 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should preserve invalid date strings in lenient mode', () => {
-    const value: DeepPartial<Rss.Feed<DateLike>> = {
+  it('should preserve invalid date strings', () => {
+    const value: Rss.Feed<DateLike> = {
       title: 'Test Feed',
       description: 'Test Description',
       pubDate: 'not-a-valid-date',
@@ -1177,11 +1263,11 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should handle deeply nested partial objects', () => {
-    const value: DeepPartial<Rss.Feed<DateLike>> = {
+    const value: Rss.Feed<DateLike> = {
       title: 'Test Feed',
       items: [
         {
@@ -1214,11 +1300,11 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should handle mixed Date objects and string dates', () => {
-    const value: DeepPartial<Rss.Feed<DateLike>> = {
+    const value: Rss.Feed<DateLike> = {
       title: 'Mixed Dates Feed',
       description: 'Feed with both Date objects and strings',
       pubDate: new Date('2023-01-01T00:00:00.000Z'),
@@ -1253,7 +1339,7 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with acast namespace', () => {
