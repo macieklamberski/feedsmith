@@ -1,5 +1,7 @@
 import { defineConfig } from 'vitepress'
 
+const hostname = 'https://feedsmith.dev'
+
 export default defineConfig({
   title: 'Feedsmith',
   titleTemplate: ':title',
@@ -8,7 +10,14 @@ export default defineConfig({
   lastUpdated: true,
   cleanUrls: true,
   sitemap: {
-    hostname: 'https://feedsmith.dev',
+    hostname,
+  },
+  transformHead: ({ pageData }) => {
+    const canonicalUrl = `${hostname}/${pageData.relativePath}`
+      .replace(/index\.md$/, '')
+      .replace(/\.md$/, '')
+
+    return [['link', { rel: 'canonical', href: canonicalUrl }]]
   },
   head: [
     ['meta', { property: 'og:site_name', content: 'Feedsmith' }],
