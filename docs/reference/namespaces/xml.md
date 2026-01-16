@@ -1,6 +1,6 @@
 # XML Namespace Reference
 
-The XML namespace provides standard attributes that can appear on any element in XML-based feeds.
+Supports `xml:lang`, `xml:base`, `xml:space`, and `xml:id` attributes at both feed and item/entry level in RSS, Atom, and RDF feeds.
 
 <table>
   <tbody>
