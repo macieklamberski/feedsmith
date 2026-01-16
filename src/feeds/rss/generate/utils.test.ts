@@ -2088,4 +2088,44 @@ describe('generateFeed', () => {
 
     expect(generateFeed(value)).toEqual(expected)
   })
+
+  it('should generate RSS feed with xml namespace properties', () => {
+    const value = {
+      title: 'Feed with XML namespace',
+      description: 'A feed with XML namespace attributes',
+      xml: {
+        lang: 'en',
+        base: 'http://example.org/',
+      },
+      items: [
+        {
+          title: 'Item with XML namespace',
+          xml: {
+            lang: 'en-US',
+            base: 'http://example.org/item/1/',
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xml:lang': 'en',
+        '@xml:base': 'http://example.org/',
+        channel: {
+          title: 'Feed with XML namespace',
+          description: 'A feed with XML namespace attributes',
+          item: [
+            {
+              title: 'Item with XML namespace',
+              '@xml:lang': 'en-US',
+              '@xml:base': 'http://example.org/item/1/',
+            },
+          ],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
 })

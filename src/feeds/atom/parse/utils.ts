@@ -250,7 +250,7 @@ export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options)
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces?.has('trackback') ? retrieveTrackbackItem(value) : undefined,
-    xml: retrieveXmlItemOrFeed(value),
+    xml: options?.asNamespace ? undefined : retrieveXmlItemOrFeed(value),
   }
 
   return trimObject(entry)
@@ -293,7 +293,7 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) =
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
     admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackFeed(value) : undefined,
-    xml: retrieveXmlItemOrFeed(value),
+    xml: options?.asNamespace ? undefined : retrieveXmlItemOrFeed(value),
   }
 
   return trimObject(feed)
