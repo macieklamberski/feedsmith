@@ -1,4 +1,8 @@
-# TypeScript
+---
+title: "Reference: Working with TypeScript"
+---
+
+# Working with TypeScript
 
 Feedsmith is built with TypeScript and provides comprehensive type definitions for all feed formats and namespaces.
 

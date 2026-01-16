@@ -1,4 +1,8 @@
-# Migration from 2.x to 3.x
+---
+title: Migrating from 2.x to 3.x
+---
+
+# Migrating from 2.x to 3.x
 
 This guide covers all breaking changes when upgrading from Feedsmith 2.x to 3.x. Each breaking change is detailed with specific upgrade steps and examples.
 
@@ -133,6 +137,74 @@ const strictFeed: Rss.Feed<Date, Rss.Person, true> = {
 1. If you relied on TypeScript to enforce required fields, add `true` as the last type parameter
 2. Alternatively, add runtime validation for required fields
 
+### Media Namespace: Deprecated Field Removed
+
+The deprecated `group` field has been removed from `MediaNs.ItemOrFeed` to align with the [Media RSS specification](https://www.rssboard.org/media-rss):
+- `group` → `groups` (spec allows multiple `media:group` elements)
+
+#### Before (2.x)
+```typescript
+import type { MediaNs } from 'feedsmith/types'
+
+const media: MediaNs.ItemOrFeed = {
+  group: {
+    contents: [{ url: 'https://example.com/video.mp4' }],
+  },
+}
+```
+
+#### After (3.x)
+```typescript
+import type { MediaNs } from 'feedsmith/types'
+
+const media: MediaNs.ItemOrFeed = {
+  groups: [
+    {
+      contents: [{ url: 'https://example.com/video.mp4' }],
+    },
+  ],
+}
+```
+
+#### Migration Steps
+1. Replace `group` with `groups` (wrap the object in an array)
+2. If you were accessing `media.group`, change to `media.groups?.[0]`
+
+### Podcast Namespace: Deprecated Fields Removed
+
+Deprecated fields have been removed from `PodcastNs.Item` and `PodcastNs.Feed` to align with the [Podcasting 2.0 specification](https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/1.0.md):
+
+- `location` → `locations` (spec allows multiple `podcast:location` elements)
+- `value` → `values` (spec allows multiple `podcast:value` elements)
+- `chats` → `chat` (spec allows only one `podcast:chat` element)
+
+#### Before (2.x)
+```typescript
+import type { PodcastNs } from 'feedsmith/types'
+
+const podcast: PodcastNs.Item = {
+  location: { name: 'New York' },
+  value: { type: 'lightning', method: 'keysend' },
+  chats: [{ server: 'irc.example.com', protocol: 'irc' }],
+}
+```
+
+#### After (3.x)
+```typescript
+import type { PodcastNs } from 'feedsmith/types'
+
+const podcast: PodcastNs.Item = {
+  locations: [{ name: 'New York' }],
+  values: [{ type: 'lightning', method: 'keysend' }],
+  chat: { server: 'irc.example.com', protocol: 'irc' },
+}
+```
+
+#### Migration Steps
+1. Replace `location` with `locations` (wrap in array)
+2. Replace `value` with `values` (wrap in array)
+3. Replace `chats` with `chat` (use `chats[0]` if you had multiple)
+
 ## New Features
 
 ### XML Namespace Support
@@ -147,4 +219,6 @@ Use this checklist to ensure a complete migration:
 - Add `{ strict: true }` where you need compile-time validation of required fields
 - Remove `DeepPartial` from imports
 - Update type parameters if using strict types directly (add `true` as last parameter)
+- Replace Media namespace deprecated field (`group` → `groups`)
+- Replace Podcast namespace deprecated fields (`location` → `locations`, `value` → `values`, `chats` → `chat`)
 - Test feed generation to ensure output is correct

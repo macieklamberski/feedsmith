@@ -295,13 +295,6 @@
             "country": "US"
           }
         ],
-        "location": {
-          "display": "New York City, NY",
-          "rel": "subject",
-          "geo": "geo:40.7128,-74.0060",
-          "osm": "R8780673",
-          "country": "US"
-        },
         "season": {
           "number": 1,
           "name": "First Season"
@@ -368,25 +361,6 @@
             ]
           }
         ],
-        "value": {
-          "type": "lightning",
-          "method": "keysend",
-          "suggested": 0.00000002,
-          "valueRecipients": [
-            {
-              "name": "Host",
-              "type": "node",
-              "address": "02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee83420ef254acd7d8e5edf5f16e",
-              "split": 90
-            },
-            {
-              "name": "Guest",
-              "type": "node",
-              "address": "03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a",
-              "split": 10
-            }
-          ]
-        },
         "images": [
           {
             "href": "https://example.com/images/episode-artwork.jpg",
@@ -433,14 +407,7 @@
           "server": "chat.example.com",
           "protocol": "xmpp",
           "accountId": "episode@conference.example.com"
-        },
-        "chats": [
-          {
-            "server": "chat.example.com",
-            "protocol": "xmpp",
-            "accountId": "episode@conference.example.com"
-          }
-        ]
+        }
       },
       "psc": {
         "chapters": [
@@ -631,126 +598,6 @@
             ]
           }
         ],
-        "group": {
-          "contents": [
-            {
-              "url": "https://example.com/videos/sample-hd.mp4",
-              "fileSize": 45678912,
-              "type": "video/mp4",
-              "medium": "video",
-              "expression": "full",
-              "bitrate": 5000,
-              "framerate": 60,
-              "duration": 180,
-              "height": 1080,
-              "width": 1920,
-              "lang": "en",
-              "title": {
-                "value": "HD Version (1080p)"
-              }
-            },
-            {
-              "url": "https://example.com/videos/sample-sd.mp4",
-              "fileSize": 23456789,
-              "type": "video/mp4",
-              "medium": "video",
-              "expression": "full",
-              "bitrate": 2500,
-              "framerate": 30,
-              "duration": 180,
-              "height": 720,
-              "width": 1280,
-              "lang": "en",
-              "title": {
-                "value": "SD Version (720p)"
-              }
-            },
-            {
-              "url": "https://example.com/videos/sample.webm",
-              "fileSize": 19876543,
-              "type": "video/webm",
-              "medium": "video",
-              "expression": "full",
-              "bitrate": 2000,
-              "framerate": 30,
-              "duration": 180,
-              "height": 720,
-              "width": 1280,
-              "lang": "en",
-              "title": {
-                "value": "WebM Version"
-              }
-            },
-            {
-              "url": "https://example.com/audio/sample.mp3",
-              "fileSize": 3456789,
-              "type": "audio/mpeg",
-              "medium": "audio",
-              "expression": "full",
-              "bitrate": 320,
-              "samplingrate": 44.1,
-              "channels": 2,
-              "duration": 180,
-              "lang": "en",
-              "title": {
-                "value": "Audio Only Version"
-              }
-            },
-            {
-              "url": "https://example.com/captions/sample-en.srt",
-              "type": "text/srt",
-              "medium": "document",
-              "expression": "sample",
-              "lang": "en",
-              "title": {
-                "value": "English Subtitles"
-              }
-            },
-            {
-              "url": "https://example.com/captions/sample-es.srt",
-              "type": "text/srt",
-              "medium": "document",
-              "expression": "sample",
-              "lang": "es",
-              "title": {
-                "value": "Spanish Subtitles"
-              }
-            }
-          ],
-          "title": {
-            "value": "Multi-Format Content Example"
-          },
-          "description": {
-            "value": "This video is available in multiple formats and resolutions"
-          },
-          "thumbnails": [
-            {
-              "url": "https://example.com/thumbnails/group-main.jpg",
-              "width": 640,
-              "height": 360
-            },
-            {
-              "url": "https://example.com/thumbnails/group-alt.jpg",
-              "width": 1280,
-              "height": 720
-            }
-          ],
-          "keywords": ["group", "multiple", "formats", "resolutions"],
-          "categories": [
-            {
-              "name": "Technology"
-            }
-          ],
-          "ratings": [
-            {
-              "value": "PG",
-              "scheme": "urn:mpaa"
-            }
-          ],
-          "copyright": {
-            "value": "© 2025 Example Media Inc."
-          }
-        },
         "groups": [
           {
             "contents": [
@@ -1393,13 +1240,6 @@
         "country": "US"
       }
     ],
-    "location": {
-      "display": "San Francisco, CA",
-      "rel": "creator",
-      "geo": "geo:37.7749,-122.4194",
-      "osm": "R4163767",
-      "country": "US"
-    },
     "trailers": [
       {
         "display": "Season 1 Trailer",
@@ -1436,25 +1276,6 @@
         ]
       }
     ],
-    "value": {
-      "type": "lightning",
-      "method": "keysend",
-      "suggested": 0.00000005,
-      "valueRecipients": [
-        {
-          "name": "Host",
-          "type": "node",
-          "address": "02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee83420ef254acd7d8e5edf5f16e",
-          "split": 90
-        },
-        {
-          "name": "Producer",
-          "type": "node",
-          "address": "03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a",
-          "split": 10
-        }
-      ]
-    },
     "medium": "podcast",
     "images": [
       {
@@ -1496,15 +1317,7 @@
           "protocol": "matrix",
           "accountId": "@livepodcast:live.example.com",
           "space": "#live-episode"
-        },
-        "chats": [
-          {
-            "server": "live.example.com",
-            "protocol": "matrix",
-            "accountId": "@livepodcast:live.example.com",
-            "space": "#live-episode"
-          }
-        ]
+        }
       }
     ],
     "blocks": [{ "value": true }, { "value": false, "id": "test" }],
@@ -1549,19 +1362,6 @@
       "accountId": "examplepodcast",
       "space": "#general"
     },
-    "chats": [
-      {
-        "server": "irc.example.com",
-        "protocol": "irc",
-        "accountId": "examplepodcast",
-        "space": "#general"
-      },
-      {
-        "server": "matrix.example.org",
-        "protocol": "matrix",
-        "accountId": "@examplepodcast:matrix.org"
-      }
-    ],
     "publisher": {
       "remoteItem": {
         "feedGuid": "ead4c236-bf58-58c6-a2c6-publisher-feed-guid",
@@ -1729,126 +1529,6 @@
         ]
       }
     ],
-    "group": {
-      "contents": [
-        {
-          "url": "https://example.com/videos/sample-hd.mp4",
-          "fileSize": 45678912,
-          "type": "video/mp4",
-          "medium": "video",
-          "expression": "full",
-          "bitrate": 5000,
-          "framerate": 60,
-          "duration": 180,
-          "height": 1080,
-          "width": 1920,
-          "lang": "en",
-          "title": {
-            "value": "HD Version (1080p)"
-          }
-        },
-        {
-          "url": "https://example.com/videos/sample-sd.mp4",
-          "fileSize": 23456789,
-          "type": "video/mp4",
-          "medium": "video",
-          "expression": "full",
-          "bitrate": 2500,
-          "framerate": 30,
-          "duration": 180,
-          "height": 720,
-          "width": 1280,
-          "lang": "en",
-          "title": {
-            "value": "SD Version (720p)"
-          }
-        },
-        {
-          "url": "https://example.com/videos/sample.webm",
-          "fileSize": 19876543,
-          "type": "video/webm",
-          "medium": "video",
-          "expression": "full",
-          "bitrate": 2000,
-          "framerate": 30,
-          "duration": 180,
-          "height": 720,
-          "width": 1280,
-          "lang": "en",
-          "title": {
-            "value": "WebM Version"
-          }
-        },
-        {
-          "url": "https://example.com/audio/sample.mp3",
-          "fileSize": 3456789,
-          "type": "audio/mpeg",
-          "medium": "audio",
-          "expression": "full",
-          "bitrate": 320,
-          "samplingrate": 44.1,
-          "channels": 2,
-          "duration": 180,
-          "lang": "en",
-          "title": {
-            "value": "Audio Only Version"
-          }
-        },
-        {
-          "url": "https://example.com/captions/sample-en.srt",
-          "type": "text/srt",
-          "medium": "document",
-          "expression": "sample",
-          "lang": "en",
-          "title": {
-            "value": "English Subtitles"
-          }
-        },
-        {
-          "url": "https://example.com/captions/sample-es.srt",
-          "type": "text/srt",
-          "medium": "document",
-          "expression": "sample",
-          "lang": "es",
-          "title": {
-            "value": "Spanish Subtitles"
-          }
-        }
-      ],
-      "title": {
-        "value": "Multi-Format Content Example"
-      },
-      "description": {
-        "value": "This video is available in multiple formats and resolutions"
-      },
-      "thumbnails": [
-        {
-          "url": "https://example.com/thumbnails/group-main.jpg",
-          "width": 640,
-          "height": 360
-        },
-        {
-          "url": "https://example.com/thumbnails/group-alt.jpg",
-          "width": 1280,
-          "height": 720
-        }
-      ],
-      "keywords": ["group", "multiple", "formats", "resolutions"],
-      "categories": [
-        {
-          "name": "Technology"
-        }
-      ],
-      "ratings": [
-        {
-          "value": "PG",
-          "scheme": "urn:mpaa"
-        }
-      ],
-      "copyright": {
-        "value": "© 2025 Example Media Inc."
-      }
-    },
     "groups": [
       {
         "contents": [

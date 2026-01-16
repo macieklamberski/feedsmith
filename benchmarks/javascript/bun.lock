@@ -13,7 +13,7 @@
         "feedparser": "^2.2.10",
         "feedsmith": "2.8.0",
         "node-opml-parser": "^1.0.0",
-        "opml": "^0.5.7",
+        "opml": "^0.5.8",
         "opml-generator": "^1.1.1",
         "opml-to-json": "^1.0.1",
         "opmlparser": "^0.8.0",
@@ -23,7 +23,7 @@
       },
       "devDependencies": {
         "@types/benchmark": "^2.1.5",
-        "@types/bun": "^1.3.3",
+        "@types/bun": "^1.3.5",
         "@types/feedme": "^2.0.4",
         "@types/feedparser": "^2.2.8",
         "typescript": "^5.9.3",
