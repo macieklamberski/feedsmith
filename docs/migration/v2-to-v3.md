@@ -205,6 +205,43 @@ const podcast: PodcastNs.Item = {
 2. Replace `value` with `values` (wrap in array)
 3. Replace `chats` with `chat` (use `chats[0]` if you had multiple)
 
+### Dublin Core Namespace: Singular Fields Removed
+
+All deprecated singular fields have been removed from `DcNs.ItemOrFeed`. Per the [Dublin Core specification](https://www.dublincore.org/specifications/dublin-core/dces/), all elements are repeatable and now use plural array forms only.
+
+This includes two types of changes:
+- Singular fields renamed to plural (e.g., `title` → `titles`, `creator` → `creators`)
+- Fields that kept their name but changed from singular to array: `coverage`, `rights`
+
+#### Before (2.x)
+```typescript
+import type { DcNs } from 'feedsmith/types'
+
+const dc: DcNs.ItemOrFeed<string> = {
+  title: 'Document Title',
+  creator: 'John Doe',
+  coverage: 'Worldwide',
+  rights: 'Copyright 2024',
+}
+```
+
+#### After (3.x)
+```typescript
+import type { DcNs } from 'feedsmith/types'
+
+const dc: DcNs.ItemOrFeed<string> = {
+  titles: ['Document Title'],
+  creators: ['John Doe'],
+  coverage: ['Worldwide'],
+  rights: ['Copyright 2024'],
+}
+```
+
+#### Migration Steps
+1. Replace singular fields with their plural equivalents (e.g., `title` → `titles`)
+2. Wrap all values in arrays, including fields that kept their name (`coverage`, `rights`)
+3. If accessing values, use `dc.titles?.[0]` or `dc.coverage?.[0]` instead of singular access
+
 ## Migration Checklist
 
 Use this checklist to ensure a complete migration:
@@ -215,4 +252,5 @@ Use this checklist to ensure a complete migration:
 - Update type parameters if using strict types directly (add `true` as last parameter)
 - Replace Media namespace deprecated field (`group` → `groups`)
 - Replace Podcast namespace deprecated fields (`location` → `locations`, `value` → `values`, `chats` → `chat`)
+- Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
 - Test feed generation to ensure output is correct
