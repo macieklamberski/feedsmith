@@ -1,6 +1,6 @@
 # XML Namespace Reference
 
-The XML namespace provides standard attributes for language specification, base URI resolution, whitespace handling, and element identification. These attributes are part of the core XML specification and can appear on any element in XML-based feeds.
+The XML namespace provides standard attributes that can appear on any element in XML-based feeds.
 
 <table>
   <tbody>
