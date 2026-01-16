@@ -941,6 +941,10 @@
         "showId": "abc123def456ghi789jkl012",
         "episodeUrl": "example-episode-title",
         "settings": "RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA=="
+      },
+      "xml": {
+        "lang": "en-US",
+        "base": "http://example.org/item/1/"
       }
     }
   ],
@@ -1893,5 +1897,9 @@
       "value": "Example Network"
     },
     "importedFeed": "https://example.com/original-feed"
+  },
+  "xml": {
+    "lang": "en",
+    "base": "http://example.org/"
   }
 }

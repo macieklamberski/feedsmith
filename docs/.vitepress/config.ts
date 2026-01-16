@@ -124,6 +124,7 @@ export default defineConfig({
               { text: 'W3C Basic Geo', link: '/reference/namespaces/geo' },
               { text: 'GeoRSS Simple', link: '/reference/namespaces/georss' },
               { text: 'RDF', link: '/reference/namespaces/rdf' },
+              { text: 'XML', link: '/reference/namespaces/xml' },
             ],
           },
           {

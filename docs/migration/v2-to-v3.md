@@ -205,6 +205,12 @@ const podcast: PodcastNs.Item = {
 2. Replace `value` with `values` (wrap in array)
 3. Replace `chats` with `chat` (use `chats[0]` if you had multiple)
 
+## New Features
+
+### XML Namespace Support
+
+Version 3.x adds support for the [XML namespace](/reference/namespaces/xml) (`xml:*` attributes) in RSS, Atom, and RDF feeds. The `xml` property is available on both feed and item levels, providing access to `xml:lang`, `xml:base`, `xml:space`, and `xml:id` attributes.
+
 ## Migration Checklist
 
 Use this checklist to ensure a complete migration:

@@ -46,6 +46,7 @@ import {
 } from '../../../namespaces/thr/generate/utils.js'
 import { generateItem as generateTrackbackItem } from '../../../namespaces/trackback/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
+import { generateItemOrFeed as generateXmlItemOrFeed } from '../../../namespaces/xml/generate/utils.js'
 import {
   generateFeed as generateYtFeed,
   generateItem as generateYtItem,
@@ -203,6 +204,7 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
     ...generateYtItem(entry.yt),
     ...generatePingbackItem(entry.pingback),
     ...generateTrackbackItem(entry.trackback),
+    ...generateXmlItemOrFeed(entry.xml),
   }
 }
 
@@ -268,6 +270,7 @@ export const generateFeed: GenerateUtil<Atom.Feed<DateLike>> = (feed, options) =
     ...generateYtFeed(feed.yt),
     ...generateAdminFeed(feed.admin),
     ...generatePingbackFeed(feed.pingback),
+    ...generateXmlItemOrFeed(feed.xml),
     ...valueEntries,
   }
 
