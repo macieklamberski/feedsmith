@@ -36,6 +36,34 @@ try {
 }
 ```
 
+## Detailed Errors
+
+By default, `ParseError` contains only a generic message. To get detailed XML error information including line and column numbers, use the `detailedErrors` option:
+
+```typescript
+import { parseRssFeed, ParseError } from 'feedsmith'
+
+try {
+  parseRssFeed('<rss><channel><title>Test</title', { detailedErrors: true })
+} catch (error) {
+  if (error instanceof ParseError) {
+    console.log(error.message) // "Unexpected end of tag (line 1, column 35)"
+    console.log(error.line)    // 1
+    console.log(error.column)  // 35
+    console.log(error.code)    // Error code from XML validator
+  }
+}
+```
+
+### ParseError Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `message` | `string` | Error message, includes line/column when available |
+| `line` | `number \| undefined` | Line number where error occurred |
+| `column` | `number \| undefined` | Column number where error occurred |
+| `code` | `string \| undefined` | Error code from the XML validator |
+
 ## Universal Parser
 
 The universal `parseFeed` function throws the same error types:
@@ -53,3 +81,7 @@ try {
   }
 }
 ```
+
+## Performance Note
+
+The `detailedErrors` option runs additional XML validation when parsing fails, which adds overhead. For performance-critical applications, consider enabling it only in development or when debugging specific issues.

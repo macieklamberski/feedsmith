@@ -1,6 +1,7 @@
 import { locales } from '../../../common/config.js'
 import { DetectError, ParseError } from '../../../common/errors.js'
 import type { ParseMainOptions, Unreliable } from '../../../common/types.js'
+import { validateXml } from '../../../common/utils.js'
 import { detectAtomFeed } from '../../../index.js'
 import type { Atom } from '../common/types.js'
 import { normalizeNamespaces, parser } from './config.js'
@@ -20,6 +21,9 @@ export const parse = <TDate = string>(
     const object = parser.parse(value)
     normalized = normalizeNamespaces(object)
   } catch {
+    if (options?.detailedErrors) {
+      validateXml(value)
+    }
     throw new ParseError(locales.invalidFeedFormat)
   }
 
