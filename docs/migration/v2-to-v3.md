@@ -394,6 +394,21 @@ Parsing functions now throw dedicated error types for better error handling:
 - `DetectError` — thrown when input doesn't match the expected feed format
 - `ParseError` — thrown when XML parsing fails
 
+Additionally, the new `detailedErrors` option provides line and column numbers for XML errors:
+
+```typescript
+import { parseRssFeed, DetectError, ParseError } from 'feedsmith'
+
+try {
+  parseRssFeed('<rss><invalid', { detailedErrors: true })
+} catch (error) {
+  if (error instanceof ParseError) {
+    console.log(error.line)   // 1
+    console.log(error.column) // 14
+  }
+}
+```
+
 See [Error Handling](/parsing/errors) for more details.
 
 ### Namespace Type Exports
