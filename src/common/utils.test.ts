@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import { type XMLBuilder, XMLParser } from 'fast-xml-parser'
 import { namespacePrefixes, namespaceUris } from './config.js'
+import { ParseError } from './error.js'
 import type { ParseExactUtil } from './types.js'
 import {
   createNamespaceNormalizator,
@@ -40,6 +41,7 @@ import {
   retrieveText,
   trimArray,
   trimObject,
+  validateXml,
 } from './utils.js'
 
 describe('isPresent', () => {
@@ -4185,5 +4187,54 @@ describe('parseJsonObject', () => {
     expect(parseJsonObject(null)).toBeUndefined()
     expect(parseJsonObject(undefined)).toBeUndefined()
     expect(parseJsonObject([1, 2, 3])).toBeUndefined()
+  })
+})
+
+describe('validateXml', () => {
+  it('should not throw for valid XML', () => {
+    const value = '<?xml version="1.0"?><root><item>test</item></root>'
+
+    expect(() => validateXml(value)).not.toThrow()
+  })
+
+  it('should not throw for valid RSS XML', () => {
+    const value = `<?xml version="1.0"?>
+<rss version="2.0">
+  <channel>
+    <title>Test</title>
+  </channel>
+</rss>`
+
+    expect(() => validateXml(value)).not.toThrow()
+  })
+
+  it('should throw ParseError for unclosed tag', () => {
+    const value = '<?xml version="1.0"?><root><item>test</root>'
+    const throwing = () => validateXml(value)
+
+    expect(throwing).toThrow(ParseError)
+  })
+
+  it('should throw ParseError with line and column for invalid XML', () => {
+    const value = '<?xml version="1.0"?>\n<root>\n<item>test</root>'
+    let error: ParseError | undefined
+
+    try {
+      validateXml(value)
+    } catch (e) {
+      error = e as ParseError
+    }
+
+    expect(error).toBeInstanceOf(ParseError)
+    expect(error?.line).toBeDefined()
+    expect(error?.column).toBeDefined()
+    expect(error?.code).toBeDefined()
+  })
+
+  it('should throw ParseError for invalid attribute syntax', () => {
+    const value = '<?xml version="1.0"?><root attr=value><item>test</item></root>'
+    const throwing = () => validateXml(value)
+
+    expect(throwing).toThrow(ParseError)
   })
 })
