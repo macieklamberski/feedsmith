@@ -59,6 +59,7 @@ export default defineConfig({
           { text: 'Namespaces', link: '/parsing/namespaces' },
           { text: 'Dates', link: '/parsing/dates' },
           { text: 'Detecting', link: '/parsing/detecting' },
+          { text: 'Errors', link: '/parsing/errors' },
           { text: 'Examples', link: '/parsing/examples' },
         ],
       },

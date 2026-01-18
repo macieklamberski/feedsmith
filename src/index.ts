@@ -5,6 +5,7 @@ import type { Rdf as RdfTypes } from './feeds/rdf/common/types.js'
 import type { Rss as RssTypes } from './feeds/rss/common/types.js'
 import type { Opml as OpmlTypes } from './opml/common/types.js'
 
+export { DetectError, ParseError } from './common/error.js'
 export { parse as parseFeed } from './common/parse.js'
 
 /** @deprecated Use `import type { Atom } from 'feedsmith/types'` and access as `Atom.Feed` instead. */
