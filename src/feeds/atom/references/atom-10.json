@@ -77,6 +77,10 @@
     "type": "text"
   },
   "updated": "2023-01-15T12:00:00Z",
+  "xml": {
+    "base": "http://example.org/",
+    "lang": "en"
+  },
   "entries": [
     {
       "authors": [
@@ -269,7 +273,10 @@
       "title": {
         "value": "Exemple de Contenu en Français"
       },
-      "updated": "2023-01-10T11:05:00Z"
+      "updated": "2023-01-10T11:05:00Z",
+      "xml": {
+        "lang": "fr"
+      }
     }
   ]
 }

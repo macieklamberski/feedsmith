@@ -1,3 +1,7 @@
+---
+title: "Reference: Podcast Index Namespace"
+---
+
 # Podcast Index Namespace Reference
 
 The Podcast Index namespace implements the Podcasting 2.0 specification, providing advanced features for modern podcasting including transcripts, chapters, value streaming, and enhanced metadata.
@@ -30,7 +34,7 @@ The Podcast Index namespace implements the Podcasting 2.0 specification, providi
 ## Types
 
 > [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
+> For details on type parameters (`TDate`, `TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tdate).
 
 <<< @/../src/namespaces/podcast/common/types.ts#reference
 

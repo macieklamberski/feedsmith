@@ -1,4 +1,8 @@
-# Trackback Reference
+---
+title: "Reference: Trackback Namespace"
+---
+
+# Trackback Namespace Reference
 
 The Trackback namespace enables peer-to-peer communication between web sites that publish related content. In its simplest form, trackback is a means of sending a message that lets a site know you've published a link to one of its pages.
 

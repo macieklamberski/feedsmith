@@ -1,3 +1,7 @@
+---
+title: "Reference: Source Namespace"
+---
+
 # Source Namespace Reference
 
 The Source namespace provides elements for enhanced feed metadata, including social media accounts, subscription lists, blogrolls, and source content in various formats like Markdown and OPML outlines.
@@ -28,6 +32,9 @@ The Source namespace provides elements for enhanced feed metadata, including soc
 </table>
 
 ## Types
+
+> [!INFO]
+> For details on type parameters (`TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tstrict).
 
 <<< @/../src/namespaces/source/common/types.ts#reference
 

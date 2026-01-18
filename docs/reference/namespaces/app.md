@@ -1,4 +1,8 @@
-# Atom Publishing Protocol Reference
+---
+title: "Reference: Atom Publishing Protocol Namespace"
+---
+
+# Atom Publishing Protocol Namespace Reference
 
 Extends Atom feeds with elements for content management workflows.
 
@@ -28,6 +32,9 @@ Extends Atom feeds with elements for content management workflows.
 </table>
 
 ## Types
+
+> [!INFO]
+> For details on type parameters (`TDate`), see [TypeScript Reference](/reference/typescript#tdate).
 
 <<< @/../src/namespaces/app/common/types.ts#reference
 

@@ -1142,6 +1142,76 @@ describe('generate', () => {
   })
 })
 
+describe('strict mode', () => {
+  it('should require id, title, updated in strict mode', () => {
+    // @ts-expect-error: This is for testing purposes.
+    generate({ title: { value: 'Test' } }, { strict: true })
+  })
+
+  it('should accept feed with all required fields in strict mode', () => {
+    generate(
+      { id: 'https://example.com', title: { value: 'Test' }, updated: new Date() },
+      { strict: true },
+    )
+  })
+
+  it('should require entry fields in strict mode', () => {
+    generate(
+      {
+        id: 'https://example.com',
+        title: { value: 'Test' },
+        updated: new Date(),
+        // @ts-expect-error: This is for testing purposes.
+        entries: [{ id: 'https://example.com/1' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept entries with all required fields in strict mode', () => {
+    generate(
+      {
+        id: 'https://example.com',
+        title: { value: 'Test' },
+        updated: new Date(),
+        entries: [{ id: 'https://example.com/1', title: { value: 'Entry' }, updated: new Date() }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should require nested type fields in strict mode', () => {
+    generate(
+      {
+        id: 'https://example.com',
+        title: { value: 'Test' },
+        updated: new Date(),
+        // @ts-expect-error: This is for testing purposes.
+        links: [{ rel: 'self' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept nested types with all required fields in strict mode', () => {
+    generate(
+      {
+        id: 'https://example.com',
+        title: { value: 'Test' },
+        updated: new Date(),
+        links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
+        authors: [{ name: 'John Doe' }],
+        categories: [{ term: 'tech' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept partial feed in lenient mode', () => {
+    generate({ title: { value: 'Test' } })
+  })
+})
+
 describe('generate edge cases', () => {
   it('should accept partial feeds', () => {
     const value = {
@@ -1358,6 +1428,43 @@ describe('generate with app namespace', () => {
     <app:control>
       <app:draft>yes</app:draft>
     </app:control>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with xml namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: { value: 'Feed with xml namespace' },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      xml: {
+        lang: 'en',
+        base: 'http://example.org/',
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: { value: 'Entry with XML namespace' },
+          updated: new Date('2023-03-15T12:00:00Z'),
+          xml: {
+            lang: 'en-US',
+            base: 'http://example.org/entry/1/',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en" xml:base="http://example.org/">
+  <id>https://example.com/feed</id>
+  <title>Feed with xml namespace</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <entry xml:lang="en-US" xml:base="http://example.org/entry/1/">
+    <id>https://example.com/entry/1</id>
+    <title>Entry with XML namespace</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
   </entry>
 </feed>
 `

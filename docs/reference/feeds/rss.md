@@ -1,3 +1,7 @@
+---
+title: "Reference: RSS Feed"
+---
+
 # RSS Feed Reference
 
 RSS (Really Simple Syndication) is one of the most widely used web feed formats. Feedsmith automatically normalizes legacy elements to their modern equivalents.
@@ -17,31 +21,33 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
       <td>
         <a href="/reference/namespaces/atom">Atom</a>,
         <a href="/reference/namespaces/dc">Dublin Core</a>,
+        <a href="/reference/namespaces/dcterms">Dublin Core Terms</a>,
         <a href="/reference/namespaces/sy">Syndication</a>,
         <a href="/reference/namespaces/content">Content</a>,
         <a href="/reference/namespaces/slash">Slash</a>,
         <a href="/reference/namespaces/itunes">iTunes</a>,
         <a href="/reference/namespaces/podcast">Podcast Index</a>,
-        <a href="/reference/namespaces/rawvoice">RawVoice</a>,
         <a href="/reference/namespaces/psc">Podlove Simple Chapters</a>,
+        <a href="/reference/namespaces/media">Media RSS</a>,
         <a href="/reference/namespaces/googleplay">Google Play Podcast</a>,
         <a href="/reference/namespaces/spotify">Spotify</a>,
-        <a href="/reference/namespaces/media">Media RSS</a>,
-        <a href="/reference/namespaces/geo">W3C Basic Geo</a>,
-        <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
+        <a href="/reference/namespaces/acast">Acast</a>,
+        <a href="/reference/namespaces/rawvoice">RawVoice</a>,
+        <a href="/reference/namespaces/feedpress">FeedPress</a>,
+        <a href="/reference/namespaces/opensearch">OpenSearch</a>,
+        <a href="/reference/namespaces/prism">PRISM</a>,
+        <a href="/reference/namespaces/cc">ccREL</a>,
+        <a href="/reference/namespaces/creativecommons">Creative Commons</a>,
         <a href="/reference/namespaces/thr">Atom Threading</a>,
-        <a href="/reference/namespaces/dcterms">Dublin Core Terms</a>,
         <a href="/reference/namespaces/wfw">Comment API</a>,
         <a href="/reference/namespaces/admin">Administrative</a>,
         <a href="/reference/namespaces/pingback">Pingback</a>,
         <a href="/reference/namespaces/trackback">Trackback</a>,
         <a href="/reference/namespaces/source">Source</a>,
-        <a href="/reference/namespaces/cc">ccREL</a>,
-        <a href="/reference/namespaces/creativecommons">Creative Commons</a>,
-        <a href="/reference/namespaces/feedpress">FeedPress</a>,
-        <a href="/reference/namespaces/opensearch">OpenSearch</a>,
         <a href="/reference/namespaces/blogchannel">blogChannel</a>,
-        <a href="/reference/namespaces/prism">PRISM</a>
+        <a href="/reference/namespaces/geo">W3C Basic Geo</a>,
+        <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
+        <a href="/reference/namespaces/xml">XML</a>
       </td>
     </tr>
   </tbody>
@@ -102,6 +108,7 @@ const xml = generateRssFeed(feedData, {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
+| `strict` | `boolean` | `false` | Enable strict mode for spec-required field validation, see [Strict Mode](/generating/strict-mode) |
 | `stylesheets` | `Stylesheet[]` | - | Add stylesheets for visual formatting, see [Feed Styling](/generating/styling) |
 
 #### Returns
@@ -147,7 +154,7 @@ See the [TypeScript guide](/reference/typescript) for usage examples.
 ### Type Definitions
 
 > [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
+> For details on type parameters (`TDate`, `TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tdate).
 
 <<< @/../src/feeds/rss/common/types.ts#reference
 

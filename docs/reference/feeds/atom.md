@@ -1,3 +1,7 @@
+---
+title: "Reference: Atom Feed"
+---
+
 # Atom Feed Reference
 
 Atom is a syndication format based on XML that provides a robust framework for web feeds. Feedsmith provides comprehensive parsing and generation capabilities.
@@ -16,26 +20,27 @@ Atom is a syndication format based on XML that provides a robust framework for w
       <th>Namespaces</th>
       <td>
         <a href="/reference/namespaces/dc">Dublin Core</a>,
+        <a href="/reference/namespaces/dcterms">Dublin Core Terms</a>,
         <a href="/reference/namespaces/sy">Syndication</a>,
         <a href="/reference/namespaces/slash">Slash</a>,
         <a href="/reference/namespaces/itunes">iTunes</a>,
         <a href="/reference/namespaces/psc">Podlove Simple Chapters</a>,
-        <a href="/reference/namespaces/googleplay">Google Play Podcast</a>,
         <a href="/reference/namespaces/media">Media RSS</a>,
-        <a href="/reference/namespaces/geo">W3C Basic Geo</a>,
-        <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
+        <a href="/reference/namespaces/googleplay">Google Play Podcast</a>,
+        <a href="/reference/namespaces/arxiv">arXiv</a>,
+        <a href="/reference/namespaces/opensearch">OpenSearch</a>,
+        <a href="/reference/namespaces/cc">ccREL</a>,
+        <a href="/reference/namespaces/creativecommons">Creative Commons</a>,
         <a href="/reference/namespaces/thr">Atom Threading</a>,
         <a href="/reference/namespaces/app">Atom Publishing Protocol</a>,
-        <a href="/reference/namespaces/dcterms">Dublin Core Terms</a>,
         <a href="/reference/namespaces/wfw">Comment API</a>,
         <a href="/reference/namespaces/admin">Administrative</a>,
         <a href="/reference/namespaces/pingback">Pingback</a>,
         <a href="/reference/namespaces/trackback">Trackback</a>,
-        <a href="/reference/namespaces/cc">ccREL</a>,
-        <a href="/reference/namespaces/creativecommons">Creative Commons</a>,
-        <a href="/reference/namespaces/opensearch">OpenSearch</a>,
-        <a href="/reference/namespaces/arxiv">arXiv</a>,
-        <a href="/reference/namespaces/yt">YouTube</a>
+        <a href="/reference/namespaces/yt">YouTube</a>,
+        <a href="/reference/namespaces/geo">W3C Basic Geo</a>,
+        <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
+        <a href="/reference/namespaces/xml">XML</a>
       </td>
     </tr>
   </tbody>
@@ -96,6 +101,7 @@ const xml = generateAtomFeed(feedData, {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
+| `strict` | `boolean` | `false` | Enable strict mode for spec-required field validation, see [Strict Mode](/generating/strict-mode) |
 | `stylesheets` | `Stylesheet[]` | - | Add stylesheets for visual formatting, see [Feed Styling](/generating/styling) |
 
 #### Returns
@@ -141,7 +147,7 @@ See the [TypeScript guide](/reference/typescript) for usage examples.
 ### Type Definitions
 
 > [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
+> For details on type parameters (`TDate`, `TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tdate).
 
 <<< @/../src/feeds/atom/common/types.ts#reference
 

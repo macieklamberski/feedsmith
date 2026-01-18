@@ -443,12 +443,14 @@ describe('generateSource', () => {
     expect(generateSource(value)).toEqual(expected)
   })
 
-  it('should generate source with minimal properties', () => {
+  it('should generate source with all required properties', () => {
     const value = {
       title: 'Example Source',
+      url: 'https://example.com/feed.xml',
     }
     const expected = {
       '#text': 'Example Source',
+      '@url': 'https://example.com/feed.xml',
     }
 
     expect(generateSource(value)).toEqual(expected)
@@ -2080,6 +2082,46 @@ describe('generateFeed', () => {
           title: 'Licensed Feed',
           description: 'A feed with Creative Commons properties',
           'creativeCommons:license': ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with xml namespace properties', () => {
+    const value = {
+      title: 'Feed with XML namespace',
+      description: 'A feed with XML namespace attributes',
+      xml: {
+        lang: 'en',
+        base: 'http://example.org/',
+      },
+      items: [
+        {
+          title: 'Item with XML namespace',
+          xml: {
+            lang: 'en-US',
+            base: 'http://example.org/item/1/',
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xml:lang': 'en',
+        '@xml:base': 'http://example.org/',
+        channel: {
+          title: 'Feed with XML namespace',
+          description: 'A feed with XML namespace attributes',
+          item: [
+            {
+              title: 'Item with XML namespace',
+              '@xml:lang': 'en-US',
+              '@xml:base': 'http://example.org/item/1/',
+            },
+          ],
         },
       },
     }
