@@ -14,7 +14,7 @@ describe('parse', () => {
     const expected = {
       format: 'atom' as const,
       feed: {
-        title: 'Feed',
+        title: { value: 'Feed' },
         id: 'example-feed',
       },
     }
@@ -313,7 +313,7 @@ describe('parse', () => {
       const expected = {
         format: 'atom' as const,
         feed: {
-          title: 'Feed',
+          title: { value: 'Feed' },
           id: 'example-feed',
         },
       }
@@ -421,7 +421,7 @@ describe('parse', () => {
       const expected = {
         format: 'atom' as const,
         feed: {
-          title: 'Feed',
+          title: { value: 'Feed' },
           id: 'example-feed',
         },
       }
