@@ -106,7 +106,7 @@ const isJsonFeed = detectJsonFeed(jsonContent)
 All JSON Feed types are available under the `Json` namespace:
 
 ```typescript
-import type { Json } from 'feedsmith/types'
+import type { Json } from 'feedsmith'
 
 // Access any type from the definitions below
 type Feed = Json.Feed<Date>
