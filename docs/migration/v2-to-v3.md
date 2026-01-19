@@ -307,8 +307,9 @@ Use this checklist to ensure a complete migration:
 
 - Remove `{ lenient: true }` from all generate function calls
 - Add `{ strict: true }` where you need compile-time validation of required fields
-- Remove `DeepPartial` from imports
 - Update type parameters if using strict types directly (add `true` as last parameter)
+- Remove `DeepPartial` from imports
+- Change `feedsmith/types` imports to `feedsmith`
 - Replace Media namespace deprecated field (`group` → `groups`)
 - Replace Podcast namespace deprecated fields (`location` → `locations`, `value` → `values`, `chats` → `chat`)
 - Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
