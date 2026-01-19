@@ -21,7 +21,7 @@ npm install feedsmith@latest
 
 ### Strict Mode Now Opt-In
 
-In 2.x, generate functions enforced spec-required fields by default and required `{ lenient: true }` to make all fields optional. In 3.x, this is inverted: all fields are optional by default and `{ strict: true }` enables compile-time validation of spec-required fields.
+In version 2.x, generate functions enforced spec-required fields by default and to make all fields optional, it required passing `{ lenient: true }`. In 3.x, this is inverted: all fields are optional by default and `{ strict: true }` enables compile-time validation of spec-required fields.
 
 #### Before (2.x)
 ```typescript
@@ -63,9 +63,46 @@ const xml = generateRssFeed({
 1. Remove `{ lenient: true }` from all generate function calls (it's now the default)
 2. Add `{ strict: true }` if you want to preserve v2's default strict behavior
 
+### All Type Fields Now Optional by Default
+
+Related to the above, previously required fields in type definitions are now optional by default. Pass `true` as the strict type parameter if you need compile-time enforcement.
+
+#### Before (2.x)
+```typescript
+import type { Atom } from 'feedsmith/types'
+
+// TypeScript enforced required fields
+const entry: Atom.Entry<Date> = {
+  id: 'https://example.com/post/1',
+  title: 'Post Title',
+  updated: new Date('2024-01-01'),
+}
+```
+
+#### After (3.x)
+```typescript
+import type { Atom } from 'feedsmith'
+
+// All fields optional by default
+const entry: Atom.Entry<Date> = {
+  title: 'Post Title',
+}
+
+// Pass `true` for compile-time enforcement
+const strictEntry: Atom.Entry<Date, true> = {
+  id: 'https://example.com/post/1',
+  title: 'Post Title',
+  updated: new Date('2024-01-01'),
+}
+```
+
+#### Migration Steps
+1. If you relied on TypeScript to enforce required fields, add `true` as the last type parameter
+2. Alternatively, add runtime validation for required fields
+
 ### `DeepPartial` Type Removed
 
-The `DeepPartial` utility type is no longer exported. Since all type fields are now optional by default, this type is no longer needed.
+The `DeepPartial` utility type has been removed. Since all type fields are now optional by default, this type is no longer needed.
 
 #### Before (2.x)
 ```typescript
@@ -89,53 +126,6 @@ const processFeed = (feed: Rss.Feed<string>) => {
 #### Migration Steps
 1. Remove `DeepPartial` from your imports
 2. Use base types directly (`Rss.Feed`, `Atom.Feed`, etc.)
-
-### All Type Fields Now Optional by Default
-
-Previously required fields in type definitions are now optional by default. Use strict mode types if you need compile-time enforcement.
-
-#### Before (2.x)
-```typescript
-import type { Rss } from 'feedsmith/types'
-
-// TypeScript enforced required fields
-const feed: Rss.Feed<Date> = {
-  title: 'My Blog',
-  description: 'Required by type',
-  // link was already optional
-}
-
-// Items required title OR description
-const item: Rss.Item<Date> = {
-  title: 'Post Title', // Required by discriminated union
-}
-```
-
-#### After (3.x)
-```typescript
-import type { Rss } from 'feedsmith'
-
-// All fields optional by default
-const feed: Rss.Feed<Date> = {
-  title: 'My Blog',
-  // description no longer required by type
-}
-
-// Items have all optional fields
-const item: Rss.Item<Date> = {
-  // No fields required by type
-}
-
-// Use strict type parameter for compile-time enforcement
-const strictFeed: Rss.Feed<Date, Rss.Person, true> = {
-  title: 'My Blog',
-  description: 'Required in strict mode',
-}
-```
-
-#### Migration Steps
-1. If you relied on TypeScript to enforce required fields, add `true` as the last type parameter
-2. Alternatively, add runtime validation for required fields
 
 ### Types Entry Point Removed
 
