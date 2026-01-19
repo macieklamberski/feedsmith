@@ -21,7 +21,7 @@ npm install feedsmith@latest
 
 ### Strict Mode Now Opt-In
 
-In 2.x, generate functions enforced spec-required fields by default and required `{ lenient: true }` to make all fields optional. In 3.x, this is inverted: all fields are optional by default and `{ strict: true }` enables compile-time validation of spec-required fields.
+In version 2.x, generate functions enforced spec-required fields by default and to make all fields optional, it required passing `{ lenient: true }`. In 3.x, this is inverted: all fields are optional by default and `{ strict: true }` enables compile-time validation of spec-required fields.
 
 #### Before (2.x)
 ```typescript
@@ -63,9 +63,46 @@ const xml = generateRssFeed({
 1. Remove `{ lenient: true }` from all generate function calls (it's now the default)
 2. Add `{ strict: true }` if you want to preserve v2's default strict behavior
 
+### All Type Fields Now Optional by Default
+
+Related to the above, previously required fields in type definitions are now optional by default. Pass `true` as the strict type parameter if you need compile-time enforcement.
+
+#### Before (2.x)
+```typescript
+import type { Atom } from 'feedsmith/types'
+
+// TypeScript enforced required fields
+const entry: Atom.Entry<Date> = {
+  id: 'https://example.com/post/1',
+  title: 'Post Title',
+  updated: new Date('2024-01-01'),
+}
+```
+
+#### After (3.x)
+```typescript
+import type { Atom } from 'feedsmith'
+
+// All fields optional by default
+const entry: Atom.Entry<Date> = {
+  title: 'Post Title',
+}
+
+// Pass `true` for compile-time enforcement
+const strictEntry: Atom.Entry<Date, true> = {
+  id: 'https://example.com/post/1',
+  title: 'Post Title',
+  updated: new Date('2024-01-01'),
+}
+```
+
+#### Migration Steps
+1. If you relied on TypeScript to enforce required fields, add `true` as the last type parameter
+2. Alternatively, add runtime validation for required fields
+
 ### `DeepPartial` Type Removed
 
-The `DeepPartial` utility type is no longer exported from `feedsmith/types`. Since all type fields are now optional by default, this type is no longer needed.
+The `DeepPartial` utility type has been removed. Since all type fields are now optional by default, this type is no longer needed.
 
 #### Before (2.x)
 ```typescript
@@ -78,7 +115,7 @@ const processFeed = (feed: DeepPartial<Rss.Feed<string>>) => {
 
 #### After (3.x)
 ```typescript
-import type { Rss } from 'feedsmith/types'
+import type { Rss } from 'feedsmith'
 
 // All fields already optional - DeepPartial not needed
 const processFeed = (feed: Rss.Feed<string>) => {
@@ -90,89 +127,49 @@ const processFeed = (feed: Rss.Feed<string>) => {
 1. Remove `DeepPartial` from your imports
 2. Use base types directly (`Rss.Feed`, `Atom.Feed`, etc.)
 
-### All Type Fields Now Optional by Default
+### Types Entry Point Removed
 
-Previously required fields in type definitions are now optional by default. Use strict mode types if you need compile-time enforcement.
+The `feedsmith/types` entry point has been removed. All types are now exported from the main `feedsmith` entry point. Additionally, deprecated type aliases (`RssFeed`, `AtomFeed`, `JsonFeed`, `RdfFeed`, `Opml`) have been removed.
 
 #### Before (2.x)
 ```typescript
 import type { Rss } from 'feedsmith/types'
-
-// TypeScript enforced required fields
-const feed: Rss.Feed<Date> = {
-  title: 'My Blog',
-  description: 'Required by type',
-  // link was already optional
-}
-
-// Items required title OR description
-const item: Rss.Item<Date> = {
-  title: 'Post Title', // Required by discriminated union
-}
+import { parseRssFeed } from 'feedsmith'
 ```
 
 #### After (3.x)
 ```typescript
-import type { Rss } from 'feedsmith/types'
-
-// All fields optional by default
-const feed: Rss.Feed<Date> = {
-  title: 'My Blog',
-  // description no longer required by type
-}
-
-// Items have all optional fields
-const item: Rss.Item<Date> = {
-  // No fields required by type
-}
-
-// Use strict type parameter for compile-time enforcement
-const strictFeed: Rss.Feed<Date, Rss.Person, true> = {
-  title: 'My Blog',
-  description: 'Required in strict mode',
-}
+import { type Rss, parseRssFeed } from 'feedsmith'
 ```
 
 #### Migration Steps
-1. If you relied on TypeScript to enforce required fields, add `true` as the last type parameter
-2. Alternatively, add runtime validation for required fields
+1. Change `feedsmith/types` imports to `feedsmith`
+2. Replace deprecated type aliases: `RssFeed` → `Rss.Feed`, `AtomFeed` → `Atom.Feed`, etc.
 
 ### Media Namespace: Deprecated Field Removed
 
-The deprecated `group` field has been removed from `MediaNs.ItemOrFeed` to align with the [Media RSS specification](https://www.rssboard.org/media-rss):
+The deprecated `group` field has been removed to align with the [Media RSS specification](https://www.rssboard.org/media-rss):
 - `group` → `groups` (spec allows multiple `media:group` elements)
 
 #### Before (2.x)
 ```typescript
-import type { MediaNs } from 'feedsmith/types'
-
-const media: MediaNs.ItemOrFeed = {
-  group: {
-    contents: [{ url: 'https://example.com/video.mp4' }],
-  },
-}
+const feed = parseRssFeed(xml)
+const group = feed.media?.group
 ```
 
 #### After (3.x)
 ```typescript
-import type { MediaNs } from 'feedsmith/types'
-
-const media: MediaNs.ItemOrFeed = {
-  groups: [
-    {
-      contents: [{ url: 'https://example.com/video.mp4' }],
-    },
-  ],
-}
+const feed = parseRssFeed(xml)
+const group = feed.media?.groups?.[0]
 ```
 
 #### Migration Steps
-1. Replace `group` with `groups` (wrap the object in an array)
-2. If you were accessing `media.group`, change to `media.groups?.[0]`
+1. Replace `group` with `groups`
+2. Access the first element: `media.group` → `media.groups?.[0]`
 
 ### Podcast Namespace: Deprecated Fields Removed
 
-Deprecated fields have been removed from `PodcastNs.Item` and `PodcastNs.Feed` to align with the [Podcasting 2.0 specification](https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/1.0.md):
+Deprecated fields have been removed to align with the [Podcasting 2.0 specification](https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/1.0.md):
 
 - `location` → `locations` (spec allows multiple `podcast:location` elements)
 - `value` → `values` (spec allows multiple `podcast:value` elements)
@@ -180,24 +177,18 @@ Deprecated fields have been removed from `PodcastNs.Item` and `PodcastNs.Feed` t
 
 #### Before (2.x)
 ```typescript
-import type { PodcastNs } from 'feedsmith/types'
-
-const podcast: PodcastNs.Item = {
-  location: { name: 'New York' },
-  value: { type: 'lightning', method: 'keysend' },
-  chats: [{ server: 'irc.example.com', protocol: 'irc' }],
-}
+const feed = parseRssFeed(xml)
+const location = feed.items?.[0]?.podcast?.location
+const value = feed.items?.[0]?.podcast?.value
+const chat = feed.items?.[0]?.podcast?.chats?.[0]
 ```
 
 #### After (3.x)
 ```typescript
-import type { PodcastNs } from 'feedsmith/types'
-
-const podcast: PodcastNs.Item = {
-  locations: [{ name: 'New York' }],
-  values: [{ type: 'lightning', method: 'keysend' }],
-  chat: { server: 'irc.example.com', protocol: 'irc' },
-}
+const feed = parseRssFeed(xml)
+const location = feed.items?.[0]?.podcast?.locations?.[0]
+const value = feed.items?.[0]?.podcast?.values?.[0]
+const chat = feed.items?.[0]?.podcast?.chat
 ```
 
 #### Migration Steps
