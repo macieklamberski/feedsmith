@@ -65,7 +65,7 @@ const xml = generateRssFeed({
 
 ### `DeepPartial` Type Removed
 
-The `DeepPartial` utility type is no longer exported from `feedsmith/types`. Since all type fields are now optional by default, this type is no longer needed.
+The `DeepPartial` utility type is no longer exported. Since all type fields are now optional by default, this type is no longer needed.
 
 #### Before (2.x)
 ```typescript
@@ -78,7 +78,7 @@ const processFeed = (feed: DeepPartial<Rss.Feed<string>>) => {
 
 #### After (3.x)
 ```typescript
-import type { Rss } from 'feedsmith/types'
+import type { Rss } from 'feedsmith'
 
 // All fields already optional - DeepPartial not needed
 const processFeed = (feed: Rss.Feed<string>) => {
@@ -113,7 +113,7 @@ const item: Rss.Item<Date> = {
 
 #### After (3.x)
 ```typescript
-import type { Rss } from 'feedsmith/types'
+import type { Rss } from 'feedsmith'
 
 // All fields optional by default
 const feed: Rss.Feed<Date> = {
@@ -137,42 +137,49 @@ const strictFeed: Rss.Feed<Date, Rss.Person, true> = {
 1. If you relied on TypeScript to enforce required fields, add `true` as the last type parameter
 2. Alternatively, add runtime validation for required fields
 
-### Media Namespace: Deprecated Field Removed
+### Types Entry Point Removed
 
-The deprecated `group` field has been removed from `MediaNs.ItemOrFeed` to align with the [Media RSS specification](https://www.rssboard.org/media-rss):
-- `group` → `groups` (spec allows multiple `media:group` elements)
+The `feedsmith/types` entry point has been removed. All types are now exported from the main `feedsmith` entry point. Additionally, deprecated type aliases (`RssFeed`, `AtomFeed`, `JsonFeed`, `RdfFeed`, `Opml`) have been removed.
 
 #### Before (2.x)
 ```typescript
-import type { MediaNs } from 'feedsmith/types'
-
-const media: MediaNs.ItemOrFeed = {
-  group: {
-    contents: [{ url: 'https://example.com/video.mp4' }],
-  },
-}
+import type { Rss } from 'feedsmith/types'
+import { parseRssFeed } from 'feedsmith'
 ```
 
 #### After (3.x)
 ```typescript
-import type { MediaNs } from 'feedsmith/types'
-
-const media: MediaNs.ItemOrFeed = {
-  groups: [
-    {
-      contents: [{ url: 'https://example.com/video.mp4' }],
-    },
-  ],
-}
+import { type Rss, parseRssFeed } from 'feedsmith'
 ```
 
 #### Migration Steps
-1. Replace `group` with `groups` (wrap the object in an array)
-2. If you were accessing `media.group`, change to `media.groups?.[0]`
+1. Change `feedsmith/types` imports to `feedsmith`
+2. Replace deprecated type aliases: `RssFeed` → `Rss.Feed`, `AtomFeed` → `Atom.Feed`, etc.
+
+### Media Namespace: Deprecated Field Removed
+
+The deprecated `group` field has been removed to align with the [Media RSS specification](https://www.rssboard.org/media-rss):
+- `group` → `groups` (spec allows multiple `media:group` elements)
+
+#### Before (2.x)
+```typescript
+const feed = parseRssFeed(xml)
+const group = feed.media?.group
+```
+
+#### After (3.x)
+```typescript
+const feed = parseRssFeed(xml)
+const group = feed.media?.groups?.[0]
+```
+
+#### Migration Steps
+1. Replace `group` with `groups`
+2. Access the first element: `media.group` → `media.groups?.[0]`
 
 ### Podcast Namespace: Deprecated Fields Removed
 
-Deprecated fields have been removed from `PodcastNs.Item` and `PodcastNs.Feed` to align with the [Podcasting 2.0 specification](https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/1.0.md):
+Deprecated fields have been removed to align with the [Podcasting 2.0 specification](https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/1.0.md):
 
 - `location` → `locations` (spec allows multiple `podcast:location` elements)
 - `value` → `values` (spec allows multiple `podcast:value` elements)
@@ -180,24 +187,18 @@ Deprecated fields have been removed from `PodcastNs.Item` and `PodcastNs.Feed` t
 
 #### Before (2.x)
 ```typescript
-import type { PodcastNs } from 'feedsmith/types'
-
-const podcast: PodcastNs.Item = {
-  location: { name: 'New York' },
-  value: { type: 'lightning', method: 'keysend' },
-  chats: [{ server: 'irc.example.com', protocol: 'irc' }],
-}
+const feed = parseRssFeed(xml)
+const location = feed.items?.[0]?.podcast?.location
+const value = feed.items?.[0]?.podcast?.value
+const chat = feed.items?.[0]?.podcast?.chats?.[0]
 ```
 
 #### After (3.x)
 ```typescript
-import type { PodcastNs } from 'feedsmith/types'
-
-const podcast: PodcastNs.Item = {
-  locations: [{ name: 'New York' }],
-  values: [{ type: 'lightning', method: 'keysend' }],
-  chat: { server: 'irc.example.com', protocol: 'irc' },
-}
+const feed = parseRssFeed(xml)
+const location = feed.items?.[0]?.podcast?.locations?.[0]
+const value = feed.items?.[0]?.podcast?.values?.[0]
+const chat = feed.items?.[0]?.podcast?.chat
 ```
 
 #### Migration Steps

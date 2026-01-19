@@ -96,7 +96,7 @@ const xml = generateOpml(opmlData, {
 All OPML types are available under the `Opml` namespace:
 
 ```typescript
-import type { Opml } from 'feedsmith/types'
+import type { Opml } from 'feedsmith'
 
 // Access any type from the definitions below
 type Document = Opml.Document<Date>

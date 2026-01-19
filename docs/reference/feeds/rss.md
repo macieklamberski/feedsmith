@@ -139,7 +139,7 @@ const isRss = detectRssFeed(xmlContent)
 All RSS types are available under the `Rss` namespace:
 
 ```typescript
-import type { Rss } from 'feedsmith/types'
+import type { Rss } from 'feedsmith'
 
 // Access any type from the definitions below
 type Feed = Rss.Feed<Date>
