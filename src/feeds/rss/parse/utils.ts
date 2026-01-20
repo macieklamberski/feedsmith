@@ -6,6 +6,7 @@ import {
   parseBoolean,
   parseDate,
   parseNumber,
+  parseSingular,
   parseSingularOf,
   parseString,
   retrieveText,
@@ -70,6 +71,7 @@ import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/uti
 import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/parse/utils.js'
 import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
+import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
 import type { Rss } from '../common/types.js'
 
 export const parsePerson: ParsePartialUtil<Rss.Person> = (value) => {
@@ -215,67 +217,72 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
     pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
     acast: namespaces.has('acast') ? retrieveAcastItem(value) : undefined,
+    xml: retrieveXmlItemOrFeed(value),
   }
 
   return trimObject(item)
 }
 
 export const parseFeed: ParsePartialUtil<Rss.Feed<string>, ParseOptions> = (value, options) => {
-  if (!isObject(value)) {
+  const channel = parseSingular(value?.channel)
+
+  if (!isObject(channel)) {
     return
   }
-
-  const namespaces = detectNamespaces(value)
+  const namespaces = detectNamespaces(channel)
   const feed = {
-    title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
-    link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
-    description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
-    language: parseSingularOf(value.language, (value) => parseString(retrieveText(value))),
-    copyright: parseSingularOf(value.copyright, (value) => parseString(retrieveText(value))),
-    managingEditor: parseSingularOf(value.managingeditor, parsePerson),
-    webMaster: parseSingularOf(value.webmaster, parsePerson),
-    pubDate: parseSingularOf(value.pubdate, (value) => parseDate(retrieveText(value))),
-    lastBuildDate: parseSingularOf(value.lastbuilddate, (value) => parseDate(retrieveText(value))),
-    categories: parseArrayOf(value.category, parseCategory),
-    generator: parseSingularOf(value.generator, (value) => parseString(retrieveText(value))),
-    docs: parseSingularOf(value.docs, (value) => parseString(retrieveText(value))),
-    cloud: parseSingularOf(value.cloud, parseCloud),
-    ttl: parseSingularOf(value.ttl, (value) => parseNumber(retrieveText(value))),
-    image: parseSingularOf(value.image, parseImage),
-    rating: parseSingularOf(value.rating, (value) => parseString(retrieveText(value))),
-    textInput: parseSingularOf(value.textinput, parseTextInput),
-    skipHours: parseSingularOf(value.skiphours, parseSkipHours),
-    skipDays: parseSingularOf(value.skipdays, parseSkipDays),
-    items: parseArrayOf(value.item, parseItem, options?.maxItems),
-    atom: namespaces.has('atom') ? retrieveAtomFeed(value) : undefined,
-    cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
-    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
-    sy: namespaces.has('sy') ? retrieveSyFeed(value) : undefined,
-    itunes: namespaces.has('itunes') ? retrieveItunesFeed(value) : undefined,
-    podcast: namespaces.has('podcast') ? retrievePodcastFeed(value) : undefined,
-    googleplay: namespaces.has('googleplay') ? retrieveGooglePlayFeed(value) : undefined,
-    media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
-    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
-    geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
-    prism: namespaces.has('prism') ? retrievePrismFeed(value) : undefined,
+    title: parseSingularOf(channel.title, (value) => parseString(retrieveText(value))),
+    link: parseSingularOf(channel.link, (value) => parseString(retrieveText(value))),
+    description: parseSingularOf(channel.description, (value) => parseString(retrieveText(value))),
+    language: parseSingularOf(channel.language, (value) => parseString(retrieveText(value))),
+    copyright: parseSingularOf(channel.copyright, (value) => parseString(retrieveText(value))),
+    managingEditor: parseSingularOf(channel.managingeditor, parsePerson),
+    webMaster: parseSingularOf(channel.webmaster, parsePerson),
+    pubDate: parseSingularOf(channel.pubdate, (value) => parseDate(retrieveText(value))),
+    lastBuildDate: parseSingularOf(channel.lastbuilddate, (value) =>
+      parseDate(retrieveText(value)),
+    ),
+    categories: parseArrayOf(channel.category, parseCategory),
+    generator: parseSingularOf(channel.generator, (value) => parseString(retrieveText(value))),
+    docs: parseSingularOf(channel.docs, (value) => parseString(retrieveText(value))),
+    cloud: parseSingularOf(channel.cloud, parseCloud),
+    ttl: parseSingularOf(channel.ttl, (value) => parseNumber(retrieveText(value))),
+    image: parseSingularOf(channel.image, parseImage),
+    rating: parseSingularOf(channel.rating, (value) => parseString(retrieveText(value))),
+    textInput: parseSingularOf(channel.textinput, parseTextInput),
+    skipHours: parseSingularOf(channel.skiphours, parseSkipHours),
+    skipDays: parseSingularOf(channel.skipdays, parseSkipDays),
+    items: parseArrayOf(channel.item, parseItem, options?.maxItems),
+    atom: namespaces.has('atom') ? retrieveAtomFeed(channel) : undefined,
+    cc: namespaces.has('cc') ? retrieveCc(channel) : undefined,
+    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel) : undefined,
+    sy: namespaces.has('sy') ? retrieveSyFeed(channel) : undefined,
+    itunes: namespaces.has('itunes') ? retrieveItunesFeed(channel) : undefined,
+    podcast: namespaces.has('podcast') ? retrievePodcastFeed(channel) : undefined,
+    googleplay: namespaces.has('googleplay') ? retrieveGooglePlayFeed(channel) : undefined,
+    media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
+    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
+    geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(channel) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(channel) : undefined,
+    prism: namespaces.has('prism') ? retrievePrismFeed(channel) : undefined,
     creativeCommons: namespaces.has('creativecommons')
-      ? retrieveCreativeCommonsItemOrFeed(value)
+      ? retrieveCreativeCommonsItemOrFeed(channel)
       : undefined,
-    feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(value) : undefined,
-    opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(value) : undefined,
-    admin: namespaces.has('admin') ? retrieveAdminFeed(value) : undefined,
-    sourceNs: namespaces.has('source') ? retrieveSourceFeed(value) : undefined,
-    blogChannel: namespaces.has('blogchannel') ? retrieveBlogChannelFeed(value) : undefined,
-    rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceFeed(value) : undefined,
-    spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(value) : undefined,
-    pingback: namespaces.has('pingback') ? retrievePingbackFeed(value) : undefined,
-    acast: namespaces.has('acast') ? retrieveAcastFeed(value) : undefined,
+    feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(channel) : undefined,
+    opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(channel) : undefined,
+    admin: namespaces.has('admin') ? retrieveAdminFeed(channel) : undefined,
+    sourceNs: namespaces.has('source') ? retrieveSourceFeed(channel) : undefined,
+    blogChannel: namespaces.has('blogchannel') ? retrieveBlogChannelFeed(channel) : undefined,
+    rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceFeed(channel) : undefined,
+    spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(channel) : undefined,
+    pingback: namespaces.has('pingback') ? retrievePingbackFeed(channel) : undefined,
+    acast: namespaces.has('acast') ? retrieveAcastFeed(channel) : undefined,
+    xml: retrieveXmlItemOrFeed(value),
   }
 
   return trimObject(feed)
 }
 
 export const retrieveFeed: ParsePartialUtil<Rss.Feed<string>, ParseOptions> = (value, options) => {
-  return parseSingularOf(value?.rss?.channel, (value) => parseFeed(value, options))
+  return parseSingularOf(value?.rss, (value) => parseFeed(value, options))
 }

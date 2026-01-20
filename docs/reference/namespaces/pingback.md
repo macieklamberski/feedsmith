@@ -1,3 +1,7 @@
+---
+title: "Reference: Pingback Namespace"
+---
+
 # Pingback Namespace Reference
 
 The Pingback namespace provides a mechanism for notifying websites when content references or links to them, enabling automatic trackback of linkages between web resources.

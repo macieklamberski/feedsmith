@@ -1,4 +1,8 @@
-# Meet Feedsmith
+---
+title: Feedsmith — Fast JavaScript Feed Parser
+---
+
+# Feedsmith
 
 Fast, all‑in‑one JavaScript feed parser and generator for RSS, Atom, RDF, and JSON Feed, with support for popular namespaces and OPML files.
 
@@ -90,6 +94,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [W3C Basic Geo](/reference/namespaces/geo) | `<geo:*>` | RSS, Atom | ✅ | ✅ |
 | [GeoRSS Simple](/reference/namespaces/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [RDF](/reference/namespaces/rdf) | `<rdf:*>` | RDF | ✅ | ✅ |
+| [XML](/reference/namespaces/xml) | `<xml:*>` | RSS, Atom, RDF | ✅ | ✅ |
 
 ## Why Feedsmith?
 

@@ -1,3 +1,7 @@
+---
+title: Quick Start
+---
+
 # Quick Start
 
 This guide will get you up and running with Feedsmith in just a few minutes.
@@ -146,7 +150,7 @@ try {
 Feedsmith provides comprehensive TypeScript types for all feed formats:
 
 ```typescript
-import type { Rss, Atom, Json, Opml } from 'feedsmith/types'
+import type { Rss, Atom, Json, Opml } from 'feedsmith'
 
 // Access all types for a format
 type Feed = Rss.Feed

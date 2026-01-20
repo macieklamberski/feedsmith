@@ -1,3 +1,7 @@
+---
+title: "Reference: Atom Threading Namespace"
+---
+
 # Atom Threading Namespace Reference
 
 The Atom Threading namespace provides elements for representing threaded discussions and comment relationships in Atom feeds, enabling proper conversation threading.

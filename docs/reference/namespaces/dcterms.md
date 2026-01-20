@@ -1,3 +1,7 @@
+---
+title: "Reference: Dublin Core Terms Namespace"
+---
+
 # Dublin Core Terms Namespace Reference
 
 The Dublin Core Terms namespace provides extended metadata elements based on the Dublin Core Metadata Initiative, offering comprehensive resource description capabilities.

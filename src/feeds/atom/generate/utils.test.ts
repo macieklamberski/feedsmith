@@ -1789,4 +1789,48 @@ describe('generateFeed', () => {
 
     expect(generateFeed(value)).toEqual(expected)
   })
+
+  it('should generate Atom feed with xml namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with XML namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      xml: {
+        lang: 'en',
+        base: 'http://example.org/',
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry with XML namespace',
+          updated: new Date('2023-03-15T12:00:00Z'),
+          xml: {
+            lang: 'en-US',
+            base: 'http://example.org/entry/1/',
+          },
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xml:lang': 'en',
+        '@xml:base': 'http://example.org/',
+        id: 'https://example.com/feed',
+        title: 'Feed with XML namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        entry: [
+          {
+            id: 'https://example.com/entry/1',
+            title: 'Entry with XML namespace',
+            updated: '2023-03-15T12:00:00.000Z',
+            '@xml:lang': 'en-US',
+            '@xml:base': 'http://example.org/entry/1/',
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
 })

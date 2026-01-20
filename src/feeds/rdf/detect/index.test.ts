@@ -1,7 +1,48 @@
 import { describe, expect, it } from 'bun:test'
+import { namespaceUris } from '../../../common/config.js'
 import { detect } from './index.js'
 
+// RSS 0.9/1.0 namespace URIs for testing (matches the local constant in detect).
+const rssNamespaceUris = [
+  'http://purl.org/rss/1.0/',
+  'https://purl.org/rss/1.0/',
+  'http://purl.org/rss/1.0',
+  'https://purl.org/rss/1.0',
+  'http://channel.netscape.com/rdf/simple/0.9/',
+  'https://channel.netscape.com/rdf/simple/0.9/',
+  'http://channel.netscape.com/rdf/simple/0.9',
+  'https://channel.netscape.com/rdf/simple/0.9',
+]
+
 describe('detect', () => {
+  describe('namespace URI variants', () => {
+    it.each(namespaceUris.rdf)('should detect RDF feed with RDF namespace %s', (uri) => {
+      const rdfFeed = `
+        <?xml version="1.0"?>
+        <rdf:RDF xmlns:rdf="${uri}">
+          <channel>
+            <title>Test</title>
+          </channel>
+        </rdf:RDF>
+      `
+
+      expect(detect(rdfFeed)).toBe(true)
+    })
+
+    it.each(rssNamespaceUris)('should detect RDF feed with RSS namespace %s', (uri) => {
+      const rdfFeed = `
+        <?xml version="1.0"?>
+        <rdf:RDF xmlns="${uri}">
+          <channel>
+            <title>Test</title>
+          </channel>
+        </rdf:RDF>
+      `
+
+      expect(detect(rdfFeed)).toBe(true)
+    })
+  })
+
   it('should detect valid RDF feed with xmlns declaration', () => {
     const rdfFeed = `
       <?xml version="1.0"?>
