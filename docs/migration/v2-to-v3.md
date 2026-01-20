@@ -196,6 +196,46 @@ const chat = feed.items?.[0]?.podcast?.chat
 2. Replace `value` with `values` (wrap in array)
 3. Replace `chats` with `chat` (use `chats[0]` if you had multiple)
 
+### Dublin Core Namespace: Singular Fields Removed
+
+Deprecated singular fields have been removed to align with the [Dublin Core specification](https://www.dublincore.org/specifications/dublin-core/dces/) where all elements are repeatable:
+
+- `title` → `titles`
+- `creator` → `creators`
+- `subject` → `subjects`
+- `description` → `descriptions`
+- `publisher` → `publishers`
+- `contributor` → `contributors`
+- `date` → `dates`
+- `type` → `types`
+- `format` → `formats`
+- `identifier` → `identifiers`
+- `source` → `sources`
+- `language` → `languages`
+- `relation` → `relations`
+- `coverage` (now array)
+- `rights` (now array)
+
+#### Before (2.x)
+```typescript
+const feed = parseRssFeed(xml)
+const title = feed.dc?.title
+const creator = feed.dc?.creator
+const coverage = feed.dc?.coverage
+```
+
+#### After (3.x)
+```typescript
+const feed = parseRssFeed(xml)
+const title = feed.dc?.titles?.[0]
+const creator = feed.dc?.creators?.[0]
+const coverage = feed.dc?.coverage?.[0]
+```
+
+#### Migration Steps
+1. Replace singular fields with plural equivalents (e.g., `dc.title` → `dc.titles?.[0]`)
+2. Fields that kept their name (`coverage`, `rights`) are now arrays: `dc.coverage` → `dc.coverage?.[0]`
+
 ## New Features
 
 ### XML Namespace Support
@@ -212,4 +252,5 @@ Use this checklist to ensure a complete migration:
 - Update type parameters if using strict types directly (add `true` as last parameter)
 - Replace Media namespace deprecated field (`group` → `groups`)
 - Replace Podcast namespace deprecated fields (`location` → `locations`, `value` → `values`, `chats` → `chat`)
+- Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
 - Test feed generation to ensure output is correct

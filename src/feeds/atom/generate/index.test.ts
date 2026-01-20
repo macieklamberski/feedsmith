@@ -319,7 +319,7 @@ describe('generate', () => {
       title: 'Feed with DC namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
-        creator: 'John Doe',
+        creators: ['John Doe'],
       },
       entries: [
         {
@@ -327,7 +327,7 @@ describe('generate', () => {
           title: 'Entry with DC',
           updated: new Date('2023-03-15T12:00:00Z'),
           dc: {
-            creator: 'Jane Smith',
+            creators: ['Jane Smith'],
           },
         },
       ],
@@ -638,8 +638,8 @@ describe('generate', () => {
       title: 'Feed with multiple namespaces',
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
-        creator: 'John Doe',
-        rights: 'Copyright 2023',
+        creators: ['John Doe'],
+        rights: ['Copyright 2023'],
       },
       sy: {
         updatePeriod: 'daily',
@@ -651,7 +651,7 @@ describe('generate', () => {
           title: 'Multi-namespace entry',
           updated: new Date('2023-03-15T12:00:00Z'),
           dc: {
-            creator: 'Jane Smith',
+            creators: ['Jane Smith'],
           },
           slash: {
             section: 'Technology',

@@ -630,7 +630,6 @@ describe('parseItem', () => {
       link: 'http://example.com',
       dc: {
         creators: ['John Doe'],
-        creator: 'John Doe',
       },
     }
 
@@ -1603,7 +1602,6 @@ describe('parseFeed', () => {
       ],
       dc: {
         creators: ['John Doe'],
-        creator: 'John Doe',
       },
     }
 

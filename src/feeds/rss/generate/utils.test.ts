@@ -561,12 +561,12 @@ describe('generateItem', () => {
     const value = {
       title: 'Item with dc namespace',
       dc: {
-        creator: 'Jane Smith',
+        creators: ['Jane Smith'],
       },
     }
     const expected = {
       title: 'Item with dc namespace',
-      'dc:creator': 'Jane Smith',
+      'dc:creator': ['Jane Smith'],
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -1260,7 +1260,7 @@ describe('generateFeed', () => {
       title: 'Feed with dc namespace',
       description: 'Description',
       dc: {
-        creator: 'John Doe',
+        creators: ['John Doe'],
       },
     }
     const expected = {
@@ -1270,7 +1270,7 @@ describe('generateFeed', () => {
         channel: {
           title: 'Feed with dc namespace',
           description: 'Description',
-          'dc:creator': 'John Doe',
+          'dc:creator': ['John Doe'],
         },
       },
     }
