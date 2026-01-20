@@ -64,13 +64,13 @@ describe('generate', () => {
       title: 'Feed with dc namespace',
       description: 'Test feed with Dublin Core namespace',
       dc: {
-        creator: 'John Doe',
+        creators: ['John Doe'],
       },
       items: [
         {
           title: 'First item',
           dc: {
-            creator: 'Jane Smith',
+            creators: ['Jane Smith'],
           },
         },
       ],
@@ -147,15 +147,15 @@ describe('generate', () => {
       title: 'Feed with dcterms namespace',
       description: 'Test feed with Dublin Core Terms namespace',
       dcterms: {
-        created: new Date('2023-01-01T00:00:00Z'),
-        license: 'Creative Commons Attribution 4.0',
+        created: [new Date('2023-01-01T00:00:00Z')],
+        licenses: ['Creative Commons Attribution 4.0'],
       },
       items: [
         {
           title: 'First item',
           dcterms: {
-            created: new Date('2023-02-01T00:00:00Z'),
-            license: 'MIT License',
+            created: [new Date('2023-02-01T00:00:00Z')],
+            licenses: ['MIT License'],
           },
         },
       ],
@@ -1391,6 +1391,39 @@ describe('generate edge cases', () => {
       <acast:showId>664fde3eda02bb0012bad909</acast:showId>
       <acast:episodeUrl>jonathan-blow-on-programming-language-design</acast:episodeUrl>
       <acast:settings>FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC</acast:settings>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with xml namespace', () => {
+    const value = {
+      title: 'Feed with xml namespace',
+      description: 'Test feed with XML namespace attributes',
+      xml: {
+        lang: 'en',
+        base: 'http://example.org/',
+      },
+      items: [
+        {
+          title: 'Item with XML namespace',
+          xml: {
+            lang: 'en-US',
+            base: 'http://example.org/item/1/',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xml:lang="en" xml:base="http://example.org/">
+  <channel>
+    <title>Feed with xml namespace</title>
+    <description>Test feed with XML namespace attributes</description>
+    <item xml:lang="en-US" xml:base="http://example.org/item/1/">
+      <title>Item with XML namespace</title>
     </item>
   </channel>
 </rss>

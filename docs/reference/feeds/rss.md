@@ -1,3 +1,7 @@
+---
+title: "Reference: RSS Feed"
+---
+
 # RSS Feed Reference
 
 RSS (Really Simple Syndication) is one of the most widely used web feed formats. Feedsmith automatically normalizes legacy elements to their modern equivalents.
@@ -42,7 +46,8 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
         <a href="/reference/namespaces/source">Source</a>,
         <a href="/reference/namespaces/blogchannel">blogChannel</a>,
         <a href="/reference/namespaces/geo">W3C Basic Geo</a>,
-        <a href="/reference/namespaces/georss">GeoRSS Simple</a>
+        <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
+        <a href="/reference/namespaces/xml">XML</a>
       </td>
     </tr>
   </tbody>
@@ -134,7 +139,7 @@ const isRss = detectRssFeed(xmlContent)
 All RSS types are available under the `Rss` namespace:
 
 ```typescript
-import type { Rss } from 'feedsmith/types'
+import type { Rss } from 'feedsmith'
 
 // Access any type from the definitions below
 type Feed = Rss.Feed<Date>

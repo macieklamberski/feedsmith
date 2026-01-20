@@ -1,3 +1,7 @@
+---
+title: "Reference: Atom Publishing Protocol Namespace"
+---
+
 # Atom Publishing Protocol Namespace Reference
 
 Extends Atom feeds with elements for content management workflows.

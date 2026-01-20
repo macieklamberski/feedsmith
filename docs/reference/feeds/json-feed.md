@@ -1,3 +1,7 @@
+---
+title: "Reference: JSON Feed"
+---
+
 # JSON Feed Reference
 
 JSON Feed is a syndication format based on JSON that provides a simple, straightforward way to publish feeds. Feedsmith provides full parsing and generation capabilities.
@@ -102,7 +106,7 @@ const isJsonFeed = detectJsonFeed(jsonContent)
 All JSON Feed types are available under the `Json` namespace:
 
 ```typescript
-import type { Json } from 'feedsmith/types'
+import type { Json } from 'feedsmith'
 
 // Access any type from the definitions below
 type Feed = Json.Feed<Date>

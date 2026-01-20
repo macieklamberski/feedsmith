@@ -1,12 +1,26 @@
 import { defineConfig } from 'vitepress'
 
+const hostname = 'https://feedsmith.dev'
+
 export default defineConfig({
   title: 'Feedsmith',
+  titleTemplate: ':title',
   description:
     'Fast, all‑in‑one JavaScript feed parser and generator for RSS, Atom, RDF, and JSON Feed, with support for popular namespaces and OPML files.',
   lastUpdated: true,
   cleanUrls: true,
+  sitemap: {
+    hostname,
+  },
+  transformHead: ({ pageData }) => {
+    const canonicalUrl = `${hostname}/${pageData.relativePath}`
+      .replace(/index\.md$/, '')
+      .replace(/\.md$/, '')
+
+    return [['link', { rel: 'canonical', href: canonicalUrl }]]
+  },
   head: [
+    ['meta', { property: 'og:site_name', content: 'Feedsmith' }],
     [
       'script',
       {
@@ -24,6 +38,10 @@ export default defineConfig({
       { text: 'Quick Start', link: '/quick-start' },
       { text: 'Parsing', link: '/parsing/' },
       { text: 'Generating', link: '/generating/' },
+      {
+        text: 'v3.0 (Next)',
+        items: [{ text: 'v2.0', link: 'https://feedsmith.dev' }],
+      },
     ],
     sidebar: [
       {
@@ -106,6 +124,7 @@ export default defineConfig({
               { text: 'W3C Basic Geo', link: '/reference/namespaces/geo' },
               { text: 'GeoRSS Simple', link: '/reference/namespaces/georss' },
               { text: 'RDF', link: '/reference/namespaces/rdf' },
+              { text: 'XML', link: '/reference/namespaces/xml' },
             ],
           },
           {

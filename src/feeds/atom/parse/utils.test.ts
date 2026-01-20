@@ -994,7 +994,6 @@ describe('parseEntry', () => {
       title: 'Example Entry',
       dc: {
         creators: ['John Doe'],
-        creator: 'John Doe',
       },
     }
 
@@ -1050,8 +1049,7 @@ describe('parseEntry', () => {
       title: 'Example Entry',
       dcterms: {
         licenses: ['MIT License'],
-        license: 'MIT License',
-        created: '2023-02-01T00:00:00Z',
+        created: ['2023-02-01T00:00:00Z'],
       },
     }
 
@@ -1499,7 +1497,6 @@ describe('parseFeed', () => {
       title: 'Example Feed',
       dc: {
         creators: ['John Doe'],
-        creator: 'John Doe',
       },
     }
 
@@ -1533,8 +1530,7 @@ describe('parseFeed', () => {
       title: 'Example Feed',
       dcterms: {
         licenses: ['Creative Commons Attribution 4.0'],
-        license: 'Creative Commons Attribution 4.0',
-        created: '2023-01-01T00:00:00Z',
+        created: ['2023-01-01T00:00:00Z'],
       },
     }
 

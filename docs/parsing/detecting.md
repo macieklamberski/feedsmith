@@ -1,9 +1,8 @@
 ---
-prev: Parsing › Dates
-next: Parsing › Examples
+title: "Parsing Feeds: Detecting Format"
 ---
 
-# Format Detection
+# Detecting Feed Format
 
 You can quickly detect the feed format without parsing it.
 

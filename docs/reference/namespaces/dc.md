@@ -1,3 +1,7 @@
+---
+title: "Reference: Dublin Core Namespace"
+---
+
 # Dublin Core Namespace Reference
 
 The Dublin Core namespace provides standardized metadata elements for describing digital resources. It offers a simple and effective way to add bibliographic information to feeds and items.

@@ -10,6 +10,7 @@ import type { RdfNs } from '../../../namespaces/rdf/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
 import type { SyNs } from '../../../namespaces/sy/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
+import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 
 // #region reference
 export namespace Rdf {
@@ -48,6 +49,7 @@ export namespace Rdf {
       georss?: GeoRssNs.ItemOrFeed<TStrict>
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       wfw?: WfwNs.Item
+      xml?: XmlNs.ItemOrFeed
     },
     TStrict
   >
@@ -68,6 +70,7 @@ export namespace Rdf {
       georss?: GeoRssNs.ItemOrFeed<TStrict>
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       admin?: AdminNs.Feed
+      xml?: XmlNs.ItemOrFeed
     },
     TStrict
   >

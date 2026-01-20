@@ -1,6 +1,5 @@
 ---
-prev: Parsing › Overview
-next: Parsing › Dates
+title: "Parsing Feeds: Namespaces"
 ---
 
 # Parsing Namespaces
