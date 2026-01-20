@@ -697,16 +697,16 @@ describe('generateEntry', () => {
       title: 'Entry with DCTerms namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       dcterms: {
-        created: new Date('2023-02-01T00:00:00Z'),
-        license: 'MIT License',
+        created: [new Date('2023-02-01T00:00:00Z')],
+        licenses: ['MIT License'],
       },
     }
     const expected = {
       id: 'https://example.com/entry/1',
       title: 'Entry with DCTerms namespace',
       updated: '2023-03-15T12:00:00.000Z',
-      'dcterms:created': '2023-02-01T00:00:00.000Z',
-      'dcterms:license': 'MIT License',
+      'dcterms:created': ['2023-02-01T00:00:00.000Z'],
+      'dcterms:license': ['MIT License'],
     }
 
     expect(generateEntry(value)).toEqual(expected)
@@ -1502,8 +1502,8 @@ describe('generateFeed', () => {
       title: 'Feed with DCTerms namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       dcterms: {
-        created: new Date('2023-01-01T00:00:00Z'),
-        license: 'Creative Commons Attribution 4.0',
+        created: [new Date('2023-01-01T00:00:00Z')],
+        licenses: ['Creative Commons Attribution 4.0'],
       },
     }
     const expected = {
@@ -1513,8 +1513,8 @@ describe('generateFeed', () => {
         id: 'https://example.com/feed',
         title: 'Feed with DCTerms namespace',
         updated: '2023-03-15T12:00:00.000Z',
-        'dcterms:created': '2023-01-01T00:00:00.000Z',
-        'dcterms:license': 'Creative Commons Attribution 4.0',
+        'dcterms:created': ['2023-01-01T00:00:00.000Z'],
+        'dcterms:license': ['Creative Commons Attribution 4.0'],
       },
     }
 

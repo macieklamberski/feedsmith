@@ -379,8 +379,8 @@ describe('generate', () => {
       title: 'Feed with DCTerms namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       dcterms: {
-        created: new Date('2023-01-01T00:00:00Z'),
-        license: 'Creative Commons Attribution 4.0',
+        created: [new Date('2023-01-01T00:00:00Z')],
+        licenses: ['Creative Commons Attribution 4.0'],
       },
       entries: [
         {
@@ -388,8 +388,8 @@ describe('generate', () => {
           title: 'Entry with DCTerms',
           updated: new Date('2023-03-15T12:00:00Z'),
           dcterms: {
-            created: new Date('2023-02-01T00:00:00Z'),
-            license: 'MIT License',
+            created: [new Date('2023-02-01T00:00:00Z')],
+            licenses: ['MIT License'],
           },
         },
       ],
