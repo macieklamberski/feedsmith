@@ -153,7 +153,7 @@ See [Error Handling](/parsing/errors) for detailed error information and the `de
 Feedsmith provides comprehensive TypeScript types for all feed formats:
 
 ```typescript
-import type { Rss, Atom, Json, Opml } from 'feedsmith/types'
+import type { Rss, Atom, Json, Opml } from 'feedsmith'
 
 // Access all types for a format
 type Feed = Rss.Feed

@@ -132,7 +132,7 @@ const isAtom = detectAtomFeed(xmlContent)
 All Atom types are available under the `Atom` namespace:
 
 ```typescript
-import type { Atom } from 'feedsmith/types'
+import type { Atom } from 'feedsmith'
 
 // Access any type from the definitions below
 type Feed = Atom.Feed<Date>
