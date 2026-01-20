@@ -147,7 +147,6 @@ describe('generate edge cases', () => {
   it('should accept feeds with string dates', () => {
     const value = {
       title: 'Test Feed',
-      date_published: '2023-01-01T00:00:00.000Z',
       items: [
         {
           id: '1',
@@ -159,7 +158,6 @@ describe('generate edge cases', () => {
     const expected = {
       version: 'https://jsonfeed.org/version/1.1',
       title: 'Test Feed',
-      date_published: '2023-01-01T00:00:00.000Z',
       items: [
         {
           id: '1',
@@ -175,13 +173,24 @@ describe('generate edge cases', () => {
   it('should preserve invalid date strings', () => {
     const value = {
       title: 'Test Feed',
-      date_published: 'not-a-valid-date',
-      items: [],
+      items: [
+        {
+          id: '1',
+          title: 'Test Item',
+          date_published: 'not-a-valid-date',
+        },
+      ],
     }
     const expected = {
       version: 'https://jsonfeed.org/version/1.1',
       title: 'Test Feed',
-      date_published: 'not-a-valid-date',
+      items: [
+        {
+          id: '1',
+          title: 'Test Item',
+          date_published: 'not-a-valid-date',
+        },
+      ],
     }
 
     expect(generate(value)).toEqual(expected)

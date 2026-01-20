@@ -1,4 +1,3 @@
-import type { ParseOptions, ParsePartialUtil } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
   isObject,
@@ -10,7 +9,7 @@ import {
   parseString,
   trimObject,
 } from '../../../common/utils.js'
-import type { Json } from '../common/types.js'
+import type { ExtraFieldNames, Json, ParsePartialOptions } from '../common/types.js'
 
 export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
   return (requestedKey: string) => {
@@ -28,7 +27,28 @@ export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
   }
 }
 
-export const parseAuthor: ParsePartialUtil<Json.Author> = (value) => {
+const preserveExtraFields = <T extends Record<string, unknown>>(
+  source: Record<string, unknown>,
+  target: T,
+  extraFields?: ExtraFieldNames,
+): T => {
+  if (!extraFields || extraFields.length === 0) {
+    return target
+  }
+
+  for (const field of extraFields) {
+    if (field in source) {
+      ;(target as Record<string, unknown>)[field] = source[field]
+    }
+  }
+
+  return target
+}
+
+export const parseAuthor = <TExtra extends ExtraFieldNames = []>(
+  value: unknown,
+  options?: ParsePartialOptions<TExtra>,
+): Partial<Json.Author<TExtra>> | undefined => {
   if (isObject(value)) {
     const get = createCaseInsensitiveGetter(value)
     const author = {
@@ -37,7 +57,9 @@ export const parseAuthor: ParsePartialUtil<Json.Author> = (value) => {
       avatar: parseSingularOf(get('avatar'), parseString),
     }
 
-    return trimObject(author)
+    preserveExtraFields(value, author, options?.extraFields)
+
+    return trimObject(author) as Partial<Json.Author<TExtra>> | undefined
   }
 
   if (isNonEmptyStringOrNumber(value)) {
@@ -45,11 +67,14 @@ export const parseAuthor: ParsePartialUtil<Json.Author> = (value) => {
       name: parseString(value),
     }
 
-    return trimObject(author)
+    return trimObject(author) as Partial<Json.Author<TExtra>> | undefined
   }
 }
 
-export const retrieveAuthors: ParsePartialUtil<Array<Json.Author>> = (value) => {
+export const retrieveAuthors = <TExtra extends ExtraFieldNames = []>(
+  value: unknown,
+  options?: ParsePartialOptions<TExtra>,
+): Array<Partial<Json.Author<TExtra>>> | undefined => {
   if (!isObject(value)) {
     return
   }
@@ -58,13 +83,16 @@ export const retrieveAuthors: ParsePartialUtil<Array<Json.Author>> = (value) => 
   // Some feeds use author/authors incorrectly based on the feed version, so this function helps
   // to unify those into one value.
   const get = createCaseInsensitiveGetter(value)
-  const parsedAuthors = parseArrayOf(get('authors'), parseAuthor)
-  const parsedAuthor = parseArrayOf(get('author'), parseAuthor)
+  const parsedAuthors = parseArrayOf(get('authors'), (value) => parseAuthor(value, options))
+  const parsedAuthor = parseArrayOf(get('author'), (value) => parseAuthor(value, options))
 
   return parsedAuthors?.length ? parsedAuthors : parsedAuthor
 }
 
-export const parseAttachment: ParsePartialUtil<Json.Attachment> = (value) => {
+export const parseAttachment = <TExtra extends ExtraFieldNames = []>(
+  value: unknown,
+  options?: ParsePartialOptions<TExtra>,
+): Partial<Json.Attachment<false, TExtra>> | undefined => {
   if (!isObject(value)) {
     return
   }
@@ -78,10 +106,15 @@ export const parseAttachment: ParsePartialUtil<Json.Attachment> = (value) => {
     duration_in_seconds: parseSingularOf(get('duration_in_seconds'), parseNumber),
   }
 
-  return trimObject(attachment)
+  preserveExtraFields(value, attachment, options?.extraFields)
+
+  return trimObject(attachment) as Partial<Json.Attachment<false, TExtra>> | undefined
 }
 
-export const parseItem: ParsePartialUtil<Json.Item<string>> = (value) => {
+export const parseItem = <TExtra extends ExtraFieldNames = []>(
+  value: unknown,
+  options?: ParsePartialOptions<TExtra>,
+): Partial<Json.Item<string, false, TExtra>> | undefined => {
   if (!isObject(value)) {
     return
   }
@@ -100,15 +133,20 @@ export const parseItem: ParsePartialUtil<Json.Item<string>> = (value) => {
     date_published: parseSingularOf(get('date_published'), parseDate),
     date_modified: parseSingularOf(get('date_modified'), parseDate),
     tags: parseArrayOf(get('tags'), parseString),
-    authors: retrieveAuthors(value),
+    authors: retrieveAuthors(value, options),
     language: parseSingularOf(get('language'), parseString),
-    attachments: parseArrayOf(get('attachments'), parseAttachment),
+    attachments: parseArrayOf(get('attachments'), (value) => parseAttachment(value, options)),
   }
 
-  return trimObject(item)
+  preserveExtraFields(value, item, options?.extraFields)
+
+  return trimObject(item) as Partial<Json.Item<string, false, TExtra>> | undefined
 }
 
-export const parseHub: ParsePartialUtil<Json.Hub> = (value) => {
+export const parseHub = <TExtra extends ExtraFieldNames = []>(
+  value: unknown,
+  options?: ParsePartialOptions<TExtra>,
+): Partial<Json.Hub<false, TExtra>> | undefined => {
   if (!isObject(value)) {
     return
   }
@@ -119,10 +157,15 @@ export const parseHub: ParsePartialUtil<Json.Hub> = (value) => {
     url: parseSingularOf(get('url'), parseString),
   }
 
-  return trimObject(hub)
+  preserveExtraFields(value, hub, options?.extraFields)
+
+  return trimObject(hub) as Partial<Json.Hub<false, TExtra>> | undefined
 }
 
-export const parseFeed: ParsePartialUtil<Json.Feed<string>, ParseOptions> = (value, options) => {
+export const parseFeed = <TExtra extends ExtraFieldNames = []>(
+  value: unknown,
+  options?: ParsePartialOptions<TExtra>,
+): Partial<Json.Feed<string, false, TExtra>> | undefined => {
   if (!isObject(value)) {
     return
   }
@@ -139,10 +182,12 @@ export const parseFeed: ParsePartialUtil<Json.Feed<string>, ParseOptions> = (val
     favicon: parseSingularOf(get('favicon'), parseString),
     language: parseSingularOf(get('language'), parseString),
     expired: parseSingularOf(get('expired'), parseBoolean),
-    hubs: parseArrayOf(get('hubs'), parseHub),
-    authors: retrieveAuthors(value),
-    items: parseArrayOf(get('items'), parseItem, options?.maxItems),
+    hubs: parseArrayOf(get('hubs'), (value) => parseHub(value, options)),
+    authors: retrieveAuthors(value, options),
+    items: parseArrayOf(get('items'), (value) => parseItem(value, options), options?.maxItems),
   }
 
-  return trimObject(feed)
+  preserveExtraFields(value, feed, options?.extraFields)
+
+  return trimObject(feed) as Partial<Json.Feed<string, false, TExtra>> | undefined
 }
