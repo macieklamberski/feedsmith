@@ -1,3 +1,7 @@
+---
+title: "Reference: Spotify Namespace"
+---
+
 # Spotify Namespace Reference
 
 The Spotify namespace provides podcast-specific metadata for Spotify's podcast platform, including episode limits and country targeting information.

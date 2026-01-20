@@ -538,6 +538,10 @@
       },
       "rdf": {
         "about": "http://example.org/item/1"
+      },
+      "xml": {
+        "lang": "en-US",
+        "base": "http://example.org/item/1/"
       }
     }
   ],
@@ -1124,5 +1128,9 @@
   },
   "rdf": {
     "about": "http://example.org/rss"
+  },
+  "xml": {
+    "lang": "en",
+    "base": "http://example.org/"
   }
 }

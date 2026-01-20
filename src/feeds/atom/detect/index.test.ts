@@ -1,7 +1,21 @@
 import { describe, expect, it } from 'bun:test'
+import { namespaceUris } from '../../../common/config.js'
 import { detect } from './index.js'
 
 describe('detect', () => {
+  describe('namespace URI variants', () => {
+    it.each(namespaceUris.atom)('should detect Atom feed with namespace %s', (uri) => {
+      const atomFeed = `
+        <?xml version="1.0"?>
+        <feed xmlns="${uri}">
+          <title>Test</title>
+        </feed>
+      `
+
+      expect(detect(atomFeed)).toBe(true)
+    })
+  })
+
   it('should detect valid Atom feed with xmlns declaration', () => {
     const atomFeed = `
       <?xml version="1.0"?>

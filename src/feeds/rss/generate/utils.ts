@@ -70,6 +70,7 @@ import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
 import { generateItem as generateTrackbackItem } from '../../../namespaces/trackback/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
+import { generateItemOrFeed as generateXmlItemOrFeed } from '../../../namespaces/xml/generate/utils.js'
 import type { Rss } from '../common/types.js'
 
 export const generatePerson: GenerateUtil<Rss.PersonLike> = (person) => {
@@ -247,6 +248,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike, Rss.PersonLike>> = (i
     ...generatePingbackItem(item.pingback),
     ...generateTrackbackItem(item.trackback),
     ...generateAcastItem(item.acast),
+    ...generateXmlItemOrFeed(item.xml),
   }
 
   return trimObject(value)
@@ -312,6 +314,7 @@ export const generateFeed: GenerateUtil<Rss.Feed<DateLike, Rss.PersonLike>> = (f
     rss: {
       '@version': '2.0',
       ...generateNamespaceAttrs(trimmedValue, namespaceUris),
+      ...generateXmlItemOrFeed(feed.xml),
       channel: trimmedValue,
     },
   }

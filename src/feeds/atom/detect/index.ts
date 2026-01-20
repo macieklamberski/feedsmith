@@ -1,3 +1,4 @@
+import { namespaceUris } from '../../../common/config.js'
 import { isNonEmptyString } from '../../../common/utils.js'
 
 export const detect = (value: unknown): value is string => {
@@ -11,7 +12,7 @@ export const detect = (value: unknown): value is string => {
     return false
   }
 
-  const hasAtomNamespace = value.includes('http://www.w3.org/2005/Atom')
+  const hasAtomNamespace = namespaceUris.atom.some((uri) => value.includes(uri))
   const hasAtomElements = /(<(?:\w+:)?(entry|title|link|id|updated|summary)[\s>])/i.test(value)
 
   return hasAtomNamespace || hasAtomElements

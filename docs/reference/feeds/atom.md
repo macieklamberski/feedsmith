@@ -1,3 +1,7 @@
+---
+title: "Reference: Atom Feed"
+---
+
 # Atom Feed Reference
 
 Atom is a syndication format based on XML that provides a robust framework for web feeds. Feedsmith provides comprehensive parsing and generation capabilities.
@@ -35,7 +39,8 @@ Atom is a syndication format based on XML that provides a robust framework for w
         <a href="/reference/namespaces/trackback">Trackback</a>,
         <a href="/reference/namespaces/yt">YouTube</a>,
         <a href="/reference/namespaces/geo">W3C Basic Geo</a>,
-        <a href="/reference/namespaces/georss">GeoRSS Simple</a>
+        <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
+        <a href="/reference/namespaces/xml">XML</a>
       </td>
     </tr>
   </tbody>
@@ -127,7 +132,7 @@ const isAtom = detectAtomFeed(xmlContent)
 All Atom types are available under the `Atom` namespace:
 
 ```typescript
-import type { Atom } from 'feedsmith/types'
+import type { Atom } from 'feedsmith'
 
 // Access any type from the definitions below
 type Feed = Atom.Feed<Date>

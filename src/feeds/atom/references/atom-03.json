@@ -28,6 +28,10 @@
   "subtitle": "For documentation <em>only</em>",
   "title": "Sample Feed",
   "updated": "2004-04-20T11:56:34Z",
+  "xml": {
+    "base": "http://example.org/",
+    "lang": "en"
+  },
   "entries": [
     {
       "authors": [

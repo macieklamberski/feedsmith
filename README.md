@@ -105,6 +105,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [W3C Basic Geo](https://feedsmith.dev/reference/namespaces/geo) | `<geo:*>` | RSS, Atom | ✅ | ✅ |
 | [GeoRSS Simple](https://feedsmith.dev/reference/namespaces/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [RDF](https://feedsmith.dev/reference/namespaces/rdf) | `<rdf:*>` | RDF | ✅ | ✅ |
+| [XML](https://feedsmith.dev/reference/namespaces/xml) | `<xml:*>` | RSS, Atom, RDF | ✅ | ✅ |
 
 ## Quick Start
 
@@ -224,7 +225,7 @@ try {
 Feedsmith provides comprehensive TypeScript types for all feed formats:
 
 ```typescript
-import type { Rss, Atom, Json, Opml } from 'feedsmith/types'
+import type { Rss, Atom, Json, Opml } from 'feedsmith'
 
 // Access all types for a format
 type Feed = Rss.Feed

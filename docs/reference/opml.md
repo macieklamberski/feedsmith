@@ -1,3 +1,7 @@
+---
+title: "Reference: OPML"
+---
+
 # OPML Reference
 
 OPML (Outline Processor Markup Language) is a format for exchanging outline-structured information, commonly used for sharing feed subscription lists.
@@ -92,7 +96,7 @@ const xml = generateOpml(opmlData, {
 All OPML types are available under the `Opml` namespace:
 
 ```typescript
-import type { Opml } from 'feedsmith/types'
+import type { Opml } from 'feedsmith'
 
 // Access any type from the definitions below
 type Document = Opml.Document<Date>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0"
+     xml:lang="en"
+     xml:base="http://example.org/"
      xmlns:atom="http://www.w3.org/2005/Atom"
      xmlns:dc="http://purl.org/dc/elements/1.1/"
      xmlns:dcterms="http://purl.org/dc/terms/"
@@ -470,7 +472,7 @@
     <acast:network id="net123abc456def789ghi012" slug="example-network-net123abc456">Example Network</acast:network>
     <acast:importedFeed>https://example.com/original-feed</acast:importedFeed>
 
-    <item>
+    <item xml:lang="en-US" xml:base="http://example.org/item/1/">
       <title>Example Item</title>
       <link>http://example.org/item/1</link>
       <author>John Smith</author>

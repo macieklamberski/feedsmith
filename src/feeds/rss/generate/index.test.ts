@@ -1398,4 +1398,37 @@ describe('generate edge cases', () => {
 
     expect(generate(value)).toEqual(expected)
   })
+
+  it('should generate RSS with xml namespace', () => {
+    const value = {
+      title: 'Feed with xml namespace',
+      description: 'Test feed with XML namespace attributes',
+      xml: {
+        lang: 'en',
+        base: 'http://example.org/',
+      },
+      items: [
+        {
+          title: 'Item with XML namespace',
+          xml: {
+            lang: 'en-US',
+            base: 'http://example.org/item/1/',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xml:lang="en" xml:base="http://example.org/">
+  <channel>
+    <title>Feed with xml namespace</title>
+    <description>Test feed with XML namespace attributes</description>
+    <item xml:lang="en-US" xml:base="http://example.org/item/1/">
+      <title>Item with XML namespace</title>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
 })
