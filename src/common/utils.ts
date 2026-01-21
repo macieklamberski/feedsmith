@@ -1,5 +1,7 @@
 import { decodeHTML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
+import { XMLValidator } from 'fast-xml-parser'
+import { ParseError } from './error.js'
 import type {
   AnyOf,
   DateLike,
@@ -753,4 +755,20 @@ export const parseJsonObject = (value: unknown): unknown => {
   try {
     return JSON.parse(value)
   } catch {}
+}
+
+export const validateXml = (xml: unknown): void => {
+  if (typeof xml !== 'string') {
+    return
+  }
+
+  const result = XMLValidator.validate(xml)
+
+  if (result !== true) {
+    throw new ParseError(result.err.msg, {
+      line: result.err.line,
+      column: result.err.col,
+      code: result.err.code,
+    })
+  }
 }

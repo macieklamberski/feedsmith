@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { locales } from '../../../common/config.js'
+import { DetectError, ParseError } from '../../../common/error.js'
 import { parse } from './index.js'
 
 describe('parse', () => {
@@ -935,6 +936,56 @@ describe('parse', () => {
       }
 
       expect(parse(value, { maxItems: undefined })).toEqual(expected)
+    })
+  })
+
+  describe('with detailedErrors option', () => {
+    it('should throw ParseError with line and column for malformed XML', () => {
+      const value = `<?xml version="1.0"?>
+<rss version="2.0">
+  <channel>
+    <title>Test</title
+  </channel>
+</rss>`
+      const options = { detailedErrors: true }
+      let error: ParseError | undefined
+
+      try {
+        parse(value, options)
+      } catch (e) {
+        error = e as ParseError
+      }
+
+      expect(error).toBeInstanceOf(ParseError)
+      expect(error?.line).toBeDefined()
+      expect(error?.column).toBeDefined()
+    })
+
+    it('should throw DetectError for invalid input with detailedErrors', () => {
+      const value = 'not a valid feed'
+      const options = { detailedErrors: true }
+      const throwing = () => parse(value, options)
+
+      expect(throwing).toThrow(DetectError)
+    })
+
+    it('should parse valid XML normally with detailedErrors enabled', () => {
+      const value = `<?xml version="1.0"?>
+        <rss version="2.0">
+          <channel>
+            <title>Test Feed</title>
+            <link>https://example.com</link>
+            <description>Test description</description>
+          </channel>
+        </rss>`
+      const options = { detailedErrors: true }
+      const expected = {
+        title: 'Test Feed',
+        link: 'https://example.com',
+        description: 'Test description',
+      }
+
+      expect(parse(value, options)).toEqual(expected)
     })
   })
 })

@@ -1,3 +1,4 @@
+export { DetectError, ParseError } from './common/error.js'
 export { parse as parseFeed } from './common/parse.js'
 export type { Atom } from './feeds/atom/common/types.js'
 export { detect as detectAtomFeed } from './feeds/atom/detect/index.js'

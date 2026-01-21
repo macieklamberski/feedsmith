@@ -41,7 +41,7 @@ The universal parser:
 - Automatically detects the feed format using format detection functions
 - Returns an object with `format` and `feed` properties
 - Supports RSS, Atom, RDF, and JSON Feed formats
-- Throws an error for unrecognized or invalid feeds
+- Throws `DetectError` or `ParseError` for invalid feeds
 
 > [!IMPORTANT]
 > The universal parser uses detection functions to identify the feed format. While these work well for most feeds, they might not perfectly detect all valid feeds, especially those with non-standard structures. If you know the feed format in advance, using a dedicated parser is more reliable.
@@ -89,26 +89,8 @@ opml.body?.outlines
 
 ## Error Handling
 
-If the feed is unrecognized or invalid, an `Error` will be thrown with a descriptive message.
-
-```typescript
-import { parseFeed, parseJsonFeed } from 'feedsmith'
-
-try {
-  const universalFeed = parseFeed('<not-a-feed></not-a-feed>')
-} catch (error) {
-  // Error: Unrecognized feed format
-}
-
-try {
-  const jsonFeed = parseJsonFeed('{}')
-} catch (error) {
-  // Error: Invalid feed format
-}
-```
+Parsing functions throw `DetectError` when the input doesn't match the expected format, or `ParseError` when XML parsing fails. See [Error Handling](/parsing/errors) for details on error types.
 
 ## Returned Values
 
-The parsing functions return JavaScript objects representing the feed in its original structure.
-
-For detailed examples of input and output for each feed format, see the [Parsing Examples](/parsing/examples) page.
+The parsing functions return JavaScript objects representing the feed in its original structure. See [Parsing Examples](/parsing/examples) page for detailed examples of input and output for each feed format.

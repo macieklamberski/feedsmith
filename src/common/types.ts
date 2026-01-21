@@ -59,6 +59,7 @@ export type GenerateUtil<V, O = undefined> = (
 
 export type ParseOptions = {
   maxItems?: number
+  detailedErrors?: boolean
 }
 
 export type XmlStylesheet = {
