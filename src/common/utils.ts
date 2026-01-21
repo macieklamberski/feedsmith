@@ -116,36 +116,6 @@ export const trimArray = <T, R = T>(
   return result.length > 0 ? result : undefined
 }
 
-// TODO: Remove this once deprecated fields are removed in next major version.
-export const generateArrayOrSingular = <V>(
-  pluralValues: Array<V> | undefined,
-  singularValue: V | undefined,
-  generator: (value: V) => unknown,
-) => {
-  if (isPresent(pluralValues)) {
-    return trimArray(pluralValues.map(generator))
-  }
-
-  if (isPresent(singularValue)) {
-    return generator(singularValue)
-  }
-}
-
-// TODO: Remove this once deprecated fields are removed in next major version.
-export const generateSingularOrArray = <V>(
-  singularValue: V | undefined,
-  pluralValues: Array<V> | undefined,
-  generator: (value: V) => unknown,
-) => {
-  if (isPresent(singularValue)) {
-    return generator(singularValue)
-  }
-
-  if (isPresent(pluralValues)) {
-    return trimArray(pluralValues.map(generator))
-  }
-}
-
 const cdataStartTag = '<![CDATA['
 const cdataEndTag = ']]>'
 

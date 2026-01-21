@@ -36,8 +36,8 @@ export default defineConfig({
     },
     nav: [
       { text: 'Quick Start', link: '/quick-start' },
-      { text: 'Parsing', link: '/parsing/' },
-      { text: 'Generating', link: '/generating/' },
+      { text: 'Parsing', link: '/parsing' },
+      { text: 'Generating', link: '/generating' },
       {
         text: 'v3.0 (Next)',
         items: [{ text: 'v2.0', link: 'https://feedsmith.dev' }],
@@ -55,7 +55,7 @@ export default defineConfig({
       {
         text: 'Parsing',
         items: [
-          { text: 'Overview', link: '/parsing/' },
+          { text: 'Overview', link: '/parsing' },
           { text: 'Namespaces', link: '/parsing/namespaces' },
           { text: 'Dates', link: '/parsing/dates' },
           { text: 'Detecting', link: '/parsing/detecting' },
@@ -66,7 +66,7 @@ export default defineConfig({
       {
         text: 'Generating',
         items: [
-          { text: 'Overview', link: '/generating/' },
+          { text: 'Overview', link: '/generating' },
           { text: 'Styling', link: '/generating/styling' },
           { text: 'Strict Mode', link: '/generating/strict-mode' },
           { text: 'Examples', link: '/generating/examples' },
@@ -77,7 +77,7 @@ export default defineConfig({
         items: [
           {
             text: 'Universal',
-            link: '/reference/',
+            link: '/reference',
           },
           {
             text: 'Feeds',

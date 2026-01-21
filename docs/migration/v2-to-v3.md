@@ -196,6 +196,105 @@ const chat = feed.items?.[0]?.podcast?.chat
 2. Replace `value` with `values` (wrap in array)
 3. Replace `chats` with `chat` (use `chats[0]` if you had multiple)
 
+### Dublin Core Namespace: Singular Fields Removed
+
+Deprecated singular fields have been removed to align with the [Dublin Core specification](https://www.dublincore.org/specifications/dublin-core/dces/) where all elements are repeatable:
+
+- `title` → `titles`
+- `creator` → `creators`
+- `subject` → `subjects`
+- `description` → `descriptions`
+- `publisher` → `publishers`
+- `contributor` → `contributors`
+- `date` → `dates`
+- `type` → `types`
+- `format` → `formats`
+- `identifier` → `identifiers`
+- `source` → `sources`
+- `language` → `languages`
+- `relation` → `relations`
+- `coverage` (now array)
+- `rights` (now array)
+
+#### Before (2.x)
+```typescript
+const feed = parseRssFeed(xml)
+const title = feed.dc?.title
+const creator = feed.dc?.creator
+const coverage = feed.dc?.coverage
+```
+
+#### After (3.x)
+```typescript
+const feed = parseRssFeed(xml)
+const title = feed.dc?.titles?.[0]
+const creator = feed.dc?.creators?.[0]
+const coverage = feed.dc?.coverage?.[0]
+```
+
+#### Migration Steps
+1. Replace singular fields with plural equivalents (e.g., `dc.title` → `dc.titles?.[0]`)
+2. Fields that kept their name (`coverage`, `rights`) are now arrays: `dc.coverage` → `dc.coverage?.[0]`
+
+### Dublin Core Terms Namespace: Singular Fields Removed
+
+Deprecated singular fields have been removed to align with the [Dublin Core Terms specification](https://www.dublincore.org/specifications/dublin-core/dcmi-terms/) where all elements are repeatable:
+
+- `title` → `titles`
+- `creator` → `creators`
+- `subject` → `subjects`
+- `description` → `descriptions`
+- `publisher` → `publishers`
+- `contributor` → `contributors`
+- `date` → `dates`
+- `type` → `types`
+- `format` → `formats`
+- `identifier` → `identifiers`
+- `source` → `sources`
+- `language` → `languages`
+- `relation` → `relations`
+- `abstract` → `abstracts`
+- `audience` → `audiences`
+- `alternative` → `alternatives`
+- `educationLevel` → `educationLevels`
+- `extent` → `extents`
+- `hasFormat` → `hasFormats`
+- `hasPart` → `hasParts`
+- `hasVersion` → `hasVersions`
+- `instructionalMethod` → `instructionalMethods`
+- `license` → `licenses`
+- `mediator` → `mediators`
+- `medium` → `mediums`
+- `provenance` → `provenances`
+- `rightsHolder` → `rightsHolders`
+- `spatial` → `spatials`
+- `temporal` → `temporals`
+- `accrualMethod` → `accrualMethods`
+- `accrualPeriodicity` → `accrualPeriodicities`
+- `accrualPolicy` → `accrualPolicies`
+- `bibliographicCitation` → `bibliographicCitations`
+- Plus 21 fields that kept their name but are now arrays (e.g., `created`, `modified`, `issued`, `valid`)
+
+#### Before (2.x)
+```typescript
+const feed = parseRssFeed(xml)
+const title = feed.dcterms?.title
+const creator = feed.dcterms?.creator
+const created = feed.dcterms?.created
+```
+
+#### After (3.x)
+```typescript
+const feed = parseRssFeed(xml)
+const title = feed.dcterms?.titles?.[0]
+const creator = feed.dcterms?.creators?.[0]
+const created = feed.dcterms?.created?.[0]
+```
+
+#### Migration Steps
+1. Replace singular fields with plural equivalents (e.g., `dcterms.title` → `dcterms.titles?.[0]`)
+2. Fields that kept their name (e.g., `created`, `modified`) are now arrays: `dcterms.created` → `dcterms.created?.[0]`
+
 ## New Features
 
 ### Improved Error Handling
@@ -232,9 +331,12 @@ Use this checklist to ensure a complete migration:
 
 - Remove `{ lenient: true }` from all generate function calls
 - Add `{ strict: true }` where you need compile-time validation of required fields
-- Remove `DeepPartial` from imports
 - Update type parameters if using strict types directly (add `true` as last parameter)
+- Remove `DeepPartial` from imports
+- Change `feedsmith/types` imports to `feedsmith`
 - Replace Media namespace deprecated field (`group` → `groups`)
 - Replace Podcast namespace deprecated fields (`location` → `locations`, `value` → `values`, `chats` → `chat`)
+- Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
+- Replace Dublin Core Terms singular fields with plural arrays (e.g., `title` → `titles`)
 - Test feed generation to ensure output is correct
 - Update error handling to use `DetectError` and `ParseError` instead of generic `Error`
