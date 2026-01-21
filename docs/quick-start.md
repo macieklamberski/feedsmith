@@ -163,8 +163,8 @@ Each format exports its complete type system, including nested types and namespa
 
 ## What's Next?
 
-- **[Parse feeds](/parsing/)** — Learn about parsing different formats
+- **[Parse feeds](/parsing)** — Learn about parsing different formats
 - **[Work with namespaces](/parsing/namespaces)** — Access podcast, media, and other metadata
-- **[Generate feeds](/generating/)** — Create feeds in various formats
-- **[API Reference](/reference/)** — Explore all available functions and types
+- **[Generate feeds](/generating)** — Create feeds in various formats
+- **[API Reference](/reference)** — Explore all available functions and types
 - **[Benchmarks](/benchmarks)** — See how Feedsmith compares to other libraries
