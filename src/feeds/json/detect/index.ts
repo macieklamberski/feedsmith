@@ -1,5 +1,9 @@
-import { isNonEmptyString, isObject, parseJsonObject } from '../../../common/utils.js'
-import { createCaseInsensitiveGetter } from '../parse/utils.js'
+import {
+  createCaseInsensitiveGetter,
+  isNonEmptyString,
+  isObject,
+  parseJsonObject,
+} from '../../../common/utils.js'
 
 export const detect = (value: unknown): value is object => {
   const json = parseJsonObject(value)

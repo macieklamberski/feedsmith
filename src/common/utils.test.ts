@@ -3,6 +3,7 @@ import { type XMLBuilder, XMLParser } from 'fast-xml-parser'
 import { namespacePrefixes, namespaceUris } from './config.js'
 import type { ParseExactUtil } from './types.js'
 import {
+  createCaseInsensitiveGetter,
   createNamespaceNormalizator,
   detectNamespaces,
   generateBoolean,
@@ -1625,6 +1626,126 @@ describe('parseSingularOf', () => {
   it('should handle null and undefined input values', () => {
     expect(parseSingularOf(null, parseString)).toBeUndefined()
     expect(parseSingularOf(undefined, parseNumber)).toBeUndefined()
+  })
+})
+
+describe('createCaseInsensitiveGetter', () => {
+  it('should retrieve value using case-insensitive key lookup', () => {
+    const value = {
+      Title: 'Example Title',
+      AUTHOR: 'John Doe',
+      content: 'Some content here',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('title')).toBe('Example Title')
+    expect(get('author')).toBe('John Doe')
+    expect(get('CONTENT')).toBe('Some content here')
+  })
+
+  it('should preserve the original value types', () => {
+    const value = {
+      Number: 42,
+      Boolean: true,
+      Object: { key: 'value' },
+      Array: [1, 2, 3],
+      Null: null,
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('number')).toBe(42)
+    expect(get('boolean')).toBe(true)
+    expect(get('object')).toEqual({ key: 'value' })
+    expect(get('array')).toEqual([1, 2, 3])
+    expect(get('null')).toBeNull()
+  })
+
+  it('should handle keys that differ only in case', () => {
+    const value = {
+      key: 'lowercase value',
+      KEY: 'uppercase value',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('key')).toBe('lowercase value')
+    expect(get('KEY')).toBe('uppercase value')
+  })
+
+  it('should handle non-string key lookups by coercing to string', () => {
+    const value = {
+      '123': 'numeric key',
+      true: 'boolean key',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('123')).toBe('numeric key')
+    expect(get('TRUE')).toBe('boolean key')
+  })
+
+  it('should handle special characters in keys', () => {
+    const value = {
+      'Special-Key': 'with dash',
+      Special_Key: 'with underscore',
+      'Special.Key': 'with dot',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('special-key')).toBe('with dash')
+    expect(get('SPECIAL_KEY')).toBe('with underscore')
+    expect(get('special.key')).toBe('with dot')
+  })
+
+  it('should handle Unicode characters correctly', () => {
+    const value = {
+      CaféItem: 'coffee',
+      RÉSUMÉ: 'document',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('caféitem')).toBe('coffee')
+    expect(get('résumé')).toBe('document')
+  })
+
+  it('should handle multiple lookups on the same getter', () => {
+    const value = {
+      First: 'first value',
+      Second: 'second value',
+      Third: 'third value',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('first')).toBe('first value')
+    expect(get('SECOND')).toBe('second value')
+    expect(get('THiRd')).toBe('third value')
+  })
+
+  it('should handle undefined values in the object', () => {
+    const value = {
+      DefinedKey: 'defined value',
+      UndefinedKey: undefined,
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('definedkey')).toBe('defined value')
+    expect(get('undefinedkey')).toBeUndefined()
+    // Make sure we can distinguish between non-existent keys and keys with undefined values.
+    expect('UndefinedKey' in value).toBe(true)
+  })
+
+  it('should return undefined for non-existent keys', () => {
+    const value = {
+      ExistingKey: 'value',
+    }
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('nonexistentkey')).toBeUndefined()
+  })
+
+  it('should handle empty objects', () => {
+    const value = {}
+    const get = createCaseInsensitiveGetter(value)
+
+    expect(get('anykey')).toBeUndefined()
   })
 })
 
