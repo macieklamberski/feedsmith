@@ -63,11 +63,12 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [RDF](https://feedsmith.dev/reference/feeds/rdf) | 0.9, 1.0 | ✅ | 📋 |
 | [JSON Feed](https://feedsmith.dev/reference/feeds/json) | 1.0, 1.1 | ✅ | ✅ |
 
-### Other
+### Related Formats
 
 | Format | Versions | Parse | Generate |
 |--------|----------|-------|----------|
-| [OPML](https://feedsmith.dev/reference/other/opml) | 1.0, 2.0 | ✅ | ✅ |
+| [OPML](https://feedsmith.dev/reference/opml) | 1.0, 2.0 | ✅ | ✅ |
+| [Podcast Chapters](https://feedsmith.dev/reference/related/podcast-chapters) | 1.2 | ✅ | ✅ |
 
 ### Feed Namespaces
 
