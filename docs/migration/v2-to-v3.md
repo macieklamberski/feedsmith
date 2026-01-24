@@ -297,6 +297,25 @@ const created = feed.dcterms?.created?.[0]
 
 ## New Features
 
+### Namespace Type Exports
+
+All namespace types are now exported directly from the main package:
+
+```typescript
+import type { ItunesNs, DcNs, MediaNs, PodcastNs } from 'feedsmith'
+
+const category: ItunesNs.Category = {
+  text: 'Technology'
+}
+
+const transcript: PodcastNs.Transcript = {
+  url: 'https://example.com/transcript.srt',
+  type: 'application/srt'
+}
+```
+
+See [Working with TypeScript](/reference/typescript#importing-namespace-types) for the more information and usage examples.
+
 ### XML Namespace Support
 
 Version 3.x adds support for the [XML namespace](/reference/namespaces/xml) (`xml:*` attributes) in RSS, Atom, and RDF feeds. The `xml` property is available on both feed and item levels, providing access to `xml:lang`, `xml:base`, `xml:space`, and `xml:id` attributes.
