@@ -33,6 +33,7 @@ export const locales = {
   invalidInputAtom: 'Invalid input Atom',
   invalidInputRss: 'Invalid input RSS',
   invalidInputChapters: 'Invalid input Podcast Chapters',
+  invalidInputTranscripts: 'Invalid input Podcast Transcripts',
 }
 
 export const namespaceUris = {
