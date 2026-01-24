@@ -16,21 +16,8 @@ describe('retrieveItemOrFeed', () => {
     sources: ['https://example.org/source'],
     languages: ['en-US'],
     relations: ['https://example.org/related'],
-    title: 'Sample Title',
-    creator: 'John Doe',
-    subject: 'Test Subject',
-    description: 'This is a description',
-    publisher: 'Test Publisher',
-    contributor: 'Jane Smith',
-    date: '2023-05-15T09:30:00Z',
-    type: 'Article',
-    format: 'text/html',
-    identifier: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-    source: 'https://example.org/source',
-    language: 'en-US',
-    relation: 'https://example.org/related',
-    coverage: 'Worldwide',
-    rights: 'Copyright 2023, All rights reserved',
+    coverage: ['Worldwide'],
+    rights: ['Copyright 2023, All rights reserved'],
   }
 
   it('should parse complete item or feed object with all properties (with #text)', () => {
@@ -115,21 +102,8 @@ describe('retrieveItemOrFeed', () => {
       sources: ['https://example.org/source', 'https://example.org/alternate-source'],
       languages: ['en-US', 'fr-FR'],
       relations: ['https://example.org/related', 'https://example.org/also-related'],
-      title: 'Sample Title',
-      creator: 'John Doe',
-      subject: 'Test Subject',
-      description: 'This is a description',
-      publisher: 'Test Publisher',
-      contributor: 'Jane Smith',
-      date: '2023-05-15T09:30:00Z',
-      type: 'Article',
-      format: 'text/html',
-      identifier: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      source: 'https://example.org/source',
-      language: 'en-US',
-      relation: 'https://example.org/related',
-      coverage: 'Worldwide',
-      rights: 'Copyright 2023, All rights reserved',
+      coverage: ['Worldwide', 'North America'],
+      rights: ['Copyright 2023, All rights reserved', 'Creative Commons BY-NC-SA 4.0'],
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
@@ -145,9 +119,6 @@ describe('retrieveItemOrFeed', () => {
       titles: ['Sample Title'],
       creators: ['John Doe'],
       dates: ['2023-05-15T09:30:00Z'],
-      title: 'Sample Title',
-      creator: 'John Doe',
-      date: '2023-05-15T09:30:00Z',
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
@@ -159,7 +130,6 @@ describe('retrieveItemOrFeed', () => {
     }
     const expected = {
       titles: ['Only Title'],
-      title: 'Only Title',
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
@@ -174,8 +144,6 @@ describe('retrieveItemOrFeed', () => {
     const expected = {
       titles: ['123'],
       identifiers: ['456'],
-      title: '123',
-      identifier: '456',
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
@@ -212,8 +180,6 @@ describe('retrieveItemOrFeed', () => {
     const expected = {
       creators: ['John Doe'],
       dates: ['2023-01-01T12:00:00Z'],
-      creator: 'John Doe',
-      date: '2023-01-01T12:00:00Z',
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
@@ -227,7 +193,6 @@ describe('retrieveItemOrFeed', () => {
     }
     const expected = {
       creators: ['John Doe'],
-      creator: 'John Doe',
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
@@ -241,7 +206,6 @@ describe('retrieveItemOrFeed', () => {
     }
     const expected = {
       creators: ['John Doe'],
-      creator: 'John Doe',
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
@@ -255,8 +219,6 @@ describe('retrieveItemOrFeed', () => {
     const expected = {
       identifiers: ['12345'],
       languages: ['en'],
-      identifier: '12345',
-      language: 'en',
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)

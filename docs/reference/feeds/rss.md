@@ -2,7 +2,7 @@
 title: "Reference: RSS Feed"
 ---
 
-# RSS Feed
+# RSS Feed Reference
 
 RSS (Really Simple Syndication) is one of the most widely used web feed formats. Feedsmith automatically normalizes legacy elements to their modern equivalents.
 
@@ -46,7 +46,8 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
         <a href="/reference/namespaces/source">Source</a>,
         <a href="/reference/namespaces/blogchannel">blogChannel</a>,
         <a href="/reference/namespaces/geo">W3C Basic Geo</a>,
-        <a href="/reference/namespaces/georss">GeoRSS Simple</a>
+        <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
+        <a href="/reference/namespaces/xml">XML</a>
       </td>
     </tr>
   </tbody>
@@ -92,7 +93,6 @@ Generates RSS XML from feed data.
 import { generateRssFeed } from 'feedsmith'
 
 const xml = generateRssFeed(feedData, {
-  lenient: true,
   stylesheets: [{ type: 'text/xsl', href: '/feed.xsl' }]
 })
 ```
@@ -108,7 +108,7 @@ const xml = generateRssFeed(feedData, {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `lenient` | `boolean` | `false` | Enable lenient mode for relaxed validation, see [Lenient Mode](/generating/lenient-mode) |
+| `strict` | `boolean` | `false` | Enable strict mode for spec-required field validation, see [Strict Mode](/generating/strict-mode) |
 | `stylesheets` | `Stylesheet[]` | - | Add stylesheets for visual formatting, see [Feed Styling](/generating/styling) |
 
 #### Returns
@@ -139,7 +139,7 @@ const isRss = detectRssFeed(xmlContent)
 All RSS types are available under the `Rss` namespace:
 
 ```typescript
-import type { Rss } from 'feedsmith/types'
+import type { Rss } from 'feedsmith'
 
 // Access any type from the definitions below
 type Feed = Rss.Feed<Date>
@@ -154,7 +154,7 @@ See the [TypeScript guide](/reference/typescript) for usage examples.
 ### Type Definitions
 
 > [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
+> For details on type parameters (`TDate`, `TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tdate).
 
 <<< @/../src/feeds/rss/common/types.ts#reference
 

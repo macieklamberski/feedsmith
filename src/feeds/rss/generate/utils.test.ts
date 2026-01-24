@@ -141,14 +141,12 @@ describe('generateCategory', () => {
       domain: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateCategory(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateCategory(value)).toBeUndefined()
   })
 
@@ -186,14 +184,12 @@ describe('generateCloud', () => {
       protocol: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateCloud(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateCloud(value)).toBeUndefined()
   })
 
@@ -231,7 +227,6 @@ describe('generateImage', () => {
       link: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateImage(value)).toBeUndefined()
   })
 
@@ -266,7 +261,6 @@ describe('generateTextInput', () => {
       link: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateTextInput(value)).toBeUndefined()
   })
 
@@ -298,14 +292,12 @@ describe('generateEnclosure', () => {
       type: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateEnclosure(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateEnclosure(value)).toBeUndefined()
   })
 
@@ -423,14 +415,12 @@ describe('generateGuid', () => {
       isPermaLink: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateGuid(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateGuid(value)).toBeUndefined()
   })
 
@@ -453,12 +443,14 @@ describe('generateSource', () => {
     expect(generateSource(value)).toEqual(expected)
   })
 
-  it('should generate source with minimal properties', () => {
+  it('should generate source with all required properties', () => {
     const value = {
       title: 'Example Source',
+      url: 'https://example.com/feed.xml',
     }
     const expected = {
       '#text': 'Example Source',
+      '@url': 'https://example.com/feed.xml',
     }
 
     expect(generateSource(value)).toEqual(expected)
@@ -470,14 +462,12 @@ describe('generateSource', () => {
       url: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateSource(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateSource(value)).toBeUndefined()
   })
 
@@ -571,12 +561,12 @@ describe('generateItem', () => {
     const value = {
       title: 'Item with dc namespace',
       dc: {
-        creator: 'Jane Smith',
+        creators: ['Jane Smith'],
       },
     }
     const expected = {
       title: 'Item with dc namespace',
-      'dc:creator': 'Jane Smith',
+      'dc:creator': ['Jane Smith'],
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -631,14 +621,14 @@ describe('generateItem', () => {
     const value = {
       title: 'Item with DCTerms namespace',
       dcterms: {
-        created: new Date('2023-02-01T00:00:00Z'),
-        license: 'MIT License',
+        created: [new Date('2023-02-01T00:00:00Z')],
+        licenses: ['MIT License'],
       },
     }
     const expected = {
       title: 'Item with DCTerms namespace',
-      'dcterms:created': '2023-02-01T00:00:00.000Z',
-      'dcterms:license': 'MIT License',
+      'dcterms:created': ['2023-02-01T00:00:00.000Z'],
+      'dcterms:license': ['MIT License'],
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -685,14 +675,12 @@ describe('generateItem', () => {
       link: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(value)).toBeUndefined()
   })
 
@@ -1181,14 +1169,12 @@ describe('generateFeed', () => {
       link: undefined,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(value)).toBeUndefined()
   })
 
@@ -1274,7 +1260,7 @@ describe('generateFeed', () => {
       title: 'Feed with dc namespace',
       description: 'Description',
       dc: {
-        creator: 'John Doe',
+        creators: ['John Doe'],
       },
     }
     const expected = {
@@ -1284,7 +1270,7 @@ describe('generateFeed', () => {
         channel: {
           title: 'Feed with dc namespace',
           description: 'Description',
-          'dc:creator': 'John Doe',
+          'dc:creator': ['John Doe'],
         },
       },
     }
@@ -1297,8 +1283,8 @@ describe('generateFeed', () => {
       title: 'Feed with DCTerms namespace',
       description: 'Description',
       dcterms: {
-        created: new Date('2023-01-01T00:00:00Z'),
-        license: 'Creative Commons Attribution 4.0',
+        created: [new Date('2023-01-01T00:00:00Z')],
+        licenses: ['Creative Commons Attribution 4.0'],
       },
     }
     const expected = {
@@ -1308,8 +1294,8 @@ describe('generateFeed', () => {
         channel: {
           title: 'Feed with DCTerms namespace',
           description: 'Description',
-          'dcterms:created': '2023-01-01T00:00:00.000Z',
-          'dcterms:license': 'Creative Commons Attribution 4.0',
+          'dcterms:created': ['2023-01-01T00:00:00.000Z'],
+          'dcterms:license': ['Creative Commons Attribution 4.0'],
         },
       },
     }
@@ -2096,6 +2082,46 @@ describe('generateFeed', () => {
           title: 'Licensed Feed',
           description: 'A feed with Creative Commons properties',
           'creativeCommons:license': ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with xml namespace properties', () => {
+    const value = {
+      title: 'Feed with XML namespace',
+      description: 'A feed with XML namespace attributes',
+      xml: {
+        lang: 'en',
+        base: 'http://example.org/',
+      },
+      items: [
+        {
+          title: 'Item with XML namespace',
+          xml: {
+            lang: 'en-US',
+            base: 'http://example.org/item/1/',
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xml:lang': 'en',
+        '@xml:base': 'http://example.org/',
+        channel: {
+          title: 'Feed with XML namespace',
+          description: 'A feed with XML namespace attributes',
+          item: [
+            {
+              title: 'Item with XML namespace',
+              '@xml:lang': 'en-US',
+              '@xml:base': 'http://example.org/item/1/',
+            },
+          ],
         },
       },
     }

@@ -2,7 +2,7 @@
 title: "Reference: Comment API Namespace"
 ---
 
-# Comment API Namespace
+# Comment API Namespace Reference
 
 The Comment API namespace provides elements for linking to comment feeds and comment posting interfaces, enabling better integration between feeds and commenting systems.
 

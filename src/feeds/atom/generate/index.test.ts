@@ -252,7 +252,6 @@ describe('generate', () => {
   it('should throw error for invalid Atom feed structure', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(() => generate(value)).toThrow(locales.invalidInputAtom)
   })
 
@@ -320,7 +319,7 @@ describe('generate', () => {
       title: 'Feed with DC namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
-        creator: 'John Doe',
+        creators: ['John Doe'],
       },
       entries: [
         {
@@ -328,7 +327,7 @@ describe('generate', () => {
           title: 'Entry with DC',
           updated: new Date('2023-03-15T12:00:00Z'),
           dc: {
-            creator: 'Jane Smith',
+            creators: ['Jane Smith'],
           },
         },
       ],
@@ -380,8 +379,8 @@ describe('generate', () => {
       title: 'Feed with DCTerms namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       dcterms: {
-        created: new Date('2023-01-01T00:00:00Z'),
-        license: 'Creative Commons Attribution 4.0',
+        created: [new Date('2023-01-01T00:00:00Z')],
+        licenses: ['Creative Commons Attribution 4.0'],
       },
       entries: [
         {
@@ -389,8 +388,8 @@ describe('generate', () => {
           title: 'Entry with DCTerms',
           updated: new Date('2023-03-15T12:00:00Z'),
           dcterms: {
-            created: new Date('2023-02-01T00:00:00Z'),
-            license: 'MIT License',
+            created: [new Date('2023-02-01T00:00:00Z')],
+            licenses: ['MIT License'],
           },
         },
       ],
@@ -639,8 +638,8 @@ describe('generate', () => {
       title: 'Feed with multiple namespaces',
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
-        creator: 'John Doe',
-        rights: 'Copyright 2023',
+        creators: ['John Doe'],
+        rights: ['Copyright 2023'],
       },
       sy: {
         updatePeriod: 'daily',
@@ -652,7 +651,7 @@ describe('generate', () => {
           title: 'Multi-namespace entry',
           updated: new Date('2023-03-15T12:00:00Z'),
           dc: {
-            creator: 'Jane Smith',
+            creators: ['Jane Smith'],
           },
           slash: {
             section: 'Technology',
@@ -1147,8 +1146,75 @@ describe('generate', () => {
   })
 })
 
-describe('generate with lenient mode', () => {
-  it('should accept partial feeds with lenient: true', () => {
+describe('strict mode', () => {
+  it('should require id, title, updated in strict mode', () => {
+    // @ts-expect-error: This is for testing purposes.
+    generate({ title: 'Test' }, { strict: true })
+  })
+
+  it('should accept feed with all required fields in strict mode', () => {
+    generate({ id: 'https://example.com', title: 'Test', updated: new Date() }, { strict: true })
+  })
+
+  it('should require entry fields in strict mode', () => {
+    generate(
+      {
+        id: 'https://example.com',
+        title: 'Test',
+        updated: new Date(),
+        // @ts-expect-error: This is for testing purposes.
+        entries: [{ id: 'https://example.com/1' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept entries with all required fields in strict mode', () => {
+    generate(
+      {
+        id: 'https://example.com',
+        title: 'Test',
+        updated: new Date(),
+        entries: [{ id: 'https://example.com/1', title: 'Entry', updated: new Date() }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should require nested type fields in strict mode', () => {
+    generate(
+      {
+        id: 'https://example.com',
+        title: 'Test',
+        updated: new Date(),
+        // @ts-expect-error: This is for testing purposes.
+        links: [{ rel: 'self' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept nested types with all required fields in strict mode', () => {
+    generate(
+      {
+        id: 'https://example.com',
+        title: 'Test',
+        updated: new Date(),
+        links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
+        authors: [{ name: 'John Doe' }],
+        categories: [{ term: 'tech' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept partial feed in lenient mode', () => {
+    generate({ title: 'Test' })
+  })
+})
+
+describe('generate edge cases', () => {
+  it('should accept partial feeds', () => {
     const value = {
       title: 'Test Feed',
     }
@@ -1158,10 +1224,10 @@ describe('generate with lenient mode', () => {
 </feed>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should accept feeds with string dates in lenient mode', () => {
+  it('should accept feeds with string dates', () => {
     const value = {
       id: 'https://example.com/feed',
       title: 'Test Feed',
@@ -1175,10 +1241,10 @@ describe('generate with lenient mode', () => {
 </feed>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should preserve invalid date strings in lenient mode', () => {
+  it('should preserve invalid date strings', () => {
     const value = {
       id: 'https://example.com/feed',
       title: 'Feed with Invalid Date',
@@ -1204,7 +1270,7 @@ describe('generate with lenient mode', () => {
 </feed>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should handle mixed Date objects and string dates', () => {
@@ -1243,7 +1309,7 @@ describe('generate with lenient mode', () => {
 </feed>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should handle deeply nested partial objects', () => {
@@ -1287,9 +1353,11 @@ describe('generate with lenient mode', () => {
 </feed>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
+})
 
+describe('generate with app namespace', () => {
   it('should generate Atom feed with app namespace', () => {
     const value = {
       id: 'http://example.com/blog',
@@ -1361,6 +1429,43 @@ describe('generate with lenient mode', () => {
     <app:control>
       <app:draft>yes</app:draft>
     </app:control>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with xml namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with xml namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      xml: {
+        lang: 'en',
+        base: 'http://example.org/',
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Entry with XML namespace',
+          updated: new Date('2023-03-15T12:00:00Z'),
+          xml: {
+            lang: 'en-US',
+            base: 'http://example.org/entry/1/',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en" xml:base="http://example.org/">
+  <id>https://example.com/feed</id>
+  <title>Feed with xml namespace</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <entry xml:lang="en-US" xml:base="http://example.org/entry/1/">
+    <id>https://example.com/entry/1</id>
+    <title>Entry with XML namespace</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
   </entry>
 </feed>
 `
