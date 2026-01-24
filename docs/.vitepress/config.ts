@@ -134,6 +134,7 @@ export default defineConfig({
             items: [
               { text: 'OPML', link: '/reference/opml' },
               { text: 'Podcast Chapters', link: '/reference/related/podcast-chapters' },
+              { text: 'Podcast Transcripts', link: '/reference/related/podcast-transcripts' },
             ],
           },
           {
