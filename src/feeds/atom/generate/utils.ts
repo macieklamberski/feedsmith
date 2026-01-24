@@ -58,7 +58,64 @@ export const createNamespaceSetter = (prefix: string | undefined) => {
 }
 
 export const generateText: GenerateUtil<Atom.Text> = (text) => {
-  return generateCdataString(text)
+  if (!isObject(text)) {
+    return
+  }
+
+  const textContent = generateCdataString(text.value)
+  const typeAttr = generatePlainString(text.type)
+
+  // If no type attribute, return text/CDATA content directly
+  if (!typeAttr) {
+    return textContent
+  }
+
+  // If type attribute is present, need to combine with text content
+  if (isObject(textContent)) {
+    // CDATA case: { '#cdata': value }
+    return trimObject({
+      ...textContent,
+      '@type': typeAttr,
+    })
+  }
+
+  // Plain text case
+  return trimObject({
+    '#text': textContent,
+    '@type': typeAttr,
+  })
+}
+
+export const generateContent: GenerateUtil<Atom.Content> = (content) => {
+  if (!isObject(content)) {
+    return
+  }
+
+  const textContent = generateCdataString(content.value)
+  const typeAttr = generatePlainString(content.type)
+  const srcAttr = generatePlainString(content.src)
+
+  // If no type or src attributes, return text/CDATA content directly
+  if (!typeAttr && !srcAttr) {
+    return textContent
+  }
+
+  // If type or src attributes are present, need to combine with text content
+  if (isObject(textContent)) {
+    // CDATA case: { '#cdata': value }
+    return trimObject({
+      ...textContent,
+      '@type': typeAttr,
+      '@src': srcAttr,
+    })
+  }
+
+  // Plain text case (or no text content for src-only)
+  return trimObject({
+    '#text': textContent,
+    '@type': typeAttr,
+    '@src': srcAttr,
+  })
 }
 
 export const generateLink: GenerateUtil<Atom.Link<DateLike>> = (link) => {
@@ -160,7 +217,7 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
   const value = {
     [key('author')]: trimArray(entry.authors, generatePerson),
     [key('category')]: trimArray(entry.categories, generateCategory),
-    [key('content')]: generateText(entry.content),
+    [key('content')]: generateContent(entry.content),
     [key('contributor')]: trimArray(entry.contributors, (contributor) =>
       generatePerson(contributor, options),
     ),

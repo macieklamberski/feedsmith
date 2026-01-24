@@ -2,12 +2,14 @@ import { describe, expect, it } from 'bun:test'
 import {
   createNamespaceGetter,
   parseCategory,
+  parseContent,
   parseEntry,
   parseFeed,
   parseGenerator,
   parseLink,
   parsePerson,
   parseSource,
+  parseText,
   retrieveFeed,
   retrieveGeneratorUri,
   retrievePersonUri,
@@ -109,6 +111,110 @@ describe('createNamespaceGetter', () => {
     const get = createNamespaceGetter(value, 'ns:')
 
     expect(get('nonExistentKey')).toBeUndefined()
+  })
+})
+
+describe('parseText', () => {
+  it('should parse simple string value', () => {
+    const value = 'Simple text'
+    const expected = { value: 'Simple text' }
+
+    expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should parse object with text content', () => {
+    const value = { '#text': 'Text content' }
+    const expected = { value: 'Text content' }
+
+    expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should parse object with text and type', () => {
+    const value = { '#text': 'HTML content', '@type': 'html' }
+    const expected = { value: 'HTML content', type: 'html' }
+
+    expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should handle xhtml type', () => {
+    const value = { '#text': '<p>XHTML content</p>', '@type': 'xhtml' }
+    const expected = { value: '<p>XHTML content</p>', type: 'xhtml' }
+
+    expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty string', () => {
+    expect(parseText('')).toBeUndefined()
+  })
+
+  it('should return undefined for whitespace-only string', () => {
+    expect(parseText('   ')).toBeUndefined()
+  })
+
+  it('should return undefined for non-object, non-string input', () => {
+    expect(parseText(null)).toBeUndefined()
+    expect(parseText(undefined)).toBeUndefined()
+    expect(parseText(123)).toBeUndefined()
+  })
+
+  it('should return undefined for object with empty text', () => {
+    const value = { '#text': '' }
+
+    expect(parseText(value)).toBeUndefined()
+  })
+})
+
+describe('parseContent', () => {
+  it('should parse simple string value', () => {
+    const value = 'Simple content'
+    const expected = { value: 'Simple content' }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should parse object with text content', () => {
+    const value = { '#text': 'Content text' }
+    const expected = { value: 'Content text' }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should parse object with text, type and src', () => {
+    const value = {
+      '#text': 'Content text',
+      '@type': 'html',
+      '@src': 'https://example.com/content',
+    }
+    const expected = {
+      value: 'Content text',
+      type: 'html',
+      src: 'https://example.com/content',
+    }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should parse content with only src attribute', () => {
+    const value = {
+      '@type': 'video/mp4',
+      '@src': 'https://example.com/video.mp4',
+    }
+    const expected = {
+      type: 'video/mp4',
+      src: 'https://example.com/video.mp4',
+    }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty string', () => {
+    expect(parseContent('')).toBeUndefined()
+  })
+
+  it('should return undefined for non-object, non-string input', () => {
+    expect(parseContent(null)).toBeUndefined()
+    expect(parseContent(undefined)).toBeUndefined()
+    expect(parseContent(123)).toBeUndefined()
   })
 })
 
@@ -538,7 +644,7 @@ describe('parseGenerator', () => {
 describe('parseSource', () => {
   const expectedFull = {
     id: 'urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6',
-    title: 'Example Feed',
+    title: { value: 'Example Feed' },
     updated: '2003-12-13T18:30:02Z',
     authors: [{ name: 'John Doe' }],
     links: [{ href: 'https://example.com/' }],
@@ -547,8 +653,8 @@ describe('parseSource', () => {
     generator: { text: 'Example Generator' },
     icon: 'https://example.com/favicon.ico',
     logo: 'https://example.com/logo.png',
-    rights: 'Copyright 2003, Example Corp.',
-    subtitle: 'A blog about examples',
+    rights: { value: 'Copyright 2003, Example Corp.' },
+    subtitle: { value: 'A blog about examples' },
   }
 
   it('should parse complete source object (with #text)', () => {
@@ -616,7 +722,7 @@ describe('parseSource', () => {
       title: { '#text': 'Example Feed' },
     }
     const expected = {
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
     }
 
     expect(parseSource(value)).toEqual(expected)
@@ -630,7 +736,7 @@ describe('parseSource', () => {
     }
     const expected = {
       id: '123',
-      title: '456',
+      title: { value: '456' },
       links: [{ href: 'https://example.com/' }],
     }
 
@@ -758,18 +864,18 @@ describe('retrieveSubtitle', () => {
       subtitle: { '#text': 'Feed subtitle' },
       tagline: { '#text': 'Feed tagline' },
     }
-    const expected = 'Feed subtitle'
+    const expected = { value: 'Feed subtitle' }
 
-    expect(retrieveSubtitle(value)).toBe(expected)
+    expect(retrieveSubtitle(value)).toEqual(expected)
   })
 
   it('should fall back to tagline (Atom 0.3) if subtitle is missing', () => {
     const value = {
       tagline: { '#text': 'Feed tagline' },
     }
-    const expected = 'Feed tagline'
+    const expected = { value: 'Feed tagline' }
 
-    expect(retrieveSubtitle(value)).toBe(expected)
+    expect(retrieveSubtitle(value)).toEqual(expected)
   })
 
   it('should return undefined if no subtitle fields exist', () => {
@@ -784,9 +890,9 @@ describe('retrieveSubtitle', () => {
     const value = {
       subtitle: { '#text': 123 },
     }
-    const expected = '123'
+    const expected = { value: '123' }
 
-    expect(retrieveSubtitle(value)).toBe(expected)
+    expect(retrieveSubtitle(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -800,11 +906,11 @@ describe('retrieveSubtitle', () => {
 describe('parseEntry', () => {
   const expectedFull = {
     id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-    title: 'Entry Title',
+    title: { value: 'Entry Title' },
     updated: '2023-01-01T12:00:00Z',
     authors: [{ name: 'John Doe' }],
-    content: '<p>Entry content</p>',
-    summary: 'Entry summary',
+    content: { value: '<p>Entry content</p>' },
+    summary: { value: 'Entry summary' },
     published: '2023-01-01T10:00:00Z',
     links: [
       { href: 'https://example.com/entry', rel: 'alternate' },
@@ -812,10 +918,10 @@ describe('parseEntry', () => {
     ],
     categories: [{ term: 'technology' }, { term: 'web' }],
     contributors: [{ name: 'Jane Smith' }],
-    rights: 'Copyright 2023',
+    rights: { value: 'Copyright 2023' },
     source: {
       id: 'urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6',
-      title: 'Source Feed',
+      title: { value: 'Source Feed' },
     },
   }
 
@@ -910,7 +1016,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Entry Title',
+      title: { value: 'Entry Title' },
     }
 
     expect(parseEntry(value)).toEqual(expected)
@@ -925,7 +1031,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Entry Title',
+      title: { value: 'Entry Title' },
       published: '2003-12-13T08:29:29-04:00',
       updated: '2003-12-13T18:30:02Z',
     }
@@ -942,8 +1048,8 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: '123',
-      title: '456',
-      content: '789',
+      title: { value: '456' },
+      content: { value: '789' },
       links: [{ href: 'https://example.com/' }],
     }
 
@@ -956,7 +1062,7 @@ describe('parseEntry', () => {
       updated: { '#text': '2023-01-01T12:00:00Z' },
     }
     const expected = {
-      title: 'Entry Title',
+      title: { value: 'Entry Title' },
       updated: '2023-01-01T12:00:00Z',
     }
 
@@ -991,7 +1097,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       dc: {
         creators: ['John Doe'],
       },
@@ -1019,7 +1125,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Podcast Episode Entry',
+      title: { value: 'Podcast Episode Entry' },
       psc: {
         chapters: [
           {
@@ -1046,7 +1152,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       dcterms: {
         licenses: ['MIT License'],
         created: ['2023-02-01T00:00:00Z'],
@@ -1064,7 +1170,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       slash: { comments: 10 },
     }
 
@@ -1080,7 +1186,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       itunes: {
         duration: 3600,
         explicit: false,
@@ -1098,7 +1204,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       media: {
         contents: [{ url: 'https://example.com/video.mp4', type: 'video/mp4' }],
       },
@@ -1115,7 +1221,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       georss: {
         point: { lat: 42.3601, lng: -71.0589 },
       },
@@ -1135,7 +1241,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       thr: {
         inReplyTos: [{ ref: 'http://example.com/posts/1', href: 'http://example.com/posts/1' }],
       },
@@ -1153,7 +1259,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       wfw: {
         comment: 'https://example.com/comment',
         commentRss: 'https://example.com/comments/feed',
@@ -1172,7 +1278,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       yt: {
         videoId: 'abc123',
         channelId: 'UCexample',
@@ -1186,10 +1292,10 @@ describe('parseEntry', () => {
 describe('parseFeed', () => {
   const expectedFull = {
     id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
-    title: 'Example Feed',
+    title: { value: 'Example Feed' },
     updated: '2023-01-01T12:00:00Z',
     authors: [{ name: 'John Doe' }],
-    subtitle: 'A subtitle for my feed',
+    subtitle: { value: 'A subtitle for my feed' },
     links: [
       { href: 'https://example.com/', rel: 'alternate' },
       { href: 'https://example.com/feed', rel: 'self' },
@@ -1199,19 +1305,19 @@ describe('parseFeed', () => {
     generator: { text: 'Example Generator', uri: 'https://example.com/gen', version: '1.0' },
     icon: 'https://example.com/favicon.ico',
     logo: 'https://example.com/logo.png',
-    rights: 'Copyright 2023, Example Corp.',
+    rights: { value: 'Copyright 2023, Example Corp.' },
     entries: [
       {
         id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-        title: 'First Entry',
+        title: { value: 'First Entry' },
         updated: '2023-01-01T10:00:00Z',
-        content: '<p>First entry content</p>',
+        content: { value: '<p>First entry content</p>' },
       },
       {
         id: 'urn:uuid:1225c695-cfb8-4ebb-bbbb-80da344efa6a',
-        title: 'Second Entry',
+        title: { value: 'Second Entry' },
         updated: '2023-01-02T10:00:00Z',
-        content: '<p>Second entry content</p>',
+        content: { value: '<p>Second entry content</p>' },
       },
     ],
   }
@@ -1362,7 +1468,7 @@ describe('parseFeed', () => {
       title: { '#text': 'Example Feed' },
     }
     const expected = {
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
     }
 
     expect(parseFeed(value)).toEqual(expected)
@@ -1384,13 +1490,13 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       updated: '2003-12-13T18:30:02Z',
-      subtitle: 'A tagline for my feed',
+      subtitle: { value: 'A tagline for my feed' },
       entries: [
         {
           id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-          title: 'First Entry',
+          title: { value: 'First Entry' },
           published: '2003-12-13T08:29:29-04:00',
         },
       ],
@@ -1408,9 +1514,9 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: '123',
-      title: '456',
+      title: { value: '456' },
       links: [{ href: 'https://example.com/' }],
-      entries: [{ id: '789', title: 'First Entry' }],
+      entries: [{ id: '789', title: { value: 'First Entry' } }],
     }
 
     expect(parseFeed(value)).toEqual(expected)
@@ -1422,7 +1528,7 @@ describe('parseFeed', () => {
       updated: { '#text': '2023-01-01T12:00:00Z' },
     }
     const expected = {
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       updated: '2023-01-01T12:00:00Z',
     }
 
@@ -1475,10 +1581,10 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       entries: [
-        { id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a', title: 'Valid Entry' },
-        { title: 'Invalid Entry' },
+        { id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a', title: { value: 'Valid Entry' } },
+        { title: { value: 'Invalid Entry' } },
         { id: 'urn:uuid:1225c695-cfb8-4ebb-cccc-80da344efa6a' },
       ],
     }
@@ -1494,7 +1600,7 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       dc: {
         creators: ['John Doe'],
       },
@@ -1511,7 +1617,7 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       sy: { updateFrequency: 5 },
     }
 
@@ -1527,7 +1633,7 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       dcterms: {
         licenses: ['Creative Commons Attribution 4.0'],
         created: ['2023-01-01T00:00:00Z'],
@@ -1545,7 +1651,7 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       yt: {
         channelId: 'UCexample',
       },
@@ -1567,7 +1673,7 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
         generatorAgent: 'http://www.movabletype.org/?v=3.2',
@@ -1598,15 +1704,15 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:feed-id',
-      title: 'Test Feed',
+      title: { value: 'Test Feed' },
       entries: [
         {
           id: 'urn:uuid:entry-1',
-          title: 'Entry 1',
+          title: { value: 'Entry 1' },
         },
         {
           id: 'urn:uuid:entry-2',
-          title: 'Entry 2',
+          title: { value: 'Entry 2' },
         },
       ],
     }
@@ -1631,7 +1737,7 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:feed-id',
-      title: 'Test Feed',
+      title: { value: 'Test Feed' },
     }
 
     expect(parseFeed(value, { maxItems: 0 })).toEqual(expected)
@@ -1654,15 +1760,15 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:feed-id',
-      title: 'Test Feed',
+      title: { value: 'Test Feed' },
       entries: [
         {
           id: 'urn:uuid:entry-1',
-          title: 'Entry 1',
+          title: { value: 'Entry 1' },
         },
         {
           id: 'urn:uuid:entry-2',
-          title: 'Entry 2',
+          title: { value: 'Entry 2' },
         },
       ],
     }
@@ -1681,7 +1787,7 @@ describe('retrieveFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -1696,7 +1802,7 @@ describe('retrieveFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
