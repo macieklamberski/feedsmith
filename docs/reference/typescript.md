@@ -85,7 +85,59 @@ const feed: Rss.Feed<Date> = {
 const xml = generateRssFeed(feed)
 ```
 
-<!-- TODO: Add example for working with namespaces. -->
+## Importing Namespace Types
+
+All namespace types are exported from the main package, allowing direct type access:
+
+```typescript
+import type { ItunesNs, DcNs, MediaNs, PodcastNs } from 'feedsmith'
+```
+
+Each namespace contains its complete type system:
+
+```typescript
+// Dublin Core namespace types
+type DcFeed = DcNs.Feed
+type DcItem = DcNs.Item
+
+// Media namespace types
+type MediaFeed = MediaNs.Feed
+type MediaItem = MediaNs.Item
+type MediaContent = MediaNs.Content
+type MediaGroup = MediaNs.Group
+```
+
+This is useful when you need to type variables or function parameters with namespace-specific types:
+
+```typescript
+import type { ItunesNs, PodcastNs } from 'feedsmith'
+import { generateRssFeed } from 'feedsmith'
+
+const itunesCategory: ItunesNs.Category = {
+  text: 'Technology',
+  categories: [{ text: 'Software How-To' }]
+}
+
+const transcript: PodcastNs.Transcript = {
+  url: 'https://example.com/transcript.srt',
+  type: 'application/srt'
+}
+
+const xml = generateRssFeed({
+  title: 'My Podcast',
+  itunes: {
+    categories: [itunesCategory]
+  },
+  items: [{
+    title: 'Episode 1',
+    podcast: {
+      transcripts: [transcript]
+    }
+  }]
+})
+```
+
+Each namespace's type export name can be found in the "Types" section of its reference documentation.
 
 ## Complete Example
 
