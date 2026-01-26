@@ -32,6 +32,7 @@ export const locales = {
   invalidInputOpml: 'Invalid input OPML',
   invalidInputAtom: 'Invalid input Atom',
   invalidInputRss: 'Invalid input RSS',
+  invalidInputChapters: 'Invalid input Podcast Chapters',
 }
 
 export const namespaceUris = {
