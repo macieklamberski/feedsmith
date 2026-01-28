@@ -28,6 +28,7 @@ import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../.
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDcTermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
 import { generateFeed as generateFeedPressFeed } from '../../../namespaces/feedpress/generate/utils.js'
+import { generateItem as generateGItem } from '../../../namespaces/g/generate/utils.js'
 import { generateItemOrFeed as generateGeoItemOrFeed } from '../../../namespaces/geo/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
@@ -248,6 +249,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike, Rss.PersonLike>> = (i
     ...generatePingbackItem(item.pingback),
     ...generateTrackbackItem(item.trackback),
     ...generateAcastItem(item.acast),
+    ...generateGItem(item.g),
     ...generateXmlItemOrFeed(item.xml),
   }
 

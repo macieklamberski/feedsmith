@@ -1002,6 +1002,61 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS feed with g namespace', () => {
+    const value = {
+      title: 'Product Feed',
+      description: 'Test feed with Google Merchant Center namespace',
+      items: [
+        {
+          title: 'Example Product',
+          g: {
+            id: 'SKU12345',
+            title: 'Example Product',
+            description: 'A great product',
+            link: 'https://example.com/product/12345',
+            imageLink: 'https://example.com/images/product.jpg',
+            price: '19.99 USD',
+            availability: 'in_stock',
+            brand: 'Example Brand',
+            condition: 'new',
+            shippings: [
+              {
+                country: 'US',
+                price: '5.99 USD',
+              },
+            ],
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
+  <channel>
+    <title>Product Feed</title>
+    <description>Test feed with Google Merchant Center namespace</description>
+    <item>
+      <title>Example Product</title>
+      <g:id>SKU12345</g:id>
+      <g:title>Example Product</g:title>
+      <g:description>A great product</g:description>
+      <g:link>https://example.com/product/12345</g:link>
+      <g:image_link>https://example.com/images/product.jpg</g:image_link>
+      <g:price>19.99 USD</g:price>
+      <g:availability>in_stock</g:availability>
+      <g:brand>Example Brand</g:brand>
+      <g:condition>new</g:condition>
+      <g:shipping>
+        <g:country>US</g:country>
+        <g:price>5.99 USD</g:price>
+      </g:shipping>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS feed with stylesheets', () => {
     const value = {
       title: 'Feed with Stylesheet',

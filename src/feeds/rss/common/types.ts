@@ -9,6 +9,7 @@ import type { CreativeCommonsNs } from '../../../namespaces/creativecommons/comm
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
 import type { FeedPressNs } from '../../../namespaces/feedpress/common/types.js'
+import type { GNs } from '../../../namespaces/g/common/types.js'
 import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { GooglePlayNs } from '../../../namespaces/googleplay/common/types.js'
@@ -145,6 +146,7 @@ export namespace Rss {
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
       acast?: AcastNs.Item
+      g?: GNs.Item<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
     TStrict

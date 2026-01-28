@@ -32,6 +32,7 @@
      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:acast="https://schema.acast.com/1.0/"
+     xmlns:g="http://base.google.com/ns/1.0"
 >
   <channel>
     <title>Example Feed</title>
@@ -868,6 +869,60 @@
       <acast:showId>abc123def456ghi789jkl012</acast:showId>
       <acast:episodeUrl>example-episode-title</acast:episodeUrl>
       <acast:settings>RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA==</acast:settings>
+
+      <!-- Google Merchant Center Namespace: Item Level Tags -->
+      <g:id>SKU12345</g:id>
+      <g:title>Example Product</g:title>
+      <g:description>A great product for demonstrating Google Merchant Center data</g:description>
+      <g:link>https://example.com/product/12345</g:link>
+      <g:mobile_link>https://m.example.com/product/12345</g:mobile_link>
+      <g:image_link>https://example.com/images/product.jpg</g:image_link>
+      <g:additional_image_link>https://example.com/images/product-alt1.jpg</g:additional_image_link>
+      <g:additional_image_link>https://example.com/images/product-alt2.jpg</g:additional_image_link>
+      <g:price>19.99 USD</g:price>
+      <g:sale_price>14.99 USD</g:sale_price>
+      <g:sale_price_effective_date>2024-01-01T00:00:00Z/2024-01-31T23:59:59Z</g:sale_price_effective_date>
+      <g:availability>in_stock</g:availability>
+      <g:brand>Example Brand</g:brand>
+      <g:gtin>00012345678905</g:gtin>
+      <g:mpn>ABC123</g:mpn>
+      <g:identifier_exists>yes</g:identifier_exists>
+      <g:google_product_category><![CDATA[Electronics > Phones > Smartphones]]></g:google_product_category>
+      <g:product_type>Electronics</g:product_type>
+      <g:product_type>Phones</g:product_type>
+      <g:condition>new</g:condition>
+      <g:item_group_id>PRODUCT-GROUP-1</g:item_group_id>
+      <g:color>Black</g:color>
+      <g:size>Large</g:size>
+      <g:gender>unisex</g:gender>
+      <g:age_group>adult</g:age_group>
+      <g:shipping>
+        <g:country>US</g:country>
+        <g:region>CA</g:region>
+        <g:service>Standard</g:service>
+        <g:price>5.99 USD</g:price>
+        <g:min_handling_time>1</g:min_handling_time>
+        <g:max_handling_time>3</g:max_handling_time>
+      </g:shipping>
+      <g:shipping_weight>1.5 kg</g:shipping_weight>
+      <g:tax>
+        <g:country>US</g:country>
+        <g:region>CA</g:region>
+        <g:rate>8.25</g:rate>
+        <g:tax_ship>yes</g:tax_ship>
+      </g:tax>
+      <g:multipack>1</g:multipack>
+      <g:is_bundle>no</g:is_bundle>
+      <g:adult>no</g:adult>
+      <g:product_highlight>Premium quality materials</g:product_highlight>
+      <g:product_highlight>Free shipping on orders over $50</g:product_highlight>
+      <g:product_detail>
+        <g:section_name>Technical Specs</g:section_name>
+        <g:attribute_name>Weight</g:attribute_name>
+        <g:attribute_value>1.5 kg</g:attribute_value>
+      </g:product_detail>
+      <g:custom_label_0>bestseller</g:custom_label_0>
+      <g:custom_label_1>clearance</g:custom_label_1>
     </item>
   </channel>
 </rss>
