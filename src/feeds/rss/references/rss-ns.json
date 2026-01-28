@@ -895,6 +895,66 @@
         "episodeUrl": "example-episode-title",
         "settings": "RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA=="
       },
+      "g": {
+        "id": "SKU12345",
+        "title": "Example Product",
+        "description": "A great product for demonstrating Google Merchant Center data",
+        "link": "https://example.com/product/12345",
+        "mobileLink": "https://m.example.com/product/12345",
+        "imageLink": "https://example.com/images/product.jpg",
+        "additionalImageLinks": [
+          "https://example.com/images/product-alt1.jpg",
+          "https://example.com/images/product-alt2.jpg"
+        ],
+        "price": "19.99 USD",
+        "salePrice": "14.99 USD",
+        "salePriceEffectiveDate": "2024-01-01T00:00:00Z/2024-01-31T23:59:59Z",
+        "availability": "in_stock",
+        "brand": "Example Brand",
+        "gtin": "00012345678905",
+        "mpn": "ABC123",
+        "identifierExists": true,
+        "googleProductCategory": "Electronics > Phones > Smartphones",
+        "productTypes": ["Electronics", "Phones"],
+        "condition": "new",
+        "itemGroupId": "PRODUCT-GROUP-1",
+        "color": "Black",
+        "size": "Large",
+        "gender": "unisex",
+        "ageGroup": "adult",
+        "shippings": [
+          {
+            "country": "US",
+            "region": "CA",
+            "service": "Standard",
+            "price": "5.99 USD",
+            "minHandlingTime": 1,
+            "maxHandlingTime": 3
+          }
+        ],
+        "shippingWeight": "1.5 kg",
+        "taxes": [
+          {
+            "country": "US",
+            "region": "CA",
+            "rate": "8.25",
+            "taxShip": true
+          }
+        ],
+        "multipack": 1,
+        "isBundle": false,
+        "adult": false,
+        "productHighlights": ["Premium quality materials", "Free shipping on orders over $50"],
+        "productDetails": [
+          {
+            "sectionName": "Technical Specs",
+            "attributeName": "Weight",
+            "attributeValue": "1.5 kg"
+          }
+        ],
+        "customLabel0": "bestseller",
+        "customLabel1": "clearance"
+      },
       "xml": {
         "lang": "en-US",
         "base": "http://example.org/item/1/"
