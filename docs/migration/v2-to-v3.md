@@ -316,6 +316,21 @@ const transcript: PodcastNs.Transcript = {
 
 See [Working with TypeScript](/reference/typescript#importing-namespace-types) for the more information and usage examples.
 
+### Utility Type Exports
+
+Common utility types `DateLike` and `XmlStylesheet` are now exported from the main package:
+
+```typescript
+import type { Rss, DateLike, XmlStylesheet } from 'feedsmith'
+
+type RssMetadata = Omit<Rss.Feed<DateLike>, 'items'>
+
+const stylesheet: XmlStylesheet = {
+  type: 'text/xsl',
+  href: '/feed.xsl',
+}
+```
+
 ### XML Namespace Support
 
 Version 3.x adds support for the [XML namespace](/reference/namespaces/xml) (`xml:*` attributes) in RSS, Atom, and RDF feeds. The `xml` property is available on both feed and item levels, providing access to `xml:lang`, `xml:base`, `xml:space`, and `xml:id` attributes.

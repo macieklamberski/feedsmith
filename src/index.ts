@@ -1,4 +1,5 @@
 export { parse as parseFeed } from './common/parse.js'
+export type { DateLike, XmlStylesheet } from './common/types.js'
 export type { Atom } from './feeds/atom/common/types.js'
 export { detect as detectAtomFeed } from './feeds/atom/detect/index.js'
 export { generate as generateAtomFeed } from './feeds/atom/generate/index.js'
