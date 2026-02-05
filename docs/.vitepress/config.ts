@@ -129,8 +129,12 @@ export default defineConfig({
             ],
           },
           {
-            text: 'OPML',
-            link: '/reference/opml',
+            text: 'Related Formats',
+            collapsed: true,
+            items: [
+              { text: 'OPML', link: '/reference/opml' },
+              { text: 'Podcast Chapters', link: '/reference/related/podcast-chapters' },
+            ],
           },
           {
             text: 'TypeScript',
