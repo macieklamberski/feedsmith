@@ -314,6 +314,9 @@ export const namespaceUris = {
     'https://schema.acast.com/1.0',
     'http://schema.acast.com/1.0',
   ],
+  g: [
+    'http://base.google.com/ns/1.0', // Official URI.
+  ],
 }
 
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(
