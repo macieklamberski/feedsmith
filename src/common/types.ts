@@ -2,6 +2,24 @@
 // biome-ignore lint/suspicious/noExplicitAny: Temporary solution until the Unreliable type fixed.
 export type Unreliable = any
 
+type Simplify<T> = { [K in keyof T]: T[K] }
+type Unwrap<T> = T extends { __requirable: infer U } ? U : T
+type HasMarker<T> = [Extract<T, { __requirable: unknown }>] extends [never] ? false : true
+type Optional<T> = { [K in keyof T]-?: object extends Pick<T, K> ? K : never }[keyof T]
+type Marked<T> = { [K in keyof T]-?: HasMarker<T[K]> extends true ? K : never }[keyof T]
+
+export type Strict<T, S extends boolean> = Simplify<
+  S extends true
+    ? { [K in Exclude<keyof T, Optional<T>>]-?: Unwrap<T[K]> } & {
+        [K in Optional<T>]?: Unwrap<T[K]>
+      }
+    : { [K in Exclude<keyof T, Optional<T> | Marked<T>>]-?: Unwrap<T[K]> } & {
+        [K in Optional<T> | Marked<T>]?: Unwrap<T[K]>
+      }
+>
+
+export type Requirable<T> = T | { __requirable: T }
+
 export type DateLike = Date | string
 
 export type ExtraFields<F extends ReadonlyArray<string>, V = unknown> = {
@@ -24,15 +42,6 @@ export type IsPlainObject<T> =
             : true
           : false
 
-export type RemoveUndefined<T> = T extends undefined ? never : T
-
-export type DeepPartial<T> =
-  IsPlainObject<T> extends true
-    ? { [P in keyof T]?: DeepPartial<RemoveUndefined<T[P]>> }
-    : T extends Array<infer U>
-      ? Array<DeepPartial<U>>
-      : T
-
 export type DeepOmit<T, K extends string> = T extends Array<infer U>
   ? Array<DeepOmit<U, K>>
   : IsPlainObject<T> extends true
@@ -41,10 +50,7 @@ export type DeepOmit<T, K extends string> = T extends Array<infer U>
 
 export type ParseExactUtil<R> = (value: Unreliable) => R | undefined
 
-export type ParsePartialUtil<R, O = undefined> = (
-  value: Unreliable,
-  options?: O,
-) => DeepPartial<R> | undefined
+export type ParsePartialUtil<R, O = undefined> = (value: Unreliable, options?: O) => R | undefined
 
 export type GenerateUtil<V, O = undefined> = (
   value: V | undefined,
@@ -64,21 +70,21 @@ export type XmlStylesheet = {
   alternate?: boolean
 }
 
-export type XmlGenerateOptions<O, F extends boolean = false> = O & {
-  lenient?: F
+export type XmlGenerateOptions<O = Record<string, unknown>, S extends boolean = false> = O & {
+  strict?: S
   stylesheets?: Array<XmlStylesheet>
 }
 
-export type JsonGenerateOptions<O, F extends boolean = false> = O & {
-  lenient?: F
-}
-
-export type XmlGenerateMain<S, L, O = Record<string, unknown>> = <F extends boolean = false>(
-  value: F extends true ? L : S,
-  options?: XmlGenerateOptions<O, F>,
+export type XmlGenerateMain<L, St, O = Record<string, unknown>> = <S extends boolean = false>(
+  value: S extends true ? St : L,
+  options?: XmlGenerateOptions<O, S>,
 ) => string
 
-export type JsonGenerateMain<S, L, O = Record<string, unknown>> = <F extends boolean = false>(
-  value: F extends true ? L : S,
-  options?: JsonGenerateOptions<O, F>,
+export type JsonGenerateOptions<O = Record<string, unknown>, S extends boolean = false> = O & {
+  strict?: S
+}
+
+export type JsonGenerateMain<L, St, O = Record<string, unknown>> = <S extends boolean = false>(
+  value: S extends true ? St : L,
+  options?: JsonGenerateOptions<O, S>,
 ) => unknown

@@ -2,7 +2,7 @@
 title: "Reference: Spotify Namespace"
 ---
 
-# Spotify Namespace
+# Spotify Namespace Reference
 
 The Spotify namespace provides podcast-specific metadata for Spotify's podcast platform, including episode limits and country targeting information.
 
@@ -32,6 +32,9 @@ The Spotify namespace provides podcast-specific metadata for Spotify's podcast p
 </table>
 
 ## Types
+
+> [!INFO]
+> For details on type parameters (`TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tstrict).
 
 <<< @/../src/namespaces/spotify/common/types.ts#reference
 

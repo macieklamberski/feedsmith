@@ -68,6 +68,10 @@
   "subtitle": "A <em>comprehensive</em> example showing all Atom 1.0 elements",
   "title": "Comprehensive Atom 1.0 Example Feed",
   "updated": "2023-01-15T12:00:00Z",
+  "xml": {
+    "base": "http://example.org/",
+    "lang": "en"
+  },
   "entries": [
     {
       "authors": [
@@ -212,7 +216,10 @@
       "id": "tag:example.org,2023:entry-6",
       "summary": "This is an English summary of a French entry to demonstrate language-specific content.",
       "title": "Exemple de Contenu en Français",
-      "updated": "2023-01-10T11:05:00Z"
+      "updated": "2023-01-10T11:05:00Z",
+      "xml": {
+        "lang": "fr"
+      }
     }
   ]
 }
