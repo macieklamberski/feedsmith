@@ -71,18 +71,7 @@ You can add XML stylesheets to make feeds browser-friendly by providing the `sty
 ```typescript
 import { generateRssFeed } from 'feedsmith'
 
-const rssFeed = generateRssFeed({
-  title: 'My Tech Blog',
-  link: 'https://myblog.com',
-  description: 'Thoughts on web development',
-  items: [
-    {
-      title: 'Hello World',
-      link: 'https://myblog.com/hello',
-      description: 'First post'
-    }
-  ]
-}, {
+const rssFeed = generateRssFeed(feedData, {
   stylesheets: [{
     type: 'text/xsl',
     href: '/styles/feed.xsl'
@@ -286,7 +275,7 @@ You can generate OPML files with custom outline attributes by providing them in 
 ```typescript
 import { generateOpml } from 'feedsmith'
 
-const opml = generateOpml({
+const data = {
   head: {
     title: 'My Custom Feed List',
     dateCreated: new Date('2024-01-15T12:00:00Z')
@@ -319,15 +308,17 @@ const opml = generateOpml({
       }
     ]
   }
-}, {
+}
+
+const opml = generateOpml(data, {
   extraOutlineAttributes: [
     'customIcon',
     'updateInterval',
     'isPrivate',
     'tags',
     'customColor',
-    'isPinned'
-  ]
+    'isPinned',
+  ],
 })
 ```
 
