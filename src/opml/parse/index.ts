@@ -3,10 +3,10 @@ import type { MainOptions, Opml } from '../common/types.js'
 import { parser } from './config.js'
 import { parseDocument } from './utils.js'
 
-export const parse = <const A extends ReadonlyArray<string> = ReadonlyArray<string>>(
+export const parse = <const TExtra extends ReadonlyArray<string> = ReadonlyArray<string>>(
   value: string,
-  options?: MainOptions<A>,
-): Opml.Document<string, A> => {
+  options?: MainOptions<TExtra>,
+): Opml.Document<string, TExtra> => {
   const object = parser.parse(value)
   const parsed = parseDocument(object, options)
 
