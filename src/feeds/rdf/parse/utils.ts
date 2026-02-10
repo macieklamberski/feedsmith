@@ -1,4 +1,4 @@
-import type { DateAny, ParseOptions, ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny } from '../../../common/types.js'
 import {
   detectNamespaces,
   isObject,
@@ -25,7 +25,7 @@ import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/par
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
-import type { Rdf } from '../common/types.js'
+import type { ParseUtilPartial, Rdf } from '../common/types.js'
 
 const retrieveByAbout = (elements: unknown, resourceUri: string | undefined): unknown => {
   if (!resourceUri) {
@@ -49,7 +49,7 @@ const findByTocReference = (value: unknown, property: string): unknown => {
   return retrieveByAbout(value[property], resourceUri)
 }
 
-export const parseImage: ParsePartialUtil<Rdf.Image> = (value) => {
+export const parseImage: ParseUtilPartial<Rdf.Image> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -64,11 +64,11 @@ export const parseImage: ParsePartialUtil<Rdf.Image> = (value) => {
   return trimObject(image)
 }
 
-export const retrieveImage: ParsePartialUtil<Rdf.Image> = (value) => {
+export const retrieveImage: ParseUtilPartial<Rdf.Image> = (value) => {
   return parseImage(findByTocReference(value, 'image')) ?? parseSingularOf(value?.image, parseImage)
 }
 
-export const parseTextInput: ParsePartialUtil<Rdf.TextInput> = (value) => {
+export const parseTextInput: ParseUtilPartial<Rdf.TextInput> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -84,17 +84,14 @@ export const parseTextInput: ParsePartialUtil<Rdf.TextInput> = (value) => {
   return trimObject(textInput)
 }
 
-export const retrieveTextInput: ParsePartialUtil<Rdf.TextInput> = (value) => {
+export const retrieveTextInput: ParseUtilPartial<Rdf.TextInput> = (value) => {
   return (
     parseTextInput(findByTocReference(value, 'textinput')) ??
     parseSingularOf(value?.textinput, parseTextInput)
   )
 }
 
-export const parseItem: ParsePartialUtil<Rdf.Item<DateAny>, ParseOptions<DateAny>> = (
-  value,
-  options,
-) => {
+export const parseItem: ParseUtilPartial<Rdf.Item<DateAny>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -119,10 +116,7 @@ export const parseItem: ParsePartialUtil<Rdf.Item<DateAny>, ParseOptions<DateAny
   return trimObject(item) as Rdf.Item<DateAny> | undefined
 }
 
-export const retrieveItems: ParsePartialUtil<Array<Rdf.Item<DateAny>>, ParseOptions<DateAny>> = (
-  value,
-  options,
-) => {
+export const retrieveItems: ParseUtilPartial<Array<Rdf.Item<DateAny>>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -147,10 +141,7 @@ export const retrieveItems: ParsePartialUtil<Array<Rdf.Item<DateAny>>, ParseOpti
   return parseArrayOf(value?.item, (value) => parseItem(value, options), options?.maxItems)
 }
 
-export const parseFeed: ParsePartialUtil<Rdf.Feed<DateAny>, ParseOptions<DateAny>> = (
-  value,
-  options,
-) => {
+export const parseFeed: ParseUtilPartial<Rdf.Feed<DateAny>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -178,9 +169,6 @@ export const parseFeed: ParsePartialUtil<Rdf.Feed<DateAny>, ParseOptions<DateAny
   return trimObject(feed) as Rdf.Feed<DateAny> | undefined
 }
 
-export const retrieveFeed: ParsePartialUtil<Rdf.Feed<DateAny>, ParseOptions<DateAny>> = (
-  value,
-  options,
-) => {
+export const retrieveFeed: ParseUtilPartial<Rdf.Feed<DateAny>> = (value, options) => {
   return parseSingularOf(value?.rdf, (value) => parseFeed(value, options))
 }

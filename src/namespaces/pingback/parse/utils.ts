@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseSingularOf,
@@ -8,7 +8,7 @@ import {
 } from '../../../common/utils.js'
 import type { PingbackNs } from '../common/types.js'
 
-export const retrieveItem: ParsePartialUtil<PingbackNs.Item> = (value) => {
+export const retrieveItem: ParseUtilPartial<PingbackNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -25,7 +25,7 @@ export const retrieveItem: ParsePartialUtil<PingbackNs.Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialUtil<PingbackNs.Feed> = (value) => {
+export const retrieveFeed: ParseUtilPartial<PingbackNs.Feed> = (value) => {
   if (!isObject(value)) {
     return
   }

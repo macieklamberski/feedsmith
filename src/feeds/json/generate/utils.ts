@@ -1,6 +1,6 @@
-import type { DateLike, GenerateUtil } from '../../../common/types.js'
+import type { DateLike } from '../../../common/types.js'
 import { generateRfc3339Date, trimArray, trimObject } from '../../../common/utils.js'
-import type { Json } from '../common/types.js'
+import type { GenerateUtil, Json } from '../common/types.js'
 
 export const generateItem: GenerateUtil<Json.Item<DateLike>> = (item) => {
   const value = {

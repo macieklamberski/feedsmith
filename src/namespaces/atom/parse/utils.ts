@@ -1,11 +1,11 @@
-import type { DateAny, ParseOptions, ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
   parseEntry as parseAtomEntry,
   parseFeed as parseAtomFeed,
 } from '../../../feeds/atom/parse/utils.js'
 import type { AtomNs } from '../common/types.js'
 
-export const retrieveEntry: ParsePartialUtil<AtomNs.Entry<DateAny>, ParseOptions<DateAny>> = (
+export const retrieveEntry: ParseUtilPartial<AtomNs.Entry<DateAny>, ParseMainOptions<DateAny>> = (
   value,
   options,
 ) => {
@@ -14,7 +14,7 @@ export const retrieveEntry: ParsePartialUtil<AtomNs.Entry<DateAny>, ParseOptions
     | undefined
 }
 
-export const retrieveFeed: ParsePartialUtil<AtomNs.Feed<DateAny>, ParseOptions<DateAny>> = (
+export const retrieveFeed: ParseUtilPartial<AtomNs.Feed<DateAny>, ParseMainOptions<DateAny>> = (
   value,
   options,
 ) => {

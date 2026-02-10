@@ -1,4 +1,4 @@
-import type { DateAny, ParseOptions, ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -12,7 +12,7 @@ import {
 } from '../../../common/utils.js'
 import type { RawVoiceNs } from '../common/types.js'
 
-export const parseRating: ParsePartialUtil<RawVoiceNs.Rating> = (value) => {
+export const parseRating: ParseUtilPartial<RawVoiceNs.Rating> = (value) => {
   const rating = {
     value: parseString(retrieveText(value)),
     tv: parseString(value?.['@tv']),
@@ -22,9 +22,9 @@ export const parseRating: ParsePartialUtil<RawVoiceNs.Rating> = (value) => {
   return trimObject(rating)
 }
 
-export const parseLiveStream: ParsePartialUtil<
+export const parseLiveStream: ParseUtilPartial<
   RawVoiceNs.LiveStream<DateAny>,
-  ParseOptions<DateAny>
+  ParseMainOptions<DateAny>
 > = (value, options) => {
   const liveStream = {
     url: parseString(retrieveText(value)),
@@ -36,7 +36,7 @@ export const parseLiveStream: ParsePartialUtil<
   return trimObject(liveStream) as RawVoiceNs.LiveStream<DateAny> | undefined
 }
 
-export const parsePoster: ParsePartialUtil<RawVoiceNs.Poster> = (value) => {
+export const parsePoster: ParseUtilPartial<RawVoiceNs.Poster> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -48,7 +48,7 @@ export const parsePoster: ParsePartialUtil<RawVoiceNs.Poster> = (value) => {
   return trimObject(poster)
 }
 
-export const parseAlternateEnclosure: ParsePartialUtil<RawVoiceNs.AlternateEnclosure> = (value) => {
+export const parseAlternateEnclosure: ParseUtilPartial<RawVoiceNs.AlternateEnclosure> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -62,7 +62,7 @@ export const parseAlternateEnclosure: ParsePartialUtil<RawVoiceNs.AlternateEnclo
   return trimObject(alternateEnclosure)
 }
 
-export const parseSubscribe: ParsePartialUtil<RawVoiceNs.Subscribe> = (value) => {
+export const parseSubscribe: ParseUtilPartial<RawVoiceNs.Subscribe> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -82,7 +82,7 @@ export const parseSubscribe: ParsePartialUtil<RawVoiceNs.Subscribe> = (value) =>
   return trimObject(subscribe)
 }
 
-export const parseMetamark: ParsePartialUtil<RawVoiceNs.Metamark> = (value) => {
+export const parseMetamark: ParseUtilPartial<RawVoiceNs.Metamark> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -98,7 +98,7 @@ export const parseMetamark: ParsePartialUtil<RawVoiceNs.Metamark> = (value) => {
   return trimObject(metamark)
 }
 
-export const parseDonate: ParsePartialUtil<RawVoiceNs.Donate> = (value) => {
+export const parseDonate: ParseUtilPartial<RawVoiceNs.Donate> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -111,7 +111,7 @@ export const parseDonate: ParsePartialUtil<RawVoiceNs.Donate> = (value) => {
   return trimObject(donate)
 }
 
-export const retrieveItem: ParsePartialUtil<RawVoiceNs.Item> = (value) => {
+export const retrieveItem: ParseUtilPartial<RawVoiceNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -130,7 +130,7 @@ export const retrieveItem: ParsePartialUtil<RawVoiceNs.Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialUtil<RawVoiceNs.Feed<DateAny>, ParseOptions<DateAny>> = (
+export const retrieveFeed: ParseUtilPartial<RawVoiceNs.Feed<DateAny>, ParseMainOptions<DateAny>> = (
   value,
   options,
 ) => {

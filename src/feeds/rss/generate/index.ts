@@ -1,11 +1,11 @@
 import { locales } from '../../../common/config.js'
-import type { DateLike, XmlGenerateMain } from '../../../common/types.js'
+import type { DateLike, GenerateMainXml } from '../../../common/types.js'
 import { generateXml } from '../../../common/utils.js'
 import type { Rss } from '../common/types.js'
 import { builder } from './config.js'
 import { generateFeed } from './utils.js'
 
-export const generate: XmlGenerateMain<
+export const generate: GenerateMainXml<
   Rss.Feed<DateLike, Rss.PersonLike>,
   Rss.Feed<Date, Rss.PersonLike, true>
 > = (value, options) => {
