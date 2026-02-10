@@ -1,8 +1,9 @@
 import type { DateLike, ExtraFields, ParseOptions, Requirable, Strict } from '../../common/types.js'
 
-export type MainOptions<A extends ReadonlyArray<string> = ReadonlyArray<string>> = ParseOptions & {
-  extraOutlineAttributes?: A
-}
+export type MainOptions<TExtra extends ReadonlyArray<string> = ReadonlyArray<string>> =
+  ParseOptions & {
+    extraOutlineAttributes?: TExtra
+  }
 
 // #region reference
 export namespace Opml {
@@ -10,7 +11,7 @@ export namespace Opml {
   // Outline extends it and adds recursive outlines field separately.
   export type BaseOutline<
     TDate extends DateLike,
-    A extends ReadonlyArray<string> = ReadonlyArray<string>,
+    TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
     TStrict extends boolean = false,
   > = Strict<
     {
@@ -30,14 +31,14 @@ export namespace Opml {
     },
     TStrict
   > &
-    ExtraFields<A>
+    ExtraFields<TExtra>
 
   export type Outline<
     TDate extends DateLike,
-    A extends ReadonlyArray<string> = ReadonlyArray<string>,
+    TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
     TStrict extends boolean = false,
-  > = BaseOutline<TDate, A, TStrict> & {
-    outlines?: Array<Outline<TDate, A, TStrict>>
+  > = BaseOutline<TDate, TExtra, TStrict> & {
+    outlines?: Array<Outline<TDate, TExtra, TStrict>>
   }
 
   export type Head<TDate extends DateLike> = {
@@ -58,19 +59,19 @@ export namespace Opml {
 
   export type Body<
     TDate extends DateLike,
-    A extends ReadonlyArray<string> = ReadonlyArray<string>,
+    TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
     TStrict extends boolean = false,
   > = {
-    outlines?: Array<Outline<TDate, A, TStrict>>
+    outlines?: Array<Outline<TDate, TExtra, TStrict>>
   }
 
   export type Document<
     TDate extends DateLike,
-    A extends ReadonlyArray<string> = ReadonlyArray<string>,
+    TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
     TStrict extends boolean = false,
   > = {
     head?: Head<TDate>
-    body?: Body<TDate, A, TStrict>
+    body?: Body<TDate, TExtra, TStrict>
   }
 }
 // #endregion reference
