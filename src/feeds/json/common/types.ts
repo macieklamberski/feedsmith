@@ -1,4 +1,15 @@
-import type { Requirable, Strict } from '../../../common/types.js'
+import type {
+  GenerateUtil as BaseGenerateUtil,
+  ParseUtilPartial as BaseParseUtilPartial,
+  DateAny,
+  ParseMainOptions,
+  Requirable,
+  Strict,
+} from '../../../common/types.js'
+
+export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateAny>>
+
+export type GenerateUtil<V> = BaseGenerateUtil<V>
 
 // #region reference
 export namespace Json {

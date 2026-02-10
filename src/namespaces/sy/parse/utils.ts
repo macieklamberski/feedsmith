@@ -1,4 +1,4 @@
-import type { DateAny, ParseOptions, ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseDate,
@@ -10,7 +10,7 @@ import {
 } from '../../../common/utils.js'
 import type { SyNs } from '../common/types.js'
 
-export const retrieveFeed: ParsePartialUtil<SyNs.Feed<DateAny>, ParseOptions<DateAny>> = (
+export const retrieveFeed: ParseUtilPartial<SyNs.Feed<DateAny>, ParseMainOptions<DateAny>> = (
   value,
   options,
 ) => {

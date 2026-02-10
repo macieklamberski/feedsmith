@@ -1,8 +1,8 @@
 import type {
   GenerateUtil as BaseGenerateUtil,
-  ParsePartialUtil as BaseParsePartialUtil,
+  ParseMainOptions as BaseParseMainOptions,
+  ParseUtilPartial as BaseParseUtilPartial,
   DateAny,
-  ParseOptions,
   Requirable,
   Strict,
 } from '../../../common/types.js'
@@ -29,19 +29,19 @@ import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 import type { YtNs } from '../../../namespaces/yt/common/types.js'
 
-export type ParseUtilOptions<TDate = string> = ParseOptions<TDate> & {
+export type ParseMainOptions<TDate = string> = BaseParseMainOptions<TDate> & {
   prefix?: string
   asNamespace?: boolean
 }
 
-export type GenerateUtilOptions = {
+export type GenerateMainOptions = {
   prefix?: string
   asNamespace?: boolean
 }
 
-export type ParsePartialUtil<R> = BaseParsePartialUtil<R, ParseUtilOptions<DateAny>>
+export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateAny>>
 
-export type GenerateUtil<V> = BaseGenerateUtil<V, GenerateUtilOptions>
+export type GenerateUtil<V> = BaseGenerateUtil<V, GenerateMainOptions>
 
 // #region reference
 export namespace Atom {

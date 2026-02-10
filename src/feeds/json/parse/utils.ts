@@ -1,4 +1,4 @@
-import type { DateAny, ParseOptions, ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
   isObject,
@@ -10,7 +10,7 @@ import {
   parseString,
   trimObject,
 } from '../../../common/utils.js'
-import type { Json } from '../common/types.js'
+import type { Json, ParseUtilPartial } from '../common/types.js'
 
 export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
   return (requestedKey: string) => {
@@ -28,7 +28,7 @@ export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
   }
 }
 
-export const parseAuthor: ParsePartialUtil<Json.Author> = (value) => {
+export const parseAuthor: ParseUtilPartial<Json.Author> = (value) => {
   if (isObject(value)) {
     const get = createCaseInsensitiveGetter(value)
     const author = {
@@ -49,7 +49,7 @@ export const parseAuthor: ParsePartialUtil<Json.Author> = (value) => {
   }
 }
 
-export const retrieveAuthors: ParsePartialUtil<Array<Json.Author>> = (value) => {
+export const retrieveAuthors: ParseUtilPartial<Array<Json.Author>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -64,7 +64,7 @@ export const retrieveAuthors: ParsePartialUtil<Array<Json.Author>> = (value) => 
   return parsedAuthors?.length ? parsedAuthors : parsedAuthor
 }
 
-export const parseAttachment: ParsePartialUtil<Json.Attachment> = (value) => {
+export const parseAttachment: ParseUtilPartial<Json.Attachment> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -81,10 +81,7 @@ export const parseAttachment: ParsePartialUtil<Json.Attachment> = (value) => {
   return trimObject(attachment)
 }
 
-export const parseItem: ParsePartialUtil<Json.Item<DateAny>, ParseOptions<DateAny>> = (
-  value,
-  options,
-) => {
+export const parseItem: ParseUtilPartial<Json.Item<DateAny>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -115,7 +112,7 @@ export const parseItem: ParsePartialUtil<Json.Item<DateAny>, ParseOptions<DateAn
   return trimObject(item) as Json.Item<DateAny> | undefined
 }
 
-export const parseHub: ParsePartialUtil<Json.Hub> = (value) => {
+export const parseHub: ParseUtilPartial<Json.Hub> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -129,10 +126,7 @@ export const parseHub: ParsePartialUtil<Json.Hub> = (value) => {
   return trimObject(hub)
 }
 
-export const parseFeed: ParsePartialUtil<Json.Feed<DateAny>, ParseOptions<DateAny>> = (
-  value,
-  options,
-) => {
+export const parseFeed: ParseUtilPartial<Json.Feed<DateAny>> = (value, options) => {
   if (!isObject(value)) {
     return
   }

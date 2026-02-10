@@ -50,7 +50,7 @@ import {
   retrieveFeed as retrieveYtFeed,
   retrieveItem as retrieveYtItem,
 } from '../../../namespaces/yt/parse/utils.js'
-import type { Atom, ParsePartialUtil } from '../common/types.js'
+import type { Atom, ParseUtilPartial } from '../common/types.js'
 
 export const createNamespaceGetter = (
   value: Record<string, Unreliable>,
@@ -63,7 +63,7 @@ export const createNamespaceGetter = (
   return (key: string) => value[prefix + key]
 }
 
-export const parseLink: ParsePartialUtil<Atom.Link<DateAny>> = (value, options) => {
+export const parseLink: ParseUtilPartial<Atom.Link<DateAny>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -82,7 +82,7 @@ export const parseLink: ParsePartialUtil<Atom.Link<DateAny>> = (value, options) 
   return trimObject(link)
 }
 
-export const retrievePersonUri: ParsePartialUtil<string> = (value, options) => {
+export const retrievePersonUri: ParseUtilPartial<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -94,7 +94,7 @@ export const retrievePersonUri: ParsePartialUtil<string> = (value, options) => {
   return uri || url
 }
 
-export const parsePerson: ParsePartialUtil<Atom.Person> = (value, options) => {
+export const parsePerson: ParseUtilPartial<Atom.Person> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -111,7 +111,7 @@ export const parsePerson: ParsePartialUtil<Atom.Person> = (value, options) => {
   return trimObject(person)
 }
 
-export const parseCategory: ParsePartialUtil<Atom.Category> = (value) => {
+export const parseCategory: ParseUtilPartial<Atom.Category> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -125,7 +125,7 @@ export const parseCategory: ParsePartialUtil<Atom.Category> = (value) => {
   return trimObject(category)
 }
 
-export const retrieveGeneratorUri: ParsePartialUtil<string> = (value) => {
+export const retrieveGeneratorUri: ParseUtilPartial<string> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -136,7 +136,7 @@ export const retrieveGeneratorUri: ParsePartialUtil<string> = (value) => {
   return uri || url
 }
 
-export const parseGenerator: ParsePartialUtil<Atom.Generator> = (value) => {
+export const parseGenerator: ParseUtilPartial<Atom.Generator> = (value) => {
   const generator = {
     text: parseString(retrieveText(value)),
     uri: retrieveGeneratorUri(value),
@@ -146,7 +146,7 @@ export const parseGenerator: ParsePartialUtil<Atom.Generator> = (value) => {
   return trimObject(generator)
 }
 
-export const parseSource: ParsePartialUtil<Atom.Source<DateAny>> = (value, options) => {
+export const parseSource: ParseUtilPartial<Atom.Source<DateAny>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -170,7 +170,7 @@ export const parseSource: ParsePartialUtil<Atom.Source<DateAny>> = (value, optio
   return trimObject(source)
 }
 
-export const retrievePublished: ParsePartialUtil<DateAny> = (value, options) => {
+export const retrievePublished: ParseUtilPartial<DateAny> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -192,7 +192,7 @@ export const retrievePublished: ParsePartialUtil<DateAny> = (value, options) => 
   return published || issued || created
 }
 
-export const retrieveUpdated: ParsePartialUtil<DateAny> = (value, options) => {
+export const retrieveUpdated: ParseUtilPartial<DateAny> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -208,7 +208,7 @@ export const retrieveUpdated: ParsePartialUtil<DateAny> = (value, options) => {
   return updated || modified
 }
 
-export const retrieveSubtitle: ParsePartialUtil<string> = (value, options) => {
+export const retrieveSubtitle: ParseUtilPartial<string> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -220,7 +220,7 @@ export const retrieveSubtitle: ParsePartialUtil<string> = (value, options) => {
   return subtitle || tagline
 }
 
-export const parseEntry: ParsePartialUtil<Atom.Entry<DateAny>> = (value, options) => {
+export const parseEntry: ParseUtilPartial<Atom.Entry<DateAny>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -266,7 +266,7 @@ export const parseEntry: ParsePartialUtil<Atom.Entry<DateAny>> = (value, options
   return trimObject(entry)
 }
 
-export const parseFeed: ParsePartialUtil<Atom.Feed<DateAny>> = (value, options) => {
+export const parseFeed: ParseUtilPartial<Atom.Feed<DateAny>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -309,7 +309,7 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<DateAny>> = (value, options) 
   return trimObject(feed)
 }
 
-export const retrieveFeed: ParsePartialUtil<Atom.Feed<DateAny>> = (value, options) => {
+export const retrieveFeed: ParseUtilPartial<Atom.Feed<DateAny>> = (value, options) => {
   const notNamespaced = parseSingularOf(value?.feed, (value) => parseFeed(value, options))
   const namespaced = parseSingularOf(value?.['atom:feed'], (value) =>
     parseFeed(value, { ...options, prefix: 'atom:' }),

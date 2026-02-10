@@ -1,4 +1,4 @@
-import type { DateAny, ParsePartialUtil } from '../../common/types.js'
+import type { DateAny } from '../../common/types.js'
 import {
   isObject,
   isPresent,
@@ -12,12 +12,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../common/utils.js'
-import type { Opml, ParseMainOptions } from '../common/types.js'
+import type { Opml, ParseUtilPartial } from '../common/types.js'
 
-export const parseOutline: ParsePartialUtil<Opml.Outline<DateAny>, ParseMainOptions<DateAny>> = (
-  value,
-  options,
-) => {
+export const parseOutline: ParseUtilPartial<Opml.Outline<DateAny>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -54,10 +51,7 @@ export const parseOutline: ParsePartialUtil<Opml.Outline<DateAny>, ParseMainOpti
   return trimObject(outline) as Opml.Outline<DateAny> | undefined
 }
 
-export const parseHead: ParsePartialUtil<Opml.Head<DateAny>, ParseMainOptions<DateAny>> = (
-  value,
-  options,
-) => {
+export const parseHead: ParseUtilPartial<Opml.Head<DateAny>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -89,10 +83,7 @@ export const parseHead: ParsePartialUtil<Opml.Head<DateAny>, ParseMainOptions<Da
   return trimObject(head)
 }
 
-export const parseBody: ParsePartialUtil<Opml.Body<DateAny>, ParseMainOptions<DateAny>> = (
-  value,
-  options,
-) => {
+export const parseBody: ParseUtilPartial<Opml.Body<DateAny>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -108,10 +99,7 @@ export const parseBody: ParsePartialUtil<Opml.Body<DateAny>, ParseMainOptions<Da
   return trimObject(body)
 }
 
-export const parseDocument: ParsePartialUtil<Opml.Document<DateAny>, ParseMainOptions<DateAny>> = (
-  value,
-  options,
-) => {
+export const parseDocument: ParseUtilPartial<Opml.Document<DateAny>> = (value, options) => {
   if (!isObject(value?.opml)) {
     return
   }

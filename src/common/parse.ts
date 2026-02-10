@@ -11,12 +11,12 @@ import type { Rss } from '../feeds/rss/common/types.js'
 import { detect as detectRssFeed } from '../feeds/rss/detect/index.js'
 import { parse as parseRssFeed } from '../feeds/rss/parse/index.js'
 import { locales } from './config.js'
-import type { ParseOptions } from './types.js'
+import type { ParseMainOptions } from './types.js'
 import { parseJsonObject } from './utils.js'
 
 export const parse = <TDate = string>(
   value: unknown,
-  options?: ParseOptions<TDate>,
+  options?: ParseMainOptions<TDate>,
 ):
   | { format: 'rss'; feed: Rss.Feed<TDate> }
   | { format: 'atom'; feed: Atom.Feed<TDate> }

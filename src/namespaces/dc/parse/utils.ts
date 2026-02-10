@@ -1,4 +1,4 @@
-import type { DateAny, ParseOptions, ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -9,9 +9,9 @@ import {
 } from '../../../common/utils.js'
 import type { DcNs } from '../common/types.js'
 
-export const retrieveItemOrFeed: ParsePartialUtil<
+export const retrieveItemOrFeed: ParseUtilPartial<
   DcNs.ItemOrFeed<DateAny>,
-  ParseOptions<DateAny>
+  ParseMainOptions<DateAny>
 > = (value, options) => {
   if (!isObject(value)) {
     return

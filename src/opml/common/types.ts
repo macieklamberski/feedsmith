@@ -1,15 +1,27 @@
-import type { ExtraFields, ParseOptions, Requirable, Strict } from '../../common/types.js'
+import type {
+  GenerateUtil as BaseGenerateUtil,
+  ParseMainOptions as BaseParseMainOptions,
+  ParseUtilPartial as BaseParseUtilPartial,
+  DateAny,
+  ExtraFields,
+  Requirable,
+  Strict,
+} from '../../common/types.js'
 
 export type ParseMainOptions<
   TDate = string,
   TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
-> = ParseOptions<TDate> & {
+> = BaseParseMainOptions<TDate> & {
   extraOutlineAttributes?: TExtra
 }
 
 export type GenerateMainOptions<TExtra extends ReadonlyArray<string> = ReadonlyArray<string>> = {
   extraOutlineAttributes?: TExtra
 }
+
+export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateAny>>
+
+export type GenerateUtil<V> = BaseGenerateUtil<V, GenerateMainOptions>
 
 // #region reference
 export namespace Opml {

@@ -1,4 +1,4 @@
-import type { DateAny, ParseOptions, ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseDate,
@@ -9,7 +9,7 @@ import {
 } from '../../../common/utils.js'
 import type { AppNs } from '../common/types.js'
 
-export const parseControl: ParsePartialUtil<AppNs.Control> = (value) => {
+export const parseControl: ParseUtilPartial<AppNs.Control> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -21,7 +21,7 @@ export const parseControl: ParsePartialUtil<AppNs.Control> = (value) => {
   return trimObject(control)
 }
 
-export const retrieveEntry: ParsePartialUtil<AppNs.Entry<DateAny>, ParseOptions<DateAny>> = (
+export const retrieveEntry: ParseUtilPartial<AppNs.Entry<DateAny>, ParseMainOptions<DateAny>> = (
   value,
   options,
 ) => {

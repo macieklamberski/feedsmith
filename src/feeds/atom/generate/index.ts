@@ -1,11 +1,11 @@
 import { locales } from '../../../common/config.js'
-import type { DateLike, XmlGenerateMain } from '../../../common/types.js'
+import type { DateLike, GenerateMainXml } from '../../../common/types.js'
 import { generateXml } from '../../../common/utils.js'
 import type { Atom } from '../common/types.js'
 import { builder } from './config.js'
 import { generateFeed } from './utils.js'
 
-export const generate: XmlGenerateMain<Atom.Feed<DateLike>, Atom.Feed<Date, true>> = (
+export const generate: GenerateMainXml<Atom.Feed<DateLike>, Atom.Feed<Date, true>> = (
   value,
   options,
 ) => {

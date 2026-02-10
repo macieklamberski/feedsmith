@@ -1,5 +1,5 @@
 import { locales, namespacePrefixes, namespaceUris } from '../../../common/config.js'
-import type { ParseOptions } from '../../../common/types.js'
+import type { ParseMainOptions } from '../../../common/types.js'
 import { createNamespaceNormalizator } from '../../../common/utils.js'
 import { detectAtomFeed } from '../../../index.js'
 import type { Atom } from '../common/types.js'
@@ -8,7 +8,7 @@ import { retrieveFeed } from './utils.js'
 
 export const parse = <TDate = string>(
   value: unknown,
-  options?: ParseOptions<TDate>,
+  options?: ParseMainOptions<TDate>,
 ): Atom.Feed<TDate> => {
   if (!detectAtomFeed(value)) {
     throw new Error(locales.invalidFeedFormat)

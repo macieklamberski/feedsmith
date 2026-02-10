@@ -1,4 +1,4 @@
-import type { DateAny, ParseOptions, ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny } from '../../../common/types.js'
 import {
   detectNamespaces,
   isObject,
@@ -72,13 +72,13 @@ import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/parse/u
 import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
-import type { Rss } from '../common/types.js'
+import type { ParseUtilPartial, Rss } from '../common/types.js'
 
-export const parsePerson: ParsePartialUtil<Rss.Person> = (value) => {
+export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
   return parseSingularOf(value?.name ?? value, (value) => parseString(retrieveText(value)))
 }
 
-export const parseCategory: ParsePartialUtil<Rss.Category> = (value) => {
+export const parseCategory: ParseUtilPartial<Rss.Category> = (value) => {
   const category = {
     name: parseString(retrieveText(value)),
     domain: parseString(value?.['@domain']),
@@ -87,7 +87,7 @@ export const parseCategory: ParsePartialUtil<Rss.Category> = (value) => {
   return trimObject(category)
 }
 
-export const parseCloud: ParsePartialUtil<Rss.Cloud> = (value) => {
+export const parseCloud: ParseUtilPartial<Rss.Cloud> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -103,7 +103,7 @@ export const parseCloud: ParsePartialUtil<Rss.Cloud> = (value) => {
   return trimObject(cloud)
 }
 
-export const parseImage: ParsePartialUtil<Rss.Image> = (value) => {
+export const parseImage: ParseUtilPartial<Rss.Image> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -120,7 +120,7 @@ export const parseImage: ParsePartialUtil<Rss.Image> = (value) => {
   return trimObject(image)
 }
 
-export const parseTextInput: ParsePartialUtil<Rss.TextInput> = (value) => {
+export const parseTextInput: ParseUtilPartial<Rss.TextInput> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -135,15 +135,15 @@ export const parseTextInput: ParsePartialUtil<Rss.TextInput> = (value) => {
   return trimObject(textInput)
 }
 
-export const parseSkipHours: ParsePartialUtil<Array<number>> = (value) => {
+export const parseSkipHours: ParseUtilPartial<Array<number>> = (value) => {
   return trimArray(value?.hour, (value) => parseNumber(retrieveText(value)))
 }
 
-export const parseSkipDays: ParsePartialUtil<Array<string>> = (value) => {
+export const parseSkipDays: ParseUtilPartial<Array<string>> = (value) => {
   return trimArray(value?.day, (value) => parseString(retrieveText(value)))
 }
 
-export const parseEnclosure: ParsePartialUtil<Rss.Enclosure> = (value) => {
+export const parseEnclosure: ParseUtilPartial<Rss.Enclosure> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -157,7 +157,7 @@ export const parseEnclosure: ParsePartialUtil<Rss.Enclosure> = (value) => {
   return trimObject(enclosure)
 }
 
-export const parseGuid: ParsePartialUtil<Rss.Guid> = (value) => {
+export const parseGuid: ParseUtilPartial<Rss.Guid> = (value) => {
   const source = {
     value: parseString(retrieveText(value)),
     isPermaLink: parseBoolean(value?.['@ispermalink']),
@@ -166,7 +166,7 @@ export const parseGuid: ParsePartialUtil<Rss.Guid> = (value) => {
   return trimObject(source)
 }
 
-export const parseSource: ParsePartialUtil<Rss.Source> = (value) => {
+export const parseSource: ParseUtilPartial<Rss.Source> = (value) => {
   const source = {
     title: parseString(retrieveText(value)),
     url: parseString(value?.['@url']),
@@ -175,10 +175,7 @@ export const parseSource: ParsePartialUtil<Rss.Source> = (value) => {
   return trimObject(source)
 }
 
-export const parseItem: ParsePartialUtil<Rss.Item<DateAny>, ParseOptions<DateAny>> = (
-  value,
-  options,
-) => {
+export const parseItem: ParseUtilPartial<Rss.Item<DateAny>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -228,10 +225,7 @@ export const parseItem: ParsePartialUtil<Rss.Item<DateAny>, ParseOptions<DateAny
   return trimObject(item)
 }
 
-export const parseFeed: ParsePartialUtil<Rss.Feed<DateAny>, ParseOptions<DateAny>> = (
-  value,
-  options,
-) => {
+export const parseFeed: ParseUtilPartial<Rss.Feed<DateAny>> = (value, options) => {
   const channel = parseSingular(value?.channel)
 
   if (!isObject(channel)) {
@@ -293,9 +287,6 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<DateAny>, ParseOptions<DateAny
   return trimObject(feed)
 }
 
-export const retrieveFeed: ParsePartialUtil<Rss.Feed<DateAny>, ParseOptions<DateAny>> = (
-  value,
-  options,
-) => {
+export const retrieveFeed: ParseUtilPartial<Rss.Feed<DateAny>> = (value, options) => {
   return parseSingularOf(value?.rss, (value) => parseFeed(value, options))
 }

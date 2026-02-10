@@ -1,4 +1,4 @@
-import type { DateAny, ParseOptions, ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -11,7 +11,7 @@ import {
 } from '../../../common/utils.js'
 import type { PrismNs } from '../common/types.js'
 
-export const retrieveFeed: ParsePartialUtil<PrismNs.Feed<DateAny>, ParseOptions<DateAny>> = (
+export const retrieveFeed: ParseUtilPartial<PrismNs.Feed<DateAny>, ParseMainOptions<DateAny>> = (
   value,
   options,
 ) => {
@@ -204,7 +204,7 @@ export const retrieveFeed: ParsePartialUtil<PrismNs.Feed<DateAny>, ParseOptions<
   return trimObject(feed)
 }
 
-export const retrieveItem: ParsePartialUtil<PrismNs.Item<DateAny>, ParseOptions<DateAny>> = (
+export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOptions<DateAny>> = (
   value,
   options,
 ) => {
