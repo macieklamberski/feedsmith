@@ -98,7 +98,11 @@
       ],
       "content": {
         "value": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n        <h1>Comprehensive Atom 1.0 Entry</h1>\n        <p>This entry demonstrates all possible elements in an Atom 1.0 entry.</p>\n        <ul>\n          <li>Required elements: id, title, updated</li>\n          <li>Optional elements: author, category, content, contributor, link, published, rights, source, summary</li>\n        </ul>\n        <p>The content can contain rich <strong>XHTML</strong> markup.</p>\n      </div>",
-        "type": "xhtml"
+        "type": "xhtml",
+        "xml": {
+          "base": "http://example.org/entry/1",
+          "lang": "en-US"
+        }
       },
       "contributors": [
         {
@@ -268,7 +272,10 @@
       },
       "id": "tag:example.org,2023:entry-6",
       "summary": {
-        "value": "This is an English summary of a French entry to demonstrate language-specific content."
+        "value": "This is an English summary of a French entry to demonstrate language-specific content.",
+        "xml": {
+          "lang": "en"
+        }
       },
       "title": {
         "value": "Exemple de Contenu en Français"

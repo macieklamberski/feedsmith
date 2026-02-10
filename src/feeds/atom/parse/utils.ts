@@ -84,6 +84,7 @@ export const parseText: ParsePartialUtil<Atom.Text> = (value) => {
   const text = {
     value: parsedValue,
     type: parseString(value['@type']),
+    xml: retrieveXmlItemOrFeed(value),
   }
 
   return trimObject(text) as Atom.Text
@@ -104,6 +105,7 @@ export const parseContent: ParsePartialUtil<Atom.Content> = (value) => {
     value: parseString(retrieveText(value)),
     type: parseString(value['@type']),
     src: parseString(value['@src']),
+    xml: retrieveXmlItemOrFeed(value),
   }
 
   return trimObject(content)

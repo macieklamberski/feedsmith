@@ -43,12 +43,14 @@ export namespace Atom {
   export type Text = {
     value: string
     type?: string
+    xml?: XmlNs.ItemOrFeed
   }
 
   export type Content = {
     value?: string
     type?: string
     src?: string
+    xml?: XmlNs.ItemOrFeed
   }
 
   export type Link<TDate extends DateLike, TStrict extends boolean = false> = Strict<

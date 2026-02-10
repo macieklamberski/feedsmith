@@ -51,7 +51,7 @@ describe('createNamespaceSetter', () => {
 describe('generateText', () => {
   it('should generate text with value only', () => {
     const value = { value: 'Hello World' }
-    const expected = 'Hello World'
+    const expected = { '#text': 'Hello World' }
 
     expect(generateText(value)).toEqual(expected)
   })
@@ -90,7 +90,41 @@ describe('generateText', () => {
       value: 'Content',
       type: undefined,
     }
-    const expected = 'Content'
+    const expected = { '#text': 'Content' }
+
+    expect(generateText(value)).toEqual(expected)
+  })
+
+  it('should generate text with xml namespace attributes', () => {
+    const value = {
+      value: 'Contenu en français',
+      type: 'text',
+      xml: {
+        lang: 'fr',
+        base: 'http://example.org/',
+      },
+    }
+    const expected = {
+      '#text': 'Contenu en français',
+      '@type': 'text',
+      '@xml:lang': 'fr',
+      '@xml:base': 'http://example.org/',
+    }
+
+    expect(generateText(value)).toEqual(expected)
+  })
+
+  it('should generate text with only xml namespace attributes', () => {
+    const value = {
+      value: 'English summary',
+      xml: {
+        lang: 'en',
+      },
+    }
+    const expected = {
+      '#text': 'English summary',
+      '@xml:lang': 'en',
+    }
 
     expect(generateText(value)).toEqual(expected)
   })
@@ -99,7 +133,7 @@ describe('generateText', () => {
 describe('generateContent', () => {
   it('should generate content with value only', () => {
     const value = { value: 'Content text' }
-    const expected = 'Content text'
+    const expected = { '#text': 'Content text' }
 
     expect(generateContent(value)).toEqual(expected)
   })
@@ -140,6 +174,25 @@ describe('generateContent', () => {
     const value = {}
 
     expect(generateContent(value)).toBeUndefined()
+  })
+
+  it('should generate content with xml namespace attributes', () => {
+    const value = {
+      value: '<div>XHTML content</div>',
+      type: 'xhtml',
+      xml: {
+        base: 'http://example.org/entry/1',
+        lang: 'en-US',
+      },
+    }
+    const expected = {
+      '#cdata': '<div>XHTML content</div>',
+      '@type': 'xhtml',
+      '@xml:base': 'http://example.org/entry/1',
+      '@xml:lang': 'en-US',
+    }
+
+    expect(generateContent(value)).toEqual(expected)
   })
 })
 
@@ -388,9 +441,9 @@ describe('generateSource', () => {
       id: 'https://example.com/source',
       link: [{ '@href': 'https://example.com' }],
       logo: 'https://example.com/logo.png',
-      rights: 'Copyright 2023',
-      subtitle: 'Source subtitle',
-      title: 'Source Title',
+      rights: { '#text': 'Copyright 2023' },
+      subtitle: { '#text': 'Source subtitle' },
+      title: { '#text': 'Source Title' },
       updated: '2023-03-15T12:00:00.000Z',
     }
 
@@ -404,7 +457,7 @@ describe('generateSource', () => {
     }
     const expected = {
       id: 'https://example.com/source',
-      title: 'Minimal Source',
+      title: { '#text': 'Minimal Source' },
     }
 
     expect(generateSource(value)).toEqual(expected)
@@ -420,7 +473,7 @@ describe('generateSource', () => {
     }
     const expected = {
       id: 'https://example.com/source',
-      title: 'Source with empty arrays',
+      title: { '#text': 'Source with empty arrays' },
     }
 
     expect(generateSource(value)).toEqual(expected)
@@ -434,7 +487,7 @@ describe('generateSource', () => {
     }
     const expected = {
       id: 'https://example.com/source',
-      title: 'Source with invalid date',
+      title: { '#text': 'Source with invalid date' },
     }
 
     expect(generateSource(value)).toEqual(expected)
@@ -480,15 +533,15 @@ describe('generateEntry', () => {
     const expected = {
       author: [{ name: 'John Doe' }],
       category: [{ '@term': 'technology' }],
-      content: 'Entry content here',
+      content: { '#text': 'Entry content here' },
       contributor: [{ name: 'Jane Smith' }],
       id: 'https://example.com/entry/1',
       link: [{ '@href': 'https://example.com/entry/1' }],
       published: '2023-03-10T08:00:00.000Z',
-      rights: 'Copyright 2023',
-      source: { id: 'https://example.com/source', title: 'Source' },
-      summary: 'Entry summary',
-      title: 'Entry Title',
+      rights: { '#text': 'Copyright 2023' },
+      source: { id: 'https://example.com/source', title: { '#text': 'Source' } },
+      summary: { '#text': 'Entry summary' },
+      title: { '#text': 'Entry Title' },
       updated: '2023-03-15T12:00:00.000Z',
     }
 
@@ -503,7 +556,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Minimal Entry',
+      title: { '#text': 'Minimal Entry' },
       updated: '2023-03-15T12:00:00.000Z',
     }
 
@@ -521,7 +574,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with empty arrays',
+      title: { '#text': 'Entry with empty arrays' },
       updated: '2023-03-15T12:00:00.000Z',
     }
 
@@ -537,7 +590,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with invalid dates',
+      title: { '#text': 'Entry with invalid dates' },
     }
 
     expect(generateEntry(value)).toEqual(expected)
@@ -571,7 +624,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with namespaces',
+      title: { '#text': 'Entry with namespaces' },
     }
 
     expect(generateEntry(value, { asNamespace: true })).toEqual(expected)
@@ -593,7 +646,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with namespaces',
+      title: { '#text': 'Entry with namespaces' },
       updated: '2023-03-15T12:00:00.000Z',
       'dc:creator': ['Jane Smith'],
       'dc:date': ['2023-02-01T00:00:00.000Z'],
@@ -613,7 +666,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       'atom:id': 'https://example.com/entry/1',
-      'atom:title': 'Entry with prefix',
+      'atom:title': { '#text': 'Entry with prefix' },
       'atom:updated': '2023-03-15T12:00:00.000Z',
     }
 
@@ -630,7 +683,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       'atom:id': 'https://example.com/entry/1',
-      'atom:title': 'Entry with prefix and namespaces',
+      'atom:title': { '#text': 'Entry with prefix and namespaces' },
     }
 
     expect(generateEntry(value, { prefix: 'atom:', asNamespace: true })).toEqual(expected)
@@ -657,7 +710,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with DC namespace',
+      title: { '#text': 'Entry with DC namespace' },
       updated: '2023-03-15T12:00:00.000Z',
       'dc:creator': ['Jane Smith'],
     }
@@ -676,7 +729,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with Slash namespace',
+      title: { '#text': 'Entry with Slash namespace' },
       updated: '2023-03-15T12:00:00.000Z',
       'slash:section': 'Technology',
     }
@@ -695,7 +748,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with Threading namespace',
+      title: { '#text': 'Entry with Threading namespace' },
       updated: '2023-03-15T12:00:00.000Z',
       'thr:total': 42,
     }
@@ -716,7 +769,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with Media namespace',
+      title: { '#text': 'Entry with Media namespace' },
       updated: '2023-03-15T12:00:00.000Z',
       'media:title': {
         '#text': 'Media Entry Title',
@@ -737,7 +790,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with iTunes namespace',
+      title: { '#text': 'Entry with iTunes namespace' },
       updated: '2023-03-15T12:00:00.000Z',
       'itunes:title': 'Episode 1 - Special Title',
     }
@@ -757,7 +810,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with georss namespace',
+      title: { '#text': 'Entry with georss namespace' },
       updated: '2023-03-15T12:00:00.000Z',
       'georss:point': '45.256 -71.92',
       'georss:featureName': 'Boston',
@@ -778,7 +831,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with DCTerms namespace',
+      title: { '#text': 'Entry with DCTerms namespace' },
       updated: '2023-03-15T12:00:00.000Z',
       'dcterms:created': ['2023-02-01T00:00:00.000Z'],
       'dcterms:license': ['MIT License'],
@@ -799,7 +852,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with WFW namespace',
+      title: { '#text': 'Entry with WFW namespace' },
       updated: '2023-03-15T12:00:00.000Z',
       'wfw:comment': 'https://example.com/comments/1',
       'wfw:commentRss': 'https://example.com/comments/1/feed',
@@ -820,7 +873,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with Pingback namespace',
+      title: { '#text': 'Entry with Pingback namespace' },
       updated: '2023-03-15T12:00:00.000Z',
       'pingback:server': 'https://example.com/xmlrpc.php',
       'pingback:target': 'https://referenced-blog.com/article',
@@ -843,7 +896,7 @@ describe('generateEntry', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:pingback': 'http://madskills.com/public/xml/rss/module/pingback/',
         id: 'https://example.com/feed',
-        title: 'Feed with Pingback namespace',
+        title: { '#text': 'Feed with Pingback namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         'pingback:to': 'https://example.com/pingback-service',
       },
@@ -864,7 +917,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with Trackback namespace',
+      title: { '#text': 'Entry with Trackback namespace' },
       updated: '2023-03-15T12:00:00.000Z',
       'trackback:ping': 'https://example.com/trackback/123',
       'trackback:about': ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
@@ -889,7 +942,7 @@ describe('generateEntry', () => {
         '@xmlns:admin': 'http://webns.net/mvcb/',
         '@xmlns:rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
         id: 'https://example.com/feed',
-        title: 'Feed with Admin namespace',
+        title: { '#text': 'Feed with Admin namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         'admin:errorReportsTo': {
           '@rdf:resource': 'mailto:webmaster@example.com',
@@ -915,7 +968,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with ccREL namespace',
+      title: { '#text': 'Entry with ccREL namespace' },
       updated: '2023-03-15T12:00:00.000Z',
       'cc:license': 'https://creativecommons.org/licenses/by/4.0/',
       'cc:morePermissions': 'https://example.com/additional-permissions',
@@ -938,7 +991,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with PSC chapters',
+      title: { '#text': 'Entry with PSC chapters' },
       updated: '2023-03-15T12:00:00.000Z',
       'psc:chapters': {
         'psc:chapter': [
@@ -970,7 +1023,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with YouTube namespace',
+      title: { '#text': 'Entry with YouTube namespace' },
       updated: '2023-03-15T12:00:00.000Z',
       'yt:videoId': 'dQw4w9WgXcQ',
       'yt:channelId': 'UC123456789',
@@ -990,7 +1043,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with Creative Commons namespace',
+      title: { '#text': 'Entry with Creative Commons namespace' },
       updated: '2023-03-15T12:00:00.000Z',
       'creativeCommons:license': ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
     }
@@ -1012,7 +1065,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: 'Entry with Google Play namespace',
+      title: { '#text': 'Entry with Google Play namespace' },
       updated: '2023-03-15T12:00:00.000Z',
       'googleplay:author': 'Episode Guest Speaker',
       'googleplay:description': 'A detailed episode description',
@@ -1051,10 +1104,10 @@ describe('generateFeed', () => {
       feed: {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         id: 'https://example.com/feed',
-        title: 'Example Feed',
+        title: { '#text': 'Example Feed' },
         updated: '2023-03-15T12:00:00.000Z',
-        subtitle: 'Example feed subtitle',
-        rights: 'Copyright 2023',
+        subtitle: { '#text': 'Example feed subtitle' },
+        rights: { '#text': 'Copyright 2023' },
         icon: 'https://example.com/icon.png',
         logo: 'https://example.com/logo.png',
         author: [
@@ -1087,7 +1140,7 @@ describe('generateFeed', () => {
         entry: [
           {
             id: 'https://example.com/entry/1',
-            title: 'Example Entry',
+            title: { '#text': 'Example Entry' },
             updated: '2023-03-15T12:00:00.000Z',
           },
         ],
@@ -1107,7 +1160,7 @@ describe('generateFeed', () => {
       feed: {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         id: 'https://example.com/feed',
-        title: 'Minimal Feed',
+        title: { '#text': 'Minimal Feed' },
         updated: '2023-03-15T12:00:00.000Z',
       },
     }
@@ -1129,7 +1182,7 @@ describe('generateFeed', () => {
       feed: {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         id: 'https://example.com/feed',
-        title: 'Feed with empty arrays',
+        title: { '#text': 'Feed with empty arrays' },
         updated: '2023-03-15T12:00:00.000Z',
       },
     }
@@ -1147,7 +1200,7 @@ describe('generateFeed', () => {
       feed: {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         id: 'https://example.com/feed',
-        title: 'Feed with invalid date',
+        title: { '#text': 'Feed with invalid date' },
       },
     }
 
@@ -1170,11 +1223,11 @@ describe('generateFeed', () => {
       feed: {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         id: 'https://example.com/feed',
-        title: 'Feed with mixed entries',
+        title: { '#text': 'Feed with mixed entries' },
         updated: '2023-03-15T12:00:00.000Z',
         entry: [
-          { id: 'https://example.com/entry/1', title: 'Valid entry' },
-          { id: 'https://example.com/entry/2', title: 'Another valid entry' },
+          { id: 'https://example.com/entry/1', title: { '#text': 'Valid entry' } },
+          { id: 'https://example.com/entry/2', title: { '#text': 'Another valid entry' } },
         ],
       },
     }
@@ -1206,12 +1259,12 @@ describe('generateFeed', () => {
     const expected = {
       feed: {
         id: 'https://example.com/feed',
-        title: 'Feed with asNamespace',
+        title: { '#text': 'Feed with asNamespace' },
         updated: '2023-03-15T12:00:00.000Z',
         entry: [
           {
             id: 'https://example.com/entry/1',
-            title: 'Entry 1',
+            title: { '#text': 'Entry 1' },
           },
         ],
       },
@@ -1235,7 +1288,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
         id: 'https://example.com/feed',
-        title: 'Feed with namespaces',
+        title: { '#text': 'Feed with namespaces' },
         updated: '2023-03-15T12:00:00.000Z',
         'dc:creator': ['Jane Smith'],
         'dc:rights': ['Copyright 2023'],
@@ -1260,11 +1313,11 @@ describe('generateFeed', () => {
     const expected = {
       feed: {
         'atom:id': 'https://example.com/feed',
-        'atom:title': 'Feed with prefix',
+        'atom:title': { '#text': 'Feed with prefix' },
         'atom:entry': [
           {
             'atom:id': 'https://example.com/entry/1',
-            'atom:title': 'Entry 1',
+            'atom:title': { '#text': 'Entry 1' },
           },
         ],
       },
@@ -1284,7 +1337,7 @@ describe('generateFeed', () => {
     const expected = {
       feed: {
         'atom:id': 'https://example.com/feed',
-        'atom:title': 'Feed with prefix and namespaces',
+        'atom:title': { '#text': 'Feed with prefix and namespaces' },
       },
     }
 
@@ -1325,7 +1378,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
         id: 'https://example.com/feed',
-        title: 'Feed with DC namespace',
+        title: { '#text': 'Feed with DC namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         'dc:creator': ['John Doe'],
       },
@@ -1348,7 +1401,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:sy': 'http://purl.org/rss/1.0/modules/syndication/',
         id: 'https://example.com/feed',
-        title: 'Feed with SY namespace',
+        title: { '#text': 'Feed with SY namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         'sy:updatePeriod': 'hourly',
       },
@@ -1402,7 +1455,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:media': 'http://search.yahoo.com/mrss/',
         id: 'https://example.com/feed',
-        title: 'Feed with Media namespace',
+        title: { '#text': 'Feed with Media namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         'media:title': {
           '#text': 'Feed Media Title',
@@ -1473,7 +1526,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
         id: 'https://example.com/feed',
-        title: 'Feed with iTunes namespace',
+        title: { '#text': 'Feed with iTunes namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         'itunes:image': {
           '@href': 'https://example.com/podcast-cover.jpg',
@@ -1516,7 +1569,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:georss': 'http://www.georss.org/georss',
         id: 'https://example.com/feed',
-        title: 'Feed with georss namespace',
+        title: { '#text': 'Feed with georss namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         'georss:point': '45.256 -71.92',
         'georss:featureName': 'Boston',
@@ -1552,14 +1605,14 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:geo': 'http://www.w3.org/2003/01/geo/wgs84_pos#',
         id: 'http://example.com/feed',
-        title: 'Locations Feed',
+        title: { '#text': 'Locations Feed' },
         updated: '2024-01-10T12:00:00.000Z',
         'geo:lat': 37.7749,
         'geo:long': -122.4194,
         entry: [
           {
             id: 'http://example.com/entry/1',
-            title: 'Example Place',
+            title: { '#text': 'Example Place' },
             updated: '2024-01-10T12:00:00.000Z',
             'geo:lat': 37.808,
             'geo:long': -122.4177,
@@ -1586,7 +1639,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:dcterms': 'http://purl.org/dc/terms/',
         id: 'https://example.com/feed',
-        title: 'Feed with DCTerms namespace',
+        title: { '#text': 'Feed with DCTerms namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         'dcterms:created': ['2023-01-01T00:00:00.000Z'],
         'dcterms:license': ['Creative Commons Attribution 4.0'],
@@ -1611,7 +1664,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:cc': 'http://creativecommons.org/ns#',
         id: 'https://example.com/feed',
-        title: 'Feed with ccREL namespace',
+        title: { '#text': 'Feed with ccREL namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         'cc:license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
         'cc:morePermissions': 'https://example.com/commercial-license',
@@ -1635,7 +1688,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:creativeCommons': 'http://backend.userland.com/creativeCommonsRssModule',
         id: 'https://example.com/feed',
-        title: 'Feed with Creative Commons namespace',
+        title: { '#text': 'Feed with Creative Commons namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         'creativeCommons:license': ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
       },
@@ -1666,7 +1719,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:opensearch': 'http://a9.com/-/spec/opensearch/1.1/',
         id: 'http://example.com/search',
-        title: 'Search Results',
+        title: { '#text': 'Search Results' },
         updated: '2024-01-10T12:00:00.000Z',
         'opensearch:totalResults': 1000,
         'opensearch:startIndex': 21,
@@ -1718,7 +1771,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:arxiv': 'http://arxiv.org/schemas/atom',
         id: 'http://arxiv.org/api/query',
-        title: 'arXiv Query Results',
+        title: { '#text': 'arXiv Query Results' },
         updated: '2024-01-10T12:00:00.000Z',
         entry: [
           {
@@ -1729,7 +1782,7 @@ describe('generateFeed', () => {
               },
             ],
             id: 'http://arxiv.org/abs/2403.12345v1',
-            title: 'Example Paper',
+            title: { '#text': 'Example Paper' },
             updated: '2024-03-15T12:00:00.000Z',
             'arxiv:comment': '23 pages, 8 figures',
             'arxiv:doi': '10.1234/example',
@@ -1761,7 +1814,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:yt': 'http://www.youtube.com/xml/schemas/2015',
         id: 'https://example.com/feed',
-        title: 'Feed with YouTube namespace',
+        title: { '#text': 'Feed with YouTube namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         'yt:channelId': 'UC123456789',
         'yt:playlistId': 'PL123456789',
@@ -1803,18 +1856,18 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:app': 'http://www.w3.org/2007/app',
         id: 'http://example.com/blog',
-        title: 'My Blog',
+        title: { '#text': 'My Blog' },
         updated: '2024-03-15T16:00:00.000Z',
         entry: [
           {
             id: 'http://example.com/blog/post/1',
-            title: 'Published Post',
+            title: { '#text': 'Published Post' },
             updated: '2024-03-15T16:00:00.000Z',
             'app:edited': '2024-03-15T14:30:00.000Z',
           },
           {
             id: 'http://example.com/blog/post/2',
-            title: 'Draft Post',
+            title: { '#text': 'Draft Post' },
             updated: '2024-03-15T15:00:00.000Z',
             'app:edited': '2024-03-15T15:00:00.000Z',
             'app:control': {
@@ -1849,7 +1902,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:googleplay': 'https://www.google.com/schemas/play-podcasts/1.0/',
         id: 'https://example.com/feed',
-        title: 'Podcast with Google Play namespace',
+        title: { '#text': 'Podcast with Google Play namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         'googleplay:author': 'Podcast Host',
         'googleplay:description': 'A great podcast about technology',
@@ -1892,12 +1945,12 @@ describe('generateFeed', () => {
         '@xml:lang': 'en',
         '@xml:base': 'http://example.org/',
         id: 'https://example.com/feed',
-        title: 'Feed with XML namespace',
+        title: { '#text': 'Feed with XML namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         entry: [
           {
             id: 'https://example.com/entry/1',
-            title: 'Entry with XML namespace',
+            title: { '#text': 'Entry with XML namespace' },
             updated: '2023-03-15T12:00:00.000Z',
             '@xml:lang': 'en-US',
             '@xml:base': 'http://example.org/entry/1/',

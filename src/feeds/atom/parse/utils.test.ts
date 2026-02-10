@@ -157,6 +157,40 @@ describe('parseText', () => {
     expect(parseText(123)).toBeUndefined()
   })
 
+  it('should parse object with xml namespace attributes', () => {
+    const value = {
+      '#text': 'Contenu en français',
+      '@type': 'text',
+      '@xml:lang': 'fr',
+      '@xml:base': 'http://example.org/',
+    }
+    const expected = {
+      value: 'Contenu en français',
+      type: 'text',
+      xml: {
+        lang: 'fr',
+        base: 'http://example.org/',
+      },
+    }
+
+    expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should parse object with only xml namespace attributes', () => {
+    const value = {
+      '#text': 'English summary',
+      '@xml:lang': 'en',
+    }
+    const expected = {
+      value: 'English summary',
+      xml: {
+        lang: 'en',
+      },
+    }
+
+    expect(parseText(value)).toEqual(expected)
+  })
+
   it('should return undefined for object with empty text', () => {
     const value = { '#text': '' }
 
@@ -209,6 +243,25 @@ describe('parseContent', () => {
 
   it('should return undefined for empty string', () => {
     expect(parseContent('')).toBeUndefined()
+  })
+
+  it('should parse object with xml namespace attributes', () => {
+    const value = {
+      '#text': '<div>XHTML content</div>',
+      '@type': 'xhtml',
+      '@xml:base': 'http://example.org/entry/1',
+      '@xml:lang': 'en-US',
+    }
+    const expected = {
+      value: '<div>XHTML content</div>',
+      type: 'xhtml',
+      xml: {
+        base: 'http://example.org/entry/1',
+        lang: 'en-US',
+      },
+    }
+
+    expect(parseContent(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object, non-string input', () => {

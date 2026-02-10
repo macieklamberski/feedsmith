@@ -62,27 +62,10 @@ export const generateText: GenerateUtil<Atom.Text> = (text) => {
     return
   }
 
-  const textContent = generateCdataString(text.value)
-  const typeAttr = generatePlainString(text.type)
-
-  // If no type attribute, return text/CDATA content directly
-  if (!typeAttr) {
-    return textContent
-  }
-
-  // If type attribute is present, need to combine with text content
-  if (isObject(textContent)) {
-    // CDATA case: { '#cdata': value }
-    return trimObject({
-      ...textContent,
-      '@type': typeAttr,
-    })
-  }
-
-  // Plain text case
   return trimObject({
-    '#text': textContent,
-    '@type': typeAttr,
+    ...generateTextOrCdataString(text.value),
+    '@type': generatePlainString(text.type),
+    ...generateXmlItemOrFeed(text.xml),
   })
 }
 
@@ -91,30 +74,11 @@ export const generateContent: GenerateUtil<Atom.Content> = (content) => {
     return
   }
 
-  const textContent = generateCdataString(content.value)
-  const typeAttr = generatePlainString(content.type)
-  const srcAttr = generatePlainString(content.src)
-
-  // If no type or src attributes, return text/CDATA content directly
-  if (!typeAttr && !srcAttr) {
-    return textContent
-  }
-
-  // If type or src attributes are present, need to combine with text content
-  if (isObject(textContent)) {
-    // CDATA case: { '#cdata': value }
-    return trimObject({
-      ...textContent,
-      '@type': typeAttr,
-      '@src': srcAttr,
-    })
-  }
-
-  // Plain text case (or no text content for src-only)
   return trimObject({
-    '#text': textContent,
-    '@type': typeAttr,
-    '@src': srcAttr,
+    ...generateTextOrCdataString(content.value),
+    '@type': generatePlainString(content.type),
+    '@src': generatePlainString(content.src),
+    ...generateXmlItemOrFeed(content.xml),
   })
 }
 
