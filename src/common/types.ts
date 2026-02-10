@@ -65,7 +65,7 @@ export type GenerateUtil<V, O = undefined> = (
   options?: O,
 ) => Unreliable | undefined
 
-export type ParseMainOptions<TDate = string> = {
+export type ParseMainOptions<TDate> = {
   maxItems?: number
   parseDateFn?: (raw: string) => TDate
 }
@@ -79,7 +79,7 @@ export type XmlStylesheet = {
   alternate?: boolean
 }
 
-export type GenerateMainXmlOptions<O = Record<string, unknown>, S extends boolean = false> = O & {
+export type GenerateMainXmlOptions<O, S extends boolean> = O & {
   strict?: S
   stylesheets?: Array<XmlStylesheet>
 }
@@ -89,7 +89,7 @@ export type GenerateMainXml<LV, SV, O = Record<string, unknown>> = <S extends bo
   options?: GenerateMainXmlOptions<O, S>,
 ) => string
 
-export type GenerateMainJsonOptions<O = Record<string, unknown>, S extends boolean = false> = O & {
+export type GenerateMainJsonOptions<O, S extends boolean> = O & {
   strict?: S
 }
 

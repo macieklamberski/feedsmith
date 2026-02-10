@@ -29,7 +29,7 @@ import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 import type { YtNs } from '../../../namespaces/yt/common/types.js'
 
-export type ParseMainOptions<TDate = string> = BaseParseMainOptions<TDate> & {
+export type ParseMainOptions<TDate> = BaseParseMainOptions<TDate> & {
   prefix?: string
   asNamespace?: boolean
 }

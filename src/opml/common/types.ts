@@ -9,7 +9,7 @@ import type {
 } from '../../common/types.js'
 
 export type ParseMainOptions<
-  TDate = string,
+  TDate,
   TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
 > = BaseParseMainOptions<TDate> & {
   extraOutlineAttributes?: TExtra
