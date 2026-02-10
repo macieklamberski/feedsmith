@@ -3,7 +3,7 @@ import { retrieveEntry, retrieveFeed } from './utils.js'
 
 describe('retrieveEntry', () => {
   const expectedFull = {
-    title: { value: 'Entry Title' },
+    title: 'Entry Title',
     id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
     updated: '2023-01-01T12:00:00Z',
     authors: [{ name: 'John Doe' }],
@@ -57,13 +57,13 @@ describe('retrieveEntry', () => {
 
 describe('retrieveFeed', () => {
   const expectedFull = {
-    title: { value: 'Feed Title' },
+    title: 'Feed Title',
     id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
     updated: '2023-01-01T12:00:00Z',
     links: [{ href: 'https://example.com/', rel: 'alternate' }],
     entries: [
       {
-        title: { value: 'Entry Title' },
+        title: 'Entry Title',
         id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       },
     ],

@@ -1,14 +1,10 @@
 {
   "id": "example-feed",
-  "title": {
-    "value": "Example Feed"
-  },
+  "title": "Example Feed",
   "entries": [
     {
       "id": "example-entry",
-      "title": {
-        "value": "Example Entry"
-      },
+      "title": "Example Entry",
       "authors": [
         {
           "name": "H1 Collaboration"

@@ -58,15 +58,7 @@ export const createNamespaceSetter = (prefix: string | undefined) => {
 }
 
 export const generateText: GenerateUtil<Atom.Text> = (text) => {
-  if (!isObject(text)) {
-    return
-  }
-
-  return trimObject({
-    ...generateTextOrCdataString(text.value),
-    '@type': generatePlainString(text.type),
-    ...generateXmlItemOrFeed(text.xml),
-  })
+  return generateCdataString(text)
 }
 
 export const generateContent: GenerateUtil<Atom.Content> = (content) => {

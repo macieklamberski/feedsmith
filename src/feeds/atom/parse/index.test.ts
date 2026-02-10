@@ -77,15 +77,15 @@ describe('parse', () => {
       </FeEd>
     `
     const expected = {
-      title: { value: 'Mixed Case Atom Feed' },
-      subtitle: { value: 'A test feed with mixed case tags' },
+      title: 'Mixed Case Atom Feed',
+      subtitle: 'A test feed with mixed case tags',
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
       updated: '2024-01-10T12:00:00Z',
       links: [
         { href: 'https://example.com/', rel: 'alternate' },
         { href: 'https://example.com/atom.xml', rel: 'self' },
       ],
-      rights: { value: 'Copyright 2024, Example Corp' },
+      rights: 'Copyright 2024, Example Corp',
       authors: [
         {
           name: 'John Doe',
@@ -115,7 +115,7 @@ describe('parse', () => {
       logo: 'https://example.com/logo.png',
       entries: [
         {
-          title: { value: 'First Entry' },
+          title: 'First Entry',
           id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
           links: [{ href: 'https://example.com/entry1', rel: 'alternate' }],
           published: '2024-01-01T12:00:00Z',
@@ -125,18 +125,18 @@ describe('parse', () => {
             type: 'html',
             value: '<p>This is the first entry in a mixed case Atom feed.</p>',
           },
-          summary: { value: 'Summary of the first entry' },
+          summary: 'Summary of the first entry',
           categories: [{ term: 'samples', label: 'Samples' }],
         },
         {
-          title: { value: 'Second Entry' },
+          title: 'Second Entry',
           id: 'urn:uuid:1225c695-cfb8-4ebb-bbbb-80da344efa6a',
           links: [{ href: 'https://example.com/entry2', rel: 'alternate' }],
           published: '2024-01-03T14:30:00Z',
           updated: '2024-01-03T15:45:00Z',
           authors: [{ name: 'Jane Smith' }],
           content: { type: 'text', value: 'This is the second entry in a mixed case Atom feed.' },
-          summary: { value: 'Summary of the second entry' },
+          summary: 'Summary of the second entry',
           categories: [{ term: 'docs', label: 'Documentation' }],
         },
       ],
@@ -170,22 +170,22 @@ describe('parse', () => {
       </feed>
     `
     const expected = {
-      title: { value: 'Test Feed' },
+      title: 'Test Feed',
       id: 'urn:uuid:test-feed',
       updated: '2024-01-10T12:00:00Z',
       entries: [
         {
-          title: { value: 'First' },
+          title: 'First',
           id: 'urn:uuid:1',
           updated: '2024-01-01T12:00:00Z',
         },
         {
-          title: { value: 'Second' },
+          title: 'Second',
           id: 'urn:uuid:2',
           updated: '2024-01-02T12:00:00Z',
         },
         {
-          title: { value: 'Third' },
+          title: 'Third',
           id: 'urn:uuid:3',
           updated: '2024-01-03T12:00:00Z',
         },
@@ -209,11 +209,11 @@ describe('parse', () => {
     `
     const expected = {
       id: 'example-feed',
-      title: { value: 'Example Feed' },
+      title: 'Example Feed',
       entries: [
         {
           id: 'example-entry',
-          title: { value: 'Example Entry' },
+          title: 'Example Entry',
         },
       ],
     }
@@ -267,7 +267,7 @@ describe('parse', () => {
       </feed>
     `
     const expected = {
-      title: { value: 'YouTube Channel Feed' },
+      title: 'YouTube Channel Feed',
       id: 'yt:channel:UCuAXFkgsw1L7xaCfnd5JJOw',
       updated: '2024-01-10T12:00:00Z',
       yt: {
@@ -276,7 +276,7 @@ describe('parse', () => {
       entries: [
         {
           id: 'yt:video:dQw4w9WgXcQ',
-          title: { value: 'Example YouTube Video' },
+          title: 'Example YouTube Video',
           updated: '2024-01-05T10:30:00Z',
           yt: {
             videoId: 'dQw4w9WgXcQ',
@@ -307,7 +307,7 @@ describe('parse', () => {
       </feed>
     `
     const expected = {
-      title: { value: 'YouTube Playlist Feed' },
+      title: 'YouTube Playlist Feed',
       id: 'yt:playlist:PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf',
       updated: '2024-01-10T12:00:00Z',
       yt: {
@@ -316,7 +316,7 @@ describe('parse', () => {
       entries: [
         {
           id: 'yt:video:OTYFJaT-Glk',
-          title: { value: 'Video in Playlist' },
+          title: 'Video in Playlist',
           updated: '2024-01-08T14:20:00Z',
           yt: {
             videoId: 'OTYFJaT-Glk',
@@ -345,12 +345,12 @@ describe('parse', () => {
         </feed>
       `
       const expected = {
-        title: { value: 'Simple Feed' },
+        title: 'Simple Feed',
         id: 'urn:uuid:12345',
         updated: '2024-01-01T00:00:00Z',
         entries: [
           {
-            title: { value: 'Simple Entry' },
+            title: 'Simple Entry',
             id: 'urn:uuid:67890',
             updated: '2024-01-01T00:00:00Z',
           },
@@ -375,12 +375,12 @@ describe('parse', () => {
         </feed>
       `
       const expected = {
-        title: { value: 'Test Feed' },
+        title: 'Test Feed',
         id: 'urn:uuid:12345',
         updated: '2024-01-01T00:00:00Z',
         entries: [
           {
-            title: { value: 'Test Entry' },
+            title: 'Test Entry',
             id: 'urn:uuid:67890',
             updated: '2024-01-01T00:00:00Z',
           },
@@ -405,12 +405,12 @@ describe('parse', () => {
         </a:feed>
       `
       const expected = {
-        title: { value: 'Test Feed' },
+        title: 'Test Feed',
         id: 'urn:uuid:12345',
         updated: '2024-01-01T00:00:00Z',
         entries: [
           {
-            title: { value: 'Test Entry' },
+            title: 'Test Entry',
             id: 'urn:uuid:67890',
             updated: '2024-01-01T00:00:00Z',
           },
@@ -436,12 +436,12 @@ describe('parse', () => {
         </feed>
       `
       const expected = {
-        title: { value: 'Atom Feed' },
+        title: 'Atom Feed',
         id: 'urn:uuid:12345',
         updated: '2024-01-01T00:00:00Z',
         entries: [
           {
-            title: { value: 'Entry Title' },
+            title: 'Entry Title',
             id: 'urn:uuid:67890',
             updated: '2024-01-01T00:00:00Z',
             dc: {
@@ -476,12 +476,12 @@ describe('parse', () => {
         </feed>
       `
       const expected = {
-        title: { value: 'Atom Feed' },
+        title: 'Atom Feed',
         id: 'urn:uuid:12345',
         updated: '2024-01-01T00:00:00Z',
         entries: [
           {
-            title: { value: 'Entry Title' },
+            title: 'Entry Title',
             id: 'urn:uuid:67890',
             updated: '2024-01-01T00:00:00Z',
             dc: {
@@ -490,7 +490,7 @@ describe('parse', () => {
             },
           },
           {
-            title: { value: 'Entry Without Namespace' },
+            title: 'Entry Without Namespace',
             id: 'urn:uuid:abcdef',
             updated: '2024-01-01T00:00:00Z',
           },
@@ -516,12 +516,12 @@ describe('parse', () => {
         </FEED>
       `
       const expected = {
-        title: { value: 'Feed Title' },
+        title: 'Feed Title',
         id: 'urn:uuid:12345',
         updated: '2024-01-01T00:00:00Z',
         entries: [
           {
-            title: { value: 'Entry Title' },
+            title: 'Entry Title',
             id: 'urn:uuid:67890',
             updated: '2024-01-01T00:00:00Z',
             dc: {
@@ -556,12 +556,12 @@ describe('parse', () => {
         </feed>
       `
       const expected = {
-        title: { value: 'Atom Feed' },
+        title: 'Atom Feed',
         id: 'urn:uuid:12345',
         updated: '2024-01-01T00:00:00Z',
         entries: [
           {
-            title: { value: 'Entry 1' },
+            title: 'Entry 1',
             id: 'urn:uuid:67890',
             updated: '2024-01-01T00:00:00Z',
             media: {
@@ -573,10 +573,10 @@ describe('parse', () => {
             },
           },
           {
-            title: { value: 'Entry 2' },
+            title: 'Entry 2',
             id: 'urn:uuid:abcdef',
             updated: '2024-01-01T00:00:00Z',
-            summary: { value: 'No media namespace here' },
+            summary: 'No media namespace here',
           },
         ],
       }
@@ -608,12 +608,12 @@ describe('parse', () => {
         </feed>
       `
       const expected = {
-        title: { value: 'Atom Feed' },
+        title: 'Atom Feed',
         id: 'urn:uuid:12345',
         updated: '2024-01-01T00:00:00Z',
         entries: [
           {
-            title: { value: 'Entry Title' },
+            title: 'Entry Title',
             id: 'urn:uuid:67890',
             updated: '2024-01-01T00:00:00Z',
             dc: {
@@ -658,12 +658,12 @@ describe('parse', () => {
         </feed>
       `
       const expected = {
-        title: { value: 'Atom Feed' },
+        title: 'Atom Feed',
         id: 'urn:uuid:12345',
         updated: '2024-01-01T00:00:00Z',
         entries: [
           {
-            title: { value: 'Entry Title' },
+            title: 'Entry Title',
             id: 'urn:uuid:67890',
             updated: '2024-01-01T00:00:00Z',
             dc: {
@@ -690,7 +690,7 @@ describe('parse', () => {
         </feed>
       `
       const expected = {
-        title: { value: 'Atom Feed with Custom Default NS' },
+        title: 'Atom Feed with Custom Default NS',
         id: 'urn:uuid:12345',
         updated: '2024-01-01T00:00:00Z',
       }
@@ -715,10 +715,10 @@ describe('parse', () => {
         </feed>
       `
       const expected = {
-        title: { value: 'Incomplete Feed' },
+        title: 'Incomplete Feed',
         entries: [
           {
-            title: { value: 'Incomplete Entry' },
+            title: 'Incomplete Entry',
             dc: {
               creators: ['John Doe'],
             },
@@ -748,12 +748,12 @@ describe('parse', () => {
         </feed>
       `
       const expected = {
-        title: { value: 'Feed Title' },
+        title: 'Feed Title',
         id: 'urn:uuid:feed',
         updated: '2024-01-01T00:00:00Z',
         entries: [
           {
-            title: { value: 'Entry with different default namespace' },
+            title: 'Entry with different default namespace',
             id: 'urn:uuid:entry',
             updated: '2024-01-01T00:00:00Z',
           },
@@ -782,7 +782,7 @@ describe('parse', () => {
         </feed>
       `
       const expected = {
-        title: { value: 'Feed with GooglePlay' },
+        title: 'Feed with GooglePlay',
         id: 'urn:uuid:feed-id',
         updated: '2024-01-01T00:00:00Z',
         googleplay: {
@@ -791,7 +791,7 @@ describe('parse', () => {
         },
         entries: [
           {
-            title: { value: 'Episode with GooglePlay' },
+            title: 'Episode with GooglePlay',
             id: 'urn:uuid:entry-id',
             updated: '2024-01-01T00:00:00Z',
             googleplay: {
@@ -822,12 +822,12 @@ describe('parse', () => {
           </feed>
         `
         const expected = {
-          title: { value: 'Test' },
+          title: 'Test',
           id: 'urn:uuid:feed',
           updated: '2024-01-01T00:00:00Z',
           entries: [
             {
-              title: { value: 'Entry' },
+              title: 'Entry',
               id: 'urn:uuid:entry',
               updated: '2024-01-01T00:00:00Z',
               dc: {
@@ -856,12 +856,12 @@ describe('parse', () => {
           </feed>
         `
         const expected = {
-          title: { value: 'Test' },
+          title: 'Test',
           id: 'urn:uuid:feed',
           updated: '2024-01-01T00:00:00Z',
           entries: [
             {
-              title: { value: 'Entry' },
+              title: 'Entry',
               id: 'urn:uuid:entry',
               updated: '2024-01-01T00:00:00Z',
               dc: {
@@ -890,12 +890,12 @@ describe('parse', () => {
           </feed>
         `
         const expected = {
-          title: { value: 'Test' },
+          title: 'Test',
           id: 'urn:uuid:feed',
           updated: '2024-01-01T00:00:00Z',
           entries: [
             {
-              title: { value: 'Entry' },
+              title: 'Entry',
               id: 'urn:uuid:entry',
               updated: '2024-01-01T00:00:00Z',
               dc: {
@@ -924,12 +924,12 @@ describe('parse', () => {
           </feed>
         `
         const expected = {
-          title: { value: 'Test' },
+          title: 'Test',
           id: 'urn:uuid:feed',
           updated: '2024-01-01T00:00:00Z',
           entries: [
             {
-              title: { value: 'Entry' },
+              title: 'Entry',
               id: 'urn:uuid:entry',
               updated: '2024-01-01T00:00:00Z',
               dc: {
@@ -958,12 +958,12 @@ describe('parse', () => {
           </feed>
         `
         const expected = {
-          title: { value: 'Test' },
+          title: 'Test',
           id: 'urn:uuid:feed',
           updated: '2024-01-01T00:00:00Z',
           entries: [
             {
-              title: { value: 'Entry' },
+              title: 'Entry',
               id: 'urn:uuid:entry',
               updated: '2024-01-01T00:00:00Z',
               dc: {
@@ -992,12 +992,12 @@ describe('parse', () => {
           </feed>
         `
         const expected = {
-          title: { value: 'Test' },
+          title: 'Test',
           id: 'urn:uuid:feed',
           updated: '2024-01-01T00:00:00Z',
           entries: [
             {
-              title: { value: 'Entry' },
+              title: 'Entry',
               id: 'urn:uuid:entry',
               updated: '2024-01-01T00:00:00Z',
               dc: {
@@ -1027,12 +1027,12 @@ describe('parse', () => {
           </feed>
         `
         const expected = {
-          title: { value: 'Test' },
+          title: 'Test',
           id: 'urn:uuid:feed',
           updated: '2024-01-01T00:00:00Z',
           entries: [
             {
-              title: { value: 'Entry' },
+              title: 'Entry',
               id: 'urn:uuid:entry',
               updated: '2024-01-01T00:00:00Z',
               dcterms: {
@@ -1049,12 +1049,12 @@ describe('parse', () => {
 
     describe('Atom namespace URI variants', () => {
       const expected = {
-        title: { value: 'Test Feed' },
+        title: 'Test Feed',
         id: 'urn:uuid:feed-id',
         updated: '2024-01-01T00:00:00Z',
         entries: [
           {
-            title: { value: 'Test Entry' },
+            title: 'Test Entry',
             id: 'urn:uuid:entry-id',
             updated: '2024-01-01T00:00:00Z',
           },
@@ -1109,17 +1109,17 @@ describe('parse', () => {
 
       it('should limit entries to specified number', () => {
         const expected = {
-          title: { value: 'Test Feed' },
+          title: 'Test Feed',
           id: 'urn:uuid:feed-id',
           updated: '2024-01-01T00:00:00Z',
           entries: [
             {
-              title: { value: 'Entry 1' },
+              title: 'Entry 1',
               id: 'urn:uuid:entry-1',
               updated: '2024-01-01T00:00:00Z',
             },
             {
-              title: { value: 'Entry 2' },
+              title: 'Entry 2',
               id: 'urn:uuid:entry-2',
               updated: '2024-01-01T00:00:00Z',
             },
@@ -1131,7 +1131,7 @@ describe('parse', () => {
 
       it('should skip all entries when maxItems is 0', () => {
         const expected = {
-          title: { value: 'Test Feed' },
+          title: 'Test Feed',
           id: 'urn:uuid:feed-id',
           updated: '2024-01-01T00:00:00Z',
         }
@@ -1141,22 +1141,22 @@ describe('parse', () => {
 
       it('should return all entries when maxItems is undefined', () => {
         const expected = {
-          title: { value: 'Test Feed' },
+          title: 'Test Feed',
           id: 'urn:uuid:feed-id',
           updated: '2024-01-01T00:00:00Z',
           entries: [
             {
-              title: { value: 'Entry 1' },
+              title: 'Entry 1',
               id: 'urn:uuid:entry-1',
               updated: '2024-01-01T00:00:00Z',
             },
             {
-              title: { value: 'Entry 2' },
+              title: 'Entry 2',
               id: 'urn:uuid:entry-2',
               updated: '2024-01-01T00:00:00Z',
             },
             {
-              title: { value: 'Entry 3' },
+              title: 'Entry 3',
               id: 'urn:uuid:entry-3',
               updated: '2024-01-01T00:00:00Z',
             },

@@ -49,84 +49,24 @@ describe('createNamespaceSetter', () => {
 })
 
 describe('generateText', () => {
-  it('should generate text with value only', () => {
-    const value = { value: 'Hello World' }
-    const expected = { '#text': 'Hello World' }
-
-    expect(generateText(value)).toEqual(expected)
+  it('should generate text from string', () => {
+    expect(generateText('Hello World')).toBe('Hello World')
   })
 
-  it('should generate text with value and type', () => {
-    const value = {
-      value: 'HTML content',
-      type: 'html',
-    }
-    const expected = {
-      '#text': 'HTML content',
-      '@type': 'html',
-    }
-
-    expect(generateText(value)).toEqual(expected)
+  it('should wrap special characters in CDATA', () => {
+    expect(generateText('Hello & World')).toEqual({ '#cdata': 'Hello & World' })
   })
 
-  it('should return undefined for empty value', () => {
-    const value = { value: '' }
-
-    expect(generateText(value)).toBeUndefined()
+  it('should return undefined for empty string', () => {
+    expect(generateText('')).toBeUndefined()
   })
 
-  it('should return undefined for whitespace-only value', () => {
-    const value = { value: '   ' }
-
-    expect(generateText(value)).toBeUndefined()
+  it('should return undefined for whitespace-only string', () => {
+    expect(generateText('   ')).toBeUndefined()
   })
 
-  it('should return undefined for non-object input', () => {
+  it('should return undefined for undefined input', () => {
     expect(generateText(undefined)).toBeUndefined()
-  })
-
-  it('should filter out undefined type', () => {
-    const value = {
-      value: 'Content',
-      type: undefined,
-    }
-    const expected = { '#text': 'Content' }
-
-    expect(generateText(value)).toEqual(expected)
-  })
-
-  it('should generate text with xml namespace attributes', () => {
-    const value = {
-      value: 'Contenu en français',
-      type: 'text',
-      xml: {
-        lang: 'fr',
-        base: 'http://example.org/',
-      },
-    }
-    const expected = {
-      '#text': 'Contenu en français',
-      '@type': 'text',
-      '@xml:lang': 'fr',
-      '@xml:base': 'http://example.org/',
-    }
-
-    expect(generateText(value)).toEqual(expected)
-  })
-
-  it('should generate text with only xml namespace attributes', () => {
-    const value = {
-      value: 'English summary',
-      xml: {
-        lang: 'en',
-      },
-    }
-    const expected = {
-      '#text': 'English summary',
-      '@xml:lang': 'en',
-    }
-
-    expect(generateText(value)).toEqual(expected)
   })
 })
 
@@ -427,9 +367,9 @@ describe('generateSource', () => {
       id: 'https://example.com/source',
       links: [{ href: 'https://example.com' }],
       logo: 'https://example.com/logo.png',
-      rights: { value: 'Copyright 2023' },
-      subtitle: { value: 'Source subtitle' },
-      title: { value: 'Source Title' },
+      rights: 'Copyright 2023',
+      subtitle: 'Source subtitle',
+      title: 'Source Title',
       updated: date,
     }
     const expected = {
@@ -441,9 +381,9 @@ describe('generateSource', () => {
       id: 'https://example.com/source',
       link: [{ '@href': 'https://example.com' }],
       logo: 'https://example.com/logo.png',
-      rights: { '#text': 'Copyright 2023' },
-      subtitle: { '#text': 'Source subtitle' },
-      title: { '#text': 'Source Title' },
+      rights: 'Copyright 2023',
+      subtitle: 'Source subtitle',
+      title: 'Source Title',
       updated: '2023-03-15T12:00:00.000Z',
     }
 
@@ -453,11 +393,11 @@ describe('generateSource', () => {
   it('should generate source with minimal properties', () => {
     const value = {
       id: 'https://example.com/source',
-      title: { value: 'Minimal Source' },
+      title: 'Minimal Source',
     }
     const expected = {
       id: 'https://example.com/source',
-      title: { '#text': 'Minimal Source' },
+      title: 'Minimal Source',
     }
 
     expect(generateSource(value)).toEqual(expected)
@@ -466,14 +406,14 @@ describe('generateSource', () => {
   it('should handle empty arrays', () => {
     const value = {
       id: 'https://example.com/source',
-      title: { value: 'Source with empty arrays' },
+      title: 'Source with empty arrays',
       authors: [],
       categories: [],
       links: [],
     }
     const expected = {
       id: 'https://example.com/source',
-      title: { '#text': 'Source with empty arrays' },
+      title: 'Source with empty arrays',
     }
 
     expect(generateSource(value)).toEqual(expected)
@@ -482,12 +422,12 @@ describe('generateSource', () => {
   it('should handle invalid date objects', () => {
     const value = {
       id: 'https://example.com/source',
-      title: { value: 'Source with invalid date' },
+      title: 'Source with invalid date',
       updated: new Date('invalid-date'),
     }
     const expected = {
       id: 'https://example.com/source',
-      title: { '#text': 'Source with invalid date' },
+      title: 'Source with invalid date',
     }
 
     expect(generateSource(value)).toEqual(expected)
@@ -524,10 +464,10 @@ describe('generateEntry', () => {
       id: 'https://example.com/entry/1',
       links: [{ href: 'https://example.com/entry/1' }],
       published: new Date('2023-03-10T08:00:00Z'),
-      rights: { value: 'Copyright 2023' },
-      source: { id: 'https://example.com/source', title: { value: 'Source' } },
-      summary: { value: 'Entry summary' },
-      title: { value: 'Entry Title' },
+      rights: 'Copyright 2023',
+      source: { id: 'https://example.com/source', title: 'Source' },
+      summary: 'Entry summary',
+      title: 'Entry Title',
       updated: new Date('2023-03-15T12:00:00Z'),
     }
     const expected = {
@@ -538,10 +478,10 @@ describe('generateEntry', () => {
       id: 'https://example.com/entry/1',
       link: [{ '@href': 'https://example.com/entry/1' }],
       published: '2023-03-10T08:00:00.000Z',
-      rights: { '#text': 'Copyright 2023' },
-      source: { id: 'https://example.com/source', title: { '#text': 'Source' } },
-      summary: { '#text': 'Entry summary' },
-      title: { '#text': 'Entry Title' },
+      rights: 'Copyright 2023',
+      source: { id: 'https://example.com/source', title: 'Source' },
+      summary: 'Entry summary',
+      title: 'Entry Title',
       updated: '2023-03-15T12:00:00.000Z',
     }
 
@@ -551,12 +491,12 @@ describe('generateEntry', () => {
   it('should generate entry with minimal properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Minimal Entry' },
+      title: 'Minimal Entry',
       updated: new Date('2023-03-15T12:00:00Z'),
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Minimal Entry' },
+      title: 'Minimal Entry',
       updated: '2023-03-15T12:00:00.000Z',
     }
 
@@ -566,7 +506,7 @@ describe('generateEntry', () => {
   it('should handle empty arrays', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with empty arrays' },
+      title: 'Entry with empty arrays',
       updated: new Date('2023-03-15T12:00:00Z'),
       authors: [],
       categories: [],
@@ -574,7 +514,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with empty arrays' },
+      title: 'Entry with empty arrays',
       updated: '2023-03-15T12:00:00.000Z',
     }
 
@@ -584,13 +524,13 @@ describe('generateEntry', () => {
   it('should handle invalid date objects', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with invalid dates' },
+      title: 'Entry with invalid dates',
       published: new Date('invalid-date'),
       updated: new Date(Number.NaN),
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with invalid dates' },
+      title: 'Entry with invalid dates',
     }
 
     expect(generateEntry(value)).toEqual(expected)
@@ -609,7 +549,7 @@ describe('generateEntry', () => {
   it('should exclude namespace properties when asNamespace is true', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with namespaces' },
+      title: 'Entry with namespaces',
       dc: {
         creators: ['Jane Smith'],
         dates: [new Date('2023-02-01T00:00:00Z')],
@@ -624,7 +564,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with namespaces' },
+      title: 'Entry with namespaces',
     }
 
     expect(generateEntry(value, { asNamespace: true })).toEqual(expected)
@@ -633,7 +573,7 @@ describe('generateEntry', () => {
   it('should include namespace properties when asNamespace is false or undefined', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with namespaces' },
+      title: 'Entry with namespaces',
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creators: ['Jane Smith'],
@@ -646,7 +586,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with namespaces' },
+      title: 'Entry with namespaces',
       updated: '2023-03-15T12:00:00.000Z',
       'dc:creator': ['Jane Smith'],
       'dc:date': ['2023-02-01T00:00:00.000Z'],
@@ -661,12 +601,12 @@ describe('generateEntry', () => {
   it('should apply prefix when asNamespace is true', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with prefix' },
+      title: 'Entry with prefix',
       updated: new Date('2023-03-15T12:00:00Z'),
     }
     const expected = {
       'atom:id': 'https://example.com/entry/1',
-      'atom:title': { '#text': 'Entry with prefix' },
+      'atom:title': 'Entry with prefix',
       'atom:updated': '2023-03-15T12:00:00.000Z',
     }
 
@@ -676,14 +616,14 @@ describe('generateEntry', () => {
   it('should apply prefix and exclude namespaces when asNamespace is true', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with prefix and namespaces' },
+      title: 'Entry with prefix and namespaces',
       dc: {
         creators: ['Jane Smith'],
       },
     }
     const expected = {
       'atom:id': 'https://example.com/entry/1',
-      'atom:title': { '#text': 'Entry with prefix and namespaces' },
+      'atom:title': 'Entry with prefix and namespaces',
     }
 
     expect(generateEntry(value, { prefix: 'atom:', asNamespace: true })).toEqual(expected)
@@ -702,7 +642,7 @@ describe('generateEntry', () => {
   it('should generate entry with dc namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with DC namespace' },
+      title: 'Entry with DC namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creators: ['Jane Smith'],
@@ -710,7 +650,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with DC namespace' },
+      title: 'Entry with DC namespace',
       updated: '2023-03-15T12:00:00.000Z',
       'dc:creator': ['Jane Smith'],
     }
@@ -721,7 +661,7 @@ describe('generateEntry', () => {
   it('should generate entry with slash namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with Slash namespace' },
+      title: 'Entry with Slash namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       slash: {
         section: 'Technology',
@@ -729,7 +669,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with Slash namespace' },
+      title: 'Entry with Slash namespace',
       updated: '2023-03-15T12:00:00.000Z',
       'slash:section': 'Technology',
     }
@@ -740,7 +680,7 @@ describe('generateEntry', () => {
   it('should generate entry with thr namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with Threading namespace' },
+      title: 'Entry with Threading namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       thr: {
         total: 42,
@@ -748,7 +688,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with Threading namespace' },
+      title: 'Entry with Threading namespace',
       updated: '2023-03-15T12:00:00.000Z',
       'thr:total': 42,
     }
@@ -759,7 +699,7 @@ describe('generateEntry', () => {
   it('should generate entry with media namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with Media namespace' },
+      title: 'Entry with Media namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       media: {
         title: {
@@ -769,7 +709,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with Media namespace' },
+      title: 'Entry with Media namespace',
       updated: '2023-03-15T12:00:00.000Z',
       'media:title': {
         '#text': 'Media Entry Title',
@@ -782,7 +722,7 @@ describe('generateEntry', () => {
   it('should generate entry with itunes namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with iTunes namespace' },
+      title: 'Entry with iTunes namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       itunes: {
         title: 'Episode 1 - Special Title',
@@ -790,7 +730,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with iTunes namespace' },
+      title: 'Entry with iTunes namespace',
       updated: '2023-03-15T12:00:00.000Z',
       'itunes:title': 'Episode 1 - Special Title',
     }
@@ -801,7 +741,7 @@ describe('generateEntry', () => {
   it('should generate entry with georss namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with georss namespace' },
+      title: 'Entry with georss namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       georss: {
         point: { lat: 45.256, lng: -71.92 },
@@ -810,7 +750,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with georss namespace' },
+      title: 'Entry with georss namespace',
       updated: '2023-03-15T12:00:00.000Z',
       'georss:point': '45.256 -71.92',
       'georss:featureName': 'Boston',
@@ -822,7 +762,7 @@ describe('generateEntry', () => {
   it('should generate entry with dcterms namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with DCTerms namespace' },
+      title: 'Entry with DCTerms namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       dcterms: {
         created: [new Date('2023-02-01T00:00:00Z')],
@@ -831,7 +771,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with DCTerms namespace' },
+      title: 'Entry with DCTerms namespace',
       updated: '2023-03-15T12:00:00.000Z',
       'dcterms:created': ['2023-02-01T00:00:00.000Z'],
       'dcterms:license': ['MIT License'],
@@ -843,7 +783,7 @@ describe('generateEntry', () => {
   it('should generate entry with wfw namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with WFW namespace' },
+      title: 'Entry with WFW namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       wfw: {
         comment: 'https://example.com/comments/1',
@@ -852,7 +792,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with WFW namespace' },
+      title: 'Entry with WFW namespace',
       updated: '2023-03-15T12:00:00.000Z',
       'wfw:comment': 'https://example.com/comments/1',
       'wfw:commentRss': 'https://example.com/comments/1/feed',
@@ -864,7 +804,7 @@ describe('generateEntry', () => {
   it('should generate entry with pingback namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with Pingback namespace' },
+      title: 'Entry with Pingback namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       pingback: {
         server: 'https://example.com/xmlrpc.php',
@@ -873,7 +813,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with Pingback namespace' },
+      title: 'Entry with Pingback namespace',
       updated: '2023-03-15T12:00:00.000Z',
       'pingback:server': 'https://example.com/xmlrpc.php',
       'pingback:target': 'https://referenced-blog.com/article',
@@ -885,7 +825,7 @@ describe('generateEntry', () => {
   it('should generate feed with pingback namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with Pingback namespace' },
+      title: 'Feed with Pingback namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       pingback: {
         to: 'https://example.com/pingback-service',
@@ -896,7 +836,7 @@ describe('generateEntry', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:pingback': 'http://madskills.com/public/xml/rss/module/pingback/',
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with Pingback namespace' },
+        title: 'Feed with Pingback namespace',
         updated: '2023-03-15T12:00:00.000Z',
         'pingback:to': 'https://example.com/pingback-service',
       },
@@ -908,7 +848,7 @@ describe('generateEntry', () => {
   it('should generate entry with trackback namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with Trackback namespace' },
+      title: 'Entry with Trackback namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       trackback: {
         ping: 'https://example.com/trackback/123',
@@ -917,7 +857,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with Trackback namespace' },
+      title: 'Entry with Trackback namespace',
       updated: '2023-03-15T12:00:00.000Z',
       'trackback:ping': 'https://example.com/trackback/123',
       'trackback:about': ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
@@ -929,7 +869,7 @@ describe('generateEntry', () => {
   it('should generate feed with admin namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with Admin namespace' },
+      title: 'Feed with Admin namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
@@ -942,7 +882,7 @@ describe('generateEntry', () => {
         '@xmlns:admin': 'http://webns.net/mvcb/',
         '@xmlns:rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with Admin namespace' },
+        title: 'Feed with Admin namespace',
         updated: '2023-03-15T12:00:00.000Z',
         'admin:errorReportsTo': {
           '@rdf:resource': 'mailto:webmaster@example.com',
@@ -959,7 +899,7 @@ describe('generateEntry', () => {
   it('should generate entry with ccREL namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with ccREL namespace' },
+      title: 'Entry with ccREL namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       cc: {
         license: 'https://creativecommons.org/licenses/by/4.0/',
@@ -968,7 +908,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with ccREL namespace' },
+      title: 'Entry with ccREL namespace',
       updated: '2023-03-15T12:00:00.000Z',
       'cc:license': 'https://creativecommons.org/licenses/by/4.0/',
       'cc:morePermissions': 'https://example.com/additional-permissions',
@@ -980,7 +920,7 @@ describe('generateEntry', () => {
   it('should generate entry with psc namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with PSC chapters' },
+      title: 'Entry with PSC chapters',
       updated: new Date('2023-03-15T12:00:00Z'),
       psc: {
         chapters: [
@@ -991,7 +931,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with PSC chapters' },
+      title: 'Entry with PSC chapters',
       updated: '2023-03-15T12:00:00.000Z',
       'psc:chapters': {
         'psc:chapter': [
@@ -1014,7 +954,7 @@ describe('generateEntry', () => {
   it('should generate entry with yt namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with YouTube namespace' },
+      title: 'Entry with YouTube namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       yt: {
         videoId: 'dQw4w9WgXcQ',
@@ -1023,7 +963,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with YouTube namespace' },
+      title: 'Entry with YouTube namespace',
       updated: '2023-03-15T12:00:00.000Z',
       'yt:videoId': 'dQw4w9WgXcQ',
       'yt:channelId': 'UC123456789',
@@ -1035,7 +975,7 @@ describe('generateEntry', () => {
   it('should generate entry with creativecommons namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with Creative Commons namespace' },
+      title: 'Entry with Creative Commons namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       creativeCommons: {
         licenses: ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
@@ -1043,7 +983,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with Creative Commons namespace' },
+      title: 'Entry with Creative Commons namespace',
       updated: '2023-03-15T12:00:00.000Z',
       'creativeCommons:license': ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
     }
@@ -1054,7 +994,7 @@ describe('generateEntry', () => {
   it('should generate entry with googleplay namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
-      title: { value: 'Entry with Google Play namespace' },
+      title: 'Entry with Google Play namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       googleplay: {
         author: 'Episode Guest Speaker',
@@ -1065,7 +1005,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       id: 'https://example.com/entry/1',
-      title: { '#text': 'Entry with Google Play namespace' },
+      title: 'Entry with Google Play namespace',
       updated: '2023-03-15T12:00:00.000Z',
       'googleplay:author': 'Episode Guest Speaker',
       'googleplay:description': 'A detailed episode description',
@@ -1088,14 +1028,14 @@ describe('generateFeed', () => {
       id: 'https://example.com/feed',
       links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
       logo: 'https://example.com/logo.png',
-      rights: { value: 'Copyright 2023' },
-      subtitle: { value: 'Example feed subtitle' },
-      title: { value: 'Example Feed' },
+      rights: 'Copyright 2023',
+      subtitle: 'Example feed subtitle',
+      title: 'Example Feed',
       updated: new Date('2023-03-15T12:00:00Z'),
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: { value: 'Example Entry' },
+          title: 'Example Entry',
           updated: new Date('2023-03-15T12:00:00Z'),
         },
       ],
@@ -1104,10 +1044,10 @@ describe('generateFeed', () => {
       feed: {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         id: 'https://example.com/feed',
-        title: { '#text': 'Example Feed' },
+        title: 'Example Feed',
         updated: '2023-03-15T12:00:00.000Z',
-        subtitle: { '#text': 'Example feed subtitle' },
-        rights: { '#text': 'Copyright 2023' },
+        subtitle: 'Example feed subtitle',
+        rights: 'Copyright 2023',
         icon: 'https://example.com/icon.png',
         logo: 'https://example.com/logo.png',
         author: [
@@ -1140,7 +1080,7 @@ describe('generateFeed', () => {
         entry: [
           {
             id: 'https://example.com/entry/1',
-            title: { '#text': 'Example Entry' },
+            title: 'Example Entry',
             updated: '2023-03-15T12:00:00.000Z',
           },
         ],
@@ -1153,14 +1093,14 @@ describe('generateFeed', () => {
   it('should generate Atom feed with minimal required fields', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Minimal Feed' },
+      title: 'Minimal Feed',
       updated: new Date('2023-03-15T12:00:00Z'),
     }
     const expected = {
       feed: {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         id: 'https://example.com/feed',
-        title: { '#text': 'Minimal Feed' },
+        title: 'Minimal Feed',
         updated: '2023-03-15T12:00:00.000Z',
       },
     }
@@ -1171,7 +1111,7 @@ describe('generateFeed', () => {
   it('should handle empty arrays', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with empty arrays' },
+      title: 'Feed with empty arrays',
       updated: new Date('2023-03-15T12:00:00Z'),
       authors: [],
       categories: [],
@@ -1182,7 +1122,7 @@ describe('generateFeed', () => {
       feed: {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with empty arrays' },
+        title: 'Feed with empty arrays',
         updated: '2023-03-15T12:00:00.000Z',
       },
     }
@@ -1193,14 +1133,14 @@ describe('generateFeed', () => {
   it('should handle invalid date objects', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with invalid date' },
+      title: 'Feed with invalid date',
       updated: new Date('invalid-date'),
     }
     const expected = {
       feed: {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with invalid date' },
+        title: 'Feed with invalid date',
       },
     }
 
@@ -1210,12 +1150,12 @@ describe('generateFeed', () => {
   it('should filter out invalid entries', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with mixed entries' },
+      title: 'Feed with mixed entries',
       updated: new Date('2023-03-15T12:00:00Z'),
       entries: [
-        { id: 'https://example.com/entry/1', title: { value: 'Valid entry' } },
+        { id: 'https://example.com/entry/1', title: 'Valid entry' },
         {}, // Invalid entry.
-        { id: 'https://example.com/entry/2', title: { value: 'Another valid entry' } },
+        { id: 'https://example.com/entry/2', title: 'Another valid entry' },
         undefined, // Invalid entry.
       ],
     }
@@ -1223,11 +1163,11 @@ describe('generateFeed', () => {
       feed: {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with mixed entries' },
+        title: 'Feed with mixed entries',
         updated: '2023-03-15T12:00:00.000Z',
         entry: [
-          { id: 'https://example.com/entry/1', title: { '#text': 'Valid entry' } },
-          { id: 'https://example.com/entry/2', title: { '#text': 'Another valid entry' } },
+          { id: 'https://example.com/entry/1', title: 'Valid entry' },
+          { id: 'https://example.com/entry/2', title: 'Another valid entry' },
         ],
       },
     }
@@ -1239,7 +1179,7 @@ describe('generateFeed', () => {
   it('should return feed object directly when asNamespace is true', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with asNamespace' },
+      title: 'Feed with asNamespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creators: ['Jane Smith'],
@@ -1252,19 +1192,19 @@ describe('generateFeed', () => {
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: { value: 'Entry 1' },
+          title: 'Entry 1',
         },
       ],
     }
     const expected = {
       feed: {
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with asNamespace' },
+        title: 'Feed with asNamespace',
         updated: '2023-03-15T12:00:00.000Z',
         entry: [
           {
             id: 'https://example.com/entry/1',
-            title: { '#text': 'Entry 1' },
+            title: 'Entry 1',
           },
         ],
       },
@@ -1276,7 +1216,7 @@ describe('generateFeed', () => {
   it('should include xmlns attributes and namespaces when asNamespace is false or undefined', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with namespaces' },
+      title: 'Feed with namespaces',
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creators: ['Jane Smith'],
@@ -1288,7 +1228,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with namespaces' },
+        title: 'Feed with namespaces',
         updated: '2023-03-15T12:00:00.000Z',
         'dc:creator': ['Jane Smith'],
         'dc:rights': ['Copyright 2023'],
@@ -1302,22 +1242,22 @@ describe('generateFeed', () => {
   it('should apply prefix when asNamespace is true', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with prefix' },
+      title: 'Feed with prefix',
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: { value: 'Entry 1' },
+          title: 'Entry 1',
         },
       ],
     }
     const expected = {
       feed: {
         'atom:id': 'https://example.com/feed',
-        'atom:title': { '#text': 'Feed with prefix' },
+        'atom:title': 'Feed with prefix',
         'atom:entry': [
           {
             'atom:id': 'https://example.com/entry/1',
-            'atom:title': { '#text': 'Entry 1' },
+            'atom:title': 'Entry 1',
           },
         ],
       },
@@ -1329,7 +1269,7 @@ describe('generateFeed', () => {
   it('should apply prefix and exclude xmlns when asNamespace is true', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with prefix and namespaces' },
+      title: 'Feed with prefix and namespaces',
       dc: {
         creators: ['Jane Smith'],
       },
@@ -1337,7 +1277,7 @@ describe('generateFeed', () => {
     const expected = {
       feed: {
         'atom:id': 'https://example.com/feed',
-        'atom:title': { '#text': 'Feed with prefix and namespaces' },
+        'atom:title': 'Feed with prefix and namespaces',
       },
     }
 
@@ -1367,7 +1307,7 @@ describe('generateFeed', () => {
   it('should generate Atom feed with dc namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with DC namespace' },
+      title: 'Feed with DC namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
         creators: ['John Doe'],
@@ -1378,7 +1318,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with DC namespace' },
+        title: 'Feed with DC namespace',
         updated: '2023-03-15T12:00:00.000Z',
         'dc:creator': ['John Doe'],
       },
@@ -1390,7 +1330,7 @@ describe('generateFeed', () => {
   it('should generate Atom feed with sy namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with SY namespace' },
+      title: 'Feed with SY namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       sy: {
         updatePeriod: 'hourly',
@@ -1401,7 +1341,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:sy': 'http://purl.org/rss/1.0/modules/syndication/',
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with SY namespace' },
+        title: 'Feed with SY namespace',
         updated: '2023-03-15T12:00:00.000Z',
         'sy:updatePeriod': 'hourly',
       },
@@ -1413,7 +1353,7 @@ describe('generateFeed', () => {
   it('should generate Atom feed with media namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with Media namespace' },
+      title: 'Feed with Media namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       media: {
         title: {
@@ -1455,7 +1395,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:media': 'http://search.yahoo.com/mrss/',
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with Media namespace' },
+        title: 'Feed with Media namespace',
         updated: '2023-03-15T12:00:00.000Z',
         'media:title': {
           '#text': 'Feed Media Title',
@@ -1498,7 +1438,7 @@ describe('generateFeed', () => {
   it('should generate Atom feed with itunes namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with iTunes namespace' },
+      title: 'Feed with iTunes namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       itunes: {
         author: 'Podcast Author',
@@ -1526,7 +1466,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with iTunes namespace' },
+        title: 'Feed with iTunes namespace',
         updated: '2023-03-15T12:00:00.000Z',
         'itunes:image': {
           '@href': 'https://example.com/podcast-cover.jpg',
@@ -1557,7 +1497,7 @@ describe('generateFeed', () => {
   it('should generate Atom feed with georss namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with georss namespace' },
+      title: 'Feed with georss namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       georss: {
         point: { lat: 45.256, lng: -71.92 },
@@ -1569,7 +1509,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:georss': 'http://www.georss.org/georss',
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with georss namespace' },
+        title: 'Feed with georss namespace',
         updated: '2023-03-15T12:00:00.000Z',
         'georss:point': '45.256 -71.92',
         'georss:featureName': 'Boston',
@@ -1582,7 +1522,7 @@ describe('generateFeed', () => {
   it('should generate Atom feed with geo namespace properties', () => {
     const value = {
       id: 'http://example.com/feed',
-      title: { value: 'Locations Feed' },
+      title: 'Locations Feed',
       updated: new Date('2024-01-10T12:00:00Z'),
       geo: {
         lat: 37.7749,
@@ -1591,7 +1531,7 @@ describe('generateFeed', () => {
       entries: [
         {
           id: 'http://example.com/entry/1',
-          title: { value: 'Example Place' },
+          title: 'Example Place',
           updated: new Date('2024-01-10T12:00:00Z'),
           geo: {
             lat: 37.808,
@@ -1605,14 +1545,14 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:geo': 'http://www.w3.org/2003/01/geo/wgs84_pos#',
         id: 'http://example.com/feed',
-        title: { '#text': 'Locations Feed' },
+        title: 'Locations Feed',
         updated: '2024-01-10T12:00:00.000Z',
         'geo:lat': 37.7749,
         'geo:long': -122.4194,
         entry: [
           {
             id: 'http://example.com/entry/1',
-            title: { '#text': 'Example Place' },
+            title: 'Example Place',
             updated: '2024-01-10T12:00:00.000Z',
             'geo:lat': 37.808,
             'geo:long': -122.4177,
@@ -1627,7 +1567,7 @@ describe('generateFeed', () => {
   it('should generate Atom feed with dcterms namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with DCTerms namespace' },
+      title: 'Feed with DCTerms namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       dcterms: {
         created: [new Date('2023-01-01T00:00:00Z')],
@@ -1639,7 +1579,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:dcterms': 'http://purl.org/dc/terms/',
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with DCTerms namespace' },
+        title: 'Feed with DCTerms namespace',
         updated: '2023-03-15T12:00:00.000Z',
         'dcterms:created': ['2023-01-01T00:00:00.000Z'],
         'dcterms:license': ['Creative Commons Attribution 4.0'],
@@ -1652,7 +1592,7 @@ describe('generateFeed', () => {
   it('should generate Atom feed with ccREL namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with ccREL namespace' },
+      title: 'Feed with ccREL namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       cc: {
         license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
@@ -1664,7 +1604,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:cc': 'http://creativecommons.org/ns#',
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with ccREL namespace' },
+        title: 'Feed with ccREL namespace',
         updated: '2023-03-15T12:00:00.000Z',
         'cc:license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
         'cc:morePermissions': 'https://example.com/commercial-license',
@@ -1677,7 +1617,7 @@ describe('generateFeed', () => {
   it('should generate Atom feed with creativecommons namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with Creative Commons namespace' },
+      title: 'Feed with Creative Commons namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       creativeCommons: {
         licenses: ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
@@ -1688,7 +1628,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:creativeCommons': 'http://backend.userland.com/creativeCommonsRssModule',
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with Creative Commons namespace' },
+        title: 'Feed with Creative Commons namespace',
         updated: '2023-03-15T12:00:00.000Z',
         'creativeCommons:license': ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
       },
@@ -1700,7 +1640,7 @@ describe('generateFeed', () => {
   it('should generate Atom feed with opensearch namespace properties', () => {
     const value = {
       id: 'http://example.com/search',
-      title: { value: 'Search Results' },
+      title: 'Search Results',
       updated: new Date('2024-01-10T12:00:00Z'),
       opensearch: {
         totalResults: 1000,
@@ -1719,7 +1659,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:opensearch': 'http://a9.com/-/spec/opensearch/1.1/',
         id: 'http://example.com/search',
-        title: { '#text': 'Search Results' },
+        title: 'Search Results',
         updated: '2024-01-10T12:00:00.000Z',
         'opensearch:totalResults': 1000,
         'opensearch:startIndex': 21,
@@ -1739,12 +1679,12 @@ describe('generateFeed', () => {
   it('should generate Atom feed with arxiv namespace properties', () => {
     const value = {
       id: 'http://arxiv.org/api/query',
-      title: { value: 'arXiv Query Results' },
+      title: 'arXiv Query Results',
       updated: new Date('2024-01-10T12:00:00Z'),
       entries: [
         {
           id: 'http://arxiv.org/abs/2403.12345v1',
-          title: { value: 'Example Paper' },
+          title: 'Example Paper',
           updated: new Date('2024-03-15T12:00:00Z'),
           authors: [
             {
@@ -1771,7 +1711,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:arxiv': 'http://arxiv.org/schemas/atom',
         id: 'http://arxiv.org/api/query',
-        title: { '#text': 'arXiv Query Results' },
+        title: 'arXiv Query Results',
         updated: '2024-01-10T12:00:00.000Z',
         entry: [
           {
@@ -1782,7 +1722,7 @@ describe('generateFeed', () => {
               },
             ],
             id: 'http://arxiv.org/abs/2403.12345v1',
-            title: { '#text': 'Example Paper' },
+            title: 'Example Paper',
             updated: '2024-03-15T12:00:00.000Z',
             'arxiv:comment': '23 pages, 8 figures',
             'arxiv:doi': '10.1234/example',
@@ -1802,7 +1742,7 @@ describe('generateFeed', () => {
   it('should generate Atom feed with yt namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with YouTube namespace' },
+      title: 'Feed with YouTube namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       yt: {
         channelId: 'UC123456789',
@@ -1814,7 +1754,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:yt': 'http://www.youtube.com/xml/schemas/2015',
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with YouTube namespace' },
+        title: 'Feed with YouTube namespace',
         updated: '2023-03-15T12:00:00.000Z',
         'yt:channelId': 'UC123456789',
         'yt:playlistId': 'PL123456789',
@@ -1827,12 +1767,12 @@ describe('generateFeed', () => {
   it('should generate Atom feed with app namespace properties', () => {
     const value = {
       id: 'http://example.com/blog',
-      title: { value: 'My Blog' },
+      title: 'My Blog',
       updated: new Date('2024-03-15T16:00:00Z'),
       entries: [
         {
           id: 'http://example.com/blog/post/1',
-          title: { value: 'Published Post' },
+          title: 'Published Post',
           updated: new Date('2024-03-15T16:00:00Z'),
           app: {
             edited: new Date('2024-03-15T14:30:00Z'),
@@ -1840,7 +1780,7 @@ describe('generateFeed', () => {
         },
         {
           id: 'http://example.com/blog/post/2',
-          title: { value: 'Draft Post' },
+          title: 'Draft Post',
           updated: new Date('2024-03-15T15:00:00Z'),
           app: {
             edited: new Date('2024-03-15T15:00:00Z'),
@@ -1856,18 +1796,18 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:app': 'http://www.w3.org/2007/app',
         id: 'http://example.com/blog',
-        title: { '#text': 'My Blog' },
+        title: 'My Blog',
         updated: '2024-03-15T16:00:00.000Z',
         entry: [
           {
             id: 'http://example.com/blog/post/1',
-            title: { '#text': 'Published Post' },
+            title: 'Published Post',
             updated: '2024-03-15T16:00:00.000Z',
             'app:edited': '2024-03-15T14:30:00.000Z',
           },
           {
             id: 'http://example.com/blog/post/2',
-            title: { '#text': 'Draft Post' },
+            title: 'Draft Post',
             updated: '2024-03-15T15:00:00.000Z',
             'app:edited': '2024-03-15T15:00:00.000Z',
             'app:control': {
@@ -1884,7 +1824,7 @@ describe('generateFeed', () => {
   it('should generate Atom feed with googleplay namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Podcast with Google Play namespace' },
+      title: 'Podcast with Google Play namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       googleplay: {
         author: 'Podcast Host',
@@ -1902,7 +1842,7 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:googleplay': 'https://www.google.com/schemas/play-podcasts/1.0/',
         id: 'https://example.com/feed',
-        title: { '#text': 'Podcast with Google Play namespace' },
+        title: 'Podcast with Google Play namespace',
         updated: '2023-03-15T12:00:00.000Z',
         'googleplay:author': 'Podcast Host',
         'googleplay:description': 'A great podcast about technology',
@@ -1921,7 +1861,7 @@ describe('generateFeed', () => {
   it('should generate Atom feed with xml namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
-      title: { value: 'Feed with XML namespace' },
+      title: 'Feed with XML namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       xml: {
         lang: 'en',
@@ -1930,7 +1870,7 @@ describe('generateFeed', () => {
       entries: [
         {
           id: 'https://example.com/entry/1',
-          title: { value: 'Entry with XML namespace' },
+          title: 'Entry with XML namespace',
           updated: new Date('2023-03-15T12:00:00Z'),
           xml: {
             lang: 'en-US',
@@ -1945,12 +1885,12 @@ describe('generateFeed', () => {
         '@xml:lang': 'en',
         '@xml:base': 'http://example.org/',
         id: 'https://example.com/feed',
-        title: { '#text': 'Feed with XML namespace' },
+        title: 'Feed with XML namespace',
         updated: '2023-03-15T12:00:00.000Z',
         entry: [
           {
             id: 'https://example.com/entry/1',
-            title: { '#text': 'Entry with XML namespace' },
+            title: 'Entry with XML namespace',
             updated: '2023-03-15T12:00:00.000Z',
             '@xml:lang': 'en-US',
             '@xml:base': 'http://example.org/entry/1/',

@@ -64,18 +64,9 @@
     }
   ],
   "logo": "http://example.org/logo.png",
-  "rights": {
-    "value": "<p>Copyright © 2023, Example Organization. All rights reserved.</p>",
-    "type": "html"
-  },
-  "subtitle": {
-    "value": "A <em>comprehensive</em> example showing all Atom 1.0 elements",
-    "type": "html"
-  },
-  "title": {
-    "value": "Comprehensive Atom 1.0 Example Feed",
-    "type": "text"
-  },
+  "rights": "<p>Copyright © 2023, Example Organization. All rights reserved.</p>",
+  "subtitle": "A <em>comprehensive</em> example showing all Atom 1.0 elements",
+  "title": "Comprehensive Atom 1.0 Example Feed",
   "updated": "2023-01-15T12:00:00Z",
   "xml": {
     "base": "http://example.org/",
@@ -145,10 +136,7 @@
         }
       ],
       "published": "2023-01-10T08:30:00Z",
-      "rights": {
-        "value": "<p>Copyright © 2023, Entry Copyright Holder. All rights reserved.</p>",
-        "type": "html"
-      },
+      "rights": "<p>Copyright © 2023, Entry Copyright Holder. All rights reserved.</p>",
       "source": {
         "authors": [
           {
@@ -183,25 +171,13 @@
           { "href": "http://original.example.org/", "rel": "alternate" }
         ],
         "logo": "http://original.example.org/logo.png",
-        "rights": {
-          "value": "Copyright © 2023, Original Organization"
-        },
-        "subtitle": {
-          "value": "Original source subtitle"
-        },
-        "title": {
-          "value": "Original Source Feed"
-        },
+        "rights": "Copyright © 2023, Original Organization",
+        "subtitle": "Original source subtitle",
+        "title": "Original Source Feed",
         "updated": "2023-01-10T08:00:00Z"
       },
-      "summary": {
-        "value": "This is a comprehensive example entry showing all possible Atom 1.0 elements in an entry.",
-        "type": "text"
-      },
-      "title": {
-        "value": "Comprehensive Entry Example",
-        "type": "text"
-      },
+      "summary": "This is a comprehensive example entry showing all possible Atom 1.0 elements in an entry.",
+      "title": "Comprehensive Entry Example",
       "updated": "2023-01-15T11:45:00Z"
     },
     {
@@ -210,9 +186,7 @@
         "type": "text"
       },
       "id": "tag:example.org,2023:entry-2",
-      "title": {
-        "value": "Minimal Required Entry"
-      },
+      "title": "Minimal Required Entry",
       "updated": "2023-01-14T15:30:00Z"
     },
     {
@@ -222,23 +196,14 @@
       },
       "id": "tag:example.org,2023:entry-3",
       "links": [{ "href": "/entry/3", "rel": "alternate" }],
-      "summary": {
-        "value": "<p>This is a summary with <strong>HTML</strong> markup.</p>",
-        "type": "html"
-      },
-      "title": {
-        "value": "Content Types Example"
-      },
+      "summary": "<p>This is a summary with <strong>HTML</strong> markup.</p>",
+      "title": "Content Types Example",
       "updated": "2023-01-13T18:45:00Z"
     },
     {
       "id": "tag:example.org,2023:entry-4",
-      "summary": {
-        "value": "This entry references its content rather than including it inline."
-      },
-      "title": {
-        "value": "Content by Reference"
-      },
+      "summary": "This entry references its content rather than including it inline.",
+      "title": "Content by Reference",
       "updated": "2023-01-12T09:15:00Z",
       "content": { "src": "http://example.org/full-content.html", "type": "text/html" }
     },
@@ -260,9 +225,7 @@
         "type": "text"
       },
       "id": "tag:example.org,2023:entry-5",
-      "title": {
-        "value": "Multiple Authors Example"
-      },
+      "title": "Multiple Authors Example",
       "updated": "2023-01-11T14:20:00Z"
     },
     {
@@ -271,15 +234,8 @@
         "type": "text"
       },
       "id": "tag:example.org,2023:entry-6",
-      "summary": {
-        "value": "This is an English summary of a French entry to demonstrate language-specific content.",
-        "xml": {
-          "lang": "en"
-        }
-      },
-      "title": {
-        "value": "Exemple de Contenu en Français"
-      },
+      "summary": "This is an English summary of a French entry to demonstrate language-specific content.",
+      "title": "Exemple de Contenu en Français",
       "updated": "2023-01-10T11:05:00Z",
       "xml": {
         "lang": "fr"
