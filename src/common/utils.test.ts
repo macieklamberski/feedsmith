@@ -1491,6 +1491,43 @@ describe('parseDate', () => {
 
     expect(parseDate(value)).toBeUndefined()
   })
+
+  it('should apply custom parseDateFn', () => {
+    const value = '2023-03-15T12:00:00Z'
+    const expected = new Date('2023-03-15T12:00:00Z')
+
+    expect(parseDate(value, (raw) => new Date(raw))).toEqual(expected)
+  })
+
+  it('should apply custom parseDateFn returning number', () => {
+    const value = '2023-03-15T12:00:00Z'
+    const expected = 1678881600000
+
+    expect(parseDate(value, (raw) => new Date(raw).getTime())).toBe(expected)
+  })
+
+  it('should return undefined when parseDateFn is provided but value is empty', () => {
+    const value = ''
+
+    expect(parseDate(value, (raw) => new Date(raw))).toBeUndefined()
+  })
+
+  it('should normalize value before passing to parseDateFn', () => {
+    const value = '  2023-03-15T12:00:00Z  '
+    const expected = new Date('2023-03-15T12:00:00Z')
+
+    expect(parseDate(value, (raw) => new Date(raw))).toEqual(expected)
+  })
+
+  it('should propagate error when parseDateFn throws', () => {
+    const value = 'invalid-date'
+    const parseDateFn = () => {
+      throw new Error('Parse failed')
+    }
+    const throwing = () => parseDate(value, parseDateFn)
+
+    expect(throwing).toThrow('Parse failed')
+  })
 })
 
 describe('generateBoolean', () => {

@@ -9,7 +9,7 @@ export const generate: XmlGenerateMain<
   Rss.Feed<DateLike, Rss.PersonLike>,
   Rss.Feed<Date, Rss.PersonLike, true>
 > = (value, options) => {
-  const generated = generateFeed(value as Rss.Feed<DateLike, Rss.PersonLike>)
+  const generated = generateFeed(value)
 
   if (!generated) {
     throw new Error(locales.invalidInputRss)

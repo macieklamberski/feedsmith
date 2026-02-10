@@ -1,4 +1,4 @@
-import type { DateLike, Requirable, Strict } from '../../../common/types.js'
+import type { Requirable, Strict } from '../../../common/types.js'
 
 // #region reference
 export namespace ThrNs {
@@ -12,7 +12,7 @@ export namespace ThrNs {
     TStrict
   >
 
-  export type Link<TDate extends DateLike> = {
+  export type Link<TDate> = {
     count?: number
     updated?: TDate
   }

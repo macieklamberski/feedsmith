@@ -2,6 +2,7 @@ import { decodeHTML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
 import type {
   AnyOf,
+  DateAny,
   DateLike,
   GenerateUtil,
   ParseExactUtil,
@@ -216,11 +217,17 @@ export const parseYesNoBoolean: ParseExactUtil<boolean> = (value) => {
   }
 }
 
-export const parseDate: ParseExactUtil<string> = (value) => {
-  // This function is currently a placeholder for the actual date parsing functionality
-  // which might be added at some point in the future. Currently it just uses treats
-  // the date as string.
-  return parseString(value)
+export const parseDate = (
+  value: Unreliable,
+  parseDateFn?: (raw: string) => DateAny,
+): DateAny | undefined => {
+  const raw = parseString(value)
+
+  if (raw === undefined) {
+    return
+  }
+
+  return parseDateFn ? parseDateFn(raw) : raw
 }
 
 export const parseArray: ParseExactUtil<Array<Unreliable>> = (value) => {

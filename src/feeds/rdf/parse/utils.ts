@@ -1,4 +1,4 @@
-import type { ParseOptions, ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny, ParseOptions, ParsePartialUtil } from '../../../common/types.js'
 import {
   detectNamespaces,
   isObject,
@@ -91,7 +91,10 @@ export const retrieveTextInput: ParsePartialUtil<Rdf.TextInput> = (value) => {
   )
 }
 
-export const parseItem: ParsePartialUtil<Rdf.Item<string>> = (value) => {
+export const parseItem: ParsePartialUtil<Rdf.Item<DateAny>, ParseOptions<DateAny>> = (
+  value,
+  options,
+) => {
   if (!isObject(value)) {
     return
   }
@@ -102,21 +105,21 @@ export const parseItem: ParsePartialUtil<Rdf.Item<string>> = (value) => {
     link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
     description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
     rdf: retrieveRdfAbout(value),
-    atom: namespaces.has('atom') ? retrieveAtomEntry(value) : undefined,
-    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
+    atom: namespaces.has('atom') ? retrieveAtomEntry(value, options) : undefined,
+    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value, options) : undefined,
     content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(value) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(value, options) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
 
-  return trimObject(item)
+  return trimObject(item) as Rdf.Item<DateAny> | undefined
 }
 
-export const retrieveItems: ParsePartialUtil<Array<Rdf.Item<string>>, ParseOptions> = (
+export const retrieveItems: ParsePartialUtil<Array<Rdf.Item<DateAny>>, ParseOptions<DateAny>> = (
   value,
   options,
 ) => {
@@ -134,17 +137,20 @@ export const retrieveItems: ParsePartialUtil<Array<Rdf.Item<string>>, ParseOptio
   )
   const items = trimArray(
     itemUris?.map((uri) => retrieveByAbout(value.item, uri)),
-    parseItem,
+    (value) => parseItem(value, options),
   )
 
   if (items?.length) {
     return items
   }
 
-  return parseArrayOf(value?.item, parseItem, options?.maxItems)
+  return parseArrayOf(value?.item, (value) => parseItem(value, options), options?.maxItems)
 }
 
-export const parseFeed: ParsePartialUtil<Rdf.Feed<string>, ParseOptions> = (value, options) => {
+export const parseFeed: ParsePartialUtil<Rdf.Feed<DateAny>, ParseOptions<DateAny>> = (
+  value,
+  options,
+) => {
   if (!isObject(value)) {
     return
   }
@@ -159,19 +165,22 @@ export const parseFeed: ParsePartialUtil<Rdf.Feed<string>, ParseOptions> = (valu
     items: retrieveItems(value, options),
     textInput: retrieveTextInput(value),
     rdf: retrieveRdfAbout(channel),
-    atom: namespaces.has('atom') ? retrieveAtomFeed(channel) : undefined,
-    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel) : undefined,
-    sy: namespaces.has('sy') ? retrieveSyFeed(channel) : undefined,
+    atom: namespaces.has('atom') ? retrieveAtomFeed(channel, options) : undefined,
+    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel, options) : undefined,
+    sy: namespaces.has('sy') ? retrieveSyFeed(channel, options) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(channel) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(channel, options) : undefined,
     admin: namespaces.has('admin') ? retrieveAdminFeed(channel) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
 
-  return trimObject(feed)
+  return trimObject(feed) as Rdf.Feed<DateAny> | undefined
 }
 
-export const retrieveFeed: ParsePartialUtil<Rdf.Feed<string>, ParseOptions> = (value, options) => {
+export const retrieveFeed: ParsePartialUtil<Rdf.Feed<DateAny>, ParseOptions<DateAny>> = (
+  value,
+  options,
+) => {
   return parseSingularOf(value?.rdf, (value) => parseFeed(value, options))
 }

@@ -14,16 +14,14 @@ import { locales } from './config.js'
 import type { ParseOptions } from './types.js'
 import { parseJsonObject } from './utils.js'
 
-export type Parse = (
+export const parse = <TDate = string>(
   value: unknown,
-  options?: ParseOptions,
-) =>
-  | { format: 'rss'; feed: Rss.Feed<string> }
-  | { format: 'atom'; feed: Atom.Feed<string> }
-  | { format: 'rdf'; feed: Rdf.Feed<string> }
-  | { format: 'json'; feed: Json.Feed<string> }
-
-export const parse: Parse = (value, options) => {
+  options?: ParseOptions<TDate>,
+):
+  | { format: 'rss'; feed: Rss.Feed<TDate> }
+  | { format: 'atom'; feed: Atom.Feed<TDate> }
+  | { format: 'rdf'; feed: Rdf.Feed<TDate> }
+  | { format: 'json'; feed: Json.Feed<TDate> } => {
   if (detectRssFeed(value)) {
     return { format: 'rss', feed: parseRssFeed(value, options) }
   }

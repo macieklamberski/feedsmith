@@ -1164,4 +1164,40 @@ describe('parse', () => {
       })
     })
   })
+
+  describe('parseDateFn', () => {
+    it('should apply custom parseDateFn to feed and entry dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <title>Test</title>
+          <id>urn:uuid:feed</id>
+          <updated>2024-01-10T12:00:00Z</updated>
+          <entry>
+            <title>Entry</title>
+            <id>urn:uuid:entry</id>
+            <published>2024-01-01T12:00:00Z</published>
+            <updated>2024-01-02T09:30:00Z</updated>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Test',
+        id: 'urn:uuid:feed',
+        updated: new Date('2024-01-10T12:00:00Z'),
+        entries: [
+          {
+            title: 'Entry',
+            id: 'urn:uuid:entry',
+            published: new Date('2024-01-01T12:00:00Z'),
+            updated: new Date('2024-01-02T09:30:00Z'),
+          },
+        ],
+      }
+
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
+    })
+  })
 })

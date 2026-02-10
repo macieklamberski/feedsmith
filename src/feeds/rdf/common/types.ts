@@ -1,4 +1,4 @@
-import type { DateLike, Requirable, Strict } from '../../../common/types.js'
+import type { Requirable, Strict } from '../../../common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
 import type { ContentNs } from '../../../namespaces/content/common/types.js'
@@ -35,7 +35,7 @@ export namespace Rdf {
     TStrict
   >
 
-  export type Item<TDate extends DateLike, TStrict extends boolean = false> = Strict<
+  export type Item<TDate, TStrict extends boolean = false> = Strict<
     {
       title: Requirable<string> // Required in spec.
       link: Requirable<string> // Required in spec.
@@ -54,7 +54,7 @@ export namespace Rdf {
     TStrict
   >
 
-  export type Feed<TDate extends DateLike, TStrict extends boolean = false> = Strict<
+  export type Feed<TDate, TStrict extends boolean = false> = Strict<
     {
       title: Requirable<string> // Required in spec.
       link: Requirable<string> // Required in spec.

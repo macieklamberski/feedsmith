@@ -18,14 +18,6 @@ export type Strict<T, S extends boolean> = Simplify<
       }
 >
 
-export type Requirable<T> = T | { __requirable: T }
-
-export type DateLike = Date | string
-
-export type ExtraFields<F extends ReadonlyArray<string>, V = unknown> = {
-  [K in F[number]]?: V
-}
-
 export type AnyOf<T> = Partial<{ [P in keyof T]-?: NonNullable<T[P]> }> &
   { [P in keyof T]-?: Pick<{ [Q in keyof T]-?: NonNullable<T[Q]> }, P> }[keyof T]
 
@@ -48,6 +40,22 @@ export type DeepOmit<T, K extends string> = T extends Array<infer U>
     ? Pick<{ [P in keyof T]: DeepOmit<T[P], K> }, Exclude<keyof T, K>>
     : T
 
+export type Requirable<T> = T | { __requirable: T }
+
+export type DateLike = Date | string
+
+// Date-aware parse utils need to return different date types depending on the
+// parseDateFn option, but TypeScript can't express generic functions through
+// type aliases like ParsePartialUtil. Using `any` here lets all parse utils
+// share the same ParsePartialUtil pattern while the public parse() entry points
+// enforce the correct TDate type via generics.
+// biome-ignore lint/suspicious/noExplicitAny: See above reasoning.
+export type DateAny = any
+
+export type ExtraFields<F extends ReadonlyArray<string>, V = unknown> = {
+  [K in F[number]]?: V
+}
+
 export type ParseExactUtil<R> = (value: Unreliable) => R | undefined
 
 export type ParsePartialUtil<R, O = undefined> = (value: Unreliable, options?: O) => R | undefined
@@ -57,8 +65,9 @@ export type GenerateUtil<V, O = undefined> = (
   options?: O,
 ) => Unreliable | undefined
 
-export type ParseOptions = {
+export type ParseOptions<TDate = string> = {
   maxItems?: number
+  parseDateFn?: (raw: string) => TDate
 }
 
 export type XmlStylesheet = {

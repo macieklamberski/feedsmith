@@ -1,4 +1,4 @@
-import type { DateLike, Requirable, Strict } from '../../../common/types.js'
+import type { Requirable, Strict } from '../../../common/types.js'
 import type { AcastNs } from '../../../namespaces/acast/common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
@@ -107,7 +107,7 @@ export namespace Rss {
   >
 
   export type Item<
-    TDate extends DateLike,
+    TDate,
     TPerson extends PersonLike = Person,
     TStrict extends boolean = false,
   > = Strict<
@@ -152,7 +152,7 @@ export namespace Rss {
     (TStrict extends true ? { title: string } | { description: string } : unknown)
 
   export type Feed<
-    TDate extends DateLike,
+    TDate,
     TPerson extends PersonLike = Person,
     TStrict extends boolean = false,
   > = Strict<

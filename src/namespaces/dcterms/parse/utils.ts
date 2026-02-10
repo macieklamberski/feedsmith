@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny, ParseOptions, ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -9,7 +9,10 @@ import {
 } from '../../../common/utils.js'
 import type { DcTermsNs } from '../common/types.js'
 
-export const retrieveItemOrFeed: ParsePartialUtil<DcTermsNs.ItemOrFeed<string>> = (value) => {
+export const retrieveItemOrFeed: ParsePartialUtil<
+  DcTermsNs.ItemOrFeed<DateAny>,
+  ParseOptions<DateAny>
+> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -32,7 +35,9 @@ export const retrieveItemOrFeed: ParsePartialUtil<DcTermsNs.ItemOrFeed<string>> 
       parseString(retrieveText(value)),
     ),
     audiences: parseArrayOf(value['dcterms:audience'], (value) => parseString(retrieveText(value))),
-    available: parseArrayOf(value['dcterms:available'], (value) => parseDate(retrieveText(value))),
+    available: parseArrayOf(value['dcterms:available'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     bibliographicCitations: parseArrayOf(value['dcterms:bibliographiccitation'], (value) =>
       parseString(retrieveText(value)),
     ),
@@ -43,17 +48,21 @@ export const retrieveItemOrFeed: ParsePartialUtil<DcTermsNs.ItemOrFeed<string>> 
       parseString(retrieveText(value)),
     ),
     coverages: parseArrayOf(value['dcterms:coverage'], (value) => parseString(retrieveText(value))),
-    created: parseArrayOf(value['dcterms:created'], (value) => parseDate(retrieveText(value))),
+    created: parseArrayOf(value['dcterms:created'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     creators: parseArrayOf(value['dcterms:creator'], (value) => parseString(retrieveText(value))),
     dateAccepted: parseArrayOf(value['dcterms:dateaccepted'], (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
     dateCopyrighted: parseArrayOf(value['dcterms:datecopyrighted'], (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
-    dates: parseArrayOf(value['dcterms:date'], (value) => parseDate(retrieveText(value))),
+    dates: parseArrayOf(value['dcterms:date'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     dateSubmitted: parseArrayOf(value['dcterms:datesubmitted'], (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
     descriptions: parseArrayOf(value['dcterms:description'], (value) =>
       parseString(retrieveText(value)),
@@ -89,7 +98,9 @@ export const retrieveItemOrFeed: ParsePartialUtil<DcTermsNs.ItemOrFeed<string>> 
     isRequiredBy: parseArrayOf(value['dcterms:isrequiredby'], (value) =>
       parseString(retrieveText(value)),
     ),
-    issued: parseArrayOf(value['dcterms:issued'], (value) => parseDate(retrieveText(value))),
+    issued: parseArrayOf(value['dcterms:issued'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     isVersionOf: parseArrayOf(value['dcterms:isversionof'], (value) =>
       parseString(retrieveText(value)),
     ),
@@ -97,7 +108,9 @@ export const retrieveItemOrFeed: ParsePartialUtil<DcTermsNs.ItemOrFeed<string>> 
     licenses: parseArrayOf(value['dcterms:license'], (value) => parseString(retrieveText(value))),
     mediators: parseArrayOf(value['dcterms:mediator'], (value) => parseString(retrieveText(value))),
     mediums: parseArrayOf(value['dcterms:medium'], (value) => parseString(retrieveText(value))),
-    modified: parseArrayOf(value['dcterms:modified'], (value) => parseDate(retrieveText(value))),
+    modified: parseArrayOf(value['dcterms:modified'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     provenances: parseArrayOf(value['dcterms:provenance'], (value) =>
       parseString(retrieveText(value)),
     ),
@@ -123,7 +136,9 @@ export const retrieveItemOrFeed: ParsePartialUtil<DcTermsNs.ItemOrFeed<string>> 
     temporals: parseArrayOf(value['dcterms:temporal'], (value) => parseString(retrieveText(value))),
     titles: parseArrayOf(value['dcterms:title'], (value) => parseString(retrieveText(value))),
     types: parseArrayOf(value['dcterms:type'], (value) => parseString(retrieveText(value))),
-    valid: parseArrayOf(value['dcterms:valid'], (value) => parseDate(retrieveText(value))),
+    valid: parseArrayOf(value['dcterms:valid'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
   }
 
   return trimObject(itemOrFeed)

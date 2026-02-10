@@ -6,7 +6,10 @@ import type { Rss } from '../common/types.js'
 import { parser } from './config.js'
 import { retrieveFeed } from './utils.js'
 
-export const parse = (value: unknown, options?: ParseOptions): Rss.Feed<string> => {
+export const parse = <TDate = string>(
+  value: unknown,
+  options?: ParseOptions<TDate>,
+): Rss.Feed<TDate> => {
   if (!detectRssFeed(value)) {
     throw new Error(locales.invalidFeedFormat)
   }
@@ -21,5 +24,5 @@ export const parse = (value: unknown, options?: ParseOptions): Rss.Feed<string> 
     throw new Error(locales.invalidFeedFormat)
   }
 
-  return parsed
+  return parsed as Rss.Feed<TDate>
 }

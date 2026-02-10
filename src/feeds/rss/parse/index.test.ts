@@ -937,4 +937,82 @@ describe('parse', () => {
       expect(parse(value, { maxItems: undefined })).toEqual(expected)
     })
   })
+
+  describe('parseDateFn', () => {
+    it('should apply custom parseDateFn to feed and item dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0">
+          <channel>
+            <title>Test</title>
+            <pubDate>Wed, 15 Mar 2023 12:00:00 GMT</pubDate>
+            <item>
+              <title>Item</title>
+              <pubDate>Thu, 16 Mar 2023 12:00:00 GMT</pubDate>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test',
+        pubDate: new Date('Wed, 15 Mar 2023 12:00:00 GMT'),
+        items: [
+          {
+            title: 'Item',
+            pubDate: new Date('Thu, 16 Mar 2023 12:00:00 GMT'),
+          },
+        ],
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should apply custom parseDateFn to namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <channel>
+            <title>Test</title>
+            <item>
+              <title>Item</title>
+              <dc:date>2023-03-15T12:00:00Z</dc:date>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test',
+        items: [
+          {
+            title: 'Item',
+            dc: {
+              dates: [new Date('2023-03-15T12:00:00Z')],
+            },
+          },
+        ],
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should propagate error when parseDateFn throws', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0">
+          <channel>
+            <title>Test</title>
+            <pubDate>invalid</pubDate>
+          </channel>
+        </rss>
+      `
+      const parseDateFn = () => {
+        throw new Error('Parse failed')
+      }
+      const throwing = () => parse(value, { parseDateFn })
+
+      expect(throwing).toThrow('Parse failed')
+    })
+  })
 })

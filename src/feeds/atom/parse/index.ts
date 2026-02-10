@@ -6,7 +6,10 @@ import type { Atom } from '../common/types.js'
 import { parser } from './config.js'
 import { retrieveFeed } from './utils.js'
 
-export const parse = (value: unknown, options?: ParseOptions): Atom.Feed<string> => {
+export const parse = <TDate = string>(
+  value: unknown,
+  options?: ParseOptions<TDate>,
+): Atom.Feed<TDate> => {
   if (!detectAtomFeed(value)) {
     throw new Error(locales.invalidFeedFormat)
   }
@@ -21,5 +24,5 @@ export const parse = (value: unknown, options?: ParseOptions): Atom.Feed<string>
     throw new Error(locales.invalidFeedFormat)
   }
 
-  return parsed
+  return parsed as Atom.Feed<TDate>
 }

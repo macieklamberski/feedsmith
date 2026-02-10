@@ -9,7 +9,7 @@ export const generate: XmlGenerateMain<Atom.Feed<DateLike>, Atom.Feed<Date, true
   value,
   options,
 ) => {
-  const generated = generateFeed(value as Atom.Feed<DateLike>)
+  const generated = generateFeed(value)
 
   if (!generated) {
     throw new Error(locales.invalidInputAtom)

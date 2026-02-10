@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny, ParseOptions, ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -120,7 +120,10 @@ export const parseEpisode: ParsePartialUtil<PodcastNs.Episode> = (value) => {
   return trimObject(episode)
 }
 
-export const parseTrailer: ParsePartialUtil<PodcastNs.Trailer<string>> = (value) => {
+export const parseTrailer: ParsePartialUtil<PodcastNs.Trailer<DateAny>, ParseOptions<DateAny>> = (
+  value,
+  options,
+) => {
   if (!isObject(value)) {
     return
   }
@@ -128,7 +131,7 @@ export const parseTrailer: ParsePartialUtil<PodcastNs.Trailer<string>> = (value)
   const trailer = {
     display: parseString(retrieveText(value)),
     url: parseString(value['@url']),
-    pubDate: parseDate(value['@pubdate']),
+    pubDate: parseDate(value['@pubdate'], options?.parseDateFn),
     length: parseNumber(value['@length']),
     type: parseString(value['@type']),
     season: parseNumber(value['@season']),
@@ -277,7 +280,10 @@ export const retrieveImages: ParsePartialUtil<Array<PodcastNs.Image>> = (value) 
   )
 }
 
-export const parseLiveItem: ParsePartialUtil<PodcastNs.LiveItem<string>> = (value) => {
+export const parseLiveItem: ParsePartialUtil<PodcastNs.LiveItem<DateAny>, ParseOptions<DateAny>> = (
+  value,
+  options,
+) => {
   if (!isObject(value)) {
     return
   }
@@ -285,12 +291,12 @@ export const parseLiveItem: ParsePartialUtil<PodcastNs.LiveItem<string>> = (valu
   const liveItem = {
     ...retrieveItem(value),
     status: parseString(value['@status']),
-    start: parseDate(value['@start']),
-    end: parseDate(value['@end']),
+    start: parseDate(value['@start'], options?.parseDateFn),
+    end: parseDate(value['@end'], options?.parseDateFn),
     contentLinks: parseArrayOf(value['podcast:contentlink'], parseContentLink),
   }
 
-  return trimObject(liveItem)
+  return trimObject(liveItem) as PodcastNs.LiveItem<DateAny> | undefined
 }
 
 export const parseContentLink: ParsePartialUtil<PodcastNs.ContentLink> = (value) => {
@@ -383,17 +389,18 @@ export const parsePodroll: ParsePartialUtil<PodcastNs.Podroll> = (value) => {
   return trimObject(podroll)
 }
 
-export const parseUpdateFrequency: ParsePartialUtil<PodcastNs.UpdateFrequency<string>> = (
-  value,
-) => {
+export const parseUpdateFrequency: ParsePartialUtil<
+  PodcastNs.UpdateFrequency<DateAny>,
+  ParseOptions<DateAny>
+> = (value, options) => {
   const updateFrequency = {
     display: parseString(retrieveText(value)),
     complete: parseBoolean(value?.['@complete']),
-    dtstart: parseDate(value?.['@dtstart']),
+    dtstart: parseDate(value?.['@dtstart'], options?.parseDateFn),
     rrule: parseString(value?.['@rrule']),
   }
 
-  return trimObject(updateFrequency)
+  return trimObject(updateFrequency) as PodcastNs.UpdateFrequency<DateAny> | undefined
 }
 
 export const parsePodping: ParsePartialUtil<PodcastNs.Podping> = (value) => {
@@ -462,7 +469,10 @@ export const retrieveItem: ParsePartialUtil<PodcastNs.Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialUtil<PodcastNs.Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialUtil<PodcastNs.Feed<DateAny>, ParseOptions<DateAny>> = (
+  value,
+  options,
+) => {
   if (!isObject(value)) {
     return
   }
@@ -472,18 +482,20 @@ export const retrieveFeed: ParsePartialUtil<PodcastNs.Feed<string>> = (value) =>
     fundings: parseArrayOf(value['podcast:funding'], parseFunding),
     persons: parseArrayOf(value['podcast:person'], parsePerson),
     locations: parseArrayOf(value['podcast:location'], parseLocation),
-    trailers: parseArrayOf(value['podcast:trailer'], parseTrailer),
+    trailers: parseArrayOf(value['podcast:trailer'], (value) => parseTrailer(value, options)),
     license: parseSingularOf(value['podcast:license'], parseLicense),
     guid: parseSingularOf(value['podcast:guid'], (value) => parseString(retrieveText(value))),
     values: parseArrayOf(value['podcast:value'], parseValue),
     medium: parseSingularOf(value['podcast:medium'], (value) => parseString(retrieveText(value))),
     images: retrieveImages(value),
-    liveItems: parseArrayOf(value['podcast:liveitem'], parseLiveItem),
+    liveItems: parseArrayOf(value['podcast:liveitem'], (value) => parseLiveItem(value, options)),
     blocks: parseArrayOf(value['podcast:block'], parseBlock),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
     remoteItems: parseArrayOf(value['podcast:remoteitem'], parseRemoteItem),
     podroll: parseSingularOf(value['podcast:podroll'], parsePodroll),
-    updateFrequency: parseSingularOf(value['podcast:updatefrequency'], parseUpdateFrequency),
+    updateFrequency: parseSingularOf(value['podcast:updatefrequency'], (value) =>
+      parseUpdateFrequency(value, options),
+    ),
     podping: parseSingularOf(value['podcast:podping'], parsePodping),
     chat: parseSingularOf(value['podcast:chat'], parseChat),
     publisher: parseSingularOf(value['podcast:publisher'], parsePublisher),

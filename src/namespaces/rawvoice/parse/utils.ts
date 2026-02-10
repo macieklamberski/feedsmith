@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny, ParseOptions, ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -22,15 +22,18 @@ export const parseRating: ParsePartialUtil<RawVoiceNs.Rating> = (value) => {
   return trimObject(rating)
 }
 
-export const parseLiveStream: ParsePartialUtil<RawVoiceNs.LiveStream<string>> = (value) => {
+export const parseLiveStream: ParsePartialUtil<
+  RawVoiceNs.LiveStream<DateAny>,
+  ParseOptions<DateAny>
+> = (value, options) => {
   const liveStream = {
     url: parseString(retrieveText(value)),
-    schedule: parseDate(value?.['@schedule']),
+    schedule: parseDate(value?.['@schedule'], options?.parseDateFn),
     duration: parseString(value?.['@duration']),
     type: parseString(value?.['@type']),
   }
 
-  return trimObject(liveStream)
+  return trimObject(liveStream) as RawVoiceNs.LiveStream<DateAny> | undefined
 }
 
 export const parsePoster: ParsePartialUtil<RawVoiceNs.Poster> = (value) => {
@@ -127,7 +130,10 @@ export const retrieveItem: ParsePartialUtil<RawVoiceNs.Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialUtil<RawVoiceNs.Feed<string>> = (value) => {
+export const retrieveFeed: ParsePartialUtil<RawVoiceNs.Feed<DateAny>, ParseOptions<DateAny>> = (
+  value,
+  options,
+) => {
   if (!isObject(value)) {
     return
   }
@@ -137,10 +143,18 @@ export const retrieveFeed: ParsePartialUtil<RawVoiceNs.Feed<string>> = (value) =
     liveEmbed: parseSingularOf(value['rawvoice:liveembed'], (value) =>
       parseString(retrieveText(value)),
     ),
-    flashLiveStream: parseSingularOf(value['rawvoice:flashlivestream'], parseLiveStream),
-    httpLiveStream: parseSingularOf(value['rawvoice:httplivestream'], parseLiveStream),
-    shoutcastLiveStream: parseSingularOf(value['rawvoice:shoutcastlivestream'], parseLiveStream),
-    liveStream: parseSingularOf(value['rawvoice:livestream'], parseLiveStream),
+    flashLiveStream: parseSingularOf(value['rawvoice:flashlivestream'], (value) =>
+      parseLiveStream(value, options),
+    ),
+    httpLiveStream: parseSingularOf(value['rawvoice:httplivestream'], (value) =>
+      parseLiveStream(value, options),
+    ),
+    shoutcastLiveStream: parseSingularOf(value['rawvoice:shoutcastlivestream'], (value) =>
+      parseLiveStream(value, options),
+    ),
+    liveStream: parseSingularOf(value['rawvoice:livestream'], (value) =>
+      parseLiveStream(value, options),
+    ),
     location: parseSingularOf(value['rawvoice:location'], (value) =>
       parseString(retrieveText(value)),
     ),

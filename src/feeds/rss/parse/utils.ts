@@ -1,4 +1,4 @@
-import type { ParseOptions, ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny, ParseOptions, ParsePartialUtil } from '../../../common/types.js'
 import {
   detectNamespaces,
   isObject,
@@ -175,7 +175,10 @@ export const parseSource: ParsePartialUtil<Rss.Source> = (value) => {
   return trimObject(source)
 }
 
-export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
+export const parseItem: ParsePartialUtil<Rss.Item<DateAny>, ParseOptions<DateAny>> = (
+  value,
+  options,
+) => {
   if (!isObject(value)) {
     return
   }
@@ -190,11 +193,13 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
     comments: parseSingularOf(value.comments, (value) => parseString(retrieveText(value))),
     enclosures: parseArrayOf(value.enclosure, parseEnclosure),
     guid: parseSingularOf(value.guid, parseGuid),
-    pubDate: parseSingularOf(value.pubdate, (value) => parseDate(retrieveText(value))),
+    pubDate: parseSingularOf(value.pubdate, (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     source: parseSingularOf(value.source, parseSource),
-    atom: namespaces.has('atom') ? retrieveAtomEntry(value) : undefined,
+    atom: namespaces.has('atom') ? retrieveAtomEntry(value, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
-    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
+    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value, options) : undefined,
     content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     creativeCommons: namespaces.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(value)
@@ -208,8 +213,8 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(value) : undefined,
-    prism: namespaces.has('prism') ? retrievePrismItem(value) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(value, options) : undefined,
+    prism: namespaces.has('prism') ? retrievePrismItem(value, options) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceItem(value) : undefined,
@@ -223,7 +228,10 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
   return trimObject(item)
 }
 
-export const parseFeed: ParsePartialUtil<Rss.Feed<string>, ParseOptions> = (value, options) => {
+export const parseFeed: ParsePartialUtil<Rss.Feed<DateAny>, ParseOptions<DateAny>> = (
+  value,
+  options,
+) => {
   const channel = parseSingular(value?.channel)
 
   if (!isObject(channel)) {
@@ -238,9 +246,11 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>, ParseOptions> = (valu
     copyright: parseSingularOf(channel.copyright, (value) => parseString(retrieveText(value))),
     managingEditor: parseSingularOf(channel.managingeditor, parsePerson),
     webMaster: parseSingularOf(channel.webmaster, parsePerson),
-    pubDate: parseSingularOf(channel.pubdate, (value) => parseDate(retrieveText(value))),
+    pubDate: parseSingularOf(channel.pubdate, (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     lastBuildDate: parseSingularOf(channel.lastbuilddate, (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
     categories: parseArrayOf(channel.category, parseCategory),
     generator: parseSingularOf(channel.generator, (value) => parseString(retrieveText(value))),
@@ -252,19 +262,19 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>, ParseOptions> = (valu
     textInput: parseSingularOf(channel.textinput, parseTextInput),
     skipHours: parseSingularOf(channel.skiphours, parseSkipHours),
     skipDays: parseSingularOf(channel.skipdays, parseSkipDays),
-    items: parseArrayOf(channel.item, parseItem, options?.maxItems),
-    atom: namespaces.has('atom') ? retrieveAtomFeed(channel) : undefined,
+    items: parseArrayOf(channel.item, (value) => parseItem(value, options), options?.maxItems),
+    atom: namespaces.has('atom') ? retrieveAtomFeed(channel, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(channel) : undefined,
-    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel) : undefined,
-    sy: namespaces.has('sy') ? retrieveSyFeed(channel) : undefined,
+    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel, options) : undefined,
+    sy: namespaces.has('sy') ? retrieveSyFeed(channel, options) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesFeed(channel) : undefined,
-    podcast: namespaces.has('podcast') ? retrievePodcastFeed(channel) : undefined,
+    podcast: namespaces.has('podcast') ? retrievePodcastFeed(channel, options) : undefined,
     googleplay: namespaces.has('googleplay') ? retrieveGooglePlayFeed(channel) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(channel) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(channel) : undefined,
-    prism: namespaces.has('prism') ? retrievePrismFeed(channel) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(channel, options) : undefined,
+    prism: namespaces.has('prism') ? retrievePrismFeed(channel, options) : undefined,
     creativeCommons: namespaces.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(channel)
       : undefined,
@@ -273,7 +283,7 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>, ParseOptions> = (valu
     admin: namespaces.has('admin') ? retrieveAdminFeed(channel) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceFeed(channel) : undefined,
     blogChannel: namespaces.has('blogchannel') ? retrieveBlogChannelFeed(channel) : undefined,
-    rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceFeed(channel) : undefined,
+    rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceFeed(channel, options) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(channel) : undefined,
     pingback: namespaces.has('pingback') ? retrievePingbackFeed(channel) : undefined,
     acast: namespaces.has('acast') ? retrieveAcastFeed(channel) : undefined,
@@ -283,6 +293,9 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>, ParseOptions> = (valu
   return trimObject(feed)
 }
 
-export const retrieveFeed: ParsePartialUtil<Rss.Feed<string>, ParseOptions> = (value, options) => {
+export const retrieveFeed: ParsePartialUtil<Rss.Feed<DateAny>, ParseOptions<DateAny>> = (
+  value,
+  options,
+) => {
   return parseSingularOf(value?.rss, (value) => parseFeed(value, options))
 }

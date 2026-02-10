@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../common/types.js'
+import type { DateAny, ParsePartialUtil } from '../../common/types.js'
 import {
   isObject,
   isPresent,
@@ -12,9 +12,9 @@ import {
   retrieveText,
   trimObject,
 } from '../../common/utils.js'
-import type { MainOptions, Opml } from '../common/types.js'
+import type { Opml, ParseMainOptions } from '../common/types.js'
 
-export const parseOutline: ParsePartialUtil<Opml.Outline<string>, MainOptions> = (
+export const parseOutline: ParsePartialUtil<Opml.Outline<DateAny>, ParseMainOptions<DateAny>> = (
   value,
   options,
 ) => {
@@ -27,7 +27,7 @@ export const parseOutline: ParsePartialUtil<Opml.Outline<string>, MainOptions> =
     type: parseString(value['@type']),
     isComment: parseBoolean(value['@iscomment']),
     isBreakpoint: parseBoolean(value['@isbreakpoint']),
-    created: parseDate(value['@created']),
+    created: parseDate(value['@created'], options?.parseDateFn),
     category: parseString(value['@category']),
     description: parseString(value['@description']),
     xmlUrl: parseString(value['@xmlurl']),
@@ -51,18 +51,25 @@ export const parseOutline: ParsePartialUtil<Opml.Outline<string>, MainOptions> =
     }
   }
 
-  return trimObject(outline)
+  return trimObject(outline) as Opml.Outline<DateAny> | undefined
 }
 
-export const parseHead: ParsePartialUtil<Opml.Head<string>> = (value) => {
+export const parseHead: ParsePartialUtil<Opml.Head<DateAny>, ParseMainOptions<DateAny>> = (
+  value,
+  options,
+) => {
   if (!isObject(value)) {
     return
   }
 
   const head = {
     title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
-    dateCreated: parseSingularOf(value.datecreated, (value) => parseDate(retrieveText(value))),
-    dateModified: parseSingularOf(value.datemodified, (value) => parseDate(retrieveText(value))),
+    dateCreated: parseSingularOf(value.datecreated, (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
+    dateModified: parseSingularOf(value.datemodified, (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     ownerName: parseSingularOf(value.ownername, (value) => parseString(retrieveText(value))),
     ownerEmail: parseSingularOf(value.owneremail, (value) => parseString(retrieveText(value))),
     ownerId: parseSingularOf(value.ownerid, (value) => parseString(retrieveText(value))),
@@ -82,7 +89,10 @@ export const parseHead: ParsePartialUtil<Opml.Head<string>> = (value) => {
   return trimObject(head)
 }
 
-export const parseBody: ParsePartialUtil<Opml.Body<string>, MainOptions> = (value, options) => {
+export const parseBody: ParsePartialUtil<Opml.Body<DateAny>, ParseMainOptions<DateAny>> = (
+  value,
+  options,
+) => {
   if (!isObject(value)) {
     return
   }
@@ -98,7 +108,7 @@ export const parseBody: ParsePartialUtil<Opml.Body<string>, MainOptions> = (valu
   return trimObject(body)
 }
 
-export const parseDocument: ParsePartialUtil<Opml.Document<string>, MainOptions> = (
+export const parseDocument: ParsePartialUtil<Opml.Document<DateAny>, ParseMainOptions<DateAny>> = (
   value,
   options,
 ) => {
@@ -107,7 +117,7 @@ export const parseDocument: ParsePartialUtil<Opml.Document<string>, MainOptions>
   }
 
   const opml = {
-    head: parseHead(value.opml.head),
+    head: parseHead(value.opml.head, options),
     body: parseBody(value.opml.body, options),
   }
 

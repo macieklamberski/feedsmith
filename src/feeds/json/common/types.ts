@@ -1,4 +1,4 @@
-import type { DateLike, Requirable, Strict } from '../../../common/types.js'
+import type { Requirable, Strict } from '../../../common/types.js'
 
 // #region reference
 export namespace Json {
@@ -19,7 +19,7 @@ export namespace Json {
     TStrict
   >
 
-  export type Item<TDate extends DateLike, TStrict extends boolean = false> = Strict<
+  export type Item<TDate, TStrict extends boolean = false> = Strict<
     {
       id: Requirable<string> // Required in spec.
       url?: string
@@ -49,7 +49,7 @@ export namespace Json {
     TStrict
   >
 
-  export type Feed<TDate extends DateLike, TStrict extends boolean = false> = Strict<
+  export type Feed<TDate, TStrict extends boolean = false> = Strict<
     {
       title: Requirable<string> // Required in spec.
       home_page_url?: string

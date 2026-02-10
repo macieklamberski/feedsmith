@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny, ParseOptions, ParsePartialUtil } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -26,14 +26,17 @@ export const parseInReplyTo: ParsePartialUtil<ThrNs.InReplyTo> = (value) => {
   return trimObject(inReplyTo)
 }
 
-export const retrieveLink: ParsePartialUtil<ThrNs.Link<string>> = (value) => {
+export const retrieveLink: ParsePartialUtil<ThrNs.Link<DateAny>, ParseOptions<DateAny>> = (
+  value,
+  options,
+) => {
   if (!isObject(value)) {
     return
   }
 
   const link = {
     count: parseNumber(value['@thr:count']),
-    updated: parseDate(value['@thr:updated']),
+    updated: parseDate(value['@thr:updated'], options?.parseDateFn),
   }
 
   return trimObject(link)

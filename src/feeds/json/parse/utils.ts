@@ -1,4 +1,4 @@
-import type { ParseOptions, ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny, ParseOptions, ParsePartialUtil } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
   isObject,
@@ -81,7 +81,10 @@ export const parseAttachment: ParsePartialUtil<Json.Attachment> = (value) => {
   return trimObject(attachment)
 }
 
-export const parseItem: ParsePartialUtil<Json.Item<string>> = (value) => {
+export const parseItem: ParsePartialUtil<Json.Item<DateAny>, ParseOptions<DateAny>> = (
+  value,
+  options,
+) => {
   if (!isObject(value)) {
     return
   }
@@ -97,15 +100,19 @@ export const parseItem: ParsePartialUtil<Json.Item<string>> = (value) => {
     summary: parseSingularOf(get('summary'), parseString),
     image: parseSingularOf(get('image'), parseString),
     banner_image: parseSingularOf(get('banner_image'), parseString),
-    date_published: parseSingularOf(get('date_published'), parseDate),
-    date_modified: parseSingularOf(get('date_modified'), parseDate),
+    date_published: parseSingularOf(get('date_published'), (value) =>
+      parseDate(value, options?.parseDateFn),
+    ),
+    date_modified: parseSingularOf(get('date_modified'), (value) =>
+      parseDate(value, options?.parseDateFn),
+    ),
     tags: parseArrayOf(get('tags'), parseString),
     authors: retrieveAuthors(value),
     language: parseSingularOf(get('language'), parseString),
     attachments: parseArrayOf(get('attachments'), parseAttachment),
   }
 
-  return trimObject(item)
+  return trimObject(item) as Json.Item<DateAny> | undefined
 }
 
 export const parseHub: ParsePartialUtil<Json.Hub> = (value) => {
@@ -122,7 +129,10 @@ export const parseHub: ParsePartialUtil<Json.Hub> = (value) => {
   return trimObject(hub)
 }
 
-export const parseFeed: ParsePartialUtil<Json.Feed<string>, ParseOptions> = (value, options) => {
+export const parseFeed: ParsePartialUtil<Json.Feed<DateAny>, ParseOptions<DateAny>> = (
+  value,
+  options,
+) => {
   if (!isObject(value)) {
     return
   }
@@ -141,7 +151,7 @@ export const parseFeed: ParsePartialUtil<Json.Feed<string>, ParseOptions> = (val
     expired: parseSingularOf(get('expired'), parseBoolean),
     hubs: parseArrayOf(get('hubs'), parseHub),
     authors: retrieveAuthors(value),
-    items: parseArrayOf(get('items'), parseItem, options?.maxItems),
+    items: parseArrayOf(get('items'), (value) => parseItem(value, options), options?.maxItems),
   }
 
   return trimObject(feed)

@@ -5,7 +5,10 @@ import { detectJsonFeed } from '../../../index.js'
 import type { Json } from '../common/types.js'
 import { parseFeed } from './utils.js'
 
-export const parse = (value: unknown, options?: ParseOptions): Json.Feed<string> => {
+export const parse = <TDate = string>(
+  value: unknown,
+  options?: ParseOptions<TDate>,
+): Json.Feed<TDate> => {
   const json = parseJsonObject(value)
 
   if (!detectJsonFeed(json)) {
@@ -18,5 +21,5 @@ export const parse = (value: unknown, options?: ParseOptions): Json.Feed<string>
     throw new Error(locales.invalidFeedFormat)
   }
 
-  return parsed
+  return parsed as Json.Feed<TDate>
 }
