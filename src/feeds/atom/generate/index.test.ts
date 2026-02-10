@@ -319,7 +319,7 @@ describe('generate', () => {
       title: { value: 'Feed with DC namespace' },
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
-        creator: 'John Doe',
+        creators: ['John Doe'],
       },
       entries: [
         {
@@ -327,7 +327,7 @@ describe('generate', () => {
           title: { value: 'Entry with DC' },
           updated: new Date('2023-03-15T12:00:00Z'),
           dc: {
-            creator: 'Jane Smith',
+            creators: ['Jane Smith'],
           },
         },
       ],
@@ -379,8 +379,8 @@ describe('generate', () => {
       title: { value: 'Feed with DCTerms namespace' },
       updated: new Date('2023-03-15T12:00:00Z'),
       dcterms: {
-        created: new Date('2023-01-01T00:00:00Z'),
-        license: 'Creative Commons Attribution 4.0',
+        created: [new Date('2023-01-01T00:00:00Z')],
+        licenses: ['Creative Commons Attribution 4.0'],
       },
       entries: [
         {
@@ -388,8 +388,8 @@ describe('generate', () => {
           title: { value: 'Entry with DCTerms' },
           updated: new Date('2023-03-15T12:00:00Z'),
           dcterms: {
-            created: new Date('2023-02-01T00:00:00Z'),
-            license: 'MIT License',
+            created: [new Date('2023-02-01T00:00:00Z')],
+            licenses: ['MIT License'],
           },
         },
       ],
@@ -634,8 +634,8 @@ describe('generate', () => {
       title: { value: 'Feed with multiple namespaces' },
       updated: new Date('2023-03-15T12:00:00Z'),
       dc: {
-        creator: 'John Doe',
-        rights: 'Copyright 2023',
+        creators: ['John Doe'],
+        rights: ['Copyright 2023'],
       },
       sy: {
         updatePeriod: 'daily',
@@ -647,7 +647,7 @@ describe('generate', () => {
           title: { value: 'Multi-namespace entry' },
           updated: new Date('2023-03-15T12:00:00Z'),
           dc: {
-            creator: 'Jane Smith',
+            creators: ['Jane Smith'],
           },
           slash: {
             section: 'Technology',

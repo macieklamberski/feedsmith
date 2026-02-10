@@ -20,7 +20,7 @@ import {
 import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
-import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces/geo/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
@@ -288,7 +288,7 @@ export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options)
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     geo: namespaces?.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     thr: namespaces?.has('thr') ? retrieveThrItem(value) : undefined,
-    dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    dcterms: namespaces?.has('dcterms') ? retrieveDcTermsItemOrFeed(value) : undefined,
     creativeCommons: namespaces?.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(value)
       : undefined,
@@ -331,7 +331,7 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) =
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     geo: namespaces?.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
-    dcterms: namespaces?.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    dcterms: namespaces?.has('dcterms') ? retrieveDcTermsItemOrFeed(value) : undefined,
     creativeCommons: namespaces?.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(value)
       : undefined,

@@ -116,5 +116,5 @@ generateRssFeed(
 
 ## Related
 
-- **[Generating Feeds](/generating/)** - Overview of feed generation
+- **[Generating Feeds](/generating)** - Overview of feed generation
 - **[TypeScript Guide](/reference/typescript)** - Working with Feedsmith types

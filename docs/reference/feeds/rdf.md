@@ -98,7 +98,7 @@ const isRdf = detectRdfFeed(xmlContent)
 All RDF types are available under the `Rdf` namespace:
 
 ```typescript
-import type { Rdf } from 'feedsmith/types'
+import type { Rdf } from 'feedsmith'
 
 // Access any type from the definitions below
 type Feed = Rdf.Feed<Date>

@@ -75,8 +75,8 @@ export type XmlGenerateOptions<O = Record<string, unknown>, S extends boolean = 
   stylesheets?: Array<XmlStylesheet>
 }
 
-export type XmlGenerateMain<L, St, O = Record<string, unknown>> = <S extends boolean = false>(
-  value: S extends true ? St : L,
+export type XmlGenerateMain<LV, SV, O = Record<string, unknown>> = <S extends boolean = false>(
+  value: S extends true ? SV : LV,
   options?: XmlGenerateOptions<O, S>,
 ) => string
 
@@ -84,7 +84,7 @@ export type JsonGenerateOptions<O = Record<string, unknown>, S extends boolean =
   strict?: S
 }
 
-export type JsonGenerateMain<L, St, O = Record<string, unknown>> = <S extends boolean = false>(
-  value: S extends true ? St : L,
+export type JsonGenerateMain<LV, SV, O = Record<string, unknown>> = <S extends boolean = false>(
+  value: S extends true ? SV : LV,
   options?: JsonGenerateOptions<O, S>,
 ) => unknown

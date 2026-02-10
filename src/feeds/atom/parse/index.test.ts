@@ -446,7 +446,6 @@ describe('parse', () => {
             updated: '2024-01-01T00:00:00Z',
             dc: {
               creators: ['John Doe'],
-              creator: 'John Doe',
             },
           },
         ],
@@ -488,8 +487,6 @@ describe('parse', () => {
             dc: {
               creators: ['John Doe'],
               dates: ['2023-01-01'],
-              creator: 'John Doe',
-              date: '2023-01-01',
             },
           },
           {
@@ -529,7 +526,6 @@ describe('parse', () => {
             updated: '2024-01-01T00:00:00Z',
             dc: {
               creators: ['John Doe'],
-              creator: 'John Doe',
             },
           },
         ],
@@ -623,8 +619,6 @@ describe('parse', () => {
             dc: {
               creators: ['John Doe'],
               dates: ['2023-01-01'],
-              creator: 'John Doe',
-              date: '2023-01-01',
             },
             media: {
               title: { value: 'Media Title' },
@@ -674,7 +668,6 @@ describe('parse', () => {
             updated: '2024-01-01T00:00:00Z',
             dc: {
               creators: ['Should not normalize (empty URI)'],
-              creator: 'Should not normalize (empty URI)',
             },
           },
         ],
@@ -728,7 +721,6 @@ describe('parse', () => {
             title: { value: 'Incomplete Entry' },
             dc: {
               creators: ['John Doe'],
-              creator: 'John Doe',
             },
           },
         ],
@@ -840,7 +832,6 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -875,7 +866,6 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -910,7 +900,6 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -945,7 +934,6 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -980,7 +968,6 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -1015,7 +1002,6 @@ describe('parse', () => {
               updated: '2024-01-01T00:00:00Z',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -1052,8 +1038,6 @@ describe('parse', () => {
               dcterms: {
                 creators: ['Jane Doe'],
                 titles: ['DC Terms Title'],
-                creator: 'Jane Doe',
-                title: 'DC Terms Title',
               },
             },
           ],

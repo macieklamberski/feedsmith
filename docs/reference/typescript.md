@@ -8,10 +8,10 @@ Feedsmith is built with TypeScript and provides comprehensive type definitions f
 
 ## Importing Types
 
-All types are available through the `feedsmith/types` export:
+All types are available through the main `feedsmith` export:
 
 ```typescript
-import type { Rss, Atom, Json, Rdf, Opml } from 'feedsmith/types'
+import type { Rss, Atom, Json, Rdf, Opml } from 'feedsmith'
 ```
 
 Each namespace contains the complete type system for that format:
@@ -46,8 +46,7 @@ type Outline = Opml.Outline
 When parsing, dates are returned as strings. Use `<string>` for the generic parameter:
 
 ```typescript
-import type { Rss } from 'feedsmith/types'
-import { parseRssFeed } from 'feedsmith'
+import { type Rss, parseRssFeed } from 'feedsmith'
 
 const feed: Rss.Feed<string> = parseRssFeed(xmlContent)
 
@@ -65,8 +64,7 @@ feed.items?.[0]?.enclosures // Enclosure[] | undefined
 When generating, you can use `Date` objects. Use `<Date>` for the generic parameter:
 
 ```typescript
-import type { Rss } from 'feedsmith/types'
-import { generateRssFeed } from 'feedsmith'
+import { type Rss, generateRssFeed } from 'feedsmith'
 
 const feed: Rss.Feed<Date> = {
   title: 'My Podcast',
@@ -87,15 +85,66 @@ const feed: Rss.Feed<Date> = {
 const xml = generateRssFeed(feed)
 ```
 
-<!-- TODO: Add example for working with namespaces. -->
+## Importing Namespace Types
+
+All namespace types are exported from the main package, allowing direct type access:
+
+```typescript
+import type { ItunesNs, DcNs, MediaNs, PodcastNs } from 'feedsmith'
+```
+
+Each namespace contains its complete type system:
+
+```typescript
+// Dublin Core namespace types
+type DcFeed = DcNs.Feed
+type DcItem = DcNs.Item
+
+// Media namespace types
+type MediaFeed = MediaNs.Feed
+type MediaItem = MediaNs.Item
+type MediaContent = MediaNs.Content
+type MediaGroup = MediaNs.Group
+```
+
+This is useful when you need to type variables or function parameters with namespace-specific types:
+
+```typescript
+import type { ItunesNs, PodcastNs } from 'feedsmith'
+import { generateRssFeed } from 'feedsmith'
+
+const itunesCategory: ItunesNs.Category = {
+  text: 'Technology',
+  categories: [{ text: 'Software How-To' }]
+}
+
+const transcript: PodcastNs.Transcript = {
+  url: 'https://example.com/transcript.srt',
+  type: 'application/srt'
+}
+
+const xml = generateRssFeed({
+  title: 'My Podcast',
+  itunes: {
+    categories: [itunesCategory]
+  },
+  items: [{
+    title: 'Episode 1',
+    podcast: {
+      transcripts: [transcript]
+    }
+  }]
+})
+```
+
+Each namespace's type export name can be found in the "Types" section of its reference documentation.
 
 ## Complete Example
 
 Here's an example on how you can utilize the types for sub-elements of the RSS feed while generating a podcast feed:
 
 ```typescript
-import type { Rss } from 'feedsmith/types'
-import { generateRssFeed } from 'feedsmith'
+import { type Rss, generateRssFeed } from 'feedsmith'
 
 const items: Array<Rss.Item<Date>> = [{
   title: 'Episode 1: Introduction',

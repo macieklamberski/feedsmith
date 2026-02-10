@@ -17,7 +17,7 @@ import {
 } from '../../../namespaces/atom/parse/utils.js'
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
-import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
 import { retrieveAbout as retrieveRdfAbout } from '../../../namespaces/rdf/parse/utils.js'
@@ -108,7 +108,7 @@ export const parseItem: ParsePartialUtil<Rdf.Item<string>> = (value) => {
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
@@ -164,7 +164,7 @@ export const parseFeed: ParsePartialUtil<Rdf.Feed<string>, ParseOptions> = (valu
     sy: namespaces.has('sy') ? retrieveSyFeed(channel) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(channel) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(channel) : undefined,
     admin: namespaces.has('admin') ? retrieveAdminFeed(channel) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
