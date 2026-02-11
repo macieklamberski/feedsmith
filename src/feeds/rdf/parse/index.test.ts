@@ -1554,5 +1554,33 @@ describe('parse', () => {
 
       expect(result).toEqual(expected)
     })
+
+    it('should apply custom parseDateFn to sy namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/"
+          xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+        >
+          <channel rdf:about="http://example.com">
+            <title>Test</title>
+            <sy:updateBase>2023-03-15T12:00:00Z</sy:updateBase>
+          </channel>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'Test',
+        rdf: {
+          about: 'http://example.com',
+        },
+        sy: {
+          updateBase: new Date('2023-03-15T12:00:00Z'),
+        },
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
+    })
   })
 })
