@@ -66,12 +66,14 @@ export const generateContent: GenerateUtil<Atom.Content> = (content) => {
     return
   }
 
-  return trimObject({
+  const value = {
     ...generateTextOrCdataString(content.value),
     '@type': generatePlainString(content.type),
     '@src': generatePlainString(content.src),
     ...generateXmlItemOrFeed(content.xml),
-  })
+  }
+
+  return trimObject(value)
 }
 
 export const generateLink: GenerateUtil<Atom.Link<DateLike>> = (link) => {

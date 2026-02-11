@@ -242,7 +242,7 @@ export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options)
   const entry = {
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
-    content: parseSingularOf(get('content'), parseContent),
+    content: parseSingularOf(get('content'), (value) => parseContent(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
     id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
