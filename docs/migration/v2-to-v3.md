@@ -146,6 +146,47 @@ import { type Rss, parseRssFeed } from 'feedsmith'
 1. Change `feedsmith/types` imports to `feedsmith`
 2. Replace deprecated type aliases: `RssFeed` → `Rss.Feed`, `AtomFeed` → `Atom.Feed`, etc.
 
+### Atom Entry `content` changed from string to object
+
+The `content` field on Atom entries was previously flattened to a string. This meant, any additional attributes like `type` (indicating content type), `src` (remote content URI), and XML namespace declarations were lost during parsing. In the new version, it is replaced with the `Atom.Content` object that preserves these attributes, properly representing the [Atom content construct](https://www.rfc-editor.org/rfc/rfc4287#section-4.1.3).
+
+```tsx
+<content type="xhtml" xml:base="http://example.org/entry/1" xml:lang="en-US">
+  Text
+</content>
+````
+
+#### Before (2.x)
+```typescript
+// Parsing
+const feed = parseAtomFeed(xml)
+const content = feed.entries?.[0]?.content // string
+
+// Generating
+const xml = generateAtomFeed({
+  entries: [{ content: '<p>Hello</p>' }],
+})
+```
+
+#### After (3.x)
+```typescript
+// Parsing
+const feed = parseAtomFeed(xml)
+const content = feed.entries?.[0]?.content?.value // string (text content)
+const type = feed.entries?.[0]?.content?.type // e.g. 'html', 'xhtml', 'text'
+const src = feed.entries?.[0]?.content?.src // remote content URI
+
+// Generating
+const xml = generateAtomFeed({
+  entries: [{ content: { value: '<p>Hello</p>', type: 'html' } }],
+})
+```
+
+#### Migration Steps
+1. Replace `entry.content` reads with `entry.content?.value`
+2. Update generate calls: `content: 'text'` → `content: { value: 'text' }`
+3. Optionally use `type` and `src` for richer content metadata
+
 ### Media Namespace: Deprecated Field Removed
 
 The deprecated `group` field has been removed to align with the [Media RSS specification](https://www.rssboard.org/media-rss):
@@ -344,6 +385,7 @@ Use this checklist to ensure a complete migration:
 - Update type parameters if using strict types directly (add `true` as last parameter)
 - Remove `DeepPartial` from imports
 - Change `feedsmith/types` imports to `feedsmith`
+- Update Atom `entry.content` usage: read `content?.value` instead of `content`, generate with `{ value: '...' }` instead of plain string
 - Replace Media namespace deprecated field (`group` → `groups`)
 - Replace Podcast namespace deprecated fields (`location` → `locations`, `value` → `values`, `chats` → `chat`)
 - Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
