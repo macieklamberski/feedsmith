@@ -290,6 +290,22 @@ export const parseSingularOf = <R>(value: Unreliable, parse: ParseExactUtil<R>):
   return parse(parseSingular(value))
 }
 
+export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
+  return (requestedKey: string) => {
+    if (requestedKey in value) {
+      return value[requestedKey]
+    }
+
+    const lowerKey = requestedKey.toLowerCase()
+
+    for (const key in value) {
+      if (key.toLowerCase() === lowerKey) {
+        return value[key]
+      }
+    }
+  }
+}
+
 export const parseCsvOf = <T>(
   value: Unreliable,
   parse: ParseExactUtil<T>,
