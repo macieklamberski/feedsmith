@@ -48,6 +48,13 @@ export namespace Atom {
   // For simplicity's sake, a string is used for now, but this may be reconsidered in the future.
   export type Text = string
 
+  export type Content = {
+    value?: string
+    type?: string
+    src?: string
+    xml?: XmlNs.ItemOrFeed
+  }
+
   export type Link<TDate, TStrict extends boolean = false> = Strict<
     {
       href: Requirable<string> // Required in spec.
@@ -108,7 +115,7 @@ export namespace Atom {
     {
       authors?: Array<Person<TStrict>>
       categories?: Array<Category<TStrict>>
-      content?: Text
+      content?: Content
       contributors?: Array<Person<TStrict>>
       id: Requirable<string> // Required in spec.
       links?: Array<Link<TDate, TStrict>>

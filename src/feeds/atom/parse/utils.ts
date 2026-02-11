@@ -1,6 +1,7 @@
 import type { DateAny, Unreliable } from '../../../common/types.js'
 import {
   detectNamespaces,
+  isNonEmptyString,
   isObject,
   parseArrayOf,
   parseDate,
@@ -61,6 +62,27 @@ export const createNamespaceGetter = (
   }
 
   return (key: string) => value[prefix + key]
+}
+
+export const parseContent: ParseUtilPartial<Atom.Content> = (value) => {
+  if (isNonEmptyString(value)) {
+    const parsed = parseString(value)
+
+    return parsed ? { value: parsed } : undefined
+  }
+
+  if (!isObject(value)) {
+    return
+  }
+
+  const content = {
+    value: parseString(retrieveText(value)),
+    type: parseString(value['@type']),
+    src: parseString(value['@src']),
+    xml: retrieveXmlItemOrFeed(value),
+  }
+
+  return trimObject(content)
 }
 
 export const parseLink: ParseUtilPartial<Atom.Link<DateAny>> = (value, options) => {
@@ -230,7 +252,7 @@ export const parseEntry: ParseUtilPartial<Atom.Entry<DateAny>> = (value, options
   const entry = {
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
-    content: parseSingularOf(get('content'), (value) => parseString(retrieveText(value))),
+    content: parseSingularOf(get('content'), (value) => parseContent(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
     id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),

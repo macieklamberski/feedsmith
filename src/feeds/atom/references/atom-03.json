@@ -45,7 +45,14 @@
           "label": "Documentation"
         }
       ],
-      "content": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Watch out for <span style=\"background-image: url(javascript:window.location='http://example.org/')\"> nasty tricks</span></div>",
+      "content": {
+        "value": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Watch out for <span style=\"background-image: url(javascript:window.location='http://example.org/')\"> nasty tricks</span></div>",
+        "type": "application/xhtml+xml",
+        "xml": {
+          "base": "http://example.org/entry/3",
+          "lang": "en-US"
+        }
+      },
       "contributors": [
         { "name": "Joe", "uri": "http://example.org/joe/", "email": "joe@example.org" },
         { "name": "Sam", "uri": "http://example.org/sam/", "email": "sam@example.org" }
@@ -97,7 +104,14 @@
       "authors": [
         { "name": "Jane Smith", "uri": "http://example.org/jane/", "email": "jane@example.org" }
       ],
-      "content": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Watch out for <span style=\"background-image: url(javascript:window.location='http://example.org/')\"> nasty tricks</span></div>",
+      "content": {
+        "value": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Watch out for <span style=\"background-image: url(javascript:window.location='http://example.org/')\"> nasty tricks</span></div>",
+        "type": "application/xhtml+xml",
+        "xml": {
+          "base": "http://example.org/entry/3",
+          "lang": "en-US"
+        }
+      },
       "id": "tag:feedparser.org,2004-04-20:/docs/examples/atom03.xml:4",
       "links": [{ "href": "/entry/4", "rel": "alternate", "type": "text/html" }],
       "published": "2004-04-20T08:45:00Z",
