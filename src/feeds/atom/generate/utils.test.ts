@@ -2,6 +2,7 @@ import { describe, expect, it } from 'bun:test'
 import {
   createNamespaceSetter,
   generateCategory,
+  generateContent,
   generateEntry,
   generateFeed,
   generateGenerator,
@@ -48,11 +49,12 @@ describe('createNamespaceSetter', () => {
 })
 
 describe('generateText', () => {
-  it('should pass through non-empty string text', () => {
-    const value = 'Hello World'
-    const expected = 'Hello World'
+  it('should generate text from string', () => {
+    expect(generateText('Hello World')).toBe('Hello World')
+  })
 
-    expect(generateText(value)).toEqual(expected)
+  it('should wrap special characters in CDATA', () => {
+    expect(generateText('Hello & World')).toEqual({ '#cdata': 'Hello & World' })
   })
 
   it('should return undefined for empty string', () => {
@@ -63,8 +65,74 @@ describe('generateText', () => {
     expect(generateText('   ')).toBeUndefined()
   })
 
-  it('should pass through undefined', () => {
+  it('should return undefined for undefined input', () => {
     expect(generateText(undefined)).toBeUndefined()
+  })
+})
+
+describe('generateContent', () => {
+  it('should generate content with value only', () => {
+    const value = { value: 'Content text' }
+    const expected = { '#text': 'Content text' }
+
+    expect(generateContent(value)).toEqual(expected)
+  })
+
+  it('should generate content with value, type and src', () => {
+    const value = {
+      value: 'Content text',
+      type: 'html',
+      src: 'https://example.com/content',
+    }
+    const expected = {
+      '#text': 'Content text',
+      '@type': 'html',
+      '@src': 'https://example.com/content',
+    }
+
+    expect(generateContent(value)).toEqual(expected)
+  })
+
+  it('should generate content with only src attribute', () => {
+    const value = {
+      type: 'video/mp4',
+      src: 'https://example.com/video.mp4',
+    }
+    const expected = {
+      '@type': 'video/mp4',
+      '@src': 'https://example.com/video.mp4',
+    }
+
+    expect(generateContent(value)).toEqual(expected)
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(generateContent(undefined)).toBeUndefined()
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(generateContent(value)).toBeUndefined()
+  })
+
+  it('should generate content with xml namespace attributes', () => {
+    const value = {
+      value: '<div>XHTML content</div>',
+      type: 'xhtml',
+      xml: {
+        base: 'http://example.org/entry/1',
+        lang: 'en-US',
+      },
+    }
+    const expected = {
+      '#cdata': '<div>XHTML content</div>',
+      '@type': 'xhtml',
+      '@xml:base': 'http://example.org/entry/1',
+      '@xml:lang': 'en-US',
+    }
+
+    expect(generateContent(value)).toEqual(expected)
   })
 })
 
@@ -391,7 +459,7 @@ describe('generateEntry', () => {
     const value = {
       authors: [{ name: 'John Doe' }],
       categories: [{ term: 'technology' }],
-      content: 'Entry content here',
+      content: { value: 'Entry content here' },
       contributors: [{ name: 'Jane Smith' }],
       id: 'https://example.com/entry/1',
       links: [{ href: 'https://example.com/entry/1' }],
@@ -405,7 +473,7 @@ describe('generateEntry', () => {
     const expected = {
       author: [{ name: 'John Doe' }],
       category: [{ '@term': 'technology' }],
-      content: 'Entry content here',
+      content: { '#text': 'Entry content here' },
       contributor: [{ name: 'Jane Smith' }],
       id: 'https://example.com/entry/1',
       link: [{ '@href': 'https://example.com/entry/1' }],

@@ -61,6 +61,21 @@ export const generateText: GenerateUtil<Atom.Text> = (text) => {
   return generateCdataString(text)
 }
 
+export const generateContent: GenerateUtil<Atom.Content> = (content) => {
+  if (!isObject(content)) {
+    return
+  }
+
+  const value = {
+    ...generateTextOrCdataString(content.value),
+    '@type': generatePlainString(content.type),
+    '@src': generatePlainString(content.src),
+    ...generateXmlItemOrFeed(content.xml),
+  }
+
+  return trimObject(value)
+}
+
 export const generateLink: GenerateUtil<Atom.Link<DateLike>> = (link) => {
   if (!isObject(link)) {
     return
@@ -160,7 +175,7 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
   const value = {
     [key('author')]: trimArray(entry.authors, generatePerson),
     [key('category')]: trimArray(entry.categories, generateCategory),
-    [key('content')]: generateText(entry.content),
+    [key('content')]: generateContent(entry.content),
     [key('contributor')]: trimArray(entry.contributors, (contributor) =>
       generatePerson(contributor, options),
     ),
