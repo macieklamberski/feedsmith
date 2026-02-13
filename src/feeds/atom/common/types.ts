@@ -13,6 +13,7 @@ import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { CreativeCommonsNs } from '../../../namespaces/creativecommons/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
+import type { GNs } from '../../../namespaces/g/common/types.js'
 import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { GooglePlayNs } from '../../../namespaces/googleplay/common/types.js'
@@ -131,6 +132,7 @@ export namespace Atom {
       yt?: YtNs.Item
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
+      g?: GNs.Item<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
     TStrict

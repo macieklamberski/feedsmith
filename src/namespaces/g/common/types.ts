@@ -16,6 +16,7 @@ export namespace GNs {
       minTransitTime?: number
       maxTransitTime?: number
       handlingCutoffTime?: string // Simple HHMM sub-attribute variant.
+      handlingCutoffTimezone?: string
     },
     TStrict
   >
@@ -150,7 +151,9 @@ export namespace GNs {
     shippingTransitBusinessDays?: string
 
     // Tax.
+    /** @deprecated Since July 2025 for US merchants. */
     taxes?: Array<Tax>
+    /** @deprecated Since July 2025 for US merchants. */
     taxCategory?: string
 
     // Unit pricing.
@@ -165,8 +168,11 @@ export namespace GNs {
     adult?: boolean
 
     // Energy efficiency.
+    /** @deprecated In EU countries since April 2025. Use certifications instead. */
     energyEfficiencyClass?: string
+    /** @deprecated In EU countries since April 2025. Use certifications instead. */
     minEnergyEfficiencyClass?: string
+    /** @deprecated In EU countries since April 2025. Use certifications instead. */
     maxEnergyEfficiencyClass?: string
     certifications?: Array<Certification>
 

@@ -626,6 +626,18 @@
       "creativeCommons": {
         "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]
       },
+      "g": {
+        "id": "SKU12345",
+        "title": "Example Product",
+        "description": "A great product for demonstrating Google Merchant Center data",
+        "link": "https://example.com/product/12345",
+        "imageLink": "https://example.com/images/product.jpg",
+        "price": "19.99 USD",
+        "availability": "in_stock",
+        "brand": "Example Brand",
+        "gtin": "00012345678905",
+        "condition": "new"
+      },
       "links": [
         {
           "rel": "replies",

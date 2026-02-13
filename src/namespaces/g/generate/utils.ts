@@ -28,6 +28,7 @@ export const generateShipping: GenerateUtil<GNs.Shipping> = (shipping) => {
     'g:min_transit_time': generateNumber(shipping.minTransitTime),
     'g:max_transit_time': generateNumber(shipping.maxTransitTime),
     'g:handling_cutoff_time': generatePlainString(shipping.handlingCutoffTime),
+    'g:handling_cutoff_timezone': generateCdataString(shipping.handlingCutoffTimezone),
   }
 
   return trimObject(value)

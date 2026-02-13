@@ -45,6 +45,9 @@ export const parseShipping: ParsePartialUtil<GNs.Shipping> = (value) => {
     handlingCutoffTime: parseSingularOf(value['g:handling_cutoff_time'], (value) =>
       parseString(retrieveText(value)),
     ),
+    handlingCutoffTimezone: parseSingularOf(value['g:handling_cutoff_timezone'], (value) =>
+      parseString(retrieveText(value)),
+    ),
   }
 
   return trimObject(shipping)

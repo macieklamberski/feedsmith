@@ -28,6 +28,7 @@ describe('generateShipping', () => {
       minTransitTime: 2,
       maxTransitTime: 5,
       handlingCutoffTime: '1400',
+      handlingCutoffTimezone: 'America/New_York',
     }
     const expected = {
       'g:country': 'US',
@@ -42,6 +43,7 @@ describe('generateShipping', () => {
       'g:min_transit_time': 2,
       'g:max_transit_time': 5,
       'g:handling_cutoff_time': '1400',
+      'g:handling_cutoff_timezone': 'America/New_York',
     }
 
     expect(generateShipping(value)).toEqual(expected)

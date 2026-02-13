@@ -22,7 +22,7 @@ The Google Merchant Center namespace (`g:`) provides product data attributes for
     </tr>
     <tr>
       <th>Available in</th>
-      <td><a href="/reference/feeds/rss">RSS</a></td>
+      <td><a href="/reference/feeds/rss">RSS</a>, <a href="/reference/feeds/atom">Atom</a></td>
     </tr>
     <tr>
       <th>Property</th>
@@ -41,4 +41,5 @@ The Google Merchant Center namespace (`g:`) provides product data attributes for
 ## Related
 
 - **[RSS Feed Reference](/reference/feeds/rss)** - RSS feed format documentation
+- **[Atom Feed Reference](/reference/feeds/atom)** - Atom feed format documentation
 - **[Parsing Namespaces](/parsing/namespaces)** - How namespace parsing works

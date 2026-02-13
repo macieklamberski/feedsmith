@@ -316,6 +316,9 @@ export const namespaceUris = {
   ],
   g: [
     'http://base.google.com/ns/1.0', // Official URI.
+    'https://base.google.com/ns/1.0',
+    'http://base.google.com/ns/1.0/',
+    'https://base.google.com/ns/1.0/',
   ],
 }
 

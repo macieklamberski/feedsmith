@@ -1790,6 +1790,51 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with g namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Google Merchant Center namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'Product Entry',
+          updated: new Date('2023-03-15T12:00:00Z'),
+          g: {
+            id: 'SKU12345',
+            price: '19.99 USD',
+            brand: 'Example Brand',
+            availability: 'in_stock',
+            condition: 'new',
+          },
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:g': 'http://base.google.com/ns/1.0',
+        id: 'https://example.com/feed',
+        title: 'Feed with Google Merchant Center namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        entry: [
+          {
+            id: 'https://example.com/entry/1',
+            title: 'Product Entry',
+            updated: '2023-03-15T12:00:00.000Z',
+            'g:id': 'SKU12345',
+            'g:price': '19.99 USD',
+            'g:availability': 'in_stock',
+            'g:brand': 'Example Brand',
+            'g:condition': 'new',
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with xml namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',

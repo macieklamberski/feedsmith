@@ -21,6 +21,7 @@
       xmlns:yt="http://www.youtube.com/xml/schemas/2015"
       xmlns:georss="http://www.georss.org/georss"
       xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+      xmlns:g="http://base.google.com/ns/1.0"
       xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
   <id>example-feed</id>
@@ -578,5 +579,17 @@
     <!-- YouTube Namespace: Entry Level Tags -->
     <yt:videoId>dQw4w9WgXcQ</yt:videoId>
     <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
+
+    <!-- Google Merchant Center Namespace: Entry Level Tags -->
+    <g:id>SKU12345</g:id>
+    <g:title>Example Product</g:title>
+    <g:description>A great product for demonstrating Google Merchant Center data</g:description>
+    <g:link>https://example.com/product/12345</g:link>
+    <g:image_link>https://example.com/images/product.jpg</g:image_link>
+    <g:price>19.99 USD</g:price>
+    <g:availability>in_stock</g:availability>
+    <g:brand>Example Brand</g:brand>
+    <g:gtin>00012345678905</g:gtin>
+    <g:condition>new</g:condition>
   </entry>
 </feed>
