@@ -93,14 +93,17 @@ export namespace GNs {
     description?: string
     link?: string
     mobileLink?: string
+    canonicalLink?: string
     imageLink?: string
     additionalImageLinks?: Array<string>
+    lifestyleImageLinks?: Array<string>
 
     // Price & availability.
     price?: string
     salePrice?: string
     salePriceEffectiveDate?: string
     costOfGoodsSold?: string
+    maximumRetailPrice?: string
     availability?: string
     availabilityDate?: string
     expirationDate?: string
@@ -118,6 +121,12 @@ export namespace GNs {
 
     // Condition.
     condition?: string
+
+    // Product dimensions.
+    productLength?: string
+    productWidth?: string
+    productHeight?: string
+    productWeight?: string
 
     // Apparel & variants.
     itemGroupId?: string
@@ -205,12 +214,26 @@ export namespace GNs {
     shoppingAdsExcludedCountries?: Array<string>
 
     // Display ads / dynamic remarketing.
+    displayAdsId?: string
+    displayAdsTitle?: string
+    displayAdsLink?: string
+    displayAdsValue?: number
+    displayAdsSimilarIds?: Array<string>
     adsGrouping?: string
     adsLabels?: Array<string>
 
     // Structured content (AI disclosure).
     structuredTitle?: StructuredContent<TStrict>
     structuredDescription?: StructuredContent<TStrict>
+
+    // Local inventory / pickup.
+    pickupMethod?: string
+    pickupSla?: string
+    sellOnGoogleQuantity?: number
+
+    // Link templates (local storefront).
+    linkTemplate?: string
+    mobileLinkTemplate?: string
 
     // Auto-discounts.
     autoPricingMinPrice?: string

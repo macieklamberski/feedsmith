@@ -249,8 +249,14 @@ export const retrieveItem: ParsePartialUtil<GNs.Item> = (value) => {
     mobileLink: parseSingularOf(value['g:mobile_link'], (value) =>
       parseString(retrieveText(value)),
     ),
+    canonicalLink: parseSingularOf(value['g:canonical_link'], (value) =>
+      parseString(retrieveText(value)),
+    ),
     imageLink: parseSingularOf(value['g:image_link'], (value) => parseString(retrieveText(value))),
     additionalImageLinks: parseArrayOf(value['g:additional_image_link'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    lifestyleImageLinks: parseArrayOf(value['g:lifestyle_image_link'], (value) =>
       parseString(retrieveText(value)),
     ),
 
@@ -261,6 +267,9 @@ export const retrieveItem: ParsePartialUtil<GNs.Item> = (value) => {
       parseString(retrieveText(value)),
     ),
     costOfGoodsSold: parseSingularOf(value['g:cost_of_goods_sold'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    maximumRetailPrice: parseSingularOf(value['g:maximum_retail_price'], (value) =>
       parseString(retrieveText(value)),
     ),
     availability: parseSingularOf(value['g:availability'], (value) =>
@@ -292,6 +301,20 @@ export const retrieveItem: ParsePartialUtil<GNs.Item> = (value) => {
 
     // Condition.
     condition: parseSingularOf(value['g:condition'], (value) => parseString(retrieveText(value))),
+
+    // Product dimensions.
+    productLength: parseSingularOf(value['g:product_length'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    productWidth: parseSingularOf(value['g:product_width'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    productHeight: parseSingularOf(value['g:product_height'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    productWeight: parseSingularOf(value['g:product_weight'], (value) =>
+      parseString(retrieveText(value)),
+    ),
 
     // Apparel & variants.
     itemGroupId: parseSingularOf(value['g:item_group_id'], (value) =>
@@ -443,6 +466,21 @@ export const retrieveItem: ParsePartialUtil<GNs.Item> = (value) => {
     ),
 
     // Display ads / dynamic remarketing.
+    displayAdsId: parseSingularOf(value['g:display_ads_id'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    displayAdsTitle: parseSingularOf(value['g:display_ads_title'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    displayAdsLink: parseSingularOf(value['g:display_ads_link'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    displayAdsValue: parseSingularOf(value['g:display_ads_value'], (value) =>
+      parseNumber(retrieveText(value)),
+    ),
+    displayAdsSimilarIds: parseArrayOf(value['g:display_ads_similar_id'], (value) =>
+      parseString(retrieveText(value)),
+    ),
     adsGrouping: parseSingularOf(value['g:ads_grouping'], (value) =>
       parseString(retrieveText(value)),
     ),
@@ -453,6 +491,23 @@ export const retrieveItem: ParsePartialUtil<GNs.Item> = (value) => {
     structuredDescription: parseSingularOf(
       value['g:structured_description'],
       parseStructuredContent,
+    ),
+
+    // Local inventory / pickup.
+    pickupMethod: parseSingularOf(value['g:pickup_method'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    pickupSla: parseSingularOf(value['g:pickup_sla'], (value) => parseString(retrieveText(value))),
+    sellOnGoogleQuantity: parseSingularOf(value['g:sell_on_google_quantity'], (value) =>
+      parseNumber(retrieveText(value)),
+    ),
+
+    // Link templates (local storefront).
+    linkTemplate: parseSingularOf(value['g:link_template'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    mobileLinkTemplate: parseSingularOf(value['g:mobile_link_template'], (value) =>
+      parseString(retrieveText(value)),
     ),
 
     // Auto-discounts.

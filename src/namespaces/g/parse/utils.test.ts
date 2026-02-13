@@ -419,53 +419,43 @@ describe('parseStructuredContent', () => {
 })
 
 describe('retrieveItem', () => {
-  it('should parse item with basic product data', () => {
+  it('should parse item with all properties', () => {
     const value = {
       'g:id': 'SKU123',
       'g:title': 'Example Product',
       'g:description': 'A great product',
       'g:link': 'https://example.com/product/123',
+      'g:mobile_link': 'https://m.example.com/product/123',
+      'g:canonical_link': 'https://example.com/canonical/product/123',
       'g:image_link': 'https://example.com/image.jpg',
-      'g:price': '19.99 USD',
+      'g:additional_image_link': [
+        'https://example.com/image2.jpg',
+        'https://example.com/image3.jpg',
+      ],
+      'g:lifestyle_image_link': [
+        'https://example.com/lifestyle1.jpg',
+        'https://example.com/lifestyle2.jpg',
+      ],
+      'g:price': '29.99 USD',
+      'g:sale_price': '19.99 USD',
+      'g:sale_price_effective_date': '2024-01-01T00:00:00Z/2024-01-31T23:59:59Z',
+      'g:cost_of_goods_sold': '10.00 USD',
+      'g:maximum_retail_price': '39.99 USD',
       'g:availability': 'in_stock',
+      'g:availability_date': '2024-02-01T00:00:00Z',
+      'g:expiration_date': '2024-12-31T23:59:59Z',
+      'g:pause': 'ads',
       'g:brand': 'ExampleBrand',
-      'g:condition': 'new',
-    }
-    const expected = {
-      id: 'SKU123',
-      title: 'Example Product',
-      description: 'A great product',
-      link: 'https://example.com/product/123',
-      imageLink: 'https://example.com/image.jpg',
-      price: '19.99 USD',
-      availability: 'in_stock',
-      brand: 'ExampleBrand',
-      condition: 'new',
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should parse item with identifiers', () => {
-    const value = {
-      'g:id': 'SKU123',
       'g:gtin': '1234567890123',
       'g:mpn': 'MPN-12345',
       'g:identifier_exists': 'yes',
-    }
-    const expected = {
-      id: 'SKU123',
-      gtin: '1234567890123',
-      mpn: 'MPN-12345',
-      identifierExists: true,
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should parse item with apparel attributes', () => {
-    const value = {
-      'g:id': 'SKU123',
+      'g:google_product_category': 'Electronics',
+      'g:product_type': ['Electronics', 'Phones'],
+      'g:condition': 'new',
+      'g:product_length': '20 cm',
+      'g:product_width': '10 cm',
+      'g:product_height': '5 cm',
+      'g:product_weight': '500 g',
       'g:item_group_id': 'GROUP123',
       'g:color': 'Blue',
       'g:size': 'M',
@@ -475,9 +465,131 @@ describe('retrieveItem', () => {
       'g:age_group': 'adult',
       'g:material': 'Cotton',
       'g:pattern': 'Solid',
+      'g:shipping': [{ 'g:country': 'US', 'g:price': '5.99 USD' }],
+      'g:shipping_label': 'standard',
+      'g:shipping_weight': '1.5 kg',
+      'g:shipping_length': '25 cm',
+      'g:shipping_width': '15 cm',
+      'g:shipping_height': '10 cm',
+      'g:ships_from_country': 'US',
+      'g:transit_time_label': 'fast',
+      'g:max_handling_time': '3',
+      'g:min_handling_time': '1',
+      'g:free_shipping_threshold': { 'g:country': 'US', 'g:price_threshold': '50.00 USD' },
+      'g:handling_cutoff_time': {
+        'g:cutoff_time': '1400',
+        'g:cutoff_timezone': 'America/New_York',
+        'g:country': 'US',
+        'g:disable_delivery_after_cutoff': 'yes',
+      },
+      'g:shipping_handling_business_days': '1-3',
+      'g:shipping_transit_business_days': '3-7',
+      'g:tax': { 'g:country': 'US', 'g:region': 'CA', 'g:rate': '9.5', 'g:tax_ship': 'yes' },
+      'g:tax_category': 'Electronics',
+      'g:unit_pricing_measure': '750ml',
+      'g:unit_pricing_base_measure': '100ml',
+      'g:multipack': '6',
+      'g:is_bundle': 'yes',
+      'g:adult': 'no',
+      'g:energy_efficiency_class': 'A+',
+      'g:min_energy_efficiency_class': 'A',
+      'g:max_energy_efficiency_class': 'A+++',
+      'g:certification': {
+        'g:certification_authority': 'European Commission',
+        'g:certification_name': 'EPREL',
+        'g:certification_code': '123456',
+        'g:certification_value': 'A++',
+      },
+      'g:installment': { 'g:months': '12', 'g:amount': '99.99 BRL' },
+      'g:subscription_cost': {
+        'g:period': 'month',
+        'g:period_length': '1',
+        'g:amount': '9.99 USD',
+      },
+      'g:loyalty_program': {
+        'g:program_label': 'rewards',
+        'g:tier_label': 'gold',
+        'g:price': '49.99 USD',
+        'g:loyalty_points': '500',
+        'g:member_price_effective_date': '2024-01-01T00:00:00Z/2024-12-31T23:59:59Z',
+        'g:shipping_label': 'free_member_shipping',
+        'g:cashback_for_future_use': '5.00 USD',
+      },
+      'g:product_highlight': ['Feature 1', 'Feature 2'],
+      'g:product_detail': {
+        'g:section_name': 'Technical Specs',
+        'g:attribute_name': 'Weight',
+        'g:attribute_value': '1.5 kg',
+      },
+      'g:return_policy_label': 'free_returns',
+      'g:ads_redirect': 'https://example.com/track?id=123',
+      'g:custom_label_0': 'Best Seller',
+      'g:custom_label_1': 'Summer',
+      'g:custom_label_2': 'Clearance',
+      'g:custom_label_3': 'New Arrival',
+      'g:custom_label_4': 'Premium',
+      'g:promotion_id': ['PROMO1', 'PROMO2'],
+      'g:excluded_destination': ['Display_Ads'],
+      'g:included_destination': ['Shopping_Actions', 'Shopping_Ads'],
+      'g:shopping_ads_excluded_country': ['DE', 'FR'],
+      'g:display_ads_id': 'display-123',
+      'g:display_ads_title': 'Custom Display Title',
+      'g:display_ads_link': 'https://example.com/display/123',
+      'g:display_ads_value': '9.99',
+      'g:display_ads_similar_id': ['similar1', 'similar2'],
+      'g:ads_grouping': 'group1',
+      'g:ads_labels': ['label1', 'label2'],
+      'g:structured_title': {
+        'g:digital_source_type': 'trained_algorithmic_media',
+        'g:content': 'AI-Enhanced Title',
+      },
+      'g:structured_description': {
+        'g:digital_source_type': 'trained_algorithmic_media',
+        'g:content': 'AI-Enhanced Description',
+      },
+      'g:pickup_method': 'buy',
+      'g:pickup_sla': 'same_day',
+      'g:sell_on_google_quantity': '10',
+      'g:link_template': 'https://example.com/product/{store_code}/123',
+      'g:mobile_link_template': 'https://m.example.com/product/{store_code}/123',
+      'g:auto_pricing_min_price': '14.99 USD',
+      'g:external_seller_id': 'seller-123',
+      'g:virtual_model_link': 'https://example.com/virtual-model/123',
+      'g:disclosure_date': '2024-06-01T00:00:00Z',
     }
     const expected = {
       id: 'SKU123',
+      title: 'Example Product',
+      description: 'A great product',
+      link: 'https://example.com/product/123',
+      mobileLink: 'https://m.example.com/product/123',
+      canonicalLink: 'https://example.com/canonical/product/123',
+      imageLink: 'https://example.com/image.jpg',
+      additionalImageLinks: ['https://example.com/image2.jpg', 'https://example.com/image3.jpg'],
+      lifestyleImageLinks: [
+        'https://example.com/lifestyle1.jpg',
+        'https://example.com/lifestyle2.jpg',
+      ],
+      price: '29.99 USD',
+      salePrice: '19.99 USD',
+      salePriceEffectiveDate: '2024-01-01T00:00:00Z/2024-01-31T23:59:59Z',
+      costOfGoodsSold: '10.00 USD',
+      maximumRetailPrice: '39.99 USD',
+      availability: 'in_stock',
+      availabilityDate: '2024-02-01T00:00:00Z',
+      expirationDate: '2024-12-31T23:59:59Z',
+      pause: 'ads',
+      brand: 'ExampleBrand',
+      gtin: '1234567890123',
+      mpn: 'MPN-12345',
+      identifierExists: true,
+      googleProductCategory: 'Electronics',
+      productTypes: ['Electronics', 'Phones'],
+      condition: 'new',
+      productLength: '20 cm',
+      productWidth: '10 cm',
+      productHeight: '5 cm',
+      productWeight: '500 g',
       itemGroupId: 'GROUP123',
       color: 'Blue',
       size: 'M',
@@ -487,254 +599,97 @@ describe('retrieveItem', () => {
       ageGroup: 'adult',
       material: 'Cotton',
       pattern: 'Solid',
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should parse item with shipping data', () => {
-    const value = {
-      'g:id': 'SKU123',
-      'g:shipping': [
-        {
-          'g:country': 'US',
-          'g:price': '5.99 USD',
-        },
-        {
-          'g:country': 'CA',
-          'g:price': '9.99 USD',
-        },
-      ],
-      'g:shipping_label': 'standard',
-      'g:shipping_weight': '1.5 kg',
-      'g:ships_from_country': 'US',
-    }
-    const expected = {
-      id: 'SKU123',
-      shippings: [
-        { country: 'US', price: '5.99 USD' },
-        { country: 'CA', price: '9.99 USD' },
-      ],
+      shippings: [{ country: 'US', price: '5.99 USD' }],
       shippingLabel: 'standard',
       shippingWeight: '1.5 kg',
+      shippingLength: '25 cm',
+      shippingWidth: '15 cm',
+      shippingHeight: '10 cm',
       shipsFromCountry: 'US',
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should parse item with taxes', () => {
-    const value = {
-      'g:id': 'SKU123',
-      'g:tax': {
-        'g:country': 'US',
-        'g:region': 'CA',
-        'g:rate': '9.5',
-        'g:tax_ship': 'yes',
-      },
-      'g:tax_category': 'Electronics',
-    }
-    const expected = {
-      id: 'SKU123',
-      taxes: [
+      transitTimeLabel: 'fast',
+      maxHandlingTime: 3,
+      minHandlingTime: 1,
+      freeShippingThresholds: [{ country: 'US', priceThreshold: '50.00 USD' }],
+      handlingCutoffTimes: [
         {
+          cutoffTime: '1400',
+          cutoffTimezone: 'America/New_York',
           country: 'US',
-          region: 'CA',
-          rate: '9.5',
-          taxShip: true,
+          disableDeliveryAfterCutoff: true,
         },
       ],
+      shippingHandlingBusinessDays: '1-3',
+      shippingTransitBusinessDays: '3-7',
+      taxes: [{ country: 'US', region: 'CA', rate: '9.5', taxShip: true }],
       taxCategory: 'Electronics',
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should parse item with product details', () => {
-    const value = {
-      'g:id': 'SKU123',
-      'g:product_detail': [
-        {
-          'g:section_name': 'Display',
-          'g:attribute_name': 'Screen Size',
-          'g:attribute_value': '6.1 inches',
-        },
-        {
-          'g:attribute_name': 'Resolution',
-          'g:attribute_value': '1080x2400',
-        },
-      ],
-      'g:product_highlight': ['Feature 1', 'Feature 2', 'Feature 3'],
-    }
-    const expected = {
-      id: 'SKU123',
-      productDetails: [
-        {
-          sectionName: 'Display',
-          attributeName: 'Screen Size',
-          attributeValue: '6.1 inches',
-        },
-        {
-          attributeName: 'Resolution',
-          attributeValue: '1080x2400',
-        },
-      ],
-      productHighlights: ['Feature 1', 'Feature 2', 'Feature 3'],
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should parse item with shopping campaign data', () => {
-    const value = {
-      'g:id': 'SKU123',
-      'g:ads_redirect': 'https://example.com/track?id=123',
-      'g:custom_label_0': 'Best Seller',
-      'g:custom_label_1': 'Summer',
-      'g:promotion_id': ['PROMO1', 'PROMO2'],
-      'g:excluded_destination': ['Display_Ads'],
-      'g:included_destination': ['Shopping_Actions', 'Shopping_Ads'],
-    }
-    const expected = {
-      id: 'SKU123',
-      adsRedirect: 'https://example.com/track?id=123',
-      customLabel0: 'Best Seller',
-      customLabel1: 'Summer',
-      promotionIds: ['PROMO1', 'PROMO2'],
-      excludedDestinations: ['Display_Ads'],
-      includedDestinations: ['Shopping_Actions', 'Shopping_Ads'],
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should parse item with bundle and multipack', () => {
-    const value = {
-      'g:id': 'SKU123',
-      'g:multipack': '6',
-      'g:is_bundle': 'yes',
-    }
-    const expected = {
-      id: 'SKU123',
+      unitPricingMeasure: '750ml',
+      unitPricingBaseMeasure: '100ml',
       multipack: 6,
       isBundle: true,
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should parse item with loyalty programs', () => {
-    const value = {
-      'g:id': 'SKU123',
-      'g:loyalty_program': [
+      adult: false,
+      energyEfficiencyClass: 'A+',
+      minEnergyEfficiencyClass: 'A',
+      maxEnergyEfficiencyClass: 'A+++',
+      certifications: [
         {
-          'g:program_label': 'rewards',
-          'g:tier_label': 'gold',
-          'g:price': '49.99 USD',
-          'g:loyalty_points': '500',
-        },
-        {
-          'g:program_label': 'rewards',
-          'g:tier_label': 'silver',
-          'g:price': '54.99 USD',
-          'g:loyalty_points': '300',
+          certificationAuthority: 'European Commission',
+          certificationName: 'EPREL',
+          certificationCode: '123456',
+          certificationValue: 'A++',
         },
       ],
-    }
-    const expected = {
-      id: 'SKU123',
+      installment: { months: 12, amount: '99.99 BRL' },
+      subscriptionCost: { period: 'month', periodLength: 1, amount: '9.99 USD' },
       loyaltyPrograms: [
         {
           programLabel: 'rewards',
           tierLabel: 'gold',
           price: '49.99 USD',
           loyaltyPoints: 500,
-        },
-        {
-          programLabel: 'rewards',
-          tierLabel: 'silver',
-          price: '54.99 USD',
-          loyaltyPoints: 300,
+          memberPriceEffectiveDate: '2024-01-01T00:00:00Z/2024-12-31T23:59:59Z',
+          shippingLabel: 'free_member_shipping',
+          cashbackForFutureUse: '5.00 USD',
         },
       ],
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should parse item with structured content', () => {
-    const value = {
-      'g:id': 'SKU123',
-      'g:structured_title': {
-        'g:digital_source_type': 'trained_algorithmic_media',
-        'g:content': 'AI-Enhanced Product Title',
-      },
-      'g:structured_description': {
-        'g:digital_source_type': 'trained_algorithmic_media',
-        'g:content': 'AI-Enhanced Product Description',
-      },
-    }
-    const expected = {
-      id: 'SKU123',
+      productHighlights: ['Feature 1', 'Feature 2'],
+      productDetails: [
+        { sectionName: 'Technical Specs', attributeName: 'Weight', attributeValue: '1.5 kg' },
+      ],
+      returnPolicyLabel: 'free_returns',
+      adsRedirect: 'https://example.com/track?id=123',
+      customLabel0: 'Best Seller',
+      customLabel1: 'Summer',
+      customLabel2: 'Clearance',
+      customLabel3: 'New Arrival',
+      customLabel4: 'Premium',
+      promotionIds: ['PROMO1', 'PROMO2'],
+      excludedDestinations: ['Display_Ads'],
+      includedDestinations: ['Shopping_Actions', 'Shopping_Ads'],
+      shoppingAdsExcludedCountries: ['DE', 'FR'],
+      displayAdsId: 'display-123',
+      displayAdsTitle: 'Custom Display Title',
+      displayAdsLink: 'https://example.com/display/123',
+      displayAdsValue: 9.99,
+      displayAdsSimilarIds: ['similar1', 'similar2'],
+      adsGrouping: 'group1',
+      adsLabels: ['label1', 'label2'],
       structuredTitle: {
         digitalSourceType: 'trained_algorithmic_media',
-        content: 'AI-Enhanced Product Title',
+        content: 'AI-Enhanced Title',
       },
       structuredDescription: {
         digitalSourceType: 'trained_algorithmic_media',
-        content: 'AI-Enhanced Product Description',
+        content: 'AI-Enhanced Description',
       },
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should parse item with sale price and dates', () => {
-    const value = {
-      'g:id': 'SKU123',
-      'g:price': '29.99 USD',
-      'g:sale_price': '19.99 USD',
-      'g:sale_price_effective_date': '2024-01-01T00:00:00Z/2024-01-31T23:59:59Z',
-      'g:availability_date': '2024-02-01T00:00:00Z',
-      'g:expiration_date': '2024-12-31T23:59:59Z',
-    }
-    const expected = {
-      id: 'SKU123',
-      price: '29.99 USD',
-      salePrice: '19.99 USD',
-      salePriceEffectiveDate: '2024-01-01T00:00:00Z/2024-01-31T23:59:59Z',
-      availabilityDate: '2024-02-01T00:00:00Z',
-      expirationDate: '2024-12-31T23:59:59Z',
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should parse item with adult and pause flags', () => {
-    const value = {
-      'g:id': 'SKU123',
-      'g:adult': 'no',
-      'g:pause': 'ads',
-    }
-    const expected = {
-      id: 'SKU123',
-      adult: false,
-      pause: 'ads',
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should parse item with product types (multiple)', () => {
-    const value = {
-      'g:id': 'SKU123',
-      'g:google_product_category': 'Electronics > Phones > Smartphones',
-      'g:product_type': ['Electronics', 'Phones', 'Smartphones'],
-    }
-    const expected = {
-      id: 'SKU123',
-      googleProductCategory: 'Electronics > Phones > Smartphones',
-      productTypes: ['Electronics', 'Phones', 'Smartphones'],
+      pickupMethod: 'buy',
+      pickupSla: 'same_day',
+      sellOnGoogleQuantity: 10,
+      linkTemplate: 'https://example.com/product/{store_code}/123',
+      mobileLinkTemplate: 'https://m.example.com/product/{store_code}/123',
+      autoPricingMinPrice: '14.99 USD',
+      externalSellerId: 'seller-123',
+      virtualModelLink: 'https://example.com/virtual-model/123',
+      disclosureDate: '2024-06-01T00:00:00Z',
     }
 
     expect(retrieveItem(value)).toEqual(expected)

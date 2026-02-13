@@ -1,8 +1,8 @@
 ---
-title: "Reference: Google Merchant Center Namespace"
+title: "Reference: Google Merchant Center (Google Base) Namespace"
 ---
 
-# Google Merchant Center Namespace Reference
+# Google Merchant Center (Google Base) Namespace Reference
 
 The Google Merchant Center namespace (`g:`) provides product data attributes for Google Shopping product feeds. This namespace is used to define product information such as price, availability, brand, shipping, and other e-commerce attributes for primary product data feeds.
 

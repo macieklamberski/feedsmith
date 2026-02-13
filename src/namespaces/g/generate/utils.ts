@@ -182,14 +182,17 @@ export const generateItem: GenerateUtil<GNs.Item> = (item) => {
     'g:description': generateCdataString(item.description),
     'g:link': generateCdataString(item.link),
     'g:mobile_link': generateCdataString(item.mobileLink),
+    'g:canonical_link': generateCdataString(item.canonicalLink),
     'g:image_link': generateCdataString(item.imageLink),
     'g:additional_image_link': trimArray(item.additionalImageLinks, generateCdataString),
+    'g:lifestyle_image_link': trimArray(item.lifestyleImageLinks, generateCdataString),
 
     // Price & availability.
     'g:price': generateCdataString(item.price),
     'g:sale_price': generateCdataString(item.salePrice),
     'g:sale_price_effective_date': generateCdataString(item.salePriceEffectiveDate),
     'g:cost_of_goods_sold': generateCdataString(item.costOfGoodsSold),
+    'g:maximum_retail_price': generateCdataString(item.maximumRetailPrice),
     'g:availability': generateCdataString(item.availability),
     'g:availability_date': generateCdataString(item.availabilityDate),
     'g:expiration_date': generateCdataString(item.expirationDate),
@@ -207,6 +210,12 @@ export const generateItem: GenerateUtil<GNs.Item> = (item) => {
 
     // Condition.
     'g:condition': generateCdataString(item.condition),
+
+    // Product dimensions.
+    'g:product_length': generateCdataString(item.productLength),
+    'g:product_width': generateCdataString(item.productWidth),
+    'g:product_height': generateCdataString(item.productHeight),
+    'g:product_weight': generateCdataString(item.productWeight),
 
     // Apparel & variants.
     'g:item_group_id': generateCdataString(item.itemGroupId),
@@ -295,12 +304,26 @@ export const generateItem: GenerateUtil<GNs.Item> = (item) => {
     ),
 
     // Display ads / dynamic remarketing.
+    'g:display_ads_id': generateCdataString(item.displayAdsId),
+    'g:display_ads_title': generateCdataString(item.displayAdsTitle),
+    'g:display_ads_link': generateCdataString(item.displayAdsLink),
+    'g:display_ads_value': generateNumber(item.displayAdsValue),
+    'g:display_ads_similar_id': trimArray(item.displayAdsSimilarIds, generateCdataString),
     'g:ads_grouping': generateCdataString(item.adsGrouping),
     'g:ads_labels': trimArray(item.adsLabels, generateCdataString),
 
     // Structured content (AI disclosure).
     'g:structured_title': generateStructuredContent(item.structuredTitle),
     'g:structured_description': generateStructuredContent(item.structuredDescription),
+
+    // Local inventory / pickup.
+    'g:pickup_method': generateCdataString(item.pickupMethod),
+    'g:pickup_SLA': generateCdataString(item.pickupSla),
+    'g:sell_on_google_quantity': generateNumber(item.sellOnGoogleQuantity),
+
+    // Link templates (local storefront).
+    'g:link_template': generateCdataString(item.linkTemplate),
+    'g:mobile_link_template': generateCdataString(item.mobileLinkTemplate),
 
     // Auto-discounts.
     'g:auto_pricing_min_price': generateCdataString(item.autoPricingMinPrice),
