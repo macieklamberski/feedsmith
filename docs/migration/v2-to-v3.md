@@ -146,15 +146,64 @@ import { type Rss, parseRssFeed } from 'feedsmith'
 1. Change `feedsmith/types` imports to `feedsmith`
 2. Replace deprecated type aliases: `RssFeed` → `Rss.Feed`, `AtomFeed` → `Atom.Feed`, etc.
 
+### Atom text fields changed from string to object
+
+The `title`, `subtitle`, `rights`, and `summary` fields on Atom feeds and entries were previously flattened to strings. This meant any additional attributes like `type` (indicating whether the text is plain text, HTML, or XHTML) and XML namespace declarations were lost during parsing. In the new version, they use the `Atom.Text` object that preserves these attributes, properly representing the [Atom text construct](https://www.rfc-editor.org/rfc/rfc4287#section-3.1).
+
+The affected fields are:
+- **Feed**: `title`, `subtitle`, `rights`
+- **Entry**: `title`, `summary`, `rights`
+- **Source** (in entry): `title`, `subtitle`, `rights`
+
+```xml
+<title type="html">My &lt;em&gt;Blog&lt;/em&gt;</title>
+```
+
+#### Before (2.x)
+```typescript
+// Parsing
+const feed = parseAtomFeed(xml)
+const title = feed.title // string
+const subtitle = feed.subtitle // string
+const rights = feed.entries?.[0]?.rights // string
+
+// Generating
+const xml = generateAtomFeed({
+  title: 'My Blog',
+  subtitle: 'A blog about things',
+})
+```
+
+#### After (3.x)
+```typescript
+// Parsing
+const feed = parseAtomFeed(xml)
+const title = feed.title?.value // string (text content)
+const titleType = feed.title?.type // e.g. 'html', 'xhtml', 'text'
+const subtitle = feed.subtitle?.value // string
+const rights = feed.entries?.[0]?.rights?.value // string
+
+// Generating
+const xml = generateAtomFeed({
+  title: { value: 'My Blog' },
+  subtitle: { value: 'A blog about things', type: 'text' },
+})
+```
+
+#### Migration Steps
+1. Replace reads with `.value` (e.g., `feed.title` → `feed.title?.value`)
+2. Update generate calls: `title: 'text'` → `title: { value: 'text' }`
+3. Optionally use `type` for richer text metadata (`'text'`, `'html'`, `'xhtml'`)
+
 ### Atom Entry `content` changed from string to object
 
 The `content` field on Atom entries was previously flattened to a string. This meant, any additional attributes like `type` (indicating content type), `src` (remote content URI), and XML namespace declarations were lost during parsing. In the new version, it is replaced with the `Atom.Content` object that preserves these attributes, properly representing the [Atom content construct](https://www.rfc-editor.org/rfc/rfc4287#section-4.1.3).
 
-```tsx
+```xml
 <content type="xhtml" xml:base="http://example.org/entry/1" xml:lang="en-US">
   Text
 </content>
-````
+```
 
 #### Before (2.x)
 ```typescript
@@ -399,6 +448,7 @@ Use this checklist to ensure a complete migration:
 - Update type parameters if using strict types directly (add `true` as last parameter)
 - Remove `DeepPartial` from imports
 - Change `feedsmith/types` imports to `feedsmith`
+- Update Atom text fields (`title`, `subtitle`, `rights`, `summary`): read `.value` instead of plain string, generate with `{ value: '...' }` instead of plain string
 - Update Atom `entry.content` usage: read `content?.value` instead of `content`, generate with `{ value: '...' }` instead of plain string
 - Replace Media namespace deprecated field (`group` → `groups`)
 - Replace Podcast namespace deprecated fields (`location` → `locations`, `value` → `values`, `chats` → `chat`)
