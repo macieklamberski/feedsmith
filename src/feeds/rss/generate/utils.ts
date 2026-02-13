@@ -1,5 +1,5 @@
 import { namespaceUris } from '../../../common/config.js'
-import type { DateLike, GenerateUtil } from '../../../common/types.js'
+import type { DateLike } from '../../../common/types.js'
 import {
   generateBoolean,
   generateCdataString,
@@ -71,7 +71,7 @@ import { generateItem as generateThrItem } from '../../../namespaces/thr/generat
 import { generateItem as generateTrackbackItem } from '../../../namespaces/trackback/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
 import { generateItemOrFeed as generateXmlItemOrFeed } from '../../../namespaces/xml/generate/utils.js'
-import type { Rss } from '../common/types.js'
+import type { GenerateUtil, Rss } from '../common/types.js'
 
 export const generatePerson: GenerateUtil<Rss.PersonLike> = (person) => {
   if (isObject(person)) {

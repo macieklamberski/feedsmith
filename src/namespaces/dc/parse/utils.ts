@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -9,7 +9,10 @@ import {
 } from '../../../common/utils.js'
 import type { DcNs } from '../common/types.js'
 
-export const retrieveItemOrFeed: ParsePartialUtil<DcNs.ItemOrFeed<string>> = (value) => {
+export const retrieveItemOrFeed: ParseUtilPartial<
+  DcNs.ItemOrFeed<DateAny>,
+  ParseMainOptions<DateAny>
+> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -25,7 +28,9 @@ export const retrieveItemOrFeed: ParsePartialUtil<DcNs.ItemOrFeed<string>> = (va
     contributors: parseArrayOf(value['dc:contributor'], (value) =>
       parseString(retrieveText(value)),
     ),
-    dates: parseArrayOf(value['dc:date'], (value) => parseDate(retrieveText(value))),
+    dates: parseArrayOf(value['dc:date'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     types: parseArrayOf(value['dc:type'], (value) => parseString(retrieveText(value))),
     formats: parseArrayOf(value['dc:format'], (value) => parseString(retrieveText(value))),
     identifiers: parseArrayOf(value['dc:identifier'], (value) => parseString(retrieveText(value))),

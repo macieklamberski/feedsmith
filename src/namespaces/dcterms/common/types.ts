@@ -1,8 +1,6 @@
-import type { DateLike } from '../../../common/types.js'
-
 // #region reference
 export namespace DcTermsNs {
-  export type ItemOrFeed<TDate extends DateLike> = {
+  export type ItemOrFeed<TDate> = {
     abstracts?: Array<string>
     accessRights?: Array<string>
     accrualMethods?: Array<string>
