@@ -113,7 +113,7 @@ export const parseItem: ParseUtilPartial<Rdf.Item<DateAny>> = (value, options) =
     xml: retrieveXmlItemOrFeed(value),
   }
 
-  return trimObject(item) as Rdf.Item<DateAny> | undefined
+  return trimObject(item)
 }
 
 export const retrieveItems: ParseUtilPartial<Array<Rdf.Item<DateAny>>> = (value, options) => {
@@ -166,7 +166,7 @@ export const parseFeed: ParseUtilPartial<Rdf.Feed<DateAny>> = (value, options) =
     xml: retrieveXmlItemOrFeed(value),
   }
 
-  return trimObject(feed) as Rdf.Feed<DateAny> | undefined
+  return trimObject(feed)
 }
 
 export const retrieveFeed: ParseUtilPartial<Rdf.Feed<DateAny>> = (value, options) => {

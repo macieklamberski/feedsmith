@@ -109,7 +109,7 @@ export const parseItem: ParseUtilPartial<Json.Item<DateAny>> = (value, options) 
     attachments: parseArrayOf(get('attachments'), parseAttachment),
   }
 
-  return trimObject(item) as Json.Item<DateAny> | undefined
+  return trimObject(item)
 }
 
 export const parseHub: ParseUtilPartial<Json.Hub> = (value) => {

@@ -33,7 +33,7 @@ export const parseLiveStream: ParseUtilPartial<
     type: parseString(value?.['@type']),
   }
 
-  return trimObject(liveStream) as RawVoiceNs.LiveStream<DateAny> | undefined
+  return trimObject(liveStream)
 }
 
 export const parsePoster: ParseUtilPartial<RawVoiceNs.Poster> = (value) => {

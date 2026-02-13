@@ -48,7 +48,7 @@ export const parseOutline: ParseUtilPartial<Opml.Outline<DateAny>> = (value, opt
     }
   }
 
-  return trimObject(outline) as Opml.Outline<DateAny> | undefined
+  return trimObject(outline)
 }
 
 export const parseHead: ParseUtilPartial<Opml.Head<DateAny>> = (value, options) => {

@@ -9,16 +9,12 @@ export const retrieveEntry: ParseUtilPartial<AtomNs.Entry<DateAny>, ParseMainOpt
   value,
   options,
 ) => {
-  return parseAtomEntry(value, { ...options, prefix: 'atom:', asNamespace: true }) as
-    | AtomNs.Entry<DateAny>
-    | undefined
+  return parseAtomEntry(value, { ...options, prefix: 'atom:', asNamespace: true })
 }
 
 export const retrieveFeed: ParseUtilPartial<AtomNs.Feed<DateAny>, ParseMainOptions<DateAny>> = (
   value,
   options,
 ) => {
-  return parseAtomFeed(value, { ...options, prefix: 'atom:', asNamespace: true }) as
-    | AtomNs.Feed<DateAny>
-    | undefined
+  return parseAtomFeed(value, { ...options, prefix: 'atom:', asNamespace: true })
 }

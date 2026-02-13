@@ -296,7 +296,7 @@ export const parseLiveItem: ParseUtilPartial<
     contentLinks: parseArrayOf(value['podcast:contentlink'], parseContentLink),
   }
 
-  return trimObject(liveItem) as PodcastNs.LiveItem<DateAny> | undefined
+  return trimObject(liveItem)
 }
 
 export const parseContentLink: ParseUtilPartial<PodcastNs.ContentLink> = (value) => {
@@ -400,7 +400,7 @@ export const parseUpdateFrequency: ParseUtilPartial<
     rrule: parseString(value?.['@rrule']),
   }
 
-  return trimObject(updateFrequency) as PodcastNs.UpdateFrequency<DateAny> | undefined
+  return trimObject(updateFrequency)
 }
 
 export const parsePodping: ParseUtilPartial<PodcastNs.Podping> = (value) => {
