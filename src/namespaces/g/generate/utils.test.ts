@@ -114,7 +114,7 @@ describe('generateHandlingCutoffTime', () => {
       'g:cutoff_time': '1400',
       'g:cutoff_timezone': 'America/Los_Angeles',
       'g:country': 'US',
-      'g:disable_delivery_after_cutoff': 'yes',
+      'g:disable_delivery_after_cutoff': true,
     }
 
     expect(generateHandlingCutoffTime(value)).toEqual(expected)
@@ -127,7 +127,7 @@ describe('generateHandlingCutoffTime', () => {
     }
     const expected = {
       'g:cutoff_time': '0900',
-      'g:disable_delivery_after_cutoff': 'no',
+      'g:disable_delivery_after_cutoff': false,
     }
 
     expect(generateHandlingCutoffTime(value)).toEqual(expected)
@@ -452,8 +452,8 @@ describe('generateItem', () => {
           disableDeliveryAfterCutoff: true,
         },
       ],
-      shippingHandlingBusinessDays: '1-3',
-      shippingTransitBusinessDays: '3-7',
+      shippingHandlingBusinessDays: 'MTWRF',
+      shippingTransitBusinessDays: 'MTWRFS',
       taxes: [{ country: 'US', region: 'CA', rate: '9.5', taxShip: true }],
       taxCategory: 'Electronics',
       unitPricingMeasure: '100ml',
@@ -602,11 +602,11 @@ describe('generateItem', () => {
           'g:cutoff_time': '1400',
           'g:cutoff_timezone': 'America/New_York',
           'g:country': 'US',
-          'g:disable_delivery_after_cutoff': 'yes',
+          'g:disable_delivery_after_cutoff': true,
         },
       ],
-      'g:shipping_handling_business_days': '1-3',
-      'g:shipping_transit_business_days': '3-7',
+      'g:shipping_handling_business_days': 'MTWRF',
+      'g:shipping_transit_business_days': 'MTWRFS',
       'g:tax': [
         {
           'g:country': 'US',

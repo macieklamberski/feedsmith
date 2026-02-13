@@ -647,10 +647,10 @@
       <g:cutoff_time>1400</g:cutoff_time>
       <g:cutoff_timezone>America/New_York</g:cutoff_timezone>
       <g:country>US</g:country>
-      <g:disable_delivery_after_cutoff>yes</g:disable_delivery_after_cutoff>
+      <g:disable_delivery_after_cutoff>true</g:disable_delivery_after_cutoff>
     </g:handling_cutoff_time>
-    <g:shipping_handling_business_days>1-3</g:shipping_handling_business_days>
-    <g:shipping_transit_business_days>3-7</g:shipping_transit_business_days>
+    <g:shipping_handling_business_days>MTWRF</g:shipping_handling_business_days>
+    <g:shipping_transit_business_days>MTWRFS</g:shipping_transit_business_days>
     <g:tax>
       <g:country>US</g:country>
       <g:region>CA</g:region>

@@ -1,5 +1,6 @@
 import type { GenerateUtil } from '../../../common/types.js'
 import {
+  generateBoolean,
   generateCdataString,
   generateNumber,
   generatePlainString,
@@ -58,7 +59,7 @@ export const generateHandlingCutoffTime: GenerateUtil<GNs.HandlingCutoffTime> = 
     'g:cutoff_time': generatePlainString(cutoff.cutoffTime),
     'g:cutoff_timezone': generateCdataString(cutoff.cutoffTimezone),
     'g:country': generateCdataString(cutoff.country),
-    'g:disable_delivery_after_cutoff': generateYesNoBoolean(cutoff.disableDeliveryAfterCutoff),
+    'g:disable_delivery_after_cutoff': generateBoolean(cutoff.disableDeliveryAfterCutoff),
   }
 
   return trimObject(value)
