@@ -27,7 +27,9 @@ import { parseRssFeed } from 'feedsmith'
 import { parse } from 'date-fns'
 
 const feed = parseRssFeed(xml, {
-  parseDateFn: (raw) => parse(raw, 'EEE, dd MMM yyyy HH:mm:ss xx', new Date()),
+  parseDateFn: (raw) => {
+    return parse(raw, 'EEE, dd MMM yyyy HH:mm:ss xx', new Date())
+  },
 })
 
 feed.pubDate // Date
@@ -51,10 +53,8 @@ const feed = parseAtomFeed(xml, {
 feed.updated // Date | undefined
 ```
 
-### Scope
-
-`parseDateFn` applies to **all** date fields across the feed, items, and every namespace (Dublin Core, DCTerms, Podcast, PRISM, Syndication, etc.).
-
 ### Error handling
 
-Errors thrown by `parseDateFn` are not caught — they propagate to the caller. If a date string is empty or whitespace-only, `parseDateFn` is not called and the field is omitted from the result.
+Errors thrown by `parseDateFn` are **not caught** — they propagate to the caller. You should wrap your logic in a try/catch if it might throw. This is intentional — silently swallowing errors would hide invalid dates, and you're better off deciding how to handle them yourself.
+
+If a date string is empty or whitespace-only, `parseDateFn` is not called and the field is omitted from the result.
