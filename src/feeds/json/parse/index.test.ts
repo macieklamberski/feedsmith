@@ -359,3 +359,125 @@ describe('parse', () => {
     })
   })
 })
+
+describe('Integration: parse and generate with extraFields', () => {
+  it('should preserve extra fields through full cycle', () => {
+    const original = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Test Feed',
+      _podcast: {
+        locked: true,
+        explicit: false,
+      },
+      items: [
+        {
+          id: '1',
+          content_text: 'Episode 1',
+          _microblog: {
+            thumbnail_url: 'https://example.com/thumb.jpg',
+          },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Test Feed',
+      _podcast: {
+        locked: true,
+        explicit: false,
+      },
+      items: [
+        {
+          id: '1',
+          content_text: 'Episode 1',
+          _microblog: {
+            thumbnail_url: 'https://example.com/thumb.jpg',
+          },
+        },
+      ],
+    }
+
+    expect(parse(original, { extraFields: ['_podcast', '_microblog'] })).toEqual(expected)
+  })
+
+  it('should work with real-world Micro.blog feed example', () => {
+    const feedData = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'My Microblog',
+      home_page_url: 'https://example.micro.blog/',
+      feed_url: 'https://example.micro.blog/feed.json',
+      items: [
+        {
+          id: 'post-1',
+          content_html: '<p>This is a post with a custom thumbnail.</p>',
+          url: 'https://example.micro.blog/2023/01/01/post.html',
+          date_published: '2023-01-01T12:00:00Z',
+          _microblog: {
+            thumbnail_url: 'https://example.com/thumb.jpg',
+            crosspost: ['https://twitter.com/user/status/123'],
+          },
+        },
+      ],
+    }
+    const expected = {
+      title: 'My Microblog',
+      home_page_url: 'https://example.micro.blog/',
+      feed_url: 'https://example.micro.blog/feed.json',
+      items: [
+        {
+          id: 'post-1',
+          content_html: '<p>This is a post with a custom thumbnail.</p>',
+          url: 'https://example.micro.blog/2023/01/01/post.html',
+          date_published: '2023-01-01T12:00:00Z',
+          _microblog: {
+            thumbnail_url: 'https://example.com/thumb.jpg',
+            crosspost: ['https://twitter.com/user/status/123'],
+          },
+        },
+      ],
+    }
+
+    expect(parse(feedData, { extraFields: ['_microblog'] })).toEqual(expected)
+  })
+
+  it('should work with podcast namespace extension', () => {
+    const feedData = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'My Podcast',
+      _podcast: {
+        locked: true,
+        explicit: false,
+      },
+      items: [
+        {
+          id: 'episode-1',
+          content_text: 'Episode description',
+          _podcast: {
+            episode_number: 1,
+            season_number: 1,
+            episode_type: 'full',
+          },
+        },
+      ],
+    }
+    const expected = {
+      title: 'My Podcast',
+      _podcast: {
+        locked: true,
+        explicit: false,
+      },
+      items: [
+        {
+          id: 'episode-1',
+          content_text: 'Episode description',
+          _podcast: {
+            episode_number: 1,
+            season_number: 1,
+            episode_type: 'full',
+          },
+        },
+      ],
+    }
+
+    expect(parse(feedData, { extraFields: ['_podcast'] })).toEqual(expected)
+  })
+})

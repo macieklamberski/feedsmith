@@ -7,19 +7,36 @@ import type {
   Strict,
 } from '../../../common/types.js'
 
-export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateAny>>
+export type ExtraFieldNames = ReadonlyArray<`_${string}`>
 
-export type GenerateUtil<V> = BaseGenerateUtil<V>
+export type ExtraFields<F extends ExtraFieldNames> = {
+  [K in F[number]]?: unknown
+}
+
+export type ParsePartialOptions<TExtra extends ExtraFieldNames> = ParseMainOptions<DateAny> & {
+  extraFields?: TExtra
+}
+
+export type GeneratePartialOptions<TExtra extends ExtraFieldNames> = {
+  extraFields?: TExtra
+}
+
+export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParsePartialOptions<ExtraFieldNames>>
+
+export type GenerateUtil<V> = BaseGenerateUtil<V, GeneratePartialOptions<ExtraFieldNames>>
 
 // #region reference
 export namespace Json {
-  export type Author = {
+  export type Author<TExtra extends ExtraFieldNames = []> = {
     name?: string
     url?: string
     avatar?: string
-  }
+  } & ExtraFields<TExtra>
 
-  export type Attachment<TStrict extends boolean = false> = Strict<
+  export type Attachment<
+    TStrict extends boolean = false,
+    TExtra extends ExtraFieldNames = [],
+  > = Strict<
     {
       url: Requirable<string> // Required in spec.
       mime_type: Requirable<string> // Required in spec.
@@ -28,9 +45,14 @@ export namespace Json {
       duration_in_seconds?: number
     },
     TStrict
-  >
+  > &
+    ExtraFields<TExtra>
 
-  export type Item<TDate, TStrict extends boolean = false> = Strict<
+  export type Item<
+    TDate,
+    TStrict extends boolean = false,
+    TExtra extends ExtraFieldNames = [],
+  > = Strict<
     {
       id: Requirable<string> // Required in spec.
       url?: string
@@ -44,23 +66,29 @@ export namespace Json {
       date_published?: TDate
       date_modified?: TDate
       tags?: Array<string>
-      authors?: Array<Author>
+      authors?: Array<Author<TExtra>>
       language?: string
-      attachments?: Array<Attachment<TStrict>>
+      attachments?: Array<Attachment<TStrict, TExtra>>
     },
     TStrict
   > &
-    (TStrict extends true ? { content_html: string } | { content_text: string } : unknown)
+    (TStrict extends true ? { content_html: string } | { content_text: string } : unknown) &
+    ExtraFields<TExtra>
 
-  export type Hub<TStrict extends boolean = false> = Strict<
+  export type Hub<TStrict extends boolean = false, TExtra extends ExtraFieldNames = []> = Strict<
     {
       type: Requirable<string> // Required in spec.
       url: Requirable<string> // Required in spec.
     },
     TStrict
-  >
+  > &
+    ExtraFields<TExtra>
 
-  export type Feed<TDate, TStrict extends boolean = false> = Strict<
+  export type Feed<
+    TDate,
+    TStrict extends boolean = false,
+    TExtra extends ExtraFieldNames = [],
+  > = Strict<
     {
       title: Requirable<string> // Required in spec.
       home_page_url?: string
@@ -72,11 +100,12 @@ export namespace Json {
       favicon?: string
       language?: string
       expired?: boolean
-      hubs?: Array<Hub<TStrict>>
-      authors?: Array<Author>
-      items: Requirable<Array<Item<TDate, TStrict>>> // Required in spec.
+      hubs?: Array<Hub<TStrict, TExtra>>
+      authors?: Array<Author<TExtra>>
+      items: Requirable<Array<Item<TDate, TStrict, TExtra>>> // Required in spec.
     },
     TStrict
-  >
+  > &
+    ExtraFields<TExtra>
 }
 // #endregion reference

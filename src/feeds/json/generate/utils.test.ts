@@ -49,7 +49,6 @@ describe('generateItem', () => {
     const expected = {
       id: '1',
       title: 'Test Item',
-      authors: [],
       tags: ['test'],
       content_html: '<p>HTML content</p>',
     }
@@ -215,5 +214,215 @@ describe('generateFeed', () => {
     }
 
     expect(generateFeed(value)).toEqual(expected)
+  })
+})
+
+describe('generateItem with extraFields', () => {
+  it('should include declared extra fields', () => {
+    const value = {
+      id: '1',
+      content_text: 'Hello',
+      _microblog: { thumbnail_url: 'https://example.com/thumb.jpg' },
+      _undeclared: { should: 'be excluded' },
+    }
+    const expected = {
+      id: '1',
+      content_text: 'Hello',
+      _microblog: { thumbnail_url: 'https://example.com/thumb.jpg' },
+    }
+
+    expect(generateItem(value, { extraFields: ['_microblog'] })).toEqual(expected)
+  })
+
+  it('should handle extraFields in nested authors', () => {
+    const value = {
+      id: '1',
+      content_text: 'Hello',
+      authors: [
+        {
+          name: 'John',
+          _social: { twitter: '@john' },
+        },
+      ],
+    }
+    const expected = {
+      id: '1',
+      content_text: 'Hello',
+      authors: [
+        {
+          name: 'John',
+          _social: { twitter: '@john' },
+        },
+      ],
+    }
+
+    expect(generateItem(value, { extraFields: ['_social'] })).toEqual(expected)
+  })
+
+  it('should handle extraFields in nested attachments', () => {
+    const value = {
+      id: '1',
+      content_text: 'Hello',
+      attachments: [
+        {
+          url: 'https://example.com/file.mp3',
+          mime_type: 'audio/mpeg',
+          _custom: { metadata: 'value' },
+        },
+      ],
+    }
+    const expected = {
+      id: '1',
+      content_text: 'Hello',
+      attachments: [
+        {
+          url: 'https://example.com/file.mp3',
+          mime_type: 'audio/mpeg',
+          _custom: { metadata: 'value' },
+        },
+      ],
+    }
+
+    expect(generateItem(value, { extraFields: ['_custom'] })).toEqual(expected)
+  })
+
+  it('should exclude undeclared fields from output (security)', () => {
+    const value = {
+      id: '1',
+      content_text: 'Hello',
+      _public: { data: 'ok to share' },
+      _internal: { secret: 'should not leak' },
+    }
+    const expected = {
+      id: '1',
+      content_text: 'Hello',
+      _public: { data: 'ok to share' },
+    }
+
+    expect(generateItem(value, { extraFields: ['_public'] })).toEqual(expected)
+  })
+})
+
+describe('generateFeed with extraFields', () => {
+  it('should include declared feed-level extra fields', () => {
+    const value = {
+      title: 'Test Feed',
+      items: [],
+      _podcast: { locked: true },
+      _undeclared: { should: 'be excluded' },
+    }
+    const expected = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Test Feed',
+      _podcast: { locked: true },
+    }
+
+    expect(generateFeed(value, { extraFields: ['_podcast'] })).toEqual(expected)
+  })
+
+  it('should handle extraFields in feed-level authors', () => {
+    const value = {
+      title: 'Test Feed',
+      items: [],
+      authors: [
+        {
+          name: 'Jane',
+          _verified: { status: true },
+        },
+      ],
+    }
+    const expected = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Test Feed',
+      authors: [
+        {
+          name: 'Jane',
+          _verified: { status: true },
+        },
+      ],
+    }
+
+    expect(generateFeed(value, { extraFields: ['_verified'] })).toEqual(expected)
+  })
+
+  it('should handle extraFields in feed-level hubs', () => {
+    const value = {
+      title: 'Test Feed',
+      items: [],
+      hubs: [
+        {
+          type: 'websub',
+          url: 'https://example.com/hub',
+          _custom: { priority: 1 },
+        },
+      ],
+    }
+    const expected = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Test Feed',
+      hubs: [
+        {
+          type: 'websub',
+          url: 'https://example.com/hub',
+          _custom: { priority: 1 },
+        },
+      ],
+    }
+
+    expect(generateFeed(value, { extraFields: ['_custom'] })).toEqual(expected)
+  })
+
+  it('should handle item-level extra fields', () => {
+    const value = {
+      title: 'Test Feed',
+      items: [
+        {
+          id: '1',
+          content_text: 'Hello',
+          _microblog: { thumbnail_url: 'https://example.com/thumb.jpg' },
+        },
+      ],
+    }
+    const expected = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Test Feed',
+      items: [
+        {
+          id: '1',
+          content_text: 'Hello',
+          _microblog: { thumbnail_url: 'https://example.com/thumb.jpg' },
+        },
+      ],
+    }
+
+    expect(generateFeed(value, { extraFields: ['_microblog'] })).toEqual(expected)
+  })
+
+  it('should handle multiple extra fields at different levels', () => {
+    const value = {
+      title: 'Test Feed',
+      _podcast: { locked: true },
+      items: [
+        {
+          id: '1',
+          content_text: 'Hello',
+          _microblog: { thumbnail_url: 'https://example.com/thumb.jpg' },
+        },
+      ],
+    }
+    const expected = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Test Feed',
+      _podcast: { locked: true },
+      items: [
+        {
+          id: '1',
+          content_text: 'Hello',
+          _microblog: { thumbnail_url: 'https://example.com/thumb.jpg' },
+        },
+      ],
+    }
+
+    expect(generateFeed(value, { extraFields: ['_podcast', '_microblog'] })).toEqual(expected)
   })
 })

@@ -10,7 +10,7 @@ import {
   parseString,
   trimObject,
 } from '../../../common/utils.js'
-import type { Json, ParseUtilPartial } from '../common/types.js'
+import type { ExtraFieldNames, Json, ParseUtilPartial } from '../common/types.js'
 
 export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
   return (requestedKey: string) => {
@@ -28,7 +28,25 @@ export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
   }
 }
 
-export const parseAuthor: ParseUtilPartial<Json.Author> = (value) => {
+const preserveExtraFields = <T extends Record<string, unknown>>(
+  source: Record<string, unknown>,
+  target: T,
+  extraFields?: ExtraFieldNames,
+): T => {
+  if (!extraFields || extraFields.length === 0) {
+    return target
+  }
+
+  for (const field of extraFields) {
+    if (field in source) {
+      ;(target as Record<string, unknown>)[field] = source[field]
+    }
+  }
+
+  return target
+}
+
+export const parseAuthor: ParseUtilPartial<Json.Author> = (value, options) => {
   if (isObject(value)) {
     const get = createCaseInsensitiveGetter(value)
     const author = {
@@ -36,6 +54,8 @@ export const parseAuthor: ParseUtilPartial<Json.Author> = (value) => {
       url: parseSingularOf(get('url'), parseString),
       avatar: parseSingularOf(get('avatar'), parseString),
     }
+
+    preserveExtraFields(value, author, options?.extraFields)
 
     return trimObject(author)
   }
@@ -49,7 +69,7 @@ export const parseAuthor: ParseUtilPartial<Json.Author> = (value) => {
   }
 }
 
-export const retrieveAuthors: ParseUtilPartial<Array<Json.Author>> = (value) => {
+export const retrieveAuthors: ParseUtilPartial<Array<Json.Author>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -58,13 +78,13 @@ export const retrieveAuthors: ParseUtilPartial<Array<Json.Author>> = (value) => 
   // Some feeds use author/authors incorrectly based on the feed version, so this function helps
   // to unify those into one value.
   const get = createCaseInsensitiveGetter(value)
-  const parsedAuthors = parseArrayOf(get('authors'), parseAuthor)
-  const parsedAuthor = parseArrayOf(get('author'), parseAuthor)
+  const parsedAuthors = parseArrayOf(get('authors'), (value) => parseAuthor(value, options))
+  const parsedAuthor = parseArrayOf(get('author'), (value) => parseAuthor(value, options))
 
   return parsedAuthors?.length ? parsedAuthors : parsedAuthor
 }
 
-export const parseAttachment: ParseUtilPartial<Json.Attachment> = (value) => {
+export const parseAttachment: ParseUtilPartial<Json.Attachment> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -77,6 +97,8 @@ export const parseAttachment: ParseUtilPartial<Json.Attachment> = (value) => {
     size_in_bytes: parseSingularOf(get('size_in_bytes'), parseNumber),
     duration_in_seconds: parseSingularOf(get('duration_in_seconds'), parseNumber),
   }
+
+  preserveExtraFields(value, attachment, options?.extraFields)
 
   return trimObject(attachment)
 }
@@ -104,15 +126,17 @@ export const parseItem: ParseUtilPartial<Json.Item<DateAny>> = (value, options) 
       parseDate(value, options?.parseDateFn),
     ),
     tags: parseArrayOf(get('tags'), parseString),
-    authors: retrieveAuthors(value),
+    authors: retrieveAuthors(value, options),
     language: parseSingularOf(get('language'), parseString),
-    attachments: parseArrayOf(get('attachments'), parseAttachment),
+    attachments: parseArrayOf(get('attachments'), (value) => parseAttachment(value, options)),
   }
+
+  preserveExtraFields(value, item, options?.extraFields)
 
   return trimObject(item)
 }
 
-export const parseHub: ParseUtilPartial<Json.Hub> = (value) => {
+export const parseHub: ParseUtilPartial<Json.Hub> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -122,6 +146,8 @@ export const parseHub: ParseUtilPartial<Json.Hub> = (value) => {
     type: parseSingularOf(get('type'), parseString),
     url: parseSingularOf(get('url'), parseString),
   }
+
+  preserveExtraFields(value, hub, options?.extraFields)
 
   return trimObject(hub)
 }
@@ -143,10 +169,12 @@ export const parseFeed: ParseUtilPartial<Json.Feed<DateAny>> = (value, options) 
     favicon: parseSingularOf(get('favicon'), parseString),
     language: parseSingularOf(get('language'), parseString),
     expired: parseSingularOf(get('expired'), parseBoolean),
-    hubs: parseArrayOf(get('hubs'), parseHub),
-    authors: retrieveAuthors(value),
+    hubs: parseArrayOf(get('hubs'), (value) => parseHub(value, options)),
+    authors: retrieveAuthors(value, options),
     items: parseArrayOf(get('items'), (value) => parseItem(value, options), options?.maxItems),
   }
+
+  preserveExtraFields(value, feed, options?.extraFields)
 
   return trimObject(feed)
 }
