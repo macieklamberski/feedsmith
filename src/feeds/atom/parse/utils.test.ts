@@ -245,6 +245,10 @@ describe('parseContent', () => {
     expect(parseContent('')).toBeUndefined()
   })
 
+  it('should return undefined for whitespace-only string', () => {
+    expect(parseContent('   ')).toBeUndefined()
+  })
+
   it('should parse object with xml namespace attributes', () => {
     const value = {
       '#text': '<div>XHTML content</div>',
