@@ -4,22 +4,9 @@ title: "Parsing Feeds: Parsing Dates"
 
 # Parsing Dates
 
-Dates in feeds do not always follow a format defined in the specifications, or even any consistent format. Instead of attempting to parse all of them and risking errors, Feedsmith returns dates in their original string form by default.
+Dates in feeds are notoriously unreliable — wrong formats, missing timezones, localized strings, inconsistencies within the same feed. Rather than shipping a built-in parser that handles some cases and silently fails on others, Feedsmith returns date strings as-is and lets you bring your own parsing logic via the `parseDateFn` option. This way you can use whichever date library (or the native `Date` constructor) fits your needs and handle edge cases on your terms.
 
-### Common Issues
-
-- **RSS**: Should use RFC 2822 format, but many feeds use incorrect formats
-- **Atom**: ISO 8601/RFC 3339 format, generally more consistent but still varies
-- **Real-world problems**:
-  - Missing timezone information
-  - Invalid day/month combinations
-  - Inconsistent formatting within the same feed
-  - Localized date strings
-  - Custom date formats
-
-## Custom Date Parsing
-
-Use the `parseDateFn` option to convert date strings into any format. The function receives the raw (trimmed) date string and its return value is used in the result.
+The function receives the raw (trimmed) date string and its return value replaces it in the result.
 
 ### Using `Date` constructor
 
