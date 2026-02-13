@@ -372,6 +372,20 @@ const stylesheet: XmlStylesheet = {
 }
 ```
 
+### Custom Date Parsing
+
+Parse functions now accept a `parseDateFn` option to convert date strings into any format. All date fields across feeds, items, and namespaces are passed through the provided function. See [Parsing Dates](/parsing/dates) for details and examples.
+
+```typescript
+import { parseRssFeed } from 'feedsmith'
+
+const feed = parseRssFeed(xml, {
+  parseDateFn: (raw) => new Date(raw),
+})
+
+feed.pubDate // Date
+```
+
 ### XML Namespace Support
 
 Version 3.x adds support for the [XML namespace](/reference/namespaces/xml) (`xml:*` attributes) in RSS, Atom, and RDF feeds. The `xml` property is available on both feed and item levels, providing access to `xml:lang`, `xml:base`, `xml:space`, and `xml:id` attributes.

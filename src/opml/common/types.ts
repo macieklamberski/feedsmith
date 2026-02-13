@@ -1,16 +1,34 @@
-import type { DateLike, ExtraFields, ParseOptions, Requirable, Strict } from '../../common/types.js'
+import type {
+  GenerateUtil as BaseGenerateUtil,
+  ParseMainOptions as BaseParseMainOptions,
+  ParseUtilPartial as BaseParseUtilPartial,
+  DateAny,
+  ExtraFields,
+  Requirable,
+  Strict,
+} from '../../common/types.js'
 
-export type MainOptions<TExtra extends ReadonlyArray<string> = ReadonlyArray<string>> =
-  ParseOptions & {
-    extraOutlineAttributes?: TExtra
-  }
+export type ParseMainOptions<
+  TDate,
+  TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
+> = BaseParseMainOptions<TDate> & {
+  extraOutlineAttributes?: TExtra
+}
+
+export type GenerateMainOptions<TExtra extends ReadonlyArray<string> = ReadonlyArray<string>> = {
+  extraOutlineAttributes?: TExtra
+}
+
+export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateAny>>
+
+export type GenerateUtil<V> = BaseGenerateUtil<V, GenerateMainOptions>
 
 // #region reference
 export namespace Opml {
   // NOTE: BaseOutline contains non-recursive fields wrapped in Strict<>.
   // Outline extends it and adds recursive outlines field separately.
   export type BaseOutline<
-    TDate extends DateLike,
+    TDate,
     TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
     TStrict extends boolean = false,
   > = Strict<
@@ -34,14 +52,14 @@ export namespace Opml {
     ExtraFields<TExtra>
 
   export type Outline<
-    TDate extends DateLike,
+    TDate,
     TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
     TStrict extends boolean = false,
   > = BaseOutline<TDate, TExtra, TStrict> & {
     outlines?: Array<Outline<TDate, TExtra, TStrict>>
   }
 
-  export type Head<TDate extends DateLike> = {
+  export type Head<TDate> = {
     title?: string
     dateCreated?: TDate
     dateModified?: TDate
@@ -58,7 +76,7 @@ export namespace Opml {
   }
 
   export type Body<
-    TDate extends DateLike,
+    TDate,
     TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
     TStrict extends boolean = false,
   > = {
@@ -66,7 +84,7 @@ export namespace Opml {
   }
 
   export type Document<
-    TDate extends DateLike,
+    TDate,
     TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
     TStrict extends boolean = false,
   > = {

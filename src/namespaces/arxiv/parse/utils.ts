@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseSingularOf,
@@ -8,7 +8,7 @@ import {
 } from '../../../common/utils.js'
 import type { ArxivNs } from '../common/types.js'
 
-export const parsePrimaryCategory: ParsePartialUtil<ArxivNs.PrimaryCategory> = (value) => {
+export const parsePrimaryCategory: ParseUtilPartial<ArxivNs.PrimaryCategory> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -22,7 +22,7 @@ export const parsePrimaryCategory: ParsePartialUtil<ArxivNs.PrimaryCategory> = (
   return trimObject(primaryCategory)
 }
 
-export const retrieveAuthor: ParsePartialUtil<ArxivNs.Author> = (value) => {
+export const retrieveAuthor: ParseUtilPartial<ArxivNs.Author> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -36,7 +36,7 @@ export const retrieveAuthor: ParsePartialUtil<ArxivNs.Author> = (value) => {
   return trimObject(author)
 }
 
-export const retrieveEntry: ParsePartialUtil<ArxivNs.Entry> = (value) => {
+export const retrieveEntry: ParseUtilPartial<ArxivNs.Entry> = (value) => {
   if (!isObject(value)) {
     return
   }

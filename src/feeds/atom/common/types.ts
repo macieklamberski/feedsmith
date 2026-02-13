@@ -1,8 +1,8 @@
 import type {
   GenerateUtil as BaseGenerateUtil,
-  ParsePartialUtil as BaseParsePartialUtil,
-  DateLike,
-  ParseOptions,
+  ParseMainOptions as BaseParseMainOptions,
+  ParseUtilPartial as BaseParseUtilPartial,
+  DateAny,
   Requirable,
   Strict,
 } from '../../../common/types.js'
@@ -29,14 +29,19 @@ import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 import type { YtNs } from '../../../namespaces/yt/common/types.js'
 
-export type UtilOptions = ParseOptions & {
+export type ParseMainOptions<TDate> = BaseParseMainOptions<TDate> & {
   prefix?: string
   asNamespace?: boolean
 }
 
-export type ParsePartialUtil<R> = BaseParsePartialUtil<R, UtilOptions>
+export type GenerateMainOptions = {
+  prefix?: string
+  asNamespace?: boolean
+}
 
-export type GenerateUtil<V> = BaseGenerateUtil<V, UtilOptions>
+export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateAny>>
+
+export type GenerateUtil<V> = BaseGenerateUtil<V, GenerateMainOptions>
 
 // #region reference
 export namespace Atom {
@@ -53,7 +58,7 @@ export namespace Atom {
     xml?: XmlNs.ItemOrFeed
   }
 
-  export type Link<TDate extends DateLike, TStrict extends boolean = false> = Strict<
+  export type Link<TDate, TStrict extends boolean = false> = Strict<
     {
       href: Requirable<string> // Required in spec.
       rel?: string
@@ -94,7 +99,7 @@ export namespace Atom {
     TStrict
   >
 
-  export type Source<TDate extends DateLike, TStrict extends boolean = false> = {
+  export type Source<TDate, TStrict extends boolean = false> = {
     authors?: Array<Person<TStrict>>
     categories?: Array<Category<TStrict>>
     contributors?: Array<Person<TStrict>>
@@ -109,7 +114,7 @@ export namespace Atom {
     updated?: TDate
   }
 
-  export type Entry<TDate extends DateLike, TStrict extends boolean = false> = Strict<
+  export type Entry<TDate, TStrict extends boolean = false> = Strict<
     {
       authors?: Array<Person<TStrict>>
       categories?: Array<Category<TStrict>>
@@ -146,7 +151,7 @@ export namespace Atom {
     TStrict
   >
 
-  export type Feed<TDate extends DateLike, TStrict extends boolean = false> = Strict<
+  export type Feed<TDate, TStrict extends boolean = false> = Strict<
     {
       authors?: Array<Person<TStrict>>
       categories?: Array<Category<TStrict>>
