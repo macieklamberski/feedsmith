@@ -87,7 +87,14 @@
         },
         { "term": "complete", "label": "Complete Example" }
       ],
-      "content": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n        <h1>Comprehensive Atom 1.0 Entry</h1>\n        <p>This entry demonstrates all possible elements in an Atom 1.0 entry.</p>\n        <ul>\n          <li>Required elements: id, title, updated</li>\n          <li>Optional elements: author, category, content, contributor, link, published, rights, source, summary</li>\n        </ul>\n        <p>The content can contain rich <strong>XHTML</strong> markup.</p>\n      </div>",
+      "content": {
+        "value": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n        <h1>Comprehensive Atom 1.0 Entry</h1>\n        <p>This entry demonstrates all possible elements in an Atom 1.0 entry.</p>\n        <ul>\n          <li>Required elements: id, title, updated</li>\n          <li>Optional elements: author, category, content, contributor, link, published, rights, source, summary</li>\n        </ul>\n        <p>The content can contain rich <strong>XHTML</strong> markup.</p>\n      </div>",
+        "type": "xhtml",
+        "xml": {
+          "base": "http://example.org/entry/1",
+          "lang": "en-US"
+        }
+      },
       "contributors": [
         {
           "name": "Technical Editor",
@@ -174,13 +181,19 @@
       "updated": "2023-01-15T11:45:00Z"
     },
     {
-      "content": "This entry contains only the required elements: id, title, and updated.",
+      "content": {
+        "value": "This entry contains only the required elements: id, title, and updated.",
+        "type": "text"
+      },
       "id": "tag:example.org,2023:entry-2",
       "title": "Minimal Required Entry",
       "updated": "2023-01-14T15:30:00Z"
     },
     {
-      "content": "This is plain text content without any markup.",
+      "content": {
+        "value": "This is plain text content without any markup.",
+        "type": "text"
+      },
       "id": "tag:example.org,2023:entry-3",
       "links": [{ "href": "/entry/3", "rel": "alternate" }],
       "summary": "<p>This is a summary with <strong>HTML</strong> markup.</p>",
@@ -191,7 +204,8 @@
       "id": "tag:example.org,2023:entry-4",
       "summary": "This entry references its content rather than including it inline.",
       "title": "Content by Reference",
-      "updated": "2023-01-12T09:15:00Z"
+      "updated": "2023-01-12T09:15:00Z",
+      "content": { "src": "http://example.org/full-content.html", "type": "text/html" }
     },
     {
       "authors": [
@@ -206,13 +220,19 @@
           "email": "co-author@example.org"
         }
       ],
-      "content": "This entry has multiple authors to demonstrate how multiple author elements can be used.",
+      "content": {
+        "value": "This entry has multiple authors to demonstrate how multiple author elements can be used.",
+        "type": "text"
+      },
       "id": "tag:example.org,2023:entry-5",
       "title": "Multiple Authors Example",
       "updated": "2023-01-11T14:20:00Z"
     },
     {
-      "content": "Cet article est écrit en français pour démontrer l'utilisation de l'attribut xml:lang.",
+      "content": {
+        "value": "Cet article est écrit en français pour démontrer l'utilisation de l'attribut xml:lang.",
+        "type": "text"
+      },
       "id": "tag:example.org,2023:entry-6",
       "summary": "This is an English summary of a French entry to demonstrate language-specific content.",
       "title": "Exemple de Contenu en Français",

@@ -329,6 +329,35 @@ describe('parse', () => {
       expect(parse(commonValue, { maxItems: undefined })).toEqual(expected)
     })
   })
+
+  describe('parseDateFn', () => {
+    it('should apply custom parseDateFn to item dates', () => {
+      const value = {
+        version: 'https://jsonfeed.org/version/1.1',
+        title: 'Test',
+        items: [
+          {
+            id: '1',
+            date_published: '2023-01-01T00:00:00Z',
+            date_modified: '2023-01-02T00:00:00Z',
+          },
+        ],
+      }
+      const expected = {
+        title: 'Test',
+        items: [
+          {
+            id: '1',
+            date_published: new Date('2023-01-01T00:00:00Z'),
+            date_modified: new Date('2023-01-02T00:00:00Z'),
+          },
+        ],
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
+    })
+  })
 })
 
 describe('Integration: parse and generate with extraFields', () => {

@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -10,7 +10,7 @@ import {
 } from '../../../common/utils.js'
 import type { OpenSearchNs } from '../common/types.js'
 
-export const parseQuery: ParsePartialUtil<OpenSearchNs.Query> = (value) => {
+export const parseQuery: ParseUtilPartial<OpenSearchNs.Query> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -29,7 +29,7 @@ export const parseQuery: ParsePartialUtil<OpenSearchNs.Query> = (value) => {
   return trimObject(query)
 }
 
-export const retrieveFeed: ParsePartialUtil<OpenSearchNs.Feed> = (value) => {
+export const retrieveFeed: ParseUtilPartial<OpenSearchNs.Feed> = (value) => {
   if (!isObject(value)) {
     return
   }

@@ -18,14 +18,6 @@ export type Strict<T, S extends boolean> = Simplify<
       }
 >
 
-export type Requirable<T> = T | { __requirable: T }
-
-export type DateLike = Date | string
-
-export type ExtraFields<F extends ReadonlyArray<string>, V = unknown> = {
-  [K in F[number]]?: V
-}
-
 export type AnyOf<T> = Partial<{ [P in keyof T]-?: NonNullable<T[P]> }> &
   { [P in keyof T]-?: Pick<{ [Q in keyof T]-?: NonNullable<T[Q]> }, P> }[keyof T]
 
@@ -48,17 +40,34 @@ export type DeepOmit<T, K extends string> = T extends Array<infer U>
     ? Pick<{ [P in keyof T]: DeepOmit<T[P], K> }, Exclude<keyof T, K>>
     : T
 
-export type ParseExactUtil<R> = (value: Unreliable) => R | undefined
+export type Requirable<T> = T | { __requirable: T }
 
-export type ParsePartialUtil<R, O = undefined> = (value: Unreliable, options?: O) => R | undefined
+export type DateLike = Date | string
+
+// Date-aware parse utils need to return different date types depending on the
+// parseDateFn option, but TypeScript can't express generic functions through
+// type aliases like ParseUtilPartial. Using `any` here lets all parse utils
+// share the same ParseUtilPartial pattern while the public parse() entry points
+// enforce the correct TDate type via generics.
+// biome-ignore lint/suspicious/noExplicitAny: See above reasoning.
+export type DateAny = any
+
+export type ExtraFields<F extends ReadonlyArray<string>, V = unknown> = {
+  [K in F[number]]?: V
+}
+
+export type ParseUtilExact<R> = (value: Unreliable) => R | undefined
+
+export type ParseUtilPartial<R, O = undefined> = (value: Unreliable, options?: O) => R | undefined
 
 export type GenerateUtil<V, O = undefined> = (
   value: V | undefined,
   options?: O,
 ) => Unreliable | undefined
 
-export type ParseOptions = {
+export type ParseMainOptions<TDate> = {
   maxItems?: number
+  parseDateFn?: (raw: string) => TDate
 }
 
 export type XmlStylesheet = {
@@ -70,21 +79,21 @@ export type XmlStylesheet = {
   alternate?: boolean
 }
 
-export type XmlGenerateOptions<O = Record<string, unknown>, S extends boolean = false> = O & {
+export type GenerateMainXmlOptions<O, S extends boolean> = O & {
   strict?: S
   stylesheets?: Array<XmlStylesheet>
 }
 
-export type XmlGenerateMain<L, St, O = Record<string, unknown>> = <S extends boolean = false>(
-  value: S extends true ? St : L,
-  options?: XmlGenerateOptions<O, S>,
+export type GenerateMainXml<LV, SV, O = Record<string, unknown>> = <S extends boolean = false>(
+  value: S extends true ? SV : LV,
+  options?: GenerateMainXmlOptions<O, S>,
 ) => string
 
-export type JsonGenerateOptions<O = Record<string, unknown>, S extends boolean = false> = O & {
+export type GenerateMainJsonOptions<O, S extends boolean> = O & {
   strict?: S
 }
 
-export type JsonGenerateMain<L, St, O = Record<string, unknown>> = <S extends boolean = false>(
-  value: S extends true ? St : L,
-  options?: JsonGenerateOptions<O, S>,
+export type GenerateMainJson<LV, SV, O = Record<string, unknown>> = <S extends boolean = false>(
+  value: S extends true ? SV : LV,
+  options?: GenerateMainJsonOptions<O, S>,
 ) => unknown

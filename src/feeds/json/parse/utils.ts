@@ -1,3 +1,4 @@
+import type { DateAny } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
   isObject,
@@ -9,7 +10,7 @@ import {
   parseString,
   trimObject,
 } from '../../../common/utils.js'
-import type { ExtraFieldNames, Json, ParsePartialOptions } from '../common/types.js'
+import type { ExtraFieldNames, Json, ParseUtilPartial } from '../common/types.js'
 
 export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
   return (requestedKey: string) => {
@@ -45,10 +46,7 @@ const preserveExtraFields = <T extends Record<string, unknown>>(
   return target
 }
 
-export const parseAuthor = <TExtra extends ExtraFieldNames = []>(
-  value: unknown,
-  options?: ParsePartialOptions<TExtra>,
-): Partial<Json.Author<TExtra>> | undefined => {
+export const parseAuthor: ParseUtilPartial<Json.Author> = (value, options) => {
   if (isObject(value)) {
     const get = createCaseInsensitiveGetter(value)
     const author = {
@@ -59,7 +57,7 @@ export const parseAuthor = <TExtra extends ExtraFieldNames = []>(
 
     preserveExtraFields(value, author, options?.extraFields)
 
-    return trimObject(author) as Partial<Json.Author<TExtra>> | undefined
+    return trimObject(author)
   }
 
   if (isNonEmptyStringOrNumber(value)) {
@@ -67,14 +65,11 @@ export const parseAuthor = <TExtra extends ExtraFieldNames = []>(
       name: parseString(value),
     }
 
-    return trimObject(author) as Partial<Json.Author<TExtra>> | undefined
+    return trimObject(author)
   }
 }
 
-export const retrieveAuthors = <TExtra extends ExtraFieldNames = []>(
-  value: unknown,
-  options?: ParsePartialOptions<TExtra>,
-): Array<Partial<Json.Author<TExtra>>> | undefined => {
+export const retrieveAuthors: ParseUtilPartial<Array<Json.Author>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -89,10 +84,7 @@ export const retrieveAuthors = <TExtra extends ExtraFieldNames = []>(
   return parsedAuthors?.length ? parsedAuthors : parsedAuthor
 }
 
-export const parseAttachment = <TExtra extends ExtraFieldNames = []>(
-  value: unknown,
-  options?: ParsePartialOptions<TExtra>,
-): Partial<Json.Attachment<false, TExtra>> | undefined => {
+export const parseAttachment: ParseUtilPartial<Json.Attachment> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -108,13 +100,10 @@ export const parseAttachment = <TExtra extends ExtraFieldNames = []>(
 
   preserveExtraFields(value, attachment, options?.extraFields)
 
-  return trimObject(attachment) as Partial<Json.Attachment<false, TExtra>> | undefined
+  return trimObject(attachment)
 }
 
-export const parseItem = <TExtra extends ExtraFieldNames = []>(
-  value: unknown,
-  options?: ParsePartialOptions<TExtra>,
-): Partial<Json.Item<string, false, TExtra>> | undefined => {
+export const parseItem: ParseUtilPartial<Json.Item<DateAny>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -130,8 +119,12 @@ export const parseItem = <TExtra extends ExtraFieldNames = []>(
     summary: parseSingularOf(get('summary'), parseString),
     image: parseSingularOf(get('image'), parseString),
     banner_image: parseSingularOf(get('banner_image'), parseString),
-    date_published: parseSingularOf(get('date_published'), parseDate),
-    date_modified: parseSingularOf(get('date_modified'), parseDate),
+    date_published: parseSingularOf(get('date_published'), (value) =>
+      parseDate(value, options?.parseDateFn),
+    ),
+    date_modified: parseSingularOf(get('date_modified'), (value) =>
+      parseDate(value, options?.parseDateFn),
+    ),
     tags: parseArrayOf(get('tags'), parseString),
     authors: retrieveAuthors(value, options),
     language: parseSingularOf(get('language'), parseString),
@@ -140,13 +133,10 @@ export const parseItem = <TExtra extends ExtraFieldNames = []>(
 
   preserveExtraFields(value, item, options?.extraFields)
 
-  return trimObject(item) as Partial<Json.Item<string, false, TExtra>> | undefined
+  return trimObject(item)
 }
 
-export const parseHub = <TExtra extends ExtraFieldNames = []>(
-  value: unknown,
-  options?: ParsePartialOptions<TExtra>,
-): Partial<Json.Hub<false, TExtra>> | undefined => {
+export const parseHub: ParseUtilPartial<Json.Hub> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -159,13 +149,10 @@ export const parseHub = <TExtra extends ExtraFieldNames = []>(
 
   preserveExtraFields(value, hub, options?.extraFields)
 
-  return trimObject(hub) as Partial<Json.Hub<false, TExtra>> | undefined
+  return trimObject(hub)
 }
 
-export const parseFeed = <TExtra extends ExtraFieldNames = []>(
-  value: unknown,
-  options?: ParsePartialOptions<TExtra>,
-): Partial<Json.Feed<string, false, TExtra>> | undefined => {
+export const parseFeed: ParseUtilPartial<Json.Feed<DateAny>> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -189,5 +176,5 @@ export const parseFeed = <TExtra extends ExtraFieldNames = []>(
 
   preserveExtraFields(value, feed, options?.extraFields)
 
-  return trimObject(feed) as Partial<Json.Feed<string, false, TExtra>> | undefined
+  return trimObject(feed)
 }

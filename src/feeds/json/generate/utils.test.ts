@@ -231,7 +231,7 @@ describe('generateItem with extraFields', () => {
       _microblog: { thumbnail_url: 'https://example.com/thumb.jpg' },
     }
 
-    expect(generateItem(value, ['_microblog'])).toEqual(expected)
+    expect(generateItem(value, { extraFields: ['_microblog'] })).toEqual(expected)
   })
 
   it('should handle extraFields in nested authors', () => {
@@ -256,7 +256,7 @@ describe('generateItem with extraFields', () => {
       ],
     }
 
-    expect(generateItem(value, ['_social'])).toEqual(expected)
+    expect(generateItem(value, { extraFields: ['_social'] })).toEqual(expected)
   })
 
   it('should handle extraFields in nested attachments', () => {
@@ -283,7 +283,7 @@ describe('generateItem with extraFields', () => {
       ],
     }
 
-    expect(generateItem(value, ['_custom'])).toEqual(expected)
+    expect(generateItem(value, { extraFields: ['_custom'] })).toEqual(expected)
   })
 
   it('should exclude undeclared fields from output (security)', () => {
@@ -299,7 +299,7 @@ describe('generateItem with extraFields', () => {
       _public: { data: 'ok to share' },
     }
 
-    expect(generateItem(value, ['_public'])).toEqual(expected)
+    expect(generateItem(value, { extraFields: ['_public'] })).toEqual(expected)
   })
 })
 
@@ -317,7 +317,7 @@ describe('generateFeed with extraFields', () => {
       _podcast: { locked: true },
     }
 
-    expect(generateFeed(value, ['_podcast'])).toEqual(expected)
+    expect(generateFeed(value, { extraFields: ['_podcast'] })).toEqual(expected)
   })
 
   it('should handle extraFields in feed-level authors', () => {
@@ -342,7 +342,7 @@ describe('generateFeed with extraFields', () => {
       ],
     }
 
-    expect(generateFeed(value, ['_verified'])).toEqual(expected)
+    expect(generateFeed(value, { extraFields: ['_verified'] })).toEqual(expected)
   })
 
   it('should handle extraFields in feed-level hubs', () => {
@@ -369,7 +369,7 @@ describe('generateFeed with extraFields', () => {
       ],
     }
 
-    expect(generateFeed(value, ['_custom'])).toEqual(expected)
+    expect(generateFeed(value, { extraFields: ['_custom'] })).toEqual(expected)
   })
 
   it('should handle item-level extra fields', () => {
@@ -395,7 +395,7 @@ describe('generateFeed with extraFields', () => {
       ],
     }
 
-    expect(generateFeed(value, ['_microblog'])).toEqual(expected)
+    expect(generateFeed(value, { extraFields: ['_microblog'] })).toEqual(expected)
   })
 
   it('should handle multiple extra fields at different levels', () => {
@@ -423,6 +423,6 @@ describe('generateFeed with extraFields', () => {
       ],
     }
 
-    expect(generateFeed(value, ['_podcast', '_microblog'])).toEqual(expected)
+    expect(generateFeed(value, { extraFields: ['_podcast', '_microblog'] })).toEqual(expected)
   })
 })

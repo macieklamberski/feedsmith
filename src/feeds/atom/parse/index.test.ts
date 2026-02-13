@@ -121,7 +121,10 @@ describe('parse', () => {
           published: '2024-01-01T12:00:00Z',
           updated: '2024-01-02T09:30:00Z',
           authors: [{ name: 'John Doe' }],
-          content: '<p>This is the first entry in a mixed case Atom feed.</p>',
+          content: {
+            type: 'html',
+            value: '<p>This is the first entry in a mixed case Atom feed.</p>',
+          },
           summary: 'Summary of the first entry',
           categories: [{ term: 'samples', label: 'Samples' }],
         },
@@ -132,7 +135,7 @@ describe('parse', () => {
           published: '2024-01-03T14:30:00Z',
           updated: '2024-01-03T15:45:00Z',
           authors: [{ name: 'Jane Smith' }],
-          content: 'This is the second entry in a mixed case Atom feed.',
+          content: { type: 'text', value: 'This is the second entry in a mixed case Atom feed.' },
           summary: 'Summary of the second entry',
           categories: [{ term: 'docs', label: 'Documentation' }],
         },
@@ -1162,6 +1165,154 @@ describe('parse', () => {
 
         expect(parse(commonValue, { maxItems: undefined })).toEqual(expected)
       })
+    })
+  })
+
+  describe('parseDateFn', () => {
+    it('should apply custom parseDateFn to feed and entry dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <title>Test</title>
+          <id>urn:uuid:feed</id>
+          <updated>2024-01-10T12:00:00Z</updated>
+          <entry>
+            <title>Entry</title>
+            <id>urn:uuid:entry</id>
+            <published>2024-01-01T12:00:00Z</published>
+            <updated>2024-01-02T09:30:00Z</updated>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Test',
+        id: 'urn:uuid:feed',
+        updated: new Date('2024-01-10T12:00:00Z'),
+        entries: [
+          {
+            title: 'Entry',
+            id: 'urn:uuid:entry',
+            published: new Date('2024-01-01T12:00:00Z'),
+            updated: new Date('2024-01-02T09:30:00Z'),
+          },
+        ],
+      }
+
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should apply custom parseDateFn to dc namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <title>Test</title>
+          <id>urn:uuid:feed</id>
+          <updated>2024-01-10T12:00:00Z</updated>
+          <entry>
+            <title>Entry</title>
+            <id>urn:uuid:entry</id>
+            <updated>2024-01-02T09:30:00Z</updated>
+            <dc:date>2024-01-01T12:00:00Z</dc:date>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Test',
+        id: 'urn:uuid:feed',
+        updated: new Date('2024-01-10T12:00:00Z'),
+        entries: [
+          {
+            title: 'Entry',
+            id: 'urn:uuid:entry',
+            updated: new Date('2024-01-02T09:30:00Z'),
+            dc: {
+              dates: [new Date('2024-01-01T12:00:00Z')],
+            },
+          },
+        ],
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should apply custom parseDateFn to thr link dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom" xmlns:thr="http://purl.org/syndication/thread/1.0">
+          <title>Test</title>
+          <id>urn:uuid:feed</id>
+          <updated>2024-01-10T12:00:00Z</updated>
+          <entry>
+            <title>Entry</title>
+            <id>urn:uuid:entry</id>
+            <updated>2024-01-02T09:30:00Z</updated>
+            <link href="https://example.com/comments" rel="replies" thr:count="5" thr:updated="2024-01-05T12:00:00Z" />
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Test',
+        id: 'urn:uuid:feed',
+        updated: new Date('2024-01-10T12:00:00Z'),
+        entries: [
+          {
+            title: 'Entry',
+            id: 'urn:uuid:entry',
+            updated: new Date('2024-01-02T09:30:00Z'),
+            links: [
+              {
+                href: 'https://example.com/comments',
+                rel: 'replies',
+                thr: {
+                  count: 5,
+                  updated: new Date('2024-01-05T12:00:00Z'),
+                },
+              },
+            ],
+          },
+        ],
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should apply custom parseDateFn to app namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom" xmlns:app="http://www.w3.org/2007/app">
+          <title>Test</title>
+          <id>urn:uuid:feed</id>
+          <updated>2024-01-10T12:00:00Z</updated>
+          <entry>
+            <title>Entry</title>
+            <id>urn:uuid:entry</id>
+            <updated>2024-01-02T09:30:00Z</updated>
+            <app:edited>2024-01-03T15:00:00Z</app:edited>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Test',
+        id: 'urn:uuid:feed',
+        updated: new Date('2024-01-10T12:00:00Z'),
+        entries: [
+          {
+            title: 'Entry',
+            id: 'urn:uuid:entry',
+            updated: new Date('2024-01-02T09:30:00Z'),
+            app: {
+              edited: new Date('2024-01-03T15:00:00Z'),
+            },
+          },
+        ],
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
     })
   })
 })

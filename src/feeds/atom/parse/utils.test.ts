@@ -2,6 +2,7 @@ import { describe, expect, it } from 'bun:test'
 import {
   createNamespaceGetter,
   parseCategory,
+  parseContent,
   parseEntry,
   parseFeed,
   parseGenerator,
@@ -109,6 +110,83 @@ describe('createNamespaceGetter', () => {
     const get = createNamespaceGetter(value, 'ns:')
 
     expect(get('nonExistentKey')).toBeUndefined()
+  })
+})
+
+describe('parseContent', () => {
+  it('should parse simple string value', () => {
+    const value = 'Simple content'
+    const expected = { value: 'Simple content' }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should parse object with text content', () => {
+    const value = { '#text': 'Content text' }
+    const expected = { value: 'Content text' }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should parse object with text, type and src', () => {
+    const value = {
+      '#text': 'Content text',
+      '@type': 'html',
+      '@src': 'https://example.com/content',
+    }
+    const expected = {
+      value: 'Content text',
+      type: 'html',
+      src: 'https://example.com/content',
+    }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should parse content with only src attribute', () => {
+    const value = {
+      '@type': 'video/mp4',
+      '@src': 'https://example.com/video.mp4',
+    }
+    const expected = {
+      type: 'video/mp4',
+      src: 'https://example.com/video.mp4',
+    }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty string', () => {
+    expect(parseContent('')).toBeUndefined()
+  })
+
+  it('should return undefined for whitespace-only string', () => {
+    expect(parseContent('   ')).toBeUndefined()
+  })
+
+  it('should parse object with xml namespace attributes', () => {
+    const value = {
+      '#text': '<div>XHTML content</div>',
+      '@type': 'xhtml',
+      '@xml:base': 'http://example.org/entry/1',
+      '@xml:lang': 'en-US',
+    }
+    const expected = {
+      value: '<div>XHTML content</div>',
+      type: 'xhtml',
+      xml: {
+        base: 'http://example.org/entry/1',
+        lang: 'en-US',
+      },
+    }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should return undefined for non-object, non-string input', () => {
+    expect(parseContent(null)).toBeUndefined()
+    expect(parseContent(undefined)).toBeUndefined()
+    expect(parseContent(123)).toBeUndefined()
   })
 })
 
@@ -803,7 +881,7 @@ describe('parseEntry', () => {
     title: 'Entry Title',
     updated: '2023-01-01T12:00:00Z',
     authors: [{ name: 'John Doe' }],
-    content: '<p>Entry content</p>',
+    content: { value: '<p>Entry content</p>' },
     summary: 'Entry summary',
     published: '2023-01-01T10:00:00Z',
     links: [
@@ -943,7 +1021,7 @@ describe('parseEntry', () => {
     const expected = {
       id: '123',
       title: '456',
-      content: '789',
+      content: { value: '789' },
       links: [{ href: 'https://example.com/' }],
     }
 
@@ -1205,13 +1283,13 @@ describe('parseFeed', () => {
         id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
         title: 'First Entry',
         updated: '2023-01-01T10:00:00Z',
-        content: '<p>First entry content</p>',
+        content: { value: '<p>First entry content</p>' },
       },
       {
         id: 'urn:uuid:1225c695-cfb8-4ebb-bbbb-80da344efa6a',
         title: 'Second Entry',
         updated: '2023-01-02T10:00:00Z',
-        content: '<p>Second entry content</p>',
+        content: { value: '<p>Second entry content</p>' },
       },
     ],
   }

@@ -1,15 +1,11 @@
-import type { DateLike, JsonGenerateMain } from '../../../common/types.js'
-import type { ExtraFieldNames, Json } from '../common/types.js'
+import type { DateLike, GenerateMainJson } from '../../../common/types.js'
+import type { ExtraFieldNames, GeneratePartialOptions, Json } from '../common/types.js'
 import { generateFeed } from './utils.js'
 
-export type GenerateOptions<TExtra extends ExtraFieldNames = []> = {
-  extraFields?: TExtra
-}
-
-export const generate: JsonGenerateMain<
+export const generate: GenerateMainJson<
   Json.Feed<DateLike, false, ExtraFieldNames>,
   Json.Feed<Date, true, ExtraFieldNames>,
-  GenerateOptions<ExtraFieldNames>
+  GeneratePartialOptions<ExtraFieldNames>
 > = (value, options) => {
-  return generateFeed(value as Json.Feed<DateLike, false, ExtraFieldNames>, options?.extraFields)
+  return generateFeed(value as Json.Feed<DateLike, false, ExtraFieldNames>, options)
 }

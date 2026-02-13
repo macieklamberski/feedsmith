@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import { type XMLBuilder, XMLParser } from 'fast-xml-parser'
 import { namespacePrefixes, namespaceUris } from './config.js'
-import type { ParseExactUtil } from './types.js'
+import type { ParseUtilExact } from './types.js'
 import {
   createNamespaceNormalizator,
   detectNamespaces,
@@ -1491,6 +1491,43 @@ describe('parseDate', () => {
 
     expect(parseDate(value)).toBeUndefined()
   })
+
+  it('should apply custom parseDateFn', () => {
+    const value = '2023-03-15T12:00:00Z'
+    const expected = new Date('2023-03-15T12:00:00Z')
+
+    expect(parseDate(value, (raw) => new Date(raw))).toEqual(expected)
+  })
+
+  it('should apply custom parseDateFn returning number', () => {
+    const value = '2023-03-15T12:00:00Z'
+    const expected = 1678881600000
+
+    expect(parseDate(value, (raw) => new Date(raw).getTime())).toBe(expected)
+  })
+
+  it('should return undefined when parseDateFn is provided but value is empty', () => {
+    const value = ''
+
+    expect(parseDate(value, (raw) => new Date(raw))).toBeUndefined()
+  })
+
+  it('should normalize value before passing to parseDateFn', () => {
+    const value = '  2023-03-15T12:00:00Z  '
+    const expected = new Date('2023-03-15T12:00:00Z')
+
+    expect(parseDate(value, (raw) => new Date(raw))).toEqual(expected)
+  })
+
+  it('should propagate error when parseDateFn throws', () => {
+    const value = 'invalid-date'
+    const parseDateFn = () => {
+      throw new Error('Parse failed')
+    }
+    const throwing = () => parseDate(value, parseDateFn)
+
+    expect(throwing).toThrow('Parse failed')
+  })
 })
 
 describe('generateBoolean', () => {
@@ -1613,7 +1650,7 @@ describe('parseSingularOf', () => {
   })
 
   it('should work with custom parse functions', () => {
-    const parseUpperCase: ParseExactUtil<string> = (value) => {
+    const parseUpperCase: ParseUtilExact<string> = (value) => {
       return typeof value === 'string' ? value.toUpperCase() : undefined
     }
 
@@ -1703,7 +1740,7 @@ describe('parseArray', () => {
 })
 
 describe('parseArrayOf', () => {
-  const parser: ParseExactUtil<string> = (value) => {
+  const parser: ParseUtilExact<string> = (value) => {
     if (typeof value === 'number') {
       return value.toString()
     }

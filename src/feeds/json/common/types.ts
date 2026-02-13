@@ -1,6 +1,8 @@
 import type {
-  ParseOptions as BaseParseOptions,
-  DateLike,
+  GenerateUtil as BaseGenerateUtil,
+  ParseUtilPartial as BaseParseUtilPartial,
+  DateAny,
+  ParseMainOptions,
   Requirable,
   Strict,
 } from '../../../common/types.js'
@@ -11,9 +13,17 @@ export type ExtraFields<F extends ExtraFieldNames> = {
   [K in F[number]]?: unknown
 }
 
-export type ParsePartialOptions<TExtra extends ExtraFieldNames> = BaseParseOptions & {
+export type ParsePartialOptions<TExtra extends ExtraFieldNames> = ParseMainOptions<DateAny> & {
   extraFields?: TExtra
 }
+
+export type GeneratePartialOptions<TExtra extends ExtraFieldNames> = {
+  extraFields?: TExtra
+}
+
+export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParsePartialOptions<ExtraFieldNames>>
+
+export type GenerateUtil<V> = BaseGenerateUtil<V, GeneratePartialOptions<ExtraFieldNames>>
 
 // #region reference
 export namespace Json {
@@ -39,7 +49,7 @@ export namespace Json {
     ExtraFields<TExtra>
 
   export type Item<
-    TDate extends DateLike,
+    TDate,
     TStrict extends boolean = false,
     TExtra extends ExtraFieldNames = [],
   > = Strict<
@@ -75,7 +85,7 @@ export namespace Json {
     ExtraFields<TExtra>
 
   export type Feed<
-    TDate extends DateLike,
+    TDate,
     TStrict extends boolean = false,
     TExtra extends ExtraFieldNames = [],
   > = Strict<

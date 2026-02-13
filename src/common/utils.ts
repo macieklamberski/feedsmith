@@ -2,9 +2,10 @@ import { decodeHTML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
 import type {
   AnyOf,
+  DateAny,
   DateLike,
   GenerateUtil,
-  ParseExactUtil,
+  ParseUtilExact,
   Unreliable,
   XmlStylesheet,
 } from './types.js'
@@ -77,7 +78,7 @@ export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<
 
 export const trimArray = <T, R = T>(
   value: Array<T> | undefined,
-  parse?: ParseExactUtil<R>,
+  parse?: ParseUtilExact<R>,
 ): Array<R> | undefined => {
   if (!Array.isArray(value) || value.length === 0) {
     return
@@ -161,7 +162,7 @@ const decodeWithCdata = (text: string): string => {
   return result
 }
 
-export const parseString: ParseExactUtil<string> = (value) => {
+export const parseString: ParseUtilExact<string> = (value) => {
   if (typeof value === 'string') {
     if (value === '') {
       return
@@ -177,7 +178,7 @@ export const parseString: ParseExactUtil<string> = (value) => {
   }
 }
 
-export const parseNumber: ParseExactUtil<number> = (value) => {
+export const parseNumber: ParseUtilExact<number> = (value) => {
   if (typeof value === 'number') {
     return value
   }
@@ -193,7 +194,7 @@ const trueRegex = /^\p{White_Space}*true\p{White_Space}*$/iu
 const falseRegex = /^\p{White_Space}*false\p{White_Space}*$/iu
 const yesRegex = /^\p{White_Space}*yes\p{White_Space}*$/iu
 
-export const parseBoolean: ParseExactUtil<boolean> = (value) => {
+export const parseBoolean: ParseUtilExact<boolean> = (value) => {
   if (typeof value === 'boolean') {
     return value
   }
@@ -204,7 +205,7 @@ export const parseBoolean: ParseExactUtil<boolean> = (value) => {
   }
 }
 
-export const parseYesNoBoolean: ParseExactUtil<boolean> = (value) => {
+export const parseYesNoBoolean: ParseUtilExact<boolean> = (value) => {
   const boolean = parseBoolean(value)
 
   if (boolean !== undefined) {
@@ -216,14 +217,20 @@ export const parseYesNoBoolean: ParseExactUtil<boolean> = (value) => {
   }
 }
 
-export const parseDate: ParseExactUtil<string> = (value) => {
-  // This function is currently a placeholder for the actual date parsing functionality
-  // which might be added at some point in the future. Currently it just uses treats
-  // the date as string.
-  return parseString(value)
+export const parseDate = (
+  value: Unreliable,
+  parseDateFn?: (raw: string) => DateAny,
+): DateAny | undefined => {
+  const raw = parseString(value)
+
+  if (raw === undefined) {
+    return
+  }
+
+  return parseDateFn ? parseDateFn(raw) : raw
 }
 
-export const parseArray: ParseExactUtil<Array<Unreliable>> = (value) => {
+export const parseArray: ParseUtilExact<Array<Unreliable>> = (value) => {
   if (Array.isArray(value)) {
     return value
   }
@@ -256,7 +263,7 @@ export const parseArray: ParseExactUtil<Array<Unreliable>> = (value) => {
 
 export const parseArrayOf = <R>(
   value: Unreliable,
-  parse: ParseExactUtil<R>,
+  parse: ParseUtilExact<R>,
   limit?: number,
 ): Array<R> | undefined => {
   let array = parseArray(value)
@@ -286,13 +293,13 @@ export const parseSingular = <T>(value: T | Array<T>): T => {
   return Array.isArray(value) ? value[0] : value
 }
 
-export const parseSingularOf = <R>(value: Unreliable, parse: ParseExactUtil<R>): R | undefined => {
+export const parseSingularOf = <R>(value: Unreliable, parse: ParseUtilExact<R>): R | undefined => {
   return parse(parseSingular(value))
 }
 
 export const parseCsvOf = <T>(
   value: Unreliable,
-  parse: ParseExactUtil<T>,
+  parse: ParseUtilExact<T>,
 ): Array<T> | undefined => {
   if (!isNonEmptyStringOrNumber(value)) {
     return

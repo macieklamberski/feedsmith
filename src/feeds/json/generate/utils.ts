@@ -1,8 +1,8 @@
 import type { DateLike } from '../../../common/types.js'
 import { generateRfc3339Date, isObject, trimArray, trimObject } from '../../../common/utils.js'
-import type { ExtraFieldNames, Json } from '../common/types.js'
+import type { ExtraFieldNames, GenerateUtil, Json } from '../common/types.js'
 
-const filterExtraFields = <T extends Record<string, unknown>>(
+export const filterExtraFields = <T extends Record<string, unknown>>(
   source: T,
   extraFields?: ExtraFieldNames,
 ): Partial<T> => {
@@ -21,10 +21,7 @@ const filterExtraFields = <T extends Record<string, unknown>>(
   return result as Partial<T>
 }
 
-export const generateAuthor = <TExtra extends ExtraFieldNames = []>(
-  author: Partial<Json.Author<TExtra>> | undefined,
-  extraFields?: TExtra,
-): Record<string, unknown> | undefined => {
+export const generateAuthor: GenerateUtil<Json.Author> = (author, options) => {
   if (!isObject(author)) {
     return
   }
@@ -33,16 +30,13 @@ export const generateAuthor = <TExtra extends ExtraFieldNames = []>(
     name: author.name,
     url: author.url,
     avatar: author.avatar,
-    ...filterExtraFields(author, extraFields),
+    ...filterExtraFields(author, options?.extraFields),
   }
 
   return trimObject(value)
 }
 
-export const generateAttachment = <TExtra extends ExtraFieldNames = []>(
-  attachment: Partial<Json.Attachment<false, TExtra>> | undefined,
-  extraFields?: TExtra,
-): Record<string, unknown> | undefined => {
+export const generateAttachment: GenerateUtil<Json.Attachment> = (attachment, options) => {
   if (!isObject(attachment)) {
     return
   }
@@ -53,16 +47,13 @@ export const generateAttachment = <TExtra extends ExtraFieldNames = []>(
     title: attachment.title,
     size_in_bytes: attachment.size_in_bytes,
     duration_in_seconds: attachment.duration_in_seconds,
-    ...filterExtraFields(attachment, extraFields),
+    ...filterExtraFields(attachment, options?.extraFields),
   }
 
   return trimObject(value)
 }
 
-export const generateHub = <TExtra extends ExtraFieldNames = []>(
-  hub: Partial<Json.Hub<false, TExtra>> | undefined,
-  extraFields?: TExtra,
-): Record<string, unknown> | undefined => {
+export const generateHub: GenerateUtil<Json.Hub> = (hub, options) => {
   if (!isObject(hub)) {
     return
   }
@@ -70,16 +61,13 @@ export const generateHub = <TExtra extends ExtraFieldNames = []>(
   const value = {
     type: hub.type,
     url: hub.url,
-    ...filterExtraFields(hub, extraFields),
+    ...filterExtraFields(hub, options?.extraFields),
   }
 
   return trimObject(value)
 }
 
-export const generateItem = <TExtra extends ExtraFieldNames = []>(
-  item: Partial<Json.Item<DateLike, false, TExtra>> | undefined,
-  extraFields?: TExtra,
-): Record<string, unknown> | undefined => {
+export const generateItem: GenerateUtil<Json.Item<DateLike>> = (item, options) => {
   if (!isObject(item)) {
     return
   }
@@ -97,21 +85,18 @@ export const generateItem = <TExtra extends ExtraFieldNames = []>(
     date_published: generateRfc3339Date(item.date_published),
     date_modified: generateRfc3339Date(item.date_modified),
     language: item.language,
-    authors: trimArray(item.authors, (value) => generateAuthor(value, extraFields)),
+    authors: trimArray(item.authors, (value) => generateAuthor(value, options)),
     tags: item.tags,
-    attachments: trimArray(item.attachments, (value) => generateAttachment(value, extraFields)),
-    ...filterExtraFields(item, extraFields),
+    attachments: trimArray(item.attachments, (value) => generateAttachment(value, options)),
+    ...filterExtraFields(item, options?.extraFields),
   }
 
   return trimObject(value)
 }
 
-export const generateFeed = <TExtra extends ExtraFieldNames = []>(
-  feed: Partial<Json.Feed<DateLike, false, TExtra>> | undefined,
-  extraFields?: TExtra,
-): Record<string, unknown> => {
+export const generateFeed: GenerateUtil<Json.Feed<DateLike>> = (feed, options) => {
   if (!isObject(feed)) {
-    return {}
+    return
   }
 
   const value = {
@@ -126,10 +111,10 @@ export const generateFeed = <TExtra extends ExtraFieldNames = []>(
     favicon: feed.favicon,
     language: feed.language,
     expired: feed.expired,
-    hubs: trimArray(feed.hubs, (value) => generateHub(value, extraFields)),
-    authors: trimArray(feed.authors, (value) => generateAuthor(value, extraFields)),
-    items: trimArray(feed.items, (value) => generateItem(value, extraFields)),
-    ...filterExtraFields(feed, extraFields),
+    hubs: trimArray(feed.hubs, (value) => generateHub(value, options)),
+    authors: trimArray(feed.authors, (value) => generateAuthor(value, options)),
+    items: trimArray(feed.items, (value) => generateItem(value, options)),
+    ...filterExtraFields(feed, options?.extraFields),
   }
 
   return trimObject(value) as Record<string, unknown>

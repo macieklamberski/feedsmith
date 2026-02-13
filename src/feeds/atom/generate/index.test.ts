@@ -167,7 +167,7 @@ describe('generate', () => {
           title: 'Complete Entry',
           updated: new Date('2023-03-15T12:00:00Z'),
           published: new Date('2023-03-10T08:00:00Z'),
-          content: 'This is the complete entry content',
+          content: { value: 'This is the complete entry content' },
           summary: 'Entry summary',
           authors: [
             {
@@ -267,7 +267,7 @@ describe('generate', () => {
           id: 'https://example.com/entry/1',
           title: 'Entry with & Special Characters',
           updated: updatedDate,
-          content: 'Content with <b>bold</b> & "quoted" text',
+          content: { value: 'Content with <b>bold</b> & "quoted" text' },
         },
       ],
     }
@@ -519,9 +519,7 @@ describe('generate', () => {
       title: 'Feed with Media namespace',
       updated: new Date('2023-03-15T12:00:00Z'),
       media: {
-        title: {
-          value: 'Feed Media Title',
-        },
+        title: { value: 'Feed Media Title' },
       },
       entries: [
         {
@@ -529,9 +527,7 @@ describe('generate', () => {
           title: 'Entry with Media',
           updated: new Date('2023-03-15T12:00:00Z'),
           media: {
-            title: {
-              value: 'Entry Media Title',
-            },
+            title: { value: 'Entry Media Title' },
           },
         },
       ],

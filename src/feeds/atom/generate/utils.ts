@@ -20,7 +20,7 @@ import {
 import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
 import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
-import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
+import { generateItemOrFeed as generateDcTermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
 import { generateItemOrFeed as generateGeoItemOrFeed } from '../../../namespaces/geo/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
@@ -59,6 +59,21 @@ export const createNamespaceSetter = (prefix: string | undefined) => {
 
 export const generateText: GenerateUtil<Atom.Text> = (text) => {
   return generateCdataString(text)
+}
+
+export const generateContent: GenerateUtil<Atom.Content> = (content) => {
+  if (!isObject(content)) {
+    return
+  }
+
+  const value = {
+    ...generateTextOrCdataString(content.value),
+    '@type': generatePlainString(content.type),
+    '@src': generatePlainString(content.src),
+    ...generateXmlItemOrFeed(content.xml),
+  }
+
+  return trimObject(value)
 }
 
 export const generateLink: GenerateUtil<Atom.Link<DateLike>> = (link) => {
@@ -160,7 +175,7 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
   const value = {
     [key('author')]: trimArray(entry.authors, generatePerson),
     [key('category')]: trimArray(entry.categories, generateCategory),
-    [key('content')]: generateText(entry.content),
+    [key('content')]: generateContent(entry.content),
     [key('contributor')]: trimArray(entry.contributors, (contributor) =>
       generatePerson(contributor, options),
     ),
@@ -198,7 +213,7 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
     ...generateGeoRssItemOrFeed(entry.georss),
     ...generateGeoItemOrFeed(entry.geo),
     ...generateThrItem(entry.thr),
-    ...generateDctermsItemOrFeed(entry.dcterms),
+    ...generateDcTermsItemOrFeed(entry.dcterms),
     ...generateCreativeCommonsItemOrFeed(entry.creativeCommons),
     ...generateWfwItem(entry.wfw),
     ...generateYtItem(entry.yt),
@@ -264,7 +279,7 @@ export const generateFeed: GenerateUtil<Atom.Feed<DateLike>> = (feed, options) =
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateGeoItemOrFeed(feed.geo),
-    ...generateDctermsItemOrFeed(feed.dcterms),
+    ...generateDcTermsItemOrFeed(feed.dcterms),
     ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
     ...generateOpenSearchFeed(feed.opensearch),
     ...generateYtFeed(feed.yt),
