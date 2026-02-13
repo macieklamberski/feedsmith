@@ -2,11 +2,9 @@
 title: "Generating Feeds: Styling"
 ---
 
-# Styling
+# Styling Feeds
 
 XML-based feeds (RSS, Atom) and OPML files support stylesheets to provide custom styling and transformations in browsers and feed readers.
-
-## Overview
 
 Stylesheets allow you to:
 

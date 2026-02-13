@@ -318,7 +318,6 @@ describe('parse', () => {
             description: 'Item Description',
             dc: {
               creators: ['John Doe'],
-              creator: 'John Doe',
             },
           },
         ],
@@ -362,8 +361,6 @@ describe('parse', () => {
             dc: {
               creators: ['John Doe'],
               dates: ['2023-01-01'],
-              creator: 'John Doe',
-              date: '2023-01-01',
             },
           },
           {
@@ -405,7 +402,6 @@ describe('parse', () => {
             description: 'Item Description',
             dc: {
               creators: ['John Doe'],
-              creator: 'John Doe',
             },
           },
         ],
@@ -501,8 +497,6 @@ describe('parse', () => {
             dc: {
               creators: ['John Doe'],
               dates: ['2023-01-01'],
-              creator: 'John Doe',
-              date: '2023-01-01',
             },
             media: {
               title: {
@@ -549,7 +543,6 @@ describe('parse', () => {
             title: 'Item Title',
             dc: {
               creators: ['Should not be normalized (empty URI)'],
-              creator: 'Should not be normalized (empty URI)',
             },
           },
         ],
@@ -623,8 +616,6 @@ describe('parse', () => {
             dc: {
               creators: ['John Doe'],
               dates: ['2023-01-01'],
-              creator: 'John Doe',
-              date: '2023-01-01',
             },
           },
         ],
@@ -658,7 +649,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -691,7 +681,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -724,7 +713,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -757,7 +745,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -790,7 +777,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -823,7 +809,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -858,8 +843,6 @@ describe('parse', () => {
               dcterms: {
                 creators: ['Jane Doe'],
                 titles: ['DC Terms Title'],
-                creator: 'Jane Doe',
-                title: 'DC Terms Title',
               },
             },
           ],
@@ -952,6 +935,202 @@ describe('parse', () => {
       }
 
       expect(parse(value, { maxItems: undefined })).toEqual(expected)
+    })
+  })
+
+  describe('parseDateFn', () => {
+    it('should apply custom parseDateFn to feed and item dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0">
+          <channel>
+            <title>Test</title>
+            <pubDate>Wed, 15 Mar 2023 12:00:00 GMT</pubDate>
+            <item>
+              <title>Item</title>
+              <pubDate>Thu, 16 Mar 2023 12:00:00 GMT</pubDate>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test',
+        pubDate: new Date('Wed, 15 Mar 2023 12:00:00 GMT'),
+        items: [
+          {
+            title: 'Item',
+            pubDate: new Date('Thu, 16 Mar 2023 12:00:00 GMT'),
+          },
+        ],
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should apply custom parseDateFn to namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <channel>
+            <title>Test</title>
+            <item>
+              <title>Item</title>
+              <dc:date>2023-03-15T12:00:00Z</dc:date>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test',
+        items: [
+          {
+            title: 'Item',
+            dc: {
+              dates: [new Date('2023-03-15T12:00:00Z')],
+            },
+          },
+        ],
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should propagate error when parseDateFn throws', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0">
+          <channel>
+            <title>Test</title>
+            <pubDate>invalid</pubDate>
+          </channel>
+        </rss>
+      `
+      const parseDateFn = () => {
+        throw new Error('Parse failed')
+      }
+      const throwing = () => parse(value, { parseDateFn })
+
+      expect(throwing).toThrow('Parse failed')
+    })
+
+    it('should apply custom parseDateFn to podcast namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0" xmlns:podcast="https://podcastindex.org/namespace/1.0">
+          <channel>
+            <title>Test</title>
+            <podcast:trailer pubdate="Thu, 16 Mar 2023 12:00:00 GMT" url="https://example.com/trailer.mp3">Trailer</podcast:trailer>
+            <podcast:liveItem status="live" start="2023-03-15T12:00:00Z" end="2023-03-15T13:00:00Z" />
+            <podcast:updateFrequency dtstart="2023-03-20T00:00:00Z" rrule="FREQ=WEEKLY">Weekly</podcast:updateFrequency>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test',
+        podcast: {
+          trailers: [
+            {
+              display: 'Trailer',
+              url: 'https://example.com/trailer.mp3',
+              pubDate: new Date('Thu, 16 Mar 2023 12:00:00 GMT'),
+            },
+          ],
+          liveItems: [
+            {
+              status: 'live',
+              start: new Date('2023-03-15T12:00:00Z'),
+              end: new Date('2023-03-15T13:00:00Z'),
+            },
+          ],
+          updateFrequency: {
+            display: 'Weekly',
+            dtstart: new Date('2023-03-20T00:00:00Z'),
+            rrule: 'FREQ=WEEKLY',
+          },
+        },
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should apply custom parseDateFn to sy namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/">
+          <channel>
+            <title>Test</title>
+            <sy:updateBase>2023-03-15T12:00:00Z</sy:updateBase>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test',
+        sy: {
+          updateBase: new Date('2023-03-15T12:00:00Z'),
+        },
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should apply custom parseDateFn to prism namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0" xmlns:prism="http://prismstandard.org/namespaces/basic/3.0/">
+          <channel>
+            <title>Test</title>
+            <item>
+              <title>Item</title>
+              <prism:publicationDate>2023-03-15T12:00:00Z</prism:publicationDate>
+              <prism:modificationDate>2023-03-16T12:00:00Z</prism:modificationDate>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test',
+        items: [
+          {
+            title: 'Item',
+            prism: {
+              publicationDates: [new Date('2023-03-15T12:00:00Z')],
+              modificationDate: new Date('2023-03-16T12:00:00Z'),
+            },
+          },
+        ],
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should apply custom parseDateFn to rawvoice namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0" xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/">
+          <channel>
+            <title>Test</title>
+            <rawvoice:liveStream schedule="2023-03-15T12:00:00Z" duration="01:00:00">https://example.com/stream</rawvoice:liveStream>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test',
+        rawvoice: {
+          liveStream: {
+            url: 'https://example.com/stream',
+            schedule: new Date('2023-03-15T12:00:00Z'),
+            duration: '01:00:00',
+          },
+        },
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
     })
   })
 })

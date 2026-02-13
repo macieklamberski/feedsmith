@@ -2,7 +2,7 @@
 title: "Reference: Atom Feed"
 ---
 
-# Atom Feed
+# Atom Feed Reference
 
 Atom is a syndication format based on XML that provides a robust framework for web feeds. Feedsmith provides comprehensive parsing and generation capabilities.
 
@@ -39,7 +39,8 @@ Atom is a syndication format based on XML that provides a robust framework for w
         <a href="/reference/namespaces/trackback">Trackback</a>,
         <a href="/reference/namespaces/yt">YouTube</a>,
         <a href="/reference/namespaces/geo">W3C Basic Geo</a>,
-        <a href="/reference/namespaces/georss">GeoRSS Simple</a>
+        <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
+        <a href="/reference/namespaces/xml">XML</a>
       </td>
     </tr>
   </tbody>
@@ -85,7 +86,6 @@ Generates Atom XML from feed data.
 import { generateAtomFeed } from 'feedsmith'
 
 const xml = generateAtomFeed(feedData, {
-  lenient: true,
   stylesheets: [{ type: 'text/xsl', href: '/feed.xsl' }]
 })
 ```
@@ -101,7 +101,7 @@ const xml = generateAtomFeed(feedData, {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `lenient` | `boolean` | `false` | Enable lenient mode for relaxed validation, see [Lenient Mode](/generating/lenient-mode) |
+| `strict` | `boolean` | `false` | Enable strict mode for spec-required field validation, see [Strict Mode](/generating/strict-mode) |
 | `stylesheets` | `Stylesheet[]` | - | Add stylesheets for visual formatting, see [Feed Styling](/generating/styling) |
 
 #### Returns
@@ -132,7 +132,7 @@ const isAtom = detectAtomFeed(xmlContent)
 All Atom types are available under the `Atom` namespace:
 
 ```typescript
-import type { Atom } from 'feedsmith/types'
+import type { Atom } from 'feedsmith'
 
 // Access any type from the definitions below
 type Feed = Atom.Feed<Date>
@@ -147,7 +147,7 @@ See the [TypeScript guide](/reference/typescript) for usage examples.
 ### Type Definitions
 
 > [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
+> For details on type parameters (`TDate`, `TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tdate).
 
 <<< @/../src/feeds/atom/common/types.ts#reference
 

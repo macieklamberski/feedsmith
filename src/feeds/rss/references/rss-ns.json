@@ -36,36 +36,30 @@
         "sources": ["https://example.org/item-source"],
         "languages": ["en-US"],
         "relations": ["https://example.org/related-article"],
-        "title": "Dublin Core Enhanced Item Title",
-        "creator": "Jack Jackson",
-        "subject": "Article, Tutorial, Example",
-        "description": "Detailed description of the example item content",
-        "publisher": "Example News Organization",
-        "contributor": "Assistant Editor Mike Thompson",
-        "date": "2022-01-01T12:00:00.000Z",
-        "type": "Article",
-        "format": "text/html",
-        "identifier": "urn:uuid:98765432-9876-9876-9876-987654321def",
-        "source": "https://example.org/item-source",
-        "language": "en-US",
-        "relation": "https://example.org/related-article",
-        "coverage": "United States",
-        "rights": "Copyright 2025 Example News Organization"
+        "coverage": ["United States"],
+        "rights": ["Copyright 2025 Example News Organization"]
       },
       "dcterms": {
         "abstracts": ["This article explores advanced concepts in technology"],
+        "accessRights": ["Public access with attribution required"],
         "accrualMethods": ["Single publication"],
         "accrualPeriodicities": ["One-time"],
         "accrualPolicies": ["Editorial review required"],
         "alternatives": ["Alternative Item Title"],
         "audiences": ["Technical professionals"],
+        "available": ["2022-01-01T12:00:00.000Z"],
         "bibliographicCitations": [
           "Smith, J. (2022). Example Item. Retrieved from https://example.org/item/1"
         ],
+        "conformsTo": ["HTML5 standard"],
         "contributors": ["Assistant Editor Mike Thompson"],
         "coverages": ["United States technology sector"],
+        "created": ["2022-01-01T12:00:00.000Z"],
         "creators": ["Jack Jackson"],
+        "dateAccepted": ["2022-01-01T12:00:00.000Z"],
+        "dateCopyrighted": ["2022-01-01T12:00:00.000Z"],
         "dates": ["2022-01-01T12:00:00.000Z"],
+        "dateSubmitted": ["2022-01-01T12:00:00.000Z"],
         "descriptions": ["Detailed description of the example item content and its significance"],
         "educationLevels": ["Advanced"],
         "extents": ["Approximately 2500 words"],
@@ -75,75 +69,34 @@
         "hasVersions": ["1.1"],
         "identifiers": ["urn:uuid:item-98765432-9876-9876-9876-987654321def"],
         "instructionalMethods": ["Step-by-step tutorial"],
+        "isFormatOf": ["https://example.org/item-source"],
+        "isPartOf": ["Example Article Series"],
+        "isReferencedBy": ["https://example.org/item/1/citations"],
+        "isReplacedBy": ["https://example.org/item/1/updated"],
+        "isRequiredBy": ["https://example.org/item/1/prerequisites"],
+        "issued": ["2022-01-01T12:00:00.000Z"],
+        "isVersionOf": ["https://example.org/item/1/original"],
         "languages": ["en-US"],
         "licenses": ["Creative Commons Attribution 4.0"],
         "mediators": ["Editorial Team"],
         "mediums": ["Digital"],
+        "modified": ["2022-06-01T12:00:00.000Z"],
         "provenances": ["Originally published by Example News Organization"],
         "publishers": ["Example News Organization"],
+        "references": ["https://example.org/item/1/references"],
         "relations": ["https://example.org/related-article"],
+        "replaces": ["https://example.org/item/1/previous"],
+        "requires": ["Basic understanding of web technologies"],
+        "rights": ["Copyright 2025 Example News Organization"],
         "rightsHolders": ["Example News Organization"],
         "sources": ["https://example.org/item-source"],
         "spatials": ["United States"],
         "subjects": ["Article, Tutorial, Example"],
+        "tableOfContents": ["Introduction, Main Content, Conclusion"],
         "temporals": ["2022"],
         "titles": ["Dublin Core Terms Enhanced Item Title"],
         "types": ["Article"],
-        "created": "2022-01-01T12:00:00.000Z",
-        "license": "Creative Commons Attribution 4.0",
-        "abstract": "This article explores advanced concepts in technology",
-        "accessRights": "Public access with attribution required",
-        "accrualMethod": "Single publication",
-        "accrualPeriodicity": "One-time",
-        "accrualPolicy": "Editorial review required",
-        "alternative": "Alternative Item Title",
-        "audience": "Technical professionals",
-        "available": "2022-01-01T12:00:00.000Z",
-        "bibliographicCitation": "Smith, J. (2022). Example Item. Retrieved from https://example.org/item/1",
-        "conformsTo": "HTML5 standard",
-        "contributor": "Assistant Editor Mike Thompson",
-        "coverage": "United States technology sector",
-        "creator": "Jack Jackson",
-        "date": "2022-01-01T12:00:00.000Z",
-        "dateAccepted": "2022-01-01T12:00:00.000Z",
-        "dateCopyrighted": "2022-01-01T12:00:00.000Z",
-        "dateSubmitted": "2022-01-01T12:00:00.000Z",
-        "description": "Detailed description of the example item content and its significance",
-        "educationLevel": "Advanced",
-        "extent": "Approximately 2500 words",
-        "format": "text/html",
-        "hasFormat": "https://example.org/item/1.pdf",
-        "hasPart": "https://example.org/item/1/section1",
-        "hasVersion": "1.1",
-        "identifier": "urn:uuid:item-98765432-9876-9876-9876-987654321def",
-        "instructionalMethod": "Step-by-step tutorial",
-        "isFormatOf": "https://example.org/item-source",
-        "isPartOf": "Example Article Series",
-        "isReferencedBy": "https://example.org/item/1/citations",
-        "isReplacedBy": "https://example.org/item/1/updated",
-        "isRequiredBy": "https://example.org/item/1/prerequisites",
-        "issued": "2022-01-01T12:00:00.000Z",
-        "isVersionOf": "https://example.org/item/1/original",
-        "language": "en-US",
-        "mediator": "Editorial Team",
-        "medium": "Digital",
-        "modified": "2022-06-01T12:00:00.000Z",
-        "provenance": "Originally published by Example News Organization",
-        "publisher": "Example News Organization",
-        "references": "https://example.org/item/1/references",
-        "relation": "https://example.org/related-article",
-        "replaces": "https://example.org/item/1/previous",
-        "requires": "Basic understanding of web technologies",
-        "rights": "Copyright 2025 Example News Organization",
-        "rightsHolder": "Example News Organization",
-        "source": "https://example.org/item-source",
-        "spatial": "United States",
-        "subject": "Article, Tutorial, Example",
-        "tableOfContents": "Introduction, Main Content, Conclusion",
-        "temporal": "2022",
-        "title": "Dublin Core Terms Enhanced Item Title",
-        "type": "Article",
-        "valid": "2025-12-31T23:59:59.000Z"
+        "valid": ["2025-12-31T23:59:59.000Z"]
       },
       "prism": {
         "publicationName": "Nature",
@@ -295,13 +248,6 @@
             "country": "US"
           }
         ],
-        "location": {
-          "display": "New York City, NY",
-          "rel": "subject",
-          "geo": "geo:40.7128,-74.0060",
-          "osm": "R8780673",
-          "country": "US"
-        },
         "season": {
           "number": 1,
           "name": "First Season"
@@ -368,25 +314,6 @@
             ]
           }
         ],
-        "value": {
-          "type": "lightning",
-          "method": "keysend",
-          "suggested": 0.00000002,
-          "valueRecipients": [
-            {
-              "name": "Host",
-              "type": "node",
-              "address": "02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee83420ef254acd7d8e5edf5f16e",
-              "split": 90
-            },
-            {
-              "name": "Guest",
-              "type": "node",
-              "address": "03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a",
-              "split": 10
-            }
-          ]
-        },
         "images": [
           {
             "href": "https://example.com/images/episode-artwork.jpg",
@@ -433,14 +360,7 @@
           "server": "chat.example.com",
           "protocol": "xmpp",
           "accountId": "episode@conference.example.com"
-        },
-        "chats": [
-          {
-            "server": "chat.example.com",
-            "protocol": "xmpp",
-            "accountId": "episode@conference.example.com"
-          }
-        ]
+        }
       },
       "psc": {
         "chapters": [
@@ -631,126 +551,6 @@
             ]
           }
         ],
-        "group": {
-          "contents": [
-            {
-              "url": "https://example.com/videos/sample-hd.mp4",
-              "fileSize": 45678912,
-              "type": "video/mp4",
-              "medium": "video",
-              "expression": "full",
-              "bitrate": 5000,
-              "framerate": 60,
-              "duration": 180,
-              "height": 1080,
-              "width": 1920,
-              "lang": "en",
-              "title": {
-                "value": "HD Version (1080p)"
-              }
-            },
-            {
-              "url": "https://example.com/videos/sample-sd.mp4",
-              "fileSize": 23456789,
-              "type": "video/mp4",
-              "medium": "video",
-              "expression": "full",
-              "bitrate": 2500,
-              "framerate": 30,
-              "duration": 180,
-              "height": 720,
-              "width": 1280,
-              "lang": "en",
-              "title": {
-                "value": "SD Version (720p)"
-              }
-            },
-            {
-              "url": "https://example.com/videos/sample.webm",
-              "fileSize": 19876543,
-              "type": "video/webm",
-              "medium": "video",
-              "expression": "full",
-              "bitrate": 2000,
-              "framerate": 30,
-              "duration": 180,
-              "height": 720,
-              "width": 1280,
-              "lang": "en",
-              "title": {
-                "value": "WebM Version"
-              }
-            },
-            {
-              "url": "https://example.com/audio/sample.mp3",
-              "fileSize": 3456789,
-              "type": "audio/mpeg",
-              "medium": "audio",
-              "expression": "full",
-              "bitrate": 320,
-              "samplingrate": 44.1,
-              "channels": 2,
-              "duration": 180,
-              "lang": "en",
-              "title": {
-                "value": "Audio Only Version"
-              }
-            },
-            {
-              "url": "https://example.com/captions/sample-en.srt",
-              "type": "text/srt",
-              "medium": "document",
-              "expression": "sample",
-              "lang": "en",
-              "title": {
-                "value": "English Subtitles"
-              }
-            },
-            {
-              "url": "https://example.com/captions/sample-es.srt",
-              "type": "text/srt",
-              "medium": "document",
-              "expression": "sample",
-              "lang": "es",
-              "title": {
-                "value": "Spanish Subtitles"
-              }
-            }
-          ],
-          "title": {
-            "value": "Multi-Format Content Example"
-          },
-          "description": {
-            "value": "This video is available in multiple formats and resolutions"
-          },
-          "thumbnails": [
-            {
-              "url": "https://example.com/thumbnails/group-main.jpg",
-              "width": 640,
-              "height": 360
-            },
-            {
-              "url": "https://example.com/thumbnails/group-alt.jpg",
-              "width": 1280,
-              "height": 720
-            }
-          ],
-          "keywords": ["group", "multiple", "formats", "resolutions"],
-          "categories": [
-            {
-              "name": "Technology"
-            }
-          ],
-          "ratings": [
-            {
-              "value": "PG",
-              "scheme": "urn:mpaa"
-            }
-          ],
-          "copyright": {
-            "value": "© 2025 Example Media Inc."
-          }
-        },
         "groups": [
           {
             "contents": [
@@ -1094,6 +894,10 @@
         "showId": "abc123def456ghi789jkl012",
         "episodeUrl": "example-episode-title",
         "settings": "RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA=="
+      },
+      "xml": {
+        "lang": "en-US",
+        "base": "http://example.org/item/1/"
       }
     }
   ],
@@ -1124,34 +928,28 @@
     "sources": ["https://example.org/original-source"],
     "languages": ["en-US"],
     "relations": ["https://example.org/related-content"],
-    "title": "Dublin Core Enhanced Feed Title",
-    "creator": "John Doe",
-    "subject": "Technology, Programming, Web Development",
-    "description": "This is an example of description.",
-    "publisher": "Example Publishing Company",
-    "contributor": "Jane Smith",
-    "date": "2022-01-01T12:00:00.000Z",
-    "type": "Text",
-    "format": "application/rss+xml",
-    "identifier": "urn:uuid:12345678-1234-1234-1234-123456789abc",
-    "source": "https://example.org/original-source",
-    "language": "en-US",
-    "relation": "https://example.org/related-content",
-    "coverage": "Global",
-    "rights": "Copyright 2025 Example Publishing Company"
+    "coverage": ["Global"],
+    "rights": ["Copyright 2025 Example Publishing Company"]
   },
   "dcterms": {
     "abstracts": ["This is an abstract of the feed content"],
+    "accessRights": ["Public access with attribution required"],
     "accrualMethods": ["Regular updates"],
     "accrualPeriodicities": ["Daily"],
     "accrualPolicies": ["Content added based on editorial calendar"],
     "alternatives": ["Alternative Feed Title"],
     "audiences": ["General technology audience"],
+    "available": ["2022-01-01T12:00:00.000Z"],
     "bibliographicCitations": ["Example Feed. (2022). Retrieved from https://example.org"],
+    "conformsTo": ["RSS 2.0 Specification"],
     "contributors": ["Jane Smith"],
     "coverages": ["Global technology topics"],
+    "created": ["2022-01-01T12:00:00.000Z"],
     "creators": ["John Doe"],
+    "dateAccepted": ["2022-01-01T12:00:00.000Z"],
+    "dateCopyrighted": ["2022-01-01T12:00:00.000Z"],
     "dates": ["2022-01-01T12:00:00.000Z"],
+    "dateSubmitted": ["2022-01-01T12:00:00.000Z"],
     "descriptions": ["Detailed description of the feed content and purpose"],
     "educationLevels": ["Intermediate to advanced"],
     "extents": ["Approximately 1000 words per article"],
@@ -1161,75 +959,34 @@
     "hasVersions": ["2.0"],
     "identifiers": ["urn:uuid:feed-12345678-1234-1234-1234-123456789abc"],
     "instructionalMethods": ["Practical examples and tutorials"],
+    "isFormatOf": ["https://example.org/original-content"],
+    "isPartOf": ["Example Media Network"],
+    "isReferencedBy": ["https://example.org/references"],
+    "isReplacedBy": ["https://example.org/new-feed"],
+    "isRequiredBy": ["https://example.org/dependent-feeds"],
+    "issued": ["2022-01-01T12:00:00.000Z"],
+    "isVersionOf": ["https://example.org/original-feed"],
     "languages": ["en-US"],
     "licenses": ["Creative Commons Attribution 4.0"],
     "mediators": ["Content Management System"],
     "mediums": ["Digital"],
+    "modified": ["2023-01-01T12:00:00.000Z"],
     "provenances": ["Originally created by Example Publishing Company"],
     "publishers": ["Example Publishing Company"],
+    "references": ["https://example.org/referenced-sources"],
     "relations": ["https://example.org/related-feeds"],
+    "replaces": ["https://example.org/old-feed"],
+    "requires": ["RSS 2.0 compatible reader"],
+    "rights": ["Copyright 2025 Example Publishing Company"],
     "rightsHolders": ["Example Publishing Company"],
     "sources": ["https://example.org/original-source"],
     "spatials": ["Global"],
     "subjects": ["Technology, Programming, Web Development"],
+    "tableOfContents": ["Latest articles, tutorials, and news"],
     "temporals": ["2022-present"],
     "titles": ["Dublin Core Terms Enhanced Feed Title"],
     "types": ["Text"],
-    "created": "2022-01-01T12:00:00.000Z",
-    "license": "Creative Commons Attribution 4.0",
-    "abstract": "This is an abstract of the feed content",
-    "accessRights": "Public access with attribution required",
-    "accrualMethod": "Regular updates",
-    "accrualPeriodicity": "Daily",
-    "accrualPolicy": "Content added based on editorial calendar",
-    "alternative": "Alternative Feed Title",
-    "audience": "General technology audience",
-    "available": "2022-01-01T12:00:00.000Z",
-    "bibliographicCitation": "Example Feed. (2022). Retrieved from https://example.org",
-    "conformsTo": "RSS 2.0 Specification",
-    "contributor": "Jane Smith",
-    "coverage": "Global technology topics",
-    "creator": "John Doe",
-    "date": "2022-01-01T12:00:00.000Z",
-    "dateAccepted": "2022-01-01T12:00:00.000Z",
-    "dateCopyrighted": "2022-01-01T12:00:00.000Z",
-    "dateSubmitted": "2022-01-01T12:00:00.000Z",
-    "description": "Detailed description of the feed content and purpose",
-    "educationLevel": "Intermediate to advanced",
-    "extent": "Approximately 1000 words per article",
-    "format": "application/rss+xml",
-    "hasFormat": "https://example.org/feed.atom",
-    "hasPart": "https://example.org/category/tutorials",
-    "hasVersion": "2.0",
-    "identifier": "urn:uuid:feed-12345678-1234-1234-1234-123456789abc",
-    "instructionalMethod": "Practical examples and tutorials",
-    "isFormatOf": "https://example.org/original-content",
-    "isPartOf": "Example Media Network",
-    "isReferencedBy": "https://example.org/references",
-    "isReplacedBy": "https://example.org/new-feed",
-    "isRequiredBy": "https://example.org/dependent-feeds",
-    "issued": "2022-01-01T12:00:00.000Z",
-    "isVersionOf": "https://example.org/original-feed",
-    "language": "en-US",
-    "mediator": "Content Management System",
-    "medium": "Digital",
-    "modified": "2023-01-01T12:00:00.000Z",
-    "provenance": "Originally created by Example Publishing Company",
-    "publisher": "Example Publishing Company",
-    "references": "https://example.org/referenced-sources",
-    "relation": "https://example.org/related-feeds",
-    "replaces": "https://example.org/old-feed",
-    "requires": "RSS 2.0 compatible reader",
-    "rights": "Copyright 2025 Example Publishing Company",
-    "rightsHolder": "Example Publishing Company",
-    "source": "https://example.org/original-source",
-    "spatial": "Global",
-    "subject": "Technology, Programming, Web Development",
-    "tableOfContents": "Latest articles, tutorials, and news",
-    "temporal": "2022-present",
-    "title": "Dublin Core Terms Enhanced Feed Title",
-    "type": "Text",
-    "valid": "2025-12-31T23:59:59.000Z"
+    "valid": ["2025-12-31T23:59:59.000Z"]
   },
   "prism": {
     "publicationName": "Nature",
@@ -1389,13 +1146,6 @@
         "country": "US"
       }
     ],
-    "location": {
-      "display": "San Francisco, CA",
-      "rel": "creator",
-      "geo": "geo:37.7749,-122.4194",
-      "osm": "R4163767",
-      "country": "US"
-    },
     "trailers": [
       {
         "display": "Season 1 Trailer",
@@ -1432,25 +1182,6 @@
         ]
       }
     ],
-    "value": {
-      "type": "lightning",
-      "method": "keysend",
-      "suggested": 0.00000005,
-      "valueRecipients": [
-        {
-          "name": "Host",
-          "type": "node",
-          "address": "02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee83420ef254acd7d8e5edf5f16e",
-          "split": 90
-        },
-        {
-          "name": "Producer",
-          "type": "node",
-          "address": "03ae9f91a0cb8ff43840e3c322c4c61f019d8c1c3cea15a25cfc425ac605e61a4a",
-          "split": 10
-        }
-      ]
-    },
     "medium": "podcast",
     "images": [
       {
@@ -1492,15 +1223,7 @@
           "protocol": "matrix",
           "accountId": "@livepodcast:live.example.com",
           "space": "#live-episode"
-        },
-        "chats": [
-          {
-            "server": "live.example.com",
-            "protocol": "matrix",
-            "accountId": "@livepodcast:live.example.com",
-            "space": "#live-episode"
-          }
-        ]
+        }
       }
     ],
     "blocks": [{ "value": true }, { "value": false, "id": "test" }],
@@ -1545,19 +1268,6 @@
       "accountId": "examplepodcast",
       "space": "#general"
     },
-    "chats": [
-      {
-        "server": "irc.example.com",
-        "protocol": "irc",
-        "accountId": "examplepodcast",
-        "space": "#general"
-      },
-      {
-        "server": "matrix.example.org",
-        "protocol": "matrix",
-        "accountId": "@examplepodcast:matrix.org"
-      }
-    ],
     "publisher": {
       "remoteItem": {
         "feedGuid": "ead4c236-bf58-58c6-a2c6-publisher-feed-guid",
@@ -1725,126 +1435,6 @@
         ]
       }
     ],
-    "group": {
-      "contents": [
-        {
-          "url": "https://example.com/videos/sample-hd.mp4",
-          "fileSize": 45678912,
-          "type": "video/mp4",
-          "medium": "video",
-          "expression": "full",
-          "bitrate": 5000,
-          "framerate": 60,
-          "duration": 180,
-          "height": 1080,
-          "width": 1920,
-          "lang": "en",
-          "title": {
-            "value": "HD Version (1080p)"
-          }
-        },
-        {
-          "url": "https://example.com/videos/sample-sd.mp4",
-          "fileSize": 23456789,
-          "type": "video/mp4",
-          "medium": "video",
-          "expression": "full",
-          "bitrate": 2500,
-          "framerate": 30,
-          "duration": 180,
-          "height": 720,
-          "width": 1280,
-          "lang": "en",
-          "title": {
-            "value": "SD Version (720p)"
-          }
-        },
-        {
-          "url": "https://example.com/videos/sample.webm",
-          "fileSize": 19876543,
-          "type": "video/webm",
-          "medium": "video",
-          "expression": "full",
-          "bitrate": 2000,
-          "framerate": 30,
-          "duration": 180,
-          "height": 720,
-          "width": 1280,
-          "lang": "en",
-          "title": {
-            "value": "WebM Version"
-          }
-        },
-        {
-          "url": "https://example.com/audio/sample.mp3",
-          "fileSize": 3456789,
-          "type": "audio/mpeg",
-          "medium": "audio",
-          "expression": "full",
-          "bitrate": 320,
-          "samplingrate": 44.1,
-          "channels": 2,
-          "duration": 180,
-          "lang": "en",
-          "title": {
-            "value": "Audio Only Version"
-          }
-        },
-        {
-          "url": "https://example.com/captions/sample-en.srt",
-          "type": "text/srt",
-          "medium": "document",
-          "expression": "sample",
-          "lang": "en",
-          "title": {
-            "value": "English Subtitles"
-          }
-        },
-        {
-          "url": "https://example.com/captions/sample-es.srt",
-          "type": "text/srt",
-          "medium": "document",
-          "expression": "sample",
-          "lang": "es",
-          "title": {
-            "value": "Spanish Subtitles"
-          }
-        }
-      ],
-      "title": {
-        "value": "Multi-Format Content Example"
-      },
-      "description": {
-        "value": "This video is available in multiple formats and resolutions"
-      },
-      "thumbnails": [
-        {
-          "url": "https://example.com/thumbnails/group-main.jpg",
-          "width": 640,
-          "height": 360
-        },
-        {
-          "url": "https://example.com/thumbnails/group-alt.jpg",
-          "width": 1280,
-          "height": 720
-        }
-      ],
-      "keywords": ["group", "multiple", "formats", "resolutions"],
-      "categories": [
-        {
-          "name": "Technology"
-        }
-      ],
-      "ratings": [
-        {
-          "value": "PG",
-          "scheme": "urn:mpaa"
-        }
-      ],
-      "copyright": {
-        "value": "© 2025 Example Media Inc."
-      }
-    },
     "groups": [
       {
         "contents": [
@@ -2213,5 +1803,9 @@
       "value": "Example Network"
     },
     "importedFeed": "https://example.com/original-feed"
+  },
+  "xml": {
+    "lang": "en",
+    "base": "http://example.org/"
   }
 }

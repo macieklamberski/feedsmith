@@ -97,8 +97,7 @@ Generates (showing first lines):
 Build type-safe RSS feeds using the exported types:
 
 ```typescript
-import type { Rss } from 'feedsmith/types'
-import { generateRssFeed } from 'feedsmith'
+import { type Rss, generateRssFeed } from 'feedsmith'
 
 // Define items with full type safety
 const items: Array<Rss.Item<Date>> = [{

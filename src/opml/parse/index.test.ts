@@ -258,4 +258,36 @@ describe('parse', () => {
       expect(parse(commonValue, { maxItems: undefined })).toEqual(expected)
     })
   })
+
+  describe('parseDateFn', () => {
+    it('should apply custom parseDateFn to head and outline dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <opml version="2.0">
+          <head>
+            <dateCreated>Wed, 15 Mar 2023 12:00:00 GMT</dateCreated>
+          </head>
+          <body>
+            <outline text="Feed" created="Fri, 17 Mar 2023 12:00:00 GMT" />
+          </body>
+        </opml>
+      `
+      const expected = {
+        head: {
+          dateCreated: new Date('Wed, 15 Mar 2023 12:00:00 GMT'),
+        },
+        body: {
+          outlines: [
+            {
+              text: 'Feed',
+              created: new Date('Fri, 17 Mar 2023 12:00:00 GMT'),
+            },
+          ],
+        },
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
+    })
+  })
 })

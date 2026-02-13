@@ -14,7 +14,7 @@ describe('parse', () => {
     const expected = {
       format: 'atom' as const,
       feed: {
-        title: 'Feed',
+        title: { value: 'Feed' },
         id: 'example-feed',
       },
     }
@@ -313,7 +313,7 @@ describe('parse', () => {
       const expected = {
         format: 'atom' as const,
         feed: {
-          title: 'Feed',
+          title: { value: 'Feed' },
           id: 'example-feed',
         },
       }
@@ -421,12 +421,36 @@ describe('parse', () => {
       const expected = {
         format: 'atom' as const,
         feed: {
-          title: 'Feed',
+          title: { value: 'Feed' },
           id: 'example-feed',
         },
       }
 
       expect(parse(value)).toEqual(expected)
+    })
+  })
+
+  describe('parseDateFn', () => {
+    it('should apply custom parseDateFn and detect format correctly', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0">
+          <channel>
+            <title>Test</title>
+            <pubDate>Wed, 15 Mar 2023 12:00:00 GMT</pubDate>
+          </channel>
+        </rss>
+      `
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+      const expected = {
+        format: 'rss' as const,
+        feed: {
+          title: 'Test',
+          pubDate: new Date('Wed, 15 Mar 2023 12:00:00 GMT'),
+        },
+      }
+
+      expect(result).toEqual(expected)
     })
   })
 })

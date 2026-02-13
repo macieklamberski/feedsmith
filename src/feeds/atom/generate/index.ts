@@ -1,15 +1,15 @@
 import { locales } from '../../../common/config.js'
-import type { DateLike, DeepPartial, XmlGenerateMain } from '../../../common/types.js'
+import type { DateLike, GenerateMainXml } from '../../../common/types.js'
 import { generateXml } from '../../../common/utils.js'
 import type { Atom } from '../common/types.js'
 import { builder } from './config.js'
 import { generateFeed } from './utils.js'
 
-export const generate: XmlGenerateMain<Atom.Feed<Date>, DeepPartial<Atom.Feed<DateLike>>> = (
+export const generate: GenerateMainXml<Atom.Feed<DateLike>, Atom.Feed<Date, true>> = (
   value,
   options,
 ) => {
-  const generated = generateFeed(value as Atom.Feed<DateLike>)
+  const generated = generateFeed(value)
 
   if (!generated) {
     throw new Error(locales.invalidInputAtom)

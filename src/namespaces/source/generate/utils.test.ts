@@ -78,7 +78,6 @@ describe('generateLikes', () => {
   it('should return undefined when server is missing', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateLikes(value)).toBeUndefined()
   })
 })
@@ -120,7 +119,6 @@ describe('generateArchive', () => {
       endDay: '2023-12-31',
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateArchive(value)).toBeUndefined()
   })
 
@@ -130,7 +128,6 @@ describe('generateArchive', () => {
       endDay: '2023-12-31',
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateArchive(value)).toBeUndefined()
   })
 })
@@ -165,7 +162,6 @@ describe('generateSubscriptionList', () => {
       value: 'follows',
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateSubscriptionList(value)).toBeUndefined()
   })
 })

@@ -292,7 +292,6 @@ describe('parse', () => {
             description: 'Item Description',
             dc: {
               creators: ['John Doe'],
-              creator: 'John Doe',
             },
             rdf: { about: 'http://example.com/item1' },
           },
@@ -337,8 +336,6 @@ describe('parse', () => {
             dc: {
               creators: ['John Doe'],
               dates: ['2023-01-01'],
-              creator: 'John Doe',
-              date: '2023-01-01',
             },
             rdf: { about: 'http://example.com/item1' },
           },
@@ -382,7 +379,6 @@ describe('parse', () => {
             description: 'Item Description',
             dc: {
               creators: ['John Doe'],
-              creator: 'John Doe',
             },
             rdf: { about: 'http://example.com/item1' },
           },
@@ -477,7 +473,6 @@ describe('parse', () => {
         description: 'RDF Feed Description',
         dc: {
           creators: ['Feed Author'],
-          creator: 'Feed Author',
         },
         sy: {
           updatePeriod: 'hourly',
@@ -491,8 +486,6 @@ describe('parse', () => {
             dc: {
               creators: ['John Doe'],
               dates: ['2023-01-01'],
-              creator: 'John Doe',
-              date: '2023-01-01',
             },
             slash: {
               comments: 42,
@@ -536,7 +529,6 @@ describe('parse', () => {
             title: 'Item Title',
             dc: {
               creators: ['Should not normalize (empty URI)'],
-              creator: 'Should not normalize (empty URI)',
             },
             rdf: { about: 'http://example.com/item1' },
           },
@@ -599,14 +591,12 @@ describe('parse', () => {
       const expected = {
         dc: {
           creators: ['Channel Author'],
-          creator: 'Channel Author',
         },
         items: [
           {
             title: 'Item without about',
             dc: {
               creators: ['Item Author'],
-              creator: 'Item Author',
             },
           },
         ],
@@ -681,7 +671,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -720,7 +709,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -759,7 +747,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -798,7 +785,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -837,7 +823,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -876,7 +861,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -917,8 +901,6 @@ describe('parse', () => {
               dcterms: {
                 creators: ['Jane Doe'],
                 titles: ['DC Terms Title'],
-                creator: 'Jane Doe',
-                title: 'DC Terms Title',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -998,9 +980,8 @@ describe('parse', () => {
       link: 'http://example.com',
       description: 'Test feed with Dublin Core Terms namespace',
       dcterms: {
-        created: '2023-01-01T00:00:00.000Z',
+        created: ['2023-01-01T00:00:00.000Z'],
         licenses: ['Creative Commons Attribution 4.0'],
-        license: 'Creative Commons Attribution 4.0',
       },
       rdf: { about: 'http://example.com' },
       items: [
@@ -1008,9 +989,8 @@ describe('parse', () => {
           title: 'First item',
           link: 'http://example.com/item1',
           dcterms: {
-            created: '2023-02-01T00:00:00.000Z',
+            created: ['2023-02-01T00:00:00.000Z'],
             licenses: ['MIT License'],
-            license: 'MIT License',
           },
           rdf: { about: 'http://example.com/item1' },
         },
@@ -1221,11 +1201,8 @@ describe('parse', () => {
       description: 'Test feed with Dublin Core namespace',
       dc: {
         creators: ['John Doe'],
-        creator: 'John Doe',
         publishers: ['Example Publishing'],
-        publisher: 'Example Publishing',
         languages: ['en-US'],
-        language: 'en-US',
       },
       rdf: { about: 'http://example.com' },
       items: [
@@ -1234,11 +1211,8 @@ describe('parse', () => {
           link: 'http://example.com/item1',
           dc: {
             creators: ['Jane Smith'],
-            creator: 'Jane Smith',
             dates: ['2023-01-15T10:00:00Z'],
-            date: '2023-01-15T10:00:00Z',
             subjects: ['Technology'],
-            subject: 'Technology',
           },
           rdf: { about: 'http://example.com/item1' },
         },
@@ -1538,6 +1512,75 @@ describe('parse', () => {
       }
 
       expect(parse(commonValue, { maxItems: undefined })).toEqual(expected)
+    })
+  })
+
+  describe('parseDateFn', () => {
+    it('should apply custom parseDateFn to namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/"
+          xmlns:dc="http://purl.org/dc/elements/1.1/"
+        >
+          <channel rdf:about="http://example.com">
+            <title>Test</title>
+          </channel>
+          <item rdf:about="http://example.com/item1">
+            <title>Item</title>
+            <dc:date>2023-03-15T12:00:00Z</dc:date>
+          </item>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'Test',
+        rdf: {
+          about: 'http://example.com',
+        },
+        items: [
+          {
+            title: 'Item',
+            rdf: {
+              about: 'http://example.com/item1',
+            },
+            dc: {
+              dates: [new Date('2023-03-15T12:00:00Z')],
+            },
+          },
+        ],
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
+    })
+
+    it('should apply custom parseDateFn to sy namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/"
+          xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+        >
+          <channel rdf:about="http://example.com">
+            <title>Test</title>
+            <sy:updateBase>2023-03-15T12:00:00Z</sy:updateBase>
+          </channel>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'Test',
+        rdf: {
+          about: 'http://example.com',
+        },
+        sy: {
+          updateBase: new Date('2023-03-15T12:00:00Z'),
+        },
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
     })
   })
 })

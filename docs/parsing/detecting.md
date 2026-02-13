@@ -2,7 +2,7 @@
 title: "Parsing Feeds: Detecting Format"
 ---
 
-# Detecting Format
+# Detecting Feed Format
 
 You can quickly detect the feed format without parsing it.
 

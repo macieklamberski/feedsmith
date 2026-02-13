@@ -1,4 +1,11 @@
-import type { DateLike } from '../../../common/types.js'
+import type {
+  GenerateUtil as BaseGenerateUtil,
+  ParseUtilPartial as BaseParseUtilPartial,
+  DateAny,
+  ParseMainOptions,
+  Requirable,
+  Strict,
+} from '../../../common/types.js'
 import type { AcastNs } from '../../../namespaces/acast/common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
@@ -27,6 +34,11 @@ import type { SyNs } from '../../../namespaces/sy/common/types.js'
 import type { ThrNs } from '../../../namespaces/thr/common/types.js'
 import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
+import type { XmlNs } from '../../../namespaces/xml/common/types.js'
+
+export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateAny>>
+
+export type GenerateUtil<V> = BaseGenerateUtil<V>
 
 // #region reference
 export namespace Rss {
@@ -35,136 +47,172 @@ export namespace Rss {
 
   export type Person = string
 
-  export type Category = {
-    name: string
-    domain?: string
-  }
+  export type Category<TStrict extends boolean = false> = Strict<
+    {
+      name: Requirable<string> // Required in spec.
+      domain?: string
+    },
+    TStrict
+  >
 
-  export type Cloud = {
-    domain: string
-    port: number
-    path: string
-    registerProcedure: string
-    protocol: string
-  }
+  export type Cloud<TStrict extends boolean = false> = Strict<
+    {
+      domain: Requirable<string> // Required in spec.
+      port: Requirable<number> // Required in spec.
+      path: Requirable<string> // Required in spec.
+      registerProcedure: Requirable<string> // Required in spec.
+      protocol: Requirable<string> // Required in spec.
+    },
+    TStrict
+  >
 
-  export type Image = {
-    url: string
-    title: string
-    link: string
-    description?: string
-    height?: number
-    width?: number
-  }
+  export type Image<TStrict extends boolean = false> = Strict<
+    {
+      url: Requirable<string> // Required in spec.
+      title: Requirable<string> // Required in spec.
+      link: Requirable<string> // Required in spec.
+      description?: string
+      height?: number
+      width?: number
+    },
+    TStrict
+  >
 
-  export type TextInput = {
-    title: string
-    description: string
-    name: string
-    link: string
-  }
+  export type TextInput<TStrict extends boolean = false> = Strict<
+    {
+      title: Requirable<string> // Required in spec.
+      description: Requirable<string> // Required in spec.
+      name: Requirable<string> // Required in spec.
+      link: Requirable<string> // Required in spec.
+    },
+    TStrict
+  >
 
-  export type Enclosure = {
-    url: string
-    length: number
-    type: string
-  }
+  export type Enclosure<TStrict extends boolean = false> = Strict<
+    {
+      url: Requirable<string> // Required in spec.
+      length: Requirable<number> // Required in spec.
+      type: Requirable<string> // Required in spec.
+    },
+    TStrict
+  >
 
   export type SkipHours = Array<number>
 
   export type SkipDays = Array<string>
 
-  export type Guid = {
-    value: string
-    isPermaLink?: boolean
-  }
+  export type Guid<TStrict extends boolean = false> = Strict<
+    {
+      value: Requirable<string> // Required in spec.
+      isPermaLink?: boolean
+    },
+    TStrict
+  >
 
-  export type Source = {
-    title: string
-    url?: string
-  }
+  export type Source<TStrict extends boolean = false> = Strict<
+    {
+      title: Requirable<string> // Required in spec.
+      url: Requirable<string> // Required in spec.
+    },
+    TStrict
+  >
 
-  export type Item<TDate extends DateLike, TPerson extends PersonLike = Person> = {
-    title?: string
-    link?: string
-    description?: string
-    authors?: Array<TPerson>
-    categories?: Array<Category>
-    comments?: string
-    enclosures?: Array<Enclosure>
-    guid?: Guid
-    pubDate?: TDate
-    source?: Source
-    atom?: AtomNs.Entry<TDate>
-    cc?: CcNs.ItemOrFeed
-    dc?: DcNs.ItemOrFeed<TDate>
-    content?: ContentNs.Item
-    creativeCommons?: CreativeCommonsNs.ItemOrFeed
-    slash?: SlashNs.Item
-    itunes?: ItunesNs.Item
-    podcast?: PodcastNs.Item
-    psc?: PscNs.Item
-    googleplay?: GooglePlayNs.Item
-    media?: MediaNs.ItemOrFeed
-    georss?: GeoRssNs.ItemOrFeed
-    geo?: GeoNs.ItemOrFeed
-    thr?: ThrNs.Item
-    dcterms?: DcTermsNs.ItemOrFeed<TDate>
-    prism?: PrismNs.Item<TDate>
-    wfw?: WfwNs.Item
-    sourceNs?: SourceNs.Item
-    rawvoice?: RawVoiceNs.Item
-    spotify?: SpotifyNs.Item
-    pingback?: PingbackNs.Item
-    trackback?: TrackbackNs.Item
-    acast?: AcastNs.Item
-  } & ({ title: string } | { description: string })
+  export type Item<
+    TDate,
+    TPerson extends PersonLike = Person,
+    TStrict extends boolean = false,
+  > = Strict<
+    {
+      title?: string // At least one of title or description is required in spec.
+      link?: string
+      description?: string // At least one of title or description is required in spec.
+      authors?: Array<TPerson>
+      categories?: Array<Category<TStrict>>
+      comments?: string
+      enclosures?: Array<Enclosure<TStrict>>
+      guid?: Guid<TStrict>
+      pubDate?: TDate
+      source?: Source<TStrict>
+      atom?: AtomNs.Entry<TDate>
+      cc?: CcNs.ItemOrFeed
+      dc?: DcNs.ItemOrFeed<TDate>
+      content?: ContentNs.Item
+      creativeCommons?: CreativeCommonsNs.ItemOrFeed
+      slash?: SlashNs.Item
+      itunes?: ItunesNs.Item
+      podcast?: PodcastNs.Item<TStrict>
+      psc?: PscNs.Item<TStrict>
+      googleplay?: GooglePlayNs.Item<TStrict>
+      media?: MediaNs.ItemOrFeed<TStrict>
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
+      geo?: GeoNs.ItemOrFeed
+      thr?: ThrNs.Item<TStrict>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
+      prism?: PrismNs.Item<TDate>
+      wfw?: WfwNs.Item
+      sourceNs?: SourceNs.Item
+      rawvoice?: RawVoiceNs.Item<TStrict>
+      spotify?: SpotifyNs.Item<TStrict>
+      pingback?: PingbackNs.Item
+      trackback?: TrackbackNs.Item
+      acast?: AcastNs.Item
+      xml?: XmlNs.ItemOrFeed
+    },
+    TStrict
+  > &
+    (TStrict extends true ? { title: string } | { description: string } : unknown)
 
-  export type Feed<TDate extends DateLike, TPerson extends PersonLike = Person> = {
-    title: string
-    // INFO: Spec mentions required "link", but the "link" might be missing as well when the
-    // atom:link rel="self" is present so that's why the "link" is not required in this type.
-    link?: string
-    description: string
-    language?: string
-    copyright?: string
-    managingEditor?: TPerson
-    webMaster?: TPerson
-    pubDate?: TDate
-    lastBuildDate?: TDate
-    categories?: Array<Category>
-    generator?: string
-    docs?: string
-    cloud?: Cloud
-    ttl?: number
-    image?: Image
-    rating?: string
-    textInput?: TextInput
-    skipHours?: Array<number>
-    skipDays?: Array<string>
-    items?: Array<Item<TDate, TPerson>>
-    atom?: AtomNs.Feed<TDate>
-    cc?: CcNs.ItemOrFeed
-    dc?: DcNs.ItemOrFeed<TDate>
-    sy?: SyNs.Feed<TDate>
-    itunes?: ItunesNs.Feed
-    podcast?: PodcastNs.Feed<TDate>
-    googleplay?: GooglePlayNs.Feed
-    media?: MediaNs.ItemOrFeed
-    georss?: GeoRssNs.ItemOrFeed
-    geo?: GeoNs.ItemOrFeed
-    dcterms?: DcTermsNs.ItemOrFeed<TDate>
-    prism?: PrismNs.Feed<TDate>
-    creativeCommons?: CreativeCommonsNs.ItemOrFeed
-    feedpress?: FeedPressNs.Feed
-    opensearch?: OpenSearchNs.Feed
-    admin?: AdminNs.Feed
-    sourceNs?: SourceNs.Feed
-    blogChannel?: BlogChannelNs.Feed
-    rawvoice?: RawVoiceNs.Feed<TDate>
-    spotify?: SpotifyNs.Feed
-    pingback?: PingbackNs.Feed
-    acast?: AcastNs.Feed
-  }
+  export type Feed<
+    TDate,
+    TPerson extends PersonLike = Person,
+    TStrict extends boolean = false,
+  > = Strict<
+    {
+      title: Requirable<string> // Required in spec.
+      link: Requirable<string> // Required in spec (but may be missing when atom:link rel="self" is present).
+      description: Requirable<string> // Required in spec.
+      language?: string
+      copyright?: string
+      managingEditor?: TPerson
+      webMaster?: TPerson
+      pubDate?: TDate
+      lastBuildDate?: TDate
+      categories?: Array<Category<TStrict>>
+      generator?: string
+      docs?: string
+      cloud?: Cloud<TStrict>
+      ttl?: number
+      image?: Image<TStrict>
+      rating?: string
+      textInput?: TextInput<TStrict>
+      skipHours?: Array<number>
+      skipDays?: Array<string>
+      items?: Array<Item<TDate, TPerson, TStrict>>
+      atom?: AtomNs.Feed<TDate>
+      cc?: CcNs.ItemOrFeed
+      dc?: DcNs.ItemOrFeed<TDate>
+      sy?: SyNs.Feed<TDate>
+      itunes?: ItunesNs.Feed<TStrict>
+      podcast?: PodcastNs.Feed<TDate, TStrict>
+      googleplay?: GooglePlayNs.Feed<TStrict>
+      media?: MediaNs.ItemOrFeed<TStrict>
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
+      geo?: GeoNs.ItemOrFeed
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
+      prism?: PrismNs.Feed<TDate>
+      creativeCommons?: CreativeCommonsNs.ItemOrFeed
+      feedpress?: FeedPressNs.Feed
+      opensearch?: OpenSearchNs.Feed<TStrict>
+      admin?: AdminNs.Feed
+      sourceNs?: SourceNs.Feed<TStrict>
+      blogChannel?: BlogChannelNs.Feed
+      rawvoice?: RawVoiceNs.Feed<TDate, TStrict>
+      spotify?: SpotifyNs.Feed<TStrict>
+      pingback?: PingbackNs.Feed
+      acast?: AcastNs.Feed
+      xml?: XmlNs.ItemOrFeed
+    },
+    TStrict
+  >
 }
 // #endregion reference
