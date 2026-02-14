@@ -1025,6 +1025,49 @@ describe('generateItem', () => {
 
     expect(generateItem(value)).toEqual(expected)
   })
+
+  it('should generate item with g namespace properties', () => {
+    const value = {
+      title: 'Product item with Google Merchant Center properties',
+      g: {
+        id: 'SKU12345',
+        title: 'Example Product',
+        description: 'A great product description',
+        link: 'https://example.com/product/12345',
+        imageLink: 'https://example.com/images/product.jpg',
+        price: '19.99 USD',
+        availability: 'in_stock',
+        brand: 'Example Brand',
+        condition: 'new',
+        shippings: [
+          {
+            country: 'US',
+            price: '5.99 USD',
+          },
+        ],
+      },
+    }
+    const expected = {
+      title: 'Product item with Google Merchant Center properties',
+      'g:id': 'SKU12345',
+      'g:title': 'Example Product',
+      'g:description': 'A great product description',
+      'g:link': 'https://example.com/product/12345',
+      'g:image_link': 'https://example.com/images/product.jpg',
+      'g:price': '19.99 USD',
+      'g:availability': 'in_stock',
+      'g:brand': 'Example Brand',
+      'g:condition': 'new',
+      'g:shipping': [
+        {
+          'g:country': 'US',
+          'g:price': '5.99 USD',
+        },
+      ],
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -2120,6 +2163,51 @@ describe('generateFeed', () => {
               title: 'Item with XML namespace',
               '@xml:lang': 'en-US',
               '@xml:base': 'http://example.org/item/1/',
+            },
+          ],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with g namespace properties in items', () => {
+    const value = {
+      title: 'Product Feed',
+      description: 'A feed with Google Merchant Center product data',
+      items: [
+        {
+          title: 'Example Product',
+          g: {
+            id: 'SKU12345',
+            title: 'Example Product',
+            link: 'https://example.com/product/12345',
+            price: '19.99 USD',
+            availability: 'in_stock',
+            brand: 'Example Brand',
+            condition: 'new',
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:g': 'http://base.google.com/ns/1.0',
+        channel: {
+          title: 'Product Feed',
+          description: 'A feed with Google Merchant Center product data',
+          item: [
+            {
+              title: 'Example Product',
+              'g:id': 'SKU12345',
+              'g:title': 'Example Product',
+              'g:link': 'https://example.com/product/12345',
+              'g:price': '19.99 USD',
+              'g:availability': 'in_stock',
+              'g:brand': 'Example Brand',
+              'g:condition': 'new',
             },
           ],
         },

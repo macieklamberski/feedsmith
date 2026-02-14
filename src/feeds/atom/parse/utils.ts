@@ -21,6 +21,7 @@ import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/u
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import { retrieveItem as retrieveGItem } from '../../../namespaces/g/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces/geo/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
@@ -308,6 +309,7 @@ export const parseEntry: ParseUtilPartial<Atom.Entry<DateAny>> = (value, options
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces?.has('trackback') ? retrieveTrackbackItem(value) : undefined,
+    g: namespaces?.has('g') ? retrieveGItem(value) : undefined,
     xml: options?.asNamespace ? undefined : retrieveXmlItemOrFeed(value),
   }
 

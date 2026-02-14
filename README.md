@@ -88,6 +88,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Acast](https://feedsmith.dev/reference/namespaces/acast) | `<acast:*>` | RSS | ✅ | ✅ |
 | [RawVoice](https://feedsmith.dev/reference/namespaces/rawvoice) | `<rawvoice:*>` | RSS | ✅ | ✅ |
 | [FeedPress](https://feedsmith.dev/reference/namespaces/feedpress) | `<feedpress:*>` | RSS | ✅ | ✅ |
+| [Google Merchant Center](https://feedsmith.dev/reference/namespaces/g) | `<g:*>` | RSS, Atom | ✅ | ✅ |
 | [arXiv](https://feedsmith.dev/reference/namespaces/arxiv) | `<arxiv:*>` | Atom | ✅ | ✅ |
 | [OpenSearch](https://feedsmith.dev/reference/namespaces/opensearch) | `<opensearch:*>` | RSS, Atom | ✅ | ✅ |
 | [PRISM](https://feedsmith.dev/reference/namespaces/prism) | `<prism:*>` | RSS | ✅ | ✅ |

@@ -1435,6 +1435,49 @@ describe('generate with app namespace', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with g namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Product Feed',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      entries: [
+        {
+          id: 'https://example.com/products/1',
+          title: 'Example Product',
+          updated: new Date('2024-01-05T10:30:00Z'),
+          g: {
+            id: 'SKU12345',
+            title: 'Example Product',
+            price: '19.99 USD',
+            brand: 'Example Brand',
+            availability: 'in_stock',
+            condition: 'new',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:g="http://base.google.com/ns/1.0">
+  <id>https://example.com/feed</id>
+  <title>Product Feed</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <entry>
+    <id>https://example.com/products/1</id>
+    <title>Example Product</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+    <g:id>SKU12345</g:id>
+    <g:title>Example Product</g:title>
+    <g:price>19.99 USD</g:price>
+    <g:availability>in_stock</g:availability>
+    <g:brand>Example Brand</g:brand>
+    <g:condition>new</g:condition>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with xml namespace', () => {
     const value = {
       id: 'https://example.com/feed',
