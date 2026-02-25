@@ -45,8 +45,11 @@ export type GenerateUtil<V> = BaseGenerateUtil<V, GenerateMainOptions>
 
 // #region reference
 export namespace Atom {
-  // For simplicity's sake, a string is used for now, but this may be reconsidered in the future.
-  export type Text = string
+  export type Text = {
+    value: string
+    type?: string
+    xml?: XmlNs.ItemOrFeed
+  }
 
   export type Content = {
     value?: string

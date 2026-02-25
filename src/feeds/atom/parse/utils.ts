@@ -64,6 +64,32 @@ export const createNamespaceGetter = (
   return (key: string) => value[prefix + key]
 }
 
+export const parseText: ParseUtilPartial<Atom.Text> = (value) => {
+  if (isNonEmptyString(value)) {
+    const parsed = parseString(value)
+
+    return parsed ? { value: parsed } : undefined
+  }
+
+  if (!isObject(value)) {
+    return
+  }
+
+  const parsedValue = parseString(retrieveText(value))
+
+  if (!parsedValue) {
+    return
+  }
+
+  const text = {
+    value: parsedValue,
+    type: parseString(value['@type']),
+    xml: retrieveXmlItemOrFeed(value),
+  }
+
+  return trimObject(text) as Atom.Text
+}
+
 export const parseContent: ParseUtilPartial<Atom.Content> = (value) => {
   if (isNonEmptyString(value)) {
     const parsed = parseString(value)
@@ -183,9 +209,9 @@ export const parseSource: ParseUtilPartial<Atom.Source<DateAny>> = (value, optio
     id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
     logo: parseSingularOf(get('logo'), (value) => parseString(retrieveText(value))),
-    rights: parseSingularOf(get('rights'), (value) => parseString(retrieveText(value))),
-    subtitle: parseSingularOf(get('subtitle'), (value) => parseString(retrieveText(value))),
-    title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
+    rights: parseSingularOf(get('rights'), parseText),
+    subtitle: parseSingularOf(get('subtitle'), parseText),
+    title: parseSingularOf(get('title'), parseText),
     updated: retrieveUpdated(value, options),
   }
 
@@ -230,14 +256,14 @@ export const retrieveUpdated: ParseUtilPartial<DateAny> = (value, options) => {
   return updated || modified
 }
 
-export const retrieveSubtitle: ParseUtilPartial<string> = (value, options) => {
+export const retrieveSubtitle: ParseUtilPartial<Atom.Text> = (value, options) => {
   if (!isObject(value)) {
     return
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const subtitle = parseSingularOf(get('subtitle'), (value) => parseString(retrieveText(value))) // Atom 1.0.
-  const tagline = parseSingularOf(get('tagline'), (value) => parseString(retrieveText(value))) // Atom 0.3.
+  const subtitle = parseSingularOf(get('subtitle'), parseText) // Atom 1.0.
+  const tagline = parseSingularOf(get('tagline'), parseText) // Atom 0.3.
 
   return subtitle || tagline
 }
@@ -257,10 +283,10 @@ export const parseEntry: ParseUtilPartial<Atom.Entry<DateAny>> = (value, options
     id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
     published: retrievePublished(value, options),
-    rights: parseSingularOf(get('rights'), (value) => parseString(retrieveText(value))),
+    rights: parseSingularOf(get('rights'), parseText),
     source: parseSingularOf(get('source'), (value) => parseSource(value, options)),
-    summary: parseSingularOf(get('summary'), (value) => parseString(retrieveText(value))),
-    title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
+    summary: parseSingularOf(get('summary'), parseText),
+    title: parseSingularOf(get('title'), parseText),
     updated: retrieveUpdated(value, options),
     app: namespaces?.has('app') ? retrieveAppEntry(value, options) : undefined,
     arxiv: namespaces?.has('arxiv') ? retrieveArxivEntry(value) : undefined,
@@ -304,9 +330,9 @@ export const parseFeed: ParseUtilPartial<Atom.Feed<DateAny>> = (value, options) 
     id: parseSingularOf(get('id'), (value) => parseString(retrieveText(value))),
     links: parseArrayOf(get('link'), (value) => parseLink(value, options)),
     logo: parseSingularOf(get('logo'), (value) => parseString(retrieveText(value))),
-    rights: parseSingularOf(get('rights'), (value) => parseString(retrieveText(value))),
+    rights: parseSingularOf(get('rights'), parseText),
     subtitle: retrieveSubtitle(value, options),
-    title: parseSingularOf(get('title'), (value) => parseString(retrieveText(value))),
+    title: parseSingularOf(get('title'), parseText),
     updated: retrieveUpdated(value, options),
     entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options), options?.maxItems),
     cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
