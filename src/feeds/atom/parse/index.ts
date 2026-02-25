@@ -1,6 +1,7 @@
 import { locales, namespacePrefixes, namespaceUris } from '../../../common/config.js'
-import type { ParseMainOptions } from '../../../common/types.js'
-import { createNamespaceNormalizator } from '../../../common/utils.js'
+import { DetectError, ParseError } from '../../../common/error.js'
+import type { ParseMainOptions, Unreliable } from '../../../common/types.js'
+import { createNamespaceNormalizator, validateXml } from '../../../common/utils.js'
 import { detectAtomFeed } from '../../../index.js'
 import type { Atom } from '../common/types.js'
 import { parser } from './config.js'
@@ -11,17 +12,30 @@ export const parse = <TDate = string>(
   options?: ParseMainOptions<TDate>,
 ): Atom.Feed<TDate> => {
   if (!detectAtomFeed(value)) {
-    throw new Error(locales.invalidFeedFormat)
+    throw new DetectError(locales.invalidFeedFormat)
   }
 
-  const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, 'atom')
+  let normalized: Unreliable
 
-  const object = parser.parse(value)
-  const normalized = normalizeNamespaces(object)
+  try {
+    const normalizeNamespaces = createNamespaceNormalizator(
+      namespaceUris,
+      namespacePrefixes,
+      'atom',
+    )
+    const object = parser.parse(value)
+    normalized = normalizeNamespaces(object)
+  } catch {
+    if (options?.detailedErrors) {
+      validateXml(value)
+    }
+    throw new ParseError(locales.invalidFeedFormat)
+  }
+
   const parsed = retrieveFeed(normalized, options)
 
   if (!parsed) {
-    throw new Error(locales.invalidFeedFormat)
+    throw new ParseError(locales.invalidFeedFormat)
   }
 
   return parsed as Atom.Feed<TDate>

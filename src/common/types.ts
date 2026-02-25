@@ -67,6 +67,7 @@ export type GenerateUtil<V, O = undefined> = (
 
 export type ParseMainOptions<TDate> = {
   maxItems?: number
+  detailedErrors?: boolean
   parseDateFn?: (raw: string) => TDate
 }
 

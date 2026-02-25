@@ -1,4 +1,7 @@
 import { locales } from '../../common/config.js'
+import { ParseError } from '../../common/error.js'
+import type { Unreliable } from '../../common/types.js'
+import { validateXml } from '../../common/utils.js'
 import type { Opml, ParseMainOptions } from '../common/types.js'
 import { parser } from './config.js'
 import { parseDocument } from './utils.js'
@@ -10,11 +13,21 @@ export const parse = <
   value: string,
   options?: ParseMainOptions<TDate, TExtra>,
 ): Opml.Document<TDate, TExtra> => {
-  const object = parser.parse(value)
+  let object: Unreliable
+
+  try {
+    object = parser.parse(value)
+  } catch {
+    if (options?.detailedErrors) {
+      validateXml(value)
+    }
+    throw new ParseError(locales.invalidOpmlFormat)
+  }
+
   const parsed = parseDocument(object, options)
 
   if (!parsed) {
-    throw new Error(locales.invalidOpmlFormat)
+    throw new ParseError(locales.invalidOpmlFormat)
   }
 
   return parsed as Opml.Document<TDate, TExtra>
