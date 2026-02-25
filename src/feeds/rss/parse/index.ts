@@ -1,12 +1,15 @@
 import { locales, namespacePrefixes, namespaceUris } from '../../../common/config.js'
-import type { DeepPartial, ParseOptions } from '../../../common/types.js'
+import type { ParseMainOptions } from '../../../common/types.js'
 import { createNamespaceNormalizator } from '../../../common/utils.js'
 import { detectRssFeed } from '../../../index.js'
 import type { Rss } from '../common/types.js'
 import { parser } from './config.js'
 import { retrieveFeed } from './utils.js'
 
-export const parse = (value: unknown, options?: ParseOptions): DeepPartial<Rss.Feed<string>> => {
+export const parse = <TDate = string>(
+  value: unknown,
+  options?: ParseMainOptions<TDate>,
+): Rss.Feed<TDate> => {
   if (!detectRssFeed(value)) {
     throw new Error(locales.invalidFeedFormat)
   }
@@ -21,5 +24,5 @@ export const parse = (value: unknown, options?: ParseOptions): DeepPartial<Rss.F
     throw new Error(locales.invalidFeedFormat)
   }
 
-  return parsed
+  return parsed as Rss.Feed<TDate>
 }

@@ -99,8 +99,8 @@ describe('generateCategory', () => {
   })
 
   it('should handle non-object inputs', () => {
-    // @ts-expect-error: This is for testing purposes.
-    expect(generateCategory('string')).toBeUndefined()
+    // @ts-expect-error: Testing with invalid input type.
+    expect(generateCategory(123)).toBeUndefined()
     expect(generateCategory(undefined)).toBeUndefined()
   })
 })

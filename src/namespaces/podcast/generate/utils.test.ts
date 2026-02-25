@@ -1076,9 +1076,11 @@ describe('generateBaseItem', () => {
           role: 'host',
         },
       ],
-      location: {
-        display: 'Austin, TX',
-      },
+      locations: [
+        {
+          display: 'Austin, TX',
+        },
+      ],
       season: {
         number: 2,
       },
@@ -1093,10 +1095,12 @@ describe('generateBaseItem', () => {
           type: 'audio/mpeg',
         },
       ],
-      value: {
-        type: 'lightning',
-        method: 'keysend',
-      },
+      values: [
+        {
+          type: 'lightning',
+          method: 'keysend',
+        },
+      ],
       images: [
         {
           href: 'https://example.com/image.jpg',
@@ -1136,9 +1140,11 @@ describe('generateBaseItem', () => {
           '@role': 'host',
         },
       ],
-      'podcast:location': {
-        '#text': 'Austin, TX',
-      },
+      'podcast:location': [
+        {
+          '#text': 'Austin, TX',
+        },
+      ],
       'podcast:season': {
         '#text': 2,
       },
@@ -1153,10 +1159,12 @@ describe('generateBaseItem', () => {
           '@type': 'audio/mpeg',
         },
       ],
-      'podcast:value': {
-        '@type': 'lightning',
-        '@method': 'keysend',
-      },
+      'podcast:value': [
+        {
+          '@type': 'lightning',
+          '@method': 'keysend',
+        },
+      ],
       'podcast:image': [
         {
           '@href': 'https://example.com/image.jpg',
@@ -1323,9 +1331,11 @@ describe('generateFeed', () => {
           role: 'host',
         },
       ],
-      location: {
-        display: 'Austin, TX',
-      },
+      locations: [
+        {
+          display: 'Austin, TX',
+        },
+      ],
       trailers: [
         {
           display: 'Season 2 Trailer',
@@ -1337,10 +1347,12 @@ describe('generateFeed', () => {
         display: 'Creative Commons',
       },
       guid: 'feed-guid-123',
-      value: {
-        type: 'lightning',
-        method: 'keysend',
-      },
+      values: [
+        {
+          type: 'lightning',
+          method: 'keysend',
+        },
+      ],
       medium: 'podcast',
       images: [
         {
@@ -1400,9 +1412,11 @@ describe('generateFeed', () => {
           '@role': 'host',
         },
       ],
-      'podcast:location': {
-        '#text': 'Austin, TX',
-      },
+      'podcast:location': [
+        {
+          '#text': 'Austin, TX',
+        },
+      ],
       'podcast:trailer': [
         {
           '#text': 'Season 2 Trailer',
@@ -1414,10 +1428,12 @@ describe('generateFeed', () => {
         '#text': 'Creative Commons',
       },
       'podcast:guid': 'feed-guid-123',
-      'podcast:value': {
-        '@type': 'lightning',
-        '@method': 'keysend',
-      },
+      'podcast:value': [
+        {
+          '@type': 'lightning',
+          '@method': 'keysend',
+        },
+      ],
       'podcast:medium': 'podcast',
       'podcast:image': [
         {

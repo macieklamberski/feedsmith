@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -9,7 +9,7 @@ import {
 } from '../../../common/utils.js'
 import type { TrackbackNs } from '../common/types.js'
 
-export const retrieveItem: ParsePartialUtil<TrackbackNs.Item> = (value) => {
+export const retrieveItem: ParseUtilPartial<TrackbackNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }

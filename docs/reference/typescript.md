@@ -8,10 +8,10 @@ Feedsmith is built with TypeScript and provides comprehensive type definitions f
 
 ## Importing Types
 
-All types are available through the `feedsmith/types` export:
+All types are available through the main `feedsmith` export:
 
 ```typescript
-import type { Rss, Atom, Json, Rdf, Opml } from 'feedsmith/types'
+import type { Rss, Atom, Json, Rdf, Opml } from 'feedsmith'
 ```
 
 Each namespace contains the complete type system for that format:
@@ -46,8 +46,7 @@ type Outline = Opml.Outline
 When parsing, dates are returned as strings. Use `<string>` for the generic parameter:
 
 ```typescript
-import type { Rss } from 'feedsmith/types'
-import { parseRssFeed } from 'feedsmith'
+import { type Rss, parseRssFeed } from 'feedsmith'
 
 const feed: Rss.Feed<string> = parseRssFeed(xmlContent)
 
@@ -60,36 +59,12 @@ feed.items?.[0]?.enclosures // Enclosure[] | undefined
 > [!NOTE]
 > Explicit typing is usually not required when parsing since the parse functions already return properly typed objects. TypeScript will automatically infer the correct types.
 
-### Working with DeepPartial
-
-The `DeepPartial` type recursively makes all properties optional, including nested objects and arrays. This accurately represents the reality of parsed feeds where any field might be missing.
-
-Use it to recreate the same type that parse functions return:
-
-```typescript
-import type { Rss, DeepPartial } from 'feedsmith/types'
-import { parseRssFeed } from 'feedsmith'
-
-const feed = parseRssFeed(xmlContent)
-
-function processFeed(feed: DeepPartial<Rss.Feed<string>>) {
-  console.log(feed.title) // string | undefined
-}
-
-function processItem(item: DeepPartial<Rss.Item<string>>) {
-  console.log(item.title) // string | undefined
-}
-
-processFeed(feed)
-```
-
 ## Using Types with Generating
 
 When generating, you can use `Date` objects. Use `<Date>` for the generic parameter:
 
 ```typescript
-import type { Rss } from 'feedsmith/types'
-import { generateRssFeed } from 'feedsmith'
+import { type Rss, generateRssFeed } from 'feedsmith'
 
 const feed: Rss.Feed<Date> = {
   title: 'My Podcast',
@@ -110,15 +85,66 @@ const feed: Rss.Feed<Date> = {
 const xml = generateRssFeed(feed)
 ```
 
-<!-- TODO: Add example for working with namespaces. -->
+## Importing Namespace Types
+
+All namespace types are exported from the main package, allowing direct type access:
+
+```typescript
+import type { ItunesNs, DcNs, MediaNs, PodcastNs } from 'feedsmith'
+```
+
+Each namespace contains its complete type system:
+
+```typescript
+// Dublin Core namespace types
+type DcFeed = DcNs.Feed
+type DcItem = DcNs.Item
+
+// Media namespace types
+type MediaFeed = MediaNs.Feed
+type MediaItem = MediaNs.Item
+type MediaContent = MediaNs.Content
+type MediaGroup = MediaNs.Group
+```
+
+This is useful when you need to type variables or function parameters with namespace-specific types:
+
+```typescript
+import type { ItunesNs, PodcastNs } from 'feedsmith'
+import { generateRssFeed } from 'feedsmith'
+
+const itunesCategory: ItunesNs.Category = {
+  text: 'Technology',
+  categories: [{ text: 'Software How-To' }]
+}
+
+const transcript: PodcastNs.Transcript = {
+  url: 'https://example.com/transcript.srt',
+  type: 'application/srt'
+}
+
+const xml = generateRssFeed({
+  title: 'My Podcast',
+  itunes: {
+    categories: [itunesCategory]
+  },
+  items: [{
+    title: 'Episode 1',
+    podcast: {
+      transcripts: [transcript]
+    }
+  }]
+})
+```
+
+Each namespace's type export name can be found in the "Types" section of its reference documentation.
 
 ## Complete Example
 
 Here's an example on how you can utilize the types for sub-elements of the RSS feed while generating a podcast feed:
 
 ```typescript
-import type { Rss } from 'feedsmith/types'
-import { generateRssFeed } from 'feedsmith'
+import { type Rss, generateRssFeed } from 'feedsmith'
 
 const items: Array<Rss.Item<Date>> = [{
   title: 'Episode 1: Introduction',
@@ -158,9 +184,9 @@ const feed: Rss.Feed<Date> = {
 const xml = generateRssFeed(feed)
 ```
 
-## The TDate Parameter
+## The TDate Parameter {#tdate}
 
-The `TDate` generic parameter indicates how dates are represented in feed the typed objects. This differentiation is currently needed as Feedsmith intentionally does not parse dates ([see related page in the docs](/parsing/dates)).
+The `TDate` generic parameter indicates how dates are represented in the typed objects. This differentiation is needed as Feedsmith intentionally does not parse dates (see [Handling Dates](/parsing/dates)).
 
 In general, use:
 - `Type<string>` when parsing
@@ -179,3 +205,24 @@ const generated: Rss.Feed<Date> = {
   items: []
 }
 ```
+
+## The TStrict Parameter {#tstrict}
+
+The `TStrict` generic parameter controls whether specification-required fields are enforced at compile time. When you pass `{ strict: true }` to generate functions, TypeScript uses the strict variant of the type, making required fields mandatory.
+
+See [Strict Mode](/generating/strict-mode) for usage details.
+
+### Requirable Markers {#requirable}
+
+In type definitions, fields wrapped in `Requirable<T>` become mandatory when strict mode is enabled:
+
+```typescript
+// Type definition (simplified)
+type Enclosure<TStrict> = Strict<{
+  url: Requirable<string>     // Required in strict mode
+  length: Requirable<number>  // Required in strict mode
+  type: Requirable<string>    // Required in strict mode
+}, TStrict>
+```
+
+Look for `Requirable<...>` in reference documentation to identify which fields become required in strict mode.

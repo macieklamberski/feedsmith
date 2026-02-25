@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
   isObject,
@@ -14,7 +14,7 @@ import {
 } from '../../../common/utils.js'
 import type { ItunesNs } from '../common/types.js'
 
-export const parseCategory: ParsePartialUtil<ItunesNs.Category> = (value) => {
+export const parseCategory: ParseUtilPartial<ItunesNs.Category> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -27,7 +27,7 @@ export const parseCategory: ParsePartialUtil<ItunesNs.Category> = (value) => {
   return trimObject(category)
 }
 
-export const parseOwner: ParsePartialUtil<ItunesNs.Owner> = (value) => {
+export const parseOwner: ParseUtilPartial<ItunesNs.Owner> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -42,7 +42,7 @@ export const parseOwner: ParsePartialUtil<ItunesNs.Owner> = (value) => {
 
 const explicitOrYesRegex = /^\p{White_Space}*(explicit|yes)\p{White_Space}*$/iu
 
-export const parseExplicit: ParsePartialUtil<boolean> = (value) => {
+export const parseExplicit: ParseUtilPartial<boolean> = (value) => {
   const boolean = parseBoolean(value)
 
   if (boolean !== undefined) {
@@ -55,7 +55,7 @@ export const parseExplicit: ParsePartialUtil<boolean> = (value) => {
   }
 }
 
-export const parseDuration: ParsePartialUtil<number> = (value) => {
+export const parseDuration: ParseUtilPartial<number> = (value) => {
   const duration = parseNumber(value)
 
   if (duration !== undefined) {
@@ -75,7 +75,7 @@ export const parseDuration: ParsePartialUtil<number> = (value) => {
   }
 }
 
-export const parseImage: ParsePartialUtil<string> = (value) => {
+export const parseImage: ParseUtilPartial<string> = (value) => {
   // Support non-standard format of the image tag where href is not provided in the @href
   // attribute but rather provided as a node value.
   if (isNonEmptyStringOrNumber(value)) {
@@ -89,7 +89,7 @@ export const parseImage: ParsePartialUtil<string> = (value) => {
   return parseString(value['@href'])
 }
 
-export const retrieveItem: ParsePartialUtil<ItunesNs.Item> = (value) => {
+export const retrieveItem: ParseUtilPartial<ItunesNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -124,7 +124,7 @@ export const retrieveItem: ParsePartialUtil<ItunesNs.Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialUtil<ItunesNs.Feed> = (value) => {
+export const retrieveFeed: ParseUtilPartial<ItunesNs.Feed> = (value) => {
   if (!isObject(value)) {
     return
   }
