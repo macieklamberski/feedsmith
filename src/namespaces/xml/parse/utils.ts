@@ -1,8 +1,8 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import { isObject, parseString, trimObject } from '../../../common/utils.js'
 import type { XmlNs } from '../common/types.js'
 
-export const retrieveItemOrFeed: ParsePartialUtil<XmlNs.ItemOrFeed> = (value) => {
+export const retrieveItemOrFeed: ParseUtilPartial<XmlNs.ItemOrFeed> = (value) => {
   if (!isObject(value)) {
     return
   }

@@ -1,4 +1,11 @@
-import type { DateLike, Requirable, Strict } from '../../../common/types.js'
+import type {
+  GenerateUtil as BaseGenerateUtil,
+  ParseUtilPartial as BaseParseUtilPartial,
+  DateAny,
+  ParseMainOptions,
+  Requirable,
+  Strict,
+} from '../../../common/types.js'
 import type { AcastNs } from '../../../namespaces/acast/common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
@@ -28,6 +35,10 @@ import type { ThrNs } from '../../../namespaces/thr/common/types.js'
 import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 import type { XmlNs } from '../../../namespaces/xml/common/types.js'
+
+export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateAny>>
+
+export type GenerateUtil<V> = BaseGenerateUtil<V>
 
 // #region reference
 export namespace Rss {
@@ -107,7 +118,7 @@ export namespace Rss {
   >
 
   export type Item<
-    TDate extends DateLike,
+    TDate,
     TPerson extends PersonLike = Person,
     TStrict extends boolean = false,
   > = Strict<
@@ -152,7 +163,7 @@ export namespace Rss {
     (TStrict extends true ? { title: string } | { description: string } : unknown)
 
   export type Feed<
-    TDate extends DateLike,
+    TDate,
     TPerson extends PersonLike = Person,
     TStrict extends boolean = false,
   > = Strict<

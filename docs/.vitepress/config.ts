@@ -16,6 +16,7 @@ export default defineConfig({
     const canonicalUrl = `${hostname}/${pageData.relativePath}`
       .replace(/index\.md$/, '')
       .replace(/\.md$/, '')
+      .replace(/\/$/, '')
 
     return [['link', { rel: 'canonical', href: canonicalUrl }]]
   },

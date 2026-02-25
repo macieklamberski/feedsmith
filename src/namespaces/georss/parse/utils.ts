@@ -1,4 +1,4 @@
-import type { ParseExactUtil, ParsePartialUtil, Unreliable } from '../../../common/types.js'
+import type { ParseUtilExact, ParseUtilPartial, Unreliable } from '../../../common/types.js'
 import {
   isNonEmptyString,
   isObject,
@@ -50,11 +50,11 @@ export const parseLatLngPairs = (
   return points.length > 0 ? points : undefined
 }
 
-export const parsePoint: ParseExactUtil<GeoRssNs.Point> = (value) => {
+export const parsePoint: ParseUtilExact<GeoRssNs.Point> = (value) => {
   return parseLatLngPairs(retrieveText(value), { min: 1, max: 1 })?.[0]
 }
 
-export const parseLine: ParseExactUtil<GeoRssNs.Line> = (value) => {
+export const parseLine: ParseUtilExact<GeoRssNs.Line> = (value) => {
   const points = parseLatLngPairs(retrieveText(value), { min: 2 })
 
   if (isPresent(points)) {
@@ -62,7 +62,7 @@ export const parseLine: ParseExactUtil<GeoRssNs.Line> = (value) => {
   }
 }
 
-export const parsePolygon: ParseExactUtil<GeoRssNs.Polygon> = (value) => {
+export const parsePolygon: ParseUtilExact<GeoRssNs.Polygon> = (value) => {
   const points = parseLatLngPairs(retrieveText(value), { min: 4 })
 
   if (isPresent(points)) {
@@ -70,7 +70,7 @@ export const parsePolygon: ParseExactUtil<GeoRssNs.Polygon> = (value) => {
   }
 }
 
-export const parseBox: ParseExactUtil<GeoRssNs.Box> = (value) => {
+export const parseBox: ParseUtilExact<GeoRssNs.Box> = (value) => {
   const points = parseLatLngPairs(retrieveText(value), { min: 2, max: 2 })
   const lowerCorner = points?.[0]
   const upperCorner = points?.[1]
@@ -80,7 +80,7 @@ export const parseBox: ParseExactUtil<GeoRssNs.Box> = (value) => {
   }
 }
 
-export const retrieveItemOrFeed: ParsePartialUtil<GeoRssNs.ItemOrFeed> = (value) => {
+export const retrieveItemOrFeed: ParseUtilPartial<GeoRssNs.ItemOrFeed> = (value) => {
   if (!isObject(value)) {
     return
   }

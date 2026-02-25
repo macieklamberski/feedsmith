@@ -1,27 +1,34 @@
 import { locales } from '../../common/config.js'
 import { ParseError } from '../../common/error.js'
+import type { Unreliable } from '../../common/types.js'
 import { validateXml } from '../../common/utils.js'
-import type { MainOptions, Opml } from '../common/types.js'
+import type { Opml, ParseMainOptions } from '../common/types.js'
 import { parser } from './config.js'
 import { parseDocument } from './utils.js'
 
-export const parse = <const A extends ReadonlyArray<string> = ReadonlyArray<string>>(
+export const parse = <
+  TDate = string,
+  const TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
+>(
   value: string,
-  options?: MainOptions<A>,
-): Opml.Document<string, A> => {
+  options?: ParseMainOptions<TDate, TExtra>,
+): Opml.Document<TDate, TExtra> => {
+  let object: Unreliable
+
   try {
-    const object = parser.parse(value)
-    const parsed = parseDocument(object, options)
-
-    if (!parsed) {
-      throw new ParseError(locales.invalidOpmlFormat)
-    }
-
-    return parsed
+    object = parser.parse(value)
   } catch {
     if (options?.detailedErrors) {
       validateXml(value)
     }
     throw new ParseError(locales.invalidOpmlFormat)
   }
+
+  const parsed = parseDocument(object, options)
+
+  if (!parsed) {
+    throw new ParseError(locales.invalidOpmlFormat)
+  }
+
+  return parsed as Opml.Document<TDate, TExtra>
 }

@@ -1,5 +1,5 @@
 import { namespaceUris } from '../../../common/config.js'
-import type { DateLike, GenerateUtil } from '../../../common/types.js'
+import type { DateLike } from '../../../common/types.js'
 import {
   generateBoolean,
   generateCdataString,
@@ -26,7 +26,7 @@ import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generat
 import { generateItem as generateContentItem } from '../../../namespaces/content/generate/utils.js'
 import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
-import { generateItemOrFeed as generateDctermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
+import { generateItemOrFeed as generateDcTermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
 import { generateFeed as generateFeedPressFeed } from '../../../namespaces/feedpress/generate/utils.js'
 import { generateItemOrFeed as generateGeoItemOrFeed } from '../../../namespaces/geo/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
@@ -71,7 +71,7 @@ import { generateItem as generateThrItem } from '../../../namespaces/thr/generat
 import { generateItem as generateTrackbackItem } from '../../../namespaces/trackback/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
 import { generateItemOrFeed as generateXmlItemOrFeed } from '../../../namespaces/xml/generate/utils.js'
-import type { Rss } from '../common/types.js'
+import type { GenerateUtil, Rss } from '../common/types.js'
 
 export const generatePerson: GenerateUtil<Rss.PersonLike> = (person) => {
   if (isObject(person)) {
@@ -239,7 +239,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike, Rss.PersonLike>> = (i
     ...generateGeoRssItemOrFeed(item.georss),
     ...generateGeoItemOrFeed(item.geo),
     ...generateThrItem(item.thr),
-    ...generateDctermsItemOrFeed(item.dcterms),
+    ...generateDcTermsItemOrFeed(item.dcterms),
     ...generatePrismItem(item.prism),
     ...generateWfwItem(item.wfw),
     ...generateSourceItem(item.sourceNs),
@@ -289,7 +289,7 @@ export const generateFeed: GenerateUtil<Rss.Feed<DateLike, Rss.PersonLike>> = (f
     ...generateMediaItemOrFeed(feed.media),
     ...generateGeoRssItemOrFeed(feed.georss),
     ...generateGeoItemOrFeed(feed.geo),
-    ...generateDctermsItemOrFeed(feed.dcterms),
+    ...generateDcTermsItemOrFeed(feed.dcterms),
     ...generatePrismFeed(feed.prism),
     ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
     ...generateFeedPressFeed(feed.feedpress),

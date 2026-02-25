@@ -410,7 +410,7 @@ OPML files often contain custom attributes for specific applications or feed rea
 ```typescript
 import { parseOpml } from 'feedsmith'
 
-const opml = parseOpml(`
+const xml = `
   <?xml version="1.0" encoding="utf-8"?>
   <opml version="2.0">
     <head>
@@ -440,15 +440,17 @@ const opml = parseOpml(`
       </outline>
     </body>
   </opml>
-`, {
+`
+
+const opml = parseOpml(xml, {
   extraOutlineAttributes: [
     'customIcon',
     'updateInterval',
     'isPrivate',
     'tags',
     'customColor',
-    'isPinned'
-  ]
+    'isPinned',
+  ],
 })
 ```
 
@@ -500,7 +502,7 @@ The `maxItems` option allows you to control how many items/entries/outlines are 
 ```typescript
 import { parseRssFeed } from 'feedsmith'
 
-const rssFeed = parseRssFeed(`
+const xml = `
   <?xml version="1.0" encoding="utf-8"?>
   <rss version="2.0">
     <channel>
@@ -524,7 +526,9 @@ const rssFeed = parseRssFeed(`
       </item>
     </channel>
   </rss>
-`, { maxItems: 2 })
+`
+
+const rssFeed = parseRssFeed(xml, { maxItems: 2 })
 ```
 
 Returns:
@@ -559,7 +563,7 @@ When you only need feed-level information and want to skip all items entirely, u
 ```typescript
 import { parseRssFeed } from 'feedsmith'
 
-const rssFeed = parseRssFeed(`
+const xml = `
   <?xml version="1.0" encoding="utf-8"?>
   <rss version="2.0">
     <channel>
@@ -578,7 +582,9 @@ const rssFeed = parseRssFeed(`
       </item>
     </channel>
   </rss>
-`, { maxItems: 0 })
+`
+
+const rssFeed = parseRssFeed(xml, { maxItems: 0 })
 ```
 
 Returns:
