@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import { type XMLBuilder, XMLParser } from 'fast-xml-parser'
+import type { XMLBuilder } from 'fast-xml-builder'
+import { XMLParser } from 'fast-xml-parser'
 import { namespacePrefixes, namespaceUris } from './config.js'
 import type { ParseExactUtil } from './types.js'
 import {

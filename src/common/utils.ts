@@ -1,5 +1,5 @@
 import { decodeHTML } from 'entities'
-import type { XMLBuilder } from 'fast-xml-parser'
+import type { XMLBuilder } from 'fast-xml-builder'
 import type {
   AnyOf,
   DateLike,
