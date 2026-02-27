@@ -1,4 +1,5 @@
-import type { X2jOptions, XmlBuilderOptions } from 'fast-xml-parser'
+import type { XmlBuilderOptions } from 'fast-xml-builder'
+import type { X2jOptions } from 'fast-xml-parser'
 
 export const parserConfig: X2jOptions = {
   trimValues: false,
