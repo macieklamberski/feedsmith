@@ -29,6 +29,7 @@ import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../.
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
 import { retrieveFeed as retrieveFeedPressFeed } from '../../../namespaces/feedpress/parse/utils.js'
+import { retrieveItem as retrieveGItem } from '../../../namespaces/g/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces/geo/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
@@ -219,6 +220,7 @@ export const parseItem: ParseUtilPartial<Rss.Item<DateAny>> = (value, options) =
     pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
     acast: namespaces.has('acast') ? retrieveAcastItem(value) : undefined,
+    g: namespaces.has('g') ? retrieveGItem(value) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
 

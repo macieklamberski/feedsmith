@@ -895,6 +895,177 @@
         "episodeUrl": "example-episode-title",
         "settings": "RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA=="
       },
+      "g": {
+        "id": "SKU12345",
+        "title": "Example Product",
+        "description": "A great product for demonstrating Google Merchant Center data",
+        "link": "https://example.com/product/12345",
+        "mobileLink": "https://m.example.com/product/12345",
+        "canonicalLink": "https://example.com/product/12345",
+        "imageLink": "https://example.com/images/product.jpg",
+        "additionalImageLinks": [
+          "https://example.com/images/product-alt1.jpg",
+          "https://example.com/images/product-alt2.jpg"
+        ],
+        "lifestyleImageLinks": [
+          "https://example.com/images/product-lifestyle1.jpg",
+          "https://example.com/images/product-lifestyle2.jpg"
+        ],
+        "price": "19.99 USD",
+        "salePrice": "14.99 USD",
+        "salePriceEffectiveDate": "2024-01-01T00:00:00Z/2024-01-31T23:59:59Z",
+        "costOfGoodsSold": "10.00 USD",
+        "maximumRetailPrice": "24.99 USD",
+        "availability": "in_stock",
+        "availabilityDate": "2024-01-15T00:00:00Z",
+        "expirationDate": "2025-01-15T00:00:00Z",
+        "pause": "ads",
+        "brand": "Example Brand",
+        "gtin": "00012345678905",
+        "mpn": "ABC123",
+        "identifierExists": true,
+        "googleProductCategory": "Electronics > Phones > Smartphones",
+        "productTypes": ["Electronics", "Phones"],
+        "condition": "new",
+        "productLength": "20 cm",
+        "productWidth": "10 cm",
+        "productHeight": "5 cm",
+        "productWeight": "500 g",
+        "itemGroupId": "PRODUCT-GROUP-1",
+        "color": "Black",
+        "size": "Large",
+        "sizeType": "regular",
+        "sizeSystem": "US",
+        "gender": "unisex",
+        "ageGroup": "adult",
+        "material": "Cotton",
+        "pattern": "Solid",
+        "shippings": [
+          {
+            "country": "US",
+            "region": "CA",
+            "service": "Standard",
+            "price": "5.99 USD",
+            "minHandlingTime": 1,
+            "maxHandlingTime": 3
+          }
+        ],
+        "shippingLabel": "standard",
+        "shippingWeight": "1.5 kg",
+        "shippingLength": "30 cm",
+        "shippingWidth": "20 cm",
+        "shippingHeight": "10 cm",
+        "shipsFromCountry": "US",
+        "transitTimeLabel": "express",
+        "maxHandlingTime": 2,
+        "minHandlingTime": 0,
+        "freeShippingThresholds": [
+          {
+            "country": "US",
+            "priceThreshold": "50.00 USD"
+          }
+        ],
+        "handlingCutoffTimes": [
+          {
+            "cutoffTime": "1400",
+            "cutoffTimezone": "America/New_York",
+            "country": "US",
+            "disableDeliveryAfterCutoff": true
+          }
+        ],
+        "shippingHandlingBusinessDays": "MTWRF",
+        "shippingTransitBusinessDays": "MTWRFS",
+        "taxes": [
+          {
+            "country": "US",
+            "region": "CA",
+            "rate": "8.25",
+            "taxShip": true
+          }
+        ],
+        "taxCategory": "Electronics",
+        "unitPricingMeasure": "100ml",
+        "unitPricingBaseMeasure": "100ml",
+        "multipack": 1,
+        "isBundle": false,
+        "adult": false,
+        "energyEfficiencyClass": "A++",
+        "minEnergyEfficiencyClass": "A",
+        "maxEnergyEfficiencyClass": "A+++",
+        "certifications": [
+          {
+            "certificationAuthority": "European Commission",
+            "certificationName": "EPREL",
+            "certificationCode": "123456",
+            "certificationValue": "A++"
+          }
+        ],
+        "installment": {
+          "months": 12,
+          "amount": "99.99 BRL",
+          "downpayment": "199.99 BRL",
+          "creditType": "finance"
+        },
+        "subscriptionCost": {
+          "period": "month",
+          "periodLength": 1,
+          "amount": "9.99 USD"
+        },
+        "loyaltyPrograms": [
+          {
+            "programLabel": "rewards",
+            "tierLabel": "gold",
+            "price": "49.99 USD",
+            "loyaltyPoints": 500,
+            "memberPriceEffectiveDate": "2024-01-01T00:00:00Z/2024-12-31T23:59:59Z",
+            "shippingLabel": "free_member_shipping",
+            "cashbackForFutureUse": "5.00 USD"
+          }
+        ],
+        "productHighlights": ["Premium quality materials", "Free shipping on orders over $50"],
+        "productDetails": [
+          {
+            "sectionName": "Technical Specs",
+            "attributeName": "Weight",
+            "attributeValue": "1.5 kg"
+          }
+        ],
+        "returnPolicyLabel": "30-day-returns",
+        "adsRedirect": "https://example.com/track?id=12345",
+        "customLabel0": "bestseller",
+        "customLabel1": "clearance",
+        "customLabel2": "summer",
+        "customLabel3": "premium",
+        "customLabel4": "new-arrival",
+        "promotionIds": ["PROMO1", "PROMO2"],
+        "excludedDestinations": ["Display_Ads"],
+        "includedDestinations": ["Shopping_Actions", "Shopping_Ads"],
+        "shoppingAdsExcludedCountries": ["DE", "FR"],
+        "displayAdsId": "display-12345",
+        "displayAdsTitle": "Custom Display Title",
+        "displayAdsLink": "https://example.com/display/12345",
+        "displayAdsValue": 15.99,
+        "displayAdsSimilarIds": ["SIMILAR-001", "SIMILAR-002"],
+        "adsGrouping": "group-electronics",
+        "adsLabels": ["label1", "label2"],
+        "structuredTitle": {
+          "digitalSourceType": "trained_algorithmic_media",
+          "content": "AI-Enhanced Product Title"
+        },
+        "structuredDescription": {
+          "digitalSourceType": "trained_algorithmic_media",
+          "content": "AI-Enhanced Product Description"
+        },
+        "pickupMethod": "buy",
+        "pickupSla": "same_day",
+        "sellOnGoogleQuantity": 10,
+        "linkTemplate": "https://example.com/product/{store_code}/12345",
+        "mobileLinkTemplate": "https://m.example.com/product/{store_code}/12345",
+        "autoPricingMinPrice": "12.99 USD",
+        "externalSellerId": "seller-456",
+        "virtualModelLink": "https://example.com/virtual-model/12345",
+        "disclosureDate": "2024-06-01T00:00:00Z"
+      },
       "xml": {
         "lang": "en-US",
         "base": "http://example.org/item/1/"
