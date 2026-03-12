@@ -1,3 +1,18 @@
+export const uris = [
+  'http://purl.org/dc/terms/', // Official URI.
+  'https://purl.org/dc/terms/',
+  'http://purl.org/dc/terms',
+  'https://purl.org/dc/terms',
+  'http://dublincore.org/documents/dcmi-terms/',
+  'https://dublincore.org/documents/dcmi-terms/',
+  'http://dublincore.org/documents/dcmi-terms',
+  'https://dublincore.org/documents/dcmi-terms',
+  'http://dublincore.org/specifications/dublin-core/dcmi-terms/',
+  'https://dublincore.org/specifications/dublin-core/dcmi-terms/',
+  'http://dublincore.org/specifications/dublin-core/dcmi-terms',
+  'https://dublincore.org/specifications/dublin-core/dcmi-terms',
+]
+
 export const stopNodes = [
   '*.dcterms:abstract',
   '*.dcterms:accrualmethod',
