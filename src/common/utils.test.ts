@@ -958,6 +958,13 @@ describe('parseString', () => {
     expect(parseString(value)).toBe(expected)
   })
 
+  it('should preserve HTML entities inside CDATA (content:encoded scenario)', () => {
+    const value = '<![CDATA[<p>Use <code>&lt;link rel="alternate"&gt;</code> in your HTML.</p>]]>'
+    const expected = '<p>Use <code>&lt;link rel="alternate"&gt;</code> in your HTML.</p>'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
   it('should decode only one layer of triple-escaped entities', () => {
     expect(parseString('&amp;amp;amp;')).toBe('&amp;amp;')
   })

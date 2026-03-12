@@ -1180,4 +1180,8 @@ describe('parse', () => {
       })
     })
   })
+
+  describe('real world feeds', () => {
+    // TODO: Add real world feeds with problematic edge cases.
+  })
 })

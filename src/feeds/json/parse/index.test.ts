@@ -329,4 +329,8 @@ describe('parse', () => {
       expect(parse(commonValue, { maxItems: undefined })).toEqual(expected)
     })
   })
+
+  describe('real world feeds', () => {
+    // TODO: Add real world feeds with problematic edge cases.
+  })
 })

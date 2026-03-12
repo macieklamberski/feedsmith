@@ -870,6 +870,42 @@ describe('parse', () => {
     })
   })
 
+  describe('real world feeds', () => {
+    it('should preserve HTML entities inside CDATA in content:encoded', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+          <channel>
+            <title>Test Blog</title>
+            <link>https://example.com</link>
+            <description>A test blog</description>
+            <item>
+              <title>How to use the link element</title>
+              <link>https://example.com/post</link>
+              <content:encoded><![CDATA[<p>Use <code>&lt;link rel="alternate"&gt;</code> in your HTML.</p>]]></content:encoded>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test Blog',
+        link: 'https://example.com',
+        description: 'A test blog',
+        items: [
+          {
+            title: 'How to use the link element',
+            link: 'https://example.com/post',
+            content: {
+              encoded: '<p>Use <code>&lt;link rel="alternate"&gt;</code> in your HTML.</p>',
+            },
+          },
+        ],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+  })
+
   describe('with maxItems option', () => {
     it('should limit items to specified number', () => {
       const value = `
