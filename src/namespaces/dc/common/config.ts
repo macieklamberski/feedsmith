@@ -1,0 +1,16 @@
+export const stopNodes = [
+  '*.dc:title',
+  '*.dc:creator',
+  '*.dc:subject',
+  '*.dc:description',
+  '*.dc:publisher',
+  '*.dc:contributor',
+  '*.dc:type',
+  '*.dc:format',
+  '*.dc:identifier',
+  '*.dc:source',
+  '*.dc:language',
+  '*.dc:relation',
+  '*.dc:coverage',
+  '*.dc:rights',
+]

@@ -1,7 +1,8 @@
 import { XMLParser } from 'fast-xml-parser'
-import { parserConfig } from '../../../common/config.js'
+import { namespaceStopNodes, parserConfig } from '../../../common/config.js'
 
 export const stopNodes = [
+  ...namespaceStopNodes,
   'rdf:rdf.channel.title',
   'rdf:rdf.channel.link',
   'rdf:rdf.channel.description',
@@ -15,7 +16,6 @@ export const stopNodes = [
   'rdf:rdf.textinput.description',
   'rdf:rdf.textinput.name',
   'rdf:rdf.textinput.link',
-  // TODO: What about the namespaces?
 ]
 
 export const parser = new XMLParser({

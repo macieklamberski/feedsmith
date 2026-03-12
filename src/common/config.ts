@@ -1,4 +1,32 @@
 import type { X2jOptions, XmlBuilderOptions } from 'fast-xml-parser'
+import { stopNodes as acastStopNodes } from '../namespaces/acast/common/config.js'
+import { stopNodes as adminStopNodes } from '../namespaces/admin/common/config.js'
+import { stopNodes as arxivStopNodes } from '../namespaces/arxiv/common/config.js'
+import { stopNodes as blogchannelStopNodes } from '../namespaces/blogchannel/common/config.js'
+import { stopNodes as ccStopNodes } from '../namespaces/cc/common/config.js'
+import { stopNodes as contentStopNodes } from '../namespaces/content/common/config.js'
+import { stopNodes as creativecommonsStopNodes } from '../namespaces/creativecommons/common/config.js'
+import { stopNodes as dcStopNodes } from '../namespaces/dc/common/config.js'
+import { stopNodes as dctermsStopNodes } from '../namespaces/dcterms/common/config.js'
+import { stopNodes as feedpressStopNodes } from '../namespaces/feedpress/common/config.js'
+import { stopNodes as georssStopNodes } from '../namespaces/georss/common/config.js'
+import { stopNodes as googleplayStopNodes } from '../namespaces/googleplay/common/config.js'
+import { stopNodes as itunesStopNodes } from '../namespaces/itunes/common/config.js'
+import { stopNodes as mediaStopNodes } from '../namespaces/media/common/config.js'
+import { stopNodes as opensearchStopNodes } from '../namespaces/opensearch/common/config.js'
+import { stopNodes as pingbackStopNodes } from '../namespaces/pingback/common/config.js'
+import { stopNodes as podcastStopNodes } from '../namespaces/podcast/common/config.js'
+import { stopNodes as prismStopNodes } from '../namespaces/prism/common/config.js'
+import { stopNodes as rawvoiceStopNodes } from '../namespaces/rawvoice/common/config.js'
+import { stopNodes as rdfStopNodes } from '../namespaces/rdf/common/config.js'
+import { stopNodes as slashStopNodes } from '../namespaces/slash/common/config.js'
+import { stopNodes as sourceStopNodes } from '../namespaces/source/common/config.js'
+import { stopNodes as spotifyStopNodes } from '../namespaces/spotify/common/config.js'
+import { stopNodes as syStopNodes } from '../namespaces/sy/common/config.js'
+import { stopNodes as thrStopNodes } from '../namespaces/thr/common/config.js'
+import { stopNodes as trackbackStopNodes } from '../namespaces/trackback/common/config.js'
+import { stopNodes as wfwStopNodes } from '../namespaces/wfw/common/config.js'
+import { stopNodes as ytStopNodes } from '../namespaces/yt/common/config.js'
 
 export const parserConfig: X2jOptions = {
   trimValues: false,
@@ -327,3 +355,34 @@ export const namespacePrefixes = Object.entries(namespaceUris).reduce(
   },
   {} as Record<string, string>,
 )
+
+export const namespaceStopNodes = [
+  ...acastStopNodes,
+  ...adminStopNodes,
+  ...arxivStopNodes,
+  ...blogchannelStopNodes,
+  ...ccStopNodes,
+  ...contentStopNodes,
+  ...creativecommonsStopNodes,
+  ...dcStopNodes,
+  ...dctermsStopNodes,
+  ...feedpressStopNodes,
+  ...georssStopNodes,
+  ...googleplayStopNodes,
+  ...itunesStopNodes,
+  ...mediaStopNodes,
+  ...opensearchStopNodes,
+  ...pingbackStopNodes,
+  ...podcastStopNodes,
+  ...prismStopNodes,
+  ...rawvoiceStopNodes,
+  ...rdfStopNodes,
+  ...slashStopNodes,
+  ...sourceStopNodes,
+  ...spotifyStopNodes,
+  ...syStopNodes,
+  ...thrStopNodes,
+  ...trackbackStopNodes,
+  ...wfwStopNodes,
+  ...ytStopNodes,
+]

@@ -1,0 +1,15 @@
+export const stopNodes = [
+  '*.source:account',
+  '*.source:url',
+  '*.source:startday',
+  '*.source:endday',
+  '*.source:filename',
+  '*.source:subscriptionlist',
+  '*.source:cloud',
+  '*.source:blogroll',
+  '*.source:self',
+  '*.source:markdown',
+  '*.source:outline',
+  '*.source:localtime',
+  '*.source:linkfull',
+]
