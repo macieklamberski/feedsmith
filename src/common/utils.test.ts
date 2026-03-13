@@ -1014,6 +1014,14 @@ describe('parseString', () => {
     expect(parseString('Hello<!-- comment --> &amp; World')).toBe('Hello & World')
   })
 
+  it('should handle nested comment start marker inside comment', () => {
+    expect(parseString('A<!-- first <!-- second -->B')).toBe('AB')
+  })
+
+  it('should handle extra closing comment marker as plain text', () => {
+    expect(parseString('A<!-- comment --> -->B')).toBe('A -->B')
+  })
+
   it('should strip XML comments alongside CDATA sections', () => {
     expect(parseString('<!-- comment --><![CDATA[content]]>')).toBe('content')
   })
