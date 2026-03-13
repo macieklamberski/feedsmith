@@ -904,6 +904,68 @@ describe('parse', () => {
 
       expect(parse(value)).toEqual(expected)
     })
+
+    describe('author', () => {
+      it('should parse item author as plain text', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0">
+            <channel>
+              <title>Test Blog</title>
+              <link>https://example.com</link>
+              <description>A test blog</description>
+              <item>
+                <title>Test Post</title>
+                <author>john@example.com (John Doe)</author>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test Blog',
+          link: 'https://example.com',
+          description: 'A test blog',
+          items: [
+            {
+              title: 'Test Post',
+              authors: ['john@example.com (John Doe)'],
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should parse item author with nested name element', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0">
+            <channel>
+              <title>Test Blog</title>
+              <link>https://example.com</link>
+              <description>A test blog</description>
+              <item>
+                <title>Test Post</title>
+                <author><name>John Doe</name></author>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test Blog',
+          link: 'https://example.com',
+          description: 'A test blog',
+          items: [
+            {
+              title: 'Test Post',
+              authors: ['John Doe'],
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+    })
   })
 
   describe('with maxItems option', () => {
