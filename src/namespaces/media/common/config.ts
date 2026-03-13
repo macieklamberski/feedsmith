@@ -39,8 +39,8 @@ export const stopNodes = [
   '*.media:license',
   '*.media:location',
   '*.media:param',
-  '*.scenetitle',
-  '*.scenedescription',
-  '*.scenestarttime',
-  '*.sceneendtime',
+  '*.media:scene.scenetitle',
+  '*.media:scene.scenedescription',
+  '*.media:scene.scenestarttime',
+  '*.media:scene.sceneendtime',
 ]
