@@ -144,12 +144,41 @@ export const generateSingularOrArray = <V>(
   }
 }
 
+const commentStartTag = '<!--'
+const commentEndTag = '-->'
 const cdataStartTag = '<![CDATA['
 const cdataEndTag = ']]>'
 
 export const hasEntities = (text: string) => {
   const ampIndex = text.indexOf('&')
   return ampIndex !== -1 && text.indexOf(';', ampIndex) !== -1
+}
+
+const stripComments = (text: string): string => {
+  let currentIndex = text.indexOf(commentStartTag)
+
+  if (currentIndex === -1) {
+    return text
+  }
+
+  let result = ''
+  let lastIndex = 0
+
+  while (currentIndex !== -1) {
+    result += text.substring(lastIndex, currentIndex)
+    const endIndex = text.indexOf(commentEndTag, currentIndex + commentStartTag.length)
+
+    if (endIndex === -1) {
+      return text
+    }
+
+    lastIndex = endIndex + commentEndTag.length
+    currentIndex = text.indexOf(commentStartTag, lastIndex)
+  }
+
+  result += text.substring(lastIndex)
+
+  return result
 }
 
 const decodeWithCdata = (text: string): string => {
@@ -197,7 +226,7 @@ export const parseString: ParseExactUtil<string> = (value) => {
       return
     }
 
-    const string = decodeWithCdata(value).trim()
+    const string = decodeWithCdata(stripComments(value)).trim()
 
     return string || undefined
   }

@@ -990,6 +990,34 @@ describe('parseString', () => {
     expect(parseString(value)).toBe('test')
   })
 
+  it('should strip XML comments from text', () => {
+    expect(parseString('Test<!-- hidden --> Feed')).toBe('Test Feed')
+  })
+
+  it('should strip multiple XML comments', () => {
+    expect(parseString('A<!-- one -->B<!-- two -->C')).toBe('ABC')
+  })
+
+  it('should strip XML comment leaving only remaining text', () => {
+    expect(parseString('<!-- full comment -->visible')).toBe('visible')
+  })
+
+  it('should return undefined when entire content is a comment', () => {
+    expect(parseString('<!-- only comment -->')).toBeUndefined()
+  })
+
+  it('should handle malformed XML comment without closing tag', () => {
+    expect(parseString('<!-- no closing tag')).toBe('<!-- no closing tag')
+  })
+
+  it('should strip XML comments and decode entities in remaining text', () => {
+    expect(parseString('Hello<!-- comment --> &amp; World')).toBe('Hello & World')
+  })
+
+  it('should strip XML comments alongside CDATA sections', () => {
+    expect(parseString('<!-- comment --><![CDATA[content]]>')).toBe('content')
+  })
+
   it('should return number as string', () => {
     const value = 420
 
