@@ -1184,4 +1184,36 @@ describe('parse', () => {
   describe('real world feeds', () => {
     // TODO: Add real world feeds with problematic edge cases.
   })
+
+  describe('xml comment stripping', () => {
+    it('should strip XML comments from element content', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <title>Test<!-- hidden --> Feed</title>
+          <id>urn:uuid:test</id>
+          <updated>2024-01-01T00:00:00Z</updated>
+          <entry>
+            <title>Post<!-- comment --> Title</title>
+            <id>urn:uuid:1</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: 'Test Feed',
+        id: 'urn:uuid:test',
+        updated: '2024-01-01T00:00:00Z',
+        entries: [
+          {
+            title: 'Post Title',
+            id: 'urn:uuid:1',
+            updated: '2024-01-01T00:00:00Z',
+          },
+        ],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+  })
 })

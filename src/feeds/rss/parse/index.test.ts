@@ -1052,4 +1052,30 @@ describe('parse', () => {
       expect(parse(value, { maxItems: undefined })).toEqual(expected)
     })
   })
+
+  describe('xml comment stripping', () => {
+    it('should strip XML comments from element content', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>Test<!-- hidden --> Feed</title>
+            <link>https://example.com</link>
+            <description>Test</description>
+            <item>
+              <title>Post<!-- comment --> Title</title>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test Feed',
+        link: 'https://example.com',
+        description: 'Test',
+        items: [{ title: 'Post Title' }],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+  })
 })
