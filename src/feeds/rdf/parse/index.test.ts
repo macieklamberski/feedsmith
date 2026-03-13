@@ -1540,4 +1540,38 @@ describe('parse', () => {
       expect(parse(commonValue, { maxItems: undefined })).toEqual(expected)
     })
   })
+
+  describe('xml comment stripping', () => {
+    it('should strip XML comments from element content', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/">
+          <channel>
+            <title>Test<!-- hidden --> Feed</title>
+            <link>http://example.com</link>
+            <description>Test</description>
+          </channel>
+          <item>
+            <title>Post<!-- comment --> Title</title>
+            <link>http://example.com/post</link>
+          </item>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'Test Feed',
+        link: 'http://example.com',
+        description: 'Test',
+        items: [
+          {
+            title: 'Post Title',
+            link: 'http://example.com/post',
+          },
+        ],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+  })
 })
