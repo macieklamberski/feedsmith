@@ -6,4 +6,20 @@ export const uris = [
   'https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/1.0.md',
 ]
 
-export const stopNodes = ['*.podcast:guid', '*.podcast:medium']
+export const stopNodes = [
+  '*.podcast:locked',
+  '*.podcast:funding',
+  '*.podcast:soundbite',
+  '*.podcast:person',
+  '*.podcast:location',
+  '*.podcast:season',
+  '*.podcast:episode',
+  '*.podcast:trailer',
+  '*.podcast:license',
+  '*.podcast:guid',
+  '*.podcast:medium',
+  '*.podcast:contentlink',
+  '*.podcast:block',
+  '*.podcast:txt',
+  '*.podcast:updatefrequency',
+]

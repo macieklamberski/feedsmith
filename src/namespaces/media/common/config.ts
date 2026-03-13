@@ -21,4 +21,26 @@ export const uris = [
   'https://tools.search.yahoo.com/mrss',
 ]
 
-export const stopNodes = ['*.media:comment', '*.media:response', '*.media:backlink']
+export const stopNodes = [
+  '*.media:rating',
+  '*.media:adult',
+  '*.media:title',
+  '*.media:description',
+  '*.media:category',
+  '*.media:hash',
+  '*.media:credit',
+  '*.media:copyright',
+  '*.media:text',
+  '*.media:restriction',
+  '*.media:keywords',
+  '*.media:comment',
+  '*.media:response',
+  '*.media:backlink',
+  '*.media:license',
+  '*.media:location',
+  '*.media:param',
+  '*.scenetitle',
+  '*.scenedescription',
+  '*.scenestarttime',
+  '*.sceneendtime',
+]

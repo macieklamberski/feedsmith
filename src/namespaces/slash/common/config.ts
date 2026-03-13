@@ -5,4 +5,9 @@ export const uris = [
   'https://purl.org/rss/1.0/modules/slash',
 ]
 
-export const stopNodes = ['*.slash:section', '*.slash:department']
+export const stopNodes = [
+  '*.slash:section',
+  '*.slash:department',
+  '*.slash:comments',
+  '*.slash:hit_parade',
+]

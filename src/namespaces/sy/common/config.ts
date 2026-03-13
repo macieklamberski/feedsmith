@@ -5,4 +5,4 @@ export const uris = [
   'https://purl.org/rss/1.0/modules/syndication',
 ]
 
-export const stopNodes = ['*.sy:updateperiod']
+export const stopNodes = ['*.sy:updateperiod', '*.sy:updatefrequency', '*.sy:updatebase']

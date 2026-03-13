@@ -20,6 +20,7 @@ export const stopNodes = [
   '*.dc:description',
   '*.dc:publisher',
   '*.dc:contributor',
+  '*.dc:date',
   '*.dc:type',
   '*.dc:format',
   '*.dc:identifier',

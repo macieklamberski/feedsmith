@@ -12,9 +12,15 @@ export const uris = [
 export const stopNodes = [
   '*.rawvoice:rating',
   '*.rawvoice:liveembed',
+  '*.rawvoice:flashlivestream',
+  '*.rawvoice:httplivestream',
+  '*.rawvoice:shoutcastlivestream',
+  '*.rawvoice:livestream',
   '*.rawvoice:location',
   '*.rawvoice:frequency',
+  '*.rawvoice:mycast',
   '*.rawvoice:metamark',
   '*.rawvoice:donate',
   '*.rawvoice:embed',
+  '*.rawvoice:ishd',
 ]

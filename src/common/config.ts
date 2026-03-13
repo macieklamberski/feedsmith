@@ -7,7 +7,7 @@ import {
   stopNodes as adminStopNodes,
   uris as adminUris,
 } from '../namespaces/admin/common/config.js'
-import { uris as appUris } from '../namespaces/app/common/config.js'
+import { stopNodes as appStopNodes, uris as appUris } from '../namespaces/app/common/config.js'
 import {
   stopNodes as arxivStopNodes,
   uris as arxivUris,
@@ -35,7 +35,7 @@ import {
   stopNodes as feedpressStopNodes,
   uris as feedpressUris,
 } from '../namespaces/feedpress/common/config.js'
-import { uris as geoUris } from '../namespaces/geo/common/config.js'
+import { stopNodes as geoStopNodes, uris as geoUris } from '../namespaces/geo/common/config.js'
 import {
   stopNodes as georssStopNodes,
   uris as georssUris,
@@ -179,6 +179,7 @@ export const namespacePrefixes = Object.entries(namespaceUris).reduce(
 export const namespaceStopNodes = [
   ...acastStopNodes,
   ...adminStopNodes,
+  ...appStopNodes,
   ...arxivStopNodes,
   ...blogchannelStopNodes,
   ...ccStopNodes,
@@ -187,6 +188,7 @@ export const namespaceStopNodes = [
   ...dcStopNodes,
   ...dctermsStopNodes,
   ...feedpressStopNodes,
+  ...geoStopNodes,
   ...georssStopNodes,
   ...googleplayStopNodes,
   ...itunesStopNodes,

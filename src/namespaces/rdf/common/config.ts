@@ -3,4 +3,4 @@ export const uris = [
   'https://www.w3.org/1999/02/22-rdf-syntax-ns#',
 ]
 
-export const stopNodes = ['*.rdf:value']
+export const stopNodes = ['*.rdf:type', '*.rdf:value']

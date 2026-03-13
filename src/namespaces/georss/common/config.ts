@@ -6,7 +6,14 @@ export const uris = [
 ]
 
 export const stopNodes = [
+  '*.georss:point',
+  '*.georss:line',
+  '*.georss:polygon',
+  '*.georss:box',
   '*.georss:featuretypetag',
   '*.georss:relationshiptag',
   '*.georss:featurename',
+  '*.georss:elev',
+  '*.georss:floor',
+  '*.georss:radius',
 ]
