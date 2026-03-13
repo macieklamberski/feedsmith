@@ -55,7 +55,7 @@ export const stopNodes = [
   'feed.entry.source.logo',
   'feed.entry.source.rights',
   'feed.entry.source.subtitle',
-  'feed.entry.source.title,',
+  'feed.entry.source.title',
   'feed.entry.source.updated',
   'feed.entry.source.modified', // Atom 0.3.
   'feed.entry.summary',
