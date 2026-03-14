@@ -1181,7 +1181,7 @@ describe('parse', () => {
     })
   })
 
-  // Catalogue: plans/real_world_test_suite.md
+  // Edge cases and quirks observed in feeds found in the wild.
   describe('real world feeds', () => {
     describe('character encoding', () => {
       it('RW-E01: should decode HTML numeric character references in entry title', () => {
@@ -1202,11 +1202,13 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Caf\u00e9 Culture',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-          }],
+          entries: [
+            {
+              title: 'Caf\u00e9 Culture',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1231,12 +1233,14 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            summary: 'First \u2013 Second',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              summary: 'First \u2013 Second',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1260,11 +1264,13 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Tom &amp; Jerry',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-          }],
+          entries: [
+            {
+              title: 'Tom &amp; Jerry',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1291,12 +1297,14 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            content: '<p>Full <strong>HTML</strong> content</p>',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              content: '<p>Full <strong>HTML</strong> content</p>',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1322,13 +1330,15 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            summary: 'A brief summary',
-            content: 'Full content here',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              summary: 'A brief summary',
+              content: 'Full content here',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1353,11 +1363,13 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1382,12 +1394,15 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            content: '<div xmlns="http://www.w3.org/1999/xhtml"><p>Hello <em>world</em></p></div>',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              content:
+                '<div xmlns="http://www.w3.org/1999/xhtml"><p>Hello <em>world</em></p></div>',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1412,11 +1427,13 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1441,12 +1458,15 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            content: '<div xmlns="http://www.w3.org/1999/xhtml"><div class="article"><p>Text</p></div></div>',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              content:
+                '<div xmlns="http://www.w3.org/1999/xhtml"><div class="article"><p>Text</p></div></div>',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1471,12 +1491,14 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            content: 'iVBORw0KGgo=',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              content: 'iVBORw0KGgo=',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1519,12 +1541,14 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            content: '<p>No wrapper</p>',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              content: '<p>No wrapper</p>',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1558,15 +1582,17 @@ describe('parse', () => {
             { href: 'https://example.com/', rel: 'alternate' },
             { href: 'https://example.com/feed.xml', rel: 'self', type: 'application/atom+xml' },
           ],
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            links: [
-              { href: 'https://example.com/post/1', rel: 'alternate' },
-              { href: 'https://example.com/post/1/comments', rel: 'replies' },
-            ],
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              links: [
+                { href: 'https://example.com/post/1', rel: 'alternate' },
+                { href: 'https://example.com/post/1/comments', rel: 'replies' },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1592,15 +1618,17 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            links: [
-              { href: 'https://example.com/en/post', rel: 'alternate', hreflang: 'en' },
-              { href: 'https://example.com/fr/post', rel: 'alternate', hreflang: 'fr' },
-            ],
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              links: [
+                { href: 'https://example.com/en/post', rel: 'alternate', hreflang: 'en' },
+                { href: 'https://example.com/fr/post', rel: 'alternate', hreflang: 'fr' },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1625,12 +1653,14 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            links: [{ href: '/blog/post-1', rel: 'alternate' }],
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              links: [{ href: '/blog/post-1', rel: 'alternate' }],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1657,12 +1687,14 @@ describe('parse', () => {
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
           links: [{ rel: 'alternate', type: 'text/html' }],
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            links: [{ rel: 'alternate' }],
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              links: [{ rel: 'alternate' }],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1688,15 +1720,17 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            links: [
-              { href: 'https://example.com/post', rel: 'alternate' },
-              { href: 'https://example.com/post/comments', rel: 'replies' },
-            ],
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              links: [
+                { href: 'https://example.com/post', rel: 'alternate' },
+                { href: 'https://example.com/post/comments', rel: 'replies' },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1722,15 +1756,17 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            links: [
-              { href: 'https://example.com/image.jpg', rel: 'enclosure', type: 'image/jpeg' },
-              { href: 'https://example.com/post', rel: 'alternate' },
-            ],
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              links: [
+                { href: 'https://example.com/image.jpg', rel: 'enclosure', type: 'image/jpeg' },
+                { href: 'https://example.com/post', rel: 'alternate' },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1764,15 +1800,17 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Co-authored Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            authors: [
-              { name: 'Alice', email: 'alice@example.com' },
-              { name: 'Bob', uri: 'https://bob.example.com' },
-            ],
-          }],
+          entries: [
+            {
+              title: 'Co-authored Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              authors: [
+                { name: 'Alice', email: 'alice@example.com' },
+                { name: 'Bob', uri: 'https://bob.example.com' },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1796,11 +1834,13 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          authors: [{
-            name: 'Feed Author',
-            uri: 'https://author.example.com',
-            email: 'author@example.com',
-          }],
+          authors: [
+            {
+              name: 'Feed Author',
+              uri: 'https://author.example.com',
+              email: 'author@example.com',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1827,13 +1867,15 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            authors: [{ name: 'Main Author' }],
-            contributors: [{ name: 'Editor' }, { name: 'Reviewer' }],
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              authors: [{ name: 'Main Author' }],
+              contributors: [{ name: 'Editor' }, { name: 'Reviewer' }],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1860,12 +1902,14 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            authors: [{ email: 'author@example.com' }],
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              authors: [{ email: 'author@example.com' }],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1892,12 +1936,14 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            authors: [{ uri: 'https://author.example.com' }],
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              authors: [{ uri: 'https://author.example.com' }],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1925,15 +1971,19 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            contributors: [{
-              email: 'jane@example.com',
-              uri: 'https://jane.example.com',
-            }],
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              contributors: [
+                {
+                  email: 'jane@example.com',
+                  uri: 'https://jane.example.com',
+                },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1972,8 +2022,12 @@ describe('parse', () => {
         expect(result.entries?.[0]?.yt?.videoId).toBe('dQw4w9WgXcQ')
         expect(result.entries?.[0]?.yt?.channelId).toBe('UCxxxxxxxx')
         expect(result.entries?.[0]?.media?.groups?.[0]?.title?.value).toBe('Video Title')
-        expect(result.entries?.[0]?.media?.groups?.[0]?.description?.value).toBe('Video description')
-        expect(result.entries?.[0]?.media?.groups?.[0]?.thumbnails?.[0]?.url).toBe('https://img.youtube.com/thumb.jpg')
+        expect(result.entries?.[0]?.media?.groups?.[0]?.description?.value).toBe(
+          'Video description',
+        )
+        expect(result.entries?.[0]?.media?.groups?.[0]?.thumbnails?.[0]?.url).toBe(
+          'https://img.youtube.com/thumb.jpg',
+        )
       })
 
       it('RW-NS05: should parse feed with media:content on entry', () => {
@@ -1997,7 +2051,9 @@ describe('parse', () => {
 
         expect(result.entries?.[0]?.media?.contents?.[0]?.url).toBe('https://example.com/image.jpg')
         expect(result.entries?.[0]?.media?.contents?.[0]?.type).toBe('image/jpeg')
-        expect(result.entries?.[0]?.media?.thumbnails?.[0]?.url).toBe('https://example.com/thumb.jpg')
+        expect(result.entries?.[0]?.media?.thumbnails?.[0]?.url).toBe(
+          'https://example.com/thumb.jpg',
+        )
       })
 
       it('RW-NS01: should handle non-standard prefix for known namespace URI', () => {
@@ -2020,15 +2076,17 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            dc: {
-              creators: ['Author Name'],
-              creator: 'Author Name',
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              dc: {
+                creators: ['Author Name'],
+                creator: 'Author Name',
+              },
             },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2081,12 +2139,14 @@ describe('parse', () => {
           title: 'Atom 0.3 Feed',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            content: '<p>Hello <b>world</b></p>',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              content: '<p>Hello <b>world</b></p>',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2112,11 +2172,13 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            content: 'Content without title',
-          }],
+          entries: [
+            {
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              content: 'Content without title',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2159,11 +2221,13 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2188,11 +2252,13 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            content: 'Has content but empty title',
-          }],
+          entries: [
+            {
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              content: 'Has content but empty title',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2226,11 +2292,13 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            published: '2024-01-15T10:30:00Z',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              published: '2024-01-15T10:30:00Z',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2253,10 +2321,12 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            content: 'Some content here',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              content: 'Some content here',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2283,12 +2353,14 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-06-15T14:30:00+02:00',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            published: '2024-06-15T12:00:00Z',
-            updated: '2024-06-15T14:30:00+02:00',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              published: '2024-06-15T12:00:00Z',
+              updated: '2024-06-15T14:30:00+02:00',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2313,12 +2385,14 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            published: '2024-01-01T00:00:00Z',
-            updated: '2024-06-15T12:00:00Z',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              published: '2024-01-01T00:00:00Z',
+              updated: '2024-06-15T12:00:00Z',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2381,11 +2455,13 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Tom & Jerry',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-          }],
+          entries: [
+            {
+              title: 'Tom & Jerry',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2410,12 +2486,14 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            content: 'Hello\u00A0World',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              content: 'Hello\u00A0World',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2472,11 +2550,13 @@ describe('parse', () => {
           title: 'Test Feed',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post Title',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-          }],
+          entries: [
+            {
+              title: 'Post Title',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2500,11 +2580,13 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-15T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2531,12 +2613,15 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            content: '<div><img src="test.jpg" /><p>Text with <a href="http://example.com">link</a> and <br/> break</p></div>',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              content:
+                '<div><img src="test.jpg" /><p>Text with <a href="http://example.com">link</a> and <br/> break</p></div>',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2561,12 +2646,14 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            summary: '<p>Escaped paragraph</p>',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              summary: '<p>Escaped paragraph</p>',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2591,10 +2678,12 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-          }],
+          entries: [
+            {
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2644,15 +2733,17 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            categories: [
-              { term: 'tech', scheme: 'https://example.com/categories', label: 'Technology' },
-              { term: 'programming' },
-            ],
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              categories: [
+                { term: 'tech', scheme: 'https://example.com/categories', label: 'Technology' },
+                { term: 'programming' },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2681,16 +2772,18 @@ describe('parse', () => {
           title: 'Aggregator',
           id: 'urn:uuid:aggregator',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Reposted Article',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            source: {
-              title: 'Original Blog',
-              id: 'urn:uuid:original',
-              links: [{ href: 'https://original.example.com', rel: 'alternate' }],
+          entries: [
+            {
+              title: 'Reposted Article',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              source: {
+                title: 'Original Blog',
+                id: 'urn:uuid:original',
+                links: [{ href: 'https://original.example.com', rel: 'alternate' }],
+              },
             },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2718,15 +2811,17 @@ describe('parse', () => {
           title: 'Aggregator',
           id: 'urn:uuid:aggregator',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Article Title',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            source: {
-              title: 'Blog Name',
-              id: 'urn:uuid:blog',
+          entries: [
+            {
+              title: 'Article Title',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              source: {
+                title: 'Blog Name',
+                id: 'urn:uuid:blog',
+              },
             },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2750,11 +2845,13 @@ describe('parse', () => {
           title: 'English Feed',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2781,12 +2878,14 @@ describe('parse', () => {
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
           links: [{ href: 'https://example.com/' }],
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            links: [{ href: 'https://example.com/post/1' }],
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              links: [{ href: 'https://example.com/post/1' }],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2830,11 +2929,13 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'CSS, &lt;pre&gt;, and more',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-          }],
+          entries: [
+            {
+              title: 'CSS, &lt;pre&gt;, and more',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2859,12 +2960,14 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            content: '<p>Hello <strong>world</strong></p>',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              content: '<p>Hello <strong>world</strong></p>',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2890,13 +2993,15 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            content: 'Full article content here',
-            summary: 'Brief summary',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              content: 'Full article content here',
+              summary: 'Brief summary',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2921,12 +3026,14 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            links: [{ href: 'https://example.com/search?q=test&sort=new', rel: 'alternate' }],
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              links: [{ href: 'https://example.com/search?q=test&sort=new', rel: 'alternate' }],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2951,12 +3058,14 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            links: [{ rel: 'alternate', type: 'text/html' }],
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              links: [{ rel: 'alternate', type: 'text/html' }],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2982,15 +3091,17 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            links: [
-              { href: 'https://example.com/feed/1', rel: 'self' },
-              { href: 'https://example.com/post/1', rel: 'alternate', type: 'text/html' },
-            ],
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              links: [
+                { href: 'https://example.com/feed/1', rel: 'self' },
+                { href: 'https://example.com/post/1', rel: 'alternate', type: 'text/html' },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -3034,11 +3145,13 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -3074,12 +3187,15 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            content: '<div xmlns="http://www.w3.org/1999/xhtml"><details><summary>Click to expand</summary><p>Details here</p></details></div>',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              content:
+                '<div xmlns="http://www.w3.org/1999/xhtml"><details><summary>Click to expand</summary><p>Details here</p></details></div>',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -3104,12 +3220,14 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-01T00:00:00Z',
-            content: '<math xmlns="http://www.w3.org/1998/Math/MathML"><mi>x</mi></math>',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-01T00:00:00Z',
+              content: '<math xmlns="http://www.w3.org/1998/Math/MathML"><mi>x</mi></math>',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -3144,11 +3262,13 @@ describe('parse', () => {
           title: 'Test',
           id: 'urn:uuid:test',
           updated: '2024-01-01T00:00:00Z',
-          entries: [{
-            title: 'Post',
-            id: 'urn:uuid:1',
-            updated: '2024-01-15T10:30:00Z',
-          }],
+          entries: [
+            {
+              title: 'Post',
+              id: 'urn:uuid:1',
+              updated: '2024-01-15T10:30:00Z',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)

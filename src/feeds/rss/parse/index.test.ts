@@ -870,7 +870,7 @@ describe('parse', () => {
     })
   })
 
-  // Catalogue: plans/real_world_test_suite.md
+  // Edge cases and quirks observed in feeds found in the wild.
   describe('real world feeds', () => {
     it('RW-C01: should preserve HTML entities inside CDATA in content:encoded', () => {
       const value = `
@@ -1172,9 +1172,11 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Jahresr&uuml;ckblick 2017',
-          }],
+          items: [
+            {
+              title: 'Jahresr&uuml;ckblick 2017',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1201,10 +1203,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            description: '<p>Actual content here</p>',
-          }],
+          items: [
+            {
+              title: 'Post',
+              description: '<p>Actual content here</p>',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1229,10 +1233,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            content: { encoded: 'Use &amp; for ampersands' },
-          }],
+          items: [
+            {
+              title: 'Post',
+              content: { encoded: 'Use &amp; for ampersands' },
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1259,10 +1265,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            description: '<![CDATA[Some escaped CDATA content]]>',
-          }],
+          items: [
+            {
+              title: 'Post',
+              description: '<![CDATA[Some escaped CDATA content]]>',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1290,11 +1298,13 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            description: 'Short summary',
-            content: { encoded: '<p>Full HTML content</p>' },
-          }],
+          items: [
+            {
+              title: 'Post',
+              description: 'Short summary',
+              content: { encoded: '<p>Full HTML content</p>' },
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1357,10 +1367,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            description: '<p>HTML content</p>',
-          }],
+          items: [
+            {
+              title: 'Post',
+              description: '<p>HTML content</p>',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1387,10 +1399,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            link: '/blog/post-1',
-          }],
+          items: [
+            {
+              title: 'Post',
+              link: '/blog/post-1',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1415,10 +1429,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            link: 'https://example.com/search?q=hello&lang=en',
-          }],
+          items: [
+            {
+              title: 'Post',
+              link: 'https://example.com/search?q=hello&lang=en',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1441,7 +1457,9 @@ describe('parse', () => {
           link: 'https://example.com',
           description: 'Test',
           atom: {
-            links: [{ href: 'https://example.com/feed.xml', rel: 'self', type: 'application/rss+xml' }],
+            links: [
+              { href: 'https://example.com/feed.xml', rel: 'self', type: 'application/rss+xml' },
+            ],
           },
         }
 
@@ -1472,10 +1490,12 @@ describe('parse', () => {
           atom: {
             links: [{ href: 'https://example.com/rss', rel: 'self', type: 'application/rss+xml' }],
           },
-          items: [{
-            title: 'Post',
-            link: 'https://example.com/post/1',
-          }],
+          items: [
+            {
+              title: 'Post',
+              link: 'https://example.com/post/1',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1503,13 +1523,15 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Episode 1',
-            enclosures: [
-              { url: 'https://example.com/audio.mp3', type: 'audio/mpeg', length: 12345 },
-              { url: 'https://example.com/audio.ogg', type: 'audio/ogg', length: 23456 },
-            ],
-          }],
+          items: [
+            {
+              title: 'Episode 1',
+              enclosures: [
+                { url: 'https://example.com/audio.mp3', type: 'audio/mpeg', length: 12345 },
+                { url: 'https://example.com/audio.ogg', type: 'audio/ogg', length: 23456 },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1536,14 +1558,16 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            categories: [
-              { name: 'Technology' },
-              { name: 'JavaScript', domain: 'https://example.com/tags' },
-              { name: 'TypeScript', domain: 'https://example.com/tags' },
-            ],
-          }],
+          items: [
+            {
+              title: 'Post',
+              categories: [
+                { name: 'Technology' },
+                { name: 'JavaScript', domain: 'https://example.com/tags' },
+                { name: 'TypeScript', domain: 'https://example.com/tags' },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1569,10 +1593,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            authors: ['alice@example.com (Alice)', 'bob@example.com (Bob)'],
-          }],
+          items: [
+            {
+              title: 'Post',
+              authors: ['alice@example.com (Alice)', 'bob@example.com (Bob)'],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1745,10 +1771,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            guid: { value: 'unique-id-123', isPermaLink: false },
-          }],
+          items: [
+            {
+              title: 'Post',
+              guid: { value: 'unique-id-123', isPermaLink: false },
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1773,10 +1801,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            guid: { value: 'unique-id-456', isPermaLink: false },
-          }],
+          items: [
+            {
+              title: 'Post',
+              guid: { value: 'unique-id-456', isPermaLink: false },
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1801,10 +1831,14 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Episode',
-            enclosures: [{ url: 'https://example.com/ep.mp3', length: 12345678, type: 'audio/mpeg' }],
-          }],
+          items: [
+            {
+              title: 'Episode',
+              enclosures: [
+                { url: 'https://example.com/ep.mp3', length: 12345678, type: 'audio/mpeg' },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1831,13 +1865,15 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            dc: {
-              creators: ['John Doe'],
-              creator: 'John Doe',
+          items: [
+            {
+              title: 'Post',
+              dc: {
+                creators: ['John Doe'],
+                creator: 'John Doe',
+              },
             },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1869,13 +1905,15 @@ describe('parse', () => {
           atom: {
             links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
           },
-          items: [{
-            title: 'Post',
-            dc: {
-              creators: ['Jane'],
-              creator: 'Jane',
+          items: [
+            {
+              title: 'Post',
+              dc: {
+                creators: ['Jane'],
+                creator: 'Jane',
+              },
             },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1900,13 +1938,15 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            dc: {
-              creators: ['Author'],
-              creator: 'Author',
+          items: [
+            {
+              title: 'Post',
+              dc: {
+                creators: ['Author'],
+                creator: 'Author',
+              },
             },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1931,13 +1971,15 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            dc: {
-              creators: ['Inline Author'],
-              creator: 'Inline Author',
+          items: [
+            {
+              title: 'Post',
+              dc: {
+                creators: ['Inline Author'],
+                creator: 'Inline Author',
+              },
             },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1993,10 +2035,12 @@ describe('parse', () => {
           title: 'Aggregator',
           link: 'https://example.com',
           description: 'Aggregated feed',
-          items: [{
-            title: 'Cross-posted Article',
-            source: { title: 'Original Blog', url: 'https://original.com/feed.xml' },
-          }],
+          items: [
+            {
+              title: 'Cross-posted Article',
+              source: { title: 'Original Blog', url: 'https://original.com/feed.xml' },
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2021,10 +2065,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            comments: 'https://example.com/post/1#comments',
-          }],
+          items: [
+            {
+              title: 'Post',
+              comments: 'https://example.com/post/1#comments',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2049,10 +2095,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            authors: ['john@example.com (John Doe)'],
-          }],
+          items: [
+            {
+              title: 'Post',
+              authors: ['john@example.com (John Doe)'],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2118,10 +2166,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            description: 'Fish & Chips are great',
-          }],
+          items: [
+            {
+              title: 'Post',
+              description: 'Fish & Chips are great',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2325,10 +2375,12 @@ describe('parse', () => {
           title: 'Feed',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Outside Item',
-            link: 'https://example.com/outside',
-          }],
+          items: [
+            {
+              title: 'Outside Item',
+              link: 'https://example.com/outside',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2353,13 +2405,17 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            enclosures: [{
-              url: 'https://example.com/file.mp3',
-              type: 'audio/mpeg',
-            }],
-          }],
+          items: [
+            {
+              title: 'Post',
+              enclosures: [
+                {
+                  url: 'https://example.com/file.mp3',
+                  type: 'audio/mpeg',
+                },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2410,12 +2466,14 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Code Example',
-            content: {
-              encoded: '<pre>for (i = 0; i < 10; i++) { console.log(i); }</pre>',
+          items: [
+            {
+              title: 'Code Example',
+              content: {
+                encoded: '<pre>for (i = 0; i < 10; i++) { console.log(i); }</pre>',
+              },
             },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2440,10 +2498,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            description: 'Click <a href="https://example.com">here</a> for more',
-          }],
+          items: [
+            {
+              title: 'Post',
+              description: 'Click <a href="https://example.com">here</a> for more',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2470,10 +2530,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Episode',
-            enclosures: [{ type: 'audio/mpeg', length: 5000000 }],
-          }],
+          items: [
+            {
+              title: 'Episode',
+              enclosures: [{ type: 'audio/mpeg', length: 5000000 }],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2522,9 +2584,11 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            guid: { value: 'unique-12345', isPermaLink: false },
-          }],
+          items: [
+            {
+              guid: { value: 'unique-12345', isPermaLink: false },
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2549,10 +2613,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            pubDate: 'sometime in January',
-          }],
+          items: [
+            {
+              title: 'Post',
+              pubDate: 'sometime in January',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2623,10 +2689,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            pubDate: 'Mon, 01 Jan 2024 00:00:00 GMT',
-          }],
+          items: [
+            {
+              title: 'Post',
+              pubDate: 'Mon, 01 Jan 2024 00:00:00 GMT',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2652,10 +2720,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            description: 'Fallback content',
-          }],
+          items: [
+            {
+              title: 'Post',
+              description: 'Fallback content',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2680,10 +2750,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            guid: { value: 'https://example.com/post/1', isPermaLink: true },
-          }],
+          items: [
+            {
+              title: 'Post',
+              guid: { value: 'https://example.com/post/1', isPermaLink: true },
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2708,14 +2780,18 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Episode',
-            enclosures: [{
-              url: 'https://example.com/audio.mp3',
-              type: 'mp3',
-              length: 12345,
-            }],
-          }],
+          items: [
+            {
+              title: 'Episode',
+              enclosures: [
+                {
+                  url: 'https://example.com/audio.mp3',
+                  type: 'mp3',
+                  length: 12345,
+                },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2740,13 +2816,15 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            dc: {
-              dates: ['2025-02-21T16:00:00Z'],
-              date: '2025-02-21T16:00:00Z',
+          items: [
+            {
+              title: 'Post',
+              dc: {
+                dates: ['2025-02-21T16:00:00Z'],
+                date: '2025-02-21T16:00:00Z',
+              },
             },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2773,17 +2851,21 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            media: {
-              contents: [{
-                url: 'https://example.com/image.png',
-                type: 'image/png',
-                medium: 'image',
-                ratings: [{ value: 'nonadult', scheme: 'urn:simple' }],
-              }],
+          items: [
+            {
+              title: 'Post',
+              media: {
+                contents: [
+                  {
+                    url: 'https://example.com/image.png',
+                    type: 'image/png',
+                    medium: 'image',
+                    ratings: [{ value: 'nonadult', scheme: 'urn:simple' }],
+                  },
+                ],
+              },
             },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2809,20 +2891,26 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            media: {
-              contents: [{
-                url: 'https://example.com/full.jpg',
-                type: 'image/jpeg',
-              }],
-              thumbnails: [{
-                url: 'https://example.com/thumb.jpg',
-                width: 120,
-                height: 90,
-              }],
+          items: [
+            {
+              title: 'Post',
+              media: {
+                contents: [
+                  {
+                    url: 'https://example.com/full.jpg',
+                    type: 'image/jpeg',
+                  },
+                ],
+                thumbnails: [
+                  {
+                    url: 'https://example.com/thumb.jpg',
+                    width: 120,
+                    height: 90,
+                  },
+                ],
+              },
             },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2867,13 +2955,15 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            dc: {
-              creators: ['John Doe'],
-              creator: 'John Doe',
+          items: [
+            {
+              title: 'Post',
+              dc: {
+                creators: ['John Doe'],
+                creator: 'John Doe',
+              },
             },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2896,11 +2986,13 @@ describe('parse', () => {
           link: 'https://example.com',
           description: 'Test',
           atom: {
-            links: [{
-              href: 'https://example.com/feed.xml',
-              rel: 'self',
-              type: 'application/rss+xml',
-            }],
+            links: [
+              {
+                href: 'https://example.com/feed.xml',
+                rel: 'self',
+                type: 'application/rss+xml',
+              },
+            ],
           },
         }
 
@@ -2926,10 +3018,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            description: "It doesn't work",
-          }],
+          items: [
+            {
+              title: 'Post',
+              description: "It doesn't work",
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -3026,10 +3120,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            pubDate: '<time datetime="2019-05-12">Sun, 05/12/2019</time>',
-          }],
+          items: [
+            {
+              title: 'Post',
+              pubDate: '<time datetime="2019-05-12">Sun, 05/12/2019</time>',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -3125,14 +3221,16 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            authors: ['Regular Author'],
-            dc: {
-              creators: ['DC Author'],
-              creator: 'DC Author',
+          items: [
+            {
+              title: 'Post',
+              authors: ['Regular Author'],
+              dc: {
+                creators: ['DC Author'],
+                creator: 'DC Author',
+              },
             },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -3158,13 +3256,15 @@ describe('parse', () => {
           title: 'Test',
           link: 'https://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            dc: {
-              creators: ['Alice', 'Bob'],
-              creator: 'Alice',
+          items: [
+            {
+              title: 'Post',
+              dc: {
+                creators: ['Alice', 'Bob'],
+                creator: 'Alice',
+              },
             },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)

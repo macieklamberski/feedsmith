@@ -1541,7 +1541,7 @@ describe('parse', () => {
     })
   })
 
-  // Catalogue: plans/real_world_test_suite.md
+  // Edge cases and quirks observed in feeds found in the wild.
   describe('real world feeds', () => {
     describe('character encoding', () => {
       it('RW-E01: should decode HTML numeric character references', () => {
@@ -1582,10 +1582,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'http://example.com',
           description: 'Test',
-          items: [{
-            title: 'News \u2013 Update',
-            rdf: { about: 'http://example.com/1' },
-          }],
+          items: [
+            {
+              title: 'News \u2013 Update',
+              rdf: { about: 'http://example.com/1' },
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1612,11 +1614,13 @@ describe('parse', () => {
           title: 'Test',
           link: 'http://example.com',
           description: 'Test',
-          items: [{
-            title: 'Item',
-            description: '<p>HTML with <strong>bold</strong></p>',
-            rdf: { about: 'http://example.com/1' },
-          }],
+          items: [
+            {
+              title: 'Item',
+              description: '<p>HTML with <strong>bold</strong></p>',
+              rdf: { about: 'http://example.com/1' },
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1666,16 +1670,18 @@ describe('parse', () => {
           title: 'Test',
           link: 'http://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            dc: {
-              creators: ['Author'],
-              creator: 'Author',
-              dates: ['2024-01-15'],
-              date: '2024-01-15',
+          items: [
+            {
+              title: 'Post',
+              dc: {
+                creators: ['Author'],
+                creator: 'Author',
+                dates: ['2024-01-15'],
+                date: '2024-01-15',
+              },
+              rdf: { about: 'http://example.com/1' },
             },
-            rdf: { about: 'http://example.com/1' },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1702,11 +1708,13 @@ describe('parse', () => {
           title: 'Test',
           link: 'http://example.com',
           description: 'Test',
-          items: [{
-            title: 'Title Only',
-            link: 'http://example.com/1',
-            rdf: { about: 'http://example.com/1' },
-          }],
+          items: [
+            {
+              title: 'Title Only',
+              link: 'http://example.com/1',
+              rdf: { about: 'http://example.com/1' },
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1776,14 +1784,16 @@ describe('parse', () => {
           title: 'Test',
           link: 'http://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            dc: {
-              subjects: ['Technology', 'Science', 'Open Source'],
-              subject: 'Technology',
+          items: [
+            {
+              title: 'Post',
+              dc: {
+                subjects: ['Technology', 'Science', 'Open Source'],
+                subject: 'Technology',
+              },
+              rdf: { about: 'http://example.com/1' },
             },
-            rdf: { about: 'http://example.com/1' },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1812,13 +1822,16 @@ describe('parse', () => {
           title: 'Test',
           link: 'http://example.com',
           description: 'Test',
-          items: [{
-            title: 'Post',
-            content: {
-              encoded: '<div class="post"><h1>Title</h1><p>Text with <a href="https://example.com">link</a></p></div>',
+          items: [
+            {
+              title: 'Post',
+              content: {
+                encoded:
+                  '<div class="post"><h1>Title</h1><p>Text with <a href="https://example.com">link</a></p></div>',
+              },
+              rdf: { about: 'http://example.com/1' },
             },
-            rdf: { about: 'http://example.com/1' },
-          }],
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1863,10 +1876,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'http://example.com',
           description: 'Test',
-          items: [{
-            title: 'Hello\u00A0World',
-            rdf: { about: 'http://example.com/1' },
-          }],
+          items: [
+            {
+              title: 'Hello\u00A0World',
+              rdf: { about: 'http://example.com/1' },
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1906,10 +1921,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'http://example.com',
           description: 'Test',
-          items: [{
-            title: 'Tom &amp; Jerry',
-            rdf: { about: 'http://example.com/1' },
-          }],
+          items: [
+            {
+              title: 'Tom &amp; Jerry',
+              rdf: { about: 'http://example.com/1' },
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -1965,9 +1982,21 @@ describe('parse', () => {
           link: 'http://example.com',
           description: 'Test',
           items: [
-            { title: 'First', link: 'http://example.com/1', rdf: { about: 'http://example.com/1' } },
-            { title: 'Second', link: 'http://example.com/2', rdf: { about: 'http://example.com/2' } },
-            { title: 'Third', link: 'http://example.com/3', rdf: { about: 'http://example.com/3' } },
+            {
+              title: 'First',
+              link: 'http://example.com/1',
+              rdf: { about: 'http://example.com/1' },
+            },
+            {
+              title: 'Second',
+              link: 'http://example.com/2',
+              rdf: { about: 'http://example.com/2' },
+            },
+            {
+              title: 'Third',
+              link: 'http://example.com/3',
+              rdf: { about: 'http://example.com/3' },
+            },
           ],
         }
 
@@ -1994,11 +2023,13 @@ describe('parse', () => {
           title: 'Prefixed Feed',
           link: 'http://example.com',
           description: 'A feed using prefixed RSS elements',
-          items: [{
-            title: 'Prefixed Item',
-            link: 'http://example.com/1',
-            rdf: { about: 'http://example.com/1' },
-          }],
+          items: [
+            {
+              title: 'Prefixed Item',
+              link: 'http://example.com/1',
+              rdf: { about: 'http://example.com/1' },
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -2023,10 +2054,12 @@ describe('parse', () => {
           title: 'Test',
           link: 'http://example.com',
           description: 'Test',
-          items: [{
-            title: 'No About',
-            link: 'http://example.com/1',
-          }],
+          items: [
+            {
+              title: 'No About',
+              link: 'http://example.com/1',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)

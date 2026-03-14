@@ -330,7 +330,7 @@ describe('parse', () => {
     })
   })
 
-  // Catalogue: plans/real_world_test_suite.md
+  // Edge cases and quirks observed in feeds found in the wild.
   describe('real world feeds', () => {
     describe('author handling', () => {
       it('RW-J01: should handle v1 singular author object', () => {
@@ -370,27 +370,35 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-            authors: [{
-              name: 'Alice',
-              url: 'https://alice.example.com',
-              avatar: 'https://alice.example.com/avatar.jpg',
-            }],
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+              authors: [
+                {
+                  name: 'Alice',
+                  url: 'https://alice.example.com',
+                  avatar: 'https://alice.example.com/avatar.jpg',
+                },
+              ],
+            },
+          ],
         }
         const expected = {
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-            authors: [{
-              name: 'Alice',
-              url: 'https://alice.example.com',
-              avatar: 'https://alice.example.com/avatar.jpg',
-            }],
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+              authors: [
+                {
+                  name: 'Alice',
+                  url: 'https://alice.example.com',
+                  avatar: 'https://alice.example.com/avatar.jpg',
+                },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -402,17 +410,21 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_html: '<p>Hello <strong>world</strong></p>',
-          }],
+          items: [
+            {
+              id: '1',
+              content_html: '<p>Hello <strong>world</strong></p>',
+            },
+          ],
         }
         const expected = {
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_html: '<p>Hello <strong>world</strong></p>',
-          }],
+          items: [
+            {
+              id: '1',
+              content_html: '<p>Hello <strong>world</strong></p>',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -422,19 +434,23 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_text: 'Hello world',
-            content_html: '<p>Hello world</p>',
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello world',
+              content_html: '<p>Hello world</p>',
+            },
+          ],
         }
         const expected = {
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_text: 'Hello world',
-            content_html: '<p>Hello world</p>',
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello world',
+              content_html: '<p>Hello world</p>',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -444,17 +460,21 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_text: 'Plain text content',
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Plain text content',
+            },
+          ],
         }
         const expected = {
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_text: 'Plain text content',
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Plain text content',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -466,31 +486,39 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Podcast',
-          items: [{
-            id: '1',
-            content_text: 'Episode notes',
-            attachments: [{
-              url: 'https://example.com/episode.mp3',
-              mime_type: 'audio/mpeg',
-              title: 'Episode 1',
-              size_in_bytes: 12345678,
-              duration_in_seconds: 3600,
-            }],
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Episode notes',
+              attachments: [
+                {
+                  url: 'https://example.com/episode.mp3',
+                  mime_type: 'audio/mpeg',
+                  title: 'Episode 1',
+                  size_in_bytes: 12345678,
+                  duration_in_seconds: 3600,
+                },
+              ],
+            },
+          ],
         }
         const expected = {
           title: 'Podcast',
-          items: [{
-            id: '1',
-            content_text: 'Episode notes',
-            attachments: [{
-              url: 'https://example.com/episode.mp3',
-              mime_type: 'audio/mpeg',
-              title: 'Episode 1',
-              size_in_bytes: 12345678,
-              duration_in_seconds: 3600,
-            }],
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Episode notes',
+              attachments: [
+                {
+                  url: 'https://example.com/episode.mp3',
+                  mime_type: 'audio/mpeg',
+                  title: 'Episode 1',
+                  size_in_bytes: 12345678,
+                  duration_in_seconds: 3600,
+                },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -500,25 +528,29 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Podcast',
-          items: [{
-            id: '1',
-            content_text: 'Episode',
-            attachments: [
-              { url: 'https://example.com/ep.mp3', mime_type: 'audio/mpeg' },
-              { url: 'https://example.com/ep.ogg', mime_type: 'audio/ogg' },
-            ],
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Episode',
+              attachments: [
+                { url: 'https://example.com/ep.mp3', mime_type: 'audio/mpeg' },
+                { url: 'https://example.com/ep.ogg', mime_type: 'audio/ogg' },
+              ],
+            },
+          ],
         }
         const expected = {
           title: 'Podcast',
-          items: [{
-            id: '1',
-            content_text: 'Episode',
-            attachments: [
-              { url: 'https://example.com/ep.mp3', mime_type: 'audio/mpeg' },
-              { url: 'https://example.com/ep.ogg', mime_type: 'audio/ogg' },
-            ],
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Episode',
+              attachments: [
+                { url: 'https://example.com/ep.mp3', mime_type: 'audio/mpeg' },
+                { url: 'https://example.com/ep.ogg', mime_type: 'audio/ogg' },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -530,19 +562,23 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-            tags: ['javascript', 'typescript', 'nodejs'],
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+              tags: ['javascript', 'typescript', 'nodejs'],
+            },
+          ],
         }
         const expected = {
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-            tags: ['javascript', 'typescript', 'nodejs'],
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+              tags: ['javascript', 'typescript', 'nodejs'],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -555,18 +591,22 @@ describe('parse', () => {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Blog',
           custom_extension: { foo: 'bar' },
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-            _custom: 'value',
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+              _custom: 'value',
+            },
+          ],
         }
         const expected = {
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -577,19 +617,23 @@ describe('parse', () => {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Blog',
           description: null,
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-            title: null,
-            summary: null,
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+              title: null,
+              summary: null,
+            },
+          ],
         }
         const expected = {
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -600,18 +644,22 @@ describe('parse', () => {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Blog',
           description: '',
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-            title: '',
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+              title: '',
+            },
+          ],
         }
         const expected = {
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -621,17 +669,21 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Blog',
-          items: [{
-            id: 42,
-            content_text: 'Hello',
-          }],
+          items: [
+            {
+              id: 42,
+              content_text: 'Hello',
+            },
+          ],
         }
         const expected = {
           title: 'Blog',
-          items: [{
-            id: '42',
-            content_text: 'Hello',
-          }],
+          items: [
+            {
+              id: '42',
+              content_text: 'Hello',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -689,16 +741,20 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Blog',
-          items: [{
-            id: true,
-            content_text: 'Hello',
-          }],
+          items: [
+            {
+              id: true,
+              content_text: 'Hello',
+            },
+          ],
         }
         const expected = {
           title: 'Blog',
-          items: [{
-            content_text: 'Hello',
-          }],
+          items: [
+            {
+              content_text: 'Hello',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -708,17 +764,21 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Blog',
-          items: [{
-            id: 0,
-            content_text: 'Hello',
-          }],
+          items: [
+            {
+              id: 0,
+              content_text: 'Hello',
+            },
+          ],
         }
         const expected = {
           title: 'Blog',
-          items: [{
-            id: '0',
-            content_text: 'Hello',
-          }],
+          items: [
+            {
+              id: '0',
+              content_text: 'Hello',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -747,18 +807,22 @@ describe('parse', () => {
           version: 'https://jsonfeed.org/version/1.1',
           Title: 'Blog',
           DESCRIPTION: 'A test blog',
-          items: [{
-            ID: '1',
-            Content_Text: 'Hello',
-          }],
+          items: [
+            {
+              ID: '1',
+              Content_Text: 'Hello',
+            },
+          ],
         }
         const expected = {
           title: 'Blog',
           description: 'A test blog',
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -828,19 +892,23 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Podcast',
-          items: [{
-            id: '1',
-            content_text: 'Episode',
-            attachments: [{ url: 'https://example.com/file.mp3' }],
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Episode',
+              attachments: [{ url: 'https://example.com/file.mp3' }],
+            },
+          ],
         }
         const expected = {
           title: 'Podcast',
-          items: [{
-            id: '1',
-            content_text: 'Episode',
-            attachments: [{ url: 'https://example.com/file.mp3' }],
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Episode',
+              attachments: [{ url: 'https://example.com/file.mp3' }],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -850,21 +918,25 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-            date_published: '2024-01-15T12:00:00Z',
-            date_modified: '2024-01-16T14:30:00+02:00',
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+              date_published: '2024-01-15T12:00:00Z',
+              date_modified: '2024-01-16T14:30:00+02:00',
+            },
+          ],
         }
         const expected = {
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-            date_published: '2024-01-15T12:00:00Z',
-            date_modified: '2024-01-16T14:30:00+02:00',
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+              date_published: '2024-01-15T12:00:00Z',
+              date_modified: '2024-01-16T14:30:00+02:00',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -887,19 +959,23 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-            tags: ['javascript', '', 'typescript', '   '],
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+              tags: ['javascript', '', 'typescript', '   '],
+            },
+          ],
         }
         const expected = {
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-            tags: ['javascript', 'typescript'],
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+              tags: ['javascript', 'typescript'],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -909,19 +985,23 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Test Blog',
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-            authors: { name: 'John Doe' },
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+              authors: { name: 'John Doe' },
+            },
+          ],
         }
         const expected = {
           title: 'Test Blog',
-          items: [{
-            id: '1',
-            content_text: 'Hello',
-            authors: [{ name: 'John Doe' }],
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Hello',
+              authors: [{ name: 'John Doe' }],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -939,11 +1019,13 @@ describe('parse', () => {
         }
         const expected = {
           title: 'Blog',
-          items: [{
-            id: '1',
-            content_text: 'Solo post',
-            url: 'https://example.com/post/1',
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Solo post',
+              url: 'https://example.com/post/1',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -953,18 +1035,22 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Test',
-          items: [{
-            id: '1',
-            content_text: 'Post',
-            authors: [{ name: '', url: '', avatar: '' }],
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Post',
+              authors: [{ name: '', url: '', avatar: '' }],
+            },
+          ],
         }
         const expected = {
           title: 'Test',
-          items: [{
-            id: '1',
-            content_text: 'Post',
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Post',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -974,17 +1060,21 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Test',
-          items: [{
-            id: '1',
-            summary: 'This is a summary',
-          }],
+          items: [
+            {
+              id: '1',
+              summary: 'This is a summary',
+            },
+          ],
         }
         const expected = {
           title: 'Test',
-          items: [{
-            id: '1',
-            summary: 'This is a summary',
-          }],
+          items: [
+            {
+              id: '1',
+              summary: 'This is a summary',
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
@@ -994,29 +1084,37 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Test',
-          items: [{
-            id: '1',
-            content_text: 'Episode',
-            attachments: [{
-              url: 'https://example.com/episode.mp3',
-              mime_type: 'audio/mpeg',
-              size_in_bytes: '12345678',
-              duration_in_seconds: '3661',
-            }],
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Episode',
+              attachments: [
+                {
+                  url: 'https://example.com/episode.mp3',
+                  mime_type: 'audio/mpeg',
+                  size_in_bytes: '12345678',
+                  duration_in_seconds: '3661',
+                },
+              ],
+            },
+          ],
         }
         const expected = {
           title: 'Test',
-          items: [{
-            id: '1',
-            content_text: 'Episode',
-            attachments: [{
-              url: 'https://example.com/episode.mp3',
-              mime_type: 'audio/mpeg',
-              size_in_bytes: 12345678,
-              duration_in_seconds: 3661,
-            }],
-          }],
+          items: [
+            {
+              id: '1',
+              content_text: 'Episode',
+              attachments: [
+                {
+                  url: 'https://example.com/episode.mp3',
+                  mime_type: 'audio/mpeg',
+                  size_in_bytes: 12345678,
+                  duration_in_seconds: 3661,
+                },
+              ],
+            },
+          ],
         }
 
         expect(parse(value)).toEqual(expected)
