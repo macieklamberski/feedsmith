@@ -13,6 +13,9 @@ import {
   parseSource,
   parseTextInput,
   retrieveFeed,
+  retrieveImage,
+  retrieveItems,
+  retrieveTextInput,
 } from './utils.js'
 
 describe('parsePerson', () => {
@@ -1565,6 +1568,177 @@ describe('parseFeed', () => {
   })
 })
 
+describe('retrieveImage', () => {
+  it('should retrieve image from channel', () => {
+    const value = {
+      channel: {
+        image: {
+          url: 'https://example.com/image.jpg',
+          title: 'Channel Image',
+        },
+      },
+    }
+    const expected = {
+      url: 'https://example.com/image.jpg',
+      title: 'Channel Image',
+    }
+
+    expect(retrieveImage(value)).toEqual(expected)
+  })
+
+  it('should retrieve image from root when channel has no image', () => {
+    const value = {
+      channel: {
+        title: 'Feed Title',
+      },
+      image: {
+        url: 'https://example.com/outside.jpg',
+        title: 'Outside Image',
+      },
+    }
+    const expected = {
+      url: 'https://example.com/outside.jpg',
+      title: 'Outside Image',
+    }
+
+    expect(retrieveImage(value)).toEqual(expected)
+  })
+
+  it('should prefer channel image over root image', () => {
+    const value = {
+      channel: {
+        image: {
+          url: 'https://example.com/channel.jpg',
+          title: 'Channel Image',
+        },
+      },
+      image: {
+        url: 'https://example.com/outside.jpg',
+        title: 'Outside Image',
+      },
+    }
+    const expected = {
+      url: 'https://example.com/channel.jpg',
+      title: 'Channel Image',
+    }
+
+    expect(retrieveImage(value)).toEqual(expected)
+  })
+
+  it('should return undefined when no image exists', () => {
+    expect(retrieveImage({ channel: {} })).toBeUndefined()
+    expect(retrieveImage({})).toBeUndefined()
+    expect(retrieveImage(undefined)).toBeUndefined()
+  })
+})
+
+describe('retrieveTextInput', () => {
+  it('should retrieve textInput from channel', () => {
+    const value = {
+      channel: {
+        textinput: {
+          title: 'Search',
+          name: 'q',
+        },
+      },
+    }
+    const expected = {
+      title: 'Search',
+      name: 'q',
+    }
+
+    expect(retrieveTextInput(value)).toEqual(expected)
+  })
+
+  it('should retrieve textInput from root when channel has no textInput', () => {
+    const value = {
+      channel: {
+        title: 'Feed Title',
+      },
+      textinput: {
+        title: 'Outside Search',
+        name: 'query',
+      },
+    }
+    const expected = {
+      title: 'Outside Search',
+      name: 'query',
+    }
+
+    expect(retrieveTextInput(value)).toEqual(expected)
+  })
+
+  it('should prefer channel textInput over root textInput', () => {
+    const value = {
+      channel: {
+        textinput: {
+          title: 'Channel Search',
+          name: 'q',
+        },
+      },
+      textinput: {
+        title: 'Outside Search',
+        name: 'query',
+      },
+    }
+    const expected = {
+      title: 'Channel Search',
+      name: 'q',
+    }
+
+    expect(retrieveTextInput(value)).toEqual(expected)
+  })
+
+  it('should return undefined when no textInput exists', () => {
+    expect(retrieveTextInput({ channel: {} })).toBeUndefined()
+    expect(retrieveTextInput({})).toBeUndefined()
+    expect(retrieveTextInput(undefined)).toBeUndefined()
+  })
+})
+
+describe('retrieveItems', () => {
+  it('should retrieve items from channel', () => {
+    const value = {
+      channel: {
+        item: [{ title: 'Item 1' }, { title: 'Item 2' }],
+      },
+    }
+    const expected = [{ title: 'Item 1' }, { title: 'Item 2' }]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should retrieve items from root when channel has no items', () => {
+    const value = {
+      channel: {
+        title: 'Feed Title',
+      },
+      item: [{ title: 'Outside Item 1' }, { title: 'Outside Item 2' }],
+    }
+    const expected = [{ title: 'Outside Item 1' }, { title: 'Outside Item 2' }]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should prefer channel items over root items', () => {
+    const value = {
+      channel: {
+        item: { title: 'Channel Item' },
+      },
+      item: { title: 'Outside Item' },
+    }
+    const expected = [{ title: 'Channel Item' }]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should return undefined when no items exist', () => {
+    expect(retrieveItems({ channel: {} })).toBeUndefined()
+    expect(retrieveItems({})).toBeUndefined()
+    expect(retrieveItems(undefined)).toBeUndefined()
+  })
+})
+
 describe('retrieveFeed', () => {
   const expectedFull = {
     title: 'Feed Title',
@@ -1614,5 +1788,156 @@ describe('retrieveFeed', () => {
     }
 
     expect(retrieveFeed(value)).toEqual(expectedFull)
+  })
+
+  describe('lenient parsing', () => {
+    it('should use items placed outside channel as fallback', () => {
+      const value = {
+        rss: {
+          channel: {
+            title: 'Feed Title',
+            link: 'https://example.com',
+          },
+          item: [{ title: 'Outside Item 1' }, { title: 'Outside Item 2' }],
+        },
+      }
+      const expected = {
+        title: 'Feed Title',
+        link: 'https://example.com',
+        items: [{ title: 'Outside Item 1' }, { title: 'Outside Item 2' }],
+      }
+
+      expect(retrieveFeed(value)).toEqual(expected)
+    })
+
+    it('should prefer channel items over outside items', () => {
+      const value = {
+        rss: {
+          channel: {
+            title: 'Feed Title',
+            link: 'https://example.com',
+            item: { title: 'Channel Item' },
+          },
+          item: { title: 'Outside Item' },
+        },
+      }
+      const expected = {
+        title: 'Feed Title',
+        link: 'https://example.com',
+        items: [{ title: 'Channel Item' }],
+      }
+
+      expect(retrieveFeed(value)).toEqual(expected)
+    })
+
+    it('should use image placed outside channel as fallback', () => {
+      const value = {
+        rss: {
+          channel: {
+            title: 'Feed Title',
+            link: 'https://example.com',
+          },
+          image: {
+            url: 'https://example.com/image.jpg',
+            title: 'Outside Image',
+          },
+        },
+      }
+      const expected = {
+        title: 'Feed Title',
+        link: 'https://example.com',
+        image: {
+          url: 'https://example.com/image.jpg',
+          title: 'Outside Image',
+        },
+      }
+
+      expect(retrieveFeed(value)).toEqual(expected)
+    })
+
+    it('should prefer channel image over outside image', () => {
+      const value = {
+        rss: {
+          channel: {
+            title: 'Feed Title',
+            link: 'https://example.com',
+            image: {
+              url: 'https://example.com/channel-image.jpg',
+              title: 'Channel Image',
+            },
+          },
+          image: {
+            url: 'https://example.com/outside-image.jpg',
+            title: 'Outside Image',
+          },
+        },
+      }
+      const expected = {
+        title: 'Feed Title',
+        link: 'https://example.com',
+        image: {
+          url: 'https://example.com/channel-image.jpg',
+          title: 'Channel Image',
+        },
+      }
+
+      expect(retrieveFeed(value)).toEqual(expected)
+    })
+
+    it('should use textInput placed outside channel as fallback', () => {
+      const value = {
+        rss: {
+          channel: {
+            title: 'Feed Title',
+            link: 'https://example.com',
+          },
+          textinput: {
+            title: 'Search',
+            name: 'q',
+            link: 'https://example.com/search',
+          },
+        },
+      }
+      const expected = {
+        title: 'Feed Title',
+        link: 'https://example.com',
+        textInput: {
+          title: 'Search',
+          name: 'q',
+          link: 'https://example.com/search',
+        },
+      }
+
+      expect(retrieveFeed(value)).toEqual(expected)
+    })
+
+    it('should prefer channel textInput over outside textInput', () => {
+      const value = {
+        rss: {
+          channel: {
+            title: 'Feed Title',
+            link: 'https://example.com',
+            textinput: {
+              title: 'Channel Search',
+              name: 'q',
+            },
+          },
+          textinput: {
+            title: 'Outside Search',
+            name: 'query',
+          },
+        },
+      }
+      const expected = {
+        title: 'Feed Title',
+        link: 'https://example.com',
+        textInput: {
+          title: 'Channel Search',
+          name: 'q',
+        },
+      }
+
+      expect(retrieveFeed(value)).toEqual(expected)
+    })
   })
 })

@@ -135,6 +135,30 @@ export const parseTextInput: ParseUtilPartial<Rss.TextInput> = (value) => {
   return trimObject(textInput)
 }
 
+export const retrieveImage: ParseUtilPartial<Rss.Image> = (value) => {
+  const channel = parseSingular(value?.channel)
+
+  return parseSingularOf(channel?.image, parseImage) ?? parseSingularOf(value?.image, parseImage)
+}
+
+export const retrieveTextInput: ParseUtilPartial<Rss.TextInput> = (value) => {
+  const channel = parseSingular(value?.channel)
+
+  return (
+    parseSingularOf(channel?.textinput, parseTextInput) ??
+    parseSingularOf(value?.textinput, parseTextInput)
+  )
+}
+
+export const retrieveItems: ParseUtilPartial<Array<Rss.Item<DateAny>>> = (value, options) => {
+  const channel = parseSingular(value?.channel)
+
+  return (
+    parseArrayOf(channel?.item, (value) => parseItem(value, options), options?.maxItems) ??
+    parseArrayOf(value?.item, (value) => parseItem(value, options), options?.maxItems)
+  )
+}
+
 export const parseSkipHours: ParseUtilPartial<Array<number>> = (value) => {
   return trimArray(value?.hour, (value) => parseNumber(retrieveText(value)))
 }
@@ -251,12 +275,12 @@ export const parseFeed: ParseUtilPartial<Rss.Feed<DateAny>> = (value, options) =
     docs: parseSingularOf(channel.docs, (value) => parseString(retrieveText(value))),
     cloud: parseSingularOf(channel.cloud, parseCloud),
     ttl: parseSingularOf(channel.ttl, (value) => parseNumber(retrieveText(value))),
-    image: parseSingularOf(channel.image, parseImage),
+    image: retrieveImage(value),
     rating: parseSingularOf(channel.rating, (value) => parseString(retrieveText(value))),
-    textInput: parseSingularOf(channel.textinput, parseTextInput),
+    textInput: retrieveTextInput(value),
     skipHours: parseSingularOf(channel.skiphours, parseSkipHours),
     skipDays: parseSingularOf(channel.skipdays, parseSkipDays),
-    items: parseArrayOf(channel.item, (value) => parseItem(value, options), options?.maxItems),
+    items: retrieveItems(value, options),
     atom: namespaces.has('atom') ? retrieveAtomFeed(channel, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(channel) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel, options) : undefined,

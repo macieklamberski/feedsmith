@@ -324,6 +324,48 @@ describe('parseLink', () => {
     expect(parseLink(value)).toEqual(expected)
   })
 
+  it('should fall back to text content as href when href attribute is missing', () => {
+    const value = {
+      '#text': 'https://example.com/image.jpg',
+      '@rel': 'enclosure',
+      '@type': 'image/jpeg',
+    }
+    const expected = {
+      href: 'https://example.com/image.jpg',
+      rel: 'enclosure',
+      type: 'image/jpeg',
+    }
+
+    expect(parseLink(value)).toEqual(expected)
+  })
+
+  it('should prefer href attribute over text content', () => {
+    const value = {
+      '@href': 'https://example.com/correct',
+      '#text': 'https://example.com/fallback',
+      '@rel': 'alternate',
+    }
+    const expected = {
+      href: 'https://example.com/correct',
+      rel: 'alternate',
+    }
+
+    expect(parseLink(value)).toEqual(expected)
+  })
+
+  it('should parse link without href when neither href attribute nor text content exist', () => {
+    const value = {
+      '@rel': 'alternate',
+      '@type': 'text/html',
+    }
+    const expected = {
+      rel: 'alternate',
+      type: 'text/html',
+    }
+
+    expect(parseLink(value)).toEqual(expected)
+  })
+
   it('should return undefined if href is missing', () => {
     const value = {
       rel: 'alternate',
