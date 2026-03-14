@@ -2015,19 +2015,28 @@ describe('parse', () => {
             </entry>
           </feed>
         `
-        const result = parse(value)
+        const mediaGroup = {
+          title: { value: 'Video Title' },
+          description: { value: 'Video description' },
+          thumbnails: [{ url: 'https://img.youtube.com/thumb.jpg', height: 360, width: 480 }],
+        }
+        const expected = {
+          id: 'urn:uuid:yt-channel',
+          title: 'YouTube Channel',
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              id: 'urn:uuid:yt-video',
+              title: 'Video Title',
+              updated: '2024-01-01T00:00:00Z',
+              media: { groups: [mediaGroup], group: mediaGroup },
+              yt: { videoId: 'dQw4w9WgXcQ', channelId: 'UCxxxxxxxx' },
+            },
+          ],
+          yt: { channelId: 'UCxxxxxxxx' },
+        }
 
-        expect(result.title).toBe('YouTube Channel')
-        expect(result.yt?.channelId).toBe('UCxxxxxxxx')
-        expect(result.entries?.[0]?.yt?.videoId).toBe('dQw4w9WgXcQ')
-        expect(result.entries?.[0]?.yt?.channelId).toBe('UCxxxxxxxx')
-        expect(result.entries?.[0]?.media?.groups?.[0]?.title?.value).toBe('Video Title')
-        expect(result.entries?.[0]?.media?.groups?.[0]?.description?.value).toBe(
-          'Video description',
-        )
-        expect(result.entries?.[0]?.media?.groups?.[0]?.thumbnails?.[0]?.url).toBe(
-          'https://img.youtube.com/thumb.jpg',
-        )
+        expect(parse(value)).toEqual(expected)
       })
 
       it('RW-NS05: should parse feed with media:content on entry', () => {
@@ -2047,13 +2056,26 @@ describe('parse', () => {
             </entry>
           </feed>
         `
-        const result = parse(value)
+        const expected = {
+          id: 'urn:uuid:test',
+          title: 'Media Feed',
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              id: 'urn:uuid:1',
+              title: 'Post with Image',
+              updated: '2024-01-01T00:00:00Z',
+              media: {
+                contents: [
+                  { url: 'https://example.com/image.jpg', type: 'image/jpeg', medium: 'image' },
+                ],
+                thumbnails: [{ url: 'https://example.com/thumb.jpg', height: 150, width: 150 }],
+              },
+            },
+          ],
+        }
 
-        expect(result.entries?.[0]?.media?.contents?.[0]?.url).toBe('https://example.com/image.jpg')
-        expect(result.entries?.[0]?.media?.contents?.[0]?.type).toBe('image/jpeg')
-        expect(result.entries?.[0]?.media?.thumbnails?.[0]?.url).toBe(
-          'https://example.com/thumb.jpg',
-        )
+        expect(parse(value)).toEqual(expected)
       })
 
       it('RW-NS01: should handle non-standard prefix for known namespace URI', () => {
@@ -2109,15 +2131,26 @@ describe('parse', () => {
             </entry>
           </feed>
         `
-        const result = parse(value)
+        const expected = {
+          id: 'urn:uuid:test',
+          title: 'Test',
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              id: 'urn:uuid:1',
+              title: 'Post',
+              updated: '2024-01-01T00:00:00Z',
+              media: {
+                contents: [
+                  { url: 'https://example.com/video.mp4', type: 'video/mp4', medium: 'video' },
+                  { url: 'https://example.com/audio.mp3', type: 'audio/mpeg', medium: 'audio' },
+                ],
+              },
+            },
+          ],
+        }
 
-        expect(result.entries?.[0]?.media?.contents).toHaveLength(2)
-        expect(result.entries?.[0]?.media?.contents?.[0]?.url).toBe('https://example.com/video.mp4')
-        expect(result.entries?.[0]?.media?.contents?.[0]?.type).toBe('video/mp4')
-        expect(result.entries?.[0]?.media?.contents?.[0]?.medium).toBe('video')
-        expect(result.entries?.[0]?.media?.contents?.[1]?.url).toBe('https://example.com/audio.mp3')
-        expect(result.entries?.[0]?.media?.contents?.[1]?.type).toBe('audio/mpeg')
-        expect(result.entries?.[0]?.media?.contents?.[1]?.medium).toBe('audio')
+        expect(parse(value)).toEqual(expected)
       })
 
       it('RW-D22: should parse Atom 0.3 entry with mode="escaped" content', () => {

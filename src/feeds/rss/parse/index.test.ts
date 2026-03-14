@@ -2006,14 +2006,23 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'My Podcast',
+          link: 'https://example.com',
+          description: 'A podcast',
+          items: [
+            {
+              title: 'Episode 1',
+              enclosures: [
+                { url: 'https://example.com/ep1.mp3', length: 12345, type: 'audio/mpeg' },
+              ],
+              itunes: { duration: 5025, explicit: false },
+            },
+          ],
+          itunes: { explicit: false, author: 'Host Name' },
+        }
 
-        expect(result.title).toBe('My Podcast')
-        expect(result.itunes?.author).toBe('Host Name')
-        expect(result.itunes?.explicit).toBe(false)
-        expect(result.items?.[0]?.title).toBe('Episode 1')
-        expect(result.items?.[0]?.itunes?.duration).toBe(5025)
-        expect(result.items?.[0]?.itunes?.explicit).toBe(false)
+        expect(parse(value)).toEqual(expected)
       })
 
       it('RW-Q03: should parse feed with source element on item', () => {
@@ -2639,9 +2648,21 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Episode',
+              enclosures: [
+                { url: 'https://example.com/ep.mp3', length: 9007199254740992, type: 'audio/mpeg' },
+              ],
+            },
+          ],
+        }
 
-        expect(result.items?.[0]?.enclosures?.[0]?.length).toBe(9007199254740992)
+        expect(parse(value)).toEqual(expected)
       })
 
       it('RW-NS07: should parse nested iTunes categories', () => {
@@ -2662,12 +2683,20 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'My Podcast',
+          link: 'https://example.com',
+          description: 'A podcast',
+          items: [{ title: 'Episode 1' }],
+          itunes: {
+            categories: [
+              { text: 'Technology', categories: [{ text: 'Podcasting' }] },
+              { text: 'Society & Culture' },
+            ],
+          },
+        }
 
-        expect(result.itunes?.categories).toEqual([
-          { text: 'Technology', categories: [{ text: 'Podcasting' }] },
-          { text: 'Society & Culture' },
-        ])
+        expect(parse(value)).toEqual(expected)
       })
 
       it('RW-C13: should unwrap CDATA-wrapped pubDate', () => {
@@ -3285,9 +3314,14 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'My Podcast',
+          link: 'https://example.com',
+          description: 'A podcast',
+          items: [{ title: 'Episode 1', itunes: { explicit: false } }],
+        }
 
-        expect(result.items?.[0]?.itunes?.explicit).toBe(false)
+        expect(parse(value)).toEqual(expected)
       })
 
       it('RW-Q14: should parse itunes:duration with fractional seconds', () => {
@@ -3305,9 +3339,14 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'My Podcast',
+          link: 'https://example.com',
+          description: 'A podcast',
+          items: [{ title: 'Episode 1', itunes: { duration: 3661.5 } }],
+        }
 
-        expect(result.items?.[0]?.itunes?.duration).toBe(3661.5)
+        expect(parse(value)).toEqual(expected)
       })
 
       it('RW-Q15: should parse itunes:image as text content without @href', () => {
@@ -3325,9 +3364,14 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'My Podcast',
+          link: 'https://example.com',
+          description: 'A podcast',
+          items: [{ title: 'Episode 1', itunes: { image: 'https://example.com/art.jpg' } }],
+        }
 
-        expect(result.items?.[0]?.itunes?.image).toBe('https://example.com/art.jpg')
+        expect(parse(value)).toEqual(expected)
       })
     })
 
@@ -3347,9 +3391,14 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [{ title: 'Post', categories: [{ name: '\u202ASports\u202C' }] }],
+        }
 
-        expect(result.items?.[0]?.categories?.[0]?.name).toBe('\u202ASports\u202C')
+        expect(parse(value)).toEqual(expected)
       })
     })
 
@@ -3411,9 +3460,14 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [{ title: 'Post', description: '<p>Hello world</p>' }],
+        }
 
-        expect(result.items?.[0]?.description).toBe('<p>Hello world</p>')
+        expect(parse(value)).toEqual(expected)
       })
     })
 
@@ -3430,16 +3484,16 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
-
-        expect(result.link).toBe('https://example.com')
-        expect(result.atom?.links).toEqual([
-          {
-            href: 'https://example.com/feed',
-            rel: 'self',
-            type: 'application/rss+xml',
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          atom: {
+            links: [{ href: 'https://example.com/feed', rel: 'self', type: 'application/rss+xml' }],
           },
-        ])
+        }
+
+        expect(parse(value)).toEqual(expected)
       })
     })
 
@@ -3461,10 +3515,19 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Post',
+              dc: { creators: ['Alice', 'Bob', 'Charlie'], creator: 'Alice' },
+            },
+          ],
+        }
 
-        expect(result.items?.[0]?.dc?.creators).toEqual(['Alice', 'Bob', 'Charlie'])
-        expect(result.items?.[0]?.dc?.creator).toBe('Alice')
+        expect(parse(value)).toEqual(expected)
       })
 
       it('RW-NS24: should ignore empty dc:title and keep core title', () => {
@@ -3482,10 +3545,14 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [{ title: 'Real Title' }],
+        }
 
-        expect(result.items?.[0]?.title).toBe('Real Title')
-        expect(result.items?.[0]?.dc).toBeUndefined()
+        expect(parse(value)).toEqual(expected)
       })
     })
 
@@ -3506,9 +3573,14 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [{ title: 'Post', guid: { value: 'first-guid' } }],
+        }
 
-        expect(result.items?.[0]?.guid).toEqual({ value: 'first-guid' })
+        expect(parse(value)).toEqual(expected)
       })
     })
 
@@ -3527,9 +3599,14 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          image: { url: 'https://example.com/logo.png' },
+        }
 
-        expect(result.image).toEqual({ url: 'https://example.com/logo.png' })
+        expect(parse(value)).toEqual(expected)
       })
 
       it('RW-Q16: should not parse image element at item level', () => {
@@ -3547,9 +3624,14 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [{ title: 'Post' }],
+        }
 
-        expect(result.items?.[0]).toEqual({ title: 'Post' })
+        expect(parse(value)).toEqual(expected)
       })
     })
 
@@ -3569,11 +3651,19 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Episode',
+              enclosures: [{ url: 'https://example.com/file.mp3', type: 'audio/mpeg' }],
+            },
+          ],
+        }
 
-        expect(result.items?.[0]?.enclosures).toEqual([
-          { url: 'https://example.com/file.mp3', type: 'audio/mpeg' },
-        ])
+        expect(parse(value)).toEqual(expected)
       })
 
       it('RW-A14: should omit length for non-numeric enclosure length', () => {
@@ -3591,11 +3681,19 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Episode',
+              enclosures: [{ url: 'https://example.com/file.mp3', type: 'audio/mpeg' }],
+            },
+          ],
+        }
 
-        expect(result.items?.[0]?.enclosures).toEqual([
-          { url: 'https://example.com/file.mp3', type: 'audio/mpeg' },
-        ])
+        expect(parse(value)).toEqual(expected)
       })
 
       it('RW-A15: should parse float enclosure length as number', () => {
@@ -3613,11 +3711,21 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Episode',
+              enclosures: [
+                { url: 'https://example.com/file.mp3', length: 1.5, type: 'audio/mpeg' },
+              ],
+            },
+          ],
+        }
 
-        expect(result.items?.[0]?.enclosures).toEqual([
-          { url: 'https://example.com/file.mp3', length: 1.5, type: 'audio/mpeg' },
-        ])
+        expect(parse(value)).toEqual(expected)
       })
 
       it('RW-A19: should ignore enclosure text content without attributes', () => {
@@ -3635,9 +3743,14 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [{ title: 'Episode' }],
+        }
 
-        expect(result.items?.[0]?.enclosures).toBeUndefined()
+        expect(parse(value)).toEqual(expected)
       })
 
       it('RW-A20: should preserve MIME type with parameters in enclosure', () => {
