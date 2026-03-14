@@ -11,7 +11,9 @@ export const parse = (value: unknown, options?: ParseOptions): DeepPartial<Atom.
     throw new Error(locales.invalidFeedFormat)
   }
 
-  const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, 'atom')
+  const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
+    'atom',
+  ])
 
   const object = parser.parse(value)
   const normalized = normalizeNamespaces(object)

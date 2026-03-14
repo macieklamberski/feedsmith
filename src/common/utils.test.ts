@@ -3225,11 +3225,9 @@ describe('createNamespaceNormalizator', () => {
 
     describe('default namespace handling', () => {
       it('should handle default Atom namespace with primary namespace', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(
-          namespaceUris,
-          namespacePrefixes,
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
           'atom',
-        )
+        ])
         const value = parser.parse(`
           <?xml version="1.0"?>
           <feed xmlns="http://www.w3.org/2005/Atom">
@@ -3303,11 +3301,9 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle custom Atom prefix with primary namespace', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(
-          namespaceUris,
-          namespacePrefixes,
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
           'atom',
-        )
+        ])
         const value = parser.parse(`
           <?xml version="1.0"?>
           <a:feed xmlns:a="http://www.w3.org/2005/Atom">
@@ -3593,11 +3589,9 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle complex nesting with namespace inheritance', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(
-          namespaceUris,
-          namespacePrefixes,
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
           'atom',
-        )
+        ])
         const value = parser.parse(`
           <?xml version="1.0"?>
           <feed xmlns="http://www.w3.org/2005/Atom">
@@ -3797,11 +3791,10 @@ describe('createNamespaceNormalizator', () => {
 
     describe('RDF primary namespace handling', () => {
       it('should normalize RDF namespace elements and attributes including arrays', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(
-          namespaceUris,
-          namespacePrefixes,
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
           'rdf',
-        )
+          'rss',
+        ])
         const value = parser.parse(`
           <?xml version="1.0" encoding="UTF-8"?>
           <rdf:RDF
@@ -3845,6 +3838,42 @@ describe('createNamespaceNormalizator', () => {
               { title: 'Item 1', '@about': 'http://example.com/item1' },
               { title: 'Item 2', '@about': 'http://example.com/item2' },
             ],
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should strip prefixes for multiple primary namespaces', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
+          'rdf',
+          'rss',
+        ])
+        const value = parser.parse(`
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rdf:RDF
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns:rss="http://purl.org/rss/1.0/"
+          >
+            <rss:channel>
+              <rss:title>Test Feed</rss:title>
+            </rss:channel>
+            <rss:item rdf:about="http://example.com/item1">
+              <rss:title>Item 1</rss:title>
+            </rss:item>
+          </rdf:RDF>
+        `)
+        const expected = {
+          rdf: {
+            '@xmlns:rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+            '@xmlns:rss': 'http://purl.org/rss/1.0/',
+            channel: {
+              title: 'Test Feed',
+            },
+            item: {
+              title: 'Item 1',
+              '@about': 'http://example.com/item1',
+            },
           },
         }
 

@@ -154,6 +154,7 @@ export const namespaceUris = {
   googleplay: googleplayUris,
   spotify: spotifyUris,
   rdf: rdfUris,
+  rss: ['http://purl.org/rss/1.0/', 'https://purl.org/rss/1.0/'],
   rawvoice: rawvoiceUris,
   cc: ccUris,
   opensearch: opensearchUris,
