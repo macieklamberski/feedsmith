@@ -616,7 +616,7 @@ export const generateNamespaceAttrs = (
 export const createNamespaceNormalizator = <T extends Record<string, Array<string>>>(
   namespaceUris: T,
   namespacePrefixes: Record<string, string>,
-  primaryNamespace?: keyof T,
+  primaryNamespaces?: Array<keyof T>,
 ) => {
   const normalizedUriCache = new Map<string, string>()
 
@@ -635,10 +635,9 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
     return normalized
   }
 
-  const primaryNamespaceUris =
-    primaryNamespace && namespaceUris[primaryNamespace]
-      ? namespaceUris[primaryNamespace].map(normalizeNamespaceUri)
-      : undefined
+  const primaryNamespaceUris = primaryNamespaces?.length
+    ? primaryNamespaces.flatMap((key) => namespaceUris[key].map(normalizeNamespaceUri))
+    : undefined
 
   const resolveNamespacePrefix = (uri: string, localName: string, fallback: string): string => {
     const normalizedUri = normalizeNamespaceUri(uri)
