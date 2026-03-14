@@ -74,6 +74,7 @@ import {
   uris as rawvoiceUris,
 } from '../namespaces/rawvoice/common/config.js'
 import { stopNodes as rdfStopNodes, uris as rdfUris } from '../namespaces/rdf/common/config.js'
+import { uris as rssUris } from '../namespaces/rss/common/config.js'
 import {
   stopNodes as slashStopNodes,
   uris as slashUris,
@@ -154,7 +155,7 @@ export const namespaceUris = {
   googleplay: googleplayUris,
   spotify: spotifyUris,
   rdf: rdfUris,
-  rss: ['http://purl.org/rss/1.0/', 'https://purl.org/rss/1.0/'],
+  rss: rssUris,
   rawvoice: rawvoiceUris,
   cc: ccUris,
   opensearch: opensearchUris,
