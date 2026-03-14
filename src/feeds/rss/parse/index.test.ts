@@ -1853,7 +1853,6 @@ describe('parse', () => {
               title: 'Post',
               dc: {
                 creators: ['John Doe'],
-                creator: 'John Doe',
               },
             },
           ],
@@ -1893,7 +1892,6 @@ describe('parse', () => {
               title: 'Post',
               dc: {
                 creators: ['Jane'],
-                creator: 'Jane',
               },
             },
           ],
@@ -1926,7 +1924,6 @@ describe('parse', () => {
               title: 'Post',
               dc: {
                 creators: ['Author'],
-                creator: 'Author',
               },
             },
           ],
@@ -1959,7 +1956,6 @@ describe('parse', () => {
               title: 'Post',
               dc: {
                 creators: ['Inline Author'],
-                creator: 'Inline Author',
               },
             },
           ],
@@ -2833,7 +2829,6 @@ describe('parse', () => {
               title: 'Post',
               dc: {
                 dates: ['2025-02-21T16:00:00Z'],
-                date: '2025-02-21T16:00:00Z',
               },
             },
           ],
@@ -2972,7 +2967,6 @@ describe('parse', () => {
               title: 'Post',
               dc: {
                 creators: ['John Doe'],
-                creator: 'John Doe',
               },
             },
           ],
@@ -3239,7 +3233,6 @@ describe('parse', () => {
               authors: ['Regular Author'],
               dc: {
                 creators: ['DC Author'],
-                creator: 'DC Author',
               },
             },
           ],
@@ -3273,7 +3266,6 @@ describe('parse', () => {
               title: 'Post',
               dc: {
                 creators: ['Alice', 'Bob'],
-                creator: 'Alice',
               },
             },
           ],
@@ -3505,7 +3497,7 @@ describe('parse', () => {
           items: [
             {
               title: 'Post',
-              dc: { creators: ['Alice', 'Bob', 'Charlie'], creator: 'Alice' },
+              dc: { creators: ['Alice', 'Bob', 'Charlie'] },
             },
           ],
         }

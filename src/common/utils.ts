@@ -117,6 +117,8 @@ export const trimArray = <T, R = T>(
 
 const cdataStartTag = '<![CDATA['
 const cdataEndTag = ']]>'
+const commentStartTag = '<!--'
+const commentEndTag = '-->'
 
 export const hasEntities = (text: string) => {
   const ampIndex = text.indexOf('&')
