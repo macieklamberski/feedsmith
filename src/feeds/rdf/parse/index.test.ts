@@ -1541,6 +1541,10 @@ describe('parse', () => {
     })
   })
 
+  describe('real world feeds', () => {
+    // TODO: Add real world feeds with problematic edge cases.
+  })
+
   describe('xml comment stripping', () => {
     it('should strip XML comments from element content', () => {
       const value = `

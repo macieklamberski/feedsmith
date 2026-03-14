@@ -1,7 +1,8 @@
 import { XMLParser } from 'fast-xml-parser'
-import { parserConfig } from '../../../common/config.js'
+import { namespaceStopNodes, parserConfig } from '../../../common/config.js'
 
 export const stopNodes = [
+  ...namespaceStopNodes,
   'feed.author.name',
   'feed.author.uri',
   'feed.author.url', // Atom 0.3.
@@ -54,14 +55,13 @@ export const stopNodes = [
   'feed.entry.source.logo',
   'feed.entry.source.rights',
   'feed.entry.source.subtitle',
-  'feed.entry.source.title,',
+  'feed.entry.source.title',
   'feed.entry.source.updated',
   'feed.entry.source.modified', // Atom 0.3.
   'feed.entry.summary',
   'feed.entry.title',
   'feed.entry.updated',
   'feed.entry.modified', // Atom 0.3.
-  // TODO: What about the namespaces?
 ]
 
 export const parser = new XMLParser({

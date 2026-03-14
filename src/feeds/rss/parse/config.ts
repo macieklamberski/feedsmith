@@ -1,5 +1,5 @@
 import { XMLParser } from 'fast-xml-parser'
-import { parserConfig } from '../../../common/config.js'
+import { namespaceStopNodes, parserConfig } from '../../../common/config.js'
 
 // These elements can appear both inside <channel> and as direct children of
 // <rss> in malformed feeds, so stop nodes are generated for both paths.
@@ -29,6 +29,7 @@ const sharedStopNodes = [
 ]
 
 export const stopNodes = [
+  ...namespaceStopNodes,
   'rss.channel.title',
   'rss.channel.link',
   'rss.channel.description',
@@ -38,7 +39,6 @@ export const stopNodes = [
   'rss.channel.webmaster',
   'rss.channel.pubdate',
   'rss.channel.lastbuilddate',
-  'rss.channel.author',
   'rss.channel.category',
   'rss.channel.generator',
   'rss.channel.docs',
