@@ -1,6 +1,5 @@
-import { locales, namespacePrefixes, namespaceUris } from '../../../common/config.js'
+import { locales } from '../../../common/config.js'
 import type { ParseMainOptions } from '../../../common/types.js'
-import { createNamespaceNormalizator } from '../../../common/utils.js'
 import { detectAtomFeed } from '../../../index.js'
 import type { Atom } from '../common/types.js'
 import { normalizeNamespaces, parser } from './config.js'
