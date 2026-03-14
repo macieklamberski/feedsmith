@@ -2970,7 +2970,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-A11: should parse feed with xml:lang attribute (attribute not captured)', () => {
+      it('RW-A11: should parse feed with xml:lang attribute', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US">
