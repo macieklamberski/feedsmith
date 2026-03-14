@@ -123,6 +123,33 @@ export const hasEntities = (text: string) => {
   return ampIndex !== -1 && text.indexOf(';', ampIndex) !== -1
 }
 
+const stripComments = (text: string): string => {
+  let currentIndex = text.indexOf(commentStartTag)
+
+  if (currentIndex === -1) {
+    return text
+  }
+
+  let result = ''
+  let lastIndex = 0
+
+  while (currentIndex !== -1) {
+    result += text.substring(lastIndex, currentIndex)
+    const endIndex = text.indexOf(commentEndTag, currentIndex + commentStartTag.length)
+
+    if (endIndex === -1) {
+      return text
+    }
+
+    lastIndex = endIndex + commentEndTag.length
+    currentIndex = text.indexOf(commentStartTag, lastIndex)
+  }
+
+  result += text.substring(lastIndex)
+
+  return result
+}
+
 const decodeWithCdata = (text: string): string => {
   // Per XML spec, CDATA content should be passed through verbatim without entity decoding.
   // Text outside CDATA should have entities decoded normally.
@@ -168,7 +195,7 @@ export const parseString: ParseUtilExact<string> = (value) => {
       return
     }
 
-    const string = decodeWithCdata(value).trim()
+    const string = decodeWithCdata(stripComments(value)).trim()
 
     return string || undefined
   }
@@ -564,7 +591,7 @@ export const generateNamespaceAttrs = (
 export const createNamespaceNormalizator = <T extends Record<string, Array<string>>>(
   namespaceUris: T,
   namespacePrefixes: Record<string, string>,
-  primaryNamespace?: keyof T,
+  primaryNamespaces?: Array<keyof T>,
 ) => {
   const normalizedUriCache = new Map<string, string>()
 
@@ -583,10 +610,9 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
     return normalized
   }
 
-  const primaryNamespaceUris =
-    primaryNamespace && namespaceUris[primaryNamespace]
-      ? namespaceUris[primaryNamespace].map(normalizeNamespaceUri)
-      : undefined
+  const primaryNamespaceUris = primaryNamespaces?.length
+    ? primaryNamespaces.flatMap((key) => namespaceUris[key].map(normalizeNamespaceUri))
+    : undefined
 
   const resolveNamespacePrefix = (uri: string, localName: string, fallback: string): string => {
     const normalizedUri = normalizeNamespaceUri(uri)

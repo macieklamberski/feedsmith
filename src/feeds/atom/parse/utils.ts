@@ -118,7 +118,7 @@ export const parseLink: ParseUtilPartial<Atom.Link<DateAny>> = (value, options) 
 
   const namespaces = detectNamespaces(value)
   const link = {
-    href: parseString(value['@href']),
+    href: parseString(value['@href']) ?? parseString(retrieveText(value)),
     rel: parseString(value['@rel']),
     type: parseString(value['@type']),
     hreflang: parseString(value['@hreflang']),
