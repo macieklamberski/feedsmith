@@ -11,7 +11,10 @@ export const parse = (value: unknown, options?: ParseOptions): DeepPartial<Rdf.F
     throw new Error(locales.invalidFeedFormat)
   }
 
-  const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, 'rdf')
+  const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
+    'rdf',
+    'rss',
+  ])
 
   const object = parser.parse(value)
   const normalized = normalizeNamespaces(object)
