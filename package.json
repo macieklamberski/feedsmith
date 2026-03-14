@@ -72,12 +72,12 @@
   },
   "dependencies": {
     "entities": "^7.0.1",
-    "fast-xml-parser": "^5.3.7"
+    "fast-xml-parser": "~5.4.2"
   },
   "devDependencies": {
-    "@types/bun": "^1.3.9",
+    "@types/bun": "^1.3.10",
     "kvalita": "^1.10.0",
-    "tsdown": "^0.20.3",
+    "tsdown": "^0.21.2",
     "vitepress": "^1.6.4"
   }
 }
