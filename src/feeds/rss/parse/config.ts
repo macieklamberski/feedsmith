@@ -1,5 +1,11 @@
 import { XMLParser } from 'fast-xml-parser'
-import { namespaceStopNodes, parserConfig } from '../../../common/config.js'
+import {
+  namespacePrefixes,
+  namespaceStopNodes,
+  namespaceUris,
+  parserConfig,
+} from '../../../common/config.js'
+import { createNamespaceNormalizator } from '../../../common/utils.js'
 
 // These elements can appear both inside <channel> and as direct children of
 // <rss> in malformed feeds, so stop nodes are generated for both paths.
@@ -55,3 +61,5 @@ export const parser = new XMLParser({
   ...parserConfig,
   stopNodes,
 })
+
+export const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
