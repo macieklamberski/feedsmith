@@ -1,8 +1,9 @@
-import type { GenerateUtil } from '../../../common/types.js'
+import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateBoolean,
   generateNumber,
   generatePlainString,
+  generateRfc3339Date,
   isObject,
   trimArray,
   trimObject,
@@ -48,7 +49,7 @@ export const generateIndirectAcquisition: GenerateUtil<OpdsNs.IndirectAcquisitio
   return trimObject(value)
 }
 
-export const generateAvailability: GenerateUtil<OpdsNs.Availability> = (availability) => {
+export const generateAvailability: GenerateUtil<OpdsNs.Availability<DateLike>> = (availability) => {
   if (!isObject(availability)) {
     return
   }
@@ -59,8 +60,8 @@ export const generateAvailability: GenerateUtil<OpdsNs.Availability> = (availabi
 
   const value = {
     '@status': generatePlainString(availability.status),
-    '@since': generatePlainString(availability.since),
-    '@until': generatePlainString(availability.until),
+    '@since': generateRfc3339Date(availability.since),
+    '@until': generateRfc3339Date(availability.until),
   }
 
   return trimObject(value)
@@ -92,7 +93,7 @@ export const generateCopies: GenerateUtil<OpdsNs.Copies> = (copies) => {
   return trimObject(value)
 }
 
-export const generateLink: GenerateUtil<OpdsNs.Link> = (link) => {
+export const generateLink: GenerateUtil<OpdsNs.Link<DateLike>> = (link) => {
   if (!isObject(link)) {
     return
   }

@@ -199,8 +199,8 @@ describe('generateAvailability', () => {
     }
     const expected = {
       '@status': 'available',
-      '@since': '2023-01-01T00:00:00Z',
-      '@until': '2023-12-31T23:59:59Z',
+      '@since': '2023-01-01T00:00:00.000Z',
+      '@until': '2023-12-31T23:59:59.000Z',
     }
 
     expect(generateAvailability(value)).toEqual(expected)
@@ -224,7 +224,7 @@ describe('generateAvailability', () => {
     }
     const expected = {
       '@status': 'reserved',
-      '@since': '2023-06-15T10:00:00Z',
+      '@since': '2023-06-15T10:00:00.000Z',
     }
 
     expect(generateAvailability(value)).toEqual(expected)
@@ -237,7 +237,22 @@ describe('generateAvailability', () => {
     }
     const expected = {
       '@status': 'ready',
-      '@until': '2023-07-01T00:00:00Z',
+      '@until': '2023-07-01T00:00:00.000Z',
+    }
+
+    expect(generateAvailability(value)).toEqual(expected)
+  })
+
+  it('should generate availability with Date objects', () => {
+    const value = {
+      status: 'available',
+      since: new Date('2023-01-01T00:00:00Z'),
+      until: new Date('2023-12-31T23:59:59Z'),
+    }
+    const expected = {
+      '@status': 'available',
+      '@since': '2023-01-01T00:00:00.000Z',
+      '@until': '2023-12-31T23:59:59.000Z',
     }
 
     expect(generateAvailability(value)).toEqual(expected)

@@ -3,6 +3,7 @@ import {
   isObject,
   parseArrayOf,
   parseBoolean,
+  parseDate,
   parseNumber,
   parseSingularOf,
   parseString,
@@ -48,7 +49,7 @@ export const parseIndirectAcquisition: ParsePartialUtil<OpdsNs.IndirectAcquisiti
   return trimObject(indirectAcquisition) as OpdsNs.IndirectAcquisition
 }
 
-export const parseAvailability: ParsePartialUtil<OpdsNs.Availability> = (value) => {
+export const parseAvailability: ParsePartialUtil<OpdsNs.Availability<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -61,11 +62,11 @@ export const parseAvailability: ParsePartialUtil<OpdsNs.Availability> = (value) 
 
   const availability = {
     status,
-    since: parseString(value['@since']),
-    until: parseString(value['@until']),
+    since: parseDate(value['@since']),
+    until: parseDate(value['@until']),
   }
 
-  return trimObject(availability) as OpdsNs.Availability
+  return trimObject(availability) as OpdsNs.Availability<string>
 }
 
 export const parseHolds: ParsePartialUtil<OpdsNs.Holds> = (value) => {
@@ -94,7 +95,7 @@ export const parseCopies: ParsePartialUtil<OpdsNs.Copies> = (value) => {
   return trimObject(copies)
 }
 
-export const retrieveLink: ParsePartialUtil<OpdsNs.Link> = (value) => {
+export const retrieveLink: ParsePartialUtil<OpdsNs.Link<string>> = (value) => {
   if (!isObject(value)) {
     return
   }
