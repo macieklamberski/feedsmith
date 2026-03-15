@@ -53,6 +53,10 @@ import {
   uris as mediaUris,
 } from '../namespaces/media/common/config.js'
 import {
+  stopNodes as opdsStopNodes,
+  uris as opdsUris,
+} from '../namespaces/opds/common/config.js'
+import {
   stopNodes as opensearchStopNodes,
   uris as opensearchUris,
 } from '../namespaces/opensearch/common/config.js'
@@ -164,6 +168,7 @@ export const namespaceUris = {
   trackback: trackbackUris,
   prism: prismUris,
   acast: acastUris,
+  opds: opdsUris,
 }
 
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(
@@ -195,6 +200,7 @@ export const namespaceStopNodes = [
   ...googleplayStopNodes,
   ...itunesStopNodes,
   ...mediaStopNodes,
+  ...opdsStopNodes,
   ...opensearchStopNodes,
   ...pingbackStopNodes,
   ...podcastStopNodes,
