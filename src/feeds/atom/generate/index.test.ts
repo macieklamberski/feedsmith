@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { locales } from '../../../common/config.js'
+import { GenerateError } from '../../../common/errors.js'
 import { generate } from './index.js'
 
 describe('generate', () => {
@@ -249,10 +250,14 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should throw error for invalid Atom feed structure', () => {
-    const value = {}
+  describe('error types', () => {
+    it('should throw GenerateError for invalid Atom feed structure', () => {
+      const value = {}
+      const throwing = () => generate(value)
 
-    expect(() => generate(value)).toThrow(locales.invalidInputAtom)
+      expect(throwing).toThrow(GenerateError)
+      expect(throwing).toThrow(locales.invalidInputAtom)
+    })
   })
 
   it('should properly encode special characters in text content', () => {

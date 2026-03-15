@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { locales } from '../../../common/config.js'
-import { DetectError, ParseError } from '../../../common/errors.js'
+import { DetectError, MalformedError, ParseError } from '../../../common/errors.js'
 import { parse } from './index.js'
 
 describe('parse', () => {
@@ -223,14 +223,23 @@ describe('parse', () => {
       expect(throwing).toThrow(locales.invalidFeedFormat)
     })
 
-    it('should throw ParseError for malformed XML', () => {
+    it('should throw MalformedError for malformed XML', () => {
       const value = `
         <?xml version="1.0"?>
         <rss version="2.0">
           <channel>
             <title>Test</title
           </channel>
-        </rss>`
+        </rss>
+      `
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrow(MalformedError)
+      expect(throwing).toThrow(locales.invalidFeedFormat)
+    })
+
+    it('should throw ParseError for valid XML with invalid structure', () => {
+      const value = '<rss version="2.0"></rss>'
       const throwing = () => parse(value)
 
       expect(throwing).toThrow(ParseError)

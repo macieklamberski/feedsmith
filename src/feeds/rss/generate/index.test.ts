@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'bun:test'
+import { locales } from '../../../common/config.js'
+import { GenerateError } from '../../../common/errors.js'
 import type { DateLike } from '../../../common/types.js'
 import type { Rss } from '../common/types.js'
 import { generate } from './index.js'
@@ -1430,5 +1432,15 @@ describe('generate edge cases', () => {
 `
 
     expect(generate(value)).toEqual(expected)
+  })
+
+  describe('error types', () => {
+    it('should throw GenerateError for empty input', () => {
+      const value = {}
+      const throwing = () => generate(value)
+
+      expect(throwing).toThrow(GenerateError)
+      expect(throwing).toThrow(locales.invalidInputRss)
+    })
   })
 })

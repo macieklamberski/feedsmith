@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { locales, namespaceUris } from '../../../common/config.js'
-import { DetectError, ParseError } from '../../../common/errors.js'
+import { DetectError, MalformedError, ParseError } from '../../../common/errors.js'
 import { parse } from './index.js'
 
 describe('parse', () => {
@@ -92,7 +92,7 @@ describe('parse', () => {
       expect(throwing).toThrow(locales.invalidFeedFormat)
     })
 
-    it('should throw ParseError for malformed XML', () => {
+    it('should throw MalformedError for malformed XML', () => {
       const value = `
         <?xml version="1.0"?>
         <rdf:RDF
@@ -101,7 +101,22 @@ describe('parse', () => {
           <channel>
             <title>Test</title
           </channel>
-        </rdf:RDF>`
+        </rdf:RDF>
+      `
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrow(MalformedError)
+      expect(throwing).toThrow(locales.invalidFeedFormat)
+    })
+
+    it('should throw ParseError for valid XML with invalid structure', () => {
+      const value = `
+        <?xml version="1.0"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/">
+        </rdf:RDF>
+      `
       const throwing = () => parse(value)
 
       expect(throwing).toThrow(ParseError)
