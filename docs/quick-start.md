@@ -127,26 +127,30 @@ console.log(rss) // Complete RSS XML
 
 ## Error Handling
 
-Parsing functions throw errors when the input is invalid:
+Feedsmith throws dedicated error types for different failure scenarios:
 
 - `DetectError` — input doesn't match the expected feed format
-- `ParseError` — XML parsing failed
+- `MalformedError` — content is malformed (e.g., invalid XML)
+- `ParseError` — content parsed but produced an invalid result
+- `GenerateError` — feed generation failed due to invalid input
 
 ```typescript
-import { parseRssFeed, DetectError, ParseError } from 'feedsmith'
+import { parseRssFeed, DetectError, MalformedError, ParseError } from 'feedsmith'
 
 try {
   parseRssFeed(input)
 } catch (error) {
   if (error instanceof DetectError) {
     // Not RSS format
-  } else if (error instanceof ParseError) {
+  } else if (error instanceof MalformedError) {
     // Malformed XML
+  } else if (error instanceof ParseError) {
+    // Valid XML but invalid feed structure
   }
 }
 ```
 
-See [Error Handling](/parsing/errors) for more details.
+See [Parsing Errors](/parsing/errors) and [Generating Errors](/generating/errors) for more details.
 
 ## TypeScript Types
 

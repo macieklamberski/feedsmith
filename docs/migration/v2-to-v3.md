@@ -389,12 +389,14 @@ const created = feed.dcterms?.created?.[0]
 
 ### Improved Error Handling
 
-Parsing functions now throw dedicated error types for better error handling:
+Feedsmith now throws dedicated error types for different failure scenarios:
 
 - `DetectError` — thrown when input doesn't match the expected feed format
-- `ParseError` — thrown when XML parsing fails
+- `MalformedError` — thrown when content is malformed (e.g., invalid XML)
+- `ParseError` — thrown when content parsed but produced an invalid result
+- `GenerateError` — thrown when feed generation fails due to invalid input
 
-See [Error Handling](/parsing/errors) for more details.
+See [Parsing Errors](/parsing/errors) and [Generating Errors](/generating/errors) for more details.
 
 ### Namespace Type Exports
 
@@ -464,4 +466,4 @@ Use this checklist to ensure a complete migration:
 - Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
 - Replace Dublin Core Terms singular fields with plural arrays (e.g., `title` → `titles`)
 - Test feed generation to ensure output is correct
-- Update error handling to use `DetectError` and `ParseError` instead of generic `Error`
+- Update error handling to use `DetectError`, `MalformedError`, `ParseError`, and `GenerateError` instead of generic `Error`

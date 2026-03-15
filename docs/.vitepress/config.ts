@@ -70,6 +70,7 @@ export default defineConfig({
           { text: 'Overview', link: '/generating' },
           { text: 'Styling', link: '/generating/styling' },
           { text: 'Strict Mode', link: '/generating/strict-mode' },
+          { text: 'Errors', link: '/generating/errors' },
           { text: 'Examples', link: '/generating/examples' },
         ],
       },

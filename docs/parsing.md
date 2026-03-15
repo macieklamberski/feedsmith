@@ -41,7 +41,7 @@ The universal parser:
 - Automatically detects the feed format using format detection functions
 - Returns an object with `format` and `feed` properties
 - Supports RSS, Atom, RDF, and JSON Feed formats
-- Throws `DetectError` or `ParseError` for invalid feeds
+- Throws `DetectError`, `MalformedError`, or `ParseError` for invalid feeds
 
 > [!IMPORTANT]
 > The universal parser uses detection functions to identify the feed format. While these work well for most feeds, they might not perfectly detect all valid feeds, especially those with non-standard structures. If you know the feed format in advance, using a dedicated parser is more reliable.
@@ -89,7 +89,7 @@ opml.body?.outlines
 
 ## Error Handling
 
-Parsing functions throw `DetectError` when the input doesn't match the expected format, or `ParseError` when XML parsing fails. See [Error Handling](/parsing/errors) for details on error types.
+Parsing functions throw `DetectError` when the input doesn't match the expected format, `MalformedError` when the content is malformed, or `ParseError` when the parsed result is invalid. See [Error Handling](/parsing/errors) for details.
 
 ## Returned Values
 
