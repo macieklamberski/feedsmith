@@ -68,6 +68,7 @@ export type GenerateUtil<V, O = undefined> = (
 export type ParseMainOptions<TDate> = {
   maxItems?: number
   parseDateFn?: (raw: string) => TDate
+  detailedErrors?: boolean
 }
 
 export type XmlStylesheet = {

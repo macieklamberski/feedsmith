@@ -1,6 +1,7 @@
 import { locales } from '../../common/config.js'
 import { ParseError } from '../../common/errors.js'
 import type { Unreliable } from '../../common/types.js'
+import { validateXml } from '../../common/utils.js'
 import type { Opml, ParseMainOptions } from '../common/types.js'
 import { parser } from './config.js'
 import { parseDocument } from './utils.js'
@@ -17,6 +18,9 @@ export const parse = <
   try {
     object = parser.parse(value)
   } catch {
+    if (options?.detailedErrors) {
+      validateXml(value)
+    }
     throw new ParseError(locales.invalidOpmlFormat)
   }
 

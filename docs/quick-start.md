@@ -130,7 +130,7 @@ console.log(rss) // Complete RSS XML
 Parsing functions throw errors when the input is invalid:
 
 - `DetectError` — input doesn't match the expected feed format
-- `ParseError` — XML parsing failed
+- `ParseError` — XML parsing failed (with optional line/column details)
 
 ```typescript
 import { parseRssFeed, DetectError, ParseError } from 'feedsmith'
@@ -146,7 +146,7 @@ try {
 }
 ```
 
-See [Error Handling](/parsing/errors) for more details.
+See [Error Handling](/parsing/errors) for detailed error information and the `detailedErrors` option.
 
 ## TypeScript Types
 
