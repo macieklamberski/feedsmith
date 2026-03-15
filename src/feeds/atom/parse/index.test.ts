@@ -1318,6 +1318,57 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should correctly parse Atom feed with OPDS library lending extensions', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom" xmlns:opds="http://opds-spec.org/2010/catalog">
+        <title>Library Catalog</title>
+        <id>urn:uuid:library-catalog</id>
+        <updated>2024-01-15T12:00:00Z</updated>
+        <entry>
+          <title>Borrowable Book</title>
+          <id>urn:isbn:9780000000003</id>
+          <updated>2024-01-15T12:00:00Z</updated>
+          <link href="https://example.com/borrow" rel="http://opds-spec.org/acquisition/borrow" type="application/atom+xml;type=entry;profile=opds-catalog">
+            <opds:availability status="unavailable" since="2024-01-01T00:00:00Z" until="2024-06-30T23:59:59Z"/>
+            <opds:holds total="5" position="2"/>
+            <opds:copies total="3" available="1"/>
+          </link>
+        </entry>
+      </feed>
+    `
+    const expected = {
+      title: 'Library Catalog',
+      id: 'urn:uuid:library-catalog',
+      updated: '2024-01-15T12:00:00Z',
+      entries: [
+        {
+          title: 'Borrowable Book',
+          id: 'urn:isbn:9780000000003',
+          updated: '2024-01-15T12:00:00Z',
+          links: [
+            {
+              href: 'https://example.com/borrow',
+              rel: 'http://opds-spec.org/acquisition/borrow',
+              type: 'application/atom+xml;type=entry;profile=opds-catalog',
+              opds: {
+                availability: {
+                  status: 'unavailable',
+                  since: '2024-01-01T00:00:00Z',
+                  until: '2024-06-30T23:59:59Z',
+                },
+                holds: { total: 5, position: 2 },
+                copies: { total: 3, available: 1 },
+              },
+            },
+          ],
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   // Edge cases and quirks observed in feeds found in the wild.
   describe('real world feeds', () => {
     describe('character encoding', () => {
