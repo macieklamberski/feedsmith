@@ -1453,6 +1453,56 @@ describe('generate with lenient mode', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with OPDS library lending extensions', () => {
+    const value = {
+      id: 'urn:uuid:library-catalog',
+      title: 'Library Catalog',
+      updated: new Date('2024-01-15T12:00:00Z'),
+      entries: [
+        {
+          id: 'urn:isbn:9780000000003',
+          title: 'Borrowable Book',
+          updated: new Date('2024-01-15T12:00:00Z'),
+          links: [
+            {
+              href: 'https://example.com/borrow',
+              rel: 'http://opds-spec.org/acquisition/borrow',
+              type: 'application/atom+xml;type=entry;profile=opds-catalog',
+              opds: {
+                availability: {
+                  status: 'unavailable',
+                  since: new Date('2024-01-01T00:00:00Z'),
+                  until: new Date('2024-06-30T23:59:59Z'),
+                },
+                holds: { total: 5, position: 2 },
+                copies: { total: 3, available: 1 },
+              },
+            },
+          ],
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:opds="http://opds-spec.org/2010/catalog">
+  <id>urn:uuid:library-catalog</id>
+  <title>Library Catalog</title>
+  <updated>2024-01-15T12:00:00.000Z</updated>
+  <entry>
+    <id>urn:isbn:9780000000003</id>
+    <link href="https://example.com/borrow" rel="http://opds-spec.org/acquisition/borrow" type="application/atom+xml;type=entry;profile=opds-catalog">
+      <opds:availability status="unavailable" since="2024-01-01T00:00:00.000Z" until="2024-06-30T23:59:59.000Z"/>
+      <opds:holds total="5" position="2"/>
+      <opds:copies total="3" available="1"/>
+    </link>
+    <title>Borrowable Book</title>
+    <updated>2024-01-15T12:00:00.000Z</updated>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with OPDS indirect acquisition', () => {
     const value = {
       id: 'urn:uuid:catalog-indirect',
