@@ -1,11 +1,13 @@
+import type { DateLike } from '../../../common/types.js'
+
 // #region reference
 export namespace OpdsNs {
-  export type Link = {
+  export type Link<TDate extends DateLike> = {
     prices?: Array<Price>
     indirectAcquisitions?: Array<IndirectAcquisition>
     facetGroup?: string
     activeFacet?: boolean
-    availability?: Availability
+    availability?: Availability<TDate>
     holds?: Holds
     copies?: Copies
   }
@@ -21,10 +23,10 @@ export namespace OpdsNs {
   }
 
   // Unofficial extension for Library lending: availability status of a resource.
-  export type Availability = {
+  export type Availability<TDate extends DateLike> = {
     status: string
-    since?: string
-    until?: string
+    since?: TDate
+    until?: TDate
   }
 
   // Unofficial extension for Library lending: hold queue information.

@@ -49,7 +49,7 @@ export namespace Atom {
     title?: string
     length?: number
     thr?: ThrNs.Link<TDate>
-    opds?: OpdsNs.Link
+    opds?: OpdsNs.Link<TDate>
   }
 
   export type Person = {
