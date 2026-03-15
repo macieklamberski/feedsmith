@@ -387,6 +387,15 @@ const created = feed.dcterms?.created?.[0]
 
 ## New Features
 
+### Improved Error Handling
+
+Parsing functions now throw dedicated error types for better error handling:
+
+- `DetectError` — thrown when input doesn't match the expected feed format
+- `ParseError` — thrown when XML parsing fails
+
+See [Error Handling](/parsing/errors) for more details.
+
 ### Namespace Type Exports
 
 All namespace types are now exported directly from the main package:
@@ -437,7 +446,7 @@ feed.pubDate // Date
 
 ### XML Namespace Support
 
-Version 3.x adds support for the [XML namespace](/reference/namespaces/xml) (`xml:*` attributes) in RSS, Atom, and RDF feeds. The `xml` property is available on both feed and item levels, providing access to `xml:lang`, `xml:base`, `xml:space`, and `xml:id` attributes.
+RSS, Atom, and RDF feeds now support the [XML namespace](/reference/namespaces/xml) (`xml:*` attributes). The `xml` property is available on both feed and item levels, providing access to `xml:lang`, `xml:base`, `xml:space`, and `xml:id` attributes.
 
 ## Migration Checklist
 
@@ -455,3 +464,4 @@ Use this checklist to ensure a complete migration:
 - Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
 - Replace Dublin Core Terms singular fields with plural arrays (e.g., `title` → `titles`)
 - Test feed generation to ensure output is correct
+- Update error handling to use `DetectError` and `ParseError` instead of generic `Error`

@@ -1,3 +1,4 @@
+export { DetectError, ParseError } from './common/errors.js'
 export { parse as parseFeed } from './common/parse.js'
 export type { DateLike, XmlStylesheet } from './common/types.js'
 export type { Atom } from './feeds/atom/common/types.js'
