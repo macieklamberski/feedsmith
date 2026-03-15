@@ -158,6 +158,45 @@ describe('parseIndirectAcquisition', () => {
     expect(parseIndirectAcquisition(value)).toEqual(expected)
   })
 
+  it('should parse multiple levels of nested indirect acquisitions', () => {
+    const value = {
+      '@type': 'text/html',
+      'opds:indirectacquisition': {
+        '@type': 'application/atom+xml',
+        'opds:indirectacquisition': {
+          '@type': 'application/epub+zip',
+          'opds:indirectacquisition': {
+            '@type': 'application/x-mobipocket-ebook',
+            'opds:indirectacquisition': {
+              '@type': 'application/pdf',
+            },
+          },
+        },
+      },
+    }
+    const expected = {
+      type: 'text/html',
+      indirectAcquisitions: [
+        {
+          type: 'application/atom+xml',
+          indirectAcquisitions: [
+            {
+              type: 'application/epub+zip',
+              indirectAcquisitions: [
+                {
+                  type: 'application/x-mobipocket-ebook',
+                  indirectAcquisitions: [{ type: 'application/pdf' }],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    }
+
+    expect(parseIndirectAcquisition(value)).toEqual(expected)
+  })
+
   it('should filter out invalid nested acquisitions', () => {
     const value = {
       '@type': 'application/epub+zip',
