@@ -1,16 +1,18 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
   parseDate,
-  parseSingularOf,
   parseString,
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
 import type { DcNs } from '../common/types.js'
 
-export const retrieveItemOrFeed: ParsePartialUtil<DcNs.ItemOrFeed<string>> = (value) => {
+export const retrieveItemOrFeed: ParseUtilPartial<
+  DcNs.ItemOrFeed<DateAny>,
+  ParseMainOptions<DateAny>
+> = (value, options) => {
   if (!isObject(value)) {
     return
   }
@@ -26,38 +28,17 @@ export const retrieveItemOrFeed: ParsePartialUtil<DcNs.ItemOrFeed<string>> = (va
     contributors: parseArrayOf(value['dc:contributor'], (value) =>
       parseString(retrieveText(value)),
     ),
-    dates: parseArrayOf(value['dc:date'], (value) => parseDate(retrieveText(value))),
+    dates: parseArrayOf(value['dc:date'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     types: parseArrayOf(value['dc:type'], (value) => parseString(retrieveText(value))),
     formats: parseArrayOf(value['dc:format'], (value) => parseString(retrieveText(value))),
     identifiers: parseArrayOf(value['dc:identifier'], (value) => parseString(retrieveText(value))),
     sources: parseArrayOf(value['dc:source'], (value) => parseString(retrieveText(value))),
     languages: parseArrayOf(value['dc:language'], (value) => parseString(retrieveText(value))),
     relations: parseArrayOf(value['dc:relation'], (value) => parseString(retrieveText(value))),
-
-    // Deprecated fields for backward compatibility.
-    title: parseSingularOf(value['dc:title'], (value) => parseString(retrieveText(value))),
-    creator: parseSingularOf(value['dc:creator'], (value) => parseString(retrieveText(value))),
-    subject: parseSingularOf(value['dc:subject'], (value) => parseString(retrieveText(value))),
-    description: parseSingularOf(value['dc:description'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    publisher: parseSingularOf(value['dc:publisher'], (value) => parseString(retrieveText(value))),
-    contributor: parseSingularOf(value['dc:contributor'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    date: parseSingularOf(value['dc:date'], (value) => parseDate(retrieveText(value))),
-    type: parseSingularOf(value['dc:type'], (value) => parseString(retrieveText(value))),
-    format: parseSingularOf(value['dc:format'], (value) => parseString(retrieveText(value))),
-    identifier: parseSingularOf(value['dc:identifier'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    source: parseSingularOf(value['dc:source'], (value) => parseString(retrieveText(value))),
-    language: parseSingularOf(value['dc:language'], (value) => parseString(retrieveText(value))),
-    relation: parseSingularOf(value['dc:relation'], (value) => parseString(retrieveText(value))),
-
-    // Deprecated fields later on replaced with array type.
-    coverage: parseSingularOf(value['dc:coverage'], (value) => parseString(retrieveText(value))),
-    rights: parseSingularOf(value['dc:rights'], (value) => parseString(retrieveText(value))),
+    coverage: parseArrayOf(value['dc:coverage'], (value) => parseString(retrieveText(value))),
+    rights: parseArrayOf(value['dc:rights'], (value) => parseString(retrieveText(value))),
   }
 
   return trimObject(itemOrFeed)

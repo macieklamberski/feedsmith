@@ -40,8 +40,8 @@ export default defineConfig({
       { text: 'Parsing', link: '/parsing' },
       { text: 'Generating', link: '/generating' },
       {
-        text: 'v2.x',
-        items: [{ text: 'v3.x (Next)', link: 'https://next.feedsmith.dev' }],
+        text: 'v3.0 (Next)',
+        items: [{ text: 'v2.0', link: 'https://feedsmith.dev' }],
       },
     ],
     sidebar: [
@@ -60,6 +60,7 @@ export default defineConfig({
           { text: 'Namespaces', link: '/parsing/namespaces' },
           { text: 'Dates', link: '/parsing/dates' },
           { text: 'Detecting', link: '/parsing/detecting' },
+          { text: 'Errors', link: '/parsing/errors' },
           { text: 'Examples', link: '/parsing/examples' },
         ],
       },
@@ -68,7 +69,8 @@ export default defineConfig({
         items: [
           { text: 'Overview', link: '/generating' },
           { text: 'Styling', link: '/generating/styling' },
-          { text: 'Lenient Mode', link: '/generating/lenient-mode' },
+          { text: 'Strict Mode', link: '/generating/strict-mode' },
+          { text: 'Errors', link: '/generating/errors' },
           { text: 'Examples', link: '/generating/examples' },
         ],
       },
@@ -125,6 +127,7 @@ export default defineConfig({
               { text: 'W3C Basic Geo', link: '/reference/namespaces/geo' },
               { text: 'GeoRSS Simple', link: '/reference/namespaces/georss' },
               { text: 'RDF', link: '/reference/namespaces/rdf' },
+              { text: 'XML', link: '/reference/namespaces/xml' },
             ],
           },
           {
@@ -139,7 +142,10 @@ export default defineConfig({
       },
       {
         text: 'Migration',
-        items: [{ text: 'From 1.x to 2.x', link: '/migration/v1-to-v2' }],
+        items: [
+          { text: 'From 2.x to 3.x', link: '/migration/v2-to-v3' },
+          { text: 'From 1.x to 2.x', link: '/migration/v1-to-v2' },
+        ],
       },
     ],
     search: {

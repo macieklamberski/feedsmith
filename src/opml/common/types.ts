@@ -1,32 +1,65 @@
-import type { DateLike, ExtraFields, ParseOptions } from '../../common/types.js'
+import type {
+  GenerateUtil as BaseGenerateUtil,
+  ParseMainOptions as BaseParseMainOptions,
+  ParseUtilPartial as BaseParseUtilPartial,
+  DateAny,
+  ExtraFields,
+  Requirable,
+  Strict,
+} from '../../common/types.js'
 
-export type MainOptions<A extends ReadonlyArray<string> = ReadonlyArray<string>> = ParseOptions & {
-  extraOutlineAttributes?: A
+export type ParseMainOptions<
+  TDate,
+  TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
+> = BaseParseMainOptions<TDate> & {
+  extraOutlineAttributes?: TExtra
 }
+
+export type GenerateMainOptions<TExtra extends ReadonlyArray<string> = ReadonlyArray<string>> = {
+  extraOutlineAttributes?: TExtra
+}
+
+export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateAny>>
+
+export type GenerateUtil<V> = BaseGenerateUtil<V, GenerateMainOptions>
 
 // #region reference
 export namespace Opml {
-  export type Outline<
-    TDate extends DateLike,
-    A extends ReadonlyArray<string> = ReadonlyArray<string>,
-  > = {
-    text: string
-    type?: string
-    isComment?: boolean
-    isBreakpoint?: boolean
-    created?: TDate
-    category?: string
-    description?: string
-    xmlUrl?: string
-    htmlUrl?: string
-    language?: string
-    title?: string
-    version?: string
-    url?: string
-    outlines?: Array<Outline<TDate, A>>
-  } & ExtraFields<A>
+  // NOTE: BaseOutline contains non-recursive fields wrapped in Strict<>.
+  // Outline extends it and adds recursive outlines field separately.
+  export type BaseOutline<
+    TDate,
+    TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
+    TStrict extends boolean = false,
+  > = Strict<
+    {
+      text: Requirable<string> // Required in spec.
+      type?: string
+      isComment?: boolean
+      isBreakpoint?: boolean
+      created?: TDate
+      category?: string
+      description?: string
+      xmlUrl?: string
+      htmlUrl?: string
+      language?: string
+      title?: string
+      version?: string
+      url?: string
+    },
+    TStrict
+  > &
+    ExtraFields<TExtra>
 
-  export type Head<TDate extends DateLike> = {
+  export type Outline<
+    TDate,
+    TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
+    TStrict extends boolean = false,
+  > = BaseOutline<TDate, TExtra, TStrict> & {
+    outlines?: Array<Outline<TDate, TExtra, TStrict>>
+  }
+
+  export type Head<TDate> = {
     title?: string
     dateCreated?: TDate
     dateModified?: TDate
@@ -43,18 +76,20 @@ export namespace Opml {
   }
 
   export type Body<
-    TDate extends DateLike,
-    A extends ReadonlyArray<string> = ReadonlyArray<string>,
+    TDate,
+    TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
+    TStrict extends boolean = false,
   > = {
-    outlines?: Array<Outline<TDate, A>>
+    outlines?: Array<Outline<TDate, TExtra, TStrict>>
   }
 
   export type Document<
-    TDate extends DateLike,
-    A extends ReadonlyArray<string> = ReadonlyArray<string>,
+    TDate,
+    TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
+    TStrict extends boolean = false,
   > = {
     head?: Head<TDate>
-    body?: Body<TDate, A>
+    body?: Body<TDate, TExtra, TStrict>
   }
 }
 // #endregion reference
