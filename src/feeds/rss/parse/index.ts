@@ -1,5 +1,5 @@
 import { locales } from '../../../common/config.js'
-import { DetectError, ParseError } from '../../../common/errors.js'
+import { DetectError, MalformedError, ParseError } from '../../../common/errors.js'
 import type { ParseMainOptions, Unreliable } from '../../../common/types.js'
 import { detectRssFeed } from '../../../index.js'
 import type { Rss } from '../common/types.js'
@@ -20,7 +20,7 @@ export const parse = <TDate = string>(
     const object = parser.parse(value)
     normalized = normalizeNamespaces(object)
   } catch {
-    throw new ParseError(locales.invalidFeedFormat)
+    throw new MalformedError(locales.invalidFeedFormat)
   }
 
   const parsed = retrieveFeed(normalized, options)

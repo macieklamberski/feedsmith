@@ -1,5 +1,5 @@
 import { locales } from '../../common/config.js'
-import { ParseError } from '../../common/errors.js'
+import { MalformedError, ParseError } from '../../common/errors.js'
 import type { Unreliable } from '../../common/types.js'
 import type { Opml, ParseMainOptions } from '../common/types.js'
 import { parser } from './config.js'
@@ -17,7 +17,7 @@ export const parse = <
   try {
     object = parser.parse(value)
   } catch {
-    throw new ParseError(locales.invalidOpmlFormat)
+    throw new MalformedError(locales.invalidOpmlFormat)
   }
 
   const parsed = parseDocument(object, options)
