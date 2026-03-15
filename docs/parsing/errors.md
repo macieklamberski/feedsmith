@@ -63,11 +63,33 @@ try {
   parseFeed('<not-a-feed></not-a-feed>')
 } catch (error) {
   if (error instanceof DetectError) {
-    // Unrecognized feed format
+    // Unrecognized feed format.
   } else if (error instanceof MalformedError) {
-    // Malformed XML
+    // Malformed XML.
   } else if (error instanceof ParseError) {
-    // Valid XML but invalid feed structure
+    // Valid XML but invalid feed structure.
+  }
+}
+```
+
+## Error Hierarchy
+
+All error classes extend the built-in `Error`, so `instanceof Error` checks work as expected. This can be useful for catching any parsing error alongside other errors in a single handler:
+
+```typescript
+import { parseFeed, DetectError, MalformedError, ParseError } from 'feedsmith'
+
+try {
+  parseFeed(input)
+} catch (error) {
+  if (error instanceof DetectError) {
+    // Unrecognized feed format.
+  } else if (error instanceof MalformedError) {
+    // Malformed XML.
+  } else if (error instanceof ParseError) {
+    // Valid XML but invalid feed structure.
+  } else if (error instanceof Error) {
+    // Any other error.
   }
 }
 ```
