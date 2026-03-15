@@ -1433,14 +1433,14 @@ describe('generate edge cases', () => {
 
     expect(generate(value)).toEqual(expected)
   })
+})
 
-  describe('error types', () => {
-    it('should throw GenerateError for empty input', () => {
-      const value = {}
-      const throwing = () => generate(value)
+describe('error types', () => {
+  it('should throw GenerateError for empty input', () => {
+    const value = {}
+    const throwing = () => generate(value)
 
-      expect(throwing).toThrow(GenerateError)
-      expect(throwing).toThrow(locales.invalidInputRss)
-    })
+    expect(throwing).toThrow(GenerateError)
+    expect(throwing).toThrow(locales.invalidInputRss)
   })
 })

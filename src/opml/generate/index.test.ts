@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'bun:test'
+import { locales } from '../../common/config.js'
 import { GenerateError } from '../../common/errors.js'
 import { generate } from './index.js'
 
@@ -227,6 +228,7 @@ describe('generate', () => {
       const throwing = () => generate(value)
 
       expect(throwing).toThrow(GenerateError)
+      expect(throwing).toThrow(locales.invalidInputOpml)
     })
   })
 
