@@ -94,10 +94,10 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should generate RSS with object author format', () => {
+  it('should generate RSS with structured person fields', () => {
     const value = {
-      title: 'Feed with object author',
-      description: 'Test feed with object author format',
+      title: 'Feed with structured persons',
+      description: 'Test feed with structured person fields',
       managingEditor: {
         name: 'Editor Name',
         email: 'editor@example.com',
@@ -127,8 +127,8 @@ describe('generate', () => {
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
   <channel>
-    <title>Feed with object author</title>
-    <description>Test feed with object author format</description>
+    <title>Feed with structured persons</title>
+    <description>Test feed with structured person fields</description>
     <managingEditor>editor@example.com (Editor Name)</managingEditor>
     <webMaster>webmaster@example.com (Webmaster)</webMaster>
     <item>

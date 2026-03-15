@@ -923,7 +923,7 @@ describe('parse', () => {
     })
 
     describe('author', () => {
-      it('RW-M03: should parse item author as plain text', () => {
+      it('RW-M03: should parse item author in RFC 2822 format', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -945,7 +945,7 @@ describe('parse', () => {
           items: [
             {
               title: 'Test Post',
-              authors: ['john@example.com (John Doe)'],
+              authors: [{ email: 'john@example.com', name: 'John Doe' }],
             },
           ],
         }
@@ -975,7 +975,7 @@ describe('parse', () => {
           items: [
             {
               title: 'Test Post',
-              authors: ['John Doe'],
+              authors: [{ name: 'John Doe' }],
             },
           ],
         }
@@ -1612,7 +1612,10 @@ describe('parse', () => {
           items: [
             {
               title: 'Post',
-              authors: ['alice@example.com (Alice)', 'bob@example.com (Bob)'],
+              authors: [
+                { email: 'alice@example.com', name: 'Alice' },
+                { email: 'bob@example.com', name: 'Bob' },
+              ],
             },
           ],
         }
@@ -2097,7 +2100,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-Q09: should preserve RFC 2822 author email format', () => {
+      it('RW-Q09: should parse RFC 2822 author email format into structured person', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2119,7 +2122,7 @@ describe('parse', () => {
           items: [
             {
               title: 'Post',
-              authors: ['john@example.com (John Doe)'],
+              authors: [{ email: 'john@example.com', name: 'John Doe' }],
             },
           ],
         }
@@ -3263,7 +3266,7 @@ describe('parse', () => {
           items: [
             {
               title: 'Post',
-              authors: ['Regular Author'],
+              authors: [{ name: 'Regular Author' }],
               dc: {
                 creators: ['DC Author'],
               },
@@ -3850,7 +3853,7 @@ describe('parse', () => {
         `
         const result = parse(value)
 
-        expect(result.items?.[0]?.authors).toEqual(['John Doe'])
+        expect(result.items?.[0]?.authors).toEqual([{ name: 'John Doe' }])
       })
     })
 
