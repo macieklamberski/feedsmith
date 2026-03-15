@@ -1316,6 +1316,7 @@ describe('parse', () => {
     }
 
     expect(parse(value)).toEqual(expected)
+  })
 
   // Edge cases and quirks observed in feeds found in the wild.
   describe('real world feeds', () => {
