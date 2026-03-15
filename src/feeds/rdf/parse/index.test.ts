@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { locales, namespaceUris } from '../../../common/config.js'
+import { DetectError, MalformedError, ParseError } from '../../../common/errors.js'
 import { parse } from './index.js'
 
 describe('parse', () => {
@@ -81,6 +82,46 @@ describe('parse', () => {
 
   it('should handle number input', () => {
     expect(() => parse(123)).toThrowError(locales.invalidFeedFormat)
+  })
+
+  describe('error types', () => {
+    it('should throw DetectError for non-feed input', () => {
+      const throwing = () => parse('not a feed')
+
+      expect(throwing).toThrow(DetectError)
+      expect(throwing).toThrow(locales.invalidFeedFormat)
+    })
+
+    it('should throw MalformedError for malformed XML', () => {
+      const value = `
+        <?xml version="1.0"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/">
+          <channel>
+            <title>Test</title
+          </channel>
+        </rdf:RDF>
+      `
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrow(MalformedError)
+      expect(throwing).toThrow(locales.invalidFeedFormat)
+    })
+
+    it('should throw ParseError for valid XML with invalid structure', () => {
+      const value = `
+        <?xml version="1.0"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/">
+        </rdf:RDF>
+      `
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrow(ParseError)
+      expect(throwing).toThrow(locales.invalidFeedFormat)
+    })
   })
 
   it('should handle non-standard atom namespace prefix', () => {

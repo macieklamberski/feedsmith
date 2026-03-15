@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { locales } from '../../../common/config.js'
+import { DetectError, ParseError } from '../../../common/errors.js'
 import { parse } from './index.js'
 
 describe('parse', () => {
@@ -259,6 +260,25 @@ describe('parse', () => {
 
   it('should handle number input', () => {
     expect(() => parse(123)).toThrowError(locales.invalidFeedFormat)
+  })
+
+  describe('error types', () => {
+    it('should throw DetectError for non-feed input', () => {
+      const throwing = () => parse({})
+
+      expect(throwing).toThrow(DetectError)
+      expect(throwing).toThrow(locales.invalidFeedFormat)
+    })
+
+    it('should throw ParseError for detected but invalid feed', () => {
+      const value = {
+        version: 'https://jsonfeed.org/version/1',
+      }
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrow(ParseError)
+      expect(throwing).toThrow(locales.invalidFeedFormat)
+    })
   })
 
   describe('with maxItems option', () => {

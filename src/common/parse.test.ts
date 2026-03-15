@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { locales } from './config.js'
+import { DetectError } from './errors.js'
 import { parse } from './parse.js'
 
 describe('parse', () => {
@@ -247,6 +248,15 @@ describe('parse', () => {
 
   it('should handle number input', () => {
     expect(() => parse(123)).toThrowError(locales.unrecognizedFeedFormat)
+  })
+
+  describe('error types', () => {
+    it('should throw DetectError for unrecognized format', () => {
+      const throwing = () => parse('not a feed')
+
+      expect(throwing).toThrow(DetectError)
+      expect(throwing).toThrow(locales.unrecognizedFeedFormat)
+    })
   })
 
   describe('leading/trailing garbage', () => {

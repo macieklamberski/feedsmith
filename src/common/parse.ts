@@ -11,6 +11,7 @@ import type { Rss } from '../feeds/rss/common/types.js'
 import { detect as detectRssFeed } from '../feeds/rss/detect/index.js'
 import { parse as parseRssFeed } from '../feeds/rss/parse/index.js'
 import { locales } from './config.js'
+import { DetectError } from './errors.js'
 import type { ParseMainOptions } from './types.js'
 import { parseJsonObject } from './utils.js'
 
@@ -40,5 +41,5 @@ export const parse = <TDate = string>(
     return { format: 'json', feed: parseJsonFeed(json, options) }
   }
 
-  throw new Error(locales.unrecognizedFeedFormat)
+  throw new DetectError(locales.unrecognizedFeedFormat)
 }

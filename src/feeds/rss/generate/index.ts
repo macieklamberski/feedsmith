@@ -1,4 +1,5 @@
 import { locales } from '../../../common/config.js'
+import { GenerateError } from '../../../common/errors.js'
 import type { DateLike, GenerateMainXml } from '../../../common/types.js'
 import { generateXml } from '../../../common/utils.js'
 import type { Rss } from '../common/types.js'
@@ -12,7 +13,7 @@ export const generate: GenerateMainXml<
   const generated = generateFeed(value)
 
   if (!generated) {
-    throw new Error(locales.invalidInputRss)
+    throw new GenerateError(locales.invalidInputRss)
   }
 
   return generateXml(builder, generated, options)
