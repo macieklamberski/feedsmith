@@ -42,10 +42,11 @@ export type GenerateUtil<V> = BaseGenerateUtil<V>
 
 // #region reference
 export namespace Rss {
-  /** @internal Intermediary type before Person refactoring. Do not use downstream. */
-  export type PersonLike = string | { name?: string; email?: string }
-
-  export type Person = string
+  export type Person = {
+    name?: string
+    email?: string
+    link?: string
+  }
 
   export type Category<TStrict extends boolean = false> = Strict<
     {
@@ -117,16 +118,12 @@ export namespace Rss {
     TStrict
   >
 
-  export type Item<
-    TDate,
-    TPerson extends PersonLike = Person,
-    TStrict extends boolean = false,
-  > = Strict<
+  export type Item<TDate, TStrict extends boolean = false> = Strict<
     {
       title?: string // At least one of title or description is required in spec.
       link?: string
       description?: string // At least one of title or description is required in spec.
-      authors?: Array<TPerson>
+      authors?: Array<Person>
       categories?: Array<Category<TStrict>>
       comments?: string
       enclosures?: Array<Enclosure<TStrict>>
@@ -162,19 +159,15 @@ export namespace Rss {
   > &
     (TStrict extends true ? { title: string } | { description: string } : unknown)
 
-  export type Feed<
-    TDate,
-    TPerson extends PersonLike = Person,
-    TStrict extends boolean = false,
-  > = Strict<
+  export type Feed<TDate, TStrict extends boolean = false> = Strict<
     {
       title: Requirable<string> // Required in spec.
       link: Requirable<string> // Required in spec (but may be missing when atom:link rel="self" is present).
       description: Requirable<string> // Required in spec.
       language?: string
       copyright?: string
-      managingEditor?: TPerson
-      webMaster?: TPerson
+      managingEditor?: Person
+      webMaster?: Person
       pubDate?: TDate
       lastBuildDate?: TDate
       categories?: Array<Category<TStrict>>
@@ -187,7 +180,7 @@ export namespace Rss {
       textInput?: TextInput<TStrict>
       skipHours?: Array<number>
       skipDays?: Array<string>
-      items?: Array<Item<TDate, TPerson, TStrict>>
+      items?: Array<Item<TDate, TStrict>>
       atom?: AtomNs.Feed<TDate>
       cc?: CcNs.ItemOrFeed
       dc?: DcNs.ItemOrFeed<TDate>
