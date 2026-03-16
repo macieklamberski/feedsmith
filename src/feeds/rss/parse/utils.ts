@@ -78,32 +78,22 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const URL_PATTERN = /^(?:https?:\/\/|www\.)[^\s@]+\.[^\s@]+$/
 const MAILTO_PATTERN = /^mailto:/i
 const HAS_BRACKETS = /[<[(]/
-const BRACKET_PATTERN = /([^<[(]+)|(?:<([^>]*)>)|(?:\[([^\]]*)\])|(?:\(([^)]*)\))/g
-
-const restoreBrackets = (match: RegExpMatchArray, chunk: string): string => {
-  if (match[2] !== undefined) {
-    return `<${chunk}>`
-  }
-
-  if (match[3] !== undefined) {
-    return `[${chunk}]`
-  }
-
-  if (match[4] !== undefined) {
-    return `(${chunk})`
-  }
-
-  return chunk
-}
+const WHITESPACE_PATTERN = /\s+/
 
 const parseUnbracketedPerson = (raw: string): Rss.Person | undefined => {
-  const words = raw.split(/\s+/)
+  // If no email/URL markers anywhere, the entire string is a name.
+  if (raw.indexOf('@') === -1 && raw.indexOf('http') === -1 && raw.indexOf('www.') === -1) {
+    return { name: raw }
+  }
+
+  const words = raw.split(WHITESPACE_PATTERN)
   const nameParts: Array<string> = []
   let email: string | undefined
   let link: string | undefined
 
   for (const word of words) {
     const stripped = word.replace(MAILTO_PATTERN, '')
+
     if (EMAIL_PATTERN.test(stripped) && !email) {
       email = stripped
     } else if (URL_PATTERN.test(word) && !link) {
@@ -113,18 +103,15 @@ const parseUnbracketedPerson = (raw: string): Rss.Person | undefined => {
     }
   }
 
-  // If no email/URL found, entire string is name.
   if (!email && !link) {
     return { name: raw }
   }
 
-  const person: Rss.Person = {}
-  const name = parseString(nameParts.join(' '))
-  if (name) person.name = name
-  if (email) person.email = email
-  if (link) person.link = link
-
-  return trimObject(person)
+  return trimObject({
+    name: parseString(nameParts.join(' ')),
+    email,
+    link,
+  })
 }
 
 export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
@@ -138,31 +125,49 @@ export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
     raw = raw.replace(MAILTO_PATTERN, '')
   }
 
-  if (EMAIL_PATTERN.test(raw)) {
-    return { email: raw }
-  }
+  if (EMAIL_PATTERN.test(raw)) return { email: raw }
+  if (URL_PATTERN.test(raw)) return { link: raw }
+  if (!HAS_BRACKETS.test(raw)) return parseUnbracketedPerson(raw)
 
-  if (URL_PATTERN.test(raw)) {
-    return { link: raw }
-  }
-
-  if (!HAS_BRACKETS.test(raw)) {
-    return parseUnbracketedPerson(raw)
-  }
-
-  // Bracket decomposition.
   const person: Rss.Person = {}
   const nameParts: Array<string> = []
-  let hasUnbracketedName = false
+  const length = raw.length
 
-  for (const match of raw.matchAll(BRACKET_PATTERN)) {
-    const chunk = parseString(match[1] ?? match[2] ?? match[3] ?? match[4])
+  let hasUnbracketedName = false
+  let i = 0
+
+  while (i < length) {
+    let chunk: string | undefined
+    let isBracketed = false
+    let openBracket = ''
+    let closeBracket = ''
+
+    const char = raw[i]
+
+    if (char === '<' || char === '(' || char === '[') {
+      isBracketed = true
+      openBracket = char
+      closeBracket = char === '<' ? '>' : char === '(' ? ')' : ']'
+
+      const start = i + 1
+      const end = raw.indexOf(closeBracket, start)
+
+      if (end !== -1) {
+        chunk = parseString(raw.substring(start, end))
+        i = end + 1
+      } else {
+        i = length
+      }
+    } else {
+      const start = i
+      while (i < length && raw[i] !== '<' && raw[i] !== '(' && raw[i] !== '[') i++
+      chunk = parseString(raw.substring(start, i))
+    }
 
     if (!chunk) {
       continue
     }
 
-    const isBracketed = !match[1]
     const strippedChunk = chunk.replace(MAILTO_PATTERN, '')
 
     if (EMAIL_PATTERN.test(strippedChunk) && !person.email) {
@@ -170,18 +175,14 @@ export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
     } else if (URL_PATTERN.test(chunk) && !person.link) {
       person.link = chunk
     } else if (isBracketed) {
-      // Preserve brackets only when there's already unbracketed name text.
-      // e.g. "John Doe (Editor)" → "John Doe (Editor)"
-      // but "john@example.com (John Doe)" → "John Doe" (no brackets).
-      nameParts.push(hasUnbracketedName ? restoreBrackets(match, chunk) : chunk)
+      nameParts.push(hasUnbracketedName ? `${openBracket}${chunk}${closeBracket}` : chunk)
     } else {
       hasUnbracketedName = true
       nameParts.push(chunk)
     }
   }
 
-  const name = parseString(nameParts.join(' '))
-  if (name) person.name = name
+  person.name = parseString(nameParts.join(' '))
 
   return trimObject(person)
 }
