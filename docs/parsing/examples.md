@@ -144,7 +144,7 @@ Returns:
   "link": "http://example.org/",
   "description": "For documentation <em>only</em>",
   "language": "en",
-  "webMaster": "webmaster@example.org",
+  "webMaster": { "email": "webmaster@example.org" },
   "pubDate": "Sat, 19 Mar 1988 07:15:00 GMT",
   "lastBuildDate": "Sat, 19 Mar 1988 07:15:00 GMT",
   "categories": [{ "name": "Examples2", "domain": "http://www.example.com/cusips" }],
