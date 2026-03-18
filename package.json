@@ -78,6 +78,6 @@
     "@types/bun": "^1.3.10",
     "kvalita": "^1.10.0",
     "tsdown": "^0.21.2",
-    "vitepress": "^1.6.4"
+    "vitepress": "^2.0.0-alpha.16"
   }
 }
