@@ -147,12 +147,16 @@ export default defineConfig({
     },
     socialLinks: [
       {
+        icon: 'npm',
+        link: 'https://www.npmjs.com/package/feedsmith',
+      },
+      {
         icon: 'github',
         link: 'https://github.com/macieklamberski/feedsmith',
       },
       {
-        icon: 'npm',
-        link: 'https://www.npmjs.com/package/feedsmith',
+        icon: 'x',
+        link: 'https://x.com/macieklamberski',
       },
     ],
   },
