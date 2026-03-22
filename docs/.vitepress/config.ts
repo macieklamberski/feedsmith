@@ -24,6 +24,16 @@ export default defineConfig({
     ['meta', { property: 'og:site_name', content: 'Feedsmith' }],
     [
       'script',
+      { type: 'application/ld+json' },
+      JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'Feedsmith',
+        url: hostname,
+      }),
+    ],
+    [
+      'script',
       {
         async: '',
         src: 'https://stats.lamberski.com/script.js',
