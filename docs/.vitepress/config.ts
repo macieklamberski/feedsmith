@@ -24,6 +24,16 @@ export default defineConfig({
     ['meta', { property: 'og:site_name', content: 'Feedsmith' }],
     [
       'script',
+      { type: 'application/ld+json' },
+      JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'Feedsmith',
+        url: hostname,
+      }),
+    ],
+    [
+      'script',
       {
         async: '',
         src: 'https://stats.lamberski.com/script.js',
@@ -153,12 +163,16 @@ export default defineConfig({
     },
     socialLinks: [
       {
+        icon: 'npm',
+        link: 'https://www.npmjs.com/package/feedsmith',
+      },
+      {
         icon: 'github',
         link: 'https://github.com/macieklamberski/feedsmith',
       },
       {
-        icon: 'npm',
-        link: 'https://www.npmjs.com/package/feedsmith',
+        icon: 'x',
+        link: 'https://x.com/macieklamberski',
       },
     ],
   },
