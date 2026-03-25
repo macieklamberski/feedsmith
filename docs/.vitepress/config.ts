@@ -51,7 +51,7 @@ export default defineConfig({
       { text: 'Generating', link: '/generating' },
       {
         text: 'v2.x',
-        items: [{ text: 'v3.x (Next)', link: 'https://next.feedsmith.dev' }],
+        items: [{ text: 'v3.x (Next)', link: 'https://v3.feedsmith.dev' }],
       },
     ],
     sidebar: [

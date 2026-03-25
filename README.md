@@ -19,7 +19,7 @@ Feedsmith offers universal and format‑specific parsers that maintain the origi
 ---
 
 > [!IMPORTANT]
-> **Feedsmith 3.x is in final stages of development.** Check out the [v3.x guide](https://next.feedsmith.dev/migration/v2-to-v3) to explore new features and learn how to upgrade. Install it with:
+> **Feedsmith 3.x is in final stages of development.** Check out the [v3.x guide](https://v3.feedsmith.dev/migration/v2-to-v3) to explore new features and learn how to upgrade. Install it with:
 >
 > `npm install feedsmith@next`
 
