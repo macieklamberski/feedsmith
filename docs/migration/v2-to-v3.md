@@ -17,6 +17,24 @@ Update your package to the latest 3.x version:
 npm install feedsmith@latest
 ```
 
+## Migration Checklist
+
+Use this checklist to ensure a complete migration:
+
+- Remove `{ lenient: true }` from all generate function calls
+- Add `{ strict: true }` where you need compile-time validation of required fields
+- Update type parameters if using strict types directly (add `true` as last parameter)
+- Remove `DeepPartial` from imports
+- Change `feedsmith/types` imports to `feedsmith`
+- Update Atom text fields (`title`, `subtitle`, `rights`, `summary`): read `.value` instead of plain string, generate with `{ value: '...' }` instead of plain string
+- Update Atom `entry.content` usage: read `content?.value` instead of `content`, generate with `{ value: '...' }` instead of plain string
+- Replace Media namespace deprecated field (`group` → `groups`)
+- Replace Podcast namespace deprecated fields (`location` → `locations`, `value` → `values`, `chats` → `chat`)
+- Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
+- Replace Dublin Core Terms singular fields with plural arrays (e.g., `title` → `titles`)
+- Test feed generation to ensure output is correct
+- Update error handling to use `DetectError`, `MalformedError`, `ParseError`, and `GenerateError` instead of generic `Error`
+
 ## Breaking Changes
 
 ### Strict Mode Now Opt-In
@@ -450,20 +468,3 @@ feed.pubDate // Date
 
 RSS, Atom, and RDF feeds now support the [XML namespace](/reference/namespaces/xml) (`xml:*` attributes). The `xml` property is available on both feed and item levels, providing access to `xml:lang`, `xml:base`, `xml:space`, and `xml:id` attributes.
 
-## Migration Checklist
-
-Use this checklist to ensure a complete migration:
-
-- Remove `{ lenient: true }` from all generate function calls
-- Add `{ strict: true }` where you need compile-time validation of required fields
-- Update type parameters if using strict types directly (add `true` as last parameter)
-- Remove `DeepPartial` from imports
-- Change `feedsmith/types` imports to `feedsmith`
-- Update Atom text fields (`title`, `subtitle`, `rights`, `summary`): read `.value` instead of plain string, generate with `{ value: '...' }` instead of plain string
-- Update Atom `entry.content` usage: read `content?.value` instead of `content`, generate with `{ value: '...' }` instead of plain string
-- Replace Media namespace deprecated field (`group` → `groups`)
-- Replace Podcast namespace deprecated fields (`location` → `locations`, `value` → `values`, `chats` → `chat`)
-- Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
-- Replace Dublin Core Terms singular fields with plural arrays (e.g., `title` → `titles`)
-- Test feed generation to ensure output is correct
-- Update error handling to use `DetectError`, `MalformedError`, `ParseError`, and `GenerateError` instead of generic `Error`
