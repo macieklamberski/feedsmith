@@ -45,6 +45,8 @@ export namespace Rss {
   export type Person = {
     name?: string
     email?: string
+    // Parse-only. Extracted from URLs found in person strings. Not included in generated output,
+    // as the RSS spec has no standard way to encode links in person fields.
     link?: string
   }
 
