@@ -238,7 +238,7 @@ const xml = generateAtomFeed({
 
 ### RSS Person Fields Changed from Strings to Objects
 
-The `managingEditor`, `webMaster`, `authors`, and `skipHours`-adjacent person fields on RSS feeds and items were previously plain strings (e.g., `'editor@example.com (Editor Name)'`). In the new version, they use the `Rss.Person` object that preserves structured data, properly representing the [RSS person construct](https://www.rssboard.org/rss-specification#ltauthorgtSubelementOfLtitemgt).
+The `managingEditor`, `webMaster`, and `authors` fields on RSS feeds and items were previously plain strings (e.g., `'editor@example.com (Editor Name)'`). In the new version, they use the `Rss.Person` object that preserves structured data, properly representing the [RSS person construct](https://www.rssboard.org/rss-specification#ltauthorgtSubelementOfLtitemgt).
 
 The affected fields are:
 - **Feed**: `managingEditor`, `webMaster`
