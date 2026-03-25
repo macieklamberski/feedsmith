@@ -2016,6 +2016,20 @@ describe('parseFeed', () => {
 
     expect(parseFeed(value)).toEqual(expected)
   })
+
+  it('should parse managingEditor with name and email (RFC 2822 format)', () => {
+    const value = { channel: { managingeditor: { '#text': 'editor@example.com (Editor Name)' } } }
+    const expected = { email: 'editor@example.com', name: 'Editor Name' }
+
+    expect(parseFeed(value)?.managingEditor).toEqual(expected)
+  })
+
+  it('should parse webMaster with name and email (RFC 2822 format)', () => {
+    const value = { channel: { webmaster: { '#text': 'webmaster@example.com (Webmaster Name)' } } }
+    const expected = { email: 'webmaster@example.com', name: 'Webmaster Name' }
+
+    expect(parseFeed(value)?.webMaster).toEqual(expected)
+  })
 })
 
 describe('retrieveImage', () => {
