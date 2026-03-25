@@ -222,4 +222,3 @@ Custom namespace prefixes are automatically normalized to standard ones:
 // Input: <custom:creator>John Doe</custom:creator>
 // Automatically becomes: feed.dc.creator
 ```
-
