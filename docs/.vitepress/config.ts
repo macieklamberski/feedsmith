@@ -1,5 +1,9 @@
 import { defineConfig } from 'vitepress'
 
+const indexMdRegex = /index\.md$/
+const mdRegex = /\.md$/
+const trailingSlashRegex = /\/$/
+
 const hostname = 'https://feedsmith.dev'
 
 export default defineConfig({
@@ -14,9 +18,9 @@ export default defineConfig({
   },
   transformHead: ({ pageData }) => {
     const canonicalUrl = `${hostname}/${pageData.relativePath}`
-      .replace(/index\.md$/, '')
-      .replace(/\.md$/, '')
-      .replace(/\/$/, '')
+      .replace(indexMdRegex, '')
+      .replace(mdRegex, '')
+      .replace(trailingSlashRegex, '')
 
     return [['link', { rel: 'canonical', href: canonicalUrl }]]
   },
