@@ -14,6 +14,7 @@ import {
 } from '../../../common/utils.js'
 import type { ItunesNs } from '../common/types.js'
 
+const explicitOrYesRegex = /^\p{White_Space}*(explicit|yes)\p{White_Space}*$/iu
 const durationRegex = /^(?:(\d+):)?(\d+):(\d+)$/
 
 export const parseCategory: ParsePartialUtil<ItunesNs.Category> = (value) => {
@@ -41,8 +42,6 @@ export const parseOwner: ParsePartialUtil<ItunesNs.Owner> = (value) => {
 
   return trimObject(owner)
 }
-
-const explicitOrYesRegex = /^\p{White_Space}*(explicit|yes)\p{White_Space}*$/iu
 
 export const parseExplicit: ParsePartialUtil<boolean> = (value) => {
   const boolean = parseBoolean(value)
