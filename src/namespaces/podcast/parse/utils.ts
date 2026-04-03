@@ -14,6 +14,9 @@ import {
 } from '../../../common/utils.js'
 import type { PodcastNs } from '../common/types.js'
 
+const whitespaceRegex = /\s+/
+const trailingWRegex = /w$/
+
 export const parseTranscript: ParsePartialUtil<PodcastNs.Transcript> = (value) => {
   if (!isObject(value)) {
     return
@@ -257,11 +260,11 @@ export const parseImages: ParsePartialUtil<Array<PodcastNs.Image>> = (value) => 
   const segments = srcset.split(',')
 
   for (const segment of segments) {
-    const [href, width] = segment.trim().split(/\s+/)
+    const [href, width] = segment.trim().split(whitespaceRegex)
 
     const image = {
       href: parseString(href),
-      width: parseNumber(width?.replace(/w$/, '')),
+      width: parseNumber(width?.replace(trailingWRegex, '')),
     }
 
     images.push(image)
