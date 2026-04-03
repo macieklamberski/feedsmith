@@ -20,7 +20,7 @@ describe('parse', () => {
     })
   }
 
-  it('should correctly parse Atom 1.0 feed with mixed case tags', async () => {
+  it('should correctly parse Atom 1.0 feed with mixed case tags', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
       <FeEd xmlns="http://www.w3.org/2005/Atom">
@@ -142,7 +142,7 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
-  it('should handle alternating case entries', async () => {
+  it('should handle alternating case entries', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
       <feed xmlns="http://www.w3.org/2005/Atom">
@@ -192,7 +192,7 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
-  it('should correctly parse namespaced Atom feed', async () => {
+  it('should correctly parse namespaced Atom feed', () => {
     const value = `
       <?xml version="1.0" encoding="utf-8"?>
       <atom:feed atom:xmlns="http://www.w3.org/2005/Atom">

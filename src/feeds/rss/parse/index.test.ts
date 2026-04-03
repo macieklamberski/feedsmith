@@ -24,7 +24,7 @@ describe('parse', () => {
     })
   }
 
-  it('should correctly parse RSS with mixed case tags', async () => {
+  it('should correctly parse RSS with mixed case tags', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8" ?>
       <rSs version="2.0">

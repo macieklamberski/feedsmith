@@ -68,7 +68,7 @@ export const parseSubscribe: ParsePartialUtil<RawVoiceNs.Subscribe> = (value) =>
 
   for (const key in value) {
     if (key.startsWith('@')) {
-      const attrName = key.substring(1)
+      const attrName = key.slice(1)
       const attrValue = parseString(value[key])
       if (attrValue) {
         subscribe[attrName] = attrValue

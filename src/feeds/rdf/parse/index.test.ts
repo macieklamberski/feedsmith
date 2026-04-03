@@ -20,7 +20,7 @@ describe('parse', () => {
     })
   }
 
-  it('should correctly parse RDF with mixed case tags', async () => {
+  it('should correctly parse RDF with mixed case tags', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8" ?>
       <?xml version="1.0"?>

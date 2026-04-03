@@ -33,11 +33,12 @@ export type DeepPartial<T> =
       ? Array<DeepPartial<U>>
       : T
 
-export type DeepOmit<T, K extends string> = T extends Array<infer U>
-  ? Array<DeepOmit<U, K>>
-  : IsPlainObject<T> extends true
-    ? Pick<{ [P in keyof T]: DeepOmit<T[P], K> }, Exclude<keyof T, K>>
-    : T
+export type DeepOmit<T, K extends string> =
+  T extends Array<infer U>
+    ? Array<DeepOmit<U, K>>
+    : IsPlainObject<T> extends true
+      ? Pick<{ [P in keyof T]: DeepOmit<T[P], K> }, Exclude<keyof T, K>>
+      : T
 
 export type ParseExactUtil<R> = (value: Unreliable) => R | undefined
 
