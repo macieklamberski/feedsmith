@@ -769,6 +769,9 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
   return normalizeRoot
 }
 
+const startsWithBraceRegex = /^\s*\{/
+const endsWithBraceRegex = /\}\s*$/
+
 export const parseJsonObject = (value: unknown): unknown => {
   if (isObject(value)) {
     return value
@@ -778,8 +781,8 @@ export const parseJsonObject = (value: unknown): unknown => {
     return
   }
 
-  const startsWithBrace = value.charAt(0) === '{' || /^\s*\{/.test(value)
-  const endsWithBrace = value.charAt(value.length - 1) === '}' || /\}\s*$/.test(value)
+  const startsWithBrace = value.charAt(0) === '{' || startsWithBraceRegex.test(value)
+  const endsWithBrace = value.charAt(value.length - 1) === '}' || endsWithBraceRegex.test(value)
 
   if (!startsWithBrace || !endsWithBrace) {
     return

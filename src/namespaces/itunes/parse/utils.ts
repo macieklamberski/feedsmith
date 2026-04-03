@@ -14,6 +14,8 @@ import {
 } from '../../../common/utils.js'
 import type { ItunesNs } from '../common/types.js'
 
+const durationRegex = /^(?:(\d+):)?(\d+):(\d+)$/
+
 export const parseCategory: ParseUtilPartial<ItunesNs.Category> = (value) => {
   if (!isObject(value)) {
     return
@@ -67,7 +69,7 @@ export const parseDuration: ParseUtilPartial<number> = (value) => {
   }
 
   // Handle HH:MM:SS and MM:SS format.
-  const match = value.match(/^(?:(\d+):)?(\d+):(\d+)$/)
+  const match = value.match(durationRegex)
 
   if (match) {
     const [, hours, minutes, seconds] = match
