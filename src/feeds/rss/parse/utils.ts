@@ -74,29 +74,41 @@ import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/u
 import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
 import type { ParseUtilPartial, Rss } from '../common/types.js'
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const URL_PATTERN = /^(?:https?:\/\/|www\.)[^\s]+\.[^\s]+$/
-const MAILTO_PATTERN = /^mailto:/i
-const HAS_BRACKETS = /[<[(]/
-const WHITESPACE_PATTERN = /\s+/
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const urlRegex = /^(?:https?:\/\/|www\.)[^\s]+\.[^\s]+$/
+const mailtoRegex = /^mailto:/i
+const hasBracketsRegex = /[<[(]/
+const whitespaceRegex = /\s+/
+
+const closeBracketFor = (char: string) => {
+  if (char === '<') {
+    return '>'
+  }
+
+  if (char === '(') {
+    return ')'
+  }
+
+  return ']'
+}
 
 const parseUnbracketedPerson = (raw: string): Rss.Person | undefined => {
   // If no email/URL markers anywhere, the entire string is a name.
-  if (raw.indexOf('@') === -1 && raw.indexOf('http') === -1 && raw.indexOf('www.') === -1) {
+  if (raw.indexOf('@') === -1 && raw.indexOf('://') === -1 && raw.indexOf('www.') === -1) {
     return { name: raw }
   }
 
-  const words = raw.split(WHITESPACE_PATTERN)
+  const words = raw.split(whitespaceRegex)
   const nameParts: Array<string> = []
   let email: string | undefined
   let link: string | undefined
 
   for (const word of words) {
-    const stripped = word.replace(MAILTO_PATTERN, '')
+    const stripped = word.replace(mailtoRegex, '')
 
-    if (URL_PATTERN.test(word) && !link) {
+    if (urlRegex.test(word) && !link) {
       link = word
-    } else if (EMAIL_PATTERN.test(stripped) && !email) {
+    } else if (emailRegex.test(stripped) && !email) {
       email = stripped
     } else {
       nameParts.push(word)
@@ -115,19 +127,25 @@ const parseUnbracketedPerson = (raw: string): Rss.Person | undefined => {
 }
 
 export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
-  let raw = parseSingularOf(value?.name ?? value, (v) => parseString(retrieveText(v)))
+  const raw = parseSingularOf(value?.name ?? value, (v) => parseString(retrieveText(v)))
 
   if (!raw) {
     return
   }
 
-  if (MAILTO_PATTERN.test(raw)) {
-    raw = raw.replace(MAILTO_PATTERN, '')
+  const stripped = raw.replace(mailtoRegex, '')
+
+  if (urlRegex.test(stripped)) {
+    return { link: stripped }
   }
 
-  if (URL_PATTERN.test(raw)) return { link: raw }
-  if (EMAIL_PATTERN.test(raw)) return { email: raw }
-  if (!HAS_BRACKETS.test(raw)) return parseUnbracketedPerson(raw)
+  if (emailRegex.test(stripped)) {
+    return { email: stripped }
+  }
+
+  if (!hasBracketsRegex.test(raw)) {
+    return parseUnbracketedPerson(raw)
+  }
 
   const person: Rss.Person = {}
   const nameParts: Array<string> = []
@@ -147,32 +165,34 @@ export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
     if (char === '<' || char === '(' || char === '[') {
       isBracketed = true
       openBracket = char
-      closeBracket = char === '<' ? '>' : char === '(' ? ')' : ']'
+      closeBracket = closeBracketFor(char)
 
       const start = i + 1
       const end = raw.indexOf(closeBracket, start)
 
       if (end !== -1) {
-        chunk = parseString(raw.substring(start, end))
+        chunk = parseString(raw.slice(start, end))
         i = end + 1
       } else {
         i = length
       }
     } else {
       const start = i
-      while (i < length && raw[i] !== '<' && raw[i] !== '(' && raw[i] !== '[') i++
-      chunk = parseString(raw.substring(start, i))
+      while (i < length && raw[i] !== '<' && raw[i] !== '(' && raw[i] !== '[') {
+        i++
+      }
+      chunk = parseString(raw.slice(start, i))
     }
 
     if (!chunk) {
       continue
     }
 
-    const strippedChunk = chunk.replace(MAILTO_PATTERN, '')
+    const strippedChunk = chunk.replace(mailtoRegex, '')
 
-    if (URL_PATTERN.test(chunk) && !person.link) {
+    if (urlRegex.test(chunk) && !person.link) {
       person.link = chunk
-    } else if (EMAIL_PATTERN.test(strippedChunk) && !person.email) {
+    } else if (emailRegex.test(strippedChunk) && !person.email) {
       person.email = strippedChunk
     } else if (isBracketed) {
       nameParts.push(hasUnbracketedName ? `${openBracket}${chunk}${closeBracket}` : chunk)
