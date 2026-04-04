@@ -126,27 +126,7 @@ const parseUnbracketedPerson = (raw: string): Rss.Person | undefined => {
   })
 }
 
-export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
-  const raw = parseSingularOf(value?.name ?? value, (v) => parseString(retrieveText(v)))
-
-  if (!raw) {
-    return
-  }
-
-  const stripped = raw.replace(mailtoRegex, '')
-
-  if (urlRegex.test(stripped)) {
-    return { link: stripped }
-  }
-
-  if (emailRegex.test(stripped)) {
-    return { email: stripped }
-  }
-
-  if (!hasBracketsRegex.test(raw)) {
-    return parseUnbracketedPerson(raw)
-  }
-
+const parseBracketedPerson = (raw: string): Rss.Person | undefined => {
   const person: Rss.Person = {}
   const nameParts: Array<string> = []
   const length = raw.length
@@ -221,6 +201,30 @@ export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
   person.name = parseString(nameParts.join(' '))
 
   return trimObject(person)
+}
+
+export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
+  const raw = parseSingularOf(value?.name ?? value, (v) => parseString(retrieveText(v)))
+
+  if (!raw) {
+    return
+  }
+
+  const stripped = raw.replace(mailtoRegex, '')
+
+  if (urlRegex.test(stripped)) {
+    return { link: stripped }
+  }
+
+  if (emailRegex.test(stripped)) {
+    return { email: stripped }
+  }
+
+  if (!hasBracketsRegex.test(raw)) {
+    return parseUnbracketedPerson(raw)
+  }
+
+  return parseBracketedPerson(raw)
 }
 
 export const parseCategory: ParseUtilPartial<Rss.Category> = (value) => {
