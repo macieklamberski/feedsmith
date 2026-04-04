@@ -3857,6 +3857,59 @@ describe('parse', () => {
       })
     })
 
+    describe('person fields', () => {
+      it('should parse managingEditor in RFC 2822 format', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0">
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <managingEditor>editor@example.com (Editor Name)</managingEditor>
+            </channel>
+          </rss>
+        `
+        const result = parse(value)
+
+        expect(result.managingEditor).toEqual({ email: 'editor@example.com', name: 'Editor Name' })
+      })
+
+      it('should parse webMaster in RFC 2822 format', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0">
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <webMaster>webmaster@example.com (Webmaster)</webMaster>
+            </channel>
+          </rss>
+        `
+        const result = parse(value)
+
+        expect(result.webMaster).toEqual({ email: 'webmaster@example.com', name: 'Webmaster' })
+      })
+
+      it('should parse managingEditor with email only', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0">
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <managingEditor>editor@example.com</managingEditor>
+            </channel>
+          </rss>
+        `
+        const result = parse(value)
+
+        expect(result.managingEditor).toEqual({ email: 'editor@example.com' })
+      })
+    })
+
     describe('foreign namespace on core elements', () => {
       it('RW-NS25: should handle default namespace override on link element', () => {
         const value = `
