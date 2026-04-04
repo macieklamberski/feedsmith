@@ -70,6 +70,23 @@ describe('generatePerson', () => {
     expect(generatePerson(value)).toEqual(expected)
   })
 
+  it('should generate person with parentheses in name', () => {
+    const value = {
+      name: 'John (Editor)',
+      email: 'john@example.com',
+    }
+    const expected = 'john@example.com (John (Editor))'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should wrap in CDATA when name contains angle brackets', () => {
+    const value = { name: 'John <CEO>' }
+    const expected = { '#cdata': 'John <CEO>' }
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
   it('should handle empty object', () => {
     expect(generatePerson({})).toBeUndefined()
   })
