@@ -114,6 +114,20 @@ describe('parsePerson', () => {
 
       expect(parsePerson(value)).toEqual(expected)
     })
+
+    it('should parse URL containing @ (Mastodon)', () => {
+      const value = 'https://mastodon.social/@user'
+      const expected = { link: 'https://mastodon.social/@user' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should parse URL containing @ (Medium)', () => {
+      const value = 'https://medium.com/@author'
+      const expected = { link: 'https://medium.com/@author' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
   })
 
   describe('invalid inputs', () => {
@@ -229,6 +243,16 @@ describe('parsePerson', () => {
         const expected = {
           name: 'John Doe',
           link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse URL containing @ in brackets', () => {
+        const value = 'John Doe (https://mastodon.social/@johndoe)'
+        const expected = {
+          name: 'John Doe',
+          link: 'https://mastodon.social/@johndoe',
         }
 
         expect(parsePerson(value)).toEqual(expected)
@@ -500,6 +524,16 @@ describe('parsePerson', () => {
       const expected = {
         name: 'John Doe',
         email: 'john@example.com',
+      }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should extract URL containing @ after name', () => {
+      const value = 'John Doe https://mastodon.social/@johndoe'
+      const expected = {
+        name: 'John Doe',
+        link: 'https://mastodon.social/@johndoe',
       }
 
       expect(parsePerson(value)).toEqual(expected)

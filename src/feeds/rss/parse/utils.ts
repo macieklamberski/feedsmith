@@ -75,7 +75,7 @@ import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces
 import type { ParseUtilPartial, Rss } from '../common/types.js'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const URL_PATTERN = /^(?:https?:\/\/|www\.)[^\s@]+\.[^\s@]+$/
+const URL_PATTERN = /^(?:https?:\/\/|www\.)[^\s]+\.[^\s]+$/
 const MAILTO_PATTERN = /^mailto:/i
 const HAS_BRACKETS = /[<[(]/
 const WHITESPACE_PATTERN = /\s+/
@@ -94,10 +94,10 @@ const parseUnbracketedPerson = (raw: string): Rss.Person | undefined => {
   for (const word of words) {
     const stripped = word.replace(MAILTO_PATTERN, '')
 
-    if (EMAIL_PATTERN.test(stripped) && !email) {
-      email = stripped
-    } else if (URL_PATTERN.test(word) && !link) {
+    if (URL_PATTERN.test(word) && !link) {
       link = word
+    } else if (EMAIL_PATTERN.test(stripped) && !email) {
+      email = stripped
     } else {
       nameParts.push(word)
     }
@@ -125,8 +125,8 @@ export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
     raw = raw.replace(MAILTO_PATTERN, '')
   }
 
-  if (EMAIL_PATTERN.test(raw)) return { email: raw }
   if (URL_PATTERN.test(raw)) return { link: raw }
+  if (EMAIL_PATTERN.test(raw)) return { email: raw }
   if (!HAS_BRACKETS.test(raw)) return parseUnbracketedPerson(raw)
 
   const person: Rss.Person = {}
@@ -170,10 +170,10 @@ export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
 
     const strippedChunk = chunk.replace(MAILTO_PATTERN, '')
 
-    if (EMAIL_PATTERN.test(strippedChunk) && !person.email) {
-      person.email = strippedChunk
-    } else if (URL_PATTERN.test(chunk) && !person.link) {
+    if (URL_PATTERN.test(chunk) && !person.link) {
       person.link = chunk
+    } else if (EMAIL_PATTERN.test(strippedChunk) && !person.email) {
+      person.email = strippedChunk
     } else if (isBracketed) {
       nameParts.push(hasUnbracketedName ? `${openBracket}${chunk}${closeBracket}` : chunk)
     } else {
