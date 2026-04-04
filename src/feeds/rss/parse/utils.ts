@@ -82,7 +82,7 @@ const whitespaceRegex = /\s+/
 const commonSeparatorsRegex = /^[\s,\-|/:;]+|[\s,\-|/:;]+$/g
 const mailtoQueryRegex = /\?.*$/
 
-const stripMailto = (value: string) => {
+export const stripMailto = (value: string) => {
   const stripped = value.replace(mailtoRegex, '')
 
   if (stripped !== value) {

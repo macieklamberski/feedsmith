@@ -16,7 +16,52 @@ import {
   retrieveImage,
   retrieveItems,
   retrieveTextInput,
+  stripMailto,
 } from './utils.js'
+
+describe('stripMailto', () => {
+  it('should strip mailto: prefix', () => {
+    const value = 'mailto:john@example.com'
+    const expected = 'john@example.com'
+
+    expect(stripMailto(value)).toBe(expected)
+  })
+
+  it('should strip mailto: prefix case-insensitively', () => {
+    const value = 'MAILTO:john@example.com'
+    const expected = 'john@example.com'
+
+    expect(stripMailto(value)).toBe(expected)
+  })
+
+  it('should strip query string when mailto: prefix is present', () => {
+    const value = 'mailto:john@example.com?subject=feedback'
+    const expected = 'john@example.com'
+
+    expect(stripMailto(value)).toBe(expected)
+  })
+
+  it('should not strip query string when mailto: prefix is absent', () => {
+    const value = 'john@example.com?subject=feedback'
+    const expected = 'john@example.com?subject=feedback'
+
+    expect(stripMailto(value)).toBe(expected)
+  })
+
+  it('should return value unchanged when no mailto: prefix', () => {
+    const value = 'john@example.com'
+    const expected = 'john@example.com'
+
+    expect(stripMailto(value)).toBe(expected)
+  })
+
+  it('should return non-email string unchanged', () => {
+    const value = 'John Doe'
+    const expected = 'John Doe'
+
+    expect(stripMailto(value)).toBe(expected)
+  })
+})
 
 describe('parsePerson', () => {
   describe('name only', () => {
