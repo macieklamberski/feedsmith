@@ -105,6 +105,13 @@ describe('parsePerson', () => {
 
       expect(parsePerson(value)).toEqual(expected)
     })
+
+    it('should strip mailto: query string parameters', () => {
+      const value = 'mailto:john@example.com?subject=feedback'
+      const expected = { email: 'john@example.com' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
   })
 
   describe('url only', () => {
@@ -188,6 +195,16 @@ describe('parsePerson', () => {
         expect(parsePerson(value)).toEqual(expected)
       })
 
+      it('should parse accented characters in bracketed name', () => {
+        const value = 'jdasilva@example.br (João da Silva)'
+        const expected = {
+          email: 'jdasilva@example.br',
+          name: 'João da Silva',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
       it('should handle email with plus addressing', () => {
         const value = 'me+spam@example.com (Editor)'
         const expected = {
@@ -232,6 +249,16 @@ describe('parsePerson', () => {
 
       it('should strip mailto: prefix inside brackets', () => {
         const value = 'John Doe (mailto:john@example.com)'
+        const expected = {
+          name: 'John Doe',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should strip mailto: query string inside brackets', () => {
+        const value = 'John Doe (mailto:john@example.com?subject=feedback)'
         const expected = {
           name: 'John Doe',
           email: 'john@example.com',
@@ -565,6 +592,16 @@ describe('parsePerson', () => {
   })
 
   describe('unbracketed mixed content', () => {
+    it('should extract email before name', () => {
+      const value = 'jsmith@example.org John Smith'
+      const expected = {
+        name: 'John Smith',
+        email: 'jsmith@example.org',
+      }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
     it('should extract email after name', () => {
       const value = 'John Doe john@example.com'
       const expected = {
@@ -632,9 +669,64 @@ describe('parsePerson', () => {
       expect(parsePerson(value)).toEqual(expected)
     })
 
+    it('should preserve hyphenated name', () => {
+      const value = 'Jean-Pierre de la Croix'
+      const expected = { name: 'Jean-Pierre de la Croix' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should preserve name with slash separator', () => {
+      const value = 'Smith / Jones'
+      const expected = { name: 'Smith / Jones' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
     it('should treat string with @ but no valid email or URL as name', () => {
       const value = 'John @ Company'
       const expected = { name: 'John @ Company' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should strip comma separator between name and email', () => {
+      const value = 'John Smith, john@example.com'
+      const expected = {
+        name: 'John Smith',
+        email: 'john@example.com',
+      }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should strip hyphen separator between name and email', () => {
+      const value = 'John Smith - john@example.com'
+      const expected = {
+        name: 'John Smith',
+        email: 'john@example.com',
+      }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should strip separators between name, email and URL', () => {
+      const value = 'John Smith - john@example.com - http://example.com/'
+      const expected = {
+        name: 'John Smith',
+        email: 'john@example.com',
+        link: 'http://example.com/',
+      }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should strip mailto: query string from unbracketed email', () => {
+      const value = 'John Doe mailto:john@example.com?subject=feedback'
+      const expected = {
+        name: 'John Doe',
+        email: 'john@example.com',
+      }
 
       expect(parsePerson(value)).toEqual(expected)
     })

@@ -79,6 +79,18 @@ const urlRegex = /^(?:https?:\/\/|www\.)[^\s]+\.[^\s]+$/
 const mailtoRegex = /^mailto:/i
 const hasBracketsRegex = /[<[(]/
 const whitespaceRegex = /\s+/
+const commonSeparatorsRegex = /^[\s,\-|/:;]+|[\s,\-|/:;]+$/g
+const mailtoQueryRegex = /\?.*$/
+
+const stripMailto = (value: string) => {
+  const stripped = value.replace(mailtoRegex, '')
+
+  if (stripped !== value) {
+    return stripped.replace(mailtoQueryRegex, '')
+  }
+
+  return stripped
+}
 
 const closeBracketFor = (char: string) => {
   if (char === '<') {
@@ -93,7 +105,7 @@ const closeBracketFor = (char: string) => {
 }
 
 const parseSimplePerson = (raw: string): Rss.Person | undefined => {
-  const stripped = raw.replace(mailtoRegex, '')
+  const stripped = stripMailto(raw)
 
   if (urlRegex.test(stripped)) {
     return { link: stripped }
@@ -116,7 +128,7 @@ const parseUnbracketedPerson = (raw: string): Rss.Person | undefined => {
   let link: string | undefined
 
   for (const word of words) {
-    const stripped = word.replace(mailtoRegex, '')
+    const stripped = stripMailto(word)
 
     if (urlRegex.test(word) && !link) {
       link = word
@@ -131,11 +143,13 @@ const parseUnbracketedPerson = (raw: string): Rss.Person | undefined => {
     return { name: raw }
   }
 
-  return trimObject({
-    name: parseString(nameParts.join(' ')),
+  const person = {
+    name: parseString(nameParts.join(' ').replace(commonSeparatorsRegex, '')),
     email,
     link,
-  })
+  }
+
+  return trimObject(person)
 }
 
 const parseBracketedPerson = (raw: string): Rss.Person | undefined => {
@@ -196,7 +210,7 @@ const parseBracketedPerson = (raw: string): Rss.Person | undefined => {
       continue
     }
 
-    const strippedChunk = chunk.replace(mailtoRegex, '')
+    const strippedChunk = stripMailto(chunk)
 
     if (urlRegex.test(chunk) && !person.link) {
       person.link = chunk
