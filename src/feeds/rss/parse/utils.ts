@@ -92,6 +92,18 @@ const closeBracketFor = (char: string) => {
   return ']'
 }
 
+const parseSimplePerson = (raw: string): Rss.Person | undefined => {
+  const stripped = raw.replace(mailtoRegex, '')
+
+  if (urlRegex.test(stripped)) {
+    return { link: stripped }
+  }
+
+  if (emailRegex.test(stripped)) {
+    return { email: stripped }
+  }
+}
+
 const parseUnbracketedPerson = (raw: string): Rss.Person | undefined => {
   // If no email/URL markers anywhere, the entire string is a name.
   if (raw.indexOf('@') === -1 && raw.indexOf('://') === -1 && raw.indexOf('www.') === -1) {
@@ -203,18 +215,6 @@ const parseBracketedPerson = (raw: string): Rss.Person | undefined => {
   return trimObject(person)
 }
 
-const parseSimplePerson = (raw: string): Rss.Person | undefined => {
-  const stripped = raw.replace(mailtoRegex, '')
-
-  if (urlRegex.test(stripped)) {
-    return { link: stripped }
-  }
-
-  if (emailRegex.test(stripped)) {
-    return { email: stripped }
-  }
-}
-
 export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
   const raw = parseSingularOf(value?.name ?? value, (v) => parseString(retrieveText(v)))
 
@@ -222,16 +222,19 @@ export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
     return
   }
 
+  // Step 1. Handles bare email, mailto:email, or URL-only strings.
   const simple = parseSimplePerson(raw)
 
   if (simple) {
     return simple
   }
 
+  // Step 2. Handles unbracketed mixed content like "John Doe john@example.com".
   if (!hasBracketsRegex.test(raw)) {
     return parseUnbracketedPerson(raw)
   }
 
+  // Step 3. Handles bracketed formats like "email (Name)" or "Name <email> (url)".
   return parseBracketedPerson(raw)
 }
 
