@@ -203,13 +203,7 @@ const parseBracketedPerson = (raw: string): Rss.Person | undefined => {
   return trimObject(person)
 }
 
-export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
-  const raw = parseSingularOf(value?.name ?? value, (v) => parseString(retrieveText(v)))
-
-  if (!raw) {
-    return
-  }
-
+const parseSimplePerson = (raw: string): Rss.Person | undefined => {
   const stripped = raw.replace(mailtoRegex, '')
 
   if (urlRegex.test(stripped)) {
@@ -218,6 +212,20 @@ export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
 
   if (emailRegex.test(stripped)) {
     return { email: stripped }
+  }
+}
+
+export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
+  const raw = parseSingularOf(value?.name ?? value, (v) => parseString(retrieveText(v)))
+
+  if (!raw) {
+    return
+  }
+
+  const simple = parseSimplePerson(raw)
+
+  if (simple) {
+    return simple
   }
 
   if (!hasBracketsRegex.test(raw)) {
