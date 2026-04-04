@@ -144,6 +144,42 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with CDATA-wrapped person name containing special characters', () => {
+    const value = {
+      title: 'Test',
+      description: 'Test',
+      managingEditor: {
+        name: 'Tom & Jerry',
+        email: 'tom@example.com',
+      },
+      items: [
+        {
+          title: 'Post',
+          authors: [{ name: "O'Brien & Associates", email: 'info@example.com' }],
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test</title>
+    <description>Test</description>
+    <managingEditor>
+      <![CDATA[tom@example.com (Tom & Jerry)]]>
+    </managingEditor>
+    <item>
+      <title>Post</title>
+      <author>
+        <![CDATA[info@example.com (O'Brien & Associates)]]>
+      </author>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with dcterms namespace', () => {
     const value = {
       title: 'Feed with dcterms namespace',
