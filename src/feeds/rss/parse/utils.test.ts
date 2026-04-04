@@ -631,6 +631,13 @@ describe('parsePerson', () => {
 
       expect(parsePerson(value)).toEqual(expected)
     })
+
+    it('should treat string with @ but no valid email or URL as name', () => {
+      const value = 'John @ Company'
+      const expected = { name: 'John @ Company' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
   })
 })
 
