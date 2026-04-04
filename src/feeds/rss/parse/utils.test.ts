@@ -62,6 +62,20 @@ describe('parsePerson', () => {
       expect(parsePerson(value)).toEqual(expected)
     })
 
+    it('should parse accented characters in name', () => {
+      const value = 'José García'
+      const expected = { name: 'José García' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should parse CJK characters in name', () => {
+      const value = '田中太郎'
+      const expected = { name: '田中太郎' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
     it('should use first element when value is an array', () => {
       const value = ['John Doe', 'Jane Smith']
       const expected = { name: 'John Doe' }
@@ -159,6 +173,16 @@ describe('parsePerson', () => {
         const expected = {
           email: 'john@example.com',
           name: 'John Doe',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse international characters in bracketed name', () => {
+        const value = 'taro@example.com (田中太郎)'
+        const expected = {
+          email: 'taro@example.com',
+          name: '田中太郎',
         }
 
         expect(parsePerson(value)).toEqual(expected)
