@@ -476,6 +476,68 @@ describe('parsePerson', () => {
         expect(parsePerson(value)).toEqual(expected)
       })
     })
+
+    describe('nested brackets', () => {
+      it('should handle nested parentheses', () => {
+        const value = 'John ((nick)) <john@example.com>'
+        const expected = {
+          name: 'John ((nick))',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should handle nested parentheses with name inside', () => {
+        const value = 'John (hello (world)) <john@example.com>'
+        const expected = {
+          name: 'John (hello (world))',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+    })
+
+    describe('unmatched brackets', () => {
+      it('should preserve unmatched parenthesis as literal text', () => {
+        const value = 'John (test'
+        const expected = { name: 'John (test' }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should preserve unmatched angle bracket as literal text', () => {
+        const value = 'John <broken'
+        const expected = { name: 'John <broken' }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should preserve unmatched square bracket as literal text', () => {
+        const value = 'John [incomplete'
+        const expected = { name: 'John [incomplete' }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should skip empty brackets and extract email', () => {
+        const value = 'John () <john@example.com>'
+        const expected = {
+          name: 'John',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse bracketed-only email input', () => {
+        const value = '(john@example.com)'
+        const expected = { email: 'john@example.com' }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+    })
   })
 
   describe('unbracketed mixed content', () => {

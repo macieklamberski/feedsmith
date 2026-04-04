@@ -74,7 +74,7 @@ import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/u
 import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
 import type { ParseUtilPartial, Rss } from '../common/types.js'
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const emailRegex = /^[^\s@()<>[\]]+@[^\s@()<>[\]]+\.[^\s@()<>[\]]+$/
 const urlRegex = /^(?:https?:\/\/|www\.)[^\s]+\.[^\s]+$/
 const mailtoRegex = /^mailto:/i
 const hasBracketsRegex = /[<[(]/
@@ -163,18 +163,34 @@ export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
     const char = raw[i]
 
     if (char === '<' || char === '(' || char === '[') {
-      isBracketed = true
       openBracket = char
       closeBracket = closeBracketFor(char)
 
       const start = i + 1
-      const end = raw.indexOf(closeBracket, start)
+      let depth = 1
+      let end = start
 
-      if (end !== -1) {
-        chunk = parseString(raw.slice(start, end))
-        i = end + 1
+      while (end < length && depth > 0) {
+        if (raw[end] === openBracket) {
+          depth++
+        } else if (raw[end] === closeBracket) {
+          depth--
+        }
+        end++
+      }
+
+      if (depth === 0) {
+        isBracketed = true
+        chunk = parseString(raw.slice(start, end - 1))
+        i = end
       } else {
-        i = length
+        // Unmatched bracket — treat as literal text.
+        const literalStart = i
+        i = start
+        while (i < length && raw[i] !== '<' && raw[i] !== '(' && raw[i] !== '[') {
+          i++
+        }
+        chunk = parseString(raw.slice(literalStart, i))
       }
     } else {
       const start = i
