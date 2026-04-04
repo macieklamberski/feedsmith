@@ -19,48 +19,618 @@ import {
 } from './utils.js'
 
 describe('parsePerson', () => {
-  it('should parse author string (with #text)', () => {
-    const value = {
-      '#text': 'John Doe (john@example.com)',
-    }
-    const expected = 'John Doe (john@example.com)'
+  describe('name only', () => {
+    it('should parse plain name string', () => {
+      const value = 'John Doe'
+      const expected = { name: 'John Doe' }
 
-    expect(parsePerson(value)).toBe(expected)
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should parse name via #text object', () => {
+      const value = { '#text': 'John Doe' }
+      const expected = { name: 'John Doe' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should parse name via nested name object', () => {
+      const value = { name: { '#text': 'John Doe' } }
+      const expected = { name: 'John Doe' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should coerce number value to name', () => {
+      const value = { '#text': 123 }
+      const expected = { name: '123' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should decode HTML entities in name', () => {
+      const value = { '#text': 'John &amp; Jane' }
+      const expected = { name: 'John & Jane' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should handle CDATA in name', () => {
+      const value = { '#text': '<![CDATA[John Doe]]>' }
+      const expected = { name: 'John Doe' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should parse accented characters in name', () => {
+      const value = 'José García'
+      const expected = { name: 'José García' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should parse CJK characters in name', () => {
+      const value = '田中太郎'
+      const expected = { name: '田中太郎' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should use first element when value is an array', () => {
+      const value = ['John Doe', 'Jane Smith']
+      const expected = { name: 'John Doe' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
   })
 
-  it('should parse author string (without #text)', () => {
-    const value = 'John Doe (john@example.com)'
-    const expected = 'John Doe (john@example.com)'
+  describe('email only', () => {
+    it('should parse bare email address', () => {
+      const value = 'john@example.com'
+      const expected = { email: 'john@example.com' }
 
-    expect(parsePerson(value)).toBe(expected)
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should strip mailto: prefix', () => {
+      const value = 'mailto:john@example.com'
+      const expected = { email: 'john@example.com' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should strip MAILTO: prefix (case-insensitive)', () => {
+      const value = 'MAILTO:john@example.com'
+      const expected = { email: 'john@example.com' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
   })
 
-  it('should parse author nested under author.name', () => {
-    const value = {
-      name: {
-        '#text': 'John Doe',
-      },
-    }
+  describe('url only', () => {
+    it('should parse http URL', () => {
+      const value = 'http://example.com'
+      const expected = { link: 'http://example.com' }
 
-    expect(parsePerson(value)).toBe('John Doe')
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should parse https URL', () => {
+      const value = 'https://example.com/~john'
+      const expected = { link: 'https://example.com/~john' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should parse www URL', () => {
+      const value = 'www.example.com'
+      const expected = { link: 'www.example.com' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should parse URL containing @ (Mastodon)', () => {
+      const value = 'https://mastodon.social/@user'
+      const expected = { link: 'https://mastodon.social/@user' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should parse URL containing @ (Medium)', () => {
+      const value = 'https://medium.com/@author'
+      const expected = { link: 'https://medium.com/@author' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
   })
 
-  it('should handle coercible values', () => {
-    const value = {
-      '#text': 123,
-    }
+  describe('invalid inputs', () => {
+    it('should return undefined for empty string', () => {
+      expect(parsePerson('')).toBeUndefined()
+    })
 
-    expect(parsePerson(value)).toBe('123')
+    it('should return undefined for whitespace only', () => {
+      expect(parsePerson('   ')).toBeUndefined()
+    })
+
+    it('should return undefined for undefined', () => {
+      expect(parsePerson(undefined)).toBeUndefined()
+    })
+
+    it('should return undefined for null', () => {
+      expect(parsePerson(null)).toBeUndefined()
+    })
+
+    it('should return undefined for empty object', () => {
+      expect(parsePerson({})).toBeUndefined()
+    })
   })
 
-  it('should return undefined for empty object', () => {
-    const value = {}
+  describe('bracket decomposition', () => {
+    describe('email (name) — RSS spec format', () => {
+      it('should parse standard format', () => {
+        const value = 'john@example.com (John Doe)'
+        const expected = {
+          email: 'john@example.com',
+          name: 'John Doe',
+        }
 
-    expect(parsePerson(value)).toBeUndefined()
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse international characters in bracketed name', () => {
+        const value = 'taro@example.com (田中太郎)'
+        const expected = {
+          email: 'taro@example.com',
+          name: '田中太郎',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should handle email with plus addressing', () => {
+        const value = 'me+spam@example.com (Editor)'
+        const expected = {
+          email: 'me+spam@example.com',
+          name: 'Editor',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+    })
+
+    describe('name (email) — common format', () => {
+      it('should parse parentheses', () => {
+        const value = 'John Doe (john@example.com)'
+        const expected = {
+          name: 'John Doe',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse square brackets', () => {
+        const value = 'John Doe [john@example.com]'
+        const expected = {
+          name: 'John Doe',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse angle brackets', () => {
+        const value = 'John Doe <john@example.com>'
+        const expected = {
+          name: 'John Doe',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should strip mailto: prefix inside brackets', () => {
+        const value = 'John Doe (mailto:john@example.com)'
+        const expected = {
+          name: 'John Doe',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+    })
+
+    describe('name + URL', () => {
+      it('should parse parentheses', () => {
+        const value = 'John Doe (https://example.com)'
+        const expected = {
+          name: 'John Doe',
+          link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse square brackets', () => {
+        const value = 'John Doe [https://example.com]'
+        const expected = {
+          name: 'John Doe',
+          link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse angle brackets', () => {
+        const value = 'John Doe <https://example.com>'
+        const expected = {
+          name: 'John Doe',
+          link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse URL containing @ in brackets', () => {
+        const value = 'John Doe (https://mastodon.social/@johndoe)'
+        const expected = {
+          name: 'John Doe',
+          link: 'https://mastodon.social/@johndoe',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+    })
+
+    describe('email + URL', () => {
+      it('should parse parentheses', () => {
+        const value = 'john@example.com (https://example.com)'
+        const expected = {
+          email: 'john@example.com',
+          link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse square brackets', () => {
+        const value = 'john@example.com [https://example.com]'
+        const expected = {
+          email: 'john@example.com',
+          link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse angle brackets', () => {
+        const value = 'john@example.com <https://example.com>'
+        const expected = {
+          email: 'john@example.com',
+          link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+    })
+
+    describe('email + name in alternative brackets', () => {
+      it('should parse square brackets', () => {
+        const value = 'john@example.com [John Doe]'
+        const expected = {
+          email: 'john@example.com',
+          name: 'John Doe',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse angle brackets', () => {
+        const value = 'john@example.com <John Doe>'
+        const expected = {
+          email: 'john@example.com',
+          name: 'John Doe',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+    })
+
+    describe('all three components', () => {
+      it('should parse name <email> (url)', () => {
+        const value = 'John Doe <john@example.com> (https://example.com)'
+        const expected = {
+          name: 'John Doe',
+          email: 'john@example.com',
+          link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse name (email) [url]', () => {
+        const value = 'John Doe (john@example.com) [https://example.com]'
+        const expected = {
+          name: 'John Doe',
+          email: 'john@example.com',
+          link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse email (name) [url]', () => {
+        const value = 'john@example.com (John Doe) [https://example.com]'
+        const expected = {
+          email: 'john@example.com',
+          name: 'John Doe',
+          link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse email [name] (url)', () => {
+        const value = 'john@example.com [John Doe] (https://example.com)'
+        const expected = {
+          email: 'john@example.com',
+          name: 'John Doe',
+          link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse <email> (name) [url]', () => {
+        const value = '<john@example.com> (John Doe) [https://example.com]'
+        const expected = {
+          email: 'john@example.com',
+          name: 'John Doe',
+          link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse <email> [url] (name)', () => {
+        const value = '<john@example.com> [https://example.com] (John Doe)'
+        const expected = {
+          email: 'john@example.com',
+          link: 'https://example.com',
+          name: 'John Doe',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse name <email> [url]', () => {
+        const value = 'John Doe <john@example.com> [https://example.com]'
+        const expected = {
+          name: 'John Doe',
+          email: 'john@example.com',
+          link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse name [url] <email>', () => {
+        const value = 'John Doe [https://example.com] <john@example.com>'
+        const expected = {
+          name: 'John Doe',
+          link: 'https://example.com',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+    })
+
+    describe('multiple values (first wins)', () => {
+      it('should use first email when multiple emails present', () => {
+        const value = 'John (john1@x.com) (john2@x.com)'
+        const expected = {
+          name: 'John (john2@x.com)',
+          email: 'john1@x.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should use first URL when multiple URLs present', () => {
+        const value = 'John (https://x.com/1) (https://x.com/2)'
+        const expected = {
+          name: 'John (https://x.com/2)',
+          link: 'https://x.com/1',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+    })
+
+    describe('name split by bracketed content', () => {
+      it('should reassemble name around bracketed email', () => {
+        const value = 'Mock (john@example.com) Name'
+        const expected = {
+          name: 'Mock Name',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should reassemble name around bracketed URL', () => {
+        const value = 'Mock (https://example.com) Name'
+        const expected = {
+          name: 'Mock Name',
+          link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+    })
+
+    describe('non-email/URL bracket content preserved in name', () => {
+      it('should preserve role in parentheses', () => {
+        const value = 'John Doe (Editor)'
+        const expected = { name: 'John Doe (Editor)' }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should preserve role and extract email', () => {
+        const value = 'John Doe (Editor) <john@example.com>'
+        const expected = {
+          name: 'John Doe (Editor)',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should preserve title in square brackets and extract email and url', () => {
+        const value = 'Dr. John [CEO] <john@example.com> (https://example.com)'
+        const expected = {
+          name: 'Dr. John [CEO]',
+          email: 'john@example.com',
+          link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+    })
+
+    describe('nested brackets', () => {
+      it('should handle nested parentheses', () => {
+        const value = 'John ((nick)) <john@example.com>'
+        const expected = {
+          name: 'John ((nick))',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should handle nested parentheses with name inside', () => {
+        const value = 'John (hello (world)) <john@example.com>'
+        const expected = {
+          name: 'John (hello (world))',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+    })
+
+    describe('unmatched brackets', () => {
+      it('should preserve unmatched parenthesis as literal text', () => {
+        const value = 'John (test'
+        const expected = { name: 'John (test' }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should preserve unmatched angle bracket as literal text', () => {
+        const value = 'John <broken'
+        const expected = { name: 'John <broken' }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should preserve unmatched square bracket as literal text', () => {
+        const value = 'John [incomplete'
+        const expected = { name: 'John [incomplete' }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should skip empty brackets and extract email', () => {
+        const value = 'John () <john@example.com>'
+        const expected = {
+          name: 'John',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should parse bracketed-only email input', () => {
+        const value = '(john@example.com)'
+        const expected = { email: 'john@example.com' }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+    })
   })
 
-  it('should return undefined for undefined value', () => {
-    expect(parsePerson(undefined)).toBeUndefined()
+  describe('unbracketed mixed content', () => {
+    it('should extract email after name', () => {
+      const value = 'John Doe john@example.com'
+      const expected = {
+        name: 'John Doe',
+        email: 'john@example.com',
+      }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should extract URL after name', () => {
+      const value = 'John Doe https://example.com'
+      const expected = {
+        name: 'John Doe',
+        link: 'https://example.com',
+      }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should extract email from middle of name', () => {
+      const value = 'John john@example.com Doe'
+      const expected = {
+        name: 'John Doe',
+        email: 'john@example.com',
+      }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should extract URL from middle of name', () => {
+      const value = 'John https://example.com Doe'
+      const expected = {
+        name: 'John Doe',
+        link: 'https://example.com',
+      }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should strip mailto: prefix from unbracketed email', () => {
+      const value = 'John Doe mailto:john@example.com'
+      const expected = {
+        name: 'John Doe',
+        email: 'john@example.com',
+      }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should extract URL containing @ after name', () => {
+      const value = 'John Doe https://mastodon.social/@johndoe'
+      const expected = {
+        name: 'John Doe',
+        link: 'https://mastodon.social/@johndoe',
+      }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should treat plain string without email or URL as name', () => {
+      const value = 'John Doe, Editor-in-Chief'
+      const expected = { name: 'John Doe, Editor-in-Chief' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
   })
 })
 
@@ -640,7 +1210,7 @@ describe('parseItem', () => {
     title: 'Item Title',
     link: 'https://example.com/item',
     description: 'Item Description',
-    authors: ['John Doe (john@example.com)'],
+    authors: [{ name: 'John Doe', email: 'john@example.com' }],
     categories: [
       { name: 'Technology', domain: 'http://example.com/categories' },
       { name: 'Web Development' },
@@ -766,7 +1336,7 @@ describe('parseItem', () => {
 
     expect(parseItem(value)).toEqual({
       title: '123',
-      authors: ['456'],
+      authors: [{ name: '456' }],
     })
   })
 
@@ -1009,8 +1579,8 @@ describe('parseFeed', () => {
     description: 'Feed Description',
     language: 'en-us',
     copyright: '© 2023 Example',
-    managingEditor: 'editor@example.com',
-    webMaster: 'webmaster@example.com',
+    managingEditor: { email: 'editor@example.com' },
+    webMaster: { email: 'webmaster@example.com' },
     pubDate: 'Mon, 15 Mar 2023 12:00:00 GMT',
     lastBuildDate: 'Mon, 15 Mar 2023 13:00:00 GMT',
     categories: [{ name: 'Technology', domain: 'http://example.com/categories' }],
@@ -1364,7 +1934,7 @@ describe('parseFeed', () => {
         {
           title: 'Item 2',
           description: 'Item 2 Description',
-          authors: ['Author 1', 'Author 2'],
+          authors: [{ name: 'Author 1' }, { name: 'Author 2' }],
         },
       ],
       image: {
@@ -1565,6 +2135,20 @@ describe('parseFeed', () => {
     }
 
     expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should parse managingEditor with name and email (RFC 2822 format)', () => {
+    const value = { channel: { managingeditor: { '#text': 'editor@example.com (Editor Name)' } } }
+    const expected = { email: 'editor@example.com', name: 'Editor Name' }
+
+    expect(parseFeed(value)?.managingEditor).toEqual(expected)
+  })
+
+  it('should parse webMaster with name and email (RFC 2822 format)', () => {
+    const value = { channel: { webmaster: { '#text': 'webmaster@example.com (Webmaster Name)' } } }
+    const expected = { email: 'webmaster@example.com', name: 'Webmaster Name' }
+
+    expect(parseFeed(value)?.webMaster).toEqual(expected)
   })
 })
 

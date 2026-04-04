@@ -28,6 +28,7 @@ Use this checklist to ensure a complete migration:
 - Change `feedsmith/types` imports to `feedsmith`
 - Update Atom text fields (`title`, `subtitle`, `rights`, `summary`): read `.value` instead of plain string, generate with `{ value: '...' }` instead of plain string
 - Update Atom `entry.content` usage: read `content?.value` instead of `content`, generate with `{ value: '...' }` instead of plain string
+- Update RSS person fields (`managingEditor`, `webMaster`, `authors`): read `.email`/`.name` instead of plain string, generate with `{ email: '...', name: '...' }` instead of plain string
 - Replace Media namespace deprecated field (`group` → `groups`)
 - Replace Podcast namespace deprecated fields (`location` → `locations`, `value` → `values`, `chats` → `chat`)
 - Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
@@ -254,6 +255,54 @@ const xml = generateAtomFeed({
 2. Update generate calls: `content: 'text'` → `content: { value: 'text' }`
 3. Optionally use `type` and `src` for richer content metadata
 
+### RSS Person Fields Changed from Strings to Objects
+
+The `managingEditor`, `webMaster`, and `authors` fields on RSS feeds and items were previously plain strings (e.g., `'editor@example.com (Editor Name)'`). In the new version, they use the `Rss.Person` object that preserves structured data, properly representing the [RSS person construct](https://www.rssboard.org/rss-specification#ltauthorgtSubelementOfLtitemgt).
+
+The affected fields are:
+- **Feed**: `managingEditor`, `webMaster`
+- **Item**: `authors`
+
+```xml
+<managingEditor>editor@example.com (Editor Name)</managingEditor>
+<author>john@example.com (John Doe)</author>
+```
+
+#### Before (2.x)
+```typescript
+// Parsing
+const feed = parseRssFeed(xml)
+const editor = feed.managingEditor // 'editor@example.com (Editor Name)'
+const author = feed.items?.[0]?.authors?.[0] // 'john@example.com (John Doe)'
+
+// Generating
+const xml = generateRssFeed({
+  managingEditor: 'editor@example.com (Editor Name)',
+  items: [{ authors: ['john@example.com (John Doe)'] }],
+})
+```
+
+#### After (3.x)
+```typescript
+// Parsing
+const feed = parseRssFeed(xml)
+const editor = feed.managingEditor // { email: 'editor@example.com', name: 'Editor Name' }
+const author = feed.items?.[0]?.authors?.[0] // { email: 'john@example.com', name: 'John Doe' }
+
+// Generating
+const xml = generateRssFeed({
+  managingEditor: { email: 'editor@example.com', name: 'Editor Name' },
+  items: [{ authors: [{ email: 'john@example.com', name: 'John Doe' }] }],
+})
+```
+
+> [!NOTE]
+> The `link` property on `Rss.Person` is parse-only — it is extracted from URLs found in the person string but is not included in generated XML output, as RSS spec does not define a standard way to encode links in person fields.
+
+#### Migration Steps
+1. Replace string reads with object property access (e.g., `feed.managingEditor` → `feed.managingEditor?.email`)
+2. Update generate calls: `'email (Name)'` → `{ email: 'email', name: 'Name' }`
+
 ### Media Namespace: Deprecated Field Removed
 
 The deprecated `group` field has been removed to align with the [Media RSS specification](https://www.rssboard.org/media-rss):
@@ -467,4 +516,3 @@ feed.pubDate // Date
 ### XML Namespace Support
 
 RSS, Atom, and RDF feeds now support the [XML namespace](/reference/namespaces/xml) (`xml:*` attributes). The `xml` property is available on both feed and item levels, providing access to `xml:lang`, `xml:base`, `xml:space`, and `xml:id` attributes.
-

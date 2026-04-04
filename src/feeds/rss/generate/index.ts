@@ -6,10 +6,10 @@ import type { Rss } from '../common/types.js'
 import { builder } from './config.js'
 import { generateFeed } from './utils.js'
 
-export const generate: GenerateMainXml<
-  Rss.Feed<DateLike, Rss.PersonLike>,
-  Rss.Feed<Date, Rss.PersonLike, true>
-> = (value, options) => {
+export const generate: GenerateMainXml<Rss.Feed<DateLike>, Rss.Feed<Date, true>> = (
+  value,
+  options,
+) => {
   const generated = generateFeed(value)
 
   if (!generated) {
