@@ -88,8 +88,8 @@ export const trimArray = <T, R = T>(
   if (!parse) {
     let needsTrimming = false
 
-    for (let i = 0; i < value.length; i++) {
-      if (!isPresent(value[i])) {
+    for (const item of value) {
+      if (!isPresent(item)) {
         needsTrimming = true
         break
       }
@@ -104,8 +104,8 @@ export const trimArray = <T, R = T>(
   // similar to the one used in trimObject.
   const result: Array<R> = []
 
-  for (let i = 0; i < value.length; i++) {
-    const item = parse ? parse(value[i]) : value[i]
+  for (const element of value) {
+    const item = parse ? parse(element) : element
 
     if (isPresent(item)) {
       result.push(item as R)
@@ -136,7 +136,7 @@ const stripComments = (text: string): string => {
   let lastIndex = 0
 
   while (currentIndex !== -1) {
-    result += text.substring(lastIndex, currentIndex)
+    result += text.slice(lastIndex, currentIndex)
     const endIndex = text.indexOf(commentEndTag, currentIndex + commentStartTag.length)
 
     if (endIndex === -1) {
@@ -147,7 +147,7 @@ const stripComments = (text: string): string => {
     currentIndex = text.indexOf(commentStartTag, lastIndex)
   }
 
-  result += text.substring(lastIndex)
+  result += text.slice(lastIndex)
 
   return result
 }
@@ -167,7 +167,7 @@ const decodeWithCdata = (text: string): string => {
 
   while (currentIndex !== -1) {
     // Decode entities in text before CDATA.
-    const textBefore = text.substring(lastIndex, currentIndex)
+    const textBefore = text.slice(lastIndex, currentIndex)
     result += hasEntities(textBefore) ? decodeHTML(textBefore) : textBefore
 
     // Find end of CDATA section.
@@ -179,13 +179,13 @@ const decodeWithCdata = (text: string): string => {
     }
 
     // Add CDATA content verbatim (without markers).
-    result += text.substring(currentIndex + cdataStartTag.length, endIndex)
+    result += text.slice(currentIndex + cdataStartTag.length, endIndex)
     lastIndex = endIndex + cdataEndTag.length
     currentIndex = text.indexOf(cdataStartTag, lastIndex)
   }
 
   // Decode entities in remaining text after last CDATA.
-  const textAfter = text.substring(lastIndex)
+  const textAfter = text.slice(lastIndex)
   result += hasEntities(textAfter) ? decodeHTML(textAfter) : textAfter
 
   return result
@@ -229,8 +229,13 @@ export const parseBoolean: ParseUtilExact<boolean> = (value) => {
   }
 
   if (isNonEmptyString(value)) {
-    if (trueRegex.test(value)) return true
-    if (falseRegex.test(value)) return false
+    if (trueRegex.test(value)) {
+      return true
+    }
+
+    if (falseRegex.test(value)) {
+      return false
+    }
   }
 }
 
@@ -363,7 +368,7 @@ export const generateXmlStylesheet = (stylesheet: XmlStylesheet): string | undef
   })
 
   if (!generated) {
-    return undefined
+    return
   }
 
   let attributes = ''
@@ -640,7 +645,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
         if (key === '@xmlns') {
           declarations[''] = normalizeNamespaceUri(element[key])
         } else if (key.indexOf('@xmlns:') === 0) {
-          const prefix = key.substring('@xmlns:'.length)
+          const prefix = key.slice('@xmlns:'.length)
           declarations[prefix] = normalizeNamespaceUri(element[key])
         }
       }
@@ -664,8 +669,8 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
       return name
     }
 
-    const prefix = name.substring(0, colonIndex)
-    const unprefixedName = name.substring(colonIndex + 1)
+    const prefix = name.slice(0, colonIndex)
+    const unprefixedName = name.slice(colonIndex + 1)
     const uri = context[prefix]
 
     if (uri) {
@@ -677,7 +682,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
 
   const normalizeKey = (key: string, context: Record<string, string>): string => {
     if (key.charCodeAt(0) === 64) {
-      const attrName = key.substring(1)
+      const attrName = key.slice(1)
       const normalizedAttrName = normalizeWithContext(attrName, context, false)
 
       return `@${normalizedAttrName}`
@@ -769,6 +774,9 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
   return normalizeRoot
 }
 
+const startsWithBraceRegex = /^\s*\{/
+const endsWithBraceRegex = /\}\s*$/
+
 export const parseJsonObject = (value: unknown): unknown => {
   if (isObject(value)) {
     return value
@@ -778,8 +786,8 @@ export const parseJsonObject = (value: unknown): unknown => {
     return
   }
 
-  const startsWithBrace = value.charAt(0) === '{' || /^\s*\{/.test(value)
-  const endsWithBrace = value.charAt(value.length - 1) === '}' || /\}\s*$/.test(value)
+  const startsWithBrace = value.charAt(0) === '{' || startsWithBraceRegex.test(value)
+  const endsWithBrace = value.charAt(value.length - 1) === '}' || endsWithBraceRegex.test(value)
 
   if (!startsWithBrace || !endsWithBrace) {
     return

@@ -98,6 +98,7 @@ describe('isPresent', () => {
   })
 
   it('should return true for RegExp objects', () => {
+    // biome-ignore lint/performance/useTopLevelRegex: It's for testing purposes.
     expect(isPresent(/test/)).toBe(true)
   })
 })
@@ -147,6 +148,7 @@ describe('isObject', () => {
 
   it('should return false for built-in objects', () => {
     expect(isObject(new Date())).toBe(false)
+    // biome-ignore lint/suspicious/useErrorMessage: It's for testing purposes.
     expect(isObject(new Error())).toBe(false)
     expect(isObject(new Map())).toBe(false)
     expect(isObject(new Set())).toBe(false)
@@ -167,6 +169,7 @@ describe('isNonEmptyString', () => {
   })
 
   it('should handle edge cases', () => {
+    // biome-ignore lint/style/useConsistentBuiltinInstantiation: It's for testing purposes.
     const stringObject = new String('hello')
 
     expect(isNonEmptyString(stringObject)).toBe(false)
@@ -241,7 +244,9 @@ describe('isNonEmptyStringOrNumber', () => {
   })
 
   it('should handle edge cases', () => {
+    // biome-ignore lint/style/useConsistentBuiltinInstantiation: It's for testing purposes.
     const stringObject = new String('hello')
+    // biome-ignore lint/style/useConsistentBuiltinInstantiation: It's for testing purposes.
     const numberObject = new Number(42)
 
     expect(isNonEmptyStringOrNumber(stringObject)).toBe(false)
@@ -612,7 +617,8 @@ describe('trimObject', () => {
         return 1
       },
       get b() {
-        return undefined
+        // biome-ignore lint/suspicious/useGetterReturn: It's for testing purposes.
+        return
       },
     }
     const expected = { a: 1 }
@@ -718,9 +724,18 @@ describe('trimArray', () => {
       const value = ['a', 3, 'b', 6, null, true]
       const expected = ['A', 'B', 12, true]
       const parseWithConditions = (val: unknown) => {
-        if (typeof val === 'string') return val.toUpperCase()
-        if (typeof val === 'number' && val > 5) return val * 2
-        if (typeof val === 'number') return null
+        if (typeof val === 'string') {
+          return val.toUpperCase()
+        }
+
+        if (typeof val === 'number' && val > 5) {
+          return val * 2
+        }
+
+        if (typeof val === 'number') {
+          return null
+        }
+
         return val
       }
 
@@ -824,7 +839,8 @@ describe('parseString', () => {
   it('should handle entities #1: no CDATA', () => {
     const value =
       'Testing &lt;b&gt;bold text&lt;/b&gt; and &lt;i&gt;italic text&lt;/i&gt; with &amp;amp; ampersand, &amp;quot; quotes, &amp;apos; apostrophe and &amp;nbsp; non-breaking space.'
-    const expected = `Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.`
+    const expected =
+      'Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.'
 
     expect(parseString(value)).toBe(expected)
   })
@@ -1770,6 +1786,7 @@ describe('parseArray', () => {
     const value2 = new Set([1, 2, 3])
     const value3 = new Map()
     const value4 = new Date()
+    // biome-ignore lint/performance/useTopLevelRegex: It's for testing purposes.
     const value5 = /regex/
     const value6 = () => {}
 
@@ -3147,7 +3164,7 @@ describe('generateNumber', () => {
   })
 
   it('should return undefined for special number values', () => {
-    const values = [Infinity, -Infinity, NaN]
+    const values = [Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY, Number.NaN]
 
     for (const value of values) {
       expect(generateNumber(value)).toBeUndefined()

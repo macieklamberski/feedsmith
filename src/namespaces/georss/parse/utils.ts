@@ -12,6 +12,8 @@ import {
 } from '../../../common/utils.js'
 import type { GeoRssNs } from '../common/types.js'
 
+const whitespaceRegex = /\s+/
+
 export const parseLatLngPairs = (
   value: Unreliable,
   pairsCount?: { min?: number; max?: number },
@@ -20,7 +22,7 @@ export const parseLatLngPairs = (
     return
   }
 
-  const rawParts = value.split(/\s+/)
+  const rawParts = value.split(whitespaceRegex)
   const numericParts = parseArrayOf(rawParts, parseNumber)
 
   if (!numericParts || numericParts.length % 2 !== 0 || rawParts.length !== numericParts.length) {
