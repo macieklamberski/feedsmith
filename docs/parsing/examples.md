@@ -125,6 +125,7 @@ const rssFeed = parseRssFeed(`
         <title>First item title</title>
         <link>http://example.org/item/1</link>
         <description>Some description of the first item.</description>
+        <author>john@example.org (John Doe)</author>
         <comments>http://example.org/comments/1</comments>
         <enclosure url="http://example.org/audio/demo.mp3" length="1069871" type="audio/mpeg" />
         <guid isPermaLink="true">http://example.org/guid/1</guid>
@@ -144,7 +145,7 @@ Returns:
   "link": "http://example.org/",
   "description": "For documentation <em>only</em>",
   "language": "en",
-  "webMaster": "webmaster@example.org",
+  "webMaster": { "email": "webmaster@example.org" },
   "pubDate": "Sat, 19 Mar 1988 07:15:00 GMT",
   "lastBuildDate": "Sat, 19 Mar 1988 07:15:00 GMT",
   "categories": [{ "name": "Examples2", "domain": "http://www.example.com/cusips" }],
@@ -179,6 +180,7 @@ Returns:
       "title": "First item title",
       "link": "http://example.org/item/1",
       "description": "Some description of the first item.",
+      "authors": [{ "email": "john@example.org", "name": "John Doe" }],
       "comments": "http://example.org/comments/1",
       "enclosures": [
         {
@@ -410,7 +412,7 @@ OPML files often contain custom attributes for specific applications or feed rea
 ```typescript
 import { parseOpml } from 'feedsmith'
 
-const opml = parseOpml(`
+const xml = `
   <?xml version="1.0" encoding="utf-8"?>
   <opml version="2.0">
     <head>
@@ -440,15 +442,17 @@ const opml = parseOpml(`
       </outline>
     </body>
   </opml>
-`, {
+`
+
+const opml = parseOpml(xml, {
   extraOutlineAttributes: [
     'customIcon',
     'updateInterval',
     'isPrivate',
     'tags',
     'customColor',
-    'isPinned'
-  ]
+    'isPinned',
+  ],
 })
 ```
 
@@ -500,7 +504,7 @@ The `maxItems` option allows you to control how many items/entries/outlines are 
 ```typescript
 import { parseRssFeed } from 'feedsmith'
 
-const rssFeed = parseRssFeed(`
+const xml = `
   <?xml version="1.0" encoding="utf-8"?>
   <rss version="2.0">
     <channel>
@@ -524,7 +528,9 @@ const rssFeed = parseRssFeed(`
       </item>
     </channel>
   </rss>
-`, { maxItems: 2 })
+`
+
+const rssFeed = parseRssFeed(xml, { maxItems: 2 })
 ```
 
 Returns:
@@ -559,7 +565,7 @@ When you only need feed-level information and want to skip all items entirely, u
 ```typescript
 import { parseRssFeed } from 'feedsmith'
 
-const rssFeed = parseRssFeed(`
+const xml = `
   <?xml version="1.0" encoding="utf-8"?>
   <rss version="2.0">
     <channel>
@@ -578,7 +584,9 @@ const rssFeed = parseRssFeed(`
       </item>
     </channel>
   </rss>
-`, { maxItems: 0 })
+`
+
+const rssFeed = parseRssFeed(xml, { maxItems: 0 })
 ```
 
 Returns:

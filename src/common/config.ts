@@ -1,4 +1,101 @@
 import type { X2jOptions, XmlBuilderOptions } from 'fast-xml-parser'
+import {
+  stopNodes as acastStopNodes,
+  uris as acastUris,
+} from '../namespaces/acast/common/config.js'
+import {
+  stopNodes as adminStopNodes,
+  uris as adminUris,
+} from '../namespaces/admin/common/config.js'
+import { stopNodes as appStopNodes, uris as appUris } from '../namespaces/app/common/config.js'
+import {
+  stopNodes as arxivStopNodes,
+  uris as arxivUris,
+} from '../namespaces/arxiv/common/config.js'
+import { uris as atomUris } from '../namespaces/atom/common/config.js'
+import {
+  stopNodes as blogchannelStopNodes,
+  uris as blogchannelUris,
+} from '../namespaces/blogchannel/common/config.js'
+import { stopNodes as ccStopNodes, uris as ccUris } from '../namespaces/cc/common/config.js'
+import {
+  stopNodes as contentStopNodes,
+  uris as contentUris,
+} from '../namespaces/content/common/config.js'
+import {
+  stopNodes as creativecommonsStopNodes,
+  uris as creativecommonsUris,
+} from '../namespaces/creativecommons/common/config.js'
+import { stopNodes as dcStopNodes, uris as dcUris } from '../namespaces/dc/common/config.js'
+import {
+  stopNodes as dctermsStopNodes,
+  uris as dctermsUris,
+} from '../namespaces/dcterms/common/config.js'
+import {
+  stopNodes as feedpressStopNodes,
+  uris as feedpressUris,
+} from '../namespaces/feedpress/common/config.js'
+import { stopNodes as gStopNodes, uris as gUris } from '../namespaces/g/common/config.js'
+import { stopNodes as geoStopNodes, uris as geoUris } from '../namespaces/geo/common/config.js'
+import {
+  stopNodes as georssStopNodes,
+  uris as georssUris,
+} from '../namespaces/georss/common/config.js'
+import {
+  stopNodes as googleplayStopNodes,
+  uris as googleplayUris,
+} from '../namespaces/googleplay/common/config.js'
+import {
+  stopNodes as itunesStopNodes,
+  uris as itunesUris,
+} from '../namespaces/itunes/common/config.js'
+import {
+  stopNodes as mediaStopNodes,
+  uris as mediaUris,
+} from '../namespaces/media/common/config.js'
+import {
+  stopNodes as opensearchStopNodes,
+  uris as opensearchUris,
+} from '../namespaces/opensearch/common/config.js'
+import {
+  stopNodes as pingbackStopNodes,
+  uris as pingbackUris,
+} from '../namespaces/pingback/common/config.js'
+import {
+  stopNodes as podcastStopNodes,
+  uris as podcastUris,
+} from '../namespaces/podcast/common/config.js'
+import {
+  stopNodes as prismStopNodes,
+  uris as prismUris,
+} from '../namespaces/prism/common/config.js'
+import { uris as pscUris } from '../namespaces/psc/common/config.js'
+import {
+  stopNodes as rawvoiceStopNodes,
+  uris as rawvoiceUris,
+} from '../namespaces/rawvoice/common/config.js'
+import { stopNodes as rdfStopNodes, uris as rdfUris } from '../namespaces/rdf/common/config.js'
+import { uris as rssUris } from '../namespaces/rss/common/config.js'
+import {
+  stopNodes as slashStopNodes,
+  uris as slashUris,
+} from '../namespaces/slash/common/config.js'
+import {
+  stopNodes as sourceStopNodes,
+  uris as sourceUris,
+} from '../namespaces/source/common/config.js'
+import {
+  stopNodes as spotifyStopNodes,
+  uris as spotifyUris,
+} from '../namespaces/spotify/common/config.js'
+import { stopNodes as syStopNodes, uris as syUris } from '../namespaces/sy/common/config.js'
+import { stopNodes as thrStopNodes, uris as thrUris } from '../namespaces/thr/common/config.js'
+import {
+  stopNodes as trackbackStopNodes,
+  uris as trackbackUris,
+} from '../namespaces/trackback/common/config.js'
+import { stopNodes as wfwStopNodes, uris as wfwUris } from '../namespaces/wfw/common/config.js'
+import { stopNodes as ytStopNodes, uris as ytUris } from '../namespaces/yt/common/config.js'
 
 export const parserConfig: X2jOptions = {
   trimValues: false,
@@ -32,294 +129,44 @@ export const locales = {
   invalidInputOpml: 'Invalid input OPML',
   invalidInputAtom: 'Invalid input Atom',
   invalidInputRss: 'Invalid input RSS',
+  invalidInputJson: 'Invalid input JSON',
 }
 
 export const namespaceUris = {
-  admin: [
-    'http://webns.net/mvcb/', // Official URI.
-    'https://webns.net/mvcb/',
-    'http://webns.net/mvcb',
-    'https://webns.net/mvcb',
-  ],
-  atom: [
-    'http://www.w3.org/2005/Atom', // Official URI (Atom 1.0).
-    'https://www.w3.org/2005/Atom',
-    'http://www.w3.org/2005/Atom/',
-    'https://www.w3.org/2005/Atom/',
-    'http://purl.org/atom/ns#', // Official URI (Atom 0.3).
-    'https://purl.org/atom/ns#',
-  ],
-  blogChannel: [
-    'http://backend.userland.com/blogChannelModule', // Official URI.
-    'https://backend.userland.com/blogChannelModule',
-    'http://backend.userland.com/blogChannelModule/',
-    'https://backend.userland.com/blogChannelModule/',
-  ],
-  app: [
-    'http://www.w3.org/2007/app', // Official URI.
-    'https://www.w3.org/2007/app',
-    'http://www.w3.org/2007/app/',
-    'https://www.w3.org/2007/app/',
-  ],
-  dc: [
-    'http://purl.org/dc/elements/1.1/', // Official URI.
-    'https://purl.org/dc/elements/1.1/',
-    'http://purl.org/dc/elements/1.1',
-    'https://purl.org/dc/elements/1.1',
-    'http://dublincore.org/documents/dcmi-namespace/',
-    'https://dublincore.org/documents/dcmi-namespace/',
-    'http://dublincore.org/documents/dcmi-namespace',
-    'https://dublincore.org/documents/dcmi-namespace',
-    'http://purl.org/dc/elements/1.0/',
-    'https://purl.org/dc/elements/1.0/',
-    'http://purl.org/dc/elements/1.0',
-    'https://purl.org/dc/elements/1.0',
-  ],
-  sy: [
-    'http://purl.org/rss/1.0/modules/syndication/', // Official URI.
-    'https://purl.org/rss/1.0/modules/syndication/',
-    'http://purl.org/rss/1.0/modules/syndication',
-    'https://purl.org/rss/1.0/modules/syndication',
-  ],
-  content: [
-    'http://purl.org/rss/1.0/modules/content/', // Official URI.
-    'https://purl.org/rss/1.0/modules/content/',
-    'http://purl.org/rss/1.0/modules/content',
-    'https://purl.org/rss/1.0/modules/content',
-  ],
-  creativeCommons: [
-    'http://backend.userland.com/creativeCommonsRssModule', // Official URI.
-    'https://backend.userland.com/creativeCommonsRssModule',
-    'http://backend.userland.com/creativeCommonsRssModule/',
-    'https://backend.userland.com/creativeCommonsRssModule/',
-    'http://cyber.law.harvard.edu/rss/creativeCommonsRssModule.html',
-    'https://cyber.law.harvard.edu/rss/creativeCommonsRssModule.html',
-    'http://cyber.law.harvard.edu/rss/creativeCommonsRssModule',
-    'https://cyber.law.harvard.edu/rss/creativeCommonsRssModule',
-  ],
-  slash: [
-    'http://purl.org/rss/1.0/modules/slash/', // Official URI.
-    'https://purl.org/rss/1.0/modules/slash/',
-    'http://purl.org/rss/1.0/modules/slash',
-    'https://purl.org/rss/1.0/modules/slash',
-  ],
-  itunes: [
-    'http://www.itunes.com/dtds/podcast-1.0.dtd', // Official URI.
-    'https://www.itunes.com/dtds/podcast-1.0.dtd',
-  ],
-  podcast: [
-    'https://podcastindex.org/namespace/1.0', // Official URI.
-    'http://podcastindex.org/namespace/1.0',
-    'https://podcastindex.org/namespace/1.0/',
-    'http://podcastindex.org/namespace/1.0/',
-    'https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/1.0.md',
-  ],
-  psc: [
-    'http://podlove.org/simple-chapters', // Official URI.
-    'https://podlove.org/simple-chapters',
-    'http://podlove.org/simple-chapters/',
-    'https://podlove.org/simple-chapters/',
-  ],
-  media: [
-    'http://search.yahoo.com/mrss/', // Official URI.
-    'https://search.yahoo.com/mrss/',
-    'http://search.yahoo.com/mrss',
-    'https://search.yahoo.com/mrss',
-    'http://video.search.yahoo.com/mrss',
-    'http://video.search.yahoo.com/mrss/',
-    'https://video.search.yahoo.com/mrss',
-    'https://video.search.yahoo.com/mrss/',
-    'http://www.rssboard.org/media-rss',
-    'http://www.rssboard.org/media-rss/',
-    'https://www.rssboard.org/media-rss',
-    'https://www.rssboard.org/media-rss/',
-    'http://search.yahoo.com/searchmonkey/media/',
-    'https://search.yahoo.com/searchmonkey/media/',
-    'http://search.yahoo.com/searchmonkey/media',
-    'https://search.yahoo.com/searchmonkey/media',
-    'http://tools.search.yahoo.com/mrss/',
-    'https://tools.search.yahoo.com/mrss/',
-    'http://tools.search.yahoo.com/mrss',
-    'https://tools.search.yahoo.com/mrss',
-  ],
-  georss: [
-    'http://www.georss.org/georss', // Official URI.
-    'http://www.georss.org/georss/',
-    'https://www.georss.org/georss',
-    'https://www.georss.org/georss/',
-  ],
-  geo: [
-    'http://www.w3.org/2003/01/geo/wgs84_pos#', // Official URI.
-    'https://www.w3.org/2003/01/geo/wgs84_pos#',
-  ],
-  thr: [
-    'http://purl.org/syndication/thread/1.0', // Official URI.
-    'https://purl.org/syndication/thread/1.0',
-    'http://purl.org/syndication/thread/1.0/',
-    'https://purl.org/syndication/thread/1.0/',
-    'http://purl.org/rss/1.0/modules/threading/',
-    'https://purl.org/rss/1.0/modules/threading/',
-    'http://purl.org/rss/1.0/modules/threading',
-    'https://purl.org/rss/1.0/modules/threading',
-  ],
-  dcterms: [
-    'http://purl.org/dc/terms/', // Official URI.
-    'https://purl.org/dc/terms/',
-    'http://purl.org/dc/terms',
-    'https://purl.org/dc/terms',
-    'http://dublincore.org/documents/dcmi-terms/',
-    'https://dublincore.org/documents/dcmi-terms/',
-    'http://dublincore.org/documents/dcmi-terms',
-    'https://dublincore.org/documents/dcmi-terms',
-    'http://dublincore.org/specifications/dublin-core/dcmi-terms/',
-    'https://dublincore.org/specifications/dublin-core/dcmi-terms/',
-    'http://dublincore.org/specifications/dublin-core/dcmi-terms',
-    'https://dublincore.org/specifications/dublin-core/dcmi-terms',
-  ],
-  wfw: [
-    'http://wellformedweb.org/CommentAPI/', // Official URI.
-    'https://wellformedweb.org/CommentAPI/',
-    'http://wellformedweb.org/CommentAPI',
-    'https://wellformedweb.org/CommentAPI',
-  ],
-  source: [
-    'http://source.scripting.com/', // Official URI.
-    'https://source.scripting.com/',
-    'http://source.scripting.com',
-    'https://source.scripting.com',
-  ],
-  feedpress: [
-    'https://feed.press/xmlns', // Official URI.
-    'http://feed.press/xmlns',
-    'https://feed.press/xmlns/',
-    'http://feed.press/xmlns/',
-    'https://feedpress.com/xmlns',
-    'http://feedpress.com/xmlns',
-    'https://feedpress.com/xmlns/',
-    'http://feedpress.com/xmlns/',
-    'http://feedpress.it/xmlns',
-    'https://feedpress.it/xmlns',
-    'http://feedpress.it/xmlns/',
-    'https://feedpress.it/xmlns/',
-  ],
-  yt: [
-    'http://www.youtube.com/xml/schemas/2015', // Official URI.
-    'https://www.youtube.com/xml/schemas/2015',
-    'http://www.youtube.com/xml/schemas/2015/',
-    'https://www.youtube.com/xml/schemas/2015/',
-  ],
-  googleplay: [
-    'https://www.google.com/schemas/play-podcasts/1.0/', // Official URI.
-    'http://www.google.com/schemas/play-podcasts/1.0/',
-    'https://www.google.com/schemas/play-podcasts/1.0',
-    'http://www.google.com/schemas/play-podcasts/1.0',
-    'https://www.google.com/schemas/play-podcasts/1.0/play-podcasts.xsd',
-    'http://www.google.com/schemas/play-podcasts/1.0/play-podcasts.xsd',
-  ],
-  spotify: [
-    'http://www.spotify.com/ns/rss', // Official URI.
-    'https://www.spotify.com/ns/rss',
-    'http://www.spotify.com/ns/rss/',
-    'https://www.spotify.com/ns/rss/',
-  ],
-  rdf: [
-    'http://www.w3.org/1999/02/22-rdf-syntax-ns#', // Official URI.
-    'https://www.w3.org/1999/02/22-rdf-syntax-ns#',
-  ],
-  rawvoice: [
-    'http://www.rawvoice.com/rawvoiceRssModule/', // Official URI.
-    'https://www.rawvoice.com/rawvoiceRssModule/',
-    'http://www.rawvoice.com/rawvoiceRssModule',
-    'https://www.rawvoice.com/rawvoiceRssModule',
-    'https://blubrry.com/developer/rawvoice-rss',
-    'http://blubrry.com/developer/rawvoice-rss',
-    'https://blubrry.com/developer/rawvoice-rss/',
-    'http://blubrry.com/developer/rawvoice-rss/',
-  ],
-  cc: [
-    'http://creativecommons.org/ns#', // Official URI.
-    'https://creativecommons.org/ns#',
-    'http://web.resource.org/cc/',
-    'https://web.resource.org/cc/',
-    'http://web.resource.org/cc',
-    'https://web.resource.org/cc',
-  ],
-  opensearch: [
-    'http://a9.com/-/spec/opensearch/1.1/', // Official URI (OpenSearch 1.1).
-    'https://a9.com/-/spec/opensearch/1.1/',
-    'http://a9.com/-/spec/opensearch/1.0/', // Official URI (OpenSearch 1.0).
-    'https://a9.com/-/spec/opensearch/1.0/',
-    'http://a9.com/-/spec/opensearchrss/1.0/', // Official URI (legacy).
-    'https://a9.com/-/spec/opensearchrss/1.0/',
-  ],
-  arxiv: [
-    'http://arxiv.org/schemas/atom', // Official URI.
-    'https://arxiv.org/schemas/atom',
-    'http://arxiv.org/schemas/atom/',
-    'https://arxiv.org/schemas/atom/',
-  ],
-  pingback: [
-    'http://madskills.com/public/xml/rss/module/pingback/', // Official URI.
-    'https://madskills.com/public/xml/rss/module/pingback/',
-    'http://madskills.com/public/xml/rss/module/pingback',
-    'https://madskills.com/public/xml/rss/module/pingback',
-  ],
-  trackback: [
-    'http://madskills.com/public/xml/rss/module/trackback/', // Official URI.
-    'https://madskills.com/public/xml/rss/module/trackback/',
-    'http://madskills.com/public/xml/rss/module/trackback',
-    'https://madskills.com/public/xml/rss/module/trackback',
-  ],
-  prism: [
-    'http://prismstandard.org/namespaces/basic/3.0/', // Official URI (PRISM 3.0).
-    'https://prismstandard.org/namespaces/basic/3.0/',
-    'http://prismstandard.org/namespaces/basic/3.0',
-    'https://prismstandard.org/namespaces/basic/3.0',
-    'http://prismstandard.org/namespaces/basic/2.2/', // PRISM 2.2.
-    'https://prismstandard.org/namespaces/basic/2.2/',
-    'http://prismstandard.org/namespaces/basic/2.2',
-    'https://prismstandard.org/namespaces/basic/2.2',
-    'http://prismstandard.org/namespaces/basic/2.1/', // PRISM 2.1.
-    'https://prismstandard.org/namespaces/basic/2.1/',
-    'http://prismstandard.org/namespaces/basic/2.1',
-    'https://prismstandard.org/namespaces/basic/2.1',
-    'http://prismstandard.org/namespaces/basic/2.0/', // PRISM 2.0.
-    'https://prismstandard.org/namespaces/basic/2.0/',
-    'http://prismstandard.org/namespaces/basic/2.0',
-    'https://prismstandard.org/namespaces/basic/2.0',
-    'http://prismstandard.org/namespaces/2.0/basic/', // PRISM 2.0 (alternative path).
-    'https://prismstandard.org/namespaces/2.0/basic/',
-    'http://prismstandard.org/namespaces/2.0/basic',
-    'https://prismstandard.org/namespaces/2.0/basic',
-    'http://prismstandard.org/namespaces/1.2/basic/', // PRISM 1.2 (most common).
-    'https://prismstandard.org/namespaces/1.2/basic/',
-    'http://prismstandard.org/namespaces/1.2/basic',
-    'https://prismstandard.org/namespaces/1.2/basic',
-    'http://prismstandard.org/namespaces/1.1/basic/', // PRISM 1.1.
-    'https://prismstandard.org/namespaces/1.1/basic/',
-    'http://prismstandard.org/namespaces/1.1/basic',
-    'https://prismstandard.org/namespaces/1.1/basic',
-    'http://prismstandard.org/namespaces/1.0/basic/', // PRISM 1.0.
-    'https://prismstandard.org/namespaces/1.0/basic/',
-    'http://prismstandard.org/namespaces/1.0/basic',
-    'https://prismstandard.org/namespaces/1.0/basic',
-    'http://purl.org/rss/1.0/modules/prism/', // Legacy purl.org URI.
-    'https://purl.org/rss/1.0/modules/prism/',
-    'http://purl.org/rss/1.0/modules/prism',
-    'https://purl.org/rss/1.0/modules/prism',
-  ],
-  acast: [
-    'https://schema.acast.com/1.0/', // Official URI.
-    'http://schema.acast.com/1.0/',
-    'https://schema.acast.com/1.0',
-    'http://schema.acast.com/1.0',
-  ],
-  g: [
-    'http://base.google.com/ns/1.0', // Official URI.
-    'https://base.google.com/ns/1.0',
-    'http://base.google.com/ns/1.0/',
-    'https://base.google.com/ns/1.0/',
-  ],
+  admin: adminUris,
+  atom: atomUris,
+  blogChannel: blogchannelUris,
+  app: appUris,
+  dc: dcUris,
+  sy: syUris,
+  content: contentUris,
+  creativeCommons: creativecommonsUris,
+  slash: slashUris,
+  itunes: itunesUris,
+  podcast: podcastUris,
+  psc: pscUris,
+  media: mediaUris,
+  georss: georssUris,
+  geo: geoUris,
+  thr: thrUris,
+  dcterms: dctermsUris,
+  wfw: wfwUris,
+  source: sourceUris,
+  feedpress: feedpressUris,
+  yt: ytUris,
+  googleplay: googleplayUris,
+  spotify: spotifyUris,
+  rdf: rdfUris,
+  rss: rssUris,
+  rawvoice: rawvoiceUris,
+  cc: ccUris,
+  opensearch: opensearchUris,
+  arxiv: arxivUris,
+  pingback: pingbackUris,
+  trackback: trackbackUris,
+  prism: prismUris,
+  acast: acastUris,
+  g: gUris,
 }
 
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(
@@ -333,3 +180,37 @@ export const namespacePrefixes = Object.entries(namespaceUris).reduce(
   },
   {} as Record<string, string>,
 )
+
+export const namespaceStopNodes = [
+  ...acastStopNodes,
+  ...adminStopNodes,
+  ...appStopNodes,
+  ...arxivStopNodes,
+  ...blogchannelStopNodes,
+  ...ccStopNodes,
+  ...contentStopNodes,
+  ...creativecommonsStopNodes,
+  ...dcStopNodes,
+  ...dctermsStopNodes,
+  ...feedpressStopNodes,
+  ...gStopNodes,
+  ...geoStopNodes,
+  ...georssStopNodes,
+  ...googleplayStopNodes,
+  ...itunesStopNodes,
+  ...mediaStopNodes,
+  ...opensearchStopNodes,
+  ...pingbackStopNodes,
+  ...podcastStopNodes,
+  ...prismStopNodes,
+  ...rawvoiceStopNodes,
+  ...rdfStopNodes,
+  ...slashStopNodes,
+  ...sourceStopNodes,
+  ...spotifyStopNodes,
+  ...syStopNodes,
+  ...thrStopNodes,
+  ...trackbackStopNodes,
+  ...wfwStopNodes,
+  ...ytStopNodes,
+]

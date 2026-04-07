@@ -95,6 +95,49 @@ describe('parseOutline', () => {
     expect(parseOutline(value)).toEqual(expected)
   })
 
+  it('should handle multiple levels of nested outlines', () => {
+    const value = {
+      '@text': 'Regions',
+      outline: [
+        {
+          '@text': 'Europe',
+          outline: [
+            {
+              '@text': 'Western Europe',
+              outline: [
+                {
+                  '@text': 'France',
+                  outline: [{ '@text': 'Paris' }],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    }
+    const expected = {
+      text: 'Regions',
+      outlines: [
+        {
+          text: 'Europe',
+          outlines: [
+            {
+              text: 'Western Europe',
+              outlines: [
+                {
+                  text: 'France',
+                  outlines: [{ text: 'Paris' }],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    }
+
+    expect(parseOutline(value)).toEqual(expected)
+  })
+
   it('should handle empty outline object', () => {
     const value = {}
 

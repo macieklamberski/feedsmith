@@ -1,4 +1,4 @@
-import type { DateLike, GenerateUtil } from '../../common/types.js'
+import type { DateLike } from '../../common/types.js'
 import {
   generateBoolean,
   generateCdataString,
@@ -11,12 +11,9 @@ import {
   trimArray,
   trimObject,
 } from '../../common/utils.js'
-import type { MainOptions, Opml } from '../common/types.js'
+import type { GenerateUtil, Opml } from '../common/types.js'
 
-export const generateOutline: GenerateUtil<Opml.Outline<DateLike>, MainOptions> = (
-  outline,
-  options,
-) => {
+export const generateOutline: GenerateUtil<Opml.Outline<DateLike>> = (outline, options) => {
   if (!isObject(outline)) {
     return
   }
@@ -77,7 +74,7 @@ export const generateHead: GenerateUtil<Opml.Head<DateLike>> = (head) => {
   return trimObject(value)
 }
 
-export const generateBody: GenerateUtil<Opml.Body<DateLike>, MainOptions> = (body, options) => {
+export const generateBody: GenerateUtil<Opml.Body<DateLike>> = (body, options) => {
   if (!isObject(body)) {
     return
   }
@@ -89,10 +86,7 @@ export const generateBody: GenerateUtil<Opml.Body<DateLike>, MainOptions> = (bod
   return trimObject(value)
 }
 
-export const generateDocument: GenerateUtil<Opml.Document<DateLike>, MainOptions> = (
-  opml,
-  options,
-) => {
+export const generateDocument: GenerateUtil<Opml.Document<DateLike>> = (opml, options) => {
   if (!isObject(opml)) {
     return
   }

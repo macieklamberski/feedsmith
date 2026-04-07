@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -11,7 +11,7 @@ import {
 } from '../../../common/utils.js'
 import type { GNs } from '../common/types.js'
 
-export const parseShipping: ParsePartialUtil<GNs.Shipping> = (value) => {
+export const parseShipping: ParseUtilPartial<GNs.Shipping> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -53,7 +53,7 @@ export const parseShipping: ParsePartialUtil<GNs.Shipping> = (value) => {
   return trimObject(shipping)
 }
 
-export const parseFreeShippingThreshold: ParsePartialUtil<GNs.FreeShippingThreshold> = (value) => {
+export const parseFreeShippingThreshold: ParseUtilPartial<GNs.FreeShippingThreshold> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -68,7 +68,7 @@ export const parseFreeShippingThreshold: ParsePartialUtil<GNs.FreeShippingThresh
   return trimObject(threshold)
 }
 
-export const parseHandlingCutoffTime: ParsePartialUtil<GNs.HandlingCutoffTime> = (value) => {
+export const parseHandlingCutoffTime: ParseUtilPartial<GNs.HandlingCutoffTime> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -89,7 +89,7 @@ export const parseHandlingCutoffTime: ParsePartialUtil<GNs.HandlingCutoffTime> =
   return trimObject(cutoff)
 }
 
-export const parseTax: ParsePartialUtil<GNs.Tax> = (value) => {
+export const parseTax: ParseUtilPartial<GNs.Tax> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -112,7 +112,7 @@ export const parseTax: ParsePartialUtil<GNs.Tax> = (value) => {
   return trimObject(tax)
 }
 
-export const parseInstallment: ParsePartialUtil<GNs.Installment> = (value) => {
+export const parseInstallment: ParseUtilPartial<GNs.Installment> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -131,7 +131,7 @@ export const parseInstallment: ParsePartialUtil<GNs.Installment> = (value) => {
   return trimObject(installment)
 }
 
-export const parseSubscriptionCost: ParsePartialUtil<GNs.SubscriptionCost> = (value) => {
+export const parseSubscriptionCost: ParseUtilPartial<GNs.SubscriptionCost> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -147,7 +147,7 @@ export const parseSubscriptionCost: ParsePartialUtil<GNs.SubscriptionCost> = (va
   return trimObject(subscription)
 }
 
-export const parseLoyaltyProgram: ParsePartialUtil<GNs.LoyaltyProgram> = (value) => {
+export const parseLoyaltyProgram: ParseUtilPartial<GNs.LoyaltyProgram> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -175,7 +175,7 @@ export const parseLoyaltyProgram: ParsePartialUtil<GNs.LoyaltyProgram> = (value)
   return trimObject(program)
 }
 
-export const parseProductDetail: ParsePartialUtil<GNs.ProductDetail> = (value) => {
+export const parseProductDetail: ParseUtilPartial<GNs.ProductDetail> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -195,7 +195,7 @@ export const parseProductDetail: ParsePartialUtil<GNs.ProductDetail> = (value) =
   return trimObject(detail)
 }
 
-export const parseCertification: ParsePartialUtil<GNs.Certification> = (value) => {
+export const parseCertification: ParseUtilPartial<GNs.Certification> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -218,7 +218,7 @@ export const parseCertification: ParsePartialUtil<GNs.Certification> = (value) =
   return trimObject(certification)
 }
 
-export const parseStructuredContent: ParsePartialUtil<GNs.StructuredContent> = (value) => {
+export const parseStructuredContent: ParseUtilPartial<GNs.StructuredContent> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -233,7 +233,7 @@ export const parseStructuredContent: ParsePartialUtil<GNs.StructuredContent> = (
   return trimObject(structured)
 }
 
-export const retrieveItem: ParsePartialUtil<GNs.Item> = (value) => {
+export const retrieveItem: ParseUtilPartial<GNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }
