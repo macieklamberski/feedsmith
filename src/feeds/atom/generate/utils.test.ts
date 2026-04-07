@@ -1943,12 +1943,12 @@ describe('generateFeed', () => {
         '@xmlns': 'http://www.w3.org/2005/Atom',
         '@xmlns:g': 'http://base.google.com/ns/1.0',
         id: 'https://example.com/feed',
-        title: 'Feed with Google Merchant Center namespace',
+        title: { '#text': 'Feed with Google Merchant Center namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         entry: [
           {
             id: 'https://example.com/entry/1',
-            title: 'Product Entry',
+            title: { '#text': 'Product Entry' },
             updated: '2023-03-15T12:00:00.000Z',
             'g:id': 'SKU12345',
             'g:price': '19.99 USD',

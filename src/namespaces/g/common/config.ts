@@ -54,7 +54,9 @@ export const stopNodes = [
   '*.g:max_handling_time',
   '*.g:min_transit_time',
   '*.g:max_transit_time',
-  '*.g:handling_cutoff_time',
+  // Cannot be a stop node because it's used both as a leaf (simple string inside
+  // g:shipping) and as a container element with children at the item level.
+  // '*.g:handling_cutoff_time',
   '*.g:handling_cutoff_timezone',
   '*.g:shipping_label',
   '*.g:shipping_weight',
