@@ -1,6 +1,5 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
-  createCaseInsensitiveGetter,
   isObject,
   parseArrayOf,
   parseBoolean,
@@ -11,7 +10,23 @@ import {
 } from '../../../common/utils.js'
 import type { Chapters } from '../common/types.js'
 
-export const parseLocation: ParsePartialUtil<Chapters.Location> = (value) => {
+const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
+  return (requestedKey: string) => {
+    if (requestedKey in value) {
+      return value[requestedKey]
+    }
+
+    const lowerKey = requestedKey.toLowerCase()
+
+    for (const key in value) {
+      if (key.toLowerCase() === lowerKey) {
+        return value[key]
+      }
+    }
+  }
+}
+
+export const parseLocation: ParseUtilPartial<Chapters.Location> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -26,7 +41,7 @@ export const parseLocation: ParsePartialUtil<Chapters.Location> = (value) => {
   return trimObject(location)
 }
 
-export const parseChapter: ParsePartialUtil<Chapters.Chapter> = (value) => {
+export const parseChapter: ParseUtilPartial<Chapters.Chapter> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -45,7 +60,7 @@ export const parseChapter: ParsePartialUtil<Chapters.Chapter> = (value) => {
   return trimObject(chapter)
 }
 
-export const parseDocument: ParsePartialUtil<Chapters.Document> = (value) => {
+export const parseDocument: ParseUtilPartial<Chapters.Document> = (value) => {
   if (!isObject(value)) {
     return
   }

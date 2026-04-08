@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { locales } from '../../../common/config.js'
+import { DetectError, ParseError } from '../../../common/errors.js'
 import { parse } from './index.js'
 
 describe('parse', () => {
@@ -261,6 +262,25 @@ describe('parse', () => {
     expect(() => parse(123)).toThrowError(locales.invalidFeedFormat)
   })
 
+  describe('error types', () => {
+    it('should throw DetectError for non-feed input', () => {
+      const throwing = () => parse({})
+
+      expect(throwing).toThrow(DetectError)
+      expect(throwing).toThrow(locales.invalidFeedFormat)
+    })
+
+    it('should throw ParseError for detected but invalid feed', () => {
+      const value = {
+        version: 'https://jsonfeed.org/version/1',
+      }
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrow(ParseError)
+      expect(throwing).toThrow(locales.invalidFeedFormat)
+    })
+  })
+
   describe('with maxItems option', () => {
     const commonValue = {
       version: 'https://jsonfeed.org/version/1.1',
@@ -327,6 +347,35 @@ describe('parse', () => {
       }
 
       expect(parse(commonValue, { maxItems: undefined })).toEqual(expected)
+    })
+  })
+
+  describe('parseDateFn', () => {
+    it('should apply custom parseDateFn to item dates', () => {
+      const value = {
+        version: 'https://jsonfeed.org/version/1.1',
+        title: 'Test',
+        items: [
+          {
+            id: '1',
+            date_published: '2023-01-01T00:00:00Z',
+            date_modified: '2023-01-02T00:00:00Z',
+          },
+        ],
+      }
+      const expected = {
+        title: 'Test',
+        items: [
+          {
+            id: '1',
+            date_published: new Date('2023-01-01T00:00:00Z'),
+            date_modified: new Date('2023-01-02T00:00:00Z'),
+          },
+        ],
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
     })
   })
 })

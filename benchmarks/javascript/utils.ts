@@ -81,7 +81,7 @@ export const runTinybench = async (name: string, tests: Record<string, () => Pro
   console.table(resultsWithPerformance)
 }
 
-export const runBenchmarkJs = async (name: string, tests: Record<string, () => Promise<void>>) => {
+export const runBenchmarkJs = (name: string, tests: Record<string, () => Promise<void>>) => {
   const randomlySortedTests = Object.entries(tests).sort(() => Math.random() - 0.5)
 
   return new Promise<void>((resolve) => {

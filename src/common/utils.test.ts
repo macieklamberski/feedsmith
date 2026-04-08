@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import { type XMLBuilder, XMLParser } from 'fast-xml-parser'
 import { namespacePrefixes, namespaceUris } from './config.js'
-import type { ParseExactUtil } from './types.js'
+import type { ParseUtilExact } from './types.js'
 import {
   createCaseInsensitiveGetter,
   createNamespaceNormalizator,
@@ -99,6 +99,7 @@ describe('isPresent', () => {
   })
 
   it('should return true for RegExp objects', () => {
+    // biome-ignore lint/performance/useTopLevelRegex: It's for testing purposes.
     expect(isPresent(/test/)).toBe(true)
   })
 })
@@ -148,6 +149,7 @@ describe('isObject', () => {
 
   it('should return false for built-in objects', () => {
     expect(isObject(new Date())).toBe(false)
+    // biome-ignore lint/suspicious/useErrorMessage: It's for testing purposes.
     expect(isObject(new Error())).toBe(false)
     expect(isObject(new Map())).toBe(false)
     expect(isObject(new Set())).toBe(false)
@@ -168,6 +170,7 @@ describe('isNonEmptyString', () => {
   })
 
   it('should handle edge cases', () => {
+    // biome-ignore lint/style/useConsistentBuiltinInstantiation: It's for testing purposes.
     const stringObject = new String('hello')
 
     expect(isNonEmptyString(stringObject)).toBe(false)
@@ -242,7 +245,9 @@ describe('isNonEmptyStringOrNumber', () => {
   })
 
   it('should handle edge cases', () => {
+    // biome-ignore lint/style/useConsistentBuiltinInstantiation: It's for testing purposes.
     const stringObject = new String('hello')
+    // biome-ignore lint/style/useConsistentBuiltinInstantiation: It's for testing purposes.
     const numberObject = new Number(42)
 
     expect(isNonEmptyStringOrNumber(stringObject)).toBe(false)
@@ -613,7 +618,8 @@ describe('trimObject', () => {
         return 1
       },
       get b() {
-        return undefined
+        // biome-ignore lint/suspicious/useGetterReturn: It's for testing purposes.
+        return
       },
     }
     const expected = { a: 1 }
@@ -719,9 +725,18 @@ describe('trimArray', () => {
       const value = ['a', 3, 'b', 6, null, true]
       const expected = ['A', 'B', 12, true]
       const parseWithConditions = (val: unknown) => {
-        if (typeof val === 'string') return val.toUpperCase()
-        if (typeof val === 'number' && val > 5) return val * 2
-        if (typeof val === 'number') return null
+        if (typeof val === 'string') {
+          return val.toUpperCase()
+        }
+
+        if (typeof val === 'number' && val > 5) {
+          return val * 2
+        }
+
+        if (typeof val === 'number') {
+          return null
+        }
+
         return val
       }
 
@@ -825,7 +840,8 @@ describe('parseString', () => {
   it('should handle entities #1: no CDATA', () => {
     const value =
       'Testing &lt;b&gt;bold text&lt;/b&gt; and &lt;i&gt;italic text&lt;/i&gt; with &amp;amp; ampersand, &amp;quot; quotes, &amp;apos; apostrophe and &amp;nbsp; non-breaking space.'
-    const expected = `Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.`
+    const expected =
+      'Testing <b>bold text</b> and <i>italic text</i> with &amp; ampersand, &quot; quotes, &apos; apostrophe and &nbsp; non-breaking space.'
 
     expect(parseString(value)).toBe(expected)
   })
@@ -957,6 +973,13 @@ describe('parseString', () => {
     expect(parseString(value)).toBe(expected)
   })
 
+  it('should preserve HTML entities inside CDATA (content:encoded scenario)', () => {
+    const value = '<![CDATA[<p>Use <code>&lt;link rel="alternate"&gt;</code> in your HTML.</p>]]>'
+    const expected = '<p>Use <code>&lt;link rel="alternate"&gt;</code> in your HTML.</p>'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
   it('should decode only one layer of triple-escaped entities', () => {
     expect(parseString('&amp;amp;amp;')).toBe('&amp;amp;')
   })
@@ -987,6 +1010,42 @@ describe('parseString', () => {
     const value = '<![CDATA[    test    ]]>'
 
     expect(parseString(value)).toBe('test')
+  })
+
+  it('should strip XML comments from text', () => {
+    expect(parseString('Test<!-- hidden --> Feed')).toBe('Test Feed')
+  })
+
+  it('should strip multiple XML comments', () => {
+    expect(parseString('A<!-- one -->B<!-- two -->C')).toBe('ABC')
+  })
+
+  it('should strip XML comment leaving only remaining text', () => {
+    expect(parseString('<!-- full comment -->visible')).toBe('visible')
+  })
+
+  it('should return undefined when entire content is a comment', () => {
+    expect(parseString('<!-- only comment -->')).toBeUndefined()
+  })
+
+  it('should handle malformed XML comment without closing tag', () => {
+    expect(parseString('<!-- no closing tag')).toBe('<!-- no closing tag')
+  })
+
+  it('should strip XML comments and decode entities in remaining text', () => {
+    expect(parseString('Hello<!-- comment --> &amp; World')).toBe('Hello & World')
+  })
+
+  it('should handle nested comment start marker inside comment', () => {
+    expect(parseString('A<!-- first <!-- second -->B')).toBe('AB')
+  })
+
+  it('should handle extra closing comment marker as plain text', () => {
+    expect(parseString('A<!-- comment --> -->B')).toBe('A -->B')
+  })
+
+  it('should strip XML comments alongside CDATA sections', () => {
+    expect(parseString('<!-- comment --><![CDATA[content]]>')).toBe('content')
   })
 
   it('should return number as string', () => {
@@ -1492,6 +1551,43 @@ describe('parseDate', () => {
 
     expect(parseDate(value)).toBeUndefined()
   })
+
+  it('should apply custom parseDateFn', () => {
+    const value = '2023-03-15T12:00:00Z'
+    const expected = new Date('2023-03-15T12:00:00Z')
+
+    expect(parseDate(value, (raw) => new Date(raw))).toEqual(expected)
+  })
+
+  it('should apply custom parseDateFn returning number', () => {
+    const value = '2023-03-15T12:00:00Z'
+    const expected = 1678881600000
+
+    expect(parseDate(value, (raw) => new Date(raw).getTime())).toBe(expected)
+  })
+
+  it('should return undefined when parseDateFn is provided but value is empty', () => {
+    const value = ''
+
+    expect(parseDate(value, (raw) => new Date(raw))).toBeUndefined()
+  })
+
+  it('should normalize value before passing to parseDateFn', () => {
+    const value = '  2023-03-15T12:00:00Z  '
+    const expected = new Date('2023-03-15T12:00:00Z')
+
+    expect(parseDate(value, (raw) => new Date(raw))).toEqual(expected)
+  })
+
+  it('should propagate error when parseDateFn throws', () => {
+    const value = 'invalid-date'
+    const parseDateFn = () => {
+      throw new Error('Parse failed')
+    }
+    const throwing = () => parseDate(value, parseDateFn)
+
+    expect(throwing).toThrow('Parse failed')
+  })
 })
 
 describe('generateBoolean', () => {
@@ -1614,7 +1710,7 @@ describe('parseSingularOf', () => {
   })
 
   it('should work with custom parse functions', () => {
-    const parseUpperCase: ParseExactUtil<string> = (value) => {
+    const parseUpperCase: ParseUtilExact<string> = (value) => {
       return typeof value === 'string' ? value.toUpperCase() : undefined
     }
 
@@ -1811,6 +1907,7 @@ describe('parseArray', () => {
     const value2 = new Set([1, 2, 3])
     const value3 = new Map()
     const value4 = new Date()
+    // biome-ignore lint/performance/useTopLevelRegex: It's for testing purposes.
     const value5 = /regex/
     const value6 = () => {}
 
@@ -1824,7 +1921,7 @@ describe('parseArray', () => {
 })
 
 describe('parseArrayOf', () => {
-  const parser: ParseExactUtil<string> = (value) => {
+  const parser: ParseUtilExact<string> = (value) => {
     if (typeof value === 'number') {
       return value.toString()
     }
@@ -3188,7 +3285,7 @@ describe('generateNumber', () => {
   })
 
   it('should return undefined for special number values', () => {
-    const values = [Infinity, -Infinity, NaN]
+    const values = [Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY, Number.NaN]
 
     for (const value of values) {
       expect(generateNumber(value)).toBeUndefined()
@@ -3301,11 +3398,9 @@ describe('createNamespaceNormalizator', () => {
 
     describe('default namespace handling', () => {
       it('should handle default Atom namespace with primary namespace', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(
-          namespaceUris,
-          namespacePrefixes,
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
           'atom',
-        )
+        ])
         const value = parser.parse(`
           <?xml version="1.0"?>
           <feed xmlns="http://www.w3.org/2005/Atom">
@@ -3379,11 +3474,9 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle custom Atom prefix with primary namespace', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(
-          namespaceUris,
-          namespacePrefixes,
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
           'atom',
-        )
+        ])
         const value = parser.parse(`
           <?xml version="1.0"?>
           <a:feed xmlns:a="http://www.w3.org/2005/Atom">
@@ -3669,11 +3762,9 @@ describe('createNamespaceNormalizator', () => {
       })
 
       it('should handle complex nesting with namespace inheritance', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(
-          namespaceUris,
-          namespacePrefixes,
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
           'atom',
-        )
+        ])
         const value = parser.parse(`
           <?xml version="1.0"?>
           <feed xmlns="http://www.w3.org/2005/Atom">
@@ -3873,11 +3964,10 @@ describe('createNamespaceNormalizator', () => {
 
     describe('RDF primary namespace handling', () => {
       it('should normalize RDF namespace elements and attributes including arrays', () => {
-        const normalizeNamespaces = createNamespaceNormalizator(
-          namespaceUris,
-          namespacePrefixes,
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
           'rdf',
-        )
+          'rss',
+        ])
         const value = parser.parse(`
           <?xml version="1.0" encoding="UTF-8"?>
           <rdf:RDF
@@ -3921,6 +4011,42 @@ describe('createNamespaceNormalizator', () => {
               { title: 'Item 1', '@about': 'http://example.com/item1' },
               { title: 'Item 2', '@about': 'http://example.com/item2' },
             ],
+          },
+        }
+
+        expect(normalizeNamespaces(value)).toEqual(expected)
+      })
+
+      it('should strip prefixes for multiple primary namespaces', () => {
+        const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
+          'rdf',
+          'rss',
+        ])
+        const value = parser.parse(`
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rdf:RDF
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns:rss="http://purl.org/rss/1.0/"
+          >
+            <rss:channel>
+              <rss:title>Test Feed</rss:title>
+            </rss:channel>
+            <rss:item rdf:about="http://example.com/item1">
+              <rss:title>Item 1</rss:title>
+            </rss:item>
+          </rdf:RDF>
+        `)
+        const expected = {
+          rdf: {
+            '@xmlns:rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+            '@xmlns:rss': 'http://purl.org/rss/1.0/',
+            channel: {
+              title: 'Test Feed',
+            },
+            item: {
+              title: 'Item 1',
+              '@about': 'http://example.com/item1',
+            },
           },
         }
 

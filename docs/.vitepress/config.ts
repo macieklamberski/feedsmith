@@ -1,5 +1,9 @@
 import { defineConfig } from 'vitepress'
 
+const indexMdRegex = /index\.md$/
+const mdRegex = /\.md$/
+const trailingSlashRegex = /\/$/
+
 const hostname = 'https://feedsmith.dev'
 
 export default defineConfig({
@@ -14,14 +18,24 @@ export default defineConfig({
   },
   transformHead: ({ pageData }) => {
     const canonicalUrl = `${hostname}/${pageData.relativePath}`
-      .replace(/index\.md$/, '')
-      .replace(/\.md$/, '')
-      .replace(/\/$/, '')
+      .replace(indexMdRegex, '')
+      .replace(mdRegex, '')
+      .replace(trailingSlashRegex, '')
 
     return [['link', { rel: 'canonical', href: canonicalUrl }]]
   },
   head: [
     ['meta', { property: 'og:site_name', content: 'Feedsmith' }],
+    [
+      'script',
+      { type: 'application/ld+json' },
+      JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'Feedsmith',
+        url: hostname,
+      }),
+    ],
     [
       'script',
       {
@@ -60,6 +74,7 @@ export default defineConfig({
           { text: 'Namespaces', link: '/parsing/namespaces' },
           { text: 'Dates', link: '/parsing/dates' },
           { text: 'Detecting', link: '/parsing/detecting' },
+          { text: 'Errors', link: '/parsing/errors' },
           { text: 'Examples', link: '/parsing/examples' },
         ],
       },
@@ -69,6 +84,7 @@ export default defineConfig({
           { text: 'Overview', link: '/generating' },
           { text: 'Styling', link: '/generating/styling' },
           { text: 'Strict Mode', link: '/generating/strict-mode' },
+          { text: 'Errors', link: '/generating/errors' },
           { text: 'Examples', link: '/generating/examples' },
         ],
       },
@@ -155,12 +171,16 @@ export default defineConfig({
     },
     socialLinks: [
       {
+        icon: 'npm',
+        link: 'https://www.npmjs.com/package/feedsmith',
+      },
+      {
         icon: 'github',
         link: 'https://github.com/macieklamberski/feedsmith',
       },
       {
-        icon: 'npm',
-        link: 'https://www.npmjs.com/package/feedsmith',
+        icon: 'x',
+        link: 'https://x.com/macieklamberski',
       },
     ],
   },
