@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { locales } from './config.js'
+import { DetectError } from './errors.js'
 import { parse } from './parse.js'
 
 describe('parse', () => {
@@ -14,7 +15,7 @@ describe('parse', () => {
     const expected = {
       format: 'atom' as const,
       feed: {
-        title: 'Feed',
+        title: { value: 'Feed' },
         id: 'example-feed',
       },
     }
@@ -249,6 +250,15 @@ describe('parse', () => {
     expect(() => parse(123)).toThrowError(locales.unrecognizedFeedFormat)
   })
 
+  describe('error types', () => {
+    it('should throw DetectError for unrecognized format', () => {
+      const throwing = () => parse('not a feed')
+
+      expect(throwing).toThrow(DetectError)
+      expect(throwing).toThrow(locales.unrecognizedFeedFormat)
+    })
+  })
+
   describe('leading/trailing garbage', () => {
     it('should parse RSS feed with PHP warning before XML declaration', () => {
       const value = `
@@ -313,7 +323,7 @@ describe('parse', () => {
       const expected = {
         format: 'atom' as const,
         feed: {
-          title: 'Feed',
+          title: { value: 'Feed' },
           id: 'example-feed',
         },
       }
@@ -421,7 +431,7 @@ describe('parse', () => {
       const expected = {
         format: 'atom' as const,
         feed: {
-          title: 'Feed',
+          title: { value: 'Feed' },
           id: 'example-feed',
         },
       }

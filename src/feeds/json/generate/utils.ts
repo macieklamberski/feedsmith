@@ -100,7 +100,6 @@ export const generateFeed: GenerateUtil<Json.Feed<DateLike>> = (feed, options) =
   }
 
   const value = {
-    version: 'https://jsonfeed.org/version/1.1',
     title: feed.title,
     home_page_url: feed.home_page_url,
     feed_url: feed.feed_url,
@@ -117,5 +116,14 @@ export const generateFeed: GenerateUtil<Json.Feed<DateLike>> = (feed, options) =
     ...filterExtraFields(feed, options?.extraFields),
   }
 
-  return trimObject(value) as Record<string, unknown>
+  const trimmed = trimObject(value)
+
+  if (!trimmed) {
+    return
+  }
+
+  return {
+    version: 'https://jsonfeed.org/version/1.1',
+    ...trimmed,
+  }
 }

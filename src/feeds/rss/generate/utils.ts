@@ -73,27 +73,26 @@ import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generat
 import { generateItemOrFeed as generateXmlItemOrFeed } from '../../../namespaces/xml/generate/utils.js'
 import type { GenerateUtil, Rss } from '../common/types.js'
 
-export const generatePerson: GenerateUtil<Rss.PersonLike> = (person) => {
-  if (isObject(person)) {
-    const name = generatePlainString(person.name)
-    const email = generatePlainString(person.email)
-
-    if (email && name) {
-      return generateCdataString(`${email} (${name})`)
-    }
-
-    if (name) {
-      return generateCdataString(name)
-    }
-
-    if (email) {
-      return generateCdataString(email)
-    }
-
+export const generatePerson: GenerateUtil<Rss.Person> = (person) => {
+  if (!isObject(person)) {
     return
   }
 
-  return generateCdataString(person)
+  const name = generatePlainString(person.name)
+  const email = generatePlainString(person.email)
+  // person.link is intentionally not generated (no RSS spec support).
+
+  if (email && name) {
+    return generateCdataString(`${email} (${name})`)
+  }
+
+  if (name) {
+    return generateCdataString(name)
+  }
+
+  if (email) {
+    return generateCdataString(email)
+  }
 }
 
 export const generateCategory: GenerateUtil<Rss.Category> = (category) => {
@@ -209,7 +208,7 @@ export const generateSource: GenerateUtil<Rss.Source> = (source) => {
   return trimObject(value)
 }
 
-export const generateItem: GenerateUtil<Rss.Item<DateLike, Rss.PersonLike>> = (item) => {
+export const generateItem: GenerateUtil<Rss.Item<DateLike>> = (item) => {
   if (!isObject(item)) {
     return
   }
@@ -254,7 +253,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike, Rss.PersonLike>> = (i
   return trimObject(value)
 }
 
-export const generateFeed: GenerateUtil<Rss.Feed<DateLike, Rss.PersonLike>> = (feed) => {
+export const generateFeed: GenerateUtil<Rss.Feed<DateLike>> = (feed) => {
   if (!isObject(feed)) {
     return
   }

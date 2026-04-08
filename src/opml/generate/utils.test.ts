@@ -73,6 +73,49 @@ describe('generateOutline', () => {
     expect(generateOutline(value)).toEqual(expected)
   })
 
+  it('should handle multiple levels of nested outlines', () => {
+    const value = {
+      text: 'Regions',
+      outlines: [
+        {
+          text: 'Europe',
+          outlines: [
+            {
+              text: 'Western Europe',
+              outlines: [
+                {
+                  text: 'France',
+                  outlines: [{ text: 'Paris' }],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    }
+    const expected = {
+      '@text': 'Regions',
+      outline: [
+        {
+          '@text': 'Europe',
+          outline: [
+            {
+              '@text': 'Western Europe',
+              outline: [
+                {
+                  '@text': 'France',
+                  outline: [{ '@text': 'Paris' }],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    }
+
+    expect(generateOutline(value)).toEqual(expected)
+  })
+
   it('should handle empty outlines array', () => {
     const value = {
       text: 'Parent',

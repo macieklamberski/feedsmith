@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'bun:test'
+import { locales } from '../../../common/config.js'
+import { GenerateError } from '../../../common/errors.js'
 import { generate } from './index.js'
 
 describe('generate', () => {
@@ -128,6 +130,15 @@ describe('strict mode', () => {
 
   it('should accept partial feed in lenient mode', () => {
     generate({ title: 'Test' })
+  })
+})
+
+describe('error types', () => {
+  it('should throw GenerateError for invalid input', () => {
+    const throwing = () => generate({})
+
+    expect(throwing).toThrow(GenerateError)
+    expect(throwing).toThrow(locales.invalidInputJson)
   })
 })
 

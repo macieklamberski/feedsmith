@@ -14,12 +14,15 @@ const rssNamespaceUris = [
   'https://channel.netscape.com/rdf/simple/0.9',
 ]
 
+const rdfElementRegex = /(?:^|[\s>])<(?:\w+:)?rdf[\s>]/im
+const rdfElementsRegex = /(<(?:\w+:)?(channel|item|title|link|description)[\s>])/i
+
 export const detect = (value: unknown): value is string => {
   if (!isNonEmptyString(value)) {
     return false
   }
 
-  const hasRdfElement = /(?:^|[\s>])<(?:\w+:)?rdf[\s>]/im.test(value)
+  const hasRdfElement = rdfElementRegex.test(value)
 
   if (!hasRdfElement) {
     return false
@@ -27,7 +30,7 @@ export const detect = (value: unknown): value is string => {
 
   const hasRdfNamespace = namespaceUris.rdf.some((uri) => value.includes(uri))
   const hasRssNamespace = rssNamespaceUris.some((uri) => value.includes(uri))
-  const hasRdfElements = /(<(?:\w+:)?(channel|item|title|link|description)[\s>])/i.test(value)
+  const hasRdfElements = rdfElementsRegex.test(value)
 
   return hasRdfNamespace || hasRssNamespace || hasRdfElements
 }

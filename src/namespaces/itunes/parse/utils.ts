@@ -14,6 +14,9 @@ import {
 } from '../../../common/utils.js'
 import type { ItunesNs } from '../common/types.js'
 
+const explicitOrYesRegex = /^\p{White_Space}*(explicit|yes)\p{White_Space}*$/iu
+const durationRegex = /^(?:(\d+):)?(\d+):(\d+)$/
+
 export const parseCategory: ParseUtilPartial<ItunesNs.Category> = (value) => {
   if (!isObject(value)) {
     return
@@ -40,8 +43,6 @@ export const parseOwner: ParseUtilPartial<ItunesNs.Owner> = (value) => {
   return trimObject(owner)
 }
 
-const explicitOrYesRegex = /^\p{White_Space}*(explicit|yes)\p{White_Space}*$/iu
-
 export const parseExplicit: ParseUtilPartial<boolean> = (value) => {
   const boolean = parseBoolean(value)
 
@@ -67,7 +68,7 @@ export const parseDuration: ParseUtilPartial<number> = (value) => {
   }
 
   // Handle HH:MM:SS and MM:SS format.
-  const match = value.match(/^(?:(\d+):)?(\d+):(\d+)$/)
+  const match = value.match(durationRegex)
 
   if (match) {
     const [, hours, minutes, seconds] = match

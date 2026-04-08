@@ -74,8 +74,182 @@ import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/u
 import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
 import type { ParseUtilPartial, Rss } from '../common/types.js'
 
+const emailRegex = /^[^\s@()<>[\]]+@[^\s@()<>[\]]+\.[^\s@()<>[\]]+$/
+const urlRegex = /^(?:https?:\/\/|www\.)[^\s]+\.[^\s]+$/
+const mailtoRegex = /^mailto:/i
+const hasBracketsRegex = /[<[(]/
+const whitespaceRegex = /\s+/
+const commonSeparatorsRegex = /^[\s,\-|/:;]+|[\s,\-|/:;]+$/g
+const mailtoQueryRegex = /\?.*$/
+
+export const stripMailto = (value: string) => {
+  const stripped = value.replace(mailtoRegex, '')
+
+  if (stripped !== value) {
+    return stripped.replace(mailtoQueryRegex, '')
+  }
+
+  return stripped
+}
+
+const closeBracketFor = (char: string) => {
+  if (char === '<') {
+    return '>'
+  }
+
+  if (char === '(') {
+    return ')'
+  }
+
+  return ']'
+}
+
+const parseSimplePerson = (raw: string): Rss.Person | undefined => {
+  const stripped = stripMailto(raw)
+
+  if (urlRegex.test(stripped)) {
+    return { link: stripped }
+  }
+
+  if (emailRegex.test(stripped)) {
+    return { email: stripped }
+  }
+}
+
+const parseUnbracketedPerson = (raw: string): Rss.Person | undefined => {
+  // If no email/URL markers anywhere, the entire string is a name.
+  if (raw.indexOf('@') === -1 && raw.indexOf('://') === -1 && raw.indexOf('www.') === -1) {
+    return { name: raw }
+  }
+
+  const words = raw.split(whitespaceRegex)
+  const nameParts: Array<string> = []
+  let email: string | undefined
+  let link: string | undefined
+
+  for (const word of words) {
+    const stripped = stripMailto(word)
+
+    if (urlRegex.test(word) && !link) {
+      link = word
+    } else if (emailRegex.test(stripped) && !email) {
+      email = stripped
+    } else {
+      nameParts.push(word)
+    }
+  }
+
+  if (!email && !link) {
+    return { name: raw }
+  }
+
+  const person = {
+    name: parseString(nameParts.join(' ').replace(commonSeparatorsRegex, '')),
+    email,
+    link,
+  }
+
+  return trimObject(person)
+}
+
+const parseBracketedPerson = (raw: string): Rss.Person | undefined => {
+  const person: Rss.Person = {}
+  const nameParts: Array<string> = []
+  const length = raw.length
+
+  let hasUnbracketedName = false
+  let i = 0
+
+  while (i < length) {
+    let chunk: string | undefined
+    let isBracketed = false
+    let openBracket = ''
+    let closeBracket = ''
+
+    const char = raw[i]
+
+    if (char === '<' || char === '(' || char === '[') {
+      openBracket = char
+      closeBracket = closeBracketFor(char)
+
+      const start = i + 1
+      let depth = 1
+      let end = start
+
+      while (end < length && depth > 0) {
+        if (raw[end] === openBracket) {
+          depth++
+        } else if (raw[end] === closeBracket) {
+          depth--
+        }
+        end++
+      }
+
+      if (depth === 0) {
+        isBracketed = true
+        chunk = parseString(raw.slice(start, end - 1))
+        i = end
+      } else {
+        // Unmatched bracket — treat as literal text.
+        const literalStart = i
+        i = start
+        while (i < length && raw[i] !== '<' && raw[i] !== '(' && raw[i] !== '[') {
+          i++
+        }
+        chunk = parseString(raw.slice(literalStart, i))
+      }
+    } else {
+      const start = i
+      while (i < length && raw[i] !== '<' && raw[i] !== '(' && raw[i] !== '[') {
+        i++
+      }
+      chunk = parseString(raw.slice(start, i))
+    }
+
+    if (!chunk) {
+      continue
+    }
+
+    const strippedChunk = stripMailto(chunk)
+
+    if (urlRegex.test(chunk) && !person.link) {
+      person.link = chunk
+    } else if (emailRegex.test(strippedChunk) && !person.email) {
+      person.email = strippedChunk
+    } else if (isBracketed) {
+      nameParts.push(hasUnbracketedName ? `${openBracket}${chunk}${closeBracket}` : chunk)
+    } else {
+      hasUnbracketedName = true
+      nameParts.push(chunk)
+    }
+  }
+
+  person.name = parseString(nameParts.join(' '))
+
+  return trimObject(person)
+}
+
 export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
-  return parseSingularOf(value?.name ?? value, (value) => parseString(retrieveText(value)))
+  const raw = parseSingularOf(value?.name ?? value, (v) => parseString(retrieveText(v)))
+
+  if (!raw) {
+    return
+  }
+
+  // Step 1. Handles bare email, mailto:email, or URL-only strings.
+  const simple = parseSimplePerson(raw)
+
+  if (simple) {
+    return simple
+  }
+
+  // Step 2. Handles unbracketed mixed content like "John Doe john@example.com".
+  if (!hasBracketsRegex.test(raw)) {
+    return parseUnbracketedPerson(raw)
+  }
+
+  // Step 3. Handles bracketed formats like "email (Name)" or "Name <email> (url)".
+  return parseBracketedPerson(raw)
 }
 
 export const parseCategory: ParseUtilPartial<Rss.Category> = (value) => {
@@ -133,6 +307,30 @@ export const parseTextInput: ParseUtilPartial<Rss.TextInput> = (value) => {
   }
 
   return trimObject(textInput)
+}
+
+export const retrieveImage: ParseUtilPartial<Rss.Image> = (value) => {
+  const channel = parseSingular(value?.channel)
+
+  return parseSingularOf(channel?.image, parseImage) ?? parseSingularOf(value?.image, parseImage)
+}
+
+export const retrieveTextInput: ParseUtilPartial<Rss.TextInput> = (value) => {
+  const channel = parseSingular(value?.channel)
+
+  return (
+    parseSingularOf(channel?.textinput, parseTextInput) ??
+    parseSingularOf(value?.textinput, parseTextInput)
+  )
+}
+
+export const retrieveItems: ParseUtilPartial<Array<Rss.Item<DateAny>>> = (value, options) => {
+  const channel = parseSingular(value?.channel)
+
+  return (
+    parseArrayOf(channel?.item, (value) => parseItem(value, options), options?.maxItems) ??
+    parseArrayOf(value?.item, (value) => parseItem(value, options), options?.maxItems)
+  )
 }
 
 export const parseSkipHours: ParseUtilPartial<Array<number>> = (value) => {
@@ -251,12 +449,12 @@ export const parseFeed: ParseUtilPartial<Rss.Feed<DateAny>> = (value, options) =
     docs: parseSingularOf(channel.docs, (value) => parseString(retrieveText(value))),
     cloud: parseSingularOf(channel.cloud, parseCloud),
     ttl: parseSingularOf(channel.ttl, (value) => parseNumber(retrieveText(value))),
-    image: parseSingularOf(channel.image, parseImage),
+    image: retrieveImage(value),
     rating: parseSingularOf(channel.rating, (value) => parseString(retrieveText(value))),
-    textInput: parseSingularOf(channel.textinput, parseTextInput),
+    textInput: retrieveTextInput(value),
     skipHours: parseSingularOf(channel.skiphours, parseSkipHours),
     skipDays: parseSingularOf(channel.skipdays, parseSkipDays),
-    items: parseArrayOf(channel.item, (value) => parseItem(value, options), options?.maxItems),
+    items: retrieveItems(value, options),
     atom: namespaces.has('atom') ? retrieveAtomFeed(channel, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(channel) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel, options) : undefined,

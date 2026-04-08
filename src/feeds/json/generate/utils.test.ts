@@ -215,6 +215,14 @@ describe('generateFeed', () => {
 
     expect(generateFeed(value)).toEqual(expected)
   })
+
+  it('should handle non-object inputs', () => {
+    expect(generateFeed('string')).toBeUndefined()
+    expect(generateFeed(123)).toBeUndefined()
+    expect(generateFeed(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateFeed(null)).toBeUndefined()
+  })
 })
 
 describe('generateItem with extraFields', () => {

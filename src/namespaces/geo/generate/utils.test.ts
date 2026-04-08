@@ -142,7 +142,7 @@ describe('generateItemOrFeed', () => {
 
   it('should handle NaN values', () => {
     const value = {
-      lat: NaN,
+      lat: Number.NaN,
       long: -122.4194,
     }
     const expected = {

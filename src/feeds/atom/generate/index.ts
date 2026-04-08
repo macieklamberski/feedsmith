@@ -1,4 +1,5 @@
 import { locales } from '../../../common/config.js'
+import { GenerateError } from '../../../common/errors.js'
 import type { DateLike, GenerateMainXml } from '../../../common/types.js'
 import { generateXml } from '../../../common/utils.js'
 import type { Atom } from '../common/types.js'
@@ -12,7 +13,7 @@ export const generate: GenerateMainXml<Atom.Feed<DateLike>, Atom.Feed<Date, true
   const generated = generateFeed(value)
 
   if (!generated) {
-    throw new Error(locales.invalidInputAtom)
+    throw new GenerateError(locales.invalidInputAtom)
   }
 
   return generateXml(builder, generated, options)

@@ -1,4 +1,5 @@
 import { locales } from '../../common/config.js'
+import { GenerateError } from '../../common/errors.js'
 import type { DateLike, GenerateMainXmlOptions } from '../../common/types.js'
 import { generateXml } from '../../common/utils.js'
 import type { GenerateMainOptions, Opml } from '../common/types.js'
@@ -12,7 +13,7 @@ export const generate = <TExtra extends ReadonlyArray<string> = [], S extends bo
   const generated = generateDocument(value, options)
 
   if (!generated) {
-    throw new Error(locales.invalidInputOpml)
+    throw new GenerateError(locales.invalidInputOpml)
   }
 
   return generateXml(builder, generated, options)

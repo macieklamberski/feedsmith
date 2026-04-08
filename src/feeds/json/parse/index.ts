@@ -1,4 +1,5 @@
 import { locales } from '../../../common/config.js'
+import { DetectError, ParseError } from '../../../common/errors.js'
 import type { ParseMainOptions } from '../../../common/types.js'
 import { parseJsonObject } from '../../../common/utils.js'
 import { detectJsonFeed } from '../../../index.js'
@@ -11,14 +12,15 @@ export const parse = <TDate = string, TExtra extends ExtraFieldNames = []>(
 ): Json.Feed<TDate, false, TExtra> => {
   const json = parseJsonObject(value)
 
+  // TODO: Detect malformed JSON input and throw MalformedError.
   if (!detectJsonFeed(json)) {
-    throw new Error(locales.invalidFeedFormat)
+    throw new DetectError(locales.invalidFeedFormat)
   }
 
   const parsed = parseFeed(json, options)
 
   if (!parsed) {
-    throw new Error(locales.invalidFeedFormat)
+    throw new ParseError(locales.invalidFeedFormat)
   }
 
   return parsed as Json.Feed<TDate, false, TExtra>
