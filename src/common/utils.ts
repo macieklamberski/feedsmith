@@ -58,21 +58,40 @@ export const retrieveRdfResourceOrText = <T>(
 }
 
 export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<T> | undefined => {
-  let result: Partial<T> | undefined
+  let hasPresent = false
+  let hasAbsent = false
+
+  for (const key in object) {
+    if (isPresent(object[key])) {
+      hasPresent = true
+    } else {
+      hasAbsent = true
+    }
+
+    if (hasPresent && hasAbsent) {
+      break
+    }
+  }
+
+  if (!hasPresent) {
+    return
+  }
+
+  if (!hasAbsent) {
+    return object as AnyOf<T>
+  }
+
+  const result: Partial<T> = {}
 
   for (const key in object) {
     const value = object[key]
 
     if (isPresent(value)) {
-      if (!result) {
-        result = {}
-      }
-
       result[key] = value
     }
   }
 
-  return result as AnyOf<T> | undefined
+  return result as AnyOf<T>
 }
 
 export const trimArray = <T, R = T>(
