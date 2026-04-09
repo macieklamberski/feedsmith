@@ -4008,6 +4008,164 @@ describe('createNamespaceNormalizator', () => {
       expect(normalizeNamespaces(value)).toEqual(expected)
     })
   })
+
+  describe('normalization skipping', () => {
+    it('should skip normalization when all prefixes match standard names', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        rss: {
+          '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+          '@xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
+          '@version': '2.0',
+          channel: {
+            title: 'Test Feed',
+            'dc:creator': 'John',
+            'itunes:author': 'John',
+          },
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toBe(value)
+    })
+
+    it('should skip normalization when no xmlns declarations exist', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        rss: {
+          '@version': '2.0',
+          channel: {
+            title: 'Test Feed',
+            '#text': 'Some text',
+          },
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toBe(value)
+    })
+
+    it('should skip normalization when default xmlns maps to primary namespace', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
+        'atom',
+      ])
+      const value = {
+        feed: {
+          '@xmlns': 'http://www.w3.org/2005/Atom',
+          '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+          title: 'Test Feed',
+          'dc:creator': 'John',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toBe(value)
+    })
+
+    it('should skip normalization when xmlns URI is unknown', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        root: {
+          '@xmlns:custom': 'http://example.com/unknown',
+          'custom:element': 'value',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toBe(value)
+    })
+
+    it('should skip normalization with arrays containing standard prefixes', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        rss: {
+          '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+          channel: {
+            item: [
+              { title: 'Item 1', 'dc:creator': 'Alice' },
+              { title: 'Item 2', 'dc:creator': 'Bob' },
+            ],
+          },
+        },
+      }
+
+      expect(normalizeNamespaces(value)).toBe(value)
+    })
+
+    it('should not skip normalization when prefix differs from standard', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        rss: {
+          '@xmlns:dublincore': 'http://purl.org/dc/elements/1.1/',
+          channel: {
+            'dublincore:creator': 'John',
+          },
+        },
+      }
+
+      expect(normalizeNamespaces(value)).not.toBe(value)
+    })
+
+    it('should not skip normalization when default xmlns maps to non-primary standard prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        root: {
+          '@xmlns': 'http://www.w3.org/2005/Atom',
+          title: 'Test',
+        },
+      }
+
+      expect(normalizeNamespaces(value)).not.toBe(value)
+    })
+
+    it('should not skip normalization when primary namespace has explicit prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
+        'rdf',
+        'rss',
+      ])
+      const value = {
+        'rdf:rdf': {
+          '@xmlns:rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+          '@xmlns': 'http://purl.org/rss/1.0/',
+          'rdf:channel': {
+            title: 'Test',
+          },
+        },
+      }
+
+      expect(normalizeNamespaces(value)).not.toBe(value)
+    })
+
+    it('should not skip normalization when nested element has non-standard prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        rss: {
+          channel: {
+            item: {
+              '@xmlns:dublincore': 'http://purl.org/dc/elements/1.1/',
+              'dublincore:creator': 'John',
+            },
+          },
+        },
+      }
+
+      expect(normalizeNamespaces(value)).not.toBe(value)
+    })
+
+    it('should not skip normalization when array element has non-standard prefix', () => {
+      const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)
+      const value = {
+        rss: {
+          channel: {
+            item: [
+              {
+                '@xmlns:dublincore': 'http://purl.org/dc/elements/1.1/',
+                'dublincore:creator': 'Alice',
+              },
+            ],
+          },
+        },
+      }
+
+      expect(normalizeNamespaces(value)).not.toBe(value)
+    })
+  })
 })
 
 describe('generateArrayOrSingular', () => {
