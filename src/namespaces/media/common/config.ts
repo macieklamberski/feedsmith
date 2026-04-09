@@ -21,26 +21,34 @@ export const uris = [
   'https://tools.search.yahoo.com/mrss',
 ]
 
-export const stopNodes = [
-  '*.media:rating',
-  '*.media:adult',
-  '*.media:title',
-  '*.media:description',
-  '*.media:category',
-  '*.media:hash',
-  '*.media:credit',
-  '*.media:copyright',
-  '*.media:text',
-  '*.media:restriction',
-  '*.media:keywords',
-  '*.media:comment',
-  '*.media:response',
-  '*.media:backlink',
-  '*.media:license',
-  '*.media:location',
-  '*.media:param',
-  '*.media:scene.scenetitle',
-  '*.media:scene.scenedescription',
-  '*.media:scene.scenestarttime',
-  '*.media:scene.sceneendtime',
+// Containers that are NOT stopNodes but contain leaf stopNode elements.
+const containers = ['media:group', 'media:content', 'media:group.media:content', 'media:embed']
+
+const leaves = [
+  'media:rating',
+  'media:adult',
+  'media:title',
+  'media:description',
+  'media:category',
+  'media:hash',
+  'media:credit',
+  'media:copyright',
+  'media:text',
+  'media:restriction',
+  'media:keywords',
+  'media:comment',
+  'media:response',
+  'media:backlink',
+  'media:license',
+  'media:location',
+  'media:param',
+  'media:scene.scenetitle',
+  'media:scene.scenedescription',
+  'media:scene.scenestarttime',
+  'media:scene.sceneendtime',
 ]
+
+export const stopNodes = leaves.flatMap((leaf) => [
+  `*.${leaf}`,
+  ...containers.map((container) => `*.${container}.${leaf}`),
+])

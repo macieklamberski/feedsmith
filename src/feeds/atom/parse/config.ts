@@ -5,10 +5,10 @@ import {
   namespaceUris,
   parserConfig,
 } from '../../../common/config.js'
-import { createNamespaceNormalizator } from '../../../common/utils.js'
+import { createNamespaceNormalizator, expandStopNodes } from '../../../common/utils.js'
 
 export const stopNodes = [
-  ...namespaceStopNodes,
+  ...expandStopNodes(namespaceStopNodes, ['feed', 'feed.entry', 'feed.entry.source']),
   'feed.author.name',
   'feed.author.uri',
   'feed.author.url', // Atom 0.3.

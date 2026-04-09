@@ -820,3 +820,24 @@ export const parseJsonObject = (value: unknown): unknown => {
     return JSON.parse(value)
   } catch {}
 }
+
+export const expandStopNodes = (
+  stopNodes: Array<string>,
+  containerPaths: Array<string>,
+): Array<string> => {
+  const expanded: Array<string> = []
+
+  for (const node of stopNodes) {
+    if (node.startsWith('*.')) {
+      const suffix = node.slice(2)
+
+      for (const path of containerPaths) {
+        expanded.push(`${path}.${suffix}`)
+      }
+    } else {
+      expanded.push(node)
+    }
+  }
+
+  return expanded
+}

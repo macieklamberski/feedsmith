@@ -5,10 +5,15 @@ import {
   namespaceUris,
   parserConfig,
 } from '../../../common/config.js'
-import { createNamespaceNormalizator } from '../../../common/utils.js'
+import { createNamespaceNormalizator, expandStopNodes } from '../../../common/utils.js'
 
 export const stopNodes = [
-  ...namespaceStopNodes,
+  ...expandStopNodes(namespaceStopNodes, [
+    'rdf:rdf.channel',
+    'rdf:rdf.item',
+    'rdf:rdf.image',
+    'rdf:rdf.textinput',
+  ]),
   'rdf:rdf.channel.title',
   'rdf:rdf.channel.link',
   'rdf:rdf.channel.description',

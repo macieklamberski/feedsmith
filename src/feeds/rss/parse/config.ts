@@ -5,7 +5,7 @@ import {
   namespaceUris,
   parserConfig,
 } from '../../../common/config.js'
-import { createNamespaceNormalizator } from '../../../common/utils.js'
+import { createNamespaceNormalizator, expandStopNodes } from '../../../common/utils.js'
 
 // These elements can appear both inside <channel> and as direct children of
 // <rss> in malformed feeds, so stop nodes are generated for both paths.
@@ -35,7 +35,7 @@ const sharedStopNodes = [
 ]
 
 export const stopNodes = [
-  ...namespaceStopNodes,
+  ...expandStopNodes(namespaceStopNodes, ['rss.channel', 'rss.channel.item', 'rss', 'rss.item']),
   'rss.channel.title',
   'rss.channel.link',
   'rss.channel.description',

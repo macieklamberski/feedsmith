@@ -6,6 +6,18 @@ export const uris = [
   'https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/1.0.md',
 ]
 
+// Item-level stopNodes that also appear inside podcast:liveitem container.
+const liveItemLeaves = [
+  'podcast:soundbite',
+  'podcast:person',
+  'podcast:location',
+  'podcast:season',
+  'podcast:episode',
+  'podcast:license',
+  'podcast:txt',
+  'podcast:contentlink',
+]
+
 export const stopNodes = [
   '*.podcast:locked',
   '*.podcast:funding',
@@ -22,4 +34,6 @@ export const stopNodes = [
   '*.podcast:block',
   '*.podcast:txt',
   '*.podcast:updatefrequency',
+  // Inside podcast:liveitem container.
+  ...liveItemLeaves.map((leaf) => `*.podcast:liveitem.${leaf}`),
 ]
