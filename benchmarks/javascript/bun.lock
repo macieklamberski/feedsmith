@@ -25,7 +25,6 @@
         "@types/benchmark": "^2.1.5",
         "@types/bun": "^1.3.11",
         "@types/feedme": "^2.0.4",
-        "@types/feedparser": "^2.2.8",
         "typescript": "^6.0.2",
       },
     },
@@ -45,11 +44,7 @@
 
     "@types/feedme": ["@types/feedme@2.0.4", "", { "dependencies": { "feedme": "*" } }, "sha512-IpMFyDtIx/KypkY4AUqMWBzUt6ce5jR42kjCWB+p+5Qu90+3YveX9lJ6gWGT9eu7GtNR4jkbBwbnkEMiueYKVA=="],
 
-    "@types/feedparser": ["@types/feedparser@2.2.8", "", { "dependencies": { "@types/node": "*", "@types/sax": "*" } }, "sha512-hIxDfr1VSgxZazxZZEGzbgDEQHtxWtMjLh7xAzuld/IA8xmneak9I16R0mA7Tnb10/McjE177H9daAyYBwTQOw=="],
-
     "@types/node": ["@types/node@22.14.0", "", { "dependencies": { "undici-types": "~6.21.0" } }, "sha512-Kmpl+z84ILoG+3T/zQFyAJsU6EPTmOCj8/2+83fSN6djd6I4o7uOuGIH6vq3PrjY5BGitSbFuMN18j3iknubbA=="],
-
-    "@types/sax": ["@types/sax@1.2.7", "", { "dependencies": { "@types/node": "*" } }, "sha512-rO73L89PJxeYM3s3pPPjiPgVVcymqU490g0YO5n5By0k2Erzj6tay/4lr1CHAAU4JyOWd1rpQ8bCf6cZfHU96A=="],
 
     "@ulisesgascon/rss-feed-parser": ["@ulisesgascon/rss-feed-parser@1.0.1", "", { "dependencies": { "fast-xml-parser": "^4.3.2" } }, "sha512-WxMzGd+om4h3aT4v37wrcGIcBaeHw9/6XflF6j/Ji38SLMtjxL9S9k8cpTUBX6eF6FdEF1YPiz4T4lCdf7Ceyg=="],
 
