@@ -35,6 +35,7 @@ import {
   stopNodes as feedpressStopNodes,
   uris as feedpressUris,
 } from '../namespaces/feedpress/common/config.js'
+import { stopNodes as gStopNodes, uris as gUris } from '../namespaces/g/common/config.js'
 import { stopNodes as geoStopNodes, uris as geoUris } from '../namespaces/geo/common/config.js'
 import {
   stopNodes as georssStopNodes,
@@ -165,6 +166,7 @@ export const namespaceUris = {
   trackback: trackbackUris,
   prism: prismUris,
   acast: acastUris,
+  g: gUris,
 }
 
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(
@@ -191,6 +193,7 @@ export const namespaceStopNodes = [
   ...dcStopNodes,
   ...dctermsStopNodes,
   ...feedpressStopNodes,
+  ...gStopNodes,
   ...geoStopNodes,
   ...georssStopNodes,
   ...googleplayStopNodes,

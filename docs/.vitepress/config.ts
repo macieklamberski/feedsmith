@@ -124,6 +124,7 @@ export default defineConfig({
               { text: 'Acast', link: '/reference/namespaces/acast' },
               { text: 'RawVoice', link: '/reference/namespaces/rawvoice' },
               { text: 'FeedPress', link: '/reference/namespaces/feedpress' },
+              { text: 'Google Merchant Center', link: '/reference/namespaces/g' },
               { text: 'arXiv', link: '/reference/namespaces/arxiv' },
               { text: 'OpenSearch', link: '/reference/namespaces/opensearch' },
               { text: 'PRISM', link: '/reference/namespaces/prism' },
