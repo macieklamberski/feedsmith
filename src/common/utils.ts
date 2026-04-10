@@ -787,13 +787,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
   const needsNormalization = (object: Unreliable): boolean => {
     const check = (value: Unreliable): boolean => {
       if (Array.isArray(value)) {
-        for (const item of value) {
-          if (check(item)) {
-            return true
-          }
-        }
-
-        return false
+        return value.some(check)
       }
 
       if (!isObject(value)) {
