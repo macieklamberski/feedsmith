@@ -23,13 +23,6 @@ jobs:
       - name: Run tests with coverage
         run: bun test --coverage --coverage-reporter=lcov
 
-      - name: Upload lcov artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: lcov-report
-          path: ./coverage/lcov.info
-
       - name: Upload coverage to Codecov
         if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         uses: codecov/codecov-action@v5
