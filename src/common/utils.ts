@@ -59,21 +59,40 @@ export const retrieveRdfResourceOrText = <T>(
 }
 
 export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<T> | undefined => {
-  let result: Partial<T> | undefined
+  let hasPresent = false
+  let hasAbsent = false
+
+  for (const key in object) {
+    if (isPresent(object[key])) {
+      hasPresent = true
+    } else {
+      hasAbsent = true
+    }
+
+    if (hasPresent && hasAbsent) {
+      break
+    }
+  }
+
+  if (!hasPresent) {
+    return
+  }
+
+  if (!hasAbsent) {
+    return object as AnyOf<T>
+  }
+
+  const result: Partial<T> = {}
 
   for (const key in object) {
     const value = object[key]
 
     if (isPresent(value)) {
-      if (!result) {
-        result = {}
-      }
-
       result[key] = value
     }
   }
 
-  return result as AnyOf<T> | undefined
+  return result as AnyOf<T>
 }
 
 export const trimArray = <T, R = T>(
@@ -742,6 +761,77 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
     return normalizedObject
   }
 
+  const needsNormalization = (object: Unreliable): boolean => {
+    const check = (value: Unreliable): boolean => {
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          if (check(item)) {
+            return true
+          }
+        }
+
+        return false
+      }
+
+      if (!isObject(value)) {
+        return false
+      }
+
+      for (const key in value) {
+        if (key[0] === '@') {
+          // Attribute key (@*) — only xmlns declarations matter.
+          if (key === '@xmlns') {
+            const normalizedUri = normalizeNamespaceUri(value[key])
+
+            if (primaryNamespaceUris?.includes(normalizedUri)) {
+              // Default namespace maps to a primary namespace — unprefixed
+              // elements stay unprefixed, so no remapping is needed.
+              continue
+            }
+
+            if (namespacePrefixes[normalizedUri]) {
+              // Default namespace maps to a non-primary standard prefix —
+              // unprefixed elements need to be prefixed.
+              return true
+            }
+          } else if (key.startsWith('@xmlns:')) {
+            const prefix = key.slice(7)
+            const normalizedUri = normalizeNamespaceUri(value[key])
+            const standardPrefix = namespacePrefixes[normalizedUri]
+
+            if (standardPrefix) {
+              if (primaryNamespaceUris?.includes(normalizedUri)) {
+                // Primary namespace with explicit prefix — normalization
+                // strips the prefix (e.g., rdf:channel → channel).
+                return true
+              }
+
+              if (standardPrefix !== prefix) {
+                return true
+              }
+            }
+          }
+
+          continue
+        }
+
+        // Skip text/cdata nodes (#text, #cdata) — never contain xmlns.
+        if (key[0] === '#') {
+          continue
+        }
+
+        // Recurse into child elements only.
+        if (check(value[key])) {
+          return true
+        }
+      }
+
+      return false
+    }
+
+    return check(object)
+  }
+
   // For the root level, we need to handle the special case where the root element
   // itself has namespace declarations that apply to its own normalization.
   const normalizeRoot = (object: Unreliable): Unreliable => {
@@ -749,8 +839,8 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
       return object
     }
 
-    if (Array.isArray(object)) {
-      return object.map(normalizeRoot)
+    if (!needsNormalization(object)) {
+      return object
     }
 
     const normalizedObject: Unreliable = {}
