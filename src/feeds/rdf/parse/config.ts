@@ -1,4 +1,5 @@
 import { XMLParser } from 'fast-xml-parser'
+import { Expression } from 'path-expression-matcher'
 import {
   namespacePrefixes,
   namespaceStopNodes,
@@ -29,9 +30,13 @@ export const stopNodes = [
   'rdf:rdf.textinput.link',
 ]
 
+// Pre-construct Expression objects once at module load to avoid re-parsing
+// stop node strings on every XMLParser.parse() call.
+const stopNodeExpressions = stopNodes.map((node) => new Expression(node))
+
 export const parser = new XMLParser({
   ...parserConfig,
-  stopNodes,
+  stopNodes: stopNodeExpressions,
 })
 
 export const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
