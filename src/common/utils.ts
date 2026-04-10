@@ -862,10 +862,6 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
       return object
     }
 
-    if (Array.isArray(object)) {
-      return object.map(normalizeRoot)
-    }
-
     if (!needsNormalization(object)) {
       return object
     }
