@@ -1,12 +1,12 @@
 import { XMLParser } from 'fast-xml-parser'
-import { Expression } from 'path-expression-matcher'
 import {
+  namespaceContainers,
   namespacePrefixes,
   namespaceStopNodes,
   namespaceUris,
   parserConfig,
 } from '../../../common/config.js'
-import { createNamespaceNormalizator, expandStopNodes } from '../../../common/utils.js'
+import { createNamespaceNormalizator, createStopNodeExpressions } from '../../../common/utils.js'
 
 // These elements can appear both inside <channel> and as direct children of
 // <rss> in malformed feeds, so stop nodes are generated for both paths.
@@ -35,8 +35,7 @@ const sharedStopNodes = [
   'item.source',
 ]
 
-export const stopNodes = [
-  ...expandStopNodes(namespaceStopNodes, ['rss.channel', 'rss.channel.item', 'rss', 'rss.item']),
+const feedStopNodes = [
   'rss.channel.title',
   'rss.channel.link',
   'rss.channel.description',
@@ -58,9 +57,12 @@ export const stopNodes = [
   ...sharedStopNodes.map((node) => `rss.${node}`),
 ]
 
-// Pre-construct Expression objects once at module load to avoid re-parsing
-// stop node strings on every XMLParser.parse() call.
-const stopNodeExpressions = stopNodes.map((node) => new Expression(node))
+const stopNodeExpressions = createStopNodeExpressions(
+  namespaceStopNodes,
+  feedStopNodes,
+  ['rss.channel', 'rss.channel.item', 'rss', 'rss.item'],
+  namespaceContainers,
+)
 
 export const parser = new XMLParser({
   ...parserConfig,

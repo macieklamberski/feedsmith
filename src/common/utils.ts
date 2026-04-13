@@ -1,5 +1,6 @@
 import { decodeHTML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
+import { Expression } from 'path-expression-matcher'
 import type {
   AnyOf,
   DateLike,
@@ -911,23 +912,39 @@ export const parseJsonObject = (value: unknown): unknown => {
   } catch {}
 }
 
-export const expandStopNodes = (
-  stopNodes: Array<string>,
-  containerPaths: Array<string>,
-): Array<string> => {
-  const expanded: Array<string> = []
+// Expands wildcard stop nodes (*.prefix:element) into explicit paths for
+// each feed container, including paths through namespace containers (e.g.
+// media:group, podcast:liveitem). Only crosses containers with leaves from
+// the same namespace prefix. Pre-constructs Expression objects once at
+// module load to avoid re-parsing on every XMLParser.parse() call.
+// When fxp resolves its performance regression, this can be replaced with
+// raw wildcard strings passed directly to XMLParser.
+export const createStopNodeExpressions = (
+  wildcardStopNodes: Array<string>,
+  explicitStopNodes: Array<string>,
+  feedContainerPaths: Array<string>,
+  namespaceContainers: Array<string>,
+): Array<Expression> => {
+  const set = new Set<string>()
 
-  for (const node of stopNodes) {
-    if (node.startsWith('*.')) {
-      const suffix = node.slice(2)
+  for (const node of wildcardStopNodes) {
+    const suffix = node.slice(2)
+    const prefix = suffix.split(':')[0]
 
-      for (const path of containerPaths) {
-        expanded.push(`${path}.${suffix}`)
+    for (const feedPath of feedContainerPaths) {
+      set.add(`${feedPath}.${suffix}`)
+
+      for (const nsContainer of namespaceContainers) {
+        if (nsContainer.split(':')[0] === prefix) {
+          set.add(`${feedPath}.${nsContainer}.${suffix}`)
+        }
       }
-    } else {
-      expanded.push(node)
     }
   }
 
-  return expanded
+  for (const node of explicitStopNodes) {
+    set.add(node)
+  }
+
+  return [...set].map((node) => new Expression(node))
 }

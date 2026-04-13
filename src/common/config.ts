@@ -107,7 +107,6 @@ export const parserConfig: X2jOptions = {
   ignorePiTags: true,
   ignoreDeclaration: true,
   attributeNamePrefix: '@',
-  jPath: false,
   transformTagName: (name) => name.toLowerCase(),
   transformAttributeName: (name) => name.toLowerCase(),
 }
@@ -178,6 +177,17 @@ export const namespacePrefixes = Object.entries(namespaceUris).reduce(
   },
   {} as Record<string, string>,
 )
+
+// Namespace elements that act as containers for other namespace elements.
+// Used during stop node expansion to generate paths through these containers.
+export const namespaceContainers = [
+  'media:group',
+  'media:content',
+  'media:group.media:content',
+  'media:embed',
+  'podcast:liveitem',
+  'itunes:owner',
+]
 
 export const namespaceStopNodes = [
   ...acastStopNodes,

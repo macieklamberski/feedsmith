@@ -21,7 +21,4 @@ export const stopNodes = [
   '*.itunes:new-feed-url',
   '*.itunes:complete',
   '*.itunes:applepodcastsverify',
-  // Inside itunes:owner container.
-  '*.itunes:owner.itunes:name',
-  '*.itunes:owner.itunes:email',
 ]
