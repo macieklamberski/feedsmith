@@ -1,6 +1,5 @@
 import { decodeHTML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
-import { Expression } from 'path-expression-matcher'
 import type {
   AnyOf,
   DateLike,
@@ -912,22 +911,32 @@ export const parseJsonObject = (value: unknown): unknown => {
   } catch {}
 }
 
+// TODO: Remove expandStopNodes and namespaceContainers after fast-xml-parser
+// resolves stop node performance regression. Revert feed configs from
+// ...expandStopNodes(namespaceStopNodes, [...]) back to ...namespaceStopNodes.
+// https://github.com/NaturalIntelligence/fast-xml-parser/issues/816
+
+// Namespace elements that act as containers for other namespace elements.
+const namespaceContainers = [
+  'media:group',
+  'media:content',
+  'media:group.media:content',
+  'media:embed',
+  'podcast:liveitem',
+  'itunes:owner',
+]
+
 // Expands wildcard stop nodes (*.prefix:element) into explicit paths for
 // each feed container, including paths through namespace containers (e.g.
 // media:group, podcast:liveitem). Only crosses containers with leaves from
-// the same namespace prefix. Pre-constructs Expression objects once at
-// module load to avoid re-parsing on every XMLParser.parse() call.
-// When fxp resolves its performance regression, this can be replaced with
-// raw wildcard strings passed directly to XMLParser.
-export const createStopNodeExpressions = (
-  wildcardStopNodes: Array<string>,
-  explicitStopNodes: Array<string>,
+// the same namespace prefix.
+export const expandStopNodes = (
+  stopNodes: Array<string>,
   feedContainerPaths: Array<string>,
-  namespaceContainers: Array<string>,
-): Array<Expression> => {
+): Array<string> => {
   const set = new Set<string>()
 
-  for (const node of wildcardStopNodes) {
+  for (const node of stopNodes) {
     const suffix = node.slice(2)
     const prefix = suffix.split(':')[0]
 
@@ -942,9 +951,5 @@ export const createStopNodeExpressions = (
     }
   }
 
-  for (const node of explicitStopNodes) {
-    set.add(node)
-  }
-
-  return [...set].map((node) => new Expression(node))
+  return [...set]
 }

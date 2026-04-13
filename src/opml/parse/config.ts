@@ -23,11 +23,7 @@ export const stopNodes = [
   // '*.outline.outline',
 ]
 
-// Pre-construct Expression objects once at module load to avoid re-parsing
-// stop node strings on every XMLParser.parse() call.
-const stopNodeExpressions = stopNodes.map((node) => new Expression(node))
-
 export const parser = new XMLParser({
   ...parserConfig,
-  stopNodes: stopNodeExpressions,
+  stopNodes: stopNodes.map((node) => new Expression(node)),
 })

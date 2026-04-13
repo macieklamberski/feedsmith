@@ -1,14 +1,15 @@
 import { XMLParser } from 'fast-xml-parser'
+import { Expression } from 'path-expression-matcher'
 import {
-  namespaceContainers,
   namespacePrefixes,
   namespaceStopNodes,
   namespaceUris,
   parserConfig,
 } from '../../../common/config.js'
-import { createNamespaceNormalizator, createStopNodeExpressions } from '../../../common/utils.js'
+import { createNamespaceNormalizator, expandStopNodes } from '../../../common/utils.js'
 
-const feedStopNodes = [
+export const stopNodes = [
+  ...expandStopNodes(namespaceStopNodes, ['feed', 'feed.entry', 'feed.entry.source']),
   'feed.author.name',
   'feed.author.uri',
   'feed.author.url', // Atom 0.3.
@@ -70,16 +71,9 @@ const feedStopNodes = [
   'feed.entry.modified', // Atom 0.3.
 ]
 
-const stopNodeExpressions = createStopNodeExpressions(
-  namespaceStopNodes,
-  feedStopNodes,
-  ['feed', 'feed.entry', 'feed.entry.source'],
-  namespaceContainers,
-)
-
 export const parser = new XMLParser({
   ...parserConfig,
-  stopNodes: stopNodeExpressions,
+  stopNodes: stopNodes.map((node) => new Expression(node)),
 })
 
 export const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [

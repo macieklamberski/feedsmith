@@ -1,14 +1,20 @@
 import { XMLParser } from 'fast-xml-parser'
+import { Expression } from 'path-expression-matcher'
 import {
-  namespaceContainers,
   namespacePrefixes,
   namespaceStopNodes,
   namespaceUris,
   parserConfig,
 } from '../../../common/config.js'
-import { createNamespaceNormalizator, createStopNodeExpressions } from '../../../common/utils.js'
+import { createNamespaceNormalizator, expandStopNodes } from '../../../common/utils.js'
 
-const feedStopNodes = [
+export const stopNodes = [
+  ...expandStopNodes(namespaceStopNodes, [
+    'rdf:rdf.channel',
+    'rdf:rdf.item',
+    'rdf:rdf.image',
+    'rdf:rdf.textinput',
+  ]),
   'rdf:rdf.channel.title',
   'rdf:rdf.channel.link',
   'rdf:rdf.channel.description',
@@ -24,16 +30,9 @@ const feedStopNodes = [
   'rdf:rdf.textinput.link',
 ]
 
-const stopNodeExpressions = createStopNodeExpressions(
-  namespaceStopNodes,
-  feedStopNodes,
-  ['rdf:rdf.channel', 'rdf:rdf.item', 'rdf:rdf.image', 'rdf:rdf.textinput'],
-  namespaceContainers,
-)
-
 export const parser = new XMLParser({
   ...parserConfig,
-  stopNodes: stopNodeExpressions,
+  stopNodes: stopNodes.map((node) => new Expression(node)),
 })
 
 export const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
