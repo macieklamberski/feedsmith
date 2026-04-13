@@ -107,6 +107,7 @@ export const parserConfig: X2jOptions = {
   ignorePiTags: true,
   ignoreDeclaration: true,
   attributeNamePrefix: '@',
+  jPath: false,
   transformTagName: (name) => name.toLowerCase(),
   transformAttributeName: (name) => name.toLowerCase(),
 }

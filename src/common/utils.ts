@@ -887,3 +887,46 @@ export const parseJsonObject = (value: unknown): unknown => {
     return JSON.parse(value)
   } catch {}
 }
+
+// TODO: Remove expandStopNodes and namespaceContainers after fast-xml-parser
+// resolves stop node performance regression. Revert feed configs from
+// ...expandStopNodes(namespaceStopNodes, [...]) back to ...namespaceStopNodes.
+// https://github.com/NaturalIntelligence/fast-xml-parser/issues/816
+
+// Namespace elements that act as containers for other namespace elements.
+const namespaceContainers = [
+  'media:group',
+  'media:content',
+  'media:group.media:content',
+  'media:embed',
+  'podcast:liveitem',
+  'itunes:owner',
+]
+
+// Expands wildcard stop nodes (*.prefix:element) into explicit paths for
+// each feed container, including paths through namespace containers (e.g.
+// media:group, podcast:liveitem). Only crosses containers with leaves from
+// the same namespace prefix.
+export const expandStopNodes = (
+  stopNodes: Array<string>,
+  feedContainerPaths: Array<string>,
+): Array<string> => {
+  const set = new Set<string>()
+
+  for (const node of stopNodes) {
+    const suffix = node.slice(2)
+    const prefix = suffix.split(':')[0]
+
+    for (const feedPath of feedContainerPaths) {
+      set.add(`${feedPath}.${suffix}`)
+
+      for (const nsContainer of namespaceContainers) {
+        if (nsContainer.split(':')[0] === prefix) {
+          set.add(`${feedPath}.${nsContainer}.${suffix}`)
+        }
+      }
+    }
+  }
+
+  return [...set]
+}
