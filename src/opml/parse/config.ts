@@ -1,5 +1,4 @@
 import { XMLParser } from 'fast-xml-parser'
-import { Expression } from 'path-expression-matcher'
 import { parserConfig } from '../../common/config.js'
 
 export const stopNodes = [
@@ -25,5 +24,5 @@ export const stopNodes = [
 
 export const parser = new XMLParser({
   ...parserConfig,
-  stopNodes: stopNodes.map((node) => new Expression(node)),
+  stopNodes,
 })
