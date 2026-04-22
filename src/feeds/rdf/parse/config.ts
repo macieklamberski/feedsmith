@@ -1,5 +1,4 @@
 import { XMLParser } from 'fast-xml-parser'
-import { Expression } from 'path-expression-matcher'
 import {
   namespacePrefixes,
   namespaceStopNodes,
@@ -32,7 +31,7 @@ export const stopNodes = [
 
 export const parser = new XMLParser({
   ...parserConfig,
-  stopNodes: stopNodes.map((node) => new Expression(node)),
+  stopNodes,
 })
 
 export const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
