@@ -130,6 +130,7 @@ export const locales = {
   invalidInputAtom: 'Invalid input Atom',
   invalidInputRss: 'Invalid input RSS',
   invalidInputJson: 'Invalid input JSON',
+  invalidInputChapters: 'Invalid input Podcast Chapters',
 }
 
 export const namespaceUris = {
