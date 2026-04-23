@@ -21,6 +21,10 @@ export const stopNodes = [
   'feed.generator',
   'feed.icon',
   'feed.id',
+  // Intentionally NOT a stop node. OPDS places child elements (opds:price,
+  // opds:indirectAcquisition, …) inside <atom:link>, so the parser must
+  // traverse into link rather than treat its contents as raw text.
+  // 'feed.link',
   'feed.logo',
   'feed.rights',
   'feed.subtitle',
@@ -39,6 +43,8 @@ export const stopNodes = [
   'feed.entry.contributor.url', // Atom 0.3.
   'feed.entry.contributor.email',
   'feed.entry.id',
+  // Same reason as feed.link above.
+  // 'feed.entry.link',
   'feed.entry.published',
   'feed.entry.issued', // Atom 0.3.
   'feed.entry.created', // Atom 0.3.
@@ -55,6 +61,8 @@ export const stopNodes = [
   'feed.entry.source.generator',
   'feed.entry.source.icon',
   'feed.entry.source.id',
+  // Same reason as feed.link above.
+  // 'feed.entry.source.link',
   'feed.entry.source.logo',
   'feed.entry.source.rights',
   'feed.entry.source.subtitle',
