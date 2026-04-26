@@ -40,8 +40,9 @@ export default defineConfig({
       'script',
       {
         defer: '',
-        src: 'https://ping.lamberski.com/js/script.js',
+        src: '/beat.js',
         'data-domain': 'feedsmith.dev',
+        'data-api': '/beat.json',
       },
     ],
   ],
