@@ -129,6 +129,7 @@ export const locales = {
   invalidInputOpml: 'Invalid input OPML',
   invalidInputAtom: 'Invalid input Atom',
   invalidInputRss: 'Invalid input RSS',
+  invalidInputJson: 'Invalid input JSON',
 }
 
 export const namespaceUris = {

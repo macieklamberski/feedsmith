@@ -64,7 +64,6 @@ describe('generateLatLngPairs', () => {
     ]
     const expected = '45.256 -71.92 47 -70'
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateLatLngPairs(value)).toBe(expected)
   })
 
@@ -141,14 +140,12 @@ describe('generatePoint', () => {
   it('should return undefined for missing lat', () => {
     const value = { lng: -71.92 }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generatePoint(value)).toBeUndefined()
   })
 
   it('should return undefined for missing lng', () => {
     const value = { lat: 45.256 }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generatePoint(value)).toBeUndefined()
   })
 
@@ -360,7 +357,6 @@ describe('generateBox', () => {
       upperCorner: { lat: 43.039, lng: -69.856 },
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateBox(value)).toBeUndefined()
   })
 
@@ -369,7 +365,6 @@ describe('generateBox', () => {
       lowerCorner: { lat: 42.943, lng: -71.032 },
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateBox(value)).toBeUndefined()
   })
 

@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'bun:test'
-import type { DateLike, DeepPartial } from '../../../common/types.js'
+import { locales } from '../../../common/config.js'
+import { GenerateError } from '../../../common/errors.js'
+import type { DateLike } from '../../../common/types.js'
 import type { Rss } from '../common/types.js'
 import { generate } from './index.js'
 
@@ -64,13 +66,13 @@ describe('generate', () => {
       title: 'Feed with dc namespace',
       description: 'Test feed with Dublin Core namespace',
       dc: {
-        creator: 'John Doe',
+        creators: ['John Doe'],
       },
       items: [
         {
           title: 'First item',
           dc: {
-            creator: 'Jane Smith',
+            creators: ['Jane Smith'],
           },
         },
       ],
@@ -92,10 +94,10 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should generate RSS with object author format', () => {
+  it('should generate RSS with structured person fields', () => {
     const value = {
-      title: 'Feed with object author',
-      description: 'Test feed with object author format',
+      title: 'Feed with structured persons',
+      description: 'Test feed with structured person fields',
       managingEditor: {
         name: 'Editor Name',
         email: 'editor@example.com',
@@ -125,8 +127,8 @@ describe('generate', () => {
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
   <channel>
-    <title>Feed with object author</title>
-    <description>Test feed with object author format</description>
+    <title>Feed with structured persons</title>
+    <description>Test feed with structured person fields</description>
     <managingEditor>editor@example.com (Editor Name)</managingEditor>
     <webMaster>webmaster@example.com (Webmaster)</webMaster>
     <item>
@@ -142,20 +144,56 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with CDATA-wrapped person name containing special characters', () => {
+    const value = {
+      title: 'Test',
+      description: 'Test',
+      managingEditor: {
+        name: 'Tom & Jerry',
+        email: 'tom@example.com',
+      },
+      items: [
+        {
+          title: 'Post',
+          authors: [{ name: "O'Brien & Associates", email: 'info@example.com' }],
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test</title>
+    <description>Test</description>
+    <managingEditor>
+      <![CDATA[tom@example.com (Tom & Jerry)]]>
+    </managingEditor>
+    <item>
+      <title>Post</title>
+      <author>
+        <![CDATA[info@example.com (O'Brien & Associates)]]>
+      </author>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with dcterms namespace', () => {
     const value = {
       title: 'Feed with dcterms namespace',
       description: 'Test feed with Dublin Core Terms namespace',
       dcterms: {
-        created: new Date('2023-01-01T00:00:00Z'),
-        license: 'Creative Commons Attribution 4.0',
+        created: [new Date('2023-01-01T00:00:00Z')],
+        licenses: ['Creative Commons Attribution 4.0'],
       },
       items: [
         {
           title: 'First item',
           dcterms: {
-            created: new Date('2023-02-01T00:00:00Z'),
-            license: 'MIT License',
+            created: [new Date('2023-02-01T00:00:00Z')],
+            licenses: ['MIT License'],
           },
         },
       ],
@@ -1105,11 +1143,97 @@ describe('generate', () => {
   })
 })
 
-describe('generate with lenient mode', () => {
-  it('should accept partial feeds with lenient: true', () => {
-    const value: DeepPartial<Rss.Feed<DateLike>> = {
+describe('strict mode', () => {
+  it('should require title, link, description in strict mode', () => {
+    // @ts-expect-error: This is for testing purposes.
+    generate({ title: 'Test' }, { strict: true })
+  })
+
+  it('should accept feed with all required fields in strict mode', () => {
+    generate({ title: 'Test', link: 'https://example.com', description: 'Desc' }, { strict: true })
+  })
+
+  it('should require nested type fields in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [
+          {
+            title: 'Item',
+            description: 'Desc',
+            // @ts-expect-error: This is for testing purposes.
+            enclosures: [{ url: 'https://example.com/file.mp3' }],
+          },
+        ],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept nested types with all required fields in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [
+          {
+            title: 'Item',
+            enclosures: [{ url: 'https://example.com/file.mp3', length: 1000, type: 'audio/mpeg' }],
+          },
+        ],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept item with only title in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [{ title: 'Item Title' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept item with only description in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [{ description: 'Item Description' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept item with both title and description in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [{ title: 'Item Title', description: 'Item Description' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept partial feed in lenient mode', () => {
+    generate({ title: 'Test' })
+  })
+})
+
+describe('generate edge cases', () => {
+  it('should accept partial feeds', () => {
+    const value: Rss.Feed<DateLike> = {
       title: 'Test Feed',
-      // Missing required 'description' field.
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
@@ -1119,11 +1243,11 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should accept feeds with string dates in lenient mode', () => {
-    const value: DeepPartial<Rss.Feed<DateLike>> = {
+  it('should accept feeds with string dates', () => {
+    const value: Rss.Feed<DateLike> = {
       title: 'Test Feed',
       description: 'Test Description',
       pubDate: '2023-01-01T00:00:00.000Z',
@@ -1148,11 +1272,11 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should preserve invalid date strings in lenient mode', () => {
-    const value: DeepPartial<Rss.Feed<DateLike>> = {
+  it('should preserve invalid date strings', () => {
+    const value: Rss.Feed<DateLike> = {
       title: 'Test Feed',
       description: 'Test Description',
       pubDate: 'not-a-valid-date',
@@ -1177,11 +1301,11 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should handle deeply nested partial objects', () => {
-    const value: DeepPartial<Rss.Feed<DateLike>> = {
+    const value: Rss.Feed<DateLike> = {
       title: 'Test Feed',
       items: [
         {
@@ -1214,11 +1338,11 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should handle mixed Date objects and string dates', () => {
-    const value: DeepPartial<Rss.Feed<DateLike>> = {
+    const value: Rss.Feed<DateLike> = {
       title: 'Mixed Dates Feed',
       description: 'Feed with both Date objects and strings',
       pubDate: new Date('2023-01-01T00:00:00.000Z'),
@@ -1253,7 +1377,7 @@ describe('generate with lenient mode', () => {
 </rss>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   it('should generate RSS with acast namespace', () => {
@@ -1311,5 +1435,48 @@ describe('generate with lenient mode', () => {
 `
 
     expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with xml namespace', () => {
+    const value = {
+      title: 'Feed with xml namespace',
+      description: 'Test feed with XML namespace attributes',
+      xml: {
+        lang: 'en',
+        base: 'http://example.org/',
+      },
+      items: [
+        {
+          title: 'Item with XML namespace',
+          xml: {
+            lang: 'en-US',
+            base: 'http://example.org/item/1/',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xml:lang="en" xml:base="http://example.org/">
+  <channel>
+    <title>Feed with xml namespace</title>
+    <description>Test feed with XML namespace attributes</description>
+    <item xml:lang="en-US" xml:base="http://example.org/item/1/">
+      <title>Item with XML namespace</title>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+})
+
+describe('error types', () => {
+  it('should throw GenerateError for empty input', () => {
+    const value = {}
+    const throwing = () => generate(value)
+
+    expect(throwing).toThrow(GenerateError)
+    expect(throwing).toThrow(locales.invalidInputRss)
   })
 })

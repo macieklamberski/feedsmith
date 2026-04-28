@@ -1,19 +1,30 @@
 import { locales } from '../../common/config.js'
-import type { DeepPartial } from '../../common/types.js'
-import type { MainOptions, Opml } from '../common/types.js'
+import { MalformedError, ParseError } from '../../common/errors.js'
+import type { Unreliable } from '../../common/types.js'
+import type { Opml, ParseMainOptions } from '../common/types.js'
 import { parser } from './config.js'
 import { parseDocument } from './utils.js'
 
-export const parse = <const A extends ReadonlyArray<string> = ReadonlyArray<string>>(
+export const parse = <
+  TDate = string,
+  const TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
+>(
   value: string,
-  options?: MainOptions<A>,
-): DeepPartial<Opml.Document<string, A>> => {
-  const object = parser.parse(value)
+  options?: ParseMainOptions<TDate, TExtra>,
+): Opml.Document<TDate, TExtra> => {
+  let object: Unreliable
+
+  try {
+    object = parser.parse(value)
+  } catch {
+    throw new MalformedError(locales.invalidOpmlFormat)
+  }
+
   const parsed = parseDocument(object, options)
 
   if (!parsed) {
-    throw new Error(locales.invalidOpmlFormat)
+    throw new ParseError(locales.invalidOpmlFormat)
   }
 
-  return parsed as DeepPartial<Opml.Document<string, A>>
+  return parsed as Opml.Document<TDate, TExtra>
 }

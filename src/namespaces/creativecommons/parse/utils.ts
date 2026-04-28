@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -8,7 +8,7 @@ import {
 } from '../../../common/utils.js'
 import type { CreativeCommonsNs } from '../common/types.js'
 
-export const retrieveItemOrFeed: ParsePartialUtil<CreativeCommonsNs.ItemOrFeed> = (value) => {
+export const retrieveItemOrFeed: ParseUtilPartial<CreativeCommonsNs.ItemOrFeed> = (value) => {
   if (!isObject(value)) {
     return
   }

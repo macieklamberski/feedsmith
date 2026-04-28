@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseBoolean,
@@ -10,7 +10,7 @@ import {
 } from '../../../common/utils.js'
 import type { SpotifyNs } from '../common/types.js'
 
-export const parseLimit: ParsePartialUtil<SpotifyNs.Limit> = (value) => {
+export const parseLimit: ParseUtilPartial<SpotifyNs.Limit> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -22,7 +22,7 @@ export const parseLimit: ParsePartialUtil<SpotifyNs.Limit> = (value) => {
   return trimObject(limit)
 }
 
-export const parsePartner: ParsePartialUtil<SpotifyNs.Partner> = (value) => {
+export const parsePartner: ParseUtilPartial<SpotifyNs.Partner> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -32,7 +32,7 @@ export const parsePartner: ParsePartialUtil<SpotifyNs.Partner> = (value) => {
   return id ? { id } : undefined
 }
 
-export const parseSandbox: ParsePartialUtil<SpotifyNs.Sandbox> = (value) => {
+export const parseSandbox: ParseUtilPartial<SpotifyNs.Sandbox> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -42,7 +42,7 @@ export const parseSandbox: ParsePartialUtil<SpotifyNs.Sandbox> = (value) => {
   return enabled !== undefined ? { enabled } : undefined
 }
 
-export const parseFeedAccess: ParsePartialUtil<SpotifyNs.FeedAccess> = (value) => {
+export const parseFeedAccess: ParseUtilPartial<SpotifyNs.FeedAccess> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -55,7 +55,7 @@ export const parseFeedAccess: ParsePartialUtil<SpotifyNs.FeedAccess> = (value) =
   return trimObject(access)
 }
 
-export const parseEntitlement: ParsePartialUtil<SpotifyNs.Entitlement> = (value) => {
+export const parseEntitlement: ParseUtilPartial<SpotifyNs.Entitlement> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -65,7 +65,7 @@ export const parseEntitlement: ParsePartialUtil<SpotifyNs.Entitlement> = (value)
   return name ? { name } : undefined
 }
 
-export const parseItemAccess: ParsePartialUtil<SpotifyNs.ItemAccess> = (value) => {
+export const parseItemAccess: ParseUtilPartial<SpotifyNs.ItemAccess> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -77,7 +77,7 @@ export const parseItemAccess: ParsePartialUtil<SpotifyNs.ItemAccess> = (value) =
   return trimObject(access)
 }
 
-export const retrieveFeed: ParsePartialUtil<SpotifyNs.Feed> = (value) => {
+export const retrieveFeed: ParseUtilPartial<SpotifyNs.Feed> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -93,7 +93,7 @@ export const retrieveFeed: ParsePartialUtil<SpotifyNs.Feed> = (value) => {
   return trimObject(feed)
 }
 
-export const retrieveItem: ParsePartialUtil<SpotifyNs.Item> = (value) => {
+export const retrieveItem: ParseUtilPartial<SpotifyNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }

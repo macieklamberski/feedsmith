@@ -32,7 +32,7 @@ const rssFeed = generateRssFeed({
       description: 'Learn the basics of TypeScript and why you should use it',
       pubDate: new Date('2024-01-15T10:00:00Z'),
       guid: 'https://myblog.com/posts/intro-to-typescript',
-      authors: ['john@myblog.com (John Doe)'],
+      authors: [{ email: 'john@myblog.com', name: 'John Doe' }],
       categories: [{ name: 'TypeScript' }, { name: 'Programming' }]
     }
   ]
@@ -97,8 +97,7 @@ Generates (showing first lines):
 Build type-safe RSS feeds using the exported types:
 
 ```typescript
-import type { Rss } from 'feedsmith/types'
-import { generateRssFeed } from 'feedsmith'
+import { type Rss, generateRssFeed } from 'feedsmith'
 
 // Define items with full type safety
 const items: Array<Rss.Item<Date>> = [{
@@ -131,7 +130,7 @@ import { generateAtomFeed } from 'feedsmith'
 
 const atomFeed = generateAtomFeed({
   id: 'https://myblog.com/feed',
-  title: 'My Tech Blog',
+  title: { value: 'My Tech Blog' },
   updated: new Date('2024-01-15T12:00:00Z'),
   links: [
     { href: 'https://myblog.com/feed.xml', rel: 'self' },
@@ -140,9 +139,9 @@ const atomFeed = generateAtomFeed({
   entries: [
     {
       id: 'https://myblog.com/posts/1',
-      title: 'Introduction to TypeScript',
+      title: { value: 'Introduction to TypeScript' },
       updated: new Date('2024-01-15T10:00:00Z'),
-      content: '<p>Learn the basics of TypeScript and why you should use it</p>',
+      content: { value: '<p>Learn the basics of TypeScript and why you should use it</p>', type: 'html' },
       links: [{ href: 'https://myblog.com/posts/intro-to-typescript' }],
       categories: [{ term: 'typescript', label: 'TypeScript' }]
     }
@@ -165,7 +164,9 @@ Generates:
     <title>Introduction to TypeScript</title>
     <updated>2024-01-15T10:00:00.000Z</updated>
     <link href="https://myblog.com/posts/intro-to-typescript"/>
-    <content>Learn the basics of TypeScript and why you should use it</content>
+    <content type="html">
+      <![CDATA[<p>Learn the basics of TypeScript and why you should use it</p>]]>
+    </content>
     <category term="typescript" label="TypeScript"/>
   </entry>
 </feed>
