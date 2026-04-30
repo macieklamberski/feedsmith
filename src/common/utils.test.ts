@@ -31,6 +31,7 @@ import {
   parseCsvOf,
   parseDate,
   parseJsonObject,
+  parseJsonString,
   parseNumber,
   parseSingular,
   parseSingularOf,
@@ -1223,6 +1224,77 @@ describe('parseString', () => {
         })
       }
     })
+  })
+})
+
+describe('parseJsonString', () => {
+  it('should return string as-is when no entities or comments are present', () => {
+    const value = 'plain text'
+    const expected = 'plain text'
+
+    expect(parseJsonString(value)).toBe(expected)
+  })
+
+  it('should trim leading and trailing whitespace', () => {
+    const value = '  hello  '
+    const expected = 'hello'
+
+    expect(parseJsonString(value)).toBe(expected)
+  })
+
+  it('should convert numbers to strings', () => {
+    const value = 42
+    const expected = '42'
+
+    expect(parseJsonString(value)).toBe(expected)
+  })
+
+  it('should return undefined for empty string', () => {
+    const value = ''
+
+    expect(parseJsonString(value)).toBeUndefined()
+  })
+
+  it('should return undefined for whitespace-only string', () => {
+    const value = '   '
+
+    expect(parseJsonString(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-string non-number inputs', () => {
+    expect(parseJsonString(null)).toBeUndefined()
+    expect(parseJsonString(undefined)).toBeUndefined()
+    expect(parseJsonString(true)).toBeUndefined()
+    expect(parseJsonString({})).toBeUndefined()
+    expect(parseJsonString([])).toBeUndefined()
+  })
+
+  it('should preserve XML entities (no entity decoding)', () => {
+    const value = '&lt;p&gt;hello&lt;/p&gt; &amp; goodbye'
+    const expected = '&lt;p&gt;hello&lt;/p&gt; &amp; goodbye'
+
+    expect(parseJsonString(value)).toBe(expected)
+  })
+
+  it('should preserve HTML comment markers (no comment stripping)', () => {
+    const value = 'before <!-- inline note --> after'
+    const expected = 'before <!-- inline note --> after'
+
+    expect(parseJsonString(value)).toBe(expected)
+  })
+
+  it('should preserve CDATA markers verbatim', () => {
+    const value = '<![CDATA[raw <p>text</p>]]>'
+    const expected = '<![CDATA[raw <p>text</p>]]>'
+
+    expect(parseJsonString(value)).toBe(expected)
+  })
+
+  it('should preserve numeric character references', () => {
+    const value = '&#60;tag&#62;'
+    const expected = '&#60;tag&#62;'
+
+    expect(parseJsonString(value)).toBe(expected)
   })
 })
 
