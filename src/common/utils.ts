@@ -255,6 +255,26 @@ export const parseString: ParseExactUtil<string> = (value) => {
   }
 }
 
+// Variant of parseString for JSON-sourced values: skips XML entity decoding and
+// HTML comment stripping. JSON.parse already produces the final string, so any
+// `&lt;` / `<!--` in fields like JSON Feed's `content_html` belongs to the HTML
+// payload and must be preserved verbatim.
+export const parseJsonString: ParseExactUtil<string> = (value) => {
+  if (typeof value === 'string') {
+    if (value === '') {
+      return
+    }
+
+    const string = value.trim()
+
+    return string || undefined
+  }
+
+  if (typeof value === 'number') {
+    return value.toString()
+  }
+}
+
 export const parseNumber: ParseExactUtil<number> = (value) => {
   if (typeof value === 'number') {
     return value
