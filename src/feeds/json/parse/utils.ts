@@ -5,9 +5,9 @@ import {
   parseArrayOf,
   parseBoolean,
   parseDate,
+  parseJsonString,
   parseNumber,
   parseSingularOf,
-  parseString,
   trimObject,
 } from '../../../common/utils.js'
 import type { Json, ParseUtilPartial } from '../common/types.js'
@@ -32,9 +32,9 @@ export const parseAuthor: ParseUtilPartial<Json.Author> = (value) => {
   if (isObject(value)) {
     const get = createCaseInsensitiveGetter(value)
     const author = {
-      name: parseSingularOf(get('name'), parseString),
-      url: parseSingularOf(get('url'), parseString),
-      avatar: parseSingularOf(get('avatar'), parseString),
+      name: parseSingularOf(get('name'), parseJsonString),
+      url: parseSingularOf(get('url'), parseJsonString),
+      avatar: parseSingularOf(get('avatar'), parseJsonString),
     }
 
     return trimObject(author)
@@ -42,7 +42,7 @@ export const parseAuthor: ParseUtilPartial<Json.Author> = (value) => {
 
   if (isNonEmptyStringOrNumber(value)) {
     const author = {
-      name: parseString(value),
+      name: parseJsonString(value),
     }
 
     return trimObject(author)
@@ -71,9 +71,9 @@ export const parseAttachment: ParseUtilPartial<Json.Attachment> = (value) => {
 
   const get = createCaseInsensitiveGetter(value)
   const attachment = {
-    url: parseSingularOf(get('url'), parseString),
-    mime_type: parseSingularOf(get('mime_type'), parseString),
-    title: parseSingularOf(get('title'), parseString),
+    url: parseSingularOf(get('url'), parseJsonString),
+    mime_type: parseSingularOf(get('mime_type'), parseJsonString),
+    title: parseSingularOf(get('title'), parseJsonString),
     size_in_bytes: parseSingularOf(get('size_in_bytes'), parseNumber),
     duration_in_seconds: parseSingularOf(get('duration_in_seconds'), parseNumber),
   }
@@ -88,24 +88,24 @@ export const parseItem: ParseUtilPartial<Json.Item<DateAny>> = (value, options) 
 
   const get = createCaseInsensitiveGetter(value)
   const item = {
-    id: parseSingularOf(get('id'), parseString),
-    url: parseSingularOf(get('url'), parseString),
-    external_url: parseSingularOf(get('external_url'), parseString),
-    title: parseSingularOf(get('title'), parseString),
-    content_html: parseSingularOf(get('content_html'), parseString),
-    content_text: parseSingularOf(get('content_text'), parseString),
-    summary: parseSingularOf(get('summary'), parseString),
-    image: parseSingularOf(get('image'), parseString),
-    banner_image: parseSingularOf(get('banner_image'), parseString),
+    id: parseSingularOf(get('id'), parseJsonString),
+    url: parseSingularOf(get('url'), parseJsonString),
+    external_url: parseSingularOf(get('external_url'), parseJsonString),
+    title: parseSingularOf(get('title'), parseJsonString),
+    content_html: parseSingularOf(get('content_html'), parseJsonString),
+    content_text: parseSingularOf(get('content_text'), parseJsonString),
+    summary: parseSingularOf(get('summary'), parseJsonString),
+    image: parseSingularOf(get('image'), parseJsonString),
+    banner_image: parseSingularOf(get('banner_image'), parseJsonString),
     date_published: parseSingularOf(get('date_published'), (value) =>
       parseDate(value, options?.parseDateFn),
     ),
     date_modified: parseSingularOf(get('date_modified'), (value) =>
       parseDate(value, options?.parseDateFn),
     ),
-    tags: parseArrayOf(get('tags'), parseString),
+    tags: parseArrayOf(get('tags'), parseJsonString),
     authors: retrieveAuthors(value),
-    language: parseSingularOf(get('language'), parseString),
+    language: parseSingularOf(get('language'), parseJsonString),
     attachments: parseArrayOf(get('attachments'), parseAttachment),
   }
 
@@ -119,8 +119,8 @@ export const parseHub: ParseUtilPartial<Json.Hub> = (value) => {
 
   const get = createCaseInsensitiveGetter(value)
   const hub = {
-    type: parseSingularOf(get('type'), parseString),
-    url: parseSingularOf(get('url'), parseString),
+    type: parseSingularOf(get('type'), parseJsonString),
+    url: parseSingularOf(get('url'), parseJsonString),
   }
 
   return trimObject(hub)
@@ -133,15 +133,15 @@ export const parseFeed: ParseUtilPartial<Json.Feed<DateAny>> = (value, options) 
 
   const get = createCaseInsensitiveGetter(value)
   const feed = {
-    title: parseSingularOf(get('title'), parseString),
-    home_page_url: parseSingularOf(get('home_page_url'), parseString),
-    feed_url: parseSingularOf(get('feed_url'), parseString),
-    description: parseSingularOf(get('description'), parseString),
-    user_comment: parseSingularOf(get('user_comment'), parseString),
-    next_url: parseSingularOf(get('next_url'), parseString),
-    icon: parseSingularOf(get('icon'), parseString),
-    favicon: parseSingularOf(get('favicon'), parseString),
-    language: parseSingularOf(get('language'), parseString),
+    title: parseSingularOf(get('title'), parseJsonString),
+    home_page_url: parseSingularOf(get('home_page_url'), parseJsonString),
+    feed_url: parseSingularOf(get('feed_url'), parseJsonString),
+    description: parseSingularOf(get('description'), parseJsonString),
+    user_comment: parseSingularOf(get('user_comment'), parseJsonString),
+    next_url: parseSingularOf(get('next_url'), parseJsonString),
+    icon: parseSingularOf(get('icon'), parseJsonString),
+    favicon: parseSingularOf(get('favicon'), parseJsonString),
+    language: parseSingularOf(get('language'), parseJsonString),
     expired: parseSingularOf(get('expired'), parseBoolean),
     hubs: parseArrayOf(get('hubs'), parseHub),
     authors: retrieveAuthors(value),
