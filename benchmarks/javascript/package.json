@@ -9,7 +9,7 @@
     "benchmark": "^2.1.4",
     "feedme": "^2.0.2",
     "feedparser": "^2.3.1",
-    "feedsmith": "2.9.3",
+    "feedsmith": "2.9.4",
     "node-opml-parser": "^1.0.0",
     "opml": "^0.5.8",
     "opml-generator": "^1.1.1",
@@ -17,7 +17,7 @@
     "opmlparser": "^0.8.0",
     "podcast-feed-parser": "^1.0.4",
     "rss-parser": "^3.13.0",
-    "tinybench": "^6.0.0"
+    "tinybench": "^6.0.1"
   },
   "devDependencies": {
     "@types/benchmark": "^2.1.5",
