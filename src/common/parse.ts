@@ -45,6 +45,3 @@ export const parse = <TDate = string>(
 
   throw new DetectError(locales.unrecognizedFeedFormat)
 }
-
-/** @deprecated Use `parseAnyFeed` instead. Will be removed in the next major version. */
-export const parseFeed = parse

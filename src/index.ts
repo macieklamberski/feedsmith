@@ -1,19 +1,19 @@
 export { DetectError, GenerateError, MalformedError, ParseError } from './common/errors.js'
 export type { AnyFeed } from './common/parse.js'
-export { parse as parseAnyFeed, parseFeed } from './common/parse.js'
+export { parse as parseAnyFeed } from './common/parse.js'
 export type { DateLike, XmlStylesheet } from './common/types.js'
-export type { Atom, AtomFeed } from './feeds/atom/common/types.js'
+export type { AtomFeed } from './feeds/atom/common/types.js'
 export { detect as detectAtomFeed } from './feeds/atom/detect/index.js'
 export { generate as generateAtomFeed } from './feeds/atom/generate/index.js'
 export { parse as parseAtomFeed } from './feeds/atom/parse/index.js'
-export type { Json, JsonFeed } from './feeds/json/common/types.js'
+export type { JsonFeed } from './feeds/json/common/types.js'
 export { detect as detectJsonFeed } from './feeds/json/detect/index.js'
 export { generate as generateJsonFeed } from './feeds/json/generate/index.js'
 export { parse as parseJsonFeed } from './feeds/json/parse/index.js'
-export type { Rdf, RdfFeed } from './feeds/rdf/common/types.js'
+export type { RdfFeed } from './feeds/rdf/common/types.js'
 export { detect as detectRdfFeed } from './feeds/rdf/detect/index.js'
 export { parse as parseRdfFeed } from './feeds/rdf/parse/index.js'
-export type { Rss, RssFeed } from './feeds/rss/common/types.js'
+export type { RssFeed } from './feeds/rss/common/types.js'
 export { detect as detectRssFeed } from './feeds/rss/detect/index.js'
 export { generate as generateRssFeed } from './feeds/rss/generate/index.js'
 export { parse as parseRssFeed } from './feeds/rss/parse/index.js'
@@ -53,3 +53,61 @@ export type { YtNs } from './namespaces/yt/common/types.js'
 export type { Opml } from './opml/common/types.js'
 export { generate as generateOpml } from './opml/generate/index.js'
 export { parse as parseOpml } from './opml/parse/index.js'
+
+// Deprecated aliases — declared here so JSDoc survives tsdown's .d.ts bundling.
+// Remove this block in 4.x along with `parseFeed` below.
+
+import { parse } from './common/parse.js'
+import type { AtomFeed } from './feeds/atom/common/types.js'
+import type { JsonFeed } from './feeds/json/common/types.js'
+import type { RdfFeed } from './feeds/rdf/common/types.js'
+import type { RssFeed } from './feeds/rss/common/types.js'
+
+/** @deprecated Use `RssFeed` instead. Will be removed in the next major version. */
+export namespace Rss {
+  export type Person = RssFeed.Person
+  export type Category<TStrict extends boolean = false> = RssFeed.Category<TStrict>
+  export type Cloud<TStrict extends boolean = false> = RssFeed.Cloud<TStrict>
+  export type Image<TStrict extends boolean = false> = RssFeed.Image<TStrict>
+  export type TextInput<TStrict extends boolean = false> = RssFeed.TextInput<TStrict>
+  export type Enclosure<TStrict extends boolean = false> = RssFeed.Enclosure<TStrict>
+  export type SkipHours = RssFeed.SkipHours
+  export type SkipDays = RssFeed.SkipDays
+  export type Guid<TStrict extends boolean = false> = RssFeed.Guid<TStrict>
+  export type Source<TStrict extends boolean = false> = RssFeed.Source<TStrict>
+  export type Item<TDate, TStrict extends boolean = false> = RssFeed.Item<TDate, TStrict>
+  export type Feed<TDate, TStrict extends boolean = false> = RssFeed.Feed<TDate, TStrict>
+}
+
+/** @deprecated Use `AtomFeed` instead. Will be removed in the next major version. */
+export namespace Atom {
+  export type Text = AtomFeed.Text
+  export type Content = AtomFeed.Content
+  export type Link<TDate, TStrict extends boolean = false> = AtomFeed.Link<TDate, TStrict>
+  export type Person<TStrict extends boolean = false> = AtomFeed.Person<TStrict>
+  export type Category<TStrict extends boolean = false> = AtomFeed.Category<TStrict>
+  export type Generator<TStrict extends boolean = false> = AtomFeed.Generator<TStrict>
+  export type Source<TDate, TStrict extends boolean = false> = AtomFeed.Source<TDate, TStrict>
+  export type Entry<TDate, TStrict extends boolean = false> = AtomFeed.Entry<TDate, TStrict>
+  export type Feed<TDate, TStrict extends boolean = false> = AtomFeed.Feed<TDate, TStrict>
+}
+
+/** @deprecated Use `JsonFeed` instead. Will be removed in the next major version. */
+export namespace Json {
+  export type Author = JsonFeed.Author
+  export type Attachment<TStrict extends boolean = false> = JsonFeed.Attachment<TStrict>
+  export type Item<TDate, TStrict extends boolean = false> = JsonFeed.Item<TDate, TStrict>
+  export type Hub<TStrict extends boolean = false> = JsonFeed.Hub<TStrict>
+  export type Feed<TDate, TStrict extends boolean = false> = JsonFeed.Feed<TDate, TStrict>
+}
+
+/** @deprecated Use `RdfFeed` instead. Will be removed in the next major version. */
+export namespace Rdf {
+  export type Image<TStrict extends boolean = false> = RdfFeed.Image<TStrict>
+  export type TextInput<TStrict extends boolean = false> = RdfFeed.TextInput<TStrict>
+  export type Item<TDate, TStrict extends boolean = false> = RdfFeed.Item<TDate, TStrict>
+  export type Feed<TDate, TStrict extends boolean = false> = RdfFeed.Feed<TDate, TStrict>
+}
+
+/** @deprecated Use `parseAnyFeed` instead. Will be removed in the next major version. */
+export const parseFeed: typeof parse = (value, options) => parse(value, options)

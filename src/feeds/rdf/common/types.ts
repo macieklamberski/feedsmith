@@ -84,11 +84,3 @@ export namespace RdfFeed {
   >
 }
 // #endregion reference
-
-/** @deprecated Use `RdfFeed` instead. Will be removed in the next major version. */
-export namespace Rdf {
-  export type Image<TStrict extends boolean = false> = RdfFeed.Image<TStrict>
-  export type TextInput<TStrict extends boolean = false> = RdfFeed.TextInput<TStrict>
-  export type Item<TDate, TStrict extends boolean = false> = RdfFeed.Item<TDate, TStrict>
-  export type Feed<TDate, TStrict extends boolean = false> = RdfFeed.Feed<TDate, TStrict>
-}
