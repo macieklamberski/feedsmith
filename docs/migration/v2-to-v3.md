@@ -526,9 +526,7 @@ const entry: AtomFeed.Entry<string> = entries[0]
 
 Nested type access works identically: `RssFeed.Item`, `AtomFeed.Link`, `JsonFeed.Author`, `RdfFeed.Image`, etc. The shape of each namespace is unchanged — only the outer name is different.
 
-The previous names (`Rss`, `Atom`, `Json`, `Rdf`) remain available as deprecated aliases and will be removed in 4.x. Editors with TypeScript support display them with a strikethrough.
-
-`Opml` is unchanged — it is an outline format, not a feed.
+The previous names (`Rss`, `Atom`, `Json`, `Rdf`) remain available as deprecated aliases and will be removed in 4.x.
 
 ### `parseFeed` Renamed to `parseAnyFeed`
 
