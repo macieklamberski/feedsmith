@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'bun:test'
 import { locales } from './config.js'
 import { DetectError } from './errors.js'
-import { parseAny } from './parse.js'
+import { parse } from './parse.js'
 
-describe('parseAny', () => {
+describe('parse', () => {
   it('should parse valid Atom feed', () => {
     const value = `
       <?xml version="1.0"?>
@@ -20,7 +20,7 @@ describe('parseAny', () => {
       },
     }
 
-    expect(parseAny(value)).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should parse valid JSON feed', () => {
@@ -63,7 +63,7 @@ describe('parseAny', () => {
       },
     }
 
-    expect(parseAny(value)).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should parse JSON feed from string', () => {
@@ -94,7 +94,7 @@ describe('parseAny', () => {
       },
     }
 
-    expect(parseAny(value)).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should parse JSON feed from string with leading whitespace', () => {
@@ -112,7 +112,7 @@ describe('parseAny', () => {
       },
     }
 
-    expect(parseAny(value)).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should parse JSON feed from string with trailing whitespace', () => {
@@ -130,7 +130,7 @@ describe('parseAny', () => {
       },
     }
 
-    expect(parseAny(value)).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should parse JSON feed from string with whitespace on both ends', () => {
@@ -148,19 +148,19 @@ describe('parseAny', () => {
       },
     }
 
-    expect(parseAny(value)).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should reject malformed JSON string', () => {
     const value = '{"version":"https://jsonfeed.org/version/1.1","title":"Malformed'
 
-    expect(() => parseAny(value)).toThrowError(locales.unrecognizedFeedFormat)
+    expect(() => parse(value)).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should reject JSON array string', () => {
     const value = '[{"version":"https://jsonfeed.org/version/1.1"}]'
 
-    expect(() => parseAny(value)).toThrowError(locales.unrecognizedFeedFormat)
+    expect(() => parse(value)).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should parse valid RSS feed', () => {
@@ -183,7 +183,7 @@ describe('parseAny', () => {
       },
     }
 
-    expect(parseAny(value)).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should parse valid RDF feed', () => {
@@ -219,40 +219,40 @@ describe('parseAny', () => {
       },
     }
 
-    expect(parseAny(value)).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should throw error for invalid input', () => {
-    expect(() => parseAny('not a feed')).toThrowError(locales.unrecognizedFeedFormat)
+    expect(() => parse('not a feed')).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle null input', () => {
-    expect(() => parseAny(null)).toThrowError(locales.unrecognizedFeedFormat)
+    expect(() => parse(null)).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle undefined input', () => {
-    expect(() => parseAny(undefined)).toThrowError(locales.unrecognizedFeedFormat)
+    expect(() => parse(undefined)).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle array input', () => {
-    expect(() => parseAny([])).toThrowError(locales.unrecognizedFeedFormat)
+    expect(() => parse([])).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle empty object input', () => {
-    expect(() => parseAny({})).toThrowError(locales.unrecognizedFeedFormat)
+    expect(() => parse({})).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle string input', () => {
-    expect(() => parseAny('not a feed')).toThrowError(locales.unrecognizedFeedFormat)
+    expect(() => parse('not a feed')).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle number input', () => {
-    expect(() => parseAny(123)).toThrowError(locales.unrecognizedFeedFormat)
+    expect(() => parse(123)).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   describe('error types', () => {
     it('should throw DetectError for unrecognized format', () => {
-      const throwing = () => parseAny('not a feed')
+      const throwing = () => parse('not a feed')
 
       expect(throwing).toThrow(DetectError)
       expect(throwing).toThrow(locales.unrecognizedFeedFormat)
@@ -281,7 +281,7 @@ describe('parseAny', () => {
         },
       }
 
-      expect(parseAny(value)).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should parse RSS feed with multiple PHP errors before RSS tag (no XML declaration)', () => {
@@ -306,7 +306,7 @@ describe('parseAny', () => {
         },
       }
 
-      expect(parseAny(value)).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should parse Atom feed with HTML-formatted PHP errors', () => {
@@ -328,7 +328,7 @@ describe('parseAny', () => {
         },
       }
 
-      expect(parseAny(value)).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should parse RDF feed with whitespace and text before XML', () => {
@@ -367,7 +367,7 @@ describe('parseAny', () => {
         },
       }
 
-      expect(parseAny(value)).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should parse RSS feed with only whitespace before XML', () => {
@@ -391,7 +391,7 @@ describe('parseAny', () => {
         },
       }
 
-      expect(parseAny(value)).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should parse RSS feed with PHP error after closing tag', () => {
@@ -415,7 +415,7 @@ describe('parseAny', () => {
         },
       }
 
-      expect(parseAny(value)).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
 
     it('should parse Atom feed with whitespace and text after closing tag', () => {
@@ -436,7 +436,7 @@ describe('parseAny', () => {
         },
       }
 
-      expect(parseAny(value)).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
   })
 
@@ -451,7 +451,7 @@ describe('parseAny', () => {
           </channel>
         </rss>
       `
-      const result = parseAny(value, { parseDateFn: (raw) => new Date(raw) })
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
       const expected = {
         format: 'rss' as const,
         feed: {

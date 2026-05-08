@@ -21,7 +21,7 @@ export type AnyFeed<TDate = string> =
   | { format: 'rdf'; feed: RdfFeed.Feed<TDate> }
   | { format: 'json'; feed: JsonFeed.Feed<TDate> }
 
-export const parseAny = <TDate = string>(
+export const parse = <TDate = string>(
   value: unknown,
   options?: ParseMainOptions<TDate>,
 ): AnyFeed<TDate> => {
@@ -47,4 +47,4 @@ export const parseAny = <TDate = string>(
 }
 
 /** @deprecated Use `parseAnyFeed` instead. Will be removed in the next major version. */
-export const parseFeed = parseAny
+export const parseFeed = parse

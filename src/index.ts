@@ -1,6 +1,6 @@
 export { DetectError, GenerateError, MalformedError, ParseError } from './common/errors.js'
 export type { AnyFeed } from './common/parse.js'
-export { parseAny as parseAnyFeed, parseFeed } from './common/parse.js'
+export { parse as parseAnyFeed, parseFeed } from './common/parse.js'
 export type { DateLike, XmlStylesheet } from './common/types.js'
 export type { Atom, AtomFeed } from './feeds/atom/common/types.js'
 export { detect as detectAtomFeed } from './feeds/atom/detect/index.js'
