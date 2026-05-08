@@ -51,13 +51,13 @@ import {
   generateFeed as generateYtFeed,
   generateItem as generateYtItem,
 } from '../../../namespaces/yt/generate/utils.js'
-import type { Atom, GenerateUtil } from '../common/types.js'
+import type { AtomFeed, GenerateUtil } from '../common/types.js'
 
 export const createNamespaceSetter = (prefix: string | undefined) => {
   return (key: string) => (prefix ? `${prefix}${key}` : key)
 }
 
-export const generateText: GenerateUtil<Atom.Text> = (text) => {
+export const generateText: GenerateUtil<AtomFeed.Text> = (text) => {
   if (!isObject(text)) {
     return
   }
@@ -69,7 +69,7 @@ export const generateText: GenerateUtil<Atom.Text> = (text) => {
   })
 }
 
-export const generateContent: GenerateUtil<Atom.Content> = (content) => {
+export const generateContent: GenerateUtil<AtomFeed.Content> = (content) => {
   if (!isObject(content)) {
     return
   }
@@ -84,7 +84,7 @@ export const generateContent: GenerateUtil<Atom.Content> = (content) => {
   return trimObject(value)
 }
 
-export const generateLink: GenerateUtil<Atom.Link<DateLike>> = (link) => {
+export const generateLink: GenerateUtil<AtomFeed.Link<DateLike>> = (link) => {
   if (!isObject(link)) {
     return
   }
@@ -102,7 +102,7 @@ export const generateLink: GenerateUtil<Atom.Link<DateLike>> = (link) => {
   return trimObject(value)
 }
 
-export const generatePerson: GenerateUtil<Atom.Person> = (person, options) => {
+export const generatePerson: GenerateUtil<AtomFeed.Person> = (person, options) => {
   if (!isObject(person)) {
     return
   }
@@ -118,7 +118,7 @@ export const generatePerson: GenerateUtil<Atom.Person> = (person, options) => {
   return trimObject(value)
 }
 
-export const generateCategory: GenerateUtil<Atom.Category> = (category) => {
+export const generateCategory: GenerateUtil<AtomFeed.Category> = (category) => {
   if (!isObject(category)) {
     return
   }
@@ -132,7 +132,7 @@ export const generateCategory: GenerateUtil<Atom.Category> = (category) => {
   return trimObject(value)
 }
 
-export const generateGenerator: GenerateUtil<Atom.Generator> = (generator) => {
+export const generateGenerator: GenerateUtil<AtomFeed.Generator> = (generator) => {
   if (!isObject(generator)) {
     return
   }
@@ -146,7 +146,7 @@ export const generateGenerator: GenerateUtil<Atom.Generator> = (generator) => {
   return trimObject(value)
 }
 
-export const generateSource: GenerateUtil<Atom.Source<DateLike>> = (source, options) => {
+export const generateSource: GenerateUtil<AtomFeed.Source<DateLike>> = (source, options) => {
   if (!isObject(source)) {
     return
   }
@@ -174,7 +174,7 @@ export const generateSource: GenerateUtil<Atom.Source<DateLike>> = (source, opti
   return trimObject(value)
 }
 
-export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options) => {
+export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, options) => {
   if (!isObject(entry)) {
     return
   }
@@ -231,7 +231,7 @@ export const generateEntry: GenerateUtil<Atom.Entry<DateLike>> = (entry, options
   }
 }
 
-export const generateFeed: GenerateUtil<Atom.Feed<DateLike>> = (feed, options) => {
+export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, options) => {
   if (!isObject(feed)) {
     return
   }

@@ -2,14 +2,14 @@ import { locales } from '../../../common/config.js'
 import { DetectError, MalformedError, ParseError } from '../../../common/errors.js'
 import type { ParseMainOptions, Unreliable } from '../../../common/types.js'
 import { detectRssFeed } from '../../../index.js'
-import type { Rss } from '../common/types.js'
+import type { RssFeed } from '../common/types.js'
 import { normalizeNamespaces, parser } from './config.js'
 import { retrieveFeed } from './utils.js'
 
 export const parse = <TDate = string>(
   value: unknown,
   options?: ParseMainOptions<TDate>,
-): Rss.Feed<TDate> => {
+): RssFeed.Feed<TDate> => {
   if (!detectRssFeed(value)) {
     throw new DetectError(locales.invalidFeedFormat)
   }
@@ -29,5 +29,5 @@ export const parse = <TDate = string>(
     throw new ParseError(locales.invalidFeedFormat)
   }
 
-  return parsed as Rss.Feed<TDate>
+  return parsed as RssFeed.Feed<TDate>
 }

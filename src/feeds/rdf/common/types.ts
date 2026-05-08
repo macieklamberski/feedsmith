@@ -21,7 +21,7 @@ import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateAny>>
 
 // #region reference
-export namespace Rdf {
+export namespace RdfFeed {
   export type Image<TStrict extends boolean = false> = Strict<
     {
       title: Requirable<string> // Required in spec.
@@ -84,3 +84,11 @@ export namespace Rdf {
   >
 }
 // #endregion reference
+
+/** @deprecated Use `RdfFeed` instead. Will be removed in the next major version. */
+export namespace Rdf {
+  export type Image<TStrict extends boolean = false> = RdfFeed.Image<TStrict>
+  export type TextInput<TStrict extends boolean = false> = RdfFeed.TextInput<TStrict>
+  export type Item<TDate, TStrict extends boolean = false> = RdfFeed.Item<TDate, TStrict>
+  export type Feed<TDate, TStrict extends boolean = false> = RdfFeed.Feed<TDate, TStrict>
+}

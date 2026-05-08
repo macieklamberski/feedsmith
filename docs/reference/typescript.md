@@ -11,30 +11,28 @@ Feedsmith is built with TypeScript and provides comprehensive type definitions f
 All types are available through the main `feedsmith` export:
 
 ```typescript
-import type { Rss, Atom, Json, Rdf, Opml } from 'feedsmith'
+import type { RssFeed, AtomFeed, JsonFeed, RdfFeed, Opml } from 'feedsmith'
 ```
 
 Each namespace contains the complete type system for that format:
 
 ```typescript
 // RSS types
-type Feed = Rss.Feed
-type Item = Rss.Item
-type Category = Rss.Category
-type Enclosure = Rss.Enclosure
+type Feed = RssFeed.Feed
+type Item = RssFeed.Item
+type Category = RssFeed.Category
+type Enclosure = RssFeed.Enclosure
 
 // Atom types
-type AtomFeed = Atom.Feed
-type Entry = Atom.Entry
-type Link = Atom.Link
+type Entry = AtomFeed.Entry
+type Link = AtomFeed.Link
 
 // JSON Feed types
-type JsonFeed = Json.Feed
-type JsonItem = Json.Item
-type Author = Json.Author
+type JsonItem = JsonFeed.Item
+type Author = JsonFeed.Author
 
 // RDF types
-type RdfFeed = Rdf.Feed
+type RdfItem = RdfFeed.Item
 
 // OPML types
 type Document = Opml.Document
@@ -46,9 +44,9 @@ type Outline = Opml.Outline
 When parsing, dates are returned as strings. Use `<string>` for the generic parameter:
 
 ```typescript
-import { type Rss, parseRssFeed } from 'feedsmith'
+import { type RssFeed, parseRssFeed } from 'feedsmith'
 
-const feed: Rss.Feed<string> = parseRssFeed(xmlContent)
+const feed: RssFeed.Feed<string> = parseRssFeed(xmlContent)
 
 // Access properties with full type safety
 feed.title // string | undefined
@@ -64,9 +62,9 @@ feed.items?.[0]?.enclosures // Enclosure[] | undefined
 When generating, you can use `Date` objects. Use `<Date>` for the generic parameter:
 
 ```typescript
-import { type Rss, generateRssFeed } from 'feedsmith'
+import { type RssFeed, generateRssFeed } from 'feedsmith'
 
-const feed: Rss.Feed<Date> = {
+const feed: RssFeed.Feed<Date> = {
   title: 'My Podcast',
   link: 'https://example.com',
   description: 'A great podcast',
@@ -83,6 +81,22 @@ const feed: Rss.Feed<Date> = {
 }
 
 const xml = generateRssFeed(feed)
+```
+
+## Universal Parser Return Type
+
+The universal `parseAnyFeed` function returns a discriminated union typed as `AnyFeed`:
+
+```typescript
+import { type AnyFeed, parseAnyFeed } from 'feedsmith'
+
+const result: AnyFeed = parseAnyFeed(content)
+
+if (result.format === 'rss') {
+  result.feed // RssFeed.Feed<string>
+} else if (result.format === 'atom') {
+  result.feed // AtomFeed.Feed<string>
+}
 ```
 
 ## Importing Namespace Types
@@ -144,9 +158,9 @@ Each namespace's type export name can be found in the "Types" section of its ref
 Here's an example on how you can utilize the types for sub-elements of the RSS feed while generating a podcast feed:
 
 ```typescript
-import { type Rss, generateRssFeed } from 'feedsmith'
+import { type RssFeed, generateRssFeed } from 'feedsmith'
 
-const items: Array<Rss.Item<Date>> = [{
+const items: Array<RssFeed.Item<Date>> = [{
   title: 'Episode 1: Introduction',
   description: 'Getting started with TypeScript',
   pubDate: new Date('2024-01-15T10:00:00Z'),
@@ -162,7 +176,7 @@ const items: Array<Rss.Item<Date>> = [{
   }
 }]
 
-const feed: Rss.Feed<Date> = {
+const feed: RssFeed.Feed<Date> = {
   title: 'My TypeScript Podcast',
   link: 'https://mypodcast.com',
   description: 'A podcast about TypeScript',
@@ -194,10 +208,10 @@ In general, use:
 
 ```typescript
 // Parsing - dates are strings
-const parsed: Rss.Feed<string> = parseRssFeed(xml)
+const parsed: RssFeed.Feed<string> = parseRssFeed(xml)
 
 // Generating - dates are Date objects
-const generated: Rss.Feed<Date> = {
+const generated: RssFeed.Feed<Date> = {
   title: 'Feed',
   link: 'https://example.com',
   description: 'Description',

@@ -44,7 +44,7 @@ export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateA
 export type GenerateUtil<V> = BaseGenerateUtil<V, GenerateMainOptions>
 
 // #region reference
-export namespace Atom {
+export namespace AtomFeed {
   export type Text = {
     value: string
     type?: string
@@ -186,3 +186,16 @@ export namespace Atom {
   >
 }
 // #endregion reference
+
+/** @deprecated Use `AtomFeed` instead. Will be removed in the next major version. */
+export namespace Atom {
+  export type Text = AtomFeed.Text
+  export type Content = AtomFeed.Content
+  export type Link<TDate, TStrict extends boolean = false> = AtomFeed.Link<TDate, TStrict>
+  export type Person<TStrict extends boolean = false> = AtomFeed.Person<TStrict>
+  export type Category<TStrict extends boolean = false> = AtomFeed.Category<TStrict>
+  export type Generator<TStrict extends boolean = false> = AtomFeed.Generator<TStrict>
+  export type Source<TDate, TStrict extends boolean = false> = AtomFeed.Source<TDate, TStrict>
+  export type Entry<TDate, TStrict extends boolean = false> = AtomFeed.Entry<TDate, TStrict>
+  export type Feed<TDate, TStrict extends boolean = false> = AtomFeed.Feed<TDate, TStrict>
+}

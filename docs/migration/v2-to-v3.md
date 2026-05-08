@@ -33,6 +33,8 @@ Use this checklist to ensure a complete migration:
 - Replace Podcast namespace deprecated fields (`location` → `locations`, `value` → `values`, `chats` → `chat`)
 - Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
 - Replace Dublin Core Terms singular fields with plural arrays (e.g., `title` → `titles`)
+- Rename type imports: `Rss` → `RssFeed`, `Atom` → `AtomFeed`, `Json` → `JsonFeed`, `Rdf` → `RdfFeed`
+- Replace `parseFeed` calls with `parseAnyFeed`, optionally annotate the result with the new `AnyFeed` type
 - Test feed generation to ensure output is correct
 - Update error handling to use `DetectError`, `MalformedError`, `ParseError`, and `GenerateError` instead of generic `Error`
 
@@ -489,15 +491,61 @@ See [Working with TypeScript](/reference/typescript#importing-namespace-types) f
 Common utility types `DateLike` and `XmlStylesheet` are now exported from the main package:
 
 ```typescript
-import type { Rss, DateLike, XmlStylesheet } from 'feedsmith'
+import type { RssFeed, DateLike, XmlStylesheet } from 'feedsmith'
 
-type RssMetadata = Omit<Rss.Feed<DateLike>, 'items'>
+type RssMetadata = Omit<RssFeed.Feed<DateLike>, 'items'>
 
 const stylesheet: XmlStylesheet = {
   type: 'text/xsl',
   href: '/feed.xsl',
 }
 ```
+
+### Format Type Namespaces Renamed
+
+The four format-level type namespaces have been renamed to align with their parse function names:
+
+| Before (2.x) | After (3.x) |
+|---|---|
+| `Rss` | `RssFeed` |
+| `Atom` | `AtomFeed` |
+| `Json` | `JsonFeed` |
+| `Rdf` | `RdfFeed` |
+
+```typescript
+// Before (2.x)
+import type { Rss, Atom } from 'feedsmith/types'
+const feed: Rss.Feed<string> = parseRssFeed(xml)
+const entry: Atom.Entry<string> = entries[0]
+
+// After (3.x)
+import type { RssFeed, AtomFeed } from 'feedsmith'
+const feed: RssFeed.Feed<string> = parseRssFeed(xml)
+const entry: AtomFeed.Entry<string> = entries[0]
+```
+
+Nested type access works identically: `RssFeed.Item`, `AtomFeed.Link`, `JsonFeed.Author`, `RdfFeed.Image`, etc. The shape of each namespace is unchanged — only the outer name is different.
+
+The previous names (`Rss`, `Atom`, `Json`, `Rdf`) remain available as deprecated aliases and will be removed in 4.x. Editors with TypeScript support display them with a strikethrough.
+
+`Opml` is unchanged — it is an outline format, not a feed.
+
+### `parseFeed` Renamed to `parseAnyFeed`
+
+The universal parser is now `parseAnyFeed`, and its return type is exported as `AnyFeed`:
+
+```typescript
+// Before (2.x)
+import { parseFeed } from 'feedsmith'
+const { format, feed } = parseFeed(content)
+
+// After (3.x)
+import { parseAnyFeed, type AnyFeed } from 'feedsmith'
+const result: AnyFeed = parseAnyFeed(content)
+const { format, feed } = result
+```
+
+The function's behavior, options, and return shape are unchanged. `parseFeed` remains available as a deprecated alias and will be removed in 4.x.
 
 ### Custom Date Parsing
 

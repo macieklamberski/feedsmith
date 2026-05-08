@@ -8,10 +8,10 @@ Feedsmith provides powerful parsing capabilities for various feed formats. The l
 
 ## Universal Feed Parser
 
-The simplest way to parse any feed is to use the universal `parseFeed` function:
+The simplest way to parse any feed is to use the universal `parseAnyFeed` function:
 
 ```typescript
-import { parseFeed } from 'feedsmith'
+import { parseAnyFeed } from 'feedsmith'
 
 const content = `
   <?xml version="1.0"?>
@@ -30,7 +30,7 @@ const content = `
   </rss>
 `
 
-const result = parseFeed(content)
+const result = parseAnyFeed(content)
 result.format // rss
 result.feed.title // My Blog
 result.feed.items?.length // 1

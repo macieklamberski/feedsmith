@@ -41,7 +41,7 @@ export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateA
 export type GenerateUtil<V> = BaseGenerateUtil<V>
 
 // #region reference
-export namespace Rss {
+export namespace RssFeed {
   export type Person = {
     name?: string
     email?: string
@@ -211,3 +211,19 @@ export namespace Rss {
   >
 }
 // #endregion reference
+
+/** @deprecated Use `RssFeed` instead. Will be removed in the next major version. */
+export namespace Rss {
+  export type Person = RssFeed.Person
+  export type Category<TStrict extends boolean = false> = RssFeed.Category<TStrict>
+  export type Cloud<TStrict extends boolean = false> = RssFeed.Cloud<TStrict>
+  export type Image<TStrict extends boolean = false> = RssFeed.Image<TStrict>
+  export type TextInput<TStrict extends boolean = false> = RssFeed.TextInput<TStrict>
+  export type Enclosure<TStrict extends boolean = false> = RssFeed.Enclosure<TStrict>
+  export type SkipHours = RssFeed.SkipHours
+  export type SkipDays = RssFeed.SkipDays
+  export type Guid<TStrict extends boolean = false> = RssFeed.Guid<TStrict>
+  export type Source<TStrict extends boolean = false> = RssFeed.Source<TStrict>
+  export type Item<TDate, TStrict extends boolean = false> = RssFeed.Item<TDate, TStrict>
+  export type Feed<TDate, TStrict extends boolean = false> = RssFeed.Feed<TDate, TStrict>
+}

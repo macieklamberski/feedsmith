@@ -12,7 +12,7 @@ export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateA
 export type GenerateUtil<V> = BaseGenerateUtil<V>
 
 // #region reference
-export namespace Json {
+export namespace JsonFeed {
   export type Author = {
     name?: string
     url?: string
@@ -80,3 +80,12 @@ export namespace Json {
   >
 }
 // #endregion reference
+
+/** @deprecated Use `JsonFeed` instead. Will be removed in the next major version. */
+export namespace Json {
+  export type Author = JsonFeed.Author
+  export type Attachment<TStrict extends boolean = false> = JsonFeed.Attachment<TStrict>
+  export type Item<TDate, TStrict extends boolean = false> = JsonFeed.Item<TDate, TStrict>
+  export type Hub<TStrict extends boolean = false> = JsonFeed.Hub<TStrict>
+  export type Feed<TDate, TStrict extends boolean = false> = JsonFeed.Feed<TDate, TStrict>
+}

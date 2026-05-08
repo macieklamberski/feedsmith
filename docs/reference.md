@@ -8,7 +8,7 @@ Universal functions that work across all feed formats.
 
 ## Functions
 
-### `parseFeed()`
+### `parseAnyFeed()`
 
 Universal parser that automatically detects feed format and parses accordingly.
 
@@ -32,15 +32,15 @@ Universal parser that automatically detects feed format and parses accordingly.
 
 #### Example
 ```typescript
-import { parseFeed } from 'feedsmith'
+import { parseAnyFeed } from 'feedsmith'
 
-const { format, feed } = parseFeed(feedContent)
+const { format, feed } = parseAnyFeed(feedContent)
 
 // Limit number of items parsed
-const { format, feed } = parseFeed(feedContent, { maxItems: 5 })
+const { format, feed } = parseAnyFeed(feedContent, { maxItems: 5 })
 
 // Parse only feed metadata (skip all items)
-const { format, feed } = parseFeed(feedContent, { maxItems: 0 })
+const { format, feed } = parseAnyFeed(feedContent, { maxItems: 0 })
 ```
 
 > [!IMPORTANT]

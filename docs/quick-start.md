@@ -37,22 +37,22 @@ Or using CDN:
 
 ```html
 <script type="module">
-  import { parseFeed } from 'https://esm.sh/feedsmith@latest'
+  import { parseAnyFeed } from 'https://esm.sh/feedsmith@latest'
 
-  const { format, feed } = parseFeed(feedContent)
+  const { format, feed } = parseAnyFeed(feedContent)
   console.log(feed.title)
 </script>
 ```
 
 ## Parse Any Feed
 
-The simplest way to parse any feed is to use the universal `parseFeed` function:
+The simplest way to parse any feed is to use the universal `parseAnyFeed` function:
 
 ```typescript
-import { parseFeed } from 'feedsmith'
+import { parseAnyFeed } from 'feedsmith'
 
 // Works with RSS, Atom, RDF, and JSON Feed
-const { format, feed } = parseFeed(feedContent)
+const { format, feed } = parseAnyFeed(feedContent)
 
 console.log('Feed format:', format) // rss, atom, json, rdf
 console.log('Feed title:', feed.title)
@@ -157,13 +157,13 @@ See [Parsing Errors](/parsing/errors) and [Generating Errors](/generating/errors
 Feedsmith provides comprehensive TypeScript types for all feed formats:
 
 ```typescript
-import type { Rss, Atom, Json, Opml } from 'feedsmith'
+import type { RssFeed, AtomFeed, JsonFeed, Opml } from 'feedsmith'
 
 // Access all types for a format
-type Feed = Rss.Feed
-type Item = Rss.Item
-type Category = Rss.Category
-type Enclosure = Rss.Enclosure
+type Feed = RssFeed.Feed
+type Item = RssFeed.Item
+type Category = RssFeed.Category
+type Enclosure = RssFeed.Enclosure
 ```
 
 Each format exports its complete type system, including nested types and namespace types. See the [TypeScript guide](/reference/typescript) for details.
