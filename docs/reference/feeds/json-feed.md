@@ -43,7 +43,7 @@ const jsonFeed = parseJsonFeed(jsonContent, { maxItems: 10 })
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `content` | `string` | The JSON Feed content to parse |
+| `content` | `unknown` | The JSON Feed content to parse (string or object) |
 | `options` | `object` | Optional parsing settings |
 
 #### Options
