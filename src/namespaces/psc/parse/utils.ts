@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -8,7 +8,7 @@ import {
 } from '../../../common/utils.js'
 import type { PscNs } from '../common/types.js'
 
-export const parseChapter: ParsePartialUtil<PscNs.Chapter> = (value) => {
+export const parseChapter: ParseUtilPartial<PscNs.Chapter> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -23,11 +23,11 @@ export const parseChapter: ParsePartialUtil<PscNs.Chapter> = (value) => {
   return trimObject(chapter)
 }
 
-export const parseChapters: ParsePartialUtil<Array<PscNs.Chapter>> = (value) => {
+export const parseChapters: ParseUtilPartial<Array<PscNs.Chapter>> = (value) => {
   return parseArrayOf(value?.['psc:chapter'], parseChapter)
 }
 
-export const retrieveItem: ParsePartialUtil<PscNs.Item> = (value) => {
+export const retrieveItem: ParseUtilPartial<PscNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }

@@ -2,7 +2,7 @@
 title: "Reference: Dublin Core Terms Namespace"
 ---
 
-# Dublin Core Terms Namespace
+# Dublin Core Terms Namespace Reference
 
 The Dublin Core Terms namespace provides extended metadata elements based on the Dublin Core Metadata Initiative, offering comprehensive resource description capabilities.
 
@@ -38,7 +38,7 @@ The Dublin Core Terms namespace provides extended metadata elements based on the
 ## Types
 
 > [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
+> For details on type parameters (`TDate`), see [TypeScript Reference](/reference/typescript#tdate).
 
 <<< @/../src/namespaces/dcterms/common/types.ts#reference
 

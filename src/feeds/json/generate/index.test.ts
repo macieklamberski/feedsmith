@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'bun:test'
+import { locales } from '../../../common/config.js'
+import { GenerateError } from '../../../common/errors.js'
 import { generate } from './index.js'
 
 describe('generate', () => {
@@ -53,8 +55,95 @@ describe('generate', () => {
   })
 })
 
-describe('generate with lenient mode', () => {
-  it('should accept partial feeds with lenient: true', () => {
+describe('strict mode', () => {
+  it('should require title and items in strict mode', () => {
+    // @ts-expect-error: This is for testing purposes.
+    generate({ title: 'Test' }, { strict: true })
+  })
+
+  it('should accept feed with all required fields in strict mode', () => {
+    generate({ title: 'Test', items: [] }, { strict: true })
+  })
+
+  it('should require item id in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        // @ts-expect-error: This is for testing purposes.
+        items: [{ content_text: 'Hello' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept items with content_html in strict mode', () => {
+    generate(
+      { title: 'Test', items: [{ id: '1', content_html: '<p>Hello</p>' }] },
+      { strict: true },
+    )
+  })
+
+  it('should accept items with content_text in strict mode', () => {
+    generate({ title: 'Test', items: [{ id: '1', content_text: 'Hello' }] }, { strict: true })
+  })
+
+  it('should accept items with both content fields in strict mode', () => {
+    generate(
+      { title: 'Test', items: [{ id: '1', content_html: '<p>Hello</p>', content_text: 'Hello' }] },
+      { strict: true },
+    )
+  })
+
+  it('should require nested type fields in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        items: [
+          {
+            id: '1',
+            content_html: '<p>Hello</p>',
+            // @ts-expect-error: This is for testing purposes.
+            attachments: [{ url: 'https://example.com/file.mp3' }],
+          },
+        ],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept nested types with all required fields in strict mode', () => {
+    generate(
+      {
+        title: 'Test',
+        items: [
+          {
+            id: '1',
+            content_html: '<p>Hello</p>',
+            attachments: [{ url: 'https://example.com/file.mp3', mime_type: 'audio/mpeg' }],
+          },
+        ],
+        hubs: [{ type: 'websub', url: 'https://example.com/hub' }],
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept partial feed in lenient mode', () => {
+    generate({ title: 'Test' })
+  })
+})
+
+describe('error types', () => {
+  it('should throw GenerateError for invalid input', () => {
+    const throwing = () => generate({})
+
+    expect(throwing).toThrow(GenerateError)
+    expect(throwing).toThrow(locales.invalidInputJson)
+  })
+})
+
+describe('generate edge cases', () => {
+  it('should accept partial feeds', () => {
     const value = {
       title: 'Test Feed',
     }
@@ -63,10 +152,10 @@ describe('generate with lenient mode', () => {
       title: 'Test Feed',
     }
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should accept feeds with string dates in lenient mode', () => {
+  it('should accept feeds with string dates', () => {
     const value = {
       title: 'Test Feed',
       date_published: '2023-01-01T00:00:00.000Z',
@@ -91,10 +180,10 @@ describe('generate with lenient mode', () => {
       ],
     }
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should preserve invalid date strings in lenient mode', () => {
+  it('should preserve invalid date strings', () => {
     const value = {
       title: 'Test Feed',
       date_published: 'not-a-valid-date',
@@ -106,6 +195,6 @@ describe('generate with lenient mode', () => {
       date_published: 'not-a-valid-date',
     }
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 })

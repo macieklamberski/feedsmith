@@ -31,13 +31,6 @@
   "type": "module",
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.cts",
-  "typesVersions": {
-    "*": {
-      "types": [
-        "./dist/types.d.ts"
-      ]
-    }
-  },
   "exports": {
     ".": {
       "import": {
@@ -49,16 +42,6 @@
         "default": "./dist/index.cjs"
       }
     },
-    "./types": {
-      "import": {
-        "types": "./dist/types.d.ts",
-        "default": "./dist/types.js"
-      },
-      "require": {
-        "types": "./dist/types.d.cts",
-        "default": "./dist/types.cjs"
-      }
-    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -66,7 +49,7 @@
   ],
   "scripts": {
     "prepare": "lefthook install",
-    "build": "tsdown src/index.ts src/types.ts --format cjs,esm --dts --clean --unbundle --no-fixed-extension",
+    "build": "tsdown src/index.ts --format cjs,esm --dts --clean --unbundle --no-fixed-extension",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs"
   },

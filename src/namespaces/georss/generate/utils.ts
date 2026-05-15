@@ -39,7 +39,7 @@ export const generatePoint: GenerateUtil<GeoRssNs.Point> = (point) => {
 }
 
 export const generateLine: GenerateUtil<GeoRssNs.Line> = (line) => {
-  if (!isObject(line)) {
+  if (!isObject(line) || !line.points) {
     return
   }
 
@@ -47,7 +47,7 @@ export const generateLine: GenerateUtil<GeoRssNs.Line> = (line) => {
 }
 
 export const generatePolygon: GenerateUtil<GeoRssNs.Polygon> = (polygon) => {
-  if (!isObject(polygon)) {
+  if (!isObject(polygon) || !polygon.points) {
     return
   }
 

@@ -2,7 +2,7 @@
 title: "Reference: OPML"
 ---
 
-# OPML
+# OPML Reference
 
 OPML (Outline Processor Markup Language) is a format for exchanging outline-structured information, commonly used for sharing feed subscription lists.
 
@@ -68,7 +68,6 @@ Generates OPML XML from OPML data.
 import { generateOpml } from 'feedsmith'
 
 const xml = generateOpml(opmlData, {
-  lenient: true,
   stylesheets: [{ type: 'text/xsl', href: '/opml.xsl' }],
   extraOutlineAttributes: ['customIcon', 'updateInterval']
 })
@@ -85,7 +84,7 @@ const xml = generateOpml(opmlData, {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `lenient` | `boolean` | `false` | Enable lenient mode for relaxed validation, see [Lenient Mode](/generating/lenient-mode) |
+| `strict` | `boolean` | `false` | Enable strict mode for spec-required field validation, see [Strict Mode](/generating/strict-mode) |
 | `stylesheets` | `Stylesheet[]` | - | Add stylesheets for visual formatting, see [Feed Styling](/generating/styling) |
 | `extraOutlineAttributes` | `string[]` | - | Custom attributes to include in outline elements. Only specified attributes are included in generated XML, see [examples](/generating/examples#extra-outline-attributes) |
 
@@ -97,7 +96,7 @@ const xml = generateOpml(opmlData, {
 All OPML types are available under the `Opml` namespace:
 
 ```typescript
-import type { Opml } from 'feedsmith/types'
+import type { Opml } from 'feedsmith'
 
 // Access any type from the definitions below
 type Document = Opml.Document<Date>
@@ -112,7 +111,7 @@ See the [TypeScript guide](/reference/typescript) for usage examples.
 ### Type Definitions
 
 > [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
+> For details on type parameters (`TDate`, `TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tdate).
 
 <<< @/../src/opml/common/types.ts#reference
 

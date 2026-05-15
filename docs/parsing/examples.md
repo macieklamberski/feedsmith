@@ -125,6 +125,7 @@ const rssFeed = parseRssFeed(`
         <title>First item title</title>
         <link>http://example.org/item/1</link>
         <description>Some description of the first item.</description>
+        <author>john@example.org (John Doe)</author>
         <comments>http://example.org/comments/1</comments>
         <enclosure url="http://example.org/audio/demo.mp3" length="1069871" type="audio/mpeg" />
         <guid isPermaLink="true">http://example.org/guid/1</guid>
@@ -144,7 +145,7 @@ Returns:
   "link": "http://example.org/",
   "description": "For documentation <em>only</em>",
   "language": "en",
-  "webMaster": "webmaster@example.org",
+  "webMaster": { "email": "webmaster@example.org" },
   "pubDate": "Sat, 19 Mar 1988 07:15:00 GMT",
   "lastBuildDate": "Sat, 19 Mar 1988 07:15:00 GMT",
   "categories": [{ "name": "Examples2", "domain": "http://www.example.com/cusips" }],
@@ -179,6 +180,7 @@ Returns:
       "title": "First item title",
       "link": "http://example.org/item/1",
       "description": "Some description of the first item.",
+      "authors": [{ "email": "john@example.org", "name": "John Doe" }],
       "comments": "http://example.org/comments/1",
       "enclosures": [
         {

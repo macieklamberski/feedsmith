@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'bun:test'
+import { locales } from '../../common/config.js'
+import { MalformedError, ParseError } from '../../common/errors.js'
 import { parse } from './index.js'
 
 describe('parse', () => {
@@ -118,6 +120,31 @@ describe('parse', () => {
     `
 
     expect(() => parse(value)).toThrow()
+  })
+
+  describe('error types', () => {
+    it('should throw MalformedError for invalid XML', () => {
+      const value = `
+        <?xml version="1.0"?>
+        <opml version="2.0">
+          <head>
+            <title>Test</title
+          </head>
+        </opml>
+      `
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrow(MalformedError)
+      expect(throwing).toThrow(locales.invalidOpmlFormat)
+    })
+
+    it('should throw ParseError for valid XML with invalid structure', () => {
+      const value = '<opml version="2.0"></opml>'
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrow(ParseError)
+      expect(throwing).toThrow(locales.invalidOpmlFormat)
+    })
   })
 
   describe('custom attributes', () => {
@@ -256,6 +283,38 @@ describe('parse', () => {
       }
 
       expect(parse(commonValue, { maxItems: undefined })).toEqual(expected)
+    })
+  })
+
+  describe('parseDateFn', () => {
+    it('should apply custom parseDateFn to head and outline dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <opml version="2.0">
+          <head>
+            <dateCreated>Wed, 15 Mar 2023 12:00:00 GMT</dateCreated>
+          </head>
+          <body>
+            <outline text="Feed" created="Fri, 17 Mar 2023 12:00:00 GMT" />
+          </body>
+        </opml>
+      `
+      const expected = {
+        head: {
+          dateCreated: new Date('Wed, 15 Mar 2023 12:00:00 GMT'),
+        },
+        body: {
+          outlines: [
+            {
+              text: 'Feed',
+              created: new Date('Fri, 17 Mar 2023 12:00:00 GMT'),
+            },
+          ],
+        },
+      }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
     })
   })
 })

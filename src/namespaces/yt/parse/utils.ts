@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseSingularOf,
@@ -8,7 +8,7 @@ import {
 } from '../../../common/utils.js'
 import type { YtNs } from '../common/types.js'
 
-export const retrieveItem: ParsePartialUtil<YtNs.Item> = (value) => {
+export const retrieveItem: ParseUtilPartial<YtNs.Item> = (value) => {
   if (!isObject(value)) {
     return
   }
@@ -21,7 +21,7 @@ export const retrieveItem: ParsePartialUtil<YtNs.Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialUtil<YtNs.Feed> = (value) => {
+export const retrieveFeed: ParseUtilPartial<YtNs.Feed> = (value) => {
   if (!isObject(value)) {
     return
   }

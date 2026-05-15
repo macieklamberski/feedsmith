@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseSingularOf,
@@ -8,7 +8,7 @@ import {
 } from '../../../common/utils.js'
 import type { BlogChannelNs } from '../common/types.js'
 
-export const retrieveFeed: ParsePartialUtil<BlogChannelNs.Feed> = (value) => {
+export const retrieveFeed: ParseUtilPartial<BlogChannelNs.Feed> = (value) => {
   if (!isObject(value)) {
     return
   }

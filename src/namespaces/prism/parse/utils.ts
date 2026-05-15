@@ -1,4 +1,4 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
   isObject,
   parseArrayOf,
@@ -11,7 +11,10 @@ import {
 } from '../../../common/utils.js'
 import type { PrismNs } from '../common/types.js'
 
-export const retrieveFeed: ParsePartialUtil<PrismNs.Feed<string>> = (value) => {
+export const retrieveFeed: ParseUtilPartial<PrismNs.Feed<DateAny>, ParseMainOptions<DateAny>> = (
+  value,
+  options,
+) => {
   if (!isObject(value)) {
     return
   }
@@ -44,31 +47,37 @@ export const retrieveFeed: ParsePartialUtil<PrismNs.Feed<string>> = (value) => {
     aggregationType: parseSingularOf(value['prism:aggregationtype'], (value) =>
       parseString(retrieveText(value)),
     ),
-    coverDate: parseSingularOf(value['prism:coverdate'], (value) => parseDate(retrieveText(value))),
+    coverDate: parseSingularOf(value['prism:coverdate'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     coverDisplayDate: parseSingularOf(value['prism:coverdisplaydate'], (value) =>
       parseString(retrieveText(value)),
     ),
     publicationDates: parseArrayOf(value['prism:publicationdate'], (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
     publicationDisplayDates: parseArrayOf(value['prism:publicationdisplaydate'], (value) =>
       parseString(retrieveText(value)),
     ),
     creationDate: parseSingularOf(value['prism:creationdate'], (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
     modificationDate: parseSingularOf(value['prism:modificationdate'], (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
     dateReceived: parseSingularOf(value['prism:datereceived'], (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
-    onSaleDates: parseArrayOf(value['prism:onsaledate'], (value) => parseDate(retrieveText(value))),
+    onSaleDates: parseArrayOf(value['prism:onsaledate'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     onSaleDays: parseArrayOf(value['prism:onsaleday'], (value) => parseString(retrieveText(value))),
     offSaleDates: parseArrayOf(value['prism:offsaledate'], (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
-    killDate: parseSingularOf(value['prism:killdate'], (value) => parseDate(retrieveText(value))),
+    killDate: parseSingularOf(value['prism:killdate'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     copyrightYears: parseArrayOf(value['prism:copyrightyear'], (value) =>
       parseString(retrieveText(value)),
     ),
@@ -179,13 +188,13 @@ export const retrieveFeed: ParsePartialUtil<PrismNs.Feed<string>> = (value) => {
     ),
     sport: parseSingularOf(value['prism:sport'], (value) => parseString(retrieveText(value))),
     embargoDate: parseSingularOf(value['prism:embargodate'], (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
     copyright: parseSingularOf(value['prism:copyright'], (value) =>
       parseString(retrieveText(value)),
     ),
     expirationDate: parseSingularOf(value['prism:expirationdate'], (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
     rightsAgent: parseSingularOf(value['prism:rightsagent'], (value) =>
       parseString(retrieveText(value)),
@@ -195,7 +204,10 @@ export const retrieveFeed: ParsePartialUtil<PrismNs.Feed<string>> = (value) => {
   return trimObject(feed)
 }
 
-export const retrieveItem: ParsePartialUtil<PrismNs.Item<string>> = (value) => {
+export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOptions<DateAny>> = (
+  value,
+  options,
+) => {
   if (!isObject(value)) {
     return
   }
@@ -231,21 +243,23 @@ export const retrieveItem: ParsePartialUtil<PrismNs.Item<string>> = (value) => {
       parseString(retrieveText(value)),
     ),
     publicationDates: parseArrayOf(value['prism:publicationdate'], (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
     publicationDisplayDates: parseArrayOf(value['prism:publicationdisplaydate'], (value) =>
       parseString(retrieveText(value)),
     ),
     creationDate: parseSingularOf(value['prism:creationdate'], (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
     modificationDate: parseSingularOf(value['prism:modificationdate'], (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
     dateReceived: parseSingularOf(value['prism:datereceived'], (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
-    killDate: parseSingularOf(value['prism:killdate'], (value) => parseDate(retrieveText(value))),
+    killDate: parseSingularOf(value['prism:killdate'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     copyrightYears: parseArrayOf(value['prism:copyrightyear'], (value) =>
       parseString(retrieveText(value)),
     ),
@@ -322,13 +336,13 @@ export const retrieveItem: ParsePartialUtil<PrismNs.Item<string>> = (value) => {
     ),
     tickers: parseArrayOf(value['prism:ticker'], (value) => parseString(retrieveText(value))),
     embargoDate: parseSingularOf(value['prism:embargodate'], (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
     copyright: parseSingularOf(value['prism:copyright'], (value) =>
       parseString(retrieveText(value)),
     ),
     expirationDate: parseSingularOf(value['prism:expirationdate'], (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
     rightsAgent: parseSingularOf(value['prism:rightsagent'], (value) =>
       parseString(retrieveText(value)),

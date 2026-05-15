@@ -1,68 +1,100 @@
+import type { Requirable, Strict } from '../../../common/types.js'
+
 // #region reference
 export namespace MediaNs {
-  export type Rating = {
-    value: string
-    scheme?: string
-  }
+  export type Rating<TStrict extends boolean = false> = Strict<
+    {
+      value: Requirable<string> // Required in spec.
+      scheme?: string
+    },
+    TStrict
+  >
 
-  export type TitleOrDescription = {
-    value: string
-    type?: string
-  }
+  export type TitleOrDescription<TStrict extends boolean = false> = Strict<
+    {
+      value: Requirable<string> // Required in spec.
+      type?: string
+    },
+    TStrict
+  >
 
-  export type Thumbnail = {
-    url: string
-    height?: number
-    width?: number
-    time?: string
-  }
+  export type Thumbnail<TStrict extends boolean = false> = Strict<
+    {
+      url: Requirable<string> // Required in spec.
+      height?: number
+      width?: number
+      time?: string
+    },
+    TStrict
+  >
 
-  export type Category = {
-    name: string
-    scheme?: string
-    label?: string
-  }
+  export type Category<TStrict extends boolean = false> = Strict<
+    {
+      name: Requirable<string> // Required in spec.
+      scheme?: string
+      label?: string
+    },
+    TStrict
+  >
 
-  export type Hash = {
-    value: string
-    algo?: string
-  }
+  export type Hash<TStrict extends boolean = false> = Strict<
+    {
+      value: Requirable<string> // Required in spec.
+      algo?: string
+    },
+    TStrict
+  >
 
-  export type Player = {
-    url: string
-    height?: number
-    width?: number
-  }
+  export type Player<TStrict extends boolean = false> = Strict<
+    {
+      url: Requirable<string> // Required in spec.
+      height?: number
+      width?: number
+    },
+    TStrict
+  >
 
-  export type Credit = {
-    value: string
-    role?: string
-    scheme?: string
-  }
+  export type Credit<TStrict extends boolean = false> = Strict<
+    {
+      value: Requirable<string> // Required in spec.
+      role?: string
+      scheme?: string
+    },
+    TStrict
+  >
 
-  export type Copyright = {
-    value: string
-    url?: string
-  }
+  export type Copyright<TStrict extends boolean = false> = Strict<
+    {
+      value: Requirable<string> // Required in spec.
+      url?: string
+    },
+    TStrict
+  >
 
-  export type Text = {
-    value: string
-    type?: string
-    lang?: string
-    start?: string
-    end?: string
-  }
+  export type Text<TStrict extends boolean = false> = Strict<
+    {
+      value: Requirable<string> // Required in spec.
+      type?: string
+      lang?: string
+      start?: string
+      end?: string
+    },
+    TStrict
+  >
 
-  export type Restriction = {
-    value: string
-    relationship: string
-    type?: string
-  }
+  export type Restriction<TStrict extends boolean = false> = Strict<
+    {
+      value: Requirable<string> // Required in spec.
+      relationship: Requirable<string> // Required in spec.
+      type?: string
+    },
+    TStrict
+  >
 
-  export type Community = {
+  export type Community<TStrict extends boolean = false> = {
     starRating?: StarRating
     statistics?: Statistics
-    tags?: Array<Tag>
+    tags?: Array<Tag<TStrict>>
   }
 
   export type StarRating = {
@@ -77,27 +109,39 @@ export namespace MediaNs {
     favorites?: number
   }
 
-  export type Tag = {
-    name: string
-    weight?: number
-  }
+  export type Tag<TStrict extends boolean = false> = Strict<
+    {
+      name: Requirable<string> // Required in spec.
+      weight?: number
+    },
+    TStrict
+  >
 
-  export type Embed = {
-    url: string
-    width?: number
-    height?: number
-    params?: Array<Param>
-  }
+  export type Embed<TStrict extends boolean = false> = Strict<
+    {
+      url: Requirable<string> // Required in spec.
+      width?: number
+      height?: number
+      params?: Array<Param<TStrict>>
+    },
+    TStrict
+  >
 
-  export type Param = {
-    name: string
-    value: string
-  }
+  export type Param<TStrict extends boolean = false> = Strict<
+    {
+      name: Requirable<string> // Required in spec.
+      value: Requirable<string> // Required in spec.
+    },
+    TStrict
+  >
 
-  export type Status = {
-    state: string
-    reason?: string
-  }
+  export type Status<TStrict extends boolean = false> = Strict<
+    {
+      state: Requirable<string> // Required in spec.
+      reason?: string
+    },
+    TStrict
+  >
 
   export type Price = {
     type?: string
@@ -106,22 +150,28 @@ export namespace MediaNs {
     currency?: string
   }
 
-  export type License = {
-    name?: string
+  export type License<TStrict extends boolean = false> = {
+    name?: string // At least one of name or href is required in spec.
     type?: string
-    href?: string
-  } & ({ name: string } | { href: string })
+    href?: string // At least one of name or href is required in spec.
+  } & (TStrict extends true ? { name: string } | { href: string } : unknown)
 
-  export type SubTitle = {
-    type?: string
-    lang?: string
-    href: string
-  }
+  export type SubTitle<TStrict extends boolean = false> = Strict<
+    {
+      type?: string
+      lang?: string
+      href: Requirable<string> // Required in spec.
+    },
+    TStrict
+  >
 
-  export type PeerLink = {
-    type?: string
-    href: string
-  }
+  export type PeerLink<TStrict extends boolean = false> = Strict<
+    {
+      type?: string
+      href: Requirable<string> // Required in spec.
+    },
+    TStrict
+  >
 
   export type Rights = {
     status?: string
@@ -143,35 +193,35 @@ export namespace MediaNs {
   }
 
   /** @internal Shared elements available across Content, Group, ItemOrFeed types. */
-  export type CommonElements = {
-    ratings?: Array<Rating>
-    title?: TitleOrDescription
-    description?: TitleOrDescription
+  export type CommonElements<TStrict extends boolean = false> = {
+    ratings?: Array<Rating<TStrict>>
+    title?: TitleOrDescription<TStrict>
+    description?: TitleOrDescription<TStrict>
     keywords?: Array<string>
-    thumbnails?: Array<Thumbnail>
-    categories?: Array<Category>
-    hashes?: Array<Hash>
-    player?: Player
-    credits?: Array<Credit>
-    copyright?: Copyright
-    texts?: Array<Text>
-    restrictions?: Array<Restriction>
-    community?: Community
+    thumbnails?: Array<Thumbnail<TStrict>>
+    categories?: Array<Category<TStrict>>
+    hashes?: Array<Hash<TStrict>>
+    player?: Player<TStrict>
+    credits?: Array<Credit<TStrict>>
+    copyright?: Copyright<TStrict>
+    texts?: Array<Text<TStrict>>
+    restrictions?: Array<Restriction<TStrict>>
+    community?: Community<TStrict>
     comments?: Array<string>
-    embed?: Embed
+    embed?: Embed<TStrict>
     responses?: Array<string>
     backLinks?: Array<string>
-    status?: Status
+    status?: Status<TStrict>
     prices?: Array<Price>
-    licenses?: Array<License>
-    subTitles?: Array<SubTitle>
-    peerLinks?: Array<PeerLink>
+    licenses?: Array<License<TStrict>>
+    subTitles?: Array<SubTitle<TStrict>>
+    peerLinks?: Array<PeerLink<TStrict>>
     locations?: Array<Location>
     rights?: Rights
     scenes?: Array<Scene>
   }
 
-  export type Content = {
+  export type Content<TStrict extends boolean = false> = {
     url?: string
     fileSize?: number
     type?: string
@@ -186,18 +236,15 @@ export namespace MediaNs {
     height?: number
     width?: number
     lang?: string
-  } & CommonElements
+  } & CommonElements<TStrict>
 
-  export type Group = {
-    contents?: Array<Content>
-  } & CommonElements
+  export type Group<TStrict extends boolean = false> = {
+    contents?: Array<Content<TStrict>>
+  } & CommonElements<TStrict>
 
-  export type ItemOrFeed = {
-    groups?: Array<Group>
-    contents?: Array<Content>
-
-    /** @deprecated Use `groups` (array) instead. Multiple media:group elements are allowed per specification. */
-    group?: Group
-  } & CommonElements
+  export type ItemOrFeed<TStrict extends boolean = false> = {
+    groups?: Array<Group<TStrict>>
+    contents?: Array<Content<TStrict>>
+  } & CommonElements<TStrict>
 }
 // #endregion reference

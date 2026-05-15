@@ -2318,10 +2318,6 @@ describe('parseLiveItem', () => {
           geo: '40.7128,-74.0060',
         },
       ],
-      location: {
-        display: 'New York, NY',
-        geo: '40.7128,-74.0060',
-      },
     }
 
     expect(parseLiveItem(value)).toEqual(expected)
@@ -3738,22 +3734,6 @@ describe('retrieveItem', () => {
         purpose: 'description',
       },
     ],
-    location: {
-      display: 'New York, NY',
-      geo: '40.7128,-74.0060',
-    },
-    value: {
-      type: 'lightning',
-      method: 'keysend',
-      suggested: 0.00000005,
-      valueRecipients: [
-        {
-          type: 'node',
-          address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
-          split: 100,
-        },
-      ],
-    },
   }
 
   it('should parse a complete item with all podcast namespace elements', () => {
@@ -4186,10 +4166,6 @@ describe('retrieveFeed', () => {
         geo: '37.7749,-122.4194',
       },
     ],
-    location: {
-      display: 'San Francisco, CA',
-      geo: '37.7749,-122.4194',
-    },
     trailers: [
       {
         display: 'Season 2 Trailer',
@@ -4218,18 +4194,6 @@ describe('retrieveFeed', () => {
         ],
       },
     ],
-    value: {
-      type: 'lightning',
-      method: 'keysend',
-      suggested: 0.00000005,
-      valueRecipients: [
-        {
-          type: 'node',
-          address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
-          split: 100,
-        },
-      ],
-    },
     medium: 'podcast',
     images: [
       {

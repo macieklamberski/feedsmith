@@ -1,39 +1,109 @@
-import type { DateLike } from './common/types.js'
-import type { Atom as AtomTypes } from './feeds/atom/common/types.js'
-import type { Json as JsonTypes } from './feeds/json/common/types.js'
-import type { Rdf as RdfTypes } from './feeds/rdf/common/types.js'
-import type { Rss as RssTypes } from './feeds/rss/common/types.js'
-import type { Opml as OpmlTypes } from './opml/common/types.js'
-
+export { DetectError, GenerateError, MalformedError, ParseError } from './common/errors.js'
+export type { AnyFeed } from './common/parse.js'
 export { parse as parseFeed } from './common/parse.js'
-
-/** @deprecated Use `import type { Atom } from 'feedsmith/types'` and access as `Atom.Feed` instead. */
-export type AtomFeed<TDate extends DateLike> = AtomTypes.Feed<TDate>
+export type { DateLike, XmlStylesheet } from './common/types.js'
+export type { AtomFeed } from './feeds/atom/common/types.js'
 export { detect as detectAtomFeed } from './feeds/atom/detect/index.js'
 export { generate as generateAtomFeed } from './feeds/atom/generate/index.js'
 export { parse as parseAtomFeed } from './feeds/atom/parse/index.js'
-
-/** @deprecated Use `import type { Json } from 'feedsmith/types'` and access as `Json.Feed` instead. */
-export type JsonFeed<TDate extends DateLike> = JsonTypes.Feed<TDate>
+export type { JsonFeed } from './feeds/json/common/types.js'
 export { detect as detectJsonFeed } from './feeds/json/detect/index.js'
 export { generate as generateJsonFeed } from './feeds/json/generate/index.js'
 export { parse as parseJsonFeed } from './feeds/json/parse/index.js'
-
-/** @deprecated Use `import type { Rdf } from 'feedsmith/types'` and access as `Rdf.Feed` instead. */
-export type RdfFeed<TDate extends DateLike> = RdfTypes.Feed<TDate>
+export type { RdfFeed } from './feeds/rdf/common/types.js'
 export { detect as detectRdfFeed } from './feeds/rdf/detect/index.js'
 export { parse as parseRdfFeed } from './feeds/rdf/parse/index.js'
-
-/** @deprecated Use `import type { Rss } from 'feedsmith/types'` and access as `Rss.Feed` instead. */
-export type RssFeed<TDate extends DateLike> = RssTypes.Feed<TDate>
+export type { RssFeed } from './feeds/rss/common/types.js'
 export { detect as detectRssFeed } from './feeds/rss/detect/index.js'
 export { generate as generateRssFeed } from './feeds/rss/generate/index.js'
 export { parse as parseRssFeed } from './feeds/rss/parse/index.js'
-
-/** @deprecated Use `import type { Opml } from 'feedsmith/types'` and access as `Opml.Document` instead. */
-export type Opml<
-  TDate extends DateLike,
-  A extends ReadonlyArray<string> = ReadonlyArray<string>,
-> = OpmlTypes.Document<TDate, A>
+export type { AcastNs } from './namespaces/acast/common/types.js'
+export type { AdminNs } from './namespaces/admin/common/types.js'
+export type { AppNs } from './namespaces/app/common/types.js'
+export type { ArxivNs } from './namespaces/arxiv/common/types.js'
+export type { AtomNs } from './namespaces/atom/common/types.js'
+export type { BlogChannelNs } from './namespaces/blogchannel/common/types.js'
+export type { CcNs } from './namespaces/cc/common/types.js'
+export type { ContentNs } from './namespaces/content/common/types.js'
+export type { CreativeCommonsNs } from './namespaces/creativecommons/common/types.js'
+export type { DcNs } from './namespaces/dc/common/types.js'
+export type { DcTermsNs } from './namespaces/dcterms/common/types.js'
+export type { FeedPressNs } from './namespaces/feedpress/common/types.js'
+export type { GeoNs } from './namespaces/geo/common/types.js'
+export type { GeoRssNs } from './namespaces/georss/common/types.js'
+export type { GooglePlayNs } from './namespaces/googleplay/common/types.js'
+export type { ItunesNs } from './namespaces/itunes/common/types.js'
+export type { MediaNs } from './namespaces/media/common/types.js'
+export type { OpenSearchNs } from './namespaces/opensearch/common/types.js'
+export type { PingbackNs } from './namespaces/pingback/common/types.js'
+export type { PodcastNs } from './namespaces/podcast/common/types.js'
+export type { PrismNs } from './namespaces/prism/common/types.js'
+export type { PscNs } from './namespaces/psc/common/types.js'
+export type { RawVoiceNs } from './namespaces/rawvoice/common/types.js'
+export type { RdfNs } from './namespaces/rdf/common/types.js'
+export type { SlashNs } from './namespaces/slash/common/types.js'
+export type { SourceNs } from './namespaces/source/common/types.js'
+export type { SpotifyNs } from './namespaces/spotify/common/types.js'
+export type { SyNs } from './namespaces/sy/common/types.js'
+export type { ThrNs } from './namespaces/thr/common/types.js'
+export type { TrackbackNs } from './namespaces/trackback/common/types.js'
+export type { WfwNs } from './namespaces/wfw/common/types.js'
+export type { XmlNs } from './namespaces/xml/common/types.js'
+export type { YtNs } from './namespaces/yt/common/types.js'
+export type { Opml } from './opml/common/types.js'
 export { generate as generateOpml } from './opml/generate/index.js'
 export { parse as parseOpml } from './opml/parse/index.js'
+
+// Deprecated aliases — declared here so JSDoc survives tsdown's .d.ts bundling.
+// Remove this block in 4.x.
+
+import type { AtomFeed } from './feeds/atom/common/types.js'
+import type { JsonFeed } from './feeds/json/common/types.js'
+import type { RdfFeed } from './feeds/rdf/common/types.js'
+import type { RssFeed } from './feeds/rss/common/types.js'
+
+/** @deprecated Use `RssFeed` instead. Will be removed in the next major version. */
+export namespace Rss {
+  export type Person = RssFeed.Person
+  export type Category<TStrict extends boolean = false> = RssFeed.Category<TStrict>
+  export type Cloud<TStrict extends boolean = false> = RssFeed.Cloud<TStrict>
+  export type Image<TStrict extends boolean = false> = RssFeed.Image<TStrict>
+  export type TextInput<TStrict extends boolean = false> = RssFeed.TextInput<TStrict>
+  export type Enclosure<TStrict extends boolean = false> = RssFeed.Enclosure<TStrict>
+  export type SkipHours = RssFeed.SkipHours
+  export type SkipDays = RssFeed.SkipDays
+  export type Guid<TStrict extends boolean = false> = RssFeed.Guid<TStrict>
+  export type Source<TStrict extends boolean = false> = RssFeed.Source<TStrict>
+  export type Item<TDate, TStrict extends boolean = false> = RssFeed.Item<TDate, TStrict>
+  export type Feed<TDate, TStrict extends boolean = false> = RssFeed.Feed<TDate, TStrict>
+}
+
+/** @deprecated Use `AtomFeed` instead. Will be removed in the next major version. */
+export namespace Atom {
+  export type Text = AtomFeed.Text
+  export type Content = AtomFeed.Content
+  export type Link<TDate, TStrict extends boolean = false> = AtomFeed.Link<TDate, TStrict>
+  export type Person<TStrict extends boolean = false> = AtomFeed.Person<TStrict>
+  export type Category<TStrict extends boolean = false> = AtomFeed.Category<TStrict>
+  export type Generator<TStrict extends boolean = false> = AtomFeed.Generator<TStrict>
+  export type Source<TDate, TStrict extends boolean = false> = AtomFeed.Source<TDate, TStrict>
+  export type Entry<TDate, TStrict extends boolean = false> = AtomFeed.Entry<TDate, TStrict>
+  export type Feed<TDate, TStrict extends boolean = false> = AtomFeed.Feed<TDate, TStrict>
+}
+
+/** @deprecated Use `JsonFeed` instead. Will be removed in the next major version. */
+export namespace Json {
+  export type Author = JsonFeed.Author
+  export type Attachment<TStrict extends boolean = false> = JsonFeed.Attachment<TStrict>
+  export type Item<TDate, TStrict extends boolean = false> = JsonFeed.Item<TDate, TStrict>
+  export type Hub<TStrict extends boolean = false> = JsonFeed.Hub<TStrict>
+  export type Feed<TDate, TStrict extends boolean = false> = JsonFeed.Feed<TDate, TStrict>
+}
+
+/** @deprecated Use `RdfFeed` instead. Will be removed in the next major version. */
+export namespace Rdf {
+  export type Image<TStrict extends boolean = false> = RdfFeed.Image<TStrict>
+  export type TextInput<TStrict extends boolean = false> = RdfFeed.TextInput<TStrict>
+  export type Item<TDate, TStrict extends boolean = false> = RdfFeed.Item<TDate, TStrict>
+  export type Feed<TDate, TStrict extends boolean = false> = RdfFeed.Feed<TDate, TStrict>
+}

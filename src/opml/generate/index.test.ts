@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'bun:test'
+import { locales } from '../../common/config.js'
+import { GenerateError } from '../../common/errors.js'
 import { generate } from './index.js'
 
 describe('generate', () => {
@@ -216,14 +218,18 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should throw error for invalid OPML structure', () => {
-    const value = {
-      head: {
-        title: 'Invalid OPML',
-      },
-    }
+  describe('error types', () => {
+    it('should throw GenerateError for invalid OPML structure', () => {
+      const value = {
+        head: {
+          title: 'Invalid OPML',
+        },
+      }
+      const throwing = () => generate(value)
 
-    expect(() => generate(value)).toThrow()
+      expect(throwing).toThrow(GenerateError)
+      expect(throwing).toThrow(locales.invalidInputOpml)
+    })
   })
 
   it('should properly encode special characters in attributes', () => {
@@ -270,8 +276,74 @@ describe('generate', () => {
   })
 })
 
-describe('generate with lenient mode', () => {
-  it('should accept partial feeds with lenient: true', () => {
+describe('strict mode', () => {
+  it('should require outline text in strict mode', () => {
+    generate(
+      {
+        body: {
+          // @ts-expect-error: This is for testing purposes.
+          outlines: [{ type: 'rss', xmlUrl: 'https://example.com/feed.xml' }],
+        },
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept outlines with text in strict mode', () => {
+    generate(
+      {
+        body: {
+          outlines: [{ text: 'Feed', type: 'rss', xmlUrl: 'https://example.com/feed.xml' }],
+        },
+      },
+      { strict: true },
+    )
+  })
+
+  it('should require nested outline text in strict mode', () => {
+    generate(
+      {
+        body: {
+          outlines: [
+            {
+              text: 'Category',
+              // @ts-expect-error: This is for testing purposes.
+              outlines: [{ type: 'rss', xmlUrl: 'https://example.com/feed.xml' }],
+            },
+          ],
+        },
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept nested outlines with text in strict mode', () => {
+    generate(
+      {
+        body: {
+          outlines: [
+            {
+              text: 'Category',
+              outlines: [{ text: 'Feed', type: 'rss', xmlUrl: 'https://example.com/feed.xml' }],
+            },
+          ],
+        },
+      },
+      { strict: true },
+    )
+  })
+
+  it('should accept partial document in lenient mode', () => {
+    generate({
+      body: {
+        outlines: [{ type: 'rss', xmlUrl: 'https://example.com/feed.xml' }],
+      },
+    })
+  })
+})
+
+describe('generate with partial and string dates', () => {
+  it('should accept partial documents', () => {
     const value = {
       body: {
         outlines: [{ text: 'Test Outline' }],
@@ -285,10 +357,10 @@ describe('generate with lenient mode', () => {
 </opml>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should accept feeds with string dates in lenient mode', () => {
+  it('should accept string dates', () => {
     const value = {
       head: {
         title: 'Test OPML',
@@ -312,10 +384,10 @@ describe('generate with lenient mode', () => {
 </opml>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
-  it('should preserve invalid date strings in lenient mode', () => {
+  it('should preserve invalid date strings', () => {
     const value = {
       head: {
         title: 'Test OPML',
@@ -339,7 +411,7 @@ describe('generate with lenient mode', () => {
 </opml>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
+    expect(generate(value)).toEqual(expected)
   })
 
   describe('custom attributes', () => {
