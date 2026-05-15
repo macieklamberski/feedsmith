@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test'
 import { locales } from '../../../common/config.js'
 import { GenerateError } from '../../../common/errors.js'
 import type { DateLike } from '../../../common/types.js'
-import type { Rss } from '../common/types.js'
+import type { RssFeed } from '../common/types.js'
 import { generate } from './index.js'
 
 describe('generate', () => {
@@ -1232,7 +1232,7 @@ describe('strict mode', () => {
 
 describe('generate edge cases', () => {
   it('should accept partial feeds', () => {
-    const value: Rss.Feed<DateLike> = {
+    const value: RssFeed.Feed<DateLike> = {
       title: 'Test Feed',
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
@@ -1247,7 +1247,7 @@ describe('generate edge cases', () => {
   })
 
   it('should accept feeds with string dates', () => {
-    const value: Rss.Feed<DateLike> = {
+    const value: RssFeed.Feed<DateLike> = {
       title: 'Test Feed',
       description: 'Test Description',
       pubDate: '2023-01-01T00:00:00.000Z',
@@ -1276,7 +1276,7 @@ describe('generate edge cases', () => {
   })
 
   it('should preserve invalid date strings', () => {
-    const value: Rss.Feed<DateLike> = {
+    const value: RssFeed.Feed<DateLike> = {
       title: 'Test Feed',
       description: 'Test Description',
       pubDate: 'not-a-valid-date',
@@ -1305,7 +1305,7 @@ describe('generate edge cases', () => {
   })
 
   it('should handle deeply nested partial objects', () => {
-    const value: Rss.Feed<DateLike> = {
+    const value: RssFeed.Feed<DateLike> = {
       title: 'Test Feed',
       items: [
         {
@@ -1342,7 +1342,7 @@ describe('generate edge cases', () => {
   })
 
   it('should handle mixed Date objects and string dates', () => {
-    const value: Rss.Feed<DateLike> = {
+    const value: RssFeed.Feed<DateLike> = {
       title: 'Mixed Dates Feed',
       description: 'Feed with both Date objects and strings',
       pubDate: new Date('2023-01-01T00:00:00.000Z'),

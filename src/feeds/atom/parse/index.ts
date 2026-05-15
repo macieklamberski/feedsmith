@@ -2,14 +2,14 @@ import { locales } from '../../../common/config.js'
 import { DetectError, MalformedError, ParseError } from '../../../common/errors.js'
 import type { ParseMainOptions, Unreliable } from '../../../common/types.js'
 import { detectAtomFeed } from '../../../index.js'
-import type { Atom } from '../common/types.js'
+import type { AtomFeed } from '../common/types.js'
 import { normalizeNamespaces, parser } from './config.js'
 import { retrieveFeed } from './utils.js'
 
 export const parse = <TDate = string>(
   value: unknown,
   options?: ParseMainOptions<TDate>,
-): Atom.Feed<TDate> => {
+): AtomFeed.Feed<TDate> => {
   if (!detectAtomFeed(value)) {
     throw new DetectError(locales.invalidFeedFormat)
   }
@@ -29,5 +29,5 @@ export const parse = <TDate = string>(
     throw new ParseError(locales.invalidFeedFormat)
   }
 
-  return parsed as Atom.Feed<TDate>
+  return parsed as AtomFeed.Feed<TDate>
 }

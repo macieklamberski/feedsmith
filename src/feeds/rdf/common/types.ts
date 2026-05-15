@@ -21,7 +21,7 @@ import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateAny>>
 
 // #region reference
-export namespace Rdf {
+export namespace RdfFeed {
   export type Image<TStrict extends boolean = false> = Strict<
     {
       title: Requirable<string> // Required in spec.

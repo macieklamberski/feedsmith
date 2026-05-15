@@ -33,6 +33,7 @@ Use this checklist to ensure a complete migration:
 - Replace Podcast namespace deprecated fields (`location` → `locations`, `value` → `values`, `chats` → `chat`)
 - Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
 - Replace Dublin Core Terms singular fields with plural arrays (e.g., `title` → `titles`)
+- Rename type imports: `Rss` → `RssFeed`, `Atom` → `AtomFeed`, `Json` → `JsonFeed`, `Rdf` → `RdfFeed`
 - Test feed generation to ensure output is correct
 - Update error handling to use `DetectError`, `MalformedError`, `ParseError`, and `GenerateError` instead of generic `Error`
 
@@ -489,15 +490,55 @@ See [Working with TypeScript](/reference/typescript#importing-namespace-types) f
 Common utility types `DateLike` and `XmlStylesheet` are now exported from the main package:
 
 ```typescript
-import type { Rss, DateLike, XmlStylesheet } from 'feedsmith'
+import type { RssFeed, DateLike, XmlStylesheet } from 'feedsmith'
 
-type RssMetadata = Omit<Rss.Feed<DateLike>, 'items'>
+type RssMetadata = Omit<RssFeed.Feed<DateLike>, 'items'>
 
 const stylesheet: XmlStylesheet = {
   type: 'text/xsl',
   href: '/feed.xsl',
 }
 ```
+
+### Format Type Namespaces Renamed
+
+The four format-level type namespaces have been renamed to align with their parse function names:
+
+| Before (2.x) | After (3.x) |
+|---|---|
+| `Rss` | `RssFeed` |
+| `Atom` | `AtomFeed` |
+| `Json` | `JsonFeed` |
+| `Rdf` | `RdfFeed` |
+
+```typescript
+// Before (2.x)
+import type { Rss, Atom } from 'feedsmith/types'
+const feed: Rss.Feed<string> = parseRssFeed(xml)
+const entry: Atom.Entry<string> = entries[0]
+
+// After (3.x)
+import type { RssFeed, AtomFeed } from 'feedsmith'
+const feed: RssFeed.Feed<string> = parseRssFeed(xml)
+const entry: AtomFeed.Entry<string> = entries[0]
+```
+
+Nested type access works identically: `RssFeed.Item`, `AtomFeed.Link`, `JsonFeed.Author`, `RdfFeed.Image`, etc. The shape of each namespace is unchanged — only the outer name is different.
+
+The previous names (`Rss`, `Atom`, `Json`, `Rdf`) remain available as deprecated aliases and will be removed in 4.x.
+
+### `parseFeed` Return Type Now Exported as `AnyFeed`
+
+The universal `parseFeed` function now has a publicly exported return type, `AnyFeed`, so you can annotate the result directly:
+
+```typescript
+import { parseFeed, type AnyFeed } from 'feedsmith'
+
+const result: AnyFeed = parseFeed(content)
+const { format, feed } = result
+```
+
+The function itself, its options, and its return shape are unchanged.
 
 ### Custom Date Parsing
 

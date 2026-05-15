@@ -12,7 +12,7 @@ export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateA
 export type GenerateUtil<V> = BaseGenerateUtil<V>
 
 // #region reference
-export namespace Json {
+export namespace JsonFeed {
   export type Author = {
     name?: string
     url?: string

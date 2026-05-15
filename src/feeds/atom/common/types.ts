@@ -44,7 +44,7 @@ export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateA
 export type GenerateUtil<V> = BaseGenerateUtil<V, GenerateMainOptions>
 
 // #region reference
-export namespace Atom {
+export namespace AtomFeed {
   export type Text = {
     value: string
     type?: string
