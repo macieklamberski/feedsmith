@@ -34,7 +34,6 @@ Use this checklist to ensure a complete migration:
 - Replace Dublin Core singular fields with plural arrays (e.g., `title` → `titles`)
 - Replace Dublin Core Terms singular fields with plural arrays (e.g., `title` → `titles`)
 - Rename type imports: `Rss` → `RssFeed`, `Atom` → `AtomFeed`, `Json` → `JsonFeed`, `Rdf` → `RdfFeed`
-- Replace `parseFeed` calls with `parseAnyFeed`, optionally annotate the result with the new `AnyFeed` type
 - Test feed generation to ensure output is correct
 - Update error handling to use `DetectError`, `MalformedError`, `ParseError`, and `GenerateError` instead of generic `Error`
 
@@ -528,22 +527,18 @@ Nested type access works identically: `RssFeed.Item`, `AtomFeed.Link`, `JsonFeed
 
 The previous names (`Rss`, `Atom`, `Json`, `Rdf`) remain available as deprecated aliases and will be removed in 4.x.
 
-### `parseFeed` Renamed to `parseAnyFeed`
+### `parseFeed` Return Type Now Exported as `AnyFeed`
 
-The universal parser is now `parseAnyFeed`, and its return type is exported as `AnyFeed`:
+The universal `parseFeed` function now has a publicly exported return type, `AnyFeed`, so you can annotate the result directly:
 
 ```typescript
-// Before (2.x)
-import { parseFeed } from 'feedsmith'
-const { format, feed } = parseFeed(content)
+import { parseFeed, type AnyFeed } from 'feedsmith'
 
-// After (3.x)
-import { parseAnyFeed, type AnyFeed } from 'feedsmith'
-const result: AnyFeed = parseAnyFeed(content)
+const result: AnyFeed = parseFeed(content)
 const { format, feed } = result
 ```
 
-The function's behavior, options, and return shape are unchanged. `parseFeed` remains available as a deprecated alias and will be removed in 4.x.
+The function itself, its options, and its return shape are unchanged.
 
 ### Custom Date Parsing
 

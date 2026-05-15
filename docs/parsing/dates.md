@@ -11,9 +11,9 @@ The function receives the raw (trimmed) date string and its return value replace
 ### Using `Date` constructor
 
 ```typescript
-import { parseAnyFeed } from 'feedsmith'
+import { parseFeed } from 'feedsmith'
 
-const { feed } = parseAnyFeed(xml, {
+const { feed } = parseFeed(xml, {
   parseDateFn: (raw) => new Date(raw),
 })
 

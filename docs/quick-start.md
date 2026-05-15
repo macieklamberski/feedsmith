@@ -37,22 +37,22 @@ Or using CDN:
 
 ```html
 <script type="module">
-  import { parseAnyFeed } from 'https://esm.sh/feedsmith@latest'
+  import { parseFeed } from 'https://esm.sh/feedsmith@latest'
 
-  const { format, feed } = parseAnyFeed(feedContent)
+  const { format, feed } = parseFeed(feedContent)
   console.log(feed.title)
 </script>
 ```
 
 ## Parse Any Feed
 
-The simplest way to parse any feed is to use the universal `parseAnyFeed` function:
+The simplest way to parse any feed is to use the universal `parseFeed` function:
 
 ```typescript
-import { parseAnyFeed } from 'feedsmith'
+import { parseFeed } from 'feedsmith'
 
 // Works with RSS, Atom, RDF, and JSON Feed
-const { format, feed } = parseAnyFeed(feedContent)
+const { format, feed } = parseFeed(feedContent)
 
 console.log('Feed format:', format) // rss, atom, json, rdf
 console.log('Feed title:', feed.title)

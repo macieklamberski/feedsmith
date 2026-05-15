@@ -85,12 +85,12 @@ const xml = generateRssFeed(feed)
 
 ## Universal Parser Return Type
 
-The universal `parseAnyFeed` function returns a discriminated union typed as `AnyFeed`:
+The universal `parseFeed` function returns a discriminated union typed as `AnyFeed`:
 
 ```typescript
-import { type AnyFeed, parseAnyFeed } from 'feedsmith'
+import { type AnyFeed, parseFeed } from 'feedsmith'
 
-const result: AnyFeed = parseAnyFeed(content)
+const result: AnyFeed = parseFeed(content)
 
 if (result.format === 'rss') {
   result.feed // RssFeed.Feed<string>

@@ -54,13 +54,13 @@ try {
 
 ## Universal Parser
 
-The universal `parseAnyFeed` function throws the same error types:
+The universal `parseFeed` function throws the same error types:
 
 ```typescript
-import { parseAnyFeed, DetectError, MalformedError, ParseError } from 'feedsmith'
+import { parseFeed, DetectError, MalformedError, ParseError } from 'feedsmith'
 
 try {
-  parseAnyFeed('<not-a-feed></not-a-feed>')
+  parseFeed('<not-a-feed></not-a-feed>')
 } catch (error) {
   if (error instanceof DetectError) {
     // Unrecognized feed format.
@@ -77,10 +77,10 @@ try {
 All error classes extend the built-in `Error`, so `instanceof Error` checks work as expected. This can be useful for catching any parsing error alongside other errors in a single handler:
 
 ```typescript
-import { parseAnyFeed, DetectError, MalformedError, ParseError } from 'feedsmith'
+import { parseFeed, DetectError, MalformedError, ParseError } from 'feedsmith'
 
 try {
-  parseAnyFeed(input)
+  parseFeed(input)
 } catch (error) {
   if (error instanceof DetectError) {
     // Unrecognized feed format.

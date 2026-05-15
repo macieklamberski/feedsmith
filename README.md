@@ -123,13 +123,13 @@ npm install feedsmith
 
 ### Parse Any Feed
 
-The simplest way to parse any feed is to use the universal `parseAnyFeed` function:
+The simplest way to parse any feed is to use the universal `parseFeed` function:
 
 ```typescript
-import { parseAnyFeed } from 'feedsmith'
+import { parseFeed } from 'feedsmith'
 
 // Works with RSS, Atom, RDF, and JSON Feed
-const { format, feed } = parseAnyFeed(feedContent)
+const { format, feed } = parseFeed(feedContent)
 
 console.log('Feed format:', format) // rss, atom, json, rdf
 console.log('Feed title:', feed.title)
@@ -205,10 +205,10 @@ console.log(rss) // Complete RSS XML
 If the feed is unrecognized or invalid, an `Error` will be thrown with a descriptive message.
 
 ```typescript
-import { parseAnyFeed, parseJsonFeed } from 'feedsmith'
+import { parseFeed, parseJsonFeed } from 'feedsmith'
 
 try {
-  const universalFeed = parseAnyFeed('<not-a-feed></not-a-feed>')
+  const universalFeed = parseFeed('<not-a-feed></not-a-feed>')
 } catch (error) {
   // Error: Unrecognized feed format
 }

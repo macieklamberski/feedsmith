@@ -1,6 +1,6 @@
 export { DetectError, GenerateError, MalformedError, ParseError } from './common/errors.js'
 export type { AnyFeed } from './common/parse.js'
-export { parse as parseAnyFeed } from './common/parse.js'
+export { parse as parseFeed } from './common/parse.js'
 export type { DateLike, XmlStylesheet } from './common/types.js'
 export type { AtomFeed } from './feeds/atom/common/types.js'
 export { detect as detectAtomFeed } from './feeds/atom/detect/index.js'
@@ -55,9 +55,8 @@ export { generate as generateOpml } from './opml/generate/index.js'
 export { parse as parseOpml } from './opml/parse/index.js'
 
 // Deprecated aliases — declared here so JSDoc survives tsdown's .d.ts bundling.
-// Remove this block in 4.x along with `parseFeed` below.
+// Remove this block in 4.x.
 
-import { parse } from './common/parse.js'
 import type { AtomFeed } from './feeds/atom/common/types.js'
 import type { JsonFeed } from './feeds/json/common/types.js'
 import type { RdfFeed } from './feeds/rdf/common/types.js'
@@ -108,6 +107,3 @@ export namespace Rdf {
   export type Item<TDate, TStrict extends boolean = false> = RdfFeed.Item<TDate, TStrict>
   export type Feed<TDate, TStrict extends boolean = false> = RdfFeed.Feed<TDate, TStrict>
 }
-
-/** @deprecated Use `parseAnyFeed` instead. Will be removed in the next major version. */
-export const parseFeed: typeof parse = (value, options) => parse(value, options)
