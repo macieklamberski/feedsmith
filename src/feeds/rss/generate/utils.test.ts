@@ -893,8 +893,8 @@ describe('generateItem', () => {
       sourceNs: {
         markdown: '# Example markdown content',
         outlines: ['<outline text="Section 1"/>', '<outline text="Section 2"/>'],
-        localTime: '2024-01-15 10:30:00',
         linkFull: 'https://example.com/full-article',
+        inReplyTo: { value: 'did:plc:iwl32vekohccji6khfdt3clw', isPermaLink: false },
       },
     }
     const expected = {
@@ -904,8 +904,11 @@ describe('generateItem', () => {
         { '#cdata': '<outline text="Section 1"/>' },
         { '#cdata': '<outline text="Section 2"/>' },
       ],
-      'source:localTime': '2024-01-15 10:30:00',
       'source:linkFull': 'https://example.com/full-article',
+      'source:inReplyTo': {
+        '#text': 'did:plc:iwl32vekohccji6khfdt3clw',
+        '@isPermaLink': false,
+      },
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -1518,6 +1521,7 @@ describe('generateFeed', () => {
         accounts: [{ service: 'twitter', value: 'johndoe' }, { service: 'github' }],
         likes: { server: 'http://likes.example.com/' },
         blogroll: 'https://example.com/blogroll.opml',
+        localTime: '2024-01-15 10:30:00',
       },
     }
     const expected = {
@@ -1533,6 +1537,7 @@ describe('generateFeed', () => {
           ],
           'source:likes': { '@server': 'http://likes.example.com/' },
           'source:blogroll': 'https://example.com/blogroll.opml',
+          'source:localTime': '2024-01-15 10:30:00',
         },
       },
     }
