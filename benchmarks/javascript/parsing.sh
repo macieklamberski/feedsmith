@@ -5,6 +5,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FILES_DIR="$SCRIPT_DIR/../files"
 RUNNER="$SCRIPT_DIR/runner.ts"
+TABULATE="$SCRIPT_DIR/../tabulate.ts"
 
 # Runs one hyperfine comparison for a fixture directory. `limit` caps the number of files
 # (empty means all). Each remaining argument is a "key:label" pair, where `key` is the
@@ -26,7 +27,11 @@ run_benchmark() {
   echo ""
   echo "⏳ Running: $description"
 
-  hyperfine --warmup 3 --min-runs 10 "${args[@]}"
+  local json
+  json=$(mktemp)
+  hyperfine --warmup 3 --min-runs 10 --export-json "$json" "${args[@]}"
+  bun "$TABULATE" "$json"
+  rm -f "$json"
 }
 
 # Libraries that parse RSS/Atom/RDF feeds, in the same order as the previous benchmark.
@@ -62,10 +67,10 @@ OPML_LIBS=(
   "feedsmith:feedsmith *"
 )
 
-run_benchmark "rss-small" "rss" "" "RSS feed parsing (100 files × 100KB–5MB)" "${RSS_LIBS[@]}"
 run_benchmark "rss-big" "rss" "10" "RSS feed parsing (10 files × 5MB–50MB)" "${RSS_LIBS[@]}"
-run_benchmark "atom-small" "atom" "" "Atom feed parsing (100 files × 100KB–5MB)" "${ATOM_LIBS[@]}"
+run_benchmark "rss-small" "rss" "" "RSS feed parsing (100 files × 100KB–5MB)" "${RSS_LIBS[@]}"
 run_benchmark "atom-big" "atom" "10" "Atom feed parsing (10 files × 5MB–50MB)" "${ATOM_LIBS[@]}"
+run_benchmark "atom-small" "atom" "" "Atom feed parsing (100 files × 100KB–5MB)" "${ATOM_LIBS[@]}"
 run_benchmark "rdf" "rdf" "" "RDF feed parsing (97 files × 100KB–5MB)" "${ATOM_LIBS[@]}"
 run_benchmark "opml" "opml" "" "OPML parsing (50 files × 100KB–500KB)" "${OPML_LIBS[@]}"
 
