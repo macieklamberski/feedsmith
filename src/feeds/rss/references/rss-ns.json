@@ -1050,8 +1050,8 @@
           "<outline text=\"Introduction\"><outline text=\"What are namespaces?\"/></outline>",
           "<outline text=\"Implementation\"><outline text=\"RSS Integration\"/></outline>"
         ],
-        "localTime": "2023-12-25 10:30:00",
-        "linkFull": "http://example.org/item/1/understanding-xml-namespaces-complete-guide"
+        "linkFull": "http://example.org/item/1/understanding-xml-namespaces-complete-guide",
+        "inReplyTo": { "value": "did:plc:iwl32vekohccji6khfdt3clw", "isPermaLink": false }
       },
       "creativeCommons": {
         "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]
@@ -2124,7 +2124,8 @@
     ],
     "cloud": "https://cloudserver.example.com/notify",
     "blogroll": "https://blog.example.com/blogroll.opml",
-    "self": "http://example.com/feed.xml"
+    "self": "http://example.com/feed.xml",
+    "localTime": "2023-12-25 10:30:00"
   },
   "blogChannel": {
     "blogRoll": "http://example.com/blogroll.opml",
