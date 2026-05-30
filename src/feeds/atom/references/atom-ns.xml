@@ -19,6 +19,7 @@
       xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
       xmlns:admin="http://webns.net/mvcb/"
       xmlns:yt="http://www.youtube.com/xml/schemas/2015"
+      xmlns:opds="http://opds-spec.org/2010/catalog"
       xmlns:georss="http://www.georss.org/georss"
       xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
       xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -578,5 +579,22 @@
     <!-- YouTube Namespace: Entry Level Tags -->
     <yt:videoId>dQw4w9WgXcQ</yt:videoId>
     <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
+
+    <!-- OPDS Namespace: Entry Level Tags (Link Extensions) -->
+    <link href="https://example.com/book.epub" rel="http://opds-spec.org/acquisition/buy" type="application/epub+zip">
+      <opds:price currencycode="USD">9.99</opds:price>
+      <opds:price currencycode="EUR">8.49</opds:price>
+    </link>
+    <link href="https://example.com/borrow" rel="http://opds-spec.org/acquisition/borrow" type="application/atom+xml;type=entry;profile=opds-catalog">
+      <opds:indirectAcquisition type="application/vnd.adobe.adept+xml">
+        <opds:indirectAcquisition type="application/epub+zip"/>
+      </opds:indirectAcquisition>
+    </link>
+    <link href="https://example.com/catalog?sort=new" rel="http://opds-spec.org/facet" title="New Releases" opds:facetGroup="Sort By" opds:activeFacet="true"/>
+    <link href="https://example.com/borrow/123" rel="http://opds-spec.org/acquisition/borrow" type="application/atom+xml;type=entry;profile=opds-catalog">
+      <opds:availability status="available" since="2024-01-01T00:00:00Z" until="2024-12-31T23:59:59Z"/>
+      <opds:holds total="5" position="2"/>
+      <opds:copies total="3" available="1"/>
+    </link>
   </entry>
 </feed>
