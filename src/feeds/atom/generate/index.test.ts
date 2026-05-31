@@ -1367,4 +1367,73 @@ describe('generate with lenient mode', () => {
 
     expect(generate(value)).toEqual(expected)
   })
+
+  it('should generate Atom feed with byline namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Byline namespace',
+      updated: new Date('2024-01-10T12:00:00Z'),
+      byline: {
+        contributors: [
+          {
+            id: 'annie',
+            name: 'Annie Park',
+            urls: ['https://annie.example.com'],
+            profiles: [{ href: 'https://mastodon.social/@annie', rel: 'mastodon' }],
+            theme: { color: '#4A90A4', style: 'light' },
+          },
+        ],
+        organizations: [{ id: 'ttr', name: 'The Tech Review', type: 'news' }],
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: 'First entry',
+          updated: new Date('2024-01-10T12:00:00Z'),
+          byline: {
+            author: { ref: 'annie' },
+            role: 'staff',
+            perspective: 'reporting',
+            affiliation: { org: 'ttr', relationship: 'employed', title: 'Senior Engineer' },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:byline="https://bylinespec.org/1.0">
+  <id>https://example.com/feed</id>
+  <title>Feed with Byline namespace</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <byline:contributors>
+    <byline:person id="annie">
+      <byline:name>Annie Park</byline:name>
+      <byline:url>https://annie.example.com</byline:url>
+      <byline:profile href="https://mastodon.social/@annie" rel="mastodon"/>
+      <byline:theme color="#4A90A4" style="light"/>
+    </byline:person>
+  </byline:contributors>
+  <byline:organizations>
+    <byline:org id="ttr">
+      <byline:name>The Tech Review</byline:name>
+      <byline:type>news</byline:type>
+    </byline:org>
+  </byline:organizations>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>First entry</title>
+    <updated>2024-01-10T12:00:00.000Z</updated>
+    <byline:author ref="annie"/>
+    <byline:role>staff</byline:role>
+    <byline:perspective>reporting</byline:perspective>
+    <byline:affiliation>
+      <byline:org-ref ref="ttr"/>
+      <byline:relationship>employed</byline:relationship>
+      <byline:title>Senior Engineer</byline:title>
+    </byline:affiliation>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
 })

@@ -134,6 +134,7 @@ export default defineConfig({
               { text: 'Administrative', link: '/reference/namespaces/admin' },
               { text: 'Pingback', link: '/reference/namespaces/pingback' },
               { text: 'Trackback', link: '/reference/namespaces/trackback' },
+              { text: 'Byline', link: '/reference/namespaces/byline' },
               { text: 'Source', link: '/reference/namespaces/source' },
               { text: 'blogChannel', link: '/reference/namespaces/blogchannel' },
               { text: 'YouTube', link: '/reference/namespaces/yt' },
