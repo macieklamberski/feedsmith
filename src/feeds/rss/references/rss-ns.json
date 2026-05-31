@@ -1044,6 +1044,18 @@
         "ping": "https://example.com/trackback/123",
         "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
       },
+      "byline": {
+        "author": {
+          "ref": "annie"
+        },
+        "role": "staff",
+        "perspective": "reporting",
+        "affiliation": {
+          "org": "ttr",
+          "relationship": "employed",
+          "title": "Senior Engineer"
+        }
+      },
       "sourceNs": {
         "markdown": "# Understanding XML Namespaces - This article explores the power and flexibility of XML namespaces in modern web syndication.",
         "outlines": [
@@ -2105,6 +2117,43 @@
   },
   "pingback": {
     "to": "https://example.com/pingback-service"
+  },
+  "byline": {
+    "contributors": [
+      {
+        "id": "annie",
+        "name": "Annie Park",
+        "context": "Designer and photographer.",
+        "urls": ["https://annie.example.com"],
+        "avatar": "https://annie.example.com/avatar.jpg",
+        "profiles": [
+          {
+            "href": "https://mastodon.social/@annie",
+            "rel": "mastodon"
+          }
+        ],
+        "now": "https://annie.example.com/now",
+        "uses": "https://annie.example.com/uses",
+        "theme": {
+          "color": "#4A90A4",
+          "accent": "#FF6B6B",
+          "style": "light"
+        }
+      }
+    ],
+    "organizations": [
+      {
+        "id": "ttr",
+        "name": "The Tech Review",
+        "url": "https://thetechreview.example.com",
+        "type": "news",
+        "theme": {
+          "color": "#1A1A2E",
+          "accent": "#E94560",
+          "style": "dark"
+        }
+      }
+    ]
   },
   "sourceNs": {
     "accounts": [

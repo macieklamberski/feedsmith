@@ -1314,4 +1314,69 @@ describe('generate with lenient mode', () => {
 
     expect(generate(value)).toEqual(expected)
   })
+
+  it('should generate RSS with byline namespace', () => {
+    const value = {
+      title: 'Feed with byline namespace',
+      description: 'Test feed with Byline namespace',
+      byline: {
+        contributors: [
+          {
+            id: 'annie',
+            name: 'Annie Park',
+            urls: ['https://annie.example.com'],
+            profiles: [{ href: 'https://mastodon.social/@annie', rel: 'mastodon' }],
+            theme: { color: '#4A90A4', style: 'light' },
+          },
+        ],
+        organizations: [{ id: 'ttr', name: 'The Tech Review', type: 'news' }],
+      },
+      items: [
+        {
+          title: 'First item',
+          byline: {
+            author: { ref: 'annie' },
+            role: 'staff',
+            perspective: 'reporting',
+            affiliation: { org: 'ttr', relationship: 'employed', title: 'Senior Engineer' },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:byline="https://bylinespec.org/1.0">
+  <channel>
+    <title>Feed with byline namespace</title>
+    <description>Test feed with Byline namespace</description>
+    <byline:contributors>
+      <byline:person id="annie">
+        <byline:name>Annie Park</byline:name>
+        <byline:url>https://annie.example.com</byline:url>
+        <byline:profile href="https://mastodon.social/@annie" rel="mastodon"/>
+        <byline:theme color="#4A90A4" style="light"/>
+      </byline:person>
+    </byline:contributors>
+    <byline:organizations>
+      <byline:org id="ttr">
+        <byline:name>The Tech Review</byline:name>
+        <byline:type>news</byline:type>
+      </byline:org>
+    </byline:organizations>
+    <item>
+      <title>First item</title>
+      <byline:author ref="annie"/>
+      <byline:role>staff</byline:role>
+      <byline:perspective>reporting</byline:perspective>
+      <byline:affiliation>
+        <byline:org-ref ref="ttr"/>
+        <byline:relationship>employed</byline:relationship>
+        <byline:title>Senior Engineer</byline:title>
+      </byline:affiliation>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
 })
