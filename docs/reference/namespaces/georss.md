@@ -14,7 +14,7 @@ The GeoRSS Simple namespace enables geographic tagging of RSS feeds and items, a
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="http://www.georss.org/georss" target="_blank">GeoRSS Specification</a></td>
+      <td><a href="https://www.ogc.org/standards/georss/" target="_blank">GeoRSS Specification</a></td>
     </tr>
     <tr>
       <th>Prefix</th>
