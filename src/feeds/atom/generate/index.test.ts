@@ -1476,4 +1476,59 @@ describe('generate with app namespace', () => {
 
     expect(generate(value)).toEqual(expected)
   })
+
+  it('should generate Atom feed with at namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: { value: 'Feed with Tombstones' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      at: {
+        deletedEntries: [
+          {
+            ref: 'tag:example.org,2005:/entries/2',
+            when: new Date('2005-11-29T12:11:12Z'),
+            by: {
+              name: 'John Doe',
+              email: 'jdoe@example.com',
+            },
+            comment: 'Removed due to copyright claim.',
+            links: [
+              {
+                href: 'https://example.com/entries/2',
+              },
+            ],
+          },
+        ],
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: { value: 'Entry title' },
+          updated: new Date('2024-01-05T10:30:00Z'),
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:at="http://purl.org/atompub/tombstones/1.0">
+  <id>https://example.com/feed</id>
+  <title>Feed with Tombstones</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <at:deleted-entry ref="tag:example.org,2005:/entries/2" when="2005-11-29T12:11:12.000Z">
+    <at:by>
+      <name>John Doe</name>
+      <email>jdoe@example.com</email>
+    </at:by>
+    <at:comment>Removed due to copyright claim.</at:comment>
+    <link href="https://example.com/entries/2"/>
+  </at:deleted-entry>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry title</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
 })

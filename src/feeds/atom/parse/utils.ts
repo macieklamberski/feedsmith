@@ -17,6 +17,7 @@ import {
   retrieveAuthor as retrieveArxivAuthor,
   retrieveEntry as retrieveArxivEntry,
 } from '../../../namespaces/arxiv/parse/utils.js'
+import { retrieveFeed as retrieveAtFeed } from '../../../namespaces/at/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
@@ -352,6 +353,7 @@ export const parseFeed: ParseUtilPartial<AtomFeed.Feed<DateAny>> = (value, optio
     admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackFeed(value) : undefined,
     xml: options?.asNamespace ? undefined : retrieveXmlItemOrFeed(value),
+    at: namespaces?.has('at') ? retrieveAtFeed(value, options) : undefined,
   }
 
   return trimObject(feed)

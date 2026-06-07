@@ -132,6 +132,7 @@ export default defineConfig({
               { text: 'Creative Commons', link: '/reference/namespaces/creativecommons' },
               { text: 'Atom Threading', link: '/reference/namespaces/thr' },
               { text: 'Atom Publishing Protocol', link: '/reference/namespaces/app' },
+              { text: 'Atom Tombstones', link: '/reference/namespaces/at' },
               { text: 'Comment API', link: '/reference/namespaces/wfw' },
               { text: 'Administrative', link: '/reference/namespaces/admin' },
               { text: 'Pingback', link: '/reference/namespaces/pingback' },

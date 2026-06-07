@@ -1736,6 +1736,59 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with at namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: { value: 'Feed with Tombstones' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      at: {
+        deletedEntries: [
+          {
+            ref: 'tag:example.org,2005:/entries/2',
+            when: new Date('2005-11-29T12:11:12Z'),
+            by: {
+              name: 'John Doe',
+              email: 'jdoe@example.com',
+            },
+            comment: 'Removed due to copyright claim.',
+            links: [
+              {
+                href: 'https://example.com/entries/2',
+              },
+            ],
+          },
+        ],
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:at': 'http://purl.org/atompub/tombstones/1.0',
+        id: 'https://example.com/feed',
+        title: { '#text': 'Feed with Tombstones' },
+        updated: '2024-01-10T12:00:00.000Z',
+        'at:deleted-entry': [
+          {
+            '@ref': 'tag:example.org,2005:/entries/2',
+            '@when': '2005-11-29T12:11:12.000Z',
+            'at:by': {
+              name: 'John Doe',
+              email: 'jdoe@example.com',
+            },
+            'at:comment': 'Removed due to copyright claim.',
+            link: [
+              {
+                '@href': 'https://example.com/entries/2',
+              },
+            ],
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with arxiv namespace properties', () => {
     const value = {
       id: 'http://arxiv.org/api/query',

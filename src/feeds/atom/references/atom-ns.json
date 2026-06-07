@@ -1213,5 +1213,23 @@
     "elev": 360,
     "floor": 4,
     "radius": 50000
+  },
+  "at": {
+    "deletedEntries": [
+      {
+        "ref": "tag:example.org,2005:/entries/2",
+        "when": "2005-11-29T12:11:12Z",
+        "by": {
+          "name": "John Doe",
+          "email": "jdoe@example.com"
+        },
+        "comment": "Removed due to copyright claim.",
+        "links": [
+          {
+            "href": "https://example.com/entries/2"
+          }
+        ]
+      }
+    ]
   }
 }
