@@ -84,6 +84,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Creative Commons](/reference/namespaces/creativecommons) | `<creativeCommons:*>` | RSS, Atom | ✅ | ✅ |
 | [Atom Threading](/reference/namespaces/thr) | `<thr:*>` | RSS, Atom | ✅ | ✅ |
 | [Atom Publishing Protocol](/reference/namespaces/app) | `<app:*>` | Atom | ✅ | ✅ |
+| [Atom Tombstones](/reference/namespaces/at) | `<at:*>` | Atom | ✅ | ✅ |
 | [Comment API](/reference/namespaces/wfw) | `<wfw:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Administrative](/reference/namespaces/admin) | `<admin:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Pingback](/reference/namespaces/pingback) | `<pingback:*>` | RSS, Atom | ✅ | ✅ |

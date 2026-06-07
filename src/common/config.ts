@@ -12,6 +12,7 @@ import {
   stopNodes as arxivStopNodes,
   uris as arxivUris,
 } from '../namespaces/arxiv/common/config.js'
+import { uris as atUris } from '../namespaces/at/common/config.js'
 import { uris as atomUris } from '../namespaces/atom/common/config.js'
 import {
   stopNodes as blogchannelStopNodes,
@@ -166,6 +167,7 @@ export const namespaceUris = {
   trackback: trackbackUris,
   prism: prismUris,
   acast: acastUris,
+  at: atUris,
 }
 
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(
