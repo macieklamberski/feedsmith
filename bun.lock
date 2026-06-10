@@ -10,7 +10,7 @@
       },
       "devDependencies": {
         "@types/bun": "^1.3.14",
-        "kvalita": "^1.13.0",
+        "kvalita": "^1.14.0",
         "tsdown": "^0.22.0",
         "vitepress": "^2.0.0-alpha.17",
       },
@@ -649,7 +649,7 @@
 
     "jsonfile": ["jsonfile@6.2.0", "", { "dependencies": { "universalify": "^2.0.0" }, "optionalDependencies": { "graceful-fs": "^4.1.6" } }, "sha512-FGuPw30AdOIUTRMC2OMRtQV+jkVj2cfPqSeWXv1NEAJ1qZ5zb1X6z1mFhbfOB/iy3ssJCD+3KuZ8r8C3uVFlAg=="],
 
-    "kvalita": ["kvalita@1.13.0", "", { "peerDependencies": { "@biomejs/biome": "^2.2.7", "@commitlint/cli": "^20.0.0", "@commitlint/config-conventional": "^20.0.0", "conventional-changelog-conventionalcommits": "^9.0.0", "lefthook": "^2.0.0", "semantic-release": "^25.0.0", "typescript": "^6.0.0" } }, "sha512-zf5p/SE76oEf0Ercv7JHK42OGLo6FYbzSubsUGkCUg36lmsOmzRuYL47daar6uIjoxwNN4hdIuHPW3hgzU/E+Q=="],
+    "kvalita": ["kvalita@1.14.0", "", { "peerDependencies": { "@biomejs/biome": "^2.2.7", "@commitlint/cli": "^20.0.0 || ^21.0.0", "@commitlint/config-conventional": "^20.0.0 || ^21.0.0", "conventional-changelog-conventionalcommits": "^9.0.0", "lefthook": "^2.0.0", "semantic-release": "^25.0.0", "typescript": "^6.0.0" } }, "sha512-/gruDqouWuaMiJu9HjqUAalQaWz3ROpcQiaaoPX7/t/gTGFBAMJp2jkvpB/OicUOxiwulZAOTMrICW1bxRcOkQ=="],
 
     "lefthook": ["lefthook@2.1.5", "", { "optionalDependencies": { "lefthook-darwin-arm64": "2.1.5", "lefthook-darwin-x64": "2.1.5", "lefthook-freebsd-arm64": "2.1.5", "lefthook-freebsd-x64": "2.1.5", "lefthook-linux-arm64": "2.1.5", "lefthook-linux-x64": "2.1.5", "lefthook-openbsd-arm64": "2.1.5", "lefthook-openbsd-x64": "2.1.5", "lefthook-windows-arm64": "2.1.5", "lefthook-windows-x64": "2.1.5" }, "bin": { "lefthook": "bin/index.js" } }, "sha512-yB9IFWurFllusbPZqvG0EavTmpNXPya2MuO7Li7YT78xAj3uCQ3AgmW9TVUbTTsSMhsegbiAMRpwfEk2TP1P0A=="],
 
