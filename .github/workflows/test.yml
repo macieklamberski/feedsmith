@@ -2,9 +2,8 @@ name: Test
 
 on:
   push:
-    branches: [main]
+    branches: [main, alpha, beta, rc]
   pull_request:
-    branches: [main]
   workflow_call:
 
 jobs:

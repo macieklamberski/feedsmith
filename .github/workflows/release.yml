@@ -10,9 +10,9 @@ on:
         type: choice
         options:
           - main
+          - rc
           - beta
           - alpha
-          - next
 
 jobs:
   test:
