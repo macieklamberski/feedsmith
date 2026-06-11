@@ -73,6 +73,18 @@ describe('detect', () => {
     expect(detect(rssFeed)).toBe(true)
   })
 
+  it('should detect RSS feed with namespace prefix on root element', () => {
+    const prefixedFeed = '<ns:rss version="2.0"><channel><title>Test</title></channel></ns:rss>'
+
+    expect(detect(prefixedFeed)).toBe(true)
+  })
+
+  it.todo('should return false for RSS element in XML comments', () => {
+    // An <rss> element placed inside an XML comment (<!-- <rss>...</rss> -->) currently yields a
+    // false positive because the regex-based detector does not strip comments. Expected: detect
+    // returns false once comment stripping is implemented.
+  })
+
   it('should return false for RSS element in CDATA', () => {
     const cdataFeed = `
       <?xml version="1.0"?>

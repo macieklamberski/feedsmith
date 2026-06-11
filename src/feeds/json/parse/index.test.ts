@@ -171,8 +171,9 @@ describe('parse', () => {
 
   it('should handle malformed JSON string', () => {
     const value = '{"version":"https://jsonfeed.org/version/1.1","title":"Malformed'
+    const throwing = () => parse(value)
 
-    expect(() => parse(value)).toThrowError(locales.invalidFeedFormat)
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should parse feed with invalid URLs', () => {
@@ -235,39 +236,59 @@ describe('parse', () => {
   })
 
   it('should throw error for invalid input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse('not a feed')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle null input', () => {
-    expect(() => parse(null)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(null)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle undefined input', () => {
-    expect(() => parse(undefined)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(undefined)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle array input', () => {
-    expect(() => parse([])).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse([])
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle empty object input', () => {
-    expect(() => parse({})).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse({})
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
-  it('should handle string input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.invalidFeedFormat)
+  it('should handle empty string input', () => {
+    const throwing = () => parse('')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
+  })
+
+  it('should handle whitespace-only string input', () => {
+    const throwing = () => parse('   \n  ')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle number input', () => {
-    expect(() => parse(123)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(123)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   describe('error types', () => {
     it('should throw DetectError for non-feed input', () => {
       const throwing = () => parse({})
 
-      expect(throwing).toThrow(DetectError)
-      expect(throwing).toThrow(locales.invalidFeedFormat)
+      expect(throwing).toThrowError(DetectError)
+      expect(throwing).toThrowError(locales.invalidFeedFormat)
     })
 
     it('should throw ParseError for detected but invalid feed', () => {
@@ -276,8 +297,8 @@ describe('parse', () => {
       }
       const throwing = () => parse(value)
 
-      expect(throwing).toThrow(ParseError)
-      expect(throwing).toThrow(locales.invalidFeedFormat)
+      expect(throwing).toThrowError(ParseError)
+      expect(throwing).toThrowError(locales.invalidFeedFormat)
     })
   })
 
@@ -373,9 +394,43 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    })
 
-      expect(result).toEqual(expected)
+    it('should propagate error when parseDateFn throws', () => {
+      const value = {
+        version: 'https://jsonfeed.org/version/1.1',
+        title: 'Test',
+        items: [
+          {
+            id: '1',
+            date_published: 'invalid',
+          },
+        ],
+      }
+      const parseDateFn = () => {
+        throw new Error('Parse failed')
+      }
+      const throwing = () => parse(value, { parseDateFn })
+
+      expect(throwing).toThrowError('Parse failed')
+    })
+  })
+
+  describe.todo('real-world feeds', () => {
+    it.todo('should parse JSON Feed string prefixed with a BOM', () => {
+      // A UTF-8 byte order mark before the opening brace is common in real exports. Expected:
+      // the BOM is ignored and the feed parses normally.
+    })
+
+    it.todo('should parse JSON Feed with escaped unicode sequences in text fields', () => {
+      // Titles and content with \u-escaped characters (emoji, accented letters) should decode to
+      // the actual characters.
+    })
+
+    it.todo('should parse JSON Feed with HTML entities preserved in content_html', () => {
+      // Entities like &amp; and &lt; inside content_html are part of the HTML payload and must be
+      // passed through unchanged, not decoded.
     })
   })
 })

@@ -230,7 +230,26 @@ describe('generateItemOrFeed', () => {
     expect(generateItemOrFeed(value)).toBeUndefined()
   })
 
-  it('should handle non-object inputs gracefully', () => {
+  it('should handle non-object inputs', () => {
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateItemOrFeed('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateItemOrFeed(123)).toBeUndefined()
     expect(generateItemOrFeed(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateItemOrFeed(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateItemOrFeed([])).toBeUndefined()
+  })
+
+  it('should wrap special characters in CDATA', () => {
+    const value = {
+      titles: ['Research & Development <Update>'],
+    }
+    const expected = {
+      'dcterms:title': [{ '#cdata': 'Research & Development <Update>' }],
+    }
+
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 })

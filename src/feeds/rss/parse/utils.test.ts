@@ -182,15 +182,15 @@ describe('parsePerson', () => {
     })
 
     it('should parse URL containing @ (Mastodon)', () => {
-      const value = 'https://mastodon.social/@user'
-      const expected = { link: 'https://mastodon.social/@user' }
+      const value = 'https://example.com/@user'
+      const expected = { link: 'https://example.com/@user' }
 
       expect(parsePerson(value)).toEqual(expected)
     })
 
     it('should parse URL containing @ (Medium)', () => {
-      const value = 'https://medium.com/@author'
-      const expected = { link: 'https://medium.com/@author' }
+      const value = 'https://example.com/@author'
+      const expected = { link: 'https://example.com/@author' }
 
       expect(parsePerson(value)).toEqual(expected)
     })
@@ -345,10 +345,10 @@ describe('parsePerson', () => {
       })
 
       it('should parse URL containing @ in brackets', () => {
-        const value = 'John Doe (https://mastodon.social/@johndoe)'
+        const value = 'John Doe (https://example.com/@johndoe)'
         const expected = {
           name: 'John Doe',
-          link: 'https://mastodon.social/@johndoe',
+          link: 'https://example.com/@johndoe',
         }
 
         expect(parsePerson(value)).toEqual(expected)
@@ -501,20 +501,20 @@ describe('parsePerson', () => {
 
     describe('multiple values (first wins)', () => {
       it('should use first email when multiple emails present', () => {
-        const value = 'John (john1@x.com) (john2@x.com)'
+        const value = 'John (john1@example.com) (john2@example.com)'
         const expected = {
-          name: 'John (john2@x.com)',
-          email: 'john1@x.com',
+          name: 'John (john2@example.com)',
+          email: 'john1@example.com',
         }
 
         expect(parsePerson(value)).toEqual(expected)
       })
 
       it('should use first URL when multiple URLs present', () => {
-        const value = 'John (https://x.com/1) (https://x.com/2)'
+        const value = 'John (https://example.com/1) (https://example.com/2)'
         const expected = {
-          name: 'John (https://x.com/2)',
-          link: 'https://x.com/1',
+          name: 'John (https://example.com/2)',
+          link: 'https://example.com/1',
         }
 
         expect(parsePerson(value)).toEqual(expected)
@@ -698,10 +698,10 @@ describe('parsePerson', () => {
     })
 
     it('should extract URL containing @ after name', () => {
-      const value = 'John Doe https://mastodon.social/@johndoe'
+      const value = 'John Doe https://example.com/@johndoe'
       const expected = {
         name: 'John Doe',
-        link: 'https://mastodon.social/@johndoe',
+        link: 'https://example.com/@johndoe',
       }
 
       expect(parsePerson(value)).toEqual(expected)
@@ -1396,7 +1396,7 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expectedFull)
   })
 
-  it('should parse complete item object (without array of values)', () => {
+  it('should parse complete item object (with arrays of values)', () => {
     const value = {
       title: ['Item Title', 'Alternative Item Title'],
       link: ['https://example.com/item', 'https://example.com/item-alternate'],
@@ -2265,7 +2265,7 @@ describe('parseFeed', () => {
         '@rdf:resource': 'mailto:webmaster@example.com',
       },
       'admin:generatoragent': {
-        '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+        '@rdf:resource': 'https://example.com/generator?v=3.2',
       },
     }
     const value = { channel }
@@ -2274,7 +2274,7 @@ describe('parseFeed', () => {
       link: 'https://example.com',
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
-        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+        generatorAgent: 'https://example.com/generator?v=3.2',
       },
     }
 
@@ -2458,6 +2458,29 @@ describe('retrieveItems', () => {
     const expected = [{ title: 'Channel Item' }]
 
     expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should limit items to maxItems when option is set', () => {
+    const value = {
+      channel: {
+        item: [{ title: 'Item 1' }, { title: 'Item 2' }, { title: 'Item 3' }],
+      },
+    }
+    const options = { maxItems: 2 }
+    const expected = [{ title: 'Item 1' }, { title: 'Item 2' }]
+
+    expect(retrieveItems(value, options)).toEqual(expected)
+  })
+
+  it('should return undefined when maxItems is 0', () => {
+    const value = {
+      channel: {
+        item: [{ title: 'Item 1' }],
+      },
+    }
+    const options = { maxItems: 0 }
+
+    expect(retrieveItems(value, options)).toBeUndefined()
   })
 
   it('should return undefined when no items exist', () => {
