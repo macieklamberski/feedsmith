@@ -53,6 +53,36 @@ describe('parseQuery', () => {
     expect(parseQuery(value)).toEqual(expected)
   })
 
+  it('should handle coercible numeric values', () => {
+    const value = {
+      '@role': 'request',
+      '@count': 10,
+      '@startindex': 21,
+    }
+    const expected = {
+      role: 'request',
+      count: 10,
+      startIndex: 21,
+    }
+
+    expect(parseQuery(value)).toEqual(expected)
+  })
+
+  it('should handle mixed valid and invalid attributes', () => {
+    const value = {
+      '@role': 'request',
+      '@count': 'not a number',
+      '@searchterms': '',
+      '@language': 'en',
+    }
+    const expected = {
+      role: 'request',
+      language: 'en',
+    }
+
+    expect(parseQuery(value)).toEqual(expected)
+  })
+
   it('should return undefined for empty object', () => {
     const value = {}
 
@@ -160,7 +190,7 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
-  it('should handle 0-based indexing (arXiv style)', () => {
+  it('should handle 0-based indexing', () => {
     const value = {
       'opensearch:totalresults': '1000',
       'opensearch:startindex': '0',

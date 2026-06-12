@@ -233,4 +233,9 @@ describe('retrieveItemOrFeed', () => {
 
     expect(retrieveItemOrFeed(value)).toBeUndefined()
   })
+
+  it.todo('should parse dates with custom parseDateFn', () => {
+    // Pass options.parseDateFn that maps each date string to a Date instance.
+    // Expected: dates contains the values returned by the custom parser instead of the raw strings.
+  })
 })

@@ -61,6 +61,14 @@ describe('generateItemOrFeed', () => {
     expect(generateItemOrFeed(value)).toBeUndefined()
   })
 
+  it('should handle empty licenses array', () => {
+    const value = {
+      licenses: [],
+    }
+
+    expect(generateItemOrFeed(value)).toBeUndefined()
+  })
+
   it('should handle empty object', () => {
     const value = {}
 

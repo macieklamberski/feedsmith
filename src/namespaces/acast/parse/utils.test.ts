@@ -188,7 +188,7 @@ describe('retrieveFeed', () => {
           '#text': 'Example Network',
         },
       ],
-      'acast:importedfeed': ['https://example.com/original-feed', 'https://other.feed.com'],
+      'acast:importedfeed': ['https://example.com/original-feed', 'https://other.example.com/feed'],
     }
 
     expect(retrieveFeed(value)).toEqual(expectedFull)

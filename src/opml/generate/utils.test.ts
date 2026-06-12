@@ -155,7 +155,7 @@ describe('generateOutline', () => {
 
   describe('custom attributes', () => {
     it('should generate outline with custom attributes when specified in options', () => {
-      const outline = {
+      const value = {
         text: 'Feed with custom attrs',
         type: 'rss',
         xmlUrl: 'https://example.com/feed.xml',
@@ -166,20 +166,20 @@ describe('generateOutline', () => {
       const options = {
         extraOutlineAttributes: ['customField1', 'customField2', 'rating'],
       }
-      const result = generateOutline(outline, options)
-
-      expect(result).toEqual({
+      const expected = {
         '@text': 'Feed with custom attrs',
         '@type': 'rss',
         '@xmlUrl': 'https://example.com/feed.xml',
         '@customField1': 'value1',
         '@customField2': 'value2',
         '@rating': '5',
-      })
+      }
+
+      expect(generateOutline(value, options)).toEqual(expected)
     })
 
     it('should not include custom attributes when not in options', () => {
-      const outline = {
+      const value = {
         text: 'Feed with custom attrs',
         type: 'rss',
         xmlUrl: 'https://example.com/feed.xml',
@@ -187,17 +187,17 @@ describe('generateOutline', () => {
         customField2: 'value2',
         rating: '5',
       }
-      const result = generateOutline(outline)
-
-      expect(result).toEqual({
+      const expected = {
         '@text': 'Feed with custom attrs',
         '@type': 'rss',
         '@xmlUrl': 'https://example.com/feed.xml',
-      })
+      }
+
+      expect(generateOutline(value)).toEqual(expected)
     })
 
     it('should handle nested outlines with custom attributes', () => {
-      const outline = {
+      const value = {
         text: 'Parent',
         customParent: 'parentValue',
         outlines: [
@@ -214,9 +214,7 @@ describe('generateOutline', () => {
       const options = {
         extraOutlineAttributes: ['customParent', 'customChild'],
       }
-      const result = generateOutline(outline, options)
-
-      expect(result).toEqual({
+      const expected = {
         '@text': 'Parent',
         '@customParent': 'parentValue',
         outline: [
@@ -229,11 +227,13 @@ describe('generateOutline', () => {
             '@customChild': 'childValue2',
           },
         ],
-      })
+      }
+
+      expect(generateOutline(value, options)).toEqual(expected)
     })
 
     it('should only include specified custom attributes', () => {
-      const outline = {
+      const value = {
         text: 'Selective',
         type: 'rss',
         customField1: 'included',
@@ -243,18 +243,18 @@ describe('generateOutline', () => {
       const options = {
         extraOutlineAttributes: ['customField1', 'customField3'],
       }
-      const result = generateOutline(outline, options)
-
-      expect(result).toEqual({
+      const expected = {
         '@text': 'Selective',
         '@type': 'rss',
         '@customField1': 'included',
         '@customField3': 'included',
-      })
+      }
+
+      expect(generateOutline(value, options)).toEqual(expected)
     })
 
     it('should handle custom attributes as strings', () => {
-      const outline = {
+      const value = {
         text: 'Test',
         stringAttr: 'text value',
         numberAttr: '123',
@@ -263,14 +263,20 @@ describe('generateOutline', () => {
       const options = {
         extraOutlineAttributes: ['stringAttr', 'numberAttr', 'boolAttr'],
       }
-      const result = generateOutline(outline, options)
-
-      expect(result).toEqual({
+      const expected = {
         '@text': 'Test',
         '@stringAttr': 'text value',
         '@numberAttr': '123',
         '@boolAttr': 'true',
-      })
+      }
+
+      expect(generateOutline(value, options)).toEqual(expected)
+    })
+
+    it.todo('should handle non-string custom attribute values', () => {
+      // generateOutline passes custom attribute values to generatePlainString as strings,
+      // so number and boolean values are currently dropped from the output.
+      // Pin the expected output for non-string custom attribute values.
     })
   })
 })
@@ -509,6 +515,16 @@ describe('generateDocument', () => {
     const value = {
       body: {
         outlines: [],
+      },
+    }
+
+    expect(generateDocument(value)).toBeUndefined()
+  })
+
+  it('should return undefined for head without body', () => {
+    const value = {
+      head: {
+        title: 'Head Only',
       },
     }
 

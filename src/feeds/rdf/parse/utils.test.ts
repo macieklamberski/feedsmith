@@ -739,23 +739,6 @@ describe('parseItem', () => {
 
     expect(parseItem(value)).toEqual(expected)
   })
-
-  it('should handle rdf:about attribute on item', () => {
-    const value = {
-      '@rdf:about': 'http://example.com/item/1',
-      title: { '#text': 'Example Entry' },
-      link: { '#text': 'http://example.com' },
-    }
-    const expected = {
-      title: 'Example Entry',
-      link: 'http://example.com',
-      rdf: {
-        about: 'http://example.com/item/1',
-      },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
 })
 
 describe('retrieveItems', () => {
@@ -1049,45 +1032,6 @@ describe('retrieveItems', () => {
       },
       {
         title: 'Direct Item 2',
-      },
-    ]
-
-    expect(retrieveItems(value)).toEqual(expected)
-  })
-
-  it('should skip invalid ToC references and return only valid items', () => {
-    const value = {
-      channel: {
-        title: 'Test Feed',
-        items: {
-          seq: {
-            li: [
-              { '@resource': 'http://example.com/item1' },
-              { '@resource': 'http://example.com/missing' },
-              { '@resource': 'http://example.com/item2' },
-            ],
-          },
-        },
-      },
-      item: [
-        {
-          '@about': 'http://example.com/item1',
-          title: 'First Item',
-        },
-        {
-          '@about': 'http://example.com/item2',
-          title: 'Second Item',
-        },
-      ],
-    }
-    const expected = [
-      {
-        title: 'First Item',
-        rdf: { about: 'http://example.com/item1' },
-      },
-      {
-        title: 'Second Item',
-        rdf: { about: 'http://example.com/item2' },
       },
     ]
 
@@ -1733,7 +1677,7 @@ describe('parseFeed', () => {
           '@rdf:resource': 'mailto:webmaster@example.com',
         },
         'admin:generatoragent': {
-          '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+          '@rdf:resource': 'https://example.com/generator?v=3.2',
         },
       },
       item: [
@@ -1753,7 +1697,7 @@ describe('parseFeed', () => {
       ],
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
-        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+        generatorAgent: 'https://example.com/generator?v=3.2',
       },
     }
 

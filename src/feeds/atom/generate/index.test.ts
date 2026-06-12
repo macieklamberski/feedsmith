@@ -1,26 +1,22 @@
 import { describe, expect, it } from 'bun:test'
 import { locales } from '../../../common/config.js'
 import { GenerateError } from '../../../common/errors.js'
+import type { DateLike } from '../../../common/types.js'
+import type { AtomFeed } from '../common/types.js'
 import { generate } from './index.js'
 
 describe('generate', () => {
-  const versions = {
-    // TODO: Enable reference tests once advanced features like Text fields being an object of
-    // { value: string, type: 'text' | 'html' | 'xhtml' }
-    // '10': '1.0',
-    // ns: 'with namespaces',
-  }
+  it.todo('should correctly generate Atom 1.0', () => {
+    // Generate from the references/atom-10.json fixture and compare against
+    // references/atom-10.xml. Blocked until text fields support objects of
+    // { value: string, type: 'text' | 'html' | 'xhtml' }.
+  })
 
-  for (const [key, label] of Object.entries(versions)) {
-    it(`should correctly generate Atom ${label}`, async () => {
-      const reference = `${import.meta.dir}/../references/atom-${key}`
-      const input = await Bun.file(`${reference}.json`).json()
-      const expectation = await Bun.file(`${reference}.xml`).text()
-      const result = generate(input)
-
-      expect(result).toEqual(expectation)
-    })
-  }
+  it.todo('should correctly generate Atom with namespaces', () => {
+    // Generate from the references/atom-ns.json fixture and compare against
+    // references/atom-ns.xml. Blocked until text fields support objects of
+    // { value: string, type: 'text' | 'html' | 'xhtml' }.
+  })
 
   it('should generate minimal valid Atom feed', () => {
     const value = {
@@ -593,7 +589,7 @@ describe('generate', () => {
   })
 
   it('should generate Atom feed with googleplay namespace', () => {
-    const value = {
+    const value: AtomFeed.Feed<DateLike> = {
       id: 'https://example.com/feed',
       title: { value: 'Feed with GooglePlay namespace' },
       updated: new Date('2023-03-15T12:00:00Z'),
@@ -608,7 +604,7 @@ describe('generate', () => {
           updated: new Date('2023-03-15T12:00:00Z'),
           googleplay: {
             author: 'Episode Author',
-            explicit: 'clean' as const,
+            explicit: 'clean',
           },
         },
       ],
@@ -952,7 +948,7 @@ describe('generate', () => {
           updated: new Date('2024-01-05T10:30:00Z'),
           pingback: {
             server: 'https://example.com/xmlrpc.php',
-            target: 'https://referenced-blog.com/article',
+            target: 'https://example.net/article',
           },
         },
       ],
@@ -968,7 +964,7 @@ describe('generate', () => {
     <title>Post with Pingback</title>
     <updated>2024-01-05T10:30:00.000Z</updated>
     <pingback:server>https://example.com/xmlrpc.php</pingback:server>
-    <pingback:target>https://referenced-blog.com/article</pingback:target>
+    <pingback:target>https://example.net/article</pingback:target>
   </entry>
 </feed>
 `
@@ -983,7 +979,7 @@ describe('generate', () => {
       updated: new Date('2024-01-10T12:00:00Z'),
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
-        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+        generatorAgent: 'https://example.com/generator?v=3.2',
       },
       entries: [
         {
@@ -999,7 +995,7 @@ describe('generate', () => {
   <title>Feed with Admin</title>
   <updated>2024-01-10T12:00:00.000Z</updated>
   <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
-  <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+  <admin:generatorAgent rdf:resource="https://example.com/generator?v=3.2"/>
   <entry>
     <id>https://example.com/entry/1</id>
     <title>Entry title</title>
@@ -1023,7 +1019,7 @@ describe('generate', () => {
           updated: new Date('2024-01-05T10:30:00Z'),
           trackback: {
             ping: 'https://example.com/trackback/123',
-            abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+            abouts: ['https://example.net/trackback/456', 'https://example.org/trackback/789'],
           },
         },
       ],
@@ -1038,8 +1034,8 @@ describe('generate', () => {
     <title>Post with Trackback</title>
     <updated>2024-01-05T10:30:00.000Z</updated>
     <trackback:ping>https://example.com/trackback/123</trackback:ping>
-    <trackback:about>https://blog1.com/trackback/456</trackback:about>
-    <trackback:about>https://blog2.com/trackback/789</trackback:about>
+    <trackback:about>https://example.net/trackback/456</trackback:about>
+    <trackback:about>https://example.org/trackback/789</trackback:about>
   </entry>
 </feed>
 `
@@ -1145,300 +1141,6 @@ describe('generate', () => {
 
     expect(generate(value, options)).toEqual(expected)
   })
-})
-
-describe('strict mode', () => {
-  it('should require id, title, updated in strict mode', () => {
-    // @ts-expect-error: This is for testing purposes.
-    generate({ title: { value: 'Test' } }, { strict: true })
-  })
-
-  it('should accept feed with all required fields in strict mode', () => {
-    generate(
-      { id: 'https://example.com', title: { value: 'Test' }, updated: new Date() },
-      { strict: true },
-    )
-  })
-
-  it('should require entry fields in strict mode', () => {
-    generate(
-      {
-        id: 'https://example.com',
-        title: { value: 'Test' },
-        updated: new Date(),
-        // @ts-expect-error: This is for testing purposes.
-        entries: [{ id: 'https://example.com/1' }],
-      },
-      { strict: true },
-    )
-  })
-
-  it('should accept entries with all required fields in strict mode', () => {
-    generate(
-      {
-        id: 'https://example.com',
-        title: { value: 'Test' },
-        updated: new Date(),
-        entries: [{ id: 'https://example.com/1', title: { value: 'Entry' }, updated: new Date() }],
-      },
-      { strict: true },
-    )
-  })
-
-  it('should require nested type fields in strict mode', () => {
-    generate(
-      {
-        id: 'https://example.com',
-        title: { value: 'Test' },
-        updated: new Date(),
-        // @ts-expect-error: This is for testing purposes.
-        links: [{ rel: 'self' }],
-      },
-      { strict: true },
-    )
-  })
-
-  it('should accept nested types with all required fields in strict mode', () => {
-    generate(
-      {
-        id: 'https://example.com',
-        title: { value: 'Test' },
-        updated: new Date(),
-        links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
-        authors: [{ name: 'John Doe' }],
-        categories: [{ term: 'tech' }],
-      },
-      { strict: true },
-    )
-  })
-
-  it('should accept partial feed in lenient mode', () => {
-    generate({ title: { value: 'Test' } })
-  })
-})
-
-describe('generate edge cases', () => {
-  it('should accept partial feeds', () => {
-    const value = {
-      title: { value: 'Test Feed' },
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Test Feed</title>
-</feed>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-
-  it('should accept feeds with string dates', () => {
-    const value = {
-      id: 'https://example.com/feed',
-      title: { value: 'Test Feed' },
-      updated: '2023-01-01T00:00:00.000Z',
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <id>https://example.com/feed</id>
-  <title>Test Feed</title>
-  <updated>2023-01-01T00:00:00.000Z</updated>
-</feed>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-
-  it('should preserve invalid date strings', () => {
-    const value = {
-      id: 'https://example.com/feed',
-      title: { value: 'Feed with Invalid Date' },
-      updated: 'not-a-valid-date',
-      entries: [
-        {
-          id: 'https://example.com/entry/1',
-          title: { value: 'Entry with invalid date' },
-          updated: 'also-invalid-date',
-        },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <id>https://example.com/feed</id>
-  <title>Feed with Invalid Date</title>
-  <updated>not-a-valid-date</updated>
-  <entry>
-    <id>https://example.com/entry/1</id>
-    <title>Entry with invalid date</title>
-    <updated>also-invalid-date</updated>
-  </entry>
-</feed>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-
-  it('should handle mixed Date objects and string dates', () => {
-    const value = {
-      id: 'https://example.com/feed',
-      title: { value: 'Mixed Dates Feed' },
-      updated: new Date('2023-01-01T00:00:00.000Z'),
-      entries: [
-        {
-          id: 'https://example.com/entry/1',
-          title: { value: 'Entry with Date object' },
-          updated: new Date('2023-02-01T00:00:00.000Z'),
-        },
-        {
-          id: 'https://example.com/entry/2',
-          title: { value: 'Entry with string date' },
-          updated: '2023-03-01T00:00:00.000Z',
-        },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <id>https://example.com/feed</id>
-  <title>Mixed Dates Feed</title>
-  <updated>2023-01-01T00:00:00.000Z</updated>
-  <entry>
-    <id>https://example.com/entry/1</id>
-    <title>Entry with Date object</title>
-    <updated>2023-02-01T00:00:00.000Z</updated>
-  </entry>
-  <entry>
-    <id>https://example.com/entry/2</id>
-    <title>Entry with string date</title>
-    <updated>2023-03-01T00:00:00.000Z</updated>
-  </entry>
-</feed>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-
-  it('should handle deeply nested partial objects', () => {
-    const value = {
-      id: 'https://example.com/feed',
-      title: { value: 'Feed with Nested Partials' },
-      entries: [
-        {
-          id: 'https://example.com/entry/1',
-          title: { value: 'Entry 1' },
-          author: [
-            {
-              name: 'John Doe',
-            },
-          ],
-          category: [
-            {
-              term: 'tech',
-              label: 'Technology',
-            },
-          ],
-        },
-        {
-          id: 'https://example.com/entry/2',
-          title: { value: 'Minimal Entry' },
-        },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <id>https://example.com/feed</id>
-  <title>Feed with Nested Partials</title>
-  <entry>
-    <id>https://example.com/entry/1</id>
-    <title>Entry 1</title>
-  </entry>
-  <entry>
-    <id>https://example.com/entry/2</id>
-    <title>Minimal Entry</title>
-  </entry>
-</feed>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-})
-
-describe('generate with app namespace', () => {
-  it('should generate Atom feed with app namespace', () => {
-    const value = {
-      id: 'http://example.com/blog',
-      title: { value: 'My Blog' },
-      updated: new Date('2024-03-15T16:00:00Z'),
-      entries: [
-        {
-          id: 'http://example.com/blog/post/1',
-          title: { value: 'Article' },
-          updated: new Date('2024-03-15T16:00:00Z'),
-          app: {
-            edited: new Date('2024-03-15T14:30:00Z'),
-            control: {
-              draft: false,
-            },
-          },
-        },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:app="http://www.w3.org/2007/app">
-  <id>http://example.com/blog</id>
-  <title>My Blog</title>
-  <updated>2024-03-15T16:00:00.000Z</updated>
-  <entry>
-    <id>http://example.com/blog/post/1</id>
-    <title>Article</title>
-    <updated>2024-03-15T16:00:00.000Z</updated>
-    <app:edited>2024-03-15T14:30:00.000Z</app:edited>
-    <app:control>
-      <app:draft>no</app:draft>
-    </app:control>
-  </entry>
-</feed>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-
-  it('should generate Atom entry with draft status', () => {
-    const value = {
-      id: 'http://example.com/blog',
-      title: { value: 'Blog' },
-      updated: new Date('2024-03-15T16:00:00Z'),
-      entries: [
-        {
-          id: 'http://example.com/blog/draft',
-          title: { value: 'Draft Article' },
-          updated: new Date('2024-03-15T15:00:00Z'),
-          app: {
-            edited: new Date('2024-03-15T15:00:00Z'),
-            control: {
-              draft: true,
-            },
-          },
-        },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:app="http://www.w3.org/2007/app">
-  <id>http://example.com/blog</id>
-  <title>Blog</title>
-  <updated>2024-03-15T16:00:00.000Z</updated>
-  <entry>
-    <id>http://example.com/blog/draft</id>
-    <title>Draft Article</title>
-    <updated>2024-03-15T15:00:00.000Z</updated>
-    <app:edited>2024-03-15T15:00:00.000Z</app:edited>
-    <app:control>
-      <app:draft>yes</app:draft>
-    </app:control>
-  </entry>
-</feed>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
 
   it('should generate Atom feed with xml namespace', () => {
     const value = {
@@ -1475,5 +1177,373 @@ describe('generate with app namespace', () => {
 `
 
     expect(generate(value)).toEqual(expected)
+  })
+
+  describe('strict mode', () => {
+    it('should require id, title, updated in strict mode', () => {
+      const value = { title: { value: 'Test' } }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Test</title>
+</feed>
+`
+
+      // @ts-expect-error: This is for testing purposes.
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
+
+    it('should accept feed with all required fields in strict mode', () => {
+      const value = {
+        id: 'https://example.com',
+        title: { value: 'Test' },
+        updated: new Date('2023-03-15T12:00:00Z'),
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com</id>
+  <title>Test</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+</feed>
+`
+
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
+
+    it('should require entry fields in strict mode', () => {
+      const value = {
+        id: 'https://example.com',
+        title: { value: 'Test' },
+        updated: new Date('2023-03-15T12:00:00Z'),
+        entries: [{ id: 'https://example.com/1' }],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com</id>
+  <title>Test</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <entry>
+    <id>https://example.com/1</id>
+  </entry>
+</feed>
+`
+
+      // @ts-expect-error: This is for testing purposes.
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
+
+    it('should accept entries with all required fields in strict mode', () => {
+      const value = {
+        id: 'https://example.com',
+        title: { value: 'Test' },
+        updated: new Date('2023-03-15T12:00:00Z'),
+        entries: [
+          {
+            id: 'https://example.com/1',
+            title: { value: 'Entry' },
+            updated: new Date('2023-03-15T12:00:00Z'),
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com</id>
+  <title>Test</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <entry>
+    <id>https://example.com/1</id>
+    <title>Entry</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
+  </entry>
+</feed>
+`
+
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
+
+    it('should require nested type fields in strict mode', () => {
+      const value = {
+        id: 'https://example.com',
+        title: { value: 'Test' },
+        updated: new Date('2023-03-15T12:00:00Z'),
+        links: [{ rel: 'self' }],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com</id>
+  <link rel="self"/>
+  <title>Test</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+</feed>
+`
+
+      // @ts-expect-error: This is for testing purposes.
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
+
+    it('should accept nested types with all required fields in strict mode', () => {
+      const value = {
+        id: 'https://example.com',
+        title: { value: 'Test' },
+        updated: new Date('2023-03-15T12:00:00Z'),
+        links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
+        authors: [{ name: 'John Doe' }],
+        categories: [{ term: 'tech' }],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <author>
+    <name>John Doe</name>
+  </author>
+  <category term="tech"/>
+  <id>https://example.com</id>
+  <link href="https://example.com/feed.xml" rel="self"/>
+  <title>Test</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+</feed>
+`
+
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
+
+    it('should accept partial feed in lenient mode', () => {
+      const value = { title: { value: 'Test' } }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Test</title>
+</feed>
+`
+
+      expect(generate(value)).toEqual(expected)
+    })
+
+    it.todo('should produce identical output in strict and lenient modes', () => {
+      // The strict option only changes compile-time types. Assert that
+      // generate(value, { strict: true }) and generate(value) return byte-identical XML for a
+      // corpus of valid feeds.
+    })
+  })
+
+  describe('edge cases', () => {
+    it('should accept partial feeds', () => {
+      const value = {
+        title: { value: 'Test Feed' },
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Test Feed</title>
+</feed>
+`
+
+      expect(generate(value)).toEqual(expected)
+    })
+
+    it('should accept feeds with string dates', () => {
+      const value = {
+        id: 'https://example.com/feed',
+        title: { value: 'Test Feed' },
+        updated: '2023-01-01T00:00:00.000Z',
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com/feed</id>
+  <title>Test Feed</title>
+  <updated>2023-01-01T00:00:00.000Z</updated>
+</feed>
+`
+
+      expect(generate(value)).toEqual(expected)
+    })
+
+    it('should preserve invalid date strings', () => {
+      const value = {
+        id: 'https://example.com/feed',
+        title: { value: 'Feed with Invalid Date' },
+        updated: 'not-a-valid-date',
+        entries: [
+          {
+            id: 'https://example.com/entry/1',
+            title: { value: 'Entry with invalid date' },
+            updated: 'also-invalid-date',
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com/feed</id>
+  <title>Feed with Invalid Date</title>
+  <updated>not-a-valid-date</updated>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry with invalid date</title>
+    <updated>also-invalid-date</updated>
+  </entry>
+</feed>
+`
+
+      expect(generate(value)).toEqual(expected)
+    })
+
+    it('should handle mixed Date objects and string dates', () => {
+      const value = {
+        id: 'https://example.com/feed',
+        title: { value: 'Mixed Dates Feed' },
+        updated: new Date('2023-01-01T00:00:00.000Z'),
+        entries: [
+          {
+            id: 'https://example.com/entry/1',
+            title: { value: 'Entry with Date object' },
+            updated: new Date('2023-02-01T00:00:00.000Z'),
+          },
+          {
+            id: 'https://example.com/entry/2',
+            title: { value: 'Entry with string date' },
+            updated: '2023-03-01T00:00:00.000Z',
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com/feed</id>
+  <title>Mixed Dates Feed</title>
+  <updated>2023-01-01T00:00:00.000Z</updated>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry with Date object</title>
+    <updated>2023-02-01T00:00:00.000Z</updated>
+  </entry>
+  <entry>
+    <id>https://example.com/entry/2</id>
+    <title>Entry with string date</title>
+    <updated>2023-03-01T00:00:00.000Z</updated>
+  </entry>
+</feed>
+`
+
+      expect(generate(value)).toEqual(expected)
+    })
+
+    it('should ignore unrecognized entry properties and keep partial entries', () => {
+      const value = {
+        id: 'https://example.com/feed',
+        title: { value: 'Feed with Nested Partials' },
+        entries: [
+          {
+            id: 'https://example.com/entry/1',
+            title: { value: 'Entry 1' },
+            author: [
+              {
+                name: 'John Doe',
+              },
+            ],
+            category: [
+              {
+                term: 'tech',
+                label: 'Technology',
+              },
+            ],
+          },
+          {
+            id: 'https://example.com/entry/2',
+            title: { value: 'Minimal Entry' },
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com/feed</id>
+  <title>Feed with Nested Partials</title>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry 1</title>
+  </entry>
+  <entry>
+    <id>https://example.com/entry/2</id>
+    <title>Minimal Entry</title>
+  </entry>
+</feed>
+`
+
+      expect(generate(value)).toEqual(expected)
+    })
+  })
+
+  describe('app namespace', () => {
+    it('should generate Atom feed with app namespace', () => {
+      const value = {
+        id: 'http://example.com/blog',
+        title: { value: 'My Blog' },
+        updated: new Date('2024-03-15T16:00:00Z'),
+        entries: [
+          {
+            id: 'http://example.com/blog/post/1',
+            title: { value: 'Article' },
+            updated: new Date('2024-03-15T16:00:00Z'),
+            app: {
+              edited: new Date('2024-03-15T14:30:00Z'),
+              control: {
+                draft: false,
+              },
+            },
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:app="http://www.w3.org/2007/app">
+  <id>http://example.com/blog</id>
+  <title>My Blog</title>
+  <updated>2024-03-15T16:00:00.000Z</updated>
+  <entry>
+    <id>http://example.com/blog/post/1</id>
+    <title>Article</title>
+    <updated>2024-03-15T16:00:00.000Z</updated>
+    <app:edited>2024-03-15T14:30:00.000Z</app:edited>
+    <app:control>
+      <app:draft>no</app:draft>
+    </app:control>
+  </entry>
+</feed>
+`
+
+      expect(generate(value)).toEqual(expected)
+    })
+
+    it('should generate Atom entry with draft status', () => {
+      const value = {
+        id: 'http://example.com/blog',
+        title: { value: 'Blog' },
+        updated: new Date('2024-03-15T16:00:00Z'),
+        entries: [
+          {
+            id: 'http://example.com/blog/draft',
+            title: { value: 'Draft Article' },
+            updated: new Date('2024-03-15T15:00:00Z'),
+            app: {
+              edited: new Date('2024-03-15T15:00:00Z'),
+              control: {
+                draft: true,
+              },
+            },
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:app="http://www.w3.org/2007/app">
+  <id>http://example.com/blog</id>
+  <title>Blog</title>
+  <updated>2024-03-15T16:00:00.000Z</updated>
+  <entry>
+    <id>http://example.com/blog/draft</id>
+    <title>Draft Article</title>
+    <updated>2024-03-15T15:00:00.000Z</updated>
+    <app:edited>2024-03-15T15:00:00.000Z</app:edited>
+    <app:control>
+      <app:draft>yes</app:draft>
+    </app:control>
+  </entry>
+</feed>
+`
+
+      expect(generate(value)).toEqual(expected)
+    })
   })
 })

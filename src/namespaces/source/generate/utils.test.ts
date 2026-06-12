@@ -35,7 +35,6 @@ describe('generateAccount', () => {
     const value = {
       service: 'twitter',
     }
-
     const expected = {
       '@service': 'twitter',
     }
@@ -53,17 +52,6 @@ describe('generateAccount', () => {
 })
 
 describe('generateLikes', () => {
-  it('should generate likes with only server', () => {
-    const value = {
-      server: 'http://likes.example.com/',
-    }
-    const expected = {
-      '@server': 'http://likes.example.com/',
-    }
-
-    expect(generateLikes(value)).toEqual(expected)
-  })
-
   it('should generate likes with only server', () => {
     const value = {
       server: 'http://likes.example.com/',

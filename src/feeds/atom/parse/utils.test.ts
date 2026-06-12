@@ -1758,7 +1758,7 @@ describe('parseFeed', () => {
         '@rdf:resource': 'mailto:webmaster@example.com',
       },
       'admin:generatoragent': {
-        '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+        '@rdf:resource': 'https://example.com/generator?v=3.2',
       },
     }
     const expected = {
@@ -1766,7 +1766,7 @@ describe('parseFeed', () => {
       title: { value: 'Example Feed' },
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
-        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+        generatorAgent: 'https://example.com/generator?v=3.2',
       },
     }
 
@@ -1905,5 +1905,10 @@ describe('retrieveFeed', () => {
     }
 
     expect(retrieveFeed(value)).toBeUndefined()
+  })
+
+  it('should return undefined for null and undefined inputs', () => {
+    expect(retrieveFeed(null)).toBeUndefined()
+    expect(retrieveFeed(undefined)).toBeUndefined()
   })
 })

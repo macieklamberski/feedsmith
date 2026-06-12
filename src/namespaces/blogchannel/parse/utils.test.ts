@@ -4,14 +4,14 @@ import { retrieveFeed } from './utils.js'
 describe('retrieveFeed', () => {
   const expectedFull = {
     blogRoll: 'http://example.com/blogroll.opml',
-    blink: 'http://recommended-site.com/',
+    blink: 'http://recommended.example.com/',
     mySubscriptions: 'http://example.com/subscriptions.opml',
   }
 
   it('should parse all blogChannel feed properties when present (with #text)', () => {
     const value = {
       'blogchannel:blogroll': { '#text': 'http://example.com/blogroll.opml' },
-      'blogchannel:blink': { '#text': 'http://recommended-site.com/' },
+      'blogchannel:blink': { '#text': 'http://recommended.example.com/' },
       'blogchannel:mysubscriptions': { '#text': 'http://example.com/subscriptions.opml' },
     }
 
@@ -21,7 +21,7 @@ describe('retrieveFeed', () => {
   it('should parse all blogChannel feed properties when present (without #text)', () => {
     const value = {
       'blogchannel:blogroll': 'http://example.com/blogroll.opml',
-      'blogchannel:blink': 'http://recommended-site.com/',
+      'blogchannel:blink': 'http://recommended.example.com/',
       'blogchannel:mysubscriptions': 'http://example.com/subscriptions.opml',
     }
 
@@ -31,7 +31,7 @@ describe('retrieveFeed', () => {
   it('should parse feed properties from arrays (uses first)', () => {
     const value = {
       'blogchannel:blogroll': ['http://example.com/blogroll.opml', 'http://example.com/alt.opml'],
-      'blogchannel:blink': ['http://recommended-site.com/', 'http://other-site.com/'],
+      'blogchannel:blink': ['http://recommended.example.com/', 'http://other.example.com/'],
       'blogchannel:mysubscriptions': [
         'http://example.com/subscriptions.opml',
         'http://example.com/subs2.opml',
@@ -54,10 +54,10 @@ describe('retrieveFeed', () => {
 
   it('should parse feed with only blink', () => {
     const value = {
-      'blogchannel:blink': 'http://recommended-site.com/',
+      'blogchannel:blink': 'http://recommended.example.com/',
     }
     const expected = {
-      blink: 'http://recommended-site.com/',
+      blink: 'http://recommended.example.com/',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -90,11 +90,11 @@ describe('retrieveFeed', () => {
   it('should handle CDATA sections in text content', () => {
     const value = {
       'blogchannel:blogroll': { '#text': '<![CDATA[http://example.com/blogroll.opml]]>' },
-      'blogchannel:blink': { '#text': '<![CDATA[http://recommended-site.com/]]>' },
+      'blogchannel:blink': { '#text': '<![CDATA[http://recommended.example.com/]]>' },
     }
     const expected = {
       blogRoll: 'http://example.com/blogroll.opml',
-      blink: 'http://recommended-site.com/',
+      blink: 'http://recommended.example.com/',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -149,10 +149,10 @@ describe('retrieveFeed', () => {
   it('should handle empty string values', () => {
     const value = {
       'blogchannel:blogroll': { '#text': '' },
-      'blogchannel:blink': { '#text': 'http://recommended-site.com/' },
+      'blogchannel:blink': { '#text': 'http://recommended.example.com/' },
     }
     const expected = {
-      blink: 'http://recommended-site.com/',
+      blink: 'http://recommended.example.com/',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
