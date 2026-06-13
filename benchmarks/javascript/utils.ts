@@ -26,6 +26,7 @@ export const runTest = async <T, F = unknown>(
   feeds: Record<string, F>,
   test: (feed: F) => T | Promise<T>,
 ) => {
+  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
   for (const name in feeds) {
     try {
       await test(feeds[name])

@@ -16,8 +16,8 @@ export const parse = <
 
   try {
     object = parser.parse(value)
-  } catch {
-    throw new MalformedError(locales.invalidOpmlFormat)
+  } catch (error) {
+    throw new MalformedError(locales.invalidOpmlFormat, { cause: error })
   }
 
   const parsed = parseDocument(object, options)
