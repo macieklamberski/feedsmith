@@ -671,10 +671,7 @@ describe('trimObject', () => {
       get a() {
         return 1
       },
-      get b() {
-        // biome-ignore lint/suspicious/useGetterReturn: It's for testing purposes.
-        return
-      },
+      b: undefined,
     }
     const expected = { a: 1 }
 

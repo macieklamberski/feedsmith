@@ -19,8 +19,8 @@ export const parse = <TDate = string>(
   try {
     const object = parser.parse(value)
     normalized = normalizeNamespaces(object)
-  } catch {
-    throw new MalformedError(locales.invalidFeedFormat)
+  } catch (error) {
+    throw new MalformedError(locales.invalidFeedFormat, { cause: error })
   }
 
   const parsed = retrieveFeed(normalized, options)
