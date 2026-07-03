@@ -1,11 +1,11 @@
-import { isNonEmptyString } from 'trousse'
-import { isObject, parseJsonObject } from '../../../common/utils.js'
+import { isNonEmptyString, isPlainObject } from 'trousse'
+import { parseJsonObject } from '../../../common/utils.js'
 import { createCaseInsensitiveGetter } from '../parse/utils.js'
 
 export const detect = (value: unknown): value is object => {
   const json = parseJsonObject(value)
 
-  if (!isObject(json)) {
+  if (!isPlainObject(json)) {
     return false
   }
 

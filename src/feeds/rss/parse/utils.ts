@@ -1,7 +1,7 @@
+import { isPlainObject } from 'trousse'
 import type { DateAny } from '../../../common/types.js'
 import {
   detectNamespaces,
-  isObject,
   parseArrayOf,
   parseBoolean,
   parseDate,
@@ -262,7 +262,7 @@ export const parseCategory: ParseUtilPartial<RssFeed.Category> = (value) => {
 }
 
 export const parseCloud: ParseUtilPartial<RssFeed.Cloud> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -278,7 +278,7 @@ export const parseCloud: ParseUtilPartial<RssFeed.Cloud> = (value) => {
 }
 
 export const parseImage: ParseUtilPartial<RssFeed.Image> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -295,7 +295,7 @@ export const parseImage: ParseUtilPartial<RssFeed.Image> = (value) => {
 }
 
 export const parseTextInput: ParseUtilPartial<RssFeed.TextInput> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -342,7 +342,7 @@ export const parseSkipDays: ParseUtilPartial<Array<string>> = (value) => {
 }
 
 export const parseEnclosure: ParseUtilPartial<RssFeed.Enclosure> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -374,7 +374,7 @@ export const parseSource: ParseUtilPartial<RssFeed.Source> = (value) => {
 }
 
 export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -426,7 +426,7 @@ export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, option
 export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, options) => {
   const channel = parseSingular(value?.channel)
 
-  if (!isObject(channel)) {
+  if (!isPlainObject(channel)) {
     return
   }
   const namespaces = detectNamespaces(channel)

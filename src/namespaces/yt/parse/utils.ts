@@ -1,15 +1,10 @@
+import { isPlainObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
-import {
-  isObject,
-  parseSingularOf,
-  parseString,
-  retrieveText,
-  trimObject,
-} from '../../../common/utils.js'
+import { parseSingularOf, parseString, retrieveText, trimObject } from '../../../common/utils.js'
 import type { YtNs } from '../common/types.js'
 
 export const retrieveItem: ParseUtilPartial<YtNs.Item> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -22,7 +17,7 @@ export const retrieveItem: ParseUtilPartial<YtNs.Item> = (value) => {
 }
 
 export const retrieveFeed: ParseUtilPartial<YtNs.Feed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

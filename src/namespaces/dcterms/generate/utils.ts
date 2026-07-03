@@ -1,15 +1,15 @@
+import { isPlainObject } from 'trousse'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generateRfc3339Date,
-  isObject,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { DcTermsNs } from '../common/types.js'
 
 export const generateItemOrFeed: GenerateUtil<DcTermsNs.ItemOrFeed<DateLike>> = (itemOrFeed) => {
-  if (!isObject(itemOrFeed)) {
+  if (!isPlainObject(itemOrFeed)) {
     return
   }
 

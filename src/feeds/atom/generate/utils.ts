@@ -1,3 +1,4 @@
+import { isPlainObject } from 'trousse'
 import { namespaceUris } from '../../../common/config.js'
 import type { DateLike } from '../../../common/types.js'
 import {
@@ -7,7 +8,6 @@ import {
   generatePlainString,
   generateRfc3339Date,
   generateTextOrCdataString,
-  isObject,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
@@ -58,7 +58,7 @@ export const createNamespaceSetter = (prefix: string | undefined) => {
 }
 
 export const generateText: GenerateUtil<AtomFeed.Text> = (text) => {
-  if (!isObject(text)) {
+  if (!isPlainObject(text)) {
     return
   }
 
@@ -70,7 +70,7 @@ export const generateText: GenerateUtil<AtomFeed.Text> = (text) => {
 }
 
 export const generateContent: GenerateUtil<AtomFeed.Content> = (content) => {
-  if (!isObject(content)) {
+  if (!isPlainObject(content)) {
     return
   }
 
@@ -85,7 +85,7 @@ export const generateContent: GenerateUtil<AtomFeed.Content> = (content) => {
 }
 
 export const generateLink: GenerateUtil<AtomFeed.Link<DateLike>> = (link) => {
-  if (!isObject(link)) {
+  if (!isPlainObject(link)) {
     return
   }
 
@@ -103,7 +103,7 @@ export const generateLink: GenerateUtil<AtomFeed.Link<DateLike>> = (link) => {
 }
 
 export const generatePerson: GenerateUtil<AtomFeed.Person> = (person, options) => {
-  if (!isObject(person)) {
+  if (!isPlainObject(person)) {
     return
   }
 
@@ -119,7 +119,7 @@ export const generatePerson: GenerateUtil<AtomFeed.Person> = (person, options) =
 }
 
 export const generateCategory: GenerateUtil<AtomFeed.Category> = (category) => {
-  if (!isObject(category)) {
+  if (!isPlainObject(category)) {
     return
   }
 
@@ -133,7 +133,7 @@ export const generateCategory: GenerateUtil<AtomFeed.Category> = (category) => {
 }
 
 export const generateGenerator: GenerateUtil<AtomFeed.Generator> = (generator) => {
-  if (!isObject(generator)) {
+  if (!isPlainObject(generator)) {
     return
   }
 
@@ -147,7 +147,7 @@ export const generateGenerator: GenerateUtil<AtomFeed.Generator> = (generator) =
 }
 
 export const generateSource: GenerateUtil<AtomFeed.Source<DateLike>> = (source, options) => {
-  if (!isObject(source)) {
+  if (!isPlainObject(source)) {
     return
   }
 
@@ -175,7 +175,7 @@ export const generateSource: GenerateUtil<AtomFeed.Source<DateLike>> = (source, 
 }
 
 export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, options) => {
-  if (!isObject(entry)) {
+  if (!isPlainObject(entry)) {
     return
   }
 
@@ -232,7 +232,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
 }
 
 export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, options) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 

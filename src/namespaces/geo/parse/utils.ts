@@ -1,15 +1,10 @@
+import { isPlainObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
-import {
-  isObject,
-  parseNumber,
-  parseSingularOf,
-  retrieveText,
-  trimObject,
-} from '../../../common/utils.js'
+import { parseNumber, parseSingularOf, retrieveText, trimObject } from '../../../common/utils.js'
 import type { GeoNs } from '../common/types.js'
 
 export const retrieveItemOrFeed: ParseUtilPartial<GeoNs.ItemOrFeed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

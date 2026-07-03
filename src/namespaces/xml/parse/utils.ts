@@ -1,9 +1,10 @@
+import { isPlainObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
-import { isObject, parseString, trimObject } from '../../../common/utils.js'
+import { parseString, trimObject } from '../../../common/utils.js'
 import type { XmlNs } from '../common/types.js'
 
 export const retrieveItemOrFeed: ParseUtilPartial<XmlNs.ItemOrFeed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

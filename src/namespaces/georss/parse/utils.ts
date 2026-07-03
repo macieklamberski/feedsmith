@@ -1,7 +1,6 @@
-import { isNonEmptyString, isPresent } from 'trousse'
+import { isNonEmptyString, isPlainObject, isPresent } from 'trousse'
 import type { ParseUtilExact, ParseUtilPartial, Unreliable } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseNumber,
   parseSingularOf,
@@ -82,7 +81,7 @@ export const parseBox: ParseUtilExact<GeoRssNs.Box> = (value) => {
 }
 
 export const retrieveItemOrFeed: ParseUtilPartial<GeoRssNs.ItemOrFeed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

@@ -1,6 +1,6 @@
+import { isPlainObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseSingularOf,
   parseString,
@@ -10,7 +10,7 @@ import {
 import type { SourceNs } from '../common/types.js'
 
 export const parseAccount: ParseUtilPartial<SourceNs.Account> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -23,7 +23,7 @@ export const parseAccount: ParseUtilPartial<SourceNs.Account> = (value) => {
 }
 
 export const parseLikes: ParseUtilPartial<SourceNs.Likes> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -35,7 +35,7 @@ export const parseLikes: ParseUtilPartial<SourceNs.Likes> = (value) => {
 }
 
 export const parseArchive: ParseUtilPartial<SourceNs.Archive> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -54,7 +54,7 @@ export const parseArchive: ParseUtilPartial<SourceNs.Archive> = (value) => {
 }
 
 export const parseSubscriptionList: ParseUtilPartial<SourceNs.SubscriptionList> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -67,7 +67,7 @@ export const parseSubscriptionList: ParseUtilPartial<SourceNs.SubscriptionList> 
 }
 
 export const retrieveFeed: ParseUtilPartial<SourceNs.Feed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -87,7 +87,7 @@ export const retrieveFeed: ParseUtilPartial<SourceNs.Feed> = (value) => {
 }
 
 export const retrieveItem: ParseUtilPartial<SourceNs.Item> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

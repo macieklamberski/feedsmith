@@ -1,3 +1,4 @@
+import { isPlainObject } from 'trousse'
 import { namespaceUris } from '../../../common/config.js'
 import type { DateLike } from '../../../common/types.js'
 import {
@@ -8,7 +9,6 @@ import {
   generatePlainString,
   generateRfc822Date,
   generateTextOrCdataString,
-  isObject,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
@@ -74,7 +74,7 @@ import { generateItemOrFeed as generateXmlItemOrFeed } from '../../../namespaces
 import type { GenerateUtil, RssFeed } from '../common/types.js'
 
 export const generatePerson: GenerateUtil<RssFeed.Person> = (person) => {
-  if (!isObject(person)) {
+  if (!isPlainObject(person)) {
     return
   }
 
@@ -96,7 +96,7 @@ export const generatePerson: GenerateUtil<RssFeed.Person> = (person) => {
 }
 
 export const generateCategory: GenerateUtil<RssFeed.Category> = (category) => {
-  if (!isObject(category)) {
+  if (!isPlainObject(category)) {
     return
   }
 
@@ -109,7 +109,7 @@ export const generateCategory: GenerateUtil<RssFeed.Category> = (category) => {
 }
 
 export const generateCloud: GenerateUtil<RssFeed.Cloud> = (cloud) => {
-  if (!isObject(cloud)) {
+  if (!isPlainObject(cloud)) {
     return
   }
 
@@ -125,7 +125,7 @@ export const generateCloud: GenerateUtil<RssFeed.Cloud> = (cloud) => {
 }
 
 export const generateImage: GenerateUtil<RssFeed.Image> = (image) => {
-  if (!isObject(image)) {
+  if (!isPlainObject(image)) {
     return
   }
 
@@ -142,7 +142,7 @@ export const generateImage: GenerateUtil<RssFeed.Image> = (image) => {
 }
 
 export const generateTextInput: GenerateUtil<RssFeed.TextInput> = (textInput) => {
-  if (!isObject(textInput)) {
+  if (!isPlainObject(textInput)) {
     return
   }
 
@@ -157,7 +157,7 @@ export const generateTextInput: GenerateUtil<RssFeed.TextInput> = (textInput) =>
 }
 
 export const generateEnclosure: GenerateUtil<RssFeed.Enclosure> = (enclosure) => {
-  if (!isObject(enclosure)) {
+  if (!isPlainObject(enclosure)) {
     return
   }
 
@@ -196,7 +196,7 @@ export const generateGuid: GenerateUtil<RssFeed.Guid> = (guid) => {
 }
 
 export const generateSource: GenerateUtil<RssFeed.Source> = (source) => {
-  if (!isObject(source)) {
+  if (!isPlainObject(source)) {
     return
   }
 
@@ -209,7 +209,7 @@ export const generateSource: GenerateUtil<RssFeed.Source> = (source) => {
 }
 
 export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
-  if (!isObject(item)) {
+  if (!isPlainObject(item)) {
     return
   }
 
@@ -254,7 +254,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
 }
 
 export const generateFeed: GenerateUtil<RssFeed.Feed<DateLike>> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 

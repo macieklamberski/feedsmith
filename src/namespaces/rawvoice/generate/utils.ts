@@ -1,3 +1,4 @@
+import { isPlainObject } from 'trousse'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
@@ -6,14 +7,13 @@ import {
   generateRfc822Date,
   generateTextOrCdataString,
   generateYesNoBoolean,
-  isObject,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { RawVoiceNs } from '../common/types.js'
 
 export const generateRating: GenerateUtil<RawVoiceNs.Rating> = (rating) => {
-  if (!isObject(rating)) {
+  if (!isPlainObject(rating)) {
     return
   }
 
@@ -27,7 +27,7 @@ export const generateRating: GenerateUtil<RawVoiceNs.Rating> = (rating) => {
 }
 
 export const generateLiveStream: GenerateUtil<RawVoiceNs.LiveStream<DateLike>> = (liveStream) => {
-  if (!isObject(liveStream)) {
+  if (!isPlainObject(liveStream)) {
     return
   }
 
@@ -42,7 +42,7 @@ export const generateLiveStream: GenerateUtil<RawVoiceNs.LiveStream<DateLike>> =
 }
 
 export const generatePoster: GenerateUtil<RawVoiceNs.Poster> = (poster) => {
-  if (!isObject(poster)) {
+  if (!isPlainObject(poster)) {
     return
   }
 
@@ -56,7 +56,7 @@ export const generatePoster: GenerateUtil<RawVoiceNs.Poster> = (poster) => {
 export const generateAlternateEnclosure: GenerateUtil<RawVoiceNs.AlternateEnclosure> = (
   alternateEnclosure,
 ) => {
-  if (!isObject(alternateEnclosure)) {
+  if (!isPlainObject(alternateEnclosure)) {
     return
   }
 
@@ -70,7 +70,7 @@ export const generateAlternateEnclosure: GenerateUtil<RawVoiceNs.AlternateEnclos
 }
 
 export const generateSubscribe: GenerateUtil<RawVoiceNs.Subscribe> = (subscribe) => {
-  if (!isObject(subscribe)) {
+  if (!isPlainObject(subscribe)) {
     return
   }
 
@@ -85,7 +85,7 @@ export const generateSubscribe: GenerateUtil<RawVoiceNs.Subscribe> = (subscribe)
 }
 
 export const generateMetamark: GenerateUtil<RawVoiceNs.Metamark> = (metamark) => {
-  if (!isObject(metamark)) {
+  if (!isPlainObject(metamark)) {
     return
   }
 
@@ -101,7 +101,7 @@ export const generateMetamark: GenerateUtil<RawVoiceNs.Metamark> = (metamark) =>
 }
 
 export const generateDonate: GenerateUtil<RawVoiceNs.Donate> = (donate) => {
-  if (!isObject(donate)) {
+  if (!isPlainObject(donate)) {
     return
   }
 
@@ -114,7 +114,7 @@ export const generateDonate: GenerateUtil<RawVoiceNs.Donate> = (donate) => {
 }
 
 export const generateItem: GenerateUtil<RawVoiceNs.Item> = (item) => {
-  if (!isObject(item)) {
+  if (!isPlainObject(item)) {
     return
   }
 
@@ -131,7 +131,7 @@ export const generateItem: GenerateUtil<RawVoiceNs.Item> = (item) => {
 }
 
 export const generateFeed: GenerateUtil<RawVoiceNs.Feed<DateLike>> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 

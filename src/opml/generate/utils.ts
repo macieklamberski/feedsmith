@@ -1,4 +1,4 @@
-import { isPresent } from 'trousse'
+import { isPlainObject, isPresent } from 'trousse'
 import type { DateLike } from '../../common/types.js'
 import {
   generateBoolean,
@@ -7,14 +7,13 @@ import {
   generateNumber,
   generatePlainString,
   generateRfc822Date,
-  isObject,
   trimArray,
   trimObject,
 } from '../../common/utils.js'
 import type { GenerateUtil, Opml } from '../common/types.js'
 
 export const generateOutline: GenerateUtil<Opml.Outline<DateLike>> = (outline, options) => {
-  if (!isObject(outline)) {
+  if (!isPlainObject(outline)) {
     return
   }
 
@@ -51,7 +50,7 @@ export const generateOutline: GenerateUtil<Opml.Outline<DateLike>> = (outline, o
 }
 
 export const generateHead: GenerateUtil<Opml.Head<DateLike>> = (head) => {
-  if (!isObject(head)) {
+  if (!isPlainObject(head)) {
     return
   }
 
@@ -75,7 +74,7 @@ export const generateHead: GenerateUtil<Opml.Head<DateLike>> = (head) => {
 }
 
 export const generateBody: GenerateUtil<Opml.Body<DateLike>> = (body, options) => {
-  if (!isObject(body)) {
+  if (!isPlainObject(body)) {
     return
   }
 
@@ -87,7 +86,7 @@ export const generateBody: GenerateUtil<Opml.Body<DateLike>> = (body, options) =
 }
 
 export const generateDocument: GenerateUtil<Opml.Document<DateLike>> = (opml, options) => {
-  if (!isObject(opml)) {
+  if (!isPlainObject(opml)) {
     return
   }
 

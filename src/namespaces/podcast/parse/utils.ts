@@ -1,6 +1,6 @@
+import { isPlainObject } from 'trousse'
 import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseBoolean,
   parseDate,
@@ -18,7 +18,7 @@ const whitespaceRegex = /\s+/
 const trailingWRegex = /w$/
 
 export const parseTranscript: ParseUtilPartial<PodcastNs.Transcript> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -42,7 +42,7 @@ export const parseLocked: ParseUtilPartial<PodcastNs.Locked> = (value) => {
 }
 
 export const parseFunding: ParseUtilPartial<PodcastNs.Funding> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -55,7 +55,7 @@ export const parseFunding: ParseUtilPartial<PodcastNs.Funding> = (value) => {
 }
 
 export const parseChapters: ParseUtilPartial<PodcastNs.Chapters> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -68,7 +68,7 @@ export const parseChapters: ParseUtilPartial<PodcastNs.Chapters> = (value) => {
 }
 
 export const parseSoundbite: ParseUtilPartial<PodcastNs.Soundbite> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -127,7 +127,7 @@ export const parseTrailer: ParseUtilPartial<
   PodcastNs.Trailer<DateAny>,
   ParseMainOptions<DateAny>
 > = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -153,7 +153,7 @@ export const parseLicense: ParseUtilPartial<PodcastNs.License> = (value) => {
 }
 
 export const parseAlternateEnclosure: ParseUtilPartial<PodcastNs.AlternateEnclosure> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -175,7 +175,7 @@ export const parseAlternateEnclosure: ParseUtilPartial<PodcastNs.AlternateEnclos
 }
 
 export const parseSource: ParseUtilPartial<PodcastNs.Source> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -188,7 +188,7 @@ export const parseSource: ParseUtilPartial<PodcastNs.Source> = (value) => {
 }
 
 export const parseIntegrity: ParseUtilPartial<PodcastNs.Integrity> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -201,7 +201,7 @@ export const parseIntegrity: ParseUtilPartial<PodcastNs.Integrity> = (value) => 
 }
 
 export const parseValue: ParseUtilPartial<PodcastNs.Value> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -217,7 +217,7 @@ export const parseValue: ParseUtilPartial<PodcastNs.Value> = (value) => {
 }
 
 export const parseValueRecipient: ParseUtilPartial<PodcastNs.ValueRecipient> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -235,7 +235,7 @@ export const parseValueRecipient: ParseUtilPartial<PodcastNs.ValueRecipient> = (
 }
 
 export const parseImage: ParseUtilPartial<PodcastNs.Image> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -287,7 +287,7 @@ export const parseLiveItem: ParseUtilPartial<
   PodcastNs.LiveItem<DateAny>,
   ParseMainOptions<DateAny>
 > = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -303,7 +303,7 @@ export const parseLiveItem: ParseUtilPartial<
 }
 
 export const parseContentLink: ParseUtilPartial<PodcastNs.ContentLink> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -316,7 +316,7 @@ export const parseContentLink: ParseUtilPartial<PodcastNs.ContentLink> = (value)
 }
 
 export const parseSocialInteract: ParseUtilPartial<PodcastNs.SocialInteract> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -332,7 +332,7 @@ export const parseSocialInteract: ParseUtilPartial<PodcastNs.SocialInteract> = (
 }
 
 export const parseChat: ParseUtilPartial<PodcastNs.Chat> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -365,7 +365,7 @@ export const parseTxt: ParseUtilPartial<PodcastNs.Txt> = (value) => {
 }
 
 export const parseRemoteItem: ParseUtilPartial<PodcastNs.RemoteItem> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -381,7 +381,7 @@ export const parseRemoteItem: ParseUtilPartial<PodcastNs.RemoteItem> = (value) =
 }
 
 export const parsePodroll: ParseUtilPartial<PodcastNs.Podroll> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -407,7 +407,7 @@ export const parseUpdateFrequency: ParseUtilPartial<
 }
 
 export const parsePodping: ParseUtilPartial<PodcastNs.Podping> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -419,7 +419,7 @@ export const parsePodping: ParseUtilPartial<PodcastNs.Podping> = (value) => {
 }
 
 export const parsePublisher: ParseUtilPartial<PodcastNs.Publisher> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -431,7 +431,7 @@ export const parsePublisher: ParseUtilPartial<PodcastNs.Publisher> = (value) => 
 }
 
 export const parseValueTimeSplit: ParseUtilPartial<PodcastNs.ValueTimeSplit> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -448,7 +448,7 @@ export const parseValueTimeSplit: ParseUtilPartial<PodcastNs.ValueTimeSplit> = (
 }
 
 export const retrieveItem: ParseUtilPartial<PodcastNs.Item> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -476,7 +476,7 @@ export const retrieveFeed: ParseUtilPartial<PodcastNs.Feed<DateAny>, ParseMainOp
   value,
   options,
 ) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

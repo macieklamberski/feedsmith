@@ -1,7 +1,7 @@
-import type { DateAny } from '../../../common/types.js'
+import { isPlainObject } from 'trousse'
+import type { DateAny, Unreliable } from '../../../common/types.js'
 import {
   detectNamespaces,
-  isObject,
   parseArrayOf,
   parseSingular,
   parseSingularOf,
@@ -38,11 +38,11 @@ const retrieveByAbout = (elements: unknown, resourceUri: string | undefined): un
 }
 
 const findByTocReference = (value: unknown, property: string): unknown => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
-  const channel = parseSingular(value.channel)
+  const channel = parseSingular(value.channel as Unreliable)
   const resourceRef = parseSingular(channel?.[property])
   const resourceUri = parseString(resourceRef?.['@resource'])
 
@@ -50,7 +50,7 @@ const findByTocReference = (value: unknown, property: string): unknown => {
 }
 
 export const parseImage: ParseUtilPartial<RdfFeed.Image> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -69,7 +69,7 @@ export const retrieveImage: ParseUtilPartial<RdfFeed.Image> = (value) => {
 }
 
 export const parseTextInput: ParseUtilPartial<RdfFeed.TextInput> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -92,7 +92,7 @@ export const retrieveTextInput: ParseUtilPartial<RdfFeed.TextInput> = (value) =>
 }
 
 export const parseItem: ParseUtilPartial<RdfFeed.Item<DateAny>> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -117,11 +117,11 @@ export const parseItem: ParseUtilPartial<RdfFeed.Item<DateAny>> = (value, option
 }
 
 export const retrieveItems: ParseUtilPartial<Array<RdfFeed.Item<DateAny>>> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
-  const channel = parseSingular(value.channel)
+  const channel = parseSingular(value.channel as Unreliable)
   const tocItems = parseSingular(channel?.items)
   const itemsSeq = parseSingular(tocItems?.seq)
   const itemUris = parseArrayOf(
@@ -142,11 +142,11 @@ export const retrieveItems: ParseUtilPartial<Array<RdfFeed.Item<DateAny>>> = (va
 }
 
 export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
-  const channel = parseSingular(value.channel)
+  const channel = parseSingular(value.channel as Unreliable)
   const namespaces = detectNamespaces(channel)
   const feed = {
     title: parseSingularOf(channel?.title, (value) => parseString(retrieveText(value))),

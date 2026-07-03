@@ -1,7 +1,7 @@
+import { isPlainObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
-  isObject,
   parseArrayOf,
   parseBoolean,
   parseCsvOf,
@@ -23,7 +23,7 @@ export const parseRating: ParseUtilPartial<MediaNs.Rating> = (value) => {
 }
 
 export const retrieveRatings: ParseUtilPartial<Array<MediaNs.Rating>> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -56,7 +56,7 @@ export const parseTitleOrDescription: ParseUtilPartial<MediaNs.TitleOrDescriptio
 }
 
 export const parseThumbnail: ParseUtilPartial<MediaNs.Thumbnail> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -90,7 +90,7 @@ export const parseHash: ParseUtilPartial<MediaNs.Hash> = (value) => {
 }
 
 export const parsePlayer: ParseUtilPartial<MediaNs.Player> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -135,7 +135,7 @@ export const parseText: ParseUtilPartial<MediaNs.Text> = (value) => {
 }
 
 export const parseRestriction: ParseUtilPartial<MediaNs.Restriction> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -149,7 +149,7 @@ export const parseRestriction: ParseUtilPartial<MediaNs.Restriction> = (value) =
 }
 
 export const parseCommunity: ParseUtilPartial<MediaNs.Community> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -163,7 +163,7 @@ export const parseCommunity: ParseUtilPartial<MediaNs.Community> = (value) => {
 }
 
 export const parseStarRating: ParseUtilPartial<MediaNs.StarRating> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -178,7 +178,7 @@ export const parseStarRating: ParseUtilPartial<MediaNs.StarRating> = (value) => 
 }
 
 export const parseStatistics: ParseUtilPartial<MediaNs.Statistics> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -206,7 +206,7 @@ export const parseComments: ParseUtilPartial<Array<string>> = (value) => {
 }
 
 export const parseEmbed: ParseUtilPartial<MediaNs.Embed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -221,7 +221,7 @@ export const parseEmbed: ParseUtilPartial<MediaNs.Embed> = (value) => {
 }
 
 export const parseParam: ParseUtilPartial<MediaNs.Param> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -242,7 +242,7 @@ export const parseBackLinks: ParseUtilPartial<Array<string>> = (value) => {
 }
 
 export const parseStatus: ParseUtilPartial<MediaNs.Status> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -255,7 +255,7 @@ export const parseStatus: ParseUtilPartial<MediaNs.Status> = (value) => {
 }
 
 export const parsePrice: ParseUtilPartial<MediaNs.Price> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -280,7 +280,7 @@ export const parseLicense: ParseUtilPartial<MediaNs.License> = (value) => {
 }
 
 export const parseSubTitle: ParseUtilPartial<MediaNs.SubTitle> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -294,7 +294,7 @@ export const parseSubTitle: ParseUtilPartial<MediaNs.SubTitle> = (value) => {
 }
 
 export const parsePeerLink: ParseUtilPartial<MediaNs.PeerLink> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -307,7 +307,7 @@ export const parsePeerLink: ParseUtilPartial<MediaNs.PeerLink> = (value) => {
 }
 
 export const parseRights: ParseUtilPartial<MediaNs.Rights> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -319,7 +319,7 @@ export const parseRights: ParseUtilPartial<MediaNs.Rights> = (value) => {
 }
 
 export const parseScene: ParseUtilPartial<MediaNs.Scene> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -341,7 +341,7 @@ export const parseScenes: ParseUtilPartial<Array<MediaNs.Scene>> = (value) => {
 
 export const parseLocation: ParseUtilPartial<MediaNs.Location> = (value) => {
   // For cases where the location is simply a string within the <media:location> tag.
-  if (isNonEmptyStringOrNumber(value) || isObject(value)) {
+  if (isNonEmptyStringOrNumber(value) || isPlainObject(value)) {
     const location = {
       description: ((value) => parseString(retrieveText(value)))(value),
     }
@@ -354,7 +354,7 @@ export const parseLocation: ParseUtilPartial<MediaNs.Location> = (value) => {
 }
 
 export const retrieveCommonElements: ParseUtilPartial<MediaNs.CommonElements> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -392,7 +392,7 @@ export const retrieveCommonElements: ParseUtilPartial<MediaNs.CommonElements> = 
 }
 
 export const parseContent: ParseUtilPartial<MediaNs.Content> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -418,7 +418,7 @@ export const parseContent: ParseUtilPartial<MediaNs.Content> = (value) => {
 }
 
 export const parseGroup: ParseUtilPartial<MediaNs.Group> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -431,7 +431,7 @@ export const parseGroup: ParseUtilPartial<MediaNs.Group> = (value) => {
 }
 
 export const retrieveItemOrFeed: ParseUtilPartial<MediaNs.ItemOrFeed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

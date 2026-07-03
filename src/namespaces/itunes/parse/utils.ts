@@ -1,7 +1,7 @@
+import { isPlainObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
-  isObject,
   parseArrayOf,
   parseBoolean,
   parseCsvOf,
@@ -18,7 +18,7 @@ const explicitOrYesRegex = /^\p{White_Space}*(explicit|yes)\p{White_Space}*$/iu
 const durationRegex = /^(?:(\d+):)?(\d+):(\d+)$/
 
 export const parseCategory: ParseUtilPartial<ItunesNs.Category> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -31,7 +31,7 @@ export const parseCategory: ParseUtilPartial<ItunesNs.Category> = (value) => {
 }
 
 export const parseOwner: ParseUtilPartial<ItunesNs.Owner> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -83,7 +83,7 @@ export const parseImage: ParseUtilPartial<string> = (value) => {
     return parseString(value)
   }
 
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -91,7 +91,7 @@ export const parseImage: ParseUtilPartial<string> = (value) => {
 }
 
 export const retrieveItem: ParseUtilPartial<ItunesNs.Item> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -126,7 +126,7 @@ export const retrieveItem: ParseUtilPartial<ItunesNs.Item> = (value) => {
 }
 
 export const retrieveFeed: ParseUtilPartial<ItunesNs.Feed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

@@ -21,7 +21,6 @@ import {
   generateYesNoBoolean,
   hasEntities,
   isNonEmptyStringOrNumber,
-  isObject,
   limitArray,
   parseArray,
   parseArrayOf,
@@ -40,67 +39,6 @@ import {
   trimArray,
   trimObject,
 } from './utils.js'
-
-describe('isObject', () => {
-  it('should return true for plain objects', () => {
-    expect(isObject({})).toBe(true)
-    expect(isObject({ a: 1 })).toBe(true)
-    expect(isObject({ a: null, b: undefined })).toBe(true)
-    expect(isObject({ toString: () => 'custom' })).toBe(true)
-  })
-
-  it('should return false for arrays', () => {
-    expect(isObject([])).toBe(false)
-    expect(isObject([1, 2, 3])).toBe(false)
-    expect(isObject(new Array(5))).toBe(false)
-  })
-
-  it('should return false for null', () => {
-    expect(isObject(null)).toBe(false)
-  })
-
-  it('should return false for undefined', () => {
-    expect(isObject(undefined)).toBe(false)
-  })
-
-  it('should return false for primitive types', () => {
-    expect(isObject(42)).toBe(false)
-    expect(isObject('string')).toBe(false)
-    expect(isObject(true)).toBe(false)
-    expect(isObject(Symbol('sym'))).toBe(false)
-    expect(isObject(BigInt(123))).toBe(false)
-  })
-
-  it('should return false for functions', () => {
-    expect(isObject(() => {})).toBe(false)
-    // biome-ignore lint/complexity/useArrowFunction: It's for testing purposes.
-    expect(isObject(function () {})).toBe(false)
-    expect(isObject(Math.sin)).toBe(false)
-  })
-
-  it('should return false for objects with custom prototypes', () => {
-    class CustomClass {}
-
-    expect(isObject(new CustomClass())).toBe(false)
-  })
-
-  it('should return false for built-in objects', () => {
-    expect(isObject(new Date())).toBe(false)
-    // biome-ignore lint/suspicious/useErrorMessage: It's for testing purposes.
-    expect(isObject(new Error())).toBe(false)
-    expect(isObject(new Map())).toBe(false)
-    expect(isObject(new Set())).toBe(false)
-    expect(isObject(new WeakMap())).toBe(false)
-    expect(isObject(new WeakSet())).toBe(false)
-    // biome-ignore lint/complexity/useRegexLiterals: It's for testing purposes.
-    expect(isObject(new RegExp('.'))).toBe(false)
-    expect(isObject(new ArrayBuffer(10))).toBe(false)
-  })
-
-  it('should return false for objects with null prototype', () => {
-    expect(isObject(Object.create(null))).toBe(false)
-  })
-})
 
 describe('isNonEmptyStringOrNumber', () => {
   it('should return true for non-empty strings', () => {

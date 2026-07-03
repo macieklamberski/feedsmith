@@ -1,6 +1,6 @@
+import { isPlainObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseSingularOf,
   parseString,
@@ -11,7 +11,7 @@ import {
 import type { GooglePlayNs } from '../common/types.js'
 
 export const parseImage: ParseUtilPartial<GooglePlayNs.Image> = (value) => {
-  if (isObject(value) && value['@href']) {
+  if (isPlainObject(value) && value['@href']) {
     const image = {
       href: parseString(value['@href']),
     }
@@ -30,7 +30,7 @@ export const parseImage: ParseUtilPartial<GooglePlayNs.Image> = (value) => {
 }
 
 export const parseCategory: ParseUtilPartial<string> = (value) => {
-  if (isObject(value) && value['@text']) {
+  if (isPlainObject(value) && value['@text']) {
     return parseString(value['@text'])
   }
 
@@ -48,7 +48,7 @@ export const parseExplicit: ParseUtilPartial<boolean | 'clean'> = (value) => {
 }
 
 export const retrieveItem: ParseUtilPartial<GooglePlayNs.Item> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -70,7 +70,7 @@ export const retrieveItem: ParseUtilPartial<GooglePlayNs.Item> = (value) => {
 }
 
 export const retrieveFeed: ParseUtilPartial<GooglePlayNs.Feed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
