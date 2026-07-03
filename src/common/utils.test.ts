@@ -20,10 +20,8 @@ import {
   generateXmlStylesheet,
   generateYesNoBoolean,
   hasEntities,
-  isNonEmptyString,
   isNonEmptyStringOrNumber,
   isObject,
-  isPresent,
   limitArray,
   parseArray,
   parseArrayOf,
@@ -42,69 +40,6 @@ import {
   trimArray,
   trimObject,
 } from './utils.js'
-
-describe('isPresent', () => {
-  it('should return false for null', () => {
-    expect(isPresent(null)).toBe(false)
-  })
-
-  it('should return false for undefined', () => {
-    expect(isPresent(undefined)).toBe(false)
-  })
-
-  it('should return true for empty string', () => {
-    expect(isPresent('')).toBe(true)
-  })
-
-  it('should return true for zero', () => {
-    expect(isPresent(0)).toBe(true)
-  })
-
-  it('should return true for NaN', () => {
-    expect(isPresent(Number.NaN)).toBe(true)
-  })
-
-  it('should return true for false', () => {
-    expect(isPresent(false)).toBe(true)
-  })
-
-  it('should return true for empty objects', () => {
-    expect(isPresent({})).toBe(true)
-  })
-
-  it('should return true for empty arrays', () => {
-    expect(isPresent([])).toBe(true)
-  })
-
-  it('should return true for string values', () => {
-    expect(isPresent('hello')).toBe(true)
-  })
-
-  it('should return true for number values', () => {
-    expect(isPresent(123)).toBe(true)
-  })
-
-  it('should return true for object values', () => {
-    expect(isPresent({ key: 'value' })).toBe(true)
-  })
-
-  it('should return true for array values', () => {
-    expect(isPresent([1, 2, 3])).toBe(true)
-  })
-
-  it('should return true for function values', () => {
-    expect(isPresent(() => {})).toBe(true)
-  })
-
-  it('should return true for Date objects', () => {
-    expect(isPresent(new Date())).toBe(true)
-  })
-
-  it('should return true for RegExp objects', () => {
-    // biome-ignore lint/performance/useTopLevelRegex: It's for testing purposes.
-    expect(isPresent(/test/)).toBe(true)
-  })
-})
 
 describe('isObject', () => {
   it('should return true for plain objects', () => {
@@ -164,73 +99,6 @@ describe('isObject', () => {
 
   it('should return false for objects with null prototype', () => {
     expect(isObject(Object.create(null))).toBe(false)
-  })
-})
-
-describe('isNonEmptyString', () => {
-  it('should return true for non-empty strings', () => {
-    expect(isNonEmptyString('hello')).toBe(true)
-    expect(isNonEmptyString('0')).toBe(true)
-    expect(isNonEmptyString('undefined')).toBe(true)
-    expect(isNonEmptyString('null')).toBe(true)
-  })
-
-  it('should handle edge cases', () => {
-    // biome-ignore lint/style/useConsistentBuiltinInstantiation: It's for testing purposes.
-    const stringObject = new String('hello')
-
-    expect(isNonEmptyString(stringObject)).toBe(false)
-  })
-
-  it('should return false for empty strings', () => {
-    expect(isNonEmptyString('')).toBe(false)
-    expect(isNonEmptyString(' ')).toBe(false)
-  })
-
-  it('should return false for unicode whitespace-only strings', () => {
-    expect(isNonEmptyString('\u00a0')).toBe(false)
-    expect(isNonEmptyString('\u2002\u2003')).toBe(false)
-    expect(isNonEmptyString('\u3000')).toBe(false)
-  })
-
-  it('should return false for number', () => {
-    expect(isNonEmptyString(2)).toBe(false)
-  })
-
-  it('should return false for arrays', () => {
-    expect(isNonEmptyString([])).toBe(false)
-    expect(isNonEmptyString([1, 2, 3])).toBe(false)
-    expect(isNonEmptyString(['hello'])).toBe(false)
-  })
-
-  it('should return false for objects', () => {
-    expect(isNonEmptyString({})).toBe(false)
-    expect(isNonEmptyString({ key: 'value' })).toBe(false)
-    expect(isNonEmptyString(new Date())).toBe(false)
-  })
-
-  it('should return false for null and undefined', () => {
-    expect(isNonEmptyString(null)).toBe(false)
-    expect(isNonEmptyString(undefined)).toBe(false)
-  })
-
-  it('should return false for booleans', () => {
-    expect(isNonEmptyString(true)).toBe(false)
-    expect(isNonEmptyString(false)).toBe(false)
-  })
-
-  it('should return false for functions', () => {
-    expect(isNonEmptyString(() => {})).toBe(false)
-    // biome-ignore lint/complexity/useArrowFunction: It's for testing purposes.
-    expect(isNonEmptyString(function () {})).toBe(false)
-  })
-
-  it('should return false for symbols', () => {
-    expect(isNonEmptyString(Symbol('test'))).toBe(false)
-  })
-
-  it('should return false for BigInt', () => {
-    expect(isNonEmptyString(BigInt(123))).toBe(false)
   })
 })
 

@@ -1,8 +1,7 @@
+import { isNonEmptyString, isPresent } from 'trousse'
 import type { ParseUtilExact, ParseUtilPartial, Unreliable } from '../../../common/types.js'
 import {
-  isNonEmptyString,
   isObject,
-  isPresent,
   parseArrayOf,
   parseNumber,
   parseSingularOf,

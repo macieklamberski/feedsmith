@@ -1,3 +1,4 @@
+import { isNonEmptyString } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
@@ -5,7 +6,6 @@ import {
   generateNumber,
   generatePlainString,
   generateYesNoBoolean,
-  isNonEmptyString,
   isObject,
   trimArray,
   trimObject,

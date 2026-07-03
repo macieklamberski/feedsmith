@@ -1,7 +1,7 @@
+import { isNonEmptyString } from 'trousse'
 import type { DateAny, Unreliable } from '../../../common/types.js'
 import {
   detectNamespaces,
-  isNonEmptyString,
   isObject,
   parseArrayOf,
   parseDate,

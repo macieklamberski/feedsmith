@@ -1,3 +1,4 @@
+import { isPresent } from 'trousse'
 import type { DateLike } from '../../common/types.js'
 import {
   generateBoolean,
@@ -7,7 +8,6 @@ import {
   generatePlainString,
   generateRfc822Date,
   isObject,
-  isPresent,
   trimArray,
   trimObject,
 } from '../../common/utils.js'

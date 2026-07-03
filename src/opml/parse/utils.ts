@@ -1,7 +1,7 @@
+import { isPresent } from 'trousse'
 import type { DateAny } from '../../common/types.js'
 import {
   isObject,
-  isPresent,
   parseArrayOf,
   parseBoolean,
   parseCsvOf,

@@ -1,5 +1,14 @@
 import { decodeHTML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
+import {
+  coerceBoolean,
+  coerceNumber,
+  coerceSingular,
+  isNonEmptyString,
+  isNumber,
+  isPlainObject,
+  isPresent,
+} from 'trousse'
 import type {
   AnyOf,
   DateAny,
@@ -10,27 +19,12 @@ import type {
   XmlStylesheet,
 } from './types.js'
 
-export const isPresent = <T>(value: T): value is NonNullable<T> => {
-  return value != null
-}
-
 export const isObject = (value: Unreliable): value is Record<string, Unreliable> => {
-  return (
-    value != null &&
-    typeof value === 'object' &&
-    !Array.isArray(value) &&
-    value.constructor === Object
-  )
-}
-
-const whitespaceOnlyRegex = /^\p{White_Space}*$/u
-
-export const isNonEmptyString = (value: Unreliable): value is string => {
-  return typeof value === 'string' && value !== '' && !whitespaceOnlyRegex.test(value)
+  return isPlainObject(value)
 }
 
 export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | number => {
-  return typeof value === 'number' || isNonEmptyString(value)
+  return isNumber(value) || isNonEmptyString(value)
 }
 
 export const retrieveText = (value: Unreliable): Unreliable => {
@@ -249,35 +243,13 @@ export const parseJsonString: ParseUtilExact<string> = (value) => {
 }
 
 export const parseNumber: ParseUtilExact<number> = (value) => {
-  if (typeof value === 'number') {
-    return value
-  }
-
-  if (isNonEmptyString(value)) {
-    const numeric = +value
-
-    return Number.isNaN(numeric) ? undefined : numeric
-  }
+  return coerceNumber(value)
 }
 
-const trueRegex = /^\p{White_Space}*true\p{White_Space}*$/iu
-const falseRegex = /^\p{White_Space}*false\p{White_Space}*$/iu
 const yesRegex = /^\p{White_Space}*yes\p{White_Space}*$/iu
 
 export const parseBoolean: ParseUtilExact<boolean> = (value) => {
-  if (typeof value === 'boolean') {
-    return value
-  }
-
-  if (isNonEmptyString(value)) {
-    if (trueRegex.test(value)) {
-      return true
-    }
-
-    if (falseRegex.test(value)) {
-      return false
-    }
-  }
+  return coerceBoolean(value)
 }
 
 export const parseYesNoBoolean: ParseUtilExact<boolean> = (value) => {
@@ -365,7 +337,7 @@ export const limitArray = <T>(array: Array<T>, limit: number | undefined): Array
 }
 
 export const parseSingular = <T>(value: T | Array<T>): T => {
-  return Array.isArray(value) ? value[0] : value
+  return coerceSingular(value)
 }
 
 export const parseSingularOf = <R>(value: Unreliable, parse: ParseUtilExact<R>): R | undefined => {
