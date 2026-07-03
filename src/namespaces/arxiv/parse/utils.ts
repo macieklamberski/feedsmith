@@ -1,15 +1,10 @@
+import { isPlainObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
-import {
-  isObject,
-  parseSingularOf,
-  parseString,
-  retrieveText,
-  trimObject,
-} from '../../../common/utils.js'
+import { parseSingularOf, parseString, retrieveText, trimObject } from '../../../common/utils.js'
 import type { ArxivNs } from '../common/types.js'
 
 export const parsePrimaryCategory: ParseUtilPartial<ArxivNs.PrimaryCategory> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -23,7 +18,7 @@ export const parsePrimaryCategory: ParseUtilPartial<ArxivNs.PrimaryCategory> = (
 }
 
 export const retrieveAuthor: ParseUtilPartial<ArxivNs.Author> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -37,7 +32,7 @@ export const retrieveAuthor: ParseUtilPartial<ArxivNs.Author> = (value) => {
 }
 
 export const retrieveEntry: ParseUtilPartial<ArxivNs.Entry> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

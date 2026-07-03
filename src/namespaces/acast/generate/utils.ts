@@ -1,15 +1,15 @@
+import { isPlainObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generatePlainString,
   generateTextOrCdataString,
-  isObject,
   trimObject,
 } from '../../../common/utils.js'
 import type { AcastNs } from '../common/types.js'
 
 export const generateSignature: GenerateUtil<AcastNs.Signature> = (signature) => {
-  if (!isObject(signature)) {
+  if (!isPlainObject(signature)) {
     return
   }
 
@@ -23,7 +23,7 @@ export const generateSignature: GenerateUtil<AcastNs.Signature> = (signature) =>
 }
 
 export const generateNetwork: GenerateUtil<AcastNs.Network> = (network) => {
-  if (!isObject(network)) {
+  if (!isPlainObject(network)) {
     return
   }
 
@@ -37,7 +37,7 @@ export const generateNetwork: GenerateUtil<AcastNs.Network> = (network) => {
 }
 
 export const generateFeed: GenerateUtil<AcastNs.Feed> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 
@@ -54,7 +54,7 @@ export const generateFeed: GenerateUtil<AcastNs.Feed> = (feed) => {
 }
 
 export const generateItem: GenerateUtil<AcastNs.Item> = (item) => {
-  if (!isObject(item)) {
+  if (!isPlainObject(item)) {
     return
   }
 

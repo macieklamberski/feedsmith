@@ -1,6 +1,6 @@
+import { isPlainObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseSingularOf,
   parseString,
   retrieveRdfResourceOrText,
@@ -9,7 +9,7 @@ import {
 import type { PingbackNs } from '../common/types.js'
 
 export const retrieveItem: ParseUtilPartial<PingbackNs.Item> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -26,7 +26,7 @@ export const retrieveItem: ParseUtilPartial<PingbackNs.Item> = (value) => {
 }
 
 export const retrieveFeed: ParseUtilPartial<PingbackNs.Feed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

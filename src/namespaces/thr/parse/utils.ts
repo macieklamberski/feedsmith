@@ -1,6 +1,6 @@
+import { isPlainObject } from 'trousse'
 import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseDate,
   parseNumber,
@@ -12,7 +12,7 @@ import {
 import type { ThrNs } from '../common/types.js'
 
 export const parseInReplyTo: ParseUtilPartial<ThrNs.InReplyTo> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -30,7 +30,7 @@ export const retrieveLink: ParseUtilPartial<ThrNs.Link<DateAny>, ParseMainOption
   value,
   options,
 ) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -43,7 +43,7 @@ export const retrieveLink: ParseUtilPartial<ThrNs.Link<DateAny>, ParseMainOption
 }
 
 export const retrieveItem: ParseUtilPartial<ThrNs.Item> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

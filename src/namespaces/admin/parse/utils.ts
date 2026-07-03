@@ -1,6 +1,6 @@
+import { isPlainObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseSingularOf,
   parseString,
   retrieveRdfResourceOrText,
@@ -9,7 +9,7 @@ import {
 import type { AdminNs } from '../common/types.js'
 
 export const retrieveFeed: ParseUtilPartial<AdminNs.Feed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

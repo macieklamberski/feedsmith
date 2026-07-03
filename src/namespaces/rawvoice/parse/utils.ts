@@ -1,6 +1,6 @@
+import { isPlainObject } from 'trousse'
 import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseDate,
   parseNumber,
@@ -37,7 +37,7 @@ export const parseLiveStream: ParseUtilPartial<
 }
 
 export const parsePoster: ParseUtilPartial<RawVoiceNs.Poster> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -49,7 +49,7 @@ export const parsePoster: ParseUtilPartial<RawVoiceNs.Poster> = (value) => {
 }
 
 export const parseAlternateEnclosure: ParseUtilPartial<RawVoiceNs.AlternateEnclosure> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -63,7 +63,7 @@ export const parseAlternateEnclosure: ParseUtilPartial<RawVoiceNs.AlternateEnclo
 }
 
 export const parseSubscribe: ParseUtilPartial<RawVoiceNs.Subscribe> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -84,7 +84,7 @@ export const parseSubscribe: ParseUtilPartial<RawVoiceNs.Subscribe> = (value) =>
 }
 
 export const parseMetamark: ParseUtilPartial<RawVoiceNs.Metamark> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -100,7 +100,7 @@ export const parseMetamark: ParseUtilPartial<RawVoiceNs.Metamark> = (value) => {
 }
 
 export const parseDonate: ParseUtilPartial<RawVoiceNs.Donate> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -113,7 +113,7 @@ export const parseDonate: ParseUtilPartial<RawVoiceNs.Donate> = (value) => {
 }
 
 export const retrieveItem: ParseUtilPartial<RawVoiceNs.Item> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -135,7 +135,7 @@ export const retrieveFeed: ParseUtilPartial<RawVoiceNs.Feed<DateAny>, ParseMainO
   value,
   options,
 ) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

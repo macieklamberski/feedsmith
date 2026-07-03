@@ -1,7 +1,7 @@
+import { isPlainObject } from 'trousse'
 import type { DateAny } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
-  isObject,
   parseArrayOf,
   parseBoolean,
   parseDate,
@@ -30,7 +30,7 @@ export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
 }
 
 export const parseAuthor: ParseUtilPartial<JsonFeed.Author> = (value) => {
-  if (isObject(value)) {
+  if (isPlainObject(value)) {
     const get = createCaseInsensitiveGetter(value)
     const author = {
       name: parseSingularOf(get('name'), parseJsonString),
@@ -51,7 +51,7 @@ export const parseAuthor: ParseUtilPartial<JsonFeed.Author> = (value) => {
 }
 
 export const retrieveAuthors: ParseUtilPartial<Array<JsonFeed.Author>> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -66,7 +66,7 @@ export const retrieveAuthors: ParseUtilPartial<Array<JsonFeed.Author>> = (value)
 }
 
 export const parseAttachment: ParseUtilPartial<JsonFeed.Attachment> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -83,7 +83,7 @@ export const parseAttachment: ParseUtilPartial<JsonFeed.Attachment> = (value) =>
 }
 
 export const parseItem: ParseUtilPartial<JsonFeed.Item<DateAny>> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -114,7 +114,7 @@ export const parseItem: ParseUtilPartial<JsonFeed.Item<DateAny>> = (value, optio
 }
 
 export const parseHub: ParseUtilPartial<JsonFeed.Hub> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -128,7 +128,7 @@ export const parseHub: ParseUtilPartial<JsonFeed.Hub> = (value) => {
 }
 
 export const parseFeed: ParseUtilPartial<JsonFeed.Feed<DateAny>> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

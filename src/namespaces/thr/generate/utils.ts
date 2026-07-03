@@ -1,16 +1,16 @@
+import { isPlainObject } from 'trousse'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateNumber,
   generatePlainString,
   generateRfc3339Date,
-  isObject,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { ThrNs } from '../common/types.js'
 
 export const generateInReplyTo: GenerateUtil<ThrNs.InReplyTo> = (inReplyTo) => {
-  if (!isObject(inReplyTo)) {
+  if (!isPlainObject(inReplyTo)) {
     return
   }
 
@@ -25,7 +25,7 @@ export const generateInReplyTo: GenerateUtil<ThrNs.InReplyTo> = (inReplyTo) => {
 }
 
 export const generateLink: GenerateUtil<ThrNs.Link<DateLike>> = (link) => {
-  if (!isObject(link)) {
+  if (!isPlainObject(link)) {
     return
   }
 
@@ -38,7 +38,7 @@ export const generateLink: GenerateUtil<ThrNs.Link<DateLike>> = (link) => {
 }
 
 export const generateItem: GenerateUtil<ThrNs.Item> = (item) => {
-  if (!isObject(item)) {
+  if (!isPlainObject(item)) {
     return
   }
 

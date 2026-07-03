@@ -1,5 +1,14 @@
 import { decodeHTML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
+import {
+  coerceBoolean,
+  coerceNumber,
+  coerceSingular,
+  isNonEmptyString,
+  isNumber,
+  isPlainObject,
+  isPresent,
+} from 'trousse'
 import type {
   AnyOf,
   DateAny,
@@ -10,27 +19,8 @@ import type {
   XmlStylesheet,
 } from './types.js'
 
-export const isPresent = <T>(value: T): value is NonNullable<T> => {
-  return value != null
-}
-
-export const isObject = (value: Unreliable): value is Record<string, Unreliable> => {
-  return (
-    value != null &&
-    typeof value === 'object' &&
-    !Array.isArray(value) &&
-    value.constructor === Object
-  )
-}
-
-const whitespaceOnlyRegex = /^\p{White_Space}*$/u
-
-export const isNonEmptyString = (value: Unreliable): value is string => {
-  return typeof value === 'string' && value !== '' && !whitespaceOnlyRegex.test(value)
-}
-
 export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | number => {
-  return typeof value === 'number' || isNonEmptyString(value)
+  return isNumber(value) || isNonEmptyString(value)
 }
 
 export const retrieveText = (value: Unreliable): Unreliable => {
@@ -41,7 +31,7 @@ export const retrieveRdfResourceOrText = <T>(
   value: Unreliable,
   parse: (value: Unreliable) => T | undefined,
 ): T | undefined => {
-  if (isObject(value)) {
+  if (isPlainObject(value)) {
     const rdfResource = parse(value['@rdf:resource'])
 
     if (isPresent(rdfResource)) {
@@ -249,35 +239,13 @@ export const parseJsonString: ParseUtilExact<string> = (value) => {
 }
 
 export const parseNumber: ParseUtilExact<number> = (value) => {
-  if (typeof value === 'number') {
-    return value
-  }
-
-  if (isNonEmptyString(value)) {
-    const numeric = +value
-
-    return Number.isNaN(numeric) ? undefined : numeric
-  }
+  return coerceNumber(value)
 }
 
-const trueRegex = /^\p{White_Space}*true\p{White_Space}*$/iu
-const falseRegex = /^\p{White_Space}*false\p{White_Space}*$/iu
 const yesRegex = /^\p{White_Space}*yes\p{White_Space}*$/iu
 
 export const parseBoolean: ParseUtilExact<boolean> = (value) => {
-  if (typeof value === 'boolean') {
-    return value
-  }
-
-  if (isNonEmptyString(value)) {
-    if (trueRegex.test(value)) {
-      return true
-    }
-
-    if (falseRegex.test(value)) {
-      return false
-    }
-  }
+  return coerceBoolean(value)
 }
 
 export const parseYesNoBoolean: ParseUtilExact<boolean> = (value) => {
@@ -310,7 +278,7 @@ export const parseArray: ParseUtilExact<Array<Unreliable>> = (value) => {
     return value
   }
 
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -365,7 +333,7 @@ export const limitArray = <T>(array: Array<T>, limit: number | undefined): Array
 }
 
 export const parseSingular = <T>(value: T | Array<T>): T => {
-  return Array.isArray(value) ? value[0] : value
+  return coerceSingular(value)
 }
 
 export const parseSingularOf = <R>(value: Unreliable, parse: ParseUtilExact<R>): R | undefined => {
@@ -531,7 +499,7 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
       return
     }
 
-    if (isObject(current)) {
+    if (isPlainObject(current)) {
       // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
       for (const key in current) {
         if (seenKeys?.has(key)) {
@@ -576,7 +544,7 @@ export const generateCdataString: GenerateUtil<string> = (value) => {
 export const generateTextOrCdataString: GenerateUtil<string> = (value) => {
   const result = generateCdataString(value)
 
-  if (!result || isObject(result)) {
+  if (!result || isPlainObject(result)) {
     return result
   }
 
@@ -616,7 +584,7 @@ export const generateNamespaceAttrs = (
   value: Unreliable,
   namespaceUris: Record<string, Array<string>>,
 ): Record<string, string> | undefined => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -684,14 +652,14 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
   const extractNamespaceDeclarations = (element: Unreliable): Record<string, string> => {
     const declarations: Record<string, string> = {}
 
-    if (isObject(element)) {
+    if (isPlainObject(element)) {
       // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
       for (const key in element) {
         if (key === '@xmlns') {
-          declarations[''] = normalizeNamespaceUri(element[key])
+          declarations[''] = normalizeNamespaceUri(element[key] as Unreliable)
         } else if (key.indexOf('@xmlns:') === 0) {
           const prefix = key.slice('@xmlns:'.length)
-          declarations[prefix] = normalizeNamespaceUri(element[key])
+          declarations[prefix] = normalizeNamespaceUri(element[key] as Unreliable)
         }
       }
     }
@@ -740,12 +708,12 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
     object: Unreliable,
     parentContext: Record<string, string> = {},
   ): Unreliable => {
-    // Check arrays first since isObject() excludes arrays.
+    // Check arrays first since isPlainObject() excludes arrays.
     if (Array.isArray(object)) {
       return object.map((item) => traverseAndNormalize(item, parentContext))
     }
 
-    if (!isObject(object)) {
+    if (!isPlainObject(object)) {
       return object
     }
 
@@ -801,7 +769,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
         return false
       }
 
-      if (!isObject(value)) {
+      if (!isPlainObject(value)) {
         return false
       }
 
@@ -810,7 +778,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
         if (key[0] === '@') {
           // Attribute key (@*) — only xmlns declarations matter.
           if (key === '@xmlns') {
-            const normalizedUri = normalizeNamespaceUri(value[key])
+            const normalizedUri = normalizeNamespaceUri(value[key] as Unreliable)
 
             if (primaryNamespaceUris?.includes(normalizedUri)) {
               // Default namespace maps to a primary namespace — unprefixed
@@ -825,7 +793,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
             }
           } else if (key.startsWith('@xmlns:')) {
             const prefix = key.slice(7)
-            const normalizedUri = normalizeNamespaceUri(value[key])
+            const normalizedUri = normalizeNamespaceUri(value[key] as Unreliable)
             const standardPrefix = namespacePrefixes[normalizedUri]
 
             if (standardPrefix) {
@@ -864,7 +832,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
   // For the root level, we need to handle the special case where the root element
   // itself has namespace declarations that apply to its own normalization.
   const normalizeRoot = (object: Unreliable): Unreliable => {
-    if (!isObject(object)) {
+    if (!isPlainObject(object)) {
       return object
     }
 
@@ -898,7 +866,7 @@ const startsWithBraceRegex = /^\s*\{/
 const endsWithBraceRegex = /\}\s*$/
 
 export const parseJsonObject = (value: unknown): unknown => {
-  if (isObject(value)) {
+  if (isPlainObject(value)) {
     return value
   }
 

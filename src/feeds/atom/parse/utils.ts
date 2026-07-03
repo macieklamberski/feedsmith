@@ -1,8 +1,7 @@
+import { isNonEmptyString, isPlainObject } from 'trousse'
 import type { DateAny, Unreliable } from '../../../common/types.js'
 import {
   detectNamespaces,
-  isNonEmptyString,
-  isObject,
   parseArrayOf,
   parseDate,
   parseNumber,
@@ -71,7 +70,7 @@ export const parseText: ParseUtilPartial<AtomFeed.Text> = (value) => {
     return parsed ? { value: parsed } : undefined
   }
 
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -97,7 +96,7 @@ export const parseContent: ParseUtilPartial<AtomFeed.Content> = (value) => {
     return parsed ? { value: parsed } : undefined
   }
 
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -112,7 +111,7 @@ export const parseContent: ParseUtilPartial<AtomFeed.Content> = (value) => {
 }
 
 export const parseLink: ParseUtilPartial<AtomFeed.Link<DateAny>> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -131,7 +130,7 @@ export const parseLink: ParseUtilPartial<AtomFeed.Link<DateAny>> = (value, optio
 }
 
 export const retrievePersonUri: ParseUtilPartial<string> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -143,7 +142,7 @@ export const retrievePersonUri: ParseUtilPartial<string> = (value, options) => {
 }
 
 export const parsePerson: ParseUtilPartial<AtomFeed.Person> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -160,7 +159,7 @@ export const parsePerson: ParseUtilPartial<AtomFeed.Person> = (value, options) =
 }
 
 export const parseCategory: ParseUtilPartial<AtomFeed.Category> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -174,7 +173,7 @@ export const parseCategory: ParseUtilPartial<AtomFeed.Category> = (value) => {
 }
 
 export const retrieveGeneratorUri: ParseUtilPartial<string> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -195,7 +194,7 @@ export const parseGenerator: ParseUtilPartial<AtomFeed.Generator> = (value) => {
 }
 
 export const parseSource: ParseUtilPartial<AtomFeed.Source<DateAny>> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -219,7 +218,7 @@ export const parseSource: ParseUtilPartial<AtomFeed.Source<DateAny>> = (value, o
 }
 
 export const retrievePublished: ParseUtilPartial<DateAny> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -241,7 +240,7 @@ export const retrievePublished: ParseUtilPartial<DateAny> = (value, options) => 
 }
 
 export const retrieveUpdated: ParseUtilPartial<DateAny> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -257,7 +256,7 @@ export const retrieveUpdated: ParseUtilPartial<DateAny> = (value, options) => {
 }
 
 export const retrieveSubtitle: ParseUtilPartial<AtomFeed.Text> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -269,7 +268,7 @@ export const retrieveSubtitle: ParseUtilPartial<AtomFeed.Text> = (value, options
 }
 
 export const parseEntry: ParseUtilPartial<AtomFeed.Entry<DateAny>> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -315,7 +314,7 @@ export const parseEntry: ParseUtilPartial<AtomFeed.Entry<DateAny>> = (value, opt
 }
 
 export const parseFeed: ParseUtilPartial<AtomFeed.Feed<DateAny>> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

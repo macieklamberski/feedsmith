@@ -1,5 +1,6 @@
+import { isPlainObject } from 'trousse'
 import type { DateLike } from '../../../common/types.js'
-import { generateRfc3339Date, isObject, trimArray, trimObject } from '../../../common/utils.js'
+import { generateRfc3339Date, trimArray, trimObject } from '../../../common/utils.js'
 import type { GenerateUtil, JsonFeed } from '../common/types.js'
 
 export const generateItem: GenerateUtil<JsonFeed.Item<DateLike>> = (item) => {
@@ -13,7 +14,7 @@ export const generateItem: GenerateUtil<JsonFeed.Item<DateLike>> = (item) => {
 }
 
 export const generateFeed: GenerateUtil<JsonFeed.Feed<DateLike>> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 

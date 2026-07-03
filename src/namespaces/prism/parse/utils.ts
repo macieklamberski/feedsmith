@@ -1,6 +1,6 @@
+import { isPlainObject } from 'trousse'
 import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseDate,
   parseNumber,
@@ -15,7 +15,7 @@ export const retrieveFeed: ParseUtilPartial<PrismNs.Feed<DateAny>, ParseMainOpti
   value,
   options,
 ) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -208,7 +208,7 @@ export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOpti
   value,
   options,
 ) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

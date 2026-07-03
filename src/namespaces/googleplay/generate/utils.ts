@@ -1,16 +1,16 @@
+import { isPlainObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generatePlainString,
   generateYesNoBoolean,
-  isObject,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { GooglePlayNs } from '../common/types.js'
 
 const generateImage: GenerateUtil<GooglePlayNs.Image> = (image) => {
-  if (!isObject(image)) {
+  if (!isPlainObject(image)) {
     return
   }
 
@@ -38,7 +38,7 @@ const generateExplicit: GenerateUtil<boolean | 'clean'> = (explicit) => {
 }
 
 export const generateItem: GenerateUtil<GooglePlayNs.Item> = (item) => {
-  if (!isObject(item)) {
+  if (!isPlainObject(item)) {
     return
   }
 
@@ -52,7 +52,7 @@ export const generateItem: GenerateUtil<GooglePlayNs.Item> = (item) => {
 }
 
 export const generateFeed: GenerateUtil<GooglePlayNs.Feed> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 

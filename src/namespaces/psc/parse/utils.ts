@@ -1,15 +1,10 @@
+import { isPlainObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
-import {
-  isObject,
-  parseArrayOf,
-  parseSingularOf,
-  parseString,
-  trimObject,
-} from '../../../common/utils.js'
+import { parseArrayOf, parseSingularOf, parseString, trimObject } from '../../../common/utils.js'
 import type { PscNs } from '../common/types.js'
 
 export const parseChapter: ParseUtilPartial<PscNs.Chapter> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -28,7 +23,7 @@ export const parseChapters: ParseUtilPartial<Array<PscNs.Chapter>> = (value) => 
 }
 
 export const retrieveItem: ParseUtilPartial<PscNs.Item> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

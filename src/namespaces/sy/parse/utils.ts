@@ -1,6 +1,6 @@
+import { isPlainObject } from 'trousse'
 import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseDate,
   parseNumber,
   parseSingularOf,
@@ -14,7 +14,7 @@ export const retrieveFeed: ParseUtilPartial<SyNs.Feed<DateAny>, ParseMainOptions
   value,
   options,
 ) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

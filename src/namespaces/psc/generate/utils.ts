@@ -1,9 +1,10 @@
+import { isPlainObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import { generatePlainString, isObject, trimArray, trimObject } from '../../../common/utils.js'
+import { generatePlainString, trimArray, trimObject } from '../../../common/utils.js'
 import type { PscNs } from '../common/types.js'
 
 export const generateChapter: GenerateUtil<PscNs.Chapter> = (chapter) => {
-  if (!isObject(chapter)) {
+  if (!isPlainObject(chapter)) {
     return
   }
 
@@ -26,7 +27,7 @@ export const generateChapters: GenerateUtil<Array<PscNs.Chapter>> = (chapters) =
 }
 
 export const generateItem: GenerateUtil<PscNs.Item> = (item) => {
-  if (!isObject(item)) {
+  if (!isPlainObject(item)) {
     return
   }
 

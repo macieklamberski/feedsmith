@@ -1,6 +1,6 @@
+import { isPlainObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseNumber,
   parseSingularOf,
@@ -11,7 +11,7 @@ import {
 import type { OpenSearchNs } from '../common/types.js'
 
 export const parseQuery: ParseUtilPartial<OpenSearchNs.Query> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -30,7 +30,7 @@ export const parseQuery: ParseUtilPartial<OpenSearchNs.Query> = (value) => {
 }
 
 export const retrieveFeed: ParseUtilPartial<OpenSearchNs.Feed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
