@@ -61,6 +61,7 @@ export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<
   let hasPresent = false
   let hasAbsent = false
 
+  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
   for (const key in object) {
     if (isPresent(object[key])) {
       hasPresent = true
@@ -83,6 +84,7 @@ export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<
 
   const result: Partial<T> = {}
 
+  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
   for (const key in object) {
     const value = object[key]
 
@@ -435,6 +437,7 @@ export const generateXmlStylesheet = (stylesheet: XmlStylesheet): string | undef
 
   let attributes = ''
 
+  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
   for (const key in generated) {
     const value = generated[key as keyof typeof generated]
     if (value !== undefined) {
@@ -552,6 +555,7 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
     }
 
     if (isObject(current)) {
+      // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
       for (const key in current) {
         if (seenKeys?.has(key)) {
           continue
@@ -642,6 +646,7 @@ export const generateNamespaceAttrs = (
   let namespaceAttrs: Record<string, string> | undefined
   const valueNamespaces = detectNamespaces(value, true)
 
+  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
   for (const prefix in namespaceUris) {
     if (!valueNamespaces.has(prefix)) {
       continue
@@ -703,6 +708,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
     const declarations: Record<string, string> = {}
 
     if (isObject(element)) {
+      // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
       for (const key in element) {
         if (key === '@xmlns') {
           declarations[''] = normalizeNamespaceUri(element[key])
@@ -769,6 +775,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
     const declarations = extractNamespaceDeclarations(object)
     // Avoid object spread if no new declarations (common case).
     let hasDeclarations = false
+    // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
     for (const _ in declarations) {
       hasDeclarations = true
       break
@@ -777,6 +784,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
 
     const normalizedObject: Unreliable = {}
 
+    // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
     for (const key in object) {
       const value = object[key]
 
@@ -820,6 +828,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
         return false
       }
 
+      // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
       for (const key in value) {
         if (key[0] === '@') {
           // Attribute key (@*) — only xmlns declarations matter.
@@ -888,6 +897,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
 
     const normalizedObject: Unreliable = {}
 
+    // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
     for (const key in object) {
       const value = object[key]
 

@@ -66,6 +66,7 @@ export const parseSubscribe: ParsePartialUtil<RawVoiceNs.Subscribe> = (value) =>
 
   const subscribe: RawVoiceNs.Subscribe = {}
 
+  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
   for (const key in value) {
     if (key.startsWith('@')) {
       const attrName = key.slice(1)
