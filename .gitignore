@@ -18,6 +18,7 @@ docs/.vitepress/dist
 
 # Benchmarks
 benchmarks/files
+benchmarks/**/.venv
 benchmarks/**/vendor
 benchmarks/**/go.sum
 benchmarks/**/composer.lock

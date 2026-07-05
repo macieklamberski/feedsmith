@@ -1,6 +1,7 @@
 import { isNonEmptyString, isPlainObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import {
+  generateBoolean,
   generateCdataString,
   generateTextOrCdataString,
   trimArray,
@@ -65,6 +66,19 @@ export const generateSubscriptionList: GenerateUtil<SourceNs.SubscriptionList> =
   return trimObject(value)
 }
 
+export const generateInReplyTo: GenerateUtil<SourceNs.InReplyTo> = (inReplyTo) => {
+  if (!isPlainObject(inReplyTo) || !isNonEmptyString(inReplyTo.value)) {
+    return
+  }
+
+  const value = {
+    ...generateTextOrCdataString(inReplyTo.value),
+    '@isPermaLink': generateBoolean(inReplyTo.isPermaLink),
+  }
+
+  return trimObject(value)
+}
+
 export const generateFeed: GenerateUtil<SourceNs.Feed> = (feed) => {
   if (!isPlainObject(feed)) {
     return
@@ -78,6 +92,7 @@ export const generateFeed: GenerateUtil<SourceNs.Feed> = (feed) => {
     'source:cloud': generateCdataString(feed.cloud),
     'source:blogroll': generateCdataString(feed.blogroll),
     'source:self': generateCdataString(feed.self),
+    'source:localTime': generateCdataString(feed.localTime),
   }
 
   return trimObject(value)
@@ -91,8 +106,8 @@ export const generateItem: GenerateUtil<SourceNs.Item> = (item) => {
   const value = {
     'source:markdown': generateCdataString(item.markdown),
     'source:outline': trimArray(item.outlines, generateCdataString),
-    'source:localTime': generateCdataString(item.localTime),
     'source:linkFull': generateCdataString(item.linkFull),
+    'source:inReplyTo': generateInReplyTo(item.inReplyTo),
   }
 
   return trimObject(value)

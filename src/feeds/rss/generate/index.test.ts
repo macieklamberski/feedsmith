@@ -709,6 +709,7 @@ describe('generate', () => {
         accounts: [{ service: 'twitter', value: 'johndoe' }, { service: 'github' }],
         likes: { server: 'http://likes.example.com/' },
         blogroll: 'https://blog.example.com/blogroll.opml',
+        localTime: '2024-01-15 10:30:00',
       },
       items: [
         {
@@ -716,8 +717,8 @@ describe('generate', () => {
           sourceNs: {
             markdown: '# Example Post - This is markdown content for the post.',
             outlines: ['<outline text="Section 1"/>', '<outline text="Section 2"/>'],
-            localTime: '2024-01-15 10:30:00',
             linkFull: 'https://example.com/posts/full-version',
+            inReplyTo: { value: 'did:plc:iwl32vekohccji6khfdt3clw', isPermaLink: false },
           },
         },
       ],
@@ -731,6 +732,7 @@ describe('generate', () => {
     <source:account service="github"/>
     <source:likes server="http://likes.example.com/"/>
     <source:blogroll>https://blog.example.com/blogroll.opml</source:blogroll>
+    <source:localTime>2024-01-15 10:30:00</source:localTime>
     <item>
       <title>Item with source metadata</title>
       <source:markdown># Example Post - This is markdown content for the post.</source:markdown>
@@ -740,8 +742,8 @@ describe('generate', () => {
       <source:outline>
         <![CDATA[<outline text="Section 2"/>]]>
       </source:outline>
-      <source:localTime>2024-01-15 10:30:00</source:localTime>
       <source:linkFull>https://example.com/posts/full-version</source:linkFull>
+      <source:inReplyTo isPermaLink="false">did:plc:iwl32vekohccji6khfdt3clw</source:inReplyTo>
     </item>
   </channel>
 </rss>

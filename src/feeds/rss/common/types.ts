@@ -149,7 +149,7 @@ export namespace RssFeed {
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       prism?: PrismNs.Item<TDate>
       wfw?: WfwNs.Item
-      sourceNs?: SourceNs.Item
+      sourceNs?: SourceNs.Item<TStrict>
       rawvoice?: RawVoiceNs.Item<TStrict>
       spotify?: SpotifyNs.Item<TStrict>
       pingback?: PingbackNs.Item

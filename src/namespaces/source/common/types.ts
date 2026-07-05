@@ -35,6 +35,14 @@ export namespace SourceNs {
     TStrict
   >
 
+  export type InReplyTo<TStrict extends boolean = false> = Strict<
+    {
+      value: Requirable<string> // Required in spec.
+      isPermaLink?: boolean
+    },
+    TStrict
+  >
+
   export type Feed<TStrict extends boolean = false> = {
     accounts?: Array<Account<TStrict>>
     likes?: Likes<TStrict>
@@ -43,13 +51,14 @@ export namespace SourceNs {
     cloud?: string
     blogroll?: string
     self?: string
+    localTime?: string
   }
 
-  export type Item = {
+  export type Item<TStrict extends boolean = false> = {
     markdown?: string
     outlines?: Array<string>
-    localTime?: string
     linkFull?: string
+    inReplyTo?: InReplyTo<TStrict>
   }
 }
 // #endregion reference

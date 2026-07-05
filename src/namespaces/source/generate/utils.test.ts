@@ -3,6 +3,7 @@ import {
   generateAccount,
   generateArchive,
   generateFeed,
+  generateInReplyTo,
   generateItem,
   generateLikes,
   generateSubscriptionList,
@@ -154,6 +155,61 @@ describe('generateSubscriptionList', () => {
   })
 })
 
+describe('generateInReplyTo', () => {
+  it('should generate a bare permalink value', () => {
+    const value = {
+      value: 'https://example.com/2026/05/16/hello-world.html',
+    }
+    const expected = {
+      '#text': 'https://example.com/2026/05/16/hello-world.html',
+    }
+
+    expect(generateInReplyTo(value)).toEqual(expected)
+  })
+
+  it('should generate value with isPermaLink set to false', () => {
+    const value = {
+      value: 'did:plc:iwl32vekohccji6khfdt3clw',
+      isPermaLink: false,
+    }
+    const expected = {
+      '#text': 'did:plc:iwl32vekohccji6khfdt3clw',
+      '@isPermaLink': false,
+    }
+
+    expect(generateInReplyTo(value)).toEqual(expected)
+  })
+
+  it('should generate value with isPermaLink set to true', () => {
+    const value = {
+      value: 'https://example.com/posts/123',
+      isPermaLink: true,
+    }
+    const expected = {
+      '#text': 'https://example.com/posts/123',
+      '@isPermaLink': true,
+    }
+
+    expect(generateInReplyTo(value)).toEqual(expected)
+  })
+
+  it('should return undefined when value is missing', () => {
+    const value = {
+      isPermaLink: false,
+    }
+
+    expect(generateInReplyTo(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(generateInReplyTo(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateInReplyTo(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateInReplyTo('not an object')).toBeUndefined()
+  })
+})
+
 describe('generateFeed', () => {
   it('should generate complete feed with all properties', () => {
     const value = {
@@ -168,6 +224,7 @@ describe('generateFeed', () => {
       cloud: 'https://cloudserver.example.com/notify',
       blogroll: 'https://blog.example.com/blogroll.opml',
       self: 'http://example.com/feed.xml',
+      localTime: '2023-12-25 10:30:00',
     }
     const expected = {
       'source:account': [{ '@service': 'twitter', '#text': 'davewiner' }],
@@ -183,6 +240,7 @@ describe('generateFeed', () => {
       'source:cloud': 'https://cloudserver.example.com/notify',
       'source:blogroll': 'https://blog.example.com/blogroll.opml',
       'source:self': 'http://example.com/feed.xml',
+      'source:localTime': '2023-12-25 10:30:00',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -234,16 +292,22 @@ describe('generateItem', () => {
     const value = {
       markdown: '# Title\n\nThis is **markdown** content.',
       outlines: ['<outline text="Item 1"><outline text="Subitem 1"/></outline>'],
-      localTime: '2023-12-25 10:30:00',
       linkFull: 'http://example.com/very/long/url/that/was/shortened',
+      inReplyTo: {
+        value: 'did:plc:iwl32vekohccji6khfdt3clw',
+        isPermaLink: false,
+      },
     }
     const expected = {
       'source:markdown': '# Title\n\nThis is **markdown** content.',
       'source:outline': [
         { '#cdata': '<outline text="Item 1"><outline text="Subitem 1"/></outline>' },
       ],
-      'source:localTime': '2023-12-25 10:30:00',
       'source:linkFull': 'http://example.com/very/long/url/that/was/shortened',
+      'source:inReplyTo': {
+        '#text': 'did:plc:iwl32vekohccji6khfdt3clw',
+        '@isPermaLink': false,
+      },
     }
 
     expect(generateItem(value)).toEqual(expected)

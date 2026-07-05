@@ -2,6 +2,7 @@ import { isPlainObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   parseArrayOf,
+  parseBoolean,
   parseSingularOf,
   parseString,
   retrieveText,
@@ -66,6 +67,15 @@ export const parseSubscriptionList: ParseUtilPartial<SourceNs.SubscriptionList> 
   return trimObject(subscriptionList)
 }
 
+export const parseInReplyTo: ParseUtilPartial<SourceNs.InReplyTo> = (value) => {
+  const inReplyTo = {
+    value: parseString(retrieveText(value)),
+    isPermaLink: parseBoolean(value?.['@ispermalink']),
+  }
+
+  return trimObject(inReplyTo)
+}
+
 export const retrieveFeed: ParseUtilPartial<SourceNs.Feed> = (value) => {
   if (!isPlainObject(value)) {
     return
@@ -81,6 +91,9 @@ export const retrieveFeed: ParseUtilPartial<SourceNs.Feed> = (value) => {
       parseString(retrieveText(value)),
     ),
     self: parseSingularOf(value['source:self'], (value) => parseString(retrieveText(value))),
+    localTime: parseSingularOf(value['source:localtime'], (value) =>
+      parseString(retrieveText(value)),
+    ),
   }
 
   return trimObject(feed)
@@ -96,12 +109,10 @@ export const retrieveItem: ParseUtilPartial<SourceNs.Item> = (value) => {
       parseString(retrieveText(value)),
     ),
     outlines: parseArrayOf(value['source:outline'], (value) => parseString(retrieveText(value))),
-    localTime: parseSingularOf(value['source:localtime'], (value) =>
-      parseString(retrieveText(value)),
-    ),
     linkFull: parseSingularOf(value['source:linkfull'], (value) =>
       parseString(retrieveText(value)),
     ),
+    inReplyTo: parseSingularOf(value['source:inreplyto'], parseInReplyTo),
   }
 
   return trimObject(item)
