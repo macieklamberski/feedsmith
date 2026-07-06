@@ -14,7 +14,7 @@ The Pingback namespace provides a mechanism for notifying websites when content 
     </tr>
     <tr>
       <th>Specification</th>
-      <td>Pingback RSS Module (madskills.com)</td>
+      <td><a href="https://web.archive.org/web/20040207104933/http://madskills.com/public/xml/rss/module/pingback/" target="_blank">Pingback RSS Module</a> (archive)</td>
     </tr>
     <tr>
       <th>Prefix</th>
