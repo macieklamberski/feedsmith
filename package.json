@@ -71,7 +71,6 @@
     "docs:build": "vitepress build docs"
   },
   "dependencies": {
-    "@biomejs/biome": "^2.5.2",
     "entities": "^7.0.1",
     "fast-xml-parser": "~5.9.3"
   },
