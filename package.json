@@ -76,7 +76,7 @@
   },
   "devDependencies": {
     "@types/bun": "^1.3.14",
-    "kvalita": "^1.15.1",
+    "kvalita": "^1.16.0",
     "tsdown": "^0.22.3",
     "vitepress": "^2.0.0-alpha.17"
   }
