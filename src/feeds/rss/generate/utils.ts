@@ -38,6 +38,7 @@ import {
   generateFeed as generateItunesFeed,
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
+import { generateItem as generateLivejournalItem } from '../../../namespaces/livejournal/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
 import { generateFeed as generateOpenSearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
 import {
@@ -247,6 +248,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
     ...generatePingbackItem(item.pingback),
     ...generateTrackbackItem(item.trackback),
     ...generateAcastItem(item.acast),
+    ...generateLivejournalItem(item.livejournal),
     ...generateXmlItemOrFeed(item.xml),
   }
 
