@@ -1536,6 +1536,45 @@ describe('generate', () => {
       expect(generate(value)).toEqual(expected)
     })
 
+    it('should generate RSS with livejournal namespace', () => {
+      const value = {
+        title: 'Feed with livejournal namespace',
+        description: 'Test feed with LiveJournal namespace',
+        items: [
+          {
+            title: 'Journal entry',
+            livejournal: {
+              music: 'The Beatles - Hey Jude',
+              mood: 'cheerful',
+              security: 'public',
+              poster: 'johndoe',
+              journal: 'example_community',
+              replyCount: 42,
+            },
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:lj="http://www.livejournal.org/rss/lj/1.0/">
+  <channel>
+    <title>Feed with livejournal namespace</title>
+    <description>Test feed with LiveJournal namespace</description>
+    <item>
+      <title>Journal entry</title>
+      <lj:music>The Beatles - Hey Jude</lj:music>
+      <lj:mood>cheerful</lj:mood>
+      <lj:security>public</lj:security>
+      <lj:poster>johndoe</lj:poster>
+      <lj:journal>example_community</lj:journal>
+      <lj:replycount>42</lj:replycount>
+    </item>
+  </channel>
+</rss>
+`
+
+      expect(generate(value)).toEqual(expected)
+    })
+
     it('should generate RSS with xml namespace', () => {
       const value = {
         title: 'Feed with xml namespace',

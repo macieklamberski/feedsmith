@@ -49,6 +49,10 @@ import {
   uris as itunesUris,
 } from '../namespaces/itunes/common/config.js'
 import {
+  stopNodes as livejournalStopNodes,
+  uris as livejournalUris,
+} from '../namespaces/livejournal/common/config.js'
+import {
   stopNodes as mediaStopNodes,
   uris as mediaUris,
 } from '../namespaces/media/common/config.js'
@@ -166,6 +170,7 @@ export const namespaceUris = {
   trackback: trackbackUris,
   prism: prismUris,
   acast: acastUris,
+  lj: livejournalUris,
 }
 
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(
@@ -196,6 +201,7 @@ export const namespaceStopNodes = [
   ...georssStopNodes,
   ...googleplayStopNodes,
   ...itunesStopNodes,
+  ...livejournalStopNodes,
   ...mediaStopNodes,
   ...opensearchStopNodes,
   ...pingbackStopNodes,
