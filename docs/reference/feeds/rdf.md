@@ -2,7 +2,7 @@
 title: "Reference: RDF Feed"
 ---
 
-# RDF Feed
+# RDF Feed Reference
 
 RDF (Resource Description Framework) Site Summary is an early XML-based syndication format that uses RDF metadata. Feedsmith provides full parsing capabilities.
 
@@ -19,17 +19,18 @@ RDF (Resource Description Framework) Site Summary is an early XML-based syndicat
     <tr>
       <th>Namespaces</th>
       <td>
-        <a href="/reference/namespaces/rdf">RDF</a>,
         <a href="/reference/namespaces/atom">Atom</a>,
         <a href="/reference/namespaces/dc">Dublin Core</a>,
+        <a href="/reference/namespaces/dcterms">Dublin Core Terms</a>,
         <a href="/reference/namespaces/sy">Syndication</a>,
         <a href="/reference/namespaces/content">Content</a>,
         <a href="/reference/namespaces/slash">Slash</a>,
         <a href="/reference/namespaces/media">Media RSS</a>,
-        <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
-        <a href="/reference/namespaces/dcterms">Dublin Core Terms</a>,
         <a href="/reference/namespaces/wfw">Comment API</a>,
-        <a href="/reference/namespaces/admin">Administrative</a>
+        <a href="/reference/namespaces/admin">Administrative</a>,
+        <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
+        <a href="/reference/namespaces/rdf">RDF</a>,
+        <a href="/reference/namespaces/xml">XML</a>
       </td>
     </tr>
   </tbody>
@@ -94,16 +95,16 @@ const isRdf = detectRdfFeed(xmlContent)
 
 ## Types
 
-All RDF types are available under the `Rdf` namespace:
+All RDF types are available under the `RdfFeed` namespace:
 
 ```typescript
-import type { Rdf } from 'feedsmith/types'
+import type { RdfFeed } from 'feedsmith'
 
 // Access any type from the definitions below
-type Feed = Rdf.Feed<Date>
-type Item = Rdf.Item<Date>
-type Image = Rdf.Image
-type TextInput = Rdf.TextInput
+type Feed = RdfFeed.Feed<Date>
+type Item = RdfFeed.Item<Date>
+type Image = RdfFeed.Image
+type TextInput = RdfFeed.TextInput
 // … see type definitions below for all available types
 ```
 

@@ -82,6 +82,13 @@ describe('parseLikes', () => {
 
     expect(parseLikes(value)).toBeUndefined()
   })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(parseLikes('not an object')).toBeUndefined()
+    expect(parseLikes(undefined)).toBeUndefined()
+    expect(parseLikes(null)).toBeUndefined()
+    expect(parseLikes([])).toBeUndefined()
+  })
 })
 
 describe('parseArchive', () => {
@@ -139,6 +146,19 @@ describe('parseArchive', () => {
     }
 
     expect(parseArchive(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(parseArchive(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(parseArchive('not an object')).toBeUndefined()
+    expect(parseArchive(undefined)).toBeUndefined()
+    expect(parseArchive(null)).toBeUndefined()
+    expect(parseArchive([])).toBeUndefined()
   })
 })
 

@@ -51,7 +51,7 @@ describe('createCaseInsensitiveGetter', () => {
     expect(get('KEY')).toBe('uppercase value')
   })
 
-  it('should handle non-string key lookups by coercing to string', () => {
+  it('should handle numeric-like and boolean-like string keys', () => {
     const value = {
       '123': 'numeric key',
       true: 'boolean key',
@@ -229,6 +229,15 @@ describe('retrieveAuthors', () => {
   it('should handle author when no authors present', () => {
     const value = {
       authors: undefined,
+      author: { name: 'Jane' },
+    }
+
+    expect(retrieveAuthors(value)).toEqual([{ name: 'Jane' }])
+  })
+
+  it('should fall back to author when authors parses to an empty array', () => {
+    const value = {
+      authors: [],
       author: { name: 'Jane' },
     }
 
@@ -429,7 +438,7 @@ describe('parseItem', () => {
   const expectedFull = {
     id: 'item-123',
     url: 'https://example.com/article',
-    external_url: 'https://external-source.com/article',
+    external_url: 'https://example.net/article',
     title: 'Test Article',
     content_html: '<p>HTML Content</p>',
     content_text: 'Plain text content',
@@ -464,10 +473,7 @@ describe('parseItem', () => {
     const value = {
       id: ['item-123', 'item-456'],
       url: ['https://example.com/article', 'https://example.com/alternate-article'],
-      external_url: [
-        'https://external-source.com/article',
-        'https://external-source.com/alternate-article',
-      ],
+      external_url: ['https://example.net/article', 'https://example.net/alternate-article'],
       title: ['Test Article', 'Alternative Test Article'],
       content_html: ['<p>HTML Content</p>', '<p>Alternative HTML Content</p>'],
       content_text: ['Plain text content', 'Alternative plain text content'],
@@ -609,13 +615,13 @@ describe('parseItem', () => {
       attachments: [
         true,
         { not_url: 'missing url field' },
-        { url: 'https://valid.com/attachment.pdf', mime_type: 'application/pdf' },
+        { url: 'https://example.com/attachment.pdf', mime_type: 'application/pdf' },
       ],
     }
     const expected = {
       id: 'item-invalid-props',
       content_text: 'Minimal text content',
-      attachments: [{ url: 'https://valid.com/attachment.pdf', mime_type: 'application/pdf' }],
+      attachments: [{ url: 'https://example.com/attachment.pdf', mime_type: 'application/pdf' }],
     }
 
     expect(parseItem(value)).toEqual(expected)

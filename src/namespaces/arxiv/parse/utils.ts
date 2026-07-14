@@ -1,15 +1,10 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
-import {
-  isObject,
-  parseSingularOf,
-  parseString,
-  retrieveText,
-  trimObject,
-} from '../../../common/utils.js'
+import { isPlainObject } from 'trousse'
+import type { ParseUtilPartial } from '../../../common/types.js'
+import { parseSingularOf, parseString, retrieveText, trimObject } from '../../../common/utils.js'
 import type { ArxivNs } from '../common/types.js'
 
-export const parsePrimaryCategory: ParsePartialUtil<ArxivNs.PrimaryCategory> = (value) => {
-  if (!isObject(value)) {
+export const parsePrimaryCategory: ParseUtilPartial<ArxivNs.PrimaryCategory> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -22,8 +17,8 @@ export const parsePrimaryCategory: ParsePartialUtil<ArxivNs.PrimaryCategory> = (
   return trimObject(primaryCategory)
 }
 
-export const retrieveAuthor: ParsePartialUtil<ArxivNs.Author> = (value) => {
-  if (!isObject(value)) {
+export const retrieveAuthor: ParseUtilPartial<ArxivNs.Author> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -36,8 +31,8 @@ export const retrieveAuthor: ParsePartialUtil<ArxivNs.Author> = (value) => {
   return trimObject(author)
 }
 
-export const retrieveEntry: ParsePartialUtil<ArxivNs.Entry> = (value) => {
-  if (!isObject(value)) {
+export const retrieveEntry: ParseUtilPartial<ArxivNs.Entry> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 

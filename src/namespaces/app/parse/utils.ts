@@ -1,6 +1,6 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import { isPlainObject } from 'trousse'
+import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseDate,
   parseSingularOf,
   parseYesNoBoolean,
@@ -9,8 +9,8 @@ import {
 } from '../../../common/utils.js'
 import type { AppNs } from '../common/types.js'
 
-export const parseControl: ParsePartialUtil<AppNs.Control> = (value) => {
-  if (!isObject(value)) {
+export const parseControl: ParseUtilPartial<AppNs.Control> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -21,13 +21,18 @@ export const parseControl: ParsePartialUtil<AppNs.Control> = (value) => {
   return trimObject(control)
 }
 
-export const retrieveEntry: ParsePartialUtil<AppNs.Entry<string>> = (value) => {
-  if (!isObject(value)) {
+export const retrieveEntry: ParseUtilPartial<AppNs.Entry<DateAny>, ParseMainOptions<DateAny>> = (
+  value,
+  options,
+) => {
+  if (!isPlainObject(value)) {
     return
   }
 
   const entry = {
-    edited: parseSingularOf(value['app:edited'], (value) => parseDate(retrieveText(value))),
+    edited: parseSingularOf(value['app:edited'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     control: parseSingularOf(value['app:control'], parseControl),
   }
 

@@ -1,8 +1,6 @@
-import type { DateLike } from '../../../common/types.js'
-
 // #region reference
 export namespace PrismNs {
-  export type Feed<TDate extends DateLike> = {
+  export type Feed<TDate> = {
     publicationName?: string
     issn?: string
     eIssn?: string
@@ -86,7 +84,7 @@ export namespace PrismNs {
     rightsAgent?: string
   }
 
-  export type Item<TDate extends DateLike> = {
+  export type Item<TDate> = {
     publicationName?: string
     issn?: string
     eIssn?: string

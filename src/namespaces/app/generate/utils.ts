@@ -1,14 +1,10 @@
+import { isPlainObject } from 'trousse'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
-import {
-  generateRfc3339Date,
-  generateYesNoBoolean,
-  isObject,
-  trimObject,
-} from '../../../common/utils.js'
+import { generateRfc3339Date, generateYesNoBoolean, trimObject } from '../../../common/utils.js'
 import type { AppNs } from '../common/types.js'
 
 export const generateControl: GenerateUtil<AppNs.Control> = (control) => {
-  if (!isObject(control)) {
+  if (!isPlainObject(control)) {
     return
   }
 
@@ -20,7 +16,7 @@ export const generateControl: GenerateUtil<AppNs.Control> = (control) => {
 }
 
 export const generateEntry: GenerateUtil<AppNs.Entry<DateLike>> = (entry) => {
-  if (!isObject(entry)) {
+  if (!isPlainObject(entry)) {
     return
   }
 

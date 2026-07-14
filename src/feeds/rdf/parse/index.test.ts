@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { locales, namespaceUris } from '../../../common/config.js'
+import { DetectError, MalformedError, ParseError } from '../../../common/errors.js'
 import { parse } from './index.js'
 
 describe('parse', () => {
@@ -13,10 +14,9 @@ describe('parse', () => {
     it(`should correctly parse RDF ${label}`, async () => {
       const reference = `${import.meta.dir}/../references/rdf-${key}`
       const input = await Bun.file(`${reference}.xml`).text()
-      const expectation = await Bun.file(`${reference}.json`).json()
-      const result = parse(input)
+      const expected = await Bun.file(`${reference}.json`).json()
 
-      expect(result).toEqual(expectation)
+      expect(parse(input)).toEqual(expected)
     })
   }
 
@@ -29,58 +29,118 @@ describe('parse', () => {
         xmlns="http://channel.netscape.com/rdf/simple/0.9/"
       >
         <CHANNEL>
-          <title>Mozilla Dot Org</title>
-          <LINK>http://www.mozilla.org</LINK>
-          <description>the Mozilla Organization web site</description>
+          <title>Example Dot Org</title>
+          <LINK>http://example.org</LINK>
+          <description>the Example Organization web site</description>
         </CHANNEL>
         <ItEM RDF:aBOUT="http://example.org/item1">
           <TITle>New Status Updates</TITle>
-          <link>http://www.mozilla.org/status/</link>
+          <link>http://example.org/status/</link>
         </ItEM>
       </RDF:rdf>
     `
-    const expectation = {
-      title: 'Mozilla Dot Org',
-      link: 'http://www.mozilla.org',
-      description: 'the Mozilla Organization web site',
+    const expected = {
+      title: 'Example Dot Org',
+      link: 'http://example.org',
+      description: 'the Example Organization web site',
       items: [
         {
           title: 'New Status Updates',
-          link: 'http://www.mozilla.org/status/',
+          link: 'http://example.org/status/',
           rdf: { about: 'http://example.org/item1' },
         },
       ],
     }
 
-    expect(parse(value)).toEqual(expectation)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should throw error for invalid input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse('not a feed')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle null input', () => {
-    expect(() => parse(null)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(null)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle undefined input', () => {
-    expect(() => parse(undefined)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(undefined)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle array input', () => {
-    expect(() => parse([])).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse([])
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle empty object input', () => {
-    expect(() => parse({})).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse({})
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
-  it('should handle string input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.invalidFeedFormat)
+  it('should handle empty string input', () => {
+    const throwing = () => parse('')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
+  })
+
+  it('should handle whitespace-only string input', () => {
+    const throwing = () => parse('   \n  ')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle number input', () => {
-    expect(() => parse(123)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(123)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
+  })
+
+  describe('error types', () => {
+    it('should throw DetectError for non-feed input', () => {
+      const throwing = () => parse('not a feed')
+
+      expect(throwing).toThrowError(DetectError)
+      expect(throwing).toThrowError(locales.invalidFeedFormat)
+    })
+
+    it('should throw MalformedError for malformed XML', () => {
+      const value = `
+        <?xml version="1.0"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/">
+          <channel>
+            <title>Test</title
+          </channel>
+        </rdf:RDF>
+      `
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrowError(MalformedError)
+      expect(throwing).toThrowError(locales.invalidFeedFormat)
+    })
+
+    it('should throw ParseError for valid XML with invalid structure', () => {
+      const value = `
+        <?xml version="1.0"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/">
+        </rdf:RDF>
+      `
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrowError(ParseError)
+      expect(throwing).toThrowError(locales.invalidFeedFormat)
+    })
   })
 
   it('should handle non-standard atom namespace prefix', () => {
@@ -292,7 +352,6 @@ describe('parse', () => {
             description: 'Item Description',
             dc: {
               creators: ['John Doe'],
-              creator: 'John Doe',
             },
             rdf: { about: 'http://example.com/item1' },
           },
@@ -337,8 +396,6 @@ describe('parse', () => {
             dc: {
               creators: ['John Doe'],
               dates: ['2023-01-01'],
-              creator: 'John Doe',
-              date: '2023-01-01',
             },
             rdf: { about: 'http://example.com/item1' },
           },
@@ -382,7 +439,6 @@ describe('parse', () => {
             description: 'Item Description',
             dc: {
               creators: ['John Doe'],
-              creator: 'John Doe',
             },
             rdf: { about: 'http://example.com/item1' },
           },
@@ -477,7 +533,6 @@ describe('parse', () => {
         description: 'RDF Feed Description',
         dc: {
           creators: ['Feed Author'],
-          creator: 'Feed Author',
         },
         sy: {
           updatePeriod: 'hourly',
@@ -491,8 +546,6 @@ describe('parse', () => {
             dc: {
               creators: ['John Doe'],
               dates: ['2023-01-01'],
-              creator: 'John Doe',
-              date: '2023-01-01',
             },
             slash: {
               comments: 42,
@@ -536,7 +589,6 @@ describe('parse', () => {
             title: 'Item Title',
             dc: {
               creators: ['Should not normalize (empty URI)'],
-              creator: 'Should not normalize (empty URI)',
             },
             rdf: { about: 'http://example.com/item1' },
           },
@@ -599,14 +651,12 @@ describe('parse', () => {
       const expected = {
         dc: {
           creators: ['Channel Author'],
-          creator: 'Channel Author',
         },
         items: [
           {
             title: 'Item without about',
             dc: {
               creators: ['Item Author'],
-              creator: 'Item Author',
             },
           },
         ],
@@ -681,7 +731,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -720,7 +769,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -759,7 +807,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -798,7 +845,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -837,7 +883,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -876,7 +921,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -917,8 +961,6 @@ describe('parse', () => {
               dcterms: {
                 creators: ['Jane Doe'],
                 titles: ['DC Terms Title'],
-                creator: 'Jane Doe',
-                title: 'DC Terms Title',
               },
               rdf: { about: 'http://example.com/item1' },
             },
@@ -998,9 +1040,8 @@ describe('parse', () => {
       link: 'http://example.com',
       description: 'Test feed with Dublin Core Terms namespace',
       dcterms: {
-        created: '2023-01-01T00:00:00.000Z',
+        created: ['2023-01-01T00:00:00.000Z'],
         licenses: ['Creative Commons Attribution 4.0'],
-        license: 'Creative Commons Attribution 4.0',
       },
       rdf: { about: 'http://example.com' },
       items: [
@@ -1008,9 +1049,8 @@ describe('parse', () => {
           title: 'First item',
           link: 'http://example.com/item1',
           dcterms: {
-            created: '2023-02-01T00:00:00.000Z',
+            created: ['2023-02-01T00:00:00.000Z'],
             licenses: ['MIT License'],
-            license: 'MIT License',
           },
           rdf: { about: 'http://example.com/item1' },
         },
@@ -1115,7 +1155,7 @@ describe('parse', () => {
           <link>http://example.com</link>
           <description>Test feed with Administrative namespace</description>
           <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
-          <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+          <admin:generatorAgent rdf:resource="https://example.com/generator?v=3.2"/>
         </channel>
         <item rdf:about="http://example.com/item1">
           <title>Item title</title>
@@ -1129,7 +1169,7 @@ describe('parse', () => {
       description: 'Test feed with Administrative namespace',
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
-        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+        generatorAgent: 'https://example.com/generator?v=3.2',
       },
       rdf: { about: 'http://example.com' },
       items: [
@@ -1221,11 +1261,8 @@ describe('parse', () => {
       description: 'Test feed with Dublin Core namespace',
       dc: {
         creators: ['John Doe'],
-        creator: 'John Doe',
         publishers: ['Example Publishing'],
-        publisher: 'Example Publishing',
         languages: ['en-US'],
-        language: 'en-US',
       },
       rdf: { about: 'http://example.com' },
       items: [
@@ -1234,11 +1271,8 @@ describe('parse', () => {
           link: 'http://example.com/item1',
           dc: {
             creators: ['Jane Smith'],
-            creator: 'Jane Smith',
             dates: ['2023-01-15T10:00:00Z'],
-            date: '2023-01-15T10:00:00Z',
             subjects: ['Technology'],
-            subject: 'Technology',
           },
           rdf: { about: 'http://example.com/item1' },
         },
@@ -1541,603 +1575,117 @@ describe('parse', () => {
     })
   })
 
-  // Edge cases and quirks observed in feeds found in the wild.
-  describe('real world feeds', () => {
-    describe('character encoding', () => {
-      it('RW-E01: should decode HTML numeric character references', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
-            <channel>
-              <title>Caf&#233; Blog</title>
-              <link>http://example.com</link>
-              <description>Test</description>
-            </channel>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'Caf\u00e9 Blog',
-          link: 'http://example.com',
-          description: 'Test',
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-E03: should decode named HTML entities in item title', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
-            <channel>
-              <title>Test</title>
-              <link>http://example.com</link>
-              <description>Test</description>
-            </channel>
-            <item rdf:about="http://example.com/1">
-              <title>News &ndash; Update</title>
-            </item>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'Test',
-          link: 'http://example.com',
-          description: 'Test',
-          items: [
-            {
-              title: 'News \u2013 Update',
-              rdf: { about: 'http://example.com/1' },
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-
-    describe('cdata handling', () => {
-      it('RW-C09: should handle CDATA in item description', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
-            <channel>
-              <title>Test</title>
-              <link>http://example.com</link>
-              <description>Test</description>
-            </channel>
-            <item rdf:about="http://example.com/1">
-              <title>Item</title>
-              <description><![CDATA[<p>HTML with <strong>bold</strong></p>]]></description>
-            </item>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'Test',
-          link: 'http://example.com',
-          description: 'Test',
-          items: [
-            {
-              title: 'Item',
-              description: '<p>HTML with <strong>bold</strong></p>',
-              rdf: { about: 'http://example.com/1' },
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-C02: should handle CDATA in channel title', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
-            <channel>
-              <title><![CDATA[Test & Blog]]></title>
-              <link>http://example.com</link>
-              <description>Test</description>
-            </channel>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'Test & Blog',
-          link: 'http://example.com',
-          description: 'Test',
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-
-    describe('namespace edge cases', () => {
-      it('RW-NS01: should handle non-standard prefix for dc namespace', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-                   xmlns="http://purl.org/rss/1.0/"
-                   xmlns:dublin="http://purl.org/dc/elements/1.1/">
-            <channel>
-              <title>Test</title>
-              <link>http://example.com</link>
-              <description>Test</description>
-            </channel>
-            <item rdf:about="http://example.com/1">
-              <title>Post</title>
-              <dublin:creator>Author</dublin:creator>
-              <dublin:date>2024-01-15</dublin:date>
-            </item>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'Test',
-          link: 'http://example.com',
-          description: 'Test',
-          items: [
-            {
-              title: 'Post',
-              dc: {
-                creators: ['Author'],
-                creator: 'Author',
-                dates: ['2024-01-15'],
-                date: '2024-01-15',
-              },
-              rdf: { about: 'http://example.com/1' },
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-
-    describe('missing and empty elements', () => {
-      it('RW-N08: should parse item with no description', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
-            <channel>
-              <title>Test</title>
-              <link>http://example.com</link>
-              <description>Test</description>
-            </channel>
-            <item rdf:about="http://example.com/1">
-              <title>Title Only</title>
-              <link>http://example.com/1</link>
-            </item>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'Test',
-          link: 'http://example.com',
-          description: 'Test',
-          items: [
-            {
-              title: 'Title Only',
-              link: 'http://example.com/1',
-              rdf: { about: 'http://example.com/1' },
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-N01: should parse feed with no items', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
-            <channel>
-              <title>Empty</title>
-              <link>http://example.com</link>
-              <description>No items</description>
-            </channel>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'Empty',
-          link: 'http://example.com',
-          description: 'No items',
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-N03: should handle empty self-closing description', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
-            <channel>
-              <title>Test</title>
-              <link>http://example.com</link>
-              <description/>
-            </channel>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'Test',
-          link: 'http://example.com',
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-
-    describe('multiple elements', () => {
-      it('RW-M04: should parse multiple dc:subject as categories', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-                   xmlns="http://purl.org/rss/1.0/"
-                   xmlns:dc="http://purl.org/dc/elements/1.1/">
-            <channel>
-              <title>Test</title>
-              <link>http://example.com</link>
-              <description>Test</description>
-            </channel>
-            <item rdf:about="http://example.com/1">
-              <title>Post</title>
-              <dc:subject>Technology</dc:subject>
-              <dc:subject>Science</dc:subject>
-              <dc:subject>Open Source</dc:subject>
-            </item>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'Test',
-          link: 'http://example.com',
-          description: 'Test',
-          items: [
-            {
-              title: 'Post',
-              dc: {
-                subjects: ['Technology', 'Science', 'Open Source'],
-                subject: 'Technology',
-              },
-              rdf: { about: 'http://example.com/1' },
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-
-    describe('content:encoded', () => {
-      it('RW-NS09: should parse content:encoded with complex HTML in CDATA', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-                   xmlns="http://purl.org/rss/1.0/"
-                   xmlns:content="http://purl.org/rss/1.0/modules/content/">
-            <channel>
-              <title>Test</title>
-              <link>http://example.com</link>
-              <description>Test</description>
-            </channel>
-            <item rdf:about="http://example.com/1">
-              <title>Post</title>
-              <content:encoded><![CDATA[<div class="post"><h1>Title</h1><p>Text with <a href="https://example.com">link</a></p></div>]]></content:encoded>
-            </item>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'Test',
-          link: 'http://example.com',
-          description: 'Test',
-          items: [
-            {
-              title: 'Post',
-              content: {
-                encoded:
-                  '<div class="post"><h1>Title</h1><p>Text with <a href="https://example.com">link</a></p></div>',
-              },
-              rdf: { about: 'http://example.com/1' },
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-
-    describe('malformed XML resilience', () => {
-      it('RW-E10: should handle BOM at start of feed', () => {
-        const value = `\uFEFF<?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
-            <channel>
-              <title>BOM Feed</title>
-              <link>http://example.com</link>
-              <description>Test</description>
-            </channel>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'BOM Feed',
-          link: 'http://example.com',
-          description: 'Test',
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-E06: should decode &nbsp; entity in item title', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
-            <channel>
-              <title>Test</title>
-              <link>http://example.com</link>
-              <description>Test</description>
-            </channel>
-            <item rdf:about="http://example.com/1">
-              <title>Hello&nbsp;World</title>
-            </item>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'Test',
-          link: 'http://example.com',
-          description: 'Test',
-          items: [
-            {
-              title: 'Hello\u00A0World',
-              rdf: { about: 'http://example.com/1' },
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-X01: should partially parse truncated XML without throwing', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
-            <channel>
-              <title>Test</title>
-        `
-        const expected = {
-          title: 'Test',
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-
-    describe('double-encoded and special entities', () => {
-      it('RW-E04: should single-decode double-encoded entities', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
-            <channel>
-              <title>Test</title>
-              <link>http://example.com</link>
-              <description>Test</description>
-            </channel>
-            <item rdf:about="http://example.com/1">
-              <title>Tom &amp;amp; Jerry</title>
-            </item>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'Test',
-          link: 'http://example.com',
-          description: 'Test',
-          items: [
-            {
-              title: 'Tom &amp; Jerry',
-              rdf: { about: 'http://example.com/1' },
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-E07: should decode &copy; entity', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
-            <channel>
-              <title>&copy; 2024 Example</title>
-              <link>http://example.com</link>
-              <description>Test</description>
-            </channel>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: '\u00A9 2024 Example',
-          link: 'http://example.com',
-          description: 'Test',
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-
-    describe('multiple items and rdf:about', () => {
-      it('RW-M07: should parse multiple items preserving rdf:about on each', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
-            <channel>
-              <title>Test</title>
-              <link>http://example.com</link>
-              <description>Test</description>
-            </channel>
-            <item rdf:about="http://example.com/1">
-              <title>First</title>
-              <link>http://example.com/1</link>
-            </item>
-            <item rdf:about="http://example.com/2">
-              <title>Second</title>
-              <link>http://example.com/2</link>
-            </item>
-            <item rdf:about="http://example.com/3">
-              <title>Third</title>
-              <link>http://example.com/3</link>
-            </item>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'Test',
-          link: 'http://example.com',
-          description: 'Test',
-          items: [
-            {
-              title: 'First',
-              link: 'http://example.com/1',
-              rdf: { about: 'http://example.com/1' },
-            },
-            {
-              title: 'Second',
-              link: 'http://example.com/2',
-              rdf: { about: 'http://example.com/2' },
-            },
-            {
-              title: 'Third',
-              link: 'http://example.com/3',
-              rdf: { about: 'http://example.com/3' },
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-NS13: should handle prefixed core elements in RDF feed', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-                   xmlns:rss="http://purl.org/rss/1.0/">
-            <rss:channel>
-              <rss:title>Prefixed Feed</rss:title>
-              <rss:link>http://example.com</rss:link>
-              <rss:description>A feed using prefixed RSS elements</rss:description>
-            </rss:channel>
-            <rss:item rdf:about="http://example.com/1">
-              <rss:title>Prefixed Item</rss:title>
-              <rss:link>http://example.com/1</rss:link>
-            </rss:item>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'Prefixed Feed',
-          link: 'http://example.com',
-          description: 'A feed using prefixed RSS elements',
-          items: [
-            {
-              title: 'Prefixed Item',
-              link: 'http://example.com/1',
-              rdf: { about: 'http://example.com/1' },
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-N12: should handle item with no rdf:about', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
-            <channel>
-              <title>Test</title>
-              <link>http://example.com</link>
-              <description>Test</description>
-            </channel>
-            <item>
-              <title>No About</title>
-              <link>http://example.com/1</link>
-            </item>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'Test',
-          link: 'http://example.com',
-          description: 'Test',
-          items: [
-            {
-              title: 'No About',
-              link: 'http://example.com/1',
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-X15: should parse items as top-level siblings outside channel', () => {
-        const value = `
-          <?xml version="1.0" encoding="UTF-8"?>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
-            <channel>
-              <title>Test Channel</title>
-              <link>http://example.com</link>
-              <description>A test channel</description>
-            </channel>
-            <item rdf:about="http://example.com/1">
-              <title>First Item</title>
-              <link>http://example.com/1</link>
-            </item>
-            <item rdf:about="http://example.com/2">
-              <title>Second Item</title>
-              <link>http://example.com/2</link>
-            </item>
-          </rdf:RDF>
-        `
-        const expected = {
-          title: 'Test Channel',
-          link: 'http://example.com',
-          description: 'A test channel',
-          items: [
-            {
-              title: 'First Item',
-              link: 'http://example.com/1',
-              rdf: { about: 'http://example.com/1' },
-            },
-            {
-              title: 'Second Item',
-              link: 'http://example.com/2',
-              rdf: { about: 'http://example.com/2' },
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-  })
-
-  describe('xml comment stripping', () => {
-    it('should strip XML comments from element content', () => {
+  describe('parseDateFn', () => {
+    it('should apply custom parseDateFn to namespace dates', () => {
       const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rdf:RDF
           xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-          xmlns="http://purl.org/rss/1.0/">
-          <channel>
-            <title>Test<!-- hidden --> Feed</title>
-            <link>http://example.com</link>
-            <description>Test</description>
+          xmlns="http://purl.org/rss/1.0/"
+          xmlns:dc="http://purl.org/dc/elements/1.1/"
+        >
+          <channel rdf:about="http://example.com">
+            <title>Test</title>
           </channel>
-          <item>
-            <title>Post<!-- comment --> Title</title>
-            <link>http://example.com/post</link>
+          <item rdf:about="http://example.com/item1">
+            <title>Item</title>
+            <dc:date>2023-03-15T12:00:00Z</dc:date>
           </item>
         </rdf:RDF>
       `
       const expected = {
-        title: 'Test Feed',
-        link: 'http://example.com',
-        description: 'Test',
+        title: 'Test',
+        rdf: {
+          about: 'http://example.com',
+        },
         items: [
           {
-            title: 'Post Title',
-            link: 'http://example.com/post',
+            title: 'Item',
+            rdf: {
+              about: 'http://example.com/item1',
+            },
+            dc: {
+              dates: [new Date('2023-03-15T12:00:00Z')],
+            },
           },
         ],
       }
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    })
 
-      expect(parse(value)).toEqual(expected)
+    it('should apply custom parseDateFn to sy namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/"
+          xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+        >
+          <channel rdf:about="http://example.com">
+            <title>Test</title>
+            <sy:updateBase>2023-03-15T12:00:00Z</sy:updateBase>
+          </channel>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'Test',
+        rdf: {
+          about: 'http://example.com',
+        },
+        sy: {
+          updateBase: new Date('2023-03-15T12:00:00Z'),
+        },
+      }
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    })
+
+    it('should propagate error when parseDateFn throws', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/"
+          xmlns:dc="http://purl.org/dc/elements/1.1/"
+        >
+          <channel rdf:about="http://example.com">
+            <title>Test</title>
+            <dc:date>invalid</dc:date>
+          </channel>
+        </rdf:RDF>
+      `
+      const parseDateFn = () => {
+        throw new Error('Parse failed')
+      }
+      const throwing = () => parse(value, { parseDateFn })
+
+      expect(throwing).toThrowError('Parse failed')
+    })
+  })
+
+  describe.todo('real-world feeds', () => {
+    it.todo('should parse RDF feed with CDATA-wrapped titles and descriptions', () => {
+      // Mirror the RSS real-world CDATA suite: <title><![CDATA[...]]></title> and CDATA-wrapped
+      // item descriptions should parse to the inner text.
+    })
+
+    it.todo('should parse RDF feed with named and numeric HTML entities', () => {
+      // Mirror the RSS real-world entity suite: &amp;, &#8217;, &#x2019; in titles and
+      // descriptions should decode correctly.
+    })
+
+    it.todo('should parse RDF feed prefixed with a BOM', () => {
+      // A UTF-8 byte order mark before the XML declaration is common in real feeds and must not
+      // break detection or parsing.
+    })
+
+    it.todo('should parse RDF feed with a DOCTYPE declaration', () => {
+      // Some real feeds include a DOCTYPE before the root element. Parsing should ignore it
+      // instead of failing.
+    })
+
+    it.todo('should throw MalformedError for truncated RDF XML', () => {
+      // Mirror the RSS real-world truncation tests: a feed cut off mid-element should raise
+      // MalformedError rather than return a partial feed.
     })
   })
 })

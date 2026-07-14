@@ -1,6 +1,6 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import { isPlainObject } from 'trousse'
+import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseDate,
   parseNumber,
@@ -12,7 +12,7 @@ import {
 } from '../../../common/utils.js'
 import type { RawVoiceNs } from '../common/types.js'
 
-export const parseRating: ParsePartialUtil<RawVoiceNs.Rating> = (value) => {
+export const parseRating: ParseUtilPartial<RawVoiceNs.Rating> = (value) => {
   const rating = {
     value: parseString(retrieveText(value)),
     tv: parseString(value?.['@tv']),
@@ -22,10 +22,13 @@ export const parseRating: ParsePartialUtil<RawVoiceNs.Rating> = (value) => {
   return trimObject(rating)
 }
 
-export const parseLiveStream: ParsePartialUtil<RawVoiceNs.LiveStream<string>> = (value) => {
+export const parseLiveStream: ParseUtilPartial<
+  RawVoiceNs.LiveStream<DateAny>,
+  ParseMainOptions<DateAny>
+> = (value, options) => {
   const liveStream = {
     url: parseString(retrieveText(value)),
-    schedule: parseDate(value?.['@schedule']),
+    schedule: parseDate(value?.['@schedule'], options?.parseDateFn),
     duration: parseString(value?.['@duration']),
     type: parseString(value?.['@type']),
   }
@@ -33,8 +36,8 @@ export const parseLiveStream: ParsePartialUtil<RawVoiceNs.LiveStream<string>> = 
   return trimObject(liveStream)
 }
 
-export const parsePoster: ParsePartialUtil<RawVoiceNs.Poster> = (value) => {
-  if (!isObject(value)) {
+export const parsePoster: ParseUtilPartial<RawVoiceNs.Poster> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -45,8 +48,8 @@ export const parsePoster: ParsePartialUtil<RawVoiceNs.Poster> = (value) => {
   return trimObject(poster)
 }
 
-export const parseAlternateEnclosure: ParsePartialUtil<RawVoiceNs.AlternateEnclosure> = (value) => {
-  if (!isObject(value)) {
+export const parseAlternateEnclosure: ParseUtilPartial<RawVoiceNs.AlternateEnclosure> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -59,8 +62,8 @@ export const parseAlternateEnclosure: ParsePartialUtil<RawVoiceNs.AlternateEnclo
   return trimObject(alternateEnclosure)
 }
 
-export const parseSubscribe: ParsePartialUtil<RawVoiceNs.Subscribe> = (value) => {
-  if (!isObject(value)) {
+export const parseSubscribe: ParseUtilPartial<RawVoiceNs.Subscribe> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -80,8 +83,8 @@ export const parseSubscribe: ParsePartialUtil<RawVoiceNs.Subscribe> = (value) =>
   return trimObject(subscribe)
 }
 
-export const parseMetamark: ParsePartialUtil<RawVoiceNs.Metamark> = (value) => {
-  if (!isObject(value)) {
+export const parseMetamark: ParseUtilPartial<RawVoiceNs.Metamark> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -96,8 +99,8 @@ export const parseMetamark: ParsePartialUtil<RawVoiceNs.Metamark> = (value) => {
   return trimObject(metamark)
 }
 
-export const parseDonate: ParsePartialUtil<RawVoiceNs.Donate> = (value) => {
-  if (!isObject(value)) {
+export const parseDonate: ParseUtilPartial<RawVoiceNs.Donate> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -109,8 +112,8 @@ export const parseDonate: ParsePartialUtil<RawVoiceNs.Donate> = (value) => {
   return trimObject(donate)
 }
 
-export const retrieveItem: ParsePartialUtil<RawVoiceNs.Item> = (value) => {
-  if (!isObject(value)) {
+export const retrieveItem: ParseUtilPartial<RawVoiceNs.Item> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -128,8 +131,11 @@ export const retrieveItem: ParsePartialUtil<RawVoiceNs.Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialUtil<RawVoiceNs.Feed<string>> = (value) => {
-  if (!isObject(value)) {
+export const retrieveFeed: ParseUtilPartial<RawVoiceNs.Feed<DateAny>, ParseMainOptions<DateAny>> = (
+  value,
+  options,
+) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -138,10 +144,18 @@ export const retrieveFeed: ParsePartialUtil<RawVoiceNs.Feed<string>> = (value) =
     liveEmbed: parseSingularOf(value['rawvoice:liveembed'], (value) =>
       parseString(retrieveText(value)),
     ),
-    flashLiveStream: parseSingularOf(value['rawvoice:flashlivestream'], parseLiveStream),
-    httpLiveStream: parseSingularOf(value['rawvoice:httplivestream'], parseLiveStream),
-    shoutcastLiveStream: parseSingularOf(value['rawvoice:shoutcastlivestream'], parseLiveStream),
-    liveStream: parseSingularOf(value['rawvoice:livestream'], parseLiveStream),
+    flashLiveStream: parseSingularOf(value['rawvoice:flashlivestream'], (value) =>
+      parseLiveStream(value, options),
+    ),
+    httpLiveStream: parseSingularOf(value['rawvoice:httplivestream'], (value) =>
+      parseLiveStream(value, options),
+    ),
+    shoutcastLiveStream: parseSingularOf(value['rawvoice:shoutcastlivestream'], (value) =>
+      parseLiveStream(value, options),
+    ),
+    liveStream: parseSingularOf(value['rawvoice:livestream'], (value) =>
+      parseLiveStream(value, options),
+    ),
     location: parseSingularOf(value['rawvoice:location'], (value) =>
       parseString(retrieveText(value)),
     ),

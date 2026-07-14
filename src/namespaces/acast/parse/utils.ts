@@ -1,15 +1,10 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
-import {
-  isObject,
-  parseSingularOf,
-  parseString,
-  retrieveText,
-  trimObject,
-} from '../../../common/utils.js'
+import { isPlainObject } from 'trousse'
+import type { ParseUtilPartial } from '../../../common/types.js'
+import { parseSingularOf, parseString, retrieveText, trimObject } from '../../../common/utils.js'
 import type { AcastNs } from '../common/types.js'
 
-export const parseSignature: ParsePartialUtil<AcastNs.Signature> = (value) => {
-  if (!isObject(value)) {
+export const parseSignature: ParseUtilPartial<AcastNs.Signature> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -22,8 +17,8 @@ export const parseSignature: ParsePartialUtil<AcastNs.Signature> = (value) => {
   return trimObject(signature)
 }
 
-export const parseNetwork: ParsePartialUtil<AcastNs.Network> = (value) => {
-  if (!isObject(value)) {
+export const parseNetwork: ParseUtilPartial<AcastNs.Network> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -36,8 +31,8 @@ export const parseNetwork: ParsePartialUtil<AcastNs.Network> = (value) => {
   return trimObject(network)
 }
 
-export const retrieveFeed: ParsePartialUtil<AcastNs.Feed> = (value) => {
-  if (!isObject(value)) {
+export const retrieveFeed: ParseUtilPartial<AcastNs.Feed> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -55,8 +50,8 @@ export const retrieveFeed: ParsePartialUtil<AcastNs.Feed> = (value) => {
   return trimObject(feed)
 }
 
-export const retrieveItem: ParsePartialUtil<AcastNs.Item> = (value) => {
-  if (!isObject(value)) {
+export const retrieveItem: ParseUtilPartial<AcastNs.Item> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 

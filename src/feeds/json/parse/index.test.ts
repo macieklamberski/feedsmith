@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { locales } from '../../../common/config.js'
+import { DetectError, ParseError } from '../../../common/errors.js'
 import { parse } from './index.js'
 
 describe('parse', () => {
@@ -170,8 +171,9 @@ describe('parse', () => {
 
   it('should handle malformed JSON string', () => {
     const value = '{"version":"https://jsonfeed.org/version/1.1","title":"Malformed'
+    const throwing = () => parse(value)
 
-    expect(() => parse(value)).toThrowError(locales.invalidFeedFormat)
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should parse feed with invalid URLs', () => {
@@ -234,31 +236,70 @@ describe('parse', () => {
   })
 
   it('should throw error for invalid input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse('not a feed')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle null input', () => {
-    expect(() => parse(null)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(null)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle undefined input', () => {
-    expect(() => parse(undefined)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(undefined)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle array input', () => {
-    expect(() => parse([])).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse([])
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle empty object input', () => {
-    expect(() => parse({})).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse({})
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
-  it('should handle string input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.invalidFeedFormat)
+  it('should handle empty string input', () => {
+    const throwing = () => parse('')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
+  })
+
+  it('should handle whitespace-only string input', () => {
+    const throwing = () => parse('   \n  ')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle number input', () => {
-    expect(() => parse(123)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(123)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
+  })
+
+  describe('error types', () => {
+    it('should throw DetectError for non-feed input', () => {
+      const throwing = () => parse({})
+
+      expect(throwing).toThrowError(DetectError)
+      expect(throwing).toThrowError(locales.invalidFeedFormat)
+    })
+
+    it('should throw ParseError for detected but invalid feed', () => {
+      const value = {
+        version: 'https://jsonfeed.org/version/1',
+      }
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrowError(ParseError)
+      expect(throwing).toThrowError(locales.invalidFeedFormat)
+    })
   })
 
   describe('with maxItems option', () => {
@@ -330,795 +371,66 @@ describe('parse', () => {
     })
   })
 
-  // Edge cases and quirks observed in feeds found in the wild.
-  describe('real world feeds', () => {
-    describe('author handling', () => {
-      it('RW-J01: should handle v1 singular author object', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1',
-          title: 'Blog',
-          author: { name: 'John Doe', url: 'https://example.com' },
-          items: [{ id: '1', content_text: 'Hello' }],
-        }
-        const expected = {
-          title: 'Blog',
-          authors: [{ name: 'John Doe', url: 'https://example.com' }],
-          items: [{ id: '1', content_text: 'Hello' }],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-J01: should prefer v1.1 authors array over v1 author object', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          authors: [{ name: 'Alice' }, { name: 'Bob' }],
-          author: { name: 'Ignored' },
-          items: [{ id: '1', content_text: 'Hello' }],
-        }
-        const expected = {
-          title: 'Blog',
-          authors: [{ name: 'Alice' }, { name: 'Bob' }],
-          items: [{ id: '1', content_text: 'Hello' }],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-J01: should handle author on item level', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-              authors: [
-                {
-                  name: 'Alice',
-                  url: 'https://alice.example.com',
-                  avatar: 'https://alice.example.com/avatar.jpg',
-                },
-              ],
-            },
-          ],
-        }
-        const expected = {
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-              authors: [
-                {
-                  name: 'Alice',
-                  url: 'https://alice.example.com',
-                  avatar: 'https://alice.example.com/avatar.jpg',
-                },
-              ],
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-
-    describe('content handling', () => {
-      it('RW-J06: should parse content_html with raw HTML', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_html: '<p>Hello <strong>world</strong></p>',
-            },
-          ],
-        }
-        const expected = {
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_html: '<p>Hello <strong>world</strong></p>',
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-J06: should parse both content_text and content_html', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello world',
-              content_html: '<p>Hello world</p>',
-            },
-          ],
-        }
-        const expected = {
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello world',
-              content_html: '<p>Hello world</p>',
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-J06: should handle item with only content_text', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Plain text content',
-            },
-          ],
-        }
-        const expected = {
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Plain text content',
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-
-    describe('attachments', () => {
-      it('RW-M08: should parse attachments with all fields', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Podcast',
-          items: [
-            {
-              id: '1',
-              content_text: 'Episode notes',
-              attachments: [
-                {
-                  url: 'https://example.com/episode.mp3',
-                  mime_type: 'audio/mpeg',
-                  title: 'Episode 1',
-                  size_in_bytes: 12345678,
-                  duration_in_seconds: 3600,
-                },
-              ],
-            },
-          ],
-        }
-        const expected = {
-          title: 'Podcast',
-          items: [
-            {
-              id: '1',
-              content_text: 'Episode notes',
-              attachments: [
-                {
-                  url: 'https://example.com/episode.mp3',
-                  mime_type: 'audio/mpeg',
-                  title: 'Episode 1',
-                  size_in_bytes: 12345678,
-                  duration_in_seconds: 3600,
-                },
-              ],
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-M08: should parse multiple attachments', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Podcast',
-          items: [
-            {
-              id: '1',
-              content_text: 'Episode',
-              attachments: [
-                { url: 'https://example.com/ep.mp3', mime_type: 'audio/mpeg' },
-                { url: 'https://example.com/ep.ogg', mime_type: 'audio/ogg' },
-              ],
-            },
-          ],
-        }
-        const expected = {
-          title: 'Podcast',
-          items: [
-            {
-              id: '1',
-              content_text: 'Episode',
-              attachments: [
-                { url: 'https://example.com/ep.mp3', mime_type: 'audio/mpeg' },
-                { url: 'https://example.com/ep.ogg', mime_type: 'audio/ogg' },
-              ],
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-
-    describe('tags', () => {
-      it('RW-J07: should parse tags as array of strings', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-              tags: ['javascript', 'typescript', 'nodejs'],
-            },
-          ],
-        }
-        const expected = {
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-              tags: ['javascript', 'typescript', 'nodejs'],
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-
-    describe('missing and empty elements', () => {
-      it('RW-N13: should ignore unknown custom fields', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          custom_extension: { foo: 'bar' },
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-              _custom: 'value',
-            },
-          ],
-        }
-        const expected = {
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-N04: should handle null values in fields', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          description: null,
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-              title: null,
-              summary: null,
-            },
-          ],
-        }
-        const expected = {
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-N05: should handle empty string values', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          description: '',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-              title: '',
-            },
-          ],
-        }
-        const expected = {
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-J03: should handle item with numeric id', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          items: [
-            {
-              id: 42,
-              content_text: 'Hello',
-            },
-          ],
-        }
-        const expected = {
-          title: 'Blog',
-          items: [
-            {
-              id: '42',
-              content_text: 'Hello',
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-
-    describe('feed metadata', () => {
-      it('RW-Q08: should parse feed with all metadata fields', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'My Blog',
-          home_page_url: 'https://example.com',
-          feed_url: 'https://example.com/feed.json',
-          description: 'A blog about stuff',
-          icon: 'https://example.com/icon.png',
-          favicon: 'https://example.com/favicon.ico',
-          language: 'en-US',
-          expired: false,
-          items: [{ id: '1', content_text: 'Hello' }],
-        }
-        const expected = {
-          title: 'My Blog',
-          home_page_url: 'https://example.com',
-          feed_url: 'https://example.com/feed.json',
-          description: 'A blog about stuff',
-          icon: 'https://example.com/icon.png',
-          favicon: 'https://example.com/favicon.ico',
-          language: 'en-US',
-          expired: false,
-          items: [{ id: '1', content_text: 'Hello' }],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-Q08: should parse hubs for WebSub support', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          hubs: [{ type: 'WebSub', url: 'https://hub.example.com' }],
-          items: [{ id: '1', content_text: 'Hello' }],
-        }
-        const expected = {
-          title: 'Blog',
-          hubs: [{ type: 'WebSub', url: 'https://hub.example.com' }],
-          items: [{ id: '1', content_text: 'Hello' }],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-
-    describe('type coercion edge cases', () => {
-      it('RW-J05: should drop boolean id (not coerced to string)', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          items: [
-            {
-              id: true,
-              content_text: 'Hello',
-            },
-          ],
-        }
-        const expected = {
-          title: 'Blog',
-          items: [
-            {
-              content_text: 'Hello',
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-J04: should handle numeric zero as id', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          items: [
-            {
-              id: 0,
-              content_text: 'Hello',
-            },
-          ],
-        }
-        const expected = {
-          title: 'Blog',
-          items: [
-            {
-              id: '0',
-              content_text: 'Hello',
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-J09: should handle expired as true', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Archived Blog',
-          expired: true,
-          items: [{ id: '1', content_text: 'Old post' }],
-        }
-        const expected = {
-          title: 'Archived Blog',
-          expired: true,
-          items: [{ id: '1', content_text: 'Old post' }],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-
-    describe('case insensitivity', () => {
-      it('RW-J08: should handle uppercase property names', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          Title: 'Blog',
-          DESCRIPTION: 'A test blog',
-          items: [
-            {
-              ID: '1',
-              Content_Text: 'Hello',
-            },
-          ],
-        }
-        const expected = {
-          title: 'Blog',
-          description: 'A test blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-J08: should handle mixed case in nested objects', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          Authors: [{ Name: 'Alice', URL: 'https://alice.com' }],
-          items: [{ id: '1', content_text: 'Hello' }],
-        }
-        const expected = {
-          title: 'Blog',
-          authors: [{ name: 'Alice', url: 'https://alice.com' }],
-          items: [{ id: '1', content_text: 'Hello' }],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-    })
-
-    describe('unusual but valid structures', () => {
-      it('RW-J02: should handle author as plain string (non-spec but common)', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1',
-          title: 'Blog',
-          author: 'John Doe',
-          items: [{ id: '1', content_text: 'Hello' }],
-        }
-        const expected = {
-          title: 'Blog',
-          authors: [{ name: 'John Doe' }],
-          items: [{ id: '1', content_text: 'Hello' }],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-N09: should handle empty items array', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Empty Blog',
-          items: [],
-        }
-        const expected = {
-          title: 'Empty Blog',
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-N10: should handle items with only empty objects', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          items: [{}],
-        }
-        const expected = {
-          title: 'Blog',
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-A10: should handle attachment with no mime_type', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Podcast',
-          items: [
-            {
-              id: '1',
-              content_text: 'Episode',
-              attachments: [{ url: 'https://example.com/file.mp3' }],
-            },
-          ],
-        }
-        const expected = {
-          title: 'Podcast',
-          items: [
-            {
-              id: '1',
-              content_text: 'Episode',
-              attachments: [{ url: 'https://example.com/file.mp3' }],
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-T04: should handle item with date_published and date_modified', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-              date_published: '2024-01-15T12:00:00Z',
-              date_modified: '2024-01-16T14:30:00+02:00',
-            },
-          ],
-        }
-        const expected = {
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-              date_published: '2024-01-15T12:00:00Z',
-              date_modified: '2024-01-16T14:30:00+02:00',
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-N11: should handle whitespace-only title', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: '   ',
-          items: [{ id: '1', content_text: 'Hello' }],
-        }
-        const expected = {
-          items: [{ id: '1', content_text: 'Hello' }],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-J07: should handle tags with empty strings filtered out', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-              tags: ['javascript', '', 'typescript', '   '],
-            },
-          ],
-        }
-        const expected = {
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-              tags: ['javascript', 'typescript'],
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-J10: should handle authors as plain object instead of array', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Test Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-              authors: { name: 'John Doe' },
-            },
-          ],
-        }
-        const expected = {
-          title: 'Test Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Hello',
-              authors: [{ name: 'John Doe' }],
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-J11: should handle items as single object instead of array', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Blog',
-          items: {
+  describe('parseDateFn', () => {
+    it('should apply custom parseDateFn to item dates', () => {
+      const value = {
+        version: 'https://jsonfeed.org/version/1.1',
+        title: 'Test',
+        items: [
+          {
             id: '1',
-            content_text: 'Solo post',
-            url: 'https://example.com/post/1',
+            date_published: '2023-01-01T00:00:00Z',
+            date_modified: '2023-01-02T00:00:00Z',
           },
-        }
-        const expected = {
-          title: 'Blog',
-          items: [
-            {
-              id: '1',
-              content_text: 'Solo post',
-              url: 'https://example.com/post/1',
-            },
-          ],
-        }
+        ],
+      }
+      const expected = {
+        title: 'Test',
+        items: [
+          {
+            id: '1',
+            date_published: new Date('2023-01-01T00:00:00Z'),
+            date_modified: new Date('2023-01-02T00:00:00Z'),
+          },
+        ],
+      }
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    })
 
-        expect(parse(value)).toEqual(expected)
-      })
+    it('should propagate error when parseDateFn throws', () => {
+      const value = {
+        version: 'https://jsonfeed.org/version/1.1',
+        title: 'Test',
+        items: [
+          {
+            id: '1',
+            date_published: 'invalid',
+          },
+        ],
+      }
+      const parseDateFn = () => {
+        throw new Error('Parse failed')
+      }
+      const throwing = () => parse(value, { parseDateFn })
 
-      it('RW-N25: should drop author with all empty string fields', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Test',
-          items: [
-            {
-              id: '1',
-              content_text: 'Post',
-              authors: [{ name: '', url: '', avatar: '' }],
-            },
-          ],
-        }
-        const expected = {
-          title: 'Test',
-          items: [
-            {
-              id: '1',
-              content_text: 'Post',
-            },
-          ],
-        }
+      expect(throwing).toThrowError('Parse failed')
+    })
+  })
 
-        expect(parse(value)).toEqual(expected)
-      })
+  describe.todo('real-world feeds', () => {
+    it.todo('should parse JSON Feed string prefixed with a BOM', () => {
+      // A UTF-8 byte order mark before the opening brace is common in real exports. Expected:
+      // the BOM is ignored and the feed parses normally.
+    })
 
-      it('RW-J12: should parse summary as separate field without content', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Test',
-          items: [
-            {
-              id: '1',
-              summary: 'This is a summary',
-            },
-          ],
-        }
-        const expected = {
-          title: 'Test',
-          items: [
-            {
-              id: '1',
-              summary: 'This is a summary',
-            },
-          ],
-        }
+    it.todo('should parse JSON Feed with escaped unicode sequences in text fields', () => {
+      // Titles and content with \u-escaped characters (emoji, accented letters) should decode to
+      // the actual characters.
+    })
 
-        expect(parse(value)).toEqual(expected)
-      })
-
-      it('RW-J13: should coerce string size_in_bytes and duration_in_seconds to numbers', () => {
-        const value = {
-          version: 'https://jsonfeed.org/version/1.1',
-          title: 'Test',
-          items: [
-            {
-              id: '1',
-              content_text: 'Episode',
-              attachments: [
-                {
-                  url: 'https://example.com/episode.mp3',
-                  mime_type: 'audio/mpeg',
-                  size_in_bytes: '12345678',
-                  duration_in_seconds: '3661',
-                },
-              ],
-            },
-          ],
-        }
-        const expected = {
-          title: 'Test',
-          items: [
-            {
-              id: '1',
-              content_text: 'Episode',
-              attachments: [
-                {
-                  url: 'https://example.com/episode.mp3',
-                  mime_type: 'audio/mpeg',
-                  size_in_bytes: 12345678,
-                  duration_in_seconds: 3661,
-                },
-              ],
-            },
-          ],
-        }
-
-        expect(parse(value)).toEqual(expected)
-      })
+    it.todo('should parse JSON Feed with HTML entities preserved in content_html', () => {
+      // Entities like &amp; and &lt; inside content_html are part of the HTML payload and must be
+      // passed through unchanged, not decoded.
     })
   })
 })

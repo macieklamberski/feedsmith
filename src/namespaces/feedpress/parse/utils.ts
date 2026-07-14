@@ -1,15 +1,10 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
-import {
-  isObject,
-  parseSingularOf,
-  parseString,
-  retrieveText,
-  trimObject,
-} from '../../../common/utils.js'
+import { isPlainObject } from 'trousse'
+import type { ParseUtilPartial } from '../../../common/types.js'
+import { parseSingularOf, parseString, retrieveText, trimObject } from '../../../common/utils.js'
 import type { FeedPressNs } from '../common/types.js'
 
-export const retrieveFeed: ParsePartialUtil<FeedPressNs.Feed> = (value) => {
-  if (!isObject(value)) {
+export const retrieveFeed: ParseUtilPartial<FeedPressNs.Feed> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 

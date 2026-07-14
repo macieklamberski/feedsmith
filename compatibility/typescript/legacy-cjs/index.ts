@@ -1,8 +1,7 @@
 // biome-ignore lint/style/noCommonJs: This file tests CJS compatibility.
 const { generateRssFeed, parseFeed } = require('feedsmith')
 
-import type { RssFeed } from 'feedsmith'
-import type { Rss } from 'feedsmith/types'
+import type { Rss } from 'feedsmith'
 
 const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
@@ -19,13 +18,6 @@ const feedData: Rss.Feed<Date> = {
   title: 'Generated Feed',
   link: 'https://example.com',
   description: 'Generated description',
-  items: [],
-}
-
-const _legacyFeedData: RssFeed<Date> = {
-  title: 'Legacy Type',
-  link: 'https://example.com',
-  description: 'Legacy description',
   items: [],
 }
 

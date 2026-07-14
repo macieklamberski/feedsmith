@@ -1,4 +1,5 @@
-import type { DateLike, GenerateUtil } from '../../common/types.js'
+import { isPlainObject, isPresent } from 'trousse'
+import type { DateLike } from '../../common/types.js'
 import {
   generateBoolean,
   generateCdataString,
@@ -6,18 +7,13 @@ import {
   generateNumber,
   generatePlainString,
   generateRfc822Date,
-  isObject,
-  isPresent,
   trimArray,
   trimObject,
 } from '../../common/utils.js'
-import type { MainOptions, Opml } from '../common/types.js'
+import type { GenerateUtil, Opml } from '../common/types.js'
 
-export const generateOutline: GenerateUtil<Opml.Outline<DateLike>, MainOptions> = (
-  outline,
-  options,
-) => {
-  if (!isObject(outline)) {
+export const generateOutline: GenerateUtil<Opml.Outline<DateLike>> = (outline, options) => {
+  if (!isPlainObject(outline)) {
     return
   }
 
@@ -54,7 +50,7 @@ export const generateOutline: GenerateUtil<Opml.Outline<DateLike>, MainOptions> 
 }
 
 export const generateHead: GenerateUtil<Opml.Head<DateLike>> = (head) => {
-  if (!isObject(head)) {
+  if (!isPlainObject(head)) {
     return
   }
 
@@ -77,8 +73,8 @@ export const generateHead: GenerateUtil<Opml.Head<DateLike>> = (head) => {
   return trimObject(value)
 }
 
-export const generateBody: GenerateUtil<Opml.Body<DateLike>, MainOptions> = (body, options) => {
-  if (!isObject(body)) {
+export const generateBody: GenerateUtil<Opml.Body<DateLike>> = (body, options) => {
+  if (!isPlainObject(body)) {
     return
   }
 
@@ -89,11 +85,8 @@ export const generateBody: GenerateUtil<Opml.Body<DateLike>, MainOptions> = (bod
   return trimObject(value)
 }
 
-export const generateDocument: GenerateUtil<Opml.Document<DateLike>, MainOptions> = (
-  opml,
-  options,
-) => {
-  if (!isObject(opml)) {
+export const generateDocument: GenerateUtil<Opml.Document<DateLike>> = (opml, options) => {
+  if (!isPlainObject(opml)) {
     return
   }
 

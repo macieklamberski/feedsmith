@@ -1,14 +1,10 @@
+import { isPlainObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import {
-  generateCdataString,
-  generatePlainString,
-  isObject,
-  trimObject,
-} from '../../../common/utils.js'
+import { generateCdataString, generatePlainString, trimObject } from '../../../common/utils.js'
 import type { ArxivNs } from '../common/types.js'
 
 export const generatePrimaryCategory: GenerateUtil<ArxivNs.PrimaryCategory> = (primaryCategory) => {
-  if (!isObject(primaryCategory)) {
+  if (!isPlainObject(primaryCategory)) {
     return
   }
 
@@ -22,7 +18,7 @@ export const generatePrimaryCategory: GenerateUtil<ArxivNs.PrimaryCategory> = (p
 }
 
 export const generateAuthor: GenerateUtil<ArxivNs.Author> = (author) => {
-  if (!isObject(author)) {
+  if (!isPlainObject(author)) {
     return
   }
 
@@ -34,7 +30,7 @@ export const generateAuthor: GenerateUtil<ArxivNs.Author> = (author) => {
 }
 
 export const generateEntry: GenerateUtil<ArxivNs.Entry> = (entry) => {
-  if (!isObject(entry)) {
+  if (!isPlainObject(entry)) {
     return
   }
 

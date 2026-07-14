@@ -1,9 +1,10 @@
+import { isPlainObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import { generatePlainString, isObject, trimArray, trimObject } from '../../../common/utils.js'
+import { generatePlainString, trimArray, trimObject } from '../../../common/utils.js'
 import type { RdfNs } from '../common/types.js'
 
 export const generateAbout: GenerateUtil<RdfNs.About> = (about) => {
-  if (!isObject(about)) {
+  if (!isPlainObject(about)) {
     return
   }
 
@@ -16,7 +17,7 @@ export const generateAbout: GenerateUtil<RdfNs.About> = (about) => {
 
 /** @internal General RDF element kept for potential future use when all RDF data is needed. */
 export const generateElement: GenerateUtil<RdfNs.Element> = (element) => {
-  if (!isObject(element)) {
+  if (!isPlainObject(element)) {
     return
   }
 

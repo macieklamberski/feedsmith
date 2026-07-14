@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'bun:test'
+import { locales } from '../../common/config.js'
+import { MalformedError, ParseError } from '../../common/errors.js'
 import { parse } from './index.js'
 
 describe('parse', () => {
@@ -15,7 +17,7 @@ describe('parse', () => {
   }
 
   it('should handle OPML with one outline', () => {
-    const mixedCaseOpml = `
+    const value = `
       <?xml version="1.0" encoding="UTF-8"?>
       <OPML version="2.0">
         <HEAD>
@@ -35,11 +37,11 @@ describe('parse', () => {
       },
     }
 
-    expect(parse(mixedCaseOpml)).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should handle case-insensitive XML tags and attributes', () => {
-    const mixedCaseOpml = `
+    const value = `
       <?xml version="1.0" encoding="UTF-8"?>
       <OPML version="2.0">
         <HEAD>
@@ -69,7 +71,7 @@ describe('parse', () => {
       },
     }
 
-    expect(parse(mixedCaseOpml)).toEqual(expected)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should handle alternating case outlines', () => {
@@ -98,41 +100,52 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
-  it('should handle empty string input', () => {
-    const value = ''
+  describe('error types', () => {
+    it('should throw ParseError for empty string input', () => {
+      const throwing = () => parse('')
 
-    expect(() => parse(value)).toThrow()
-  })
+      expect(throwing).toThrow(ParseError)
+      expect(throwing).toThrow(locales.invalidOpmlFormat)
+    })
 
-  it('should handle invalid XML input', () => {
-    const value = `
-      <?xml version="1.0" encoding="UTF-8"?>
-      <OPML version="2.0">
-        <HEAD>
-          <title>Invalid XML Example
-        </HEAD>
-        <Body>
-          <outline TEXT="Unclosed tag
-        </Body>
-      </OPML>
-    `
+    it('should throw MalformedError for invalid XML', () => {
+      const value = `
+        <?xml version="1.0"?>
+        <opml version="2.0">
+          <head>
+            <title>Test</title
+          </head>
+        </opml>
+      `
+      const throwing = () => parse(value)
 
-    expect(() => parse(value)).toThrow()
+      expect(throwing).toThrow(MalformedError)
+      expect(throwing).toThrow(locales.invalidOpmlFormat)
+    })
+
+    it('should throw ParseError for valid XML with invalid structure', () => {
+      const value = '<opml version="2.0"></opml>'
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrow(ParseError)
+      expect(throwing).toThrow(locales.invalidOpmlFormat)
+    })
   })
 
   describe('custom attributes', () => {
     it('should parse OPML with custom attributes when specified in options', () => {
-      const opmlString = `<?xml version="1.0" encoding="UTF-8"?>
-<opml version="2.0">
-  <head>
-    <title>Test OPML</title>
-  </head>
-  <body>
-    <outline text="Feed 1" type="rss" xmlUrl="https://feed1.com/rss" customRating="5" customTags="tech,news" />
-    <outline text="Feed 2" type="rss" xmlUrl="https://feed2.com/rss" customRating="3" customTags="blog" />
-  </body>
-</opml>`
-
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <opml version="2.0">
+          <head>
+            <title>Test OPML</title>
+          </head>
+          <body>
+            <outline text="Feed 1" type="rss" xmlUrl="https://example.com/feed1.xml" customRating="5" customTags="tech,news" />
+            <outline text="Feed 2" type="rss" xmlUrl="https://example.com/feed2.xml" customRating="3" customTags="blog" />
+          </body>
+        </opml>
+      `
       const options = {
         extraOutlineAttributes: ['customRating', 'customTags'],
       }
@@ -145,14 +158,14 @@ describe('parse', () => {
             {
               text: 'Feed 1',
               type: 'rss',
-              xmlUrl: 'https://feed1.com/rss',
+              xmlUrl: 'https://example.com/feed1.xml',
               customRating: '5',
               customTags: 'tech,news',
             },
             {
               text: 'Feed 2',
               type: 'rss',
-              xmlUrl: 'https://feed2.com/rss',
+              xmlUrl: 'https://example.com/feed2.xml',
               customRating: '3',
               customTags: 'blog',
             },
@@ -160,45 +173,48 @@ describe('parse', () => {
         },
       }
 
-      expect(parse(opmlString, options)).toEqual(expected)
+      expect(parse(value, options)).toEqual(expected)
     })
 
     it('should not include custom attributes when not specified in options', () => {
-      const opmlString = `<?xml version="1.0" encoding="UTF-8"?>
-<opml version="2.0">
-  <body>
-    <outline text="Feed" type="rss" xmlUrl="https://feed.com/rss" customRating="5" customTags="tech" />
-  </body>
-</opml>`
-
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <opml version="2.0">
+          <body>
+            <outline text="Feed" type="rss" xmlUrl="https://example.com/feed.xml" customRating="5" customTags="tech" />
+          </body>
+        </opml>
+      `
       const expected = {
         body: {
           outlines: [
             {
               text: 'Feed',
               type: 'rss',
-              xmlUrl: 'https://feed.com/rss',
+              xmlUrl: 'https://example.com/feed.xml',
             },
           ],
         },
       }
 
-      expect(parse(opmlString)).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
   })
 
   describe('with maxItems option', () => {
-    const commonValue = `<?xml version="1.0" encoding="UTF-8"?>
-<opml version="2.0">
-  <head>
-    <title>Test OPML</title>
-  </head>
-  <body>
-    <outline text="Outline 1" type="rss" />
-    <outline text="Outline 2" type="rss" />
-    <outline text="Outline 3" type="rss" />
-  </body>
-</opml>`
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <opml version="2.0">
+        <head>
+          <title>Test OPML</title>
+        </head>
+        <body>
+          <outline text="Outline 1" type="rss" />
+          <outline text="Outline 2" type="rss" />
+          <outline text="Outline 3" type="rss" />
+        </body>
+      </opml>
+    `
 
     it('should limit outlines to specified number', () => {
       const expected = {
@@ -219,7 +235,7 @@ describe('parse', () => {
         },
       }
 
-      expect(parse(commonValue, { maxItems: 2 })).toEqual(expected)
+      expect(parse(value, { maxItems: 2 })).toEqual(expected)
     })
 
     it('should skip all outlines when maxItems is 0', () => {
@@ -229,7 +245,7 @@ describe('parse', () => {
         },
       }
 
-      expect(parse(commonValue, { maxItems: 0 })).toEqual(expected)
+      expect(parse(value, { maxItems: 0 })).toEqual(expected)
     })
 
     it('should return all outlines when maxItems is undefined', () => {
@@ -255,7 +271,43 @@ describe('parse', () => {
         },
       }
 
-      expect(parse(commonValue, { maxItems: undefined })).toEqual(expected)
+      expect(parse(value, { maxItems: undefined })).toEqual(expected)
     })
+  })
+
+  describe('parseDateFn', () => {
+    it('should apply custom parseDateFn to head and outline dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <opml version="2.0">
+          <head>
+            <dateCreated>Wed, 15 Mar 2023 12:00:00 GMT</dateCreated>
+          </head>
+          <body>
+            <outline text="Feed" created="Fri, 17 Mar 2023 12:00:00 GMT" />
+          </body>
+        </opml>
+      `
+      const expected = {
+        head: {
+          dateCreated: new Date('Wed, 15 Mar 2023 12:00:00 GMT'),
+        },
+        body: {
+          outlines: [
+            {
+              text: 'Feed',
+              created: new Date('Fri, 17 Mar 2023 12:00:00 GMT'),
+            },
+          ],
+        },
+      }
+
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    })
+  })
+
+  it.todo('should parse OPML with version 1.0 or missing version attribute', () => {
+    // The parser currently ignores the version attribute entirely.
+    // Pin the behavior for OPML 1.0 documents and for documents without a version attribute.
   })
 })

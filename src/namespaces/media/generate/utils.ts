@@ -1,20 +1,19 @@
+import { isPlainObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import {
-  generateArrayOrSingular,
   generateCdataString,
   generateCsvOf,
   generateNumber,
   generatePlainString,
   generateTextOrCdataString,
   generateYesNoBoolean,
-  isObject,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { MediaNs } from '../common/types.js'
 
 export const generateRating: GenerateUtil<MediaNs.Rating> = (rating) => {
-  if (!isObject(rating)) {
+  if (!isPlainObject(rating)) {
     return
   }
 
@@ -29,7 +28,7 @@ export const generateRating: GenerateUtil<MediaNs.Rating> = (rating) => {
 export const generateTitleOrDescription: GenerateUtil<MediaNs.TitleOrDescription> = (
   titleOrDescription,
 ) => {
-  if (!isObject(titleOrDescription)) {
+  if (!isPlainObject(titleOrDescription)) {
     return
   }
 
@@ -42,7 +41,7 @@ export const generateTitleOrDescription: GenerateUtil<MediaNs.TitleOrDescription
 }
 
 export const generateThumbnail: GenerateUtil<MediaNs.Thumbnail> = (thumbnail) => {
-  if (!isObject(thumbnail)) {
+  if (!isPlainObject(thumbnail)) {
     return
   }
 
@@ -57,7 +56,7 @@ export const generateThumbnail: GenerateUtil<MediaNs.Thumbnail> = (thumbnail) =>
 }
 
 export const generateCategory: GenerateUtil<MediaNs.Category> = (category) => {
-  if (!isObject(category)) {
+  if (!isPlainObject(category)) {
     return
   }
 
@@ -71,7 +70,7 @@ export const generateCategory: GenerateUtil<MediaNs.Category> = (category) => {
 }
 
 export const generateHash: GenerateUtil<MediaNs.Hash> = (hash) => {
-  if (!isObject(hash)) {
+  if (!isPlainObject(hash)) {
     return
   }
 
@@ -84,7 +83,7 @@ export const generateHash: GenerateUtil<MediaNs.Hash> = (hash) => {
 }
 
 export const generatePlayer: GenerateUtil<MediaNs.Player> = (player) => {
-  if (!isObject(player)) {
+  if (!isPlainObject(player)) {
     return
   }
 
@@ -98,7 +97,7 @@ export const generatePlayer: GenerateUtil<MediaNs.Player> = (player) => {
 }
 
 export const generateCredit: GenerateUtil<MediaNs.Credit> = (credit) => {
-  if (!isObject(credit)) {
+  if (!isPlainObject(credit)) {
     return
   }
 
@@ -112,7 +111,7 @@ export const generateCredit: GenerateUtil<MediaNs.Credit> = (credit) => {
 }
 
 export const generateCopyright: GenerateUtil<MediaNs.Copyright> = (copyright) => {
-  if (!isObject(copyright)) {
+  if (!isPlainObject(copyright)) {
     return
   }
 
@@ -125,7 +124,7 @@ export const generateCopyright: GenerateUtil<MediaNs.Copyright> = (copyright) =>
 }
 
 export const generateText: GenerateUtil<MediaNs.Text> = (text) => {
-  if (!isObject(text)) {
+  if (!isPlainObject(text)) {
     return
   }
 
@@ -141,7 +140,7 @@ export const generateText: GenerateUtil<MediaNs.Text> = (text) => {
 }
 
 export const generateRestriction: GenerateUtil<MediaNs.Restriction> = (restriction) => {
-  if (!isObject(restriction)) {
+  if (!isPlainObject(restriction)) {
     return
   }
 
@@ -155,7 +154,7 @@ export const generateRestriction: GenerateUtil<MediaNs.Restriction> = (restricti
 }
 
 export const generateStarRating: GenerateUtil<MediaNs.StarRating> = (starRating) => {
-  if (!isObject(starRating)) {
+  if (!isPlainObject(starRating)) {
     return
   }
 
@@ -170,7 +169,7 @@ export const generateStarRating: GenerateUtil<MediaNs.StarRating> = (starRating)
 }
 
 export const generateStatistics: GenerateUtil<MediaNs.Statistics> = (statistics) => {
-  if (!isObject(statistics)) {
+  if (!isPlainObject(statistics)) {
     return
   }
 
@@ -183,7 +182,7 @@ export const generateStatistics: GenerateUtil<MediaNs.Statistics> = (statistics)
 }
 
 export const generateTag: GenerateUtil<MediaNs.Tag> = (tag) => {
-  if (!isObject(tag)) {
+  if (!isPlainObject(tag)) {
     return
   }
 
@@ -199,7 +198,7 @@ export const generateTag: GenerateUtil<MediaNs.Tag> = (tag) => {
 }
 
 export const generateCommunity: GenerateUtil<MediaNs.Community> = (community) => {
-  if (!isObject(community)) {
+  if (!isPlainObject(community)) {
     return
   }
 
@@ -245,7 +244,7 @@ export const generateScenes: GenerateUtil<Array<MediaNs.Scene>> = (scenes) => {
 }
 
 export const generateParam: GenerateUtil<MediaNs.Param> = (param) => {
-  if (!isObject(param)) {
+  if (!isPlainObject(param)) {
     return
   }
 
@@ -258,7 +257,7 @@ export const generateParam: GenerateUtil<MediaNs.Param> = (param) => {
 }
 
 export const generateEmbed: GenerateUtil<MediaNs.Embed> = (embed) => {
-  if (!isObject(embed)) {
+  if (!isPlainObject(embed)) {
     return
   }
 
@@ -273,7 +272,7 @@ export const generateEmbed: GenerateUtil<MediaNs.Embed> = (embed) => {
 }
 
 export const generateStatus: GenerateUtil<MediaNs.Status> = (status) => {
-  if (!isObject(status)) {
+  if (!isPlainObject(status)) {
     return
   }
 
@@ -286,7 +285,7 @@ export const generateStatus: GenerateUtil<MediaNs.Status> = (status) => {
 }
 
 export const generatePrice: GenerateUtil<MediaNs.Price> = (price) => {
-  if (!isObject(price)) {
+  if (!isPlainObject(price)) {
     return
   }
 
@@ -301,7 +300,7 @@ export const generatePrice: GenerateUtil<MediaNs.Price> = (price) => {
 }
 
 export const generateLicense: GenerateUtil<MediaNs.License> = (license) => {
-  if (!isObject(license)) {
+  if (!isPlainObject(license)) {
     return
   }
 
@@ -315,7 +314,7 @@ export const generateLicense: GenerateUtil<MediaNs.License> = (license) => {
 }
 
 export const generateSubTitle: GenerateUtil<MediaNs.SubTitle> = (subTitle) => {
-  if (!isObject(subTitle)) {
+  if (!isPlainObject(subTitle)) {
     return
   }
 
@@ -329,7 +328,7 @@ export const generateSubTitle: GenerateUtil<MediaNs.SubTitle> = (subTitle) => {
 }
 
 export const generatePeerLink: GenerateUtil<MediaNs.PeerLink> = (peerLink) => {
-  if (!isObject(peerLink)) {
+  if (!isPlainObject(peerLink)) {
     return
   }
 
@@ -342,7 +341,7 @@ export const generatePeerLink: GenerateUtil<MediaNs.PeerLink> = (peerLink) => {
 }
 
 export const generateRights: GenerateUtil<MediaNs.Rights> = (rights) => {
-  if (!isObject(rights)) {
+  if (!isPlainObject(rights)) {
     return
   }
 
@@ -354,7 +353,7 @@ export const generateRights: GenerateUtil<MediaNs.Rights> = (rights) => {
 }
 
 export const generateScene: GenerateUtil<MediaNs.Scene> = (scene) => {
-  if (!isObject(scene)) {
+  if (!isPlainObject(scene)) {
     return
   }
 
@@ -369,7 +368,7 @@ export const generateScene: GenerateUtil<MediaNs.Scene> = (scene) => {
 }
 
 export const generateLocation: GenerateUtil<MediaNs.Location> = (location) => {
-  if (!isObject(location)) {
+  if (!isPlainObject(location)) {
     return
   }
 
@@ -385,7 +384,7 @@ export const generateLocation: GenerateUtil<MediaNs.Location> = (location) => {
 }
 
 export const generateCommonElements: GenerateUtil<MediaNs.CommonElements> = (elements) => {
-  if (!isObject(elements)) {
+  if (!isPlainObject(elements)) {
     return
   }
 
@@ -421,7 +420,7 @@ export const generateCommonElements: GenerateUtil<MediaNs.CommonElements> = (ele
 }
 
 export const generateContent: GenerateUtil<MediaNs.Content> = (content) => {
-  if (!isObject(content)) {
+  if (!isPlainObject(content)) {
     return
   }
 
@@ -447,7 +446,7 @@ export const generateContent: GenerateUtil<MediaNs.Content> = (content) => {
 }
 
 export const generateGroup: GenerateUtil<MediaNs.Group> = (group) => {
-  if (!isObject(group)) {
+  if (!isPlainObject(group)) {
     return
   }
 
@@ -460,12 +459,12 @@ export const generateGroup: GenerateUtil<MediaNs.Group> = (group) => {
 }
 
 export const generateItemOrFeed: GenerateUtil<MediaNs.ItemOrFeed> = (itemOrFeed) => {
-  if (!isObject(itemOrFeed)) {
+  if (!isPlainObject(itemOrFeed)) {
     return
   }
 
   const value = {
-    'media:group': generateArrayOrSingular(itemOrFeed.groups, itemOrFeed.group, generateGroup),
+    'media:group': trimArray(itemOrFeed.groups, generateGroup),
     'media:content': trimArray(itemOrFeed.contents, generateContent),
     ...generateCommonElements(itemOrFeed),
   }

@@ -1,9 +1,10 @@
+import { isPlainObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import { generateNumber, isObject, trimObject } from '../../../common/utils.js'
+import { generateNumber, trimObject } from '../../../common/utils.js'
 import type { GeoNs } from '../common/types.js'
 
 export const generateItemOrFeed: GenerateUtil<GeoNs.ItemOrFeed> = (geo) => {
-  if (!isObject(geo)) {
+  if (!isPlainObject(geo)) {
     return
   }
 

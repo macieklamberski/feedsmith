@@ -1,6 +1,6 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import { isPlainObject } from 'trousse'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseSingularOf,
   parseString,
@@ -9,8 +9,8 @@ import {
 } from '../../../common/utils.js'
 import type { TrackbackNs } from '../common/types.js'
 
-export const retrieveItem: ParsePartialUtil<TrackbackNs.Item> = (value) => {
-  if (!isObject(value)) {
+export const retrieveItem: ParseUtilPartial<TrackbackNs.Item> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 

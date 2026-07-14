@@ -1,9 +1,10 @@
+import { isPlainObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import { generateCdataString, isObject, trimArray, trimObject } from '../../../common/utils.js'
+import { generateCdataString, trimArray, trimObject } from '../../../common/utils.js'
 import type { CreativeCommonsNs } from '../common/types.js'
 
 export const generateItemOrFeed: GenerateUtil<CreativeCommonsNs.ItemOrFeed> = (itemOrFeed) => {
-  if (!isObject(itemOrFeed)) {
+  if (!isPlainObject(itemOrFeed)) {
     return
   }
 

@@ -1,15 +1,10 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
-import {
-  isObject,
-  parseArrayOf,
-  parseSingularOf,
-  parseString,
-  trimObject,
-} from '../../../common/utils.js'
+import { isPlainObject } from 'trousse'
+import type { ParseUtilPartial } from '../../../common/types.js'
+import { parseArrayOf, parseSingularOf, parseString, trimObject } from '../../../common/utils.js'
 import type { PscNs } from '../common/types.js'
 
-export const parseChapter: ParsePartialUtil<PscNs.Chapter> = (value) => {
-  if (!isObject(value)) {
+export const parseChapter: ParseUtilPartial<PscNs.Chapter> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -23,12 +18,12 @@ export const parseChapter: ParsePartialUtil<PscNs.Chapter> = (value) => {
   return trimObject(chapter)
 }
 
-export const parseChapters: ParsePartialUtil<Array<PscNs.Chapter>> = (value) => {
+export const parseChapters: ParseUtilPartial<Array<PscNs.Chapter>> = (value) => {
   return parseArrayOf(value?.['psc:chapter'], parseChapter)
 }
 
-export const retrieveItem: ParsePartialUtil<PscNs.Item> = (value) => {
-  if (!isObject(value)) {
+export const retrieveItem: ParseUtilPartial<PscNs.Item> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 

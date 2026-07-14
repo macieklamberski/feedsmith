@@ -1,17 +1,16 @@
+import { isNonEmptyString, isPlainObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateBoolean,
   generateCdataString,
   generateTextOrCdataString,
-  isNonEmptyString,
-  isObject,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { SourceNs } from '../common/types.js'
 
 export const generateAccount: GenerateUtil<SourceNs.Account> = (account) => {
-  if (!isObject(account) || !isNonEmptyString(account.service)) {
+  if (!isPlainObject(account) || !isNonEmptyString(account.service)) {
     return
   }
 
@@ -24,7 +23,7 @@ export const generateAccount: GenerateUtil<SourceNs.Account> = (account) => {
 }
 
 export const generateLikes: GenerateUtil<SourceNs.Likes> = (likes) => {
-  if (!isObject(likes) || !isNonEmptyString(likes.server)) {
+  if (!isPlainObject(likes) || !isNonEmptyString(likes.server)) {
     return
   }
 
@@ -34,7 +33,11 @@ export const generateLikes: GenerateUtil<SourceNs.Likes> = (likes) => {
 }
 
 export const generateArchive: GenerateUtil<SourceNs.Archive> = (archive) => {
-  if (!isObject(archive) || !isNonEmptyString(archive.url) || !isNonEmptyString(archive.startDay)) {
+  if (
+    !isPlainObject(archive) ||
+    !isNonEmptyString(archive.url) ||
+    !isNonEmptyString(archive.startDay)
+  ) {
     return
   }
 
@@ -51,7 +54,7 @@ export const generateArchive: GenerateUtil<SourceNs.Archive> = (archive) => {
 export const generateSubscriptionList: GenerateUtil<SourceNs.SubscriptionList> = (
   subscriptionList,
 ) => {
-  if (!isObject(subscriptionList) || !isNonEmptyString(subscriptionList.url)) {
+  if (!isPlainObject(subscriptionList) || !isNonEmptyString(subscriptionList.url)) {
     return
   }
 
@@ -64,7 +67,7 @@ export const generateSubscriptionList: GenerateUtil<SourceNs.SubscriptionList> =
 }
 
 export const generateInReplyTo: GenerateUtil<SourceNs.InReplyTo> = (inReplyTo) => {
-  if (!isObject(inReplyTo) || !isNonEmptyString(inReplyTo.value)) {
+  if (!isPlainObject(inReplyTo) || !isNonEmptyString(inReplyTo.value)) {
     return
   }
 
@@ -77,7 +80,7 @@ export const generateInReplyTo: GenerateUtil<SourceNs.InReplyTo> = (inReplyTo) =
 }
 
 export const generateFeed: GenerateUtil<SourceNs.Feed> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 
@@ -96,7 +99,7 @@ export const generateFeed: GenerateUtil<SourceNs.Feed> = (feed) => {
 }
 
 export const generateItem: GenerateUtil<SourceNs.Item> = (item) => {
-  if (!isObject(item)) {
+  if (!isPlainObject(item)) {
     return
   }
 

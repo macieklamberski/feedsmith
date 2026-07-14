@@ -68,12 +68,12 @@ describe('generatePrimaryCategory', () => {
   })
 
   it('should handle non-object inputs', () => {
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generatePrimaryCategory('string')).toBeUndefined()
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generatePrimaryCategory(123)).toBeUndefined()
     expect(generatePrimaryCategory(undefined)).toBeUndefined()
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generatePrimaryCategory(null)).toBeUndefined()
   })
 })
@@ -124,12 +124,12 @@ describe('generateAuthor', () => {
   })
 
   it('should handle non-object inputs', () => {
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generateAuthor('string')).toBeUndefined()
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generateAuthor(123)).toBeUndefined()
     expect(generateAuthor(undefined)).toBeUndefined()
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generateAuthor(null)).toBeUndefined()
   })
 })
@@ -217,12 +217,12 @@ describe('generateEntry', () => {
   })
 
   it('should handle non-object inputs', () => {
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generateEntry('string')).toBeUndefined()
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generateEntry(123)).toBeUndefined()
     expect(generateEntry(undefined)).toBeUndefined()
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generateEntry(null)).toBeUndefined()
   })
 

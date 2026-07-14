@@ -1,5 +1,6 @@
+import { isPlainObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import { generateCdataString, generateNumber, isObject, trimObject } from '../../../common/utils.js'
+import { generateCdataString, generateNumber, trimObject } from '../../../common/utils.js'
 import type { GeoRssNs } from '../common/types.js'
 
 export const generateLatLngPairs = (
@@ -31,7 +32,7 @@ export const generateLatLngPairs = (
 }
 
 export const generatePoint: GenerateUtil<GeoRssNs.Point> = (point) => {
-  if (!isObject(point)) {
+  if (!isPlainObject(point)) {
     return
   }
 
@@ -39,7 +40,7 @@ export const generatePoint: GenerateUtil<GeoRssNs.Point> = (point) => {
 }
 
 export const generateLine: GenerateUtil<GeoRssNs.Line> = (line) => {
-  if (!isObject(line)) {
+  if (!isPlainObject(line) || !line.points) {
     return
   }
 
@@ -47,7 +48,7 @@ export const generateLine: GenerateUtil<GeoRssNs.Line> = (line) => {
 }
 
 export const generatePolygon: GenerateUtil<GeoRssNs.Polygon> = (polygon) => {
-  if (!isObject(polygon)) {
+  if (!isPlainObject(polygon) || !polygon.points) {
     return
   }
 
@@ -55,7 +56,7 @@ export const generatePolygon: GenerateUtil<GeoRssNs.Polygon> = (polygon) => {
 }
 
 export const generateBox: GenerateUtil<GeoRssNs.Box> = (box) => {
-  if (!isObject(box) || !box.lowerCorner || !box.upperCorner) {
+  if (!isPlainObject(box) || !box.lowerCorner || !box.upperCorner) {
     return
   }
 
@@ -63,7 +64,7 @@ export const generateBox: GenerateUtil<GeoRssNs.Box> = (box) => {
 }
 
 export const generateItemOrFeed: GenerateUtil<GeoRssNs.ItemOrFeed> = (itemOrFeed) => {
-  if (!isObject(itemOrFeed)) {
+  if (!isPlainObject(itemOrFeed)) {
     return
   }
 

@@ -2,7 +2,7 @@
 title: "Reference: iTunes Namespace"
 ---
 
-# iTunes Namespace
+# iTunes Namespace Reference
 
 The iTunes namespace provides podcast-specific metadata for RSS and Atom feeds. This namespace is essential for podcast distribution through Apple Podcasts and other podcast platforms.
 
@@ -35,6 +35,9 @@ The iTunes namespace provides podcast-specific metadata for RSS and Atom feeds. 
 </table>
 
 ## Types
+
+> [!INFO]
+> For details on type parameters (`TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tstrict).
 
 <<< @/../src/namespaces/itunes/common/types.ts#reference
 

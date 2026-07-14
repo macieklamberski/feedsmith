@@ -242,6 +242,7 @@ describe('parseOwner', () => {
 
     expect(parseOwner(value)).toEqual(expected)
   })
+
   it('should handle non-string values for name and email', () => {
     const value = {
       'itunes:name': { '#text': 123 },
@@ -417,29 +418,29 @@ describe('parseExplicit', () => {
 
 describe('parseDuration', () => {
   it('should handle numbers directly', () => {
-    expect(parseDuration(42)).toEqual(42)
-    expect(parseDuration(0)).toEqual(0)
-    expect(parseDuration(3600)).toEqual(3600)
+    expect(parseDuration(42)).toBe(42)
+    expect(parseDuration(0)).toBe(0)
+    expect(parseDuration(3600)).toBe(3600)
   })
 
   it('should handle numeric strings', () => {
-    expect(parseDuration('120')).toEqual(120)
-    expect(parseDuration('0')).toEqual(0)
-    expect(parseDuration('3600')).toEqual(3600)
+    expect(parseDuration('120')).toBe(120)
+    expect(parseDuration('0')).toBe(0)
+    expect(parseDuration('3600')).toBe(3600)
   })
 
   it('should parse HH:MM:SS format', () => {
-    expect(parseDuration('01:30:45')).toEqual(5445)
-    expect(parseDuration('00:00:30')).toEqual(30)
-    expect(parseDuration('02:00:00')).toEqual(7200)
-    expect(parseDuration('100:00:00')).toEqual(360000)
+    expect(parseDuration('01:30:45')).toBe(5445)
+    expect(parseDuration('00:00:30')).toBe(30)
+    expect(parseDuration('02:00:00')).toBe(7200)
+    expect(parseDuration('100:00:00')).toBe(360000)
   })
 
   it('should parse MM:SS format', () => {
-    expect(parseDuration('05:30')).toEqual(330)
-    expect(parseDuration('00:45')).toEqual(45)
-    expect(parseDuration('90:00')).toEqual(5400)
-    expect(parseDuration('1:30')).toEqual(90)
+    expect(parseDuration('05:30')).toBe(330)
+    expect(parseDuration('00:45')).toBe(45)
+    expect(parseDuration('90:00')).toBe(5400)
+    expect(parseDuration('1:30')).toBe(90)
   })
 
   it('should handle invalid time formats', () => {
@@ -494,6 +495,11 @@ describe('parseDuration', () => {
   it('should handle undefined', () => {
     expect(parseDuration(undefined)).toBeUndefined()
   })
+
+  it.todo('should handle negative and very large durations', () => {
+    // Pass -42, Number.MAX_SAFE_INTEGER and '-01:30:00'.
+    // Expected: pin whether negative durations pass through as numbers or are rejected.
+  })
 })
 
 describe('parseImage', () => {
@@ -501,14 +507,14 @@ describe('parseImage', () => {
     const value = { '@href': 'https://example.com/image.jpg' }
     const expected = 'https://example.com/image.jpg'
 
-    expect(parseImage(value)).toEqual(expected)
+    expect(parseImage(value)).toBe(expected)
   })
 
   it('should parse image in a non-standard format', () => {
     const value = 'https://example.com/image.jpg'
     const expected = 'https://example.com/image.jpg'
 
-    expect(parseImage(value)).toEqual(expected)
+    expect(parseImage(value)).toBe(expected)
   })
 
   it('should return undefined when @href is missing', () => {
@@ -527,21 +533,21 @@ describe('parseImage', () => {
     const value = { '@href': 'https://example.com/image&amp;.jpg' }
     const expected = 'https://example.com/image&.jpg'
 
-    expect(parseImage(value)).toEqual(expected)
+    expect(parseImage(value)).toBe(expected)
   })
 
   it('should handle CDATA in @href', () => {
     const value = { '@href': '<![CDATA[https://example.com/image.jpg]]>' }
     const expected = 'https://example.com/image.jpg'
 
-    expect(parseImage(value)).toEqual(expected)
+    expect(parseImage(value)).toBe(expected)
   })
 
   it('should coerce non-string @href values to string', () => {
     const value = { '@href': 123 }
     const expected = '123'
 
-    expect(parseImage(value)).toEqual(expected)
+    expect(parseImage(value)).toBe(expected)
   })
 
   it('should return undefined for null or undefined @href', () => {
@@ -656,49 +662,38 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toEqual(expected)
   })
 
-  it('should parse duration in various formats', () => {
-    const testWithDuration = (durationValue: string, expectedDuration: number) => {
-      const value = { 'itunes:duration': { '#text': durationValue } }
-      const expected = retrieveItem(value)
+  const durationCases: Array<[string, { duration: number }]> = [
+    ['3600', { duration: 3600 }],
+    ['01:30:00', { duration: 5400 }],
+    ['45:30', { duration: 2730 }],
+  ]
 
-      expect(expected).toHaveProperty('duration', expectedDuration)
-    }
-
-    testWithDuration('3600', 3600)
-    testWithDuration('01:30:00', 5400)
-    testWithDuration('45:30', 2730)
+  it.each(durationCases)('should parse duration format: %s', (duration, expected) => {
+    expect(retrieveItem({ 'itunes:duration': { '#text': duration } })).toEqual(expected)
   })
 
-  it('should parse explicit value correctly', () => {
-    const testWithExplicit = (explicitValue: string, expectedExplicit: boolean) => {
-      const value = {
-        'itunes:explicit': { '#text': explicitValue },
-      }
-      const result = retrieveItem(value)
-      expect(result).toHaveProperty('explicit', expectedExplicit)
-    }
+  const explicitCases: Array<[string, { explicit: boolean }]> = [
+    ['true', { explicit: true }],
+    ['false', { explicit: false }],
+    ['yes', { explicit: true }],
+    ['no', { explicit: false }],
+    ['explicit', { explicit: true }],
+    ['clean', { explicit: false }],
+  ]
 
-    testWithExplicit('true', true)
-    testWithExplicit('false', false)
-    testWithExplicit('yes', true)
-    testWithExplicit('no', false)
-    testWithExplicit('explicit', true)
-    testWithExplicit('clean', false)
+  it.each(explicitCases)('should parse explicit value: %s', (explicit, expected) => {
+    expect(retrieveItem({ 'itunes:explicit': { '#text': explicit } })).toEqual(expected)
   })
 
-  it('should parse block value correctly', () => {
-    const testWithBlock = (blockValue: string, expectedBlock: boolean) => {
-      const value = {
-        'itunes:block': { '#text': blockValue },
-      }
-      const result = retrieveItem(value)
-      expect(result).toHaveProperty('block', expectedBlock)
-    }
+  const blockCases: Array<[string, { block: boolean }]> = [
+    ['yes', { block: true }],
+    ['no', { block: false }],
+    ['true', { block: true }],
+    ['false', { block: false }],
+  ]
 
-    testWithBlock('yes', true)
-    testWithBlock('no', false)
-    testWithBlock('true', true)
-    testWithBlock('false', false)
+  it.each(blockCases)('should parse block value: %s', (block, expected) => {
+    expect(retrieveItem({ 'itunes:block': { '#text': block } })).toEqual(expected)
   })
 
   it('should handle HTML entities in text content', () => {
@@ -1003,26 +998,22 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
-  it('should parse explicit value correctly', () => {
-    const testWithExplicit = (explicitValue: string, expectedExplicit: boolean) => {
-      const value = {
-        'itunes:image': { '@href': 'https://example.com/image.jpg' },
-        'itunes:explicit': { '#text': explicitValue },
-      }
-      const expected = {
-        image: 'https://example.com/image.jpg',
-        explicit: expectedExplicit,
-      }
+  const explicitCases: Array<[string, { image: string; explicit: boolean }]> = [
+    ['true', { image: 'https://example.com/image.jpg', explicit: true }],
+    ['false', { image: 'https://example.com/image.jpg', explicit: false }],
+    ['yes', { image: 'https://example.com/image.jpg', explicit: true }],
+    ['no', { image: 'https://example.com/image.jpg', explicit: false }],
+    ['explicit', { image: 'https://example.com/image.jpg', explicit: true }],
+    ['clean', { image: 'https://example.com/image.jpg', explicit: false }],
+  ]
 
-      expect(retrieveFeed(value)).toEqual(expected)
+  it.each(explicitCases)('should parse explicit value: %s', (explicit, expected) => {
+    const value = {
+      'itunes:image': { '@href': 'https://example.com/image.jpg' },
+      'itunes:explicit': { '#text': explicit },
     }
 
-    testWithExplicit('true', true)
-    testWithExplicit('false', false)
-    testWithExplicit('yes', true)
-    testWithExplicit('no', false)
-    testWithExplicit('explicit', true)
-    testWithExplicit('clean', false)
+    expect(retrieveFeed(value)).toEqual(expected)
   })
 
   it('should parse block and complete values correctly', () => {

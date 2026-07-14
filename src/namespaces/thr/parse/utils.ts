@@ -1,6 +1,6 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import { isPlainObject } from 'trousse'
+import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseDate,
   parseNumber,
@@ -11,8 +11,8 @@ import {
 } from '../../../common/utils.js'
 import type { ThrNs } from '../common/types.js'
 
-export const parseInReplyTo: ParsePartialUtil<ThrNs.InReplyTo> = (value) => {
-  if (!isObject(value)) {
+export const parseInReplyTo: ParseUtilPartial<ThrNs.InReplyTo> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -26,21 +26,24 @@ export const parseInReplyTo: ParsePartialUtil<ThrNs.InReplyTo> = (value) => {
   return trimObject(inReplyTo)
 }
 
-export const retrieveLink: ParsePartialUtil<ThrNs.Link<string>> = (value) => {
-  if (!isObject(value)) {
+export const retrieveLink: ParseUtilPartial<ThrNs.Link<DateAny>, ParseMainOptions<DateAny>> = (
+  value,
+  options,
+) => {
+  if (!isPlainObject(value)) {
     return
   }
 
   const link = {
     count: parseNumber(value['@thr:count']),
-    updated: parseDate(value['@thr:updated']),
+    updated: parseDate(value['@thr:updated'], options?.parseDateFn),
   }
 
   return trimObject(link)
 }
 
-export const retrieveItem: ParsePartialUtil<ThrNs.Item> = (value) => {
-  if (!isObject(value)) {
+export const retrieveItem: ParseUtilPartial<ThrNs.Item> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 

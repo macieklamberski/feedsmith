@@ -1,15 +1,10 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
-import {
-  isObject,
-  parseSingularOf,
-  parseString,
-  retrieveText,
-  trimObject,
-} from '../../../common/utils.js'
+import { isPlainObject } from 'trousse'
+import type { ParseUtilPartial } from '../../../common/types.js'
+import { parseSingularOf, parseString, retrieveText, trimObject } from '../../../common/utils.js'
 import type { YtNs } from '../common/types.js'
 
-export const retrieveItem: ParsePartialUtil<YtNs.Item> = (value) => {
-  if (!isObject(value)) {
+export const retrieveItem: ParseUtilPartial<YtNs.Item> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -21,8 +16,8 @@ export const retrieveItem: ParsePartialUtil<YtNs.Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialUtil<YtNs.Feed> = (value) => {
-  if (!isObject(value)) {
+export const retrieveFeed: ParseUtilPartial<YtNs.Feed> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 

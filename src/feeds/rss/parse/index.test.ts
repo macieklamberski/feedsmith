@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { locales } from '../../../common/config.js'
+import { DetectError, MalformedError, ParseError } from '../../../common/errors.js'
 import { parse } from './index.js'
 
 describe('parse', () => {
@@ -17,10 +18,9 @@ describe('parse', () => {
     it(`should correctly parse RSS ${label}`, async () => {
       const reference = `${import.meta.dir}/../references/rss-${key}`
       const input = await Bun.file(`${reference}.xml`).text()
-      const expectation = await Bun.file(`${reference}.json`).json()
-      const result = parse(input)
+      const expected = await Bun.file(`${reference}.json`).json()
 
-      expect(result).toEqual(expectation)
+      expect(parse(input)).toEqual(expected)
     })
   }
 
@@ -48,7 +48,7 @@ describe('parse', () => {
         </ChAnNeL>
       </rSs>
     `
-    const expectation = {
+    const expected = {
       title: 'Mixed Case Feed',
       link: 'https://example.com/',
       description: 'A test feed with mixed case tags',
@@ -69,7 +69,7 @@ describe('parse', () => {
       ],
     }
 
-    expect(parse(value)).toEqual(expectation)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should handle alternating case items', () => {
@@ -92,14 +92,14 @@ describe('parse', () => {
         </channel>
       </rss>
     `
-    const expectation = {
+    const expected = {
       title: 'Test Feed',
       link: 'https://example.com',
       description: 'Testing alternating case items',
       items: [{ title: 'First' }, { title: 'Second' }, { title: 'Third' }],
     }
 
-    expect(parse(value)).toEqual(expectation)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should parse RSS feed with multiple enclosures per item', () => {
@@ -187,31 +187,83 @@ describe('parse', () => {
   })
 
   it('should throw error for invalid input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse('not a feed')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle null input', () => {
-    expect(() => parse(null)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(null)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle undefined input', () => {
-    expect(() => parse(undefined)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(undefined)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle array input', () => {
-    expect(() => parse([])).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse([])
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle empty object input', () => {
-    expect(() => parse({})).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse({})
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
-  it('should handle string input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.invalidFeedFormat)
+  it('should handle empty string input', () => {
+    const throwing = () => parse('')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
+  })
+
+  it('should handle whitespace-only string input', () => {
+    const throwing = () => parse('   \n  ')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle number input', () => {
-    expect(() => parse(123)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(123)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
+  })
+
+  describe('error types', () => {
+    it('should throw DetectError for non-feed input', () => {
+      const throwing = () => parse('not a feed')
+
+      expect(throwing).toThrowError(DetectError)
+      expect(throwing).toThrowError(locales.invalidFeedFormat)
+    })
+
+    it('should throw MalformedError for malformed XML', () => {
+      const value = `
+        <?xml version="1.0"?>
+        <rss version="2.0">
+          <channel>
+            <title>Test</title
+          </channel>
+        </rss>
+      `
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrowError(MalformedError)
+      expect(throwing).toThrowError(locales.invalidFeedFormat)
+    })
+
+    it('should throw ParseError for valid XML with invalid structure', () => {
+      const value = '<rss version="2.0"></rss>'
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrowError(ParseError)
+      expect(throwing).toThrowError(locales.invalidFeedFormat)
+    })
   })
 
   it('should handle non-standard atom namespace prefix', () => {
@@ -318,7 +370,6 @@ describe('parse', () => {
             description: 'Item Description',
             dc: {
               creators: ['John Doe'],
-              creator: 'John Doe',
             },
           },
         ],
@@ -362,8 +413,6 @@ describe('parse', () => {
             dc: {
               creators: ['John Doe'],
               dates: ['2023-01-01'],
-              creator: 'John Doe',
-              date: '2023-01-01',
             },
           },
           {
@@ -405,7 +454,6 @@ describe('parse', () => {
             description: 'Item Description',
             dc: {
               creators: ['John Doe'],
-              creator: 'John Doe',
             },
           },
         ],
@@ -501,8 +549,6 @@ describe('parse', () => {
             dc: {
               creators: ['John Doe'],
               dates: ['2023-01-01'],
-              creator: 'John Doe',
-              date: '2023-01-01',
             },
             media: {
               title: {
@@ -549,7 +595,6 @@ describe('parse', () => {
             title: 'Item Title',
             dc: {
               creators: ['Should not be normalized (empty URI)'],
-              creator: 'Should not be normalized (empty URI)',
             },
           },
         ],
@@ -623,8 +668,6 @@ describe('parse', () => {
             dc: {
               creators: ['John Doe'],
               dates: ['2023-01-01'],
-              creator: 'John Doe',
-              date: '2023-01-01',
             },
           },
         ],
@@ -658,7 +701,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -691,7 +733,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -724,7 +765,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -757,7 +797,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -790,7 +829,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -823,7 +861,6 @@ describe('parse', () => {
               title: 'Item',
               dc: {
                 creators: ['John'],
-                creator: 'John',
               },
             },
           ],
@@ -858,8 +895,6 @@ describe('parse', () => {
               dcterms: {
                 creators: ['Jane Doe'],
                 titles: ['DC Terms Title'],
-                creator: 'Jane Doe',
-                title: 'DC Terms Title',
               },
             },
           ],
@@ -872,7 +907,7 @@ describe('parse', () => {
 
   // Edge cases and quirks observed in feeds found in the wild.
   describe('real world feeds', () => {
-    it('RW-C01: should preserve HTML entities inside CDATA in content:encoded', () => {
+    it('should preserve HTML entities inside CDATA in content:encoded (RW-C01)', () => {
       const value = `
         <?xml version="1.0" encoding="UTF-8"?>
         <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
@@ -907,7 +942,7 @@ describe('parse', () => {
     })
 
     describe('author', () => {
-      it('RW-M03: should parse item author as plain text', () => {
+      it('should parse item author in RFC 2822 format (RW-M03)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -929,7 +964,7 @@ describe('parse', () => {
           items: [
             {
               title: 'Test Post',
-              authors: ['john@example.com (John Doe)'],
+              authors: [{ email: 'john@example.com', name: 'John Doe' }],
             },
           ],
         }
@@ -937,7 +972,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-M03: should parse item author with nested name element', () => {
+      it('should parse item author with nested name element (RW-M03)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -959,7 +994,7 @@ describe('parse', () => {
           items: [
             {
               title: 'Test Post',
-              authors: ['John Doe'],
+              authors: [{ name: 'John Doe' }],
             },
           ],
         }
@@ -969,7 +1004,7 @@ describe('parse', () => {
     })
 
     describe('character encoding', () => {
-      it('RW-E01: should decode HTML numeric character references in text', () => {
+      it('should decode HTML numeric character references in text (RW-E01)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -993,7 +1028,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-E02: should decode hex numeric character references', () => {
+      it('should decode hex numeric character references (RW-E02)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1017,7 +1052,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-E03: should decode named HTML entities in text', () => {
+      it('should decode named HTML entities in text (RW-E03)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1041,7 +1076,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-E04: should single-decode double-encoded entities', () => {
+      it('should single-decode double-encoded entities (RW-E04)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1065,7 +1100,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-E05: should decode multiple entity types in a single field', () => {
+      it('should decode multiple entity types in a single field (RW-E05)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1091,7 +1126,7 @@ describe('parse', () => {
     })
 
     describe('cdata handling', () => {
-      it('RW-C05: should handle mixed CDATA and regular text in same element', () => {
+      it('should handle mixed CDATA and regular text in same element (RW-C05)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1115,7 +1150,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-C02: should handle empty CDATA section', () => {
+      it('should handle empty CDATA section (RW-C02)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1134,7 +1169,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-C02: should handle CDATA in title element', () => {
+      it('should handle CDATA in title element (RW-C02)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1154,7 +1189,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-C12: should preserve HTML entities inside CDATA verbatim per XML spec', () => {
+      it('should preserve HTML entities inside CDATA verbatim per XML spec (RW-C12)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1182,7 +1217,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-C11: should handle CDATA preceded by whitespace and newlines', () => {
+      it('should handle CDATA preceded by whitespace and newlines (RW-C11)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1214,7 +1249,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-C01: should preserve entities inside CDATA without decoding', () => {
+      it('should preserve entities inside CDATA without decoding (RW-C01)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
@@ -1246,7 +1281,7 @@ describe('parse', () => {
     })
 
     describe('escaped cdata', () => {
-      it('RW-C10: should preserve entity-escaped CDATA markers as literal text', () => {
+      it('should preserve entity-escaped CDATA markers as literal text (RW-C10)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1278,7 +1313,7 @@ describe('parse', () => {
     })
 
     describe('content and description', () => {
-      it('RW-D01: should parse both content:encoded and description independently', () => {
+      it('should parse both content:encoded and description independently (RW-D01)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
@@ -1310,7 +1345,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-D02: should handle empty self-closing description tag', () => {
+      it('should handle empty self-closing description tag (RW-D02)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1329,7 +1364,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-D03: should handle whitespace-only description', () => {
+      it('should handle whitespace-only description (RW-D03)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1348,7 +1383,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-D04: should decode escaped HTML in description', () => {
+      it('should decode escaped HTML in description (RW-D04)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1380,7 +1415,7 @@ describe('parse', () => {
     })
 
     describe('link and URL handling', () => {
-      it('RW-L01: should preserve relative URLs as-is', () => {
+      it('should preserve relative URLs as-is (RW-L01)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1410,7 +1445,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-L02: should handle URLs with encoded ampersands in query parameters', () => {
+      it('should handle URLs with encoded ampersands in query parameters (RW-L02)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1440,7 +1475,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-L03: should parse atom:link in RSS feed', () => {
+      it('should parse atom:link in RSS feed (RW-L03)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -1466,7 +1501,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-L12: should parse plain link when mixed with attribute-only link elements', () => {
+      it('should parse plain link when mixed with attribute-only link elements (RW-L12)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -1503,7 +1538,7 @@ describe('parse', () => {
     })
 
     describe('multiple elements', () => {
-      it('RW-M01: should parse multiple enclosures', () => {
+      it('should parse multiple enclosures (RW-M01)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1537,7 +1572,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-M02: should parse multiple categories with domains', () => {
+      it('should parse multiple categories with domains (RW-M02)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1573,7 +1608,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-M03: should parse multiple authors', () => {
+      it('should parse multiple authors (RW-M03)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1596,7 +1631,10 @@ describe('parse', () => {
           items: [
             {
               title: 'Post',
-              authors: ['alice@example.com (Alice)', 'bob@example.com (Bob)'],
+              authors: [
+                { email: 'alice@example.com', name: 'Alice' },
+                { email: 'bob@example.com', name: 'Bob' },
+              ],
             },
           ],
         }
@@ -1606,7 +1644,7 @@ describe('parse', () => {
     })
 
     describe('missing and empty elements', () => {
-      it('RW-N01: should parse feed with no items', () => {
+      it('should parse feed with no items (RW-N01)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1626,7 +1664,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-N02: should parse item with only description', () => {
+      it('should parse item with only description (RW-N02)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1650,7 +1688,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-N03: should handle self-closing empty tags gracefully', () => {
+      it('should handle self-closing empty tags gracefully (RW-N03)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1676,7 +1714,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-N06: should parse feed with minimal channel info', () => {
+      it('should parse feed with minimal channel info (RW-N06)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1692,18 +1730,19 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-N14: should throw for empty channel container', () => {
+      it('should throw for empty channel container (RW-N14)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
             <channel></channel>
           </rss>
         `
+        const throwing = () => parse(value)
 
-        expect(() => parse(value)).toThrow()
+        expect(throwing).toThrowError(ParseError)
       })
 
-      it('RW-N16: should parse RSS feed with no channel title', () => {
+      it('should parse RSS feed with no channel title (RW-N16)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1725,7 +1764,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-N18: should treat empty guid element as absent', () => {
+      it('should treat empty guid element as absent (RW-N18)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1752,7 +1791,7 @@ describe('parse', () => {
     })
 
     describe('attribute handling', () => {
-      it('RW-A01: should parse guid with isPermaLink false', () => {
+      it('should parse guid with isPermaLink false (RW-A01)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1782,7 +1821,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-A02: should parse guid with uppercase isPermaLink value', () => {
+      it('should parse guid with uppercase isPermaLink value (RW-A02)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1812,7 +1851,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-A03: should parse enclosure with all attributes', () => {
+      it('should parse enclosure with all attributes (RW-A03)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1846,7 +1885,7 @@ describe('parse', () => {
     })
 
     describe('namespace edge cases', () => {
-      it('RW-NS01: should handle non-standard prefix for known namespace URI', () => {
+      it('should handle non-standard prefix for known namespace URI (RW-NS01)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:mydc="http://purl.org/dc/elements/1.1/">
@@ -1870,7 +1909,6 @@ describe('parse', () => {
               title: 'Post',
               dc: {
                 creators: ['John Doe'],
-                creator: 'John Doe',
               },
             },
           ],
@@ -1879,7 +1917,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-NS02: should handle multiple namespaces with non-standard prefixes', () => {
+      it('should handle multiple namespaces with non-standard prefixes (RW-NS02)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0"
@@ -1910,7 +1948,6 @@ describe('parse', () => {
               title: 'Post',
               dc: {
                 creators: ['Jane'],
-                creator: 'Jane',
               },
             },
           ],
@@ -1919,7 +1956,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-NS03: should handle namespace URI without trailing slash variant', () => {
+      it('should handle namespace URI without trailing slash variant (RW-NS03)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1">
@@ -1943,7 +1980,6 @@ describe('parse', () => {
               title: 'Post',
               dc: {
                 creators: ['Author'],
-                creator: 'Author',
               },
             },
           ],
@@ -1952,7 +1988,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-NS12: should handle namespace declared inline on item element', () => {
+      it('should handle namespace declared inline on item element (RW-NS12)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -1976,7 +2012,6 @@ describe('parse', () => {
               title: 'Post',
               dc: {
                 creators: ['Inline Author'],
-                creator: 'Inline Author',
               },
             },
           ],
@@ -1987,7 +2022,7 @@ describe('parse', () => {
     })
 
     describe('feed-specific quirks', () => {
-      it('RW-Q02: should parse podcast feed with itunes namespace', () => {
+      it('should parse podcast feed with itunes namespace (RW-Q02)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
@@ -2025,7 +2060,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-Q03: should parse feed with source element on item', () => {
+      it('should parse feed with source element on item (RW-Q03)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2035,7 +2070,7 @@ describe('parse', () => {
               <description>Aggregated feed</description>
               <item>
                 <title>Cross-posted Article</title>
-                <source url="https://original.com/feed.xml">Original Blog</source>
+                <source url="https://example.org/feed.xml">Original Blog</source>
               </item>
             </channel>
           </rss>
@@ -2047,7 +2082,7 @@ describe('parse', () => {
           items: [
             {
               title: 'Cross-posted Article',
-              source: { title: 'Original Blog', url: 'https://original.com/feed.xml' },
+              source: { title: 'Original Blog', url: 'https://example.org/feed.xml' },
             },
           ],
         }
@@ -2055,7 +2090,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-Q04: should parse feed with comments URL on item', () => {
+      it('should parse feed with comments URL on item (RW-Q04)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2085,7 +2120,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-Q09: should preserve RFC 2822 author email format', () => {
+      it('should parse RFC 2822 author email format into structured person (RW-Q09)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2107,7 +2142,7 @@ describe('parse', () => {
           items: [
             {
               title: 'Post',
-              authors: ['john@example.com (John Doe)'],
+              authors: [{ email: 'john@example.com', name: 'John Doe' }],
             },
           ],
         }
@@ -2117,7 +2152,7 @@ describe('parse', () => {
     })
 
     describe('malformed XML resilience', () => {
-      it('RW-E10: should handle BOM at start of XML', () => {
+      it('should handle BOM at start of XML (RW-E10)', () => {
         const value = `\uFEFF<?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
             <channel>
@@ -2136,7 +2171,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-E12: should handle unescaped ampersand in title', () => {
+      it('should handle unescaped ampersand in title (RW-E12)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2156,7 +2191,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-E12: should handle unescaped ampersand in item description', () => {
+      it('should handle unescaped ampersand in item description (RW-E12)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2186,7 +2221,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-E06: should handle HTML entity &nbsp; in text', () => {
+      it('should handle HTML entity &nbsp; in text (RW-E06)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2210,7 +2245,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-E07: should handle &copy; entity in text', () => {
+      it('should handle &copy; entity in text (RW-E07)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2234,18 +2269,19 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-X01: should throw on truncated XML', () => {
+      it('should throw on truncated XML (RW-X01)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
             <channel>
               <title>Incomplete
         `
+        const throwing = () => parse(value)
 
-        expect(() => parse(value)).toThrow()
+        expect(throwing).toThrowError(MalformedError)
       })
 
-      it('RW-E17: should throw on unescaped less-than in title', () => {
+      it('should throw on unescaped less-than in title (RW-E17)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2259,11 +2295,12 @@ describe('parse', () => {
             </channel>
           </rss>
         `
+        const throwing = () => parse(value)
 
-        expect(() => parse(value)).toThrow()
+        expect(throwing).toThrowError(MalformedError)
       })
 
-      it('RW-E11: should handle control character U+0008 in content', () => {
+      it('should handle control character U+0008 in content (RW-E11)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2287,7 +2324,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-X04: should parse feed with DOCTYPE declaration', () => {
+      it('should parse feed with DOCTYPE declaration (RW-X04)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE rss SYSTEM "https://example.com/rss.dtd">
@@ -2312,7 +2349,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-X08: should strip XML comments from element content', () => {
+      it('should strip XML comments from element content (RW-X08)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2336,7 +2373,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-X10: should use first channel when multiple channel elements exist', () => {
+      it('should use first channel when multiple channel elements exist (RW-X10)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2365,7 +2402,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-X11: should parse items placed outside channel element', () => {
+      it('should parse items placed outside channel element (RW-X11)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2395,7 +2432,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-X12: should drop unquoted attribute values (fast-xml-parser limitation)', () => {
+      it('should drop unquoted attribute values (fast-xml-parser limitation) (RW-X12)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2432,7 +2469,7 @@ describe('parse', () => {
     })
 
     describe('stop node edge cases', () => {
-      it('RW-D04: should preserve HTML tags in title as text', () => {
+      it('should preserve HTML tags in title as text (RW-D04)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2456,7 +2493,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-C04: should handle CDATA with code containing angle brackets', () => {
+      it('should handle CDATA with code containing angle brackets (RW-C04)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
@@ -2488,7 +2525,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-D04: should handle description with escaped HTML link', () => {
+      it('should handle description with escaped HTML link (RW-D04)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2520,7 +2557,7 @@ describe('parse', () => {
     })
 
     describe('partial attributes', () => {
-      it('RW-A04: should handle enclosure with missing url attribute', () => {
+      it('should handle enclosure with missing url attribute (RW-A04)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2550,7 +2587,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-A05: should drop enclosure with no attributes', () => {
+      it('should drop enclosure with no attributes (RW-A05)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2575,7 +2612,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-N02: should parse item with only guid', () => {
+      it('should parse item with only guid (RW-N02)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2603,7 +2640,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-T01: should handle invalid date strings as plain strings', () => {
+      it('should handle invalid date strings as plain strings (RW-T01)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2633,7 +2670,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-A06: should handle large enclosure length values', () => {
+      it('should handle large enclosure length values (RW-A06)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2665,7 +2702,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-NS07: should parse nested iTunes categories', () => {
+      it('should parse nested iTunes categories (RW-NS07)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
@@ -2699,7 +2736,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-C13: should unwrap CDATA-wrapped pubDate', () => {
+      it('should unwrap CDATA-wrapped pubDate (RW-C13)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2729,7 +2766,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-C14: should omit empty content:encoded and keep description', () => {
+      it('should omit empty content:encoded and keep description (RW-C14)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
@@ -2760,7 +2797,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-L14: should parse guid with isPermaLink true and no link element', () => {
+      it('should parse guid with isPermaLink true and no link element (RW-L14)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2790,7 +2827,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-A13: should store non-MIME enclosure type as-is', () => {
+      it('should store non-MIME enclosure type as-is (RW-A13)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -2826,7 +2863,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-NS14: should parse dc:date in RSS 2.0', () => {
+      it('should parse dc:date in RSS 2.0 (RW-NS14)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
@@ -2850,7 +2887,6 @@ describe('parse', () => {
               title: 'Post',
               dc: {
                 dates: ['2025-02-21T16:00:00Z'],
-                date: '2025-02-21T16:00:00Z',
               },
             },
           ],
@@ -2859,7 +2895,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-NS15: should parse media:content with nested child elements', () => {
+      it('should parse media:content with nested child elements (RW-NS15)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
@@ -2900,7 +2936,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-NS16: should parse both media:content and media:thumbnail', () => {
+      it('should parse both media:content and media:thumbnail (RW-NS16)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
@@ -2945,7 +2981,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-NS17: should parse itunes:duration with MM:SS format', () => {
+      it('should parse itunes:duration with MM:SS format (RW-NS17)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
@@ -2960,12 +2996,24 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'My Podcast',
+          link: 'https://example.com',
+          description: 'A podcast',
+          items: [
+            {
+              title: 'Episode 1',
+              itunes: {
+                duration: 199,
+              },
+            },
+          ],
+        }
 
-        expect(result.items?.[0]?.itunes?.duration).toBe(199)
+        expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-NS18: should handle HTTPS variant of DC namespace URI', () => {
+      it('should handle HTTPS variant of DC namespace URI (RW-NS18)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:dc="https://purl.org/dc/elements/1.1/">
@@ -2989,7 +3037,6 @@ describe('parse', () => {
               title: 'Post',
               dc: {
                 creators: ['John Doe'],
-                creator: 'John Doe',
               },
             },
           ],
@@ -2998,7 +3045,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-NS19: should parse atom:link declared inline on channel element', () => {
+      it('should parse atom:link declared inline on channel element (RW-NS19)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3028,7 +3075,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-X13: should decode numeric character reference &#39; in description', () => {
+      it('should decode numeric character reference &#39; in description (RW-X13)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3058,7 +3105,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-X14: should omit self-closing empty link element', () => {
+      it('should omit self-closing empty link element (RW-X14)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3083,7 +3130,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-X17: should handle leading whitespace before XML declaration', () => {
+      it('should handle leading whitespace before XML declaration (RW-X17)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3107,8 +3154,9 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-X18: should ignore xml-stylesheet processing instruction', () => {
-        const value = `<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="style.xsl"?>
+      it('should ignore xml-stylesheet processing instruction (RW-X18)', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="style.xsl"?>
           <rss version="2.0">
             <channel>
               <title>Test</title>
@@ -3130,7 +3178,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-X19: should preserve raw XML inside stop node pubDate', () => {
+      it('should preserve raw XML inside stop node pubDate (RW-X19)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3160,7 +3208,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-X20: should scope image child elements without polluting channel', () => {
+      it('should scope image child elements without polluting channel (RW-X20)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3194,7 +3242,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-X21: should scope textInput child elements without polluting channel', () => {
+      it('should scope textInput child elements without polluting channel (RW-X21)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3230,7 +3278,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-Q11: should preserve both author and dc:creator', () => {
+      it('should preserve both author and dc:creator (RW-Q11)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
@@ -3253,10 +3301,9 @@ describe('parse', () => {
           items: [
             {
               title: 'Post',
-              authors: ['Regular Author'],
+              authors: [{ name: 'Regular Author' }],
               dc: {
                 creators: ['DC Author'],
-                creator: 'DC Author',
               },
             },
           ],
@@ -3265,7 +3312,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-Q12: should collect multiple dc:creator elements', () => {
+      it('should collect multiple dc:creator elements (RW-Q12)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
@@ -3290,7 +3337,6 @@ describe('parse', () => {
               title: 'Post',
               dc: {
                 creators: ['Alice', 'Bob'],
-                creator: 'Alice',
               },
             },
           ],
@@ -3299,7 +3345,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-Q13: should treat itunes:explicit "1" as false', () => {
+      it('should treat itunes:explicit "1" as false (RW-Q13)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
@@ -3324,7 +3370,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-Q14: should parse itunes:duration with fractional seconds', () => {
+      it('should parse itunes:duration with fractional seconds (RW-Q14)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
@@ -3349,7 +3395,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-Q15: should parse itunes:image as text content without @href', () => {
+      it('should parse itunes:image as text content without @href (RW-Q15)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
@@ -3376,7 +3422,7 @@ describe('parse', () => {
     })
 
     describe('unicode and special characters', () => {
-      it('RW-E18: should preserve BiDi control characters in category text', () => {
+      it('should preserve BiDi control characters in category text (RW-E18)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3403,7 +3449,7 @@ describe('parse', () => {
     })
 
     describe('description and content interaction', () => {
-      it('RW-D18: should parse both description and content:encoded regardless of order', () => {
+      it('should parse both description and content:encoded regardless of order (RW-D18)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
@@ -3445,7 +3491,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-D23: should preserve bare HTML children inside description stop node', () => {
+      it('should preserve bare HTML children inside description stop node (RW-D23)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3472,7 +3518,7 @@ describe('parse', () => {
     })
 
     describe('link edge cases', () => {
-      it('RW-L17: should parse text link separately from atom:link', () => {
+      it('should parse text link separately from atom:link (RW-L17)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -3498,7 +3544,7 @@ describe('parse', () => {
     })
 
     describe('dc namespace edge cases', () => {
-      it('RW-M09: should collect multiple dc:creator elements in order', () => {
+      it('should collect multiple dc:creator elements in order (RW-M09)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
@@ -3522,7 +3568,7 @@ describe('parse', () => {
           items: [
             {
               title: 'Post',
-              dc: { creators: ['Alice', 'Bob', 'Charlie'], creator: 'Alice' },
+              dc: { creators: ['Alice', 'Bob', 'Charlie'] },
             },
           ],
         }
@@ -3530,7 +3576,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-NS24: should ignore empty dc:title and keep core title', () => {
+      it('should ignore empty dc:title and keep core title (RW-NS24)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
@@ -3557,7 +3603,7 @@ describe('parse', () => {
     })
 
     describe('duplicate element handling', () => {
-      it('RW-M11: should use first guid when multiple guid elements exist', () => {
+      it('should use first guid when multiple guid elements exist (RW-M11)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3585,7 +3631,7 @@ describe('parse', () => {
     })
 
     describe('image edge cases', () => {
-      it('RW-N22: should parse channel image with only url', () => {
+      it('should parse channel image with only url (RW-N22)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3609,7 +3655,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-Q16: should not parse image element at item level', () => {
+      it('should not parse image element at item level (RW-Q16)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3636,7 +3682,7 @@ describe('parse', () => {
     })
 
     describe('enclosure edge cases', () => {
-      it('RW-A14: should omit length for empty string enclosure length', () => {
+      it('should omit length for empty string enclosure length (RW-A14)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3666,7 +3712,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-A14: should omit length for non-numeric enclosure length', () => {
+      it('should omit length for non-numeric enclosure length (RW-A14)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3696,7 +3742,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-A15: should parse float enclosure length as number', () => {
+      it('should parse float enclosure length as number (RW-A15)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3728,7 +3774,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-A19: should ignore enclosure text content without attributes', () => {
+      it('should ignore enclosure text content without attributes (RW-A19)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3753,7 +3799,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-A20: should preserve MIME type with parameters in enclosure', () => {
+      it('should preserve MIME type with parameters in enclosure (RW-A20)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3768,16 +3814,26 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Post',
+              enclosures: [
+                { url: 'https://example.com/page', length: 5000, type: 'text/html; charset=utf-8' },
+              ],
+            },
+          ],
+        }
 
-        expect(result.items?.[0]?.enclosures).toEqual([
-          { url: 'https://example.com/page', length: 5000, type: 'text/html; charset=utf-8' },
-        ])
+        expect(parse(value)).toEqual(expected)
       })
     })
 
     describe('guid edge cases', () => {
-      it('RW-A16: should parse guid without isPermaLink attribute', () => {
+      it('should parse guid without isPermaLink attribute (RW-A16)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3792,15 +3848,24 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Post',
+              guid: { value: 'internal-id-12345' },
+            },
+          ],
+        }
 
-        expect(result.items?.[0]?.guid).toEqual({ value: 'internal-id-12345' })
-        expect(result.items?.[0]?.guid?.isPermaLink).toBeUndefined()
+        expect(parse(value)).toEqual(expected)
       })
     })
 
     describe('source element', () => {
-      it('RW-A17: should parse source with url attribute and text', () => {
+      it('should parse source with url attribute and text (RW-A17)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3815,17 +3880,27 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Post',
+              source: {
+                title: 'Source Name',
+                url: 'https://example.com/feed',
+              },
+            },
+          ],
+        }
 
-        expect(result.items?.[0]?.source).toEqual({
-          title: 'Source Name',
-          url: 'https://example.com/feed',
-        })
+        expect(parse(value)).toEqual(expected)
       })
     })
 
     describe('author edge cases', () => {
-      it('RW-A18: should parse plain author name string', () => {
+      it('should parse plain author name string (RW-A18)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3840,14 +3915,92 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Post',
+              authors: [{ name: 'John Doe' }],
+            },
+          ],
+        }
 
-        expect(result.items?.[0]?.authors).toEqual(['John Doe'])
+        expect(parse(value)).toEqual(expected)
+      })
+    })
+
+    describe('person fields', () => {
+      it('should parse managingEditor in RFC 2822 format', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0">
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <managingEditor>editor@example.com (Editor Name)</managingEditor>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          managingEditor: { email: 'editor@example.com', name: 'Editor Name' },
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should parse webMaster in RFC 2822 format', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0">
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <webMaster>webmaster@example.com (Webmaster)</webMaster>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          webMaster: { email: 'webmaster@example.com', name: 'Webmaster' },
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should parse managingEditor with email only', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0">
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <managingEditor>editor@example.com</managingEditor>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          managingEditor: { email: 'editor@example.com' },
+        }
+
+        expect(parse(value)).toEqual(expected)
       })
     })
 
     describe('foreign namespace on core elements', () => {
-      it('RW-NS25: should handle default namespace override on link element', () => {
+      it('should handle default namespace override on link element (RW-NS25)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3858,14 +4011,18 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+        }
 
-        expect(result.link).toBe('https://example.com')
+        expect(parse(value)).toEqual(expected)
       })
     })
 
     describe('atom namespace in RSS items', () => {
-      it('RW-NS26: should parse atom:author inside RSS item', () => {
+      it('should parse atom:author inside RSS item (RW-NS26)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -3882,14 +4039,26 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Post',
+              atom: {
+                authors: [{ name: 'John Doe' }],
+              },
+            },
+          ],
+        }
 
-        expect(result.items?.[0]?.atom?.authors).toEqual([{ name: 'John Doe' }])
+        expect(parse(value)).toEqual(expected)
       })
     })
 
     describe('sy namespace edge cases', () => {
-      it('RW-NS27: should preserve bad date string in sy:updateBase', () => {
+      it('should preserve bad date string in sy:updateBase (RW-NS27)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/">
@@ -3901,14 +4070,21 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          sy: {
+            updateBase: 'not-a-date',
+          },
+        }
 
-        expect(result.sy?.updateBase).toBe('not-a-date')
+        expect(parse(value)).toEqual(expected)
       })
     })
 
     describe('namespace scoping', () => {
-      it('RW-NS28: should not leak dc:identifier nested inside media:content to item level', () => {
+      it('should not leak dc:identifier nested inside media:content to item level (RW-NS28)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0"
@@ -3927,15 +4103,26 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Post',
+              media: {
+                contents: [{ url: 'https://example.com/video.mp4' }],
+              },
+            },
+          ],
+        }
 
-        expect(result.items?.[0]?.media?.contents?.[0]?.url).toBe('https://example.com/video.mp4')
-        expect(result.items?.[0]?.dc?.identifiers).toBeUndefined()
+        expect(parse(value)).toEqual(expected)
       })
     })
 
     describe('itunes and core field independence', () => {
-      it('RW-NS29: should parse itunes:summary and description independently', () => {
+      it('should parse itunes:summary and description independently (RW-NS29)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
@@ -3951,15 +4138,27 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'My Podcast',
+          link: 'https://example.com',
+          description: 'A podcast',
+          items: [
+            {
+              title: 'Episode 1',
+              description: 'Real description',
+              itunes: {
+                summary: 'iTunes summary',
+              },
+            },
+          ],
+        }
 
-        expect(result.items?.[0]?.description).toBe('Real description')
-        expect(result.items?.[0]?.itunes?.summary).toBe('iTunes summary')
+        expect(parse(value)).toEqual(expected)
       })
     })
 
     describe('concatenated and malformed XML', () => {
-      it('RW-X22: should parse only first document from concatenated RSS documents', () => {
+      it('should parse only first document from concatenated RSS documents (RW-X22)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -3987,7 +4186,7 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
-      it('RW-X23: should parse adjacent elements without whitespace', () => {
+      it('should parse adjacent elements without whitespace (RW-X23)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0"
@@ -4004,15 +4203,29 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Post',
+              content: {
+                encoded: 'Article text',
+              },
+              media: {
+                contents: [{ url: 'https://example.com/img.jpg' }],
+              },
+            },
+          ],
+        }
 
-        expect(result.items?.[0]?.media?.contents?.[0]?.url).toBe('https://example.com/img.jpg')
-        expect(result.items?.[0]?.content?.encoded).toBe('Article text')
+        expect(parse(value)).toEqual(expected)
       })
     })
 
     describe('non-standard RSS version', () => {
-      it('RW-X24: should parse RSS with version 0.91', () => {
+      it('should parse RSS with version 0.91 (RW-X24)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="0.91">
@@ -4038,7 +4251,7 @@ describe('parse', () => {
     })
 
     describe('itunes:explicit values', () => {
-      it('RW-Q17: should treat itunes:explicit "no" as false', () => {
+      it('should treat itunes:explicit "no" as false (RW-Q17)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
@@ -4053,14 +4266,26 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'My Podcast',
+          link: 'https://example.com',
+          description: 'A podcast',
+          items: [
+            {
+              title: 'Episode 1',
+              itunes: {
+                explicit: false,
+              },
+            },
+          ],
+        }
 
-        expect(result.items?.[0]?.itunes?.explicit).toBe(false)
+        expect(parse(value)).toEqual(expected)
       })
     })
 
     describe('category edge cases', () => {
-      it('RW-Q18: should parse category with domain but empty text', () => {
+      it('should parse category with domain but empty text (RW-Q18)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
           <rss version="2.0">
@@ -4075,9 +4300,19 @@ describe('parse', () => {
             </channel>
           </rss>
         `
-        const result = parse(value)
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Post',
+              categories: [{ domain: 'dmoz' }],
+            },
+          ],
+        }
 
-        expect(result.items?.[0]?.categories).toEqual([{ domain: 'dmoz' }])
+        expect(parse(value)).toEqual(expected)
       })
     })
   })
@@ -4167,29 +4402,187 @@ describe('parse', () => {
     })
   })
 
-  describe('xml comment stripping', () => {
-    it('should strip XML comments from element content', () => {
+  describe('parseDateFn', () => {
+    it('should apply custom parseDateFn to feed and item dates', () => {
       const value = `
-        <?xml version="1.0" encoding="UTF-8"?>
+        <?xml version="1.0" encoding="UTF-8" ?>
         <rss version="2.0">
           <channel>
-            <title>Test<!-- hidden --> Feed</title>
-            <link>https://example.com</link>
-            <description>Test</description>
+            <title>Test</title>
+            <pubDate>Wed, 15 Mar 2023 12:00:00 GMT</pubDate>
             <item>
-              <title>Post<!-- comment --> Title</title>
+              <title>Item</title>
+              <pubDate>Thu, 16 Mar 2023 12:00:00 GMT</pubDate>
             </item>
           </channel>
         </rss>
       `
       const expected = {
-        title: 'Test Feed',
-        link: 'https://example.com',
-        description: 'Test',
-        items: [{ title: 'Post Title' }],
+        title: 'Test',
+        pubDate: new Date('Wed, 15 Mar 2023 12:00:00 GMT'),
+        items: [
+          {
+            title: 'Item',
+            pubDate: new Date('Thu, 16 Mar 2023 12:00:00 GMT'),
+          },
+        ],
       }
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    })
 
-      expect(parse(value)).toEqual(expected)
+    it('should apply custom parseDateFn to namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <channel>
+            <title>Test</title>
+            <item>
+              <title>Item</title>
+              <dc:date>2023-03-15T12:00:00Z</dc:date>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test',
+        items: [
+          {
+            title: 'Item',
+            dc: {
+              dates: [new Date('2023-03-15T12:00:00Z')],
+            },
+          },
+        ],
+      }
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    })
+
+    it('should propagate error when parseDateFn throws', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0">
+          <channel>
+            <title>Test</title>
+            <pubDate>invalid</pubDate>
+          </channel>
+        </rss>
+      `
+      const parseDateFn = () => {
+        throw new Error('Parse failed')
+      }
+      const throwing = () => parse(value, { parseDateFn })
+
+      expect(throwing).toThrowError('Parse failed')
+    })
+
+    it('should apply custom parseDateFn to podcast namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0" xmlns:podcast="https://podcastindex.org/namespace/1.0">
+          <channel>
+            <title>Test</title>
+            <podcast:trailer pubdate="Thu, 16 Mar 2023 12:00:00 GMT" url="https://example.com/trailer.mp3">Trailer</podcast:trailer>
+            <podcast:liveItem status="live" start="2023-03-15T12:00:00Z" end="2023-03-15T13:00:00Z" />
+            <podcast:updateFrequency dtstart="2023-03-20T00:00:00Z" rrule="FREQ=WEEKLY">Weekly</podcast:updateFrequency>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test',
+        podcast: {
+          trailers: [
+            {
+              display: 'Trailer',
+              url: 'https://example.com/trailer.mp3',
+              pubDate: new Date('Thu, 16 Mar 2023 12:00:00 GMT'),
+            },
+          ],
+          liveItems: [
+            {
+              status: 'live',
+              start: new Date('2023-03-15T12:00:00Z'),
+              end: new Date('2023-03-15T13:00:00Z'),
+            },
+          ],
+          updateFrequency: {
+            display: 'Weekly',
+            dtstart: new Date('2023-03-20T00:00:00Z'),
+            rrule: 'FREQ=WEEKLY',
+          },
+        },
+      }
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    })
+
+    it('should apply custom parseDateFn to sy namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/">
+          <channel>
+            <title>Test</title>
+            <sy:updateBase>2023-03-15T12:00:00Z</sy:updateBase>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test',
+        sy: {
+          updateBase: new Date('2023-03-15T12:00:00Z'),
+        },
+      }
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    })
+
+    it('should apply custom parseDateFn to prism namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0" xmlns:prism="http://prismstandard.org/namespaces/basic/3.0/">
+          <channel>
+            <title>Test</title>
+            <item>
+              <title>Item</title>
+              <prism:publicationDate>2023-03-15T12:00:00Z</prism:publicationDate>
+              <prism:modificationDate>2023-03-16T12:00:00Z</prism:modificationDate>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test',
+        items: [
+          {
+            title: 'Item',
+            prism: {
+              publicationDates: [new Date('2023-03-15T12:00:00Z')],
+              modificationDate: new Date('2023-03-16T12:00:00Z'),
+            },
+          },
+        ],
+      }
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    })
+
+    it('should apply custom parseDateFn to rawvoice namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0" xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/">
+          <channel>
+            <title>Test</title>
+            <rawvoice:liveStream schedule="2023-03-15T12:00:00Z" duration="01:00:00">https://example.com/stream</rawvoice:liveStream>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test',
+        rawvoice: {
+          liveStream: {
+            url: 'https://example.com/stream',
+            schedule: new Date('2023-03-15T12:00:00Z'),
+            duration: '01:00:00',
+          },
+        },
+      }
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
     })
   })
 })

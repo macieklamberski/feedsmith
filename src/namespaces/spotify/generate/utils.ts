@@ -1,15 +1,15 @@
+import { isPlainObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generateNumber,
   generatePlainString,
-  isObject,
   trimObject,
 } from '../../../common/utils.js'
 import type { SpotifyNs } from '../common/types.js'
 
 export const generateLimit: GenerateUtil<SpotifyNs.Limit> = (limit) => {
-  if (!isObject(limit)) {
+  if (!isPlainObject(limit)) {
     return
   }
 
@@ -21,7 +21,7 @@ export const generateLimit: GenerateUtil<SpotifyNs.Limit> = (limit) => {
 }
 
 export const generatePartner: GenerateUtil<SpotifyNs.Partner> = (partner) => {
-  if (!isObject(partner)) {
+  if (!isPlainObject(partner)) {
     return
   }
 
@@ -33,7 +33,7 @@ export const generatePartner: GenerateUtil<SpotifyNs.Partner> = (partner) => {
 }
 
 export const generateSandbox: GenerateUtil<SpotifyNs.Sandbox> = (sandbox) => {
-  if (!isObject(sandbox)) {
+  if (!isPlainObject(sandbox)) {
     return
   }
 
@@ -43,7 +43,7 @@ export const generateSandbox: GenerateUtil<SpotifyNs.Sandbox> = (sandbox) => {
 }
 
 export const generateFeedAccess: GenerateUtil<SpotifyNs.FeedAccess> = (access) => {
-  if (!isObject(access)) {
+  if (!isPlainObject(access)) {
     return
   }
 
@@ -56,7 +56,7 @@ export const generateFeedAccess: GenerateUtil<SpotifyNs.FeedAccess> = (access) =
 }
 
 export const generateEntitlement: GenerateUtil<SpotifyNs.Entitlement> = (entitlement) => {
-  if (!isObject(entitlement)) {
+  if (!isPlainObject(entitlement)) {
     return
   }
 
@@ -68,7 +68,7 @@ export const generateEntitlement: GenerateUtil<SpotifyNs.Entitlement> = (entitle
 }
 
 export const generateItemAccess: GenerateUtil<SpotifyNs.ItemAccess> = (access) => {
-  if (!isObject(access)) {
+  if (!isPlainObject(access)) {
     return
   }
 
@@ -80,7 +80,7 @@ export const generateItemAccess: GenerateUtil<SpotifyNs.ItemAccess> = (access) =
 }
 
 export const generateFeed: GenerateUtil<SpotifyNs.Feed> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 
@@ -94,7 +94,7 @@ export const generateFeed: GenerateUtil<SpotifyNs.Feed> = (feed) => {
 }
 
 export const generateItem: GenerateUtil<SpotifyNs.Item> = (item) => {
-  if (!isObject(item)) {
+  if (!isPlainObject(item)) {
     return
   }
 

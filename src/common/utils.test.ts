@@ -1,11 +1,10 @@
 import { describe, expect, it } from 'bun:test'
 import { type XMLBuilder, XMLParser } from 'fast-xml-parser'
 import { namespacePrefixes, namespaceUris } from './config.js'
-import type { ParseExactUtil } from './types.js'
+import type { ParseUtilExact } from './types.js'
 import {
   createNamespaceNormalizator,
   detectNamespaces,
-  generateArrayOrSingular,
   generateBoolean,
   generateCdataString,
   generateCsvOf,
@@ -15,15 +14,12 @@ import {
   generateRdfResource,
   generateRfc822Date,
   generateRfc3339Date,
-  generateSingularOrArray,
+  generateTextOrCdataString,
   generateXml,
   generateXmlStylesheet,
   generateYesNoBoolean,
   hasEntities,
-  isNonEmptyString,
   isNonEmptyStringOrNumber,
-  isObject,
-  isPresent,
   limitArray,
   parseArray,
   parseArrayOf,
@@ -42,187 +38,6 @@ import {
   trimArray,
   trimObject,
 } from './utils.js'
-
-describe('isPresent', () => {
-  it('should return false for null', () => {
-    expect(isPresent(null)).toBe(false)
-  })
-
-  it('should return false for undefined', () => {
-    expect(isPresent(undefined)).toBe(false)
-  })
-
-  it('should return true for empty string', () => {
-    expect(isPresent('')).toBe(true)
-  })
-
-  it('should return true for zero', () => {
-    expect(isPresent(0)).toBe(true)
-  })
-
-  it('should return true for NaN', () => {
-    expect(isPresent(Number.NaN)).toBe(true)
-  })
-
-  it('should return true for false', () => {
-    expect(isPresent(false)).toBe(true)
-  })
-
-  it('should return true for empty objects', () => {
-    expect(isPresent({})).toBe(true)
-  })
-
-  it('should return true for empty arrays', () => {
-    expect(isPresent([])).toBe(true)
-  })
-
-  it('should return true for string values', () => {
-    expect(isPresent('hello')).toBe(true)
-  })
-
-  it('should return true for number values', () => {
-    expect(isPresent(123)).toBe(true)
-  })
-
-  it('should return true for object values', () => {
-    expect(isPresent({ key: 'value' })).toBe(true)
-  })
-
-  it('should return true for array values', () => {
-    expect(isPresent([1, 2, 3])).toBe(true)
-  })
-
-  it('should return true for function values', () => {
-    expect(isPresent(() => {})).toBe(true)
-  })
-
-  it('should return true for Date objects', () => {
-    expect(isPresent(new Date())).toBe(true)
-  })
-
-  it('should return true for RegExp objects', () => {
-    // biome-ignore lint/performance/useTopLevelRegex: It's for testing purposes.
-    expect(isPresent(/test/)).toBe(true)
-  })
-})
-
-describe('isObject', () => {
-  it('should return true for plain objects', () => {
-    expect(isObject({})).toBe(true)
-    expect(isObject({ a: 1 })).toBe(true)
-    expect(isObject({ a: null, b: undefined })).toBe(true)
-    expect(isObject({ toString: () => 'custom' })).toBe(true)
-  })
-
-  it('should return false for arrays', () => {
-    expect(isObject([])).toBe(false)
-    expect(isObject([1, 2, 3])).toBe(false)
-    expect(isObject(new Array(5))).toBe(false)
-  })
-
-  it('should return false for null', () => {
-    expect(isObject(null)).toBe(false)
-  })
-
-  it('should return false for undefined', () => {
-    expect(isObject(undefined)).toBe(false)
-  })
-
-  it('should return false for primitive types', () => {
-    expect(isObject(42)).toBe(false)
-    expect(isObject('string')).toBe(false)
-    expect(isObject(true)).toBe(false)
-    expect(isObject(Symbol('sym'))).toBe(false)
-    expect(isObject(BigInt(123))).toBe(false)
-  })
-
-  it('should return false for functions', () => {
-    expect(isObject(() => {})).toBe(false)
-    // biome-ignore lint/complexity/useArrowFunction: It's for testing purposes.
-    expect(isObject(function () {})).toBe(false)
-    expect(isObject(Math.sin)).toBe(false)
-  })
-
-  it('should return false for objects with custom prototypes', () => {
-    class CustomClass {}
-
-    expect(isObject(new CustomClass())).toBe(false)
-  })
-
-  it('should return false for built-in objects', () => {
-    expect(isObject(new Date())).toBe(false)
-    // biome-ignore lint/suspicious/useErrorMessage: It's for testing purposes.
-    expect(isObject(new Error())).toBe(false)
-    expect(isObject(new Map())).toBe(false)
-    expect(isObject(new Set())).toBe(false)
-    expect(isObject(new WeakMap())).toBe(false)
-    expect(isObject(new WeakSet())).toBe(false)
-    // biome-ignore lint/complexity/useRegexLiterals: It's for testing purposes.
-    expect(isObject(new RegExp('.'))).toBe(false)
-    expect(isObject(new ArrayBuffer(10))).toBe(false)
-  })
-})
-
-describe('isNonEmptyString', () => {
-  it('should return true for non-empty strings', () => {
-    expect(isNonEmptyString('hello')).toBe(true)
-    expect(isNonEmptyString('0')).toBe(true)
-    expect(isNonEmptyString('undefined')).toBe(true)
-    expect(isNonEmptyString('null')).toBe(true)
-  })
-
-  it('should handle edge cases', () => {
-    // biome-ignore lint/style/useConsistentBuiltinInstantiation: It's for testing purposes.
-    const stringObject = new String('hello')
-
-    expect(isNonEmptyString(stringObject)).toBe(false)
-  })
-
-  it('should return false for empty strings', () => {
-    expect(isNonEmptyString('')).toBe(false)
-    expect(isNonEmptyString(' ')).toBe(false)
-  })
-
-  it('should return false for number', () => {
-    expect(isNonEmptyString(2)).toBe(false)
-  })
-
-  it('should return false for arrays', () => {
-    expect(isNonEmptyString([])).toBe(false)
-    expect(isNonEmptyString([1, 2, 3])).toBe(false)
-    expect(isNonEmptyString(['hello'])).toBe(false)
-  })
-
-  it('should return false for objects', () => {
-    expect(isNonEmptyString({})).toBe(false)
-    expect(isNonEmptyString({ key: 'value' })).toBe(false)
-    expect(isNonEmptyString(new Date())).toBe(false)
-  })
-
-  it('should return false for null and undefined', () => {
-    expect(isNonEmptyString(null)).toBe(false)
-    expect(isNonEmptyString(undefined)).toBe(false)
-  })
-
-  it('should return false for booleans', () => {
-    expect(isNonEmptyString(true)).toBe(false)
-    expect(isNonEmptyString(false)).toBe(false)
-  })
-
-  it('should return false for functions', () => {
-    expect(isNonEmptyString(() => {})).toBe(false)
-    // biome-ignore lint/complexity/useArrowFunction: It's for testing purposes.
-    expect(isNonEmptyString(function () {})).toBe(false)
-  })
-
-  it('should return false for symbols', () => {
-    expect(isNonEmptyString(Symbol('test'))).toBe(false)
-  })
-
-  it('should return false for BigInt', () => {
-    expect(isNonEmptyString(BigInt(123))).toBe(false)
-  })
-})
 
 describe('isNonEmptyStringOrNumber', () => {
   it('should return true for non-empty strings', () => {
@@ -305,9 +120,10 @@ describe('retrieveText', () => {
 
     expect(retrieveText(value)).toEqual(value)
   })
+
   it('should return #text property even if it has falsy value (except null/undefined)', () => {
     expect(retrieveText({ '#text': '' })).toBe('')
-    expect(retrieveText({ '#text': 0 })).toEqual(0)
+    expect(retrieveText({ '#text': 0 })).toBe(0)
     expect(retrieveText({ '#text': false })).toBe(false)
   })
 
@@ -329,11 +145,13 @@ describe('retrieveText', () => {
 
   it('should work with arrays', () => {
     const array = [1, 2, 3]
+
     expect(retrieveText(array)).toEqual(array)
   })
 
   it('should work with dates', () => {
     const date = new Date()
+
     expect(retrieveText(date)).toEqual(date)
   })
 
@@ -357,7 +175,7 @@ describe('retrieveText', () => {
 
   it('should return primitive values as is', () => {
     expect(retrieveText('string value')).toBe('string value')
-    expect(retrieveText(42)).toEqual(42)
+    expect(retrieveText(42)).toBe(42)
     expect(retrieveText(true)).toBe(true)
     expect(retrieveText(false)).toBe(false)
   })
@@ -503,6 +321,45 @@ describe('retrieveRdfResourceOrText', () => {
         '@rdf:resource': '  https://example.com/license  ',
       }
       const expected = 'https://example.com/license'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should extract value from @resource attribute', () => {
+      const value = {
+        '@resource': 'https://creativecommons.org/licenses/by/4.0/',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should prefer @rdf:resource over @resource when both present', () => {
+      const value = {
+        '@rdf:resource': 'https://creativecommons.org/licenses/by/4.0/',
+        '@resource': 'https://example.com/other-license',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should fall back to @resource when @rdf:resource is empty', () => {
+      const value = {
+        '@rdf:resource': '',
+        '@resource': 'https://creativecommons.org/licenses/by/4.0/',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
+
+      expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
+    })
+
+    it('should prefer @resource over #text when both present', () => {
+      const value = {
+        '@resource': 'https://creativecommons.org/licenses/by/4.0/',
+        '#text': 'https://example.com/other-license',
+      }
+      const expected = 'https://creativecommons.org/licenses/by/4.0/'
 
       expect(retrieveRdfResourceOrText(value, parseString)).toBe(expected)
     })
@@ -671,12 +528,22 @@ describe('trimArray', () => {
     expect(trimArray(value)).toEqual(expected)
   })
 
-  it('should preserve empty arrays', () => {
+  it('should return undefined for empty arrays', () => {
     expect(trimArray([])).toBeUndefined()
   })
 
   it('should handle arrays with only nullish values', () => {
     expect(trimArray([null, undefined, null])).toBeUndefined()
+  })
+
+  it('should return undefined for non-array inputs', () => {
+    expect(trimArray(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(trimArray('not an array')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(trimArray({ 0: 'first', 1: 'second' })).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(trimArray(42)).toBeUndefined()
   })
 
   describe('with parsing function', () => {
@@ -954,24 +821,6 @@ describe('parseString', () => {
     expect(parseString(value)).toBe(expected)
   })
 
-  it('Should handle entities #10', () => {
-    // Decode escaped script tag with entities in non-CDATA content.
-    const value =
-      '&lt;script&gt;function test() { if (x &lt; y &amp;&amp; z &gt; 0) { alert(&quot;Hello!&quot;); } }&lt;/script&gt;'
-    const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
-
-    expect(parseString(value)).toBe(expected)
-  })
-
-  it('Should handle entities #11', () => {
-    // Preserve script tag content inside CDATA sections.
-    const value =
-      '<![CDATA[<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>]]>'
-    const expected = '<script>function test() { if (x < y && z > 0) { alert("Hello!"); } }</script>'
-
-    expect(parseString(value)).toBe(expected)
-  })
-
   it('should preserve HTML entities inside CDATA (content:encoded scenario)', () => {
     const value = '<![CDATA[<p>Use <code>&lt;link rel="alternate"&gt;</code> in your HTML.</p>]]>'
     const expected = '<p>Use <code>&lt;link rel="alternate"&gt;</code> in your HTML.</p>'
@@ -997,18 +846,6 @@ describe('parseString', () => {
     const value = '<![CDATA[content &amp; more'
 
     expect(parseString(value)).toBe('<![CDATA[content & more')
-  })
-
-  it('Should handle empty string in CDATA', () => {
-    const value = '<![CDATA[        ]]>'
-
-    expect(parseString(value)).toBeUndefined()
-  })
-
-  it('Should trim string in CDATA', () => {
-    const value = '<![CDATA[    test    ]]>'
-
-    expect(parseString(value)).toBe('test')
   })
 
   it('should strip XML comments from text', () => {
@@ -1082,7 +919,6 @@ describe('parseString', () => {
   })
 
   describe('XML spec compliance', () => {
-    // XML §4.1: Character and Entity References (outside CDATA)
     describe('entity references outside CDATA (XML §4.1)', () => {
       const cases = [
         { value: '&lt;', expected: '<', name: '&lt; to <' },
@@ -1101,7 +937,6 @@ describe('parseString', () => {
       }
     })
 
-    // Single-decode behavior (prevents double-decoding data corruption)
     describe('single-decode behavior (no double-decoding)', () => {
       const cases = [
         { value: '&amp;lt;', expected: '&lt;', name: '&amp;lt; to &lt; (not <)' },
@@ -1118,7 +953,6 @@ describe('parseString', () => {
       }
     })
 
-    // XML §2.7: CDATA Sections (verbatim passthrough)
     describe('CDATA verbatim passthrough (XML §2.7)', () => {
       const cases = [
         { value: '<![CDATA[&lt;]]>', expected: '&lt;', name: '&lt; inside CDATA' },
@@ -1136,7 +970,6 @@ describe('parseString', () => {
       }
     })
 
-    // Mixed content: outside decoded, inside verbatim
     describe('mixed content (CDATA + regular text)', () => {
       const cases = [
         {
@@ -1168,7 +1001,6 @@ describe('parseString', () => {
       }
     })
 
-    // Real-world feed examples (from feed-parser issue #209)
     describe('real-world feed examples', () => {
       const cases = [
         {
@@ -1176,7 +1008,7 @@ describe('parseString', () => {
             '<![CDATA[<pre class="code-block"><code>&lt;div&gt;\n  &lt;a&gt;1&lt;/a&gt;\n&lt;/div&gt;</code></pre>]]>',
           expected:
             '<pre class="code-block"><code>&lt;div&gt;\n  &lt;a&gt;1&lt;/a&gt;\n&lt;/div&gt;</code></pre>',
-          name: 'CSS-Tricks: code block with escaped HTML inside CDATA',
+          name: 'Tech blog: code block with escaped HTML inside CDATA',
         },
         {
           value:
@@ -1188,7 +1020,7 @@ describe('parseString', () => {
           value:
             '&lt;li&gt;&lt;code&gt;&amp;lt;bluesky-likes&amp;gt;&lt;/code&gt; — displays likes&lt;/li&gt;',
           expected: '<li><code>&lt;bluesky-likes&gt;</code> — displays likes</li>',
-          name: 'Lea Verou: double-escaped custom element',
+          name: 'Personal blog: double-escaped custom element',
         },
         {
           value:
@@ -1206,7 +1038,7 @@ describe('parseString', () => {
         {
           value: 'Learn about &amp;lt;template&amp;gt; and &amp;lt;slot&amp;gt; elements',
           expected: 'Learn about &lt;template&gt; and &lt;slot&gt; elements',
-          name: 'WordPress: double-encoded HTML tags',
+          name: 'CMS blog: double-encoded HTML tags',
         },
         {
           value: '<![CDATA[<p>Use <code>&lt;script type="module"&gt;</code> for ES modules</p>]]>',
@@ -1317,7 +1149,7 @@ describe('parseNumber', () => {
   it('should handle numeric string', () => {
     const value = '36.6'
 
-    expect(parseNumber(value)).toEqual(36.6)
+    expect(parseNumber(value)).toBe(36.6)
   })
 
   it('should handle empty string', () => {
@@ -1335,7 +1167,7 @@ describe('parseNumber', () => {
   it('should return number', () => {
     const value = 420
 
-    expect(parseNumber(value)).toEqual(value)
+    expect(parseNumber(value)).toBe(value)
   })
 
   it('should return boolean', () => {
@@ -1403,6 +1235,11 @@ describe('parseBoolean', () => {
     const value = 'javascript'
 
     expect(parseBoolean(value)).toBeUndefined()
+  })
+
+  it('should return undefined for "yes" and "no" strings', () => {
+    expect(parseBoolean('yes')).toBeUndefined()
+    expect(parseBoolean('no')).toBeUndefined()
   })
 
   it('should return number', () => {
@@ -1621,6 +1458,43 @@ describe('parseDate', () => {
 
     expect(parseDate(value)).toBeUndefined()
   })
+
+  it('should apply custom parseDateFn', () => {
+    const value = '2023-03-15T12:00:00Z'
+    const expected = new Date('2023-03-15T12:00:00Z')
+
+    expect(parseDate(value, (raw) => new Date(raw))).toEqual(expected)
+  })
+
+  it('should apply custom parseDateFn returning number', () => {
+    const value = '2023-03-15T12:00:00Z'
+    const expected = 1678881600000
+
+    expect(parseDate(value, (raw) => new Date(raw).getTime())).toBe(expected)
+  })
+
+  it('should return undefined when parseDateFn is provided but value is empty', () => {
+    const value = ''
+
+    expect(parseDate(value, (raw) => new Date(raw))).toBeUndefined()
+  })
+
+  it('should normalize value before passing to parseDateFn', () => {
+    const value = '  2023-03-15T12:00:00Z  '
+    const expected = new Date('2023-03-15T12:00:00Z')
+
+    expect(parseDate(value, (raw) => new Date(raw))).toEqual(expected)
+  })
+
+  it('should propagate error when parseDateFn throws', () => {
+    const value = 'invalid-date'
+    const parseDateFn = () => {
+      throw new Error('Parse failed')
+    }
+    const throwing = () => parseDate(value, parseDateFn)
+
+    expect(throwing).toThrow('Parse failed')
+  })
 })
 
 describe('generateBoolean', () => {
@@ -1661,13 +1535,13 @@ describe('generateYesNoBoolean', () => {
 
 describe('parseSingular', () => {
   it('should return the first element of an array', () => {
-    expect(parseSingular([1, 2, 3])).toEqual(1)
+    expect(parseSingular([1, 2, 3])).toBe(1)
     expect(parseSingular(['a', 'b', 'c'])).toBe('a')
     expect(parseSingular([{ key: 'value' }, { another: 'object' }])).toEqual({ key: 'value' })
   })
 
   it('should return the value itself when not an array', () => {
-    expect(parseSingular(42)).toEqual(42)
+    expect(parseSingular(42)).toBe(42)
     expect(parseSingular('string')).toBe('string')
     expect(parseSingular(true)).toBe(true)
     expect(parseSingular({ key: 'value' })).toEqual({ key: 'value' })
@@ -1713,7 +1587,7 @@ describe('parseSingularOf', () => {
 
   it('should apply parse function to non-array values', () => {
     expect(parseSingularOf(42, parseString)).toBe('42')
-    expect(parseSingularOf('123', parseNumber)).toEqual(123)
+    expect(parseSingularOf('123', parseNumber)).toBe(123)
     expect(parseSingularOf('true', parseBoolean)).toBe(true)
   })
 
@@ -1743,7 +1617,7 @@ describe('parseSingularOf', () => {
   })
 
   it('should work with custom parse functions', () => {
-    const parseUpperCase: ParseExactUtil<string> = (value) => {
+    const parseUpperCase: ParseUtilExact<string> = (value) => {
       return typeof value === 'string' ? value.toUpperCase() : undefined
     }
 
@@ -1760,7 +1634,7 @@ describe('parseSingularOf', () => {
 
 describe('parseArray', () => {
   it('should handle arrays', () => {
-    const value1 = [] as Array<string>
+    const value1: Array<string> = []
     const value2 = [1, 2, 3]
     const value3 = new Array(5)
 
@@ -1785,7 +1659,7 @@ describe('parseArray', () => {
     expect(parseArray(value2)).toEqual([undefined, undefined, undefined])
   })
 
-  it('should return false for non-sequential or non-zero-indexed objects', () => {
+  it('should return undefined for non-sequential or non-zero-indexed objects', () => {
     const value1 = { 1: 'a', 2: 'b' }
     const value2 = { 0: 'a', 2: 'b' }
     const value3 = { a: 1, b: 2 }
@@ -1797,7 +1671,7 @@ describe('parseArray', () => {
     expect(parseArray(value4)).toBeUndefined()
   })
 
-  it('should return false for primitive types', () => {
+  it('should return undefined for primitive types', () => {
     const value1 = null
     const value2 = undefined
     const value3 = 42
@@ -1815,7 +1689,7 @@ describe('parseArray', () => {
     expect(parseArray(value7)).toBeUndefined()
   })
 
-  it('should return false for other object types', () => {
+  it('should return undefined for other object types', () => {
     const value1 = {}
     const value2 = new Set([1, 2, 3])
     const value3 = new Map()
@@ -1834,7 +1708,7 @@ describe('parseArray', () => {
 })
 
 describe('parseArrayOf', () => {
-  const parser: ParseExactUtil<string> = (value) => {
+  const parser: ParseUtilExact<string> = (value) => {
     if (typeof value === 'number') {
       return value.toString()
     }
@@ -1864,6 +1738,26 @@ describe('parseArrayOf', () => {
     const value = 420
 
     expect(parseArrayOf(value, parser)).toEqual(['420'])
+  })
+
+  it('should limit number of items when limit is provided', () => {
+    const value = ['John', 'Jane', 'Jack']
+    const expected = ['John', 'Jane']
+
+    expect(parseArrayOf(value, parser, 2)).toEqual(expected)
+  })
+
+  it('should return all items when limit exceeds array length', () => {
+    const value = ['John', 'Jane']
+    const expected = ['John', 'Jane']
+
+    expect(parseArrayOf(value, parser, 10)).toEqual(expected)
+  })
+
+  it('should return undefined when limit is 0', () => {
+    const value = ['John', 'Jane', 'Jack']
+
+    expect(parseArrayOf(value, parser, 0)).toBeUndefined()
   })
 
   it('should handle boolean', () => {
@@ -2037,12 +1931,6 @@ describe('parseCsvOf', () => {
     expect(parseCsvOf(value, parseNumber)).toBeUndefined()
   })
 
-  it('should handle empty string', () => {
-    const value = ''
-
-    expect(parseCsvOf(value, parseNumber)).toBeUndefined()
-  })
-
   it('should handle empty keywords (just commas)', () => {
     const value = ',,'
 
@@ -2075,42 +1963,42 @@ describe('generateCsvOf', () => {
     const value = ['podcast', 'technology', 'programming']
     const expected = 'podcast,technology,programming'
 
-    expect(generateCsvOf(value)).toEqual(expected)
+    expect(generateCsvOf(value)).toBe(expected)
   })
 
   it('should generate comma-separated string from numbers', () => {
     const value = [1, 2, 3, 4, 5]
     const expected = '1,2,3,4,5'
 
-    expect(generateCsvOf(value)).toEqual(expected)
+    expect(generateCsvOf(value)).toBe(expected)
   })
 
   it('should handle single item array', () => {
     const value = ['podcast']
     const expected = 'podcast'
 
-    expect(generateCsvOf(value)).toEqual(expected)
+    expect(generateCsvOf(value)).toBe(expected)
   })
 
   it('should handle mixed types', () => {
     const value = [1, 'podcast', true, null]
     const expected = '1,podcast,true'
 
-    expect(generateCsvOf(value)).toEqual(expected)
+    expect(generateCsvOf(value)).toBe(expected)
   })
 
   it('should use generate function when provided', () => {
     const value = ['  podcast  ', '  technology  ', '  programming  ']
     const expected = 'podcast,technology,programming'
 
-    expect(generateCsvOf(value, parseString)).toEqual(expected)
+    expect(generateCsvOf(value, parseString)).toBe(expected)
   })
 
   it('should filter out undefined values with generate function', () => {
     const value = ['1', 'invalid', '2', 'also invalid', '3']
     const expected = '1,2,3'
 
-    expect(generateCsvOf(value, parseNumber)).toEqual(expected)
+    expect(generateCsvOf(value, parseNumber)).toBe(expected)
   })
 
   it('should return undefined for empty array', () => {
@@ -2135,12 +2023,12 @@ describe('generateCsvOf', () => {
     const value = [0, '', false]
     const expected = '0,,false'
 
-    expect(generateCsvOf(value)).toEqual(expected)
+    expect(generateCsvOf(value)).toBe(expected)
   })
 })
 
 describe('generateXmlStylesheet', () => {
-  describe('Required attributes', () => {
+  describe('required attributes', () => {
     it('should generate stylesheet with only required attributes', () => {
       const value = {
         type: 'text/xsl',
@@ -2162,7 +2050,7 @@ describe('generateXmlStylesheet', () => {
     })
   })
 
-  describe('Optional attributes', () => {
+  describe('optional attributes', () => {
     it('should include title when provided', () => {
       const value = {
         type: 'text/xsl',
@@ -2183,6 +2071,17 @@ describe('generateXmlStylesheet', () => {
       }
       const expected =
         '<?xml-stylesheet type="text/css" href="/styles/mobile.css" media="screen and (max-width: 768px)"?>'
+
+      expect(generateXmlStylesheet(value)).toBe(expected)
+    })
+
+    it('should include alternate="yes" when alternate is true', () => {
+      const value = {
+        type: 'text/xsl',
+        href: '/styles/feed.xsl',
+        alternate: true,
+      }
+      const expected = '<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl" alternate="yes"?>'
 
       expect(generateXmlStylesheet(value)).toBe(expected)
     })
@@ -2218,7 +2117,7 @@ describe('generateXmlStylesheet', () => {
     })
   })
 
-  describe('Special characters', () => {
+  describe('special characters', () => {
     it('should handle URLs with query parameters', () => {
       const value = {
         type: 'text/xsl',
@@ -2243,7 +2142,7 @@ describe('generateXmlStylesheet', () => {
     })
   })
 
-  describe('Edge cases', () => {
+  describe('edge cases', () => {
     it('should return undefined when all fields are empty strings', () => {
       const value = {
         type: '',
@@ -2287,28 +2186,28 @@ describe('generateXml', () => {
     const value = 'test content'
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
 
-    expect(generateXml(mockBuilder, value)).toEqual(expected)
+    expect(generateXml(mockBuilder, value)).toBe(expected)
   })
 
   it('should replace single apostrophe entity', () => {
     const value = 'don&apos;t'
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>don\'t</root>'
 
-    expect(generateXml(mockBuilder, value)).toEqual(expected)
+    expect(generateXml(mockBuilder, value)).toBe(expected)
   })
 
   it('should replace multiple apostrophe entities', () => {
     const value = 'don&apos;t worry, it&apos;s fine'
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>don\'t worry, it\'s fine</root>'
 
-    expect(generateXml(mockBuilder, value)).toEqual(expected)
+    expect(generateXml(mockBuilder, value)).toBe(expected)
   })
 
   it('should handle empty value input', () => {
     const value = ''
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root></root>'
 
-    expect(generateXml(mockBuilder, value)).toEqual(expected)
+    expect(generateXml(mockBuilder, value)).toBe(expected)
   })
 
   it('should include single stylesheet when provided', () => {
@@ -2319,7 +2218,7 @@ describe('generateXml', () => {
     const expected =
       '<?xml version="1.0" encoding="utf-8"?>\n<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl"?>\n<root>test content</root>'
 
-    expect(generateXml(mockBuilder, value, options)).toEqual(expected)
+    expect(generateXml(mockBuilder, value, options)).toBe(expected)
   })
 
   it('should include multiple stylesheets when provided', () => {
@@ -2333,7 +2232,7 @@ describe('generateXml', () => {
     const expected =
       '<?xml version="1.0" encoding="utf-8"?>\n<?xml-stylesheet type="text/xsl" href="/styles/feed.xsl"?>\n<?xml-stylesheet type="text/css" href="/styles/feed.css" media="screen"?>\n<root>test content</root>'
 
-    expect(generateXml(mockBuilder, value, options)).toEqual(expected)
+    expect(generateXml(mockBuilder, value, options)).toBe(expected)
   })
 
   it('should generate XML without stylesheets when array is empty', () => {
@@ -2343,7 +2242,7 @@ describe('generateXml', () => {
     }
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
 
-    expect(generateXml(mockBuilder, value, options)).toEqual(expected)
+    expect(generateXml(mockBuilder, value, options)).toBe(expected)
   })
 
   it('should generate XML without stylesheets when stylesheets is undefined', () => {
@@ -2351,14 +2250,14 @@ describe('generateXml', () => {
     const options = {}
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
 
-    expect(generateXml(mockBuilder, value, options)).toEqual(expected)
+    expect(generateXml(mockBuilder, value, options)).toBe(expected)
   })
 
   it('should generate XML without stylesheets when options parameter is undefined', () => {
     const value = 'test content'
     const expected = '<?xml version="1.0" encoding="utf-8"?>\n<root>test content</root>'
 
-    expect(generateXml(mockBuilder, value, undefined)).toEqual(expected)
+    expect(generateXml(mockBuilder, value, undefined)).toBe(expected)
   })
 })
 
@@ -2367,66 +2266,67 @@ describe('generateRfc822Date', () => {
     const value = new Date('2023-03-15T12:00:00Z')
     const expected = 'Wed, 15 Mar 2023 12:00:00 GMT'
 
-    expect(generateRfc822Date(value)).toEqual(expected)
+    expect(generateRfc822Date(value)).toBe(expected)
   })
 
   it('should format valid date string to RFC822 string', () => {
     const value = '2023-03-15T12:00:00Z'
     const expected = 'Wed, 15 Mar 2023 12:00:00 GMT'
 
-    expect(generateRfc822Date(value)).toEqual(expected)
+    expect(generateRfc822Date(value)).toBe(expected)
   })
 
   it('should handle date string with milliseconds', () => {
     const value = '2023-05-17T15:02:07.123Z'
     const expected = 'Wed, 17 May 2023 15:02:07 GMT'
 
-    expect(generateRfc822Date(value)).toEqual(expected)
+    expect(generateRfc822Date(value)).toBe(expected)
   })
 
   it('should handle date string without milliseconds', () => {
     const value = '2023-05-17T15:02:07Z'
     const expected = 'Wed, 17 May 2023 15:02:07 GMT'
 
-    expect(generateRfc822Date(value)).toEqual(expected)
+    expect(generateRfc822Date(value)).toBe(expected)
   })
 
   it('should handle Date object with milliseconds', () => {
     const value = new Date('2023-05-17T15:02:07.123Z')
     const expected = 'Wed, 17 May 2023 15:02:07 GMT'
 
-    expect(generateRfc822Date(value)).toEqual(expected)
+    expect(generateRfc822Date(value)).toBe(expected)
   })
 
   it('should handle timezone conversion to UTC', () => {
     const value = new Date('2023-05-17T15:02:07.000+02:00')
     const expected = 'Wed, 17 May 2023 13:02:07 GMT'
 
-    expect(generateRfc822Date(value)).toEqual(expected)
+    expect(generateRfc822Date(value)).toBe(expected)
   })
 
   it('should handle edge case dates', () => {
     const unixEpoch = new Date('1970-01-01T00:00:00.000Z')
     const expected = 'Thu, 01 Jan 1970 00:00:00 GMT'
 
-    expect(generateRfc822Date(unixEpoch)).toEqual(expected)
+    expect(generateRfc822Date(unixEpoch)).toBe(expected)
   })
 
   it('should handle future dates', () => {
     const futureDate = new Date('2099-12-31T23:59:59.999Z')
     const expected = 'Thu, 31 Dec 2099 23:59:59 GMT'
 
-    expect(generateRfc822Date(futureDate)).toEqual(expected)
+    expect(generateRfc822Date(futureDate)).toBe(expected)
   })
 
   it('should return original string for invalid date string', () => {
-    expect(generateRfc822Date('not a date')).toEqual('not a date')
-    expect(generateRfc822Date('invalid date string')).toEqual('invalid date string')
-    expect(generateRfc822Date('2023-13-45')).toEqual('2023-13-45')
+    expect(generateRfc822Date('not a date')).toBe('not a date')
+    expect(generateRfc822Date('invalid date string')).toBe('invalid date string')
+    expect(generateRfc822Date('2023-13-45')).toBe('2023-13-45')
   })
 
   it('should return undefined for invalid Date object', () => {
     const invalidDate = new Date('invalid')
+
     expect(generateRfc822Date(invalidDate)).toBeUndefined()
   })
 
@@ -2444,66 +2344,67 @@ describe('generateRfc3339Date', () => {
     const value = new Date('2023-03-15T12:00:00Z')
     const expected = '2023-03-15T12:00:00.000Z'
 
-    expect(generateRfc3339Date(value)).toEqual(expected)
+    expect(generateRfc3339Date(value)).toBe(expected)
   })
 
   it('should format valid date string to RFC3339 string', () => {
     const value = '2023-03-15T12:00:00Z'
     const expected = '2023-03-15T12:00:00.000Z'
 
-    expect(generateRfc3339Date(value)).toEqual(expected)
+    expect(generateRfc3339Date(value)).toBe(expected)
   })
 
   it('should handle date string with milliseconds', () => {
     const value = '2023-05-17T15:02:07.123Z'
     const expected = '2023-05-17T15:02:07.123Z'
 
-    expect(generateRfc3339Date(value)).toEqual(expected)
+    expect(generateRfc3339Date(value)).toBe(expected)
   })
 
   it('should handle date string without milliseconds', () => {
     const value = '2023-05-17T15:02:07Z'
     const expected = '2023-05-17T15:02:07.000Z'
 
-    expect(generateRfc3339Date(value)).toEqual(expected)
+    expect(generateRfc3339Date(value)).toBe(expected)
   })
 
   it('should handle Date object with milliseconds', () => {
     const value = new Date('2023-05-17T15:02:07.123Z')
     const expected = '2023-05-17T15:02:07.123Z'
 
-    expect(generateRfc3339Date(value)).toEqual(expected)
+    expect(generateRfc3339Date(value)).toBe(expected)
   })
 
   it('should handle timezone conversion to UTC', () => {
     const value = new Date('2023-05-17T15:02:07.000+02:00')
     const expected = '2023-05-17T13:02:07.000Z'
 
-    expect(generateRfc3339Date(value)).toEqual(expected)
+    expect(generateRfc3339Date(value)).toBe(expected)
   })
 
   it('should handle edge case dates', () => {
     const unixEpoch = new Date('1970-01-01T00:00:00.000Z')
     const expected = '1970-01-01T00:00:00.000Z'
 
-    expect(generateRfc3339Date(unixEpoch)).toEqual(expected)
+    expect(generateRfc3339Date(unixEpoch)).toBe(expected)
   })
 
   it('should handle future dates', () => {
     const futureDate = new Date('2099-12-31T23:59:59.999Z')
     const expected = '2099-12-31T23:59:59.999Z'
 
-    expect(generateRfc3339Date(futureDate)).toEqual(expected)
+    expect(generateRfc3339Date(futureDate)).toBe(expected)
   })
 
   it('should return original string for invalid date string', () => {
-    expect(generateRfc3339Date('not a date')).toEqual('not a date')
-    expect(generateRfc3339Date('invalid date string')).toEqual('invalid date string')
-    expect(generateRfc3339Date('2023-13-45')).toEqual('2023-13-45')
+    expect(generateRfc3339Date('not a date')).toBe('not a date')
+    expect(generateRfc3339Date('invalid date string')).toBe('invalid date string')
+    expect(generateRfc3339Date('2023-13-45')).toBe('2023-13-45')
   })
 
   it('should return undefined for invalid Date object', () => {
     const invalidDate = new Date('invalid')
+
     expect(generateRfc3339Date(invalidDate)).toBeUndefined()
   })
 
@@ -2888,6 +2789,16 @@ describe('detectNamespaces', () => {
     expect(detectNamespaces(value, true)).toEqual(expectedRecursive)
   })
 
+  it('should return empty set for non-object input', () => {
+    const expected = new Set<string>()
+
+    expect(detectNamespaces(null)).toEqual(expected)
+    expect(detectNamespaces(undefined)).toEqual(expected)
+    expect(detectNamespaces('atom:link')).toEqual(expected)
+    expect(detectNamespaces(42)).toEqual(expected)
+    expect(detectNamespaces(true)).toEqual(expected)
+  })
+
   it('should respect seenKeys optimization in recursive mode', () => {
     const value = {
       'duplicate:key': 'value1',
@@ -3122,9 +3033,9 @@ describe('generateCdataString', () => {
     const expected2 = 'Text with numbers 123 and spaces'
     const expected3 = 'Text with special chars !@#$%^*()_+-='
 
-    expect(generateCdataString(value1)).toEqual(expected1)
-    expect(generateCdataString(value2)).toEqual(expected2)
-    expect(generateCdataString(value3)).toEqual(expected3)
+    expect(generateCdataString(value1)).toBe(expected1)
+    expect(generateCdataString(value2)).toBe(expected2)
+    expect(generateCdataString(value3)).toBe(expected3)
   })
 
   it('should handle empty string', () => {
@@ -3144,6 +3055,57 @@ describe('generateCdataString', () => {
   })
 })
 
+describe('generateTextOrCdataString', () => {
+  it('should wrap simple text in #text object', () => {
+    const value = 'Simple text content'
+    const expected = { '#text': 'Simple text content' }
+
+    expect(generateTextOrCdataString(value)).toEqual(expected)
+  })
+
+  it('should trim simple text before wrapping in #text object', () => {
+    const value = '  Text with spaces  '
+    const expected = { '#text': 'Text with spaces' }
+
+    expect(generateTextOrCdataString(value)).toEqual(expected)
+  })
+
+  it('should wrap HTML content in #cdata object', () => {
+    const value = '<p>HTML content</p>'
+    const expected = { '#cdata': '<p>HTML content</p>' }
+
+    expect(generateTextOrCdataString(value)).toEqual(expected)
+  })
+
+  it('should wrap content with ampersands in #cdata object', () => {
+    const value = 'Text with & ampersand'
+    const expected = { '#cdata': 'Text with & ampersand' }
+
+    expect(generateTextOrCdataString(value)).toEqual(expected)
+  })
+
+  it('should handle empty string', () => {
+    const value = ''
+
+    expect(generateTextOrCdataString(value)).toBeUndefined()
+  })
+
+  it('should handle string with only whitespace', () => {
+    const value = '   '
+
+    expect(generateTextOrCdataString(value)).toBeUndefined()
+  })
+
+  it('should handle non-string inputs', () => {
+    expect(generateTextOrCdataString(undefined)).toBeUndefined()
+  })
+
+  it.todo('should handle text containing a CDATA end marker', () => {
+    // A value containing ']]>' is wrapped verbatim in #cdata, which produces invalid XML.
+    // Decide whether the marker should be split across multiple CDATA sections and pin the output.
+  })
+})
+
 describe('generatePlainString', () => {
   it('should return trimmed string for simple text', () => {
     const value1 = 'Simple text content'
@@ -3153,9 +3115,9 @@ describe('generatePlainString', () => {
     const expected2 = 'Text with spaces'
     const expected3 = 'Text with special chars !@#$%^*()_+-='
 
-    expect(generatePlainString(value1)).toEqual(expected1)
-    expect(generatePlainString(value2)).toEqual(expected2)
-    expect(generatePlainString(value3)).toEqual(expected3)
+    expect(generatePlainString(value1)).toBe(expected1)
+    expect(generatePlainString(value2)).toBe(expected2)
+    expect(generatePlainString(value3)).toBe(expected3)
   })
 
   it('should return string even if it contains XML characters', () => {
@@ -3166,9 +3128,9 @@ describe('generatePlainString', () => {
     const expected2 = 'Text with & ampersand'
     const expected3 = 'Content with > greater than'
 
-    expect(generatePlainString(value1)).toEqual(expected1)
-    expect(generatePlainString(value2)).toEqual(expected2)
-    expect(generatePlainString(value3)).toEqual(expected3)
+    expect(generatePlainString(value1)).toBe(expected1)
+    expect(generatePlainString(value2)).toBe(expected2)
+    expect(generatePlainString(value3)).toBe(expected3)
   })
 
   it('should handle empty string', () => {
@@ -4237,193 +4199,6 @@ describe('createNamespaceNormalizator', () => {
   })
 })
 
-describe('generateArrayOrSingular', () => {
-  it('should prioritize plural values over singular values', () => {
-    const generator = (value: string) => value.toUpperCase()
-    const result = generateArrayOrSingular(['a', 'b', 'c'], 'x', generator)
-
-    expect(result).toEqual(['A', 'B', 'C'])
-  })
-
-  it('should use singular value when plural is undefined', () => {
-    const generator = (value: string) => value.toUpperCase()
-    const result = generateArrayOrSingular(undefined, 'x', generator)
-
-    expect(result).toEqual('X')
-  })
-
-  it('should return undefined when both values are undefined', () => {
-    const generator = (value: string) => value.toUpperCase()
-    const result = generateArrayOrSingular(undefined, undefined, generator)
-
-    expect(result).toBeUndefined()
-  })
-
-  it('should filter out undefined results from array', () => {
-    const generator = (value: string | undefined) => (value === 'skip' ? undefined : value)
-    const result = generateArrayOrSingular(['a', 'skip', 'b'], 'x', generator)
-
-    expect(result).toEqual(['a', 'b'])
-  })
-
-  it('should return undefined when all array items generate undefined', () => {
-    const generator = () => undefined
-    const result = generateArrayOrSingular(['a', 'b'], 'x', generator)
-
-    expect(result).toBeUndefined()
-  })
-
-  it('should work with generateCdataString', () => {
-    const result = generateArrayOrSingular(
-      ['<p>HTML</p>', 'Plain text'],
-      undefined,
-      generateCdataString,
-    )
-
-    expect(result).toEqual([{ '#cdata': '<p>HTML</p>' }, 'Plain text'])
-  })
-
-  it('should work with generatePlainString', () => {
-    const result = generateArrayOrSingular(['  value1  ', 'value2'], undefined, generatePlainString)
-
-    expect(result).toEqual(['value1', 'value2'])
-  })
-
-  it('should work with generateNumber', () => {
-    const result = generateArrayOrSingular([42, 100], undefined, generateNumber)
-
-    expect(result).toEqual([42, 100])
-  })
-
-  it('should handle empty plural array', () => {
-    const generator = (value: string) => value.toUpperCase()
-    const result = generateArrayOrSingular([], 'x', generator)
-
-    expect(result).toBeUndefined()
-  })
-
-  it('should handle singular value that generates undefined', () => {
-    const generator = (value: string) => (value === 'skip' ? undefined : value)
-    const result = generateArrayOrSingular(undefined, 'skip', generator)
-
-    expect(result).toBeUndefined()
-  })
-
-  it('should preserve order of array elements', () => {
-    const generator = (value: number) => value * 2
-    const result = generateArrayOrSingular([1, 2, 3, 4, 5], 99, generator)
-
-    expect(result).toEqual([2, 4, 6, 8, 10])
-  })
-
-  it('should work with complex object transformations', () => {
-    const generator = (value: string) => ({ name: value, length: value.length })
-    const result = generateArrayOrSingular(['foo', 'bar'], 'baz', generator)
-
-    expect(result).toEqual([
-      { name: 'foo', length: 3 },
-      { name: 'bar', length: 3 },
-    ])
-  })
-
-  it('should ignore singular when plural is empty array', () => {
-    const generator = (value: string) => value.toUpperCase()
-    const result = generateArrayOrSingular([], 'x', generator)
-
-    expect(result).toBeUndefined()
-  })
-})
-
-describe('generateSingularOrArray', () => {
-  it('should prioritize singular value over plural values', () => {
-    const generator = (value: string) => value.toUpperCase()
-    const result = generateSingularOrArray('x', ['a', 'b', 'c'], generator)
-
-    expect(result).toEqual('X')
-  })
-
-  it('should use plural values when singular is undefined', () => {
-    const generator = (value: string) => value.toUpperCase()
-    const result = generateSingularOrArray(undefined, ['a', 'b', 'c'], generator)
-
-    expect(result).toEqual(['A', 'B', 'C'])
-  })
-
-  it('should return undefined when both values are undefined', () => {
-    const generator = (value: string) => value.toUpperCase()
-    const result = generateSingularOrArray(undefined, undefined, generator)
-
-    expect(result).toBeUndefined()
-  })
-
-  it('should filter out undefined results from array', () => {
-    const generator = (value: string | undefined) => (value === 'skip' ? undefined : value)
-    const result = generateSingularOrArray(undefined, ['a', 'skip', 'b'], generator)
-
-    expect(result).toEqual(['a', 'b'])
-  })
-
-  it('should return undefined when all array items generate undefined', () => {
-    const generator = () => undefined
-    const result = generateSingularOrArray(undefined, ['a', 'b'], generator)
-
-    expect(result).toBeUndefined()
-  })
-
-  it('should work with generateCdataString', () => {
-    const result = generateSingularOrArray('<p>HTML</p>', undefined, generateCdataString)
-
-    expect(result).toEqual({ '#cdata': '<p>HTML</p>' })
-  })
-
-  it('should work with generatePlainString', () => {
-    const result = generateSingularOrArray('  value  ', undefined, generatePlainString)
-
-    expect(result).toEqual('value')
-  })
-
-  it('should work with generateNumber', () => {
-    const result = generateSingularOrArray(42, undefined, generateNumber)
-
-    expect(result).toEqual(42)
-  })
-
-  it('should handle empty plural array', () => {
-    const generator = (value: string) => value.toUpperCase()
-    const result = generateSingularOrArray(undefined, [], generator)
-
-    expect(result).toBeUndefined()
-  })
-
-  it('should handle singular value that generates undefined', () => {
-    const generator = (value: string) => (value === 'skip' ? undefined : value)
-    const result = generateSingularOrArray('skip', ['a', 'b'], generator)
-
-    expect(result).toBeUndefined()
-  })
-
-  it('should preserve order of array elements when using plural', () => {
-    const generator = (value: number) => value * 2
-    const result = generateSingularOrArray(undefined, [1, 2, 3, 4, 5], generator)
-
-    expect(result).toEqual([2, 4, 6, 8, 10])
-  })
-
-  it('should work with complex object transformations', () => {
-    const generator = (value: string) => ({ name: value, length: value.length })
-    const result = generateSingularOrArray('foo', undefined, generator)
-
-    expect(result).toEqual({ name: 'foo', length: 3 })
-  })
-
-  it('should ignore plural when singular is defined', () => {
-    const generator = (value: string) => value.toUpperCase()
-    const result = generateSingularOrArray('x', ['a', 'b', 'c'], generator)
-
-    expect(result).toEqual('X')
-  })
-})
-
 describe('parseJsonObject', () => {
   it('should return object unchanged when input is object', () => {
     const value = { title: 'Test', count: 42 }
@@ -4481,6 +4256,13 @@ describe('parseJsonObject', () => {
     const value = 'not json'
 
     expect(parseJsonObject(value)).toBeUndefined()
+  })
+
+  it('should parse empty JSON object string', () => {
+    const value = '{}'
+    const expected = {}
+
+    expect(parseJsonObject(value)).toEqual(expected)
   })
 
   it('should return undefined for malformed JSON', () => {

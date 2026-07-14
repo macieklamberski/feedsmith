@@ -61,7 +61,7 @@ describe('generateItem', () => {
     const value = {
       id: '1',
       url: 'https://example.com/item/1',
-      external_url: 'https://external.com/item/1',
+      external_url: 'https://example.net/item/1',
       title: 'Test Item',
       content_html: '<p>HTML content</p>',
       content_text: 'Plain text content',
@@ -78,7 +78,7 @@ describe('generateItem', () => {
     const expected = {
       id: '1',
       url: 'https://example.com/item/1',
-      external_url: 'https://external.com/item/1',
+      external_url: 'https://example.net/item/1',
       title: 'Test Item',
       content_html: '<p>HTML content</p>',
       content_text: 'Plain text content',
@@ -215,5 +215,15 @@ describe('generateFeed', () => {
     }
 
     expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should handle non-object inputs', () => {
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateFeed('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateFeed(123)).toBeUndefined()
+    expect(generateFeed(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateFeed(null)).toBeUndefined()
   })
 })

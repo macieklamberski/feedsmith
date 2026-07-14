@@ -1,6 +1,6 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import { isPlainObject } from 'trousse'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseBoolean,
   parseSingularOf,
@@ -10,8 +10,8 @@ import {
 } from '../../../common/utils.js'
 import type { SourceNs } from '../common/types.js'
 
-export const parseAccount: ParsePartialUtil<SourceNs.Account> = (value) => {
-  if (!isObject(value)) {
+export const parseAccount: ParseUtilPartial<SourceNs.Account> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -23,8 +23,8 @@ export const parseAccount: ParsePartialUtil<SourceNs.Account> = (value) => {
   return trimObject(account)
 }
 
-export const parseLikes: ParsePartialUtil<SourceNs.Likes> = (value) => {
-  if (!isObject(value)) {
+export const parseLikes: ParseUtilPartial<SourceNs.Likes> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -35,8 +35,8 @@ export const parseLikes: ParsePartialUtil<SourceNs.Likes> = (value) => {
   return trimObject(likes)
 }
 
-export const parseArchive: ParsePartialUtil<SourceNs.Archive> = (value) => {
-  if (!isObject(value)) {
+export const parseArchive: ParseUtilPartial<SourceNs.Archive> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -54,8 +54,8 @@ export const parseArchive: ParsePartialUtil<SourceNs.Archive> = (value) => {
   return trimObject(archive)
 }
 
-export const parseSubscriptionList: ParsePartialUtil<SourceNs.SubscriptionList> = (value) => {
-  if (!isObject(value)) {
+export const parseSubscriptionList: ParseUtilPartial<SourceNs.SubscriptionList> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -67,7 +67,7 @@ export const parseSubscriptionList: ParsePartialUtil<SourceNs.SubscriptionList> 
   return trimObject(subscriptionList)
 }
 
-export const parseInReplyTo: ParsePartialUtil<SourceNs.InReplyTo> = (value) => {
+export const parseInReplyTo: ParseUtilPartial<SourceNs.InReplyTo> = (value) => {
   const inReplyTo = {
     value: parseString(retrieveText(value)),
     isPermaLink: parseBoolean(value?.['@ispermalink']),
@@ -76,8 +76,8 @@ export const parseInReplyTo: ParsePartialUtil<SourceNs.InReplyTo> = (value) => {
   return trimObject(inReplyTo)
 }
 
-export const retrieveFeed: ParsePartialUtil<SourceNs.Feed> = (value) => {
-  if (!isObject(value)) {
+export const retrieveFeed: ParseUtilPartial<SourceNs.Feed> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -99,8 +99,8 @@ export const retrieveFeed: ParsePartialUtil<SourceNs.Feed> = (value) => {
   return trimObject(feed)
 }
 
-export const retrieveItem: ParsePartialUtil<SourceNs.Item> = (value) => {
-  if (!isObject(value)) {
+export const retrieveItem: ParseUtilPartial<SourceNs.Item> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 

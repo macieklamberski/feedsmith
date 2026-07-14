@@ -57,6 +57,21 @@ describe('parseOutline', () => {
     expect(parseOutline(value)).toEqual(expected)
   })
 
+  it('should handle created and category attributes', () => {
+    const value = {
+      '@text': 'Outline with date and category',
+      '@created': 'Mon, 15 Mar 2023 12:00:00 GMT',
+      '@category': '/Technology/Feeds',
+    }
+    const expected = {
+      text: 'Outline with date and category',
+      created: 'Mon, 15 Mar 2023 12:00:00 GMT',
+      category: '/Technology/Feeds',
+    }
+
+    expect(parseOutline(value)).toEqual(expected)
+  })
+
   it('should handle coercible values', () => {
     const value = {
       '@text': 123,
@@ -150,6 +165,12 @@ describe('parseOutline', () => {
     expect(parseOutline(null)).toBeUndefined()
   })
 
+  it.todo('should handle whitespace-only outline text', () => {
+    // '@text': '   ' parses to undefined, so the text key is dropped while other attributes
+    // are kept.
+    // Pin whether an outline without usable text should still be returned.
+  })
+
   describe('custom attributes', () => {
     it('should extract specified custom attributes', () => {
       const value = {
@@ -163,16 +184,16 @@ describe('parseOutline', () => {
       const options = {
         extraOutlineAttributes: ['customField1', 'customField2', 'rating'],
       }
-      const result = parseOutline(value, options)
-
-      expect(result).toEqual({
+      const expected = {
         text: 'Feed with custom attrs',
         type: 'rss',
         xmlUrl: 'https://example.com/feed.xml',
         customField1: 'value1',
         customField2: 'value2',
         rating: '5',
-      })
+      }
+
+      expect(parseOutline(value, options)).toEqual(expected)
     })
 
     it('should only extract attributes listed in options', () => {
@@ -185,13 +206,13 @@ describe('parseOutline', () => {
       const options = {
         extraOutlineAttributes: ['customField1', 'customField3'],
       }
-      const result = parseOutline(value, options)
-
-      expect(result).toEqual({
+      const expected = {
         text: 'Selective extraction',
         customField1: 'value1',
         customField3: 'value3',
-      })
+      }
+
+      expect(parseOutline(value, options)).toEqual(expected)
     })
 
     it('should handle nested outlines with custom attributes', () => {
@@ -212,9 +233,7 @@ describe('parseOutline', () => {
       const options = {
         extraOutlineAttributes: ['customParent', 'customChild'],
       }
-      const result = parseOutline(value, options)
-
-      expect(result).toEqual({
+      const expected = {
         text: 'Parent',
         customParent: 'parentValue',
         outlines: [
@@ -227,7 +246,9 @@ describe('parseOutline', () => {
             customChild: 'childValue2',
           },
         ],
-      })
+      }
+
+      expect(parseOutline(value, options)).toEqual(expected)
     })
 
     it('should not add custom properties when no custom attributes found', () => {
@@ -238,12 +259,12 @@ describe('parseOutline', () => {
       const options = {
         extraOutlineAttributes: ['nonExistent'],
       }
-      const result = parseOutline(value, options)
-
-      expect(result).toEqual({
+      const expected = {
         text: 'No custom attrs',
         type: 'rss',
-      })
+      }
+
+      expect(parseOutline(value, options)).toEqual(expected)
     })
 
     it('should handle case-insensitive attribute matching', () => {
@@ -255,13 +276,13 @@ describe('parseOutline', () => {
       const options = {
         extraOutlineAttributes: ['customField', 'anotherField'],
       }
-      const result = parseOutline(value, options)
-
-      expect(result).toEqual({
+      const expected = {
         text: 'Test',
         customField: 'value1',
         anotherField: 'value2',
-      })
+      }
+
+      expect(parseOutline(value, options)).toEqual(expected)
     })
   })
 })
@@ -464,7 +485,7 @@ describe('parseBody', () => {
   })
 
   describe('with maxItems option', () => {
-    const commonValue = {
+    const value = {
       outline: [
         {
           '@text': 'Outline 1',
@@ -495,11 +516,11 @@ describe('parseBody', () => {
         ],
       }
 
-      expect(parseBody(commonValue, { maxItems: 2 })).toEqual(expected)
+      expect(parseBody(value, { maxItems: 2 })).toEqual(expected)
     })
 
     it('should skip all outlines when maxItems is 0', () => {
-      expect(parseBody(commonValue, { maxItems: 0 })).toBeUndefined()
+      expect(parseBody(value, { maxItems: 0 })).toBeUndefined()
     })
 
     it('should return all outlines when maxItems is undefined', () => {
@@ -520,7 +541,7 @@ describe('parseBody', () => {
         ],
       }
 
-      expect(parseBody(commonValue, { maxItems: undefined })).toEqual(expected)
+      expect(parseBody(value, { maxItems: undefined })).toEqual(expected)
     })
   })
 })

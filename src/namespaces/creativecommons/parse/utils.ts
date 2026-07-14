@@ -1,15 +1,10 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
-import {
-  isObject,
-  parseArrayOf,
-  parseString,
-  retrieveText,
-  trimObject,
-} from '../../../common/utils.js'
+import { isPlainObject } from 'trousse'
+import type { ParseUtilPartial } from '../../../common/types.js'
+import { parseArrayOf, parseString, retrieveText, trimObject } from '../../../common/utils.js'
 import type { CreativeCommonsNs } from '../common/types.js'
 
-export const retrieveItemOrFeed: ParsePartialUtil<CreativeCommonsNs.ItemOrFeed> = (value) => {
-  if (!isObject(value)) {
+export const retrieveItemOrFeed: ParseUtilPartial<CreativeCommonsNs.ItemOrFeed> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 

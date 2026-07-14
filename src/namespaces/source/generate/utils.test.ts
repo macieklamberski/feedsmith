@@ -36,7 +36,6 @@ describe('generateAccount', () => {
     const value = {
       service: 'twitter',
     }
-
     const expected = {
       '@service': 'twitter',
     }
@@ -65,21 +64,9 @@ describe('generateLikes', () => {
     expect(generateLikes(value)).toEqual(expected)
   })
 
-  it('should generate likes with only server', () => {
-    const value = {
-      server: 'http://likes.example.com/',
-    }
-    const expected = {
-      '@server': 'http://likes.example.com/',
-    }
-
-    expect(generateLikes(value)).toEqual(expected)
-  })
-
   it('should return undefined when server is missing', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateLikes(value)).toBeUndefined()
   })
 })
@@ -121,7 +108,6 @@ describe('generateArchive', () => {
       endDay: '2023-12-31',
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateArchive(value)).toBeUndefined()
   })
 
@@ -131,7 +117,6 @@ describe('generateArchive', () => {
       endDay: '2023-12-31',
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateArchive(value)).toBeUndefined()
   })
 })
@@ -166,7 +151,6 @@ describe('generateSubscriptionList', () => {
       value: 'follows',
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateSubscriptionList(value)).toBeUndefined()
   })
 })
@@ -214,7 +198,6 @@ describe('generateInReplyTo', () => {
       isPermaLink: false,
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateInReplyTo(value)).toBeUndefined()
   })
 

@@ -1,16 +1,16 @@
+import { isPlainObject } from 'trousse'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generateNumber,
   generateRfc3339Date,
-  isObject,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
 import type { PrismNs } from '../common/types.js'
 
 export const generateFeed: GenerateUtil<PrismNs.Feed<DateLike>> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 
@@ -98,7 +98,7 @@ export const generateFeed: GenerateUtil<PrismNs.Feed<DateLike>> = (feed) => {
 }
 
 export const generateItem: GenerateUtil<PrismNs.Item<DateLike>> = (item) => {
-  if (!isObject(item)) {
+  if (!isPlainObject(item)) {
     return
   }
 
