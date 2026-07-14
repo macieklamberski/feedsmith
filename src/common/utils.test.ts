@@ -5,7 +5,6 @@ import type { ParseUtilExact } from './types.js'
 import {
   createNamespaceNormalizator,
   detectNamespaces,
-  expandStopNodes,
   generateBoolean,
   generateCdataString,
   generateCsvOf,
@@ -4284,63 +4283,5 @@ describe('parseJsonObject', () => {
     expect(parseJsonObject(null)).toBeUndefined()
     expect(parseJsonObject(undefined)).toBeUndefined()
     expect(parseJsonObject([1, 2, 3])).toBeUndefined()
-  })
-})
-
-describe('expandStopNodes', () => {
-  it('should expand wildcard stop nodes for each feed container path', () => {
-    const value = ['*.dc:creator']
-    const expected = ['rss.channel.dc:creator', 'rss.channel.item.dc:creator']
-
-    expect(expandStopNodes(value, ['rss.channel', 'rss.channel.item'])).toEqual(expected)
-  })
-
-  it('should expand stop nodes through namespace containers with the same prefix', () => {
-    const value = ['*.media:title']
-    const expected = [
-      'rss.channel.item.media:title',
-      'rss.channel.item.media:group.media:title',
-      'rss.channel.item.media:content.media:title',
-      'rss.channel.item.media:group.media:content.media:title',
-      'rss.channel.item.media:embed.media:title',
-    ]
-
-    expect(expandStopNodes(value, ['rss.channel.item'])).toEqual(expected)
-  })
-
-  it('should not cross namespace containers with a different prefix', () => {
-    const value = ['*.podcast:transcript']
-    const expected = [
-      'rss.channel.item.podcast:transcript',
-      'rss.channel.item.podcast:liveitem.podcast:transcript',
-    ]
-
-    expect(expandStopNodes(value, ['rss.channel.item'])).toEqual(expected)
-  })
-
-  it('should deduplicate repeated stop nodes', () => {
-    const value = ['*.dc:creator', '*.dc:creator']
-    const expected = ['rss.channel.dc:creator']
-
-    expect(expandStopNodes(value, ['rss.channel'])).toEqual(expected)
-  })
-
-  it('should return empty array for empty stop nodes', () => {
-    const value: Array<string> = []
-    const expected: Array<string> = []
-
-    expect(expandStopNodes(value, ['rss.channel'])).toEqual(expected)
-  })
-
-  it('should return empty array for empty feed container paths', () => {
-    const value = ['*.dc:creator']
-    const expected: Array<string> = []
-
-    expect(expandStopNodes(value, [])).toEqual(expected)
-  })
-
-  it.todo('should handle stop nodes without the *. wildcard prefix', () => {
-    // expandStopNodes slices the first two characters assuming a '*.' prefix.
-    // Pin the behavior for stop nodes given as explicit paths like 'rss.channel.dc:creator'.
   })
 })
