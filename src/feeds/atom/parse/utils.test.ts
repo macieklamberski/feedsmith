@@ -15,7 +15,9 @@ import {
   retrievePersonUri,
   retrievePublished,
   retrieveSubtitle,
+  retrieveTypedText,
   retrieveUpdated,
+  unwrapXhtmlDiv,
 } from './utils.js'
 
 describe('createNamespaceGetter', () => {
@@ -114,6 +116,124 @@ describe('createNamespaceGetter', () => {
   })
 })
 
+describe('unwrapXhtmlDiv', () => {
+  it('should unwrap the wrapping div', () => {
+    const value = '<div><p>Rich content</p></div>'
+    const expected = '<p>Rich content</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should unwrap a div with attributes', () => {
+    const value = '<div xmlns="http://www.w3.org/1999/xhtml"><p>Rich content</p></div>'
+    const expected = '<p>Rich content</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should unwrap a prefixed div and strip the prefix from descendant tags', () => {
+    const value =
+      '<xhtml:div xmlns:xhtml="http://www.w3.org/1999/xhtml"><xhtml:p>Text</xhtml:p></xhtml:div>'
+    const expected = '<p>Text</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should handle surrounding whitespace', () => {
+    const value = '\n  <div>\n    <p>Text</p>\n  </div>\n'
+    const expected = '\n    <p>Text</p>\n  '
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should keep inner divs intact', () => {
+    const value = '<div><div>Inner</div></div>'
+    const expected = '<div>Inner</div>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should return undefined for a self-closing div', () => {
+    expect(unwrapXhtmlDiv('<xhtml:div/>')).toBeUndefined()
+    expect(unwrapXhtmlDiv('<div class="empty" />')).toBeUndefined()
+  })
+
+  it('should return value unchanged when there is no div wrapper', () => {
+    const value = '<p>Rich content</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should return value unchanged when the wrapper is unterminated', () => {
+    const value = '<div><p>Text</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should return non-string values unchanged', () => {
+    expect(unwrapXhtmlDiv(undefined)).toBeUndefined()
+    expect(unwrapXhtmlDiv(123)).toBe(123)
+  })
+})
+
+describe('retrieveTypedText', () => {
+  it('should unwrap the div wrapper when the type is xhtml', () => {
+    const value = { '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>Text</p></div>' }
+    const expected = '<p>Text</p>'
+
+    expect(retrieveTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should strip the namespace prefix when the type is xhtml', () => {
+    const value = {
+      '#text':
+        '<xhtml:div xmlns:xhtml="http://www.w3.org/1999/xhtml"><xhtml:p>Text</xhtml:p></xhtml:div>',
+    }
+    const expected = '<p>Text</p>'
+
+    expect(retrieveTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should return undefined when the xhtml wrapper is self-closing', () => {
+    const value = { '#text': '<xhtml:div/>' }
+
+    expect(retrieveTypedText(value, 'xhtml')).toBeUndefined()
+  })
+
+  it('should return the value unchanged when an xhtml construct has no wrapper', () => {
+    const value = { '#text': '<p>Text</p>' }
+    const expected = '<p>Text</p>'
+
+    expect(retrieveTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should leave a div-wrapped value untouched when the type is html', () => {
+    const value = { '#text': '<div><p>Text</p></div>' }
+    const expected = '<div><p>Text</p></div>'
+
+    expect(retrieveTypedText(value, 'html')).toBe(expected)
+  })
+
+  it('should leave a div-wrapped value untouched when the type is absent', () => {
+    const value = { '#text': '<div><p>Text</p></div>' }
+    const expected = '<div><p>Text</p></div>'
+
+    expect(retrieveTypedText(value, undefined)).toBe(expected)
+  })
+
+  it('should retrieve the text of a bare string value', () => {
+    const value = 'Plain text'
+    const expected = 'Plain text'
+
+    expect(retrieveTypedText(value, 'text')).toBe(expected)
+  })
+
+  it('should return non-string values unchanged', () => {
+    expect(retrieveTypedText({ '#text': 123 }, 'xhtml')).toBe(123)
+    expect(retrieveTypedText(undefined, 'xhtml')).toBeUndefined()
+  })
+})
+
 describe('parseText', () => {
   it('should parse simple string value', () => {
     const value = 'Simple text'
@@ -136,11 +256,20 @@ describe('parseText', () => {
     expect(parseText(value)).toEqual(expected)
   })
 
-  it('should handle xhtml type', () => {
-    const value = { '#text': '<p>XHTML content</p>', '@type': 'xhtml' }
-    const expected = { value: '<p>XHTML content</p>', type: 'xhtml' }
+  it('should unwrap the div wrapper of xhtml type', () => {
+    const value = {
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>Rich content</p></div>',
+      '@type': 'xhtml',
+    }
+    const expected = { value: '<p>Rich content</p>', type: 'xhtml' }
 
     expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should return undefined for xhtml type with an empty div wrapper', () => {
+    const value = { '#text': '<xhtml:div/>', '@type': 'xhtml' }
+
+    expect(parseText(value)).toBeUndefined()
   })
 
   it('should return undefined for empty string', () => {
@@ -228,6 +357,15 @@ describe('parseContent', () => {
     expect(parseContent(value)).toEqual(expected)
   })
 
+  // Unlike parseText, which drops the whole construct when nothing is left, parseContent
+  // keeps the remaining attributes, so an empty wrapper yields a content without a value.
+  it('should keep the type but drop the value for a self-closing div wrapper', () => {
+    const value = { '#text': '<xhtml:div/>', '@type': 'xhtml' }
+    const expected = { type: 'xhtml' }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
   it('should parse content with only src attribute', () => {
     const value = {
       '@type': 'video/mp4',
@@ -257,7 +395,7 @@ describe('parseContent', () => {
       '@xml:lang': 'en-US',
     }
     const expected = {
-      value: '<div>XHTML content</div>',
+      value: 'XHTML content',
       type: 'xhtml',
       xml: {
         base: 'http://example.org/entry/1',
