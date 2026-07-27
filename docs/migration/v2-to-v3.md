@@ -256,6 +256,41 @@ const xml = generateAtomFeed({
 2. Update generate calls: `content: 'text'` → `content: { value: 'text' }`
 3. Optionally use `type` and `src` for richer content metadata
 
+### Atom `type="xhtml"` Values Are Now Plain HTML
+
+Parsing of `type="xhtml"` text constructs and content now conforms to [RFC 4287 §3.1.1.3](https://www.rfc-editor.org/rfc/rfc4287#section-3.1.1.3), and the parsed value is the plain HTML the spec describes. Three things changed:
+
+- The wrapper `<div>` is stripped: the spec excludes it from the content
+- The `xhtml:` prefix is removed from every tag when the feed binds the XHTML namespace to a prefix
+- Escaped characters are no longer decoded: inside an xhtml construct `&lt;` stands for the literal character, so an email address like `From: Sean &lt;sean@intel.com&gt;` survives instead of becoming a tag that HTML parsers swallow. A CDATA section also means literal text, so `<![CDATA[a < b]]>` comes out as `a &lt; b`
+
+A value without the wrapper `<div>` does not follow the spec and is decoded as before, so feeds that label escaped HTML as `xhtml` keep working.
+
+```xml
+<content type="xhtml">
+  <xhtml:div xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <xhtml:p>a &lt; b</xhtml:p>
+  </xhtml:div>
+</content>
+```
+
+#### Before (2.x)
+```typescript
+const content = feed.entries?.[0]?.content?.value
+// '<xhtml:div xmlns:xhtml="http://www.w3.org/1999/xhtml"><xhtml:p>a < b</xhtml:p></xhtml:div>'
+```
+
+#### After (3.x)
+```typescript
+const content = feed.entries?.[0]?.content?.value
+// '<p>a &lt; b</p>'
+```
+
+#### Migration Steps
+1. Drop any code that strips the wrapper `<div>` or the `xhtml:` prefix: the parser does it
+2. Render the value as HTML, not as XML
+3. Note that a construct whose wrapper is empty (`<div/>`) now yields no value at all: `entry.content` keeps its other fields but loses `value`, while `title`, `summary`, `subtitle`, and `rights` become `undefined`
+
 ### RSS Person Fields Changed from Strings to Objects
 
 The `managingEditor`, `webMaster`, and `authors` fields on RSS feeds and items were previously plain strings (e.g., `'editor@example.com (Editor Name)'`). In the new version, they use the `Rss.Person` object that preserves structured data, properly representing the [RSS person construct](https://www.rssboard.org/rss-specification#ltauthorgtSubelementOfLtitemgt).
