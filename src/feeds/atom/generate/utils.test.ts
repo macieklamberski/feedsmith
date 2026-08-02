@@ -59,9 +59,40 @@ describe('generateXhtmlValue', () => {
     expect(generateXhtmlValue(value)).toEqual(expected)
   })
 
-  it('should escape a value that is not well-formed XML instead of wrapping it', () => {
-    const value = '<p>Hello<br>world</p>'
-    const expected = { '#text': '&lt;p&gt;Hello&lt;br&gt;world&lt;/p&gt;' }
+  it('should return undefined when the value is not well-formed XML', () => {
+    expect(generateXhtmlValue('<p>Hello<br>world</p>')).toBeUndefined()
+  })
+
+  it('should return undefined when the value carries an HTML-only entity', () => {
+    expect(generateXhtmlValue('<p>a&nbsp;b</p>')).toBeUndefined()
+  })
+
+  it('should return undefined for entity names XML cannot resolve', () => {
+    expect(generateXhtmlValue('<p>a&_foo;b</p>')).toBeUndefined()
+    expect(generateXhtmlValue('<p>a&my-entity;b</p>')).toBeUndefined()
+  })
+
+  it('should return undefined for malformed character references', () => {
+    expect(generateXhtmlValue('<p>a&#;b</p>')).toBeUndefined()
+    expect(generateXhtmlValue('<p>a&#x;b</p>')).toBeUndefined()
+    // XML allows only a lowercase x in a character reference.
+    expect(generateXhtmlValue('<p>a&#X41;b</p>')).toBeUndefined()
+  })
+
+  it('should keep the predefined entities and valid character references', () => {
+    const value = '<p>a&amp;b &#13; &#x1F600;</p>'
+    const expected = {
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>a&amp;b &#13; &#x1F600;</p></div>',
+    }
+
+    expect(generateXhtmlValue(value)).toEqual(expected)
+  })
+
+  it('should encode a carriage return as a character reference', () => {
+    const value = '<p>a\r\nb</p>'
+    const expected = {
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>a&#13;\nb</p></div>',
+    }
 
     expect(generateXhtmlValue(value)).toEqual(expected)
   })

@@ -74,7 +74,7 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should escape an xhtml value that is not well-formed XML instead of wrapping it', () => {
+  it('should emit an xhtml value that is not well-formed XML as type html', () => {
     const value = {
       id: 'https://example.com/feed',
       title: {
@@ -86,7 +86,9 @@ describe('generate', () => {
     const expected = `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>https://example.com/feed</id>
-  <title type="xhtml">&lt;p&gt;Hello&lt;br&gt;world&lt;/p&gt;</title>
+  <title type="html">
+    <![CDATA[<p>Hello<br>world</p>]]>
+  </title>
   <updated>2023-03-15T12:00:00.000Z</updated>
 </feed>
 `

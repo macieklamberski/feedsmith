@@ -65,6 +65,39 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate atom xhtml content as markup inside a div wrapper', () => {
+    const value = {
+      title: 'Feed with Atom xhtml',
+      description: 'Test feed',
+      items: [
+        {
+          title: 'First item',
+          atom: {
+            content: {
+              value: '<p>Rich <em>text</em></p>',
+              type: 'xhtml',
+            },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Feed with Atom xhtml</title>
+    <description>Test feed</description>
+    <item>
+      <title>First item</title>
+      <atom:content type="xhtml">
+<div xmlns="http://www.w3.org/1999/xhtml"><p>Rich <em>text</em></p></div>      </atom:content>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with dc namespace', () => {
     const value = {
       title: 'Feed with dc namespace',

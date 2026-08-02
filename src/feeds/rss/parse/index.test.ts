@@ -1475,6 +1475,46 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
+      it('should parse atom xhtml content in RSS item with the div wrapper stripped', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Item</title>
+                <atom:title type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b</p></div></atom:title>
+                <atom:content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>Rich <em>text</em></p></div></atom:content>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              atom: {
+                title: {
+                  value: '<p>a &lt; b</p>',
+                  type: 'xhtml',
+                },
+                content: {
+                  value: '<p>Rich <em>text</em></p>',
+                  type: 'xhtml',
+                },
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
       it('should parse atom:link in RSS feed (RW-L03)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>

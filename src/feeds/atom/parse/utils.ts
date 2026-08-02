@@ -73,8 +73,52 @@ export const createNamespaceGetter = (
 // parsing tokens in foreign content", https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign),
 // but prefixed SVG/MathML inside xhtml constructs has no observed real-world usage; extend
 // to those bindings if such feeds ever appear.
-const xhtmlSelfClosingDivRegex = /^\s*<(?:[a-zA-Z][\w-]*:)?div(?:\s[^>]*)?\/>\s*$/
-const xhtmlOpeningDivRegex = /^\s*<(?:([a-zA-Z][\w-]*):)?div(?:\s[^>]*)?>/
+// The attribute part accepts only quoted values, so a `>` inside an attribute value
+// (`<div title="a>b">`) cannot end the match early and shift the slice into the attribute.
+const xhtmlDivAttrsPattern = '(?:\\s+[^\\s=>]+\\s*=\\s*(?:"[^"]*"|\'[^\']*\'))*'
+const xhtmlSelfClosingDivRegex = new RegExp(
+  `^\\s*<(?:[a-zA-Z][\\w.-]*:)?div${xhtmlDivAttrsPattern}\\s*/>\\s*$`,
+)
+const xhtmlOpeningDivRegex = new RegExp(
+  `^\\s*<(?:([a-zA-Z][\\w.-]*):)?div${xhtmlDivAttrsPattern}\\s*>`,
+)
+// Classification only: a value opening with any div tag is markup, including shapes the
+// strict wrapper pattern rejects, such as an unquoted attribute value.
+const xhtmlDivStartRegex = /^\s*<(?:[a-zA-Z][\w.-]*:)?div[\s/>]/
+const divTagRegex = new RegExp(
+  `<(/?)(?:[a-zA-Z][\\w.-]*:)?div(?=[\\s/>])${xhtmlDivAttrsPattern}\\s*(/?)>`,
+  'g',
+)
+const commentRegex = /<!--[\s\S]*?-->/g
+
+// A spec-violating construct can hold several sibling divs (`<div>a</div><div>b</div>`);
+// stripping the first opening and last closing tag there would leave unbalanced markup, so
+// the wrapper is only stripped when the remaining div tags close in order and end at depth
+// zero. Comments are dropped before counting because their text is literal, not markup;
+// CDATA is already escaped by the time this runs (see parseTypedText).
+const hasBalancedDivs = (inner: string): boolean => {
+  const scannable = inner.includes('<!--') ? inner.replace(commentRegex, '') : inner
+
+  divTagRegex.lastIndex = 0
+  let depth = 0
+  let match: RegExpExecArray | null = divTagRegex.exec(scannable)
+
+  while (match) {
+    if (match[1] === '/') {
+      depth--
+
+      if (depth < 0) {
+        return false
+      }
+    } else if (match[2] !== '/') {
+      depth++
+    }
+
+    match = divTagRegex.exec(scannable)
+  }
+
+  return depth === 0
+}
 
 export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
   if (!isNonEmptyString(value)) {
@@ -91,7 +135,8 @@ export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
     return value
   }
 
-  const prefix = match[1]
+  // A prefix may contain dots, which are regex metacharacters when interpolated.
+  const prefix = match[1]?.replace(/\./g, '\\.')
   const closingDivRegex = new RegExp(`</\\s*${prefix ? `${prefix}:` : ''}div\\s*>\\s*$`)
 
   if (!closingDivRegex.test(value)) {
@@ -99,6 +144,10 @@ export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
   }
 
   const inner = value.slice(match[0].length).replace(closingDivRegex, '')
+
+  if (!hasBalancedDivs(inner)) {
+    return value
+  }
 
   if (prefix) {
     return inner.replace(new RegExp(`(</?)${prefix}:`, 'g'), '$1')
@@ -130,10 +179,12 @@ export const escapeCdataSections = (value: Unreliable): Unreliable => {
 // to read an invalid one, so it keeps the decoding, which suits a feed that labels escaped
 // HTML as xhtml. That is a choice, not a rule: 1 of 554 wrapper-less constructs in the
 // corpus sample carries escaped markup, and for the rest both paths produce the same string.
+// Atom 0.3 spelled the same construct as `type="application/xhtml+xml"`, so that type gets
+// the identical treatment.
 export const parseTypedText = (value: Unreliable, type: string | undefined): string | undefined => {
   const text = retrieveText(value)
 
-  if (type !== 'xhtml') {
+  if (type !== 'xhtml' && type !== 'application/xhtml+xml') {
     return parseString(text)
   }
 
@@ -142,7 +193,20 @@ export const parseTypedText = (value: Unreliable, type: string | undefined): str
   const escaped = escapeCdataSections(text)
   const unwrapped = unwrapXhtmlDiv(escaped)
 
-  return unwrapped === escaped ? parseString(text) : parseVerbatimString(unwrapped)
+  if (unwrapped !== escaped) {
+    return parseVerbatimString(unwrapped)
+  }
+
+  // A value that opens with a div is markup even when the wrapper cannot be stripped
+  // (sibling divs, an unterminated wrapper); only wrapper-less values keep the decoding
+  // path for feeds that label escaped HTML as xhtml. The looser test accepts shapes the
+  // strict wrapper regex rejects, such as an unquoted attribute value, so a value that is
+  // plainly markup never reaches the decoding path.
+  if (isNonEmptyString(escaped) && xhtmlDivStartRegex.test(escaped)) {
+    return parseVerbatimString(escaped)
+  }
+
+  return parseString(text)
 }
 
 export const parseText: ParseUtilPartial<AtomFeed.Text> = (value) => {
