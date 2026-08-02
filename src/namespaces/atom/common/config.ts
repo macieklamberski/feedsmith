@@ -6,3 +6,13 @@ export const uris = [
   'http://purl.org/atom/ns#', // Official URI (Atom 0.3).
   'https://purl.org/atom/ns#',
 ]
+
+// The elements that can carry a type="xhtml" value with inline markup.
+export const textConstructs = [
+  'title',
+  'subtitle',
+  'tagline', // Atom 0.3.
+  'rights',
+  'summary',
+  'content',
+]
