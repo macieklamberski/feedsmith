@@ -59,8 +59,22 @@ describe('generateXhtmlValue', () => {
     expect(generateXhtmlValue(value)).toEqual(expected)
   })
 
+  it('should keep entities escaped in a well-formed value', () => {
+    const value = '<p>a &lt; b &amp; c &#60;d&#62;</p>'
+    const expected = {
+      '#text':
+        '<div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b &amp; c &#60;d&#62;</p></div>',
+    }
+
+    expect(generateXhtmlValue(value)).toEqual(expected)
+  })
+
   it('should return undefined when the value is not well-formed XML', () => {
     expect(generateXhtmlValue('<p>Hello<br>world</p>')).toBeUndefined()
+  })
+
+  it('should return undefined when the value closes the wrapper early', () => {
+    expect(generateXhtmlValue('</div><p>injected</p>')).toBeUndefined()
   })
 
   it('should return undefined when the value carries an HTML-only entity', () => {
@@ -120,6 +134,28 @@ describe('generateText', () => {
     expect(generateText(value)).toEqual(expected)
   })
 
+  it('should escape a quote in attribute values of an xhtml construct', () => {
+    const value = {
+      value: '<p>ok</p>',
+      type: 'xhtml',
+      xml: { base: 'https://example.com/a"b' },
+    }
+    const expected = {
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>ok</p></div>',
+      '@type': 'xhtml',
+      '@xml:base': 'https://example.com/a&quot;b',
+    }
+
+    expect(generateText(value)).toEqual(expected)
+  })
+
+  it('should emit a value that is not well-formed XML as type html', () => {
+    const value = { value: '<p>Hello<br>world</p>', type: 'xhtml' }
+    const expected = { '#cdata': '<p>Hello<br>world</p>', '@type': 'html' }
+
+    expect(generateText(value)).toEqual(expected)
+  })
+
   it('should route a padded type to the same path as the emitted attribute', () => {
     const value = { value: '<p>ok</p>', type: ' xhtml' }
     const expected = {
@@ -168,6 +204,12 @@ describe('generateText', () => {
     const value = { value: '   ' }
 
     expect(generateText(value)).toBeUndefined()
+  })
+
+  it('should return undefined for an empty value with a type', () => {
+    expect(generateText({ value: '', type: 'xhtml' })).toBeUndefined()
+    expect(generateText({ value: '   ', type: 'xhtml' })).toBeUndefined()
+    expect(generateText({ value: '', type: 'text' })).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
@@ -238,6 +280,13 @@ describe('generateContent', () => {
       '@type': 'html',
       '@src': 'https://example.com/content',
     }
+
+    expect(generateContent(value)).toEqual(expected)
+  })
+
+  it('should emit a value that is not well-formed XML as type html', () => {
+    const value = { value: '<p>Hello<br>world</p>', type: 'xhtml' }
+    const expected = { '#cdata': '<p>Hello<br>world</p>', '@type': 'html' }
 
     expect(generateContent(value)).toEqual(expected)
   })

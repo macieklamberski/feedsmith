@@ -136,8 +136,17 @@ export const generateText: GenerateUtil<AtomFeed.Text> = (text) => {
     return
   }
 
+  const typed = generateTypedText(text.value, text.type)
+
+  // A text construct carries nothing but its value, so without one there is no element to
+  // emit: a bare `type="xhtml"` would even violate the single-div content model. Content
+  // differs here, since `src` makes an empty element meaningful.
+  if (!typed?.['#text'] && !typed?.['#cdata']) {
+    return
+  }
+
   const value = {
-    ...generateTypedText(text.value, text.type),
+    ...typed,
     ...generateXmlItemOrFeed(text.xml),
   }
 
