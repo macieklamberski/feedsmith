@@ -91,9 +91,10 @@ const escapeStopNodeAttributes = <T extends Record<string, unknown>>(value: T): 
   // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
   for (const key in value) {
     const attribute = value[key]
+    // Attribute keys start with `@` (charCode 64); everything else is element content.
+    const isStringAttribute = key.charCodeAt(0) === 64 && typeof attribute === 'string'
 
-    escaped[key] =
-      key.charCodeAt(0) === 64 && typeof attribute === 'string' ? escapeHtml(attribute) : attribute
+    escaped[key] = isStringAttribute ? escapeHtml(attribute) : attribute
   }
 
   return escaped as T
