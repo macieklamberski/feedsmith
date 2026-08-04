@@ -7,12 +7,6 @@ export const uris = [
   'https://purl.org/atom/ns#',
 ]
 
-// The elements that can carry a type="xhtml" value with inline markup.
-export const textConstructs = [
-  'title',
-  'subtitle',
-  'tagline', // Atom 0.3.
-  'rights',
-  'summary',
-  'content',
-]
+// The elements that can carry a type="xhtml" value with inline markup. Atom 0.3's tagline
+// is left out: generated feeds are normalized to 1.0, so its stop node would never match.
+export const textConstructs = ['title', 'subtitle', 'rights', 'summary', 'content']
