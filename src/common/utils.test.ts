@@ -3273,7 +3273,7 @@ describe('createNamespaceResolver', () => {
         ignoreAttributes: false,
         attributeNamePrefix: '@',
         stopNodes,
-        ...createNamespaceOptions(),
+        ...createNamespaceOptions(value),
       }).parse(value)
   }
 
@@ -3400,6 +3400,140 @@ describe('createNamespaceResolver', () => {
     }
 
     expect(value).toEqual(expected)
+  })
+
+  it('should seed a self-declared prefix so its stop node captures raw content', () => {
+    const parse = createParser(undefined, ['*.content:encoded'])
+    const value = `
+      <rss>
+        <myns:encoded xmlns:myns="http://purl.org/rss/1.0/modules/content/"><b>Hi</b></myns:encoded>
+      </rss>
+    `
+    const expected = {
+      rss: {
+        'content:encoded': {
+          '#text': '<b>Hi</b>',
+          '@xmlns:myns': 'http://purl.org/rss/1.0/modules/content/',
+        },
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should seed declarations spelled with single quotes and spacing', () => {
+    const parse = createParser(undefined, ['*.content:encoded'])
+    const value = `
+      <rss>
+        <myns:encoded xmlns:myns = 'http://purl.org/rss/1.0/modules/content/'><b>Hi</b></myns:encoded>
+      </rss>
+    `
+    const expected = {
+      rss: {
+        'content:encoded': {
+          '#text': '<b>Hi</b>',
+          '@xmlns:myns': 'http://purl.org/rss/1.0/modules/content/',
+        },
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should not seed a declaration past the scan cap', () => {
+    const parse = createParser(undefined, ['*.content:encoded'])
+    // The comment pushes the declaration past the 64KB seed window. The element still
+    // renames, since its own declaration arrives with its attributes, but the stop node
+    // missed it, so the content parses as structure instead of raw text.
+    const value = `
+      <rss>
+        <!-- ${'x'.repeat(70000)} -->
+        <myns:encoded xmlns:myns="http://purl.org/rss/1.0/modules/content/"><b>Hi</b></myns:encoded>
+      </rss>
+    `
+    const expected = {
+      rss: {
+        'content:encoded': {
+          b: 'Hi',
+          '@xmlns:myns': 'http://purl.org/rss/1.0/modules/content/',
+        },
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should fall back to a whole-document scan when no root element is found', () => {
+    const createNamespaceOptions = createNamespaceResolver({ namespaceUris, namespacePrefixes })
+    // Markup, but no element to anchor on, so the scan covers the whole string. Such a
+    // document is not a feed and never reaches the parser in practice.
+    const options = createNamespaceOptions('<!-- xmlns:a="http://purl.org/dc/elements/1.1/" -->')
+    const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '@', ...options })
+    const expected = { rss: { 'dc:title': 'T' } }
+
+    expect(parser.parse('<rss><a:title>T</a:title></rss>')).toEqual(expected)
+  })
+
+  it('should fall back to a whole-document scan when a comment never closes', () => {
+    const createNamespaceOptions = createNamespaceResolver({ namespaceUris, namespacePrefixes })
+    // The comment never closes, so no root can be found and the scan falls back to the
+    // whole string.
+    const options = createNamespaceOptions('<!-- xmlns:a="http://purl.org/dc/elements/1.1/"')
+    const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '@', ...options })
+    const expected = { rss: { 'dc:title': 'T' } }
+
+    expect(parser.parse('<rss><a:title>T</a:title></rss>')).toEqual(expected)
+  })
+
+  // The scan matches `xmlns:` case-sensitively, so an uppercased declaration is only seen
+  // by the streaming recorder, after the element's own name was transformed; updateTag is
+  // what repairs the name afterwards.
+  it('should canonicalize a self-declared prefix the scan cannot see', () => {
+    const parse = createParser()
+    const value =
+      '<rss><FOO:creator XMLNS:FOO="http://purl.org/dc/elements/1.1/">A</FOO:creator></rss>'
+    const expected = {
+      rss: {
+        'dc:creator': { '#text': 'A', '@xmlns:foo': 'http://purl.org/dc/elements/1.1/' },
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should let a real declaration replace a seeded guess', () => {
+    const parse = createParser()
+    const value = `
+      <rss xmlns:custom="http://search.yahoo.com/mrss/">
+        <item>
+          <note><![CDATA[ xmlns:custom="http://purl.org/dc/elements/1.1/" ]]></note>
+          <custom:title>T</custom:title>
+        </item>
+      </rss>
+    `
+    const expected = {
+      rss: {
+        '@xmlns:custom': 'http://search.yahoo.com/mrss/',
+        item: {
+          note: ' xmlns:custom="http://purl.org/dc/elements/1.1/" ',
+          'media:title': 'T',
+        },
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should ignore a declaration-shaped string before the root element', () => {
+    const parse = createParser(['rdf'])
+    const value = `
+      <!-- xmlns:rdf="http://purl.org/dc/elements/1.1/" -->
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <channel>T</channel>
+      </rdf:RDF>
+    `
+
+    expect(Object.keys(parse(value) as Record<string, unknown>)).toContain('rdf')
   })
 
   it('should not leak declarations between parses', () => {

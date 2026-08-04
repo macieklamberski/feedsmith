@@ -1556,6 +1556,41 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
+      it('should parse the xhtml value of a construct that declares its own prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0">
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Item</title>
+                <myatom:content xmlns:myatom="http://www.w3.org/2005/Atom" type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>Text</p></div></myatom:content>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              atom: {
+                content: {
+                  value: '<p>Text</p>',
+                  type: 'xhtml',
+                },
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
       it('should parse a namespaced element that declares its own prefix', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
@@ -4729,45 +4764,6 @@ describe('parse', () => {
         },
       }
       expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
-    })
-  })
-
-  describe('known limitations', () => {
-    // An element that declares its own namespace prefix reaches the stop-node matcher
-    // before the declaration is recorded, so its inline markup is parsed into an element
-    // tree and the value is lost; the key itself still canonicalizes. The parser offers no
-    // hook between reading the attributes and the stop-node check; seeding the declaration
-    // map from a pre-parse scan of the document would close this.
-    it('should lose the xhtml value of a construct that declares its own prefix', () => {
-      const value = `
-        <?xml version="1.0" encoding="UTF-8"?>
-        <rss version="2.0">
-          <channel>
-            <title>Test</title>
-            <link>https://example.com</link>
-            <description>Test</description>
-            <item>
-              <title>Item</title>
-              <myatom:content xmlns:myatom="http://www.w3.org/2005/Atom" type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>Text</p></div></myatom:content>
-            </item>
-          </channel>
-        </rss>
-      `
-      const expected = {
-        title: 'Test',
-        link: 'https://example.com',
-        description: 'Test',
-        items: [
-          {
-            title: 'Item',
-            atom: {
-              content: { type: 'xhtml' },
-            },
-          },
-        ],
-      }
-
-      expect(parse(value)).toEqual(expected)
     })
   })
 })

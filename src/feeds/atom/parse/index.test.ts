@@ -222,25 +222,23 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
-  describe('known limitations', () => {
-    // The root element declares its own prefix, so its name reaches the stop-node matcher
-    // before the declaration is recorded and the path-anchored stop nodes miss; the xhtml
-    // title is parsed into an element tree and its value is lost. Seeding the declaration
-    // map from a pre-parse scan of the document would close this.
-    it('should lose an xhtml title in a fully prefixed Atom feed', () => {
-      const value = `
-        <?xml version="1.0" encoding="utf-8"?>
-        <atom:feed xmlns:atom="http://www.w3.org/2005/Atom">
-          <atom:id>example-feed</atom:id>
-          <atom:title type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b</p></div></atom:title>
-        </atom:feed>
-      `
-      const expected = {
-        id: 'example-feed',
-      }
+  it('should parse an xhtml title in a fully prefixed Atom feed', () => {
+    const value = `
+      <?xml version="1.0" encoding="utf-8"?>
+      <atom:feed xmlns:atom="http://www.w3.org/2005/Atom">
+        <atom:id>example-feed</atom:id>
+        <atom:title type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b</p></div></atom:title>
+      </atom:feed>
+    `
+    const expected = {
+      id: 'example-feed',
+      title: {
+        value: '<p>a &lt; b</p>',
+        type: 'xhtml',
+      },
+    }
 
-      expect(parse(value)).toEqual(expected)
-    })
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should throw error for invalid input', () => {
