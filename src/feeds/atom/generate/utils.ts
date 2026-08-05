@@ -1,4 +1,5 @@
-import { isPlainObject } from 'trousse'
+import { XMLValidator } from 'fast-xml-parser'
+import { escapeHtml, isNonEmptyString, isPlainObject } from 'trousse'
 import { namespaceUris } from '../../../common/config.js'
 import type { DateLike } from '../../../common/types.js'
 import {
@@ -8,6 +9,7 @@ import {
   generatePlainString,
   generateRfc3339Date,
   generateTextOrCdataString,
+  isXmlAttributeKey,
   trimArray,
   trimObject,
 } from '../../../common/utils.js'
@@ -57,16 +59,67 @@ export const createNamespaceSetter = (prefix: string | undefined) => {
   return (key: string) => (prefix ? `${prefix}${key}` : key)
 }
 
+// A `type="xhtml"` construct must hold its markup as XML inside a single div (RFC 4287
+// §3.1.1.3), not as escaped text or CDATA, so the value is wrapped in the div. The builder
+// emits these constructs raw (see the stop nodes in config.ts), which is only correct when
+// the wrapped value is well-formed XML. A value that is not (unclosed HTML tags, bare `&`)
+// is escaped here instead, since the builder will not touch it either way: the document
+// stays valid at the cost of the construct staying non-conformant.
+export const generateXhtmlValue: GenerateUtil<string> = (value) => {
+  if (!isNonEmptyString(value)) {
+    return
+  }
+
+  const wrapped = `<div xmlns="http://www.w3.org/1999/xhtml">${value.trim()}</div>`
+
+  if (XMLValidator.validate(wrapped) !== true) {
+    return { '#text': escapeHtml(value.trim()) }
+  }
+
+  return { '#text': wrapped }
+}
+
+// A construct emitted raw by the builder (see the stop nodes in config.ts) has its
+// attributes emitted verbatim too, so their values are escaped here. Constructs of every
+// other type go through the builder's own attribute encoding, which would double-escape.
+const escapeStopNodeAttributes = <T extends Record<string, unknown>>(value: T): T => {
+  if (value['@type'] !== 'xhtml') {
+    return value
+  }
+
+  const escaped: Record<string, unknown> = {}
+
+  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
+  for (const key in value) {
+    const attribute = value[key]
+
+    escaped[key] =
+      isXmlAttributeKey(key) && typeof attribute === 'string' ? escapeHtml(attribute) : attribute
+  }
+
+  return escaped as T
+}
+
+// The type decides both the routing and the emitted attribute, so it is normalized once:
+// a padded ` xhtml` would otherwise take the escaped path while the trimmed attribute
+// matches the stop node, and the builder would serialize the CDATA key as an element.
+const generateTypedValue = (value: string | undefined, type: string | undefined) => {
+  return type === 'xhtml' ? generateXhtmlValue(value) : generateTextOrCdataString(value)
+}
+
 export const generateText: GenerateUtil<AtomFeed.Text> = (text) => {
   if (!isPlainObject(text)) {
     return
   }
 
-  return trimObject({
-    ...generateTextOrCdataString(text.value),
-    '@type': generatePlainString(text.type),
+  const type = generatePlainString(text.type)
+  const value = {
+    ...generateTypedValue(text.value, type),
+    '@type': type,
     ...generateXmlItemOrFeed(text.xml),
-  })
+  }
+
+  return trimObject(escapeStopNodeAttributes(value))
 }
 
 export const generateContent: GenerateUtil<AtomFeed.Content> = (content) => {
@@ -74,14 +127,15 @@ export const generateContent: GenerateUtil<AtomFeed.Content> = (content) => {
     return
   }
 
+  const type = generatePlainString(content.type)
   const value = {
-    ...generateTextOrCdataString(content.value),
-    '@type': generatePlainString(content.type),
+    ...generateTypedValue(content.value, type),
+    '@type': type,
     '@src': generatePlainString(content.src),
     ...generateXmlItemOrFeed(content.xml),
   }
 
-  return trimObject(value)
+  return trimObject(escapeStopNodeAttributes(value))
 }
 
 export const generateLink: GenerateUtil<AtomFeed.Link<DateLike>> = (link) => {

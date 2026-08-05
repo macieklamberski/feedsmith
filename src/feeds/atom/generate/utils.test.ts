@@ -10,6 +10,7 @@ import {
   generatePerson,
   generateSource,
   generateText,
+  generateXhtmlValue,
 } from './utils.js'
 
 describe('createNamespaceSetter', () => {
@@ -48,7 +49,67 @@ describe('createNamespaceSetter', () => {
   })
 })
 
+describe('generateXhtmlValue', () => {
+  it('should wrap a well-formed value in a div', () => {
+    const value = '<p>Text</p>'
+    const expected = {
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>Text</p></div>',
+    }
+
+    expect(generateXhtmlValue(value)).toEqual(expected)
+  })
+
+  it('should escape a value that is not well-formed XML instead of wrapping it', () => {
+    const value = '<p>Hello<br>world</p>'
+    const expected = { '#text': '&lt;p&gt;Hello&lt;br&gt;world&lt;/p&gt;' }
+
+    expect(generateXhtmlValue(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty and non-string values', () => {
+    expect(generateXhtmlValue('')).toBeUndefined()
+    expect(generateXhtmlValue('   ')).toBeUndefined()
+    expect(generateXhtmlValue(undefined)).toBeUndefined()
+  })
+})
+
 describe('generateText', () => {
+  it('should escape attribute values of an xhtml construct', () => {
+    const value = {
+      value: '<p>ok</p>',
+      type: 'xhtml',
+      xml: { base: 'https://example.com/a?b=1&c=2' },
+    }
+    const expected = {
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>ok</p></div>',
+      '@type': 'xhtml',
+      '@xml:base': 'https://example.com/a?b=1&amp;c=2',
+    }
+
+    expect(generateText(value)).toEqual(expected)
+  })
+
+  it('should route a padded type to the same path as the emitted attribute', () => {
+    const value = { value: '<p>ok</p>', type: ' xhtml' }
+    const expected = {
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>ok</p></div>',
+      '@type': 'xhtml',
+    }
+
+    expect(generateText(value)).toEqual(expected)
+  })
+
+  it('should leave attributes of a non-xhtml construct to the builder', () => {
+    const value = { value: 'plain', type: 'text', xml: { base: 'https://example.com/?a=1&b=2' } }
+    const expected = {
+      '#text': 'plain',
+      '@type': 'text',
+      '@xml:base': 'https://example.com/?a=1&b=2',
+    }
+
+    expect(generateText(value)).toEqual(expected)
+  })
+
   it('should generate text with value only', () => {
     const value = { value: 'Hello World' }
     const expected = { '#text': 'Hello World' }
@@ -57,10 +118,7 @@ describe('generateText', () => {
   })
 
   it('should generate text with value and type', () => {
-    const value = {
-      value: 'HTML content',
-      type: 'html',
-    }
+    const value = { value: 'HTML content', type: 'html' }
     const expected = {
       '#text': 'HTML content',
       '@type': 'html',
@@ -186,7 +244,7 @@ describe('generateContent', () => {
       },
     }
     const expected = {
-      '#cdata': '<div>XHTML content</div>',
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><div>XHTML content</div></div>',
       '@type': 'xhtml',
       '@xml:base': 'http://example.org/entry/1',
       '@xml:lang': 'en-US',

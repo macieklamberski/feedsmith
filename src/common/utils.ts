@@ -24,6 +24,11 @@ export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | n
   return isNumber(value) || isNonEmptyString(value)
 }
 
+export const isXmlAttributeKey = (key: string) => {
+  // Matches the `@` (charCode 64) from attributeNamePrefix in config.ts.
+  return key.charCodeAt(0) === 64
+}
+
 export const retrieveText = (value: Unreliable): Unreliable => {
   return value?.['#text'] ?? value
 }
@@ -509,7 +514,7 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
 
         seenKeys?.add(key)
 
-        const keyWithoutAt = key.charCodeAt(0) === 64 ? key.slice(1) : key
+        const keyWithoutAt = isXmlAttributeKey(key) ? key.slice(1) : key
         const colonIndex = keyWithoutAt.indexOf(':')
 
         if (colonIndex > 0) {
