@@ -219,11 +219,11 @@ export const parseString: ParseUtilExact<string> = (value) => {
   }
 }
 
-// Variant of parseString for JSON-sourced values: skips XML entity decoding and
-// HTML comment stripping. JSON.parse already produces the final string, so any
-// `&lt;` / `<!--` in fields like JSON Feed's `content_html` belongs to the HTML
-// payload and must be preserved verbatim.
-export const parseJsonString: ParseUtilExact<string> = (value) => {
+// Variant of parseString for values that are already final markup: skips XML entity
+// decoding and HTML comment stripping. Used where a `&lt;` / `<!--` belongs to the payload
+// rather than encoding it — JSON Feed's `content_html`, whose string comes straight out of
+// JSON.parse, and Atom's xhtml constructs, whose entities stand for literal characters.
+export const parseVerbatimString: ParseUtilExact<string> = (value) => {
   if (typeof value === 'string') {
     if (value === '') {
       return

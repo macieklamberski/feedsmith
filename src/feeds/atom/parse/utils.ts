@@ -7,6 +7,7 @@ import {
   parseNumber,
   parseSingularOf,
   parseString,
+  parseVerbatimString,
   retrieveText,
   trimObject,
 } from '../../../common/utils.js'
@@ -106,10 +107,42 @@ export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
   return inner
 }
 
-export const retrieveTypedText = (value: Unreliable, type: string | undefined): Unreliable => {
+// A CDATA section is XML's other spelling for literal text, so its content becomes entities
+// in the verbatim value: dropping only the markers would hand a literal `<` to an HTML
+// parser as markup, the same corruption the verbatim path exists to avoid. A section
+// without its `]]>` terminator is malformed XML and is left untouched.
+const cdataSectionRegex = /<!\[CDATA\[([\s\S]*?)\]\]>/g
+
+export const escapeCdataSections = (value: Unreliable): Unreliable => {
+  if (!isNonEmptyString(value)) {
+    return value
+  }
+
+  return value.replace(cdataSectionRegex, (_, content: string) => {
+    return content.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+  })
+}
+
+// Inside a genuine xhtml construct an escaped `&lt;` stands for that character and not for
+// markup (RFC 4287 §3.1.1.3), so decoding it would turn text into tags that an HTML parser
+// then swallows. Such a value is taken verbatim instead. The wrapper div identifies the
+// genuine case: a value without one is not a valid construct, and the spec does not say how
+// to read an invalid one, so it keeps the decoding, which suits a feed that labels escaped
+// HTML as xhtml. That is a choice, not a rule: 1 of 554 wrapper-less constructs in the
+// corpus sample carries escaped markup, and for the rest both paths produce the same string.
+export const parseTypedText = (value: Unreliable, type: string | undefined): string | undefined => {
   const text = retrieveText(value)
 
-  return type === 'xhtml' ? unwrapXhtmlDiv(text) : text
+  if (type !== 'xhtml') {
+    return parseString(text)
+  }
+
+  // CDATA is escaped before the wrapper is stripped: its content is literal text, so a
+  // `</xhtml:p>` or `<div>` inside it must not be seen as markup by the prefix strip.
+  const escaped = escapeCdataSections(text)
+  const unwrapped = unwrapXhtmlDiv(escaped)
+
+  return unwrapped === escaped ? parseString(text) : parseVerbatimString(unwrapped)
 }
 
 export const parseText: ParseUtilPartial<AtomFeed.Text> = (value) => {
@@ -124,7 +157,7 @@ export const parseText: ParseUtilPartial<AtomFeed.Text> = (value) => {
   }
 
   const type = parseString(value['@type'])
-  const parsedValue = parseString(retrieveTypedText(value, type))
+  const parsedValue = parseTypedText(value, type)
 
   if (!parsedValue) {
     return
@@ -153,7 +186,7 @@ export const parseContent: ParseUtilPartial<AtomFeed.Content> = (value) => {
   const type = parseString(value['@type'])
 
   const content = {
-    value: parseString(retrieveTypedText(value, type)),
+    value: parseTypedText(value, type),
     type,
     src: parseString(value['@src']),
     xml: retrieveXmlItemOrFeed(value),

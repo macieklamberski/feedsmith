@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import {
   createNamespaceGetter,
+  escapeCdataSections,
   parseCategory,
   parseContent,
   parseEntry,
@@ -10,12 +11,12 @@ import {
   parsePerson,
   parseSource,
   parseText,
+  parseTypedText,
   retrieveFeed,
   retrieveGeneratorUri,
   retrievePersonUri,
   retrievePublished,
   retrieveSubtitle,
-  retrieveTypedText,
   retrieveUpdated,
   unwrapXhtmlDiv,
 } from './utils.js'
@@ -176,12 +177,45 @@ describe('unwrapXhtmlDiv', () => {
   })
 })
 
-describe('retrieveTypedText', () => {
+describe('escapeCdataSections', () => {
+  it('should replace a CDATA section with its entity-escaped content', () => {
+    const value = 'before <![CDATA[a < b && c]]> after'
+    const expected = 'before a &lt; b &amp;&amp; c after'
+
+    expect(escapeCdataSections(value)).toBe(expected)
+  })
+
+  it('should replace multiple CDATA sections', () => {
+    const value = '<![CDATA[<p>]]> and <![CDATA[&]]>'
+    const expected = '&lt;p> and &amp;'
+
+    expect(escapeCdataSections(value)).toBe(expected)
+  })
+
+  it('should leave an unterminated CDATA section untouched', () => {
+    const value = '<pre><![CDATA[if (a < b) return;</pre>'
+
+    expect(escapeCdataSections(value)).toBe(value)
+  })
+
+  it('should return a value without CDATA sections unchanged', () => {
+    const value = '<p>a &lt; b</p>'
+
+    expect(escapeCdataSections(value)).toBe(value)
+  })
+
+  it('should return non-string values unchanged', () => {
+    expect(escapeCdataSections(undefined)).toBeUndefined()
+    expect(escapeCdataSections(123)).toBe(123)
+  })
+})
+
+describe('parseTypedText', () => {
   it('should unwrap the div wrapper when the type is xhtml', () => {
     const value = { '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>Text</p></div>' }
     const expected = '<p>Text</p>'
 
-    expect(retrieveTypedText(value, 'xhtml')).toBe(expected)
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
   })
 
   it('should strip the namespace prefix when the type is xhtml', () => {
@@ -191,46 +225,109 @@ describe('retrieveTypedText', () => {
     }
     const expected = '<p>Text</p>'
 
-    expect(retrieveTypedText(value, 'xhtml')).toBe(expected)
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
   })
 
   it('should return undefined when the xhtml wrapper is self-closing', () => {
     const value = { '#text': '<xhtml:div/>' }
 
-    expect(retrieveTypedText(value, 'xhtml')).toBeUndefined()
+    expect(parseTypedText(value, 'xhtml')).toBeUndefined()
   })
 
   it('should return the value unchanged when an xhtml construct has no wrapper', () => {
     const value = { '#text': '<p>Text</p>' }
     const expected = '<p>Text</p>'
 
-    expect(retrieveTypedText(value, 'xhtml')).toBe(expected)
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
   })
 
   it('should leave a div-wrapped value untouched when the type is html', () => {
     const value = { '#text': '<div><p>Text</p></div>' }
     const expected = '<div><p>Text</p></div>'
 
-    expect(retrieveTypedText(value, 'html')).toBe(expected)
+    expect(parseTypedText(value, 'html')).toBe(expected)
   })
 
   it('should leave a div-wrapped value untouched when the type is absent', () => {
     const value = { '#text': '<div><p>Text</p></div>' }
     const expected = '<div><p>Text</p></div>'
 
-    expect(retrieveTypedText(value, undefined)).toBe(expected)
+    expect(parseTypedText(value, undefined)).toBe(expected)
   })
 
   it('should retrieve the text of a bare string value', () => {
     const value = 'Plain text'
     const expected = 'Plain text'
 
-    expect(retrieveTypedText(value, 'text')).toBe(expected)
+    expect(parseTypedText(value, 'text')).toBe(expected)
   })
 
-  it('should return non-string values unchanged', () => {
-    expect(retrieveTypedText({ '#text': 123 }, 'xhtml')).toBe(123)
-    expect(retrieveTypedText(undefined, 'xhtml')).toBeUndefined()
+  it('should keep entities escaped inside a wrapped xhtml construct', () => {
+    const value = {
+      '#text':
+        '<div xmlns="http://www.w3.org/1999/xhtml"><pre>From: Sean &lt;sean@intel.com&gt;</pre></div>',
+    }
+    const expected = '<pre>From: Sean &lt;sean@intel.com&gt;</pre>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should keep entities escaped inside a prefixed xhtml construct', () => {
+    const value = {
+      '#text':
+        '<xhtml:div xmlns:xhtml="http://www.w3.org/1999/xhtml"><xhtml:p>a &lt; b</xhtml:p></xhtml:div>',
+    }
+    const expected = '<p>a &lt; b</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should turn CDATA content into entities inside a wrapped xhtml construct', () => {
+    const value = {
+      '#text':
+        '<div xmlns="http://www.w3.org/1999/xhtml"><pre><![CDATA[if (a < b && c) return;]]></pre></div>',
+    }
+    const expected = '<pre>if (a &lt; b &amp;&amp; c) return;</pre>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should keep a prefix inside CDATA literal text when unwrapping a prefixed construct', () => {
+    const value = {
+      '#text':
+        '<xh:div xmlns:xh="http://www.w3.org/1999/xhtml"><xh:p><![CDATA[literal <xh:b> & stuff]]></xh:p></xh:div>',
+    }
+    const expected = '<p>literal &lt;xh:b> &amp; stuff</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  // Escaped markup labelled as xhtml violates the spec, but publishers ship it; without a
+  // wrapper to prove the construct is genuine, decoding stays the better guess.
+  it('should decode entities when an xhtml construct has no wrapper', () => {
+    const value = { '#text': '&lt;p&gt;Hello&lt;/p&gt;' }
+    const expected = '<p>Hello</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should decode entities when the type is html', () => {
+    const value = { '#text': '&lt;p&gt;Hello&lt;/p&gt;' }
+    const expected = '<p>Hello</p>'
+
+    expect(parseTypedText(value, 'html')).toBe(expected)
+  })
+
+  it('should decode entities when the type is absent', () => {
+    const value = { '#text': 'a &lt; b' }
+    const expected = 'a < b'
+
+    expect(parseTypedText(value, undefined)).toBe(expected)
+  })
+
+  it('should coerce non-string values to a string', () => {
+    expect(parseTypedText({ '#text': 123 }, 'xhtml')).toBe('123')
+    expect(parseTypedText(undefined, 'xhtml')).toBeUndefined()
   })
 })
 
