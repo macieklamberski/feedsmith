@@ -4,6 +4,7 @@ import {
   coerceBoolean,
   coerceNumber,
   coerceSingular,
+  isJsonLike,
   isNonEmptyString,
   isNumber,
   isPlainObject,
@@ -862,26 +863,20 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
   return normalizeRoot
 }
 
-const startsWithBraceRegex = /^\s*\{/
-const endsWithBraceRegex = /\}\s*$/
-
 export const parseJsonObject = (value: unknown): unknown => {
   if (isPlainObject(value)) {
     return value
   }
 
-  if (!isNonEmptyString(value) || value.length < 2) {
-    return
-  }
-
-  const startsWithBrace = value.charAt(0) === '{' || startsWithBraceRegex.test(value)
-  const endsWithBrace = value.charAt(value.length - 1) === '}' || endsWithBraceRegex.test(value)
-
-  if (!startsWithBrace || !endsWithBrace) {
+  if (!isNonEmptyString(value) || !isJsonLike(value)) {
     return
   }
 
   try {
-    return JSON.parse(value)
+    const parsed = JSON.parse(value)
+
+    if (isPlainObject(parsed)) {
+      return parsed
+    }
   } catch {}
 }
