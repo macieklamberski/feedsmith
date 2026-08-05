@@ -12,7 +12,7 @@ import {
   stopNodes as arxivStopNodes,
   uris as arxivUris,
 } from '../namespaces/arxiv/common/config.js'
-import { uris as atomUris } from '../namespaces/atom/common/config.js'
+import { stopNodes as atomStopNodes, uris as atomUris } from '../namespaces/atom/common/config.js'
 import {
   stopNodes as blogchannelStopNodes,
   uris as blogchannelUris,
@@ -185,6 +185,7 @@ export const namespaceStopNodes = [
   ...adminStopNodes,
   ...appStopNodes,
   ...arxivStopNodes,
+  ...atomStopNodes,
   ...blogchannelStopNodes,
   ...ccStopNodes,
   ...contentStopNodes,

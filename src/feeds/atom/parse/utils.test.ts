@@ -171,6 +171,51 @@ describe('unwrapXhtmlDiv', () => {
     expect(unwrapXhtmlDiv(value)).toBe(value)
   })
 
+  it('should unwrap when a comment holds a div-like string', () => {
+    const value = '<div>hi<!-- </div> --></div>'
+    const expected = 'hi<!-- </div> -->'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should unwrap a prefixed div whose prefix contains a dot', () => {
+    const value = '<x.y:div xmlns:x.y="http://www.w3.org/1999/xhtml"><x.y:p>Text</x.y:p></x.y:div>'
+    const expected = '<p>Text</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should return value unchanged for sibling top-level divs', () => {
+    const value = '<div>First</div><div>Second</div>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should return value unchanged when a stray closing tag splits the scan', () => {
+    const value = '<div>First</div></x-wrap><div>Second</div>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should return value unchanged when text follows the wrapper', () => {
+    const value = '<div>Text</div> trailing'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should return value unchanged when a comment follows the wrapper', () => {
+    const value = '<div>Text</div><!-- comment -->'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should unwrap a div whose attribute value contains a closing angle bracket', () => {
+    const value = '<div title="a>b"><p>Text</p></div>'
+    const expected = '<p>Text</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
   it('should return non-string values unchanged', () => {
     expect(unwrapXhtmlDiv(undefined)).toBeUndefined()
     expect(unwrapXhtmlDiv(123)).toBe(123)
@@ -278,6 +323,43 @@ describe('parseTypedText', () => {
         '<xhtml:div xmlns:xhtml="http://www.w3.org/1999/xhtml"><xhtml:p>a &lt; b</xhtml:p></xhtml:div>',
     }
     const expected = '<p>a &lt; b</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should unwrap the div wrapper when the type is application/xhtml+xml', () => {
+    const value = {
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b</p></div>',
+    }
+    const expected = '<p>a &lt; b</p>'
+
+    expect(parseTypedText(value, 'application/xhtml+xml')).toBe(expected)
+  })
+
+  it('should decode entities when an application/xhtml+xml construct has no wrapper', () => {
+    const value = { '#text': '&lt;p&gt;Hello&lt;/p&gt;' }
+    const expected = '<p>Hello</p>'
+
+    expect(parseTypedText(value, 'application/xhtml+xml')).toBe(expected)
+  })
+
+  it('should unwrap when a CDATA section holds a div-like string', () => {
+    const value = { '#text': '<div><p>code: <![CDATA[</div>]]></p></div>' }
+    const expected = '<p>code: &lt;/div></p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should unwrap a wrapper with an unquoted attribute value', () => {
+    const value = { '#text': '<div class=foo><p>5 &lt; 6</p></div>' }
+    const expected = '<p>5 &lt; 6</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should keep a sibling-div value verbatim without unwrapping', () => {
+    const value = { '#text': '<div>a &lt; b</div><div>Second</div>' }
+    const expected = '<div>a &lt; b</div><div>Second</div>'
 
     expect(parseTypedText(value, 'xhtml')).toBe(expected)
   })

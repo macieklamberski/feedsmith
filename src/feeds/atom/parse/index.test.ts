@@ -200,11 +200,11 @@ describe('parse', () => {
     const value = `
       <?xml version="1.0" encoding="utf-8"?>
       <atom:feed atom:xmlns="http://www.w3.org/2005/Atom">
-        <atom:title>Example Feed</title>
-        <atom:id>example-feed</id>
+        <atom:title>Example Feed</atom:title>
+        <atom:id>example-feed</atom:id>
         <atom:entry>
-          <atom:title>Example Entry</title>
-          <atom:id>example-entry</id>
+          <atom:title>Example Entry</atom:title>
+          <atom:id>example-entry</atom:id>
         </atom:entry>
       </atom:feed>
     `

@@ -258,7 +258,7 @@ const xml = generateAtomFeed({
 
 ### Atom `type="xhtml"` Values Are Now Plain HTML
 
-Parsing of `type="xhtml"` text constructs and content now conforms to [RFC 4287 §3.1.1.3](https://www.rfc-editor.org/rfc/rfc4287#section-3.1.1.3), and the parsed value is the plain HTML the spec describes. Three things changed:
+Parsing of `type="xhtml"` text constructs and content now conforms to [RFC 4287 §3.1.1.3](https://www.rfc-editor.org/rfc/rfc4287#section-3.1.1.3), and the parsed value is the plain HTML the spec describes. The same applies to `type="application/xhtml+xml"` (the Atom 0.3 spelling) and to Atom text constructs embedded in RSS items. Three things changed:
 
 - The wrapper `<div>` is stripped: the spec excludes it from the content
 - The `xhtml:` prefix is removed from every tag when the feed binds the XHTML namespace to a prefix
@@ -286,13 +286,13 @@ const content = feed.entries?.[0]?.content?.value
 // '<p>a &lt; b</p>'
 ```
 
-Generating follows the same rule in the other direction. A text construct or content with `type="xhtml"` is emitted as markup inside a single `<div xmlns="http://www.w3.org/1999/xhtml">` wrapper, where it was previously written as escaped text or CDATA. The value must be well-formed XML for this: a value that is not (unclosed tags like `<br>`, a bare `&`) keeps the previous escaped form, which stays parseable everywhere but does not conform to the spec.
+Generating works in the other direction: a `type="xhtml"` value is emitted as markup inside a single `<div xmlns="http://www.w3.org/1999/xhtml">` wrapper instead of as escaped text or CDATA. A value that is not well-formed XML (unclosed tags like `<br>`, a bare `&`, an HTML-only entity like `&nbsp;`) is emitted as escaped text under `type="html"` instead.
 
 #### Migration Steps
 1. Drop any code that strips the wrapper `<div>` or the `xhtml:` prefix: the parser does it
 2. Render the value as HTML, not as XML
 3. Note that a construct whose wrapper is empty (`<div/>`) now yields no value at all: `entry.content` keeps its other fields but loses `value`, while `title`, `summary`, `subtitle`, and `rights` become `undefined`
-4. When generating with `type="xhtml"`, pass the inner markup without the wrapper `<div>` and keep it well-formed (XHTML-style closed tags) so it can be embedded as XML
+4. When generating with `type="xhtml"`, pass the inner markup without the wrapper `<div>` and keep it well-formed (XHTML-style closed tags)
 
 ### RSS Person Fields Changed from Strings to Objects
 

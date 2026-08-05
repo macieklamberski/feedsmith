@@ -1,3 +1,4 @@
+import { XMLParser } from 'fast-xml-parser'
 import { isNonEmptyString, isPlainObject } from 'trousse'
 import type { DateAny, Unreliable } from '../../../common/types.js'
 import {
@@ -65,43 +66,92 @@ export const createNamespaceGetter = (
 }
 
 // The value of a `type="xhtml"` text construct is the content of its single wrapping
-// <div> — RFC 4287 §3.1.1.3 requires the div itself to be excluded. The wrapper may also
+// <div>: RFC 4287 §3.1.1.3 requires the div itself to be excluded. The wrapper may also
 // bind the XHTML namespace to a prefix (`<xhtml:div>`), in which case every descendant tag
 // carries it too; the prefix is stripped along with the wrapper so the value is plain HTML.
 // Only the XHTML prefix gets this treatment. SVG and MathML are the two other namespaces
-// HTML represents unprefixed (foreign content — WHATWG HTML §13.2.6.5, "The rules for
+// HTML represents unprefixed (foreign content: WHATWG HTML §13.2.6.5, "The rules for
 // parsing tokens in foreign content", https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign),
 // but prefixed SVG/MathML inside xhtml constructs has no observed real-world usage; extend
 // to those bindings if such feeds ever appear.
-const xhtmlSelfClosingDivRegex = /^\s*<(?:[a-zA-Z][\w-]*:)?div(?:\s[^>]*)?\/>\s*$/
-const xhtmlOpeningDivRegex = /^\s*<(?:([a-zA-Z][\w-]*):)?div(?:\s[^>]*)?>/
+const xhtmlDivStartRegex = /^\s*<(?:([a-zA-Z][\w.-]*):)?div[\s/>]/
+
+// The wrapper is located by re-parsing the value with the div as a stop node, which hands
+// back its raw inner markup byte for byte while a real tag scan deals with a `>` inside a
+// quoted attribute, comments and nested divs. A spec-violating shape (sibling divs, text
+// or comments around the wrapper, a mismatched closing tag) surfaces as extra root
+// children or a parse error, and the value is then kept unchanged.
+//
+// The synthetic root exists because the parser silently drops text standing outside the
+// root element; inside `x-wrap`, that text stays visible to the shape check below.
+const xhtmlDivParser = new XMLParser({
+  preserveOrder: true,
+  stopNodes: ['x-wrap.div'],
+  processEntities: false,
+  ignoreAttributes: true,
+  removeNSPrefix: true,
+  trimValues: false,
+  commentPropName: '#comment',
+})
 
 export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
   if (!isNonEmptyString(value)) {
     return value
   }
 
-  if (xhtmlSelfClosingDivRegex.test(value)) {
-    return
-  }
-
-  const match = value.match(xhtmlOpeningDivRegex)
+  const match = value.match(xhtmlDivStartRegex)
 
   if (!match) {
     return value
   }
 
-  const prefix = match[1]
-  const closingDivRegex = new RegExp(`</\\s*${prefix ? `${prefix}:` : ''}div\\s*>\\s*$`)
+  let children: Unreliable
 
-  if (!closingDivRegex.test(value)) {
+  try {
+    const parsed = xhtmlDivParser.parse(`<x-wrap>${value}</x-wrap>`)
+
+    if (parsed.length !== 1 || !Array.isArray(parsed[0]['x-wrap'])) {
+      return value
+    }
+
+    children = parsed[0]['x-wrap']
+  } catch {
     return value
   }
 
-  const inner = value.slice(match[0].length).replace(closingDivRegex, '')
+  const divTexts: Array<string> = []
+
+  for (const child of children) {
+    if (Array.isArray(child.div)) {
+      divTexts.push(child.div[0]?.['#text'] ?? '')
+      continue
+    }
+
+    if (typeof child['#text'] === 'string' && child['#text'].trim() === '') {
+      continue
+    }
+
+    return value
+  }
+
+  if (divTexts.length !== 1) {
+    return value
+  }
+
+  const inner = divTexts[0]
+
+  // A self-closing or empty wrapper is a construct with no content.
+  if (inner === '') {
+    return
+  }
+
+  const prefix = match[1]
 
   if (prefix) {
-    return inner.replace(new RegExp(`(</?)${prefix}:`, 'g'), '$1')
+    // A prefix may contain dots, which are regex metacharacters when interpolated.
+    const escapedPrefix = prefix.replace(/\./g, '\\.')
+
+    return inner.replace(new RegExp(`(</?)${escapedPrefix}:`, 'g'), '$1')
   }
 
   return inner
@@ -130,10 +180,12 @@ export const escapeCdataSections = (value: Unreliable): Unreliable => {
 // to read an invalid one, so it keeps the decoding, which suits a feed that labels escaped
 // HTML as xhtml. That is a choice, not a rule: 1 of 554 wrapper-less constructs in the
 // corpus sample carries escaped markup, and for the rest both paths produce the same string.
+// Atom 0.3 spelled the same construct as `type="application/xhtml+xml"`, so that type gets
+// the identical treatment.
 export const parseTypedText = (value: Unreliable, type: string | undefined): string | undefined => {
   const text = retrieveText(value)
 
-  if (type !== 'xhtml') {
+  if (type !== 'xhtml' && type !== 'application/xhtml+xml') {
     return parseString(text)
   }
 
@@ -142,7 +194,18 @@ export const parseTypedText = (value: Unreliable, type: string | undefined): str
   const escaped = escapeCdataSections(text)
   const unwrapped = unwrapXhtmlDiv(escaped)
 
-  return unwrapped === escaped ? parseString(text) : parseVerbatimString(unwrapped)
+  if (unwrapped !== escaped) {
+    return parseVerbatimString(unwrapped)
+  }
+
+  // A value that opens with a div is markup even when the wrapper cannot be stripped
+  // (sibling divs, an unterminated wrapper, text around it); only wrapper-less values keep
+  // the decoding path for feeds that label escaped HTML as xhtml.
+  if (isNonEmptyString(escaped) && xhtmlDivStartRegex.test(escaped)) {
+    return parseVerbatimString(escaped)
+  }
+
+  return parseString(text)
 }
 
 export const parseText: ParseUtilPartial<AtomFeed.Text> = (value) => {

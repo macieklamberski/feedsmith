@@ -53,15 +53,60 @@ describe('generateXhtmlValue', () => {
   it('should wrap a well-formed value in a div', () => {
     const value = '<p>Text</p>'
     const expected = {
-      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>Text</p></div>',
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>Text</p></div>\n',
     }
 
     expect(generateXhtmlValue(value)).toEqual(expected)
   })
 
-  it('should escape a value that is not well-formed XML instead of wrapping it', () => {
-    const value = '<p>Hello<br>world</p>'
-    const expected = { '#text': '&lt;p&gt;Hello&lt;br&gt;world&lt;/p&gt;' }
+  it('should keep entities escaped in a well-formed value', () => {
+    const value = '<p>a &lt; b &amp; c &#60;d&#62;</p>'
+    const expected = {
+      '#text':
+        '<div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b &amp; c &#60;d&#62;</p></div>\n',
+    }
+
+    expect(generateXhtmlValue(value)).toEqual(expected)
+  })
+
+  it('should return undefined when the value is not well-formed XML', () => {
+    expect(generateXhtmlValue('<p>Hello<br>world</p>')).toBeUndefined()
+  })
+
+  it('should return undefined when the value closes the wrapper early', () => {
+    expect(generateXhtmlValue('</div><p>injected</p>')).toBeUndefined()
+  })
+
+  it('should return undefined when the value carries an HTML-only entity', () => {
+    expect(generateXhtmlValue('<p>a&nbsp;b</p>')).toBeUndefined()
+  })
+
+  it('should return undefined for entity names XML cannot resolve', () => {
+    expect(generateXhtmlValue('<p>a&_foo;b</p>')).toBeUndefined()
+    expect(generateXhtmlValue('<p>a&my-entity;b</p>')).toBeUndefined()
+  })
+
+  it('should return undefined for malformed character references', () => {
+    expect(generateXhtmlValue('<p>a&#;b</p>')).toBeUndefined()
+    expect(generateXhtmlValue('<p>a&#x;b</p>')).toBeUndefined()
+    // XML allows only a lowercase x in a character reference.
+    expect(generateXhtmlValue('<p>a&#X41;b</p>')).toBeUndefined()
+  })
+
+  it('should keep the predefined entities and valid character references', () => {
+    const value = '<p>a&amp;b &#13; &#x1F600;</p>'
+    const expected = {
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>a&amp;b &#13; &#x1F600;</p></div>\n',
+    }
+
+    expect(generateXhtmlValue(value)).toEqual(expected)
+  })
+
+  it('should encode a carriage return as a character reference', () => {
+    const value = '<p>a\r\nb</p>'
+    const expected = {
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>a&#13;\nb</p></div>\n',
+    }
 
     expect(generateXhtmlValue(value)).toEqual(expected)
   })
@@ -81,7 +126,7 @@ describe('generateText', () => {
       xml: { base: 'https://example.com/a?b=1&c=2' },
     }
     const expected = {
-      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>ok</p></div>',
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>ok</p></div>\n',
       '@type': 'xhtml',
       '@xml:base': 'https://example.com/a?b=1&amp;c=2',
     }
@@ -89,10 +134,32 @@ describe('generateText', () => {
     expect(generateText(value)).toEqual(expected)
   })
 
+  it('should escape a quote in attribute values of an xhtml construct', () => {
+    const value = {
+      value: '<p>ok</p>',
+      type: 'xhtml',
+      xml: { base: 'https://example.com/a"b' },
+    }
+    const expected = {
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>ok</p></div>\n',
+      '@type': 'xhtml',
+      '@xml:base': 'https://example.com/a&quot;b',
+    }
+
+    expect(generateText(value)).toEqual(expected)
+  })
+
+  it('should emit a value that is not well-formed XML as type html', () => {
+    const value = { value: '<p>Hello<br>world</p>', type: 'xhtml' }
+    const expected = { '#cdata': '<p>Hello<br>world</p>', '@type': 'html' }
+
+    expect(generateText(value)).toEqual(expected)
+  })
+
   it('should route a padded type to the same path as the emitted attribute', () => {
     const value = { value: '<p>ok</p>', type: ' xhtml' }
     const expected = {
-      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>ok</p></div>',
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>ok</p></div>\n',
       '@type': 'xhtml',
     }
 
@@ -137,6 +204,12 @@ describe('generateText', () => {
     const value = { value: '   ' }
 
     expect(generateText(value)).toBeUndefined()
+  })
+
+  it('should return undefined for an empty value with a type', () => {
+    expect(generateText({ value: '', type: 'xhtml' })).toBeUndefined()
+    expect(generateText({ value: '   ', type: 'xhtml' })).toBeUndefined()
+    expect(generateText({ value: '', type: 'text' })).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
@@ -211,6 +284,13 @@ describe('generateContent', () => {
     expect(generateContent(value)).toEqual(expected)
   })
 
+  it('should emit a value that is not well-formed XML as type html', () => {
+    const value = { value: '<p>Hello<br>world</p>', type: 'xhtml' }
+    const expected = { '#cdata': '<p>Hello<br>world</p>', '@type': 'html' }
+
+    expect(generateContent(value)).toEqual(expected)
+  })
+
   it('should generate content with only src attribute', () => {
     const value = {
       type: 'video/mp4',
@@ -244,7 +324,7 @@ describe('generateContent', () => {
       },
     }
     const expected = {
-      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><div>XHTML content</div></div>',
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><div>XHTML content</div></div>\n',
       '@type': 'xhtml',
       '@xml:base': 'http://example.org/entry/1',
       '@xml:lang': 'en-US',
