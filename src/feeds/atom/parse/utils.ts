@@ -110,7 +110,7 @@ export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
   try {
     const parsed = xhtmlDivParser.parse(`<x-wrap>${value}</x-wrap>`)
 
-    if (parsed.length !== 1) {
+    if (parsed.length !== 1 || !Array.isArray(parsed[0]['x-wrap'])) {
       return value
     }
 
@@ -119,19 +119,11 @@ export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
     return value
   }
 
-  if (!Array.isArray(children)) {
-    return value
-  }
-
-  let inner: string | undefined
+  const divTexts: Array<string> = []
 
   for (const child of children) {
     if (Array.isArray(child.div)) {
-      if (inner !== undefined) {
-        return value
-      }
-
-      inner = child.div[0]?.['#text'] ?? ''
+      divTexts.push(child.div[0]?.['#text'] ?? '')
       continue
     }
 
@@ -142,9 +134,11 @@ export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
     return value
   }
 
-  if (inner === undefined) {
+  if (divTexts.length !== 1) {
     return value
   }
+
+  const inner = divTexts[0]
 
   // A self-closing or empty wrapper is a construct with no content.
   if (inner === '') {

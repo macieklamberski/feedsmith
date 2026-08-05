@@ -191,6 +191,12 @@ describe('unwrapXhtmlDiv', () => {
     expect(unwrapXhtmlDiv(value)).toBe(value)
   })
 
+  it('should return value unchanged when a stray closing tag splits the scan', () => {
+    const value = '<div>First</div></x-wrap><div>Second</div>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
   it('should return value unchanged when text follows the wrapper', () => {
     const value = '<div>Text</div> trailing'
 
