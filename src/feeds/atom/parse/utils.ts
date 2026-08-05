@@ -63,6 +63,55 @@ export const createNamespaceGetter = (
   return (key: string) => value[prefix + key]
 }
 
+// The value of a `type="xhtml"` text construct is the content of its single wrapping
+// <div> — RFC 4287 §3.1.1.3 requires the div itself to be excluded. The wrapper may also
+// bind the XHTML namespace to a prefix (`<xhtml:div>`), in which case every descendant tag
+// carries it too; the prefix is stripped along with the wrapper so the value is plain HTML.
+// Only the XHTML prefix gets this treatment. SVG and MathML are the two other namespaces
+// HTML represents unprefixed (foreign content — WHATWG HTML §13.2.6.5, "The rules for
+// parsing tokens in foreign content", https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign),
+// but prefixed SVG/MathML inside xhtml constructs has no observed real-world usage; extend
+// to those bindings if such feeds ever appear.
+const xhtmlSelfClosingDivRegex = /^\s*<(?:[a-zA-Z][\w-]*:)?div(?:\s[^>]*)?\/>\s*$/
+const xhtmlOpeningDivRegex = /^\s*<(?:([a-zA-Z][\w-]*):)?div(?:\s[^>]*)?>/
+
+export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
+  if (!isNonEmptyString(value)) {
+    return value
+  }
+
+  if (xhtmlSelfClosingDivRegex.test(value)) {
+    return
+  }
+
+  const match = value.match(xhtmlOpeningDivRegex)
+
+  if (!match) {
+    return value
+  }
+
+  const prefix = match[1]
+  const closingDivRegex = new RegExp(`</\\s*${prefix ? `${prefix}:` : ''}div\\s*>\\s*$`)
+
+  if (!closingDivRegex.test(value)) {
+    return value
+  }
+
+  const inner = value.slice(match[0].length).replace(closingDivRegex, '')
+
+  if (prefix) {
+    return inner.replace(new RegExp(`(</?)${prefix}:`, 'g'), '$1')
+  }
+
+  return inner
+}
+
+export const retrieveTypedText = (value: Unreliable, type: string | undefined): Unreliable => {
+  const text = retrieveText(value)
+
+  return type === 'xhtml' ? unwrapXhtmlDiv(text) : text
+}
+
 export const parseText: ParseUtilPartial<AtomFeed.Text> = (value) => {
   if (isNonEmptyString(value)) {
     const parsed = parseString(value)
@@ -74,7 +123,8 @@ export const parseText: ParseUtilPartial<AtomFeed.Text> = (value) => {
     return
   }
 
-  const parsedValue = parseString(retrieveText(value))
+  const type = parseString(value['@type'])
+  const parsedValue = parseString(retrieveTypedText(value, type))
 
   if (!parsedValue) {
     return
@@ -82,7 +132,7 @@ export const parseText: ParseUtilPartial<AtomFeed.Text> = (value) => {
 
   const text = {
     value: parsedValue,
-    type: parseString(value['@type']),
+    type,
     xml: retrieveXmlItemOrFeed(value),
   }
 
@@ -100,9 +150,11 @@ export const parseContent: ParseUtilPartial<AtomFeed.Content> = (value) => {
     return
   }
 
+  const type = parseString(value['@type'])
+
   const content = {
-    value: parseString(retrieveText(value)),
-    type: parseString(value['@type']),
+    value: parseString(retrieveTypedText(value, type)),
+    type,
     src: parseString(value['@src']),
     xml: retrieveXmlItemOrFeed(value),
   }
