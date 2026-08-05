@@ -89,7 +89,8 @@ describe('generate', () => {
     <item>
       <title>First item</title>
       <atom:content type="xhtml">
-<div xmlns="http://www.w3.org/1999/xhtml"><p>Rich <em>text</em></p></div>      </atom:content>
+<div xmlns="http://www.w3.org/1999/xhtml"><p>Rich <em>text</em></p></div>
+      </atom:content>
     </item>
   </channel>
 </rss>

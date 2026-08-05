@@ -53,7 +53,7 @@ describe('generateXhtmlValue', () => {
   it('should wrap a well-formed value in a div', () => {
     const value = '<p>Text</p>'
     const expected = {
-      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>Text</p></div>',
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>Text</p></div>\n',
     }
 
     expect(generateXhtmlValue(value)).toEqual(expected)
@@ -63,7 +63,7 @@ describe('generateXhtmlValue', () => {
     const value = '<p>a &lt; b &amp; c &#60;d&#62;</p>'
     const expected = {
       '#text':
-        '<div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b &amp; c &#60;d&#62;</p></div>',
+        '<div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b &amp; c &#60;d&#62;</p></div>\n',
     }
 
     expect(generateXhtmlValue(value)).toEqual(expected)
@@ -96,7 +96,7 @@ describe('generateXhtmlValue', () => {
   it('should keep the predefined entities and valid character references', () => {
     const value = '<p>a&amp;b &#13; &#x1F600;</p>'
     const expected = {
-      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>a&amp;b &#13; &#x1F600;</p></div>',
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>a&amp;b &#13; &#x1F600;</p></div>\n',
     }
 
     expect(generateXhtmlValue(value)).toEqual(expected)
@@ -105,7 +105,7 @@ describe('generateXhtmlValue', () => {
   it('should encode a carriage return as a character reference', () => {
     const value = '<p>a\r\nb</p>'
     const expected = {
-      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>a&#13;\nb</p></div>',
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>a&#13;\nb</p></div>\n',
     }
 
     expect(generateXhtmlValue(value)).toEqual(expected)
@@ -126,7 +126,7 @@ describe('generateText', () => {
       xml: { base: 'https://example.com/a?b=1&c=2' },
     }
     const expected = {
-      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>ok</p></div>',
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>ok</p></div>\n',
       '@type': 'xhtml',
       '@xml:base': 'https://example.com/a?b=1&amp;c=2',
     }
@@ -141,7 +141,7 @@ describe('generateText', () => {
       xml: { base: 'https://example.com/a"b' },
     }
     const expected = {
-      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>ok</p></div>',
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>ok</p></div>\n',
       '@type': 'xhtml',
       '@xml:base': 'https://example.com/a&quot;b',
     }
@@ -159,7 +159,7 @@ describe('generateText', () => {
   it('should route a padded type to the same path as the emitted attribute', () => {
     const value = { value: '<p>ok</p>', type: ' xhtml' }
     const expected = {
-      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>ok</p></div>',
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>ok</p></div>\n',
       '@type': 'xhtml',
     }
 
@@ -324,7 +324,7 @@ describe('generateContent', () => {
       },
     }
     const expected = {
-      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><div>XHTML content</div></div>',
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><div>XHTML content</div></div>\n',
       '@type': 'xhtml',
       '@xml:base': 'http://example.org/entry/1',
       '@xml:lang': 'en-US',

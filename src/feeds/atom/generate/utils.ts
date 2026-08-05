@@ -85,7 +85,9 @@ export const generateXhtmlValue: GenerateUtil<string> = (value) => {
     return
   }
 
-  return { '#text': wrapped }
+  // The builder emits this value raw and puts the closing tag right after it; the newline
+  // lets that tag land indented on its own line instead of glued to the div.
+  return { '#text': `${wrapped}\n` }
 }
 
 // A construct emitted raw by the builder (see the stop nodes in config.ts) has its

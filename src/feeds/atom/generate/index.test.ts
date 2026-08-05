@@ -59,11 +59,13 @@ describe('generate', () => {
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>https://example.com/feed</id>
   <title type="xhtml">
-<div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b <em>ok</em></p></div>  </title>
+<div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b <em>ok</em></p></div>
+  </title>
   <updated>2023-03-15T12:00:00.000Z</updated>
   <entry>
     <content type="xhtml">
-<div xmlns="http://www.w3.org/1999/xhtml"><p>Rich <strong>content</strong></p></div>    </content>
+<div xmlns="http://www.w3.org/1999/xhtml"><p>Rich <strong>content</strong></p></div>
+    </content>
     <id>https://example.com/entry</id>
     <title>Entry</title>
     <updated>2023-03-15T12:00:00.000Z</updated>
