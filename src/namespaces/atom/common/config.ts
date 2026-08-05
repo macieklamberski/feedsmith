@@ -75,6 +75,8 @@ const prefixSegments = (path: string) => {
     .join('.')
 }
 
+// Prefixes are canonicalized to `atom:` during parsing (createNamespaceHooks), so
+// alternates like `a10:` match these entries too.
 export const stopNodes = [...new Set([...feedPaths, ...entryPaths])].map((path) => {
   return `*.${prefixSegments(path)}`
 })

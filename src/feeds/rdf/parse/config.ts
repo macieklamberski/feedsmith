@@ -1,11 +1,4 @@
-import { XMLParser } from 'fast-xml-parser'
-import {
-  namespacePrefixes,
-  namespaceStopNodes,
-  namespaceUris,
-  parserConfig,
-} from '../../../common/config.js'
-import { createNamespaceNormalizator } from '../../../common/utils.js'
+import { namespaceStopNodes } from '../../../common/config.js'
 
 export const stopNodes = [
   ...namespaceStopNodes,
@@ -23,13 +16,3 @@ export const stopNodes = [
   'rdf:rdf.textinput.name',
   'rdf:rdf.textinput.link',
 ]
-
-export const parser = new XMLParser({
-  ...parserConfig,
-  stopNodes,
-})
-
-export const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
-  'rdf',
-  'rss',
-])
