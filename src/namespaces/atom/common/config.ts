@@ -75,8 +75,6 @@ const prefixSegments = (path: string) => {
     .join('.')
 }
 
-// Embedded in other formats, every element spells the atom prefix below a host-dependent
-// mount point.
 export const stopNodes = [...new Set([...feedPaths, ...entryPaths])].map((path) => {
   return `*.${prefixSegments(path)}`
 })

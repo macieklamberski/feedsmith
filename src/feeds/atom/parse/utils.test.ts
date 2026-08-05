@@ -191,6 +191,18 @@ describe('unwrapXhtmlDiv', () => {
     expect(unwrapXhtmlDiv(value)).toBe(value)
   })
 
+  it('should return value unchanged when text follows the wrapper', () => {
+    const value = '<div>Text</div> trailing'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should return value unchanged when a comment follows the wrapper', () => {
+    const value = '<div>Text</div><!-- comment -->'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
   it('should unwrap a div whose attribute value contains a closing angle bracket', () => {
     const value = '<div title="a>b"><p>Text</p></div>'
     const expected = '<p>Text</p>'
@@ -332,9 +344,9 @@ describe('parseTypedText', () => {
     expect(parseTypedText(value, 'xhtml')).toBe(expected)
   })
 
-  it('should keep an unquoted-attribute wrapper verbatim instead of decoding it', () => {
+  it('should unwrap a wrapper with an unquoted attribute value', () => {
     const value = { '#text': '<div class=foo><p>5 &lt; 6</p></div>' }
-    const expected = '<div class=foo><p>5 &lt; 6</p></div>'
+    const expected = '<p>5 &lt; 6</p>'
 
     expect(parseTypedText(value, 'xhtml')).toBe(expected)
   })

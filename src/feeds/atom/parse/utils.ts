@@ -1,3 +1,4 @@
+import { XMLParser } from 'fast-xml-parser'
 import { isNonEmptyString, isPlainObject } from 'trousse'
 import type { DateAny, Unreliable } from '../../../common/types.js'
 import {
@@ -65,92 +66,98 @@ export const createNamespaceGetter = (
 }
 
 // The value of a `type="xhtml"` text construct is the content of its single wrapping
-// <div> — RFC 4287 §3.1.1.3 requires the div itself to be excluded. The wrapper may also
+// <div>: RFC 4287 §3.1.1.3 requires the div itself to be excluded. The wrapper may also
 // bind the XHTML namespace to a prefix (`<xhtml:div>`), in which case every descendant tag
 // carries it too; the prefix is stripped along with the wrapper so the value is plain HTML.
 // Only the XHTML prefix gets this treatment. SVG and MathML are the two other namespaces
-// HTML represents unprefixed (foreign content — WHATWG HTML §13.2.6.5, "The rules for
+// HTML represents unprefixed (foreign content: WHATWG HTML §13.2.6.5, "The rules for
 // parsing tokens in foreign content", https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign),
 // but prefixed SVG/MathML inside xhtml constructs has no observed real-world usage; extend
 // to those bindings if such feeds ever appear.
-// The attribute part accepts only quoted values, so a `>` inside an attribute value
-// (`<div title="a>b">`) cannot end the match early and shift the slice into the attribute.
-const xhtmlDivAttrsPattern = '(?:\\s+[^\\s=>]+\\s*=\\s*(?:"[^"]*"|\'[^\']*\'))*'
-const xhtmlSelfClosingDivRegex = new RegExp(
-  `^\\s*<(?:[a-zA-Z][\\w.-]*:)?div${xhtmlDivAttrsPattern}\\s*/>\\s*$`,
-)
-const xhtmlOpeningDivRegex = new RegExp(
-  `^\\s*<(?:([a-zA-Z][\\w.-]*):)?div${xhtmlDivAttrsPattern}\\s*>`,
-)
-// Classification only: a value opening with any div tag is markup, including shapes the
-// strict wrapper pattern rejects, such as an unquoted attribute value.
-const xhtmlDivStartRegex = /^\s*<(?:[a-zA-Z][\w.-]*:)?div[\s/>]/
-const divTagRegex = new RegExp(
-  `<(/?)(?:[a-zA-Z][\\w.-]*:)?div(?=[\\s/>])${xhtmlDivAttrsPattern}\\s*(/?)>`,
-  'g',
-)
-const commentRegex = /<!--[\s\S]*?-->/g
+const xhtmlDivStartRegex = /^\s*<(?:([a-zA-Z][\w.-]*):)?div[\s/>]/
 
-// A spec-violating construct can hold several sibling divs (`<div>a</div><div>b</div>`);
-// stripping the first opening and last closing tag there would leave unbalanced markup, so
-// the wrapper is only stripped when the remaining div tags close in order and end at depth
-// zero. Comments are dropped before counting because their text is literal, not markup;
-// CDATA is already escaped by the time this runs (see parseTypedText).
-const hasBalancedDivs = (inner: string): boolean => {
-  const scannable = inner.includes('<!--') ? inner.replace(commentRegex, '') : inner
-
-  divTagRegex.lastIndex = 0
-  let depth = 0
-  let match: RegExpExecArray | null = divTagRegex.exec(scannable)
-
-  while (match) {
-    if (match[1] === '/') {
-      depth--
-
-      if (depth < 0) {
-        return false
-      }
-    } else if (match[2] !== '/') {
-      depth++
-    }
-
-    match = divTagRegex.exec(scannable)
-  }
-
-  return depth === 0
-}
+// The wrapper is located by re-parsing the value with the div as a stop node, which hands
+// back its raw inner markup byte for byte while a real tag scan deals with a `>` inside a
+// quoted attribute, comments and nested divs. A spec-violating shape (sibling divs, text
+// or comments around the wrapper, a mismatched closing tag) surfaces as extra root
+// children or a parse error, and the value is then kept unchanged.
+//
+// The synthetic root exists because the parser silently drops text standing outside the
+// root element; inside `x-wrap`, that text stays visible to the shape check below.
+const xhtmlDivParser = new XMLParser({
+  preserveOrder: true,
+  stopNodes: ['x-wrap.div'],
+  processEntities: false,
+  ignoreAttributes: true,
+  removeNSPrefix: true,
+  trimValues: false,
+  commentPropName: '#comment',
+})
 
 export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
   if (!isNonEmptyString(value)) {
     return value
   }
 
-  if (xhtmlSelfClosingDivRegex.test(value)) {
-    return
-  }
-
-  const match = value.match(xhtmlOpeningDivRegex)
+  const match = value.match(xhtmlDivStartRegex)
 
   if (!match) {
     return value
   }
 
-  // A prefix may contain dots, which are regex metacharacters when interpolated.
-  const prefix = match[1]?.replace(/\./g, '\\.')
-  const closingDivRegex = new RegExp(`</\\s*${prefix ? `${prefix}:` : ''}div\\s*>\\s*$`)
+  let children: Unreliable
 
-  if (!closingDivRegex.test(value)) {
+  try {
+    const parsed = xhtmlDivParser.parse(`<x-wrap>${value}</x-wrap>`)
+
+    if (parsed.length !== 1) {
+      return value
+    }
+
+    children = parsed[0]['x-wrap']
+  } catch {
     return value
   }
 
-  const inner = value.slice(match[0].length).replace(closingDivRegex, '')
-
-  if (!hasBalancedDivs(inner)) {
+  if (!Array.isArray(children)) {
     return value
   }
+
+  let inner: string | undefined
+
+  for (const child of children) {
+    if (Array.isArray(child.div)) {
+      if (inner !== undefined) {
+        return value
+      }
+
+      inner = child.div[0]?.['#text'] ?? ''
+      continue
+    }
+
+    if (typeof child['#text'] === 'string' && child['#text'].trim() === '') {
+      continue
+    }
+
+    return value
+  }
+
+  if (inner === undefined) {
+    return value
+  }
+
+  // A self-closing or empty wrapper is a construct with no content.
+  if (inner === '') {
+    return
+  }
+
+  const prefix = match[1]
 
   if (prefix) {
-    return inner.replace(new RegExp(`(</?)${prefix}:`, 'g'), '$1')
+    // A prefix may contain dots, which are regex metacharacters when interpolated.
+    const escapedPrefix = prefix.replace(/\./g, '\\.')
+
+    return inner.replace(new RegExp(`(</?)${escapedPrefix}:`, 'g'), '$1')
   }
 
   return inner
@@ -198,10 +205,8 @@ export const parseTypedText = (value: Unreliable, type: string | undefined): str
   }
 
   // A value that opens with a div is markup even when the wrapper cannot be stripped
-  // (sibling divs, an unterminated wrapper); only wrapper-less values keep the decoding
-  // path for feeds that label escaped HTML as xhtml. The looser test accepts shapes the
-  // strict wrapper regex rejects, such as an unquoted attribute value, so a value that is
-  // plainly markup never reaches the decoding path.
+  // (sibling divs, an unterminated wrapper, text around it); only wrapper-less values keep
+  // the decoding path for feeds that label escaped HTML as xhtml.
   if (isNonEmptyString(escaped) && xhtmlDivStartRegex.test(escaped)) {
     return parseVerbatimString(escaped)
   }
