@@ -1,5 +1,5 @@
 import { XMLParser } from 'fast-xml-parser'
-import { isNonEmptyString, isPlainObject } from 'trousse'
+import { isNonEmptyString, isPlainObject, parseUrl } from 'trousse'
 import type { DateAny, Unreliable } from '../../../common/types.js'
 import {
   detectNamespaces,
@@ -47,6 +47,7 @@ import {
 } from '../../../namespaces/thr/parse/utils.js'
 import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
+import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
 import {
   retrieveFeed as retrieveYtFeed,
@@ -88,7 +89,8 @@ const xhtmlDivParser = new XMLParser({
   preserveOrder: true,
   stopNodes: ['x-wrap.div'],
   processEntities: false,
-  ignoreAttributes: true,
+  ignoreAttributes: false,
+  attributeNamePrefix: '@',
   removeNSPrefix: true,
   trimValues: false,
   commentPropName: '#comment',
@@ -157,6 +159,72 @@ export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
   return inner
 }
 
+// The wrapper div is excluded from the content (RFC 4287 §3.1.1.3), so xml:base and
+// xml:lang declared on it would vanish with it. They are read here through the same
+// mini-parse that located the wrapper, only when it was actually stripped: a value kept
+// verbatim still carries its div, declarations included.
+// Atom 0.3 spelled the construct type as `application/xhtml+xml`.
+const isXhtmlType = (type: string | undefined): boolean => {
+  return type === 'xhtml' || type === 'application/xhtml+xml'
+}
+
+export const retrieveXhtmlDivXml = (
+  value: Unreliable,
+  type: string | undefined,
+): XmlNs.ItemOrFeed | undefined => {
+  if (!isXhtmlType(type)) {
+    return
+  }
+
+  const escaped = escapeCdataSections(retrieveText(value))
+
+  if (!isNonEmptyString(escaped) || unwrapXhtmlDiv(escaped) === escaped) {
+    return
+  }
+
+  // The wrapper was stripped, so this identical parse is known to succeed and to hold
+  // exactly one div child; no guards are needed on the way to it.
+  const children = xhtmlDivParser.parse(`<x-wrap>${escaped}</x-wrap>`)[0]['x-wrap']
+
+  for (const child of children) {
+    if (Array.isArray(child.div)) {
+      const attributes = child[':@']
+      const xml = {
+        base: parseString(attributes?.['@base']),
+        lang: parseString(attributes?.['@lang']),
+      }
+
+      return trimObject(xml)
+    }
+  }
+}
+
+// The div is the inner scope, so its lang replaces the element's, and its base resolves
+// against the element's when relative (XML Base §4.3); a pair the URL parser rejects keeps
+// the div's value as declared.
+export const mergeXhtmlDivXml = (
+  elementXml: XmlNs.ItemOrFeed | undefined,
+  divXml: XmlNs.ItemOrFeed | undefined,
+): XmlNs.ItemOrFeed | undefined => {
+  if (!divXml) {
+    return elementXml
+  }
+
+  let base = divXml.base ?? elementXml?.base
+
+  if (divXml.base && elementXml?.base) {
+    base = parseUrl(divXml.base, elementXml.base)?.href ?? base
+  }
+
+  const merged = {
+    ...elementXml,
+    lang: divXml.lang ?? elementXml?.lang,
+    base,
+  }
+
+  return trimObject(merged)
+}
+
 // A CDATA section is XML's other spelling for literal text, so its content becomes entities
 // in the verbatim value: dropping only the markers would hand a literal `<` to an HTML
 // parser as markup, the same corruption the verbatim path exists to avoid. A section
@@ -185,7 +253,7 @@ export const escapeCdataSections = (value: Unreliable): Unreliable => {
 export const parseTypedText = (value: Unreliable, type: string | undefined): string | undefined => {
   const text = retrieveText(value)
 
-  if (type !== 'xhtml' && type !== 'application/xhtml+xml') {
+  if (!isXhtmlType(type)) {
     return parseString(text)
   }
 
@@ -229,7 +297,7 @@ export const parseText: ParseUtilPartial<AtomFeed.Text> = (value) => {
   const text = {
     value: parsedValue,
     type,
-    xml: retrieveXmlItemOrFeed(value),
+    xml: mergeXhtmlDivXml(retrieveXmlItemOrFeed(value), retrieveXhtmlDivXml(value, type)),
   }
 
   return trimObject(text) as AtomFeed.Text
@@ -252,7 +320,7 @@ export const parseContent: ParseUtilPartial<AtomFeed.Content> = (value) => {
     value: parseTypedText(value, type),
     type,
     src: parseString(value['@src']),
-    xml: retrieveXmlItemOrFeed(value),
+    xml: mergeXhtmlDivXml(retrieveXmlItemOrFeed(value), retrieveXhtmlDivXml(value, type)),
   }
 
   return trimObject(content)

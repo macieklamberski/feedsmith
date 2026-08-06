@@ -504,6 +504,126 @@ describe('parseText', () => {
 
     expect(parseText(value)).toBeUndefined()
   })
+
+  describe('wrapper div xml declarations', () => {
+    it('should surface xml:base declared on the stripped wrapper div', () => {
+      const value = {
+        '#text':
+          '<div xmlns="http://www.w3.org/1999/xhtml" xml:base="https://example.com/posts/"><p>Text</p></div>',
+        '@type': 'xhtml',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { base: 'https://example.com/posts/' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should surface xml:lang declared on the stripped wrapper div', () => {
+      const value = {
+        '#text': '<div xmlns="http://www.w3.org/1999/xhtml" xml:lang="de"><p>Text</p></div>',
+        '@type': 'xhtml',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { lang: 'de' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should let the wrapper div lang replace the element lang', () => {
+      const value = {
+        '#text': '<div xmlns="http://www.w3.org/1999/xhtml" xml:lang="de"><p>Text</p></div>',
+        '@type': 'xhtml',
+        '@xml:lang': 'en',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { lang: 'de' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should let an absolute wrapper div base replace the element base', () => {
+      const value = {
+        '#text':
+          '<div xmlns="http://www.w3.org/1999/xhtml" xml:base="https://inner.example.com/"><p>Text</p></div>',
+        '@type': 'xhtml',
+        '@xml:base': 'https://outer.example.com/',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { base: 'https://inner.example.com/' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should resolve a relative wrapper div base against the element base', () => {
+      const value = {
+        '#text': '<div xmlns="http://www.w3.org/1999/xhtml" xml:base="images/"><p>Text</p></div>',
+        '@type': 'xhtml',
+        '@xml:base': 'https://example.com/posts/',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { base: 'https://example.com/posts/images/' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should keep the wrapper div base as declared when the pair does not resolve', () => {
+      const value = {
+        '#text': '<div xmlns="http://www.w3.org/1999/xhtml" xml:base="images/"><p>Text</p></div>',
+        '@type': 'xhtml',
+        '@xml:base': 'not a url',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { base: 'images/' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should attach nothing from a wrapper div that was not stripped', () => {
+      const value = {
+        '#text': '<div xml:base="https://example.com/"><p>1</p></div><div><p>2</p></div>',
+        '@type': 'xhtml',
+      }
+      const expected = {
+        value: '<div xml:base="https://example.com/"><p>1</p></div><div><p>2</p></div>',
+        type: 'xhtml',
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should decode entities in a wrapper div base', () => {
+      const value = {
+        '#text':
+          '<div xmlns="http://www.w3.org/1999/xhtml" xml:base="https://example.com/?a=1&amp;b=2"><p>Text</p></div>',
+        '@type': 'xhtml',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { base: 'https://example.com/?a=1&b=2' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+  })
 })
 
 describe('parseContent', () => {
