@@ -258,7 +258,7 @@ const xml = generateAtomFeed({
 
 ### Atom `type="xhtml"` Values Are Now Plain HTML
 
-Parsing of `type="xhtml"` text constructs and content now conforms to [RFC 4287 §3.1.1.3](https://www.rfc-editor.org/rfc/rfc4287#section-3.1.1.3), and the parsed value is the plain HTML the spec describes. The same applies to `type="application/xhtml+xml"` (the Atom 0.3 spelling) and to Atom text constructs embedded in RSS items. Three things changed:
+Parsing of `type="xhtml"` text constructs and content now conforms to [RFC 4287 §3.1.1.3](https://www.rfc-editor.org/rfc/rfc4287#section-3.1.1.3), and the parsed value is the plain HTML the spec describes. The same applies to `type="application/xhtml+xml"` (the Atom 0.3 spelling) and to Atom text constructs embedded in RSS items. Four things changed:
 
 - The wrapper `<div>` is stripped: the spec excludes it from the content
 - `xml:base` and `xml:lang` declared on the stripped wrapper fold into the construct's `xml` object, where the element's own declarations already live. The wrapper is the inner scope, so its `lang` replaces the element's, and its `base` resolves against the element's when relative. The `base` is surfaced as declared, not resolved against feed or entry level declarations, which stay on their own levels
