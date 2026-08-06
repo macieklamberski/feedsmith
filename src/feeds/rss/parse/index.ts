@@ -34,7 +34,7 @@ export const parse = <TDate = string>(
   let normalized: Unreliable
 
   try {
-    namespaceOptions = createNamespaceOptions()
+    namespaceOptions = createNamespaceOptions(value)
     normalized = parser.parse(value)
   } catch (error) {
     throw new MalformedError(locales.invalidFeedFormat, { cause: error })

@@ -652,15 +652,98 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
     return namespacePrefixes[normalized]
   }
 
+  // Far above the deepest alternate-prefix declaration observed in real feeds.
+  const seedScanLimit = 65536
+
+  // Everything before the root element is a comment, a processing instruction or a
+  // doctype, none of which can carry a declaration. A document with no root is not a feed
+  // and never reaches the parser; the scan then simply starts at the beginning.
+  const findRootIndex = (document: string): number => {
+    let index = document.indexOf('<')
+
+    while (index !== -1) {
+      const marker = document.charCodeAt(index + 1)
+
+      // A letter or underscore starts a tag name, so this is the root.
+      if (marker !== 63 && marker !== 33) {
+        return index
+      }
+
+      const end = document.startsWith('<!--', index)
+        ? document.indexOf('-->', index)
+        : document.indexOf('>', index)
+
+      if (end === -1) {
+        return -1
+      }
+
+      index = document.indexOf('<', end)
+    }
+
+    return -1
+  }
+
   // Every declaration a document makes lives in this call, so nothing survives the parse
   // it belongs to and no state can leak into the next document.
-  return () => {
+  return (document?: string) => {
     const prefixMap = new Map<string, string>()
+    const seededPrefixes = new Set<string>()
     let defaultCanonical: string | undefined
     // Stays false while every declaration binds its conventional prefix, which keeps the
     // per-tag work at a single boolean check for the overwhelming majority of feeds.
     let hasRemapping = false
     let tagsSeen = 0
+
+    const recordPrefix = (prefix: string, uri: string) => {
+      if (!prefixMap.has(prefix)) {
+        const canonical = resolveUri(uri)
+
+        if (canonical !== undefined) {
+          prefixMap.set(prefix, canonical)
+
+          if (canonical !== prefix) {
+            hasRemapping = true
+          }
+        }
+      }
+    }
+
+    // The parser matches stop nodes against an element's name before reading its own
+    // attributes, so an element that declares its own prefix would miss them. Seeding the
+    // map from the raw document first closes that gap. Only prefixed declarations are
+    // seeded: a default `xmlns` cannot be scoped without parsing. The scan starts at the
+    // root element because junk before it is the one case a later real declaration cannot
+    // repair, the root's own name being resolved before its attributes are read.
+    if (document) {
+      // Only the head of the document is scanned, which keeps the cost flat on
+      // multi-megabyte feeds. Alternate prefixes, the reason the seed exists, are declared
+      // at the top of real documents; declarations found deeper either already spell the
+      // canonical prefix or resolve to no known namespace, so seeding them would change
+      // nothing. An alternate past the cap falls back to in-order discovery, the behavior
+      // every element had before seeding existed.
+      const head = document.length > seedScanLimit ? document.slice(0, seedScanLimit) : document
+
+      // indexOf jumps from one `xmlns:` occurrence to the next, and the sticky regex then
+      // reads just the `prefix="uri"` pair at that spot, so no regex ever scans the
+      // document itself.
+      const declarationTailRegex = /([\w.-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/y
+
+      let index = head.indexOf('xmlns:', findRootIndex(head))
+
+      while (index !== -1) {
+        declarationTailRegex.lastIndex = index + 6
+        const match = declarationTailRegex.exec(head)
+
+        if (match) {
+          const prefix = match[1].toLowerCase()
+
+          recordPrefix(prefix, match[2] ?? match[3])
+          seededPrefixes.add(prefix)
+        }
+
+        index = head.indexOf('xmlns:', match ? declarationTailRegex.lastIndex : index + 6)
+      }
+    }
 
     const recordDeclaration = (rawAttrName: string, value: unknown) => {
       // Anything not starting with "x" cannot be an xmlns declaration; bail before the
@@ -693,17 +776,13 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
       if (attrName.startsWith('xmlns:')) {
         const prefix = attrName.slice(6)
 
-        if (!prefixMap.has(prefix)) {
-          const canonical = resolveUri(value)
-
-          if (canonical !== undefined) {
-            prefixMap.set(prefix, canonical)
-
-            if (canonical !== prefix) {
-              hasRemapping = true
-            }
-          }
+        // A seeded entry is a guess read out of the raw text; the parser reporting the
+        // declaration is the document itself, so it replaces the guess.
+        if (seededPrefixes.delete(prefix)) {
+          prefixMap.delete(prefix)
         }
+
+        recordPrefix(prefix, value)
       }
     }
 
