@@ -1,6 +1,6 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import { generateCdataString, generatePlainString, trimObject } from '../../../common/utils.js'
+import { generateCdataString, generatePlainString } from '../../../common/utils.js'
 import type { ArxivNs } from '../common/types.js'
 
 export const generatePrimaryCategory: GenerateUtil<ArxivNs.PrimaryCategory> = (primaryCategory) => {

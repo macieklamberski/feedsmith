@@ -1,6 +1,6 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import { generateCdataString, generateNumber, trimObject } from '../../../common/utils.js'
+import { generateCdataString, generateNumber } from '../../../common/utils.js'
 import type { GeoRssNs } from '../common/types.js'
 
 export const generateLatLngPairs = (

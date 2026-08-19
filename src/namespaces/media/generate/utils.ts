@@ -1,4 +1,4 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
@@ -8,7 +8,6 @@ import {
   generateTextOrCdataString,
   generateYesNoBoolean,
   trimArray,
-  trimObject,
 } from '../../../common/utils.js'
 import type { MediaNs } from '../common/types.js'
 

@@ -1,5 +1,5 @@
 import { XMLParser } from 'fast-xml-parser'
-import { isNonEmptyString, isPlainObject, parseUrl } from 'trousse'
+import { isNonEmptyString, isPlainObject, parseUrl, trimObject } from 'trousse'
 import type { DateAny, Unreliable } from '../../../common/types.js'
 import {
   detectNamespaces,
@@ -10,7 +10,6 @@ import {
   parseString,
   parseVerbatimString,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
 import { retrieveEntry as retrieveAppEntry } from '../../../namespaces/app/parse/utils.js'

@@ -1,4 +1,4 @@
-import { isNonEmptyString, isPlainObject, isPresent } from 'trousse'
+import { isNonEmptyString, isPlainObject, isPresent, trimObject } from 'trousse'
 import type { ParseUtilExact, ParseUtilPartial, Unreliable } from '../../../common/types.js'
 import {
   parseArrayOf,
@@ -6,7 +6,6 @@ import {
   parseSingularOf,
   parseString,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { GeoRssNs } from '../common/types.js'
 

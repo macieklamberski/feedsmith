@@ -1,6 +1,6 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
-import { parseSingularOf, parseString, retrieveText, trimObject } from '../../../common/utils.js'
+import { parseSingularOf, parseString, retrieveText } from '../../../common/utils.js'
 import type { ArxivNs } from '../common/types.js'
 
 export const parsePrimaryCategory: ParseUtilPartial<ArxivNs.PrimaryCategory> = (value) => {

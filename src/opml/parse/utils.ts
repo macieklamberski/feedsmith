@@ -1,4 +1,4 @@
-import { isPlainObject, isPresent } from 'trousse'
+import { isPlainObject, isPresent, trimObject } from 'trousse'
 import type { DateAny } from '../../common/types.js'
 import {
   parseArrayOf,
@@ -9,7 +9,6 @@ import {
   parseSingularOf,
   parseString,
   retrieveText,
-  trimObject,
 } from '../../common/utils.js'
 import type { Opml, ParseUtilPartial } from '../common/types.js'
 

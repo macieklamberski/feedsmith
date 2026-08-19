@@ -1,11 +1,6 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
-import {
-  generateCdataString,
-  generateRfc3339Date,
-  trimArray,
-  trimObject,
-} from '../../../common/utils.js'
+import { generateCdataString, generateRfc3339Date, trimArray } from '../../../common/utils.js'
 import type { DcNs } from '../common/types.js'
 
 export const generateItemOrFeed: GenerateUtil<DcNs.ItemOrFeed<DateLike>> = (itemOrFeed) => {

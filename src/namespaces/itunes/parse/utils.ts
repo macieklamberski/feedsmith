@@ -1,4 +1,4 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
@@ -10,7 +10,6 @@ import {
   parseString,
   parseYesNoBoolean,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { ItunesNs } from '../common/types.js'
 

@@ -1,11 +1,10 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   parseArrayOf,
   parseSingularOf,
   parseString,
   retrieveRdfResourceOrText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { TrackbackNs } from '../common/types.js'
 

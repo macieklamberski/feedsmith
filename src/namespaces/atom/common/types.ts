@@ -1,4 +1,4 @@
-import type { DeepOmit } from '../../../common/types.js'
+import type { DeepOmit } from 'trousse'
 import type { AtomFeed } from '../../../feeds/atom/common/types.js'
 
 // Namespace properties to exclude when Atom is used as a namespace (not as a feed format).

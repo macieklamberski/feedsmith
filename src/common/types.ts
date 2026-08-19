@@ -1,5 +1,3 @@
-export type { AnyOf, DeepOmit, IsPlainObject } from 'trousse'
-
 // TODO: Try to use: { [key: string]: Unreliable } | undefined for better type safety.
 // biome-ignore lint/suspicious/noExplicitAny: Temporary solution until the Unreliable type fixed.
 export type Unreliable = any

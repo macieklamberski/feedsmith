@@ -1,6 +1,6 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import { generatePlainString, trimArray, trimObject } from '../../../common/utils.js'
+import { generatePlainString, trimArray } from '../../../common/utils.js'
 import type { PscNs } from '../common/types.js'
 
 export const generateChapter: GenerateUtil<PscNs.Chapter> = (chapter) => {

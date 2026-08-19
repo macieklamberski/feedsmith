@@ -1,4 +1,4 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   parseBoolean,
@@ -6,7 +6,6 @@ import {
   parseSingularOf,
   parseString,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { SpotifyNs } from '../common/types.js'
 

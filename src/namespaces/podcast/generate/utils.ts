@@ -1,4 +1,4 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateBoolean,
@@ -10,7 +10,6 @@ import {
   generateTextOrCdataString,
   generateYesNoBoolean,
   trimArray,
-  trimObject,
 } from '../../../common/utils.js'
 import type { PodcastNs } from '../common/types.js'
 

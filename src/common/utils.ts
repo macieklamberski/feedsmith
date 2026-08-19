@@ -54,8 +54,6 @@ export const retrieveRdfResourceOrText = <T>(
   return parse(retrieveText(value))
 }
 
-export { trimObject }
-
 export const trimArray = <T, R = T>(
   value: Array<T> | undefined,
   parse?: ParseUtilExact<R>,

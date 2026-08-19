@@ -1,4 +1,4 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateAny } from '../../../common/types.js'
 import {
   detectNamespaces,
@@ -11,7 +11,6 @@ import {
   parseString,
   retrieveText,
   trimArray,
-  trimObject,
 } from '../../../common/utils.js'
 import {
   retrieveFeed as retrieveAcastFeed,

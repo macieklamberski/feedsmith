@@ -1,6 +1,6 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import { generateCdataString, trimObject } from '../../../common/utils.js'
+import { generateCdataString } from '../../../common/utils.js'
 import type { BlogChannelNs } from '../common/types.js'
 
 export const generateFeed: GenerateUtil<BlogChannelNs.Feed> = (feed) => {
