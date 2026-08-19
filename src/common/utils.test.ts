@@ -36,7 +36,6 @@ import {
   retrieveRdfResourceOrText,
   retrieveText,
   trimArray,
-  trimObject,
 } from './utils.js'
 
 describe('isNonEmptyStringOrNumber', () => {
@@ -424,73 +423,6 @@ describe('retrieveRdfResourceOrText', () => {
 
       expect(retrieveRdfResourceOrText(value, alwaysUndefined)).toBeUndefined()
     })
-  })
-})
-
-describe('trimObject', () => {
-  it('should remove nullish properties from objects', () => {
-    const value = { a: 1, b: undefined, c: 'string', d: undefined, e: null, f: false, g: 0, h: '' }
-    const expected = { a: 1, c: 'string', f: false, g: 0, h: '' }
-
-    expect(trimObject(value)).toEqual(expected)
-  })
-
-  it('should return the same object when no properties are nullish', () => {
-    const value = { a: 1, b: 'string', c: false, d: [], e: {} }
-
-    expect(trimObject(value)).toEqual(value)
-  })
-
-  it('should preserve falsy non-undefined values', () => {
-    const value = { a: 0, b: '', c: false, d: Number.NaN }
-
-    expect(trimObject(value)).toEqual(value)
-  })
-
-  it('should handle objects with symbol keys', () => {
-    const sym = Symbol('test')
-    const value = { a: 1, b: undefined, [sym]: 'symbol value' }
-    const expected = { a: 1 }
-
-    // Symbol keys are not enumerable with for..in, so they won't be included.
-    expect(trimObject(value)).toEqual(expected)
-  })
-
-  it('should handle complex nested objects', () => {
-    const value = {
-      a: { nested: 'value', undef: undefined },
-      b: undefined,
-      c: [1, undefined, 3],
-    }
-    const expected = {
-      a: { nested: 'value', undef: undefined },
-      c: [1, undefined, 3],
-    }
-
-    // The function only removes top-level undefined properties, not those in nested objects.
-    expect(trimObject(value)).toEqual(expected)
-  })
-
-  it('should handle object with getters', () => {
-    const value = {
-      get a() {
-        return 1
-      },
-      b: undefined,
-    }
-    const expected = { a: 1 }
-
-    expect(trimObject(value)).toEqual(expected)
-  })
-
-  it('should return undefined object when all properties are nullish', () => {
-    const value = { a: undefined, b: undefined, c: null }
-
-    expect(trimObject(value)).toBeUndefined()
-  })
-
-  it('should handle empty objects', () => {
-    expect(trimObject({})).toBeUndefined()
   })
 })
 

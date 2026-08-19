@@ -1,11 +1,10 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generateNumber,
   generateRfc3339Date,
   trimArray,
-  trimObject,
 } from '../../../common/utils.js'
 import type { PrismNs } from '../common/types.js'
 

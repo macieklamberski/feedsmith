@@ -1,12 +1,6 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
-import {
-  parseArrayOf,
-  parseDate,
-  parseString,
-  retrieveText,
-  trimObject,
-} from '../../../common/utils.js'
+import { parseArrayOf, parseDate, parseString, retrieveText } from '../../../common/utils.js'
 import type { DcTermsNs } from '../common/types.js'
 
 export const retrieveItemOrFeed: ParseUtilPartial<

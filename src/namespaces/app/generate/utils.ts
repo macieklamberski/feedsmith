@@ -1,6 +1,6 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
-import { generateRfc3339Date, generateYesNoBoolean, trimObject } from '../../../common/utils.js'
+import { generateRfc3339Date, generateYesNoBoolean } from '../../../common/utils.js'
 import type { AppNs } from '../common/types.js'
 
 export const generateControl: GenerateUtil<AppNs.Control> = (control) => {

@@ -1,6 +1,6 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import { generatePlainString, generateRdfResource, trimObject } from '../../../common/utils.js'
+import { generatePlainString, generateRdfResource } from '../../../common/utils.js'
 import type { AdminNs } from '../common/types.js'
 
 export const generateFeed: GenerateUtil<AdminNs.Feed> = (feed) => {

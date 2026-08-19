@@ -1,4 +1,4 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateAny } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
@@ -8,7 +8,6 @@ import {
   parseNumber,
   parseSingularOf,
   parseVerbatimString,
-  trimObject,
 } from '../../../common/utils.js'
 import type { JsonFeed, ParseUtilPartial } from '../common/types.js'
 

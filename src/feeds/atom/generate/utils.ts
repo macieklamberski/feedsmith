@@ -1,5 +1,5 @@
 import { XMLValidator } from 'fast-xml-parser'
-import { escapeHtml, isNonEmptyString, isPlainObject } from 'trousse'
+import { escapeHtml, isNonEmptyString, isPlainObject, trimObject } from 'trousse'
 import { namespaceUris } from '../../../common/config.js'
 import type { DateLike } from '../../../common/types.js'
 import {
@@ -11,7 +11,6 @@ import {
   generateTextOrCdataString,
   isXmlAttributeKey,
   trimArray,
-  trimObject,
 } from '../../../common/utils.js'
 import { generateFeed as generateAdminFeed } from '../../../namespaces/admin/generate/utils.js'
 import { generateEntry as generateAppEntry } from '../../../namespaces/app/generate/utils.js'
