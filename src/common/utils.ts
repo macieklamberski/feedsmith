@@ -9,9 +9,9 @@ import {
   isNumber,
   isPlainObject,
   isPresent,
+  trimObject,
 } from 'trousse'
 import type {
-  AnyOf,
   DateAny,
   DateLike,
   GenerateUtil,
@@ -54,44 +54,7 @@ export const retrieveRdfResourceOrText = <T>(
   return parse(retrieveText(value))
 }
 
-export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<T> | undefined => {
-  let hasPresent = false
-  let hasAbsent = false
-
-  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
-  for (const key in object) {
-    if (isPresent(object[key])) {
-      hasPresent = true
-    } else {
-      hasAbsent = true
-    }
-
-    if (hasPresent && hasAbsent) {
-      break
-    }
-  }
-
-  if (!hasPresent) {
-    return
-  }
-
-  if (!hasAbsent) {
-    return object as AnyOf<T>
-  }
-
-  const result: Partial<T> = {}
-
-  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
-  for (const key in object) {
-    const value = object[key]
-
-    if (isPresent(value)) {
-      result[key] = value
-    }
-  }
-
-  return result as AnyOf<T>
-}
+export { trimObject }
 
 export const trimArray = <T, R = T>(
   value: Array<T> | undefined,

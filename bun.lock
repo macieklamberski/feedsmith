@@ -11,7 +11,7 @@
       "devDependencies": {
         "@types/bun": "^1.3.14",
         "kvalita": "^1.16.0",
-        "trousse": "^1.1.1",
+        "trousse": "^1.5.0",
         "tsdown": "^0.22.7",
         "vitepress": "^2.0.0-alpha.18",
       },
@@ -908,7 +908,7 @@
 
     "trim-lines": ["trim-lines@3.0.1", "", {}, "sha512-kRj8B+YHZCc9kQYdWfJB2/oUl9rA99qbowYYBtr4ui4mZyAQ2JpvVBd/6U2YloATfqBhBTSMhTpgBHtU0Mf3Rg=="],
 
-    "trousse": ["trousse@1.1.1", "", {}, "sha512-UEufemNgUNPIapW3WPVWwm0dS7GnXeXnOp/xUnSarQq97luECYmjXTXvRhw7tXqjiaqiifrnMFXXkj1XP1sv5Q=="],
+    "trousse": ["trousse@1.5.0", "", {}, "sha512-rvy/EyGp6Djxfe3fv13MCJwUie1cVUXbLaz6KVtETVq4ek4cD31OWoG3iotgInXt7RB4NW+vnxHTIIpcnPV4+Q=="],
 
     "tsdown": ["tsdown@0.22.7", "", { "dependencies": { "ansis": "^4.3.1", "cac": "^7.0.0", "defu": "^6.1.7", "empathic": "^2.0.1", "hookable": "^6.1.1", "import-without-cache": "^0.4.0", "obug": "^2.1.3", "picomatch": "^4.0.5", "rolldown": "~1.1.5", "rolldown-plugin-dts": "^0.27.8", "semver": "^7.8.5", "tinyexec": "^1.2.4", "tinyglobby": "^0.2.17", "tree-kill": "^1.2.2", "unconfig-core": "^7.5.0" }, "peerDependencies": { "@arethetypeswrong/core": "^0.18.1", "@tsdown/css": "0.22.7", "@tsdown/exe": "0.22.7", "@vitejs/devtools": "*", "publint": "^0.3.8", "tsx": "*", "typescript": "^5.0.0 || ^6.0.0 || ^7.0.0", "unplugin-unused": "^0.5.0", "unrun": "*" }, "optionalPeers": ["@arethetypeswrong/core", "@tsdown/css", "@tsdown/exe", "@vitejs/devtools", "publint", "tsx", "typescript", "unplugin-unused", "unrun"], "bin": { "tsdown": "./dist/run.mjs" } }, "sha512-4egbOzc9dxVv/QS+gDV75FIxDIjQQeOnXBlUuikyjmn0ozuc6FW11djJjEEo3vqkuJRygpnKHurnj+Iwftk4VA=="],
 
