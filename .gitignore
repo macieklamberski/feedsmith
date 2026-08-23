@@ -26,4 +26,3 @@ benchmarks/**/Gemfile.lock
 benchmarks/**/parsing-gofeed
 
 # Development
-plans
