@@ -60,7 +60,7 @@
   "devDependencies": {
     "@types/bun": "^1.3.14",
     "kvalita": "^1.21.0",
-    "trousse": "^1.5.0",
+    "trousse": "^2.0.0",
     "tsdown": "^0.22.14",
     "vitepress": "^2.0.0-alpha.19"
   }
