@@ -3409,12 +3409,12 @@ describe('createNamespaceResolver', () => {
   // A default namespace is an attribute value, which fast-xml-parser does not sanitize, so
   // `constructor` and `__proto__` reach the prefix table as keys. Answering with an inherited
   // member renames every element after the uri and the document stops being a feed.
-  it.each([
-    'constructor',
-    '__proto__',
-  ])('should not resolve a %s namespace uri to an inherited member', (uri) => {
-    const createNamespaceOptions = createNamespaceResolver({ namespaceUris, namespacePrefixes })
-    const options = createNamespaceOptions(`<rss xmlns="${uri}">`)
+  const inheritedMemberUris = ['constructor', '__proto__']
+
+  it.each(inheritedMemberUris)('should not resolve %s to an inherited member', (uri) => {
+    const options = createNamespaceResolver({ namespaceUris, namespacePrefixes })(
+      `<rss xmlns="${uri}">`,
+    )
     const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '@', ...options })
     const expected = { rss: { '@xmlns': uri, title: 'T' } }
 
