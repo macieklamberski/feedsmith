@@ -189,7 +189,7 @@ const parseBracketedPerson = (raw: string): RssFeed.Person | undefined => {
         chunk = parseString(raw.slice(start, end - 1))
         i = end
       } else {
-        // Unmatched bracket — treat as literal text.
+        // Unmatched bracket: treat as literal text.
         const literalStart = i
         i = start
         while (i < length && raw[i] !== '<' && raw[i] !== '(' && raw[i] !== '[') {

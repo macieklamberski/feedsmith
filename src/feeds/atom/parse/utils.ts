@@ -65,25 +65,25 @@ export const createNamespaceGetter = (
   return (key: string) => value[prefix + key]
 }
 
-// The value of a `type="xhtml"` text construct is the content of its single wrapping
-// <div>: RFC 4287 §3.1.1.3 requires the div itself to be excluded. The wrapper may also
-// bind the XHTML namespace to a prefix (`<xhtml:div>`), in which case every descendant tag
-// carries it too; the prefix is stripped along with the wrapper so the value is plain HTML.
-// Only the XHTML prefix gets this treatment. SVG and MathML are the two other namespaces
-// HTML represents unprefixed (foreign content: WHATWG HTML §13.2.6.5, "The rules for
-// parsing tokens in foreign content", https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign),
-// but prefixed SVG/MathML inside xhtml constructs has no observed real-world usage; extend
-// to those bindings if such feeds ever appear.
+// The value of a `type="xhtml"` text construct is the content of its single wrapping <div>: RFC
+// 4287 §3.1.1.3 requires the div itself to be excluded. The wrapper may also bind the XHTML
+// namespace to a prefix (`<xhtml:div>`), in which case every descendant tag carries it too; the
+// prefix is stripped along with the wrapper so the value is plain HTML. Only the XHTML prefix gets
+// this treatment. SVG and MathML are the two other namespaces HTML represents unprefixed (foreign
+// content: WHATWG HTML §13.2.6.5, "The rules for parsing tokens in foreign content",
+// https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign), but prefixed
+// SVG/MathML inside xhtml constructs has no observed real-world usage; extend to those bindings if
+// such feeds ever appear.
 const xhtmlDivStartRegex = /^\s*<(?:([a-zA-Z][\w.-]*):)?div[\s/>]/
 
-// The wrapper is located by re-parsing the value with the div as a stop node, which hands
-// back its raw inner markup byte for byte while a real tag scan deals with a `>` inside a
-// quoted attribute, comments and nested divs. A spec-violating shape (sibling divs, text
-// or comments around the wrapper, a mismatched closing tag) surfaces as extra root
-// children or a parse error, and the value is then kept unchanged.
+// The wrapper is located by re-parsing the value with the div as a stop node, which hands back its
+// raw inner markup byte for byte while a real tag scan deals with a `>` inside a quoted attribute,
+// comments and nested divs. A spec-violating shape (sibling divs, text or comments around the
+// wrapper, a mismatched closing tag) surfaces as extra root children or a parse error, and the
+// value is then kept unchanged.
 //
-// The synthetic root exists because the parser silently drops text standing outside the
-// root element; inside `x-wrap`, that text stays visible to the shape check below.
+// The synthetic root exists because the parser silently drops text standing outside the root
+// element; inside `x-wrap`, that text stays visible to the shape check below.
 const xhtmlDivParser = new XMLParser({
   preserveOrder: true,
   stopNodes: ['x-wrap.div'],
@@ -158,11 +158,10 @@ export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
   return inner
 }
 
-// The wrapper div is excluded from the content (RFC 4287 §3.1.1.3), so xml:base and
-// xml:lang declared on it would vanish with it. They are read here through the same
-// mini-parse that located the wrapper, only when it was actually stripped: a value kept
-// verbatim still carries its div, declarations included.
-// Atom 0.3 spelled the construct type as `application/xhtml+xml`.
+// The wrapper div is excluded from the content (RFC 4287 §3.1.1.3), so xml:base and xml:lang
+// declared on it would vanish with it. They are read here through the same mini-parse that located
+// the wrapper, only when it was actually stripped: a value kept verbatim still carries its div,
+// declarations included. Atom 0.3 spelled the construct type as `application/xhtml+xml`.
 const isXhtmlType = (type: string | undefined): boolean => {
   return type === 'xhtml' || type === 'application/xhtml+xml'
 }
@@ -181,8 +180,8 @@ export const retrieveXhtmlDivXml = (
     return
   }
 
-  // The wrapper was stripped, so this identical parse is known to succeed and to hold
-  // exactly one div child; no guards are needed on the way to it.
+  // The wrapper was stripped, so this identical parse is known to succeed and to hold exactly one
+  // div child; no guards are needed on the way to it.
   const children = xhtmlDivParser.parse(`<x-wrap>${escaped}</x-wrap>`)[0]['x-wrap']
 
   for (const child of children) {
@@ -198,9 +197,9 @@ export const retrieveXhtmlDivXml = (
   }
 }
 
-// The div is the inner scope, so its lang replaces the element's, and its base resolves
-// against the element's when relative (XML Base §4.3); a pair the URL parser rejects keeps
-// the div's value as declared.
+// The div is the inner scope, so its lang replaces the element's, and its base resolves against the
+// element's when relative (XML Base §4.3); a pair the URL parser rejects keeps the div's value as
+// declared.
 export const mergeXhtmlDivXml = (
   elementXml: XmlNs.ItemOrFeed | undefined,
   divXml: XmlNs.ItemOrFeed | undefined,
@@ -224,10 +223,10 @@ export const mergeXhtmlDivXml = (
   return trimObject(merged)
 }
 
-// A CDATA section is XML's other spelling for literal text, so its content becomes entities
-// in the verbatim value: dropping only the markers would hand a literal `<` to an HTML
-// parser as markup, the same corruption the verbatim path exists to avoid. A section
-// without its `]]>` terminator is malformed XML and is left untouched.
+// A CDATA section is XML's other spelling for literal text, so its content becomes entities in the
+// verbatim value: dropping only the markers would hand a literal `<` to an HTML parser as markup,
+// the same corruption the verbatim path exists to avoid. A section without its `]]>` terminator is
+// malformed XML and is left untouched.
 const cdataSectionRegex = /<!\[CDATA\[([\s\S]*?)\]\]>/g
 
 export const escapeCdataSections = (value: Unreliable): Unreliable => {
@@ -240,15 +239,14 @@ export const escapeCdataSections = (value: Unreliable): Unreliable => {
   })
 }
 
-// Inside a genuine xhtml construct an escaped `&lt;` stands for that character and not for
-// markup (RFC 4287 §3.1.1.3), so decoding it would turn text into tags that an HTML parser
-// then swallows. Such a value is taken verbatim instead. The wrapper div identifies the
-// genuine case: a value without one is not a valid construct, and the spec does not say how
-// to read an invalid one, so it keeps the decoding, which suits a feed that labels escaped
-// HTML as xhtml. That is a choice, not a rule: 1 of 554 wrapper-less constructs in the
-// corpus sample carries escaped markup, and for the rest both paths produce the same string.
-// Atom 0.3 spelled the same construct as `type="application/xhtml+xml"`, so that type gets
-// the identical treatment.
+// Inside a genuine xhtml construct an escaped `&lt;` stands for that character and not for markup
+// (RFC 4287 §3.1.1.3), so decoding it would turn text into tags that an HTML parser then swallows.
+// Such a value is taken verbatim instead. The wrapper div identifies the genuine case: a value
+// without one is not a valid construct, and the spec does not say how to read an invalid one, so it
+// keeps the decoding, which suits a feed that labels escaped HTML as xhtml. That is a choice, not a
+// rule: 1 of 554 wrapper-less constructs in the corpus sample carries escaped markup, and for the
+// rest both paths produce the same string. Atom 0.3 spelled the same construct as
+// `type="application/xhtml+xml"`, so that type gets the identical treatment.
 export const parseTypedText = (value: Unreliable, type: string | undefined): string | undefined => {
   const text = retrieveText(value)
 
@@ -256,8 +254,8 @@ export const parseTypedText = (value: Unreliable, type: string | undefined): str
     return parseString(text)
   }
 
-  // CDATA is escaped before the wrapper is stripped: its content is literal text, so a
-  // `</xhtml:p>` or `<div>` inside it must not be seen as markup by the prefix strip.
+  // CDATA is escaped before the wrapper is stripped: its content is literal text, so a `</xhtml:p>`
+  // or `<div>` inside it must not be seen as markup by the prefix strip.
   const escaped = escapeCdataSections(text)
   const unwrapped = unwrapXhtmlDiv(escaped)
 
@@ -265,9 +263,9 @@ export const parseTypedText = (value: Unreliable, type: string | undefined): str
     return parseVerbatimString(unwrapped)
   }
 
-  // A value that opens with a div is markup even when the wrapper cannot be stripped
-  // (sibling divs, an unterminated wrapper, text around it); only wrapper-less values keep
-  // the decoding path for feeds that label escaped HTML as xhtml.
+  // A value that opens with a div is markup even when the wrapper cannot be stripped (sibling divs,
+  // an unterminated wrapper, text around it); only wrapper-less values keep the decoding path for
+  // feeds that label escaped HTML as xhtml.
   if (isNonEmptyString(escaped) && xhtmlDivStartRegex.test(escaped)) {
     return parseVerbatimString(escaped)
   }
@@ -350,8 +348,8 @@ export const retrievePersonUri: ParseUtilPartial<string> = (value, options) => {
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const uri = parseSingularOf(get('uri'), (value) => parseString(retrieveText(value))) // Atom 1.0.
-  const url = parseSingularOf(get('url'), (value) => parseString(retrieveText(value))) // Atom 0.3.
+  const uri = parseSingularOf(get('uri'), (value) => parseString(retrieveText(value))) // Atom 1.0
+  const url = parseSingularOf(get('url'), (value) => parseString(retrieveText(value))) // Atom 0.3
 
   return uri || url
 }
@@ -392,8 +390,8 @@ export const retrieveGeneratorUri: ParseUtilPartial<string> = (value) => {
     return
   }
 
-  const uri = parseString(value['@uri']) // Atom 1.0.
-  const url = parseString(value['@url']) // Atom 0.3.
+  const uri = parseString(value['@uri']) // Atom 1.0
+  const url = parseString(value['@url']) // Atom 0.3
 
   return uri || url
 }
@@ -448,9 +446,9 @@ export const retrievePublished: ParseUtilPartial<DateAny> = (value, options) => 
     parseDate(retrieveText(value), options?.parseDateFn),
   ) // Atom 0.3.
 
-  // The "created" date is not entirely valid as "published date", but if it's there when
-  // no other date is present, it's a good-enough fallback especially that it's not present
-  // in 1.0 version of the specfication.
+  // The "created" date is not entirely valid as "published date", but if it's there when no other
+  // date is present, it's a good-enough fallback especially that it's not present in 1.0 version of
+  // the specfication.
   return published || issued || created
 }
 
@@ -476,8 +474,8 @@ export const retrieveSubtitle: ParseUtilPartial<AtomFeed.Text> = (value, options
   }
 
   const get = createNamespaceGetter(value, options?.prefix)
-  const subtitle = parseSingularOf(get('subtitle'), parseText) // Atom 1.0.
-  const tagline = parseSingularOf(get('tagline'), parseText) // Atom 0.3.
+  const subtitle = parseSingularOf(get('subtitle'), parseText) // Atom 1.0
+  const tagline = parseSingularOf(get('tagline'), parseText) // Atom 0.3
 
   return subtitle || tagline
 }

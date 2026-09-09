@@ -1,5 +1,5 @@
 export const uris = [
-  'http://backend.userland.com/creativeCommonsRssModule', // Official URI.
+  'http://backend.userland.com/creativeCommonsRssModule', // Official URI
   'https://backend.userland.com/creativeCommonsRssModule',
   'http://backend.userland.com/creativeCommonsRssModule/',
   'https://backend.userland.com/creativeCommonsRssModule/',

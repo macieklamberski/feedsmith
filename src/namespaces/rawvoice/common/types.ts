@@ -11,8 +11,8 @@ export namespace RawVoiceNs {
   export type LiveStream<TDate, TStrict extends boolean = false> = Strict<
     {
       url?: string
-      schedule: Requirable<TDate> // Required in spec.
-      duration: Requirable<string> // Required in spec.
+      schedule: Requirable<TDate> // Required in spec
+      duration: Requirable<string> // Required in spec
       type?: string
     },
     TStrict
@@ -20,14 +20,14 @@ export namespace RawVoiceNs {
 
   export type Poster<TStrict extends boolean = false> = Strict<
     {
-      url: Requirable<string> // Required in spec.
+      url: Requirable<string> // Required in spec
     },
     TStrict
   >
 
   export type AlternateEnclosure<TStrict extends boolean = false> = Strict<
     {
-      src: Requirable<string> // Required in spec.
+      src: Requirable<string> // Required in spec
       type?: string
       length?: number
     },
@@ -46,7 +46,7 @@ export namespace RawVoiceNs {
 
   export type Donate<TStrict extends boolean = false> = Strict<
     {
-      href: Requirable<string> // Required in spec.
+      href: Requirable<string> // Required in spec
       value?: string
     },
     TStrict

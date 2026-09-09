@@ -45,14 +45,14 @@ export namespace RssFeed {
   export type Person = {
     name?: string
     email?: string
-    // Parse-only. Extracted from URLs found in person strings. Not included in generated output,
-    // as the RSS spec has no standard way to encode links in person fields.
+    // Parse-only. Extracted from URLs found in person strings. Not included in generated output, as
+    // the RSS spec has no standard way to encode links in person fields.
     link?: string
   }
 
   export type Category<TStrict extends boolean = false> = Strict<
     {
-      name: Requirable<string> // Required in spec.
+      name: Requirable<string> // Required in spec
       domain?: string
     },
     TStrict
@@ -60,20 +60,20 @@ export namespace RssFeed {
 
   export type Cloud<TStrict extends boolean = false> = Strict<
     {
-      domain: Requirable<string> // Required in spec.
-      port: Requirable<number> // Required in spec.
-      path: Requirable<string> // Required in spec.
-      registerProcedure: Requirable<string> // Required in spec.
-      protocol: Requirable<string> // Required in spec.
+      domain: Requirable<string> // Required in spec
+      port: Requirable<number> // Required in spec
+      path: Requirable<string> // Required in spec
+      registerProcedure: Requirable<string> // Required in spec
+      protocol: Requirable<string> // Required in spec
     },
     TStrict
   >
 
   export type Image<TStrict extends boolean = false> = Strict<
     {
-      url: Requirable<string> // Required in spec.
-      title: Requirable<string> // Required in spec.
-      link: Requirable<string> // Required in spec.
+      url: Requirable<string> // Required in spec
+      title: Requirable<string> // Required in spec
+      link: Requirable<string> // Required in spec
       description?: string
       height?: number
       width?: number
@@ -83,19 +83,19 @@ export namespace RssFeed {
 
   export type TextInput<TStrict extends boolean = false> = Strict<
     {
-      title: Requirable<string> // Required in spec.
-      description: Requirable<string> // Required in spec.
-      name: Requirable<string> // Required in spec.
-      link: Requirable<string> // Required in spec.
+      title: Requirable<string> // Required in spec
+      description: Requirable<string> // Required in spec
+      name: Requirable<string> // Required in spec
+      link: Requirable<string> // Required in spec
     },
     TStrict
   >
 
   export type Enclosure<TStrict extends boolean = false> = Strict<
     {
-      url: Requirable<string> // Required in spec.
-      length: Requirable<number> // Required in spec.
-      type: Requirable<string> // Required in spec.
+      url: Requirable<string> // Required in spec
+      length: Requirable<number> // Required in spec
+      type: Requirable<string> // Required in spec
     },
     TStrict
   >
@@ -106,7 +106,7 @@ export namespace RssFeed {
 
   export type Guid<TStrict extends boolean = false> = Strict<
     {
-      value: Requirable<string> // Required in spec.
+      value: Requirable<string> // Required in spec
       isPermaLink?: boolean
     },
     TStrict
@@ -114,17 +114,17 @@ export namespace RssFeed {
 
   export type Source<TStrict extends boolean = false> = Strict<
     {
-      title: Requirable<string> // Required in spec.
-      url: Requirable<string> // Required in spec.
+      title: Requirable<string> // Required in spec
+      url: Requirable<string> // Required in spec
     },
     TStrict
   >
 
   export type Item<TDate, TStrict extends boolean = false> = Strict<
     {
-      title?: string // At least one of title or description is required in spec.
+      title?: string // At least one of title or description is required in spec
       link?: string
-      description?: string // At least one of title or description is required in spec.
+      description?: string // At least one of title or description is required in spec
       authors?: Array<Person>
       categories?: Array<Category<TStrict>>
       comments?: string
@@ -163,9 +163,9 @@ export namespace RssFeed {
 
   export type Feed<TDate, TStrict extends boolean = false> = Strict<
     {
-      title: Requirable<string> // Required in spec.
-      link: Requirable<string> // Required in spec (but may be missing when atom:link rel="self" is present).
-      description: Requirable<string> // Required in spec.
+      title: Requirable<string> // Required in spec
+      link: Requirable<string> // Required in spec (but may be missing when atom:link rel="self" is present)
+      description: Requirable<string> // Required in spec
       language?: string
       copyright?: string
       managingEditor?: Person
