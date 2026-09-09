@@ -60,7 +60,7 @@ export namespace AtomFeed {
 
   export type Link<TDate, TStrict extends boolean = false> = Strict<
     {
-      href: Requirable<string> // Required in spec.
+      href: Requirable<string> // Required in spec
       rel?: string
       type?: string
       hreflang?: string
@@ -73,7 +73,7 @@ export namespace AtomFeed {
 
   export type Person<TStrict extends boolean = false> = Strict<
     {
-      name: Requirable<string> // Required in spec.
+      name: Requirable<string> // Required in spec
       uri?: string
       email?: string
       arxiv?: ArxivNs.Author
@@ -83,7 +83,7 @@ export namespace AtomFeed {
 
   export type Category<TStrict extends boolean = false> = Strict<
     {
-      term: Requirable<string> // Required in spec.
+      term: Requirable<string> // Required in spec
       scheme?: string
       label?: string
     },
@@ -92,7 +92,7 @@ export namespace AtomFeed {
 
   export type Generator<TStrict extends boolean = false> = Strict<
     {
-      text: Requirable<string> // Required in spec.
+      text: Requirable<string> // Required in spec
       uri?: string
       version?: string
     },
@@ -120,14 +120,14 @@ export namespace AtomFeed {
       categories?: Array<Category<TStrict>>
       content?: Content
       contributors?: Array<Person<TStrict>>
-      id: Requirable<string> // Required in spec.
+      id: Requirable<string> // Required in spec
       links?: Array<Link<TDate, TStrict>>
       published?: TDate
       rights?: Text
       source?: Source<TDate, TStrict>
       summary?: Text
-      title: Requirable<Text> // Required in spec.
-      updated: Requirable<TDate> // Required in spec.
+      title: Requirable<Text> // Required in spec
+      updated: Requirable<TDate> // Required in spec
       app?: AppNs.Entry<TDate>
       arxiv?: ArxivNs.Entry
       cc?: CcNs.ItemOrFeed
@@ -158,13 +158,13 @@ export namespace AtomFeed {
       contributors?: Array<Person<TStrict>>
       generator?: Generator<TStrict>
       icon?: string
-      id: Requirable<string> // Required in spec.
+      id: Requirable<string> // Required in spec
       links?: Array<Link<TDate, TStrict>>
       logo?: string
       rights?: Text
       subtitle?: Text
-      title: Requirable<Text> // Required in spec.
-      updated: Requirable<TDate> // Required in spec.
+      title: Requirable<Text> // Required in spec
+      updated: Requirable<TDate> // Required in spec
       entries?: Array<Entry<TDate, TStrict>>
       cc?: CcNs.ItemOrFeed
       dc?: DcNs.ItemOrFeed<TDate>

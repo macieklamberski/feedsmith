@@ -4,7 +4,7 @@ import type { Requirable, Strict } from '../../../common/types.js'
 export namespace SourceNs {
   export type Account<TStrict extends boolean = false> = Strict<
     {
-      service: Requirable<string> // Required in spec.
+      service: Requirable<string> // Required in spec
       value?: string
     },
     TStrict
@@ -12,15 +12,15 @@ export namespace SourceNs {
 
   export type Likes<TStrict extends boolean = false> = Strict<
     {
-      server: Requirable<string> // Required in spec.
+      server: Requirable<string> // Required in spec
     },
     TStrict
   >
 
   export type Archive<TStrict extends boolean = false> = Strict<
     {
-      url: Requirable<string> // Required in spec.
-      startDay: Requirable<string> // Required in spec.
+      url: Requirable<string> // Required in spec
+      startDay: Requirable<string> // Required in spec
       endDay?: string
       filename?: string
     },
@@ -29,7 +29,7 @@ export namespace SourceNs {
 
   export type SubscriptionList<TStrict extends boolean = false> = Strict<
     {
-      url: Requirable<string> // Required in spec.
+      url: Requirable<string> // Required in spec
       value?: string
     },
     TStrict
@@ -37,7 +37,7 @@ export namespace SourceNs {
 
   export type InReplyTo<TStrict extends boolean = false> = Strict<
     {
-      value: Requirable<string> // Required in spec.
+      value: Requirable<string> // Required in spec
       isPermaLink?: boolean
     },
     TStrict

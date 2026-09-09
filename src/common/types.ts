@@ -22,11 +22,10 @@ export type Requirable<T> = T | { __requirable: T }
 
 export type DateLike = Date | string
 
-// Date-aware parse utils need to return different date types depending on the
-// parseDateFn option, but TypeScript can't express generic functions through
-// type aliases like ParseUtilPartial. Using `any` here lets all parse utils
-// share the same ParseUtilPartial pattern while the public parse() entry points
-// enforce the correct TDate type via generics.
+// Date-aware parse utils need to return different date types depending on the parseDateFn option,
+// but TypeScript can't express generic functions through type aliases like ParseUtilPartial. Using
+// `any` here lets all parse utils share the same ParseUtilPartial pattern while the public parse()
+// entry points enforce the correct TDate type via generics.
 // biome-ignore lint/suspicious/noExplicitAny: See above reasoning.
 export type DateAny = any
 

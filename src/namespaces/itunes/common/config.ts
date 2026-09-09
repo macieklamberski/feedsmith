@@ -1,5 +1,5 @@
 export const uris = [
-  'http://www.itunes.com/dtds/podcast-1.0.dtd', // Official URI.
+  'http://www.itunes.com/dtds/podcast-1.0.dtd', // Official URI
   'https://www.itunes.com/dtds/podcast-1.0.dtd',
 ]
 

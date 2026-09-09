@@ -76,8 +76,8 @@ export const parseDuration: ParseUtilPartial<number> = (value) => {
 }
 
 export const parseImage: ParseUtilPartial<string> = (value) => {
-  // Support non-standard format of the image tag where href is not provided in the @href
-  // attribute but rather provided as a node value.
+  // Support non-standard format of the image tag where href is not provided in the @href attribute
+  // but rather provided as a node value.
   if (isNonEmptyStringOrNumber(value)) {
     return parseString(value)
   }

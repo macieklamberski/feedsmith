@@ -78,8 +78,8 @@ export const trimArray = <T, R = T>(
     }
   }
 
-  // Pre-allocation in case of Array is more performant than doing the lazy-allocation
-  // similar to the one used in trimObject.
+  // Pre-allocation in case of Array is more performant than doing the lazy-allocation similar to
+  // the one used in trimObject.
   const result: Array<R> = []
 
   for (const element of value) {
@@ -131,8 +131,8 @@ const stripComments = (text: string): string => {
 }
 
 const decodeWithCdata = (text: string): string => {
-  // Per XML spec, CDATA content should be passed through verbatim without entity decoding.
-  // Text outside CDATA should have entities decoded normally.
+  // Per XML spec, CDATA content should be passed through verbatim without entity decoding. Text
+  // outside CDATA should have entities decoded normally.
 
   let currentIndex = text.indexOf(cdataStartTag)
 
@@ -185,10 +185,10 @@ export const parseString: ParseUtilExact<string> = (value) => {
   }
 }
 
-// Variant of parseString for values that are already final markup: skips XML entity
-// decoding and HTML comment stripping. Used where a `&lt;` / `<!--` belongs to the payload
-// rather than encoding it — JSON Feed's `content_html`, whose string comes straight out of
-// JSON.parse, and Atom's xhtml constructs, whose entities stand for literal characters.
+// Variant of parseString for values that are already final markup: skips XML entity decoding and
+// HTML comment stripping. Used where a `&lt;` / `<!--` belongs to the payload rather than encoding
+// it: JSON Feed's `content_html`, whose string comes straight out of JSON.parse, and Atom's xhtml
+// constructs, whose entities stand for literal characters.
 export const parseVerbatimString: ParseUtilExact<string> = (value) => {
   if (typeof value === 'string') {
     if (value === '') {
@@ -412,10 +412,10 @@ export const generateRfc822Date: GenerateUtil<DateLike> = (value) => {
 }
 
 export const generateRfc3339Date: GenerateUtil<DateLike> = (value) => {
-  // This function generates RFC 3339 format dates which is also compatible with W3C-DTF.
-  // The only difference between ISO 8601 (produced by toISOString) and RFC 3339 is that
-  // RFC 3339 allows a space between date and time parts instead of 'T', but the 'T' format
-  // is actually valid in RFC 3339 as well, so we can just return the ISO string.
+  // This function generates RFC 3339 format dates which is also compatible with W3C-DTF. The only
+  // difference between ISO 8601 (produced by toISOString) and RFC 3339 is that RFC 3339 allows a
+  // space between date and time parts instead of 'T', but the 'T' format is actually valid in RFC
+  // 3339 as well, so we can just return the ISO string.
 
   if (!isPresent(value)) {
     return
@@ -574,20 +574,18 @@ export const generateNamespaceAttrs = (
   return namespaceAttrs
 }
 
-// Renames namespace prefixes to their canonical form while the document is being parsed,
-// so stop nodes can match `a10:title` as `atom:title`. Renaming after parsing would be
-// too late: stop nodes fire during it.
+// Renames namespace prefixes to their canonical form while the document is being parsed, so stop
+// nodes can match `a10:title` as `atom:title`. Renaming after parsing would be too late: stop nodes
+// fire during it.
 //
-// Document order is what makes this work. By the time the parser hands over an element's
-// name, it has already read every ancestor's attributes, including their `xmlns:`
-// declarations, which attributeValueProcessor records into a map. transformTagName can
-// therefore rename the element right away. The one exception is an element that declares
-// its own prefix: its name arrives before its attributes, so updateTag renames it once
-// more after they are read.
+// Document order is what makes this work. By the time the parser hands over an element's name, it
+// has already read every ancestor's attributes, including their `xmlns:` declarations, which
+// attributeValueProcessor records into a map. transformTagName can therefore rename the element
+// right away. The one exception is an element that declares its own prefix: its name arrives before
+// its attributes, so updateTag renames it once more after they are read.
 //
-// The map is flat and first-wins: real feeds declare namespaces once, on the root, and
-// re-binding a prefix deeper in a document has no observed usage. Add scope tracking if
-// such feeds ever appear.
+// The map is flat and first-wins: real feeds declare namespaces once, on the root, and re-binding a
+// prefix deeper in a document has no observed usage. Add scope tracking if such feeds ever appear.
 export const createNamespaceResolver = <T extends Record<string, Array<string>>>(options: {
   namespaceUris: T
   namespacePrefixes: Record<string, string>
@@ -601,8 +599,8 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
     }),
   )
 
-  // Canonical prefix for the URI, or an empty string when the URI is a primary namespace,
-  // whose elements go unprefixed. Undefined means the URI is not recognized.
+  // Canonical prefix for the URI, or an empty string when the URI is a primary namespace, whose
+  // elements go unprefixed. Undefined means the URI is not recognized.
   const resolveUri = (uri: string): string | undefined => {
     const normalized = uri.trim().toLowerCase()
 
@@ -616,9 +614,9 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
   // Far above the deepest alternate-prefix declaration observed in real feeds.
   const seedScanLimit = 65536
 
-  // Everything before the root element is a comment, a processing instruction or a
-  // doctype, none of which can carry a declaration. A document with no root is not a feed
-  // and never reaches the parser; the scan then simply starts at the beginning.
+  // Everything before the root element is a comment, a processing instruction or a doctype, none of
+  // which can carry a declaration. A document with no root is not a feed and never reaches the
+  // parser; the scan then simply starts at the beginning.
   const findRootIndex = (document: string): number => {
     let index = document.indexOf('<')
 
@@ -644,14 +642,14 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
     return -1
   }
 
-  // Every declaration a document makes lives in this call, so nothing survives the parse
-  // it belongs to and no state can leak into the next document.
+  // Every declaration a document makes lives in this call, so nothing survives the parse it belongs
+  // to and no state can leak into the next document.
   return (document?: string) => {
     const prefixMap = new Map<string, string>()
     const seededPrefixes = new Set<string>()
     let defaultCanonical: string | undefined
-    // Stays false while every declaration binds its conventional prefix, which keeps the
-    // per-tag work at a single boolean check for the overwhelming majority of feeds.
+    // Stays false while every declaration binds its conventional prefix, which keeps the per-tag
+    // work at a single boolean check for the overwhelming majority of feeds.
     let hasRemapping = false
     let tagsSeen = 0
 
@@ -669,24 +667,22 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
       }
     }
 
-    // The parser matches stop nodes against an element's name before reading its own
-    // attributes, so an element that declares its own prefix would miss them. Seeding the
-    // map from the raw document first closes that gap. Only prefixed declarations are
-    // seeded: a default `xmlns` cannot be scoped without parsing. The scan starts at the
-    // root element because junk before it is the one case a later real declaration cannot
-    // repair, the root's own name being resolved before its attributes are read.
+    // The parser matches stop nodes against an element's name before reading its own attributes, so
+    // an element that declares its own prefix would miss them. Seeding the map from the raw
+    // document first closes that gap. Only prefixed declarations are seeded: a default `xmlns`
+    // cannot be scoped without parsing. The scan starts at the root element because junk before it
+    // is the one case a later real declaration cannot repair, the root's own name being resolved
+    // before its attributes are read.
     if (document) {
-      // Only the head of the document is scanned, which keeps the cost flat on
-      // multi-megabyte feeds. Alternate prefixes, the reason the seed exists, are declared
-      // at the top of real documents; declarations found deeper either already spell the
-      // canonical prefix or resolve to no known namespace, so seeding them would change
-      // nothing. An alternate past the cap falls back to in-order discovery, the behavior
-      // every element had before seeding existed.
+      // Only the head of the document is scanned, which keeps the cost flat on multi-megabyte
+      // feeds. Alternate prefixes, the reason the seed exists, are declared at the top of real
+      // documents; declarations found deeper either already spell the canonical prefix or resolve
+      // to no known namespace, so seeding them would change nothing. An alternate past the cap
+      // falls back to in-order discovery, the behavior every element had before seeding existed.
       const head = document.length > seedScanLimit ? document.slice(0, seedScanLimit) : document
 
-      // indexOf jumps from one `xmlns:` occurrence to the next, and the sticky regex then
-      // reads just the `prefix="uri"` pair at that spot, so no regex ever scans the
-      // document itself.
+      // indexOf jumps from one `xmlns:` occurrence to the next, and the sticky regex then reads
+      // just the `prefix="uri"` pair at that spot, so no regex ever scans the document itself.
       const declarationTailRegex = /([\w.-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/y
 
       let index = head.indexOf('xmlns:', findRootIndex(head))
@@ -707,9 +703,9 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
     }
 
     const recordDeclaration = (rawAttrName: string, value: unknown) => {
-      // Anything not starting with "x" cannot be an xmlns declaration; bail before the
-      // string comparisons since this runs for every attribute in the document. The name
-      // arrives as written, so both cases are checked.
+      // Anything not starting with "x" cannot be an xmlns declaration; bail before the string
+      // comparisons since this runs for every attribute in the document. The name arrives as
+      // written, so both cases are checked.
       const firstCharCode = rawAttrName.charCodeAt(0)
 
       if ((firstCharCode !== 120 && firstCharCode !== 88) || typeof value !== 'string') {
@@ -719,10 +715,10 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
       const attrName = rawAttrName.toLowerCase()
 
       if (attrName === 'xmlns') {
-        // Only the root's default namespace is honored. A default declared deeper scopes
-        // to its own subtree, which the parser gives no way to track, and applying it
-        // document wide would rename every later element: a feed carrying
-        // `<atom:link xmlns="...atom"/>` inside its channel would lose the items after it.
+        // Only the root's default namespace is honored. A default declared deeper scopes to its own
+        // subtree, which the parser gives no way to track, and applying it document wide would
+        // rename every later element: a feed carrying `<atom:link xmlns="...atom"/>` inside its
+        // channel would lose the items after it.
         if (tagsSeen === 1 && defaultCanonical === undefined) {
           defaultCanonical = resolveUri(value)
 
@@ -737,8 +733,8 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
       if (attrName.startsWith('xmlns:')) {
         const prefix = attrName.slice(6)
 
-        // A seeded entry is a guess read out of the raw text; the parser reporting the
-        // declaration is the document itself, so it replaces the guess.
+        // A seeded entry is a guess read out of the raw text; the parser reporting the declaration
+        // is the document itself, so it replaces the guess.
         if (seededPrefixes.delete(prefix)) {
           prefixMap.delete(prefix)
         }
@@ -796,10 +792,10 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
       return value
     }
 
-    // Re-canonicalize with the now-complete maps: a name transformed before its own
-    // element's declarations were read gets its final form here. The name arrives already
-    // lowercased and usually already canonical, so every unchanged path returns the same
-    // string without allocating.
+    // Re-canonicalize with the now-complete maps: a name transformed before its own element's
+    // declarations were read gets its final form here. The name arrives already lowercased and
+    // usually already canonical, so every unchanged path returns the same string without
+    // allocating.
     const updateTag = (tagName: string) => {
       if (!hasRemapping) {
         return tagName
@@ -811,8 +807,8 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
         return defaultCanonical ? `${defaultCanonical}:${tagName}` : tagName
       }
 
-      // The reserved xmlns/xml prefixes never appear as element names and are never
-      // recorded in the map, so the lookup alone leaves them unchanged.
+      // The reserved xmlns/xml prefixes never appear as element names and are never recorded in the
+      // map, so the lookup alone leaves them unchanged.
       const prefix = tagName.slice(0, colonIndex)
       const canonical = prefixMap.get(prefix)
 
