@@ -1,3 +1,4 @@
+import { isNonEmptyString, isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
@@ -5,10 +6,7 @@ import {
   generateNumber,
   generatePlainString,
   generateYesNoBoolean,
-  isNonEmptyString,
-  isObject,
   trimArray,
-  trimObject,
 } from '../../../common/utils.js'
 import type { ItunesNs } from '../common/types.js'
 
@@ -23,7 +21,7 @@ export const generateImage: GenerateUtil<string> = (image) => {
 }
 
 export const generateCategory: GenerateUtil<ItunesNs.Category> = (category) => {
-  if (!isObject(category)) {
+  if (!isPlainObject(category)) {
     return
   }
 
@@ -36,7 +34,7 @@ export const generateCategory: GenerateUtil<ItunesNs.Category> = (category) => {
 }
 
 export const generateOwner: GenerateUtil<ItunesNs.Owner> = (owner) => {
-  if (!isObject(owner)) {
+  if (!isPlainObject(owner)) {
     return
   }
 
@@ -49,7 +47,7 @@ export const generateOwner: GenerateUtil<ItunesNs.Owner> = (owner) => {
 }
 
 export const generateItem: GenerateUtil<ItunesNs.Item> = (item) => {
-  if (!isObject(item)) {
+  if (!isPlainObject(item)) {
     return
   }
 
@@ -72,7 +70,7 @@ export const generateItem: GenerateUtil<ItunesNs.Item> = (item) => {
 }
 
 export const generateFeed: GenerateUtil<ItunesNs.Feed> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 

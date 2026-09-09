@@ -4,28 +4,28 @@ import { generateFeed, generateItem } from './utils.js'
 describe('generateFeed', () => {
   it('should generate feed with core properties', () => {
     const value = {
-      publicationName: 'Nature',
-      issn: '0028-0836',
-      eIssn: '1476-4687',
+      publicationName: 'Journal of Examples',
+      issn: '1234-5678',
+      eIssn: '8765-4321',
       volume: '615',
       number: '7952',
       publicationDates: [new Date('2023-03-15T00:00:00Z')],
       aggregationType: 'journal',
       publishingFrequency: 'weekly',
-      urls: ['https://www.nature.com'],
+      urls: ['https://journal.example.com'],
       teasers: ['A short promotional description'],
       keywords: ['science', 'research'],
     }
     const expected = {
-      'prism:publicationName': 'Nature',
-      'prism:issn': '0028-0836',
-      'prism:eIssn': '1476-4687',
+      'prism:publicationName': 'Journal of Examples',
+      'prism:issn': '1234-5678',
+      'prism:eIssn': '8765-4321',
       'prism:volume': '615',
       'prism:number': '7952',
       'prism:publicationDate': ['2023-03-15T00:00:00.000Z'],
       'prism:aggregationType': 'journal',
       'prism:publishingFrequency': 'weekly',
-      'prism:url': ['https://www.nature.com'],
+      'prism:url': ['https://journal.example.com'],
       'prism:teaser': ['A short promotional description'],
       'prism:keyword': ['science', 'research'],
     }
@@ -218,13 +218,13 @@ describe('generateFeed', () => {
     const value = {
       edition: 'International',
       contentType: 'article',
-      alternateTitles: ['Nature Journal', 'Nature Magazine'],
+      alternateTitles: ['Example Journal', 'Example Magazine'],
       subtitles: ['The International Weekly Journal of Science'],
     }
     const expected = {
       'prism:edition': 'International',
       'prism:contentType': 'article',
-      'prism:alternateTitle': ['Nature Journal', 'Nature Magazine'],
+      'prism:alternateTitle': ['Example Journal', 'Example Magazine'],
       'prism:subtitle': ['The International Weekly Journal of Science'],
     }
 
@@ -235,12 +235,12 @@ describe('generateFeed', () => {
     const value = {
       bookEditions: ['First Edition', 'Second Edition'],
       nationalCatalogNumber: 'NC12345',
-      productCodes: ['NAT-2023-615', 'NAT-2023-616'],
+      productCodes: ['EXJ-2023-615', 'EXJ-2023-616'],
     }
     const expected = {
       'prism:bookEdition': ['First Edition', 'Second Edition'],
       'prism:nationalCatalogNumber': 'NC12345',
-      'prism:productCode': ['NAT-2023-615', 'NAT-2023-616'],
+      'prism:productCode': ['EXJ-2023-615', 'EXJ-2023-616'],
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -265,15 +265,15 @@ describe('generateFeed', () => {
 
   it('should generate feed with organization and entity fields', () => {
     const value = {
-      corporateEntities: ['Springer Nature', 'Nature Research'],
-      distributor: 'Nature Publishing Group',
-      organizations: ['Nature Research'],
+      corporateEntities: ['Example Publishing', 'Example Research'],
+      distributor: 'Example Distribution Group',
+      organizations: ['Example Research'],
       persons: ['Dr. Jane Smith', 'Dr. John Doe'],
     }
     const expected = {
-      'prism:corporateEntity': ['Springer Nature', 'Nature Research'],
-      'prism:distributor': 'Nature Publishing Group',
-      'prism:organization': ['Nature Research'],
+      'prism:corporateEntity': ['Example Publishing', 'Example Research'],
+      'prism:distributor': 'Example Distribution Group',
+      'prism:organization': ['Example Research'],
       'prism:person': ['Dr. Jane Smith', 'Dr. John Doe'],
     }
 
@@ -282,15 +282,15 @@ describe('generateFeed', () => {
 
   it('should generate feed with blog and link fields', () => {
     const value = {
-      blogTitle: 'Nature News Blog',
-      blogURL: 'https://www.nature.com/news/blog',
-      links: ['https://www.nature.com/nature'],
+      blogTitle: 'Example News Blog',
+      blogURL: 'https://journal.example.com/news/blog',
+      links: ['https://journal.example.com/journal'],
       ratings: ['A+', 'Excellent'],
     }
     const expected = {
-      'prism:blogTitle': 'Nature News Blog',
-      'prism:blogURL': 'https://www.nature.com/news/blog',
-      'prism:link': ['https://www.nature.com/nature'],
+      'prism:blogTitle': 'Example News Blog',
+      'prism:blogURL': 'https://journal.example.com/news/blog',
+      'prism:link': ['https://journal.example.com/journal'],
       'prism:rating': ['A+', 'Excellent'],
     }
 
@@ -299,12 +299,37 @@ describe('generateFeed', () => {
 
   it('should handle empty strings by omitting them', () => {
     const value = {
-      publicationName: 'Nature',
+      publicationName: 'Journal of Examples',
       issn: '',
       volume: '   ',
     }
     const expected = {
-      'prism:publicationName': 'Nature',
+      'prism:publicationName': 'Journal of Examples',
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should filter out empty values from array fields', () => {
+    const value = {
+      keywords: ['science', '', '   '],
+      isbns: ['', '   '],
+    }
+    const expected = {
+      'prism:keyword': ['science'],
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should filter out undefined values', () => {
+    const value = {
+      publicationName: 'Journal of Examples',
+      issn: undefined,
+      aggregateIssueNumber: undefined,
+    }
+    const expected = {
+      'prism:publicationName': 'Journal of Examples',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -328,8 +353,8 @@ describe('generateFeed', () => {
 describe('generateItem', () => {
   it('should generate item with core properties', () => {
     const value = {
-      doi: '10.1038/s41586-023-05842-x',
-      urls: ['https://www.nature.com/articles/s41586-023-05842-x'],
+      doi: '10.1234/example-2023-0001',
+      urls: ['https://journal.example.com/articles/example-2023-0001'],
       volume: '615',
       number: '7952',
       startingPage: '425',
@@ -339,8 +364,8 @@ describe('generateItem', () => {
       genres: ['research-article'],
     }
     const expected = {
-      'prism:doi': '10.1038/s41586-023-05842-x',
-      'prism:url': ['https://www.nature.com/articles/s41586-023-05842-x'],
+      'prism:doi': '10.1234/example-2023-0001',
+      'prism:url': ['https://journal.example.com/articles/example-2023-0001'],
       'prism:volume': '615',
       'prism:number': '7952',
       'prism:startingPage': '425',
@@ -571,6 +596,31 @@ describe('generateItem', () => {
       'prism:modificationDate': '2023-03-10T00:00:00.000Z',
       'prism:dateReceived': '2023-01-15T00:00:00.000Z',
       'prism:killDate': '2024-03-15T00:00:00.000Z',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should filter out empty values from array fields', () => {
+    const value = {
+      keywords: ['quantum', '', '   '],
+      genres: ['', '   '],
+    }
+    const expected = {
+      'prism:keyword': ['quantum'],
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should filter out undefined values', () => {
+    const value = {
+      doi: '10.1234/example-2023-0001',
+      volume: undefined,
+      wordCount: undefined,
+    }
+    const expected = {
+      'prism:doi': '10.1234/example-2023-0001',
     }
 
     expect(generateItem(value)).toEqual(expected)

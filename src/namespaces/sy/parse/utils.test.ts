@@ -134,4 +134,9 @@ describe('retrieveFeed', () => {
 
     expect(retrieveFeed(value)).toEqual(expected)
   })
+
+  it.todo('should parse updateBase with custom parseDateFn', () => {
+    // Pass options.parseDateFn that converts the date string into a Date instance.
+    // Expected: updateBase equals the value returned by parseDateFn instead of the raw string.
+  })
 })

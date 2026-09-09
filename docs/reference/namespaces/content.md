@@ -2,7 +2,7 @@
 title: "Reference: Content Namespace"
 ---
 
-# Content Namespace
+# Content Namespace Reference
 
 The Content namespace allows RSS and RDF feeds to include full content alongside or instead of summaries. It provides a way to embed complete articles or posts within feed items.
 

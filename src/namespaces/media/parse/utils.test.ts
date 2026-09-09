@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import type { ParsePartialUtil } from '../../../common/types.js'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   parseBackLinks,
   parseCategory,
@@ -38,7 +38,7 @@ import {
 
 const createSimpleArrayParserTests = (
   functionName: string,
-  parserFunction: ParsePartialUtil<Array<string>>,
+  parserFunction: ParseUtilPartial<Array<string>>,
   propertyName: string,
 ) => {
   describe(functionName, () => {
@@ -3571,21 +3571,6 @@ describe('retrieveItemOrFeed', () => {
       },
     }
     const expected = {
-      group: {
-        contents: [
-          {
-            url: 'https://example.com/video-hd.mp4',
-            type: 'video/mp4',
-          },
-          {
-            url: 'https://example.com/video-sd.mp4',
-            type: 'video/mp4',
-          },
-        ],
-        title: {
-          value: 'Group Title',
-        },
-      },
       groups: [
         {
           contents: [
@@ -3641,17 +3626,6 @@ describe('retrieveItemOrFeed', () => {
       },
     }
     const expected = {
-      group: {
-        contents: [
-          {
-            url: 'https://example.com/video-hd.mp4',
-            type: 'video/mp4',
-          },
-        ],
-        title: {
-          value: 'Group Title',
-        },
-      },
       groups: [
         {
           contents: [

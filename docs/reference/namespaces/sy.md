@@ -2,7 +2,7 @@
 title: "Reference: Syndication Namespace"
 ---
 
-# Syndication Namespace
+# Syndication Namespace Reference
 
 The Syndication namespace provides information about the frequency and timing of feed updates. It helps aggregators understand how often to check for new content.
 
@@ -38,7 +38,7 @@ The Syndication namespace provides information about the frequency and timing of
 ## Types
 
 > [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
+> For details on type parameters (`TDate`), see [TypeScript Reference](/reference/typescript#tdate).
 
 <<< @/../src/namespaces/sy/common/types.ts#reference
 

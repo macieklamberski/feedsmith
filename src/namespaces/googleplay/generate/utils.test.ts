@@ -59,6 +59,27 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      author: '   ',
+      description: '\t\n',
+    }
+
+    expect(generateItem(value)).toBeUndefined()
+  })
+
+  it('should handle object with all undefined properties', () => {
+    const value = {
+      author: undefined,
+      description: undefined,
+      explicit: undefined,
+      block: undefined,
+      image: undefined,
+    }
+
+    expect(generateItem(value)).toBeUndefined()
+  })
+
   it('should return undefined for empty object', () => {
     expect(generateItem({})).toBeUndefined()
   })
@@ -133,6 +154,30 @@ describe('generateFeed', () => {
     }
 
     expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      author: '   ',
+      description: '\t\n',
+    }
+
+    expect(generateFeed(value)).toBeUndefined()
+  })
+
+  it('should handle object with all undefined properties', () => {
+    const value = {
+      author: undefined,
+      description: undefined,
+      explicit: undefined,
+      block: undefined,
+      image: undefined,
+      newFeedUrl: undefined,
+      email: undefined,
+      categories: undefined,
+    }
+
+    expect(generateFeed(value)).toBeUndefined()
   })
 
   it('should return undefined for empty object', () => {

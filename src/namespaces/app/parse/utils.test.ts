@@ -45,6 +45,7 @@ describe('parseControl', () => {
     expect(parseControl(null)).toBeUndefined()
     expect(parseControl(undefined)).toBeUndefined()
     expect(parseControl('string')).toBeUndefined()
+    expect(parseControl(123)).toBeUndefined()
   })
 })
 
@@ -174,5 +175,10 @@ describe('retrieveEntry', () => {
     expect(retrieveEntry(undefined)).toBeUndefined()
     expect(retrieveEntry('string')).toBeUndefined()
     expect(retrieveEntry(123)).toBeUndefined()
+  })
+
+  it.todo('should parse edited date with custom parseDateFn', () => {
+    // Pass options.parseDateFn that maps the edited string to a Date instance.
+    // Expected: edited equals the value returned by the custom parser instead of the raw string.
   })
 })

@@ -12,7 +12,7 @@ import {
   stopNodes as arxivStopNodes,
   uris as arxivUris,
 } from '../namespaces/arxiv/common/config.js'
-import { uris as atomUris } from '../namespaces/atom/common/config.js'
+import { stopNodes as atomStopNodes, uris as atomUris } from '../namespaces/atom/common/config.js'
 import {
   stopNodes as blogchannelStopNodes,
   uris as blogchannelUris,
@@ -129,6 +129,7 @@ export const locales = {
   invalidInputOpml: 'Invalid input OPML',
   invalidInputAtom: 'Invalid input Atom',
   invalidInputRss: 'Invalid input RSS',
+  invalidInputJson: 'Invalid input JSON',
 }
 
 export const namespaceUris = {
@@ -184,6 +185,7 @@ export const namespaceStopNodes = [
   ...adminStopNodes,
   ...appStopNodes,
   ...arxivStopNodes,
+  ...atomStopNodes,
   ...blogchannelStopNodes,
   ...ccStopNodes,
   ...contentStopNodes,

@@ -945,7 +945,7 @@ describe('parseSeason', () => {
     expect(parseSeason(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supoprted input', () => {
+  it('should return undefined for not supported input', () => {
     expect(parseSeason(undefined)).toBeUndefined()
     expect(parseSeason(null)).toBeUndefined()
     expect(parseSeason([])).toBeUndefined()
@@ -1211,6 +1211,11 @@ describe('parseTrailer', () => {
     expect(parseTrailer(undefined)).toBeUndefined()
     expect(parseTrailer(null)).toBeUndefined()
     expect(parseTrailer([])).toBeUndefined()
+  })
+
+  it.todo('should parse pubDate with custom parseDateFn', () => {
+    // Pass options.parseDateFn that converts the RFC 822 string into a Date instance.
+    // Expected: pubDate equals the value returned by parseDateFn instead of the raw string.
   })
 })
 
@@ -2318,10 +2323,6 @@ describe('parseLiveItem', () => {
           geo: '40.7128,-74.0060',
         },
       ],
-      location: {
-        display: 'New York, NY',
-        geo: '40.7128,-74.0060',
-      },
     }
 
     expect(parseLiveItem(value)).toEqual(expected)
@@ -2456,6 +2457,11 @@ describe('parseLiveItem', () => {
     expect(parseLiveItem(undefined)).toBeUndefined()
     expect(parseLiveItem(null)).toBeUndefined()
     expect(parseLiveItem([])).toBeUndefined()
+  })
+
+  it.todo('should parse start and end with custom parseDateFn', () => {
+    // Pass options.parseDateFn that converts the RFC 3339 strings into Date instances.
+    // Expected: start and end equal the values returned by parseDateFn instead of raw strings.
   })
 })
 
@@ -3216,6 +3222,11 @@ describe('parseUpdateFrequency', () => {
     expect(parseUpdateFrequency(null)).toBeUndefined()
     expect(parseUpdateFrequency([])).toBeUndefined()
   })
+
+  it.todo('should parse dtstart with custom parseDateFn', () => {
+    // Pass options.parseDateFn that converts the RFC 3339 string into a Date instance.
+    // Expected: dtstart equals the value returned by parseDateFn instead of the raw string.
+  })
 })
 
 describe('parsePodping', () => {
@@ -3738,22 +3749,6 @@ describe('retrieveItem', () => {
         purpose: 'description',
       },
     ],
-    location: {
-      display: 'New York, NY',
-      geo: '40.7128,-74.0060',
-    },
-    value: {
-      type: 'lightning',
-      method: 'keysend',
-      suggested: 0.00000005,
-      valueRecipients: [
-        {
-          type: 'node',
-          address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
-          split: 100,
-        },
-      ],
-    },
   }
 
   it('should parse a complete item with all podcast namespace elements', () => {
@@ -4186,10 +4181,6 @@ describe('retrieveFeed', () => {
         geo: '37.7749,-122.4194',
       },
     ],
-    location: {
-      display: 'San Francisco, CA',
-      geo: '37.7749,-122.4194',
-    },
     trailers: [
       {
         display: 'Season 2 Trailer',
@@ -4218,18 +4209,6 @@ describe('retrieveFeed', () => {
         ],
       },
     ],
-    value: {
-      type: 'lightning',
-      method: 'keysend',
-      suggested: 0.00000005,
-      valueRecipients: [
-        {
-          type: 'node',
-          address: '02d5c1bf8b940dc9cadca86d1b0a3c37fbe39cee4c7e839e33bef9174531d27f52',
-          split: 100,
-        },
-      ],
-    },
     medium: 'podcast',
     images: [
       {

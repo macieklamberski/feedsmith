@@ -1,19 +1,24 @@
 import { describe, expect, it } from 'bun:test'
 import {
   createNamespaceGetter,
+  escapeCdataSections,
   parseCategory,
+  parseContent,
   parseEntry,
   parseFeed,
   parseGenerator,
   parseLink,
   parsePerson,
   parseSource,
+  parseText,
+  parseTypedText,
   retrieveFeed,
   retrieveGeneratorUri,
   retrievePersonUri,
   retrievePublished,
   retrieveSubtitle,
   retrieveUpdated,
+  unwrapXhtmlDiv,
 } from './utils.js'
 
 describe('createNamespaceGetter', () => {
@@ -109,6 +114,601 @@ describe('createNamespaceGetter', () => {
     const get = createNamespaceGetter(value, 'ns:')
 
     expect(get('nonExistentKey')).toBeUndefined()
+  })
+})
+
+describe('unwrapXhtmlDiv', () => {
+  it('should unwrap the wrapping div', () => {
+    const value = '<div><p>Rich content</p></div>'
+    const expected = '<p>Rich content</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should unwrap a div with attributes', () => {
+    const value = '<div xmlns="http://www.w3.org/1999/xhtml"><p>Rich content</p></div>'
+    const expected = '<p>Rich content</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should unwrap a prefixed div and strip the prefix from descendant tags', () => {
+    const value =
+      '<xhtml:div xmlns:xhtml="http://www.w3.org/1999/xhtml"><xhtml:p>Text</xhtml:p></xhtml:div>'
+    const expected = '<p>Text</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should handle surrounding whitespace', () => {
+    const value = '\n  <div>\n    <p>Text</p>\n  </div>\n'
+    const expected = '\n    <p>Text</p>\n  '
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should keep inner divs intact', () => {
+    const value = '<div><div>Inner</div></div>'
+    const expected = '<div>Inner</div>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should return undefined for a self-closing div', () => {
+    expect(unwrapXhtmlDiv('<xhtml:div/>')).toBeUndefined()
+    expect(unwrapXhtmlDiv('<div class="empty" />')).toBeUndefined()
+  })
+
+  it('should return value unchanged when there is no div wrapper', () => {
+    const value = '<p>Rich content</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should return value unchanged when the wrapper is unterminated', () => {
+    const value = '<div><p>Text</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should unwrap when a comment holds a div-like string', () => {
+    const value = '<div>hi<!-- </div> --></div>'
+    const expected = 'hi<!-- </div> -->'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should unwrap a prefixed div whose prefix contains a dot', () => {
+    const value = '<x.y:div xmlns:x.y="http://www.w3.org/1999/xhtml"><x.y:p>Text</x.y:p></x.y:div>'
+    const expected = '<p>Text</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should return value unchanged for sibling top-level divs', () => {
+    const value = '<div>First</div><div>Second</div>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should return value unchanged when a stray closing tag splits the scan', () => {
+    const value = '<div>First</div></x-wrap><div>Second</div>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should return value unchanged when text follows the wrapper', () => {
+    const value = '<div>Text</div> trailing'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should return value unchanged when a comment follows the wrapper', () => {
+    const value = '<div>Text</div><!-- comment -->'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should unwrap a div whose attribute value contains a closing angle bracket', () => {
+    const value = '<div title="a>b"><p>Text</p></div>'
+    const expected = '<p>Text</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should return non-string values unchanged', () => {
+    expect(unwrapXhtmlDiv(undefined)).toBeUndefined()
+    expect(unwrapXhtmlDiv(123)).toBe(123)
+  })
+})
+
+describe('escapeCdataSections', () => {
+  it('should replace a CDATA section with its entity-escaped content', () => {
+    const value = 'before <![CDATA[a < b && c]]> after'
+    const expected = 'before a &lt; b &amp;&amp; c after'
+
+    expect(escapeCdataSections(value)).toBe(expected)
+  })
+
+  it('should replace multiple CDATA sections', () => {
+    const value = '<![CDATA[<p>]]> and <![CDATA[&]]>'
+    const expected = '&lt;p> and &amp;'
+
+    expect(escapeCdataSections(value)).toBe(expected)
+  })
+
+  it('should leave an unterminated CDATA section untouched', () => {
+    const value = '<pre><![CDATA[if (a < b) return;</pre>'
+
+    expect(escapeCdataSections(value)).toBe(value)
+  })
+
+  it('should return a value without CDATA sections unchanged', () => {
+    const value = '<p>a &lt; b</p>'
+
+    expect(escapeCdataSections(value)).toBe(value)
+  })
+
+  it('should return non-string values unchanged', () => {
+    expect(escapeCdataSections(undefined)).toBeUndefined()
+    expect(escapeCdataSections(123)).toBe(123)
+  })
+})
+
+describe('parseTypedText', () => {
+  it('should unwrap the div wrapper when the type is xhtml', () => {
+    const value = { '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>Text</p></div>' }
+    const expected = '<p>Text</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should strip the namespace prefix when the type is xhtml', () => {
+    const value = {
+      '#text':
+        '<xhtml:div xmlns:xhtml="http://www.w3.org/1999/xhtml"><xhtml:p>Text</xhtml:p></xhtml:div>',
+    }
+    const expected = '<p>Text</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should return undefined when the xhtml wrapper is self-closing', () => {
+    const value = { '#text': '<xhtml:div/>' }
+
+    expect(parseTypedText(value, 'xhtml')).toBeUndefined()
+  })
+
+  it('should return the value unchanged when an xhtml construct has no wrapper', () => {
+    const value = { '#text': '<p>Text</p>' }
+    const expected = '<p>Text</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should leave a div-wrapped value untouched when the type is html', () => {
+    const value = { '#text': '<div><p>Text</p></div>' }
+    const expected = '<div><p>Text</p></div>'
+
+    expect(parseTypedText(value, 'html')).toBe(expected)
+  })
+
+  it('should leave a div-wrapped value untouched when the type is absent', () => {
+    const value = { '#text': '<div><p>Text</p></div>' }
+    const expected = '<div><p>Text</p></div>'
+
+    expect(parseTypedText(value, undefined)).toBe(expected)
+  })
+
+  it('should retrieve the text of a bare string value', () => {
+    const value = 'Plain text'
+    const expected = 'Plain text'
+
+    expect(parseTypedText(value, 'text')).toBe(expected)
+  })
+
+  it('should keep entities escaped inside a wrapped xhtml construct', () => {
+    const value = {
+      '#text':
+        '<div xmlns="http://www.w3.org/1999/xhtml"><pre>From: Sean &lt;sean@intel.com&gt;</pre></div>',
+    }
+    const expected = '<pre>From: Sean &lt;sean@intel.com&gt;</pre>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should keep entities escaped inside a prefixed xhtml construct', () => {
+    const value = {
+      '#text':
+        '<xhtml:div xmlns:xhtml="http://www.w3.org/1999/xhtml"><xhtml:p>a &lt; b</xhtml:p></xhtml:div>',
+    }
+    const expected = '<p>a &lt; b</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should unwrap the div wrapper when the type is application/xhtml+xml', () => {
+    const value = {
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b</p></div>',
+    }
+    const expected = '<p>a &lt; b</p>'
+
+    expect(parseTypedText(value, 'application/xhtml+xml')).toBe(expected)
+  })
+
+  it('should decode entities when an application/xhtml+xml construct has no wrapper', () => {
+    const value = { '#text': '&lt;p&gt;Hello&lt;/p&gt;' }
+    const expected = '<p>Hello</p>'
+
+    expect(parseTypedText(value, 'application/xhtml+xml')).toBe(expected)
+  })
+
+  it('should unwrap when a CDATA section holds a div-like string', () => {
+    const value = { '#text': '<div><p>code: <![CDATA[</div>]]></p></div>' }
+    const expected = '<p>code: &lt;/div></p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should unwrap a wrapper with an unquoted attribute value', () => {
+    const value = { '#text': '<div class=foo><p>5 &lt; 6</p></div>' }
+    const expected = '<p>5 &lt; 6</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should keep a sibling-div value verbatim without unwrapping', () => {
+    const value = { '#text': '<div>a &lt; b</div><div>Second</div>' }
+    const expected = '<div>a &lt; b</div><div>Second</div>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should turn CDATA content into entities inside a wrapped xhtml construct', () => {
+    const value = {
+      '#text':
+        '<div xmlns="http://www.w3.org/1999/xhtml"><pre><![CDATA[if (a < b && c) return;]]></pre></div>',
+    }
+    const expected = '<pre>if (a &lt; b &amp;&amp; c) return;</pre>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should keep a prefix inside CDATA literal text when unwrapping a prefixed construct', () => {
+    const value = {
+      '#text':
+        '<xh:div xmlns:xh="http://www.w3.org/1999/xhtml"><xh:p><![CDATA[literal <xh:b> & stuff]]></xh:p></xh:div>',
+    }
+    const expected = '<p>literal &lt;xh:b> &amp; stuff</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  // Escaped markup labelled as xhtml violates the spec, but publishers ship it; without a
+  // wrapper to prove the construct is genuine, decoding stays the better guess.
+  it('should decode entities when an xhtml construct has no wrapper', () => {
+    const value = { '#text': '&lt;p&gt;Hello&lt;/p&gt;' }
+    const expected = '<p>Hello</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should decode entities when the type is html', () => {
+    const value = { '#text': '&lt;p&gt;Hello&lt;/p&gt;' }
+    const expected = '<p>Hello</p>'
+
+    expect(parseTypedText(value, 'html')).toBe(expected)
+  })
+
+  it('should decode entities when the type is absent', () => {
+    const value = { '#text': 'a &lt; b' }
+    const expected = 'a < b'
+
+    expect(parseTypedText(value, undefined)).toBe(expected)
+  })
+
+  it('should coerce non-string values to a string', () => {
+    expect(parseTypedText({ '#text': 123 }, 'xhtml')).toBe('123')
+    expect(parseTypedText(undefined, 'xhtml')).toBeUndefined()
+  })
+})
+
+describe('parseText', () => {
+  it('should parse simple string value', () => {
+    const value = 'Simple text'
+    const expected = { value: 'Simple text' }
+
+    expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should parse object with text content', () => {
+    const value = { '#text': 'Text content' }
+    const expected = { value: 'Text content' }
+
+    expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should parse object with text and type', () => {
+    const value = { '#text': 'HTML content', '@type': 'html' }
+    const expected = { value: 'HTML content', type: 'html' }
+
+    expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should unwrap the div wrapper of xhtml type', () => {
+    const value = {
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>Rich content</p></div>',
+      '@type': 'xhtml',
+    }
+    const expected = { value: '<p>Rich content</p>', type: 'xhtml' }
+
+    expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should return undefined for xhtml type with an empty div wrapper', () => {
+    const value = { '#text': '<xhtml:div/>', '@type': 'xhtml' }
+
+    expect(parseText(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty string', () => {
+    expect(parseText('')).toBeUndefined()
+  })
+
+  it('should return undefined for whitespace-only string', () => {
+    expect(parseText('   ')).toBeUndefined()
+  })
+
+  it('should return undefined for non-object, non-string input', () => {
+    expect(parseText(null)).toBeUndefined()
+    expect(parseText(undefined)).toBeUndefined()
+    expect(parseText(123)).toBeUndefined()
+  })
+
+  it('should parse object with xml namespace attributes', () => {
+    const value = {
+      '#text': 'Contenu en français',
+      '@type': 'text',
+      '@xml:lang': 'fr',
+      '@xml:base': 'http://example.org/',
+    }
+    const expected = {
+      value: 'Contenu en français',
+      type: 'text',
+      xml: {
+        lang: 'fr',
+        base: 'http://example.org/',
+      },
+    }
+
+    expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should parse object with only xml namespace attributes', () => {
+    const value = {
+      '#text': 'English summary',
+      '@xml:lang': 'en',
+    }
+    const expected = {
+      value: 'English summary',
+      xml: {
+        lang: 'en',
+      },
+    }
+
+    expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should return undefined for object with empty text', () => {
+    const value = { '#text': '' }
+
+    expect(parseText(value)).toBeUndefined()
+  })
+
+  describe('wrapper div xml declarations', () => {
+    it('should surface xml:base declared on the stripped wrapper div', () => {
+      const value = {
+        '#text':
+          '<div xmlns="http://www.w3.org/1999/xhtml" xml:base="https://example.com/posts/"><p>Text</p></div>',
+        '@type': 'xhtml',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { base: 'https://example.com/posts/' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should surface xml:lang declared on the stripped wrapper div', () => {
+      const value = {
+        '#text': '<div xmlns="http://www.w3.org/1999/xhtml" xml:lang="de"><p>Text</p></div>',
+        '@type': 'xhtml',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { lang: 'de' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should let the wrapper div lang replace the element lang', () => {
+      const value = {
+        '#text': '<div xmlns="http://www.w3.org/1999/xhtml" xml:lang="de"><p>Text</p></div>',
+        '@type': 'xhtml',
+        '@xml:lang': 'en',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { lang: 'de' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should let an absolute wrapper div base replace the element base', () => {
+      const value = {
+        '#text':
+          '<div xmlns="http://www.w3.org/1999/xhtml" xml:base="https://inner.example.com/"><p>Text</p></div>',
+        '@type': 'xhtml',
+        '@xml:base': 'https://outer.example.com/',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { base: 'https://inner.example.com/' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should resolve a relative wrapper div base against the element base', () => {
+      const value = {
+        '#text': '<div xmlns="http://www.w3.org/1999/xhtml" xml:base="images/"><p>Text</p></div>',
+        '@type': 'xhtml',
+        '@xml:base': 'https://example.com/posts/',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { base: 'https://example.com/posts/images/' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should keep the wrapper div base as declared when the pair does not resolve', () => {
+      const value = {
+        '#text': '<div xmlns="http://www.w3.org/1999/xhtml" xml:base="images/"><p>Text</p></div>',
+        '@type': 'xhtml',
+        '@xml:base': 'not a url',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { base: 'images/' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should attach nothing from a wrapper div that was not stripped', () => {
+      const value = {
+        '#text': '<div xml:base="https://example.com/"><p>1</p></div><div><p>2</p></div>',
+        '@type': 'xhtml',
+      }
+      const expected = {
+        value: '<div xml:base="https://example.com/"><p>1</p></div><div><p>2</p></div>',
+        type: 'xhtml',
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should decode entities in a wrapper div base', () => {
+      const value = {
+        '#text':
+          '<div xmlns="http://www.w3.org/1999/xhtml" xml:base="https://example.com/?a=1&amp;b=2"><p>Text</p></div>',
+        '@type': 'xhtml',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { base: 'https://example.com/?a=1&b=2' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+  })
+})
+
+describe('parseContent', () => {
+  it('should parse simple string value', () => {
+    const value = 'Simple content'
+    const expected = { value: 'Simple content' }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should parse object with text content', () => {
+    const value = { '#text': 'Content text' }
+    const expected = { value: 'Content text' }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should parse object with text, type and src', () => {
+    const value = {
+      '#text': 'Content text',
+      '@type': 'html',
+      '@src': 'https://example.com/content',
+    }
+    const expected = {
+      value: 'Content text',
+      type: 'html',
+      src: 'https://example.com/content',
+    }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  // Unlike parseText, which drops the whole construct when nothing is left, parseContent
+  // keeps the remaining attributes, so an empty wrapper yields a content without a value.
+  it('should keep the type but drop the value for a self-closing div wrapper', () => {
+    const value = { '#text': '<xhtml:div/>', '@type': 'xhtml' }
+    const expected = { type: 'xhtml' }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should parse content with only src attribute', () => {
+    const value = {
+      '@type': 'video/mp4',
+      '@src': 'https://example.com/video.mp4',
+    }
+    const expected = {
+      type: 'video/mp4',
+      src: 'https://example.com/video.mp4',
+    }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty string', () => {
+    expect(parseContent('')).toBeUndefined()
+  })
+
+  it('should return undefined for whitespace-only string', () => {
+    expect(parseContent('   ')).toBeUndefined()
+  })
+
+  it('should parse object with xml namespace attributes', () => {
+    const value = {
+      '#text': '<div>XHTML content</div>',
+      '@type': 'xhtml',
+      '@xml:base': 'http://example.org/entry/1',
+      '@xml:lang': 'en-US',
+    }
+    const expected = {
+      value: 'XHTML content',
+      type: 'xhtml',
+      xml: {
+        base: 'http://example.org/entry/1',
+        lang: 'en-US',
+      },
+    }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  it('should return undefined for non-object, non-string input', () => {
+    expect(parseContent(null)).toBeUndefined()
+    expect(parseContent(undefined)).toBeUndefined()
+    expect(parseContent(123)).toBeUndefined()
   })
 })
 
@@ -571,7 +1171,7 @@ describe('parseGenerator', () => {
 describe('parseSource', () => {
   const expectedFull = {
     id: 'urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6',
-    title: 'Example Feed',
+    title: { value: 'Example Feed' },
     updated: '2003-12-13T18:30:02Z',
     authors: [{ name: 'John Doe' }],
     links: [{ href: 'https://example.com/' }],
@@ -580,8 +1180,8 @@ describe('parseSource', () => {
     generator: { text: 'Example Generator' },
     icon: 'https://example.com/favicon.ico',
     logo: 'https://example.com/logo.png',
-    rights: 'Copyright 2003, Example Corp.',
-    subtitle: 'A blog about examples',
+    rights: { value: 'Copyright 2003, Example Corp.' },
+    subtitle: { value: 'A blog about examples' },
   }
 
   it('should parse complete source object (with #text)', () => {
@@ -649,7 +1249,7 @@ describe('parseSource', () => {
       title: { '#text': 'Example Feed' },
     }
     const expected = {
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
     }
 
     expect(parseSource(value)).toEqual(expected)
@@ -663,7 +1263,7 @@ describe('parseSource', () => {
     }
     const expected = {
       id: '123',
-      title: '456',
+      title: { value: '456' },
       links: [{ href: 'https://example.com/' }],
     }
 
@@ -791,18 +1391,18 @@ describe('retrieveSubtitle', () => {
       subtitle: { '#text': 'Feed subtitle' },
       tagline: { '#text': 'Feed tagline' },
     }
-    const expected = 'Feed subtitle'
+    const expected = { value: 'Feed subtitle' }
 
-    expect(retrieveSubtitle(value)).toBe(expected)
+    expect(retrieveSubtitle(value)).toEqual(expected)
   })
 
   it('should fall back to tagline (Atom 0.3) if subtitle is missing', () => {
     const value = {
       tagline: { '#text': 'Feed tagline' },
     }
-    const expected = 'Feed tagline'
+    const expected = { value: 'Feed tagline' }
 
-    expect(retrieveSubtitle(value)).toBe(expected)
+    expect(retrieveSubtitle(value)).toEqual(expected)
   })
 
   it('should return undefined if no subtitle fields exist', () => {
@@ -817,9 +1417,9 @@ describe('retrieveSubtitle', () => {
     const value = {
       subtitle: { '#text': 123 },
     }
-    const expected = '123'
+    const expected = { value: '123' }
 
-    expect(retrieveSubtitle(value)).toBe(expected)
+    expect(retrieveSubtitle(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
@@ -833,11 +1433,11 @@ describe('retrieveSubtitle', () => {
 describe('parseEntry', () => {
   const expectedFull = {
     id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-    title: 'Entry Title',
+    title: { value: 'Entry Title' },
     updated: '2023-01-01T12:00:00Z',
     authors: [{ name: 'John Doe' }],
-    content: '<p>Entry content</p>',
-    summary: 'Entry summary',
+    content: { value: '<p>Entry content</p>' },
+    summary: { value: 'Entry summary' },
     published: '2023-01-01T10:00:00Z',
     links: [
       { href: 'https://example.com/entry', rel: 'alternate' },
@@ -845,10 +1445,10 @@ describe('parseEntry', () => {
     ],
     categories: [{ term: 'technology' }, { term: 'web' }],
     contributors: [{ name: 'Jane Smith' }],
-    rights: 'Copyright 2023',
+    rights: { value: 'Copyright 2023' },
     source: {
       id: 'urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6',
-      title: 'Source Feed',
+      title: { value: 'Source Feed' },
     },
   }
 
@@ -943,7 +1543,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Entry Title',
+      title: { value: 'Entry Title' },
     }
 
     expect(parseEntry(value)).toEqual(expected)
@@ -958,7 +1558,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Entry Title',
+      title: { value: 'Entry Title' },
       published: '2003-12-13T08:29:29-04:00',
       updated: '2003-12-13T18:30:02Z',
     }
@@ -975,8 +1575,8 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: '123',
-      title: '456',
-      content: '789',
+      title: { value: '456' },
+      content: { value: '789' },
       links: [{ href: 'https://example.com/' }],
     }
 
@@ -989,7 +1589,7 @@ describe('parseEntry', () => {
       updated: { '#text': '2023-01-01T12:00:00Z' },
     }
     const expected = {
-      title: 'Entry Title',
+      title: { value: 'Entry Title' },
       updated: '2023-01-01T12:00:00Z',
     }
 
@@ -1024,10 +1624,9 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       dc: {
         creators: ['John Doe'],
-        creator: 'John Doe',
       },
     }
 
@@ -1053,7 +1652,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Podcast Episode Entry',
+      title: { value: 'Podcast Episode Entry' },
       psc: {
         chapters: [
           {
@@ -1080,11 +1679,10 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       dcterms: {
         licenses: ['MIT License'],
-        license: 'MIT License',
-        created: '2023-02-01T00:00:00Z',
+        created: ['2023-02-01T00:00:00Z'],
       },
     }
 
@@ -1099,7 +1697,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       slash: { comments: 10 },
     }
 
@@ -1115,7 +1713,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       itunes: {
         duration: 3600,
         explicit: false,
@@ -1133,7 +1731,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       media: {
         contents: [{ url: 'https://example.com/video.mp4', type: 'video/mp4' }],
       },
@@ -1150,7 +1748,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       georss: {
         point: { lat: 42.3601, lng: -71.0589 },
       },
@@ -1170,7 +1768,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       thr: {
         inReplyTos: [{ ref: 'http://example.com/posts/1', href: 'http://example.com/posts/1' }],
       },
@@ -1188,7 +1786,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       wfw: {
         comment: 'https://example.com/comment',
         commentRss: 'https://example.com/comments/feed',
@@ -1207,7 +1805,7 @@ describe('parseEntry', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Entry',
+      title: { value: 'Example Entry' },
       yt: {
         videoId: 'abc123',
         channelId: 'UCexample',
@@ -1221,10 +1819,10 @@ describe('parseEntry', () => {
 describe('parseFeed', () => {
   const expectedFull = {
     id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
-    title: 'Example Feed',
+    title: { value: 'Example Feed' },
     updated: '2023-01-01T12:00:00Z',
     authors: [{ name: 'John Doe' }],
-    subtitle: 'A subtitle for my feed',
+    subtitle: { value: 'A subtitle for my feed' },
     links: [
       { href: 'https://example.com/', rel: 'alternate' },
       { href: 'https://example.com/feed', rel: 'self' },
@@ -1234,19 +1832,19 @@ describe('parseFeed', () => {
     generator: { text: 'Example Generator', uri: 'https://example.com/gen', version: '1.0' },
     icon: 'https://example.com/favicon.ico',
     logo: 'https://example.com/logo.png',
-    rights: 'Copyright 2023, Example Corp.',
+    rights: { value: 'Copyright 2023, Example Corp.' },
     entries: [
       {
         id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-        title: 'First Entry',
+        title: { value: 'First Entry' },
         updated: '2023-01-01T10:00:00Z',
-        content: '<p>First entry content</p>',
+        content: { value: '<p>First entry content</p>' },
       },
       {
         id: 'urn:uuid:1225c695-cfb8-4ebb-bbbb-80da344efa6a',
-        title: 'Second Entry',
+        title: { value: 'Second Entry' },
         updated: '2023-01-02T10:00:00Z',
-        content: '<p>Second entry content</p>',
+        content: { value: '<p>Second entry content</p>' },
       },
     ],
   }
@@ -1397,7 +1995,7 @@ describe('parseFeed', () => {
       title: { '#text': 'Example Feed' },
     }
     const expected = {
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
     }
 
     expect(parseFeed(value)).toEqual(expected)
@@ -1419,13 +2017,13 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       updated: '2003-12-13T18:30:02Z',
-      subtitle: 'A tagline for my feed',
+      subtitle: { value: 'A tagline for my feed' },
       entries: [
         {
           id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-          title: 'First Entry',
+          title: { value: 'First Entry' },
           published: '2003-12-13T08:29:29-04:00',
         },
       ],
@@ -1443,9 +2041,9 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: '123',
-      title: '456',
+      title: { value: '456' },
       links: [{ href: 'https://example.com/' }],
-      entries: [{ id: '789', title: 'First Entry' }],
+      entries: [{ id: '789', title: { value: 'First Entry' } }],
     }
 
     expect(parseFeed(value)).toEqual(expected)
@@ -1457,7 +2055,7 @@ describe('parseFeed', () => {
       updated: { '#text': '2023-01-01T12:00:00Z' },
     }
     const expected = {
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       updated: '2023-01-01T12:00:00Z',
     }
 
@@ -1510,10 +2108,10 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       entries: [
-        { id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a', title: 'Valid Entry' },
-        { title: 'Invalid Entry' },
+        { id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a', title: { value: 'Valid Entry' } },
+        { title: { value: 'Invalid Entry' } },
         { id: 'urn:uuid:1225c695-cfb8-4ebb-cccc-80da344efa6a' },
       ],
     }
@@ -1529,10 +2127,9 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       dc: {
         creators: ['John Doe'],
-        creator: 'John Doe',
       },
     }
 
@@ -1547,7 +2144,7 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       sy: { updateFrequency: 5 },
     }
 
@@ -1563,11 +2160,10 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       dcterms: {
         licenses: ['Creative Commons Attribution 4.0'],
-        license: 'Creative Commons Attribution 4.0',
-        created: '2023-01-01T00:00:00Z',
+        created: ['2023-01-01T00:00:00Z'],
       },
     }
 
@@ -1582,7 +2178,7 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       yt: {
         channelId: 'UCexample',
       },
@@ -1599,15 +2195,15 @@ describe('parseFeed', () => {
         '@rdf:resource': 'mailto:webmaster@example.com',
       },
       'admin:generatoragent': {
-        '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+        '@rdf:resource': 'https://example.com/generator?v=3.2',
       },
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
-        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+        generatorAgent: 'https://example.com/generator?v=3.2',
       },
     }
 
@@ -1635,15 +2231,15 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:feed-id',
-      title: 'Test Feed',
+      title: { value: 'Test Feed' },
       entries: [
         {
           id: 'urn:uuid:entry-1',
-          title: 'Entry 1',
+          title: { value: 'Entry 1' },
         },
         {
           id: 'urn:uuid:entry-2',
-          title: 'Entry 2',
+          title: { value: 'Entry 2' },
         },
       ],
     }
@@ -1668,7 +2264,7 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:feed-id',
-      title: 'Test Feed',
+      title: { value: 'Test Feed' },
     }
 
     expect(parseFeed(value, { maxItems: 0 })).toEqual(expected)
@@ -1691,15 +2287,15 @@ describe('parseFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:feed-id',
-      title: 'Test Feed',
+      title: { value: 'Test Feed' },
       entries: [
         {
           id: 'urn:uuid:entry-1',
-          title: 'Entry 1',
+          title: { value: 'Entry 1' },
         },
         {
           id: 'urn:uuid:entry-2',
-          title: 'Entry 2',
+          title: { value: 'Entry 2' },
         },
       ],
     }
@@ -1718,7 +2314,7 @@ describe('retrieveFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -1733,7 +2329,7 @@ describe('retrieveFeed', () => {
     }
     const expected = {
       id: 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6',
-      title: 'Example Feed',
+      title: { value: 'Example Feed' },
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -1746,5 +2342,10 @@ describe('retrieveFeed', () => {
     }
 
     expect(retrieveFeed(value)).toBeUndefined()
+  })
+
+  it('should return undefined for null and undefined inputs', () => {
+    expect(retrieveFeed(null)).toBeUndefined()
+    expect(retrieveFeed(undefined)).toBeUndefined()
   })
 })

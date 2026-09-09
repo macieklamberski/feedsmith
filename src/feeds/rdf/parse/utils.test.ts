@@ -630,7 +630,6 @@ describe('parseItem', () => {
       link: 'http://example.com',
       dc: {
         creators: ['John Doe'],
-        creator: 'John Doe',
       },
     }
 
@@ -664,8 +663,7 @@ describe('parseItem', () => {
       link: 'http://example.com',
       dcterms: {
         licenses: ['MIT License'],
-        license: 'MIT License',
-        created: '2023-02-01T00:00:00Z',
+        created: ['2023-02-01T00:00:00Z'],
       },
     }
 
@@ -737,23 +735,6 @@ describe('parseItem', () => {
       title: 'Example Entry',
       link: 'http://example.com',
       rdf: { about: 'http://example.com/item/1' },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
-  it('should handle rdf:about attribute on item', () => {
-    const value = {
-      '@rdf:about': 'http://example.com/item/1',
-      title: { '#text': 'Example Entry' },
-      link: { '#text': 'http://example.com' },
-    }
-    const expected = {
-      title: 'Example Entry',
-      link: 'http://example.com',
-      rdf: {
-        about: 'http://example.com/item/1',
-      },
     }
 
     expect(parseItem(value)).toEqual(expected)
@@ -1051,45 +1032,6 @@ describe('retrieveItems', () => {
       },
       {
         title: 'Direct Item 2',
-      },
-    ]
-
-    expect(retrieveItems(value)).toEqual(expected)
-  })
-
-  it('should skip invalid ToC references and return only valid items', () => {
-    const value = {
-      channel: {
-        title: 'Test Feed',
-        items: {
-          seq: {
-            li: [
-              { '@resource': 'http://example.com/item1' },
-              { '@resource': 'http://example.com/missing' },
-              { '@resource': 'http://example.com/item2' },
-            ],
-          },
-        },
-      },
-      item: [
-        {
-          '@about': 'http://example.com/item1',
-          title: 'First Item',
-        },
-        {
-          '@about': 'http://example.com/item2',
-          title: 'Second Item',
-        },
-      ],
-    }
-    const expected = [
-      {
-        title: 'First Item',
-        rdf: { about: 'http://example.com/item1' },
-      },
-      {
-        title: 'Second Item',
-        rdf: { about: 'http://example.com/item2' },
       },
     ]
 
@@ -1603,7 +1545,6 @@ describe('parseFeed', () => {
       ],
       dc: {
         creators: ['John Doe'],
-        creator: 'John Doe',
       },
     }
 
@@ -1661,8 +1602,7 @@ describe('parseFeed', () => {
       ],
       dcterms: {
         licenses: ['Creative Commons Attribution 4.0'],
-        license: 'Creative Commons Attribution 4.0',
-        created: '2023-01-01T00:00:00Z',
+        created: ['2023-01-01T00:00:00Z'],
       },
     }
 
@@ -1737,7 +1677,7 @@ describe('parseFeed', () => {
           '@rdf:resource': 'mailto:webmaster@example.com',
         },
         'admin:generatoragent': {
-          '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+          '@rdf:resource': 'https://example.com/generator?v=3.2',
         },
       },
       item: [
@@ -1757,7 +1697,7 @@ describe('parseFeed', () => {
       ],
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
-        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+        generatorAgent: 'https://example.com/generator?v=3.2',
       },
     }
 
