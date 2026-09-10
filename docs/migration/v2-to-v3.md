@@ -256,6 +256,45 @@ const xml = generateAtomFeed({
 2. Update generate calls: `content: 'text'` → `content: { value: 'text' }`
 3. Optionally use `type` and `src` for richer content metadata
 
+### Atom `type="xhtml"` Values Are Now Plain HTML
+
+Parsing of `type="xhtml"` text constructs and content now conforms to [RFC 4287 §3.1.1.3](https://www.rfc-editor.org/rfc/rfc4287#section-3.1.1.3), and the parsed value is the plain HTML the spec describes. The same applies to `type="application/xhtml+xml"` (the Atom 0.3 spelling) and to Atom text constructs embedded in RSS items. Four things changed:
+
+- The wrapper `<div>` is stripped: the spec excludes it from the content
+- `xml:base` and `xml:lang` declared on the stripped wrapper fold into the construct's `xml` object, where the element's own declarations already live. The wrapper is the inner scope, so its `lang` replaces the element's, and its `base` resolves against the element's when relative. The `base` is surfaced as declared, not resolved against feed or entry level declarations, which stay on their own levels
+- The `xhtml:` prefix is removed from every tag when the feed binds the XHTML namespace to a prefix
+- Escaped characters are no longer decoded: inside an xhtml construct `&lt;` stands for the literal character, so an email address like `From: Sean &lt;sean@intel.com&gt;` survives instead of becoming a tag that HTML parsers swallow. A CDATA section also means literal text, so `<![CDATA[a < b]]>` comes out as `a &lt; b`
+
+A value without the wrapper `<div>` does not follow the spec and is decoded as before, so feeds that label escaped HTML as `xhtml` keep working.
+
+```xml
+<content type="xhtml">
+  <xhtml:div xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <xhtml:p>a &lt; b</xhtml:p>
+  </xhtml:div>
+</content>
+```
+
+#### Before (2.x)
+```typescript
+const content = feed.entries?.[0]?.content?.value
+// '<xhtml:div xmlns:xhtml="http://www.w3.org/1999/xhtml"><xhtml:p>a < b</xhtml:p></xhtml:div>'
+```
+
+#### After (3.x)
+```typescript
+const content = feed.entries?.[0]?.content?.value
+// '<p>a &lt; b</p>'
+```
+
+Generating works in the other direction: a `type="xhtml"` value is emitted as markup inside a single `<div xmlns="http://www.w3.org/1999/xhtml">` wrapper instead of as escaped text or CDATA. A value that is not well-formed XML (unclosed tags like `<br>`, a bare `&`, an HTML-only entity like `&nbsp;`) is emitted as escaped text under `type="html"` instead.
+
+#### Migration Steps
+1. Drop any code that strips the wrapper `<div>` or the `xhtml:` prefix: the parser does it
+2. Render the value as HTML, not as XML
+3. Note that a construct whose wrapper is empty (`<div/>`) now yields no value at all: `entry.content` keeps its other fields but loses `value`, while `title`, `summary`, `subtitle`, and `rights` become `undefined`
+4. When generating with `type="xhtml"`, pass the inner markup without the wrapper `<div>` and keep it well-formed (XHTML-style closed tags)
+
 ### RSS Person Fields Changed from Strings to Objects
 
 The `managingEditor`, `webMaster`, and `authors` fields on RSS feeds and items were previously plain strings (e.g., `'editor@example.com (Editor Name)'`). In the new version, they use the `Rss.Person` object that preserves structured data, properly representing the [RSS person construct](https://www.rssboard.org/rss-specification#ltauthorgtSubelementOfLtitemgt).

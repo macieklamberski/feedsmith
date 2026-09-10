@@ -1,10 +1,9 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generatePlainString,
   generateTextOrCdataString,
-  trimObject,
 } from '../../../common/utils.js'
 import type { AcastNs } from '../common/types.js'
 

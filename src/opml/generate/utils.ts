@@ -1,4 +1,4 @@
-import { isPlainObject, isPresent } from 'trousse'
+import { isPlainObject, isPresent, trimObject } from 'trousse'
 import type { DateLike } from '../../common/types.js'
 import {
   generateBoolean,
@@ -8,7 +8,6 @@ import {
   generatePlainString,
   generateRfc822Date,
   trimArray,
-  trimObject,
 } from '../../common/utils.js'
 import type { GenerateUtil, Opml } from '../common/types.js'
 

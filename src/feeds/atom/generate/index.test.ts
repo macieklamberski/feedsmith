@@ -35,6 +35,69 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate xhtml text constructs as markup inside a div wrapper', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: {
+        value: '<p>a &lt; b <em>ok</em></p>',
+        type: 'xhtml',
+      },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      entries: [
+        {
+          id: 'https://example.com/entry',
+          title: { value: 'Entry' },
+          updated: new Date('2023-03-15T12:00:00Z'),
+          content: {
+            value: '<p>Rich <strong>content</strong></p>',
+            type: 'xhtml',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com/feed</id>
+  <title type="xhtml">
+<div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b <em>ok</em></p></div>
+  </title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <entry>
+    <content type="xhtml">
+<div xmlns="http://www.w3.org/1999/xhtml"><p>Rich <strong>content</strong></p></div>
+    </content>
+    <id>https://example.com/entry</id>
+    <title>Entry</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should emit an xhtml value that is not well-formed XML as type html', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: {
+        value: '<p>Hello<br>world</p>',
+        type: 'xhtml',
+      },
+      updated: new Date('2023-03-15T12:00:00Z'),
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://example.com/feed</id>
+  <title type="html">
+    <![CDATA[<p>Hello<br>world</p>]]>
+  </title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with entries', () => {
     const value = {
       id: 'https://example.com/feed',

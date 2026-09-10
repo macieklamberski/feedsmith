@@ -1,11 +1,6 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import {
-  generateNumber,
-  generatePlainString,
-  trimArray,
-  trimObject,
-} from '../../../common/utils.js'
+import { generateNumber, generatePlainString, trimArray } from '../../../common/utils.js'
 import type { OpenSearchNs } from '../common/types.js'
 
 export const generateQuery: GenerateUtil<OpenSearchNs.Query> = (query) => {

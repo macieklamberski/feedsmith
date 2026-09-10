@@ -189,6 +189,45 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse atom xhtml content in an RDF item with the div wrapper stripped', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:atom="http://www.w3.org/2005/Atom"
+      >
+        <channel rdf:about="https://example.com">
+          <title>Test</title>
+          <link>https://example.com</link>
+        </channel>
+        <item rdf:about="https://example.com/item1">
+          <title>Item</title>
+          <atom:content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b</p></div></atom:content>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Test',
+      link: 'https://example.com',
+      rdf: { about: 'https://example.com' },
+      items: [
+        {
+          title: 'Item',
+          atom: {
+            content: {
+              value: '<p>a &lt; b</p>',
+              type: 'xhtml',
+            },
+          },
+          rdf: { about: 'https://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   describe('namespace normalization integration', () => {
     it('should handle RDF 1.0 feeds with no additional namespaces', () => {
       const value = `
@@ -627,6 +666,60 @@ describe('parse', () => {
       }
 
       expect(parse(value)).toEqual(expected)
+    })
+
+    it('should parse a bare root element under the RDF default namespace', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+          <channel xmlns="http://purl.org/rss/1.0/">
+            <title>Bare Root</title>
+            <link>https://example.com</link>
+          </channel>
+        </RDF>
+      `
+      const expected = {
+        title: 'Bare Root',
+        link: 'https://example.com',
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
+    // The channel stop nodes are spelled `rdf.*`, so this pins that they still fire after
+    // the root's prefix canonicalizes away: entities inside CDATA stay raw, which only a
+    // captured stop node preserves.
+    it('should capture stop-node content under a prefixed root', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
+          <channel rdf:about="https://example.com">
+            <title><![CDATA[Ampersands &amp; <b>markup</b>]]></title>
+            <link>https://example.com</link>
+          </channel>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'Ampersands &amp; <b>markup</b>',
+        link: 'https://example.com',
+        rdf: { about: 'https://example.com' },
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
+    it('should throw when the root prefix is never declared', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF>
+          <channel>
+            <title>Undeclared</title>
+          </channel>
+        </rdf:RDF>
+      `
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrowError(ParseError)
     })
 
     it('should handle missing required RDF elements', () => {

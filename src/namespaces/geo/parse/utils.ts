@@ -1,6 +1,6 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
-import { parseNumber, parseSingularOf, retrieveText, trimObject } from '../../../common/utils.js'
+import { parseNumber, parseSingularOf, retrieveText } from '../../../common/utils.js'
 import type { GeoNs } from '../common/types.js'
 
 export const retrieveItemOrFeed: ParseUtilPartial<GeoNs.ItemOrFeed> = (value) => {

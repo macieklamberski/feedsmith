@@ -1,6 +1,6 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
-import { parseArrayOf, parseSingularOf, parseString, trimObject } from '../../../common/utils.js'
+import { parseArrayOf, parseSingularOf, parseString } from '../../../common/utils.js'
 import type { PscNs } from '../common/types.js'
 
 export const parseChapter: ParseUtilPartial<PscNs.Chapter> = (value) => {

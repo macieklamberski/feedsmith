@@ -1,11 +1,6 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import {
-  generateCdataString,
-  generateNumber,
-  generatePlainString,
-  trimObject,
-} from '../../../common/utils.js'
+import { generateCdataString, generateNumber, generatePlainString } from '../../../common/utils.js'
 import type { SpotifyNs } from '../common/types.js'
 
 export const generateLimit: GenerateUtil<SpotifyNs.Limit> = (limit) => {

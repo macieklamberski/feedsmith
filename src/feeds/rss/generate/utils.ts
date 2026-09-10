@@ -1,4 +1,4 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import { namespaceUris } from '../../../common/config.js'
 import type { DateLike } from '../../../common/types.js'
 import {
@@ -10,7 +10,6 @@ import {
   generateRfc822Date,
   generateTextOrCdataString,
   trimArray,
-  trimObject,
 } from '../../../common/utils.js'
 import {
   generateFeed as generateAcastFeed,

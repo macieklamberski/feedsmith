@@ -1475,6 +1475,226 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
+      // A hosting platform emits this shape: a default namespace declared on an element
+      // inside the channel. Honoring it beyond that element renamed every later element
+      // and left the feed with no items.
+      it('should keep items when a nested element declares a default namespace', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+            <channel>
+              <atom:link href="https://example.com/feed" rel="self"/>
+              <atom:link href="https://hub.example.com" rel="hub" xmlns="http://www.w3.org/2005/Atom"/>
+              <title>Podcast</title>
+              <description>Desc</description>
+              <item>
+                <title>Ep 1</title>
+                <guid>1</guid>
+              </item>
+              <item>
+                <title>Ep 2</title>
+                <guid>2</guid>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Podcast',
+          description: 'Desc',
+          atom: {
+            links: [
+              { href: 'https://example.com/feed', rel: 'self' },
+              { href: 'https://hub.example.com', rel: 'hub' },
+            ],
+          },
+          items: [
+            { title: 'Ep 1', guid: { value: '1' } },
+            { title: 'Ep 2', guid: { value: '2' } },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should surface wrapper div xml declarations on embedded atom content', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Item</title>
+                <atom:content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml" xml:base="https://example.com/posts/" xml:lang="de"><p>Text</p></div></atom:content>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              atom: {
+                content: {
+                  value: '<p>Text</p>',
+                  type: 'xhtml',
+                  xml: {
+                    base: 'https://example.com/posts/',
+                    lang: 'de',
+                  },
+                },
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should parse atom xhtml content in RSS item with the div wrapper stripped', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Item</title>
+                <atom:title type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b</p></div></atom:title>
+                <atom:content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>Rich <em>text</em></p></div></atom:content>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              atom: {
+                title: {
+                  value: '<p>a &lt; b</p>',
+                  type: 'xhtml',
+                },
+                content: {
+                  value: '<p>Rich <em>text</em></p>',
+                  type: 'xhtml',
+                },
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should parse the xhtml value of a construct that declares its own prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0">
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Item</title>
+                <myatom:content xmlns:myatom="http://www.w3.org/2005/Atom" type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>Text</p></div></myatom:content>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              atom: {
+                content: {
+                  value: '<p>Text</p>',
+                  type: 'xhtml',
+                },
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should parse a namespaced element that declares its own prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0">
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Item</title>
+                <myns:encoded xmlns:myns="http://purl.org/rss/1.0/modules/content/"><![CDATA[<p>Hello</p>]]></myns:encoded>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              content: { encoded: '<p>Hello</p>' },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should parse xhtml content under the a10 prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:a10="http://www.w3.org/2005/Atom">
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Item</title>
+                <a10:content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b</p></div></a10:content>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              atom: {
+                content: {
+                  value: '<p>a &lt; b</p>',
+                  type: 'xhtml',
+                },
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
       it('should parse atom:link in RSS feed (RW-L03)', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>

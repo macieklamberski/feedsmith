@@ -4,13 +4,14 @@ import {
   coerceBoolean,
   coerceNumber,
   coerceSingular,
+  isJsonLike,
   isNonEmptyString,
   isNumber,
   isPlainObject,
   isPresent,
+  trimObject,
 } from 'trousse'
 import type {
-  AnyOf,
   DateAny,
   DateLike,
   GenerateUtil,
@@ -21,6 +22,11 @@ import type {
 
 export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | number => {
   return isNumber(value) || isNonEmptyString(value)
+}
+
+export const isXmlAttributeKey = (key: string) => {
+  // Matches the `@` (charCode 64) from attributeNamePrefix in config.ts.
+  return key.charCodeAt(0) === 64
 }
 
 export const retrieveText = (value: Unreliable): Unreliable => {
@@ -48,45 +54,6 @@ export const retrieveRdfResourceOrText = <T>(
   return parse(retrieveText(value))
 }
 
-export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<T> | undefined => {
-  let hasPresent = false
-  let hasAbsent = false
-
-  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
-  for (const key in object) {
-    if (isPresent(object[key])) {
-      hasPresent = true
-    } else {
-      hasAbsent = true
-    }
-
-    if (hasPresent && hasAbsent) {
-      break
-    }
-  }
-
-  if (!hasPresent) {
-    return
-  }
-
-  if (!hasAbsent) {
-    return object as AnyOf<T>
-  }
-
-  const result: Partial<T> = {}
-
-  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
-  for (const key in object) {
-    const value = object[key]
-
-    if (isPresent(value)) {
-      result[key] = value
-    }
-  }
-
-  return result as AnyOf<T>
-}
-
 export const trimArray = <T, R = T>(
   value: Array<T> | undefined,
   parse?: ParseUtilExact<R>,
@@ -111,8 +78,8 @@ export const trimArray = <T, R = T>(
     }
   }
 
-  // Pre-allocation in case of Array is more performant than doing the lazy-allocation
-  // similar to the one used in trimObject.
+  // Pre-allocation in case of Array is more performant than doing the lazy-allocation similar to
+  // the one used in trimObject.
   const result: Array<R> = []
 
   for (const element of value) {
@@ -164,8 +131,8 @@ const stripComments = (text: string): string => {
 }
 
 const decodeWithCdata = (text: string): string => {
-  // Per XML spec, CDATA content should be passed through verbatim without entity decoding.
-  // Text outside CDATA should have entities decoded normally.
+  // Per XML spec, CDATA content should be passed through verbatim without entity decoding. Text
+  // outside CDATA should have entities decoded normally.
 
   let currentIndex = text.indexOf(cdataStartTag)
 
@@ -218,11 +185,11 @@ export const parseString: ParseUtilExact<string> = (value) => {
   }
 }
 
-// Variant of parseString for JSON-sourced values: skips XML entity decoding and
-// HTML comment stripping. JSON.parse already produces the final string, so any
-// `&lt;` / `<!--` in fields like JSON Feed's `content_html` belongs to the HTML
-// payload and must be preserved verbatim.
-export const parseJsonString: ParseUtilExact<string> = (value) => {
+// Variant of parseString for values that are already final markup: skips XML entity decoding and
+// HTML comment stripping. Used where a `&lt;` / `<!--` belongs to the payload rather than encoding
+// it: JSON Feed's `content_html`, whose string comes straight out of JSON.parse, and Atom's xhtml
+// constructs, whose entities stand for literal characters.
+export const parseVerbatimString: ParseUtilExact<string> = (value) => {
   if (typeof value === 'string') {
     if (value === '') {
       return
@@ -445,10 +412,10 @@ export const generateRfc822Date: GenerateUtil<DateLike> = (value) => {
 }
 
 export const generateRfc3339Date: GenerateUtil<DateLike> = (value) => {
-  // This function generates RFC 3339 format dates which is also compatible with W3C-DTF.
-  // The only difference between ISO 8601 (produced by toISOString) and RFC 3339 is that
-  // RFC 3339 allows a space between date and time parts instead of 'T', but the 'T' format
-  // is actually valid in RFC 3339 as well, so we can just return the ISO string.
+  // This function generates RFC 3339 format dates which is also compatible with W3C-DTF. The only
+  // difference between ISO 8601 (produced by toISOString) and RFC 3339 is that RFC 3339 allows a
+  // space between date and time parts instead of 'T', but the 'T' format is actually valid in RFC
+  // 3339 as well, so we can just return the ISO string.
 
   if (!isPresent(value)) {
     return
@@ -508,7 +475,7 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
 
         seenKeys?.add(key)
 
-        const keyWithoutAt = key.charCodeAt(0) === 64 ? key.slice(1) : key
+        const keyWithoutAt = isXmlAttributeKey(key) ? key.slice(1) : key
         const colonIndex = keyWithoutAt.indexOf(':')
 
         if (colonIndex > 0) {
@@ -607,281 +574,271 @@ export const generateNamespaceAttrs = (
   return namespaceAttrs
 }
 
-export const createNamespaceNormalizator = <T extends Record<string, Array<string>>>(
-  namespaceUris: T,
-  namespacePrefixes: Record<string, string>,
-  primaryNamespaces?: Array<keyof T>,
-) => {
-  const normalizedUriCache = new Map<string, string>()
+// Renames namespace prefixes to their canonical form while the document is being parsed, so stop
+// nodes can match `a10:title` as `atom:title`. Renaming after parsing would be too late: stop nodes
+// fire during it.
+//
+// Document order is what makes this work. By the time the parser hands over an element's name, it
+// has already read every ancestor's attributes, including their `xmlns:` declarations, which
+// attributeValueProcessor records into a map. transformTagName can therefore rename the element
+// right away. The one exception is an element that declares its own prefix: its name arrives before
+// its attributes, so updateTag renames it once more after they are read.
+//
+// The map is flat and first-wins: real feeds declare namespaces once, on the root, and re-binding a
+// prefix deeper in a document has no observed usage. Add scope tracking if such feeds ever appear.
+export const createNamespaceResolver = <T extends Record<string, Array<string>>>(options: {
+  namespaceUris: T
+  namespacePrefixes: Record<string, string>
+  primaryNamespaces?: Array<keyof T>
+}) => {
+  const { namespaceUris, namespacePrefixes, primaryNamespaces } = options
 
-  const normalizeNamespaceUri = (uri: string): string => {
-    if (typeof uri !== 'string') {
-      return uri
+  const primaryUris = new Set(
+    primaryNamespaces?.flatMap((key) => {
+      return namespaceUris[key]?.map((uri) => uri.toLowerCase()) ?? []
+    }),
+  )
+
+  // Canonical prefix for the URI, or an empty string when the URI is a primary namespace, whose
+  // elements go unprefixed. Undefined means the URI is not recognized.
+  const resolveUri = (uri: string): string | undefined => {
+    const normalized = uri.trim().toLowerCase()
+
+    if (primaryUris.has(normalized)) {
+      return ''
     }
 
-    let normalized = normalizedUriCache.get(uri)
-
-    if (normalized === undefined) {
-      normalized = uri.trim().toLowerCase()
-      normalizedUriCache.set(uri, normalized)
-    }
-
-    return normalized
+    return namespacePrefixes[normalized]
   }
 
-  const primaryNamespaceUris = primaryNamespaces?.length
-    ? primaryNamespaces.flatMap((key) => namespaceUris[key].map(normalizeNamespaceUri))
-    : undefined
+  // Far above the deepest alternate-prefix declaration observed in real feeds.
+  const seedScanLimit = 65536
 
-  const resolveNamespacePrefix = (uri: string, localName: string, fallback: string): string => {
-    const normalizedUri = normalizeNamespaceUri(uri)
+  // Everything before the root element is a comment, a processing instruction or a doctype, none of
+  // which can carry a declaration. A document with no root is not a feed and never reaches the
+  // parser; the scan then simply starts at the beginning.
+  const findRootIndex = (document: string): number => {
+    let index = document.indexOf('<')
 
-    if (primaryNamespaceUris?.includes(normalizedUri)) {
-      return localName
+    while (index !== -1) {
+      const marker = document.charCodeAt(index + 1)
+
+      // A letter or underscore starts a tag name, so this is the root.
+      if (marker !== 63 && marker !== 33) {
+        return index
+      }
+
+      const end = document.startsWith('<!--', index)
+        ? document.indexOf('-->', index)
+        : document.indexOf('>', index)
+
+      if (end === -1) {
+        return -1
+      }
+
+      index = document.indexOf('<', end)
     }
 
-    const standardPrefix = namespacePrefixes[normalizedUri]
-
-    if (standardPrefix) {
-      return `${standardPrefix}:${localName}`
-    }
-
-    return fallback
+    return -1
   }
 
-  const extractNamespaceDeclarations = (element: Unreliable): Record<string, string> => {
-    const declarations: Record<string, string> = {}
+  // Every declaration a document makes lives in this call, so nothing survives the parse it belongs
+  // to and no state can leak into the next document.
+  return (document?: string) => {
+    const prefixMap = new Map<string, string>()
+    const seededPrefixes = new Set<string>()
+    let defaultCanonical: string | undefined
+    // Stays false while every declaration binds its conventional prefix, which keeps the per-tag
+    // work at a single boolean check for the overwhelming majority of feeds.
+    let hasRemapping = false
+    let tagsSeen = 0
 
-    if (isPlainObject(element)) {
-      // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
-      for (const key in element) {
-        if (key === '@xmlns') {
-          declarations[''] = normalizeNamespaceUri(element[key] as Unreliable)
-        } else if (key.indexOf('@xmlns:') === 0) {
-          const prefix = key.slice('@xmlns:'.length)
-          declarations[prefix] = normalizeNamespaceUri(element[key] as Unreliable)
+    const recordPrefix = (prefix: string, uri: string) => {
+      if (!prefixMap.has(prefix)) {
+        const canonical = resolveUri(uri)
+
+        if (canonical !== undefined) {
+          prefixMap.set(prefix, canonical)
+
+          if (canonical !== prefix) {
+            hasRemapping = true
+          }
         }
       }
     }
 
-    return declarations
-  }
+    // The parser matches stop nodes against an element's name before reading its own attributes, so
+    // an element that declares its own prefix would miss them. Seeding the map from the raw
+    // document first closes that gap. Only prefixed declarations are seeded: a default `xmlns`
+    // cannot be scoped without parsing. The scan starts at the root element because junk before it
+    // is the one case a later real declaration cannot repair, the root's own name being resolved
+    // before its attributes are read.
+    if (document) {
+      // Only the head of the document is scanned, which keeps the cost flat on multi-megabyte
+      // feeds. Alternate prefixes, the reason the seed exists, are declared at the top of real
+      // documents; declarations found deeper either already spell the canonical prefix or resolve
+      // to no known namespace, so seeding them would change nothing. An alternate past the cap
+      // falls back to in-order discovery, the behavior every element had before seeding existed.
+      const head = document.length > seedScanLimit ? document.slice(0, seedScanLimit) : document
 
-  const normalizeWithContext = (
-    name: string,
-    context: Record<string, string>,
-    useDefault = false,
-  ): string => {
-    const colonIndex = name.indexOf(':')
+      // indexOf jumps from one `xmlns:` occurrence to the next, and the sticky regex then reads
+      // just the `prefix="uri"` pair at that spot, so no regex ever scans the document itself.
+      const declarationTailRegex = /([\w.-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/y
 
-    if (colonIndex === -1) {
-      if (useDefault && context['']) {
-        return resolveNamespacePrefix(context[''], name, name)
-      }
+      let index = head.indexOf('xmlns:', findRootIndex(head))
 
-      return name
-    }
+      while (index !== -1) {
+        declarationTailRegex.lastIndex = index + 6
+        const match = declarationTailRegex.exec(head)
 
-    const prefix = name.slice(0, colonIndex)
-    const unprefixedName = name.slice(colonIndex + 1)
-    const uri = context[prefix]
+        if (match) {
+          const prefix = match[1].toLowerCase()
 
-    if (uri) {
-      return resolveNamespacePrefix(uri, unprefixedName, name)
-    }
-
-    return name
-  }
-
-  const normalizeKey = (key: string, context: Record<string, string>): string => {
-    if (key.charCodeAt(0) === 64) {
-      const attrName = key.slice(1)
-      const normalizedAttrName = normalizeWithContext(attrName, context, false)
-
-      return `@${normalizedAttrName}`
-    }
-
-    return normalizeWithContext(key, context, true)
-  }
-
-  const traverseAndNormalize = (
-    object: Unreliable,
-    parentContext: Record<string, string> = {},
-  ): Unreliable => {
-    // Check arrays first since isPlainObject() excludes arrays.
-    if (Array.isArray(object)) {
-      return object.map((item) => traverseAndNormalize(item, parentContext))
-    }
-
-    if (!isPlainObject(object)) {
-      return object
-    }
-
-    const declarations = extractNamespaceDeclarations(object)
-    // Avoid object spread if no new declarations (common case).
-    let hasDeclarations = false
-    // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
-    for (const _ in declarations) {
-      hasDeclarations = true
-      break
-    }
-    const currentContext = hasDeclarations ? { ...parentContext, ...declarations } : parentContext
-
-    const normalizedObject: Unreliable = {}
-
-    // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
-    for (const key in object) {
-      const value = object[key]
-
-      if (key.indexOf('@xmlns') === 0) {
-        normalizedObject[key] = value
-        continue
-      }
-
-      const normalizedKey = normalizeKey(key, currentContext)
-      const normalizedValue = traverseAndNormalize(value, currentContext)
-
-      // Handle key collisions inline (rare: different prefixes mapping to same namespace).
-      if (normalizedKey in normalizedObject) {
-        const existing = normalizedObject[normalizedKey]
-        if (Array.isArray(existing)) {
-          existing.push(normalizedValue)
-        } else {
-          normalizedObject[normalizedKey] = [existing, normalizedValue]
+          recordPrefix(prefix, match[2] ?? match[3])
+          seededPrefixes.add(prefix)
         }
-      } else {
-        normalizedObject[normalizedKey] = normalizedValue
+
+        index = head.indexOf('xmlns:', match ? declarationTailRegex.lastIndex : index + 6)
       }
     }
 
-    return normalizedObject
-  }
+    const recordDeclaration = (rawAttrName: string, value: unknown) => {
+      // Anything not starting with "x" cannot be an xmlns declaration; bail before the string
+      // comparisons since this runs for every attribute in the document. The name arrives as
+      // written, so both cases are checked.
+      const firstCharCode = rawAttrName.charCodeAt(0)
 
-  const needsNormalization = (object: Unreliable): boolean => {
-    const check = (value: Unreliable): boolean => {
-      if (Array.isArray(value)) {
-        for (const item of value) {
-          if (check(item)) {
-            return true
+      if ((firstCharCode !== 120 && firstCharCode !== 88) || typeof value !== 'string') {
+        return
+      }
+
+      const attrName = rawAttrName.toLowerCase()
+
+      if (attrName === 'xmlns') {
+        // Only the root's default namespace is honored. A default declared deeper scopes to its own
+        // subtree, which the parser gives no way to track, and applying it document wide would
+        // rename every later element: a feed carrying `<atom:link xmlns="...atom"/>` inside its
+        // channel would lose the items after it.
+        if (tagsSeen === 1 && defaultCanonical === undefined) {
+          defaultCanonical = resolveUri(value)
+
+          if (defaultCanonical) {
+            hasRemapping = true
           }
         }
 
-        return false
+        return
       }
 
-      if (!isPlainObject(value)) {
-        return false
+      if (attrName.startsWith('xmlns:')) {
+        const prefix = attrName.slice(6)
+
+        // A seeded entry is a guess read out of the raw text; the parser reporting the declaration
+        // is the document itself, so it replaces the guess.
+        if (seededPrefixes.delete(prefix)) {
+          prefixMap.delete(prefix)
+        }
+
+        recordPrefix(prefix, value)
       }
-
-      // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
-      for (const key in value) {
-        if (key[0] === '@') {
-          // Attribute key (@*) — only xmlns declarations matter.
-          if (key === '@xmlns') {
-            const normalizedUri = normalizeNamespaceUri(value[key] as Unreliable)
-
-            if (primaryNamespaceUris?.includes(normalizedUri)) {
-              // Default namespace maps to a primary namespace — unprefixed
-              // elements stay unprefixed, so no remapping is needed.
-              continue
-            }
-
-            if (namespacePrefixes[normalizedUri]) {
-              // Default namespace maps to a non-primary standard prefix —
-              // unprefixed elements need to be prefixed.
-              return true
-            }
-          } else if (key.startsWith('@xmlns:')) {
-            const prefix = key.slice(7)
-            const normalizedUri = normalizeNamespaceUri(value[key] as Unreliable)
-            const standardPrefix = namespacePrefixes[normalizedUri]
-
-            if (standardPrefix) {
-              if (primaryNamespaceUris?.includes(normalizedUri)) {
-                // Primary namespace with explicit prefix — normalization
-                // strips the prefix (e.g., rdf:channel → channel).
-                return true
-              }
-
-              if (standardPrefix !== prefix) {
-                return true
-              }
-            }
-          }
-
-          continue
-        }
-
-        // Skip text/cdata nodes (#text, #cdata) — never contain xmlns.
-        if (key[0] === '#') {
-          continue
-        }
-
-        // Recurse into child elements only.
-        if (check(value[key])) {
-          return true
-        }
-      }
-
-      return false
     }
 
-    return check(object)
+    const transformName = (name: string, useDefault: boolean): string => {
+      const lowered = name.toLowerCase()
+
+      if (!hasRemapping) {
+        return lowered
+      }
+
+      const colonIndex = lowered.indexOf(':')
+
+      if (colonIndex === -1) {
+        if (useDefault && defaultCanonical) {
+          return `${defaultCanonical}:${lowered}`
+        }
+
+        return lowered
+      }
+
+      const prefix = lowered.slice(0, colonIndex)
+
+      if (prefix === 'xmlns' || prefix === 'xml') {
+        return lowered
+      }
+
+      const canonical = prefixMap.get(prefix)
+
+      if (canonical === undefined) {
+        return lowered
+      }
+
+      const local = lowered.slice(colonIndex + 1)
+
+      return canonical === '' ? local : `${canonical}:${local}`
+    }
+
+    const transformTagName = (name: string) => {
+      tagsSeen++
+
+      return transformName(name, true)
+    }
+
+    // The parser hands attribute names in with the `@` marker already applied.
+    const transformAttributeName = (name: string) => `@${transformName(name.slice(1), false)}`
+
+    const attributeValueProcessor = (attrName: string, value: unknown) => {
+      recordDeclaration(attrName, value)
+
+      return value
+    }
+
+    // Re-canonicalize with the now-complete maps: a name transformed before its own element's
+    // declarations were read gets its final form here. The name arrives already lowercased and
+    // usually already canonical, so every unchanged path returns the same string without
+    // allocating.
+    const updateTag = (tagName: string) => {
+      if (!hasRemapping) {
+        return tagName
+      }
+
+      const colonIndex = tagName.indexOf(':')
+
+      if (colonIndex === -1) {
+        return defaultCanonical ? `${defaultCanonical}:${tagName}` : tagName
+      }
+
+      // The reserved xmlns/xml prefixes never appear as element names and are never recorded in the
+      // map, so the lookup alone leaves them unchanged.
+      const prefix = tagName.slice(0, colonIndex)
+      const canonical = prefixMap.get(prefix)
+
+      if (canonical === undefined || canonical === prefix) {
+        return tagName
+      }
+
+      const local = tagName.slice(colonIndex + 1)
+
+      return canonical === '' ? local : `${canonical}:${local}`
+    }
+
+    return { transformTagName, transformAttributeName, attributeValueProcessor, updateTag }
   }
-
-  // For the root level, we need to handle the special case where the root element
-  // itself has namespace declarations that apply to its own normalization.
-  const normalizeRoot = (object: Unreliable): Unreliable => {
-    if (!isPlainObject(object)) {
-      return object
-    }
-
-    if (!needsNormalization(object)) {
-      return object
-    }
-
-    const normalizedObject: Unreliable = {}
-
-    // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
-    for (const key in object) {
-      const value = object[key]
-
-      // Extract namespace declarations from the value to see if they apply to the key.
-      const declarations = extractNamespaceDeclarations(value)
-      // If this element has declarations, use them to normalize its own key.
-      const normalizedKey = Object.keys(declarations).length ? normalizeKey(key, declarations) : key
-      // Process the value with empty parent context since this is root.
-      const normalizedValue = traverseAndNormalize(value)
-
-      normalizedObject[normalizedKey] = normalizedValue
-    }
-
-    return normalizedObject
-  }
-
-  return normalizeRoot
 }
-
-const startsWithBraceRegex = /^\s*\{/
-const endsWithBraceRegex = /\}\s*$/
 
 export const parseJsonObject = (value: unknown): unknown => {
   if (isPlainObject(value)) {
     return value
   }
 
-  if (!isNonEmptyString(value) || value.length < 2) {
-    return
-  }
-
-  const startsWithBrace = value.charAt(0) === '{' || startsWithBraceRegex.test(value)
-  const endsWithBrace = value.charAt(value.length - 1) === '}' || endsWithBraceRegex.test(value)
-
-  if (!startsWithBrace || !endsWithBrace) {
+  if (!isNonEmptyString(value) || !isJsonLike(value)) {
     return
   }
 
   try {
-    return JSON.parse(value)
+    const parsed = JSON.parse(value)
+
+    if (isPlainObject(parsed)) {
+      return parsed
+    }
   } catch {}
 }

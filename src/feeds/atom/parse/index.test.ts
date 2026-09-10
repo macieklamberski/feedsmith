@@ -200,11 +200,11 @@ describe('parse', () => {
     const value = `
       <?xml version="1.0" encoding="utf-8"?>
       <atom:feed atom:xmlns="http://www.w3.org/2005/Atom">
-        <atom:title>Example Feed</title>
-        <atom:id>example-feed</id>
+        <atom:title>Example Feed</atom:title>
+        <atom:id>example-feed</atom:id>
         <atom:entry>
-          <atom:title>Example Entry</title>
-          <atom:id>example-entry</id>
+          <atom:title>Example Entry</atom:title>
+          <atom:id>example-entry</atom:id>
         </atom:entry>
       </atom:feed>
     `
@@ -217,6 +217,25 @@ describe('parse', () => {
           title: { value: 'Example Entry' },
         },
       ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse an xhtml title in a fully prefixed Atom feed', () => {
+    const value = `
+      <?xml version="1.0" encoding="utf-8"?>
+      <atom:feed xmlns:atom="http://www.w3.org/2005/Atom">
+        <atom:id>example-feed</atom:id>
+        <atom:title type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b</p></div></atom:title>
+      </atom:feed>
+    `
+    const expected = {
+      id: 'example-feed',
+      title: {
+        value: '<p>a &lt; b</p>',
+        type: 'xhtml',
+      },
     }
 
     expect(parse(value)).toEqual(expected)

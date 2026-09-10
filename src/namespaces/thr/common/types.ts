@@ -4,7 +4,7 @@ import type { Requirable, Strict } from '../../../common/types.js'
 export namespace ThrNs {
   export type InReplyTo<TStrict extends boolean = false> = Strict<
     {
-      ref: Requirable<string> // Required in spec.
+      ref: Requirable<string> // Required in spec
       href?: string
       type?: string
       source?: string

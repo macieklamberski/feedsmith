@@ -1,4 +1,4 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
   parseArrayOf,
@@ -7,7 +7,6 @@ import {
   parseSingularOf,
   parseString,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { ThrNs } from '../common/types.js'
 

@@ -17,8 +17,8 @@ export const stopNodes = [
   'opml.head.windowright',
   // Not a stop node because it supports recursive nesting that requires parser traversal.
   // '*.outline',
-  // Not a stop node because *.X.Y wildcard patterns don't work in fast-xml-parser
-  // (the part after *. is matched against a single tag name, not a path).
+  // Not a stop node because *.X.Y wildcard patterns don't work in fast-xml-parser (the part after
+  // *. is matched against a single tag name, not a path).
   // '*.outline.outline',
 ]
 

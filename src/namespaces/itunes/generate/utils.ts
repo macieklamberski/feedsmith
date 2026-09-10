@@ -1,4 +1,4 @@
-import { isNonEmptyString, isPlainObject } from 'trousse'
+import { isNonEmptyString, isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
@@ -7,7 +7,6 @@ import {
   generatePlainString,
   generateYesNoBoolean,
   trimArray,
-  trimObject,
 } from '../../../common/utils.js'
 import type { ItunesNs } from '../common/types.js'
 

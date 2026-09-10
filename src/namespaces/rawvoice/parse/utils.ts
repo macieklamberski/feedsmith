@@ -1,6 +1,7 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
+  isXmlAttributeKey,
   parseArrayOf,
   parseDate,
   parseNumber,
@@ -8,7 +9,6 @@ import {
   parseString,
   parseYesNoBoolean,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { RawVoiceNs } from '../common/types.js'
 
@@ -71,7 +71,7 @@ export const parseSubscribe: ParseUtilPartial<RawVoiceNs.Subscribe> = (value) =>
 
   // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
   for (const key in value) {
-    if (key.startsWith('@')) {
+    if (isXmlAttributeKey(key)) {
       const attrName = key.slice(1)
       const attrValue = parseString(value[key])
       if (attrValue) {

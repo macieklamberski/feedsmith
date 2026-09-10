@@ -1,6 +1,6 @@
-import { isPlainObject } from 'trousse'
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateLike } from '../../../common/types.js'
-import { generateRfc3339Date, trimArray, trimObject } from '../../../common/utils.js'
+import { generateRfc3339Date, trimArray } from '../../../common/utils.js'
 import type { GenerateUtil, JsonFeed } from '../common/types.js'
 
 export const generateItem: GenerateUtil<JsonFeed.Item<DateLike>> = (item) => {
