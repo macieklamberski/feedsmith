@@ -21,6 +21,7 @@
       xmlns:yt="http://www.youtube.com/xml/schemas/2015"
       xmlns:georss="http://www.georss.org/georss"
       xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+      xmlns:g="http://base.google.com/ns/1.0"
       xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
   <id>example-feed</id>
@@ -578,5 +579,165 @@
     <!-- YouTube Namespace: Entry Level Tags -->
     <yt:videoId>dQw4w9WgXcQ</yt:videoId>
     <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
+
+    <!-- Google Merchant Center (Google Base) Namespace: Entry Level Tags -->
+    <g:id>SKU12345</g:id>
+    <g:title>Example Product</g:title>
+    <g:description>A great product for demonstrating Google Merchant Center data</g:description>
+    <g:link>https://example.com/product/12345</g:link>
+    <g:mobile_link>https://m.example.com/product/12345</g:mobile_link>
+    <g:canonical_link>https://example.com/product/12345</g:canonical_link>
+    <g:image_link>https://example.com/images/product.jpg</g:image_link>
+    <g:additional_image_link>https://example.com/images/product-alt1.jpg</g:additional_image_link>
+    <g:additional_image_link>https://example.com/images/product-alt2.jpg</g:additional_image_link>
+    <g:lifestyle_image_link>https://example.com/images/product-lifestyle1.jpg</g:lifestyle_image_link>
+    <g:lifestyle_image_link>https://example.com/images/product-lifestyle2.jpg</g:lifestyle_image_link>
+    <g:price>19.99 USD</g:price>
+    <g:sale_price>14.99 USD</g:sale_price>
+    <g:sale_price_effective_date>2024-01-01T00:00:00Z/2024-01-31T23:59:59Z</g:sale_price_effective_date>
+    <g:cost_of_goods_sold>10.00 USD</g:cost_of_goods_sold>
+    <g:maximum_retail_price>24.99 USD</g:maximum_retail_price>
+    <g:availability>in_stock</g:availability>
+    <g:availability_date>2024-01-15T00:00:00Z</g:availability_date>
+    <g:expiration_date>2025-01-15T00:00:00Z</g:expiration_date>
+    <g:pause>ads</g:pause>
+    <g:brand>Example Brand</g:brand>
+    <g:gtin>00012345678905</g:gtin>
+    <g:mpn>ABC123</g:mpn>
+    <g:identifier_exists>yes</g:identifier_exists>
+    <g:google_product_category><![CDATA[Electronics > Phones > Smartphones]]></g:google_product_category>
+    <g:product_type>Electronics</g:product_type>
+    <g:product_type>Phones</g:product_type>
+    <g:condition>new</g:condition>
+    <g:product_length>20 cm</g:product_length>
+    <g:product_width>10 cm</g:product_width>
+    <g:product_height>5 cm</g:product_height>
+    <g:product_weight>500 g</g:product_weight>
+    <g:item_group_id>PRODUCT-GROUP-1</g:item_group_id>
+    <g:color>Black</g:color>
+    <g:size>Large</g:size>
+    <g:size_type>regular</g:size_type>
+    <g:size_system>US</g:size_system>
+    <g:gender>unisex</g:gender>
+    <g:age_group>adult</g:age_group>
+    <g:material>Cotton</g:material>
+    <g:pattern>Solid</g:pattern>
+    <g:shipping>
+      <g:country>US</g:country>
+      <g:region>CA</g:region>
+      <g:service>Standard</g:service>
+      <g:price>5.99 USD</g:price>
+      <g:min_handling_time>1</g:min_handling_time>
+      <g:max_handling_time>3</g:max_handling_time>
+    </g:shipping>
+    <g:shipping_label>standard</g:shipping_label>
+    <g:shipping_weight>1.5 kg</g:shipping_weight>
+    <g:shipping_length>30 cm</g:shipping_length>
+    <g:shipping_width>20 cm</g:shipping_width>
+    <g:shipping_height>10 cm</g:shipping_height>
+    <g:ships_from_country>US</g:ships_from_country>
+    <g:transit_time_label>express</g:transit_time_label>
+    <g:max_handling_time>2</g:max_handling_time>
+    <g:min_handling_time>0</g:min_handling_time>
+    <g:free_shipping_threshold>
+      <g:country>US</g:country>
+      <g:price_threshold>50.00 USD</g:price_threshold>
+    </g:free_shipping_threshold>
+    <g:handling_cutoff_time>
+      <g:cutoff_time>1400</g:cutoff_time>
+      <g:cutoff_timezone>America/New_York</g:cutoff_timezone>
+      <g:country>US</g:country>
+      <g:disable_delivery_after_cutoff>true</g:disable_delivery_after_cutoff>
+    </g:handling_cutoff_time>
+    <g:shipping_handling_business_days>MTWRF</g:shipping_handling_business_days>
+    <g:shipping_transit_business_days>MTWRFS</g:shipping_transit_business_days>
+    <g:tax>
+      <g:country>US</g:country>
+      <g:region>CA</g:region>
+      <g:rate>8.25</g:rate>
+      <g:tax_ship>yes</g:tax_ship>
+    </g:tax>
+    <g:tax_category>Electronics</g:tax_category>
+    <g:unit_pricing_measure>100ml</g:unit_pricing_measure>
+    <g:unit_pricing_base_measure>100ml</g:unit_pricing_base_measure>
+    <g:multipack>1</g:multipack>
+    <g:is_bundle>no</g:is_bundle>
+    <g:adult>no</g:adult>
+    <g:energy_efficiency_class>A++</g:energy_efficiency_class>
+    <g:min_energy_efficiency_class>A</g:min_energy_efficiency_class>
+    <g:max_energy_efficiency_class>A+++</g:max_energy_efficiency_class>
+    <g:certification>
+      <g:certification_authority>European Commission</g:certification_authority>
+      <g:certification_name>EPREL</g:certification_name>
+      <g:certification_code>123456</g:certification_code>
+      <g:certification_value>A++</g:certification_value>
+    </g:certification>
+    <g:installment>
+      <g:months>12</g:months>
+      <g:amount>99.99 BRL</g:amount>
+      <g:downpayment>199.99 BRL</g:downpayment>
+      <g:credit_type>finance</g:credit_type>
+    </g:installment>
+    <g:subscription_cost>
+      <g:period>month</g:period>
+      <g:period_length>1</g:period_length>
+      <g:amount>9.99 USD</g:amount>
+    </g:subscription_cost>
+    <g:loyalty_program>
+      <g:program_label>rewards</g:program_label>
+      <g:tier_label>gold</g:tier_label>
+      <g:price>49.99 USD</g:price>
+      <g:loyalty_points>500</g:loyalty_points>
+      <g:member_price_effective_date>2024-01-01T00:00:00Z/2024-12-31T23:59:59Z</g:member_price_effective_date>
+      <g:shipping_label>free_member_shipping</g:shipping_label>
+      <g:cashback_for_future_use>5.00 USD</g:cashback_for_future_use>
+    </g:loyalty_program>
+    <g:product_highlight>Premium quality materials</g:product_highlight>
+    <g:product_highlight>Free shipping on orders over $50</g:product_highlight>
+    <g:product_detail>
+      <g:section_name>Technical Specs</g:section_name>
+      <g:attribute_name>Weight</g:attribute_name>
+      <g:attribute_value>1.5 kg</g:attribute_value>
+    </g:product_detail>
+    <g:return_policy_label>30-day-returns</g:return_policy_label>
+    <g:ads_redirect>https://example.com/track?id=12345</g:ads_redirect>
+    <g:custom_label_0>bestseller</g:custom_label_0>
+    <g:custom_label_1>clearance</g:custom_label_1>
+    <g:custom_label_2>summer</g:custom_label_2>
+    <g:custom_label_3>premium</g:custom_label_3>
+    <g:custom_label_4>new-arrival</g:custom_label_4>
+    <g:promotion_id>PROMO1</g:promotion_id>
+    <g:promotion_id>PROMO2</g:promotion_id>
+    <g:excluded_destination>Display_Ads</g:excluded_destination>
+    <g:included_destination>Shopping_Actions</g:included_destination>
+    <g:included_destination>Shopping_Ads</g:included_destination>
+    <g:shopping_ads_excluded_country>DE</g:shopping_ads_excluded_country>
+    <g:shopping_ads_excluded_country>FR</g:shopping_ads_excluded_country>
+    <g:display_ads_id>display-12345</g:display_ads_id>
+    <g:display_ads_title>Custom Display Title</g:display_ads_title>
+    <g:display_ads_link>https://example.com/display/12345</g:display_ads_link>
+    <g:display_ads_value>15.99</g:display_ads_value>
+    <g:display_ads_similar_id>SIMILAR-001</g:display_ads_similar_id>
+    <g:display_ads_similar_id>SIMILAR-002</g:display_ads_similar_id>
+    <g:ads_grouping>group-electronics</g:ads_grouping>
+    <g:ads_labels>label1</g:ads_labels>
+    <g:ads_labels>label2</g:ads_labels>
+    <g:structured_title>
+      <g:digital_source_type>trained_algorithmic_media</g:digital_source_type>
+      <g:content>AI-Enhanced Product Title</g:content>
+    </g:structured_title>
+    <g:structured_description>
+      <g:digital_source_type>trained_algorithmic_media</g:digital_source_type>
+      <g:content>AI-Enhanced Product Description</g:content>
+    </g:structured_description>
+    <g:pickup_method>buy</g:pickup_method>
+    <g:pickup_SLA>same_day</g:pickup_SLA>
+    <g:sell_on_google_quantity>10</g:sell_on_google_quantity>
+    <g:link_template>https://example.com/product/{store_code}/12345</g:link_template>
+    <g:mobile_link_template>https://m.example.com/product/{store_code}/12345</g:mobile_link_template>
+    <g:auto_pricing_min_price>12.99 USD</g:auto_pricing_min_price>
+    <g:external_seller_id>seller-456</g:external_seller_id>
+    <g:virtual_model_link>https://example.com/virtual-model/12345</g:virtual_model_link>
+    <g:disclosure_date>2024-06-01T00:00:00Z</g:disclosure_date>
   </entry>
 </feed>
