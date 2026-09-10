@@ -143,6 +143,104 @@ describe('generateLink', () => {
 
     expect(generateLink(value)).toEqual(expected)
   })
+
+  it('should generate link with OPDS acquisition properties', () => {
+    const value = {
+      href: 'https://example.com/book.epub',
+      rel: 'http://opds-spec.org/acquisition/buy',
+      type: 'application/epub+zip',
+      opds: {
+        prices: [{ value: 9.99, currencyCode: 'USD' }],
+      },
+    }
+    const expected = {
+      '@href': 'https://example.com/book.epub',
+      '@rel': 'http://opds-spec.org/acquisition/buy',
+      '@type': 'application/epub+zip',
+      'opds:price': [{ '#text': 9.99, '@currencycode': 'USD' }],
+    }
+
+    expect(generateLink(value)).toEqual(expected)
+  })
+
+  it('should generate link with OPDS indirect acquisition', () => {
+    const value = {
+      href: 'https://example.com/checkout',
+      rel: 'http://opds-spec.org/acquisition',
+      type: 'text/html',
+      opds: {
+        indirectAcquisitions: [
+          {
+            type: 'application/epub+zip',
+            indirectAcquisitions: [{ type: 'application/x-mobipocket-ebook' }],
+          },
+        ],
+      },
+    }
+    const expected = {
+      '@href': 'https://example.com/checkout',
+      '@rel': 'http://opds-spec.org/acquisition',
+      '@type': 'text/html',
+      'opds:indirectAcquisition': [
+        {
+          '@type': 'application/epub+zip',
+          'opds:indirectAcquisition': [{ '@type': 'application/x-mobipocket-ebook' }],
+        },
+      ],
+    }
+
+    expect(generateLink(value)).toEqual(expected)
+  })
+
+  it('should generate link with OPDS library lending extensions', () => {
+    const value = {
+      href: 'https://example.com/borrow',
+      rel: 'http://opds-spec.org/acquisition/borrow',
+      type: 'application/atom+xml;type=entry;profile=opds-catalog',
+      opds: {
+        availability: {
+          status: 'unavailable',
+          since: '2024-01-01T00:00:00Z',
+          until: '2024-06-30T23:59:59Z',
+        },
+        holds: { total: 5, position: 2 },
+        copies: { total: 3, available: 1 },
+      },
+    }
+    const expected = {
+      '@href': 'https://example.com/borrow',
+      '@rel': 'http://opds-spec.org/acquisition/borrow',
+      '@type': 'application/atom+xml;type=entry;profile=opds-catalog',
+      'opds:availability': {
+        '@status': 'unavailable',
+        '@since': '2024-01-01T00:00:00.000Z',
+        '@until': '2024-06-30T23:59:59.000Z',
+      },
+      'opds:holds': { '@total': 5, '@position': 2 },
+      'opds:copies': { '@total': 3, '@available': 1 },
+    }
+
+    expect(generateLink(value)).toEqual(expected)
+  })
+
+  it('should generate link with OPDS facet attributes', () => {
+    const value = {
+      href: 'https://example.com/catalog?sort=author',
+      rel: 'http://opds-spec.org/facet',
+      opds: {
+        facetGroup: 'Sort',
+        activeFacet: true,
+      },
+    }
+    const expected = {
+      '@href': 'https://example.com/catalog?sort=author',
+      '@rel': 'http://opds-spec.org/facet',
+      '@opds:facetGroup': 'Sort',
+      '@opds:activeFacet': true,
+    }
+
+    expect(generateLink(value)).toEqual(expected)
+  })
 })
 
 describe('generatePerson', () => {
