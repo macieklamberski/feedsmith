@@ -1,6 +1,7 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
+  isXmlAttributeKey,
   parseArrayOf,
   parseDate,
   parseNumber,
@@ -8,7 +9,6 @@ import {
   parseString,
   parseYesNoBoolean,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { RawVoiceNs } from '../common/types.js'
 
@@ -37,7 +37,7 @@ export const parseLiveStream: ParseUtilPartial<
 }
 
 export const parsePoster: ParseUtilPartial<RawVoiceNs.Poster> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -49,7 +49,7 @@ export const parsePoster: ParseUtilPartial<RawVoiceNs.Poster> = (value) => {
 }
 
 export const parseAlternateEnclosure: ParseUtilPartial<RawVoiceNs.AlternateEnclosure> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -63,14 +63,15 @@ export const parseAlternateEnclosure: ParseUtilPartial<RawVoiceNs.AlternateEnclo
 }
 
 export const parseSubscribe: ParseUtilPartial<RawVoiceNs.Subscribe> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
   const subscribe: RawVoiceNs.Subscribe = {}
 
+  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
   for (const key in value) {
-    if (key.startsWith('@')) {
+    if (isXmlAttributeKey(key)) {
       const attrName = key.slice(1)
       const attrValue = parseString(value[key])
       if (attrValue) {
@@ -83,7 +84,7 @@ export const parseSubscribe: ParseUtilPartial<RawVoiceNs.Subscribe> = (value) =>
 }
 
 export const parseMetamark: ParseUtilPartial<RawVoiceNs.Metamark> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -99,7 +100,7 @@ export const parseMetamark: ParseUtilPartial<RawVoiceNs.Metamark> = (value) => {
 }
 
 export const parseDonate: ParseUtilPartial<RawVoiceNs.Donate> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -112,7 +113,7 @@ export const parseDonate: ParseUtilPartial<RawVoiceNs.Donate> = (value) => {
 }
 
 export const retrieveItem: ParseUtilPartial<RawVoiceNs.Item> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -134,7 +135,7 @@ export const retrieveFeed: ParseUtilPartial<RawVoiceNs.Feed<DateAny>, ParseMainO
   value,
   options,
 ) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

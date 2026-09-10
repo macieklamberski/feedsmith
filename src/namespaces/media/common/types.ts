@@ -4,7 +4,7 @@ import type { Requirable, Strict } from '../../../common/types.js'
 export namespace MediaNs {
   export type Rating<TStrict extends boolean = false> = Strict<
     {
-      value: Requirable<string> // Required in spec.
+      value: Requirable<string> // Required in spec
       scheme?: string
     },
     TStrict
@@ -12,7 +12,7 @@ export namespace MediaNs {
 
   export type TitleOrDescription<TStrict extends boolean = false> = Strict<
     {
-      value: Requirable<string> // Required in spec.
+      value: Requirable<string> // Required in spec
       type?: string
     },
     TStrict
@@ -20,7 +20,7 @@ export namespace MediaNs {
 
   export type Thumbnail<TStrict extends boolean = false> = Strict<
     {
-      url: Requirable<string> // Required in spec.
+      url: Requirable<string> // Required in spec
       height?: number
       width?: number
       time?: string
@@ -30,7 +30,7 @@ export namespace MediaNs {
 
   export type Category<TStrict extends boolean = false> = Strict<
     {
-      name: Requirable<string> // Required in spec.
+      name: Requirable<string> // Required in spec
       scheme?: string
       label?: string
     },
@@ -39,7 +39,7 @@ export namespace MediaNs {
 
   export type Hash<TStrict extends boolean = false> = Strict<
     {
-      value: Requirable<string> // Required in spec.
+      value: Requirable<string> // Required in spec
       algo?: string
     },
     TStrict
@@ -47,7 +47,7 @@ export namespace MediaNs {
 
   export type Player<TStrict extends boolean = false> = Strict<
     {
-      url: Requirable<string> // Required in spec.
+      url: Requirable<string> // Required in spec
       height?: number
       width?: number
     },
@@ -56,7 +56,7 @@ export namespace MediaNs {
 
   export type Credit<TStrict extends boolean = false> = Strict<
     {
-      value: Requirable<string> // Required in spec.
+      value: Requirable<string> // Required in spec
       role?: string
       scheme?: string
     },
@@ -65,7 +65,7 @@ export namespace MediaNs {
 
   export type Copyright<TStrict extends boolean = false> = Strict<
     {
-      value: Requirable<string> // Required in spec.
+      value: Requirable<string> // Required in spec
       url?: string
     },
     TStrict
@@ -73,7 +73,7 @@ export namespace MediaNs {
 
   export type Text<TStrict extends boolean = false> = Strict<
     {
-      value: Requirable<string> // Required in spec.
+      value: Requirable<string> // Required in spec
       type?: string
       lang?: string
       start?: string
@@ -84,8 +84,8 @@ export namespace MediaNs {
 
   export type Restriction<TStrict extends boolean = false> = Strict<
     {
-      value: Requirable<string> // Required in spec.
-      relationship: Requirable<string> // Required in spec.
+      value: Requirable<string> // Required in spec
+      relationship: Requirable<string> // Required in spec
       type?: string
     },
     TStrict
@@ -111,7 +111,7 @@ export namespace MediaNs {
 
   export type Tag<TStrict extends boolean = false> = Strict<
     {
-      name: Requirable<string> // Required in spec.
+      name: Requirable<string> // Required in spec
       weight?: number
     },
     TStrict
@@ -119,7 +119,7 @@ export namespace MediaNs {
 
   export type Embed<TStrict extends boolean = false> = Strict<
     {
-      url: Requirable<string> // Required in spec.
+      url: Requirable<string> // Required in spec
       width?: number
       height?: number
       params?: Array<Param<TStrict>>
@@ -129,15 +129,15 @@ export namespace MediaNs {
 
   export type Param<TStrict extends boolean = false> = Strict<
     {
-      name: Requirable<string> // Required in spec.
-      value: Requirable<string> // Required in spec.
+      name: Requirable<string> // Required in spec
+      value: Requirable<string> // Required in spec
     },
     TStrict
   >
 
   export type Status<TStrict extends boolean = false> = Strict<
     {
-      state: Requirable<string> // Required in spec.
+      state: Requirable<string> // Required in spec
       reason?: string
     },
     TStrict
@@ -151,16 +151,16 @@ export namespace MediaNs {
   }
 
   export type License<TStrict extends boolean = false> = {
-    name?: string // At least one of name or href is required in spec.
+    name?: string // At least one of name or href is required in spec
     type?: string
-    href?: string // At least one of name or href is required in spec.
+    href?: string // At least one of name or href is required in spec
   } & (TStrict extends true ? { name: string } | { href: string } : unknown)
 
   export type SubTitle<TStrict extends boolean = false> = Strict<
     {
       type?: string
       lang?: string
-      href: Requirable<string> // Required in spec.
+      href: Requirable<string> // Required in spec
     },
     TStrict
   >
@@ -168,7 +168,7 @@ export namespace MediaNs {
   export type PeerLink<TStrict extends boolean = false> = Strict<
     {
       type?: string
-      href: Requirable<string> // Required in spec.
+      href: Requirable<string> // Required in spec
     },
     TStrict
   >

@@ -1,3 +1,4 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateBoolean,
@@ -8,14 +9,12 @@ import {
   generateRfc3339Date,
   generateTextOrCdataString,
   generateYesNoBoolean,
-  isObject,
   trimArray,
-  trimObject,
 } from '../../../common/utils.js'
 import type { PodcastNs } from '../common/types.js'
 
 export const generateBaseItem: GenerateUtil<PodcastNs.BaseItem> = (baseItem) => {
-  if (!isObject(baseItem)) {
+  if (!isPlainObject(baseItem)) {
     return
   }
 
@@ -43,7 +42,7 @@ export const generateBaseItem: GenerateUtil<PodcastNs.BaseItem> = (baseItem) => 
 }
 
 export const generateTranscript: GenerateUtil<PodcastNs.Transcript> = (transcript) => {
-  if (!isObject(transcript)) {
+  if (!isPlainObject(transcript)) {
     return
   }
 
@@ -58,7 +57,7 @@ export const generateTranscript: GenerateUtil<PodcastNs.Transcript> = (transcrip
 }
 
 export const generateLocked: GenerateUtil<PodcastNs.Locked> = (locked) => {
-  if (!isObject(locked)) {
+  if (!isPlainObject(locked)) {
     return
   }
 
@@ -71,7 +70,7 @@ export const generateLocked: GenerateUtil<PodcastNs.Locked> = (locked) => {
 }
 
 export const generateFunding: GenerateUtil<PodcastNs.Funding> = (funding) => {
-  if (!isObject(funding)) {
+  if (!isPlainObject(funding)) {
     return
   }
 
@@ -84,7 +83,7 @@ export const generateFunding: GenerateUtil<PodcastNs.Funding> = (funding) => {
 }
 
 export const generateChapters: GenerateUtil<PodcastNs.Chapters> = (chapters) => {
-  if (!isObject(chapters)) {
+  if (!isPlainObject(chapters)) {
     return
   }
 
@@ -97,7 +96,7 @@ export const generateChapters: GenerateUtil<PodcastNs.Chapters> = (chapters) => 
 }
 
 export const generateSoundbite: GenerateUtil<PodcastNs.Soundbite> = (soundbite) => {
-  if (!isObject(soundbite)) {
+  if (!isPlainObject(soundbite)) {
     return
   }
 
@@ -111,7 +110,7 @@ export const generateSoundbite: GenerateUtil<PodcastNs.Soundbite> = (soundbite) 
 }
 
 export const generatePerson: GenerateUtil<PodcastNs.Person> = (person) => {
-  if (!isObject(person)) {
+  if (!isPlainObject(person)) {
     return
   }
 
@@ -127,7 +126,7 @@ export const generatePerson: GenerateUtil<PodcastNs.Person> = (person) => {
 }
 
 export const generateLocation: GenerateUtil<PodcastNs.Location> = (location) => {
-  if (!isObject(location)) {
+  if (!isPlainObject(location)) {
     return
   }
 
@@ -143,7 +142,7 @@ export const generateLocation: GenerateUtil<PodcastNs.Location> = (location) => 
 }
 
 export const generateSeason: GenerateUtil<PodcastNs.Season> = (season) => {
-  if (!isObject(season)) {
+  if (!isPlainObject(season)) {
     return
   }
 
@@ -156,7 +155,7 @@ export const generateSeason: GenerateUtil<PodcastNs.Season> = (season) => {
 }
 
 export const generateEpisode: GenerateUtil<PodcastNs.Episode> = (episode) => {
-  if (!isObject(episode)) {
+  if (!isPlainObject(episode)) {
     return
   }
 
@@ -169,7 +168,7 @@ export const generateEpisode: GenerateUtil<PodcastNs.Episode> = (episode) => {
 }
 
 export const generateTrailer: GenerateUtil<PodcastNs.Trailer<DateLike>> = (trailer) => {
-  if (!isObject(trailer)) {
+  if (!isPlainObject(trailer)) {
     return
   }
 
@@ -186,7 +185,7 @@ export const generateTrailer: GenerateUtil<PodcastNs.Trailer<DateLike>> = (trail
 }
 
 export const generateLicense: GenerateUtil<PodcastNs.License> = (license) => {
-  if (!isObject(license)) {
+  if (!isPlainObject(license)) {
     return
   }
 
@@ -199,7 +198,7 @@ export const generateLicense: GenerateUtil<PodcastNs.License> = (license) => {
 }
 
 export const generateSource: GenerateUtil<PodcastNs.Source> = (source) => {
-  if (!isObject(source)) {
+  if (!isPlainObject(source)) {
     return
   }
 
@@ -212,7 +211,7 @@ export const generateSource: GenerateUtil<PodcastNs.Source> = (source) => {
 }
 
 export const generateIntegrity: GenerateUtil<PodcastNs.Integrity> = (integrity) => {
-  if (!isObject(integrity)) {
+  if (!isPlainObject(integrity)) {
     return
   }
 
@@ -227,7 +226,7 @@ export const generateIntegrity: GenerateUtil<PodcastNs.Integrity> = (integrity) 
 export const generateAlternateEnclosure: GenerateUtil<PodcastNs.AlternateEnclosure> = (
   alternateEnclosure,
 ) => {
-  if (!isObject(alternateEnclosure)) {
+  if (!isPlainObject(alternateEnclosure)) {
     return
   }
 
@@ -249,7 +248,7 @@ export const generateAlternateEnclosure: GenerateUtil<PodcastNs.AlternateEnclosu
 }
 
 export const generateValueRecipient: GenerateUtil<PodcastNs.ValueRecipient> = (valueRecipient) => {
-  if (!isObject(valueRecipient)) {
+  if (!isPlainObject(valueRecipient)) {
     return
   }
 
@@ -267,7 +266,7 @@ export const generateValueRecipient: GenerateUtil<PodcastNs.ValueRecipient> = (v
 }
 
 export const generateValueTimeSplit: GenerateUtil<PodcastNs.ValueTimeSplit> = (valueTimeSplit) => {
-  if (!isObject(valueTimeSplit)) {
+  if (!isPlainObject(valueTimeSplit)) {
     return
   }
 
@@ -284,7 +283,7 @@ export const generateValueTimeSplit: GenerateUtil<PodcastNs.ValueTimeSplit> = (v
 }
 
 export const generateValue: GenerateUtil<PodcastNs.Value> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -300,7 +299,7 @@ export const generateValue: GenerateUtil<PodcastNs.Value> = (value) => {
 }
 
 export const generateImage: GenerateUtil<PodcastNs.Image> = (image) => {
-  if (!isObject(image)) {
+  if (!isPlainObject(image)) {
     return
   }
 
@@ -318,7 +317,7 @@ export const generateImage: GenerateUtil<PodcastNs.Image> = (image) => {
 }
 
 export const generateContentLink: GenerateUtil<PodcastNs.ContentLink> = (contentLink) => {
-  if (!isObject(contentLink)) {
+  if (!isPlainObject(contentLink)) {
     return
   }
 
@@ -331,7 +330,7 @@ export const generateContentLink: GenerateUtil<PodcastNs.ContentLink> = (content
 }
 
 export const generateLiveItem: GenerateUtil<PodcastNs.LiveItem<DateLike>> = (liveItem) => {
-  if (!isObject(liveItem)) {
+  if (!isPlainObject(liveItem)) {
     return
   }
 
@@ -347,7 +346,7 @@ export const generateLiveItem: GenerateUtil<PodcastNs.LiveItem<DateLike>> = (liv
 }
 
 export const generateSocialInteract: GenerateUtil<PodcastNs.SocialInteract> = (socialInteract) => {
-  if (!isObject(socialInteract)) {
+  if (!isPlainObject(socialInteract)) {
     return
   }
 
@@ -363,7 +362,7 @@ export const generateSocialInteract: GenerateUtil<PodcastNs.SocialInteract> = (s
 }
 
 export const generateChat: GenerateUtil<PodcastNs.Chat> = (chat) => {
-  if (!isObject(chat)) {
+  if (!isPlainObject(chat)) {
     return
   }
 
@@ -378,7 +377,7 @@ export const generateChat: GenerateUtil<PodcastNs.Chat> = (chat) => {
 }
 
 export const generateBlock: GenerateUtil<PodcastNs.Block> = (block) => {
-  if (!isObject(block)) {
+  if (!isPlainObject(block)) {
     return
   }
 
@@ -391,7 +390,7 @@ export const generateBlock: GenerateUtil<PodcastNs.Block> = (block) => {
 }
 
 export const generateTxt: GenerateUtil<PodcastNs.Txt> = (txt) => {
-  if (!isObject(txt)) {
+  if (!isPlainObject(txt)) {
     return
   }
 
@@ -404,7 +403,7 @@ export const generateTxt: GenerateUtil<PodcastNs.Txt> = (txt) => {
 }
 
 export const generateRemoteItem: GenerateUtil<PodcastNs.RemoteItem> = (remoteItem) => {
-  if (!isObject(remoteItem)) {
+  if (!isPlainObject(remoteItem)) {
     return
   }
 
@@ -420,7 +419,7 @@ export const generateRemoteItem: GenerateUtil<PodcastNs.RemoteItem> = (remoteIte
 }
 
 export const generatePodroll: GenerateUtil<PodcastNs.Podroll> = (podroll) => {
-  if (!isObject(podroll)) {
+  if (!isPlainObject(podroll)) {
     return
   }
 
@@ -434,7 +433,7 @@ export const generatePodroll: GenerateUtil<PodcastNs.Podroll> = (podroll) => {
 export const generateUpdateFrequency: GenerateUtil<PodcastNs.UpdateFrequency<DateLike>> = (
   updateFrequency,
 ) => {
-  if (!isObject(updateFrequency)) {
+  if (!isPlainObject(updateFrequency)) {
     return
   }
 
@@ -449,7 +448,7 @@ export const generateUpdateFrequency: GenerateUtil<PodcastNs.UpdateFrequency<Dat
 }
 
 export const generatePodping: GenerateUtil<PodcastNs.Podping> = (podping) => {
-  if (!isObject(podping)) {
+  if (!isPlainObject(podping)) {
     return
   }
 
@@ -461,7 +460,7 @@ export const generatePodping: GenerateUtil<PodcastNs.Podping> = (podping) => {
 }
 
 export const generatePublisher: GenerateUtil<PodcastNs.Publisher> = (publisher) => {
-  if (!isObject(publisher)) {
+  if (!isPlainObject(publisher)) {
     return
   }
 
@@ -473,7 +472,7 @@ export const generatePublisher: GenerateUtil<PodcastNs.Publisher> = (publisher) 
 }
 
 export const generateItem: GenerateUtil<PodcastNs.Item> = (item) => {
-  if (!isObject(item)) {
+  if (!isPlainObject(item)) {
     return
   }
 
@@ -481,7 +480,7 @@ export const generateItem: GenerateUtil<PodcastNs.Item> = (item) => {
 }
 
 export const generateFeed: GenerateUtil<PodcastNs.Feed<DateLike>> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 

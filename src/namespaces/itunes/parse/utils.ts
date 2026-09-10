@@ -1,7 +1,7 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
-  isObject,
   parseArrayOf,
   parseBoolean,
   parseCsvOf,
@@ -10,7 +10,6 @@ import {
   parseString,
   parseYesNoBoolean,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { ItunesNs } from '../common/types.js'
 
@@ -18,7 +17,7 @@ const explicitOrYesRegex = /^\p{White_Space}*(explicit|yes)\p{White_Space}*$/iu
 const durationRegex = /^(?:(\d+):)?(\d+):(\d+)$/
 
 export const parseCategory: ParseUtilPartial<ItunesNs.Category> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -31,7 +30,7 @@ export const parseCategory: ParseUtilPartial<ItunesNs.Category> = (value) => {
 }
 
 export const parseOwner: ParseUtilPartial<ItunesNs.Owner> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -77,13 +76,13 @@ export const parseDuration: ParseUtilPartial<number> = (value) => {
 }
 
 export const parseImage: ParseUtilPartial<string> = (value) => {
-  // Support non-standard format of the image tag where href is not provided in the @href
-  // attribute but rather provided as a node value.
+  // Support non-standard format of the image tag where href is not provided in the @href attribute
+  // but rather provided as a node value.
   if (isNonEmptyStringOrNumber(value)) {
     return parseString(value)
   }
 
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -91,7 +90,7 @@ export const parseImage: ParseUtilPartial<string> = (value) => {
 }
 
 export const retrieveItem: ParseUtilPartial<ItunesNs.Item> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -126,7 +125,7 @@ export const retrieveItem: ParseUtilPartial<ItunesNs.Item> = (value) => {
 }
 
 export const retrieveFeed: ParseUtilPartial<ItunesNs.Feed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

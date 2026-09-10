@@ -260,6 +260,12 @@ describe('generateImage', () => {
     expect(generateImage(value)).toBeUndefined()
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateImage(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs gracefully', () => {
     expect(generateImage(undefined)).toBeUndefined()
   })
@@ -461,19 +467,6 @@ describe('generateGuid', () => {
 
 describe('generateSource', () => {
   it('should generate valid source object with all properties', () => {
-    const value = {
-      title: 'Example Source',
-      url: 'https://example.com/feed.xml',
-    }
-    const expected = {
-      '#text': 'Example Source',
-      '@url': 'https://example.com/feed.xml',
-    }
-
-    expect(generateSource(value)).toEqual(expected)
-  })
-
-  it('should generate source with all required properties', () => {
     const value = {
       title: 'Example Source',
       url: 'https://example.com/feed.xml',
@@ -876,13 +869,13 @@ describe('generateItem', () => {
       title: 'Item with pingback namespace',
       pingback: {
         server: 'https://example.com/xmlrpc.php',
-        target: 'https://referenced-blog.com/article',
+        target: 'https://example.net/article',
       },
     }
     const expected = {
       title: 'Item with pingback namespace',
       'pingback:server': 'https://example.com/xmlrpc.php',
-      'pingback:target': 'https://referenced-blog.com/article',
+      'pingback:target': 'https://example.net/article',
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -893,13 +886,13 @@ describe('generateItem', () => {
       title: 'Item with trackback namespace',
       trackback: {
         ping: 'https://example.com/trackback/123',
-        abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+        abouts: ['https://example.net/trackback/456', 'https://example.org/trackback/789'],
       },
     }
     const expected = {
       title: 'Item with trackback namespace',
       'trackback:ping': 'https://example.com/trackback/123',
-      'trackback:about': ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      'trackback:about': ['https://example.net/trackback/456', 'https://example.org/trackback/789'],
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -911,8 +904,8 @@ describe('generateItem', () => {
       sourceNs: {
         markdown: '# Example markdown content',
         outlines: ['<outline text="Section 1"/>', '<outline text="Section 2"/>'],
-        localTime: '2024-01-15 10:30:00',
         linkFull: 'https://example.com/full-article',
+        inReplyTo: { value: 'did:plc:iwl32vekohccji6khfdt3clw', isPermaLink: false },
       },
     }
     const expected = {
@@ -922,8 +915,11 @@ describe('generateItem', () => {
         { '#cdata': '<outline text="Section 1"/>' },
         { '#cdata': '<outline text="Section 2"/>' },
       ],
-      'source:localTime': '2024-01-15 10:30:00',
       'source:linkFull': 'https://example.com/full-article',
+      'source:inReplyTo': {
+        '#text': 'did:plc:iwl32vekohccji6khfdt3clw',
+        '@isPermaLink': false,
+      },
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -1577,6 +1573,7 @@ describe('generateFeed', () => {
         accounts: [{ service: 'twitter', value: 'johndoe' }, { service: 'github' }],
         likes: { server: 'http://likes.example.com/' },
         blogroll: 'https://example.com/blogroll.opml',
+        localTime: '2024-01-15 10:30:00',
       },
     }
     const expected = {
@@ -1592,6 +1589,7 @@ describe('generateFeed', () => {
           ],
           'source:likes': { '@server': 'http://likes.example.com/' },
           'source:blogroll': 'https://example.com/blogroll.opml',
+          'source:localTime': '2024-01-15 10:30:00',
         },
       },
     }
@@ -1605,7 +1603,7 @@ describe('generateFeed', () => {
       description: 'A feed with blogChannel properties',
       blogChannel: {
         blogRoll: 'http://example.com/blogroll.opml',
-        blink: 'http://recommended-site.com/',
+        blink: 'http://example.net/',
         mySubscriptions: 'http://example.com/subscriptions.opml',
       },
     }
@@ -1617,7 +1615,7 @@ describe('generateFeed', () => {
           title: 'Feed with blogChannel namespace',
           description: 'A feed with blogChannel properties',
           'blogChannel:blogRoll': 'http://example.com/blogroll.opml',
-          'blogChannel:blink': 'http://recommended-site.com/',
+          'blogChannel:blink': 'http://example.net/',
           'blogChannel:mySubscriptions': 'http://example.com/subscriptions.opml',
         },
       },
@@ -1633,6 +1631,8 @@ describe('generateFeed', () => {
       cc: {
         license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
         morePermissions: 'https://example.com/commercial-license',
+        attributionName: 'Example Publishing Company',
+        attributionURL: 'https://example.com/',
       },
     }
     const expected = {
@@ -1644,6 +1644,8 @@ describe('generateFeed', () => {
           description: 'A feed with ccREL license',
           'cc:license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
           'cc:morePermissions': 'https://example.com/commercial-license',
+          'cc:attributionName': 'Example Publishing Company',
+          'cc:attributionURL': 'https://example.com/',
         },
       },
     }
@@ -1674,38 +1676,13 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
-  it('should generate feedpress namespace properties and attributes for feed', () => {
-    const value = {
-      title: 'Feed with FeedPress namespace',
-      description: 'A feed with FeedPress properties',
-      feedpress: {
-        link: 'https://feed.press/example',
-        newsletterId: '12345',
-      },
-    }
-    const expected = {
-      rss: {
-        '@version': '2.0',
-        '@xmlns:feedpress': 'https://feed.press/xmlns',
-        channel: {
-          title: 'Feed with FeedPress namespace',
-          description: 'A feed with FeedPress properties',
-          'feedpress:link': 'https://feed.press/example',
-          'feedpress:newsletterId': '12345',
-        },
-      },
-    }
-
-    expect(generateFeed(value)).toEqual(expected)
-  })
-
   it('should generate admin namespace properties and attributes for feed', () => {
     const value = {
       title: 'Feed with admin namespace',
       description: 'A feed with admin properties',
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
-        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+        generatorAgent: 'https://example.com/generator?v=3.2',
       },
     }
     const expected = {
@@ -1720,47 +1697,8 @@ describe('generateFeed', () => {
             '@rdf:resource': 'mailto:webmaster@example.com',
           },
           'admin:generatorAgent': {
-            '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+            '@rdf:resource': 'https://example.com/generator?v=3.2',
           },
-        },
-      },
-    }
-
-    expect(generateFeed(value)).toEqual(expected)
-  })
-
-  it('should generate opensearch namespace properties for feed', () => {
-    const value = {
-      title: 'Search Results',
-      description: 'Search results feed',
-      opensearch: {
-        totalResults: 1000,
-        startIndex: 21,
-        itemsPerPage: 10,
-        queries: [
-          {
-            role: 'request',
-            searchTerms: 'quantum computing',
-          },
-        ],
-      },
-    }
-    const expected = {
-      rss: {
-        '@version': '2.0',
-        '@xmlns:opensearch': 'http://a9.com/-/spec/opensearch/1.1/',
-        channel: {
-          title: 'Search Results',
-          description: 'Search results feed',
-          'opensearch:totalResults': 1000,
-          'opensearch:startIndex': 21,
-          'opensearch:itemsPerPage': 10,
-          'opensearch:Query': [
-            {
-              '@role': 'request',
-              '@searchTerms': 'quantum computing',
-            },
-          ],
         },
       },
     }
@@ -1790,29 +1728,6 @@ describe('generateFeed', () => {
             '#text': 'TV-PG',
           },
           'rawvoice:frequency': 'weekly',
-        },
-      },
-    }
-
-    expect(generateFeed(value)).toEqual(expected)
-  })
-
-  it('should generate spotify namespace properties and attributes for feed', () => {
-    const value = {
-      title: 'Feed with Spotify namespace',
-      description: 'A feed with Spotify properties',
-      spotify: {
-        countryOfOrigin: 'US',
-      },
-    }
-    const expected = {
-      rss: {
-        '@version': '2.0',
-        '@xmlns:spotify': 'http://www.spotify.com/ns/rss',
-        channel: {
-          title: 'Feed with Spotify namespace',
-          description: 'A feed with Spotify properties',
-          'spotify:countryOfOrigin': 'US',
         },
       },
     }
@@ -1869,7 +1784,7 @@ describe('generateFeed', () => {
       description: 'A feed with Acast properties',
       acast: {
         showId: '664fde3eda02bb0012bad909',
-        showUrl: 'software-unscripted',
+        showUrl: 'example-show',
         signature: {
           key: 'EXAMPLE_KEY',
           algorithm: 'aes-256-cbc',
@@ -1878,10 +1793,10 @@ describe('generateFeed', () => {
         settings: 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
         network: {
           id: '664fdd227c6b200013652ed6',
-          slug: 'richard-feldman-664fdd227c6b200013652ed6',
-          value: 'Richard Feldman',
+          slug: 'example-network-664fdd227c6b200013652ed6',
+          value: 'Example Network',
         },
-        importedFeed: 'https://feeds.resonaterecordings.com/software-unscripted',
+        importedFeed: 'https://feeds.example.com/example-show',
       },
     }
     const expected = {
@@ -1892,7 +1807,7 @@ describe('generateFeed', () => {
           title: 'Feed with Acast namespace',
           description: 'A feed with Acast properties',
           'acast:showId': '664fde3eda02bb0012bad909',
-          'acast:showUrl': 'software-unscripted',
+          'acast:showUrl': 'example-show',
           'acast:signature': {
             '@key': 'EXAMPLE_KEY',
             '@algorithm': 'aes-256-cbc',
@@ -1901,10 +1816,10 @@ describe('generateFeed', () => {
           'acast:settings': 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
           'acast:network': {
             '@id': '664fdd227c6b200013652ed6',
-            '@slug': 'richard-feldman-664fdd227c6b200013652ed6',
-            '#text': 'Richard Feldman',
+            '@slug': 'example-network-664fdd227c6b200013652ed6',
+            '#text': 'Example Network',
           },
-          'acast:importedFeed': 'https://feeds.resonaterecordings.com/software-unscripted',
+          'acast:importedFeed': 'https://feeds.example.com/example-show',
         },
       },
     }
@@ -1922,7 +1837,7 @@ describe('generateFeed', () => {
           acast: {
             episodeId: '6918f06ee42e3466f29467f9',
             showId: '664fde3eda02bb0012bad909',
-            episodeUrl: 'jonathan-blow-on-programming-language-design',
+            episodeUrl: 'example-episode-slug',
             settings: 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
           },
         },
@@ -1940,37 +1855,10 @@ describe('generateFeed', () => {
               title: 'Episode with Acast metadata',
               'acast:episodeId': '6918f06ee42e3466f29467f9',
               'acast:showId': '664fde3eda02bb0012bad909',
-              'acast:episodeUrl': 'jonathan-blow-on-programming-language-design',
+              'acast:episodeUrl': 'example-episode-slug',
               'acast:settings': 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
             },
           ],
-        },
-      },
-    }
-
-    expect(generateFeed(value)).toEqual(expected)
-  })
-
-  it('should generate RSS feed with blogChannel namespace properties', () => {
-    const value = {
-      title: 'Blog Feed',
-      description: 'A feed with blogChannel properties',
-      blogChannel: {
-        blogRoll: 'http://example.com/blogroll.opml',
-        blink: 'http://recommended-site.com/',
-        mySubscriptions: 'http://example.com/subscriptions.opml',
-      },
-    }
-    const expected = {
-      rss: {
-        '@version': '2.0',
-        '@xmlns:blogChannel': 'http://backend.userland.com/blogChannelModule',
-        channel: {
-          title: 'Blog Feed',
-          description: 'A feed with blogChannel properties',
-          'blogChannel:blogRoll': 'http://example.com/blogroll.opml',
-          'blogChannel:blink': 'http://recommended-site.com/',
-          'blogChannel:mySubscriptions': 'http://example.com/subscriptions.opml',
         },
       },
     }
@@ -2105,56 +1993,6 @@ describe('generateFeed', () => {
             '@recentCount': 10,
           },
           'spotify:countryOfOrigin': 'US',
-        },
-      },
-    }
-
-    expect(generateFeed(value)).toEqual(expected)
-  })
-
-  it('should generate RSS feed with ccREL namespace properties', () => {
-    const value = {
-      title: 'Licensed Feed',
-      description: 'A feed with ccREL properties',
-      cc: {
-        license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
-        attributionName: 'Example Publishing Company',
-        attributionURL: 'https://example.com/',
-      },
-    }
-    const expected = {
-      rss: {
-        '@version': '2.0',
-        '@xmlns:cc': 'http://creativecommons.org/ns#',
-        channel: {
-          title: 'Licensed Feed',
-          description: 'A feed with ccREL properties',
-          'cc:license': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
-          'cc:attributionName': 'Example Publishing Company',
-          'cc:attributionURL': 'https://example.com/',
-        },
-      },
-    }
-
-    expect(generateFeed(value)).toEqual(expected)
-  })
-
-  it('should generate RSS feed with creativecommons namespace properties', () => {
-    const value = {
-      title: 'Licensed Feed',
-      description: 'A feed with Creative Commons properties',
-      creativeCommons: {
-        licenses: ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
-      },
-    }
-    const expected = {
-      rss: {
-        '@version': '2.0',
-        '@xmlns:creativeCommons': 'http://backend.userland.com/creativeCommonsRssModule',
-        channel: {
-          title: 'Licensed Feed',
-          description: 'A feed with Creative Commons properties',
-          'creativeCommons:license': ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
         },
       },
     }

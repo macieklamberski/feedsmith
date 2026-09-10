@@ -18,38 +18,14 @@ export type Strict<T, S extends boolean> = Simplify<
       }
 >
 
-export type AnyOf<T> = Partial<{ [P in keyof T]-?: NonNullable<T[P]> }> &
-  { [P in keyof T]-?: Pick<{ [Q in keyof T]-?: NonNullable<T[Q]> }, P> }[keyof T]
-
-export type IsPlainObject<T> =
-  T extends Array<unknown>
-    ? false
-    : T extends (...args: Array<unknown>) => unknown
-      ? false
-      : T extends Date
-        ? false
-        : T extends object
-          ? T extends null
-            ? false
-            : true
-          : false
-
-export type DeepOmit<T, K extends string> =
-  T extends Array<infer U>
-    ? Array<DeepOmit<U, K>>
-    : IsPlainObject<T> extends true
-      ? Pick<{ [P in keyof T]: DeepOmit<T[P], K> }, Exclude<keyof T, K>>
-      : T
-
 export type Requirable<T> = T | { __requirable: T }
 
 export type DateLike = Date | string
 
-// Date-aware parse utils need to return different date types depending on the
-// parseDateFn option, but TypeScript can't express generic functions through
-// type aliases like ParseUtilPartial. Using `any` here lets all parse utils
-// share the same ParseUtilPartial pattern while the public parse() entry points
-// enforce the correct TDate type via generics.
+// Date-aware parse utils need to return different date types depending on the parseDateFn option,
+// but TypeScript can't express generic functions through type aliases like ParseUtilPartial. Using
+// `any` here lets all parse utils share the same ParseUtilPartial pattern while the public parse()
+// entry points enforce the correct TDate type via generics.
 // biome-ignore lint/suspicious/noExplicitAny: See above reasoning.
 export type DateAny = any
 

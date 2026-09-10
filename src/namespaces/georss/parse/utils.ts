@@ -1,14 +1,11 @@
+import { isNonEmptyString, isPlainObject, isPresent, trimObject } from 'trousse'
 import type { ParseUtilExact, ParseUtilPartial, Unreliable } from '../../../common/types.js'
 import {
-  isNonEmptyString,
-  isObject,
-  isPresent,
   parseArrayOf,
   parseNumber,
   parseSingularOf,
   parseString,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { GeoRssNs } from '../common/types.js'
 
@@ -83,7 +80,7 @@ export const parseBox: ParseUtilExact<GeoRssNs.Box> = (value) => {
 }
 
 export const retrieveItemOrFeed: ParseUtilPartial<GeoRssNs.ItemOrFeed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

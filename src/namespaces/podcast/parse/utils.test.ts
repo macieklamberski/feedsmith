@@ -945,7 +945,7 @@ describe('parseSeason', () => {
     expect(parseSeason(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supoprted input', () => {
+  it('should return undefined for not supported input', () => {
     expect(parseSeason(undefined)).toBeUndefined()
     expect(parseSeason(null)).toBeUndefined()
     expect(parseSeason([])).toBeUndefined()
@@ -1211,6 +1211,11 @@ describe('parseTrailer', () => {
     expect(parseTrailer(undefined)).toBeUndefined()
     expect(parseTrailer(null)).toBeUndefined()
     expect(parseTrailer([])).toBeUndefined()
+  })
+
+  it.todo('should parse pubDate with custom parseDateFn', () => {
+    // Pass options.parseDateFn that converts the RFC 822 string into a Date instance.
+    // Expected: pubDate equals the value returned by parseDateFn instead of the raw string.
   })
 })
 
@@ -2453,6 +2458,11 @@ describe('parseLiveItem', () => {
     expect(parseLiveItem(null)).toBeUndefined()
     expect(parseLiveItem([])).toBeUndefined()
   })
+
+  it.todo('should parse start and end with custom parseDateFn', () => {
+    // Pass options.parseDateFn that converts the RFC 3339 strings into Date instances.
+    // Expected: start and end equal the values returned by parseDateFn instead of raw strings.
+  })
 })
 
 describe('parseContentLink', () => {
@@ -3211,6 +3221,11 @@ describe('parseUpdateFrequency', () => {
     expect(parseUpdateFrequency(undefined)).toBeUndefined()
     expect(parseUpdateFrequency(null)).toBeUndefined()
     expect(parseUpdateFrequency([])).toBeUndefined()
+  })
+
+  it.todo('should parse dtstart with custom parseDateFn', () => {
+    // Pass options.parseDateFn that converts the RFC 3339 string into a Date instance.
+    // Expected: dtstart equals the value returned by parseDateFn instead of the raw string.
   })
 })
 

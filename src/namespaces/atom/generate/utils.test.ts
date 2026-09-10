@@ -38,12 +38,43 @@ describe('generateEntry', () => {
     expect(generateEntry(value)).toEqual(expected)
   })
 
+  it('should handle empty strings', () => {
+    const value = {
+      id: '',
+      title: { value: 'Entry Title' },
+    }
+    const expected = {
+      'atom:title': { '#text': 'Entry Title' },
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      id: '   ',
+    }
+
+    expect(generateEntry(value)).toBeUndefined()
+  })
+
   it('should handle empty object', () => {
     expect(generateEntry({})).toBeUndefined()
   })
 
   it('should handle undefined input', () => {
     expect(generateEntry(undefined)).toBeUndefined()
+  })
+
+  it('should handle non-object inputs', () => {
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateEntry('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateEntry(123)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateEntry(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateEntry([])).toBeUndefined()
   })
 })
 
@@ -83,11 +114,42 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should handle empty strings', () => {
+    const value = {
+      id: '',
+      title: { value: 'Feed Title' },
+    }
+    const expected = {
+      'atom:title': { '#text': 'Feed Title' },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      id: '   ',
+    }
+
+    expect(generateFeed(value)).toBeUndefined()
+  })
+
   it('should handle empty object', () => {
     expect(generateFeed({})).toBeUndefined()
   })
 
   it('should handle undefined input', () => {
     expect(generateFeed(undefined)).toBeUndefined()
+  })
+
+  it('should handle non-object inputs', () => {
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateFeed('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateFeed(123)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateFeed(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateFeed([])).toBeUndefined()
   })
 })

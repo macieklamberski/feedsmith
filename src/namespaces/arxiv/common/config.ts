@@ -1,5 +1,5 @@
 export const uris = [
-  'http://arxiv.org/schemas/atom', // Official URI.
+  'http://arxiv.org/schemas/atom', // Official URI
   'https://arxiv.org/schemas/atom',
   'http://arxiv.org/schemas/atom/',
   'https://arxiv.org/schemas/atom/',

@@ -1,15 +1,32 @@
-import { locales } from '../../../common/config.js'
+import { XMLParser } from 'fast-xml-parser'
+import { locales, namespacePrefixes, namespaceUris, parserConfig } from '../../../common/config.js'
 import { DetectError, MalformedError, ParseError } from '../../../common/errors.js'
 import type { ParseMainOptions, Unreliable } from '../../../common/types.js'
+import { createNamespaceResolver } from '../../../common/utils.js'
 import { detectRssFeed } from '../../../index.js'
-import type { Rss } from '../common/types.js'
-import { normalizeNamespaces, parser } from './config.js'
+import type { RssFeed } from '../common/types.js'
+import { stopNodes } from './config.js'
 import { retrieveFeed } from './utils.js'
+
+const createNamespaceOptions = createNamespaceResolver({ namespaceUris, namespacePrefixes })
+
+// Replaced per document, so the hooks below always read the declarations of the feed being parsed
+// and nothing survives into the next one.
+let namespaceOptions = createNamespaceOptions()
+
+const parser = new XMLParser({
+  ...parserConfig,
+  stopNodes,
+  transformTagName: (name) => namespaceOptions.transformTagName(name),
+  transformAttributeName: (name) => namespaceOptions.transformAttributeName(name),
+  attributeValueProcessor: (name, value) => namespaceOptions.attributeValueProcessor(name, value),
+  updateTag: (name) => namespaceOptions.updateTag(name),
+})
 
 export const parse = <TDate = string>(
   value: unknown,
   options?: ParseMainOptions<TDate>,
-): Rss.Feed<TDate> => {
+): RssFeed.Feed<TDate> => {
   if (!detectRssFeed(value)) {
     throw new DetectError(locales.invalidFeedFormat)
   }
@@ -17,10 +34,10 @@ export const parse = <TDate = string>(
   let normalized: Unreliable
 
   try {
-    const object = parser.parse(value)
-    normalized = normalizeNamespaces(object)
-  } catch {
-    throw new MalformedError(locales.invalidFeedFormat)
+    namespaceOptions = createNamespaceOptions(value)
+    normalized = parser.parse(value)
+  } catch (error) {
+    throw new MalformedError(locales.invalidFeedFormat, { cause: error })
   }
 
   const parsed = retrieveFeed(normalized, options)
@@ -29,5 +46,5 @@ export const parse = <TDate = string>(
     throw new ParseError(locales.invalidFeedFormat)
   }
 
-  return parsed as Rss.Feed<TDate>
+  return parsed as RssFeed.Feed<TDate>
 }

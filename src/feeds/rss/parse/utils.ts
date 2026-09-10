@@ -1,7 +1,7 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateAny } from '../../../common/types.js'
 import {
   detectNamespaces,
-  isObject,
   parseArrayOf,
   parseBoolean,
   parseDate,
@@ -11,7 +11,6 @@ import {
   parseString,
   retrieveText,
   trimArray,
-  trimObject,
 } from '../../../common/utils.js'
 import {
   retrieveFeed as retrieveAcastFeed,
@@ -73,7 +72,7 @@ import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/parse/u
 import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
-import type { ParseUtilPartial, Rss } from '../common/types.js'
+import type { ParseUtilPartial, RssFeed } from '../common/types.js'
 
 const emailRegex = /^[^\s@()<>[\]]+@[^\s@()<>[\]]+\.[^\s@()<>[\]]+$/
 const urlRegex = /^(?:https?:\/\/|www\.)[^\s]+\.[^\s]+$/
@@ -105,7 +104,7 @@ const closeBracketFor = (char: string) => {
   return ']'
 }
 
-const parseSimplePerson = (raw: string): Rss.Person | undefined => {
+const parseSimplePerson = (raw: string): RssFeed.Person | undefined => {
   const stripped = stripMailto(raw)
 
   if (urlRegex.test(stripped)) {
@@ -117,7 +116,7 @@ const parseSimplePerson = (raw: string): Rss.Person | undefined => {
   }
 }
 
-const parseUnbracketedPerson = (raw: string): Rss.Person | undefined => {
+const parseUnbracketedPerson = (raw: string): RssFeed.Person | undefined => {
   // If no email/URL markers anywhere, the entire string is a name.
   if (raw.indexOf('@') === -1 && raw.indexOf('://') === -1 && raw.indexOf('www.') === -1) {
     return { name: raw }
@@ -153,8 +152,8 @@ const parseUnbracketedPerson = (raw: string): Rss.Person | undefined => {
   return trimObject(person)
 }
 
-const parseBracketedPerson = (raw: string): Rss.Person | undefined => {
-  const person: Rss.Person = {}
+const parseBracketedPerson = (raw: string): RssFeed.Person | undefined => {
+  const person: RssFeed.Person = {}
   const nameParts: Array<string> = []
   const length = raw.length
 
@@ -191,7 +190,7 @@ const parseBracketedPerson = (raw: string): Rss.Person | undefined => {
         chunk = parseString(raw.slice(start, end - 1))
         i = end
       } else {
-        // Unmatched bracket — treat as literal text.
+        // Unmatched bracket: treat as literal text.
         const literalStart = i
         i = start
         while (i < length && raw[i] !== '<' && raw[i] !== '(' && raw[i] !== '[') {
@@ -230,7 +229,7 @@ const parseBracketedPerson = (raw: string): Rss.Person | undefined => {
   return trimObject(person)
 }
 
-export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
+export const parsePerson: ParseUtilPartial<RssFeed.Person> = (value) => {
   const raw = parseSingularOf(value?.name ?? value, (v) => parseString(retrieveText(v)))
 
   if (!raw) {
@@ -253,7 +252,7 @@ export const parsePerson: ParseUtilPartial<Rss.Person> = (value) => {
   return parseBracketedPerson(raw)
 }
 
-export const parseCategory: ParseUtilPartial<Rss.Category> = (value) => {
+export const parseCategory: ParseUtilPartial<RssFeed.Category> = (value) => {
   const category = {
     name: parseString(retrieveText(value)),
     domain: parseString(value?.['@domain']),
@@ -262,8 +261,8 @@ export const parseCategory: ParseUtilPartial<Rss.Category> = (value) => {
   return trimObject(category)
 }
 
-export const parseCloud: ParseUtilPartial<Rss.Cloud> = (value) => {
-  if (!isObject(value)) {
+export const parseCloud: ParseUtilPartial<RssFeed.Cloud> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -278,8 +277,8 @@ export const parseCloud: ParseUtilPartial<Rss.Cloud> = (value) => {
   return trimObject(cloud)
 }
 
-export const parseImage: ParseUtilPartial<Rss.Image> = (value) => {
-  if (!isObject(value)) {
+export const parseImage: ParseUtilPartial<RssFeed.Image> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -295,8 +294,8 @@ export const parseImage: ParseUtilPartial<Rss.Image> = (value) => {
   return trimObject(image)
 }
 
-export const parseTextInput: ParseUtilPartial<Rss.TextInput> = (value) => {
-  if (!isObject(value)) {
+export const parseTextInput: ParseUtilPartial<RssFeed.TextInput> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -310,13 +309,13 @@ export const parseTextInput: ParseUtilPartial<Rss.TextInput> = (value) => {
   return trimObject(textInput)
 }
 
-export const retrieveImage: ParseUtilPartial<Rss.Image> = (value) => {
+export const retrieveImage: ParseUtilPartial<RssFeed.Image> = (value) => {
   const channel = parseSingular(value?.channel)
 
   return parseSingularOf(channel?.image, parseImage) ?? parseSingularOf(value?.image, parseImage)
 }
 
-export const retrieveTextInput: ParseUtilPartial<Rss.TextInput> = (value) => {
+export const retrieveTextInput: ParseUtilPartial<RssFeed.TextInput> = (value) => {
   const channel = parseSingular(value?.channel)
 
   return (
@@ -325,7 +324,7 @@ export const retrieveTextInput: ParseUtilPartial<Rss.TextInput> = (value) => {
   )
 }
 
-export const retrieveItems: ParseUtilPartial<Array<Rss.Item<DateAny>>> = (value, options) => {
+export const retrieveItems: ParseUtilPartial<Array<RssFeed.Item<DateAny>>> = (value, options) => {
   const channel = parseSingular(value?.channel)
 
   return (
@@ -342,8 +341,8 @@ export const parseSkipDays: ParseUtilPartial<Array<string>> = (value) => {
   return trimArray(value?.day, (value) => parseString(retrieveText(value)))
 }
 
-export const parseEnclosure: ParseUtilPartial<Rss.Enclosure> = (value) => {
-  if (!isObject(value)) {
+export const parseEnclosure: ParseUtilPartial<RssFeed.Enclosure> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -356,7 +355,7 @@ export const parseEnclosure: ParseUtilPartial<Rss.Enclosure> = (value) => {
   return trimObject(enclosure)
 }
 
-export const parseGuid: ParseUtilPartial<Rss.Guid> = (value) => {
+export const parseGuid: ParseUtilPartial<RssFeed.Guid> = (value) => {
   const source = {
     value: parseString(retrieveText(value)),
     isPermaLink: parseBoolean(value?.['@ispermalink']),
@@ -365,7 +364,7 @@ export const parseGuid: ParseUtilPartial<Rss.Guid> = (value) => {
   return trimObject(source)
 }
 
-export const parseSource: ParseUtilPartial<Rss.Source> = (value) => {
+export const parseSource: ParseUtilPartial<RssFeed.Source> = (value) => {
   const source = {
     title: parseString(retrieveText(value)),
     url: parseString(value?.['@url']),
@@ -374,8 +373,8 @@ export const parseSource: ParseUtilPartial<Rss.Source> = (value) => {
   return trimObject(source)
 }
 
-export const parseItem: ParseUtilPartial<Rss.Item<DateAny>> = (value, options) => {
-  if (!isObject(value)) {
+export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, options) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -425,10 +424,10 @@ export const parseItem: ParseUtilPartial<Rss.Item<DateAny>> = (value, options) =
   return trimObject(item)
 }
 
-export const parseFeed: ParseUtilPartial<Rss.Feed<DateAny>> = (value, options) => {
+export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, options) => {
   const channel = parseSingular(value?.channel)
 
-  if (!isObject(channel)) {
+  if (!isPlainObject(channel)) {
     return
   }
   const namespaces = detectNamespaces(channel)
@@ -487,6 +486,6 @@ export const parseFeed: ParseUtilPartial<Rss.Feed<DateAny>> = (value, options) =
   return trimObject(feed)
 }
 
-export const retrieveFeed: ParseUtilPartial<Rss.Feed<DateAny>> = (value, options) => {
+export const retrieveFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, options) => {
   return parseSingularOf(value?.rss, (value) => parseFeed(value, options))
 }

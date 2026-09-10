@@ -1,8 +1,9 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateLike } from '../../../common/types.js'
-import { generateRfc3339Date, isObject, trimArray, trimObject } from '../../../common/utils.js'
-import type { GenerateUtil, Json } from '../common/types.js'
+import { generateRfc3339Date, trimArray } from '../../../common/utils.js'
+import type { GenerateUtil, JsonFeed } from '../common/types.js'
 
-export const generateItem: GenerateUtil<Json.Item<DateLike>> = (item) => {
+export const generateItem: GenerateUtil<JsonFeed.Item<DateLike>> = (item) => {
   const value = {
     ...item,
     date_published: generateRfc3339Date(item?.date_published),
@@ -12,8 +13,8 @@ export const generateItem: GenerateUtil<Json.Item<DateLike>> = (item) => {
   return trimObject(value)
 }
 
-export const generateFeed: GenerateUtil<Json.Feed<DateLike>> = (feed) => {
-  if (!isObject(feed)) {
+export const generateFeed: GenerateUtil<JsonFeed.Feed<DateLike>> = (feed) => {
+  if (!isPlainObject(feed)) {
     return
   }
 

@@ -14,10 +14,9 @@ describe('parse', () => {
     it(`should correctly parse RDF ${label}`, async () => {
       const reference = `${import.meta.dir}/../references/rdf-${key}`
       const input = await Bun.file(`${reference}.xml`).text()
-      const expectation = await Bun.file(`${reference}.json`).json()
-      const result = parse(input)
+      const expected = await Bun.file(`${reference}.json`).json()
 
-      expect(result).toEqual(expectation)
+      expect(parse(input)).toEqual(expected)
     })
   }
 
@@ -30,66 +29,86 @@ describe('parse', () => {
         xmlns="http://channel.netscape.com/rdf/simple/0.9/"
       >
         <CHANNEL>
-          <title>Mozilla Dot Org</title>
-          <LINK>http://www.mozilla.org</LINK>
-          <description>the Mozilla Organization web site</description>
+          <title>Example Dot Org</title>
+          <LINK>http://example.org</LINK>
+          <description>the Example Organization web site</description>
         </CHANNEL>
         <ItEM RDF:aBOUT="http://example.org/item1">
           <TITle>New Status Updates</TITle>
-          <link>http://www.mozilla.org/status/</link>
+          <link>http://example.org/status/</link>
         </ItEM>
       </RDF:rdf>
     `
-    const expectation = {
-      title: 'Mozilla Dot Org',
-      link: 'http://www.mozilla.org',
-      description: 'the Mozilla Organization web site',
+    const expected = {
+      title: 'Example Dot Org',
+      link: 'http://example.org',
+      description: 'the Example Organization web site',
       items: [
         {
           title: 'New Status Updates',
-          link: 'http://www.mozilla.org/status/',
+          link: 'http://example.org/status/',
           rdf: { about: 'http://example.org/item1' },
         },
       ],
     }
 
-    expect(parse(value)).toEqual(expectation)
+    expect(parse(value)).toEqual(expected)
   })
 
   it('should throw error for invalid input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse('not a feed')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle null input', () => {
-    expect(() => parse(null)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(null)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle undefined input', () => {
-    expect(() => parse(undefined)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(undefined)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle array input', () => {
-    expect(() => parse([])).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse([])
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle empty object input', () => {
-    expect(() => parse({})).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse({})
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
-  it('should handle string input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.invalidFeedFormat)
+  it('should handle empty string input', () => {
+    const throwing = () => parse('')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
+  })
+
+  it('should handle whitespace-only string input', () => {
+    const throwing = () => parse('   \n  ')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle number input', () => {
-    expect(() => parse(123)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(123)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   describe('error types', () => {
     it('should throw DetectError for non-feed input', () => {
       const throwing = () => parse('not a feed')
 
-      expect(throwing).toThrow(DetectError)
-      expect(throwing).toThrow(locales.invalidFeedFormat)
+      expect(throwing).toThrowError(DetectError)
+      expect(throwing).toThrowError(locales.invalidFeedFormat)
     })
 
     it('should throw MalformedError for malformed XML', () => {
@@ -105,8 +124,8 @@ describe('parse', () => {
       `
       const throwing = () => parse(value)
 
-      expect(throwing).toThrow(MalformedError)
-      expect(throwing).toThrow(locales.invalidFeedFormat)
+      expect(throwing).toThrowError(MalformedError)
+      expect(throwing).toThrowError(locales.invalidFeedFormat)
     })
 
     it('should throw ParseError for valid XML with invalid structure', () => {
@@ -119,8 +138,8 @@ describe('parse', () => {
       `
       const throwing = () => parse(value)
 
-      expect(throwing).toThrow(ParseError)
-      expect(throwing).toThrow(locales.invalidFeedFormat)
+      expect(throwing).toThrowError(ParseError)
+      expect(throwing).toThrowError(locales.invalidFeedFormat)
     })
   })
 
@@ -163,6 +182,45 @@ describe('parse', () => {
             links: [{ href: 'https://example.com/item1', rel: 'alternate' }],
           },
           rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse atom xhtml content in an RDF item with the div wrapper stripped', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:atom="http://www.w3.org/2005/Atom"
+      >
+        <channel rdf:about="https://example.com">
+          <title>Test</title>
+          <link>https://example.com</link>
+        </channel>
+        <item rdf:about="https://example.com/item1">
+          <title>Item</title>
+          <atom:content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b</p></div></atom:content>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Test',
+      link: 'https://example.com',
+      rdf: { about: 'https://example.com' },
+      items: [
+        {
+          title: 'Item',
+          atom: {
+            content: {
+              value: '<p>a &lt; b</p>',
+              type: 'xhtml',
+            },
+          },
+          rdf: { about: 'https://example.com/item1' },
         },
       ],
     }
@@ -608,6 +666,60 @@ describe('parse', () => {
       }
 
       expect(parse(value)).toEqual(expected)
+    })
+
+    it('should parse a bare root element under the RDF default namespace', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+          <channel xmlns="http://purl.org/rss/1.0/">
+            <title>Bare Root</title>
+            <link>https://example.com</link>
+          </channel>
+        </RDF>
+      `
+      const expected = {
+        title: 'Bare Root',
+        link: 'https://example.com',
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
+    // The channel stop nodes are spelled `rdf.*`, so this pins that they still fire after
+    // the root's prefix canonicalizes away: entities inside CDATA stay raw, which only a
+    // captured stop node preserves.
+    it('should capture stop-node content under a prefixed root', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
+          <channel rdf:about="https://example.com">
+            <title><![CDATA[Ampersands &amp; <b>markup</b>]]></title>
+            <link>https://example.com</link>
+          </channel>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'Ampersands &amp; <b>markup</b>',
+        link: 'https://example.com',
+        rdf: { about: 'https://example.com' },
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
+    it('should throw when the root prefix is never declared', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF>
+          <channel>
+            <title>Undeclared</title>
+          </channel>
+        </rdf:RDF>
+      `
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrowError(ParseError)
     })
 
     it('should handle missing required RDF elements', () => {
@@ -1136,7 +1248,7 @@ describe('parse', () => {
           <link>http://example.com</link>
           <description>Test feed with Administrative namespace</description>
           <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
-          <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+          <admin:generatorAgent rdf:resource="https://example.com/generator?v=3.2"/>
         </channel>
         <item rdf:about="http://example.com/item1">
           <title>Item title</title>
@@ -1150,7 +1262,7 @@ describe('parse', () => {
       description: 'Test feed with Administrative namespace',
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
-        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+        generatorAgent: 'https://example.com/generator?v=3.2',
       },
       rdf: { about: 'http://example.com' },
       items: [
@@ -1591,9 +1703,7 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
-
-      expect(result).toEqual(expected)
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
     })
 
     it('should apply custom parseDateFn to sy namespace dates', () => {
@@ -1619,9 +1729,56 @@ describe('parse', () => {
           updateBase: new Date('2023-03-15T12:00:00Z'),
         },
       }
-      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    })
 
-      expect(result).toEqual(expected)
+    it('should propagate error when parseDateFn throws', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/"
+          xmlns:dc="http://purl.org/dc/elements/1.1/"
+        >
+          <channel rdf:about="http://example.com">
+            <title>Test</title>
+            <dc:date>invalid</dc:date>
+          </channel>
+        </rdf:RDF>
+      `
+      const parseDateFn = () => {
+        throw new Error('Parse failed')
+      }
+      const throwing = () => parse(value, { parseDateFn })
+
+      expect(throwing).toThrowError('Parse failed')
+    })
+  })
+
+  describe.todo('real-world feeds', () => {
+    it.todo('should parse RDF feed with CDATA-wrapped titles and descriptions', () => {
+      // Mirror the RSS real-world CDATA suite: <title><![CDATA[...]]></title> and CDATA-wrapped
+      // item descriptions should parse to the inner text.
+    })
+
+    it.todo('should parse RDF feed with named and numeric HTML entities', () => {
+      // Mirror the RSS real-world entity suite: &amp;, &#8217;, &#x2019; in titles and
+      // descriptions should decode correctly.
+    })
+
+    it.todo('should parse RDF feed prefixed with a BOM', () => {
+      // A UTF-8 byte order mark before the XML declaration is common in real feeds and must not
+      // break detection or parsing.
+    })
+
+    it.todo('should parse RDF feed with a DOCTYPE declaration', () => {
+      // Some real feeds include a DOCTYPE before the root element. Parsing should ignore it
+      // instead of failing.
+    })
+
+    it.todo('should throw MalformedError for truncated RDF XML', () => {
+      // Mirror the RSS real-world truncation tests: a feed cut off mid-element should raise
+      // MalformedError rather than return a partial feed.
     })
   })
 })

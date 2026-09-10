@@ -80,6 +80,17 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
+  it('should parse altitude only', () => {
+    const value = {
+      'geo:alt': '10.5',
+    }
+    const expected = {
+      alt: 10.5,
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
   it('should handle empty strings', () => {
     const value = {
       'geo:lat': '',
@@ -164,5 +175,10 @@ describe('retrieveItemOrFeed', () => {
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it.todo('should handle out-of-range coordinate values', () => {
+    // Pass lat '91' and long '181' (outside the valid -90..90 and -180..180 ranges).
+    // Expected: pin whether the parser passes them through as numbers or drops them.
   })
 })

@@ -1,15 +1,10 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
-import {
-  isObject,
-  parseSingularOf,
-  parseString,
-  retrieveRdfResourceOrText,
-  trimObject,
-} from '../../../common/utils.js'
+import { parseSingularOf, parseString, retrieveRdfResourceOrText } from '../../../common/utils.js'
 import type { CcNs } from '../common/types.js'
 
 export const retrieveItemOrFeed: ParseUtilPartial<CcNs.ItemOrFeed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

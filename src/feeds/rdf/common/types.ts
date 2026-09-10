@@ -21,12 +21,12 @@ import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateAny>>
 
 // #region reference
-export namespace Rdf {
+export namespace RdfFeed {
   export type Image<TStrict extends boolean = false> = Strict<
     {
-      title: Requirable<string> // Required in spec.
-      link: Requirable<string> // Required in spec.
-      url: Requirable<string> // Required in spec.
+      title: Requirable<string> // Required in spec
+      link: Requirable<string> // Required in spec
+      url: Requirable<string> // Required in spec
       rdf?: RdfNs.About
     },
     TStrict
@@ -34,10 +34,10 @@ export namespace Rdf {
 
   export type TextInput<TStrict extends boolean = false> = Strict<
     {
-      title: Requirable<string> // Required in spec.
-      description: Requirable<string> // Required in spec.
-      name: Requirable<string> // Required in spec.
-      link: Requirable<string> // Required in spec.
+      title: Requirable<string> // Required in spec
+      description: Requirable<string> // Required in spec
+      name: Requirable<string> // Required in spec
+      link: Requirable<string> // Required in spec
       rdf?: RdfNs.About
     },
     TStrict
@@ -45,8 +45,8 @@ export namespace Rdf {
 
   export type Item<TDate, TStrict extends boolean = false> = Strict<
     {
-      title: Requirable<string> // Required in spec.
-      link: Requirable<string> // Required in spec.
+      title: Requirable<string> // Required in spec
+      link: Requirable<string> // Required in spec
       description?: string
       rdf?: RdfNs.About
       atom?: AtomNs.Entry<TDate>
@@ -64,9 +64,9 @@ export namespace Rdf {
 
   export type Feed<TDate, TStrict extends boolean = false> = Strict<
     {
-      title: Requirable<string> // Required in spec.
-      link: Requirable<string> // Required in spec.
-      description: Requirable<string> // Required in spec.
+      title: Requirable<string> // Required in spec
+      link: Requirable<string> // Required in spec
+      description: Requirable<string> // Required in spec
       image?: Image<TStrict>
       items?: Array<Item<TDate, TStrict>>
       textInput?: TextInput<TStrict>

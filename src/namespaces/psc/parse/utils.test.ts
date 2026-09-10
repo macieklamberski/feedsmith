@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { parseChapter, retrieveItem } from './utils.js'
+import { parseChapter, parseChapters, retrieveItem } from './utils.js'
 
 describe('parseChapter', () => {
   it('should parse complete chapter with all attributes', () => {
@@ -86,6 +86,72 @@ describe('parseChapter', () => {
     }
 
     expect(parseChapter(value)).toEqual(expected)
+  })
+})
+
+describe('parseChapters', () => {
+  it('should parse multiple chapters', () => {
+    const value = {
+      'psc:chapter': [
+        {
+          '@start': '00:00:00.000',
+          '@title': 'Introduction',
+        },
+        {
+          '@start': '00:05:30.000',
+          '@title': 'Chapter 1',
+        },
+      ],
+    }
+    const expected = [
+      {
+        start: '00:00:00.000',
+        title: 'Introduction',
+      },
+      {
+        start: '00:05:30.000',
+        title: 'Chapter 1',
+      },
+    ]
+
+    expect(parseChapters(value)).toEqual(expected)
+  })
+
+  it('should parse single chapter into an array', () => {
+    const value = {
+      'psc:chapter': {
+        '@start': '00:00:00.000',
+        '@title': 'Single Chapter',
+      },
+    }
+    const expected = [
+      {
+        start: '00:00:00.000',
+        title: 'Single Chapter',
+      },
+    ]
+
+    expect(parseChapters(value)).toEqual(expected)
+  })
+
+  it('should return undefined when psc:chapter is missing', () => {
+    const value = {
+      'other:element': 'value',
+    }
+
+    expect(parseChapters(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(parseChapters(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(parseChapters('not an object')).toBeUndefined()
+    expect(parseChapters(null)).toBeUndefined()
+    expect(parseChapters(undefined)).toBeUndefined()
   })
 })
 

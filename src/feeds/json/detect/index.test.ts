@@ -140,6 +140,36 @@ describe('detect', () => {
     expect(detect(json)).toBe(true)
   })
 
+  it('should detect JSON Feed with case-insensitive keys', () => {
+    const jsonFeed = {
+      VERSION: 'https://jsonfeed.org/version/1.1',
+      TITLE: 'Example Feed',
+      items: [],
+    }
+
+    expect(detect(jsonFeed)).toBe(true)
+  })
+
+  it('should fall back to structure checks when version is an empty string', () => {
+    const jsonFeed = {
+      version: '',
+      title: 'Example Feed',
+      items: [],
+    }
+
+    expect(detect(jsonFeed)).toBe(true)
+  })
+
+  it('should return false for whitespace-only string', () => {
+    expect(detect('   \n  ')).toBe(false)
+  })
+
+  it('should return false for XML content', () => {
+    const xml = '<feed xmlns="http://www.w3.org/2005/Atom"><title>Example Feed</title></feed>'
+
+    expect(detect(xml)).toBe(false)
+  })
+
   it('should return false for invalid JSON string', () => {
     expect(detect('{"title": "Not valid JSON')).toBe(false)
   })

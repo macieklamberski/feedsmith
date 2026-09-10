@@ -2,25 +2,29 @@ import { describe, expect, it } from 'bun:test'
 import { locales } from '../../../common/config.js'
 import { GenerateError } from '../../../common/errors.js'
 import type { DateLike } from '../../../common/types.js'
-import type { Rss } from '../common/types.js'
+import type { RssFeed } from '../common/types.js'
 import { generate } from './index.js'
 
 describe('generate', () => {
   const versions = {
     '20': '2.0',
-    // ns: 'with namespaces',
   }
 
   for (const [key, label] of Object.entries(versions)) {
     it(`should correctly generate RSS ${label}`, async () => {
       const reference = `${import.meta.dir}/../references/rss-${key}`
       const input = await Bun.file(`${reference}.json`).json()
-      const expectation = await Bun.file(`${reference}.xml`).text()
-      const result = generate(input)
+      const expected = await Bun.file(`${reference}.xml`).text()
 
-      expect(result).toEqual(expectation)
+      expect(generate(input)).toEqual(expected)
     })
   }
+
+  it.todo('should correctly generate RSS with namespaces', () => {
+    // Generate from the references/rss-ns.json fixture and compare against
+    // references/rss-ns.xml. Currently disabled because namespace generation does not yet
+    // reproduce the full reference output.
+  })
 
   it('should generate RSS with atom namespace', () => {
     const value = {
@@ -53,6 +57,40 @@ describe('generate', () => {
     <item>
       <title>First item</title>
       <atom:id>https://example.com/entry/1</atom:id>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate atom xhtml content as markup inside a div wrapper', () => {
+    const value = {
+      title: 'Feed with Atom xhtml',
+      description: 'Test feed',
+      items: [
+        {
+          title: 'First item',
+          atom: {
+            content: {
+              value: '<p>Rich <em>text</em></p>',
+              type: 'xhtml',
+            },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Feed with Atom xhtml</title>
+    <description>Test feed</description>
+    <item>
+      <title>First item</title>
+      <atom:content type="xhtml">
+<div xmlns="http://www.w3.org/1999/xhtml"><p>Rich <em>text</em></p></div>
+      </atom:content>
     </item>
   </channel>
 </rss>
@@ -642,7 +680,7 @@ describe('generate', () => {
           title: 'First item',
           pingback: {
             server: 'https://example.com/xmlrpc.php',
-            target: 'https://referenced-blog.com/article',
+            target: 'https://example.net/article',
           },
         },
       ],
@@ -656,7 +694,7 @@ describe('generate', () => {
     <item>
       <title>First item</title>
       <pingback:server>https://example.com/xmlrpc.php</pingback:server>
-      <pingback:target>https://referenced-blog.com/article</pingback:target>
+      <pingback:target>https://example.net/article</pingback:target>
     </item>
   </channel>
 </rss>
@@ -674,7 +712,7 @@ describe('generate', () => {
           title: 'First item',
           trackback: {
             ping: 'https://example.com/trackback/123',
-            abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+            abouts: ['https://example.net/trackback/456', 'https://example.org/trackback/789'],
           },
         },
       ],
@@ -687,8 +725,8 @@ describe('generate', () => {
     <item>
       <title>First item</title>
       <trackback:ping>https://example.com/trackback/123</trackback:ping>
-      <trackback:about>https://blog1.com/trackback/456</trackback:about>
-      <trackback:about>https://blog2.com/trackback/789</trackback:about>
+      <trackback:about>https://example.net/trackback/456</trackback:about>
+      <trackback:about>https://example.org/trackback/789</trackback:about>
     </item>
   </channel>
 </rss>
@@ -705,6 +743,7 @@ describe('generate', () => {
         accounts: [{ service: 'twitter', value: 'johndoe' }, { service: 'github' }],
         likes: { server: 'http://likes.example.com/' },
         blogroll: 'https://blog.example.com/blogroll.opml',
+        localTime: '2024-01-15 10:30:00',
       },
       items: [
         {
@@ -712,8 +751,8 @@ describe('generate', () => {
           sourceNs: {
             markdown: '# Example Post - This is markdown content for the post.',
             outlines: ['<outline text="Section 1"/>', '<outline text="Section 2"/>'],
-            localTime: '2024-01-15 10:30:00',
             linkFull: 'https://example.com/posts/full-version',
+            inReplyTo: { value: 'did:plc:iwl32vekohccji6khfdt3clw', isPermaLink: false },
           },
         },
       ],
@@ -727,6 +766,7 @@ describe('generate', () => {
     <source:account service="github"/>
     <source:likes server="http://likes.example.com/"/>
     <source:blogroll>https://blog.example.com/blogroll.opml</source:blogroll>
+    <source:localTime>2024-01-15 10:30:00</source:localTime>
     <item>
       <title>Item with source metadata</title>
       <source:markdown># Example Post - This is markdown content for the post.</source:markdown>
@@ -736,8 +776,8 @@ describe('generate', () => {
       <source:outline>
         <![CDATA[<outline text="Section 2"/>]]>
       </source:outline>
-      <source:localTime>2024-01-15 10:30:00</source:localTime>
       <source:linkFull>https://example.com/posts/full-version</source:linkFull>
+      <source:inReplyTo isPermaLink="false">did:plc:iwl32vekohccji6khfdt3clw</source:inReplyTo>
     </item>
   </channel>
 </rss>
@@ -752,7 +792,7 @@ describe('generate', () => {
       description: 'Test feed with blogChannel namespace',
       blogChannel: {
         blogRoll: 'http://example.com/blogroll.opml',
-        blink: 'http://recommended-site.com/',
+        blink: 'http://example.net/',
         mySubscriptions: 'http://example.com/subscriptions.opml',
       },
     }
@@ -762,7 +802,7 @@ describe('generate', () => {
     <title>Feed with blogChannel namespace</title>
     <description>Test feed with blogChannel namespace</description>
     <blogChannel:blogRoll>http://example.com/blogroll.opml</blogChannel:blogRoll>
-    <blogChannel:blink>http://recommended-site.com/</blogChannel:blink>
+    <blogChannel:blink>http://example.net/</blogChannel:blink>
     <blogChannel:mySubscriptions>http://example.com/subscriptions.opml</blogChannel:mySubscriptions>
   </channel>
 </rss>
@@ -856,7 +896,7 @@ describe('generate', () => {
       description: 'Test feed with admin namespace',
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
-        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+        generatorAgent: 'https://example.com/generator?v=3.2',
       },
       items: [
         {
@@ -870,7 +910,7 @@ describe('generate', () => {
     <title>Feed with admin namespace</title>
     <description>Test feed with admin namespace</description>
     <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
-    <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+    <admin:generatorAgent rdf:resource="https://example.com/generator?v=3.2"/>
     <item>
       <title>Item title</title>
     </item>
@@ -1002,7 +1042,7 @@ describe('generate', () => {
   })
 
   it('should generate RSS feed with googleplay namespace', () => {
-    const value = {
+    const value: RssFeed.Feed<DateLike> = {
       title: 'Feed with GooglePlay namespace',
       description: 'Test feed with Google Play Podcasts namespace',
       googleplay: {
@@ -1015,7 +1055,7 @@ describe('generate', () => {
           description: 'Episode description',
           googleplay: {
             author: 'Episode Author',
-            explicit: 'clean' as const,
+            explicit: 'clean',
           },
         },
       ],
@@ -1196,21 +1236,39 @@ describe('generate', () => {
 
     expect(generate(value)).toEqual(expected)
   })
-})
 
-describe('strict mode', () => {
-  it('should require title, link, description in strict mode', () => {
-    // @ts-expect-error: This is for testing purposes.
-    generate({ title: 'Test' }, { strict: true })
-  })
+  describe('strict mode', () => {
+    it('should require title, link, description in strict mode', () => {
+      const value = { title: 'Test' }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test</title>
+  </channel>
+</rss>
+`
 
-  it('should accept feed with all required fields in strict mode', () => {
-    generate({ title: 'Test', link: 'https://example.com', description: 'Desc' }, { strict: true })
-  })
+      // @ts-expect-error: This is for testing purposes.
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
 
-  it('should require nested type fields in strict mode', () => {
-    generate(
-      {
+    it('should accept feed with all required fields in strict mode', () => {
+      const value = { title: 'Test', link: 'https://example.com', description: 'Desc' }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test</title>
+    <link>https://example.com</link>
+    <description>Desc</description>
+  </channel>
+</rss>
+`
+
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
+
+    it('should require nested type fields in strict mode', () => {
+      const value = {
         title: 'Test',
         link: 'https://example.com',
         description: 'Desc',
@@ -1218,18 +1276,31 @@ describe('strict mode', () => {
           {
             title: 'Item',
             description: 'Desc',
-            // @ts-expect-error: This is for testing purposes.
             enclosures: [{ url: 'https://example.com/file.mp3' }],
           },
         ],
-      },
-      { strict: true },
-    )
-  })
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test</title>
+    <link>https://example.com</link>
+    <description>Desc</description>
+    <item>
+      <title>Item</title>
+      <description>Desc</description>
+      <enclosure url="https://example.com/file.mp3"/>
+    </item>
+  </channel>
+</rss>
+`
 
-  it('should accept nested types with all required fields in strict mode', () => {
-    generate(
-      {
+      // @ts-expect-error: This is for testing purposes.
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
+
+    it('should accept nested types with all required fields in strict mode', () => {
+      const value = {
         title: 'Test',
         link: 'https://example.com',
         description: 'Desc',
@@ -1239,58 +1310,120 @@ describe('strict mode', () => {
             enclosures: [{ url: 'https://example.com/file.mp3', length: 1000, type: 'audio/mpeg' }],
           },
         ],
-      },
-      { strict: true },
-    )
-  })
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test</title>
+    <link>https://example.com</link>
+    <description>Desc</description>
+    <item>
+      <title>Item</title>
+      <enclosure url="https://example.com/file.mp3" length="1000" type="audio/mpeg"/>
+    </item>
+  </channel>
+</rss>
+`
 
-  it('should accept item with only title in strict mode', () => {
-    generate(
-      {
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
+
+    it('should accept item with only title in strict mode', () => {
+      const value = {
         title: 'Test',
         link: 'https://example.com',
         description: 'Desc',
         items: [{ title: 'Item Title' }],
-      },
-      { strict: true },
-    )
-  })
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test</title>
+    <link>https://example.com</link>
+    <description>Desc</description>
+    <item>
+      <title>Item Title</title>
+    </item>
+  </channel>
+</rss>
+`
 
-  it('should accept item with only description in strict mode', () => {
-    generate(
-      {
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
+
+    it('should accept item with only description in strict mode', () => {
+      const value = {
         title: 'Test',
         link: 'https://example.com',
         description: 'Desc',
         items: [{ description: 'Item Description' }],
-      },
-      { strict: true },
-    )
-  })
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test</title>
+    <link>https://example.com</link>
+    <description>Desc</description>
+    <item>
+      <description>Item Description</description>
+    </item>
+  </channel>
+</rss>
+`
 
-  it('should accept item with both title and description in strict mode', () => {
-    generate(
-      {
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
+
+    it('should accept item with both title and description in strict mode', () => {
+      const value = {
         title: 'Test',
         link: 'https://example.com',
         description: 'Desc',
         items: [{ title: 'Item Title', description: 'Item Description' }],
-      },
-      { strict: true },
-    )
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test</title>
+    <link>https://example.com</link>
+    <description>Desc</description>
+    <item>
+      <title>Item Title</title>
+      <description>Item Description</description>
+    </item>
+  </channel>
+</rss>
+`
+
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
+
+    it('should accept partial feed in lenient mode', () => {
+      const value = { title: 'Test' }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test</title>
+  </channel>
+</rss>
+`
+
+      expect(generate(value)).toEqual(expected)
+    })
+
+    it.todo('should produce identical output in strict and lenient modes', () => {
+      // The strict option only changes compile-time types. Assert that
+      // generate(value, { strict: true }) and generate(value) return byte-identical XML for a
+      // corpus of valid feeds.
+    })
   })
 
-  it('should accept partial feed in lenient mode', () => {
-    generate({ title: 'Test' })
-  })
-})
-
-describe('generate edge cases', () => {
-  it('should accept partial feeds', () => {
-    const value: Rss.Feed<DateLike> = {
-      title: 'Test Feed',
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
+  describe('edge cases', () => {
+    it('should accept partial feeds', () => {
+      const value: RssFeed.Feed<DateLike> = {
+        title: 'Test Feed',
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
   <channel>
     <title>Test Feed</title>
@@ -1298,22 +1431,22 @@ describe('generate edge cases', () => {
 </rss>
 `
 
-    expect(generate(value)).toEqual(expected)
-  })
+      expect(generate(value)).toEqual(expected)
+    })
 
-  it('should accept feeds with string dates', () => {
-    const value: Rss.Feed<DateLike> = {
-      title: 'Test Feed',
-      description: 'Test Description',
-      pubDate: '2023-01-01T00:00:00.000Z',
-      items: [
-        {
-          title: 'Test Item',
-          pubDate: 'Mon, 01 Jan 2023 12:00:00 GMT',
-        },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
+    it('should accept feeds with string dates', () => {
+      const value: RssFeed.Feed<DateLike> = {
+        title: 'Test Feed',
+        description: 'Test Description',
+        pubDate: '2023-01-01T00:00:00.000Z',
+        items: [
+          {
+            title: 'Test Item',
+            pubDate: 'Mon, 01 Jan 2023 12:00:00 GMT',
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
   <channel>
     <title>Test Feed</title>
@@ -1327,22 +1460,22 @@ describe('generate edge cases', () => {
 </rss>
 `
 
-    expect(generate(value)).toEqual(expected)
-  })
+      expect(generate(value)).toEqual(expected)
+    })
 
-  it('should preserve invalid date strings', () => {
-    const value: Rss.Feed<DateLike> = {
-      title: 'Test Feed',
-      description: 'Test Description',
-      pubDate: 'not-a-valid-date',
-      items: [
-        {
-          title: 'Test Item',
-          pubDate: 'also-invalid-date',
-        },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
+    it('should preserve invalid date strings', () => {
+      const value: RssFeed.Feed<DateLike> = {
+        title: 'Test Feed',
+        description: 'Test Description',
+        pubDate: 'not-a-valid-date',
+        items: [
+          {
+            title: 'Test Item',
+            pubDate: 'also-invalid-date',
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
   <channel>
     <title>Test Feed</title>
@@ -1356,27 +1489,27 @@ describe('generate edge cases', () => {
 </rss>
 `
 
-    expect(generate(value)).toEqual(expected)
-  })
+      expect(generate(value)).toEqual(expected)
+    })
 
-  it('should handle deeply nested partial objects', () => {
-    const value: Rss.Feed<DateLike> = {
-      title: 'Test Feed',
-      items: [
-        {
-          title: 'Item 1',
-          guid: {
-            value: 'guid-1',
+    it('should handle deeply nested partial objects', () => {
+      const value: RssFeed.Feed<DateLike> = {
+        title: 'Test Feed',
+        items: [
+          {
+            title: 'Item 1',
+            guid: {
+              value: 'guid-1',
+            },
           },
+        ],
+        image: {
+          url: 'https://example.com/image.png',
+          title: 'Image Title',
+          link: 'https://example.com',
         },
-      ],
-      image: {
-        url: 'https://example.com/image.png',
-        title: 'Image Title',
-        link: 'https://example.com',
-      },
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
   <channel>
     <title>Test Feed</title>
@@ -1393,27 +1526,27 @@ describe('generate edge cases', () => {
 </rss>
 `
 
-    expect(generate(value)).toEqual(expected)
-  })
+      expect(generate(value)).toEqual(expected)
+    })
 
-  it('should handle mixed Date objects and string dates', () => {
-    const value: Rss.Feed<DateLike> = {
-      title: 'Mixed Dates Feed',
-      description: 'Feed with both Date objects and strings',
-      pubDate: new Date('2023-01-01T00:00:00.000Z'),
-      lastBuildDate: '2023-06-01T00:00:00.000Z',
-      items: [
-        {
-          title: 'Item with Date object',
-          pubDate: new Date('2023-02-01T00:00:00.000Z'),
-        },
-        {
-          title: 'Item with string date',
-          pubDate: '2023-03-01T00:00:00.000Z',
-        },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
+    it('should handle mixed Date objects and string dates', () => {
+      const value: RssFeed.Feed<DateLike> = {
+        title: 'Mixed Dates Feed',
+        description: 'Feed with both Date objects and strings',
+        pubDate: new Date('2023-01-01T00:00:00.000Z'),
+        lastBuildDate: '2023-06-01T00:00:00.000Z',
+        items: [
+          {
+            title: 'Item with Date object',
+            pubDate: new Date('2023-02-01T00:00:00.000Z'),
+          },
+          {
+            title: 'Item with string date',
+            pubDate: '2023-03-01T00:00:00.000Z',
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
   <channel>
     <title>Mixed Dates Feed</title>
@@ -1432,85 +1565,85 @@ describe('generate edge cases', () => {
 </rss>
 `
 
-    expect(generate(value)).toEqual(expected)
-  })
+      expect(generate(value)).toEqual(expected)
+    })
 
-  it('should generate RSS with acast namespace', () => {
-    const value = {
-      title: 'Feed with acast namespace',
-      description: 'Test feed with Acast namespace',
-      acast: {
-        showId: '664fde3eda02bb0012bad909',
-        showUrl: 'software-unscripted',
-        signature: {
-          key: 'EXAMPLE_KEY',
-          algorithm: 'aes-256-cbc',
-          value: 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
-        },
-        settings: 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
-        network: {
-          id: '664fdd227c6b200013652ed6',
-          slug: 'richard-feldman-664fdd227c6b200013652ed6',
-          value: 'Richard Feldman',
-        },
-        importedFeed: 'https://feeds.resonaterecordings.com/software-unscripted',
-      },
-      items: [
-        {
-          title: 'Episode with Acast metadata',
-          acast: {
-            episodeId: '6918f06ee42e3466f29467f9',
-            showId: '664fde3eda02bb0012bad909',
-            episodeUrl: 'jonathan-blow-on-programming-language-design',
-            settings: 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+    it('should generate RSS with acast namespace', () => {
+      const value = {
+        title: 'Feed with acast namespace',
+        description: 'Test feed with Acast namespace',
+        acast: {
+          showId: '664fde3eda02bb0012bad909',
+          showUrl: 'example-show',
+          signature: {
+            key: 'EXAMPLE_KEY',
+            algorithm: 'aes-256-cbc',
+            value: 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
           },
+          settings: 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
+          network: {
+            id: '664fdd227c6b200013652ed6',
+            slug: 'example-network-664fdd227c6b200013652ed6',
+            value: 'Example Network',
+          },
+          importedFeed: 'https://feeds.example.com/example-show',
         },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
+        items: [
+          {
+            title: 'Episode with Acast metadata',
+            acast: {
+              episodeId: '6918f06ee42e3466f29467f9',
+              showId: '664fde3eda02bb0012bad909',
+              episodeUrl: 'example-episode-slug',
+              settings: 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
+            },
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:acast="https://schema.acast.com/1.0/">
   <channel>
     <title>Feed with acast namespace</title>
     <description>Test feed with Acast namespace</description>
     <acast:showId>664fde3eda02bb0012bad909</acast:showId>
-    <acast:showUrl>software-unscripted</acast:showUrl>
+    <acast:showUrl>example-show</acast:showUrl>
     <acast:signature key="EXAMPLE_KEY" algorithm="aes-256-cbc">wbG1Z7+6h9QOi+CR1Dv0uQ==</acast:signature>
     <acast:settings>FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB</acast:settings>
-    <acast:network id="664fdd227c6b200013652ed6" slug="richard-feldman-664fdd227c6b200013652ed6">Richard Feldman</acast:network>
-    <acast:importedFeed>https://feeds.resonaterecordings.com/software-unscripted</acast:importedFeed>
+    <acast:network id="664fdd227c6b200013652ed6" slug="example-network-664fdd227c6b200013652ed6">Example Network</acast:network>
+    <acast:importedFeed>https://feeds.example.com/example-show</acast:importedFeed>
     <item>
       <title>Episode with Acast metadata</title>
       <acast:episodeId>6918f06ee42e3466f29467f9</acast:episodeId>
       <acast:showId>664fde3eda02bb0012bad909</acast:showId>
-      <acast:episodeUrl>jonathan-blow-on-programming-language-design</acast:episodeUrl>
+      <acast:episodeUrl>example-episode-slug</acast:episodeUrl>
       <acast:settings>FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC</acast:settings>
     </item>
   </channel>
 </rss>
 `
 
-    expect(generate(value)).toEqual(expected)
-  })
+      expect(generate(value)).toEqual(expected)
+    })
 
-  it('should generate RSS with xml namespace', () => {
-    const value = {
-      title: 'Feed with xml namespace',
-      description: 'Test feed with XML namespace attributes',
-      xml: {
-        lang: 'en',
-        base: 'http://example.org/',
-      },
-      items: [
-        {
-          title: 'Item with XML namespace',
-          xml: {
-            lang: 'en-US',
-            base: 'http://example.org/item/1/',
-          },
+    it('should generate RSS with xml namespace', () => {
+      const value = {
+        title: 'Feed with xml namespace',
+        description: 'Test feed with XML namespace attributes',
+        xml: {
+          lang: 'en',
+          base: 'http://example.org/',
         },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
+        items: [
+          {
+            title: 'Item with XML namespace',
+            xml: {
+              lang: 'en-US',
+              base: 'http://example.org/item/1/',
+            },
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xml:lang="en" xml:base="http://example.org/">
   <channel>
     <title>Feed with xml namespace</title>
@@ -1522,16 +1655,17 @@ describe('generate edge cases', () => {
 </rss>
 `
 
-    expect(generate(value)).toEqual(expected)
+      expect(generate(value)).toEqual(expected)
+    })
   })
-})
 
-describe('error types', () => {
-  it('should throw GenerateError for empty input', () => {
-    const value = {}
-    const throwing = () => generate(value)
+  describe('error types', () => {
+    it('should throw GenerateError for empty input', () => {
+      const value = {}
+      const throwing = () => generate(value)
 
-    expect(throwing).toThrow(GenerateError)
-    expect(throwing).toThrow(locales.invalidInputRss)
+      expect(throwing).toThrowError(GenerateError)
+      expect(throwing).toThrowError(locales.invalidInputRss)
+    })
   })
 })

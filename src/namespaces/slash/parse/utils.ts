@@ -1,12 +1,11 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseCsvOf,
   parseNumber,
   parseSingularOf,
   parseString,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { SlashNs } from '../common/types.js'
 
@@ -15,7 +14,7 @@ export const parseHitParade: ParseUtilPartial<SlashNs.HitParade> = (value) => {
 }
 
 export const retrieveItem: ParseUtilPartial<SlashNs.Item> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

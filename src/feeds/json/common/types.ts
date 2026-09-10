@@ -12,7 +12,7 @@ export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateA
 export type GenerateUtil<V> = BaseGenerateUtil<V>
 
 // #region reference
-export namespace Json {
+export namespace JsonFeed {
   export type Author = {
     name?: string
     url?: string
@@ -21,8 +21,8 @@ export namespace Json {
 
   export type Attachment<TStrict extends boolean = false> = Strict<
     {
-      url: Requirable<string> // Required in spec.
-      mime_type: Requirable<string> // Required in spec.
+      url: Requirable<string> // Required in spec
+      mime_type: Requirable<string> // Required in spec
       title?: string
       size_in_bytes?: number
       duration_in_seconds?: number
@@ -32,12 +32,12 @@ export namespace Json {
 
   export type Item<TDate, TStrict extends boolean = false> = Strict<
     {
-      id: Requirable<string> // Required in spec.
+      id: Requirable<string> // Required in spec
       url?: string
       external_url?: string
       title?: string
-      content_html?: string // At least one of content_html or content_text is required in spec.
-      content_text?: string // At least one of content_html or content_text is required in spec.
+      content_html?: string // At least one of content_html or content_text is required in spec
+      content_text?: string // At least one of content_html or content_text is required in spec
       summary?: string
       image?: string
       banner_image?: string
@@ -54,15 +54,15 @@ export namespace Json {
 
   export type Hub<TStrict extends boolean = false> = Strict<
     {
-      type: Requirable<string> // Required in spec.
-      url: Requirable<string> // Required in spec.
+      type: Requirable<string> // Required in spec
+      url: Requirable<string> // Required in spec
     },
     TStrict
   >
 
   export type Feed<TDate, TStrict extends boolean = false> = Strict<
     {
-      title: Requirable<string> // Required in spec.
+      title: Requirable<string> // Required in spec
       home_page_url?: string
       feed_url?: string
       description?: string
@@ -74,7 +74,7 @@ export namespace Json {
       expired?: boolean
       hubs?: Array<Hub<TStrict>>
       authors?: Array<Author>
-      items: Requirable<Array<Item<TDate, TStrict>>> // Required in spec.
+      items: Requirable<Array<Item<TDate, TStrict>>> // Required in spec
     },
     TStrict
   >

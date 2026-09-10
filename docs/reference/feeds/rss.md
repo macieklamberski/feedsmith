@@ -136,16 +136,16 @@ const isRss = detectRssFeed(xmlContent)
 
 ## Types
 
-All RSS types are available under the `Rss` namespace:
+All RSS types are available under the `RssFeed` namespace:
 
 ```typescript
-import type { Rss } from 'feedsmith'
+import type { RssFeed } from 'feedsmith'
 
 // Access any type from the definitions below
-type Feed = Rss.Feed<Date>
-type Item = Rss.Item<Date>
-type Category = Rss.Category
-type Enclosure = Rss.Enclosure
+type Feed = RssFeed.Feed<Date>
+type Item = RssFeed.Item<Date>
+type Category = RssFeed.Category
+type Enclosure = RssFeed.Enclosure
 // … see type definitions below for all available types
 ```
 

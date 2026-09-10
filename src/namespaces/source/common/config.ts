@@ -1,5 +1,5 @@
 export const uris = [
-  'http://source.scripting.com/', // Official URI.
+  'http://source.scripting.com/', // Official URI
   'https://source.scripting.com/',
   'http://source.scripting.com',
   'https://source.scripting.com',
@@ -19,4 +19,5 @@ export const stopNodes = [
   '*.source:outline',
   '*.source:localtime',
   '*.source:linkfull',
+  '*.source:inreplyto',
 ]

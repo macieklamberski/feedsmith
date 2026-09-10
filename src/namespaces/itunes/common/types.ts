@@ -2,11 +2,11 @@ import type { Requirable, Strict } from '../../../common/types.js'
 
 // #region reference
 export namespace ItunesNs {
-  // NOTE: BaseCategory contains non-recursive fields wrapped in Strict<>.
-  // Category extends it and adds recursive categories field separately.
+  // NOTE: BaseCategory contains non-recursive fields wrapped in Strict<>. Category extends it and
+  // adds recursive categories field separately.
   export type BaseCategory<TStrict extends boolean = false> = Strict<
     {
-      text: Requirable<string> // Required in spec.
+      text: Requirable<string> // Required in spec
     },
     TStrict
   >

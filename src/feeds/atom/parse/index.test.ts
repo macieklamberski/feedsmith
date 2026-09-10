@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import { locales, namespaceUris } from '../../../common/config.js'
 import { DetectError, MalformedError, ParseError } from '../../../common/errors.js'
+import type { AtomFeed } from '../common/types.js'
 import { parse } from './index.js'
 
 describe('parse', () => {
@@ -15,9 +16,8 @@ describe('parse', () => {
       const reference = `${import.meta.dir}/../references/atom-${key}`
       const input = await Bun.file(`${reference}.xml`).text()
       const expected = await Bun.file(`${reference}.json`).json()
-      const result = parse(input)
 
-      expect(result).toEqual(expected)
+      expect(parse(input)).toEqual(expected)
     })
   }
 
@@ -200,11 +200,11 @@ describe('parse', () => {
     const value = `
       <?xml version="1.0" encoding="utf-8"?>
       <atom:feed atom:xmlns="http://www.w3.org/2005/Atom">
-        <atom:title>Example Feed</title>
-        <atom:id>example-feed</id>
+        <atom:title>Example Feed</atom:title>
+        <atom:id>example-feed</atom:id>
         <atom:entry>
-          <atom:title>Example Entry</title>
-          <atom:id>example-entry</id>
+          <atom:title>Example Entry</atom:title>
+          <atom:id>example-entry</atom:id>
         </atom:entry>
       </atom:feed>
     `
@@ -222,40 +222,79 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse an xhtml title in a fully prefixed Atom feed', () => {
+    const value = `
+      <?xml version="1.0" encoding="utf-8"?>
+      <atom:feed xmlns:atom="http://www.w3.org/2005/Atom">
+        <atom:id>example-feed</atom:id>
+        <atom:title type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b</p></div></atom:title>
+      </atom:feed>
+    `
+    const expected = {
+      id: 'example-feed',
+      title: {
+        value: '<p>a &lt; b</p>',
+        type: 'xhtml',
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should throw error for invalid input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse('not a feed')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle null input', () => {
-    expect(() => parse(null)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(null)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle undefined input', () => {
-    expect(() => parse(undefined)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(undefined)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle array input', () => {
-    expect(() => parse([])).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse([])
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle empty object input', () => {
-    expect(() => parse({})).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse({})
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
-  it('should handle string input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.invalidFeedFormat)
+  it('should handle empty string input', () => {
+    const throwing = () => parse('')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
+  })
+
+  it('should handle whitespace-only string input', () => {
+    const throwing = () => parse('   \n  ')
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   it('should handle number input', () => {
-    expect(() => parse(123)).toThrowError(locales.invalidFeedFormat)
+    const throwing = () => parse(123)
+
+    expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
   describe('error types', () => {
     it('should throw DetectError for non-feed input', () => {
       const throwing = () => parse('not a feed')
 
-      expect(throwing).toThrow(DetectError)
-      expect(throwing).toThrow(locales.invalidFeedFormat)
+      expect(throwing).toThrowError(DetectError)
+      expect(throwing).toThrowError(locales.invalidFeedFormat)
     })
 
     it('should throw MalformedError for malformed XML', () => {
@@ -267,16 +306,16 @@ describe('parse', () => {
       `
       const throwing = () => parse(value)
 
-      expect(throwing).toThrow(MalformedError)
-      expect(throwing).toThrow(locales.invalidFeedFormat)
+      expect(throwing).toThrowError(MalformedError)
+      expect(throwing).toThrowError(locales.invalidFeedFormat)
     })
 
     it('should throw ParseError for valid XML with invalid structure', () => {
       const value = '<feed xmlns="http://www.w3.org/2005/Atom"></feed>'
       const throwing = () => parse(value)
 
-      expect(throwing).toThrow(ParseError)
-      expect(throwing).toThrow(locales.invalidFeedFormat)
+      expect(throwing).toThrowError(ParseError)
+      expect(throwing).toThrowError(locales.invalidFeedFormat)
     })
   })
 
@@ -812,7 +851,7 @@ describe('parse', () => {
           </entry>
         </feed>
       `
-      const expected = {
+      const expected: AtomFeed.Feed<string> = {
         title: { value: 'Feed with GooglePlay' },
         id: 'urn:uuid:feed-id',
         updated: '2024-01-01T00:00:00Z',
@@ -827,7 +866,7 @@ describe('parse', () => {
             updated: '2024-01-01T00:00:00Z',
             googleplay: {
               author: 'Episode Author',
-              explicit: 'clean' as const,
+              explicit: 'clean',
             },
           },
         ],
@@ -1229,9 +1268,7 @@ describe('parse', () => {
         ],
       }
 
-      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
-
-      expect(result).toEqual(expected)
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
     })
 
     it('should apply custom parseDateFn to dc namespace dates', () => {
@@ -1264,9 +1301,7 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
-
-      expect(result).toEqual(expected)
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
     })
 
     it('should apply custom parseDateFn to thr link dates', () => {
@@ -1306,9 +1341,7 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
-
-      expect(result).toEqual(expected)
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
     })
 
     it('should apply custom parseDateFn to app namespace dates', () => {
@@ -1341,9 +1374,51 @@ describe('parse', () => {
           },
         ],
       }
-      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    })
 
-      expect(result).toEqual(expected)
+    it('should propagate error when parseDateFn throws', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <title>Test</title>
+          <id>urn:uuid:feed</id>
+          <updated>invalid</updated>
+        </feed>
+      `
+      const parseDateFn = () => {
+        throw new Error('Parse failed')
+      }
+      const throwing = () => parse(value, { parseDateFn })
+
+      expect(throwing).toThrowError('Parse failed')
+    })
+  })
+
+  describe.todo('real-world feeds', () => {
+    it.todo('should parse Atom feed with CDATA-wrapped titles and content', () => {
+      // Mirror the RSS real-world CDATA suite: <title><![CDATA[...]]></title> and CDATA-wrapped
+      // entry content should parse to the inner text.
+    })
+
+    it.todo('should parse Atom feed with named and numeric HTML entities', () => {
+      // Mirror the RSS real-world entity suite: &amp;, &#8217;, &#x2019; in titles and summaries
+      // should decode correctly.
+    })
+
+    it.todo('should parse Atom feed prefixed with a BOM', () => {
+      // A UTF-8 byte order mark before the XML declaration is common in real feeds and must not
+      // break detection or parsing.
+    })
+
+    it.todo('should parse Atom feed with a DOCTYPE declaration', () => {
+      // Some real feeds include a DOCTYPE before the root element. Parsing should ignore it
+      // instead of failing.
+    })
+
+    it.todo('should throw MalformedError for truncated Atom XML', () => {
+      // Mirror the RSS real-world truncation tests: a feed cut off mid-element should raise
+      // MalformedError rather than return a partial feed.
     })
   })
 })

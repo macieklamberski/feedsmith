@@ -51,7 +51,7 @@ describe('createCaseInsensitiveGetter', () => {
     expect(get('KEY')).toBe('uppercase value')
   })
 
-  it('should handle non-string key lookups by coercing to string', () => {
+  it('should handle numeric-like and boolean-like string keys', () => {
     const value = {
       '123': 'numeric key',
       true: 'boolean key',
@@ -229,6 +229,15 @@ describe('retrieveAuthors', () => {
   it('should handle author when no authors present', () => {
     const value = {
       authors: undefined,
+      author: { name: 'Jane' },
+    }
+
+    expect(retrieveAuthors(value)).toEqual([{ name: 'Jane' }])
+  })
+
+  it('should fall back to author when authors parses to an empty array', () => {
+    const value = {
+      authors: [],
       author: { name: 'Jane' },
     }
 
@@ -429,7 +438,7 @@ describe('parseItem', () => {
   const expectedFull = {
     id: 'item-123',
     url: 'https://example.com/article',
-    external_url: 'https://external-source.com/article',
+    external_url: 'https://example.net/article',
     title: 'Test Article',
     content_html: '<p>HTML Content</p>',
     content_text: 'Plain text content',
@@ -464,10 +473,7 @@ describe('parseItem', () => {
     const value = {
       id: ['item-123', 'item-456'],
       url: ['https://example.com/article', 'https://example.com/alternate-article'],
-      external_url: [
-        'https://external-source.com/article',
-        'https://external-source.com/alternate-article',
-      ],
+      external_url: ['https://example.net/article', 'https://example.net/alternate-article'],
       title: ['Test Article', 'Alternative Test Article'],
       content_html: ['<p>HTML Content</p>', '<p>Alternative HTML Content</p>'],
       content_text: ['Plain text content', 'Alternative plain text content'],
@@ -609,13 +615,13 @@ describe('parseItem', () => {
       attachments: [
         true,
         { not_url: 'missing url field' },
-        { url: 'https://valid.com/attachment.pdf', mime_type: 'application/pdf' },
+        { url: 'https://example.com/attachment.pdf', mime_type: 'application/pdf' },
       ],
     }
     const expected = {
       id: 'item-invalid-props',
       content_text: 'Minimal text content',
-      attachments: [{ url: 'https://valid.com/attachment.pdf', mime_type: 'application/pdf' }],
+      attachments: [{ url: 'https://example.com/attachment.pdf', mime_type: 'application/pdf' }],
     }
 
     expect(parseItem(value)).toEqual(expected)
@@ -685,6 +691,71 @@ describe('parseItem', () => {
         { name: 'Author 2' },
       ],
       attachments: [{ url: 'https://example.com/file1.pdf', mime_type: 'application/pdf' }],
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should preserve HTML entities in content_html verbatim', () => {
+    const value = {
+      id: '1',
+      content_html: 'before <code>&lt;title&gt;</code> after &amp; &lt;p&gt;outside&lt;/p&gt;',
+    }
+    const expected = {
+      id: '1',
+      content_html: 'before <code>&lt;title&gt;</code> after &amp; &lt;p&gt;outside&lt;/p&gt;',
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should preserve HTML entities in content_text verbatim', () => {
+    const value = {
+      id: '1',
+      content_text: 'Tom &amp; Jerry &lt; Bugs &amp; Daffy',
+    }
+    const expected = {
+      id: '1',
+      content_text: 'Tom &amp; Jerry &lt; Bugs &amp; Daffy',
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should preserve HTML entities in summary verbatim', () => {
+    const value = {
+      id: '1',
+      summary: 'A &amp; B',
+    }
+    const expected = {
+      id: '1',
+      summary: 'A &amp; B',
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should preserve HTML entities in title verbatim', () => {
+    const value = {
+      id: '1',
+      title: 'Tom &amp; Jerry',
+    }
+    const expected = {
+      id: '1',
+      title: 'Tom &amp; Jerry',
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should preserve HTML comment markers inside content_html', () => {
+    const value = {
+      id: '1',
+      content_html: '<p>before</p><!-- inline note --><p>after</p>',
+    }
+    const expected = {
+      id: '1',
+      content_html: '<p>before</p><!-- inline note --><p>after</p>',
     }
 
     expect(parseItem(value)).toEqual(expected)
@@ -1127,6 +1198,21 @@ describe('parseFeed', () => {
       }
 
       expect(parseFeed(commonValue, { maxItems: undefined })).toEqual(expected)
+    })
+  })
+
+  describe('entity preservation', () => {
+    it('should preserve HTML entities in feed-level title and description', () => {
+      const value = {
+        title: 'Tom &amp; Jerry',
+        description: 'A &lt;strong&gt;great&lt;/strong&gt; feed',
+      }
+      const expected = {
+        title: 'Tom &amp; Jerry',
+        description: 'A &lt;strong&gt;great&lt;/strong&gt; feed',
+      }
+
+      expect(parseFeed(value)).toEqual(expected)
     })
   })
 })

@@ -97,10 +97,10 @@ Generates (showing first lines):
 Build type-safe RSS feeds using the exported types:
 
 ```typescript
-import { type Rss, generateRssFeed } from 'feedsmith'
+import { type RssFeed, generateRssFeed } from 'feedsmith'
 
 // Define items with full type safety
-const items: Array<Rss.Item<Date>> = [{
+const items: Array<RssFeed.Item<Date>> = [{
   title: 'New Episode',
   description: 'Episode description',
   enclosures: [{
@@ -111,7 +111,7 @@ const items: Array<Rss.Item<Date>> = [{
 }]
 
 // Build the feed
-const feed: Rss.Feed<Date> = {
+const feed: RssFeed.Feed<Date> = {
   title: 'My Podcast',
   link: 'https://example.com',
   description: 'A podcast',

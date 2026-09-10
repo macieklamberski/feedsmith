@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import {
   createNamespaceGetter,
+  escapeCdataSections,
   parseCategory,
   parseContent,
   parseEntry,
@@ -10,12 +11,14 @@ import {
   parsePerson,
   parseSource,
   parseText,
+  parseTypedText,
   retrieveFeed,
   retrieveGeneratorUri,
   retrievePersonUri,
   retrievePublished,
   retrieveSubtitle,
   retrieveUpdated,
+  unwrapXhtmlDiv,
 } from './utils.js'
 
 describe('createNamespaceGetter', () => {
@@ -114,6 +117,302 @@ describe('createNamespaceGetter', () => {
   })
 })
 
+describe('unwrapXhtmlDiv', () => {
+  it('should unwrap the wrapping div', () => {
+    const value = '<div><p>Rich content</p></div>'
+    const expected = '<p>Rich content</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should unwrap a div with attributes', () => {
+    const value = '<div xmlns="http://www.w3.org/1999/xhtml"><p>Rich content</p></div>'
+    const expected = '<p>Rich content</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should unwrap a prefixed div and strip the prefix from descendant tags', () => {
+    const value =
+      '<xhtml:div xmlns:xhtml="http://www.w3.org/1999/xhtml"><xhtml:p>Text</xhtml:p></xhtml:div>'
+    const expected = '<p>Text</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should handle surrounding whitespace', () => {
+    const value = '\n  <div>\n    <p>Text</p>\n  </div>\n'
+    const expected = '\n    <p>Text</p>\n  '
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should keep inner divs intact', () => {
+    const value = '<div><div>Inner</div></div>'
+    const expected = '<div>Inner</div>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should return undefined for a self-closing div', () => {
+    expect(unwrapXhtmlDiv('<xhtml:div/>')).toBeUndefined()
+    expect(unwrapXhtmlDiv('<div class="empty" />')).toBeUndefined()
+  })
+
+  it('should return value unchanged when there is no div wrapper', () => {
+    const value = '<p>Rich content</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should return value unchanged when the wrapper is unterminated', () => {
+    const value = '<div><p>Text</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should unwrap when a comment holds a div-like string', () => {
+    const value = '<div>hi<!-- </div> --></div>'
+    const expected = 'hi<!-- </div> -->'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should unwrap a prefixed div whose prefix contains a dot', () => {
+    const value = '<x.y:div xmlns:x.y="http://www.w3.org/1999/xhtml"><x.y:p>Text</x.y:p></x.y:div>'
+    const expected = '<p>Text</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should return value unchanged for sibling top-level divs', () => {
+    const value = '<div>First</div><div>Second</div>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should return value unchanged when a stray closing tag splits the scan', () => {
+    const value = '<div>First</div></x-wrap><div>Second</div>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should return value unchanged when text follows the wrapper', () => {
+    const value = '<div>Text</div> trailing'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should return value unchanged when a comment follows the wrapper', () => {
+    const value = '<div>Text</div><!-- comment -->'
+
+    expect(unwrapXhtmlDiv(value)).toBe(value)
+  })
+
+  it('should unwrap a div whose attribute value contains a closing angle bracket', () => {
+    const value = '<div title="a>b"><p>Text</p></div>'
+    const expected = '<p>Text</p>'
+
+    expect(unwrapXhtmlDiv(value)).toBe(expected)
+  })
+
+  it('should return non-string values unchanged', () => {
+    expect(unwrapXhtmlDiv(undefined)).toBeUndefined()
+    expect(unwrapXhtmlDiv(123)).toBe(123)
+  })
+})
+
+describe('escapeCdataSections', () => {
+  it('should replace a CDATA section with its entity-escaped content', () => {
+    const value = 'before <![CDATA[a < b && c]]> after'
+    const expected = 'before a &lt; b &amp;&amp; c after'
+
+    expect(escapeCdataSections(value)).toBe(expected)
+  })
+
+  it('should replace multiple CDATA sections', () => {
+    const value = '<![CDATA[<p>]]> and <![CDATA[&]]>'
+    const expected = '&lt;p> and &amp;'
+
+    expect(escapeCdataSections(value)).toBe(expected)
+  })
+
+  it('should leave an unterminated CDATA section untouched', () => {
+    const value = '<pre><![CDATA[if (a < b) return;</pre>'
+
+    expect(escapeCdataSections(value)).toBe(value)
+  })
+
+  it('should return a value without CDATA sections unchanged', () => {
+    const value = '<p>a &lt; b</p>'
+
+    expect(escapeCdataSections(value)).toBe(value)
+  })
+
+  it('should return non-string values unchanged', () => {
+    expect(escapeCdataSections(undefined)).toBeUndefined()
+    expect(escapeCdataSections(123)).toBe(123)
+  })
+})
+
+describe('parseTypedText', () => {
+  it('should unwrap the div wrapper when the type is xhtml', () => {
+    const value = { '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>Text</p></div>' }
+    const expected = '<p>Text</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should strip the namespace prefix when the type is xhtml', () => {
+    const value = {
+      '#text':
+        '<xhtml:div xmlns:xhtml="http://www.w3.org/1999/xhtml"><xhtml:p>Text</xhtml:p></xhtml:div>',
+    }
+    const expected = '<p>Text</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should return undefined when the xhtml wrapper is self-closing', () => {
+    const value = { '#text': '<xhtml:div/>' }
+
+    expect(parseTypedText(value, 'xhtml')).toBeUndefined()
+  })
+
+  it('should return the value unchanged when an xhtml construct has no wrapper', () => {
+    const value = { '#text': '<p>Text</p>' }
+    const expected = '<p>Text</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should leave a div-wrapped value untouched when the type is html', () => {
+    const value = { '#text': '<div><p>Text</p></div>' }
+    const expected = '<div><p>Text</p></div>'
+
+    expect(parseTypedText(value, 'html')).toBe(expected)
+  })
+
+  it('should leave a div-wrapped value untouched when the type is absent', () => {
+    const value = { '#text': '<div><p>Text</p></div>' }
+    const expected = '<div><p>Text</p></div>'
+
+    expect(parseTypedText(value, undefined)).toBe(expected)
+  })
+
+  it('should retrieve the text of a bare string value', () => {
+    const value = 'Plain text'
+    const expected = 'Plain text'
+
+    expect(parseTypedText(value, 'text')).toBe(expected)
+  })
+
+  it('should keep entities escaped inside a wrapped xhtml construct', () => {
+    const value = {
+      '#text':
+        '<div xmlns="http://www.w3.org/1999/xhtml"><pre>From: Sean &lt;sean@intel.com&gt;</pre></div>',
+    }
+    const expected = '<pre>From: Sean &lt;sean@intel.com&gt;</pre>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should keep entities escaped inside a prefixed xhtml construct', () => {
+    const value = {
+      '#text':
+        '<xhtml:div xmlns:xhtml="http://www.w3.org/1999/xhtml"><xhtml:p>a &lt; b</xhtml:p></xhtml:div>',
+    }
+    const expected = '<p>a &lt; b</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should unwrap the div wrapper when the type is application/xhtml+xml', () => {
+    const value = {
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>a &lt; b</p></div>',
+    }
+    const expected = '<p>a &lt; b</p>'
+
+    expect(parseTypedText(value, 'application/xhtml+xml')).toBe(expected)
+  })
+
+  it('should decode entities when an application/xhtml+xml construct has no wrapper', () => {
+    const value = { '#text': '&lt;p&gt;Hello&lt;/p&gt;' }
+    const expected = '<p>Hello</p>'
+
+    expect(parseTypedText(value, 'application/xhtml+xml')).toBe(expected)
+  })
+
+  it('should unwrap when a CDATA section holds a div-like string', () => {
+    const value = { '#text': '<div><p>code: <![CDATA[</div>]]></p></div>' }
+    const expected = '<p>code: &lt;/div></p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should unwrap a wrapper with an unquoted attribute value', () => {
+    const value = { '#text': '<div class=foo><p>5 &lt; 6</p></div>' }
+    const expected = '<p>5 &lt; 6</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should keep a sibling-div value verbatim without unwrapping', () => {
+    const value = { '#text': '<div>a &lt; b</div><div>Second</div>' }
+    const expected = '<div>a &lt; b</div><div>Second</div>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should turn CDATA content into entities inside a wrapped xhtml construct', () => {
+    const value = {
+      '#text':
+        '<div xmlns="http://www.w3.org/1999/xhtml"><pre><![CDATA[if (a < b && c) return;]]></pre></div>',
+    }
+    const expected = '<pre>if (a &lt; b &amp;&amp; c) return;</pre>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should keep a prefix inside CDATA literal text when unwrapping a prefixed construct', () => {
+    const value = {
+      '#text':
+        '<xh:div xmlns:xh="http://www.w3.org/1999/xhtml"><xh:p><![CDATA[literal <xh:b> & stuff]]></xh:p></xh:div>',
+    }
+    const expected = '<p>literal &lt;xh:b> &amp; stuff</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  // Escaped markup labelled as xhtml violates the spec, but publishers ship it; without a
+  // wrapper to prove the construct is genuine, decoding stays the better guess.
+  it('should decode entities when an xhtml construct has no wrapper', () => {
+    const value = { '#text': '&lt;p&gt;Hello&lt;/p&gt;' }
+    const expected = '<p>Hello</p>'
+
+    expect(parseTypedText(value, 'xhtml')).toBe(expected)
+  })
+
+  it('should decode entities when the type is html', () => {
+    const value = { '#text': '&lt;p&gt;Hello&lt;/p&gt;' }
+    const expected = '<p>Hello</p>'
+
+    expect(parseTypedText(value, 'html')).toBe(expected)
+  })
+
+  it('should decode entities when the type is absent', () => {
+    const value = { '#text': 'a &lt; b' }
+    const expected = 'a < b'
+
+    expect(parseTypedText(value, undefined)).toBe(expected)
+  })
+
+  it('should coerce non-string values to a string', () => {
+    expect(parseTypedText({ '#text': 123 }, 'xhtml')).toBe('123')
+    expect(parseTypedText(undefined, 'xhtml')).toBeUndefined()
+  })
+})
+
 describe('parseText', () => {
   it('should parse simple string value', () => {
     const value = 'Simple text'
@@ -136,11 +435,20 @@ describe('parseText', () => {
     expect(parseText(value)).toEqual(expected)
   })
 
-  it('should handle xhtml type', () => {
-    const value = { '#text': '<p>XHTML content</p>', '@type': 'xhtml' }
-    const expected = { value: '<p>XHTML content</p>', type: 'xhtml' }
+  it('should unwrap the div wrapper of xhtml type', () => {
+    const value = {
+      '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>Rich content</p></div>',
+      '@type': 'xhtml',
+    }
+    const expected = { value: '<p>Rich content</p>', type: 'xhtml' }
 
     expect(parseText(value)).toEqual(expected)
+  })
+
+  it('should return undefined for xhtml type with an empty div wrapper', () => {
+    const value = { '#text': '<xhtml:div/>', '@type': 'xhtml' }
+
+    expect(parseText(value)).toBeUndefined()
   })
 
   it('should return undefined for empty string', () => {
@@ -196,6 +504,126 @@ describe('parseText', () => {
 
     expect(parseText(value)).toBeUndefined()
   })
+
+  describe('wrapper div xml declarations', () => {
+    it('should surface xml:base declared on the stripped wrapper div', () => {
+      const value = {
+        '#text':
+          '<div xmlns="http://www.w3.org/1999/xhtml" xml:base="https://example.com/posts/"><p>Text</p></div>',
+        '@type': 'xhtml',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { base: 'https://example.com/posts/' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should surface xml:lang declared on the stripped wrapper div', () => {
+      const value = {
+        '#text': '<div xmlns="http://www.w3.org/1999/xhtml" xml:lang="de"><p>Text</p></div>',
+        '@type': 'xhtml',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { lang: 'de' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should let the wrapper div lang replace the element lang', () => {
+      const value = {
+        '#text': '<div xmlns="http://www.w3.org/1999/xhtml" xml:lang="de"><p>Text</p></div>',
+        '@type': 'xhtml',
+        '@xml:lang': 'en',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { lang: 'de' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should let an absolute wrapper div base replace the element base', () => {
+      const value = {
+        '#text':
+          '<div xmlns="http://www.w3.org/1999/xhtml" xml:base="https://inner.example.com/"><p>Text</p></div>',
+        '@type': 'xhtml',
+        '@xml:base': 'https://outer.example.com/',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { base: 'https://inner.example.com/' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should resolve a relative wrapper div base against the element base', () => {
+      const value = {
+        '#text': '<div xmlns="http://www.w3.org/1999/xhtml" xml:base="images/"><p>Text</p></div>',
+        '@type': 'xhtml',
+        '@xml:base': 'https://example.com/posts/',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { base: 'https://example.com/posts/images/' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should keep the wrapper div base as declared when the pair does not resolve', () => {
+      const value = {
+        '#text': '<div xmlns="http://www.w3.org/1999/xhtml" xml:base="images/"><p>Text</p></div>',
+        '@type': 'xhtml',
+        '@xml:base': 'not a url',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { base: 'images/' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should attach nothing from a wrapper div that was not stripped', () => {
+      const value = {
+        '#text': '<div xml:base="https://example.com/"><p>1</p></div><div><p>2</p></div>',
+        '@type': 'xhtml',
+      }
+      const expected = {
+        value: '<div xml:base="https://example.com/"><p>1</p></div><div><p>2</p></div>',
+        type: 'xhtml',
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+
+    it('should decode entities in a wrapper div base', () => {
+      const value = {
+        '#text':
+          '<div xmlns="http://www.w3.org/1999/xhtml" xml:base="https://example.com/?a=1&amp;b=2"><p>Text</p></div>',
+        '@type': 'xhtml',
+      }
+      const expected = {
+        value: '<p>Text</p>',
+        type: 'xhtml',
+        xml: { base: 'https://example.com/?a=1&b=2' },
+      }
+
+      expect(parseText(value)).toEqual(expected)
+    })
+  })
 })
 
 describe('parseContent', () => {
@@ -224,6 +652,15 @@ describe('parseContent', () => {
       type: 'html',
       src: 'https://example.com/content',
     }
+
+    expect(parseContent(value)).toEqual(expected)
+  })
+
+  // Unlike parseText, which drops the whole construct when nothing is left, parseContent
+  // keeps the remaining attributes, so an empty wrapper yields a content without a value.
+  it('should keep the type but drop the value for a self-closing div wrapper', () => {
+    const value = { '#text': '<xhtml:div/>', '@type': 'xhtml' }
+    const expected = { type: 'xhtml' }
 
     expect(parseContent(value)).toEqual(expected)
   })
@@ -257,7 +694,7 @@ describe('parseContent', () => {
       '@xml:lang': 'en-US',
     }
     const expected = {
-      value: '<div>XHTML content</div>',
+      value: 'XHTML content',
       type: 'xhtml',
       xml: {
         base: 'http://example.org/entry/1',
@@ -1758,7 +2195,7 @@ describe('parseFeed', () => {
         '@rdf:resource': 'mailto:webmaster@example.com',
       },
       'admin:generatoragent': {
-        '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
+        '@rdf:resource': 'https://example.com/generator?v=3.2',
       },
     }
     const expected = {
@@ -1766,7 +2203,7 @@ describe('parseFeed', () => {
       title: { value: 'Example Feed' },
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
-        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+        generatorAgent: 'https://example.com/generator?v=3.2',
       },
     }
 
@@ -1905,5 +2342,10 @@ describe('retrieveFeed', () => {
     }
 
     expect(retrieveFeed(value)).toBeUndefined()
+  })
+
+  it('should return undefined for null and undefined inputs', () => {
+    expect(retrieveFeed(null)).toBeUndefined()
+    expect(retrieveFeed(undefined)).toBeUndefined()
   })
 })

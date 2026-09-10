@@ -65,6 +65,12 @@ describe('generateTranscript', () => {
     expect(generateTranscript(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateTranscript(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateTranscript(undefined)).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
@@ -97,6 +103,12 @@ describe('generateLocked', () => {
     expect(generateLocked(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateLocked(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateLocked(undefined)).toBeUndefined()
   })
@@ -127,6 +139,12 @@ describe('generateFunding', () => {
     expect(generateFunding(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateFunding(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateFunding(undefined)).toBeUndefined()
   })
@@ -144,6 +162,12 @@ describe('generateChapters', () => {
     }
 
     expect(generateChapters(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateChapters(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -178,6 +202,12 @@ describe('generateSoundbite', () => {
     }
 
     expect(generateSoundbite(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateSoundbite(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -216,6 +246,12 @@ describe('generatePerson', () => {
     expect(generatePerson(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generatePerson(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generatePerson(undefined)).toBeUndefined()
   })
@@ -252,6 +288,12 @@ describe('generateLocation', () => {
     expect(generateLocation(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateLocation(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateLocation(undefined)).toBeUndefined()
   })
@@ -282,6 +324,12 @@ describe('generateSeason', () => {
     expect(generateSeason(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateSeason(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateSeason(undefined)).toBeUndefined()
   })
@@ -310,6 +358,12 @@ describe('generateEpisode', () => {
     }
 
     expect(generateEpisode(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateEpisode(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -354,6 +408,12 @@ describe('generateTrailer', () => {
     expect(generateTrailer(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateTrailer(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateTrailer(undefined)).toBeUndefined()
   })
@@ -382,6 +442,12 @@ describe('generateLicense', () => {
     }
 
     expect(generateLicense(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateLicense(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -414,6 +480,12 @@ describe('generateSource', () => {
     expect(generateSource(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateSource(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateSource(undefined)).toBeUndefined()
   })
@@ -431,6 +503,12 @@ describe('generateIntegrity', () => {
     }
 
     expect(generateIntegrity(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateIntegrity(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -497,6 +575,12 @@ describe('generateAlternateEnclosure', () => {
     expect(generateAlternateEnclosure(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateAlternateEnclosure(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateAlternateEnclosure(undefined)).toBeUndefined()
   })
@@ -539,6 +623,12 @@ describe('generateValueRecipient', () => {
     }
 
     expect(generateValueRecipient(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateValueRecipient(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -603,6 +693,12 @@ describe('generateValueTimeSplit', () => {
     expect(generateValueTimeSplit(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateValueTimeSplit(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateValueTimeSplit(undefined)).toBeUndefined()
   })
@@ -663,6 +759,12 @@ describe('generateValue', () => {
     expect(generateValue(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateValue(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateValue(undefined)).toBeUndefined()
   })
@@ -703,6 +805,12 @@ describe('generateImage', () => {
     expect(generateImage(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateImage(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateImage(undefined)).toBeUndefined()
   })
@@ -731,6 +839,12 @@ describe('generateContentLink', () => {
     }
 
     expect(generateContentLink(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateContentLink(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -769,6 +883,12 @@ describe('generateSocialInteract', () => {
     expect(generateSocialInteract(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateSocialInteract(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateSocialInteract(undefined)).toBeUndefined()
   })
@@ -805,6 +925,12 @@ describe('generateChat', () => {
     expect(generateChat(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateChat(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateChat(undefined)).toBeUndefined()
   })
@@ -835,6 +961,12 @@ describe('generateBlock', () => {
     expect(generateBlock(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateBlock(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateBlock(undefined)).toBeUndefined()
   })
@@ -863,6 +995,12 @@ describe('generateTxt', () => {
     }
 
     expect(generateTxt(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateTxt(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -899,6 +1037,12 @@ describe('generateRemoteItem', () => {
     }
 
     expect(generateRemoteItem(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateRemoteItem(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -944,6 +1088,12 @@ describe('generatePodroll', () => {
     expect(generatePodroll(value)).toBeUndefined()
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generatePodroll(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generatePodroll(undefined)).toBeUndefined()
   })
@@ -978,6 +1128,12 @@ describe('generateUpdateFrequency', () => {
     expect(generateUpdateFrequency(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateUpdateFrequency(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateUpdateFrequency(undefined)).toBeUndefined()
   })
@@ -1004,6 +1160,12 @@ describe('generatePodping', () => {
     }
 
     expect(generatePodping(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generatePodping(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -1044,6 +1206,12 @@ describe('generatePublisher', () => {
     }
 
     expect(generatePublisher(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generatePublisher(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -1268,6 +1436,12 @@ describe('generateLiveItem', () => {
     }
 
     expect(generateLiveItem(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateLiveItem(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {

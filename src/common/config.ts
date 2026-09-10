@@ -12,7 +12,7 @@ import {
   stopNodes as arxivStopNodes,
   uris as arxivUris,
 } from '../namespaces/arxiv/common/config.js'
-import { uris as atomUris } from '../namespaces/atom/common/config.js'
+import { stopNodes as atomStopNodes, uris as atomUris } from '../namespaces/atom/common/config.js'
 import {
   stopNodes as blogchannelStopNodes,
   uris as blogchannelUris,
@@ -108,6 +108,7 @@ export const parserConfig: X2jOptions = {
   ignorePiTags: true,
   ignoreDeclaration: true,
   attributeNamePrefix: '@',
+  jPath: false,
   transformTagName: (name) => name.toLowerCase(),
   transformAttributeName: (name) => name.toLowerCase(),
 }
@@ -186,6 +187,7 @@ export const namespaceStopNodes = [
   ...adminStopNodes,
   ...appStopNodes,
   ...arxivStopNodes,
+  ...atomStopNodes,
   ...blogchannelStopNodes,
   ...ccStopNodes,
   ...contentStopNodes,
