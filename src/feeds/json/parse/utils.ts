@@ -20,6 +20,7 @@ export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
 
     const lowerKey = requestedKey.toLowerCase()
 
+    // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
     for (const key in value) {
       if (key.toLowerCase() === lowerKey) {
         return value[key]

@@ -76,6 +76,7 @@ export const generateSubscribe: GenerateUtil<RawVoiceNs.Subscribe> = (subscribe)
 
   const value: RawVoiceNs.Subscribe = {}
 
+  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
   for (const key in subscribe) {
     value[`@${key}`] = generatePlainString(subscribe[key])
   }

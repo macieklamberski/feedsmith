@@ -14,7 +14,7 @@ The Comment API namespace provides elements for linking to comment feeds and com
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="http://wellformedweb.org/CommentAPI/" target="_blank">Well Formed Web Comment API</a></td>
+      <td><a href="https://www.rssboard.org/comment-api" target="_blank">Comment API Namespace for RSS</a></td>
     </tr>
     <tr>
       <th>Prefix</th>
