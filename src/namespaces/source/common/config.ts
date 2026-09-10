@@ -19,4 +19,5 @@ export const stopNodes = [
   '*.source:outline',
   '*.source:localtime',
   '*.source:linkfull',
+  '*.source:inreplyto',
 ]

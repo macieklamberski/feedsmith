@@ -990,13 +990,13 @@ describe('parseItem', () => {
     const value = {
       title: { '#text': 'Source Item' },
       'source:markdown': { '#text': '# Example markdown content' },
-      'source:localtime': { '#text': '2024-01-15 10:30:00' },
+      'source:inreplyto': { '@ispermalink': 'false', '#text': 'did:plc:iwl32vekohccji6khfdt3clw' },
     }
     const expected = {
       title: 'Source Item',
       sourceNs: {
         markdown: '# Example markdown content',
-        localTime: '2024-01-15 10:30:00',
+        inReplyTo: { value: 'did:plc:iwl32vekohccji6khfdt3clw', isPermaLink: false },
       },
     }
 
@@ -1533,6 +1533,7 @@ describe('parseFeed', () => {
       link: { '#text': 'https://example.com' },
       'source:account': { '@service': 'twitter', '#text': 'johndoe' },
       'source:blogroll': { '#text': 'https://example.com/blogroll.opml' },
+      'source:localtime': { '#text': '2024-01-15 10:30:00' },
     }
     const value = { channel }
     const expected = {
@@ -1541,6 +1542,7 @@ describe('parseFeed', () => {
       sourceNs: {
         accounts: [{ service: 'twitter', value: 'johndoe' }],
         blogroll: 'https://example.com/blogroll.opml',
+        localTime: '2024-01-15 10:30:00',
       },
     }
 

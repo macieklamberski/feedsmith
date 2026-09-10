@@ -408,6 +408,7 @@
     <source:cloud>https://cloudserver.example.com/notify</source:cloud>
     <source:blogroll>https://blog.example.com/blogroll.opml</source:blogroll>
     <source:self>http://example.com/feed.xml</source:self>
+    <source:localTime>2023-12-25 10:30:00</source:localTime>
 
     <!-- blogChannel Namespace: Channel Level Tags -->
     <blogChannel:blogRoll>http://example.com/blogroll.opml</blogChannel:blogRoll>
@@ -842,8 +843,8 @@
       <source:markdown># Understanding XML Namespaces - This article explores the power and flexibility of XML namespaces in modern web syndication.</source:markdown>
       <source:outline>&lt;outline text="Introduction"&gt;&lt;outline text="What are namespaces?"/&gt;&lt;/outline&gt;</source:outline>
       <source:outline>&lt;outline text="Implementation"&gt;&lt;outline text="RSS Integration"/&gt;&lt;/outline&gt;</source:outline>
-      <source:localTime>2023-12-25 10:30:00</source:localTime>
       <source:linkFull>http://example.org/item/1/understanding-xml-namespaces-complete-guide</source:linkFull>
+      <source:inReplyTo isPermaLink="false">did:plc:iwl32vekohccji6khfdt3clw</source:inReplyTo>
 
       <!-- Creative Commons Namespace: Item Level Tags -->
       <creativeCommons:license>http://creativecommons.org/licenses/by-sa/4.0/</creativeCommons:license>

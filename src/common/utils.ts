@@ -61,6 +61,7 @@ export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<
   let hasPresent = false
   let hasAbsent = false
 
+  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
   for (const key in object) {
     if (isPresent(object[key])) {
       hasPresent = true
@@ -83,6 +84,7 @@ export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<
 
   const result: Partial<T> = {}
 
+  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
   for (const key in object) {
     const value = object[key]
 
@@ -255,6 +257,26 @@ export const parseString: ParseExactUtil<string> = (value) => {
   }
 }
 
+// Variant of parseString for JSON-sourced values: skips XML entity decoding and
+// HTML comment stripping. JSON.parse already produces the final string, so any
+// `&lt;` / `<!--` in fields like JSON Feed's `content_html` belongs to the HTML
+// payload and must be preserved verbatim.
+export const parseJsonString: ParseExactUtil<string> = (value) => {
+  if (typeof value === 'string') {
+    if (value === '') {
+      return
+    }
+
+    const string = value.trim()
+
+    return string || undefined
+  }
+
+  if (typeof value === 'number') {
+    return value.toString()
+  }
+}
+
 export const parseNumber: ParseExactUtil<number> = (value) => {
   if (typeof value === 'number') {
     return value
@@ -415,6 +437,7 @@ export const generateXmlStylesheet = (stylesheet: XmlStylesheet): string | undef
 
   let attributes = ''
 
+  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
   for (const key in generated) {
     const value = generated[key as keyof typeof generated]
     if (value !== undefined) {
@@ -532,6 +555,7 @@ export const detectNamespaces = (value: unknown, recursive = false): Set<string>
     }
 
     if (isObject(current)) {
+      // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
       for (const key in current) {
         if (seenKeys?.has(key)) {
           continue
@@ -622,6 +646,7 @@ export const generateNamespaceAttrs = (
   let namespaceAttrs: Record<string, string> | undefined
   const valueNamespaces = detectNamespaces(value, true)
 
+  // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
   for (const prefix in namespaceUris) {
     if (!valueNamespaces.has(prefix)) {
       continue
@@ -683,6 +708,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
     const declarations: Record<string, string> = {}
 
     if (isObject(element)) {
+      // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
       for (const key in element) {
         if (key === '@xmlns') {
           declarations[''] = normalizeNamespaceUri(element[key])
@@ -749,6 +775,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
     const declarations = extractNamespaceDeclarations(object)
     // Avoid object spread if no new declarations (common case).
     let hasDeclarations = false
+    // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
     for (const _ in declarations) {
       hasDeclarations = true
       break
@@ -757,6 +784,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
 
     const normalizedObject: Unreliable = {}
 
+    // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
     for (const key in object) {
       const value = object[key]
 
@@ -800,6 +828,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
         return false
       }
 
+      // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
       for (const key in value) {
         if (key[0] === '@') {
           // Attribute key (@*) — only xmlns declarations matter.
@@ -868,6 +897,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
 
     const normalizedObject: Unreliable = {}
 
+    // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
     for (const key in object) {
       const value = object[key]
 
@@ -909,47 +939,4 @@ export const parseJsonObject = (value: unknown): unknown => {
   try {
     return JSON.parse(value)
   } catch {}
-}
-
-// TODO: Remove expandStopNodes and namespaceContainers after fast-xml-parser
-// resolves stop node performance regression. Revert feed configs from
-// ...expandStopNodes(namespaceStopNodes, [...]) back to ...namespaceStopNodes.
-// https://github.com/NaturalIntelligence/fast-xml-parser/issues/816
-
-// Namespace elements that act as containers for other namespace elements.
-const namespaceContainers = [
-  'media:group',
-  'media:content',
-  'media:group.media:content',
-  'media:embed',
-  'podcast:liveitem',
-  'itunes:owner',
-]
-
-// Expands wildcard stop nodes (*.prefix:element) into explicit paths for
-// each feed container, including paths through namespace containers (e.g.
-// media:group, podcast:liveitem). Only crosses containers with leaves from
-// the same namespace prefix.
-export const expandStopNodes = (
-  stopNodes: Array<string>,
-  feedContainerPaths: Array<string>,
-): Array<string> => {
-  const set = new Set<string>()
-
-  for (const node of stopNodes) {
-    const suffix = node.slice(2)
-    const prefix = suffix.split(':')[0]
-
-    for (const feedPath of feedContainerPaths) {
-      set.add(`${feedPath}.${suffix}`)
-
-      for (const nsContainer of namespaceContainers) {
-        if (nsContainer.split(':')[0] === prefix) {
-          set.add(`${feedPath}.${nsContainer}.${suffix}`)
-        }
-      }
-    }
-  }
-
-  return [...set]
 }

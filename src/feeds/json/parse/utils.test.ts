@@ -689,6 +689,71 @@ describe('parseItem', () => {
 
     expect(parseItem(value)).toEqual(expected)
   })
+
+  it('should preserve HTML entities in content_html verbatim', () => {
+    const value = {
+      id: '1',
+      content_html: 'before <code>&lt;title&gt;</code> after &amp; &lt;p&gt;outside&lt;/p&gt;',
+    }
+    const expected = {
+      id: '1',
+      content_html: 'before <code>&lt;title&gt;</code> after &amp; &lt;p&gt;outside&lt;/p&gt;',
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should preserve HTML entities in content_text verbatim', () => {
+    const value = {
+      id: '1',
+      content_text: 'Tom &amp; Jerry &lt; Bugs &amp; Daffy',
+    }
+    const expected = {
+      id: '1',
+      content_text: 'Tom &amp; Jerry &lt; Bugs &amp; Daffy',
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should preserve HTML entities in summary verbatim', () => {
+    const value = {
+      id: '1',
+      summary: 'A &amp; B',
+    }
+    const expected = {
+      id: '1',
+      summary: 'A &amp; B',
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should preserve HTML entities in title verbatim', () => {
+    const value = {
+      id: '1',
+      title: 'Tom &amp; Jerry',
+    }
+    const expected = {
+      id: '1',
+      title: 'Tom &amp; Jerry',
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should preserve HTML comment markers inside content_html', () => {
+    const value = {
+      id: '1',
+      content_html: '<p>before</p><!-- inline note --><p>after</p>',
+    }
+    const expected = {
+      id: '1',
+      content_html: '<p>before</p><!-- inline note --><p>after</p>',
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
 })
 
 describe('parseHub', () => {
@@ -1127,6 +1192,21 @@ describe('parseFeed', () => {
       }
 
       expect(parseFeed(commonValue, { maxItems: undefined })).toEqual(expected)
+    })
+  })
+
+  describe('entity preservation', () => {
+    it('should preserve HTML entities in feed-level title and description', () => {
+      const value = {
+        title: 'Tom &amp; Jerry',
+        description: 'A &lt;strong&gt;great&lt;/strong&gt; feed',
+      }
+      const expected = {
+        title: 'Tom &amp; Jerry',
+        description: 'A &lt;strong&gt;great&lt;/strong&gt; feed',
+      }
+
+      expect(parseFeed(value)).toEqual(expected)
     })
   })
 })

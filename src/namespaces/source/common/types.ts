@@ -21,6 +21,11 @@ export namespace SourceNs {
     value?: string
   }
 
+  export type InReplyTo = {
+    value: string
+    isPermaLink?: boolean
+  }
+
   export type Feed = {
     accounts?: Array<Account>
     likes?: Likes
@@ -29,13 +34,14 @@ export namespace SourceNs {
     cloud?: string
     blogroll?: string
     self?: string
+    localTime?: string
   }
 
   export type Item = {
     markdown?: string
     outlines?: Array<string>
-    localTime?: string
     linkFull?: string
+    inReplyTo?: InReplyTo
   }
 }
 // #endregion reference
