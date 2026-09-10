@@ -54,9 +54,9 @@ export const retrieveAuthors: ParseUtilPartial<Array<JsonFeed.Author>> = (value)
     return
   }
 
-  // Regardless of the JSON Feed version, the 'authors' property is returned in the item/feed.
-  // Some feeds use author/authors incorrectly based on the feed version, so this function helps
-  // to unify those into one value.
+  // Regardless of the JSON Feed version, the 'authors' property is returned in the item/feed. Some
+  // feeds use author/authors incorrectly based on the feed version, so this function helps to unify
+  // those into one value.
   const get = createCaseInsensitiveGetter(value)
   const parsedAuthors = parseArrayOf(get('authors'), parseAuthor)
   const parsedAuthor = parseArrayOf(get('author'), parseAuthor)
