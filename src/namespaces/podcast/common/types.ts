@@ -1,4 +1,4 @@
-import type { DateLike, Requirable, Strict } from '../../../common/types.js'
+import type { Requirable, Strict } from '../../../common/types.js'
 
 // #region reference
 export namespace PodcastNs {
@@ -101,7 +101,7 @@ export namespace PodcastNs {
     TStrict
   >
 
-  export type Trailer<TDate extends DateLike, TStrict extends boolean = false> = Strict<
+  export type Trailer<TDate, TStrict extends boolean = false> = Strict<
     {
       display: Requirable<string> // Required in spec.
       url: Requirable<string> // Required in spec.
@@ -196,10 +196,7 @@ export namespace PodcastNs {
     TStrict
   >
 
-  export type LiveItem<
-    TDate extends DateLike,
-    TStrict extends boolean = false,
-  > = BaseItem<TStrict> &
+  export type LiveItem<TDate, TStrict extends boolean = false> = BaseItem<TStrict> &
     Strict<
       {
         status: Requirable<string> // Required in spec.
@@ -273,7 +270,7 @@ export namespace PodcastNs {
     remoteItems?: Array<RemoteItem<TStrict>>
   }
 
-  export type UpdateFrequency<TDate extends DateLike, TStrict extends boolean = false> = Strict<
+  export type UpdateFrequency<TDate, TStrict extends boolean = false> = Strict<
     {
       display: Requirable<string> // Required in spec.
       complete?: boolean
@@ -305,7 +302,7 @@ export namespace PodcastNs {
 
   export type Item<TStrict extends boolean = false> = BaseItem<TStrict>
 
-  export type Feed<TDate extends DateLike, TStrict extends boolean = false> = {
+  export type Feed<TDate, TStrict extends boolean = false> = {
     locked?: Locked<TStrict>
     fundings?: Array<Funding<TStrict>>
     persons?: Array<Person<TStrict>>

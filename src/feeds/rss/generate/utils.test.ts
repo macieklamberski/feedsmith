@@ -15,13 +15,6 @@ import {
 } from './utils.js'
 
 describe('generatePerson', () => {
-  it('should pass through string person', () => {
-    const value = 'john.doe@example.com (John Doe)'
-    const expected = 'john.doe@example.com (John Doe)'
-
-    expect(generatePerson(value)).toEqual(expected)
-  })
-
   it('should generate person with both name and email', () => {
     const value = {
       name: 'John Doe',
@@ -50,20 +43,56 @@ describe('generatePerson', () => {
     expect(generatePerson(value)).toEqual(expected)
   })
 
-  it('should handle empty object', () => {
-    const value = {}
+  it('should silently drop link (no RSS spec support)', () => {
+    const value = {
+      name: 'John Doe',
+      email: 'john@example.com',
+      link: 'https://example.com',
+    }
+    const expected = 'john@example.com (John Doe)'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should return undefined for link-only person', () => {
+    const value = { link: 'https://example.com' }
 
     expect(generatePerson(value)).toBeUndefined()
   })
 
-  it('should handle object with empty strings', () => {
+  it('should wrap in CDATA when name contains special characters', () => {
     const value = {
-      name: '',
-      email: '',
+      name: 'Tom & Jerry',
+      email: 'tom@example.com',
     }
-    const expected = undefined
+    const expected = { '#cdata': 'tom@example.com (Tom & Jerry)' }
 
     expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should generate person with parentheses in name', () => {
+    const value = {
+      name: 'John (Editor)',
+      email: 'john@example.com',
+    }
+    const expected = 'john@example.com (John (Editor))'
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should wrap in CDATA when name contains angle brackets', () => {
+    const value = { name: 'John <CEO>' }
+    const expected = { '#cdata': 'John <CEO>' }
+
+    expect(generatePerson(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    expect(generatePerson({})).toBeUndefined()
+  })
+
+  it('should handle object with empty strings', () => {
+    expect(generatePerson({ name: '', email: '' })).toBeUndefined()
   })
 
   it('should trim whitespace around name and email', () => {
@@ -97,16 +126,17 @@ describe('generatePerson', () => {
   })
 
   it('should handle whitespace-only for both fields', () => {
-    const value = {
-      name: '   ',
-      email: '  ',
-    }
-
-    expect(generatePerson(value)).toBeUndefined()
+    expect(generatePerson({ name: '   ', email: '  ' })).toBeUndefined()
   })
 
   it('should handle non-object inputs gracefully', () => {
     expect(generatePerson(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generatePerson('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generatePerson(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generatePerson(123)).toBeUndefined()
   })
 })
 
@@ -482,7 +512,7 @@ describe('generateItem', () => {
       title: 'Example Item',
       link: 'https://example.com/item/123',
       description: 'Item description',
-      authors: ['john.doe@example.com (John Doe)'],
+      authors: [{ name: 'John Doe', email: 'john.doe@example.com' }],
       categories: [{ name: 'Technology', domain: 'https://example.com/categories' }],
       comments: 'https://example.com/item/123/comments',
       enclosures: [
@@ -1035,8 +1065,8 @@ describe('generateFeed', () => {
       description: 'Example feed description',
       language: 'en-US',
       copyright: '© 2023 Example Corp',
-      managingEditor: 'editor@example.com (Editor Name)',
-      webMaster: 'webmaster@example.com (Webmaster Name)',
+      managingEditor: { name: 'Editor Name', email: 'editor@example.com' },
+      webMaster: { name: 'Webmaster Name', email: 'webmaster@example.com' },
       pubDate: new Date('2023-03-15T12:00:00Z'),
       lastBuildDate: new Date('2023-03-15T12:00:00Z'),
       categories: [{ name: 'Technology' }],

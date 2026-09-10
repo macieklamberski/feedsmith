@@ -17,6 +17,19 @@ Update your package to the latest 2.x version:
 npm install feedsmith@latest
 ```
 
+## Migration Checklist
+
+Use this checklist to ensure a complete migration:
+
+- Update `result.type` to `result.format` in all `parseFeed` calls
+- Change `item.guid` to `item.guid?.value` for RSS feeds
+- Change `item.enclosure` to `item.enclosures?.[0]` for RSS feeds
+- Change `podcast.contentlink` to `podcast.contentLink`
+- Add optional chaining (`?.`) for all feed property access
+- Test with your existing feeds to ensure proper parsing
+- Consider utilizing new generation features
+- Explore enhanced namespace support for richer data access
+
 ## Breaking Changes
 
 ### `parseFeed` Return Type Property Rename
@@ -209,16 +222,3 @@ Custom namespace prefixes are automatically normalized to standard ones:
 // Input: <custom:creator>John Doe</custom:creator>
 // Automatically becomes: feed.dc.creator
 ```
-
-## Migration Checklist
-
-Use this checklist to ensure a complete migration:
-
-- Update `result.type` to `result.format` in all `parseFeed` calls
-- Change `item.guid` to `item.guid?.value` for RSS feeds
-- Change `item.enclosure` to `item.enclosures?.[0]` for RSS feeds
-- Change `podcast.contentlink` to `podcast.contentLink`
-- Add optional chaining (`?.`) for all feed property access
-- Test with your existing feeds to ensure proper parsing
-- Consider utilizing new generation features
-- Explore enhanced namespace support for richer data access

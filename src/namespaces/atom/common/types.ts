@@ -1,4 +1,4 @@
-import type { DateLike, DeepOmit } from '../../../common/types.js'
+import type { DeepOmit } from '../../../common/types.js'
 import type { Atom } from '../../../feeds/atom/common/types.js'
 
 // Namespace properties to exclude when Atom is used as a namespace (not as a feed format).
@@ -28,8 +28,8 @@ type NsKeys =
 
 // #region reference
 export namespace AtomNs {
-  export type Entry<TDate extends DateLike> = DeepOmit<Atom.Entry<TDate>, NsKeys>
+  export type Entry<TDate> = DeepOmit<Atom.Entry<TDate>, NsKeys>
 
-  export type Feed<TDate extends DateLike> = DeepOmit<Atom.Feed<TDate>, NsKeys>
+  export type Feed<TDate> = DeepOmit<Atom.Feed<TDate>, NsKeys>
 }
 // #endregion reference

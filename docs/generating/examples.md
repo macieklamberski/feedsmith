@@ -32,7 +32,7 @@ const rssFeed = generateRssFeed({
       description: 'Learn the basics of TypeScript and why you should use it',
       pubDate: new Date('2024-01-15T10:00:00Z'),
       guid: 'https://myblog.com/posts/intro-to-typescript',
-      authors: ['john@myblog.com (John Doe)'],
+      authors: [{ email: 'john@myblog.com', name: 'John Doe' }],
       categories: [{ name: 'TypeScript' }, { name: 'Programming' }]
     }
   ]
@@ -71,18 +71,7 @@ You can add XML stylesheets to make feeds browser-friendly by providing the `sty
 ```typescript
 import { generateRssFeed } from 'feedsmith'
 
-const rssFeed = generateRssFeed({
-  title: 'My Tech Blog',
-  link: 'https://myblog.com',
-  description: 'Thoughts on web development',
-  items: [
-    {
-      title: 'Hello World',
-      link: 'https://myblog.com/hello',
-      description: 'First post'
-    }
-  ]
-}, {
+const rssFeed = generateRssFeed(feedData, {
   stylesheets: [{
     type: 'text/xsl',
     href: '/styles/feed.xsl'
@@ -141,7 +130,7 @@ import { generateAtomFeed } from 'feedsmith'
 
 const atomFeed = generateAtomFeed({
   id: 'https://myblog.com/feed',
-  title: 'My Tech Blog',
+  title: { value: 'My Tech Blog' },
   updated: new Date('2024-01-15T12:00:00Z'),
   links: [
     { href: 'https://myblog.com/feed.xml', rel: 'self' },
@@ -150,9 +139,9 @@ const atomFeed = generateAtomFeed({
   entries: [
     {
       id: 'https://myblog.com/posts/1',
-      title: 'Introduction to TypeScript',
+      title: { value: 'Introduction to TypeScript' },
       updated: new Date('2024-01-15T10:00:00Z'),
-      content: '<p>Learn the basics of TypeScript and why you should use it</p>',
+      content: { value: '<p>Learn the basics of TypeScript and why you should use it</p>', type: 'html' },
       links: [{ href: 'https://myblog.com/posts/intro-to-typescript' }],
       categories: [{ term: 'typescript', label: 'TypeScript' }]
     }
@@ -175,7 +164,9 @@ Generates:
     <title>Introduction to TypeScript</title>
     <updated>2024-01-15T10:00:00.000Z</updated>
     <link href="https://myblog.com/posts/intro-to-typescript"/>
-    <content>Learn the basics of TypeScript and why you should use it</content>
+    <content type="html">
+      <![CDATA[<p>Learn the basics of TypeScript and why you should use it</p>]]>
+    </content>
     <category term="typescript" label="TypeScript"/>
   </entry>
 </feed>
@@ -285,7 +276,7 @@ You can generate OPML files with custom outline attributes by providing them in 
 ```typescript
 import { generateOpml } from 'feedsmith'
 
-const opml = generateOpml({
+const data = {
   head: {
     title: 'My Custom Feed List',
     dateCreated: new Date('2024-01-15T12:00:00Z')
@@ -318,15 +309,17 @@ const opml = generateOpml({
       }
     ]
   }
-}, {
+}
+
+const opml = generateOpml(data, {
   extraOutlineAttributes: [
     'customIcon',
     'updateInterval',
     'isPrivate',
     'tags',
     'customColor',
-    'isPinned'
-  ]
+    'isPinned',
+  ],
 })
 ```
 

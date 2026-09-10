@@ -1,18 +1,22 @@
 import { isNonEmptyString } from '../../../common/utils.js'
 
+const rssElementRegex = /(?:^|[\s>])<(?:\w+:)?rss[\s>]/im
+const versionAttributeRegex = /version\s*=\s*["'][^"']*["']/i
+const rssElementsRegex = /(<(channel|item|title|link|description|pubDate|guid)[\s>])/i
+
 export const detect = (value: unknown): value is string => {
   if (!isNonEmptyString(value)) {
     return false
   }
 
-  const hasRssElement = /(?:^|[\s>])<(?:\w+:)?rss[\s>]/im.test(value)
+  const hasRssElement = rssElementRegex.test(value)
 
   if (!hasRssElement) {
     return false
   }
 
-  const hasVersionAttribute = /version\s*=\s*["'][^"']*["']/i.test(value)
-  const hasRssElements = /(<(channel|item|title|link|description|pubDate|guid)[\s>])/i.test(value)
+  const hasVersionAttribute = versionAttributeRegex.test(value)
+  const hasRssElements = rssElementsRegex.test(value)
 
   return hasVersionAttribute || hasRssElements
 }

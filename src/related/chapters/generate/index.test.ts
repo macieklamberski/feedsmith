@@ -145,7 +145,7 @@ describe('generate', () => {
 
 describe('strict mode', () => {
   it('should require chapters in strict mode', () => {
-    // @ts-expect-error: This is for testing purposes.
+    // @ts-expect-error: Testing missing required chapters field.
     generate({ title: 'Test' }, { strict: true })
   })
 
@@ -156,7 +156,7 @@ describe('strict mode', () => {
   it('should require chapter startTime in strict mode', () => {
     generate(
       {
-        // @ts-expect-error: This is for testing purposes.
+        // @ts-expect-error: Testing missing required startTime field.
         chapters: [{ title: 'Hello' }],
       },
       { strict: true },
@@ -169,7 +169,7 @@ describe('strict mode', () => {
         chapters: [
           {
             startTime: 0,
-            // @ts-expect-error: This is for testing purposes.
+            // @ts-expect-error: Testing missing required geo field.
             location: { name: 'Test' },
           },
         ],

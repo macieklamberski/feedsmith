@@ -2,9 +2,10 @@ import { decodeHTML } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
 import type {
   AnyOf,
+  DateAny,
   DateLike,
   GenerateUtil,
-  ParseExactUtil,
+  ParseUtilExact,
   Unreliable,
   XmlStylesheet,
 } from './types.js'
@@ -77,7 +78,7 @@ export const trimObject = <T extends Record<string, unknown>>(object: T): AnyOf<
 
 export const trimArray = <T, R = T>(
   value: Array<T> | undefined,
-  parse?: ParseExactUtil<R>,
+  parse?: ParseUtilExact<R>,
 ): Array<R> | undefined => {
   if (!Array.isArray(value) || value.length === 0) {
     return
@@ -87,8 +88,8 @@ export const trimArray = <T, R = T>(
   if (!parse) {
     let needsTrimming = false
 
-    for (let i = 0; i < value.length; i++) {
-      if (!isPresent(value[i])) {
+    for (const item of value) {
+      if (!isPresent(item)) {
         needsTrimming = true
         break
       }
@@ -103,8 +104,8 @@ export const trimArray = <T, R = T>(
   // similar to the one used in trimObject.
   const result: Array<R> = []
 
-  for (let i = 0; i < value.length; i++) {
-    const item = parse ? parse(value[i]) : value[i]
+  for (const element of value) {
+    const item = parse ? parse(element) : element
 
     if (isPresent(item)) {
       result.push(item as R)
@@ -116,10 +117,39 @@ export const trimArray = <T, R = T>(
 
 const cdataStartTag = '<![CDATA['
 const cdataEndTag = ']]>'
+const commentStartTag = '<!--'
+const commentEndTag = '-->'
 
 export const hasEntities = (text: string) => {
   const ampIndex = text.indexOf('&')
   return ampIndex !== -1 && text.indexOf(';', ampIndex) !== -1
+}
+
+const stripComments = (text: string): string => {
+  let currentIndex = text.indexOf(commentStartTag)
+
+  if (currentIndex === -1) {
+    return text
+  }
+
+  let result = ''
+  let lastIndex = 0
+
+  while (currentIndex !== -1) {
+    result += text.slice(lastIndex, currentIndex)
+    const endIndex = text.indexOf(commentEndTag, currentIndex + commentStartTag.length)
+
+    if (endIndex === -1) {
+      return text
+    }
+
+    lastIndex = endIndex + commentEndTag.length
+    currentIndex = text.indexOf(commentStartTag, lastIndex)
+  }
+
+  result += text.slice(lastIndex)
+
+  return result
 }
 
 const decodeWithCdata = (text: string): string => {
@@ -137,7 +167,7 @@ const decodeWithCdata = (text: string): string => {
 
   while (currentIndex !== -1) {
     // Decode entities in text before CDATA.
-    const textBefore = text.substring(lastIndex, currentIndex)
+    const textBefore = text.slice(lastIndex, currentIndex)
     result += hasEntities(textBefore) ? decodeHTML(textBefore) : textBefore
 
     // Find end of CDATA section.
@@ -149,25 +179,25 @@ const decodeWithCdata = (text: string): string => {
     }
 
     // Add CDATA content verbatim (without markers).
-    result += text.substring(currentIndex + cdataStartTag.length, endIndex)
+    result += text.slice(currentIndex + cdataStartTag.length, endIndex)
     lastIndex = endIndex + cdataEndTag.length
     currentIndex = text.indexOf(cdataStartTag, lastIndex)
   }
 
   // Decode entities in remaining text after last CDATA.
-  const textAfter = text.substring(lastIndex)
+  const textAfter = text.slice(lastIndex)
   result += hasEntities(textAfter) ? decodeHTML(textAfter) : textAfter
 
   return result
 }
 
-export const parseString: ParseExactUtil<string> = (value) => {
+export const parseString: ParseUtilExact<string> = (value) => {
   if (typeof value === 'string') {
     if (value === '') {
       return
     }
 
-    const string = decodeWithCdata(value).trim()
+    const string = decodeWithCdata(stripComments(value)).trim()
 
     return string || undefined
   }
@@ -177,7 +207,7 @@ export const parseString: ParseExactUtil<string> = (value) => {
   }
 }
 
-export const parseNumber: ParseExactUtil<number> = (value) => {
+export const parseNumber: ParseUtilExact<number> = (value) => {
   if (typeof value === 'number') {
     return value
   }
@@ -193,18 +223,23 @@ const trueRegex = /^\p{White_Space}*true\p{White_Space}*$/iu
 const falseRegex = /^\p{White_Space}*false\p{White_Space}*$/iu
 const yesRegex = /^\p{White_Space}*yes\p{White_Space}*$/iu
 
-export const parseBoolean: ParseExactUtil<boolean> = (value) => {
+export const parseBoolean: ParseUtilExact<boolean> = (value) => {
   if (typeof value === 'boolean') {
     return value
   }
 
   if (isNonEmptyString(value)) {
-    if (trueRegex.test(value)) return true
-    if (falseRegex.test(value)) return false
+    if (trueRegex.test(value)) {
+      return true
+    }
+
+    if (falseRegex.test(value)) {
+      return false
+    }
   }
 }
 
-export const parseYesNoBoolean: ParseExactUtil<boolean> = (value) => {
+export const parseYesNoBoolean: ParseUtilExact<boolean> = (value) => {
   const boolean = parseBoolean(value)
 
   if (boolean !== undefined) {
@@ -216,14 +251,20 @@ export const parseYesNoBoolean: ParseExactUtil<boolean> = (value) => {
   }
 }
 
-export const parseDate: ParseExactUtil<string> = (value) => {
-  // This function is currently a placeholder for the actual date parsing functionality
-  // which might be added at some point in the future. Currently it just uses treats
-  // the date as string.
-  return parseString(value)
+export const parseDate = (
+  value: Unreliable,
+  parseDateFn?: (raw: string) => DateAny,
+): DateAny | undefined => {
+  const raw = parseString(value)
+
+  if (raw === undefined) {
+    return
+  }
+
+  return parseDateFn ? parseDateFn(raw) : raw
 }
 
-export const parseArray: ParseExactUtil<Array<Unreliable>> = (value) => {
+export const parseArray: ParseUtilExact<Array<Unreliable>> = (value) => {
   if (Array.isArray(value)) {
     return value
   }
@@ -256,7 +297,7 @@ export const parseArray: ParseExactUtil<Array<Unreliable>> = (value) => {
 
 export const parseArrayOf = <R>(
   value: Unreliable,
-  parse: ParseExactUtil<R>,
+  parse: ParseUtilExact<R>,
   limit?: number,
 ): Array<R> | undefined => {
   let array = parseArray(value)
@@ -286,7 +327,7 @@ export const parseSingular = <T>(value: T | Array<T>): T => {
   return Array.isArray(value) ? value[0] : value
 }
 
-export const parseSingularOf = <R>(value: Unreliable, parse: ParseExactUtil<R>): R | undefined => {
+export const parseSingularOf = <R>(value: Unreliable, parse: ParseUtilExact<R>): R | undefined => {
   return parse(parseSingular(value))
 }
 
@@ -308,7 +349,7 @@ export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
 
 export const parseCsvOf = <T>(
   value: Unreliable,
-  parse: ParseExactUtil<T>,
+  parse: ParseUtilExact<T>,
 ): Array<T> | undefined => {
   if (!isNonEmptyStringOrNumber(value)) {
     return
@@ -343,7 +384,7 @@ export const generateXmlStylesheet = (stylesheet: XmlStylesheet): string | undef
   })
 
   if (!generated) {
-    return undefined
+    return
   }
 
   let attributes = ''
@@ -573,7 +614,7 @@ export const generateNamespaceAttrs = (
 export const createNamespaceNormalizator = <T extends Record<string, Array<string>>>(
   namespaceUris: T,
   namespacePrefixes: Record<string, string>,
-  primaryNamespace?: keyof T,
+  primaryNamespaces?: Array<keyof T>,
 ) => {
   const normalizedUriCache = new Map<string, string>()
 
@@ -592,10 +633,9 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
     return normalized
   }
 
-  const primaryNamespaceUris =
-    primaryNamespace && namespaceUris[primaryNamespace]
-      ? namespaceUris[primaryNamespace].map(normalizeNamespaceUri)
-      : undefined
+  const primaryNamespaceUris = primaryNamespaces?.length
+    ? primaryNamespaces.flatMap((key) => namespaceUris[key].map(normalizeNamespaceUri))
+    : undefined
 
   const resolveNamespacePrefix = (uri: string, localName: string, fallback: string): string => {
     const normalizedUri = normalizeNamespaceUri(uri)
@@ -621,7 +661,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
         if (key === '@xmlns') {
           declarations[''] = normalizeNamespaceUri(element[key])
         } else if (key.indexOf('@xmlns:') === 0) {
-          const prefix = key.substring('@xmlns:'.length)
+          const prefix = key.slice('@xmlns:'.length)
           declarations[prefix] = normalizeNamespaceUri(element[key])
         }
       }
@@ -645,8 +685,8 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
       return name
     }
 
-    const prefix = name.substring(0, colonIndex)
-    const unprefixedName = name.substring(colonIndex + 1)
+    const prefix = name.slice(0, colonIndex)
+    const unprefixedName = name.slice(colonIndex + 1)
     const uri = context[prefix]
 
     if (uri) {
@@ -658,7 +698,7 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
 
   const normalizeKey = (key: string, context: Record<string, string>): string => {
     if (key.charCodeAt(0) === 64) {
-      const attrName = key.substring(1)
+      const attrName = key.slice(1)
       const normalizedAttrName = normalizeWithContext(attrName, context, false)
 
       return `@${normalizedAttrName}`
@@ -750,6 +790,9 @@ export const createNamespaceNormalizator = <T extends Record<string, Array<strin
   return normalizeRoot
 }
 
+const startsWithBraceRegex = /^\s*\{/
+const endsWithBraceRegex = /\}\s*$/
+
 export const parseJsonObject = (value: unknown): unknown => {
   if (isObject(value)) {
     return value
@@ -759,8 +802,8 @@ export const parseJsonObject = (value: unknown): unknown => {
     return
   }
 
-  const startsWithBrace = value.charAt(0) === '{' || /^\s*\{/.test(value)
-  const endsWithBrace = value.charAt(value.length - 1) === '}' || /\}\s*$/.test(value)
+  const startsWithBrace = value.charAt(0) === '{' || startsWithBraceRegex.test(value)
+  const endsWithBrace = value.charAt(value.length - 1) === '}' || endsWithBraceRegex.test(value)
 
   if (!startsWithBrace || !endsWithBrace) {
     return

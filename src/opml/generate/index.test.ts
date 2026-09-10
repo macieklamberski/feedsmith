@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'bun:test'
+import { locales } from '../../common/config.js'
+import { GenerateError } from '../../common/errors.js'
 import { generate } from './index.js'
 
 describe('generate', () => {
@@ -216,14 +218,18 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should throw error for invalid OPML structure', () => {
-    const value = {
-      head: {
-        title: 'Invalid OPML',
-      },
-    }
+  describe('error types', () => {
+    it('should throw GenerateError for invalid OPML structure', () => {
+      const value = {
+        head: {
+          title: 'Invalid OPML',
+        },
+      }
+      const throwing = () => generate(value)
 
-    expect(() => generate(value)).toThrow()
+      expect(throwing).toThrow(GenerateError)
+      expect(throwing).toThrow(locales.invalidInputOpml)
+    })
   })
 
   it('should properly encode special characters in attributes', () => {

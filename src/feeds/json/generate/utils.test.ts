@@ -216,4 +216,14 @@ describe('generateFeed', () => {
 
     expect(generateFeed(value)).toEqual(expected)
   })
+
+  it('should handle non-object inputs', () => {
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateFeed('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateFeed(123)).toBeUndefined()
+    expect(generateFeed(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateFeed(null)).toBeUndefined()
+  })
 })

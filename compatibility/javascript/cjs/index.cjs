@@ -9,7 +9,7 @@ const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
   </channel>
 </rss>`
 
-const result = parseFeed(rssXml)
+const _result = parseFeed(rssXml)
 
 const feedData = {
   title: 'Generated Feed',
@@ -18,4 +18,4 @@ const feedData = {
   items: [],
 }
 
-const generatedRss = generateRssFeed(feedData)
+const _generatedRss = generateRssFeed(feedData)

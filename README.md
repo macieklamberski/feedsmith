@@ -46,7 +46,7 @@ Feedsmith offers universal and format‑specific parsers that maintain the origi
 
 ## Supported Formats
 
-Feedsmith aims to fully support all major feed formats and namespaces in complete alignment with their specifications.
+Feedsmith aims to fully support all major feed formats and namespaces in complete alignment with their specs.
 
 ✅ Available
 &nbsp;&nbsp;·&nbsp;&nbsp;

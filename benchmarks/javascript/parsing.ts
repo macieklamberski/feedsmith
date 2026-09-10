@@ -25,7 +25,7 @@ const testGaphubFeedParser = (feed: string) => {
   return gaphubFeedParserInstance.parseString(feed)
 }
 
-const testGaphubFeedParserOpml = async (xml: string) => {
+const testGaphubFeedParserOpml = (xml: string) => {
   return gaphubFeedParserInstance.parseOPMLString(xml)
 }
 
@@ -67,7 +67,7 @@ const testRssParser = (feed: string) => {
   return rssParserInstance.parseString(feed)
 }
 
-const testOpmlParser = async (xml: string) => {
+const testOpmlParser = (xml: string) => {
   return new Promise((resolve, reject) => {
     const stream = Readable.from([xml])
     const parser = new OpmlParser({})
@@ -86,7 +86,7 @@ const testOpmlParser = async (xml: string) => {
   })
 }
 
-const testNodeOpmlParser = async (xml: string) => {
+const testNodeOpmlParser = (xml: string) => {
   let items: unknown
 
   nodeOpmlParser(xml, (_error, result: unknown) => {
@@ -96,7 +96,7 @@ const testNodeOpmlParser = async (xml: string) => {
   return items
 }
 
-const testOpmlPackage = async (xml: string) => {
+const testOpmlPackage = (xml: string) => {
   let items: unknown
 
   opmlPackage.parse(xml, (_error, result: unknown) => {
