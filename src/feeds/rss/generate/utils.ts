@@ -22,6 +22,10 @@ import {
   generateFeed as generateAtomFeed,
 } from '../../../namespaces/atom/generate/utils.js'
 import { generateFeed as generateBlogChannelFeed } from '../../../namespaces/blogchannel/generate/utils.js'
+import {
+  generateFeed as generateBylineFeed,
+  generateItem as generateBylineItem,
+} from '../../../namespaces/byline/generate/utils.js'
 import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
 import { generateItem as generateContentItem } from '../../../namespaces/content/generate/utils.js'
 import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
@@ -241,6 +245,7 @@ export const generateItem: GenerateUtil<Rss.Item<DateLike, Rss.PersonLike>> = (i
     ...generateDctermsItemOrFeed(item.dcterms),
     ...generatePrismItem(item.prism),
     ...generateWfwItem(item.wfw),
+    ...generateBylineItem(item.byline),
     ...generateSourceItem(item.sourceNs),
     ...generateRawVoiceItem(item.rawvoice),
     ...generateSpotifyItem(item.spotify),
@@ -293,6 +298,7 @@ export const generateFeed: GenerateUtil<Rss.Feed<DateLike, Rss.PersonLike>> = (f
     ...generateFeedPressFeed(feed.feedpress),
     ...generateOpenSearchFeed(feed.opensearch),
     ...generateAdminFeed(feed.admin),
+    ...generateBylineFeed(feed.byline),
     ...generateSourceFeed(feed.sourceNs),
     ...generateBlogChannelFeed(feed.blogChannel),
     ...generateRawVoiceFeed(feed.rawvoice),

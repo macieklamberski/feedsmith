@@ -17,6 +17,10 @@ import {
   stopNodes as blogchannelStopNodes,
   uris as blogchannelUris,
 } from '../namespaces/blogchannel/common/config.js'
+import {
+  stopNodes as bylineStopNodes,
+  uris as bylineUris,
+} from '../namespaces/byline/common/config.js'
 import { stopNodes as ccStopNodes, uris as ccUris } from '../namespaces/cc/common/config.js'
 import {
   stopNodes as contentStopNodes,
@@ -150,6 +154,7 @@ export const namespaceUris = {
   thr: thrUris,
   dcterms: dctermsUris,
   wfw: wfwUris,
+  byline: bylineUris,
   source: sourceUris,
   feedpress: feedpressUris,
   yt: ytUris,
@@ -185,6 +190,7 @@ export const namespaceStopNodes = [
   ...appStopNodes,
   ...arxivStopNodes,
   ...blogchannelStopNodes,
+  ...bylineStopNodes,
   ...ccStopNodes,
   ...contentStopNodes,
   ...creativecommonsStopNodes,

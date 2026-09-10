@@ -16,6 +16,10 @@ import {
   retrieveAuthor as retrieveArxivAuthor,
   retrieveEntry as retrieveArxivEntry,
 } from '../../../namespaces/arxiv/parse/utils.js'
+import {
+  retrieveFeed as retrieveBylineFeed,
+  retrieveItem as retrieveBylineItem,
+} from '../../../namespaces/byline/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
@@ -249,6 +253,7 @@ export const parseEntry: ParsePartialUtil<Atom.Entry<string>> = (value, options)
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces?.has('trackback') ? retrieveTrackbackItem(value) : undefined,
+    byline: namespaces?.has('byline') ? retrieveBylineItem(value) : undefined,
   }
 
   return trimObject(entry)
@@ -291,6 +296,7 @@ export const parseFeed: ParsePartialUtil<Atom.Feed<string>> = (value, options) =
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
     admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackFeed(value) : undefined,
+    byline: namespaces?.has('byline') ? retrieveBylineFeed(value) : undefined,
   }
 
   return trimObject(feed)

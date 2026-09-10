@@ -1040,6 +1040,31 @@ describe('generateItem', () => {
 
     expect(generateItem(value)).toEqual(expected)
   })
+
+  it('should generate item with byline namespace properties', () => {
+    const value = {
+      title: 'Item with byline namespace',
+      byline: {
+        author: { ref: 'annie' },
+        role: 'staff',
+        perspective: 'reporting',
+        affiliation: { org: 'apple', relationship: 'employed', title: 'Senior Engineer' },
+      },
+    }
+    const expected = {
+      title: 'Item with byline namespace',
+      'byline:author': { '@ref': 'annie' },
+      'byline:role': 'staff',
+      'byline:perspective': 'reporting',
+      'byline:affiliation': {
+        'byline:org-ref': { '@ref': 'apple' },
+        'byline:relationship': 'employed',
+        'byline:title': 'Senior Engineer',
+      },
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -2101,6 +2126,47 @@ describe('generateFeed', () => {
           title: 'Licensed Feed',
           description: 'A feed with Creative Commons properties',
           'creativeCommons:license': ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with byline namespace properties', () => {
+    const value = {
+      title: 'Feed with byline namespace',
+      description: 'A feed with Byline contributors and organizations',
+      byline: {
+        contributors: [{ id: 'annie', name: 'Annie Park', urls: ['https://annie.example.com'] }],
+        organizations: [{ id: 'ttr', name: 'The Tech Review', type: 'news' }],
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:byline': 'https://bylinespec.org/1.0',
+        channel: {
+          title: 'Feed with byline namespace',
+          description: 'A feed with Byline contributors and organizations',
+          'byline:contributors': {
+            'byline:person': [
+              {
+                '@id': 'annie',
+                'byline:name': 'Annie Park',
+                'byline:url': ['https://annie.example.com'],
+              },
+            ],
+          },
+          'byline:organizations': {
+            'byline:org': [
+              {
+                '@id': 'ttr',
+                'byline:name': 'The Tech Review',
+                'byline:type': 'news',
+              },
+            ],
+          },
         },
       },
     }
