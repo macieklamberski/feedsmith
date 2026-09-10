@@ -69,6 +69,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 |--------|----------|-------|----------|
 | [OPML](https://feedsmith.dev/reference/opml) | 1.0, 2.0 | ✅ | ✅ |
 | [Podcast Chapters](https://feedsmith.dev/reference/related/podcast-chapters) | 1.2 | ✅ | ✅ |
+| [Podcast Transcripts](https://feedsmith.dev/reference/related/podcast-transcripts) | 1.0 | ✅ | ✅ |
 
 ### Feed Namespaces
 
