@@ -1823,6 +1823,49 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate livejournal namespace properties for item', () => {
+    const value = {
+      title: 'Feed with LiveJournal items',
+      description: 'A feed with LiveJournal item properties',
+      items: [
+        {
+          title: 'Journal entry',
+          livejournal: {
+            music: 'The Beatles - Hey Jude',
+            mood: 'cheerful',
+            security: 'public',
+            poster: 'johndoe',
+            journal: 'example_community',
+            replyCount: 42,
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:lj': 'http://www.livejournal.org/rss/lj/1.0/',
+        channel: {
+          title: 'Feed with LiveJournal items',
+          description: 'A feed with LiveJournal item properties',
+          item: [
+            {
+              title: 'Journal entry',
+              'lj:music': 'The Beatles - Hey Jude',
+              'lj:mood': 'cheerful',
+              'lj:security': 'public',
+              'lj:poster': 'johndoe',
+              'lj:journal': 'example_community',
+              'lj:replycount': 42,
+            },
+          ],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate RSS feed with feedpress namespace properties', () => {
     const value = {
       title: 'Podcast Feed',
