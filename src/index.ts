@@ -54,7 +54,7 @@ export type { Opml } from './opml/common/types.js'
 export { generate as generateOpml } from './opml/generate/index.js'
 export { parse as parseOpml } from './opml/parse/index.js'
 
-// Deprecated aliases — declared here so JSDoc survives tsdown's .d.ts bundling.
+// Deprecated aliases: declared here so JSDoc survives tsdown's .d.ts bundling.
 // Remove this block in 4.x.
 
 import type { AtomFeed } from './feeds/atom/common/types.js'

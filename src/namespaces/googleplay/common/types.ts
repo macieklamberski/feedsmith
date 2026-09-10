@@ -4,7 +4,7 @@ import type { Requirable, Strict } from '../../../common/types.js'
 export namespace GooglePlayNs {
   export type Image<TStrict extends boolean = false> = Strict<
     {
-      href: Requirable<string> // Required in spec.
+      href: Requirable<string> // Required in spec
     },
     TStrict
   >

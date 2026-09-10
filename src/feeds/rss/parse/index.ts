@@ -10,8 +10,8 @@ import { retrieveFeed } from './utils.js'
 
 const createNamespaceOptions = createNamespaceResolver({ namespaceUris, namespacePrefixes })
 
-// Replaced per document, so the hooks below always read the declarations of the feed
-// being parsed and nothing survives into the next one.
+// Replaced per document, so the hooks below always read the declarations of the feed being parsed
+// and nothing survives into the next one.
 let namespaceOptions = createNamespaceOptions()
 
 const parser = new XMLParser({

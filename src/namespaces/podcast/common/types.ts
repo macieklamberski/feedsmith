@@ -22,8 +22,8 @@ export namespace PodcastNs {
 
   export type Transcript<TStrict extends boolean = false> = Strict<
     {
-      url: Requirable<string> // Required in spec.
-      type: Requirable<string> // Required in spec.
+      url: Requirable<string> // Required in spec
+      type: Requirable<string> // Required in spec
       language?: string
       rel?: string
     },
@@ -32,7 +32,7 @@ export namespace PodcastNs {
 
   export type Locked<TStrict extends boolean = false> = Strict<
     {
-      value: Requirable<boolean> // Required in spec.
+      value: Requirable<boolean> // Required in spec
       owner?: string
     },
     TStrict
@@ -40,7 +40,7 @@ export namespace PodcastNs {
 
   export type Funding<TStrict extends boolean = false> = Strict<
     {
-      url: Requirable<string> // Required in spec.
+      url: Requirable<string> // Required in spec
       display?: string
     },
     TStrict
@@ -48,16 +48,16 @@ export namespace PodcastNs {
 
   export type Chapters<TStrict extends boolean = false> = Strict<
     {
-      url: Requirable<string> // Required in spec.
-      type: Requirable<string> // Required in spec.
+      url: Requirable<string> // Required in spec
+      type: Requirable<string> // Required in spec
     },
     TStrict
   >
 
   export type Soundbite<TStrict extends boolean = false> = Strict<
     {
-      startTime: Requirable<number> // Required in spec.
-      duration: Requirable<number> // Required in spec.
+      startTime: Requirable<number> // Required in spec
+      duration: Requirable<number> // Required in spec
       display?: string
     },
     TStrict
@@ -65,7 +65,7 @@ export namespace PodcastNs {
 
   export type Person<TStrict extends boolean = false> = Strict<
     {
-      display: Requirable<string> // Required in spec.
+      display: Requirable<string> // Required in spec
       role?: string
       group?: string
       img?: string
@@ -76,7 +76,7 @@ export namespace PodcastNs {
 
   export type Location<TStrict extends boolean = false> = Strict<
     {
-      display: Requirable<string> // Required in spec.
+      display: Requirable<string> // Required in spec
       rel?: string
       geo?: string
       osm?: string
@@ -87,7 +87,7 @@ export namespace PodcastNs {
 
   export type Season<TStrict extends boolean = false> = Strict<
     {
-      number: Requirable<number> // Required in spec.
+      number: Requirable<number> // Required in spec
       name?: string
     },
     TStrict
@@ -95,7 +95,7 @@ export namespace PodcastNs {
 
   export type Episode<TStrict extends boolean = false> = Strict<
     {
-      number: Requirable<number> // Required in spec.
+      number: Requirable<number> // Required in spec
       display?: string
     },
     TStrict
@@ -103,9 +103,9 @@ export namespace PodcastNs {
 
   export type Trailer<TDate, TStrict extends boolean = false> = Strict<
     {
-      display: Requirable<string> // Required in spec.
-      url: Requirable<string> // Required in spec.
-      pubDate: Requirable<TDate> // Required in spec.
+      display: Requirable<string> // Required in spec
+      url: Requirable<string> // Required in spec
+      pubDate: Requirable<TDate> // Required in spec
       length?: number
       type?: string
       season?: number
@@ -115,7 +115,7 @@ export namespace PodcastNs {
 
   export type License<TStrict extends boolean = false> = Strict<
     {
-      display: Requirable<string> // Required in spec.
+      display: Requirable<string> // Required in spec
       url?: string
     },
     TStrict
@@ -123,7 +123,7 @@ export namespace PodcastNs {
 
   export type AlternateEnclosure<TStrict extends boolean = false> = Strict<
     {
-      type: Requirable<string> // Required in spec.
+      type: Requirable<string> // Required in spec
       length?: number
       bitrate?: number
       height?: number
@@ -140,7 +140,7 @@ export namespace PodcastNs {
 
   export type Source<TStrict extends boolean = false> = Strict<
     {
-      uri: Requirable<string> // Required in spec.
+      uri: Requirable<string> // Required in spec
       contentType?: string
     },
     TStrict
@@ -148,16 +148,16 @@ export namespace PodcastNs {
 
   export type Integrity<TStrict extends boolean = false> = Strict<
     {
-      type: Requirable<string> // Required in spec.
-      value: Requirable<string> // Required in spec.
+      type: Requirable<string> // Required in spec
+      value: Requirable<string> // Required in spec
     },
     TStrict
   >
 
   export type Value<TStrict extends boolean = false> = Strict<
     {
-      type: Requirable<string> // Required in spec.
-      method: Requirable<string> // Required in spec.
+      type: Requirable<string> // Required in spec
+      method: Requirable<string> // Required in spec
       suggested?: number
       valueRecipients?: Array<ValueRecipient<TStrict>>
       valueTimeSplits?: Array<ValueTimeSplit<TStrict>>
@@ -170,9 +170,9 @@ export namespace PodcastNs {
       name?: string
       customKey?: string
       customValue?: string
-      type: Requirable<string> // Required in spec.
-      address: Requirable<string> // Required in spec.
-      split: Requirable<number> // Required in spec.
+      type: Requirable<string> // Required in spec
+      address: Requirable<string> // Required in spec
+      split: Requirable<number> // Required in spec
       fee?: boolean
     },
     TStrict
@@ -185,7 +185,7 @@ export namespace PodcastNs {
 
   export type Image<TStrict extends boolean = false> = Strict<
     {
-      href: Requirable<string> // Required in spec.
+      href: Requirable<string> // Required in spec
       alt?: string
       aspectRatio?: string
       width?: number
@@ -199,9 +199,9 @@ export namespace PodcastNs {
   export type LiveItem<TDate, TStrict extends boolean = false> = BaseItem<TStrict> &
     Strict<
       {
-        status: Requirable<string> // Required in spec.
-        start: Requirable<TDate> // Required in spec. Date: ISO 8601.
-        end?: TDate // Date: ISO 8601.
+        status: Requirable<string> // Required in spec
+        start: Requirable<TDate> // Required in spec. Date: ISO 8601
+        end?: TDate // Date: ISO 8601
         contentLinks?: Array<ContentLink<TStrict>>
       },
       TStrict
@@ -209,7 +209,7 @@ export namespace PodcastNs {
 
   export type ContentLink<TStrict extends boolean = false> = Strict<
     {
-      href: Requirable<string> // Required in spec.
+      href: Requirable<string> // Required in spec
       display?: string
     },
     TStrict
@@ -221,7 +221,7 @@ export namespace PodcastNs {
       // to `disabled`, no other attributes are necessary. To bypass the protocol value check, which
       // may be invalid, only the protocol is required to ensure consistent behavior.
       uri?: string
-      protocol: Requirable<string> // Required in spec.
+      protocol: Requirable<string> // Required in spec
       accountId?: string
       accountUrl?: string
       priority?: number
@@ -231,8 +231,8 @@ export namespace PodcastNs {
 
   export type Chat<TStrict extends boolean = false> = Strict<
     {
-      server: Requirable<string> // Required in spec.
-      protocol: Requirable<string> // Required in spec.
+      server: Requirable<string> // Required in spec
+      protocol: Requirable<string> // Required in spec
       accountId?: string
       space?: string
     },
@@ -241,7 +241,7 @@ export namespace PodcastNs {
 
   export type Block<TStrict extends boolean = false> = Strict<
     {
-      value: Requirable<boolean> // Required in spec.
+      value: Requirable<boolean> // Required in spec
       id?: string
     },
     TStrict
@@ -249,7 +249,7 @@ export namespace PodcastNs {
 
   export type Txt<TStrict extends boolean = false> = Strict<
     {
-      display: Requirable<string> // Required in spec.
+      display: Requirable<string> // Required in spec
       purpose?: string
     },
     TStrict
@@ -257,7 +257,7 @@ export namespace PodcastNs {
 
   export type RemoteItem<TStrict extends boolean = false> = Strict<
     {
-      feedGuid: Requirable<string> // Required in spec.
+      feedGuid: Requirable<string> // Required in spec
       feedUrl?: string
       itemGuid?: string
       medium?: string
@@ -272,7 +272,7 @@ export namespace PodcastNs {
 
   export type UpdateFrequency<TDate, TStrict extends boolean = false> = Strict<
     {
-      display: Requirable<string> // Required in spec.
+      display: Requirable<string> // Required in spec
       complete?: boolean
       dtstart?: TDate
       rrule?: string
@@ -290,8 +290,8 @@ export namespace PodcastNs {
 
   export type ValueTimeSplit<TStrict extends boolean = false> = Strict<
     {
-      startTime: Requirable<number> // Required in spec.
-      duration: Requirable<number> // Required in spec.
+      startTime: Requirable<number> // Required in spec
+      duration: Requirable<number> // Required in spec
       remoteStartTime?: number
       remotePercentage?: number
       remoteItem?: RemoteItem<TStrict>

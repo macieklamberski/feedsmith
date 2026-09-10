@@ -1,8 +1,8 @@
 import type { DeepOmit } from 'trousse'
 import type { AtomFeed } from '../../../feeds/atom/common/types.js'
 
-// Namespace properties to exclude when Atom is used as a namespace (not as a feed format).
-// This includes keys from all levels: Entry/Feed, Person (arxiv), Link (thr), etc.
+// Namespace properties to exclude when Atom is used as a namespace (not as a feed format). This
+// includes keys from all levels: Entry/Feed, Person (arxiv), Link (thr), etc.
 type NsKeys =
   | 'admin'
   | 'app'
