@@ -55,8 +55,8 @@ export default defineConfig({
       { text: 'Parsing', link: '/parsing' },
       { text: 'Generating', link: '/generating' },
       {
-        text: 'v3.0 (Next)',
-        items: [{ text: 'v2.0', link: 'https://feedsmith.dev' }],
+        text: 'v3.x',
+        items: [{ text: 'v2.x', link: 'https://v2.feedsmith.dev' }],
       },
     ],
     sidebar: [
