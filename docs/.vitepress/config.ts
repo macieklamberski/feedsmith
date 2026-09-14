@@ -1,10 +1,17 @@
 import { defineConfig } from 'vitepress'
+import { createOg } from './og.js'
 
 const indexMdRegex = /index\.md$/
 const mdRegex = /\.md$/
 const trailingSlashRegex = /\/$/
 
 const hostname = 'https://feedsmith.dev'
+const og = createOg({
+  name: 'feedsmith',
+  hostname,
+  repo: 'macieklamberski/feedsmith',
+  accent: '#ff8c4d',
+})
 
 export default defineConfig({
   title: 'Feedsmith',
@@ -16,15 +23,17 @@ export default defineConfig({
   sitemap: {
     hostname,
   },
-  transformHead: ({ pageData }) => {
-    const canonicalUrl = `${hostname}/${pageData.relativePath}`
+  buildEnd: og.buildEnd,
+  transformHead: (context) => {
+    const canonicalUrl = `${hostname}/${context.pageData.relativePath}`
       .replace(indexMdRegex, '')
       .replace(mdRegex, '')
       .replace(trailingSlashRegex, '')
 
-    return [['link', { rel: 'canonical', href: canonicalUrl }]]
+    return [['link', { rel: 'canonical', href: canonicalUrl }], ...og.transformHead(context)]
   },
   head: [
+    ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
     ['meta', { property: 'og:site_name', content: 'Feedsmith' }],
     [
       'script',
