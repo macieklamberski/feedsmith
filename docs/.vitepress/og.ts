@@ -38,7 +38,7 @@ const nonBreakingHyphenRegex = /\u2011/g
 const size = {
   cardWidth: 1200,
   cardHeight: 630,
-  cardPadding: '56px 450px 56px 64px',
+  cardPadding: '56px 400px 56px 64px',
   logoTile: 56,
   logoText: 44,
   eyebrowText: 26,
@@ -59,7 +59,6 @@ const color = {
   bg: '#171717',
   text: '#f0f0f0',
   textMuted: '#a3a3a3',
-  textSoft: '#c4c4c4',
   railDot: '#5c5c5c',
 }
 
@@ -143,7 +142,6 @@ const renderTitle = (heading: string, hasEyebrow: boolean): Node => {
     fontWeight: isLong ? 400 : 700,
     lineHeight: 1.15,
     letterSpacing: isLong ? '-0.0125em' : '-0.025em',
-    color: isLong ? color.textSoft : color.text,
     display: 'block',
   }
 
