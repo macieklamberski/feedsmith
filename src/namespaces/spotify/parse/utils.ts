@@ -1,17 +1,16 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import { isPlainObject, trimObject } from 'trousse'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseBoolean,
   parseNumber,
   parseSingularOf,
   parseString,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { SpotifyNs } from '../common/types.js'
 
-export const parseLimit: ParsePartialUtil<SpotifyNs.Limit> = (value) => {
-  if (!isObject(value)) {
+export const parseLimit: ParseUtilPartial<SpotifyNs.Limit> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -22,8 +21,8 @@ export const parseLimit: ParsePartialUtil<SpotifyNs.Limit> = (value) => {
   return trimObject(limit)
 }
 
-export const parsePartner: ParsePartialUtil<SpotifyNs.Partner> = (value) => {
-  if (!isObject(value)) {
+export const parsePartner: ParseUtilPartial<SpotifyNs.Partner> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -32,8 +31,8 @@ export const parsePartner: ParsePartialUtil<SpotifyNs.Partner> = (value) => {
   return id ? { id } : undefined
 }
 
-export const parseSandbox: ParsePartialUtil<SpotifyNs.Sandbox> = (value) => {
-  if (!isObject(value)) {
+export const parseSandbox: ParseUtilPartial<SpotifyNs.Sandbox> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -42,8 +41,8 @@ export const parseSandbox: ParsePartialUtil<SpotifyNs.Sandbox> = (value) => {
   return enabled !== undefined ? { enabled } : undefined
 }
 
-export const parseFeedAccess: ParsePartialUtil<SpotifyNs.FeedAccess> = (value) => {
-  if (!isObject(value)) {
+export const parseFeedAccess: ParseUtilPartial<SpotifyNs.FeedAccess> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -55,8 +54,8 @@ export const parseFeedAccess: ParsePartialUtil<SpotifyNs.FeedAccess> = (value) =
   return trimObject(access)
 }
 
-export const parseEntitlement: ParsePartialUtil<SpotifyNs.Entitlement> = (value) => {
-  if (!isObject(value)) {
+export const parseEntitlement: ParseUtilPartial<SpotifyNs.Entitlement> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -65,8 +64,8 @@ export const parseEntitlement: ParsePartialUtil<SpotifyNs.Entitlement> = (value)
   return name ? { name } : undefined
 }
 
-export const parseItemAccess: ParsePartialUtil<SpotifyNs.ItemAccess> = (value) => {
-  if (!isObject(value)) {
+export const parseItemAccess: ParseUtilPartial<SpotifyNs.ItemAccess> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -77,8 +76,8 @@ export const parseItemAccess: ParsePartialUtil<SpotifyNs.ItemAccess> = (value) =
   return trimObject(access)
 }
 
-export const retrieveFeed: ParsePartialUtil<SpotifyNs.Feed> = (value) => {
-  if (!isObject(value)) {
+export const retrieveFeed: ParseUtilPartial<SpotifyNs.Feed> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -93,8 +92,8 @@ export const retrieveFeed: ParsePartialUtil<SpotifyNs.Feed> = (value) => {
   return trimObject(feed)
 }
 
-export const retrieveItem: ParsePartialUtil<SpotifyNs.Item> = (value) => {
-  if (!isObject(value)) {
+export const retrieveItem: ParseUtilPartial<SpotifyNs.Item> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 

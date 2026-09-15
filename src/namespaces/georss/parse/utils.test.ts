@@ -319,9 +319,9 @@ describe('parseBox', () => {
   it('should handle partial box objects with missing corners', () => {
     // This simulates a case where parseLatLngPairs returns valid points
     // but one of them has undefined coordinates.
-    const valueWithInvalidPoints = '45.256 NaN 51.5 -0.12'
+    const value = '45.256 NaN 51.5 -0.12'
 
-    expect(parseBox(valueWithInvalidPoints)).toBeUndefined()
+    expect(parseBox(value)).toBeUndefined()
   })
 
   it('should return undefined if there are not exactly 2 points', () => {

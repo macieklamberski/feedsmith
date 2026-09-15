@@ -2,7 +2,7 @@
 title: "Reference: PRISM Namespace"
 ---
 
-# PRISM Namespace
+# PRISM Namespace Reference
 
 The PRISM (Publishing Requirements for Industry Standard Metadata) namespace provides comprehensive metadata elements for scholarly and academic publishing, including bibliographic information, page ranges, DOIs, and publication details.
 
@@ -36,7 +36,7 @@ The PRISM (Publishing Requirements for Industry Standard Metadata) namespace pro
 ## Types
 
 > [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
+> For details on type parameters (`TDate`), see [TypeScript Reference](/reference/typescript#tdate).
 
 <<< @/../src/namespaces/prism/common/types.ts#reference
 

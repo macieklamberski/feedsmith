@@ -4,6 +4,7 @@ import {
   generateCategory,
   generateComments,
   generateCommonElements,
+  generateCommunity,
   generateContent,
   generateCopyright,
   generateCredit,
@@ -58,6 +59,12 @@ describe('generateRating', () => {
     expect(generateRating(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateRating(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateRating(undefined)).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
@@ -88,6 +95,12 @@ describe('generateTitleOrDescription', () => {
     }
 
     expect(generateTitleOrDescription(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateTitleOrDescription(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -124,6 +137,12 @@ describe('generateThumbnail', () => {
     expect(generateThumbnail(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateThumbnail(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateThumbnail(undefined)).toBeUndefined()
   })
@@ -133,12 +152,12 @@ describe('generateCategory', () => {
   it('should generate category with all properties', () => {
     const value = {
       name: 'music/artist/album/song',
-      scheme: 'http://blah.com/scheme',
+      scheme: 'http://example.org/scheme',
       label: 'Music',
     }
     const expected = {
       '#text': 'music/artist/album/song',
-      '@scheme': 'http://blah.com/scheme',
+      '@scheme': 'http://example.org/scheme',
       '@label': 'Music',
     }
 
@@ -154,6 +173,12 @@ describe('generateCategory', () => {
     }
 
     expect(generateCategory(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateCategory(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -186,6 +211,12 @@ describe('generateHash', () => {
     expect(generateHash(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateHash(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateHash(undefined)).toBeUndefined()
   })
@@ -194,12 +225,12 @@ describe('generateHash', () => {
 describe('generatePlayer', () => {
   it('should generate player with all properties', () => {
     const value = {
-      url: 'http://www.foo.com/player?id=1111',
+      url: 'http://www.example.com/player?id=1111',
       height: 200,
       width: 400,
     }
     const expected = {
-      '@url': 'http://www.foo.com/player?id=1111',
+      '@url': 'http://www.example.com/player?id=1111',
       '@height': 200,
       '@width': 400,
     }
@@ -209,13 +240,19 @@ describe('generatePlayer', () => {
 
   it('should generate player with minimal properties', () => {
     const value = {
-      url: 'http://www.foo.com/player',
+      url: 'http://www.example.com/player',
     }
     const expected = {
-      '@url': 'http://www.foo.com/player',
+      '@url': 'http://www.example.com/player',
     }
 
     expect(generatePlayer(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generatePlayer(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -250,6 +287,12 @@ describe('generateCredit', () => {
     expect(generateCredit(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateCredit(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateCredit(undefined)).toBeUndefined()
   })
@@ -258,12 +301,12 @@ describe('generateCredit', () => {
 describe('generateCopyright', () => {
   it('should generate copyright with all properties', () => {
     const value = {
-      value: '2005 FooBar Media',
-      url: 'http://blah.com/additional-info.html',
+      value: '2005 Example Media',
+      url: 'http://example.org/additional-info.html',
     }
     const expected = {
-      '#text': '2005 FooBar Media',
-      '@url': 'http://blah.com/additional-info.html',
+      '#text': '2005 Example Media',
+      '@url': 'http://example.org/additional-info.html',
     }
 
     expect(generateCopyright(value)).toEqual(expected)
@@ -278,6 +321,12 @@ describe('generateCopyright', () => {
     }
 
     expect(generateCopyright(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateCopyright(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -316,6 +365,12 @@ describe('generateText', () => {
     expect(generateText(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateText(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateText(undefined)).toBeUndefined()
   })
@@ -348,6 +403,12 @@ describe('generateRestriction', () => {
     }
 
     expect(generateRestriction(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateRestriction(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -384,6 +445,12 @@ describe('generateStarRating', () => {
     expect(generateStarRating(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateStarRating(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateStarRating(undefined)).toBeUndefined()
   })
@@ -414,6 +481,12 @@ describe('generateStatistics', () => {
     expect(generateStatistics(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateStatistics(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateStatistics(undefined)).toBeUndefined()
   })
@@ -427,7 +500,7 @@ describe('generateTag', () => {
     }
     const expected = 'music:5'
 
-    expect(generateTag(value)).toEqual(expected)
+    expect(generateTag(value)).toBe(expected)
   })
 
   it('should generate tag with default weight when not provided', () => {
@@ -436,7 +509,7 @@ describe('generateTag', () => {
     }
     const expected = 'video:1'
 
-    expect(generateTag(value)).toEqual(expected)
+    expect(generateTag(value)).toBe(expected)
   })
 
   it('should return undefined when name is empty', () => {
@@ -457,8 +530,75 @@ describe('generateTag', () => {
     expect(generateTag(value)).toBeUndefined()
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateTag(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateTag(undefined)).toBeUndefined()
+  })
+})
+
+describe('generateCommunity', () => {
+  it('should generate community with all properties', () => {
+    const value = {
+      starRating: {
+        average: 4.5,
+        count: 2500,
+        min: 1,
+        max: 5,
+      },
+      statistics: {
+        views: 12345,
+        favorites: 100,
+      },
+      tags: [
+        { name: 'music', weight: 5 },
+        { name: 'video', weight: 1 },
+      ],
+    }
+    const expected = {
+      'media:starRating': {
+        '@average': 4.5,
+        '@count': 2500,
+        '@min': 1,
+        '@max': 5,
+      },
+      'media:statistics': {
+        '@views': 12345,
+        '@favorites': 100,
+      },
+      'media:tags': 'music:5,video:1',
+    }
+
+    expect(generateCommunity(value)).toEqual(expected)
+  })
+
+  it('should generate community with minimal properties', () => {
+    const value = {
+      statistics: {
+        views: 500,
+      },
+    }
+    const expected = {
+      'media:statistics': {
+        '@views': 500,
+      },
+    }
+
+    expect(generateCommunity(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateCommunity(value)).toBeUndefined()
+  })
+
+  it('should handle non-object inputs', () => {
+    expect(generateCommunity(undefined)).toBeUndefined()
   })
 })
 
@@ -576,6 +716,23 @@ describe('generateParam', () => {
     expect(generateParam(value)).toEqual(expected)
   })
 
+  it('should generate param with minimal properties', () => {
+    const value = {
+      value: 'application/x-shockwave-flash',
+    }
+    const expected = {
+      '#text': 'application/x-shockwave-flash',
+    }
+
+    expect(generateParam(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateParam(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateParam(undefined)).toBeUndefined()
   })
@@ -584,7 +741,7 @@ describe('generateParam', () => {
 describe('generateEmbed', () => {
   it('should generate embed with all properties', () => {
     const value = {
-      url: 'http://www.foo.com/player.swf',
+      url: 'http://www.example.com/player.swf',
       width: 512,
       height: 323,
       params: [
@@ -599,7 +756,7 @@ describe('generateEmbed', () => {
       ],
     }
     const expected = {
-      '@url': 'http://www.foo.com/player.swf',
+      '@url': 'http://www.example.com/player.swf',
       '@width': 512,
       '@height': 323,
       'media:param': [
@@ -619,13 +776,19 @@ describe('generateEmbed', () => {
 
   it('should generate embed with minimal properties', () => {
     const value = {
-      url: 'http://www.foo.com/player.swf',
+      url: 'http://www.example.com/player.swf',
     }
     const expected = {
-      '@url': 'http://www.foo.com/player.swf',
+      '@url': 'http://www.example.com/player.swf',
     }
 
     expect(generateEmbed(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateEmbed(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -658,6 +821,12 @@ describe('generateStatus', () => {
     expect(generateStatus(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateStatus(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateStatus(undefined)).toBeUndefined()
   })
@@ -667,13 +836,13 @@ describe('generatePrice', () => {
   it('should generate price with all properties', () => {
     const value = {
       type: 'rent',
-      info: 'http://www.dummy.jp/payment_info',
+      info: 'http://www.example.net/payment_info',
       price: 19.99,
       currency: 'EUR',
     }
     const expected = {
       '@type': 'rent',
-      '@info': 'http://www.dummy.jp/payment_info',
+      '@info': 'http://www.example.net/payment_info',
       '@price': 19.99,
       '@currency': 'EUR',
     }
@@ -690,6 +859,12 @@ describe('generatePrice', () => {
     }
 
     expect(generatePrice(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generatePrice(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -735,6 +910,12 @@ describe('generateLicense', () => {
     expect(generateLicense(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateLicense(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateLicense(undefined)).toBeUndefined()
   })
@@ -745,12 +926,12 @@ describe('generateSubTitle', () => {
     const value = {
       type: 'application/smil',
       lang: 'en',
-      href: 'http://www.foo.com/subtitle.smil',
+      href: 'http://www.example.com/subtitle.smil',
     }
     const expected = {
       '@type': 'application/smil',
       '@lang': 'en',
-      '@href': 'http://www.foo.com/subtitle.smil',
+      '@href': 'http://www.example.com/subtitle.smil',
     }
 
     expect(generateSubTitle(value)).toEqual(expected)
@@ -758,13 +939,19 @@ describe('generateSubTitle', () => {
 
   it('should generate subtitle with minimal properties', () => {
     const value = {
-      href: 'http://www.foo.com/subtitle.txt',
+      href: 'http://www.example.com/subtitle.txt',
     }
     const expected = {
-      '@href': 'http://www.foo.com/subtitle.txt',
+      '@href': 'http://www.example.com/subtitle.txt',
     }
 
     expect(generateSubTitle(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateSubTitle(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -776,11 +963,11 @@ describe('generatePeerLink', () => {
   it('should generate peer link with all properties', () => {
     const value = {
       type: 'application/x-bittorrent',
-      href: 'http://www.foo.com/sampleFile.torrent',
+      href: 'http://www.example.com/sampleFile.torrent',
     }
     const expected = {
       '@type': 'application/x-bittorrent',
-      '@href': 'http://www.foo.com/sampleFile.torrent',
+      '@href': 'http://www.example.com/sampleFile.torrent',
     }
 
     expect(generatePeerLink(value)).toEqual(expected)
@@ -788,13 +975,19 @@ describe('generatePeerLink', () => {
 
   it('should generate peer link with minimal properties', () => {
     const value = {
-      href: 'http://www.foo.com/file.torrent',
+      href: 'http://www.example.com/file.torrent',
     }
     const expected = {
-      '@href': 'http://www.foo.com/file.torrent',
+      '@href': 'http://www.example.com/file.torrent',
     }
 
     expect(generatePeerLink(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generatePeerLink(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -812,6 +1005,12 @@ describe('generateRights', () => {
     }
 
     expect(generateRights(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateRights(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -846,6 +1045,12 @@ describe('generateScene', () => {
     }
 
     expect(generateScene(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateScene(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -884,6 +1089,12 @@ describe('generateLocation', () => {
     expect(generateLocation(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateLocation(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateLocation(undefined)).toBeUndefined()
   })
@@ -892,7 +1103,7 @@ describe('generateLocation', () => {
 describe('generateContent', () => {
   it('should generate content with all properties including CommonElements', () => {
     const value = {
-      url: 'http://www.foo.com/movie.mov',
+      url: 'http://www.example.com/movie.mov',
       fileSize: 2000,
       type: 'video/quicktime',
       medium: 'video',
@@ -924,7 +1135,7 @@ describe('generateContent', () => {
       keywords: ['video', 'movie', 'entertainment'],
       thumbnails: [
         {
-          url: 'http://www.foo.com/keyframe.jpg',
+          url: 'http://www.example.com/keyframe.jpg',
           width: 75,
           height: 50,
           time: '12:05:01.123',
@@ -944,7 +1155,7 @@ describe('generateContent', () => {
         },
       ],
       player: {
-        url: 'http://www.foo.com/player',
+        url: 'http://www.example.com/player',
         height: 200,
         width: 400,
       },
@@ -956,8 +1167,8 @@ describe('generateContent', () => {
         },
       ],
       copyright: {
-        value: '2005 FooBar Media',
-        url: 'http://blah.com/info.html',
+        value: '2005 Example Media',
+        url: 'http://example.org/info.html',
       },
       texts: [
         {
@@ -995,7 +1206,7 @@ describe('generateContent', () => {
       },
       comments: ['Great video!', 'Thanks for sharing'],
       embed: {
-        url: 'http://www.foo.com/player.swf',
+        url: 'http://www.example.com/player.swf',
         width: 512,
         height: 323,
         params: [
@@ -1014,7 +1225,7 @@ describe('generateContent', () => {
       prices: [
         {
           type: 'rent',
-          info: 'http://www.dummy.jp/payment_info',
+          info: 'http://www.example.net/payment_info',
           price: 19.99,
           currency: 'EUR',
         },
@@ -1030,13 +1241,13 @@ describe('generateContent', () => {
         {
           type: 'application/smil',
           lang: 'en',
-          href: 'http://www.foo.com/subtitle.smil',
+          href: 'http://www.example.com/subtitle.smil',
         },
       ],
       peerLinks: [
         {
           type: 'application/x-bittorrent',
-          href: 'http://www.foo.com/file.torrent',
+          href: 'http://www.example.com/file.torrent',
         },
       ],
       locations: [
@@ -1061,7 +1272,7 @@ describe('generateContent', () => {
       ],
     }
     const expected = {
-      '@url': 'http://www.foo.com/movie.mov',
+      '@url': 'http://www.example.com/movie.mov',
       '@fileSize': 2000,
       '@type': 'video/quicktime',
       '@medium': 'video',
@@ -1092,7 +1303,7 @@ describe('generateContent', () => {
       'media:keywords': 'video,movie,entertainment',
       'media:thumbnail': [
         {
-          '@url': 'http://www.foo.com/keyframe.jpg',
+          '@url': 'http://www.example.com/keyframe.jpg',
           '@width': 75,
           '@height': 50,
           '@time': '12:05:01.123',
@@ -1112,7 +1323,7 @@ describe('generateContent', () => {
         },
       ],
       'media:player': {
-        '@url': 'http://www.foo.com/player',
+        '@url': 'http://www.example.com/player',
         '@height': 200,
         '@width': 400,
       },
@@ -1124,8 +1335,8 @@ describe('generateContent', () => {
         },
       ],
       'media:copyright': {
-        '#text': '2005 FooBar Media',
-        '@url': 'http://blah.com/info.html',
+        '#text': '2005 Example Media',
+        '@url': 'http://example.org/info.html',
       },
       'media:text': [
         {
@@ -1160,7 +1371,7 @@ describe('generateContent', () => {
         'media:comment': ['Great video!', 'Thanks for sharing'],
       },
       'media:embed': {
-        '@url': 'http://www.foo.com/player.swf',
+        '@url': 'http://www.example.com/player.swf',
         '@width': 512,
         '@height': 323,
         'media:param': [
@@ -1183,7 +1394,7 @@ describe('generateContent', () => {
       'media:price': [
         {
           '@type': 'rent',
-          '@info': 'http://www.dummy.jp/payment_info',
+          '@info': 'http://www.example.net/payment_info',
           '@price': 19.99,
           '@currency': 'EUR',
         },
@@ -1199,13 +1410,13 @@ describe('generateContent', () => {
         {
           '@type': 'application/smil',
           '@lang': 'en',
-          '@href': 'http://www.foo.com/subtitle.smil',
+          '@href': 'http://www.example.com/subtitle.smil',
         },
       ],
       'media:peerLink': [
         {
           '@type': 'application/x-bittorrent',
-          '@href': 'http://www.foo.com/file.torrent',
+          '@href': 'http://www.example.com/file.torrent',
         },
       ],
       'media:location': [
@@ -1237,13 +1448,19 @@ describe('generateContent', () => {
 
   it('should generate content with minimal properties', () => {
     const value = {
-      url: 'http://www.foo.com/audio.mp3',
+      url: 'http://www.example.com/audio.mp3',
     }
     const expected = {
-      '@url': 'http://www.foo.com/audio.mp3',
+      '@url': 'http://www.example.com/audio.mp3',
     }
 
     expect(generateContent(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateContent(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
@@ -1256,12 +1473,12 @@ describe('generateGroup', () => {
     const value = {
       contents: [
         {
-          url: 'http://www.foo.com/song_lo.mp3',
+          url: 'http://www.example.com/song_lo.mp3',
           fileSize: 1000,
           bitrate: 128,
         },
         {
-          url: 'http://www.foo.com/song_hi.mp3',
+          url: 'http://www.example.com/song_hi.mp3',
           fileSize: 2000,
           bitrate: 192,
         },
@@ -1284,7 +1501,7 @@ describe('generateGroup', () => {
       keywords: ['music', 'audio', 'song'],
       thumbnails: [
         {
-          url: 'http://www.foo.com/album_art.jpg',
+          url: 'http://www.example.com/album_art.jpg',
           width: 300,
           height: 300,
         },
@@ -1303,7 +1520,7 @@ describe('generateGroup', () => {
         },
       ],
       player: {
-        url: 'http://www.foo.com/music_player',
+        url: 'http://www.example.com/music_player',
         height: 50,
         width: 400,
       },
@@ -1316,7 +1533,7 @@ describe('generateGroup', () => {
       ],
       copyright: {
         value: '2023 Record Label',
-        url: 'http://label.com/info.html',
+        url: 'http://records.example.com/info.html',
       },
       texts: [
         {
@@ -1356,7 +1573,7 @@ describe('generateGroup', () => {
       },
       comments: ['Love this song!', 'Amazing track'],
       embed: {
-        url: 'http://www.foo.com/audio_player.swf',
+        url: 'http://www.example.com/audio_player.swf',
         width: 400,
         height: 50,
       },
@@ -1380,14 +1597,14 @@ describe('generateGroup', () => {
       ],
       subTitles: [
         {
-          href: 'http://www.foo.com/lyrics.txt',
+          href: 'http://www.example.com/lyrics.txt',
           type: 'text/plain',
           lang: 'en',
         },
       ],
       peerLinks: [
         {
-          href: 'http://www.foo.com/music.torrent',
+          href: 'http://www.example.com/music.torrent',
         },
       ],
       locations: [
@@ -1409,12 +1626,12 @@ describe('generateGroup', () => {
     const expected = {
       'media:content': [
         {
-          '@url': 'http://www.foo.com/song_lo.mp3',
+          '@url': 'http://www.example.com/song_lo.mp3',
           '@fileSize': 1000,
           '@bitrate': 128,
         },
         {
-          '@url': 'http://www.foo.com/song_hi.mp3',
+          '@url': 'http://www.example.com/song_hi.mp3',
           '@fileSize': 2000,
           '@bitrate': 192,
         },
@@ -1436,7 +1653,7 @@ describe('generateGroup', () => {
       'media:keywords': 'music,audio,song',
       'media:thumbnail': [
         {
-          '@url': 'http://www.foo.com/album_art.jpg',
+          '@url': 'http://www.example.com/album_art.jpg',
           '@width': 300,
           '@height': 300,
         },
@@ -1455,7 +1672,7 @@ describe('generateGroup', () => {
         },
       ],
       'media:player': {
-        '@url': 'http://www.foo.com/music_player',
+        '@url': 'http://www.example.com/music_player',
         '@height': 50,
         '@width': 400,
       },
@@ -1468,7 +1685,7 @@ describe('generateGroup', () => {
       ],
       'media:copyright': {
         '#text': '2023 Record Label',
-        '@url': 'http://label.com/info.html',
+        '@url': 'http://records.example.com/info.html',
       },
       'media:text': [
         {
@@ -1501,7 +1718,7 @@ describe('generateGroup', () => {
         'media:comment': ['Love this song!', 'Amazing track'],
       },
       'media:embed': {
-        '@url': 'http://www.foo.com/audio_player.swf',
+        '@url': 'http://www.example.com/audio_player.swf',
         '@width': 400,
         '@height': 50,
       },
@@ -1529,14 +1746,14 @@ describe('generateGroup', () => {
       ],
       'media:subTitle': [
         {
-          '@href': 'http://www.foo.com/lyrics.txt',
+          '@href': 'http://www.example.com/lyrics.txt',
           '@type': 'text/plain',
           '@lang': 'en',
         },
       ],
       'media:peerLink': [
         {
-          '@href': 'http://www.foo.com/music.torrent',
+          '@href': 'http://www.example.com/music.torrent',
         },
       ],
       'media:location': [
@@ -1576,6 +1793,12 @@ describe('generateGroup', () => {
     expect(generateGroup(value)).toEqual(expected)
   })
 
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateGroup(value)).toBeUndefined()
+  })
+
   it('should handle non-object inputs', () => {
     expect(generateGroup(undefined)).toBeUndefined()
   })
@@ -1584,20 +1807,22 @@ describe('generateGroup', () => {
 describe('generateItemOrFeed', () => {
   it('should generate item with all properties', () => {
     const value = {
-      group: {
-        contents: [
-          {
-            url: 'http://www.foo.com/video.mp4',
-            type: 'video/mp4',
+      groups: [
+        {
+          contents: [
+            {
+              url: 'http://www.example.com/video.mp4',
+              type: 'video/mp4',
+            },
+          ],
+          title: {
+            value: 'Video Group',
           },
-        ],
-        title: {
-          value: 'Video Group',
         },
-      },
+      ],
       contents: [
         {
-          url: 'http://www.foo.com/audio.mp3',
+          url: 'http://www.example.com/audio.mp3',
           type: 'audio/mpeg',
         },
       ],
@@ -1619,7 +1844,7 @@ describe('generateItemOrFeed', () => {
       keywords: ['media', 'content', 'test'],
       thumbnails: [
         {
-          url: 'http://www.foo.com/thumb.jpg',
+          url: 'http://www.example.com/thumb.jpg',
           width: 160,
           height: 120,
         },
@@ -1638,7 +1863,7 @@ describe('generateItemOrFeed', () => {
         },
       ],
       player: {
-        url: 'http://www.foo.com/player',
+        url: 'http://www.example.com/player',
         height: 400,
         width: 600,
       },
@@ -1680,7 +1905,7 @@ describe('generateItemOrFeed', () => {
       },
       comments: ['Great content!'],
       embed: {
-        url: 'http://www.foo.com/embed.swf',
+        url: 'http://www.example.com/embed.swf',
       },
       responses: ['http://example.com/response'],
       backLinks: ['http://example.com/backlink'],
@@ -1699,12 +1924,12 @@ describe('generateItemOrFeed', () => {
       ],
       subTitles: [
         {
-          href: 'http://www.foo.com/subs.srt',
+          href: 'http://www.example.com/subs.srt',
         },
       ],
       peerLinks: [
         {
-          href: 'http://www.foo.com/peer.torrent',
+          href: 'http://www.example.com/peer.torrent',
         },
       ],
       locations: [
@@ -1722,20 +1947,22 @@ describe('generateItemOrFeed', () => {
       ],
     }
     const expected = {
-      'media:group': {
-        'media:content': [
-          {
-            '@url': 'http://www.foo.com/video.mp4',
-            '@type': 'video/mp4',
+      'media:group': [
+        {
+          'media:content': [
+            {
+              '@url': 'http://www.example.com/video.mp4',
+              '@type': 'video/mp4',
+            },
+          ],
+          'media:title': {
+            '#text': 'Video Group',
           },
-        ],
-        'media:title': {
-          '#text': 'Video Group',
         },
-      },
+      ],
       'media:content': [
         {
-          '@url': 'http://www.foo.com/audio.mp3',
+          '@url': 'http://www.example.com/audio.mp3',
           '@type': 'audio/mpeg',
         },
       ],
@@ -1756,7 +1983,7 @@ describe('generateItemOrFeed', () => {
       'media:keywords': 'media,content,test',
       'media:thumbnail': [
         {
-          '@url': 'http://www.foo.com/thumb.jpg',
+          '@url': 'http://www.example.com/thumb.jpg',
           '@width': 160,
           '@height': 120,
         },
@@ -1775,7 +2002,7 @@ describe('generateItemOrFeed', () => {
         },
       ],
       'media:player': {
-        '@url': 'http://www.foo.com/player',
+        '@url': 'http://www.example.com/player',
         '@height': 400,
         '@width': 600,
       },
@@ -1814,7 +2041,7 @@ describe('generateItemOrFeed', () => {
         'media:comment': ['Great content!'],
       },
       'media:embed': {
-        '@url': 'http://www.foo.com/embed.swf',
+        '@url': 'http://www.example.com/embed.swf',
       },
       'media:responses': {
         'media:response': ['http://example.com/response'],
@@ -1837,12 +2064,12 @@ describe('generateItemOrFeed', () => {
       ],
       'media:subTitle': [
         {
-          '@href': 'http://www.foo.com/subs.srt',
+          '@href': 'http://www.example.com/subs.srt',
         },
       ],
       'media:peerLink': [
         {
-          '@href': 'http://www.foo.com/peer.torrent',
+          '@href': 'http://www.example.com/peer.torrent',
         },
       ],
       'media:location': [

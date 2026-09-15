@@ -1,15 +1,10 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
-import {
-  generateCdataString,
-  generateNumber,
-  generateRfc3339Date,
-  isObject,
-  trimObject,
-} from '../../../common/utils.js'
+import { generateCdataString, generateNumber, generateRfc3339Date } from '../../../common/utils.js'
 import type { SyNs } from '../common/types.js'
 
 export const generateFeed: GenerateUtil<SyNs.Feed<DateLike>> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 
