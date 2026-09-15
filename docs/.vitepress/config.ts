@@ -1,3 +1,5 @@
+import { getImageUrl } from 'ogier'
+import { vitepress } from 'ogier/adapters'
 import { defineConfig } from 'vitepress'
 
 const indexMdRegex = /index\.md$/
@@ -5,6 +7,25 @@ const mdRegex = /\.md$/
 const trailingSlashRegex = /\/$/
 
 const hostname = 'https://feedsmith.dev'
+const docsHostname = 'https://v3.feedsmith.dev'
+const og = vitepress({
+  site: {
+    hostname,
+    imageUrl: (path) => getImageUrl(docsHostname, path),
+    favicon: { file: new URL('../public/favicon.svg', import.meta.url) },
+  },
+  card: {
+    header: {
+      text: 'feedsmith',
+      icon: { file: new URL('../public/favicon.svg', import.meta.url) },
+    },
+    footer: {
+      text: 'macieklamberski/feedsmith',
+      icon: { file: new URL('./github.svg', import.meta.url) },
+    },
+  },
+  style: { background: { pattern: 'dots' } },
+})
 
 export default defineConfig({
   title: 'Feedsmith',
@@ -16,15 +37,17 @@ export default defineConfig({
   sitemap: {
     hostname,
   },
-  transformHead: ({ pageData }) => {
-    const canonicalUrl = `${hostname}/${pageData.relativePath}`
+  buildEnd: og.buildEnd,
+  transformHead: (context) => {
+    const canonicalUrl = `${hostname}/${context.pageData.relativePath}`
       .replace(indexMdRegex, '')
       .replace(mdRegex, '')
       .replace(trailingSlashRegex, '')
 
-    return [['link', { rel: 'canonical', href: canonicalUrl }]]
+    return [['link', { rel: 'canonical', href: canonicalUrl }], ...og.transformHead(context)]
   },
   head: [
+    ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
     ['meta', { property: 'og:site_name', content: 'Feedsmith' }],
     [
       'script',
@@ -56,7 +79,7 @@ export default defineConfig({
       { text: 'Generating', link: '/generating' },
       {
         text: 'v3.x',
-        items: [{ text: 'v2.x', link: 'https://v2.feedsmith.dev' }],
+        items: [{ text: 'v2.x', link: 'https://v2.feedsmith.dev', target: '_self' }],
       },
     ],
     sidebar: [
