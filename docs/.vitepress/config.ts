@@ -1,3 +1,4 @@
+import { getImageUrl } from 'ogier'
 import { vitepress } from 'ogier/vitepress'
 import { defineConfig } from 'vitepress'
 
@@ -6,8 +7,9 @@ const mdRegex = /\.md$/
 const trailingSlashRegex = /\/$/
 
 const hostname = 'https://feedsmith.dev'
+const docsHostname = 'https://v3.feedsmith.dev'
 const og = vitepress({
-  site: { hostname },
+  site: { hostname, imageUrl: (path) => getImageUrl(docsHostname, path) },
   card: {
     header: {
       text: 'feedsmith',
