@@ -1,5 +1,5 @@
 import { getImageUrl } from 'ogier'
-import { vitepress } from 'ogier/vitepress'
+import { vitepress } from 'ogier/adapters'
 import { defineConfig } from 'vitepress'
 
 const indexMdRegex = /index\.md$/
@@ -9,7 +9,11 @@ const trailingSlashRegex = /\/$/
 const hostname = 'https://feedsmith.dev'
 const docsHostname = 'https://v3.feedsmith.dev'
 const og = vitepress({
-  site: { hostname, imageUrl: (path) => getImageUrl(docsHostname, path) },
+  site: {
+    hostname,
+    imageUrl: (path) => getImageUrl(docsHostname, path),
+    favicon: { file: new URL('../public/favicon.svg', import.meta.url) },
+  },
   card: {
     header: {
       text: 'feedsmith',
@@ -75,7 +79,7 @@ export default defineConfig({
       { text: 'Generating', link: '/generating' },
       {
         text: 'v3.0 (Next)',
-        items: [{ text: 'v2.0', link: 'https://feedsmith.dev' }],
+        items: [{ text: 'v2.0', link: 'https://feedsmith.dev', target: '_self' }],
       },
     ],
     sidebar: [
