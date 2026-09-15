@@ -3,6 +3,7 @@ import type { AcastNs } from '../../../namespaces/acast/common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
 import type { BlogChannelNs } from '../../../namespaces/blogchannel/common/types.js'
+import type { BylineNs } from '../../../namespaces/byline/common/types.js'
 import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { ContentNs } from '../../../namespaces/content/common/types.js'
 import type { CreativeCommonsNs } from '../../../namespaces/creativecommons/common/types.js'
@@ -112,6 +113,7 @@ export namespace Rss {
     dcterms?: DcTermsNs.ItemOrFeed<TDate>
     prism?: PrismNs.Item<TDate>
     wfw?: WfwNs.Item
+    byline?: BylineNs.Item
     sourceNs?: SourceNs.Item
     rawvoice?: RawVoiceNs.Item
     spotify?: SpotifyNs.Item
@@ -159,6 +161,7 @@ export namespace Rss {
     feedpress?: FeedPressNs.Feed
     opensearch?: OpenSearchNs.Feed
     admin?: AdminNs.Feed
+    byline?: BylineNs.Feed
     sourceNs?: SourceNs.Feed
     blogChannel?: BlogChannelNs.Feed
     rawvoice?: RawVoiceNs.Feed<TDate>
