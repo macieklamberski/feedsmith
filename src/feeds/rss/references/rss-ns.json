@@ -895,6 +895,17 @@
         "episodeUrl": "example-episode-title",
         "settings": "RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA=="
       },
+      "livejournal": {
+        "music": "The Beatles - Hey Jude",
+        "mood": "cheerful",
+        "security": "public",
+        "poster": "johndoe",
+        "posterId": "12345",
+        "journal": "example_community",
+        "journalId": "67890",
+        "journalType": "C",
+        "replyCount": 42
+      },
       "xml": {
         "lang": "en-US",
         "base": "http://example.org/item/1/"
