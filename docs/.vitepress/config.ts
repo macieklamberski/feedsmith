@@ -1,16 +1,24 @@
+import { vitepress } from 'ogier/vitepress'
 import { defineConfig } from 'vitepress'
-import { createOg } from './og.js'
 
 const indexMdRegex = /index\.md$/
 const mdRegex = /\.md$/
 const trailingSlashRegex = /\/$/
 
 const hostname = 'https://feedsmith.dev'
-const og = createOg({
-  name: 'feedsmith',
-  hostname,
-  repo: 'macieklamberski/feedsmith',
-  accent: '#ff8c4d',
+const og = vitepress({
+  site: { hostname },
+  card: {
+    header: {
+      text: 'feedsmith',
+      icon: { file: new URL('../public/favicon.svg', import.meta.url) },
+    },
+    footer: {
+      text: 'macieklamberski/feedsmith',
+      icon: { file: new URL('./github.svg', import.meta.url) },
+    },
+  },
+  style: { background: { pattern: 'dots' } },
 })
 
 export default defineConfig({
