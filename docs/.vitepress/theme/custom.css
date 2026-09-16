@@ -19,10 +19,4 @@
   width: 24px;
   height: 24px;
   margin-right: 10px;
-  filter: grayscale(1) brightness(0.9);
-  transition: filter 0.25s;
-}
-
-.VPNavBarTitle .title:hover .nav-logo {
-  filter: none;
 }
