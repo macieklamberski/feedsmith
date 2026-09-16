@@ -122,7 +122,7 @@ For a full overview of all the features, visit the [documentation website](https
 npm install feedsmith
 ```
 
-> **Migrating from v1.x?** Check out the [migration guide](https://v2.feedsmith.dev/migration/v1-to-v2).
+> **Migrating from v2.x?** Check out the [migration guide](https://feedsmith.dev/migration/v2-to-v3).
 
 ### Parse Any Feed
 
