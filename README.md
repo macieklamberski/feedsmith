@@ -8,6 +8,9 @@ Fast, all‑in‑one JavaScript feed parser and generator for RSS, Atom, RDF, an
 
 Feedsmith offers universal and format‑specific parsers that maintain the original feed structure in a clean, object-oriented format while intelligently normalizing legacy elements. Access all feed data without compromising simplicity.
 
+> [!TIP]
+> **Feedsmith 3.0 is out! 🎉** It comes with a range of improvements and some breaking changes. Check out the [migration guide](https://feedsmith.dev/migration/v2-to-v3) to see what's new and how to upgrade from 2.x.
+
 **[Read full docs ↗](https://feedsmith.dev)**
 &nbsp;&nbsp;·&nbsp;&nbsp;
 [Quick Start](#quick-start)
@@ -119,7 +122,7 @@ For a full overview of all the features, visit the [documentation website](https
 npm install feedsmith
 ```
 
-> **Migrating from v1.x?** Check out the [migration guide](https://feedsmith.dev/migration-to-2.x).
+> **Migrating from v1.x?** Check out the [migration guide](https://v2.feedsmith.dev/migration/v1-to-v2).
 
 ### Parse Any Feed
 
