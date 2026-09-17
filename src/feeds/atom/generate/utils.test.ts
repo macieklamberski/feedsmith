@@ -959,6 +959,35 @@ describe('generateEntry', () => {
 
     expect(generateEntry(value)).toEqual(expected)
   })
+
+  it('should generate entry with byline namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Byline namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      byline: {
+        author: { ref: 'annie' },
+        role: 'staff',
+        perspective: 'reporting',
+        affiliation: { org: 'apple', relationship: 'employed', title: 'Senior Engineer' },
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: 'Entry with Byline namespace',
+      updated: '2023-03-15T12:00:00.000Z',
+      'byline:author': { '@ref': 'annie' },
+      'byline:role': 'staff',
+      'byline:perspective': 'reporting',
+      'byline:affiliation': {
+        'byline:org-ref': { '@ref': 'apple' },
+        'byline:relationship': 'employed',
+        'byline:title': 'Senior Engineer',
+      },
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -1801,6 +1830,35 @@ describe('generateFeed', () => {
         'googleplay:new-feed-url': 'https://example.com/new-feed.xml',
         'googleplay:email': 'podcast@example.com',
         'googleplay:category': [{ '@text': 'Technology' }, { '@text': 'Science' }],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with byline namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: 'Feed with Byline namespace',
+      updated: new Date('2023-03-15T12:00:00Z'),
+      byline: {
+        contributors: [{ id: 'annie', name: 'Annie Park' }],
+        organizations: [{ id: 'ttr', name: 'The Tech Review', type: 'news' }],
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:byline': 'https://bylinespec.org/1.0',
+        id: 'https://example.com/feed',
+        title: 'Feed with Byline namespace',
+        updated: '2023-03-15T12:00:00.000Z',
+        'byline:contributors': {
+          'byline:person': [{ '@id': 'annie', 'byline:name': 'Annie Park' }],
+        },
+        'byline:organizations': {
+          'byline:org': [{ '@id': 'ttr', 'byline:name': 'The Tech Review', 'byline:type': 'news' }],
+        },
       },
     }
 
