@@ -73,7 +73,10 @@ export default defineConfig({
       { text: 'Generating', link: '/generating' },
       {
         text: 'v2.x',
-        items: [{ text: 'v3.x', link: 'https://feedsmith.dev', target: '_self' }],
+        items: [
+          { text: 'v3.x (Latest)', link: 'https://feedsmith.dev', target: '_self' },
+          { text: 'v2.x', link: 'https://v2.feedsmith.dev', target: '_self' },
+        ],
       },
     ],
     sidebar: [
