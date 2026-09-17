@@ -3406,6 +3406,21 @@ describe('createNamespaceResolver', () => {
     expect(parser.parse('<rss><a:title>T</a:title></rss>')).toEqual(expected)
   })
 
+  // A default namespace is an attribute value, which fast-xml-parser does not sanitize, so
+  // `constructor` and `__proto__` reach the prefix table as keys. Answering with an inherited
+  // member renames every element after the uri and the document stops being a feed.
+  const inheritedMemberUris = ['constructor', '__proto__']
+
+  it.each(inheritedMemberUris)('should not resolve %s to an inherited member', (uri) => {
+    const options = createNamespaceResolver({ namespaceUris, namespacePrefixes })(
+      `<rss xmlns="${uri}">`,
+    )
+    const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '@', ...options })
+    const expected = { rss: { '@xmlns': uri, title: 'T' } }
+
+    expect(parser.parse(`<rss xmlns="${uri}"><title>T</title></rss>`)).toEqual(expected)
+  })
+
   it('should fall back to a whole-document scan when a comment never closes', () => {
     const createNamespaceOptions = createNamespaceResolver({ namespaceUris, namespacePrefixes })
     // The comment never closes, so no root can be found and the scan falls back to the

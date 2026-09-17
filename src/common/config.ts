@@ -177,7 +177,7 @@ export const namespacePrefixes = Object.entries(namespaceUris).reduce(
 
     return prefixes
   },
-  {} as Record<string, string>,
+  Object.create(null) as Record<string, string>,
 )
 
 export const namespaceStopNodes = [
