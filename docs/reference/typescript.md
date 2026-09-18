@@ -18,25 +18,25 @@ Each namespace contains the complete type system for that format:
 
 ```typescript
 // RSS types
-type Feed = RssFeed.Feed
-type Item = RssFeed.Item
+type Feed = RssFeed.Feed<string>
+type Item = RssFeed.Item<string>
 type Category = RssFeed.Category
 type Enclosure = RssFeed.Enclosure
 
 // Atom types
-type Entry = AtomFeed.Entry
-type Link = AtomFeed.Link
+type Entry = AtomFeed.Entry<string>
+type Link = AtomFeed.Link<string>
 
 // JSON Feed types
-type JsonItem = JsonFeed.Item
+type JsonItem = JsonFeed.Item<string>
 type Author = JsonFeed.Author
 
 // RDF types
-type RdfItem = RdfFeed.Item
+type RdfItem = RdfFeed.Item<string>
 
 // OPML types
-type Document = Opml.Document
-type Outline = Opml.Outline
+type Document = Opml.Document<string>
+type Outline = Opml.Outline<string>
 ```
 
 ## Using Types with Parsing
