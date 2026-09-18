@@ -29,8 +29,6 @@ Feedsmith parses each feed into an object that mirrors its original structure, a
 * **Preserves structure**: Parsed feed object maintains the original feed structure making it easy to access the data.
 * **Smart namespace handling**: Normalizes custom namespace prefixes to standard ones (e.g., `<custom:creator>` becomes `dc.creator`).
 * **Parsing & generating**: Use one package for both parsing and generating feeds.
-* **Type-safe API**: Built with TypeScript from the ground up, it provides complete type definitions for every feed format and namespace.
-* **Well-tested**: Comprehensive test suite with over 4000 tests and 99% code coverage.
 
 ### Leniency
 
@@ -42,7 +40,9 @@ Feedsmith parses each feed into an object that mirrors its original structure, a
 ### Performance
 
 * **Ultrafast parsing**: One of the fastest JavaScript feed parsers ([see benchmarks](https://feedsmith.dev/benchmarks)).
+* **Type-safe API**: Built with TypeScript from the ground up, it provides complete type definitions for every feed format and namespace.
 * **Tree-shakable**: Only include the parts of the library you need, reducing bundle size.
+* **Well-tested**: Comprehensive test suite with over 4000 tests and 99% code coverage.
 
 ### Compatibility
 
