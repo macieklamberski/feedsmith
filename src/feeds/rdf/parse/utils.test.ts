@@ -1704,6 +1704,43 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
+  it('should handle cc namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'cc:license': {
+          '@resource': 'https://creativecommons.org/licenses/by/4.0/',
+        },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+          'cc:license': {
+            '@resource': 'https://creativecommons.org/licenses/by-sa/4.0/',
+          },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+          cc: {
+            license: 'https://creativecommons.org/licenses/by-sa/4.0/',
+          },
+        },
+      ],
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
   it('should handle rdf namespace attributes on channel', () => {
     const value = {
       channel: {
