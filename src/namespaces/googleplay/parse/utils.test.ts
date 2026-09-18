@@ -1,6 +1,169 @@
 import { describe, expect, it } from 'bun:test'
 import type { GooglePlayNs } from '../common/types.js'
-import { retrieveFeed, retrieveItem } from './utils.js'
+import { parseCategory, parseExplicit, parseImage, retrieveFeed, retrieveItem } from './utils.js'
+
+describe('parseImage', () => {
+  it('should parse image with href attribute', () => {
+    const value = {
+      '@href': 'https://example.com/image.jpg',
+    }
+    const expected: GooglePlayNs.Image = {
+      href: 'https://example.com/image.jpg',
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should parse image from string value', () => {
+    const value = 'https://example.com/image.jpg'
+    const expected: GooglePlayNs.Image = {
+      href: 'https://example.com/image.jpg',
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should parse image from #text property', () => {
+    const value = {
+      '#text': 'https://example.com/image.jpg',
+    }
+    const expected: GooglePlayNs.Image = {
+      href: 'https://example.com/image.jpg',
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should handle coercible number values', () => {
+    const value = 123
+    const expected: GooglePlayNs.Image = {
+      href: '123',
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty strings', () => {
+    expect(parseImage('')).toBeUndefined()
+    expect(parseImage({ '@href': '' })).toBeUndefined()
+  })
+
+  it('should return undefined for whitespace-only strings', () => {
+    expect(parseImage('   ')).toBeUndefined()
+  })
+
+  it('should return undefined for empty object', () => {
+    expect(parseImage({})).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(parseImage(null)).toBeUndefined()
+    expect(parseImage(undefined)).toBeUndefined()
+    expect(parseImage([])).toBeUndefined()
+    expect(parseImage(true)).toBeUndefined()
+  })
+})
+
+describe('parseCategory', () => {
+  it('should parse category with text attribute', () => {
+    const value = {
+      '@text': 'Technology',
+    }
+
+    expect(parseCategory(value)).toBe('Technology')
+  })
+
+  it('should parse category from string value', () => {
+    const value = 'Technology'
+
+    expect(parseCategory(value)).toBe('Technology')
+  })
+
+  it('should parse category from #text property', () => {
+    const value = {
+      '#text': 'Technology',
+    }
+
+    expect(parseCategory(value)).toBe('Technology')
+  })
+
+  it('should handle coercible number values', () => {
+    expect(parseCategory(123)).toBe('123')
+  })
+
+  it('should return undefined for empty strings', () => {
+    expect(parseCategory('')).toBeUndefined()
+    expect(parseCategory({ '@text': '' })).toBeUndefined()
+  })
+
+  it('should return undefined for whitespace-only strings', () => {
+    expect(parseCategory('   ')).toBeUndefined()
+  })
+
+  it('should return undefined for empty object', () => {
+    expect(parseCategory({})).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(parseCategory(null)).toBeUndefined()
+    expect(parseCategory(undefined)).toBeUndefined()
+    expect(parseCategory([])).toBeUndefined()
+  })
+})
+
+describe('parseExplicit', () => {
+  it('should parse yes as true case-insensitively', () => {
+    expect(parseExplicit('yes')).toBe(true)
+    expect(parseExplicit('Yes')).toBe(true)
+    expect(parseExplicit('YES')).toBe(true)
+  })
+
+  it('should parse no as false case-insensitively', () => {
+    expect(parseExplicit('no')).toBe(false)
+    expect(parseExplicit('NO')).toBe(false)
+  })
+
+  it('should parse clean value case-insensitively', () => {
+    expect(parseExplicit('clean')).toBe('clean')
+    expect(parseExplicit('CLEAN')).toBe('clean')
+    expect(parseExplicit('  Clean  ')).toBe('clean')
+  })
+
+  it('should parse clean from #text property', () => {
+    const value = {
+      '#text': 'clean',
+    }
+
+    expect(parseExplicit(value)).toBe('clean')
+  })
+
+  it('should parse non-yes values as false', () => {
+    expect(parseExplicit('maybe')).toBe(false)
+  })
+
+  it('should return undefined for empty and whitespace-only strings', () => {
+    expect(parseExplicit('')).toBeUndefined()
+    expect(parseExplicit('   ')).toBeUndefined()
+  })
+
+  it('should return undefined for null and undefined inputs', () => {
+    expect(parseExplicit(null)).toBeUndefined()
+    expect(parseExplicit(undefined)).toBeUndefined()
+  })
+
+  it.todo('should parse yes from #text property', () => {
+    // parseExplicit({ '#text': 'yes' }) currently returns undefined because the yes/no branch
+    // passes the raw object to parseYesNoBoolean instead of the retrieved text, while the clean
+    // branch reads the retrieved text.
+    // Expected: true.
+  })
+
+  it.todo('should handle non-string inputs without throwing', () => {
+    // parseExplicit currently throws a TypeError for {}, [], 123 and true because retrieveText
+    // returns the raw value and .trim() is called on a non-string.
+    // Expected: undefined instead of a throw.
+  })
+})
 
 describe('retrieveItem', () => {
   it('should parse complete item object with all properties', () => {

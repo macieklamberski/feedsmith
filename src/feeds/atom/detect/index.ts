@@ -1,5 +1,5 @@
+import { isNonEmptyString } from 'trousse'
 import { namespaceUris } from '../../../common/config.js'
-import { isNonEmptyString } from '../../../common/utils.js'
 
 const feedElementRegex = /(?:^|[\s>])<(?:\w+:)?feed[\s>]/im
 const atomElementsRegex = /(<(?:\w+:)?(entry|title|link|id|updated|summary)[\s>])/i

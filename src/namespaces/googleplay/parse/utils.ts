@@ -1,17 +1,16 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import { isPlainObject, trimObject } from 'trousse'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseSingularOf,
   parseString,
   parseYesNoBoolean,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { GooglePlayNs } from '../common/types.js'
 
-export const parseImage: ParsePartialUtil<GooglePlayNs.Image> = (value) => {
-  if (isObject(value) && value['@href']) {
+export const parseImage: ParseUtilPartial<GooglePlayNs.Image> = (value) => {
+  if (isPlainObject(value) && value['@href']) {
     const image = {
       href: parseString(value['@href']),
     }
@@ -29,15 +28,15 @@ export const parseImage: ParsePartialUtil<GooglePlayNs.Image> = (value) => {
   }
 }
 
-export const parseCategory: ParsePartialUtil<string> = (value) => {
-  if (isObject(value) && value['@text']) {
+export const parseCategory: ParseUtilPartial<string> = (value) => {
+  if (isPlainObject(value) && value['@text']) {
     return parseString(value['@text'])
   }
 
   return parseString(retrieveText(value))
 }
 
-export const parseExplicit: ParsePartialUtil<boolean | 'clean'> = (value) => {
+export const parseExplicit: ParseUtilPartial<boolean | 'clean'> = (value) => {
   const explicit = retrieveText(value)?.trim().toLowerCase()
 
   if (explicit === 'clean') {
@@ -47,8 +46,8 @@ export const parseExplicit: ParsePartialUtil<boolean | 'clean'> = (value) => {
   return parseYesNoBoolean(value)
 }
 
-export const retrieveItem: ParsePartialUtil<GooglePlayNs.Item> = (value) => {
-  if (!isObject(value)) {
+export const retrieveItem: ParseUtilPartial<GooglePlayNs.Item> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -69,8 +68,8 @@ export const retrieveItem: ParsePartialUtil<GooglePlayNs.Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParsePartialUtil<GooglePlayNs.Feed> = (value) => {
-  if (!isObject(value)) {
+export const retrieveFeed: ParseUtilPartial<GooglePlayNs.Feed> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 

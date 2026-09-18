@@ -97,6 +97,12 @@ describe('generateSandbox', () => {
     expect(generateSandbox(value)).toEqual(expected)
   })
 
+  it.todo('should return undefined for empty object', () => {
+    // generateSandbox({}) currently returns { '@enabled': undefined } because the generator
+    // skips trimObject, unlike every sibling generator in this file. Expected: undefined for
+    // an empty object. Pin this once the generator trims its value.
+  })
+
   it('should return undefined for non-object input', () => {
     // @ts-expect-error: This is for testing purposes.
     expect(generateSandbox(null)).toBeUndefined()
@@ -342,38 +348,30 @@ describe('generateFeed', () => {
     expect(generateFeed(null)).toBeUndefined()
   })
 
-  it('should handle country codes correctly', () => {
-    const countryCodes = ['US', 'GB', 'CA', 'AU', 'DE', 'FR', 'JP']
+  const countryCases: Array<[string, { 'spotify:countryOfOrigin': string }]> = [
+    ['US', { 'spotify:countryOfOrigin': 'US' }],
+    ['GB', { 'spotify:countryOfOrigin': 'GB' }],
+    ['CA', { 'spotify:countryOfOrigin': 'CA' }],
+    ['AU', { 'spotify:countryOfOrigin': 'AU' }],
+    ['DE', { 'spotify:countryOfOrigin': 'DE' }],
+    ['FR', { 'spotify:countryOfOrigin': 'FR' }],
+    ['JP', { 'spotify:countryOfOrigin': 'JP' }],
+  ]
 
-    for (const code of countryCodes) {
-      const value = {
-        countryOfOrigin: code,
-      }
-      const expected = {
-        'spotify:countryOfOrigin': code,
-      }
-
-      expect(generateFeed(value)).toEqual(expected)
-    }
+  it.each(countryCases)('should handle country code %s', (countryOfOrigin, expected) => {
+    expect(generateFeed({ countryOfOrigin })).toEqual(expected)
   })
 
-  it('should handle various recentCount limit values', () => {
-    const limits = [1, 5, 10, 50, 100]
+  const limitCases: Array<[number, { 'spotify:limit': { '@recentCount': number } }]> = [
+    [1, { 'spotify:limit': { '@recentCount': 1 } }],
+    [5, { 'spotify:limit': { '@recentCount': 5 } }],
+    [10, { 'spotify:limit': { '@recentCount': 10 } }],
+    [50, { 'spotify:limit': { '@recentCount': 50 } }],
+    [100, { 'spotify:limit': { '@recentCount': 100 } }],
+  ]
 
-    for (const count of limits) {
-      const value = {
-        limit: {
-          recentCount: count,
-        },
-      }
-      const expected = {
-        'spotify:limit': {
-          '@recentCount': count,
-        },
-      }
-
-      expect(generateFeed(value)).toEqual(expected)
-    }
+  it.each(limitCases)('should handle recentCount limit value %s', (recentCount, expected) => {
+    expect(generateFeed({ limit: { recentCount } })).toEqual(expected)
   })
 
   it('should handle limit with undefined recentCount', () => {

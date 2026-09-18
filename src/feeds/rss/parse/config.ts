@@ -1,14 +1,7 @@
-import { XMLParser } from 'fast-xml-parser'
-import {
-  namespacePrefixes,
-  namespaceStopNodes,
-  namespaceUris,
-  parserConfig,
-} from '../../../common/config.js'
-import { createNamespaceNormalizator } from '../../../common/utils.js'
+import { namespaceStopNodes } from '../../../common/config.js'
 
-// These elements can appear both inside <channel> and as direct children of
-// <rss> in malformed feeds, so stop nodes are generated for both paths.
+// These elements can appear both inside <channel> and as direct children of <rss> in malformed
+// feeds, so stop nodes are generated for both paths.
 const sharedStopNodes = [
   'image.description',
   'image.height',
@@ -23,8 +16,8 @@ const sharedStopNodes = [
   'item.title',
   'item.link',
   'item.description',
-  // INFO: Added support for nested *.name under author to support cases as
-  // described here: https://github.com/macieklamberski/feedsmith/issues/22.
+  // INFO: Added support for nested *.name under author to support cases as described here:
+  // https://github.com/macieklamberski/feedsmith/issues/22.
   'item.author.name',
   'item.category',
   'item.comments',
@@ -56,10 +49,3 @@ export const stopNodes = [
   ...sharedStopNodes.map((node) => `rss.channel.${node}`),
   ...sharedStopNodes.map((node) => `rss.${node}`),
 ]
-
-export const parser = new XMLParser({
-  ...parserConfig,
-  stopNodes,
-})
-
-export const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes)

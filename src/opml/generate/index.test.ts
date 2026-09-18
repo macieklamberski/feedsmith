@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'bun:test'
+import { locales } from '../../common/config.js'
+import { GenerateError } from '../../common/errors.js'
 import { generate } from './index.js'
 
 describe('generate', () => {
@@ -10,7 +12,7 @@ describe('generate', () => {
       const value = await Bun.file(`${path}.json`).json()
       const expected = await Bun.file(`${path}.opml`).text()
 
-      expect(generate(value)).toEqual(expected)
+      expect(generate(value)).toBe(expected)
     })
   }
 
@@ -28,7 +30,7 @@ describe('generate', () => {
 </opml>
 `
 
-    expect(generate(value)).toEqual(expected)
+    expect(generate(value)).toBe(expected)
   })
 
   it('should generate OPML with head information', () => {
@@ -60,7 +62,7 @@ describe('generate', () => {
 </opml>
 `
 
-    expect(generate(value)).toEqual(expected)
+    expect(generate(value)).toBe(expected)
   })
 
   it('should generate OPML with nested outlines', () => {
@@ -94,7 +96,7 @@ describe('generate', () => {
 </opml>
 `
 
-    expect(generate(value)).toEqual(expected)
+    expect(generate(value)).toBe(expected)
   })
 
   it('should generate OPML with boolean attributes', () => {
@@ -117,13 +119,13 @@ describe('generate', () => {
 </opml>
 `
 
-    expect(generate(value)).toEqual(expected)
+    expect(generate(value)).toBe(expected)
   })
 
   it('should generate complete OPML with all fields', () => {
     const now = new Date('2023-03-15T12:00:00Z')
 
-    const opml = {
+    const value = {
       head: {
         title: 'Complete OPML Example',
         dateCreated: now,
@@ -191,7 +193,7 @@ describe('generate', () => {
 </opml>
 `
 
-    expect(generate(opml)).toEqual(expected)
+    expect(generate(value)).toBe(expected)
   })
 
   it('should handle outlines with empty arrays', () => {
@@ -213,21 +215,37 @@ describe('generate', () => {
 </opml>
 `
 
-    expect(generate(value)).toEqual(expected)
+    expect(generate(value)).toBe(expected)
   })
 
-  it('should throw error for invalid OPML structure', () => {
-    const value = {
-      head: {
-        title: 'Invalid OPML',
-      },
-    }
+  describe('error types', () => {
+    it('should throw GenerateError for invalid OPML structure', () => {
+      const value = {
+        head: {
+          title: 'Invalid OPML',
+        },
+      }
+      const throwing = () => generate(value)
 
-    expect(() => generate(value)).toThrow()
+      expect(throwing).toThrow(GenerateError)
+      expect(throwing).toThrow(locales.invalidInputOpml)
+    })
+
+    it('should throw GenerateError for body with empty outlines', () => {
+      const value = {
+        body: {
+          outlines: [],
+        },
+      }
+      const throwing = () => generate(value)
+
+      expect(throwing).toThrow(GenerateError)
+      expect(throwing).toThrow(locales.invalidInputOpml)
+    })
   })
 
   it('should properly encode special characters in attributes', () => {
-    const opml = {
+    const value = {
       body: {
         outlines: [
           {
@@ -245,7 +263,7 @@ describe('generate', () => {
 </opml>
 `
 
-    expect(generate(opml)).toEqual(expected)
+    expect(generate(value)).toBe(expected)
   })
 
   it('should generate OPML with stylesheets', () => {
@@ -266,18 +284,120 @@ describe('generate', () => {
 </opml>
 `
 
-    expect(generate(value, options)).toEqual(expected)
+    expect(generate(value, options)).toBe(expected)
   })
-})
 
-describe('generate with lenient mode', () => {
-  it('should accept partial feeds with lenient: true', () => {
-    const value = {
-      body: {
-        outlines: [{ text: 'Test Outline' }],
-      },
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
+  describe('strict mode', () => {
+    it('should require outline text in strict mode', () => {
+      const value = {
+        body: {
+          outlines: [{ type: 'rss', xmlUrl: 'https://example.com/feed.xml' }],
+        },
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <body>
+    <outline type="rss" xmlUrl="https://example.com/feed.xml"/>
+  </body>
+</opml>
+`
+
+      // @ts-expect-error: This is for testing purposes.
+      expect(generate(value, { strict: true })).toBe(expected)
+    })
+
+    it('should accept outlines with text in strict mode', () => {
+      const value = {
+        body: {
+          outlines: [{ text: 'Feed', type: 'rss', xmlUrl: 'https://example.com/feed.xml' }],
+        },
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <body>
+    <outline text="Feed" type="rss" xmlUrl="https://example.com/feed.xml"/>
+  </body>
+</opml>
+`
+
+      expect(generate(value, { strict: true })).toBe(expected)
+    })
+
+    it('should require nested outline text in strict mode', () => {
+      const value = {
+        body: {
+          outlines: [
+            {
+              text: 'Category',
+              outlines: [{ type: 'rss', xmlUrl: 'https://example.com/feed.xml' }],
+            },
+          ],
+        },
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <body>
+    <outline text="Category">
+      <outline type="rss" xmlUrl="https://example.com/feed.xml"/>
+    </outline>
+  </body>
+</opml>
+`
+
+      // @ts-expect-error: This is for testing purposes.
+      expect(generate(value, { strict: true })).toBe(expected)
+    })
+
+    it('should accept nested outlines with text in strict mode', () => {
+      const value = {
+        body: {
+          outlines: [
+            {
+              text: 'Category',
+              outlines: [{ text: 'Feed', type: 'rss', xmlUrl: 'https://example.com/feed.xml' }],
+            },
+          ],
+        },
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <body>
+    <outline text="Category">
+      <outline text="Feed" type="rss" xmlUrl="https://example.com/feed.xml"/>
+    </outline>
+  </body>
+</opml>
+`
+
+      expect(generate(value, { strict: true })).toBe(expected)
+    })
+
+    it('should accept partial document in lenient mode', () => {
+      const value = {
+        body: {
+          outlines: [{ type: 'rss', xmlUrl: 'https://example.com/feed.xml' }],
+        },
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<opml version="2.0">
+  <body>
+    <outline type="rss" xmlUrl="https://example.com/feed.xml"/>
+  </body>
+</opml>
+`
+
+      expect(generate(value)).toBe(expected)
+    })
+  })
+
+  describe('partial documents and string dates', () => {
+    it('should accept partial documents', () => {
+      const value = {
+        body: {
+          outlines: [{ text: 'Test Outline' }],
+        },
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
 <opml version="2.0">
   <body>
     <outline text="Test Outline"/>
@@ -285,21 +405,21 @@ describe('generate with lenient mode', () => {
 </opml>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
-  })
+      expect(generate(value)).toBe(expected)
+    })
 
-  it('should accept feeds with string dates in lenient mode', () => {
-    const value = {
-      head: {
-        title: 'Test OPML',
-        dateCreated: '2023-01-01T00:00:00.000Z',
-        dateModified: '2023-01-02T00:00:00.000Z',
-      },
-      body: {
-        outlines: [{ text: 'Test Outline' }],
-      },
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
+    it('should accept string dates', () => {
+      const value = {
+        head: {
+          title: 'Test OPML',
+          dateCreated: '2023-01-01T00:00:00.000Z',
+          dateModified: '2023-01-02T00:00:00.000Z',
+        },
+        body: {
+          outlines: [{ text: 'Test Outline' }],
+        },
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
 <opml version="2.0">
   <head>
     <title>Test OPML</title>
@@ -312,21 +432,21 @@ describe('generate with lenient mode', () => {
 </opml>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
-  })
+      expect(generate(value)).toBe(expected)
+    })
 
-  it('should preserve invalid date strings in lenient mode', () => {
-    const value = {
-      head: {
-        title: 'Test OPML',
-        dateCreated: 'not-a-valid-date',
-        dateModified: 'also-invalid',
-      },
-      body: {
-        outlines: [{ text: 'Test Outline' }],
-      },
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
+    it('should preserve invalid date strings', () => {
+      const value = {
+        head: {
+          title: 'Test OPML',
+          dateCreated: 'not-a-valid-date',
+          dateModified: 'also-invalid',
+        },
+        body: {
+          outlines: [{ text: 'Test Outline' }],
+        },
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
 <opml version="2.0">
   <head>
     <title>Test OPML</title>
@@ -339,67 +459,68 @@ describe('generate with lenient mode', () => {
 </opml>
 `
 
-    expect(generate(value, { lenient: true })).toEqual(expected)
-  })
+      expect(generate(value)).toBe(expected)
+    })
 
-  describe('custom attributes', () => {
-    it('should generate OPML with custom attributes when specified in options', () => {
-      const opml = {
-        head: {
-          title: 'Test OPML',
-        },
-        body: {
-          outlines: [
-            {
-              text: 'Feed 1',
-              type: 'rss',
-              xmlUrl: 'https://feed1.com/rss',
-              customRating: '5',
-              customTags: 'tech,news',
-            },
-          ],
-        },
-      }
-      const options = {
-        extraOutlineAttributes: ['customRating', 'customTags'],
-      }
-      const expected = `<?xml version="1.0" encoding="utf-8"?>
+    describe('custom attributes', () => {
+      it('should generate OPML with custom attributes when specified in options', () => {
+        const value = {
+          head: {
+            title: 'Test OPML',
+          },
+          body: {
+            outlines: [
+              {
+                text: 'Feed 1',
+                type: 'rss',
+                xmlUrl: 'https://example.com/feed1.xml',
+                customRating: '5',
+                customTags: 'tech,news',
+              },
+            ],
+          },
+        }
+        const options = {
+          extraOutlineAttributes: ['customRating', 'customTags'],
+        }
+        const expected = `<?xml version="1.0" encoding="utf-8"?>
 <opml version="2.0">
   <head>
     <title>Test OPML</title>
   </head>
   <body>
-    <outline text="Feed 1" type="rss" xmlUrl="https://feed1.com/rss" customRating="5" customTags="tech,news"/>
+    <outline text="Feed 1" type="rss" xmlUrl="https://example.com/feed1.xml" customRating="5" customTags="tech,news"/>
   </body>
 </opml>
 `
 
-      expect(generate(opml, options)).toEqual(expected)
-    })
+        expect(generate(value, options)).toBe(expected)
+      })
 
-    it('should not include custom attributes when not specified in options', () => {
-      const opml = {
-        body: {
-          outlines: [
-            {
-              text: 'Feed',
-              type: 'rss',
-              xmlUrl: 'https://feed.com/rss',
-              customRating: '5',
-              customTags: 'tech',
-            },
-          ],
-        },
-      }
-      const expected = `<?xml version="1.0" encoding="utf-8"?>
+      it('should not include custom attributes when not specified in options', () => {
+        const value = {
+          body: {
+            outlines: [
+              {
+                text: 'Feed',
+                type: 'rss',
+                xmlUrl: 'https://example.com/feed.xml',
+                customRating: '5',
+                customTags: 'tech',
+              },
+            ],
+          },
+        }
+        const expected = `<?xml version="1.0" encoding="utf-8"?>
 <opml version="2.0">
   <body>
-    <outline text="Feed" type="rss" xmlUrl="https://feed.com/rss"/>
+    <outline text="Feed" type="rss" xmlUrl="https://example.com/feed.xml"/>
   </body>
 </opml>
 `
 
-      expect(generate(opml)).toEqual(expected)
+        expect(generate(value)).toBe(expected)
+      })
     })
   })
 })

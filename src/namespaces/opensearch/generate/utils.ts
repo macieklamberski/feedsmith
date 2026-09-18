@@ -1,15 +1,10 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import {
-  generateNumber,
-  generatePlainString,
-  isObject,
-  trimArray,
-  trimObject,
-} from '../../../common/utils.js'
+import { generateNumber, generatePlainString, trimArray } from '../../../common/utils.js'
 import type { OpenSearchNs } from '../common/types.js'
 
 export const generateQuery: GenerateUtil<OpenSearchNs.Query> = (query) => {
-  if (!isObject(query)) {
+  if (!isPlainObject(query)) {
     return
   }
 
@@ -28,7 +23,7 @@ export const generateQuery: GenerateUtil<OpenSearchNs.Query> = (query) => {
 }
 
 export const generateFeed: GenerateUtil<OpenSearchNs.Feed> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 

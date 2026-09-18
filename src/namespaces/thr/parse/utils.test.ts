@@ -177,6 +177,11 @@ describe('retrieveLink', () => {
     expect(retrieveLink(null)).toBeUndefined()
     expect(retrieveLink([])).toBeUndefined()
   })
+
+  it.todo('should parse updated with custom parseDateFn', () => {
+    // Pass options.parseDateFn that converts the RFC 3339 string into a Date instance.
+    // Expected: updated equals the value returned by parseDateFn instead of the raw string.
+  })
 })
 
 describe('retrieveItem', () => {

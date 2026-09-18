@@ -2,9 +2,9 @@
 title: "Reference: ccREL Namespace"
 ---
 
-# ccREL Namespace
+# ccREL Namespace Reference
 
-The Creative Commons Rights Expression Language (ccREL) enables RSS and Atom feeds to declare copyright licenses and additional permissions for feed content.
+The Creative Commons Rights Expression Language (ccREL) enables RSS, Atom and RDF feeds to declare copyright licenses and additional permissions for feed content.
 
 <table>
   <tbody>
@@ -22,7 +22,7 @@ The Creative Commons Rights Expression Language (ccREL) enables RSS and Atom fee
     </tr>
     <tr>
       <th>Available in</th>
-      <td><a href="/reference/feeds/rss">RSS</a>, <a href="/reference/feeds/atom">Atom</a></td>
+      <td><a href="/reference/feeds/rss">RSS</a>, <a href="/reference/feeds/atom">Atom</a>, <a href="/reference/feeds/rdf">RDF</a></td>
     </tr>
     <tr>
       <th>Property</th>

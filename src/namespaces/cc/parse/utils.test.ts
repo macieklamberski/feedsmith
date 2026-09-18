@@ -88,6 +88,74 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
+  it('should parse properties from arrays (uses first)', () => {
+    const value = {
+      'cc:license': [
+        'https://creativecommons.org/licenses/by/4.0/',
+        'https://creativecommons.org/licenses/by-sa/4.0/',
+      ],
+      'cc:attributionname': ['John Doe', 'Jane Doe'],
+    }
+    const expected = {
+      license: 'https://creativecommons.org/licenses/by/4.0/',
+      attributionName: 'John Doe',
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should handle HTML entities in text content', () => {
+    const value = {
+      'cc:morepermissions': { '#text': 'https://example.com/license?type=by&amp;version=2.0' },
+    }
+    const expected = {
+      morePermissions: 'https://example.com/license?type=by&version=2.0',
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should handle CDATA sections in text content', () => {
+    const value = {
+      'cc:license': { '#text': '<![CDATA[https://creativecommons.org/licenses/by/4.0/]]>' },
+    }
+    const expected = {
+      license: 'https://creativecommons.org/licenses/by/4.0/',
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should handle missing #text properties', () => {
+    const value = {
+      'cc:license': {},
+      'cc:morepermissions': {},
+    }
+
+    expect(retrieveItemOrFeed(value)).toBeUndefined()
+  })
+
+  it('should handle empty string values', () => {
+    const value = {
+      'cc:license': { '#text': '' },
+      'cc:attributionname': 'John Doe',
+    }
+    const expected = {
+      attributionName: 'John Doe',
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace-only values', () => {
+    const value = {
+      'cc:license': { '#text': '   ' },
+      'cc:attributionname': { '#text': '\t\n' },
+    }
+
+    expect(retrieveItemOrFeed(value)).toBeUndefined()
+  })
+
   it('should return undefined for empty object', () => {
     expect(retrieveItemOrFeed({})).toBeUndefined()
   })

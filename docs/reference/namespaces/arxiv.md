@@ -2,7 +2,7 @@
 title: "Reference: arXiv Namespace"
 ---
 
-# arXiv Namespace
+# arXiv Namespace Reference
 
 arXiv is an extension namespace for the arXiv preprint repository API, providing metadata specific to scholarly papers in physics, mathematics, computer science, and related fields.
 

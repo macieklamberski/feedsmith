@@ -5,12 +5,12 @@ describe('generateFeed', () => {
   it('should generate feed with all properties', () => {
     const value = {
       blogRoll: 'http://example.com/blogroll.opml',
-      blink: 'http://recommended-site.com/',
+      blink: 'http://recommended.example.com/',
       mySubscriptions: 'http://example.com/subscriptions.opml',
     }
     const expected = {
       'blogChannel:blogRoll': 'http://example.com/blogroll.opml',
-      'blogChannel:blink': 'http://recommended-site.com/',
+      'blogChannel:blink': 'http://recommended.example.com/',
       'blogChannel:mySubscriptions': 'http://example.com/subscriptions.opml',
     }
 
@@ -30,10 +30,10 @@ describe('generateFeed', () => {
 
   it('should generate feed with only blink', () => {
     const value = {
-      blink: 'http://recommended-site.com/',
+      blink: 'http://recommended.example.com/',
     }
     const expected = {
-      'blogChannel:blink': 'http://recommended-site.com/',
+      'blogChannel:blink': 'http://recommended.example.com/',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -53,10 +53,10 @@ describe('generateFeed', () => {
   it('should handle empty strings', () => {
     const value = {
       blogRoll: '',
-      blink: 'http://recommended-site.com/',
+      blink: 'http://recommended.example.com/',
     }
     const expected = {
-      'blogChannel:blink': 'http://recommended-site.com/',
+      'blogChannel:blink': 'http://recommended.example.com/',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -97,24 +97,27 @@ describe('generateFeed', () => {
     expect(generateFeed(null)).toBeUndefined()
   })
 
-  it('should handle various URL formats', () => {
-    const urls = [
+  const urlFormatCases: Array<[string, { 'blogChannel:blogRoll': string }]> = [
+    [
       'http://example.com/blogroll.opml',
+      { 'blogChannel:blogRoll': 'http://example.com/blogroll.opml' },
+    ],
+    [
       'https://example.com/blogroll.opml',
-      'http://example.com/blogroll.opml?foo=bar',
+      { 'blogChannel:blogRoll': 'https://example.com/blogroll.opml' },
+    ],
+    [
+      'http://example.com/blogroll.opml?format=opml',
+      { 'blogChannel:blogRoll': 'http://example.com/blogroll.opml?format=opml' },
+    ],
+    [
       'http://example.com/path/to/blogroll.opml',
-    ]
+      { 'blogChannel:blogRoll': 'http://example.com/path/to/blogroll.opml' },
+    ],
+  ]
 
-    for (const url of urls) {
-      const value = {
-        blogRoll: url,
-      }
-      const expected = {
-        'blogChannel:blogRoll': url,
-      }
-
-      expect(generateFeed(value)).toEqual(expected)
-    }
+  it.each(urlFormatCases)('should handle URL format: %s', (blogRoll, expected) => {
+    expect(generateFeed({ blogRoll })).toEqual(expected)
   })
 
   it('should handle partial feed data', () => {
@@ -133,11 +136,11 @@ describe('generateFeed', () => {
   it('should handle mixed empty and valid strings', () => {
     const value = {
       blogRoll: '',
-      blink: 'http://recommended-site.com/',
+      blink: 'http://recommended.example.com/',
       mySubscriptions: '   ',
     }
     const expected = {
-      'blogChannel:blink': 'http://recommended-site.com/',
+      'blogChannel:blink': 'http://recommended.example.com/',
     }
 
     expect(generateFeed(value)).toEqual(expected)

@@ -4,27 +4,8 @@ on:
   push:
     branches: [main, alpha, beta, rc]
   pull_request:
-  workflow_call:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile --ignore-scripts
-
-      - name: Run tests with coverage
-        run: bun test --coverage --coverage-reporter=lcov
-
-      - name: Upload coverage to Codecov
-        if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage/lcov.info
+    uses: macieklamberski/kvalita/.github/workflows/shared-test.yml@main
+    secrets: inherit
