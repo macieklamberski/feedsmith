@@ -27,7 +27,7 @@ Feedsmith offers universal and format‑specific parsers that maintain the origi
 * **Ultrafast parsing**: One of the fastest JavaScript feed parsers ([see benchmarks](/benchmarks)).
 * **Type-safe API**: Built with TypeScript from the ground up, it provides complete type definitions for every feed format and namespace.
 * **Tree-shakable**: Only include the parts of the library you need, reducing bundle size.
-* **Well-tested**: Comprehensive test suite with over 2000 tests and 99% code coverage.
+* **Well-tested**: Comprehensive test suite with over 3500 tests and 99% code coverage.
 
 ### Compatibility
 * Works in Node.js and modern browsers.
