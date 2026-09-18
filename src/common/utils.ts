@@ -845,13 +845,10 @@ export const parseJsonObject = (value: unknown): unknown => {
 
 const unclosedElementErrorRegex = /^Unexpected end of (.+)$/
 const attributeRegex = /[\w:.-]+\s*=\s*(?:"[^"]*"|'[^']*')/g
-// A plugin that injects an attribute after the slash leaves `href="…" / role="menuitem">`, so a
-// stray `/` is accepted between attributes.
 const attributesSource = `(?:[\\s/]+${attributeRegex.source})*\\s*`
 
 // Some generators write an attribute-only element without its `/`, as in `<atom:link href="…">`.
-// That is not valid XML, so parsing fails. This adds the missing `/` so the document can be
-// parsed again.
+// That is not valid XML and parsing fails, so the missing `/` is added before parsing again.
 export const repairUnclosedElement = (
   xml: string,
   error: unknown,
