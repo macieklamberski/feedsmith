@@ -228,6 +228,80 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  describe('unclosed attribute-only elements', () => {
+    it('should parse feed with unclosed atom:link', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/"
+          xmlns:atom="http://www.w3.org/2005/Atom"
+        >
+          <channel rdf:about="http://example.com">
+            <title>Feed Title</title>
+            <atom:link href="https://example.com/feed.rdf" rel="self">
+          </channel>
+          <item rdf:about="http://example.com/item1">
+            <title>First item</title>
+            <link>http://example.com/item1</link>
+          </item>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'Feed Title',
+        atom: {
+          links: [{ href: 'https://example.com/feed.rdf', rel: 'self' }],
+        },
+        rdf: { about: 'http://example.com' },
+        items: [
+          {
+            title: 'First item',
+            link: 'http://example.com/item1',
+            rdf: { about: 'http://example.com/item1' },
+          },
+        ],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
+    it('should parse feed with unclosed atom:link written with another prefix', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rdf:RDF
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns="http://purl.org/rss/1.0/"
+          xmlns:a10="http://www.w3.org/2005/Atom"
+        >
+          <channel rdf:about="http://example.com">
+            <title>Feed Title</title>
+            <a10:link href="https://example.com/feed.rdf" rel="self">
+          </channel>
+          <item rdf:about="http://example.com/item1">
+            <title>First item</title>
+            <link>http://example.com/item1</link>
+          </item>
+        </rdf:RDF>
+      `
+      const expected = {
+        title: 'Feed Title',
+        atom: {
+          links: [{ href: 'https://example.com/feed.rdf', rel: 'self' }],
+        },
+        rdf: { about: 'http://example.com' },
+        items: [
+          {
+            title: 'First item',
+            link: 'http://example.com/item1',
+            rdf: { about: 'http://example.com/item1' },
+          },
+        ],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+  })
+
   describe('namespace normalization integration', () => {
     it('should handle RDF 1.0 feeds with no additional namespaces', () => {
       const value = `

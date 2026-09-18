@@ -4,6 +4,7 @@ import {
   coerceBoolean,
   coerceNumber,
   coerceSingular,
+  escapeRegex,
   isJsonLike,
   isNonEmptyString,
   isNumber,
@@ -841,4 +842,76 @@ export const parseJsonObject = (value: unknown): unknown => {
       return parsed
     }
   } catch {}
+}
+
+const unclosedElementErrorRegex = /^Unexpected end of (.+)$/
+const attributeRegex = /[\w:.-]+\s*=\s*(?:"[^"]*"|'[^']*')/g
+const attributesSource = `(?:[\\s/]+${attributeRegex.source})*\\s*`
+const cdataOrCommentSource = '<!\\[CDATA\\[[\\s\\S]*?\\]\\]>|<!--[\\s\\S]*?-->'
+
+// Some generators write an attribute-only element without its `/`, as in `<atom:link href="…">`.
+// That is not valid XML and parsing fails, so the missing `/` is added before parsing again.
+export const repairUnclosedElement = (
+  xml: string,
+  error: unknown,
+  attributeOnlyElements: Array<string>,
+  canonicalize: (name: string) => string,
+): string | undefined => {
+  if (!(error instanceof Error)) {
+    return
+  }
+
+  // The error names the tag as written in the document, which may be `ATOM:LINK` or `a10:link`.
+  const written = error.message.match(unclosedElementErrorRegex)?.[1]
+
+  if (!written || !attributeOnlyElements.includes(canonicalize(written))) {
+    return
+  }
+
+  const name = escapeRegex(written)
+
+  const sameNameRegex = new RegExp(`<(/?)${name}(?=[\\s/>])`, 'gi')
+  const unclosedRegex = new RegExp(`${cdataOrCommentSource}|<(${name})(${attributesSource})>`, 'gi')
+  const repaired = xml.replace(
+    unclosedRegex,
+    (match: string, tag: string | undefined, attributes: string, offset: number) => {
+      // A CDATA section or a comment, where the same text is content and not a tag.
+      if (!tag) {
+        return match
+      }
+
+      // The next tag of the same name being a closing one means this tag has its pair.
+      sameNameRegex.lastIndex = offset + match.length
+
+      if (sameNameRegex.exec(xml)?.[1] === '/') {
+        return match
+      }
+
+      const pairs = attributes.match(attributeRegex) ?? []
+
+      return `<${[tag, ...pairs].join(' ')}/>`
+    },
+  )
+
+  return repaired === xml ? undefined : repaired
+}
+
+// A repair self-closes every unclosed tag of one name, so each retry has fewer left to fail on.
+export const parseWithRepair = <T>(
+  xml: string,
+  attributeOnlyElements: Array<string>,
+  canonicalize: (name: string) => string,
+  parse: (xml: string) => T,
+): T => {
+  try {
+    return parse(xml)
+  } catch (error) {
+    const repaired = repairUnclosedElement(xml, error, attributeOnlyElements, canonicalize)
+
+    if (!repaired) {
+      throw error
+    }
+
+    return parseWithRepair(repaired, attributeOnlyElements, canonicalize, parse)
+  }
 }
