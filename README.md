@@ -8,7 +8,7 @@ Fast, all‑in‑one JavaScript feed parser and generator for RSS, Atom, RDF, an
 
 Feedsmith offers universal and format‑specific parsers that maintain the original feed structure in a clean, object-oriented format while intelligently normalizing legacy elements. Access all feed data without compromising simplicity.
 
-**[Read full docs ↗](https://feedsmith.dev)**
+**[Read full docs ↗](https://v2.feedsmith.dev)**
 &nbsp;&nbsp;·&nbsp;&nbsp;
 [Quick Start](#quick-start)
 &nbsp;&nbsp;·&nbsp;&nbsp;
@@ -22,25 +22,25 @@ Feedsmith offers universal and format‑specific parsers that maintain the origi
 
 ### Core
 
-* **Comprehensive support** — Supports all major feed formats and namespaces.
-* **Preserves structure** — Parsed feed object maintains the original feed structure making it easy to access the data.
-* **Smart namespace handling** — Normalizes custom namespace prefixes to standard ones (e.g., `<custom:creator>` becomes `dc.creator`).
-* **Parsing & generating** — Use one package for both parsing and generating feeds.
+* **Comprehensive support**: Supports all major feed formats and namespaces.
+* **Preserves structure**: Parsed feed object maintains the original feed structure making it easy to access the data.
+* **Smart namespace handling**: Normalizes custom namespace prefixes to standard ones (e.g., `<custom:creator>` becomes `dc.creator`).
+* **Parsing & generating**: Use one package for both parsing and generating feeds.
 
 ### Leniency
-* **Normalizes legacy elements** — Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
-* **CaSe INSENsiTive** — Handles fields and attributes in any case (lowercase, uppercase, mixed).
-* **Namespace URI tolerance** — Accepts non-official namespace URIs (HTTPS variants, case variations, trailing slashes, whitespace).
-* **Forgiving** — Gracefully handles malformed or incomplete feeds and extracts valid data. This makes it suitable for use with real-world feeds that may not strictly follow specifications.
+* **Normalizes legacy elements**: Upgrades feed elements to their modern equivalents so that you never need to worry about reading feeds in older formats.
+* **CaSe INSENsiTive**: Handles fields and attributes in any case (lowercase, uppercase, mixed).
+* **Namespace URI tolerance**: Accepts non-official namespace URIs (HTTPS variants, case variations, trailing slashes, whitespace).
+* **Forgiving**: Gracefully handles malformed or incomplete feeds and extracts valid data. This makes it suitable for use with real-world feeds that may not strictly follow specifications.
 
 ### Performance
-* **Ultrafast parsing** — One of the fastest JavaScript feed parsers ([see benchmarks](/benchmarks)).
-* **Type-safe API** — Built with TypeScript from the ground up, it provides complete type definitions for every feed format and namespace.
-* **Tree-shakable** — Only include the parts of the library you need, reducing bundle size.
-* **Well-tested** — Comprehensive test suite with over 2000 tests and 99% code coverage.
+* **Ultrafast parsing**: One of the fastest JavaScript feed parsers ([see benchmarks](https://v2.feedsmith.dev/benchmarks)).
+* **Type-safe API**: Built with TypeScript from the ground up, it provides complete type definitions for every feed format and namespace.
+* **Tree-shakable**: Only include the parts of the library you need, reducing bundle size.
+* **Well-tested**: Comprehensive test suite with over 3500 tests and 99% code coverage.
 
 ### Compatibility
-* Works in Node.js 14.0.0+ and modern browsers.
+* Works in Node.js and modern browsers.
 * Supports both CommonJS and ES modules.
 * Works with plain JavaScript, you don't need to use TypeScript.
 
@@ -58,59 +58,59 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 
 | Format | Versions | Parse | Generate |
 |--------|----------|-------|----------|
-| [RSS](https://feedsmith.dev/reference/feeds/rss) | 0.9x, 2.0 | ✅ | ✅ |
-| [Atom](https://feedsmith.dev/reference/feeds/atom) | 0.3, 1.0 | ✅ | ✅ |
-| [RDF](https://feedsmith.dev/reference/feeds/rdf) | 0.9, 1.0 | ✅ | 📋 |
-| [JSON Feed](https://feedsmith.dev/reference/feeds/json) | 1.0, 1.1 | ✅ | ✅ |
+| [RSS](https://v2.feedsmith.dev/reference/feeds/rss) | 0.9x, 2.0 | ✅ | ✅ |
+| [Atom](https://v2.feedsmith.dev/reference/feeds/atom) | 0.3, 1.0 | ✅ | ✅ |
+| [RDF](https://v2.feedsmith.dev/reference/feeds/rdf) | 0.9, 1.0 | ✅ | 📋 |
+| [JSON Feed](https://v2.feedsmith.dev/reference/feeds/json-feed) | 1.0, 1.1 | ✅ | ✅ |
 
 ### Other
 
 | Format | Versions | Parse | Generate |
 |--------|----------|-------|----------|
-| [OPML](https://feedsmith.dev/reference/other/opml) | 1.0, 2.0 | ✅ | ✅ |
+| [OPML](https://v2.feedsmith.dev/reference/opml) | 1.0, 2.0 | ✅ | ✅ |
 
 ### Feed Namespaces
 
 | Name | Prefix | Supported in | Parse | Generate |
 |------|---------|--------------|-------|----------|
-| [Atom](https://feedsmith.dev/reference/namespaces/atom) | `<atom:*>` | RSS, RDF | ✅ | ✅ |
-| [Dublin Core](https://feedsmith.dev/reference/namespaces/dc) | `<dc:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [Dublin Core Terms](https://feedsmith.dev/reference/namespaces/dcterms) | `<dcterms:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [Syndication](https://feedsmith.dev/reference/namespaces/sy) | `<sy:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [Content](https://feedsmith.dev/reference/namespaces/content) | `<content:*>` | RSS, RDF | ✅ | ✅ |
-| [Slash](https://feedsmith.dev/reference/namespaces/slash) | `<slash:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [iTunes](https://feedsmith.dev/reference/namespaces/itunes) | `<itunes:*>` | RSS, Atom | ✅ | ✅ |
-| [Podcast Index](https://feedsmith.dev/reference/namespaces/podcast) | `<podcast:*>` | RSS | ✅ | ✅ |
-| [Podlove Simple Chapters](https://feedsmith.dev/reference/namespaces/psc) | `<psc:*>` | RSS, Atom | ✅ | ✅ |
-| [Media RSS](https://feedsmith.dev/reference/namespaces/media) | `<media:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [Google Play Podcast](https://feedsmith.dev/reference/namespaces/googleplay) | `<googleplay:*>` | RSS, Atom | ✅ | ✅ |
-| [Spotify](https://feedsmith.dev/reference/namespaces/spotify) | `<spotify:*>` | RSS | ✅ | ✅ |
-| [Acast](https://feedsmith.dev/reference/namespaces/acast) | `<acast:*>` | RSS | ✅ | ✅ |
-| [RawVoice](https://feedsmith.dev/reference/namespaces/rawvoice) | `<rawvoice:*>` | RSS | ✅ | ✅ |
-| [FeedPress](https://feedsmith.dev/reference/namespaces/feedpress) | `<feedpress:*>` | RSS | ✅ | ✅ |
-| [arXiv](https://feedsmith.dev/reference/namespaces/arxiv) | `<arxiv:*>` | Atom | ✅ | ✅ |
-| [OpenSearch](https://feedsmith.dev/reference/namespaces/opensearch) | `<opensearch:*>` | RSS, Atom | ✅ | ✅ |
-| [PRISM](https://feedsmith.dev/reference/namespaces/prism) | `<prism:*>` | RSS | ✅ | ✅ |
-| [ccREL](https://feedsmith.dev/reference/namespaces/cc) | `<cc:*>` | RSS, Atom | ✅ | ✅ |
-| [Creative Commons](https://feedsmith.dev/reference/namespaces/creativecommons) | `<creativeCommons:*>` | RSS, Atom | ✅ | ✅ |
-| [Atom Threading](https://feedsmith.dev/reference/namespaces/thr) | `<thr:*>` | RSS, Atom | ✅ | ✅ |
-| [Atom Publishing Protocol](https://feedsmith.dev/reference/namespaces/app) | `<app:*>` | Atom | ✅ | ✅ |
-| [Comment API](https://feedsmith.dev/reference/namespaces/wfw) | `<wfw:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [Administrative](https://feedsmith.dev/reference/namespaces/admin) | `<admin:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [Pingback](https://feedsmith.dev/reference/namespaces/pingback) | `<pingback:*>` | RSS, Atom | ✅ | ✅ |
-| [Trackback](https://feedsmith.dev/reference/namespaces/trackback) | `<trackback:*>` | RSS, Atom | ✅ | ✅ |
-| [Source](https://feedsmith.dev/reference/namespaces/source) | `<source:*>` | RSS | ✅ | ✅ |
-| [blogChannel](https://feedsmith.dev/reference/namespaces/blogchannel) | `<blogChannel:*>` | RSS | ✅ | ✅ |
-| [YouTube](https://feedsmith.dev/reference/namespaces/yt) | `<yt:*>` | Atom | ✅ | ✅ |
-| [W3C Basic Geo](https://feedsmith.dev/reference/namespaces/geo) | `<geo:*>` | RSS, Atom | ✅ | ✅ |
-| [GeoRSS Simple](https://feedsmith.dev/reference/namespaces/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [RDF](https://feedsmith.dev/reference/namespaces/rdf) | `<rdf:*>` | RDF | ✅ | ✅ |
+| [Atom](https://v2.feedsmith.dev/reference/namespaces/atom) | `<atom:*>` | RSS, RDF | ✅ | ✅ |
+| [Dublin Core](https://v2.feedsmith.dev/reference/namespaces/dc) | `<dc:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Dublin Core Terms](https://v2.feedsmith.dev/reference/namespaces/dcterms) | `<dcterms:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Syndication](https://v2.feedsmith.dev/reference/namespaces/sy) | `<sy:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Content](https://v2.feedsmith.dev/reference/namespaces/content) | `<content:*>` | RSS, RDF | ✅ | ✅ |
+| [Slash](https://v2.feedsmith.dev/reference/namespaces/slash) | `<slash:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [iTunes](https://v2.feedsmith.dev/reference/namespaces/itunes) | `<itunes:*>` | RSS, Atom | ✅ | ✅ |
+| [Podcast Index](https://v2.feedsmith.dev/reference/namespaces/podcast) | `<podcast:*>` | RSS | ✅ | ✅ |
+| [Podlove Simple Chapters](https://v2.feedsmith.dev/reference/namespaces/psc) | `<psc:*>` | RSS, Atom | ✅ | ✅ |
+| [Media RSS](https://v2.feedsmith.dev/reference/namespaces/media) | `<media:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Google Play Podcast](https://v2.feedsmith.dev/reference/namespaces/googleplay) | `<googleplay:*>` | RSS, Atom | ✅ | ✅ |
+| [Spotify](https://v2.feedsmith.dev/reference/namespaces/spotify) | `<spotify:*>` | RSS | ✅ | ✅ |
+| [Acast](https://v2.feedsmith.dev/reference/namespaces/acast) | `<acast:*>` | RSS | ✅ | ✅ |
+| [RawVoice](https://v2.feedsmith.dev/reference/namespaces/rawvoice) | `<rawvoice:*>` | RSS | ✅ | ✅ |
+| [FeedPress](https://v2.feedsmith.dev/reference/namespaces/feedpress) | `<feedpress:*>` | RSS | ✅ | ✅ |
+| [arXiv](https://v2.feedsmith.dev/reference/namespaces/arxiv) | `<arxiv:*>` | Atom | ✅ | ✅ |
+| [OpenSearch](https://v2.feedsmith.dev/reference/namespaces/opensearch) | `<opensearch:*>` | RSS, Atom | ✅ | ✅ |
+| [PRISM](https://v2.feedsmith.dev/reference/namespaces/prism) | `<prism:*>` | RSS | ✅ | ✅ |
+| [ccREL](https://v2.feedsmith.dev/reference/namespaces/cc) | `<cc:*>` | RSS, Atom | ✅ | ✅ |
+| [Creative Commons](https://v2.feedsmith.dev/reference/namespaces/creativecommons) | `<creativeCommons:*>` | RSS, Atom | ✅ | ✅ |
+| [Atom Threading](https://v2.feedsmith.dev/reference/namespaces/thr) | `<thr:*>` | RSS, Atom | ✅ | ✅ |
+| [Atom Publishing Protocol](https://v2.feedsmith.dev/reference/namespaces/app) | `<app:*>` | Atom | ✅ | ✅ |
+| [Comment API](https://v2.feedsmith.dev/reference/namespaces/wfw) | `<wfw:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Administrative](https://v2.feedsmith.dev/reference/namespaces/admin) | `<admin:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Pingback](https://v2.feedsmith.dev/reference/namespaces/pingback) | `<pingback:*>` | RSS, Atom | ✅ | ✅ |
+| [Trackback](https://v2.feedsmith.dev/reference/namespaces/trackback) | `<trackback:*>` | RSS, Atom | ✅ | ✅ |
+| [Source](https://v2.feedsmith.dev/reference/namespaces/source) | `<source:*>` | RSS | ✅ | ✅ |
+| [blogChannel](https://v2.feedsmith.dev/reference/namespaces/blogchannel) | `<blogChannel:*>` | RSS | ✅ | ✅ |
+| [YouTube](https://v2.feedsmith.dev/reference/namespaces/yt) | `<yt:*>` | Atom | ✅ | ✅ |
+| [W3C Basic Geo](https://v2.feedsmith.dev/reference/namespaces/geo) | `<geo:*>` | RSS, Atom | ✅ | ✅ |
+| [GeoRSS Simple](https://v2.feedsmith.dev/reference/namespaces/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [RDF](https://v2.feedsmith.dev/reference/namespaces/rdf) | `<rdf:*>` | RDF | ✅ | ✅ |
 
 ## Quick Start
 
 This guide will get you up and running with Feedsmith in just a few minutes.
 
-For a full overview of all the features, visit the [documentation website](https://feedsmith.dev).
+For a full overview of all the features, visit the [documentation website](https://v2.feedsmith.dev).
 
 ### Installation
 
@@ -118,7 +118,7 @@ For a full overview of all the features, visit the [documentation website](https
 npm install feedsmith
 ```
 
-> **Migrating from v1.x?** Check out the [migration guide](https://feedsmith.dev/migration-to-2.x).
+> **Migrating from v1.x?** Check out the [migration guide](https://v2.feedsmith.dev/migration/v1-to-v2).
 
 ### Parse Any Feed
 
