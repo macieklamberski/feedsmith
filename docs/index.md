@@ -6,7 +6,7 @@ title: 'Feedsmith: Fast JavaScript Feed Parser and Generator'
 
 Fast, all‑in‑one JavaScript feed parser and generator for RSS, Atom, RDF, and JSON Feed, with support for popular namespaces and OPML files.
 
-Feedsmith parses each feed into an object that mirrors its original structure, and maps legacy elements to their modern equivalents, so the same code reads old and new feeds.
+Feedsmith's universal and format-specific parsers turn each feed into an object that mirrors its original structure and maps legacy elements to their modern equivalents, so you read an old feed the same way as a new one.
 
 ::: tip ANNOUNCEMENT
 **Feedsmith 3.0 is out! 🎉** It comes with a range of improvements and some breaking changes. Check out the [migration guide](/migration/v2-to-v3) to see what's new and how to upgrade from 2.x.
