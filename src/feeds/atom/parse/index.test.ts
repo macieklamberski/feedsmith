@@ -421,6 +421,27 @@ describe('parse', () => {
       expect(parse(value)).toEqual(expected)
     })
 
+    it('should parse feed with unclosed link in a prefixed feed', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <atom:feed xmlns:atom="http://www.w3.org/2005/Atom">
+          <atom:title>Feed Title</atom:title>
+          <atom:link href="https://example.com/feed.xml" rel="self">
+          <atom:entry>
+            <atom:id>https://example.com/entry/1</atom:id>
+            <atom:title>First entry</atom:title>
+          </atom:entry>
+        </atom:feed>
+      `
+      const expected = {
+        title: { value: 'Feed Title' },
+        links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
+        entries: [{ id: 'https://example.com/entry/1', title: { value: 'First entry' } }],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
     it('should keep a category closed after its content next to an unclosed one', () => {
       const value = `
         <?xml version="1.0" encoding="UTF-8"?>
