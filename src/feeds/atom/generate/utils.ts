@@ -283,15 +283,11 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
 
   const trimmedValue = trimObject(value)
 
-  if (!trimmedValue) {
-    return
-  }
-
   if (options?.asNamespace) {
     return trimmedValue
   }
 
-  return {
+  const valueFull = {
     ...trimmedValue,
     ...generateAppEntry(entry.app),
     ...generateArxivEntry(entry.arxiv),
@@ -313,6 +309,8 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
     ...generateTrackbackItem(entry.trackback),
     ...generateXmlItemOrFeed(entry.xml),
   }
+
+  return trimObject(valueFull)
 }
 
 export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, options) => {
@@ -348,11 +346,11 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
 
   const valueEntries = trimObject(entriesValue)
 
-  if (!valueFeed && !valueEntries) {
-    return
-  }
-
   if (options?.asNamespace) {
+    if (!valueFeed && !valueEntries) {
+      return
+    }
+
     return {
       feed: {
         ...valueFeed,
@@ -361,7 +359,7 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
     }
   }
 
-  const valueFull = {
+  const valueFull = trimObject({
     ...valueFeed,
     ...generateCc(feed.cc),
     ...generateDcItemOrFeed(feed.dc),
@@ -379,6 +377,10 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
     ...generatePingbackFeed(feed.pingback),
     ...generateXmlItemOrFeed(feed.xml),
     ...valueEntries,
+  })
+
+  if (!valueFull) {
+    return
   }
 
   return {
