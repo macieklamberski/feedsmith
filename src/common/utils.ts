@@ -846,6 +846,7 @@ export const parseJsonObject = (value: unknown): unknown => {
 const unclosedElementErrorRegex = /^Unexpected end of (.+)$/
 const attributeRegex = /[\w:.-]+\s*=\s*(?:"[^"]*"|'[^']*')/g
 const attributesSource = `(?:[\\s/]+${attributeRegex.source})*\\s*`
+const cdataOrCommentSource = '<!\\[CDATA\\[[\\s\\S]*?\\]\\]>|<!--[\\s\\S]*?-->'
 
 // Some generators write an attribute-only element without its `/`, as in `<atom:link href="…">`.
 // That is not valid XML and parsing fails, so the missing `/` is added before parsing again.
@@ -858,18 +859,35 @@ export const repairUnclosedElement = (
     return
   }
 
-  const name = error.message.match(unclosedElementErrorRegex)?.[1]
+  // The error names the tag as written in the document, which may be `ATOM:LINK`.
+  const name = error.message.match(unclosedElementErrorRegex)?.[1]?.toLowerCase()
 
   if (!name || !attributeOnlyElements.includes(name)) {
     return
   }
 
-  const unclosedRegex = new RegExp(`<(${name})(${attributesSource})>(?!\\s*</${name}\\s*>)`, 'gi')
-  const repaired = xml.replace(unclosedRegex, (_, tag: string, attributes: string) => {
-    const pairs = attributes.match(attributeRegex) ?? []
+  const sameNameRegex = new RegExp(`<(/?)${name}(?=[\\s/>])`, 'gi')
+  const unclosedRegex = new RegExp(`${cdataOrCommentSource}|<(${name})(${attributesSource})>`, 'gi')
+  const repaired = xml.replace(
+    unclosedRegex,
+    (match: string, tag: string | undefined, attributes: string, offset: number) => {
+      // A CDATA section or a comment, where the same text is content and not a tag.
+      if (!tag) {
+        return match
+      }
 
-    return `<${[tag, ...pairs].join(' ')}/>`
-  })
+      // The next tag of the same name being a closing one means this tag has its pair.
+      sameNameRegex.lastIndex = offset + match.length
+
+      if (sameNameRegex.exec(xml)?.[1] === '/') {
+        return match
+      }
+
+      const pairs = attributes.match(attributeRegex) ?? []
+
+      return `<${[tag, ...pairs].join(' ')}/>`
+    },
+  )
 
   return repaired === xml ? undefined : repaired
 }

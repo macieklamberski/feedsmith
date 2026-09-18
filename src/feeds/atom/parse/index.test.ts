@@ -420,6 +420,38 @@ describe('parse', () => {
 
       expect(parse(value)).toEqual(expected)
     })
+
+    it('should keep a category closed after its content next to an unclosed one', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <title>Feed Title</title>
+          <entry>
+            <id>https://example.com/entry/1</id>
+            <category term="news">
+            <category term="tech">Technology</category>
+            <title>First entry</title>
+          </entry>
+          <entry>
+            <id>https://example.com/entry/2</id>
+            <title>Second entry</title>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: { value: 'Feed Title' },
+        entries: [
+          {
+            id: 'https://example.com/entry/1',
+            title: { value: 'First entry' },
+            categories: [{ term: 'news' }, { term: 'tech' }],
+          },
+          { id: 'https://example.com/entry/2', title: { value: 'Second entry' } },
+        ],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
   })
 
   describe('namespace normalization integration', () => {

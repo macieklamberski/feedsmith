@@ -3614,6 +3614,44 @@ describe('repairUnclosedElement', () => {
     expect(repairUnclosedElement(value, error, attributeOnlyElements)).toBe(expected)
   })
 
+  it('should leave an element closed after its content untouched', () => {
+    const value =
+      '<entry><category term="a"><category term="b">Label</category><title>Title</title></entry>'
+    const error = new Error('Unexpected end of category')
+    const expected =
+      '<entry><category term="a"/><category term="b">Label</category><title>Title</title></entry>'
+
+    expect(repairUnclosedElement(value, error, ['category'])).toBe(expected)
+  })
+
+  it('should leave the same text inside a CDATA section untouched', () => {
+    const value =
+      '<channel><atom:link href="https://example.com/feed.xml"><description><![CDATA[Add <atom:link href="https://example.com/feed.xml"> to the channel]]></description></channel>'
+    const error = new Error('Unexpected end of atom:link')
+    const expected =
+      '<channel><atom:link href="https://example.com/feed.xml"/><description><![CDATA[Add <atom:link href="https://example.com/feed.xml"> to the channel]]></description></channel>'
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements)).toBe(expected)
+  })
+
+  it('should leave the same text inside a comment untouched', () => {
+    const value =
+      '<channel><!-- <atom:link href="https://example.com/old.xml"> --><atom:link href="https://example.com/feed.xml"></channel>'
+    const error = new Error('Unexpected end of atom:link')
+    const expected =
+      '<channel><!-- <atom:link href="https://example.com/old.xml"> --><atom:link href="https://example.com/feed.xml"/></channel>'
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements)).toBe(expected)
+  })
+
+  it('should repair an element written in uppercase', () => {
+    const value = '<channel><ATOM:LINK HREF="https://example.com/feed.xml"><item/></channel>'
+    const error = new Error('Unexpected end of ATOM:LINK')
+    const expected = '<channel><ATOM:LINK HREF="https://example.com/feed.xml"/><item/></channel>'
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements)).toBe(expected)
+  })
+
   it('should drop a stray slash left between attributes', () => {
     const value =
       '<channel><atom:link href="https://example.com/feed.xml" rel="self" / role="menuitem"><item/></channel>'
