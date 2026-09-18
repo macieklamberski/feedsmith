@@ -14,6 +14,7 @@ import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
 } from '../../../namespaces/atom/parse/utils.js'
+import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
@@ -102,6 +103,7 @@ export const parseItem: ParseUtilPartial<RdfFeed.Item<DateAny>> = (value, option
     description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
     rdf: retrieveRdfAbout(value),
     atom: namespaces.has('atom') ? retrieveAtomEntry(value, options) : undefined,
+    cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value, options) : undefined,
     content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
@@ -156,6 +158,7 @@ export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, option
     textInput: retrieveTextInput(value),
     rdf: retrieveRdfAbout(channel),
     atom: namespaces.has('atom') ? retrieveAtomFeed(channel, options) : undefined,
+    cc: namespaces.has('cc') ? retrieveCc(channel) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel, options) : undefined,
     sy: namespaces.has('sy') ? retrieveSyFeed(channel, options) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,

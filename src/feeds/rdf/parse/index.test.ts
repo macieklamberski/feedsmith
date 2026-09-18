@@ -1235,6 +1235,50 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with cc namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:cc="http://web.resource.org/cc/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with cc namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with ccREL namespace</description>
+          <cc:license rdf:resource="https://creativecommons.org/licenses/by/4.0/"/>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item title</title>
+          <link>http://example.com/item1</link>
+          <cc:license rdf:resource="https://creativecommons.org/licenses/by-sa/4.0/"/>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with cc namespace',
+      link: 'http://example.com',
+      description: 'Test feed with ccREL namespace',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+      },
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Item title',
+          link: 'http://example.com/item1',
+          cc: {
+            license: 'https://creativecommons.org/licenses/by-sa/4.0/',
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with admin namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>

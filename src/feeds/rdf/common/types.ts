@@ -7,6 +7,7 @@ import type {
 } from '../../../common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
+import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { ContentNs } from '../../../namespaces/content/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
@@ -50,6 +51,7 @@ export namespace RdfFeed {
       description?: string
       rdf?: RdfNs.About
       atom?: AtomNs.Entry<TDate>
+      cc?: CcNs.ItemOrFeed
       dc?: DcNs.ItemOrFeed<TDate>
       content?: ContentNs.Item
       slash?: SlashNs.Item
@@ -72,6 +74,7 @@ export namespace RdfFeed {
       textInput?: TextInput<TStrict>
       rdf?: RdfNs.About
       atom?: AtomNs.Feed<TDate>
+      cc?: CcNs.ItemOrFeed
       dc?: DcNs.ItemOrFeed<TDate>
       sy?: SyNs.Feed<TDate>
       media?: MediaNs.ItemOrFeed<TStrict>

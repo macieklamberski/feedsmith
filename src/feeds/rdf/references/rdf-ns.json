@@ -502,6 +502,10 @@
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
       },
+      "cc": {
+        "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "attributionName": "Jack Jackson"
+      },
       "rdf": {
         "about": "http://example.org/item/1"
       },
@@ -1057,6 +1061,10 @@
   "admin": {
     "errorReportsTo": "mailto:webmaster@example.com",
     "generatorAgent": "http://www.movabletype.org/?v=3.2"
+  },
+  "cc": {
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "attributionName": "Example Publishing Company"
   },
   "rdf": {
     "about": "http://example.org/rss"

@@ -14,6 +14,7 @@
   xmlns:georss="http://www.georss.org/georss"
   xmlns:wfw="http://wellformedweb.org/CommentAPI/"
   xmlns:admin="http://webns.net/mvcb/"
+  xmlns:cc="http://creativecommons.org/ns#"
 >
   <channel rdf:about="http://example.org/rss">
     <title>Example Feed</title>
@@ -226,6 +227,10 @@
     <!-- Admin Namespace: Channel Level Tags -->
     <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
     <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+
+    <!-- ccREL Namespace: Channel Level Tags -->
+    <cc:license rdf:resource="https://creativecommons.org/licenses/by/4.0/"/>
+    <cc:attributionName>Example Publishing Company</cc:attributionName>
   </channel>
 
   <item rdf:about="http://example.org/item/1" xml:lang="en-US" xml:base="http://example.org/item/1/">
@@ -431,5 +436,9 @@
     <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
     <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
+
+    <!-- ccREL Namespace: Item Level Tags -->
+    <cc:license rdf:resource="https://creativecommons.org/licenses/by-sa/4.0/"/>
+    <cc:attributionName>Jack Jackson</cc:attributionName>
   </item>
 </rdf:RDF>

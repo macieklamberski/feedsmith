@@ -84,7 +84,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [arXiv](/reference/namespaces/arxiv) | `<arxiv:*>` | Atom | ✅ | ✅ |
 | [OpenSearch](/reference/namespaces/opensearch) | `<opensearch:*>` | RSS, Atom | ✅ | ✅ |
 | [PRISM](/reference/namespaces/prism) | `<prism:*>` | RSS | ✅ | ✅ |
-| [ccREL](/reference/namespaces/cc) | `<cc:*>` | RSS, Atom | ✅ | ✅ |
+| [ccREL](/reference/namespaces/cc) | `<cc:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Creative Commons](/reference/namespaces/creativecommons) | `<creativeCommons:*>` | RSS, Atom | ✅ | ✅ |
 | [Atom Threading](/reference/namespaces/thr) | `<thr:*>` | RSS, Atom | ✅ | ✅ |
 | [Atom Publishing Protocol](/reference/namespaces/app) | `<app:*>` | Atom | ✅ | ✅ |
