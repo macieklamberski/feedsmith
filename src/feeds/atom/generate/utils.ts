@@ -283,15 +283,11 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
 
   const trimmedValue = trimObject(value)
 
-  if (!trimmedValue) {
-    return
-  }
-
   if (options?.asNamespace) {
     return trimmedValue
   }
 
-  return {
+  const fullValue = {
     ...trimmedValue,
     ...generateAppEntry(entry.app),
     ...generateArxivEntry(entry.arxiv),
@@ -313,6 +309,8 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
     ...generateTrackbackItem(entry.trackback),
     ...generateXmlItemOrFeed(entry.xml),
   }
+
+  return trimObject(fullValue)
 }
 
 export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, options) => {
@@ -348,11 +346,11 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
 
   const valueEntries = trimObject(entriesValue)
 
-  if (!valueFeed && !valueEntries) {
-    return
-  }
-
   if (options?.asNamespace) {
+    if (!valueFeed && !valueEntries) {
+      return
+    }
+
     return {
       feed: {
         ...valueFeed,
@@ -361,7 +359,7 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
     }
   }
 
-  const valueFull = {
+  const fullValue = trimObject({
     ...valueFeed,
     ...generateCc(feed.cc),
     ...generateDcItemOrFeed(feed.dc),
@@ -379,13 +377,17 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
     ...generatePingbackFeed(feed.pingback),
     ...generateXmlItemOrFeed(feed.xml),
     ...valueEntries,
+  })
+
+  if (!fullValue) {
+    return
   }
 
   return {
     feed: {
       '@xmlns': 'http://www.w3.org/2005/Atom',
-      ...generateNamespaceAttrs({ value: valueFull }, namespaceUris),
-      ...valueFull,
+      ...generateNamespaceAttrs({ value: fullValue }, namespaceUris),
+      ...fullValue,
     },
   }
 }

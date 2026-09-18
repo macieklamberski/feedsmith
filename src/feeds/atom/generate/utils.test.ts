@@ -840,6 +840,19 @@ describe('generateEntry', () => {
     expect(generateEntry(value, { prefix: 'atom:', asNamespace: true })).toEqual(expected)
   })
 
+  it('should generate entry with only namespace properties', () => {
+    const value = {
+      georss: {
+        point: { lat: 40.689, lng: -74.044 },
+      },
+    }
+    const expected = {
+      'georss:point': '40.689 -74.044',
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
   it('should handle empty object', () => {
     const value = {}
 
@@ -1450,6 +1463,35 @@ describe('generateFeed', () => {
     }
 
     expect(generateFeed(value)).toBeUndefined()
+  })
+
+  it('should generate feed with only namespace properties', () => {
+    const value = {
+      entries: [
+        {
+          georss: {
+            point: { lat: 40.689, lng: -74.044 },
+          },
+        },
+      ],
+      xml: {
+        lang: 'en',
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:georss': 'http://www.georss.org/georss',
+        '@xml:lang': 'en',
+        entry: [
+          {
+            'georss:point': '40.689 -74.044',
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
   })
 
   it('should handle empty object', () => {
