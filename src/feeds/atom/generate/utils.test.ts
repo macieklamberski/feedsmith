@@ -811,6 +811,19 @@ describe('generateEntry', () => {
     expect(generateEntry(value, { prefix: 'atom:' })).toEqual(expected)
   })
 
+  it('should apply prefix to author and contributor elements', () => {
+    const value = {
+      authors: [{ name: 'John Doe', email: 'john@example.com' }],
+      contributors: [{ name: 'Jane Smith', uri: 'https://example.com/jane' }],
+    }
+    const expected = {
+      'atom:author': [{ 'atom:name': 'John Doe', 'atom:email': 'john@example.com' }],
+      'atom:contributor': [{ 'atom:name': 'Jane Smith', 'atom:uri': 'https://example.com/jane' }],
+    }
+
+    expect(generateEntry(value, { prefix: 'atom:' })).toEqual(expected)
+  })
+
   it('should apply prefix and exclude namespaces when asNamespace is true', () => {
     const value = {
       id: 'https://example.com/entry/1',

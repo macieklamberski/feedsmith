@@ -265,7 +265,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
 
   const key = createNamespaceSetter(options?.prefix)
   const value = {
-    [key('author')]: trimArray(entry.authors, generatePerson),
+    [key('author')]: trimArray(entry.authors, (author) => generatePerson(author, options)),
     [key('category')]: trimArray(entry.categories, generateCategory),
     [key('content')]: generateContent(entry.content),
     [key('contributor')]: trimArray(entry.contributors, (contributor) =>

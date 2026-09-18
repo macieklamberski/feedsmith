@@ -9,7 +9,7 @@ describe('generateEntry', () => {
     }
     const expected = {
       'atom:updated': '2023-03-15T12:00:00.000Z',
-      'atom:author': [{ name: 'John Doe' }],
+      'atom:author': [{ 'atom:name': 'John Doe' }],
     }
 
     expect(generateEntry(value)).toEqual(expected)
