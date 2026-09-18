@@ -6,7 +6,7 @@
 
 Fast, all‑in‑one JavaScript feed parser and generator for RSS, Atom, RDF, and JSON Feed, with support for popular namespaces and OPML files.
 
-Feedsmith offers universal and format‑specific parsers that maintain the original feed structure in a clean, object-oriented format while intelligently normalizing legacy elements. Access all feed data without compromising simplicity.
+Feedsmith parses each feed into an object that mirrors its original structure, and maps legacy elements to their modern equivalents, so the same code reads old and new feeds.
 
 > [!TIP]
 > **Feedsmith 3.0 is out! 🎉** It comes with a range of improvements and some breaking changes. Check out the [migration guide](https://feedsmith.dev/migration/v2-to-v3) to see what's new and how to upgrade from 2.x.
@@ -30,7 +30,7 @@ Feedsmith offers universal and format‑specific parsers that maintain the origi
 * **Smart namespace handling**: Normalizes custom namespace prefixes to standard ones (e.g., `<custom:creator>` becomes `dc.creator`).
 * **Parsing & generating**: Use one package for both parsing and generating feeds.
 * **Type-safe API**: Built with TypeScript from the ground up, it provides complete type definitions for every feed format and namespace.
-* **Well-tested**: Comprehensive test suite with over 2000 tests and 99% code coverage.
+* **Well-tested**: Comprehensive test suite with over 4000 tests and 99% code coverage.
 
 ### Leniency
 
@@ -41,12 +41,12 @@ Feedsmith offers universal and format‑specific parsers that maintain the origi
 
 ### Performance
 
-* **Ultrafast parsing**: One of the fastest JavaScript feed parsers ([see benchmarks](/benchmarks)).
+* **Ultrafast parsing**: One of the fastest JavaScript feed parsers ([see benchmarks](https://feedsmith.dev/benchmarks)).
 * **Tree-shakable**: Only include the parts of the library you need, reducing bundle size.
 
 ### Compatibility
 
-* Works in Node.js 14.0.0+ and modern browsers.
+* Works in Node.js and modern browsers.
 * Supports both CommonJS and ES modules.
 * Works with plain JavaScript, so you don't need TypeScript.
 
@@ -67,13 +67,13 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [RSS](https://feedsmith.dev/reference/feeds/rss) | 0.9x, 2.0 | ✅ | ✅ |
 | [Atom](https://feedsmith.dev/reference/feeds/atom) | 0.3, 1.0 | ✅ | ✅ |
 | [RDF](https://feedsmith.dev/reference/feeds/rdf) | 0.9, 1.0 | ✅ | 📋 |
-| [JSON Feed](https://feedsmith.dev/reference/feeds/json) | 1.0, 1.1 | ✅ | ✅ |
+| [JSON Feed](https://feedsmith.dev/reference/feeds/json-feed) | 1.0, 1.1 | ✅ | ✅ |
 
 ### Other
 
 | Format | Versions | Parse | Generate |
 |--------|----------|-------|----------|
-| [OPML](https://feedsmith.dev/reference/other/opml) | 1.0, 2.0 | ✅ | ✅ |
+| [OPML](https://feedsmith.dev/reference/opml) | 1.0, 2.0 | ✅ | ✅ |
 
 ### Feed Namespaces
 
