@@ -231,13 +231,16 @@ try {
 Feedsmith provides comprehensive TypeScript types for all feed formats:
 
 ```typescript
-import type { Rss, Atom, Json, Opml } from 'feedsmith'
+import type { AnyFeed, AtomFeed, JsonFeed, Opml, RssFeed } from 'feedsmith'
 
 // Access all types for a format
-type Feed = Rss.Feed
-type Item = Rss.Item
-type Category = Rss.Category
-type Enclosure = Rss.Enclosure
+type Feed = RssFeed.Feed<string>
+type Item = RssFeed.Item<string>
+type Category = RssFeed.Category
+type Enclosure = RssFeed.Enclosure
+
+// Return type of parseFeed
+type Result = AnyFeed
 ```
 
 ## Why Feedsmith?

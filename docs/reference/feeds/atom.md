@@ -137,7 +137,7 @@ import type { AtomFeed } from 'feedsmith'
 // Access any type from the definitions below
 type Feed = AtomFeed.Feed<Date>
 type Entry = AtomFeed.Entry<Date>
-type Link = AtomFeed.Link
+type Link = AtomFeed.Link<Date>
 type Person = AtomFeed.Person
 // … see type definitions below for all available types
 ```
