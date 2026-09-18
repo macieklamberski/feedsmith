@@ -34,11 +34,16 @@ export const parse = <TDate = string>(
   let normalized: Unreliable
 
   try {
-    normalized = parseWithRepair(value, attributeOnlyElements, (xml) => {
-      namespaceOptions = createNamespaceOptions(xml)
+    normalized = parseWithRepair(
+      value,
+      attributeOnlyElements,
+      (name) => namespaceOptions.transformTagName(name),
+      (xml) => {
+        namespaceOptions = createNamespaceOptions(xml)
 
-      return parser.parse(xml)
-    })
+        return parser.parse(xml)
+      },
+    )
   } catch (error) {
     throw new MalformedError(locales.invalidFeedFormat, { cause: error })
   }

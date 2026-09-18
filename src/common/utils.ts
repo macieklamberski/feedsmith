@@ -4,6 +4,7 @@ import {
   coerceBoolean,
   coerceNumber,
   coerceSingular,
+  escapeRegex,
   isJsonLike,
   isNonEmptyString,
   isNumber,
@@ -854,17 +855,20 @@ export const repairUnclosedElement = (
   xml: string,
   error: unknown,
   attributeOnlyElements: Array<string>,
+  canonicalize: (name: string) => string,
 ): string | undefined => {
   if (!(error instanceof Error)) {
     return
   }
 
-  // The error names the tag as written in the document, which may be `ATOM:LINK`.
-  const name = error.message.match(unclosedElementErrorRegex)?.[1]?.toLowerCase()
+  // The error names the tag as written in the document, which may be `ATOM:LINK` or `a10:link`.
+  const written = error.message.match(unclosedElementErrorRegex)?.[1]
 
-  if (!name || !attributeOnlyElements.includes(name)) {
+  if (!written || !attributeOnlyElements.includes(canonicalize(written))) {
     return
   }
+
+  const name = escapeRegex(written)
 
   const sameNameRegex = new RegExp(`<(/?)${name}(?=[\\s/>])`, 'gi')
   const unclosedRegex = new RegExp(`${cdataOrCommentSource}|<(${name})(${attributesSource})>`, 'gi')
@@ -896,17 +900,18 @@ export const repairUnclosedElement = (
 export const parseWithRepair = <T>(
   xml: string,
   attributeOnlyElements: Array<string>,
+  canonicalize: (name: string) => string,
   parse: (xml: string) => T,
 ): T => {
   try {
     return parse(xml)
   } catch (error) {
-    const repaired = repairUnclosedElement(xml, error, attributeOnlyElements)
+    const repaired = repairUnclosedElement(xml, error, attributeOnlyElements, canonicalize)
 
     if (!repaired) {
       throw error
     }
 
-    return parseWithRepair(repaired, attributeOnlyElements, parse)
+    return parseWithRepair(repaired, attributeOnlyElements, canonicalize, parse)
   }
 }
