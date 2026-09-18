@@ -287,7 +287,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
     return trimmedValue
   }
 
-  const valueFull = {
+  const fullValue = {
     ...trimmedValue,
     ...generateAppEntry(entry.app),
     ...generateArxivEntry(entry.arxiv),
@@ -310,7 +310,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
     ...generateXmlItemOrFeed(entry.xml),
   }
 
-  return trimObject(valueFull)
+  return trimObject(fullValue)
 }
 
 export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, options) => {
@@ -359,7 +359,7 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
     }
   }
 
-  const valueFull = trimObject({
+  const fullValue = trimObject({
     ...valueFeed,
     ...generateCc(feed.cc),
     ...generateDcItemOrFeed(feed.dc),
@@ -379,15 +379,15 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
     ...valueEntries,
   })
 
-  if (!valueFull) {
+  if (!fullValue) {
     return
   }
 
   return {
     feed: {
       '@xmlns': 'http://www.w3.org/2005/Atom',
-      ...generateNamespaceAttrs({ value: valueFull }, namespaceUris),
-      ...valueFull,
+      ...generateNamespaceAttrs({ value: fullValue }, namespaceUris),
+      ...fullValue,
     },
   }
 }
