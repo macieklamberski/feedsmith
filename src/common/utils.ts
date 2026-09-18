@@ -847,6 +847,8 @@ const unclosedElementErrorRegex = /^Unexpected end of (.+)$/
 const attributesSource = `(?:\\s+[\\w:.-]+\\s*=\\s*(?:"[^"]*"|'[^']*'))*\\s*`
 
 // Some generators write an attribute-only element without its `/`, as in `<atom:link href="…">`.
+// That is not valid XML, so parsing fails. This adds the missing `/` so the document can be
+// parsed again.
 export const repairUnclosedElement = (
   xml: string,
   error: unknown,
