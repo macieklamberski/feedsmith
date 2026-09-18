@@ -3583,7 +3583,7 @@ describe('parseJsonObject', () => {
 })
 
 describe('repairUnclosedElement', () => {
-  const attributeOnlyElements = new Set(['atom:link'])
+  const attributeOnlyElements = ['atom:link']
 
   it('should self-close an unclosed element named in the error', () => {
     const value =
@@ -3645,7 +3645,7 @@ describe('repairUnclosedElement', () => {
 })
 
 describe('parseWithRepair', () => {
-  const attributeOnlyElements = new Set(['atom:link'])
+  const attributeOnlyElements = ['atom:link']
 
   it('should return the result when parsing succeeds', () => {
     const value = '<channel/>'

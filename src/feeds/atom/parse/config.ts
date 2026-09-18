@@ -7,4 +7,4 @@ export const stopNodes = [
   ...entryPaths.map((path) => `feed.entry.${path}`),
 ]
 
-export const attributeOnlyElements = new Set(['link', 'category'])
+export const attributeOnlyElements = ['link', 'category']

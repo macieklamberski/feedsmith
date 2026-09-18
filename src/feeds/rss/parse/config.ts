@@ -50,4 +50,4 @@ export const stopNodes = [
   ...sharedStopNodes.map((node) => `rss.${node}`),
 ]
 
-export const attributeOnlyElements = new Set(['atom:link', 'atom:category', 'enclosure'])
+export const attributeOnlyElements = ['atom:link', 'atom:category', 'enclosure']

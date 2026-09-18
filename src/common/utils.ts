@@ -852,7 +852,7 @@ const attributesSource = `(?:\\s+[\\w:.-]+\\s*=\\s*(?:"[^"]*"|'[^']*'))*\\s*`
 export const repairUnclosedElement = (
   xml: string,
   error: unknown,
-  attributeOnlyElements: Set<string>,
+  attributeOnlyElements: Array<string>,
 ): string | undefined => {
   if (!(error instanceof Error)) {
     return
@@ -860,7 +860,7 @@ export const repairUnclosedElement = (
 
   const name = error.message.match(unclosedElementErrorRegex)?.[1]
 
-  if (!name || !attributeOnlyElements.has(name)) {
+  if (!name || !attributeOnlyElements.includes(name)) {
     return
   }
 
@@ -873,7 +873,7 @@ export const repairUnclosedElement = (
 // A repair self-closes every unclosed tag of one name, so each retry has fewer left to fail on.
 export const parseWithRepair = <T>(
   xml: string,
-  attributeOnlyElements: Set<string>,
+  attributeOnlyElements: Array<string>,
   parse: (xml: string) => T,
 ): T => {
   try {
