@@ -844,7 +844,10 @@ export const parseJsonObject = (value: unknown): unknown => {
 }
 
 const unclosedElementErrorRegex = /^Unexpected end of (.+)$/
-const attributesSource = `(?:\\s+[\\w:.-]+\\s*=\\s*(?:"[^"]*"|'[^']*'))*\\s*`
+const attributeRegex = /[\w:.-]+\s*=\s*(?:"[^"]*"|'[^']*')/g
+// A plugin that injects an attribute after the slash leaves `href="…" / role="menuitem">`, so a
+// stray `/` is accepted between attributes.
+const attributesSource = `(?:[\\s/]+${attributeRegex.source})*\\s*`
 
 // Some generators write an attribute-only element without its `/`, as in `<atom:link href="…">`.
 // That is not valid XML, so parsing fails. This adds the missing `/` so the document can be
@@ -865,7 +868,11 @@ export const repairUnclosedElement = (
   }
 
   const unclosedRegex = new RegExp(`<(${name})(${attributesSource})>(?!\\s*</${name}\\s*>)`, 'gi')
-  const repaired = xml.replace(unclosedRegex, '<$1$2/>')
+  const repaired = xml.replace(unclosedRegex, (_, tag: string, attributes: string) => {
+    const pairs = attributes.match(attributeRegex) ?? []
+
+    return `<${[tag, ...pairs].join(' ')}/>`
+  })
 
   return repaired === xml ? undefined : repaired
 }

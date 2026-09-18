@@ -3614,6 +3614,16 @@ describe('repairUnclosedElement', () => {
     expect(repairUnclosedElement(value, error, attributeOnlyElements)).toBe(expected)
   })
 
+  it('should drop a stray slash left between attributes', () => {
+    const value =
+      '<channel><atom:link href="https://example.com/feed.xml" rel="self" / role="menuitem"><item/></channel>'
+    const error = new Error('Unexpected end of atom:link')
+    const expected =
+      '<channel><atom:link href="https://example.com/feed.xml" rel="self" role="menuitem"/><item/></channel>'
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements)).toBe(expected)
+  })
+
   it('should return undefined for an element outside the list', () => {
     const value = '<channel><description>Unclosed</channel>'
     const error = new Error('Unexpected end of description')

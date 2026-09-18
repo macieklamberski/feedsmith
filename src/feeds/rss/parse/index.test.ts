@@ -429,6 +429,30 @@ describe('parse', () => {
       expect(parse(value)).toEqual(expected)
     })
 
+    it('should parse feed with a stray slash inside an unclosed atom:link', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+          <channel>
+            <title>Feed Title</title>
+            <atom:link href="https://example.com/feed.xml" rel="self" / role="menuitem">
+            <item>
+              <title>First item</title>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Feed Title',
+        items: [{ title: 'First item' }],
+        atom: {
+          links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
+        },
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
     it('should throw MalformedError for an unclosed element that holds content', () => {
       const value = `
         <?xml version="1.0" encoding="UTF-8"?>
