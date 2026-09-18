@@ -842,3 +842,47 @@ export const parseJsonObject = (value: unknown): unknown => {
     }
   } catch {}
 }
+
+const unclosedElementErrorRegex = /^Unexpected end of (.+)$/
+const attributesSource = `(?:\\s+[\\w:.-]+\\s*=\\s*(?:"[^"]*"|'[^']*'))*\\s*`
+
+// Some generators write an attribute-only element without its `/`, as in `<atom:link href="…">`.
+export const repairUnclosedElement = (
+  xml: string,
+  error: unknown,
+  attributeOnlyElements: Set<string>,
+): string | undefined => {
+  if (!(error instanceof Error)) {
+    return
+  }
+
+  const name = error.message.match(unclosedElementErrorRegex)?.[1]
+
+  if (!name || !attributeOnlyElements.has(name)) {
+    return
+  }
+
+  const unclosedRegex = new RegExp(`<(${name})(${attributesSource})>(?!\\s*</${name}\\s*>)`, 'gi')
+  const repaired = xml.replace(unclosedRegex, '<$1$2/>')
+
+  return repaired === xml ? undefined : repaired
+}
+
+// A repair self-closes every unclosed tag of one name, so each retry has fewer left to fail on.
+export const parseWithRepair = <T>(
+  xml: string,
+  attributeOnlyElements: Set<string>,
+  parse: (xml: string) => T,
+): T => {
+  try {
+    return parse(xml)
+  } catch (error) {
+    const repaired = repairUnclosedElement(xml, error, attributeOnlyElements)
+
+    if (!repaired) {
+      throw error
+    }
+
+    return parseWithRepair(repaired, attributeOnlyElements, parse)
+  }
+}

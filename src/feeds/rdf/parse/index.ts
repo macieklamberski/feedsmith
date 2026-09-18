@@ -2,10 +2,10 @@ import { XMLParser } from 'fast-xml-parser'
 import { locales, namespacePrefixes, namespaceUris, parserConfig } from '../../../common/config.js'
 import { DetectError, MalformedError, ParseError } from '../../../common/errors.js'
 import type { ParseMainOptions, Unreliable } from '../../../common/types.js'
-import { createNamespaceResolver } from '../../../common/utils.js'
+import { createNamespaceResolver, parseWithRepair } from '../../../common/utils.js'
 import { detectRdfFeed } from '../../../index.js'
 import type { RdfFeed } from '../common/types.js'
-import { stopNodes } from './config.js'
+import { attributeOnlyElements, stopNodes } from './config.js'
 import { retrieveFeed } from './utils.js'
 
 const createNamespaceOptions = createNamespaceResolver({
@@ -38,8 +38,11 @@ export const parse = <TDate = string>(
   let normalized: Unreliable
 
   try {
-    namespaceOptions = createNamespaceOptions(value)
-    normalized = parser.parse(value)
+    normalized = parseWithRepair(value, attributeOnlyElements, (xml) => {
+      namespaceOptions = createNamespaceOptions(xml)
+
+      return parser.parse(xml)
+    })
   } catch (error) {
     throw new MalformedError(locales.invalidFeedFormat, { cause: error })
   }

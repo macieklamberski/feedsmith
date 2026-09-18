@@ -32,7 +32,9 @@ import {
   parseSingularOf,
   parseString,
   parseVerbatimString,
+  parseWithRepair,
   parseYesNoBoolean,
+  repairUnclosedElement,
   retrieveRdfResourceOrText,
   retrieveText,
   trimArray,
@@ -3577,5 +3579,102 @@ describe('parseJsonObject', () => {
     expect(parseJsonObject(null)).toBeUndefined()
     expect(parseJsonObject(undefined)).toBeUndefined()
     expect(parseJsonObject([1, 2, 3])).toBeUndefined()
+  })
+})
+
+describe('repairUnclosedElement', () => {
+  const attributeOnlyElements = new Set(['atom:link'])
+
+  it('should self-close an unclosed element named in the error', () => {
+    const value =
+      '<channel><atom:link href="https://example.com/feed.xml" rel="self"><item/></channel>'
+    const error = new Error('Unexpected end of atom:link')
+    const expected =
+      '<channel><atom:link href="https://example.com/feed.xml" rel="self"/><item/></channel>'
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements)).toBe(expected)
+  })
+
+  it('should leave an element with its closing tag untouched', () => {
+    const value =
+      '<channel><atom:link href="https://example.com/a"></atom:link><atom:link href="https://example.com/b"></channel>'
+    const error = new Error('Unexpected end of atom:link')
+    const expected =
+      '<channel><atom:link href="https://example.com/a"></atom:link><atom:link href="https://example.com/b"/></channel>'
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements)).toBe(expected)
+  })
+
+  it('should handle a greater-than sign inside an attribute value', () => {
+    const value = '<channel><atom:link title="a > b" href="https://example.com/feed.xml"></channel>'
+    const error = new Error('Unexpected end of atom:link')
+    const expected =
+      '<channel><atom:link title="a > b" href="https://example.com/feed.xml"/></channel>'
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements)).toBe(expected)
+  })
+
+  it('should return undefined for an element outside the list', () => {
+    const value = '<channel><description>Unclosed</channel>'
+    const error = new Error('Unexpected end of description')
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements)).toBeUndefined()
+  })
+
+  it('should return undefined for a different error', () => {
+    const value = '<channel><atom:link href="https://example.com/feed.xml"></channel>'
+    const error = new Error('Closing tag is not closed.')
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements)).toBeUndefined()
+  })
+
+  it('should return undefined when no unclosed element is found', () => {
+    const value = '<channel><atom:link href="https://example.com/feed.xml"/></channel>'
+    const error = new Error('Unexpected end of atom:link')
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements)).toBeUndefined()
+  })
+
+  it('should return undefined for a non-error value', () => {
+    const value = '<channel><atom:link href="https://example.com/feed.xml"></channel>'
+
+    expect(
+      repairUnclosedElement(value, 'Unexpected end of atom:link', attributeOnlyElements),
+    ).toBeUndefined()
+  })
+})
+
+describe('parseWithRepair', () => {
+  const attributeOnlyElements = new Set(['atom:link'])
+
+  it('should return the result when parsing succeeds', () => {
+    const value = '<channel/>'
+    const parse = (xml: string) => xml.length
+
+    expect(parseWithRepair(value, attributeOnlyElements, parse)).toBe(10)
+  })
+
+  it('should parse again with the repaired document', () => {
+    const value = '<channel><atom:link href="https://example.com/feed.xml"></channel>'
+    const expected = '<channel><atom:link href="https://example.com/feed.xml"/></channel>'
+    const parse = (xml: string) => {
+      if (xml === value) {
+        throw new Error('Unexpected end of atom:link')
+      }
+
+      return xml
+    }
+
+    expect(parseWithRepair(value, attributeOnlyElements, parse)).toBe(expected)
+  })
+
+  it('should rethrow the error when the document cannot be repaired', () => {
+    const value = '<channel><description>Unclosed</channel>'
+    const parse = () => {
+      throw new Error('Unexpected end of description')
+    }
+    const throwing = () => parseWithRepair(value, attributeOnlyElements, parse)
+
+    expect(throwing).toThrowError('Unexpected end of description')
   })
 })

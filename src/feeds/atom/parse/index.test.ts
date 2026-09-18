@@ -399,6 +399,29 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  describe('unclosed attribute-only elements', () => {
+    it('should parse feed with unclosed link', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <title>Feed Title</title>
+          <link href="https://example.com/feed.xml" rel="self">
+          <entry>
+            <id>https://example.com/entry/1</id>
+            <title>First entry</title>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: { value: 'Feed Title' },
+        links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
+        entries: [{ id: 'https://example.com/entry/1', title: { value: 'First entry' } }],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+  })
+
   describe('namespace normalization integration', () => {
     it('should handle feeds with no namespace', () => {
       const value = `
