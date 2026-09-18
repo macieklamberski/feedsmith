@@ -157,6 +157,7 @@ const parseBracketedPerson = (raw: string): RssFeed.Person | undefined => {
   const length = raw.length
 
   let hasUnbracketedName = false
+  let hasAngleName = false
   let i = 0
 
   while (i < length) {
@@ -216,11 +217,18 @@ const parseBracketedPerson = (raw: string): RssFeed.Person | undefined => {
     } else if (emailRegex.test(strippedChunk) && !person.email) {
       person.email = strippedChunk
     } else if (isBracketed) {
+      hasAngleName ||= openBracket === '<'
       nameParts.push(hasUnbracketedName ? `${openBracket}${chunk}${closeBracket}` : chunk)
     } else {
       hasUnbracketedName = true
       nameParts.push(chunk)
     }
+  }
+
+  // Angle brackets hold an address. With no address anywhere they are markup, as in
+  // `<p>John Doe</p>`, so the string is kept as written.
+  if (hasAngleName && !person.email && !person.link) {
+    return { name: raw }
   }
 
   person.name = parseString(nameParts.join(' '))

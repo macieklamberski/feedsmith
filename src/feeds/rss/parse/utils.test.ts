@@ -573,6 +573,17 @@ describe('parsePerson', () => {
       })
     })
 
+    describe('angle brackets without an address', () => {
+      it('should keep markup as the name', () => {
+        const value = '<p>John Doe</p>'
+        const expected = {
+          name: '<p>John Doe</p>',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+    })
+
     describe('nested brackets', () => {
       it('should handle nested parentheses', () => {
         const value = 'John ((nick)) <john@example.com>'
