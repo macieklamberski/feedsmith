@@ -25,22 +25,24 @@ export const parse = <TDate = string>(
   value: unknown,
   options?: ParseMainOptions<TDate>,
 ): AnyFeed<TDate> => {
-  if (detectRssFeed(value)) {
-    return { format: 'rss', feed: parseRssFeed(value, options) }
+  // A JSON string is read as JSON before the XML detectors see it. They match on markup, and a
+  // JSON Feed can carry feed markup inside its content, which would pass for an RSS or Atom feed.
+  const input = parseJsonObject(value) ?? value
+
+  if (detectRssFeed(input)) {
+    return { format: 'rss', feed: parseRssFeed(input, options) }
   }
 
-  if (detectAtomFeed(value)) {
-    return { format: 'atom', feed: parseAtomFeed(value, options) }
+  if (detectAtomFeed(input)) {
+    return { format: 'atom', feed: parseAtomFeed(input, options) }
   }
 
-  if (detectRdfFeed(value)) {
-    return { format: 'rdf', feed: parseRdfFeed(value, options) }
+  if (detectRdfFeed(input)) {
+    return { format: 'rdf', feed: parseRdfFeed(input, options) }
   }
 
-  const json = parseJsonObject(value)
-
-  if (detectJsonFeed(json)) {
-    return { format: 'json', feed: parseJsonFeed(json, options) }
+  if (detectJsonFeed(input)) {
+    return { format: 'json', feed: parseJsonFeed(input, options) }
   }
 
   throw new DetectError(locales.unrecognizedFeedFormat)
