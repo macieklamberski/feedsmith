@@ -478,7 +478,9 @@ export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, option
     spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(channel) : undefined,
     pingback: namespaces.has('pingback') ? retrievePingbackFeed(channel) : undefined,
     acast: namespaces.has('acast') ? retrieveAcastFeed(channel) : undefined,
-    xml: retrieveXmlItemOrFeed(value),
+    // Both elements can carry xml:* attributes and each one scopes independently, so the nearer
+    // declaration on <channel> overrides the one on <rss> per attribute.
+    xml: trimObject({ ...retrieveXmlItemOrFeed(value), ...retrieveXmlItemOrFeed(channel) }),
   }
 
   return trimObject(feed)
