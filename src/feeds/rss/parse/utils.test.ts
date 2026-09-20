@@ -1555,6 +1555,7 @@ describe('parseItem', () => {
     const value = {
       title: { '#text': 'Podcast Episode 1' },
       'psc:chapters': {
+        '@version': '1.2',
         'psc:chapter': [
           {
             '@start': '00:00:00.000',
@@ -1570,16 +1571,19 @@ describe('parseItem', () => {
     const expected = {
       title: 'Podcast Episode 1',
       psc: {
-        chapters: [
-          {
-            start: '00:00:00.000',
-            title: 'Introduction',
-          },
-          {
-            start: '00:05:30.000',
-            title: 'Main Topic',
-          },
-        ],
+        chapters: {
+          version: '1.2',
+          items: [
+            {
+              start: '00:00:00.000',
+              title: 'Introduction',
+            },
+            {
+              start: '00:05:30.000',
+              title: 'Main Topic',
+            },
+          ],
+        },
       },
     }
 
