@@ -1638,6 +1638,7 @@ describe('parseEntry', () => {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
       title: { '#text': 'Podcast Episode Entry' },
       'psc:chapters': {
+        '@version': '1.2',
         'psc:chapter': [
           {
             '@start': '00:00:00.000',
@@ -1654,16 +1655,19 @@ describe('parseEntry', () => {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: { value: 'Podcast Episode Entry' },
       psc: {
-        chapters: [
-          {
-            start: '00:00:00.000',
-            title: 'Introduction',
-          },
-          {
-            start: '00:03:15.000',
-            title: 'Discussion',
-          },
-        ],
+        chapters: {
+          version: '1.2',
+          items: [
+            {
+              start: '00:00:00.000',
+              title: 'Introduction',
+            },
+            {
+              start: '00:03:15.000',
+              title: 'Discussion',
+            },
+          ],
+        },
       },
     }
 

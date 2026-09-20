@@ -1094,10 +1094,13 @@ describe('generateEntry', () => {
       title: { value: 'Entry with PSC chapters' },
       updated: new Date('2023-03-15T12:00:00Z'),
       psc: {
-        chapters: [
-          { start: '00:00:00', title: 'Introduction', href: 'https://example.com/intro' },
-          { start: '00:05:30', title: 'Main Content' },
-        ],
+        chapters: {
+          version: '1.2',
+          items: [
+            { start: '00:00:00', title: 'Introduction', href: 'https://example.com/intro' },
+            { start: '00:05:30', title: 'Main Content' },
+          ],
+        },
       },
     }
     const expected = {
@@ -1105,6 +1108,7 @@ describe('generateEntry', () => {
       title: { '#text': 'Entry with PSC chapters' },
       updated: '2023-03-15T12:00:00.000Z',
       'psc:chapters': {
+        '@version': '1.2',
         'psc:chapter': [
           {
             '@start': '00:00:00',

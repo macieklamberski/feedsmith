@@ -961,15 +961,19 @@ describe('generateItem', () => {
     const value = {
       title: 'Item with PSC chapters',
       psc: {
-        chapters: [
-          { start: '00:00:00', title: 'Introduction', href: 'https://example.com/intro' },
-          { start: '00:05:30', title: 'Main Content' },
-        ],
+        chapters: {
+          version: '1.2',
+          items: [
+            { start: '00:00:00', title: 'Introduction', href: 'https://example.com/intro' },
+            { start: '00:05:30', title: 'Main Content' },
+          ],
+        },
       },
     }
     const expected = {
       title: 'Item with PSC chapters',
       'psc:chapters': {
+        '@version': '1.2',
         'psc:chapter': [
           {
             '@start': '00:00:00',

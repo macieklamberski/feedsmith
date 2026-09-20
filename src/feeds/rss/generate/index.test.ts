@@ -954,10 +954,13 @@ describe('generate', () => {
         {
           title: 'Episode with chapters',
           psc: {
-            chapters: [
-              { start: '00:00:00', title: 'Introduction' },
-              { start: '00:05:30', title: 'Main Content', href: 'https://example.com/chapter2' },
-            ],
+            chapters: {
+              version: '1.2',
+              items: [
+                { start: '00:00:00', title: 'Introduction' },
+                { start: '00:05:30', title: 'Main Content', href: 'https://example.com/chapter2' },
+              ],
+            },
           },
         },
       ],
@@ -969,7 +972,7 @@ describe('generate', () => {
     <description>Test feed with Podlove Simple Chapters</description>
     <item>
       <title>Episode with chapters</title>
-      <psc:chapters>
+      <psc:chapters version="1.2">
         <psc:chapter start="00:00:00" title="Introduction"/>
         <psc:chapter start="00:05:30" title="Main Content" href="https://example.com/chapter2"/>
       </psc:chapters>
