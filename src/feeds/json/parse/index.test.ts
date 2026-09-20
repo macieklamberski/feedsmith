@@ -235,6 +235,22 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should skip null items and null authors', () => {
+    const value = {
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'My Example Feed',
+      authors: [null, { name: 'John Doe' }],
+      items: [null, { id: '1', authors: [null] }],
+    }
+    const expected = {
+      title: 'My Example Feed',
+      authors: [{ name: 'John Doe' }],
+      items: [{ id: '1' }],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should throw error for invalid input', () => {
     const throwing = () => parse('not a feed')
 
