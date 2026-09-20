@@ -1,4 +1,4 @@
-import { decodeHTML } from 'entities'
+import { decodeHTMLStrict } from 'entities'
 import type { XMLBuilder } from 'fast-xml-parser'
 import {
   coerceBoolean,
@@ -137,7 +137,7 @@ const decodeWithCdata = (text: string): string => {
   let currentIndex = text.indexOf(cdataStartTag)
 
   if (currentIndex === -1) {
-    return hasEntities(text) ? decodeHTML(text) : text
+    return hasEntities(text) ? decodeHTMLStrict(text) : text
   }
 
   let result = ''
@@ -146,14 +146,14 @@ const decodeWithCdata = (text: string): string => {
   while (currentIndex !== -1) {
     // Decode entities in text before CDATA.
     const textBefore = text.slice(lastIndex, currentIndex)
-    result += hasEntities(textBefore) ? decodeHTML(textBefore) : textBefore
+    result += hasEntities(textBefore) ? decodeHTMLStrict(textBefore) : textBefore
 
     // Find end of CDATA section.
     const endIndex = text.indexOf(cdataEndTag, currentIndex + cdataStartTag.length)
 
     if (endIndex === -1) {
       // Malformed - return original text decoded.
-      return hasEntities(text) ? decodeHTML(text) : text
+      return hasEntities(text) ? decodeHTMLStrict(text) : text
     }
 
     // Add CDATA content verbatim (without markers).
@@ -164,7 +164,7 @@ const decodeWithCdata = (text: string): string => {
 
   // Decode entities in remaining text after last CDATA.
   const textAfter = text.slice(lastIndex)
-  result += hasEntities(textAfter) ? decodeHTML(textAfter) : textAfter
+  result += hasEntities(textAfter) ? decodeHTMLStrict(textAfter) : textAfter
 
   return result
 }

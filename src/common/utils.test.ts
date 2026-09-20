@@ -732,6 +732,31 @@ describe('parseString', () => {
     expect(parseString(value)).toBe(expected)
   })
 
+  it('should leave an unterminated entity name in a query string alone', () => {
+    const value = 'https://example.com/?page=1&copy=2;mode=x'
+
+    expect(parseString(value)).toBe(value)
+  })
+
+  it('should leave an unterminated entity name alone when a semicolon follows later', () => {
+    const value = '?a=1&times=2;b &sect=3;c &not=4;d'
+
+    expect(parseString(value)).toBe(value)
+  })
+
+  it('should leave an unknown entity name alone', () => {
+    const value = 'testing &notit; entity'
+
+    expect(parseString(value)).toBe(value)
+  })
+
+  it('should still decode terminated entities alongside an unterminated one', () => {
+    const value = '?copy=1&amp;page=2;x &copy; &ndash; &#233;'
+    const expected = '?copy=1&page=2;x © – é'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
   it('should handle empty string in CDATA', () => {
     const value = '<![CDATA[        ]]>'
 
