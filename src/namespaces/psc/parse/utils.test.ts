@@ -156,6 +156,34 @@ describe('parseChapters', () => {
 })
 
 describe('retrieveItem', () => {
+  it('should parse the version attribute from the chapters element', () => {
+    const value = {
+      'psc:chapters': {
+        '@version': '1.2',
+        'psc:chapter': [{ '@start': '00:00:00.000', '@title': 'Introduction' }],
+      },
+    }
+    const expected = {
+      version: '1.2',
+      chapters: [{ start: '00:00:00.000', title: 'Introduction' }],
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse chapters with no version attribute', () => {
+    const value = {
+      'psc:chapters': {
+        'psc:chapter': [{ '@start': '00:00:00.000', '@title': 'Introduction' }],
+      },
+    }
+    const expected = {
+      chapters: [{ start: '00:00:00.000', title: 'Introduction' }],
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
   it('should parse complete psc item with multiple chapters', () => {
     const value = {
       'psc:chapters': {

@@ -13,6 +13,7 @@ export namespace PscNs {
   >
 
   export type Item<TStrict extends boolean = false> = {
+    version?: string
     chapters?: Array<Chapter<TStrict>>
   }
 }

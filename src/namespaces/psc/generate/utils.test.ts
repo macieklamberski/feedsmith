@@ -111,6 +111,34 @@ describe('generateChapters', () => {
 })
 
 describe('generateItem', () => {
+  it('should generate the version attribute on the chapters element', () => {
+    const value = {
+      version: '1.2',
+      chapters: [{ start: '00:00:00.000', title: 'Introduction' }],
+    }
+    const expected = {
+      'psc:chapters': {
+        '@version': '1.2',
+        'psc:chapter': [{ '@start': '00:00:00.000', '@title': 'Introduction' }],
+      },
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should omit the version attribute when it is absent', () => {
+    const value = {
+      chapters: [{ start: '00:00:00.000', title: 'Introduction' }],
+    }
+    const expected = {
+      'psc:chapters': {
+        'psc:chapter': [{ '@start': '00:00:00.000', '@title': 'Introduction' }],
+      },
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate valid item object with multiple chapters', () => {
     const value = {
       chapters: [

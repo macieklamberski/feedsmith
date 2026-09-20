@@ -697,7 +697,7 @@
       <podcast:chat server="chat.example.com" protocol="xmpp" accountId="episode@conference.example.com"/>
 
       <!-- Podlove Simple Chapters: Item Level Tags -->
-      <psc:chapters>
+      <psc:chapters version="1.2">
         <psc:chapter start="00:00:00.000" title="Introduction" href="https://example.com/episode/intro" image="https://example.com/images/intro-chapter.jpg"/>
         <psc:chapter start="00:05:30.000" title="Main Topic Discussion" href="https://example.com/episode/main-topic"/>
         <psc:chapter start="00:15:45.500" title="Guest Interview" href="https://example.com/episode/interview" image="https://example.com/images/interview-chapter.jpg"/>

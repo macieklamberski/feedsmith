@@ -28,6 +28,7 @@ export const retrieveItem: ParseUtilPartial<PscNs.Item> = (value) => {
   }
 
   const item = {
+    version: parseSingularOf(value['psc:chapters'], (value) => parseString(value?.['@version'])),
     chapters: parseSingularOf(value['psc:chapters'], parseChapters),
   }
 

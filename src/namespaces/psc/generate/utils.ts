@@ -31,7 +31,14 @@ export const generateItem: GenerateUtil<PscNs.Item> = (item) => {
     return
   }
 
+  const chapters = generateChapters(item.chapters)
+
   return trimObject({
-    'psc:chapters': generateChapters(item.chapters),
+    'psc:chapters':
+      chapters &&
+      trimObject({
+        '@version': generatePlainString(item.version),
+        ...chapters,
+      }),
   })
 }
