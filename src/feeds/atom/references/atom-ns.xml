@@ -14,6 +14,7 @@
       xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule"
       xmlns:thr="http://purl.org/syndication/thread/1.0"
       xmlns:app="http://www.w3.org/2007/app"
+      xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0"
       xmlns:wfw="http://wellformedweb.org/CommentAPI/"
       xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
       xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
@@ -578,5 +579,9 @@
     <!-- YouTube Namespace: Entry Level Tags -->
     <yt:videoId>dQw4w9WgXcQ</yt:videoId>
     <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
+
+    <!-- FeedBurner Namespace: Entry Level Tags -->
+    <feedburner:origLink>https://example.com/posts/original-article</feedburner:origLink>
+    <feedburner:origEnclosureLink>https://example.com/audio/original-episode.mp3</feedburner:origEnclosureLink>
   </entry>
 </feed>

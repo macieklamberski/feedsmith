@@ -27,6 +27,10 @@ import { retrieveItem as retrieveContentItem } from '../../../namespaces/content
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import {
+  retrieveFeed as retrieveFeedBurnerFeed,
+  retrieveItem as retrieveFeedBurnerItem,
+} from '../../../namespaces/feedburner/parse/utils.js'
 import { retrieveFeed as retrieveFeedPressFeed } from '../../../namespaces/feedpress/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces/geo/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
@@ -413,6 +417,7 @@ export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, option
     dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(value, options) : undefined,
     prism: namespaces.has('prism') ? retrievePrismItem(value, options) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
+    feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceItem(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyItem(value) : undefined,
@@ -472,6 +477,7 @@ export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, option
     creativeCommons: namespaces.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(channel)
       : undefined,
+    feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerFeed(channel) : undefined,
     feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(channel) : undefined,
     opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(channel) : undefined,
     admin: namespaces.has('admin') ? retrieveAdminFeed(channel) : undefined,

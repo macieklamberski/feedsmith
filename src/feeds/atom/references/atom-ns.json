@@ -630,6 +630,10 @@
       "creativeCommons": {
         "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]
       },
+      "feedburner": {
+        "origLink": "https://example.com/posts/original-article",
+        "origEnclosureLink": "https://example.com/audio/original-episode.mp3"
+      },
       "links": [
         {
           "rel": "replies",

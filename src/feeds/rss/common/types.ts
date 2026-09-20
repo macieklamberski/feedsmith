@@ -15,6 +15,7 @@ import type { ContentNs } from '../../../namespaces/content/common/types.js'
 import type { CreativeCommonsNs } from '../../../namespaces/creativecommons/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
+import type { FeedBurnerNs } from '../../../namespaces/feedburner/common/types.js'
 import type { FeedPressNs } from '../../../namespaces/feedpress/common/types.js'
 import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
@@ -150,6 +151,7 @@ export namespace RssFeed {
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       prism?: PrismNs.Item<TDate>
       wfw?: WfwNs.Item
+      feedburner?: FeedBurnerNs.Item
       sourceNs?: SourceNs.Item<TStrict>
       rawvoice?: RawVoiceNs.Item<TStrict>
       spotify?: SpotifyNs.Item<TStrict>
@@ -197,6 +199,7 @@ export namespace RssFeed {
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       prism?: PrismNs.Feed<TDate>
       creativeCommons?: CreativeCommonsNs.ItemOrFeed
+      feedburner?: FeedBurnerNs.Feed<TStrict>
       feedpress?: FeedPressNs.Feed
       opensearch?: OpenSearchNs.Feed<TStrict>
       admin?: AdminNs.Feed

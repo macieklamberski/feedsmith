@@ -16,6 +16,7 @@
      xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/"
      xmlns:spotify="http://www.spotify.com/ns/rss"
      xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/"
+     xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0"
      xmlns:feedpress="https://feed.press/xmlns"
      xmlns:arxiv="http://arxiv.org/schemas/atom"
      xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
@@ -432,6 +433,13 @@
 
     <!-- Creative Commons Namespace: Channel Level Tags -->
     <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
+
+    <!-- FeedBurner Namespace: Channel Level Tags -->
+    <feedburner:info uri="examplepodcast"/>
+    <feedburner:feedFlare href="https://add.my.yahoo.com/rss?url=https://example.com/feed" src="https://us.i1.yimg.com/addtomyyahoo4.gif">Add to My Yahoo</feedburner:feedFlare>
+    <feedburner:browserFriendly>This is an XML content feed. It is intended to be viewed in a newsreader or syndicated to another site.</feedburner:browserFriendly>
+    <feedburner:emailServiceId>ExamplePodcast</feedburner:emailServiceId>
+    <feedburner:feedburnerHostname>https://feedburner.google.com</feedburner:feedburnerHostname>
 
     <!-- FeedPress Namespace: Channel Level Tags -->
     <feedpress:link>https://feedpress.com/examplepodcast</feedpress:link>
@@ -869,6 +877,10 @@
       <acast:showId>abc123def456ghi789jkl012</acast:showId>
       <acast:episodeUrl>example-episode-title</acast:episodeUrl>
       <acast:settings>RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA==</acast:settings>
+
+      <!-- FeedBurner Namespace: Item Level Tags -->
+      <feedburner:origLink>https://example.com/episode/original-article</feedburner:origLink>
+      <feedburner:origEnclosureLink>https://example.com/audio/original-episode.mp3</feedburner:origEnclosureLink>
     </item>
   </channel>
 </rss>

@@ -147,6 +147,7 @@ export default defineConfig({
               { text: 'Spotify', link: '/reference/namespaces/spotify' },
               { text: 'Acast', link: '/reference/namespaces/acast' },
               { text: 'RawVoice', link: '/reference/namespaces/rawvoice' },
+              { text: 'FeedBurner', link: '/reference/namespaces/feedburner' },
               { text: 'FeedPress', link: '/reference/namespaces/feedpress' },
               { text: 'arXiv', link: '/reference/namespaces/arxiv' },
               { text: 'OpenSearch', link: '/reference/namespaces/opensearch' },
