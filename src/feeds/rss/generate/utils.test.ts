@@ -558,6 +558,21 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with expirationDate', () => {
+    const value = {
+      title: 'Example Item',
+      pubDate: new Date('2002-09-05T00:00:01Z'),
+      expirationDate: new Date('2002-09-06T00:00:01Z'),
+    }
+    const expected = {
+      title: 'Example Item',
+      pubDate: 'Thu, 05 Sep 2002 00:00:01 GMT',
+      expirationDate: 'Fri, 06 Sep 2002 00:00:01 GMT',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with minimal properties (title only)', () => {
     const value = {
       title: 'Minimal Item',

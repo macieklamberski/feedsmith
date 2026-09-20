@@ -222,6 +222,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
     enclosure: trimArray(item.enclosures, generateEnclosure),
     guid: generateGuid(item.guid),
     pubDate: generateRfc822Date(item.pubDate),
+    expirationDate: generateRfc822Date(item.expirationDate),
     source: generateSource(item.source),
     ...generateAtomEntry(item.atom),
     ...generateCc(item.cc),
