@@ -38,6 +38,36 @@ describe('parseLatLngPairs', () => {
     expect(parseLatLngPairs(value, { min: 3, max: 3 })).toEqual(expected)
   })
 
+  it('should parse a valid string wrapped in whitespace and newlines', () => {
+    const value = '\n      45.256 -71.92 37.8 -122.41\n    '
+    const expected = [
+      { lat: 45.256, lng: -71.92 },
+      { lat: 37.8, lng: -122.41 },
+    ]
+
+    expect(parseLatLngPairs(value, { min: 2, max: 2 })).toEqual(expected)
+  })
+
+  it('should return undefined for whitespace-only strings', () => {
+    const value = '   \n\t '
+
+    expect(parseLatLngPairs(value)).toBeUndefined()
+  })
+
+  it('should parse a CDATA-wrapped string', () => {
+    const value = '<![CDATA[45.256 -71.92]]>'
+    const expected = [{ lat: 45.256, lng: -71.92 }]
+
+    expect(parseLatLngPairs(value, { min: 1, max: 1 })).toEqual(expected)
+  })
+
+  it('should parse a string with an XML comment between the coordinates', () => {
+    const value = '45.256 <!-- longitude --> -71.92'
+    const expected = [{ lat: 45.256, lng: -71.92 }]
+
+    expect(parseLatLngPairs(value, { min: 1, max: 1 })).toEqual(expected)
+  })
+
   it('should parse a valid string with a ranging lat/lng pairs', () => {
     const value = '45.256 -71.92'
     const expected = [{ lat: 45.256, lng: -71.92 }]
@@ -107,6 +137,16 @@ describe('parseLatLngPairs', () => {
 describe('parsePoint', () => {
   it('should parse valid point string with space separator', () => {
     const value = '45.256 -71.92'
+    const expected = {
+      lat: 45.256,
+      lng: -71.92,
+    }
+
+    expect(parsePoint(value)).toEqual(expected)
+  })
+
+  it('should parse point string indented on its own line', () => {
+    const value = '\n      45.256 -71.92\n    '
     const expected = {
       lat: 45.256,
       lng: -71.92,
