@@ -1,4 +1,4 @@
-import { isNonEmptyString, isPlainObject, isPresent, trimObject } from 'trousse'
+import { isPlainObject, isPresent, trimObject } from 'trousse'
 import type { ParseUtilExact, ParseUtilPartial, Unreliable } from '../../../common/types.js'
 import {
   parseArrayOf,
@@ -15,11 +15,13 @@ export const parseLatLngPairs = (
   value: Unreliable,
   pairsCount?: { min?: number; max?: number },
 ): Array<GeoRssNs.Point> | undefined => {
-  if (!isNonEmptyString(value)) {
+  const string = parseString(value)
+
+  if (!string) {
     return
   }
 
-  const rawParts = value.split(whitespaceRegex)
+  const rawParts = string.split(whitespaceRegex)
   const numericParts = parseArrayOf(rawParts, parseNumber)
 
   if (!numericParts || numericParts.length % 2 !== 0 || rawParts.length !== numericParts.length) {
