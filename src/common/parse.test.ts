@@ -460,6 +460,28 @@ describe('parse', () => {
 
       expect(parse(value)).toEqual(expected)
     })
+
+    it('should parse RSS feed with a BOM before the XML declaration', () => {
+      const value = `﻿<?xml version="1.0"?>
+        <rss version="2.0">
+          <channel>
+            <title>Feed</title>
+            <link>https://example.com/feed</link>
+            <description>Example Feed</description>
+          </channel>
+        </rss>
+      `
+      const expected: AnyFeed = {
+        format: 'rss',
+        feed: {
+          title: 'Feed',
+          link: 'https://example.com/feed',
+          description: 'Example Feed',
+        },
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
   })
 
   describe('parseDateFn', () => {
@@ -488,12 +510,6 @@ describe('parse', () => {
   it.todo('should prefer earlier formats in detection order for ambiguous input', () => {
     // parse() runs the rss, atom, rdf and json detectors in that order.
     // Craft an input that matches more than one detector and pin which format wins.
-  })
-
-  it.todo('should parse feed with a BOM prefix', () => {
-    // Prepend the BOM character (U+FEFF) to a valid RSS string.
-    // Expected: detection still succeeds and the parsed result matches the same feed without
-    // the BOM.
   })
 
   it.todo('should pass maxItems option through to the format parser', () => {
