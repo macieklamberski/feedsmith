@@ -390,6 +390,9 @@ export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, option
     pubDate: parseSingularOf(value.pubdate, (value) =>
       parseDate(retrieveText(value), options?.parseDateFn),
     ),
+    expirationDate: parseSingularOf(value.expirationdate, (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     source: parseSingularOf(value.source, parseSource),
     atom: namespaces.has('atom') ? retrieveAtomEntry(value, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(value) : undefined,

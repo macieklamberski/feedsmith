@@ -131,6 +131,7 @@ export namespace RssFeed {
       enclosures?: Array<Enclosure<TStrict>>
       guid?: Guid<TStrict>
       pubDate?: TDate
+      expirationDate?: TDate
       source?: Source<TStrict>
       atom?: AtomNs.Entry<TDate>
       cc?: CcNs.ItemOrFeed
