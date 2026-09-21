@@ -1,4 +1,5 @@
 import type { Requirable, Strict } from '../../../common/types.js'
+import type { GeoRssNs } from '../../georss/common/types.js'
 
 // #region reference
 export namespace MediaNs {
@@ -190,6 +191,7 @@ export namespace MediaNs {
     end?: string
     lat?: number
     lng?: number
+    georss?: Pick<GeoRssNs.ItemOrFeed, 'where'>
   }
 
   /** @internal Shared elements available across Content, Group, ItemOrFeed types. */

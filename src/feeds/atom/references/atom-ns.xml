@@ -192,7 +192,13 @@
     <media:price type="rent" price="2.99" currency="USD"/>
     <media:license type="text/html" href="https://example.com/license">Standard License</media:license>
     <media:peerLink type="application/torrent" href="https://example.com/torrents/sample1.torrent"/>
-    <media:location>Sample Studio</media:location>
+    <media:location description="Sample Studio" start="00:00:10" end="00:01:30">
+      <georss:where>
+        <gml:Point>
+          <gml:pos>40.7128 -74.006</gml:pos>
+        </gml:Point>
+      </georss:where>
+    </media:location>
     <media:rights status="official"/>
     <media:scenes>
       <media:scene>
@@ -483,7 +489,13 @@
       <media:price type="rent" price="2.99" currency="USD"/>
       <media:license type="text/html" href="https://example.com/license">Standard License</media:license>
       <media:peerLink type="application/torrent" href="https://example.com/torrents/sample1.torrent"/>
-      <media:location>Sample Studio</media:location>
+      <media:location description="Sample Studio" start="00:00:10" end="00:01:30">
+        <georss:where>
+          <gml:Point>
+            <gml:pos>40.7128 -74.006</gml:pos>
+          </gml:Point>
+        </georss:where>
+      </media:location>
       <media:rights status="official"/>
       <media:scenes>
         <media:scene>

@@ -228,7 +228,18 @@
             ],
             "locations": [
               {
-                "description": "Sample Studio"
+                "description": "Sample Studio",
+                "start": "00:00:10",
+                "end": "00:01:30",
+                "georss": {
+                  "where": {
+                    "gml": {
+                      "point": {
+                        "pos": { "lat": 40.7128, "lng": -74.006 }
+                      }
+                    }
+                  }
+                }
               }
             ],
             "rights": {
@@ -806,7 +817,18 @@
         ],
         "locations": [
           {
-            "description": "Sample Studio"
+            "description": "Sample Studio",
+            "start": "00:00:10",
+            "end": "00:01:30",
+            "georss": {
+              "where": {
+                "gml": {
+                  "point": {
+                    "pos": { "lat": 40.7128, "lng": -74.006 }
+                  }
+                }
+              }
+            }
           }
         ],
         "rights": {

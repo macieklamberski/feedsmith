@@ -2575,6 +2575,59 @@ describe('parseLocation', () => {
     expect(parseLocation(value)).toEqual(expected)
   })
 
+  it('should parse the spec form with attributes and a GML geometry', () => {
+    const value = {
+      '@description': 'My house',
+      '@start': '00:01',
+      '@end': '01:00',
+      'georss:where': {
+        'gml:point': { 'gml:pos': '35.669998 139.770004' },
+      },
+    }
+    const expected = {
+      description: 'My house',
+      start: '00:01',
+      end: '01:00',
+      georss: {
+        where: {
+          gml: {
+            point: {
+              pos: { lat: 35.669998, lng: 139.770004 },
+            },
+          },
+        },
+      },
+    }
+
+    expect(parseLocation(value)).toEqual(expected)
+  })
+
+  it('should prefer the description attribute over element text', () => {
+    const value = {
+      '@description': 'My house',
+      '#text': 'Ireland',
+    }
+    const expected = {
+      description: 'My house',
+    }
+
+    expect(parseLocation(value)).toEqual(expected)
+  })
+
+  it('should drop georss:where that holds no GML geometry', () => {
+    const value = {
+      '@description': 'My house',
+      'georss:where': {
+        'geo:point': { 'geo:pos': '35.669998 139.770004' },
+      },
+    }
+    const expected = {
+      description: 'My house',
+    }
+
+    expect(parseLocation(value)).toEqual(expected)
+  })
+
   it('should return undefined for unsupported input', () => {
     expect(parseLocation(undefined)).toBeUndefined()
     expect(parseLocation(null)).toBeUndefined()

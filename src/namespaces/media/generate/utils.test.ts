@@ -1068,7 +1068,7 @@ describe('generateLocation', () => {
       lng: -74.006,
     }
     const expected = {
-      '#text': 'New York City',
+      '@description': 'New York City',
       '@start': '01:00:00',
       '@end': '01:05:00',
       '@lat': 40.7128,
@@ -1083,7 +1083,36 @@ describe('generateLocation', () => {
       description: 'San Francisco',
     }
     const expected = {
-      '#text': 'San Francisco',
+      '@description': 'San Francisco',
+    }
+
+    expect(generateLocation(value)).toEqual(expected)
+  })
+
+  it('should generate location with a GML geometry in georss:where', () => {
+    const value = {
+      description: 'My house',
+      start: '00:01',
+      end: '01:00',
+      georss: {
+        where: {
+          gml: {
+            point: {
+              pos: { lat: 35.669998, lng: 139.770004 },
+            },
+          },
+        },
+      },
+    }
+    const expected = {
+      '@description': 'My house',
+      '@start': '00:01',
+      '@end': '01:00',
+      'georss:where': {
+        'gml:Point': {
+          'gml:pos': { '#text': '35.669998 139.770004' },
+        },
+      },
     }
 
     expect(generateLocation(value)).toEqual(expected)
@@ -1421,7 +1450,7 @@ describe('generateContent', () => {
       ],
       'media:location': [
         {
-          '#text': 'New York City',
+          '@description': 'New York City',
           '@start': '01:00:00',
           '@end': '01:05:00',
           '@lat': 40.7128,
@@ -1758,7 +1787,7 @@ describe('generateGroup', () => {
       ],
       'media:location': [
         {
-          '#text': 'Recording Studio',
+          '@description': 'Recording Studio',
         },
       ],
       'media:rights': {
@@ -2074,7 +2103,7 @@ describe('generateItemOrFeed', () => {
       ],
       'media:location': [
         {
-          '#text': 'Studio Location',
+          '@description': 'Studio Location',
         },
       ],
       'media:rights': {
