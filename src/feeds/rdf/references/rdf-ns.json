@@ -504,6 +504,10 @@
           "lowerCorner": { "lat": 37.15, "lng": -122.85 },
           "upperCorner": { "lat": 38.15, "lng": -121.85 }
         },
+        "circle": {
+          "center": { "lat": 37.65, "lng": -122.35 },
+          "radius": 500
+        },
         "featureTypeTag": "region",
         "relationshipTag": "contains",
         "featureName": "San Francisco Bay Area",
@@ -1077,6 +1081,10 @@
     "box": {
       "lowerCorner": { "lat": 37.15, "lng": -122.85 },
       "upperCorner": { "lat": 38.15, "lng": -121.85 }
+    },
+    "circle": {
+      "center": { "lat": 37.65, "lng": -122.35 },
+      "radius": 500
     },
     "featureTypeTag": "region",
     "relationshipTag": "contains",

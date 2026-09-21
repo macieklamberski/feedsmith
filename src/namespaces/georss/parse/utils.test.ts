@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import {
   parseBox,
+  parseCircle,
   parseLatLngPairs,
   parseLine,
   parsePoint,
@@ -398,6 +399,67 @@ describe('parseBox', () => {
   })
 })
 
+describe('parseCircle', () => {
+  it('should parse a circle with a center and a radius', () => {
+    const value = '45.256 -71.92 500'
+    const expected = {
+      center: { lat: 45.256, lng: -71.92 },
+      radius: 500,
+    }
+
+    expect(parseCircle(value)).toEqual(expected)
+  })
+
+  it('should parse a circle from an object with #text', () => {
+    const value = { '#text': '45.256 -71.92 500' }
+    const expected = {
+      center: { lat: 45.256, lng: -71.92 },
+      radius: 500,
+    }
+
+    expect(parseCircle(value)).toEqual(expected)
+  })
+
+  it('should handle varied spacing and surrounding whitespace', () => {
+    const value = '  45.256\t-71.92   500\n'
+    const expected = {
+      center: { lat: 45.256, lng: -71.92 },
+      radius: 500,
+    }
+
+    expect(parseCircle(value)).toEqual(expected)
+  })
+
+  it('should return undefined when the radius is missing', () => {
+    const value = '45.256 -71.92'
+
+    expect(parseCircle(value)).toBeUndefined()
+  })
+
+  it('should return undefined when there are more than three values', () => {
+    const value = '45.256 -71.92 500 100'
+
+    expect(parseCircle(value)).toBeUndefined()
+  })
+
+  it('should return undefined when a value is not a number', () => {
+    const value = '45.256 -71.92 wide'
+
+    expect(parseCircle(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty and whitespace-only strings', () => {
+    expect(parseCircle('')).toBeUndefined()
+    expect(parseCircle('   ')).toBeUndefined()
+  })
+
+  it('should return undefined for non-string inputs', () => {
+    expect(parseCircle(undefined)).toBeUndefined()
+    expect(parseCircle(null)).toBeUndefined()
+    expect(parseCircle({})).toBeUndefined()
+  })
+})
+
 describe('retrieveItemOrFeed', () => {
   const expectedFull = {
     point: { lat: 45.256, lng: -71.92 },
@@ -420,6 +482,10 @@ describe('retrieveItemOrFeed', () => {
       lowerCorner: { lat: 42.943, lng: -71.032 },
       upperCorner: { lat: 43.039, lng: -69.856 },
     },
+    circle: {
+      center: { lat: 45.256, lng: -71.92 },
+      radius: 250,
+    },
     featureTypeTag: 'city',
     relationshipTag: 'is-centroid-of',
     featureName: 'Portland',
@@ -434,6 +500,7 @@ describe('retrieveItemOrFeed', () => {
       'georss:line': { '#text': '45.256 -110.45 46.46 -109.48 43.84 -109.86' },
       'georss:polygon': { '#text': '45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45' },
       'georss:box': { '#text': '42.943 -71.032 43.039 -69.856' },
+      'georss:circle': { '#text': '45.256 -71.92 250' },
       'georss:featuretypetag': { '#text': 'city' },
       'georss:relationshiptag': { '#text': 'is-centroid-of' },
       'georss:featurename': { '#text': 'Portland' },
@@ -451,6 +518,7 @@ describe('retrieveItemOrFeed', () => {
       'georss:line': '45.256 -110.45 46.46 -109.48 43.84 -109.86',
       'georss:polygon': '45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45',
       'georss:box': '42.943 -71.032 43.039 -69.856',
+      'georss:circle': '45.256 -71.92 250',
       'georss:featuretypetag': 'city',
       'georss:relationshiptag': 'is-centroid-of',
       'georss:featurename': 'Portland',
@@ -468,6 +536,7 @@ describe('retrieveItemOrFeed', () => {
       'georss:line': ['45.256 -110.45 46.46 -109.48 43.84 -109.86'],
       'georss:polygon': ['45.256 -110.45 46.46 -109.48 43.84 -109.86 45.256 -110.45'],
       'georss:box': ['42.943 -71.032 43.039 -69.856'],
+      'georss:circle': ['45.256 -71.92 250'],
       'georss:featuretypetag': ['city'],
       'georss:relationshiptag': ['is-centroid-of'],
       'georss:featurename': ['Portland'],
