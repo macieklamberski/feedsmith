@@ -732,6 +732,31 @@ describe('parseString', () => {
     expect(parseString(value)).toBe(expected)
   })
 
+  it('should leave an unterminated entity name in a query string alone', () => {
+    const value = 'https://example.com/?page=1&copy=2;mode=x'
+
+    expect(parseString(value)).toBe(value)
+  })
+
+  it('should leave an unterminated entity name alone when a semicolon follows later', () => {
+    const value = '?a=1&times=2;b &sect=3;c &not=4;d'
+
+    expect(parseString(value)).toBe(value)
+  })
+
+  it('should leave an unknown entity name alone', () => {
+    const value = 'testing &notit; entity'
+
+    expect(parseString(value)).toBe(value)
+  })
+
+  it('should still decode terminated entities alongside an unterminated one', () => {
+    const value = '?copy=1&amp;page=2;x &copy; &ndash; &#233;'
+    const expected = '?copy=1&page=2;x © – é'
+
+    expect(parseString(value)).toBe(expected)
+  })
+
   it('should handle empty string in CDATA', () => {
     const value = '<![CDATA[        ]]>'
 
@@ -3406,6 +3431,21 @@ describe('createNamespaceResolver', () => {
     expect(parser.parse('<rss><a:title>T</a:title></rss>')).toEqual(expected)
   })
 
+  // A default namespace is an attribute value, which fast-xml-parser does not sanitize, so
+  // `constructor` and `__proto__` reach the prefix table as keys. Answering with an inherited
+  // member renames every element after the uri and the document stops being a feed.
+  const inheritedMemberUris = ['constructor', '__proto__']
+
+  it.each(inheritedMemberUris)('should not resolve %s to an inherited member', (uri) => {
+    const options = createNamespaceResolver({ namespaceUris, namespacePrefixes })(
+      `<rss xmlns="${uri}">`,
+    )
+    const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '@', ...options })
+    const expected = { rss: { '@xmlns': uri, title: 'T' } }
+
+    expect(parser.parse(`<rss xmlns="${uri}"><title>T</title></rss>`)).toEqual(expected)
+  })
+
   it('should fall back to a whole-document scan when a comment never closes', () => {
     const createNamespaceOptions = createNamespaceResolver({ namespaceUris, namespacePrefixes })
     // The comment never closes, so no root can be found and the scan falls back to the
@@ -3508,6 +3548,20 @@ describe('parseJsonObject', () => {
 
   it('should parse JSON string with whitespace on both ends', () => {
     const value = '  {"title":"Test"}  '
+    const expected = { title: 'Test' }
+
+    expect(parseJsonObject(value)).toEqual(expected)
+  })
+
+  it('should parse JSON string prefixed with a BOM', () => {
+    const value = '\ufeff{"title":"Test"}'
+    const expected = { title: 'Test' }
+
+    expect(parseJsonObject(value)).toEqual(expected)
+  })
+
+  it('should parse JSON string with a BOM and surrounding whitespace', () => {
+    const value = '\ufeff  {"title":"Test"}  '
     const expected = { title: 'Test' }
 
     expect(parseJsonObject(value)).toEqual(expected)

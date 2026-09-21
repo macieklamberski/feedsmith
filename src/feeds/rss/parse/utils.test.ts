@@ -1460,6 +1460,21 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle item with expirationDate', () => {
+    const value = {
+      title: { '#text': 'Item Title' },
+      pubdate: { '#text': 'Thu, 05 Sep 2002 00:00:01 GMT' },
+      expirationdate: { '#text': 'Fri, 06 Sep 2002 00:00:01 GMT' },
+    }
+    const expected = {
+      title: 'Item Title',
+      pubDate: 'Thu, 05 Sep 2002 00:00:01 GMT',
+      expirationDate: 'Fri, 06 Sep 2002 00:00:01 GMT',
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle minimal item with description only', () => {
     const value = {
       description: { '#text': 'Item Description' },

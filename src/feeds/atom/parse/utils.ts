@@ -21,6 +21,10 @@ import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/u
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import {
+  retrieveFeed as retrieveFeedBurnerFeed,
+  retrieveItem as retrieveFeedBurnerItem,
+} from '../../../namespaces/feedburner/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces/geo/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
@@ -500,26 +504,27 @@ export const parseEntry: ParseUtilPartial<AtomFeed.Entry<DateAny>> = (value, opt
     summary: parseSingularOf(get('summary'), parseText),
     title: parseSingularOf(get('title'), parseText),
     updated: retrieveUpdated(value, options),
-    app: namespaces?.has('app') ? retrieveAppEntry(value, options) : undefined,
-    arxiv: namespaces?.has('arxiv') ? retrieveArxivEntry(value) : undefined,
-    cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value, options) : undefined,
+    dcterms: namespaces?.has('dcterms') ? retrieveDcTermsItemOrFeed(value, options) : undefined,
     slash: namespaces?.has('slash') ? retrieveSlashItem(value) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesItem(value) : undefined,
-    googleplay: namespaces?.has('googleplay') ? retrieveGooglePlayItem(value) : undefined,
     psc: namespaces?.has('psc') ? retrievePscItem(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
-    georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
-    geo: namespaces?.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
-    thr: namespaces?.has('thr') ? retrieveThrItem(value) : undefined,
-    dcterms: namespaces?.has('dcterms') ? retrieveDcTermsItemOrFeed(value, options) : undefined,
+    googleplay: namespaces?.has('googleplay') ? retrieveGooglePlayItem(value) : undefined,
+    feedburner: namespaces?.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
+    arxiv: namespaces?.has('arxiv') ? retrieveArxivEntry(value) : undefined,
+    cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     creativeCommons: namespaces?.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(value)
       : undefined,
+    thr: namespaces?.has('thr') ? retrieveThrItem(value) : undefined,
+    app: namespaces?.has('app') ? retrieveAppEntry(value, options) : undefined,
     wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
-    yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces?.has('trackback') ? retrieveTrackbackItem(value) : undefined,
+    yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
+    geo: namespaces?.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
+    georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     xml: options?.asNamespace ? undefined : retrieveXmlItemOrFeed(value),
   }
 
@@ -547,22 +552,23 @@ export const parseFeed: ParseUtilPartial<AtomFeed.Feed<DateAny>> = (value, optio
     title: parseSingularOf(get('title'), parseText),
     updated: retrieveUpdated(value, options),
     entries: parseArrayOf(get('entry'), (value) => parseEntry(value, options), options?.maxItems),
-    cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces?.has('dc') ? retrieveDcItemOrFeed(value, options) : undefined,
+    dcterms: namespaces?.has('dcterms') ? retrieveDcTermsItemOrFeed(value, options) : undefined,
     sy: namespaces?.has('sy') ? retrieveSyFeed(value, options) : undefined,
     itunes: namespaces?.has('itunes') ? retrieveItunesFeed(value) : undefined,
-    googleplay: namespaces?.has('googleplay') ? retrieveGooglePlayFeed(value) : undefined,
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
-    georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
-    geo: namespaces?.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
-    dcterms: namespaces?.has('dcterms') ? retrieveDcTermsItemOrFeed(value, options) : undefined,
+    googleplay: namespaces?.has('googleplay') ? retrieveGooglePlayFeed(value) : undefined,
+    feedburner: namespaces?.has('feedburner') ? retrieveFeedBurnerFeed(value) : undefined,
+    opensearch: namespaces?.has('opensearch') ? retrieveOpenSearchFeed(value) : undefined,
+    cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     creativeCommons: namespaces?.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(value)
       : undefined,
-    opensearch: namespaces?.has('opensearch') ? retrieveOpenSearchFeed(value) : undefined,
-    yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
     admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackFeed(value) : undefined,
+    yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
+    geo: namespaces?.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
+    georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     xml: options?.asNamespace ? undefined : retrieveXmlItemOrFeed(value),
   }
 

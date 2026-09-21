@@ -1,8 +1,8 @@
 ---
-title: Migrating from 2.x to 3.x
+title: Migrate from 2.x to 3.x
 ---
 
-# Migrating from 2.x to 3.x
+# Migrate from 2.x to 3.x
 
 This guide covers all breaking changes when upgrading from Feedsmith 2.x to 3.x. Each breaking change is detailed with specific upgrade steps and examples.
 
@@ -101,17 +101,17 @@ const entry: Atom.Entry<Date> = {
 
 #### After (3.x)
 ```typescript
-import type { Atom } from 'feedsmith'
+import type { AtomFeed } from 'feedsmith'
 
 // All fields optional by default
-const entry: Atom.Entry<Date> = {
-  title: 'Post Title',
+const entry: AtomFeed.Entry<Date> = {
+  title: { value: 'Post Title' },
 }
 
 // Pass `true` for compile-time enforcement
-const strictEntry: Atom.Entry<Date, true> = {
+const strictEntry: AtomFeed.Entry<Date, true> = {
   id: 'https://example.com/post/1',
-  title: 'Post Title',
+  title: { value: 'Post Title' },
   updated: new Date('2024-01-01'),
 }
 ```
@@ -135,21 +135,21 @@ const processFeed = (feed: DeepPartial<Rss.Feed<string>>) => {
 
 #### After (3.x)
 ```typescript
-import type { Rss } from 'feedsmith'
+import type { RssFeed } from 'feedsmith'
 
 // All fields already optional - DeepPartial not needed
-const processFeed = (feed: Rss.Feed<string>) => {
+const processFeed = (feed: RssFeed.Feed<string>) => {
   console.log(feed.title)
 }
 ```
 
 #### Migration Steps
 1. Remove `DeepPartial` from your imports
-2. Use base types directly (`Rss.Feed`, `Atom.Feed`, etc.)
+2. Use base types directly (`RssFeed.Feed`, `AtomFeed.Feed`, etc.)
 
 ### Types Entry Point Removed
 
-The `feedsmith/types` entry point has been removed. All types are now exported from the main `feedsmith` entry point. Additionally, deprecated type aliases (`RssFeed`, `AtomFeed`, `JsonFeed`, `RdfFeed`, `Opml`) have been removed.
+The `feedsmith/types` entry point has been removed. All types are now exported from the main `feedsmith` entry point. The generic aliases deprecated in 2.x (`RssFeed<TDate>`, `AtomFeed<TDate>`, `JsonFeed<TDate>`, `RdfFeed<TDate>`, `Opml<TDate>`) have been removed. `RssFeed`, `AtomFeed`, `JsonFeed` and `RdfFeed` are now the [format type namespaces](#format-type-namespaces-renamed), and `Opml` is the OPML one.
 
 #### Before (2.x)
 ```typescript
@@ -159,16 +159,16 @@ import { parseRssFeed } from 'feedsmith'
 
 #### After (3.x)
 ```typescript
-import { type Rss, parseRssFeed } from 'feedsmith'
+import { type RssFeed, parseRssFeed } from 'feedsmith'
 ```
 
 #### Migration Steps
 1. Change `feedsmith/types` imports to `feedsmith`
-2. Replace deprecated type aliases: `RssFeed` → `Rss.Feed`, `AtomFeed` → `Atom.Feed`, etc.
+2. Replace the removed generic aliases: `RssFeed<Date>` → `RssFeed.Feed<Date>`, `AtomFeed<Date>` → `AtomFeed.Feed<Date>`, `Opml<Date>` → `Opml.Document<Date>`, etc.
 
 ### Atom text fields changed from string to object
 
-The `title`, `subtitle`, `rights`, and `summary` fields on Atom feeds and entries were previously flattened to strings. This meant any additional attributes like `type` (indicating whether the text is plain text, HTML, or XHTML) and XML namespace declarations were lost during parsing. In the new version, they use the `Atom.Text` object that preserves these attributes, properly representing the [Atom text construct](https://www.rfc-editor.org/rfc/rfc4287#section-3.1).
+The `title`, `subtitle`, `rights`, and `summary` fields on Atom feeds and entries were previously flattened to strings. This meant any additional attributes like `type` (indicating whether the text is plain text, HTML, or XHTML) and XML namespace declarations were lost during parsing. In the new version, they use the `AtomFeed.Text` object that preserves these attributes, properly representing the [Atom text construct](https://www.rfc-editor.org/rfc/rfc4287#section-3.1).
 
 The affected fields are:
 - **Feed**: `title`, `subtitle`, `rights`
@@ -217,7 +217,7 @@ const xml = generateAtomFeed({
 
 ### Atom Entry `content` changed from string to object
 
-The `content` field on Atom entries was previously flattened to a string. This meant, any additional attributes like `type` (indicating content type), `src` (remote content URI), and XML namespace declarations were lost during parsing. In the new version, it is replaced with the `Atom.Content` object that preserves these attributes, properly representing the [Atom content construct](https://www.rfc-editor.org/rfc/rfc4287#section-4.1.3).
+The `content` field on Atom entries was previously flattened to a string. This meant, any additional attributes like `type` (indicating content type), `src` (remote content URI), and XML namespace declarations were lost during parsing. In the new version, it is replaced with the `AtomFeed.Content` object that preserves these attributes, properly representing the [Atom content construct](https://www.rfc-editor.org/rfc/rfc4287#section-4.1.3).
 
 ```xml
 <content type="xhtml" xml:base="http://example.org/entry/1" xml:lang="en-US">
@@ -297,7 +297,7 @@ Generating works in the other direction: a `type="xhtml"` value is emitted as ma
 
 ### RSS Person Fields Changed from Strings to Objects
 
-The `managingEditor`, `webMaster`, and `authors` fields on RSS feeds and items were previously plain strings (e.g., `'editor@example.com (Editor Name)'`). In the new version, they use the `Rss.Person` object that preserves structured data, properly representing the [RSS person construct](https://www.rssboard.org/rss-specification#ltauthorgtSubelementOfLtitemgt).
+The `managingEditor`, `webMaster`, and `authors` fields on RSS feeds and items were previously plain strings (e.g., `'editor@example.com (Editor Name)'`). In the new version, they use the `RssFeed.Person` object that preserves structured data, properly representing the [RSS person construct](https://www.rssboard.org/rss-specification#ltauthorgtSubelementOfLtitemgt).
 
 The affected fields are:
 - **Feed**: `managingEditor`, `webMaster`
@@ -337,7 +337,7 @@ const xml = generateRssFeed({
 ```
 
 > [!NOTE]
-> The `link` property on `Rss.Person` is parse-only — it is extracted from URLs found in the person string but is not included in generated XML output, as RSS spec does not define a standard way to encode links in person fields.
+> The `link` property on `RssFeed.Person` is parse-only: it is extracted from URLs found in the person string but is not included in generated XML output, as RSS spec does not define a standard way to encode links in person fields.
 
 #### Migration Steps
 1. Replace string reads with object property access (e.g., `feed.managingEditor` → `feed.managingEditor?.email`)

@@ -2239,6 +2239,96 @@ describe('parse', () => {
 
         expect(parse(value)).toEqual(expected)
       })
+
+      // An unrecognized default namespace on the root leaves every unprefixed element
+      // where it is; only a default namespace matching a known URI renames them.
+      it('should handle unrecognized default namespace on the RSS root', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss xmlns="https://cyber.harvard.edu/rss/rss.html" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <atom:link href="https://example.com/feed" rel="self" type="application/rss+xml"/>
+              <item>
+                <title>Post</title>
+                <link>https://example.com/post</link>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          atom: {
+            links: [
+              {
+                href: 'https://example.com/feed',
+                rel: 'self',
+                type: 'application/rss+xml',
+              },
+            ],
+          },
+          items: [
+            {
+              title: 'Post',
+              link: 'https://example.com/post',
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should parse core elements bound to a prefix (RW-X26)', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <r:rss version="2.0" xmlns:r="http://backend.userland.com/rss2">
+            <r:channel>
+              <r:title>Test</r:title>
+              <r:link>https://example.com</r:link>
+              <r:description>Test</r:description>
+              <r:item>
+                <r:title>Post</r:title>
+              </r:item>
+            </r:channel>
+          </r:rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [{ title: 'Post' }],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should parse core elements under the RSS 2.0 namespace declared as default (RW-X26)', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns="http://backend.userland.com/rss2">
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Post</title>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [{ title: 'Post' }],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
     })
 
     describe('feed-specific quirks', () => {

@@ -22,6 +22,10 @@ import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generat
 import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDcTermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
+import {
+  generateFeed as generateFeedBurnerFeed,
+  generateItem as generateFeedBurnerItem,
+} from '../../../namespaces/feedburner/generate/utils.js'
 import { generateItemOrFeed as generateGeoItemOrFeed } from '../../../namespaces/geo/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
@@ -265,7 +269,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
 
   const key = createNamespaceSetter(options?.prefix)
   const value = {
-    [key('author')]: trimArray(entry.authors, generatePerson),
+    [key('author')]: trimArray(entry.authors, (author) => generatePerson(author, options)),
     [key('category')]: trimArray(entry.categories, generateCategory),
     [key('content')]: generateContent(entry.content),
     [key('contributor')]: trimArray(entry.contributors, (contributor) =>
@@ -283,36 +287,35 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
 
   const trimmedValue = trimObject(value)
 
-  if (!trimmedValue) {
-    return
-  }
-
   if (options?.asNamespace) {
     return trimmedValue
   }
 
-  return {
+  const fullValue = {
     ...trimmedValue,
-    ...generateAppEntry(entry.app),
-    ...generateArxivEntry(entry.arxiv),
-    ...generateCc(entry.cc),
     ...generateDcItemOrFeed(entry.dc),
+    ...generateDcTermsItemOrFeed(entry.dcterms),
     ...generateSlashItem(entry.slash),
     ...generateItunesItem(entry.itunes),
-    ...generateGooglePlayItem(entry.googleplay),
     ...generatePscItem(entry.psc),
     ...generateMediaItemOrFeed(entry.media),
-    ...generateGeoRssItemOrFeed(entry.georss),
-    ...generateGeoItemOrFeed(entry.geo),
-    ...generateThrItem(entry.thr),
-    ...generateDcTermsItemOrFeed(entry.dcterms),
+    ...generateGooglePlayItem(entry.googleplay),
+    ...generateFeedBurnerItem(entry.feedburner),
+    ...generateArxivEntry(entry.arxiv),
+    ...generateCc(entry.cc),
     ...generateCreativeCommonsItemOrFeed(entry.creativeCommons),
+    ...generateThrItem(entry.thr),
+    ...generateAppEntry(entry.app),
     ...generateWfwItem(entry.wfw),
-    ...generateYtItem(entry.yt),
     ...generatePingbackItem(entry.pingback),
     ...generateTrackbackItem(entry.trackback),
+    ...generateYtItem(entry.yt),
+    ...generateGeoItemOrFeed(entry.geo),
+    ...generateGeoRssItemOrFeed(entry.georss),
     ...generateXmlItemOrFeed(entry.xml),
   }
+
+  return trimObject(fullValue)
 }
 
 export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, options) => {
@@ -348,11 +351,11 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
 
   const valueEntries = trimObject(entriesValue)
 
-  if (!valueFeed && !valueEntries) {
-    return
-  }
-
   if (options?.asNamespace) {
+    if (!valueFeed && !valueEntries) {
+      return
+    }
+
     return {
       feed: {
         ...valueFeed,
@@ -361,31 +364,36 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
     }
   }
 
-  const valueFull = {
+  const fullValue = trimObject({
     ...valueFeed,
-    ...generateCc(feed.cc),
     ...generateDcItemOrFeed(feed.dc),
+    ...generateDcTermsItemOrFeed(feed.dcterms),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
-    ...generateGooglePlayFeed(feed.googleplay),
     ...generateMediaItemOrFeed(feed.media),
-    ...generateGeoRssItemOrFeed(feed.georss),
-    ...generateGeoItemOrFeed(feed.geo),
-    ...generateDcTermsItemOrFeed(feed.dcterms),
-    ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
+    ...generateGooglePlayFeed(feed.googleplay),
+    ...generateFeedBurnerFeed(feed.feedburner),
     ...generateOpenSearchFeed(feed.opensearch),
-    ...generateYtFeed(feed.yt),
+    ...generateCc(feed.cc),
+    ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
     ...generateAdminFeed(feed.admin),
     ...generatePingbackFeed(feed.pingback),
+    ...generateYtFeed(feed.yt),
+    ...generateGeoItemOrFeed(feed.geo),
+    ...generateGeoRssItemOrFeed(feed.georss),
     ...generateXmlItemOrFeed(feed.xml),
     ...valueEntries,
+  })
+
+  if (!fullValue) {
+    return
   }
 
   return {
     feed: {
       '@xmlns': 'http://www.w3.org/2005/Atom',
-      ...generateNamespaceAttrs({ value: valueFull }, namespaceUris),
-      ...valueFull,
+      ...generateNamespaceAttrs({ value: fullValue }, namespaceUris),
+      ...fullValue,
     },
   }
 }

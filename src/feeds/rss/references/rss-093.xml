@@ -51,6 +51,7 @@
       <category>Technology</category>
       <enclosure url="http://example.org/audio/demo.mp3" length="1069871" type="audio/mpeg" />
       <pubDate>Thu, 05 Sep 2002 0:00:01 GMT</pubDate>
+      <expirationDate>Fri, 06 Sep 2002 0:00:01 GMT</expirationDate>
       <source url="http://www.example.org/links.xml">Example's Realm</source>
     </item>
     <item>

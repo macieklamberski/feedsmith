@@ -30,6 +30,8 @@ export namespace ItunesNs {
     season?: number
     episodeType?: string
     block?: boolean
+    /** @deprecated No longer used by Apple Podcasts. */
+    order?: number
     /** @deprecated Use standard RSS description instead. No longer used by Apple Podcasts. */
     summary?: string
     /** @deprecated No longer used by Apple Podcasts. */

@@ -22,7 +22,7 @@ The Trackback namespace enables peer-to-peer communication between web sites tha
     </tr>
     <tr>
       <th>Available in</th>
-      <td><a href="/reference/feeds/rss">RSS</a>, <a href="/reference/feeds/atom">Atom</a></td>
+      <td><a href="/reference/feeds/rss">RSS</a>, <a href="/reference/feeds/atom">Atom</a>, <a href="/reference/feeds/rdf">RDF</a></td>
     </tr>
     <tr>
       <th>Property</th>

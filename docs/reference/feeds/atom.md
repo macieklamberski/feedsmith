@@ -27,6 +27,7 @@ Atom is a syndication format based on XML that provides a robust framework for w
         <a href="/reference/namespaces/psc">Podlove Simple Chapters</a>,
         <a href="/reference/namespaces/media">Media RSS</a>,
         <a href="/reference/namespaces/googleplay">Google Play Podcast</a>,
+        <a href="/reference/namespaces/feedburner">FeedBurner</a>,
         <a href="/reference/namespaces/arxiv">arXiv</a>,
         <a href="/reference/namespaces/opensearch">OpenSearch</a>,
         <a href="/reference/namespaces/cc">ccREL</a>,
@@ -137,7 +138,7 @@ import type { AtomFeed } from 'feedsmith'
 // Access any type from the definitions below
 type Feed = AtomFeed.Feed<Date>
 type Entry = AtomFeed.Entry<Date>
-type Link = AtomFeed.Link
+type Link = AtomFeed.Link<Date>
 type Person = AtomFeed.Person
 // … see type definitions below for all available types
 ```

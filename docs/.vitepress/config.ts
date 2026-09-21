@@ -1,3 +1,4 @@
+import { vitepress } from 'ogier/adapters'
 import { defineConfig } from 'vitepress'
 
 const indexMdRegex = /index\.md$/
@@ -5,6 +6,23 @@ const mdRegex = /\.md$/
 const trailingSlashRegex = /\/$/
 
 const hostname = 'https://feedsmith.dev'
+const og = vitepress({
+  site: {
+    hostname,
+    favicon: { file: new URL('../public/favicon.svg', import.meta.url) },
+  },
+  card: {
+    header: {
+      text: 'feedsmith',
+      icon: { file: new URL('../public/favicon.svg', import.meta.url) },
+    },
+    footer: {
+      text: 'macieklamberski/feedsmith',
+      icon: { file: new URL('./github.svg', import.meta.url) },
+    },
+  },
+  style: { background: { pattern: 'dots' } },
+})
 
 export default defineConfig({
   title: 'Feedsmith',
@@ -16,15 +34,17 @@ export default defineConfig({
   sitemap: {
     hostname,
   },
-  transformHead: ({ pageData }) => {
-    const canonicalUrl = `${hostname}/${pageData.relativePath}`
+  buildEnd: og.buildEnd,
+  transformHead: (context) => {
+    const canonicalUrl = `${hostname}/${context.pageData.relativePath}`
       .replace(indexMdRegex, '')
       .replace(mdRegex, '')
       .replace(trailingSlashRegex, '')
 
-    return [['link', { rel: 'canonical', href: canonicalUrl }]]
+    return [['link', { rel: 'canonical', href: canonicalUrl }], ...og.transformHead(context)]
   },
   head: [
+    ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
     ['meta', { property: 'og:site_name', content: 'Feedsmith' }],
     [
       'script',
@@ -55,8 +75,11 @@ export default defineConfig({
       { text: 'Parsing', link: '/parsing' },
       { text: 'Generating', link: '/generating' },
       {
-        text: 'v3.0 (Next)',
-        items: [{ text: 'v2.0', link: 'https://feedsmith.dev' }],
+        text: 'v3.x',
+        items: [
+          { text: 'v3.x (Latest)', link: 'https://feedsmith.dev', target: '_self' },
+          { text: 'v2.x', link: 'https://v2.feedsmith.dev', target: '_self' },
+        ],
       },
     ],
     sidebar: [
@@ -124,6 +147,7 @@ export default defineConfig({
               { text: 'Spotify', link: '/reference/namespaces/spotify' },
               { text: 'Acast', link: '/reference/namespaces/acast' },
               { text: 'RawVoice', link: '/reference/namespaces/rawvoice' },
+              { text: 'FeedBurner', link: '/reference/namespaces/feedburner' },
               { text: 'FeedPress', link: '/reference/namespaces/feedpress' },
               { text: 'arXiv', link: '/reference/namespaces/arxiv' },
               { text: 'OpenSearch', link: '/reference/namespaces/opensearch' },

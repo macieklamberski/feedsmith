@@ -50,6 +50,7 @@
         }
       ],
       "pubDate": "Thu, 05 Sep 2002 0:00:01 GMT",
+      "expirationDate": "Fri, 06 Sep 2002 0:00:01 GMT",
       "source": {
         "title": "Example's Realm",
         "url": "http://www.example.org/links.xml"

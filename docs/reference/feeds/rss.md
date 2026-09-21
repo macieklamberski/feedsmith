@@ -33,6 +33,7 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
         <a href="/reference/namespaces/spotify">Spotify</a>,
         <a href="/reference/namespaces/acast">Acast</a>,
         <a href="/reference/namespaces/rawvoice">RawVoice</a>,
+        <a href="/reference/namespaces/feedburner">FeedBurner</a>,
         <a href="/reference/namespaces/feedpress">FeedPress</a>,
         <a href="/reference/namespaces/opensearch">OpenSearch</a>,
         <a href="/reference/namespaces/prism">PRISM</a>,
@@ -47,6 +48,7 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
         <a href="/reference/namespaces/blogchannel">blogChannel</a>,
         <a href="/reference/namespaces/geo">W3C Basic Geo</a>,
         <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
+        <a href="/reference/namespaces/livejournal">LiveJournal</a>,
         <a href="/reference/namespaces/xml">XML</a>
       </td>
     </tr>

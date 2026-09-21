@@ -100,6 +100,8 @@ export namespace PrismNs {
     pageCount?: number
     pageProgressionDirection?: string
     samplePageRange?: string
+    coverDate?: TDate
+    coverDisplayDate?: string
     publicationDates?: Array<TDate>
     publicationDisplayDates?: Array<string>
     creationDate?: TDate

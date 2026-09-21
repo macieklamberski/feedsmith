@@ -14,14 +14,25 @@ import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
 } from '../../../namespaces/atom/parse/utils.js'
+import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import {
+  retrieveFeed as retrieveFeedBurnerFeed,
+  retrieveItem as retrieveFeedBurnerItem,
+} from '../../../namespaces/feedburner/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
+import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
+import {
+  retrieveFeed as retrievePrismFeed,
+  retrieveItem as retrievePrismItem,
+} from '../../../namespaces/prism/parse/utils.js'
 import { retrieveAbout as retrieveRdfAbout } from '../../../namespaces/rdf/parse/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
+import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
 import type { ParseUtilPartial, RdfFeed } from '../common/types.js'
@@ -103,12 +114,16 @@ export const parseItem: ParseUtilPartial<RdfFeed.Item<DateAny>> = (value, option
     rdf: retrieveRdfAbout(value),
     atom: namespaces.has('atom') ? retrieveAtomEntry(value, options) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value, options) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(value, options) : undefined,
     content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
-    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(value, options) : undefined,
+    feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
+    prism: namespaces.has('prism') ? retrievePrismItem(value, options) : undefined,
+    cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
+    trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
+    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
 
@@ -157,11 +172,15 @@ export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, option
     rdf: retrieveRdfAbout(channel),
     atom: namespaces.has('atom') ? retrieveAtomFeed(channel, options) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel, options) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(channel, options) : undefined,
     sy: namespaces.has('sy') ? retrieveSyFeed(channel, options) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
-    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(channel, options) : undefined,
+    feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerFeed(channel) : undefined,
+    opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(channel) : undefined,
+    prism: namespaces.has('prism') ? retrievePrismFeed(channel, options) : undefined,
+    cc: namespaces.has('cc') ? retrieveCc(channel) : undefined,
     admin: namespaces.has('admin') ? retrieveAdminFeed(channel) : undefined,
+    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
 

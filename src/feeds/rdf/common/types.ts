@@ -7,14 +7,19 @@ import type {
 } from '../../../common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
+import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { ContentNs } from '../../../namespaces/content/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
+import type { FeedBurnerNs } from '../../../namespaces/feedburner/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
+import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
+import type { PrismNs } from '../../../namespaces/prism/common/types.js'
 import type { RdfNs } from '../../../namespaces/rdf/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
 import type { SyNs } from '../../../namespaces/sy/common/types.js'
+import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 
@@ -51,12 +56,16 @@ export namespace RdfFeed {
       rdf?: RdfNs.About
       atom?: AtomNs.Entry<TDate>
       dc?: DcNs.ItemOrFeed<TDate>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
       content?: ContentNs.Item
       slash?: SlashNs.Item
       media?: MediaNs.ItemOrFeed<TStrict>
-      georss?: GeoRssNs.ItemOrFeed<TStrict>
-      dcterms?: DcTermsNs.ItemOrFeed<TDate>
+      feedburner?: FeedBurnerNs.Item
+      prism?: PrismNs.Item<TDate>
+      cc?: CcNs.ItemOrFeed
       wfw?: WfwNs.Item
+      trackback?: TrackbackNs.Item
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
     TStrict
@@ -73,11 +82,15 @@ export namespace RdfFeed {
       rdf?: RdfNs.About
       atom?: AtomNs.Feed<TDate>
       dc?: DcNs.ItemOrFeed<TDate>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
       sy?: SyNs.Feed<TDate>
       media?: MediaNs.ItemOrFeed<TStrict>
-      georss?: GeoRssNs.ItemOrFeed<TStrict>
-      dcterms?: DcTermsNs.ItemOrFeed<TDate>
+      feedburner?: FeedBurnerNs.Feed<TStrict>
+      opensearch?: OpenSearchNs.Feed<TStrict>
+      prism?: PrismNs.Feed<TDate>
+      cc?: CcNs.ItemOrFeed
       admin?: AdminNs.Feed
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
     TStrict

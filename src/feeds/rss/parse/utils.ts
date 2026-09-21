@@ -27,6 +27,10 @@ import { retrieveItem as retrieveContentItem } from '../../../namespaces/content
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import {
+  retrieveFeed as retrieveFeedBurnerFeed,
+  retrieveItem as retrieveFeedBurnerItem,
+} from '../../../namespaces/feedburner/parse/utils.js'
 import { retrieveFeed as retrieveFeedPressFeed } from '../../../namespaces/feedpress/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces/geo/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
@@ -394,32 +398,36 @@ export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, option
     pubDate: parseSingularOf(value.pubdate, (value) =>
       parseDate(retrieveText(value), options?.parseDateFn),
     ),
+    expirationDate: parseSingularOf(value.expirationdate, (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     source: parseSingularOf(value.source, parseSource),
     atom: namespaces.has('atom') ? retrieveAtomEntry(value, options) : undefined,
-    cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value, options) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(value, options) : undefined,
     content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
-    creativeCommons: namespaces.has('creativecommons')
-      ? retrieveCreativeCommonsItemOrFeed(value)
-      : undefined,
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesItem(value) : undefined,
     podcast: namespaces.has('podcast') ? retrievePodcastItem(value) : undefined,
     psc: namespaces.has('psc') ? retrievePscItem(value) : undefined,
-    googleplay: namespaces.has('googleplay') ? retrieveGooglePlayItem(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
-    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
-    geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
-    thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(value, options) : undefined,
-    prism: namespaces.has('prism') ? retrievePrismItem(value, options) : undefined,
-    wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
-    sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
-    rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceItem(value) : undefined,
+    googleplay: namespaces.has('googleplay') ? retrieveGooglePlayItem(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyItem(value) : undefined,
+    acast: namespaces.has('acast') ? retrieveAcastItem(value) : undefined,
+    rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceItem(value) : undefined,
+    feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
+    prism: namespaces.has('prism') ? retrievePrismItem(value, options) : undefined,
+    cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
+    creativeCommons: namespaces.has('creativecommons')
+      ? retrieveCreativeCommonsItemOrFeed(value)
+      : undefined,
+    thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
+    wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
     pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
-    acast: namespaces.has('acast') ? retrieveAcastItem(value) : undefined,
+    sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
+    geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
+    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     livejournal: namespaces.has('lj') ? retrieveLivejournalItem(value) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
@@ -460,29 +468,30 @@ export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, option
     skipDays: parseSingularOf(channel.skipdays, parseSkipDays),
     items: retrieveItems(value, options),
     atom: namespaces.has('atom') ? retrieveAtomFeed(channel, options) : undefined,
-    cc: namespaces.has('cc') ? retrieveCc(channel) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel, options) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(channel, options) : undefined,
     sy: namespaces.has('sy') ? retrieveSyFeed(channel, options) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesFeed(channel) : undefined,
     podcast: namespaces.has('podcast') ? retrievePodcastFeed(channel, options) : undefined,
-    googleplay: namespaces.has('googleplay') ? retrieveGooglePlayFeed(channel) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
-    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
-    geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(channel) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(channel, options) : undefined,
+    googleplay: namespaces.has('googleplay') ? retrieveGooglePlayFeed(channel) : undefined,
+    spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(channel) : undefined,
+    acast: namespaces.has('acast') ? retrieveAcastFeed(channel) : undefined,
+    rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceFeed(channel, options) : undefined,
+    feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerFeed(channel) : undefined,
+    feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(channel) : undefined,
+    opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(channel) : undefined,
     prism: namespaces.has('prism') ? retrievePrismFeed(channel, options) : undefined,
+    cc: namespaces.has('cc') ? retrieveCc(channel) : undefined,
     creativeCommons: namespaces.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(channel)
       : undefined,
-    feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(channel) : undefined,
-    opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(channel) : undefined,
     admin: namespaces.has('admin') ? retrieveAdminFeed(channel) : undefined,
+    pingback: namespaces.has('pingback') ? retrievePingbackFeed(channel) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceFeed(channel) : undefined,
     blogChannel: namespaces.has('blogchannel') ? retrieveBlogChannelFeed(channel) : undefined,
-    rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceFeed(channel, options) : undefined,
-    spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(channel) : undefined,
-    pingback: namespaces.has('pingback') ? retrievePingbackFeed(channel) : undefined,
-    acast: namespaces.has('acast') ? retrieveAcastFeed(channel) : undefined,
+    geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(channel) : undefined,
+    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
     livejournal: namespaces.has('lj') ? retrieveLivejournalFeed(channel) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }

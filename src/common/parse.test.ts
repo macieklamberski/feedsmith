@@ -151,6 +151,81 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse JSON feed from string prefixed with a BOM', () => {
+    const json = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Feed with a BOM',
+      items: [{ id: '1', content_text: 'Test' }],
+    })
+    const value = `\ufeff${json}`
+    const expected: AnyFeed = {
+      format: 'json',
+      feed: {
+        title: 'Feed with a BOM',
+        items: [{ id: '1', content_text: 'Test' }],
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse JSON feed from string as JSON when its content carries RSS markup', () => {
+    const value = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'My Example Feed',
+      items: [
+        {
+          id: '1',
+          content_html: 'Example: <rss version="2.0"><channel><title>Other</title></channel></rss>',
+        },
+      ],
+    })
+    const expected: AnyFeed = {
+      format: 'json',
+      feed: {
+        title: 'My Example Feed',
+        items: [
+          {
+            id: '1',
+            content_html:
+              'Example: <rss version="2.0"><channel><title>Other</title></channel></rss>',
+          },
+        ],
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse JSON feed from string as JSON when its content carries Atom markup', () => {
+    const value = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'My Example Feed',
+      items: [
+        {
+          id: '1',
+          content_html:
+            'Example: <feed xmlns="http://www.w3.org/2005/Atom"><title>Other</title></feed>',
+        },
+      ],
+    })
+    const expected: AnyFeed = {
+      format: 'json',
+      feed: {
+        title: 'My Example Feed',
+        items: [
+          {
+            id: '1',
+            content_html:
+              'Example: <feed xmlns="http://www.w3.org/2005/Atom"><title>Other</title></feed>',
+          },
+        ],
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should reject malformed JSON string', () => {
     const value = '{"version":"https://jsonfeed.org/version/1.1","title":"Malformed'
     const throwing = () => parse(value)
@@ -460,6 +535,28 @@ describe('parse', () => {
 
       expect(parse(value)).toEqual(expected)
     })
+
+    it('should parse RSS feed with a BOM before the XML declaration', () => {
+      const value = `\ufeff<?xml version="1.0"?>
+        <rss version="2.0">
+          <channel>
+            <title>Feed</title>
+            <link>https://example.com/feed</link>
+            <description>Example Feed</description>
+          </channel>
+        </rss>
+      `
+      const expected: AnyFeed = {
+        format: 'rss',
+        feed: {
+          title: 'Feed',
+          link: 'https://example.com/feed',
+          description: 'Example Feed',
+        },
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
   })
 
   describe('parseDateFn', () => {
@@ -488,12 +585,6 @@ describe('parse', () => {
   it.todo('should prefer earlier formats in detection order for ambiguous input', () => {
     // parse() runs the rss, atom, rdf and json detectors in that order.
     // Craft an input that matches more than one detector and pin which format wins.
-  })
-
-  it.todo('should parse feed with a BOM prefix', () => {
-    // Prepend the BOM character (U+FEFF) to a valid RSS string.
-    // Expected: detection still succeeds and the parsed result matches the same feed without
-    // the BOM.
   })
 
   it.todo('should pass maxItems option through to the format parser', () => {

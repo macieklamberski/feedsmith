@@ -575,6 +575,7 @@ describe('retrieveItem', () => {
     season: 2,
     episodeType: 'full',
     block: true,
+    order: 3,
     keywords: ['podcast', 'technology', 'programming'],
     summary: 'A detailed summary of this episode',
     subtitle: 'Episode subtitle',
@@ -591,6 +592,7 @@ describe('retrieveItem', () => {
       'itunes:season': { '#text': '2' },
       'itunes:episodetype': { '#text': 'full' },
       'itunes:block': { '#text': 'yes' },
+      'itunes:order': { '#text': '3' },
       'itunes:keywords': { '#text': 'podcast,technology,programming' },
       'itunes:summary': { '#text': 'A detailed summary of this episode' },
       'itunes:subtitle': { '#text': 'Episode subtitle' },
@@ -610,6 +612,7 @@ describe('retrieveItem', () => {
       'itunes:season': '2',
       'itunes:episodetype': 'full',
       'itunes:block': 'yes',
+      'itunes:order': '3',
       'itunes:keywords': 'podcast,technology,programming',
       'itunes:summary': 'A detailed summary of this episode',
       'itunes:subtitle': 'Episode subtitle',
@@ -632,6 +635,7 @@ describe('retrieveItem', () => {
       'itunes:season': ['2', '3'],
       'itunes:episodetype': ['full', 'trailer'],
       'itunes:block': ['yes', 'no'],
+      'itunes:order': ['3', '4'],
       'itunes:keywords': ['podcast,technology,programming', 'development,coding,software'],
       'itunes:summary': [
         'A detailed summary of this episode',
@@ -694,6 +698,17 @@ describe('retrieveItem', () => {
 
   it.each(blockCases)('should parse block value: %s', (block, expected) => {
     expect(retrieveItem({ 'itunes:block': { '#text': block } })).toEqual(expected)
+  })
+
+  it('should parse order of zero', () => {
+    const value = {
+      'itunes:order': '0',
+    }
+    const expected = {
+      order: 0,
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should handle HTML entities in text content', () => {
