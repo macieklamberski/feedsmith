@@ -79,6 +79,7 @@ import {
 } from '../namespaces/rawvoice/common/config.js'
 import { stopNodes as rdfStopNodes, uris as rdfUris } from '../namespaces/rdf/common/config.js'
 import { uris as rssUris } from '../namespaces/rss/common/config.js'
+import { uris as rss2Uris } from '../namespaces/rss2/common/config.js'
 import {
   stopNodes as slashStopNodes,
   uris as slashUris,
@@ -171,6 +172,7 @@ export const namespaceUris = {
   georss: georssUris,
   rdf: rdfUris,
   rss: rssUris,
+  rss2: rss2Uris,
 }
 
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(
