@@ -3553,6 +3553,20 @@ describe('parseJsonObject', () => {
     expect(parseJsonObject(value)).toEqual(expected)
   })
 
+  it('should parse JSON string prefixed with a BOM', () => {
+    const value = '\ufeff{"title":"Test"}'
+    const expected = { title: 'Test' }
+
+    expect(parseJsonObject(value)).toEqual(expected)
+  })
+
+  it('should parse JSON string with a BOM and surrounding whitespace', () => {
+    const value = '\ufeff  {"title":"Test"}  '
+    const expected = { title: 'Test' }
+
+    expect(parseJsonObject(value)).toEqual(expected)
+  })
+
   it('should return undefined for array string', () => {
     const value = '[1,2,3]'
 
