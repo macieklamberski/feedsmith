@@ -1,5 +1,58 @@
 import { describe, expect, it } from 'bun:test'
-import { retrieveFeed, retrieveItem } from './utils.js'
+import { retrieveFeed, retrieveItem, retrieveReplyCount } from './utils.js'
+
+describe('retrieveReplyCount', () => {
+  it('should parse replycount', () => {
+    const value = {
+      'lj:replycount': { '#text': '42' },
+    }
+
+    expect(retrieveReplyCount(value)).toBe(42)
+  })
+
+  it('should parse reply-count', () => {
+    const value = {
+      'lj:reply-count': { '#text': '17' },
+    }
+
+    expect(retrieveReplyCount(value)).toBe(17)
+  })
+
+  it('should prefer replycount when both spellings are present', () => {
+    const value = {
+      'lj:replycount': { '#text': '42' },
+      'lj:reply-count': { '#text': '17' },
+    }
+
+    expect(retrieveReplyCount(value)).toBe(42)
+  })
+
+  it('should fall back to reply-count when replycount is empty', () => {
+    const value = {
+      'lj:replycount': '',
+      'lj:reply-count': { '#text': '17' },
+    }
+
+    expect(retrieveReplyCount(value)).toBe(17)
+  })
+
+  it('should fall back to reply-count when replycount is not a number', () => {
+    const value = {
+      'lj:replycount': { '#text': 'not-a-number' },
+      'lj:reply-count': { '#text': '17' },
+    }
+
+    expect(retrieveReplyCount(value)).toBe(17)
+  })
+
+  it('should return undefined when neither spelling is present', () => {
+    const value = {
+      'lj:mood': { '#text': 'cheerful' },
+    }
+
+    expect(retrieveReplyCount(value)).toBeUndefined()
+  })
+})
 
 describe('retrieveFeed', () => {
   const expectedFull = {
@@ -137,18 +190,6 @@ describe('retrieveItem', () => {
     }
     const expected = {
       replyCount: 17,
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should prefer the unhyphenated replycount over reply-count', () => {
-    const value = {
-      'lj:replycount': { '#text': '42' },
-      'lj:reply-count': { '#text': '17' },
-    }
-    const expected = {
-      replyCount: 42,
     }
 
     expect(retrieveItem(value)).toEqual(expected)

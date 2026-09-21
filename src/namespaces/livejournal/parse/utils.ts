@@ -3,6 +3,14 @@ import type { ParseUtilPartial } from '../../../common/types.js'
 import { parseNumber, parseSingularOf, parseString, retrieveText } from '../../../common/utils.js'
 import type { LivejournalNs } from '../common/types.js'
 
+// Current LiveJournal writes lj:replycount. Older LiveJournal and Dreamwidth write lj:reply-count.
+export const retrieveReplyCount: ParseUtilPartial<number> = (value) => {
+  return (
+    parseSingularOf(value['lj:replycount'], (value) => parseNumber(retrieveText(value))) ??
+    parseSingularOf(value['lj:reply-count'], (value) => parseNumber(retrieveText(value)))
+  )
+}
+
 export const retrieveFeed: ParseUtilPartial<LivejournalNs.Feed> = (value) => {
   if (!isPlainObject(value)) {
     return
@@ -30,10 +38,7 @@ export const retrieveItem: ParseUtilPartial<LivejournalNs.Item> = (value) => {
     security: parseSingularOf(value['lj:security'], (value) => parseString(retrieveText(value))),
     poster: parseSingularOf(value['lj:poster'], (value) => parseString(retrieveText(value))),
     posterId: parseSingularOf(value['lj:posterid'], (value) => parseString(retrieveText(value))),
-    // INFO: Both the unhyphenated (dominant) and hyphenated spellings appear in real feeds.
-    replyCount: parseSingularOf(value['lj:replycount'] ?? value['lj:reply-count'], (value) =>
-      parseNumber(retrieveText(value)),
-    ),
+    replyCount: retrieveReplyCount(value),
   }
 
   return trimObject(item)
