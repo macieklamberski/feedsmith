@@ -1321,6 +1321,48 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with trackback namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with Trackback namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with Trackback namespace</description>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item title</title>
+          <link>http://example.com/item1</link>
+          <trackback:ping rdf:resource="http://example.com/trackback/1"/>
+          <trackback:about rdf:resource="http://example.org/trackback/2"/>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with Trackback namespace',
+      link: 'http://example.com',
+      description: 'Test feed with Trackback namespace',
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Item title',
+          link: 'http://example.com/item1',
+          trackback: {
+            ping: 'http://example.com/trackback/1',
+            abouts: ['http://example.org/trackback/2'],
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with georss namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
