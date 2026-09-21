@@ -1064,6 +1064,19 @@
     "feedburnerHostname": "https://feedburner.google.com",
     "awareness": "https://feedburner.google.com/awareness/1.0/data/examplerss"
   },
+  "opensearch": {
+    "totalResults": 1000,
+    "startIndex": 21,
+    "itemsPerPage": 10,
+    "queries": [
+      {
+        "role": "request",
+        "searchTerms": "quantum computing",
+        "startIndex": 21,
+        "count": 10
+      }
+    ]
+  },
   "prism": {
     "publicationName": "Nature",
     "issn": "0028-0836",

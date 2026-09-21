@@ -11,6 +11,7 @@
   xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
   xmlns:media="http://search.yahoo.com/mrss/"
   xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0"
+  xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
   xmlns:prism="http://prismstandard.org/namespaces/basic/2.0/"
   xmlns:cc="http://creativecommons.org/ns#"
   xmlns:wfw="http://wellformedweb.org/CommentAPI/"
@@ -222,6 +223,12 @@
     <feedburner:emailServiceId>ExampleRss</feedburner:emailServiceId>
     <feedburner:feedburnerHostname>https://feedburner.google.com</feedburner:feedburnerHostname>
     <feedburner:awareness>https://feedburner.google.com/awareness/1.0/data/examplerss</feedburner:awareness>
+
+    <!-- OpenSearch Namespace: Channel Level Tags -->
+    <opensearch:totalResults>1000</opensearch:totalResults>
+    <opensearch:startIndex>21</opensearch:startIndex>
+    <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+    <opensearch:Query role="request" searchTerms="quantum computing" startIndex="21" count="10"/>
 
     <!-- PRISM Namespace: Channel Level Tags -->
     <prism:publicationName>Nature</prism:publicationName>
