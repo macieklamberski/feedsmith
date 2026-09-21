@@ -471,6 +471,17 @@
         "origEnclosureLink": "https://example.org/audio/original-episode.mp3",
         "awareness": "https://feedburner.google.com/awareness/1.0/data/examplerss/item"
       },
+      "prism": {
+        "publicationName": "Nature",
+        "doi": "10.1038/s41586-023-05842-x",
+        "urls": ["https://www.nature.com/articles/s41586-023-05842-x"],
+        "volume": "615",
+        "number": "7952",
+        "section": "Research",
+        "startingPage": "425",
+        "endingPage": "432",
+        "publicationDates": ["2023-03-15T00:00:00.000Z"]
+      },
       "cc": {
         "license": "https://creativecommons.org/licenses/by-sa/4.0/",
         "attributionName": "Jack Jackson"
@@ -1065,6 +1076,15 @@
         "count": 10
       }
     ]
+  },
+  "prism": {
+    "publicationName": "Nature",
+    "issn": "0028-0836",
+    "eIssn": "1476-4687",
+    "volume": "615",
+    "number": "7952",
+    "coverDate": "2023-03-15T00:00:00.000Z",
+    "publicationDates": ["2023-03-15T00:00:00.000Z"]
   },
   "cc": {
     "license": "https://creativecommons.org/licenses/by/4.0/",
