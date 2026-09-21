@@ -129,25 +129,25 @@ export namespace AtomFeed {
       summary?: Text
       title: Requirable<Text> // Required in spec
       updated: Requirable<TDate> // Required in spec
-      app?: AppNs.Entry<TDate>
-      arxiv?: ArxivNs.Entry
-      cc?: CcNs.ItemOrFeed
       dc?: DcNs.ItemOrFeed<TDate>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
       slash?: SlashNs.Item
       itunes?: ItunesNs.Item
-      googleplay?: GooglePlayNs.Item<TStrict>
       psc?: PscNs.Item<TStrict>
       media?: MediaNs.ItemOrFeed<TStrict>
-      georss?: GeoRssNs.ItemOrFeed<TStrict>
-      geo?: GeoNs.ItemOrFeed
-      thr?: ThrNs.Item<TStrict>
-      dcterms?: DcTermsNs.ItemOrFeed<TDate>
-      creativeCommons?: CreativeCommonsNs.ItemOrFeed
-      wfw?: WfwNs.Item
+      googleplay?: GooglePlayNs.Item<TStrict>
       feedburner?: FeedBurnerNs.Item
-      yt?: YtNs.Item
+      arxiv?: ArxivNs.Entry
+      cc?: CcNs.ItemOrFeed
+      creativeCommons?: CreativeCommonsNs.ItemOrFeed
+      thr?: ThrNs.Item<TStrict>
+      app?: AppNs.Entry<TDate>
+      wfw?: WfwNs.Item
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
+      yt?: YtNs.Item
+      geo?: GeoNs.ItemOrFeed
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
     TStrict
@@ -168,21 +168,21 @@ export namespace AtomFeed {
       title: Requirable<Text> // Required in spec
       updated: Requirable<TDate> // Required in spec
       entries?: Array<Entry<TDate, TStrict>>
-      cc?: CcNs.ItemOrFeed
       dc?: DcNs.ItemOrFeed<TDate>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
       sy?: SyNs.Feed<TDate>
       itunes?: ItunesNs.Feed<TStrict>
-      googleplay?: GooglePlayNs.Feed<TStrict>
       media?: MediaNs.ItemOrFeed<TStrict>
-      georss?: GeoRssNs.ItemOrFeed<TStrict>
-      geo?: GeoNs.ItemOrFeed
-      dcterms?: DcTermsNs.ItemOrFeed<TDate>
-      creativeCommons?: CreativeCommonsNs.ItemOrFeed
-      opensearch?: OpenSearchNs.Feed<TStrict>
+      googleplay?: GooglePlayNs.Feed<TStrict>
       feedburner?: FeedBurnerNs.Feed<TStrict>
-      yt?: YtNs.Feed
+      opensearch?: OpenSearchNs.Feed<TStrict>
+      cc?: CcNs.ItemOrFeed
+      creativeCommons?: CreativeCommonsNs.ItemOrFeed
       admin?: AdminNs.Feed
       pingback?: PingbackNs.Feed
+      yt?: YtNs.Feed
+      geo?: GeoNs.ItemOrFeed
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
     TStrict
