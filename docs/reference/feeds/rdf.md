@@ -28,6 +28,7 @@ RDF (Resource Description Framework) Site Summary is an early XML-based syndicat
         <a href="/reference/namespaces/media">Media RSS</a>,
         <a href="/reference/namespaces/wfw">Comment API</a>,
         <a href="/reference/namespaces/admin">Administrative</a>,
+        <a href="/reference/namespaces/trackback">Trackback</a>,
         <a href="/reference/namespaces/cc">ccREL</a>,
         <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
         <a href="/reference/namespaces/rdf">RDF</a>,
