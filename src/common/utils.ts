@@ -834,8 +834,11 @@ export const parseJsonObject = (value: unknown): unknown => {
     return
   }
 
+  // JSON.parse rejects a leading BOM, which UTF-8 feed exports carry.
+  const json = value.startsWith('\ufeff') ? value.slice(1) : value
+
   try {
-    const parsed = JSON.parse(value)
+    const parsed = JSON.parse(json)
 
     if (isPlainObject(parsed)) {
       return parsed

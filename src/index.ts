@@ -1,3 +1,4 @@
+export { detect as detectFeed } from './common/detect.js'
 export { DetectError, GenerateError, MalformedError, ParseError } from './common/errors.js'
 export type { AnyFeed } from './common/parse.js'
 export { parse as parseFeed } from './common/parse.js'
