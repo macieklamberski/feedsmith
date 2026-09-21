@@ -1,5 +1,29 @@
 import { describe, expect, it } from 'bun:test'
-import { generateFeed, generateFeedFlare, generateItem } from './utils.js'
+import { generateFeed, generateFeedFlare, generateInfo, generateItem } from './utils.js'
+
+describe('generateInfo', () => {
+  it('should generate info with uri attribute', () => {
+    const expected = { '@uri': 'exampleblog' }
+
+    expect(generateInfo('exampleblog')).toEqual(expected)
+  })
+
+  it('should handle empty string', () => {
+    expect(generateInfo('')).toBeUndefined()
+  })
+
+  it('should handle whitespace-only string', () => {
+    expect(generateInfo('   ')).toBeUndefined()
+  })
+
+  it('should handle non-string inputs', () => {
+    expect(generateInfo(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateInfo(123)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateInfo(null)).toBeUndefined()
+  })
+})
 
 describe('generateFeedFlare', () => {
   it('should generate feed flare with all properties', () => {
@@ -30,6 +54,31 @@ describe('generateFeedFlare', () => {
     expect(generateFeedFlare(value)).toEqual(expected)
   })
 
+  it('should wrap text containing special characters in CDATA', () => {
+    const value = {
+      href: 'https://add.example.com/a',
+      src: 'https://img.example.com/a.gif',
+      value: 'Add to <My> Yahoo & More',
+    }
+    const expected = {
+      '@href': 'https://add.example.com/a',
+      '@src': 'https://img.example.com/a.gif',
+      '#cdata': 'Add to <My> Yahoo & More',
+    }
+
+    expect(generateFeedFlare(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      href: '   ',
+      src: '\t\n',
+      value: '   ',
+    }
+
+    expect(generateFeedFlare(value)).toBeUndefined()
+  })
+
   it('should handle empty object', () => {
     expect(generateFeedFlare({})).toBeUndefined()
   })
@@ -40,6 +89,8 @@ describe('generateFeedFlare', () => {
     expect(generateFeedFlare('string')).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
     expect(generateFeedFlare(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateFeedFlare([])).toBeUndefined()
   })
 })
 
@@ -48,10 +99,12 @@ describe('generateItem', () => {
     const value = {
       origLink: 'https://example.com/2024/01/post.html',
       origEnclosureLink: 'https://example.com/audio.mp3',
+      awareness: 'https://feedburner.google.com/awareness/1.0/data/example/item',
     }
     const expected = {
       'feedburner:origLink': 'https://example.com/2024/01/post.html',
       'feedburner:origEnclosureLink': 'https://example.com/audio.mp3',
+      'feedburner:awareness': 'https://feedburner.google.com/awareness/1.0/data/example/item',
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -71,6 +124,15 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      origLink: '   ',
+      origEnclosureLink: '\t\n',
+    }
+
+    expect(generateItem(value)).toBeUndefined()
+  })
+
   it('should handle empty object', () => {
     expect(generateItem({})).toBeUndefined()
   })
@@ -81,6 +143,8 @@ describe('generateItem', () => {
     expect(generateItem('string')).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
     expect(generateItem(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateItem([])).toBeUndefined()
   })
 })
 
@@ -115,6 +179,36 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should wrap text containing special characters in CDATA', () => {
+    const value = { browserFriendly: 'Subscribe <now> & read later' }
+    const expected = {
+      'feedburner:browserFriendly': { '#cdata': 'Subscribe <now> & read later' },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should handle empty strings', () => {
+    const value = {
+      info: '',
+      browserFriendly: '',
+      emailServiceId: 'ExampleBlog',
+    }
+    const expected = { 'feedburner:emailServiceId': 'ExampleBlog' }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      info: '   ',
+      browserFriendly: '\t\n',
+      awareness: '   ',
+    }
+
+    expect(generateFeed(value)).toBeUndefined()
+  })
+
   it('should handle empty object', () => {
     expect(generateFeed({})).toBeUndefined()
   })
@@ -125,5 +219,7 @@ describe('generateFeed', () => {
     expect(generateFeed('string')).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
     expect(generateFeed(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateFeed([])).toBeUndefined()
   })
 })

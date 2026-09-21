@@ -29,6 +29,9 @@ export const retrieveItem: ParseUtilPartial<FeedBurnerNs.Item> = (value) => {
     origEnclosureLink: parseSingularOf(value['feedburner:origenclosurelink'], (value) =>
       parseString(retrieveText(value)),
     ),
+    awareness: parseSingularOf(value['feedburner:awareness'], (value) =>
+      parseString(retrieveText(value)),
+    ),
   }
 
   return trimObject(item)

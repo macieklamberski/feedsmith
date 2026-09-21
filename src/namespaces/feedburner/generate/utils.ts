@@ -1,4 +1,4 @@
-import { isPlainObject, trimObject } from 'trousse'
+import { isNonEmptyString, isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
@@ -7,6 +7,16 @@ import {
   trimArray,
 } from '../../../common/utils.js'
 import type { FeedBurnerNs } from '../common/types.js'
+
+export const generateInfo: GenerateUtil<string> = (info) => {
+  if (!isNonEmptyString(info)) {
+    return
+  }
+
+  return {
+    '@uri': generatePlainString(info),
+  }
+}
 
 export const generateFeedFlare: GenerateUtil<FeedBurnerNs.FeedFlare> = (feedFlare) => {
   if (!isPlainObject(feedFlare)) {
@@ -30,6 +40,7 @@ export const generateItem: GenerateUtil<FeedBurnerNs.Item> = (item) => {
   const value = {
     'feedburner:origLink': generateCdataString(item.origLink),
     'feedburner:origEnclosureLink': generateCdataString(item.origEnclosureLink),
+    'feedburner:awareness': generateCdataString(item.awareness),
   }
 
   return trimObject(value)
@@ -41,7 +52,7 @@ export const generateFeed: GenerateUtil<FeedBurnerNs.Feed> = (feed) => {
   }
 
   const value = {
-    'feedburner:info': feed.info ? { '@uri': generatePlainString(feed.info) } : undefined,
+    'feedburner:info': generateInfo(feed.info),
     'feedburner:feedFlare': trimArray(feed.feedFlares, generateFeedFlare),
     'feedburner:browserFriendly': generateCdataString(feed.browserFriendly),
     'feedburner:emailServiceId': generateCdataString(feed.emailServiceId),

@@ -502,6 +502,11 @@
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
       },
+      "feedburner": {
+        "origLink": "https://example.org/posts/original-article",
+        "origEnclosureLink": "https://example.org/audio/original-episode.mp3",
+        "awareness": "https://feedburner.google.com/awareness/1.0/data/examplerss/item"
+      },
       "cc": {
         "license": "https://creativecommons.org/licenses/by-sa/4.0/",
         "attributionName": "Jack Jackson"
@@ -1057,6 +1062,20 @@
     "elev": 360,
     "floor": 4,
     "radius": 50000
+  },
+  "feedburner": {
+    "info": "examplerss",
+    "feedFlares": [
+      {
+        "href": "https://add.my.yahoo.com/rss?url=https://example.org/rss",
+        "src": "https://us.i1.yimg.com/addtomyyahoo4.gif",
+        "value": "Add to My Yahoo"
+      }
+    ],
+    "browserFriendly": "This is an XML content feed. It is intended to be viewed in a newsreader or syndicated to another site.",
+    "emailServiceId": "ExampleRss",
+    "feedburnerHostname": "https://feedburner.google.com",
+    "awareness": "https://feedburner.google.com/awareness/1.0/data/examplerss"
   },
   "admin": {
     "errorReportsTo": "mailto:webmaster@example.com",

@@ -18,6 +18,10 @@ import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/u
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import {
+  retrieveFeed as retrieveFeedBurnerFeed,
+  retrieveItem as retrieveFeedBurnerItem,
+} from '../../../namespaces/feedburner/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
 import { retrieveAbout as retrieveRdfAbout } from '../../../namespaces/rdf/parse/utils.js'
@@ -111,6 +115,7 @@ export const parseItem: ParseUtilPartial<RdfFeed.Item<DateAny>> = (value, option
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(value, options) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
+    feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
 
@@ -164,6 +169,7 @@ export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, option
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(channel, options) : undefined,
+    feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerFeed(channel) : undefined,
     admin: namespaces.has('admin') ? retrieveAdminFeed(channel) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }

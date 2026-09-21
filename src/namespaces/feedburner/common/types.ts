@@ -23,6 +23,7 @@ export namespace FeedBurnerNs {
   export type Item = {
     origLink?: string
     origEnclosureLink?: string
+    awareness?: string
   }
 }
 // #endregion reference

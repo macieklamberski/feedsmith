@@ -440,6 +440,7 @@
     <feedburner:browserFriendly>This is an XML content feed. It is intended to be viewed in a newsreader or syndicated to another site.</feedburner:browserFriendly>
     <feedburner:emailServiceId>ExamplePodcast</feedburner:emailServiceId>
     <feedburner:feedburnerHostname>https://feedburner.google.com</feedburner:feedburnerHostname>
+    <feedburner:awareness>https://feedburner.google.com/awareness/1.0/data/examplepodcast</feedburner:awareness>
 
     <!-- FeedPress Namespace: Channel Level Tags -->
     <feedpress:link>https://feedpress.com/examplepodcast</feedpress:link>
@@ -881,6 +882,7 @@
       <!-- FeedBurner Namespace: Item Level Tags -->
       <feedburner:origLink>https://example.com/episode/original-article</feedburner:origLink>
       <feedburner:origEnclosureLink>https://example.com/audio/original-episode.mp3</feedburner:origEnclosureLink>
+      <feedburner:awareness>https://feedburner.google.com/awareness/1.0/data/examplepodcast/episode</feedburner:awareness>
     </item>
   </channel>
 </rss>

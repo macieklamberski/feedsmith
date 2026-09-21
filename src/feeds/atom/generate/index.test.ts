@@ -996,6 +996,51 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with feedburner namespace', () => {
+    const value = {
+      id: 'https://example.com/blog',
+      title: { value: 'Blog Proxied by FeedBurner' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      feedburner: {
+        info: 'exampleblog',
+        feedFlares: [
+          {
+            href: 'https://add.my.yahoo.com/rss?url=https://example.com/feed',
+            src: 'https://us.i1.yimg.com/addtomyyahoo4.gif',
+            value: 'Add to My Yahoo',
+          },
+        ],
+      },
+      entries: [
+        {
+          id: 'https://example.com/post/1',
+          title: { value: 'Post with an original link' },
+          updated: new Date('2024-01-05T10:30:00Z'),
+          feedburner: {
+            origLink: 'https://example.com/posts/original-article',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0">
+  <id>https://example.com/blog</id>
+  <title>Blog Proxied by FeedBurner</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <feedburner:info uri="exampleblog"/>
+  <feedburner:feedFlare href="https://add.my.yahoo.com/rss?url=https://example.com/feed" src="https://us.i1.yimg.com/addtomyyahoo4.gif">Add to My Yahoo</feedburner:feedFlare>
+  <entry>
+    <id>https://example.com/post/1</id>
+    <title>Post with an original link</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+    <feedburner:origLink>https://example.com/posts/original-article</feedburner:origLink>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with pingback namespace', () => {
     const value = {
       id: 'https://example.com/blog',
