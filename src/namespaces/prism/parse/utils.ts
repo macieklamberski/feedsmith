@@ -241,6 +241,12 @@ export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOpti
     samplePageRange: parseSingularOf(value['prism:samplepagerange'], (value) =>
       parseString(retrieveText(value)),
     ),
+    coverDate: parseSingularOf(value['prism:coverdate'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
+    coverDisplayDate: parseSingularOf(value['prism:coverdisplaydate'], (value) =>
+      parseString(retrieveText(value)),
+    ),
     publicationDates: parseArrayOf(value['prism:publicationdate'], (value) =>
       parseDate(retrieveText(value), options?.parseDateFn),
     ),

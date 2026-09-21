@@ -113,6 +113,7 @@
         "season": 1,
         "episodeType": "full",
         "block": false,
+        "order": 1,
         "summary": "This is a detailed summary of the episode content and key takeaways",
         "subtitle": "Episode subtitle with additional context",
         "keywords": ["tutorial", "example", "technology", "programming"]
@@ -765,6 +766,8 @@
         "pageCount": 8,
         "pageProgressionDirection": "LTR",
         "samplePageRange": "425-427",
+        "coverDate": "2023-03-15T00:00:00.000Z",
+        "coverDisplayDate": "March 15, 2023",
         "publicationDates": ["2023-03-15T00:00:00.000Z"],
         "publicationDisplayDates": ["March 15, 2023"],
         "creationDate": "2023-01-15T00:00:00.000Z",

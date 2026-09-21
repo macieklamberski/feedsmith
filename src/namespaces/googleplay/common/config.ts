@@ -15,5 +15,6 @@ export const stopNodes = [
   '*.googleplay:explicit',
   '*.googleplay:image',
   '*.googleplay:new-feed-url',
+  '*.googleplay:newfeedurl',
   '*.googleplay:category',
 ]

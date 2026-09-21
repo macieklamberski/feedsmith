@@ -555,6 +555,19 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toEqual(expected)
   })
 
+  it('should parse item with cover date fields', () => {
+    const value = {
+      'prism:coverdate': '2023-03-15',
+      'prism:coverdisplaydate': 'March 15, 2023',
+    }
+    const expected = {
+      coverDate: '2023-03-15',
+      coverDisplayDate: 'March 15, 2023',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
   it('should parse item with people and organization fields', () => {
     const value = {
       'prism:corporateentity': ['Department of Physics'],

@@ -15,6 +15,7 @@
   xmlns:cc="http://creativecommons.org/ns#"
   xmlns:wfw="http://wellformedweb.org/CommentAPI/"
   xmlns:admin="http://webns.net/mvcb/"
+  xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
   xmlns:georss="http://www.georss.org/georss"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
@@ -464,6 +465,11 @@
     <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
     <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
+
+    <!-- Trackback Namespace: Item Level Tags -->
+    <trackback:ping rdf:resource="https://example.com/trackback/123"/>
+    <trackback:about rdf:resource="https://blog1.com/trackback/456"/>
+    <trackback:about rdf:resource="https://blog2.com/trackback/789"/>
 
     <!-- GeoRSS-Simple Namespace: Item/Feed Level Tags (while not typical, included are all values for testing) -->
     <georss:point>37.78 -122.42</georss:point>
