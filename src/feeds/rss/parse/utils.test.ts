@@ -2298,6 +2298,41 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
+  // xml:* attributes may sit on <rss>, on <channel>, or on both, and each attribute scopes on its
+  // own, so a declaration on <channel> overrides only the attribute it repeats.
+  describe('xml attributes on the root and the channel', () => {
+    it('should read them from the rss element', () => {
+      const value = { '@xml:base': 'https://example.com/root/', channel: { title: 'T' } }
+      const expected = { base: 'https://example.com/root/' }
+
+      expect(parseFeed(value)?.xml).toEqual(expected)
+    })
+
+    it('should read them from the channel element', () => {
+      const value = { channel: { title: 'T', '@xml:base': 'https://example.com/chan/' } }
+      const expected = { base: 'https://example.com/chan/' }
+
+      expect(parseFeed(value)?.xml).toEqual(expected)
+    })
+
+    it('should let the channel override the rss element per attribute', () => {
+      const value = {
+        '@xml:base': 'https://example.com/root/',
+        '@xml:lang': 'en',
+        channel: { title: 'T', '@xml:base': 'https://example.com/chan/' },
+      }
+      const expected = { base: 'https://example.com/chan/', lang: 'en' }
+
+      expect(parseFeed(value)?.xml).toEqual(expected)
+    })
+
+    it('should return undefined when neither element carries one', () => {
+      const value = { channel: { title: 'T' } }
+
+      expect(parseFeed(value)?.xml).toBeUndefined()
+    })
+  })
+
   it('should parse managingEditor with name and email (RFC 2822 format)', () => {
     const value = { channel: { managingeditor: { '#text': 'editor@example.com (Editor Name)' } } }
     const expected = { email: 'editor@example.com', name: 'Editor Name' }
