@@ -169,6 +169,21 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse JSON Feed from string prefixed with a BOM', () => {
+    const json = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Feed with a BOM',
+      items: [{ id: '1', content_text: 'Test' }],
+    })
+    const value = `\ufeff${json}`
+    const expected = {
+      title: 'Feed with a BOM',
+      items: [{ id: '1', content_text: 'Test' }],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should handle malformed JSON string', () => {
     const value = '{"version":"https://jsonfeed.org/version/1.1","title":"Malformed'
     const throwing = () => parse(value)
