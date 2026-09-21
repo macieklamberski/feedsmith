@@ -52,15 +52,15 @@ export namespace RdfFeed {
       description?: string
       rdf?: RdfNs.About
       atom?: AtomNs.Entry<TDate>
-      cc?: CcNs.ItemOrFeed
       dc?: DcNs.ItemOrFeed<TDate>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
       content?: ContentNs.Item
       slash?: SlashNs.Item
       media?: MediaNs.ItemOrFeed<TStrict>
-      georss?: GeoRssNs.ItemOrFeed<TStrict>
-      dcterms?: DcTermsNs.ItemOrFeed<TDate>
-      wfw?: WfwNs.Item
       feedburner?: FeedBurnerNs.Item
+      cc?: CcNs.ItemOrFeed
+      wfw?: WfwNs.Item
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
     TStrict
@@ -76,14 +76,14 @@ export namespace RdfFeed {
       textInput?: TextInput<TStrict>
       rdf?: RdfNs.About
       atom?: AtomNs.Feed<TDate>
-      cc?: CcNs.ItemOrFeed
       dc?: DcNs.ItemOrFeed<TDate>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
       sy?: SyNs.Feed<TDate>
       media?: MediaNs.ItemOrFeed<TStrict>
-      georss?: GeoRssNs.ItemOrFeed<TStrict>
-      dcterms?: DcTermsNs.ItemOrFeed<TDate>
       feedburner?: FeedBurnerNs.Feed<TStrict>
+      cc?: CcNs.ItemOrFeed
       admin?: AdminNs.Feed
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
     TStrict

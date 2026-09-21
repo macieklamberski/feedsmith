@@ -65,40 +65,6 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should generate atom xhtml content as markup inside a div wrapper', () => {
-    const value = {
-      title: 'Feed with Atom xhtml',
-      description: 'Test feed',
-      items: [
-        {
-          title: 'First item',
-          atom: {
-            content: {
-              value: '<p>Rich <em>text</em></p>',
-              type: 'xhtml',
-            },
-          },
-        },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Feed with Atom xhtml</title>
-    <description>Test feed</description>
-    <item>
-      <title>First item</title>
-      <atom:content type="xhtml">
-<div xmlns="http://www.w3.org/1999/xhtml"><p>Rich <em>text</em></p></div>
-      </atom:content>
-    </item>
-  </channel>
-</rss>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-
   it('should generate RSS with dc namespace', () => {
     const value = {
       title: 'Feed with dc namespace',
@@ -124,92 +90,6 @@ describe('generate', () => {
     <item>
       <title>First item</title>
       <dc:creator>Jane Smith</dc:creator>
-    </item>
-  </channel>
-</rss>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-
-  it('should generate RSS with structured person fields', () => {
-    const value = {
-      title: 'Feed with structured persons',
-      description: 'Test feed with structured person fields',
-      managingEditor: {
-        name: 'Editor Name',
-        email: 'editor@example.com',
-      },
-      webMaster: {
-        name: 'Webmaster',
-        email: 'webmaster@example.com',
-      },
-      items: [
-        {
-          title: 'First item',
-          authors: [
-            {
-              name: 'John Doe',
-              email: 'john@example.com',
-            },
-            {
-              name: 'Jane Smith',
-            },
-            {
-              email: 'noreply@example.com',
-            },
-          ],
-        },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0">
-  <channel>
-    <title>Feed with structured persons</title>
-    <description>Test feed with structured person fields</description>
-    <managingEditor>editor@example.com (Editor Name)</managingEditor>
-    <webMaster>webmaster@example.com (Webmaster)</webMaster>
-    <item>
-      <title>First item</title>
-      <author>john@example.com (John Doe)</author>
-      <author>Jane Smith</author>
-      <author>noreply@example.com</author>
-    </item>
-  </channel>
-</rss>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-
-  it('should generate RSS with CDATA-wrapped person name containing special characters', () => {
-    const value = {
-      title: 'Test',
-      description: 'Test',
-      managingEditor: {
-        name: 'Tom & Jerry',
-        email: 'tom@example.com',
-      },
-      items: [
-        {
-          title: 'Post',
-          authors: [{ name: "O'Brien & Associates", email: 'info@example.com' }],
-        },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0">
-  <channel>
-    <title>Test</title>
-    <description>Test</description>
-    <managingEditor>
-      <![CDATA[tom@example.com (Tom & Jerry)]]>
-    </managingEditor>
-    <item>
-      <title>Post</title>
-      <author>
-        <![CDATA[info@example.com (O'Brien & Associates)]]>
-      </author>
     </item>
   </channel>
 </rss>
@@ -255,41 +135,6 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should generate RSS with prism namespace', () => {
-    const value = {
-      title: 'Feed with prism namespace',
-      description: 'Test feed with PRISM namespace',
-      prism: {
-        issn: '0028-0836',
-      },
-      items: [
-        {
-          title: 'First item',
-          prism: {
-            doi: '10.1038/s41586-023-05842-x',
-            startingPage: '425',
-          },
-        },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:prism="http://prismstandard.org/namespaces/basic/3.0/">
-  <channel>
-    <title>Feed with prism namespace</title>
-    <description>Test feed with PRISM namespace</description>
-    <prism:issn>0028-0836</prism:issn>
-    <item>
-      <title>First item</title>
-      <prism:doi>10.1038/s41586-023-05842-x</prism:doi>
-      <prism:startingPage>425</prism:startingPage>
-    </item>
-  </channel>
-</rss>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-
   it('should generate RSS with sy namespace', () => {
     const value = {
       title: 'Feed with sy namespace',
@@ -304,6 +149,66 @@ describe('generate', () => {
     <title>Feed with sy namespace</title>
     <description>Test feed with syndication namespace</description>
     <sy:updatePeriod>hourly</sy:updatePeriod>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with content namespace', () => {
+    const value = {
+      title: 'Feed with content namespace',
+      description: 'Test feed with Content namespace',
+      items: [
+        {
+          title: 'First item',
+          content: {
+            encoded: '<p>Full HTML content with <strong>formatting</strong></p>',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Feed with content namespace</title>
+    <description>Test feed with Content namespace</description>
+    <item>
+      <title>First item</title>
+      <content:encoded>
+        <![CDATA[<p>Full HTML content with <strong>formatting</strong></p>]]>
+      </content:encoded>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with slash namespace', () => {
+    const value = {
+      title: 'Feed with slash namespace',
+      description: 'Test feed with Slash namespace',
+      items: [
+        {
+          title: 'First item',
+          slash: {
+            section: 'Technology',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
+  <channel>
+    <title>Feed with slash namespace</title>
+    <description>Test feed with Slash namespace</description>
+    <item>
+      <title>First item</title>
+      <slash:section>Technology</slash:section>
+    </item>
   </channel>
 </rss>
 `
@@ -377,6 +282,41 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with psc namespace', () => {
+    const value = {
+      title: 'Feed with psc namespace',
+      description: 'Test feed with Podlove Simple Chapters',
+      items: [
+        {
+          title: 'Episode with chapters',
+          psc: {
+            chapters: [
+              { start: '00:00:00', title: 'Introduction' },
+              { start: '00:05:30', title: 'Main Content', href: 'https://example.com/chapter2' },
+            ],
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:psc="http://podlove.org/simple-chapters">
+  <channel>
+    <title>Feed with psc namespace</title>
+    <description>Test feed with Podlove Simple Chapters</description>
+    <item>
+      <title>Episode with chapters</title>
+      <psc:chapters>
+        <psc:chapter start="00:00:00" title="Introduction"/>
+        <psc:chapter start="00:05:30" title="Main Content" href="https://example.com/chapter2"/>
+      </psc:chapters>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with media namespace', () => {
     const value = {
       title: 'Feed with media namespace',
@@ -414,41 +354,37 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should correctly generate elements with attributes and CDATA content', () => {
-    const value = {
-      title: 'CDATA with Attributes Test',
-      description: 'Test feed for CDATA nesting fix',
+  it('should generate RSS feed with googleplay namespace', () => {
+    const value: RssFeed.Feed<DateLike> = {
+      title: 'Feed with GooglePlay namespace',
+      description: 'Test feed with Google Play Podcasts namespace',
+      googleplay: {
+        author: 'Podcast Creator',
+        explicit: false,
+      },
       items: [
         {
-          title: 'Test Item',
-          categories: [
-            {
-              name: 'Technology & Science',
-              domain: 'example.com',
-            },
-          ],
-          media: {
-            description: {
-              value: '<p>HTML content with <strong>tags</strong> & special chars</p>',
-              type: 'html',
-            },
+          title: 'Episode with GooglePlay',
+          description: 'Episode description',
+          googleplay: {
+            author: 'Episode Author',
+            explicit: 'clean',
           },
         },
       ],
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+<rss version="2.0" xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/">
   <channel>
-    <title>CDATA with Attributes Test</title>
-    <description>Test feed for CDATA nesting fix</description>
+    <title>Feed with GooglePlay namespace</title>
+    <description>Test feed with Google Play Podcasts namespace</description>
+    <googleplay:author>Podcast Creator</googleplay:author>
+    <googleplay:explicit>no</googleplay:explicit>
     <item>
-      <title>Test Item</title>
-      <category domain="example.com">
-        <![CDATA[Technology & Science]]>
-      </category>
-      <media:description type="html">
-        <![CDATA[<p>HTML content with <strong>tags</strong> & special chars</p>]]>
-      </media:description>
+      <title>Episode with GooglePlay</title>
+      <description>Episode description</description>
+      <googleplay:author>Episode Author</googleplay:author>
+      <googleplay:explicit>clean</googleplay:explicit>
     </item>
   </channel>
 </rss>
@@ -457,29 +393,76 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should generate RSS with content namespace', () => {
+  it('should generate RSS with spotify namespace', () => {
     const value = {
-      title: 'Feed with content namespace',
-      description: 'Test feed with Content namespace',
+      title: 'Feed with spotify namespace',
+      description: 'Test feed with Spotify namespace',
+      spotify: {
+        countryOfOrigin: 'US',
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:spotify="http://www.spotify.com/ns/rss">
+  <channel>
+    <title>Feed with spotify namespace</title>
+    <description>Test feed with Spotify namespace</description>
+    <spotify:countryOfOrigin>US</spotify:countryOfOrigin>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with acast namespace', () => {
+    const value = {
+      title: 'Feed with acast namespace',
+      description: 'Test feed with Acast namespace',
+      acast: {
+        showId: '664fde3eda02bb0012bad909',
+        showUrl: 'example-show',
+        signature: {
+          key: 'EXAMPLE_KEY',
+          algorithm: 'aes-256-cbc',
+          value: 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
+        },
+        settings: 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
+        network: {
+          id: '664fdd227c6b200013652ed6',
+          slug: 'example-network-664fdd227c6b200013652ed6',
+          value: 'Example Network',
+        },
+        importedFeed: 'https://feeds.example.com/example-show',
+      },
       items: [
         {
-          title: 'First item',
-          content: {
-            encoded: '<p>Full HTML content with <strong>formatting</strong></p>',
+          title: 'Episode with Acast metadata',
+          acast: {
+            episodeId: '6918f06ee42e3466f29467f9',
+            showId: '664fde3eda02bb0012bad909',
+            episodeUrl: 'example-episode-slug',
+            settings: 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
           },
         },
       ],
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<rss version="2.0" xmlns:acast="https://schema.acast.com/1.0/">
   <channel>
-    <title>Feed with content namespace</title>
-    <description>Test feed with Content namespace</description>
+    <title>Feed with acast namespace</title>
+    <description>Test feed with Acast namespace</description>
+    <acast:showId>664fde3eda02bb0012bad909</acast:showId>
+    <acast:showUrl>example-show</acast:showUrl>
+    <acast:signature key="EXAMPLE_KEY" algorithm="aes-256-cbc">wbG1Z7+6h9QOi+CR1Dv0uQ==</acast:signature>
+    <acast:settings>FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB</acast:settings>
+    <acast:network id="664fdd227c6b200013652ed6" slug="example-network-664fdd227c6b200013652ed6">Example Network</acast:network>
+    <acast:importedFeed>https://feeds.example.com/example-show</acast:importedFeed>
     <item>
-      <title>First item</title>
-      <content:encoded>
-        <![CDATA[<p>Full HTML content with <strong>formatting</strong></p>]]>
-      </content:encoded>
+      <title>Episode with Acast metadata</title>
+      <acast:episodeId>6918f06ee42e3466f29467f9</acast:episodeId>
+      <acast:showId>664fde3eda02bb0012bad909</acast:showId>
+      <acast:episodeUrl>example-episode-slug</acast:episodeUrl>
+      <acast:settings>FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC</acast:settings>
     </item>
   </channel>
 </rss>
@@ -488,28 +471,220 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should generate RSS with slash namespace', () => {
+  it('should generate RSS with rawvoice namespace', () => {
     const value = {
-      title: 'Feed with slash namespace',
-      description: 'Test feed with Slash namespace',
+      title: 'Feed with rawvoice namespace',
+      description: 'Test feed with RawVoice namespace',
+      rawvoice: {
+        rating: {
+          value: 'TV-PG',
+        },
+        frequency: 'weekly',
+      },
       items: [
         {
-          title: 'First item',
-          slash: {
-            section: 'Technology',
+          title: 'Episode with poster',
+          rawvoice: {
+            poster: {
+              url: 'https://example.com/poster.jpg',
+            },
           },
         },
       ],
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
+<rss version="2.0" xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/">
   <channel>
-    <title>Feed with slash namespace</title>
-    <description>Test feed with Slash namespace</description>
+    <title>Feed with rawvoice namespace</title>
+    <description>Test feed with RawVoice namespace</description>
+    <rawvoice:rating>TV-PG</rawvoice:rating>
+    <rawvoice:frequency>weekly</rawvoice:frequency>
+    <item>
+      <title>Episode with poster</title>
+      <rawvoice:poster url="https://example.com/poster.jpg"/>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with feedburner namespace', () => {
+    const value = {
+      title: 'Feed with feedburner namespace',
+      description: 'Test feed with FeedBurner properties',
+      feedburner: {
+        info: 'examplepodcast',
+        feedFlares: [
+          {
+            href: 'https://add.my.yahoo.com/rss?url=https://example.com/feed',
+            src: 'https://us.i1.yimg.com/addtomyyahoo4.gif',
+            value: 'Add to My Yahoo',
+          },
+        ],
+      },
+      items: [
+        {
+          title: 'Item with an original link',
+          feedburner: {
+            origLink: 'https://example.com/posts/original-article',
+            origEnclosureLink: 'https://example.com/audio/original-episode.mp3',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0">
+  <channel>
+    <title>Feed with feedburner namespace</title>
+    <description>Test feed with FeedBurner properties</description>
+    <feedburner:info uri="examplepodcast"/>
+    <feedburner:feedFlare href="https://add.my.yahoo.com/rss?url=https://example.com/feed" src="https://us.i1.yimg.com/addtomyyahoo4.gif">Add to My Yahoo</feedburner:feedFlare>
+    <item>
+      <title>Item with an original link</title>
+      <feedburner:origLink>https://example.com/posts/original-article</feedburner:origLink>
+      <feedburner:origEnclosureLink>https://example.com/audio/original-episode.mp3</feedburner:origEnclosureLink>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with feedpress namespace', () => {
+    const value = {
+      title: 'Feed with feedpress namespace',
+      description: 'Test feed with FeedPress namespace',
+      feedpress: {
+        link: 'https://feed.press/example',
+        newsletterId: '12345',
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:feedpress="https://feed.press/xmlns">
+  <channel>
+    <title>Feed with feedpress namespace</title>
+    <description>Test feed with FeedPress namespace</description>
+    <feedpress:link>https://feed.press/example</feedpress:link>
+    <feedpress:newsletterId>12345</feedpress:newsletterId>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with opensearch namespace', () => {
+    const value = {
+      title: 'Search Results',
+      description: 'Search results feed',
+      opensearch: {
+        totalResults: 1000,
+        startIndex: 0,
+        itemsPerPage: 10,
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">
+  <channel>
+    <title>Search Results</title>
+    <description>Search results feed</description>
+    <opensearch:totalResults>1000</opensearch:totalResults>
+    <opensearch:startIndex>0</opensearch:startIndex>
+    <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with prism namespace', () => {
+    const value = {
+      title: 'Feed with prism namespace',
+      description: 'Test feed with PRISM namespace',
+      prism: {
+        issn: '0028-0836',
+      },
+      items: [
+        {
+          title: 'First item',
+          prism: {
+            doi: '10.1038/s41586-023-05842-x',
+            startingPage: '425',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:prism="http://prismstandard.org/namespaces/basic/3.0/">
+  <channel>
+    <title>Feed with prism namespace</title>
+    <description>Test feed with PRISM namespace</description>
+    <prism:issn>0028-0836</prism:issn>
     <item>
       <title>First item</title>
-      <slash:section>Technology</slash:section>
+      <prism:doi>10.1038/s41586-023-05842-x</prism:doi>
+      <prism:startingPage>425</prism:startingPage>
     </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with ccREL namespace', () => {
+    const value = {
+      title: 'Feed with ccREL namespace',
+      description: 'Test feed with ccREL namespace',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+        morePermissions: 'https://example.com/commercial-license',
+      },
+      items: [
+        {
+          title: 'Item with ccREL',
+          cc: {
+            license: 'https://creativecommons.org/licenses/by/4.0/',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:cc="http://creativecommons.org/ns#">
+  <channel>
+    <title>Feed with ccREL namespace</title>
+    <description>Test feed with ccREL namespace</description>
+    <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
+    <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
+    <item>
+      <title>Item with ccREL</title>
+      <cc:license>https://creativecommons.org/licenses/by/4.0/</cc:license>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with creativecommons namespace', () => {
+    const value = {
+      title: 'Feed with creativecommons namespace',
+      description: 'Test feed with Creative Commons namespace',
+      creativeCommons: {
+        licenses: ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule">
+  <channel>
+    <title>Feed with creativecommons namespace</title>
+    <description>Test feed with Creative Commons namespace</description>
+    <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
   </channel>
 </rss>
 `
@@ -546,97 +721,6 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should generate RSS with georss namespace', () => {
-    const value = {
-      title: 'Feed with georss namespace',
-      description: 'Test feed with GeoRSS namespace',
-      georss: {
-        point: { lat: 45.256, lng: -71.92 },
-      },
-      items: [
-        {
-          title: 'Location item',
-          georss: {
-            point: { lat: 42.3601, lng: -71.0589 },
-            featureName: 'Boston',
-          },
-        },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:georss="http://www.georss.org/georss">
-  <channel>
-    <title>Feed with georss namespace</title>
-    <description>Test feed with GeoRSS namespace</description>
-    <georss:point>45.256 -71.92</georss:point>
-    <item>
-      <title>Location item</title>
-      <georss:point>42.3601 -71.0589</georss:point>
-      <georss:featureName>Boston</georss:featureName>
-    </item>
-  </channel>
-</rss>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-
-  it('should generate RSS with geo namespace', () => {
-    const value = {
-      title: 'Location Feed',
-      description: 'Feed with W3C Basic Geo',
-      geo: {
-        lat: 37.7749,
-        long: -122.4194,
-      },
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
-  <channel>
-    <title>Location Feed</title>
-    <description>Feed with W3C Basic Geo</description>
-    <geo:lat>37.7749</geo:lat>
-    <geo:long>-122.4194</geo:long>
-  </channel>
-</rss>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-
-  it('should generate RSS item with geo coordinates including altitude', () => {
-    const value = {
-      title: 'Altitude Feed',
-      description: 'High altitude locations',
-      items: [
-        {
-          title: 'High Altitude Location',
-          geo: {
-            lat: 28.0026,
-            long: 86.8528,
-            alt: 5364,
-          },
-        },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
-  <channel>
-    <title>Altitude Feed</title>
-    <description>High altitude locations</description>
-    <item>
-      <title>High Altitude Location</title>
-      <geo:lat>28.0026</geo:lat>
-      <geo:long>86.8528</geo:long>
-      <geo:alt>5364</geo:alt>
-    </item>
-  </channel>
-</rss>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-
   it('should generate RSS with wfw namespace', () => {
     const value = {
       title: 'Feed with wfw namespace',
@@ -660,6 +744,37 @@ describe('generate', () => {
       <title>Item with comments</title>
       <wfw:comment>https://example.com/posts/item1/comment</wfw:comment>
       <wfw:commentRss>https://example.com/posts/item1/comments/feed</wfw:commentRss>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with admin namespace', () => {
+    const value = {
+      title: 'Feed with admin namespace',
+      description: 'Test feed with admin namespace',
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'https://example.com/generator?v=3.2',
+      },
+      items: [
+        {
+          title: 'Item title',
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:admin="http://webns.net/mvcb/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <channel>
+    <title>Feed with admin namespace</title>
+    <description>Test feed with admin namespace</description>
+    <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
+    <admin:generatorAgent rdf:resource="https://example.com/generator?v=3.2"/>
+    <item>
+      <title>Item title</title>
     </item>
   </channel>
 </rss>
@@ -811,33 +926,56 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should generate RSS with ccREL namespace', () => {
+  it('should generate RSS with geo namespace', () => {
     const value = {
-      title: 'Feed with ccREL namespace',
-      description: 'Test feed with ccREL namespace',
-      cc: {
-        license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
-        morePermissions: 'https://example.com/commercial-license',
+      title: 'Location Feed',
+      description: 'Feed with W3C Basic Geo',
+      geo: {
+        lat: 37.7749,
+        long: -122.4194,
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
+  <channel>
+    <title>Location Feed</title>
+    <description>Feed with W3C Basic Geo</description>
+    <geo:lat>37.7749</geo:lat>
+    <geo:long>-122.4194</geo:long>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS with georss namespace', () => {
+    const value = {
+      title: 'Feed with georss namespace',
+      description: 'Test feed with GeoRSS namespace',
+      georss: {
+        point: { lat: 45.256, lng: -71.92 },
       },
       items: [
         {
-          title: 'Item with ccREL',
-          cc: {
-            license: 'https://creativecommons.org/licenses/by/4.0/',
+          title: 'Location item',
+          georss: {
+            point: { lat: 42.3601, lng: -71.0589 },
+            featureName: 'Boston',
           },
         },
       ],
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:cc="http://creativecommons.org/ns#">
+<rss version="2.0" xmlns:georss="http://www.georss.org/georss">
   <channel>
-    <title>Feed with ccREL namespace</title>
-    <description>Test feed with ccREL namespace</description>
-    <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
-    <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
+    <title>Feed with georss namespace</title>
+    <description>Test feed with GeoRSS namespace</description>
+    <georss:point>45.256 -71.92</georss:point>
     <item>
-      <title>Item with ccREL</title>
-      <cc:license>https://creativecommons.org/licenses/by/4.0/</cc:license>
+      <title>Location item</title>
+      <georss:point>42.3601 -71.0589</georss:point>
+      <georss:featureName>Boston</georss:featureName>
     </item>
   </channel>
 </rss>
@@ -846,133 +984,31 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should generate RSS with creativecommons namespace', () => {
+  it('should generate RSS with xml namespace', () => {
     const value = {
-      title: 'Feed with creativecommons namespace',
-      description: 'Test feed with Creative Commons namespace',
-      creativeCommons: {
-        licenses: ['http://creativecommons.org/licenses/by-nc-nd/2.0/'],
-      },
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule">
-  <channel>
-    <title>Feed with creativecommons namespace</title>
-    <description>Test feed with Creative Commons namespace</description>
-    <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
-  </channel>
-</rss>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-
-  it('should generate RSS with feedpress namespace', () => {
-    const value = {
-      title: 'Feed with feedpress namespace',
-      description: 'Test feed with FeedPress namespace',
-      feedpress: {
-        link: 'https://feed.press/example',
-        newsletterId: '12345',
-      },
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:feedpress="https://feed.press/xmlns">
-  <channel>
-    <title>Feed with feedpress namespace</title>
-    <description>Test feed with FeedPress namespace</description>
-    <feedpress:link>https://feed.press/example</feedpress:link>
-    <feedpress:newsletterId>12345</feedpress:newsletterId>
-  </channel>
-</rss>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-
-  it('should generate RSS with admin namespace', () => {
-    const value = {
-      title: 'Feed with admin namespace',
-      description: 'Test feed with admin namespace',
-      admin: {
-        errorReportsTo: 'mailto:webmaster@example.com',
-        generatorAgent: 'https://example.com/generator?v=3.2',
+      title: 'Feed with xml namespace',
+      description: 'Test feed with XML namespace attributes',
+      xml: {
+        lang: 'en',
+        base: 'http://example.org/',
       },
       items: [
         {
-          title: 'Item title',
-        },
-      ],
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:admin="http://webns.net/mvcb/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-  <channel>
-    <title>Feed with admin namespace</title>
-    <description>Test feed with admin namespace</description>
-    <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
-    <admin:generatorAgent rdf:resource="https://example.com/generator?v=3.2"/>
-    <item>
-      <title>Item title</title>
-    </item>
-  </channel>
-</rss>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-
-  it('should generate RSS with opensearch namespace', () => {
-    const value = {
-      title: 'Search Results',
-      description: 'Search results feed',
-      opensearch: {
-        totalResults: 1000,
-        startIndex: 0,
-        itemsPerPage: 10,
-      },
-    }
-    const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">
-  <channel>
-    <title>Search Results</title>
-    <description>Search results feed</description>
-    <opensearch:totalResults>1000</opensearch:totalResults>
-    <opensearch:startIndex>0</opensearch:startIndex>
-    <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
-  </channel>
-</rss>
-`
-
-    expect(generate(value)).toEqual(expected)
-  })
-
-  it('should generate RSS with psc namespace', () => {
-    const value = {
-      title: 'Feed with psc namespace',
-      description: 'Test feed with Podlove Simple Chapters',
-      items: [
-        {
-          title: 'Episode with chapters',
-          psc: {
-            chapters: [
-              { start: '00:00:00', title: 'Introduction' },
-              { start: '00:05:30', title: 'Main Content', href: 'https://example.com/chapter2' },
-            ],
+          title: 'Item with XML namespace',
+          xml: {
+            lang: 'en-US',
+            base: 'http://example.org/item/1/',
           },
         },
       ],
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:psc="http://podlove.org/simple-chapters">
+<rss version="2.0" xml:lang="en" xml:base="http://example.org/">
   <channel>
-    <title>Feed with psc namespace</title>
-    <description>Test feed with Podlove Simple Chapters</description>
-    <item>
-      <title>Episode with chapters</title>
-      <psc:chapters>
-        <psc:chapter start="00:00:00" title="Introduction"/>
-        <psc:chapter start="00:05:30" title="Main Content" href="https://example.com/chapter2"/>
-      </psc:chapters>
+    <title>Feed with xml namespace</title>
+    <description>Test feed with XML namespace attributes</description>
+    <item xml:lang="en-US" xml:base="http://example.org/item/1/">
+      <title>Item with XML namespace</title>
     </item>
   </channel>
 </rss>
@@ -981,37 +1017,32 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should generate RSS with rawvoice namespace', () => {
+  it('should generate atom xhtml content as markup inside a div wrapper', () => {
     const value = {
-      title: 'Feed with rawvoice namespace',
-      description: 'Test feed with RawVoice namespace',
-      rawvoice: {
-        rating: {
-          value: 'TV-PG',
-        },
-        frequency: 'weekly',
-      },
+      title: 'Feed with Atom xhtml',
+      description: 'Test feed',
       items: [
         {
-          title: 'Episode with poster',
-          rawvoice: {
-            poster: {
-              url: 'https://example.com/poster.jpg',
+          title: 'First item',
+          atom: {
+            content: {
+              value: '<p>Rich <em>text</em></p>',
+              type: 'xhtml',
             },
           },
         },
       ],
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Feed with rawvoice namespace</title>
-    <description>Test feed with RawVoice namespace</description>
-    <rawvoice:rating>TV-PG</rawvoice:rating>
-    <rawvoice:frequency>weekly</rawvoice:frequency>
+    <title>Feed with Atom xhtml</title>
+    <description>Test feed</description>
     <item>
-      <title>Episode with poster</title>
-      <rawvoice:poster url="https://example.com/poster.jpg"/>
+      <title>First item</title>
+      <atom:content type="xhtml">
+<div xmlns="http://www.w3.org/1999/xhtml"><p>Rich <em>text</em></p></div>
+      </atom:content>
     </item>
   </channel>
 </rss>
@@ -1020,20 +1051,49 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should generate RSS with spotify namespace', () => {
+  it('should generate RSS with structured person fields', () => {
     const value = {
-      title: 'Feed with spotify namespace',
-      description: 'Test feed with Spotify namespace',
-      spotify: {
-        countryOfOrigin: 'US',
+      title: 'Feed with structured persons',
+      description: 'Test feed with structured person fields',
+      managingEditor: {
+        name: 'Editor Name',
+        email: 'editor@example.com',
       },
+      webMaster: {
+        name: 'Webmaster',
+        email: 'webmaster@example.com',
+      },
+      items: [
+        {
+          title: 'First item',
+          authors: [
+            {
+              name: 'John Doe',
+              email: 'john@example.com',
+            },
+            {
+              name: 'Jane Smith',
+            },
+            {
+              email: 'noreply@example.com',
+            },
+          ],
+        },
+      ],
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:spotify="http://www.spotify.com/ns/rss">
+<rss version="2.0">
   <channel>
-    <title>Feed with spotify namespace</title>
-    <description>Test feed with Spotify namespace</description>
-    <spotify:countryOfOrigin>US</spotify:countryOfOrigin>
+    <title>Feed with structured persons</title>
+    <description>Test feed with structured person fields</description>
+    <managingEditor>editor@example.com (Editor Name)</managingEditor>
+    <webMaster>webmaster@example.com (Webmaster)</webMaster>
+    <item>
+      <title>First item</title>
+      <author>john@example.com (John Doe)</author>
+      <author>Jane Smith</author>
+      <author>noreply@example.com</author>
+    </item>
   </channel>
 </rss>
 `
@@ -1041,37 +1101,110 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
-  it('should generate RSS feed with googleplay namespace', () => {
-    const value: RssFeed.Feed<DateLike> = {
-      title: 'Feed with GooglePlay namespace',
-      description: 'Test feed with Google Play Podcasts namespace',
-      googleplay: {
-        author: 'Podcast Creator',
-        explicit: false,
+  it('should generate RSS with CDATA-wrapped person name containing special characters', () => {
+    const value = {
+      title: 'Test',
+      description: 'Test',
+      managingEditor: {
+        name: 'Tom & Jerry',
+        email: 'tom@example.com',
       },
       items: [
         {
-          title: 'Episode with GooglePlay',
-          description: 'Episode description',
-          googleplay: {
-            author: 'Episode Author',
-            explicit: 'clean',
+          title: 'Post',
+          authors: [{ name: "O'Brien & Associates", email: 'info@example.com' }],
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test</title>
+    <description>Test</description>
+    <managingEditor>
+      <![CDATA[tom@example.com (Tom & Jerry)]]>
+    </managingEditor>
+    <item>
+      <title>Post</title>
+      <author>
+        <![CDATA[info@example.com (O'Brien & Associates)]]>
+      </author>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should correctly generate elements with attributes and CDATA content', () => {
+    const value = {
+      title: 'CDATA with Attributes Test',
+      description: 'Test feed for CDATA nesting fix',
+      items: [
+        {
+          title: 'Test Item',
+          categories: [
+            {
+              name: 'Technology & Science',
+              domain: 'example.com',
+            },
+          ],
+          media: {
+            description: {
+              value: '<p>HTML content with <strong>tags</strong> & special chars</p>',
+              type: 'html',
+            },
           },
         },
       ],
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/">
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
   <channel>
-    <title>Feed with GooglePlay namespace</title>
-    <description>Test feed with Google Play Podcasts namespace</description>
-    <googleplay:author>Podcast Creator</googleplay:author>
-    <googleplay:explicit>no</googleplay:explicit>
+    <title>CDATA with Attributes Test</title>
+    <description>Test feed for CDATA nesting fix</description>
     <item>
-      <title>Episode with GooglePlay</title>
-      <description>Episode description</description>
-      <googleplay:author>Episode Author</googleplay:author>
-      <googleplay:explicit>clean</googleplay:explicit>
+      <title>Test Item</title>
+      <category domain="example.com">
+        <![CDATA[Technology & Science]]>
+      </category>
+      <media:description type="html">
+        <![CDATA[<p>HTML content with <strong>tags</strong> & special chars</p>]]>
+      </media:description>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate RSS item with geo coordinates including altitude', () => {
+    const value = {
+      title: 'Altitude Feed',
+      description: 'High altitude locations',
+      items: [
+        {
+          title: 'High Altitude Location',
+          geo: {
+            lat: 28.0026,
+            long: 86.8528,
+            alt: 5364,
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
+  <channel>
+    <title>Altitude Feed</title>
+    <description>High altitude locations</description>
+    <item>
+      <title>High Altitude Location</title>
+      <geo:lat>28.0026</geo:lat>
+      <geo:long>86.8528</geo:long>
+      <geo:alt>5364</geo:alt>
     </item>
   </channel>
 </rss>
@@ -1505,139 +1638,6 @@ describe('generate', () => {
     <item>
       <title>Item with string date</title>
       <pubDate>Wed, 01 Mar 2023 00:00:00 GMT</pubDate>
-    </item>
-  </channel>
-</rss>
-`
-
-      expect(generate(value)).toEqual(expected)
-    })
-
-    it('should generate RSS with acast namespace', () => {
-      const value = {
-        title: 'Feed with acast namespace',
-        description: 'Test feed with Acast namespace',
-        acast: {
-          showId: '664fde3eda02bb0012bad909',
-          showUrl: 'example-show',
-          signature: {
-            key: 'EXAMPLE_KEY',
-            algorithm: 'aes-256-cbc',
-            value: 'wbG1Z7+6h9QOi+CR1Dv0uQ==',
-          },
-          settings: 'FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB',
-          network: {
-            id: '664fdd227c6b200013652ed6',
-            slug: 'example-network-664fdd227c6b200013652ed6',
-            value: 'Example Network',
-          },
-          importedFeed: 'https://feeds.example.com/example-show',
-        },
-        items: [
-          {
-            title: 'Episode with Acast metadata',
-            acast: {
-              episodeId: '6918f06ee42e3466f29467f9',
-              showId: '664fde3eda02bb0012bad909',
-              episodeUrl: 'example-episode-slug',
-              settings: 'FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC',
-            },
-          },
-        ],
-      }
-      const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:acast="https://schema.acast.com/1.0/">
-  <channel>
-    <title>Feed with acast namespace</title>
-    <description>Test feed with Acast namespace</description>
-    <acast:showId>664fde3eda02bb0012bad909</acast:showId>
-    <acast:showUrl>example-show</acast:showUrl>
-    <acast:signature key="EXAMPLE_KEY" algorithm="aes-256-cbc">wbG1Z7+6h9QOi+CR1Dv0uQ==</acast:signature>
-    <acast:settings>FYjHyZbXWHZ7gmX8Pp1rmTHg2/BXqPr07kkpFZ5JfhvEZqggcpunI6E1w81XpUaB</acast:settings>
-    <acast:network id="664fdd227c6b200013652ed6" slug="example-network-664fdd227c6b200013652ed6">Example Network</acast:network>
-    <acast:importedFeed>https://feeds.example.com/example-show</acast:importedFeed>
-    <item>
-      <title>Episode with Acast metadata</title>
-      <acast:episodeId>6918f06ee42e3466f29467f9</acast:episodeId>
-      <acast:showId>664fde3eda02bb0012bad909</acast:showId>
-      <acast:episodeUrl>example-episode-slug</acast:episodeUrl>
-      <acast:settings>FYjHyZbXWHZ7gmX8Pp1rmbKbhgrQiwYShz70Q9/ffXZMTtedvdcRQbP4eiLMjXzC</acast:settings>
-    </item>
-  </channel>
-</rss>
-`
-
-      expect(generate(value)).toEqual(expected)
-    })
-
-    it('should generate RSS with feedburner namespace', () => {
-      const value = {
-        title: 'Feed with feedburner namespace',
-        description: 'Test feed with FeedBurner properties',
-        feedburner: {
-          info: 'examplepodcast',
-          feedFlares: [
-            {
-              href: 'https://add.my.yahoo.com/rss?url=https://example.com/feed',
-              src: 'https://us.i1.yimg.com/addtomyyahoo4.gif',
-              value: 'Add to My Yahoo',
-            },
-          ],
-        },
-        items: [
-          {
-            title: 'Item with an original link',
-            feedburner: {
-              origLink: 'https://example.com/posts/original-article',
-              origEnclosureLink: 'https://example.com/audio/original-episode.mp3',
-            },
-          },
-        ],
-      }
-      const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0">
-  <channel>
-    <title>Feed with feedburner namespace</title>
-    <description>Test feed with FeedBurner properties</description>
-    <feedburner:info uri="examplepodcast"/>
-    <feedburner:feedFlare href="https://add.my.yahoo.com/rss?url=https://example.com/feed" src="https://us.i1.yimg.com/addtomyyahoo4.gif">Add to My Yahoo</feedburner:feedFlare>
-    <item>
-      <title>Item with an original link</title>
-      <feedburner:origLink>https://example.com/posts/original-article</feedburner:origLink>
-      <feedburner:origEnclosureLink>https://example.com/audio/original-episode.mp3</feedburner:origEnclosureLink>
-    </item>
-  </channel>
-</rss>
-`
-
-      expect(generate(value)).toEqual(expected)
-    })
-
-    it('should generate RSS with xml namespace', () => {
-      const value = {
-        title: 'Feed with xml namespace',
-        description: 'Test feed with XML namespace attributes',
-        xml: {
-          lang: 'en',
-          base: 'http://example.org/',
-        },
-        items: [
-          {
-            title: 'Item with XML namespace',
-            xml: {
-              lang: 'en-US',
-              base: 'http://example.org/item/1/',
-            },
-          },
-        ],
-      }
-      const expected = `<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xml:lang="en" xml:base="http://example.org/">
-  <channel>
-    <title>Feed with xml namespace</title>
-    <description>Test feed with XML namespace attributes</description>
-    <item xml:lang="en-US" xml:base="http://example.org/item/1/">
-      <title>Item with XML namespace</title>
     </item>
   </channel>
 </rss>

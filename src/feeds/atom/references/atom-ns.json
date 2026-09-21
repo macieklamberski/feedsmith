@@ -20,22 +20,6 @@
           }
         }
       ],
-      "app": {
-        "edited": "2024-03-15T14:30:00.000Z",
-        "control": {
-          "draft": true
-        }
-      },
-      "arxiv": {
-        "comment": "23 pages, 8 figures and 4 tables",
-        "journalRef": "Eur.Phys.J. C31 (2003) 17-29",
-        "doi": "10.1529/biophysj.104.047340",
-        "primaryCategory": {
-          "term": "hep-ex",
-          "scheme": "http://arxiv.org/schemas/atom",
-          "label": "High Energy Physics - Experiment"
-        }
-      },
       "dc": {
         "titles": ["Dublin Core Enhanced Entry Title"],
         "creators": ["Jack Jackson"],
@@ -112,19 +96,6 @@
         "types": ["Article"],
         "valid": ["2025-12-31T23:59:59.000Z"]
       },
-      "cc": {
-        "license": "https://creativecommons.org/licenses/by/4.0/",
-        "morePermissions": "https://example.com/additional-permissions",
-        "attributionName": "Jack Jackson",
-        "attributionURL": "https://example.com/authors/jack-jackson",
-        "useGuidelines": "https://example.com/article-usage-guidelines",
-        "permits": "http://creativecommons.org/ns#Reproduction",
-        "requires": "http://creativecommons.org/ns#Attribution",
-        "prohibits": "http://creativecommons.org/ns#CommercialUse",
-        "jurisdiction": "http://creativecommons.org/international/us/",
-        "legalcode": "https://creativecommons.org/licenses/by/4.0/legalcode",
-        "deprecatedOn": "2026-12-31"
-      },
       "slash": {
         "section": "articles",
         "department": "not-an-ocean-unless-there-are-lobsters",
@@ -143,15 +114,6 @@
         "summary": "This is a detailed summary of the episode content and key takeaways",
         "subtitle": "Episode subtitle with additional context",
         "keywords": ["tutorial", "example", "technology", "programming"]
-      },
-      "googleplay": {
-        "author": "Episode Author",
-        "description": "Plain-text episode description for Google Play Podcasts",
-        "explicit": "clean",
-        "block": false,
-        "image": {
-          "href": "https://example.com/images/episode-googleplay.jpg"
-        }
       },
       "psc": {
         "chapters": [
@@ -182,10 +144,6 @@
             "href": "https://example.com/episode/conclusion"
           }
         ]
-      },
-      "yt": {
-        "videoId": "dQw4w9WgXcQ",
-        "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw"
       },
       "media": {
         "contents": [
@@ -563,6 +521,83 @@
           ]
         }
       },
+      "googleplay": {
+        "author": "Episode Author",
+        "description": "Plain-text episode description for Google Play Podcasts",
+        "explicit": "clean",
+        "block": false,
+        "image": {
+          "href": "https://example.com/images/episode-googleplay.jpg"
+        }
+      },
+      "feedburner": {
+        "origLink": "https://example.com/posts/original-article",
+        "origEnclosureLink": "https://example.com/audio/original-episode.mp3",
+        "awareness": "https://feedburner.google.com/awareness/1.0/data/example/entry"
+      },
+      "arxiv": {
+        "comment": "23 pages, 8 figures and 4 tables",
+        "journalRef": "Eur.Phys.J. C31 (2003) 17-29",
+        "doi": "10.1529/biophysj.104.047340",
+        "primaryCategory": {
+          "term": "hep-ex",
+          "scheme": "http://arxiv.org/schemas/atom",
+          "label": "High Energy Physics - Experiment"
+        }
+      },
+      "cc": {
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "morePermissions": "https://example.com/additional-permissions",
+        "attributionName": "Jack Jackson",
+        "attributionURL": "https://example.com/authors/jack-jackson",
+        "useGuidelines": "https://example.com/article-usage-guidelines",
+        "permits": "http://creativecommons.org/ns#Reproduction",
+        "requires": "http://creativecommons.org/ns#Attribution",
+        "prohibits": "http://creativecommons.org/ns#CommercialUse",
+        "jurisdiction": "http://creativecommons.org/international/us/",
+        "legalcode": "https://creativecommons.org/licenses/by/4.0/legalcode",
+        "deprecatedOn": "2026-12-31"
+      },
+      "creativeCommons": {
+        "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]
+      },
+      "thr": {
+        "total": 100,
+        "inReplyTos": [
+          {
+            "ref": "urn:uuid:d5e9c5d0-4c0c-11ec-81d3-0242ac130003",
+            "href": "https://example.com/posts/understanding-xml-namespaces",
+            "type": "application/xhtml+xml"
+          },
+          {
+            "ref": "urn:uuid:e7865b80-4c0c-11ec-81d3-0242ac130003",
+            "href": "https://example.com/posts/understanding-xml-namespaces/comments/1",
+            "type": "application/xhtml+xml"
+          }
+        ]
+      },
+      "app": {
+        "edited": "2024-03-15T14:30:00.000Z",
+        "control": {
+          "draft": true
+        }
+      },
+      "wfw": {
+        "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
+        "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
+      },
+      "pingback": {
+        "server": "https://example.com/xmlrpc.php",
+        "target": "https://referenced-blog.com/article"
+      },
+      "trackback": {
+        "ping": "https://example.com/trackback/123",
+        "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
+      },
+      "yt": {
+        "videoId": "dQw4w9WgXcQ",
+        "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw"
+      },
       "geo": {
         "lat": 37.8199,
         "long": -122.4783,
@@ -599,41 +634,6 @@
         "elev": 360,
         "floor": 4,
         "radius": 50000
-      },
-      "thr": {
-        "total": 100,
-        "inReplyTos": [
-          {
-            "ref": "urn:uuid:d5e9c5d0-4c0c-11ec-81d3-0242ac130003",
-            "href": "https://example.com/posts/understanding-xml-namespaces",
-            "type": "application/xhtml+xml"
-          },
-          {
-            "ref": "urn:uuid:e7865b80-4c0c-11ec-81d3-0242ac130003",
-            "href": "https://example.com/posts/understanding-xml-namespaces/comments/1",
-            "type": "application/xhtml+xml"
-          }
-        ]
-      },
-      "wfw": {
-        "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
-        "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
-      },
-      "pingback": {
-        "server": "https://example.com/xmlrpc.php",
-        "target": "https://referenced-blog.com/article"
-      },
-      "trackback": {
-        "ping": "https://example.com/trackback/123",
-        "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
-      },
-      "creativeCommons": {
-        "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]
-      },
-      "feedburner": {
-        "origLink": "https://example.com/posts/original-article",
-        "origEnclosureLink": "https://example.com/audio/original-episode.mp3",
-        "awareness": "https://feedburner.google.com/awareness/1.0/data/example/entry"
       },
       "links": [
         {
@@ -721,42 +721,6 @@
     "types": ["Text"],
     "valid": ["2025-12-31T23:59:59.000Z"]
   },
-  "cc": {
-    "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-    "morePermissions": "https://example.com/commercial-license",
-    "attributionName": "Example Publishing Company",
-    "attributionURL": "https://example.com/",
-    "useGuidelines": "https://example.com/usage-guidelines",
-    "permits": "http://creativecommons.org/ns#Reproduction",
-    "requires": "http://creativecommons.org/ns#Attribution",
-    "prohibits": "http://creativecommons.org/ns#CommercialUse",
-    "jurisdiction": "http://creativecommons.org/international/us/",
-    "legalcode": "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode",
-    "deprecatedOn": "2025-12-31"
-  },
-  "creativeCommons": {
-    "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
-  },
-  "pingback": {
-    "to": "https://example.com/pingback-service"
-  },
-  "admin": {
-    "errorReportsTo": "mailto:webmaster@example.com",
-    "generatorAgent": "http://www.movabletype.org/?v=3.2"
-  },
-  "opensearch": {
-    "totalResults": 1000,
-    "startIndex": 0,
-    "itemsPerPage": 10,
-    "queries": [
-      {
-        "role": "request",
-        "searchTerms": "quantum computing",
-        "startIndex": 0,
-        "count": 10
-      }
-    ]
-  },
   "sy": {
     "updatePeriod": "hourly",
     "updateFrequency": 1,
@@ -789,36 +753,6 @@
     "subtitle": "A subtitle that provides additional context",
     "keywords": ["technology", "programming", "web development", "tutorials"],
     "applePodcastsVerify": "example-verification-key"
-  },
-  "googleplay": {
-    "author": "Podcast Creator",
-    "description": "This is a plain-text description for Google Play Podcasts",
-    "explicit": false,
-    "block": false,
-    "image": {
-      "href": "https://example.com/images/googleplay-cover.jpg"
-    },
-    "categories": ["Technology"],
-    "email": "podcaster@example.com",
-    "newFeedUrl": "https://example.com/new-podcast-feed.xml"
-  },
-  "feedburner": {
-    "info": "exampleblog",
-    "feedFlares": [
-      {
-        "href": "https://add.my.yahoo.com/rss?url=https://example.com/feed",
-        "src": "https://us.i1.yimg.com/addtomyyahoo4.gif",
-        "value": "Add to My Yahoo"
-      }
-    ],
-    "browserFriendly": "This is an XML content feed. It is intended to be viewed in a newsreader or syndicated to another site.",
-    "emailServiceId": "ExampleBlog",
-    "feedburnerHostname": "https://feedburner.google.com",
-    "awareness": "https://feedburner.google.com/awareness/1.0/data/example"
-  },
-  "yt": {
-    "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw",
-    "playlistId": "PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf"
   },
   "media": {
     "contents": [
@@ -1195,6 +1129,72 @@
         { "name": "demo", "weight": 2 }
       ]
     }
+  },
+  "googleplay": {
+    "author": "Podcast Creator",
+    "description": "This is a plain-text description for Google Play Podcasts",
+    "explicit": false,
+    "block": false,
+    "image": {
+      "href": "https://example.com/images/googleplay-cover.jpg"
+    },
+    "categories": ["Technology"],
+    "email": "podcaster@example.com",
+    "newFeedUrl": "https://example.com/new-podcast-feed.xml"
+  },
+  "feedburner": {
+    "info": "exampleblog",
+    "feedFlares": [
+      {
+        "href": "https://add.my.yahoo.com/rss?url=https://example.com/feed",
+        "src": "https://us.i1.yimg.com/addtomyyahoo4.gif",
+        "value": "Add to My Yahoo"
+      }
+    ],
+    "browserFriendly": "This is an XML content feed. It is intended to be viewed in a newsreader or syndicated to another site.",
+    "emailServiceId": "ExampleBlog",
+    "feedburnerHostname": "https://feedburner.google.com",
+    "awareness": "https://feedburner.google.com/awareness/1.0/data/example"
+  },
+  "opensearch": {
+    "totalResults": 1000,
+    "startIndex": 0,
+    "itemsPerPage": 10,
+    "queries": [
+      {
+        "role": "request",
+        "searchTerms": "quantum computing",
+        "startIndex": 0,
+        "count": 10
+      }
+    ]
+  },
+  "cc": {
+    "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "morePermissions": "https://example.com/commercial-license",
+    "attributionName": "Example Publishing Company",
+    "attributionURL": "https://example.com/",
+    "useGuidelines": "https://example.com/usage-guidelines",
+    "permits": "http://creativecommons.org/ns#Reproduction",
+    "requires": "http://creativecommons.org/ns#Attribution",
+    "prohibits": "http://creativecommons.org/ns#CommercialUse",
+    "jurisdiction": "http://creativecommons.org/international/us/",
+    "legalcode": "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode",
+    "deprecatedOn": "2025-12-31"
+  },
+  "creativeCommons": {
+    "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
+  },
+  "admin": {
+    "errorReportsTo": "mailto:webmaster@example.com",
+    "generatorAgent": "http://www.movabletype.org/?v=3.2"
+  },
+  "pingback": {
+    "to": "https://example.com/pingback-service"
+  },
+  "yt": {
+    "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw",
+    "playlistId": "PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf"
   },
   "geo": {
     "lat": 37.7749,
