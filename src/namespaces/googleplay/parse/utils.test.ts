@@ -345,6 +345,18 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
+  it('should fall back to newFeedUrl when new-feed-url is empty', () => {
+    const value = {
+      'googleplay:new-feed-url': '',
+      'googleplay:newfeedurl': 'https://example.com/new-podcast-feed',
+    }
+    const expected = {
+      newFeedUrl: 'https://example.com/new-podcast-feed',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
   it('should parse categories as text content when no text attribute', () => {
     const value = {
       'googleplay:category': ['Technology', 'Education'],
