@@ -81,6 +81,28 @@ export const parseBox: ParseUtilExact<GeoRssNs.Box> = (value) => {
   }
 }
 
+// The radius is in metres.
+export const parseCircle: ParseUtilExact<GeoRssNs.Circle> = (value) => {
+  const string = parseString(retrieveText(value))
+
+  if (!string) {
+    return
+  }
+
+  const rawParts = string.split(whitespaceRegex)
+  const numericParts = parseArrayOf(rawParts, parseNumber)
+
+  if (rawParts.length !== 3 || numericParts?.length !== 3) {
+    return
+  }
+
+  const [lat, lng, radius] = numericParts
+
+  if (isPresent(lat) && isPresent(lng) && isPresent(radius)) {
+    return { center: { lat, lng }, radius }
+  }
+}
+
 export const retrieveItemOrFeed: ParseUtilPartial<GeoRssNs.ItemOrFeed> = (value) => {
   if (!isPlainObject(value)) {
     return
@@ -91,6 +113,7 @@ export const retrieveItemOrFeed: ParseUtilPartial<GeoRssNs.ItemOrFeed> = (value)
     line: parseSingularOf(value['georss:line'], parseLine),
     polygon: parseSingularOf(value['georss:polygon'], parsePolygon),
     box: parseSingularOf(value['georss:box'], parseBox),
+    circle: parseSingularOf(value['georss:circle'], parseCircle),
     // TODO: Implement when (or if) GeoRSS-GML and GML namespace are implemented.
     // where: parseSingularOf(value['georss:where'], parseWhere),
     featureTypeTag: parseSingularOf(value['georss:featuretypetag'], (value) =>
