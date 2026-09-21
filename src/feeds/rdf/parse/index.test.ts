@@ -1321,6 +1321,56 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with prism namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with PRISM namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with PRISM namespace</description>
+          <prism:publicationName>Example Journal</prism:publicationName>
+          <prism:issn>1234-5678</prism:issn>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item title</title>
+          <link>http://example.com/item1</link>
+          <prism:doi>10.1000/example.1</prism:doi>
+          <prism:volume>12</prism:volume>
+          <prism:startingPage>101</prism:startingPage>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with PRISM namespace',
+      link: 'http://example.com',
+      description: 'Test feed with PRISM namespace',
+      prism: {
+        publicationName: 'Example Journal',
+        issn: '1234-5678',
+      },
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Item title',
+          link: 'http://example.com/item1',
+          prism: {
+            doi: '10.1000/example.1',
+            volume: '12',
+            startingPage: '101',
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with georss namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
