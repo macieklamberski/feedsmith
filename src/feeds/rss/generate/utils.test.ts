@@ -1827,6 +1827,9 @@ describe('generateFeed', () => {
     const value = {
       title: 'Feed with LiveJournal items',
       description: 'A feed with LiveJournal item properties',
+      livejournal: {
+        journal: 'example_community',
+      },
       items: [
         {
           title: 'Journal entry',
@@ -1835,7 +1838,6 @@ describe('generateFeed', () => {
             mood: 'cheerful',
             security: 'public',
             poster: 'johndoe',
-            journal: 'example_community',
             replyCount: 42,
           },
         },
@@ -1848,6 +1850,7 @@ describe('generateFeed', () => {
         channel: {
           title: 'Feed with LiveJournal items',
           description: 'A feed with LiveJournal item properties',
+          'lj:journal': 'example_community',
           item: [
             {
               title: 'Journal entry',
@@ -1855,7 +1858,6 @@ describe('generateFeed', () => {
               'lj:mood': 'cheerful',
               'lj:security': 'public',
               'lj:poster': 'johndoe',
-              'lj:journal': 'example_community',
               'lj:replycount': 42,
             },
           ],

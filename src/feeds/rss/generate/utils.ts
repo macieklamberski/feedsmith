@@ -37,7 +37,10 @@ import {
   generateFeed as generateItunesFeed,
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
-import { generateItem as generateLivejournalItem } from '../../../namespaces/livejournal/generate/utils.js'
+import {
+  generateFeed as generateLivejournalFeed,
+  generateItem as generateLivejournalItem,
+} from '../../../namespaces/livejournal/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
 import { generateFeed as generateOpenSearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
 import {
@@ -301,6 +304,7 @@ export const generateFeed: GenerateUtil<RssFeed.Feed<DateLike>> = (feed) => {
     ...generateSpotifyFeed(feed.spotify),
     ...generatePingbackFeed(feed.pingback),
     ...generateAcastFeed(feed.acast),
+    ...generateLivejournalFeed(feed.livejournal),
     item: trimArray(feed.items, generateItem),
   }
 

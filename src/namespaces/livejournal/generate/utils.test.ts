@@ -1,5 +1,53 @@
 import { describe, expect, it } from 'bun:test'
-import { generateItem } from './utils.js'
+import { generateFeed, generateItem } from './utils.js'
+
+describe('generateFeed', () => {
+  it('should generate valid feed object with all properties', () => {
+    const value = {
+      journal: 'example_community',
+      journalId: '67890',
+      journalType: 'community',
+    }
+    const expected = {
+      'lj:journal': 'example_community',
+      'lj:journalid': '67890',
+      'lj:journaltype': 'community',
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate feed with minimal properties', () => {
+    const value = {
+      journal: 'example_user',
+    }
+    const expected = {
+      'lj:journal': 'example_user',
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should handle object with only undefined properties', () => {
+    const value = {
+      journal: undefined,
+      journalId: undefined,
+      journalType: undefined,
+    }
+
+    expect(generateFeed(value)).toBeUndefined()
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateFeed(value)).toBeUndefined()
+  })
+
+  it('should handle non-object inputs gracefully', () => {
+    expect(generateFeed(undefined)).toBeUndefined()
+  })
+})
 
 describe('generateItem', () => {
   it('should generate valid item object with all properties', () => {
@@ -9,9 +57,6 @@ describe('generateItem', () => {
       security: 'public',
       poster: 'johndoe',
       posterId: '12345',
-      journal: 'example_community',
-      journalId: '67890',
-      journalType: 'C',
       replyCount: 42,
     }
     const expected = {
@@ -20,9 +65,6 @@ describe('generateItem', () => {
       'lj:security': 'public',
       'lj:poster': 'johndoe',
       'lj:posterid': '12345',
-      'lj:journal': 'example_community',
-      'lj:journalid': '67890',
-      'lj:journaltype': 'C',
       'lj:replycount': 42,
     }
 
@@ -58,9 +100,6 @@ describe('generateItem', () => {
       security: undefined,
       poster: undefined,
       posterId: undefined,
-      journal: undefined,
-      journalId: undefined,
-      journalType: undefined,
       replyCount: undefined,
     }
 

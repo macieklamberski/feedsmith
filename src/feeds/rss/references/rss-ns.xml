@@ -474,6 +474,11 @@
     <acast:network id="net123abc456def789ghi012" slug="example-network-net123abc456">Example Network</acast:network>
     <acast:importedFeed>https://example.com/original-feed</acast:importedFeed>
 
+    <!-- LiveJournal Namespace: Channel Level Tags -->
+    <lj:journal>example_community</lj:journal>
+    <lj:journalid>67890</lj:journalid>
+    <lj:journaltype>community</lj:journaltype>
+
     <item xml:lang="en-US" xml:base="http://example.org/item/1/">
       <title>Example Item</title>
       <link>http://example.org/item/1</link>
@@ -877,9 +882,6 @@
       <lj:security>public</lj:security>
       <lj:poster>johndoe</lj:poster>
       <lj:posterid>12345</lj:posterid>
-      <lj:journal>example_community</lj:journal>
-      <lj:journalid>67890</lj:journalid>
-      <lj:journaltype>C</lj:journaltype>
       <lj:replycount>42</lj:replycount>
     </item>
   </channel>

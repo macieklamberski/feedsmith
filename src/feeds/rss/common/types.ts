@@ -207,6 +207,7 @@ export namespace RssFeed {
       spotify?: SpotifyNs.Feed<TStrict>
       pingback?: PingbackNs.Feed
       acast?: AcastNs.Feed
+      livejournal?: LivejournalNs.Feed
       xml?: XmlNs.ItemOrFeed
     },
     TStrict

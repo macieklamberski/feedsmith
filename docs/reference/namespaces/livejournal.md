@@ -4,7 +4,7 @@ title: "Reference: LiveJournal Namespace"
 
 # LiveJournal Namespace
 
-The LiveJournal namespace adds journal-specific metadata to RSS feed items, such as the author's current mood and music, the entry's security level, the posting user, and the originating journal. LiveJournal (and compatible platforms like Dreamwidth and Scribbld) emit these elements on each item of a syndicated journal feed.
+The LiveJournal namespace adds journal-specific metadata to RSS feeds: the journal's name, id and type on the channel, and the author's current mood and music, the entry's security level, the posting user and the reply count on each item. LiveJournal (and compatible platforms like Dreamwidth and Scribbld) emit these elements in their RSS journal feeds.
 
 <table>
   <tbody>
@@ -14,7 +14,7 @@ The LiveJournal namespace adds journal-specific metadata to RSS feed items, such
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://www.livejournal.com/support/faq/149.html" target="_blank">LiveJournal Syndication FAQ</a></td>
+      <td><a href="https://github.com/apparentlymart/livejournal/blob/8c24ffae22479331728a543ca87b7d6d5d64be8b/cgi-bin/ljfeed.pl" target="_blank">LiveJournal feed generator source</a></td>
     </tr>
     <tr>
       <th>Prefix</th>

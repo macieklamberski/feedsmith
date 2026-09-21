@@ -901,9 +901,6 @@
         "security": "public",
         "poster": "johndoe",
         "posterId": "12345",
-        "journal": "example_community",
-        "journalId": "67890",
-        "journalType": "C",
         "replyCount": 42
       },
       "xml": {
@@ -1815,6 +1812,11 @@
       "value": "Example Network"
     },
     "importedFeed": "https://example.com/original-feed"
+  },
+  "livejournal": {
+    "journal": "example_community",
+    "journalId": "67890",
+    "journalType": "community"
   },
   "xml": {
     "lang": "en",

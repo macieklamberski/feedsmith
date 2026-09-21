@@ -1,5 +1,86 @@
 import { describe, expect, it } from 'bun:test'
-import { retrieveItem } from './utils.js'
+import { retrieveFeed, retrieveItem } from './utils.js'
+
+describe('retrieveFeed', () => {
+  const expectedFull = {
+    journal: 'example_community',
+    journalId: '67890',
+    journalType: 'community',
+  }
+
+  it('should parse complete livejournal feed (with #text)', () => {
+    const value = {
+      'lj:journal': { '#text': 'example_community' },
+      'lj:journalid': { '#text': '67890' },
+      'lj:journaltype': { '#text': 'community' },
+    }
+
+    expect(retrieveFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete livejournal feed (without #text)', () => {
+    const value = {
+      'lj:journal': 'example_community',
+      'lj:journalid': '67890',
+      'lj:journaltype': 'community',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should parse complete livejournal feed (with array of values)', () => {
+    const value = {
+      'lj:journal': ['example_community', 'another_community'],
+      'lj:journalid': ['67890', '9876'],
+      'lj:journaltype': ['community', 'personal'],
+    }
+
+    expect(retrieveFeed(value)).toEqual(expectedFull)
+  })
+
+  it('should parse feed with only journal field', () => {
+    const value = {
+      'lj:journal': { '#text': 'example_user' },
+    }
+    const expected = {
+      journal: 'example_user',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should handle coercible values', () => {
+    const value = {
+      'lj:journalid': { '#text': 67890 },
+    }
+    const expected = {
+      journalId: '67890',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(retrieveFeed(value)).toBeUndefined()
+  })
+
+  it('should return undefined if no livejournal properties exist', () => {
+    const value = {
+      title: { '#text': 'Not a livejournal feed' },
+    }
+
+    expect(retrieveFeed(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(retrieveFeed('not an object')).toBeUndefined()
+    expect(retrieveFeed(undefined)).toBeUndefined()
+    expect(retrieveFeed(null)).toBeUndefined()
+    expect(retrieveFeed([])).toBeUndefined()
+  })
+})
 
 describe('retrieveItem', () => {
   const expectedFull = {
@@ -8,9 +89,6 @@ describe('retrieveItem', () => {
     security: 'public',
     poster: 'johndoe',
     posterId: '12345',
-    journal: 'example_community',
-    journalId: '67890',
-    journalType: 'C',
     replyCount: 42,
   }
 
@@ -21,9 +99,6 @@ describe('retrieveItem', () => {
       'lj:security': { '#text': 'public' },
       'lj:poster': { '#text': 'johndoe' },
       'lj:posterid': { '#text': '12345' },
-      'lj:journal': { '#text': 'example_community' },
-      'lj:journalid': { '#text': '67890' },
-      'lj:journaltype': { '#text': 'C' },
       'lj:replycount': { '#text': '42' },
     }
 
@@ -37,9 +112,6 @@ describe('retrieveItem', () => {
       'lj:security': 'public',
       'lj:poster': 'johndoe',
       'lj:posterid': '12345',
-      'lj:journal': 'example_community',
-      'lj:journalid': '67890',
-      'lj:journaltype': 'C',
       'lj:replycount': '42',
     }
 
@@ -53,9 +125,6 @@ describe('retrieveItem', () => {
       'lj:security': ['public', 'private'],
       'lj:poster': ['johndoe', 'janedoe'],
       'lj:posterid': ['12345', '54321'],
-      'lj:journal': ['example_community', 'another_community'],
-      'lj:journalid': ['67890', '9876'],
-      'lj:journaltype': ['C', 'P'],
       'lj:replycount': ['42', '7'],
     }
 

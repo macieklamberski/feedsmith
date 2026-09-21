@@ -38,7 +38,10 @@ import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/parse/utils.js'
-import { retrieveItem as retrieveLivejournalItem } from '../../../namespaces/livejournal/parse/utils.js'
+import {
+  retrieveFeed as retrieveLivejournalFeed,
+  retrieveItem as retrieveLivejournalItem,
+} from '../../../namespaces/livejournal/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
 import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
 import {
@@ -480,6 +483,7 @@ export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, option
     spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(channel) : undefined,
     pingback: namespaces.has('pingback') ? retrievePingbackFeed(channel) : undefined,
     acast: namespaces.has('acast') ? retrieveAcastFeed(channel) : undefined,
+    livejournal: namespaces.has('lj') ? retrieveLivejournalFeed(channel) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
 

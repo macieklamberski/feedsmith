@@ -1574,6 +1574,9 @@ describe('generate', () => {
       const value = {
         title: 'Feed with livejournal namespace',
         description: 'Test feed with LiveJournal namespace',
+        livejournal: {
+          journal: 'example_community',
+        },
         items: [
           {
             title: 'Journal entry',
@@ -1582,7 +1585,6 @@ describe('generate', () => {
               mood: 'cheerful',
               security: 'public',
               poster: 'johndoe',
-              journal: 'example_community',
               replyCount: 42,
             },
           },
@@ -1593,13 +1595,13 @@ describe('generate', () => {
   <channel>
     <title>Feed with livejournal namespace</title>
     <description>Test feed with LiveJournal namespace</description>
+    <lj:journal>example_community</lj:journal>
     <item>
       <title>Journal entry</title>
       <lj:music>The Beatles - Hey Jude</lj:music>
       <lj:mood>cheerful</lj:mood>
       <lj:security>public</lj:security>
       <lj:poster>johndoe</lj:poster>
-      <lj:journal>example_community</lj:journal>
       <lj:replycount>42</lj:replycount>
     </item>
   </channel>
