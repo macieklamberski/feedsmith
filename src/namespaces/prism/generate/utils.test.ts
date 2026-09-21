@@ -601,6 +601,19 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with cover date fields', () => {
+    const value = {
+      coverDate: new Date('2023-03-15T00:00:00Z'),
+      coverDisplayDate: 'March 15, 2023',
+    }
+    const expected = {
+      'prism:coverDate': '2023-03-15T00:00:00.000Z',
+      'prism:coverDisplayDate': 'March 15, 2023',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should filter out empty values from array fields', () => {
     const value = {
       keywords: ['quantum', '', '   '],

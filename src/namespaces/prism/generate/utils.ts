@@ -117,6 +117,8 @@ export const generateItem: GenerateUtil<PrismNs.Item<DateLike>> = (item) => {
     'prism:pageCount': generateNumber(item.pageCount),
     'prism:pageProgressionDirection': generateCdataString(item.pageProgressionDirection),
     'prism:samplePageRange': generateCdataString(item.samplePageRange),
+    'prism:coverDate': generateRfc3339Date(item.coverDate),
+    'prism:coverDisplayDate': generateCdataString(item.coverDisplayDate),
     'prism:publicationDate': trimArray(item.publicationDates, generateRfc3339Date),
     'prism:publicationDisplayDate': trimArray(item.publicationDisplayDates, generateCdataString),
     'prism:creationDate': generateRfc3339Date(item.creationDate),
