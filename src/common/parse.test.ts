@@ -480,7 +480,7 @@ describe('parse', () => {
     })
 
     it('should parse RSS feed with a BOM before the XML declaration', () => {
-      const value = `﻿<?xml version="1.0"?>
+      const value = `\ufeff<?xml version="1.0"?>
         <rss version="2.0">
           <channel>
             <title>Feed</title>
