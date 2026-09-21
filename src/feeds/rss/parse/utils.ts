@@ -84,6 +84,9 @@ const hasBracketsRegex = /[<[(]/
 const whitespaceRegex = /\s+/
 const commonSeparatorsRegex = /^[\s,\-|/:;]+|[\s,\-|/:;]+$/g
 const mailtoQueryRegex = /\?.*$/
+const closingTagRegex = /<\/[a-z][a-z0-9]*\s*>/i
+const tagRegex = /<\/?[a-z][a-z0-9]*(?:\s[^<>]*)?\/?>/gi
+const anchorHrefRegex = /<a\s[^<>]*?href\s*=\s*(?:"([^"]*)"|'([^']*)')/gi
 
 export const stripMailto = (value: string) => {
   const stripped = value.replace(mailtoRegex, '')
@@ -161,6 +164,7 @@ const parseBracketedPerson = (raw: string): RssFeed.Person | undefined => {
   const length = raw.length
 
   let hasUnbracketedName = false
+  let hasAngleName = false
   let i = 0
 
   while (i < length) {
@@ -220,6 +224,7 @@ const parseBracketedPerson = (raw: string): RssFeed.Person | undefined => {
     } else if (emailRegex.test(strippedChunk) && !person.email) {
       person.email = strippedChunk
     } else if (isBracketed) {
+      hasAngleName ||= openBracket === '<'
       nameParts.push(hasUnbracketedName ? `${openBracket}${chunk}${closeBracket}` : chunk)
     } else {
       hasUnbracketedName = true
@@ -227,18 +232,18 @@ const parseBracketedPerson = (raw: string): RssFeed.Person | undefined => {
     }
   }
 
+  // Angle brackets hold an address. With no address anywhere they are markup, as in
+  // `<p>John Doe</p>`, so the string is kept as written.
+  if (hasAngleName && !person.email && !person.link) {
+    return { name: raw }
+  }
+
   person.name = parseString(nameParts.join(' '))
 
   return trimObject(person)
 }
 
-export const parsePerson: ParseUtilPartial<RssFeed.Person> = (value) => {
-  const raw = parseSingularOf(value?.name ?? value, (v) => parseString(retrieveText(v)))
-
-  if (!raw) {
-    return
-  }
-
+const parsePlainPerson = (raw: string): RssFeed.Person | undefined => {
   // Step 1. Handles bare email, mailto:email, or URL-only strings.
   const simple = parseSimplePerson(raw)
 
@@ -253,6 +258,54 @@ export const parsePerson: ParseUtilPartial<RssFeed.Person> = (value) => {
 
   // Step 3. Handles bracketed formats like "email (Name)" or "Name <email> (url)".
   return parseBracketedPerson(raw)
+}
+
+// A person wrapped in HTML, as in `<p>John Doe</p>` or `<a href="mailto:john@example.com">John</a>`.
+// An anchor supplies the email or the link only when it is the single anchor of that kind.
+const parseMarkupPerson = (raw: string): RssFeed.Person | undefined => {
+  const emails: Array<string> = []
+  const links: Array<string> = []
+
+  for (const match of raw.matchAll(anchorHrefRegex)) {
+    const href = (match[1] ?? match[2]).trim()
+    const email = stripMailto(href)
+
+    if (email !== href && emailRegex.test(email)) {
+      emails.push(email)
+      continue
+    }
+
+    if (urlRegex.test(href)) {
+      links.push(href)
+    }
+  }
+
+  const text = raw.replace(tagRegex, ' ').split(whitespaceRegex).join(' ').trim()
+  const person = text ? parsePlainPerson(text) : undefined
+  const anchorEmail = emails.length === 1 ? emails[0] : undefined
+  const anchorLink = links.length === 1 ? links[0] : undefined
+  const result = {
+    name: person?.name,
+    email: person?.email ?? anchorEmail,
+    link: person?.link ?? anchorLink,
+  }
+
+  return trimObject(result)
+}
+
+export const parsePerson: ParseUtilPartial<RssFeed.Person> = (value) => {
+  const raw = parseSingularOf(value?.name ?? value, (v) => parseString(retrieveText(v)))
+
+  if (!raw) {
+    return
+  }
+
+  // A closing tag is what tells markup from an address in angle brackets.
+  if (closingTagRegex.test(raw)) {
+    return parseMarkupPerson(raw)
+  }
+
+  return parsePlainPerson(raw)
 }
 
 export const parseCategory: ParseUtilPartial<RssFeed.Category> = (value) => {
