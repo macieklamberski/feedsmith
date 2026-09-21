@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'bun:test'
 import type { GooglePlayNs } from '../common/types.js'
-import { parseCategory, parseExplicit, parseImage, retrieveFeed, retrieveItem } from './utils.js'
+import {
+  parseCategory,
+  parseExplicit,
+  parseImage,
+  retrieveFeed,
+  retrieveItem,
+  retrieveNewFeedUrl,
+} from './utils.js'
 
 describe('parseImage', () => {
   it('should parse image with href attribute', () => {
@@ -296,6 +303,46 @@ describe('retrieveItem', () => {
   })
 })
 
+describe('retrieveNewFeedUrl', () => {
+  it('should parse new-feed-url', () => {
+    const value = {
+      'googleplay:new-feed-url': 'https://example.com/new-podcast-feed',
+    }
+
+    expect(retrieveNewFeedUrl(value)).toBe('https://example.com/new-podcast-feed')
+  })
+
+  it('should parse newFeedUrl spelled as in the schema', () => {
+    const value = {
+      'googleplay:newfeedurl': 'https://example.com/new-podcast-feed',
+    }
+
+    expect(retrieveNewFeedUrl(value)).toBe('https://example.com/new-podcast-feed')
+  })
+
+  it('should prefer new-feed-url when both spellings are present', () => {
+    const value = {
+      'googleplay:new-feed-url': 'https://example.com/new-podcast-feed',
+      'googleplay:newfeedurl': 'https://example.com/other-podcast-feed',
+    }
+
+    expect(retrieveNewFeedUrl(value)).toBe('https://example.com/new-podcast-feed')
+  })
+
+  it('should fall back to newFeedUrl when new-feed-url is empty', () => {
+    const value = {
+      'googleplay:new-feed-url': '',
+      'googleplay:newfeedurl': 'https://example.com/new-podcast-feed',
+    }
+
+    expect(retrieveNewFeedUrl(value)).toBe('https://example.com/new-podcast-feed')
+  })
+
+  it('should return undefined when neither spelling is present', () => {
+    expect(retrieveNewFeedUrl({})).toBeUndefined()
+  })
+})
+
 describe('retrieveFeed', () => {
   it('should parse complete feed object with all properties', () => {
     const value = {
@@ -324,30 +371,6 @@ describe('retrieveFeed', () => {
 
   it('should parse newFeedUrl spelled as in the schema', () => {
     const value = {
-      'googleplay:newfeedurl': 'https://example.com/new-podcast-feed',
-    }
-    const expected = {
-      newFeedUrl: 'https://example.com/new-podcast-feed',
-    }
-
-    expect(retrieveFeed(value)).toEqual(expected)
-  })
-
-  it('should prefer new-feed-url when both spellings are present', () => {
-    const value = {
-      'googleplay:new-feed-url': 'https://example.com/new-podcast-feed',
-      'googleplay:newfeedurl': 'https://example.com/other-podcast-feed',
-    }
-    const expected = {
-      newFeedUrl: 'https://example.com/new-podcast-feed',
-    }
-
-    expect(retrieveFeed(value)).toEqual(expected)
-  })
-
-  it('should fall back to newFeedUrl when new-feed-url is empty', () => {
-    const value = {
-      'googleplay:new-feed-url': '',
       'googleplay:newfeedurl': 'https://example.com/new-podcast-feed',
     }
     const expected = {
