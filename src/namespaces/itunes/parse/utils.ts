@@ -112,6 +112,7 @@ export const retrieveItem: ParseUtilPartial<ItunesNs.Item> = (value) => {
     block: parseSingularOf(value['itunes:block'], (value) =>
       parseYesNoBoolean(retrieveText(value)),
     ),
+    order: parseSingularOf(value['itunes:order'], (value) => parseNumber(retrieveText(value))),
     summary: parseSingularOf(value['itunes:summary'], (value) => parseString(retrieveText(value))),
     subtitle: parseSingularOf(value['itunes:subtitle'], (value) =>
       parseString(retrieveText(value)),

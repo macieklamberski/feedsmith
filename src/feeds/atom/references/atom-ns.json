@@ -111,6 +111,7 @@
         "season": 1,
         "episodeType": "full",
         "block": false,
+        "order": 1,
         "summary": "This is a detailed summary of the episode content and key takeaways",
         "subtitle": "Episode subtitle with additional context",
         "keywords": ["tutorial", "example", "technology", "programming"]

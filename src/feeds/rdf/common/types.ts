@@ -18,6 +18,7 @@ import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.j
 import type { RdfNs } from '../../../namespaces/rdf/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
 import type { SyNs } from '../../../namespaces/sy/common/types.js'
+import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 
@@ -61,6 +62,7 @@ export namespace RdfFeed {
       feedburner?: FeedBurnerNs.Item
       cc?: CcNs.ItemOrFeed
       wfw?: WfwNs.Item
+      trackback?: TrackbackNs.Item
       georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
