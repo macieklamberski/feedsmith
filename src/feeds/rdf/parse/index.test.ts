@@ -1321,6 +1321,50 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with opensearch namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:openSearch="http://a9.com/-/spec/opensearchrss/1.0/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with OpenSearch namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with OpenSearch namespace</description>
+          <openSearch:totalResults>120</openSearch:totalResults>
+          <openSearch:startIndex>1</openSearch:startIndex>
+          <openSearch:itemsPerPage>20</openSearch:itemsPerPage>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item title</title>
+          <link>http://example.com/item1</link>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with OpenSearch namespace',
+      link: 'http://example.com',
+      description: 'Test feed with OpenSearch namespace',
+      opensearch: {
+        totalResults: 120,
+        startIndex: 1,
+        itemsPerPage: 20,
+      },
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Item title',
+          link: 'http://example.com/item1',
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with georss namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
