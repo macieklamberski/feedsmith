@@ -12,6 +12,7 @@ export const stopNodes = [
   '*.itunes:season',
   '*.itunes:episodetype',
   '*.itunes:block',
+  '*.itunes:order',
   '*.itunes:summary',
   '*.itunes:subtitle',
   '*.itunes:keywords',
