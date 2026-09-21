@@ -984,6 +984,45 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with gml namespace', () => {
+    const value = {
+      title: 'Feed with gml namespace',
+      description: 'Test feed with GML geometry',
+      items: [
+        {
+          title: 'Location item',
+          georss: {
+            where: {
+              gml: {
+                point: {
+                  pos: { lat: 45.256, lng: -71.92 },
+                },
+              },
+            },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:georss="http://www.georss.org/georss" xmlns:gml="http://www.opengis.net/gml">
+  <channel>
+    <title>Feed with gml namespace</title>
+    <description>Test feed with GML geometry</description>
+    <item>
+      <title>Location item</title>
+      <georss:where>
+        <gml:Point>
+          <gml:pos>45.256 -71.92</gml:pos>
+        </gml:Point>
+      </georss:where>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with xml namespace', () => {
     const value = {
       title: 'Feed with xml namespace',

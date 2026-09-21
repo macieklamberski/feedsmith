@@ -6,6 +6,7 @@ import {
   parseLine,
   parsePoint,
   parsePolygon,
+  parseWhere,
   retrieveItemOrFeed,
 } from './utils.js'
 
@@ -460,6 +461,33 @@ describe('parseCircle', () => {
   })
 })
 
+describe('parseWhere', () => {
+  it('should parse the GML geometry under gml', () => {
+    const value = { 'gml:point': { 'gml:pos': '45.256 -71.92' } }
+    const expected = {
+      gml: {
+        point: {
+          pos: { lat: 45.256, lng: -71.92 },
+        },
+      },
+    }
+
+    expect(parseWhere(value)).toEqual(expected)
+  })
+
+  it('should return undefined when nothing inside is GML', () => {
+    const value = { 'geo:point': { 'geo:pos': '45.256 -71.92' } }
+
+    expect(parseWhere(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty and non-object inputs', () => {
+    expect(parseWhere({})).toBeUndefined()
+    expect(parseWhere('45.256 -71.92')).toBeUndefined()
+    expect(parseWhere(undefined)).toBeUndefined()
+  })
+})
+
 describe('retrieveItemOrFeed', () => {
   const expectedFull = {
     point: { lat: 45.256, lng: -71.92 },
@@ -606,6 +634,87 @@ describe('retrieveItemOrFeed', () => {
     }
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should parse georss:where without copying its geometry into the simple fields', () => {
+    const value = {
+      'georss:where': { 'gml:point': { 'gml:pos': '45.256 -71.92' } },
+      'georss:featurename': 'Portland',
+    }
+    const expected = {
+      where: {
+        gml: {
+          point: {
+            pos: { lat: 45.256, lng: -71.92 },
+          },
+        },
+      },
+      featureName: 'Portland',
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should keep the simple element and georss:where side by side', () => {
+    const value = {
+      'georss:point': '45.256 -71.92',
+      'georss:where': {
+        'gml:point': { 'gml:pos': '51.5 -0.12' },
+        'gml:envelope': {
+          'gml:lowercorner': '42.943 -71.032',
+          'gml:uppercorner': '43.039 -69.856',
+        },
+      },
+    }
+    const expected = {
+      point: { lat: 45.256, lng: -71.92 },
+      where: {
+        gml: {
+          point: {
+            pos: { lat: 51.5, lng: -0.12 },
+          },
+          envelope: {
+            lowerCorner: { lat: 42.943, lng: -71.032 },
+            upperCorner: { lat: 43.039, lng: -69.856 },
+          },
+        },
+      },
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should keep the coordinate system of a geometry under where', () => {
+    const value = {
+      'georss:where': {
+        'gml:point': {
+          '@srsname': 'urn:ogc:def:crs:EPSG:9.0:26986',
+          'gml:pos': '236750 900000',
+        },
+      },
+    }
+    const expected = {
+      where: {
+        gml: {
+          point: {
+            srsName: 'urn:ogc:def:crs:EPSG:9.0:26986',
+            pos: { lat: 236750, lng: 900000 },
+          },
+        },
+      },
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should ignore elements inside georss:where that are not GML', () => {
+    const value = {
+      'georss:where': {
+        'geo:point': { 'geo:pos': '40.823597 23.846565' },
+      },
+    }
+
+    expect(retrieveItemOrFeed(value)).toBeUndefined()
   })
 
   it('should handle coercible number values', () => {

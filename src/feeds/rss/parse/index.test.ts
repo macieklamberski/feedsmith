@@ -2329,6 +2329,103 @@ describe('parse', () => {
 
         expect(parse(value)).toEqual(expected)
       })
+
+      it('should parse GML geometry from georss:where (RW-NS33)', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss
+            version="2.0"
+            xmlns:georss="http://www.georss.org/georss"
+            xmlns:gml="http://www.opengis.net/gml"
+          >
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Place</title>
+                <georss:where>
+                  <gml:Point>
+                    <gml:pos>53.9 30.333333</gml:pos>
+                  </gml:Point>
+                </georss:where>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Place',
+              georss: {
+                where: {
+                  gml: {
+                    point: {
+                      pos: { lat: 53.9, lng: 30.333333 },
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should parse GML geometry bound to a non-standard prefix (RW-NS33)', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss
+            version="2.0"
+            xmlns:georss="http://www.georss.org/georss"
+            xmlns:g="http://www.opengis.net/gml"
+          >
+            <channel>
+              <title>Test</title>
+              <link>https://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Route</title>
+                <georss:where>
+                  <g:LineString>
+                    <g:posList>40.1 14.4 40.2 14.5</g:posList>
+                  </g:LineString>
+                </georss:where>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'https://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Route',
+              georss: {
+                where: {
+                  gml: {
+                    lineString: {
+                      posList: {
+                        points: [
+                          { lat: 40.1, lng: 14.4 },
+                          { lat: 40.2, lng: 14.5 },
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
     })
 
     describe('feed-specific quirks', () => {

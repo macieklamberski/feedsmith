@@ -44,6 +44,7 @@ import {
   stopNodes as georssStopNodes,
   uris as georssUris,
 } from '../namespaces/georss/common/config.js'
+import { stopNodes as gmlStopNodes, uris as gmlUris } from '../namespaces/gml/common/config.js'
 import {
   stopNodes as googleplayStopNodes,
   uris as googleplayUris,
@@ -170,6 +171,7 @@ export const namespaceUris = {
   yt: ytUris,
   geo: geoUris,
   georss: georssUris,
+  gml: gmlUris,
   rdf: rdfUris,
   rss: rssUris,
   rss2: rss2Uris,
@@ -203,6 +205,7 @@ export const namespaceStopNodes = [
   ...feedpressStopNodes,
   ...geoStopNodes,
   ...georssStopNodes,
+  ...gmlStopNodes,
   ...googleplayStopNodes,
   ...itunesStopNodes,
   ...mediaStopNodes,

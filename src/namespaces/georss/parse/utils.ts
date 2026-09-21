@@ -7,6 +7,7 @@ import {
   parseString,
   retrieveText,
 } from '../../../common/utils.js'
+import { retrieveWhere as retrieveGmlWhere } from '../../gml/parse/utils.js'
 import type { GeoRssNs } from '../common/types.js'
 
 const whitespaceRegex = /\s+/
@@ -103,6 +104,18 @@ export const parseCircle: ParseUtilExact<GeoRssNs.Circle> = (value) => {
   }
 }
 
+export const parseWhere: ParseUtilPartial<GeoRssNs.Where> = (value) => {
+  if (!isPlainObject(value)) {
+    return
+  }
+
+  const where = {
+    gml: retrieveGmlWhere(value),
+  }
+
+  return trimObject(where)
+}
+
 export const retrieveItemOrFeed: ParseUtilPartial<GeoRssNs.ItemOrFeed> = (value) => {
   if (!isPlainObject(value)) {
     return
@@ -114,8 +127,7 @@ export const retrieveItemOrFeed: ParseUtilPartial<GeoRssNs.ItemOrFeed> = (value)
     polygon: parseSingularOf(value['georss:polygon'], parsePolygon),
     box: parseSingularOf(value['georss:box'], parseBox),
     circle: parseSingularOf(value['georss:circle'], parseCircle),
-    // TODO: Implement when (or if) GeoRSS-GML and GML namespace are implemented.
-    // where: parseSingularOf(value['georss:where'], parseWhere),
+    where: parseSingularOf(value['georss:where'], parseWhere),
     featureTypeTag: parseSingularOf(value['georss:featuretypetag'], (value) =>
       parseString(retrieveText(value)),
     ),
