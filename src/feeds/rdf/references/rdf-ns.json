@@ -5,9 +5,6 @@
     {
       "title": "Example Item",
       "link": "http://example.org/item/1",
-      "content": {
-        "encoded": "This is an example of content."
-      },
       "dc": {
         "titles": ["Dublin Core Enhanced Item Title"],
         "creators": ["Jack Jackson"],
@@ -83,6 +80,9 @@
         "titles": ["Dublin Core Terms Enhanced Item Title"],
         "types": ["Article"],
         "valid": ["2025-12-31T23:59:59+00:00"]
+      },
+      "content": {
+        "encoded": "This is an example of content."
       },
       "slash": {
         "section": "articles",
@@ -466,6 +466,19 @@
           ]
         }
       },
+      "feedburner": {
+        "origLink": "https://example.org/posts/original-article",
+        "origEnclosureLink": "https://example.org/audio/original-episode.mp3",
+        "awareness": "https://feedburner.google.com/awareness/1.0/data/examplerss/item"
+      },
+      "cc": {
+        "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "attributionName": "Jack Jackson"
+      },
+      "wfw": {
+        "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
+        "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
+      },
       "georss": {
         "point": {
           "lat": 37.78,
@@ -498,19 +511,6 @@
         "floor": 4,
         "radius": 50000
       },
-      "wfw": {
-        "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
-        "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
-      },
-      "feedburner": {
-        "origLink": "https://example.org/posts/original-article",
-        "origEnclosureLink": "https://example.org/audio/original-episode.mp3",
-        "awareness": "https://feedburner.google.com/awareness/1.0/data/examplerss/item"
-      },
-      "cc": {
-        "license": "https://creativecommons.org/licenses/by-sa/4.0/",
-        "attributionName": "Jack Jackson"
-      },
       "rdf": {
         "about": "http://example.org/item/1"
       },
@@ -520,6 +520,62 @@
       }
     }
   ],
+  "atom": {
+    "links": [
+      {
+        "href": "https://example.org/feed.xml",
+        "rel": "self",
+        "type": "application/rss+xml"
+      },
+      {
+        "href": "https://example.org/feed.atom",
+        "rel": "alternate",
+        "type": "application/atom+xml",
+        "title": "Atom Feed"
+      },
+      {
+        "href": "https://example.org/",
+        "rel": "alternate",
+        "type": "text/html",
+        "title": "Website"
+      },
+      {
+        "href": "https://example.org/hub",
+        "rel": "hub"
+      },
+      {
+        "href": "https://example.org/feed-archive",
+        "rel": "archive",
+        "title": "Feed Archive"
+      },
+      {
+        "href": "https://example.org/feed-next",
+        "rel": "next",
+        "title": "Next Page"
+      },
+      {
+        "href": "https://example.org/feed-prev",
+        "rel": "prev",
+        "title": "Previous Page"
+      },
+      {
+        "href": "https://example.org/feed-first",
+        "rel": "first",
+        "title": "First Page"
+      },
+      {
+        "href": "https://example.org/feed-last",
+        "rel": "last",
+        "title": "Last Page"
+      },
+      {
+        "href": "https://example.org/comments-feed",
+        "rel": "replies",
+        "type": "application/rss+xml",
+        "title": "Comments Feed"
+      }
+    ]
+  },
   "dc": {
     "titles": ["Dublin Core Enhanced Feed Title"],
     "creators": ["John Doe"],
@@ -598,62 +654,6 @@
     "updatePeriod": "hourly",
     "updateFrequency": 1,
     "updateBase": "2000-01-01T12:00+00:00"
-  },
-  "atom": {
-    "links": [
-      {
-        "href": "https://example.org/feed.xml",
-        "rel": "self",
-        "type": "application/rss+xml"
-      },
-      {
-        "href": "https://example.org/feed.atom",
-        "rel": "alternate",
-        "type": "application/atom+xml",
-        "title": "Atom Feed"
-      },
-      {
-        "href": "https://example.org/",
-        "rel": "alternate",
-        "type": "text/html",
-        "title": "Website"
-      },
-      {
-        "href": "https://example.org/hub",
-        "rel": "hub"
-      },
-      {
-        "href": "https://example.org/feed-archive",
-        "rel": "archive",
-        "title": "Feed Archive"
-      },
-      {
-        "href": "https://example.org/feed-next",
-        "rel": "next",
-        "title": "Next Page"
-      },
-      {
-        "href": "https://example.org/feed-prev",
-        "rel": "prev",
-        "title": "Previous Page"
-      },
-      {
-        "href": "https://example.org/feed-first",
-        "rel": "first",
-        "title": "First Page"
-      },
-      {
-        "href": "https://example.org/feed-last",
-        "rel": "last",
-        "title": "Last Page"
-      },
-      {
-        "href": "https://example.org/comments-feed",
-        "rel": "replies",
-        "type": "application/rss+xml",
-        "title": "Comments Feed"
-      }
-    ]
   },
   "media": {
     "contents": [
@@ -1031,6 +1031,28 @@
       ]
     }
   },
+  "feedburner": {
+    "info": "examplerss",
+    "feedFlares": [
+      {
+        "href": "https://add.my.yahoo.com/rss?url=https://example.org/rss",
+        "src": "https://us.i1.yimg.com/addtomyyahoo4.gif",
+        "value": "Add to My Yahoo"
+      }
+    ],
+    "browserFriendly": "This is an XML content feed. It is intended to be viewed in a newsreader or syndicated to another site.",
+    "emailServiceId": "ExampleRss",
+    "feedburnerHostname": "https://feedburner.google.com",
+    "awareness": "https://feedburner.google.com/awareness/1.0/data/examplerss"
+  },
+  "cc": {
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "attributionName": "Example Publishing Company"
+  },
+  "admin": {
+    "errorReportsTo": "mailto:webmaster@example.com",
+    "generatorAgent": "http://www.movabletype.org/?v=3.2"
+  },
   "georss": {
     "point": {
       "lat": 37.78,
@@ -1062,28 +1084,6 @@
     "elev": 360,
     "floor": 4,
     "radius": 50000
-  },
-  "feedburner": {
-    "info": "examplerss",
-    "feedFlares": [
-      {
-        "href": "https://add.my.yahoo.com/rss?url=https://example.org/rss",
-        "src": "https://us.i1.yimg.com/addtomyyahoo4.gif",
-        "value": "Add to My Yahoo"
-      }
-    ],
-    "browserFriendly": "This is an XML content feed. It is intended to be viewed in a newsreader or syndicated to another site.",
-    "emailServiceId": "ExampleRss",
-    "feedburnerHostname": "https://feedburner.google.com",
-    "awareness": "https://feedburner.google.com/awareness/1.0/data/examplerss"
-  },
-  "admin": {
-    "errorReportsTo": "mailto:webmaster@example.com",
-    "generatorAgent": "http://www.movabletype.org/?v=3.2"
-  },
-  "cc": {
-    "license": "https://creativecommons.org/licenses/by/4.0/",
-    "attributionName": "Example Publishing Company"
   },
   "rdf": {
     "about": "http://example.org/rss"
