@@ -895,6 +895,11 @@
         "episodeUrl": "example-episode-title",
         "settings": "RXBpc29kZVNldHRpbmdzQmFzZTY0RW5jb2RlZA=="
       },
+      "feedburner": {
+        "origLink": "https://example.com/episode/original-article",
+        "origEnclosureLink": "https://example.com/audio/original-episode.mp3",
+        "awareness": "https://feedburner.google.com/awareness/1.0/data/examplepodcast/episode"
+      },
       "xml": {
         "lang": "en-US",
         "base": "http://example.org/item/1/"
@@ -1724,6 +1729,20 @@
   },
   "creativeCommons": {
     "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
+  },
+  "feedburner": {
+    "info": "examplepodcast",
+    "feedFlares": [
+      {
+        "href": "https://add.my.yahoo.com/rss?url=https://example.com/feed",
+        "src": "https://us.i1.yimg.com/addtomyyahoo4.gif",
+        "value": "Add to My Yahoo"
+      }
+    ],
+    "browserFriendly": "This is an XML content feed. It is intended to be viewed in a newsreader or syndicated to another site.",
+    "emailServiceId": "ExamplePodcast",
+    "feedburnerHostname": "https://feedburner.google.com",
+    "awareness": "https://feedburner.google.com/awareness/1.0/data/examplepodcast"
   },
   "feedpress": {
     "link": "https://feedpress.com/examplepodcast",

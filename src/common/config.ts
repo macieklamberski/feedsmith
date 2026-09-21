@@ -32,6 +32,10 @@ import {
   uris as dctermsUris,
 } from '../namespaces/dcterms/common/config.js'
 import {
+  stopNodes as feedburnerStopNodes,
+  uris as feedburnerUris,
+} from '../namespaces/feedburner/common/config.js'
+import {
   stopNodes as feedpressStopNodes,
   uris as feedpressUris,
 } from '../namespaces/feedpress/common/config.js'
@@ -152,6 +156,7 @@ export const namespaceUris = {
   dcterms: dctermsUris,
   wfw: wfwUris,
   source: sourceUris,
+  feedburner: feedburnerUris,
   feedpress: feedpressUris,
   yt: ytUris,
   googleplay: googleplayUris,
@@ -192,6 +197,7 @@ export const namespaceStopNodes = [
   ...creativecommonsStopNodes,
   ...dcStopNodes,
   ...dctermsStopNodes,
+  ...feedburnerStopNodes,
   ...feedpressStopNodes,
   ...geoStopNodes,
   ...georssStopNodes,

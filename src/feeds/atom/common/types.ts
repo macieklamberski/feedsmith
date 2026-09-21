@@ -13,6 +13,7 @@ import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { CreativeCommonsNs } from '../../../namespaces/creativecommons/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
+import type { FeedBurnerNs } from '../../../namespaces/feedburner/common/types.js'
 import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { GooglePlayNs } from '../../../namespaces/googleplay/common/types.js'
@@ -143,6 +144,7 @@ export namespace AtomFeed {
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       creativeCommons?: CreativeCommonsNs.ItemOrFeed
       wfw?: WfwNs.Item
+      feedburner?: FeedBurnerNs.Item
       yt?: YtNs.Item
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
@@ -177,6 +179,7 @@ export namespace AtomFeed {
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       creativeCommons?: CreativeCommonsNs.ItemOrFeed
       opensearch?: OpenSearchNs.Feed<TStrict>
+      feedburner?: FeedBurnerNs.Feed<TStrict>
       yt?: YtNs.Feed
       admin?: AdminNs.Feed
       pingback?: PingbackNs.Feed

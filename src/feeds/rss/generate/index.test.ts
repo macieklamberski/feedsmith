@@ -1570,6 +1570,49 @@ describe('generate', () => {
       expect(generate(value)).toEqual(expected)
     })
 
+    it('should generate RSS with feedburner namespace', () => {
+      const value = {
+        title: 'Feed with feedburner namespace',
+        description: 'Test feed with FeedBurner properties',
+        feedburner: {
+          info: 'examplepodcast',
+          feedFlares: [
+            {
+              href: 'https://add.my.yahoo.com/rss?url=https://example.com/feed',
+              src: 'https://us.i1.yimg.com/addtomyyahoo4.gif',
+              value: 'Add to My Yahoo',
+            },
+          ],
+        },
+        items: [
+          {
+            title: 'Item with an original link',
+            feedburner: {
+              origLink: 'https://example.com/posts/original-article',
+              origEnclosureLink: 'https://example.com/audio/original-episode.mp3',
+            },
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0">
+  <channel>
+    <title>Feed with feedburner namespace</title>
+    <description>Test feed with FeedBurner properties</description>
+    <feedburner:info uri="examplepodcast"/>
+    <feedburner:feedFlare href="https://add.my.yahoo.com/rss?url=https://example.com/feed" src="https://us.i1.yimg.com/addtomyyahoo4.gif">Add to My Yahoo</feedburner:feedFlare>
+    <item>
+      <title>Item with an original link</title>
+      <feedburner:origLink>https://example.com/posts/original-article</feedburner:origLink>
+      <feedburner:origEnclosureLink>https://example.com/audio/original-episode.mp3</feedburner:origEnclosureLink>
+    </item>
+  </channel>
+</rss>
+`
+
+      expect(generate(value)).toEqual(expected)
+    })
+
     it('should generate RSS with xml namespace', () => {
       const value = {
         title: 'Feed with xml namespace',

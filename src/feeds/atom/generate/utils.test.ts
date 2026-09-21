@@ -2058,6 +2058,43 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with feedburner namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: { value: 'Burned Feed' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      feedburner: { info: 'examplefeed' },
+      entries: [
+        {
+          id: 'https://example.com/1',
+          title: { value: 'Entry' },
+          updated: new Date('2024-01-10T12:00:00Z'),
+          feedburner: { origLink: 'https://example.com/posts/original-article' },
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:feedburner': 'http://rssnamespace.org/feedburner/ext/1.0',
+        id: 'https://example.com/feed',
+        title: { '#text': 'Burned Feed' },
+        updated: '2024-01-10T12:00:00.000Z',
+        'feedburner:info': { '@uri': 'examplefeed' },
+        entry: [
+          {
+            id: 'https://example.com/1',
+            title: { '#text': 'Entry' },
+            updated: '2024-01-10T12:00:00.000Z',
+            'feedburner:origLink': 'https://example.com/posts/original-article',
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with xml namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',

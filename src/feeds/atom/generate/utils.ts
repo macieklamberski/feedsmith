@@ -22,6 +22,10 @@ import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generat
 import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDcTermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
+import {
+  generateFeed as generateFeedBurnerFeed,
+  generateItem as generateFeedBurnerItem,
+} from '../../../namespaces/feedburner/generate/utils.js'
 import { generateItemOrFeed as generateGeoItemOrFeed } from '../../../namespaces/geo/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
@@ -304,6 +308,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
     ...generateDcTermsItemOrFeed(entry.dcterms),
     ...generateCreativeCommonsItemOrFeed(entry.creativeCommons),
     ...generateWfwItem(entry.wfw),
+    ...generateFeedBurnerItem(entry.feedburner),
     ...generateYtItem(entry.yt),
     ...generatePingbackItem(entry.pingback),
     ...generateTrackbackItem(entry.trackback),
@@ -372,6 +377,7 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
     ...generateDcTermsItemOrFeed(feed.dcterms),
     ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
     ...generateOpenSearchFeed(feed.opensearch),
+    ...generateFeedBurnerFeed(feed.feedburner),
     ...generateYtFeed(feed.yt),
     ...generateAdminFeed(feed.admin),
     ...generatePingbackFeed(feed.pingback),

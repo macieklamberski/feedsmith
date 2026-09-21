@@ -13,6 +13,7 @@
   xmlns:media="http://search.yahoo.com/mrss/"
   xmlns:georss="http://www.georss.org/georss"
   xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+  xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0"
   xmlns:admin="http://webns.net/mvcb/"
   xmlns:cc="http://creativecommons.org/ns#"
 >
@@ -223,6 +224,14 @@
     <georss:elev>360</georss:elev>
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
+
+    <!-- FeedBurner Namespace: Channel Level Tags -->
+    <feedburner:info uri="examplerss"/>
+    <feedburner:feedFlare href="https://add.my.yahoo.com/rss?url=https://example.org/rss" src="https://us.i1.yimg.com/addtomyyahoo4.gif">Add to My Yahoo</feedburner:feedFlare>
+    <feedburner:browserFriendly>This is an XML content feed. It is intended to be viewed in a newsreader or syndicated to another site.</feedburner:browserFriendly>
+    <feedburner:emailServiceId>ExampleRss</feedburner:emailServiceId>
+    <feedburner:feedburnerHostname>https://feedburner.google.com</feedburner:feedburnerHostname>
+    <feedburner:awareness>https://feedburner.google.com/awareness/1.0/data/examplerss</feedburner:awareness>
 
     <!-- Admin Namespace: Channel Level Tags -->
     <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
@@ -436,6 +445,11 @@
     <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
     <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
+
+    <!-- FeedBurner Namespace: Item Level Tags -->
+    <feedburner:origLink>https://example.org/posts/original-article</feedburner:origLink>
+    <feedburner:origEnclosureLink>https://example.org/audio/original-episode.mp3</feedburner:origEnclosureLink>
+    <feedburner:awareness>https://feedburner.google.com/awareness/1.0/data/examplerss/item</feedburner:awareness>
 
     <!-- ccREL Namespace: Item Level Tags -->
     <cc:license rdf:resource="https://creativecommons.org/licenses/by-sa/4.0/"/>

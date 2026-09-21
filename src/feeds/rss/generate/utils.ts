@@ -26,6 +26,10 @@ import { generateItem as generateContentItem } from '../../../namespaces/content
 import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDcTermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
+import {
+  generateFeed as generateFeedBurnerFeed,
+  generateItem as generateFeedBurnerItem,
+} from '../../../namespaces/feedburner/generate/utils.js'
 import { generateFeed as generateFeedPressFeed } from '../../../namespaces/feedpress/generate/utils.js'
 import { generateItemOrFeed as generateGeoItemOrFeed } from '../../../namespaces/geo/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
@@ -241,6 +245,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
     ...generateDcTermsItemOrFeed(item.dcterms),
     ...generatePrismItem(item.prism),
     ...generateWfwItem(item.wfw),
+    ...generateFeedBurnerItem(item.feedburner),
     ...generateSourceItem(item.sourceNs),
     ...generateRawVoiceItem(item.rawvoice),
     ...generateSpotifyItem(item.spotify),
@@ -291,6 +296,7 @@ export const generateFeed: GenerateUtil<RssFeed.Feed<DateLike>> = (feed) => {
     ...generateDcTermsItemOrFeed(feed.dcterms),
     ...generatePrismFeed(feed.prism),
     ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
+    ...generateFeedBurnerFeed(feed.feedburner),
     ...generateFeedPressFeed(feed.feedpress),
     ...generateOpenSearchFeed(feed.opensearch),
     ...generateAdminFeed(feed.admin),

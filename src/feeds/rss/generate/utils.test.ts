@@ -1838,6 +1838,43 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate RSS feed with feedburner namespace properties', () => {
+    const value = {
+      title: 'Burned Feed',
+      description: 'A feed with FeedBurner properties',
+      feedburner: {
+        info: 'examplepodcast',
+        browserFriendly: 'This is an XML content feed.',
+      },
+      items: [
+        {
+          title: 'Item',
+          feedburner: { origLink: 'https://example.com/posts/original-article' },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:feedburner': 'http://rssnamespace.org/feedburner/ext/1.0',
+        channel: {
+          title: 'Burned Feed',
+          description: 'A feed with FeedBurner properties',
+          'feedburner:info': { '@uri': 'examplepodcast' },
+          'feedburner:browserFriendly': 'This is an XML content feed.',
+          item: [
+            {
+              title: 'Item',
+              'feedburner:origLink': 'https://example.com/posts/original-article',
+            },
+          ],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate RSS feed with feedpress namespace properties', () => {
     const value = {
       title: 'Podcast Feed',

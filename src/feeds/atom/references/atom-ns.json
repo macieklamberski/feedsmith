@@ -630,6 +630,11 @@
       "creativeCommons": {
         "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]
       },
+      "feedburner": {
+        "origLink": "https://example.com/posts/original-article",
+        "origEnclosureLink": "https://example.com/audio/original-episode.mp3",
+        "awareness": "https://feedburner.google.com/awareness/1.0/data/example/entry"
+      },
       "links": [
         {
           "rel": "replies",
@@ -796,6 +801,20 @@
     "categories": ["Technology"],
     "email": "podcaster@example.com",
     "newFeedUrl": "https://example.com/new-podcast-feed.xml"
+  },
+  "feedburner": {
+    "info": "exampleblog",
+    "feedFlares": [
+      {
+        "href": "https://add.my.yahoo.com/rss?url=https://example.com/feed",
+        "src": "https://us.i1.yimg.com/addtomyyahoo4.gif",
+        "value": "Add to My Yahoo"
+      }
+    ],
+    "browserFriendly": "This is an XML content feed. It is intended to be viewed in a newsreader or syndicated to another site.",
+    "emailServiceId": "ExampleBlog",
+    "feedburnerHostname": "https://feedburner.google.com",
+    "awareness": "https://feedburner.google.com/awareness/1.0/data/example"
   },
   "yt": {
     "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw",

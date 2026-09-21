@@ -14,6 +14,7 @@
       xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule"
       xmlns:thr="http://purl.org/syndication/thread/1.0"
       xmlns:app="http://www.w3.org/2007/app"
+      xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0"
       xmlns:wfw="http://wellformedweb.org/CommentAPI/"
       xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
       xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
@@ -283,6 +284,14 @@
   <opensearch:startIndex>0</opensearch:startIndex>
   <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
   <opensearch:Query role="request" searchTerms="quantum computing" startIndex="0" count="10"/>
+
+  <!-- FeedBurner Namespace: Feed Level Tags -->
+  <feedburner:info uri="exampleblog"/>
+  <feedburner:feedFlare href="https://add.my.yahoo.com/rss?url=https://example.com/feed" src="https://us.i1.yimg.com/addtomyyahoo4.gif">Add to My Yahoo</feedburner:feedFlare>
+  <feedburner:browserFriendly>This is an XML content feed. It is intended to be viewed in a newsreader or syndicated to another site.</feedburner:browserFriendly>
+  <feedburner:emailServiceId>ExampleBlog</feedburner:emailServiceId>
+  <feedburner:feedburnerHostname>https://feedburner.google.com</feedburner:feedburnerHostname>
+  <feedburner:awareness>https://feedburner.google.com/awareness/1.0/data/example</feedburner:awareness>
 
   <!-- YouTube Namespace: Feed Level Tags -->
   <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
@@ -578,5 +587,10 @@
     <!-- YouTube Namespace: Entry Level Tags -->
     <yt:videoId>dQw4w9WgXcQ</yt:videoId>
     <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
+
+    <!-- FeedBurner Namespace: Entry Level Tags -->
+    <feedburner:origLink>https://example.com/posts/original-article</feedburner:origLink>
+    <feedburner:origEnclosureLink>https://example.com/audio/original-episode.mp3</feedburner:origEnclosureLink>
+    <feedburner:awareness>https://feedburner.google.com/awareness/1.0/data/example/entry</feedburner:awareness>
   </entry>
 </feed>

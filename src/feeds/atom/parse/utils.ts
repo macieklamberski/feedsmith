@@ -21,6 +21,10 @@ import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/u
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import {
+  retrieveFeed as retrieveFeedBurnerFeed,
+  retrieveItem as retrieveFeedBurnerItem,
+} from '../../../namespaces/feedburner/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces/geo/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import {
@@ -517,6 +521,7 @@ export const parseEntry: ParseUtilPartial<AtomFeed.Entry<DateAny>> = (value, opt
       ? retrieveCreativeCommonsItemOrFeed(value)
       : undefined,
     wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
+    feedburner: namespaces?.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces?.has('trackback') ? retrieveTrackbackItem(value) : undefined,
@@ -560,6 +565,7 @@ export const parseFeed: ParseUtilPartial<AtomFeed.Feed<DateAny>> = (value, optio
       ? retrieveCreativeCommonsItemOrFeed(value)
       : undefined,
     opensearch: namespaces?.has('opensearch') ? retrieveOpenSearchFeed(value) : undefined,
+    feedburner: namespaces?.has('feedburner') ? retrieveFeedBurnerFeed(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
     admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackFeed(value) : undefined,
