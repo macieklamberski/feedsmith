@@ -85,8 +85,10 @@ export const retrieveFeed: ParseUtilPartial<GooglePlayNs.Feed> = (value) => {
       parseYesNoBoolean(retrieveText(value)),
     ),
     image: parseSingularOf(value['googleplay:image'], parseImage),
-    newFeedUrl: parseSingularOf(value['googleplay:new-feed-url'], (value) =>
-      parseString(retrieveText(value)),
+    // The schema at the namespace URI names the element newFeedUrl.
+    newFeedUrl: parseSingularOf(
+      value['googleplay:new-feed-url'] ?? value['googleplay:newfeedurl'],
+      (value) => parseString(retrieveText(value)),
     ),
     email: parseSingularOf(value['googleplay:email'], (value) => parseString(retrieveText(value))),
     categories: parseArrayOf(value['googleplay:category'], parseCategory),

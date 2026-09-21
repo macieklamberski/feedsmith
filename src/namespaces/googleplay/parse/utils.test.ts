@@ -322,6 +322,29 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
+  it('should parse newFeedUrl spelled as in the schema', () => {
+    const value = {
+      'googleplay:newfeedurl': 'https://example.com/new-podcast-feed',
+    }
+    const expected = {
+      newFeedUrl: 'https://example.com/new-podcast-feed',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should prefer new-feed-url when both spellings are present', () => {
+    const value = {
+      'googleplay:new-feed-url': 'https://example.com/new-podcast-feed',
+      'googleplay:newfeedurl': 'https://example.com/other-podcast-feed',
+    }
+    const expected = {
+      newFeedUrl: 'https://example.com/new-podcast-feed',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
   it('should parse categories as text content when no text attribute', () => {
     const value = {
       'googleplay:category': ['Technology', 'Education'],
