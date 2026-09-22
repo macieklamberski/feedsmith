@@ -7,6 +7,7 @@ export namespace PingbackNs {
   export type Item = {
     server?: string
     target?: string
+    abouts?: Array<string>
   }
 }
 // #endregion reference
