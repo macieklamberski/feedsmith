@@ -618,7 +618,8 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
   // Canonical prefix for the URI, or an empty string when the URI is a primary namespace, whose
   // elements go unprefixed. Undefined means the URI is not recognized.
   const resolveUri = (uri: string): string | undefined => {
-    const normalized = uri.trim().toLowerCase()
+    const trimmed = uri.trim().toLowerCase()
+    const normalized = trimmed.startsWith('//') ? `http:${trimmed}` : trimmed
 
     if (primaryUris.has(normalized)) {
       return ''

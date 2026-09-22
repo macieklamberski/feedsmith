@@ -3286,6 +3286,29 @@ describe('createNamespaceResolver', () => {
     expect(value).toEqual(expected)
   })
 
+  it('should canonicalize an alternate prefix bound to a scheme-relative URI', () => {
+    const parse = createParser()
+    const value = parse(
+      '<rss xmlns:c="//purl.org/rss/1.0/modules/content/"><c:encoded>Hello</c:encoded></rss>',
+    )
+    const expected = {
+      rss: { '@xmlns:c': '//purl.org/rss/1.0/modules/content/', 'content:encoded': 'Hello' },
+    }
+
+    expect(value).toEqual(expected)
+  })
+
+  it('should canonicalize an alternate prefix bound to a scheme-relative https-only URI', () => {
+    const uri = '//github.com/Podcastindex-org/podcast-namespace/blob/main/docs/1.0.md'
+    const parse = createParser()
+    const value = parse(`<rss xmlns:p="${uri}"><p:locked>yes</p:locked></rss>`)
+    const expected = {
+      rss: { '@xmlns:p': uri, 'podcast:locked': 'yes' },
+    }
+
+    expect(value).toEqual(expected)
+  })
+
   it('should strip the prefix of a primary namespace', () => {
     const parse = createParser(['atom'])
     const value = parse(
