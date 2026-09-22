@@ -249,6 +249,39 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate itunes:explicit as true or false', () => {
+    const value = {
+      title: 'Feed with iTunes namespace',
+      description: 'Test feed with Apple Podcasts namespace',
+      itunes: {
+        explicit: true,
+      },
+      items: [
+        {
+          title: 'Episode 1',
+          itunes: {
+            explicit: false,
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <channel>
+    <title>Feed with iTunes namespace</title>
+    <description>Test feed with Apple Podcasts namespace</description>
+    <itunes:explicit>true</itunes:explicit>
+    <item>
+      <title>Episode 1</title>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with podcast namespace', () => {
     const value = {
       title: 'Feed with podcast namespace',

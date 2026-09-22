@@ -174,7 +174,7 @@ describe('generateItem', () => {
       'itunes:image': {
         '@href': 'https://example.com/episode-image.jpg',
       },
-      'itunes:explicit': 'yes',
+      'itunes:explicit': true,
       'itunes:author': 'John Doe',
       'itunes:title': 'Episode Title',
       'itunes:episode': 5,
@@ -206,7 +206,7 @@ describe('generateItem', () => {
       explicit: false,
     }
     const expected = {
-      'itunes:explicit': 'no',
+      'itunes:explicit': false,
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -353,7 +353,7 @@ describe('generateFeed', () => {
           'itunes:category': [{ '@text': 'Tech News' }],
         },
       ],
-      'itunes:explicit': 'no',
+      'itunes:explicit': false,
       'itunes:author': 'John Doe',
       'itunes:title': 'My Podcast',
       'itunes:type': 'episodic',
@@ -389,7 +389,7 @@ describe('generateFeed', () => {
       explicit: true,
     }
     const expected = {
-      'itunes:explicit': 'yes',
+      'itunes:explicit': true,
     }
 
     expect(generateFeed(value)).toEqual(expected)

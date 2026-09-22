@@ -1621,7 +1621,7 @@ describe('generateFeed', () => {
             ],
           },
         ],
-        'itunes:explicit': 'no',
+        'itunes:explicit': false,
         'itunes:author': 'Podcast Author',
         'itunes:type': 'episodic',
         'itunes:owner': {

@@ -111,7 +111,7 @@
   <itunes:category text="Society &amp; Culture">
     <itunes:category text="Philosophy"/>
   </itunes:category>
-  <itunes:explicit>no</itunes:explicit>
+  <itunes:explicit>false</itunes:explicit>
   <itunes:author>John Doe</itunes:author>
   <itunes:title>iTunes Enhanced Podcast Title</itunes:title>
   <itunes:type>episodic</itunes:type>
@@ -394,7 +394,7 @@
     <!-- iTunes Namespace: Entry Level Tags -->
     <itunes:duration>1800</itunes:duration>
     <itunes:image href="https://example.com/images/episode-cover.jpg"/>
-    <itunes:explicit>no</itunes:explicit>
+    <itunes:explicit>false</itunes:explicit>
     <itunes:title>iTunes Enhanced Episode Title</itunes:title>
     <itunes:episode>1</itunes:episode>
     <itunes:season>1</itunes:season>
