@@ -33,6 +33,17 @@ describe('generateAccount', () => {
     expect(generateAccount(value)).toBeUndefined()
   })
 
+  it('should generate account with only value', () => {
+    const value = {
+      value: 'johndoe',
+    }
+    const expected = {
+      '#text': 'johndoe',
+    }
+
+    expect(generateAccount(value)).toEqual(expected)
+  })
+
   it('should generate account with only service', () => {
     const value = {
       service: 'twitter',
@@ -103,20 +114,34 @@ describe('generateArchive', () => {
     expect(generateArchive(value)).toEqual(expected)
   })
 
-  it('should return undefined when url is missing', () => {
+  it('should generate archive without url', () => {
     const value = {
       startDay: '2023-01-01',
       endDay: '2023-12-31',
     }
+    const expected = {
+      'source:startDay': '2023-01-01',
+      'source:endDay': '2023-12-31',
+    }
 
-    expect(generateArchive(value)).toBeUndefined()
+    expect(generateArchive(value)).toEqual(expected)
   })
 
-  it('should return undefined when startDay is missing', () => {
+  it('should generate archive without startDay', () => {
     const value = {
       url: 'http://example.com/archive',
       endDay: '2023-12-31',
     }
+    const expected = {
+      'source:url': 'http://example.com/archive',
+      'source:endDay': '2023-12-31',
+    }
+
+    expect(generateArchive(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
 
     expect(generateArchive(value)).toBeUndefined()
   })
@@ -147,10 +172,19 @@ describe('generateSubscriptionList', () => {
     expect(generateSubscriptionList(value)).toEqual(expected)
   })
 
-  it('should return undefined when url is missing', () => {
+  it('should generate subscription list without url', () => {
     const value = {
       value: 'follows',
     }
+    const expected = {
+      '#text': 'follows',
+    }
+
+    expect(generateSubscriptionList(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
 
     expect(generateSubscriptionList(value)).toBeUndefined()
   })
@@ -194,10 +228,19 @@ describe('generateInReplyTo', () => {
     expect(generateInReplyTo(value)).toEqual(expected)
   })
 
-  it('should return undefined when value is missing', () => {
+  it('should generate isPermaLink without value', () => {
     const value = {
       isPermaLink: false,
     }
+    const expected = {
+      '@isPermaLink': false,
+    }
+
+    expect(generateInReplyTo(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
 
     expect(generateInReplyTo(value)).toBeUndefined()
   })
