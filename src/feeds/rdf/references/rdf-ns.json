@@ -523,6 +523,15 @@
           "center": { "lat": 37.65, "lng": -122.35 },
           "radius": 500
         },
+        "where": {
+          "gml": {
+            "point": {
+              "id": "p1",
+              "srsName": "EPSG:4326",
+              "pos": { "lat": 37.65, "lng": -122.35 }
+            }
+          }
+        },
         "featureTypeTag": "region",
         "relationshipTag": "contains",
         "featureName": "San Francisco Bay Area",
@@ -1122,6 +1131,15 @@
     "circle": {
       "center": { "lat": 37.65, "lng": -122.35 },
       "radius": 500
+    },
+    "where": {
+      "gml": {
+        "point": {
+          "id": "p1",
+          "srsName": "EPSG:4326",
+          "pos": { "lat": 37.65, "lng": -122.35 }
+        }
+      }
     },
     "featureTypeTag": "region",
     "relationshipTag": "contains",

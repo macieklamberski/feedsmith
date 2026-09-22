@@ -2009,6 +2009,40 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate RSS feed with gml namespace properties', () => {
+    const value = {
+      title: 'Feed with gml namespace',
+      description: 'A feed with GML geometry',
+      georss: {
+        where: {
+          gml: {
+            point: {
+              pos: { lat: 45.256, lng: -71.92 },
+            },
+          },
+        },
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:georss': 'http://www.georss.org/georss',
+        '@xmlns:gml': 'http://www.opengis.net/gml',
+        channel: {
+          title: 'Feed with gml namespace',
+          description: 'A feed with GML geometry',
+          'georss:where': {
+            'gml:Point': {
+              'gml:pos': { '#text': '45.256 -71.92' },
+            },
+          },
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate RSS feed with xml namespace properties', () => {
     const value = {
       title: 'Feed with XML namespace',

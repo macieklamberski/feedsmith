@@ -2148,6 +2148,42 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with gml namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: { value: 'Feed with gml namespace' },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      georss: {
+        where: {
+          gml: {
+            envelope: {
+              lowerCorner: { lat: 42.943, lng: -71.032 },
+              upperCorner: { lat: 43.039, lng: -69.856 },
+            },
+          },
+        },
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:georss': 'http://www.georss.org/georss',
+        '@xmlns:gml': 'http://www.opengis.net/gml',
+        id: 'https://example.com/feed',
+        title: { '#text': 'Feed with gml namespace' },
+        updated: '2023-03-15T12:00:00.000Z',
+        'georss:where': {
+          'gml:Envelope': {
+            'gml:lowerCorner': { '#text': '42.943 -71.032' },
+            'gml:upperCorner': { '#text': '43.039 -69.856' },
+          },
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with xml namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',

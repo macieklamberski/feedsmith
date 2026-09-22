@@ -1217,6 +1217,39 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with gml namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: { value: 'Feed with gml namespace' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      georss: {
+        where: {
+          gml: {
+            envelope: {
+              lowerCorner: { lat: 42.943, lng: -71.032 },
+              upperCorner: { lat: 43.039, lng: -69.856 },
+            },
+          },
+        },
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:georss="http://www.georss.org/georss" xmlns:gml="http://www.opengis.net/gml">
+  <id>https://example.com/feed</id>
+  <title>Feed with gml namespace</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <georss:where>
+    <gml:Envelope>
+      <gml:lowerCorner>42.943 -71.032</gml:lowerCorner>
+      <gml:upperCorner>43.039 -69.856</gml:upperCorner>
+    </gml:Envelope>
+  </georss:where>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with xml namespace', () => {
     const value = {
       id: 'https://example.com/feed',

@@ -2405,6 +2405,56 @@ describe('parse', () => {
 
         expect(parse(value)).toEqual(expected)
       })
+
+      it('should parse GML geometry from georss:where (RW-NS33)', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <feed
+            xmlns="http://www.w3.org/2005/Atom"
+            xmlns:georss="http://www.georss.org/georss"
+            xmlns:gml="http://www.opengis.net/gml"
+          >
+            <id>urn:uuid:test</id>
+            <title>Test</title>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <entry>
+              <id>urn:uuid:place</id>
+              <title>Place</title>
+              <updated>2024-01-01T00:00:00Z</updated>
+              <georss:where>
+                <gml:Envelope>
+                  <gml:lowerCorner>42.943 -71.032</gml:lowerCorner>
+                  <gml:upperCorner>43.039 -69.856</gml:upperCorner>
+                </gml:Envelope>
+              </georss:where>
+            </entry>
+          </feed>
+        `
+        const expected = {
+          id: 'urn:uuid:test',
+          title: { value: 'Test' },
+          updated: '2024-01-01T00:00:00Z',
+          entries: [
+            {
+              id: 'urn:uuid:place',
+              title: { value: 'Place' },
+              updated: '2024-01-01T00:00:00Z',
+              georss: {
+                where: {
+                  gml: {
+                    envelope: {
+                      lowerCorner: { lat: 42.943, lng: -71.032 },
+                      upperCorner: { lat: 43.039, lng: -69.856 },
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
     })
 
     describe('missing and empty elements', () => {

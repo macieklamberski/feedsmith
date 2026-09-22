@@ -1,4 +1,5 @@
 import type { Requirable, Strict } from '../../../common/types.js'
+import type { GmlNs } from '../../gml/common/types.js'
 
 // #region reference
 export namespace GeoRssNs {
@@ -40,12 +41,17 @@ export namespace GeoRssNs {
     TStrict
   >
 
+  export type Where = {
+    gml?: GmlNs.Where
+  }
+
   export type ItemOrFeed<TStrict extends boolean = false> = {
     point?: Point<TStrict>
     line?: Line<TStrict>
     polygon?: Polygon<TStrict>
     box?: Box<TStrict>
     circle?: Circle<TStrict>
+    where?: Where
     featureTypeTag?: string
     relationshipTag?: string
     featureName?: string
