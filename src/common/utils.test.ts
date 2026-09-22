@@ -3286,6 +3286,18 @@ describe('createNamespaceResolver', () => {
     expect(value).toEqual(expected)
   })
 
+  it('should canonicalize an alternate prefix bound to a scheme-relative URI', () => {
+    const parse = createParser()
+    const value = parse(
+      '<rss xmlns:c="//purl.org/rss/1.0/modules/content/"><c:encoded>Hello</c:encoded></rss>',
+    )
+    const expected = {
+      rss: { '@xmlns:c': '//purl.org/rss/1.0/modules/content/', 'content:encoded': 'Hello' },
+    }
+
+    expect(value).toEqual(expected)
+  })
+
   it('should strip the prefix of a primary namespace', () => {
     const parse = createParser(['atom'])
     const value = parse(
