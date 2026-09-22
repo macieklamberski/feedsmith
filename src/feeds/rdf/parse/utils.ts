@@ -25,6 +25,7 @@ import {
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
 import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
+import { retrieveItem as retrievePingbackItem } from '../../../namespaces/pingback/parse/utils.js'
 import {
   retrieveFeed as retrievePrismFeed,
   retrieveItem as retrievePrismItem,
@@ -122,6 +123,7 @@ export const parseItem: ParseUtilPartial<RdfFeed.Item<DateAny>> = (value, option
     prism: namespaces.has('prism') ? retrievePrismItem(value, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
+    pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     xml: retrieveXmlItemOrFeed(value),

@@ -16,6 +16,7 @@
   xmlns:cc="http://creativecommons.org/ns#"
   xmlns:wfw="http://wellformedweb.org/CommentAPI/"
   xmlns:admin="http://webns.net/mvcb/"
+  xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
   xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
   xmlns:georss="http://www.georss.org/georss"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -472,6 +473,12 @@
     <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
     <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
+
+    <!-- Pingback Namespace: Item Level Tags -->
+    <pingback:server rdf:resource="https://example.com/xmlrpc.php"/>
+    <pingback:target rdf:resource="https://referenced-blog.com/article"/>
+    <pingback:about rdf:resource="https://blog1.com/posts/xml-basics"/>
+    <pingback:about rdf:resource="https://blog2.com/posts/namespaces"/>
 
     <!-- Trackback Namespace: Item Level Tags -->
     <trackback:ping rdf:resource="https://example.com/trackback/123"/>

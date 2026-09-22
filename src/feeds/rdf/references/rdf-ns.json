@@ -490,6 +490,11 @@
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
       },
+      "pingback": {
+        "server": "https://example.com/xmlrpc.php",
+        "target": "https://referenced-blog.com/article",
+        "abouts": ["https://blog1.com/posts/xml-basics", "https://blog2.com/posts/namespaces"]
+      },
       "trackback": {
         "ping": "https://example.com/trackback/123",
         "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
