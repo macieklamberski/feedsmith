@@ -9,6 +9,7 @@ import {
   generateYesNoBoolean,
   trimArray,
 } from '../../../common/utils.js'
+import { generateWhere } from '../../georss/generate/utils.js'
 import type { MediaNs } from '../common/types.js'
 
 export const generateRating: GenerateUtil<MediaNs.Rating> = (rating) => {
@@ -372,11 +373,10 @@ export const generateLocation: GenerateUtil<MediaNs.Location> = (location) => {
   }
 
   const value = {
-    ...generateTextOrCdataString(location.description),
+    '@description': generatePlainString(location.description),
     '@start': generatePlainString(location.start),
     '@end': generatePlainString(location.end),
-    '@lat': generateNumber(location.lat),
-    '@lng': generateNumber(location.lng),
+    'georss:where': generateWhere(location.georss?.where),
   }
 
   return trimObject(value)
