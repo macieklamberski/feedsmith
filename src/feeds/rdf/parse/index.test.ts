@@ -1499,6 +1499,56 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with geo namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with W3C Basic Geo namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with W3C Basic Geo namespace</description>
+          <geo:lat>37.7749</geo:lat>
+          <geo:long>-122.4194</geo:long>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Location item</title>
+          <link>http://example.com/item1</link>
+          <geo:lat>26.58</geo:lat>
+          <geo:long>-97.83</geo:long>
+          <geo:alt>10.5</geo:alt>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with W3C Basic Geo namespace',
+      link: 'http://example.com',
+      description: 'Test feed with W3C Basic Geo namespace',
+      geo: {
+        lat: 37.7749,
+        long: -122.4194,
+      },
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Location item',
+          link: 'http://example.com/item1',
+          geo: {
+            lat: 26.58,
+            long: -97.83,
+            alt: 10.5,
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with georss namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>

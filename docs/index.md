@@ -99,7 +99,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Source](/reference/namespaces/source) | `<source:*>` | RSS | ✅ | ✅ |
 | [blogChannel](/reference/namespaces/blogchannel) | `<blogChannel:*>` | RSS | ✅ | ✅ |
 | [YouTube](/reference/namespaces/yt) | `<yt:*>` | Atom | ✅ | ✅ |
-| [W3C Basic Geo](/reference/namespaces/geo) | `<geo:*>` | RSS, Atom | ✅ | ✅ |
+| [W3C Basic Geo](/reference/namespaces/geo) | `<geo:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [GeoRSS Simple](/reference/namespaces/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [RDF](/reference/namespaces/rdf) | `<rdf:*>` | RDF | ✅ | ✅ |
 
