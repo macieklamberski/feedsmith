@@ -4,6 +4,7 @@ import {
   parsePlatformDate,
   parsePlatformString,
   parseRating,
+  retrieveEmbargoDate,
   retrieveItemOrFeed,
 } from './utils.js'
 
@@ -1196,5 +1197,54 @@ describe('parseRating', () => {
 
   it('should return undefined for undefined', () => {
     expect(parseRating(undefined)).toBeUndefined()
+  })
+})
+
+describe('retrieveEmbargoDate', () => {
+  it('should parse embargoDate', () => {
+    const value = {
+      'prism:embargodate': '2023-06-01',
+    }
+
+    expect(retrieveEmbargoDate(value)).toBe('2023-06-01')
+  })
+
+  it('should parse releaseTime from earlier PRISM versions', () => {
+    const value = {
+      'prism:releasetime': '2023-06-01',
+    }
+
+    expect(retrieveEmbargoDate(value)).toBe('2023-06-01')
+  })
+
+  it('should prefer embargoDate when both are present', () => {
+    const value = {
+      'prism:embargodate': '2023-06-01',
+      'prism:releasetime': '2023-07-01',
+    }
+
+    expect(retrieveEmbargoDate(value)).toBe('2023-06-01')
+  })
+
+  it('should fall back to releaseTime when embargoDate is empty', () => {
+    const value = {
+      'prism:embargodate': '',
+      'prism:releasetime': '2023-06-01',
+    }
+
+    expect(retrieveEmbargoDate(value)).toBe('2023-06-01')
+  })
+
+  it('should apply custom parseDateFn', () => {
+    const value = {
+      'prism:releasetime': '2023-06-01T00:00:00Z',
+    }
+    const expected = new Date('2023-06-01T00:00:00Z')
+
+    expect(retrieveEmbargoDate(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+  })
+
+  it('should return undefined when neither is present', () => {
+    expect(retrieveEmbargoDate({})).toBeUndefined()
   })
 })

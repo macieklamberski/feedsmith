@@ -54,6 +54,21 @@ export const parseRating: ParseUtilPartial<PrismNs.Rating> = (value) => {
   return trimObject(rating)
 }
 
+// See: http://purl.org/rss/1.0/modules/prism/, which names releaseTime as the earlier embargoDate.
+export const retrieveEmbargoDate: ParseUtilPartial<DateAny, ParseMainOptions<DateAny>> = (
+  value,
+  options,
+) => {
+  return (
+    parseSingularOf(value['prism:embargodate'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ) ??
+    parseSingularOf(value['prism:releasetime'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    )
+  )
+}
+
 export const retrieveItemOrFeed: ParseUtilPartial<
   PrismNs.ItemOrFeed<DateAny>,
   ParseMainOptions<DateAny>
@@ -300,9 +315,7 @@ export const retrieveItemOrFeed: ParseUtilPartial<
     supplementStartingPage: parseSingularOf(value['prism:supplementstartingpage'], (value) =>
       parseString(retrieveText(value)),
     ),
-    embargoDate: parseSingularOf(value['prism:embargodate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
-    ),
+    embargoDate: retrieveEmbargoDate(value, options),
     copyright: parseSingularOf(value['prism:copyright'], (value) =>
       parseString(retrieveText(value)),
     ),

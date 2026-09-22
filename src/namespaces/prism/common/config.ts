@@ -118,6 +118,7 @@ export const stopNodes = [
   '*.prism:profession',
   '*.prism:sport',
   '*.prism:embargodate',
+  '*.prism:releasetime',
   '*.prism:copyright',
   '*.prism:expirationdate',
   '*.prism:rightsagent',
