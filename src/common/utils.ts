@@ -205,13 +205,23 @@ export const parseVerbatimString: ParseUtilExact<string> = (value) => {
   }
 }
 
+// A raw XML value still carries its CDATA markers, comments and entities, so a string is read
+// through parseString before it is coerced.
 export const parseNumber: ParseUtilExact<number> = (value) => {
+  if (typeof value === 'string') {
+    return coerceNumber(parseString(value))
+  }
+
   return coerceNumber(value)
 }
 
 const yesRegex = /^\p{White_Space}*yes\p{White_Space}*$/iu
 
 export const parseBoolean: ParseUtilExact<boolean> = (value) => {
+  if (typeof value === 'string') {
+    return coerceBoolean(parseString(value))
+  }
+
   return coerceBoolean(value)
 }
 
@@ -222,8 +232,14 @@ export const parseYesNoBoolean: ParseUtilExact<boolean> = (value) => {
     return boolean
   }
 
-  if (isNonEmptyString(value)) {
-    return yesRegex.test(value)
+  if (typeof value !== 'string') {
+    return
+  }
+
+  const string = parseString(value)
+
+  if (string) {
+    return yesRegex.test(string)
   }
 }
 

@@ -1109,6 +1109,18 @@ describe('parseNumber', () => {
     expect(parseNumber(value)).toBe(36.6)
   })
 
+  it('should handle numeric string wrapped in CDATA', () => {
+    const value = '<![CDATA[36.6]]>'
+
+    expect(parseNumber(value)).toBe(36.6)
+  })
+
+  it('should handle non-numeric string wrapped in CDATA', () => {
+    const value = '<![CDATA[javascript]]>'
+
+    expect(parseNumber(value)).toBeUndefined()
+  })
+
   it('should handle empty string', () => {
     const value = ''
 
@@ -1155,6 +1167,24 @@ describe('parseBoolean', () => {
 
   it('should return boolean false', () => {
     const value = false
+
+    expect(parseBoolean(value)).toBe(false)
+  })
+
+  it('should handle true string wrapped in CDATA', () => {
+    const value = '<![CDATA[true]]>'
+
+    expect(parseBoolean(value)).toBe(true)
+  })
+
+  it('should handle false string wrapped in CDATA', () => {
+    const value = '<![CDATA[false]]>'
+
+    expect(parseBoolean(value)).toBe(false)
+  })
+
+  it('should handle whitespace inside CDATA', () => {
+    const value = '<![CDATA[ false ]]>'
 
     expect(parseBoolean(value)).toBe(false)
   })
@@ -1247,6 +1277,18 @@ describe('parseYesNoBoolean', () => {
     const value = 'true'
 
     expect(parseYesNoBoolean(value)).toBe(true)
+  })
+
+  it('should handle yes string wrapped in CDATA', () => {
+    const value = '<![CDATA[yes]]>'
+
+    expect(parseYesNoBoolean(value)).toBe(true)
+  })
+
+  it('should handle no string wrapped in CDATA', () => {
+    const value = '<![CDATA[no]]>'
+
+    expect(parseYesNoBoolean(value)).toBe(false)
   })
 
   it('should handle false string', () => {
