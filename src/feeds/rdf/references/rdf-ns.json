@@ -492,7 +492,8 @@
       },
       "pingback": {
         "server": "https://example.com/xmlrpc.php",
-        "target": "https://referenced-blog.com/article"
+        "target": "https://referenced-blog.com/article",
+        "abouts": ["https://blog1.com/posts/xml-basics", "https://blog2.com/posts/namespaces"]
       },
       "trackback": {
         "ping": "https://example.com/trackback/123",

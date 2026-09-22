@@ -477,6 +477,8 @@
     <!-- Pingback Namespace: Item Level Tags -->
     <pingback:server rdf:resource="https://example.com/xmlrpc.php"/>
     <pingback:target rdf:resource="https://referenced-blog.com/article"/>
+    <pingback:about rdf:resource="https://blog1.com/posts/xml-basics"/>
+    <pingback:about rdf:resource="https://blog2.com/posts/namespaces"/>
 
     <!-- Trackback Namespace: Item Level Tags -->
     <trackback:ping rdf:resource="https://example.com/trackback/123"/>
