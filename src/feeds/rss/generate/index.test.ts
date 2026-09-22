@@ -187,6 +187,68 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with content namespace items', () => {
+    const value = {
+      title: 'Feed with content namespace',
+      description: 'Test feed with Content namespace',
+      content: {
+        items: [
+          {
+            format: 'http://www.w3.org/TR/html4/',
+            value: 'This is <em>very</em> cool.',
+          },
+        ],
+      },
+      items: [
+        {
+          title: 'First item',
+          content: {
+            items: [
+              {
+                about: 'http://example.com/item/content.svg',
+                format: 'http://www.w3.org/2000/svg',
+              },
+            ],
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <channel>
+    <title>Feed with content namespace</title>
+    <description>Test feed with Content namespace</description>
+    <content:items>
+      <rdf:Bag>
+        <rdf:li>
+          <content:item>
+            <content:format rdf:resource="http://www.w3.org/TR/html4/"/>
+            <rdf:value>
+              <![CDATA[This is <em>very</em> cool.]]>
+            </rdf:value>
+          </content:item>
+        </rdf:li>
+      </rdf:Bag>
+    </content:items>
+    <item>
+      <title>First item</title>
+      <content:items>
+        <rdf:Bag>
+          <rdf:li>
+            <content:item rdf:about="http://example.com/item/content.svg">
+              <content:format rdf:resource="http://www.w3.org/2000/svg"/>
+            </content:item>
+          </rdf:li>
+        </rdf:Bag>
+      </content:items>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with slash namespace', () => {
     const value = {
       title: 'Feed with slash namespace',

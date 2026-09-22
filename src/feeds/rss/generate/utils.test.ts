@@ -1418,6 +1418,46 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate content namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with content namespace',
+      description: 'Description',
+      content: {
+        items: [
+          {
+            format: 'http://www.w3.org/TR/html4/',
+            value: 'This is very cool.',
+          },
+        ],
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:content': 'http://purl.org/rss/1.0/modules/content/',
+        '@xmlns:rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        channel: {
+          title: 'Feed with content namespace',
+          description: 'Description',
+          'content:items': {
+            'rdf:Bag': {
+              'rdf:li': [
+                {
+                  'content:item': {
+                    'content:format': { '@rdf:resource': 'http://www.w3.org/TR/html4/' },
+                    'rdf:value': 'This is very cool.',
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate itunes namespace properties and attributes for feed', () => {
     const value = {
       title: 'Feed with iTunes namespace',

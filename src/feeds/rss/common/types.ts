@@ -190,6 +190,7 @@ export namespace RssFeed {
       dc?: DcNs.ItemOrFeed<TDate>
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       sy?: SyNs.Feed<TDate>
+      content?: ContentNs.Feed
       itunes?: ItunesNs.Feed<TStrict>
       podcast?: PodcastNs.Feed<TDate, TStrict>
       media?: MediaNs.ItemOrFeed<TStrict>

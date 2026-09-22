@@ -22,7 +22,10 @@ import {
 } from '../../../namespaces/atom/generate/utils.js'
 import { generateFeed as generateBlogChannelFeed } from '../../../namespaces/blogchannel/generate/utils.js'
 import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
-import { generateItem as generateContentItem } from '../../../namespaces/content/generate/utils.js'
+import {
+  generateFeed as generateContentFeed,
+  generateItem as generateContentItem,
+} from '../../../namespaces/content/generate/utils.js'
 import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDcTermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
@@ -287,6 +290,7 @@ export const generateFeed: GenerateUtil<RssFeed.Feed<DateLike>> = (feed) => {
     ...generateDcItemOrFeed(feed.dc),
     ...generateDcTermsItemOrFeed(feed.dcterms),
     ...generateSyFeed(feed.sy),
+    ...generateContentFeed(feed.content),
     ...generateItunesFeed(feed.itunes),
     ...generatePodcastFeed(feed.podcast),
     ...generateMediaItemOrFeed(feed.media),

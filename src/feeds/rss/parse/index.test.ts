@@ -234,6 +234,79 @@ describe('parse', () => {
     expect(throwing).toThrowError(locales.invalidFeedFormat)
   })
 
+  it('should parse content items with rdf prefixed bag', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rss
+        version="2.0"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:content="http://purl.org/rss/1.0/modules/content/"
+      >
+        <channel>
+          <title>RSS Feed</title>
+          <item>
+            <title>Item Title</title>
+            <content:items>
+              <rdf:Bag>
+                <rdf:li>
+                  <content:item>
+                    <content:format rdf:resource="http://www.w3.org/TR/html4/" />
+                  </content:item>
+                </rdf:li>
+              </rdf:Bag>
+            </content:items>
+          </item>
+        </channel>
+      </rss>
+    `
+    const expected = {
+      title: 'RSS Feed',
+      items: [
+        {
+          title: 'Item Title',
+          content: {
+            items: [{ format: 'http://www.w3.org/TR/html4/' }],
+          },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should not parse content items with unprefixed bag', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rss
+        version="2.0"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:content="http://purl.org/rss/1.0/modules/content/"
+      >
+        <channel>
+          <title>RSS Feed</title>
+          <item>
+            <title>Item Title</title>
+            <content:items>
+              <Bag>
+                <li>
+                  <content:item>
+                    <content:format rdf:resource="http://www.w3.org/TR/html4/" />
+                  </content:item>
+                </li>
+              </Bag>
+            </content:items>
+          </item>
+        </channel>
+      </rss>
+    `
+    const expected = {
+      title: 'RSS Feed',
+      items: [{ title: 'Item Title' }],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   describe('error types', () => {
     it('should throw DetectError for non-feed input', () => {
       const throwing = () => parse('not a feed')

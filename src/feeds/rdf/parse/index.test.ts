@@ -1193,6 +1193,89 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with content namespace items', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:content="http://purl.org/rss/1.0/modules/content/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with Content namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with Content namespace</description>
+          <content:items>
+            <rdf:Bag>
+              <rdf:li>
+                <content:item rdf:about="http://example.com/content.svg">
+                  <content:format rdf:resource="http://www.w3.org/2000/svg" />
+                </content:item>
+              </rdf:li>
+            </rdf:Bag>
+          </content:items>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>First item</title>
+          <link>http://example.com/item1</link>
+          <content:items>
+            <rdf:Bag>
+              <rdf:li>
+                <content:item>
+                  <content:format rdf:resource="http://www.w3.org/1999/xhtml" />
+                  <content:encoding rdf:resource="http://www.w3.org/TR/REC-xml#dt-wellformed" />
+                  <rdf:value rdf:parseType="Literal"><em>This is <strong>very</strong></em> cool.</rdf:value>
+                </content:item>
+              </rdf:li>
+              <rdf:li>
+                <content:item>
+                  <content:format rdf:resource="http://www.w3.org/TR/html4/" />
+                  <rdf:value><![CDATA[<em>This is very cool.</em>]]></rdf:value>
+                </content:item>
+              </rdf:li>
+            </rdf:Bag>
+          </content:items>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with Content namespace',
+      link: 'http://example.com',
+      description: 'Test feed with Content namespace',
+      rdf: { about: 'http://example.com' },
+      content: {
+        items: [
+          {
+            about: 'http://example.com/content.svg',
+            format: 'http://www.w3.org/2000/svg',
+          },
+        ],
+      },
+      items: [
+        {
+          title: 'First item',
+          link: 'http://example.com/item1',
+          content: {
+            items: [
+              {
+                format: 'http://www.w3.org/1999/xhtml',
+                encoding: 'http://www.w3.org/TR/REC-xml#dt-wellformed',
+                value: '<em>This is <strong>very</strong></em> cool.',
+              },
+              {
+                format: 'http://www.w3.org/TR/html4/',
+                value: '<em>This is very cool.</em>',
+              },
+            ],
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with wfw namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>

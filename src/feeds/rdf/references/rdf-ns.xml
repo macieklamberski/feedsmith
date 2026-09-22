@@ -115,6 +115,17 @@
     <sy:updatePeriod>hourly</sy:updatePeriod>
     <sy:updateFrequency>1</sy:updateFrequency>
 
+    <!-- Content Namespace: Channel Level Tags -->
+    <content:items>
+      <rdf:Bag>
+        <rdf:li>
+          <content:item rdf:about="https://example.com/content.svg">
+            <content:format rdf:resource="http://www.w3.org/2000/svg"/>
+          </content:item>
+        </rdf:li>
+      </rdf:Bag>
+    </content:items>
+
     <!-- Media Namespace: Item/Feed Level Tags -->
     <media:content url="https://example.com/videos/sample1.mp4" fileSize="12345678" type="video/mp4" medium="video" isDefault="true" expression="full" bitrate="1500" framerate="30" samplingrate="44.1" channels="2" duration="120" height="720" width="1280" lang="en">
       <media:title type="plain">Sample Video Title</media:title>
@@ -341,6 +352,23 @@
 
     <!-- Content Namespace: Item Level Tags -->
     <content:encoded>This is an example of content.</content:encoded>
+    <content:items>
+      <rdf:Bag>
+        <rdf:li>
+          <content:item>
+            <content:format rdf:resource="http://www.w3.org/1999/xhtml"/>
+            <content:encoding rdf:resource="http://www.w3.org/TR/REC-xml#dt-wellformed"/>
+            <rdf:value rdf:parseType="Literal"><em>This is <strong>very</strong></em> cool.</rdf:value>
+          </content:item>
+        </rdf:li>
+        <rdf:li>
+          <content:item rdf:about="https://example.com/content.html">
+            <content:format rdf:resource="http://www.w3.org/TR/html4/"/>
+            <rdf:value><![CDATA[<em>This is very cool.</em>]]></rdf:value>
+          </content:item>
+        </rdf:li>
+      </rdf:Bag>
+    </content:items>
 
     <!-- Slash Namespace: Item Level Tags -->
     <slash:section>articles</slash:section>
