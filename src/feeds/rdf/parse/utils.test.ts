@@ -4,6 +4,7 @@ import {
   parseImage,
   parseItem,
   parseTextInput,
+  retrieveCcFeed,
   retrieveFeed,
   retrieveImage,
   retrieveItems,
@@ -1218,6 +1219,48 @@ describe('retrieveItems', () => {
   })
 })
 
+describe('retrieveCcFeed', () => {
+  it('should merge channel cc elements with root cc:License elements', () => {
+    const value = {
+      channel: {
+        'cc:license': { '@resource': 'https://creativecommons.org/licenses/by/4.0/' },
+      },
+      'cc:license': {
+        '@about': 'https://creativecommons.org/licenses/by/4.0/',
+        'cc:requires': { '@resource': 'http://creativecommons.org/ns#Attribution' },
+      },
+    }
+    const expected = {
+      license: 'https://creativecommons.org/licenses/by/4.0/',
+      licenses: [
+        {
+          about: 'https://creativecommons.org/licenses/by/4.0/',
+          requires: ['http://creativecommons.org/ns#Attribution'],
+        },
+      ],
+    }
+
+    expect(retrieveCcFeed(value)).toEqual(expected)
+  })
+
+  it('should return undefined when no cc elements exist', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+      },
+    }
+
+    expect(retrieveCcFeed(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(retrieveCcFeed('string')).toBeUndefined()
+    expect(retrieveCcFeed(123)).toBeUndefined()
+    expect(retrieveCcFeed(null)).toBeUndefined()
+    expect(retrieveCcFeed(undefined)).toBeUndefined()
+  })
+})
+
 describe('parseFeed', () => {
   const expectedFull = {
     title: 'Feed Title',
@@ -1735,6 +1778,70 @@ describe('parseFeed', () => {
       ],
       cc: {
         license: 'https://creativecommons.org/licenses/by/4.0/',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle cc:License at root level', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+      },
+      'cc:license': [
+        {
+          '@about': 'https://creativecommons.org/licenses/by/4.0/',
+          'cc:permits': { '@resource': 'http://creativecommons.org/ns#Reproduction' },
+          'cc:requires': { '@resource': 'http://creativecommons.org/ns#Attribution' },
+        },
+        {
+          '@about': 'https://creativecommons.org/licenses/by-sa/4.0/',
+          'cc:requires': { '@resource': 'http://creativecommons.org/ns#Copyleft' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      cc: {
+        licenses: [
+          {
+            about: 'https://creativecommons.org/licenses/by/4.0/',
+            permits: ['http://creativecommons.org/ns#Reproduction'],
+            requires: ['http://creativecommons.org/ns#Attribution'],
+          },
+          {
+            about: 'https://creativecommons.org/licenses/by-sa/4.0/',
+            requires: ['http://creativecommons.org/ns#Copyleft'],
+          },
+        ],
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle cc elements on channel and cc:License at root level together', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'cc:license': { '@resource': 'https://creativecommons.org/licenses/by/4.0/' },
+      },
+      'cc:license': {
+        '@about': 'https://creativecommons.org/licenses/by/4.0/',
+        'cc:permits': { '@resource': 'http://creativecommons.org/ns#Reproduction' },
+      },
+    }
+    const expected = {
+      title: 'Example Feed',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+        licenses: [
+          {
+            about: 'https://creativecommons.org/licenses/by/4.0/',
+            permits: ['http://creativecommons.org/ns#Reproduction'],
+          },
+        ],
       },
     }
 

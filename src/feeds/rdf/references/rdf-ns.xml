@@ -491,4 +491,21 @@
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
   </item>
+
+  <!-- ccREL Namespace: Root Level Tags -->
+  <cc:License rdf:about="https://creativecommons.org/licenses/by/4.0/">
+    <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
+    <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
+    <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
+    <cc:requires rdf:resource="http://creativecommons.org/ns#Notice"/>
+    <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution"/>
+  </cc:License>
+  <cc:License rdf:about="https://creativecommons.org/licenses/by-sa/4.0/">
+    <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
+    <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
+    <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
+    <cc:requires rdf:resource="http://creativecommons.org/ns#Notice"/>
+    <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution"/>
+    <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike"/>
+  </cc:License>
 </rdf:RDF>

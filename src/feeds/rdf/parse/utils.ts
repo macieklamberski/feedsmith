@@ -14,7 +14,11 @@ import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
 } from '../../../namespaces/atom/parse/utils.js'
-import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
+import type { CcNs } from '../../../namespaces/cc/common/types.js'
+import {
+  parseLicense as parseCcLicense,
+  retrieveItemOrFeed as retrieveCc,
+} from '../../../namespaces/cc/parse/utils.js'
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
@@ -155,6 +159,20 @@ export const retrieveItems: ParseUtilPartial<Array<RdfFeed.Item<DateAny>>> = (va
   return parseArrayOf(value?.item, (value) => parseItem(value, options), options?.maxItems)
 }
 
+// The cc:License elements sit at the root, beside the channel, not inside it.
+export const retrieveCcFeed: ParseUtilPartial<CcNs.Feed> = (value) => {
+  if (!isPlainObject(value)) {
+    return
+  }
+
+  const cc = {
+    ...retrieveCc(parseSingular(value.channel as Unreliable)),
+    licenses: parseArrayOf(value['cc:license'], parseCcLicense),
+  }
+
+  return trimObject(cc)
+}
+
 export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, options) => {
   if (!isPlainObject(value)) {
     return
@@ -162,6 +180,7 @@ export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, option
 
   const channel = parseSingular(value.channel as Unreliable)
   const namespaces = detectNamespaces(channel)
+  const rootNamespaces = detectNamespaces(value)
   const feed = {
     title: parseSingularOf(channel?.title, (value) => parseString(retrieveText(value))),
     link: parseSingularOf(channel?.link, (value) => parseString(retrieveText(value))),
@@ -178,7 +197,7 @@ export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, option
     feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerFeed(channel) : undefined,
     opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(channel) : undefined,
     prism: namespaces.has('prism') ? retrievePrismFeed(channel, options) : undefined,
-    cc: namespaces.has('cc') ? retrieveCc(channel) : undefined,
+    cc: namespaces.has('cc') || rootNamespaces.has('cc') ? retrieveCcFeed(value) : undefined,
     admin: namespaces.has('admin') ? retrieveAdminFeed(channel) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
     xml: retrieveXmlItemOrFeed(value),
