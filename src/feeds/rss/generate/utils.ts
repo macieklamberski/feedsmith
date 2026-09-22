@@ -52,10 +52,7 @@ import {
   generateFeed as generatePodcastFeed,
   generateItem as generatePodcastItem,
 } from '../../../namespaces/podcast/generate/utils.js'
-import {
-  generateFeed as generatePrismFeed,
-  generateItem as generatePrismItem,
-} from '../../../namespaces/prism/generate/utils.js'
+import { generateItemOrFeed as generatePrismItemOrFeed } from '../../../namespaces/prism/generate/utils.js'
 import { generateItem as generatePscItem } from '../../../namespaces/psc/generate/utils.js'
 import {
   generateFeed as generateRawVoiceFeed,
@@ -128,7 +125,7 @@ export const generateCloud: GenerateUtil<RssFeed.Cloud> = (cloud) => {
   return trimObject(value)
 }
 
-export const generateImage: GenerateUtil<RssFeed.Image> = (image) => {
+export const generateImage: GenerateUtil<RssFeed.Image<DateLike>> = (image) => {
   if (!isPlainObject(image)) {
     return
   }
@@ -140,13 +137,14 @@ export const generateImage: GenerateUtil<RssFeed.Image> = (image) => {
     description: generateCdataString(image.description),
     height: generateNumber(image.height),
     width: generateNumber(image.width),
+    ...generatePrismItemOrFeed(image.prism),
     ...generateCc(image.cc),
   }
 
   return trimObject(value)
 }
 
-export const generateTextInput: GenerateUtil<RssFeed.TextInput> = (textInput) => {
+export const generateTextInput: GenerateUtil<RssFeed.TextInput<DateLike>> = (textInput) => {
   if (!isPlainObject(textInput)) {
     return
   }
@@ -156,6 +154,7 @@ export const generateTextInput: GenerateUtil<RssFeed.TextInput> = (textInput) =>
     description: generateCdataString(textInput.description),
     name: generateCdataString(textInput.name),
     link: generateCdataString(textInput.link),
+    ...generatePrismItemOrFeed(textInput.prism),
   }
 
   return trimObject(value)
@@ -245,7 +244,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
     ...generateRawVoiceItem(item.rawvoice),
     ...generateFeedBurnerItem(item.feedburner),
     ...generateArxivEntry(item.arxiv),
-    ...generatePrismItem(item.prism),
+    ...generatePrismItemOrFeed(item.prism),
     ...generateCc(item.cc),
     ...generateCreativeCommonsItemOrFeed(item.creativeCommons),
     ...generateThrItem(item.thr),
@@ -300,7 +299,7 @@ export const generateFeed: GenerateUtil<RssFeed.Feed<DateLike>> = (feed) => {
     ...generateFeedBurnerFeed(feed.feedburner),
     ...generateFeedPressFeed(feed.feedpress),
     ...generateOpenSearchFeed(feed.opensearch),
-    ...generatePrismFeed(feed.prism),
+    ...generatePrismItemOrFeed(feed.prism),
     ...generateCc(feed.cc),
     ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
     ...generateAdminFeed(feed.admin),

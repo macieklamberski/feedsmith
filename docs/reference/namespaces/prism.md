@@ -23,7 +23,7 @@ The PRISM (Publishing Requirements for Industry Standard Metadata) namespace pro
     <tr>
       <th>Available in</th>
       <td>
-        <a href="/reference/feeds/rss">RSS</a>, <a href="/reference/feeds/rdf">RDF</a>
+        <a href="/reference/feeds/rss">RSS</a>, <a href="/reference/feeds/atom">Atom</a>, <a href="/reference/feeds/rdf">RDF</a>
       </td>
     </tr>
     <tr>

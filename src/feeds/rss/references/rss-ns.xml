@@ -42,6 +42,10 @@
       <title>Example Image</title>
       <link>http://example.org</link>
 
+      <!-- PRISM Namespace: Image Level Tags -->
+      <prism:publicationName>Nature</prism:publicationName>
+      <prism:coverDate>2023-03-15</prism:coverDate>
+
       <!-- ccREL Namespace: Image Level Tags -->
       <cc:license>https://creativecommons.org/licenses/by-nd/4.0/</cc:license>
     </image>
@@ -353,7 +357,7 @@
     <prism:isbn>978-0-12-345678-9</prism:isbn>
     <prism:issueIdentifier>2023-03-15</prism:issueIdentifier>
     <prism:issueName>Spring Issue</prism:issueName>
-    <prism:issueTeaser>Special coverage of breakthrough discoveries</prism:issueTeaser>
+    <prism:issueTeaser platform="print">Special coverage of breakthrough discoveries</prism:issueTeaser>
     <prism:issueType>regular</prism:issueType>
     <prism:volume>615</prism:volume>
     <prism:number>7952</prism:number>
@@ -362,7 +366,7 @@
     <prism:aggregationType>journal</prism:aggregationType>
     <prism:coverDate>2023-03-15T00:00:00.000Z</prism:coverDate>
     <prism:coverDisplayDate>March 15, 2023</prism:coverDisplayDate>
-    <prism:publicationDate>2023-03-15T00:00:00.000Z</prism:publicationDate>
+    <prism:publicationDate platform="print">2023-03-15T00:00:00.000Z</prism:publicationDate>
     <prism:publicationDisplayDate>Spring 2023</prism:publicationDisplayDate>
     <prism:creationDate>2023-02-01T00:00:00.000Z</prism:creationDate>
     <prism:modificationDate>2023-03-10T00:00:00.000Z</prism:modificationDate>
@@ -375,7 +379,7 @@
     <prism:contentType>article</prism:contentType>
     <prism:alternateTitle>Nature Journal</prism:alternateTitle>
     <prism:subtitle>The International Weekly Journal of Science</prism:subtitle>
-    <prism:teaser>Leading scientific research and discoveries</prism:teaser>
+    <prism:teaser platform="web">Leading scientific research and discoveries</prism:teaser>
     <prism:keyword>science</prism:keyword>
     <prism:keyword>research</prism:keyword>
     <prism:seriesTitle>Nature Research Journals</prism:seriesTitle>
@@ -396,6 +400,8 @@
     <prism:subsection2>featured</prism:subsection2>
     <prism:subsection3>editors-picks</prism:subsection3>
     <prism:subsection4>trending</prism:subsection4>
+    <prism:startingPage>975</prism:startingPage>
+    <prism:endingPage>1211</prism:endingPage>
     <prism:corporateEntity>Springer Nature</prism:corporateEntity>
     <prism:distributor>Nature Publishing Group</prism:distributor>
     <prism:sellingAgency>Scientific Publishers Inc.</prism:sellingAgency>
@@ -410,9 +416,10 @@
     <prism:blogTitle>Nature News Blog</prism:blogTitle>
     <prism:blogURL>https://www.nature.com/news/blog</prism:blogURL>
     <prism:link>https://www.nature.com/nature</prism:link>
-    <prism:url>https://www.nature.com</prism:url>
+    <prism:url platform="web">https://www.nature.com</prism:url>
+    <prism:wordCount>52000</prism:wordCount>
     <prism:byteCount>1048576</prism:byteCount>
-    <prism:rating>A+</prism:rating>
+    <prism:rating ratingSystem="Editorial">A+</prism:rating>
     <prism:timePeriod>2023-Q1</prism:timePeriod>
     <prism:versionIdentifier>v2023.03</prism:versionIdentifier>
     <prism:ticker>SPRN</prism:ticker>
@@ -426,10 +433,30 @@
     <prism:object>Scientific Research</prism:object>
     <prism:profession>Scientist</prism:profession>
     <prism:sport>none</prism:sport>
+    <prism:hasAlternative>https://www.nature.com/nature/volumes/615/issues/7952/alternative</prism:hasAlternative>
+    <prism:hasCorrection>https://www.nature.com/nature/volumes/615/issues/7952/corrections</prism:hasCorrection>
+    <prism:hasTranslation>https://www.nature.com/nature/volumes/615/issues/7952/de</prism:hasTranslation>
+    <prism:isCorrectionOf>https://www.nature.com/nature/volumes/615/issues/7952/v1</prism:isCorrectionOf>
+    <prism:isTranslationOf>https://www.nature.com/nature/volumes/615/issues/7952/en</prism:isTranslationOf>
     <prism:embargoDate>2023-03-01T00:00:00.000Z</prism:embargoDate>
     <prism:copyright>© 2023 Springer Nature</prism:copyright>
     <prism:expirationDate>2025-03-15T00:00:00.000Z</prism:expirationDate>
     <prism:rightsAgent>Springer Nature Rights</prism:rightsAgent>
+    <prism:category>research-article</prism:category>
+    <prism:hasFormat>https://www.nature.com/articles/s41586-023-05842-x.pdf</prism:hasFormat>
+    <prism:hasPart>https://www.nature.com/articles/s41586-023-05842-x/figures/1</prism:hasPart>
+    <prism:hasPart>https://www.nature.com/articles/s41586-023-05842-x/figures/2</prism:hasPart>
+    <prism:hasPreviousVersion>https://www.nature.com/articles/s41586-023-05842-x/v1</prism:hasPreviousVersion>
+    <prism:isFormatOf>https://www.nature.com/articles/s41586-023-05842-x</prism:isFormatOf>
+    <prism:isPartOf>https://www.nature.com/nature/volumes/615/issues/7952</prism:isPartOf>
+    <prism:isReferencedBy>https://www.nature.com/articles/s41586-023-06000-2</prism:isReferencedBy>
+    <prism:isRequiredBy>https://www.nature.com/collections/cell-biology</prism:isRequiredBy>
+    <prism:isVersionOf>https://www.nature.com/articles/s41586-022-04000-0</prism:isVersionOf>
+    <prism:objectTitle>Confocal microscope</prism:objectTitle>
+    <prism:receptionDate>2023-03-16T00:00:00.000Z</prism:receptionDate>
+    <prism:references>https://doi.org/10.1038/nature12373</prism:references>
+    <prism:references>https://doi.org/10.1126/science.1225829</prism:references>
+    <prism:requires>https://www.nature.com/articles/s41586-023-05842-x/data</prism:requires>
 
     <!-- ccREL Namespace: Channel Level Tags -->
     <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
@@ -790,13 +817,22 @@
       <prism:publicationName>Nature</prism:publicationName>
       <prism:issn>0028-0836</prism:issn>
       <prism:eIssn>1476-4687</prism:eIssn>
+      <prism:isbn>978-0-12-345678-9</prism:isbn>
       <prism:issueIdentifier>2023-03-15</prism:issueIdentifier>
+      <prism:issueName>Spring Issue</prism:issueName>
+      <prism:issueTeaser>Special coverage of breakthrough discoveries</prism:issueTeaser>
+      <prism:issueType>regular</prism:issueType>
       <prism:doi>10.1038/s41586-023-05842-x</prism:doi>
       <prism:url>https://www.nature.com/articles/s41586-023-05842-x</prism:url>
       <prism:volume>615</prism:volume>
       <prism:number>7952</prism:number>
       <prism:edition>International</prism:edition>
+      <prism:aggregationType>journal</prism:aggregationType>
       <prism:section>Research</prism:section>
+      <prism:subsection1>highlights</prism:subsection1>
+      <prism:subsection2>featured</prism:subsection2>
+      <prism:subsection3>editors-picks</prism:subsection3>
+      <prism:subsection4>trending</prism:subsection4>
       <prism:startingPage>425</prism:startingPage>
       <prism:endingPage>432</prism:endingPage>
       <prism:pageRange>425-432</prism:pageRange>
@@ -810,6 +846,9 @@
       <prism:creationDate>2023-01-15T00:00:00.000Z</prism:creationDate>
       <prism:modificationDate>2023-03-10T00:00:00.000Z</prism:modificationDate>
       <prism:dateReceived>2023-01-01T00:00:00.000Z</prism:dateReceived>
+      <prism:onSaleDate>2023-03-01T00:00:00.000Z</prism:onSaleDate>
+      <prism:onSaleDay>wednesday</prism:onSaleDay>
+      <prism:offSaleDate>2023-04-01T00:00:00.000Z</prism:offSaleDate>
       <prism:killDate>2033-03-15T00:00:00.000Z</prism:killDate>
       <prism:copyrightYear>2023</prism:copyrightYear>
       <prism:contentType>research-article</prism:contentType>
@@ -819,13 +858,26 @@
       <prism:teaser>Groundbreaking research reveals new insights into cellular mechanisms</prism:teaser>
       <prism:keyword>molecular biology</prism:keyword>
       <prism:keyword>cellular mechanisms</prism:keyword>
+      <prism:seriesTitle>Nature Research Journals</prism:seriesTitle>
+      <prism:seriesNumber>1</prism:seriesNumber>
+      <prism:nationalCatalogNumber>NC12345</prism:nationalCatalogNumber>
+      <prism:productCode>NAT-2023-615</prism:productCode>
+      <prism:uspsNumber>123-456</prism:uspsNumber>
+      <prism:publishingFrequency>weekly</prism:publishingFrequency>
+      <prism:subchannel1>news</prism:subchannel1>
+      <prism:subchannel2>science</prism:subchannel2>
+      <prism:subchannel3>biology</prism:subchannel3>
+      <prism:subchannel4>molecular</prism:subchannel4>
       <prism:corporateEntity>Nature Research</prism:corporateEntity>
+      <prism:distributor>Nature Publishing Group</prism:distributor>
+      <prism:sellingAgency>Scientific Publishers Inc.</prism:sellingAgency>
       <prism:organization>Massachusetts Institute of Technology</prism:organization>
       <prism:person>Dr. Jane Smith</prism:person>
       <prism:person>Dr. John Doe</prism:person>
       <prism:platform>web</prism:platform>
       <prism:originPlatform platform="print"/>
       <prism:device>desktop</prism:device>
+      <prism:complianceProfile>two</prism:complianceProfile>
       <prism:academicField>Biology</prism:academicField>
       <prism:academicField>Biochemistry</prism:academicField>
       <prism:event>Annual Science Conference 2023</prism:event>
@@ -854,6 +906,21 @@
       <prism:copyright>© 2023 Springer Nature</prism:copyright>
       <prism:expirationDate>2028-03-15T00:00:00.000Z</prism:expirationDate>
       <prism:rightsAgent>Copyright Clearance Center</prism:rightsAgent>
+      <prism:category>research-article</prism:category>
+      <prism:hasFormat>https://www.nature.com/articles/s41586-023-05842-x.pdf</prism:hasFormat>
+      <prism:hasPart>https://www.nature.com/articles/s41586-023-05842-x/figures/1</prism:hasPart>
+      <prism:hasPart>https://www.nature.com/articles/s41586-023-05842-x/figures/2</prism:hasPart>
+      <prism:hasPreviousVersion>https://www.nature.com/articles/s41586-023-05842-x/v1</prism:hasPreviousVersion>
+      <prism:isFormatOf>https://www.nature.com/articles/s41586-023-05842-x</prism:isFormatOf>
+      <prism:isPartOf>https://www.nature.com/nature/volumes/615/issues/7952</prism:isPartOf>
+      <prism:isReferencedBy>https://www.nature.com/articles/s41586-023-06000-2</prism:isReferencedBy>
+      <prism:isRequiredBy>https://www.nature.com/collections/cell-biology</prism:isRequiredBy>
+      <prism:isVersionOf>https://www.nature.com/articles/s41586-022-04000-0</prism:isVersionOf>
+      <prism:objectTitle>Confocal microscope</prism:objectTitle>
+      <prism:receptionDate>2023-03-16T00:00:00.000Z</prism:receptionDate>
+      <prism:references>https://doi.org/10.1038/nature12373</prism:references>
+      <prism:references>https://doi.org/10.1126/science.1225829</prism:references>
+      <prism:requires>https://www.nature.com/articles/s41586-023-05842-x/data</prism:requires>
 
       <!-- ccREL Namespace: Item Level Tags -->
       <cc:license>https://creativecommons.org/licenses/by/4.0/</cc:license>

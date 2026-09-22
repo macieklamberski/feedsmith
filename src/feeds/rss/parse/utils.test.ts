@@ -964,6 +964,25 @@ describe('parseImage', () => {
     expect(parseImage(value)).toBeUndefined()
   })
 
+  it('should handle prism namespace', () => {
+    const value = {
+      url: { '#text': 'https://example.com/image.jpg' },
+      'prism:publicationname': { '#text': 'Nature' },
+      'prism:coverdate': { '#text': '2023-03-15' },
+      'prism:aggregationtype': { '#text': 'journal' },
+    }
+    const expected = {
+      url: 'https://example.com/image.jpg',
+      prism: {
+        publicationName: 'Nature',
+        coverDate: '2023-03-15',
+        aggregationType: 'journal',
+      },
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
   it('should handle cc namespace', () => {
     const value = {
       url: { '#text': 'https://example.com/image.jpg' },
@@ -1060,6 +1079,38 @@ describe('parseTextInput', () => {
     }
 
     expect(parseTextInput(value)).toEqual(expected)
+  })
+
+  it('should handle prism namespace', () => {
+    const value = {
+      title: { '#text': 'Search Title' },
+      'prism:publicationname': { '#text': 'Nature' },
+      'prism:coverdate': { '#text': '2023-03-15' },
+    }
+    const expected = {
+      title: 'Search Title',
+      prism: {
+        publicationName: 'Nature',
+        coverDate: '2023-03-15',
+      },
+    }
+
+    expect(parseTextInput(value)).toEqual(expected)
+  })
+
+  it('should apply custom parseDateFn to prism namespace dates', () => {
+    const value = {
+      title: { '#text': 'Search Title' },
+      'prism:coverdate': { '#text': '2023-03-15T12:00:00Z' },
+    }
+    const expected = {
+      title: 'Search Title',
+      prism: {
+        coverDate: new Date('2023-03-15T12:00:00Z'),
+      },
+    }
+
+    expect(parseTextInput(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
   })
 })
 

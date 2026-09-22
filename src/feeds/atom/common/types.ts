@@ -21,6 +21,7 @@ import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
 import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
+import type { PrismNs } from '../../../namespaces/prism/common/types.js'
 import type { PscNs } from '../../../namespaces/psc/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
 import type { SyNs } from '../../../namespaces/sy/common/types.js'
@@ -138,6 +139,7 @@ export namespace AtomFeed {
       googleplay?: GooglePlayNs.Item<TStrict>
       feedburner?: FeedBurnerNs.Item
       arxiv?: ArxivNs.Entry
+      prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
       creativeCommons?: CreativeCommonsNs.ItemOrFeed
       thr?: ThrNs.Item<TStrict>
@@ -176,6 +178,7 @@ export namespace AtomFeed {
       googleplay?: GooglePlayNs.Feed<TStrict>
       feedburner?: FeedBurnerNs.Feed<TStrict>
       opensearch?: OpenSearchNs.Feed<TStrict>
+      prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
       creativeCommons?: CreativeCommonsNs.ItemOrFeed
       admin?: AdminNs.Feed
