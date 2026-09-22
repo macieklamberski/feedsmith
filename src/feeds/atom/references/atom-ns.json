@@ -1206,7 +1206,9 @@
           "name": "John Doe",
           "email": "jdoe@example.com"
         },
-        "comment": "Removed due to copyright claim.",
+        "comment": {
+          "value": "Removed due to copyright claim."
+        },
         "links": [
           {
             "href": "https://example.com/entries/2"

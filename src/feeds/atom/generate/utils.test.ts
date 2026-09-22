@@ -2016,7 +2016,9 @@ describe('generateFeed', () => {
               name: 'John Doe',
               email: 'jdoe@example.com',
             },
-            comment: 'Removed due to copyright claim.',
+            comment: {
+              value: 'Removed due to copyright claim.',
+            },
             links: [
               {
                 href: 'https://example.com/entries/2',
@@ -2041,7 +2043,9 @@ describe('generateFeed', () => {
               name: 'John Doe',
               email: 'jdoe@example.com',
             },
-            'at:comment': 'Removed due to copyright claim.',
+            'at:comment': {
+              '#text': 'Removed due to copyright claim.',
+            },
             link: [
               {
                 '@href': 'https://example.com/entries/2',

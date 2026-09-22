@@ -10,7 +10,9 @@ describe('generateDeletedEntry', () => {
         name: 'John Doe',
         email: 'jdoe@example.com',
       },
-      comment: 'Removed due to copyright claim.',
+      comment: {
+        value: 'Removed due to copyright claim.',
+      },
       links: [
         {
           href: 'https://example.com/entries/2',
@@ -24,7 +26,9 @@ describe('generateDeletedEntry', () => {
         name: 'John Doe',
         email: 'jdoe@example.com',
       },
-      'at:comment': 'Removed due to copyright claim.',
+      'at:comment': {
+        '#text': 'Removed due to copyright claim.',
+      },
       link: [
         {
           '@href': 'https://example.com/entries/2',
@@ -72,6 +76,25 @@ describe('generateDeletedEntry', () => {
     expect(generateDeletedEntry(value)).toEqual(expected)
   })
 
+  it('should generate comment with type', () => {
+    const value = {
+      ref: 'tag:example.org,2005:/entries/2',
+      comment: {
+        value: 'Removed <b>spam</b>',
+        type: 'html',
+      },
+    }
+    const expected = {
+      '@ref': 'tag:example.org,2005:/entries/2',
+      'at:comment': {
+        '#cdata': 'Removed <b>spam</b>',
+        '@type': 'html',
+      },
+    }
+
+    expect(generateDeletedEntry(value)).toEqual(expected)
+  })
+
   it('should generate deleted-entry with only ref and when', () => {
     const value = {
       ref: 'tag:example.org,2005:/entries/2',
@@ -100,7 +123,9 @@ describe('generateFeed', () => {
         },
         {
           ref: 'tag:example.org,2005:/entries/3',
-          comment: 'Spam.',
+          comment: {
+            value: 'Spam.',
+          },
         },
       ],
     }
@@ -112,7 +137,9 @@ describe('generateFeed', () => {
         },
         {
           '@ref': 'tag:example.org,2005:/entries/3',
-          'at:comment': 'Spam.',
+          'at:comment': {
+            '#text': 'Spam.',
+          },
         },
       ],
     }

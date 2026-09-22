@@ -8,7 +8,7 @@ export namespace AtNs {
       ref: Requirable<string> // Required in spec.
       when: Requirable<TDate> // Required in spec.
       by?: AtomFeed.Person<TStrict>
-      comment?: string
+      comment?: AtomFeed.Text
       links?: Array<AtomFeed.Link<TDate, TStrict>>
       source?: AtomFeed.Source<TDate, TStrict>
     },

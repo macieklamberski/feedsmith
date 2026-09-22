@@ -76,6 +76,40 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate an xhtml at:comment as markup inside a div wrapper', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: { value: 'Feed' },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      at: {
+        deletedEntries: [
+          {
+            ref: 'tag:example.org,2005:/entries/2',
+            when: new Date('2005-11-29T12:11:12Z'),
+            comment: {
+              value: '<p>Removed <b>spam</b></p>',
+              type: 'xhtml',
+            },
+          },
+        ],
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:at="http://purl.org/atompub/tombstones/1.0">
+  <id>https://example.com/feed</id>
+  <title>Feed</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <at:deleted-entry ref="tag:example.org,2005:/entries/2" when="2005-11-29T12:11:12.000Z">
+    <at:comment type="xhtml">
+<div xmlns="http://www.w3.org/1999/xhtml"><p>Removed <b>spam</b></p></div>
+    </at:comment>
+  </at:deleted-entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should emit an xhtml value that is not well-formed XML as type html', () => {
     const value = {
       id: 'https://example.com/feed',
@@ -985,7 +1019,7 @@ describe('generate', () => {
               name: 'John Doe',
               email: 'jdoe@example.com',
             },
-            comment: 'Removed due to copyright claim.',
+            comment: { value: 'Removed due to copyright claim.' },
             links: [
               {
                 href: 'https://example.com/entries/2',

@@ -22,7 +22,9 @@ describe('parseDeletedEntry', () => {
         name: 'John Doe',
         email: 'jdoe@example.com',
       },
-      comment: 'Removed due to copyright claim.',
+      comment: {
+        value: 'Removed due to copyright claim.',
+      },
       links: [
         {
           href: 'https://example.com/entries/2',
@@ -98,6 +100,25 @@ describe('parseDeletedEntry', () => {
     expect(parseDeletedEntry(value)).toEqual(expected)
   })
 
+  it('should parse comment with type', () => {
+    const value = {
+      '@ref': 'tag:example.org,2005:/entries/2',
+      'at:comment': {
+        '#text': 'Removed &lt;b&gt;spam&lt;/b&gt;',
+        '@type': 'html',
+      },
+    }
+    const expected = {
+      ref: 'tag:example.org,2005:/entries/2',
+      comment: {
+        value: 'Removed <b>spam</b>',
+        type: 'html',
+      },
+    }
+
+    expect(parseDeletedEntry(value)).toEqual(expected)
+  })
+
   it('should handle HTML entities in comment', () => {
     const value = {
       '@ref': 'tag:example.org,2005:/entries/2',
@@ -105,7 +126,9 @@ describe('parseDeletedEntry', () => {
     }
     const expected = {
       ref: 'tag:example.org,2005:/entries/2',
-      comment: 'Removed & archived',
+      comment: {
+        value: 'Removed & archived',
+      },
     }
 
     expect(parseDeletedEntry(value)).toEqual(expected)
@@ -118,7 +141,9 @@ describe('parseDeletedEntry', () => {
     }
     const expected = {
       ref: 'tag:example.org,2005:/entries/2',
-      comment: 'Removed',
+      comment: {
+        value: 'Removed',
+      },
     }
 
     expect(parseDeletedEntry(value)).toEqual(expected)
@@ -179,7 +204,9 @@ describe('retrieveFeed', () => {
         },
         {
           ref: 'tag:example.org,2005:/entries/3',
-          comment: 'Spam.',
+          comment: {
+            value: 'Spam.',
+          },
         },
       ],
     }

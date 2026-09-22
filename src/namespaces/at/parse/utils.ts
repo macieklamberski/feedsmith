@@ -1,13 +1,7 @@
 import { isPlainObject, trimObject } from 'trousse'
 import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
-import {
-  parseArrayOf,
-  parseDate,
-  parseSingularOf,
-  parseString,
-  retrieveText,
-} from '../../../common/utils.js'
-import { parseLink, parsePerson, parseSource } from '../../../feeds/atom/parse/utils.js'
+import { parseArrayOf, parseDate, parseSingularOf, parseString } from '../../../common/utils.js'
+import { parseLink, parsePerson, parseSource, parseText } from '../../../feeds/atom/parse/utils.js'
 import type { AtNs } from '../common/types.js'
 
 export const parseDeletedEntry: ParseUtilPartial<
@@ -22,7 +16,7 @@ export const parseDeletedEntry: ParseUtilPartial<
     ref: parseString(value['@ref']),
     when: parseDate(value['@when'], options?.parseDateFn),
     by: parseSingularOf(value['at:by'], (value) => parsePerson(value, options)),
-    comment: parseSingularOf(value['at:comment'], (value) => parseString(retrieveText(value))),
+    comment: parseSingularOf(value['at:comment'], parseText),
     links: parseArrayOf(value.link, (value) => parseLink(value, options)),
     source: parseSingularOf(value.source, (value) => parseSource(value, options)),
   }
