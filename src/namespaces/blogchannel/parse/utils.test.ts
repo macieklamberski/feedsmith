@@ -74,6 +74,17 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
+  it('should parse feed with only changes', () => {
+    const value = {
+      'blogchannel:changes': 'http://example.com/changes.xml',
+    }
+    const expected = {
+      changes: 'http://example.com/changes.xml',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
   it('should handle HTML entities in text content', () => {
     const value = {
       'blogchannel:blogroll': { '#text': 'http://example.com/blogroll.opml?foo=1&amp;bar=2' },

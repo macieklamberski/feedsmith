@@ -464,6 +464,7 @@
     <blogChannel:blogRoll>http://example.com/blogroll.opml</blogChannel:blogRoll>
     <blogChannel:blink>http://recommended-site.com/</blogChannel:blink>
     <blogChannel:mySubscriptions>http://example.com/subscriptions.opml</blogChannel:mySubscriptions>
+    <blogChannel:changes>http://example.com/changes.xml</blogChannel:changes>
 
     <!-- W3C Basic Geo Namespace: Channel Level Tags -->
     <geo:lat>37.7749</geo:lat>
