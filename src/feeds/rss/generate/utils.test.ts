@@ -1705,6 +1705,41 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate RSS feed with arxiv namespace properties', () => {
+    const value = {
+      title: 'arXiv Listing',
+      description: 'A feed with arXiv properties',
+      items: [
+        {
+          title: 'Item',
+          arxiv: {
+            doi: '10.5802/jep.257',
+            announceType: 'new',
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:arxiv': 'http://arxiv.org/schemas/atom',
+        channel: {
+          title: 'arXiv Listing',
+          description: 'A feed with arXiv properties',
+          item: [
+            {
+              title: 'Item',
+              'arxiv:doi': '10.5802/jep.257',
+              'arxiv:announce_type': 'new',
+            },
+          ],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate RSS feed with opensearch namespace properties', () => {
     const value = {
       title: 'Search Results Feed',

@@ -3,18 +3,19 @@ import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateBoolean,
   generateCdataString,
+  generatePlainString,
   generateTextOrCdataString,
   trimArray,
 } from '../../../common/utils.js'
 import type { SourceNs } from '../common/types.js'
 
 export const generateAccount: GenerateUtil<SourceNs.Account> = (account) => {
-  if (!isPlainObject(account) || !isNonEmptyString(account.service)) {
+  if (!isPlainObject(account)) {
     return
   }
 
   const value = {
-    '@service': account.service,
+    '@service': generatePlainString(account.service),
     ...generateTextOrCdataString(account.value),
   }
 
@@ -32,17 +33,13 @@ export const generateLikes: GenerateUtil<SourceNs.Likes> = (likes) => {
 }
 
 export const generateArchive: GenerateUtil<SourceNs.Archive> = (archive) => {
-  if (
-    !isPlainObject(archive) ||
-    !isNonEmptyString(archive.url) ||
-    !isNonEmptyString(archive.startDay)
-  ) {
+  if (!isPlainObject(archive)) {
     return
   }
 
   const value = {
-    'source:url': archive.url,
-    'source:startDay': archive.startDay,
+    'source:url': generateCdataString(archive.url),
+    'source:startDay': generateCdataString(archive.startDay),
     'source:endDay': generateCdataString(archive.endDay),
     'source:filename': generateCdataString(archive.filename),
   }
@@ -53,12 +50,12 @@ export const generateArchive: GenerateUtil<SourceNs.Archive> = (archive) => {
 export const generateSubscriptionList: GenerateUtil<SourceNs.SubscriptionList> = (
   subscriptionList,
 ) => {
-  if (!isPlainObject(subscriptionList) || !isNonEmptyString(subscriptionList.url)) {
+  if (!isPlainObject(subscriptionList)) {
     return
   }
 
   const value = {
-    '@url': subscriptionList.url,
+    '@url': generatePlainString(subscriptionList.url),
     ...generateTextOrCdataString(subscriptionList.value),
   }
 
@@ -66,7 +63,7 @@ export const generateSubscriptionList: GenerateUtil<SourceNs.SubscriptionList> =
 }
 
 export const generateInReplyTo: GenerateUtil<SourceNs.InReplyTo> = (inReplyTo) => {
-  if (!isPlainObject(inReplyTo) || !isNonEmptyString(inReplyTo.value)) {
+  if (!isPlainObject(inReplyTo)) {
     return
   }
 
