@@ -10,4 +10,6 @@ export const stopNodes = [
   '*.arxiv:comment',
   '*.arxiv:journal_ref',
   '*.arxiv:doi',
+  '*.arxiv:announce_type',
+  '*.arxiv:journal_reference',
 ]
