@@ -586,6 +586,7 @@
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:block>false</itunes:block>
       <itunes:order>1</itunes:order>
+      <itunes:isClosedCaptioned>yes</itunes:isClosedCaptioned>
       <itunes:summary>This is a detailed summary of the episode content and key takeaways</itunes:summary>
       <itunes:subtitle>Episode subtitle with additional context</itunes:subtitle>
       <itunes:keywords>tutorial,example,technology,programming</itunes:keywords>
