@@ -1545,6 +1545,12 @@ describe('generateFeed', () => {
           id: 'service-123',
         },
       ],
+      socialInteracts: [
+        {
+          uri: 'https://example.com/comments',
+          protocol: 'activitypub',
+        },
+      ],
       txts: [
         {
           display: 'Copyright notice',
@@ -1624,6 +1630,12 @@ describe('generateFeed', () => {
         {
           '#text': 'yes',
           '@id': 'service-123',
+        },
+      ],
+      'podcast:socialInteract': [
+        {
+          '@uri': 'https://example.com/comments',
+          '@protocol': 'activitypub',
         },
       ],
       'podcast:txt': [

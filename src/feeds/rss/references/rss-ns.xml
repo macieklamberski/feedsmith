@@ -161,6 +161,7 @@
     </podcast:liveItem>
     <podcast:block>yes</podcast:block>
     <podcast:block id="test">no</podcast:block>
+    <podcast:socialInteract uri="https://example.com/@examplepodcast/100000000" protocol="activitypub" accountId="@examplepodcast@example.com" accountUrl="https://example.com/@examplepodcast" priority="1"/>
     <podcast:txt purpose="info">Additional text information about the podcast</podcast:txt>
     <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-a6b28d128cb9" feedUrl="https://guest-podcast.example/feed.xml" itemGuid="episode-guid-here" title="Guest Podcast Episode"/>
     <podcast:podroll>
