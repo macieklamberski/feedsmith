@@ -251,7 +251,7 @@
   <opensearch:totalResults>1000</opensearch:totalResults>
   <opensearch:startIndex>0</opensearch:startIndex>
   <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
-  <opensearch:Query role="request" searchTerms="quantum computing" startIndex="0" count="10"/>
+  <opensearch:Query role="request" title="Search results for quantum computing" totalResults="1000" searchTerms="quantum computing" startIndex="0" count="10"/>
 
   <!-- ccREL Namespace: Feed Level Tags -->
   <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
