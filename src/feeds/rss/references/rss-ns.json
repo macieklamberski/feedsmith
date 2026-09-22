@@ -751,7 +751,14 @@
         "awareness": "https://feedburner.google.com/awareness/1.0/data/examplepodcast/episode"
       },
       "arxiv": {
-        "doi": "10.5802/jep.257",
+        "comment": "23 pages, 8 figures and 4 tables",
+        "journalRef": "Eur.Phys.J. C31 (2003) 17-29",
+        "doi": "10.1529/biophysj.104.047340",
+        "primaryCategory": {
+          "term": "hep-ex",
+          "scheme": "http://arxiv.org/schemas/atom",
+          "label": "High Energy Physics - Experiment"
+        },
         "announceType": "replace-cross",
         "journalReference": "Journal de l'Ecole polytechnique - Mathematiques, Tome 11 (2024), pp. 431-472"
       },
