@@ -11,6 +11,19 @@ import {
 } from '../../../common/utils.js'
 import type { PrismNs } from '../common/types.js'
 
+// See: https://www.w3.org/submissions/2020/SUBM-prism-20200910/prism-basic.html.
+export const parseOriginPlatform: ParseUtilPartial<string> = (value) => {
+  if (isPlainObject(value)) {
+    const platform = parseString(value['@platform'])
+
+    if (platform) {
+      return platform
+    }
+  }
+
+  return retrieveRdfResourceOrText(value, parseString)
+}
+
 export const retrieveFeed: ParseUtilPartial<PrismNs.Feed<DateAny>, ParseMainOptions<DateAny>> = (
   value,
   options,
@@ -153,9 +166,7 @@ export const retrieveFeed: ParseUtilPartial<PrismNs.Feed<DateAny>, ParseMainOpti
       retrieveRdfResourceOrText(value, parseString),
     ),
     platforms: parseArrayOf(value['prism:platform'], (value) => parseString(retrieveText(value))),
-    originPlatforms: parseArrayOf(value['prism:originplatform'], (value) =>
-      parseString(retrieveText(value)),
-    ),
+    originPlatforms: parseArrayOf(value['prism:originplatform'], parseOriginPlatform),
     device: parseSingularOf(value['prism:device'], (value) => parseString(retrieveText(value))),
     complianceProfile: parseSingularOf(value['prism:complianceprofile'], (value) =>
       parseString(retrieveText(value)),
@@ -226,6 +237,9 @@ export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOpti
     ),
     issn: parseSingularOf(value['prism:issn'], (value) => parseString(retrieveText(value))),
     eIssn: parseSingularOf(value['prism:eissn'], (value) => parseString(retrieveText(value))),
+    issueIdentifier: parseSingularOf(value['prism:issueidentifier'], (value) =>
+      parseString(retrieveText(value)),
+    ),
     doi: parseSingularOf(value['prism:doi'], (value) => parseString(retrieveText(value))),
     urls: parseArrayOf(value['prism:url'], (value) => parseString(retrieveText(value))),
     volume: parseSingularOf(value['prism:volume'], (value) => parseString(retrieveText(value))),
@@ -297,6 +311,7 @@ export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOpti
       retrieveRdfResourceOrText(value, parseString),
     ),
     platforms: parseArrayOf(value['prism:platform'], (value) => parseString(retrieveText(value))),
+    originPlatforms: parseArrayOf(value['prism:originplatform'], parseOriginPlatform),
     device: parseSingularOf(value['prism:device'], (value) => parseString(retrieveText(value))),
     academicFields: parseArrayOf(value['prism:academicfield'], (value) =>
       parseString(retrieveText(value)),

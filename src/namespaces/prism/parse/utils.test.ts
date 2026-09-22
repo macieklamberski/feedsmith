@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { retrieveFeed, retrieveItem } from './utils.js'
+import { parseOriginPlatform, retrieveFeed, retrieveItem } from './utils.js'
 
 describe('retrieveFeed', () => {
   it('should parse complete feed object with core properties', () => {
@@ -169,6 +169,17 @@ describe('retrieveFeed', () => {
       device: 'tablet',
       complianceProfile: 'PRISM 3.0',
       sellingAgencies: ['Agency1'],
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with originPlatform in platform attribute', () => {
+    const value = {
+      'prism:originplatform': [{ '@platform': 'web' }, { '@platform': 'print' }],
+    }
+    const expected = {
+      originPlatforms: ['web', 'print'],
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -607,6 +618,17 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toEqual(expected)
   })
 
+  it('should parse item with issue identifier', () => {
+    const value = {
+      'prism:issueidentifier': '2023-03-15',
+    }
+    const expected = {
+      issueIdentifier: '2023-03-15',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
   it('should parse item with cover date fields', () => {
     const value = {
       'prism:coverdate': '2023-03-15',
@@ -681,6 +703,28 @@ describe('retrieveItem', () => {
     const expected = {
       platforms: ['desktop', 'mobile', 'tablet'],
       device: 'smartphone',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse item with originPlatform fields', () => {
+    const value = {
+      'prism:originplatform': ['print', 'web'],
+    }
+    const expected = {
+      originPlatforms: ['print', 'web'],
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse item with originPlatform in platform attribute', () => {
+    const value = {
+      'prism:originplatform': [{ '@platform': 'print' }, { '@platform': 'web' }],
+    }
+    const expected = {
+      originPlatforms: ['print', 'web'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -792,5 +836,63 @@ describe('retrieveItem', () => {
     // Pass options.parseDateFn that converts date strings into Date instances.
     // Expected: publicationDates, creationDate, modificationDate and the other date fields
     // equal the values returned by parseDateFn instead of the raw strings.
+  })
+})
+
+describe('parseOriginPlatform', () => {
+  it('should parse platform attribute', () => {
+    const value = { '@platform': 'web' }
+
+    expect(parseOriginPlatform(value)).toBe('web')
+  })
+
+  it('should parse rdf:resource attribute', () => {
+    const value = { '@rdf:resource': 'platform.xml#web' }
+
+    expect(parseOriginPlatform(value)).toBe('platform.xml#web')
+  })
+
+  it('should parse text content', () => {
+    const value = 'web'
+
+    expect(parseOriginPlatform(value)).toBe('web')
+  })
+
+  it('should parse #text wrapper', () => {
+    const value = { '#text': 'web' }
+
+    expect(parseOriginPlatform(value)).toBe('web')
+  })
+
+  it('should prefer platform attribute over text content', () => {
+    const value = {
+      '@platform': 'web',
+      '#text': 'print',
+    }
+
+    expect(parseOriginPlatform(value)).toBe('web')
+  })
+
+  it('should fall back to text content when platform attribute is empty', () => {
+    const value = {
+      '@platform': '',
+      '#text': 'print',
+    }
+
+    expect(parseOriginPlatform(value)).toBe('print')
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(parseOriginPlatform(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty string', () => {
+    expect(parseOriginPlatform('')).toBeUndefined()
+  })
+
+  it('should return undefined for undefined', () => {
+    expect(parseOriginPlatform(undefined)).toBeUndefined()
   })
 })

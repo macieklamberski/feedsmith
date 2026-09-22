@@ -97,10 +97,19 @@ describe('generateSandbox', () => {
     expect(generateSandbox(value)).toEqual(expected)
   })
 
-  it.todo('should return undefined for empty object', () => {
-    // generateSandbox({}) currently returns { '@enabled': undefined } because the generator
-    // skips trimObject, unlike every sibling generator in this file. Expected: undefined for
-    // an empty object. Pin this once the generator trims its value.
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(generateSandbox(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-boolean enabled', () => {
+    const value = {
+      enabled: 'true',
+    }
+
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateSandbox(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
@@ -164,6 +173,14 @@ describe('generateFeedAccess', () => {
 
   it('should return undefined for empty object', () => {
     const value = {}
+
+    expect(generateFeedAccess(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty sandbox', () => {
+    const value = {
+      sandbox: {},
+    }
 
     expect(generateFeedAccess(value)).toBeUndefined()
   })

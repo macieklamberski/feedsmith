@@ -158,11 +158,21 @@ describe('parseExplicit', () => {
     expect(parseExplicit(undefined)).toBeUndefined()
   })
 
-  it.todo('should parse yes from #text property', () => {
-    // parseExplicit({ '#text': 'yes' }) currently returns undefined because the yes/no branch
-    // passes the raw object to parseYesNoBoolean instead of the retrieved text, while the clean
-    // branch reads the retrieved text.
-    // Expected: true.
+  it('should parse yes from #text property', () => {
+    const value = {
+      '#text': 'yes',
+    }
+
+    expect(parseExplicit(value)).toBe(true)
+  })
+
+  it('should parse yes from element with attributes', () => {
+    const value = {
+      '#text': 'yes',
+      '@lang': 'en',
+    }
+
+    expect(parseExplicit(value)).toBe(true)
   })
 
   it.todo('should handle non-string inputs without throwing', () => {
@@ -353,6 +363,7 @@ describe('retrieveFeed', () => {
       'googleplay:image': { '@href': 'https://example.com/podcast.jpg' },
       'googleplay:new-feed-url': 'https://example.com/new-podcast-feed',
       'googleplay:email': 'contact@example.com',
+      'googleplay:owner': 'owner@example.com',
       'googleplay:category': [{ '@text': 'Technology' }, { '@text': 'Education' }],
     }
     const expected = {
@@ -363,6 +374,7 @@ describe('retrieveFeed', () => {
       image: { href: 'https://example.com/podcast.jpg' },
       newFeedUrl: 'https://example.com/new-podcast-feed',
       email: 'contact@example.com',
+      owner: 'owner@example.com',
       categories: ['Technology', 'Education'],
     }
 
@@ -375,6 +387,17 @@ describe('retrieveFeed', () => {
     }
     const expected = {
       newFeedUrl: 'https://example.com/new-podcast-feed',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse owner', () => {
+    const value = {
+      'googleplay:owner': 'owner@example.com',
+    }
+    const expected: GooglePlayNs.Feed = {
+      owner: 'owner@example.com',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
