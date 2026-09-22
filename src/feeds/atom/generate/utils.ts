@@ -279,7 +279,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
     [key('link')]: trimArray(entry.links, (link) => generateLink(link, options)),
     [key('published')]: generateRfc3339Date(entry.published),
     [key('rights')]: generateText(entry.rights),
-    [key('source')]: generateSource(entry.source),
+    [key('source')]: generateSource(entry.source, options),
     [key('summary')]: generateText(entry.summary),
     [key('title')]: generateText(entry.title),
     [key('updated')]: generateRfc3339Date(entry.updated),
