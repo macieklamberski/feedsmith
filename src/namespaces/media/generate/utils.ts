@@ -1,12 +1,12 @@
 import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import {
+  generateBoolean,
   generateCdataString,
   generateCsvOf,
   generateNumber,
   generatePlainString,
   generateTextOrCdataString,
-  generateYesNoBoolean,
   trimArray,
 } from '../../../common/utils.js'
 import type { MediaNs } from '../common/types.js'
@@ -428,7 +428,7 @@ export const generateContent: GenerateUtil<MediaNs.Content> = (content) => {
     '@fileSize': generateNumber(content.fileSize),
     '@type': generatePlainString(content.type),
     '@medium': generatePlainString(content.medium),
-    '@isDefault': generateYesNoBoolean(content.isDefault),
+    '@isDefault': generateBoolean(content.isDefault),
     '@expression': generatePlainString(content.expression),
     '@bitrate': generateNumber(content.bitrate),
     '@framerate': generateNumber(content.framerate),
