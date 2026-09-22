@@ -763,6 +763,11 @@
       <feedburner:origEnclosureLink>https://example.com/audio/original-episode.mp3</feedburner:origEnclosureLink>
       <feedburner:awareness>https://feedburner.google.com/awareness/1.0/data/examplepodcast/episode</feedburner:awareness>
 
+      <!-- arXiv Namespace: Item Level Tags -->
+      <arxiv:DOI>10.5802/jep.257</arxiv:DOI>
+      <arxiv:announce_type>replace-cross</arxiv:announce_type>
+      <arxiv:journal_reference>Journal de l'Ecole polytechnique - Mathematiques, Tome 11 (2024), pp. 431-472</arxiv:journal_reference>
+
       <!-- PRISM Namespace: Item Level Tags -->
       <prism:publicationName>Nature</prism:publicationName>
       <prism:issn>0028-0836</prism:issn>

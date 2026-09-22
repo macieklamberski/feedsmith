@@ -750,6 +750,11 @@
         "origEnclosureLink": "https://example.com/audio/original-episode.mp3",
         "awareness": "https://feedburner.google.com/awareness/1.0/data/examplepodcast/episode"
       },
+      "arxiv": {
+        "doi": "10.5802/jep.257",
+        "announceType": "replace-cross",
+        "journalReference": "Journal de l'Ecole polytechnique - Mathematiques, Tome 11 (2024), pp. 431-472"
+      },
       "prism": {
         "publicationName": "Nature",
         "issn": "0028-0836",
