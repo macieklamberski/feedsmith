@@ -99,15 +99,18 @@ const xhtmlDivParser = new XMLParser({
   commentPropName: '#comment',
 })
 
-export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
-  if (!isNonEmptyString(value)) {
-    return value
-  }
+type XhtmlDiv = {
+  inner?: string
+  xml?: XmlNs.ItemOrFeed
+}
 
+// The wrapper is excluded from the content (RFC 4287 §3.1.1.3), so the xml:base and xml:lang
+// declared on it are returned alongside the inner markup.
+const locateXhtmlDiv = (value: string): XhtmlDiv | undefined => {
   const match = value.match(xhtmlDivStartRegex)
 
   if (!match) {
-    return value
+    return
   }
 
   let children: Unreliable
@@ -116,19 +119,19 @@ export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
     const parsed = xhtmlDivParser.parse(`<x-wrap>${value}</x-wrap>`)
 
     if (parsed.length !== 1 || !Array.isArray(parsed[0]['x-wrap'])) {
-      return value
+      return
     }
 
     children = parsed[0]['x-wrap']
   } catch {
-    return value
+    return
   }
 
-  const divTexts: Array<string> = []
+  const divs: Array<Unreliable> = []
 
   for (const child of children) {
     if (Array.isArray(child.div)) {
-      divTexts.push(child.div[0]?.['#text'] ?? '')
+      divs.push(child)
       continue
     }
 
@@ -136,69 +139,55 @@ export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
       continue
     }
 
-    return value
+    return
   }
 
-  if (divTexts.length !== 1) {
-    return value
+  if (divs.length !== 1) {
+    return
   }
 
-  const inner = divTexts[0]
+  const div = divs[0]
+  const attributes = div[':@']
+  const xml = {
+    base: parseString(attributes?.['@base']),
+    lang: parseString(attributes?.['@lang']),
+  }
+  const inner: string = div.div[0]?.['#text'] ?? ''
+  const prefix = match[1]
 
   // A self-closing or empty wrapper is a construct with no content.
   if (inner === '') {
-    return
+    return { xml: trimObject(xml) }
   }
 
-  const prefix = match[1]
-
-  if (prefix) {
-    // A prefix may contain dots, which are regex metacharacters when interpolated.
-    const escapedPrefix = prefix.replace(/\./g, '\\.')
-
-    return inner.replace(new RegExp(`(</?)${escapedPrefix}:`, 'g'), '$1')
+  if (!prefix) {
+    return { inner, xml: trimObject(xml) }
   }
 
-  return inner
+  // A prefix may contain dots, which are regex metacharacters when interpolated.
+  const escapedPrefix = prefix.replace(/\./g, '\\.')
+  const prefixRegex = new RegExp(`(</?)${escapedPrefix}:`, 'g')
+
+  return { inner: inner.replace(prefixRegex, '$1'), xml: trimObject(xml) }
 }
 
-// The wrapper div is excluded from the content (RFC 4287 §3.1.1.3), so xml:base and xml:lang
-// declared on it would vanish with it. They are read here through the same mini-parse that located
-// the wrapper, only when it was actually stripped: a value kept verbatim still carries its div,
-// declarations included. Atom 0.3 spelled the construct type as `application/xhtml+xml`.
+export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
+  if (!isNonEmptyString(value)) {
+    return value
+  }
+
+  const div = locateXhtmlDiv(value)
+
+  if (!div) {
+    return value
+  }
+
+  return div.inner
+}
+
+// Atom 0.3 spelled the construct type as `application/xhtml+xml`.
 const isXhtmlType = (type: string | undefined): boolean => {
   return type === 'xhtml' || type === 'application/xhtml+xml'
-}
-
-export const retrieveXhtmlDivXml = (
-  value: Unreliable,
-  type: string | undefined,
-): XmlNs.ItemOrFeed | undefined => {
-  if (!isXhtmlType(type)) {
-    return
-  }
-
-  const escaped = escapeCdataSections(retrieveText(value))
-
-  if (!isNonEmptyString(escaped) || unwrapXhtmlDiv(escaped) === escaped) {
-    return
-  }
-
-  // The wrapper was stripped, so this identical parse is known to succeed and to hold exactly one
-  // div child; no guards are needed on the way to it.
-  const children = xhtmlDivParser.parse(`<x-wrap>${escaped}</x-wrap>`)[0]['x-wrap']
-
-  for (const child of children) {
-    if (Array.isArray(child.div)) {
-      const attributes = child[':@']
-      const xml = {
-        base: parseString(attributes?.['@base']),
-        lang: parseString(attributes?.['@lang']),
-      }
-
-      return trimObject(xml)
-    }
-  }
 }
 
 // The div is the inner scope, so its lang replaces the element's, and its base resolves against the
@@ -251,30 +240,44 @@ export const escapeCdataSections = (value: Unreliable): Unreliable => {
 // rule: 1 of 554 wrapper-less constructs in the corpus sample carries escaped markup, and for the
 // rest both paths produce the same string. Atom 0.3 spelled the same construct as
 // `type="application/xhtml+xml"`, so that type gets the identical treatment.
-export const parseTypedText = (value: Unreliable, type: string | undefined): string | undefined => {
+type TypedConstruct = {
+  value?: string
+  xml?: XmlNs.ItemOrFeed
+}
+
+const parseTypedConstruct = (value: Unreliable, type: string | undefined): TypedConstruct => {
   const text = retrieveText(value)
 
   if (!isXhtmlType(type)) {
-    return parseString(text)
+    return { value: parseString(text) }
   }
 
   // CDATA is escaped before the wrapper is stripped: its content is literal text, so a `</xhtml:p>`
   // or `<div>` inside it must not be seen as markup by the prefix strip.
   const escaped = escapeCdataSections(text)
-  const unwrapped = unwrapXhtmlDiv(escaped)
 
-  if (unwrapped !== escaped) {
-    return parseVerbatimString(unwrapped)
+  if (!isNonEmptyString(escaped)) {
+    return { value: parseString(text) }
+  }
+
+  const div = locateXhtmlDiv(escaped)
+
+  if (div) {
+    return { value: parseVerbatimString(div.inner), xml: div.xml }
   }
 
   // A value that opens with a div is markup even when the wrapper cannot be stripped (sibling divs,
   // an unterminated wrapper, text around it); only wrapper-less values keep the decoding path for
   // feeds that label escaped HTML as xhtml.
-  if (isNonEmptyString(escaped) && xhtmlDivStartRegex.test(escaped)) {
-    return parseVerbatimString(escaped)
+  if (xhtmlDivStartRegex.test(escaped)) {
+    return { value: parseVerbatimString(escaped) }
   }
 
-  return parseString(text)
+  return { value: parseString(text) }
+}
+
+export const parseTypedText = (value: Unreliable, type: string | undefined): string | undefined => {
+  return parseTypedConstruct(value, type).value
 }
 
 export const parseText: ParseUtilPartial<AtomFeed.Text> = (value) => {
@@ -289,16 +292,16 @@ export const parseText: ParseUtilPartial<AtomFeed.Text> = (value) => {
   }
 
   const type = parseString(value['@type'])
-  const parsedValue = parseTypedText(value, type)
+  const construct = parseTypedConstruct(value, type)
 
-  if (!parsedValue) {
+  if (!construct.value) {
     return
   }
 
   const text = {
-    value: parsedValue,
+    value: construct.value,
     type,
-    xml: mergeXhtmlDivXml(retrieveXmlItemOrFeed(value), retrieveXhtmlDivXml(value, type)),
+    xml: mergeXhtmlDivXml(retrieveXmlItemOrFeed(value), construct.xml),
   }
 
   return trimObject(text) as AtomFeed.Text
@@ -316,12 +319,12 @@ export const parseContent: ParseUtilPartial<AtomFeed.Content> = (value) => {
   }
 
   const type = parseString(value['@type'])
-
+  const construct = parseTypedConstruct(value, type)
   const content = {
-    value: parseTypedText(value, type),
+    value: construct.value,
     type,
     src: parseString(value['@src']),
-    xml: mergeXhtmlDivXml(retrieveXmlItemOrFeed(value), retrieveXhtmlDivXml(value, type)),
+    xml: mergeXhtmlDivXml(retrieveXmlItemOrFeed(value), construct.xml),
   }
 
   return trimObject(content)
