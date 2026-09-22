@@ -189,6 +189,25 @@ describe('retrieveImage', () => {
     expect(retrieveImage(value)).toEqual(expected)
   })
 
+  it('should retrieve image using ToC reference with entities in the URI', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        image: { '@resource': 'http://example.com/image?a=1&amp;b=2' },
+      },
+      image: [
+        { '@about': 'http://example.com/other', title: 'Other' },
+        { '@about': 'http://example.com/image?a=1&amp;b=2', title: 'Logo' },
+      ],
+    }
+    const expected = {
+      title: 'Logo',
+      rdf: { about: 'http://example.com/image?a=1&b=2' },
+    }
+
+    expect(retrieveImage(value)).toEqual(expected)
+  })
+
   it('should retrieve correct image when multiple images exist', () => {
     const value = {
       channel: {
@@ -992,6 +1011,32 @@ describe('retrieveItems', () => {
     expect(retrieveItems(value)).toEqual(expected)
   })
 
+  it('should match ToC references with entities in the URI', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/item1' },
+              { '@resource': 'http://example.com/item2?a=1&amp;b=2' },
+            ],
+          },
+        },
+      },
+      item: [
+        { '@about': 'http://example.com/item1', title: 'Item 1' },
+        { '@about': 'http://example.com/item2?a=1&amp;b=2', title: 'Item 2' },
+      ],
+    }
+    const expected = [
+      { title: 'Item 1', rdf: { about: 'http://example.com/item1' } },
+      { title: 'Item 2', rdf: { about: 'http://example.com/item2?a=1&b=2' } },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
   it('should skip items not found in document', () => {
     const value = {
       channel: {
@@ -1082,6 +1127,168 @@ describe('retrieveItems', () => {
         title: 'Fallback Item',
         rdf: { about: 'http://example.com/item1' },
       },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should parse items nested inside the channel', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        item: [
+          { '@about': 'http://example.com/item1', title: 'Item 1' },
+          { '@about': 'http://example.com/item2', title: 'Item 2' },
+        ],
+      },
+    }
+    const expected = [
+      { title: 'Item 1', rdf: { about: 'http://example.com/item1' } },
+      { title: 'Item 2', rdf: { about: 'http://example.com/item2' } },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should retrieve items nested inside the channel using ToC references', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/item2' },
+              { '@resource': 'http://example.com/item1' },
+            ],
+          },
+        },
+        item: [
+          { '@about': 'http://example.com/item1', title: 'Item 1' },
+          { '@about': 'http://example.com/item2', title: 'Item 2' },
+        ],
+      },
+    }
+    const expected = [
+      { title: 'Item 2', rdf: { about: 'http://example.com/item2' } },
+      { title: 'Item 1', rdf: { about: 'http://example.com/item1' } },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should prefer items at the root over items nested inside the channel', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        item: { '@about': 'http://example.com/nested', title: 'Nested' },
+      },
+      item: { '@about': 'http://example.com/root', title: 'Root' },
+    }
+    const expected = [{ title: 'Root', rdf: { about: 'http://example.com/root' } }]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should collect ToC references across several Seq elements', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: [
+            { li: { '@resource': 'http://example.com/item2' } },
+            {
+              li: [
+                { '@resource': 'http://example.com/item3' },
+                { '@resource': 'http://example.com/item1' },
+              ],
+            },
+          ],
+        },
+      },
+      item: [
+        { '@about': 'http://example.com/item1', title: 'Item 1' },
+        { '@about': 'http://example.com/item2', title: 'Item 2' },
+        { '@about': 'http://example.com/item3', title: 'Item 3' },
+      ],
+    }
+    const expected = [
+      { title: 'Item 2', rdf: { about: 'http://example.com/item2' } },
+      { title: 'Item 3', rdf: { about: 'http://example.com/item3' } },
+      { title: 'Item 1', rdf: { about: 'http://example.com/item1' } },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should respect maxItems option across several Seq elements', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: [
+            { li: { '@resource': 'http://example.com/item1' } },
+            { li: { '@resource': 'http://example.com/item2' } },
+          ],
+        },
+      },
+      item: [
+        { '@about': 'http://example.com/item1', title: 'Item 1' },
+        { '@about': 'http://example.com/item2', title: 'Item 2' },
+      ],
+    }
+    const expected = [{ title: 'Item 1', rdf: { about: 'http://example.com/item1' } }]
+
+    expect(retrieveItems(value, { maxItems: 1 })).toEqual(expected)
+  })
+
+  it('should ignore items not referenced in ToC', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/item2' },
+              { '@resource': 'http://example.com/item3' },
+            ],
+          },
+        },
+      },
+      item: [
+        { '@about': 'http://example.com/item1?lang=en', title: 'Item 1' },
+        { '@about': 'http://example.com/item2', title: 'Item 2' },
+        { '@about': 'http://example.com/item3', title: 'Item 3' },
+      ],
+    }
+    const expected = [
+      { title: 'Item 2', rdf: { about: 'http://example.com/item2' } },
+      { title: 'Item 3', rdf: { about: 'http://example.com/item3' } },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should keep every item when several share the same rdf:about', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/doi/' },
+              { '@resource': 'http://example.com/doi/' },
+            ],
+          },
+        },
+      },
+      item: [
+        { '@about': 'http://example.com/doi/', title: 'Article 1' },
+        { '@about': 'http://example.com/doi/', title: 'Article 2' },
+      ],
+    }
+    const expected = [
+      { title: 'Article 1', rdf: { about: 'http://example.com/doi/' } },
+      { title: 'Article 2', rdf: { about: 'http://example.com/doi/' } },
     ]
 
     expect(retrieveItems(value)).toEqual(expected)

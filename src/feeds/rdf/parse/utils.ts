@@ -46,7 +46,7 @@ const retrieveByAbout = (elements: unknown, resourceUri: string | undefined): un
 
   const array = Array.isArray(elements) ? elements : [elements]
 
-  return array.find((el) => el?.['@about'] === resourceUri)
+  return array.find((el) => parseString(el?.['@about']) === resourceUri)
 }
 
 const findByTocReference = (value: unknown, property: string): unknown => {
@@ -142,23 +142,30 @@ export const retrieveItems: ParseUtilPartial<Array<RdfFeed.Item<DateAny>>> = (va
   }
 
   const channel = parseSingular(value.channel as Unreliable)
+  // Some generators nest the items inside the channel and some split the ToC into several Seq.
+  const itemElements = value.item ?? channel?.item
   const tocItems = parseSingular(channel?.items)
-  const itemsSeq = parseSingular(tocItems?.seq)
-  const itemUris = parseArrayOf(
-    itemsSeq?.li,
-    (li) => parseString(li?.['@resource']),
-    options?.maxItems,
-  )
-  const items = trimArray(
-    itemUris?.map((uri) => retrieveByAbout(value.item, uri)),
-    (value) => parseItem(value, options),
-  )
+  const tocLis = parseArrayOf(tocItems?.seq, (seq) => seq?.li)?.flat()
+  const itemUris = parseArrayOf(tocLis, (li) => parseString(li?.['@resource']), options?.maxItems)
+  // Some generators give several items the same rdf:about.
+  const unclaimedElements = parseArrayOf(itemElements, (element) => element) ?? []
+  const tocElements: Array<unknown> = []
+
+  for (const uri of itemUris ?? []) {
+    const index = unclaimedElements.findIndex((element) => parseString(element?.['@about']) === uri)
+
+    if (index !== -1) {
+      tocElements.push(...unclaimedElements.splice(index, 1))
+    }
+  }
+
+  const items = trimArray(tocElements, (value) => parseItem(value, options))
 
   if (items?.length) {
     return items
   }
 
-  return parseArrayOf(value?.item, (value) => parseItem(value, options), options?.maxItems)
+  return parseArrayOf(itemElements, (value) => parseItem(value, options), options?.maxItems)
 }
 
 export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, options) => {
