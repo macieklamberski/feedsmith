@@ -808,6 +808,7 @@
       <prism:person>Dr. Jane Smith</prism:person>
       <prism:person>Dr. John Doe</prism:person>
       <prism:platform>web</prism:platform>
+      <prism:originPlatform>print</prism:originPlatform>
       <prism:device>desktop</prism:device>
       <prism:academicField>Biology</prism:academicField>
       <prism:academicField>Biochemistry</prism:academicField>

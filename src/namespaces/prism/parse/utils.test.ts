@@ -645,6 +645,28 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toEqual(expected)
   })
 
+  it('should parse item with originPlatform fields', () => {
+    const value = {
+      'prism:originplatform': ['print', 'web'],
+    }
+    const expected = {
+      originPlatforms: ['print', 'web'],
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse item with originPlatform in platform attribute', () => {
+    const value = {
+      'prism:originplatform': [{ '@platform': 'print' }, { '@platform': 'web' }],
+    }
+    const expected = {
+      originPlatforms: ['print', 'web'],
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
   it('should parse item with subject classification fields', () => {
     const value = {
       'prism:academicfield': ['Quantum Physics', 'Computer Science'],

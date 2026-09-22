@@ -119,6 +119,7 @@ export namespace PrismNs {
     organizations?: Array<string>
     persons?: Array<string>
     platforms?: Array<string>
+    originPlatforms?: Array<string>
     device?: string
     academicFields?: Array<string>
     events?: Array<string>

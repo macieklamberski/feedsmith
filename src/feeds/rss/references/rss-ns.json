@@ -797,6 +797,7 @@
         "organizations": ["Massachusetts Institute of Technology"],
         "persons": ["Dr. Jane Smith", "Dr. John Doe"],
         "platforms": ["web"],
+        "originPlatforms": ["print"],
         "device": "desktop",
         "academicFields": ["Biology", "Biochemistry"],
         "events": ["Annual Science Conference 2023"],

@@ -298,6 +298,7 @@ export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOpti
     ),
     persons: parseArrayOf(value['prism:person'], (value) => parseString(retrieveText(value))),
     platforms: parseArrayOf(value['prism:platform'], (value) => parseString(retrieveText(value))),
+    originPlatforms: parseArrayOf(value['prism:originplatform'], parseOriginPlatform),
     device: parseSingularOf(value['prism:device'], (value) => parseString(retrieveText(value))),
     academicFields: parseArrayOf(value['prism:academicfield'], (value) =>
       parseString(retrieveText(value)),

@@ -136,6 +136,7 @@ export const generateItem: GenerateUtil<PrismNs.Item<DateLike>> = (item) => {
     'prism:organization': trimArray(item.organizations, generateCdataString),
     'prism:person': trimArray(item.persons, generateCdataString),
     'prism:platform': trimArray(item.platforms, generateCdataString),
+    'prism:originPlatform': trimArray(item.originPlatforms, generateCdataString),
     'prism:device': generateCdataString(item.device),
     'prism:academicField': trimArray(item.academicFields, generateCdataString),
     'prism:event': trimArray(item.events, generateCdataString),
