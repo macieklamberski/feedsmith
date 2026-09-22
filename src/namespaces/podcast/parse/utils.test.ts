@@ -3663,6 +3663,12 @@ describe('retrieveItem', () => {
         language: 'en',
       },
     ],
+    fundings: [
+      {
+        url: 'https://example.com/episodes/1/donate',
+        display: 'Support this episode',
+      },
+    ],
     chapters: {
       url: 'https://example.com/chapters.json',
       type: 'application/json',
@@ -3760,6 +3766,10 @@ describe('retrieveItem', () => {
           '@language': 'en',
         },
       ],
+      'podcast:funding': {
+        '@url': 'https://example.com/episodes/1/donate',
+        '#text': 'Support this episode',
+      },
       'podcast:chapters': {
         '@url': 'https://example.com/chapters.json',
         '@type': 'application/json',
@@ -3845,6 +3855,12 @@ describe('retrieveItem', () => {
           '@url': 'https://example.com/transcript.json',
           '@type': 'application/json',
           '@language': 'en',
+        },
+      ],
+      'podcast:funding': [
+        {
+          '@url': 'https://example.com/episodes/1/donate',
+          '#text': 'Support this episode',
         },
       ],
       'podcast:chapters': [

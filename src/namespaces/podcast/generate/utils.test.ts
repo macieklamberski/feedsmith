@@ -1228,6 +1228,12 @@ describe('generateBaseItem', () => {
           type: 'text/plain',
         },
       ],
+      fundings: [
+        {
+          url: 'https://example.com/episodes/42/donate',
+          display: 'Support this episode',
+        },
+      ],
       chapters: {
         url: 'https://example.com/chapters.json',
         type: 'application/json+chapters',
@@ -1290,6 +1296,12 @@ describe('generateBaseItem', () => {
         {
           '@url': 'https://example.com/transcript.txt',
           '@type': 'text/plain',
+        },
+      ],
+      'podcast:funding': [
+        {
+          '#text': 'Support this episode',
+          '@url': 'https://example.com/episodes/42/donate',
         },
       ],
       'podcast:chapters': {

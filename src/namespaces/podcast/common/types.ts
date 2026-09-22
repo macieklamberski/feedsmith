@@ -5,6 +5,7 @@ export namespace PodcastNs {
   /** @internal Common properties shared by Item and LiveItem. */
   export type BaseItem<TStrict extends boolean = false> = {
     transcripts?: Array<Transcript<TStrict>>
+    fundings?: Array<Funding<TStrict>>
     chapters?: Chapters<TStrict>
     soundbites?: Array<Soundbite<TStrict>>
     persons?: Array<Person<TStrict>>
