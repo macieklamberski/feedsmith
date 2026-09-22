@@ -576,6 +576,37 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with arxiv namespace', () => {
+    const value = {
+      title: 'Feed with arxiv namespace',
+      description: 'Test feed with arXiv properties',
+      items: [
+        {
+          title: 'Item with arXiv properties',
+          arxiv: {
+            announceType: 'replace-cross',
+            journalReference: 'Example Journal, Vol. 11 (2024), pp. 431-472',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:arxiv="http://arxiv.org/schemas/atom">
+  <channel>
+    <title>Feed with arxiv namespace</title>
+    <description>Test feed with arXiv properties</description>
+    <item>
+      <title>Item with arXiv properties</title>
+      <arxiv:announce_type>replace-cross</arxiv:announce_type>
+      <arxiv:journal_reference>Example Journal, Vol. 11 (2024), pp. 431-472</arxiv:journal_reference>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with opensearch namespace', () => {
     const value = {
       title: 'Search Results',
