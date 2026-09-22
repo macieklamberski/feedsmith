@@ -5,4 +5,9 @@ export const uris = [
   'https://madskills.com/public/xml/rss/module/pingback',
 ]
 
-export const stopNodes = ['*.pingback:server', '*.pingback:target', '*.pingback:to']
+export const stopNodes = [
+  '*.pingback:server',
+  '*.pingback:target',
+  '*.pingback:to',
+  '*.pingback:about',
+]
