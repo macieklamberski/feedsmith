@@ -151,7 +151,7 @@ export namespace RssFeed {
       rawvoice?: RawVoiceNs.Item<TStrict>
       feedburner?: FeedBurnerNs.Item
       arxiv?: ArxivNs.Entry
-      prism?: PrismNs.Item<TDate>
+      prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
       creativeCommons?: CreativeCommonsNs.ItemOrFeed
       thr?: ThrNs.Item<TStrict>
@@ -203,7 +203,7 @@ export namespace RssFeed {
       feedburner?: FeedBurnerNs.Feed<TStrict>
       feedpress?: FeedPressNs.Feed
       opensearch?: OpenSearchNs.Feed<TStrict>
-      prism?: PrismNs.Feed<TDate>
+      prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
       creativeCommons?: CreativeCommonsNs.ItemOrFeed
       admin?: AdminNs.Feed

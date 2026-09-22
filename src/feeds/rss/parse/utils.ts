@@ -53,10 +53,7 @@ import {
   retrieveFeed as retrievePodcastFeed,
   retrieveItem as retrievePodcastItem,
 } from '../../../namespaces/podcast/parse/utils.js'
-import {
-  retrieveFeed as retrievePrismFeed,
-  retrieveItem as retrievePrismItem,
-} from '../../../namespaces/prism/parse/utils.js'
+import { retrieveItemOrFeed as retrievePrismItemOrFeed } from '../../../namespaces/prism/parse/utils.js'
 import { retrieveItem as retrievePscItem } from '../../../namespaces/psc/parse/utils.js'
 import {
   retrieveFeed as retrieveRawVoiceFeed,
@@ -416,7 +413,7 @@ export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, option
     rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceItem(value) : undefined,
     feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
     arxiv: namespaces.has('arxiv') ? retrieveArxivEntry(value) : undefined,
-    prism: namespaces.has('prism') ? retrievePrismItem(value, options) : undefined,
+    prism: namespaces.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
     creativeCommons: namespaces.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(value)
@@ -480,7 +477,7 @@ export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, option
     feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerFeed(channel) : undefined,
     feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(channel) : undefined,
     opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(channel) : undefined,
-    prism: namespaces.has('prism') ? retrievePrismFeed(channel, options) : undefined,
+    prism: namespaces.has('prism') ? retrievePrismItemOrFeed(channel, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(channel) : undefined,
     creativeCommons: namespaces.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(channel)

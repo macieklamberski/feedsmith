@@ -64,7 +64,7 @@ export namespace RdfFeed {
       slash?: SlashNs.Item
       media?: MediaNs.ItemOrFeed<TStrict>
       feedburner?: FeedBurnerNs.Item
-      prism?: PrismNs.Item<TDate>
+      prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
       wfw?: WfwNs.Item
       pingback?: PingbackNs.Item
@@ -92,7 +92,7 @@ export namespace RdfFeed {
       media?: MediaNs.ItemOrFeed<TStrict>
       feedburner?: FeedBurnerNs.Feed<TStrict>
       opensearch?: OpenSearchNs.Feed<TStrict>
-      prism?: PrismNs.Feed<TDate>
+      prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
       admin?: AdminNs.Feed
       geo?: GeoNs.ItemOrFeed

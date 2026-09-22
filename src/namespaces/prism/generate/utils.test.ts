@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { generateFeed, generateItem, generateOriginPlatform } from './utils.js'
+import { generateItemOrFeed, generateOriginPlatform } from './utils.js'
 
 describe('generateOriginPlatform', () => {
   it('should generate origin platform as the platform attribute', () => {
@@ -25,7 +25,7 @@ describe('generateOriginPlatform', () => {
   })
 })
 
-describe('generateFeed', () => {
+describe('generateItemOrFeed', () => {
   it('should generate feed with core properties', () => {
     const value = {
       publicationName: 'Journal of Examples',
@@ -54,7 +54,67 @@ describe('generateFeed', () => {
       'prism:keyword': ['science', 'research'],
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should generate feed with PRISM 1.2 fields', () => {
+    const value = {
+      category: 'https://example.com/genre/research',
+      hasFormats: ['https://example.com/article.pdf'],
+      hasParts: ['https://example.com/figure-1', 'https://example.com/figure-2'],
+      hasPreviousVersion: 'https://example.com/article-v1',
+      isFormatOf: 'https://example.com/article',
+      isPartOf: 'https://example.com/issue-7952',
+      isReferencedBy: 'https://example.com/review',
+      isRequiredBy: 'https://example.com/bundle',
+      isVersionOf: 'https://example.com/original',
+      objectTitles: ['Dodge Viper'],
+      receptionDate: new Date('2023-03-16T00:00:00Z'),
+      references: ['https://doi.org/10.1000/1', 'https://doi.org/10.1000/2'],
+      requires: 'https://example.com/dataset',
+    }
+    const expected = {
+      'prism:category': 'https://example.com/genre/research',
+      'prism:hasFormat': ['https://example.com/article.pdf'],
+      'prism:hasPart': ['https://example.com/figure-1', 'https://example.com/figure-2'],
+      'prism:hasPreviousVersion': 'https://example.com/article-v1',
+      'prism:isFormatOf': 'https://example.com/article',
+      'prism:isPartOf': 'https://example.com/issue-7952',
+      'prism:isReferencedBy': 'https://example.com/review',
+      'prism:isRequiredBy': 'https://example.com/bundle',
+      'prism:isVersionOf': 'https://example.com/original',
+      'prism:objectTitle': ['Dodge Viper'],
+      'prism:receptionDate': '2023-03-16T00:00:00.000Z',
+      'prism:references': ['https://doi.org/10.1000/1', 'https://doi.org/10.1000/2'],
+      'prism:requires': 'https://example.com/dataset',
+    }
+
+    expect(generateItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should generate feed with page, word count and relationship fields', () => {
+    const value = {
+      startingPage: '975',
+      endingPage: '1211',
+      wordCount: 52000,
+      hasAlternatives: ['https://example.com/issue-alt'],
+      hasCorrections: ['https://example.com/issue-correction'],
+      hasTranslations: ['https://example.com/issue-de', 'https://example.com/issue-fr'],
+      isCorrectionOf: ['https://example.com/issue-v1'],
+      isTranslationOf: 'https://example.com/issue-en',
+    }
+    const expected = {
+      'prism:startingPage': '975',
+      'prism:endingPage': '1211',
+      'prism:wordCount': 52000,
+      'prism:hasAlternative': ['https://example.com/issue-alt'],
+      'prism:hasCorrection': ['https://example.com/issue-correction'],
+      'prism:hasTranslation': ['https://example.com/issue-de', 'https://example.com/issue-fr'],
+      'prism:isCorrectionOf': ['https://example.com/issue-v1'],
+      'prism:isTranslationOf': 'https://example.com/issue-en',
+    }
+
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate feed with plural fields as arrays', () => {
@@ -75,7 +135,7 @@ describe('generateFeed', () => {
       'prism:timePeriod': '2023-Q1',
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate feed with date fields', () => {
@@ -98,7 +158,7 @@ describe('generateFeed', () => {
       'prism:offSaleDate': ['2023-04-01T00:00:00.000Z'],
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate feed with number fields', () => {
@@ -111,7 +171,7 @@ describe('generateFeed', () => {
       'prism:byteCount': 1048576,
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate feed with deprecated fields', () => {
@@ -128,7 +188,7 @@ describe('generateFeed', () => {
       'prism:rightsAgent': 'Rights Management Inc.',
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate feed with distribution and platform fields', () => {
@@ -159,7 +219,7 @@ describe('generateFeed', () => {
       'prism:sellingAgency': ['Agency1'],
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate feed with subject elements', () => {
@@ -182,7 +242,7 @@ describe('generateFeed', () => {
       'prism:sport': 'Tennis',
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate feed with series fields', () => {
@@ -199,7 +259,7 @@ describe('generateFeed', () => {
       'prism:versionIdentifier': 'v1.0.0',
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate feed with issue fields', () => {
@@ -216,7 +276,7 @@ describe('generateFeed', () => {
       'prism:issueType': 'regular',
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate feed with additional date fields', () => {
@@ -235,7 +295,7 @@ describe('generateFeed', () => {
       'prism:copyrightYear': ['2023', '2024'],
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate feed with content and title fields', () => {
@@ -252,7 +312,7 @@ describe('generateFeed', () => {
       'prism:subtitle': ['The International Weekly Journal of Science'],
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate feed with catalog and product fields', () => {
@@ -267,7 +327,7 @@ describe('generateFeed', () => {
       'prism:productCode': ['EXJ-2023-615', 'EXJ-2023-616'],
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate feed with subchannel3-4 and subsection3-4', () => {
@@ -284,7 +344,7 @@ describe('generateFeed', () => {
       'prism:subsection4': 'trending',
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate feed with organization and entity fields', () => {
@@ -301,7 +361,7 @@ describe('generateFeed', () => {
       'prism:person': ['Dr. Jane Smith', 'Dr. John Doe'],
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate feed with blog and link fields', () => {
@@ -318,7 +378,7 @@ describe('generateFeed', () => {
       'prism:rating': ['A+', 'Excellent'],
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should handle empty strings by omitting them', () => {
@@ -331,7 +391,7 @@ describe('generateFeed', () => {
       'prism:publicationName': 'Journal of Examples',
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should filter out empty values from array fields', () => {
@@ -343,7 +403,7 @@ describe('generateFeed', () => {
       'prism:keyword': ['science'],
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should filter out undefined values', () => {
@@ -356,25 +416,23 @@ describe('generateFeed', () => {
       'prism:publicationName': 'Journal of Examples',
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    expect(generateFeed(value)).toBeUndefined()
+    expect(generateItemOrFeed(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs', () => {
-    expect(generateFeed(undefined)).toBeUndefined()
+    expect(generateItemOrFeed(undefined)).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
-    expect(generateFeed(null)).toBeUndefined()
+    expect(generateItemOrFeed(null)).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
-    expect(generateFeed('string')).toBeUndefined()
+    expect(generateItemOrFeed('string')).toBeUndefined()
   })
-})
 
-describe('generateItem', () => {
   it('should generate item with core properties', () => {
     const value = {
       doi: '10.1234/example-2023-0001',
@@ -399,7 +457,7 @@ describe('generateItem', () => {
       'prism:genre': ['research-article'],
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate item with page information', () => {
@@ -420,7 +478,7 @@ describe('generateItem', () => {
       'prism:samplePageRange': '1-3',
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate item with dual-level fields', () => {
@@ -437,7 +495,7 @@ describe('generateItem', () => {
       'prism:section': 'Research',
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate item with relationship fields', () => {
@@ -458,7 +516,7 @@ describe('generateItem', () => {
       'prism:isTranslationOf': 'original-article-id',
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate item with supplemental fields', () => {
@@ -473,7 +531,7 @@ describe('generateItem', () => {
       'prism:supplementStartingPage': 'S1',
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate item with metric fields', () => {
@@ -488,7 +546,7 @@ describe('generateItem', () => {
       'prism:versionIdentifier': 'v1.2.0',
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate item with PAM/PSV dual-level fields', () => {
@@ -505,7 +563,7 @@ describe('generateItem', () => {
       'prism:ticker': ['AAPL', 'GOOGL'],
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate item with deprecated fields', () => {
@@ -522,7 +580,7 @@ describe('generateItem', () => {
       'prism:rightsAgent': 'CCC',
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate item with content and title fields', () => {
@@ -543,7 +601,7 @@ describe('generateItem', () => {
       'prism:copyrightYear': ['2023', '2024'],
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate item with platform fields', () => {
@@ -556,7 +614,7 @@ describe('generateItem', () => {
       'prism:device': 'smartphone',
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate item with originPlatform fields', () => {
@@ -567,7 +625,7 @@ describe('generateItem', () => {
       'prism:originPlatform': [{ '@platform': 'print' }, { '@platform': 'web' }],
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate item with subject classification fields', () => {
@@ -590,7 +648,7 @@ describe('generateItem', () => {
       'prism:sport': 'Cycling',
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate item with organization fields', () => {
@@ -605,7 +663,7 @@ describe('generateItem', () => {
       'prism:person': ['John Doe', 'Jane Smith'],
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate item with link fields', () => {
@@ -616,7 +674,7 @@ describe('generateItem', () => {
       'prism:link': ['https://example.com/related1', 'https://example.com/related2'],
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate item with additional date fields', () => {
@@ -633,7 +691,75 @@ describe('generateItem', () => {
       'prism:killDate': '2024-03-15T00:00:00.000Z',
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should generate item with PAM issue, series and classification fields', () => {
+    const value = {
+      issueName: 'Spring Issue',
+      issueTeaser: 'Special coverage',
+      issueType: 'regular',
+      aggregationType: 'journal',
+      isbns: ['978-0-12-345678-9'],
+      onSaleDates: [new Date('2023-03-01T00:00:00Z')],
+      onSaleDays: ['wednesday'],
+      offSaleDates: [new Date('2023-04-01T00:00:00Z')],
+      seriesTitle: 'Nature Research Journals',
+      seriesNumber: 1,
+      subchannel1: 'Science',
+      subchannel2: 'Biology',
+      subchannel3: 'Cells',
+      subchannel4: 'Membranes',
+      subsection1: 'Articles',
+      subsection2: 'Letters',
+      subsection3: 'Brief Communications',
+      subsection4: 'Corrections',
+      productCodes: ['NAT-2023-615'],
+      sellingAgencies: ['Example Agency'],
+      nationalCatalogNumber: 'NC12345',
+      publishingFrequency: 'weekly',
+      uspsNumber: '123-456',
+    }
+    const expected = {
+      'prism:issueName': 'Spring Issue',
+      'prism:issueTeaser': 'Special coverage',
+      'prism:issueType': 'regular',
+      'prism:aggregationType': 'journal',
+      'prism:isbn': ['978-0-12-345678-9'],
+      'prism:onSaleDate': ['2023-03-01T00:00:00.000Z'],
+      'prism:onSaleDay': ['wednesday'],
+      'prism:offSaleDate': ['2023-04-01T00:00:00.000Z'],
+      'prism:seriesTitle': 'Nature Research Journals',
+      'prism:seriesNumber': 1,
+      'prism:subchannel1': 'Science',
+      'prism:subchannel2': 'Biology',
+      'prism:subchannel3': 'Cells',
+      'prism:subchannel4': 'Membranes',
+      'prism:subsection1': 'Articles',
+      'prism:subsection2': 'Letters',
+      'prism:subsection3': 'Brief Communications',
+      'prism:subsection4': 'Corrections',
+      'prism:productCode': ['NAT-2023-615'],
+      'prism:sellingAgency': ['Example Agency'],
+      'prism:nationalCatalogNumber': 'NC12345',
+      'prism:publishingFrequency': 'weekly',
+      'prism:uspsNumber': '123-456',
+    }
+
+    expect(generateItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should generate item with distributor and compliance profile', () => {
+    const value = {
+      distributor: 'https://example.com/distributor',
+      complianceProfile: 'two',
+    }
+    const expected = {
+      'prism:distributor': 'https://example.com/distributor',
+      'prism:complianceProfile': 'two',
+    }
+
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate item with issue identifier', () => {
@@ -644,7 +770,7 @@ describe('generateItem', () => {
       'prism:issueIdentifier': '2023-03-15',
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 
   it('should generate item with cover date fields', () => {
@@ -657,45 +783,6 @@ describe('generateItem', () => {
       'prism:coverDisplayDate': 'March 15, 2023',
     }
 
-    expect(generateItem(value)).toEqual(expected)
-  })
-
-  it('should filter out empty values from array fields', () => {
-    const value = {
-      keywords: ['quantum', '', '   '],
-      genres: ['', '   '],
-    }
-    const expected = {
-      'prism:keyword': ['quantum'],
-    }
-
-    expect(generateItem(value)).toEqual(expected)
-  })
-
-  it('should filter out undefined values', () => {
-    const value = {
-      doi: '10.1234/example-2023-0001',
-      volume: undefined,
-      wordCount: undefined,
-    }
-    const expected = {
-      'prism:doi': '10.1234/example-2023-0001',
-    }
-
-    expect(generateItem(value)).toEqual(expected)
-  })
-
-  it('should return undefined for empty object', () => {
-    const value = {}
-
-    expect(generateItem(value)).toBeUndefined()
-  })
-
-  it('should handle non-object inputs', () => {
-    expect(generateItem(undefined)).toBeUndefined()
-    // @ts-expect-error: This is for testing purposes.
-    expect(generateItem(null)).toBeUndefined()
-    // @ts-expect-error: This is for testing purposes.
-    expect(generateItem('string')).toBeUndefined()
+    expect(generateItemOrFeed(value)).toEqual(expected)
   })
 })

@@ -1,6 +1,6 @@
 // #region reference
 export namespace PrismNs {
-  export type Feed<TDate> = {
+  export type ItemOrFeed<TDate> = {
     publicationName?: string
     issn?: string
     eIssn?: string
@@ -9,6 +9,7 @@ export namespace PrismNs {
     issueName?: string
     issueTeaser?: string
     issueType?: string
+    doi?: string
     volume?: string
     number?: string
     edition?: string
@@ -48,6 +49,12 @@ export namespace PrismNs {
     subsection2?: string
     subsection3?: string
     subsection4?: string
+    startingPage?: string
+    endingPage?: string
+    pageRange?: string
+    pageCount?: number
+    pageProgressionDirection?: string
+    samplePageRange?: string
     corporateEntities?: Array<string>
     distributor?: string
     sellingAgencies?: Array<string>
@@ -61,6 +68,7 @@ export namespace PrismNs {
     blogURL?: string
     links?: Array<string>
     urls?: Array<string>
+    wordCount?: number
     byteCount?: number
     ratings?: Array<string>
     timePeriod?: string
@@ -69,61 +77,6 @@ export namespace PrismNs {
     academicFields?: Array<string>
     events?: Array<string>
     genres?: Array<string>
-    industries?: Array<string>
-    locations?: Array<string>
-    objects?: Array<string>
-    profession?: string
-    sport?: string
-    /** @deprecated Since PRISM 3.0. Use pur:embargoDate instead. */
-    embargoDate?: TDate
-    /** @deprecated Since PRISM 3.0. Use pur:copyrightDate instead. */
-    copyright?: string
-    /** @deprecated Since PRISM 3.0. Use pur:expirationDate instead. */
-    expirationDate?: TDate
-    /** @deprecated Since PRISM 3.0. Use pur:rightsAgent instead. */
-    rightsAgent?: string
-  }
-
-  export type Item<TDate> = {
-    publicationName?: string
-    issn?: string
-    eIssn?: string
-    issueIdentifier?: string
-    doi?: string
-    urls?: Array<string>
-    volume?: string
-    number?: string
-    edition?: string
-    section?: string
-    startingPage?: string
-    endingPage?: string
-    pageRange?: string
-    pageCount?: number
-    pageProgressionDirection?: string
-    samplePageRange?: string
-    coverDate?: TDate
-    coverDisplayDate?: string
-    publicationDates?: Array<TDate>
-    publicationDisplayDates?: Array<string>
-    creationDate?: TDate
-    modificationDate?: TDate
-    dateReceived?: TDate
-    killDate?: TDate
-    copyrightYears?: Array<string>
-    contentType?: string
-    genres?: Array<string>
-    alternateTitles?: Array<string>
-    subtitles?: Array<string>
-    teasers?: Array<string>
-    keywords?: Array<string>
-    corporateEntities?: Array<string>
-    organizations?: Array<string>
-    persons?: Array<string>
-    platforms?: Array<string>
-    originPlatforms?: Array<string>
-    device?: string
-    academicFields?: Array<string>
-    events?: Array<string>
     industries?: Array<string>
     locations?: Array<string>
     objects?: Array<string>
@@ -138,13 +91,6 @@ export namespace PrismNs {
     supplementTitles?: Array<string>
     supplementDisplayID?: string
     supplementStartingPage?: string
-    links?: Array<string>
-    wordCount?: number
-    byteCount?: number
-    ratings?: Array<string>
-    timePeriod?: string
-    versionIdentifier?: string
-    tickers?: Array<string>
     /** @deprecated Since PRISM 3.0. Use pur:embargoDate instead. */
     embargoDate?: TDate
     /** @deprecated Since PRISM 3.0. Use pur:copyrightDate instead. */
@@ -153,6 +99,38 @@ export namespace PrismNs {
     expirationDate?: TDate
     /** @deprecated Since PRISM 3.0. Use pur:rightsAgent instead. */
     rightsAgent?: string
+    /** @deprecated PRISM 1.2 only. */
+    category?: string
+    /** @deprecated PRISM 1.2 only. */
+    hasFormats?: Array<string>
+    /** @deprecated PRISM 1.2 only. */
+    hasParts?: Array<string>
+    /** @deprecated PRISM 1.2 only. */
+    hasPreviousVersion?: string
+    /** @deprecated PRISM 1.2 only. */
+    isFormatOf?: string
+    /** @deprecated PRISM 1.2 only. */
+    isPartOf?: string
+    /** @deprecated PRISM 1.2 only. */
+    isReferencedBy?: string
+    /** @deprecated PRISM 1.2 only. */
+    isRequiredBy?: string
+    /** @deprecated PRISM 1.2 only. */
+    isVersionOf?: string
+    /** @deprecated PRISM 1.2 only. */
+    objectTitles?: Array<string>
+    /** @deprecated PRISM 1.2 only. */
+    receptionDate?: TDate
+    /** @deprecated PRISM 1.2 only. */
+    references?: Array<string>
+    /** @deprecated PRISM 1.2 only. */
+    requires?: string
   }
+
+  /** @deprecated Use `ItemOrFeed` instead. */
+  export type Feed<TDate> = ItemOrFeed<TDate>
+
+  /** @deprecated Use `ItemOrFeed` instead. */
+  export type Item<TDate> = ItemOrFeed<TDate>
 }
 // #endregion reference
