@@ -1088,7 +1088,34 @@
   },
   "cc": {
     "license": "https://creativecommons.org/licenses/by/4.0/",
-    "attributionName": "Example Publishing Company"
+    "attributionName": "Example Publishing Company",
+    "licenses": [
+      {
+        "about": "https://creativecommons.org/licenses/by/4.0/",
+        "permits": [
+          "http://creativecommons.org/ns#Reproduction",
+          "http://creativecommons.org/ns#Distribution",
+          "http://creativecommons.org/ns#DerivativeWorks"
+        ],
+        "requires": [
+          "http://creativecommons.org/ns#Notice",
+          "http://creativecommons.org/ns#Attribution"
+        ]
+      },
+      {
+        "about": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "permits": [
+          "http://creativecommons.org/ns#Reproduction",
+          "http://creativecommons.org/ns#Distribution",
+          "http://creativecommons.org/ns#DerivativeWorks"
+        ],
+        "requires": [
+          "http://creativecommons.org/ns#Notice",
+          "http://creativecommons.org/ns#Attribution",
+          "http://creativecommons.org/ns#ShareAlike"
+        ]
+      }
+    ]
   },
   "admin": {
     "errorReportsTo": "mailto:webmaster@example.com",
