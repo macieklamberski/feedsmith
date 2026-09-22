@@ -142,15 +142,13 @@ export const retrieveItems: ParseUtilPartial<Array<RdfFeed.Item<DateAny>>> = (va
   }
 
   const channel = parseSingular(value.channel as Unreliable)
+  // Some generators nest the items inside the channel and some split the ToC into several Seq.
+  const itemElements = value.item ?? channel?.item
   const tocItems = parseSingular(channel?.items)
-  const itemsSeq = parseSingular(tocItems?.seq)
-  const itemUris = parseArrayOf(
-    itemsSeq?.li,
-    (li) => parseString(li?.['@resource']),
-    options?.maxItems,
-  )
+  const tocLis = parseArrayOf(tocItems?.seq, (seq) => seq?.li)?.flat()
+  const itemUris = parseArrayOf(tocLis, (li) => parseString(li?.['@resource']), options?.maxItems)
   const items = trimArray(
-    itemUris?.map((uri) => retrieveByAbout(value.item, uri)),
+    itemUris?.map((uri) => retrieveByAbout(itemElements, uri)),
     (value) => parseItem(value, options),
   )
 
@@ -158,7 +156,7 @@ export const retrieveItems: ParseUtilPartial<Array<RdfFeed.Item<DateAny>>> = (va
     return items
   }
 
-  return parseArrayOf(value?.item, (value) => parseItem(value, options), options?.maxItems)
+  return parseArrayOf(itemElements, (value) => parseItem(value, options), options?.maxItems)
 }
 
 export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, options) => {
