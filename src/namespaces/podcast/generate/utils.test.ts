@@ -1274,6 +1274,12 @@ describe('generateBaseItem', () => {
           href: 'https://example.com/image.jpg',
         },
       ],
+      contentLinks: [
+        {
+          href: 'https://example.com/episodes/42/discussion',
+          display: 'Join the discussion',
+        },
+      ],
       socialInteracts: [
         {
           protocol: 'activitypub',
@@ -1336,6 +1342,12 @@ describe('generateBaseItem', () => {
       'podcast:image': [
         {
           '@href': 'https://example.com/image.jpg',
+        },
+      ],
+      'podcast:contentLink': [
+        {
+          '#text': 'Join the discussion',
+          '@href': 'https://example.com/episodes/42/discussion',
         },
       ],
       'podcast:socialInteract': [

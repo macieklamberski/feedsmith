@@ -261,6 +261,12 @@
             "purpose": "social"
           }
         ],
+        "contentLinks": [
+          {
+            "href": "https://example.com/episodes/123/discussion",
+            "display": "Episode Discussion"
+          }
+        ],
         "socialInteracts": [
           {
             "protocol": "twitter",

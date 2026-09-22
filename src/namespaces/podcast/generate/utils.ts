@@ -33,6 +33,7 @@ export const generateBaseItem: GenerateUtil<PodcastNs.BaseItem> = (baseItem) => 
     ),
     'podcast:value': trimArray(baseItem.values, generateValue),
     'podcast:image': trimArray(baseItem.images, generateImage),
+    'podcast:contentLink': trimArray(baseItem.contentLinks, generateContentLink),
     'podcast:socialInteract': trimArray(baseItem.socialInteracts, generateSocialInteract),
     'podcast:txt': trimArray(baseItem.txts, generateTxt),
     'podcast:chat': generateChat(baseItem.chat),
@@ -339,7 +340,6 @@ export const generateLiveItem: GenerateUtil<PodcastNs.LiveItem<DateLike>> = (liv
     '@status': generatePlainString(liveItem.status),
     '@start': generateRfc3339Date(liveItem.start),
     '@end': generateRfc3339Date(liveItem.end),
-    'podcast:contentLink': trimArray(liveItem.contentLinks, generateContentLink),
   }
 
   return trimObject(value)

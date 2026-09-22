@@ -15,6 +15,7 @@ export namespace PodcastNs {
     alternateEnclosures?: Array<AlternateEnclosure<TStrict>>
     values?: Array<Value<TStrict>>
     images?: Array<Image<TStrict>>
+    contentLinks?: Array<ContentLink<TStrict>>
     socialInteracts?: Array<SocialInteract<TStrict>>
     txts?: Array<Txt<TStrict>>
     chat?: Chat<TStrict>
@@ -202,7 +203,6 @@ export namespace PodcastNs {
         status: Requirable<string> // Required in spec
         start: Requirable<TDate> // Required in spec. Date: ISO 8601
         end?: TDate // Date: ISO 8601
-        contentLinks?: Array<ContentLink<TStrict>>
       },
       TStrict
     >
