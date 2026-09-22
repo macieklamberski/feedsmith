@@ -236,6 +236,7 @@
   <googleplay:image href="https://example.com/images/googleplay-cover.jpg"/>
   <googleplay:category text="Technology"/>
   <googleplay:email>podcaster@example.com</googleplay:email>
+  <googleplay:owner>owner@example.com</googleplay:owner>
   <googleplay:new-feed-url>https://example.com/new-podcast-feed.xml</googleplay:new-feed-url>
 
   <!-- FeedBurner Namespace: Feed Level Tags -->

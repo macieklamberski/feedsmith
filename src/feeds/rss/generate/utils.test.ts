@@ -1508,6 +1508,7 @@ describe('generateFeed', () => {
         description: 'A comprehensive podcast description',
         explicit: false,
         email: 'contact@example.com',
+        owner: 'owner@example.com',
         categories: ['Technology', 'Education'],
       },
     }
@@ -1522,6 +1523,7 @@ describe('generateFeed', () => {
           'googleplay:description': 'A comprehensive podcast description',
           'googleplay:explicit': 'no',
           'googleplay:email': 'contact@example.com',
+          'googleplay:owner': 'owner@example.com',
           'googleplay:category': [{ '@text': 'Technology' }, { '@text': 'Education' }],
         },
       },

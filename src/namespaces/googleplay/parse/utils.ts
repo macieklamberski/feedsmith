@@ -97,6 +97,7 @@ export const retrieveFeed: ParseUtilPartial<GooglePlayNs.Feed> = (value) => {
     image: parseSingularOf(value['googleplay:image'], parseImage),
     newFeedUrl: retrieveNewFeedUrl(value),
     email: parseSingularOf(value['googleplay:email'], (value) => parseString(retrieveText(value))),
+    owner: parseSingularOf(value['googleplay:owner'], (value) => parseString(retrieveText(value))),
     categories: parseArrayOf(value['googleplay:category'], parseCategory),
   }
 

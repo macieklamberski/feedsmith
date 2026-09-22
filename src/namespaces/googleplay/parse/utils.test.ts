@@ -363,6 +363,7 @@ describe('retrieveFeed', () => {
       'googleplay:image': { '@href': 'https://example.com/podcast.jpg' },
       'googleplay:new-feed-url': 'https://example.com/new-podcast-feed',
       'googleplay:email': 'contact@example.com',
+      'googleplay:owner': 'owner@example.com',
       'googleplay:category': [{ '@text': 'Technology' }, { '@text': 'Education' }],
     }
     const expected = {
@@ -373,6 +374,7 @@ describe('retrieveFeed', () => {
       image: { href: 'https://example.com/podcast.jpg' },
       newFeedUrl: 'https://example.com/new-podcast-feed',
       email: 'contact@example.com',
+      owner: 'owner@example.com',
       categories: ['Technology', 'Education'],
     }
 
@@ -385,6 +387,17 @@ describe('retrieveFeed', () => {
     }
     const expected = {
       newFeedUrl: 'https://example.com/new-podcast-feed',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse owner', () => {
+    const value = {
+      'googleplay:owner': 'owner@example.com',
+    }
+    const expected: GooglePlayNs.Feed = {
+      owner: 'owner@example.com',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
