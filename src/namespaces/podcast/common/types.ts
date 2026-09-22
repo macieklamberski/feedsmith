@@ -315,6 +315,7 @@ export namespace PodcastNs {
     images?: Array<Image<TStrict>>
     liveItems?: Array<LiveItem<TDate, TStrict>>
     blocks?: Array<Block<TStrict>>
+    socialInteracts?: Array<SocialInteract<TStrict>>
     txts?: Array<Txt<TStrict>>
     remoteItems?: Array<RemoteItem<TStrict>>
     podroll?: Podroll<TStrict>

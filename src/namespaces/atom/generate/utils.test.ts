@@ -38,6 +38,23 @@ describe('generateEntry', () => {
     expect(generateEntry(value)).toEqual(expected)
   })
 
+  it('should generate atom entry with prefixed source elements', () => {
+    const value = {
+      source: {
+        id: 'https://example.com/feed',
+        authors: [{ name: 'John Doe' }],
+      },
+    }
+    const expected = {
+      'atom:source': {
+        'atom:author': [{ 'atom:name': 'John Doe' }],
+        'atom:id': 'https://example.com/feed',
+      },
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
   it('should handle empty strings', () => {
     const value = {
       id: '',

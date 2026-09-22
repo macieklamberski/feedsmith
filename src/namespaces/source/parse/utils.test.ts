@@ -2,6 +2,7 @@ import { describe, expect, it } from 'bun:test'
 import {
   parseAccount,
   parseArchive,
+  parseComments,
   parseInReplyTo,
   parseLikes,
   parseSubscriptionList,
@@ -259,6 +260,68 @@ describe('parseInReplyTo', () => {
   })
 })
 
+describe('parseComments', () => {
+  it('should parse comments with count and feedUrl', () => {
+    const value = {
+      '@count': '2',
+      '@feedurl': 'https://example.com/comments/204.xml',
+    }
+    const expected = {
+      count: 2,
+      feedUrl: 'https://example.com/comments/204.xml',
+    }
+
+    expect(parseComments(value)).toEqual(expected)
+  })
+
+  it('should parse comments with only count', () => {
+    const value = {
+      '@count': '2',
+    }
+    const expected = {
+      count: 2,
+    }
+
+    expect(parseComments(value)).toEqual(expected)
+  })
+
+  it('should parse comments with only feedUrl', () => {
+    const value = {
+      '@feedurl': 'https://example.com/comments/204.xml',
+    }
+    const expected = {
+      feedUrl: 'https://example.com/comments/204.xml',
+    }
+
+    expect(parseComments(value)).toEqual(expected)
+  })
+
+  it('should skip count that is not a number', () => {
+    const value = {
+      '@count': 'many',
+      '@feedurl': 'https://example.com/comments/204.xml',
+    }
+    const expected = {
+      feedUrl: 'https://example.com/comments/204.xml',
+    }
+
+    expect(parseComments(value)).toEqual(expected)
+  })
+
+  it('should return undefined when no attributes present', () => {
+    const value = {}
+
+    expect(parseComments(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(parseComments('not an object')).toBeUndefined()
+    expect(parseComments(undefined)).toBeUndefined()
+    expect(parseComments(null)).toBeUndefined()
+    expect(parseComments([])).toBeUndefined()
+  })
+})
+
 describe('retrieveFeed', () => {
   it('should parse complete feed with all properties', () => {
     const value = {
@@ -330,6 +393,10 @@ describe('retrieveItem', () => {
         '@ispermalink': 'false',
         '#text': 'did:plc:iwl32vekohccji6khfdt3clw',
       },
+      'source:comments': {
+        '@count': '2',
+        '@feedurl': 'https://example.com/comments/204.xml',
+      },
     }
     const expected = {
       markdown: '# Title\n\nThis is **markdown** content.',
@@ -338,6 +405,10 @@ describe('retrieveItem', () => {
       inReplyTo: {
         value: 'did:plc:iwl32vekohccji6khfdt3clw',
         isPermaLink: false,
+      },
+      comments: {
+        count: 2,
+        feedUrl: 'https://example.com/comments/204.xml',
       },
     }
 

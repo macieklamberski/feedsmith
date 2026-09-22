@@ -4255,6 +4255,12 @@ describe('retrieveFeed', () => {
         id: 'spotify',
       },
     ],
+    socialInteracts: [
+      {
+        uri: 'https://example.com/comments',
+        protocol: 'activitypub',
+      },
+    ],
     txts: [
       {
         display: 'Additional podcast information',
@@ -4354,6 +4360,12 @@ describe('retrieveFeed', () => {
         {
           '#text': 'yes',
           '@id': 'spotify',
+        },
+      ],
+      'podcast:socialinteract': [
+        {
+          '@uri': 'https://example.com/comments',
+          '@protocol': 'activitypub',
         },
       ],
       'podcast:txt': [
@@ -4468,6 +4480,12 @@ describe('retrieveFeed', () => {
         {
           '#text': 'yes',
           '@id': 'spotify',
+        },
+      ],
+      'podcast:socialinteract': [
+        {
+          '@uri': 'https://example.com/comments',
+          '@protocol': 'activitypub',
         },
       ],
       'podcast:txt': [

@@ -5,6 +5,8 @@ export namespace OpenSearchNs {
   export type Query<TStrict extends boolean = false> = Strict<
     {
       role: Requirable<string> // Required in spec
+      title?: string
+      totalResults?: number
       searchTerms?: string
       count?: number
       startIndex?: number

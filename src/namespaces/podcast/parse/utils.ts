@@ -492,6 +492,7 @@ export const retrieveFeed: ParseUtilPartial<PodcastNs.Feed<DateAny>, ParseMainOp
     images: retrieveImages(value),
     liveItems: parseArrayOf(value['podcast:liveitem'], (value) => parseLiveItem(value, options)),
     blocks: parseArrayOf(value['podcast:block'], parseBlock),
+    socialInteracts: parseArrayOf(value['podcast:socialinteract'], parseSocialInteract),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
     remoteItems: parseArrayOf(value['podcast:remoteitem'], parseRemoteItem),
     podroll: parseSingularOf(value['podcast:podroll'], parsePodroll),

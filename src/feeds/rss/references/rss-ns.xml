@@ -26,7 +26,7 @@
      xmlns:thr="http://purl.org/syndication/thread/1.0"
      xmlns:wfw="http://wellformedweb.org/CommentAPI/"
      xmlns:admin="http://webns.net/mvcb/"
-     xmlns:pingback="http://purl.org/net/pingback/"
+     xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
      xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
      xmlns:source="http://source.scripting.com/"
      xmlns:blogChannel="http://backend.userland.com/blogChannelModule"
@@ -161,6 +161,7 @@
     </podcast:liveItem>
     <podcast:block>yes</podcast:block>
     <podcast:block id="test">no</podcast:block>
+    <podcast:socialInteract uri="https://example.com/@examplepodcast/100000000" protocol="activitypub" accountId="@examplepodcast@example.com" accountUrl="https://example.com/@examplepodcast" priority="1"/>
     <podcast:txt purpose="info">Additional text information about the podcast</podcast:txt>
     <podcast:remoteItem feedGuid="ead4c236-bf58-58c6-a2c6-a6b28d128cb9" feedUrl="https://guest-podcast.example/feed.xml" itemGuid="episode-guid-here" title="Guest Podcast Episode"/>
     <podcast:podroll>
@@ -284,6 +285,7 @@
     <googleplay:image href="https://example.com/images/googleplay-cover.jpg" />
     <googleplay:new-feed-url>https://example.com/new-feed.xml</googleplay:new-feed-url>
     <googleplay:email>contact@example.com</googleplay:email>
+    <googleplay:owner>owner@example.com</googleplay:owner>
     <googleplay:category text="Technology" />
     <googleplay:category text="Education" />
 
@@ -333,7 +335,7 @@
     <opensearch:totalResults>1000</opensearch:totalResults>
     <opensearch:startIndex>21</opensearch:startIndex>
     <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
-    <opensearch:Query role="request" searchTerms="quantum computing" startIndex="21" count="10"/>
+    <opensearch:Query role="request" title="Search results for quantum computing" totalResults="1000" searchTerms="quantum computing" startIndex="21" count="10"/>
 
     <!-- PRISM Namespace: Channel Level Tags -->
     <prism:publicationName>Nature</prism:publicationName>
@@ -464,6 +466,7 @@
     <blogChannel:blogRoll>http://example.com/blogroll.opml</blogChannel:blogRoll>
     <blogChannel:blink>http://recommended-site.com/</blogChannel:blink>
     <blogChannel:mySubscriptions>http://example.com/subscriptions.opml</blogChannel:mySubscriptions>
+    <blogChannel:changes>http://example.com/changes.xml</blogChannel:changes>
 
     <!-- W3C Basic Geo Namespace: Channel Level Tags -->
     <geo:lat>37.7749</geo:lat>
@@ -585,6 +588,7 @@
       <itunes:episodeType>full</itunes:episodeType>
       <itunes:block>false</itunes:block>
       <itunes:order>1</itunes:order>
+      <itunes:isClosedCaptioned>yes</itunes:isClosedCaptioned>
       <itunes:summary>This is a detailed summary of the episode content and key takeaways</itunes:summary>
       <itunes:subtitle>Episode subtitle with additional context</itunes:subtitle>
       <itunes:keywords>tutorial,example,technology,programming</itunes:keywords>
@@ -764,10 +768,19 @@
       <feedburner:origEnclosureLink>https://example.com/audio/original-episode.mp3</feedburner:origEnclosureLink>
       <feedburner:awareness>https://feedburner.google.com/awareness/1.0/data/examplepodcast/episode</feedburner:awareness>
 
+      <!-- arXiv Namespace: Item Level Tags -->
+      <arxiv:comment>23 pages, 8 figures and 4 tables</arxiv:comment>
+      <arxiv:journal_ref>Eur.Phys.J. C31 (2003) 17-29</arxiv:journal_ref>
+      <arxiv:DOI>10.1529/biophysj.104.047340</arxiv:DOI>
+      <arxiv:primary_category term="hep-ex" scheme="http://arxiv.org/schemas/atom" label="High Energy Physics - Experiment"/>
+      <arxiv:announce_type>replace-cross</arxiv:announce_type>
+      <arxiv:journal_reference>Journal de l'Ecole polytechnique - Mathematiques, Tome 11 (2024), pp. 431-472</arxiv:journal_reference>
+
       <!-- PRISM Namespace: Item Level Tags -->
       <prism:publicationName>Nature</prism:publicationName>
       <prism:issn>0028-0836</prism:issn>
       <prism:eIssn>1476-4687</prism:eIssn>
+      <prism:issueIdentifier>2023-03-15</prism:issueIdentifier>
       <prism:doi>10.1038/s41586-023-05842-x</prism:doi>
       <prism:url>https://www.nature.com/articles/s41586-023-05842-x</prism:url>
       <prism:volume>615</prism:volume>
@@ -801,6 +814,7 @@
       <prism:person>Dr. Jane Smith</prism:person>
       <prism:person>Dr. John Doe</prism:person>
       <prism:platform>web</prism:platform>
+      <prism:originPlatform>print</prism:originPlatform>
       <prism:device>desktop</prism:device>
       <prism:academicField>Biology</prism:academicField>
       <prism:academicField>Biochemistry</prism:academicField>
@@ -859,6 +873,8 @@
       <!-- Pingback Namespace: Item Level Tags -->
       <pingback:server>https://example.com/xmlrpc.php</pingback:server>
       <pingback:target>https://referenced-blog.com/article</pingback:target>
+      <pingback:about>https://blog1.com/posts/xml-basics</pingback:about>
+      <pingback:about>https://blog2.com/posts/namespaces</pingback:about>
 
       <!-- Trackback Namespace: Item Level Tags -->
       <trackback:ping>https://example.com/trackback/123</trackback:ping>
@@ -871,6 +887,7 @@
       <source:outline>&lt;outline text="Implementation"&gt;&lt;outline text="RSS Integration"/&gt;&lt;/outline&gt;</source:outline>
       <source:linkFull>http://example.org/item/1/understanding-xml-namespaces-complete-guide</source:linkFull>
       <source:inReplyTo isPermaLink="false">did:plc:iwl32vekohccji6khfdt3clw</source:inReplyTo>
+      <source:comments count="2" feedUrl="http://example.org/item/1/comments.xml"/>
 
       <!-- W3C Basic Geo Namespace: Item Level Tags -->
       <geo:lat>37.8199</geo:lat>

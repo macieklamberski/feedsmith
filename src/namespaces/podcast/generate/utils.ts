@@ -497,6 +497,7 @@ export const generateFeed: GenerateUtil<PodcastNs.Feed<DateLike>> = (feed) => {
     'podcast:image': trimArray(feed.images, generateImage),
     'podcast:liveItem': trimArray(feed.liveItems, generateLiveItem),
     'podcast:block': trimArray(feed.blocks, generateBlock),
+    'podcast:socialInteract': trimArray(feed.socialInteracts, generateSocialInteract),
     'podcast:txt': trimArray(feed.txts, generateTxt),
     'podcast:remoteItem': trimArray(feed.remoteItems, generateRemoteItem),
     'podcast:podroll': generatePodroll(feed.podroll),
