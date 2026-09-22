@@ -39,7 +39,7 @@ The Atom namespace allows RSS and RDF feeds to include Atom-specific elements, p
 > [!INFO]
 > For details on type parameters (`TDate`, `TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tdate).
 
-<<< @/../src/feeds/atom/common/types.ts#reference
+<<< @/../src/namespaces/atom/common/types.ts#reference
 
 ## Related
 

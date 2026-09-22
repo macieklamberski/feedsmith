@@ -14,7 +14,10 @@ The Creative Commons namespace provides elements for specifying the license unde
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://www.rssboard.org/creative-commons" target="_blank">Creative Commons RSS Module Specification</a></td>
+      <td>
+        <a href="https://web.archive.org/web/20260106151011/http://backend.userland.com/creativeCommonsRssModule" target="_blank">creativeCommons RSS Module</a> (Original, Web Archive)<br>
+        <a href="https://www.rssboard.org/creative-commons" target="_blank">Creative Commons RSS Module Specification</a> (RSS Board)
+      </td>
     </tr>
     <tr>
       <th>Prefix</th>

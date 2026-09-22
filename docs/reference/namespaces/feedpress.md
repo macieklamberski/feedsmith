@@ -14,7 +14,10 @@ The FeedPress namespace provides elements for FeedPress-specific feed metadata, 
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://feedpress.com/xmlns" target="_blank">FeedPress Namespace Specification</a></td>
+      <td>
+        <a href="https://web.archive.org/web/20200101051701/https://feed.press/xmlns" target="_blank">FeedPress Namespace Specification</a> (Original, Web Archive)<br>
+        <a href="https://feedpress.com/xmlns" target="_blank">FeedPress Namespace Specification</a> (FeedPress)
+      </td>
     </tr>
     <tr>
       <th>Prefix</th>

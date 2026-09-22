@@ -14,7 +14,7 @@ The FeedBurner namespace carries the metadata FeedBurner adds when it proxies a 
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://web.archive.org/web/20110820183649/http://code.google.com/apis/feedburner/feedburner_namespace_reference.html" target="_blank">FeedBurner Namespace Reference</a> (archive)</td>
+      <td><a href="https://web.archive.org/web/20110820183649/http://code.google.com/apis/feedburner/feedburner_namespace_reference.html" target="_blank">FeedBurner Namespace Reference</a> (Web Archive)</td>
     </tr>
     <tr>
       <th>Prefix</th>

@@ -14,7 +14,7 @@ The W3C Basic Geo (WGS84 lat/long) Vocabulary provides a simple way to represent
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="http://www.w3.org/2003/01/geo/wgs84_pos#" target="_blank">W3C Basic Geo Vocabulary</a></td>
+      <td><a href="https://www.w3.org/2003/01/geo/" target="_blank">W3C Basic Geo Vocabulary</a></td>
     </tr>
     <tr>
       <th>Prefix</th>

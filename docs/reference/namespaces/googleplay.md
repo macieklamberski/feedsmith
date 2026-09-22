@@ -14,7 +14,7 @@ The Google Play Podcast namespace provides podcast-specific metadata for feed an
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://www.google.com/schemas/play-podcasts/1.0/">Google Play Podcast Namespace</a></td>
+      <td><a href="https://web.archive.org/web/20210926220857/https://support.google.com/podcast-publishers/answer/9889544" target="_blank">RSS Feed Guidelines for Google Podcasts</a> (Web Archive)</td>
     </tr>
     <tr>
       <th>Prefix</th>

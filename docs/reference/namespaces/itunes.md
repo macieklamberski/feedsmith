@@ -14,7 +14,10 @@ The iTunes namespace provides podcast-specific metadata for RSS and Atom feeds. 
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://podcasters.apple.com/support/823-podcast-requirements" target="_blank">Apple Podcasts Requirements</a></td>
+      <td>
+        <a href="https://web.archive.org/web/20160103214456/http://www.apple.com/itunes/podcasts/specs.html" target="_blank">Making a Podcast</a> (Original, Web Archive)<br>
+        <a href="https://help.apple.com/itc/podcasts_connect/#/itcb54353390" target="_blank">A Podcaster’s Guide to RSS</a> (Apple)
+      </td>
     </tr>
     <tr>
       <th>Prefix</th>
