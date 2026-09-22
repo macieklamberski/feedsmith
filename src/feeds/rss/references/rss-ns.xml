@@ -26,7 +26,7 @@
      xmlns:thr="http://purl.org/syndication/thread/1.0"
      xmlns:wfw="http://wellformedweb.org/CommentAPI/"
      xmlns:admin="http://webns.net/mvcb/"
-     xmlns:pingback="http://purl.org/net/pingback/"
+     xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
      xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
      xmlns:source="http://source.scripting.com/"
      xmlns:blogChannel="http://backend.userland.com/blogChannelModule"
