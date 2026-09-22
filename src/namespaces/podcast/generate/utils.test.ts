@@ -1412,6 +1412,12 @@ describe('generateLiveItem', () => {
           role: 'host',
         },
       ],
+      fundings: [
+        {
+          url: 'https://example.com/live/donate',
+          display: 'Support the show',
+        },
+      ],
     }
     const expected = {
       '@status': 'live',
@@ -1430,6 +1436,12 @@ describe('generateLiveItem', () => {
         {
           '#text': 'Host Name',
           '@role': 'host',
+        },
+      ],
+      'podcast:funding': [
+        {
+          '#text': 'Support the show',
+          '@url': 'https://example.com/live/donate',
         },
       ],
     }

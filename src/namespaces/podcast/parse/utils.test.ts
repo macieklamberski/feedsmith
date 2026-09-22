@@ -2296,6 +2296,10 @@ describe('parseLiveItem', () => {
         '#text': 'New York, NY',
         '@geo': '40.7128,-74.0060',
       },
+      'podcast:funding': {
+        '@url': 'https://example.com/live/donate',
+        '#text': 'Support the show',
+      },
     }
     const expected = {
       status: 'live',
@@ -2321,6 +2325,12 @@ describe('parseLiveItem', () => {
         {
           display: 'New York, NY',
           geo: '40.7128,-74.0060',
+        },
+      ],
+      fundings: [
+        {
+          url: 'https://example.com/live/donate',
+          display: 'Support the show',
         },
       ],
     }
