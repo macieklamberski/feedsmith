@@ -17,6 +17,7 @@
   xmlns:wfw="http://wellformedweb.org/CommentAPI/"
   xmlns:admin="http://webns.net/mvcb/"
   xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+  xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
   xmlns:georss="http://www.georss.org/georss"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
@@ -246,6 +247,11 @@
     <!-- Admin Namespace: Channel Level Tags -->
     <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
     <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+
+    <!-- W3C Basic Geo Namespace: Channel Level Tags -->
+    <geo:lat>37.7749</geo:lat>
+    <geo:long>-122.4194</geo:long>
+    <geo:alt>10.5</geo:alt>
 
     <!-- GeoRSS-Simple Namespace: Item/Feed Level Tags (while not typical, included are all values for testing) -->
     <georss:point>37.78 -122.42</georss:point>
@@ -477,6 +483,11 @@
     <trackback:ping rdf:resource="https://example.com/trackback/123"/>
     <trackback:about rdf:resource="https://blog1.com/trackback/456"/>
     <trackback:about rdf:resource="https://blog2.com/trackback/789"/>
+
+    <!-- W3C Basic Geo Namespace: Item Level Tags -->
+    <geo:lat>37.8199</geo:lat>
+    <geo:long>-122.4783</geo:long>
+    <geo:alt>67.0</geo:alt>
 
     <!-- GeoRSS-Simple Namespace: Item/Feed Level Tags (while not typical, included are all values for testing) -->
     <georss:point>37.78 -122.42</georss:point>
