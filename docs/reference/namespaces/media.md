@@ -14,7 +14,10 @@ The Media RSS namespace provides rich media metadata for RSS feeds, enabling com
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://www.rssboard.org/media-rss" target="_blank">Media RSS Specification</a></td>
+      <td>
+        <a href="https://web.archive.org/web/20090101091733/http://search.yahoo.com/mrss/" target="_blank">Media RSS Specification</a> (Original, Web Archive)<br>
+        <a href="https://www.rssboard.org/media-rss" target="_blank">Media RSS Specification</a> (RSS Board)
+      </td>
     </tr>
     <tr>
       <th>Prefix</th>

@@ -10,11 +10,14 @@ The RawVoice namespace provides elements for enhanced podcast and video content 
   <tbody>
     <tr>
       <th>Namespace URI</th>
-      <td><code>https://blubrry.com/developer/rawvoice-rss</code></td>
+      <td><code>http://www.rawvoice.com/rawvoiceRssModule/</code></td>
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://blubrry.com/developer/rawvoice-rss/" target="_blank">RawVoice RSS Namespace Specification</a></td>
+      <td>
+        <a href="https://web.archive.org/web/20170101021034/http://www.rawvoice.com/services/tools-and-resources/rawvoice-rss-2-0-module-xmlns-namespace-rss2/" target="_blank">RawVoice RSS Module</a> (Original, Web Archive)<br>
+        <a href="https://blubrry.com/developer/rawvoice-rss/" target="_blank">RawVoice RSS Namespace Specification</a> (Blubrry)
+      </td>
     </tr>
     <tr>
       <th>Prefix</th>

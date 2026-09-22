@@ -14,7 +14,10 @@ The OpenSearch namespace provides elements for communicating search metadata and
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://github.com/dewitt/opensearch/blob/master/opensearch-1-1-draft-6.md" target="_blank">OpenSearch 1.1 Specification</a>, <a href="http://web.archive.org/web/20060209232137/http://opensearch.a9.com:80/spec/1.1/response/" target="_blank">OpenSearch 1.1 Draft 2 Response</a></td>
+      <td>
+        <a href="https://web.archive.org/web/20060209232137/http://opensearch.a9.com:80/spec/1.1/response/" target="_blank">OpenSearch 1.1 Draft 2 Response</a> (Original, Web Archive)<br>
+        <a href="https://github.com/dewitt/opensearch/blob/master/opensearch-1-1-draft-6.md" target="_blank">OpenSearch 1.1 Draft 6</a> (GitHub)
+      </td>
     </tr>
     <tr>
       <th>Prefix</th>

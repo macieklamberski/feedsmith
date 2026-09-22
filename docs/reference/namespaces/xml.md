@@ -1,3 +1,7 @@
+---
+title: "Reference: XML Namespace"
+---
+
 # XML Namespace Reference
 
 Supports `xml:lang`, `xml:base`, `xml:space`, and `xml:id` attributes at both feed and item/entry level in RSS, Atom, and RDF feeds.
@@ -10,7 +14,11 @@ Supports `xml:lang`, `xml:base`, `xml:space`, and `xml:id` attributes at both fe
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://www.w3.org/TR/xml-names/" target="_blank">Namespaces in XML</a></td>
+      <td>
+        <a href="https://www.w3.org/TR/xml/" target="_blank">XML 1.0</a> (<code>xml:space</code>, <code>xml:lang</code>)<br>
+        <a href="https://www.w3.org/TR/xmlbase/" target="_blank">XML Base</a><br>
+        <a href="https://www.w3.org/TR/xml-id/" target="_blank">xml:id</a>
+      </td>
     </tr>
     <tr>
       <th>Prefix</th>
