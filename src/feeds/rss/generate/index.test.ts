@@ -868,6 +868,7 @@ describe('generate', () => {
             outlines: ['<outline text="Section 1"/>', '<outline text="Section 2"/>'],
             linkFull: 'https://example.com/posts/full-version',
             inReplyTo: { value: 'did:plc:iwl32vekohccji6khfdt3clw', isPermaLink: false },
+            comments: { count: 2, feedUrl: 'https://example.com/comments/204.xml' },
           },
         },
       ],
@@ -893,6 +894,7 @@ describe('generate', () => {
       </source:outline>
       <source:linkFull>https://example.com/posts/full-version</source:linkFull>
       <source:inReplyTo isPermaLink="false">did:plc:iwl32vekohccji6khfdt3clw</source:inReplyTo>
+      <source:comments count="2" feedUrl="https://example.com/comments/204.xml"/>
     </item>
   </channel>
 </rss>

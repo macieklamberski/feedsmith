@@ -1018,6 +1018,7 @@ describe('generateItem', () => {
         outlines: ['<outline text="Section 1"/>', '<outline text="Section 2"/>'],
         linkFull: 'https://example.com/full-article',
         inReplyTo: { value: 'did:plc:iwl32vekohccji6khfdt3clw', isPermaLink: false },
+        comments: { count: 2, feedUrl: 'https://example.com/comments/204.xml' },
       },
     }
     const expected = {
@@ -1031,6 +1032,10 @@ describe('generateItem', () => {
       'source:inReplyTo': {
         '#text': 'did:plc:iwl32vekohccji6khfdt3clw',
         '@isPermaLink': false,
+      },
+      'source:comments': {
+        '@count': 2,
+        '@feedUrl': 'https://example.com/comments/204.xml',
       },
     }
 

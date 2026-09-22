@@ -3,6 +3,8 @@ import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateBoolean,
   generateCdataString,
+  generateNumber,
+  generatePlainString,
   generateTextOrCdataString,
   trimArray,
 } from '../../../common/utils.js'
@@ -78,6 +80,19 @@ export const generateInReplyTo: GenerateUtil<SourceNs.InReplyTo> = (inReplyTo) =
   return trimObject(value)
 }
 
+export const generateComments: GenerateUtil<SourceNs.Comments> = (comments) => {
+  if (!isPlainObject(comments)) {
+    return
+  }
+
+  const value = {
+    '@count': generateNumber(comments.count),
+    '@feedUrl': generatePlainString(comments.feedUrl),
+  }
+
+  return trimObject(value)
+}
+
 export const generateFeed: GenerateUtil<SourceNs.Feed> = (feed) => {
   if (!isPlainObject(feed)) {
     return
@@ -107,6 +122,7 @@ export const generateItem: GenerateUtil<SourceNs.Item> = (item) => {
     'source:outline': trimArray(item.outlines, generateCdataString),
     'source:linkFull': generateCdataString(item.linkFull),
     'source:inReplyTo': generateInReplyTo(item.inReplyTo),
+    'source:comments': generateComments(item.comments),
   }
 
   return trimObject(value)
