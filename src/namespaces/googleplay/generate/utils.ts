@@ -61,7 +61,7 @@ export const generateFeed: GenerateUtil<GooglePlayNs.Feed> = (feed) => {
     'googleplay:explicit': generateExplicit(feed.explicit),
     'googleplay:block': generateYesNoBoolean(feed.block),
     'googleplay:image': generateImage(feed.image),
-    'googleplay:new-feed-url': generatePlainString(feed.newFeedUrl),
+    'googleplay:newFeedUrl': generatePlainString(feed.newFeedUrl),
     'googleplay:email': generatePlainString(feed.email),
     'googleplay:owner': generatePlainString(feed.owner),
     'googleplay:category': trimArray(feed.categories, generateCategory),

@@ -237,7 +237,7 @@
   <googleplay:category text="Technology"/>
   <googleplay:email>podcaster@example.com</googleplay:email>
   <googleplay:owner>owner@example.com</googleplay:owner>
-  <googleplay:new-feed-url>https://example.com/new-podcast-feed.xml</googleplay:new-feed-url>
+  <googleplay:newFeedUrl>https://example.com/new-podcast-feed.xml</googleplay:newFeedUrl>
 
   <!-- FeedBurner Namespace: Feed Level Tags -->
   <feedburner:info uri="exampleblog"/>
