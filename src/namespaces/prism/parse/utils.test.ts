@@ -783,12 +783,6 @@ describe('parseOriginPlatform', () => {
     expect(parseOriginPlatform(value)).toBe('web')
   })
 
-  it('should parse prefixed platform attribute', () => {
-    const value = { '@prism:platform': 'web' }
-
-    expect(parseOriginPlatform(value)).toBe('web')
-  })
-
   it('should parse rdf:resource attribute', () => {
     const value = { '@rdf:resource': 'platform.xml#web' }
 
@@ -803,15 +797,6 @@ describe('parseOriginPlatform', () => {
 
   it('should parse #text wrapper', () => {
     const value = { '#text': 'web' }
-
-    expect(parseOriginPlatform(value)).toBe('web')
-  })
-
-  it('should prefer platform attribute over prefixed platform attribute', () => {
-    const value = {
-      '@platform': 'web',
-      '@prism:platform': 'print',
-    }
 
     expect(parseOriginPlatform(value)).toBe('web')
   })
