@@ -535,6 +535,17 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with originPlatform fields', () => {
+    const value = {
+      originPlatforms: ['print', 'web'],
+    }
+    const expected = {
+      'prism:originPlatform': ['print', 'web'],
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with subject classification fields', () => {
     const value = {
       academicFields: ['Quantum Physics', 'Computer Science'],

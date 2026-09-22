@@ -14,7 +14,7 @@ import type { PrismNs } from '../common/types.js'
 // See: https://www.w3.org/submissions/2020/SUBM-prism-20200910/prism-basic.html.
 export const parseOriginPlatform: ParseUtilPartial<string> = (value) => {
   if (isPlainObject(value)) {
-    const platform = parseString(value['@platform']) ?? parseString(value['@prism:platform'])
+    const platform = parseString(value['@platform'])
 
     if (platform) {
       return platform
@@ -301,6 +301,7 @@ export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOpti
     ),
     persons: parseArrayOf(value['prism:person'], (value) => parseString(retrieveText(value))),
     platforms: parseArrayOf(value['prism:platform'], (value) => parseString(retrieveText(value))),
+    originPlatforms: parseArrayOf(value['prism:originplatform'], parseOriginPlatform),
     device: parseSingularOf(value['prism:device'], (value) => parseString(retrieveText(value))),
     academicFields: parseArrayOf(value['prism:academicfield'], (value) =>
       parseString(retrieveText(value)),
