@@ -288,7 +288,7 @@ export const generateFeed: GenerateUtil<RssFeed.Feed<DateLike>> = (feed) => {
     ...generateDcTermsItemOrFeed(feed.dcterms),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
-    ...generatePodcastFeed(feed.podcast),
+    ...generatePodcastFeed(feed.podcast, { generateItemFn: generateItem }),
     ...generateMediaItemOrFeed(feed.media),
     ...generateGooglePlayFeed(feed.googleplay),
     ...generateSpotifyFeed(feed.spotify),

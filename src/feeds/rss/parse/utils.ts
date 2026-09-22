@@ -430,6 +430,22 @@ export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, option
   return trimObject(item)
 }
 
+export const parseLiveItem: ParseUtilPartial<Omit<RssFeed.Item<DateAny>, 'podcast'>> = (
+  value,
+  options,
+) => {
+  const item = parseItem(value, options)
+
+  if (!item) {
+    return
+  }
+
+  // The podcast namespace reads a liveItem's podcast children onto the liveItem itself.
+  const { podcast, ...liveItem } = item
+
+  return trimObject(liveItem)
+}
+
 export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, options) => {
   const channel = parseSingular(value?.channel)
 
@@ -467,7 +483,9 @@ export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, option
     dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(channel, options) : undefined,
     sy: namespaces.has('sy') ? retrieveSyFeed(channel, options) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesFeed(channel) : undefined,
-    podcast: namespaces.has('podcast') ? retrievePodcastFeed(channel, options) : undefined,
+    podcast: namespaces.has('podcast')
+      ? retrievePodcastFeed(channel, { ...options, parseItemFn: parseLiveItem })
+      : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
     googleplay: namespaces.has('googleplay') ? retrieveGooglePlayFeed(channel) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(channel) : undefined,

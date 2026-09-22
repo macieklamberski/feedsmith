@@ -13,6 +13,10 @@ import {
 } from '../../../common/utils.js'
 import type { PodcastNs } from '../common/types.js'
 
+type ParseOptions = ParseMainOptions<DateAny> & {
+  parseItemFn?: ParseUtilPartial<object, ParseMainOptions<DateAny>>
+}
+
 const whitespaceRegex = /\s+/
 const trailingWRegex = /w$/
 
@@ -282,15 +286,16 @@ export const retrieveImages: ParseUtilPartial<Array<PodcastNs.Image>> = (value) 
   )
 }
 
-export const parseLiveItem: ParseUtilPartial<
-  PodcastNs.LiveItem<DateAny>,
-  ParseMainOptions<DateAny>
-> = (value, options) => {
+export const parseLiveItem: ParseUtilPartial<PodcastNs.LiveItem<DateAny>, ParseOptions> = (
+  value,
+  options,
+) => {
   if (!isPlainObject(value)) {
     return
   }
 
   const liveItem = {
+    ...options?.parseItemFn?.(value, options),
     ...retrieveItem(value),
     status: parseString(value['@status']),
     start: parseDate(value['@start'], options?.parseDateFn),
@@ -471,7 +476,7 @@ export const retrieveItem: ParseUtilPartial<PodcastNs.Item> = (value) => {
   return trimObject(item)
 }
 
-export const retrieveFeed: ParseUtilPartial<PodcastNs.Feed<DateAny>, ParseMainOptions<DateAny>> = (
+export const retrieveFeed: ParseUtilPartial<PodcastNs.Feed<DateAny>, ParseOptions> = (
   value,
   options,
 ) => {

@@ -282,6 +282,58 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS item elements inside podcast:liveItem', () => {
+    const value = {
+      title: 'Live Podcast',
+      description: 'Test feed with a live stream',
+      podcast: {
+        liveItems: [
+          {
+            title: 'Live Show',
+            guid: {
+              value: 'https://example.com/live',
+            },
+            enclosures: [
+              {
+                url: 'https://example.com/livestream.mp3',
+                length: 312,
+                type: 'audio/mpeg',
+              },
+            ],
+            itunes: {
+              image: 'https://example.com/live.jpg',
+            },
+            status: 'live',
+            start: new Date('2021-09-26T13:30:00.000Z'),
+            contentLinks: [
+              {
+                href: 'https://example.com/html/livestream',
+                display: 'Listen Live!',
+              },
+            ],
+          },
+        ],
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:podcast="https://podcastindex.org/namespace/1.0">
+  <channel>
+    <title>Live Podcast</title>
+    <description>Test feed with a live stream</description>
+    <podcast:liveItem status="live" start="2021-09-26T13:30:00.000Z">
+      <title>Live Show</title>
+      <enclosure url="https://example.com/livestream.mp3" length="312" type="audio/mpeg"/>
+      <guid>https://example.com/live</guid>
+      <itunes:image href="https://example.com/live.jpg"/>
+      <podcast:contentLink href="https://example.com/html/livestream">Listen Live!</podcast:contentLink>
+    </podcast:liveItem>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with psc namespace', () => {
     const value = {
       title: 'Feed with psc namespace',
