@@ -376,8 +376,6 @@ export const generateLocation: GenerateUtil<MediaNs.Location> = (location) => {
     '@description': generatePlainString(location.description),
     '@start': generatePlainString(location.start),
     '@end': generatePlainString(location.end),
-    '@lat': generateNumber(location.lat),
-    '@lng': generateNumber(location.lng),
     'georss:where': generateWhere(location.georss?.where),
   }
 

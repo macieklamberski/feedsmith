@@ -189,8 +189,6 @@ export namespace MediaNs {
     description?: string
     start?: string
     end?: string
-    lat?: number
-    lng?: number
     georss?: Pick<GeoRssNs.ItemOrFeed, 'where'>
   }
 

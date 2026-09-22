@@ -1064,15 +1064,11 @@ describe('generateLocation', () => {
       description: 'New York City',
       start: '01:00:00',
       end: '01:05:00',
-      lat: 40.7128,
-      lng: -74.006,
     }
     const expected = {
       '@description': 'New York City',
       '@start': '01:00:00',
       '@end': '01:05:00',
-      '@lat': 40.7128,
-      '@lng': -74.006,
     }
 
     expect(generateLocation(value)).toEqual(expected)
@@ -1284,8 +1280,6 @@ describe('generateContent', () => {
           description: 'New York City',
           start: '01:00:00',
           end: '01:05:00',
-          lat: 40.7128,
-          lng: -74.006,
         },
       ],
       rights: {
@@ -1453,8 +1447,6 @@ describe('generateContent', () => {
           '@description': 'New York City',
           '@start': '01:00:00',
           '@end': '01:05:00',
-          '@lat': 40.7128,
-          '@lng': -74.006,
         },
       ],
       'media:rights': {
