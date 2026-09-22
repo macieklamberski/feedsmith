@@ -178,6 +178,7 @@ export namespace AtomFeed {
       opensearch?: OpenSearchNs.Feed<TStrict>
       cc?: CcNs.ItemOrFeed
       creativeCommons?: CreativeCommonsNs.ItemOrFeed
+      app?: AppNs.Feed<TStrict>
       admin?: AdminNs.Feed
       pingback?: PingbackNs.Feed
       yt?: YtNs.Feed
