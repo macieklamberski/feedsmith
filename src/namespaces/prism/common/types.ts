@@ -126,11 +126,5 @@ export namespace PrismNs {
     /** @deprecated PRISM 1.2 only. */
     requires?: string
   }
-
-  /** @deprecated Use `ItemOrFeed` instead. */
-  export type Feed<TDate> = ItemOrFeed<TDate>
-
-  /** @deprecated Use `ItemOrFeed` instead. */
-  export type Item<TDate> = ItemOrFeed<TDate>
 }
 // #endregion reference
