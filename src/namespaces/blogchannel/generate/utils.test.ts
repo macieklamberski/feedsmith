@@ -7,11 +7,13 @@ describe('generateFeed', () => {
       blogRoll: 'http://example.com/blogroll.opml',
       blink: 'http://recommended.example.com/',
       mySubscriptions: 'http://example.com/subscriptions.opml',
+      changes: 'http://example.com/changes.xml',
     }
     const expected = {
       'blogChannel:blogRoll': 'http://example.com/blogroll.opml',
       'blogChannel:blink': 'http://recommended.example.com/',
       'blogChannel:mySubscriptions': 'http://example.com/subscriptions.opml',
+      'blogChannel:changes': 'http://example.com/changes.xml',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -45,6 +47,17 @@ describe('generateFeed', () => {
     }
     const expected = {
       'blogChannel:mySubscriptions': 'http://example.com/subscriptions.opml',
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate feed with only changes', () => {
+    const value = {
+      changes: 'http://example.com/changes.xml',
+    }
+    const expected = {
+      'blogChannel:changes': 'http://example.com/changes.xml',
     }
 
     expect(generateFeed(value)).toEqual(expected)

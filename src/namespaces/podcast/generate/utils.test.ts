@@ -1280,6 +1280,12 @@ describe('generateBaseItem', () => {
           href: 'https://example.com/image.jpg',
         },
       ],
+      contentLinks: [
+        {
+          href: 'https://example.com/episodes/42/discussion',
+          display: 'Join the discussion',
+        },
+      ],
       socialInteracts: [
         {
           protocol: 'activitypub',
@@ -1348,6 +1354,12 @@ describe('generateBaseItem', () => {
       'podcast:image': [
         {
           '@href': 'https://example.com/image.jpg',
+        },
+      ],
+      'podcast:contentLink': [
+        {
+          '#text': 'Join the discussion',
+          '@href': 'https://example.com/episodes/42/discussion',
         },
       ],
       'podcast:socialInteract': [
@@ -1569,6 +1581,12 @@ describe('generateFeed', () => {
           id: 'service-123',
         },
       ],
+      socialInteracts: [
+        {
+          uri: 'https://example.com/comments',
+          protocol: 'activitypub',
+        },
+      ],
       txts: [
         {
           display: 'Copyright notice',
@@ -1648,6 +1666,12 @@ describe('generateFeed', () => {
         {
           '#text': 'yes',
           '@id': 'service-123',
+        },
+      ],
+      'podcast:socialInteract': [
+        {
+          '@uri': 'https://example.com/comments',
+          '@protocol': 'activitypub',
         },
       ],
       'podcast:txt': [
