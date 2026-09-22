@@ -750,6 +750,18 @@
         "origEnclosureLink": "https://example.com/audio/original-episode.mp3",
         "awareness": "https://feedburner.google.com/awareness/1.0/data/examplepodcast/episode"
       },
+      "arxiv": {
+        "comment": "23 pages, 8 figures and 4 tables",
+        "journalRef": "Eur.Phys.J. C31 (2003) 17-29",
+        "doi": "10.1529/biophysj.104.047340",
+        "primaryCategory": {
+          "term": "hep-ex",
+          "scheme": "http://arxiv.org/schemas/atom",
+          "label": "High Energy Physics - Experiment"
+        },
+        "announceType": "replace-cross",
+        "journalReference": "Journal de l'Ecole polytechnique - Mathematiques, Tome 11 (2024), pp. 431-472"
+      },
       "prism": {
         "publicationName": "Nature",
         "issn": "0028-0836",
@@ -851,7 +863,8 @@
       },
       "pingback": {
         "server": "https://example.com/xmlrpc.php",
-        "target": "https://referenced-blog.com/article"
+        "target": "https://referenced-blog.com/article",
+        "abouts": ["https://blog1.com/posts/xml-basics", "https://blog2.com/posts/namespaces"]
       },
       "trackback": {
         "ping": "https://example.com/trackback/123",
@@ -1570,6 +1583,7 @@
     },
     "newFeedUrl": "https://example.com/new-feed.xml",
     "email": "contact@example.com",
+    "owner": "owner@example.com",
     "categories": ["Technology", "Education"]
   },
   "spotify": {

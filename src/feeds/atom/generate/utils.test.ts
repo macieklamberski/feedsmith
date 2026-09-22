@@ -1730,6 +1730,7 @@ describe('generateFeed', () => {
         explicit: false,
         block: false,
         email: 'podcast@example.com',
+        owner: 'owner@example.com',
         image: { href: 'https://example.com/podcast.jpg' },
         categories: ['Technology', 'Science'],
         newFeedUrl: 'https://example.com/new-feed.xml',
@@ -1749,6 +1750,7 @@ describe('generateFeed', () => {
         'googleplay:image': { '@href': 'https://example.com/podcast.jpg' },
         'googleplay:new-feed-url': 'https://example.com/new-feed.xml',
         'googleplay:email': 'podcast@example.com',
+        'googleplay:owner': 'owner@example.com',
         'googleplay:category': [{ '@text': 'Technology' }, { '@text': 'Science' }],
       },
     }

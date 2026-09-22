@@ -1,6 +1,6 @@
 import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import { generateCdataString } from '../../../common/utils.js'
+import { generateCdataString, trimArray } from '../../../common/utils.js'
 import type { PingbackNs } from '../common/types.js'
 
 export const generateItem: GenerateUtil<PingbackNs.Item> = (item) => {
@@ -11,6 +11,7 @@ export const generateItem: GenerateUtil<PingbackNs.Item> = (item) => {
   const value = {
     'pingback:server': generateCdataString(item.server),
     'pingback:target': generateCdataString(item.target),
+    'pingback:about': trimArray(item.abouts, generateCdataString),
   }
 
   return trimObject(value)
