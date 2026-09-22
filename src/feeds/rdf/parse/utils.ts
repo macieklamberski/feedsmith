@@ -65,11 +65,13 @@ export const parseImage: ParseUtilPartial<RdfFeed.Image> = (value) => {
     return
   }
 
+  const namespaces = detectNamespaces(value)
   const image = {
     title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
     link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
     url: parseSingularOf(value.url, (value) => parseString(retrieveText(value))),
     rdf: retrieveRdfAbout(value),
+    cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
   }
 
   return trimObject(image)

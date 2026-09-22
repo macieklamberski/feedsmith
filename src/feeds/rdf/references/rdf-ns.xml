@@ -262,6 +262,15 @@
     <georss:radius>50000</georss:radius>
   </channel>
 
+  <image rdf:about="http://example.org/image.png">
+    <title>Example Image</title>
+    <link>http://example.org</link>
+    <url>http://example.org/image.png</url>
+
+    <!-- ccREL Namespace: Image Level Tags -->
+    <cc:license rdf:resource="https://creativecommons.org/licenses/by-nd/4.0/"/>
+  </image>
+
   <item rdf:about="http://example.org/item/1" xml:lang="en-US" xml:base="http://example.org/item/1/">
     <title>Example Item</title>
     <link>http://example.org/item/1</link>

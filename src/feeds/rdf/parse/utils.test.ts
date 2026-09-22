@@ -129,6 +129,25 @@ describe('parseImage', () => {
 
     expect(parseImage(value)).toEqual(expected)
   })
+
+  it('should handle cc namespace', () => {
+    const value = {
+      title: { '#text': 'Image Title' },
+      link: { '#text': 'https://example.com' },
+      'cc:license': {
+        '@resource': 'https://creativecommons.org/licenses/by/4.0/',
+      },
+    }
+    const expected = {
+      title: 'Image Title',
+      link: 'https://example.com',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+      },
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
 })
 
 describe('retrieveImage', () => {
