@@ -1,6 +1,11 @@
 import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import { generateCdataString, generateNumber, generatePlainString } from '../../../common/utils.js'
+import {
+  generateBoolean,
+  generateCdataString,
+  generateNumber,
+  generatePlainString,
+} from '../../../common/utils.js'
 import type { SpotifyNs } from '../common/types.js'
 
 export const generateLimit: GenerateUtil<SpotifyNs.Limit> = (limit) => {
@@ -32,9 +37,11 @@ export const generateSandbox: GenerateUtil<SpotifyNs.Sandbox> = (sandbox) => {
     return
   }
 
-  return {
-    '@enabled': sandbox.enabled,
+  const value = {
+    '@enabled': generateBoolean(sandbox.enabled),
   }
+
+  return trimObject(value)
 }
 
 export const generateFeedAccess: GenerateUtil<SpotifyNs.FeedAccess> = (access) => {
