@@ -1,75 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { generateDeletedEntry, generateFeed, generateLink, generatePerson } from './utils.js'
-
-describe('generatePerson', () => {
-  it('should generate person with all properties', () => {
-    const value = {
-      name: 'John Doe',
-      uri: 'https://example.com/john',
-      email: 'jdoe@example.com',
-    }
-    const expected = {
-      name: 'John Doe',
-      uri: 'https://example.com/john',
-      email: 'jdoe@example.com',
-    }
-
-    expect(generatePerson(value)).toEqual(expected)
-  })
-
-  it('should generate person with only name', () => {
-    const value = {
-      name: 'John Doe',
-    }
-    const expected = {
-      name: 'John Doe',
-    }
-
-    expect(generatePerson(value)).toEqual(expected)
-  })
-
-  it('should handle undefined input', () => {
-    expect(generatePerson(undefined)).toBeUndefined()
-  })
-})
-
-describe('generateLink', () => {
-  it('should generate link with all properties', () => {
-    const value = {
-      href: 'https://example.com/entries/1',
-      rel: 'alternate',
-      type: 'text/html',
-      hreflang: 'en',
-      title: 'Removed entry',
-      length: 1024,
-    }
-    const expected = {
-      '@href': 'https://example.com/entries/1',
-      '@rel': 'alternate',
-      '@type': 'text/html',
-      '@hreflang': 'en',
-      '@title': 'Removed entry',
-      '@length': 1024,
-    }
-
-    expect(generateLink(value)).toEqual(expected)
-  })
-
-  it('should generate link with only href', () => {
-    const value = {
-      href: 'https://example.com/entries/1',
-    }
-    const expected = {
-      '@href': 'https://example.com/entries/1',
-    }
-
-    expect(generateLink(value)).toEqual(expected)
-  })
-
-  it('should handle undefined input', () => {
-    expect(generateLink(undefined)).toBeUndefined()
-  })
-})
+import { generateDeletedEntry, generateFeed } from './utils.js'
 
 describe('generateDeletedEntry', () => {
   it('should generate deleted-entry with all properties', () => {
@@ -100,6 +30,43 @@ describe('generateDeletedEntry', () => {
           '@href': 'https://example.com/entries/2',
         },
       ],
+    }
+
+    expect(generateDeletedEntry(value)).toEqual(expected)
+  })
+
+  it('should generate source', () => {
+    const value = {
+      ref: 'tag:example.org,2005:/entries/2',
+      when: new Date('2005-11-29T12:11:12Z'),
+      source: {
+        id: 'tag:example.org,2005:/feed',
+        title: { value: 'Example Feed' },
+        updated: new Date('2005-11-29T12:00:00Z'),
+        links: [
+          {
+            href: 'https://example.org/feed',
+            rel: 'self',
+          },
+        ],
+      },
+    }
+    const expected = {
+      '@ref': 'tag:example.org,2005:/entries/2',
+      '@when': '2005-11-29T12:11:12.000Z',
+      source: {
+        id: 'tag:example.org,2005:/feed',
+        link: [
+          {
+            '@href': 'https://example.org/feed',
+            '@rel': 'self',
+          },
+        ],
+        title: {
+          '#text': 'Example Feed',
+        },
+        updated: '2005-11-29T12:00:00.000Z',
+      },
     }
 
     expect(generateDeletedEntry(value)).toEqual(expected)

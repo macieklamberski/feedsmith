@@ -991,6 +991,11 @@ describe('generate', () => {
                 href: 'https://example.com/entries/2',
               },
             ],
+            source: {
+              id: 'tag:example.org,2005:/feed',
+              title: { value: 'Example Source Feed' },
+              updated: new Date('2005-11-29T12:00:00Z'),
+            },
           },
         ],
       },
@@ -1014,6 +1019,11 @@ describe('generate', () => {
     </at:by>
     <at:comment>Removed due to copyright claim.</at:comment>
     <link href="https://example.com/entries/2"/>
+    <source>
+      <id>tag:example.org,2005:/feed</id>
+      <title>Example Source Feed</title>
+      <updated>2005-11-29T12:00:00.000Z</updated>
+    </source>
   </at:deleted-entry>
   <entry>
     <id>https://example.com/entry/1</id>

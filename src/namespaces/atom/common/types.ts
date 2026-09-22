@@ -7,6 +7,7 @@ type NsKeys =
   | 'admin'
   | 'app'
   | 'arxiv'
+  | 'at'
   | 'cc'
   | 'creativeCommons'
   | 'dc'

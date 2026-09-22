@@ -1,119 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { parseDeletedEntry, parseLink, parsePerson, retrieveFeed } from './utils.js'
-
-describe('parsePerson', () => {
-  it('should parse complete person object', () => {
-    const value = {
-      name: 'John Doe',
-      uri: 'https://example.com/john',
-      email: 'jdoe@example.com',
-    }
-    const expected = {
-      name: 'John Doe',
-      uri: 'https://example.com/john',
-      email: 'jdoe@example.com',
-    }
-
-    expect(parsePerson(value)).toEqual(expected)
-  })
-
-  it('should parse person with only name', () => {
-    const value = {
-      name: 'John Doe',
-    }
-    const expected = {
-      name: 'John Doe',
-    }
-
-    expect(parsePerson(value)).toEqual(expected)
-  })
-
-  it('should handle text nodes', () => {
-    const value = {
-      name: { '#text': 'John Doe' },
-      email: { '#text': 'jdoe@example.com' },
-    }
-    const expected = {
-      name: 'John Doe',
-      email: 'jdoe@example.com',
-    }
-
-    expect(parsePerson(value)).toEqual(expected)
-  })
-
-  it('should return undefined for empty object', () => {
-    const value = {}
-
-    expect(parsePerson(value)).toBeUndefined()
-  })
-
-  it('should return undefined for unsupported input', () => {
-    expect(parsePerson('not an object')).toBeUndefined()
-    expect(parsePerson(undefined)).toBeUndefined()
-    expect(parsePerson(null)).toBeUndefined()
-    expect(parsePerson([])).toBeUndefined()
-  })
-})
-
-describe('parseLink', () => {
-  it('should parse complete link object', () => {
-    const value = {
-      '@href': 'https://example.com/entries/1',
-      '@rel': 'alternate',
-      '@type': 'text/html',
-      '@hreflang': 'en',
-      '@title': 'Removed entry',
-      '@length': 1024,
-    }
-    const expected = {
-      href: 'https://example.com/entries/1',
-      rel: 'alternate',
-      type: 'text/html',
-      hreflang: 'en',
-      title: 'Removed entry',
-      length: 1024,
-    }
-
-    expect(parseLink(value)).toEqual(expected)
-  })
-
-  it('should parse link with only href', () => {
-    const value = {
-      '@href': 'https://example.com/entries/1',
-    }
-    const expected = {
-      href: 'https://example.com/entries/1',
-    }
-
-    expect(parseLink(value)).toEqual(expected)
-  })
-
-  it('should handle coercible values', () => {
-    const value = {
-      '@href': 'https://example.com/entries/1',
-      '@length': '1024',
-    }
-    const expected = {
-      href: 'https://example.com/entries/1',
-      length: 1024,
-    }
-
-    expect(parseLink(value)).toEqual(expected)
-  })
-
-  it('should return undefined for empty object', () => {
-    const value = {}
-
-    expect(parseLink(value)).toBeUndefined()
-  })
-
-  it('should return undefined for unsupported input', () => {
-    expect(parseLink('not an object')).toBeUndefined()
-    expect(parseLink(undefined)).toBeUndefined()
-    expect(parseLink(null)).toBeUndefined()
-    expect(parseLink([])).toBeUndefined()
-  })
-})
+import { parseDeletedEntry, retrieveFeed } from './utils.js'
 
 describe('parseDeletedEntry', () => {
   it('should parse complete deleted-entry with all properties', () => {
@@ -174,6 +60,39 @@ describe('parseDeletedEntry', () => {
         { href: 'https://example.com/entries/2' },
         { href: 'https://example.com/entries/2/mirror', rel: 'alternate' },
       ],
+    }
+
+    expect(parseDeletedEntry(value)).toEqual(expected)
+  })
+
+  it('should parse source', () => {
+    const value = {
+      '@ref': 'tag:example.org,2005:/entries/2',
+      '@when': '2005-11-29T12:11:12Z',
+      source: {
+        id: 'tag:example.org,2005:/feed',
+        title: 'Example Feed',
+        updated: '2005-11-29T12:00:00Z',
+        link: {
+          '@href': 'https://example.org/feed',
+          '@rel': 'self',
+        },
+      },
+    }
+    const expected = {
+      ref: 'tag:example.org,2005:/entries/2',
+      when: '2005-11-29T12:11:12Z',
+      source: {
+        id: 'tag:example.org,2005:/feed',
+        title: { value: 'Example Feed' },
+        updated: '2005-11-29T12:00:00Z',
+        links: [
+          {
+            href: 'https://example.org/feed',
+            rel: 'self',
+          },
+        ],
+      },
     }
 
     expect(parseDeletedEntry(value)).toEqual(expected)
