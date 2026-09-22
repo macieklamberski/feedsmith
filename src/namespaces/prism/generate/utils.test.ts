@@ -1,5 +1,29 @@
 import { describe, expect, it } from 'bun:test'
-import { generateFeed, generateItem } from './utils.js'
+import { generateFeed, generateItem, generateOriginPlatform } from './utils.js'
+
+describe('generateOriginPlatform', () => {
+  it('should generate origin platform as the platform attribute', () => {
+    const expected = { '@platform': 'web' }
+
+    expect(generateOriginPlatform('web')).toEqual(expected)
+  })
+
+  it('should trim the platform value', () => {
+    const expected = { '@platform': 'print' }
+
+    expect(generateOriginPlatform('  print  ')).toEqual(expected)
+  })
+
+  it('should return undefined for empty string', () => {
+    expect(generateOriginPlatform('')).toBeUndefined()
+  })
+
+  it('should handle non-string inputs', () => {
+    expect(generateOriginPlatform(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateOriginPlatform(123)).toBeUndefined()
+  })
+})
 
 describe('generateFeed', () => {
   it('should generate feed with core properties', () => {
@@ -129,7 +153,7 @@ describe('generateFeed', () => {
       'prism:subsection1': 'highlights',
       'prism:subsection2': 'featured',
       'prism:platform': ['desktop'],
-      'prism:originPlatform': ['print', 'digital'],
+      'prism:originPlatform': [{ '@platform': 'print' }, { '@platform': 'digital' }],
       'prism:device': 'tablet',
       'prism:complianceProfile': 'PRISM 3.0',
       'prism:sellingAgency': ['Agency1'],
@@ -540,7 +564,7 @@ describe('generateItem', () => {
       originPlatforms: ['print', 'web'],
     }
     const expected = {
-      'prism:originPlatform': ['print', 'web'],
+      'prism:originPlatform': [{ '@platform': 'print' }, { '@platform': 'web' }],
     }
 
     expect(generateItem(value)).toEqual(expected)

@@ -3,6 +3,7 @@ import { locales } from '../../../common/config.js'
 import { GenerateError } from '../../../common/errors.js'
 import type { DateLike } from '../../../common/types.js'
 import type { RssFeed } from '../common/types.js'
+import { parse } from '../parse/index.js'
 import { generate } from './index.js'
 
 describe('generate', () => {
@@ -671,6 +672,7 @@ describe('generate', () => {
       description: 'Test feed with PRISM namespace',
       prism: {
         issn: '0028-0836',
+        originPlatforms: ['print'],
       },
       items: [
         {
@@ -678,6 +680,7 @@ describe('generate', () => {
           prism: {
             doi: '10.1038/s41586-023-05842-x',
             startingPage: '425',
+            originPlatforms: ['web'],
           },
         },
       ],
@@ -688,16 +691,53 @@ describe('generate', () => {
     <title>Feed with prism namespace</title>
     <description>Test feed with PRISM namespace</description>
     <prism:issn>0028-0836</prism:issn>
+    <prism:originPlatform platform="print"/>
     <item>
       <title>First item</title>
       <prism:doi>10.1038/s41586-023-05842-x</prism:doi>
       <prism:startingPage>425</prism:startingPage>
+      <prism:originPlatform platform="web"/>
     </item>
   </channel>
 </rss>
 `
 
     expect(generate(value)).toEqual(expected)
+  })
+
+  it('should parse back generated prism:originPlatform values', () => {
+    const value = {
+      title: 'Feed with prism namespace',
+      description: 'Test feed with PRISM namespace',
+      prism: {
+        originPlatforms: ['print', 'web'],
+      },
+      items: [
+        {
+          title: 'First item',
+          prism: {
+            originPlatforms: ['web'],
+          },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Feed with prism namespace',
+      description: 'Test feed with PRISM namespace',
+      prism: {
+        originPlatforms: ['print', 'web'],
+      },
+      items: [
+        {
+          title: 'First item',
+          prism: {
+            originPlatforms: ['web'],
+          },
+        },
+      ],
+    }
+
+    expect(parse(generate(value))).toEqual(expected)
   })
 
   it('should generate RSS with ccREL namespace', () => {

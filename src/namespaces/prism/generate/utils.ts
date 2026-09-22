@@ -3,10 +3,19 @@ import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generateNumber,
+  generatePlainString,
   generateRfc3339Date,
   trimArray,
 } from '../../../common/utils.js'
 import type { PrismNs } from '../common/types.js'
+
+export const generateOriginPlatform: GenerateUtil<string> = (originPlatform) => {
+  const value = {
+    '@platform': generatePlainString(originPlatform),
+  }
+
+  return trimObject(value)
+}
 
 export const generateFeed: GenerateUtil<PrismNs.Feed<DateLike>> = (feed) => {
   if (!isPlainObject(feed)) {
@@ -67,7 +76,7 @@ export const generateFeed: GenerateUtil<PrismNs.Feed<DateLike>> = (feed) => {
     'prism:organization': trimArray(feed.organizations, generateCdataString),
     'prism:person': trimArray(feed.persons, generateCdataString),
     'prism:platform': trimArray(feed.platforms, generateCdataString),
-    'prism:originPlatform': trimArray(feed.originPlatforms, generateCdataString),
+    'prism:originPlatform': trimArray(feed.originPlatforms, generateOriginPlatform),
     'prism:device': generateCdataString(feed.device),
     'prism:complianceProfile': generateCdataString(feed.complianceProfile),
     'prism:blogTitle': generateCdataString(feed.blogTitle),
@@ -137,7 +146,7 @@ export const generateItem: GenerateUtil<PrismNs.Item<DateLike>> = (item) => {
     'prism:organization': trimArray(item.organizations, generateCdataString),
     'prism:person': trimArray(item.persons, generateCdataString),
     'prism:platform': trimArray(item.platforms, generateCdataString),
-    'prism:originPlatform': trimArray(item.originPlatforms, generateCdataString),
+    'prism:originPlatform': trimArray(item.originPlatforms, generateOriginPlatform),
     'prism:device': generateCdataString(item.device),
     'prism:academicField': trimArray(item.academicFields, generateCdataString),
     'prism:event': trimArray(item.events, generateCdataString),
