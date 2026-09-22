@@ -16,7 +16,9 @@
   xmlns:cc="http://creativecommons.org/ns#"
   xmlns:wfw="http://wellformedweb.org/CommentAPI/"
   xmlns:admin="http://webns.net/mvcb/"
+  xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
   xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+  xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
   xmlns:georss="http://www.georss.org/georss"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
@@ -228,7 +230,7 @@
     <opensearch:totalResults>1000</opensearch:totalResults>
     <opensearch:startIndex>21</opensearch:startIndex>
     <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
-    <opensearch:Query role="request" searchTerms="quantum computing" startIndex="21" count="10"/>
+    <opensearch:Query role="request" title="Search results for quantum computing" totalResults="1000" searchTerms="quantum computing" startIndex="21" count="10"/>
 
     <!-- PRISM Namespace: Channel Level Tags -->
     <prism:publicationName>Nature</prism:publicationName>
@@ -247,6 +249,11 @@
     <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
     <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
 
+    <!-- W3C Basic Geo Namespace: Channel Level Tags -->
+    <geo:lat>37.7749</geo:lat>
+    <geo:long>-122.4194</geo:long>
+    <geo:alt>10.5</geo:alt>
+
     <!-- GeoRSS-Simple Namespace: Item/Feed Level Tags (while not typical, included are all values for testing) -->
     <georss:point>37.78 -122.42</georss:point>
     <georss:line>37.78 -122.42 37.42 -122.10 37.86 -122.27</georss:line>
@@ -260,6 +267,15 @@
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
   </channel>
+
+  <image rdf:about="http://example.org/image.png">
+    <title>Example Image</title>
+    <link>http://example.org</link>
+    <url>http://example.org/image.png</url>
+
+    <!-- ccREL Namespace: Image Level Tags -->
+    <cc:license rdf:resource="https://creativecommons.org/licenses/by-nd/4.0/"/>
+  </image>
 
   <item rdf:about="http://example.org/item/1" xml:lang="en-US" xml:base="http://example.org/item/1/">
     <title>Example Item</title>
@@ -473,10 +489,21 @@
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
     <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
 
+    <!-- Pingback Namespace: Item Level Tags -->
+    <pingback:server rdf:resource="https://example.com/xmlrpc.php"/>
+    <pingback:target rdf:resource="https://referenced-blog.com/article"/>
+    <pingback:about rdf:resource="https://blog1.com/posts/xml-basics"/>
+    <pingback:about rdf:resource="https://blog2.com/posts/namespaces"/>
+
     <!-- Trackback Namespace: Item Level Tags -->
     <trackback:ping rdf:resource="https://example.com/trackback/123"/>
     <trackback:about rdf:resource="https://blog1.com/trackback/456"/>
     <trackback:about rdf:resource="https://blog2.com/trackback/789"/>
+
+    <!-- W3C Basic Geo Namespace: Item Level Tags -->
+    <geo:lat>37.8199</geo:lat>
+    <geo:long>-122.4783</geo:long>
+    <geo:alt>67.0</geo:alt>
 
     <!-- GeoRSS-Simple Namespace: Item/Feed Level Tags (while not typical, included are all values for testing) -->
     <georss:point>37.78 -122.42</georss:point>

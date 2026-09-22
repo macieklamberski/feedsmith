@@ -22,9 +22,11 @@ import {
   retrieveFeed as retrieveFeedBurnerFeed,
   retrieveItem as retrieveFeedBurnerItem,
 } from '../../../namespaces/feedburner/parse/utils.js'
+import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces/geo/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
 import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
+import { retrieveItem as retrievePingbackItem } from '../../../namespaces/pingback/parse/utils.js'
 import {
   retrieveFeed as retrievePrismFeed,
   retrieveItem as retrievePrismItem,
@@ -64,11 +66,13 @@ export const parseImage: ParseUtilPartial<RdfFeed.Image> = (value) => {
     return
   }
 
+  const namespaces = detectNamespaces(value)
   const image = {
     title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
     link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
     url: parseSingularOf(value.url, (value) => parseString(retrieveText(value))),
     rdf: retrieveRdfAbout(value),
+    cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
   }
 
   return trimObject(image)
@@ -122,7 +126,9 @@ export const parseItem: ParseUtilPartial<RdfFeed.Item<DateAny>> = (value, option
     prism: namespaces.has('prism') ? retrievePrismItem(value, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
+    pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
+    geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
@@ -180,6 +186,7 @@ export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, option
     prism: namespaces.has('prism') ? retrievePrismFeed(channel, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(channel) : undefined,
     admin: namespaces.has('admin') ? retrieveAdminFeed(channel) : undefined,
+    geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(channel) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }

@@ -5,6 +5,8 @@ describe('parseQuery', () => {
   it('should parse Query with all attributes', () => {
     const value = {
       '@role': 'request',
+      '@title': 'Search results for quantum computing',
+      '@totalresults': '4230000',
       '@searchterms': 'quantum computing',
       '@count': '10',
       '@startindex': '21',
@@ -15,6 +17,8 @@ describe('parseQuery', () => {
     }
     const expected = {
       role: 'request',
+      title: 'Search results for quantum computing',
+      totalResults: 4230000,
       searchTerms: 'quantum computing',
       count: 10,
       startIndex: 21,
