@@ -10,6 +10,8 @@ export const generateQuery: GenerateUtil<OpenSearchNs.Query> = (query) => {
 
   const value = {
     '@role': generatePlainString(query.role),
+    '@title': generatePlainString(query.title),
+    '@totalResults': generateNumber(query.totalResults),
     '@searchTerms': generatePlainString(query.searchTerms),
     '@count': generateNumber(query.count),
     '@startIndex': generateNumber(query.startIndex),

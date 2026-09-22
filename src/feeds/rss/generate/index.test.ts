@@ -576,6 +576,37 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with arxiv namespace', () => {
+    const value = {
+      title: 'Feed with arxiv namespace',
+      description: 'Test feed with arXiv properties',
+      items: [
+        {
+          title: 'Item with arXiv properties',
+          arxiv: {
+            announceType: 'replace-cross',
+            journalReference: 'Example Journal, Vol. 11 (2024), pp. 431-472',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:arxiv="http://arxiv.org/schemas/atom">
+  <channel>
+    <title>Feed with arxiv namespace</title>
+    <description>Test feed with arXiv properties</description>
+    <item>
+      <title>Item with arXiv properties</title>
+      <arxiv:announce_type>replace-cross</arxiv:announce_type>
+      <arxiv:journal_reference>Example Journal, Vol. 11 (2024), pp. 431-472</arxiv:journal_reference>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with opensearch namespace', () => {
     const value = {
       title: 'Search Results',
@@ -796,6 +827,7 @@ describe('generate', () => {
           pingback: {
             server: 'https://example.com/xmlrpc.php',
             target: 'https://example.net/article',
+            abouts: ['https://example.org/post/1', 'https://example.org/post/2'],
           },
         },
       ],
@@ -810,6 +842,8 @@ describe('generate', () => {
       <title>First item</title>
       <pingback:server>https://example.com/xmlrpc.php</pingback:server>
       <pingback:target>https://example.net/article</pingback:target>
+      <pingback:about>https://example.org/post/1</pingback:about>
+      <pingback:about>https://example.org/post/2</pingback:about>
     </item>
   </channel>
 </rss>
@@ -911,6 +945,7 @@ describe('generate', () => {
         blogRoll: 'http://example.com/blogroll.opml',
         blink: 'http://example.net/',
         mySubscriptions: 'http://example.com/subscriptions.opml',
+        changes: 'http://example.com/changes.xml',
       },
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
@@ -921,6 +956,7 @@ describe('generate', () => {
     <blogChannel:blogRoll>http://example.com/blogroll.opml</blogChannel:blogRoll>
     <blogChannel:blink>http://example.net/</blogChannel:blink>
     <blogChannel:mySubscriptions>http://example.com/subscriptions.opml</blogChannel:mySubscriptions>
+    <blogChannel:changes>http://example.com/changes.xml</blogChannel:changes>
   </channel>
 </rss>
 `
