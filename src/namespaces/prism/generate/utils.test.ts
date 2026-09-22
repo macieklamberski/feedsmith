@@ -535,6 +535,17 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with originPlatform fields', () => {
+    const value = {
+      originPlatforms: ['print', 'web'],
+    }
+    const expected = {
+      'prism:originPlatform': ['print', 'web'],
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with subject classification fields', () => {
     const value = {
       academicFields: ['Quantum Physics', 'Computer Science'],
@@ -596,6 +607,17 @@ describe('generateItem', () => {
       'prism:modificationDate': '2023-03-10T00:00:00.000Z',
       'prism:dateReceived': '2023-01-15T00:00:00.000Z',
       'prism:killDate': '2024-03-15T00:00:00.000Z',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should generate item with issue identifier', () => {
+    const value = {
+      issueIdentifier: '2023-03-15',
+    }
+    const expected = {
+      'prism:issueIdentifier': '2023-03-15',
     }
 
     expect(generateItem(value)).toEqual(expected)
