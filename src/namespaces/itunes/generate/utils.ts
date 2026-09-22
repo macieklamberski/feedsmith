@@ -62,6 +62,7 @@ export const generateItem: GenerateUtil<ItunesNs.Item> = (item) => {
     'itunes:episodeType': generateCdataString(item.episodeType),
     'itunes:block': generateYesNoBoolean(item.block),
     'itunes:order': generateNumber(item.order),
+    'itunes:isClosedCaptioned': generateYesNoBoolean(item.isClosedCaptioned),
     'itunes:summary': generateCdataString(item.summary),
     'itunes:subtitle': generateCdataString(item.subtitle),
     'itunes:keywords': generateCsvOf(item.keywords),

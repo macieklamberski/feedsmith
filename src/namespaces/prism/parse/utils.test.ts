@@ -69,6 +69,27 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
+  it('should parse feed fields given as rdf:resource', () => {
+    const value = {
+      'prism:distributor': { '@rdf:resource': 'https://example.com/distributor' },
+      'prism:organization': { '@rdf:resource': 'https://example.com/org' },
+      'prism:person': { '@rdf:resource': 'https://example.com/person' },
+      'prism:event': { '@rdf:resource': 'https://example.com/event' },
+      'prism:industry': { '@rdf:resource': 'https://example.com/industry' },
+      'prism:location': { '@rdf:resource': 'https://example.com/location' },
+    }
+    const expected = {
+      distributor: 'https://example.com/distributor',
+      organizations: ['https://example.com/org'],
+      persons: ['https://example.com/person'],
+      events: ['https://example.com/event'],
+      industries: ['https://example.com/industry'],
+      locations: ['https://example.com/location'],
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
   it('should parse feed with date fields', () => {
     const value = {
       'prism:coverdate': '2023-03-01',
@@ -479,6 +500,37 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toEqual(expected)
   })
 
+  it('should parse item fields given as rdf:resource', () => {
+    const value = {
+      'prism:organization': { '@rdf:resource': 'https://example.com/org' },
+      'prism:person': { '@rdf:resource': 'https://example.com/person' },
+      'prism:event': { '@rdf:resource': 'https://example.com/event' },
+      'prism:industry': { '@rdf:resource': 'https://example.com/industry' },
+      'prism:location': { '@rdf:resource': 'https://example.com/location' },
+      'prism:hasalternative': { '@rdf:resource': 'https://example.com/alternative' },
+      'prism:hascorrection': { '@rdf:resource': 'https://example.com/correction' },
+      'prism:hastranslation': { '@rdf:resource': 'https://example.com/translation' },
+      'prism:isalternativeof': { '@rdf:resource': 'https://example.com/original' },
+      'prism:iscorrectionof': { '@rdf:resource': 'https://example.com/corrected' },
+      'prism:istranslationof': { '@rdf:resource': 'https://example.com/source' },
+    }
+    const expected = {
+      organizations: ['https://example.com/org'],
+      persons: ['https://example.com/person'],
+      events: ['https://example.com/event'],
+      industries: ['https://example.com/industry'],
+      locations: ['https://example.com/location'],
+      hasAlternatives: ['https://example.com/alternative'],
+      hasCorrections: ['https://example.com/correction'],
+      hasTranslations: ['https://example.com/translation'],
+      isAlternativeOf: ['https://example.com/original'],
+      isCorrectionOf: ['https://example.com/corrected'],
+      isTranslationOf: 'https://example.com/source',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
   it('should parse item with relationship fields', () => {
     const value = {
       'prism:hasalternative': ['alt1', 'alt2'],
@@ -566,6 +618,17 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toEqual(expected)
   })
 
+  it('should parse item with issue identifier', () => {
+    const value = {
+      'prism:issueidentifier': '2023-03-15',
+    }
+    const expected = {
+      issueIdentifier: '2023-03-15',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
   it('should parse item with cover date fields', () => {
     const value = {
       'prism:coverdate': '2023-03-15',
@@ -640,6 +703,28 @@ describe('retrieveItem', () => {
     const expected = {
       platforms: ['desktop', 'mobile', 'tablet'],
       device: 'smartphone',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse item with originPlatform fields', () => {
+    const value = {
+      'prism:originplatform': ['print', 'web'],
+    }
+    const expected = {
+      originPlatforms: ['print', 'web'],
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse item with originPlatform in platform attribute', () => {
+    const value = {
+      'prism:originplatform': [{ '@platform': 'print' }, { '@platform': 'web' }],
+    }
+    const expected = {
+      originPlatforms: ['print', 'web'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -761,12 +846,6 @@ describe('parseOriginPlatform', () => {
     expect(parseOriginPlatform(value)).toBe('web')
   })
 
-  it('should parse prefixed platform attribute', () => {
-    const value = { '@prism:platform': 'web' }
-
-    expect(parseOriginPlatform(value)).toBe('web')
-  })
-
   it('should parse rdf:resource attribute', () => {
     const value = { '@rdf:resource': 'platform.xml#web' }
 
@@ -781,15 +860,6 @@ describe('parseOriginPlatform', () => {
 
   it('should parse #text wrapper', () => {
     const value = { '#text': 'web' }
-
-    expect(parseOriginPlatform(value)).toBe('web')
-  })
-
-  it('should prefer platform attribute over prefixed platform attribute', () => {
-    const value = {
-      '@platform': 'web',
-      '@prism:platform': 'print',
-    }
 
     expect(parseOriginPlatform(value)).toBe('web')
   })

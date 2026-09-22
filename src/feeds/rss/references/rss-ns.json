@@ -114,6 +114,7 @@
         "episodeType": "full",
         "block": false,
         "order": 1,
+        "isClosedCaptioned": true,
         "summary": "This is a detailed summary of the episode content and key takeaways",
         "subtitle": "Episode subtitle with additional context",
         "keywords": ["tutorial", "example", "technology", "programming"]
@@ -130,6 +131,12 @@
             "type": "application/x-subrip",
             "language": "en",
             "rel": "captions"
+          }
+        ],
+        "fundings": [
+          {
+            "url": "https://example.com/episodes/123/support",
+            "display": "Support This Episode"
           }
         ],
         "chapters": {
@@ -259,6 +266,12 @@
             "height": 630,
             "type": "image/jpeg",
             "purpose": "social"
+          }
+        ],
+        "contentLinks": [
+          {
+            "href": "https://example.com/episodes/123/discussion",
+            "display": "Episode Discussion"
           }
         ],
         "socialInteracts": [
@@ -766,6 +779,7 @@
         "publicationName": "Nature",
         "issn": "0028-0836",
         "eIssn": "1476-4687",
+        "issueIdentifier": "2023-03-15",
         "doi": "10.1038/s41586-023-05842-x",
         "urls": ["https://www.nature.com/articles/s41586-023-05842-x"],
         "volume": "615",
@@ -797,6 +811,7 @@
         "organizations": ["Massachusetts Institute of Technology"],
         "persons": ["Dr. Jane Smith", "Dr. John Doe"],
         "platforms": ["web"],
+        "originPlatforms": ["print"],
         "device": "desktop",
         "academicFields": ["Biology", "Biochemistry"],
         "events": ["Annual Science Conference 2023"],
@@ -877,7 +892,8 @@
           "<outline text=\"Implementation\"><outline text=\"RSS Integration\"/></outline>"
         ],
         "linkFull": "http://example.org/item/1/understanding-xml-namespaces-complete-guide",
-        "inReplyTo": { "value": "did:plc:iwl32vekohccji6khfdt3clw", "isPermaLink": false }
+        "inReplyTo": { "value": "did:plc:iwl32vekohccji6khfdt3clw", "isPermaLink": false },
+        "comments": { "count": 2, "feedUrl": "http://example.org/item/1/comments.xml" }
       },
       "geo": {
         "lat": 37.8199,
@@ -1148,6 +1164,15 @@
       }
     ],
     "blocks": [{ "value": true }, { "value": false, "id": "test" }],
+    "socialInteracts": [
+      {
+        "uri": "https://example.com/@examplepodcast/100000000",
+        "protocol": "activitypub",
+        "accountId": "@examplepodcast@example.com",
+        "accountUrl": "https://example.com/@examplepodcast",
+        "priority": 1
+      }
+    ],
     "txts": [
       {
         "display": "Additional text information about the podcast",
@@ -1583,6 +1608,7 @@
     },
     "newFeedUrl": "https://example.com/new-feed.xml",
     "email": "contact@example.com",
+    "owner": "owner@example.com",
     "categories": ["Technology", "Education"]
   },
   "spotify": {
@@ -1673,6 +1699,8 @@
     "queries": [
       {
         "role": "request",
+        "title": "Search results for quantum computing",
+        "totalResults": 1000,
         "searchTerms": "quantum computing",
         "startIndex": 21,
         "count": 10
@@ -1805,7 +1833,8 @@
   "blogChannel": {
     "blogRoll": "http://example.com/blogroll.opml",
     "blink": "http://recommended-site.com/",
-    "mySubscriptions": "http://example.com/subscriptions.opml"
+    "mySubscriptions": "http://example.com/subscriptions.opml",
+    "changes": "http://example.com/changes.xml"
   },
   "geo": {
     "lat": 37.7749,

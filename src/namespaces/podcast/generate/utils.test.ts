@@ -1228,6 +1228,12 @@ describe('generateBaseItem', () => {
           type: 'text/plain',
         },
       ],
+      fundings: [
+        {
+          url: 'https://example.com/episodes/42/donate',
+          display: 'Support this episode',
+        },
+      ],
       chapters: {
         url: 'https://example.com/chapters.json',
         type: 'application/json+chapters',
@@ -1274,6 +1280,12 @@ describe('generateBaseItem', () => {
           href: 'https://example.com/image.jpg',
         },
       ],
+      contentLinks: [
+        {
+          href: 'https://example.com/episodes/42/discussion',
+          display: 'Join the discussion',
+        },
+      ],
       socialInteracts: [
         {
           protocol: 'activitypub',
@@ -1290,6 +1302,12 @@ describe('generateBaseItem', () => {
         {
           '@url': 'https://example.com/transcript.txt',
           '@type': 'text/plain',
+        },
+      ],
+      'podcast:funding': [
+        {
+          '#text': 'Support this episode',
+          '@url': 'https://example.com/episodes/42/donate',
         },
       ],
       'podcast:chapters': {
@@ -1336,6 +1354,12 @@ describe('generateBaseItem', () => {
       'podcast:image': [
         {
           '@href': 'https://example.com/image.jpg',
+        },
+      ],
+      'podcast:contentLink': [
+        {
+          '#text': 'Join the discussion',
+          '@href': 'https://example.com/episodes/42/discussion',
         },
       ],
       'podcast:socialInteract': [
@@ -1400,6 +1424,12 @@ describe('generateLiveItem', () => {
           role: 'host',
         },
       ],
+      fundings: [
+        {
+          url: 'https://example.com/live/donate',
+          display: 'Support the show',
+        },
+      ],
     }
     const expected = {
       '@status': 'live',
@@ -1418,6 +1448,12 @@ describe('generateLiveItem', () => {
         {
           '#text': 'Host Name',
           '@role': 'host',
+        },
+      ],
+      'podcast:funding': [
+        {
+          '#text': 'Support the show',
+          '@url': 'https://example.com/live/donate',
         },
       ],
     }
@@ -1545,6 +1581,12 @@ describe('generateFeed', () => {
           id: 'service-123',
         },
       ],
+      socialInteracts: [
+        {
+          uri: 'https://example.com/comments',
+          protocol: 'activitypub',
+        },
+      ],
       txts: [
         {
           display: 'Copyright notice',
@@ -1624,6 +1666,12 @@ describe('generateFeed', () => {
         {
           '#text': 'yes',
           '@id': 'service-123',
+        },
+      ],
+      'podcast:socialInteract': [
+        {
+          '@uri': 'https://example.com/comments',
+          '@protocol': 'activitypub',
         },
       ],
       'podcast:txt': [

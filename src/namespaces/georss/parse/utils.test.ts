@@ -39,6 +39,26 @@ describe('parseLatLngPairs', () => {
     expect(parseLatLngPairs(value, { min: 3, max: 3 })).toEqual(expected)
   })
 
+  it('should parse a valid string with comma separators', () => {
+    const value = '45.256,-71.92,37.8,-122.41'
+    const expected = [
+      { lat: 45.256, lng: -71.92 },
+      { lat: 37.8, lng: -122.41 },
+    ]
+
+    expect(parseLatLngPairs(value)).toEqual(expected)
+  })
+
+  it('should parse a valid string with comma and space separators', () => {
+    const value = '45.256, -71.92, 37.8, -122.41'
+    const expected = [
+      { lat: 45.256, lng: -71.92 },
+      { lat: 37.8, lng: -122.41 },
+    ]
+
+    expect(parseLatLngPairs(value)).toEqual(expected)
+  })
+
   it('should parse a valid string wrapped in whitespace and newlines', () => {
     const value = '\n      45.256 -71.92 37.8 -122.41\n    '
     const expected = [
@@ -146,6 +166,26 @@ describe('parsePoint', () => {
     expect(parsePoint(value)).toEqual(expected)
   })
 
+  it('should parse point string with comma separator', () => {
+    const value = '45.256,-71.92'
+    const expected = {
+      lat: 45.256,
+      lng: -71.92,
+    }
+
+    expect(parsePoint(value)).toEqual(expected)
+  })
+
+  it('should parse point string with comma and space separator', () => {
+    const value = '45.256, -71.92'
+    const expected = {
+      lat: 45.256,
+      lng: -71.92,
+    }
+
+    expect(parsePoint(value)).toEqual(expected)
+  })
+
   it('should parse point string indented on its own line', () => {
     const value = '\n      45.256 -71.92\n    '
     const expected = {
@@ -209,6 +249,18 @@ describe('parseLine', () => {
         { lat: 45.256, lng: -71.92 },
         { lat: 37.8, lng: -122.41 },
         { lat: 51.5, lng: -0.12 },
+      ],
+    }
+
+    expect(parseLine(value)).toEqual(expected)
+  })
+
+  it('should parse a line with comma separators', () => {
+    const value = '45.256,-71.92 37.8,-122.41'
+    const expected = {
+      points: [
+        { lat: 45.256, lng: -71.92 },
+        { lat: 37.8, lng: -122.41 },
       ],
     }
 
@@ -289,6 +341,20 @@ describe('parsePolygon', () => {
     expect(parsePolygon(value)).toEqual(expected)
   })
 
+  it('should parse a polygon with comma separators', () => {
+    const value = '45.256,-71.92 37.8,-122.41 51.5,-0.12 40.7,-74.0'
+    const expected = {
+      points: [
+        { lat: 45.256, lng: -71.92 },
+        { lat: 37.8, lng: -122.41 },
+        { lat: 51.5, lng: -0.12 },
+        { lat: 40.7, lng: -74.0 },
+      ],
+    }
+
+    expect(parsePolygon(value)).toEqual(expected)
+  })
+
   it('should handle a polygon with varied spacing', () => {
     const value = '45.256  -71.92\t37.8 -122.41    51.5 -0.12 40.7 -74.0'
     const expected = {
@@ -339,6 +405,16 @@ describe('parsePolygon', () => {
 describe('parseBox', () => {
   it('should parse a valid box with exactly 2 points', () => {
     const value = '45.256 -71.92 51.5 -0.12'
+    const expected = {
+      lowerCorner: { lat: 45.256, lng: -71.92 },
+      upperCorner: { lat: 51.5, lng: -0.12 },
+    }
+
+    expect(parseBox(value)).toEqual(expected)
+  })
+
+  it('should parse a box with comma separators', () => {
+    const value = '45.256,-71.92 51.5,-0.12'
     const expected = {
       lowerCorner: { lat: 45.256, lng: -71.92 },
       upperCorner: { lat: 51.5, lng: -0.12 },
@@ -412,6 +488,16 @@ describe('parseCircle', () => {
 
   it('should parse a circle from an object with #text', () => {
     const value = { '#text': '45.256 -71.92 500' }
+    const expected = {
+      center: { lat: 45.256, lng: -71.92 },
+      radius: 500,
+    }
+
+    expect(parseCircle(value)).toEqual(expected)
+  })
+
+  it('should parse a circle with a comma between the coordinates', () => {
+    const value = '45.256,-71.92 500'
     const expected = {
       center: { lat: 45.256, lng: -71.92 },
       radius: 500,

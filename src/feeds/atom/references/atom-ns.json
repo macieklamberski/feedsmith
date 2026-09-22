@@ -112,6 +112,7 @@
         "episodeType": "full",
         "block": false,
         "order": 1,
+        "isClosedCaptioned": true,
         "summary": "This is a detailed summary of the episode content and key takeaways",
         "subtitle": "Episode subtitle with additional context",
         "keywords": ["tutorial", "example", "technology", "programming"]
@@ -1148,6 +1149,7 @@
     },
     "categories": ["Technology"],
     "email": "podcaster@example.com",
+    "owner": "owner@example.com",
     "newFeedUrl": "https://example.com/new-podcast-feed.xml"
   },
   "feedburner": {
@@ -1171,6 +1173,8 @@
     "queries": [
       {
         "role": "request",
+        "title": "Search results for quantum computing",
+        "totalResults": 1000,
         "searchTerms": "quantum computing",
         "startIndex": 0,
         "count": 10

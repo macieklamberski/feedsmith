@@ -236,6 +236,7 @@
   <googleplay:image href="https://example.com/images/googleplay-cover.jpg"/>
   <googleplay:category text="Technology"/>
   <googleplay:email>podcaster@example.com</googleplay:email>
+  <googleplay:owner>owner@example.com</googleplay:owner>
   <googleplay:new-feed-url>https://example.com/new-podcast-feed.xml</googleplay:new-feed-url>
 
   <!-- FeedBurner Namespace: Feed Level Tags -->
@@ -250,7 +251,7 @@
   <opensearch:totalResults>1000</opensearch:totalResults>
   <opensearch:startIndex>0</opensearch:startIndex>
   <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
-  <opensearch:Query role="request" searchTerms="quantum computing" startIndex="0" count="10"/>
+  <opensearch:Query role="request" title="Search results for quantum computing" totalResults="1000" searchTerms="quantum computing" startIndex="0" count="10"/>
 
   <!-- ccREL Namespace: Feed Level Tags -->
   <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
@@ -401,6 +402,7 @@
     <itunes:episodeType>full</itunes:episodeType>
     <itunes:block>no</itunes:block>
     <itunes:order>1</itunes:order>
+    <itunes:isClosedCaptioned>yes</itunes:isClosedCaptioned>
     <itunes:summary>This is a detailed summary of the episode content and key takeaways</itunes:summary>
     <itunes:subtitle>Episode subtitle with additional context</itunes:subtitle>
     <itunes:keywords>tutorial,example,technology,programming</itunes:keywords>
