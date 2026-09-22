@@ -1,6 +1,17 @@
 {
   "title": "Example Feed",
   "link": "http://example.org",
+  "image": {
+    "title": "Example Image",
+    "link": "http://example.org",
+    "url": "http://example.org/image.png",
+    "rdf": {
+      "about": "http://example.org/image.png"
+    },
+    "cc": {
+      "license": "https://creativecommons.org/licenses/by-nd/4.0/"
+    }
+  },
   "items": [
     {
       "title": "Example Item",

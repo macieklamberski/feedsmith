@@ -33,6 +33,7 @@ export namespace RdfFeed {
       link: Requirable<string> // Required in spec
       url: Requirable<string> // Required in spec
       rdf?: RdfNs.About
+      cc?: CcNs.ItemOrFeed
     },
     TStrict
   >
