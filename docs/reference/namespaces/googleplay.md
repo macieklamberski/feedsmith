@@ -10,7 +10,7 @@ The Google Play Podcast namespace provides podcast-specific metadata for feed an
   <tbody>
     <tr>
       <th>Namespace URI</th>
-      <td><code>https://www.google.com/schemas/play-podcasts/1.0/</code></td>
+      <td><code>http://www.google.com/schemas/play-podcasts/1.0</code></td>
     </tr>
     <tr>
       <th>Specification</th>

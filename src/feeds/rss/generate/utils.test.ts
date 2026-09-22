@@ -1514,7 +1514,7 @@ describe('generateFeed', () => {
     const expected = {
       rss: {
         '@version': '2.0',
-        '@xmlns:googleplay': 'https://www.google.com/schemas/play-podcasts/1.0/',
+        '@xmlns:googleplay': 'http://www.google.com/schemas/play-podcasts/1.0',
         channel: {
           title: 'Podcast Feed',
           description: 'A feed with Google Play properties',

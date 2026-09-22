@@ -1738,7 +1738,7 @@ describe('generateFeed', () => {
     const expected = {
       feed: {
         '@xmlns': 'http://www.w3.org/2005/Atom',
-        '@xmlns:googleplay': 'https://www.google.com/schemas/play-podcasts/1.0/',
+        '@xmlns:googleplay': 'http://www.google.com/schemas/play-podcasts/1.0',
         id: 'https://example.com/feed',
         title: { '#text': 'Podcast with Google Play namespace' },
         updated: '2023-03-15T12:00:00.000Z',
