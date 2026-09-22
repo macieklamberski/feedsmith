@@ -43,7 +43,7 @@ export const parseExplicit: ParseUtilPartial<boolean | 'clean'> = (value) => {
     return explicit
   }
 
-  return parseYesNoBoolean(value)
+  return parseYesNoBoolean(retrieveText(value))
 }
 
 export const retrieveItem: ParseUtilPartial<GooglePlayNs.Item> = (value) => {
