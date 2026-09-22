@@ -1105,6 +1105,102 @@ describe('parse', () => {
     })
   })
 
+  it('should parse RDF with atom namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:atom="http://www.w3.org/2005/Atom"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with Atom namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with Atom namespace</description>
+          <atom:link href="http://example.com/feed.rdf" rel="self" type="application/rdf+xml" />
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item with Atom link</title>
+          <link>http://example.com/item1</link>
+          <atom:link href="http://example.com/item1" rel="alternate" />
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with Atom namespace',
+      link: 'http://example.com',
+      description: 'Test feed with Atom namespace',
+      atom: {
+        links: [{ href: 'http://example.com/feed.rdf', rel: 'self', type: 'application/rdf+xml' }],
+      },
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Item with Atom link',
+          link: 'http://example.com/item1',
+          atom: {
+            links: [{ href: 'http://example.com/item1', rel: 'alternate' }],
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse RDF with dc namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with DC namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with Dublin Core namespace</description>
+          <dc:creator>John Doe</dc:creator>
+          <dc:publisher>Example Publishing</dc:publisher>
+          <dc:language>en-US</dc:language>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>First item</title>
+          <link>http://example.com/item1</link>
+          <dc:creator>Jane Smith</dc:creator>
+          <dc:date>2023-01-15T10:00:00Z</dc:date>
+          <dc:subject>Technology</dc:subject>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with DC namespace',
+      link: 'http://example.com',
+      description: 'Test feed with Dublin Core namespace',
+      dc: {
+        creators: ['John Doe'],
+        publishers: ['Example Publishing'],
+        languages: ['en-US'],
+      },
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'First item',
+          link: 'http://example.com/item1',
+          dc: {
+            creators: ['Jane Smith'],
+            dates: ['2023-01-15T10:00:00Z'],
+            subjects: ['Technology'],
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with dcterms namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
@@ -1153,6 +1249,50 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with sy namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with Syndication namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with Syndication namespace</description>
+          <sy:updatePeriod>hourly</sy:updatePeriod>
+          <sy:updateFrequency>2</sy:updateFrequency>
+          <sy:updateBase>2023-01-01T00:00:00Z</sy:updateBase>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>First item</title>
+          <link>http://example.com/item1</link>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with Syndication namespace',
+      link: 'http://example.com',
+      description: 'Test feed with Syndication namespace',
+      sy: {
+        updatePeriod: 'hourly',
+        updateFrequency: 2,
+        updateBase: '2023-01-01T00:00:00Z',
+      },
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'First item',
+          link: 'http://example.com/item1',
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with content namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
@@ -1193,39 +1333,187 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
-  it('should parse RDF with wfw namespace', () => {
+  it('should parse RDF with slash namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
       <rdf:RDF
         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
         xmlns="http://purl.org/rss/1.0/"
-        xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+        xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
       >
         <channel rdf:about="http://example.com">
-          <title>Feed with WFW namespace</title>
+          <title>Feed with Slash namespace</title>
           <link>http://example.com</link>
-          <description>Test feed with Well-Formed Web namespace</description>
+          <description>Test feed with Slash namespace</description>
         </channel>
         <item rdf:about="http://example.com/item1">
-          <title>Item with comments</title>
+          <title>Slashdot-style item</title>
           <link>http://example.com/item1</link>
-          <wfw:comment>https://example.com/posts/item1/comment</wfw:comment>
-          <wfw:commentRss>https://example.com/posts/item1/comments/feed</wfw:commentRss>
+          <slash:comments>42</slash:comments>
+          <slash:section>technology</slash:section>
+          <slash:department>gadgets</slash:department>
+          <slash:hit_parade>100,50,25,10,5</slash:hit_parade>
         </item>
       </rdf:RDF>
     `
     const expected = {
-      title: 'Feed with WFW namespace',
+      title: 'Feed with Slash namespace',
       link: 'http://example.com',
-      description: 'Test feed with Well-Formed Web namespace',
+      description: 'Test feed with Slash namespace',
       rdf: { about: 'http://example.com' },
       items: [
         {
-          title: 'Item with comments',
+          title: 'Slashdot-style item',
           link: 'http://example.com/item1',
-          wfw: {
-            comment: 'https://example.com/posts/item1/comment',
-            commentRss: 'https://example.com/posts/item1/comments/feed',
+          slash: {
+            comments: 42,
+            section: 'technology',
+            department: 'gadgets',
+            hitParade: [100, 50, 25, 10, 5],
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse RDF with media namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:media="http://search.yahoo.com/mrss/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with Media namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with Media RSS namespace</description>
+          <media:title>Media Feed Title</media:title>
+          <media:description>A feed with media content</media:description>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Media item</title>
+          <link>http://example.com/item1</link>
+          <media:content url="http://example.com/video.mp4" type="video/mp4" />
+          <media:title>Video Title</media:title>
+          <media:thumbnail url="http://example.com/thumb.jpg" width="120" height="90" />
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with Media namespace',
+      link: 'http://example.com',
+      description: 'Test feed with Media RSS namespace',
+      media: {
+        title: { value: 'Media Feed Title' },
+        description: { value: 'A feed with media content' },
+      },
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Media item',
+          link: 'http://example.com/item1',
+          media: {
+            contents: [{ url: 'http://example.com/video.mp4', type: 'video/mp4' }],
+            title: { value: 'Video Title' },
+            thumbnails: [{ url: 'http://example.com/thumb.jpg', width: 120, height: 90 }],
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse RDF with opensearch namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:openSearch="http://a9.com/-/spec/opensearchrss/1.0/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with OpenSearch namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with OpenSearch namespace</description>
+          <openSearch:totalResults>120</openSearch:totalResults>
+          <openSearch:startIndex>1</openSearch:startIndex>
+          <openSearch:itemsPerPage>20</openSearch:itemsPerPage>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item title</title>
+          <link>http://example.com/item1</link>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with OpenSearch namespace',
+      link: 'http://example.com',
+      description: 'Test feed with OpenSearch namespace',
+      opensearch: {
+        totalResults: 120,
+        startIndex: 1,
+        itemsPerPage: 20,
+      },
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Item title',
+          link: 'http://example.com/item1',
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse RDF with prism namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with PRISM namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with PRISM namespace</description>
+          <prism:publicationName>Example Journal</prism:publicationName>
+          <prism:issn>1234-5678</prism:issn>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item title</title>
+          <link>http://example.com/item1</link>
+          <prism:doi>10.1000/example.1</prism:doi>
+          <prism:volume>12</prism:volume>
+          <prism:startingPage>101</prism:startingPage>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with PRISM namespace',
+      link: 'http://example.com',
+      description: 'Test feed with PRISM namespace',
+      prism: {
+        publicationName: 'Example Journal',
+        issn: '1234-5678',
+      },
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Item title',
+          link: 'http://example.com/item1',
+          prism: {
+            doi: '10.1000/example.1',
+            volume: '12',
+            startingPage: '101',
           },
           rdf: { about: 'http://example.com/item1' },
         },
@@ -1270,6 +1558,48 @@ describe('parse', () => {
           link: 'http://example.com/item1',
           cc: {
             license: 'https://creativecommons.org/licenses/by-sa/4.0/',
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse RDF with wfw namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with WFW namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with Well-Formed Web namespace</description>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item with comments</title>
+          <link>http://example.com/item1</link>
+          <wfw:comment>https://example.com/posts/item1/comment</wfw:comment>
+          <wfw:commentRss>https://example.com/posts/item1/comments/feed</wfw:commentRss>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with WFW namespace',
+      link: 'http://example.com',
+      description: 'Test feed with Well-Formed Web namespace',
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Item with comments',
+          link: 'http://example.com/item1',
+          wfw: {
+            comment: 'https://example.com/posts/item1/comment',
+            commentRss: 'https://example.com/posts/item1/comments/feed',
           },
           rdf: { about: 'http://example.com/item1' },
         },
@@ -1405,100 +1735,6 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
-  it('should parse RDF with opensearch namespace', () => {
-    const value = `
-      <?xml version="1.0" encoding="UTF-8"?>
-      <rdf:RDF
-        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-        xmlns="http://purl.org/rss/1.0/"
-        xmlns:openSearch="http://a9.com/-/spec/opensearchrss/1.0/"
-      >
-        <channel rdf:about="http://example.com">
-          <title>Feed with OpenSearch namespace</title>
-          <link>http://example.com</link>
-          <description>Test feed with OpenSearch namespace</description>
-          <openSearch:totalResults>120</openSearch:totalResults>
-          <openSearch:startIndex>1</openSearch:startIndex>
-          <openSearch:itemsPerPage>20</openSearch:itemsPerPage>
-        </channel>
-        <item rdf:about="http://example.com/item1">
-          <title>Item title</title>
-          <link>http://example.com/item1</link>
-        </item>
-      </rdf:RDF>
-    `
-    const expected = {
-      title: 'Feed with OpenSearch namespace',
-      link: 'http://example.com',
-      description: 'Test feed with OpenSearch namespace',
-      opensearch: {
-        totalResults: 120,
-        startIndex: 1,
-        itemsPerPage: 20,
-      },
-      rdf: { about: 'http://example.com' },
-      items: [
-        {
-          title: 'Item title',
-          link: 'http://example.com/item1',
-          rdf: { about: 'http://example.com/item1' },
-        },
-      ],
-    }
-
-    expect(parse(value)).toEqual(expected)
-  })
-
-  it('should parse RDF with prism namespace', () => {
-    const value = `
-      <?xml version="1.0" encoding="UTF-8"?>
-      <rdf:RDF
-        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-        xmlns="http://purl.org/rss/1.0/"
-        xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/"
-      >
-        <channel rdf:about="http://example.com">
-          <title>Feed with PRISM namespace</title>
-          <link>http://example.com</link>
-          <description>Test feed with PRISM namespace</description>
-          <prism:publicationName>Example Journal</prism:publicationName>
-          <prism:issn>1234-5678</prism:issn>
-        </channel>
-        <item rdf:about="http://example.com/item1">
-          <title>Item title</title>
-          <link>http://example.com/item1</link>
-          <prism:doi>10.1000/example.1</prism:doi>
-          <prism:volume>12</prism:volume>
-          <prism:startingPage>101</prism:startingPage>
-        </item>
-      </rdf:RDF>
-    `
-    const expected = {
-      title: 'Feed with PRISM namespace',
-      link: 'http://example.com',
-      description: 'Test feed with PRISM namespace',
-      prism: {
-        publicationName: 'Example Journal',
-        issn: '1234-5678',
-      },
-      rdf: { about: 'http://example.com' },
-      items: [
-        {
-          title: 'Item title',
-          link: 'http://example.com/item1',
-          prism: {
-            doi: '10.1000/example.1',
-            volume: '12',
-            startingPage: '101',
-          },
-          rdf: { about: 'http://example.com/item1' },
-        },
-      ],
-    }
-
-    expect(parse(value)).toEqual(expected)
-  })
-
   it('should parse RDF with geo namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
@@ -1586,242 +1822,6 @@ describe('parse', () => {
           georss: {
             point: { lat: 42.3601, lng: -71.0589 },
             featureName: 'Boston',
-          },
-          rdf: { about: 'http://example.com/item1' },
-        },
-      ],
-    }
-
-    expect(parse(value)).toEqual(expected)
-  })
-
-  it('should parse RDF with dc namespace', () => {
-    const value = `
-      <?xml version="1.0" encoding="UTF-8"?>
-      <rdf:RDF
-        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-        xmlns="http://purl.org/rss/1.0/"
-        xmlns:dc="http://purl.org/dc/elements/1.1/"
-      >
-        <channel rdf:about="http://example.com">
-          <title>Feed with DC namespace</title>
-          <link>http://example.com</link>
-          <description>Test feed with Dublin Core namespace</description>
-          <dc:creator>John Doe</dc:creator>
-          <dc:publisher>Example Publishing</dc:publisher>
-          <dc:language>en-US</dc:language>
-        </channel>
-        <item rdf:about="http://example.com/item1">
-          <title>First item</title>
-          <link>http://example.com/item1</link>
-          <dc:creator>Jane Smith</dc:creator>
-          <dc:date>2023-01-15T10:00:00Z</dc:date>
-          <dc:subject>Technology</dc:subject>
-        </item>
-      </rdf:RDF>
-    `
-    const expected = {
-      title: 'Feed with DC namespace',
-      link: 'http://example.com',
-      description: 'Test feed with Dublin Core namespace',
-      dc: {
-        creators: ['John Doe'],
-        publishers: ['Example Publishing'],
-        languages: ['en-US'],
-      },
-      rdf: { about: 'http://example.com' },
-      items: [
-        {
-          title: 'First item',
-          link: 'http://example.com/item1',
-          dc: {
-            creators: ['Jane Smith'],
-            dates: ['2023-01-15T10:00:00Z'],
-            subjects: ['Technology'],
-          },
-          rdf: { about: 'http://example.com/item1' },
-        },
-      ],
-    }
-
-    expect(parse(value)).toEqual(expected)
-  })
-
-  it('should parse RDF with sy namespace', () => {
-    const value = `
-      <?xml version="1.0" encoding="UTF-8"?>
-      <rdf:RDF
-        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-        xmlns="http://purl.org/rss/1.0/"
-        xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
-      >
-        <channel rdf:about="http://example.com">
-          <title>Feed with Syndication namespace</title>
-          <link>http://example.com</link>
-          <description>Test feed with Syndication namespace</description>
-          <sy:updatePeriod>hourly</sy:updatePeriod>
-          <sy:updateFrequency>2</sy:updateFrequency>
-          <sy:updateBase>2023-01-01T00:00:00Z</sy:updateBase>
-        </channel>
-        <item rdf:about="http://example.com/item1">
-          <title>First item</title>
-          <link>http://example.com/item1</link>
-        </item>
-      </rdf:RDF>
-    `
-    const expected = {
-      title: 'Feed with Syndication namespace',
-      link: 'http://example.com',
-      description: 'Test feed with Syndication namespace',
-      sy: {
-        updatePeriod: 'hourly',
-        updateFrequency: 2,
-        updateBase: '2023-01-01T00:00:00Z',
-      },
-      rdf: { about: 'http://example.com' },
-      items: [
-        {
-          title: 'First item',
-          link: 'http://example.com/item1',
-          rdf: { about: 'http://example.com/item1' },
-        },
-      ],
-    }
-
-    expect(parse(value)).toEqual(expected)
-  })
-
-  it('should parse RDF with media namespace', () => {
-    const value = `
-      <?xml version="1.0" encoding="UTF-8"?>
-      <rdf:RDF
-        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-        xmlns="http://purl.org/rss/1.0/"
-        xmlns:media="http://search.yahoo.com/mrss/"
-      >
-        <channel rdf:about="http://example.com">
-          <title>Feed with Media namespace</title>
-          <link>http://example.com</link>
-          <description>Test feed with Media RSS namespace</description>
-          <media:title>Media Feed Title</media:title>
-          <media:description>A feed with media content</media:description>
-        </channel>
-        <item rdf:about="http://example.com/item1">
-          <title>Media item</title>
-          <link>http://example.com/item1</link>
-          <media:content url="http://example.com/video.mp4" type="video/mp4" />
-          <media:title>Video Title</media:title>
-          <media:thumbnail url="http://example.com/thumb.jpg" width="120" height="90" />
-        </item>
-      </rdf:RDF>
-    `
-    const expected = {
-      title: 'Feed with Media namespace',
-      link: 'http://example.com',
-      description: 'Test feed with Media RSS namespace',
-      media: {
-        title: { value: 'Media Feed Title' },
-        description: { value: 'A feed with media content' },
-      },
-      rdf: { about: 'http://example.com' },
-      items: [
-        {
-          title: 'Media item',
-          link: 'http://example.com/item1',
-          media: {
-            contents: [{ url: 'http://example.com/video.mp4', type: 'video/mp4' }],
-            title: { value: 'Video Title' },
-            thumbnails: [{ url: 'http://example.com/thumb.jpg', width: 120, height: 90 }],
-          },
-          rdf: { about: 'http://example.com/item1' },
-        },
-      ],
-    }
-
-    expect(parse(value)).toEqual(expected)
-  })
-
-  it('should parse RDF with slash namespace', () => {
-    const value = `
-      <?xml version="1.0" encoding="UTF-8"?>
-      <rdf:RDF
-        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-        xmlns="http://purl.org/rss/1.0/"
-        xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
-      >
-        <channel rdf:about="http://example.com">
-          <title>Feed with Slash namespace</title>
-          <link>http://example.com</link>
-          <description>Test feed with Slash namespace</description>
-        </channel>
-        <item rdf:about="http://example.com/item1">
-          <title>Slashdot-style item</title>
-          <link>http://example.com/item1</link>
-          <slash:comments>42</slash:comments>
-          <slash:section>technology</slash:section>
-          <slash:department>gadgets</slash:department>
-          <slash:hit_parade>100,50,25,10,5</slash:hit_parade>
-        </item>
-      </rdf:RDF>
-    `
-    const expected = {
-      title: 'Feed with Slash namespace',
-      link: 'http://example.com',
-      description: 'Test feed with Slash namespace',
-      rdf: { about: 'http://example.com' },
-      items: [
-        {
-          title: 'Slashdot-style item',
-          link: 'http://example.com/item1',
-          slash: {
-            comments: 42,
-            section: 'technology',
-            department: 'gadgets',
-            hitParade: [100, 50, 25, 10, 5],
-          },
-          rdf: { about: 'http://example.com/item1' },
-        },
-      ],
-    }
-
-    expect(parse(value)).toEqual(expected)
-  })
-
-  it('should parse RDF with atom namespace', () => {
-    const value = `
-      <?xml version="1.0" encoding="UTF-8"?>
-      <rdf:RDF
-        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-        xmlns="http://purl.org/rss/1.0/"
-        xmlns:atom="http://www.w3.org/2005/Atom"
-      >
-        <channel rdf:about="http://example.com">
-          <title>Feed with Atom namespace</title>
-          <link>http://example.com</link>
-          <description>Test feed with Atom namespace</description>
-          <atom:link href="http://example.com/feed.rdf" rel="self" type="application/rdf+xml" />
-        </channel>
-        <item rdf:about="http://example.com/item1">
-          <title>Item with Atom link</title>
-          <link>http://example.com/item1</link>
-          <atom:link href="http://example.com/item1" rel="alternate" />
-        </item>
-      </rdf:RDF>
-    `
-    const expected = {
-      title: 'Feed with Atom namespace',
-      link: 'http://example.com',
-      description: 'Test feed with Atom namespace',
-      atom: {
-        links: [{ href: 'http://example.com/feed.rdf', rel: 'self', type: 'application/rdf+xml' }],
-      },
-      rdf: { about: 'http://example.com' },
-      items: [
-        {
-          title: 'Item with Atom link',
-          link: 'http://example.com/item1',
-          atom: {
-            links: [{ href: 'http://example.com/item1', rel: 'alternate' }],
           },
           rdf: { about: 'http://example.com/item1' },
         },
