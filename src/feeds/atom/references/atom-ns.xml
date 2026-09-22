@@ -567,6 +567,8 @@
     <!-- Pingback Namespace: Entry Level Tags -->
     <pingback:server>https://example.com/xmlrpc.php</pingback:server>
     <pingback:target>https://referenced-blog.com/article</pingback:target>
+    <pingback:about>https://blog1.com/posts/xml-basics</pingback:about>
+    <pingback:about>https://blog2.com/posts/namespaces</pingback:about>
 
     <!-- Trackback Namespace: Entry Level Tags -->
     <trackback:ping>https://example.com/trackback/123</trackback:ping>
