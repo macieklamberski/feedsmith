@@ -1170,6 +1170,11 @@
     "totalResults": 1000,
     "startIndex": 0,
     "itemsPerPage": 10,
+    "link": {
+      "href": "http://example.com/opensearchdescription.xml",
+      "rel": "search",
+      "type": "application/opensearchdescription+xml"
+    },
     "queries": [
       {
         "role": "request",
