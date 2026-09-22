@@ -23,6 +23,10 @@ export const uris = [
   'https://prismstandard.org/namespaces/1.2/basic/',
   'http://prismstandard.org/namespaces/1.2/basic',
   'https://prismstandard.org/namespaces/1.2/basic',
+  'http://prismstandard.org/namespaces/basic/1.2/', // PRISM 1.2 (alternative path)
+  'https://prismstandard.org/namespaces/basic/1.2/',
+  'http://prismstandard.org/namespaces/basic/1.2',
+  'https://prismstandard.org/namespaces/basic/1.2',
   'http://prismstandard.org/namespaces/1.1/basic/', // PRISM 1.1
   'https://prismstandard.org/namespaces/1.1/basic/',
   'http://prismstandard.org/namespaces/1.1/basic',
