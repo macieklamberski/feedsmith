@@ -24,14 +24,10 @@ export const parseOriginPlatform: ParseUtilPartial<string> = (value) => {
   return retrieveRdfResourceOrText(value, parseString)
 }
 
-const parsePlatform: ParseUtilPartial<string> = (value) => {
-  return parseString(value?.['@platform']) ?? parseString(value?.['@prism:platform'])
-}
-
 export const parsePlatformString: ParseUtilPartial<PrismNs.PlatformValue<string>> = (value) => {
   const platformValue = {
     value: retrieveRdfResourceOrText(value, parseString),
-    platform: parsePlatform(value),
+    platform: parseString(value?.['@platform']),
   }
 
   return trimObject(platformValue)
@@ -43,7 +39,7 @@ export const parsePlatformDate: ParseUtilPartial<
 > = (value, options) => {
   const platformValue = {
     value: parseDate(retrieveText(value), options?.parseDateFn),
-    platform: parsePlatform(value),
+    platform: parseString(value?.['@platform']),
   }
 
   return trimObject(platformValue)
@@ -52,8 +48,7 @@ export const parsePlatformDate: ParseUtilPartial<
 export const parseRating: ParseUtilPartial<PrismNs.Rating> = (value) => {
   const rating = {
     value: retrieveRdfResourceOrText(value, parseString),
-    ratingSystem:
-      parseString(value?.['@ratingsystem']) ?? parseString(value?.['@prism:ratingsystem']),
+    ratingSystem: parseString(value?.['@ratingsystem']),
   }
 
   return trimObject(rating)

@@ -1113,27 +1113,6 @@ describe('parsePlatformString', () => {
     expect(parsePlatformString(value)).toEqual(expected)
   })
 
-  it('should parse prefixed platform attribute', () => {
-    const value = { '#text': 'Summer Special', '@prism:platform': 'print' }
-    const expected = { value: 'Summer Special', platform: 'print' }
-
-    expect(parsePlatformString(value)).toEqual(expected)
-  })
-
-  it('should prefer unprefixed platform attribute', () => {
-    const value = { '#text': 'Summer Special', '@platform': 'web', '@prism:platform': 'print' }
-    const expected = { value: 'Summer Special', platform: 'web' }
-
-    expect(parsePlatformString(value)).toEqual(expected)
-  })
-
-  it('should fall back to prefixed platform attribute when unprefixed is empty', () => {
-    const value = { '#text': 'Summer Special', '@platform': '', '@prism:platform': 'print' }
-    const expected = { value: 'Summer Special', platform: 'print' }
-
-    expect(parsePlatformString(value)).toEqual(expected)
-  })
-
   it('should parse plain text', () => {
     const expected = { value: 'Summer Special' }
 
@@ -1168,13 +1147,6 @@ describe('parsePlatformDate', () => {
     expect(parsePlatformDate(value)).toEqual(expected)
   })
 
-  it('should parse prefixed platform attribute', () => {
-    const value = { '#text': '2023-03-15', '@prism:platform': 'print' }
-    const expected = { value: '2023-03-15', platform: 'print' }
-
-    expect(parsePlatformDate(value)).toEqual(expected)
-  })
-
   it('should parse plain date', () => {
     const expected = { value: '2023-03-15' }
 
@@ -1205,15 +1177,8 @@ describe('parseRating', () => {
     expect(parseRating(value)).toEqual(expected)
   })
 
-  it('should parse prefixed ratingSystem attribute', () => {
-    const value = { '#text': 'E', '@prism:ratingsystem': 'ESRB' }
-    const expected = { value: 'E', ratingSystem: 'ESRB' }
-
-    expect(parseRating(value)).toEqual(expected)
-  })
-
   it('should parse rdf:resource attribute', () => {
-    const value = { '@rdf:resource': 'https://example.com/esrb#E', '@prism:ratingsystem': 'ESRB' }
+    const value = { '@rdf:resource': 'https://example.com/esrb#E', '@ratingsystem': 'ESRB' }
     const expected = { value: 'https://example.com/esrb#E', ratingSystem: 'ESRB' }
 
     expect(parseRating(value)).toEqual(expected)

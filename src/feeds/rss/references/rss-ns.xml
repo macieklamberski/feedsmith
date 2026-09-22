@@ -357,7 +357,7 @@
     <prism:isbn>978-0-12-345678-9</prism:isbn>
     <prism:issueIdentifier>2023-03-15</prism:issueIdentifier>
     <prism:issueName>Spring Issue</prism:issueName>
-    <prism:issueTeaser prism:platform="print">Special coverage of breakthrough discoveries</prism:issueTeaser>
+    <prism:issueTeaser platform="print">Special coverage of breakthrough discoveries</prism:issueTeaser>
     <prism:issueType>regular</prism:issueType>
     <prism:volume>615</prism:volume>
     <prism:number>7952</prism:number>

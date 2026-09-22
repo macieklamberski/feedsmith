@@ -48,19 +48,6 @@ export const generatePlatformDate: GenerateUtil<PrismNs.PlatformValue<DateLike>>
   return trimObject(value)
 }
 
-export const generateIssueTeaser: GenerateUtil<PrismNs.PlatformValue<string>> = (issueTeaser) => {
-  if (!isPlainObject(issueTeaser)) {
-    return
-  }
-
-  const value = {
-    ...generateTextOrCdataString(issueTeaser.value),
-    '@prism:platform': generatePlainString(issueTeaser.platform),
-  }
-
-  return trimObject(value)
-}
-
 export const generateRating: GenerateUtil<PrismNs.Rating> = (rating) => {
   if (!isPlainObject(rating)) {
     return
@@ -86,7 +73,7 @@ export const generateItemOrFeed: GenerateUtil<PrismNs.ItemOrFeed<DateLike>> = (i
     'prism:isbn': trimArray(itemOrFeed.isbns, generateCdataString),
     'prism:issueIdentifier': generateCdataString(itemOrFeed.issueIdentifier),
     'prism:issueName': generateCdataString(itemOrFeed.issueName),
-    'prism:issueTeaser': generateIssueTeaser(itemOrFeed.issueTeaser),
+    'prism:issueTeaser': generatePlatformString(itemOrFeed.issueTeaser),
     'prism:issueType': generateCdataString(itemOrFeed.issueType),
     'prism:doi': generateCdataString(itemOrFeed.doi),
     'prism:volume': generateCdataString(itemOrFeed.volume),

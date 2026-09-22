@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'bun:test'
 import {
-  generateIssueTeaser,
   generateItemOrFeed,
   generateOriginPlatform,
   generatePlatformDate,
@@ -88,32 +87,6 @@ describe('generatePlatformDate', () => {
     expect(generatePlatformDate(undefined)).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
     expect(generatePlatformDate(new Date('2023-03-15T00:00:00Z'))).toBeUndefined()
-  })
-})
-
-describe('generateIssueTeaser', () => {
-  it('should generate text with prefixed platform attribute', () => {
-    const value = { value: 'The Hottest Swimsuits', platform: 'print' }
-    const expected = { '#text': 'The Hottest Swimsuits', '@prism:platform': 'print' }
-
-    expect(generateIssueTeaser(value)).toEqual(expected)
-  })
-
-  it('should generate text without platform attribute', () => {
-    const value = { value: 'The Hottest Swimsuits' }
-    const expected = { '#text': 'The Hottest Swimsuits' }
-
-    expect(generateIssueTeaser(value)).toEqual(expected)
-  })
-
-  it('should return undefined for empty object', () => {
-    expect(generateIssueTeaser({})).toBeUndefined()
-  })
-
-  it('should handle non-object inputs', () => {
-    expect(generateIssueTeaser(undefined)).toBeUndefined()
-    // @ts-expect-error: This is for testing purposes.
-    expect(generateIssueTeaser('The Hottest Swimsuits')).toBeUndefined()
   })
 })
 
