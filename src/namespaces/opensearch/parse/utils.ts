@@ -30,6 +30,21 @@ export const parseQuery: ParseUtilPartial<OpenSearchNs.Query> = (value) => {
   return trimObject(query)
 }
 
+export const parseLink: ParseUtilPartial<OpenSearchNs.Link> = (value) => {
+  if (!isPlainObject(value)) {
+    return
+  }
+
+  const link = {
+    href: parseString(value['@href']),
+    rel: parseString(value['@rel']),
+    type: parseString(value['@type']),
+    hreflang: parseString(value['@hreflang']),
+  }
+
+  return trimObject(link)
+}
+
 export const retrieveFeed: ParseUtilPartial<OpenSearchNs.Feed> = (value) => {
   if (!isPlainObject(value)) {
     return
@@ -45,6 +60,7 @@ export const retrieveFeed: ParseUtilPartial<OpenSearchNs.Feed> = (value) => {
     itemsPerPage: parseSingularOf(value['opensearch:itemsperpage'], (value) =>
       parseNumber(retrieveText(value)),
     ),
+    link: parseSingularOf(value['opensearch:link'], parseLink),
     queries: parseArrayOf(value['opensearch:query'], parseQuery),
   }
 

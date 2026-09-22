@@ -1755,6 +1755,11 @@ describe('generateFeed', () => {
         totalResults: 1000,
         startIndex: 21,
         itemsPerPage: 10,
+        link: {
+          href: 'http://example.com/opensearchdescription.xml',
+          rel: 'search',
+          type: 'application/opensearchdescription+xml',
+        },
         queries: [
           {
             role: 'request',
@@ -1775,6 +1780,11 @@ describe('generateFeed', () => {
           'opensearch:totalResults': 1000,
           'opensearch:startIndex': 21,
           'opensearch:itemsPerPage': 10,
+          'opensearch:link': {
+            '@href': 'http://example.com/opensearchdescription.xml',
+            '@rel': 'search',
+            '@type': 'application/opensearchdescription+xml',
+          },
           'opensearch:Query': [
             {
               '@role': 'request',

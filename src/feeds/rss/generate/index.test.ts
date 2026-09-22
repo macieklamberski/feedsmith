@@ -648,6 +648,11 @@ describe('generate', () => {
         totalResults: 1000,
         startIndex: 0,
         itemsPerPage: 10,
+        link: {
+          href: 'http://example.com/opensearchdescription.xml',
+          rel: 'search',
+          type: 'application/opensearchdescription+xml',
+        },
       },
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
@@ -658,6 +663,7 @@ describe('generate', () => {
     <opensearch:totalResults>1000</opensearch:totalResults>
     <opensearch:startIndex>0</opensearch:startIndex>
     <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+    <opensearch:link href="http://example.com/opensearchdescription.xml" rel="search" type="application/opensearchdescription+xml"/>
   </channel>
 </rss>
 `
