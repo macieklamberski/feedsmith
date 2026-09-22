@@ -284,6 +284,7 @@
     <googleplay:image href="https://example.com/images/googleplay-cover.jpg" />
     <googleplay:new-feed-url>https://example.com/new-feed.xml</googleplay:new-feed-url>
     <googleplay:email>contact@example.com</googleplay:email>
+    <googleplay:owner>owner@example.com</googleplay:owner>
     <googleplay:category text="Technology" />
     <googleplay:category text="Education" />
 

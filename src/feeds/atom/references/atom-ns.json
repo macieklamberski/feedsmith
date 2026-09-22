@@ -1145,6 +1145,7 @@
     },
     "categories": ["Technology"],
     "email": "podcaster@example.com",
+    "owner": "owner@example.com",
     "newFeedUrl": "https://example.com/new-podcast-feed.xml"
   },
   "feedburner": {

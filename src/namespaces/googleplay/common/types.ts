@@ -25,6 +25,7 @@ export namespace GooglePlayNs {
     image?: Image<TStrict>
     newFeedUrl?: string
     email?: string
+    owner?: string
     categories?: Array<string>
   }
 }

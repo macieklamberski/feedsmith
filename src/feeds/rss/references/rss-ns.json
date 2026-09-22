@@ -1570,6 +1570,7 @@
     },
     "newFeedUrl": "https://example.com/new-feed.xml",
     "email": "contact@example.com",
+    "owner": "owner@example.com",
     "categories": ["Technology", "Education"]
   },
   "spotify": {
