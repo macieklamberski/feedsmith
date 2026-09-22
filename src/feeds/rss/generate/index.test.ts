@@ -943,6 +943,7 @@ describe('generate', () => {
         blogRoll: 'http://example.com/blogroll.opml',
         blink: 'http://example.net/',
         mySubscriptions: 'http://example.com/subscriptions.opml',
+        changes: 'http://example.com/changes.xml',
       },
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
@@ -953,6 +954,7 @@ describe('generate', () => {
     <blogChannel:blogRoll>http://example.com/blogroll.opml</blogChannel:blogRoll>
     <blogChannel:blink>http://example.net/</blogChannel:blink>
     <blogChannel:mySubscriptions>http://example.com/subscriptions.opml</blogChannel:mySubscriptions>
+    <blogChannel:changes>http://example.com/changes.xml</blogChannel:changes>
   </channel>
 </rss>
 `
