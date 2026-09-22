@@ -555,6 +555,17 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toEqual(expected)
   })
 
+  it('should parse item with issue identifier', () => {
+    const value = {
+      'prism:issueidentifier': '2023-03-15',
+    }
+    const expected = {
+      issueIdentifier: '2023-03-15',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
   it('should parse item with cover date fields', () => {
     const value = {
       'prism:coverdate': '2023-03-15',

@@ -88,6 +88,7 @@ export namespace PrismNs {
     publicationName?: string
     issn?: string
     eIssn?: string
+    issueIdentifier?: string
     doi?: string
     urls?: Array<string>
     volume?: string

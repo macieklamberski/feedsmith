@@ -217,6 +217,9 @@ export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOpti
     ),
     issn: parseSingularOf(value['prism:issn'], (value) => parseString(retrieveText(value))),
     eIssn: parseSingularOf(value['prism:eissn'], (value) => parseString(retrieveText(value))),
+    issueIdentifier: parseSingularOf(value['prism:issueidentifier'], (value) =>
+      parseString(retrieveText(value)),
+    ),
     doi: parseSingularOf(value['prism:doi'], (value) => parseString(retrieveText(value))),
     urls: parseArrayOf(value['prism:url'], (value) => parseString(retrieveText(value))),
     volume: parseSingularOf(value['prism:volume'], (value) => parseString(retrieveText(value))),
