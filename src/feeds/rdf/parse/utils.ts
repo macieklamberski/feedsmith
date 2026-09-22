@@ -15,7 +15,10 @@ import {
   retrieveFeed as retrieveAtomFeed,
 } from '../../../namespaces/atom/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
-import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
+import {
+  retrieveFeed as retrieveContentFeed,
+  retrieveItem as retrieveContentItem,
+} from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
 import {
@@ -115,7 +118,7 @@ export const parseItem: ParseUtilPartial<RdfFeed.Item<DateAny>> = (value, option
     atom: namespaces.has('atom') ? retrieveAtomEntry(value, options) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value, options) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(value, options) : undefined,
-    content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
+    content: namespaces.has('content') ? retrieveContentItem(value, { rdfPrefix: '' }) : undefined,
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
@@ -174,6 +177,9 @@ export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, option
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel, options) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(channel, options) : undefined,
     sy: namespaces.has('sy') ? retrieveSyFeed(channel, options) : undefined,
+    content: namespaces.has('content')
+      ? retrieveContentFeed(channel, { rdfPrefix: '' })
+      : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
     feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerFeed(channel) : undefined,
     opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(channel) : undefined,

@@ -117,6 +117,17 @@
     <sy:updateFrequency>1</sy:updateFrequency>
     <sy:updateBase>2000-01-01T12:00:00.000Z</sy:updateBase>
 
+    <!-- Content Namespace: Channel Level Tags -->
+    <content:items>
+      <rdf:Bag>
+        <rdf:li>
+          <content:item rdf:about="https://example.com/content.svg">
+            <content:format rdf:resource="http://www.w3.org/2000/svg"/>
+          </content:item>
+        </rdf:li>
+      </rdf:Bag>
+    </content:items>
+
     <!-- iTunes Namespace: Channel Level Tags -->
     <itunes:image href="https://example.com/images/podcast-cover.jpg"/>
     <itunes:category text="Society &amp; Culture">
@@ -567,6 +578,23 @@
 
       <!-- Content Namespace: Item Level Tags -->
       <content:encoded>This is an example of content.</content:encoded>
+      <content:items>
+        <rdf:Bag>
+          <rdf:li>
+            <content:item>
+              <content:format rdf:resource="http://www.w3.org/1999/xhtml"/>
+              <content:encoding rdf:resource="http://www.w3.org/TR/REC-xml#dt-wellformed"/>
+              <rdf:value rdf:parseType="Literal"><em>This is <strong>very</strong></em> cool.</rdf:value>
+            </content:item>
+          </rdf:li>
+          <rdf:li>
+            <content:item rdf:about="https://example.com/content.html">
+              <content:format rdf:resource="http://www.w3.org/TR/html4/"/>
+              <rdf:value><![CDATA[<em>This is very cool.</em>]]></rdf:value>
+            </content:item>
+          </rdf:li>
+        </rdf:Bag>
+      </content:items>
 
       <!-- Slash Namespace: Item Level Tags -->
       <slash:section>articles</slash:section>

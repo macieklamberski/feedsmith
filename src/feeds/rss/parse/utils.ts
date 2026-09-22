@@ -23,7 +23,10 @@ import {
 } from '../../../namespaces/atom/parse/utils.js'
 import { retrieveFeed as retrieveBlogChannelFeed } from '../../../namespaces/blogchannel/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
-import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
+import {
+  retrieveFeed as retrieveContentFeed,
+  retrieveItem as retrieveContentItem,
+} from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
@@ -466,6 +469,7 @@ export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, option
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel, options) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(channel, options) : undefined,
     sy: namespaces.has('sy') ? retrieveSyFeed(channel, options) : undefined,
+    content: namespaces.has('content') ? retrieveContentFeed(channel) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesFeed(channel) : undefined,
     podcast: namespaces.has('podcast') ? retrievePodcastFeed(channel, options) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,

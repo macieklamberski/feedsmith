@@ -82,7 +82,19 @@
         "valid": ["2025-12-31T23:59:59+00:00"]
       },
       "content": {
-        "encoded": "This is an example of content."
+        "encoded": "This is an example of content.",
+        "items": [
+          {
+            "format": "http://www.w3.org/1999/xhtml",
+            "encoding": "http://www.w3.org/TR/REC-xml#dt-wellformed",
+            "value": "<em>This is <strong>very</strong></em> cool."
+          },
+          {
+            "about": "https://example.com/content.html",
+            "format": "http://www.w3.org/TR/html4/",
+            "value": "<em>This is very cool.</em>"
+          }
+        ]
       },
       "slash": {
         "section": "articles",
@@ -673,6 +685,14 @@
     "updatePeriod": "hourly",
     "updateFrequency": 1,
     "updateBase": "2000-01-01T12:00+00:00"
+  },
+  "content": {
+    "items": [
+      {
+        "about": "https://example.com/content.svg",
+        "format": "http://www.w3.org/2000/svg"
+      }
+    ]
   },
   "media": {
     "contents": [
