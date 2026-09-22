@@ -79,6 +79,7 @@ export namespace RssFeed {
       description?: string
       height?: number
       width?: number
+      cc?: CcNs.ItemOrFeed
     },
     TStrict
   >

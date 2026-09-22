@@ -269,6 +269,21 @@ describe('generateImage', () => {
   it('should handle non-object inputs gracefully', () => {
     expect(generateImage(undefined)).toBeUndefined()
   })
+
+  it('should generate image with cc namespace properties', () => {
+    const value = {
+      url: 'https://example.com/logo.png',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+      },
+    }
+    const expected = {
+      url: 'https://example.com/logo.png',
+      'cc:license': 'https://creativecommons.org/licenses/by/4.0/',
+    }
+
+    expect(generateImage(value)).toEqual(expected)
+  })
 })
 
 describe('generateTextInput', () => {

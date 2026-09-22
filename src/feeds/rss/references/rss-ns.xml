@@ -37,6 +37,14 @@
   <channel>
     <title>Example Feed</title>
     <link>http://example.org</link>
+    <image>
+      <url>http://example.org/image.png</url>
+      <title>Example Image</title>
+      <link>http://example.org</link>
+
+      <!-- ccREL Namespace: Image Level Tags -->
+      <cc:license>https://creativecommons.org/licenses/by-nd/4.0/</cc:license>
+    </image>
 
     <!-- Dublin Core Namespace: Channel Level Tags -->
     <dc:title>Dublin Core Enhanced Feed Title</dc:title>
