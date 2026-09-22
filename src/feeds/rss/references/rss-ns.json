@@ -1152,6 +1152,15 @@
       }
     ],
     "blocks": [{ "value": true }, { "value": false, "id": "test" }],
+    "socialInteracts": [
+      {
+        "uri": "https://example.com/@examplepodcast/100000000",
+        "protocol": "activitypub",
+        "accountId": "@examplepodcast@example.com",
+        "accountUrl": "https://example.com/@examplepodcast",
+        "priority": 1
+      }
+    ],
     "txts": [
       {
         "display": "Additional text information about the podcast",
