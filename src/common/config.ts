@@ -53,6 +53,7 @@ import {
   uris as itunesUris,
 } from '../namespaces/itunes/common/config.js'
 import {
+  atomUris as livejournalAtomUris,
   stopNodes as livejournalStopNodes,
   uris as livejournalUris,
 } from '../namespaces/livejournal/common/config.js'
@@ -178,6 +179,12 @@ export const namespaceUris = {
   rdf: rdfUris,
   rss: rssUris,
   rss2: rss2Uris,
+}
+
+// Generated Atom declares these URIs for namespaces whose Atom feeds use a different one.
+export const atomNamespaceUris = {
+  ...namespaceUris,
+  lj: livejournalAtomUris,
 }
 
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(

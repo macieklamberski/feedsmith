@@ -640,6 +640,16 @@
         "floor": 4,
         "radius": 50000
       },
+      "livejournal": {
+        "music": "The Beatles - Hey Jude",
+        "mood": "cheerful",
+        "security": "public",
+        "poster": "johndoe",
+        "posterId": "12345",
+        "posterUrl": "https://johndoe.example.com",
+        "posterUserpic": "https://userpic.example.com/12345",
+        "replyCount": 42
+      },
       "links": [
         {
           "rel": "replies",
@@ -1241,5 +1251,10 @@
     "elev": 360,
     "floor": 4,
     "radius": 50000
+  },
+  "livejournal": {
+    "journal": "example_community",
+    "journalId": "67890",
+    "journalType": "community"
   }
 }

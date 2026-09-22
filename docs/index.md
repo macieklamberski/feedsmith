@@ -101,7 +101,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [YouTube](/reference/namespaces/yt) | `<yt:*>` | Atom | ✅ | ✅ |
 | [W3C Basic Geo](/reference/namespaces/geo) | `<geo:*>` | RSS, Atom | ✅ | ✅ |
 | [GeoRSS Simple](/reference/namespaces/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [LiveJournal](/reference/namespaces/livejournal) | `<lj:*>` | RSS | ✅ | ✅ |
+| [LiveJournal](/reference/namespaces/livejournal) | `<lj:*>` | RSS, Atom | ✅ | ✅ |
 | [RDF](/reference/namespaces/rdf) | `<rdf:*>` | RDF | ✅ | ✅ |
 
 ## Why Feedsmith?

@@ -35,6 +35,10 @@ import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/parse/utils.js'
+import {
+  retrieveFeed as retrieveLivejournalFeed,
+  retrieveItem as retrieveLivejournalItem,
+} from '../../../namespaces/livejournal/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
 import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
 import {
@@ -525,6 +529,7 @@ export const parseEntry: ParseUtilPartial<AtomFeed.Entry<DateAny>> = (value, opt
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
     geo: namespaces?.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    livejournal: namespaces?.has('lj') ? retrieveLivejournalItem(value) : undefined,
     xml: options?.asNamespace ? undefined : retrieveXmlItemOrFeed(value),
   }
 
@@ -569,6 +574,7 @@ export const parseFeed: ParseUtilPartial<AtomFeed.Feed<DateAny>> = (value, optio
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
     geo: namespaces?.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    livejournal: namespaces?.has('lj') ? retrieveLivejournalFeed(value) : undefined,
     xml: options?.asNamespace ? undefined : retrieveXmlItemOrFeed(value),
   }
 

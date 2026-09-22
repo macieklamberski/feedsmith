@@ -12,6 +12,8 @@ export namespace LivejournalNs {
     security?: string
     poster?: string
     posterId?: string
+    posterUrl?: string
+    posterUserpic?: string
     replyCount?: number
   }
 }

@@ -901,6 +901,8 @@
       <lj:security>public</lj:security>
       <lj:poster>johndoe</lj:poster>
       <lj:posterid>12345</lj:posterid>
+      <lj:posterurl>https://johndoe.example.com</lj:posterurl>
+      <lj:posteruserpic>https://userpic.example.com/12345</lj:posteruserpic>
       <lj:replycount>42</lj:replycount>
     </item>
   </channel>

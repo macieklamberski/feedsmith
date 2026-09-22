@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
-import { generateFeed, generateItem } from './utils.js'
+import { generateAtomEntry, generateAtomFeed, generateRssFeed, generateRssItem } from './utils.js'
 
-describe('generateFeed', () => {
+describe('generateRssFeed', () => {
   it('should generate valid feed object with all properties', () => {
     const value = {
       journal: 'example_community',
@@ -14,7 +14,7 @@ describe('generateFeed', () => {
       'lj:journaltype': 'community',
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateRssFeed(value)).toEqual(expected)
   })
 
   it('should generate feed with minimal properties', () => {
@@ -25,7 +25,7 @@ describe('generateFeed', () => {
       'lj:journal': 'example_user',
     }
 
-    expect(generateFeed(value)).toEqual(expected)
+    expect(generateRssFeed(value)).toEqual(expected)
   })
 
   it('should handle object with only undefined properties', () => {
@@ -35,21 +35,21 @@ describe('generateFeed', () => {
       journalType: undefined,
     }
 
-    expect(generateFeed(value)).toBeUndefined()
+    expect(generateRssFeed(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    expect(generateFeed(value)).toBeUndefined()
+    expect(generateRssFeed(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs gracefully', () => {
-    expect(generateFeed(undefined)).toBeUndefined()
+    expect(generateRssFeed(undefined)).toBeUndefined()
   })
 })
 
-describe('generateItem', () => {
+describe('generateRssItem', () => {
   it('should generate valid item object with all properties', () => {
     const value = {
       music: 'The Beatles - Hey Jude',
@@ -57,6 +57,8 @@ describe('generateItem', () => {
       security: 'public',
       poster: 'johndoe',
       posterId: '12345',
+      posterUrl: 'https://johndoe.example.com',
+      posterUserpic: 'https://userpic.example.com/12345',
       replyCount: 42,
     }
     const expected = {
@@ -65,10 +67,12 @@ describe('generateItem', () => {
       'lj:security': 'public',
       'lj:poster': 'johndoe',
       'lj:posterid': '12345',
+      'lj:posterurl': 'https://johndoe.example.com',
+      'lj:posteruserpic': 'https://userpic.example.com/12345',
       'lj:replycount': 42,
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateRssItem(value)).toEqual(expected)
   })
 
   it('should generate item with minimal properties', () => {
@@ -79,7 +83,7 @@ describe('generateItem', () => {
       'lj:mood': 'sleepy',
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateRssItem(value)).toEqual(expected)
   })
 
   it('should generate reply count of zero', () => {
@@ -90,7 +94,7 @@ describe('generateItem', () => {
       'lj:replycount': 0,
     }
 
-    expect(generateItem(value)).toEqual(expected)
+    expect(generateRssItem(value)).toEqual(expected)
   })
 
   it('should handle object with only undefined properties', () => {
@@ -100,19 +104,151 @@ describe('generateItem', () => {
       security: undefined,
       poster: undefined,
       posterId: undefined,
+      posterUrl: undefined,
+      posterUserpic: undefined,
       replyCount: undefined,
     }
 
-    expect(generateItem(value)).toBeUndefined()
+    expect(generateRssItem(value)).toBeUndefined()
   })
 
   it('should handle empty object', () => {
     const value = {}
 
-    expect(generateItem(value)).toBeUndefined()
+    expect(generateRssItem(value)).toBeUndefined()
   })
 
   it('should handle non-object inputs gracefully', () => {
-    expect(generateItem(undefined)).toBeUndefined()
+    expect(generateRssItem(undefined)).toBeUndefined()
+  })
+})
+
+describe('generateAtomFeed', () => {
+  it('should generate journal attributes with all properties', () => {
+    const value = {
+      journal: 'example_community',
+      journalId: '67890',
+      journalType: 'community',
+    }
+    const expected = {
+      'lj:journal': {
+        '@userid': '67890',
+        '@username': 'example_community',
+        '@type': 'community',
+      },
+    }
+
+    expect(generateAtomFeed(value)).toEqual(expected)
+  })
+
+  it('should generate journal attributes with minimal properties', () => {
+    const value = {
+      journal: 'example_user',
+    }
+    const expected = {
+      'lj:journal': {
+        '@username': 'example_user',
+      },
+    }
+
+    expect(generateAtomFeed(value)).toEqual(expected)
+  })
+
+  it('should handle object with only undefined properties', () => {
+    const value = {
+      journal: undefined,
+      journalId: undefined,
+      journalType: undefined,
+    }
+
+    expect(generateAtomFeed(value)).toBeUndefined()
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateAtomFeed(value)).toBeUndefined()
+  })
+
+  it('should handle non-object inputs gracefully', () => {
+    expect(generateAtomFeed(undefined)).toBeUndefined()
+  })
+})
+
+describe('generateAtomEntry', () => {
+  it('should generate poster attributes and text elements with all properties', () => {
+    const value = {
+      music: 'The Beatles - Hey Jude',
+      mood: 'cheerful',
+      security: 'public',
+      poster: 'johndoe',
+      posterId: '12345',
+      posterUrl: 'https://johndoe.example.com',
+      posterUserpic: 'https://userpic.example.com/12345',
+      replyCount: 42,
+    }
+    const expected = {
+      'lj:poster': {
+        '@user': 'johndoe',
+        '@userid': '12345',
+      },
+      'lj:music': 'The Beatles - Hey Jude',
+      'lj:mood': 'cheerful',
+      'lj:security': 'public',
+      'lj:posterurl': 'https://johndoe.example.com',
+      'lj:posteruserpic': 'https://userpic.example.com/12345',
+      'lj:replycount': 42,
+    }
+
+    expect(generateAtomEntry(value)).toEqual(expected)
+  })
+
+  it('should generate poster attributes with minimal properties', () => {
+    const value = {
+      poster: 'johndoe',
+    }
+    const expected = {
+      'lj:poster': {
+        '@user': 'johndoe',
+      },
+    }
+
+    expect(generateAtomEntry(value)).toEqual(expected)
+  })
+
+  it('should omit lj:poster when neither poster field is set', () => {
+    const value = {
+      mood: 'sleepy',
+    }
+    const expected = {
+      'lj:mood': 'sleepy',
+    }
+
+    expect(generateAtomEntry(value)).toEqual(expected)
+  })
+
+  it('should handle object with only undefined properties', () => {
+    const value = {
+      music: undefined,
+      mood: undefined,
+      security: undefined,
+      poster: undefined,
+      posterId: undefined,
+      posterUrl: undefined,
+      posterUserpic: undefined,
+      replyCount: undefined,
+    }
+
+    expect(generateAtomEntry(value)).toBeUndefined()
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateAtomEntry(value)).toBeUndefined()
+  })
+
+  it('should handle non-object inputs gracefully', () => {
+    expect(generateAtomEntry(undefined)).toBeUndefined()
   })
 })

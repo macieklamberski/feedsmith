@@ -1186,6 +1186,29 @@ describe('generateEntry', () => {
 
     expect(generateEntry(value)).toEqual(expected)
   })
+
+  it('should generate entry with livejournal namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: { value: 'Entry with livejournal namespace' },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      livejournal: {
+        poster: 'johndoe',
+        posterId: '12345',
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: { '#text': 'Entry with livejournal namespace' },
+      updated: '2023-03-15T12:00:00.000Z',
+      'lj:poster': {
+        '@user': 'johndoe',
+        '@userid': '12345',
+      },
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
 })
 
 describe('generateFeed', () => {
@@ -2142,6 +2165,35 @@ describe('generateFeed', () => {
         updated: '2023-03-15T12:00:00.000Z',
         'georss:point': '45.256 -71.92',
         'georss:featureName': 'Boston',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with livejournal namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: { value: 'Feed with livejournal namespace' },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      livejournal: {
+        journal: 'example_community',
+        journalId: '67890',
+        journalType: 'community',
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:lj': 'https://www.livejournal.com',
+        id: 'https://example.com/feed',
+        title: { '#text': 'Feed with livejournal namespace' },
+        updated: '2023-03-15T12:00:00.000Z',
+        'lj:journal': {
+          '@userid': '67890',
+          '@username': 'example_community',
+          '@type': 'community',
+        },
       },
     }
 

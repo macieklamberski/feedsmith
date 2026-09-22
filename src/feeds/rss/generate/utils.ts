@@ -42,8 +42,8 @@ import {
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
 import {
-  generateFeed as generateLivejournalFeed,
-  generateItem as generateLivejournalItem,
+  generateRssFeed as generateLivejournalFeed,
+  generateRssItem as generateLivejournalItem,
 } from '../../../namespaces/livejournal/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
 import { generateFeed as generateOpenSearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
