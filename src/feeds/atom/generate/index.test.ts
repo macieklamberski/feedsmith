@@ -971,6 +971,62 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with app collection', () => {
+    const value = {
+      id: 'http://example.com/blog',
+      title: { value: 'My Blog' },
+      updated: new Date('2024-03-15T16:00:00Z'),
+      app: {
+        collections: [
+          {
+            href: 'http://example.com/blog/edit/',
+            title: { value: 'Blog Entries' },
+            accepts: ['image/png', 'image/jpeg'],
+            categories: [
+              {
+                fixed: true,
+                scheme: 'http://example.com/cats',
+                categories: [{ term: 'news', label: 'News' }],
+              },
+              {
+                href: 'http://example.com/blog/categories',
+              },
+            ],
+          },
+          {
+            href: 'http://example.com/blog/comments/',
+            title: { value: '<b>Comments</b>', type: 'xhtml' },
+            accepts: [''],
+          },
+        ],
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:app="http://www.w3.org/2007/app">
+  <id>http://example.com/blog</id>
+  <title>My Blog</title>
+  <updated>2024-03-15T16:00:00.000Z</updated>
+  <app:collection href="http://example.com/blog/edit/">
+    <title>Blog Entries</title>
+    <app:accept>image/png</app:accept>
+    <app:accept>image/jpeg</app:accept>
+    <app:categories fixed="yes" scheme="http://example.com/cats">
+      <category term="news" label="News"/>
+    </app:categories>
+    <app:categories href="http://example.com/blog/categories"/>
+  </app:collection>
+  <app:collection href="http://example.com/blog/comments/">
+    <title type="xhtml">
+<div xmlns="http://www.w3.org/1999/xhtml"><b>Comments</b></div>
+    </title>
+    <app:accept/>
+  </app:collection>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with wfw namespace', () => {
     const value = {
       id: 'https://example.com/blog',

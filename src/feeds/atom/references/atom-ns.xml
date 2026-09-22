@@ -268,6 +268,22 @@
   <!-- Creative Commons Namespace: Feed Level Tags -->
   <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
 
+  <!-- Atom Publishing Protocol Namespace: Feed Level Tags -->
+  <app:collection href="https://example.com/blog/edit/">
+    <title>Blog Entries</title>
+    <app:accept>application/atom+xml;type=entry</app:accept>
+    <app:accept>image/png</app:accept>
+    <app:categories fixed="yes" scheme="https://example.com/categories">
+      <category term="technology" label="Technology"/>
+      <category term="news"/>
+    </app:categories>
+    <app:categories href="https://example.com/blog/categories.atomcat"/>
+  </app:collection>
+  <app:collection href="https://example.com/blog/comments/">
+    <title type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><b>Comments</b></div></title>
+    <app:accept/>
+  </app:collection>
+
   <!-- Admin Namespace: Feed Level Tags -->
   <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
   <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>

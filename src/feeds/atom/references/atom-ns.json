@@ -1190,6 +1190,30 @@
   "creativeCommons": {
     "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
   },
+  "app": {
+    "collections": [
+      {
+        "href": "https://example.com/blog/edit/",
+        "title": { "value": "Blog Entries" },
+        "accepts": ["application/atom+xml;type=entry", "image/png"],
+        "categories": [
+          {
+            "fixed": true,
+            "scheme": "https://example.com/categories",
+            "categories": [{ "term": "technology", "label": "Technology" }, { "term": "news" }]
+          },
+          {
+            "href": "https://example.com/blog/categories.atomcat"
+          }
+        ]
+      },
+      {
+        "href": "https://example.com/blog/comments/",
+        "title": { "value": "<b>Comments</b>", "type": "xhtml" },
+        "accepts": [""]
+      }
+    ]
+  },
   "admin": {
     "errorReportsTo": "mailto:webmaster@example.com",
     "generatorAgent": "http://www.movabletype.org/?v=3.2"

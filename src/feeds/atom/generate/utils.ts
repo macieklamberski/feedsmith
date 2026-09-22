@@ -13,7 +13,10 @@ import {
   trimArray,
 } from '../../../common/utils.js'
 import { generateFeed as generateAdminFeed } from '../../../namespaces/admin/generate/utils.js'
-import { generateEntry as generateAppEntry } from '../../../namespaces/app/generate/utils.js'
+import {
+  generateEntry as generateAppEntry,
+  generateFeed as generateAppFeed,
+} from '../../../namespaces/app/generate/utils.js'
 import {
   generateAuthor as generateArxivAuthor,
   generateEntry as generateArxivEntry,
@@ -376,6 +379,7 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
     ...generateOpenSearchFeed(feed.opensearch),
     ...generateCc(feed.cc),
     ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
+    ...generateAppFeed(feed.app),
     ...generateAdminFeed(feed.admin),
     ...generatePingbackFeed(feed.pingback),
     ...generateYtFeed(feed.yt),

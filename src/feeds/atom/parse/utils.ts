@@ -12,7 +12,10 @@ import {
   retrieveText,
 } from '../../../common/utils.js'
 import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
-import { retrieveEntry as retrieveAppEntry } from '../../../namespaces/app/parse/utils.js'
+import {
+  retrieveEntry as retrieveAppEntry,
+  retrieveFeed as retrieveAppFeed,
+} from '../../../namespaces/app/parse/utils.js'
 import {
   retrieveAuthor as retrieveArxivAuthor,
   retrieveEntry as retrieveArxivEntry,
@@ -564,6 +567,7 @@ export const parseFeed: ParseUtilPartial<AtomFeed.Feed<DateAny>> = (value, optio
     creativeCommons: namespaces?.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(value)
       : undefined,
+    app: namespaces?.has('app') ? retrieveAppFeed(value) : undefined,
     admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackFeed(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,

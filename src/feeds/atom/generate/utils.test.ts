@@ -2000,6 +2000,55 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with app collection', () => {
+    const value = {
+      id: 'http://example.com/blog',
+      title: { value: 'My Blog' },
+      updated: new Date('2024-03-15T16:00:00Z'),
+      app: {
+        collections: [
+          {
+            href: 'http://example.com/blog/edit/',
+            title: { value: 'Blog Entries' },
+            accepts: ['application/atom+xml;type=entry'],
+            categories: [
+              {
+                fixed: true,
+                scheme: 'http://example.com/cats',
+                categories: [{ term: 'news' }],
+              },
+            ],
+          },
+        ],
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:app': 'http://www.w3.org/2007/app',
+        id: 'http://example.com/blog',
+        title: { '#text': 'My Blog' },
+        updated: '2024-03-15T16:00:00.000Z',
+        'app:collection': [
+          {
+            '@href': 'http://example.com/blog/edit/',
+            title: { '#text': 'Blog Entries' },
+            'app:accept': ['application/atom+xml;type=entry'],
+            'app:categories': [
+              {
+                '@fixed': 'yes',
+                '@scheme': 'http://example.com/cats',
+                category: [{ '@term': 'news' }],
+              },
+            ],
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate feed with admin namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',
