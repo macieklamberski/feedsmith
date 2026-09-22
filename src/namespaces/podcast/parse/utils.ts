@@ -295,7 +295,6 @@ export const parseLiveItem: ParseUtilPartial<
     status: parseString(value['@status']),
     start: parseDate(value['@start'], options?.parseDateFn),
     end: parseDate(value['@end'], options?.parseDateFn),
-    contentLinks: parseArrayOf(value['podcast:contentlink'], parseContentLink),
   }
 
   return trimObject(liveItem)
@@ -463,6 +462,7 @@ export const retrieveItem: ParseUtilPartial<PodcastNs.Item> = (value) => {
     alternateEnclosures: parseArrayOf(value['podcast:alternateenclosure'], parseAlternateEnclosure),
     values: parseArrayOf(value['podcast:value'], parseValue),
     images: retrieveImages(value),
+    contentLinks: parseArrayOf(value['podcast:contentlink'], parseContentLink),
     socialInteracts: parseArrayOf(value['podcast:socialinteract'], parseSocialInteract),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
     chat: parseSingularOf(value['podcast:chat'], parseChat),

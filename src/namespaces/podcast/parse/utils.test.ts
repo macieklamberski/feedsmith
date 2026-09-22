@@ -3729,6 +3729,12 @@ describe('retrieveItem', () => {
         ],
       },
     ],
+    contentLinks: [
+      {
+        href: 'https://example.com/episodes/1/discussion',
+        display: 'Join the discussion',
+      },
+    ],
     socialInteracts: [
       {
         uri: 'https://example.com/episodes/1/comments',
@@ -3821,6 +3827,12 @@ describe('retrieveItem', () => {
       'podcast:images': {
         '@srcset': 'image-1x.jpg 1x, image-2x.jpg 2x',
       },
+      'podcast:contentlink': [
+        {
+          '@href': 'https://example.com/episodes/1/discussion',
+          '#text': 'Join the discussion',
+        },
+      ],
       'podcast:socialinteract': [
         {
           '@uri': 'https://example.com/episodes/1/comments',
@@ -3920,6 +3932,12 @@ describe('retrieveItem', () => {
       'podcast:images': [
         {
           '@srcset': 'image-1x.jpg 1x, image-2x.jpg 2x',
+        },
+      ],
+      'podcast:contentlink': [
+        {
+          '@href': 'https://example.com/episodes/1/discussion',
+          '#text': 'Join the discussion',
         },
       ],
       'podcast:socialinteract': [

@@ -620,6 +620,7 @@
       </podcast:value>
       <podcast:image href="https://example.com/images/episode-artwork.jpg" alt="Episode 1 Artwork" aspect-ratio="1/1" width="3000" purpose="artwork"/>
       <podcast:image href="https://example.com/images/episode-social.jpg" alt="Episode 1 Social Preview" aspect-ratio="16/9" width="1200" height="630" type="image/jpeg" purpose="social"/>
+      <podcast:contentLink href="https://example.com/episodes/123/discussion">Episode Discussion</podcast:contentLink>
       <podcast:socialInteract uri="https://twitter.com/examplepodcast/status/123456789" protocol="twitter" accountId="@examplepodcast" accountUrl="https://twitter.com/examplepodcast"/>
       <podcast:socialInteract uri="https://podcastindex.social/@dave/123456789" protocol="mastodon" accountId="@examplepodcast@podcastindex.social" accountUrl="https://podcastindex.social/@examplepodcast"/>
       <podcast:txt purpose="transcript">{"version": "1.0.0", "chapters": []}</podcast:txt>
