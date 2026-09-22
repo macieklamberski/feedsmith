@@ -15,6 +15,7 @@
       xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule"
       xmlns:thr="http://purl.org/syndication/thread/1.0"
       xmlns:app="http://www.w3.org/2007/app"
+      xmlns:at="http://purl.org/atompub/tombstones/1.0"
       xmlns:wfw="http://wellformedweb.org/CommentAPI/"
       xmlns:admin="http://webns.net/mvcb/"
       xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
@@ -269,6 +270,21 @@
 
   <!-- Creative Commons Namespace: Feed Level Tags -->
   <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
+
+  <!-- Atom Tombstones Namespace: Feed Level Tags -->
+  <at:deleted-entry ref="tag:example.org,2005:/entries/2" when="2005-11-29T12:11:12Z">
+    <at:by>
+      <name>John Doe</name>
+      <email>jdoe@example.com</email>
+    </at:by>
+    <at:comment>Removed due to copyright claim.</at:comment>
+    <link href="https://example.com/entries/2"/>
+    <source>
+      <id>tag:example.org,2005:/feed</id>
+      <title>Example Source Feed</title>
+      <updated>2005-11-29T12:00:00Z</updated>
+    </source>
+  </at:deleted-entry>
 
   <!-- Admin Namespace: Feed Level Tags -->
   <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>

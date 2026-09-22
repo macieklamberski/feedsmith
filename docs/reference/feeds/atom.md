@@ -34,6 +34,7 @@ Atom is a syndication format based on XML that provides a robust framework for w
         <a href="/reference/namespaces/creativecommons">Creative Commons</a>,
         <a href="/reference/namespaces/thr">Atom Threading</a>,
         <a href="/reference/namespaces/app">Atom Publishing Protocol</a>,
+        <a href="/reference/namespaces/at">Atom Tombstones</a>,
         <a href="/reference/namespaces/wfw">Comment API</a>,
         <a href="/reference/namespaces/admin">Administrative</a>,
         <a href="/reference/namespaces/pingback">Pingback</a>,

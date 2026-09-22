@@ -1202,6 +1202,33 @@
   "creativeCommons": {
     "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
   },
+  "at": {
+    "deletedEntries": [
+      {
+        "ref": "tag:example.org,2005:/entries/2",
+        "when": "2005-11-29T12:11:12Z",
+        "by": {
+          "name": "John Doe",
+          "email": "jdoe@example.com"
+        },
+        "comment": {
+          "value": "Removed due to copyright claim."
+        },
+        "links": [
+          {
+            "href": "https://example.com/entries/2"
+          }
+        ],
+        "source": {
+          "id": "tag:example.org,2005:/feed",
+          "title": {
+            "value": "Example Source Feed"
+          },
+          "updated": "2005-11-29T12:00:00Z"
+        }
+      }
+    ]
+  },
   "admin": {
     "errorReportsTo": "mailto:webmaster@example.com",
     "generatorAgent": "http://www.movabletype.org/?v=3.2"
