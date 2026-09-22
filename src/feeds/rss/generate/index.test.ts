@@ -704,6 +704,14 @@ describe('generate', () => {
     const value = {
       title: 'Feed with ccREL namespace',
       description: 'Test feed with ccREL namespace',
+      image: {
+        url: 'https://example.com/image.png',
+        title: 'Image with ccREL',
+        link: 'https://example.com',
+        cc: {
+          license: 'https://creativecommons.org/licenses/by-nd/4.0/',
+        },
+      },
       cc: {
         license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
         morePermissions: 'https://example.com/commercial-license',
@@ -722,6 +730,12 @@ describe('generate', () => {
   <channel>
     <title>Feed with ccREL namespace</title>
     <description>Test feed with ccREL namespace</description>
+    <image>
+      <url>https://example.com/image.png</url>
+      <title>Image with ccREL</title>
+      <link>https://example.com</link>
+      <cc:license>https://creativecommons.org/licenses/by-nd/4.0/</cc:license>
+    </image>
     <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
     <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
     <item>

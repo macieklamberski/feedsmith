@@ -963,6 +963,21 @@ describe('parseImage', () => {
 
     expect(parseImage(value)).toBeUndefined()
   })
+
+  it('should handle cc namespace', () => {
+    const value = {
+      url: { '#text': 'https://example.com/image.jpg' },
+      'cc:license': { '#text': 'https://creativecommons.org/licenses/by/4.0/' },
+    }
+    const expected = {
+      url: 'https://example.com/image.jpg',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+      },
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
 })
 
 describe('parseTextInput', () => {

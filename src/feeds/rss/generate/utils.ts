@@ -140,6 +140,7 @@ export const generateImage: GenerateUtil<RssFeed.Image> = (image) => {
     description: generateCdataString(image.description),
     height: generateNumber(image.height),
     width: generateNumber(image.width),
+    ...generateCc(image.cc),
   }
 
   return trimObject(value)
