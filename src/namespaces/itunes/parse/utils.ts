@@ -14,7 +14,7 @@ import {
 import type { ItunesNs } from '../common/types.js'
 
 const explicitOrYesRegex = /^\p{White_Space}*(explicit|yes)\p{White_Space}*$/iu
-const durationRegex = /^(?:(\d+):)?(\d+):(\d+(?:\.\d+)?)$/
+const durationRegex = /^(?:(\d+):)?(\d+):(\d+)$/
 
 export const parseCategory: ParseUtilPartial<ItunesNs.Category> = (value) => {
   if (!isPlainObject(value)) {
@@ -123,6 +123,9 @@ export const retrieveItem: ParseUtilPartial<ItunesNs.Item> = (value) => {
       parseYesNoBoolean(retrieveText(value)),
     ),
     order: parseSingularOf(value['itunes:order'], (value) => parseNumber(retrieveText(value))),
+    isClosedCaptioned: parseSingularOf(value['itunes:isclosedcaptioned'], (value) =>
+      parseYesNoBoolean(retrieveText(value)),
+    ),
     summary: parseSingularOf(value['itunes:summary'], (value) => parseString(retrieveText(value))),
     subtitle: parseSingularOf(value['itunes:subtitle'], (value) =>
       parseString(retrieveText(value)),

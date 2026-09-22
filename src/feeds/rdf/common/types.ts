@@ -15,6 +15,7 @@ import type { FeedBurnerNs } from '../../../namespaces/feedburner/common/types.j
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
+import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
 import type { PrismNs } from '../../../namespaces/prism/common/types.js'
 import type { RdfNs } from '../../../namespaces/rdf/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
@@ -65,6 +66,7 @@ export namespace RdfFeed {
       prism?: PrismNs.Item<TDate>
       cc?: CcNs.ItemOrFeed
       wfw?: WfwNs.Item
+      pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
       georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed

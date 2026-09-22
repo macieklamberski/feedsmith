@@ -6,6 +6,7 @@ describe('retrieveFeed', () => {
     blogRoll: 'http://example.com/blogroll.opml',
     blink: 'http://recommended.example.com/',
     mySubscriptions: 'http://example.com/subscriptions.opml',
+    changes: 'http://example.com/changes.xml',
   }
 
   it('should parse all blogChannel feed properties when present (with #text)', () => {
@@ -13,6 +14,7 @@ describe('retrieveFeed', () => {
       'blogchannel:blogroll': { '#text': 'http://example.com/blogroll.opml' },
       'blogchannel:blink': { '#text': 'http://recommended.example.com/' },
       'blogchannel:mysubscriptions': { '#text': 'http://example.com/subscriptions.opml' },
+      'blogchannel:changes': { '#text': 'http://example.com/changes.xml' },
     }
 
     expect(retrieveFeed(value)).toEqual(expectedFull)
@@ -23,6 +25,7 @@ describe('retrieveFeed', () => {
       'blogchannel:blogroll': 'http://example.com/blogroll.opml',
       'blogchannel:blink': 'http://recommended.example.com/',
       'blogchannel:mysubscriptions': 'http://example.com/subscriptions.opml',
+      'blogchannel:changes': 'http://example.com/changes.xml',
     }
 
     expect(retrieveFeed(value)).toEqual(expectedFull)
@@ -36,6 +39,7 @@ describe('retrieveFeed', () => {
         'http://example.com/subscriptions.opml',
         'http://example.com/subs2.opml',
       ],
+      'blogchannel:changes': ['http://example.com/changes.xml', 'http://example.com/changes2.xml'],
     }
 
     expect(retrieveFeed(value)).toEqual(expectedFull)
@@ -69,6 +73,17 @@ describe('retrieveFeed', () => {
     }
     const expected = {
       mySubscriptions: 'http://example.com/subscriptions.opml',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with only changes', () => {
+    const value = {
+      'blogchannel:changes': 'http://example.com/changes.xml',
+    }
+    const expected = {
+      changes: 'http://example.com/changes.xml',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
