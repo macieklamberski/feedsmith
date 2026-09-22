@@ -623,21 +623,6 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
-  it('should handle content namespace', () => {
-    const value = {
-      title: { '#text': 'Example Entry' },
-      link: { '#text': 'http://example.com' },
-      'content:encoded': { '#text': '<![CDATA[<div>John Doe</div>]]>' },
-    }
-    const expected = {
-      title: 'Example Entry',
-      link: 'http://example.com',
-      content: { encoded: '<div>John Doe</div>' },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
   it('should handle dc namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },
@@ -650,21 +635,6 @@ describe('parseItem', () => {
       dc: {
         creators: ['John Doe'],
       },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
-  it('should handle slash namespace', () => {
-    const value = {
-      title: { '#text': 'Example Entry' },
-      link: { '#text': 'http://example.com' },
-      'slash:comments': { '#text': '10' },
-    }
-    const expected = {
-      title: 'Example Entry',
-      link: 'http://example.com',
-      slash: { comments: 10 },
     }
 
     expect(parseItem(value)).toEqual(expected)
@@ -689,6 +659,36 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle content namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'content:encoded': { '#text': '<![CDATA[<div>John Doe</div>]]>' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      content: { encoded: '<div>John Doe</div>' },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle slash namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'slash:comments': { '#text': '10' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      slash: { comments: 10 },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle media namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },
@@ -708,23 +708,6 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
-  it('should handle georss namespace', () => {
-    const value = {
-      title: { '#text': 'Example Entry' },
-      link: { '#text': 'http://example.com' },
-      'georss:point': { '#text': '45.256 -71.92' },
-    }
-    const expected = {
-      title: 'Example Entry',
-      link: 'http://example.com',
-      georss: {
-        point: { lat: 45.256, lng: -71.92 },
-      },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
   it('should handle wfw namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },
@@ -738,6 +721,23 @@ describe('parseItem', () => {
       wfw: {
         comment: 'https://example.com/comment',
         commentRss: 'https://example.com/comments/feed',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle georss namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'georss:point': { '#text': '45.256 -71.92' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      georss: {
+        point: { lat: 45.256, lng: -71.92 },
       },
     }
 
@@ -1570,33 +1570,6 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should handle sy namespace', () => {
-    const value = {
-      channel: {
-        title: { '#text': 'Example Feed' },
-        'sy:updatefrequency': { '#text': '5' },
-      },
-      item: [
-        {
-          title: { '#text': 'Item 1' },
-          link: { '#text': 'https://example.com/item1' },
-        },
-      ],
-    }
-    const expected = {
-      title: 'Example Feed',
-      items: [
-        {
-          title: 'Item 1',
-          link: 'https://example.com/item1',
-        },
-      ],
-      sy: { updateFrequency: 5 },
-    }
-
-    expect(parseFeed(value)).toEqual(expected)
-  })
-
   it('should handle dcterms namespace', () => {
     const value = {
       channel: {
@@ -1623,6 +1596,33 @@ describe('parseFeed', () => {
         licenses: ['Creative Commons Attribution 4.0'],
         created: ['2023-01-01T00:00:00Z'],
       },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle sy namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'sy:updatefrequency': { '#text': '5' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      sy: { updateFrequency: 5 },
     }
 
     expect(parseFeed(value)).toEqual(expected)
@@ -1659,16 +1659,21 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should handle georss namespace', () => {
+  it('should handle cc namespace', () => {
     const value = {
       channel: {
         title: { '#text': 'Example Feed' },
-        'georss:point': { '#text': '40.689 -74.044' },
+        'cc:license': {
+          '@resource': 'https://creativecommons.org/licenses/by/4.0/',
+        },
       },
       item: [
         {
           title: { '#text': 'Item 1' },
           link: { '#text': 'https://example.com/item1' },
+          'cc:license': {
+            '@resource': 'https://creativecommons.org/licenses/by-sa/4.0/',
+          },
         },
       ],
     }
@@ -1678,10 +1683,13 @@ describe('parseFeed', () => {
         {
           title: 'Item 1',
           link: 'https://example.com/item1',
+          cc: {
+            license: 'https://creativecommons.org/licenses/by-sa/4.0/',
+          },
         },
       ],
-      georss: {
-        point: { lat: 40.689, lng: -74.044 },
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
       },
     }
 
@@ -1723,21 +1731,16 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should handle cc namespace', () => {
+  it('should handle georss namespace', () => {
     const value = {
       channel: {
         title: { '#text': 'Example Feed' },
-        'cc:license': {
-          '@resource': 'https://creativecommons.org/licenses/by/4.0/',
-        },
+        'georss:point': { '#text': '40.689 -74.044' },
       },
       item: [
         {
           title: { '#text': 'Item 1' },
           link: { '#text': 'https://example.com/item1' },
-          'cc:license': {
-            '@resource': 'https://creativecommons.org/licenses/by-sa/4.0/',
-          },
         },
       ],
     }
@@ -1747,13 +1750,10 @@ describe('parseFeed', () => {
         {
           title: 'Item 1',
           link: 'https://example.com/item1',
-          cc: {
-            license: 'https://creativecommons.org/licenses/by-sa/4.0/',
-          },
         },
       ],
-      cc: {
-        license: 'https://creativecommons.org/licenses/by/4.0/',
+      georss: {
+        point: { lat: 40.689, lng: -74.044 },
       },
     }
 
