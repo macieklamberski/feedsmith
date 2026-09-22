@@ -43,6 +43,12 @@ export const retrieveEntry: ParseUtilPartial<ArxivNs.Entry> = (value) => {
     ),
     doi: parseSingularOf(value['arxiv:doi'], (value) => parseString(retrieveText(value))),
     primaryCategory: parseSingularOf(value['arxiv:primary_category'], parsePrimaryCategory),
+    announceType: parseSingularOf(value['arxiv:announce_type'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    journalReference: parseSingularOf(value['arxiv:journal_reference'], (value) =>
+      parseString(retrieveText(value)),
+    ),
   }
 
   return trimObject(entry)
