@@ -6,6 +6,8 @@ title: "Reference: W3C Basic Geo Namespace"
 
 The W3C Basic Geo (WGS84 lat/long) Vocabulary provides a simple way to represent geographic coordinates in RSS and Atom feeds using the WGS84 geodetic reference datum.
 
+Coordinates wrapped in `<geo:Point>` are read as well. When both forms are present, the bare `<geo:lat>`, `<geo:long>` and `<geo:alt>` win. Generated feeds always use the bare form.
+
 <table>
   <tbody>
     <tr>

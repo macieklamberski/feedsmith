@@ -177,6 +177,77 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
+  it('should parse coordinates inside geo:Point', () => {
+    const value = {
+      'geo:point': {
+        'geo:lat': '37.7749',
+        'geo:long': '-122.4194',
+        'geo:alt': '10.5',
+      },
+    }
+    const expected = {
+      lat: 37.7749,
+      long: -122.4194,
+      alt: 10.5,
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should parse coordinates from the first of multiple geo:Point', () => {
+    const value = {
+      'geo:point': [
+        { 'geo:lat': '37.7749', 'geo:long': '-122.4194' },
+        { 'geo:lat': '40.7128', 'geo:long': '-74.006' },
+      ],
+    }
+    const expected = {
+      lat: 37.7749,
+      long: -122.4194,
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should prefer bare coordinates over geo:Point', () => {
+    const value = {
+      'geo:lat': '37.7749',
+      'geo:long': '-122.4194',
+      'geo:point': {
+        'geo:lat': '40.7128',
+        'geo:long': '-74.006',
+      },
+    }
+    const expected = {
+      lat: 37.7749,
+      long: -122.4194,
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should fall back to geo:Point when bare coordinates are invalid', () => {
+    const value = {
+      'geo:lat': 'not a number',
+      'geo:point': {
+        'geo:lat': '40.7128',
+      },
+    }
+    const expected = {
+      lat: 40.7128,
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should return undefined for non-object geo:Point', () => {
+    const value = {
+      'geo:point': '37.7749 -122.4194',
+    }
+
+    expect(retrieveItemOrFeed(value)).toBeUndefined()
+  })
+
   it.todo('should handle out-of-range coordinate values', () => {
     // Pass lat '91' and long '181' (outside the valid -90..90 and -180..180 ranges).
     // Expected: pin whether the parser passes them through as numbers or drops them.
