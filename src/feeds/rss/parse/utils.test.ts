@@ -7,6 +7,7 @@ import {
   parseGuid,
   parseImage,
   parseItem,
+  parseLiveItem,
   parsePerson,
   parseSkipDays,
   parseSkipHours,
@@ -1728,6 +1729,45 @@ describe('parseItem', () => {
     }
 
     expect(parseItem(value)).toEqual(expected)
+  })
+})
+
+describe('parseLiveItem', () => {
+  it('should parse item elements without podcast children', () => {
+    const value = {
+      '@status': 'live',
+      title: { '#text': 'Live Show' },
+      guid: { '#text': 'https://example.com/live' },
+      'itunes:image': { '@href': 'https://example.com/live.jpg' },
+      'podcast:person': { '#text': 'Jane Doe' },
+    }
+    const expected = {
+      title: 'Live Show',
+      guid: {
+        value: 'https://example.com/live',
+      },
+      itunes: {
+        image: 'https://example.com/live.jpg',
+      },
+    }
+
+    expect(parseLiveItem(value)).toEqual(expected)
+  })
+
+  it('should return undefined when only podcast children are present', () => {
+    const value = {
+      '@status': 'live',
+      'podcast:person': { '#text': 'Jane Doe' },
+    }
+
+    expect(parseLiveItem(value)).toBeUndefined()
+  })
+
+  it('should return undefined for unsupported input', () => {
+    expect(parseLiveItem('not an object')).toBeUndefined()
+    expect(parseLiveItem(undefined)).toBeUndefined()
+    expect(parseLiveItem(null)).toBeUndefined()
+    expect(parseLiveItem([])).toBeUndefined()
   })
 })
 

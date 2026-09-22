@@ -1438,6 +1438,23 @@ describe('generateLiveItem', () => {
     expect(generateLiveItem(value)).toEqual(expected)
   })
 
+  it('should generate item elements with generateItemFn', () => {
+    const value = {
+      status: 'live',
+      start: new Date('2023-01-01T10:00:00Z'),
+    }
+    const options = {
+      generateItemFn: () => ({ title: 'Live Show' }),
+    }
+    const expected = {
+      title: 'Live Show',
+      '@status': 'live',
+      '@start': '2023-01-01T10:00:00.000Z',
+    }
+
+    expect(generateLiveItem(value, options)).toEqual(expected)
+  })
+
   it('should handle empty object', () => {
     const value = {}
 

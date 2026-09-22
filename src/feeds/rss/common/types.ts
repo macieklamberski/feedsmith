@@ -191,7 +191,7 @@ export namespace RssFeed {
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       sy?: SyNs.Feed<TDate>
       itunes?: ItunesNs.Feed<TStrict>
-      podcast?: PodcastNs.Feed<TDate, TStrict>
+      podcast?: PodcastNs.Feed<TDate, TStrict, Omit<Item<TDate, TStrict>, 'podcast'>>
       media?: MediaNs.ItemOrFeed<TStrict>
       googleplay?: GooglePlayNs.Feed<TStrict>
       spotify?: SpotifyNs.Feed<TStrict>

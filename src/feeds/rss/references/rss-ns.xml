@@ -155,6 +155,10 @@
     <podcast:image href="https://example.com/images/cover-artwork.jpg" alt="Podcast Cover Art" aspect-ratio="1/1" width="3000" purpose="artwork"/>
     <podcast:image href="https://example.com/images/cover-social.jpg" alt="Social Media Preview" aspect-ratio="16/9" width="1200" height="630" type="image/jpeg" purpose="social"/>
     <podcast:liveItem status="live" start="2025-04-30T08:00:00.000Z" end="2025-04-30T09:00:00.000Z">
+      <title>Live Episode</title>
+      <enclosure url="https://example.com/live/stream.mp3" length="0" type="audio/mpeg"/>
+      <guid isPermaLink="false">live-episode-2025-04-30</guid>
+      <itunes:image href="https://example.com/images/live-episode.jpg"/>
       <podcast:person group="host">Jane Smith</podcast:person>
       <podcast:contentLink href="https://example.com/live/chat">Live Chat</podcast:contentLink>
       <podcast:chat server="live.example.com" protocol="matrix" accountId="@livepodcast:live.example.com" space="#live-episode"/>

@@ -1,5 +1,5 @@
 import { isPlainObject, trimObject } from 'trousse'
-import type { DateLike, GenerateUtil } from '../../../common/types.js'
+import type { DateLike, GenerateUtil, Unreliable } from '../../../common/types.js'
 import {
   generateBoolean,
   generateCdataString,
@@ -12,6 +12,10 @@ import {
   trimArray,
 } from '../../../common/utils.js'
 import type { PodcastNs } from '../common/types.js'
+
+type GenerateOptions = {
+  generateItemFn?: GenerateUtil<Unreliable>
+}
 
 export const generateBaseItem: GenerateUtil<PodcastNs.BaseItem> = (baseItem) => {
   if (!isPlainObject(baseItem)) {
@@ -329,12 +333,16 @@ export const generateContentLink: GenerateUtil<PodcastNs.ContentLink> = (content
   return trimObject(value)
 }
 
-export const generateLiveItem: GenerateUtil<PodcastNs.LiveItem<DateLike>> = (liveItem) => {
+export const generateLiveItem: GenerateUtil<PodcastNs.LiveItem<DateLike>, GenerateOptions> = (
+  liveItem,
+  options,
+) => {
   if (!isPlainObject(liveItem)) {
     return
   }
 
   const value = {
+    ...options?.generateItemFn?.(liveItem),
     ...generateBaseItem(liveItem),
     '@status': generatePlainString(liveItem.status),
     '@start': generateRfc3339Date(liveItem.start),
@@ -479,7 +487,10 @@ export const generateItem: GenerateUtil<PodcastNs.Item> = (item) => {
   return generateBaseItem(item)
 }
 
-export const generateFeed: GenerateUtil<PodcastNs.Feed<DateLike>> = (feed) => {
+export const generateFeed: GenerateUtil<PodcastNs.Feed<DateLike>, GenerateOptions> = (
+  feed,
+  options,
+) => {
   if (!isPlainObject(feed)) {
     return
   }
@@ -495,7 +506,9 @@ export const generateFeed: GenerateUtil<PodcastNs.Feed<DateLike>> = (feed) => {
     'podcast:value': trimArray(feed.values, generateValue),
     'podcast:medium': generateCdataString(feed.medium),
     'podcast:image': trimArray(feed.images, generateImage),
-    'podcast:liveItem': trimArray(feed.liveItems, generateLiveItem),
+    'podcast:liveItem': trimArray(feed.liveItems, (liveItem) => {
+      return generateLiveItem(liveItem, options)
+    }),
     'podcast:block': trimArray(feed.blocks, generateBlock),
     'podcast:txt': trimArray(feed.txts, generateTxt),
     'podcast:remoteItem': trimArray(feed.remoteItems, generateRemoteItem),

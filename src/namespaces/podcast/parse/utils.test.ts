@@ -2364,6 +2364,23 @@ describe('parseLiveItem', () => {
     expect(parseLiveItem(value)).toEqual(expected)
   })
 
+  it('should parse item elements with parseItemFn', () => {
+    const value = {
+      '@status': 'live',
+      '@start': '2023-06-15T15:00:00Z',
+    }
+    const options = {
+      parseItemFn: () => ({ title: 'Live Show' }),
+    }
+    const expected = {
+      title: 'Live Show',
+      status: 'live',
+      start: '2023-06-15T15:00:00Z',
+    }
+
+    expect(parseLiveItem(value, options)).toEqual(expected)
+  })
+
   it('should handle coercible values', () => {
     const value = {
       '@status': 123,

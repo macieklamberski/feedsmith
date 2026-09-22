@@ -196,7 +196,13 @@ export namespace PodcastNs {
     TStrict
   >
 
-  export type LiveItem<TDate, TStrict extends boolean = false> = BaseItem<TStrict> &
+  // A liveItem also takes every child of the host feed's item, which TItem carries.
+  export type LiveItem<
+    TDate,
+    TStrict extends boolean = false,
+    TItem = unknown,
+  > = BaseItem<TStrict> &
+    TItem &
     Strict<
       {
         status: Requirable<string> // Required in spec
@@ -302,7 +308,7 @@ export namespace PodcastNs {
 
   export type Item<TStrict extends boolean = false> = BaseItem<TStrict>
 
-  export type Feed<TDate, TStrict extends boolean = false> = {
+  export type Feed<TDate, TStrict extends boolean = false, TItem = unknown> = {
     locked?: Locked<TStrict>
     fundings?: Array<Funding<TStrict>>
     persons?: Array<Person<TStrict>>
@@ -313,7 +319,7 @@ export namespace PodcastNs {
     values?: Array<Value<TStrict>>
     medium?: string
     images?: Array<Image<TStrict>>
-    liveItems?: Array<LiveItem<TDate, TStrict>>
+    liveItems?: Array<LiveItem<TDate, TStrict, TItem>>
     blocks?: Array<Block<TStrict>>
     txts?: Array<Txt<TStrict>>
     remoteItems?: Array<RemoteItem<TStrict>>

@@ -1111,6 +1111,21 @@
     ],
     "liveItems": [
       {
+        "title": "Live Episode",
+        "enclosures": [
+          {
+            "url": "https://example.com/live/stream.mp3",
+            "length": 0,
+            "type": "audio/mpeg"
+          }
+        ],
+        "guid": {
+          "value": "live-episode-2025-04-30",
+          "isPermaLink": false
+        },
+        "itunes": {
+          "image": "https://example.com/images/live-episode.jpg"
+        },
         "persons": [
           {
             "display": "Jane Smith",
