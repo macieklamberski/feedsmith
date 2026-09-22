@@ -58,7 +58,7 @@ const findByTocReference = (value: unknown, property: string): unknown => {
   return retrieveByAbout(value[property], resourceUri)
 }
 
-export const parseImage: ParseUtilPartial<RdfFeed.Image> = (value) => {
+export const parseImage: ParseUtilPartial<RdfFeed.Image<DateAny>> = (value, options) => {
   if (!isPlainObject(value)) {
     return
   }
@@ -69,36 +69,42 @@ export const parseImage: ParseUtilPartial<RdfFeed.Image> = (value) => {
     link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
     url: parseSingularOf(value.url, (value) => parseString(retrieveText(value))),
     rdf: retrieveRdfAbout(value),
+    prism: namespaces.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
   }
 
   return trimObject(image)
 }
 
-export const retrieveImage: ParseUtilPartial<RdfFeed.Image> = (value) => {
-  return parseImage(findByTocReference(value, 'image')) ?? parseSingularOf(value?.image, parseImage)
+export const retrieveImage: ParseUtilPartial<RdfFeed.Image<DateAny>> = (value, options) => {
+  return (
+    parseImage(findByTocReference(value, 'image'), options) ??
+    parseSingularOf(value?.image, (value) => parseImage(value, options))
+  )
 }
 
-export const parseTextInput: ParseUtilPartial<RdfFeed.TextInput> = (value) => {
+export const parseTextInput: ParseUtilPartial<RdfFeed.TextInput<DateAny>> = (value, options) => {
   if (!isPlainObject(value)) {
     return
   }
 
+  const namespaces = detectNamespaces(value)
   const textInput = {
     title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
     description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
     name: parseSingularOf(value.name, (value) => parseString(retrieveText(value))),
     link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
     rdf: retrieveRdfAbout(value),
+    prism: namespaces.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
   }
 
   return trimObject(textInput)
 }
 
-export const retrieveTextInput: ParseUtilPartial<RdfFeed.TextInput> = (value) => {
+export const retrieveTextInput: ParseUtilPartial<RdfFeed.TextInput<DateAny>> = (value, options) => {
   return (
-    parseTextInput(findByTocReference(value, 'textinput')) ??
-    parseSingularOf(value?.textinput, parseTextInput)
+    parseTextInput(findByTocReference(value, 'textinput'), options) ??
+    parseSingularOf(value?.textinput, (value) => parseTextInput(value, options))
   )
 }
 
@@ -176,9 +182,9 @@ export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, option
     title: parseSingularOf(channel?.title, (value) => parseString(retrieveText(value))),
     link: parseSingularOf(channel?.link, (value) => parseString(retrieveText(value))),
     description: parseSingularOf(channel?.description, (value) => parseString(retrieveText(value))),
-    image: retrieveImage(value),
+    image: retrieveImage(value, options),
     items: retrieveItems(value, options),
-    textInput: retrieveTextInput(value),
+    textInput: retrieveTextInput(value, options),
     rdf: retrieveRdfAbout(channel),
     atom: namespaces.has('atom') ? retrieveAtomFeed(channel, options) : undefined,
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel, options) : undefined,

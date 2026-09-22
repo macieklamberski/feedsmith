@@ -71,7 +71,7 @@ export namespace RssFeed {
     TStrict
   >
 
-  export type Image<TStrict extends boolean = false> = Strict<
+  export type Image<TDate, TStrict extends boolean = false> = Strict<
     {
       url: Requirable<string> // Required in spec
       title: Requirable<string> // Required in spec
@@ -79,17 +79,19 @@ export namespace RssFeed {
       description?: string
       height?: number
       width?: number
+      prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
     },
     TStrict
   >
 
-  export type TextInput<TStrict extends boolean = false> = Strict<
+  export type TextInput<TDate, TStrict extends boolean = false> = Strict<
     {
       title: Requirable<string> // Required in spec
       description: Requirable<string> // Required in spec
       name: Requirable<string> // Required in spec
       link: Requirable<string> // Required in spec
+      prism?: PrismNs.ItemOrFeed<TDate>
     },
     TStrict
   >
@@ -183,9 +185,9 @@ export namespace RssFeed {
       docs?: string
       cloud?: Cloud<TStrict>
       ttl?: number
-      image?: Image<TStrict>
+      image?: Image<TDate, TStrict>
       rating?: string
-      textInput?: TextInput<TStrict>
+      textInput?: TextInput<TDate, TStrict>
       skipHours?: Array<number>
       skipDays?: Array<string>
       items?: Array<Item<TDate, TStrict>>

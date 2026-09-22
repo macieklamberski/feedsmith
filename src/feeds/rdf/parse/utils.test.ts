@@ -130,6 +130,25 @@ describe('parseImage', () => {
     expect(parseImage(value)).toEqual(expected)
   })
 
+  it('should handle prism namespace', () => {
+    const value = {
+      title: { '#text': 'Logo' },
+      'prism:publicationname': { '#text': 'Nature' },
+      'prism:coverdate': { '#text': '2023-03-15' },
+      'prism:aggregationtype': { '#text': 'journal' },
+    }
+    const expected = {
+      title: 'Logo',
+      prism: {
+        publicationName: 'Nature',
+        coverDate: '2023-03-15',
+        aggregationType: 'journal',
+      },
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
   it('should handle cc namespace', () => {
     const value = {
       title: { '#text': 'Image Title' },
@@ -396,6 +415,21 @@ describe('parseTextInput', () => {
       name: 'q',
       link: 'https://example.com/search',
       rdf: { about: 'http://example.com/search' },
+    }
+
+    expect(parseTextInput(value)).toEqual(expected)
+  })
+
+  it('should handle prism namespace', () => {
+    const value = {
+      title: { '#text': 'Search' },
+      'prism:publicationname': { '#text': 'Nature' },
+    }
+    const expected = {
+      title: 'Search',
+      prism: {
+        publicationName: 'Nature',
+      },
     }
 
     expect(parseTextInput(value)).toEqual(expected)

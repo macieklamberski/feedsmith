@@ -274,6 +274,10 @@
     <link>http://example.org</link>
     <url>http://example.org/image.png</url>
 
+    <!-- PRISM Namespace: Image Level Tags -->
+    <prism:publicationName>Nature</prism:publicationName>
+    <prism:coverDate>2023-03-15</prism:coverDate>
+
     <!-- ccREL Namespace: Image Level Tags -->
     <cc:license rdf:resource="https://creativecommons.org/licenses/by-nd/4.0/"/>
   </image>

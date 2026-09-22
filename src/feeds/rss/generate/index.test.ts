@@ -676,6 +676,23 @@ describe('generate', () => {
     const value = {
       title: 'Feed with prism namespace',
       description: 'Test feed with PRISM namespace',
+      image: {
+        url: 'https://example.com/cover.png',
+        title: 'Nature cover',
+        link: 'https://example.com',
+        prism: {
+          coverDate: new Date('2023-03-15T00:00:00Z'),
+        },
+      },
+      textInput: {
+        title: 'Search',
+        description: 'Search the journal',
+        name: 'q',
+        link: 'https://example.com/search',
+        prism: {
+          publicationName: 'Nature',
+        },
+      },
       prism: {
         issn: '0028-0836',
         publicationDates: [{ value: new Date('2023-03-15T00:00:00Z'), platform: 'print' }],
@@ -699,6 +716,19 @@ describe('generate', () => {
   <channel>
     <title>Feed with prism namespace</title>
     <description>Test feed with PRISM namespace</description>
+    <image>
+      <url>https://example.com/cover.png</url>
+      <title>Nature cover</title>
+      <link>https://example.com</link>
+      <prism:coverDate>2023-03-15T00:00:00.000Z</prism:coverDate>
+    </image>
+    <textInput>
+      <title>Search</title>
+      <description>Search the journal</description>
+      <name>q</name>
+      <link>https://example.com/search</link>
+      <prism:publicationName>Nature</prism:publicationName>
+    </textInput>
     <prism:issn>0028-0836</prism:issn>
     <prism:publicationDate platform="print">2023-03-15T00:00:00.000Z</prism:publicationDate>
     <prism:originPlatform platform="print"/>

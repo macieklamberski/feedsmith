@@ -42,6 +42,10 @@
       <title>Example Image</title>
       <link>http://example.org</link>
 
+      <!-- PRISM Namespace: Image Level Tags -->
+      <prism:publicationName>Nature</prism:publicationName>
+      <prism:coverDate>2023-03-15</prism:coverDate>
+
       <!-- ccREL Namespace: Image Level Tags -->
       <cc:license>https://creativecommons.org/licenses/by-nd/4.0/</cc:license>
     </image>

@@ -278,7 +278,7 @@ export const parseCloud: ParseUtilPartial<RssFeed.Cloud> = (value) => {
   return trimObject(cloud)
 }
 
-export const parseImage: ParseUtilPartial<RssFeed.Image> = (value) => {
+export const parseImage: ParseUtilPartial<RssFeed.Image<DateAny>> = (value, options) => {
   if (!isPlainObject(value)) {
     return
   }
@@ -291,39 +291,45 @@ export const parseImage: ParseUtilPartial<RssFeed.Image> = (value) => {
     description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
     height: parseSingularOf(value.height, (value) => parseNumber(retrieveText(value))),
     width: parseSingularOf(value.width, (value) => parseNumber(retrieveText(value))),
+    prism: namespaces.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
   }
 
   return trimObject(image)
 }
 
-export const parseTextInput: ParseUtilPartial<RssFeed.TextInput> = (value) => {
+export const parseTextInput: ParseUtilPartial<RssFeed.TextInput<DateAny>> = (value, options) => {
   if (!isPlainObject(value)) {
     return
   }
 
+  const namespaces = detectNamespaces(value)
   const textInput = {
     title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
     description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
     name: parseSingularOf(value.name, (value) => parseString(retrieveText(value))),
     link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
+    prism: namespaces.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
   }
 
   return trimObject(textInput)
 }
 
-export const retrieveImage: ParseUtilPartial<RssFeed.Image> = (value) => {
-  const channel = parseSingular(value?.channel)
-
-  return parseSingularOf(channel?.image, parseImage) ?? parseSingularOf(value?.image, parseImage)
-}
-
-export const retrieveTextInput: ParseUtilPartial<RssFeed.TextInput> = (value) => {
+export const retrieveImage: ParseUtilPartial<RssFeed.Image<DateAny>> = (value, options) => {
   const channel = parseSingular(value?.channel)
 
   return (
-    parseSingularOf(channel?.textinput, parseTextInput) ??
-    parseSingularOf(value?.textinput, parseTextInput)
+    parseSingularOf(channel?.image, (value) => parseImage(value, options)) ??
+    parseSingularOf(value?.image, (value) => parseImage(value, options))
+  )
+}
+
+export const retrieveTextInput: ParseUtilPartial<RssFeed.TextInput<DateAny>> = (value, options) => {
+  const channel = parseSingular(value?.channel)
+
+  return (
+    parseSingularOf(channel?.textinput, (value) => parseTextInput(value, options)) ??
+    parseSingularOf(value?.textinput, (value) => parseTextInput(value, options))
   )
 }
 
@@ -457,9 +463,9 @@ export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, option
     docs: parseSingularOf(channel.docs, (value) => parseString(retrieveText(value))),
     cloud: parseSingularOf(channel.cloud, parseCloud),
     ttl: parseSingularOf(channel.ttl, (value) => parseNumber(retrieveText(value))),
-    image: retrieveImage(value),
+    image: retrieveImage(value, options),
     rating: parseSingularOf(channel.rating, (value) => parseString(retrieveText(value))),
-    textInput: retrieveTextInput(value),
+    textInput: retrieveTextInput(value, options),
     skipHours: parseSingularOf(channel.skiphours, parseSkipHours),
     skipDays: parseSingularOf(channel.skipdays, parseSkipDays),
     items: retrieveItems(value, options),

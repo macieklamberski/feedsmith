@@ -125,7 +125,7 @@ export const generateCloud: GenerateUtil<RssFeed.Cloud> = (cloud) => {
   return trimObject(value)
 }
 
-export const generateImage: GenerateUtil<RssFeed.Image> = (image) => {
+export const generateImage: GenerateUtil<RssFeed.Image<DateLike>> = (image) => {
   if (!isPlainObject(image)) {
     return
   }
@@ -137,13 +137,14 @@ export const generateImage: GenerateUtil<RssFeed.Image> = (image) => {
     description: generateCdataString(image.description),
     height: generateNumber(image.height),
     width: generateNumber(image.width),
+    ...generatePrismItemOrFeed(image.prism),
     ...generateCc(image.cc),
   }
 
   return trimObject(value)
 }
 
-export const generateTextInput: GenerateUtil<RssFeed.TextInput> = (textInput) => {
+export const generateTextInput: GenerateUtil<RssFeed.TextInput<DateLike>> = (textInput) => {
   if (!isPlainObject(textInput)) {
     return
   }
@@ -153,6 +154,7 @@ export const generateTextInput: GenerateUtil<RssFeed.TextInput> = (textInput) =>
     description: generateCdataString(textInput.description),
     name: generateCdataString(textInput.name),
     link: generateCdataString(textInput.link),
+    ...generatePrismItemOrFeed(textInput.prism),
   }
 
   return trimObject(value)
