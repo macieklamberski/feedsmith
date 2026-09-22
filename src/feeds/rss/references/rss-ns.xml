@@ -885,6 +885,7 @@
       <source:outline>&lt;outline text="Implementation"&gt;&lt;outline text="RSS Integration"/&gt;&lt;/outline&gt;</source:outline>
       <source:linkFull>http://example.org/item/1/understanding-xml-namespaces-complete-guide</source:linkFull>
       <source:inReplyTo isPermaLink="false">did:plc:iwl32vekohccji6khfdt3clw</source:inReplyTo>
+      <source:comments count="2" feedUrl="http://example.org/item/1/comments.xml"/>
 
       <!-- W3C Basic Geo Namespace: Item Level Tags -->
       <geo:lat>37.8199</geo:lat>

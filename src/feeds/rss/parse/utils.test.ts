@@ -1718,12 +1718,14 @@ describe('parseItem', () => {
       title: { '#text': 'Source Item' },
       'source:markdown': { '#text': '# Example markdown content' },
       'source:inreplyto': { '@ispermalink': 'false', '#text': 'did:plc:iwl32vekohccji6khfdt3clw' },
+      'source:comments': { '@count': '2', '@feedurl': 'http://example.org/item/1/comments.xml' },
     }
     const expected = {
       title: 'Source Item',
       sourceNs: {
         markdown: '# Example markdown content',
         inReplyTo: { value: 'did:plc:iwl32vekohccji6khfdt3clw', isPermaLink: false },
+        comments: { count: 2, feedUrl: 'http://example.org/item/1/comments.xml' },
       },
     }
 

@@ -880,7 +880,8 @@
           "<outline text=\"Implementation\"><outline text=\"RSS Integration\"/></outline>"
         ],
         "linkFull": "http://example.org/item/1/understanding-xml-namespaces-complete-guide",
-        "inReplyTo": { "value": "did:plc:iwl32vekohccji6khfdt3clw", "isPermaLink": false }
+        "inReplyTo": { "value": "did:plc:iwl32vekohccji6khfdt3clw", "isPermaLink": false },
+        "comments": { "count": 2, "feedUrl": "http://example.org/item/1/comments.xml" }
       },
       "geo": {
         "lat": 37.8199,

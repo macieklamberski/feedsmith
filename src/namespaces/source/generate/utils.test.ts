@@ -2,6 +2,7 @@ import { describe, expect, it } from 'bun:test'
 import {
   generateAccount,
   generateArchive,
+  generateComments,
   generateFeed,
   generateInReplyTo,
   generateItem,
@@ -253,6 +254,70 @@ describe('generateInReplyTo', () => {
   })
 })
 
+describe('generateComments', () => {
+  it('should generate comments with count and feedUrl', () => {
+    const value = {
+      count: 2,
+      feedUrl: 'https://example.com/comments/204.xml',
+    }
+    const expected = {
+      '@count': 2,
+      '@feedUrl': 'https://example.com/comments/204.xml',
+    }
+
+    expect(generateComments(value)).toEqual(expected)
+  })
+
+  it('should generate comments with count of zero', () => {
+    const value = {
+      count: 0,
+      feedUrl: 'https://example.com/comments/204.xml',
+    }
+    const expected = {
+      '@count': 0,
+      '@feedUrl': 'https://example.com/comments/204.xml',
+    }
+
+    expect(generateComments(value)).toEqual(expected)
+  })
+
+  it('should generate comments with only feedUrl', () => {
+    const value = {
+      feedUrl: 'https://example.com/comments/204.xml',
+    }
+    const expected = {
+      '@feedUrl': 'https://example.com/comments/204.xml',
+    }
+
+    expect(generateComments(value)).toEqual(expected)
+  })
+
+  it('should generate comments with only count', () => {
+    const value = {
+      count: 2,
+    }
+    const expected = {
+      '@count': 2,
+    }
+
+    expect(generateComments(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(generateComments(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(generateComments(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateComments(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateComments('not an object')).toBeUndefined()
+  })
+})
+
 describe('generateFeed', () => {
   it('should generate complete feed with all properties', () => {
     const value = {
@@ -340,6 +405,10 @@ describe('generateItem', () => {
         value: 'did:plc:iwl32vekohccji6khfdt3clw',
         isPermaLink: false,
       },
+      comments: {
+        count: 2,
+        feedUrl: 'https://example.com/comments/204.xml',
+      },
     }
     const expected = {
       'source:markdown': '# Title\n\nThis is **markdown** content.',
@@ -350,6 +419,10 @@ describe('generateItem', () => {
       'source:inReplyTo': {
         '#text': 'did:plc:iwl32vekohccji6khfdt3clw',
         '@isPermaLink': false,
+      },
+      'source:comments': {
+        '@count': 2,
+        '@feedUrl': 'https://example.com/comments/204.xml',
       },
     }
 
