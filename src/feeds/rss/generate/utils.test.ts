@@ -704,7 +704,7 @@ describe('generateItem', () => {
     const expected = {
       title: 'Item with iTunes namespace',
       'itunes:duration': 1800,
-      'itunes:explicit': 'no',
+      'itunes:explicit': false,
       'itunes:title': 'Episode 1 - Special Title',
       'itunes:episode': 1,
       'itunes:season': 1,
