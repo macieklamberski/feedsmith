@@ -41,6 +41,7 @@ import {
   retrieveFeed as retrievePingbackFeed,
   retrieveItem as retrievePingbackItem,
 } from '../../../namespaces/pingback/parse/utils.js'
+import { retrieveItemOrFeed as retrievePrismItemOrFeed } from '../../../namespaces/prism/parse/utils.js'
 import { retrieveItem as retrievePscItem } from '../../../namespaces/psc/parse/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
@@ -513,6 +514,7 @@ export const parseEntry: ParseUtilPartial<AtomFeed.Entry<DateAny>> = (value, opt
     googleplay: namespaces?.has('googleplay') ? retrieveGooglePlayItem(value) : undefined,
     feedburner: namespaces?.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
     arxiv: namespaces?.has('arxiv') ? retrieveArxivEntry(value) : undefined,
+    prism: namespaces?.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
     cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     creativeCommons: namespaces?.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(value)
@@ -560,6 +562,7 @@ export const parseFeed: ParseUtilPartial<AtomFeed.Feed<DateAny>> = (value, optio
     googleplay: namespaces?.has('googleplay') ? retrieveGooglePlayFeed(value) : undefined,
     feedburner: namespaces?.has('feedburner') ? retrieveFeedBurnerFeed(value) : undefined,
     opensearch: namespaces?.has('opensearch') ? retrieveOpenSearchFeed(value) : undefined,
+    prism: namespaces?.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
     cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     creativeCommons: namespaces?.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(value)

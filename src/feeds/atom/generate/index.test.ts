@@ -794,6 +794,51 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with prism namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: { value: 'Journal of Examples' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      prism: {
+        publicationName: 'Journal of Examples',
+        issn: '1100-9233',
+      },
+      entries: [
+        {
+          id: 'https://example.com/articles/1',
+          title: { value: 'Example Article' },
+          updated: new Date('2024-01-10T12:00:00Z'),
+          prism: {
+            volume: '24',
+            number: '6',
+            startingPage: '975',
+            endingPage: '986',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:prism="http://prismstandard.org/namespaces/basic/3.0/">
+  <id>https://example.com/feed</id>
+  <title>Journal of Examples</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <prism:publicationName>Journal of Examples</prism:publicationName>
+  <prism:issn>1100-9233</prism:issn>
+  <entry>
+    <id>https://example.com/articles/1</id>
+    <title>Example Article</title>
+    <updated>2024-01-10T12:00:00.000Z</updated>
+    <prism:volume>24</prism:volume>
+    <prism:number>6</prism:number>
+    <prism:startingPage>975</prism:startingPage>
+    <prism:endingPage>986</prism:endingPage>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with ccREL namespace', () => {
     const value = {
       id: 'https://example.com/feed',

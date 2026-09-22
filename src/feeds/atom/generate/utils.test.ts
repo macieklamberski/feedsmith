@@ -1907,6 +1907,55 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with prism namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: { value: 'Journal of Examples' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      prism: {
+        publicationName: 'Journal of Examples',
+        issn: '1100-9233',
+      },
+      entries: [
+        {
+          id: 'https://example.com/articles/1',
+          title: { value: 'Example Article' },
+          updated: new Date('2024-01-10T12:00:00Z'),
+          prism: {
+            volume: '24',
+            number: '6',
+            startingPage: '975',
+            endingPage: '986',
+          },
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:prism': 'http://prismstandard.org/namespaces/basic/3.0/',
+        id: 'https://example.com/feed',
+        title: { '#text': 'Journal of Examples' },
+        updated: '2024-01-10T12:00:00.000Z',
+        entry: [
+          {
+            id: 'https://example.com/articles/1',
+            title: { '#text': 'Example Article' },
+            updated: '2024-01-10T12:00:00.000Z',
+            'prism:volume': '24',
+            'prism:number': '6',
+            'prism:startingPage': '975',
+            'prism:endingPage': '986',
+          },
+        ],
+        'prism:publicationName': 'Journal of Examples',
+        'prism:issn': '1100-9233',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with ccREL namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',

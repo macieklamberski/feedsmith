@@ -30,6 +30,7 @@ Atom is a syndication format based on XML that provides a robust framework for w
         <a href="/reference/namespaces/feedburner">FeedBurner</a>,
         <a href="/reference/namespaces/arxiv">arXiv</a>,
         <a href="/reference/namespaces/opensearch">OpenSearch</a>,
+        <a href="/reference/namespaces/prism">PRISM</a>,
         <a href="/reference/namespaces/cc">ccREL</a>,
         <a href="/reference/namespaces/creativecommons">Creative Commons</a>,
         <a href="/reference/namespaces/thr">Atom Threading</a>,
