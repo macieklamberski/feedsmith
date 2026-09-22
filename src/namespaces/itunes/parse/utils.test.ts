@@ -470,14 +470,6 @@ describe('parseDuration', () => {
     expect(parseDuration('1:30')).toBe(90)
   })
 
-  it('should parse HH:MM:SS format with fractional seconds', () => {
-    expect(parseDuration('00:04:49.5')).toBe(289.5)
-  })
-
-  it('should parse MM:SS format with fractional seconds', () => {
-    expect(parseDuration('04:49.5')).toBe(289.5)
-  })
-
   it('should handle invalid time formats', () => {
     expect(parseDuration('01:30:45:60')).toBeUndefined()
     expect(parseDuration(':30:45')).toBeUndefined()

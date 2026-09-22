@@ -14,7 +14,7 @@ import {
 import type { ItunesNs } from '../common/types.js'
 
 const explicitOrYesRegex = /^\p{White_Space}*(explicit|yes)\p{White_Space}*$/iu
-const durationRegex = /^(?:(\d+):)?(\d+):(\d+(?:\.\d+)?)$/
+const durationRegex = /^(?:(\d+):)?(\d+):(\d+)$/
 
 export const parseCategory: ParseUtilPartial<ItunesNs.Category> = (value) => {
   if (!isPlainObject(value)) {
