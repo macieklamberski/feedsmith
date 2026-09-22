@@ -69,6 +69,27 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
+  it('should parse feed fields given as rdf:resource', () => {
+    const value = {
+      'prism:distributor': { '@rdf:resource': 'https://example.com/distributor' },
+      'prism:organization': { '@rdf:resource': 'https://example.com/org' },
+      'prism:person': { '@rdf:resource': 'https://example.com/person' },
+      'prism:event': { '@rdf:resource': 'https://example.com/event' },
+      'prism:industry': { '@rdf:resource': 'https://example.com/industry' },
+      'prism:location': { '@rdf:resource': 'https://example.com/location' },
+    }
+    const expected = {
+      distributor: 'https://example.com/distributor',
+      organizations: ['https://example.com/org'],
+      persons: ['https://example.com/person'],
+      events: ['https://example.com/event'],
+      industries: ['https://example.com/industry'],
+      locations: ['https://example.com/location'],
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
   it('should parse feed with date fields', () => {
     const value = {
       'prism:coverdate': '2023-03-01',
@@ -474,6 +495,37 @@ describe('retrieveItem', () => {
       issn: '1234-5678',
       eIssn: '8765-4321',
       section: 'Research',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse item fields given as rdf:resource', () => {
+    const value = {
+      'prism:organization': { '@rdf:resource': 'https://example.com/org' },
+      'prism:person': { '@rdf:resource': 'https://example.com/person' },
+      'prism:event': { '@rdf:resource': 'https://example.com/event' },
+      'prism:industry': { '@rdf:resource': 'https://example.com/industry' },
+      'prism:location': { '@rdf:resource': 'https://example.com/location' },
+      'prism:hasalternative': { '@rdf:resource': 'https://example.com/alternative' },
+      'prism:hascorrection': { '@rdf:resource': 'https://example.com/correction' },
+      'prism:hastranslation': { '@rdf:resource': 'https://example.com/translation' },
+      'prism:isalternativeof': { '@rdf:resource': 'https://example.com/original' },
+      'prism:iscorrectionof': { '@rdf:resource': 'https://example.com/corrected' },
+      'prism:istranslationof': { '@rdf:resource': 'https://example.com/source' },
+    }
+    const expected = {
+      organizations: ['https://example.com/org'],
+      persons: ['https://example.com/person'],
+      events: ['https://example.com/event'],
+      industries: ['https://example.com/industry'],
+      locations: ['https://example.com/location'],
+      hasAlternatives: ['https://example.com/alternative'],
+      hasCorrections: ['https://example.com/correction'],
+      hasTranslations: ['https://example.com/translation'],
+      isAlternativeOf: ['https://example.com/original'],
+      isCorrectionOf: ['https://example.com/corrected'],
+      isTranslationOf: 'https://example.com/source',
     }
 
     expect(retrieveItem(value)).toEqual(expected)
