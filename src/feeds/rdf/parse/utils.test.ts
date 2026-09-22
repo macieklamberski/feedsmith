@@ -1241,6 +1241,59 @@ describe('retrieveItems', () => {
     expect(retrieveItems(value, { maxItems: 1 })).toEqual(expected)
   })
 
+  it('should ignore items not referenced in ToC', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/item2' },
+              { '@resource': 'http://example.com/item3' },
+            ],
+          },
+        },
+      },
+      item: [
+        { '@about': 'http://example.com/item1?lang=en', title: 'Item 1' },
+        { '@about': 'http://example.com/item2', title: 'Item 2' },
+        { '@about': 'http://example.com/item3', title: 'Item 3' },
+      ],
+    }
+    const expected = [
+      { title: 'Item 2', rdf: { about: 'http://example.com/item2' } },
+      { title: 'Item 3', rdf: { about: 'http://example.com/item3' } },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should keep every item when several share the same rdf:about', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/doi/' },
+              { '@resource': 'http://example.com/doi/' },
+            ],
+          },
+        },
+      },
+      item: [
+        { '@about': 'http://example.com/doi/', title: 'Article 1' },
+        { '@about': 'http://example.com/doi/', title: 'Article 2' },
+      ],
+    }
+    const expected = [
+      { title: 'Article 1', rdf: { about: 'http://example.com/doi/' } },
+      { title: 'Article 2', rdf: { about: 'http://example.com/doi/' } },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
   it('should respect maxItems option with ToC', () => {
     const value = {
       channel: {

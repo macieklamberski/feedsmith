@@ -147,10 +147,19 @@ export const retrieveItems: ParseUtilPartial<Array<RdfFeed.Item<DateAny>>> = (va
   const tocItems = parseSingular(channel?.items)
   const tocLis = parseArrayOf(tocItems?.seq, (seq) => seq?.li)?.flat()
   const itemUris = parseArrayOf(tocLis, (li) => parseString(li?.['@resource']), options?.maxItems)
-  const items = trimArray(
-    itemUris?.map((uri) => retrieveByAbout(itemElements, uri)),
-    (value) => parseItem(value, options),
-  )
+  // Some generators give several items the same rdf:about.
+  const unclaimedElements = parseArrayOf(itemElements, (element) => element) ?? []
+  const tocElements: Array<unknown> = []
+
+  for (const uri of itemUris ?? []) {
+    const index = unclaimedElements.findIndex((element) => parseString(element?.['@about']) === uri)
+
+    if (index !== -1) {
+      tocElements.push(...unclaimedElements.splice(index, 1))
+    }
+  }
+
+  const items = trimArray(tocElements, (value) => parseItem(value, options))
 
   if (items?.length) {
     return items
