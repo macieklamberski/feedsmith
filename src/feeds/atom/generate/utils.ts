@@ -1,6 +1,6 @@
 import { XMLValidator } from 'fast-xml-parser'
 import { escapeHtml, isNonEmptyString, isPlainObject, trimObject } from 'trousse'
-import { namespaceUris } from '../../../common/config.js'
+import { atomNamespaceUris } from '../../../common/config.js'
 import type { DateLike } from '../../../common/types.js'
 import {
   generateCdataString,
@@ -36,6 +36,10 @@ import {
   generateFeed as generateItunesFeed,
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
+import {
+  generateAtomFeed as generateLivejournalFeed,
+  generateAtomEntry as generateLivejournalItem,
+} from '../../../namespaces/livejournal/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
 import { generateFeed as generateOpenSearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
 import {
@@ -312,6 +316,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
     ...generateYtItem(entry.yt),
     ...generateGeoItemOrFeed(entry.geo),
     ...generateGeoRssItemOrFeed(entry.georss),
+    ...generateLivejournalItem(entry.livejournal),
     ...generateXmlItemOrFeed(entry.xml),
   }
 
@@ -381,6 +386,7 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
     ...generateYtFeed(feed.yt),
     ...generateGeoItemOrFeed(feed.geo),
     ...generateGeoRssItemOrFeed(feed.georss),
+    ...generateLivejournalFeed(feed.livejournal),
     ...generateXmlItemOrFeed(feed.xml),
     ...valueEntries,
   })
@@ -392,7 +398,7 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
   return {
     feed: {
       '@xmlns': 'http://www.w3.org/2005/Atom',
-      ...generateNamespaceAttrs({ value: fullValue }, namespaceUris),
+      ...generateNamespaceAttrs({ value: fullValue }, atomNamespaceUris),
       ...fullValue,
     },
   }

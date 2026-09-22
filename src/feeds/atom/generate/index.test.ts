@@ -1217,6 +1217,46 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with livejournal namespace', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: { value: 'Feed with LiveJournal namespace' },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      livejournal: {
+        journal: 'example_community',
+        journalId: '67890',
+        journalType: 'community',
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: { value: 'Journal entry' },
+          updated: new Date('2023-03-15T12:00:00Z'),
+          livejournal: {
+            poster: 'johndoe',
+            posterId: '12345',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:lj="https://www.livejournal.com">
+  <id>https://example.com/feed</id>
+  <title>Feed with LiveJournal namespace</title>
+  <updated>2023-03-15T12:00:00.000Z</updated>
+  <lj:journal userid="67890" username="example_community" type="community"/>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Journal entry</title>
+    <updated>2023-03-15T12:00:00.000Z</updated>
+    <lj:poster user="johndoe" userid="12345"/>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with xml namespace', () => {
     const value = {
       id: 'https://example.com/feed',

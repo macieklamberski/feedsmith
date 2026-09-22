@@ -32,6 +32,7 @@
      xmlns:blogChannel="http://backend.userland.com/blogChannelModule"
      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
      xmlns:georss="http://www.georss.org/georss"
+     xmlns:lj="http://www.livejournal.org/rss/lj/1.0/"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
   <channel>
@@ -483,6 +484,11 @@
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
 
+    <!-- LiveJournal Namespace: Channel Level Tags -->
+    <lj:journal>example_community</lj:journal>
+    <lj:journalid>67890</lj:journalid>
+    <lj:journaltype>community</lj:journaltype>
+
     <item xml:lang="en-US" xml:base="http://example.org/item/1/">
       <title>Example Item</title>
       <link>http://example.org/item/1</link>
@@ -888,6 +894,16 @@
       <georss:elev>360</georss:elev>
       <georss:floor>4</georss:floor>
       <georss:radius>50000</georss:radius>
+
+      <!-- LiveJournal Namespace: Item Level Tags -->
+      <lj:music>The Beatles - Hey Jude</lj:music>
+      <lj:mood>cheerful</lj:mood>
+      <lj:security>public</lj:security>
+      <lj:poster>johndoe</lj:poster>
+      <lj:posterid>12345</lj:posterid>
+      <lj:posterurl>https://johndoe.example.com</lj:posterurl>
+      <lj:posteruserpic>https://userpic.example.com/12345</lj:posteruserpic>
+      <lj:replycount>42</lj:replycount>
     </item>
   </channel>
 </rss>

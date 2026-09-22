@@ -22,6 +22,7 @@
       xmlns:yt="http://www.youtube.com/xml/schemas/2015"
       xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
       xmlns:georss="http://www.georss.org/georss"
+      xmlns:lj="https://www.livejournal.com"
       xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
   <id>example-feed</id>
@@ -296,6 +297,9 @@
   <georss:elev>360</georss:elev>
   <georss:floor>4</georss:floor>
   <georss:radius>50000</georss:radius>
+
+  <!-- LiveJournal Namespace: Feed Level Tags -->
+  <lj:journal userid="67890" username="example_community" type="community"/>
 
   <entry>
     <id>example-entry</id>
@@ -594,5 +598,14 @@
     <georss:elev>360</georss:elev>
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
+
+    <!-- LiveJournal Namespace: Entry Level Tags -->
+    <lj:poster user="johndoe" userid="12345"/>
+    <lj:music>The Beatles - Hey Jude</lj:music>
+    <lj:mood>cheerful</lj:mood>
+    <lj:security>public</lj:security>
+    <lj:posterurl>https://johndoe.example.com</lj:posterurl>
+    <lj:posteruserpic>https://userpic.example.com/12345</lj:posteruserpic>
+    <lj:replycount>42</lj:replycount>
   </entry>
 </feed>

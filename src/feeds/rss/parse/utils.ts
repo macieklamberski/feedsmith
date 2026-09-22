@@ -42,6 +42,10 @@ import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
 } from '../../../namespaces/itunes/parse/utils.js'
+import {
+  retrieveFeed as retrieveLivejournalFeed,
+  retrieveItem as retrieveLivejournalItem,
+} from '../../../namespaces/livejournal/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
 import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
 import {
@@ -424,6 +428,7 @@ export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, option
     sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    livejournal: namespaces.has('lj') ? retrieveLivejournalItem(value) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
 
@@ -487,6 +492,7 @@ export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, option
     blogChannel: namespaces.has('blogchannel') ? retrieveBlogChannelFeed(channel) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(channel) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
+    livejournal: namespaces.has('lj') ? retrieveLivejournalFeed(channel) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
 
