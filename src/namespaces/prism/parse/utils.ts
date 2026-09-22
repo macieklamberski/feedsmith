@@ -24,6 +24,41 @@ export const parseOriginPlatform: ParseUtilPartial<string> = (value) => {
   return retrieveRdfResourceOrText(value, parseString)
 }
 
+const parsePlatform: ParseUtilPartial<string> = (value) => {
+  return parseString(value?.['@platform']) ?? parseString(value?.['@prism:platform'])
+}
+
+export const parsePlatformString: ParseUtilPartial<PrismNs.PlatformValue<string>> = (value) => {
+  const platformValue = {
+    value: retrieveRdfResourceOrText(value, parseString),
+    platform: parsePlatform(value),
+  }
+
+  return trimObject(platformValue)
+}
+
+export const parsePlatformDate: ParseUtilPartial<
+  PrismNs.PlatformValue<DateAny>,
+  ParseMainOptions<DateAny>
+> = (value, options) => {
+  const platformValue = {
+    value: parseDate(retrieveText(value), options?.parseDateFn),
+    platform: parsePlatform(value),
+  }
+
+  return trimObject(platformValue)
+}
+
+export const parseRating: ParseUtilPartial<PrismNs.Rating> = (value) => {
+  const rating = {
+    value: retrieveRdfResourceOrText(value, parseString),
+    ratingSystem:
+      parseString(value?.['@ratingsystem']) ?? parseString(value?.['@prism:ratingsystem']),
+  }
+
+  return trimObject(rating)
+}
+
 export const retrieveItemOrFeed: ParseUtilPartial<
   PrismNs.ItemOrFeed<DateAny>,
   ParseMainOptions<DateAny>
@@ -45,9 +80,7 @@ export const retrieveItemOrFeed: ParseUtilPartial<
     issueName: parseSingularOf(value['prism:issuename'], (value) =>
       parseString(retrieveText(value)),
     ),
-    issueTeaser: parseSingularOf(value['prism:issueteaser'], (value) =>
-      parseString(retrieveText(value)),
-    ),
+    issueTeaser: parseSingularOf(value['prism:issueteaser'], parsePlatformString),
     issueType: parseSingularOf(value['prism:issuetype'], (value) =>
       parseString(retrieveText(value)),
     ),
@@ -68,10 +101,11 @@ export const retrieveItemOrFeed: ParseUtilPartial<
       parseString(retrieveText(value)),
     ),
     publicationDates: parseArrayOf(value['prism:publicationdate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
+      parsePlatformDate(value, options),
     ),
-    publicationDisplayDates: parseArrayOf(value['prism:publicationdisplaydate'], (value) =>
-      parseString(retrieveText(value)),
+    publicationDisplayDates: parseArrayOf(
+      value['prism:publicationdisplaydate'],
+      parsePlatformString,
     ),
     creationDate: parseSingularOf(value['prism:creationdate'], (value) =>
       parseDate(retrieveText(value), options?.parseDateFn),
@@ -83,14 +117,14 @@ export const retrieveItemOrFeed: ParseUtilPartial<
       parseDate(retrieveText(value), options?.parseDateFn),
     ),
     onSaleDates: parseArrayOf(value['prism:onsaledate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
+      parsePlatformDate(value, options),
     ),
-    onSaleDays: parseArrayOf(value['prism:onsaleday'], (value) => parseString(retrieveText(value))),
+    onSaleDays: parseArrayOf(value['prism:onsaleday'], parsePlatformString),
     offSaleDates: parseArrayOf(value['prism:offsaledate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
+      parsePlatformDate(value, options),
     ),
     killDate: parseSingularOf(value['prism:killdate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
+      parsePlatformDate(value, options),
     ),
     copyrightYears: parseArrayOf(value['prism:copyrightyear'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
@@ -98,15 +132,11 @@ export const retrieveItemOrFeed: ParseUtilPartial<
     contentType: parseSingularOf(value['prism:contenttype'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
     ),
-    alternateTitles: parseArrayOf(value['prism:alternatetitle'], (value) =>
-      retrieveRdfResourceOrText(value, parseString),
-    ),
+    alternateTitles: parseArrayOf(value['prism:alternatetitle'], parsePlatformString),
     subtitles: parseArrayOf(value['prism:subtitle'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
     ),
-    teasers: parseArrayOf(value['prism:teaser'], (value) =>
-      retrieveRdfResourceOrText(value, parseString),
-    ),
+    teasers: parseArrayOf(value['prism:teaser'], parsePlatformString),
     keywords: parseArrayOf(value['prism:keyword'], (value) => parseString(retrieveText(value))),
     seriesTitle: parseSingularOf(value['prism:seriestitle'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
@@ -209,18 +239,14 @@ export const retrieveItemOrFeed: ParseUtilPartial<
     links: parseArrayOf(value['prism:link'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
     ),
-    urls: parseArrayOf(value['prism:url'], (value) =>
-      retrieveRdfResourceOrText(value, parseString),
-    ),
+    urls: parseArrayOf(value['prism:url'], parsePlatformString),
     wordCount: parseSingularOf(value['prism:wordcount'], (value) =>
       parseNumber(retrieveText(value)),
     ),
     byteCount: parseSingularOf(value['prism:bytecount'], (value) =>
       parseNumber(retrieveText(value)),
     ),
-    ratings: parseArrayOf(value['prism:rating'], (value) =>
-      retrieveRdfResourceOrText(value, parseString),
-    ),
+    ratings: parseArrayOf(value['prism:rating'], parseRating),
     timePeriod: parseSingularOf(value['prism:timeperiod'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
     ),
@@ -257,9 +283,7 @@ export const retrieveItemOrFeed: ParseUtilPartial<
     hasAlternatives: parseArrayOf(value['prism:hasalternative'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
     ),
-    hasCorrections: parseArrayOf(value['prism:hascorrection'], (value) =>
-      retrieveRdfResourceOrText(value, parseString),
-    ),
+    hasCorrections: parseArrayOf(value['prism:hascorrection'], parsePlatformString),
     hasTranslations: parseArrayOf(value['prism:hastranslation'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
     ),

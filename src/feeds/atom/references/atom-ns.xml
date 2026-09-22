@@ -262,7 +262,7 @@
   <prism:isbn>978-0-12-345678-9</prism:isbn>
   <prism:issueIdentifier>2023-03-15</prism:issueIdentifier>
   <prism:issueName>Spring Issue</prism:issueName>
-  <prism:issueTeaser>Special coverage of breakthrough discoveries</prism:issueTeaser>
+  <prism:issueTeaser prism:platform="print">Special coverage of breakthrough discoveries</prism:issueTeaser>
   <prism:issueType>regular</prism:issueType>
   <prism:volume>615</prism:volume>
   <prism:number>7952</prism:number>
@@ -271,7 +271,7 @@
   <prism:aggregationType>journal</prism:aggregationType>
   <prism:coverDate>2023-03-15T00:00:00.000Z</prism:coverDate>
   <prism:coverDisplayDate>March 15, 2023</prism:coverDisplayDate>
-  <prism:publicationDate>2023-03-15T00:00:00.000Z</prism:publicationDate>
+  <prism:publicationDate platform="print">2023-03-15T00:00:00.000Z</prism:publicationDate>
   <prism:publicationDisplayDate>Spring 2023</prism:publicationDisplayDate>
   <prism:creationDate>2023-02-01T00:00:00.000Z</prism:creationDate>
   <prism:modificationDate>2023-03-10T00:00:00.000Z</prism:modificationDate>
@@ -284,7 +284,7 @@
   <prism:contentType>article</prism:contentType>
   <prism:alternateTitle>Nature Journal</prism:alternateTitle>
   <prism:subtitle>The International Weekly Journal of Science</prism:subtitle>
-  <prism:teaser>Leading scientific research and discoveries</prism:teaser>
+  <prism:teaser platform="web">Leading scientific research and discoveries</prism:teaser>
   <prism:keyword>science</prism:keyword>
   <prism:keyword>research</prism:keyword>
   <prism:seriesTitle>Nature Research Journals</prism:seriesTitle>
@@ -321,10 +321,10 @@
   <prism:blogTitle>Nature News Blog</prism:blogTitle>
   <prism:blogURL>https://www.nature.com/news/blog</prism:blogURL>
   <prism:link>https://www.nature.com/nature</prism:link>
-  <prism:url>https://www.nature.com</prism:url>
+  <prism:url platform="web">https://www.nature.com</prism:url>
   <prism:wordCount>52000</prism:wordCount>
   <prism:byteCount>1048576</prism:byteCount>
-  <prism:rating>A+</prism:rating>
+  <prism:rating ratingSystem="Editorial">A+</prism:rating>
   <prism:timePeriod>2023-Q1</prism:timePeriod>
   <prism:versionIdentifier>v2023.03</prism:versionIdentifier>
   <prism:ticker>SPRN</prism:ticker>

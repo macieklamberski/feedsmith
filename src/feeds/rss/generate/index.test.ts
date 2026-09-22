@@ -678,7 +678,9 @@ describe('generate', () => {
       description: 'Test feed with PRISM namespace',
       prism: {
         issn: '0028-0836',
+        publicationDates: [{ value: new Date('2023-03-15T00:00:00Z'), platform: 'print' }],
         originPlatforms: ['print'],
+        ratings: [{ value: 'E', ratingSystem: 'ESRB' }],
       },
       items: [
         {
@@ -686,6 +688,7 @@ describe('generate', () => {
           prism: {
             doi: '10.1038/s41586-023-05842-x',
             startingPage: '425',
+            teasers: [{ value: 'A new catalyst', platform: 'web' }],
             originPlatforms: ['web'],
           },
         },
@@ -697,10 +700,13 @@ describe('generate', () => {
     <title>Feed with prism namespace</title>
     <description>Test feed with PRISM namespace</description>
     <prism:issn>0028-0836</prism:issn>
+    <prism:publicationDate platform="print">2023-03-15T00:00:00.000Z</prism:publicationDate>
     <prism:originPlatform platform="print"/>
+    <prism:rating ratingSystem="ESRB">E</prism:rating>
     <item>
       <title>First item</title>
       <prism:doi>10.1038/s41586-023-05842-x</prism:doi>
+      <prism:teaser platform="web">A new catalyst</prism:teaser>
       <prism:startingPage>425</prism:startingPage>
       <prism:originPlatform platform="web"/>
     </item>

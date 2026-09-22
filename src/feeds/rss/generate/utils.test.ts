@@ -1823,7 +1823,7 @@ describe('generateFeed', () => {
         publicationName: 'Nature',
         issn: '0028-0836',
         volume: '615',
-        publicationDates: [new Date('2023-03-15T00:00:00Z')],
+        publicationDates: [{ value: new Date('2023-03-15T00:00:00Z'), platform: 'print' }],
       },
     }
     const expected = {
@@ -1836,7 +1836,7 @@ describe('generateFeed', () => {
           'prism:publicationName': 'Nature',
           'prism:issn': '0028-0836',
           'prism:volume': '615',
-          'prism:publicationDate': ['2023-03-15T00:00:00.000Z'],
+          'prism:publicationDate': [{ '#text': '2023-03-15T00:00:00.000Z', '@platform': 'print' }],
         },
       },
     }

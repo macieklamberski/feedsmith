@@ -5,6 +5,7 @@ import {
   generateNumber,
   generatePlainString,
   generateRfc3339Date,
+  generateTextOrCdataString,
   trimArray,
 } from '../../../common/utils.js'
 import type { PrismNs } from '../common/types.js'
@@ -12,6 +13,62 @@ import type { PrismNs } from '../common/types.js'
 export const generateOriginPlatform: GenerateUtil<string> = (originPlatform) => {
   const value = {
     '@platform': generatePlainString(originPlatform),
+  }
+
+  return trimObject(value)
+}
+
+export const generatePlatformString: GenerateUtil<PrismNs.PlatformValue<string>> = (
+  platformValue,
+) => {
+  if (!isPlainObject(platformValue)) {
+    return
+  }
+
+  const value = {
+    ...generateTextOrCdataString(platformValue.value),
+    '@platform': generatePlainString(platformValue.platform),
+  }
+
+  return trimObject(value)
+}
+
+export const generatePlatformDate: GenerateUtil<PrismNs.PlatformValue<DateLike>> = (
+  platformValue,
+) => {
+  if (!isPlainObject(platformValue)) {
+    return
+  }
+
+  const value = {
+    '#text': generateRfc3339Date(platformValue.value),
+    '@platform': generatePlainString(platformValue.platform),
+  }
+
+  return trimObject(value)
+}
+
+export const generateIssueTeaser: GenerateUtil<PrismNs.PlatformValue<string>> = (issueTeaser) => {
+  if (!isPlainObject(issueTeaser)) {
+    return
+  }
+
+  const value = {
+    ...generateTextOrCdataString(issueTeaser.value),
+    '@prism:platform': generatePlainString(issueTeaser.platform),
+  }
+
+  return trimObject(value)
+}
+
+export const generateRating: GenerateUtil<PrismNs.Rating> = (rating) => {
+  if (!isPlainObject(rating)) {
+    return
+  }
+
+  const value = {
+    ...generateTextOrCdataString(rating.value),
+    '@ratingSystem': generatePlainString(rating.ratingSystem),
   }
 
   return trimObject(value)
@@ -29,7 +86,7 @@ export const generateItemOrFeed: GenerateUtil<PrismNs.ItemOrFeed<DateLike>> = (i
     'prism:isbn': trimArray(itemOrFeed.isbns, generateCdataString),
     'prism:issueIdentifier': generateCdataString(itemOrFeed.issueIdentifier),
     'prism:issueName': generateCdataString(itemOrFeed.issueName),
-    'prism:issueTeaser': generateCdataString(itemOrFeed.issueTeaser),
+    'prism:issueTeaser': generateIssueTeaser(itemOrFeed.issueTeaser),
     'prism:issueType': generateCdataString(itemOrFeed.issueType),
     'prism:doi': generateCdataString(itemOrFeed.doi),
     'prism:volume': generateCdataString(itemOrFeed.volume),
@@ -39,23 +96,23 @@ export const generateItemOrFeed: GenerateUtil<PrismNs.ItemOrFeed<DateLike>> = (i
     'prism:aggregationType': generateCdataString(itemOrFeed.aggregationType),
     'prism:coverDate': generateRfc3339Date(itemOrFeed.coverDate),
     'prism:coverDisplayDate': generateCdataString(itemOrFeed.coverDisplayDate),
-    'prism:publicationDate': trimArray(itemOrFeed.publicationDates, generateRfc3339Date),
+    'prism:publicationDate': trimArray(itemOrFeed.publicationDates, generatePlatformDate),
     'prism:publicationDisplayDate': trimArray(
       itemOrFeed.publicationDisplayDates,
-      generateCdataString,
+      generatePlatformString,
     ),
     'prism:creationDate': generateRfc3339Date(itemOrFeed.creationDate),
     'prism:modificationDate': generateRfc3339Date(itemOrFeed.modificationDate),
     'prism:dateReceived': generateRfc3339Date(itemOrFeed.dateReceived),
-    'prism:onSaleDate': trimArray(itemOrFeed.onSaleDates, generateRfc3339Date),
-    'prism:onSaleDay': trimArray(itemOrFeed.onSaleDays, generateCdataString),
-    'prism:offSaleDate': trimArray(itemOrFeed.offSaleDates, generateRfc3339Date),
-    'prism:killDate': generateRfc3339Date(itemOrFeed.killDate),
+    'prism:onSaleDate': trimArray(itemOrFeed.onSaleDates, generatePlatformDate),
+    'prism:onSaleDay': trimArray(itemOrFeed.onSaleDays, generatePlatformString),
+    'prism:offSaleDate': trimArray(itemOrFeed.offSaleDates, generatePlatformDate),
+    'prism:killDate': generatePlatformDate(itemOrFeed.killDate),
     'prism:copyrightYear': trimArray(itemOrFeed.copyrightYears, generateCdataString),
     'prism:contentType': generateCdataString(itemOrFeed.contentType),
-    'prism:alternateTitle': trimArray(itemOrFeed.alternateTitles, generateCdataString),
+    'prism:alternateTitle': trimArray(itemOrFeed.alternateTitles, generatePlatformString),
     'prism:subtitle': trimArray(itemOrFeed.subtitles, generateCdataString),
-    'prism:teaser': trimArray(itemOrFeed.teasers, generateCdataString),
+    'prism:teaser': trimArray(itemOrFeed.teasers, generatePlatformString),
     'prism:keyword': trimArray(itemOrFeed.keywords, generateCdataString),
     'prism:seriesTitle': generateCdataString(itemOrFeed.seriesTitle),
     'prism:seriesNumber': generateNumber(itemOrFeed.seriesNumber),
@@ -92,10 +149,10 @@ export const generateItemOrFeed: GenerateUtil<PrismNs.ItemOrFeed<DateLike>> = (i
     'prism:blogTitle': generateCdataString(itemOrFeed.blogTitle),
     'prism:blogURL': generateCdataString(itemOrFeed.blogURL),
     'prism:link': trimArray(itemOrFeed.links, generateCdataString),
-    'prism:url': trimArray(itemOrFeed.urls, generateCdataString),
+    'prism:url': trimArray(itemOrFeed.urls, generatePlatformString),
     'prism:wordCount': generateNumber(itemOrFeed.wordCount),
     'prism:byteCount': generateNumber(itemOrFeed.byteCount),
-    'prism:rating': trimArray(itemOrFeed.ratings, generateCdataString),
+    'prism:rating': trimArray(itemOrFeed.ratings, generateRating),
     'prism:timePeriod': generateCdataString(itemOrFeed.timePeriod),
     'prism:versionIdentifier': generateCdataString(itemOrFeed.versionIdentifier),
     'prism:ticker': trimArray(itemOrFeed.tickers, generateCdataString),
@@ -108,7 +165,7 @@ export const generateItemOrFeed: GenerateUtil<PrismNs.ItemOrFeed<DateLike>> = (i
     'prism:profession': generateCdataString(itemOrFeed.profession),
     'prism:sport': generateCdataString(itemOrFeed.sport),
     'prism:hasAlternative': trimArray(itemOrFeed.hasAlternatives, generateCdataString),
-    'prism:hasCorrection': trimArray(itemOrFeed.hasCorrections, generateCdataString),
+    'prism:hasCorrection': trimArray(itemOrFeed.hasCorrections, generatePlatformString),
     'prism:hasTranslation': trimArray(itemOrFeed.hasTranslations, generateCdataString),
     'prism:isAlternativeOf': trimArray(itemOrFeed.isAlternativeOf, generateCdataString),
     'prism:isCorrectionOf': trimArray(itemOrFeed.isCorrectionOf, generateCdataString),

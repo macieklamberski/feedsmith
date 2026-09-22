@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'bun:test'
-import { generateItemOrFeed, generateOriginPlatform } from './utils.js'
+import {
+  generateIssueTeaser,
+  generateItemOrFeed,
+  generateOriginPlatform,
+  generatePlatformDate,
+  generatePlatformString,
+  generateRating,
+} from './utils.js'
 
 describe('generateOriginPlatform', () => {
   it('should generate origin platform as the platform attribute', () => {
@@ -25,6 +32,117 @@ describe('generateOriginPlatform', () => {
   })
 })
 
+describe('generatePlatformString', () => {
+  it('should generate text with platform attribute', () => {
+    const value = { value: 'Summer Special', platform: 'web' }
+    const expected = { '#text': 'Summer Special', '@platform': 'web' }
+
+    expect(generatePlatformString(value)).toEqual(expected)
+  })
+
+  it('should generate text without platform attribute', () => {
+    const value = { value: 'Summer Special' }
+    const expected = { '#text': 'Summer Special' }
+
+    expect(generatePlatformString(value)).toEqual(expected)
+  })
+
+  it('should wrap HTML in CDATA', () => {
+    const value = { value: '<b>Summer</b> Special', platform: 'web' }
+    const expected = { '#cdata': '<b>Summer</b> Special', '@platform': 'web' }
+
+    expect(generatePlatformString(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    expect(generatePlatformString({})).toBeUndefined()
+  })
+
+  it('should handle non-object inputs', () => {
+    expect(generatePlatformString(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generatePlatformString('Summer Special')).toBeUndefined()
+  })
+})
+
+describe('generatePlatformDate', () => {
+  it('should generate date with platform attribute', () => {
+    const value = { value: new Date('2023-03-15T00:00:00Z'), platform: 'web' }
+    const expected = { '#text': '2023-03-15T00:00:00.000Z', '@platform': 'web' }
+
+    expect(generatePlatformDate(value)).toEqual(expected)
+  })
+
+  it('should generate date without platform attribute', () => {
+    const value = { value: new Date('2023-03-15T00:00:00Z') }
+    const expected = { '#text': '2023-03-15T00:00:00.000Z' }
+
+    expect(generatePlatformDate(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    expect(generatePlatformDate({})).toBeUndefined()
+  })
+
+  it('should handle non-object inputs', () => {
+    expect(generatePlatformDate(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generatePlatformDate(new Date('2023-03-15T00:00:00Z'))).toBeUndefined()
+  })
+})
+
+describe('generateIssueTeaser', () => {
+  it('should generate text with prefixed platform attribute', () => {
+    const value = { value: 'The Hottest Swimsuits', platform: 'print' }
+    const expected = { '#text': 'The Hottest Swimsuits', '@prism:platform': 'print' }
+
+    expect(generateIssueTeaser(value)).toEqual(expected)
+  })
+
+  it('should generate text without platform attribute', () => {
+    const value = { value: 'The Hottest Swimsuits' }
+    const expected = { '#text': 'The Hottest Swimsuits' }
+
+    expect(generateIssueTeaser(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    expect(generateIssueTeaser({})).toBeUndefined()
+  })
+
+  it('should handle non-object inputs', () => {
+    expect(generateIssueTeaser(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateIssueTeaser('The Hottest Swimsuits')).toBeUndefined()
+  })
+})
+
+describe('generateRating', () => {
+  it('should generate rating with ratingSystem attribute', () => {
+    const value = { value: 'E', ratingSystem: 'ESRB' }
+    const expected = { '#text': 'E', '@ratingSystem': 'ESRB' }
+
+    expect(generateRating(value)).toEqual(expected)
+  })
+
+  it('should generate rating without ratingSystem attribute', () => {
+    const value = { value: 'E' }
+    const expected = { '#text': 'E' }
+
+    expect(generateRating(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    expect(generateRating({})).toBeUndefined()
+  })
+
+  it('should handle non-object inputs', () => {
+    expect(generateRating(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateRating('E')).toBeUndefined()
+  })
+})
+
 describe('generateItemOrFeed', () => {
   it('should generate feed with core properties', () => {
     const value = {
@@ -33,11 +151,11 @@ describe('generateItemOrFeed', () => {
       eIssn: '8765-4321',
       volume: '615',
       number: '7952',
-      publicationDates: [new Date('2023-03-15T00:00:00Z')],
+      publicationDates: [{ value: new Date('2023-03-15T00:00:00Z') }],
       aggregationType: 'journal',
       publishingFrequency: 'weekly',
-      urls: ['https://journal.example.com'],
-      teasers: ['A short promotional description'],
+      urls: [{ value: 'https://journal.example.com' }],
+      teasers: [{ value: 'A short promotional description' }],
       keywords: ['science', 'research'],
     }
     const expected = {
@@ -46,11 +164,11 @@ describe('generateItemOrFeed', () => {
       'prism:eIssn': '8765-4321',
       'prism:volume': '615',
       'prism:number': '7952',
-      'prism:publicationDate': ['2023-03-15T00:00:00.000Z'],
+      'prism:publicationDate': [{ '#text': '2023-03-15T00:00:00.000Z' }],
       'prism:aggregationType': 'journal',
       'prism:publishingFrequency': 'weekly',
-      'prism:url': ['https://journal.example.com'],
-      'prism:teaser': ['A short promotional description'],
+      'prism:url': [{ '#text': 'https://journal.example.com' }],
+      'prism:teaser': [{ '#text': 'A short promotional description' }],
       'prism:keyword': ['science', 'research'],
     }
 
@@ -98,7 +216,7 @@ describe('generateItemOrFeed', () => {
       endingPage: '1211',
       wordCount: 52000,
       hasAlternatives: ['https://example.com/issue-alt'],
-      hasCorrections: ['https://example.com/issue-correction'],
+      hasCorrections: [{ value: 'https://example.com/issue-correction' }],
       hasTranslations: ['https://example.com/issue-de', 'https://example.com/issue-fr'],
       isCorrectionOf: ['https://example.com/issue-v1'],
       isTranslationOf: 'https://example.com/issue-en',
@@ -108,7 +226,7 @@ describe('generateItemOrFeed', () => {
       'prism:endingPage': '1211',
       'prism:wordCount': 52000,
       'prism:hasAlternative': ['https://example.com/issue-alt'],
-      'prism:hasCorrection': ['https://example.com/issue-correction'],
+      'prism:hasCorrection': [{ '#text': 'https://example.com/issue-correction' }],
       'prism:hasTranslation': ['https://example.com/issue-de', 'https://example.com/issue-fr'],
       'prism:isCorrectionOf': ['https://example.com/issue-v1'],
       'prism:isTranslationOf': 'https://example.com/issue-en',
@@ -141,21 +259,21 @@ describe('generateItemOrFeed', () => {
   it('should generate feed with date fields', () => {
     const value = {
       coverDate: new Date('2023-03-01T00:00:00Z'),
-      publicationDates: [new Date('2023-03-15T10:00:00Z')],
+      publicationDates: [{ value: new Date('2023-03-15T10:00:00Z') }],
       creationDate: new Date('2023-02-20T00:00:00Z'),
       modificationDate: new Date('2023-03-10T14:30:00Z'),
-      killDate: new Date('2024-03-15T00:00:00Z'),
-      onSaleDates: [new Date('2023-03-01T00:00:00Z')],
-      offSaleDates: [new Date('2023-04-01T00:00:00Z')],
+      killDate: { value: new Date('2024-03-15T00:00:00Z') },
+      onSaleDates: [{ value: new Date('2023-03-01T00:00:00Z') }],
+      offSaleDates: [{ value: new Date('2023-04-01T00:00:00Z') }],
     }
     const expected = {
       'prism:coverDate': '2023-03-01T00:00:00.000Z',
-      'prism:publicationDate': ['2023-03-15T10:00:00.000Z'],
+      'prism:publicationDate': [{ '#text': '2023-03-15T10:00:00.000Z' }],
       'prism:creationDate': '2023-02-20T00:00:00.000Z',
       'prism:modificationDate': '2023-03-10T14:30:00.000Z',
-      'prism:killDate': '2024-03-15T00:00:00.000Z',
-      'prism:onSaleDate': ['2023-03-01T00:00:00.000Z'],
-      'prism:offSaleDate': ['2023-04-01T00:00:00.000Z'],
+      'prism:killDate': { '#text': '2024-03-15T00:00:00.000Z' },
+      'prism:onSaleDate': [{ '#text': '2023-03-01T00:00:00.000Z' }],
+      'prism:offSaleDate': [{ '#text': '2023-04-01T00:00:00.000Z' }],
     }
 
     expect(generateItemOrFeed(value)).toEqual(expected)
@@ -266,13 +384,13 @@ describe('generateItemOrFeed', () => {
     const value = {
       issueIdentifier: '2023-03-15',
       issueName: 'Spring Issue',
-      issueTeaser: 'Special coverage of breakthrough discoveries',
+      issueTeaser: { value: 'Special coverage of breakthrough discoveries' },
       issueType: 'regular',
     }
     const expected = {
       'prism:issueIdentifier': '2023-03-15',
       'prism:issueName': 'Spring Issue',
-      'prism:issueTeaser': 'Special coverage of breakthrough discoveries',
+      'prism:issueTeaser': { '#text': 'Special coverage of breakthrough discoveries' },
       'prism:issueType': 'regular',
     }
 
@@ -282,16 +400,16 @@ describe('generateItemOrFeed', () => {
   it('should generate feed with additional date fields', () => {
     const value = {
       coverDisplayDate: 'March 15, 2023',
-      publicationDisplayDates: ['Spring 2023'],
+      publicationDisplayDates: [{ value: 'Spring 2023' }],
       dateReceived: new Date('2023-01-15T00:00:00Z'),
-      onSaleDays: ['wednesday', 'friday'],
+      onSaleDays: [{ value: 'wednesday' }, { value: 'friday' }],
       copyrightYears: ['2023', '2024'],
     }
     const expected = {
       'prism:coverDisplayDate': 'March 15, 2023',
-      'prism:publicationDisplayDate': ['Spring 2023'],
+      'prism:publicationDisplayDate': [{ '#text': 'Spring 2023' }],
       'prism:dateReceived': '2023-01-15T00:00:00.000Z',
-      'prism:onSaleDay': ['wednesday', 'friday'],
+      'prism:onSaleDay': [{ '#text': 'wednesday' }, { '#text': 'friday' }],
       'prism:copyrightYear': ['2023', '2024'],
     }
 
@@ -302,13 +420,13 @@ describe('generateItemOrFeed', () => {
     const value = {
       edition: 'International',
       contentType: 'article',
-      alternateTitles: ['Example Journal', 'Example Magazine'],
+      alternateTitles: [{ value: 'Example Journal' }, { value: 'Example Magazine' }],
       subtitles: ['The International Weekly Journal of Science'],
     }
     const expected = {
       'prism:edition': 'International',
       'prism:contentType': 'article',
-      'prism:alternateTitle': ['Example Journal', 'Example Magazine'],
+      'prism:alternateTitle': [{ '#text': 'Example Journal' }, { '#text': 'Example Magazine' }],
       'prism:subtitle': ['The International Weekly Journal of Science'],
     }
 
@@ -369,13 +487,13 @@ describe('generateItemOrFeed', () => {
       blogTitle: 'Example News Blog',
       blogURL: 'https://journal.example.com/news/blog',
       links: ['https://journal.example.com/journal'],
-      ratings: ['A+', 'Excellent'],
+      ratings: [{ value: 'A+' }, { value: 'Excellent' }],
     }
     const expected = {
       'prism:blogTitle': 'Example News Blog',
       'prism:blogURL': 'https://journal.example.com/news/blog',
       'prism:link': ['https://journal.example.com/journal'],
-      'prism:rating': ['A+', 'Excellent'],
+      'prism:rating': [{ '#text': 'A+' }, { '#text': 'Excellent' }],
     }
 
     expect(generateItemOrFeed(value)).toEqual(expected)
@@ -436,23 +554,23 @@ describe('generateItemOrFeed', () => {
   it('should generate item with core properties', () => {
     const value = {
       doi: '10.1234/example-2023-0001',
-      urls: ['https://journal.example.com/articles/example-2023-0001'],
+      urls: [{ value: 'https://journal.example.com/articles/example-2023-0001' }],
       volume: '615',
       number: '7952',
       startingPage: '425',
       endingPage: '432',
-      publicationDates: [new Date('2023-03-15T00:00:00Z')],
+      publicationDates: [{ value: new Date('2023-03-15T00:00:00Z') }],
       keywords: ['quantum', 'computing'],
       genres: ['research-article'],
     }
     const expected = {
       'prism:doi': '10.1234/example-2023-0001',
-      'prism:url': ['https://journal.example.com/articles/example-2023-0001'],
+      'prism:url': [{ '#text': 'https://journal.example.com/articles/example-2023-0001' }],
       'prism:volume': '615',
       'prism:number': '7952',
       'prism:startingPage': '425',
       'prism:endingPage': '432',
-      'prism:publicationDate': ['2023-03-15T00:00:00.000Z'],
+      'prism:publicationDate': [{ '#text': '2023-03-15T00:00:00.000Z' }],
       'prism:keyword': ['quantum', 'computing'],
       'prism:genre': ['research-article'],
     }
@@ -501,7 +619,7 @@ describe('generateItemOrFeed', () => {
   it('should generate item with relationship fields', () => {
     const value = {
       hasAlternatives: ['alt1', 'alt2'],
-      hasCorrections: ['corr1'],
+      hasCorrections: [{ value: 'corr1' }],
       hasTranslations: ['trans1'],
       isAlternativeOf: ['orig1'],
       isCorrectionOf: ['origcorr1'],
@@ -509,7 +627,7 @@ describe('generateItemOrFeed', () => {
     }
     const expected = {
       'prism:hasAlternative': ['alt1', 'alt2'],
-      'prism:hasCorrection': ['corr1'],
+      'prism:hasCorrection': [{ '#text': 'corr1' }],
       'prism:hasTranslation': ['trans1'],
       'prism:isAlternativeOf': ['orig1'],
       'prism:isCorrectionOf': ['origcorr1'],
@@ -551,14 +669,14 @@ describe('generateItemOrFeed', () => {
 
   it('should generate item with PAM/PSV dual-level fields', () => {
     const value = {
-      publicationDisplayDates: ['March 15, 2023', 'Spring 2023'],
-      ratings: ['PG-13', 'TV-14'],
+      publicationDisplayDates: [{ value: 'March 15, 2023' }, { value: 'Spring 2023' }],
+      ratings: [{ value: 'PG-13' }, { value: 'TV-14' }],
       timePeriod: '2023-Q1',
       tickers: ['AAPL', 'GOOGL'],
     }
     const expected = {
-      'prism:publicationDisplayDate': ['March 15, 2023', 'Spring 2023'],
-      'prism:rating': ['PG-13', 'TV-14'],
+      'prism:publicationDisplayDate': [{ '#text': 'March 15, 2023' }, { '#text': 'Spring 2023' }],
+      'prism:rating': [{ '#text': 'PG-13' }, { '#text': 'TV-14' }],
       'prism:timePeriod': '2023-Q1',
       'prism:ticker': ['AAPL', 'GOOGL'],
     }
@@ -587,17 +705,20 @@ describe('generateItemOrFeed', () => {
     const value = {
       edition: 'International',
       contentType: 'research-article',
-      alternateTitles: ['Alternative Title 1', 'Alternative Title 2'],
+      alternateTitles: [{ value: 'Alternative Title 1' }, { value: 'Alternative Title 2' }],
       subtitles: ['A Comprehensive Study'],
-      teasers: ['Brief summary of the article'],
+      teasers: [{ value: 'Brief summary of the article' }],
       copyrightYears: ['2023', '2024'],
     }
     const expected = {
       'prism:edition': 'International',
       'prism:contentType': 'research-article',
-      'prism:alternateTitle': ['Alternative Title 1', 'Alternative Title 2'],
+      'prism:alternateTitle': [
+        { '#text': 'Alternative Title 1' },
+        { '#text': 'Alternative Title 2' },
+      ],
       'prism:subtitle': ['A Comprehensive Study'],
-      'prism:teaser': ['Brief summary of the article'],
+      'prism:teaser': [{ '#text': 'Brief summary of the article' }],
       'prism:copyrightYear': ['2023', '2024'],
     }
 
@@ -682,13 +803,13 @@ describe('generateItemOrFeed', () => {
       creationDate: new Date('2023-02-01T09:00:00Z'),
       modificationDate: new Date('2023-03-10T00:00:00Z'),
       dateReceived: new Date('2023-01-15T00:00:00Z'),
-      killDate: new Date('2024-03-15T00:00:00Z'),
+      killDate: { value: new Date('2024-03-15T00:00:00Z') },
     }
     const expected = {
       'prism:creationDate': '2023-02-01T09:00:00.000Z',
       'prism:modificationDate': '2023-03-10T00:00:00.000Z',
       'prism:dateReceived': '2023-01-15T00:00:00.000Z',
-      'prism:killDate': '2024-03-15T00:00:00.000Z',
+      'prism:killDate': { '#text': '2024-03-15T00:00:00.000Z' },
     }
 
     expect(generateItemOrFeed(value)).toEqual(expected)
@@ -697,13 +818,13 @@ describe('generateItemOrFeed', () => {
   it('should generate item with PAM issue, series and classification fields', () => {
     const value = {
       issueName: 'Spring Issue',
-      issueTeaser: 'Special coverage',
+      issueTeaser: { value: 'Special coverage' },
       issueType: 'regular',
       aggregationType: 'journal',
       isbns: ['978-0-12-345678-9'],
-      onSaleDates: [new Date('2023-03-01T00:00:00Z')],
-      onSaleDays: ['wednesday'],
-      offSaleDates: [new Date('2023-04-01T00:00:00Z')],
+      onSaleDates: [{ value: new Date('2023-03-01T00:00:00Z') }],
+      onSaleDays: [{ value: 'wednesday' }],
+      offSaleDates: [{ value: new Date('2023-04-01T00:00:00Z') }],
       seriesTitle: 'Nature Research Journals',
       seriesNumber: 1,
       subchannel1: 'Science',
@@ -722,13 +843,13 @@ describe('generateItemOrFeed', () => {
     }
     const expected = {
       'prism:issueName': 'Spring Issue',
-      'prism:issueTeaser': 'Special coverage',
+      'prism:issueTeaser': { '#text': 'Special coverage' },
       'prism:issueType': 'regular',
       'prism:aggregationType': 'journal',
       'prism:isbn': ['978-0-12-345678-9'],
-      'prism:onSaleDate': ['2023-03-01T00:00:00.000Z'],
-      'prism:onSaleDay': ['wednesday'],
-      'prism:offSaleDate': ['2023-04-01T00:00:00.000Z'],
+      'prism:onSaleDate': [{ '#text': '2023-03-01T00:00:00.000Z' }],
+      'prism:onSaleDay': [{ '#text': 'wednesday' }],
+      'prism:offSaleDate': [{ '#text': '2023-04-01T00:00:00.000Z' }],
       'prism:seriesTitle': 'Nature Research Journals',
       'prism:seriesNumber': 1,
       'prism:subchannel1': 'Science',

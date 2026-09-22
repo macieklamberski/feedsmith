@@ -485,13 +485,13 @@
       "prism": {
         "publicationName": "Nature",
         "doi": "10.1038/s41586-023-05842-x",
-        "urls": ["https://www.nature.com/articles/s41586-023-05842-x"],
+        "urls": [{ "value": "https://www.nature.com/articles/s41586-023-05842-x" }],
         "volume": "615",
         "number": "7952",
         "section": "Research",
         "startingPage": "425",
         "endingPage": "432",
-        "publicationDates": ["2023-03-15T00:00:00.000Z"]
+        "publicationDates": [{ "value": "2023-03-15T00:00:00.000Z" }]
       },
       "cc": {
         "license": "https://creativecommons.org/licenses/by-sa/4.0/",
@@ -1112,7 +1112,7 @@
     "volume": "615",
     "number": "7952",
     "coverDate": "2023-03-15T00:00:00.000Z",
-    "publicationDates": ["2023-03-15T00:00:00.000Z"]
+    "publicationDates": [{ "value": "2023-03-15T00:00:00.000Z" }]
   },
   "cc": {
     "license": "https://creativecommons.org/licenses/by/4.0/",

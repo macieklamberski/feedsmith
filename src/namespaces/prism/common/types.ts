@@ -1,5 +1,15 @@
 // #region reference
 export namespace PrismNs {
+  export type PlatformValue<TValue> = {
+    value?: TValue
+    platform?: string
+  }
+
+  export type Rating = {
+    value?: string
+    ratingSystem?: string
+  }
+
   export type ItemOrFeed<TDate> = {
     publicationName?: string
     issn?: string
@@ -7,7 +17,7 @@ export namespace PrismNs {
     isbns?: Array<string>
     issueIdentifier?: string
     issueName?: string
-    issueTeaser?: string
+    issueTeaser?: PlatformValue<string>
     issueType?: string
     doi?: string
     volume?: string
@@ -17,20 +27,20 @@ export namespace PrismNs {
     aggregationType?: string
     coverDate?: TDate
     coverDisplayDate?: string
-    publicationDates?: Array<TDate>
-    publicationDisplayDates?: Array<string>
+    publicationDates?: Array<PlatformValue<TDate>>
+    publicationDisplayDates?: Array<PlatformValue<string>>
     creationDate?: TDate
     modificationDate?: TDate
     dateReceived?: TDate
-    onSaleDates?: Array<TDate>
-    onSaleDays?: Array<string>
-    offSaleDates?: Array<TDate>
-    killDate?: TDate
+    onSaleDates?: Array<PlatformValue<TDate>>
+    onSaleDays?: Array<PlatformValue<string>>
+    offSaleDates?: Array<PlatformValue<TDate>>
+    killDate?: PlatformValue<TDate>
     copyrightYears?: Array<string>
     contentType?: string
-    alternateTitles?: Array<string>
+    alternateTitles?: Array<PlatformValue<string>>
     subtitles?: Array<string>
-    teasers?: Array<string>
+    teasers?: Array<PlatformValue<string>>
     keywords?: Array<string>
     seriesTitle?: string
     seriesNumber?: number
@@ -67,10 +77,10 @@ export namespace PrismNs {
     blogTitle?: string
     blogURL?: string
     links?: Array<string>
-    urls?: Array<string>
+    urls?: Array<PlatformValue<string>>
     wordCount?: number
     byteCount?: number
-    ratings?: Array<string>
+    ratings?: Array<Rating>
     timePeriod?: string
     versionIdentifier?: string
     tickers?: Array<string>
@@ -83,7 +93,7 @@ export namespace PrismNs {
     profession?: string
     sport?: string
     hasAlternatives?: Array<string>
-    hasCorrections?: Array<string>
+    hasCorrections?: Array<PlatformValue<string>>
     hasTranslations?: Array<string>
     isAlternativeOf?: Array<string>
     isCorrectionOf?: Array<string>
