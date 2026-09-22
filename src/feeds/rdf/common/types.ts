@@ -16,6 +16,7 @@ import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
+import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
 import type { PrismNs } from '../../../namespaces/prism/common/types.js'
 import type { RdfNs } from '../../../namespaces/rdf/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
@@ -34,6 +35,7 @@ export namespace RdfFeed {
       link: Requirable<string> // Required in spec
       url: Requirable<string> // Required in spec
       rdf?: RdfNs.About
+      cc?: CcNs.ItemOrFeed
     },
     TStrict
   >
@@ -65,6 +67,7 @@ export namespace RdfFeed {
       prism?: PrismNs.Item<TDate>
       cc?: CcNs.ItemOrFeed
       wfw?: WfwNs.Item
+      pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>

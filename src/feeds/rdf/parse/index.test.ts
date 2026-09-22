@@ -1321,6 +1321,48 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with pingback namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with Pingback namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with Pingback namespace</description>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item title</title>
+          <link>http://example.com/item1</link>
+          <pingback:server rdf:resource="http://example.com/pingback/"/>
+          <pingback:target rdf:resource="http://example.com/item1"/>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with Pingback namespace',
+      link: 'http://example.com',
+      description: 'Test feed with Pingback namespace',
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Item title',
+          link: 'http://example.com/item1',
+          pingback: {
+            server: 'http://example.com/pingback/',
+            target: 'http://example.com/item1',
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with trackback namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>

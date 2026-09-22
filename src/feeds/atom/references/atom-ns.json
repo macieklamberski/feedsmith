@@ -112,6 +112,7 @@
         "episodeType": "full",
         "block": false,
         "order": 1,
+        "isClosedCaptioned": true,
         "summary": "This is a detailed summary of the episode content and key takeaways",
         "subtitle": "Episode subtitle with additional context",
         "keywords": ["tutorial", "example", "technology", "programming"]
@@ -544,7 +545,9 @@
           "term": "hep-ex",
           "scheme": "http://arxiv.org/schemas/atom",
           "label": "High Energy Physics - Experiment"
-        }
+        },
+        "announceType": "replace-cross",
+        "journalReference": "Journal de l'Ecole polytechnique - Mathematiques, Tome 11 (2024), pp. 431-472"
       },
       "cc": {
         "license": "https://creativecommons.org/licenses/by/4.0/",
@@ -589,7 +592,8 @@
       },
       "pingback": {
         "server": "https://example.com/xmlrpc.php",
-        "target": "https://referenced-blog.com/article"
+        "target": "https://referenced-blog.com/article",
+        "abouts": ["https://blog1.com/posts/xml-basics", "https://blog2.com/posts/namespaces"]
       },
       "trackback": {
         "ping": "https://example.com/trackback/123",
@@ -1145,6 +1149,7 @@
     },
     "categories": ["Technology"],
     "email": "podcaster@example.com",
+    "owner": "owner@example.com",
     "newFeedUrl": "https://example.com/new-podcast-feed.xml"
   },
   "feedburner": {
@@ -1168,6 +1173,8 @@
     "queries": [
       {
         "role": "request",
+        "title": "Search results for quantum computing",
+        "totalResults": 1000,
         "searchTerms": "quantum computing",
         "startIndex": 0,
         "count": 10

@@ -16,6 +16,8 @@ export const parseQuery: ParseUtilPartial<OpenSearchNs.Query> = (value) => {
 
   const query = {
     role: parseString(value['@role']),
+    title: parseString(value['@title']),
+    totalResults: parseNumber(value['@totalresults']),
     searchTerms: parseString(value['@searchterms']),
     count: parseNumber(value['@count']),
     startIndex: parseNumber(value['@startindex']),

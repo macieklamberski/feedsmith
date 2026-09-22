@@ -12,6 +12,7 @@ export const generateFeed: GenerateUtil<BlogChannelNs.Feed> = (feed) => {
     'blogChannel:blogRoll': generateCdataString(feed.blogRoll),
     'blogChannel:blink': generateCdataString(feed.blink),
     'blogChannel:mySubscriptions': generateCdataString(feed.mySubscriptions),
+    'blogChannel:changes': generateCdataString(feed.changes),
   }
 
   return trimObject(value)

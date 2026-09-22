@@ -1018,6 +1018,7 @@ describe('generateItem', () => {
         outlines: ['<outline text="Section 1"/>', '<outline text="Section 2"/>'],
         linkFull: 'https://example.com/full-article',
         inReplyTo: { value: 'did:plc:iwl32vekohccji6khfdt3clw', isPermaLink: false },
+        comments: { count: 2, feedUrl: 'https://example.com/comments/204.xml' },
       },
     }
     const expected = {
@@ -1031,6 +1032,10 @@ describe('generateItem', () => {
       'source:inReplyTo': {
         '#text': 'did:plc:iwl32vekohccji6khfdt3clw',
         '@isPermaLink': false,
+      },
+      'source:comments': {
+        '@count': 2,
+        '@feedUrl': 'https://example.com/comments/204.xml',
       },
     }
 
@@ -1508,6 +1513,7 @@ describe('generateFeed', () => {
         description: 'A comprehensive podcast description',
         explicit: false,
         email: 'contact@example.com',
+        owner: 'owner@example.com',
         categories: ['Technology', 'Education'],
       },
     }
@@ -1522,6 +1528,7 @@ describe('generateFeed', () => {
           'googleplay:description': 'A comprehensive podcast description',
           'googleplay:explicit': 'no',
           'googleplay:email': 'contact@example.com',
+          'googleplay:owner': 'owner@example.com',
           'googleplay:category': [{ '@text': 'Technology' }, { '@text': 'Education' }],
         },
       },
@@ -1698,6 +1705,41 @@ describe('generateFeed', () => {
           'feedpress:locale': 'en',
           'feedpress:podcastId': '1234567890',
           'feedpress:cssFile': 'https://example.com/custom-feed-styles.css',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with arxiv namespace properties', () => {
+    const value = {
+      title: 'arXiv Listing',
+      description: 'A feed with arXiv properties',
+      items: [
+        {
+          title: 'Item',
+          arxiv: {
+            doi: '10.5802/jep.257',
+            announceType: 'new',
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:arxiv': 'http://arxiv.org/schemas/atom',
+        channel: {
+          title: 'arXiv Listing',
+          description: 'A feed with arXiv properties',
+          item: [
+            {
+              title: 'Item',
+              'arxiv:doi': '10.5802/jep.257',
+              'arxiv:announce_type': 'new',
+            },
+          ],
         },
       },
     }
@@ -1922,6 +1964,7 @@ describe('generateFeed', () => {
         blogRoll: 'http://example.com/blogroll.opml',
         blink: 'http://example.net/',
         mySubscriptions: 'http://example.com/subscriptions.opml',
+        changes: 'http://example.com/changes.xml',
       },
     }
     const expected = {
@@ -1934,6 +1977,7 @@ describe('generateFeed', () => {
           'blogChannel:blogRoll': 'http://example.com/blogroll.opml',
           'blogChannel:blink': 'http://example.net/',
           'blogChannel:mySubscriptions': 'http://example.com/subscriptions.opml',
+          'blogChannel:changes': 'http://example.com/changes.xml',
         },
       },
     }

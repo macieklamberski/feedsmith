@@ -16,6 +16,7 @@
   xmlns:cc="http://creativecommons.org/ns#"
   xmlns:wfw="http://wellformedweb.org/CommentAPI/"
   xmlns:admin="http://webns.net/mvcb/"
+  xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
   xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
   xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
   xmlns:georss="http://www.georss.org/georss"
@@ -229,7 +230,7 @@
     <opensearch:totalResults>1000</opensearch:totalResults>
     <opensearch:startIndex>21</opensearch:startIndex>
     <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
-    <opensearch:Query role="request" searchTerms="quantum computing" startIndex="21" count="10"/>
+    <opensearch:Query role="request" title="Search results for quantum computing" totalResults="1000" searchTerms="quantum computing" startIndex="21" count="10"/>
 
     <!-- PRISM Namespace: Channel Level Tags -->
     <prism:publicationName>Nature</prism:publicationName>
@@ -266,6 +267,15 @@
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
   </channel>
+
+  <image rdf:about="http://example.org/image.png">
+    <title>Example Image</title>
+    <link>http://example.org</link>
+    <url>http://example.org/image.png</url>
+
+    <!-- ccREL Namespace: Image Level Tags -->
+    <cc:license rdf:resource="https://creativecommons.org/licenses/by-nd/4.0/"/>
+  </image>
 
   <item rdf:about="http://example.org/item/1" xml:lang="en-US" xml:base="http://example.org/item/1/">
     <title>Example Item</title>
@@ -478,6 +488,12 @@
     <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
     <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
+
+    <!-- Pingback Namespace: Item Level Tags -->
+    <pingback:server rdf:resource="https://example.com/xmlrpc.php"/>
+    <pingback:target rdf:resource="https://referenced-blog.com/article"/>
+    <pingback:about rdf:resource="https://blog1.com/posts/xml-basics"/>
+    <pingback:about rdf:resource="https://blog2.com/posts/namespaces"/>
 
     <!-- Trackback Namespace: Item Level Tags -->
     <trackback:ping rdf:resource="https://example.com/trackback/123"/>
