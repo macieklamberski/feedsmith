@@ -112,7 +112,7 @@ describe('generateFeed', () => {
       'googleplay:explicit': 'no',
       'googleplay:block': 'yes',
       'googleplay:image': { '@href': 'https://example.com/podcast.jpg' },
-      'googleplay:new-feed-url': 'https://example.com/new-podcast-feed',
+      'googleplay:newFeedUrl': 'https://example.com/new-podcast-feed',
       'googleplay:email': 'contact@example.com',
       'googleplay:owner': 'owner@example.com',
       'googleplay:category': [{ '@text': 'Technology' }, { '@text': 'Education' }],
