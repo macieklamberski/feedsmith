@@ -1,7 +1,7 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
-  isObject,
   parseArrayOf,
   parseBoolean,
   parseCsvOf,
@@ -10,7 +10,6 @@ import {
   parseString,
   parseYesNoBoolean,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { ItunesNs } from '../common/types.js'
 
@@ -18,7 +17,7 @@ const explicitOrYesRegex = /^\p{White_Space}*(explicit|yes)\p{White_Space}*$/iu
 const durationRegex = /^(?:(\d+):)?(\d+):(\d+)$/
 
 export const parseCategory: ParseUtilPartial<ItunesNs.Category> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -31,7 +30,7 @@ export const parseCategory: ParseUtilPartial<ItunesNs.Category> = (value) => {
 }
 
 export const parseOwner: ParseUtilPartial<ItunesNs.Owner> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -50,10 +49,18 @@ export const parseExplicit: ParseUtilPartial<boolean> = (value) => {
     return boolean
   }
 
-  if (typeof value === 'string') {
-    // There are also cases of "clean" and "f", but those are considered false.
-    return explicitOrYesRegex.test(value)
+  if (typeof value !== 'string') {
+    return
   }
+
+  const string = parseString(value)
+
+  if (!string) {
+    return false
+  }
+
+  // There are also cases of "clean" and "f", but those are considered false.
+  return explicitOrYesRegex.test(string)
 }
 
 export const parseDuration: ParseUtilPartial<number> = (value) => {
@@ -63,12 +70,14 @@ export const parseDuration: ParseUtilPartial<number> = (value) => {
     return duration
   }
 
-  if (typeof value !== 'string') {
+  const string = parseString(value)
+
+  if (!string) {
     return
   }
 
   // Handle HH:MM:SS and MM:SS format.
-  const match = value.match(durationRegex)
+  const match = string.match(durationRegex)
 
   if (match) {
     const [, hours, minutes, seconds] = match
@@ -77,13 +86,13 @@ export const parseDuration: ParseUtilPartial<number> = (value) => {
 }
 
 export const parseImage: ParseUtilPartial<string> = (value) => {
-  // Support non-standard format of the image tag where href is not provided in the @href
-  // attribute but rather provided as a node value.
+  // Support non-standard format of the image tag where href is not provided in the @href attribute
+  // but rather provided as a node value.
   if (isNonEmptyStringOrNumber(value)) {
     return parseString(value)
   }
 
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -91,7 +100,7 @@ export const parseImage: ParseUtilPartial<string> = (value) => {
 }
 
 export const retrieveItem: ParseUtilPartial<ItunesNs.Item> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -113,6 +122,10 @@ export const retrieveItem: ParseUtilPartial<ItunesNs.Item> = (value) => {
     block: parseSingularOf(value['itunes:block'], (value) =>
       parseYesNoBoolean(retrieveText(value)),
     ),
+    order: parseSingularOf(value['itunes:order'], (value) => parseNumber(retrieveText(value))),
+    isClosedCaptioned: parseSingularOf(value['itunes:isclosedcaptioned'], (value) =>
+      parseYesNoBoolean(retrieveText(value)),
+    ),
     summary: parseSingularOf(value['itunes:summary'], (value) => parseString(retrieveText(value))),
     subtitle: parseSingularOf(value['itunes:subtitle'], (value) =>
       parseString(retrieveText(value)),
@@ -126,7 +139,7 @@ export const retrieveItem: ParseUtilPartial<ItunesNs.Item> = (value) => {
 }
 
 export const retrieveFeed: ParseUtilPartial<ItunesNs.Feed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

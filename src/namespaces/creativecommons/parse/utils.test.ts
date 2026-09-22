@@ -41,28 +41,37 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
-  it('should parse various Creative Commons license URLs', () => {
-    const licenses = [
+  const licenseCases: Array<[string, { licenses: Array<string> }]> = [
+    [
       'http://creativecommons.org/licenses/by/3.0/',
+      { licenses: ['http://creativecommons.org/licenses/by/3.0/'] },
+    ],
+    [
       'http://creativecommons.org/licenses/by-sa/4.0/',
+      { licenses: ['http://creativecommons.org/licenses/by-sa/4.0/'] },
+    ],
+    [
       'http://creativecommons.org/licenses/by-nc/2.0/',
+      { licenses: ['http://creativecommons.org/licenses/by-nc/2.0/'] },
+    ],
+    [
       'http://creativecommons.org/licenses/by-nc-sa/3.0/',
+      { licenses: ['http://creativecommons.org/licenses/by-nc-sa/3.0/'] },
+    ],
+    [
       'http://creativecommons.org/licenses/by-nc-nd/2.0/',
+      { licenses: ['http://creativecommons.org/licenses/by-nc-nd/2.0/'] },
+    ],
+    [
       'https://creativecommons.org/publicdomain/zero/1.0/',
-      'Attribution-NonCommercial',
-      'CreativeCommons license feed',
-    ]
+      { licenses: ['https://creativecommons.org/publicdomain/zero/1.0/'] },
+    ],
+    ['Attribution-NonCommercial', { licenses: ['Attribution-NonCommercial'] }],
+    ['CreativeCommons license feed', { licenses: ['CreativeCommons license feed'] }],
+  ]
 
-    for (const license of licenses) {
-      const value = {
-        'creativecommons:license': license,
-      }
-      const expected = {
-        licenses: [license],
-      }
-
-      expect(retrieveItemOrFeed(value)).toEqual(expected)
-    }
+  it.each(licenseCases)('should parse license: %s', (license, expected) => {
+    expect(retrieveItemOrFeed({ 'creativecommons:license': license })).toEqual(expected)
   })
 
   it('should handle HTML entities in license text', () => {

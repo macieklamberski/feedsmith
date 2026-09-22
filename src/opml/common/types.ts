@@ -25,15 +25,15 @@ export type GenerateUtil<V> = BaseGenerateUtil<V, GenerateMainOptions>
 
 // #region reference
 export namespace Opml {
-  // NOTE: BaseOutline contains non-recursive fields wrapped in Strict<>.
-  // Outline extends it and adds recursive outlines field separately.
+  // NOTE: BaseOutline contains non-recursive fields wrapped in Strict<>. Outline extends it and
+  // adds recursive outlines field separately.
   export type BaseOutline<
     TDate,
     TExtra extends ReadonlyArray<string> = ReadonlyArray<string>,
     TStrict extends boolean = false,
   > = Strict<
     {
-      text: Requirable<string> // Required in spec.
+      text: Requirable<string> // Required in spec
       type?: string
       isComment?: boolean
       isBreakpoint?: boolean

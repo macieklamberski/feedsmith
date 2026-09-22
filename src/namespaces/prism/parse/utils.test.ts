@@ -1,31 +1,31 @@
 import { describe, expect, it } from 'bun:test'
-import { retrieveFeed, retrieveItem } from './utils.js'
+import { parseOriginPlatform, retrieveFeed, retrieveItem } from './utils.js'
 
 describe('retrieveFeed', () => {
   it('should parse complete feed object with core properties', () => {
     const value = {
-      'prism:publicationname': 'Nature',
-      'prism:issn': '0028-0836',
-      'prism:eissn': '1476-4687',
+      'prism:publicationname': 'Journal of Examples',
+      'prism:issn': '1234-5678',
+      'prism:eissn': '8765-4321',
       'prism:volume': '615',
       'prism:number': '7952',
       'prism:publicationdate': '2023-03-15',
       'prism:aggregationtype': 'journal',
       'prism:publishingfrequency': 'weekly',
-      'prism:url': 'https://www.nature.com',
+      'prism:url': 'https://journal.example.com',
       'prism:teaser': 'A short promotional description',
       'prism:keyword': ['science', 'research'],
     }
     const expected = {
-      publicationName: 'Nature',
-      issn: '0028-0836',
-      eIssn: '1476-4687',
+      publicationName: 'Journal of Examples',
+      issn: '1234-5678',
+      eIssn: '8765-4321',
       volume: '615',
       number: '7952',
       publicationDates: ['2023-03-15'],
       aggregationType: 'journal',
       publishingFrequency: 'weekly',
-      urls: ['https://www.nature.com'],
+      urls: ['https://journal.example.com'],
       teasers: ['A short promotional description'],
       keywords: ['science', 'research'],
     }
@@ -64,6 +64,27 @@ describe('retrieveFeed', () => {
       channels: ['web', 'print'],
       tickers: ['AAPL', 'GOOGL'],
       timePeriod: '2023-Q1',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed fields given as rdf:resource', () => {
+    const value = {
+      'prism:distributor': { '@rdf:resource': 'https://example.com/distributor' },
+      'prism:organization': { '@rdf:resource': 'https://example.com/org' },
+      'prism:person': { '@rdf:resource': 'https://example.com/person' },
+      'prism:event': { '@rdf:resource': 'https://example.com/event' },
+      'prism:industry': { '@rdf:resource': 'https://example.com/industry' },
+      'prism:location': { '@rdf:resource': 'https://example.com/location' },
+    }
+    const expected = {
+      distributor: 'https://example.com/distributor',
+      organizations: ['https://example.com/org'],
+      persons: ['https://example.com/person'],
+      events: ['https://example.com/event'],
+      industries: ['https://example.com/industry'],
+      locations: ['https://example.com/location'],
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -153,6 +174,17 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
+  it('should parse feed with originPlatform in platform attribute', () => {
+    const value = {
+      'prism:originplatform': [{ '@platform': 'web' }, { '@platform': 'print' }],
+    }
+    const expected = {
+      originPlatforms: ['web', 'print'],
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
   it('should parse feed with subject elements', () => {
     const value = {
       'prism:academicfield': ['Physics', 'Chemistry'],
@@ -233,13 +265,13 @@ describe('retrieveFeed', () => {
     const value = {
       'prism:edition': 'International',
       'prism:contenttype': 'article',
-      'prism:alternatetitle': ['Nature Journal', 'Nature Magazine'],
+      'prism:alternatetitle': ['Example Journal', 'Example Magazine'],
       'prism:subtitle': ['The International Weekly Journal of Science'],
     }
     const expected = {
       edition: 'International',
       contentType: 'article',
-      alternateTitles: ['Nature Journal', 'Nature Magazine'],
+      alternateTitles: ['Example Journal', 'Example Magazine'],
       subtitles: ['The International Weekly Journal of Science'],
     }
 
@@ -250,12 +282,12 @@ describe('retrieveFeed', () => {
     const value = {
       'prism:bookedition': ['First Edition', 'Second Edition'],
       'prism:nationalcatalognumber': 'NC12345',
-      'prism:productcode': ['NAT-2023-615', 'NAT-2023-616'],
+      'prism:productcode': ['EXJ-2023-615', 'EXJ-2023-616'],
     }
     const expected = {
       bookEditions: ['First Edition', 'Second Edition'],
       nationalCatalogNumber: 'NC12345',
-      productCodes: ['NAT-2023-615', 'NAT-2023-616'],
+      productCodes: ['EXJ-2023-615', 'EXJ-2023-616'],
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -280,15 +312,15 @@ describe('retrieveFeed', () => {
 
   it('should parse feed with organization and entity fields', () => {
     const value = {
-      'prism:corporateentity': ['Springer Nature', 'Nature Research'],
-      'prism:distributor': 'Nature Publishing Group',
-      'prism:organization': ['Nature Research'],
+      'prism:corporateentity': ['Example Publishing', 'Example Research'],
+      'prism:distributor': 'Example Distribution Group',
+      'prism:organization': ['Example Research'],
       'prism:person': ['Dr. Jane Smith', 'Dr. John Doe'],
     }
     const expected = {
-      corporateEntities: ['Springer Nature', 'Nature Research'],
-      distributor: 'Nature Publishing Group',
-      organizations: ['Nature Research'],
+      corporateEntities: ['Example Publishing', 'Example Research'],
+      distributor: 'Example Distribution Group',
+      organizations: ['Example Research'],
       persons: ['Dr. Jane Smith', 'Dr. John Doe'],
     }
 
@@ -297,15 +329,15 @@ describe('retrieveFeed', () => {
 
   it('should parse feed with blog and link fields', () => {
     const value = {
-      'prism:blogtitle': 'Nature News Blog',
-      'prism:blogurl': 'https://www.nature.com/news/blog',
-      'prism:link': ['https://www.nature.com/nature'],
+      'prism:blogtitle': 'Example News Blog',
+      'prism:blogurl': 'https://journal.example.com/news/blog',
+      'prism:link': ['https://journal.example.com/journal'],
       'prism:rating': ['A+', 'Excellent'],
     }
     const expected = {
-      blogTitle: 'Nature News Blog',
-      blogURL: 'https://www.nature.com/news/blog',
-      links: ['https://www.nature.com/nature'],
+      blogTitle: 'Example News Blog',
+      blogURL: 'https://journal.example.com/news/blog',
+      links: ['https://journal.example.com/journal'],
       ratings: ['A+', 'Excellent'],
     }
 
@@ -314,12 +346,54 @@ describe('retrieveFeed', () => {
 
   it('should handle empty strings by omitting them', () => {
     const value = {
-      'prism:publicationname': 'Nature',
+      'prism:publicationname': 'Journal of Examples',
       'prism:issn': '',
       'prism:volume': '   ',
     }
     const expected = {
-      publicationName: 'Nature',
+      publicationName: 'Journal of Examples',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should use first element when singular field is an array', () => {
+    const value = {
+      'prism:publicationname': ['Journal of Examples', 'Second Journal'],
+      'prism:volume': ['615', '616'],
+    }
+    const expected = {
+      publicationName: 'Journal of Examples',
+      volume: '615',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should handle coercible values', () => {
+    const value = {
+      'prism:volume': 615,
+      'prism:aggregateissuenumber': '500',
+      'prism:bytecount': 1048576,
+    }
+    const expected = {
+      volume: '615',
+      aggregateIssueNumber: 500,
+      byteCount: 1048576,
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should handle mixed valid and invalid properties', () => {
+    const value = {
+      'prism:publicationname': 'Journal of Examples',
+      'prism:bytecount': 'not a number',
+      'prism:issn': '',
+      'other:property': 'value',
+    }
+    const expected = {
+      publicationName: 'Journal of Examples',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -337,13 +411,19 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(null)).toBeUndefined()
     expect(retrieveFeed([])).toBeUndefined()
   })
+
+  it.todo('should parse date fields with custom parseDateFn', () => {
+    // Pass options.parseDateFn that converts date strings into Date instances.
+    // Expected: coverDate, publicationDates, creationDate and the other date fields equal
+    // the values returned by parseDateFn instead of the raw strings.
+  })
 })
 
 describe('retrieveItem', () => {
   it('should parse complete item object with core properties', () => {
     const value = {
-      'prism:doi': '10.1038/s41586-023-05842-x',
-      'prism:url': 'https://www.nature.com/articles/s41586-023-05842-x',
+      'prism:doi': '10.1234/example-2023-0001',
+      'prism:url': 'https://journal.example.com/articles/example-2023-0001',
       'prism:volume': '615',
       'prism:number': '7952',
       'prism:startingpage': '425',
@@ -353,8 +433,8 @@ describe('retrieveItem', () => {
       'prism:genre': ['research-article'],
     }
     const expected = {
-      doi: '10.1038/s41586-023-05842-x',
-      urls: ['https://www.nature.com/articles/s41586-023-05842-x'],
+      doi: '10.1234/example-2023-0001',
+      urls: ['https://journal.example.com/articles/example-2023-0001'],
       volume: '615',
       number: '7952',
       startingPage: '425',
@@ -415,6 +495,37 @@ describe('retrieveItem', () => {
       issn: '1234-5678',
       eIssn: '8765-4321',
       section: 'Research',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse item fields given as rdf:resource', () => {
+    const value = {
+      'prism:organization': { '@rdf:resource': 'https://example.com/org' },
+      'prism:person': { '@rdf:resource': 'https://example.com/person' },
+      'prism:event': { '@rdf:resource': 'https://example.com/event' },
+      'prism:industry': { '@rdf:resource': 'https://example.com/industry' },
+      'prism:location': { '@rdf:resource': 'https://example.com/location' },
+      'prism:hasalternative': { '@rdf:resource': 'https://example.com/alternative' },
+      'prism:hascorrection': { '@rdf:resource': 'https://example.com/correction' },
+      'prism:hastranslation': { '@rdf:resource': 'https://example.com/translation' },
+      'prism:isalternativeof': { '@rdf:resource': 'https://example.com/original' },
+      'prism:iscorrectionof': { '@rdf:resource': 'https://example.com/corrected' },
+      'prism:istranslationof': { '@rdf:resource': 'https://example.com/source' },
+    }
+    const expected = {
+      organizations: ['https://example.com/org'],
+      persons: ['https://example.com/person'],
+      events: ['https://example.com/event'],
+      industries: ['https://example.com/industry'],
+      locations: ['https://example.com/location'],
+      hasAlternatives: ['https://example.com/alternative'],
+      hasCorrections: ['https://example.com/correction'],
+      hasTranslations: ['https://example.com/translation'],
+      isAlternativeOf: ['https://example.com/original'],
+      isCorrectionOf: ['https://example.com/corrected'],
+      isTranslationOf: 'https://example.com/source',
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -507,6 +618,30 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toEqual(expected)
   })
 
+  it('should parse item with issue identifier', () => {
+    const value = {
+      'prism:issueidentifier': '2023-03-15',
+    }
+    const expected = {
+      issueIdentifier: '2023-03-15',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse item with cover date fields', () => {
+    const value = {
+      'prism:coverdate': '2023-03-15',
+      'prism:coverdisplaydate': 'March 15, 2023',
+    }
+    const expected = {
+      coverDate: '2023-03-15',
+      coverDisplayDate: 'March 15, 2023',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
   it('should parse item with people and organization fields', () => {
     const value = {
       'prism:corporateentity': ['Department of Physics'],
@@ -573,6 +708,28 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toEqual(expected)
   })
 
+  it('should parse item with originPlatform fields', () => {
+    const value = {
+      'prism:originplatform': ['print', 'web'],
+    }
+    const expected = {
+      originPlatforms: ['print', 'web'],
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse item with originPlatform in platform attribute', () => {
+    const value = {
+      'prism:originplatform': [{ '@platform': 'print' }, { '@platform': 'web' }],
+    }
+    const expected = {
+      originPlatforms: ['print', 'web'],
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
   it('should parse item with subject classification fields', () => {
     const value = {
       'prism:academicfield': ['Quantum Physics', 'Computer Science'],
@@ -620,6 +777,48 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toEqual(expected)
   })
 
+  it('should use first element when singular field is an array', () => {
+    const value = {
+      'prism:doi': ['10.1234/example-2023-0001', '10.1234/example-2023-0002'],
+      'prism:volume': ['615', '616'],
+    }
+    const expected = {
+      doi: '10.1234/example-2023-0001',
+      volume: '615',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should handle coercible values', () => {
+    const value = {
+      'prism:volume': 615,
+      'prism:pagecount': '15',
+      'prism:wordcount': 5000,
+    }
+    const expected = {
+      volume: '615',
+      pageCount: 15,
+      wordCount: 5000,
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should handle mixed valid and invalid properties', () => {
+    const value = {
+      'prism:doi': '10.1234/example-2023-0001',
+      'prism:wordcount': 'not a number',
+      'prism:volume': '',
+      'other:property': 'value',
+    }
+    const expected = {
+      doi: '10.1234/example-2023-0001',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
   it('should return undefined for empty object', () => {
     const value = {}
 
@@ -631,5 +830,69 @@ describe('retrieveItem', () => {
     expect(retrieveItem(undefined)).toBeUndefined()
     expect(retrieveItem(null)).toBeUndefined()
     expect(retrieveItem([])).toBeUndefined()
+  })
+
+  it.todo('should parse date fields with custom parseDateFn', () => {
+    // Pass options.parseDateFn that converts date strings into Date instances.
+    // Expected: publicationDates, creationDate, modificationDate and the other date fields
+    // equal the values returned by parseDateFn instead of the raw strings.
+  })
+})
+
+describe('parseOriginPlatform', () => {
+  it('should parse platform attribute', () => {
+    const value = { '@platform': 'web' }
+
+    expect(parseOriginPlatform(value)).toBe('web')
+  })
+
+  it('should parse rdf:resource attribute', () => {
+    const value = { '@rdf:resource': 'platform.xml#web' }
+
+    expect(parseOriginPlatform(value)).toBe('platform.xml#web')
+  })
+
+  it('should parse text content', () => {
+    const value = 'web'
+
+    expect(parseOriginPlatform(value)).toBe('web')
+  })
+
+  it('should parse #text wrapper', () => {
+    const value = { '#text': 'web' }
+
+    expect(parseOriginPlatform(value)).toBe('web')
+  })
+
+  it('should prefer platform attribute over text content', () => {
+    const value = {
+      '@platform': 'web',
+      '#text': 'print',
+    }
+
+    expect(parseOriginPlatform(value)).toBe('web')
+  })
+
+  it('should fall back to text content when platform attribute is empty', () => {
+    const value = {
+      '@platform': '',
+      '#text': 'print',
+    }
+
+    expect(parseOriginPlatform(value)).toBe('print')
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(parseOriginPlatform(value)).toBeUndefined()
+  })
+
+  it('should return undefined for empty string', () => {
+    expect(parseOriginPlatform('')).toBeUndefined()
+  })
+
+  it('should return undefined for undefined', () => {
+    expect(parseOriginPlatform(undefined)).toBeUndefined()
   })
 })

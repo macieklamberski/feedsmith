@@ -88,6 +88,7 @@ export namespace PrismNs {
     publicationName?: string
     issn?: string
     eIssn?: string
+    issueIdentifier?: string
     doi?: string
     urls?: Array<string>
     volume?: string
@@ -100,6 +101,8 @@ export namespace PrismNs {
     pageCount?: number
     pageProgressionDirection?: string
     samplePageRange?: string
+    coverDate?: TDate
+    coverDisplayDate?: string
     publicationDates?: Array<TDate>
     publicationDisplayDates?: Array<string>
     creationDate?: TDate
@@ -117,6 +120,7 @@ export namespace PrismNs {
     organizations?: Array<string>
     persons?: Array<string>
     platforms?: Array<string>
+    originPlatforms?: Array<string>
     device?: string
     academicFields?: Array<string>
     events?: Array<string>

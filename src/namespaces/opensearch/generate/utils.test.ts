@@ -5,6 +5,8 @@ describe('generateQuery', () => {
   it('should generate Query with all attributes', () => {
     const value = {
       role: 'request',
+      title: 'Search results for quantum computing',
+      totalResults: 4230000,
       searchTerms: 'quantum computing',
       count: 10,
       startIndex: 21,
@@ -15,6 +17,8 @@ describe('generateQuery', () => {
     }
     const expected = {
       '@role': 'request',
+      '@title': 'Search results for quantum computing',
+      '@totalResults': 4230000,
       '@searchTerms': 'quantum computing',
       '@count': 10,
       '@startIndex': 21,
@@ -142,7 +146,7 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
-  it('should generate feed with 0-based indexing (arXiv style)', () => {
+  it('should generate feed with 0-based indexing', () => {
     const value = {
       totalResults: 1000,
       startIndex: 0,

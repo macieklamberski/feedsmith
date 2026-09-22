@@ -5,6 +5,8 @@ describe('parseQuery', () => {
   it('should parse Query with all attributes', () => {
     const value = {
       '@role': 'request',
+      '@title': 'Search results for quantum computing',
+      '@totalresults': '4230000',
       '@searchterms': 'quantum computing',
       '@count': '10',
       '@startindex': '21',
@@ -15,6 +17,8 @@ describe('parseQuery', () => {
     }
     const expected = {
       role: 'request',
+      title: 'Search results for quantum computing',
+      totalResults: 4230000,
       searchTerms: 'quantum computing',
       count: 10,
       startIndex: 21,
@@ -48,6 +52,36 @@ describe('parseQuery', () => {
       role: 'correction',
       searchTerms: 'spelling corrected',
       count: 5,
+    }
+
+    expect(parseQuery(value)).toEqual(expected)
+  })
+
+  it('should handle coercible numeric values', () => {
+    const value = {
+      '@role': 'request',
+      '@count': 10,
+      '@startindex': 21,
+    }
+    const expected = {
+      role: 'request',
+      count: 10,
+      startIndex: 21,
+    }
+
+    expect(parseQuery(value)).toEqual(expected)
+  })
+
+  it('should handle mixed valid and invalid attributes', () => {
+    const value = {
+      '@role': 'request',
+      '@count': 'not a number',
+      '@searchterms': '',
+      '@language': 'en',
+    }
+    const expected = {
+      role: 'request',
+      language: 'en',
     }
 
     expect(parseQuery(value)).toEqual(expected)
@@ -160,7 +194,7 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
-  it('should handle 0-based indexing (arXiv style)', () => {
+  it('should handle 0-based indexing', () => {
     const value = {
       'opensearch:totalresults': '1000',
       'opensearch:startindex': '0',

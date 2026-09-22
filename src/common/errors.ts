@@ -13,8 +13,8 @@ export class GenerateError extends Error {
 }
 
 export class MalformedError extends Error {
-  constructor(message: string) {
-    super(message)
+  constructor(message: string, options?: ErrorOptions) {
+    super(message, options)
     this.name = 'MalformedError'
   }
 }

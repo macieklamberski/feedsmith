@@ -99,7 +99,7 @@ describe('generateCategory', () => {
   })
 
   it('should handle non-object inputs', () => {
-    // @ts-expect-error: Testing with invalid input type.
+    // @ts-expect-error: This is for testing purposes.
     expect(generateCategory(123)).toBeUndefined()
     expect(generateCategory(undefined)).toBeUndefined()
   })
@@ -164,6 +164,8 @@ describe('generateItem', () => {
       season: 2,
       episodeType: 'full',
       block: false,
+      order: 3,
+      isClosedCaptioned: true,
       summary: 'Episode summary',
       subtitle: 'Episode subtitle',
       keywords: ['podcast', 'technology', 'interview'],
@@ -173,13 +175,15 @@ describe('generateItem', () => {
       'itunes:image': {
         '@href': 'https://example.com/episode-image.jpg',
       },
-      'itunes:explicit': 'yes',
+      'itunes:explicit': true,
       'itunes:author': 'John Doe',
       'itunes:title': 'Episode Title',
       'itunes:episode': 5,
       'itunes:season': 2,
       'itunes:episodeType': 'full',
       'itunes:block': 'no',
+      'itunes:order': 3,
+      'itunes:isClosedCaptioned': 'yes',
       'itunes:summary': 'Episode summary',
       'itunes:subtitle': 'Episode subtitle',
       'itunes:keywords': 'podcast,technology,interview',
@@ -204,7 +208,7 @@ describe('generateItem', () => {
       explicit: false,
     }
     const expected = {
-      'itunes:explicit': 'no',
+      'itunes:explicit': false,
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -221,16 +225,14 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
-  it('should handle different episodeType values', () => {
-    const values = [{ episodeType: 'full' }, { episodeType: 'trailer' }, { episodeType: 'bonus' }]
+  const episodeTypeCases: Array<[string, { 'itunes:episodeType': string }]> = [
+    ['full', { 'itunes:episodeType': 'full' }],
+    ['trailer', { 'itunes:episodeType': 'trailer' }],
+    ['bonus', { 'itunes:episodeType': 'bonus' }],
+  ]
 
-    for (const value of values) {
-      const expected = {
-        'itunes:episodeType': value.episodeType,
-      }
-
-      expect(generateItem(value)).toEqual(expected)
-    }
+  it.each(episodeTypeCases)('should handle episodeType value: %s', (episodeType, expected) => {
+    expect(generateItem({ episodeType })).toEqual(expected)
   })
 
   it('should handle empty keywords array', () => {
@@ -353,7 +355,7 @@ describe('generateFeed', () => {
           'itunes:category': [{ '@text': 'Tech News' }],
         },
       ],
-      'itunes:explicit': 'no',
+      'itunes:explicit': false,
       'itunes:author': 'John Doe',
       'itunes:title': 'My Podcast',
       'itunes:type': 'episodic',
@@ -389,7 +391,7 @@ describe('generateFeed', () => {
       explicit: true,
     }
     const expected = {
-      'itunes:explicit': 'yes',
+      'itunes:explicit': true,
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -417,16 +419,13 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
-  it('should handle type values', () => {
-    const values = [{ type: 'episodic' }, { type: 'serial' }]
+  const typeCases: Array<[string, { 'itunes:type': string }]> = [
+    ['episodic', { 'itunes:type': 'episodic' }],
+    ['serial', { 'itunes:type': 'serial' }],
+  ]
 
-    for (const value of values) {
-      const expected = {
-        'itunes:type': value.type,
-      }
-
-      expect(generateFeed(value)).toEqual(expected)
-    }
+  it.each(typeCases)('should handle type value: %s', (type, expected) => {
+    expect(generateFeed({ type })).toEqual(expected)
   })
 
   it('should handle empty categories array', () => {

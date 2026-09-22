@@ -1,3 +1,4 @@
+export { detect as detectFeed } from './common/detect.js'
 export { DetectError, GenerateError, MalformedError, ParseError } from './common/errors.js'
 export type { AnyFeed } from './common/parse.js'
 export { parse as parseFeed } from './common/parse.js'
@@ -28,6 +29,7 @@ export type { ContentNs } from './namespaces/content/common/types.js'
 export type { CreativeCommonsNs } from './namespaces/creativecommons/common/types.js'
 export type { DcNs } from './namespaces/dc/common/types.js'
 export type { DcTermsNs } from './namespaces/dcterms/common/types.js'
+export type { FeedBurnerNs } from './namespaces/feedburner/common/types.js'
 export type { FeedPressNs } from './namespaces/feedpress/common/types.js'
 export type { GeoNs } from './namespaces/geo/common/types.js'
 export type { GeoRssNs } from './namespaces/georss/common/types.js'
@@ -54,7 +56,7 @@ export type { Opml } from './opml/common/types.js'
 export { generate as generateOpml } from './opml/generate/index.js'
 export { parse as parseOpml } from './opml/parse/index.js'
 
-// Deprecated aliases — declared here so JSDoc survives tsdown's .d.ts bundling.
+// Deprecated aliases: declared here so JSDoc survives tsdown's .d.ts bundling.
 // Remove this block in 4.x.
 
 import type { AtomFeed } from './feeds/atom/common/types.js'

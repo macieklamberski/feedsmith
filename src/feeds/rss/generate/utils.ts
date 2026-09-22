@@ -1,3 +1,4 @@
+import { isPlainObject, trimObject } from 'trousse'
 import { namespaceUris } from '../../../common/config.js'
 import type { DateLike } from '../../../common/types.js'
 import {
@@ -8,15 +9,14 @@ import {
   generatePlainString,
   generateRfc822Date,
   generateTextOrCdataString,
-  isObject,
   trimArray,
-  trimObject,
 } from '../../../common/utils.js'
 import {
   generateFeed as generateAcastFeed,
   generateItem as generateAcastItem,
 } from '../../../namespaces/acast/generate/utils.js'
 import { generateFeed as generateAdminFeed } from '../../../namespaces/admin/generate/utils.js'
+import { generateEntry as generateArxivEntry } from '../../../namespaces/arxiv/generate/utils.js'
 import {
   generateEntry as generateAtomEntry,
   generateFeed as generateAtomFeed,
@@ -27,6 +27,10 @@ import { generateItem as generateContentItem } from '../../../namespaces/content
 import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDcTermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
+import {
+  generateFeed as generateFeedBurnerFeed,
+  generateItem as generateFeedBurnerItem,
+} from '../../../namespaces/feedburner/generate/utils.js'
 import { generateFeed as generateFeedPressFeed } from '../../../namespaces/feedpress/generate/utils.js'
 import { generateItemOrFeed as generateGeoItemOrFeed } from '../../../namespaces/geo/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
@@ -74,7 +78,7 @@ import { generateItemOrFeed as generateXmlItemOrFeed } from '../../../namespaces
 import type { GenerateUtil, RssFeed } from '../common/types.js'
 
 export const generatePerson: GenerateUtil<RssFeed.Person> = (person) => {
-  if (!isObject(person)) {
+  if (!isPlainObject(person)) {
     return
   }
 
@@ -96,7 +100,7 @@ export const generatePerson: GenerateUtil<RssFeed.Person> = (person) => {
 }
 
 export const generateCategory: GenerateUtil<RssFeed.Category> = (category) => {
-  if (!isObject(category)) {
+  if (!isPlainObject(category)) {
     return
   }
 
@@ -109,7 +113,7 @@ export const generateCategory: GenerateUtil<RssFeed.Category> = (category) => {
 }
 
 export const generateCloud: GenerateUtil<RssFeed.Cloud> = (cloud) => {
-  if (!isObject(cloud)) {
+  if (!isPlainObject(cloud)) {
     return
   }
 
@@ -125,7 +129,7 @@ export const generateCloud: GenerateUtil<RssFeed.Cloud> = (cloud) => {
 }
 
 export const generateImage: GenerateUtil<RssFeed.Image> = (image) => {
-  if (!isObject(image)) {
+  if (!isPlainObject(image)) {
     return
   }
 
@@ -142,7 +146,7 @@ export const generateImage: GenerateUtil<RssFeed.Image> = (image) => {
 }
 
 export const generateTextInput: GenerateUtil<RssFeed.TextInput> = (textInput) => {
-  if (!isObject(textInput)) {
+  if (!isPlainObject(textInput)) {
     return
   }
 
@@ -157,7 +161,7 @@ export const generateTextInput: GenerateUtil<RssFeed.TextInput> = (textInput) =>
 }
 
 export const generateEnclosure: GenerateUtil<RssFeed.Enclosure> = (enclosure) => {
-  if (!isObject(enclosure)) {
+  if (!isPlainObject(enclosure)) {
     return
   }
 
@@ -196,7 +200,7 @@ export const generateGuid: GenerateUtil<RssFeed.Guid> = (guid) => {
 }
 
 export const generateSource: GenerateUtil<RssFeed.Source> = (source) => {
-  if (!isObject(source)) {
+  if (!isPlainObject(source)) {
     return
   }
 
@@ -209,7 +213,7 @@ export const generateSource: GenerateUtil<RssFeed.Source> = (source) => {
 }
 
 export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
-  if (!isObject(item)) {
+  if (!isPlainObject(item)) {
     return
   }
 
@@ -223,30 +227,33 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
     enclosure: trimArray(item.enclosures, generateEnclosure),
     guid: generateGuid(item.guid),
     pubDate: generateRfc822Date(item.pubDate),
+    expirationDate: generateRfc822Date(item.expirationDate),
     source: generateSource(item.source),
     ...generateAtomEntry(item.atom),
-    ...generateCc(item.cc),
     ...generateDcItemOrFeed(item.dc),
+    ...generateDcTermsItemOrFeed(item.dcterms),
     ...generateContentItem(item.content),
-    ...generateCreativeCommonsItemOrFeed(item.creativeCommons),
     ...generateSlashItem(item.slash),
     ...generateItunesItem(item.itunes),
     ...generatePodcastItem(item.podcast),
     ...generatePscItem(item.psc),
-    ...generateGooglePlayItem(item.googleplay),
     ...generateMediaItemOrFeed(item.media),
-    ...generateGeoRssItemOrFeed(item.georss),
-    ...generateGeoItemOrFeed(item.geo),
-    ...generateThrItem(item.thr),
-    ...generateDcTermsItemOrFeed(item.dcterms),
-    ...generatePrismItem(item.prism),
-    ...generateWfwItem(item.wfw),
-    ...generateSourceItem(item.sourceNs),
-    ...generateRawVoiceItem(item.rawvoice),
+    ...generateGooglePlayItem(item.googleplay),
     ...generateSpotifyItem(item.spotify),
+    ...generateAcastItem(item.acast),
+    ...generateRawVoiceItem(item.rawvoice),
+    ...generateFeedBurnerItem(item.feedburner),
+    ...generateArxivEntry(item.arxiv),
+    ...generatePrismItem(item.prism),
+    ...generateCc(item.cc),
+    ...generateCreativeCommonsItemOrFeed(item.creativeCommons),
+    ...generateThrItem(item.thr),
+    ...generateWfwItem(item.wfw),
     ...generatePingbackItem(item.pingback),
     ...generateTrackbackItem(item.trackback),
-    ...generateAcastItem(item.acast),
+    ...generateSourceItem(item.sourceNs),
+    ...generateGeoItemOrFeed(item.geo),
+    ...generateGeoRssItemOrFeed(item.georss),
     ...generateXmlItemOrFeed(item.xml),
   }
 
@@ -254,7 +261,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
 }
 
 export const generateFeed: GenerateUtil<RssFeed.Feed<DateLike>> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 
@@ -279,27 +286,28 @@ export const generateFeed: GenerateUtil<RssFeed.Feed<DateLike>> = (feed) => {
     skipHours: generateSkipHours(feed.skipHours),
     skipDays: generateSkipDays(feed.skipDays),
     ...generateAtomFeed(feed.atom),
-    ...generateCc(feed.cc),
     ...generateDcItemOrFeed(feed.dc),
+    ...generateDcTermsItemOrFeed(feed.dcterms),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
     ...generatePodcastFeed(feed.podcast),
-    ...generateGooglePlayFeed(feed.googleplay),
     ...generateMediaItemOrFeed(feed.media),
-    ...generateGeoRssItemOrFeed(feed.georss),
-    ...generateGeoItemOrFeed(feed.geo),
-    ...generateDcTermsItemOrFeed(feed.dcterms),
-    ...generatePrismFeed(feed.prism),
-    ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
+    ...generateGooglePlayFeed(feed.googleplay),
+    ...generateSpotifyFeed(feed.spotify),
+    ...generateAcastFeed(feed.acast),
+    ...generateRawVoiceFeed(feed.rawvoice),
+    ...generateFeedBurnerFeed(feed.feedburner),
     ...generateFeedPressFeed(feed.feedpress),
     ...generateOpenSearchFeed(feed.opensearch),
+    ...generatePrismFeed(feed.prism),
+    ...generateCc(feed.cc),
+    ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
     ...generateAdminFeed(feed.admin),
+    ...generatePingbackFeed(feed.pingback),
     ...generateSourceFeed(feed.sourceNs),
     ...generateBlogChannelFeed(feed.blogChannel),
-    ...generateRawVoiceFeed(feed.rawvoice),
-    ...generateSpotifyFeed(feed.spotify),
-    ...generatePingbackFeed(feed.pingback),
-    ...generateAcastFeed(feed.acast),
+    ...generateGeoItemOrFeed(feed.geo),
+    ...generateGeoRssItemOrFeed(feed.georss),
     item: trimArray(feed.items, generateItem),
   }
 

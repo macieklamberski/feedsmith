@@ -2,6 +2,8 @@ import { describe, expect, it } from 'bun:test'
 import {
   parseAccount,
   parseArchive,
+  parseComments,
+  parseInReplyTo,
   parseLikes,
   parseSubscriptionList,
   retrieveFeed,
@@ -81,6 +83,13 @@ describe('parseLikes', () => {
 
     expect(parseLikes(value)).toBeUndefined()
   })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(parseLikes('not an object')).toBeUndefined()
+    expect(parseLikes(undefined)).toBeUndefined()
+    expect(parseLikes(null)).toBeUndefined()
+    expect(parseLikes([])).toBeUndefined()
+  })
 })
 
 describe('parseArchive', () => {
@@ -139,6 +148,19 @@ describe('parseArchive', () => {
 
     expect(parseArchive(value)).toEqual(expected)
   })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(parseArchive(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(parseArchive('not an object')).toBeUndefined()
+    expect(parseArchive(undefined)).toBeUndefined()
+    expect(parseArchive(null)).toBeUndefined()
+    expect(parseArchive([])).toBeUndefined()
+  })
 })
 
 describe('parseSubscriptionList', () => {
@@ -184,6 +206,122 @@ describe('parseSubscriptionList', () => {
   })
 })
 
+describe('parseInReplyTo', () => {
+  it('should parse a bare permalink string value', () => {
+    const value = 'https://example.com/2026/05/16/hello-world.html'
+    const expected = {
+      value: 'https://example.com/2026/05/16/hello-world.html',
+    }
+
+    expect(parseInReplyTo(value)).toEqual(expected)
+  })
+
+  it('should parse value with isPermaLink set to false', () => {
+    const value = {
+      '@ispermalink': 'false',
+      '#text': 'did:plc:iwl32vekohccji6khfdt3clw',
+    }
+    const expected = {
+      value: 'did:plc:iwl32vekohccji6khfdt3clw',
+      isPermaLink: false,
+    }
+
+    expect(parseInReplyTo(value)).toEqual(expected)
+  })
+
+  it('should parse value with isPermaLink set to true', () => {
+    const value = {
+      '@ispermalink': 'true',
+      '#text': 'https://example.com/posts/123',
+    }
+    const expected = {
+      value: 'https://example.com/posts/123',
+      isPermaLink: true,
+    }
+
+    expect(parseInReplyTo(value)).toEqual(expected)
+  })
+
+  it('should handle CDATA value', () => {
+    const value = {
+      '#text': '<![CDATA[https://example.com/posts/123]]>',
+    }
+    const expected = {
+      value: 'https://example.com/posts/123',
+    }
+
+    expect(parseInReplyTo(value)).toEqual(expected)
+  })
+
+  it('should return undefined when value is empty', () => {
+    expect(parseInReplyTo('')).toBeUndefined()
+    expect(parseInReplyTo('   ')).toBeUndefined()
+    expect(parseInReplyTo(undefined)).toBeUndefined()
+  })
+})
+
+describe('parseComments', () => {
+  it('should parse comments with count and feedUrl', () => {
+    const value = {
+      '@count': '2',
+      '@feedurl': 'https://example.com/comments/204.xml',
+    }
+    const expected = {
+      count: 2,
+      feedUrl: 'https://example.com/comments/204.xml',
+    }
+
+    expect(parseComments(value)).toEqual(expected)
+  })
+
+  it('should parse comments with only count', () => {
+    const value = {
+      '@count': '2',
+    }
+    const expected = {
+      count: 2,
+    }
+
+    expect(parseComments(value)).toEqual(expected)
+  })
+
+  it('should parse comments with only feedUrl', () => {
+    const value = {
+      '@feedurl': 'https://example.com/comments/204.xml',
+    }
+    const expected = {
+      feedUrl: 'https://example.com/comments/204.xml',
+    }
+
+    expect(parseComments(value)).toEqual(expected)
+  })
+
+  it('should skip count that is not a number', () => {
+    const value = {
+      '@count': 'many',
+      '@feedurl': 'https://example.com/comments/204.xml',
+    }
+    const expected = {
+      feedUrl: 'https://example.com/comments/204.xml',
+    }
+
+    expect(parseComments(value)).toEqual(expected)
+  })
+
+  it('should return undefined when no attributes present', () => {
+    const value = {}
+
+    expect(parseComments(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(parseComments('not an object')).toBeUndefined()
+    expect(parseComments(undefined)).toBeUndefined()
+    expect(parseComments(null)).toBeUndefined()
+    expect(parseComments([])).toBeUndefined()
+  })
+})
+
 describe('retrieveFeed', () => {
   it('should parse complete feed with all properties', () => {
     const value = {
@@ -201,6 +339,7 @@ describe('retrieveFeed', () => {
       'source:cloud': 'https://cloudserver.example.com/notify',
       'source:blogroll': 'https://blog.example.com/blogroll.opml',
       'source:self': 'http://example.com/feed.xml',
+      'source:localtime': '2023-12-25 10:30:00',
     }
     const expected = {
       accounts: [{ service: 'twitter', value: 'johndoe' }],
@@ -214,6 +353,7 @@ describe('retrieveFeed', () => {
       cloud: 'https://cloudserver.example.com/notify',
       blogroll: 'https://blog.example.com/blogroll.opml',
       self: 'http://example.com/feed.xml',
+      localTime: '2023-12-25 10:30:00',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)
@@ -248,14 +388,28 @@ describe('retrieveItem', () => {
     const value = {
       'source:markdown': '# Title\n\nThis is **markdown** content.',
       'source:outline': '<outline text="Item 1"><outline text="Subitem 1"/></outline>',
-      'source:localtime': '2023-12-25 10:30:00',
       'source:linkfull': 'http://example.com/very/long/url/that/was/shortened',
+      'source:inreplyto': {
+        '@ispermalink': 'false',
+        '#text': 'did:plc:iwl32vekohccji6khfdt3clw',
+      },
+      'source:comments': {
+        '@count': '2',
+        '@feedurl': 'https://example.com/comments/204.xml',
+      },
     }
     const expected = {
       markdown: '# Title\n\nThis is **markdown** content.',
       outlines: ['<outline text="Item 1"><outline text="Subitem 1"/></outline>'],
-      localTime: '2023-12-25 10:30:00',
       linkFull: 'http://example.com/very/long/url/that/was/shortened',
+      inReplyTo: {
+        value: 'did:plc:iwl32vekohccji6khfdt3clw',
+        isPermaLink: false,
+      },
+      comments: {
+        count: 2,
+        feedUrl: 'https://example.com/comments/204.xml',
+      },
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -267,6 +421,17 @@ describe('retrieveItem', () => {
     }
     const expected = {
       markdown: '**Bold** text in markdown',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse item with bare-string inReplyTo permalink', () => {
+    const value = {
+      'source:inreplyto': 'https://example.com/2026/05/16/hello-world.html',
+    }
+    const expected = {
+      inReplyTo: { value: 'https://example.com/2026/05/16/hello-world.html' },
     }
 
     expect(retrieveItem(value)).toEqual(expected)

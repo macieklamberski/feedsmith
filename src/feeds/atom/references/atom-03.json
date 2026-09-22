@@ -52,7 +52,7 @@
         }
       ],
       "content": {
-        "value": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Watch out for <span style=\"background-image: url(javascript:window.location='http://example.org/')\"> nasty tricks</span></div>",
+        "value": "Watch out for <span style=\"background-image: url(javascript:window.location='http://example.org/')\"> nasty tricks</span>",
         "type": "application/xhtml+xml",
         "xml": {
           "base": "http://example.org/entry/3",
@@ -123,7 +123,7 @@
         { "name": "Jane Smith", "uri": "http://example.org/jane/", "email": "jane@example.org" }
       ],
       "content": {
-        "value": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Watch out for <span style=\"background-image: url(javascript:window.location='http://example.org/')\"> nasty tricks</span></div>",
+        "value": "Watch out for <span style=\"background-image: url(javascript:window.location='http://example.org/')\"> nasty tricks</span>",
         "type": "application/xhtml+xml",
         "xml": {
           "base": "http://example.org/entry/3",

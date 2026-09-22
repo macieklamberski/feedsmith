@@ -1,7 +1,6 @@
+import { isPlainObject, isPresent, trimObject } from 'trousse'
 import type { DateAny } from '../../common/types.js'
 import {
-  isObject,
-  isPresent,
   parseArrayOf,
   parseBoolean,
   parseCsvOf,
@@ -10,12 +9,11 @@ import {
   parseSingularOf,
   parseString,
   retrieveText,
-  trimObject,
 } from '../../common/utils.js'
 import type { Opml, ParseUtilPartial } from '../common/types.js'
 
 export const parseOutline: ParseUtilPartial<Opml.Outline<DateAny>> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -52,7 +50,7 @@ export const parseOutline: ParseUtilPartial<Opml.Outline<DateAny>> = (value, opt
 }
 
 export const parseHead: ParseUtilPartial<Opml.Head<DateAny>> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -84,7 +82,7 @@ export const parseHead: ParseUtilPartial<Opml.Head<DateAny>> = (value, options) 
 }
 
 export const parseBody: ParseUtilPartial<Opml.Body<DateAny>> = (value, options) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -100,7 +98,7 @@ export const parseBody: ParseUtilPartial<Opml.Body<DateAny>> = (value, options) 
 }
 
 export const parseDocument: ParseUtilPartial<Opml.Document<DateAny>> = (value, options) => {
-  if (!isObject(value?.opml)) {
+  if (!isPlainObject(value?.opml)) {
     return
   }
 

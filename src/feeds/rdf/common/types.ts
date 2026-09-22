@@ -7,14 +7,21 @@ import type {
 } from '../../../common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
+import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { ContentNs } from '../../../namespaces/content/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
+import type { FeedBurnerNs } from '../../../namespaces/feedburner/common/types.js'
+import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
+import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
+import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
+import type { PrismNs } from '../../../namespaces/prism/common/types.js'
 import type { RdfNs } from '../../../namespaces/rdf/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
 import type { SyNs } from '../../../namespaces/sy/common/types.js'
+import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 
@@ -24,20 +31,21 @@ export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateA
 export namespace RdfFeed {
   export type Image<TStrict extends boolean = false> = Strict<
     {
-      title: Requirable<string> // Required in spec.
-      link: Requirable<string> // Required in spec.
-      url: Requirable<string> // Required in spec.
+      title: Requirable<string> // Required in spec
+      link: Requirable<string> // Required in spec
+      url: Requirable<string> // Required in spec
       rdf?: RdfNs.About
+      cc?: CcNs.ItemOrFeed
     },
     TStrict
   >
 
   export type TextInput<TStrict extends boolean = false> = Strict<
     {
-      title: Requirable<string> // Required in spec.
-      description: Requirable<string> // Required in spec.
-      name: Requirable<string> // Required in spec.
-      link: Requirable<string> // Required in spec.
+      title: Requirable<string> // Required in spec
+      description: Requirable<string> // Required in spec
+      name: Requirable<string> // Required in spec
+      link: Requirable<string> // Required in spec
       rdf?: RdfNs.About
     },
     TStrict
@@ -45,18 +53,24 @@ export namespace RdfFeed {
 
   export type Item<TDate, TStrict extends boolean = false> = Strict<
     {
-      title: Requirable<string> // Required in spec.
-      link: Requirable<string> // Required in spec.
+      title: Requirable<string> // Required in spec
+      link: Requirable<string> // Required in spec
       description?: string
       rdf?: RdfNs.About
       atom?: AtomNs.Entry<TDate>
       dc?: DcNs.ItemOrFeed<TDate>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
       content?: ContentNs.Item
       slash?: SlashNs.Item
       media?: MediaNs.ItemOrFeed<TStrict>
-      georss?: GeoRssNs.ItemOrFeed<TStrict>
-      dcterms?: DcTermsNs.ItemOrFeed<TDate>
+      feedburner?: FeedBurnerNs.Item
+      prism?: PrismNs.Item<TDate>
+      cc?: CcNs.ItemOrFeed
       wfw?: WfwNs.Item
+      pingback?: PingbackNs.Item
+      trackback?: TrackbackNs.Item
+      geo?: GeoNs.ItemOrFeed
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
     TStrict
@@ -64,20 +78,25 @@ export namespace RdfFeed {
 
   export type Feed<TDate, TStrict extends boolean = false> = Strict<
     {
-      title: Requirable<string> // Required in spec.
-      link: Requirable<string> // Required in spec.
-      description: Requirable<string> // Required in spec.
+      title: Requirable<string> // Required in spec
+      link: Requirable<string> // Required in spec
+      description: Requirable<string> // Required in spec
       image?: Image<TStrict>
       items?: Array<Item<TDate, TStrict>>
       textInput?: TextInput<TStrict>
       rdf?: RdfNs.About
       atom?: AtomNs.Feed<TDate>
       dc?: DcNs.ItemOrFeed<TDate>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
       sy?: SyNs.Feed<TDate>
       media?: MediaNs.ItemOrFeed<TStrict>
-      georss?: GeoRssNs.ItemOrFeed<TStrict>
-      dcterms?: DcTermsNs.ItemOrFeed<TDate>
+      feedburner?: FeedBurnerNs.Feed<TStrict>
+      opensearch?: OpenSearchNs.Feed<TStrict>
+      prism?: PrismNs.Feed<TDate>
+      cc?: CcNs.ItemOrFeed
       admin?: AdminNs.Feed
+      geo?: GeoNs.ItemOrFeed
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
     TStrict

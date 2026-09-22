@@ -419,4 +419,10 @@ describe('retrieveItemOrFeed', () => {
 
     expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
+
+  it.todo('should parse date fields with custom parseDateFn', () => {
+    // Pass options.parseDateFn that maps each date string to a Date instance.
+    // Expected: dates, created and the other date fields contain the values returned by the
+    // custom parser instead of the raw strings.
+  })
 })

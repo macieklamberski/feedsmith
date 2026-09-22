@@ -2,7 +2,9 @@ import { describe, expect, it } from 'bun:test'
 import {
   generateAccount,
   generateArchive,
+  generateComments,
   generateFeed,
+  generateInReplyTo,
   generateItem,
   generateLikes,
   generateSubscriptionList,
@@ -31,11 +33,21 @@ describe('generateAccount', () => {
     expect(generateAccount(value)).toBeUndefined()
   })
 
+  it('should generate account with only value', () => {
+    const value = {
+      value: 'johndoe',
+    }
+    const expected = {
+      '#text': 'johndoe',
+    }
+
+    expect(generateAccount(value)).toEqual(expected)
+  })
+
   it('should generate account with only service', () => {
     const value = {
       service: 'twitter',
     }
-
     const expected = {
       '@service': 'twitter',
     }
@@ -53,17 +65,6 @@ describe('generateAccount', () => {
 })
 
 describe('generateLikes', () => {
-  it('should generate likes with only server', () => {
-    const value = {
-      server: 'http://likes.example.com/',
-    }
-    const expected = {
-      '@server': 'http://likes.example.com/',
-    }
-
-    expect(generateLikes(value)).toEqual(expected)
-  })
-
   it('should generate likes with only server', () => {
     const value = {
       server: 'http://likes.example.com/',
@@ -113,20 +114,34 @@ describe('generateArchive', () => {
     expect(generateArchive(value)).toEqual(expected)
   })
 
-  it('should return undefined when url is missing', () => {
+  it('should generate archive without url', () => {
     const value = {
       startDay: '2023-01-01',
       endDay: '2023-12-31',
     }
+    const expected = {
+      'source:startDay': '2023-01-01',
+      'source:endDay': '2023-12-31',
+    }
 
-    expect(generateArchive(value)).toBeUndefined()
+    expect(generateArchive(value)).toEqual(expected)
   })
 
-  it('should return undefined when startDay is missing', () => {
+  it('should generate archive without startDay', () => {
     const value = {
       url: 'http://example.com/archive',
       endDay: '2023-12-31',
     }
+    const expected = {
+      'source:url': 'http://example.com/archive',
+      'source:endDay': '2023-12-31',
+    }
+
+    expect(generateArchive(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
 
     expect(generateArchive(value)).toBeUndefined()
   })
@@ -157,12 +172,149 @@ describe('generateSubscriptionList', () => {
     expect(generateSubscriptionList(value)).toEqual(expected)
   })
 
-  it('should return undefined when url is missing', () => {
+  it('should generate subscription list without url', () => {
     const value = {
       value: 'follows',
     }
+    const expected = {
+      '#text': 'follows',
+    }
+
+    expect(generateSubscriptionList(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
 
     expect(generateSubscriptionList(value)).toBeUndefined()
+  })
+})
+
+describe('generateInReplyTo', () => {
+  it('should generate a bare permalink value', () => {
+    const value = {
+      value: 'https://example.com/2026/05/16/hello-world.html',
+    }
+    const expected = {
+      '#text': 'https://example.com/2026/05/16/hello-world.html',
+    }
+
+    expect(generateInReplyTo(value)).toEqual(expected)
+  })
+
+  it('should generate value with isPermaLink set to false', () => {
+    const value = {
+      value: 'did:plc:iwl32vekohccji6khfdt3clw',
+      isPermaLink: false,
+    }
+    const expected = {
+      '#text': 'did:plc:iwl32vekohccji6khfdt3clw',
+      '@isPermaLink': false,
+    }
+
+    expect(generateInReplyTo(value)).toEqual(expected)
+  })
+
+  it('should generate value with isPermaLink set to true', () => {
+    const value = {
+      value: 'https://example.com/posts/123',
+      isPermaLink: true,
+    }
+    const expected = {
+      '#text': 'https://example.com/posts/123',
+      '@isPermaLink': true,
+    }
+
+    expect(generateInReplyTo(value)).toEqual(expected)
+  })
+
+  it('should generate isPermaLink without value', () => {
+    const value = {
+      isPermaLink: false,
+    }
+    const expected = {
+      '@isPermaLink': false,
+    }
+
+    expect(generateInReplyTo(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(generateInReplyTo(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(generateInReplyTo(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateInReplyTo(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateInReplyTo('not an object')).toBeUndefined()
+  })
+})
+
+describe('generateComments', () => {
+  it('should generate comments with count and feedUrl', () => {
+    const value = {
+      count: 2,
+      feedUrl: 'https://example.com/comments/204.xml',
+    }
+    const expected = {
+      '@count': 2,
+      '@feedUrl': 'https://example.com/comments/204.xml',
+    }
+
+    expect(generateComments(value)).toEqual(expected)
+  })
+
+  it('should generate comments with count of zero', () => {
+    const value = {
+      count: 0,
+      feedUrl: 'https://example.com/comments/204.xml',
+    }
+    const expected = {
+      '@count': 0,
+      '@feedUrl': 'https://example.com/comments/204.xml',
+    }
+
+    expect(generateComments(value)).toEqual(expected)
+  })
+
+  it('should generate comments with only feedUrl', () => {
+    const value = {
+      feedUrl: 'https://example.com/comments/204.xml',
+    }
+    const expected = {
+      '@feedUrl': 'https://example.com/comments/204.xml',
+    }
+
+    expect(generateComments(value)).toEqual(expected)
+  })
+
+  it('should generate comments with only count', () => {
+    const value = {
+      count: 2,
+    }
+    const expected = {
+      '@count': 2,
+    }
+
+    expect(generateComments(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(generateComments(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(generateComments(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateComments(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateComments('not an object')).toBeUndefined()
   })
 })
 
@@ -180,6 +332,7 @@ describe('generateFeed', () => {
       cloud: 'https://cloudserver.example.com/notify',
       blogroll: 'https://blog.example.com/blogroll.opml',
       self: 'http://example.com/feed.xml',
+      localTime: '2023-12-25 10:30:00',
     }
     const expected = {
       'source:account': [{ '@service': 'twitter', '#text': 'davewiner' }],
@@ -195,6 +348,7 @@ describe('generateFeed', () => {
       'source:cloud': 'https://cloudserver.example.com/notify',
       'source:blogroll': 'https://blog.example.com/blogroll.opml',
       'source:self': 'http://example.com/feed.xml',
+      'source:localTime': '2023-12-25 10:30:00',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -246,16 +400,30 @@ describe('generateItem', () => {
     const value = {
       markdown: '# Title\n\nThis is **markdown** content.',
       outlines: ['<outline text="Item 1"><outline text="Subitem 1"/></outline>'],
-      localTime: '2023-12-25 10:30:00',
       linkFull: 'http://example.com/very/long/url/that/was/shortened',
+      inReplyTo: {
+        value: 'did:plc:iwl32vekohccji6khfdt3clw',
+        isPermaLink: false,
+      },
+      comments: {
+        count: 2,
+        feedUrl: 'https://example.com/comments/204.xml',
+      },
     }
     const expected = {
       'source:markdown': '# Title\n\nThis is **markdown** content.',
       'source:outline': [
         { '#cdata': '<outline text="Item 1"><outline text="Subitem 1"/></outline>' },
       ],
-      'source:localTime': '2023-12-25 10:30:00',
       'source:linkFull': 'http://example.com/very/long/url/that/was/shortened',
+      'source:inReplyTo': {
+        '#text': 'did:plc:iwl32vekohccji6khfdt3clw',
+        '@isPermaLink': false,
+      },
+      'source:comments': {
+        '@count': 2,
+        '@feedUrl': 'https://example.com/comments/204.xml',
+      },
     }
 
     expect(generateItem(value)).toEqual(expected)

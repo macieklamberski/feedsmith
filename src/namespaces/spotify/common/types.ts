@@ -8,14 +8,14 @@ export namespace SpotifyNs {
 
   export type Partner<TStrict extends boolean = false> = Strict<
     {
-      id: Requirable<string> // Required in spec.
+      id: Requirable<string> // Required in spec
     },
     TStrict
   >
 
   export type Sandbox<TStrict extends boolean = false> = Strict<
     {
-      enabled: Requirable<boolean> // Required in spec.
+      enabled: Requirable<boolean> // Required in spec
     },
     TStrict
   >
@@ -27,7 +27,7 @@ export namespace SpotifyNs {
 
   export type Entitlement<TStrict extends boolean = false> = Strict<
     {
-      name: Requirable<string> // Required in spec.
+      name: Requirable<string> // Required in spec
     },
     TStrict
   >

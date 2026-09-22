@@ -1,9 +1,10 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import { generatePlainString, isObject, trimObject } from '../../../common/utils.js'
+import { generatePlainString } from '../../../common/utils.js'
 import type { XmlNs } from '../common/types.js'
 
 export const generateItemOrFeed: GenerateUtil<XmlNs.ItemOrFeed> = (itemOrFeed) => {
-  if (!isObject(itemOrFeed)) {
+  if (!isPlainObject(itemOrFeed)) {
     return
   }
 

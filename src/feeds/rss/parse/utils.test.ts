@@ -182,15 +182,15 @@ describe('parsePerson', () => {
     })
 
     it('should parse URL containing @ (Mastodon)', () => {
-      const value = 'https://mastodon.social/@user'
-      const expected = { link: 'https://mastodon.social/@user' }
+      const value = 'https://example.com/@user'
+      const expected = { link: 'https://example.com/@user' }
 
       expect(parsePerson(value)).toEqual(expected)
     })
 
     it('should parse URL containing @ (Medium)', () => {
-      const value = 'https://medium.com/@author'
-      const expected = { link: 'https://medium.com/@author' }
+      const value = 'https://example.com/@author'
+      const expected = { link: 'https://example.com/@author' }
 
       expect(parsePerson(value)).toEqual(expected)
     })
@@ -345,10 +345,10 @@ describe('parsePerson', () => {
       })
 
       it('should parse URL containing @ in brackets', () => {
-        const value = 'John Doe (https://mastodon.social/@johndoe)'
+        const value = 'John Doe (https://example.com/@johndoe)'
         const expected = {
           name: 'John Doe',
-          link: 'https://mastodon.social/@johndoe',
+          link: 'https://example.com/@johndoe',
         }
 
         expect(parsePerson(value)).toEqual(expected)
@@ -501,20 +501,20 @@ describe('parsePerson', () => {
 
     describe('multiple values (first wins)', () => {
       it('should use first email when multiple emails present', () => {
-        const value = 'John (john1@x.com) (john2@x.com)'
+        const value = 'John (john1@example.com) (john2@example.com)'
         const expected = {
-          name: 'John (john2@x.com)',
-          email: 'john1@x.com',
+          name: 'John (john2@example.com)',
+          email: 'john1@example.com',
         }
 
         expect(parsePerson(value)).toEqual(expected)
       })
 
       it('should use first URL when multiple URLs present', () => {
-        const value = 'John (https://x.com/1) (https://x.com/2)'
+        const value = 'John (https://example.com/1) (https://example.com/2)'
         const expected = {
-          name: 'John (https://x.com/2)',
-          link: 'https://x.com/1',
+          name: 'John (https://example.com/2)',
+          link: 'https://example.com/1',
         }
 
         expect(parsePerson(value)).toEqual(expected)
@@ -698,10 +698,10 @@ describe('parsePerson', () => {
     })
 
     it('should extract URL containing @ after name', () => {
-      const value = 'John Doe https://mastodon.social/@johndoe'
+      const value = 'John Doe https://example.com/@johndoe'
       const expected = {
         name: 'John Doe',
-        link: 'https://mastodon.social/@johndoe',
+        link: 'https://example.com/@johndoe',
       }
 
       expect(parsePerson(value)).toEqual(expected)
@@ -1396,7 +1396,7 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expectedFull)
   })
 
-  it('should parse complete item object (without array of values)', () => {
+  it('should parse complete item object (with arrays of values)', () => {
     const value = {
       title: ['Item Title', 'Alternative Item Title'],
       link: ['https://example.com/item', 'https://example.com/item-alternate'],
@@ -1460,6 +1460,21 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle item with expirationDate', () => {
+    const value = {
+      title: { '#text': 'Item Title' },
+      pubdate: { '#text': 'Thu, 05 Sep 2002 00:00:01 GMT' },
+      expirationdate: { '#text': 'Fri, 06 Sep 2002 00:00:01 GMT' },
+    }
+    const expected = {
+      title: 'Item Title',
+      pubDate: 'Thu, 05 Sep 2002 00:00:01 GMT',
+      expirationDate: 'Fri, 06 Sep 2002 00:00:01 GMT',
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle minimal item with description only', () => {
     const value = {
       description: { '#text': 'Item Description' },
@@ -1495,19 +1510,6 @@ describe('parseItem', () => {
     expect(parseItem(undefined)).toBeUndefined()
   })
 
-  it('should handle content namespace', () => {
-    const value = {
-      title: { '#text': 'Example Entry' },
-      'content:encoded': { '#text': '<![CDATA[<div>John Doe</div>]]>' },
-    }
-    const expected = {
-      title: 'Example Entry',
-      content: { encoded: '<div>John Doe</div>' },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
   it('should handle atom namespace', () => {
     const value = {
       title: { '#text': 'Item 1' },
@@ -1536,41 +1538,6 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
-  it('should handle psc namespace', () => {
-    const value = {
-      title: { '#text': 'Podcast Episode 1' },
-      'psc:chapters': {
-        'psc:chapter': [
-          {
-            '@start': '00:00:00.000',
-            '@title': 'Introduction',
-          },
-          {
-            '@start': '00:05:30.000',
-            '@title': 'Main Topic',
-          },
-        ],
-      },
-    }
-    const expected = {
-      title: 'Podcast Episode 1',
-      psc: {
-        chapters: [
-          {
-            start: '00:00:00.000',
-            title: 'Introduction',
-          },
-          {
-            start: '00:05:30.000',
-            title: 'Main Topic',
-          },
-        ],
-      },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
   it('should handle dcterms namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },
@@ -1583,6 +1550,19 @@ describe('parseItem', () => {
         licenses: ['MIT License'],
         created: ['2023-02-01T00:00:00Z'],
       },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle content namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      'content:encoded': { '#text': '<![CDATA[<div>John Doe</div>]]>' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      content: { encoded: '<div>John Doe</div>' },
     }
 
     expect(parseItem(value)).toEqual(expected)
@@ -1633,6 +1613,41 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle psc namespace', () => {
+    const value = {
+      title: { '#text': 'Podcast Episode 1' },
+      'psc:chapters': {
+        'psc:chapter': [
+          {
+            '@start': '00:00:00.000',
+            '@title': 'Introduction',
+          },
+          {
+            '@start': '00:05:30.000',
+            '@title': 'Main Topic',
+          },
+        ],
+      },
+    }
+    const expected = {
+      title: 'Podcast Episode 1',
+      psc: {
+        chapters: [
+          {
+            start: '00:00:00.000',
+            title: 'Introduction',
+          },
+          {
+            start: '00:05:30.000',
+            title: 'Main Topic',
+          },
+        ],
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle media namespace', () => {
     const value = {
       title: { '#text': 'Media Item' },
@@ -1642,21 +1657,6 @@ describe('parseItem', () => {
       title: 'Media Item',
       media: {
         contents: [{ url: 'https://example.com/video.mp4', type: 'video/mp4' }],
-      },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
-  it('should handle georss namespace', () => {
-    const value = {
-      title: { '#text': 'Location Item' },
-      'georss:point': { '#text': '42.3601 -71.0589' },
-    }
-    const expected = {
-      title: 'Location Item',
-      georss: {
-        point: { lat: 42.3601, lng: -71.0589 },
       },
     }
 
@@ -1702,13 +1702,30 @@ describe('parseItem', () => {
     const value = {
       title: { '#text': 'Source Item' },
       'source:markdown': { '#text': '# Example markdown content' },
-      'source:localtime': { '#text': '2024-01-15 10:30:00' },
+      'source:inreplyto': { '@ispermalink': 'false', '#text': 'did:plc:iwl32vekohccji6khfdt3clw' },
+      'source:comments': { '@count': '2', '@feedurl': 'http://example.org/item/1/comments.xml' },
     }
     const expected = {
       title: 'Source Item',
       sourceNs: {
         markdown: '# Example markdown content',
-        localTime: '2024-01-15 10:30:00',
+        inReplyTo: { value: 'did:plc:iwl32vekohccji6khfdt3clw', isPermaLink: false },
+        comments: { count: 2, feedUrl: 'http://example.org/item/1/comments.xml' },
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle georss namespace', () => {
+    const value = {
+      title: { '#text': 'Location Item' },
+      'georss:point': { '#text': '42.3601 -71.0589' },
+    }
+    const expected = {
+      title: 'Location Item',
+      georss: {
+        point: { lat: 42.3601, lng: -71.0589 },
       },
     }
 
@@ -2127,22 +2144,6 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should handle sy namespace', () => {
-    const channel = {
-      title: { '#text': 'Example Feed' },
-      link: { '#text': 'https://example.com' },
-      'sy:updatefrequency': { '#text': '5' },
-    }
-    const value = { channel }
-    const expected = {
-      title: 'Example Feed',
-      link: 'https://example.com',
-      sy: { updateFrequency: 5 },
-    }
-
-    expect(parseFeed(value)).toEqual(expected)
-  })
-
   it('should handle dcterms namespace', () => {
     const channel = {
       title: { '#text': 'Example Feed' },
@@ -2158,6 +2159,22 @@ describe('parseFeed', () => {
         licenses: ['Creative Commons Attribution 4.0'],
         created: ['2023-01-01T00:00:00Z'],
       },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle sy namespace', () => {
+    const channel = {
+      title: { '#text': 'Example Feed' },
+      link: { '#text': 'https://example.com' },
+      'sy:updatefrequency': { '#text': '5' },
+    }
+    const value = { channel }
+    const expected = {
+      title: 'Example Feed',
+      link: 'https://example.com',
+      sy: { updateFrequency: 5 },
     }
 
     expect(parseFeed(value)).toEqual(expected)
@@ -2219,18 +2236,24 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should handle georss namespace', () => {
+  it('should handle admin namespace', () => {
     const channel = {
-      title: { '#text': 'Location Feed' },
+      title: { '#text': 'Admin Feed' },
       link: { '#text': 'https://example.com' },
-      'georss:point': { '#text': '37.7749 -122.4194' },
+      'admin:errorreportsto': {
+        '@rdf:resource': 'mailto:webmaster@example.com',
+      },
+      'admin:generatoragent': {
+        '@rdf:resource': 'https://example.com/generator?v=3.2',
+      },
     }
     const value = { channel }
     const expected = {
-      title: 'Location Feed',
+      title: 'Admin Feed',
       link: 'https://example.com',
-      georss: {
-        point: { lat: 37.7749, lng: -122.4194 },
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'https://example.com/generator?v=3.2',
       },
     }
 
@@ -2243,6 +2266,7 @@ describe('parseFeed', () => {
       link: { '#text': 'https://example.com' },
       'source:account': { '@service': 'twitter', '#text': 'johndoe' },
       'source:blogroll': { '#text': 'https://example.com/blogroll.opml' },
+      'source:localtime': { '#text': '2024-01-15 10:30:00' },
     }
     const value = { channel }
     const expected = {
@@ -2251,30 +2275,25 @@ describe('parseFeed', () => {
       sourceNs: {
         accounts: [{ service: 'twitter', value: 'johndoe' }],
         blogroll: 'https://example.com/blogroll.opml',
+        localTime: '2024-01-15 10:30:00',
       },
     }
 
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should handle admin namespace', () => {
+  it('should handle georss namespace', () => {
     const channel = {
-      title: { '#text': 'Admin Feed' },
+      title: { '#text': 'Location Feed' },
       link: { '#text': 'https://example.com' },
-      'admin:errorreportsto': {
-        '@rdf:resource': 'mailto:webmaster@example.com',
-      },
-      'admin:generatoragent': {
-        '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
-      },
+      'georss:point': { '#text': '37.7749 -122.4194' },
     }
     const value = { channel }
     const expected = {
-      title: 'Admin Feed',
+      title: 'Location Feed',
       link: 'https://example.com',
-      admin: {
-        errorReportsTo: 'mailto:webmaster@example.com',
-        generatorAgent: 'http://www.movabletype.org/?v=3.2',
+      georss: {
+        point: { lat: 37.7749, lng: -122.4194 },
       },
     }
 
@@ -2458,6 +2477,29 @@ describe('retrieveItems', () => {
     const expected = [{ title: 'Channel Item' }]
 
     expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should limit items to maxItems when option is set', () => {
+    const value = {
+      channel: {
+        item: [{ title: 'Item 1' }, { title: 'Item 2' }, { title: 'Item 3' }],
+      },
+    }
+    const options = { maxItems: 2 }
+    const expected = [{ title: 'Item 1' }, { title: 'Item 2' }]
+
+    expect(retrieveItems(value, options)).toEqual(expected)
+  })
+
+  it('should return undefined when maxItems is 0', () => {
+    const value = {
+      channel: {
+        item: [{ title: 'Item 1' }],
+      },
+    }
+    const options = { maxItems: 0 }
+
+    expect(retrieveItems(value, options)).toBeUndefined()
   })
 
   it('should return undefined when no items exist', () => {

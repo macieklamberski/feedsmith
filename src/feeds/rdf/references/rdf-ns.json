@@ -1,13 +1,21 @@
 {
   "title": "Example Feed",
   "link": "http://example.org",
+  "image": {
+    "title": "Example Image",
+    "link": "http://example.org",
+    "url": "http://example.org/image.png",
+    "rdf": {
+      "about": "http://example.org/image.png"
+    },
+    "cc": {
+      "license": "https://creativecommons.org/licenses/by-nd/4.0/"
+    }
+  },
   "items": [
     {
       "title": "Example Item",
       "link": "http://example.org/item/1",
-      "content": {
-        "encoded": "This is an example of content."
-      },
       "dc": {
         "titles": ["Dublin Core Enhanced Item Title"],
         "creators": ["Jack Jackson"],
@@ -83,6 +91,9 @@
         "titles": ["Dublin Core Terms Enhanced Item Title"],
         "types": ["Article"],
         "valid": ["2025-12-31T23:59:59+00:00"]
+      },
+      "content": {
+        "encoded": "This is an example of content."
       },
       "slash": {
         "section": "articles",
@@ -466,6 +477,44 @@
           ]
         }
       },
+      "feedburner": {
+        "origLink": "https://example.org/posts/original-article",
+        "origEnclosureLink": "https://example.org/audio/original-episode.mp3",
+        "awareness": "https://feedburner.google.com/awareness/1.0/data/examplerss/item"
+      },
+      "prism": {
+        "publicationName": "Nature",
+        "doi": "10.1038/s41586-023-05842-x",
+        "urls": ["https://www.nature.com/articles/s41586-023-05842-x"],
+        "volume": "615",
+        "number": "7952",
+        "section": "Research",
+        "startingPage": "425",
+        "endingPage": "432",
+        "publicationDates": ["2023-03-15T00:00:00.000Z"]
+      },
+      "cc": {
+        "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "attributionName": "Jack Jackson"
+      },
+      "wfw": {
+        "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
+        "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
+      },
+      "pingback": {
+        "server": "https://example.com/xmlrpc.php",
+        "target": "https://referenced-blog.com/article",
+        "abouts": ["https://blog1.com/posts/xml-basics", "https://blog2.com/posts/namespaces"]
+      },
+      "trackback": {
+        "ping": "https://example.com/trackback/123",
+        "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
+      },
+      "geo": {
+        "lat": 37.8199,
+        "long": -122.4783,
+        "alt": 67.0
+      },
       "georss": {
         "point": {
           "lat": 37.78,
@@ -491,16 +540,16 @@
           "lowerCorner": { "lat": 37.15, "lng": -122.85 },
           "upperCorner": { "lat": 38.15, "lng": -121.85 }
         },
+        "circle": {
+          "center": { "lat": 37.65, "lng": -122.35 },
+          "radius": 500
+        },
         "featureTypeTag": "region",
         "relationshipTag": "contains",
         "featureName": "San Francisco Bay Area",
         "elev": 360,
         "floor": 4,
         "radius": 50000
-      },
-      "wfw": {
-        "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
-        "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
       },
       "rdf": {
         "about": "http://example.org/item/1"
@@ -511,6 +560,62 @@
       }
     }
   ],
+  "atom": {
+    "links": [
+      {
+        "href": "https://example.org/feed.xml",
+        "rel": "self",
+        "type": "application/rss+xml"
+      },
+      {
+        "href": "https://example.org/feed.atom",
+        "rel": "alternate",
+        "type": "application/atom+xml",
+        "title": "Atom Feed"
+      },
+      {
+        "href": "https://example.org/",
+        "rel": "alternate",
+        "type": "text/html",
+        "title": "Website"
+      },
+      {
+        "href": "https://example.org/hub",
+        "rel": "hub"
+      },
+      {
+        "href": "https://example.org/feed-archive",
+        "rel": "archive",
+        "title": "Feed Archive"
+      },
+      {
+        "href": "https://example.org/feed-next",
+        "rel": "next",
+        "title": "Next Page"
+      },
+      {
+        "href": "https://example.org/feed-prev",
+        "rel": "prev",
+        "title": "Previous Page"
+      },
+      {
+        "href": "https://example.org/feed-first",
+        "rel": "first",
+        "title": "First Page"
+      },
+      {
+        "href": "https://example.org/feed-last",
+        "rel": "last",
+        "title": "Last Page"
+      },
+      {
+        "href": "https://example.org/comments-feed",
+        "rel": "replies",
+        "type": "application/rss+xml",
+        "title": "Comments Feed"
+      }
+    ]
+  },
   "dc": {
     "titles": ["Dublin Core Enhanced Feed Title"],
     "creators": ["John Doe"],
@@ -589,62 +694,6 @@
     "updatePeriod": "hourly",
     "updateFrequency": 1,
     "updateBase": "2000-01-01T12:00+00:00"
-  },
-  "atom": {
-    "links": [
-      {
-        "href": "https://example.org/feed.xml",
-        "rel": "self",
-        "type": "application/rss+xml"
-      },
-      {
-        "href": "https://example.org/feed.atom",
-        "rel": "alternate",
-        "type": "application/atom+xml",
-        "title": "Atom Feed"
-      },
-      {
-        "href": "https://example.org/",
-        "rel": "alternate",
-        "type": "text/html",
-        "title": "Website"
-      },
-      {
-        "href": "https://example.org/hub",
-        "rel": "hub"
-      },
-      {
-        "href": "https://example.org/feed-archive",
-        "rel": "archive",
-        "title": "Feed Archive"
-      },
-      {
-        "href": "https://example.org/feed-next",
-        "rel": "next",
-        "title": "Next Page"
-      },
-      {
-        "href": "https://example.org/feed-prev",
-        "rel": "prev",
-        "title": "Previous Page"
-      },
-      {
-        "href": "https://example.org/feed-first",
-        "rel": "first",
-        "title": "First Page"
-      },
-      {
-        "href": "https://example.org/feed-last",
-        "rel": "last",
-        "title": "Last Page"
-      },
-      {
-        "href": "https://example.org/comments-feed",
-        "rel": "replies",
-        "type": "application/rss+xml",
-        "title": "Comments Feed"
-      }
-    ]
   },
   "media": {
     "contents": [
@@ -1022,6 +1071,57 @@
       ]
     }
   },
+  "feedburner": {
+    "info": "examplerss",
+    "feedFlares": [
+      {
+        "href": "https://add.my.yahoo.com/rss?url=https://example.org/rss",
+        "src": "https://us.i1.yimg.com/addtomyyahoo4.gif",
+        "value": "Add to My Yahoo"
+      }
+    ],
+    "browserFriendly": "This is an XML content feed. It is intended to be viewed in a newsreader or syndicated to another site.",
+    "emailServiceId": "ExampleRss",
+    "feedburnerHostname": "https://feedburner.google.com",
+    "awareness": "https://feedburner.google.com/awareness/1.0/data/examplerss"
+  },
+  "opensearch": {
+    "totalResults": 1000,
+    "startIndex": 21,
+    "itemsPerPage": 10,
+    "queries": [
+      {
+        "role": "request",
+        "title": "Search results for quantum computing",
+        "totalResults": 1000,
+        "searchTerms": "quantum computing",
+        "startIndex": 21,
+        "count": 10
+      }
+    ]
+  },
+  "prism": {
+    "publicationName": "Nature",
+    "issn": "0028-0836",
+    "eIssn": "1476-4687",
+    "volume": "615",
+    "number": "7952",
+    "coverDate": "2023-03-15T00:00:00.000Z",
+    "publicationDates": ["2023-03-15T00:00:00.000Z"]
+  },
+  "cc": {
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "attributionName": "Example Publishing Company"
+  },
+  "admin": {
+    "errorReportsTo": "mailto:webmaster@example.com",
+    "generatorAgent": "http://www.movabletype.org/?v=3.2"
+  },
+  "geo": {
+    "lat": 37.7749,
+    "long": -122.4194,
+    "alt": 10.5
+  },
   "georss": {
     "point": {
       "lat": 37.78,
@@ -1047,16 +1147,16 @@
       "lowerCorner": { "lat": 37.15, "lng": -122.85 },
       "upperCorner": { "lat": 38.15, "lng": -121.85 }
     },
+    "circle": {
+      "center": { "lat": 37.65, "lng": -122.35 },
+      "radius": 500
+    },
     "featureTypeTag": "region",
     "relationshipTag": "contains",
     "featureName": "San Francisco Bay Area",
     "elev": 360,
     "floor": 4,
     "radius": 50000
-  },
-  "admin": {
-    "errorReportsTo": "mailto:webmaster@example.com",
-    "generatorAgent": "http://www.movabletype.org/?v=3.2"
   },
   "rdf": {
     "about": "http://example.org/rss"

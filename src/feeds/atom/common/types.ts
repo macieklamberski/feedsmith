@@ -14,6 +14,7 @@ import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { CreativeCommonsNs } from '../../../namespaces/creativecommons/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
+import type { FeedBurnerNs } from '../../../namespaces/feedburner/common/types.js'
 import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { GooglePlayNs } from '../../../namespaces/googleplay/common/types.js'
@@ -61,7 +62,7 @@ export namespace AtomFeed {
 
   export type Link<TDate, TStrict extends boolean = false> = Strict<
     {
-      href: Requirable<string> // Required in spec.
+      href: Requirable<string> // Required in spec
       rel?: string
       type?: string
       hreflang?: string
@@ -74,7 +75,7 @@ export namespace AtomFeed {
 
   export type Person<TStrict extends boolean = false> = Strict<
     {
-      name: Requirable<string> // Required in spec.
+      name: Requirable<string> // Required in spec
       uri?: string
       email?: string
       arxiv?: ArxivNs.Author
@@ -84,7 +85,7 @@ export namespace AtomFeed {
 
   export type Category<TStrict extends boolean = false> = Strict<
     {
-      term: Requirable<string> // Required in spec.
+      term: Requirable<string> // Required in spec
       scheme?: string
       label?: string
     },
@@ -93,7 +94,7 @@ export namespace AtomFeed {
 
   export type Generator<TStrict extends boolean = false> = Strict<
     {
-      text: Requirable<string> // Required in spec.
+      text: Requirable<string> // Required in spec
       uri?: string
       version?: string
     },
@@ -121,32 +122,33 @@ export namespace AtomFeed {
       categories?: Array<Category<TStrict>>
       content?: Content
       contributors?: Array<Person<TStrict>>
-      id: Requirable<string> // Required in spec.
+      id: Requirable<string> // Required in spec
       links?: Array<Link<TDate, TStrict>>
       published?: TDate
       rights?: Text
       source?: Source<TDate, TStrict>
       summary?: Text
-      title: Requirable<Text> // Required in spec.
-      updated: Requirable<TDate> // Required in spec.
-      app?: AppNs.Entry<TDate>
-      arxiv?: ArxivNs.Entry
-      cc?: CcNs.ItemOrFeed
+      title: Requirable<Text> // Required in spec
+      updated: Requirable<TDate> // Required in spec
       dc?: DcNs.ItemOrFeed<TDate>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
       slash?: SlashNs.Item
       itunes?: ItunesNs.Item
-      googleplay?: GooglePlayNs.Item<TStrict>
       psc?: PscNs.Item<TStrict>
       media?: MediaNs.ItemOrFeed<TStrict>
-      georss?: GeoRssNs.ItemOrFeed<TStrict>
-      geo?: GeoNs.ItemOrFeed
-      thr?: ThrNs.Item<TStrict>
-      dcterms?: DcTermsNs.ItemOrFeed<TDate>
+      googleplay?: GooglePlayNs.Item<TStrict>
+      feedburner?: FeedBurnerNs.Item
+      arxiv?: ArxivNs.Entry
+      cc?: CcNs.ItemOrFeed
       creativeCommons?: CreativeCommonsNs.ItemOrFeed
+      thr?: ThrNs.Item<TStrict>
+      app?: AppNs.Entry<TDate>
       wfw?: WfwNs.Item
-      yt?: YtNs.Item
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
+      yt?: YtNs.Item
+      geo?: GeoNs.ItemOrFeed
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
     TStrict
@@ -159,30 +161,31 @@ export namespace AtomFeed {
       contributors?: Array<Person<TStrict>>
       generator?: Generator<TStrict>
       icon?: string
-      id: Requirable<string> // Required in spec.
+      id: Requirable<string> // Required in spec
       links?: Array<Link<TDate, TStrict>>
       logo?: string
       rights?: Text
       subtitle?: Text
-      title: Requirable<Text> // Required in spec.
-      updated: Requirable<TDate> // Required in spec.
+      title: Requirable<Text> // Required in spec
+      updated: Requirable<TDate> // Required in spec
       entries?: Array<Entry<TDate, TStrict>>
-      cc?: CcNs.ItemOrFeed
       dc?: DcNs.ItemOrFeed<TDate>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
       sy?: SyNs.Feed<TDate>
       itunes?: ItunesNs.Feed<TStrict>
-      googleplay?: GooglePlayNs.Feed<TStrict>
       media?: MediaNs.ItemOrFeed<TStrict>
-      georss?: GeoRssNs.ItemOrFeed<TStrict>
-      geo?: GeoNs.ItemOrFeed
-      dcterms?: DcTermsNs.ItemOrFeed<TDate>
-      creativeCommons?: CreativeCommonsNs.ItemOrFeed
+      googleplay?: GooglePlayNs.Feed<TStrict>
+      feedburner?: FeedBurnerNs.Feed<TStrict>
       opensearch?: OpenSearchNs.Feed<TStrict>
-      yt?: YtNs.Feed
+      cc?: CcNs.ItemOrFeed
+      creativeCommons?: CreativeCommonsNs.ItemOrFeed
+      at?: AtNs.Feed<TDate, TStrict>
       admin?: AdminNs.Feed
       pingback?: PingbackNs.Feed
+      yt?: YtNs.Feed
+      geo?: GeoNs.ItemOrFeed
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
-      at?: AtNs.Feed<TDate, TStrict>
     },
     TStrict
   >

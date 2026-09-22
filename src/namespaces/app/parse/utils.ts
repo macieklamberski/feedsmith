@@ -1,16 +1,15 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseDate,
   parseSingularOf,
   parseYesNoBoolean,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { AppNs } from '../common/types.js'
 
 export const parseControl: ParseUtilPartial<AppNs.Control> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -25,7 +24,7 @@ export const retrieveEntry: ParseUtilPartial<AppNs.Entry<DateAny>, ParseMainOpti
   value,
   options,
 ) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

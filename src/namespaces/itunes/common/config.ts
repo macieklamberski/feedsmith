@@ -1,5 +1,5 @@
 export const uris = [
-  'http://www.itunes.com/dtds/podcast-1.0.dtd', // Official URI.
+  'http://www.itunes.com/dtds/podcast-1.0.dtd', // Official URI
   'https://www.itunes.com/dtds/podcast-1.0.dtd',
 ]
 
@@ -12,6 +12,8 @@ export const stopNodes = [
   '*.itunes:season',
   '*.itunes:episodetype',
   '*.itunes:block',
+  '*.itunes:order',
+  '*.itunes:isclosedcaptioned',
   '*.itunes:summary',
   '*.itunes:subtitle',
   '*.itunes:keywords',

@@ -129,6 +129,25 @@ describe('parseImage', () => {
 
     expect(parseImage(value)).toEqual(expected)
   })
+
+  it('should handle cc namespace', () => {
+    const value = {
+      title: { '#text': 'Image Title' },
+      link: { '#text': 'https://example.com' },
+      'cc:license': {
+        '@resource': 'https://creativecommons.org/licenses/by/4.0/',
+      },
+    }
+    const expected = {
+      title: 'Image Title',
+      link: 'https://example.com',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+      },
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
 })
 
 describe('retrieveImage', () => {
@@ -604,21 +623,6 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
-  it('should handle content namespace', () => {
-    const value = {
-      title: { '#text': 'Example Entry' },
-      link: { '#text': 'http://example.com' },
-      'content:encoded': { '#text': '<![CDATA[<div>John Doe</div>]]>' },
-    }
-    const expected = {
-      title: 'Example Entry',
-      link: 'http://example.com',
-      content: { encoded: '<div>John Doe</div>' },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
   it('should handle dc namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },
@@ -631,21 +635,6 @@ describe('parseItem', () => {
       dc: {
         creators: ['John Doe'],
       },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
-  it('should handle slash namespace', () => {
-    const value = {
-      title: { '#text': 'Example Entry' },
-      link: { '#text': 'http://example.com' },
-      'slash:comments': { '#text': '10' },
-    }
-    const expected = {
-      title: 'Example Entry',
-      link: 'http://example.com',
-      slash: { comments: 10 },
     }
 
     expect(parseItem(value)).toEqual(expected)
@@ -670,6 +659,36 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle content namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'content:encoded': { '#text': '<![CDATA[<div>John Doe</div>]]>' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      content: { encoded: '<div>John Doe</div>' },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle slash namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'slash:comments': { '#text': '10' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      slash: { comments: 10 },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle media namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },
@@ -683,23 +702,6 @@ describe('parseItem', () => {
       media: {
         contents: [{ url: 'http://example.com/video.mp4', type: 'video/mp4' }],
         title: { value: 'Video Title' },
-      },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
-  it('should handle georss namespace', () => {
-    const value = {
-      title: { '#text': 'Example Entry' },
-      link: { '#text': 'http://example.com' },
-      'georss:point': { '#text': '45.256 -71.92' },
-    }
-    const expected = {
-      title: 'Example Entry',
-      link: 'http://example.com',
-      georss: {
-        point: { lat: 45.256, lng: -71.92 },
       },
     }
 
@@ -725,6 +727,23 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle georss namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'georss:point': { '#text': '45.256 -71.92' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      georss: {
+        point: { lat: 45.256, lng: -71.92 },
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle rdf namespace attributes', () => {
     const value = {
       '@rdf:about': 'http://example.com/item/1',
@@ -735,23 +754,6 @@ describe('parseItem', () => {
       title: 'Example Entry',
       link: 'http://example.com',
       rdf: { about: 'http://example.com/item/1' },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
-  it('should handle rdf:about attribute on item', () => {
-    const value = {
-      '@rdf:about': 'http://example.com/item/1',
-      title: { '#text': 'Example Entry' },
-      link: { '#text': 'http://example.com' },
-    }
-    const expected = {
-      title: 'Example Entry',
-      link: 'http://example.com',
-      rdf: {
-        about: 'http://example.com/item/1',
-      },
     }
 
     expect(parseItem(value)).toEqual(expected)
@@ -1049,45 +1051,6 @@ describe('retrieveItems', () => {
       },
       {
         title: 'Direct Item 2',
-      },
-    ]
-
-    expect(retrieveItems(value)).toEqual(expected)
-  })
-
-  it('should skip invalid ToC references and return only valid items', () => {
-    const value = {
-      channel: {
-        title: 'Test Feed',
-        items: {
-          seq: {
-            li: [
-              { '@resource': 'http://example.com/item1' },
-              { '@resource': 'http://example.com/missing' },
-              { '@resource': 'http://example.com/item2' },
-            ],
-          },
-        },
-      },
-      item: [
-        {
-          '@about': 'http://example.com/item1',
-          title: 'First Item',
-        },
-        {
-          '@about': 'http://example.com/item2',
-          title: 'Second Item',
-        },
-      ],
-    }
-    const expected = [
-      {
-        title: 'First Item',
-        rdf: { about: 'http://example.com/item1' },
-      },
-      {
-        title: 'Second Item',
-        rdf: { about: 'http://example.com/item2' },
       },
     ]
 
@@ -1607,33 +1570,6 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should handle sy namespace', () => {
-    const value = {
-      channel: {
-        title: { '#text': 'Example Feed' },
-        'sy:updatefrequency': { '#text': '5' },
-      },
-      item: [
-        {
-          title: { '#text': 'Item 1' },
-          link: { '#text': 'https://example.com/item1' },
-        },
-      ],
-    }
-    const expected = {
-      title: 'Example Feed',
-      items: [
-        {
-          title: 'Item 1',
-          link: 'https://example.com/item1',
-        },
-      ],
-      sy: { updateFrequency: 5 },
-    }
-
-    expect(parseFeed(value)).toEqual(expected)
-  })
-
   it('should handle dcterms namespace', () => {
     const value = {
       channel: {
@@ -1660,6 +1596,33 @@ describe('parseFeed', () => {
         licenses: ['Creative Commons Attribution 4.0'],
         created: ['2023-01-01T00:00:00Z'],
       },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle sy namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'sy:updatefrequency': { '#text': '5' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      sy: { updateFrequency: 5 },
     }
 
     expect(parseFeed(value)).toEqual(expected)
@@ -1696,6 +1659,78 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
+  it('should handle cc namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'cc:license': {
+          '@resource': 'https://creativecommons.org/licenses/by/4.0/',
+        },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+          'cc:license': {
+            '@resource': 'https://creativecommons.org/licenses/by-sa/4.0/',
+          },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+          cc: {
+            license: 'https://creativecommons.org/licenses/by-sa/4.0/',
+          },
+        },
+      ],
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle admin namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'admin:errorreportsto': {
+          '@rdf:resource': 'mailto:webmaster@example.com',
+        },
+        'admin:generatoragent': {
+          '@rdf:resource': 'https://example.com/generator?v=3.2',
+        },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'https://example.com/generator?v=3.2',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
   it('should handle georss namespace', () => {
     const value = {
       channel: {
@@ -1719,41 +1754,6 @@ describe('parseFeed', () => {
       ],
       georss: {
         point: { lat: 40.689, lng: -74.044 },
-      },
-    }
-
-    expect(parseFeed(value)).toEqual(expected)
-  })
-
-  it('should handle admin namespace', () => {
-    const value = {
-      channel: {
-        title: { '#text': 'Example Feed' },
-        'admin:errorreportsto': {
-          '@rdf:resource': 'mailto:webmaster@example.com',
-        },
-        'admin:generatoragent': {
-          '@rdf:resource': 'http://www.movabletype.org/?v=3.2',
-        },
-      },
-      item: [
-        {
-          title: { '#text': 'Item 1' },
-          link: { '#text': 'https://example.com/item1' },
-        },
-      ],
-    }
-    const expected = {
-      title: 'Example Feed',
-      items: [
-        {
-          title: 'Item 1',
-          link: 'https://example.com/item1',
-        },
-      ],
-      admin: {
-        errorReportsTo: 'mailto:webmaster@example.com',
-        generatorAgent: 'http://www.movabletype.org/?v=3.2',
       },
     }
 

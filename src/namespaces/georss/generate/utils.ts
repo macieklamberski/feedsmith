@@ -1,5 +1,6 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import { generateCdataString, generateNumber, isObject, trimObject } from '../../../common/utils.js'
+import { generateCdataString, generateNumber } from '../../../common/utils.js'
 import type { GeoRssNs } from '../common/types.js'
 
 export const generateLatLngPairs = (
@@ -31,7 +32,7 @@ export const generateLatLngPairs = (
 }
 
 export const generatePoint: GenerateUtil<GeoRssNs.Point> = (point) => {
-  if (!isObject(point)) {
+  if (!isPlainObject(point)) {
     return
   }
 
@@ -39,7 +40,7 @@ export const generatePoint: GenerateUtil<GeoRssNs.Point> = (point) => {
 }
 
 export const generateLine: GenerateUtil<GeoRssNs.Line> = (line) => {
-  if (!isObject(line) || !line.points) {
+  if (!isPlainObject(line) || !line.points) {
     return
   }
 
@@ -47,7 +48,7 @@ export const generateLine: GenerateUtil<GeoRssNs.Line> = (line) => {
 }
 
 export const generatePolygon: GenerateUtil<GeoRssNs.Polygon> = (polygon) => {
-  if (!isObject(polygon) || !polygon.points) {
+  if (!isPlainObject(polygon) || !polygon.points) {
     return
   }
 
@@ -55,15 +56,29 @@ export const generatePolygon: GenerateUtil<GeoRssNs.Polygon> = (polygon) => {
 }
 
 export const generateBox: GenerateUtil<GeoRssNs.Box> = (box) => {
-  if (!isObject(box) || !box.lowerCorner || !box.upperCorner) {
+  if (!isPlainObject(box) || !box.lowerCorner || !box.upperCorner) {
     return
   }
 
   return generateLatLngPairs([box.lowerCorner, box.upperCorner], { min: 2, max: 2 })
 }
 
+export const generateCircle: GenerateUtil<GeoRssNs.Circle> = (circle) => {
+  if (!isPlainObject(circle) || typeof circle.radius !== 'number') {
+    return
+  }
+
+  const center = generatePoint(circle.center)
+
+  if (!center) {
+    return
+  }
+
+  return `${center} ${circle.radius}`
+}
+
 export const generateItemOrFeed: GenerateUtil<GeoRssNs.ItemOrFeed> = (itemOrFeed) => {
-  if (!isObject(itemOrFeed)) {
+  if (!isPlainObject(itemOrFeed)) {
     return
   }
 
@@ -72,6 +87,7 @@ export const generateItemOrFeed: GenerateUtil<GeoRssNs.ItemOrFeed> = (itemOrFeed
     'georss:line': generateLine(itemOrFeed.line),
     'georss:polygon': generatePolygon(itemOrFeed.polygon),
     'georss:box': generateBox(itemOrFeed.box),
+    'georss:circle': generateCircle(itemOrFeed.circle),
     'georss:featureTypeTag': generateCdataString(itemOrFeed.featureTypeTag),
     'georss:relationshipTag': generateCdataString(itemOrFeed.relationshipTag),
     'georss:featureName': generateCdataString(itemOrFeed.featureName),

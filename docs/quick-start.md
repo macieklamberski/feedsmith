@@ -157,13 +157,16 @@ See [Parsing Errors](/parsing/errors) and [Generating Errors](/generating/errors
 Feedsmith provides comprehensive TypeScript types for all feed formats:
 
 ```typescript
-import type { RssFeed, AtomFeed, JsonFeed, Opml } from 'feedsmith'
+import type { AnyFeed, AtomFeed, JsonFeed, Opml, RssFeed } from 'feedsmith'
 
 // Access all types for a format
-type Feed = RssFeed.Feed
-type Item = RssFeed.Item
+type Feed = RssFeed.Feed<string>
+type Item = RssFeed.Item<string>
 type Category = RssFeed.Category
 type Enclosure = RssFeed.Enclosure
+
+// Return type of parseFeed
+type Result = AnyFeed
 ```
 
 Each format exports its complete type system, including nested types and namespace types. See the [TypeScript guide](/reference/typescript) for details.

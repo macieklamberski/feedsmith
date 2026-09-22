@@ -1,17 +1,16 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseSingularOf,
   parseString,
   retrieveRdfResourceOrText,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { RdfNs } from '../common/types.js'
 
 export const retrieveAbout: ParseUtilPartial<RdfNs.About> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -24,7 +23,7 @@ export const retrieveAbout: ParseUtilPartial<RdfNs.About> = (value) => {
 
 /** @internal General RDF element kept for potential future use when all RDF data is needed. */
 export const retrieveElement: ParseUtilPartial<RdfNs.Element> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 

@@ -1,14 +1,10 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import {
-  generateCdataString,
-  generatePlainString,
-  isObject,
-  trimObject,
-} from '../../../common/utils.js'
+import { generateCdataString, generatePlainString } from '../../../common/utils.js'
 import type { ArxivNs } from '../common/types.js'
 
 export const generatePrimaryCategory: GenerateUtil<ArxivNs.PrimaryCategory> = (primaryCategory) => {
-  if (!isObject(primaryCategory)) {
+  if (!isPlainObject(primaryCategory)) {
     return
   }
 
@@ -22,7 +18,7 @@ export const generatePrimaryCategory: GenerateUtil<ArxivNs.PrimaryCategory> = (p
 }
 
 export const generateAuthor: GenerateUtil<ArxivNs.Author> = (author) => {
-  if (!isObject(author)) {
+  if (!isPlainObject(author)) {
     return
   }
 
@@ -34,7 +30,7 @@ export const generateAuthor: GenerateUtil<ArxivNs.Author> = (author) => {
 }
 
 export const generateEntry: GenerateUtil<ArxivNs.Entry> = (entry) => {
-  if (!isObject(entry)) {
+  if (!isPlainObject(entry)) {
     return
   }
 
@@ -43,6 +39,8 @@ export const generateEntry: GenerateUtil<ArxivNs.Entry> = (entry) => {
     'arxiv:journal_ref': generateCdataString(entry.journalRef),
     'arxiv:doi': generateCdataString(entry.doi),
     'arxiv:primary_category': generatePrimaryCategory(entry.primaryCategory),
+    'arxiv:announce_type': generateCdataString(entry.announceType),
+    'arxiv:journal_reference': generateCdataString(entry.journalReference),
   }
 
   return trimObject(value)

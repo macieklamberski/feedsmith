@@ -14,6 +14,12 @@ describe('DetectError', () => {
     expect(error).toBeInstanceOf(Error)
   })
 
+  it('should be instance of DetectError', () => {
+    const error = new DetectError('Test error')
+
+    expect(error).toBeInstanceOf(DetectError)
+  })
+
   it('should have name set to DetectError', () => {
     const error = new DetectError('Test error')
 
@@ -32,6 +38,12 @@ describe('GenerateError', () => {
     const error = new GenerateError('Test error')
 
     expect(error).toBeInstanceOf(Error)
+  })
+
+  it('should be instance of GenerateError', () => {
+    const error = new GenerateError('Test error')
+
+    expect(error).toBeInstanceOf(GenerateError)
   })
 
   it('should have name set to GenerateError', () => {
@@ -54,6 +66,12 @@ describe('MalformedError', () => {
     expect(error).toBeInstanceOf(Error)
   })
 
+  it('should be instance of MalformedError', () => {
+    const error = new MalformedError('Test error')
+
+    expect(error).toBeInstanceOf(MalformedError)
+  })
+
   it('should have name set to MalformedError', () => {
     const error = new MalformedError('Test error')
 
@@ -72,6 +90,12 @@ describe('ParseError', () => {
     const error = new ParseError('Test error')
 
     expect(error).toBeInstanceOf(Error)
+  })
+
+  it('should be instance of ParseError', () => {
+    const error = new ParseError('Test error')
+
+    expect(error).toBeInstanceOf(ParseError)
   })
 
   it('should have name set to ParseError', () => {

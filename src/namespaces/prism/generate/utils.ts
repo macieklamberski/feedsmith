@@ -1,16 +1,15 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generateNumber,
   generateRfc3339Date,
-  isObject,
   trimArray,
-  trimObject,
 } from '../../../common/utils.js'
 import type { PrismNs } from '../common/types.js'
 
 export const generateFeed: GenerateUtil<PrismNs.Feed<DateLike>> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 
@@ -98,7 +97,7 @@ export const generateFeed: GenerateUtil<PrismNs.Feed<DateLike>> = (feed) => {
 }
 
 export const generateItem: GenerateUtil<PrismNs.Item<DateLike>> = (item) => {
-  if (!isObject(item)) {
+  if (!isPlainObject(item)) {
     return
   }
 
@@ -106,6 +105,7 @@ export const generateItem: GenerateUtil<PrismNs.Item<DateLike>> = (item) => {
     'prism:publicationName': generateCdataString(item.publicationName),
     'prism:issn': generateCdataString(item.issn),
     'prism:eIssn': generateCdataString(item.eIssn),
+    'prism:issueIdentifier': generateCdataString(item.issueIdentifier),
     'prism:doi': generateCdataString(item.doi),
     'prism:url': trimArray(item.urls, generateCdataString),
     'prism:volume': generateCdataString(item.volume),
@@ -118,6 +118,8 @@ export const generateItem: GenerateUtil<PrismNs.Item<DateLike>> = (item) => {
     'prism:pageCount': generateNumber(item.pageCount),
     'prism:pageProgressionDirection': generateCdataString(item.pageProgressionDirection),
     'prism:samplePageRange': generateCdataString(item.samplePageRange),
+    'prism:coverDate': generateRfc3339Date(item.coverDate),
+    'prism:coverDisplayDate': generateCdataString(item.coverDisplayDate),
     'prism:publicationDate': trimArray(item.publicationDates, generateRfc3339Date),
     'prism:publicationDisplayDate': trimArray(item.publicationDisplayDates, generateCdataString),
     'prism:creationDate': generateRfc3339Date(item.creationDate),
@@ -135,6 +137,7 @@ export const generateItem: GenerateUtil<PrismNs.Item<DateLike>> = (item) => {
     'prism:organization': trimArray(item.organizations, generateCdataString),
     'prism:person': trimArray(item.persons, generateCdataString),
     'prism:platform': trimArray(item.platforms, generateCdataString),
+    'prism:originPlatform': trimArray(item.originPlatforms, generateCdataString),
     'prism:device': generateCdataString(item.device),
     'prism:academicField': trimArray(item.academicFields, generateCdataString),
     'prism:event': trimArray(item.events, generateCdataString),

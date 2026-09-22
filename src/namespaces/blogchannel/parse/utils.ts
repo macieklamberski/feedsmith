@@ -1,15 +1,10 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
-import {
-  isObject,
-  parseSingularOf,
-  parseString,
-  retrieveText,
-  trimObject,
-} from '../../../common/utils.js'
+import { parseSingularOf, parseString, retrieveText } from '../../../common/utils.js'
 import type { BlogChannelNs } from '../common/types.js'
 
 export const retrieveFeed: ParseUtilPartial<BlogChannelNs.Feed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -19,6 +14,9 @@ export const retrieveFeed: ParseUtilPartial<BlogChannelNs.Feed> = (value) => {
     ),
     blink: parseSingularOf(value['blogchannel:blink'], (value) => parseString(retrieveText(value))),
     mySubscriptions: parseSingularOf(value['blogchannel:mysubscriptions'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    changes: parseSingularOf(value['blogchannel:changes'], (value) =>
       parseString(retrieveText(value)),
     ),
   }

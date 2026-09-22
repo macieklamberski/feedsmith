@@ -1,28 +1,28 @@
+import { isPlainObject, isPresent, trimObject } from 'trousse'
 import type { ParseUtilExact, ParseUtilPartial, Unreliable } from '../../../common/types.js'
 import {
-  isNonEmptyString,
-  isObject,
-  isPresent,
   parseArrayOf,
   parseNumber,
   parseSingularOf,
   parseString,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { GeoRssNs } from '../common/types.js'
 
-const whitespaceRegex = /\s+/
+// See: https://docs.ogc.org/cs/17-002r1/17-002r1.html. Parsers treat commas as whitespace.
+const separatorRegex = /[\s,]+/
 
 export const parseLatLngPairs = (
   value: Unreliable,
   pairsCount?: { min?: number; max?: number },
 ): Array<GeoRssNs.Point> | undefined => {
-  if (!isNonEmptyString(value)) {
+  const string = parseString(value)
+
+  if (!string) {
     return
   }
 
-  const rawParts = value.split(whitespaceRegex)
+  const rawParts = string.split(separatorRegex)
   const numericParts = parseArrayOf(rawParts, parseNumber)
 
   if (!numericParts || numericParts.length % 2 !== 0 || rawParts.length !== numericParts.length) {
@@ -82,8 +82,30 @@ export const parseBox: ParseUtilExact<GeoRssNs.Box> = (value) => {
   }
 }
 
+// The radius is in metres.
+export const parseCircle: ParseUtilExact<GeoRssNs.Circle> = (value) => {
+  const string = parseString(retrieveText(value))
+
+  if (!string) {
+    return
+  }
+
+  const rawParts = string.split(separatorRegex)
+  const numericParts = parseArrayOf(rawParts, parseNumber)
+
+  if (rawParts.length !== 3 || numericParts?.length !== 3) {
+    return
+  }
+
+  const [lat, lng, radius] = numericParts
+
+  if (isPresent(lat) && isPresent(lng) && isPresent(radius)) {
+    return { center: { lat, lng }, radius }
+  }
+}
+
 export const retrieveItemOrFeed: ParseUtilPartial<GeoRssNs.ItemOrFeed> = (value) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -92,6 +114,7 @@ export const retrieveItemOrFeed: ParseUtilPartial<GeoRssNs.ItemOrFeed> = (value)
     line: parseSingularOf(value['georss:line'], parseLine),
     polygon: parseSingularOf(value['georss:polygon'], parsePolygon),
     box: parseSingularOf(value['georss:box'], parseBox),
+    circle: parseSingularOf(value['georss:circle'], parseCircle),
     // TODO: Implement when (or if) GeoRSS-GML and GML namespace are implemented.
     // where: parseSingularOf(value['georss:where'], parseWhere),
     featureTypeTag: parseSingularOf(value['georss:featuretypetag'], (value) =>

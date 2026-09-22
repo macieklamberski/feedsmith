@@ -1,21 +1,34 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseDate,
   parseNumber,
   parseSingularOf,
   parseString,
+  retrieveRdfResourceOrText,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { PrismNs } from '../common/types.js'
+
+// See: https://www.w3.org/submissions/2020/SUBM-prism-20200910/prism-basic.html.
+export const parseOriginPlatform: ParseUtilPartial<string> = (value) => {
+  if (isPlainObject(value)) {
+    const platform = parseString(value['@platform'])
+
+    if (platform) {
+      return platform
+    }
+  }
+
+  return retrieveRdfResourceOrText(value, parseString)
+}
 
 export const retrieveFeed: ParseUtilPartial<PrismNs.Feed<DateAny>, ParseMainOptions<DateAny>> = (
   value,
   options,
 ) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -141,19 +154,19 @@ export const retrieveFeed: ParseUtilPartial<PrismNs.Feed<DateAny>, ParseMainOpti
       parseString(retrieveText(value)),
     ),
     distributor: parseSingularOf(value['prism:distributor'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     sellingAgencies: parseArrayOf(value['prism:sellingagency'], (value) =>
       parseString(retrieveText(value)),
     ),
     organizations: parseArrayOf(value['prism:organization'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
-    persons: parseArrayOf(value['prism:person'], (value) => parseString(retrieveText(value))),
+    persons: parseArrayOf(value['prism:person'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
     platforms: parseArrayOf(value['prism:platform'], (value) => parseString(retrieveText(value))),
-    originPlatforms: parseArrayOf(value['prism:originplatform'], (value) =>
-      parseString(retrieveText(value)),
-    ),
+    originPlatforms: parseArrayOf(value['prism:originplatform'], parseOriginPlatform),
     device: parseSingularOf(value['prism:device'], (value) => parseString(retrieveText(value))),
     complianceProfile: parseSingularOf(value['prism:complianceprofile'], (value) =>
       parseString(retrieveText(value)),
@@ -178,10 +191,16 @@ export const retrieveFeed: ParseUtilPartial<PrismNs.Feed<DateAny>, ParseMainOpti
     academicFields: parseArrayOf(value['prism:academicfield'], (value) =>
       parseString(retrieveText(value)),
     ),
-    events: parseArrayOf(value['prism:event'], (value) => parseString(retrieveText(value))),
+    events: parseArrayOf(value['prism:event'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
     genres: parseArrayOf(value['prism:genre'], (value) => parseString(retrieveText(value))),
-    industries: parseArrayOf(value['prism:industry'], (value) => parseString(retrieveText(value))),
-    locations: parseArrayOf(value['prism:location'], (value) => parseString(retrieveText(value))),
+    industries: parseArrayOf(value['prism:industry'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    locations: parseArrayOf(value['prism:location'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
     objects: parseArrayOf(value['prism:object'], (value) => parseString(retrieveText(value))),
     profession: parseSingularOf(value['prism:profession'], (value) =>
       parseString(retrieveText(value)),
@@ -208,7 +227,7 @@ export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOpti
   value,
   options,
 ) => {
-  if (!isObject(value)) {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -218,6 +237,9 @@ export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOpti
     ),
     issn: parseSingularOf(value['prism:issn'], (value) => parseString(retrieveText(value))),
     eIssn: parseSingularOf(value['prism:eissn'], (value) => parseString(retrieveText(value))),
+    issueIdentifier: parseSingularOf(value['prism:issueidentifier'], (value) =>
+      parseString(retrieveText(value)),
+    ),
     doi: parseSingularOf(value['prism:doi'], (value) => parseString(retrieveText(value))),
     urls: parseArrayOf(value['prism:url'], (value) => parseString(retrieveText(value))),
     volume: parseSingularOf(value['prism:volume'], (value) => parseString(retrieveText(value))),
@@ -240,6 +262,12 @@ export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOpti
       parseString(retrieveText(value)),
     ),
     samplePageRange: parseSingularOf(value['prism:samplepagerange'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    coverDate: parseSingularOf(value['prism:coverdate'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
+    coverDisplayDate: parseSingularOf(value['prism:coverdisplaydate'], (value) =>
       parseString(retrieveText(value)),
     ),
     publicationDates: parseArrayOf(value['prism:publicationdate'], (value) =>
@@ -277,39 +305,48 @@ export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOpti
       parseString(retrieveText(value)),
     ),
     organizations: parseArrayOf(value['prism:organization'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
-    persons: parseArrayOf(value['prism:person'], (value) => parseString(retrieveText(value))),
+    persons: parseArrayOf(value['prism:person'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
     platforms: parseArrayOf(value['prism:platform'], (value) => parseString(retrieveText(value))),
+    originPlatforms: parseArrayOf(value['prism:originplatform'], parseOriginPlatform),
     device: parseSingularOf(value['prism:device'], (value) => parseString(retrieveText(value))),
     academicFields: parseArrayOf(value['prism:academicfield'], (value) =>
       parseString(retrieveText(value)),
     ),
-    events: parseArrayOf(value['prism:event'], (value) => parseString(retrieveText(value))),
-    industries: parseArrayOf(value['prism:industry'], (value) => parseString(retrieveText(value))),
-    locations: parseArrayOf(value['prism:location'], (value) => parseString(retrieveText(value))),
+    events: parseArrayOf(value['prism:event'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    industries: parseArrayOf(value['prism:industry'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    locations: parseArrayOf(value['prism:location'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
     objects: parseArrayOf(value['prism:object'], (value) => parseString(retrieveText(value))),
     profession: parseSingularOf(value['prism:profession'], (value) =>
       parseString(retrieveText(value)),
     ),
     sport: parseSingularOf(value['prism:sport'], (value) => parseString(retrieveText(value))),
     hasAlternatives: parseArrayOf(value['prism:hasalternative'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     hasCorrections: parseArrayOf(value['prism:hascorrection'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     hasTranslations: parseArrayOf(value['prism:hastranslation'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     isAlternativeOf: parseArrayOf(value['prism:isalternativeof'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     isCorrectionOf: parseArrayOf(value['prism:iscorrectionof'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     isTranslationOf: parseSingularOf(value['prism:istranslationof'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     supplementTitles: parseArrayOf(value['prism:supplementtitle'], (value) =>
       parseString(retrieveText(value)),

@@ -1,40 +1,21 @@
-import { XMLParser } from 'fast-xml-parser'
-import {
-  namespacePrefixes,
-  namespaceStopNodes,
-  namespaceUris,
-  parserConfig,
-} from '../../../common/config.js'
-import { createNamespaceNormalizator, expandStopNodes } from '../../../common/utils.js'
+import { namespaceStopNodes } from '../../../common/config.js'
 
+// The pre-parse seed canonicalizes the root's primary prefix before matching, so the root spells as
+// `rdf`. A document that never declares the prefix keeps `rdf:rdf` as its key and fails retrieval
+// regardless, so only the canonical form is matched.
 export const stopNodes = [
-  ...expandStopNodes(namespaceStopNodes, [
-    'rdf:rdf.channel',
-    'rdf:rdf.item',
-    'rdf:rdf.image',
-    'rdf:rdf.textinput',
-  ]),
-  'rdf:rdf.channel.title',
-  'rdf:rdf.channel.link',
-  'rdf:rdf.channel.description',
-  'rdf:rdf.image.title',
-  'rdf:rdf.image.link',
-  'rdf:rdf.image.url',
-  'rdf:rdf.item.title',
-  'rdf:rdf.item.link',
-  'rdf:rdf.item.description',
-  'rdf:rdf.textinput.title',
-  'rdf:rdf.textinput.description',
-  'rdf:rdf.textinput.name',
-  'rdf:rdf.textinput.link',
+  ...namespaceStopNodes,
+  'rdf.channel.title',
+  'rdf.channel.link',
+  'rdf.channel.description',
+  'rdf.image.title',
+  'rdf.image.link',
+  'rdf.image.url',
+  'rdf.item.title',
+  'rdf.item.link',
+  'rdf.item.description',
+  'rdf.textinput.title',
+  'rdf.textinput.description',
+  'rdf.textinput.name',
+  'rdf.textinput.link',
 ]
-
-export const parser = new XMLParser({
-  ...parserConfig,
-  stopNodes,
-})
-
-export const normalizeNamespaces = createNamespaceNormalizator(namespaceUris, namespacePrefixes, [
-  'rdf',
-  'rss',
-])

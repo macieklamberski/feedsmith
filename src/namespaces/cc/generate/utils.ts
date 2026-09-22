@@ -1,9 +1,10 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import { generateCdataString, isObject, trimObject } from '../../../common/utils.js'
+import { generateCdataString } from '../../../common/utils.js'
 import type { CcNs } from '../common/types.js'
 
 export const generateItemOrFeed: GenerateUtil<CcNs.ItemOrFeed> = (data) => {
-  if (!isObject(data)) {
+  if (!isPlainObject(data)) {
     return
   }
 

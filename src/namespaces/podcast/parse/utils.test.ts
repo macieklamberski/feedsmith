@@ -945,7 +945,7 @@ describe('parseSeason', () => {
     expect(parseSeason(value)).toBeUndefined()
   })
 
-  it('should return undefined for not supoprted input', () => {
+  it('should return undefined for not supported input', () => {
     expect(parseSeason(undefined)).toBeUndefined()
     expect(parseSeason(null)).toBeUndefined()
     expect(parseSeason([])).toBeUndefined()
@@ -1211,6 +1211,11 @@ describe('parseTrailer', () => {
     expect(parseTrailer(undefined)).toBeUndefined()
     expect(parseTrailer(null)).toBeUndefined()
     expect(parseTrailer([])).toBeUndefined()
+  })
+
+  it.todo('should parse pubDate with custom parseDateFn', () => {
+    // Pass options.parseDateFn that converts the RFC 822 string into a Date instance.
+    // Expected: pubDate equals the value returned by parseDateFn instead of the raw string.
   })
 })
 
@@ -2291,6 +2296,10 @@ describe('parseLiveItem', () => {
         '#text': 'New York, NY',
         '@geo': '40.7128,-74.0060',
       },
+      'podcast:funding': {
+        '@url': 'https://example.com/live/donate',
+        '#text': 'Support the show',
+      },
     }
     const expected = {
       status: 'live',
@@ -2316,6 +2325,12 @@ describe('parseLiveItem', () => {
         {
           display: 'New York, NY',
           geo: '40.7128,-74.0060',
+        },
+      ],
+      fundings: [
+        {
+          url: 'https://example.com/live/donate',
+          display: 'Support the show',
         },
       ],
     }
@@ -2452,6 +2467,11 @@ describe('parseLiveItem', () => {
     expect(parseLiveItem(undefined)).toBeUndefined()
     expect(parseLiveItem(null)).toBeUndefined()
     expect(parseLiveItem([])).toBeUndefined()
+  })
+
+  it.todo('should parse start and end with custom parseDateFn', () => {
+    // Pass options.parseDateFn that converts the RFC 3339 strings into Date instances.
+    // Expected: start and end equal the values returned by parseDateFn instead of raw strings.
   })
 })
 
@@ -3212,6 +3232,11 @@ describe('parseUpdateFrequency', () => {
     expect(parseUpdateFrequency(null)).toBeUndefined()
     expect(parseUpdateFrequency([])).toBeUndefined()
   })
+
+  it.todo('should parse dtstart with custom parseDateFn', () => {
+    // Pass options.parseDateFn that converts the RFC 3339 string into a Date instance.
+    // Expected: dtstart equals the value returned by parseDateFn instead of the raw string.
+  })
 })
 
 describe('parsePodping', () => {
@@ -3648,6 +3673,12 @@ describe('retrieveItem', () => {
         language: 'en',
       },
     ],
+    fundings: [
+      {
+        url: 'https://example.com/episodes/1/donate',
+        display: 'Support this episode',
+      },
+    ],
     chapters: {
       url: 'https://example.com/chapters.json',
       type: 'application/json',
@@ -3714,6 +3745,12 @@ describe('retrieveItem', () => {
         ],
       },
     ],
+    contentLinks: [
+      {
+        href: 'https://example.com/episodes/1/discussion',
+        display: 'Join the discussion',
+      },
+    ],
     socialInteracts: [
       {
         uri: 'https://example.com/episodes/1/comments',
@@ -3745,6 +3782,10 @@ describe('retrieveItem', () => {
           '@language': 'en',
         },
       ],
+      'podcast:funding': {
+        '@url': 'https://example.com/episodes/1/donate',
+        '#text': 'Support this episode',
+      },
       'podcast:chapters': {
         '@url': 'https://example.com/chapters.json',
         '@type': 'application/json',
@@ -3806,6 +3847,12 @@ describe('retrieveItem', () => {
       'podcast:images': {
         '@srcset': 'image-1x.jpg 1x, image-2x.jpg 2x',
       },
+      'podcast:contentlink': [
+        {
+          '@href': 'https://example.com/episodes/1/discussion',
+          '#text': 'Join the discussion',
+        },
+      ],
       'podcast:socialinteract': [
         {
           '@uri': 'https://example.com/episodes/1/comments',
@@ -3830,6 +3877,12 @@ describe('retrieveItem', () => {
           '@url': 'https://example.com/transcript.json',
           '@type': 'application/json',
           '@language': 'en',
+        },
+      ],
+      'podcast:funding': [
+        {
+          '@url': 'https://example.com/episodes/1/donate',
+          '#text': 'Support this episode',
         },
       ],
       'podcast:chapters': [
@@ -3905,6 +3958,12 @@ describe('retrieveItem', () => {
       'podcast:images': [
         {
           '@srcset': 'image-1x.jpg 1x, image-2x.jpg 2x',
+        },
+      ],
+      'podcast:contentlink': [
+        {
+          '@href': 'https://example.com/episodes/1/discussion',
+          '#text': 'Join the discussion',
         },
       ],
       'podcast:socialinteract': [
@@ -4222,6 +4281,12 @@ describe('retrieveFeed', () => {
         id: 'spotify',
       },
     ],
+    socialInteracts: [
+      {
+        uri: 'https://example.com/comments',
+        protocol: 'activitypub',
+      },
+    ],
     txts: [
       {
         display: 'Additional podcast information',
@@ -4321,6 +4386,12 @@ describe('retrieveFeed', () => {
         {
           '#text': 'yes',
           '@id': 'spotify',
+        },
+      ],
+      'podcast:socialinteract': [
+        {
+          '@uri': 'https://example.com/comments',
+          '@protocol': 'activitypub',
         },
       ],
       'podcast:txt': [
@@ -4435,6 +4506,12 @@ describe('retrieveFeed', () => {
         {
           '#text': 'yes',
           '@id': 'spotify',
+        },
+      ],
+      'podcast:socialinteract': [
+        {
+          '@uri': 'https://example.com/comments',
+          '@protocol': 'activitypub',
         },
       ],
       'podcast:txt': [

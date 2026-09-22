@@ -14,7 +14,7 @@ The Slash namespace provides metadata about user engagement, particularly commen
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="http://purl.org/rss/1.0/modules/slash/" target="_blank">Slash Module</a></td>
+      <td><a href="https://web.resource.org/rss/1.0/modules/slash/" target="_blank">Slash Module</a></td>
     </tr>
     <tr>
       <th>Prefix</th>

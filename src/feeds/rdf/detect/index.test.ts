@@ -120,6 +120,12 @@ describe('detect', () => {
     expect(detect(rdfFeed)).toBe(true)
   })
 
+  it.todo('should return false for RDF element in XML comments', () => {
+    // An <rdf:RDF> element placed inside an XML comment (<!-- <rdf:RDF>...</rdf:RDF> -->)
+    // currently yields a false positive because the regex-based detector does not strip comments.
+    // Expected: detect returns false once comment stripping is implemented.
+  })
+
   it('should return false for RDF element in CDATA', () => {
     const cdataFeed = `
       <?xml version="1.0"?>
