@@ -6,10 +6,12 @@ describe('generateItem', () => {
     const value = {
       server: 'https://example.com/pingback',
       target: 'https://example.com/post/123',
+      abouts: ['https://example.org/post/456', 'https://example.net/post/789'],
     }
     const expected = {
       'pingback:server': 'https://example.com/pingback',
       'pingback:target': 'https://example.com/post/123',
+      'pingback:about': ['https://example.org/post/456', 'https://example.net/post/789'],
     }
 
     expect(generateItem(value)).toEqual(expected)
@@ -37,6 +39,17 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with only abouts', () => {
+    const value = {
+      abouts: ['https://example.org/post/456'],
+    }
+    const expected = {
+      'pingback:about': ['https://example.org/post/456'],
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should handle empty strings', () => {
     const value = {
       server: '',
@@ -44,6 +57,17 @@ describe('generateItem', () => {
     }
     const expected = {
       'pingback:target': 'https://example.com/post/123',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should skip empty strings in abouts', () => {
+    const value = {
+      abouts: ['', 'https://example.org/post/456'],
+    }
+    const expected = {
+      'pingback:about': ['https://example.org/post/456'],
     }
 
     expect(generateItem(value)).toEqual(expected)
