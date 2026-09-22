@@ -26,7 +26,7 @@
      xmlns:thr="http://purl.org/syndication/thread/1.0"
      xmlns:wfw="http://wellformedweb.org/CommentAPI/"
      xmlns:admin="http://webns.net/mvcb/"
-     xmlns:pingback="http://purl.org/net/pingback/"
+     xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
      xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
      xmlns:source="http://source.scripting.com/"
      xmlns:blogChannel="http://backend.userland.com/blogChannelModule"
@@ -764,6 +764,14 @@
       <feedburner:origEnclosureLink>https://example.com/audio/original-episode.mp3</feedburner:origEnclosureLink>
       <feedburner:awareness>https://feedburner.google.com/awareness/1.0/data/examplepodcast/episode</feedburner:awareness>
 
+      <!-- arXiv Namespace: Item Level Tags -->
+      <arxiv:comment>23 pages, 8 figures and 4 tables</arxiv:comment>
+      <arxiv:journal_ref>Eur.Phys.J. C31 (2003) 17-29</arxiv:journal_ref>
+      <arxiv:DOI>10.1529/biophysj.104.047340</arxiv:DOI>
+      <arxiv:primary_category term="hep-ex" scheme="http://arxiv.org/schemas/atom" label="High Energy Physics - Experiment"/>
+      <arxiv:announce_type>replace-cross</arxiv:announce_type>
+      <arxiv:journal_reference>Journal de l'Ecole polytechnique - Mathematiques, Tome 11 (2024), pp. 431-472</arxiv:journal_reference>
+
       <!-- PRISM Namespace: Item Level Tags -->
       <prism:publicationName>Nature</prism:publicationName>
       <prism:issn>0028-0836</prism:issn>
@@ -859,6 +867,8 @@
       <!-- Pingback Namespace: Item Level Tags -->
       <pingback:server>https://example.com/xmlrpc.php</pingback:server>
       <pingback:target>https://referenced-blog.com/article</pingback:target>
+      <pingback:about>https://blog1.com/posts/xml-basics</pingback:about>
+      <pingback:about>https://blog2.com/posts/namespaces</pingback:about>
 
       <!-- Trackback Namespace: Item Level Tags -->
       <trackback:ping>https://example.com/trackback/123</trackback:ping>

@@ -158,11 +158,21 @@ describe('parseExplicit', () => {
     expect(parseExplicit(undefined)).toBeUndefined()
   })
 
-  it.todo('should parse yes from #text property', () => {
-    // parseExplicit({ '#text': 'yes' }) currently returns undefined because the yes/no branch
-    // passes the raw object to parseYesNoBoolean instead of the retrieved text, while the clean
-    // branch reads the retrieved text.
-    // Expected: true.
+  it('should parse yes from #text property', () => {
+    const value = {
+      '#text': 'yes',
+    }
+
+    expect(parseExplicit(value)).toBe(true)
+  })
+
+  it('should parse yes from element with attributes', () => {
+    const value = {
+      '#text': 'yes',
+      '@lang': 'en',
+    }
+
+    expect(parseExplicit(value)).toBe(true)
   })
 
   it.todo('should handle non-string inputs without throwing', () => {
