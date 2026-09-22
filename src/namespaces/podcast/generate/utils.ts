@@ -20,6 +20,7 @@ export const generateBaseItem: GenerateUtil<PodcastNs.BaseItem> = (baseItem) => 
 
   const value = {
     'podcast:transcript': trimArray(baseItem.transcripts, generateTranscript),
+    'podcast:funding': trimArray(baseItem.fundings, generateFunding),
     'podcast:chapters': generateChapters(baseItem.chapters),
     'podcast:soundbite': trimArray(baseItem.soundbites, generateSoundbite),
     'podcast:person': trimArray(baseItem.persons, generatePerson),

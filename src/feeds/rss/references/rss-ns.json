@@ -133,6 +133,12 @@
             "rel": "captions"
           }
         ],
+        "fundings": [
+          {
+            "url": "https://example.com/episodes/123/support",
+            "display": "Support This Episode"
+          }
+        ],
         "chapters": {
           "url": "https://example.com/episodes/123/chapters.json",
           "type": "application/json+chapters"

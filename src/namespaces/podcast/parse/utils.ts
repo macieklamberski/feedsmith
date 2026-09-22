@@ -452,6 +452,7 @@ export const retrieveItem: ParseUtilPartial<PodcastNs.Item> = (value) => {
 
   const item = {
     transcripts: parseArrayOf(value['podcast:transcript'], parseTranscript),
+    fundings: parseArrayOf(value['podcast:funding'], parseFunding),
     chapters: parseSingularOf(value['podcast:chapters'], parseChapters),
     soundbites: parseArrayOf(value['podcast:soundbite'], parseSoundbite),
     persons: parseArrayOf(value['podcast:person'], parsePerson),

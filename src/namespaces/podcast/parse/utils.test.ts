@@ -2296,6 +2296,10 @@ describe('parseLiveItem', () => {
         '#text': 'New York, NY',
         '@geo': '40.7128,-74.0060',
       },
+      'podcast:funding': {
+        '@url': 'https://example.com/live/donate',
+        '#text': 'Support the show',
+      },
     }
     const expected = {
       status: 'live',
@@ -2321,6 +2325,12 @@ describe('parseLiveItem', () => {
         {
           display: 'New York, NY',
           geo: '40.7128,-74.0060',
+        },
+      ],
+      fundings: [
+        {
+          url: 'https://example.com/live/donate',
+          display: 'Support the show',
         },
       ],
     }
@@ -3663,6 +3673,12 @@ describe('retrieveItem', () => {
         language: 'en',
       },
     ],
+    fundings: [
+      {
+        url: 'https://example.com/episodes/1/donate',
+        display: 'Support this episode',
+      },
+    ],
     chapters: {
       url: 'https://example.com/chapters.json',
       type: 'application/json',
@@ -3766,6 +3782,10 @@ describe('retrieveItem', () => {
           '@language': 'en',
         },
       ],
+      'podcast:funding': {
+        '@url': 'https://example.com/episodes/1/donate',
+        '#text': 'Support this episode',
+      },
       'podcast:chapters': {
         '@url': 'https://example.com/chapters.json',
         '@type': 'application/json',
@@ -3857,6 +3877,12 @@ describe('retrieveItem', () => {
           '@url': 'https://example.com/transcript.json',
           '@type': 'application/json',
           '@language': 'en',
+        },
+      ],
+      'podcast:funding': [
+        {
+          '@url': 'https://example.com/episodes/1/donate',
+          '#text': 'Support this episode',
         },
       ],
       'podcast:chapters': [

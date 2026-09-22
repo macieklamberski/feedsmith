@@ -596,6 +596,7 @@
       <!-- Podcast Namespace: Item Level Tags -->
       <podcast:transcript url="https://example.com/episodes/123/transcript.vtt" type="text/vtt" language="en"/>
       <podcast:transcript url="https://example.com/episodes/123/transcript.srt" type="application/x-subrip" language="en" rel="captions"/>
+      <podcast:funding url="https://example.com/episodes/123/support">Support This Episode</podcast:funding>
       <podcast:chapters url="https://example.com/episodes/123/chapters.json" type="application/json+chapters"/>
       <podcast:soundbite startTime="60" duration="30">The key takeaway from this episode</podcast:soundbite>
       <podcast:soundbite startTime="120" duration="45">Another important highlight</podcast:soundbite>
