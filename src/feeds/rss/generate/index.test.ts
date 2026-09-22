@@ -65,6 +65,43 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with thr attributes on atom namespace links', () => {
+    const value: RssFeed.Feed<DateLike> = {
+      title: 'Feed with Atom namespace',
+      description: 'Test feed with thr attributes on Atom links',
+      items: [
+        {
+          title: 'First item',
+          atom: {
+            links: [
+              {
+                href: 'https://example.com/entry/1/replies',
+                rel: 'replies',
+                thr: {
+                  count: 2,
+                },
+              },
+            ],
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:thr="http://purl.org/syndication/thread/1.0">
+  <channel>
+    <title>Feed with Atom namespace</title>
+    <description>Test feed with thr attributes on Atom links</description>
+    <item>
+      <title>First item</title>
+      <atom:link href="https://example.com/entry/1/replies" rel="replies" thr:count="2"/>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with dc namespace', () => {
     const value = {
       title: 'Feed with dc namespace',
