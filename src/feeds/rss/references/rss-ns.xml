@@ -37,6 +37,14 @@
   <channel>
     <title>Example Feed</title>
     <link>http://example.org</link>
+    <image>
+      <url>http://example.org/image.png</url>
+      <title>Example Image</title>
+      <link>http://example.org</link>
+
+      <!-- ccREL Namespace: Image Level Tags -->
+      <cc:license>https://creativecommons.org/licenses/by-nd/4.0/</cc:license>
+    </image>
 
     <!-- Dublin Core Namespace: Channel Level Tags -->
     <dc:title>Dublin Core Enhanced Feed Title</dc:title>
@@ -335,6 +343,7 @@
     <opensearch:totalResults>1000</opensearch:totalResults>
     <opensearch:startIndex>21</opensearch:startIndex>
     <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+    <opensearch:link href="http://example.com/opensearchdescription.xml" rel="search" type="application/opensearchdescription+xml"/>
     <opensearch:Query role="request" title="Search results for quantum computing" totalResults="1000" searchTerms="quantum computing" startIndex="21" count="10"/>
 
     <!-- PRISM Namespace: Channel Level Tags -->

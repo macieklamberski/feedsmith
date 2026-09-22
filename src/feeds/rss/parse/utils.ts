@@ -286,6 +286,7 @@ export const parseImage: ParseUtilPartial<RssFeed.Image> = (value) => {
     return
   }
 
+  const namespaces = detectNamespaces(value)
   const image = {
     url: parseSingularOf(value.url, (value) => parseString(retrieveText(value))),
     title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
@@ -293,6 +294,7 @@ export const parseImage: ParseUtilPartial<RssFeed.Image> = (value) => {
     description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
     height: parseSingularOf(value.height, (value) => parseNumber(retrieveText(value))),
     width: parseSingularOf(value.width, (value) => parseNumber(retrieveText(value))),
+    cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
   }
 
   return trimObject(image)

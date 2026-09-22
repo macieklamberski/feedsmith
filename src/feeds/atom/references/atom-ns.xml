@@ -251,6 +251,7 @@
   <opensearch:totalResults>1000</opensearch:totalResults>
   <opensearch:startIndex>0</opensearch:startIndex>
   <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:link href="http://example.com/opensearchdescription.xml" rel="search" type="application/opensearchdescription+xml"/>
   <opensearch:Query role="request" title="Search results for quantum computing" totalResults="1000" searchTerms="quantum computing" startIndex="0" count="10"/>
 
   <!-- ccREL Namespace: Feed Level Tags -->

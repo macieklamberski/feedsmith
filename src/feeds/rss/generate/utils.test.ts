@@ -269,6 +269,21 @@ describe('generateImage', () => {
   it('should handle non-object inputs gracefully', () => {
     expect(generateImage(undefined)).toBeUndefined()
   })
+
+  it('should generate image with cc namespace properties', () => {
+    const value = {
+      url: 'https://example.com/logo.png',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+      },
+    }
+    const expected = {
+      url: 'https://example.com/logo.png',
+      'cc:license': 'https://creativecommons.org/licenses/by/4.0/',
+    }
+
+    expect(generateImage(value)).toEqual(expected)
+  })
 })
 
 describe('generateTextInput', () => {
@@ -1755,6 +1770,11 @@ describe('generateFeed', () => {
         totalResults: 1000,
         startIndex: 21,
         itemsPerPage: 10,
+        link: {
+          href: 'http://example.com/opensearchdescription.xml',
+          rel: 'search',
+          type: 'application/opensearchdescription+xml',
+        },
         queries: [
           {
             role: 'request',
@@ -1775,6 +1795,11 @@ describe('generateFeed', () => {
           'opensearch:totalResults': 1000,
           'opensearch:startIndex': 21,
           'opensearch:itemsPerPage': 10,
+          'opensearch:link': {
+            '@href': 'http://example.com/opensearchdescription.xml',
+            '@rel': 'search',
+            '@type': 'application/opensearchdescription+xml',
+          },
           'opensearch:Query': [
             {
               '@role': 'request',

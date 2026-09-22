@@ -1,6 +1,14 @@
 {
   "title": "Example Feed",
   "link": "http://example.org",
+  "image": {
+    "url": "http://example.org/image.png",
+    "title": "Example Image",
+    "link": "http://example.org",
+    "cc": {
+      "license": "https://creativecommons.org/licenses/by-nd/4.0/"
+    }
+  },
   "items": [
     {
       "title": "Example Item",
@@ -1696,6 +1704,11 @@
     "totalResults": 1000,
     "startIndex": 21,
     "itemsPerPage": 10,
+    "link": {
+      "href": "http://example.com/opensearchdescription.xml",
+      "rel": "search",
+      "type": "application/opensearchdescription+xml"
+    },
     "queries": [
       {
         "role": "request",
