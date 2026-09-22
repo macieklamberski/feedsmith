@@ -46,7 +46,7 @@ const retrieveByAbout = (elements: unknown, resourceUri: string | undefined): un
 
   const array = Array.isArray(elements) ? elements : [elements]
 
-  return array.find((el) => el?.['@about'] === resourceUri)
+  return array.find((el) => parseString(el?.['@about']) === resourceUri)
 }
 
 const findByTocReference = (value: unknown, property: string): unknown => {

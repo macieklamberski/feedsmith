@@ -189,6 +189,25 @@ describe('retrieveImage', () => {
     expect(retrieveImage(value)).toEqual(expected)
   })
 
+  it('should retrieve image using ToC reference with entities in the URI', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        image: { '@resource': 'http://example.com/image?a=1&amp;b=2' },
+      },
+      image: [
+        { '@about': 'http://example.com/other', title: 'Other' },
+        { '@about': 'http://example.com/image?a=1&amp;b=2', title: 'Logo' },
+      ],
+    }
+    const expected = {
+      title: 'Logo',
+      rdf: { about: 'http://example.com/image?a=1&b=2' },
+    }
+
+    expect(retrieveImage(value)).toEqual(expected)
+  })
+
   it('should retrieve correct image when multiple images exist', () => {
     const value = {
       channel: {
@@ -987,6 +1006,32 @@ describe('retrieveItems', () => {
         title: 'Single Item',
         rdf: { about: 'http://example.com/item1' },
       },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should match ToC references with entities in the URI', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/item1' },
+              { '@resource': 'http://example.com/item2?a=1&amp;b=2' },
+            ],
+          },
+        },
+      },
+      item: [
+        { '@about': 'http://example.com/item1', title: 'Item 1' },
+        { '@about': 'http://example.com/item2?a=1&amp;b=2', title: 'Item 2' },
+      ],
+    }
+    const expected = [
+      { title: 'Item 1', rdf: { about: 'http://example.com/item1' } },
+      { title: 'Item 2', rdf: { about: 'http://example.com/item2?a=1&b=2' } },
     ]
 
     expect(retrieveItems(value)).toEqual(expected)

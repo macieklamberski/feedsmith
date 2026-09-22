@@ -55,6 +55,39 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should keep items whose URI contains entities when using the ToC', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
+        <channel rdf:about="http://example.com">
+          <title>Test Feed</title>
+          <items>
+            <rdf:Seq>
+              <rdf:li rdf:resource="http://example.com/item1"/>
+              <rdf:li rdf:resource="http://example.com/item2?a=1&amp;b=2"/>
+            </rdf:Seq>
+          </items>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item 1</title>
+        </item>
+        <item rdf:about="http://example.com/item2?a=1&amp;b=2">
+          <title>Item 2</title>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Test Feed',
+      rdf: { about: 'http://example.com' },
+      items: [
+        { title: 'Item 1', rdf: { about: 'http://example.com/item1' } },
+        { title: 'Item 2', rdf: { about: 'http://example.com/item2?a=1&b=2' } },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should throw error for invalid input', () => {
     const throwing = () => parse('not a feed')
 
