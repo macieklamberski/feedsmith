@@ -105,6 +105,7 @@ export const generateItem: GenerateUtil<PrismNs.Item<DateLike>> = (item) => {
     'prism:publicationName': generateCdataString(item.publicationName),
     'prism:issn': generateCdataString(item.issn),
     'prism:eIssn': generateCdataString(item.eIssn),
+    'prism:issueIdentifier': generateCdataString(item.issueIdentifier),
     'prism:doi': generateCdataString(item.doi),
     'prism:url': trimArray(item.urls, generateCdataString),
     'prism:volume': generateCdataString(item.volume),

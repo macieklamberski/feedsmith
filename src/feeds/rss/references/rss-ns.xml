@@ -26,7 +26,7 @@
      xmlns:thr="http://purl.org/syndication/thread/1.0"
      xmlns:wfw="http://wellformedweb.org/CommentAPI/"
      xmlns:admin="http://webns.net/mvcb/"
-     xmlns:pingback="http://purl.org/net/pingback/"
+     xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
      xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
      xmlns:source="http://source.scripting.com/"
      xmlns:blogChannel="http://backend.userland.com/blogChannelModule"
@@ -284,6 +284,7 @@
     <googleplay:image href="https://example.com/images/googleplay-cover.jpg" />
     <googleplay:new-feed-url>https://example.com/new-feed.xml</googleplay:new-feed-url>
     <googleplay:email>contact@example.com</googleplay:email>
+    <googleplay:owner>owner@example.com</googleplay:owner>
     <googleplay:category text="Technology" />
     <googleplay:category text="Education" />
 
@@ -333,7 +334,7 @@
     <opensearch:totalResults>1000</opensearch:totalResults>
     <opensearch:startIndex>21</opensearch:startIndex>
     <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
-    <opensearch:Query role="request" searchTerms="quantum computing" startIndex="21" count="10"/>
+    <opensearch:Query role="request" title="Search results for quantum computing" totalResults="1000" searchTerms="quantum computing" startIndex="21" count="10"/>
 
     <!-- PRISM Namespace: Channel Level Tags -->
     <prism:publicationName>Nature</prism:publicationName>
@@ -775,6 +776,7 @@
       <prism:publicationName>Nature</prism:publicationName>
       <prism:issn>0028-0836</prism:issn>
       <prism:eIssn>1476-4687</prism:eIssn>
+      <prism:issueIdentifier>2023-03-15</prism:issueIdentifier>
       <prism:doi>10.1038/s41586-023-05842-x</prism:doi>
       <prism:url>https://www.nature.com/articles/s41586-023-05842-x</prism:url>
       <prism:volume>615</prism:volume>
@@ -867,6 +869,8 @@
       <!-- Pingback Namespace: Item Level Tags -->
       <pingback:server>https://example.com/xmlrpc.php</pingback:server>
       <pingback:target>https://referenced-blog.com/article</pingback:target>
+      <pingback:about>https://blog1.com/posts/xml-basics</pingback:about>
+      <pingback:about>https://blog2.com/posts/namespaces</pingback:about>
 
       <!-- Trackback Namespace: Item Level Tags -->
       <trackback:ping>https://example.com/trackback/123</trackback:ping>

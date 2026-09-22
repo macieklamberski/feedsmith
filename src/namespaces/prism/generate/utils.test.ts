@@ -612,6 +612,17 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with issue identifier', () => {
+    const value = {
+      issueIdentifier: '2023-03-15',
+    }
+    const expected = {
+      'prism:issueIdentifier': '2023-03-15',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with cover date fields', () => {
     const value = {
       coverDate: new Date('2023-03-15T00:00:00Z'),

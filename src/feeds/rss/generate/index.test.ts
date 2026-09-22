@@ -827,6 +827,7 @@ describe('generate', () => {
           pingback: {
             server: 'https://example.com/xmlrpc.php',
             target: 'https://example.net/article',
+            abouts: ['https://example.org/post/1', 'https://example.org/post/2'],
           },
         },
       ],
@@ -841,6 +842,8 @@ describe('generate', () => {
       <title>First item</title>
       <pingback:server>https://example.com/xmlrpc.php</pingback:server>
       <pingback:target>https://example.net/article</pingback:target>
+      <pingback:about>https://example.org/post/1</pingback:about>
+      <pingback:about>https://example.org/post/2</pingback:about>
     </item>
   </channel>
 </rss>

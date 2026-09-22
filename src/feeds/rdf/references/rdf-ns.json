@@ -1071,6 +1071,8 @@
     "queries": [
       {
         "role": "request",
+        "title": "Search results for quantum computing",
+        "totalResults": 1000,
         "searchTerms": "quantum computing",
         "startIndex": 21,
         "count": 10
