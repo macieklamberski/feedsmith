@@ -1922,6 +1922,7 @@ describe('generateFeed', () => {
         blogRoll: 'http://example.com/blogroll.opml',
         blink: 'http://example.net/',
         mySubscriptions: 'http://example.com/subscriptions.opml',
+        changes: 'http://example.com/changes.xml',
       },
     }
     const expected = {
@@ -1934,6 +1935,7 @@ describe('generateFeed', () => {
           'blogChannel:blogRoll': 'http://example.com/blogroll.opml',
           'blogChannel:blink': 'http://example.net/',
           'blogChannel:mySubscriptions': 'http://example.com/subscriptions.opml',
+          'blogChannel:changes': 'http://example.com/changes.xml',
         },
       },
     }
