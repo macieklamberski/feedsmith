@@ -1,23 +1,19 @@
 # Benchmarks
 
-There are two distinct benchmark modes:
+There are two sets of benchmarks:
 
-1. **[JavaScript Benchmarks](#javascript-benchmarks)** - Compare Feedsmith against other JavaScript feed parsing libraries
-2. **[Cross-Language Benchmarks](#cross-language-benchmarks)** - Compare Feedsmith against prominent libraries in other languages
+1. **[JavaScript Benchmarks](#javascript-benchmarks)**: compare Feedsmith with other JavaScript feed parsing libraries.
+2. **[Cross-Language Benchmarks](#cross-language-benchmarks)**: compare Feedsmith with popular feed parsing libraries in other languages.
 
-One important thing to note is that packages vary in feature support (such as handling specific namespaces or feed formats). The results should be taken with a grain of salt, as direct comparisons aren't always fair.
+Keep in mind that packages support different features. Some handle more namespaces or feed formats than others, so a direct comparison isn't always fair.
 
 ## JavaScript Benchmarks
 
-Speed benchmarks comparing Feedsmith against popular JavaScript packages for parsing feeds. Feedsmith's results are marked with an asterisk (`*`).
+These benchmarks compare how fast Feedsmith and popular JavaScript packages parse feeds. Feedsmith's results are marked with an asterisk (`*`).
 
-The benchmarks use real-world feeds organized by feed format (RSS, Atom, RDF, JSON Feed, OPML) and file size ranges. Each range is tested on representative feed files, providing insight into how each package performs across various scenarios.
+The benchmarks use real-world feeds, grouped by format (RSS, Atom, RDF, JSON Feed, OPML) and by file size. Each group shows how the packages perform on a different kind of input, from many small feeds to a few very large ones.
 
-The recommended measurement uses [hyperfine](https://github.com/sharkdp/hyperfine), running each library in a **fresh subprocess** so no library shares a JIT or garbage-collector state with another, and reading **one feed into memory at a time** rather than loading the whole fixture set up front. This is the same approach as the cross-language benchmarks below and avoids the run-to-run drift that an in-process loop suffers from once hundreds of megabytes of feeds accumulate in a single heap.
-
-```bash
-$ bash parsing.sh
-```
+Measurements are taken with [hyperfine](https://github.com/sharkdp/hyperfine). Each library runs in a **fresh process**, so no library shares memory or warm-up state with another. Each run also reads **one feed into memory at a time** instead of loading all the files up front. Running everything in one process made the results drift from run to run, as hundreds of megabytes of feeds piled up in memory. The cross-language benchmarks below work the same way.
 
 ### Results
 
@@ -116,19 +112,15 @@ $ bash parsing.sh
 ```
 
 > [!NOTE]
-> It was hard to find libraries for handling JSON Feed, so at this moment only Feedsmith is listed.
+> There are few JavaScript libraries that parse JSON Feed, so for now only Feedsmith is listed.
 
 ### Methodology
 
-The parsing benchmarks measure feed parsing libraries under realistic conditions where developers need access to fully parsed data. Some libraries use lazy evaluation (deferring computation until properties are accessed) while others parse everything upfront. To ensure fair comparison, we measure the total time required to produce equivalent, fully-accessible results.
+The benchmarks measure the total time until the parsed data is fully available. This matches how most apps use a feed parser: they parse a feed and read its title, description and items right away.
 
-For lazy parsers like `@rowanmanning/feed-parser`, we call methods such as .toJSON() to force complete evaluation. Without this step, we'd only be measuring the initial setup cost while ignoring the deferred work that still needs to happen when data is accessed.
+Not every library does all the work up front. Some parse lazily and only process a part of the feed when a property is read. For lazy parsers like `@rowanmanning/feed-parser`, the benchmark calls methods such as `.toJSON()` to force a full parse. Without this step, the benchmark would measure only the setup cost. The rest of the work would still happen later, when the app reads the data.
 
-This approach reflects typical usage patterns where developers parse feeds to immediately access properties like titles, descriptions, and item lists. Measuring only the initial parsing step for lazy libraries would create misleading comparisons since the computational cost simply shifts to when the data is actually used.
-
-By standardizing on fully-evaluated results, these benchmarks provide realistic performance expectations for applications that need complete feed data processing.
-
-The hyperfine path runs each library as a separate process (`runner.ts <library> <directory> <format>`), discarding three warmup runs and then measuring at least ten runs per library. Results are reported as mean ± standard deviation, so the variance of each measurement is explicit. Big-feed categories are capped at ten files to keep the total runtime reasonable. For stable numbers, run on an otherwise idle machine.
+Each library runs as a separate process (`runner.ts <library> <directory> <format>`). Hyperfine discards three warm-up runs, then measures at least ten runs per library. Results show the mean ± standard deviation, so the spread of each measurement is visible. The large-file categories are capped at ten files to keep the total runtime reasonable. For stable numbers, run the benchmarks on an otherwise idle machine.
 
 ### Setup
 
@@ -145,14 +137,14 @@ bash feedsmith.sh
 
 ## Cross-Language Benchmarks
 
-Cross-language performance comparison using [hyperfine](https://github.com/sharkdp/hyperfine) to compare Feedsmith against popular feed parsing libraries in other languages:
+These benchmarks use [hyperfine](https://github.com/sharkdp/hyperfine) to compare Feedsmith with popular feed parsers in other languages:
 
 - **Ruby**: [Feedjira](https://github.com/feedjira/feedjira)
 - **Python**: [feedparser](https://github.com/kurtmckee/feedparser)
 - **Go**: [gofeed](https://github.com/mmcdole/gofeed)
 - **PHP**: [SimplePie](https://github.com/simplepie/simplepie)
 
-Focuses on core feed formats: **RSS**, **Atom**, and **RDF**.
+They cover the core feed formats: **RSS**, **Atom**, and **RDF**.
 
 ### Results
 
