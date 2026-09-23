@@ -15,6 +15,7 @@ const main = () => {
 
   const rows = sorted.map((result, index) => ({
     Package: result.command,
+    Performance: index === 0 ? 'baseline' : `${(result.mean / fastest).toFixed(2)}x slower`,
     // hyperfine omits the deviation for single-run commands.
     'Mean (ms)':
       result.stddev != null
@@ -22,8 +23,6 @@ const main = () => {
         : format(result.mean),
     Min: format(result.min),
     Max: format(result.max),
-    Runs: result.times.length,
-    Performance: index === 0 ? 'baseline' : `${(result.mean / fastest).toFixed(2)}x slower`,
   }))
 
   console.table(rows)
