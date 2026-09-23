@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"github.com/mmcdole/gofeed"
 )
 
@@ -14,6 +15,10 @@ func main() {
 	globPattern := filepath.Join(dirPath, pattern)
 
 	matches, _ := filepath.Glob(globPattern)
+	if len(os.Args) > 3 {
+		limit, _ := strconv.Atoi(os.Args[3])
+		matches = matches[:min(limit, len(matches))]
+	}
 	fp := gofeed.NewParser()
 
 	for _, path := range matches {

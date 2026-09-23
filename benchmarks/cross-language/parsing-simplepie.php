@@ -9,7 +9,8 @@ function main() {
 
   $dirPath = $argv[1];
   $feedType = $argv[2];
-  $matchedFiles = glob("$dirPath/*.$feedType");
+  $limit = isset($argv[3]) ? (int) $argv[3] : null;
+  $matchedFiles = array_slice(glob("$dirPath/*.$feedType"), 0, $limit);
 
   foreach ($matchedFiles as $filePath) {
     $fileData = file_get_contents($filePath);

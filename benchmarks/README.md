@@ -226,6 +226,9 @@ brew install hyperfine bun ruby python go php composer
 # 2. Install language-specific packages
 bundle install
 composer install
+
+# Composer's vendor/ directory makes Go assume vendored modules, so force module mode.
+export GOFLAGS=-mod=mod
 go mod tidy
 
 # Python is installed in a local virtualenv (Homebrew Python blocks global pip installs
