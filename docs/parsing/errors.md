@@ -24,6 +24,8 @@ try {
 
 Thrown when the content is malformed and the underlying parser fails (e.g., invalid XML).
 
+One kind of broken markup is repaired instead of thrown: an element that only carries attributes, written without its closing slash, like `<atom:link href="…">` or `<enclosure url="…">`. Left alone it would swallow every item after it, so the tag is self-closed and the feed is parsed again. An unclosed element that holds content, like `<description>`, still throws, since nothing says where it was meant to end.
+
 ```typescript
 import { parseRssFeed, MalformedError } from 'feedsmith'
 

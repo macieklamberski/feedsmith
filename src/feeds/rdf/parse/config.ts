@@ -19,3 +19,5 @@ export const stopNodes = [
   'rdf.textinput.name',
   'rdf.textinput.link',
 ]
+
+export const attributeOnlyElements = ['atom:link', 'atom:category']

@@ -49,3 +49,5 @@ export const stopNodes = [
   ...sharedStopNodes.map((node) => `rss.channel.${node}`),
   ...sharedStopNodes.map((node) => `rss.${node}`),
 ]
+
+export const attributeOnlyElements = ['atom:link', 'atom:category', 'enclosure']
