@@ -41,7 +41,7 @@ const createSimpleArrayParserTests = (
   parserFunction: ParseUtilPartial<Array<string>>,
   propertyName: string,
 ) => {
-  describe(functionName, () => {
+  describe(`${functionName}`, () => {
     it(`should parse array of ${propertyName} elements`, () => {
       const value = {
         [propertyName]: ['First item', 'Second item'],

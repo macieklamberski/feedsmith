@@ -1694,14 +1694,14 @@ describe('parseArray', () => {
     const value3 = new Map()
     const value4 = new Date()
     // biome-ignore lint/performance/useTopLevelRegex: It's for testing purposes.
-    const value5 = /regex/
+    const value5Regex = /regex/
     const value6 = () => {}
 
     expect(parseArray(value1)).toBeUndefined()
     expect(parseArray(value2)).toBeUndefined()
     expect(parseArray(value3)).toBeUndefined()
     expect(parseArray(value4)).toBeUndefined()
-    expect(parseArray(value5)).toBeUndefined()
+    expect(parseArray(value5Regex)).toBeUndefined()
     expect(parseArray(value6)).toBeUndefined()
   })
 })

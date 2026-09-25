@@ -93,6 +93,8 @@ export const stripMailto = (value: string) => {
   return stripped
 }
 
+const openBrackets = ['<', '(', '[']
+
 const closeBracketFor = (char: string) => {
   if (char === '<') {
     return '>'
@@ -169,7 +171,7 @@ const parseBracketedPerson = (raw: string): RssFeed.Person | undefined => {
 
     const char = raw[i]
 
-    if (char === '<' || char === '(' || char === '[') {
+    if (openBrackets.includes(char)) {
       openBracket = char
       closeBracket = closeBracketFor(char)
 
