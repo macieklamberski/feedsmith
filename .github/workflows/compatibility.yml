@@ -2,10 +2,15 @@ name: Compatibility
 
 on:
   push:
-    branches: [main]
+    branches: [main, alpha, beta, rc]
   pull_request:
-    branches: [main]
   workflow_call:
+    inputs:
+      ref:
+        description: Git ref to test. Defaults to the ref that triggered the workflow.
+        required: false
+        type: string
+        default: ''
 
 jobs:
   compatibility:
@@ -13,6 +18,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
