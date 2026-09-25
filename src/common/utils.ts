@@ -580,7 +580,9 @@ export const generateNamespaceAttrs = (
       continue
     }
 
-    namespaceAttrs ??= {}
+    if (!namespaceAttrs) {
+      namespaceAttrs = {}
+    }
 
     namespaceAttrs[`@xmlns:${prefix}`] = namespaceUris[prefix][0]
   }
