@@ -2,9 +2,15 @@ name: Compatibility
 
 on:
   push:
-    branches: [main]
+    branches: [main, alpha, beta, rc]
   pull_request:
   workflow_call:
+    inputs:
+      ref:
+        description: Git ref to test. Defaults to the ref that triggered the workflow.
+        required: false
+        type: string
+        default: ''
 
 jobs:
   compatibility:
@@ -19,6 +25,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
