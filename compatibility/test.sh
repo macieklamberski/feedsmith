@@ -35,6 +35,13 @@ for type in esm cjs; do
   run_test "javascript/$type" "node javascript/$type/index.js && node javascript/$type/index.$ext"
 done
 
+# JavaScript without syntax detection, so files Node would otherwise treat as CommonJS fail.
+for type in esm cjs; do
+  ext=$([ "$type" = "esm" ] && echo "mjs" || echo "cjs")
+  node="node --no-experimental-detect-module"
+  run_test "javascript/$type (no syntax detection)" "$node javascript/$type/index.js && $node javascript/$type/index.$ext"
+done
+
 # Vite bundler
 for type in esm cjs; do
   run_test "vite/$type" "bunx vite build bundler/$type"
