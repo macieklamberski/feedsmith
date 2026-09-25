@@ -23,13 +23,13 @@ jobs:
       ref: ${{ inputs.branch }}
     secrets: inherit
 
-  compatibility:
-    uses: ./.github/workflows/compatibility.yml
+  package:
+    uses: ./.github/workflows/package.yml
     with:
       ref: ${{ inputs.branch }}
 
   release:
-    needs: [test, compatibility]
+    needs: [test, package]
     permissions:
       contents: write
       issues: write
