@@ -8,10 +8,22 @@ on:
 
 jobs:
   compatibility:
+    name: compatibility (Node ${{ matrix.node }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # The lowest supported version, every LTS since, and the current release. The full suite runs on
+        # 24 only, as TypeScript and Vite need a recent Node. The others run the JavaScript files.
+        node: [14, 16, 18, 20, 22, 24, 26]
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -24,8 +36,25 @@ jobs:
 
       - name: Install compatibility test dependencies
         working-directory: compatibility
-        run: bun install --frozen-lockfile --ignore-scripts
+        run: |
+          bun install --frozen-lockfile --ignore-scripts
+          npm install --install-links --no-save --no-package-lock --ignore-scripts ..
 
       - name: Run compatibility tests
+        if: matrix.node == 24
         working-directory: compatibility
         run: ./test.sh
+
+      - name: Setup Node.js ${{ matrix.node }}
+        if: matrix.node != 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Run JavaScript files
+        if: matrix.node != 24
+        working-directory: compatibility/javascript
+        run: |
+          node --version
+          node esm/index.js && node esm/index.mjs
+          node cjs/index.js && node cjs/index.cjs

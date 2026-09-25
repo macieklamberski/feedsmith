@@ -35,11 +35,12 @@ for type in esm cjs; do
   run_test "javascript/$type" "node javascript/$type/index.js && node javascript/$type/index.$ext"
 done
 
-# Run them again without syntax detection, so files Node would otherwise treat as CommonJS fail.
+# Run them again without the fallbacks older Node versions lack: syntax detection, which loads
+# ESM files Node would otherwise treat as CommonJS, and require() of ESM files.
 for type in esm cjs; do
   ext=$([ "$type" = "esm" ] && echo "mjs" || echo "cjs")
-  node="node --no-experimental-detect-module"
-  run_test "javascript/$type (no syntax detection)" "$node javascript/$type/index.js && $node javascript/$type/index.$ext"
+  node="node --no-experimental-detect-module --no-experimental-require-module"
+  run_test "javascript/$type (no ESM fallbacks)" "$node javascript/$type/index.js && $node javascript/$type/index.$ext"
 done
 
 # Build ESM and CJS projects with Vite.
