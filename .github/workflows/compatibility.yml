@@ -2,7 +2,7 @@ name: Compatibility
 
 on:
   push:
-    branches: [main]
+    branches: [main, alpha, beta, rc]
   pull_request:
   workflow_call:
     inputs:
