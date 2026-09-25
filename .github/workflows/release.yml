@@ -10,6 +10,7 @@ on:
         type: choice
         options:
           - main
+          - hotfix
           - 2.x
           - rc
           - beta
