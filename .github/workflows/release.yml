@@ -10,6 +10,7 @@ on:
         type: choice
         options:
           - main
+          - hotfix
           - 2.x
           - rc
           - beta
@@ -18,10 +19,14 @@ on:
 jobs:
   test:
     uses: macieklamberski/kvalita/.github/workflows/shared-test.yml@main
+    with:
+      ref: ${{ inputs.branch }}
     secrets: inherit
 
   compatibility:
     uses: ./.github/workflows/compatibility.yml
+    with:
+      ref: ${{ inputs.branch }}
 
   release:
     needs: [test, compatibility]
