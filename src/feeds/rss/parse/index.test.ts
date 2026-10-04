@@ -309,6 +309,216 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  describe('unclosed attribute-only elements', () => {
+    it('should parse feed with unclosed atom:link', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+          <channel>
+            <title>Feed Title</title>
+            <atom:link href="https://example.com/feed.xml" rel="self">
+            <item>
+              <title>First item</title>
+            </item>
+            <item>
+              <title>Second item</title>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Feed Title',
+        items: [{ title: 'First item' }, { title: 'Second item' }],
+        atom: {
+          links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
+        },
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
+    it('should parse feed with unclosed enclosure', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>Feed Title</title>
+            <item>
+              <title>First item</title>
+              <enclosure url="https://example.com/audio.mp3" length="1024" type="audio/mpeg">
+            </item>
+            <item>
+              <title>Second item</title>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Feed Title',
+        items: [
+          {
+            title: 'First item',
+            enclosures: [
+              { url: 'https://example.com/audio.mp3', length: 1024, type: 'audio/mpeg' },
+            ],
+          },
+          { title: 'Second item' },
+        ],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
+    it('should parse feed with unclosed atom:link and unclosed enclosure', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+          <channel>
+            <title>Feed Title</title>
+            <atom:link href="https://example.com/feed.xml" rel="self">
+            <item>
+              <title>First item</title>
+              <enclosure url="https://example.com/audio.mp3" length="1024" type="audio/mpeg">
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Feed Title',
+        items: [
+          {
+            title: 'First item',
+            enclosures: [
+              { url: 'https://example.com/audio.mp3', length: 1024, type: 'audio/mpeg' },
+            ],
+          },
+        ],
+        atom: {
+          links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
+        },
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
+    it('should keep a closed atom:link next to an unclosed one', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+          <channel>
+            <title>Feed Title</title>
+            <atom:link href="https://example.com/feed.xml" rel="self"></atom:link>
+            <atom:link href="https://example.com/hub" rel="hub">
+            <item>
+              <title>First item</title>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Feed Title',
+        items: [{ title: 'First item' }],
+        atom: {
+          links: [
+            { href: 'https://example.com/feed.xml', rel: 'self' },
+            { href: 'https://example.com/hub', rel: 'hub' },
+          ],
+        },
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
+    it('should parse feed with a stray slash inside an unclosed atom:link', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+          <channel>
+            <title>Feed Title</title>
+            <atom:link href="https://example.com/feed.xml" rel="self" / role="menuitem">
+            <item>
+              <title>First item</title>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Feed Title',
+        items: [{ title: 'First item' }],
+        atom: {
+          links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
+        },
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
+    it('should parse feed with unclosed atom:link written with another prefix', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0" xmlns:a10="http://www.w3.org/2005/Atom">
+          <channel>
+            <title>Feed Title</title>
+            <a10:link href="https://example.com/feed.xml" rel="self">
+            <item>
+              <title>First item</title>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Feed Title',
+        items: [{ title: 'First item' }],
+        atom: {
+          links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
+        },
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
+    it('should parse feed with unclosed atom:link that declares its own prefix', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>Feed Title</title>
+            <x:link xmlns:x="http://www.w3.org/2005/Atom" href="https://example.com/feed.xml" rel="self">
+            <item>
+              <title>First item</title>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Feed Title',
+        items: [{ title: 'First item' }],
+        atom: {
+          links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
+        },
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
+    it('should throw MalformedError for an unclosed element that holds content', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0">
+          <channel>
+            <title>Feed Title</title>
+            <item>
+              <description>Unclosed description
+            </item>
+          </channel>
+        </rss>
+      `
+      const throwing = () => parse(value)
+
+      expect(throwing).toThrowError(MalformedError)
+    })
+  })
+
   describe('namespace normalization integration', () => {
     it('should handle feeds with no namespaces', () => {
       const value = `

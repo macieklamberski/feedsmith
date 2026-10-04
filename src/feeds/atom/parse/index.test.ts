@@ -399,6 +399,103 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  describe('unclosed attribute-only elements', () => {
+    it('should parse feed with unclosed link', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <title>Feed Title</title>
+          <link href="https://example.com/feed.xml" rel="self">
+          <entry>
+            <id>https://example.com/entry/1</id>
+            <title>First entry</title>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: { value: 'Feed Title' },
+        links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
+        entries: [{ id: 'https://example.com/entry/1', title: { value: 'First entry' } }],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
+    it('should parse feed with unclosed link in a prefixed feed', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <atom:feed xmlns:atom="http://www.w3.org/2005/Atom">
+          <atom:title>Feed Title</atom:title>
+          <atom:link href="https://example.com/feed.xml" rel="self">
+          <atom:entry>
+            <atom:id>https://example.com/entry/1</atom:id>
+            <atom:title>First entry</atom:title>
+          </atom:entry>
+        </atom:feed>
+      `
+      const expected = {
+        title: { value: 'Feed Title' },
+        links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
+        entries: [{ id: 'https://example.com/entry/1', title: { value: 'First entry' } }],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
+    it('should parse feed with unclosed link written with another prefix', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <a:feed xmlns:a="http://www.w3.org/2005/Atom">
+          <a:title>Feed Title</a:title>
+          <a:link href="https://example.com/feed.xml" rel="self">
+          <a:entry>
+            <a:id>https://example.com/entry/1</a:id>
+            <a:title>First entry</a:title>
+          </a:entry>
+        </a:feed>
+      `
+      const expected = {
+        title: { value: 'Feed Title' },
+        links: [{ href: 'https://example.com/feed.xml', rel: 'self' }],
+        entries: [{ id: 'https://example.com/entry/1', title: { value: 'First entry' } }],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
+    it('should keep a category closed after its content next to an unclosed one', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <title>Feed Title</title>
+          <entry>
+            <id>https://example.com/entry/1</id>
+            <category term="news">
+            <category term="tech">Technology</category>
+            <title>First entry</title>
+          </entry>
+          <entry>
+            <id>https://example.com/entry/2</id>
+            <title>Second entry</title>
+          </entry>
+        </feed>
+      `
+      const expected = {
+        title: { value: 'Feed Title' },
+        entries: [
+          {
+            id: 'https://example.com/entry/1',
+            title: { value: 'First entry' },
+            categories: [{ term: 'news' }, { term: 'tech' }],
+          },
+          { id: 'https://example.com/entry/2', title: { value: 'Second entry' } },
+        ],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+  })
+
   describe('namespace normalization integration', () => {
     it('should handle feeds with no namespace', () => {
       const value = `
