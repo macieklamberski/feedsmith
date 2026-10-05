@@ -95,7 +95,7 @@ export namespace RdfFeed {
       feedburner?: FeedBurnerNs.Feed<TStrict>
       opensearch?: OpenSearchNs.Feed<TStrict>
       prism?: PrismNs.ItemOrFeed<TDate>
-      cc?: CcNs.ItemOrFeed
+      cc?: CcNs.Feed
       admin?: AdminNs.Feed
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>

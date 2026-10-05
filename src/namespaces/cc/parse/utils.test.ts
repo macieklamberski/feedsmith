@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { retrieveItemOrFeed } from './utils.js'
+import { parseLicense, retrieveItemOrFeed } from './utils.js'
 
 describe('retrieveItemOrFeed', () => {
   it('should parse complete object with all properties', () => {
@@ -165,5 +165,99 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(undefined)).toBeUndefined()
     expect(retrieveItemOrFeed('string')).toBeUndefined()
     expect(retrieveItemOrFeed(123)).toBeUndefined()
+  })
+})
+
+describe('parseLicense', () => {
+  it('should parse complete object with all properties', () => {
+    const value = {
+      '@about': 'https://creativecommons.org/licenses/by-nc/4.0/',
+      'cc:permits': [
+        { '@resource': 'http://creativecommons.org/ns#Reproduction' },
+        { '@resource': 'http://creativecommons.org/ns#Distribution' },
+      ],
+      'cc:requires': [
+        { '@resource': 'http://creativecommons.org/ns#Notice' },
+        { '@resource': 'http://creativecommons.org/ns#Attribution' },
+      ],
+      'cc:prohibits': { '@resource': 'http://creativecommons.org/ns#CommercialUse' },
+      'cc:jurisdiction': { '@resource': 'http://creativecommons.org/international/us/' },
+      'cc:legalcode': { '@resource': 'https://creativecommons.org/licenses/by-nc/4.0/legalcode' },
+      'cc:deprecatedon': '2023-01-01',
+    }
+    const expected = {
+      about: 'https://creativecommons.org/licenses/by-nc/4.0/',
+      permits: [
+        'http://creativecommons.org/ns#Reproduction',
+        'http://creativecommons.org/ns#Distribution',
+      ],
+      requires: [
+        'http://creativecommons.org/ns#Notice',
+        'http://creativecommons.org/ns#Attribution',
+      ],
+      prohibits: ['http://creativecommons.org/ns#CommercialUse'],
+      jurisdiction: 'http://creativecommons.org/international/us/',
+      legalcode: 'https://creativecommons.org/licenses/by-nc/4.0/legalcode',
+      deprecatedOn: '2023-01-01',
+    }
+
+    expect(parseLicense(value)).toEqual(expected)
+  })
+
+  it('should parse object with partial properties', () => {
+    const value = {
+      '@about': 'https://creativecommons.org/licenses/by/4.0/',
+      'cc:permits': { '@resource': 'http://creativecommons.org/ns#Reproduction' },
+    }
+    const expected = {
+      about: 'https://creativecommons.org/licenses/by/4.0/',
+      permits: ['http://creativecommons.org/ns#Reproduction'],
+    }
+
+    expect(parseLicense(value)).toEqual(expected)
+  })
+
+  it('should parse prefixed rdf:about', () => {
+    const value = {
+      '@rdf:about': 'https://creativecommons.org/licenses/by/4.0/',
+    }
+    const expected = {
+      about: 'https://creativecommons.org/licenses/by/4.0/',
+    }
+
+    expect(parseLicense(value)).toEqual(expected)
+  })
+
+  it('should parse prefixed rdf:resource', () => {
+    const value = {
+      'cc:requires': { '@rdf:resource': 'http://creativecommons.org/ns#Attribution' },
+    }
+    const expected = {
+      requires: ['http://creativecommons.org/ns#Attribution'],
+    }
+
+    expect(parseLicense(value)).toEqual(expected)
+  })
+
+  it('should parse element content', () => {
+    const value = {
+      'cc:permits': { '#text': 'http://creativecommons.org/ns#Reproduction' },
+    }
+    const expected = {
+      permits: ['http://creativecommons.org/ns#Reproduction'],
+    }
+
+    expect(parseLicense(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    expect(parseLicense({})).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(parseLicense(null)).toBeUndefined()
+    expect(parseLicense(undefined)).toBeUndefined()
+    expect(parseLicense('string')).toBeUndefined()
+    expect(parseLicense([])).toBeUndefined()
   })
 })
