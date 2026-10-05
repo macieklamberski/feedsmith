@@ -90,8 +90,9 @@ describe('parseChapter', () => {
 })
 
 describe('parseChapters', () => {
-  it('should parse multiple chapters', () => {
+  it('should parse the version attribute and multiple chapters', () => {
     const value = {
+      '@version': '1.2',
       'psc:chapter': [
         {
           '@start': '00:00:00.000',
@@ -103,38 +104,63 @@ describe('parseChapters', () => {
         },
       ],
     }
-    const expected = [
-      {
-        start: '00:00:00.000',
-        title: 'Introduction',
-      },
-      {
-        start: '00:05:30.000',
-        title: 'Chapter 1',
-      },
-    ]
+    const expected = {
+      version: '1.2',
+      items: [
+        {
+          start: '00:00:00.000',
+          title: 'Introduction',
+        },
+        {
+          start: '00:05:30.000',
+          title: 'Chapter 1',
+        },
+      ],
+    }
 
     expect(parseChapters(value)).toEqual(expected)
   })
 
   it('should parse single chapter into an array', () => {
     const value = {
+      '@version': '1.2',
       'psc:chapter': {
         '@start': '00:00:00.000',
         '@title': 'Single Chapter',
       },
     }
-    const expected = [
-      {
-        start: '00:00:00.000',
-        title: 'Single Chapter',
-      },
-    ]
+    const expected = {
+      version: '1.2',
+      items: [
+        {
+          start: '00:00:00.000',
+          title: 'Single Chapter',
+        },
+      ],
+    }
 
     expect(parseChapters(value)).toEqual(expected)
   })
 
-  it('should return undefined when psc:chapter is missing', () => {
+  it('should parse chapters with no version attribute', () => {
+    const value = {
+      'psc:chapter': { '@start': '00:00:00.000', '@title': 'Single Chapter' },
+    }
+    const expected = {
+      items: [{ start: '00:00:00.000', title: 'Single Chapter' }],
+    }
+
+    expect(parseChapters(value)).toEqual(expected)
+  })
+
+  it('should parse a version with no chapters', () => {
+    const value = { '@version': '1.2' }
+    const expected = { version: '1.2' }
+
+    expect(parseChapters(value)).toEqual(expected)
+  })
+
+  it('should return undefined when psc:chapter is missing and no version is set', () => {
     const value = {
       'other:element': 'value',
     }
@@ -179,23 +205,25 @@ describe('retrieveItem', () => {
       },
     }
     const expected = {
-      chapters: [
-        {
-          start: '00:00:00.000',
-          title: 'Introduction',
-          href: 'https://example.com/intro',
-          image: 'https://example.com/intro.jpg',
-        },
-        {
-          start: '00:05:30.000',
-          title: 'Chapter 1',
-          href: 'https://example.com/chapter1',
-        },
-        {
-          start: '00:12:15.500',
-          title: 'Conclusion',
-        },
-      ],
+      chapters: {
+        items: [
+          {
+            start: '00:00:00.000',
+            title: 'Introduction',
+            href: 'https://example.com/intro',
+            image: 'https://example.com/intro.jpg',
+          },
+          {
+            start: '00:05:30.000',
+            title: 'Chapter 1',
+            href: 'https://example.com/chapter1',
+          },
+          {
+            start: '00:12:15.500',
+            title: 'Conclusion',
+          },
+        ],
+      },
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -211,12 +239,14 @@ describe('retrieveItem', () => {
       },
     }
     const expected = {
-      chapters: [
-        {
-          start: '00:00:00.000',
-          title: 'Single Chapter',
-        },
-      ],
+      chapters: {
+        items: [
+          {
+            start: '00:00:00.000',
+            title: 'Single Chapter',
+          },
+        ],
+      },
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -242,20 +272,22 @@ describe('retrieveItem', () => {
       },
     }
     const expected = {
-      chapters: [
-        {
-          start: '00:00:00.000',
-          title: 'Valid Chapter',
-        },
-        {
-          title: 'Chapter Without Start',
-          href: 'https://example.com/invalid',
-        },
-        {
-          start: '00:05:00.000',
-          title: 'Another Valid Chapter',
-        },
-      ],
+      chapters: {
+        items: [
+          {
+            start: '00:00:00.000',
+            title: 'Valid Chapter',
+          },
+          {
+            title: 'Chapter Without Start',
+            href: 'https://example.com/invalid',
+          },
+          {
+            start: '00:05:00.000',
+            title: 'Another Valid Chapter',
+          },
+        ],
+      },
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -275,14 +307,16 @@ describe('retrieveItem', () => {
       },
     }
     const expected = {
-      chapters: [
-        {
-          title: 'No Start Time',
-        },
-        {
-          href: 'https://example.com/invalid',
-        },
-      ],
+      chapters: {
+        items: [
+          {
+            title: 'No Start Time',
+          },
+          {
+            href: 'https://example.com/invalid',
+          },
+        ],
+      },
     }
 
     expect(retrieveItem(value)).toEqual(expected)
