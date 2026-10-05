@@ -32,6 +32,7 @@
      xmlns:blogChannel="http://backend.userland.com/blogChannelModule"
      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
      xmlns:georss="http://www.georss.org/georss"
+     xmlns:ev="http://purl.org/rss/1.0/modules/event/"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
   <channel>
@@ -982,6 +983,13 @@
       <georss:elev>360</georss:elev>
       <georss:floor>4</georss:floor>
       <georss:radius>50000</georss:radius>
+
+      <!-- Event Namespace: Item Level Tags -->
+      <ev:startdate>2026-11-14T19:30:00+01:00</ev:startdate>
+      <ev:enddate>2026-11-14T22:00:00+01:00</ev:enddate>
+      <ev:location>Town Hall, Main Street 12</ev:location>
+      <ev:organizer>City Library</ev:organizer>
+      <ev:type>concert</ev:type>
     </item>
   </channel>
 </rss>

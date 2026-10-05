@@ -31,6 +31,7 @@ import {
   stopNodes as dctermsStopNodes,
   uris as dctermsUris,
 } from '../namespaces/dcterms/common/config.js'
+import { stopNodes as evStopNodes, uris as evUris } from '../namespaces/ev/common/config.js'
 import {
   stopNodes as feedburnerStopNodes,
   uris as feedburnerUris,
@@ -170,6 +171,7 @@ export const namespaceUris = {
   yt: ytUris,
   geo: geoUris,
   georss: georssUris,
+  ev: evUris,
   rdf: rdfUris,
   rss: rssUris,
   rss2: rss2Uris,
@@ -199,6 +201,7 @@ export const namespaceStopNodes = [
   ...creativecommonsStopNodes,
   ...dcStopNodes,
   ...dctermsStopNodes,
+  ...evStopNodes,
   ...feedburnerStopNodes,
   ...feedpressStopNodes,
   ...geoStopNodes,

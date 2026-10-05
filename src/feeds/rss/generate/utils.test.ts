@@ -1131,6 +1131,23 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with ev namespace properties', () => {
+    const value = {
+      title: 'Autumn concert',
+      ev: {
+        startDate: '2026-11-14T18:30:00Z',
+        location: 'Town Hall, Main Street 12',
+      },
+    }
+    const expected = {
+      title: 'Autumn concert',
+      'ev:startdate': '2026-11-14T18:30:00.000Z',
+      'ev:location': 'Town Hall, Main Street 12',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should handle empty arrays', () => {
     const value = {
       title: 'Item with empty arrays',
@@ -2109,6 +2126,47 @@ describe('generateFeed', () => {
           description: 'A feed with geographic data',
           'georss:point': '45.256 -71.92',
           'georss:featureName': 'Boston',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with ev namespace properties', () => {
+    const value = {
+      title: 'City Library events',
+      description: 'Upcoming events at the City Library',
+      items: [
+        {
+          title: 'Autumn concert',
+          ev: {
+            startDate: '2026-11-14T18:30:00Z',
+            endDate: '2026-11-14T21:00:00Z',
+            location: 'Town Hall, Main Street 12',
+            organizer: 'City Library',
+            type: 'concert',
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:ev': 'http://purl.org/rss/1.0/modules/event/',
+        channel: {
+          title: 'City Library events',
+          description: 'Upcoming events at the City Library',
+          item: [
+            {
+              title: 'Autumn concert',
+              'ev:startdate': '2026-11-14T18:30:00.000Z',
+              'ev:enddate': '2026-11-14T21:00:00.000Z',
+              'ev:location': 'Town Hall, Main Street 12',
+              'ev:organizer': 'City Library',
+              'ev:type': 'concert',
+            },
+          ],
         },
       },
     }

@@ -797,6 +797,25 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle ev namespace', () => {
+    const value = {
+      title: { '#text': 'Autumn concert' },
+      link: { '#text': 'http://example.com/events/autumn-concert' },
+      'ev:startdate': { '#text': '2026-11-14' },
+      'ev:type': { '#text': 'concert' },
+    }
+    const expected = {
+      title: 'Autumn concert',
+      link: 'http://example.com/events/autumn-concert',
+      ev: {
+        startDate: '2026-11-14',
+        type: 'concert',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle rdf namespace attributes', () => {
     const value = {
       '@rdf:about': 'http://example.com/item/1',

@@ -1797,6 +1797,23 @@ describe('parseItem', () => {
 
     expect(parseItem(value)).toEqual(expected)
   })
+
+  it('should handle ev namespace', () => {
+    const value = {
+      title: { '#text': 'Autumn concert' },
+      'ev:startdate': { '#text': '2026-11-14T19:30:00+01:00' },
+      'ev:location': { '#text': 'Town Hall, Main Street 12' },
+    }
+    const expected = {
+      title: 'Autumn concert',
+      ev: {
+        startDate: '2026-11-14T19:30:00+01:00',
+        location: 'Town Hall, Main Street 12',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
 })
 
 describe('parseFeed', () => {

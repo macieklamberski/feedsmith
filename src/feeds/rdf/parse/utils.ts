@@ -18,6 +18,7 @@ import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/u
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import { retrieveItem as retrieveEvItem } from '../../../namespaces/ev/parse/utils.js'
 import {
   retrieveFeed as retrieveFeedBurnerFeed,
   retrieveItem as retrieveFeedBurnerItem,
@@ -133,6 +134,7 @@ export const parseItem: ParseUtilPartial<RdfFeed.Item<DateAny>> = (value, option
     trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    ev: namespaces.has('ev') ? retrieveEvItem(value, options) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
 

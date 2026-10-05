@@ -1864,6 +1864,52 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with ev namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:ev="http://purl.org/rss/1.0/modules/event/"
+      >
+        <channel rdf:about="http://example.com/calendar.rdf">
+          <title>Community calendar</title>
+          <link>http://example.com</link>
+          <description>Upcoming community events</description>
+        </channel>
+        <item rdf:about="http://example.com/calendar/event?id=1536">
+          <title>Public discussion on local planning</title>
+          <link>http://example.com/calendar/event?id=1536</link>
+          <ev:startdate>2007-08-06T23:00:00Z</ev:startdate>
+          <ev:type>Lecture</ev:type>
+          <ev:location>Monroeville</ev:location>
+          <ev:enddate>2007-08-07T01:00:00Z</ev:enddate>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Community calendar',
+      link: 'http://example.com',
+      description: 'Upcoming community events',
+      rdf: { about: 'http://example.com/calendar.rdf' },
+      items: [
+        {
+          title: 'Public discussion on local planning',
+          link: 'http://example.com/calendar/event?id=1536',
+          ev: {
+            startDate: '2007-08-06T23:00:00Z',
+            endDate: '2007-08-07T01:00:00Z',
+            location: 'Monroeville',
+            type: 'Lecture',
+          },
+          rdf: { about: 'http://example.com/calendar/event?id=1536' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should handle alternating case items', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
