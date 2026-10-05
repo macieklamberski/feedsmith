@@ -6,10 +6,12 @@ describe('retrieveItem', () => {
     const value = {
       'pingback:server': 'https://example.com/pingback',
       'pingback:target': 'https://example.com/post/123',
+      'pingback:about': ['https://example.org/post/456', 'https://example.net/post/789'],
     }
     const expected = {
       server: 'https://example.com/pingback',
       target: 'https://example.com/post/123',
+      abouts: ['https://example.org/post/456', 'https://example.net/post/789'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -32,6 +34,17 @@ describe('retrieveItem', () => {
     }
     const expected = {
       target: 'https://example.com/post/123',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse item with only about', () => {
+    const value = {
+      'pingback:about': 'https://example.org/post/456',
+    }
+    const expected = {
+      abouts: ['https://example.org/post/456'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -79,6 +92,17 @@ describe('retrieveItem', () => {
     expect(retrieveItem(value)).toBeUndefined()
   })
 
+  it('should skip empty strings in about array', () => {
+    const value = {
+      'pingback:about': ['', 'https://example.org/post/456'],
+    }
+    const expected = {
+      abouts: ['https://example.org/post/456'],
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
   it('should return undefined for empty object', () => {
     const value = {}
 
@@ -111,10 +135,15 @@ describe('retrieveItem', () => {
       'pingback:target': {
         '@rdf:resource': 'https://example.com/post/123',
       },
+      'pingback:about': [
+        { '@rdf:resource': 'https://example.org/post/456' },
+        { '@rdf:resource': 'https://example.net/post/789' },
+      ],
     }
     const expected = {
       server: 'https://example.com/pingback',
       target: 'https://example.com/post/123',
+      abouts: ['https://example.org/post/456', 'https://example.net/post/789'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)

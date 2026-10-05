@@ -1644,7 +1644,7 @@ describe('generateFeed', () => {
             ],
           },
         ],
-        'itunes:explicit': 'no',
+        'itunes:explicit': false,
         'itunes:author': 'Podcast Author',
         'itunes:type': 'episodic',
         'itunes:owner': {
@@ -1753,6 +1753,7 @@ describe('generateFeed', () => {
         explicit: false,
         block: false,
         email: 'podcast@example.com',
+        owner: 'owner@example.com',
         image: { href: 'https://example.com/podcast.jpg' },
         categories: ['Technology', 'Science'],
         newFeedUrl: 'https://example.com/new-feed.xml',
@@ -1770,8 +1771,9 @@ describe('generateFeed', () => {
         'googleplay:explicit': 'no',
         'googleplay:block': 'no',
         'googleplay:image': { '@href': 'https://example.com/podcast.jpg' },
-        'googleplay:new-feed-url': 'https://example.com/new-feed.xml',
+        'googleplay:newFeedUrl': 'https://example.com/new-feed.xml',
         'googleplay:email': 'podcast@example.com',
+        'googleplay:owner': 'owner@example.com',
         'googleplay:category': [{ '@text': 'Technology' }, { '@text': 'Science' }],
       },
     }
@@ -1888,6 +1890,11 @@ describe('generateFeed', () => {
         totalResults: 1000,
         startIndex: 21,
         itemsPerPage: 10,
+        link: {
+          href: 'http://example.com/opensearchdescription.xml',
+          rel: 'search',
+          type: 'application/opensearchdescription+xml',
+        },
         queries: [
           {
             role: 'request',
@@ -1906,12 +1913,66 @@ describe('generateFeed', () => {
         'opensearch:totalResults': 1000,
         'opensearch:startIndex': 21,
         'opensearch:itemsPerPage': 10,
+        'opensearch:link': {
+          '@href': 'http://example.com/opensearchdescription.xml',
+          '@rel': 'search',
+          '@type': 'application/opensearchdescription+xml',
+        },
         'opensearch:Query': [
           {
             '@role': 'request',
             '@searchTerms': 'quantum computing',
           },
         ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with prism namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: { value: 'Journal of Examples' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      prism: {
+        publicationName: 'Journal of Examples',
+        issn: '1100-9233',
+      },
+      entries: [
+        {
+          id: 'https://example.com/articles/1',
+          title: { value: 'Example Article' },
+          updated: new Date('2024-01-10T12:00:00Z'),
+          prism: {
+            volume: '24',
+            number: '6',
+            startingPage: '975',
+            endingPage: '986',
+          },
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:prism': 'http://prismstandard.org/namespaces/basic/3.0/',
+        id: 'https://example.com/feed',
+        title: { '#text': 'Journal of Examples' },
+        updated: '2024-01-10T12:00:00.000Z',
+        entry: [
+          {
+            id: 'https://example.com/articles/1',
+            title: { '#text': 'Example Article' },
+            updated: '2024-01-10T12:00:00.000Z',
+            'prism:volume': '24',
+            'prism:number': '6',
+            'prism:startingPage': '975',
+            'prism:endingPage': '986',
+          },
+        ],
+        'prism:publicationName': 'Journal of Examples',
+        'prism:issn': '1100-9233',
       },
     }
 

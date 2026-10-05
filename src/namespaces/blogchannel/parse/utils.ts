@@ -16,6 +16,9 @@ export const retrieveFeed: ParseUtilPartial<BlogChannelNs.Feed> = (value) => {
     mySubscriptions: parseSingularOf(value['blogchannel:mysubscriptions'], (value) =>
       parseString(retrieveText(value)),
     ),
+    changes: parseSingularOf(value['blogchannel:changes'], (value) =>
+      parseString(retrieveText(value)),
+    ),
   }
 
   return trimObject(feed)

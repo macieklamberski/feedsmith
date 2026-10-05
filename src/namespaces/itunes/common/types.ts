@@ -32,6 +32,8 @@ export namespace ItunesNs {
     block?: boolean
     /** @deprecated No longer used by Apple Podcasts. */
     order?: number
+    /** @deprecated No longer used by Apple Podcasts. */
+    isClosedCaptioned?: boolean
     /** @deprecated Use standard RSS description instead. No longer used by Apple Podcasts. */
     summary?: string
     /** @deprecated No longer used by Apple Podcasts. */
