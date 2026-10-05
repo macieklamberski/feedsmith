@@ -52,28 +52,31 @@ describe('generatePrice', () => {
     expect(generatePrice(values[2])).toEqual(expected[2])
   })
 
-  it('should return undefined when currency code is missing', () => {
+  it('should generate price without currency code', () => {
     const value = {
       value: 9.99,
     }
+    const expected = {
+      '#text': 9.99,
+    }
 
-    // @ts-expect-error: This is for testing purposes.
-    expect(generatePrice(value)).toBeUndefined()
+    expect(generatePrice(value)).toEqual(expected)
   })
 
-  it('should return undefined when value is missing', () => {
+  it('should generate price without value', () => {
     const value = {
       currencyCode: 'USD',
     }
+    const expected = {
+      '@currencycode': 'USD',
+    }
 
-    // @ts-expect-error: This is for testing purposes.
-    expect(generatePrice(value)).toBeUndefined()
+    expect(generatePrice(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generatePrice(value)).toBeUndefined()
   })
 
@@ -190,7 +193,7 @@ describe('generateIndirectAcquisition', () => {
       type: 'application/epub+zip',
       indirectAcquisitions: [
         { type: 'application/pdf' },
-        {}, // Missing type.
+        {},
         { type: 'application/x-mobipocket-ebook' },
       ],
     }
@@ -202,23 +205,23 @@ describe('generateIndirectAcquisition', () => {
       ],
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateIndirectAcquisition(value)).toEqual(expected)
   })
 
-  it('should return undefined when type is missing', () => {
+  it('should generate indirect acquisition without type', () => {
     const value = {
       indirectAcquisitions: [{ type: 'application/pdf' }],
     }
+    const expected = {
+      'opds:indirectAcquisition': [{ '@type': 'application/pdf' }],
+    }
 
-    // @ts-expect-error: This is for testing purposes.
-    expect(generateIndirectAcquisition(value)).toBeUndefined()
+    expect(generateIndirectAcquisition(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateIndirectAcquisition(value)).toBeUndefined()
   })
 
@@ -301,20 +304,22 @@ describe('generateAvailability', () => {
     expect(generateAvailability(value)).toEqual(expected)
   })
 
-  it('should return undefined when status is missing', () => {
+  it('should generate availability without status', () => {
     const value = {
       since: '2023-01-01T00:00:00Z',
       until: '2023-12-31T23:59:59Z',
     }
+    const expected = {
+      '@since': '2023-01-01T00:00:00.000Z',
+      '@until': '2023-12-31T23:59:59.000Z',
+    }
 
-    // @ts-expect-error: This is for testing purposes.
-    expect(generateAvailability(value)).toBeUndefined()
+    expect(generateAvailability(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateAvailability(value)).toBeUndefined()
   })
 
@@ -560,19 +565,14 @@ describe('generateLink', () => {
     expect(generateLink(value)).toEqual(expected)
   })
 
-  it('should filter out invalid prices', () => {
+  it('should filter out empty prices', () => {
     const value = {
-      prices: [
-        { value: 9.99, currencyCode: 'USD' },
-        { value: 5.99 }, // Missing currency code.
-        { currencyCode: 'EUR' }, // Missing value.
-      ],
+      prices: [{ value: 9.99, currencyCode: 'USD' }, {}],
     }
     const expected = {
       'opds:price': [{ '#text': 9.99, '@currencycode': 'USD' }],
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateLink(value)).toEqual(expected)
   })
 

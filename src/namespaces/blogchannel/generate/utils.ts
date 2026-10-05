@@ -1,9 +1,10 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import { generateCdataString, isObject, trimObject } from '../../../common/utils.js'
+import { generateCdataString } from '../../../common/utils.js'
 import type { BlogChannelNs } from '../common/types.js'
 
 export const generateFeed: GenerateUtil<BlogChannelNs.Feed> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 
@@ -11,6 +12,7 @@ export const generateFeed: GenerateUtil<BlogChannelNs.Feed> = (feed) => {
     'blogChannel:blogRoll': generateCdataString(feed.blogRoll),
     'blogChannel:blink': generateCdataString(feed.blink),
     'blogChannel:mySubscriptions': generateCdataString(feed.mySubscriptions),
+    'blogChannel:changes': generateCdataString(feed.changes),
   }
 
   return trimObject(value)

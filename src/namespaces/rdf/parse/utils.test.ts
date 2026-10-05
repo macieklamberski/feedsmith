@@ -49,6 +49,17 @@ describe('retrieveAbout', () => {
     expect(retrieveAbout(value)).toEqual(expected)
   })
 
+  it('should handle coercible number values', () => {
+    const value = {
+      '@about': 12345,
+    }
+    const expected = {
+      about: '12345',
+    }
+
+    expect(retrieveAbout(value)).toEqual(expected)
+  })
+
   it('should handle empty strings', () => {
     const value = {
       '@about': '',

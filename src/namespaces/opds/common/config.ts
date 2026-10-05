@@ -1,5 +1,5 @@
 export const uris = [
-  'http://opds-spec.org/2010/catalog', // Official URI.
+  'http://opds-spec.org/2010/catalog', // Official URI
   'https://opds-spec.org/2010/catalog',
   'http://opds-spec.org/2010/catalog/',
   'https://opds-spec.org/2010/catalog/',

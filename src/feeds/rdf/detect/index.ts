@@ -1,8 +1,8 @@
+import { isNonEmptyString } from 'trousse'
 import { namespaceUris } from '../../../common/config.js'
-import { isNonEmptyString } from '../../../common/utils.js'
 
-// RSS 0.9/1.0 namespace URIs (used for detection only, not in namespacePrefixes
-// since these elements are the default/unprefixed content in RDF feeds).
+// RSS 0.9/1.0 namespace URIs (used for detection only, not in namespacePrefixes since these
+// elements are the default/unprefixed content in RDF feeds).
 const rssNamespaceUris = [
   'http://purl.org/rss/1.0/',
   'https://purl.org/rss/1.0/',

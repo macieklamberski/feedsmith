@@ -65,28 +65,26 @@ describe('parsePrice', () => {
     expect(parsePrice(values[2])).toEqual(expected[2])
   })
 
-  it('should parse price without #text wrapper', () => {
-    const value = {
-      '@currencycode': 'USD',
-    }
-
-    expect(parsePrice(value)).toBeUndefined()
-  })
-
-  it('should return undefined when currency code is missing', () => {
+  it('should parse price without currency code', () => {
     const value = {
       '#text': '9.99',
     }
+    const expected = {
+      value: 9.99,
+    }
 
-    expect(parsePrice(value)).toBeUndefined()
+    expect(parsePrice(value)).toEqual(expected)
   })
 
-  it('should return undefined when value is missing', () => {
+  it('should parse price without value', () => {
     const value = {
       '@currencycode': 'USD',
     }
+    const expected = {
+      currencyCode: 'USD',
+    }
 
-    expect(parsePrice(value)).toBeUndefined()
+    expect(parsePrice(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
@@ -217,12 +215,15 @@ describe('parseIndirectAcquisition', () => {
     expect(parseIndirectAcquisition(value)).toEqual(expected)
   })
 
-  it('should return undefined when type is missing', () => {
+  it('should parse indirect acquisition without type', () => {
     const value = {
       'opds:indirectacquisition': [{ '@type': 'application/pdf' }],
     }
+    const expected = {
+      indirectAcquisitions: [{ type: 'application/pdf' }],
+    }
 
-    expect(parseIndirectAcquisition(value)).toBeUndefined()
+    expect(parseIndirectAcquisition(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
@@ -293,13 +294,17 @@ describe('parseAvailability', () => {
     expect(parseAvailability(value)).toEqual(expected)
   })
 
-  it('should return undefined when status is missing', () => {
+  it('should parse availability without status', () => {
     const value = {
       '@since': '2023-01-01T00:00:00Z',
       '@until': '2023-12-31T23:59:59Z',
     }
+    const expected = {
+      since: '2023-01-01T00:00:00Z',
+      until: '2023-12-31T23:59:59Z',
+    }
 
-    expect(parseAvailability(value)).toBeUndefined()
+    expect(parseAvailability(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
@@ -568,13 +573,9 @@ describe('retrieveLink', () => {
     expect(retrieveLink(value)).toEqual(expected)
   })
 
-  it('should filter out invalid prices', () => {
+  it('should filter out empty prices', () => {
     const value = {
-      'opds:price': [
-        { '#text': '9.99', '@currencycode': 'USD' },
-        { '#text': '5.99' }, // Missing currency code.
-        { '@currencycode': 'EUR' }, // Missing value.
-      ],
+      'opds:price': [{ '#text': '9.99', '@currencycode': 'USD' }, {}],
     }
     const expected = {
       prices: [{ value: 9.99, currencyCode: 'USD' }],

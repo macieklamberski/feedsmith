@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import {
   generateBox,
+  generateCircle,
   generateItemOrFeed,
   generateLatLngPairs,
   generateLine,
@@ -64,7 +65,6 @@ describe('generateLatLngPairs', () => {
     ]
     const expected = '45.256 -71.92 47 -70'
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateLatLngPairs(value)).toBe(expected)
   })
 
@@ -141,14 +141,12 @@ describe('generatePoint', () => {
   it('should return undefined for missing lat', () => {
     const value = { lng: -71.92 }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generatePoint(value)).toBeUndefined()
   })
 
   it('should return undefined for missing lng', () => {
     const value = { lat: 45.256 }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generatePoint(value)).toBeUndefined()
   })
 
@@ -360,7 +358,6 @@ describe('generateBox', () => {
       upperCorner: { lat: 43.039, lng: -69.856 },
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateBox(value)).toBeUndefined()
   })
 
@@ -369,7 +366,6 @@ describe('generateBox', () => {
       lowerCorner: { lat: 42.943, lng: -71.032 },
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateBox(value)).toBeUndefined()
   })
 
@@ -398,6 +394,37 @@ describe('generateBox', () => {
   })
 })
 
+describe('generateCircle', () => {
+  it('should generate a circle from a center and a radius', () => {
+    const value = {
+      center: { lat: 45.256, lng: -71.92 },
+      radius: 500,
+    }
+
+    expect(generateCircle(value)).toBe('45.256 -71.92 500')
+  })
+
+  it('should return undefined when the center is missing', () => {
+    const value = { radius: 500 }
+
+    expect(generateCircle(value)).toBeUndefined()
+  })
+
+  it('should return undefined when the radius is missing', () => {
+    const value = { center: { lat: 45.256, lng: -71.92 } }
+
+    expect(generateCircle(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(generateCircle(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateCircle(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateCircle('45.256 -71.92 500')).toBeUndefined()
+  })
+})
+
 describe('generateItemOrFeed', () => {
   it('should generate itemOrFeed object with all geometric properties', () => {
     const value = {
@@ -420,12 +447,17 @@ describe('generateItemOrFeed', () => {
         lowerCorner: { lat: 42.943, lng: -71.032 },
         upperCorner: { lat: 43.039, lng: -69.856 },
       },
+      circle: {
+        center: { lat: 45.256, lng: -71.92 },
+        radius: 250,
+      },
     }
     const expected = {
       'georss:point': '45.256 -71.92',
       'georss:line': '45.256 -71.92 46.46 -71.781',
       'georss:polygon': '45.256 -71.92 46.46 -71.781 43.84 -79.81 45.256 -71.92',
       'georss:box': '42.943 -71.032 43.039 -69.856',
+      'georss:circle': '45.256 -71.92 250',
     }
 
     expect(generateItemOrFeed(value)).toEqual(expected)

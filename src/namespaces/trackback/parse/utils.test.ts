@@ -5,11 +5,17 @@ describe('retrieveItem', () => {
   it('should parse complete item with all properties', () => {
     const value = {
       'trackback:ping': 'https://example.com/trackback/123',
-      'trackback:about': ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      'trackback:about': [
+        'https://blog1.example.com/trackback/456',
+        'https://blog2.example.com/trackback/789',
+      ],
     }
     const expected = {
       ping: 'https://example.com/trackback/123',
-      abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      abouts: [
+        'https://blog1.example.com/trackback/456',
+        'https://blog2.example.com/trackback/789',
+      ],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -28,10 +34,10 @@ describe('retrieveItem', () => {
 
   it('should parse item with only about property', () => {
     const value = {
-      'trackback:about': ['https://blog1.com/trackback/456'],
+      'trackback:about': ['https://blog1.example.com/trackback/456'],
     }
     const expected = {
-      abouts: ['https://blog1.com/trackback/456'],
+      abouts: ['https://blog1.example.com/trackback/456'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -39,10 +45,10 @@ describe('retrieveItem', () => {
 
   it('should parse item with single about value', () => {
     const value = {
-      'trackback:about': 'https://blog1.com/trackback/456',
+      'trackback:about': 'https://blog1.example.com/trackback/456',
     }
     const expected = {
-      abouts: ['https://blog1.com/trackback/456'],
+      abouts: ['https://blog1.example.com/trackback/456'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -51,16 +57,16 @@ describe('retrieveItem', () => {
   it('should parse item with multiple about values', () => {
     const value = {
       'trackback:about': [
-        'https://blog1.com/trackback/456',
-        'https://blog2.com/trackback/789',
-        'https://blog3.com/trackback/abc',
+        'https://blog1.example.com/trackback/456',
+        'https://blog2.example.com/trackback/789',
+        'https://blog3.example.com/trackback/abc',
       ],
     }
     const expected = {
       abouts: [
-        'https://blog1.com/trackback/456',
-        'https://blog2.com/trackback/789',
-        'https://blog3.com/trackback/abc',
+        'https://blog1.example.com/trackback/456',
+        'https://blog2.example.com/trackback/789',
+        'https://blog3.example.com/trackback/abc',
       ],
     }
 
@@ -81,12 +87,15 @@ describe('retrieveItem', () => {
   it('should handle HTML entities in about array', () => {
     const value = {
       'trackback:about': [
-        { '#text': 'https://blog1.com/track?id=1&amp;key=abc' },
-        { '#text': 'https://blog2.com/track?id=2&amp;key=def' },
+        { '#text': 'https://blog1.example.com/track?id=1&amp;key=abc' },
+        { '#text': 'https://blog2.example.com/track?id=2&amp;key=def' },
       ],
     }
     const expected = {
-      abouts: ['https://blog1.com/track?id=1&key=abc', 'https://blog2.com/track?id=2&key=def'],
+      abouts: [
+        'https://blog1.example.com/track?id=1&key=abc',
+        'https://blog2.example.com/track?id=2&key=def',
+      ],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -106,12 +115,15 @@ describe('retrieveItem', () => {
   it('should handle CDATA sections in about array', () => {
     const value = {
       'trackback:about': [
-        { '#text': '<![CDATA[https://blog1.com/trackback/456]]>' },
-        { '#text': '<![CDATA[https://blog2.com/trackback/789]]>' },
+        { '#text': '<![CDATA[https://blog1.example.com/trackback/456]]>' },
+        { '#text': '<![CDATA[https://blog2.example.com/trackback/789]]>' },
       ],
     }
     const expected = {
-      abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      abouts: [
+        'https://blog1.example.com/trackback/456',
+        'https://blog2.example.com/trackback/789',
+      ],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -120,10 +132,10 @@ describe('retrieveItem', () => {
   it('should handle empty strings', () => {
     const value = {
       'trackback:ping': '',
-      'trackback:about': ['https://blog1.com/trackback/456'],
+      'trackback:about': ['https://blog1.example.com/trackback/456'],
     }
     const expected = {
-      abouts: ['https://blog1.com/trackback/456'],
+      abouts: ['https://blog1.example.com/trackback/456'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -131,10 +143,10 @@ describe('retrieveItem', () => {
 
   it('should handle empty strings in about array', () => {
     const value = {
-      'trackback:about': ['', 'https://blog1.com/trackback/456', ''],
+      'trackback:about': ['', 'https://blog1.example.com/trackback/456', ''],
     }
     const expected = {
-      abouts: ['https://blog1.com/trackback/456'],
+      abouts: ['https://blog1.example.com/trackback/456'],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -172,14 +184,17 @@ describe('retrieveItem', () => {
   it('should handle mixed valid and invalid values in about array', () => {
     const value = {
       'trackback:about': [
-        'https://blog1.com/trackback/456',
+        'https://blog1.example.com/trackback/456',
         '',
         '   ',
-        'https://blog2.com/trackback/789',
+        'https://blog2.example.com/trackback/789',
       ],
     }
     const expected = {
-      abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      abouts: [
+        'https://blog1.example.com/trackback/456',
+        'https://blog2.example.com/trackback/789',
+      ],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -188,12 +203,15 @@ describe('retrieveItem', () => {
   it('should handle about array with objects containing #text', () => {
     const value = {
       'trackback:about': [
-        { '#text': 'https://blog1.com/trackback/456' },
-        { '#text': 'https://blog2.com/trackback/789' },
+        { '#text': 'https://blog1.example.com/trackback/456' },
+        { '#text': 'https://blog2.example.com/trackback/789' },
       ],
     }
     const expected = {
-      abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      abouts: [
+        'https://blog1.example.com/trackback/456',
+        'https://blog2.example.com/trackback/789',
+      ],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -206,16 +224,19 @@ describe('retrieveItem', () => {
       },
       'trackback:about': [
         {
-          '@rdf:resource': 'https://blog1.com/trackback/456',
+          '@rdf:resource': 'https://blog1.example.com/trackback/456',
         },
         {
-          '@rdf:resource': 'https://blog2.com/trackback/789',
+          '@rdf:resource': 'https://blog2.example.com/trackback/789',
         },
       ],
     }
     const expected = {
       ping: 'https://example.com/trackback/123',
-      abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      abouts: [
+        'https://blog1.example.com/trackback/456',
+        'https://blog2.example.com/trackback/789',
+      ],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -240,11 +261,17 @@ describe('retrieveItem', () => {
       'trackback:ping': {
         '@rdf:resource': 'https://example.com/trackback/123',
       },
-      'trackback:about': ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      'trackback:about': [
+        'https://blog1.example.com/trackback/456',
+        'https://blog2.example.com/trackback/789',
+      ],
     }
     const expected = {
       ping: 'https://example.com/trackback/123',
-      abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      abouts: [
+        'https://blog1.example.com/trackback/456',
+        'https://blog2.example.com/trackback/789',
+      ],
     }
 
     expect(retrieveItem(value)).toEqual(expected)
@@ -254,19 +281,19 @@ describe('retrieveItem', () => {
     const value = {
       'trackback:about': [
         {
-          '@rdf:resource': 'https://blog1.com/trackback/456',
+          '@rdf:resource': 'https://blog1.example.com/trackback/456',
         },
-        'https://blog2.com/trackback/789',
+        'https://blog2.example.com/trackback/789',
         {
-          '#text': 'https://blog3.com/trackback/abc',
+          '#text': 'https://blog3.example.com/trackback/abc',
         },
       ],
     }
     const expected = {
       abouts: [
-        'https://blog1.com/trackback/456',
-        'https://blog2.com/trackback/789',
-        'https://blog3.com/trackback/abc',
+        'https://blog1.example.com/trackback/456',
+        'https://blog2.example.com/trackback/789',
+        'https://blog3.example.com/trackback/abc',
       ],
     }
 
@@ -277,17 +304,20 @@ describe('retrieveItem', () => {
     const value = {
       'trackback:about': [
         {
-          '@rdf:resource': 'https://blog1.com/trackback/456',
-          '#text': 'https://blog1.com/other',
+          '@rdf:resource': 'https://blog1.example.com/trackback/456',
+          '#text': 'https://blog1.example.com/other',
         },
         {
-          '@rdf:resource': 'https://blog2.com/trackback/789',
-          '#text': 'https://blog2.com/other',
+          '@rdf:resource': 'https://blog2.example.com/trackback/789',
+          '#text': 'https://blog2.example.com/other',
         },
       ],
     }
     const expected = {
-      abouts: ['https://blog1.com/trackback/456', 'https://blog2.com/trackback/789'],
+      abouts: [
+        'https://blog1.example.com/trackback/456',
+        'https://blog2.example.com/trackback/789',
+      ],
     }
 
     expect(retrieveItem(value)).toEqual(expected)

@@ -1,5 +1,5 @@
 export const uris = [
-  'http://creativecommons.org/ns#', // Official URI.
+  'http://creativecommons.org/ns#', // Official URI
   'https://creativecommons.org/ns#',
   'http://web.resource.org/cc/',
   'https://web.resource.org/cc/',

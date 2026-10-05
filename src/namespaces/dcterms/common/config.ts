@@ -1,5 +1,5 @@
 export const uris = [
-  'http://purl.org/dc/terms/', // Official URI.
+  'http://purl.org/dc/terms/', // Official URI
   'https://purl.org/dc/terms/',
   'http://purl.org/dc/terms',
   'https://purl.org/dc/terms',

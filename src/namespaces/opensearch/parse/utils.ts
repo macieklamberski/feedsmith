@@ -1,22 +1,23 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import { isPlainObject, trimObject } from 'trousse'
+import type { ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseNumber,
   parseSingularOf,
   parseString,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { OpenSearchNs } from '../common/types.js'
 
-export const parseQuery: ParsePartialUtil<OpenSearchNs.Query> = (value) => {
-  if (!isObject(value)) {
+export const parseQuery: ParseUtilPartial<OpenSearchNs.Query> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
   const query = {
     role: parseString(value['@role']),
+    title: parseString(value['@title']),
+    totalResults: parseNumber(value['@totalresults']),
     searchTerms: parseString(value['@searchterms']),
     count: parseNumber(value['@count']),
     startIndex: parseNumber(value['@startindex']),
@@ -29,8 +30,23 @@ export const parseQuery: ParsePartialUtil<OpenSearchNs.Query> = (value) => {
   return trimObject(query)
 }
 
-export const retrieveFeed: ParsePartialUtil<OpenSearchNs.Feed> = (value) => {
-  if (!isObject(value)) {
+export const parseLink: ParseUtilPartial<OpenSearchNs.Link> = (value) => {
+  if (!isPlainObject(value)) {
+    return
+  }
+
+  const link = {
+    href: parseString(value['@href']),
+    rel: parseString(value['@rel']),
+    type: parseString(value['@type']),
+    hreflang: parseString(value['@hreflang']),
+  }
+
+  return trimObject(link)
+}
+
+export const retrieveFeed: ParseUtilPartial<OpenSearchNs.Feed> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -44,6 +60,7 @@ export const retrieveFeed: ParsePartialUtil<OpenSearchNs.Feed> = (value) => {
     itemsPerPage: parseSingularOf(value['opensearch:itemsperpage'], (value) =>
       parseNumber(retrieveText(value)),
     ),
+    link: parseSingularOf(value['opensearch:link'], parseLink),
     queries: parseArrayOf(value['opensearch:query'], parseQuery),
   }
 

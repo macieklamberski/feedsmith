@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import { locales } from './config.js'
-import { parse } from './parse.js'
+import { DetectError } from './errors.js'
+import { type AnyFeed, parse } from './parse.js'
 
 describe('parse', () => {
   it('should parse valid Atom feed', () => {
@@ -11,10 +12,10 @@ describe('parse', () => {
         <id>example-feed</id>
       </feed>
     `
-    const expected = {
-      format: 'atom' as const,
+    const expected: AnyFeed = {
+      format: 'atom',
       feed: {
-        title: 'Feed',
+        title: { value: 'Feed' },
         id: 'example-feed',
       },
     }
@@ -41,8 +42,8 @@ describe('parse', () => {
         },
       ],
     }
-    const expected = {
-      format: 'json' as const,
+    const expected: AnyFeed = {
+      format: 'json',
       feed: {
         title: 'My Example Feed',
         home_page_url: 'https://example.com/',
@@ -78,8 +79,8 @@ describe('parse', () => {
         },
       ],
     })
-    const expected = {
-      format: 'json' as const,
+    const expected: AnyFeed = {
+      format: 'json',
       feed: {
         title: 'My Example Feed',
         home_page_url: 'https://example.com/',
@@ -103,8 +104,8 @@ describe('parse', () => {
       items: [{ id: '1', content_text: 'Test' }],
     })
     const value = `  ${json}`
-    const expected = {
-      format: 'json' as const,
+    const expected: AnyFeed = {
+      format: 'json',
       feed: {
         title: 'Feed with whitespace',
         items: [{ id: '1', content_text: 'Test' }],
@@ -121,8 +122,8 @@ describe('parse', () => {
       items: [{ id: '1', content_text: 'Test' }],
     })
     const value = `${json}  `
-    const expected = {
-      format: 'json' as const,
+    const expected: AnyFeed = {
+      format: 'json',
       feed: {
         title: 'Feed with whitespace',
         items: [{ id: '1', content_text: 'Test' }],
@@ -139,8 +140,8 @@ describe('parse', () => {
       items: [{ id: '1', content_text: 'Test' }],
     })
     const value = `  ${json}  `
-    const expected = {
-      format: 'json' as const,
+    const expected: AnyFeed = {
+      format: 'json',
       feed: {
         title: 'Feed with whitespace',
         items: [{ id: '1', content_text: 'Test' }],
@@ -150,16 +151,93 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse JSON feed from string prefixed with a BOM', () => {
+    const json = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'Feed with a BOM',
+      items: [{ id: '1', content_text: 'Test' }],
+    })
+    const value = `\ufeff${json}`
+    const expected: AnyFeed = {
+      format: 'json',
+      feed: {
+        title: 'Feed with a BOM',
+        items: [{ id: '1', content_text: 'Test' }],
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse JSON feed from string as JSON when its content carries RSS markup', () => {
+    const value = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'My Example Feed',
+      items: [
+        {
+          id: '1',
+          content_html: 'Example: <rss version="2.0"><channel><title>Other</title></channel></rss>',
+        },
+      ],
+    })
+    const expected: AnyFeed = {
+      format: 'json',
+      feed: {
+        title: 'My Example Feed',
+        items: [
+          {
+            id: '1',
+            content_html:
+              'Example: <rss version="2.0"><channel><title>Other</title></channel></rss>',
+          },
+        ],
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse JSON feed from string as JSON when its content carries Atom markup', () => {
+    const value = JSON.stringify({
+      version: 'https://jsonfeed.org/version/1.1',
+      title: 'My Example Feed',
+      items: [
+        {
+          id: '1',
+          content_html:
+            'Example: <feed xmlns="http://www.w3.org/2005/Atom"><title>Other</title></feed>',
+        },
+      ],
+    })
+    const expected: AnyFeed = {
+      format: 'json',
+      feed: {
+        title: 'My Example Feed',
+        items: [
+          {
+            id: '1',
+            content_html:
+              'Example: <feed xmlns="http://www.w3.org/2005/Atom"><title>Other</title></feed>',
+          },
+        ],
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should reject malformed JSON string', () => {
     const value = '{"version":"https://jsonfeed.org/version/1.1","title":"Malformed'
+    const throwing = () => parse(value)
 
-    expect(() => parse(value)).toThrowError(locales.unrecognizedFeedFormat)
+    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should reject JSON array string', () => {
     const value = '[{"version":"https://jsonfeed.org/version/1.1"}]'
+    const throwing = () => parse(value)
 
-    expect(() => parse(value)).toThrowError(locales.unrecognizedFeedFormat)
+    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should parse valid RSS feed', () => {
@@ -173,8 +251,8 @@ describe('parse', () => {
         </channel>
       </rss>
     `
-    const expected = {
-      format: 'rss' as const,
+    const expected: AnyFeed = {
+      format: 'rss',
       feed: {
         title: 'Feed',
         link: 'https://example.com/feed',
@@ -202,8 +280,8 @@ describe('parse', () => {
         </item>
       </rdf:RDF>
     `
-    const expected = {
-      format: 'rdf' as const,
+    const expected: AnyFeed = {
+      format: 'rdf',
       feed: {
         title: 'Example Feed',
         link: 'http://example.org',
@@ -222,31 +300,60 @@ describe('parse', () => {
   })
 
   it('should throw error for invalid input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.unrecognizedFeedFormat)
+    const throwing = () => parse('not a feed')
+
+    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
+  })
+
+  it('should throw error for empty string input', () => {
+    const throwing = () => parse('')
+
+    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
+  })
+
+  it('should throw error for whitespace-only string input', () => {
+    const throwing = () => parse('   ')
+
+    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle null input', () => {
-    expect(() => parse(null)).toThrowError(locales.unrecognizedFeedFormat)
+    const throwing = () => parse(null)
+
+    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle undefined input', () => {
-    expect(() => parse(undefined)).toThrowError(locales.unrecognizedFeedFormat)
+    const throwing = () => parse(undefined)
+
+    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle array input', () => {
-    expect(() => parse([])).toThrowError(locales.unrecognizedFeedFormat)
+    const throwing = () => parse([])
+
+    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle empty object input', () => {
-    expect(() => parse({})).toThrowError(locales.unrecognizedFeedFormat)
-  })
+    const throwing = () => parse({})
 
-  it('should handle string input', () => {
-    expect(() => parse('not a feed')).toThrowError(locales.unrecognizedFeedFormat)
+    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
   })
 
   it('should handle number input', () => {
-    expect(() => parse(123)).toThrowError(locales.unrecognizedFeedFormat)
+    const throwing = () => parse(123)
+
+    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
+  })
+
+  describe('error types', () => {
+    it('should throw DetectError for unrecognized format', () => {
+      const throwing = () => parse('not a feed')
+
+      expect(throwing).toThrow(DetectError)
+      expect(throwing).toThrow(locales.unrecognizedFeedFormat)
+    })
   })
 
   describe('leading/trailing garbage', () => {
@@ -262,8 +369,8 @@ describe('parse', () => {
           </channel>
         </rss>
       `
-      const expected = {
-        format: 'rss' as const,
+      const expected: AnyFeed = {
+        format: 'rss',
         feed: {
           title: 'Feed',
           link: 'https://example.com/feed',
@@ -287,8 +394,8 @@ describe('parse', () => {
           </channel>
         </rss>
       `
-      const expected = {
-        format: 'rss' as const,
+      const expected: AnyFeed = {
+        format: 'rss',
         feed: {
           title: 'Feed',
           link: 'https://example.com/feed',
@@ -310,10 +417,10 @@ describe('parse', () => {
           <id>example-feed</id>
         </feed>
       `
-      const expected = {
-        format: 'atom' as const,
+      const expected: AnyFeed = {
+        format: 'atom',
         feed: {
-          title: 'Feed',
+          title: { value: 'Feed' },
           id: 'example-feed',
         },
       }
@@ -341,8 +448,8 @@ describe('parse', () => {
           </item>
         </rdf:RDF>
       `
-      const expected = {
-        format: 'rdf' as const,
+      const expected: AnyFeed = {
+        format: 'rdf',
         feed: {
           title: 'Example Feed',
           link: 'http://example.org',
@@ -372,8 +479,8 @@ describe('parse', () => {
           </channel>
         </rss>
       `
-      const expected = {
-        format: 'rss' as const,
+      const expected: AnyFeed = {
+        format: 'rss',
         feed: {
           title: 'Feed',
           link: 'https://example.com/feed',
@@ -396,8 +503,8 @@ describe('parse', () => {
         </rss>
         Warning: Cannot modify header information - headers already sent in /var/www/html/wp-includes/pluggable.php on line 1234
       `
-      const expected = {
-        format: 'rss' as const,
+      const expected: AnyFeed = {
+        format: 'rss',
         feed: {
           title: 'Feed',
           link: 'https://example.com/feed',
@@ -418,15 +525,71 @@ describe('parse', () => {
 
         Notice: Undefined index: cache_key in /var/www/html/wp-content/plugins/plugin.php on line 56
       `
-      const expected = {
-        format: 'atom' as const,
+      const expected: AnyFeed = {
+        format: 'atom',
         feed: {
-          title: 'Feed',
+          title: { value: 'Feed' },
           id: 'example-feed',
         },
       }
 
       expect(parse(value)).toEqual(expected)
     })
+
+    it('should parse RSS feed with a BOM before the XML declaration', () => {
+      const value = `\ufeff<?xml version="1.0"?>
+        <rss version="2.0">
+          <channel>
+            <title>Feed</title>
+            <link>https://example.com/feed</link>
+            <description>Example Feed</description>
+          </channel>
+        </rss>
+      `
+      const expected: AnyFeed = {
+        format: 'rss',
+        feed: {
+          title: 'Feed',
+          link: 'https://example.com/feed',
+          description: 'Example Feed',
+        },
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+  })
+
+  describe('parseDateFn', () => {
+    it('should apply custom parseDateFn and detect format correctly', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0">
+          <channel>
+            <title>Test</title>
+            <pubDate>Wed, 15 Mar 2023 12:00:00 GMT</pubDate>
+          </channel>
+        </rss>
+      `
+      const expected: AnyFeed<Date> = {
+        format: 'rss',
+        feed: {
+          title: 'Test',
+          pubDate: new Date('Wed, 15 Mar 2023 12:00:00 GMT'),
+        },
+      }
+
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    })
+  })
+
+  it.todo('should prefer earlier formats in detection order for ambiguous input', () => {
+    // parse() runs the rss, atom, rdf and json detectors in that order.
+    // Craft an input that matches more than one detector and pin which format wins.
+  })
+
+  it.todo('should pass maxItems option through to the format parser', () => {
+    // Parse an RSS feed with three items and maxItems: 2.
+    // Expected: only the first two items are returned, proving options beyond parseDateFn reach
+    // the underlying format parser.
   })
 })

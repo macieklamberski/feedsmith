@@ -1,3 +1,7 @@
+---
+title: "Reference: OPDS Namespace"
+---
+
 # OPDS Namespace Reference
 
 The OPDS (Open Publication Distribution System) namespace extends Atom links with catalog-specific metadata for digital publication distribution, including pricing, acquisition methods, and faceted navigation.

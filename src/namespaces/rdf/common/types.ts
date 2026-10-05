@@ -3,7 +3,10 @@ export namespace RdfNs {
   export type About = {
     about?: string
   }
+}
+// #endregion reference
 
+export namespace RdfNs {
   /** @internal General RDF element kept for potential future use when all RDF data is needed. */
   export type Element = {
     about?: string
@@ -16,4 +19,3 @@ export namespace RdfNs {
     value?: Array<unknown>
   }
 }
-// #endregion reference

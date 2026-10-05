@@ -30,6 +30,25 @@ describe('generateInReplyTo', () => {
     expect(generateInReplyTo(value)).toEqual(expected)
   })
 
+  it('should generate in-reply-to with partial properties', () => {
+    const value = {
+      href: 'http://example.com/original-post#comment-1',
+      type: 'text/html',
+    }
+    const expected = {
+      '@href': 'http://example.com/original-post#comment-1',
+      '@type': 'text/html',
+    }
+
+    expect(generateInReplyTo(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateInReplyTo(value)).toBeUndefined()
+  })
+
   it('should handle undefined input', () => {
     expect(generateInReplyTo(undefined)).toBeUndefined()
   })
@@ -47,6 +66,34 @@ describe('generateLink', () => {
     }
 
     expect(generateLink(value)).toEqual(expected)
+  })
+
+  it('should generate link attributes with only count', () => {
+    const value = {
+      count: 25,
+    }
+    const expected = {
+      '@thr:count': 25,
+    }
+
+    expect(generateLink(value)).toEqual(expected)
+  })
+
+  it('should generate link attributes with only updated', () => {
+    const value = {
+      updated: new Date('2023-12-15T14:30:00Z'),
+    }
+    const expected = {
+      '@thr:updated': '2023-12-15T14:30:00.000Z',
+    }
+
+    expect(generateLink(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateLink(value)).toBeUndefined()
   })
 
   it('should handle undefined input', () => {
@@ -104,8 +151,13 @@ describe('generateItem', () => {
       ],
     }
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateItem(value)).toBeUndefined()
   })
 
   it('should handle undefined input', () => {

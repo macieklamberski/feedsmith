@@ -1,6 +1,6 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
+import { isPlainObject, trimObject } from 'trousse'
+import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
 import {
-  isObject,
   parseArrayOf,
   parseBoolean,
   parseDate,
@@ -8,69 +8,54 @@ import {
   parseSingularOf,
   parseString,
   retrieveText,
-  trimObject,
 } from '../../../common/utils.js'
 import type { OpdsNs } from '../common/types.js'
 
-export const parsePrice: ParsePartialUtil<OpdsNs.Price> = (value) => {
-  if (!isObject(value)) {
+export const parsePrice: ParseUtilPartial<OpdsNs.Price> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
-  const priceValue = parseNumber(retrieveText(value))
-  const currencyCode = parseString(value['@currencycode'])
-
-  if (priceValue === undefined || currencyCode === undefined) {
-    return
+  const price = {
+    value: parseNumber(retrieveText(value)),
+    currencyCode: parseString(value['@currencycode']),
   }
 
-  return {
-    value: priceValue,
-    currencyCode,
-  }
+  return trimObject(price)
 }
 
-export const parseIndirectAcquisition: ParsePartialUtil<OpdsNs.IndirectAcquisition> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
-  const type = parseString(value['@type'])
-
-  if (type === undefined) {
+export const parseIndirectAcquisition: ParseUtilPartial<OpdsNs.IndirectAcquisition> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
   const indirectAcquisition = {
-    type,
+    type: parseString(value['@type']),
     indirectAcquisitions: parseArrayOf(value['opds:indirectacquisition'], parseIndirectAcquisition),
   }
 
-  return trimObject(indirectAcquisition) as OpdsNs.IndirectAcquisition
+  return trimObject(indirectAcquisition)
 }
 
-export const parseAvailability: ParsePartialUtil<OpdsNs.Availability<string>> = (value) => {
-  if (!isObject(value)) {
-    return
-  }
-
-  const status = parseString(value['@status'])
-
-  if (status === undefined) {
+export const parseAvailability: ParseUtilPartial<
+  OpdsNs.Availability<DateAny>,
+  ParseMainOptions<DateAny>
+> = (value, options) => {
+  if (!isPlainObject(value)) {
     return
   }
 
   const availability = {
-    status,
-    since: parseDate(value['@since']),
-    until: parseDate(value['@until']),
+    status: parseString(value['@status']),
+    since: parseDate(value['@since'], options?.parseDateFn),
+    until: parseDate(value['@until'], options?.parseDateFn),
   }
 
-  return trimObject(availability) as OpdsNs.Availability<string>
+  return trimObject(availability)
 }
 
-export const parseHolds: ParsePartialUtil<OpdsNs.Holds> = (value) => {
-  if (!isObject(value)) {
+export const parseHolds: ParseUtilPartial<OpdsNs.Holds> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -82,8 +67,8 @@ export const parseHolds: ParsePartialUtil<OpdsNs.Holds> = (value) => {
   return trimObject(holds)
 }
 
-export const parseCopies: ParsePartialUtil<OpdsNs.Copies> = (value) => {
-  if (!isObject(value)) {
+export const parseCopies: ParseUtilPartial<OpdsNs.Copies> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -95,8 +80,11 @@ export const parseCopies: ParsePartialUtil<OpdsNs.Copies> = (value) => {
   return trimObject(copies)
 }
 
-export const retrieveLink: ParsePartialUtil<OpdsNs.Link<string>> = (value) => {
-  if (!isObject(value)) {
+export const retrieveLink: ParseUtilPartial<OpdsNs.Link<DateAny>, ParseMainOptions<DateAny>> = (
+  value,
+  options,
+) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -105,7 +93,9 @@ export const retrieveLink: ParsePartialUtil<OpdsNs.Link<string>> = (value) => {
     indirectAcquisitions: parseArrayOf(value['opds:indirectacquisition'], parseIndirectAcquisition),
     facetGroup: parseString(value['@opds:facetgroup']),
     activeFacet: parseBoolean(value['@opds:activefacet']),
-    availability: parseSingularOf(value['opds:availability'], parseAvailability),
+    availability: parseSingularOf(value['opds:availability'], (value) => {
+      return parseAvailability(value, options)
+    }),
     holds: parseSingularOf(value['opds:holds'], parseHolds),
     copies: parseSingularOf(value['opds:copies'], parseCopies),
   }

@@ -137,17 +137,11 @@ describe('detect', () => {
     expect(detect(wrongNamespace)).toBe(false)
   })
 
-  // it('return false for feed element in XML comments', () => {
-  //   const commentedFeed = `
-  //     <?xml version="1.0"?>
-  //     <root>
-  //       <!-- <feed xmlns="http://www.w3.org/2005/Atom"><title>Test</title></feed> -->
-  //       <content>Not a feed</content>
-  //     </root>
-  //   `
-
-  //   expect(detect(commentedFeed)).toBe(false)
-  // })
+  it.todo('should return false for feed element in XML comments', () => {
+    // A <feed> element placed inside an XML comment (<!-- <feed>...</feed> -->) currently yields
+    // a false positive because the regex-based detector does not strip comments. Expected: detect
+    // returns false once comment stripping is implemented.
+  })
 
   it('should return false for RSS feed', () => {
     const rssFeed = `

@@ -2,7 +2,7 @@
 title: "Reference: Google Play Podcast Namespace"
 ---
 
-# Google Play Podcast Namespace
+# Google Play Podcast Namespace Reference
 
 The Google Play Podcast namespace provides podcast-specific metadata for feed and episode information optimized for Google Play's podcast platform, including author details, content descriptions, and content policies.
 
@@ -14,7 +14,7 @@ The Google Play Podcast namespace provides podcast-specific metadata for feed an
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://www.google.com/schemas/play-podcasts/1.0/">Google Play Podcast Namespace</a></td>
+      <td><a href="https://web.archive.org/web/20210926220857/https://support.google.com/podcast-publishers/answer/9889544" target="_blank">RSS Feed Guidelines for Google Podcasts</a> (Web Archive)</td>
     </tr>
     <tr>
       <th>Prefix</th>
@@ -35,6 +35,9 @@ The Google Play Podcast namespace provides podcast-specific metadata for feed an
 </table>
 
 ## Structure
+
+> [!INFO]
+> For details on type parameters (`TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tstrict).
 
 <<< @/../src/namespaces/googleplay/common/types.ts#reference
 

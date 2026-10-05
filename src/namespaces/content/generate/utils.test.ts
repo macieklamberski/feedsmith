@@ -35,6 +35,22 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should handle empty strings', () => {
+    const value = {
+      encoded: '',
+    }
+
+    expect(generateItem(value)).toBeUndefined()
+  })
+
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      encoded: '   ',
+    }
+
+    expect(generateItem(value)).toBeUndefined()
+  })
+
   it('should handle empty object', () => {
     const value = {}
 
@@ -43,5 +59,16 @@ describe('generateItem', () => {
 
   it('should handle undefined input', () => {
     expect(generateItem(undefined)).toBeUndefined()
+  })
+
+  it('should handle non-object inputs', () => {
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateItem('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateItem(123)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateItem(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateItem([])).toBeUndefined()
   })
 })

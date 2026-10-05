@@ -1,15 +1,10 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
-import {
-  isObject,
-  parseSingularOf,
-  parseString,
-  retrieveRdfResourceOrText,
-  trimObject,
-} from '../../../common/utils.js'
+import { isPlainObject, trimObject } from 'trousse'
+import type { ParseUtilPartial } from '../../../common/types.js'
+import { parseSingularOf, parseString, retrieveRdfResourceOrText } from '../../../common/utils.js'
 import type { AdminNs } from '../common/types.js'
 
-export const retrieveFeed: ParsePartialUtil<AdminNs.Feed> = (value) => {
-  if (!isObject(value)) {
+export const retrieveFeed: ParseUtilPartial<AdminNs.Feed> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 

@@ -1,21 +1,16 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateBoolean,
   generateNumber,
   generatePlainString,
   generateRfc3339Date,
-  isObject,
   trimArray,
-  trimObject,
 } from '../../../common/utils.js'
 import type { OpdsNs } from '../common/types.js'
 
 export const generatePrice: GenerateUtil<OpdsNs.Price> = (price) => {
-  if (!isObject(price)) {
-    return
-  }
-
-  if (price.value === undefined || price.currencyCode === undefined) {
+  if (!isPlainObject(price)) {
     return
   }
 
@@ -30,11 +25,7 @@ export const generatePrice: GenerateUtil<OpdsNs.Price> = (price) => {
 export const generateIndirectAcquisition: GenerateUtil<OpdsNs.IndirectAcquisition> = (
   indirectAcquisition,
 ) => {
-  if (!isObject(indirectAcquisition)) {
-    return
-  }
-
-  if (indirectAcquisition.type === undefined) {
+  if (!isPlainObject(indirectAcquisition)) {
     return
   }
 
@@ -50,11 +41,7 @@ export const generateIndirectAcquisition: GenerateUtil<OpdsNs.IndirectAcquisitio
 }
 
 export const generateAvailability: GenerateUtil<OpdsNs.Availability<DateLike>> = (availability) => {
-  if (!isObject(availability)) {
-    return
-  }
-
-  if (availability.status === undefined) {
+  if (!isPlainObject(availability)) {
     return
   }
 
@@ -68,7 +55,7 @@ export const generateAvailability: GenerateUtil<OpdsNs.Availability<DateLike>> =
 }
 
 export const generateHolds: GenerateUtil<OpdsNs.Holds> = (holds) => {
-  if (!isObject(holds)) {
+  if (!isPlainObject(holds)) {
     return
   }
 
@@ -81,7 +68,7 @@ export const generateHolds: GenerateUtil<OpdsNs.Holds> = (holds) => {
 }
 
 export const generateCopies: GenerateUtil<OpdsNs.Copies> = (copies) => {
-  if (!isObject(copies)) {
+  if (!isPlainObject(copies)) {
     return
   }
 
@@ -94,7 +81,7 @@ export const generateCopies: GenerateUtil<OpdsNs.Copies> = (copies) => {
 }
 
 export const generateLink: GenerateUtil<OpdsNs.Link<DateLike>> = (link) => {
-  if (!isObject(link)) {
+  if (!isPlainObject(link)) {
     return
   }
 

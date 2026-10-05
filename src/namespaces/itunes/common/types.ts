@@ -1,8 +1,18 @@
+import type { Requirable, Strict } from '../../../common/types.js'
+
 // #region reference
 export namespace ItunesNs {
-  export type Category = {
-    text: string
-    categories?: Array<Category>
+  // NOTE: BaseCategory contains non-recursive fields wrapped in Strict<>. Category extends it and
+  // adds recursive categories field separately.
+  export type BaseCategory<TStrict extends boolean = false> = Strict<
+    {
+      text: Requirable<string> // Required in spec
+    },
+    TStrict
+  >
+
+  export type Category<TStrict extends boolean = false> = BaseCategory<TStrict> & {
+    categories?: Array<Category<TStrict>>
   }
 
   export type Owner = {
@@ -20,6 +30,10 @@ export namespace ItunesNs {
     season?: number
     episodeType?: string
     block?: boolean
+    /** @deprecated No longer used by Apple Podcasts. */
+    order?: number
+    /** @deprecated No longer used by Apple Podcasts. */
+    isClosedCaptioned?: boolean
     /** @deprecated Use standard RSS description instead. No longer used by Apple Podcasts. */
     summary?: string
     /** @deprecated No longer used by Apple Podcasts. */
@@ -28,9 +42,9 @@ export namespace ItunesNs {
     keywords?: Array<string>
   }
 
-  export type Feed = {
+  export type Feed<TStrict extends boolean = false> = {
     image?: string
-    categories?: Array<Category>
+    categories?: Array<Category<TStrict>>
     explicit?: boolean
     author?: string
     title?: string

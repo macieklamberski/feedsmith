@@ -68,12 +68,12 @@ describe('generatePrimaryCategory', () => {
   })
 
   it('should handle non-object inputs', () => {
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generatePrimaryCategory('string')).toBeUndefined()
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generatePrimaryCategory(123)).toBeUndefined()
     expect(generatePrimaryCategory(undefined)).toBeUndefined()
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generatePrimaryCategory(null)).toBeUndefined()
   })
 })
@@ -124,12 +124,12 @@ describe('generateAuthor', () => {
   })
 
   it('should handle non-object inputs', () => {
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generateAuthor('string')).toBeUndefined()
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generateAuthor(123)).toBeUndefined()
     expect(generateAuthor(undefined)).toBeUndefined()
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generateAuthor(null)).toBeUndefined()
   })
 })
@@ -155,6 +155,21 @@ describe('generateEntry', () => {
         '@scheme': 'http://arxiv.org/schemas/atom',
         '@label': 'High Energy Physics - Experiment',
       },
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
+  it('should generate entry with the elements of the arXiv RSS feeds', () => {
+    const value = {
+      doi: '10.5802/jep.257',
+      announceType: 'replace-cross',
+      journalReference: 'Journal de l Ecole polytechnique, Tome 11 (2024), pp. 431-472',
+    }
+    const expected = {
+      'arxiv:doi': '10.5802/jep.257',
+      'arxiv:announce_type': 'replace-cross',
+      'arxiv:journal_reference': 'Journal de l Ecole polytechnique, Tome 11 (2024), pp. 431-472',
     }
 
     expect(generateEntry(value)).toEqual(expected)
@@ -217,12 +232,12 @@ describe('generateEntry', () => {
   })
 
   it('should handle non-object inputs', () => {
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generateEntry('string')).toBeUndefined()
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generateEntry(123)).toBeUndefined()
     expect(generateEntry(undefined)).toBeUndefined()
-    // @ts-expect-error: Testing invalid input
+    // @ts-expect-error: This is for testing purposes.
     expect(generateEntry(null)).toBeUndefined()
   })
 

@@ -1,5 +1,5 @@
 export const uris = [
-  'http://wellformedweb.org/CommentAPI/', // Official URI.
+  'http://wellformedweb.org/CommentAPI/', // Official URI
   'https://wellformedweb.org/CommentAPI/',
   'http://wellformedweb.org/CommentAPI',
   'https://wellformedweb.org/CommentAPI',
