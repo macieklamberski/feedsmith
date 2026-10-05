@@ -51,6 +51,10 @@ import {
   generateLink as generateThrLink,
 } from '../../../namespaces/thr/generate/utils.js'
 import { generateItem as generateTrackbackItem } from '../../../namespaces/trackback/generate/utils.js'
+import {
+  generateFeed as generateWebfeedsFeed,
+  generateItem as generateWebfeedsItem,
+} from '../../../namespaces/webfeeds/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
 import { generateItemOrFeed as generateXmlItemOrFeed } from '../../../namespaces/xml/generate/utils.js'
 import {
@@ -302,6 +306,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
     ...generateMediaItemOrFeed(entry.media),
     ...generateGooglePlayItem(entry.googleplay),
     ...generateFeedBurnerItem(entry.feedburner),
+    ...generateWebfeedsItem(entry.webfeeds),
     ...generateArxivEntry(entry.arxiv),
     ...generatePrismItemOrFeed(entry.prism),
     ...generateCc(entry.cc),
@@ -375,6 +380,7 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
     ...generateMediaItemOrFeed(feed.media),
     ...generateGooglePlayFeed(feed.googleplay),
     ...generateFeedBurnerFeed(feed.feedburner),
+    ...generateWebfeedsFeed(feed.webfeeds),
     ...generateOpenSearchFeed(feed.opensearch),
     ...generatePrismItemOrFeed(feed.prism),
     ...generateCc(feed.cc),

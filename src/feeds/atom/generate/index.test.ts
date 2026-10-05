@@ -708,6 +708,47 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with webfeeds namespace', () => {
+    const value = {
+      id: 'https://example.com/blog',
+      title: { value: 'Blog with Webfeeds branding' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      webfeeds: {
+        icon: 'https://example.com/images/icon.png',
+        accentColor: '249F80',
+        analytics: { id: 'G-E1P00P5NYS', engine: 'GoogleAnalytics' },
+      },
+      entries: [
+        {
+          id: 'https://example.com/post/1',
+          title: { value: 'Post with a featured image' },
+          updated: new Date('2024-01-05T10:30:00Z'),
+          webfeeds: {
+            featuredImage: { url: 'https://example.com/images/featured.jpg', width: 1200 },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss/1.0">
+  <id>https://example.com/blog</id>
+  <title>Blog with Webfeeds branding</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <webfeeds:icon>https://example.com/images/icon.png</webfeeds:icon>
+  <webfeeds:accentColor>249F80</webfeeds:accentColor>
+  <webfeeds:analytics id="G-E1P00P5NYS" engine="GoogleAnalytics"/>
+  <entry>
+    <id>https://example.com/post/1</id>
+    <title>Post with a featured image</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+    <webfeeds:featuredImage url="https://example.com/images/featured.jpg" width="1200"/>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with arxiv namespace', () => {
     const value = {
       id: 'http://arxiv.org/api/query',

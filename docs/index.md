@@ -85,6 +85,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [RawVoice](/reference/namespaces/rawvoice) | `<rawvoice:*>` | RSS | ✅ | ✅ |
 | [FeedBurner](/reference/namespaces/feedburner) | `<feedburner:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [FeedPress](/reference/namespaces/feedpress) | `<feedpress:*>` | RSS | ✅ | ✅ |
+| [WebFeeds](/reference/namespaces/webfeeds) (unofficial) | `<webfeeds:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [arXiv](/reference/namespaces/arxiv) | `<arxiv:*>` | RSS, Atom | ✅ | ✅ |
 | [OpenSearch](/reference/namespaces/opensearch) | `<opensearch:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [PRISM](/reference/namespaces/prism) | `<prism:*>` | RSS, Atom, RDF | ✅ | ✅ |

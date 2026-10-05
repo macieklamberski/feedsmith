@@ -98,6 +98,10 @@ import {
   stopNodes as trackbackStopNodes,
   uris as trackbackUris,
 } from '../namespaces/trackback/common/config.js'
+import {
+  stopNodes as webfeedsStopNodes,
+  uris as webfeedsUris,
+} from '../namespaces/webfeeds/common/config.js'
 import { stopNodes as wfwStopNodes, uris as wfwUris } from '../namespaces/wfw/common/config.js'
 import { stopNodes as ytStopNodes, uris as ytUris } from '../namespaces/yt/common/config.js'
 
@@ -154,6 +158,7 @@ export const namespaceUris = {
   rawvoice: rawvoiceUris,
   feedburner: feedburnerUris,
   feedpress: feedpressUris,
+  webfeeds: webfeedsUris,
   arxiv: arxivUris,
   opensearch: opensearchUris,
   prism: prismUris,
@@ -218,6 +223,7 @@ export const namespaceStopNodes = [
   ...syStopNodes,
   ...thrStopNodes,
   ...trackbackStopNodes,
+  ...webfeedsStopNodes,
   ...wfwStopNodes,
   ...ytStopNodes,
 ]
