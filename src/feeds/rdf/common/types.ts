@@ -91,6 +91,7 @@ export namespace RdfFeed {
       dc?: DcNs.ItemOrFeed<TDate>
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       sy?: SyNs.Feed<TDate>
+      content?: ContentNs.Feed
       media?: MediaNs.ItemOrFeed<TStrict>
       feedburner?: FeedBurnerNs.Feed<TStrict>
       opensearch?: OpenSearchNs.Feed<TStrict>
