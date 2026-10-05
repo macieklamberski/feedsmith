@@ -259,6 +259,7 @@ export const generateSource: GenerateUtil<AtomFeed.Source<DateLike>> = (source, 
     [key('subtitle')]: generateText(source.subtitle),
     [key('title')]: generateText(source.title),
     [key('updated')]: generateRfc3339Date(source.updated),
+    ...generateFaItemOrFeed(source.fa),
   }
 
   return trimObject(value)

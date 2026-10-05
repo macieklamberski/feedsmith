@@ -601,6 +601,23 @@ describe('generateSource', () => {
     expect(generateSource(value)).toEqual(expected)
   })
 
+  it('should generate source with fa namespace', () => {
+    const value = {
+      id: 'https://example.com',
+      title: { value: 'Weather in Kebanyel' },
+      fa: {
+        maxAge: 10800000,
+      },
+    }
+    const expected = {
+      id: 'https://example.com',
+      title: { '#text': 'Weather in Kebanyel' },
+      'fa:max-age': 10800000,
+    }
+
+    expect(generateSource(value)).toEqual(expected)
+  })
+
   it('should handle empty arrays', () => {
     const value = {
       id: 'https://example.com/source',

@@ -419,6 +419,7 @@ export const parseSource: ParseUtilPartial<AtomFeed.Source<DateAny>> = (value, o
     return
   }
 
+  const namespaces = options?.asNamespace ? undefined : detectNamespaces(value)
   const get = createNamespaceGetter(value, options?.prefix)
   const source = {
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
@@ -433,6 +434,7 @@ export const parseSource: ParseUtilPartial<AtomFeed.Source<DateAny>> = (value, o
     subtitle: parseSingularOf(get('subtitle'), parseText),
     title: parseSingularOf(get('title'), parseText),
     updated: retrieveUpdated(value, options),
+    fa: namespaces?.has('fa') ? retrieveFaItemOrFeed(value, options) : undefined,
   }
 
   return trimObject(source)

@@ -115,6 +115,7 @@ export namespace AtomFeed {
     subtitle?: Text
     title?: Text
     updated?: TDate
+    fa?: FaNs.ItemOrFeed<TDate>
   }
 
   export type Entry<TDate, TStrict extends boolean = false> = Strict<

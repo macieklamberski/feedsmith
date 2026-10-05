@@ -1255,6 +1255,23 @@ describe('parseSource', () => {
     expect(parseSource(value)).toEqual(expected)
   })
 
+  it('should parse source with fa namespace', () => {
+    const value = {
+      id: { '#text': 'https://example.com' },
+      title: { '#text': 'Weather in Kebanyel' },
+      'fa:max-age': { '#text': '10800000' },
+    }
+    const expected = {
+      id: 'https://example.com',
+      title: { value: 'Weather in Kebanyel' },
+      fa: {
+        maxAge: 10800000,
+      },
+    }
+
+    expect(parseSource(value)).toEqual(expected)
+  })
+
   it('should handle coercible values', () => {
     const value = {
       id: { '#text': '123' },
