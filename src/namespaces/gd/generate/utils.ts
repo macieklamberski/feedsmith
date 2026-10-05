@@ -1,4 +1,5 @@
-import { isPlainObject, trimObject } from 'trousse'
+import { XMLValidator } from 'fast-xml-parser'
+import { escapeHtml, isNonEmptyString, isPlainObject, trimObject } from 'trousse'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateBoolean,
@@ -25,6 +26,33 @@ const generateDateOrDateTime: GenerateUtil<DateLike> = (value) => {
   }
 
   return generateRfc3339Date(value)
+}
+
+// The Atom builder emits gd:extendedProperty raw, attributes included, so they are escaped here.
+const generateRawAttribute: GenerateUtil<string> = (value) => {
+  const generated = generatePlainString(value)
+
+  if (!generated) {
+    return
+  }
+
+  return escapeHtml(generated)
+}
+
+// Child XML is written raw, so a value that is not well-formed would break the whole document.
+const generateRawXml: GenerateUtil<string> = (value) => {
+  if (!isNonEmptyString(value)) {
+    return
+  }
+
+  const xml = value.trim()
+
+  if (XMLValidator.validate(`<x>${xml}</x>`) !== true) {
+    return
+  }
+
+  // The builder puts the closing tag right after the raw value; the newline moves it to its own line.
+  return `${xml}\n`
 }
 
 const generateEnumValue: GenerateUtil<string> = (value) => {
@@ -118,9 +146,10 @@ export const generateExtendedProperty: GenerateUtil<GdNs.ExtendedProperty> = (ex
   }
 
   const value = {
-    '@name': generatePlainString(extendedProperty.name),
-    '@value': generatePlainString(extendedProperty.value),
-    '@realm': generatePlainString(extendedProperty.realm),
+    '@name': generateRawAttribute(extendedProperty.name),
+    '@value': generateRawAttribute(extendedProperty.value),
+    '@realm': generateRawAttribute(extendedProperty.realm),
+    '#text': generateRawXml(extendedProperty.xml),
   }
 
   return trimObject(value)

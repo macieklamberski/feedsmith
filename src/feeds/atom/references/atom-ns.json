@@ -751,6 +751,10 @@
             "name": "blogger.itemClass",
             "value": "pid-982403090",
             "realm": "example.com"
+          },
+          {
+            "name": "com.example",
+            "xml": "<some_xml>value</some_xml>"
           }
         ],
         "geoPt": {

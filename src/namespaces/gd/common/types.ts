@@ -45,6 +45,7 @@ export namespace GdNs {
     name?: string
     value?: string
     realm?: string
+    xml?: string
   }
 
   export type GeoPt<TDate> = {

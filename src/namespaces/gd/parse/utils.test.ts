@@ -300,6 +300,20 @@ describe('parseExtendedProperty', () => {
     expect(parseExtendedProperty(value)).toEqual(expected)
   })
 
+  it('should keep child XML raw', () => {
+    // Constructed specimen: no sampled feed carries child XML in gd:extendedProperty.
+    const value = {
+      '@name': 'com.example',
+      '#text': '<some_xml attr="a &amp; b">AT&amp;T <b>bold</b></some_xml>',
+    }
+    const expected = {
+      name: 'com.example',
+      xml: '<some_xml attr="a &amp; b">AT&amp;T <b>bold</b></some_xml>',
+    }
+
+    expect(parseExtendedProperty(value)).toEqual(expected)
+  })
+
   it('should handle HTML entities in value', () => {
     const value = {
       '@name': 'blogger.itemClass',
@@ -1324,6 +1338,31 @@ describe('retrieveEntry', () => {
   it('should return undefined when no gd properties exist', () => {
     const value = {
       title: { '#text': 'Re: Info?' },
+    }
+
+    expect(retrieveEntry(value)).toBeUndefined()
+  })
+
+  it('should parse singular properties from arrays (uses first)', () => {
+    const value = {
+      'gd:rating': [
+        { '@value': '4', '@min': '1', '@max': '5' },
+        { '@value': '1', '@min': '1', '@max': '5' },
+      ],
+      'gd:resourceid': ['first', 'second'],
+    }
+    const expected = {
+      rating: { value: 4, min: 1, max: 5 },
+      resourceId: 'first',
+    }
+
+    expect(retrieveEntry(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty string and whitespace-only values', () => {
+    const value = {
+      'gd:recurrence': '   ',
+      'gd:resourceid': '',
     }
 
     expect(retrieveEntry(value)).toBeUndefined()

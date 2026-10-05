@@ -818,6 +818,7 @@
     <gd:email address="jo@example.com" displayName="Jo March" label="Work" rel="http://schemas.google.com/g/2005#work" primary="true"/>
     <gd:eventStatus value="http://schemas.google.com/g/2005#event.confirmed"/>
     <gd:extendedProperty name="blogger.itemClass" value="pid-982403090" realm="example.com"/>
+    <gd:extendedProperty name="com.example"><some_xml>value</some_xml></gd:extendedProperty>
     <gd:geoPt lat="40.75" lon="-74" elev="10" label="Office" time="2005-06-06T17:00:00Z"/>
     <gd:im address="jo@example.com" label="Work" rel="http://schemas.google.com/g/2005#work" protocol="http://schemas.google.com/g/2005#JABBER" primary="true"/>
     <gd:money amount="650" currencyCode="EUR"/>

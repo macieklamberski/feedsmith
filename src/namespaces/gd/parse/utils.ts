@@ -12,6 +12,7 @@ import {
   parseNumber,
   parseSingularOf,
   parseString,
+  parseVerbatimString,
   retrieveText,
 } from '../../../common/utils.js'
 import {
@@ -124,6 +125,7 @@ export const parseExtendedProperty: ParseUtilPartial<GdNs.ExtendedProperty> = (v
     name: parseString(value['@name']),
     value: parseString(value['@value']),
     realm: parseString(value['@realm']),
+    xml: parseVerbatimString(retrieveText(value)),
   }
 
   return trimObject(extendedProperty)

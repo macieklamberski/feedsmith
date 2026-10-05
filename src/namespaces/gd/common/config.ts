@@ -8,6 +8,7 @@ export const stopNodes = [
   '*.gd:agent',
   '*.gd:city',
   '*.gd:country',
+  '*.gd:extendedproperty',
   '*.gd:familyname',
   '*.gd:formattedaddress',
   '*.gd:fullname',

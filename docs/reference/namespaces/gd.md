@@ -36,7 +36,7 @@ The Google Data namespace carries the contact, event and message elements of the
 These parts are not read from the reference:
 
 - `gd:image`, read on `author` and `contributor` as `gd.image`. The reference does not document it, so its `src`, `rel`, `width` and `height` attributes come from the Blogger feeds that write it.
-- The entry level of `gd:money` and `gd:resourceId`. The reference defines both elements but names no parent for them.
+- The entry level of `gd:money`, `gd:resourceId` and `gd:recurrenceException`. The reference defines these elements but names no parent for them.
 
 ## Types
 

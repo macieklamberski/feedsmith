@@ -304,6 +304,45 @@ describe('generateExtendedProperty', () => {
     expect(generateExtendedProperty(value)).toEqual(expected)
   })
 
+  it('should write child XML raw', () => {
+    // Constructed specimen: no sampled feed carries child XML in gd:extendedProperty.
+    const value = {
+      name: 'com.example',
+      xml: '<some_xml attr="a &amp; b">AT&amp;T <b>bold</b></some_xml>',
+    }
+    const expected = {
+      '@name': 'com.example',
+      '#text': '<some_xml attr="a &amp; b">AT&amp;T <b>bold</b></some_xml>\n',
+    }
+
+    expect(generateExtendedProperty(value)).toEqual(expected)
+  })
+
+  it('should skip child XML that is not well-formed', () => {
+    const value = {
+      name: 'com.example',
+      xml: '<some_xml>unclosed',
+    }
+    const expected = {
+      '@name': 'com.example',
+    }
+
+    expect(generateExtendedProperty(value)).toEqual(expected)
+  })
+
+  it('should escape special characters in attributes', () => {
+    const value = {
+      name: 'blogger.itemClass',
+      value: 'pid-1 & "pid-2"',
+    }
+    const expected = {
+      '@name': 'blogger.itemClass',
+      '@value': 'pid-1 &amp; &quot;pid-2&quot;',
+    }
+
+    expect(generateExtendedProperty(value)).toEqual(expected)
+  })
+
   it('should handle whitespace-only strings', () => {
     const value = {
       name: '   ',
