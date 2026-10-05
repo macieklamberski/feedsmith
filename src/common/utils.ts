@@ -74,7 +74,7 @@ export const trimArray = <T, R = T>(
     }
 
     if (!needsTrimming) {
-      return value as unknown as Array<R>
+      return value as Array<T & R>
     }
   }
 
@@ -205,13 +205,23 @@ export const parseVerbatimString: ParseUtilExact<string> = (value) => {
   }
 }
 
+// A raw XML value still carries its CDATA markers, comments and entities, so a string is read
+// through parseString before it is coerced.
 export const parseNumber: ParseUtilExact<number> = (value) => {
+  if (typeof value === 'string') {
+    return coerceNumber(parseString(value))
+  }
+
   return coerceNumber(value)
 }
 
 const yesRegex = /^\p{White_Space}*yes\p{White_Space}*$/iu
 
 export const parseBoolean: ParseUtilExact<boolean> = (value) => {
+  if (typeof value === 'string') {
+    return coerceBoolean(parseString(value))
+  }
+
   return coerceBoolean(value)
 }
 
@@ -222,8 +232,14 @@ export const parseYesNoBoolean: ParseUtilExact<boolean> = (value) => {
     return boolean
   }
 
-  if (isNonEmptyString(value)) {
-    return yesRegex.test(value)
+  if (typeof value !== 'string') {
+    return
+  }
+
+  const string = parseString(value)
+
+  if (string) {
+    return yesRegex.test(string)
   }
 }
 
@@ -574,6 +590,8 @@ export const generateNamespaceAttrs = (
   return namespaceAttrs
 }
 
+const reservedPrefixes = ['xmlns', 'xml']
+
 // Renames namespace prefixes to their canonical form while the document is being parsed, so stop
 // nodes can match `a10:title` as `atom:title`. Renaming after parsing would be too late: stop nodes
 // fire during it.
@@ -602,7 +620,8 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
   // Canonical prefix for the URI, or an empty string when the URI is a primary namespace, whose
   // elements go unprefixed. Undefined means the URI is not recognized.
   const resolveUri = (uri: string): string | undefined => {
-    const normalized = uri.trim().toLowerCase()
+    const trimmed = uri.trim().toLowerCase()
+    const normalized = trimmed.startsWith('//') ? `http:${trimmed}` : trimmed
 
     if (primaryUris.has(normalized)) {
       return ''
@@ -762,7 +781,7 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
 
       const prefix = lowered.slice(0, colonIndex)
 
-      if (prefix === 'xmlns' || prefix === 'xml') {
+      if (reservedPrefixes.includes(prefix)) {
         return lowered
       }
 
@@ -834,8 +853,11 @@ export const parseJsonObject = (value: unknown): unknown => {
     return
   }
 
+  // JSON.parse rejects a leading BOM, which UTF-8 feed exports carry.
+  const json = value.startsWith('\ufeff') ? value.slice(1) : value
+
   try {
-    const parsed = JSON.parse(value)
+    const parsed = JSON.parse(json)
 
     if (isPlainObject(parsed)) {
       return parsed

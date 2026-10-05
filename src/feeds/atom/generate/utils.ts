@@ -22,6 +22,10 @@ import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generat
 import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDcTermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
+import {
+  generateFeed as generateFeedBurnerFeed,
+  generateItem as generateFeedBurnerItem,
+} from '../../../namespaces/feedburner/generate/utils.js'
 import { generateItemOrFeed as generateGeoItemOrFeed } from '../../../namespaces/geo/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
@@ -38,6 +42,7 @@ import {
   generateFeed as generatePingbackFeed,
   generateItem as generatePingbackItem,
 } from '../../../namespaces/pingback/generate/utils.js'
+import { generateItemOrFeed as generatePrismItemOrFeed } from '../../../namespaces/prism/generate/utils.js'
 import { generateItem as generatePscItem } from '../../../namespaces/psc/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
@@ -275,7 +280,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
     [key('link')]: trimArray(entry.links, (link) => generateLink(link, options)),
     [key('published')]: generateRfc3339Date(entry.published),
     [key('rights')]: generateText(entry.rights),
-    [key('source')]: generateSource(entry.source),
+    [key('source')]: generateSource(entry.source, options),
     [key('summary')]: generateText(entry.summary),
     [key('title')]: generateText(entry.title),
     [key('updated')]: generateRfc3339Date(entry.updated),
@@ -289,24 +294,26 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
 
   const fullValue = {
     ...trimmedValue,
-    ...generateAppEntry(entry.app),
-    ...generateArxivEntry(entry.arxiv),
-    ...generateCc(entry.cc),
     ...generateDcItemOrFeed(entry.dc),
+    ...generateDcTermsItemOrFeed(entry.dcterms),
     ...generateSlashItem(entry.slash),
     ...generateItunesItem(entry.itunes),
-    ...generateGooglePlayItem(entry.googleplay),
     ...generatePscItem(entry.psc),
     ...generateMediaItemOrFeed(entry.media),
-    ...generateGeoRssItemOrFeed(entry.georss),
-    ...generateGeoItemOrFeed(entry.geo),
-    ...generateThrItem(entry.thr),
-    ...generateDcTermsItemOrFeed(entry.dcterms),
+    ...generateGooglePlayItem(entry.googleplay),
+    ...generateFeedBurnerItem(entry.feedburner),
+    ...generateArxivEntry(entry.arxiv),
+    ...generatePrismItemOrFeed(entry.prism),
+    ...generateCc(entry.cc),
     ...generateCreativeCommonsItemOrFeed(entry.creativeCommons),
+    ...generateThrItem(entry.thr),
+    ...generateAppEntry(entry.app),
     ...generateWfwItem(entry.wfw),
-    ...generateYtItem(entry.yt),
     ...generatePingbackItem(entry.pingback),
     ...generateTrackbackItem(entry.trackback),
+    ...generateYtItem(entry.yt),
+    ...generateGeoItemOrFeed(entry.geo),
+    ...generateGeoRssItemOrFeed(entry.georss),
     ...generateXmlItemOrFeed(entry.xml),
   }
 
@@ -361,20 +368,22 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
 
   const fullValue = trimObject({
     ...valueFeed,
-    ...generateCc(feed.cc),
     ...generateDcItemOrFeed(feed.dc),
+    ...generateDcTermsItemOrFeed(feed.dcterms),
     ...generateSyFeed(feed.sy),
     ...generateItunesFeed(feed.itunes),
-    ...generateGooglePlayFeed(feed.googleplay),
     ...generateMediaItemOrFeed(feed.media),
-    ...generateGeoRssItemOrFeed(feed.georss),
-    ...generateGeoItemOrFeed(feed.geo),
-    ...generateDcTermsItemOrFeed(feed.dcterms),
-    ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
+    ...generateGooglePlayFeed(feed.googleplay),
+    ...generateFeedBurnerFeed(feed.feedburner),
     ...generateOpenSearchFeed(feed.opensearch),
-    ...generateYtFeed(feed.yt),
+    ...generatePrismItemOrFeed(feed.prism),
+    ...generateCc(feed.cc),
+    ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
     ...generateAdminFeed(feed.admin),
     ...generatePingbackFeed(feed.pingback),
+    ...generateYtFeed(feed.yt),
+    ...generateGeoItemOrFeed(feed.geo),
+    ...generateGeoRssItemOrFeed(feed.georss),
     ...generateXmlItemOrFeed(feed.xml),
     ...valueEntries,
   })

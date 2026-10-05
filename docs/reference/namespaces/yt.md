@@ -4,7 +4,7 @@ title: "Reference: YouTube Namespace"
 
 # YouTube Namespace Reference
 
-The YouTube namespace provides YouTube-specific metadata for RSS feeds, enabling identification of YouTube videos and channels within RSS feeds.
+The YouTube namespace provides YouTube-specific metadata for Atom feeds, enabling identification of YouTube videos and channels within Atom feeds.
 
 <table>
   <tbody>
@@ -14,7 +14,7 @@ The YouTube namespace provides YouTube-specific metadata for RSS feeds, enabling
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://developers.google.com/youtube/v3/guides/implementation/videos" target="_blank">YouTube RSS Extensions</a></td>
+      <td>No official documentation (inferred from live feeds)</td>
     </tr>
     <tr>
       <th>Prefix</th>

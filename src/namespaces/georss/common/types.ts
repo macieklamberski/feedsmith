@@ -32,11 +32,20 @@ export namespace GeoRssNs {
     TStrict
   >
 
+  export type Circle<TStrict extends boolean = false> = Strict<
+    {
+      center: Requirable<Point<TStrict>> // Required in spec
+      radius: Requirable<number> // Required in spec
+    },
+    TStrict
+  >
+
   export type ItemOrFeed<TStrict extends boolean = false> = {
     point?: Point<TStrict>
     line?: Line<TStrict>
     polygon?: Polygon<TStrict>
     box?: Box<TStrict>
+    circle?: Circle<TStrict>
     featureTypeTag?: string
     relationshipTag?: string
     featureName?: string

@@ -14,7 +14,7 @@ The PRISM (Publishing Requirements for Industry Standard Metadata) namespace pro
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://www.w3.org/submissions/prism/" target="_blank">PRISM Specification</a></td>
+      <td><a href="https://www.w3.org/submissions/prism/prism-basic.html" target="_blank">PRISM Basic Metadata Specification</a></td>
     </tr>
     <tr>
       <th>Prefix</th>
@@ -23,7 +23,7 @@ The PRISM (Publishing Requirements for Industry Standard Metadata) namespace pro
     <tr>
       <th>Available in</th>
       <td>
-        <a href="/reference/feeds/rss">RSS</a>
+        <a href="/reference/feeds/rss">RSS</a>, <a href="/reference/feeds/atom">Atom</a>, <a href="/reference/feeds/rdf">RDF</a>
       </td>
     </tr>
     <tr>

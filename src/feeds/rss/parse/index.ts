@@ -8,7 +8,11 @@ import type { RssFeed } from '../common/types.js'
 import { stopNodes } from './config.js'
 import { retrieveFeed } from './utils.js'
 
-const createNamespaceOptions = createNamespaceResolver({ namespaceUris, namespacePrefixes })
+const createNamespaceOptions = createNamespaceResolver({
+  namespaceUris,
+  namespacePrefixes,
+  primaryNamespaces: ['rss2'],
+})
 
 // Replaced per document, so the hooks below always read the declarations of the feed being parsed
 // and nothing survives into the next one.

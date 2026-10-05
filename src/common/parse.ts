@@ -1,16 +1,13 @@
 import type { AtomFeed } from '../feeds/atom/common/types.js'
-import { detect as detectAtomFeed } from '../feeds/atom/detect/index.js'
 import { parse as parseAtomFeed } from '../feeds/atom/parse/index.js'
 import type { JsonFeed } from '../feeds/json/common/types.js'
-import { detect as detectJsonFeed } from '../feeds/json/detect/index.js'
 import { parse as parseJsonFeed } from '../feeds/json/parse/index.js'
 import type { RdfFeed } from '../feeds/rdf/common/types.js'
-import { detect as detectRdfFeed } from '../feeds/rdf/detect/index.js'
 import { parse as parseRdfFeed } from '../feeds/rdf/parse/index.js'
 import type { RssFeed } from '../feeds/rss/common/types.js'
-import { detect as detectRssFeed } from '../feeds/rss/detect/index.js'
 import { parse as parseRssFeed } from '../feeds/rss/parse/index.js'
 import { locales } from './config.js'
+import { detect } from './detect.js'
 import { DetectError } from './errors.js'
 import type { ParseMainOptions } from './types.js'
 import { parseJsonObject } from './utils.js'
@@ -25,22 +22,24 @@ export const parse = <TDate = string>(
   value: unknown,
   options?: ParseMainOptions<TDate>,
 ): AnyFeed<TDate> => {
-  if (detectRssFeed(value)) {
-    return { format: 'rss', feed: parseRssFeed(value, options) }
+  // A JSON string is parsed once here, so that detecting it and parsing it share the result.
+  const input = parseJsonObject(value) ?? value
+  const format = detect(input)
+
+  if (format === 'rss') {
+    return { format, feed: parseRssFeed(input, options) }
   }
 
-  if (detectAtomFeed(value)) {
-    return { format: 'atom', feed: parseAtomFeed(value, options) }
+  if (format === 'atom') {
+    return { format, feed: parseAtomFeed(input, options) }
   }
 
-  if (detectRdfFeed(value)) {
-    return { format: 'rdf', feed: parseRdfFeed(value, options) }
+  if (format === 'rdf') {
+    return { format, feed: parseRdfFeed(input, options) }
   }
 
-  const json = parseJsonObject(value)
-
-  if (detectJsonFeed(json)) {
-    return { format: 'json', feed: parseJsonFeed(json, options) }
+  if (format === 'json') {
+    return { format, feed: parseJsonFeed(input, options) }
   }
 
   throw new DetectError(locales.unrecognizedFeedFormat)

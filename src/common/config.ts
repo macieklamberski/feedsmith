@@ -32,6 +32,10 @@ import {
   uris as dctermsUris,
 } from '../namespaces/dcterms/common/config.js'
 import {
+  stopNodes as feedburnerStopNodes,
+  uris as feedburnerUris,
+} from '../namespaces/feedburner/common/config.js'
+import {
   stopNodes as feedpressStopNodes,
   uris as feedpressUris,
 } from '../namespaces/feedpress/common/config.js'
@@ -75,6 +79,7 @@ import {
 } from '../namespaces/rawvoice/common/config.js'
 import { stopNodes as rdfStopNodes, uris as rdfUris } from '../namespaces/rdf/common/config.js'
 import { uris as rssUris } from '../namespaces/rss/common/config.js'
+import { uris as rss2Uris } from '../namespaces/rss2/common/config.js'
 import {
   stopNodes as slashStopNodes,
   uris as slashUris,
@@ -133,39 +138,41 @@ export const locales = {
 }
 
 export const namespaceUris = {
-  admin: adminUris,
   atom: atomUris,
-  blogChannel: blogchannelUris,
-  app: appUris,
   dc: dcUris,
+  dcterms: dctermsUris,
   sy: syUris,
   content: contentUris,
-  creativeCommons: creativecommonsUris,
   slash: slashUris,
   itunes: itunesUris,
   podcast: podcastUris,
   psc: pscUris,
   media: mediaUris,
-  georss: georssUris,
-  geo: geoUris,
-  thr: thrUris,
-  dcterms: dctermsUris,
-  wfw: wfwUris,
-  source: sourceUris,
-  feedpress: feedpressUris,
-  yt: ytUris,
   googleplay: googleplayUris,
   spotify: spotifyUris,
-  rdf: rdfUris,
-  rss: rssUris,
+  acast: acastUris,
   rawvoice: rawvoiceUris,
-  cc: ccUris,
-  opensearch: opensearchUris,
+  feedburner: feedburnerUris,
+  feedpress: feedpressUris,
   arxiv: arxivUris,
+  opensearch: opensearchUris,
+  prism: prismUris,
+  cc: ccUris,
+  creativeCommons: creativecommonsUris,
+  thr: thrUris,
+  app: appUris,
+  wfw: wfwUris,
+  admin: adminUris,
   pingback: pingbackUris,
   trackback: trackbackUris,
-  prism: prismUris,
-  acast: acastUris,
+  source: sourceUris,
+  blogChannel: blogchannelUris,
+  yt: ytUris,
+  geo: geoUris,
+  georss: georssUris,
+  rdf: rdfUris,
+  rss: rssUris,
+  rss2: rss2Uris,
 }
 
 export const namespacePrefixes = Object.entries(namespaceUris).reduce(
@@ -192,6 +199,7 @@ export const namespaceStopNodes = [
   ...creativecommonsStopNodes,
   ...dcStopNodes,
   ...dctermsStopNodes,
+  ...feedburnerStopNodes,
   ...feedpressStopNodes,
   ...geoStopNodes,
   ...georssStopNodes,

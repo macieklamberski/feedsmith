@@ -15,6 +15,8 @@ export namespace ArxivNs {
     journalRef?: string
     doi?: string
     primaryCategory?: PrimaryCategory
+    announceType?: string
+    journalReference?: string
   }
 }
 // #endregion reference

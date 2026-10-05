@@ -1633,47 +1633,6 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
-  it('should handle psc namespace', () => {
-    const value = {
-      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
-      title: { '#text': 'Podcast Episode Entry' },
-      'psc:chapters': {
-        '@version': '1.2',
-        'psc:chapter': [
-          {
-            '@start': '00:00:00.000',
-            '@title': 'Introduction',
-          },
-          {
-            '@start': '00:03:15.000',
-            '@title': 'Discussion',
-          },
-        ],
-      },
-    }
-    const expected = {
-      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: { value: 'Podcast Episode Entry' },
-      psc: {
-        chapters: {
-          version: '1.2',
-          items: [
-            {
-              start: '00:00:00.000',
-              title: 'Introduction',
-            },
-            {
-              start: '00:03:15.000',
-              title: 'Discussion',
-            },
-          ],
-        },
-      },
-    }
-
-    expect(parseEntry(value)).toEqual(expected)
-  })
-
   it('should handle dcterms namespace in entry', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
@@ -1727,6 +1686,47 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
+  it('should handle psc namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Podcast Episode Entry' },
+      'psc:chapters': {
+        '@version': '1.2',
+        'psc:chapter': [
+          {
+            '@start': '00:00:00.000',
+            '@title': 'Introduction',
+          },
+          {
+            '@start': '00:03:15.000',
+            '@title': 'Discussion',
+          },
+        ],
+      },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Podcast Episode Entry' },
+      psc: {
+        chapters: {
+          version: '1.2',
+          items: [
+            {
+              start: '00:00:00.000',
+              title: 'Introduction',
+            },
+            {
+              start: '00:03:15.000',
+              title: 'Discussion',
+            },
+          ],
+        },
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
   it('should handle media namespace', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
@@ -1744,17 +1744,19 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
-  it('should handle georss namespace', () => {
+  it('should handle prism namespace', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
       title: { '#text': 'Example Entry' },
-      'georss:point': { '#text': '42.3601 -71.0589' },
+      'prism:volume': { '#text': '24' },
+      'prism:startingpage': { '#text': '975' },
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: { value: 'Example Entry' },
-      georss: {
-        point: { lat: 42.3601, lng: -71.0589 },
+      prism: {
+        volume: '24',
+        startingPage: '975',
       },
     }
 
@@ -1813,6 +1815,23 @@ describe('parseEntry', () => {
       yt: {
         videoId: 'abc123',
         channelId: 'UCexample',
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should handle georss namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'georss:point': { '#text': '42.3601 -71.0589' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Example Entry' },
+      georss: {
+        point: { lat: 42.3601, lng: -71.0589 },
       },
     }
 
@@ -2140,21 +2159,6 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should handle sy namespace', () => {
-    const value = {
-      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
-      title: { '#text': 'Example Feed' },
-      'sy:updatefrequency': { '#text': '5' },
-    }
-    const expected = {
-      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
-      title: { value: 'Example Feed' },
-      sy: { updateFrequency: 5 },
-    }
-
-    expect(parseFeed(value)).toEqual(expected)
-  })
-
   it('should handle dcterms namespace in feed', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
@@ -2174,18 +2178,31 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should handle yt namespace', () => {
+  it('should handle sy namespace', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
       title: { '#text': 'Example Feed' },
-      'yt:channelid': { '#text': 'UCexample' },
+      'sy:updatefrequency': { '#text': '5' },
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: { value: 'Example Feed' },
-      yt: {
-        channelId: 'UCexample',
-      },
+      sy: { updateFrequency: 5 },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle prism namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Feed' },
+      'prism:issn': { '#text': '1100-9233' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Example Feed' },
+      prism: { issn: '1100-9233' },
     }
 
     expect(parseFeed(value)).toEqual(expected)
@@ -2208,6 +2225,23 @@ describe('parseFeed', () => {
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
         generatorAgent: 'https://example.com/generator?v=3.2',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle yt namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Feed' },
+      'yt:channelid': { '#text': 'UCexample' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Example Feed' },
+      yt: {
+        channelId: 'UCexample',
       },
     }
 

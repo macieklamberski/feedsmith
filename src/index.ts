@@ -1,3 +1,4 @@
+export { detect as detectFeed } from './common/detect.js'
 export { DetectError, GenerateError, MalformedError, ParseError } from './common/errors.js'
 export type { AnyFeed } from './common/parse.js'
 export { parse as parseFeed } from './common/parse.js'
@@ -28,6 +29,7 @@ export type { ContentNs } from './namespaces/content/common/types.js'
 export type { CreativeCommonsNs } from './namespaces/creativecommons/common/types.js'
 export type { DcNs } from './namespaces/dc/common/types.js'
 export type { DcTermsNs } from './namespaces/dcterms/common/types.js'
+export type { FeedBurnerNs } from './namespaces/feedburner/common/types.js'
 export type { FeedPressNs } from './namespaces/feedpress/common/types.js'
 export type { GeoNs } from './namespaces/geo/common/types.js'
 export type { GeoRssNs } from './namespaces/georss/common/types.js'
@@ -67,8 +69,8 @@ export namespace Rss {
   export type Person = RssFeed.Person
   export type Category<TStrict extends boolean = false> = RssFeed.Category<TStrict>
   export type Cloud<TStrict extends boolean = false> = RssFeed.Cloud<TStrict>
-  export type Image<TStrict extends boolean = false> = RssFeed.Image<TStrict>
-  export type TextInput<TStrict extends boolean = false> = RssFeed.TextInput<TStrict>
+  export type Image<TDate, TStrict extends boolean = false> = RssFeed.Image<TDate, TStrict>
+  export type TextInput<TDate, TStrict extends boolean = false> = RssFeed.TextInput<TDate, TStrict>
   export type Enclosure<TStrict extends boolean = false> = RssFeed.Enclosure<TStrict>
   export type SkipHours = RssFeed.SkipHours
   export type SkipDays = RssFeed.SkipDays
@@ -102,8 +104,8 @@ export namespace Json {
 
 /** @deprecated Use `RdfFeed` instead. Will be removed in the next major version. */
 export namespace Rdf {
-  export type Image<TStrict extends boolean = false> = RdfFeed.Image<TStrict>
-  export type TextInput<TStrict extends boolean = false> = RdfFeed.TextInput<TStrict>
+  export type Image<TDate, TStrict extends boolean = false> = RdfFeed.Image<TDate, TStrict>
+  export type TextInput<TDate, TStrict extends boolean = false> = RdfFeed.TextInput<TDate, TStrict>
   export type Item<TDate, TStrict extends boolean = false> = RdfFeed.Item<TDate, TStrict>
   export type Feed<TDate, TStrict extends boolean = false> = RdfFeed.Feed<TDate, TStrict>
 }

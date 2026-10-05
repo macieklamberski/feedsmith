@@ -63,6 +63,20 @@ export const generateBox: GenerateUtil<GeoRssNs.Box> = (box) => {
   return generateLatLngPairs([box.lowerCorner, box.upperCorner], { min: 2, max: 2 })
 }
 
+export const generateCircle: GenerateUtil<GeoRssNs.Circle> = (circle) => {
+  if (!isPlainObject(circle) || typeof circle.radius !== 'number') {
+    return
+  }
+
+  const center = generatePoint(circle.center)
+
+  if (!center) {
+    return
+  }
+
+  return `${center} ${circle.radius}`
+}
+
 export const generateItemOrFeed: GenerateUtil<GeoRssNs.ItemOrFeed> = (itemOrFeed) => {
   if (!isPlainObject(itemOrFeed)) {
     return
@@ -73,6 +87,7 @@ export const generateItemOrFeed: GenerateUtil<GeoRssNs.ItemOrFeed> = (itemOrFeed
     'georss:line': generateLine(itemOrFeed.line),
     'georss:polygon': generatePolygon(itemOrFeed.polygon),
     'georss:box': generateBox(itemOrFeed.box),
+    'georss:circle': generateCircle(itemOrFeed.circle),
     'georss:featureTypeTag': generateCdataString(itemOrFeed.featureTypeTag),
     'georss:relationshipTag': generateCdataString(itemOrFeed.relationshipTag),
     'georss:featureName': generateCdataString(itemOrFeed.featureName),

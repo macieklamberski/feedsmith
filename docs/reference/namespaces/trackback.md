@@ -14,7 +14,10 @@ The Trackback namespace enables peer-to-peer communication between web sites tha
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://www.rssboard.org/trackback" target="_blank">Trackback Namespace for RSS</a></td>
+      <td>
+        <a href="https://web.archive.org/web/20090116072921/http://madskills.com/public/xml/rss/module/trackback/" target="_blank">TrackBack Module for RSS 1.0/2.0</a> (Original, Web Archive)<br>
+        <a href="https://www.rssboard.org/trackback" target="_blank">Trackback Namespace for RSS</a> (RSS Board)
+      </td>
     </tr>
     <tr>
       <th>Prefix</th>
@@ -22,7 +25,7 @@ The Trackback namespace enables peer-to-peer communication between web sites tha
     </tr>
     <tr>
       <th>Available in</th>
-      <td><a href="/reference/feeds/rss">RSS</a>, <a href="/reference/feeds/atom">Atom</a></td>
+      <td><a href="/reference/feeds/rss">RSS</a>, <a href="/reference/feeds/atom">Atom</a>, <a href="/reference/feeds/rdf">RDF</a></td>
     </tr>
     <tr>
       <th>Property</th>

@@ -8,6 +8,7 @@ import type {
 } from '../../../common/types.js'
 import type { AcastNs } from '../../../namespaces/acast/common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
+import type { ArxivNs } from '../../../namespaces/arxiv/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
 import type { BlogChannelNs } from '../../../namespaces/blogchannel/common/types.js'
 import type { CcNs } from '../../../namespaces/cc/common/types.js'
@@ -15,6 +16,7 @@ import type { ContentNs } from '../../../namespaces/content/common/types.js'
 import type { CreativeCommonsNs } from '../../../namespaces/creativecommons/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
+import type { FeedBurnerNs } from '../../../namespaces/feedburner/common/types.js'
 import type { FeedPressNs } from '../../../namespaces/feedpress/common/types.js'
 import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
@@ -69,7 +71,7 @@ export namespace RssFeed {
     TStrict
   >
 
-  export type Image<TStrict extends boolean = false> = Strict<
+  export type Image<TDate, TStrict extends boolean = false> = Strict<
     {
       url: Requirable<string> // Required in spec
       title: Requirable<string> // Required in spec
@@ -77,16 +79,19 @@ export namespace RssFeed {
       description?: string
       height?: number
       width?: number
+      prism?: PrismNs.ItemOrFeed<TDate>
+      cc?: CcNs.ItemOrFeed
     },
     TStrict
   >
 
-  export type TextInput<TStrict extends boolean = false> = Strict<
+  export type TextInput<TDate, TStrict extends boolean = false> = Strict<
     {
       title: Requirable<string> // Required in spec
       description: Requirable<string> // Required in spec
       name: Requirable<string> // Required in spec
       link: Requirable<string> // Required in spec
+      prism?: PrismNs.ItemOrFeed<TDate>
     },
     TStrict
   >
@@ -134,28 +139,30 @@ export namespace RssFeed {
       expirationDate?: TDate
       source?: Source<TStrict>
       atom?: AtomNs.Entry<TDate>
-      cc?: CcNs.ItemOrFeed
       dc?: DcNs.ItemOrFeed<TDate>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
       content?: ContentNs.Item
-      creativeCommons?: CreativeCommonsNs.ItemOrFeed
       slash?: SlashNs.Item
       itunes?: ItunesNs.Item
       podcast?: PodcastNs.Item<TStrict>
       psc?: PscNs.Item<TStrict>
-      googleplay?: GooglePlayNs.Item<TStrict>
       media?: MediaNs.ItemOrFeed<TStrict>
-      georss?: GeoRssNs.ItemOrFeed<TStrict>
-      geo?: GeoNs.ItemOrFeed
-      thr?: ThrNs.Item<TStrict>
-      dcterms?: DcTermsNs.ItemOrFeed<TDate>
-      prism?: PrismNs.Item<TDate>
-      wfw?: WfwNs.Item
-      sourceNs?: SourceNs.Item<TStrict>
-      rawvoice?: RawVoiceNs.Item<TStrict>
+      googleplay?: GooglePlayNs.Item<TStrict>
       spotify?: SpotifyNs.Item<TStrict>
+      acast?: AcastNs.Item
+      rawvoice?: RawVoiceNs.Item<TStrict>
+      feedburner?: FeedBurnerNs.Item
+      arxiv?: ArxivNs.Entry
+      prism?: PrismNs.ItemOrFeed<TDate>
+      cc?: CcNs.ItemOrFeed
+      creativeCommons?: CreativeCommonsNs.ItemOrFeed
+      thr?: ThrNs.Item<TStrict>
+      wfw?: WfwNs.Item
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
-      acast?: AcastNs.Item
+      sourceNs?: SourceNs.Item<TStrict>
+      geo?: GeoNs.ItemOrFeed
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
     TStrict
@@ -178,34 +185,35 @@ export namespace RssFeed {
       docs?: string
       cloud?: Cloud<TStrict>
       ttl?: number
-      image?: Image<TStrict>
+      image?: Image<TDate, TStrict>
       rating?: string
-      textInput?: TextInput<TStrict>
+      textInput?: TextInput<TDate, TStrict>
       skipHours?: Array<number>
       skipDays?: Array<string>
       items?: Array<Item<TDate, TStrict>>
       atom?: AtomNs.Feed<TDate>
-      cc?: CcNs.ItemOrFeed
       dc?: DcNs.ItemOrFeed<TDate>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
       sy?: SyNs.Feed<TDate>
       itunes?: ItunesNs.Feed<TStrict>
       podcast?: PodcastNs.Feed<TDate, TStrict>
-      googleplay?: GooglePlayNs.Feed<TStrict>
       media?: MediaNs.ItemOrFeed<TStrict>
-      georss?: GeoRssNs.ItemOrFeed<TStrict>
-      geo?: GeoNs.ItemOrFeed
-      dcterms?: DcTermsNs.ItemOrFeed<TDate>
-      prism?: PrismNs.Feed<TDate>
-      creativeCommons?: CreativeCommonsNs.ItemOrFeed
+      googleplay?: GooglePlayNs.Feed<TStrict>
+      spotify?: SpotifyNs.Feed<TStrict>
+      acast?: AcastNs.Feed
+      rawvoice?: RawVoiceNs.Feed<TDate, TStrict>
+      feedburner?: FeedBurnerNs.Feed<TStrict>
       feedpress?: FeedPressNs.Feed
       opensearch?: OpenSearchNs.Feed<TStrict>
+      prism?: PrismNs.ItemOrFeed<TDate>
+      cc?: CcNs.ItemOrFeed
+      creativeCommons?: CreativeCommonsNs.ItemOrFeed
       admin?: AdminNs.Feed
+      pingback?: PingbackNs.Feed
       sourceNs?: SourceNs.Feed<TStrict>
       blogChannel?: BlogChannelNs.Feed
-      rawvoice?: RawVoiceNs.Feed<TDate, TStrict>
-      spotify?: SpotifyNs.Feed<TStrict>
-      pingback?: PingbackNs.Feed
-      acast?: AcastNs.Feed
+      geo?: GeoNs.ItemOrFeed
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
     TStrict

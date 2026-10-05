@@ -1,8 +1,8 @@
 ---
-title: Migrating from 2.x to 3.x
+title: Migrate from 2.x to 3.x
 ---
 
-# Migrating from 2.x to 3.x
+# Migrate from 2.x to 3.x
 
 This guide covers all breaking changes when upgrading from Feedsmith 2.x to 3.x. Each breaking change is detailed with specific upgrade steps and examples.
 

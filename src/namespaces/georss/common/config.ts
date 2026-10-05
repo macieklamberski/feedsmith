@@ -10,6 +10,7 @@ export const stopNodes = [
   '*.georss:line',
   '*.georss:polygon',
   '*.georss:box',
+  '*.georss:circle',
   '*.georss:featuretypetag',
   '*.georss:relationshiptag',
   '*.georss:featurename',

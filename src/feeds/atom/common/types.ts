@@ -13,6 +13,7 @@ import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { CreativeCommonsNs } from '../../../namespaces/creativecommons/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
+import type { FeedBurnerNs } from '../../../namespaces/feedburner/common/types.js'
 import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { GooglePlayNs } from '../../../namespaces/googleplay/common/types.js'
@@ -20,6 +21,7 @@ import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
 import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
+import type { PrismNs } from '../../../namespaces/prism/common/types.js'
 import type { PscNs } from '../../../namespaces/psc/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
 import type { SyNs } from '../../../namespaces/sy/common/types.js'
@@ -128,24 +130,26 @@ export namespace AtomFeed {
       summary?: Text
       title: Requirable<Text> // Required in spec
       updated: Requirable<TDate> // Required in spec
-      app?: AppNs.Entry<TDate>
-      arxiv?: ArxivNs.Entry
-      cc?: CcNs.ItemOrFeed
       dc?: DcNs.ItemOrFeed<TDate>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
       slash?: SlashNs.Item
       itunes?: ItunesNs.Item
-      googleplay?: GooglePlayNs.Item<TStrict>
       psc?: PscNs.Item<TStrict>
       media?: MediaNs.ItemOrFeed<TStrict>
-      georss?: GeoRssNs.ItemOrFeed<TStrict>
-      geo?: GeoNs.ItemOrFeed
-      thr?: ThrNs.Item<TStrict>
-      dcterms?: DcTermsNs.ItemOrFeed<TDate>
+      googleplay?: GooglePlayNs.Item<TStrict>
+      feedburner?: FeedBurnerNs.Item
+      arxiv?: ArxivNs.Entry
+      prism?: PrismNs.ItemOrFeed<TDate>
+      cc?: CcNs.ItemOrFeed
       creativeCommons?: CreativeCommonsNs.ItemOrFeed
+      thr?: ThrNs.Item<TStrict>
+      app?: AppNs.Entry<TDate>
       wfw?: WfwNs.Item
-      yt?: YtNs.Item
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
+      yt?: YtNs.Item
+      geo?: GeoNs.ItemOrFeed
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
     TStrict
@@ -166,20 +170,22 @@ export namespace AtomFeed {
       title: Requirable<Text> // Required in spec
       updated: Requirable<TDate> // Required in spec
       entries?: Array<Entry<TDate, TStrict>>
-      cc?: CcNs.ItemOrFeed
       dc?: DcNs.ItemOrFeed<TDate>
+      dcterms?: DcTermsNs.ItemOrFeed<TDate>
       sy?: SyNs.Feed<TDate>
       itunes?: ItunesNs.Feed<TStrict>
-      googleplay?: GooglePlayNs.Feed<TStrict>
       media?: MediaNs.ItemOrFeed<TStrict>
-      georss?: GeoRssNs.ItemOrFeed<TStrict>
-      geo?: GeoNs.ItemOrFeed
-      dcterms?: DcTermsNs.ItemOrFeed<TDate>
-      creativeCommons?: CreativeCommonsNs.ItemOrFeed
+      googleplay?: GooglePlayNs.Feed<TStrict>
+      feedburner?: FeedBurnerNs.Feed<TStrict>
       opensearch?: OpenSearchNs.Feed<TStrict>
-      yt?: YtNs.Feed
+      prism?: PrismNs.ItemOrFeed<TDate>
+      cc?: CcNs.ItemOrFeed
+      creativeCommons?: CreativeCommonsNs.ItemOrFeed
       admin?: AdminNs.Feed
       pingback?: PingbackNs.Feed
+      yt?: YtNs.Feed
+      geo?: GeoNs.ItemOrFeed
+      georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
     TStrict
