@@ -3,6 +3,17 @@
   "title": {
     "value": "Example Feed"
   },
+  "links": [
+    {
+      "href": "https://example.com/catalog?sort=new",
+      "rel": "http://opds-spec.org/facet",
+      "title": "New Releases",
+      "opds": {
+        "facetGroup": "Sort By",
+        "activeFacet": true
+      }
+    }
+  ],
   "entries": [
     {
       "id": "example-entry",
@@ -787,15 +798,6 @@
                 "indirectAcquisitions": [{ "type": "application/epub+zip" }]
               }
             ]
-          }
-        },
-        {
-          "href": "https://example.com/catalog?sort=new",
-          "rel": "http://opds-spec.org/facet",
-          "title": "New Releases",
-          "opds": {
-            "facetGroup": "Sort By",
-            "activeFacet": true
           }
         },
         {
