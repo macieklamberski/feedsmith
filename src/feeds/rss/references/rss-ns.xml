@@ -478,6 +478,7 @@
     <fh:complete/>
     <fh:archive/>
     <fh:incremental>true</fh:incremental>
+    <fh:stateful>true</fh:stateful>
     <fh:prev>https://example.com/feed/archive/2005/05</fh:prev>
 
     <!-- Admin Namespace: Channel Level Tags -->

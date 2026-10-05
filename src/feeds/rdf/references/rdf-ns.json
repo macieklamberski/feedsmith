@@ -1126,6 +1126,7 @@
     "complete": true,
     "archive": true,
     "incremental": true,
+    "stateful": true,
     "prev": "https://example.com/feed/archive/2005/05"
   },
   "admin": {

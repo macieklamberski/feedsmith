@@ -19,6 +19,7 @@ export const generateFeed: GenerateUtil<FhNs.Feed> = (feed) => {
     'fh:complete': generateFlag(feed.complete),
     'fh:archive': generateFlag(feed.archive),
     'fh:incremental': generateBoolean(feed.incremental),
+    'fh:stateful': generateBoolean(feed.stateful),
     'fh:prev': generateCdataString(feed.prev),
   }
 

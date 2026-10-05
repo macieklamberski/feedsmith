@@ -21,6 +21,9 @@ export const retrieveFeed: ParseUtilPartial<FhNs.Feed> = (value) => {
     incremental: parseSingularOf(value['fh:incremental'], (value) => {
       return parseBoolean(retrieveText(value))
     }),
+    stateful: parseSingularOf(value['fh:stateful'], (value) => {
+      return parseBoolean(retrieveText(value))
+    }),
     prev: parseSingularOf(value['fh:prev'], (value) => parseString(retrieveText(value))),
   }
 

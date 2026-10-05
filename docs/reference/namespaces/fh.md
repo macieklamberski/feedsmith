@@ -14,7 +14,7 @@ The Feed History namespace marks whether a feed document is a complete represent
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://www.rfc-editor.org/rfc/rfc5005" target="_blank">RFC 5005: Feed Paging and Archiving</a><br><a href="https://www.ietf.org/archive/id/draft-nottingham-atompub-feed-history-04.txt" target="_blank">Feed History Draft 04</a> (deprecated <code>incremental</code> and <code>prev</code>)</td>
+      <td><a href="https://www.rfc-editor.org/rfc/rfc5005" target="_blank">RFC 5005: Feed Paging and Archiving</a><br><a href="https://www.ietf.org/archive/id/draft-nottingham-atompub-feed-history-04.txt" target="_blank">Feed History Draft 04</a> (deprecated <code>incremental</code> and <code>prev</code>)<br><a href="https://www.ietf.org/archive/id/draft-nottingham-atompub-feed-history-03.txt" target="_blank">Feed History Draft 03</a> (deprecated <code>stateful</code>)</td>
     </tr>
     <tr>
       <th>Prefix</th>

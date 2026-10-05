@@ -7,12 +7,14 @@ describe('retrieveFeed', () => {
       'fh:complete': '',
       'fh:archive': '',
       'fh:incremental': 'true',
+      'fh:stateful': 'true',
       'fh:prev': 'https://example.com/rss/album/5837108?page=2',
     }
     const expected = {
       complete: true,
       archive: true,
       incremental: true,
+      stateful: true,
       prev: 'https://example.com/rss/album/5837108?page=2',
     }
 
@@ -47,6 +49,17 @@ describe('retrieveFeed', () => {
     }
     const expected = {
       incremental: false,
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse stateful containing false', () => {
+    const value = {
+      'fh:stateful': 'false',
+    }
+    const expected = {
+      stateful: false,
     }
 
     expect(retrieveFeed(value)).toEqual(expected)

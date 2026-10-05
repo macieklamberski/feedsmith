@@ -7,12 +7,14 @@ describe('generateFeed', () => {
       complete: true,
       archive: true,
       incremental: true,
+      stateful: true,
       prev: 'https://example.com/rss/album/5837108?page=2',
     }
     const expected = {
       'fh:complete': '',
       'fh:archive': '',
       'fh:incremental': true,
+      'fh:stateful': true,
       'fh:prev': 'https://example.com/rss/album/5837108?page=2',
     }
 
@@ -47,6 +49,17 @@ describe('generateFeed', () => {
     }
     const expected = {
       'fh:incremental': false,
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate stateful set to false', () => {
+    const value = {
+      stateful: false,
+    }
+    const expected = {
+      'fh:stateful': false,
     }
 
     expect(generateFeed(value)).toEqual(expected)
