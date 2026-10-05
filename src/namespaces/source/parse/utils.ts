@@ -3,6 +3,7 @@ import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   parseArrayOf,
   parseBoolean,
+  parseNumber,
   parseSingularOf,
   parseString,
   retrieveText,
@@ -75,6 +76,19 @@ export const parseInReplyTo: ParseUtilPartial<SourceNs.InReplyTo> = (value) => {
   return trimObject(inReplyTo)
 }
 
+export const parseComments: ParseUtilPartial<SourceNs.Comments> = (value) => {
+  if (!isPlainObject(value)) {
+    return
+  }
+
+  const comments = {
+    count: parseNumber(value['@count']),
+    feedUrl: parseString(value['@feedurl']),
+  }
+
+  return trimObject(comments)
+}
+
 export const retrieveFeed: ParseUtilPartial<SourceNs.Feed> = (value) => {
   if (!isPlainObject(value)) {
     return
@@ -112,6 +126,7 @@ export const retrieveItem: ParseUtilPartial<SourceNs.Item> = (value) => {
       parseString(retrieveText(value)),
     ),
     inReplyTo: parseSingularOf(value['source:inreplyto'], parseInReplyTo),
+    comments: parseSingularOf(value['source:comments'], parseComments),
   }
 
   return trimObject(item)

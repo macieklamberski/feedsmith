@@ -9,7 +9,8 @@ import {
 } from '../../../common/utils.js'
 import type { GeoRssNs } from '../common/types.js'
 
-const whitespaceRegex = /\s+/
+// See: https://docs.ogc.org/cs/17-002r1/17-002r1.html. Parsers treat commas as whitespace.
+const separatorRegex = /[\s,]+/
 
 export const parseLatLngPairs = (
   value: Unreliable,
@@ -21,7 +22,7 @@ export const parseLatLngPairs = (
     return
   }
 
-  const rawParts = string.split(whitespaceRegex)
+  const rawParts = string.split(separatorRegex)
   const numericParts = parseArrayOf(rawParts, parseNumber)
 
   if (!numericParts || numericParts.length % 2 !== 0 || rawParts.length !== numericParts.length) {
@@ -89,7 +90,7 @@ export const parseCircle: ParseUtilExact<GeoRssNs.Circle> = (value) => {
     return
   }
 
-  const rawParts = string.split(whitespaceRegex)
+  const rawParts = string.split(separatorRegex)
   const numericParts = parseArrayOf(rawParts, parseNumber)
 
   if (rawParts.length !== 3 || numericParts?.length !== 3) {

@@ -12,9 +12,11 @@ import type { ContentNs } from '../../../namespaces/content/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
 import type { FeedBurnerNs } from '../../../namespaces/feedburner/common/types.js'
+import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
+import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
 import type { PrismNs } from '../../../namespaces/prism/common/types.js'
 import type { RdfNs } from '../../../namespaces/rdf/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
@@ -27,23 +29,26 @@ export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateA
 
 // #region reference
 export namespace RdfFeed {
-  export type Image<TStrict extends boolean = false> = Strict<
+  export type Image<TDate, TStrict extends boolean = false> = Strict<
     {
       title: Requirable<string> // Required in spec
       link: Requirable<string> // Required in spec
       url: Requirable<string> // Required in spec
       rdf?: RdfNs.About
+      prism?: PrismNs.ItemOrFeed<TDate>
+      cc?: CcNs.ItemOrFeed
     },
     TStrict
   >
 
-  export type TextInput<TStrict extends boolean = false> = Strict<
+  export type TextInput<TDate, TStrict extends boolean = false> = Strict<
     {
       title: Requirable<string> // Required in spec
       description: Requirable<string> // Required in spec
       name: Requirable<string> // Required in spec
       link: Requirable<string> // Required in spec
       rdf?: RdfNs.About
+      prism?: PrismNs.ItemOrFeed<TDate>
     },
     TStrict
   >
@@ -61,10 +66,12 @@ export namespace RdfFeed {
       slash?: SlashNs.Item
       media?: MediaNs.ItemOrFeed<TStrict>
       feedburner?: FeedBurnerNs.Item
-      prism?: PrismNs.Item<TDate>
+      prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
       wfw?: WfwNs.Item
+      pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
+      geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
     },
@@ -76,9 +83,9 @@ export namespace RdfFeed {
       title: Requirable<string> // Required in spec
       link: Requirable<string> // Required in spec
       description: Requirable<string> // Required in spec
-      image?: Image<TStrict>
+      image?: Image<TDate, TStrict>
       items?: Array<Item<TDate, TStrict>>
-      textInput?: TextInput<TStrict>
+      textInput?: TextInput<TDate, TStrict>
       rdf?: RdfNs.About
       atom?: AtomNs.Feed<TDate>
       dc?: DcNs.ItemOrFeed<TDate>
@@ -88,9 +95,10 @@ export namespace RdfFeed {
       media?: MediaNs.ItemOrFeed<TStrict>
       feedburner?: FeedBurnerNs.Feed<TStrict>
       opensearch?: OpenSearchNs.Feed<TStrict>
-      prism?: PrismNs.Feed<TDate>
+      prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
       admin?: AdminNs.Feed
+      geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
     },

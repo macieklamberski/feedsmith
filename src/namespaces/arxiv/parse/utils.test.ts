@@ -156,6 +156,21 @@ describe('retrieveEntry', () => {
     expect(retrieveEntry(value)).toEqual(expected)
   })
 
+  it('should parse entry with the elements of the arXiv RSS feeds', () => {
+    const value = {
+      'arxiv:announce_type': 'replace-cross',
+      'arxiv:doi': '10.5802/jep.257',
+      'arxiv:journal_reference': 'Journal de l Ecole polytechnique, Tome 11 (2024), pp. 431-472',
+    }
+    const expected = {
+      doi: '10.5802/jep.257',
+      announceType: 'replace-cross',
+      journalReference: 'Journal de l Ecole polytechnique, Tome 11 (2024), pp. 431-472',
+    }
+
+    expect(retrieveEntry(value)).toEqual(expected)
+  })
+
   it('should parse entry with partial properties', () => {
     const value = {
       'arxiv:comment': '23 pages',

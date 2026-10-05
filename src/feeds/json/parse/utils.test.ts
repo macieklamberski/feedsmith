@@ -217,7 +217,7 @@ describe('retrieveAuthors', () => {
     expect(retrieveAuthors(value)).toEqual([{ name: 'John' }])
   })
 
-  it('should handle both authors and author ', () => {
+  it('should handle both authors and author', () => {
     const value = {
       authors: { name: 'John' },
       author: { name: 'Jane' },

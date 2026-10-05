@@ -14,7 +14,7 @@ The blogChannel namespace is an RSS 2.0 module for weblogging applications, prov
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://web.archive.org/web/20240625022241/http://backend.userland.com/blogChannelModule" target="_blank">blogChannel RSS Module</a> (archive)</td>
+      <td><a href="https://web.archive.org/web/20240625022241/http://backend.userland.com/blogChannelModule" target="_blank">blogChannel RSS Module</a> (Web Archive)</td>
     </tr>
     <tr>
       <th>Prefix</th>

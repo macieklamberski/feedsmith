@@ -103,6 +103,7 @@ describe('generateFeed', () => {
       image: { href: 'https://example.com/podcast.jpg' },
       newFeedUrl: 'https://example.com/new-podcast-feed',
       email: 'contact@example.com',
+      owner: 'owner@example.com',
       categories: ['Technology', 'Education'],
     }
     const expected = {
@@ -111,8 +112,9 @@ describe('generateFeed', () => {
       'googleplay:explicit': 'no',
       'googleplay:block': 'yes',
       'googleplay:image': { '@href': 'https://example.com/podcast.jpg' },
-      'googleplay:new-feed-url': 'https://example.com/new-podcast-feed',
+      'googleplay:newFeedUrl': 'https://example.com/new-podcast-feed',
       'googleplay:email': 'contact@example.com',
+      'googleplay:owner': 'owner@example.com',
       'googleplay:category': [{ '@text': 'Technology' }, { '@text': 'Education' }],
     }
 
@@ -138,6 +140,17 @@ describe('generateFeed', () => {
     const expected = {
       'googleplay:author': 'Podcast Author',
       'googleplay:explicit': 'clean',
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate owner', () => {
+    const value: GooglePlayNs.Feed = {
+      owner: 'owner@example.com',
+    }
+    const expected = {
+      'googleplay:owner': 'owner@example.com',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -174,6 +187,7 @@ describe('generateFeed', () => {
       image: undefined,
       newFeedUrl: undefined,
       email: undefined,
+      owner: undefined,
       categories: undefined,
     }
 
