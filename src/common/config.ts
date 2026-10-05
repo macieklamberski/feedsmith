@@ -31,6 +31,7 @@ import {
   stopNodes as dctermsStopNodes,
   uris as dctermsUris,
 } from '../namespaces/dcterms/common/config.js'
+import { stopNodes as faStopNodes, uris as faUris } from '../namespaces/fa/common/config.js'
 import {
   stopNodes as feedburnerStopNodes,
   uris as feedburnerUris,
@@ -161,6 +162,7 @@ export const namespaceUris = {
   creativeCommons: creativecommonsUris,
   thr: thrUris,
   app: appUris,
+  fa: faUris,
   wfw: wfwUris,
   admin: adminUris,
   pingback: pingbackUris,
@@ -199,6 +201,7 @@ export const namespaceStopNodes = [
   ...creativecommonsStopNodes,
   ...dcStopNodes,
   ...dctermsStopNodes,
+  ...faStopNodes,
   ...feedburnerStopNodes,
   ...feedpressStopNodes,
   ...geoStopNodes,

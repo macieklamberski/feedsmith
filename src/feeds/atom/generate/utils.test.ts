@@ -2061,6 +2061,47 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with fa namespace properties', () => {
+    const value = {
+      id: 'https://example.com',
+      title: { value: 'Weather in Kebanyel' },
+      updated: new Date('2026-07-02T18:00:00Z'),
+      fa: {
+        maxAge: 10800000,
+      },
+      entries: [
+        {
+          id: 'https://example.com/42935/en#time_2026-07-02T18:00:00+00:00',
+          title: { value: 'At 21:00 the weather station reported +18.1 °C' },
+          updated: new Date('2026-07-02T18:00:00Z'),
+          fa: {
+            expires: new Date('2026-07-02T21:00:00Z'),
+          },
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:fa': 'http://purl.org/atompub/age/1.0',
+        id: 'https://example.com',
+        title: { '#text': 'Weather in Kebanyel' },
+        updated: '2026-07-02T18:00:00.000Z',
+        'fa:max-age': 10800000,
+        entry: [
+          {
+            id: 'https://example.com/42935/en#time_2026-07-02T18:00:00+00:00',
+            title: { '#text': 'At 21:00 the weather station reported +18.1 °C' },
+            updated: '2026-07-02T18:00:00.000Z',
+            'fa:expires': '2026-07-02T21:00:00.000Z',
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate feed with admin namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',

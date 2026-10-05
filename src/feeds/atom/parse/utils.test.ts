@@ -1779,6 +1779,23 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
+  it('should handle fa namespace', () => {
+    const value = {
+      id: { '#text': 'https://example.com/42935/en#time_2026-07-02T18:00:00+00:00' },
+      title: { '#text': 'At 21:00 the weather station reported +18.1 °C' },
+      'fa:expires': { '#text': '2026-07-02T21:00:00+00:00' },
+    }
+    const expected = {
+      id: 'https://example.com/42935/en#time_2026-07-02T18:00:00+00:00',
+      title: { value: 'At 21:00 the weather station reported +18.1 °C' },
+      fa: {
+        expires: '2026-07-02T21:00:00+00:00',
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
   it('should handle wfw namespace', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
@@ -2199,6 +2216,23 @@ describe('parseFeed', () => {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: { value: 'Example Feed' },
       prism: { issn: '1100-9233' },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle fa namespace', () => {
+    const value = {
+      id: { '#text': 'https://example.com' },
+      title: { '#text': 'Weather in Kebanyel' },
+      'fa:max-age': { '#text': '10800000' },
+    }
+    const expected = {
+      id: 'https://example.com',
+      title: { value: 'Weather in Kebanyel' },
+      fa: {
+        maxAge: 10800000,
+      },
     }
 
     expect(parseFeed(value)).toEqual(expected)
