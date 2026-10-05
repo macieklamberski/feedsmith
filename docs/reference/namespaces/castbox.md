@@ -4,7 +4,7 @@ title: "Reference: Castbox Namespace"
 
 # Castbox Namespace Reference
 
-The Castbox namespace carries the Castbox identifiers of a podcast and its episodes, along with the podcast's visibility and the episode's premium flag, in RSS feeds hosted by Castbox.
+The Castbox namespace carries the Castbox identifiers of a podcast, its owner and its episodes, along with the podcast's visibility and the episode's premium flag, in RSS feeds hosted by Castbox.
 
 <table>
   <tbody>
@@ -33,7 +33,7 @@ The Castbox namespace carries the Castbox identifiers of a podcast and its episo
 
 Castbox publishes no document for this namespace, and its URI does not resolve. Every element below is inferred from live feeds:
 
-- `castbox:uid` on the channel, a 32-character hexadecimal identifier.
+- `castbox:uid` on the channel, a 32-character hexadecimal identifier that several podcasts can share.
 - `castbox:pid` on the channel, the numeric podcast identifier.
 - `castbox:type` on the channel, empty or `private`.
 - `castbox:tid` on the item, the numeric episode identifier.
