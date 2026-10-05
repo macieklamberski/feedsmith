@@ -269,6 +269,38 @@ describe('generateImage', () => {
   it('should handle non-object inputs gracefully', () => {
     expect(generateImage(undefined)).toBeUndefined()
   })
+
+  it('should generate image with prism namespace properties', () => {
+    const value = {
+      url: 'https://example.com/logo.png',
+      prism: {
+        publicationName: 'Nature',
+        coverDate: new Date('2023-03-15T00:00:00Z'),
+      },
+    }
+    const expected = {
+      url: 'https://example.com/logo.png',
+      'prism:publicationName': 'Nature',
+      'prism:coverDate': '2023-03-15T00:00:00.000Z',
+    }
+
+    expect(generateImage(value)).toEqual(expected)
+  })
+
+  it('should generate image with cc namespace properties', () => {
+    const value = {
+      url: 'https://example.com/logo.png',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+      },
+    }
+    const expected = {
+      url: 'https://example.com/logo.png',
+      'cc:license': 'https://creativecommons.org/licenses/by/4.0/',
+    }
+
+    expect(generateImage(value)).toEqual(expected)
+  })
 })
 
 describe('generateTextInput', () => {
@@ -302,6 +334,27 @@ describe('generateTextInput', () => {
 
   it('should handle non-object inputs gracefully', () => {
     expect(generateTextInput(undefined)).toBeUndefined()
+  })
+
+  it('should generate text input with prism namespace properties', () => {
+    const value = {
+      title: 'Search',
+      description: 'Search the journal',
+      name: 'q',
+      link: 'https://example.com/search',
+      prism: {
+        publicationName: 'Nature',
+      },
+    }
+    const expected = {
+      title: 'Search',
+      description: 'Search the journal',
+      name: 'q',
+      link: 'https://example.com/search',
+      'prism:publicationName': 'Nature',
+    }
+
+    expect(generateTextInput(value)).toEqual(expected)
   })
 })
 
@@ -704,7 +757,7 @@ describe('generateItem', () => {
     const expected = {
       title: 'Item with iTunes namespace',
       'itunes:duration': 1800,
-      'itunes:explicit': 'no',
+      'itunes:explicit': false,
       'itunes:title': 'Episode 1 - Special Title',
       'itunes:episode': 1,
       'itunes:season': 1,
@@ -1018,6 +1071,7 @@ describe('generateItem', () => {
         outlines: ['<outline text="Section 1"/>', '<outline text="Section 2"/>'],
         linkFull: 'https://example.com/full-article',
         inReplyTo: { value: 'did:plc:iwl32vekohccji6khfdt3clw', isPermaLink: false },
+        comments: { count: 2, feedUrl: 'https://example.com/comments/204.xml' },
       },
     }
     const expected = {
@@ -1031,6 +1085,10 @@ describe('generateItem', () => {
       'source:inReplyTo': {
         '#text': 'did:plc:iwl32vekohccji6khfdt3clw',
         '@isPermaLink': false,
+      },
+      'source:comments': {
+        '@count': 2,
+        '@feedUrl': 'https://example.com/comments/204.xml',
       },
     }
 
@@ -1508,6 +1566,7 @@ describe('generateFeed', () => {
         description: 'A comprehensive podcast description',
         explicit: false,
         email: 'contact@example.com',
+        owner: 'owner@example.com',
         categories: ['Technology', 'Education'],
       },
     }
@@ -1522,6 +1581,7 @@ describe('generateFeed', () => {
           'googleplay:description': 'A comprehensive podcast description',
           'googleplay:explicit': 'no',
           'googleplay:email': 'contact@example.com',
+          'googleplay:owner': 'owner@example.com',
           'googleplay:category': [{ '@text': 'Technology' }, { '@text': 'Education' }],
         },
       },
@@ -1705,6 +1765,41 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate RSS feed with arxiv namespace properties', () => {
+    const value = {
+      title: 'arXiv Listing',
+      description: 'A feed with arXiv properties',
+      items: [
+        {
+          title: 'Item',
+          arxiv: {
+            doi: '10.5802/jep.257',
+            announceType: 'new',
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:arxiv': 'http://arxiv.org/schemas/atom',
+        channel: {
+          title: 'arXiv Listing',
+          description: 'A feed with arXiv properties',
+          item: [
+            {
+              title: 'Item',
+              'arxiv:doi': '10.5802/jep.257',
+              'arxiv:announce_type': 'new',
+            },
+          ],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate RSS feed with opensearch namespace properties', () => {
     const value = {
       title: 'Search Results Feed',
@@ -1713,6 +1808,11 @@ describe('generateFeed', () => {
         totalResults: 1000,
         startIndex: 21,
         itemsPerPage: 10,
+        link: {
+          href: 'http://example.com/opensearchdescription.xml',
+          rel: 'search',
+          type: 'application/opensearchdescription+xml',
+        },
         queries: [
           {
             role: 'request',
@@ -1733,6 +1833,11 @@ describe('generateFeed', () => {
           'opensearch:totalResults': 1000,
           'opensearch:startIndex': 21,
           'opensearch:itemsPerPage': 10,
+          'opensearch:link': {
+            '@href': 'http://example.com/opensearchdescription.xml',
+            '@rel': 'search',
+            '@type': 'application/opensearchdescription+xml',
+          },
           'opensearch:Query': [
             {
               '@role': 'request',
@@ -1756,7 +1861,7 @@ describe('generateFeed', () => {
         publicationName: 'Nature',
         issn: '0028-0836',
         volume: '615',
-        publicationDates: [new Date('2023-03-15T00:00:00Z')],
+        publicationDates: [{ value: new Date('2023-03-15T00:00:00Z'), platform: 'print' }],
       },
     }
     const expected = {
@@ -1769,7 +1874,7 @@ describe('generateFeed', () => {
           'prism:publicationName': 'Nature',
           'prism:issn': '0028-0836',
           'prism:volume': '615',
-          'prism:publicationDate': ['2023-03-15T00:00:00.000Z'],
+          'prism:publicationDate': [{ '#text': '2023-03-15T00:00:00.000Z', '@platform': 'print' }],
         },
       },
     }
@@ -1922,6 +2027,7 @@ describe('generateFeed', () => {
         blogRoll: 'http://example.com/blogroll.opml',
         blink: 'http://example.net/',
         mySubscriptions: 'http://example.com/subscriptions.opml',
+        changes: 'http://example.com/changes.xml',
       },
     }
     const expected = {
@@ -1934,6 +2040,7 @@ describe('generateFeed', () => {
           'blogChannel:blogRoll': 'http://example.com/blogroll.opml',
           'blogChannel:blink': 'http://example.net/',
           'blogChannel:mySubscriptions': 'http://example.com/subscriptions.opml',
+          'blogChannel:changes': 'http://example.com/changes.xml',
         },
       },
     }

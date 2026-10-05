@@ -295,7 +295,6 @@ export const parseLiveItem: ParseUtilPartial<
     status: parseString(value['@status']),
     start: parseDate(value['@start'], options?.parseDateFn),
     end: parseDate(value['@end'], options?.parseDateFn),
-    contentLinks: parseArrayOf(value['podcast:contentlink'], parseContentLink),
   }
 
   return trimObject(liveItem)
@@ -453,6 +452,7 @@ export const retrieveItem: ParseUtilPartial<PodcastNs.Item> = (value) => {
 
   const item = {
     transcripts: parseArrayOf(value['podcast:transcript'], parseTranscript),
+    fundings: parseArrayOf(value['podcast:funding'], parseFunding),
     chapters: parseSingularOf(value['podcast:chapters'], parseChapters),
     soundbites: parseArrayOf(value['podcast:soundbite'], parseSoundbite),
     persons: parseArrayOf(value['podcast:person'], parsePerson),
@@ -463,6 +463,7 @@ export const retrieveItem: ParseUtilPartial<PodcastNs.Item> = (value) => {
     alternateEnclosures: parseArrayOf(value['podcast:alternateenclosure'], parseAlternateEnclosure),
     values: parseArrayOf(value['podcast:value'], parseValue),
     images: retrieveImages(value),
+    contentLinks: parseArrayOf(value['podcast:contentlink'], parseContentLink),
     socialInteracts: parseArrayOf(value['podcast:socialinteract'], parseSocialInteract),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
     chat: parseSingularOf(value['podcast:chat'], parseChat),
@@ -492,6 +493,7 @@ export const retrieveFeed: ParseUtilPartial<PodcastNs.Feed<DateAny>, ParseMainOp
     images: retrieveImages(value),
     liveItems: parseArrayOf(value['podcast:liveitem'], (value) => parseLiveItem(value, options)),
     blocks: parseArrayOf(value['podcast:block'], parseBlock),
+    socialInteracts: parseArrayOf(value['podcast:socialinteract'], parseSocialInteract),
     txts: parseArrayOf(value['podcast:txt'], parseTxt),
     remoteItems: parseArrayOf(value['podcast:remoteitem'], parseRemoteItem),
     podroll: parseSingularOf(value['podcast:podroll'], parsePodroll),

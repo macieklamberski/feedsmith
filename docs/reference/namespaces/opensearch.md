@@ -14,7 +14,10 @@ The OpenSearch namespace provides elements for communicating search metadata and
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://github.com/dewitt/opensearch/blob/master/opensearch-1-1-draft-6.md" target="_blank">OpenSearch 1.1 Specification</a></td>
+      <td>
+        <a href="https://web.archive.org/web/20060209232137/http://opensearch.a9.com:80/spec/1.1/response/" target="_blank">OpenSearch 1.1 Draft 2 Response</a> (Original, Web Archive)<br>
+        <a href="https://github.com/dewitt/opensearch/blob/master/opensearch-1-1-draft-6.md" target="_blank">OpenSearch 1.1 Draft 6</a> (GitHub)
+      </td>
     </tr>
     <tr>
       <th>Prefix</th>
@@ -22,7 +25,7 @@ The OpenSearch namespace provides elements for communicating search metadata and
     </tr>
     <tr>
       <th>Available in</th>
-      <td><a href="/reference/feeds/rss">RSS</a>, <a href="/reference/feeds/atom">Atom</a></td>
+      <td><a href="/reference/feeds/rss">RSS</a>, <a href="/reference/feeds/atom">Atom</a>, <a href="/reference/feeds/rdf">RDF</a></td>
     </tr>
     <tr>
       <th>Property</th>

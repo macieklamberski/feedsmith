@@ -3,77 +3,50 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-FILES_DIR="$SCRIPT_DIR/../files"
 RUNNER="$SCRIPT_DIR/runner.ts"
-TABULATE="$SCRIPT_DIR/../tabulate.ts"
 
-# Runs one hyperfine comparison for a fixture directory. `limit` caps the number of files
-# (empty means all). Each remaining argument is a "key:label" pair, where `key` is the
-# runner identifier and `label` is the display name.
-run_benchmark() {
-  local feed_dir=$1
-  local feed_format=$2
-  local limit=$3
-  local description=$4
-  shift 4
-
-  local args=()
-  for entry in "$@"; do
-    local key="${entry%%:*}"
-    local label="${entry#*:}"
-    args+=(--command-name "$label" "bun $RUNNER $key $FILES_DIR/$feed_dir $feed_format $limit")
-  done
-
-  echo ""
-  echo "⏳ Running: $description"
-
-  local json
-  json=$(mktemp)
-  hyperfine --warmup 3 --min-runs 10 --export-json "$json" "${args[@]}"
-  bun "$TABULATE" "$json"
-  rm -f "$json"
-}
+source "$SCRIPT_DIR/../common.sh"
 
 # Libraries that parse RSS/Atom/RDF feeds, in the same order as the previous benchmark.
 RSS_LIBS=(
-  "rss-parser:rss-parser"
-  "@gaphub/feed:@gaphub/feed"
-  "@rowanmanning/feed-parser:@rowanmanning/feed-parser"
-  "feedme:feedme.js"
-  "@extractus/feed-extractor:@extractus/feed-extractor"
-  "@ulisesgascon/rss-feed-parser:@ulisesgascon/rss-feed-parser"
-  "feedparser:feedparser"
-  "podcast-feed-parser:podcast-feed-parser"
-  "feedsmith:feedsmith *"
+  "rss-parser=bun $RUNNER rss-parser"
+  "@gaphub/feed=bun $RUNNER @gaphub/feed"
+  "@rowanmanning/feed-parser=bun $RUNNER @rowanmanning/feed-parser"
+  "feedme.js=bun $RUNNER feedme"
+  "@extractus/feed-extractor=bun $RUNNER @extractus/feed-extractor"
+  "@ulisesgascon/rss-feed-parser=bun $RUNNER @ulisesgascon/rss-feed-parser"
+  "feedparser=bun $RUNNER feedparser"
+  "podcast-feed-parser=bun $RUNNER podcast-feed-parser"
+  "feedsmith *=bun $RUNNER feedsmith"
 )
 
 # Atom and RDF: @ulisesgascon/rss-feed-parser and podcast-feed-parser do not support them.
 ATOM_LIBS=(
-  "rss-parser:rss-parser"
-  "@gaphub/feed:@gaphub/feed"
-  "@rowanmanning/feed-parser:@rowanmanning/feed-parser"
-  "feedme:feedme.js"
-  "@extractus/feed-extractor:@extractus/feed-extractor"
-  "feedparser:feedparser"
-  "feedsmith:feedsmith *"
+  "rss-parser=bun $RUNNER rss-parser"
+  "@gaphub/feed=bun $RUNNER @gaphub/feed"
+  "@rowanmanning/feed-parser=bun $RUNNER @rowanmanning/feed-parser"
+  "feedme.js=bun $RUNNER feedme"
+  "@extractus/feed-extractor=bun $RUNNER @extractus/feed-extractor"
+  "feedparser=bun $RUNNER feedparser"
+  "feedsmith *=bun $RUNNER feedsmith"
 )
 
 OPML_LIBS=(
-  "@gaphub/feed:@gaphub/feed"
-  "node-opml-parser:node-opml-parser"
-  "opml-to-json:opml-to-json"
-  "opml:opml"
-  "opmlparser:opmlparser"
-  "feedsmith:feedsmith *"
+  "@gaphub/feed=bun $RUNNER @gaphub/feed"
+  "node-opml-parser=bun $RUNNER node-opml-parser"
+  "opml-to-json=bun $RUNNER opml-to-json"
+  "opml=bun $RUNNER opml"
+  "opmlparser=bun $RUNNER opmlparser"
+  "feedsmith *=bun $RUNNER feedsmith"
 )
 
 run_benchmark "rss-big" "rss" "10" "RSS feed parsing (10 files × 5MB–50MB)" "${RSS_LIBS[@]}"
-run_benchmark "rss-small" "rss" "" "RSS feed parsing (100 files × 100KB–5MB)" "${RSS_LIBS[@]}"
+run_benchmark "rss-small" "rss" "100" "RSS feed parsing (100 files × 100KB–5MB)" "${RSS_LIBS[@]}"
 run_benchmark "atom-big" "atom" "10" "Atom feed parsing (10 files × 5MB–50MB)" "${ATOM_LIBS[@]}"
-run_benchmark "atom-small" "atom" "" "Atom feed parsing (100 files × 100KB–5MB)" "${ATOM_LIBS[@]}"
-run_benchmark "rdf" "rdf" "" "RDF feed parsing (97 files × 100KB–5MB)" "${ATOM_LIBS[@]}"
-run_benchmark "opml" "opml" "" "OPML parsing (50 files × 100KB–500KB)" "${OPML_LIBS[@]}"
+run_benchmark "atom-small" "atom" "100" "Atom feed parsing (100 files × 100KB–5MB)" "${ATOM_LIBS[@]}"
+run_benchmark "rdf" "rdf" "100" "RDF feed parsing (100 files × 100KB–5MB)" "${ATOM_LIBS[@]}"
+run_benchmark "opml" "opml" "100" "OPML parsing (100 files × 100KB–500KB)" "${OPML_LIBS[@]}"
 
 # JSON Feed: only feedsmith is benchmarked (other parsers do not support the format), so
 # this reports an absolute timing rather than a comparison.
-run_benchmark "json" "json" "" "JSON feed parsing (32 files × 100KB–5MB)" "feedsmith:feedsmith *"
+run_benchmark "json" "json" "100" "JSON feed parsing (100 files × 100KB–5MB)" "feedsmith *=bun $RUNNER feedsmith"

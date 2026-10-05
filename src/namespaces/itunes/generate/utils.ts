@@ -1,6 +1,7 @@
 import { isNonEmptyString, isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import {
+  generateBoolean,
   generateCdataString,
   generateCsvOf,
   generateNumber,
@@ -54,13 +55,15 @@ export const generateItem: GenerateUtil<ItunesNs.Item> = (item) => {
   const value = {
     'itunes:duration': generateNumber(item.duration),
     'itunes:image': generateImage(item.image),
-    'itunes:explicit': generateYesNoBoolean(item.explicit),
+    'itunes:explicit': generateBoolean(item.explicit),
     'itunes:author': generateCdataString(item.author),
     'itunes:title': generateCdataString(item.title),
     'itunes:episode': generateNumber(item.episode),
     'itunes:season': generateNumber(item.season),
     'itunes:episodeType': generateCdataString(item.episodeType),
     'itunes:block': generateYesNoBoolean(item.block),
+    'itunes:order': generateNumber(item.order),
+    'itunes:isClosedCaptioned': generateYesNoBoolean(item.isClosedCaptioned),
     'itunes:summary': generateCdataString(item.summary),
     'itunes:subtitle': generateCdataString(item.subtitle),
     'itunes:keywords': generateCsvOf(item.keywords),
@@ -77,7 +80,7 @@ export const generateFeed: GenerateUtil<ItunesNs.Feed> = (feed) => {
   const value = {
     'itunes:image': generateImage(feed.image),
     'itunes:category': trimArray(feed.categories, generateCategory),
-    'itunes:explicit': generateYesNoBoolean(feed.explicit),
+    'itunes:explicit': generateBoolean(feed.explicit),
     'itunes:author': generateCdataString(feed.author),
     'itunes:title': generateCdataString(feed.title),
     'itunes:type': generateCdataString(feed.type),

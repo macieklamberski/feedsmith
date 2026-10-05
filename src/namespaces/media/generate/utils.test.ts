@@ -1299,7 +1299,7 @@ describe('generateContent', () => {
       '@fileSize': 2000,
       '@type': 'video/quicktime',
       '@medium': 'video',
-      '@isDefault': 'yes',
+      '@isDefault': true,
       '@expression': 'full',
       '@bitrate': 697,
       '@framerate': 24,
@@ -1473,6 +1473,19 @@ describe('generateContent', () => {
     }
     const expected = {
       '@url': 'http://www.example.com/audio.mp3',
+    }
+
+    expect(generateContent(value)).toEqual(expected)
+  })
+
+  it('should generate content with isDefault set to false', () => {
+    const value = {
+      url: 'http://www.example.com/audio.mp3',
+      isDefault: false,
+    }
+    const expected = {
+      '@url': 'http://www.example.com/audio.mp3',
+      '@isDefault': false,
     }
 
     expect(generateContent(value)).toEqual(expected)
