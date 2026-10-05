@@ -1,5 +1,6 @@
 export const uris = [
   'http://www.pheed.com/pheed/', // Official URI
+  'https://www.pheed.com/pheed/',
   'http://pheed.com/pheed/',
 ]
 
