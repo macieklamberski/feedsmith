@@ -958,6 +958,23 @@ describe('parsePerson', () => {
     expect(parsePerson(value)).toEqual(expected)
   })
 
+  it('should handle activity namespace', () => {
+    const value = {
+      'activity:object-type': { '#text': 'http://activitystrea.ms/schema/1.0/person' },
+      uri: { '#text': 'https://example.com/user/1' },
+      name: { '#text': 'balleyne' },
+    }
+    const expected = {
+      name: 'balleyne',
+      uri: 'https://example.com/user/1',
+      activity: {
+        objectType: 'http://activitystrea.ms/schema/1.0/person',
+      },
+    }
+
+    expect(parsePerson(value)).toEqual(expected)
+  })
+
   it('should return undefined for non-object input', () => {
     expect(parsePerson('not an object')).toBeUndefined()
     expect(parsePerson(undefined)).toBeUndefined()
@@ -1792,6 +1809,31 @@ describe('parseEntry', () => {
       wfw: {
         comment: 'https://example.com/comment',
         commentRss: 'https://example.com/comments/feed',
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should handle activity namespace', () => {
+    const value = {
+      id: { '#text': 'https://example.com/posts/222544242620' },
+      title: { '#text': 'Example Entry' },
+      'activity:object': {
+        'activity:object-type': { '#text': 'http://activitystrea.ms/schema/1.0/blog-entry' },
+      },
+      'activity:verb': { '#text': 'http://activitystrea.ms/schema/1.0/post' },
+    }
+    const expected = {
+      id: 'https://example.com/posts/222544242620',
+      title: { value: 'Example Entry' },
+      activity: {
+        verb: 'http://activitystrea.ms/schema/1.0/post',
+        object: {
+          activity: {
+            objectType: 'http://activitystrea.ms/schema/1.0/blog-entry',
+          },
+        },
       },
     }
 

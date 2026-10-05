@@ -6,6 +6,7 @@ import type {
   Requirable,
   Strict,
 } from '../../../common/types.js'
+import type { ActivityNs } from '../../../namespaces/activity/common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AppNs } from '../../../namespaces/app/common/types.js'
 import type { ArxivNs } from '../../../namespaces/arxiv/common/types.js'
@@ -79,6 +80,7 @@ export namespace AtomFeed {
       uri?: string
       email?: string
       arxiv?: ArxivNs.Author
+      activity?: ActivityNs.Person
     },
     TStrict
   >
@@ -147,6 +149,7 @@ export namespace AtomFeed {
       wfw?: WfwNs.Item
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
+      activity?: ActivityNs.Entry<TDate>
       yt?: YtNs.Item
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>

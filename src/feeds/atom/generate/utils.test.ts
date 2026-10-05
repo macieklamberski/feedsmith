@@ -1145,6 +1145,33 @@ describe('generateEntry', () => {
     expect(generateEntry(value)).toEqual(expected)
   })
 
+  it('should generate entry with activity namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: { value: 'Entry with Activity Streams namespace' },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      activity: {
+        verb: 'http://activitystrea.ms/schema/1.0/post',
+        object: {
+          activity: {
+            objectType: 'http://activitystrea.ms/schema/1.0/blog-entry',
+          },
+        },
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: { '#text': 'Entry with Activity Streams namespace' },
+      updated: '2023-03-15T12:00:00.000Z',
+      'activity:verb': 'http://activitystrea.ms/schema/1.0/post',
+      'activity:object': {
+        'activity:object-type': 'http://activitystrea.ms/schema/1.0/blog-entry',
+      },
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
   it('should generate entry with yt namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
@@ -2108,6 +2135,59 @@ describe('generateFeed', () => {
         title: { '#text': 'Feed with Pingback namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         'pingback:to': 'https://example.com/pingback-service',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with activity namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: { value: 'Feed with Activity Streams namespace' },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      authors: [
+        {
+          name: 'balleyne',
+          activity: {
+            objectType: 'http://activitystrea.ms/schema/1.0/person',
+          },
+        },
+      ],
+      entries: [
+        {
+          id: 'https://example.com/notice/114244',
+          title: { value: 'New note by balleyne' },
+          updated: new Date('2023-03-15T12:00:00Z'),
+          activity: {
+            verb: 'http://activitystrea.ms/schema/1.0/post',
+            objectType: 'http://activitystrea.ms/schema/1.0/note',
+          },
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:activity': 'http://activitystrea.ms/spec/1.0/',
+        author: [
+          {
+            name: 'balleyne',
+            'activity:object-type': 'http://activitystrea.ms/schema/1.0/person',
+          },
+        ],
+        id: 'https://example.com/feed',
+        title: { '#text': 'Feed with Activity Streams namespace' },
+        updated: '2023-03-15T12:00:00.000Z',
+        entry: [
+          {
+            id: 'https://example.com/notice/114244',
+            title: { '#text': 'New note by balleyne' },
+            updated: '2023-03-15T12:00:00.000Z',
+            'activity:verb': 'http://activitystrea.ms/schema/1.0/post',
+            'activity:object-type': 'http://activitystrea.ms/schema/1.0/note',
+          },
+        ],
       },
     }
 

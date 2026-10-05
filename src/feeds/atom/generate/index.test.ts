@@ -1170,6 +1170,73 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with activity namespace', () => {
+    const value = {
+      id: 'https://example.com/blog',
+      title: { value: 'Blog with Activity Streams' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      entries: [
+        {
+          id: 'https://example.com/notice/112208',
+          title: { value: 'balleyne repeated a notice by jk' },
+          updated: new Date('2024-01-05T10:30:00Z'),
+          activity: {
+            verb: 'http://activitystrea.ms/schema/1.0/share',
+            object: {
+              authors: [
+                {
+                  name: 'jk',
+                  uri: 'https://example.com/users/jk',
+                  activity: {
+                    objectType: 'http://activitystrea.ms/schema/1.0/person',
+                  },
+                },
+              ],
+              id: 'https://example.com/users/jk/statuses/101631959188968839',
+              title: { value: 'New note by jk' },
+              activity: {
+                objectType: 'http://activitystrea.ms/schema/1.0/note',
+              },
+            },
+            target: {
+              id: 'https://example.com/albums/pets',
+              title: { value: 'My Pets' },
+            },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:activity="http://activitystrea.ms/spec/1.0/">
+  <id>https://example.com/blog</id>
+  <title>Blog with Activity Streams</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <entry>
+    <id>https://example.com/notice/112208</id>
+    <title>balleyne repeated a notice by jk</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+    <activity:verb>http://activitystrea.ms/schema/1.0/share</activity:verb>
+    <activity:object>
+      <author>
+        <name>jk</name>
+        <uri>https://example.com/users/jk</uri>
+        <activity:object-type>http://activitystrea.ms/schema/1.0/person</activity:object-type>
+      </author>
+      <id>https://example.com/users/jk/statuses/101631959188968839</id>
+      <title>New note by jk</title>
+      <activity:object-type>http://activitystrea.ms/schema/1.0/note</activity:object-type>
+    </activity:object>
+    <activity:target>
+      <id>https://example.com/albums/pets</id>
+      <title>My Pets</title>
+    </activity:target>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with YouTube namespace', () => {
     const value = {
       id: 'yt:channel:UCuAXFkgsw1L7xaCfnd5JJOw',

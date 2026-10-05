@@ -12,6 +12,10 @@ import {
   isXmlAttributeKey,
   trimArray,
 } from '../../../common/utils.js'
+import {
+  generateEntry as generateActivityEntry,
+  generatePerson as generateActivityPerson,
+} from '../../../namespaces/activity/generate/utils.js'
 import { generateFeed as generateAdminFeed } from '../../../namespaces/admin/generate/utils.js'
 import { generateEntry as generateAppEntry } from '../../../namespaces/app/generate/utils.js'
 import {
@@ -202,6 +206,7 @@ export const generatePerson: GenerateUtil<AtomFeed.Person> = (person, options) =
     [key('uri')]: generateCdataString(person.uri),
     [key('email')]: generateCdataString(person.email),
     ...generateArxivAuthor(person.arxiv),
+    ...generateActivityPerson(person.activity),
   }
 
   return trimObject(value)
@@ -311,6 +316,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
     ...generateWfwItem(entry.wfw),
     ...generatePingbackItem(entry.pingback),
     ...generateTrackbackItem(entry.trackback),
+    ...generateActivityEntry(entry.activity),
     ...generateYtItem(entry.yt),
     ...generateGeoItemOrFeed(entry.geo),
     ...generateGeoRssItemOrFeed(entry.georss),

@@ -98,6 +98,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Trackback](/reference/namespaces/trackback) | `<trackback:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Source](/reference/namespaces/source) | `<source:*>` | RSS | ✅ | ✅ |
 | [blogChannel](/reference/namespaces/blogchannel) | `<blogChannel:*>` | RSS | ✅ | ✅ |
+| [Activity Streams](/reference/namespaces/activity) | `<activity:*>` | RSS, Atom | ✅ | ✅ |
 | [YouTube](/reference/namespaces/yt) | `<yt:*>` | Atom | ✅ | ✅ |
 | [W3C Basic Geo](/reference/namespaces/geo) | `<geo:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [GeoRSS Simple](/reference/namespaces/georss) | `<georss:*>` | RSS, Atom, RDF | ✅ | ✅ |

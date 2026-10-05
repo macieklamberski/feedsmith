@@ -11,6 +11,10 @@ import {
   parseVerbatimString,
   retrieveText,
 } from '../../../common/utils.js'
+import {
+  retrieveEntry as retrieveActivityEntry,
+  retrievePerson as retrieveActivityPerson,
+} from '../../../namespaces/activity/parse/utils.js'
 import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
 import { retrieveEntry as retrieveAppEntry } from '../../../namespaces/app/parse/utils.js'
 import {
@@ -373,6 +377,7 @@ export const parsePerson: ParseUtilPartial<AtomFeed.Person> = (value, options) =
     uri: retrievePersonUri(value, options),
     email: parseSingularOf(get('email'), (value) => parseString(retrieveText(value))),
     arxiv: namespaces?.has('arxiv') ? retrieveArxivAuthor(value) : undefined,
+    activity: namespaces?.has('activity') ? retrieveActivityPerson(value) : undefined,
   }
 
   return trimObject(person)
@@ -528,6 +533,7 @@ export const parseEntry: ParseUtilPartial<AtomFeed.Entry<DateAny>> = (value, opt
     wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces?.has('trackback') ? retrieveTrackbackItem(value) : undefined,
+    activity: namespaces?.has('activity') ? retrieveActivityEntry(value, options) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
     geo: namespaces?.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
