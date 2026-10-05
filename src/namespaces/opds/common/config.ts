@@ -5,11 +5,4 @@ export const uris = [
   'https://opds-spec.org/2010/catalog/',
 ]
 
-export const stopNodes = [
-  '*.opds:price',
-  // Not a stop node because it supports recursive nesting that requires parser traversal.
-  // '*.opds:indirectacquisition',
-  '*.opds:availability',
-  '*.opds:holds',
-  '*.opds:copies',
-]
+export const stopNodes = ['*.opds:price']
