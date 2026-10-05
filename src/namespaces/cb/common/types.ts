@@ -14,7 +14,7 @@ export namespace CbNs {
   }
 
   export type Person = {
-    /** @deprecated Defined by RSS-CB 1.1 only. */
+    /** @deprecated Defined by RSS-CB 1.0 and 1.1 only. */
     type?: string
     givenName?: string
     surname?: string
@@ -98,7 +98,7 @@ export namespace CbNs {
   }
 
   export type ExchangeRate = {
-    /** @deprecated RSS-CB 1.1 syntax. RSS-CB 1.2 uses observation and observationPeriod. */
+    /** @deprecated RSS-CB 1.0 and 1.1 syntax. RSS-CB 1.2 uses observation and observationPeriod. */
     value?: Value
     observation?: Observation
     baseCurrency?: string
@@ -110,7 +110,7 @@ export namespace CbNs {
   }
 
   export type InterestRate = {
-    /** @deprecated RSS-CB 1.1 syntax. RSS-CB 1.2 uses observation and observationPeriod. */
+    /** @deprecated RSS-CB 1.0 and 1.1 syntax. RSS-CB 1.2 uses observation and observationPeriod. */
     value?: Value
     observation?: Observation
     rateName?: string
@@ -119,7 +119,7 @@ export namespace CbNs {
   }
 
   export type Transaction = {
-    /** @deprecated RSS-CB 1.1 syntax. RSS-CB 1.2 uses observation and observationPeriod. */
+    /** @deprecated RSS-CB 1.0 and 1.1 syntax. RSS-CB 1.2 uses observation and observationPeriod. */
     value?: Value
     observation?: Observation
     transactionName?: string
@@ -129,7 +129,7 @@ export namespace CbNs {
   }
 
   export type OtherStatistic = {
-    /** @deprecated RSS-CB 1.1 syntax. RSS-CB 1.2 uses observation and observationPeriod. */
+    /** @deprecated RSS-CB 1.0 and 1.1 syntax. RSS-CB 1.2 uses observation and observationPeriod. */
     value?: Value
     observation?: Observation
     /** @deprecated Defined by RSS-CB 1.1 only. */

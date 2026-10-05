@@ -20,7 +20,7 @@ The RSS-CB namespace describes what central banks publish: news, research papers
       <th>Specification</th>
       <td>
         <a href="https://web.archive.org/web/20210224094152/http://cbwiki.net/wiki/index.php/RSS-CB_1.2_Specification" target="_blank">RSS-CB 1.2 Specification</a> (Web Archive)<br>
-        <a href="https://web.archive.org/web/20070701110218/http://www.cbwiki.net/wiki/index.php/Specification_1.1" target="_blank">RSS-CB 1.1 Specification</a> (Web Archive)<br>
+        <a href="https://web.archive.org/web/20100119191305/http://www.cbwiki.net/wiki/index.php/Specification_1.1" target="_blank">RSS-CB 1.1 Specification</a> (Web Archive)<br>
         <a href="https://web.archive.org/web/20080101124549/http://www.cbwiki.net/wiki/index.php/Specification" target="_blank">RSS-CB 1.0 Specification</a> (Web Archive)
       </td>
     </tr>
@@ -47,10 +47,12 @@ RSS-CB 1.0 writes its elements directly under the item and names the application
 
 `custom` holds the child XML of `cb:custom` as a raw string. It is generated only when it is well-formed and uses no entity XML cannot resolve.
 
-These parts are inferred from live feeds, not read from a specification:
+`observationPeriod` reads both forms: the RSS-CB 1.1 `frequency` attribute with the period as the element's text, and the RSS-CB 1.2 `frequency` and `period` child elements.
 
-- `observationPeriod` written with a `frequency` attribute and the period as the element's text, as Federal Reserve feeds on the 1.1 URI do. RSS-CB 1.2 defines `frequency` and `period` as child elements.
-- `keywords`, `resources`, `persons` and `jelCodes` as lists. The specifications do not say how often these elements may appear, and live feeds repeat them.
+These parts are inferred, not read from a specification:
+
+- `keywords`, `resources`, `persons` and `jelCodes` are lists. The specifications do not say how often these elements may appear, and live feeds repeat keywords, persons and JEL codes.
+- A 1.0 statistics item with none of the subtype elements above is routed by the attributes of `cb:value`: `units` to `otherStatistic`, and `unit_mult` without `frequency` to `transaction`. RSS-CB 1.0 requires `units` for other statistics and `unit_mult` for transactions. Any other value is dropped.
 
 ## Types
 

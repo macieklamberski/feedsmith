@@ -965,6 +965,85 @@ describe('parseLegacyStatistics', () => {
     expect(parseLegacyStatistics(value)).toEqual(expected)
   })
 
+  const subtypeKeyCases: Array<[string, string, string]> = [
+    ['cb:basecurrency', 'exchangeRate', 'baseCurrency'],
+    ['cb:targetcurrency', 'exchangeRate', 'targetCurrency'],
+    ['cb:ratename', 'interestRate', 'rateName'],
+    ['cb:transactionname', 'transaction', 'transactionName'],
+    ['cb:transactiontype', 'transaction', 'transactionType'],
+    ['cb:transactionterm', 'transaction', 'transactionTerm'],
+    ['cb:topic', 'otherStatistic', 'topic'],
+    ['cb:coverage', 'otherStatistic', 'coverage'],
+  ]
+
+  it.each(subtypeKeyCases)('should route %s alone to %s', (key, subtype, field) => {
+    const value = {
+      [key]: { '#text': 'X' },
+      'cb:value': { '#text': '1.5', '@decimals': '1' },
+    }
+    const expected = {
+      [subtype]: {
+        value: { value: 1.5, decimals: 1 },
+        [field]: 'X',
+      },
+    }
+
+    expect(parseLegacyStatistics(value)).toEqual(expected)
+  })
+
+  it('should route a value with units and no subtype element to otherStatistic', () => {
+    const value = {
+      'cb:value': { '@units': 'USD', '@decimals': '3', '#text': '241.6' },
+    }
+    const expected = {
+      otherStatistic: {
+        value: { value: 241.6, units: 'USD', decimals: 3 },
+      },
+    }
+
+    expect(parseLegacyStatistics(value)).toEqual(expected)
+  })
+
+  it('should route a value with unit_mult and no frequency to transaction', () => {
+    const value = {
+      'cb:value': { '@unit_mult': '9', '@decimals': '3', '#text': '1.781' },
+    }
+    const expected = {
+      transaction: {
+        value: { value: 1.781, unitMult: 9, decimals: 3 },
+      },
+    }
+
+    expect(parseLegacyStatistics(value)).toEqual(expected)
+  })
+
+  it('should drop a value with unit_mult and frequency and no subtype element', () => {
+    const value = {
+      'cb:country': { '#text': 'DZ' },
+      'cb:value': { '@unit_mult': '9', '@frequency': 'daily', '#text': '1.781' },
+    }
+    const expected = {
+      country: 'DZ',
+    }
+
+    expect(parseLegacyStatistics(value)).toEqual(expected)
+  })
+
+  it('should prefer a subtype element over the value attributes', () => {
+    const value = {
+      'cb:ratename': { '#text': 'FedFunds' },
+      'cb:value': { '@units': 'percent', '#text': '5.33' },
+    }
+    const expected = {
+      interestRate: {
+        value: { value: 5.33, units: 'percent' },
+        rateName: 'FedFunds',
+      },
+    }
+
+    expect(parseLegacyStatistics(value)).toEqual(expected)
+  })
+
   it('should drop a value with no subtype element', () => {
     const value = {
       'cb:country': { '#text': 'DZ' },

@@ -10,6 +10,7 @@ import {
   parseArrayOf,
   parseDate,
   parseNumber,
+  parseSingular,
   parseSingularOf,
   parseString,
   parseVerbatimString,
@@ -250,8 +251,8 @@ export const parseObservationPeriod: ParseUtilPartial<CbNs.ObservationPeriod> = 
     return
   }
 
-  // Federal Reserve feeds on the 1.1 URI write the frequency as an attribute and the period as
-  // the element's text, where RSS-CB 1.2 writes both as child elements.
+  // RSS-CB 1.1 writes the frequency as an attribute and the period as the element's text, and
+  // RSS-CB 1.2 writes both as child elements.
   const observationPeriod = {
     frequency:
       parseSingularOf(value['cb:frequency'], (value) => parseString(retrieveText(value))) ??
@@ -371,8 +372,27 @@ const interestRateKeys = ['cb:ratename']
 const transactionKeys = ['cb:transactionname', 'cb:transactiontype', 'cb:transactionterm']
 const otherStatisticKeys = ['cb:topic', 'cb:coverage']
 
+// RSS-CB 1.0 requires units on the value of other statistics and unit_mult on the value of
+// transactions, where exchange and interest rates carry frequency instead.
+export const retrieveLegacyValueSubtype = (value: Unreliable): string | undefined => {
+  const legacyValue = parseSingular(value?.['cb:value'])
+
+  if (!isPlainObject(legacyValue)) {
+    return
+  }
+
+  if (legacyValue['@units'] !== undefined) {
+    return 'otherStatistic'
+  }
+
+  if (legacyValue['@unit_mult'] !== undefined && legacyValue['@frequency'] === undefined) {
+    return 'transaction'
+  }
+}
+
 // RSS-CB 1.0 has no statistics subtype element, so the subtype is told by the elements that only
-// it defines. cb:value and cb:rateType go with whichever subtype is found.
+// it defines, or by the attributes of cb:value when there are none. cb:value and cb:rateType go
+// with whichever subtype is found.
 export const parseLegacyStatistics: ParseUtilPartial<CbNs.Statistics> = (value) => {
   if (!isPlainObject(value)) {
     return
@@ -382,6 +402,16 @@ export const parseLegacyStatistics: ParseUtilPartial<CbNs.Statistics> = (value) 
     return keys.some((key) => key in value)
   }
 
+  const subtypeKeys = [
+    ...exchangeRateKeys,
+    ...interestRateKeys,
+    ...transactionKeys,
+    ...otherStatisticKeys,
+  ]
+  const valueSubtype = hasAnyKey(subtypeKeys) ? undefined : retrieveLegacyValueSubtype(value)
+  const isTransaction = hasAnyKey(transactionKeys) || valueSubtype === 'transaction'
+  const isOtherStatistic = hasAnyKey(otherStatisticKeys) || valueSubtype === 'otherStatistic'
+
   const statistics = {
     country: parseSingularOf(value['cb:country'], (value) => parseString(retrieveText(value))),
     institutionAbbrev: parseSingularOf(value['cb:institutionabbrev'], (value) =>
@@ -389,8 +419,8 @@ export const parseLegacyStatistics: ParseUtilPartial<CbNs.Statistics> = (value) 
     ),
     exchangeRate: hasAnyKey(exchangeRateKeys) ? parseExchangeRate(value) : undefined,
     interestRate: hasAnyKey(interestRateKeys) ? parseInterestRate(value) : undefined,
-    transaction: hasAnyKey(transactionKeys) ? parseTransaction(value) : undefined,
-    otherStatistic: hasAnyKey(otherStatisticKeys) ? parseOtherStatistic(value) : undefined,
+    transaction: isTransaction ? parseTransaction(value) : undefined,
+    otherStatistic: isOtherStatistic ? parseOtherStatistic(value) : undefined,
   }
 
   return trimObject(statistics)
