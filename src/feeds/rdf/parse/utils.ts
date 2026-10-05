@@ -33,6 +33,7 @@ import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/par
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
+import { retrieveItem as retrieveWikidotItem } from '../../../namespaces/wikidot/parse/utils.js'
 import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
 import type { ParseUtilPartial, RdfFeed } from '../common/types.js'
 
@@ -131,6 +132,7 @@ export const parseItem: ParseUtilPartial<RdfFeed.Item<DateAny>> = (value, option
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
     pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
+    wikidot: namespaces.has('wikidot') ? retrieveWikidotItem(value) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     xml: retrieveXmlItemOrFeed(value),

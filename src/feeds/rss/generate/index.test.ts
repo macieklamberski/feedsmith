@@ -1093,6 +1093,37 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with wikidot namespace', () => {
+    const value = {
+      title: 'Non-Disc Record',
+      description: 'Posts in the discussion thread',
+      items: [
+        {
+          title: 'Re: Non-Disc Record',
+          wikidot: {
+            authorName: 'Crayne',
+            authorUserId: '1346995',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:wikidot="http://www.wikidot.com/rss-namespace">
+  <channel>
+    <title>Non-Disc Record</title>
+    <description>Posts in the discussion thread</description>
+    <item>
+      <title>Re: Non-Disc Record</title>
+      <wikidot:authorName>Crayne</wikidot:authorName>
+      <wikidot:authorUserId>1346995</wikidot:authorUserId>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with geo namespace', () => {
     const value = {
       title: 'Location Feed',

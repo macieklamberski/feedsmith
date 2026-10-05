@@ -1768,6 +1768,48 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with wikidot namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:wikidot="http://www.wikidot.com/rss-namespace"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with Wikidot namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with Wikidot namespace</description>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item title</title>
+          <link>http://example.com/item1</link>
+          <wikidot:authorName>Crayne</wikidot:authorName>
+          <wikidot:authorUserId>1346995</wikidot:authorUserId>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with Wikidot namespace',
+      link: 'http://example.com',
+      description: 'Test feed with Wikidot namespace',
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Item title',
+          link: 'http://example.com/item1',
+          wikidot: {
+            authorName: 'Crayne',
+            authorUserId: '1346995',
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with geo namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
