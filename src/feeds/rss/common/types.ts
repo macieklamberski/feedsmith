@@ -24,6 +24,7 @@ import type { GooglePlayNs } from '../../../namespaces/googleplay/common/types.j
 import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
+import type { PhotoNs } from '../../../namespaces/photo/common/types.js'
 import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
 import type { PodcastNs } from '../../../namespaces/podcast/common/types.js'
 import type { PrismNs } from '../../../namespaces/prism/common/types.js'
@@ -147,6 +148,7 @@ export namespace RssFeed {
       podcast?: PodcastNs.Item<TStrict>
       psc?: PscNs.Item<TStrict>
       media?: MediaNs.ItemOrFeed<TStrict>
+      photo?: PhotoNs.Item
       googleplay?: GooglePlayNs.Item<TStrict>
       spotify?: SpotifyNs.Item<TStrict>
       acast?: AcastNs.Item
