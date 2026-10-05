@@ -770,6 +770,10 @@
           }
         ]
       },
+      "castbox": {
+        "tid": "211277615",
+        "episodePremium": true
+      },
       "feedburner": {
         "origLink": "https://example.com/episode/original-article",
         "origEnclosureLink": "https://example.com/audio/original-episode.mp3",
@@ -1728,6 +1732,11 @@
       "href": "https://example.com/donate",
       "value": "Support the Podcast"
     }
+  },
+  "castbox": {
+    "uid": "17834af78de544b6957678a2918ef04c",
+    "pid": "1318014",
+    "type": "private"
   },
   "feedburner": {
     "info": "examplepodcast",
