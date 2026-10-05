@@ -14,7 +14,7 @@ arXiv is an extension namespace for the arXiv preprint repository API, providing
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://info.arxiv.org/help/api/user-manual.html" target="_blank">arXiv API User's Manual</a></td>
+      <td><a href="https://info.arxiv.org/help/api/user-manual.html" target="_blank">arXiv API User's Manual</a>, <a href="https://info.arxiv.org/help/rss_specifications.html" target="_blank">arXiv RSS Feed Specifications</a></td>
     </tr>
     <tr>
       <th>Prefix</th>
@@ -22,7 +22,7 @@ arXiv is an extension namespace for the arXiv preprint repository API, providing
     </tr>
     <tr>
       <th>Available in</th>
-      <td><a href="/reference/feeds/atom">Atom</a></td>
+      <td><a href="/reference/feeds/rss">RSS</a>, <a href="/reference/feeds/atom">Atom</a></td>
     </tr>
     <tr>
       <th>Property</th>

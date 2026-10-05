@@ -129,6 +129,44 @@ describe('parseImage', () => {
 
     expect(parseImage(value)).toEqual(expected)
   })
+
+  it('should handle prism namespace', () => {
+    const value = {
+      title: { '#text': 'Logo' },
+      'prism:publicationname': { '#text': 'Nature' },
+      'prism:coverdate': { '#text': '2023-03-15' },
+      'prism:aggregationtype': { '#text': 'journal' },
+    }
+    const expected = {
+      title: 'Logo',
+      prism: {
+        publicationName: 'Nature',
+        coverDate: '2023-03-15',
+        aggregationType: 'journal',
+      },
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should handle cc namespace', () => {
+    const value = {
+      title: { '#text': 'Image Title' },
+      link: { '#text': 'https://example.com' },
+      'cc:license': {
+        '@resource': 'https://creativecommons.org/licenses/by/4.0/',
+      },
+    }
+    const expected = {
+      title: 'Image Title',
+      link: 'https://example.com',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+      },
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
 })
 
 describe('retrieveImage', () => {
@@ -165,6 +203,25 @@ describe('retrieveImage', () => {
       title: 'Logo',
       url: 'http://example.com/logo.png',
       rdf: { about: 'http://example.com/image' },
+    }
+
+    expect(retrieveImage(value)).toEqual(expected)
+  })
+
+  it('should retrieve image using ToC reference with entities in the URI', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        image: { '@resource': 'http://example.com/image?a=1&amp;b=2' },
+      },
+      image: [
+        { '@about': 'http://example.com/other', title: 'Other' },
+        { '@about': 'http://example.com/image?a=1&amp;b=2', title: 'Logo' },
+      ],
+    }
+    const expected = {
+      title: 'Logo',
+      rdf: { about: 'http://example.com/image?a=1&b=2' },
     }
 
     expect(retrieveImage(value)).toEqual(expected)
@@ -358,6 +415,21 @@ describe('parseTextInput', () => {
       name: 'q',
       link: 'https://example.com/search',
       rdf: { about: 'http://example.com/search' },
+    }
+
+    expect(parseTextInput(value)).toEqual(expected)
+  })
+
+  it('should handle prism namespace', () => {
+    const value = {
+      title: { '#text': 'Search' },
+      'prism:publicationname': { '#text': 'Nature' },
+    }
+    const expected = {
+      title: 'Search',
+      prism: {
+        publicationName: 'Nature',
+      },
     }
 
     expect(parseTextInput(value)).toEqual(expected)
@@ -604,21 +676,6 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
-  it('should handle content namespace', () => {
-    const value = {
-      title: { '#text': 'Example Entry' },
-      link: { '#text': 'http://example.com' },
-      'content:encoded': { '#text': '<![CDATA[<div>John Doe</div>]]>' },
-    }
-    const expected = {
-      title: 'Example Entry',
-      link: 'http://example.com',
-      content: { encoded: '<div>John Doe</div>' },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
   it('should handle dc namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },
@@ -631,21 +688,6 @@ describe('parseItem', () => {
       dc: {
         creators: ['John Doe'],
       },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
-  it('should handle slash namespace', () => {
-    const value = {
-      title: { '#text': 'Example Entry' },
-      link: { '#text': 'http://example.com' },
-      'slash:comments': { '#text': '10' },
-    }
-    const expected = {
-      title: 'Example Entry',
-      link: 'http://example.com',
-      slash: { comments: 10 },
     }
 
     expect(parseItem(value)).toEqual(expected)
@@ -670,6 +712,36 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle content namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'content:encoded': { '#text': '<![CDATA[<div>John Doe</div>]]>' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      content: { encoded: '<div>John Doe</div>' },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle slash namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'slash:comments': { '#text': '10' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      slash: { comments: 10 },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle media namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },
@@ -689,23 +761,6 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
-  it('should handle georss namespace', () => {
-    const value = {
-      title: { '#text': 'Example Entry' },
-      link: { '#text': 'http://example.com' },
-      'georss:point': { '#text': '45.256 -71.92' },
-    }
-    const expected = {
-      title: 'Example Entry',
-      link: 'http://example.com',
-      georss: {
-        point: { lat: 45.256, lng: -71.92 },
-      },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
   it('should handle wfw namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },
@@ -719,6 +774,23 @@ describe('parseItem', () => {
       wfw: {
         comment: 'https://example.com/comment',
         commentRss: 'https://example.com/comments/feed',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle georss namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'georss:point': { '#text': '45.256 -71.92' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      georss: {
+        point: { lat: 45.256, lng: -71.92 },
       },
     }
 
@@ -973,6 +1045,32 @@ describe('retrieveItems', () => {
     expect(retrieveItems(value)).toEqual(expected)
   })
 
+  it('should match ToC references with entities in the URI', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/item1' },
+              { '@resource': 'http://example.com/item2?a=1&amp;b=2' },
+            ],
+          },
+        },
+      },
+      item: [
+        { '@about': 'http://example.com/item1', title: 'Item 1' },
+        { '@about': 'http://example.com/item2?a=1&amp;b=2', title: 'Item 2' },
+      ],
+    }
+    const expected = [
+      { title: 'Item 1', rdf: { about: 'http://example.com/item1' } },
+      { title: 'Item 2', rdf: { about: 'http://example.com/item2?a=1&b=2' } },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
   it('should skip items not found in document', () => {
     const value = {
       channel: {
@@ -1063,6 +1161,168 @@ describe('retrieveItems', () => {
         title: 'Fallback Item',
         rdf: { about: 'http://example.com/item1' },
       },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should parse items nested inside the channel', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        item: [
+          { '@about': 'http://example.com/item1', title: 'Item 1' },
+          { '@about': 'http://example.com/item2', title: 'Item 2' },
+        ],
+      },
+    }
+    const expected = [
+      { title: 'Item 1', rdf: { about: 'http://example.com/item1' } },
+      { title: 'Item 2', rdf: { about: 'http://example.com/item2' } },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should retrieve items nested inside the channel using ToC references', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/item2' },
+              { '@resource': 'http://example.com/item1' },
+            ],
+          },
+        },
+        item: [
+          { '@about': 'http://example.com/item1', title: 'Item 1' },
+          { '@about': 'http://example.com/item2', title: 'Item 2' },
+        ],
+      },
+    }
+    const expected = [
+      { title: 'Item 2', rdf: { about: 'http://example.com/item2' } },
+      { title: 'Item 1', rdf: { about: 'http://example.com/item1' } },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should prefer items at the root over items nested inside the channel', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        item: { '@about': 'http://example.com/nested', title: 'Nested' },
+      },
+      item: { '@about': 'http://example.com/root', title: 'Root' },
+    }
+    const expected = [{ title: 'Root', rdf: { about: 'http://example.com/root' } }]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should collect ToC references across several Seq elements', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: [
+            { li: { '@resource': 'http://example.com/item2' } },
+            {
+              li: [
+                { '@resource': 'http://example.com/item3' },
+                { '@resource': 'http://example.com/item1' },
+              ],
+            },
+          ],
+        },
+      },
+      item: [
+        { '@about': 'http://example.com/item1', title: 'Item 1' },
+        { '@about': 'http://example.com/item2', title: 'Item 2' },
+        { '@about': 'http://example.com/item3', title: 'Item 3' },
+      ],
+    }
+    const expected = [
+      { title: 'Item 2', rdf: { about: 'http://example.com/item2' } },
+      { title: 'Item 3', rdf: { about: 'http://example.com/item3' } },
+      { title: 'Item 1', rdf: { about: 'http://example.com/item1' } },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should respect maxItems option across several Seq elements', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: [
+            { li: { '@resource': 'http://example.com/item1' } },
+            { li: { '@resource': 'http://example.com/item2' } },
+          ],
+        },
+      },
+      item: [
+        { '@about': 'http://example.com/item1', title: 'Item 1' },
+        { '@about': 'http://example.com/item2', title: 'Item 2' },
+      ],
+    }
+    const expected = [{ title: 'Item 1', rdf: { about: 'http://example.com/item1' } }]
+
+    expect(retrieveItems(value, { maxItems: 1 })).toEqual(expected)
+  })
+
+  it('should ignore items not referenced in ToC', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/item2' },
+              { '@resource': 'http://example.com/item3' },
+            ],
+          },
+        },
+      },
+      item: [
+        { '@about': 'http://example.com/item1?lang=en', title: 'Item 1' },
+        { '@about': 'http://example.com/item2', title: 'Item 2' },
+        { '@about': 'http://example.com/item3', title: 'Item 3' },
+      ],
+    }
+    const expected = [
+      { title: 'Item 2', rdf: { about: 'http://example.com/item2' } },
+      { title: 'Item 3', rdf: { about: 'http://example.com/item3' } },
+    ]
+
+    expect(retrieveItems(value)).toEqual(expected)
+  })
+
+  it('should keep every item when several share the same rdf:about', () => {
+    const value = {
+      channel: {
+        title: 'Test Feed',
+        items: {
+          seq: {
+            li: [
+              { '@resource': 'http://example.com/doi/' },
+              { '@resource': 'http://example.com/doi/' },
+            ],
+          },
+        },
+      },
+      item: [
+        { '@about': 'http://example.com/doi/', title: 'Article 1' },
+        { '@about': 'http://example.com/doi/', title: 'Article 2' },
+      ],
+    }
+    const expected = [
+      { title: 'Article 1', rdf: { about: 'http://example.com/doi/' } },
+      { title: 'Article 2', rdf: { about: 'http://example.com/doi/' } },
     ]
 
     expect(retrieveItems(value)).toEqual(expected)
@@ -1551,33 +1811,6 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should handle sy namespace', () => {
-    const value = {
-      channel: {
-        title: { '#text': 'Example Feed' },
-        'sy:updatefrequency': { '#text': '5' },
-      },
-      item: [
-        {
-          title: { '#text': 'Item 1' },
-          link: { '#text': 'https://example.com/item1' },
-        },
-      ],
-    }
-    const expected = {
-      title: 'Example Feed',
-      items: [
-        {
-          title: 'Item 1',
-          link: 'https://example.com/item1',
-        },
-      ],
-      sy: { updateFrequency: 5 },
-    }
-
-    expect(parseFeed(value)).toEqual(expected)
-  })
-
   it('should handle dcterms namespace', () => {
     const value = {
       channel: {
@@ -1604,6 +1837,33 @@ describe('parseFeed', () => {
         licenses: ['Creative Commons Attribution 4.0'],
         created: ['2023-01-01T00:00:00Z'],
       },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle sy namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'sy:updatefrequency': { '#text': '5' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      sy: { updateFrequency: 5 },
     }
 
     expect(parseFeed(value)).toEqual(expected)
@@ -1640,16 +1900,21 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should handle georss namespace', () => {
+  it('should handle cc namespace', () => {
     const value = {
       channel: {
         title: { '#text': 'Example Feed' },
-        'georss:point': { '#text': '40.689 -74.044' },
+        'cc:license': {
+          '@resource': 'https://creativecommons.org/licenses/by/4.0/',
+        },
       },
       item: [
         {
           title: { '#text': 'Item 1' },
           link: { '#text': 'https://example.com/item1' },
+          'cc:license': {
+            '@resource': 'https://creativecommons.org/licenses/by-sa/4.0/',
+          },
         },
       ],
     }
@@ -1659,10 +1924,13 @@ describe('parseFeed', () => {
         {
           title: 'Item 1',
           link: 'https://example.com/item1',
+          cc: {
+            license: 'https://creativecommons.org/licenses/by-sa/4.0/',
+          },
         },
       ],
-      georss: {
-        point: { lat: 40.689, lng: -74.044 },
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
       },
     }
 
@@ -1704,21 +1972,16 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should handle cc namespace', () => {
+  it('should handle georss namespace', () => {
     const value = {
       channel: {
         title: { '#text': 'Example Feed' },
-        'cc:license': {
-          '@resource': 'https://creativecommons.org/licenses/by/4.0/',
-        },
+        'georss:point': { '#text': '40.689 -74.044' },
       },
       item: [
         {
           title: { '#text': 'Item 1' },
           link: { '#text': 'https://example.com/item1' },
-          'cc:license': {
-            '@resource': 'https://creativecommons.org/licenses/by-sa/4.0/',
-          },
         },
       ],
     }
@@ -1728,13 +1991,10 @@ describe('parseFeed', () => {
         {
           title: 'Item 1',
           link: 'https://example.com/item1',
-          cc: {
-            license: 'https://creativecommons.org/licenses/by-sa/4.0/',
-          },
         },
       ],
-      cc: {
-        license: 'https://creativecommons.org/licenses/by/4.0/',
+      georss: {
+        point: { lat: 40.689, lng: -74.044 },
       },
     }
 
