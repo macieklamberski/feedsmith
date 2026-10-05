@@ -257,6 +257,57 @@ describe('parseAvailability', () => {
     expect(parseAvailability(value)).toEqual(expected)
   })
 
+  it('should parse availability with prefixed attributes', () => {
+    const value = {
+      '@opds:status': 'reserved',
+      '@opds:since': '2024-03-01T09:00:00Z',
+      '@opds:until': '2024-03-22T09:00:00Z',
+    }
+    const expected = {
+      status: 'reserved',
+      since: '2024-03-01T09:00:00Z',
+      until: '2024-03-22T09:00:00Z',
+    }
+
+    expect(parseAvailability(value)).toEqual(expected)
+  })
+
+  it('should prefer unprefixed attributes when both spellings are present', () => {
+    const value = {
+      '@status': 'available',
+      '@opds:status': 'reserved',
+      '@since': '2024-03-01T09:00:00Z',
+      '@opds:since': '2024-02-01T09:00:00Z',
+      '@until': '2024-03-22T09:00:00Z',
+      '@opds:until': '2024-02-22T09:00:00Z',
+    }
+    const expected = {
+      status: 'available',
+      since: '2024-03-01T09:00:00Z',
+      until: '2024-03-22T09:00:00Z',
+    }
+
+    expect(parseAvailability(value)).toEqual(expected)
+  })
+
+  it('should fall back to prefixed attributes when unprefixed ones are empty', () => {
+    const value = {
+      '@status': '',
+      '@opds:status': 'ready',
+      '@since': '',
+      '@opds:since': '2024-03-01T09:00:00Z',
+      '@until': '',
+      '@opds:until': '2024-03-04T09:00:00Z',
+    }
+    const expected = {
+      status: 'ready',
+      since: '2024-03-01T09:00:00Z',
+      until: '2024-03-04T09:00:00Z',
+    }
+
+    expect(parseAvailability(value)).toEqual(expected)
+  })
+
   it('should parse availability with status only', () => {
     const value = {
       '@status': 'unavailable',
@@ -336,6 +387,49 @@ describe('parseHolds', () => {
     expect(parseHolds(value)).toEqual(expected)
   })
 
+  it('should parse holds with prefixed attributes', () => {
+    const value = {
+      '@opds:total': '8',
+      '@opds:position': '3',
+    }
+    const expected = {
+      total: 8,
+      position: 3,
+    }
+
+    expect(parseHolds(value)).toEqual(expected)
+  })
+
+  it('should prefer unprefixed attributes when both spellings are present', () => {
+    const value = {
+      '@total': '8',
+      '@opds:total': '7',
+      '@position': '3',
+      '@opds:position': '2',
+    }
+    const expected = {
+      total: 8,
+      position: 3,
+    }
+
+    expect(parseHolds(value)).toEqual(expected)
+  })
+
+  it('should fall back to prefixed attributes when unprefixed ones are invalid', () => {
+    const value = {
+      '@total': 'many',
+      '@opds:total': '8',
+      '@position': '',
+      '@opds:position': '3',
+    }
+    const expected = {
+      total: 8,
+      position: 3,
+    }
+
+    expect(parseHolds(value)).toEqual(expected)
+  })
+
   it('should parse holds with total only', () => {
     const value = {
       '@total': '5',
@@ -408,6 +502,49 @@ describe('parseCopies', () => {
     const expected = {
       total: 20,
       available: 5,
+    }
+
+    expect(parseCopies(value)).toEqual(expected)
+  })
+
+  it('should parse copies with prefixed attributes', () => {
+    const value = {
+      '@opds:total': '4',
+      '@opds:available': '0',
+    }
+    const expected = {
+      total: 4,
+      available: 0,
+    }
+
+    expect(parseCopies(value)).toEqual(expected)
+  })
+
+  it('should prefer unprefixed attributes when both spellings are present', () => {
+    const value = {
+      '@total': '4',
+      '@opds:total': '5',
+      '@available': '1',
+      '@opds:available': '2',
+    }
+    const expected = {
+      total: 4,
+      available: 1,
+    }
+
+    expect(parseCopies(value)).toEqual(expected)
+  })
+
+  it('should fall back to prefixed attributes when unprefixed ones are invalid', () => {
+    const value = {
+      '@total': 'four',
+      '@opds:total': '4',
+      '@available': '',
+      '@opds:available': '1',
+    }
+    const expected = {
+      total: 4,
+      available: 1,
     }
 
     expect(parseCopies(value)).toEqual(expected)

@@ -6,6 +6,8 @@ title: "Reference: OPDS Namespace"
 
 The OPDS (Open Publication Distribution System) namespace extends Atom links with catalog-specific metadata for digital publication distribution, including pricing, acquisition methods, and faceted navigation.
 
+The `availability`, `holds` and `copies` properties are an unofficial extension, not part of OPDS 1.2. They come from [OPDS For Library Patrons](https://github.com/NYPL-Simplified/Simplified/wiki/OPDS-For-Library-Patrons), a NYPL wiki page by Leonard Richardson for Library Simplified, which defines them for library lending and places `opds:availability`, `opds:holds` and `opds:copies` inside `atom:link` in the same namespace.
+
 <table>
   <tbody>
     <tr>
@@ -14,7 +16,7 @@ The OPDS (Open Publication Distribution System) namespace extends Atom links wit
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://specs.opds.io/opds-1.2" target="_blank">OPDS Catalog 1.2</a></td>
+      <td><a href="https://specs.opds.io/opds-1.2" target="_blank">OPDS Catalog 1.2</a><br><a href="https://github.com/NYPL-Simplified/Simplified/wiki/OPDS-For-Library-Patrons" target="_blank">OPDS For Library Patrons</a></td>
     </tr>
     <tr>
       <th>Prefix</th>

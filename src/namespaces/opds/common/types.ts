@@ -30,7 +30,7 @@ export namespace OpdsNs {
     indirectAcquisitions?: Array<IndirectAcquisition<TStrict>>
   }
 
-  // Unofficial extension for Library lending: availability status of a resource.
+  // Defined by OPDS For Library Patrons, not by OPDS 1.2.
   export type Availability<TDate, TStrict extends boolean = false> = Strict<
     {
       status: Requirable<string> // Required in spec
@@ -40,13 +40,13 @@ export namespace OpdsNs {
     TStrict
   >
 
-  // Unofficial extension for Library lending: hold queue information.
+  // Defined by OPDS For Library Patrons, not by OPDS 1.2.
   export type Holds = {
     total?: number
     position?: number
   }
 
-  // Unofficial extension for Library lending: copy availability information.
+  // Defined by OPDS For Library Patrons, not by OPDS 1.2.
   export type Copies = {
     total?: number
     available?: number

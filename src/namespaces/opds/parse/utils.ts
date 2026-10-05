@@ -37,6 +37,8 @@ export const parseIndirectAcquisition: ParseUtilPartial<OpdsNs.IndirectAcquisiti
   return trimObject(indirectAcquisition)
 }
 
+// OPDS For Library Patrons names the attributes opds:status, opds:since and so on, while its
+// examples write them unprefixed. Both spellings are read, unprefixed first.
 export const parseAvailability: ParseUtilPartial<
   OpdsNs.Availability<DateAny>,
   ParseMainOptions<DateAny>
@@ -46,9 +48,13 @@ export const parseAvailability: ParseUtilPartial<
   }
 
   const availability = {
-    status: parseString(value['@status']),
-    since: parseDate(value['@since'], options?.parseDateFn),
-    until: parseDate(value['@until'], options?.parseDateFn),
+    status: parseString(value['@status']) ?? parseString(value['@opds:status']),
+    since:
+      parseDate(value['@since'], options?.parseDateFn) ??
+      parseDate(value['@opds:since'], options?.parseDateFn),
+    until:
+      parseDate(value['@until'], options?.parseDateFn) ??
+      parseDate(value['@opds:until'], options?.parseDateFn),
   }
 
   return trimObject(availability)
@@ -60,8 +66,8 @@ export const parseHolds: ParseUtilPartial<OpdsNs.Holds> = (value) => {
   }
 
   const holds = {
-    total: parseNumber(value['@total']),
-    position: parseNumber(value['@position']),
+    total: parseNumber(value['@total']) ?? parseNumber(value['@opds:total']),
+    position: parseNumber(value['@position']) ?? parseNumber(value['@opds:position']),
   }
 
   return trimObject(holds)
@@ -73,8 +79,8 @@ export const parseCopies: ParseUtilPartial<OpdsNs.Copies> = (value) => {
   }
 
   const copies = {
-    total: parseNumber(value['@total']),
-    available: parseNumber(value['@available']),
+    total: parseNumber(value['@total']) ?? parseNumber(value['@opds:total']),
+    available: parseNumber(value['@available']) ?? parseNumber(value['@opds:available']),
   }
 
   return trimObject(copies)
