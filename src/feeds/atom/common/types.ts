@@ -80,10 +80,14 @@ export namespace AtomFeed {
       uri?: string
       email?: string
       arxiv?: ArxivNs.Author
-      activity?: ActivityNs.Person
     },
     TStrict
   >
+
+  // Activity Streams reads the actor's object type on atom:author only, per its section 3.2.3.
+  export type Author<TStrict extends boolean = false> = Person<TStrict> & {
+    activity?: ActivityNs.Person
+  }
 
   export type Category<TStrict extends boolean = false> = Strict<
     {
@@ -104,7 +108,7 @@ export namespace AtomFeed {
   >
 
   export type Source<TDate, TStrict extends boolean = false> = {
-    authors?: Array<Person<TStrict>>
+    authors?: Array<Author<TStrict>>
     categories?: Array<Category<TStrict>>
     contributors?: Array<Person<TStrict>>
     generator?: Generator<TStrict>
@@ -120,7 +124,7 @@ export namespace AtomFeed {
 
   export type Entry<TDate, TStrict extends boolean = false> = Strict<
     {
-      authors?: Array<Person<TStrict>>
+      authors?: Array<Author<TStrict>>
       categories?: Array<Category<TStrict>>
       content?: Content
       contributors?: Array<Person<TStrict>>
@@ -160,7 +164,7 @@ export namespace AtomFeed {
 
   export type Feed<TDate, TStrict extends boolean = false> = Strict<
     {
-      authors?: Array<Person<TStrict>>
+      authors?: Array<Author<TStrict>>
       categories?: Array<Category<TStrict>>
       contributors?: Array<Person<TStrict>>
       generator?: Generator<TStrict>

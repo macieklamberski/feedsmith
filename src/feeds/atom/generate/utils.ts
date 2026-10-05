@@ -212,7 +212,7 @@ export const generatePerson: GenerateUtil<AtomFeed.Person> = (person, options) =
 }
 
 // Activity Streams writes the actor's object type on atom:author only, per its section 3.2.3.
-export const generateAuthor: GenerateUtil<AtomFeed.Person> = (author, options) => {
+export const generateAuthor: GenerateUtil<AtomFeed.Author> = (author, options) => {
   if (!isPlainObject(author)) {
     return
   }

@@ -383,7 +383,7 @@ export const parsePerson: ParseUtilPartial<AtomFeed.Person> = (value, options) =
 }
 
 // Activity Streams reads the actor's object type from atom:author only, per its section 3.2.3.
-export const parseAuthor: ParseUtilPartial<AtomFeed.Person> = (value, options) => {
+export const parseAuthor: ParseUtilPartial<AtomFeed.Author> = (value, options) => {
   if (!isPlainObject(value)) {
     return
   }

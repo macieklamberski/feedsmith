@@ -1322,6 +1322,34 @@ describe('parseSource', () => {
     expect(parseSource(value)).toEqual(expected)
   })
 
+  it('should read activity object type on authors but not on contributors', () => {
+    const value = {
+      id: { '#text': 'https://example.com/feed' },
+      author: {
+        name: { '#text': 'balleyne' },
+        'activity:object-type': { '#text': 'http://activitystrea.ms/schema/1.0/person' },
+      },
+      contributor: {
+        name: { '#text': 'jk' },
+        'activity:object-type': { '#text': 'http://activitystrea.ms/schema/1.0/person' },
+      },
+    }
+    const expected = {
+      id: 'https://example.com/feed',
+      authors: [
+        {
+          name: 'balleyne',
+          activity: {
+            objectType: 'http://activitystrea.ms/schema/1.0/person',
+          },
+        },
+      ],
+      contributors: [{ name: 'jk' }],
+    }
+
+    expect(parseSource(value)).toEqual(expected)
+  })
+
   it('should return undefined if no properties are valid', () => {
     const value = {
       nonExistingProp: { '#text': 'value' },
@@ -2440,6 +2468,34 @@ describe('parseFeed', () => {
     }
 
     expect(parseFeed(value, { maxItems: undefined })).toEqual(expected)
+  })
+
+  it('should read activity object type on authors but not on contributors', () => {
+    const value = {
+      id: { '#text': 'https://example.com/feed' },
+      author: {
+        name: { '#text': 'balleyne' },
+        'activity:object-type': { '#text': 'http://activitystrea.ms/schema/1.0/person' },
+      },
+      contributor: {
+        name: { '#text': 'jk' },
+        'activity:object-type': { '#text': 'http://activitystrea.ms/schema/1.0/person' },
+      },
+    }
+    const expected = {
+      id: 'https://example.com/feed',
+      authors: [
+        {
+          name: 'balleyne',
+          activity: {
+            objectType: 'http://activitystrea.ms/schema/1.0/person',
+          },
+        },
+      ],
+      contributors: [{ name: 'jk' }],
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
   })
 })
 

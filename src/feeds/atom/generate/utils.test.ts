@@ -670,6 +670,36 @@ describe('generateSource', () => {
     expect(generateSource(value)).toEqual(expected)
   })
 
+  it('should write activity object type on authors but not on contributors', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      authors: [
+        {
+          name: 'balleyne',
+          activity: { objectType: 'http://activitystrea.ms/schema/1.0/person' },
+        },
+      ],
+      contributors: [
+        {
+          name: 'jk',
+          activity: { objectType: 'http://activitystrea.ms/schema/1.0/person' },
+        },
+      ],
+    }
+    const expected = {
+      author: [
+        {
+          name: 'balleyne',
+          'activity:object-type': 'http://activitystrea.ms/schema/1.0/person',
+        },
+      ],
+      contributor: [{ name: 'jk' }],
+      id: 'https://example.com/feed',
+    }
+
+    expect(generateSource(value)).toEqual(expected)
+  })
+
   it('should handle object with only undefined/empty properties', () => {
     const value = {
       id: undefined,
