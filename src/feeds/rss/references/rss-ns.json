@@ -1894,6 +1894,12 @@
   "creativeCommons": {
     "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
   },
+  "fh": {
+    "complete": true,
+    "archive": true,
+    "incremental": true,
+    "prev": "https://example.com/feed/archive/2005/05"
+  },
   "admin": {
     "errorReportsTo": "mailto:webmaster@example.com",
     "generatorAgent": "http://www.movabletype.org/?v=3.2"

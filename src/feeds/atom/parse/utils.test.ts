@@ -2204,6 +2204,23 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
+  it('should handle fh namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Feed' },
+      'fh:complete': '',
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Example Feed' },
+      fh: {
+        complete: true,
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
   it('should handle admin namespace', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },

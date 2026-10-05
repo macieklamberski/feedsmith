@@ -24,6 +24,7 @@
      xmlns:cc="http://creativecommons.org/ns#"
      xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule"
      xmlns:thr="http://purl.org/syndication/thread/1.0"
+     xmlns:fh="http://purl.org/syndication/history/1.0"
      xmlns:wfw="http://wellformedweb.org/CommentAPI/"
      xmlns:admin="http://webns.net/mvcb/"
      xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
@@ -472,6 +473,12 @@
 
     <!-- Creative Commons Namespace: Channel Level Tags -->
     <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
+
+    <!-- Feed History Namespace: Channel Level Tags -->
+    <fh:complete/>
+    <fh:archive/>
+    <fh:incremental>true</fh:incremental>
+    <fh:prev>https://example.com/feed/archive/2005/05</fh:prev>
 
     <!-- Admin Namespace: Channel Level Tags -->
     <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>

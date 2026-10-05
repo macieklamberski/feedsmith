@@ -1934,6 +1934,29 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate fh namespace properties and attributes for feed', () => {
+    const value = {
+      title: 'Feed with fh namespace',
+      description: 'A feed with fh properties',
+      fh: {
+        complete: true,
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:fh': 'http://purl.org/syndication/history/1.0',
+        channel: {
+          title: 'Feed with fh namespace',
+          description: 'A feed with fh properties',
+          'fh:complete': '',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate admin namespace properties and attributes for feed', () => {
     const value = {
       title: 'Feed with admin namespace',

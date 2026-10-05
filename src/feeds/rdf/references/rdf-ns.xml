@@ -14,6 +14,7 @@
   xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
   xmlns:prism="http://prismstandard.org/namespaces/basic/2.0/"
   xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:fh="http://purl.org/syndication/history/1.0"
   xmlns:wfw="http://wellformedweb.org/CommentAPI/"
   xmlns:admin="http://webns.net/mvcb/"
   xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
@@ -245,6 +246,12 @@
     <!-- ccREL Namespace: Channel Level Tags -->
     <cc:license rdf:resource="https://creativecommons.org/licenses/by/4.0/"/>
     <cc:attributionName>Example Publishing Company</cc:attributionName>
+
+    <!-- Feed History Namespace: Channel Level Tags -->
+    <fh:complete/>
+    <fh:archive/>
+    <fh:incremental>true</fh:incremental>
+    <fh:prev>https://example.com/feed/archive/2005/05</fh:prev>
 
     <!-- Admin Namespace: Channel Level Tags -->
     <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
