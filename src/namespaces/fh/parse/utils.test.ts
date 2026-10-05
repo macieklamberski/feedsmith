@@ -87,6 +87,19 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
+  it('should parse complete and archive containing false as present', () => {
+    const value = {
+      'fh:complete': 'false',
+      'fh:archive': 'false',
+    }
+    const expected = {
+      complete: true,
+      archive: true,
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
   it('should parse archive carrying attributes', () => {
     const value = {
       'fh:archive': { '@xml:lang': 'en' },
