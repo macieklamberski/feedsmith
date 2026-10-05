@@ -1557,12 +1557,14 @@ describe('parse', () => {
   })
 
   it('should parse RDF with cb namespace', () => {
+    // The cb:custom element is constructed: no census feed writes it.
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
       <rdf:RDF
         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
         xmlns="http://purl.org/rss/1.0/"
         xmlns:cb="http://www.cbwiki.net/wiki/index.php/Specification_1.2/"
+        xmlns:onecb="http://example.com/rss/"
       >
         <channel rdf:about="http://example.com">
           <title>Feed with cb namespace</title>
@@ -1593,6 +1595,9 @@ describe('parse', () => {
             <cb:JELCode>F31</cb:JELCode>
             <cb:JELCode>F33</cb:JELCode>
           </cb:paper>
+          <cb:custom rdf:parseType="Resource">
+            <onecb:contact>Paul Roberts &amp; team</onecb:contact>
+          </cb:custom>
         </item>
       </rdf:RDF>
     `
@@ -1619,6 +1624,7 @@ describe('parse', () => {
               publicationDate: 'June 2022',
               jelCodes: ['F31', 'F33'],
             },
+            custom: '<onecb:contact>Paul Roberts &amp; team</onecb:contact>',
           },
           rdf: { about: 'http://example.com/item1' },
         },
@@ -1656,6 +1662,20 @@ describe('parse', () => {
             </cb:otherStatistic>
           </cb:statistics>
         </item>
+        <item rdf:about="http://example.com/item2">
+          <title>CHF 0.9190 2026-06-22 ECB Reference rate</title>
+          <link>http://example.com/item2</link>
+          <cb:statistics>
+            <cb:country>U2</cb:country>
+            <cb:institutionAbbrev>ECB</cb:institutionAbbrev>
+            <cb:exchangeRate>
+              <cb:value frequency="daily" decimals="4">0.9190</cb:value>
+              <cb:baseCurrency unit_mult="0">EUR</cb:baseCurrency>
+              <cb:targetCurrency>CHF</cb:targetCurrency>
+              <cb:rateType>Reference rate</cb:rateType>
+            </cb:exchangeRate>
+          </cb:statistics>
+        </item>
       </rdf:RDF>
     `
     const expected = {
@@ -1680,6 +1700,105 @@ describe('parse', () => {
             },
           },
           rdf: { about: 'http://example.com/item1' },
+        },
+        {
+          title: 'CHF 0.9190 2026-06-22 ECB Reference rate',
+          link: 'http://example.com/item2',
+          cb: {
+            statistics: {
+              country: 'U2',
+              institutionAbbrev: 'ECB',
+              exchangeRate: {
+                value: { value: 0.919, frequency: 'daily', decimals: 4 },
+                baseCurrency: 'EUR',
+                baseCurrencyUnitMult: 0,
+                targetCurrency: 'CHF',
+                rateType: 'Reference rate',
+              },
+            },
+          },
+          rdf: { about: 'http://example.com/item2' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse RDF with cb namespace in the RSS-CB 1.0 layout', () => {
+    // Constructed specimen: no census feed writes the RSS-CB 1.0 layout.
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:cb="http://www.bis.org/rss-cb/1.0/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with cb namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with RSS-CB 1.0</description>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Speech</title>
+          <link>http://example.com/item1</link>
+          <cb:application>speech</cb:application>
+          <cb:simpleTitle>Financial stability in emerging markets</cb:simpleTitle>
+          <cb:occurrenceDate>2006-12-19</cb:occurrenceDate>
+          <cb:person type="Author">
+            <cb:nameAsWritten>Toshiro Muto</cb:nameAsWritten>
+          </cb:person>
+          <cb:venue>Mariton Hotel, La Paz, Bolivia</cb:venue>
+        </item>
+        <item rdf:about="http://example.com/item2">
+          <title>Exchange rate</title>
+          <link>http://example.com/item2</link>
+          <cb:application>statistics</cb:application>
+          <cb:institutionAbbrev>NYFed</cb:institutionAbbrev>
+          <cb:country>DZ</cb:country>
+          <cb:baseCurrency unit_mult="2">CNY</cb:baseCurrency>
+          <cb:targetCurrency>CHF</cb:targetCurrency>
+          <cb:value frequency="daily" decimals="4">1.1240</cb:value>
+          <cb:rateType>noon buying</cb:rateType>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with cb namespace',
+      link: 'http://example.com',
+      description: 'Test feed with RSS-CB 1.0',
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Speech',
+          link: 'http://example.com/item1',
+          cb: {
+            speech: {
+              simpleTitle: 'Financial stability in emerging markets',
+              occurrenceDate: '2006-12-19',
+              persons: [{ type: 'Author', nameAsWritten: 'Toshiro Muto' }],
+              venue: 'Mariton Hotel, La Paz, Bolivia',
+            },
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+        {
+          title: 'Exchange rate',
+          link: 'http://example.com/item2',
+          cb: {
+            statistics: {
+              country: 'DZ',
+              institutionAbbrev: 'NYFed',
+              exchangeRate: {
+                value: { value: 1.124, frequency: 'daily', decimals: 4 },
+                baseCurrency: 'CNY',
+                baseCurrencyUnitMult: 2,
+                targetCurrency: 'CHF',
+                rateType: 'noon buying',
+              },
+            },
+          },
+          rdf: { about: 'http://example.com/item2' },
         },
       ],
     }

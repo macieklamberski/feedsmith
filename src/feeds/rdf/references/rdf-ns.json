@@ -615,6 +615,7 @@
               "decimals": 4
             },
             "baseCurrency": "CHF",
+            "baseCurrencyUnitMult": 0,
             "targetCurrency": "EUR",
             "rateType": "Daily rates (11:00)",
             "observationPeriod": {
@@ -684,7 +685,8 @@
             },
             "dataType": "seasonally adjusted index, 1997 = 100"
           }
-        }
+        },
+        "custom": "<contact>Example contact</contact>"
       },
       "cc": {
         "license": "https://creativecommons.org/licenses/by-sa/4.0/",

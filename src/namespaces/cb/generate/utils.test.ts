@@ -476,10 +476,22 @@ describe('generateExchangeRate', () => {
     const expected = {
       'cb:value': { '@frequency': 'daily', '@decimals': 4, '#text': 0.919 },
       'cb:observation': { 'cb:value': 0.9227, 'cb:unit': 'CHF', 'cb:decimals': 4 },
-      'cb:baseCurrency': 'CHF',
+      'cb:baseCurrency': { '#text': 'CHF' },
       'cb:targetCurrency': 'EUR',
       'cb:rateType': 'Daily rates (11:00)',
       'cb:observationPeriod': { 'cb:frequency': 'daily', 'cb:period': '2026-07-17' },
+    }
+
+    expect(generateExchangeRate(value)).toEqual(expected)
+  })
+
+  it('should generate baseCurrency unit_mult as an attribute', () => {
+    const value = {
+      baseCurrency: 'JPY',
+      baseCurrencyUnitMult: 2,
+    }
+    const expected = {
+      'cb:baseCurrency': { '@unit_mult': 2, '#text': 'JPY' },
     }
 
     expect(generateExchangeRate(value)).toEqual(expected)
@@ -618,7 +630,7 @@ describe('generateStatistics', () => {
     const expected = {
       'cb:country': 'CH',
       'cb:institutionAbbrev': 'SNB',
-      'cb:exchangeRate': { 'cb:baseCurrency': 'CHF' },
+      'cb:exchangeRate': { 'cb:baseCurrency': { '#text': 'CHF' } },
       'cb:interestRate': { 'cb:rateName': 'SARON' },
       'cb:transaction': { 'cb:transactionName': 'couponPurchase' },
       'cb:otherStatistic': { 'cb:topic': 'H10' },
@@ -667,6 +679,45 @@ describe('generateItem', () => {
         'cb:simpleTitle': 'Term PRA operation',
         'cb:occurrenceDate': '2009-12-31T00:00:00.000Z',
       },
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should write custom child XML raw', () => {
+    // Constructed specimen: no census feed writes cb:custom.
+    const value = {
+      custom: '<contact>Paul Roberts &amp; team</contact>',
+    }
+    const expected = {
+      'cb:custom': '<contact>Paul Roberts &amp; team</contact>\n',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should skip custom child XML that is not well-formed', () => {
+    const value = {
+      custom: '<contact>unclosed',
+    }
+
+    expect(generateItem(value)).toBeUndefined()
+  })
+
+  it('should skip custom child XML with an entity XML cannot resolve', () => {
+    const value = {
+      custom: '<contact>Paul&nbsp;Roberts</contact>',
+    }
+
+    expect(generateItem(value)).toBeUndefined()
+  })
+
+  it('should keep a carriage return in custom child XML as a character reference', () => {
+    const value = {
+      custom: '<contact>a\rb</contact>',
+    }
+    const expected = {
+      'cb:custom': '<contact>a&#13;b</contact>\n',
     }
 
     expect(generateItem(value)).toEqual(expected)

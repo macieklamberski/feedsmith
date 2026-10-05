@@ -102,6 +102,8 @@ export namespace CbNs {
     value?: Value
     observation?: Observation
     baseCurrency?: string
+    /** @deprecated RSS-CB 1.0 and 1.1 syntax. RSS-CB 1.2 uses observation.unitMult. */
+    baseCurrencyUnitMult?: number
     targetCurrency?: string
     rateType?: string
     observationPeriod?: ObservationPeriod
@@ -153,6 +155,7 @@ export namespace CbNs {
     paper?: Paper<TDate>
     speech?: Speech<TDate>
     statistics?: Statistics
+    custom?: string
   }
 }
 // #endregion reference

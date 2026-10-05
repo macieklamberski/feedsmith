@@ -1937,7 +1937,7 @@ describe('generateFeed', () => {
                 'cb:country': 'CH',
                 'cb:exchangeRate': {
                   'cb:observation': { 'cb:value': 0.9227, 'cb:unit': 'CHF', 'cb:decimals': 4 },
-                  'cb:baseCurrency': 'CHF',
+                  'cb:baseCurrency': { '#text': 'CHF' },
                   'cb:targetCurrency': 'EUR',
                 },
               },

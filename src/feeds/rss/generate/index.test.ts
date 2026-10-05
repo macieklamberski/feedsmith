@@ -806,6 +806,7 @@ describe('generate', () => {
               publicationDate: 'June 2022',
               jelCodes: ['F31', 'F33'],
             },
+            custom: '<contact>Paul Roberts &amp; team</contact>',
           },
         },
         {
@@ -817,6 +818,7 @@ describe('generate', () => {
               exchangeRate: {
                 observation: { value: 0.9227, unit: 'CHF', unitMult: 0, decimals: 4 },
                 baseCurrency: 'CHF',
+                baseCurrencyUnitMult: 0,
                 targetCurrency: 'EUR',
                 rateType: 'Daily rates (11:00)',
                 observationPeriod: { frequency: 'daily', period: '2026-07-17' },
@@ -851,6 +853,8 @@ describe('generate', () => {
         <cb:JELCode>F31</cb:JELCode>
         <cb:JELCode>F33</cb:JELCode>
       </cb:paper>
+      <cb:custom><contact>Paul Roberts &amp; team</contact>
+</cb:custom>
     </item>
     <item>
       <title>CHF/EUR</title>
@@ -864,7 +868,7 @@ describe('generate', () => {
             <cb:unit_mult>0</cb:unit_mult>
             <cb:decimals>4</cb:decimals>
           </cb:observation>
-          <cb:baseCurrency>CHF</cb:baseCurrency>
+          <cb:baseCurrency unit_mult="0">CHF</cb:baseCurrency>
           <cb:targetCurrency>EUR</cb:targetCurrency>
           <cb:rateType>Daily rates (11:00)</cb:rateType>
           <cb:observationPeriod>

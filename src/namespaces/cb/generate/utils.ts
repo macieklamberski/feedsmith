@@ -1,13 +1,34 @@
-import { isPlainObject, trimObject } from 'trousse'
+import { XMLValidator } from 'fast-xml-parser'
+import { isNonEmptyString, isPlainObject, trimObject } from 'trousse'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
   generateCdataString,
   generateNumber,
   generatePlainString,
   generateRfc3339Date,
+  generateTextOrCdataString,
   trimArray,
 } from '../../../common/utils.js'
+import { nonXmlEntityRegex } from '../../../feeds/atom/generate/utils.js'
 import type { CbNs } from '../common/types.js'
+
+// cb:custom is written raw by the RSS builder, so a value that is not well-formed would break the
+// whole document.
+const generateRawXml: GenerateUtil<string> = (value) => {
+  if (!isNonEmptyString(value)) {
+    return
+  }
+
+  // A literal carriage return would be normalized away by the reading XML parser (XML §2.11).
+  const xml = value.trim().replace(/\r/g, '&#13;')
+
+  if (XMLValidator.validate(`<x>${xml}</x>`) !== true || nonXmlEntityRegex.test(xml)) {
+    return
+  }
+
+  // The builder puts the closing tag right after the raw value; the newline moves it to its own line.
+  return `${xml}\n`
+}
 
 export const generateResource: GenerateUtil<CbNs.Resource> = (resource) => {
   if (!isPlainObject(resource)) {
@@ -191,10 +212,14 @@ export const generateExchangeRate: GenerateUtil<CbNs.ExchangeRate> = (exchangeRa
     return
   }
 
+  const baseCurrency = {
+    '@unit_mult': generateNumber(exchangeRate.baseCurrencyUnitMult),
+    ...generateTextOrCdataString(exchangeRate.baseCurrency),
+  }
   const value = {
     'cb:value': generateValue(exchangeRate.value),
     'cb:observation': generateObservation(exchangeRate.observation),
-    'cb:baseCurrency': generateCdataString(exchangeRate.baseCurrency),
+    'cb:baseCurrency': trimObject(baseCurrency),
     'cb:targetCurrency': generateCdataString(exchangeRate.targetCurrency),
     'cb:rateType': generateCdataString(exchangeRate.rateType),
     'cb:observationPeriod': generateObservationPeriod(exchangeRate.observationPeriod),
@@ -282,6 +307,7 @@ export const generateItem: GenerateUtil<CbNs.Item<DateLike>> = (item) => {
     'cb:paper': generatePaper(item.paper),
     'cb:speech': generateSpeech(item.speech),
     'cb:statistics': generateStatistics(item.statistics),
+    'cb:custom': generateRawXml(item.custom),
   }
 
   return trimObject(value)

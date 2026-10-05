@@ -583,7 +583,7 @@
           <cb:unit_mult>0</cb:unit_mult>
           <cb:decimals>4</cb:decimals>
         </cb:observation>
-        <cb:baseCurrency>CHF</cb:baseCurrency>
+        <cb:baseCurrency unit_mult="0">CHF</cb:baseCurrency>
         <cb:targetCurrency>EUR</cb:targetCurrency>
         <cb:rateType>Daily rates (11:00)</cb:rateType>
         <cb:observationPeriod>
@@ -640,6 +640,7 @@
         <cb:dataType>seasonally adjusted index, 1997 = 100</cb:dataType>
       </cb:otherStatistic>
     </cb:statistics>
+    <cb:custom><contact>Example contact</contact></cb:custom>
 
     <!-- ccREL Namespace: Item Level Tags -->
     <cc:license rdf:resource="https://creativecommons.org/licenses/by-sa/4.0/"/>

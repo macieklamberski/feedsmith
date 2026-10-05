@@ -44,4 +44,5 @@ export const stopNodes = [
   '*.cb:unit',
   '*.cb:frequency',
   '*.cb:period',
+  '*.cb:custom',
 ]

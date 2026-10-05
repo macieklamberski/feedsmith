@@ -1,11 +1,18 @@
-import { isPlainObject, trimObject } from 'trousse'
-import type { DateAny, ParseMainOptions, ParseUtilPartial } from '../../../common/types.js'
+import { isAnyOf, isPlainObject, trimObject } from 'trousse'
+import type {
+  DateAny,
+  ParseMainOptions,
+  ParseUtilExact,
+  ParseUtilPartial,
+  Unreliable,
+} from '../../../common/types.js'
 import {
   parseArrayOf,
   parseDate,
   parseNumber,
   parseSingularOf,
   parseString,
+  parseVerbatimString,
   retrieveText,
 } from '../../../common/utils.js'
 import type { CbNs } from '../common/types.js'
@@ -268,6 +275,9 @@ export const parseExchangeRate: ParseUtilPartial<CbNs.ExchangeRate> = (value) =>
     baseCurrency: parseSingularOf(value['cb:basecurrency'], (value) =>
       parseString(retrieveText(value)),
     ),
+    baseCurrencyUnitMult: parseSingularOf(value['cb:basecurrency'], (value) =>
+      parseNumber(value?.['@unit_mult']),
+    ),
     targetCurrency: parseSingularOf(value['cb:targetcurrency'], (value) =>
       parseString(retrieveText(value)),
     ),
@@ -356,6 +366,61 @@ export const parseStatistics: ParseUtilPartial<CbNs.Statistics> = (value) => {
   return trimObject(statistics)
 }
 
+const exchangeRateKeys = ['cb:basecurrency', 'cb:targetcurrency']
+const interestRateKeys = ['cb:ratename']
+const transactionKeys = ['cb:transactionname', 'cb:transactiontype', 'cb:transactionterm']
+const otherStatisticKeys = ['cb:topic', 'cb:coverage']
+
+// RSS-CB 1.0 has no statistics subtype element, so the subtype is told by the elements that only
+// it defines. cb:value and cb:rateType go with whichever subtype is found.
+export const parseLegacyStatistics: ParseUtilPartial<CbNs.Statistics> = (value) => {
+  if (!isPlainObject(value)) {
+    return
+  }
+
+  const hasAnyKey = (keys: Array<string>) => {
+    return keys.some((key) => key in value)
+  }
+
+  const statistics = {
+    country: parseSingularOf(value['cb:country'], (value) => parseString(retrieveText(value))),
+    institutionAbbrev: parseSingularOf(value['cb:institutionabbrev'], (value) =>
+      parseString(retrieveText(value)),
+    ),
+    exchangeRate: hasAnyKey(exchangeRateKeys) ? parseExchangeRate(value) : undefined,
+    interestRate: hasAnyKey(interestRateKeys) ? parseInterestRate(value) : undefined,
+    transaction: hasAnyKey(transactionKeys) ? parseTransaction(value) : undefined,
+    otherStatistic: hasAnyKey(otherStatisticKeys) ? parseOtherStatistic(value) : undefined,
+  }
+
+  return trimObject(statistics)
+}
+
+// RSS-CB 1.0 names the application type in cb:application and writes its elements directly under
+// the item, with the names RSS-CB 1.1 nests under the application element.
+export const retrieveApplication = <R>(
+  value: Unreliable,
+  name: string,
+  parse: ParseUtilExact<R>,
+  parseFlat: ParseUtilExact<R> = parse,
+): R | undefined => {
+  const nested = parseSingularOf(value?.[`cb:${name}`], parse)
+
+  if (nested) {
+    return nested
+  }
+
+  const application = parseSingularOf(value?.['cb:application'], (value) => {
+    return parseString(retrieveText(value))
+  })
+
+  if (!application || !isAnyOf(application, [name])) {
+    return
+  }
+
+  return parseFlat(value)
+}
+
 export const retrieveItem: ParseUtilPartial<CbNs.Item<DateAny>, ParseMainOptions<DateAny>> = (
   value,
   options,
@@ -365,11 +430,14 @@ export const retrieveItem: ParseUtilPartial<CbNs.Item<DateAny>, ParseMainOptions
   }
 
   const item = {
-    event: parseSingularOf(value['cb:event'], (value) => parseEvent(value, options)),
-    news: parseSingularOf(value['cb:news'], (value) => parseNews(value, options)),
-    paper: parseSingularOf(value['cb:paper'], (value) => parsePaper(value, options)),
-    speech: parseSingularOf(value['cb:speech'], (value) => parseSpeech(value, options)),
-    statistics: parseSingularOf(value['cb:statistics'], parseStatistics),
+    event: retrieveApplication(value, 'event', (value) => parseEvent(value, options)),
+    news: retrieveApplication(value, 'news', (value) => parseNews(value, options)),
+    paper: retrieveApplication(value, 'paper', (value) => parsePaper(value, options)),
+    speech: retrieveApplication(value, 'speech', (value) => parseSpeech(value, options)),
+    statistics: retrieveApplication(value, 'statistics', parseStatistics, parseLegacyStatistics),
+    custom: parseSingularOf(value['cb:custom'], (value) =>
+      parseVerbatimString(retrieveText(value)),
+    ),
   }
 
   return trimObject(item)

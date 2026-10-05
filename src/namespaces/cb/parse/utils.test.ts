@@ -3,6 +3,7 @@ import {
   parseEvent,
   parseExchangeRate,
   parseInterestRate,
+  parseLegacyStatistics,
   parseNews,
   parseObservation,
   parseObservationPeriod,
@@ -15,6 +16,7 @@ import {
   parseStatistics,
   parseTransaction,
   parseValue,
+  retrieveApplication,
   retrieveItem,
 } from './utils.js'
 
@@ -649,8 +651,21 @@ describe('parseExchangeRate', () => {
     const expected = {
       value: { value: 0.919, frequency: 'daily', decimals: 4 },
       baseCurrency: 'EUR',
+      baseCurrencyUnitMult: 0,
       targetCurrency: 'CHF',
       rateType: 'Reference rate',
+    }
+
+    expect(parseExchangeRate(value)).toEqual(expected)
+  })
+
+  it('should parse baseCurrency unit_mult', () => {
+    const value = {
+      'cb:basecurrency': { '@unit_mult': '2', '#text': 'JPY' },
+    }
+    const expected = {
+      baseCurrency: 'JPY',
+      baseCurrencyUnitMult: 2,
     }
 
     expect(parseExchangeRate(value)).toEqual(expected)
@@ -868,6 +883,213 @@ describe('parseStatistics', () => {
   })
 })
 
+describe('parseLegacyStatistics', () => {
+  // Constructed specimens: no census feed writes the RSS-CB 1.0 layout.
+  it('should read an exchange rate from flat elements', () => {
+    const value = {
+      'cb:country': { '#text': 'DZ' },
+      'cb:institutionabbrev': { '#text': 'BA' },
+      'cb:basecurrency': { '#text': 'CNY' },
+      'cb:targetcurrency': { '#text': 'CHF' },
+      'cb:value': { '@frequency': 'daily', '@decimals': '4', '#text': '1.1240' },
+      'cb:ratetype': { '#text': 'noon buying' },
+    }
+    const expected = {
+      country: 'DZ',
+      institutionAbbrev: 'BA',
+      exchangeRate: {
+        value: { value: 1.124, frequency: 'daily', decimals: 4 },
+        baseCurrency: 'CNY',
+        targetCurrency: 'CHF',
+        rateType: 'noon buying',
+      },
+    }
+
+    expect(parseLegacyStatistics(value)).toEqual(expected)
+  })
+
+  it('should read an interest rate from flat elements', () => {
+    const value = {
+      'cb:ratename': { '#text': 'FedFunds' },
+      'cb:value': { '@frequency': 'daily', '@decimals': '2', '#text': '5.33' },
+    }
+    const expected = {
+      interestRate: {
+        value: { value: 5.33, frequency: 'daily', decimals: 2 },
+        rateName: 'FedFunds',
+      },
+    }
+
+    expect(parseLegacyStatistics(value)).toEqual(expected)
+  })
+
+  it('should read a transaction from flat elements', () => {
+    const value = {
+      'cb:transactionname': { '#text': 'couponPurchase' },
+      'cb:transactiontype': { '#text': 'permanent open market operations' },
+      'cb:transactionterm': { '#text': '1day' },
+      'cb:value': { '@unit_mult': '9', '@decimals': '3', '#text': '1.781' },
+    }
+    const expected = {
+      transaction: {
+        value: { value: 1.781, unitMult: 9, decimals: 3 },
+        transactionName: 'couponPurchase',
+        transactionType: 'permanent open market operations',
+        transactionTerm: '1day',
+      },
+    }
+
+    expect(parseLegacyStatistics(value)).toEqual(expected)
+  })
+
+  it('should read another statistic from flat elements', () => {
+    const value = {
+      'cb:topic': { '#text': 'CP' },
+      'cb:coverage': { '#text': 'Manufacturing' },
+      'cb:value': {
+        '@frequency': 'weekly',
+        '@unit_mult': '9',
+        '@units': 'USD',
+        '@decimals': '3',
+        '#text': '241.6',
+      },
+    }
+    const expected = {
+      otherStatistic: {
+        value: { value: 241.6, frequency: 'weekly', unitMult: 9, units: 'USD', decimals: 3 },
+        topic: 'CP',
+        coverage: 'Manufacturing',
+      },
+    }
+
+    expect(parseLegacyStatistics(value)).toEqual(expected)
+  })
+
+  it('should drop a value with no subtype element', () => {
+    const value = {
+      'cb:country': { '#text': 'DZ' },
+      'cb:value': { '@decimals': '4', '#text': '1.1240' },
+    }
+    const expected = {
+      country: 'DZ',
+    }
+
+    expect(parseLegacyStatistics(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    expect(parseLegacyStatistics({})).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(parseLegacyStatistics('string')).toBeUndefined()
+    expect(parseLegacyStatistics(undefined)).toBeUndefined()
+    expect(parseLegacyStatistics(null)).toBeUndefined()
+  })
+})
+
+describe('retrieveApplication', () => {
+  // Constructed specimens: no census feed writes the RSS-CB 1.0 layout.
+  it('should read the nested application element', () => {
+    const value = {
+      'cb:news': { 'cb:simpletitle': { '#text': 'Nested title' } },
+    }
+    const expected = {
+      simpleTitle: 'Nested title',
+    }
+
+    expect(retrieveApplication(value, 'news', parseNews)).toEqual(expected)
+  })
+
+  it('should read flat elements named by cb:application', () => {
+    const value = {
+      'cb:application': { '#text': 'speech' },
+      'cb:simpletitle': { '#text': 'Flat title' },
+      'cb:venue': { '#text': 'Mariton Hotel, La Paz, Bolivia' },
+    }
+    const expected = {
+      simpleTitle: 'Flat title',
+      venue: 'Mariton Hotel, La Paz, Bolivia',
+    }
+
+    expect(retrieveApplication(value, 'speech', parseSpeech)).toEqual(expected)
+  })
+
+  it('should match cb:application in any case', () => {
+    const value = {
+      'cb:application': { '#text': 'Speech' },
+      'cb:simpletitle': { '#text': 'Flat title' },
+    }
+    const expected = {
+      simpleTitle: 'Flat title',
+    }
+
+    expect(retrieveApplication(value, 'speech', parseSpeech)).toEqual(expected)
+  })
+
+  it('should prefer the nested element over flat elements', () => {
+    const value = {
+      'cb:application': { '#text': 'news' },
+      'cb:simpletitle': { '#text': 'Flat title' },
+      'cb:news': { 'cb:simpletitle': { '#text': 'Nested title' } },
+    }
+    const expected = {
+      simpleTitle: 'Nested title',
+    }
+
+    expect(retrieveApplication(value, 'news', parseNews)).toEqual(expected)
+  })
+
+  it('should fall back to flat elements when the nested element is empty', () => {
+    const value = {
+      'cb:application': { '#text': 'news' },
+      'cb:simpletitle': { '#text': 'Flat title' },
+      'cb:news': { 'cb:simpletitle': { '#text': '' } },
+    }
+    const expected = {
+      simpleTitle: 'Flat title',
+    }
+
+    expect(retrieveApplication(value, 'news', parseNews)).toEqual(expected)
+  })
+
+  it('should use the flat parser when one is given', () => {
+    const value = {
+      'cb:application': { '#text': 'statistics' },
+      'cb:ratename': { '#text': 'FedFunds' },
+    }
+    const expected = {
+      interestRate: { rateName: 'FedFunds' },
+    }
+
+    expect(
+      retrieveApplication(value, 'statistics', parseStatistics, parseLegacyStatistics),
+    ).toEqual(expected)
+  })
+
+  it('should ignore flat elements when cb:application names another type', () => {
+    const value = {
+      'cb:application': { '#text': 'paper' },
+      'cb:simpletitle': { '#text': 'Flat title' },
+    }
+
+    expect(retrieveApplication(value, 'news', parseNews)).toBeUndefined()
+  })
+
+  it('should ignore flat elements without cb:application', () => {
+    const value = {
+      'cb:simpletitle': { '#text': 'Flat title' },
+    }
+
+    expect(retrieveApplication(value, 'news', parseNews)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(retrieveApplication(undefined, 'news', parseNews)).toBeUndefined()
+    expect(retrieveApplication('string', 'news', parseNews)).toBeUndefined()
+  })
+})
+
 describe('retrieveItem', () => {
   it('should parse item with all application types', () => {
     const value = {
@@ -925,6 +1147,42 @@ describe('retrieveItem', () => {
     }
     const expected = {
       news: { simpleTitle: 'First' },
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse RSS-CB 1.0 flat elements into the application type', () => {
+    // Constructed specimen: no census feed writes the RSS-CB 1.0 layout.
+    const value = {
+      'cb:application': { '#text': 'paper' },
+      'cb:simpletitle': { '#text': 'Financial discussion paper' },
+      'cb:occurrencedate': { '#text': '2006-12-19' },
+      'cb:byline': { '#text': 'Gonzalez, Arturo and di Taranto, Mario' },
+      'cb:jelcode': { '#text': 'E11' },
+    }
+    const expected = {
+      paper: {
+        simpleTitle: 'Financial discussion paper',
+        occurrenceDate: '2006-12-19',
+        byline: 'Gonzalez, Arturo and di Taranto, Mario',
+        jelCodes: ['E11'],
+      },
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse custom child XML verbatim', () => {
+    // Constructed specimen: no census feed writes cb:custom.
+    const value = {
+      'cb:custom': {
+        '@rdf:parsetype': 'Resource',
+        '#text': '<onecb:contact>Paul Roberts &amp; team</onecb:contact>',
+      },
+    }
+    const expected = {
+      custom: '<onecb:contact>Paul Roberts &amp; team</onecb:contact>',
     }
 
     expect(retrieveItem(value)).toEqual(expected)
