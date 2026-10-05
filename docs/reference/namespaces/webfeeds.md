@@ -37,11 +37,11 @@ The WebFeeds namespace carries Feedly's feed extensions: a cover image, icon, lo
 
 ## Inferred from Feeds
 
-The blog post shows each element in sample markup only, so these parts come from live feeds, not from a document:
+The blog post shows the cover, icon, logo, accent color, related and analytics elements in sample markup. These parts are not in it and come from live feeds:
 
 - `webfeeds:partial` on the channel, a `true` or `false` value.
 - `webfeeds:wordmark` on the channel, an image URL.
-- `webfeeds:featuredImage` on items, with `url`, `type`, `width` and `height` attributes.
+- `webfeeds:featuredImage` on items, with `url`, `type`, `width` and `height` attributes, or the URL as element text.
 - `webfeeds:featuredVisual` on items, an image URL.
 - The value types of every element, including the numeric `width` and `height`.
 

@@ -1,6 +1,7 @@
 import { isPlainObject, trimObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
+  isNonEmptyStringOrNumber,
   parseBoolean,
   parseNumber,
   parseSingularOf,
@@ -48,12 +49,21 @@ export const parseAnalytics: ParseUtilPartial<WebfeedsNs.Analytics> = (value) =>
 }
 
 export const parseFeaturedImage: ParseUtilPartial<WebfeedsNs.FeaturedImage> = (value) => {
+  // Some feeds write the image URL as element text, with no url attribute.
+  if (isNonEmptyStringOrNumber(value)) {
+    const featuredImage = {
+      url: parseString(value),
+    }
+
+    return trimObject(featuredImage)
+  }
+
   if (!isPlainObject(value)) {
     return
   }
 
   const featuredImage = {
-    url: parseString(value['@url']),
+    url: parseString(value['@url']) ?? parseString(value['#text']),
     type: parseString(value['@type']),
     width: parseNumber(value['@width']),
     height: parseNumber(value['@height']),

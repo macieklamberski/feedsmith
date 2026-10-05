@@ -174,12 +174,44 @@ describe('parseFeaturedImage', () => {
     expect(parseFeaturedImage(value)).toEqual(expected)
   })
 
+  it('should parse url from element text', () => {
+    const value = 'https://example.com/uploads/Kotlin-Featured-Image-04-150x150.jpg'
+    const expected = {
+      url: 'https://example.com/uploads/Kotlin-Featured-Image-04-150x150.jpg',
+    }
+
+    expect(parseFeaturedImage(value)).toEqual(expected)
+  })
+
+  it('should parse url from #text', () => {
+    const value = {
+      '#text': 'https://example.com/uploads/Kotlin-Featured-Image-04-150x150.jpg',
+    }
+    const expected = {
+      url: 'https://example.com/uploads/Kotlin-Featured-Image-04-150x150.jpg',
+    }
+
+    expect(parseFeaturedImage(value)).toEqual(expected)
+  })
+
+  it('should prefer url attribute over element text', () => {
+    const value = {
+      '@url': 'https://example.com/images/attribute.jpg',
+      '#text': 'https://example.com/images/text.jpg',
+    }
+    const expected = {
+      url: 'https://example.com/images/attribute.jpg',
+    }
+
+    expect(parseFeaturedImage(value)).toEqual(expected)
+  })
+
   it('should return undefined for empty object', () => {
     expect(parseFeaturedImage({})).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parseFeaturedImage('string')).toBeUndefined()
+    expect(parseFeaturedImage('')).toBeUndefined()
     expect(parseFeaturedImage(undefined)).toBeUndefined()
     expect(parseFeaturedImage(null)).toBeUndefined()
     expect(parseFeaturedImage([])).toBeUndefined()
