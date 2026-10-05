@@ -1,7 +1,6 @@
 import { isPlainObject, trimObject } from 'trousse'
 import type { DateLike, GenerateUtil } from '../../../common/types.js'
 import {
-  generateBoolean,
   generateNumber,
   generatePlainString,
   generateRfc3339Date,
@@ -89,7 +88,8 @@ export const generateLink: GenerateUtil<OpdsNs.Link<DateLike>> = (link) => {
     'opds:price': trimArray(link.prices, generatePrice),
     'opds:indirectAcquisition': trimArray(link.indirectAcquisitions, generateIndirectAcquisition),
     '@opds:facetGroup': generatePlainString(link.facetGroup),
-    '@opds:activeFacet': generateBoolean(link.activeFacet),
+    // OPDS 1.2 allows only "true": an inactive facet omits the attribute.
+    '@opds:activeFacet': link.activeFacet === true ? true : undefined,
     'opds:availability': generateAvailability(link.availability),
     'opds:holds': generateHolds(link.holds),
     'opds:copies': generateCopies(link.copies),

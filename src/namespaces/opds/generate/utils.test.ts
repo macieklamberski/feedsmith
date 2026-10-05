@@ -541,14 +541,13 @@ describe('generateLink', () => {
     expect(generateLink(value)).toEqual(expected)
   })
 
-  it('should generate link with activeFacet as false', () => {
+  it('should omit activeFacet when false', () => {
     const value = {
       facetGroup: 'Author',
       activeFacet: false,
     }
     const expected = {
       '@opds:facetGroup': 'Author',
-      '@opds:activeFacet': false,
     }
 
     expect(generateLink(value)).toEqual(expected)
