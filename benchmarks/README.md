@@ -1,23 +1,19 @@
 # Benchmarks
 
-There are two distinct benchmark modes:
+There are two sets of benchmarks:
 
-1. **[JavaScript Benchmarks](#javascript-benchmarks)** - Compare Feedsmith against other JavaScript feed parsing libraries
-2. **[Cross-Language Benchmarks](#cross-language-benchmarks)** - Compare Feedsmith against prominent libraries in other languages
+1. **[JavaScript Benchmarks](#javascript-benchmarks)**: compare Feedsmith with other JavaScript feed parsing libraries.
+2. **[Cross-Language Benchmarks](#cross-language-benchmarks)**: compare Feedsmith with popular feed parsing libraries in other languages.
 
-One important thing to note is that packages vary in feature support (such as handling specific namespaces or feed formats). The results should be taken with a grain of salt, as direct comparisons aren't always fair.
+Keep in mind that packages support different features. Some handle more namespaces or feed formats than others, so a direct comparison isn't always fair.
 
 ## JavaScript Benchmarks
 
-Speed benchmarks comparing Feedsmith against popular JavaScript packages for parsing feeds. Feedsmith's results are marked with an asterisk (`*`).
+These benchmarks compare how fast Feedsmith and popular JavaScript packages parse feeds. Feedsmith's results are marked with an asterisk (`*`).
 
-The benchmarks use real-world feeds organized by feed format (RSS, Atom, RDF, JSON Feed, OPML) and file size ranges. Each range is tested on representative feed files, providing insight into how each package performs across various scenarios.
+The benchmarks use real-world feeds, grouped by format (RSS, Atom, RDF, JSON Feed, OPML) and by file size. Each group shows how the packages perform on a different kind of input, from many small feeds to a few very large ones.
 
-The recommended measurement uses [hyperfine](https://github.com/sharkdp/hyperfine), running each library in a **fresh subprocess** so no library shares a JIT or garbage-collector state with another, and reading **one feed into memory at a time** rather than loading the whole fixture set up front. This is the same approach as the cross-language benchmarks below and avoids the run-to-run drift that an in-process loop suffers from once hundreds of megabytes of feeds accumulate in a single heap.
-
-```bash
-$ bash parsing.sh
-```
+Measurements are taken with [hyperfine](https://github.com/sharkdp/hyperfine). Each library runs in a **fresh process**, so no library shares memory or warm-up state with another. Each run also reads **one feed into memory at a time** instead of loading all the files up front. Running everything in one process made the results drift from run to run, as hundreds of megabytes of feeds piled up in memory. The cross-language benchmarks below work the same way.
 
 ### Results
 
@@ -27,108 +23,104 @@ Running `bash parsing.sh` prints one comparison per category, sorted fastest fir
 $ bash parsing.sh
 
 ⏳ Running: RSS feed parsing (10 files × 5MB–50MB)
-┌───┬───────────────────────────────┬────────────────┬─────────┬─────────┬──────┬───────────────┐
-│   │ Package                       │ Mean (ms)      │ Min     │ Max     │ Runs │ Performance   │
-├───┼───────────────────────────────┼────────────────┼─────────┼─────────┼──────┼───────────────┤
-│ 0 │ feedsmith *                   │ 844.4 ± 19.3   │ 821.7   │ 876.1   │ 10   │ baseline      │
-│ 1 │ @ulisesgascon/rss-feed-parser │ 1515.7 ± 61.2  │ 1437.2  │ 1585.3  │ 10   │ 1.79x slower  │
-│ 2 │ @extractus/feed-extractor     │ 2780.3 ± 61.7  │ 2690.2  │ 2866.3  │ 10   │ 3.29x slower  │
-│ 3 │ @gaphub/feed                  │ 3018.8 ± 13.0  │ 2992.2  │ 3033.8  │ 10   │ 3.57x slower  │
-│ 4 │ podcast-feed-parser           │ 3096.2 ± 47.3  │ 3040.7  │ 3196.8  │ 10   │ 3.67x slower  │
-│ 5 │ rss-parser                    │ 3521.2 ± 26.4  │ 3487.6  │ 3585.3  │ 10   │ 4.17x slower  │
-│ 6 │ feedme.js                     │ 4033.9 ± 451.0 │ 3382.8  │ 4416.7  │ 10   │ 4.78x slower  │
-│ 7 │ feedparser                    │ 4998.1 ± 63.7  │ 4909.1  │ 5129.4  │ 10   │ 5.92x slower  │
-│ 8 │ @rowanmanning/feed-parser     │ 12365.3 ± 46.4 │ 12275.7 │ 12457.3 │ 10   │ 14.64x slower │
-└───┴───────────────────────────────┴────────────────┴─────────┴─────────┴──────┴───────────────┘
+┌───┬───────────────────────────────┬───────────────┬───────────────┬────────┬────────┐
+│   │ Package                       │ Performance   │ Mean (ms)     │ Min    │ Max    │
+├───┼───────────────────────────────┼───────────────┼───────────────┼────────┼────────┤
+│ 0 │ feedsmith *                   │ baseline      │ 484.1 ± 6.5   │ 472.6  │ 495.3  │
+│ 1 │ @ulisesgascon/rss-feed-parser │ 1.62x slower  │ 785.3 ± 129.7 │ 682.8  │ 1139.4 │
+│ 2 │ @gaphub/feed                  │ 2.07x slower  │ 1000.8 ± 65.4 │ 921.5  │ 1061.5 │
+│ 3 │ podcast-feed-parser           │ 2.52x slower  │ 1221.5 ± 36.9 │ 1195.4 │ 1295.6 │
+│ 4 │ @extractus/feed-extractor     │ 2.54x slower  │ 1229.3 ± 35.6 │ 1167.1 │ 1281.7 │
+│ 5 │ feedme.js                     │ 2.57x slower  │ 1243.2 ± 6.3  │ 1233.7 │ 1252.6 │
+│ 6 │ rss-parser                    │ 2.83x slower  │ 1367.5 ± 45.0 │ 1284.7 │ 1426.2 │
+│ 7 │ feedparser                    │ 4.01x slower  │ 1942.9 ± 24.0 │ 1895.1 │ 1973.7 │
+│ 8 │ @rowanmanning/feed-parser     │ 17.39x slower │ 8416.2 ± 98.9 │ 8272.4 │ 8571.8 │
+└───┴───────────────────────────────┴───────────────┴───────────────┴────────┴────────┘
 
 ⏳ Running: RSS feed parsing (100 files × 100KB–5MB)
-┌───┬───────────────────────────────┬───────────────┬────────┬────────┬──────┬──────────────┐
-│   │ Package                       │ Mean (ms)     │ Min    │ Max    │ Runs │ Performance  │
-├───┼───────────────────────────────┼───────────────┼────────┼────────┼──────┼──────────────┤
-│ 0 │ feedsmith *                   │ 598.7 ± 11.6  │ 582.0  │ 624.5  │ 10   │ baseline     │
-│ 1 │ @ulisesgascon/rss-feed-parser │ 641.1 ± 3.2   │ 635.7  │ 644.9  │ 10   │ 1.07x slower │
-│ 2 │ @gaphub/feed                  │ 940.5 ± 5.7   │ 932.9  │ 950.3  │ 10   │ 1.57x slower │
-│ 3 │ podcast-feed-parser           │ 1073.9 ± 7.1  │ 1064.5 │ 1090.0 │ 10   │ 1.79x slower │
-│ 4 │ rss-parser                    │ 1385.5 ± 7.2  │ 1378.3 │ 1400.0 │ 10   │ 2.31x slower │
-│ 5 │ @extractus/feed-extractor     │ 1418.0 ± 8.2  │ 1399.5 │ 1428.9 │ 10   │ 2.37x slower │
-│ 6 │ feedme.js                     │ 1723.6 ± 89.8 │ 1586.8 │ 1790.7 │ 10   │ 2.88x slower │
-│ 7 │ feedparser                    │ 2153.1 ± 12.4 │ 2131.3 │ 2174.3 │ 10   │ 3.60x slower │
-│ 8 │ @rowanmanning/feed-parser     │ 2440.9 ± 26.7 │ 2399.2 │ 2478.9 │ 10   │ 4.08x slower │
-└───┴───────────────────────────────┴───────────────┴────────┴────────┴──────┴──────────────┘
+┌───┬───────────────────────────────┬──────────────┬───────────────┬────────┬────────┐
+│   │ Package                       │ Performance  │ Mean (ms)     │ Min    │ Max    │
+├───┼───────────────────────────────┼──────────────┼───────────────┼────────┼────────┤
+│ 0 │ feedsmith *                   │ baseline     │ 281.2 ± 6.7   │ 271.3  │ 294.7  │
+│ 1 │ @ulisesgascon/rss-feed-parser │ 1.17x slower │ 328.9 ± 10.8  │ 316.2  │ 341.7  │
+│ 2 │ @gaphub/feed                  │ 1.52x slower │ 428.4 ± 28.9  │ 401.8  │ 471.3  │
+│ 3 │ podcast-feed-parser           │ 1.59x slower │ 446.0 ± 13.6  │ 424.2  │ 465.7  │
+│ 4 │ feedme.js                     │ 1.92x slower │ 539.0 ± 6.1   │ 532.2  │ 552.2  │
+│ 5 │ rss-parser                    │ 1.97x slower │ 555.0 ± 27.2  │ 501.6  │ 587.2  │
+│ 6 │ @extractus/feed-extractor     │ 2.36x slower │ 663.0 ± 14.6  │ 643.5  │ 685.9  │
+│ 7 │ feedparser                    │ 2.81x slower │ 789.1 ± 8.6   │ 780.0  │ 804.0  │
+│ 8 │ @rowanmanning/feed-parser     │ 6.25x slower │ 1758.4 ± 28.7 │ 1714.8 │ 1793.8 │
+└───┴───────────────────────────────┴──────────────┴───────────────┴────────┴────────┘
 
 ⏳ Running: Atom feed parsing (10 files × 5MB–50MB)
-┌───┬───────────────────────────┬────────────────┬────────┬────────┬──────┬──────────────┐
-│   │ Package                   │ Mean (ms)      │ Min    │ Max    │ Runs │ Performance  │
-├───┼───────────────────────────┼────────────────┼────────┼────────┼──────┼──────────────┤
-│ 0 │ feedsmith *               │ 711.0 ± 8.8    │ 695.9  │ 725.2  │ 10   │ baseline     │
-│ 1 │ @gaphub/feed              │ 2139.9 ± 26.0  │ 2099.0 │ 2171.2 │ 10   │ 3.01x slower │
-│ 2 │ feedme.js                 │ 2728.6 ± 22.6  │ 2699.7 │ 2765.9 │ 10   │ 3.84x slower │
-│ 3 │ feedparser                │ 3072.6 ± 10.9  │ 3059.2 │ 3088.7 │ 10   │ 4.32x slower │
-│ 4 │ @extractus/feed-extractor │ 3119.7 ± 51.5  │ 3043.4 │ 3226.7 │ 10   │ 4.39x slower │
-│ 5 │ rss-parser                │ 3176.7 ± 52.6  │ 3110.9 │ 3280.7 │ 10   │ 4.47x slower │
-│ 6 │ @rowanmanning/feed-parser │ 6000.4 ± 133.3 │ 5807.1 │ 6171.5 │ 10   │ 8.44x slower │
-└───┴───────────────────────────┴────────────────┴────────┴────────┴──────┴──────────────┘
+┌───┬───────────────────────────┬──────────────┬───────────────┬────────┬────────┐
+│   │ Package                   │ Performance  │ Mean (ms)     │ Min    │ Max    │
+├───┼───────────────────────────┼──────────────┼───────────────┼────────┼────────┤
+│ 0 │ feedsmith *               │ baseline     │ 409.8 ± 5.9   │ 403.0  │ 424.1  │
+│ 1 │ @gaphub/feed              │ 2.41x slower │ 988.9 ± 8.0   │ 979.0  │ 1001.1 │
+│ 2 │ feedme.js                 │ 3.12x slower │ 1278.2 ± 47.3 │ 1258.6 │ 1412.3 │
+│ 3 │ feedparser                │ 3.89x slower │ 1595.3 ± 6.3  │ 1581.0 │ 1602.7 │
+│ 4 │ @extractus/feed-extractor │ 4.06x slower │ 1662.4 ± 21.3 │ 1612.6 │ 1690.6 │
+│ 5 │ rss-parser                │ 4.61x slower │ 1889.8 ± 34.9 │ 1842.1 │ 1939.7 │
+│ 6 │ @rowanmanning/feed-parser │ 9.05x slower │ 3709.5 ± 43.0 │ 3630.0 │ 3769.9 │
+└───┴───────────────────────────┴──────────────┴───────────────┴────────┴────────┘
 
 ⏳ Running: Atom feed parsing (100 files × 100KB–5MB)
-┌───┬───────────────────────────┬─────────────────┬─────────┬─────────┬──────┬──────────────┐
-│   │ Package                   │ Mean (ms)       │ Min     │ Max     │ Runs │ Performance  │
-├───┼───────────────────────────┼─────────────────┼─────────┼─────────┼──────┼──────────────┤
-│ 0 │ feedsmith *               │ 2487.5 ± 18.1   │ 2458.8  │ 2527.9  │ 10   │ baseline     │
-│ 1 │ @gaphub/feed              │ 5838.9 ± 31.7   │ 5789.8  │ 5914.6  │ 10   │ 2.35x slower │
-│ 2 │ @rowanmanning/feed-parser │ 6991.7 ± 75.0   │ 6840.3  │ 7073.9  │ 10   │ 2.81x slower │
-│ 3 │ @extractus/feed-extractor │ 9549.1 ± 92.7   │ 9336.3  │ 9652.5  │ 10   │ 3.84x slower │
-│ 4 │ rss-parser                │ 10602.7 ± 864.1 │ 9667.9  │ 12216.0 │ 10   │ 4.26x slower │
-│ 5 │ feedme.js                 │ 13403.7 ± 110.5 │ 13230.2 │ 13590.1 │ 10   │ 5.39x slower │
-│ 6 │ feedparser                │ 15836.8 ± 140.0 │ 15638.4 │ 16065.9 │ 10   │ 6.37x slower │
-└───┴───────────────────────────┴─────────────────┴─────────┴─────────┴──────┴──────────────┘
+┌───┬───────────────────────────┬──────────────┬─────────────────┬────────┬────────┐
+│   │ Package                   │ Performance  │ Mean (ms)       │ Min    │ Max    │
+├───┼───────────────────────────┼──────────────┼─────────────────┼────────┼────────┤
+│ 0 │ feedsmith *               │ baseline     │ 1251.2 ± 9.8    │ 1240.2 │ 1268.1 │
+│ 1 │ @rowanmanning/feed-parser │ 3.37x slower │ 4217.6 ± 279.3  │ 4037.3 │ 4752.6 │
+│ 2 │ @extractus/feed-extractor │ 3.80x slower │ 4752.5 ± 106.8  │ 4624.2 │ 4927.4 │
+│ 3 │ rss-parser                │ 4.08x slower │ 5109.2 ± 369.2  │ 4751.9 │ 5586.6 │
+│ 4 │ @gaphub/feed              │ 4.12x slower │ 5156.6 ± 1120.0 │ 3007.7 │ 5759.3 │
+│ 5 │ feedme.js                 │ 4.71x slower │ 5888.9 ± 49.0   │ 5823.1 │ 5987.2 │
+│ 6 │ feedparser                │ 4.77x slower │ 5966.7 ± 145.3  │ 5745.0 │ 6178.1 │
+└───┴───────────────────────────┴──────────────┴─────────────────┴────────┴────────┘
 
-⏳ Running: RDF feed parsing (97 files × 100KB–5MB)
-┌───┬───────────────────────────┬───────────────┬────────┬────────┬──────┬──────────────┐
-│   │ Package                   │ Mean (ms)     │ Min    │ Max    │ Runs │ Performance  │
-├───┼───────────────────────────┼───────────────┼────────┼────────┼──────┼──────────────┤
-│ 0 │ feedsmith *               │ 448.6 ± 6.6   │ 438.7  │ 457.1  │ 10   │ baseline     │
-│ 1 │ @rowanmanning/feed-parser │ 489.9 ± 10.1  │ 480.1  │ 510.0  │ 10   │ 1.09x slower │
-│ 2 │ @extractus/feed-extractor │ 716.5 ± 13.7  │ 704.2  │ 746.0  │ 10   │ 1.60x slower │
-│ 3 │ @gaphub/feed              │ 1123.1 ± 12.4 │ 1103.5 │ 1141.1 │ 10   │ 2.50x slower │
-│ 4 │ rss-parser                │ 2112.1 ± 28.1 │ 2074.9 │ 2150.3 │ 10   │ 4.71x slower │
-│ 5 │ feedme.js                 │ 2206.2 ± 23.3 │ 2177.5 │ 2250.1 │ 10   │ 4.92x slower │
-│ 6 │ feedparser                │ 2499.4 ± 31.1 │ 2456.5 │ 2542.5 │ 10   │ 5.57x slower │
-└───┴───────────────────────────┴───────────────┴────────┴────────┴──────┴──────────────┘
+⏳ Running: RDF feed parsing (100 files × 100KB–5MB)
+┌───┬───────────────────────────┬──────────────┬──────────────┬───────┬───────┐
+│   │ Package                   │ Performance  │ Mean (ms)    │ Min   │ Max   │
+├───┼───────────────────────────┼──────────────┼──────────────┼───────┼───────┤
+│ 0 │ feedsmith *               │ baseline     │ 158.3 ± 1.5  │ 155.0 │ 160.5 │
+│ 1 │ @rowanmanning/feed-parser │ 1.82x slower │ 287.8 ± 6.5  │ 278.0 │ 298.3 │
+│ 2 │ @extractus/feed-extractor │ 2.21x slower │ 349.9 ± 6.0  │ 339.8 │ 355.7 │
+│ 3 │ @gaphub/feed              │ 2.39x slower │ 378.6 ± 3.3  │ 374.7 │ 385.5 │
+│ 4 │ feedme.js                 │ 2.76x slower │ 436.5 ± 19.7 │ 422.7 │ 483.2 │
+│ 5 │ rss-parser                │ 3.21x slower │ 507.4 ± 4.0  │ 502.1 │ 513.6 │
+│ 6 │ feedparser                │ 5.58x slower │ 883.0 ± 9.9  │ 869.2 │ 904.1 │
+└───┴───────────────────────────┴──────────────┴──────────────┴───────┴───────┘
 
-⏳ Running: OPML parsing (50 files × 100KB–500KB)
-┌───┬──────────────────┬──────────────┬───────┬───────┬──────┬──────────────┐
-│   │ Package          │ Mean (ms)    │ Min   │ Max   │ Runs │ Performance  │
-├───┼──────────────────┼──────────────┼───────┼───────┼──────┼──────────────┤
-│ 0 │ feedsmith *      │ 306.6 ± 1.9  │ 302.9 │ 308.8 │ 10   │ baseline     │
-│ 1 │ @gaphub/feed     │ 535.4 ± 7.8  │ 521.1 │ 546.6 │ 10   │ 1.75x slower │
-│ 2 │ node-opml-parser │ 570.3 ± 10.0 │ 557.8 │ 587.3 │ 10   │ 1.86x slower │
-│ 3 │ opml             │ 587.9 ± 12.8 │ 568.7 │ 606.0 │ 10   │ 1.92x slower │
-│ 4 │ opmlparser       │ 650.0 ± 13.5 │ 633.1 │ 671.1 │ 10   │ 2.12x slower │
-│ 5 │ opml-to-json     │ 664.0 ± 5.8  │ 658.5 │ 673.8 │ 10   │ 2.17x slower │
-└───┴──────────────────┴──────────────┴───────┴───────┴──────┴──────────────┘
+⏳ Running: OPML parsing (100 files × 100KB–500KB)
+┌───┬──────────────────┬──────────────┬──────────────┬───────┬───────┐
+│   │ Package          │ Performance  │ Mean (ms)    │ Min   │ Max   │
+├───┼──────────────────┼──────────────┼──────────────┼───────┼───────┤
+│ 0 │ feedsmith *      │ baseline     │ 330.4 ± 2.7  │ 326.4 │ 334.9 │
+│ 1 │ opml             │ 1.81x slower │ 599.2 ± 38.3 │ 560.2 │ 650.6 │
+│ 2 │ node-opml-parser │ 1.87x slower │ 618.2 ± 41.3 │ 587.7 │ 703.7 │
+│ 3 │ @gaphub/feed     │ 1.91x slower │ 629.8 ± 70.8 │ 525.4 │ 687.1 │
+│ 4 │ opmlparser       │ 2.08x slower │ 688.3 ± 30.1 │ 676.0 │ 773.9 │
+│ 5 │ opml-to-json     │ 2.31x slower │ 764.7 ± 51.4 │ 684.7 │ 804.9 │
+└───┴──────────────────┴──────────────┴──────────────┴───────┴───────┘
 
-⏳ Running: JSON feed parsing (32 files × 100KB–5MB)
-┌───┬─────────────┬─────────────┬───────┬───────┬──────┬─────────────┐
-│   │ Package     │ Mean (ms)   │ Min   │ Max   │ Runs │ Performance │
-├───┼─────────────┼─────────────┼───────┼───────┼──────┼─────────────┤
-│ 0 │ feedsmith * │ 188.6 ± 6.4 │ 181.4 │ 207.3 │ 15   │ baseline    │
-└───┴─────────────┴─────────────┴───────┴───────┴──────┴─────────────┘
+⏳ Running: JSON feed parsing (100 files × 100KB–5MB)
+┌───┬─────────────┬─────────────┬─────────────┬───────┬───────┐
+│   │ Package     │ Performance │ Mean (ms)   │ Min   │ Max   │
+├───┼─────────────┼─────────────┼─────────────┼───────┼───────┤
+│ 0 │ feedsmith * │ baseline    │ 152.9 ± 1.2 │ 151.3 │ 156.5 │
+└───┴─────────────┴─────────────┴─────────────┴───────┴───────┘
 ```
 
 > [!NOTE]
-> It was hard to find libraries for handling JSON Feed, so at this moment only Feedsmith is listed.
+> There are few JavaScript libraries that parse JSON Feed, so for now only Feedsmith is listed.
 
 ### Methodology
 
-The parsing benchmarks measure feed parsing libraries under realistic conditions where developers need access to fully parsed data. Some libraries use lazy evaluation (deferring computation until properties are accessed) while others parse everything upfront. To ensure fair comparison, we measure the total time required to produce equivalent, fully-accessible results.
+The benchmarks measure the total time until the parsed data is fully available. This matches how most apps use a feed parser: they parse a feed and read its title, description and items right away.
 
-For lazy parsers like `@rowanmanning/feed-parser`, we call methods such as .toJSON() to force complete evaluation. Without this step, we'd only be measuring the initial setup cost while ignoring the deferred work that still needs to happen when data is accessed.
+Not every library does all the work up front. Some parse lazily and only process a part of the feed when a property is read. For lazy parsers like `@rowanmanning/feed-parser`, the benchmark calls methods such as `.toJSON()` to force a full parse. Without this step, the benchmark would measure only the setup cost. The rest of the work would still happen later, when the app reads the data.
 
-This approach reflects typical usage patterns where developers parse feeds to immediately access properties like titles, descriptions, and item lists. Measuring only the initial parsing step for lazy libraries would create misleading comparisons since the computational cost simply shifts to when the data is actually used.
-
-By standardizing on fully-evaluated results, these benchmarks provide realistic performance expectations for applications that need complete feed data processing.
-
-The hyperfine path runs each library as a separate process (`runner.ts <library> <directory> <format>`), discarding three warmup runs and then measuring at least ten runs per library. Results are reported as mean ± standard deviation, so the variance of each measurement is explicit. Big-feed categories are capped at ten files to keep the total runtime reasonable. For stable numbers, run on an otherwise idle machine.
+Each library runs as a separate process (`runner.ts <library> <directory> <format>`). Hyperfine discards three warm-up runs, then measures at least ten runs per library. Results show the mean ± standard deviation, so the spread of each measurement is visible. The large-file categories are capped at ten files to keep the total runtime reasonable. For stable numbers, run the benchmarks on an otherwise idle machine.
 
 ### Setup
 
@@ -145,14 +137,14 @@ bash feedsmith.sh
 
 ## Cross-Language Benchmarks
 
-Cross-language performance comparison using [hyperfine](https://github.com/sharkdp/hyperfine) to compare Feedsmith against popular feed parsing libraries in other languages:
+These benchmarks use [hyperfine](https://github.com/sharkdp/hyperfine) to compare Feedsmith with popular feed parsers in other languages:
 
 - **Ruby**: [Feedjira](https://github.com/feedjira/feedjira)
 - **Python**: [feedparser](https://github.com/kurtmckee/feedparser)
 - **Go**: [gofeed](https://github.com/mmcdole/gofeed)
 - **PHP**: [SimplePie](https://github.com/simplepie/simplepie)
 
-Focuses on core feed formats: **RSS**, **Atom**, and **RDF**.
+They cover the core feed formats: **RSS**, **Atom**, and **RDF**.
 
 ### Results
 
@@ -162,59 +154,59 @@ Results are sorted fastest first (mean ± σ over at least ten runs).
 $ sh parsing.sh
 
 ⏳ Running: RSS feed parsing (10 files × 5MB–50MB)
-┌───┬─────────────────────┬─────────────────┬─────────┬─────────┬──────┬───────────────┐
-│   │ Package             │ Mean (s)        │ Min     │ Max     │ Runs │ Performance   │
-├───┼─────────────────────┼─────────────────┼─────────┼─────────┼──────┼───────────────┤
-│ 0 │ feedsmith *         │ 6.262 ± 0.042   │ 6.201   │ 6.343   │ 10   │ baseline      │
-│ 1 │ simplepie (php)     │ 8.126 ± 0.090   │ 8.023   │ 8.291   │ 10   │ 1.30x slower  │
-│ 2 │ gofeed (go)         │ 13.416 ± 0.052  │ 13.353  │ 13.528  │ 10   │ 2.14x slower  │
-│ 3 │ feedjira (ruby)     │ 17.950 ± 0.125  │ 17.769  │ 18.242  │ 10   │ 2.87x slower  │
-│ 4 │ feedparser (python) │ 127.305 ± 1.259 │ 125.403 │ 129.302 │ 10   │ 20.33x slower │
-└───┴─────────────────────┴─────────────────┴─────────┴─────────┴──────┴───────────────┘
+┌───┬─────────────────────┬───────────────┬─────────────────┬─────────┬─────────┐
+│   │ Package             │ Performance   │ Mean (ms)       │ Min     │ Max     │
+├───┼─────────────────────┼───────────────┼─────────────────┼─────────┼─────────┤
+│ 0 │ feedsmith *         │ baseline      │ 454.0 ± 5.3     │ 446.7   │ 463.7   │
+│ 1 │ simplepie (php)     │ 1.39x slower  │ 630.1 ± 3.6     │ 623.5   │ 635.1   │
+│ 2 │ gofeed (go)         │ 2.01x slower  │ 914.2 ± 9.9     │ 898.2   │ 931.1   │
+│ 3 │ feedjira (ruby)     │ 2.84x slower  │ 1288.1 ± 16.4   │ 1273.1  │ 1330.2  │
+│ 4 │ feedparser (python) │ 27.55x slower │ 12506.6 ± 113.0 │ 12351.3 │ 12656.1 │
+└───┴─────────────────────┴───────────────┴─────────────────┴─────────┴─────────┘
 
 ⏳ Running: RSS feed parsing (100 files × 100KB–5MB)
-┌───┬─────────────────────┬───────────────┬───────┬───────┬──────┬───────────────┐
-│   │ Package             │ Mean (s)      │ Min   │ Max   │ Runs │ Performance   │
-├───┼─────────────────────┼───────────────┼───────┼───────┼──────┼───────────────┤
-│ 0 │ simplepie (php)     │ 0.469 ± 0.005 │ 0.461 │ 0.478 │ 10   │ baseline      │
-│ 1 │ feedsmith *         │ 0.606 ± 0.007 │ 0.598 │ 0.618 │ 10   │ 1.29x slower  │
-│ 2 │ gofeed (go)         │ 0.822 ± 0.006 │ 0.814 │ 0.834 │ 10   │ 1.75x slower  │
-│ 3 │ feedjira (ruby)     │ 1.194 ± 0.009 │ 1.181 │ 1.206 │ 10   │ 2.55x slower  │
-│ 4 │ feedparser (python) │ 6.162 ± 0.052 │ 6.094 │ 6.265 │ 10   │ 13.15x slower │
-└───┴─────────────────────┴───────────────┴───────┴───────┴──────┴───────────────┘
+┌───┬─────────────────────┬───────────────┬───────────────┬────────┬────────┐
+│   │ Package             │ Performance   │ Mean (ms)     │ Min    │ Max    │
+├───┼─────────────────────┼───────────────┼───────────────┼────────┼────────┤
+│ 0 │ feedsmith *         │ baseline      │ 276.5 ± 8.8   │ 266.2  │ 297.8  │
+│ 1 │ simplepie (php)     │ 1.03x slower  │ 283.4 ± 2.5   │ 280.0  │ 287.1  │
+│ 2 │ gofeed (go)         │ 1.84x slower  │ 507.7 ± 3.5   │ 501.9  │ 512.6  │
+│ 3 │ feedjira (ruby)     │ 2.78x slower  │ 768.9 ± 77.3  │ 710.6  │ 976.0  │
+│ 4 │ feedparser (python) │ 20.43x slower │ 5648.0 ± 35.8 │ 5599.7 │ 5725.8 │
+└───┴─────────────────────┴───────────────┴───────────────┴────────┴────────┘
 
 ⏳ Running: Atom feed parsing (10 files × 5MB–50MB)
-┌───┬─────────────────────┬────────────────┬────────┬────────┬──────┬───────────────┐
-│   │ Package             │ Mean (s)       │ Min    │ Max    │ Runs │ Performance   │
-├───┼─────────────────────┼────────────────┼────────┼────────┼──────┼───────────────┤
-│ 0 │ feedsmith *         │ 6.449 ± 0.095  │ 6.270  │ 6.576  │ 10   │ baseline      │
-│ 1 │ simplepie (php)     │ 6.936 ± 0.092  │ 6.845  │ 7.163  │ 10   │ 1.08x slower  │
-│ 2 │ gofeed (go)         │ 12.265 ± 0.044 │ 12.212 │ 12.342 │ 10   │ 1.90x slower  │
-│ 3 │ feedjira (ruby)     │ 13.723 ± 0.141 │ 13.572 │ 13.975 │ 10   │ 2.13x slower  │
-│ 4 │ feedparser (python) │ 91.862 ± 0.350 │ 91.299 │ 92.330 │ 10   │ 14.24x slower │
-└───┴─────────────────────┴────────────────┴────────┴────────┴──────┴───────────────┘
+┌───┬─────────────────────┬───────────────┬───────────────┬────────┬─────────┐
+│   │ Package             │ Performance   │ Mean (ms)     │ Min    │ Max     │
+├───┼─────────────────────┼───────────────┼───────────────┼────────┼─────────┤
+│ 0 │ feedsmith *         │ baseline      │ 448.1 ± 4.0   │ 441.0  │ 454.1   │
+│ 1 │ simplepie (php)     │ 1.28x slower  │ 575.7 ± 9.9   │ 558.2  │ 591.0   │
+│ 2 │ gofeed (go)         │ 2.36x slower  │ 1059.5 ± 16.9 │ 1044.2 │ 1096.2  │
+│ 3 │ feedjira (ruby)     │ 2.87x slower  │ 1284.2 ± 7.7  │ 1267.5 │ 1292.7  │
+│ 4 │ feedparser (python) │ 22.32x slower │ 9999.7 ± 80.5 │ 9895.0 │ 10155.5 │
+└───┴─────────────────────┴───────────────┴───────────────┴────────┴─────────┘
 
 ⏳ Running: Atom feed parsing (100 files × 100KB–5MB)
-┌───┬─────────────────────┬────────────────┬────────┬────────┬──────┬───────────────┐
-│   │ Package             │ Mean (s)       │ Min    │ Max    │ Runs │ Performance   │
-├───┼─────────────────────┼────────────────┼────────┼────────┼──────┼───────────────┤
-│ 0 │ feedsmith *         │ 3.150 ± 0.015  │ 3.127  │ 3.174  │ 10   │ baseline      │
-│ 1 │ simplepie (php)     │ 4.007 ± 0.062  │ 3.918  │ 4.103  │ 10   │ 1.27x slower  │
-│ 2 │ gofeed (go)         │ 5.241 ± 0.052  │ 5.157  │ 5.300  │ 10   │ 1.66x slower  │
-│ 3 │ feedjira (ruby)     │ 7.632 ± 0.042  │ 7.538  │ 7.693  │ 10   │ 2.42x slower  │
-│ 4 │ feedparser (python) │ 62.754 ± 0.934 │ 62.047 │ 65.278 │ 10   │ 19.92x slower │
-└───┴─────────────────────┴────────────────┴────────┴────────┴──────┴───────────────┘
+┌───┬─────────────────────┬───────────────┬─────────────────┬─────────┬─────────┐
+│   │ Package             │ Performance   │ Mean (ms)       │ Min     │ Max     │
+├───┼─────────────────────┼───────────────┼─────────────────┼─────────┼─────────┤
+│ 0 │ feedsmith *         │ baseline      │ 1482.3 ± 13.7   │ 1460.3  │ 1506.7  │
+│ 1 │ simplepie (php)     │ 1.52x slower  │ 2258.6 ± 11.4   │ 2246.5  │ 2279.6  │
+│ 2 │ gofeed (go)         │ 2.81x slower  │ 4171.7 ± 37.7   │ 4112.2  │ 4219.7  │
+│ 3 │ feedjira (ruby)     │ 3.11x slower  │ 4606.1 ± 43.4   │ 4547.6  │ 4696.5  │
+│ 4 │ feedparser (python) │ 39.29x slower │ 58234.4 ± 359.4 │ 57691.6 │ 58729.3 │
+└───┴─────────────────────┴───────────────┴─────────────────┴─────────┴─────────┘
 
 ⏳ Running: RDF feed parsing (100 files × 100KB–5MB)
-┌───┬─────────────────────┬───────────────┬───────┬───────┬──────┬───────────────┐
-│   │ Package             │ Mean (s)      │ Min   │ Max   │ Runs │ Performance   │
-├───┼─────────────────────┼───────────────┼───────┼───────┼──────┼───────────────┤
-│ 0 │ simplepie (php)     │ 0.384 ± 0.007 │ 0.377 │ 0.394 │ 10   │ baseline      │
-│ 1 │ feedjira (ruby)     │ 0.726 ± 0.001 │ 0.724 │ 0.727 │ 10   │ 1.89x slower  │
-│ 2 │ feedsmith *         │ 0.744 ± 0.008 │ 0.730 │ 0.761 │ 10   │ 1.94x slower  │
-│ 3 │ gofeed (go)         │ 0.896 ± 0.006 │ 0.890 │ 0.909 │ 10   │ 2.33x slower  │
-│ 4 │ feedparser (python) │ 6.520 ± 0.031 │ 6.479 │ 6.583 │ 10   │ 16.98x slower │
-└───┴─────────────────────┴───────────────┴───────┴───────┴──────┴───────────────┘
+┌───┬─────────────────────┬───────────────┬───────────────┬────────┬────────┐
+│   │ Package             │ Performance   │ Mean (ms)     │ Min    │ Max    │
+├───┼─────────────────────┼───────────────┼───────────────┼────────┼────────┤
+│ 0 │ simplepie (php)     │ baseline      │ 259.4 ± 2.9   │ 253.3  │ 263.8  │
+│ 1 │ feedsmith *         │ 1.11x slower  │ 286.7 ± 2.2   │ 284.4  │ 291.0  │
+│ 2 │ feedjira (ruby)     │ 1.85x slower  │ 479.1 ± 1.2   │ 477.2  │ 481.4  │
+│ 3 │ gofeed (go)         │ 2.47x slower  │ 640.1 ± 24.1  │ 619.8  │ 698.6  │
+│ 4 │ feedparser (python) │ 23.76x slower │ 6162.2 ± 35.4 │ 6115.5 │ 6230.0 │
+└───┴─────────────────────┴───────────────┴───────────────┴────────┴────────┘
 ```
 
 ### Setup
@@ -226,6 +218,9 @@ brew install hyperfine bun ruby python go php composer
 # 2. Install language-specific packages
 bundle install
 composer install
+
+# Composer's vendor/ directory makes Go assume vendored modules, so force module mode.
+export GOFLAGS=-mod=mod
 go mod tidy
 
 # Python is installed in a local virtualenv (Homebrew Python blocks global pip installs

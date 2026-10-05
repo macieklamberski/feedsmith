@@ -4,7 +4,7 @@ title: "Reference: Atom Threading Namespace"
 
 # Atom Threading Namespace Reference
 
-The Atom Threading namespace provides elements for representing threaded discussions and comment relationships in Atom feeds, enabling proper conversation threading.
+The Atom Threading namespace provides elements for representing threaded discussions and comment relationships in RSS and Atom feeds, enabling proper conversation threading.
 
 <table>
   <tbody>
@@ -14,7 +14,7 @@ The Atom Threading namespace provides elements for representing threaded discuss
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="http://purl.org/syndication/thread/1.0" target="_blank">Threading Extensions</a></td>
+      <td><a href="https://datatracker.ietf.org/doc/html/rfc4685" target="_blank">RFC 4685 - Atom Threading Extensions</a></td>
     </tr>
     <tr>
       <th>Prefix</th>
