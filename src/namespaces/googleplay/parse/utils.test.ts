@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'bun:test'
 import type { GooglePlayNs } from '../common/types.js'
-import { parseCategory, parseExplicit, parseImage, retrieveFeed, retrieveItem } from './utils.js'
+import {
+  parseCategory,
+  parseExplicit,
+  parseImage,
+  retrieveFeed,
+  retrieveItem,
+  retrieveNewFeedUrl,
+} from './utils.js'
 
 describe('parseImage', () => {
   it('should parse image with href attribute', () => {
@@ -151,11 +158,21 @@ describe('parseExplicit', () => {
     expect(parseExplicit(undefined)).toBeUndefined()
   })
 
-  it.todo('should parse yes from #text property', () => {
-    // parseExplicit({ '#text': 'yes' }) currently returns undefined because the yes/no branch
-    // passes the raw object to parseYesNoBoolean instead of the retrieved text, while the clean
-    // branch reads the retrieved text.
-    // Expected: true.
+  it('should parse yes from #text property', () => {
+    const value = {
+      '#text': 'yes',
+    }
+
+    expect(parseExplicit(value)).toBe(true)
+  })
+
+  it('should parse yes from element with attributes', () => {
+    const value = {
+      '#text': 'yes',
+      '@lang': 'en',
+    }
+
+    expect(parseExplicit(value)).toBe(true)
   })
 
   it.todo('should handle non-string inputs without throwing', () => {
@@ -296,6 +313,46 @@ describe('retrieveItem', () => {
   })
 })
 
+describe('retrieveNewFeedUrl', () => {
+  it('should parse new-feed-url', () => {
+    const value = {
+      'googleplay:new-feed-url': 'https://example.com/new-podcast-feed',
+    }
+
+    expect(retrieveNewFeedUrl(value)).toBe('https://example.com/new-podcast-feed')
+  })
+
+  it('should parse newFeedUrl spelled as in the schema', () => {
+    const value = {
+      'googleplay:newfeedurl': 'https://example.com/new-podcast-feed',
+    }
+
+    expect(retrieveNewFeedUrl(value)).toBe('https://example.com/new-podcast-feed')
+  })
+
+  it('should prefer new-feed-url when both spellings are present', () => {
+    const value = {
+      'googleplay:new-feed-url': 'https://example.com/new-podcast-feed',
+      'googleplay:newfeedurl': 'https://example.com/other-podcast-feed',
+    }
+
+    expect(retrieveNewFeedUrl(value)).toBe('https://example.com/new-podcast-feed')
+  })
+
+  it('should fall back to newFeedUrl when new-feed-url is empty', () => {
+    const value = {
+      'googleplay:new-feed-url': '',
+      'googleplay:newfeedurl': 'https://example.com/new-podcast-feed',
+    }
+
+    expect(retrieveNewFeedUrl(value)).toBe('https://example.com/new-podcast-feed')
+  })
+
+  it('should return undefined when neither spelling is present', () => {
+    expect(retrieveNewFeedUrl({})).toBeUndefined()
+  })
+})
+
 describe('retrieveFeed', () => {
   it('should parse complete feed object with all properties', () => {
     const value = {
@@ -306,6 +363,7 @@ describe('retrieveFeed', () => {
       'googleplay:image': { '@href': 'https://example.com/podcast.jpg' },
       'googleplay:new-feed-url': 'https://example.com/new-podcast-feed',
       'googleplay:email': 'contact@example.com',
+      'googleplay:owner': 'owner@example.com',
       'googleplay:category': [{ '@text': 'Technology' }, { '@text': 'Education' }],
     }
     const expected = {
@@ -316,7 +374,30 @@ describe('retrieveFeed', () => {
       image: { href: 'https://example.com/podcast.jpg' },
       newFeedUrl: 'https://example.com/new-podcast-feed',
       email: 'contact@example.com',
+      owner: 'owner@example.com',
       categories: ['Technology', 'Education'],
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse newFeedUrl spelled as in the schema', () => {
+    const value = {
+      'googleplay:newfeedurl': 'https://example.com/new-podcast-feed',
+    }
+    const expected = {
+      newFeedUrl: 'https://example.com/new-podcast-feed',
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse owner', () => {
+    const value = {
+      'googleplay:owner': 'owner@example.com',
+    }
+    const expected: GooglePlayNs.Feed = {
+      owner: 'owner@example.com',
     }
 
     expect(retrieveFeed(value)).toEqual(expected)

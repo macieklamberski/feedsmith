@@ -49,10 +49,18 @@ export const parseExplicit: ParseUtilPartial<boolean> = (value) => {
     return boolean
   }
 
-  if (typeof value === 'string') {
-    // There are also cases of "clean" and "f", but those are considered false.
-    return explicitOrYesRegex.test(value)
+  if (typeof value !== 'string') {
+    return
   }
+
+  const string = parseString(value)
+
+  if (!string) {
+    return false
+  }
+
+  // There are also cases of "clean" and "f", but those are considered false.
+  return explicitOrYesRegex.test(string)
 }
 
 export const parseDuration: ParseUtilPartial<number> = (value) => {
@@ -62,12 +70,14 @@ export const parseDuration: ParseUtilPartial<number> = (value) => {
     return duration
   }
 
-  if (typeof value !== 'string') {
+  const string = parseString(value)
+
+  if (!string) {
     return
   }
 
   // Handle HH:MM:SS and MM:SS format.
-  const match = value.match(durationRegex)
+  const match = string.match(durationRegex)
 
   if (match) {
     const [, hours, minutes, seconds] = match
@@ -110,6 +120,10 @@ export const retrieveItem: ParseUtilPartial<ItunesNs.Item> = (value) => {
       parseString(retrieveText(value)),
     ),
     block: parseSingularOf(value['itunes:block'], (value) =>
+      parseYesNoBoolean(retrieveText(value)),
+    ),
+    order: parseSingularOf(value['itunes:order'], (value) => parseNumber(retrieveText(value))),
+    isClosedCaptioned: parseSingularOf(value['itunes:isclosedcaptioned'], (value) =>
       parseYesNoBoolean(retrieveText(value)),
     ),
     summary: parseSingularOf(value['itunes:summary'], (value) => parseString(retrieveText(value))),

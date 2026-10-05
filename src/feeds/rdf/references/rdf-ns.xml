@@ -11,9 +11,14 @@
   xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
   xmlns:media="http://search.yahoo.com/mrss/"
   xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0"
+  xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
+  xmlns:prism="http://prismstandard.org/namespaces/basic/2.0/"
   xmlns:cc="http://creativecommons.org/ns#"
   xmlns:wfw="http://wellformedweb.org/CommentAPI/"
   xmlns:admin="http://webns.net/mvcb/"
+  xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
+  xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+  xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
   xmlns:georss="http://www.georss.org/georss"
   xmlns:gml="http://www.opengis.net/gml"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -222,6 +227,22 @@
     <feedburner:feedburnerHostname>https://feedburner.google.com</feedburner:feedburnerHostname>
     <feedburner:awareness>https://feedburner.google.com/awareness/1.0/data/examplerss</feedburner:awareness>
 
+    <!-- OpenSearch Namespace: Channel Level Tags -->
+    <opensearch:totalResults>1000</opensearch:totalResults>
+    <opensearch:startIndex>21</opensearch:startIndex>
+    <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+    <opensearch:link href="http://example.com/opensearchdescription.xml" rel="search" type="application/opensearchdescription+xml"/>
+    <opensearch:Query role="request" title="Search results for quantum computing" totalResults="1000" searchTerms="quantum computing" startIndex="21" count="10"/>
+
+    <!-- PRISM Namespace: Channel Level Tags -->
+    <prism:publicationName>Nature</prism:publicationName>
+    <prism:issn>0028-0836</prism:issn>
+    <prism:eIssn>1476-4687</prism:eIssn>
+    <prism:volume>615</prism:volume>
+    <prism:number>7952</prism:number>
+    <prism:coverDate>2023-03-15T00:00:00.000Z</prism:coverDate>
+    <prism:publicationDate>2023-03-15T00:00:00.000Z</prism:publicationDate>
+
     <!-- ccREL Namespace: Channel Level Tags -->
     <cc:license rdf:resource="https://creativecommons.org/licenses/by/4.0/"/>
     <cc:attributionName>Example Publishing Company</cc:attributionName>
@@ -229,6 +250,11 @@
     <!-- Admin Namespace: Channel Level Tags -->
     <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
     <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+
+    <!-- W3C Basic Geo Namespace: Channel Level Tags -->
+    <geo:lat>37.7749</geo:lat>
+    <geo:long>-122.4194</geo:long>
+    <geo:alt>10.5</geo:alt>
 
     <!-- GeoRSS-Simple Namespace: Item/Feed Level Tags (while not typical, included are all values for testing) -->
     <georss:point>37.78 -122.42</georss:point>
@@ -248,6 +274,19 @@
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
   </channel>
+
+  <image rdf:about="http://example.org/image.png">
+    <title>Example Image</title>
+    <link>http://example.org</link>
+    <url>http://example.org/image.png</url>
+
+    <!-- PRISM Namespace: Image Level Tags -->
+    <prism:publicationName>Nature</prism:publicationName>
+    <prism:coverDate>2023-03-15</prism:coverDate>
+
+    <!-- ccREL Namespace: Image Level Tags -->
+    <cc:license rdf:resource="https://creativecommons.org/licenses/by-nd/4.0/"/>
+  </image>
 
   <item rdf:about="http://example.org/item/1" xml:lang="en-US" xml:base="http://example.org/item/1/">
     <title>Example Item</title>
@@ -442,6 +481,17 @@
     <feedburner:origEnclosureLink>https://example.org/audio/original-episode.mp3</feedburner:origEnclosureLink>
     <feedburner:awareness>https://feedburner.google.com/awareness/1.0/data/examplerss/item</feedburner:awareness>
 
+    <!-- PRISM Namespace: Item Level Tags -->
+    <prism:publicationName>Nature</prism:publicationName>
+    <prism:doi>10.1038/s41586-023-05842-x</prism:doi>
+    <prism:url>https://www.nature.com/articles/s41586-023-05842-x</prism:url>
+    <prism:volume>615</prism:volume>
+    <prism:number>7952</prism:number>
+    <prism:section>Research</prism:section>
+    <prism:startingPage>425</prism:startingPage>
+    <prism:endingPage>432</prism:endingPage>
+    <prism:publicationDate>2023-03-15T00:00:00.000Z</prism:publicationDate>
+
     <!-- ccREL Namespace: Item Level Tags -->
     <cc:license rdf:resource="https://creativecommons.org/licenses/by-sa/4.0/"/>
     <cc:attributionName>Jack Jackson</cc:attributionName>
@@ -449,6 +499,22 @@
     <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
     <wfw:commentRss>https://example.com/posts/understanding-xml-namespaces/comments/feed</wfw:commentRss>
+
+    <!-- Pingback Namespace: Item Level Tags -->
+    <pingback:server rdf:resource="https://example.com/xmlrpc.php"/>
+    <pingback:target rdf:resource="https://referenced-blog.com/article"/>
+    <pingback:about rdf:resource="https://blog1.com/posts/xml-basics"/>
+    <pingback:about rdf:resource="https://blog2.com/posts/namespaces"/>
+
+    <!-- Trackback Namespace: Item Level Tags -->
+    <trackback:ping rdf:resource="https://example.com/trackback/123"/>
+    <trackback:about rdf:resource="https://blog1.com/trackback/456"/>
+    <trackback:about rdf:resource="https://blog2.com/trackback/789"/>
+
+    <!-- W3C Basic Geo Namespace: Item Level Tags -->
+    <geo:lat>37.8199</geo:lat>
+    <geo:long>-122.4783</geo:long>
+    <geo:alt>67.0</geo:alt>
 
     <!-- GeoRSS-Simple Namespace: Item/Feed Level Tags (while not typical, included are all values for testing) -->
     <georss:point>37.78 -122.42</georss:point>

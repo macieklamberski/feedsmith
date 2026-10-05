@@ -11,9 +11,11 @@ export const stopNodes = [
   '*.googleplay:author',
   '*.googleplay:description',
   '*.googleplay:email',
+  '*.googleplay:owner',
   '*.googleplay:block',
   '*.googleplay:explicit',
   '*.googleplay:image',
   '*.googleplay:new-feed-url',
+  '*.googleplay:newfeedurl',
   '*.googleplay:category',
 ]

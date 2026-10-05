@@ -297,6 +297,24 @@ describe('parseExplicit', () => {
     expect(parseExplicit(value)).toBe(false)
   })
 
+  it('should handle yes string wrapped in CDATA', () => {
+    const value = '<![CDATA[yes]]>'
+
+    expect(parseExplicit(value)).toBe(true)
+  })
+
+  it('should handle explicit string wrapped in CDATA', () => {
+    const value = '<![CDATA[explicit]]>'
+
+    expect(parseExplicit(value)).toBe(true)
+  })
+
+  it('should handle clean string wrapped in CDATA', () => {
+    const value = '<![CDATA[clean]]>'
+
+    expect(parseExplicit(value)).toBe(false)
+  })
+
   it('should handle true string', () => {
     const value = 'true'
 
@@ -421,6 +439,15 @@ describe('parseDuration', () => {
     expect(parseDuration(42)).toBe(42)
     expect(parseDuration(0)).toBe(0)
     expect(parseDuration(3600)).toBe(3600)
+  })
+
+  it('should handle values wrapped in CDATA', () => {
+    expect(parseDuration('<![CDATA[120]]>')).toBe(120)
+    expect(parseDuration('<![CDATA[01:30:45]]>')).toBe(5445)
+  })
+
+  it('should handle whitespace inside CDATA', () => {
+    expect(parseDuration('<![CDATA[ 05:30 ]]>')).toBe(330)
   })
 
   it('should handle numeric strings', () => {
@@ -575,6 +602,8 @@ describe('retrieveItem', () => {
     season: 2,
     episodeType: 'full',
     block: true,
+    order: 3,
+    isClosedCaptioned: true,
     keywords: ['podcast', 'technology', 'programming'],
     summary: 'A detailed summary of this episode',
     subtitle: 'Episode subtitle',
@@ -591,6 +620,8 @@ describe('retrieveItem', () => {
       'itunes:season': { '#text': '2' },
       'itunes:episodetype': { '#text': 'full' },
       'itunes:block': { '#text': 'yes' },
+      'itunes:order': { '#text': '3' },
+      'itunes:isclosedcaptioned': { '#text': 'yes' },
       'itunes:keywords': { '#text': 'podcast,technology,programming' },
       'itunes:summary': { '#text': 'A detailed summary of this episode' },
       'itunes:subtitle': { '#text': 'Episode subtitle' },
@@ -610,6 +641,8 @@ describe('retrieveItem', () => {
       'itunes:season': '2',
       'itunes:episodetype': 'full',
       'itunes:block': 'yes',
+      'itunes:order': '3',
+      'itunes:isclosedcaptioned': 'yes',
       'itunes:keywords': 'podcast,technology,programming',
       'itunes:summary': 'A detailed summary of this episode',
       'itunes:subtitle': 'Episode subtitle',
@@ -632,6 +665,8 @@ describe('retrieveItem', () => {
       'itunes:season': ['2', '3'],
       'itunes:episodetype': ['full', 'trailer'],
       'itunes:block': ['yes', 'no'],
+      'itunes:order': ['3', '4'],
+      'itunes:isclosedcaptioned': ['yes', 'no'],
       'itunes:keywords': ['podcast,technology,programming', 'development,coding,software'],
       'itunes:summary': [
         'A detailed summary of this episode',
@@ -694,6 +729,17 @@ describe('retrieveItem', () => {
 
   it.each(blockCases)('should parse block value: %s', (block, expected) => {
     expect(retrieveItem({ 'itunes:block': { '#text': block } })).toEqual(expected)
+  })
+
+  it('should parse order of zero', () => {
+    const value = {
+      'itunes:order': '0',
+    }
+    const expected = {
+      order: 0,
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
   })
 
   it('should handle HTML entities in text content', () => {
