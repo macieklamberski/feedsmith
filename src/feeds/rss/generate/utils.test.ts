@@ -965,6 +965,27 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with cb namespace properties', () => {
+    const value = {
+      title: 'Item with cb namespace',
+      cb: {
+        news: {
+          simpleTitle: 'Term PRA operation',
+          occurrenceDate: '2009-12-31',
+        },
+      },
+    }
+    const expected = {
+      title: 'Item with cb namespace',
+      'cb:news': {
+        'cb:simpleTitle': 'Term PRA operation',
+        'cb:occurrenceDate': '2009-12-31T00:00:00.000Z',
+      },
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with ccREL namespace properties', () => {
     const value = {
       title: 'Item with ccREL namespace',
@@ -1875,6 +1896,53 @@ describe('generateFeed', () => {
           'prism:issn': '0028-0836',
           'prism:volume': '615',
           'prism:publicationDate': [{ '#text': '2023-03-15T00:00:00.000Z', '@platform': 'print' }],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with cb namespace properties', () => {
+    const value = {
+      title: 'Exchange rates',
+      description: 'Daily exchange rates',
+      items: [
+        {
+          title: 'CHF/EUR',
+          cb: {
+            statistics: {
+              country: 'CH',
+              exchangeRate: {
+                observation: { value: 0.9227, unit: 'CHF', decimals: 4 },
+                baseCurrency: 'CHF',
+                targetCurrency: 'EUR',
+              },
+            },
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:cb': 'http://www.cbwiki.net/wiki/index.php/Specification_1.2/',
+        channel: {
+          title: 'Exchange rates',
+          description: 'Daily exchange rates',
+          item: [
+            {
+              title: 'CHF/EUR',
+              'cb:statistics': {
+                'cb:country': 'CH',
+                'cb:exchangeRate': {
+                  'cb:observation': { 'cb:value': 0.9227, 'cb:unit': 'CHF', 'cb:decimals': 4 },
+                  'cb:baseCurrency': 'CHF',
+                  'cb:targetCurrency': 'EUR',
+                },
+              },
+            },
+          ],
         },
       },
     }

@@ -1,0 +1,47 @@
+export const uris = [
+  'http://www.cbwiki.net/wiki/index.php/Specification_1.2/', // Official URI of version 1.2
+  'http://www.cbwiki.net/wiki/index.php/Specification_1.1', // Official URI of version 1.1
+  'http://www.bis.org/rss-cb/1.0/', // Official URI of version 1.0
+  'http://staging.bis.org/rss-cb/1.0/',
+  'http://www.centralbanks.org/rss-cb/1.1/',
+]
+
+export const stopNodes = [
+  '*.cb:simpletitle',
+  '*.cb:institutionabbrev',
+  '*.cb:audience',
+  '*.cb:keyword',
+  '*.cb:title',
+  '*.cb:link',
+  '*.cb:description',
+  '*.cb:givenname',
+  '*.cb:surname',
+  '*.cb:personaltitle',
+  '*.cb:nameaswritten',
+  '*.cb:jobtitle',
+  '*.cb:affiliation',
+  '*.cb:body',
+  '*.cb:venue',
+  '*.cb:locationaswritten',
+  '*.cb:locationcountry',
+  '*.cb:locationstate',
+  '*.cb:locationcity',
+  '*.cb:byline',
+  '*.cb:publicationdate',
+  '*.cb:publication',
+  '*.cb:issue',
+  '*.cb:jelcode',
+  '*.cb:country',
+  '*.cb:targetcurrency',
+  '*.cb:ratetype',
+  '*.cb:ratename',
+  '*.cb:transactionname',
+  '*.cb:transactiontype',
+  '*.cb:transactionterm',
+  '*.cb:topic',
+  '*.cb:coverage',
+  '*.cb:datatype',
+  '*.cb:unit',
+  '*.cb:frequency',
+  '*.cb:period',
+]

@@ -7,6 +7,7 @@ import type {
 } from '../../../common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
+import type { CbNs } from '../../../namespaces/cb/common/types.js'
 import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { ContentNs } from '../../../namespaces/content/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
@@ -67,6 +68,7 @@ export namespace RdfFeed {
       media?: MediaNs.ItemOrFeed<TStrict>
       feedburner?: FeedBurnerNs.Item
       prism?: PrismNs.ItemOrFeed<TDate>
+      cb?: CbNs.Item<TDate>
       cc?: CcNs.ItemOrFeed
       wfw?: WfwNs.Item
       pingback?: PingbackNs.Item

@@ -782,6 +782,105 @@ describe('generate', () => {
     expect(parse(generate(value))).toEqual(expected)
   })
 
+  it('should generate RSS with cb namespace', () => {
+    const value = {
+      title: 'Feed with cb namespace',
+      description: 'Test feed with RSS-CB namespace',
+      items: [
+        {
+          title: 'Working paper',
+          cb: {
+            paper: {
+              simpleTitle: 'Foreign exchange interventions',
+              occurrenceDate: new Date('2022-06-06T00:00:00Z'),
+              resources: [
+                {
+                  title: 'Staff Working Paper 2022-25',
+                  link: 'https://example.com/swp2022-25.pdf',
+                },
+              ],
+              persons: [
+                { nameAsWritten: 'Patrick Alexander' },
+                { givenName: 'Sami', surname: 'Alpanda' },
+              ],
+              publicationDate: 'June 2022',
+              jelCodes: ['F31', 'F33'],
+            },
+          },
+        },
+        {
+          title: 'CHF/EUR',
+          cb: {
+            statistics: {
+              country: 'CH',
+              institutionAbbrev: 'SNB',
+              exchangeRate: {
+                observation: { value: 0.9227, unit: 'CHF', unitMult: 0, decimals: 4 },
+                baseCurrency: 'CHF',
+                targetCurrency: 'EUR',
+                rateType: 'Daily rates (11:00)',
+                observationPeriod: { frequency: 'daily', period: '2026-07-17' },
+              },
+            },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:cb="http://www.cbwiki.net/wiki/index.php/Specification_1.2/">
+  <channel>
+    <title>Feed with cb namespace</title>
+    <description>Test feed with RSS-CB namespace</description>
+    <item>
+      <title>Working paper</title>
+      <cb:paper>
+        <cb:simpleTitle>Foreign exchange interventions</cb:simpleTitle>
+        <cb:occurrenceDate>2022-06-06T00:00:00.000Z</cb:occurrenceDate>
+        <cb:resource>
+          <cb:title>Staff Working Paper 2022-25</cb:title>
+          <cb:link>https://example.com/swp2022-25.pdf</cb:link>
+        </cb:resource>
+        <cb:person>
+          <cb:nameAsWritten>Patrick Alexander</cb:nameAsWritten>
+        </cb:person>
+        <cb:person>
+          <cb:givenName>Sami</cb:givenName>
+          <cb:surname>Alpanda</cb:surname>
+        </cb:person>
+        <cb:publicationDate>June 2022</cb:publicationDate>
+        <cb:JELCode>F31</cb:JELCode>
+        <cb:JELCode>F33</cb:JELCode>
+      </cb:paper>
+    </item>
+    <item>
+      <title>CHF/EUR</title>
+      <cb:statistics>
+        <cb:country>CH</cb:country>
+        <cb:institutionAbbrev>SNB</cb:institutionAbbrev>
+        <cb:exchangeRate>
+          <cb:observation>
+            <cb:value>0.9227</cb:value>
+            <cb:unit>CHF</cb:unit>
+            <cb:unit_mult>0</cb:unit_mult>
+            <cb:decimals>4</cb:decimals>
+          </cb:observation>
+          <cb:baseCurrency>CHF</cb:baseCurrency>
+          <cb:targetCurrency>EUR</cb:targetCurrency>
+          <cb:rateType>Daily rates (11:00)</cb:rateType>
+          <cb:observationPeriod>
+            <cb:frequency>daily</cb:frequency>
+            <cb:period>2026-07-17</cb:period>
+          </cb:observationPeriod>
+        </cb:exchangeRate>
+      </cb:statistics>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with ccREL namespace', () => {
     const value = {
       title: 'Feed with ccREL namespace',

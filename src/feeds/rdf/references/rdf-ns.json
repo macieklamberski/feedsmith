@@ -497,6 +497,195 @@
         "endingPage": "432",
         "publicationDates": [{ "value": "2023-03-15T00:00:00.000Z" }]
       },
+      "cb": {
+        "event": {
+          "simpleTitle": "Interest rate announcement",
+          "occurrenceDate": "2026-09-02",
+          "institutionAbbrev": "BOC",
+          "audience": "Economic Club of Canada",
+          "keywords": ["monetary policy", "interest rates"],
+          "resources": [
+            {
+              "title": "Press release",
+              "link": "https://example.com/press-release",
+              "description": "Policy rate decision and statement"
+            }
+          ],
+          "persons": [
+            {
+              "type": "Speaker",
+              "givenName": "Jane",
+              "surname": "Doe",
+              "personalTitle": "Ms",
+              "nameAsWritten": "Jane Doe",
+              "role": {
+                "jobTitle": "Governor",
+                "affiliation": "Example Central Bank",
+                "body": "Example Central Bank"
+              }
+            }
+          ],
+          "venue": "Conference Centre",
+          "locationAsWritten": "Ottawa, Canada",
+          "locationCountry": "CA",
+          "locationState": "ON",
+          "locationCity": "Ottawa",
+          "eventDateEnd": "2026-09-03"
+        },
+        "news": {
+          "simpleTitle": "Balance sheet items end of May 2026",
+          "occurrenceDate": "2026-06-30T07:00:00Z",
+          "institutionAbbrev": "SNB",
+          "keywords": ["balance sheet"],
+          "resources": [
+            {
+              "title": "Statistical release",
+              "link": "https://example.com/statistical-release"
+            }
+          ],
+          "persons": [
+            {
+              "nameAsWritten": "John Smith"
+            }
+          ]
+        },
+        "paper": {
+          "simpleTitle": "Foreign exchange interventions",
+          "occurrenceDate": "2022-06-06",
+          "institutionAbbrev": "BOC",
+          "keywords": ["exchange rates"],
+          "resources": [
+            {
+              "title": "Staff Working Paper 2022-25",
+              "link": "https://example.com/swp2022-25.pdf"
+            }
+          ],
+          "persons": [
+            {
+              "nameAsWritten": "Jane Doe"
+            },
+            {
+              "nameAsWritten": "John Smith"
+            }
+          ],
+          "byline": "Jane Doe and John Smith",
+          "publicationDate": "June 2022",
+          "publication": "Staff Working Papers",
+          "issue": "2022-25",
+          "jelCodes": ["F31", "F33"]
+        },
+        "speech": {
+          "simpleTitle": "Global developments and monetary policy",
+          "occurrenceDate": "2026-06-24T09:25:00Z",
+          "institutionAbbrev": "SNB",
+          "audience": "Finance committees",
+          "keywords": ["inflation"],
+          "resources": [
+            {
+              "title": "Speech text",
+              "link": "https://example.com/speech"
+            }
+          ],
+          "persons": [
+            {
+              "nameAsWritten": "Jane Doe"
+            }
+          ],
+          "venue": "Finance seminar 2026",
+          "locationAsWritten": "Basel, Switzerland",
+          "locationCountry": "CH",
+          "locationState": "BS",
+          "locationCity": "Basel"
+        },
+        "statistics": {
+          "country": "CH",
+          "institutionAbbrev": "SNB",
+          "exchangeRate": {
+            "value": {
+              "value": 0.9227,
+              "frequency": "daily",
+              "decimals": 4,
+              "unitMult": 0,
+              "units": "CHF"
+            },
+            "observation": {
+              "value": 0.9227,
+              "unit": "CHF",
+              "unitMult": 0,
+              "decimals": 4
+            },
+            "baseCurrency": "CHF",
+            "targetCurrency": "EUR",
+            "rateType": "Daily rates (11:00)",
+            "observationPeriod": {
+              "frequency": "daily",
+              "period": "2026-07-17"
+            }
+          },
+          "interestRate": {
+            "value": {
+              "value": 0.337,
+              "frequency": "daily",
+              "decimals": 3
+            },
+            "observation": {
+              "value": 0.337,
+              "unit": "percent",
+              "unitMult": 0,
+              "decimals": 3
+            },
+            "rateName": "R10",
+            "rateType": "Spot interest rate for 10-year maturities",
+            "observationPeriod": {
+              "frequency": "daily",
+              "period": "2026-07-01"
+            }
+          },
+          "transaction": {
+            "value": {
+              "value": 1.781,
+              "decimals": 3,
+              "unitMult": 9
+            },
+            "observation": {
+              "value": 1.781,
+              "unit": "USD",
+              "unitMult": 9,
+              "decimals": 3
+            },
+            "transactionName": "couponPurchase",
+            "transactionType": "permanent open market operations",
+            "observationPeriod": {
+              "frequency": "quarterly",
+              "period": "Q4 2008"
+            },
+            "transactionTerm": "1day"
+          },
+          "otherStatistic": {
+            "value": {
+              "value": 241.6,
+              "frequency": "weekly",
+              "decimals": 1,
+              "unitMult": 9,
+              "units": "USD"
+            },
+            "observation": {
+              "value": 241.6,
+              "unit": "USD",
+              "unitMult": 9,
+              "decimals": 1
+            },
+            "publicationDate": "Spring, 2007",
+            "topic": "CP",
+            "coverage": "Manufacturing",
+            "observationPeriod": {
+              "frequency": "weekly",
+              "period": "2026-06-22"
+            },
+            "dataType": "seasonally adjusted index, 1997 = 100"
+          }
+        }
+      },
       "cc": {
         "license": "https://creativecommons.org/licenses/by-sa/4.0/",
         "attributionName": "Jack Jackson"

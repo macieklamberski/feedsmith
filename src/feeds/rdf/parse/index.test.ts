@@ -1556,6 +1556,137 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with cb namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:cb="http://www.cbwiki.net/wiki/index.php/Specification_1.2/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with cb namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with RSS-CB namespace</description>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item title</title>
+          <link>http://example.com/item1</link>
+          <cb:paper rdf:parseType="Resource">
+            <rdf:type rdf:resource="http://www.cbwiki.net/wiki/index.php/RSS-CB_1.2_RDF_Schema#Paper"/>
+            <cb:simpleTitle>Foreign Exchange Interventions</cb:simpleTitle>
+            <cb:occurrenceDate>2022-06-06</cb:occurrenceDate>
+            <cb:resource rdf:parseType="Resource">
+              <rdf:type rdf:resource="http://www.cbwiki.net/wiki/index.php/RSS-CB_1.2_RDF_Schema#Resource"/>
+              <cb:title>Staff Working Paper 2022-25</cb:title>
+              <cb:link>http://example.com/swp2022-25.pdf</cb:link>
+            </cb:resource>
+            <cb:person rdf:parseType="Resource">
+              <rdf:type rdf:resource="http://www.cbwiki.net/wiki/index.php/RSS-CB_1.2_RDF_Schema#Person"/>
+              <cb:nameAsWritten>Patrick Alexander</cb:nameAsWritten>
+            </cb:person>
+            <cb:person rdf:parseType="Resource">
+              <rdf:type rdf:resource="http://www.cbwiki.net/wiki/index.php/RSS-CB_1.2_RDF_Schema#Person"/>
+              <cb:nameAsWritten>Sami Alpanda</cb:nameAsWritten>
+            </cb:person>
+            <cb:publicationDate>June 2022</cb:publicationDate>
+            <cb:JELCode>F31</cb:JELCode>
+            <cb:JELCode>F33</cb:JELCode>
+          </cb:paper>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with cb namespace',
+      link: 'http://example.com',
+      description: 'Test feed with RSS-CB namespace',
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Item title',
+          link: 'http://example.com/item1',
+          cb: {
+            paper: {
+              simpleTitle: 'Foreign Exchange Interventions',
+              occurrenceDate: '2022-06-06',
+              resources: [
+                {
+                  title: 'Staff Working Paper 2022-25',
+                  link: 'http://example.com/swp2022-25.pdf',
+                },
+              ],
+              persons: [{ nameAsWritten: 'Patrick Alexander' }, { nameAsWritten: 'Sami Alpanda' }],
+              publicationDate: 'June 2022',
+              jelCodes: ['F31', 'F33'],
+            },
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse RDF with cb namespace in RSS-CB 1.1 statistics', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:cb="http://www.cbwiki.net/wiki/index.php/Specification_1.1"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with cb namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with RSS-CB 1.1 statistics</description>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>HK 7.8400 2026-06-22 FRB H10 Hong Kong Dollar</title>
+          <link>http://example.com/item1</link>
+          <cb:statistics>
+            <cb:country>US</cb:country>
+            <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+            <cb:otherStatistic>
+              <cb:value decimals="4" unit_mult="1" units="Currency">7.8400</cb:value>
+              <cb:topic>H10</cb:topic>
+              <cb:coverage>Hong Kong Dollar</cb:coverage>
+              <cb:observationPeriod frequency="business">2026-06-22</cb:observationPeriod>
+              <cb:dataType/>
+            </cb:otherStatistic>
+          </cb:statistics>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with cb namespace',
+      link: 'http://example.com',
+      description: 'Test feed with RSS-CB 1.1 statistics',
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'HK 7.8400 2026-06-22 FRB H10 Hong Kong Dollar',
+          link: 'http://example.com/item1',
+          cb: {
+            statistics: {
+              country: 'US',
+              institutionAbbrev: 'FRB',
+              otherStatistic: {
+                value: { value: 7.84, decimals: 4, unitMult: 1, units: 'Currency' },
+                topic: 'H10',
+                coverage: 'Hong Kong Dollar',
+                observationPeriod: { frequency: 'business', period: '2026-06-22' },
+              },
+            },
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with cc namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
