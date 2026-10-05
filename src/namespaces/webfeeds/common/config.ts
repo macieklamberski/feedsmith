@@ -5,4 +5,10 @@ export const uris = [
   'https://webfeeds.org/rss/1.0/',
 ]
 
-export const stopNodes = ['*.webfeeds:icon', '*.webfeeds:logo', '*.webfeeds:accentcolor']
+export const stopNodes = [
+  '*.webfeeds:icon',
+  '*.webfeeds:logo',
+  '*.webfeeds:accentcolor',
+  '*.webfeeds:wordmark',
+  '*.webfeeds:featuredvisual',
+]

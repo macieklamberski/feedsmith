@@ -79,6 +79,9 @@ export const retrieveFeed: ParseUtilPartial<WebfeedsNs.Feed> = (value) => {
     partial: parseSingularOf(value['webfeeds:partial'], (value) =>
       parseBoolean(retrieveText(value)),
     ),
+    wordmark: parseSingularOf(value['webfeeds:wordmark'], (value) =>
+      parseString(retrieveText(value)),
+    ),
   }
 
   return trimObject(feed)
@@ -91,6 +94,9 @@ export const retrieveItem: ParseUtilPartial<WebfeedsNs.Item> = (value) => {
 
   const item = {
     featuredImage: parseSingularOf(value['webfeeds:featuredimage'], parseFeaturedImage),
+    featuredVisual: parseSingularOf(value['webfeeds:featuredvisual'], (value) =>
+      parseString(retrieveText(value)),
+    ),
   }
 
   return trimObject(item)

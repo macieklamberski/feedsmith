@@ -717,6 +717,7 @@ describe('generate', () => {
         icon: 'https://example.com/images/icon.png',
         accentColor: '249F80',
         analytics: { id: 'G-E1P00P5NYS', engine: 'GoogleAnalytics' },
+        wordmark: 'https://example.com/images/wordmark.svg',
       },
       entries: [
         {
@@ -737,6 +738,7 @@ describe('generate', () => {
   <webfeeds:icon>https://example.com/images/icon.png</webfeeds:icon>
   <webfeeds:accentColor>249F80</webfeeds:accentColor>
   <webfeeds:analytics id="G-E1P00P5NYS" engine="GoogleAnalytics"/>
+  <webfeeds:wordmark>https://example.com/images/wordmark.svg</webfeeds:wordmark>
   <entry>
     <id>https://example.com/post/1</id>
     <title>Post with a featured image</title>

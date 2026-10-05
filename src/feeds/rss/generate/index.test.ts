@@ -622,6 +622,7 @@ describe('generate', () => {
         related: { layout: 'card', target: 'browser' },
         analytics: { id: 'G-E1P00P5NYS', engine: 'GoogleAnalytics' },
         partial: true,
+        wordmark: 'https://example.com/images/wordmark.svg',
       },
       items: [
         {
@@ -633,6 +634,7 @@ describe('generate', () => {
               width: 408,
               height: 230,
             },
+            featuredVisual: 'https://example.com/images/featured.jpg',
           },
         },
       ],
@@ -649,9 +651,11 @@ describe('generate', () => {
     <webfeeds:related layout="card" target="browser"/>
     <webfeeds:analytics id="G-E1P00P5NYS" engine="GoogleAnalytics"/>
     <webfeeds:partial>true</webfeeds:partial>
+    <webfeeds:wordmark>https://example.com/images/wordmark.svg</webfeeds:wordmark>
     <item>
       <title>Item with a featured image</title>
       <webfeeds:featuredImage url="https://example.com/images/featured.svg" type="image/svg" width="408" height="230"/>
+      <webfeeds:featuredVisual>https://example.com/images/featured.jpg</webfeeds:featuredVisual>
     </item>
   </channel>
 </rss>

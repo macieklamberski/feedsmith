@@ -181,6 +181,7 @@ describe('generateFeed', () => {
       related: { layout: 'card', target: 'browser' },
       analytics: { id: 'G-E1P00P5NYS', engine: 'GoogleAnalytics' },
       partial: true,
+      wordmark: 'https://example.com/images/wordmark.svg',
     }
     const expected = {
       'webfeeds:cover': { '@image': 'https://example.com/images/cover.png' },
@@ -190,6 +191,7 @@ describe('generateFeed', () => {
       'webfeeds:related': { '@layout': 'card', '@target': 'browser' },
       'webfeeds:analytics': { '@id': 'G-E1P00P5NYS', '@engine': 'GoogleAnalytics' },
       'webfeeds:partial': true,
+      'webfeeds:wordmark': 'https://example.com/images/wordmark.svg',
     }
 
     expect(generateFeed(value)).toEqual(expected)
@@ -283,6 +285,17 @@ describe('generateItem', () => {
         '@width': 408,
         '@height': 230,
       },
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
+  it('should generate item with featured visual', () => {
+    const value = {
+      featuredVisual: 'https://example.com/images/featured.jpg',
+    }
+    const expected = {
+      'webfeeds:featuredVisual': 'https://example.com/images/featured.jpg',
     }
 
     expect(generateItem(value)).toEqual(expected)

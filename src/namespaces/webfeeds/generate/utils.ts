@@ -74,6 +74,7 @@ export const generateFeed: GenerateUtil<WebfeedsNs.Feed> = (feed) => {
     'webfeeds:related': generateRelated(feed.related),
     'webfeeds:analytics': generateAnalytics(feed.analytics),
     'webfeeds:partial': generateBoolean(feed.partial),
+    'webfeeds:wordmark': generateCdataString(feed.wordmark),
   }
 
   return trimObject(value)
@@ -86,6 +87,7 @@ export const generateItem: GenerateUtil<WebfeedsNs.Item> = (item) => {
 
   const value = {
     'webfeeds:featuredImage': generateFeaturedImage(item.featuredImage),
+    'webfeeds:featuredVisual': generateCdataString(item.featuredVisual),
   }
 
   return trimObject(value)

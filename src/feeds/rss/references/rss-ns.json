@@ -781,7 +781,8 @@
           "type": "image/jpeg",
           "width": 1200,
           "height": 630
-        }
+        },
+        "featuredVisual": "https://example.com/images/featured.jpg"
       },
       "arxiv": {
         "comment": "23 pages, 8 figures and 4 tables",
@@ -1765,7 +1766,8 @@
     "accentColor": "BE4825",
     "related": { "layout": "card", "target": "browser" },
     "analytics": { "id": "G-E1P00P5NYS", "engine": "GoogleAnalytics" },
-    "partial": true
+    "partial": true,
+    "wordmark": "https://example.com/images/wordmark.svg"
   },
   "opensearch": {
     "totalResults": 1000,

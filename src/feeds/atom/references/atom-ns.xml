@@ -257,6 +257,7 @@
   <webfeeds:related layout="card" target="browser"/>
   <webfeeds:analytics id="G-E1P00P5NYS" engine="GoogleAnalytics"/>
   <webfeeds:partial>true</webfeeds:partial>
+  <webfeeds:wordmark>https://example.com/images/wordmark.svg</webfeeds:wordmark>
 
   <!-- OpenSearch Namespace: Feed Level Tags -->
   <opensearch:totalResults>1000</opensearch:totalResults>
@@ -651,6 +652,7 @@
 
     <!-- WebFeeds Namespace: Entry Level Tags -->
     <webfeeds:featuredImage url="https://example.com/images/featured.jpg" type="image/jpeg" width="1200" height="630"/>
+    <webfeeds:featuredVisual>https://example.com/images/featured.jpg</webfeeds:featuredVisual>
 
     <!-- arXiv Namespace: Entry Level Tags -->
     <arxiv:comment>23 pages, 8 figures and 4 tables</arxiv:comment>

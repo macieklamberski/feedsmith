@@ -29,10 +29,12 @@ export namespace WebfeedsNs {
     related?: Related
     analytics?: Analytics
     partial?: boolean
+    wordmark?: string
   }
 
   export type Item = {
     featuredImage?: FeaturedImage
+    featuredVisual?: string
   }
 }
 // #endregion reference

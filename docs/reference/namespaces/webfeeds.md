@@ -17,8 +17,7 @@ The WebFeeds namespace carries Feedly's feed extensions: a cover image, icon, lo
       <td>
         No formal specification. The elements are documented by example in a Feedly blog post from 2015:<br>
         <a href="https://web.archive.org/web/20160811003109/https://blog.feedly.com/10-ways-to-optimize-your-feed-for-feedly/" target="_blank">10 Ways to Optimize Your Feed for Feedly</a> (Original, Web Archive)<br>
-        <a href="https://devhd.wordpress.com/2015/07/31/10-ways-to-optimize-your-feed-for-feedly/" target="_blank">10 Ways to Optimize Your Feed for Feedly</a> (Feedly)<br>
-        <a href="https://webfeeds.org/rss/1.0" target="_blank">WebFeeds RSS 1.0 Namespace Specification</a> (WebFeeds.org, unattributed)
+        <a href="https://devhd.wordpress.com/2015/07/31/10-ways-to-optimize-your-feed-for-feedly/" target="_blank">10 Ways to Optimize Your Feed for Feedly</a> (Feedly)
       </td>
     </tr>
     <tr>
@@ -41,7 +40,9 @@ The WebFeeds namespace carries Feedly's feed extensions: a cover image, icon, lo
 The blog post shows each element in sample markup only, so these parts come from live feeds, not from a document:
 
 - `webfeeds:partial` on the channel, a `true` or `false` value.
+- `webfeeds:wordmark` on the channel, an image URL.
 - `webfeeds:featuredImage` on items, with `url`, `type`, `width` and `height` attributes.
+- `webfeeds:featuredVisual` on items, an image URL.
 - The value types of every element, including the numeric `width` and `height`.
 
 ## Types

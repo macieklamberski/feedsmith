@@ -195,6 +195,7 @@ describe('retrieveFeed', () => {
     related: { layout: 'card', target: 'browser' },
     analytics: { id: 'G-E1P00P5NYS', engine: 'GoogleAnalytics' },
     partial: true,
+    wordmark: 'https://example.com/images/wordmark.svg',
   }
 
   it('should parse all feed properties (with #text)', () => {
@@ -206,6 +207,7 @@ describe('retrieveFeed', () => {
       'webfeeds:related': { '@layout': 'card', '@target': 'browser' },
       'webfeeds:analytics': { '@id': 'G-E1P00P5NYS', '@engine': 'GoogleAnalytics' },
       'webfeeds:partial': { '#text': 'true' },
+      'webfeeds:wordmark': { '#text': 'https://example.com/images/wordmark.svg' },
     }
 
     expect(retrieveFeed(value)).toEqual(expectedFull)
@@ -220,6 +222,7 @@ describe('retrieveFeed', () => {
       'webfeeds:related': { '@layout': 'card', '@target': 'browser' },
       'webfeeds:analytics': { '@id': 'G-E1P00P5NYS', '@engine': 'GoogleAnalytics' },
       'webfeeds:partial': 'true',
+      'webfeeds:wordmark': 'https://example.com/images/wordmark.svg',
     }
 
     expect(retrieveFeed(value)).toEqual(expectedFull)
@@ -237,6 +240,7 @@ describe('retrieveFeed', () => {
       'webfeeds:related': [{ '@layout': 'card', '@target': 'browser' }],
       'webfeeds:analytics': [{ '@id': 'G-E1P00P5NYS', '@engine': 'GoogleAnalytics' }],
       'webfeeds:partial': ['true', 'false'],
+      'webfeeds:wordmark': ['https://example.com/images/wordmark.svg'],
     }
 
     expect(retrieveFeed(value)).toEqual(expectedFull)
@@ -340,6 +344,36 @@ describe('retrieveItem', () => {
     }
 
     expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse featured visual', () => {
+    const value = {
+      'webfeeds:featuredvisual': { '#text': 'https://example.com/images/featured.jpg' },
+    }
+    const expected = {
+      featuredVisual: 'https://example.com/images/featured.jpg',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should parse featured visual wrapped in CDATA', () => {
+    const value = {
+      'webfeeds:featuredvisual': { '#text': '<![CDATA[https://example.com/images/featured.jpg]]>' },
+    }
+    const expected = {
+      featuredVisual: 'https://example.com/images/featured.jpg',
+    }
+
+    expect(retrieveItem(value)).toEqual(expected)
+  })
+
+  it('should return undefined for whitespace-only featured visual', () => {
+    const value = {
+      'webfeeds:featuredvisual': { '#text': '   ' },
+    }
+
+    expect(retrieveItem(value)).toBeUndefined()
   })
 
   it('should parse featured image from array (uses first)', () => {

@@ -1738,6 +1738,7 @@ describe('parseItem', () => {
         '@width': '408',
         '@type': 'image/svg',
       },
+      'webfeeds:featuredvisual': { '#text': 'https://example.com/images/featured.jpg' },
     }
     const expected = {
       title: 'Example Item',
@@ -1748,6 +1749,7 @@ describe('parseItem', () => {
           width: 408,
           height: 230,
         },
+        featuredVisual: 'https://example.com/images/featured.jpg',
       },
     }
 

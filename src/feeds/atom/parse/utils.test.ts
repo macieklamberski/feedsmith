@@ -2212,6 +2212,7 @@ describe('parseFeed', () => {
       title: { '#text': 'Example Feed' },
       'webfeeds:logo': { '#text': 'https://example.com/images/logo.svg' },
       'webfeeds:analytics': { '@id': 'G-E1P00P5NYS', '@engine': 'GoogleAnalytics' },
+      'webfeeds:wordmark': { '#text': 'https://example.com/images/wordmark.svg' },
     }
     const expected = {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
@@ -2219,6 +2220,7 @@ describe('parseFeed', () => {
       webfeeds: {
         logo: 'https://example.com/images/logo.svg',
         analytics: { id: 'G-E1P00P5NYS', engine: 'GoogleAnalytics' },
+        wordmark: 'https://example.com/images/wordmark.svg',
       },
     }
 
