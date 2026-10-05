@@ -497,6 +497,18 @@ describe('generateExchangeRate', () => {
     expect(generateExchangeRate(value)).toEqual(expected)
   })
 
+  it('should not generate baseCurrency with only baseCurrencyUnitMult', () => {
+    const value = {
+      baseCurrencyUnitMult: 2,
+      targetCurrency: 'CHF',
+    }
+    const expected = {
+      'cb:targetCurrency': 'CHF',
+    }
+
+    expect(generateExchangeRate(value)).toEqual(expected)
+  })
+
   it('should handle empty object', () => {
     expect(generateExchangeRate({})).toBeUndefined()
   })

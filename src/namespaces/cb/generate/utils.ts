@@ -207,19 +207,31 @@ export const generateObservationPeriod: GenerateUtil<CbNs.ObservationPeriod> = (
   return trimObject(value)
 }
 
+// unit_mult only qualifies the currency code, so it is not written without one.
+export const generateBaseCurrency: GenerateUtil<CbNs.ExchangeRate> = (exchangeRate) => {
+  const baseCurrency = generateTextOrCdataString(exchangeRate?.baseCurrency)
+
+  if (!baseCurrency) {
+    return
+  }
+
+  const value = {
+    '@unit_mult': generateNumber(exchangeRate?.baseCurrencyUnitMult),
+    ...baseCurrency,
+  }
+
+  return trimObject(value)
+}
+
 export const generateExchangeRate: GenerateUtil<CbNs.ExchangeRate> = (exchangeRate) => {
   if (!isPlainObject(exchangeRate)) {
     return
   }
 
-  const baseCurrency = {
-    '@unit_mult': generateNumber(exchangeRate.baseCurrencyUnitMult),
-    ...generateTextOrCdataString(exchangeRate.baseCurrency),
-  }
   const value = {
     'cb:value': generateValue(exchangeRate.value),
     'cb:observation': generateObservation(exchangeRate.observation),
-    'cb:baseCurrency': trimObject(baseCurrency),
+    'cb:baseCurrency': generateBaseCurrency(exchangeRate),
     'cb:targetCurrency': generateCdataString(exchangeRate.targetCurrency),
     'cb:rateType': generateCdataString(exchangeRate.rateType),
     'cb:observationPeriod': generateObservationPeriod(exchangeRate.observationPeriod),
