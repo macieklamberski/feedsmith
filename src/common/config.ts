@@ -93,6 +93,7 @@ import {
   uris as spotifyUris,
 } from '../namespaces/spotify/common/config.js'
 import { stopNodes as syStopNodes, uris as syUris } from '../namespaces/sy/common/config.js'
+import { stopNodes as taxoStopNodes, uris as taxoUris } from '../namespaces/taxo/common/config.js'
 import { stopNodes as thrStopNodes, uris as thrUris } from '../namespaces/thr/common/config.js'
 import {
   stopNodes as trackbackStopNodes,
@@ -144,6 +145,7 @@ export const namespaceUris = {
   sy: syUris,
   content: contentUris,
   slash: slashUris,
+  taxo: taxoUris,
   itunes: itunesUris,
   podcast: podcastUris,
   psc: pscUris,
@@ -216,6 +218,7 @@ export const namespaceStopNodes = [
   ...sourceStopNodes,
   ...spotifyStopNodes,
   ...syStopNodes,
+  ...taxoStopNodes,
   ...thrStopNodes,
   ...trackbackStopNodes,
   ...wfwStopNodes,

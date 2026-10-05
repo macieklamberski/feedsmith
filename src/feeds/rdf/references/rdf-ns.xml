@@ -9,6 +9,7 @@
   xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
   xmlns:content="http://purl.org/rss/1.0/modules/content/"
   xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+  xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/"
   xmlns:media="http://search.yahoo.com/mrss/"
   xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0"
   xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
@@ -116,6 +117,13 @@
     <sy:updateBase>2000-01-01T12:00+00:00</sy:updateBase>
     <sy:updatePeriod>hourly</sy:updatePeriod>
     <sy:updateFrequency>1</sy:updateFrequency>
+
+    <!-- Taxonomy Namespace: Channel Level Tags -->
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li rdf:resource="http://example.org/topics/web"/>
+      </rdf:Bag>
+    </taxo:topics>
 
     <!-- Media Namespace: Item/Feed Level Tags -->
     <media:content url="https://example.com/videos/sample1.mp4" fileSize="12345678" type="video/mp4" medium="video" isDefault="true" expression="full" bitrate="1500" framerate="30" samplingrate="44.1" channels="2" duration="120" height="720" width="1280" lang="en">
@@ -369,6 +377,14 @@
     <slash:comments>177</slash:comments>
     <slash:hit_parade>177,155,105,33,6,3,0</slash:hit_parade>
 
+    <!-- Taxonomy Namespace: Item Level Tags -->
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li rdf:resource="http://example.org/topics/web"/>
+        <rdf:li rdf:resource="http://example.org/topics/xml"/>
+      </rdf:Bag>
+    </taxo:topics>
+
     <!-- Media Namespace: Item/Feed Level Tags -->
     <media:content url="https://example.com/videos/sample1.mp4" fileSize="12345678" type="video/mp4" medium="video" isDefault="true" expression="full" bitrate="1500" framerate="30" samplingrate="44.1" channels="2" duration="120" height="720" width="1280" lang="en">
       <media:title type="plain">Sample Video Title</media:title>
@@ -523,4 +539,17 @@
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
   </item>
+
+  <!-- Taxonomy Namespace: Root Level Tags -->
+  <taxo:topic rdf:about="http://example.org/topics/web">
+    <taxo:link>http://example.org/topics/web</taxo:link>
+  </taxo:topic>
+  <taxo:topic rdf:about="http://example.org/topics/xml">
+    <taxo:link>http://example.org/topics/xml</taxo:link>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li rdf:resource="http://example.org/topics/web"/>
+      </rdf:Bag>
+    </taxo:topics>
+  </taxo:topic>
 </rdf:RDF>

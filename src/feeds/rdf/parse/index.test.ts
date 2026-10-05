@@ -1412,6 +1412,76 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with taxo namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/"
+      >
+        <channel rdf:about="https://example.com">
+          <title>Feed with Taxonomy namespace</title>
+          <link>https://example.com</link>
+          <description>Test feed with Taxonomy namespace</description>
+          <taxo:topics>
+            <rdf:Bag>
+              <rdf:li rdf:resource="https://example.com/category/xml"/>
+            </rdf:Bag>
+          </taxo:topics>
+          <items>
+            <rdf:Seq>
+              <rdf:li rdf:resource="https://example.com/item1"/>
+            </rdf:Seq>
+          </items>
+        </channel>
+        <item rdf:about="https://example.com/item1">
+          <title>Bookmark with tags</title>
+          <link>https://example.com/item1</link>
+          <taxo:topics><rdf:Bag>	<rdf:li rdf:resource="https://example.com/u:user/t:rss"/>
+	<rdf:li rdf:resource="https://example.com/u:user/t:xml"/>
+</rdf:Bag></taxo:topics>
+        </item>
+        <taxo:topic rdf:about="https://example.com/category/xml">
+          <taxo:link>https://example.com/category/xml</taxo:link>
+          <taxo:topics>
+            <rdf:Bag>
+              <rdf:li rdf:resource="https://example.com/category/sgml"/>
+            </rdf:Bag>
+          </taxo:topics>
+        </taxo:topic>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with Taxonomy namespace',
+      link: 'https://example.com',
+      description: 'Test feed with Taxonomy namespace',
+      rdf: { about: 'https://example.com' },
+      items: [
+        {
+          title: 'Bookmark with tags',
+          link: 'https://example.com/item1',
+          rdf: { about: 'https://example.com/item1' },
+          taxo: {
+            topics: ['https://example.com/u:user/t:rss', 'https://example.com/u:user/t:xml'],
+          },
+        },
+      ],
+      taxo: {
+        topics: ['https://example.com/category/xml'],
+        topicDefinitions: [
+          {
+            about: 'https://example.com/category/xml',
+            link: 'https://example.com/category/xml',
+            topics: ['https://example.com/category/sgml'],
+          },
+        ],
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with media namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>

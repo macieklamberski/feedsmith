@@ -21,6 +21,7 @@ import type { PrismNs } from '../../../namespaces/prism/common/types.js'
 import type { RdfNs } from '../../../namespaces/rdf/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
 import type { SyNs } from '../../../namespaces/sy/common/types.js'
+import type { TaxoNs } from '../../../namespaces/taxo/common/types.js'
 import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 import type { XmlNs } from '../../../namespaces/xml/common/types.js'
@@ -64,6 +65,7 @@ export namespace RdfFeed {
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       content?: ContentNs.Item
       slash?: SlashNs.Item
+      taxo?: TaxoNs.ItemOrFeed
       media?: MediaNs.ItemOrFeed<TStrict>
       feedburner?: FeedBurnerNs.Item
       prism?: PrismNs.ItemOrFeed<TDate>
@@ -91,6 +93,7 @@ export namespace RdfFeed {
       dc?: DcNs.ItemOrFeed<TDate>
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       sy?: SyNs.Feed<TDate>
+      taxo?: TaxoNs.Feed
       media?: MediaNs.ItemOrFeed<TStrict>
       feedburner?: FeedBurnerNs.Feed<TStrict>
       opensearch?: OpenSearchNs.Feed<TStrict>
