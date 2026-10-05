@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import {
   createNamespaceSetter,
+  generateAuthor,
   generateCategory,
   generateContent,
   generateEntry,
@@ -406,6 +407,44 @@ describe('generateLink', () => {
     }
 
     expect(generateLink(value)).toEqual(expected)
+  })
+})
+
+describe('generateAuthor', () => {
+  it('should generate person properties', () => {
+    const value = {
+      name: 'balleyne',
+      uri: 'https://example.com/user/1',
+    }
+    const expected = {
+      name: 'balleyne',
+      uri: 'https://example.com/user/1',
+    }
+
+    expect(generateAuthor(value)).toEqual(expected)
+  })
+
+  it('should generate activity namespace properties', () => {
+    const value = {
+      name: 'balleyne',
+      activity: {
+        objectType: 'http://activitystrea.ms/schema/1.0/person',
+      },
+    }
+    const expected = {
+      name: 'balleyne',
+      'activity:object-type': 'http://activitystrea.ms/schema/1.0/person',
+    }
+
+    expect(generateAuthor(value)).toEqual(expected)
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateAuthor('string')).toBeUndefined()
+    expect(generateAuthor(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateAuthor(null)).toBeUndefined()
   })
 })
 
@@ -1167,6 +1206,40 @@ describe('generateEntry', () => {
       'activity:object': {
         'activity:object-type': 'http://activitystrea.ms/schema/1.0/blog-entry',
       },
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
+  it('should write activity object type on authors but not on contributors', () => {
+    const value = {
+      id: 'https://example.com/notice/1649',
+      title: { value: 'Entry with Activity Streams people' },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      authors: [
+        {
+          name: 'balleyne',
+          activity: { objectType: 'http://activitystrea.ms/schema/1.0/person' },
+        },
+      ],
+      contributors: [
+        {
+          name: 'jk',
+          activity: { objectType: 'http://activitystrea.ms/schema/1.0/person' },
+        },
+      ],
+    }
+    const expected = {
+      author: [
+        {
+          name: 'balleyne',
+          'activity:object-type': 'http://activitystrea.ms/schema/1.0/person',
+        },
+      ],
+      contributor: [{ name: 'jk' }],
+      id: 'https://example.com/notice/1649',
+      title: { '#text': 'Entry with Activity Streams people' },
+      updated: '2023-03-15T12:00:00.000Z',
     }
 
     expect(generateEntry(value)).toEqual(expected)

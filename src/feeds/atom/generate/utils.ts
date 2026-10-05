@@ -206,7 +206,20 @@ export const generatePerson: GenerateUtil<AtomFeed.Person> = (person, options) =
     [key('uri')]: generateCdataString(person.uri),
     [key('email')]: generateCdataString(person.email),
     ...generateArxivAuthor(person.arxiv),
-    ...generateActivityPerson(person.activity),
+  }
+
+  return trimObject(value)
+}
+
+// Activity Streams writes the actor's object type on atom:author only, per its section 3.2.3.
+export const generateAuthor: GenerateUtil<AtomFeed.Person> = (author, options) => {
+  if (!isPlainObject(author)) {
+    return
+  }
+
+  const value = {
+    ...generatePerson(author, options),
+    ...generateActivityPerson(author.activity),
   }
 
   return trimObject(value)
@@ -247,7 +260,7 @@ export const generateSource: GenerateUtil<AtomFeed.Source<DateLike>> = (source, 
 
   const key = createNamespaceSetter(options?.prefix)
   const value = {
-    [key('author')]: trimArray(source.authors, (author) => generatePerson(author, options)),
+    [key('author')]: trimArray(source.authors, (author) => generateAuthor(author, options)),
     [key('category')]: trimArray(source.categories, (category) =>
       generateCategory(category, options),
     ),
@@ -275,7 +288,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
 
   const key = createNamespaceSetter(options?.prefix)
   const value = {
-    [key('author')]: trimArray(entry.authors, (author) => generatePerson(author, options)),
+    [key('author')]: trimArray(entry.authors, (author) => generateAuthor(author, options)),
     [key('category')]: trimArray(entry.categories, generateCategory),
     [key('content')]: generateContent(entry.content),
     [key('contributor')]: trimArray(entry.contributors, (contributor) =>
@@ -333,7 +346,7 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
 
   const key = createNamespaceSetter(options?.prefix)
   const feedValue = {
-    [key('author')]: trimArray(feed.authors, (author) => generatePerson(author, options)),
+    [key('author')]: trimArray(feed.authors, (author) => generateAuthor(author, options)),
     [key('category')]: trimArray(feed.categories, (category) =>
       generateCategory(category, options),
     ),

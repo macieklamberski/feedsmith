@@ -2,6 +2,7 @@ import { describe, expect, it } from 'bun:test'
 import {
   createNamespaceGetter,
   escapeCdataSections,
+  parseAuthor,
   parseCategory,
   parseContent,
   parseEntry,
@@ -958,6 +959,40 @@ describe('parsePerson', () => {
     expect(parsePerson(value)).toEqual(expected)
   })
 
+  it('should ignore activity namespace', () => {
+    const value = {
+      'activity:object-type': { '#text': 'http://activitystrea.ms/schema/1.0/person' },
+      name: { '#text': 'balleyne' },
+    }
+    const expected = {
+      name: 'balleyne',
+    }
+
+    expect(parsePerson(value)).toEqual(expected)
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(parsePerson('not an object')).toBeUndefined()
+    expect(parsePerson(undefined)).toBeUndefined()
+    expect(parsePerson(null)).toBeUndefined()
+    expect(parsePerson([])).toBeUndefined()
+  })
+})
+
+describe('parseAuthor', () => {
+  it('should parse person properties', () => {
+    const value = {
+      name: { '#text': 'balleyne' },
+      uri: { '#text': 'https://example.com/user/1' },
+    }
+    const expected = {
+      name: 'balleyne',
+      uri: 'https://example.com/user/1',
+    }
+
+    expect(parseAuthor(value)).toEqual(expected)
+  })
+
   it('should handle activity namespace', () => {
     const value = {
       'activity:object-type': { '#text': 'http://activitystrea.ms/schema/1.0/person' },
@@ -972,14 +1007,14 @@ describe('parsePerson', () => {
       },
     }
 
-    expect(parsePerson(value)).toEqual(expected)
+    expect(parseAuthor(value)).toEqual(expected)
   })
 
   it('should return undefined for non-object input', () => {
-    expect(parsePerson('not an object')).toBeUndefined()
-    expect(parsePerson(undefined)).toBeUndefined()
-    expect(parsePerson(null)).toBeUndefined()
-    expect(parsePerson([])).toBeUndefined()
+    expect(parseAuthor('not an object')).toBeUndefined()
+    expect(parseAuthor(undefined)).toBeUndefined()
+    expect(parseAuthor(null)).toBeUndefined()
+    expect(parseAuthor([])).toBeUndefined()
   })
 })
 
@@ -1835,6 +1870,34 @@ describe('parseEntry', () => {
           },
         },
       },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
+  it('should read activity object type on authors but not on contributors', () => {
+    const value = {
+      id: { '#text': 'https://example.com/notice/1649' },
+      author: {
+        name: { '#text': 'balleyne' },
+        'activity:object-type': { '#text': 'http://activitystrea.ms/schema/1.0/person' },
+      },
+      contributor: {
+        name: { '#text': 'jk' },
+        'activity:object-type': { '#text': 'http://activitystrea.ms/schema/1.0/person' },
+      },
+    }
+    const expected = {
+      id: 'https://example.com/notice/1649',
+      authors: [
+        {
+          name: 'balleyne',
+          activity: {
+            objectType: 'http://activitystrea.ms/schema/1.0/person',
+          },
+        },
+      ],
+      contributors: [{ name: 'jk' }],
     }
 
     expect(parseEntry(value)).toEqual(expected)

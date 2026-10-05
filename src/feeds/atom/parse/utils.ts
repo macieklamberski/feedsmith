@@ -377,10 +377,24 @@ export const parsePerson: ParseUtilPartial<AtomFeed.Person> = (value, options) =
     uri: retrievePersonUri(value, options),
     email: parseSingularOf(get('email'), (value) => parseString(retrieveText(value))),
     arxiv: namespaces?.has('arxiv') ? retrieveArxivAuthor(value) : undefined,
-    activity: namespaces?.has('activity') ? retrieveActivityPerson(value) : undefined,
   }
 
   return trimObject(person)
+}
+
+// Activity Streams reads the actor's object type from atom:author only, per its section 3.2.3.
+export const parseAuthor: ParseUtilPartial<AtomFeed.Person> = (value, options) => {
+  if (!isPlainObject(value)) {
+    return
+  }
+
+  const namespaces = options?.asNamespace ? undefined : detectNamespaces(value)
+  const author = {
+    ...parsePerson(value, options),
+    activity: namespaces?.has('activity') ? retrieveActivityPerson(value) : undefined,
+  }
+
+  return trimObject(author)
 }
 
 export const parseCategory: ParseUtilPartial<AtomFeed.Category> = (value) => {
@@ -425,7 +439,7 @@ export const parseSource: ParseUtilPartial<AtomFeed.Source<DateAny>> = (value, o
 
   const get = createNamespaceGetter(value, options?.prefix)
   const source = {
-    authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
+    authors: parseArrayOf(get('author'), (value) => parseAuthor(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
     generator: parseSingularOf(get('generator'), (value) => parseGenerator(value, options)),
@@ -502,7 +516,7 @@ export const parseEntry: ParseUtilPartial<AtomFeed.Entry<DateAny>> = (value, opt
   const namespaces = options?.asNamespace ? undefined : detectNamespaces(value)
   const get = createNamespaceGetter(value, options?.prefix)
   const entry = {
-    authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
+    authors: parseArrayOf(get('author'), (value) => parseAuthor(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     content: parseSingularOf(get('content'), (value) => parseContent(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
@@ -551,7 +565,7 @@ export const parseFeed: ParseUtilPartial<AtomFeed.Feed<DateAny>> = (value, optio
   const namespaces = options?.asNamespace ? undefined : detectNamespaces(value)
   const get = createNamespaceGetter(value, options?.prefix)
   const feed = {
-    authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
+    authors: parseArrayOf(get('author'), (value) => parseAuthor(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
     generator: parseSingularOf(get('generator'), (value) => parseGenerator(value, options)),
