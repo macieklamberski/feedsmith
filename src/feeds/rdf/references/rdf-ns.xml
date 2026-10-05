@@ -18,6 +18,7 @@
   xmlns:admin="http://webns.net/mvcb/"
   xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
   xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+  xmlns:activity="http://activitystrea.ms/spec/1.0/"
   xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
   xmlns:georss="http://www.georss.org/georss"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -504,6 +505,10 @@
     <trackback:ping rdf:resource="https://example.com/trackback/123"/>
     <trackback:about rdf:resource="https://blog1.com/trackback/456"/>
     <trackback:about rdf:resource="https://blog2.com/trackback/789"/>
+
+    <!-- Activity Streams Namespace: Item Level Tags -->
+    <activity:verb>http://activitystrea.ms/schema/1.0/post</activity:verb>
+    <activity:object-type>http://activitystrea.ms/schema/1.0/blog-entry</activity:object-type>
 
     <!-- W3C Basic Geo Namespace: Item Level Tags -->
     <geo:lat>37.8199</geo:lat>

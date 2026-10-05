@@ -22,7 +22,7 @@ The Activity Streams namespace describes an entry as an activity, with the verb 
     </tr>
     <tr>
       <th>Available in</th>
-      <td><a href="/reference/feeds/rss">RSS</a>, <a href="/reference/feeds/atom">Atom</a></td>
+      <td><a href="/reference/feeds/rss">RSS</a>, <a href="/reference/feeds/atom">Atom</a>, <a href="/reference/feeds/rdf">RDF</a></td>
     </tr>
     <tr>
       <th>Property</th>
@@ -31,7 +31,7 @@ The Activity Streams namespace describes an entry as an activity, with the verb 
   </tbody>
 </table>
 
-The specification defines `activity:verb` and `activity:object-type` on an RSS item, and `activity:verb`, `activity:object-type`, `activity:object` and `activity:target` on an Atom entry. On `atom:author` it defines `activity:object-type`, parsed into `activity` on the person.
+The specification defines `activity:verb` and `activity:object-type` on an RSS item, read from RSS 2.0 and RSS 1.0 items alike, and `activity:verb`, `activity:object-type`, `activity:object` and `activity:target` on an Atom entry. On `atom:author` it defines `activity:object-type`, parsed into `activity` on the person.
 
 Inferred from live feeds, not read from the specification:
 
