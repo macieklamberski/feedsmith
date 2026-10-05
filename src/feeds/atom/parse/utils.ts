@@ -41,6 +41,7 @@ import {
   retrieveFeed as retrievePingbackFeed,
   retrieveItem as retrievePingbackItem,
 } from '../../../namespaces/pingback/parse/utils.js'
+import { retrieveItemOrFeed as retrievePrismItemOrFeed } from '../../../namespaces/prism/parse/utils.js'
 import { retrieveItem as retrievePscItem } from '../../../namespaces/psc/parse/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
@@ -162,12 +163,14 @@ export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
   return inner
 }
 
+const xhtmlTypes = ['xhtml', 'application/xhtml+xml']
+
 // The wrapper div is excluded from the content (RFC 4287 §3.1.1.3), so xml:base and xml:lang
 // declared on it would vanish with it. They are read here through the same mini-parse that located
 // the wrapper, only when it was actually stripped: a value kept verbatim still carries its div,
 // declarations included. Atom 0.3 spelled the construct type as `application/xhtml+xml`.
 const isXhtmlType = (type: string | undefined): boolean => {
-  return type === 'xhtml' || type === 'application/xhtml+xml'
+  return type !== undefined && xhtmlTypes.includes(type)
 }
 
 export const retrieveXhtmlDivXml = (
@@ -355,7 +358,7 @@ export const retrievePersonUri: ParseUtilPartial<string> = (value, options) => {
   const uri = parseSingularOf(get('uri'), (value) => parseString(retrieveText(value))) // Atom 1.0
   const url = parseSingularOf(get('url'), (value) => parseString(retrieveText(value))) // Atom 0.3
 
-  return uri || url
+  return uri ?? url
 }
 
 export const parsePerson: ParseUtilPartial<AtomFeed.Person> = (value, options) => {
@@ -397,7 +400,7 @@ export const retrieveGeneratorUri: ParseUtilPartial<string> = (value) => {
   const uri = parseString(value['@uri']) // Atom 1.0
   const url = parseString(value['@url']) // Atom 0.3
 
-  return uri || url
+  return uri ?? url
 }
 
 export const parseGenerator: ParseUtilPartial<AtomFeed.Generator> = (value) => {
@@ -453,6 +456,7 @@ export const retrievePublished: ParseUtilPartial<DateAny> = (value, options) => 
   // The "created" date is not entirely valid as "published date", but if it's there when no other
   // date is present, it's a good-enough fallback especially that it's not present in 1.0 version of
   // the specfication.
+  // biome-ignore lint/nursery/useNullishCoalescing: A custom parseDateFn can return a falsy date, which falls through to the Atom 0.3 one.
   return published || issued || created
 }
 
@@ -469,6 +473,7 @@ export const retrieveUpdated: ParseUtilPartial<DateAny> = (value, options) => {
     parseDate(retrieveText(value), options?.parseDateFn),
   ) // Atom 0.3.
 
+  // biome-ignore lint/nursery/useNullishCoalescing: A custom parseDateFn can return a falsy date, which falls through to the Atom 0.3 one.
   return updated || modified
 }
 
@@ -481,7 +486,7 @@ export const retrieveSubtitle: ParseUtilPartial<AtomFeed.Text> = (value, options
   const subtitle = parseSingularOf(get('subtitle'), parseText) // Atom 1.0
   const tagline = parseSingularOf(get('tagline'), parseText) // Atom 0.3
 
-  return subtitle || tagline
+  return subtitle ?? tagline
 }
 
 export const parseEntry: ParseUtilPartial<AtomFeed.Entry<DateAny>> = (value, options) => {
@@ -513,6 +518,7 @@ export const parseEntry: ParseUtilPartial<AtomFeed.Entry<DateAny>> = (value, opt
     googleplay: namespaces?.has('googleplay') ? retrieveGooglePlayItem(value) : undefined,
     feedburner: namespaces?.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
     arxiv: namespaces?.has('arxiv') ? retrieveArxivEntry(value) : undefined,
+    prism: namespaces?.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
     cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     creativeCommons: namespaces?.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(value)
@@ -560,6 +566,7 @@ export const parseFeed: ParseUtilPartial<AtomFeed.Feed<DateAny>> = (value, optio
     googleplay: namespaces?.has('googleplay') ? retrieveGooglePlayFeed(value) : undefined,
     feedburner: namespaces?.has('feedburner') ? retrieveFeedBurnerFeed(value) : undefined,
     opensearch: namespaces?.has('opensearch') ? retrieveOpenSearchFeed(value) : undefined,
+    prism: namespaces?.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
     cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
     creativeCommons: namespaces?.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(value)
@@ -581,5 +588,5 @@ export const retrieveFeed: ParseUtilPartial<AtomFeed.Feed<DateAny>> = (value, op
     parseFeed(value, { ...options, prefix: 'atom:' }),
   )
 
-  return notNamespaced || namespaced
+  return notNamespaced ?? namespaced
 }

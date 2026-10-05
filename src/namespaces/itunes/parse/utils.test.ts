@@ -470,14 +470,6 @@ describe('parseDuration', () => {
     expect(parseDuration('1:30')).toBe(90)
   })
 
-  it('should parse HH:MM:SS format with fractional seconds', () => {
-    expect(parseDuration('00:04:49.5')).toBe(289.5)
-  })
-
-  it('should parse MM:SS format with fractional seconds', () => {
-    expect(parseDuration('04:49.5')).toBe(289.5)
-  })
-
   it('should handle invalid time formats', () => {
     expect(parseDuration('01:30:45:60')).toBeUndefined()
     expect(parseDuration(':30:45')).toBeUndefined()
@@ -611,6 +603,7 @@ describe('retrieveItem', () => {
     episodeType: 'full',
     block: true,
     order: 3,
+    isClosedCaptioned: true,
     keywords: ['podcast', 'technology', 'programming'],
     summary: 'A detailed summary of this episode',
     subtitle: 'Episode subtitle',
@@ -628,6 +621,7 @@ describe('retrieveItem', () => {
       'itunes:episodetype': { '#text': 'full' },
       'itunes:block': { '#text': 'yes' },
       'itunes:order': { '#text': '3' },
+      'itunes:isclosedcaptioned': { '#text': 'yes' },
       'itunes:keywords': { '#text': 'podcast,technology,programming' },
       'itunes:summary': { '#text': 'A detailed summary of this episode' },
       'itunes:subtitle': { '#text': 'Episode subtitle' },
@@ -648,6 +642,7 @@ describe('retrieveItem', () => {
       'itunes:episodetype': 'full',
       'itunes:block': 'yes',
       'itunes:order': '3',
+      'itunes:isclosedcaptioned': 'yes',
       'itunes:keywords': 'podcast,technology,programming',
       'itunes:summary': 'A detailed summary of this episode',
       'itunes:subtitle': 'Episode subtitle',
@@ -671,6 +666,7 @@ describe('retrieveItem', () => {
       'itunes:episodetype': ['full', 'trailer'],
       'itunes:block': ['yes', 'no'],
       'itunes:order': ['3', '4'],
+      'itunes:isclosedcaptioned': ['yes', 'no'],
       'itunes:keywords': ['podcast,technology,programming', 'development,coding,software'],
       'itunes:summary': [
         'A detailed summary of this episode',

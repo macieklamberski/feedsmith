@@ -4863,7 +4863,7 @@ describe('parse', () => {
           {
             title: 'Item',
             prism: {
-              publicationDates: [new Date('2023-03-15T12:00:00Z')],
+              publicationDates: [{ value: new Date('2023-03-15T12:00:00Z') }],
               modificationDate: new Date('2023-03-16T12:00:00Z'),
             },
           },

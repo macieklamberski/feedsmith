@@ -1,6 +1,21 @@
 {
   "title": "Example Feed",
   "link": "http://example.org",
+  "image": {
+    "title": "Example Image",
+    "link": "http://example.org",
+    "url": "http://example.org/image.png",
+    "rdf": {
+      "about": "http://example.org/image.png"
+    },
+    "prism": {
+      "publicationName": "Nature",
+      "coverDate": "2023-03-15"
+    },
+    "cc": {
+      "license": "https://creativecommons.org/licenses/by-nd/4.0/"
+    }
+  },
   "items": [
     {
       "title": "Example Item",
@@ -474,13 +489,13 @@
       "prism": {
         "publicationName": "Nature",
         "doi": "10.1038/s41586-023-05842-x",
-        "urls": ["https://www.nature.com/articles/s41586-023-05842-x"],
+        "urls": [{ "value": "https://www.nature.com/articles/s41586-023-05842-x" }],
         "volume": "615",
         "number": "7952",
         "section": "Research",
         "startingPage": "425",
         "endingPage": "432",
-        "publicationDates": ["2023-03-15T00:00:00.000Z"]
+        "publicationDates": [{ "value": "2023-03-15T00:00:00.000Z" }]
       },
       "cc": {
         "license": "https://creativecommons.org/licenses/by-sa/4.0/",
@@ -490,9 +505,19 @@
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
       },
+      "pingback": {
+        "server": "https://example.com/xmlrpc.php",
+        "target": "https://referenced-blog.com/article",
+        "abouts": ["https://blog1.com/posts/xml-basics", "https://blog2.com/posts/namespaces"]
+      },
       "trackback": {
         "ping": "https://example.com/trackback/123",
         "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
+      },
+      "geo": {
+        "lat": 37.8199,
+        "long": -122.4783,
+        "alt": 67.0
       },
       "georss": {
         "point": {
@@ -1068,9 +1093,16 @@
     "totalResults": 1000,
     "startIndex": 21,
     "itemsPerPage": 10,
+    "link": {
+      "href": "http://example.com/opensearchdescription.xml",
+      "rel": "search",
+      "type": "application/opensearchdescription+xml"
+    },
     "queries": [
       {
         "role": "request",
+        "title": "Search results for quantum computing",
+        "totalResults": 1000,
         "searchTerms": "quantum computing",
         "startIndex": 21,
         "count": 10
@@ -1084,7 +1116,7 @@
     "volume": "615",
     "number": "7952",
     "coverDate": "2023-03-15T00:00:00.000Z",
-    "publicationDates": ["2023-03-15T00:00:00.000Z"]
+    "publicationDates": [{ "value": "2023-03-15T00:00:00.000Z" }]
   },
   "cc": {
     "license": "https://creativecommons.org/licenses/by/4.0/",
@@ -1120,6 +1152,11 @@
   "admin": {
     "errorReportsTo": "mailto:webmaster@example.com",
     "generatorAgent": "http://www.movabletype.org/?v=3.2"
+  },
+  "geo": {
+    "lat": 37.7749,
+    "long": -122.4194,
+    "alt": 10.5
   },
   "georss": {
     "point": {

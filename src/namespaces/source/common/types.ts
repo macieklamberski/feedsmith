@@ -43,6 +43,14 @@ export namespace SourceNs {
     TStrict
   >
 
+  export type Comments<TStrict extends boolean = false> = Strict<
+    {
+      count: Requirable<number> // Required in spec
+      feedUrl: Requirable<string> // Required in spec
+    },
+    TStrict
+  >
+
   export type Feed<TStrict extends boolean = false> = {
     accounts?: Array<Account<TStrict>>
     likes?: Likes<TStrict>
@@ -59,6 +67,7 @@ export namespace SourceNs {
     outlines?: Array<string>
     linkFull?: string
     inReplyTo?: InReplyTo<TStrict>
+    comments?: Comments<TStrict>
   }
 }
 // #endregion reference
