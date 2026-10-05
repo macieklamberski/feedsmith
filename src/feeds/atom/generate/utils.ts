@@ -78,7 +78,7 @@ export const createNamespaceSetter = (prefix: string | undefined) => {
 // leaves it not well-formed for strict parsers. Any other name-shaped reference is matched, since
 // flagging one too many only routes the value to the escaped fallback while missing one emits
 // markup that will not parse.
-const nonXmlEntityRegex = /&(?!(?:amp|lt|gt|quot|apos);|#\d+;|#x[0-9a-fA-F]+;)[^;\s&<]+;/
+export const nonXmlEntityRegex = /&(?!(?:amp|lt|gt|quot|apos);|#\d+;|#x[0-9a-fA-F]+;)[^;\s&<]+;/
 
 export const generateXhtmlValue: GenerateUtil<string> = (value) => {
   if (!isNonEmptyString(value)) {

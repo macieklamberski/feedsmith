@@ -330,6 +330,45 @@ describe('generateExtendedProperty', () => {
     expect(generateExtendedProperty(value)).toEqual(expected)
   })
 
+  it('should skip child XML with an entity XML cannot resolve', () => {
+    const value = {
+      name: 'com.example',
+      xml: '<some_xml>a&nbsp;b</some_xml>',
+    }
+    const expected = {
+      '@name': 'com.example',
+    }
+
+    expect(generateExtendedProperty(value)).toEqual(expected)
+  })
+
+  it('should keep a carriage return in child XML as a character reference', () => {
+    const value = {
+      name: 'com.example',
+      xml: '<some_xml>a\rb</some_xml>',
+    }
+    const expected = {
+      '@name': 'com.example',
+      '#text': '<some_xml>a&#13;b</some_xml>\n',
+    }
+
+    expect(generateExtendedProperty(value)).toEqual(expected)
+  })
+
+  it('should write value and skip child XML when both are set', () => {
+    const value = {
+      name: 'com.example',
+      value: 'pid-1',
+      xml: '<some_xml>value</some_xml>',
+    }
+    const expected = {
+      '@name': 'com.example',
+      '@value': 'pid-1',
+    }
+
+    expect(generateExtendedProperty(value)).toEqual(expected)
+  })
+
   it('should escape special characters in attributes', () => {
     const value = {
       name: 'blogger.itemClass',

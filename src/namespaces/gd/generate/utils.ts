@@ -13,6 +13,7 @@ import {
 import {
   generateEntry as generateAtomEntry,
   generateFeed as generateAtomFeed,
+  nonXmlEntityRegex,
 } from '../../../feeds/atom/generate/utils.js'
 import type { GdNs } from '../common/types.js'
 
@@ -45,9 +46,10 @@ const generateRawXml: GenerateUtil<string> = (value) => {
     return
   }
 
-  const xml = value.trim()
+  // A literal carriage return would be normalized away by the reading XML parser (XML §2.11).
+  const xml = value.trim().replace(/\r/g, '&#13;')
 
-  if (XMLValidator.validate(`<x>${xml}</x>`) !== true) {
+  if (XMLValidator.validate(`<x>${xml}</x>`) !== true || nonXmlEntityRegex.test(xml)) {
     return
   }
 
@@ -145,11 +147,13 @@ export const generateExtendedProperty: GenerateUtil<GdNs.ExtendedProperty> = (ex
     return
   }
 
+  const attributeValue = generateRawAttribute(extendedProperty.value)
   const value = {
     '@name': generateRawAttribute(extendedProperty.name),
-    '@value': generateRawAttribute(extendedProperty.value),
+    '@value': attributeValue,
     '@realm': generateRawAttribute(extendedProperty.realm),
-    '#text': generateRawXml(extendedProperty.xml),
+    // The schema makes child XML and the value attribute mutually exclusive.
+    '#text': attributeValue ? undefined : generateRawXml(extendedProperty.xml),
   }
 
   return trimObject(value)
