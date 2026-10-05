@@ -74,6 +74,26 @@ describe('generatePrice', () => {
     expect(generatePrice(value)).toEqual(expected)
   })
 
+  it('should handle empty strings', () => {
+    const value = {
+      value: 9.99,
+      currencyCode: '',
+    }
+    const expected = {
+      '#text': 9.99,
+    }
+
+    expect(generatePrice(value)).toEqual(expected)
+  })
+
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      currencyCode: '   ',
+    }
+
+    expect(generatePrice(value)).toBeUndefined()
+  })
+
   it('should return undefined for empty object', () => {
     const value = {}
 
@@ -86,6 +106,8 @@ describe('generatePrice', () => {
     // @ts-expect-error: This is for testing purposes.
     expect(generatePrice(123)).toBeUndefined()
     expect(generatePrice(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generatePrice([])).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
     expect(generatePrice(null)).toBeUndefined()
   })
@@ -219,6 +241,33 @@ describe('generateIndirectAcquisition', () => {
     expect(generateIndirectAcquisition(value)).toEqual(expected)
   })
 
+  it('should handle HTML entities in type', () => {
+    const value = {
+      type: 'application/atom+xml;profile="opds-catalog"&kind=acquisition',
+    }
+    const expected = {
+      '@type': 'application/atom+xml;profile="opds-catalog"&kind=acquisition',
+    }
+
+    expect(generateIndirectAcquisition(value)).toEqual(expected)
+  })
+
+  it('should handle empty strings', () => {
+    const value = {
+      type: '',
+    }
+
+    expect(generateIndirectAcquisition(value)).toBeUndefined()
+  })
+
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      type: '   ',
+    }
+
+    expect(generateIndirectAcquisition(value)).toBeUndefined()
+  })
+
   it('should return undefined for empty object', () => {
     const value = {}
 
@@ -231,6 +280,8 @@ describe('generateIndirectAcquisition', () => {
     // @ts-expect-error: This is for testing purposes.
     expect(generateIndirectAcquisition(123)).toBeUndefined()
     expect(generateIndirectAcquisition(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateIndirectAcquisition([])).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
     expect(generateIndirectAcquisition(null)).toBeUndefined()
   })
@@ -317,6 +368,24 @@ describe('generateAvailability', () => {
     expect(generateAvailability(value)).toEqual(expected)
   })
 
+  it('should handle empty strings', () => {
+    const value = {
+      status: '',
+      since: '',
+    }
+
+    expect(generateAvailability(value)).toBeUndefined()
+  })
+
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      status: '   ',
+      until: '\t\n',
+    }
+
+    expect(generateAvailability(value)).toBeUndefined()
+  })
+
   it('should return undefined for empty object', () => {
     const value = {}
 
@@ -329,6 +398,8 @@ describe('generateAvailability', () => {
     // @ts-expect-error: This is for testing purposes.
     expect(generateAvailability(123)).toBeUndefined()
     expect(generateAvailability(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateAvailability([])).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
     expect(generateAvailability(null)).toBeUndefined()
   })
@@ -396,6 +467,8 @@ describe('generateHolds', () => {
     expect(generateHolds(123)).toBeUndefined()
     expect(generateHolds(undefined)).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
+    expect(generateHolds([])).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
     expect(generateHolds(null)).toBeUndefined()
   })
 })
@@ -461,6 +534,8 @@ describe('generateCopies', () => {
     // @ts-expect-error: This is for testing purposes.
     expect(generateCopies(123)).toBeUndefined()
     expect(generateCopies(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateCopies([])).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
     expect(generateCopies(null)).toBeUndefined()
   })
@@ -575,6 +650,33 @@ describe('generateLink', () => {
     expect(generateLink(value)).toEqual(expected)
   })
 
+  it('should handle HTML entities in facetGroup', () => {
+    const value = {
+      facetGroup: 'Science & Nature',
+    }
+    const expected = {
+      '@opds:facetGroup': 'Science & Nature',
+    }
+
+    expect(generateLink(value)).toEqual(expected)
+  })
+
+  it('should handle empty strings', () => {
+    const value = {
+      facetGroup: '',
+    }
+
+    expect(generateLink(value)).toBeUndefined()
+  })
+
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      facetGroup: '   ',
+    }
+
+    expect(generateLink(value)).toBeUndefined()
+  })
+
   it('should return undefined for empty object', () => {
     const value = {}
 
@@ -587,6 +689,8 @@ describe('generateLink', () => {
     // @ts-expect-error: This is for testing purposes.
     expect(generateLink(123)).toBeUndefined()
     expect(generateLink(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateLink([])).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
     expect(generateLink(null)).toBeUndefined()
   })

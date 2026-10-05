@@ -87,6 +87,37 @@ describe('parsePrice', () => {
     expect(parsePrice(value)).toEqual(expected)
   })
 
+  it('should handle CDATA sections in the value', () => {
+    const value = {
+      '#text': '<![CDATA[12.50]]>',
+      '@currencycode': 'GBP',
+    }
+    const expected = {
+      value: 12.5,
+      currencyCode: 'GBP',
+    }
+
+    expect(parsePrice(value)).toEqual(expected)
+  })
+
+  it('should handle empty strings', () => {
+    const value = {
+      '#text': '',
+      '@currencycode': '',
+    }
+
+    expect(parsePrice(value)).toBeUndefined()
+  })
+
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      '#text': '   ',
+      '@currencycode': '\t\n',
+    }
+
+    expect(parsePrice(value)).toBeUndefined()
+  })
+
   it('should return undefined for empty object', () => {
     const value = {}
 
@@ -226,6 +257,33 @@ describe('parseIndirectAcquisition', () => {
     expect(parseIndirectAcquisition(value)).toEqual(expected)
   })
 
+  it('should handle HTML entities in type', () => {
+    const value = {
+      '@type': 'application/atom+xml;profile=&quot;opds-catalog&quot;',
+    }
+    const expected = {
+      type: 'application/atom+xml;profile="opds-catalog"',
+    }
+
+    expect(parseIndirectAcquisition(value)).toEqual(expected)
+  })
+
+  it('should handle empty strings', () => {
+    const value = {
+      '@type': '',
+    }
+
+    expect(parseIndirectAcquisition(value)).toBeUndefined()
+  })
+
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      '@type': '   ',
+    }
+
+    expect(parseIndirectAcquisition(value)).toBeUndefined()
+  })
+
   it('should return undefined for empty object', () => {
     const value = {}
 
@@ -358,6 +416,25 @@ describe('parseAvailability', () => {
     expect(parseAvailability(value)).toEqual(expected)
   })
 
+  it('should handle empty strings', () => {
+    const value = {
+      '@status': '',
+      '@since': '',
+      '@until': '',
+    }
+
+    expect(parseAvailability(value)).toBeUndefined()
+  })
+
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      '@status': '   ',
+      '@since': '\t\n',
+    }
+
+    expect(parseAvailability(value)).toBeUndefined()
+  })
+
   it('should return undefined for empty object', () => {
     const value = {}
 
@@ -478,6 +555,24 @@ describe('parseHolds', () => {
     expect(parseHolds(value)).toEqual(expected)
   })
 
+  it('should handle empty strings', () => {
+    const value = {
+      '@total': '',
+      '@position': '',
+    }
+
+    expect(parseHolds(value)).toBeUndefined()
+  })
+
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      '@total': '   ',
+      '@position': '\t\n',
+    }
+
+    expect(parseHolds(value)).toBeUndefined()
+  })
+
   it('should return undefined for empty object', () => {
     const value = {}
 
@@ -596,6 +691,24 @@ describe('parseCopies', () => {
     }
 
     expect(parseCopies(value)).toEqual(expected)
+  })
+
+  it('should handle empty strings', () => {
+    const value = {
+      '@total': '',
+      '@available': '',
+    }
+
+    expect(parseCopies(value)).toBeUndefined()
+  })
+
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      '@total': '   ',
+      '@available': '\t\n',
+    }
+
+    expect(parseCopies(value)).toBeUndefined()
   })
 
   it('should return undefined for empty object', () => {
@@ -733,6 +846,46 @@ describe('retrieveLink', () => {
     }
 
     expect(retrieveLink(value)).toEqual(expected)
+  })
+
+  it('should handle HTML entities in facetGroup', () => {
+    const value = {
+      '@opds:facetgroup': 'Science &amp; Nature',
+    }
+    const expected = {
+      facetGroup: 'Science & Nature',
+    }
+
+    expect(retrieveLink(value)).toEqual(expected)
+  })
+
+  it('should handle CDATA sections in prices', () => {
+    const value = {
+      'opds:price': { '#text': '<![CDATA[4.99]]>', '@currencycode': 'USD' },
+    }
+    const expected = {
+      prices: [{ value: 4.99, currencyCode: 'USD' }],
+    }
+
+    expect(retrieveLink(value)).toEqual(expected)
+  })
+
+  it('should handle empty strings', () => {
+    const value = {
+      '@opds:facetgroup': '',
+      '@opds:activefacet': '',
+    }
+
+    expect(retrieveLink(value)).toBeUndefined()
+  })
+
+  it('should handle whitespace-only strings', () => {
+    const value = {
+      '@opds:facetgroup': '   ',
+      '@opds:activefacet': '\t\n',
+    }
+
+    expect(retrieveLink(value)).toBeUndefined()
   })
 
   it('should return undefined for empty object', () => {
