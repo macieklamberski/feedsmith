@@ -39,6 +39,8 @@ export const generateEntry: GenerateUtil<ArxivNs.Entry> = (entry) => {
     'arxiv:journal_ref': generateCdataString(entry.journalRef),
     'arxiv:doi': generateCdataString(entry.doi),
     'arxiv:primary_category': generatePrimaryCategory(entry.primaryCategory),
+    'arxiv:announce_type': generateCdataString(entry.announceType),
+    'arxiv:journal_reference': generateCdataString(entry.journalReference),
   }
 
   return trimObject(value)

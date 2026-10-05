@@ -1694,14 +1694,14 @@ describe('parseArray', () => {
     const value3 = new Map()
     const value4 = new Date()
     // biome-ignore lint/performance/useTopLevelRegex: It's for testing purposes.
-    const value5 = /regex/
+    const value5Regex = /regex/
     const value6 = () => {}
 
     expect(parseArray(value1)).toBeUndefined()
     expect(parseArray(value2)).toBeUndefined()
     expect(parseArray(value3)).toBeUndefined()
     expect(parseArray(value4)).toBeUndefined()
-    expect(parseArray(value5)).toBeUndefined()
+    expect(parseArray(value5Regex)).toBeUndefined()
     expect(parseArray(value6)).toBeUndefined()
   })
 })
@@ -3282,6 +3282,29 @@ describe('createNamespaceResolver', () => {
       '<rss xmlns:a10="http://www.w3.org/2005/Atom"><a10:title>Hello</a10:title></rss>',
     )
     const expected = { rss: { '@xmlns:a10': 'http://www.w3.org/2005/Atom', 'atom:title': 'Hello' } }
+
+    expect(value).toEqual(expected)
+  })
+
+  it('should canonicalize an alternate prefix bound to a scheme-relative URI', () => {
+    const parse = createParser()
+    const value = parse(
+      '<rss xmlns:c="//purl.org/rss/1.0/modules/content/"><c:encoded>Hello</c:encoded></rss>',
+    )
+    const expected = {
+      rss: { '@xmlns:c': '//purl.org/rss/1.0/modules/content/', 'content:encoded': 'Hello' },
+    }
+
+    expect(value).toEqual(expected)
+  })
+
+  it('should canonicalize an alternate prefix bound to a scheme-relative https-only URI', () => {
+    const uri = '//github.com/Podcastindex-org/podcast-namespace/blob/main/docs/1.0.md'
+    const parse = createParser()
+    const value = parse(`<rss xmlns:p="${uri}"><p:locked>yes</p:locked></rss>`)
+    const expected = {
+      rss: { '@xmlns:p': uri, 'podcast:locked': 'yes' },
+    }
 
     expect(value).toEqual(expected)
   })

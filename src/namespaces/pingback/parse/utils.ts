@@ -1,6 +1,11 @@
 import { isPlainObject, trimObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
-import { parseSingularOf, parseString, retrieveRdfResourceOrText } from '../../../common/utils.js'
+import {
+  parseArrayOf,
+  parseSingularOf,
+  parseString,
+  retrieveRdfResourceOrText,
+} from '../../../common/utils.js'
 import type { PingbackNs } from '../common/types.js'
 
 export const retrieveItem: ParseUtilPartial<PingbackNs.Item> = (value) => {
@@ -13,6 +18,9 @@ export const retrieveItem: ParseUtilPartial<PingbackNs.Item> = (value) => {
       retrieveRdfResourceOrText(value, parseString),
     ),
     target: parseSingularOf(value['pingback:target'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    abouts: parseArrayOf(value['pingback:about'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
     ),
   }
