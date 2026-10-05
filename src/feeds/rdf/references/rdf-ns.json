@@ -514,10 +514,6 @@
         "ping": "https://example.com/trackback/123",
         "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
       },
-      "wikidot": {
-        "authorName": "Crayne",
-        "authorUserId": "1346995"
-      },
       "geo": {
         "lat": 37.8199,
         "long": -122.4783,

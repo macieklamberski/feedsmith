@@ -780,23 +780,6 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
-  it('should handle wikidot namespace', () => {
-    const value = {
-      title: { '#text': 'Re: Non-Disc Record' },
-      'wikidot:authorname': { '#text': 'Crayne' },
-      'wikidot:authoruserid': { '#text': '1346995' },
-    }
-    const expected = {
-      title: 'Re: Non-Disc Record',
-      wikidot: {
-        authorName: 'Crayne',
-        authorUserId: '1346995',
-      },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
   it('should handle georss namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },

@@ -22,7 +22,7 @@ The Wikidot namespace carries the author of a forum post or page revision in the
     </tr>
     <tr>
       <th>Available in</th>
-      <td><a href="/reference/feeds/rss">RSS</a>, <a href="/reference/feeds/rdf">RDF</a></td>
+      <td><a href="/reference/feeds/rss">RSS</a></td>
     </tr>
     <tr>
       <th>Property</th>
