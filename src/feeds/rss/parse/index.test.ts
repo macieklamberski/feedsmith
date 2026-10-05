@@ -741,6 +741,38 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
+      it('should work without www and custom prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:pheed="http://pheed.com/pheed/">
+            <channel>
+              <title>Test</title>
+              <link>http://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Item</title>
+                <pheed:imgsrc>https://example.com/photo/art/imagette/97188016-67707650.jpg</pheed:imgsrc>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'http://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              photo: {
+                imgsrc: 'https://example.com/photo/art/imagette/97188016-67707650.jpg',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
       it('should work with uppercase URI and custom prefix', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>
