@@ -10,6 +10,8 @@ export const generateQuery: GenerateUtil<OpenSearchNs.Query> = (query) => {
 
   const value = {
     '@role': generatePlainString(query.role),
+    '@title': generatePlainString(query.title),
+    '@totalResults': generateNumber(query.totalResults),
     '@searchTerms': generatePlainString(query.searchTerms),
     '@count': generateNumber(query.count),
     '@startIndex': generateNumber(query.startIndex),
@@ -17,6 +19,21 @@ export const generateQuery: GenerateUtil<OpenSearchNs.Query> = (query) => {
     '@language': generatePlainString(query.language),
     '@inputEncoding': generatePlainString(query.inputEncoding),
     '@outputEncoding': generatePlainString(query.outputEncoding),
+  }
+
+  return trimObject(value)
+}
+
+export const generateLink: GenerateUtil<OpenSearchNs.Link> = (link) => {
+  if (!isPlainObject(link)) {
+    return
+  }
+
+  const value = {
+    '@href': generatePlainString(link.href),
+    '@rel': generatePlainString(link.rel),
+    '@type': generatePlainString(link.type),
+    '@hreflang': generatePlainString(link.hreflang),
   }
 
   return trimObject(value)
@@ -31,6 +48,7 @@ export const generateFeed: GenerateUtil<OpenSearchNs.Feed> = (feed) => {
     'opensearch:totalResults': generateNumber(feed.totalResults),
     'opensearch:startIndex': generateNumber(feed.startIndex),
     'opensearch:itemsPerPage': generateNumber(feed.itemsPerPage),
+    'opensearch:link': generateLink(feed.link),
     'opensearch:Query': trimArray(feed.queries, generateQuery),
   }
 

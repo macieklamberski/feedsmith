@@ -24,6 +24,7 @@ export const generateBaseItem: GenerateUtil<PodcastNs.BaseItem> = (baseItem) => 
 
   const value = {
     'podcast:transcript': trimArray(baseItem.transcripts, generateTranscript),
+    'podcast:funding': trimArray(baseItem.fundings, generateFunding),
     'podcast:chapters': generateChapters(baseItem.chapters),
     'podcast:soundbite': trimArray(baseItem.soundbites, generateSoundbite),
     'podcast:person': trimArray(baseItem.persons, generatePerson),
@@ -37,6 +38,7 @@ export const generateBaseItem: GenerateUtil<PodcastNs.BaseItem> = (baseItem) => 
     ),
     'podcast:value': trimArray(baseItem.values, generateValue),
     'podcast:image': trimArray(baseItem.images, generateImage),
+    'podcast:contentLink': trimArray(baseItem.contentLinks, generateContentLink),
     'podcast:socialInteract': trimArray(baseItem.socialInteracts, generateSocialInteract),
     'podcast:txt': trimArray(baseItem.txts, generateTxt),
     'podcast:chat': generateChat(baseItem.chat),
@@ -347,7 +349,6 @@ export const generateLiveItem: GenerateUtil<PodcastNs.LiveItem<DateLike>, Genera
     '@status': generatePlainString(liveItem.status),
     '@start': generateRfc3339Date(liveItem.start),
     '@end': generateRfc3339Date(liveItem.end),
-    'podcast:contentLink': trimArray(liveItem.contentLinks, generateContentLink),
   }
 
   return trimObject(value)
@@ -510,6 +511,7 @@ export const generateFeed: GenerateUtil<PodcastNs.Feed<DateLike>, GenerateOption
       return generateLiveItem(liveItem, options)
     }),
     'podcast:block': trimArray(feed.blocks, generateBlock),
+    'podcast:socialInteract': trimArray(feed.socialInteracts, generateSocialInteract),
     'podcast:txt': trimArray(feed.txts, generateTxt),
     'podcast:remoteItem': trimArray(feed.remoteItems, generateRemoteItem),
     'podcast:podroll': generatePodroll(feed.podroll),

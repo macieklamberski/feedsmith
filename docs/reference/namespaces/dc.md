@@ -14,7 +14,7 @@ The Dublin Core namespace provides standardized metadata elements for describing
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/" target="_blank">Dublin Core Metadata Terms</a></td>
+      <td><a href="https://www.dublincore.org/specifications/dublin-core/dces/" target="_blank">Dublin Core Metadata Element Set 1.1</a></td>
     </tr>
     <tr>
       <th>Prefix</th>

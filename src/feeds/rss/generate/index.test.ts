@@ -3,6 +3,7 @@ import { locales } from '../../../common/config.js'
 import { GenerateError } from '../../../common/errors.js'
 import type { DateLike } from '../../../common/types.js'
 import type { RssFeed } from '../common/types.js'
+import { parse } from '../parse/index.js'
 import { generate } from './index.js'
 
 describe('generate', () => {
@@ -241,6 +242,39 @@ describe('generate', () => {
     <item>
       <title>Episode 1</title>
       <itunes:title>Episode 1 - Special Title</itunes:title>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate itunes:explicit as true or false', () => {
+    const value = {
+      title: 'Feed with iTunes namespace',
+      description: 'Test feed with Apple Podcasts namespace',
+      itunes: {
+        explicit: true,
+      },
+      items: [
+        {
+          title: 'Episode 1',
+          itunes: {
+            explicit: false,
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <channel>
+    <title>Feed with iTunes namespace</title>
+    <description>Test feed with Apple Podcasts namespace</description>
+    <itunes:explicit>true</itunes:explicit>
+    <item>
+      <title>Episode 1</title>
+      <itunes:explicit>false</itunes:explicit>
     </item>
   </channel>
 </rss>
@@ -628,6 +662,37 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with arxiv namespace', () => {
+    const value = {
+      title: 'Feed with arxiv namespace',
+      description: 'Test feed with arXiv properties',
+      items: [
+        {
+          title: 'Item with arXiv properties',
+          arxiv: {
+            announceType: 'replace-cross',
+            journalReference: 'Example Journal, Vol. 11 (2024), pp. 431-472',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:arxiv="http://arxiv.org/schemas/atom">
+  <channel>
+    <title>Feed with arxiv namespace</title>
+    <description>Test feed with arXiv properties</description>
+    <item>
+      <title>Item with arXiv properties</title>
+      <arxiv:announce_type>replace-cross</arxiv:announce_type>
+      <arxiv:journal_reference>Example Journal, Vol. 11 (2024), pp. 431-472</arxiv:journal_reference>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with opensearch namespace', () => {
     const value = {
       title: 'Search Results',
@@ -636,6 +701,11 @@ describe('generate', () => {
         totalResults: 1000,
         startIndex: 0,
         itemsPerPage: 10,
+        link: {
+          href: 'http://example.com/opensearchdescription.xml',
+          rel: 'search',
+          type: 'application/opensearchdescription+xml',
+        },
       },
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
@@ -646,6 +716,7 @@ describe('generate', () => {
     <opensearch:totalResults>1000</opensearch:totalResults>
     <opensearch:startIndex>0</opensearch:startIndex>
     <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+    <opensearch:link href="http://example.com/opensearchdescription.xml" rel="search" type="application/opensearchdescription+xml"/>
   </channel>
 </rss>
 `
@@ -657,8 +728,28 @@ describe('generate', () => {
     const value = {
       title: 'Feed with prism namespace',
       description: 'Test feed with PRISM namespace',
+      image: {
+        url: 'https://example.com/cover.png',
+        title: 'Nature cover',
+        link: 'https://example.com',
+        prism: {
+          coverDate: new Date('2023-03-15T00:00:00Z'),
+        },
+      },
+      textInput: {
+        title: 'Search',
+        description: 'Search the journal',
+        name: 'q',
+        link: 'https://example.com/search',
+        prism: {
+          publicationName: 'Nature',
+        },
+      },
       prism: {
         issn: '0028-0836',
+        publicationDates: [{ value: new Date('2023-03-15T00:00:00Z'), platform: 'print' }],
+        originPlatforms: ['print'],
+        ratings: [{ value: 'E', ratingSystem: 'ESRB' }],
       },
       items: [
         {
@@ -666,6 +757,8 @@ describe('generate', () => {
           prism: {
             doi: '10.1038/s41586-023-05842-x',
             startingPage: '425',
+            teasers: [{ value: 'A new catalyst', platform: 'web' }],
+            originPlatforms: ['web'],
           },
         },
       ],
@@ -675,11 +768,29 @@ describe('generate', () => {
   <channel>
     <title>Feed with prism namespace</title>
     <description>Test feed with PRISM namespace</description>
+    <image>
+      <url>https://example.com/cover.png</url>
+      <title>Nature cover</title>
+      <link>https://example.com</link>
+      <prism:coverDate>2023-03-15T00:00:00.000Z</prism:coverDate>
+    </image>
+    <textInput>
+      <title>Search</title>
+      <description>Search the journal</description>
+      <name>q</name>
+      <link>https://example.com/search</link>
+      <prism:publicationName>Nature</prism:publicationName>
+    </textInput>
     <prism:issn>0028-0836</prism:issn>
+    <prism:publicationDate platform="print">2023-03-15T00:00:00.000Z</prism:publicationDate>
+    <prism:originPlatform platform="print"/>
+    <prism:rating ratingSystem="ESRB">E</prism:rating>
     <item>
       <title>First item</title>
       <prism:doi>10.1038/s41586-023-05842-x</prism:doi>
+      <prism:teaser platform="web">A new catalyst</prism:teaser>
       <prism:startingPage>425</prism:startingPage>
+      <prism:originPlatform platform="web"/>
     </item>
   </channel>
 </rss>
@@ -688,10 +799,53 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should parse back generated prism:originPlatform values', () => {
+    const value = {
+      title: 'Feed with prism namespace',
+      description: 'Test feed with PRISM namespace',
+      prism: {
+        originPlatforms: ['print', 'web'],
+      },
+      items: [
+        {
+          title: 'First item',
+          prism: {
+            originPlatforms: ['web'],
+          },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Feed with prism namespace',
+      description: 'Test feed with PRISM namespace',
+      prism: {
+        originPlatforms: ['print', 'web'],
+      },
+      items: [
+        {
+          title: 'First item',
+          prism: {
+            originPlatforms: ['web'],
+          },
+        },
+      ],
+    }
+
+    expect(parse(generate(value))).toEqual(expected)
+  })
+
   it('should generate RSS with ccREL namespace', () => {
     const value = {
       title: 'Feed with ccREL namespace',
       description: 'Test feed with ccREL namespace',
+      image: {
+        url: 'https://example.com/image.png',
+        title: 'Image with ccREL',
+        link: 'https://example.com',
+        cc: {
+          license: 'https://creativecommons.org/licenses/by-nd/4.0/',
+        },
+      },
       cc: {
         license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
         morePermissions: 'https://example.com/commercial-license',
@@ -710,6 +864,12 @@ describe('generate', () => {
   <channel>
     <title>Feed with ccREL namespace</title>
     <description>Test feed with ccREL namespace</description>
+    <image>
+      <url>https://example.com/image.png</url>
+      <title>Image with ccREL</title>
+      <link>https://example.com</link>
+      <cc:license>https://creativecommons.org/licenses/by-nd/4.0/</cc:license>
+    </image>
     <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
     <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
     <item>
@@ -848,6 +1008,7 @@ describe('generate', () => {
           pingback: {
             server: 'https://example.com/xmlrpc.php',
             target: 'https://example.net/article',
+            abouts: ['https://example.org/post/1', 'https://example.org/post/2'],
           },
         },
       ],
@@ -862,6 +1023,8 @@ describe('generate', () => {
       <title>First item</title>
       <pingback:server>https://example.com/xmlrpc.php</pingback:server>
       <pingback:target>https://example.net/article</pingback:target>
+      <pingback:about>https://example.org/post/1</pingback:about>
+      <pingback:about>https://example.org/post/2</pingback:about>
     </item>
   </channel>
 </rss>
@@ -920,6 +1083,7 @@ describe('generate', () => {
             outlines: ['<outline text="Section 1"/>', '<outline text="Section 2"/>'],
             linkFull: 'https://example.com/posts/full-version',
             inReplyTo: { value: 'did:plc:iwl32vekohccji6khfdt3clw', isPermaLink: false },
+            comments: { count: 2, feedUrl: 'https://example.com/comments/204.xml' },
           },
         },
       ],
@@ -945,6 +1109,7 @@ describe('generate', () => {
       </source:outline>
       <source:linkFull>https://example.com/posts/full-version</source:linkFull>
       <source:inReplyTo isPermaLink="false">did:plc:iwl32vekohccji6khfdt3clw</source:inReplyTo>
+      <source:comments count="2" feedUrl="https://example.com/comments/204.xml"/>
     </item>
   </channel>
 </rss>
@@ -961,6 +1126,7 @@ describe('generate', () => {
         blogRoll: 'http://example.com/blogroll.opml',
         blink: 'http://example.net/',
         mySubscriptions: 'http://example.com/subscriptions.opml',
+        changes: 'http://example.com/changes.xml',
       },
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
@@ -971,6 +1137,7 @@ describe('generate', () => {
     <blogChannel:blogRoll>http://example.com/blogroll.opml</blogChannel:blogRoll>
     <blogChannel:blink>http://example.net/</blogChannel:blink>
     <blogChannel:mySubscriptions>http://example.com/subscriptions.opml</blogChannel:mySubscriptions>
+    <blogChannel:changes>http://example.com/changes.xml</blogChannel:changes>
   </channel>
 </rss>
 `

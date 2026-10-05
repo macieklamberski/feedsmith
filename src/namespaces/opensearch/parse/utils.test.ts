@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'bun:test'
-import { parseQuery, retrieveFeed } from './utils.js'
+import { parseLink, parseQuery, retrieveFeed } from './utils.js'
 
 describe('parseQuery', () => {
   it('should parse Query with all attributes', () => {
     const value = {
       '@role': 'request',
+      '@title': 'Search results for quantum computing',
+      '@totalresults': '4230000',
       '@searchterms': 'quantum computing',
       '@count': '10',
       '@startindex': '21',
@@ -15,6 +17,8 @@ describe('parseQuery', () => {
     }
     const expected = {
       role: 'request',
+      title: 'Search results for quantum computing',
+      totalResults: 4230000,
       searchTerms: 'quantum computing',
       count: 10,
       startIndex: 21,
@@ -97,12 +101,85 @@ describe('parseQuery', () => {
   })
 })
 
+describe('parseLink', () => {
+  it('should parse link with all attributes', () => {
+    const value = {
+      '@href': 'http://example.com/opensearchdescription.xml',
+      '@rel': 'search',
+      '@type': 'application/opensearchdescription+xml',
+      '@hreflang': 'en',
+    }
+    const expected = {
+      href: 'http://example.com/opensearchdescription.xml',
+      rel: 'search',
+      type: 'application/opensearchdescription+xml',
+      hreflang: 'en',
+    }
+
+    expect(parseLink(value)).toEqual(expected)
+  })
+
+  it('should parse link with href only', () => {
+    const value = {
+      '@href': 'http://example.com/opensearchdescription.xml',
+    }
+    const expected = {
+      href: 'http://example.com/opensearchdescription.xml',
+    }
+
+    expect(parseLink(value)).toEqual(expected)
+  })
+
+  it('should handle HTML entities in attributes', () => {
+    const value = {
+      '@href': 'http://example.com/osd.xml?a=1&amp;b=2',
+    }
+    const expected = {
+      href: 'http://example.com/osd.xml?a=1&b=2',
+    }
+
+    expect(parseLink(value)).toEqual(expected)
+  })
+
+  it('should handle empty and whitespace-only attributes', () => {
+    const value = {
+      '@href': 'http://example.com/opensearchdescription.xml',
+      '@rel': '',
+      '@type': '   ',
+    }
+    const expected = {
+      href: 'http://example.com/opensearchdescription.xml',
+    }
+
+    expect(parseLink(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(parseLink(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(parseLink(null)).toBeUndefined()
+    expect(parseLink(undefined)).toBeUndefined()
+    expect(parseLink('string')).toBeUndefined()
+    expect(parseLink(123)).toBeUndefined()
+    expect(parseLink([])).toBeUndefined()
+  })
+})
+
 describe('retrieveFeed', () => {
   it('should parse feed with all OpenSearch properties', () => {
     const value = {
       'opensearch:totalresults': '1000',
       'opensearch:startindex': '21',
       'opensearch:itemsperpage': '10',
+      'opensearch:link': {
+        '@href': 'http://example.com/opensearchdescription.xml',
+        '@rel': 'search',
+        '@type': 'application/opensearchdescription+xml',
+      },
       'opensearch:query': {
         '@role': 'request',
         '@searchterms': 'electron',
@@ -112,6 +189,11 @@ describe('retrieveFeed', () => {
       totalResults: 1000,
       startIndex: 21,
       itemsPerPage: 10,
+      link: {
+        href: 'http://example.com/opensearchdescription.xml',
+        rel: 'search',
+        type: 'application/opensearchdescription+xml',
+      },
       queries: [
         {
           role: 'request',
@@ -173,6 +255,37 @@ describe('retrieveFeed', () => {
           searchTerms: 'quantum computing',
         },
       ],
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with link only', () => {
+    const value = {
+      'opensearch:link': {
+        '@href': 'http://example.com/opensearchdescription.xml',
+      },
+    }
+    const expected = {
+      link: {
+        href: 'http://example.com/opensearchdescription.xml',
+      },
+    }
+
+    expect(retrieveFeed(value)).toEqual(expected)
+  })
+
+  it('should parse first link when multiple are present', () => {
+    const value = {
+      'opensearch:link': [
+        { '@href': 'http://example.com/first.xml' },
+        { '@href': 'http://example.com/second.xml' },
+      ],
+    }
+    const expected = {
+      link: {
+        href: 'http://example.com/first.xml',
+      },
     }
 
     expect(retrieveFeed(value)).toEqual(expected)

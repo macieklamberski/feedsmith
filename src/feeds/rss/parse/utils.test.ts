@@ -964,6 +964,40 @@ describe('parseImage', () => {
 
     expect(parseImage(value)).toBeUndefined()
   })
+
+  it('should handle prism namespace', () => {
+    const value = {
+      url: { '#text': 'https://example.com/image.jpg' },
+      'prism:publicationname': { '#text': 'Nature' },
+      'prism:coverdate': { '#text': '2023-03-15' },
+      'prism:aggregationtype': { '#text': 'journal' },
+    }
+    const expected = {
+      url: 'https://example.com/image.jpg',
+      prism: {
+        publicationName: 'Nature',
+        coverDate: '2023-03-15',
+        aggregationType: 'journal',
+      },
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
+
+  it('should handle cc namespace', () => {
+    const value = {
+      url: { '#text': 'https://example.com/image.jpg' },
+      'cc:license': { '#text': 'https://creativecommons.org/licenses/by/4.0/' },
+    }
+    const expected = {
+      url: 'https://example.com/image.jpg',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+      },
+    }
+
+    expect(parseImage(value)).toEqual(expected)
+  })
 })
 
 describe('parseTextInput', () => {
@@ -1046,6 +1080,38 @@ describe('parseTextInput', () => {
     }
 
     expect(parseTextInput(value)).toEqual(expected)
+  })
+
+  it('should handle prism namespace', () => {
+    const value = {
+      title: { '#text': 'Search Title' },
+      'prism:publicationname': { '#text': 'Nature' },
+      'prism:coverdate': { '#text': '2023-03-15' },
+    }
+    const expected = {
+      title: 'Search Title',
+      prism: {
+        publicationName: 'Nature',
+        coverDate: '2023-03-15',
+      },
+    }
+
+    expect(parseTextInput(value)).toEqual(expected)
+  })
+
+  it('should apply custom parseDateFn to prism namespace dates', () => {
+    const value = {
+      title: { '#text': 'Search Title' },
+      'prism:coverdate': { '#text': '2023-03-15T12:00:00Z' },
+    }
+    const expected = {
+      title: 'Search Title',
+      prism: {
+        coverDate: new Date('2023-03-15T12:00:00Z'),
+      },
+    }
+
+    expect(parseTextInput(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
   })
 })
 
@@ -1511,19 +1577,6 @@ describe('parseItem', () => {
     expect(parseItem(undefined)).toBeUndefined()
   })
 
-  it('should handle content namespace', () => {
-    const value = {
-      title: { '#text': 'Example Entry' },
-      'content:encoded': { '#text': '<![CDATA[<div>John Doe</div>]]>' },
-    }
-    const expected = {
-      title: 'Example Entry',
-      content: { encoded: '<div>John Doe</div>' },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
   it('should handle atom namespace', () => {
     const value = {
       title: { '#text': 'Item 1' },
@@ -1552,41 +1605,6 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
-  it('should handle psc namespace', () => {
-    const value = {
-      title: { '#text': 'Podcast Episode 1' },
-      'psc:chapters': {
-        'psc:chapter': [
-          {
-            '@start': '00:00:00.000',
-            '@title': 'Introduction',
-          },
-          {
-            '@start': '00:05:30.000',
-            '@title': 'Main Topic',
-          },
-        ],
-      },
-    }
-    const expected = {
-      title: 'Podcast Episode 1',
-      psc: {
-        chapters: [
-          {
-            start: '00:00:00.000',
-            title: 'Introduction',
-          },
-          {
-            start: '00:05:30.000',
-            title: 'Main Topic',
-          },
-        ],
-      },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
   it('should handle dcterms namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },
@@ -1599,6 +1617,19 @@ describe('parseItem', () => {
         licenses: ['MIT License'],
         created: ['2023-02-01T00:00:00Z'],
       },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle content namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      'content:encoded': { '#text': '<![CDATA[<div>John Doe</div>]]>' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      content: { encoded: '<div>John Doe</div>' },
     }
 
     expect(parseItem(value)).toEqual(expected)
@@ -1649,6 +1680,41 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle psc namespace', () => {
+    const value = {
+      title: { '#text': 'Podcast Episode 1' },
+      'psc:chapters': {
+        'psc:chapter': [
+          {
+            '@start': '00:00:00.000',
+            '@title': 'Introduction',
+          },
+          {
+            '@start': '00:05:30.000',
+            '@title': 'Main Topic',
+          },
+        ],
+      },
+    }
+    const expected = {
+      title: 'Podcast Episode 1',
+      psc: {
+        chapters: [
+          {
+            start: '00:00:00.000',
+            title: 'Introduction',
+          },
+          {
+            start: '00:05:30.000',
+            title: 'Main Topic',
+          },
+        ],
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle media namespace', () => {
     const value = {
       title: { '#text': 'Media Item' },
@@ -1658,21 +1724,6 @@ describe('parseItem', () => {
       title: 'Media Item',
       media: {
         contents: [{ url: 'https://example.com/video.mp4', type: 'video/mp4' }],
-      },
-    }
-
-    expect(parseItem(value)).toEqual(expected)
-  })
-
-  it('should handle georss namespace', () => {
-    const value = {
-      title: { '#text': 'Location Item' },
-      'georss:point': { '#text': '42.3601 -71.0589' },
-    }
-    const expected = {
-      title: 'Location Item',
-      georss: {
-        point: { lat: 42.3601, lng: -71.0589 },
       },
     }
 
@@ -1719,12 +1770,29 @@ describe('parseItem', () => {
       title: { '#text': 'Source Item' },
       'source:markdown': { '#text': '# Example markdown content' },
       'source:inreplyto': { '@ispermalink': 'false', '#text': 'did:plc:iwl32vekohccji6khfdt3clw' },
+      'source:comments': { '@count': '2', '@feedurl': 'http://example.org/item/1/comments.xml' },
     }
     const expected = {
       title: 'Source Item',
       sourceNs: {
         markdown: '# Example markdown content',
         inReplyTo: { value: 'did:plc:iwl32vekohccji6khfdt3clw', isPermaLink: false },
+        comments: { count: 2, feedUrl: 'http://example.org/item/1/comments.xml' },
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
+  it('should handle georss namespace', () => {
+    const value = {
+      title: { '#text': 'Location Item' },
+      'georss:point': { '#text': '42.3601 -71.0589' },
+    }
+    const expected = {
+      title: 'Location Item',
+      georss: {
+        point: { lat: 42.3601, lng: -71.0589 },
       },
     }
 
@@ -2182,22 +2250,6 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should handle sy namespace', () => {
-    const channel = {
-      title: { '#text': 'Example Feed' },
-      link: { '#text': 'https://example.com' },
-      'sy:updatefrequency': { '#text': '5' },
-    }
-    const value = { channel }
-    const expected = {
-      title: 'Example Feed',
-      link: 'https://example.com',
-      sy: { updateFrequency: 5 },
-    }
-
-    expect(parseFeed(value)).toEqual(expected)
-  })
-
   it('should handle dcterms namespace', () => {
     const channel = {
       title: { '#text': 'Example Feed' },
@@ -2213,6 +2265,22 @@ describe('parseFeed', () => {
         licenses: ['Creative Commons Attribution 4.0'],
         created: ['2023-01-01T00:00:00Z'],
       },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle sy namespace', () => {
+    const channel = {
+      title: { '#text': 'Example Feed' },
+      link: { '#text': 'https://example.com' },
+      'sy:updatefrequency': { '#text': '5' },
+    }
+    const value = { channel }
+    const expected = {
+      title: 'Example Feed',
+      link: 'https://example.com',
+      sy: { updateFrequency: 5 },
     }
 
     expect(parseFeed(value)).toEqual(expected)
@@ -2274,18 +2342,24 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should handle georss namespace', () => {
+  it('should handle admin namespace', () => {
     const channel = {
-      title: { '#text': 'Location Feed' },
+      title: { '#text': 'Admin Feed' },
       link: { '#text': 'https://example.com' },
-      'georss:point': { '#text': '37.7749 -122.4194' },
+      'admin:errorreportsto': {
+        '@rdf:resource': 'mailto:webmaster@example.com',
+      },
+      'admin:generatoragent': {
+        '@rdf:resource': 'https://example.com/generator?v=3.2',
+      },
     }
     const value = { channel }
     const expected = {
-      title: 'Location Feed',
+      title: 'Admin Feed',
       link: 'https://example.com',
-      georss: {
-        point: { lat: 37.7749, lng: -122.4194 },
+      admin: {
+        errorReportsTo: 'mailto:webmaster@example.com',
+        generatorAgent: 'https://example.com/generator?v=3.2',
       },
     }
 
@@ -2314,24 +2388,18 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
-  it('should handle admin namespace', () => {
+  it('should handle georss namespace', () => {
     const channel = {
-      title: { '#text': 'Admin Feed' },
+      title: { '#text': 'Location Feed' },
       link: { '#text': 'https://example.com' },
-      'admin:errorreportsto': {
-        '@rdf:resource': 'mailto:webmaster@example.com',
-      },
-      'admin:generatoragent': {
-        '@rdf:resource': 'https://example.com/generator?v=3.2',
-      },
+      'georss:point': { '#text': '37.7749 -122.4194' },
     }
     const value = { channel }
     const expected = {
-      title: 'Admin Feed',
+      title: 'Location Feed',
       link: 'https://example.com',
-      admin: {
-        errorReportsTo: 'mailto:webmaster@example.com',
-        generatorAgent: 'https://example.com/generator?v=3.2',
+      georss: {
+        point: { lat: 37.7749, lng: -122.4194 },
       },
     }
 

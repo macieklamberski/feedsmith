@@ -1,0 +1,20 @@
+name: Package
+
+on:
+  push:
+    branches: [main, alpha, beta, rc]
+  pull_request:
+  workflow_call:
+    inputs:
+      ref:
+        description: Git ref to check. Defaults to the ref that triggered the workflow.
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  package:
+    uses: macieklamberski/kvalita/.github/workflows/shared-package.yml@main
+    with:
+      ref: ${{ inputs.ref }}
+      browser: true

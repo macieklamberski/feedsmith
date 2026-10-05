@@ -2296,6 +2296,10 @@ describe('parseLiveItem', () => {
         '#text': 'New York, NY',
         '@geo': '40.7128,-74.0060',
       },
+      'podcast:funding': {
+        '@url': 'https://example.com/live/donate',
+        '#text': 'Support the show',
+      },
     }
     const expected = {
       status: 'live',
@@ -2321,6 +2325,12 @@ describe('parseLiveItem', () => {
         {
           display: 'New York, NY',
           geo: '40.7128,-74.0060',
+        },
+      ],
+      fundings: [
+        {
+          url: 'https://example.com/live/donate',
+          display: 'Support the show',
         },
       ],
     }
@@ -3680,6 +3690,12 @@ describe('retrieveItem', () => {
         language: 'en',
       },
     ],
+    fundings: [
+      {
+        url: 'https://example.com/episodes/1/donate',
+        display: 'Support this episode',
+      },
+    ],
     chapters: {
       url: 'https://example.com/chapters.json',
       type: 'application/json',
@@ -3746,6 +3762,12 @@ describe('retrieveItem', () => {
         ],
       },
     ],
+    contentLinks: [
+      {
+        href: 'https://example.com/episodes/1/discussion',
+        display: 'Join the discussion',
+      },
+    ],
     socialInteracts: [
       {
         uri: 'https://example.com/episodes/1/comments',
@@ -3777,6 +3799,10 @@ describe('retrieveItem', () => {
           '@language': 'en',
         },
       ],
+      'podcast:funding': {
+        '@url': 'https://example.com/episodes/1/donate',
+        '#text': 'Support this episode',
+      },
       'podcast:chapters': {
         '@url': 'https://example.com/chapters.json',
         '@type': 'application/json',
@@ -3838,6 +3864,12 @@ describe('retrieveItem', () => {
       'podcast:images': {
         '@srcset': 'image-1x.jpg 1x, image-2x.jpg 2x',
       },
+      'podcast:contentlink': [
+        {
+          '@href': 'https://example.com/episodes/1/discussion',
+          '#text': 'Join the discussion',
+        },
+      ],
       'podcast:socialinteract': [
         {
           '@uri': 'https://example.com/episodes/1/comments',
@@ -3862,6 +3894,12 @@ describe('retrieveItem', () => {
           '@url': 'https://example.com/transcript.json',
           '@type': 'application/json',
           '@language': 'en',
+        },
+      ],
+      'podcast:funding': [
+        {
+          '@url': 'https://example.com/episodes/1/donate',
+          '#text': 'Support this episode',
         },
       ],
       'podcast:chapters': [
@@ -3937,6 +3975,12 @@ describe('retrieveItem', () => {
       'podcast:images': [
         {
           '@srcset': 'image-1x.jpg 1x, image-2x.jpg 2x',
+        },
+      ],
+      'podcast:contentlink': [
+        {
+          '@href': 'https://example.com/episodes/1/discussion',
+          '#text': 'Join the discussion',
         },
       ],
       'podcast:socialinteract': [
@@ -4254,6 +4298,12 @@ describe('retrieveFeed', () => {
         id: 'spotify',
       },
     ],
+    socialInteracts: [
+      {
+        uri: 'https://example.com/comments',
+        protocol: 'activitypub',
+      },
+    ],
     txts: [
       {
         display: 'Additional podcast information',
@@ -4353,6 +4403,12 @@ describe('retrieveFeed', () => {
         {
           '#text': 'yes',
           '@id': 'spotify',
+        },
+      ],
+      'podcast:socialinteract': [
+        {
+          '@uri': 'https://example.com/comments',
+          '@protocol': 'activitypub',
         },
       ],
       'podcast:txt': [
@@ -4467,6 +4523,12 @@ describe('retrieveFeed', () => {
         {
           '#text': 'yes',
           '@id': 'spotify',
+        },
+      ],
+      'podcast:socialinteract': [
+        {
+          '@uri': 'https://example.com/comments',
+          '@protocol': 'activitypub',
         },
       ],
       'podcast:txt': [

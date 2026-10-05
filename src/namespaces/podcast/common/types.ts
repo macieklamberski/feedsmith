@@ -5,6 +5,7 @@ export namespace PodcastNs {
   /** @internal Common properties shared by Item and LiveItem. */
   export type BaseItem<TStrict extends boolean = false> = {
     transcripts?: Array<Transcript<TStrict>>
+    fundings?: Array<Funding<TStrict>>
     chapters?: Chapters<TStrict>
     soundbites?: Array<Soundbite<TStrict>>
     persons?: Array<Person<TStrict>>
@@ -15,6 +16,7 @@ export namespace PodcastNs {
     alternateEnclosures?: Array<AlternateEnclosure<TStrict>>
     values?: Array<Value<TStrict>>
     images?: Array<Image<TStrict>>
+    contentLinks?: Array<ContentLink<TStrict>>
     socialInteracts?: Array<SocialInteract<TStrict>>
     txts?: Array<Txt<TStrict>>
     chat?: Chat<TStrict>
@@ -208,7 +210,6 @@ export namespace PodcastNs {
         status: Requirable<string> // Required in spec
         start: Requirable<TDate> // Required in spec. Date: ISO 8601
         end?: TDate // Date: ISO 8601
-        contentLinks?: Array<ContentLink<TStrict>>
       },
       TStrict
     >
@@ -321,6 +322,7 @@ export namespace PodcastNs {
     images?: Array<Image<TStrict>>
     liveItems?: Array<LiveItem<TDate, TStrict, TItem>>
     blocks?: Array<Block<TStrict>>
+    socialInteracts?: Array<SocialInteract<TStrict>>
     txts?: Array<Txt<TStrict>>
     remoteItems?: Array<RemoteItem<TStrict>>
     podroll?: Podroll<TStrict>
