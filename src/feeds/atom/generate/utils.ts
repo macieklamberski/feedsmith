@@ -26,6 +26,11 @@ import {
   generateFeed as generateFeedBurnerFeed,
   generateItem as generateFeedBurnerItem,
 } from '../../../namespaces/feedburner/generate/utils.js'
+import {
+  generateEntry as generateGdEntry,
+  generateFeed as generateGdFeed,
+  generatePerson as generateGdPerson,
+} from '../../../namespaces/gd/generate/utils.js'
 import { generateItemOrFeed as generateGeoItemOrFeed } from '../../../namespaces/geo/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
@@ -202,6 +207,7 @@ export const generatePerson: GenerateUtil<AtomFeed.Person> = (person, options) =
     [key('uri')]: generateCdataString(person.uri),
     [key('email')]: generateCdataString(person.email),
     ...generateArxivAuthor(person.arxiv),
+    ...generateGdPerson(person.gd),
   }
 
   return trimObject(value)
@@ -311,6 +317,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
     ...generateWfwItem(entry.wfw),
     ...generatePingbackItem(entry.pingback),
     ...generateTrackbackItem(entry.trackback),
+    ...generateGdEntry(entry.gd),
     ...generateYtItem(entry.yt),
     ...generateGeoItemOrFeed(entry.geo),
     ...generateGeoRssItemOrFeed(entry.georss),
@@ -381,6 +388,7 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
     ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
     ...generateAdminFeed(feed.admin),
     ...generatePingbackFeed(feed.pingback),
+    ...generateGdFeed(feed.gd),
     ...generateYtFeed(feed.yt),
     ...generateGeoItemOrFeed(feed.geo),
     ...generateGeoRssItemOrFeed(feed.georss),
