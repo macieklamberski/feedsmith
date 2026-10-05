@@ -4,7 +4,7 @@ title: "Reference: Spotify Namespace"
 
 # Spotify Namespace Reference
 
-The Spotify namespace provides podcast-specific metadata for Spotify's podcast platform, including episode limits and country targeting information.
+The Spotify namespace provides podcast-specific metadata for Spotify's podcast platform, including episode limits, country targeting, and Open Access settings for restricting playback to subscribers (feed-level partner and sandbox, item-level entitlement).
 
 <table>
   <tbody>
@@ -14,7 +14,10 @@ The Spotify namespace provides podcast-specific metadata for Spotify's podcast p
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://providersupport.spotify.com/article/podcast-delivery-specification-1-9" target="_blank">Spotify Podcast Delivery Specification</a></td>
+      <td>
+        <a href="https://assets.ctfassets.net/jtdj514wr91r/4r4op9KhH3fY1t3BKt2eiH/7b1b682acf4c41baf79f9574d6dedd7f/Podcast_Delivery_Specification_v1.10_-_master_doc.pdf" target="_blank">Spotify Podcast Delivery Specification v1.10</a><br>
+        <a href="https://developer.spotify.com/documentation/open-access/tutorials/content" target="_blank">Spotify Open Access</a>
+      </td>
     </tr>
     <tr>
       <th>Prefix</th>

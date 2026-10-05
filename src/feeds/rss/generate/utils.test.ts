@@ -269,6 +269,38 @@ describe('generateImage', () => {
   it('should handle non-object inputs gracefully', () => {
     expect(generateImage(undefined)).toBeUndefined()
   })
+
+  it('should generate image with prism namespace properties', () => {
+    const value = {
+      url: 'https://example.com/logo.png',
+      prism: {
+        publicationName: 'Nature',
+        coverDate: new Date('2023-03-15T00:00:00Z'),
+      },
+    }
+    const expected = {
+      url: 'https://example.com/logo.png',
+      'prism:publicationName': 'Nature',
+      'prism:coverDate': '2023-03-15T00:00:00.000Z',
+    }
+
+    expect(generateImage(value)).toEqual(expected)
+  })
+
+  it('should generate image with cc namespace properties', () => {
+    const value = {
+      url: 'https://example.com/logo.png',
+      cc: {
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+      },
+    }
+    const expected = {
+      url: 'https://example.com/logo.png',
+      'cc:license': 'https://creativecommons.org/licenses/by/4.0/',
+    }
+
+    expect(generateImage(value)).toEqual(expected)
+  })
 })
 
 describe('generateTextInput', () => {
@@ -302,6 +334,27 @@ describe('generateTextInput', () => {
 
   it('should handle non-object inputs gracefully', () => {
     expect(generateTextInput(undefined)).toBeUndefined()
+  })
+
+  it('should generate text input with prism namespace properties', () => {
+    const value = {
+      title: 'Search',
+      description: 'Search the journal',
+      name: 'q',
+      link: 'https://example.com/search',
+      prism: {
+        publicationName: 'Nature',
+      },
+    }
+    const expected = {
+      title: 'Search',
+      description: 'Search the journal',
+      name: 'q',
+      link: 'https://example.com/search',
+      'prism:publicationName': 'Nature',
+    }
+
+    expect(generateTextInput(value)).toEqual(expected)
   })
 })
 
@@ -1755,6 +1808,11 @@ describe('generateFeed', () => {
         totalResults: 1000,
         startIndex: 21,
         itemsPerPage: 10,
+        link: {
+          href: 'http://example.com/opensearchdescription.xml',
+          rel: 'search',
+          type: 'application/opensearchdescription+xml',
+        },
         queries: [
           {
             role: 'request',
@@ -1775,6 +1833,11 @@ describe('generateFeed', () => {
           'opensearch:totalResults': 1000,
           'opensearch:startIndex': 21,
           'opensearch:itemsPerPage': 10,
+          'opensearch:link': {
+            '@href': 'http://example.com/opensearchdescription.xml',
+            '@rel': 'search',
+            '@type': 'application/opensearchdescription+xml',
+          },
           'opensearch:Query': [
             {
               '@role': 'request',
@@ -1798,7 +1861,7 @@ describe('generateFeed', () => {
         publicationName: 'Nature',
         issn: '0028-0836',
         volume: '615',
-        publicationDates: [new Date('2023-03-15T00:00:00Z')],
+        publicationDates: [{ value: new Date('2023-03-15T00:00:00Z'), platform: 'print' }],
       },
     }
     const expected = {
@@ -1811,7 +1874,7 @@ describe('generateFeed', () => {
           'prism:publicationName': 'Nature',
           'prism:issn': '0028-0836',
           'prism:volume': '615',
-          'prism:publicationDate': ['2023-03-15T00:00:00.000Z'],
+          'prism:publicationDate': [{ '#text': '2023-03-15T00:00:00.000Z', '@platform': 'print' }],
         },
       },
     }

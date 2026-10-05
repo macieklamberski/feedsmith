@@ -110,8 +110,8 @@ import type { RdfFeed } from 'feedsmith'
 // Access any type from the definitions below
 type Feed = RdfFeed.Feed<Date>
 type Item = RdfFeed.Item<Date>
-type Image = RdfFeed.Image
-type TextInput = RdfFeed.TextInput
+type Image = RdfFeed.Image<Date>
+type TextInput = RdfFeed.TextInput<Date>
 // … see type definitions below for all available types
 ```
 

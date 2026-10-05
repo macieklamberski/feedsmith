@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'bun:test'
-import { parseOriginPlatform, retrieveFeed, retrieveItem } from './utils.js'
+import {
+  parseOriginPlatform,
+  parsePlatformDate,
+  parsePlatformString,
+  parseRating,
+  retrieveEmbargoDate,
+  retrieveItemOrFeed,
+} from './utils.js'
 
-describe('retrieveFeed', () => {
+describe('retrieveItemOrFeed', () => {
   it('should parse complete feed object with core properties', () => {
     const value = {
       'prism:publicationname': 'Journal of Examples',
@@ -22,15 +29,15 @@ describe('retrieveFeed', () => {
       eIssn: '8765-4321',
       volume: '615',
       number: '7952',
-      publicationDates: ['2023-03-15'],
+      publicationDates: [{ value: '2023-03-15' }],
       aggregationType: 'journal',
       publishingFrequency: 'weekly',
-      urls: ['https://journal.example.com'],
-      teasers: ['A short promotional description'],
+      urls: [{ value: 'https://journal.example.com' }],
+      teasers: [{ value: 'A short promotional description' }],
       keywords: ['science', 'research'],
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed object with #text wrapper', () => {
@@ -45,7 +52,7 @@ describe('retrieveFeed', () => {
       volume: '380',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with plural fields as arrays', () => {
@@ -66,7 +73,7 @@ describe('retrieveFeed', () => {
       timePeriod: '2023-Q1',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed fields given as rdf:resource', () => {
@@ -77,6 +84,44 @@ describe('retrieveFeed', () => {
       'prism:event': { '@rdf:resource': 'https://example.com/event' },
       'prism:industry': { '@rdf:resource': 'https://example.com/industry' },
       'prism:location': { '@rdf:resource': 'https://example.com/location' },
+      'prism:publicationname': { '@rdf:resource': 'https://example.com/publicationname' },
+      'prism:aggregationtype': { '@rdf:resource': 'https://example.com/aggregationtype' },
+      'prism:copyrightyear': { '@rdf:resource': 'https://example.com/copyrightyear' },
+      'prism:contenttype': { '@rdf:resource': 'https://example.com/contenttype' },
+      'prism:alternatetitle': { '@rdf:resource': 'https://example.com/alternatetitle' },
+      'prism:subtitle': { '@rdf:resource': 'https://example.com/subtitle' },
+      'prism:teaser': { '@rdf:resource': 'https://example.com/teaser' },
+      'prism:seriestitle': { '@rdf:resource': 'https://example.com/seriestitle' },
+      'prism:bookedition': { '@rdf:resource': 'https://example.com/bookedition' },
+      'prism:nationalcatalognumber': {
+        '@rdf:resource': 'https://example.com/nationalcatalognumber',
+      },
+      'prism:productcode': { '@rdf:resource': 'https://example.com/productcode' },
+      'prism:uspsnumber': { '@rdf:resource': 'https://example.com/uspsnumber' },
+      'prism:publishingfrequency': { '@rdf:resource': 'https://example.com/publishingfrequency' },
+      'prism:channel': { '@rdf:resource': 'https://example.com/channel' },
+      'prism:subchannel1': { '@rdf:resource': 'https://example.com/subchannel1' },
+      'prism:subchannel2': { '@rdf:resource': 'https://example.com/subchannel2' },
+      'prism:subchannel3': { '@rdf:resource': 'https://example.com/subchannel3' },
+      'prism:subchannel4': { '@rdf:resource': 'https://example.com/subchannel4' },
+      'prism:corporateentity': { '@rdf:resource': 'https://example.com/corporateentity' },
+      'prism:sellingagency': { '@rdf:resource': 'https://example.com/sellingagency' },
+      'prism:platform': { '@rdf:resource': 'https://example.com/platform' },
+      'prism:device': { '@rdf:resource': 'https://example.com/device' },
+      'prism:complianceprofile': { '@rdf:resource': 'https://example.com/complianceprofile' },
+      'prism:blogtitle': { '@rdf:resource': 'https://example.com/blogtitle' },
+      'prism:blogurl': { '@rdf:resource': 'https://example.com/blogurl' },
+      'prism:link': { '@rdf:resource': 'https://example.com/link' },
+      'prism:url': { '@rdf:resource': 'https://example.com/url' },
+      'prism:rating': { '@rdf:resource': 'https://example.com/rating' },
+      'prism:timeperiod': { '@rdf:resource': 'https://example.com/timeperiod' },
+      'prism:versionidentifier': { '@rdf:resource': 'https://example.com/versionidentifier' },
+      'prism:ticker': { '@rdf:resource': 'https://example.com/ticker' },
+      'prism:academicfield': { '@rdf:resource': 'https://example.com/academicfield' },
+      'prism:genre': { '@rdf:resource': 'https://example.com/genre' },
+      'prism:object': { '@rdf:resource': 'https://example.com/object' },
+      'prism:profession': { '@rdf:resource': 'https://example.com/profession' },
+      'prism:sport': { '@rdf:resource': 'https://example.com/sport' },
     }
     const expected = {
       distributor: 'https://example.com/distributor',
@@ -85,9 +130,111 @@ describe('retrieveFeed', () => {
       events: ['https://example.com/event'],
       industries: ['https://example.com/industry'],
       locations: ['https://example.com/location'],
+      publicationName: 'https://example.com/publicationname',
+      aggregationType: 'https://example.com/aggregationtype',
+      copyrightYears: ['https://example.com/copyrightyear'],
+      contentType: 'https://example.com/contenttype',
+      alternateTitles: [{ value: 'https://example.com/alternatetitle' }],
+      subtitles: ['https://example.com/subtitle'],
+      teasers: [{ value: 'https://example.com/teaser' }],
+      seriesTitle: 'https://example.com/seriestitle',
+      bookEditions: ['https://example.com/bookedition'],
+      nationalCatalogNumber: 'https://example.com/nationalcatalognumber',
+      productCodes: ['https://example.com/productcode'],
+      uspsNumber: 'https://example.com/uspsnumber',
+      publishingFrequency: 'https://example.com/publishingfrequency',
+      channels: ['https://example.com/channel'],
+      subchannel1: 'https://example.com/subchannel1',
+      subchannel2: 'https://example.com/subchannel2',
+      subchannel3: 'https://example.com/subchannel3',
+      subchannel4: 'https://example.com/subchannel4',
+      corporateEntities: ['https://example.com/corporateentity'],
+      sellingAgencies: ['https://example.com/sellingagency'],
+      platforms: ['https://example.com/platform'],
+      device: 'https://example.com/device',
+      complianceProfile: 'https://example.com/complianceprofile',
+      blogTitle: 'https://example.com/blogtitle',
+      blogURL: 'https://example.com/blogurl',
+      links: ['https://example.com/link'],
+      urls: [{ value: 'https://example.com/url' }],
+      ratings: [{ value: 'https://example.com/rating' }],
+      timePeriod: 'https://example.com/timeperiod',
+      versionIdentifier: 'https://example.com/versionidentifier',
+      tickers: ['https://example.com/ticker'],
+      academicFields: ['https://example.com/academicfield'],
+      genres: ['https://example.com/genre'],
+      objects: ['https://example.com/object'],
+      profession: 'https://example.com/profession',
+      sport: 'https://example.com/sport',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with PRISM 1.2 fields', () => {
+    const value = {
+      'prism:category': { '@rdf:resource': 'https://example.com/genre/research' },
+      'prism:hasformat': 'https://example.com/article.pdf',
+      'prism:haspart': [
+        { '@rdf:resource': 'https://example.com/figure-1' },
+        { '@rdf:resource': 'https://example.com/figure-2' },
+      ],
+      'prism:haspreviousversion': 'https://example.com/article-v1',
+      'prism:isformatof': 'https://example.com/article',
+      'prism:ispartof': { '@rdf:resource': 'https://example.com/issue-7952' },
+      'prism:isreferencedby': 'https://example.com/review',
+      'prism:isrequiredby': 'https://example.com/bundle',
+      'prism:isversionof': 'https://example.com/original',
+      'prism:objecttitle': 'Dodge Viper',
+      'prism:receptiondate': '2023-03-16',
+      'prism:references': [
+        { '@rdf:resource': 'https://doi.org/10.1000/1' },
+        'https://doi.org/10.1000/2',
+      ],
+      'prism:requires': { '@rdf:resource': 'https://example.com/dataset' },
+    }
+    const expected = {
+      category: 'https://example.com/genre/research',
+      hasFormats: ['https://example.com/article.pdf'],
+      hasParts: ['https://example.com/figure-1', 'https://example.com/figure-2'],
+      hasPreviousVersion: 'https://example.com/article-v1',
+      isFormatOf: 'https://example.com/article',
+      isPartOf: 'https://example.com/issue-7952',
+      isReferencedBy: 'https://example.com/review',
+      isRequiredBy: 'https://example.com/bundle',
+      isVersionOf: 'https://example.com/original',
+      objectTitles: ['Dodge Viper'],
+      receptionDate: '2023-03-16',
+      references: ['https://doi.org/10.1000/1', 'https://doi.org/10.1000/2'],
+      requires: 'https://example.com/dataset',
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should parse feed with page, word count and relationship fields', () => {
+    const value = {
+      'prism:startingpage': '975',
+      'prism:endingpage': '1211',
+      'prism:wordcount': '52000',
+      'prism:hasalternative': 'https://example.com/issue-alt',
+      'prism:hascorrection': { '@rdf:resource': 'https://example.com/issue-correction' },
+      'prism:hastranslation': ['https://example.com/issue-de', 'https://example.com/issue-fr'],
+      'prism:iscorrectionof': 'https://example.com/issue-v1',
+      'prism:istranslationof': { '@rdf:resource': 'https://example.com/issue-en' },
+    }
+    const expected = {
+      startingPage: '975',
+      endingPage: '1211',
+      wordCount: 52000,
+      hasAlternatives: ['https://example.com/issue-alt'],
+      hasCorrections: [{ value: 'https://example.com/issue-correction' }],
+      hasTranslations: ['https://example.com/issue-de', 'https://example.com/issue-fr'],
+      isCorrectionOf: ['https://example.com/issue-v1'],
+      isTranslationOf: 'https://example.com/issue-en',
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with date fields', () => {
@@ -102,15 +249,15 @@ describe('retrieveFeed', () => {
     }
     const expected = {
       coverDate: '2023-03-01',
-      publicationDates: ['2023-03-15T10:00:00Z'],
+      publicationDates: [{ value: '2023-03-15T10:00:00Z' }],
       creationDate: '2023-02-20',
       modificationDate: '2023-03-10T14:30:00Z',
-      killDate: '2024-03-15',
-      onSaleDates: ['2023-03-01', '2023-03-08'],
-      offSaleDates: ['2023-04-01'],
+      killDate: { value: '2024-03-15' },
+      onSaleDates: [{ value: '2023-03-01' }, { value: '2023-03-08' }],
+      offSaleDates: [{ value: '2023-04-01' }],
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with number fields', () => {
@@ -123,7 +270,7 @@ describe('retrieveFeed', () => {
       byteCount: 1048576,
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with deprecated fields', () => {
@@ -140,7 +287,7 @@ describe('retrieveFeed', () => {
       rightsAgent: 'Rights Management Inc.',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with distribution and platform fields', () => {
@@ -171,7 +318,7 @@ describe('retrieveFeed', () => {
       sellingAgencies: ['Agency1'],
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with originPlatform in platform attribute', () => {
@@ -182,7 +329,7 @@ describe('retrieveFeed', () => {
       originPlatforms: ['web', 'print'],
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with subject elements', () => {
@@ -205,7 +352,7 @@ describe('retrieveFeed', () => {
       sport: 'Tennis',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with series fields', () => {
@@ -222,7 +369,7 @@ describe('retrieveFeed', () => {
       versionIdentifier: 'v1.0.0',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with issue fields', () => {
@@ -235,11 +382,11 @@ describe('retrieveFeed', () => {
     const expected = {
       issueIdentifier: '2023-03-15',
       issueName: 'Spring Issue',
-      issueTeaser: 'Special coverage of breakthrough discoveries',
+      issueTeaser: { value: 'Special coverage of breakthrough discoveries' },
       issueType: 'regular',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with additional date fields', () => {
@@ -252,13 +399,13 @@ describe('retrieveFeed', () => {
     }
     const expected = {
       coverDisplayDate: 'March 15, 2023',
-      publicationDisplayDates: ['Spring 2023'],
+      publicationDisplayDates: [{ value: 'Spring 2023' }],
       dateReceived: '2023-01-15',
-      onSaleDays: ['wednesday', 'friday'],
+      onSaleDays: [{ value: 'wednesday' }, { value: 'friday' }],
       copyrightYears: ['2023', '2024'],
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with content and title fields', () => {
@@ -271,11 +418,11 @@ describe('retrieveFeed', () => {
     const expected = {
       edition: 'International',
       contentType: 'article',
-      alternateTitles: ['Example Journal', 'Example Magazine'],
+      alternateTitles: [{ value: 'Example Journal' }, { value: 'Example Magazine' }],
       subtitles: ['The International Weekly Journal of Science'],
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with catalog and product fields', () => {
@@ -290,7 +437,7 @@ describe('retrieveFeed', () => {
       productCodes: ['EXJ-2023-615', 'EXJ-2023-616'],
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with subchannel3-4 and subsection3-4', () => {
@@ -307,7 +454,7 @@ describe('retrieveFeed', () => {
       subsection4: 'trending',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with organization and entity fields', () => {
@@ -324,7 +471,7 @@ describe('retrieveFeed', () => {
       persons: ['Dr. Jane Smith', 'Dr. John Doe'],
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse feed with blog and link fields', () => {
@@ -338,10 +485,10 @@ describe('retrieveFeed', () => {
       blogTitle: 'Example News Blog',
       blogURL: 'https://journal.example.com/news/blog',
       links: ['https://journal.example.com/journal'],
-      ratings: ['A+', 'Excellent'],
+      ratings: [{ value: 'A+' }, { value: 'Excellent' }],
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should handle empty strings by omitting them', () => {
@@ -354,7 +501,7 @@ describe('retrieveFeed', () => {
       publicationName: 'Journal of Examples',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should use first element when singular field is an array', () => {
@@ -367,7 +514,7 @@ describe('retrieveFeed', () => {
       volume: '615',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should handle coercible values', () => {
@@ -382,7 +529,7 @@ describe('retrieveFeed', () => {
       byteCount: 1048576,
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should handle mixed valid and invalid properties', () => {
@@ -396,20 +543,20 @@ describe('retrieveFeed', () => {
       publicationName: 'Journal of Examples',
     }
 
-    expect(retrieveFeed(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
     const value = {}
 
-    expect(retrieveFeed(value)).toBeUndefined()
+    expect(retrieveItemOrFeed(value)).toBeUndefined()
   })
 
   it('should return undefined for non-object input', () => {
-    expect(retrieveFeed('not an object')).toBeUndefined()
-    expect(retrieveFeed(undefined)).toBeUndefined()
-    expect(retrieveFeed(null)).toBeUndefined()
-    expect(retrieveFeed([])).toBeUndefined()
+    expect(retrieveItemOrFeed('not an object')).toBeUndefined()
+    expect(retrieveItemOrFeed(undefined)).toBeUndefined()
+    expect(retrieveItemOrFeed(null)).toBeUndefined()
+    expect(retrieveItemOrFeed([])).toBeUndefined()
   })
 
   it.todo('should parse date fields with custom parseDateFn', () => {
@@ -417,9 +564,7 @@ describe('retrieveFeed', () => {
     // Expected: coverDate, publicationDates, creationDate and the other date fields equal
     // the values returned by parseDateFn instead of the raw strings.
   })
-})
 
-describe('retrieveItem', () => {
   it('should parse complete item object with core properties', () => {
     const value = {
       'prism:doi': '10.1234/example-2023-0001',
@@ -434,17 +579,17 @@ describe('retrieveItem', () => {
     }
     const expected = {
       doi: '10.1234/example-2023-0001',
-      urls: ['https://journal.example.com/articles/example-2023-0001'],
+      urls: [{ value: 'https://journal.example.com/articles/example-2023-0001' }],
       volume: '615',
       number: '7952',
       startingPage: '425',
       endingPage: '432',
-      publicationDates: ['2023-03-15'],
+      publicationDates: [{ value: '2023-03-15' }],
       keywords: ['quantum', 'computing'],
       genres: ['research-article'],
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with #text wrapper', () => {
@@ -459,7 +604,7 @@ describe('retrieveItem', () => {
       startingPage: '100',
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with page information', () => {
@@ -480,7 +625,7 @@ describe('retrieveItem', () => {
       samplePageRange: '1-3',
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with dual-level fields', () => {
@@ -497,7 +642,7 @@ describe('retrieveItem', () => {
       section: 'Research',
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item fields given as rdf:resource', () => {
@@ -513,6 +658,43 @@ describe('retrieveItem', () => {
       'prism:isalternativeof': { '@rdf:resource': 'https://example.com/original' },
       'prism:iscorrectionof': { '@rdf:resource': 'https://example.com/corrected' },
       'prism:istranslationof': { '@rdf:resource': 'https://example.com/source' },
+      'prism:publicationname': { '@rdf:resource': 'https://example.com/publicationname' },
+      'prism:url': { '@rdf:resource': 'https://example.com/url' },
+      'prism:aggregationtype': { '@rdf:resource': 'https://example.com/aggregationtype' },
+      'prism:pageprogressiondirection': {
+        '@rdf:resource': 'https://example.com/pageprogressiondirection',
+      },
+      'prism:copyrightyear': { '@rdf:resource': 'https://example.com/copyrightyear' },
+      'prism:contenttype': { '@rdf:resource': 'https://example.com/contenttype' },
+      'prism:genre': { '@rdf:resource': 'https://example.com/genre' },
+      'prism:alternatetitle': { '@rdf:resource': 'https://example.com/alternatetitle' },
+      'prism:subtitle': { '@rdf:resource': 'https://example.com/subtitle' },
+      'prism:teaser': { '@rdf:resource': 'https://example.com/teaser' },
+      'prism:seriestitle': { '@rdf:resource': 'https://example.com/seriestitle' },
+      'prism:nationalcatalognumber': {
+        '@rdf:resource': 'https://example.com/nationalcatalognumber',
+      },
+      'prism:productcode': { '@rdf:resource': 'https://example.com/productcode' },
+      'prism:uspsnumber': { '@rdf:resource': 'https://example.com/uspsnumber' },
+      'prism:publishingfrequency': { '@rdf:resource': 'https://example.com/publishingfrequency' },
+      'prism:subchannel1': { '@rdf:resource': 'https://example.com/subchannel1' },
+      'prism:subchannel2': { '@rdf:resource': 'https://example.com/subchannel2' },
+      'prism:subchannel3': { '@rdf:resource': 'https://example.com/subchannel3' },
+      'prism:subchannel4': { '@rdf:resource': 'https://example.com/subchannel4' },
+      'prism:corporateentity': { '@rdf:resource': 'https://example.com/corporateentity' },
+      'prism:sellingagency': { '@rdf:resource': 'https://example.com/sellingagency' },
+      'prism:platform': { '@rdf:resource': 'https://example.com/platform' },
+      'prism:device': { '@rdf:resource': 'https://example.com/device' },
+      'prism:complianceprofile': { '@rdf:resource': 'https://example.com/complianceprofile' },
+      'prism:academicfield': { '@rdf:resource': 'https://example.com/academicfield' },
+      'prism:object': { '@rdf:resource': 'https://example.com/object' },
+      'prism:profession': { '@rdf:resource': 'https://example.com/profession' },
+      'prism:sport': { '@rdf:resource': 'https://example.com/sport' },
+      'prism:link': { '@rdf:resource': 'https://example.com/link' },
+      'prism:rating': { '@rdf:resource': 'https://example.com/rating' },
+      'prism:timeperiod': { '@rdf:resource': 'https://example.com/timeperiod' },
+      'prism:versionidentifier': { '@rdf:resource': 'https://example.com/versionidentifier' },
+      'prism:ticker': { '@rdf:resource': 'https://example.com/ticker' },
     }
     const expected = {
       organizations: ['https://example.com/org'],
@@ -521,14 +703,115 @@ describe('retrieveItem', () => {
       industries: ['https://example.com/industry'],
       locations: ['https://example.com/location'],
       hasAlternatives: ['https://example.com/alternative'],
-      hasCorrections: ['https://example.com/correction'],
+      hasCorrections: [{ value: 'https://example.com/correction' }],
       hasTranslations: ['https://example.com/translation'],
       isAlternativeOf: ['https://example.com/original'],
       isCorrectionOf: ['https://example.com/corrected'],
       isTranslationOf: 'https://example.com/source',
+      publicationName: 'https://example.com/publicationname',
+      urls: [{ value: 'https://example.com/url' }],
+      aggregationType: 'https://example.com/aggregationtype',
+      pageProgressionDirection: 'https://example.com/pageprogressiondirection',
+      copyrightYears: ['https://example.com/copyrightyear'],
+      contentType: 'https://example.com/contenttype',
+      genres: ['https://example.com/genre'],
+      alternateTitles: [{ value: 'https://example.com/alternatetitle' }],
+      subtitles: ['https://example.com/subtitle'],
+      teasers: [{ value: 'https://example.com/teaser' }],
+      seriesTitle: 'https://example.com/seriestitle',
+      nationalCatalogNumber: 'https://example.com/nationalcatalognumber',
+      productCodes: ['https://example.com/productcode'],
+      uspsNumber: 'https://example.com/uspsnumber',
+      publishingFrequency: 'https://example.com/publishingfrequency',
+      subchannel1: 'https://example.com/subchannel1',
+      subchannel2: 'https://example.com/subchannel2',
+      subchannel3: 'https://example.com/subchannel3',
+      subchannel4: 'https://example.com/subchannel4',
+      corporateEntities: ['https://example.com/corporateentity'],
+      sellingAgencies: ['https://example.com/sellingagency'],
+      platforms: ['https://example.com/platform'],
+      device: 'https://example.com/device',
+      complianceProfile: 'https://example.com/complianceprofile',
+      academicFields: ['https://example.com/academicfield'],
+      objects: ['https://example.com/object'],
+      profession: 'https://example.com/profession',
+      sport: 'https://example.com/sport',
+      links: ['https://example.com/link'],
+      ratings: [{ value: 'https://example.com/rating' }],
+      timePeriod: 'https://example.com/timeperiod',
+      versionIdentifier: 'https://example.com/versionidentifier',
+      tickers: ['https://example.com/ticker'],
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should parse item with PAM issue, series and classification fields', () => {
+    const value = {
+      'prism:issuename': 'Spring Issue',
+      'prism:issueteaser': 'Special coverage',
+      'prism:issuetype': 'regular',
+      'prism:aggregationtype': 'journal',
+      'prism:isbn': '978-0-12-345678-9',
+      'prism:onsaledate': '2023-03-01',
+      'prism:onsaleday': 'wednesday',
+      'prism:offsaledate': '2023-04-01',
+      'prism:seriestitle': 'Nature Research Journals',
+      'prism:seriesnumber': '1',
+      'prism:subchannel1': 'Science',
+      'prism:subchannel2': 'Biology',
+      'prism:subchannel3': 'Cells',
+      'prism:subchannel4': 'Membranes',
+      'prism:subsection1': 'Articles',
+      'prism:subsection2': 'Letters',
+      'prism:subsection3': 'Brief Communications',
+      'prism:subsection4': 'Corrections',
+      'prism:productcode': 'NAT-2023-615',
+      'prism:sellingagency': 'Example Agency',
+      'prism:nationalcatalognumber': 'NC12345',
+      'prism:publishingfrequency': 'weekly',
+      'prism:uspsnumber': '123-456',
+    }
+    const expected = {
+      issueName: 'Spring Issue',
+      issueTeaser: { value: 'Special coverage' },
+      issueType: 'regular',
+      aggregationType: 'journal',
+      isbns: ['978-0-12-345678-9'],
+      onSaleDates: [{ value: '2023-03-01' }],
+      onSaleDays: [{ value: 'wednesday' }],
+      offSaleDates: [{ value: '2023-04-01' }],
+      seriesTitle: 'Nature Research Journals',
+      seriesNumber: 1,
+      subchannel1: 'Science',
+      subchannel2: 'Biology',
+      subchannel3: 'Cells',
+      subchannel4: 'Membranes',
+      subsection1: 'Articles',
+      subsection2: 'Letters',
+      subsection3: 'Brief Communications',
+      subsection4: 'Corrections',
+      productCodes: ['NAT-2023-615'],
+      sellingAgencies: ['Example Agency'],
+      nationalCatalogNumber: 'NC12345',
+      publishingFrequency: 'weekly',
+      uspsNumber: '123-456',
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should parse item with distributor and compliance profile', () => {
+    const value = {
+      'prism:distributor': { '@rdf:resource': 'https://example.com/distributor' },
+      'prism:complianceprofile': 'two',
+    }
+    const expected = {
+      distributor: 'https://example.com/distributor',
+      complianceProfile: 'two',
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with relationship fields', () => {
@@ -542,14 +825,14 @@ describe('retrieveItem', () => {
     }
     const expected = {
       hasAlternatives: ['alt1', 'alt2'],
-      hasCorrections: ['corr1'],
+      hasCorrections: [{ value: 'corr1' }],
       hasTranslations: ['trans1', 'trans2'],
       isAlternativeOf: ['orig1'],
       isCorrectionOf: ['origcorr1'],
       isTranslationOf: 'original-article-id',
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with supplemental fields', () => {
@@ -564,7 +847,7 @@ describe('retrieveItem', () => {
       supplementStartingPage: 'S1',
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with metric fields', () => {
@@ -579,7 +862,7 @@ describe('retrieveItem', () => {
       versionIdentifier: 'v1.2.0',
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with PAM/PSV dual-level fields', () => {
@@ -590,13 +873,13 @@ describe('retrieveItem', () => {
       'prism:ticker': ['AAPL', 'GOOGL'],
     }
     const expected = {
-      publicationDisplayDates: ['March 15, 2023', 'Spring 2023'],
-      ratings: ['PG-13', 'TV-14'],
+      publicationDisplayDates: [{ value: 'March 15, 2023' }, { value: 'Spring 2023' }],
+      ratings: [{ value: 'PG-13' }, { value: 'TV-14' }],
       timePeriod: '2023-Q1',
       tickers: ['AAPL', 'GOOGL'],
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with date fields', () => {
@@ -608,14 +891,14 @@ describe('retrieveItem', () => {
       'prism:killdate': '2024-03-15',
     }
     const expected = {
-      publicationDates: ['2023-03-15'],
+      publicationDates: [{ value: '2023-03-15' }],
       creationDate: '2023-02-01T09:00:00Z',
       modificationDate: '2023-03-10',
       dateReceived: '2023-01-15',
-      killDate: '2024-03-15',
+      killDate: { value: '2024-03-15' },
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with issue identifier', () => {
@@ -626,7 +909,7 @@ describe('retrieveItem', () => {
       issueIdentifier: '2023-03-15',
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with cover date fields', () => {
@@ -639,7 +922,7 @@ describe('retrieveItem', () => {
       coverDisplayDate: 'March 15, 2023',
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with people and organization fields', () => {
@@ -654,7 +937,7 @@ describe('retrieveItem', () => {
       persons: ['John Doe', 'Jane Smith'],
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with deprecated fields', () => {
@@ -671,7 +954,7 @@ describe('retrieveItem', () => {
       rightsAgent: 'CCC',
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with content and title fields', () => {
@@ -686,13 +969,13 @@ describe('retrieveItem', () => {
     const expected = {
       edition: 'International',
       contentType: 'research-article',
-      alternateTitles: ['Alternative Title 1', 'Alternative Title 2'],
+      alternateTitles: [{ value: 'Alternative Title 1' }, { value: 'Alternative Title 2' }],
       subtitles: ['A Comprehensive Study'],
-      teasers: ['Brief summary of the article'],
+      teasers: [{ value: 'Brief summary of the article' }],
       copyrightYears: ['2023', '2024'],
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with platform fields', () => {
@@ -705,7 +988,7 @@ describe('retrieveItem', () => {
       device: 'smartphone',
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with originPlatform fields', () => {
@@ -716,7 +999,7 @@ describe('retrieveItem', () => {
       originPlatforms: ['print', 'web'],
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with originPlatform in platform attribute', () => {
@@ -727,7 +1010,7 @@ describe('retrieveItem', () => {
       originPlatforms: ['print', 'web'],
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with subject classification fields', () => {
@@ -750,7 +1033,7 @@ describe('retrieveItem', () => {
       sport: 'Cycling',
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
   it('should parse item with link fields', () => {
@@ -761,81 +1044,7 @@ describe('retrieveItem', () => {
       links: ['https://example.com/related1', 'https://example.com/related2'],
     }
 
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should handle empty strings by omitting them', () => {
-    const value = {
-      'prism:doi': '10.1234/test',
-      'prism:url': '',
-      'prism:volume': '  ',
-    }
-    const expected = {
-      doi: '10.1234/test',
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should use first element when singular field is an array', () => {
-    const value = {
-      'prism:doi': ['10.1234/example-2023-0001', '10.1234/example-2023-0002'],
-      'prism:volume': ['615', '616'],
-    }
-    const expected = {
-      doi: '10.1234/example-2023-0001',
-      volume: '615',
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should handle coercible values', () => {
-    const value = {
-      'prism:volume': 615,
-      'prism:pagecount': '15',
-      'prism:wordcount': 5000,
-    }
-    const expected = {
-      volume: '615',
-      pageCount: 15,
-      wordCount: 5000,
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should handle mixed valid and invalid properties', () => {
-    const value = {
-      'prism:doi': '10.1234/example-2023-0001',
-      'prism:wordcount': 'not a number',
-      'prism:volume': '',
-      'other:property': 'value',
-    }
-    const expected = {
-      doi: '10.1234/example-2023-0001',
-    }
-
-    expect(retrieveItem(value)).toEqual(expected)
-  })
-
-  it('should return undefined for empty object', () => {
-    const value = {}
-
-    expect(retrieveItem(value)).toBeUndefined()
-  })
-
-  it('should return undefined for non-object input', () => {
-    expect(retrieveItem('not an object')).toBeUndefined()
-    expect(retrieveItem(undefined)).toBeUndefined()
-    expect(retrieveItem(null)).toBeUndefined()
-    expect(retrieveItem([])).toBeUndefined()
-  })
-
-  it.todo('should parse date fields with custom parseDateFn', () => {
-    // Pass options.parseDateFn that converts date strings into Date instances.
-    // Expected: publicationDates, creationDate, modificationDate and the other date fields
-    // equal the values returned by parseDateFn instead of the raw strings.
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 })
 
@@ -894,5 +1103,148 @@ describe('parseOriginPlatform', () => {
 
   it('should return undefined for undefined', () => {
     expect(parseOriginPlatform(undefined)).toBeUndefined()
+  })
+})
+
+describe('parsePlatformString', () => {
+  it('should parse text with platform attribute', () => {
+    const value = { '#text': 'Summer Special', '@platform': 'web' }
+    const expected = { value: 'Summer Special', platform: 'web' }
+
+    expect(parsePlatformString(value)).toEqual(expected)
+  })
+
+  it('should parse plain text', () => {
+    const expected = { value: 'Summer Special' }
+
+    expect(parsePlatformString('Summer Special')).toEqual(expected)
+  })
+
+  it('should parse rdf:resource attribute', () => {
+    const value = { '@rdf:resource': 'https://example.com/teaser', '@platform': 'web' }
+    const expected = { value: 'https://example.com/teaser', platform: 'web' }
+
+    expect(parsePlatformString(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    expect(parsePlatformString({})).toBeUndefined()
+  })
+
+  it('should return undefined for empty string', () => {
+    expect(parsePlatformString('')).toBeUndefined()
+  })
+
+  it('should return undefined for undefined', () => {
+    expect(parsePlatformString(undefined)).toBeUndefined()
+  })
+})
+
+describe('parsePlatformDate', () => {
+  it('should parse date with platform attribute', () => {
+    const value = { '#text': '2023-03-15', '@platform': 'web' }
+    const expected = { value: '2023-03-15', platform: 'web' }
+
+    expect(parsePlatformDate(value)).toEqual(expected)
+  })
+
+  it('should parse plain date', () => {
+    const expected = { value: '2023-03-15' }
+
+    expect(parsePlatformDate('2023-03-15')).toEqual(expected)
+  })
+
+  it('should apply custom parseDateFn', () => {
+    const value = { '#text': '2023-03-15T12:00:00Z', '@platform': 'web' }
+    const expected = { value: new Date('2023-03-15T12:00:00Z'), platform: 'web' }
+
+    expect(parsePlatformDate(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    expect(parsePlatformDate({})).toBeUndefined()
+  })
+
+  it('should return undefined for undefined', () => {
+    expect(parsePlatformDate(undefined)).toBeUndefined()
+  })
+})
+
+describe('parseRating', () => {
+  it('should parse rating with ratingSystem attribute', () => {
+    const value = { '#text': 'E', '@ratingsystem': 'ESRB' }
+    const expected = { value: 'E', ratingSystem: 'ESRB' }
+
+    expect(parseRating(value)).toEqual(expected)
+  })
+
+  it('should parse rdf:resource attribute', () => {
+    const value = { '@rdf:resource': 'https://example.com/esrb#E', '@ratingsystem': 'ESRB' }
+    const expected = { value: 'https://example.com/esrb#E', ratingSystem: 'ESRB' }
+
+    expect(parseRating(value)).toEqual(expected)
+  })
+
+  it('should parse plain text', () => {
+    const expected = { value: 'E' }
+
+    expect(parseRating('E')).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    expect(parseRating({})).toBeUndefined()
+  })
+
+  it('should return undefined for undefined', () => {
+    expect(parseRating(undefined)).toBeUndefined()
+  })
+})
+
+describe('retrieveEmbargoDate', () => {
+  it('should parse embargoDate', () => {
+    const value = {
+      'prism:embargodate': '2023-06-01',
+    }
+
+    expect(retrieveEmbargoDate(value)).toBe('2023-06-01')
+  })
+
+  it('should parse releaseTime from earlier PRISM versions', () => {
+    const value = {
+      'prism:releasetime': '2023-06-01',
+    }
+
+    expect(retrieveEmbargoDate(value)).toBe('2023-06-01')
+  })
+
+  it('should prefer embargoDate when both are present', () => {
+    const value = {
+      'prism:embargodate': '2023-06-01',
+      'prism:releasetime': '2023-07-01',
+    }
+
+    expect(retrieveEmbargoDate(value)).toBe('2023-06-01')
+  })
+
+  it('should fall back to releaseTime when embargoDate is empty', () => {
+    const value = {
+      'prism:embargodate': '',
+      'prism:releasetime': '2023-06-01',
+    }
+
+    expect(retrieveEmbargoDate(value)).toBe('2023-06-01')
+  })
+
+  it('should apply custom parseDateFn', () => {
+    const value = {
+      'prism:releasetime': '2023-06-01T00:00:00Z',
+    }
+    const expected = new Date('2023-06-01T00:00:00Z')
+
+    expect(retrieveEmbargoDate(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+  })
+
+  it('should return undefined when neither is present', () => {
+    expect(retrieveEmbargoDate({})).toBeUndefined()
   })
 })

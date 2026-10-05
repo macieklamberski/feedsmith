@@ -43,6 +43,7 @@ import {
   generateFeed as generatePingbackFeed,
   generateItem as generatePingbackItem,
 } from '../../../namespaces/pingback/generate/utils.js'
+import { generateItemOrFeed as generatePrismItemOrFeed } from '../../../namespaces/prism/generate/utils.js'
 import { generateItem as generatePscItem } from '../../../namespaces/psc/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
@@ -303,6 +304,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
     ...generateGooglePlayItem(entry.googleplay),
     ...generateFeedBurnerItem(entry.feedburner),
     ...generateArxivEntry(entry.arxiv),
+    ...generatePrismItemOrFeed(entry.prism),
     ...generateCc(entry.cc),
     ...generateCreativeCommonsItemOrFeed(entry.creativeCommons),
     ...generateThrItem(entry.thr),
@@ -375,6 +377,7 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
     ...generateGooglePlayFeed(feed.googleplay),
     ...generateFeedBurnerFeed(feed.feedburner),
     ...generateOpenSearchFeed(feed.opensearch),
+    ...generatePrismItemOrFeed(feed.prism),
     ...generateCc(feed.cc),
     ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
     ...generateAtFeed(feed.at),

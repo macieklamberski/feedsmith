@@ -24,17 +24,62 @@ export const parseOriginPlatform: ParseUtilPartial<string> = (value) => {
   return retrieveRdfResourceOrText(value, parseString)
 }
 
-export const retrieveFeed: ParseUtilPartial<PrismNs.Feed<DateAny>, ParseMainOptions<DateAny>> = (
+export const parsePlatformString: ParseUtilPartial<PrismNs.PlatformValue<string>> = (value) => {
+  const platformValue = {
+    value: retrieveRdfResourceOrText(value, parseString),
+    platform: parseString(value?.['@platform']),
+  }
+
+  return trimObject(platformValue)
+}
+
+export const parsePlatformDate: ParseUtilPartial<
+  PrismNs.PlatformValue<DateAny>,
+  ParseMainOptions<DateAny>
+> = (value, options) => {
+  const platformValue = {
+    value: parseDate(retrieveText(value), options?.parseDateFn),
+    platform: parseString(value?.['@platform']),
+  }
+
+  return trimObject(platformValue)
+}
+
+export const parseRating: ParseUtilPartial<PrismNs.Rating> = (value) => {
+  const rating = {
+    value: retrieveRdfResourceOrText(value, parseString),
+    ratingSystem: parseString(value?.['@ratingsystem']),
+  }
+
+  return trimObject(rating)
+}
+
+// See: http://purl.org/rss/1.0/modules/prism/, which names releaseTime as the earlier embargoDate.
+export const retrieveEmbargoDate: ParseUtilPartial<DateAny, ParseMainOptions<DateAny>> = (
   value,
   options,
 ) => {
+  return (
+    parseSingularOf(value['prism:embargodate'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ) ??
+    parseSingularOf(value['prism:releasetime'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    )
+  )
+}
+
+export const retrieveItemOrFeed: ParseUtilPartial<
+  PrismNs.ItemOrFeed<DateAny>,
+  ParseMainOptions<DateAny>
+> = (value, options) => {
   if (!isPlainObject(value)) {
     return
   }
 
-  const feed = {
+  const itemOrFeed = {
     publicationName: parseSingularOf(value['prism:publicationname'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     issn: parseSingularOf(value['prism:issn'], (value) => parseString(retrieveText(value))),
     eIssn: parseSingularOf(value['prism:eissn'], (value) => parseString(retrieveText(value))),
@@ -45,12 +90,11 @@ export const retrieveFeed: ParseUtilPartial<PrismNs.Feed<DateAny>, ParseMainOpti
     issueName: parseSingularOf(value['prism:issuename'], (value) =>
       parseString(retrieveText(value)),
     ),
-    issueTeaser: parseSingularOf(value['prism:issueteaser'], (value) =>
-      parseString(retrieveText(value)),
-    ),
+    issueTeaser: parseSingularOf(value['prism:issueteaser'], parsePlatformString),
     issueType: parseSingularOf(value['prism:issuetype'], (value) =>
       parseString(retrieveText(value)),
     ),
+    doi: parseSingularOf(value['prism:doi'], (value) => parseString(retrieveText(value))),
     volume: parseSingularOf(value['prism:volume'], (value) => parseString(retrieveText(value))),
     number: parseSingularOf(value['prism:number'], (value) => parseString(retrieveText(value))),
     edition: parseSingularOf(value['prism:edition'], (value) => parseString(retrieveText(value))),
@@ -58,7 +102,7 @@ export const retrieveFeed: ParseUtilPartial<PrismNs.Feed<DateAny>, ParseMainOpti
       parseNumber(retrieveText(value)),
     ),
     aggregationType: parseSingularOf(value['prism:aggregationtype'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     coverDate: parseSingularOf(value['prism:coverdate'], (value) =>
       parseDate(retrieveText(value), options?.parseDateFn),
@@ -67,10 +111,11 @@ export const retrieveFeed: ParseUtilPartial<PrismNs.Feed<DateAny>, ParseMainOpti
       parseString(retrieveText(value)),
     ),
     publicationDates: parseArrayOf(value['prism:publicationdate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
+      parsePlatformDate(value, options),
     ),
-    publicationDisplayDates: parseArrayOf(value['prism:publicationdisplaydate'], (value) =>
-      parseString(retrieveText(value)),
+    publicationDisplayDates: parseArrayOf(
+      value['prism:publicationdisplaydate'],
+      parsePlatformString,
     ),
     creationDate: parseSingularOf(value['prism:creationdate'], (value) =>
       parseDate(retrieveText(value), options?.parseDateFn),
@@ -82,60 +127,62 @@ export const retrieveFeed: ParseUtilPartial<PrismNs.Feed<DateAny>, ParseMainOpti
       parseDate(retrieveText(value), options?.parseDateFn),
     ),
     onSaleDates: parseArrayOf(value['prism:onsaledate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
+      parsePlatformDate(value, options),
     ),
-    onSaleDays: parseArrayOf(value['prism:onsaleday'], (value) => parseString(retrieveText(value))),
+    onSaleDays: parseArrayOf(value['prism:onsaleday'], parsePlatformString),
     offSaleDates: parseArrayOf(value['prism:offsaledate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
+      parsePlatformDate(value, options),
     ),
     killDate: parseSingularOf(value['prism:killdate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
+      parsePlatformDate(value, options),
     ),
     copyrightYears: parseArrayOf(value['prism:copyrightyear'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     contentType: parseSingularOf(value['prism:contenttype'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
-    alternateTitles: parseArrayOf(value['prism:alternatetitle'], (value) =>
-      parseString(retrieveText(value)),
+    alternateTitles: parseArrayOf(value['prism:alternatetitle'], parsePlatformString),
+    subtitles: parseArrayOf(value['prism:subtitle'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
     ),
-    subtitles: parseArrayOf(value['prism:subtitle'], (value) => parseString(retrieveText(value))),
-    teasers: parseArrayOf(value['prism:teaser'], (value) => parseString(retrieveText(value))),
+    teasers: parseArrayOf(value['prism:teaser'], parsePlatformString),
     keywords: parseArrayOf(value['prism:keyword'], (value) => parseString(retrieveText(value))),
     seriesTitle: parseSingularOf(value['prism:seriestitle'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     seriesNumber: parseSingularOf(value['prism:seriesnumber'], (value) =>
       parseNumber(retrieveText(value)),
     ),
     bookEditions: parseArrayOf(value['prism:bookedition'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     nationalCatalogNumber: parseSingularOf(value['prism:nationalcatalognumber'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     productCodes: parseArrayOf(value['prism:productcode'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     uspsNumber: parseSingularOf(value['prism:uspsnumber'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     publishingFrequency: parseSingularOf(value['prism:publishingfrequency'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
-    channels: parseArrayOf(value['prism:channel'], (value) => parseString(retrieveText(value))),
+    channels: parseArrayOf(value['prism:channel'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
     subchannel1: parseSingularOf(value['prism:subchannel1'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     subchannel2: parseSingularOf(value['prism:subchannel2'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     subchannel3: parseSingularOf(value['prism:subchannel3'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     subchannel4: parseSingularOf(value['prism:subchannel4'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     section: parseSingularOf(value['prism:section'], (value) => parseString(retrieveText(value))),
     subsection1: parseSingularOf(value['prism:subsection1'], (value) =>
@@ -150,102 +197,6 @@ export const retrieveFeed: ParseUtilPartial<PrismNs.Feed<DateAny>, ParseMainOpti
     subsection4: parseSingularOf(value['prism:subsection4'], (value) =>
       parseString(retrieveText(value)),
     ),
-    corporateEntities: parseArrayOf(value['prism:corporateentity'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    distributor: parseSingularOf(value['prism:distributor'], (value) =>
-      retrieveRdfResourceOrText(value, parseString),
-    ),
-    sellingAgencies: parseArrayOf(value['prism:sellingagency'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    organizations: parseArrayOf(value['prism:organization'], (value) =>
-      retrieveRdfResourceOrText(value, parseString),
-    ),
-    persons: parseArrayOf(value['prism:person'], (value) =>
-      retrieveRdfResourceOrText(value, parseString),
-    ),
-    platforms: parseArrayOf(value['prism:platform'], (value) => parseString(retrieveText(value))),
-    originPlatforms: parseArrayOf(value['prism:originplatform'], parseOriginPlatform),
-    device: parseSingularOf(value['prism:device'], (value) => parseString(retrieveText(value))),
-    complianceProfile: parseSingularOf(value['prism:complianceprofile'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    blogTitle: parseSingularOf(value['prism:blogtitle'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    blogURL: parseSingularOf(value['prism:blogurl'], (value) => parseString(retrieveText(value))),
-    links: parseArrayOf(value['prism:link'], (value) => parseString(retrieveText(value))),
-    urls: parseArrayOf(value['prism:url'], (value) => parseString(retrieveText(value))),
-    byteCount: parseSingularOf(value['prism:bytecount'], (value) =>
-      parseNumber(retrieveText(value)),
-    ),
-    ratings: parseArrayOf(value['prism:rating'], (value) => parseString(retrieveText(value))),
-    timePeriod: parseSingularOf(value['prism:timeperiod'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    versionIdentifier: parseSingularOf(value['prism:versionidentifier'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    tickers: parseArrayOf(value['prism:ticker'], (value) => parseString(retrieveText(value))),
-    academicFields: parseArrayOf(value['prism:academicfield'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    events: parseArrayOf(value['prism:event'], (value) =>
-      retrieveRdfResourceOrText(value, parseString),
-    ),
-    genres: parseArrayOf(value['prism:genre'], (value) => parseString(retrieveText(value))),
-    industries: parseArrayOf(value['prism:industry'], (value) =>
-      retrieveRdfResourceOrText(value, parseString),
-    ),
-    locations: parseArrayOf(value['prism:location'], (value) =>
-      retrieveRdfResourceOrText(value, parseString),
-    ),
-    objects: parseArrayOf(value['prism:object'], (value) => parseString(retrieveText(value))),
-    profession: parseSingularOf(value['prism:profession'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    sport: parseSingularOf(value['prism:sport'], (value) => parseString(retrieveText(value))),
-    embargoDate: parseSingularOf(value['prism:embargodate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
-    ),
-    copyright: parseSingularOf(value['prism:copyright'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    expirationDate: parseSingularOf(value['prism:expirationdate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
-    ),
-    rightsAgent: parseSingularOf(value['prism:rightsagent'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-  }
-
-  return trimObject(feed)
-}
-
-export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOptions<DateAny>> = (
-  value,
-  options,
-) => {
-  if (!isPlainObject(value)) {
-    return
-  }
-
-  const item = {
-    publicationName: parseSingularOf(value['prism:publicationname'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    issn: parseSingularOf(value['prism:issn'], (value) => parseString(retrieveText(value))),
-    eIssn: parseSingularOf(value['prism:eissn'], (value) => parseString(retrieveText(value))),
-    issueIdentifier: parseSingularOf(value['prism:issueidentifier'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    doi: parseSingularOf(value['prism:doi'], (value) => parseString(retrieveText(value))),
-    urls: parseArrayOf(value['prism:url'], (value) => parseString(retrieveText(value))),
-    volume: parseSingularOf(value['prism:volume'], (value) => parseString(retrieveText(value))),
-    number: parseSingularOf(value['prism:number'], (value) => parseString(retrieveText(value))),
-    edition: parseSingularOf(value['prism:edition'], (value) => parseString(retrieveText(value))),
-    section: parseSingularOf(value['prism:section'], (value) => parseString(retrieveText(value))),
     startingPage: parseSingularOf(value['prism:startingpage'], (value) =>
       parseString(retrieveText(value)),
     ),
@@ -259,50 +210,19 @@ export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOpti
       parseNumber(retrieveText(value)),
     ),
     pageProgressionDirection: parseSingularOf(value['prism:pageprogressiondirection'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     samplePageRange: parseSingularOf(value['prism:samplepagerange'], (value) =>
       parseString(retrieveText(value)),
     ),
-    coverDate: parseSingularOf(value['prism:coverdate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
-    ),
-    coverDisplayDate: parseSingularOf(value['prism:coverdisplaydate'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    publicationDates: parseArrayOf(value['prism:publicationdate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
-    ),
-    publicationDisplayDates: parseArrayOf(value['prism:publicationdisplaydate'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    creationDate: parseSingularOf(value['prism:creationdate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
-    ),
-    modificationDate: parseSingularOf(value['prism:modificationdate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
-    ),
-    dateReceived: parseSingularOf(value['prism:datereceived'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
-    ),
-    killDate: parseSingularOf(value['prism:killdate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
-    ),
-    copyrightYears: parseArrayOf(value['prism:copyrightyear'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    contentType: parseSingularOf(value['prism:contenttype'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    genres: parseArrayOf(value['prism:genre'], (value) => parseString(retrieveText(value))),
-    alternateTitles: parseArrayOf(value['prism:alternatetitle'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    subtitles: parseArrayOf(value['prism:subtitle'], (value) => parseString(retrieveText(value))),
-    teasers: parseArrayOf(value['prism:teaser'], (value) => parseString(retrieveText(value))),
-    keywords: parseArrayOf(value['prism:keyword'], (value) => parseString(retrieveText(value))),
     corporateEntities: parseArrayOf(value['prism:corporateentity'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    distributor: parseSingularOf(value['prism:distributor'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    sellingAgencies: parseArrayOf(value['prism:sellingagency'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
     ),
     organizations: parseArrayOf(value['prism:organization'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
@@ -310,13 +230,49 @@ export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOpti
     persons: parseArrayOf(value['prism:person'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
     ),
-    platforms: parseArrayOf(value['prism:platform'], (value) => parseString(retrieveText(value))),
+    platforms: parseArrayOf(value['prism:platform'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
     originPlatforms: parseArrayOf(value['prism:originplatform'], parseOriginPlatform),
-    device: parseSingularOf(value['prism:device'], (value) => parseString(retrieveText(value))),
+    device: parseSingularOf(value['prism:device'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    complianceProfile: parseSingularOf(value['prism:complianceprofile'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    blogTitle: parseSingularOf(value['prism:blogtitle'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    blogURL: parseSingularOf(value['prism:blogurl'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    links: parseArrayOf(value['prism:link'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    urls: parseArrayOf(value['prism:url'], parsePlatformString),
+    wordCount: parseSingularOf(value['prism:wordcount'], (value) =>
+      parseNumber(retrieveText(value)),
+    ),
+    byteCount: parseSingularOf(value['prism:bytecount'], (value) =>
+      parseNumber(retrieveText(value)),
+    ),
+    ratings: parseArrayOf(value['prism:rating'], parseRating),
+    timePeriod: parseSingularOf(value['prism:timeperiod'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    versionIdentifier: parseSingularOf(value['prism:versionidentifier'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    tickers: parseArrayOf(value['prism:ticker'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
     academicFields: parseArrayOf(value['prism:academicfield'], (value) =>
-      parseString(retrieveText(value)),
+      retrieveRdfResourceOrText(value, parseString),
     ),
     events: parseArrayOf(value['prism:event'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    genres: parseArrayOf(value['prism:genre'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
     ),
     industries: parseArrayOf(value['prism:industry'], (value) =>
@@ -325,17 +281,19 @@ export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOpti
     locations: parseArrayOf(value['prism:location'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
     ),
-    objects: parseArrayOf(value['prism:object'], (value) => parseString(retrieveText(value))),
-    profession: parseSingularOf(value['prism:profession'], (value) =>
-      parseString(retrieveText(value)),
+    objects: parseArrayOf(value['prism:object'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
     ),
-    sport: parseSingularOf(value['prism:sport'], (value) => parseString(retrieveText(value))),
+    profession: parseSingularOf(value['prism:profession'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    sport: parseSingularOf(value['prism:sport'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
     hasAlternatives: parseArrayOf(value['prism:hasalternative'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
     ),
-    hasCorrections: parseArrayOf(value['prism:hascorrection'], (value) =>
-      retrieveRdfResourceOrText(value, parseString),
-    ),
+    hasCorrections: parseArrayOf(value['prism:hascorrection'], parsePlatformString),
     hasTranslations: parseArrayOf(value['prism:hastranslation'], (value) =>
       retrieveRdfResourceOrText(value, parseString),
     ),
@@ -357,24 +315,7 @@ export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOpti
     supplementStartingPage: parseSingularOf(value['prism:supplementstartingpage'], (value) =>
       parseString(retrieveText(value)),
     ),
-    links: parseArrayOf(value['prism:link'], (value) => parseString(retrieveText(value))),
-    wordCount: parseSingularOf(value['prism:wordcount'], (value) =>
-      parseNumber(retrieveText(value)),
-    ),
-    byteCount: parseSingularOf(value['prism:bytecount'], (value) =>
-      parseNumber(retrieveText(value)),
-    ),
-    ratings: parseArrayOf(value['prism:rating'], (value) => parseString(retrieveText(value))),
-    timePeriod: parseSingularOf(value['prism:timeperiod'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    versionIdentifier: parseSingularOf(value['prism:versionidentifier'], (value) =>
-      parseString(retrieveText(value)),
-    ),
-    tickers: parseArrayOf(value['prism:ticker'], (value) => parseString(retrieveText(value))),
-    embargoDate: parseSingularOf(value['prism:embargodate'], (value) =>
-      parseDate(retrieveText(value), options?.parseDateFn),
-    ),
+    embargoDate: retrieveEmbargoDate(value, options),
     copyright: parseSingularOf(value['prism:copyright'], (value) =>
       parseString(retrieveText(value)),
     ),
@@ -384,7 +325,46 @@ export const retrieveItem: ParseUtilPartial<PrismNs.Item<DateAny>, ParseMainOpti
     rightsAgent: parseSingularOf(value['prism:rightsagent'], (value) =>
       parseString(retrieveText(value)),
     ),
+    category: parseSingularOf(value['prism:category'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    hasFormats: parseArrayOf(value['prism:hasformat'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    hasParts: parseArrayOf(value['prism:haspart'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    hasPreviousVersion: parseSingularOf(value['prism:haspreviousversion'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    isFormatOf: parseSingularOf(value['prism:isformatof'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    isPartOf: parseSingularOf(value['prism:ispartof'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    isReferencedBy: parseSingularOf(value['prism:isreferencedby'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    isRequiredBy: parseSingularOf(value['prism:isrequiredby'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    isVersionOf: parseSingularOf(value['prism:isversionof'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    objectTitles: parseArrayOf(value['prism:objecttitle'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    receptionDate: parseSingularOf(value['prism:receptiondate'], (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
+    references: parseArrayOf(value['prism:references'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
+    requires: parseSingularOf(value['prism:requires'], (value) =>
+      retrieveRdfResourceOrText(value, parseString),
+    ),
   }
 
-  return trimObject(item)
+  return trimObject(itemOrFeed)
 }

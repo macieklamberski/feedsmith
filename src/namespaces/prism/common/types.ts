@@ -1,14 +1,25 @@
 // #region reference
 export namespace PrismNs {
-  export type Feed<TDate> = {
+  export type PlatformValue<TValue> = {
+    value?: TValue
+    platform?: string
+  }
+
+  export type Rating = {
+    value?: string
+    ratingSystem?: string
+  }
+
+  export type ItemOrFeed<TDate> = {
     publicationName?: string
     issn?: string
     eIssn?: string
     isbns?: Array<string>
     issueIdentifier?: string
     issueName?: string
-    issueTeaser?: string
+    issueTeaser?: PlatformValue<string>
     issueType?: string
+    doi?: string
     volume?: string
     number?: string
     edition?: string
@@ -16,20 +27,20 @@ export namespace PrismNs {
     aggregationType?: string
     coverDate?: TDate
     coverDisplayDate?: string
-    publicationDates?: Array<TDate>
-    publicationDisplayDates?: Array<string>
+    publicationDates?: Array<PlatformValue<TDate>>
+    publicationDisplayDates?: Array<PlatformValue<string>>
     creationDate?: TDate
     modificationDate?: TDate
     dateReceived?: TDate
-    onSaleDates?: Array<TDate>
-    onSaleDays?: Array<string>
-    offSaleDates?: Array<TDate>
-    killDate?: TDate
+    onSaleDates?: Array<PlatformValue<TDate>>
+    onSaleDays?: Array<PlatformValue<string>>
+    offSaleDates?: Array<PlatformValue<TDate>>
+    killDate?: PlatformValue<TDate>
     copyrightYears?: Array<string>
     contentType?: string
-    alternateTitles?: Array<string>
+    alternateTitles?: Array<PlatformValue<string>>
     subtitles?: Array<string>
-    teasers?: Array<string>
+    teasers?: Array<PlatformValue<string>>
     keywords?: Array<string>
     seriesTitle?: string
     seriesNumber?: number
@@ -48,6 +59,12 @@ export namespace PrismNs {
     subsection2?: string
     subsection3?: string
     subsection4?: string
+    startingPage?: string
+    endingPage?: string
+    pageRange?: string
+    pageCount?: number
+    pageProgressionDirection?: string
+    samplePageRange?: string
     corporateEntities?: Array<string>
     distributor?: string
     sellingAgencies?: Array<string>
@@ -60,9 +77,10 @@ export namespace PrismNs {
     blogTitle?: string
     blogURL?: string
     links?: Array<string>
-    urls?: Array<string>
+    urls?: Array<PlatformValue<string>>
+    wordCount?: number
     byteCount?: number
-    ratings?: Array<string>
+    ratings?: Array<Rating>
     timePeriod?: string
     versionIdentifier?: string
     tickers?: Array<string>
@@ -74,63 +92,8 @@ export namespace PrismNs {
     objects?: Array<string>
     profession?: string
     sport?: string
-    /** @deprecated Since PRISM 3.0. Use pur:embargoDate instead. */
-    embargoDate?: TDate
-    /** @deprecated Since PRISM 3.0. Use pur:copyrightDate instead. */
-    copyright?: string
-    /** @deprecated Since PRISM 3.0. Use pur:expirationDate instead. */
-    expirationDate?: TDate
-    /** @deprecated Since PRISM 3.0. Use pur:rightsAgent instead. */
-    rightsAgent?: string
-  }
-
-  export type Item<TDate> = {
-    publicationName?: string
-    issn?: string
-    eIssn?: string
-    issueIdentifier?: string
-    doi?: string
-    urls?: Array<string>
-    volume?: string
-    number?: string
-    edition?: string
-    section?: string
-    startingPage?: string
-    endingPage?: string
-    pageRange?: string
-    pageCount?: number
-    pageProgressionDirection?: string
-    samplePageRange?: string
-    coverDate?: TDate
-    coverDisplayDate?: string
-    publicationDates?: Array<TDate>
-    publicationDisplayDates?: Array<string>
-    creationDate?: TDate
-    modificationDate?: TDate
-    dateReceived?: TDate
-    killDate?: TDate
-    copyrightYears?: Array<string>
-    contentType?: string
-    genres?: Array<string>
-    alternateTitles?: Array<string>
-    subtitles?: Array<string>
-    teasers?: Array<string>
-    keywords?: Array<string>
-    corporateEntities?: Array<string>
-    organizations?: Array<string>
-    persons?: Array<string>
-    platforms?: Array<string>
-    originPlatforms?: Array<string>
-    device?: string
-    academicFields?: Array<string>
-    events?: Array<string>
-    industries?: Array<string>
-    locations?: Array<string>
-    objects?: Array<string>
-    profession?: string
-    sport?: string
     hasAlternatives?: Array<string>
-    hasCorrections?: Array<string>
+    hasCorrections?: Array<PlatformValue<string>>
     hasTranslations?: Array<string>
     isAlternativeOf?: Array<string>
     isCorrectionOf?: Array<string>
@@ -138,13 +101,6 @@ export namespace PrismNs {
     supplementTitles?: Array<string>
     supplementDisplayID?: string
     supplementStartingPage?: string
-    links?: Array<string>
-    wordCount?: number
-    byteCount?: number
-    ratings?: Array<string>
-    timePeriod?: string
-    versionIdentifier?: string
-    tickers?: Array<string>
     /** @deprecated Since PRISM 3.0. Use pur:embargoDate instead. */
     embargoDate?: TDate
     /** @deprecated Since PRISM 3.0. Use pur:copyrightDate instead. */
@@ -153,6 +109,32 @@ export namespace PrismNs {
     expirationDate?: TDate
     /** @deprecated Since PRISM 3.0. Use pur:rightsAgent instead. */
     rightsAgent?: string
+    /** @deprecated PRISM 1.2 only. */
+    category?: string
+    /** @deprecated PRISM 1.2 only. */
+    hasFormats?: Array<string>
+    /** @deprecated PRISM 1.2 only. */
+    hasParts?: Array<string>
+    /** @deprecated PRISM 1.2 only. */
+    hasPreviousVersion?: string
+    /** @deprecated PRISM 1.2 only. */
+    isFormatOf?: string
+    /** @deprecated PRISM 1.2 only. */
+    isPartOf?: string
+    /** @deprecated PRISM 1.2 only. */
+    isReferencedBy?: string
+    /** @deprecated PRISM 1.2 only. */
+    isRequiredBy?: string
+    /** @deprecated PRISM 1.2 only. */
+    isVersionOf?: string
+    /** @deprecated PRISM 1.2 only. */
+    objectTitles?: Array<string>
+    /** @deprecated PRISM 1.2 only. */
+    receptionDate?: TDate
+    /** @deprecated PRISM 1.2 only. */
+    references?: Array<string>
+    /** @deprecated PRISM 1.2 only. */
+    requires?: string
   }
 }
 // #endregion reference

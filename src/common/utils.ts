@@ -74,7 +74,7 @@ export const trimArray = <T, R = T>(
     }
 
     if (!needsTrimming) {
-      return value as unknown as Array<R>
+      return value as Array<T & R>
     }
   }
 
@@ -590,6 +590,8 @@ export const generateNamespaceAttrs = (
   return namespaceAttrs
 }
 
+const reservedPrefixes = ['xmlns', 'xml']
+
 // Renames namespace prefixes to their canonical form while the document is being parsed, so stop
 // nodes can match `a10:title` as `atom:title`. Renaming after parsing would be too late: stop nodes
 // fire during it.
@@ -779,7 +781,7 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
 
       const prefix = lowered.slice(0, colonIndex)
 
-      if (prefix === 'xmlns' || prefix === 'xml') {
+      if (reservedPrefixes.includes(prefix)) {
         return lowered
       }
 

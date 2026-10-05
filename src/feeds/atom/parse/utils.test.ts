@@ -1740,6 +1740,25 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
+  it('should handle prism namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'prism:volume': { '#text': '24' },
+      'prism:startingpage': { '#text': '975' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Example Entry' },
+      prism: {
+        volume: '24',
+        startingPage: '975',
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
   it('should handle thr namespace', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
@@ -2165,6 +2184,21 @@ describe('parseFeed', () => {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: { value: 'Example Feed' },
       sy: { updateFrequency: 5 },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle prism namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Feed' },
+      'prism:issn': { '#text': '1100-9233' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Example Feed' },
+      prism: { issn: '1100-9233' },
     }
 
     expect(parseFeed(value)).toEqual(expected)

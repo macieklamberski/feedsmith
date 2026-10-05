@@ -29,24 +29,26 @@ export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateA
 
 // #region reference
 export namespace RdfFeed {
-  export type Image<TStrict extends boolean = false> = Strict<
+  export type Image<TDate, TStrict extends boolean = false> = Strict<
     {
       title: Requirable<string> // Required in spec
       link: Requirable<string> // Required in spec
       url: Requirable<string> // Required in spec
       rdf?: RdfNs.About
+      prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
     },
     TStrict
   >
 
-  export type TextInput<TStrict extends boolean = false> = Strict<
+  export type TextInput<TDate, TStrict extends boolean = false> = Strict<
     {
       title: Requirable<string> // Required in spec
       description: Requirable<string> // Required in spec
       name: Requirable<string> // Required in spec
       link: Requirable<string> // Required in spec
       rdf?: RdfNs.About
+      prism?: PrismNs.ItemOrFeed<TDate>
     },
     TStrict
   >
@@ -64,7 +66,7 @@ export namespace RdfFeed {
       slash?: SlashNs.Item
       media?: MediaNs.ItemOrFeed<TStrict>
       feedburner?: FeedBurnerNs.Item
-      prism?: PrismNs.Item<TDate>
+      prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
       wfw?: WfwNs.Item
       pingback?: PingbackNs.Item
@@ -81,9 +83,9 @@ export namespace RdfFeed {
       title: Requirable<string> // Required in spec
       link: Requirable<string> // Required in spec
       description: Requirable<string> // Required in spec
-      image?: Image<TStrict>
+      image?: Image<TDate, TStrict>
       items?: Array<Item<TDate, TStrict>>
-      textInput?: TextInput<TStrict>
+      textInput?: TextInput<TDate, TStrict>
       rdf?: RdfNs.About
       atom?: AtomNs.Feed<TDate>
       dc?: DcNs.ItemOrFeed<TDate>
@@ -92,7 +94,7 @@ export namespace RdfFeed {
       media?: MediaNs.ItemOrFeed<TStrict>
       feedburner?: FeedBurnerNs.Feed<TStrict>
       opensearch?: OpenSearchNs.Feed<TStrict>
-      prism?: PrismNs.Feed<TDate>
+      prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
       admin?: AdminNs.Feed
       geo?: GeoNs.ItemOrFeed

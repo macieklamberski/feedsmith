@@ -4,7 +4,7 @@ title: "Reference: Pingback Namespace"
 
 # Pingback Namespace Reference
 
-The Pingback namespace provides a mechanism for notifying websites when content references or links to them, enabling automatic trackback of linkages between web resources.
+The Pingback namespace provides a mechanism for notifying websites when content references or links to them, enabling automatic notification of linkages between web resources.
 
 <table>
   <tbody>
@@ -14,7 +14,7 @@ The Pingback namespace provides a mechanism for notifying websites when content 
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://web.archive.org/web/20040207104933/http://madskills.com/public/xml/rss/module/pingback/" target="_blank">Pingback RSS Module</a> (archive)</td>
+      <td><a href="https://web.archive.org/web/20040207104933/http://madskills.com/public/xml/rss/module/pingback/" target="_blank">Pingback RSS Module</a> (Web Archive)</td>
     </tr>
     <tr>
       <th>Prefix</th>

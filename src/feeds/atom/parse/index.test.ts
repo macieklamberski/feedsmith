@@ -2564,8 +2564,9 @@ describe('parse', () => {
           <feed xmlns="http://www.w3.org/2005/Atom">
           </feed>
         `
+        const throwing = () => parse(value)
 
-        expect(() => parse(value)).toThrow()
+        expect(throwing).toThrow()
       })
 
       it('should parse entry with published but no updated (RW-N21)', () => {
@@ -2870,8 +2871,9 @@ describe('parse', () => {
             </entry>
           </feed>
         `
+        const throwing = () => parse(value)
 
-        expect(() => parse(value)).toThrow()
+        expect(throwing).toThrow()
       })
 
       it('should strip XML comments from element content (RW-X08)', () => {

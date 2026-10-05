@@ -69,8 +69,8 @@ export namespace Rss {
   export type Person = RssFeed.Person
   export type Category<TStrict extends boolean = false> = RssFeed.Category<TStrict>
   export type Cloud<TStrict extends boolean = false> = RssFeed.Cloud<TStrict>
-  export type Image<TStrict extends boolean = false> = RssFeed.Image<TStrict>
-  export type TextInput<TStrict extends boolean = false> = RssFeed.TextInput<TStrict>
+  export type Image<TDate, TStrict extends boolean = false> = RssFeed.Image<TDate, TStrict>
+  export type TextInput<TDate, TStrict extends boolean = false> = RssFeed.TextInput<TDate, TStrict>
   export type Enclosure<TStrict extends boolean = false> = RssFeed.Enclosure<TStrict>
   export type SkipHours = RssFeed.SkipHours
   export type SkipDays = RssFeed.SkipDays
@@ -104,8 +104,8 @@ export namespace Json {
 
 /** @deprecated Use `RdfFeed` instead. Will be removed in the next major version. */
 export namespace Rdf {
-  export type Image<TStrict extends boolean = false> = RdfFeed.Image<TStrict>
-  export type TextInput<TStrict extends boolean = false> = RdfFeed.TextInput<TStrict>
+  export type Image<TDate, TStrict extends boolean = false> = RdfFeed.Image<TDate, TStrict>
+  export type TextInput<TDate, TStrict extends boolean = false> = RdfFeed.TextInput<TDate, TStrict>
   export type Item<TDate, TStrict extends boolean = false> = RdfFeed.Item<TDate, TStrict>
   export type Feed<TDate, TStrict extends boolean = false> = RdfFeed.Feed<TDate, TStrict>
 }

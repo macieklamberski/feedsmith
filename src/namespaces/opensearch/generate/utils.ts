@@ -24,6 +24,21 @@ export const generateQuery: GenerateUtil<OpenSearchNs.Query> = (query) => {
   return trimObject(value)
 }
 
+export const generateLink: GenerateUtil<OpenSearchNs.Link> = (link) => {
+  if (!isPlainObject(link)) {
+    return
+  }
+
+  const value = {
+    '@href': generatePlainString(link.href),
+    '@rel': generatePlainString(link.rel),
+    '@type': generatePlainString(link.type),
+    '@hreflang': generatePlainString(link.hreflang),
+  }
+
+  return trimObject(value)
+}
+
 export const generateFeed: GenerateUtil<OpenSearchNs.Feed> = (feed) => {
   if (!isPlainObject(feed)) {
     return
@@ -33,6 +48,7 @@ export const generateFeed: GenerateUtil<OpenSearchNs.Feed> = (feed) => {
     'opensearch:totalResults': generateNumber(feed.totalResults),
     'opensearch:startIndex': generateNumber(feed.startIndex),
     'opensearch:itemsPerPage': generateNumber(feed.itemsPerPage),
+    'opensearch:link': generateLink(feed.link),
     'opensearch:Query': trimArray(feed.queries, generateQuery),
   }
 

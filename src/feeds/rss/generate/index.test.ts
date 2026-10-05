@@ -3,6 +3,7 @@ import { locales } from '../../../common/config.js'
 import { GenerateError } from '../../../common/errors.js'
 import type { DateLike } from '../../../common/types.js'
 import type { RssFeed } from '../common/types.js'
+import { parse } from '../parse/index.js'
 import { generate } from './index.js'
 
 describe('generate', () => {
@@ -648,6 +649,11 @@ describe('generate', () => {
         totalResults: 1000,
         startIndex: 0,
         itemsPerPage: 10,
+        link: {
+          href: 'http://example.com/opensearchdescription.xml',
+          rel: 'search',
+          type: 'application/opensearchdescription+xml',
+        },
       },
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
@@ -658,6 +664,7 @@ describe('generate', () => {
     <opensearch:totalResults>1000</opensearch:totalResults>
     <opensearch:startIndex>0</opensearch:startIndex>
     <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+    <opensearch:link href="http://example.com/opensearchdescription.xml" rel="search" type="application/opensearchdescription+xml"/>
   </channel>
 </rss>
 `
@@ -669,8 +676,28 @@ describe('generate', () => {
     const value = {
       title: 'Feed with prism namespace',
       description: 'Test feed with PRISM namespace',
+      image: {
+        url: 'https://example.com/cover.png',
+        title: 'Nature cover',
+        link: 'https://example.com',
+        prism: {
+          coverDate: new Date('2023-03-15T00:00:00Z'),
+        },
+      },
+      textInput: {
+        title: 'Search',
+        description: 'Search the journal',
+        name: 'q',
+        link: 'https://example.com/search',
+        prism: {
+          publicationName: 'Nature',
+        },
+      },
       prism: {
         issn: '0028-0836',
+        publicationDates: [{ value: new Date('2023-03-15T00:00:00Z'), platform: 'print' }],
+        originPlatforms: ['print'],
+        ratings: [{ value: 'E', ratingSystem: 'ESRB' }],
       },
       items: [
         {
@@ -678,6 +705,8 @@ describe('generate', () => {
           prism: {
             doi: '10.1038/s41586-023-05842-x',
             startingPage: '425',
+            teasers: [{ value: 'A new catalyst', platform: 'web' }],
+            originPlatforms: ['web'],
           },
         },
       ],
@@ -687,11 +716,29 @@ describe('generate', () => {
   <channel>
     <title>Feed with prism namespace</title>
     <description>Test feed with PRISM namespace</description>
+    <image>
+      <url>https://example.com/cover.png</url>
+      <title>Nature cover</title>
+      <link>https://example.com</link>
+      <prism:coverDate>2023-03-15T00:00:00.000Z</prism:coverDate>
+    </image>
+    <textInput>
+      <title>Search</title>
+      <description>Search the journal</description>
+      <name>q</name>
+      <link>https://example.com/search</link>
+      <prism:publicationName>Nature</prism:publicationName>
+    </textInput>
     <prism:issn>0028-0836</prism:issn>
+    <prism:publicationDate platform="print">2023-03-15T00:00:00.000Z</prism:publicationDate>
+    <prism:originPlatform platform="print"/>
+    <prism:rating ratingSystem="ESRB">E</prism:rating>
     <item>
       <title>First item</title>
       <prism:doi>10.1038/s41586-023-05842-x</prism:doi>
+      <prism:teaser platform="web">A new catalyst</prism:teaser>
       <prism:startingPage>425</prism:startingPage>
+      <prism:originPlatform platform="web"/>
     </item>
   </channel>
 </rss>
@@ -700,10 +747,53 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should parse back generated prism:originPlatform values', () => {
+    const value = {
+      title: 'Feed with prism namespace',
+      description: 'Test feed with PRISM namespace',
+      prism: {
+        originPlatforms: ['print', 'web'],
+      },
+      items: [
+        {
+          title: 'First item',
+          prism: {
+            originPlatforms: ['web'],
+          },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Feed with prism namespace',
+      description: 'Test feed with PRISM namespace',
+      prism: {
+        originPlatforms: ['print', 'web'],
+      },
+      items: [
+        {
+          title: 'First item',
+          prism: {
+            originPlatforms: ['web'],
+          },
+        },
+      ],
+    }
+
+    expect(parse(generate(value))).toEqual(expected)
+  })
+
   it('should generate RSS with ccREL namespace', () => {
     const value = {
       title: 'Feed with ccREL namespace',
       description: 'Test feed with ccREL namespace',
+      image: {
+        url: 'https://example.com/image.png',
+        title: 'Image with ccREL',
+        link: 'https://example.com',
+        cc: {
+          license: 'https://creativecommons.org/licenses/by-nd/4.0/',
+        },
+      },
       cc: {
         license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
         morePermissions: 'https://example.com/commercial-license',
@@ -722,6 +812,12 @@ describe('generate', () => {
   <channel>
     <title>Feed with ccREL namespace</title>
     <description>Test feed with ccREL namespace</description>
+    <image>
+      <url>https://example.com/image.png</url>
+      <title>Image with ccREL</title>
+      <link>https://example.com</link>
+      <cc:license>https://creativecommons.org/licenses/by-nd/4.0/</cc:license>
+    </image>
     <cc:license>https://creativecommons.org/licenses/by-nc-sa/4.0/</cc:license>
     <cc:morePermissions>https://example.com/commercial-license</cc:morePermissions>
     <item>
