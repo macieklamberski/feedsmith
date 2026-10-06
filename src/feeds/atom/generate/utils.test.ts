@@ -1145,6 +1145,49 @@ describe('generateEntry', () => {
     expect(generateEntry(value)).toEqual(expected)
   })
 
+  it('should generate entry with gd namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: { value: 'Entry with gd namespace' },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      authors: [
+        {
+          name: 'Jill Flinton',
+          gd: {
+            image: {
+              src: 'https://example.com/img/b16-rounded.gif',
+              rel: 'http://schemas.google.com/g/2005#thumbnail',
+              width: 16,
+              height: 16,
+            },
+          },
+        },
+      ],
+      gd: {
+        extendedProperties: [{ name: 'blogger.itemClass', value: 'pid-982403090' }],
+      },
+    }
+    const expected = {
+      author: [
+        {
+          name: 'Jill Flinton',
+          'gd:image': {
+            '@src': 'https://example.com/img/b16-rounded.gif',
+            '@rel': 'http://schemas.google.com/g/2005#thumbnail',
+            '@width': 16,
+            '@height': 16,
+          },
+        },
+      ],
+      id: 'https://example.com/entry/1',
+      title: { '#text': 'Entry with gd namespace' },
+      updated: '2023-03-15T12:00:00.000Z',
+      'gd:extendedProperty': [{ '@name': 'blogger.itemClass', '@value': 'pid-982403090' }],
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
   it('should generate entry with yt namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
@@ -2108,6 +2151,43 @@ describe('generateFeed', () => {
         title: { '#text': 'Feed with Pingback namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         'pingback:to': 'https://example.com/pingback-service',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with gd namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: { value: 'Feed with gd namespace' },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      authors: [
+        {
+          name: 'Unknown',
+          gd: {
+            image: { src: 'https://example.com/img/b16-rounded.gif' },
+          },
+        },
+      ],
+      gd: {
+        wheres: [{ valueString: 'Building 41, Room X' }],
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:gd': 'http://schemas.google.com/g/2005',
+        author: [
+          {
+            name: 'Unknown',
+            'gd:image': { '@src': 'https://example.com/img/b16-rounded.gif' },
+          },
+        ],
+        id: 'https://example.com/feed',
+        title: { '#text': 'Feed with gd namespace' },
+        updated: '2023-03-15T12:00:00.000Z',
+        'gd:where': [{ '@valueString': 'Building 41, Room X' }],
       },
     }
 

@@ -1798,6 +1798,51 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
+  it('should handle gd namespace', () => {
+    const value = {
+      id: { '#text': 'tag:blogger.com,1999:blog-2399953.post-1647826227370640772' },
+      title: { '#text': 'Example Comment' },
+      author: {
+        name: { '#text': 'Jill Flinton' },
+        'gd:image': {
+          '@rel': 'http://schemas.google.com/g/2005#thumbnail',
+          '@width': '16',
+          '@height': '16',
+          '@src': 'https://example.com/img/b16-rounded.gif',
+        },
+      },
+      'gd:extendedproperty': [
+        { '@name': 'blogger.itemClass', '@value': 'pid-982403090' },
+        { '@name': 'blogger.displayTime', '@value': 'September 11, 2012 7:48 AM' },
+      ],
+    }
+    const expected = {
+      id: 'tag:blogger.com,1999:blog-2399953.post-1647826227370640772',
+      title: { value: 'Example Comment' },
+      authors: [
+        {
+          name: 'Jill Flinton',
+          gd: {
+            image: {
+              src: 'https://example.com/img/b16-rounded.gif',
+              rel: 'http://schemas.google.com/g/2005#thumbnail',
+              width: 16,
+              height: 16,
+            },
+          },
+        },
+      ],
+      gd: {
+        extendedProperties: [
+          { name: 'blogger.itemClass', value: 'pid-982403090' },
+          { name: 'blogger.displayTime', value: 'September 11, 2012 7:48 AM' },
+        ],
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
   it('should handle yt namespace', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
@@ -2221,6 +2266,45 @@ describe('parseFeed', () => {
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
         generatorAgent: 'https://example.com/generator?v=3.2',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle gd namespace', () => {
+    const value = {
+      id: { '#text': 'tag:blogger.com,1999:blog-2399953.comments' },
+      title: { '#text': 'Example Feed' },
+      author: {
+        name: { '#text': 'Unknown' },
+        'gd:image': {
+          '@rel': 'http://schemas.google.com/g/2005#thumbnail',
+          '@width': '16',
+          '@height': '16',
+          '@src': 'https://example.com/img/b16-rounded.gif',
+        },
+      },
+      'gd:where': { '@valuestring': 'Building 41, Room X' },
+    }
+    const expected = {
+      id: 'tag:blogger.com,1999:blog-2399953.comments',
+      title: { value: 'Example Feed' },
+      authors: [
+        {
+          name: 'Unknown',
+          gd: {
+            image: {
+              src: 'https://example.com/img/b16-rounded.gif',
+              rel: 'http://schemas.google.com/g/2005#thumbnail',
+              width: 16,
+              height: 16,
+            },
+          },
+        },
+      ],
+      gd: {
+        wheres: [{ valueString: 'Building 41, Room X' }],
       },
     }
 

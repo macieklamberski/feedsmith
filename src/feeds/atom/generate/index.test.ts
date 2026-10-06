@@ -1170,6 +1170,107 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with gd namespace', () => {
+    const value = {
+      id: 'tag:blogger.com,1999:blog-2399953.comments',
+      title: { value: 'Blog comments' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      authors: [
+        {
+          name: 'Unknown',
+          email: 'noreply@example.com',
+          gd: {
+            image: {
+              src: 'https://example.com/img/b16-rounded.gif',
+              rel: 'http://schemas.google.com/g/2005#thumbnail',
+              width: 16,
+              height: 16,
+            },
+          },
+        },
+      ],
+      entries: [
+        {
+          id: 'tag:blogger.com,1999:blog-2399953.post-1647826227370640772',
+          title: { value: 'Is it possible to get some type of notification?' },
+          updated: new Date('2012-09-11T14:48:16Z'),
+          gd: {
+            extendedProperties: [
+              { name: 'blogger.itemClass', value: 'pid-982403090' },
+              { name: 'blogger.displayTime', value: 'September 11, 2012 7:48 AM' },
+            ],
+            whens: [{ startTime: '2012-09-11', reminders: [{ minutes: 15 }] }],
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:gd="http://schemas.google.com/g/2005">
+  <author>
+    <name>Unknown</name>
+    <email>noreply@example.com</email>
+    <gd:image src="https://example.com/img/b16-rounded.gif" rel="http://schemas.google.com/g/2005#thumbnail" width="16" height="16"/>
+  </author>
+  <id>tag:blogger.com,1999:blog-2399953.comments</id>
+  <title>Blog comments</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <entry>
+    <id>tag:blogger.com,1999:blog-2399953.post-1647826227370640772</id>
+    <title>Is it possible to get some type of notification?</title>
+    <updated>2012-09-11T14:48:16.000Z</updated>
+    <gd:extendedProperty name="blogger.itemClass" value="pid-982403090"/>
+    <gd:extendedProperty name="blogger.displayTime" value="September 11, 2012 7:48 AM"/>
+    <gd:when startTime="2012-09-11">
+      <gd:reminder minutes="15"/>
+    </gd:when>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with raw child XML in gd extended properties', () => {
+    // Constructed specimen: no sampled feed carries child XML in gd:extendedProperty.
+    const value = {
+      id: 'example-feed',
+      title: { value: 'Example Feed' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      entries: [
+        {
+          id: 'example-entry',
+          title: { value: 'Example Entry' },
+          updated: new Date('2024-01-10T12:00:00Z'),
+          gd: {
+            extendedProperties: [
+              {
+                name: 'com.example & co',
+                xml: '<some_xml attr="a &amp; b">AT&amp;T <b>bold</b></some_xml>',
+              },
+            ],
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:gd="http://schemas.google.com/g/2005">
+  <id>example-feed</id>
+  <title>Example Feed</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <entry>
+    <id>example-entry</id>
+    <title>Example Entry</title>
+    <updated>2024-01-10T12:00:00.000Z</updated>
+    <gd:extendedProperty name="com.example &amp; co">
+<some_xml attr="a &amp; b">AT&amp;T <b>bold</b></some_xml>
+    </gd:extendedProperty>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with YouTube namespace', () => {
     const value = {
       id: 'yt:channel:UCuAXFkgsw1L7xaCfnd5JJOw',

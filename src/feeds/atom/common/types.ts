@@ -14,6 +14,7 @@ import type { CreativeCommonsNs } from '../../../namespaces/creativecommons/comm
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
 import type { FeedBurnerNs } from '../../../namespaces/feedburner/common/types.js'
+import type { GdNs } from '../../../namespaces/gd/common/types.js'
 import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { GooglePlayNs } from '../../../namespaces/googleplay/common/types.js'
@@ -79,6 +80,7 @@ export namespace AtomFeed {
       uri?: string
       email?: string
       arxiv?: ArxivNs.Author
+      gd?: GdNs.Person
     },
     TStrict
   >
@@ -147,6 +149,7 @@ export namespace AtomFeed {
       wfw?: WfwNs.Item
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
+      gd?: GdNs.Entry<TDate>
       yt?: YtNs.Item
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
@@ -183,6 +186,7 @@ export namespace AtomFeed {
       creativeCommons?: CreativeCommonsNs.ItemOrFeed
       admin?: AdminNs.Feed
       pingback?: PingbackNs.Feed
+      gd?: GdNs.Feed<TDate>
       yt?: YtNs.Feed
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>

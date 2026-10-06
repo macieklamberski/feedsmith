@@ -241,6 +241,70 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should keep inline markup raw inside gd text elements', () => {
+    const value = `
+      <?xml version="1.0" encoding="utf-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom" xmlns:gd="http://schemas.google.com/g/2005">
+        <id>example-feed</id>
+        <entry>
+          <id>example-entry</id>
+          <gd:name>
+            <gd:givenName>AT&amp;T <b>bold</b></gd:givenName>
+          </gd:name>
+          <gd:organization>
+            <gd:orgName>Smith &amp; Sons <span>Ltd</span></gd:orgName>
+          </gd:organization>
+        </entry>
+      </feed>
+    `
+    const expected = {
+      id: 'example-feed',
+      entries: [
+        {
+          id: 'example-entry',
+          gd: {
+            name: { givenName: { value: 'AT&T <b>bold</b>' } },
+            organizations: [{ orgName: { value: 'Smith & Sons <span>Ltd</span>' } }],
+          },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should keep child XML of gd extended properties raw', () => {
+    // Constructed specimen: no sampled feed carries child XML in gd:extendedProperty.
+    const value = `
+      <?xml version="1.0" encoding="utf-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom" xmlns:gd="http://schemas.google.com/g/2005">
+        <id>example-feed</id>
+        <entry>
+          <id>example-entry</id>
+          <gd:extendedProperty name="com.example"><some_xml attr="a &amp; b">AT&amp;T <b>bold</b></some_xml></gd:extendedProperty>
+        </entry>
+      </feed>
+    `
+    const expected = {
+      id: 'example-feed',
+      entries: [
+        {
+          id: 'example-entry',
+          gd: {
+            extendedProperties: [
+              {
+                name: 'com.example',
+                xml: '<some_xml attr="a &amp; b">AT&amp;T <b>bold</b></some_xml>',
+              },
+            ],
+          },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should throw error for invalid input', () => {
     const throwing = () => parse('not a feed')
 
