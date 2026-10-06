@@ -2048,6 +2048,29 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate blogger namespace properties for feed', () => {
+    const value = {
+      title: 'Feed with blogger namespace',
+      description: 'A feed with blogger properties',
+      blogger: {
+        adultContent: true,
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:blogger': 'http://schemas.google.com/blogger/2008',
+        channel: {
+          title: 'Feed with blogger namespace',
+          description: 'A feed with blogger properties',
+          'blogger:adultContent': true,
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate RSS feed with geo namespace properties', () => {
     const value = {
       title: 'Example City Feed',

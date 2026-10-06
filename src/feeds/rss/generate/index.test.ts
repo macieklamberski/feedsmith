@@ -1093,6 +1093,27 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with blogger namespace', () => {
+    const value = {
+      title: 'Feed with blogger namespace',
+      description: 'Test feed with blogger namespace',
+      blogger: {
+        adultContent: true,
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:blogger="http://schemas.google.com/blogger/2008">
+  <channel>
+    <title>Feed with blogger namespace</title>
+    <description>Test feed with blogger namespace</description>
+    <blogger:adultContent>true</blogger:adultContent>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with geo namespace', () => {
     const value = {
       title: 'Location Feed',
