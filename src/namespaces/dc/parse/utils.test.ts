@@ -355,6 +355,17 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
+  it('should read rdf:about when a typed value node holds no rdf:value', () => {
+    const value = {
+      'dc:creator': '<foaf:Person rdf:about="https://example.com/people/jane"/>',
+    }
+    const expected = {
+      creators: ['https://example.com/people/jane'],
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
   it('should keep markup with a prefixed root and no rdf:value as text', () => {
     const value = {
       'dc:description': '<o:p>Summary of the article</o:p>',

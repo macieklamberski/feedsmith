@@ -50,12 +50,16 @@ const retrieveValue = (value: Unreliable): Unreliable => {
     return retrieveText(parseSingular(rdfValue))
   }
 
+  const rdfAbout = node?.['@rdf:about']
+
+  if (isPresent(rdfAbout)) {
+    return rdfAbout
+  }
+
   // Markup with a prefixed root, such as Word's <o:p>, is text when it is not a value node.
   if (name !== 'rdf:description') {
     return text
   }
-
-  return node?.['@rdf:about']
 }
 
 export const retrieveItemOrFeed: ParseUtilPartial<
