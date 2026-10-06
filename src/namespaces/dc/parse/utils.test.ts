@@ -377,6 +377,28 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
+  it('should keep text that holds rdf:Description markup after other text', () => {
+    const value = {
+      'dc:subject': 'Note <rdf:Description><rdf:value>Articles</rdf:value></rdf:Description>',
+    }
+    const expected = {
+      subjects: ['Note <rdf:Description><rdf:value>Articles</rdf:value></rdf:Description>'],
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should keep markup inside rdf:value of a typed value node', () => {
+    const value = {
+      'dc:format': '<dcterms:IMT><rdf:value>text/html <b>strict</b></rdf:value></dcterms:IMT>',
+    }
+    const expected = {
+      formats: ['text/html <b>strict</b>'],
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
   it.todo('should parse dates with custom parseDateFn', () => {
     // Pass options.parseDateFn that maps each date string to a Date instance.
     // Expected: dates contains the values returned by the custom parser instead of the raw strings.
