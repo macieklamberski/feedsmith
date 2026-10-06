@@ -907,6 +907,91 @@ describe('parse', () => {
 
   // Edge cases and quirks observed in feeds found in the wild.
   describe('real world feeds', () => {
+    describe('ev namespace', () => {
+      it('should parse a university calendar item', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:ev="http://purl.org/rss/1.0/modules/event/">
+            <channel>
+              <title>Campus events</title>
+              <link>https://example.edu/events</link>
+              <description>Events at the university</description>
+              <item>
+                <title>Algebraic Geometry Seminar</title>
+                <link>https://example.edu/event/139208</link>
+                <category>Workshop / Seminar</category>
+                <ev:startdate>2025-10-15T15:30:00-04:00</ev:startdate>
+                <ev:enddate>2025-10-15T17:00:00-04:00</ev:enddate>            <ev:location>East Hall</ev:location>
+                <ev:organizer>School of Music, Theatre &amp; Dance</ev:organizer>
+                <ev:type>Workshop / Seminar</ev:type>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Campus events',
+          link: 'https://example.edu/events',
+          description: 'Events at the university',
+          items: [
+            {
+              title: 'Algebraic Geometry Seminar',
+              link: 'https://example.edu/event/139208',
+              categories: [{ name: 'Workshop / Seminar' }],
+              ev: {
+                startDate: '2025-10-15T15:30:00-04:00',
+                endDate: '2025-10-15T17:00:00-04:00',
+                location: 'East Hall',
+                organizer: 'School of Music, Theatre & Dance',
+                type: 'Workshop / Seminar',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should parse ev elements written under the event prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="utf-8"?>
+          <rss version="2.0" xmlns:event="http://purl.org/rss/1.0/modules/event/">
+            <channel>
+              <title>Events</title>
+              <link>https://example.com/</link>
+              <description>University events</description>
+              <item>
+                <title>Tax law evening lecture</title>
+                <link>https://example.com/events/tax-law-lecture</link>
+                <event:startdate>2027-06-07T16:30:00+0200</event:startdate>
+                <event:enddate>2027-06-07T19:30:00+0200</event:enddate>
+                <event:location>Library, D3, 2nd floor</event:location>
+                <event:organizer>Institute for Austrian and International Tax Law</event:organizer>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Events',
+          link: 'https://example.com/',
+          description: 'University events',
+          items: [
+            {
+              title: 'Tax law evening lecture',
+              link: 'https://example.com/events/tax-law-lecture',
+              ev: {
+                startDate: '2027-06-07T16:30:00+0200',
+                endDate: '2027-06-07T19:30:00+0200',
+                location: 'Library, D3, 2nd floor',
+                organizer: 'Institute for Austrian and International Tax Law',
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+    })
+
     it('should preserve HTML entities inside CDATA in content:encoded (RW-C01)', () => {
       const value = `
         <?xml version="1.0" encoding="UTF-8"?>
@@ -4892,6 +4977,36 @@ describe('parse', () => {
           },
         },
       }
+      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    })
+
+    it('should apply custom parseDateFn to ev namespace dates', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <rss version="2.0" xmlns:ev="http://purl.org/rss/1.0/modules/event/">
+          <channel>
+            <title>Test</title>
+            <item>
+              <title>Seminar</title>
+              <ev:startdate>2025-10-15T15:30:00-04:00</ev:startdate>
+              <ev:enddate>2025-10-15T17:00:00-04:00</ev:enddate>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Test',
+        items: [
+          {
+            title: 'Seminar',
+            ev: {
+              startDate: new Date('2025-10-15T15:30:00-04:00'),
+              endDate: new Date('2025-10-15T17:00:00-04:00'),
+            },
+          },
+        ],
+      }
+
       expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
     })
   })

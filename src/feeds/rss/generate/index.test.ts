@@ -1151,6 +1151,45 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with ev namespace', () => {
+    const value = {
+      title: 'City Library events',
+      description: 'Upcoming events at the City Library',
+      items: [
+        {
+          title: 'Autumn concert',
+          ev: {
+            startDate: '2026-11-14T18:30:00Z',
+            endDate: '2026-11-14T21:00:00Z',
+            location: 'Smith & Sons Hall',
+            organizer: 'City Library',
+            type: 'concert',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:ev="http://purl.org/rss/1.0/modules/event/">
+  <channel>
+    <title>City Library events</title>
+    <description>Upcoming events at the City Library</description>
+    <item>
+      <title>Autumn concert</title>
+      <ev:startdate>2026-11-14T18:30:00.000Z</ev:startdate>
+      <ev:enddate>2026-11-14T21:00:00.000Z</ev:enddate>
+      <ev:location>
+        <![CDATA[Smith & Sons Hall]]>
+      </ev:location>
+      <ev:organizer>City Library</ev:organizer>
+      <ev:type>concert</ev:type>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with xml namespace', () => {
     const value = {
       title: 'Feed with xml namespace',

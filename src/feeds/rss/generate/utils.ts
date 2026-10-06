@@ -27,6 +27,7 @@ import { generateItem as generateContentItem } from '../../../namespaces/content
 import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDcTermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
+import { generateItem as generateEvItem } from '../../../namespaces/ev/generate/utils.js'
 import {
   generateFeed as generateFeedBurnerFeed,
   generateItem as generateFeedBurnerItem,
@@ -254,6 +255,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
     ...generateSourceItem(item.sourceNs),
     ...generateGeoItemOrFeed(item.geo),
     ...generateGeoRssItemOrFeed(item.georss),
+    ...generateEvItem(item.ev),
     ...generateXmlItemOrFeed(item.xml),
   }
 
