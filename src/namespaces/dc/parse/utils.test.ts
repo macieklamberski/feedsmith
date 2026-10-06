@@ -301,6 +301,71 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(value)).toEqual(expected)
   })
 
+  it('should keep CDATA holding rdf:Description markup as text', () => {
+    const value = {
+      'dc:subject':
+        '<![CDATA[<rdf:Description><rdf:value>Articles</rdf:value></rdf:Description>]]>',
+    }
+    const expected = {
+      subjects: ['<rdf:Description><rdf:value>Articles</rdf:value></rdf:Description>'],
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should keep escaped rdf:Description markup as text', () => {
+    const value = {
+      'dc:subject':
+        '&lt;rdf:Description&gt;&lt;rdf:value&gt;Articles&lt;/rdf:value&gt;&lt;/rdf:Description&gt;',
+    }
+    const expected = {
+      subjects: ['<rdf:Description><rdf:value>Articles</rdf:value></rdf:Description>'],
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should return undefined when rdf:Description holds no rdf:value', () => {
+    const value = {
+      'dc:subject': '<rdf:Description/>',
+    }
+
+    expect(retrieveItemOrFeed(value)).toBeUndefined()
+  })
+
+  it('should read rdf:about when rdf:Description holds no rdf:value', () => {
+    const value = {
+      'dc:subject': '<rdf:Description rdf:about="https://example.com/taxonomy/D003.53"/>',
+    }
+    const expected = {
+      subjects: ['https://example.com/taxonomy/D003.53'],
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should read rdf:value from a typed value node', () => {
+    const value = {
+      'dc:format': '<dcterms:IMT><rdf:value>application/rdf+xml</rdf:value></dcterms:IMT>',
+    }
+    const expected = {
+      formats: ['application/rdf+xml'],
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should keep markup with a prefixed root and no rdf:value as text', () => {
+    const value = {
+      'dc:description': '<o:p>Summary of the article</o:p>',
+    }
+    const expected = {
+      descriptions: ['<o:p>Summary of the article</o:p>'],
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
   it.todo('should parse dates with custom parseDateFn', () => {
     // Pass options.parseDateFn that maps each date string to a Date instance.
     // Expected: dates contains the values returned by the custom parser instead of the raw strings.

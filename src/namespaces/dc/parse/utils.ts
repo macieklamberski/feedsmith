@@ -1,5 +1,5 @@
 import { XMLParser } from 'fast-xml-parser'
-import { isPlainObject, trimObject } from 'trousse'
+import { isPlainObject, isPresent, trimObject } from 'trousse'
 import { parserConfig } from '../../../common/config.js'
 import type {
   DateAny,
@@ -16,30 +16,46 @@ import {
 } from '../../../common/utils.js'
 import type { DcNs } from '../common/types.js'
 
-const rdfDescriptionRegex = /^\s*<rdf:description[\s/>]/i
+const valueNodeRegex = /^\s*<[a-z_][\w.-]*:[a-z_][\w.-]*[\s/>]/i
 
 // The value is re-parsed because every dc element is a stop node, so its markup arrives raw.
-const rdfDescriptionParser = new XMLParser({
+const valueNodeParser = new XMLParser({
   ...parserConfig,
-  stopNodes: ['rdf:description.rdf:value'],
+  stopNodes: ['*.rdf:value'],
 })
 
-// A DC property in RDF can hold a value node in place of a literal, its value string in rdf:value.
-// See: https://web.archive.org/web/20110101182532/http://dublincore.org/documents/dc-rdf/, section 4.6.
+// A DC property in RDF can hold a value node in place of a literal: an rdf:Description or a typed
+// node such as foaf:Person. Its value string is in rdf:value, its value URI in rdf:about.
+// See: https://web.archive.org/web/20110101182532/http://dublincore.org/documents/dc-rdf/, sections 4.4 and 4.6.
 const retrieveValue = (value: Unreliable): Unreliable => {
   const text = retrieveText(value)
 
-  if (typeof text !== 'string' || !rdfDescriptionRegex.test(text)) {
+  if (typeof text !== 'string' || !valueNodeRegex.test(text)) {
     return text
   }
 
-  try {
-    const description = parseSingular(rdfDescriptionParser.parse(text)['rdf:description'])
+  let parsed: Unreliable
 
-    return retrieveText(parseSingular(description?.['rdf:value']))
+  try {
+    parsed = valueNodeParser.parse(text)
   } catch {
     return text
   }
+
+  const [name] = Object.keys(parsed)
+  const node = parseSingular(parsed[name])
+  const rdfValue = node?.['rdf:value']
+
+  if (isPresent(rdfValue)) {
+    return retrieveText(parseSingular(rdfValue))
+  }
+
+  // Markup with a prefixed root, such as Word's <o:p>, is text when it is not a value node.
+  if (name !== 'rdf:description') {
+    return text
+  }
+
+  return node?.['@rdf:about']
 }
 
 export const retrieveItemOrFeed: ParseUtilPartial<
