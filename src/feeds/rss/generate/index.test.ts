@@ -881,6 +881,35 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with annotate namespace', () => {
+    const value = {
+      title: 'Feed with annotate namespace',
+      description: 'Test feed with Annotation namespace',
+      items: [
+        {
+          title: 'Re: Hello, World!',
+          annotate: {
+            reference: 'http://example.com/discuss/1',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:annotate="http://purl.org/rss/1.0/modules/annotate/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <channel>
+    <title>Feed with annotate namespace</title>
+    <description>Test feed with Annotation namespace</description>
+    <item>
+      <title>Re: Hello, World!</title>
+      <annotate:reference rdf:resource="http://example.com/discuss/1"/>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with wfw namespace', () => {
     const value = {
       title: 'Feed with wfw namespace',

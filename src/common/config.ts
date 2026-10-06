@@ -7,6 +7,10 @@ import {
   stopNodes as adminStopNodes,
   uris as adminUris,
 } from '../namespaces/admin/common/config.js'
+import {
+  stopNodes as annotateStopNodes,
+  uris as annotateUris,
+} from '../namespaces/annotate/common/config.js'
 import { stopNodes as appStopNodes, uris as appUris } from '../namespaces/app/common/config.js'
 import {
   stopNodes as arxivStopNodes,
@@ -160,6 +164,7 @@ export const namespaceUris = {
   cc: ccUris,
   creativeCommons: creativecommonsUris,
   thr: thrUris,
+  annotate: annotateUris,
   app: appUris,
   wfw: wfwUris,
   admin: adminUris,
@@ -190,6 +195,7 @@ export const namespacePrefixes = Object.entries(namespaceUris).reduce(
 export const namespaceStopNodes = [
   ...acastStopNodes,
   ...adminStopNodes,
+  ...annotateStopNodes,
   ...appStopNodes,
   ...arxivStopNodes,
   ...atomStopNodes,
