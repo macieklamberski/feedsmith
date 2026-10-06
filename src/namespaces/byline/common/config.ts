@@ -3,6 +3,10 @@ export const uris = [
   'http://bylinespec.org/1.0',
   'https://bylinespec.org/1.0/',
   'http://bylinespec.org/1.0/',
+  'https://www.bylinespec.org/1.0',
+  'http://www.bylinespec.org/1.0',
+  'https://www.bylinespec.org/1.0/',
+  'http://www.bylinespec.org/1.0/',
 ]
 
 export const stopNodes = [
