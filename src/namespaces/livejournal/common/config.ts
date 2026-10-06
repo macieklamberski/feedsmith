@@ -3,7 +3,14 @@ export const uris = [
   'https://www.livejournal.org/rss/lj/1.0/',
   'http://livejournal.org/rss/lj/1.0/',
   'https://livejournal.org/rss/lj/1.0/',
+  'http://www.livejournal.org/rss/lj/1.0',
+  'https://www.livejournal.org/rss/lj/1.0',
+  'http://livejournal.org/rss/lj/1.0',
+  'https://livejournal.org/rss/lj/1.0',
   'https://www.livejournal.com', // Atom feeds
+  'http://www.livejournal.com',
+  'https://livejournal.com',
+  'http://livejournal.com',
 ]
 
 // LiveJournal Atom feeds declare a different URI than its RSS feeds.
