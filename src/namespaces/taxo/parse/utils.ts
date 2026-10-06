@@ -14,6 +14,7 @@ import {
   retrieveText,
 } from '../../../common/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../dc/parse/utils.js'
+import { retrieveAbout as retrieveRdfAbout } from '../../rdf/parse/utils.js'
 import type { TaxoNs } from '../common/types.js'
 
 export const parseTopics: ParseUtilPartial<Array<string>> = (value) => {
@@ -35,7 +36,7 @@ export const parseTopic: ParseUtilPartial<TaxoNs.Topic<DateAny>, ParseMainOption
   }
 
   const topic = {
-    about: parseString(value['@about']) ?? parseString(value['@rdf:about']),
+    ...retrieveRdfAbout(value),
     link: parseSingularOf(value['taxo:link'], (value) => parseString(retrieveText(value))),
     topics: parseSingularOf(value['taxo:topics'], parseTopics),
     dc: retrieveDcItemOrFeed(value, options),
