@@ -12,6 +12,10 @@ import {
   isXmlAttributeKey,
   trimArray,
 } from '../../../common/utils.js'
+import {
+  generateEntry as generateActivityEntry,
+  generatePerson as generateActivityPerson,
+} from '../../../namespaces/activity/generate/utils.js'
 import { generateFeed as generateAdminFeed } from '../../../namespaces/admin/generate/utils.js'
 import { generateEntry as generateAppEntry } from '../../../namespaces/app/generate/utils.js'
 import {
@@ -207,6 +211,20 @@ export const generatePerson: GenerateUtil<AtomFeed.Person> = (person, options) =
   return trimObject(value)
 }
 
+// Activity Streams writes the actor's object type on atom:author only, per its section 3.2.3.
+export const generateAuthor: GenerateUtil<AtomFeed.Author> = (author, options) => {
+  if (!isPlainObject(author)) {
+    return
+  }
+
+  const value = {
+    ...generatePerson(author, options),
+    ...generateActivityPerson(author.activity),
+  }
+
+  return trimObject(value)
+}
+
 export const generateCategory: GenerateUtil<AtomFeed.Category> = (category) => {
   if (!isPlainObject(category)) {
     return
@@ -242,7 +260,7 @@ export const generateSource: GenerateUtil<AtomFeed.Source<DateLike>> = (source, 
 
   const key = createNamespaceSetter(options?.prefix)
   const value = {
-    [key('author')]: trimArray(source.authors, (author) => generatePerson(author, options)),
+    [key('author')]: trimArray(source.authors, (author) => generateAuthor(author, options)),
     [key('category')]: trimArray(source.categories, (category) =>
       generateCategory(category, options),
     ),
@@ -270,7 +288,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
 
   const key = createNamespaceSetter(options?.prefix)
   const value = {
-    [key('author')]: trimArray(entry.authors, (author) => generatePerson(author, options)),
+    [key('author')]: trimArray(entry.authors, (author) => generateAuthor(author, options)),
     [key('category')]: trimArray(entry.categories, generateCategory),
     [key('content')]: generateContent(entry.content),
     [key('contributor')]: trimArray(entry.contributors, (contributor) =>
@@ -311,6 +329,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
     ...generateWfwItem(entry.wfw),
     ...generatePingbackItem(entry.pingback),
     ...generateTrackbackItem(entry.trackback),
+    ...generateActivityEntry(entry.activity),
     ...generateYtItem(entry.yt),
     ...generateGeoItemOrFeed(entry.geo),
     ...generateGeoRssItemOrFeed(entry.georss),
@@ -327,7 +346,7 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
 
   const key = createNamespaceSetter(options?.prefix)
   const feedValue = {
-    [key('author')]: trimArray(feed.authors, (author) => generatePerson(author, options)),
+    [key('author')]: trimArray(feed.authors, (author) => generateAuthor(author, options)),
     [key('category')]: trimArray(feed.categories, (category) =>
       generateCategory(category, options),
     ),

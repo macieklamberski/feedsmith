@@ -11,6 +11,10 @@ import {
   parseVerbatimString,
   retrieveText,
 } from '../../../common/utils.js'
+import {
+  retrieveEntry as retrieveActivityEntry,
+  retrievePerson as retrieveActivityPerson,
+} from '../../../namespaces/activity/parse/utils.js'
 import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
 import { retrieveEntry as retrieveAppEntry } from '../../../namespaces/app/parse/utils.js'
 import {
@@ -378,6 +382,21 @@ export const parsePerson: ParseUtilPartial<AtomFeed.Person> = (value, options) =
   return trimObject(person)
 }
 
+// Activity Streams reads the actor's object type from atom:author only, per its section 3.2.3.
+export const parseAuthor: ParseUtilPartial<AtomFeed.Author> = (value, options) => {
+  if (!isPlainObject(value)) {
+    return
+  }
+
+  const namespaces = options?.asNamespace ? undefined : detectNamespaces(value)
+  const author = {
+    ...parsePerson(value, options),
+    activity: namespaces?.has('activity') ? retrieveActivityPerson(value) : undefined,
+  }
+
+  return trimObject(author)
+}
+
 export const parseCategory: ParseUtilPartial<AtomFeed.Category> = (value) => {
   if (!isPlainObject(value)) {
     return
@@ -420,7 +439,7 @@ export const parseSource: ParseUtilPartial<AtomFeed.Source<DateAny>> = (value, o
 
   const get = createNamespaceGetter(value, options?.prefix)
   const source = {
-    authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
+    authors: parseArrayOf(get('author'), (value) => parseAuthor(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
     generator: parseSingularOf(get('generator'), (value) => parseGenerator(value, options)),
@@ -497,7 +516,7 @@ export const parseEntry: ParseUtilPartial<AtomFeed.Entry<DateAny>> = (value, opt
   const namespaces = options?.asNamespace ? undefined : detectNamespaces(value)
   const get = createNamespaceGetter(value, options?.prefix)
   const entry = {
-    authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
+    authors: parseArrayOf(get('author'), (value) => parseAuthor(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     content: parseSingularOf(get('content'), (value) => parseContent(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
@@ -528,6 +547,7 @@ export const parseEntry: ParseUtilPartial<AtomFeed.Entry<DateAny>> = (value, opt
     wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces?.has('trackback') ? retrieveTrackbackItem(value) : undefined,
+    activity: namespaces?.has('activity') ? retrieveActivityEntry(value, options) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtItem(value) : undefined,
     geo: namespaces?.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     georss: namespaces?.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
@@ -545,7 +565,7 @@ export const parseFeed: ParseUtilPartial<AtomFeed.Feed<DateAny>> = (value, optio
   const namespaces = options?.asNamespace ? undefined : detectNamespaces(value)
   const get = createNamespaceGetter(value, options?.prefix)
   const feed = {
-    authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
+    authors: parseArrayOf(get('author'), (value) => parseAuthor(value, options)),
     categories: parseArrayOf(get('category'), (value) => parseCategory(value, options)),
     contributors: parseArrayOf(get('contributor'), (value) => parsePerson(value, options)),
     generator: parseSingularOf(get('generator'), (value) => parseGenerator(value, options)),

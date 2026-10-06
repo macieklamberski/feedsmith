@@ -1093,6 +1093,41 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with activity namespace', () => {
+    const value = {
+      title: 'Blog with Activity Streams',
+      link: 'https://example.com',
+      description: 'A blog whose items carry Activity Streams metadata',
+      items: [
+        {
+          title: 'Post with Activity Streams',
+          link: 'https://example.com/posts/224330343022',
+          activity: {
+            verb: 'http://activitystrea.ms/schema/1.0/post',
+            objectType: 'http://activitystrea.ms/schema/1.0/blog-entry',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:activity="http://activitystrea.ms/spec/1.0/">
+  <channel>
+    <title>Blog with Activity Streams</title>
+    <link>https://example.com</link>
+    <description>A blog whose items carry Activity Streams metadata</description>
+    <item>
+      <title>Post with Activity Streams</title>
+      <link>https://example.com/posts/224330343022</link>
+      <activity:verb>http://activitystrea.ms/schema/1.0/post</activity:verb>
+      <activity:object-type>http://activitystrea.ms/schema/1.0/blog-entry</activity:object-type>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with geo namespace', () => {
     const value = {
       title: 'Location Feed',

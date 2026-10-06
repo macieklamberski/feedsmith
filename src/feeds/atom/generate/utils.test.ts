@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import {
   createNamespaceSetter,
+  generateAuthor,
   generateCategory,
   generateContent,
   generateEntry,
@@ -409,6 +410,44 @@ describe('generateLink', () => {
   })
 })
 
+describe('generateAuthor', () => {
+  it('should generate person properties', () => {
+    const value = {
+      name: 'balleyne',
+      uri: 'https://example.com/user/1',
+    }
+    const expected = {
+      name: 'balleyne',
+      uri: 'https://example.com/user/1',
+    }
+
+    expect(generateAuthor(value)).toEqual(expected)
+  })
+
+  it('should generate activity namespace properties', () => {
+    const value = {
+      name: 'balleyne',
+      activity: {
+        objectType: 'http://activitystrea.ms/schema/1.0/person',
+      },
+    }
+    const expected = {
+      name: 'balleyne',
+      'activity:object-type': 'http://activitystrea.ms/schema/1.0/person',
+    }
+
+    expect(generateAuthor(value)).toEqual(expected)
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateAuthor('string')).toBeUndefined()
+    expect(generateAuthor(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateAuthor(null)).toBeUndefined()
+  })
+})
+
 describe('generatePerson', () => {
   it('should generate valid person object with all properties', () => {
     const value = {
@@ -626,6 +665,36 @@ describe('generateSource', () => {
     const expected = {
       id: 'https://example.com/source',
       title: { '#text': 'Source with invalid date' },
+    }
+
+    expect(generateSource(value)).toEqual(expected)
+  })
+
+  it('should write activity object type on authors but not on contributors', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      authors: [
+        {
+          name: 'balleyne',
+          activity: { objectType: 'http://activitystrea.ms/schema/1.0/person' },
+        },
+      ],
+      contributors: [
+        {
+          name: 'jk',
+          activity: { objectType: 'http://activitystrea.ms/schema/1.0/person' },
+        },
+      ],
+    }
+    const expected = {
+      author: [
+        {
+          name: 'balleyne',
+          'activity:object-type': 'http://activitystrea.ms/schema/1.0/person',
+        },
+      ],
+      contributor: [{ name: 'jk' }],
+      id: 'https://example.com/feed',
     }
 
     expect(generateSource(value)).toEqual(expected)
@@ -1140,6 +1209,67 @@ describe('generateEntry', () => {
       updated: '2023-03-15T12:00:00.000Z',
       'trackback:ping': 'https://example.com/trackback/123',
       'trackback:about': ['https://example.net/trackback/456', 'https://example.org/trackback/789'],
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
+  it('should generate entry with activity namespace properties', () => {
+    const value = {
+      id: 'https://example.com/entry/1',
+      title: { value: 'Entry with Activity Streams namespace' },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      activity: {
+        verb: 'http://activitystrea.ms/schema/1.0/post',
+        object: {
+          activity: {
+            objectType: 'http://activitystrea.ms/schema/1.0/blog-entry',
+          },
+        },
+      },
+    }
+    const expected = {
+      id: 'https://example.com/entry/1',
+      title: { '#text': 'Entry with Activity Streams namespace' },
+      updated: '2023-03-15T12:00:00.000Z',
+      'activity:verb': 'http://activitystrea.ms/schema/1.0/post',
+      'activity:object': {
+        'activity:object-type': 'http://activitystrea.ms/schema/1.0/blog-entry',
+      },
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
+  it('should write activity object type on authors but not on contributors', () => {
+    const value = {
+      id: 'https://example.com/notice/1649',
+      title: { value: 'Entry with Activity Streams people' },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      authors: [
+        {
+          name: 'balleyne',
+          activity: { objectType: 'http://activitystrea.ms/schema/1.0/person' },
+        },
+      ],
+      contributors: [
+        {
+          name: 'jk',
+          activity: { objectType: 'http://activitystrea.ms/schema/1.0/person' },
+        },
+      ],
+    }
+    const expected = {
+      author: [
+        {
+          name: 'balleyne',
+          'activity:object-type': 'http://activitystrea.ms/schema/1.0/person',
+        },
+      ],
+      contributor: [{ name: 'jk' }],
+      id: 'https://example.com/notice/1649',
+      title: { '#text': 'Entry with Activity Streams people' },
+      updated: '2023-03-15T12:00:00.000Z',
     }
 
     expect(generateEntry(value)).toEqual(expected)
@@ -2108,6 +2238,59 @@ describe('generateFeed', () => {
         title: { '#text': 'Feed with Pingback namespace' },
         updated: '2023-03-15T12:00:00.000Z',
         'pingback:to': 'https://example.com/pingback-service',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with activity namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: { value: 'Feed with Activity Streams namespace' },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      authors: [
+        {
+          name: 'balleyne',
+          activity: {
+            objectType: 'http://activitystrea.ms/schema/1.0/person',
+          },
+        },
+      ],
+      entries: [
+        {
+          id: 'https://example.com/notice/114244',
+          title: { value: 'New note by balleyne' },
+          updated: new Date('2023-03-15T12:00:00Z'),
+          activity: {
+            verb: 'http://activitystrea.ms/schema/1.0/post',
+            objectType: 'http://activitystrea.ms/schema/1.0/note',
+          },
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:activity': 'http://activitystrea.ms/spec/1.0/',
+        author: [
+          {
+            name: 'balleyne',
+            'activity:object-type': 'http://activitystrea.ms/schema/1.0/person',
+          },
+        ],
+        id: 'https://example.com/feed',
+        title: { '#text': 'Feed with Activity Streams namespace' },
+        updated: '2023-03-15T12:00:00.000Z',
+        entry: [
+          {
+            id: 'https://example.com/notice/114244',
+            title: { '#text': 'New note by balleyne' },
+            updated: '2023-03-15T12:00:00.000Z',
+            'activity:verb': 'http://activitystrea.ms/schema/1.0/post',
+            'activity:object-type': 'http://activitystrea.ms/schema/1.0/note',
+          },
+        ],
       },
     }
 

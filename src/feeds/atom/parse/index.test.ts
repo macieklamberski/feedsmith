@@ -241,6 +241,46 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should keep xhtml and CDATA text raw inside an activity object', () => {
+    const value = `
+      <?xml version="1.0" encoding="utf-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom" xmlns:activity="http://activitystrea.ms/spec/1.0/">
+        <id>example-feed</id>
+        <entry>
+          <id>example-entry</id>
+          <activity:object>
+            <id>example-object</id>
+            <title type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">a <b>b</b></div></title>
+            <content type="html"><![CDATA[<p>c</p>]]></content>
+          </activity:object>
+        </entry>
+      </feed>
+    `
+    const expected = {
+      id: 'example-feed',
+      entries: [
+        {
+          id: 'example-entry',
+          activity: {
+            object: {
+              id: 'example-object',
+              title: {
+                value: 'a <b>b</b>',
+                type: 'xhtml',
+              },
+              content: {
+                value: '<p>c</p>',
+                type: 'html',
+              },
+            },
+          },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should throw error for invalid input', () => {
     const throwing = () => parse('not a feed')
 

@@ -6,6 +6,7 @@ import type {
   Requirable,
   Strict,
 } from '../../../common/types.js'
+import type { ActivityNs } from '../../../namespaces/activity/common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AppNs } from '../../../namespaces/app/common/types.js'
 import type { ArxivNs } from '../../../namespaces/arxiv/common/types.js'
@@ -83,6 +84,11 @@ export namespace AtomFeed {
     TStrict
   >
 
+  // Activity Streams reads the actor's object type on atom:author only, per its section 3.2.3.
+  export type Author<TStrict extends boolean = false> = Person<TStrict> & {
+    activity?: ActivityNs.Person
+  }
+
   export type Category<TStrict extends boolean = false> = Strict<
     {
       term: Requirable<string> // Required in spec
@@ -102,7 +108,7 @@ export namespace AtomFeed {
   >
 
   export type Source<TDate, TStrict extends boolean = false> = {
-    authors?: Array<Person<TStrict>>
+    authors?: Array<Author<TStrict>>
     categories?: Array<Category<TStrict>>
     contributors?: Array<Person<TStrict>>
     generator?: Generator<TStrict>
@@ -118,7 +124,7 @@ export namespace AtomFeed {
 
   export type Entry<TDate, TStrict extends boolean = false> = Strict<
     {
-      authors?: Array<Person<TStrict>>
+      authors?: Array<Author<TStrict>>
       categories?: Array<Category<TStrict>>
       content?: Content
       contributors?: Array<Person<TStrict>>
@@ -147,6 +153,7 @@ export namespace AtomFeed {
       wfw?: WfwNs.Item
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
+      activity?: ActivityNs.Entry<TDate>
       yt?: YtNs.Item
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
@@ -157,7 +164,7 @@ export namespace AtomFeed {
 
   export type Feed<TDate, TStrict extends boolean = false> = Strict<
     {
-      authors?: Array<Person<TStrict>>
+      authors?: Array<Author<TStrict>>
       categories?: Array<Category<TStrict>>
       contributors?: Array<Person<TStrict>>
       generator?: Generator<TStrict>

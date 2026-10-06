@@ -1768,6 +1768,53 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with activity namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:activity="http://activitystrea.ms/spec/1.0/"
+        xmlns="http://purl.org/rss/1.0/"
+      >
+        <channel rdf:about="https://example.com/rss?rss=1.0">
+          <title>Feed with Activity Streams namespace</title>
+          <link>https://example.com</link>
+          <description>Test feed with Activity Streams namespace</description>
+        </channel>
+        <item rdf:about="0">
+          <title><![CDATA[Item title]]></title>
+          <link><![CDATA[https://example.com/224333549120]]></link>
+          <dc:date>Thu, 02 Jul 2026 16:00:00 +0900</dc:date>
+          <activity:verb>http://activitystrea.ms/schema/1.0/post</activity:verb>
+          <activity:object-type>http://activitystrea.ms/schema/1.0/blog-entry</activity:object-type>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with Activity Streams namespace',
+      link: 'https://example.com',
+      description: 'Test feed with Activity Streams namespace',
+      rdf: { about: 'https://example.com/rss?rss=1.0' },
+      items: [
+        {
+          title: 'Item title',
+          link: 'https://example.com/224333549120',
+          rdf: { about: '0' },
+          dc: {
+            dates: ['Thu, 02 Jul 2026 16:00:00 +0900'],
+          },
+          activity: {
+            verb: 'http://activitystrea.ms/schema/1.0/post',
+            objectType: 'http://activitystrea.ms/schema/1.0/blog-entry',
+          },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with geo namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
