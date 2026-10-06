@@ -1740,6 +1740,23 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
+  it('should handle webfeeds namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Entry' },
+      'webfeeds:featuredimage': { '@url': 'https://example.com/images/featured.jpg' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Example Entry' },
+      webfeeds: {
+        featuredImage: { url: 'https://example.com/images/featured.jpg' },
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
   it('should handle prism namespace', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
@@ -2184,6 +2201,27 @@ describe('parseFeed', () => {
       id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
       title: { value: 'Example Feed' },
       sy: { updateFrequency: 5 },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle webfeeds namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
+      title: { '#text': 'Example Feed' },
+      'webfeeds:logo': { '#text': 'https://example.com/images/logo.svg' },
+      'webfeeds:analytics': { '@id': 'G-E1P00P5NYS', '@engine': 'GoogleAnalytics' },
+      'webfeeds:wordmark': { '#text': 'https://example.com/images/wordmark.svg' },
+    }
+    const expected = {
+      id: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a',
+      title: { value: 'Example Feed' },
+      webfeeds: {
+        logo: 'https://example.com/images/logo.svg',
+        analytics: { id: 'G-E1P00P5NYS', engine: 'GoogleAnalytics' },
+        wordmark: 'https://example.com/images/wordmark.svg',
+      },
     }
 
     expect(parseFeed(value)).toEqual(expected)

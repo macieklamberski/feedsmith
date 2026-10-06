@@ -1462,6 +1462,52 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with webfeeds namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:webfeeds="http://webfeeds.org/rss/1.0"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with Webfeeds namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with Webfeeds namespace</description>
+          <webfeeds:icon>http://example.com/images/icon.png</webfeeds:icon>
+          <webfeeds:accentColor>DF5B57</webfeeds:accentColor>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item title</title>
+          <link>http://example.com/item1</link>
+          <webfeeds:featuredImage url="http://example.com/images/featured.jpg"/>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with Webfeeds namespace',
+      link: 'http://example.com',
+      description: 'Test feed with Webfeeds namespace',
+      webfeeds: {
+        icon: 'http://example.com/images/icon.png',
+        accentColor: 'DF5B57',
+      },
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Item title',
+          link: 'http://example.com/item1',
+          webfeeds: {
+            featuredImage: { url: 'http://example.com/images/featured.jpg' },
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with opensearch namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>

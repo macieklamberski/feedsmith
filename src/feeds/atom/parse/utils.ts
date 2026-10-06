@@ -50,6 +50,10 @@ import {
   retrieveLink as retrieveThrLink,
 } from '../../../namespaces/thr/parse/utils.js'
 import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
+import {
+  retrieveFeed as retrieveWebfeedsFeed,
+  retrieveItem as retrieveWebfeedsItem,
+} from '../../../namespaces/webfeeds/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
@@ -517,6 +521,7 @@ export const parseEntry: ParseUtilPartial<AtomFeed.Entry<DateAny>> = (value, opt
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     googleplay: namespaces?.has('googleplay') ? retrieveGooglePlayItem(value) : undefined,
     feedburner: namespaces?.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
+    webfeeds: namespaces?.has('webfeeds') ? retrieveWebfeedsItem(value) : undefined,
     arxiv: namespaces?.has('arxiv') ? retrieveArxivEntry(value) : undefined,
     prism: namespaces?.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
     cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,
@@ -565,6 +570,7 @@ export const parseFeed: ParseUtilPartial<AtomFeed.Feed<DateAny>> = (value, optio
     media: namespaces?.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     googleplay: namespaces?.has('googleplay') ? retrieveGooglePlayFeed(value) : undefined,
     feedburner: namespaces?.has('feedburner') ? retrieveFeedBurnerFeed(value) : undefined,
+    webfeeds: namespaces?.has('webfeeds') ? retrieveWebfeedsFeed(value) : undefined,
     opensearch: namespaces?.has('opensearch') ? retrieveOpenSearchFeed(value) : undefined,
     prism: namespaces?.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
     cc: namespaces?.has('cc') ? retrieveCc(value) : undefined,

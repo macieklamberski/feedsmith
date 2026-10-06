@@ -1795,6 +1795,43 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with webfeeds namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed',
+      title: { value: 'Branded Feed' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      webfeeds: { logo: 'https://example.com/images/logo.svg' },
+      entries: [
+        {
+          id: 'https://example.com/1',
+          title: { value: 'Entry' },
+          updated: new Date('2024-01-10T12:00:00Z'),
+          webfeeds: { featuredImage: { url: 'https://example.com/images/featured.jpg' } },
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:webfeeds': 'http://webfeeds.org/rss/1.0',
+        id: 'https://example.com/feed',
+        title: { '#text': 'Branded Feed' },
+        updated: '2024-01-10T12:00:00.000Z',
+        'webfeeds:logo': 'https://example.com/images/logo.svg',
+        entry: [
+          {
+            id: 'https://example.com/1',
+            title: { '#text': 'Entry' },
+            updated: '2024-01-10T12:00:00.000Z',
+            'webfeeds:featuredImage': { '@url': 'https://example.com/images/featured.jpg' },
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with arxiv namespace properties', () => {
     const value = {
       id: 'http://arxiv.org/api/query',

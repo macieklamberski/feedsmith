@@ -537,6 +537,15 @@
         "origEnclosureLink": "https://example.com/audio/original-episode.mp3",
         "awareness": "https://feedburner.google.com/awareness/1.0/data/example/entry"
       },
+      "webfeeds": {
+        "featuredImage": {
+          "url": "https://example.com/images/featured.jpg",
+          "type": "image/jpeg",
+          "width": 1200,
+          "height": 630
+        },
+        "featuredVisual": "https://example.com/images/featured.jpg"
+      },
       "arxiv": {
         "comment": "23 pages, 8 figures and 4 tables",
         "journalRef": "Eur.Phys.J. C31 (2003) 17-29",
@@ -1277,6 +1286,16 @@
     "emailServiceId": "ExampleBlog",
     "feedburnerHostname": "https://feedburner.google.com",
     "awareness": "https://feedburner.google.com/awareness/1.0/data/example"
+  },
+  "webfeeds": {
+    "cover": { "image": "https://example.com/images/cover.png" },
+    "icon": "https://example.com/images/icon.png",
+    "logo": "https://example.com/images/logo.svg",
+    "accentColor": "BE4825",
+    "related": { "layout": "card", "target": "browser" },
+    "analytics": { "id": "G-E1P00P5NYS", "engine": "GoogleAnalytics" },
+    "partial": true,
+    "wordmark": "https://example.com/images/wordmark.svg"
   },
   "opensearch": {
     "totalResults": 1000,
