@@ -81,6 +81,10 @@ import { stopNodes as rdfStopNodes, uris as rdfUris } from '../namespaces/rdf/co
 import { uris as rssUris } from '../namespaces/rss/common/config.js'
 import { uris as rss2Uris } from '../namespaces/rss2/common/config.js'
 import {
+  stopNodes as shopifyStopNodes,
+  uris as shopifyUris,
+} from '../namespaces/shopify/common/config.js'
+import {
   stopNodes as slashStopNodes,
   uris as slashUris,
 } from '../namespaces/slash/common/config.js'
@@ -168,6 +172,7 @@ export const namespaceUris = {
   source: sourceUris,
   blogChannel: blogchannelUris,
   yt: ytUris,
+  shopify: shopifyUris,
   geo: geoUris,
   georss: georssUris,
   rdf: rdfUris,
@@ -212,6 +217,7 @@ export const namespaceStopNodes = [
   ...prismStopNodes,
   ...rawvoiceStopNodes,
   ...rdfStopNodes,
+  ...shopifyStopNodes,
   ...slashStopNodes,
   ...sourceStopNodes,
   ...spotifyStopNodes,
