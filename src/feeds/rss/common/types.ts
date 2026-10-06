@@ -148,7 +148,7 @@ export namespace RssFeed {
       podcast?: PodcastNs.Item<TStrict>
       psc?: PscNs.Item<TStrict>
       media?: MediaNs.ItemOrFeed<TStrict>
-      imageNs?: ImageNs.Item<TDate>
+      imageNs?: ImageNs.Item<TDate, TStrict>
       googleplay?: GooglePlayNs.Item<TStrict>
       spotify?: SpotifyNs.Item<TStrict>
       acast?: AcastNs.Item

@@ -1621,6 +1621,68 @@ describe('generate', () => {
       expect(generate(value, { strict: true })).toEqual(expected)
     })
 
+    it('should require image namespace about in strict mode', () => {
+      const value = {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [
+          {
+            title: 'Item',
+            imageNs: { item: { width: 80, height: 50 } },
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:image="http://purl.org/rss/1.0/modules/image/">
+  <channel>
+    <title>Test</title>
+    <link>https://example.com</link>
+    <description>Desc</description>
+    <item>
+      <title>Item</title>
+      <image:item>
+        <image:width>80</image:width>
+        <image:height>50</image:height>
+      </image:item>
+    </item>
+  </channel>
+</rss>
+`
+
+      // @ts-expect-error: This is for testing purposes.
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
+
+    it('should accept image namespace with about in strict mode', () => {
+      const value = {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [
+          {
+            title: 'Item',
+            imageNs: { item: { about: 'https://example.com/image.png' } },
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:image="http://purl.org/rss/1.0/modules/image/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <channel>
+    <title>Test</title>
+    <link>https://example.com</link>
+    <description>Desc</description>
+    <item>
+      <title>Item</title>
+      <image:item rdf:about="https://example.com/image.png"/>
+    </item>
+  </channel>
+</rss>
+`
+
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
+
     it('should accept item with only title in strict mode', () => {
       const value = {
         title: 'Test',

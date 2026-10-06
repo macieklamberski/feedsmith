@@ -66,7 +66,7 @@ export namespace RdfFeed {
       content?: ContentNs.Item
       slash?: SlashNs.Item
       media?: MediaNs.ItemOrFeed<TStrict>
-      imageNs?: ImageNs.Item<TDate>
+      imageNs?: ImageNs.Item<TDate, TStrict>
       feedburner?: FeedBurnerNs.Item
       prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed

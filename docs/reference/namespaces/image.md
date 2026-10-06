@@ -14,7 +14,7 @@ The RSS 1.0 Image module adds an image to each item and a favicon to the channel
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="http://web.resource.org/rss/1.0/modules/image/" target="_blank">RSS 1.0 Modules: Image</a> (Proposed)</td>
+      <td><a href="https://web.resource.org/rss/1.0/modules/image/" target="_blank">RSS 1.0 Modules: Image</a> (Proposed)</td>
     </tr>
     <tr>
       <th>Prefix</th>
