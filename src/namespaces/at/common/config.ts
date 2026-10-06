@@ -3,6 +3,10 @@ export const uris = [
   'https://purl.org/atompub/tombstones/1.0',
   'http://purl.org/atompub/tombstones/1.0/',
   'https://purl.org/atompub/tombstones/1.0/',
+  'http://www.purl.org/atompub/tombstones/1.0',
+  'https://www.purl.org/atompub/tombstones/1.0',
+  'http://www.purl.org/atompub/tombstones/1.0/',
+  'https://www.purl.org/atompub/tombstones/1.0/',
 ]
 
 export const stopNodes = [
