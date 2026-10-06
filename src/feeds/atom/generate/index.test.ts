@@ -1170,6 +1170,27 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with blogger namespace', () => {
+    const value = {
+      id: 'tag:blogger.com,1999:blog-1234567890123456789',
+      title: { value: 'Example Blog' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      blogger: {
+        adultContent: true,
+      },
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:blogger="http://schemas.google.com/blogger/2008">
+  <id>tag:blogger.com,1999:blog-1234567890123456789</id>
+  <title>Example Blog</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <blogger:adultContent>true</blogger:adultContent>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with YouTube namespace', () => {
     const value = {
       id: 'yt:channel:UCuAXFkgsw1L7xaCfnd5JJOw',

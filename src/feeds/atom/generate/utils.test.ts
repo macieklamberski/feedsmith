@@ -2114,6 +2114,29 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with blogger namespace properties', () => {
+    const value = {
+      id: 'tag:blogger.com,1999:blog-1234567890123456789',
+      title: { value: 'Feed with Blogger namespace' },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      blogger: {
+        adultContent: true,
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:blogger': 'http://schemas.google.com/blogger/2008',
+        id: 'tag:blogger.com,1999:blog-1234567890123456789',
+        title: { '#text': 'Feed with Blogger namespace' },
+        updated: '2023-03-15T12:00:00.000Z',
+        'blogger:adultContent': true,
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with yt namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',

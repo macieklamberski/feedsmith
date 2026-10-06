@@ -2227,6 +2227,23 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
+  it('should handle blogger namespace', () => {
+    const value = {
+      id: { '#text': 'tag:blogger.com,1999:blog-1234567890123456789' },
+      title: { '#text': 'Example Blog' },
+      'blogger:adultcontent': { '#text': 'true' },
+    }
+    const expected = {
+      id: 'tag:blogger.com,1999:blog-1234567890123456789',
+      title: { value: 'Example Blog' },
+      blogger: {
+        adultContent: true,
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
   it('should handle yt namespace', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },

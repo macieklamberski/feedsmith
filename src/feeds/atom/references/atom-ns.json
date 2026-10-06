@@ -1429,6 +1429,9 @@
   "pingback": {
     "to": "https://example.com/pingback-service"
   },
+  "blogger": {
+    "adultContent": true
+  },
   "yt": {
     "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw",
     "playlistId": "PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf"
