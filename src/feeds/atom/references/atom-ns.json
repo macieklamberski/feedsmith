@@ -1,10 +1,14 @@
 {
   "id": "example-feed",
-  "title": "Example Feed",
+  "title": {
+    "value": "Example Feed"
+  },
   "entries": [
     {
       "id": "example-entry",
-      "title": "Example Entry",
+      "title": {
+        "value": "Example Entry"
+      },
       "authors": [
         {
           "name": "H1 Collaboration"
@@ -16,22 +20,6 @@
           }
         }
       ],
-      "app": {
-        "edited": "2024-03-15T14:30:00.000Z",
-        "control": {
-          "draft": true
-        }
-      },
-      "arxiv": {
-        "comment": "23 pages, 8 figures and 4 tables",
-        "journalRef": "Eur.Phys.J. C31 (2003) 17-29",
-        "doi": "10.1529/biophysj.104.047340",
-        "primaryCategory": {
-          "term": "hep-ex",
-          "scheme": "http://arxiv.org/schemas/atom",
-          "label": "High Energy Physics - Experiment"
-        }
-      },
       "dc": {
         "titles": ["Dublin Core Enhanced Entry Title"],
         "creators": ["Jack Jackson"],
@@ -46,36 +34,30 @@
         "sources": ["https://example.org/entry-source"],
         "languages": ["en-US"],
         "relations": ["https://example.org/related-entry"],
-        "creator": "Jack Jackson",
-        "contributor": "Assistant Editor Mike Thompson",
-        "date": "2022-01-01T12:00:00.000Z",
-        "description": "Detailed description of the example entry content",
-        "title": "Dublin Core Enhanced Entry Title",
-        "subject": "Article, Tutorial, Example",
-        "publisher": "Example News Organization",
-        "type": "Article",
-        "format": "application/xhtml+xml",
-        "identifier": "urn:uuid:98765432-9876-9876-9876-987654321def",
-        "source": "https://example.org/entry-source",
-        "language": "en-US",
-        "relation": "https://example.org/related-entry",
-        "coverage": "United States",
-        "rights": "Copyright 2025 Example News Organization"
+        "coverage": ["United States"],
+        "rights": ["Copyright 2025 Example News Organization"]
       },
       "dcterms": {
         "abstracts": ["This article explores advanced concepts in technology"],
+        "accessRights": ["Public access with attribution required"],
         "accrualMethods": ["Single publication"],
         "accrualPeriodicities": ["One-time"],
         "accrualPolicies": ["Editorial review required"],
         "alternatives": ["Alternative Item Title"],
         "audiences": ["Technical professionals"],
+        "available": ["2022-01-01T12:00:00.000Z"],
         "bibliographicCitations": [
           "Smith, J. (2022). Example Item. Retrieved from https://example.org/item/1"
         ],
+        "conformsTo": ["HTML5 standard"],
         "contributors": ["Assistant Editor Mike Thompson"],
         "coverages": ["United States technology sector"],
+        "created": ["2022-01-01T12:00:00.000Z"],
         "creators": ["Jack Jackson"],
+        "dateAccepted": ["2022-01-01T12:00:00.000Z"],
+        "dateCopyrighted": ["2022-01-01T12:00:00.000Z"],
         "dates": ["2022-01-01T12:00:00.000Z"],
+        "dateSubmitted": ["2022-01-01T12:00:00.000Z"],
         "descriptions": ["Detailed description of the example item content and its significance"],
         "educationLevels": ["Advanced"],
         "extents": ["Approximately 2500 words"],
@@ -85,88 +67,34 @@
         "hasVersions": ["1.1"],
         "identifiers": ["urn:uuid:item-98765432-9876-9876-9876-987654321def"],
         "instructionalMethods": ["Step-by-step tutorial"],
+        "isFormatOf": ["https://example.org/item-source"],
+        "isPartOf": ["Example Article Series"],
+        "isReferencedBy": ["https://example.org/item/1/citations"],
+        "isReplacedBy": ["https://example.org/item/1/updated"],
+        "isRequiredBy": ["https://example.org/item/1/prerequisites"],
+        "issued": ["2022-01-01T12:00:00.000Z"],
+        "isVersionOf": ["https://example.org/item/1/original"],
         "languages": ["en-US"],
         "licenses": ["Creative Commons Attribution 4.0"],
         "mediators": ["Editorial Team"],
         "mediums": ["Digital"],
+        "modified": ["2022-06-01T12:00:00.000Z"],
         "provenances": ["Originally published by Example News Organization"],
         "publishers": ["Example News Organization"],
+        "references": ["https://example.org/item/1/references"],
         "relations": ["https://example.org/related-article"],
+        "replaces": ["https://example.org/item/1/previous"],
+        "requires": ["Basic understanding of web technologies"],
+        "rights": ["Copyright 2025 Example News Organization"],
         "rightsHolders": ["Example News Organization"],
         "sources": ["https://example.org/item-source"],
         "spatials": ["United States"],
         "subjects": ["Article, Tutorial, Example"],
+        "tableOfContents": ["Introduction, Main Content, Conclusion"],
         "temporals": ["2022"],
         "titles": ["Dublin Core Terms Enhanced Item Title"],
         "types": ["Article"],
-        "created": "2022-01-01T12:00:00.000Z",
-        "license": "Creative Commons Attribution 4.0",
-        "abstract": "This article explores advanced concepts in technology",
-        "accessRights": "Public access with attribution required",
-        "accrualMethod": "Single publication",
-        "accrualPeriodicity": "One-time",
-        "accrualPolicy": "Editorial review required",
-        "alternative": "Alternative Item Title",
-        "audience": "Technical professionals",
-        "available": "2022-01-01T12:00:00.000Z",
-        "bibliographicCitation": "Smith, J. (2022). Example Item. Retrieved from https://example.org/item/1",
-        "conformsTo": "HTML5 standard",
-        "contributor": "Assistant Editor Mike Thompson",
-        "coverage": "United States technology sector",
-        "creator": "Jack Jackson",
-        "date": "2022-01-01T12:00:00.000Z",
-        "dateAccepted": "2022-01-01T12:00:00.000Z",
-        "dateCopyrighted": "2022-01-01T12:00:00.000Z",
-        "dateSubmitted": "2022-01-01T12:00:00.000Z",
-        "description": "Detailed description of the example item content and its significance",
-        "educationLevel": "Advanced",
-        "extent": "Approximately 2500 words",
-        "format": "text/html",
-        "hasFormat": "https://example.org/item/1.pdf",
-        "hasPart": "https://example.org/item/1/section1",
-        "hasVersion": "1.1",
-        "identifier": "urn:uuid:item-98765432-9876-9876-9876-987654321def",
-        "instructionalMethod": "Step-by-step tutorial",
-        "isFormatOf": "https://example.org/item-source",
-        "isPartOf": "Example Article Series",
-        "isReferencedBy": "https://example.org/item/1/citations",
-        "isReplacedBy": "https://example.org/item/1/updated",
-        "isRequiredBy": "https://example.org/item/1/prerequisites",
-        "issued": "2022-01-01T12:00:00.000Z",
-        "isVersionOf": "https://example.org/item/1/original",
-        "language": "en-US",
-        "mediator": "Editorial Team",
-        "medium": "Digital",
-        "modified": "2022-06-01T12:00:00.000Z",
-        "provenance": "Originally published by Example News Organization",
-        "publisher": "Example News Organization",
-        "references": "https://example.org/item/1/references",
-        "relation": "https://example.org/related-article",
-        "replaces": "https://example.org/item/1/previous",
-        "requires": "Basic understanding of web technologies",
-        "rights": "Copyright 2025 Example News Organization",
-        "rightsHolder": "Example News Organization",
-        "source": "https://example.org/item-source",
-        "spatial": "United States",
-        "subject": "Article, Tutorial, Example",
-        "tableOfContents": "Introduction, Main Content, Conclusion",
-        "temporal": "2022",
-        "title": "Dublin Core Terms Enhanced Item Title",
-        "type": "Article",
-        "valid": "2025-12-31T23:59:59.000Z"
-      },
-      "cc": {
-        "license": "https://creativecommons.org/licenses/by/4.0/",
-        "morePermissions": "https://example.com/additional-permissions",
-        "attributionName": "Jack Jackson",
-        "attributionURL": "https://example.com/authors/jack-jackson",
-        "useGuidelines": "https://example.com/article-usage-guidelines",
-        "permits": "http://creativecommons.org/ns#Reproduction",
-        "requires": "http://creativecommons.org/ns#Attribution",
-        "prohibits": "http://creativecommons.org/ns#CommercialUse",
-        "jurisdiction": "http://creativecommons.org/international/us/",
-        "legalcode": "https://creativecommons.org/licenses/by/4.0/legalcode",
-        "deprecatedOn": "2026-12-31"
+        "valid": ["2025-12-31T23:59:59.000Z"]
       },
       "slash": {
         "section": "articles",
@@ -183,18 +111,11 @@
         "season": 1,
         "episodeType": "full",
         "block": false,
+        "order": 1,
+        "isClosedCaptioned": true,
         "summary": "This is a detailed summary of the episode content and key takeaways",
         "subtitle": "Episode subtitle with additional context",
         "keywords": ["tutorial", "example", "technology", "programming"]
-      },
-      "googleplay": {
-        "author": "Episode Author",
-        "description": "Plain-text episode description for Google Play Podcasts",
-        "explicit": "clean",
-        "block": false,
-        "image": {
-          "href": "https://example.com/images/episode-googleplay.jpg"
-        }
       },
       "psc": {
         "chapters": [
@@ -225,10 +146,6 @@
             "href": "https://example.com/episode/conclusion"
           }
         ]
-      },
-      "yt": {
-        "videoId": "dQw4w9WgXcQ",
-        "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw"
       },
       "media": {
         "contents": [
@@ -389,126 +306,6 @@
             ]
           }
         ],
-        "group": {
-          "contents": [
-            {
-              "url": "https://example.com/videos/sample-hd.mp4",
-              "fileSize": 45678912,
-              "type": "video/mp4",
-              "medium": "video",
-              "expression": "full",
-              "bitrate": 5000,
-              "framerate": 60,
-              "duration": 180,
-              "height": 1080,
-              "width": 1920,
-              "lang": "en",
-              "title": {
-                "value": "HD Version (1080p)"
-              }
-            },
-            {
-              "url": "https://example.com/videos/sample-sd.mp4",
-              "fileSize": 23456789,
-              "type": "video/mp4",
-              "medium": "video",
-              "expression": "full",
-              "bitrate": 2500,
-              "framerate": 30,
-              "duration": 180,
-              "height": 720,
-              "width": 1280,
-              "lang": "en",
-              "title": {
-                "value": "SD Version (720p)"
-              }
-            },
-            {
-              "url": "https://example.com/videos/sample.webm",
-              "fileSize": 19876543,
-              "type": "video/webm",
-              "medium": "video",
-              "expression": "full",
-              "bitrate": 2000,
-              "framerate": 30,
-              "duration": 180,
-              "height": 720,
-              "width": 1280,
-              "lang": "en",
-              "title": {
-                "value": "WebM Version"
-              }
-            },
-            {
-              "url": "https://example.com/audio/sample.mp3",
-              "fileSize": 3456789,
-              "type": "audio/mpeg",
-              "medium": "audio",
-              "expression": "full",
-              "bitrate": 320,
-              "samplingrate": 44.1,
-              "channels": 2,
-              "duration": 180,
-              "lang": "en",
-              "title": {
-                "value": "Audio Only Version"
-              }
-            },
-            {
-              "url": "https://example.com/captions/sample-en.srt",
-              "type": "text/srt",
-              "medium": "document",
-              "expression": "sample",
-              "lang": "en",
-              "title": {
-                "value": "English Subtitles"
-              }
-            },
-            {
-              "url": "https://example.com/captions/sample-es.srt",
-              "type": "text/srt",
-              "medium": "document",
-              "expression": "sample",
-              "lang": "es",
-              "title": {
-                "value": "Spanish Subtitles"
-              }
-            }
-          ],
-          "title": {
-            "value": "Multi-Format Content Example"
-          },
-          "description": {
-            "value": "This video is available in multiple formats and resolutions"
-          },
-          "thumbnails": [
-            {
-              "url": "https://example.com/thumbnails/group-main.jpg",
-              "width": 640,
-              "height": 360
-            },
-            {
-              "url": "https://example.com/thumbnails/group-alt.jpg",
-              "width": 1280,
-              "height": 720
-            }
-          ],
-          "keywords": ["group", "multiple", "formats", "resolutions"],
-          "categories": [
-            {
-              "name": "Technology"
-            }
-          ],
-          "ratings": [
-            {
-              "value": "PG",
-              "scheme": "urn:mpaa"
-            }
-          ],
-          "copyright": {
-            "value": "© 2025 Example Media Inc."
-          }
-        },
         "groups": [
           {
             "contents": [
@@ -726,6 +523,210 @@
           ]
         }
       },
+      "googleplay": {
+        "author": "Episode Author",
+        "description": "Plain-text episode description for Google Play Podcasts",
+        "explicit": "clean",
+        "block": false,
+        "image": {
+          "href": "https://example.com/images/episode-googleplay.jpg"
+        }
+      },
+      "feedburner": {
+        "origLink": "https://example.com/posts/original-article",
+        "origEnclosureLink": "https://example.com/audio/original-episode.mp3",
+        "awareness": "https://feedburner.google.com/awareness/1.0/data/example/entry"
+      },
+      "arxiv": {
+        "comment": "23 pages, 8 figures and 4 tables",
+        "journalRef": "Eur.Phys.J. C31 (2003) 17-29",
+        "doi": "10.1529/biophysj.104.047340",
+        "primaryCategory": {
+          "term": "hep-ex",
+          "scheme": "http://arxiv.org/schemas/atom",
+          "label": "High Energy Physics - Experiment"
+        },
+        "announceType": "replace-cross",
+        "journalReference": "Journal de l'Ecole polytechnique - Mathematiques, Tome 11 (2024), pp. 431-472"
+      },
+      "prism": {
+        "publicationName": "Nature",
+        "issn": "0028-0836",
+        "eIssn": "1476-4687",
+        "isbns": ["978-0-12-345678-9"],
+        "issueIdentifier": "2023-03-15",
+        "issueName": "Spring Issue",
+        "issueTeaser": { "value": "Special coverage of breakthrough discoveries" },
+        "issueType": "regular",
+        "doi": "10.1038/s41586-023-05842-x",
+        "urls": [{ "value": "https://www.nature.com/articles/s41586-023-05842-x" }],
+        "volume": "615",
+        "number": "7952",
+        "edition": "International",
+        "aggregationType": "journal",
+        "section": "Research",
+        "subsection1": "highlights",
+        "subsection2": "featured",
+        "subsection3": "editors-picks",
+        "subsection4": "trending",
+        "startingPage": "425",
+        "endingPage": "432",
+        "pageRange": "425-432",
+        "pageCount": 8,
+        "pageProgressionDirection": "LTR",
+        "samplePageRange": "425-427",
+        "coverDate": "2023-03-15T00:00:00.000Z",
+        "coverDisplayDate": "March 15, 2023",
+        "publicationDates": [{ "value": "2023-03-15T00:00:00.000Z" }],
+        "publicationDisplayDates": [{ "value": "March 15, 2023" }],
+        "creationDate": "2023-01-15T00:00:00.000Z",
+        "modificationDate": "2023-03-10T00:00:00.000Z",
+        "dateReceived": "2023-01-01T00:00:00.000Z",
+        "onSaleDates": [{ "value": "2023-03-01T00:00:00.000Z" }],
+        "onSaleDays": [{ "value": "wednesday" }],
+        "offSaleDates": [{ "value": "2023-04-01T00:00:00.000Z" }],
+        "killDate": { "value": "2033-03-15T00:00:00.000Z" },
+        "copyrightYears": ["2023"],
+        "contentType": "research-article",
+        "genres": ["original-research"],
+        "alternateTitles": [{ "value": "Breakthrough Discovery in Cellular Biology" }],
+        "subtitles": ["New Insights into Cellular Mechanisms"],
+        "teasers": [
+          { "value": "Groundbreaking research reveals new insights into cellular mechanisms" }
+        ],
+        "keywords": ["molecular biology", "cellular mechanisms"],
+        "seriesTitle": "Nature Research Journals",
+        "seriesNumber": 1,
+        "nationalCatalogNumber": "NC12345",
+        "productCodes": ["NAT-2023-615"],
+        "uspsNumber": "123-456",
+        "publishingFrequency": "weekly",
+        "subchannel1": "news",
+        "subchannel2": "science",
+        "subchannel3": "biology",
+        "subchannel4": "molecular",
+        "corporateEntities": ["Nature Research"],
+        "distributor": "Nature Publishing Group",
+        "sellingAgencies": ["Scientific Publishers Inc."],
+        "organizations": ["Massachusetts Institute of Technology"],
+        "persons": ["Dr. Jane Smith", "Dr. John Doe"],
+        "platforms": ["web"],
+        "originPlatforms": ["print"],
+        "device": "desktop",
+        "complianceProfile": "two",
+        "academicFields": ["Biology", "Biochemistry"],
+        "events": ["Annual Science Conference 2023"],
+        "industries": ["Biotechnology"],
+        "locations": ["Boston, MA"],
+        "objects": ["Gene expression dataset"],
+        "profession": "Research Scientist",
+        "sport": "none",
+        "hasAlternatives": ["https://www.nature.com/articles/s41586-023-05842-x.pdf"],
+        "hasCorrections": [{ "value": "https://www.nature.com/articles/s41586-023-06000-1" }],
+        "hasTranslations": ["https://www.nature.com/articles/s41586-023-05842-x/de"],
+        "isAlternativeOf": ["https://doi.org/10.1038/s41586-023-05842-x"],
+        "isCorrectionOf": ["https://www.nature.com/articles/s41586-023-05800-1"],
+        "isTranslationOf": "https://www.nature.com/articles/s41586-023-05842-x/en",
+        "supplementTitles": ["Supplementary Materials"],
+        "supplementDisplayID": "S1",
+        "supplementStartingPage": "S1",
+        "links": ["https://www.nature.com/articles/s41586-023-05842-x/full"],
+        "wordCount": 5500,
+        "byteCount": 35000,
+        "ratings": [{ "value": "peer-reviewed" }],
+        "timePeriod": "2023-Q1",
+        "versionIdentifier": "v1.0",
+        "tickers": ["SPRN"],
+        "embargoDate": "2023-03-15T00:00:00.000Z",
+        "copyright": "© 2023 Springer Nature",
+        "expirationDate": "2028-03-15T00:00:00.000Z",
+        "rightsAgent": "Copyright Clearance Center",
+        "category": "research-article",
+        "hasFormats": ["https://www.nature.com/articles/s41586-023-05842-x.pdf"],
+        "hasParts": [
+          "https://www.nature.com/articles/s41586-023-05842-x/figures/1",
+          "https://www.nature.com/articles/s41586-023-05842-x/figures/2"
+        ],
+        "hasPreviousVersion": "https://www.nature.com/articles/s41586-023-05842-x/v1",
+        "isFormatOf": "https://www.nature.com/articles/s41586-023-05842-x",
+        "isPartOf": "https://www.nature.com/nature/volumes/615/issues/7952",
+        "isReferencedBy": "https://www.nature.com/articles/s41586-023-06000-2",
+        "isRequiredBy": "https://www.nature.com/collections/cell-biology",
+        "isVersionOf": "https://www.nature.com/articles/s41586-022-04000-0",
+        "objectTitles": ["Confocal microscope"],
+        "receptionDate": "2023-03-16T00:00:00.000Z",
+        "references": [
+          "https://doi.org/10.1038/nature12373",
+          "https://doi.org/10.1126/science.1225829"
+        ],
+        "requires": "https://www.nature.com/articles/s41586-023-05842-x/data"
+      },
+      "cc": {
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "morePermissions": "https://example.com/additional-permissions",
+        "attributionName": "Jack Jackson",
+        "attributionURL": "https://example.com/authors/jack-jackson",
+        "useGuidelines": "https://example.com/article-usage-guidelines",
+        "permits": "http://creativecommons.org/ns#Reproduction",
+        "requires": "http://creativecommons.org/ns#Attribution",
+        "prohibits": "http://creativecommons.org/ns#CommercialUse",
+        "jurisdiction": "http://creativecommons.org/international/us/",
+        "legalcode": "https://creativecommons.org/licenses/by/4.0/legalcode",
+        "deprecatedOn": "2026-12-31"
+      },
+      "creativeCommons": {
+        "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]
+      },
+      "thr": {
+        "total": 100,
+        "inReplyTos": [
+          {
+            "ref": "urn:uuid:d5e9c5d0-4c0c-11ec-81d3-0242ac130003",
+            "href": "https://example.com/posts/understanding-xml-namespaces",
+            "type": "application/xhtml+xml"
+          },
+          {
+            "ref": "urn:uuid:e7865b80-4c0c-11ec-81d3-0242ac130003",
+            "href": "https://example.com/posts/understanding-xml-namespaces/comments/1",
+            "type": "application/xhtml+xml"
+          }
+        ]
+      },
+      "app": {
+        "edited": "2024-03-15T14:30:00.000Z",
+        "control": {
+          "draft": true
+        }
+      },
+      "wfw": {
+        "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
+        "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
+      },
+      "pingback": {
+        "server": "https://example.com/xmlrpc.php",
+        "target": "https://referenced-blog.com/article",
+        "abouts": ["https://blog1.com/posts/xml-basics", "https://blog2.com/posts/namespaces"]
+      },
+      "trackback": {
+        "ping": "https://example.com/trackback/123",
+        "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
+      },
+      "byline": {
+        "author": {
+          "ref": "annie"
+        },
+        "role": "staff",
+        "perspective": "reporting",
+        "affiliation": {
+          "org": "ttr",
+          "relationship": "employed",
+          "title": "Senior Engineer"
+        }
+      },
+      "yt": {
+        "videoId": "dQw4w9WgXcQ",
+        "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw"
+      },
       "geo": {
         "lat": 37.8199,
         "long": -122.4783,
@@ -756,42 +757,16 @@
           "lowerCorner": { "lat": 37.15, "lng": -122.85 },
           "upperCorner": { "lat": 38.15, "lng": -121.85 }
         },
+        "circle": {
+          "center": { "lat": 37.65, "lng": -122.35 },
+          "radius": 500
+        },
         "featureTypeTag": "region",
         "relationshipTag": "contains",
         "featureName": "San Francisco Bay Area",
         "elev": 360,
         "floor": 4,
         "radius": 50000
-      },
-      "thr": {
-        "total": 100,
-        "inReplyTos": [
-          {
-            "ref": "urn:uuid:d5e9c5d0-4c0c-11ec-81d3-0242ac130003",
-            "href": "https://example.com/posts/understanding-xml-namespaces",
-            "type": "application/xhtml+xml"
-          },
-          {
-            "ref": "urn:uuid:e7865b80-4c0c-11ec-81d3-0242ac130003",
-            "href": "https://example.com/posts/understanding-xml-namespaces/comments/1",
-            "type": "application/xhtml+xml"
-          }
-        ]
-      },
-      "wfw": {
-        "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
-        "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
-      },
-      "pingback": {
-        "server": "https://example.com/xmlrpc.php",
-        "target": "https://referenced-blog.com/article"
-      },
-      "trackback": {
-        "ping": "https://example.com/trackback/123",
-        "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
-      },
-      "creativeCommons": {
-        "licenses": ["http://creativecommons.org/licenses/by-sa/4.0/"]
       },
       "links": [
         {
@@ -802,19 +777,7 @@
             "updated": "2025-05-10T16:45:00Z"
           }
         }
-      ],
-      "byline": {
-        "author": {
-          "ref": "annie"
-        },
-        "role": "staff",
-        "perspective": "reporting",
-        "affiliation": {
-          "org": "ttr",
-          "relationship": "employed",
-          "title": "Senior Engineer"
-        }
-      }
+      ]
     }
   ],
   "dc": {
@@ -831,34 +794,28 @@
     "sources": ["https://example.org/original-source"],
     "languages": ["en-US"],
     "relations": ["https://example.org/related-content"],
-    "creator": "John Doe",
-    "contributor": "Jane Smith",
-    "date": "2022-01-01T12:00:00.000Z",
-    "description": "This is an example of description.",
-    "title": "Dublin Core Enhanced Feed Title",
-    "subject": "Technology, Programming, Web Development",
-    "publisher": "Example Publishing Company",
-    "type": "Text",
-    "format": "application/atom+xml",
-    "identifier": "urn:uuid:12345678-1234-1234-1234-123456789abc",
-    "source": "https://example.org/original-source",
-    "language": "en-US",
-    "relation": "https://example.org/related-content",
-    "coverage": "Global",
-    "rights": "Copyright 2025 Example Publishing Company"
+    "coverage": ["Global"],
+    "rights": ["Copyright 2025 Example Publishing Company"]
   },
   "dcterms": {
     "abstracts": ["This is an abstract of the feed content"],
+    "accessRights": ["Public access with attribution required"],
     "accrualMethods": ["Regular updates"],
     "accrualPeriodicities": ["Daily"],
     "accrualPolicies": ["Content added based on editorial calendar"],
     "alternatives": ["Alternative Feed Title"],
     "audiences": ["General technology audience"],
+    "available": ["2022-01-01T12:00:00.000Z"],
     "bibliographicCitations": ["Example Feed. (2022). Retrieved from https://example.org"],
+    "conformsTo": ["RSS 2.0 Specification"],
     "contributors": ["Jane Smith"],
     "coverages": ["Global technology topics"],
+    "created": ["2022-01-01T12:00:00.000Z"],
     "creators": ["John Doe"],
+    "dateAccepted": ["2022-01-01T12:00:00.000Z"],
+    "dateCopyrighted": ["2022-01-01T12:00:00.000Z"],
     "dates": ["2022-01-01T12:00:00.000Z"],
+    "dateSubmitted": ["2022-01-01T12:00:00.000Z"],
     "descriptions": ["Detailed description of the feed content and purpose"],
     "educationLevels": ["Intermediate to advanced"],
     "extents": ["Approximately 1000 words per article"],
@@ -868,111 +825,34 @@
     "hasVersions": ["2.0"],
     "identifiers": ["urn:uuid:feed-12345678-1234-1234-1234-123456789abc"],
     "instructionalMethods": ["Practical examples and tutorials"],
+    "isFormatOf": ["https://example.org/original-content"],
+    "isPartOf": ["Example Media Network"],
+    "isReferencedBy": ["https://example.org/references"],
+    "isReplacedBy": ["https://example.org/new-feed"],
+    "isRequiredBy": ["https://example.org/dependent-feeds"],
+    "issued": ["2022-01-01T12:00:00.000Z"],
+    "isVersionOf": ["https://example.org/original-feed"],
     "languages": ["en-US"],
     "licenses": ["Creative Commons Attribution 4.0"],
     "mediators": ["Content Management System"],
     "mediums": ["Digital"],
+    "modified": ["2023-01-01T12:00:00.000Z"],
     "provenances": ["Originally created by Example Publishing Company"],
     "publishers": ["Example Publishing Company"],
+    "references": ["https://example.org/referenced-sources"],
     "relations": ["https://example.org/related-feeds"],
+    "replaces": ["https://example.org/old-feed"],
+    "requires": ["RSS 2.0 compatible reader"],
+    "rights": ["Copyright 2025 Example Publishing Company"],
     "rightsHolders": ["Example Publishing Company"],
     "sources": ["https://example.org/original-source"],
     "spatials": ["Global"],
     "subjects": ["Technology, Programming, Web Development"],
+    "tableOfContents": ["Latest articles, tutorials, and news"],
     "temporals": ["2022-present"],
     "titles": ["Dublin Core Terms Enhanced Feed Title"],
     "types": ["Text"],
-    "created": "2022-01-01T12:00:00.000Z",
-    "license": "Creative Commons Attribution 4.0",
-    "abstract": "This is an abstract of the feed content",
-    "accessRights": "Public access with attribution required",
-    "accrualMethod": "Regular updates",
-    "accrualPeriodicity": "Daily",
-    "accrualPolicy": "Content added based on editorial calendar",
-    "alternative": "Alternative Feed Title",
-    "audience": "General technology audience",
-    "available": "2022-01-01T12:00:00.000Z",
-    "bibliographicCitation": "Example Feed. (2022). Retrieved from https://example.org",
-    "conformsTo": "RSS 2.0 Specification",
-    "contributor": "Jane Smith",
-    "coverage": "Global technology topics",
-    "creator": "John Doe",
-    "date": "2022-01-01T12:00:00.000Z",
-    "dateAccepted": "2022-01-01T12:00:00.000Z",
-    "dateCopyrighted": "2022-01-01T12:00:00.000Z",
-    "dateSubmitted": "2022-01-01T12:00:00.000Z",
-    "description": "Detailed description of the feed content and purpose",
-    "educationLevel": "Intermediate to advanced",
-    "extent": "Approximately 1000 words per article",
-    "format": "application/atom+xml",
-    "hasFormat": "https://example.org/feed.atom",
-    "hasPart": "https://example.org/category/tutorials",
-    "hasVersion": "2.0",
-    "identifier": "urn:uuid:feed-12345678-1234-1234-1234-123456789abc",
-    "instructionalMethod": "Practical examples and tutorials",
-    "isFormatOf": "https://example.org/original-content",
-    "isPartOf": "Example Media Network",
-    "isReferencedBy": "https://example.org/references",
-    "isReplacedBy": "https://example.org/new-feed",
-    "isRequiredBy": "https://example.org/dependent-feeds",
-    "issued": "2022-01-01T12:00:00.000Z",
-    "isVersionOf": "https://example.org/original-feed",
-    "language": "en-US",
-    "mediator": "Content Management System",
-    "medium": "Digital",
-    "modified": "2023-01-01T12:00:00.000Z",
-    "provenance": "Originally created by Example Publishing Company",
-    "publisher": "Example Publishing Company",
-    "references": "https://example.org/referenced-sources",
-    "relation": "https://example.org/related-feeds",
-    "replaces": "https://example.org/old-feed",
-    "requires": "RSS 2.0 compatible reader",
-    "rights": "Copyright 2025 Example Publishing Company",
-    "rightsHolder": "Example Publishing Company",
-    "source": "https://example.org/original-source",
-    "spatial": "Global",
-    "subject": "Technology, Programming, Web Development",
-    "tableOfContents": "Latest articles, tutorials, and news",
-    "temporal": "2022-present",
-    "title": "Dublin Core Terms Enhanced Feed Title",
-    "type": "Text",
-    "valid": "2025-12-31T23:59:59.000Z"
-  },
-  "cc": {
-    "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-    "morePermissions": "https://example.com/commercial-license",
-    "attributionName": "Example Publishing Company",
-    "attributionURL": "https://example.com/",
-    "useGuidelines": "https://example.com/usage-guidelines",
-    "permits": "http://creativecommons.org/ns#Reproduction",
-    "requires": "http://creativecommons.org/ns#Attribution",
-    "prohibits": "http://creativecommons.org/ns#CommercialUse",
-    "jurisdiction": "http://creativecommons.org/international/us/",
-    "legalcode": "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode",
-    "deprecatedOn": "2025-12-31"
-  },
-  "creativeCommons": {
-    "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
-  },
-  "pingback": {
-    "to": "https://example.com/pingback-service"
-  },
-  "admin": {
-    "errorReportsTo": "mailto:webmaster@example.com",
-    "generatorAgent": "http://www.movabletype.org/?v=3.2"
-  },
-  "opensearch": {
-    "totalResults": 1000,
-    "startIndex": 0,
-    "itemsPerPage": 10,
-    "queries": [
-      {
-        "role": "request",
-        "searchTerms": "quantum computing",
-        "startIndex": 0,
-        "count": 10
-      }
-    ]
+    "valid": ["2025-12-31T23:59:59.000Z"]
   },
   "sy": {
     "updatePeriod": "hourly",
@@ -1006,22 +886,6 @@
     "subtitle": "A subtitle that provides additional context",
     "keywords": ["technology", "programming", "web development", "tutorials"],
     "applePodcastsVerify": "example-verification-key"
-  },
-  "googleplay": {
-    "author": "Podcast Creator",
-    "description": "This is a plain-text description for Google Play Podcasts",
-    "explicit": false,
-    "block": false,
-    "image": {
-      "href": "https://example.com/images/googleplay-cover.jpg"
-    },
-    "categories": ["Technology"],
-    "email": "podcaster@example.com",
-    "newFeedUrl": "https://example.com/new-podcast-feed.xml"
-  },
-  "yt": {
-    "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw",
-    "playlistId": "PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf"
   },
   "media": {
     "contents": [
@@ -1182,126 +1046,6 @@
         ]
       }
     ],
-    "group": {
-      "contents": [
-        {
-          "url": "https://example.com/videos/sample-hd.mp4",
-          "fileSize": 45678912,
-          "type": "video/mp4",
-          "medium": "video",
-          "expression": "full",
-          "bitrate": 5000,
-          "framerate": 60,
-          "duration": 180,
-          "height": 1080,
-          "width": 1920,
-          "lang": "en",
-          "title": {
-            "value": "HD Version (1080p)"
-          }
-        },
-        {
-          "url": "https://example.com/videos/sample-sd.mp4",
-          "fileSize": 23456789,
-          "type": "video/mp4",
-          "medium": "video",
-          "expression": "full",
-          "bitrate": 2500,
-          "framerate": 30,
-          "duration": 180,
-          "height": 720,
-          "width": 1280,
-          "lang": "en",
-          "title": {
-            "value": "SD Version (720p)"
-          }
-        },
-        {
-          "url": "https://example.com/videos/sample.webm",
-          "fileSize": 19876543,
-          "type": "video/webm",
-          "medium": "video",
-          "expression": "full",
-          "bitrate": 2000,
-          "framerate": 30,
-          "duration": 180,
-          "height": 720,
-          "width": 1280,
-          "lang": "en",
-          "title": {
-            "value": "WebM Version"
-          }
-        },
-        {
-          "url": "https://example.com/audio/sample.mp3",
-          "fileSize": 3456789,
-          "type": "audio/mpeg",
-          "medium": "audio",
-          "expression": "full",
-          "bitrate": 320,
-          "samplingrate": 44.1,
-          "channels": 2,
-          "duration": 180,
-          "lang": "en",
-          "title": {
-            "value": "Audio Only Version"
-          }
-        },
-        {
-          "url": "https://example.com/captions/sample-en.srt",
-          "type": "text/srt",
-          "medium": "document",
-          "expression": "sample",
-          "lang": "en",
-          "title": {
-            "value": "English Subtitles"
-          }
-        },
-        {
-          "url": "https://example.com/captions/sample-es.srt",
-          "type": "text/srt",
-          "medium": "document",
-          "expression": "sample",
-          "lang": "es",
-          "title": {
-            "value": "Spanish Subtitles"
-          }
-        }
-      ],
-      "title": {
-        "value": "Multi-Format Content Example"
-      },
-      "description": {
-        "value": "This video is available in multiple formats and resolutions"
-      },
-      "thumbnails": [
-        {
-          "url": "https://example.com/thumbnails/group-main.jpg",
-          "width": 640,
-          "height": 360
-        },
-        {
-          "url": "https://example.com/thumbnails/group-alt.jpg",
-          "width": 1280,
-          "height": 720
-        }
-      ],
-      "keywords": ["group", "multiple", "formats", "resolutions"],
-      "categories": [
-        {
-          "name": "Technology"
-        }
-      ],
-      "ratings": [
-        {
-          "value": "PG",
-          "scheme": "urn:mpaa"
-        }
-      ],
-      "copyright": {
-        "value": "© 2025 Example Media Inc."
-      }
-    },
     "groups": [
       {
         "contents": [
@@ -1519,42 +1263,183 @@
       ]
     }
   },
-  "geo": {
-    "lat": 37.7749,
-    "long": -122.4194,
-    "alt": 10.5
+  "googleplay": {
+    "author": "Podcast Creator",
+    "description": "This is a plain-text description for Google Play Podcasts",
+    "explicit": false,
+    "block": false,
+    "image": {
+      "href": "https://example.com/images/googleplay-cover.jpg"
+    },
+    "categories": ["Technology"],
+    "email": "podcaster@example.com",
+    "owner": "owner@example.com",
+    "newFeedUrl": "https://example.com/new-podcast-feed.xml"
   },
-  "georss": {
-    "point": {
-      "lat": 37.78,
-      "lng": -122.42
+  "feedburner": {
+    "info": "exampleblog",
+    "feedFlares": [
+      {
+        "href": "https://add.my.yahoo.com/rss?url=https://example.com/feed",
+        "src": "https://us.i1.yimg.com/addtomyyahoo4.gif",
+        "value": "Add to My Yahoo"
+      }
+    ],
+    "browserFriendly": "This is an XML content feed. It is intended to be viewed in a newsreader or syndicated to another site.",
+    "emailServiceId": "ExampleBlog",
+    "feedburnerHostname": "https://feedburner.google.com",
+    "awareness": "https://feedburner.google.com/awareness/1.0/data/example"
+  },
+  "opensearch": {
+    "totalResults": 1000,
+    "startIndex": 0,
+    "itemsPerPage": 10,
+    "link": {
+      "href": "http://example.com/opensearchdescription.xml",
+      "rel": "search",
+      "type": "application/opensearchdescription+xml"
     },
-    "line": {
-      "points": [
-        { "lat": 37.78, "lng": -122.42 },
-        { "lat": 37.42, "lng": -122.1 },
-        { "lat": 37.86, "lng": -122.27 }
-      ]
-    },
-    "polygon": {
-      "points": [
-        { "lat": 37.86, "lng": -122.47 },
-        { "lat": 37.86, "lng": -122.37 },
-        { "lat": 37.76, "lng": -122.37 },
-        { "lat": 37.76, "lng": -122.47 },
-        { "lat": 37.86, "lng": -122.47 }
-      ]
-    },
-    "box": {
-      "lowerCorner": { "lat": 37.15, "lng": -122.85 },
-      "upperCorner": { "lat": 38.15, "lng": -121.85 }
-    },
-    "featureTypeTag": "region",
-    "relationshipTag": "contains",
-    "featureName": "San Francisco Bay Area",
-    "elev": 360,
-    "floor": 4,
-    "radius": 50000
+    "queries": [
+      {
+        "role": "request",
+        "title": "Search results for quantum computing",
+        "totalResults": 1000,
+        "searchTerms": "quantum computing",
+        "startIndex": 0,
+        "count": 10
+      }
+    ]
+  },
+  "prism": {
+    "publicationName": "Nature",
+    "issn": "0028-0836",
+    "eIssn": "1476-4687",
+    "isbns": ["978-0-12-345678-9"],
+    "issueIdentifier": "2023-03-15",
+    "issueName": "Spring Issue",
+    "issueTeaser": { "value": "Special coverage of breakthrough discoveries", "platform": "print" },
+    "issueType": "regular",
+    "volume": "615",
+    "number": "7952",
+    "edition": "International",
+    "aggregateIssueNumber": 8500,
+    "aggregationType": "journal",
+    "coverDate": "2023-03-15T00:00:00.000Z",
+    "coverDisplayDate": "March 15, 2023",
+    "publicationDates": [{ "value": "2023-03-15T00:00:00.000Z", "platform": "print" }],
+    "publicationDisplayDates": [{ "value": "Spring 2023" }],
+    "creationDate": "2023-02-01T00:00:00.000Z",
+    "modificationDate": "2023-03-10T00:00:00.000Z",
+    "dateReceived": "2023-01-15T00:00:00.000Z",
+    "onSaleDates": [{ "value": "2023-03-01T00:00:00.000Z" }],
+    "onSaleDays": [{ "value": "wednesday" }],
+    "offSaleDates": [{ "value": "2023-04-01T00:00:00.000Z" }],
+    "killDate": { "value": "2024-03-15T00:00:00.000Z" },
+    "copyrightYears": ["2023"],
+    "contentType": "article",
+    "alternateTitles": [{ "value": "Nature Journal" }],
+    "subtitles": ["The International Weekly Journal of Science"],
+    "teasers": [{ "value": "Leading scientific research and discoveries", "platform": "web" }],
+    "keywords": ["science", "research"],
+    "seriesTitle": "Nature Research Journals",
+    "seriesNumber": 1,
+    "bookEditions": ["First Edition"],
+    "nationalCatalogNumber": "NC12345",
+    "productCodes": ["NAT-2023-615"],
+    "uspsNumber": "123-456",
+    "publishingFrequency": "weekly",
+    "channels": ["web", "print"],
+    "subchannel1": "news",
+    "subchannel2": "science",
+    "subchannel3": "biology",
+    "subchannel4": "molecular",
+    "section": "front-page",
+    "subsection1": "highlights",
+    "subsection2": "featured",
+    "subsection3": "editors-picks",
+    "subsection4": "trending",
+    "startingPage": "975",
+    "endingPage": "1211",
+    "corporateEntities": ["Springer Nature"],
+    "distributor": "Nature Publishing Group",
+    "sellingAgencies": ["Scientific Publishers Inc."],
+    "organizations": ["Nature Research"],
+    "persons": ["Dr. Jane Smith"],
+    "platforms": ["desktop", "mobile"],
+    "originPlatforms": ["print", "digital"],
+    "device": "tablet",
+    "complianceProfile": "PRISM 3.0",
+    "blogTitle": "Nature News Blog",
+    "blogURL": "https://www.nature.com/news/blog",
+    "links": ["https://www.nature.com/nature"],
+    "urls": [{ "value": "https://www.nature.com", "platform": "web" }],
+    "wordCount": 52000,
+    "byteCount": 1048576,
+    "ratings": [{ "value": "A+", "ratingSystem": "Editorial" }],
+    "timePeriod": "2023-Q1",
+    "versionIdentifier": "v2023.03",
+    "tickers": ["SPRN"],
+    "academicFields": ["Biology", "Chemistry"],
+    "events": ["Annual Science Conference 2023"],
+    "genres": ["Research Article"],
+    "industries": ["Publishing", "Science"],
+    "locations": ["London, UK"],
+    "objects": ["Scientific Research"],
+    "profession": "Scientist",
+    "sport": "none",
+    "hasAlternatives": ["https://www.nature.com/nature/volumes/615/issues/7952/alternative"],
+    "hasCorrections": [
+      { "value": "https://www.nature.com/nature/volumes/615/issues/7952/corrections" }
+    ],
+    "hasTranslations": ["https://www.nature.com/nature/volumes/615/issues/7952/de"],
+    "isCorrectionOf": ["https://www.nature.com/nature/volumes/615/issues/7952/v1"],
+    "isTranslationOf": "https://www.nature.com/nature/volumes/615/issues/7952/en",
+    "embargoDate": "2023-03-01T00:00:00.000Z",
+    "copyright": "© 2023 Springer Nature",
+    "expirationDate": "2025-03-15T00:00:00.000Z",
+    "rightsAgent": "Springer Nature Rights",
+    "category": "research-article",
+    "hasFormats": ["https://www.nature.com/articles/s41586-023-05842-x.pdf"],
+    "hasParts": [
+      "https://www.nature.com/articles/s41586-023-05842-x/figures/1",
+      "https://www.nature.com/articles/s41586-023-05842-x/figures/2"
+    ],
+    "hasPreviousVersion": "https://www.nature.com/articles/s41586-023-05842-x/v1",
+    "isFormatOf": "https://www.nature.com/articles/s41586-023-05842-x",
+    "isPartOf": "https://www.nature.com/nature/volumes/615/issues/7952",
+    "isReferencedBy": "https://www.nature.com/articles/s41586-023-06000-2",
+    "isRequiredBy": "https://www.nature.com/collections/cell-biology",
+    "isVersionOf": "https://www.nature.com/articles/s41586-022-04000-0",
+    "objectTitles": ["Confocal microscope"],
+    "receptionDate": "2023-03-16T00:00:00.000Z",
+    "references": [
+      "https://doi.org/10.1038/nature12373",
+      "https://doi.org/10.1126/science.1225829"
+    ],
+    "requires": "https://www.nature.com/articles/s41586-023-05842-x/data"
+  },
+  "cc": {
+    "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "morePermissions": "https://example.com/commercial-license",
+    "attributionName": "Example Publishing Company",
+    "attributionURL": "https://example.com/",
+    "useGuidelines": "https://example.com/usage-guidelines",
+    "permits": "http://creativecommons.org/ns#Reproduction",
+    "requires": "http://creativecommons.org/ns#Attribution",
+    "prohibits": "http://creativecommons.org/ns#CommercialUse",
+    "jurisdiction": "http://creativecommons.org/international/us/",
+    "legalcode": "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode",
+    "deprecatedOn": "2025-12-31"
+  },
+  "creativeCommons": {
+    "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
+  },
+  "admin": {
+    "errorReportsTo": "mailto:webmaster@example.com",
+    "generatorAgent": "http://www.movabletype.org/?v=3.2"
+  },
+  "pingback": {
+    "to": "https://example.com/pingback-service"
   },
   "byline": {
     "contributors": [
@@ -1592,5 +1477,50 @@
         }
       }
     ]
+  },
+  "yt": {
+    "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw",
+    "playlistId": "PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf"
+  },
+  "geo": {
+    "lat": 37.7749,
+    "long": -122.4194,
+    "alt": 10.5
+  },
+  "georss": {
+    "point": {
+      "lat": 37.78,
+      "lng": -122.42
+    },
+    "line": {
+      "points": [
+        { "lat": 37.78, "lng": -122.42 },
+        { "lat": 37.42, "lng": -122.1 },
+        { "lat": 37.86, "lng": -122.27 }
+      ]
+    },
+    "polygon": {
+      "points": [
+        { "lat": 37.86, "lng": -122.47 },
+        { "lat": 37.86, "lng": -122.37 },
+        { "lat": 37.76, "lng": -122.37 },
+        { "lat": 37.76, "lng": -122.47 },
+        { "lat": 37.86, "lng": -122.47 }
+      ]
+    },
+    "box": {
+      "lowerCorner": { "lat": 37.15, "lng": -122.85 },
+      "upperCorner": { "lat": 38.15, "lng": -121.85 }
+    },
+    "circle": {
+      "center": { "lat": 37.65, "lng": -122.35 },
+      "radius": 500
+    },
+    "featureTypeTag": "region",
+    "relationshipTag": "contains",
+    "featureName": "San Francisco Bay Area",
+    "elev": 360,
+    "floor": 4,
+    "radius": 50000
   }
 }

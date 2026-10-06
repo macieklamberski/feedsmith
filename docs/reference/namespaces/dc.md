@@ -2,7 +2,7 @@
 title: "Reference: Dublin Core Namespace"
 ---
 
-# Dublin Core Namespace
+# Dublin Core Namespace Reference
 
 The Dublin Core namespace provides standardized metadata elements for describing digital resources. It offers a simple and effective way to add bibliographic information to feeds and items.
 
@@ -14,7 +14,7 @@ The Dublin Core namespace provides standardized metadata elements for describing
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/" target="_blank">Dublin Core Metadata Terms</a></td>
+      <td><a href="https://www.dublincore.org/specifications/dublin-core/dces/" target="_blank">Dublin Core Metadata Element Set 1.1</a></td>
     </tr>
     <tr>
       <th>Prefix</th>
@@ -38,7 +38,7 @@ The Dublin Core namespace provides standardized metadata elements for describing
 ## Types
 
 > [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
+> For details on type parameters (`TDate`), see [TypeScript Reference](/reference/typescript#tdate).
 
 <<< @/../src/namespaces/dc/common/types.ts#reference
 

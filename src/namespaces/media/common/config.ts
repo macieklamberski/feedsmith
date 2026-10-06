@@ -1,5 +1,5 @@
 export const uris = [
-  'http://search.yahoo.com/mrss/', // Official URI.
+  'http://search.yahoo.com/mrss/', // Official URI
   'https://search.yahoo.com/mrss/',
   'http://search.yahoo.com/mrss',
   'https://search.yahoo.com/mrss',

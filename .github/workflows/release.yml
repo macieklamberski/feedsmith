@@ -4,53 +4,39 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch to release'
+        description: Branch to release
         required: true
-        default: 'main'
+        default: main
         type: choice
         options:
           - main
+          - hotfix
+          - 2.x
           - rc
           - beta
           - alpha
 
 jobs:
   test:
-    uses: ./.github/workflows/test.yml
+    uses: macieklamberski/kvalita/.github/workflows/shared-test.yml@main
+    with:
+      ref: ${{ inputs.branch }}
+    secrets: inherit
 
-  compatibility:
-    uses: ./.github/workflows/compatibility.yml
+  package:
+    uses: ./.github/workflows/package.yml
+    with:
+      ref: ${{ inputs.branch }}
 
   release:
-    needs: [test, compatibility]
+    needs: [test, package]
     permissions:
       contents: write
       issues: write
       pull-requests: write
       id-token: write
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          ref: ${{ inputs.branch }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          registry-url: https://registry.npmjs.org
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-
-      - name: Build package
-        run: bun run build
-
-      - name: Release and publish package
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bunx semantic-release --extends kvalita/semantic-release
+    uses: macieklamberski/kvalita/.github/workflows/shared-release.yml@main
+    with:
+      branch: ${{ inputs.branch }}
+      build: true
+    secrets: inherit

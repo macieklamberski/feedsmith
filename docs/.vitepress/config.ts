@@ -1,3 +1,4 @@
+import { vitepress } from 'ogier/adapters'
 import { defineConfig } from 'vitepress'
 
 const indexMdRegex = /index\.md$/
@@ -5,6 +6,23 @@ const mdRegex = /\.md$/
 const trailingSlashRegex = /\/$/
 
 const hostname = 'https://feedsmith.dev'
+const og = vitepress({
+  site: {
+    hostname,
+    favicon: { file: new URL('../public/favicon.svg', import.meta.url) },
+  },
+  card: {
+    header: {
+      text: 'feedsmith',
+      icon: { file: new URL('../public/favicon.svg', import.meta.url) },
+    },
+    footer: {
+      text: 'macieklamberski/feedsmith',
+      icon: { file: new URL('./github.svg', import.meta.url) },
+    },
+  },
+  style: { background: { pattern: 'dots' } },
+})
 
 export default defineConfig({
   title: 'Feedsmith',
@@ -16,15 +34,17 @@ export default defineConfig({
   sitemap: {
     hostname,
   },
-  transformHead: ({ pageData }) => {
-    const canonicalUrl = `${hostname}/${pageData.relativePath}`
+  buildEnd: og.buildEnd,
+  transformHead: (context) => {
+    const canonicalUrl = `${hostname}/${context.pageData.relativePath}`
       .replace(indexMdRegex, '')
       .replace(mdRegex, '')
       .replace(trailingSlashRegex, '')
 
-    return [['link', { rel: 'canonical', href: canonicalUrl }]]
+    return [['link', { rel: 'canonical', href: canonicalUrl }], ...og.transformHead(context)]
   },
   head: [
+    ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
     ['meta', { property: 'og:site_name', content: 'Feedsmith' }],
     [
       'script',
@@ -55,8 +75,11 @@ export default defineConfig({
       { text: 'Parsing', link: '/parsing' },
       { text: 'Generating', link: '/generating' },
       {
-        text: 'v2.x',
-        items: [{ text: 'v3.x (Next)', link: 'https://v3.feedsmith.dev' }],
+        text: 'v3.x',
+        items: [
+          { text: 'v3.x (Latest)', link: 'https://feedsmith.dev', target: '_self' },
+          { text: 'v2.x', link: 'https://v2.feedsmith.dev', target: '_self' },
+        ],
       },
     ],
     sidebar: [
@@ -75,6 +98,7 @@ export default defineConfig({
           { text: 'Namespaces', link: '/parsing/namespaces' },
           { text: 'Dates', link: '/parsing/dates' },
           { text: 'Detecting', link: '/parsing/detecting' },
+          { text: 'Errors', link: '/parsing/errors' },
           { text: 'Examples', link: '/parsing/examples' },
         ],
       },
@@ -83,7 +107,8 @@ export default defineConfig({
         items: [
           { text: 'Overview', link: '/generating' },
           { text: 'Styling', link: '/generating/styling' },
-          { text: 'Lenient Mode', link: '/generating/lenient-mode' },
+          { text: 'Strict Mode', link: '/generating/strict-mode' },
+          { text: 'Errors', link: '/generating/errors' },
           { text: 'Examples', link: '/generating/examples' },
         ],
       },
@@ -122,6 +147,7 @@ export default defineConfig({
               { text: 'Spotify', link: '/reference/namespaces/spotify' },
               { text: 'Acast', link: '/reference/namespaces/acast' },
               { text: 'RawVoice', link: '/reference/namespaces/rawvoice' },
+              { text: 'FeedBurner', link: '/reference/namespaces/feedburner' },
               { text: 'FeedPress', link: '/reference/namespaces/feedpress' },
               { text: 'arXiv', link: '/reference/namespaces/arxiv' },
               { text: 'OpenSearch', link: '/reference/namespaces/opensearch' },
@@ -141,6 +167,7 @@ export default defineConfig({
               { text: 'W3C Basic Geo', link: '/reference/namespaces/geo' },
               { text: 'GeoRSS Simple', link: '/reference/namespaces/georss' },
               { text: 'RDF', link: '/reference/namespaces/rdf' },
+              { text: 'XML', link: '/reference/namespaces/xml' },
             ],
           },
           {
@@ -155,7 +182,10 @@ export default defineConfig({
       },
       {
         text: 'Migration',
-        items: [{ text: 'From 1.x to 2.x', link: '/migration/v1-to-v2' }],
+        items: [
+          { text: 'From 2.x to 3.x', link: '/migration/v2-to-v3' },
+          { text: 'From 1.x to 2.x', link: '/migration/v1-to-v2' },
+        ],
       },
     ],
     search: {

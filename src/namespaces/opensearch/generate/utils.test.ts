@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'bun:test'
-import { generateFeed, generateQuery } from './utils.js'
+import { generateFeed, generateLink, generateQuery } from './utils.js'
 
 describe('generateQuery', () => {
   it('should generate Query with all attributes', () => {
     const value = {
       role: 'request',
+      title: 'Search results for quantum computing',
+      totalResults: 4230000,
       searchTerms: 'quantum computing',
       count: 10,
       startIndex: 21,
@@ -15,6 +17,8 @@ describe('generateQuery', () => {
     }
     const expected = {
       '@role': 'request',
+      '@title': 'Search results for quantum computing',
+      '@totalResults': 4230000,
       '@searchTerms': 'quantum computing',
       '@count': 10,
       '@startIndex': 21,
@@ -70,7 +74,6 @@ describe('generateQuery', () => {
   it('should handle empty object', () => {
     const value = {}
 
-    // @ts-expect-error: This is for testing purposes.
     expect(generateQuery(value)).toBeUndefined()
   })
 
@@ -85,12 +88,78 @@ describe('generateQuery', () => {
   })
 })
 
+describe('generateLink', () => {
+  it('should generate link with all attributes', () => {
+    const value = {
+      href: 'http://example.com/opensearchdescription.xml',
+      rel: 'search',
+      type: 'application/opensearchdescription+xml',
+      hreflang: 'en',
+    }
+    const expected = {
+      '@href': 'http://example.com/opensearchdescription.xml',
+      '@rel': 'search',
+      '@type': 'application/opensearchdescription+xml',
+      '@hreflang': 'en',
+    }
+
+    expect(generateLink(value)).toEqual(expected)
+  })
+
+  it('should generate link with href only', () => {
+    const value = {
+      href: 'http://example.com/opensearchdescription.xml',
+    }
+    const expected = {
+      '@href': 'http://example.com/opensearchdescription.xml',
+    }
+
+    expect(generateLink(value)).toEqual(expected)
+  })
+
+  it('should handle empty strings', () => {
+    const value = {
+      href: 'http://example.com/opensearchdescription.xml',
+      rel: '',
+      type: '   ',
+    }
+    const expected = {
+      '@href': 'http://example.com/opensearchdescription.xml',
+    }
+
+    expect(generateLink(value)).toEqual(expected)
+  })
+
+  it('should handle empty object', () => {
+    const value = {}
+
+    expect(generateLink(value)).toBeUndefined()
+  })
+
+  it('should handle non-object inputs', () => {
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateLink('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateLink(123)).toBeUndefined()
+    expect(generateLink(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateLink(null)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateLink([])).toBeUndefined()
+  })
+})
+
 describe('generateFeed', () => {
   it('should generate feed with all properties', () => {
     const value = {
       totalResults: 1000,
       startIndex: 21,
       itemsPerPage: 10,
+      link: {
+        href: 'http://example.com/opensearchdescription.xml',
+        rel: 'search',
+        type: 'application/opensearchdescription+xml',
+      },
       queries: [
         {
           role: 'request',
@@ -102,6 +171,11 @@ describe('generateFeed', () => {
       'opensearch:totalResults': 1000,
       'opensearch:startIndex': 21,
       'opensearch:itemsPerPage': 10,
+      'opensearch:link': {
+        '@href': 'http://example.com/opensearchdescription.xml',
+        '@rel': 'search',
+        '@type': 'application/opensearchdescription+xml',
+      },
       'opensearch:Query': [
         {
           '@role': 'request',
@@ -143,7 +217,7 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
-  it('should generate feed with 0-based indexing (arXiv style)', () => {
+  it('should generate feed with 0-based indexing', () => {
     const value = {
       totalResults: 1000,
       startIndex: 0,

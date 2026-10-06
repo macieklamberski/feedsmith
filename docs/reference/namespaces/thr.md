@@ -2,9 +2,9 @@
 title: "Reference: Atom Threading Namespace"
 ---
 
-# Atom Threading Namespace
+# Atom Threading Namespace Reference
 
-The Atom Threading namespace provides elements for representing threaded discussions and comment relationships in Atom feeds, enabling proper conversation threading.
+The Atom Threading namespace provides elements for representing threaded discussions and comment relationships in RSS and Atom feeds, enabling proper conversation threading.
 
 <table>
   <tbody>
@@ -14,7 +14,7 @@ The Atom Threading namespace provides elements for representing threaded discuss
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="http://purl.org/syndication/thread/1.0" target="_blank">Threading Extensions</a></td>
+      <td><a href="https://datatracker.ietf.org/doc/html/rfc4685" target="_blank">RFC 4685 - Atom Threading Extensions</a></td>
     </tr>
     <tr>
       <th>Prefix</th>
@@ -37,7 +37,7 @@ The Atom Threading namespace provides elements for representing threaded discuss
 ## Types
 
 > [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
+> For details on type parameters (`TDate`, `TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tdate).
 
 <<< @/../src/namespaces/thr/common/types.ts#reference
 

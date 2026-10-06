@@ -2,7 +2,7 @@
 title: "Reference: Atom Namespace"
 ---
 
-# Atom Namespace
+# Atom Namespace Reference
 
 The Atom namespace allows RSS and RDF feeds to include Atom-specific elements, providing richer metadata and linking capabilities. This namespace provides partial Atom elements that can be embedded within other feed formats.
 
@@ -37,9 +37,9 @@ The Atom namespace allows RSS and RDF feeds to include Atom-specific elements, p
 ## Types
 
 > [!INFO]
-> `TDate` represents date fields in the type definitions. When **parsing**, dates are returned as strings in their original format (see [Parsing › Handling Dates](/parsing/dates) for more details). When **generating**, dates should be provided as JavaScript `Date` objects.
+> For details on type parameters (`TDate`, `TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tdate).
 
-<<< @/../src/feeds/atom/common/types.ts#reference
+<<< @/../src/namespaces/atom/common/types.ts#reference
 
 ## Related
 

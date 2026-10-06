@@ -1,5 +1,5 @@
 export const uris = [
-  'http://www.rawvoice.com/rawvoiceRssModule/', // Official URI.
+  'http://www.rawvoice.com/rawvoiceRssModule/', // Official URI
   'https://www.rawvoice.com/rawvoiceRssModule/',
   'http://www.rawvoice.com/rawvoiceRssModule',
   'https://www.rawvoice.com/rawvoiceRssModule',

@@ -1,5 +1,5 @@
 export const uris = [
-  'http://purl.org/syndication/thread/1.0', // Official URI.
+  'http://purl.org/syndication/thread/1.0', // Official URI
   'https://purl.org/syndication/thread/1.0',
   'http://purl.org/syndication/thread/1.0/',
   'https://purl.org/syndication/thread/1.0/',

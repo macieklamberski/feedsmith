@@ -125,53 +125,45 @@ describe('generateFeed', () => {
     expect(generateFeed(null)).toBeUndefined()
   })
 
-  it('should handle various locale codes correctly', () => {
-    const locales = ['en', 'fr', 'de', 'es', 'ja', 'zh', 'pt', 'ru']
+  const localeCases: Array<[string, { 'feedpress:locale': string }]> = [
+    ['en', { 'feedpress:locale': 'en' }],
+    ['fr', { 'feedpress:locale': 'fr' }],
+    ['de', { 'feedpress:locale': 'de' }],
+    ['es', { 'feedpress:locale': 'es' }],
+    ['ja', { 'feedpress:locale': 'ja' }],
+    ['zh', { 'feedpress:locale': 'zh' }],
+    ['pt', { 'feedpress:locale': 'pt' }],
+    ['ru', { 'feedpress:locale': 'ru' }],
+  ]
 
-    for (const locale of locales) {
-      const value = {
-        locale,
-      }
-      const expected = {
-        'feedpress:locale': locale,
-      }
-
-      expect(generateFeed(value)).toEqual(expected)
-    }
+  it.each(localeCases)('should handle locale code: %s', (locale, expected) => {
+    expect(generateFeed({ locale })).toEqual(expected)
   })
 
-  it('should handle numeric podcast IDs', () => {
-    const podcastIds = ['123456', '789012', '345678']
+  const podcastIdCases: Array<[string, { 'feedpress:podcastId': string }]> = [
+    ['123456', { 'feedpress:podcastId': '123456' }],
+    ['789012', { 'feedpress:podcastId': '789012' }],
+    ['345678', { 'feedpress:podcastId': '345678' }],
+  ]
 
-    for (const podcastId of podcastIds) {
-      const value = {
-        podcastId,
-      }
-      const expected = {
-        'feedpress:podcastId': podcastId,
-      }
-
-      expect(generateFeed(value)).toEqual(expected)
-    }
+  it.each(podcastIdCases)('should handle numeric podcast ID: %s', (podcastId, expected) => {
+    expect(generateFeed({ podcastId })).toEqual(expected)
   })
 
-  it('should handle various CSS file URLs', () => {
-    const cssFiles = [
-      'https://example.com/custom.css',
+  const cssFileCases: Array<[string, { 'feedpress:cssFile': string }]> = [
+    ['https://example.com/custom.css', { 'feedpress:cssFile': 'https://example.com/custom.css' }],
+    [
       'https://cdn.example.com/styles/podcast.css',
+      { 'feedpress:cssFile': 'https://cdn.example.com/styles/podcast.css' },
+    ],
+    [
       'https://example.com/theme.css?v=1.0',
-    ]
+      { 'feedpress:cssFile': 'https://example.com/theme.css?v=1.0' },
+    ],
+  ]
 
-    for (const cssFile of cssFiles) {
-      const value = {
-        cssFile,
-      }
-      const expected = {
-        'feedpress:cssFile': cssFile,
-      }
-
-      expect(generateFeed(value)).toEqual(expected)
-    }
+  it.each(cssFileCases)('should handle CSS file URL: %s', (cssFile, expected) => {
+    expect(generateFeed({ cssFile })).toEqual(expected)
   })
 
   it('should handle partial feed data', () => {

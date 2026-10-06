@@ -35,9 +35,8 @@ describe('generateProfile', () => {
     expect(generateProfile(value)).toEqual(expected)
   })
 
-  it('should return undefined when href is missing', () => {
-    // @ts-expect-error: This is for testing purposes.
-    expect(generateProfile({ rel: 'mastodon' })).toBeUndefined()
+  it('should generate profile without href', () => {
+    expect(generateProfile({ rel: 'mastodon' })).toEqual({ '@rel': 'mastodon' })
   })
 
   it('should handle non-object inputs', () => {
@@ -132,9 +131,8 @@ describe('generatePerson', () => {
     expect(generatePerson(value)).toEqual(expected)
   })
 
-  it('should return undefined when name is missing', () => {
-    // @ts-expect-error: This is for testing purposes.
-    expect(generatePerson({ id: 'annie' })).toBeUndefined()
+  it('should generate person without name', () => {
+    expect(generatePerson({ id: 'annie' })).toEqual({ '@id': 'annie' })
   })
 
   it('should handle non-object inputs', () => {
@@ -166,9 +164,8 @@ describe('generateOrg', () => {
     expect(generateOrg(value)).toEqual(expected)
   })
 
-  it('should return undefined when name is missing', () => {
-    // @ts-expect-error: This is for testing purposes.
-    expect(generateOrg({ id: 'ttr' })).toBeUndefined()
+  it('should generate org without name', () => {
+    expect(generateOrg({ id: 'ttr' })).toEqual({ '@id': 'ttr' })
   })
 
   it('should handle non-object inputs', () => {

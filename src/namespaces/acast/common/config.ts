@@ -1,5 +1,5 @@
 export const uris = [
-  'https://schema.acast.com/1.0/', // Official URI.
+  'https://schema.acast.com/1.0/', // Official URI
   'http://schema.acast.com/1.0/',
   'https://schema.acast.com/1.0',
   'http://schema.acast.com/1.0',

@@ -1,0 +1,48 @@
+---
+title: "Reference: XML Namespace"
+---
+
+# XML Namespace Reference
+
+Supports `xml:lang`, `xml:base`, `xml:space`, and `xml:id` attributes at both feed and item/entry level in RSS, Atom, and RDF feeds.
+
+<table>
+  <tbody>
+    <tr>
+      <th>Namespace URI</th>
+      <td><code>http://www.w3.org/XML/1998/namespace</code></td>
+    </tr>
+    <tr>
+      <th>Specification</th>
+      <td>
+        <a href="https://www.w3.org/TR/xml/" target="_blank">XML 1.0</a> (<code>xml:space</code>, <code>xml:lang</code>)<br>
+        <a href="https://www.w3.org/TR/xmlbase/" target="_blank">XML Base</a><br>
+        <a href="https://www.w3.org/TR/xml-id/" target="_blank">xml:id</a>
+      </td>
+    </tr>
+    <tr>
+      <th>Prefix</th>
+      <td><code>&lt;xml:*&gt;</code></td>
+    </tr>
+    <tr>
+      <th>Available in</th>
+      <td>
+        <a href="/reference/feeds/rss">RSS</a>,
+        <a href="/reference/feeds/atom">Atom</a>,
+        <a href="/reference/feeds/rdf">RDF</a>
+      </td>
+    </tr>
+    <tr>
+      <th>Property</th>
+      <td><code>xml</code></td>
+    </tr>
+  </tbody>
+</table>
+
+## Types
+
+<<< @/../src/namespaces/xml/common/types.ts#reference
+
+## Related
+
+- **[Parsing Namespaces](/parsing/namespaces)** - How namespace parsing works

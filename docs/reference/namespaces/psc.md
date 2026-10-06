@@ -2,7 +2,7 @@
 title: "Reference: Podlove Simple Chapters Namespace"
 ---
 
-# Podlove Simple Chapters Namespace
+# Podlove Simple Chapters Namespace Reference
 
 The Podlove Simple Chapters (PSC) namespace provides structured chapter information for podcasts and other media, allowing creators to define timed segments with titles, links, and images.
 
@@ -35,6 +35,9 @@ The Podlove Simple Chapters (PSC) namespace provides structured chapter informat
 </table>
 
 ## Structure
+
+> [!INFO]
+> For details on type parameters (`TStrict`) and `Requirable<T>` markers, see [TypeScript Reference](/reference/typescript#tstrict).
 
 <<< @/../src/namespaces/psc/common/types.ts#reference
 

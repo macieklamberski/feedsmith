@@ -1,15 +1,10 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import {
-  generateCdataString,
-  generateCsvOf,
-  generateNumber,
-  isObject,
-  trimObject,
-} from '../../../common/utils.js'
+import { generateCdataString, generateCsvOf, generateNumber } from '../../../common/utils.js'
 import type { SlashNs } from '../common/types.js'
 
 export const generateItem: GenerateUtil<SlashNs.Item> = (item) => {
-  if (!isObject(item)) {
+  if (!isPlainObject(item)) {
     return
   }
 

@@ -1,21 +1,15 @@
+import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
-import {
-  generateCdataString,
-  generatePlainString,
-  isNonEmptyString,
-  isObject,
-  trimArray,
-  trimObject,
-} from '../../../common/utils.js'
+import { generateCdataString, generatePlainString, trimArray } from '../../../common/utils.js'
 import type { BylineNs } from '../common/types.js'
 
 export const generateProfile: GenerateUtil<BylineNs.Profile> = (profile) => {
-  if (!isObject(profile) || !isNonEmptyString(profile.href)) {
+  if (!isPlainObject(profile)) {
     return
   }
 
   const value = {
-    '@href': profile.href,
+    '@href': generatePlainString(profile.href),
     '@rel': generatePlainString(profile.rel),
   }
 
@@ -23,7 +17,7 @@ export const generateProfile: GenerateUtil<BylineNs.Profile> = (profile) => {
 }
 
 export const generateTheme: GenerateUtil<BylineNs.Theme> = (theme) => {
-  if (!isObject(theme)) {
+  if (!isPlainObject(theme)) {
     return
   }
 
@@ -37,7 +31,7 @@ export const generateTheme: GenerateUtil<BylineNs.Theme> = (theme) => {
 }
 
 export const generatePerson: GenerateUtil<BylineNs.Person> = (person) => {
-  if (!isObject(person) || !isNonEmptyString(person.name)) {
+  if (!isPlainObject(person)) {
     return
   }
 
@@ -57,7 +51,7 @@ export const generatePerson: GenerateUtil<BylineNs.Person> = (person) => {
 }
 
 export const generateOrg: GenerateUtil<BylineNs.Org> = (org) => {
-  if (!isObject(org) || !isNonEmptyString(org.name)) {
+  if (!isPlainObject(org)) {
     return
   }
 
@@ -73,7 +67,7 @@ export const generateOrg: GenerateUtil<BylineNs.Org> = (org) => {
 }
 
 export const generateAuthor: GenerateUtil<BylineNs.Author> = (author) => {
-  if (!isObject(author)) {
+  if (!isPlainObject(author)) {
     return
   }
 
@@ -86,12 +80,12 @@ export const generateAuthor: GenerateUtil<BylineNs.Author> = (author) => {
 }
 
 export const generateAffiliation: GenerateUtil<BylineNs.Affiliation> = (affiliation) => {
-  if (!isObject(affiliation)) {
+  if (!isPlainObject(affiliation)) {
     return
   }
 
   const value = {
-    'byline:org-ref': isNonEmptyString(affiliation.org) ? { '@ref': affiliation.org } : undefined,
+    'byline:org-ref': trimObject({ '@ref': generatePlainString(affiliation.org) }),
     'byline:relationship': generateCdataString(affiliation.relationship),
     'byline:title': generateCdataString(affiliation.title),
   }
@@ -100,7 +94,7 @@ export const generateAffiliation: GenerateUtil<BylineNs.Affiliation> = (affiliat
 }
 
 export const generateFeed: GenerateUtil<BylineNs.Feed> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 
@@ -116,7 +110,7 @@ export const generateFeed: GenerateUtil<BylineNs.Feed> = (feed) => {
 }
 
 export const generateItem: GenerateUtil<BylineNs.Item> = (item) => {
-  if (!isObject(item)) {
+  if (!isPlainObject(item)) {
     return
   }
 

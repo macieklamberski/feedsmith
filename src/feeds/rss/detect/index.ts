@@ -1,4 +1,4 @@
-import { isNonEmptyString } from '../../../common/utils.js'
+import { isNonEmptyString } from 'trousse'
 
 const rssElementRegex = /(?:^|[\s>])<(?:\w+:)?rss[\s>]/im
 const versionAttributeRegex = /version\s*=\s*["'][^"']*["']/i

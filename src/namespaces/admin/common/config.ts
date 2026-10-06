@@ -1,5 +1,5 @@
 export const uris = [
-  'http://webns.net/mvcb/', // Official URI.
+  'http://webns.net/mvcb/', // Official URI
   'https://webns.net/mvcb/',
   'http://webns.net/mvcb',
   'https://webns.net/mvcb',

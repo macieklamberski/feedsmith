@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'bun:test'
-import { generateFeed, generateItem, generateMetamark } from './utils.js'
+import {
+  generateAlternateEnclosure,
+  generateDonate,
+  generateFeed,
+  generateItem,
+  generateLiveStream,
+  generateMetamark,
+  generatePoster,
+  generateRating,
+  generateSubscribe,
+} from './utils.js'
 
 describe('generateItem', () => {
   it('should generate valid item object with all properties', () => {
@@ -210,12 +220,300 @@ describe('generateItem', () => {
 })
 
 describe('generateMetamark', () => {
+  it('should generate metamark with all properties', () => {
+    const value = {
+      type: 'ad',
+      link: 'https://example.com/ad',
+      position: 120,
+      duration: 30,
+      value: 'ad-123456',
+    }
+    const expected = {
+      '#text': 'ad-123456',
+      '@type': 'ad',
+      '@link': 'https://example.com/ad',
+      '@position': 120,
+      '@duration': 30,
+    }
+
+    expect(generateMetamark(value)).toEqual(expected)
+  })
+
+  it('should generate metamark with minimal properties', () => {
+    const value = {
+      type: 'comment',
+      position: 60,
+    }
+    const expected = {
+      '@type': 'comment',
+      '@position': 60,
+    }
+
+    expect(generateMetamark(value)).toEqual(expected)
+  })
+
+  it('should generate metamark with special characters in value', () => {
+    const value = {
+      type: 'comment',
+      value: 'Q&A segment',
+    }
+    const expected = {
+      '#cdata': 'Q&A segment',
+      '@type': 'comment',
+    }
+
+    expect(generateMetamark(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(generateMetamark(value)).toBeUndefined()
+  })
+
   it('should return undefined for non-object input', () => {
     expect(generateMetamark(undefined)).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
     expect(generateMetamark('string')).toBeUndefined()
     // @ts-expect-error: This is for testing purposes.
     expect(generateMetamark(null)).toBeUndefined()
+  })
+})
+
+describe('generateRating', () => {
+  it('should generate rating with all properties', () => {
+    const value = {
+      value: 'TV-14',
+      tv: 'TV-14',
+      movie: 'PG-13',
+    }
+    const expected = {
+      '#text': 'TV-14',
+      '@tv': 'TV-14',
+      '@movie': 'PG-13',
+    }
+
+    expect(generateRating(value)).toEqual(expected)
+  })
+
+  it('should generate rating with minimal properties', () => {
+    const value = {
+      value: 'TV-G',
+    }
+    const expected = {
+      '#text': 'TV-G',
+    }
+
+    expect(generateRating(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(generateRating(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(generateRating(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateRating('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateRating(null)).toBeUndefined()
+  })
+})
+
+describe('generateLiveStream', () => {
+  it('should generate live stream with all properties', () => {
+    const value = {
+      url: 'https://live.example.com/stream.m3u8',
+      schedule: new Date('Mon, 15 Jan 2024 10:00:00 GMT'),
+      duration: '3600',
+      type: 'audio',
+    }
+    const expected = {
+      '#text': 'https://live.example.com/stream.m3u8',
+      '@schedule': 'Mon, 15 Jan 2024 10:00:00 GMT',
+      '@duration': '3600',
+      '@type': 'audio',
+    }
+
+    expect(generateLiveStream(value)).toEqual(expected)
+  })
+
+  it('should generate live stream with minimal properties', () => {
+    const value = {
+      url: 'https://live.example.com/stream.m3u8',
+    }
+    const expected = {
+      '#text': 'https://live.example.com/stream.m3u8',
+    }
+
+    expect(generateLiveStream(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(generateLiveStream(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(generateLiveStream(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateLiveStream('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateLiveStream(null)).toBeUndefined()
+  })
+})
+
+describe('generatePoster', () => {
+  it('should generate poster with url', () => {
+    const value = {
+      url: 'https://example.com/poster.jpg',
+    }
+    const expected = {
+      '@url': 'https://example.com/poster.jpg',
+    }
+
+    expect(generatePoster(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(generatePoster(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(generatePoster(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generatePoster('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generatePoster(null)).toBeUndefined()
+  })
+})
+
+describe('generateAlternateEnclosure', () => {
+  it('should generate alternate enclosure with all properties', () => {
+    const value = {
+      src: 'https://example.com/video.webm',
+      type: 'video/webm',
+      length: 1024,
+    }
+    const expected = {
+      '@src': 'https://example.com/video.webm',
+      '@type': 'video/webm',
+      '@length': 1024,
+    }
+
+    expect(generateAlternateEnclosure(value)).toEqual(expected)
+  })
+
+  it('should generate alternate enclosure with minimal properties', () => {
+    const value = {
+      src: 'https://example.com/video.mp4',
+    }
+    const expected = {
+      '@src': 'https://example.com/video.mp4',
+    }
+
+    expect(generateAlternateEnclosure(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(generateAlternateEnclosure(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(generateAlternateEnclosure(undefined)).toBeUndefined()
+    expect(generateAlternateEnclosure('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateAlternateEnclosure(null)).toBeUndefined()
+  })
+})
+
+describe('generateSubscribe', () => {
+  it('should generate subscribe with multiple attributes', () => {
+    const value = {
+      feed: 'https://example.com/feed/podcast/',
+      itunes: 'https://itunes.apple.com/us/podcast/example/id123',
+      spotify: 'https://open.spotify.com/show/example123',
+    }
+    const expected = {
+      '@feed': 'https://example.com/feed/podcast/',
+      '@itunes': 'https://itunes.apple.com/us/podcast/example/id123',
+      '@spotify': 'https://open.spotify.com/show/example123',
+    }
+
+    expect(generateSubscribe(value)).toEqual(expected)
+  })
+
+  it('should filter out empty attribute values', () => {
+    const value = {
+      feed: 'https://example.com/feed/',
+      itunes: '',
+    }
+    const expected = {
+      '@feed': 'https://example.com/feed/',
+    }
+
+    expect(generateSubscribe(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(generateSubscribe(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(generateSubscribe(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateSubscribe('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateSubscribe(null)).toBeUndefined()
+  })
+})
+
+describe('generateDonate', () => {
+  it('should generate donate with all properties', () => {
+    const value = {
+      href: 'https://example.com/donate',
+      value: 'Support the show',
+    }
+    const expected = {
+      '#text': 'Support the show',
+      '@href': 'https://example.com/donate',
+    }
+
+    expect(generateDonate(value)).toEqual(expected)
+  })
+
+  it('should generate donate with minimal properties', () => {
+    const value = {
+      href: 'https://example.com/donate',
+    }
+    const expected = {
+      '@href': 'https://example.com/donate',
+    }
+
+    expect(generateDonate(value)).toEqual(expected)
+  })
+
+  it('should return undefined for empty object', () => {
+    const value = {}
+
+    expect(generateDonate(value)).toBeUndefined()
+  })
+
+  it('should return undefined for non-object input', () => {
+    expect(generateDonate(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateDonate('string')).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateDonate(null)).toBeUndefined()
   })
 })
 

@@ -1,22 +1,22 @@
+import { isNonEmptyString, isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import {
   generateBoolean,
   generateCdataString,
+  generateNumber,
+  generatePlainString,
   generateTextOrCdataString,
-  isNonEmptyString,
-  isObject,
   trimArray,
-  trimObject,
 } from '../../../common/utils.js'
 import type { SourceNs } from '../common/types.js'
 
 export const generateAccount: GenerateUtil<SourceNs.Account> = (account) => {
-  if (!isObject(account) || !isNonEmptyString(account.service)) {
+  if (!isPlainObject(account)) {
     return
   }
 
   const value = {
-    '@service': account.service,
+    '@service': generatePlainString(account.service),
     ...generateTextOrCdataString(account.value),
   }
 
@@ -24,7 +24,7 @@ export const generateAccount: GenerateUtil<SourceNs.Account> = (account) => {
 }
 
 export const generateLikes: GenerateUtil<SourceNs.Likes> = (likes) => {
-  if (!isObject(likes) || !isNonEmptyString(likes.server)) {
+  if (!isPlainObject(likes) || !isNonEmptyString(likes.server)) {
     return
   }
 
@@ -34,13 +34,13 @@ export const generateLikes: GenerateUtil<SourceNs.Likes> = (likes) => {
 }
 
 export const generateArchive: GenerateUtil<SourceNs.Archive> = (archive) => {
-  if (!isObject(archive) || !isNonEmptyString(archive.url) || !isNonEmptyString(archive.startDay)) {
+  if (!isPlainObject(archive)) {
     return
   }
 
   const value = {
-    'source:url': archive.url,
-    'source:startDay': archive.startDay,
+    'source:url': generateCdataString(archive.url),
+    'source:startDay': generateCdataString(archive.startDay),
     'source:endDay': generateCdataString(archive.endDay),
     'source:filename': generateCdataString(archive.filename),
   }
@@ -51,12 +51,12 @@ export const generateArchive: GenerateUtil<SourceNs.Archive> = (archive) => {
 export const generateSubscriptionList: GenerateUtil<SourceNs.SubscriptionList> = (
   subscriptionList,
 ) => {
-  if (!isObject(subscriptionList) || !isNonEmptyString(subscriptionList.url)) {
+  if (!isPlainObject(subscriptionList)) {
     return
   }
 
   const value = {
-    '@url': subscriptionList.url,
+    '@url': generatePlainString(subscriptionList.url),
     ...generateTextOrCdataString(subscriptionList.value),
   }
 
@@ -64,7 +64,7 @@ export const generateSubscriptionList: GenerateUtil<SourceNs.SubscriptionList> =
 }
 
 export const generateInReplyTo: GenerateUtil<SourceNs.InReplyTo> = (inReplyTo) => {
-  if (!isObject(inReplyTo) || !isNonEmptyString(inReplyTo.value)) {
+  if (!isPlainObject(inReplyTo)) {
     return
   }
 
@@ -76,8 +76,21 @@ export const generateInReplyTo: GenerateUtil<SourceNs.InReplyTo> = (inReplyTo) =
   return trimObject(value)
 }
 
+export const generateComments: GenerateUtil<SourceNs.Comments> = (comments) => {
+  if (!isPlainObject(comments)) {
+    return
+  }
+
+  const value = {
+    '@count': generateNumber(comments.count),
+    '@feedUrl': generatePlainString(comments.feedUrl),
+  }
+
+  return trimObject(value)
+}
+
 export const generateFeed: GenerateUtil<SourceNs.Feed> = (feed) => {
-  if (!isObject(feed)) {
+  if (!isPlainObject(feed)) {
     return
   }
 
@@ -96,7 +109,7 @@ export const generateFeed: GenerateUtil<SourceNs.Feed> = (feed) => {
 }
 
 export const generateItem: GenerateUtil<SourceNs.Item> = (item) => {
-  if (!isObject(item)) {
+  if (!isPlainObject(item)) {
     return
   }
 
@@ -105,6 +118,7 @@ export const generateItem: GenerateUtil<SourceNs.Item> = (item) => {
     'source:outline': trimArray(item.outlines, generateCdataString),
     'source:linkFull': generateCdataString(item.linkFull),
     'source:inReplyTo': generateInReplyTo(item.inReplyTo),
+    'source:comments': generateComments(item.comments),
   }
 
   return trimObject(value)

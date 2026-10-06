@@ -1,9 +1,14 @@
+import type { Requirable, Strict } from '../../../common/types.js'
+
 // #region reference
 export namespace BylineNs {
-  export type Profile = {
-    href: string
-    rel?: string
-  }
+  export type Profile<TStrict extends boolean = false> = Strict<
+    {
+      href: Requirable<string> // Required in spec
+      rel?: string
+    },
+    TStrict
+  >
 
   export type Theme = {
     color?: string
@@ -11,29 +16,32 @@ export namespace BylineNs {
     style?: string
   }
 
-  export type Person = {
-    id?: string
-    name: string
-    context?: string
-    urls?: Array<string>
-    avatar?: string
-    profiles?: Array<Profile>
-    now?: string
-    uses?: string
-    theme?: Theme
-  }
+  export type Person<TStrict extends boolean = false> = Strict<
+    {
+      id: Requirable<string> // Required in spec
+      name: Requirable<string> // Required in spec
+      context?: string
+      urls?: Array<string>
+      avatar?: string
+      profiles?: Array<Profile<TStrict>>
+      now?: string
+      uses?: string
+      theme?: Theme
+    },
+    TStrict
+  >
 
   export type Org = {
     id?: string
-    name: string
+    name?: string
     url?: string
     type?: string
     theme?: Theme
   }
 
-  export type Author = {
+  export type Author<TStrict extends boolean = false> = {
     ref?: string
-    person?: Person
+    person?: Person<TStrict>
   }
 
   export type Affiliation = {
@@ -42,13 +50,13 @@ export namespace BylineNs {
     title?: string
   }
 
-  export type Feed = {
-    contributors?: Array<Person>
+  export type Feed<TStrict extends boolean = false> = {
+    contributors?: Array<Person<TStrict>>
     organizations?: Array<Org>
   }
 
-  export type Item = {
-    author?: Author
+  export type Item<TStrict extends boolean = false> = {
+    author?: Author<TStrict>
     role?: string
     perspective?: string
     affiliation?: Affiliation

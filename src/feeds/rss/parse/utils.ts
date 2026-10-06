@@ -1,7 +1,7 @@
-import type { ParseOptions, ParsePartialUtil } from '../../../common/types.js'
+import { isPlainObject, trimObject } from 'trousse'
+import type { DateAny } from '../../../common/types.js'
 import {
   detectNamespaces,
-  isObject,
   parseArrayOf,
   parseBoolean,
   parseDate,
@@ -11,13 +11,13 @@ import {
   parseString,
   retrieveText,
   trimArray,
-  trimObject,
 } from '../../../common/utils.js'
 import {
   retrieveFeed as retrieveAcastFeed,
   retrieveItem as retrieveAcastItem,
 } from '../../../namespaces/acast/parse/utils.js'
 import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
+import { retrieveEntry as retrieveArxivEntry } from '../../../namespaces/arxiv/parse/utils.js'
 import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
@@ -31,7 +31,11 @@ import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/u
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
-import { retrieveItemOrFeed as retrieveDctermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import {
+  retrieveFeed as retrieveFeedBurnerFeed,
+  retrieveItem as retrieveFeedBurnerItem,
+} from '../../../namespaces/feedburner/parse/utils.js'
 import { retrieveFeed as retrieveFeedPressFeed } from '../../../namespaces/feedpress/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces/geo/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
@@ -53,10 +57,7 @@ import {
   retrieveFeed as retrievePodcastFeed,
   retrieveItem as retrievePodcastItem,
 } from '../../../namespaces/podcast/parse/utils.js'
-import {
-  retrieveFeed as retrievePrismFeed,
-  retrieveItem as retrievePrismItem,
-} from '../../../namespaces/prism/parse/utils.js'
+import { retrieveItemOrFeed as retrievePrismItemOrFeed } from '../../../namespaces/prism/parse/utils.js'
 import { retrieveItem as retrievePscItem } from '../../../namespaces/psc/parse/utils.js'
 import {
   retrieveFeed as retrieveRawVoiceFeed,
@@ -75,13 +76,190 @@ import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/uti
 import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/parse/utils.js'
 import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
-import type { Rss } from '../common/types.js'
+import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
+import type { ParseUtilPartial, RssFeed } from '../common/types.js'
 
-export const parsePerson: ParsePartialUtil<Rss.Person> = (value) => {
-  return parseSingularOf(value?.name ?? value, (value) => parseString(retrieveText(value)))
+const emailRegex = /^[^\s@()<>[\]]+@[^\s@()<>[\]]+\.[^\s@()<>[\]]+$/
+const urlRegex = /^(?:https?:\/\/|www\.)[^\s]+\.[^\s]+$/
+const mailtoRegex = /^mailto:/i
+const hasBracketsRegex = /[<[(]/
+const whitespaceRegex = /\s+/
+const commonSeparatorsRegex = /^[\s,\-|/:;]+|[\s,\-|/:;]+$/g
+const mailtoQueryRegex = /\?.*$/
+
+export const stripMailto = (value: string) => {
+  const stripped = value.replace(mailtoRegex, '')
+
+  if (stripped !== value) {
+    return stripped.replace(mailtoQueryRegex, '')
+  }
+
+  return stripped
 }
 
-export const parseCategory: ParsePartialUtil<Rss.Category> = (value) => {
+const openBrackets = ['<', '(', '[']
+
+const closeBracketFor = (char: string) => {
+  if (char === '<') {
+    return '>'
+  }
+
+  if (char === '(') {
+    return ')'
+  }
+
+  return ']'
+}
+
+const parseSimplePerson = (raw: string): RssFeed.Person | undefined => {
+  const stripped = stripMailto(raw)
+
+  if (urlRegex.test(stripped)) {
+    return { link: stripped }
+  }
+
+  if (emailRegex.test(stripped)) {
+    return { email: stripped }
+  }
+}
+
+const parseUnbracketedPerson = (raw: string): RssFeed.Person | undefined => {
+  // If no email/URL markers anywhere, the entire string is a name.
+  if (raw.indexOf('@') === -1 && raw.indexOf('://') === -1 && raw.indexOf('www.') === -1) {
+    return { name: raw }
+  }
+
+  const words = raw.split(whitespaceRegex)
+  const nameParts: Array<string> = []
+  let email: string | undefined
+  let link: string | undefined
+
+  for (const word of words) {
+    const stripped = stripMailto(word)
+
+    if (urlRegex.test(word) && !link) {
+      link = word
+    } else if (emailRegex.test(stripped) && !email) {
+      email = stripped
+    } else {
+      nameParts.push(word)
+    }
+  }
+
+  if (!email && !link) {
+    return { name: raw }
+  }
+
+  const person = {
+    name: parseString(nameParts.join(' ').replace(commonSeparatorsRegex, '')),
+    email,
+    link,
+  }
+
+  return trimObject(person)
+}
+
+const parseBracketedPerson = (raw: string): RssFeed.Person | undefined => {
+  const person: RssFeed.Person = {}
+  const nameParts: Array<string> = []
+  const length = raw.length
+
+  let hasUnbracketedName = false
+  let i = 0
+
+  while (i < length) {
+    let chunk: string | undefined
+    let isBracketed = false
+    let openBracket = ''
+    let closeBracket = ''
+
+    const char = raw[i]
+
+    if (openBrackets.includes(char)) {
+      openBracket = char
+      closeBracket = closeBracketFor(char)
+
+      const start = i + 1
+      let depth = 1
+      let end = start
+
+      while (end < length && depth > 0) {
+        if (raw[end] === openBracket) {
+          depth++
+        } else if (raw[end] === closeBracket) {
+          depth--
+        }
+        end++
+      }
+
+      if (depth === 0) {
+        isBracketed = true
+        chunk = parseString(raw.slice(start, end - 1))
+        i = end
+      } else {
+        // Unmatched bracket: treat as literal text.
+        const literalStart = i
+        i = start
+        while (i < length && raw[i] !== '<' && raw[i] !== '(' && raw[i] !== '[') {
+          i++
+        }
+        chunk = parseString(raw.slice(literalStart, i))
+      }
+    } else {
+      const start = i
+      while (i < length && raw[i] !== '<' && raw[i] !== '(' && raw[i] !== '[') {
+        i++
+      }
+      chunk = parseString(raw.slice(start, i))
+    }
+
+    if (!chunk) {
+      continue
+    }
+
+    const strippedChunk = stripMailto(chunk)
+
+    if (urlRegex.test(chunk) && !person.link) {
+      person.link = chunk
+    } else if (emailRegex.test(strippedChunk) && !person.email) {
+      person.email = strippedChunk
+    } else if (isBracketed) {
+      nameParts.push(hasUnbracketedName ? `${openBracket}${chunk}${closeBracket}` : chunk)
+    } else {
+      hasUnbracketedName = true
+      nameParts.push(chunk)
+    }
+  }
+
+  person.name = parseString(nameParts.join(' '))
+
+  return trimObject(person)
+}
+
+export const parsePerson: ParseUtilPartial<RssFeed.Person> = (value) => {
+  const raw = parseSingularOf(value?.name ?? value, (v) => parseString(retrieveText(v)))
+
+  if (!raw) {
+    return
+  }
+
+  // Step 1. Handles bare email, mailto:email, or URL-only strings.
+  const simple = parseSimplePerson(raw)
+
+  if (simple) {
+    return simple
+  }
+
+  // Step 2. Handles unbracketed mixed content like "John Doe john@example.com".
+  if (!hasBracketsRegex.test(raw)) {
+    return parseUnbracketedPerson(raw)
+  }
+
+  // Step 3. Handles bracketed formats like "email (Name)" or "Name <email> (url)".
+  return parseBracketedPerson(raw)
+}
+
+export const parseCategory: ParseUtilPartial<RssFeed.Category> = (value) => {
   const category = {
     name: parseString(retrieveText(value)),
     domain: parseString(value?.['@domain']),
@@ -90,8 +268,8 @@ export const parseCategory: ParsePartialUtil<Rss.Category> = (value) => {
   return trimObject(category)
 }
 
-export const parseCloud: ParsePartialUtil<Rss.Cloud> = (value) => {
-  if (!isObject(value)) {
+export const parseCloud: ParseUtilPartial<RssFeed.Cloud> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -106,11 +284,12 @@ export const parseCloud: ParsePartialUtil<Rss.Cloud> = (value) => {
   return trimObject(cloud)
 }
 
-export const parseImage: ParsePartialUtil<Rss.Image> = (value) => {
-  if (!isObject(value)) {
+export const parseImage: ParseUtilPartial<RssFeed.Image<DateAny>> = (value, options) => {
+  if (!isPlainObject(value)) {
     return
   }
 
+  const namespaces = detectNamespaces(value)
   const image = {
     url: parseSingularOf(value.url, (value) => parseString(retrieveText(value))),
     title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
@@ -118,63 +297,67 @@ export const parseImage: ParsePartialUtil<Rss.Image> = (value) => {
     description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
     height: parseSingularOf(value.height, (value) => parseNumber(retrieveText(value))),
     width: parseSingularOf(value.width, (value) => parseNumber(retrieveText(value))),
+    prism: namespaces.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
+    cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
   }
 
   return trimObject(image)
 }
 
-export const parseTextInput: ParsePartialUtil<Rss.TextInput> = (value) => {
-  if (!isObject(value)) {
+export const parseTextInput: ParseUtilPartial<RssFeed.TextInput<DateAny>> = (value, options) => {
+  if (!isPlainObject(value)) {
     return
   }
 
+  const namespaces = detectNamespaces(value)
   const textInput = {
     title: parseSingularOf(value.title, (value) => parseString(retrieveText(value))),
     description: parseSingularOf(value.description, (value) => parseString(retrieveText(value))),
     name: parseSingularOf(value.name, (value) => parseString(retrieveText(value))),
     link: parseSingularOf(value.link, (value) => parseString(retrieveText(value))),
+    prism: namespaces.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
   }
 
   return trimObject(textInput)
 }
 
-export const retrieveImage: ParsePartialUtil<Rss.Image> = (value) => {
-  const channel = parseSingular(value?.channel)
-
-  return parseSingularOf(channel?.image, parseImage) ?? parseSingularOf(value?.image, parseImage)
-}
-
-export const retrieveTextInput: ParsePartialUtil<Rss.TextInput> = (value) => {
+export const retrieveImage: ParseUtilPartial<RssFeed.Image<DateAny>> = (value, options) => {
   const channel = parseSingular(value?.channel)
 
   return (
-    parseSingularOf(channel?.textinput, parseTextInput) ??
-    parseSingularOf(value?.textinput, parseTextInput)
+    parseSingularOf(channel?.image, (value) => parseImage(value, options)) ??
+    parseSingularOf(value?.image, (value) => parseImage(value, options))
   )
 }
 
-export const retrieveItems: ParsePartialUtil<Array<Rss.Item<string>>, ParseOptions> = (
-  value,
-  options,
-) => {
+export const retrieveTextInput: ParseUtilPartial<RssFeed.TextInput<DateAny>> = (value, options) => {
   const channel = parseSingular(value?.channel)
 
   return (
-    parseArrayOf(channel?.item, parseItem, options?.maxItems) ??
-    parseArrayOf(value?.item, parseItem, options?.maxItems)
+    parseSingularOf(channel?.textinput, (value) => parseTextInput(value, options)) ??
+    parseSingularOf(value?.textinput, (value) => parseTextInput(value, options))
   )
 }
 
-export const parseSkipHours: ParsePartialUtil<Array<number>> = (value) => {
+export const retrieveItems: ParseUtilPartial<Array<RssFeed.Item<DateAny>>> = (value, options) => {
+  const channel = parseSingular(value?.channel)
+
+  return (
+    parseArrayOf(channel?.item, (value) => parseItem(value, options), options?.maxItems) ??
+    parseArrayOf(value?.item, (value) => parseItem(value, options), options?.maxItems)
+  )
+}
+
+export const parseSkipHours: ParseUtilPartial<Array<number>> = (value) => {
   return trimArray(value?.hour, (value) => parseNumber(retrieveText(value)))
 }
 
-export const parseSkipDays: ParsePartialUtil<Array<string>> = (value) => {
+export const parseSkipDays: ParseUtilPartial<Array<string>> = (value) => {
   return trimArray(value?.day, (value) => parseString(retrieveText(value)))
 }
 
-export const parseEnclosure: ParsePartialUtil<Rss.Enclosure> = (value) => {
-  if (!isObject(value)) {
+export const parseEnclosure: ParseUtilPartial<RssFeed.Enclosure> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -187,7 +370,7 @@ export const parseEnclosure: ParsePartialUtil<Rss.Enclosure> = (value) => {
   return trimObject(enclosure)
 }
 
-export const parseGuid: ParsePartialUtil<Rss.Guid> = (value) => {
+export const parseGuid: ParseUtilPartial<RssFeed.Guid> = (value) => {
   const source = {
     value: parseString(retrieveText(value)),
     isPermaLink: parseBoolean(value?.['@ispermalink']),
@@ -196,7 +379,7 @@ export const parseGuid: ParsePartialUtil<Rss.Guid> = (value) => {
   return trimObject(source)
 }
 
-export const parseSource: ParsePartialUtil<Rss.Source> = (value) => {
+export const parseSource: ParseUtilPartial<RssFeed.Source> = (value) => {
   const source = {
     title: parseString(retrieveText(value)),
     url: parseString(value?.['@url']),
@@ -205,8 +388,8 @@ export const parseSource: ParsePartialUtil<Rss.Source> = (value) => {
   return trimObject(source)
 }
 
-export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
-  if (!isObject(value)) {
+export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, options) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -220,46 +403,53 @@ export const parseItem: ParsePartialUtil<Rss.Item<string>> = (value) => {
     comments: parseSingularOf(value.comments, (value) => parseString(retrieveText(value))),
     enclosures: parseArrayOf(value.enclosure, parseEnclosure),
     guid: parseSingularOf(value.guid, parseGuid),
-    pubDate: parseSingularOf(value.pubdate, (value) => parseDate(retrieveText(value))),
+    pubDate: parseSingularOf(value.pubdate, (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
+    expirationDate: parseSingularOf(value.expirationdate, (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     source: parseSingularOf(value.source, parseSource),
-    atom: namespaces.has('atom') ? retrieveAtomEntry(value) : undefined,
-    cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
-    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value) : undefined,
+    atom: namespaces.has('atom') ? retrieveAtomEntry(value, options) : undefined,
+    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(value, options) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(value, options) : undefined,
     content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
-    creativeCommons: namespaces.has('creativecommons')
-      ? retrieveCreativeCommonsItemOrFeed(value)
-      : undefined,
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesItem(value) : undefined,
     podcast: namespaces.has('podcast') ? retrievePodcastItem(value) : undefined,
     psc: namespaces.has('psc') ? retrievePscItem(value) : undefined,
-    googleplay: namespaces.has('googleplay') ? retrieveGooglePlayItem(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
-    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
-    geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
-    thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(value) : undefined,
-    prism: namespaces.has('prism') ? retrievePrismItem(value) : undefined,
-    wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
-    byline: namespaces.has('byline') ? retrieveBylineItem(value) : undefined,
-    sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
-    rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceItem(value) : undefined,
+    googleplay: namespaces.has('googleplay') ? retrieveGooglePlayItem(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyItem(value) : undefined,
+    acast: namespaces.has('acast') ? retrieveAcastItem(value) : undefined,
+    rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceItem(value) : undefined,
+    feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
+    arxiv: namespaces.has('arxiv') ? retrieveArxivEntry(value) : undefined,
+    prism: namespaces.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
+    cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
+    creativeCommons: namespaces.has('creativecommons')
+      ? retrieveCreativeCommonsItemOrFeed(value)
+      : undefined,
+    thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
+    wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
     pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
-    acast: namespaces.has('acast') ? retrieveAcastItem(value) : undefined,
+    byline: namespaces.has('byline') ? retrieveBylineItem(value) : undefined,
+    sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
+    geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
+    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    xml: retrieveXmlItemOrFeed(value),
   }
 
   return trimObject(item)
 }
 
-export const parseFeed: ParsePartialUtil<Rss.Feed<string>, ParseOptions> = (value, options) => {
+export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, options) => {
   const channel = parseSingular(value?.channel)
 
-  if (!isObject(channel)) {
+  if (!isPlainObject(channel)) {
     return
   }
-
   const namespaces = detectNamespaces(channel)
   const feed = {
     title: parseSingularOf(channel.title, (value) => parseString(retrieveText(value))),
@@ -269,51 +459,55 @@ export const parseFeed: ParsePartialUtil<Rss.Feed<string>, ParseOptions> = (valu
     copyright: parseSingularOf(channel.copyright, (value) => parseString(retrieveText(value))),
     managingEditor: parseSingularOf(channel.managingeditor, parsePerson),
     webMaster: parseSingularOf(channel.webmaster, parsePerson),
-    pubDate: parseSingularOf(channel.pubdate, (value) => parseDate(retrieveText(value))),
+    pubDate: parseSingularOf(channel.pubdate, (value) =>
+      parseDate(retrieveText(value), options?.parseDateFn),
+    ),
     lastBuildDate: parseSingularOf(channel.lastbuilddate, (value) =>
-      parseDate(retrieveText(value)),
+      parseDate(retrieveText(value), options?.parseDateFn),
     ),
     categories: parseArrayOf(channel.category, parseCategory),
     generator: parseSingularOf(channel.generator, (value) => parseString(retrieveText(value))),
     docs: parseSingularOf(channel.docs, (value) => parseString(retrieveText(value))),
     cloud: parseSingularOf(channel.cloud, parseCloud),
     ttl: parseSingularOf(channel.ttl, (value) => parseNumber(retrieveText(value))),
-    image: retrieveImage(value),
+    image: retrieveImage(value, options),
     rating: parseSingularOf(channel.rating, (value) => parseString(retrieveText(value))),
-    textInput: retrieveTextInput(value),
+    textInput: retrieveTextInput(value, options),
     skipHours: parseSingularOf(channel.skiphours, parseSkipHours),
     skipDays: parseSingularOf(channel.skipdays, parseSkipDays),
     items: retrieveItems(value, options),
-    atom: namespaces.has('atom') ? retrieveAtomFeed(channel) : undefined,
-    cc: namespaces.has('cc') ? retrieveCc(channel) : undefined,
-    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel) : undefined,
-    sy: namespaces.has('sy') ? retrieveSyFeed(channel) : undefined,
+    atom: namespaces.has('atom') ? retrieveAtomFeed(channel, options) : undefined,
+    dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel, options) : undefined,
+    dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(channel, options) : undefined,
+    sy: namespaces.has('sy') ? retrieveSyFeed(channel, options) : undefined,
     itunes: namespaces.has('itunes') ? retrieveItunesFeed(channel) : undefined,
-    podcast: namespaces.has('podcast') ? retrievePodcastFeed(channel) : undefined,
-    googleplay: namespaces.has('googleplay') ? retrieveGooglePlayFeed(channel) : undefined,
+    podcast: namespaces.has('podcast') ? retrievePodcastFeed(channel, options) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
-    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
-    geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(channel) : undefined,
-    dcterms: namespaces.has('dcterms') ? retrieveDctermsItemOrFeed(channel) : undefined,
-    prism: namespaces.has('prism') ? retrievePrismFeed(channel) : undefined,
+    googleplay: namespaces.has('googleplay') ? retrieveGooglePlayFeed(channel) : undefined,
+    spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(channel) : undefined,
+    acast: namespaces.has('acast') ? retrieveAcastFeed(channel) : undefined,
+    rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceFeed(channel, options) : undefined,
+    feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerFeed(channel) : undefined,
+    feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(channel) : undefined,
+    opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(channel) : undefined,
+    prism: namespaces.has('prism') ? retrievePrismItemOrFeed(channel, options) : undefined,
+    cc: namespaces.has('cc') ? retrieveCc(channel) : undefined,
     creativeCommons: namespaces.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(channel)
       : undefined,
-    feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(channel) : undefined,
-    opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(channel) : undefined,
     admin: namespaces.has('admin') ? retrieveAdminFeed(channel) : undefined,
+    pingback: namespaces.has('pingback') ? retrievePingbackFeed(channel) : undefined,
     byline: namespaces.has('byline') ? retrieveBylineFeed(channel) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceFeed(channel) : undefined,
     blogChannel: namespaces.has('blogchannel') ? retrieveBlogChannelFeed(channel) : undefined,
-    rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceFeed(channel) : undefined,
-    spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(channel) : undefined,
-    pingback: namespaces.has('pingback') ? retrievePingbackFeed(channel) : undefined,
-    acast: namespaces.has('acast') ? retrieveAcastFeed(channel) : undefined,
+    geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(channel) : undefined,
+    georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
+    xml: retrieveXmlItemOrFeed(value),
   }
 
   return trimObject(feed)
 }
 
-export const retrieveFeed: ParsePartialUtil<Rss.Feed<string>, ParseOptions> = (value, options) => {
+export const retrieveFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, options) => {
   return parseSingularOf(value?.rss, (value) => parseFeed(value, options))
 }

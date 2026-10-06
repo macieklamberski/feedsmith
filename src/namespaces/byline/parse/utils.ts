@@ -1,16 +1,10 @@
-import type { ParsePartialUtil } from '../../../common/types.js'
-import {
-  isObject,
-  parseArrayOf,
-  parseSingularOf,
-  parseString,
-  retrieveText,
-  trimObject,
-} from '../../../common/utils.js'
+import { isPlainObject, trimObject } from 'trousse'
+import type { ParseUtilPartial } from '../../../common/types.js'
+import { parseArrayOf, parseSingularOf, parseString, retrieveText } from '../../../common/utils.js'
 import type { BylineNs } from '../common/types.js'
 
-export const parseProfile: ParsePartialUtil<BylineNs.Profile> = (value) => {
-  if (!isObject(value)) {
+export const parseProfile: ParseUtilPartial<BylineNs.Profile> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -22,8 +16,8 @@ export const parseProfile: ParsePartialUtil<BylineNs.Profile> = (value) => {
   return trimObject(profile)
 }
 
-export const parseTheme: ParsePartialUtil<BylineNs.Theme> = (value) => {
-  if (!isObject(value)) {
+export const parseTheme: ParseUtilPartial<BylineNs.Theme> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -36,8 +30,8 @@ export const parseTheme: ParsePartialUtil<BylineNs.Theme> = (value) => {
   return trimObject(theme)
 }
 
-export const parsePerson: ParsePartialUtil<BylineNs.Person> = (value) => {
-  if (!isObject(value)) {
+export const parsePerson: ParseUtilPartial<BylineNs.Person> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -56,8 +50,8 @@ export const parsePerson: ParsePartialUtil<BylineNs.Person> = (value) => {
   return trimObject(person)
 }
 
-export const parseOrg: ParsePartialUtil<BylineNs.Org> = (value) => {
-  if (!isObject(value)) {
+export const parseOrg: ParseUtilPartial<BylineNs.Org> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -72,8 +66,8 @@ export const parseOrg: ParsePartialUtil<BylineNs.Org> = (value) => {
   return trimObject(org)
 }
 
-export const parseAuthor: ParsePartialUtil<BylineNs.Author> = (value) => {
-  if (!isObject(value)) {
+export const parseAuthor: ParseUtilPartial<BylineNs.Author> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -85,8 +79,8 @@ export const parseAuthor: ParsePartialUtil<BylineNs.Author> = (value) => {
   return trimObject(author)
 }
 
-export const parseAffiliation: ParsePartialUtil<BylineNs.Affiliation> = (value) => {
-  if (!isObject(value)) {
+export const parseAffiliation: ParseUtilPartial<BylineNs.Affiliation> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
@@ -101,25 +95,25 @@ export const parseAffiliation: ParsePartialUtil<BylineNs.Affiliation> = (value) 
   return trimObject(affiliation)
 }
 
-export const retrieveFeed: ParsePartialUtil<BylineNs.Feed> = (value) => {
-  if (!isObject(value)) {
+export const retrieveFeed: ParseUtilPartial<BylineNs.Feed> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
   const feed = {
     contributors: parseSingularOf(value['byline:contributors'], (value) =>
-      isObject(value) ? parseArrayOf(value['byline:person'], parsePerson) : undefined,
+      isPlainObject(value) ? parseArrayOf(value['byline:person'], parsePerson) : undefined,
     ),
     organizations: parseSingularOf(value['byline:organizations'], (value) =>
-      isObject(value) ? parseArrayOf(value['byline:org'], parseOrg) : undefined,
+      isPlainObject(value) ? parseArrayOf(value['byline:org'], parseOrg) : undefined,
     ),
   }
 
   return trimObject(feed)
 }
 
-export const retrieveItem: ParsePartialUtil<BylineNs.Item> = (value) => {
-  if (!isObject(value)) {
+export const retrieveItem: ParseUtilPartial<BylineNs.Item> = (value) => {
+  if (!isPlainObject(value)) {
     return
   }
 
