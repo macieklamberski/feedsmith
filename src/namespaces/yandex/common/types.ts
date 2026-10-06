@@ -45,9 +45,9 @@ export namespace YandexNs {
 
   export type Feed = {
     logos?: Array<Logo>
-    /** @deprecated Defined only by older Yandex Turbo pages requirements. */
+    /** @deprecated Defined only by older Yandex News and Turbo pages requirements. */
     analytics?: Array<Analytics>
-    /** @deprecated Defined only by older Yandex Turbo pages requirements. */
+    /** @deprecated Defined only by older Yandex News and Turbo pages requirements. */
     adNetworks?: Array<AdNetwork>
   }
 
