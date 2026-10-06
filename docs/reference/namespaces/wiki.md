@@ -14,7 +14,10 @@ The Wiki namespace carries the metadata of a wiki's RecentChanges page: the Inte
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="http://www.meatballwiki.org/wiki/ModWiki" target="_blank">RDF Site Summary 1.0 Module: Wiki</a></td>
+      <td>
+        <a href="https://web.archive.org/web/20041210160042/http://www.usemod.com:80/cgi-bin/mb.pl?ModWiki" target="_blank">RDF Site Summary 1.0 Module: Wiki</a> (Original, Web Archive)<br>
+        <a href="http://www.meatballwiki.org/wiki/ModWiki" target="_blank">RDF Site Summary 1.0 Module: Wiki</a> (MeatballWiki)
+      </td>
     </tr>
     <tr>
       <th>Prefix</th>

@@ -153,6 +153,20 @@ describe('parseHost', () => {
     expect(parseHost(value)).toBe('192.0.2.10')
   })
 
+  it('should not read host from text content', () => {
+    const value =
+      '<rdf:Description><rdf:value>see wiki:host="192.0.2.10"</rdf:value></rdf:Description>'
+
+    expect(parseHost(value)).toBeUndefined()
+  })
+
+  it('should not read host from a prefix ending in wiki', () => {
+    const value =
+      '<rdf:Description my-wiki:host="192.0.2.10"><rdf:value>Mary</rdf:value></rdf:Description>'
+
+    expect(parseHost(value)).toBeUndefined()
+  })
+
   it('should return undefined for plain text contributor', () => {
     expect(parseHost('Mary McConnell')).toBeUndefined()
   })

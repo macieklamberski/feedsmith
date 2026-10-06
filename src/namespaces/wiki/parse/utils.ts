@@ -9,7 +9,7 @@ import {
 } from '../../../common/utils.js'
 import type { WikiNs } from '../common/types.js'
 
-const hostRegex = /\bwiki:host\s*=\s*(["'])(.*?)\1/i
+const hostRegex = /<[^>]*\swiki:host\s*=\s*(["'])(.*?)\1/i
 
 // The spec writes the InterWiki moniker either as plain text or as an rdf:Description whose
 // rdf:value holds the moniker and whose link attribute holds the InterWiki prefix url. RDF feeds
