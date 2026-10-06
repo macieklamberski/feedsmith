@@ -2061,6 +2061,29 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate feed with fh namespace properties', () => {
+    const value = {
+      id: 'https://example.com/feed/archive/2023/03',
+      title: { value: 'Feed with fh namespace' },
+      updated: new Date('2023-03-15T12:00:00Z'),
+      fh: {
+        archive: true,
+      },
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:fh': 'http://purl.org/syndication/history/1.0',
+        id: 'https://example.com/feed/archive/2023/03',
+        title: { '#text': 'Feed with fh namespace' },
+        updated: '2023-03-15T12:00:00.000Z',
+        'fh:archive': '',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate feed with admin namespace properties', () => {
     const value = {
       id: 'https://example.com/feed',

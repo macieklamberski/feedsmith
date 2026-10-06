@@ -1600,6 +1600,46 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with fh namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:fh="http://purl.org/syndication/history/1.0"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with fh namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with Feed History namespace</description>
+          <fh:complete/>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item 1</title>
+          <link>http://example.com/item1</link>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with fh namespace',
+      link: 'http://example.com',
+      description: 'Test feed with Feed History namespace',
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Item 1',
+          link: 'http://example.com/item1',
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+      fh: {
+        complete: true,
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with wfw namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>

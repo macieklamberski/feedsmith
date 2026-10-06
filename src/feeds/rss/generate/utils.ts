@@ -32,6 +32,7 @@ import {
   generateItem as generateFeedBurnerItem,
 } from '../../../namespaces/feedburner/generate/utils.js'
 import { generateFeed as generateFeedPressFeed } from '../../../namespaces/feedpress/generate/utils.js'
+import { generateFeed as generateFhFeed } from '../../../namespaces/fh/generate/utils.js'
 import { generateItemOrFeed as generateGeoItemOrFeed } from '../../../namespaces/geo/generate/utils.js'
 import { generateItemOrFeed as generateGeoRssItemOrFeed } from '../../../namespaces/georss/generate/utils.js'
 import {
@@ -302,6 +303,7 @@ export const generateFeed: GenerateUtil<RssFeed.Feed<DateLike>> = (feed) => {
     ...generatePrismItemOrFeed(feed.prism),
     ...generateCc(feed.cc),
     ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
+    ...generateFhFeed(feed.fh),
     ...generateAdminFeed(feed.admin),
     ...generatePingbackFeed(feed.pingback),
     ...generateSourceFeed(feed.sourceNs),

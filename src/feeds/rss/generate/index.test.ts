@@ -881,6 +881,35 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with fh namespace', () => {
+    const value = {
+      title: 'Feed with fh namespace',
+      description: 'Test feed with fh namespace',
+      fh: {
+        complete: true,
+      },
+      items: [
+        {
+          title: 'Item title',
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:fh="http://purl.org/syndication/history/1.0">
+  <channel>
+    <title>Feed with fh namespace</title>
+    <description>Test feed with fh namespace</description>
+    <fh:complete/>
+    <item>
+      <title>Item title</title>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with wfw namespace', () => {
     const value = {
       title: 'Feed with wfw namespace',
