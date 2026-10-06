@@ -49,6 +49,10 @@ import {
   uris as googleplayUris,
 } from '../namespaces/googleplay/common/config.js'
 import {
+  stopNodes as imageStopNodes,
+  uris as imageUris,
+} from '../namespaces/image/common/config.js'
+import {
   stopNodes as itunesStopNodes,
   uris as itunesUris,
 } from '../namespaces/itunes/common/config.js'
@@ -148,6 +152,7 @@ export const namespaceUris = {
   podcast: podcastUris,
   psc: pscUris,
   media: mediaUris,
+  image: imageUris,
   googleplay: googleplayUris,
   spotify: spotifyUris,
   acast: acastUris,
@@ -204,6 +209,7 @@ export const namespaceStopNodes = [
   ...geoStopNodes,
   ...georssStopNodes,
   ...googleplayStopNodes,
+  ...imageStopNodes,
   ...itunesStopNodes,
   ...mediaStopNodes,
   ...opensearchStopNodes,

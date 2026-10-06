@@ -21,6 +21,7 @@ import type { FeedPressNs } from '../../../namespaces/feedpress/common/types.js'
 import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { GooglePlayNs } from '../../../namespaces/googleplay/common/types.js'
+import type { ImageNs } from '../../../namespaces/image/common/types.js'
 import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
@@ -147,6 +148,7 @@ export namespace RssFeed {
       podcast?: PodcastNs.Item<TStrict>
       psc?: PscNs.Item<TStrict>
       media?: MediaNs.ItemOrFeed<TStrict>
+      imageNs?: ImageNs.Item<TDate>
       googleplay?: GooglePlayNs.Item<TStrict>
       spotify?: SpotifyNs.Item<TStrict>
       acast?: AcastNs.Item
@@ -198,6 +200,7 @@ export namespace RssFeed {
       itunes?: ItunesNs.Feed<TStrict>
       podcast?: PodcastNs.Feed<TDate, TStrict>
       media?: MediaNs.ItemOrFeed<TStrict>
+      imageNs?: ImageNs.Feed<TDate>
       googleplay?: GooglePlayNs.Feed<TStrict>
       spotify?: SpotifyNs.Feed<TStrict>
       acast?: AcastNs.Feed

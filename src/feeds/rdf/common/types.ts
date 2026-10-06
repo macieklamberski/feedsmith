@@ -14,6 +14,7 @@ import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
 import type { FeedBurnerNs } from '../../../namespaces/feedburner/common/types.js'
 import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
+import type { ImageNs } from '../../../namespaces/image/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
 import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
@@ -65,6 +66,7 @@ export namespace RdfFeed {
       content?: ContentNs.Item
       slash?: SlashNs.Item
       media?: MediaNs.ItemOrFeed<TStrict>
+      imageNs?: ImageNs.Item<TDate>
       feedburner?: FeedBurnerNs.Item
       prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
@@ -92,6 +94,7 @@ export namespace RdfFeed {
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       sy?: SyNs.Feed<TDate>
       media?: MediaNs.ItemOrFeed<TStrict>
+      imageNs?: ImageNs.Feed<TDate>
       feedburner?: FeedBurnerNs.Feed<TStrict>
       opensearch?: OpenSearchNs.Feed<TStrict>
       prism?: PrismNs.ItemOrFeed<TDate>
