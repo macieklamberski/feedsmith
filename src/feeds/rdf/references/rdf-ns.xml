@@ -20,6 +20,7 @@
   xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
   xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
   xmlns:georss="http://www.georss.org/georss"
+  xmlns:icbm="http://postneo.com/icbm"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
   <channel rdf:about="http://example.org/rss">
@@ -267,6 +268,10 @@
     <georss:elev>360</georss:elev>
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
+
+    <!-- ICBM Namespace: Channel Level Tags -->
+    <icbm:latitude>39.0298</icbm:latitude>
+    <icbm:longitude>-77.07929</icbm:longitude>
   </channel>
 
   <image rdf:about="http://example.org/image.png">
@@ -522,5 +527,9 @@
     <georss:elev>360</georss:elev>
     <georss:floor>4</georss:floor>
     <georss:radius>50000</georss:radius>
+
+    <!-- ICBM Namespace: Item Level Tags -->
+    <icbm:latitude>37.8199</icbm:latitude>
+    <icbm:longitude>-122.4783</icbm:longitude>
   </item>
 </rdf:RDF>

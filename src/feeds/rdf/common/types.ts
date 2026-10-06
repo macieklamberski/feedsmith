@@ -14,6 +14,7 @@ import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
 import type { FeedBurnerNs } from '../../../namespaces/feedburner/common/types.js'
 import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
+import type { IcbmNs } from '../../../namespaces/icbm/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
 import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
@@ -73,6 +74,7 @@ export namespace RdfFeed {
       trackback?: TrackbackNs.Item
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
+      icbm?: IcbmNs.ItemOrFeed
       xml?: XmlNs.ItemOrFeed
     },
     TStrict
@@ -99,6 +101,7 @@ export namespace RdfFeed {
       admin?: AdminNs.Feed
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
+      icbm?: IcbmNs.ItemOrFeed
       xml?: XmlNs.ItemOrFeed
     },
     TStrict

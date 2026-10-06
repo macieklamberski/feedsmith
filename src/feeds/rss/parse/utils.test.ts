@@ -1797,6 +1797,23 @@ describe('parseItem', () => {
 
     expect(parseItem(value)).toEqual(expected)
   })
+
+  it('should handle icbm namespace', () => {
+    const value = {
+      title: { '#text': 'Location Item' },
+      'icbm:latitude': { '#text': '33.92537' },
+      'icbm:longitude': { '#text': '-115.92887' },
+    }
+    const expected = {
+      title: 'Location Item',
+      icbm: {
+        latitude: 33.92537,
+        longitude: -115.92887,
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
 })
 
 describe('parseFeed', () => {
@@ -2360,6 +2377,26 @@ describe('parseFeed', () => {
       link: 'https://example.com',
       georss: {
         point: { lat: 37.7749, lng: -122.4194 },
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle icbm namespace', () => {
+    const channel = {
+      title: { '#text': 'Location Feed' },
+      link: { '#text': 'https://example.com' },
+      'icbm:latitude': { '#text': '39.02980' },
+      'icbm:longitude': { '#text': '-77.07929' },
+    }
+    const value = { channel }
+    const expected = {
+      title: 'Location Feed',
+      link: 'https://example.com',
+      icbm: {
+        latitude: 39.0298,
+        longitude: -77.07929,
       },
     }
 
