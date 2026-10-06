@@ -21,6 +21,7 @@ import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/u
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import { retrieveItemOrFeed as retrieveFaItemOrFeed } from '../../../namespaces/fa/parse/utils.js'
 import {
   retrieveFeed as retrieveFeedBurnerFeed,
   retrieveItem as retrieveFeedBurnerItem,
@@ -418,6 +419,7 @@ export const parseSource: ParseUtilPartial<AtomFeed.Source<DateAny>> = (value, o
     return
   }
 
+  const namespaces = options?.asNamespace ? undefined : detectNamespaces(value)
   const get = createNamespaceGetter(value, options?.prefix)
   const source = {
     authors: parseArrayOf(get('author'), (value) => parsePerson(value, options)),
@@ -432,6 +434,7 @@ export const parseSource: ParseUtilPartial<AtomFeed.Source<DateAny>> = (value, o
     subtitle: parseSingularOf(get('subtitle'), parseText),
     title: parseSingularOf(get('title'), parseText),
     updated: retrieveUpdated(value, options),
+    fa: namespaces?.has('fa') ? retrieveFaItemOrFeed(value, options) : undefined,
   }
 
   return trimObject(source)
@@ -525,6 +528,7 @@ export const parseEntry: ParseUtilPartial<AtomFeed.Entry<DateAny>> = (value, opt
       : undefined,
     thr: namespaces?.has('thr') ? retrieveThrItem(value) : undefined,
     app: namespaces?.has('app') ? retrieveAppEntry(value, options) : undefined,
+    fa: namespaces?.has('fa') ? retrieveFaItemOrFeed(value, options) : undefined,
     wfw: namespaces?.has('wfw') ? retrieveWfwItem(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces?.has('trackback') ? retrieveTrackbackItem(value) : undefined,
@@ -571,6 +575,7 @@ export const parseFeed: ParseUtilPartial<AtomFeed.Feed<DateAny>> = (value, optio
     creativeCommons: namespaces?.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(value)
       : undefined,
+    fa: namespaces?.has('fa') ? retrieveFaItemOrFeed(value, options) : undefined,
     admin: namespaces?.has('admin') ? retrieveAdminFeed(value) : undefined,
     pingback: namespaces?.has('pingback') ? retrievePingbackFeed(value) : undefined,
     yt: namespaces?.has('yt') ? retrieveYtFeed(value) : undefined,
