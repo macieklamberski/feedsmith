@@ -359,6 +359,75 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should correctly parse Atom feed with Shopify namespace under the s prefix', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <feed xml:lang="en" xmlns="http://www.w3.org/2005/Atom" xmlns:s="http://jadedpixel.com/-/spec/shopify">
+        <id>https://example.com/collections/all.atom</id>
+        <title>Example Shoes</title>
+        <updated>2026-06-22T22:07:56-07:00</updated>
+        <entry>
+          <id>https://example.com/products/6671437103168</id>
+          <updated>2026-06-22T22:07:56-07:00</updated>
+          <title>ELBA PENNY LOAFER</title>
+          <s:type>Loafer</s:type>
+          <s:vendor>EXAMPLE SHOES</s:vendor>
+          <s:tag>Category: Shoe</s:tag>
+          <s:tag>PRODUCT_STATUS=SALE</s:tag>
+          <s:variant>
+            <id>https://example.com/products/6671437103168</id>
+            <title>6 / Blush Suede</title>
+            <s:price currency="USD">189.00</s:price>
+            <s:sku>26996032</s:sku>
+            <s:grams>454</s:grams>
+          </s:variant>
+          <s:variant>
+            <id>https://example.com/products/6671437103168</id>
+            <title>6.5 / Blush Suede</title>
+            <s:price currency="USD">189.00</s:price>
+            <s:sku/>
+            <s:grams>0</s:grams>
+          </s:variant>
+        </entry>
+      </feed>
+    `
+    const expected = {
+      id: 'https://example.com/collections/all.atom',
+      title: { value: 'Example Shoes' },
+      updated: '2026-06-22T22:07:56-07:00',
+      entries: [
+        {
+          id: 'https://example.com/products/6671437103168',
+          updated: '2026-06-22T22:07:56-07:00',
+          title: { value: 'ELBA PENNY LOAFER' },
+          shopify: {
+            type: 'Loafer',
+            vendor: 'EXAMPLE SHOES',
+            tags: ['Category: Shoe', 'PRODUCT_STATUS=SALE'],
+            variants: [
+              {
+                id: 'https://example.com/products/6671437103168',
+                title: '6 / Blush Suede',
+                price: { value: 189, currency: 'USD' },
+                sku: '26996032',
+                grams: 454,
+              },
+              {
+                id: 'https://example.com/products/6671437103168',
+                title: '6.5 / Blush Suede',
+                price: { value: 189, currency: 'USD' },
+                grams: 0,
+              },
+            ],
+          },
+        },
+      ],
+      xml: { lang: 'en' },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should correctly parse Atom feed with YouTube playlist', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>

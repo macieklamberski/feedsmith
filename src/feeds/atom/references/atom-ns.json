@@ -715,6 +715,27 @@
         "videoId": "dQw4w9WgXcQ",
         "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw"
       },
+      "shopify": {
+        "type": "Loafer",
+        "vendor": "Example Shoes",
+        "tags": ["Category: Shoe", "SP23"],
+        "variants": [
+          {
+            "id": "https://example.com/products/6671437103168",
+            "title": "6 / Blush Suede",
+            "price": { "value": 189, "currency": "USD" },
+            "sku": "26996032",
+            "grams": 454
+          },
+          {
+            "id": "https://example.com/products/6671437103168",
+            "title": "6.5 / Blush Suede",
+            "price": { "value": 189, "currency": "USD" },
+            "sku": "27061568",
+            "grams": 454
+          }
+        ]
+      },
       "geo": {
         "lat": 37.8199,
         "long": -122.4783,

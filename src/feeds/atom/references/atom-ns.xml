@@ -21,6 +21,7 @@
       xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
       xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
       xmlns:yt="http://www.youtube.com/xml/schemas/2015"
+      xmlns:shopify="http://jadedpixel.com/-/spec/shopify"
       xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
       xmlns:georss="http://www.georss.org/georss"
       xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -801,6 +802,26 @@
     <!-- YouTube Namespace: Entry Level Tags -->
     <yt:videoId>dQw4w9WgXcQ</yt:videoId>
     <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
+
+    <!-- Shopify Namespace: Entry Level Tags -->
+    <shopify:type>Loafer</shopify:type>
+    <shopify:vendor>Example Shoes</shopify:vendor>
+    <shopify:tag>Category: Shoe</shopify:tag>
+    <shopify:tag>SP23</shopify:tag>
+    <shopify:variant>
+      <id>https://example.com/products/6671437103168</id>
+      <title>6 / Blush Suede</title>
+      <shopify:price currency="USD">189.00</shopify:price>
+      <shopify:sku>26996032</shopify:sku>
+      <shopify:grams>454</shopify:grams>
+    </shopify:variant>
+    <shopify:variant>
+      <id>https://example.com/products/6671437103168</id>
+      <title>6.5 / Blush Suede</title>
+      <shopify:price currency="USD">189.00</shopify:price>
+      <shopify:sku>27061568</shopify:sku>
+      <shopify:grams>454</shopify:grams>
+    </shopify:variant>
 
     <!-- W3C Basic Geo Namespace: Entry Level Tags -->
     <geo:lat>37.8199</geo:lat>

@@ -1166,6 +1166,47 @@ describe('generateEntry', () => {
     expect(generateEntry(value)).toEqual(expected)
   })
 
+  it('should generate entry with shopify namespace properties', () => {
+    const value = {
+      id: 'https://example.com/products/6671437103168',
+      title: { value: 'Elba Penny Loafer' },
+      updated: new Date('2026-06-22T22:07:56Z'),
+      shopify: {
+        type: 'Loafer',
+        vendor: 'Example Shoes',
+        tags: ['Category: Shoe', 'SP23'],
+        variants: [
+          {
+            id: 'https://example.com/products/6671437103168',
+            title: '6 / Blush Suede',
+            price: { value: 189, currency: 'USD' },
+            sku: '26996032',
+            grams: 454,
+          },
+        ],
+      },
+    }
+    const expected = {
+      id: 'https://example.com/products/6671437103168',
+      title: { '#text': 'Elba Penny Loafer' },
+      updated: '2026-06-22T22:07:56.000Z',
+      'shopify:type': 'Loafer',
+      'shopify:vendor': 'Example Shoes',
+      'shopify:tag': ['Category: Shoe', 'SP23'],
+      'shopify:variant': [
+        {
+          id: 'https://example.com/products/6671437103168',
+          title: '6 / Blush Suede',
+          'shopify:price': { '#text': 189, '@currency': 'USD' },
+          'shopify:sku': '26996032',
+          'shopify:grams': 454,
+        },
+      ],
+    }
+
+    expect(generateEntry(value)).toEqual(expected)
+  })
+
   it('should generate entry with georss namespace properties', () => {
     const value = {
       id: 'https://example.com/entry/1',
@@ -2133,6 +2174,57 @@ describe('generateFeed', () => {
         updated: '2023-03-15T12:00:00.000Z',
         'yt:channelId': 'UC123456789',
         'yt:playlistId': 'PL123456789',
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate Atom feed with shopify namespace properties', () => {
+    const value = {
+      id: 'https://example.com/collections/all.atom',
+      title: { value: 'Example Shop' },
+      updated: new Date('2026-06-22T22:07:56Z'),
+      entries: [
+        {
+          id: 'https://example.com/products/9703766655266',
+          title: { value: 'CBD Vape Liquid' },
+          updated: new Date('2025-04-14T18:54:10Z'),
+          shopify: {
+            vendor: 'Example Shop',
+            variants: [
+              {
+                title: 'Default Title',
+                price: { value: 37250, currency: 'CRC' },
+                grams: 0,
+              },
+            ],
+          },
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:shopify': 'http://jadedpixel.com/-/spec/shopify',
+        id: 'https://example.com/collections/all.atom',
+        title: { '#text': 'Example Shop' },
+        updated: '2026-06-22T22:07:56.000Z',
+        entry: [
+          {
+            id: 'https://example.com/products/9703766655266',
+            title: { '#text': 'CBD Vape Liquid' },
+            updated: '2025-04-14T18:54:10.000Z',
+            'shopify:vendor': 'Example Shop',
+            'shopify:variant': [
+              {
+                title: 'Default Title',
+                'shopify:price': { '#text': 37250, '@currency': 'CRC' },
+                'shopify:grams': 0,
+              },
+            ],
+          },
+        ],
       },
     }
 
