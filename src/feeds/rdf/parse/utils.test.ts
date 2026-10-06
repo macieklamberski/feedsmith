@@ -780,6 +780,23 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle yandex namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'yandex:full-text': { '#text': 'The city council approved the budget on Tuesday.' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      yandex: {
+        fullText: 'The city council approved the budget on Tuesday.',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle georss namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },
@@ -1966,6 +1983,35 @@ describe('parseFeed', () => {
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
         generatorAgent: 'https://example.com/generator?v=3.2',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle yandex namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'yandex:logo': { '@type': 'square', '#text': 'https://example.com/yandexsquarelogo.png' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      yandex: {
+        logos: [{ type: 'square', value: 'https://example.com/yandexsquarelogo.png' }],
       },
     }
 

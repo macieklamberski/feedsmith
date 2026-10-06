@@ -34,6 +34,10 @@ import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/uti
 import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
+import {
+  retrieveFeed as retrieveYandexFeed,
+  retrieveItem as retrieveYandexItem,
+} from '../../../namespaces/yandex/parse/utils.js'
 import type { ParseUtilPartial, RdfFeed } from '../common/types.js'
 
 const retrieveByAbout = (elements: unknown, resourceUri: string | undefined): unknown => {
@@ -131,6 +135,7 @@ export const parseItem: ParseUtilPartial<RdfFeed.Item<DateAny>> = (value, option
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
     pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
+    yandex: namespaces.has('yandex') ? retrieveYandexItem(value) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     xml: retrieveXmlItemOrFeed(value),
@@ -196,6 +201,7 @@ export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, option
     prism: namespaces.has('prism') ? retrievePrismItemOrFeed(channel, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(channel) : undefined,
     admin: namespaces.has('admin') ? retrieveAdminFeed(channel) : undefined,
+    yandex: namespaces.has('yandex') ? retrieveYandexFeed(channel) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(channel) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
     xml: retrieveXmlItemOrFeed(value),

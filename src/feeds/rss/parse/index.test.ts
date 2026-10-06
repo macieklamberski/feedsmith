@@ -941,6 +941,38 @@ describe('parse', () => {
       expect(parse(value)).toEqual(expected)
     })
 
+    it('should keep raw HTML in yandex:full-text without losing later items', () => {
+      const value = `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0" xmlns:yandex="http://news.yandex.ru">
+          <channel>
+            <title>Feed with raw Yandex full text</title>
+            <item>
+              <title>First</title>
+              <yandex:full-text><p>Budget approved.<br></p></yandex:full-text>
+            </item>
+            <item>
+              <title>Second</title>
+            </item>
+          </channel>
+        </rss>
+      `
+      const expected = {
+        title: 'Feed with raw Yandex full text',
+        items: [
+          {
+            title: 'First',
+            yandex: { fullText: '<p>Budget approved.<br></p>' },
+          },
+          {
+            title: 'Second',
+          },
+        ],
+      }
+
+      expect(parse(value)).toEqual(expected)
+    })
+
     describe('author', () => {
       it('should parse item author in RFC 2822 format (RW-M03)', () => {
         const value = `
