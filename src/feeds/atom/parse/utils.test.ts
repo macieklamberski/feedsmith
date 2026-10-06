@@ -1817,6 +1817,33 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
+  it('should handle opds namespace', () => {
+    const value = {
+      id: { '#text': 'urn:uuid:6409a00b-7bf2-405e-826c-3fdff0fd0734' },
+      title: { '#text': 'Example Book' },
+      link: {
+        '@href': 'https://example.com/book.epub',
+        '@rel': 'http://opds-spec.org/acquisition/buy',
+        'opds:price': { '#text': '9.99', '@currencycode': 'USD' },
+      },
+    }
+    const expected = {
+      id: 'urn:uuid:6409a00b-7bf2-405e-826c-3fdff0fd0734',
+      title: { value: 'Example Book' },
+      links: [
+        {
+          href: 'https://example.com/book.epub',
+          rel: 'http://opds-spec.org/acquisition/buy',
+          opds: {
+            prices: [{ value: 9.99, currencyCode: 'USD' }],
+          },
+        },
+      ],
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
   it('should handle georss namespace', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },
@@ -2239,6 +2266,35 @@ describe('parseFeed', () => {
       yt: {
         channelId: 'UCexample',
       },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle opds namespace', () => {
+    const value = {
+      id: { '#text': 'https://example.com/catalog' },
+      title: { '#text': 'Example Catalog' },
+      link: {
+        '@href': 'https://example.com/catalog?sort=new',
+        '@rel': 'http://opds-spec.org/facet',
+        '@opds:facetgroup': 'Sort By',
+        '@opds:activefacet': 'true',
+      },
+    }
+    const expected = {
+      id: 'https://example.com/catalog',
+      title: { value: 'Example Catalog' },
+      links: [
+        {
+          href: 'https://example.com/catalog?sort=new',
+          rel: 'http://opds-spec.org/facet',
+          opds: {
+            facetGroup: 'Sort By',
+            activeFacet: true,
+          },
+        },
+      ],
     }
 
     expect(parseFeed(value)).toEqual(expected)

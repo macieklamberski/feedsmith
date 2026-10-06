@@ -399,6 +399,48 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse opds namespace inside an entry source link', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom" xmlns:opds="http://opds-spec.org/2010/catalog">
+        <title>Catalog</title>
+        <id>urn:catalog</id>
+        <entry>
+          <id>urn:book</id>
+          <title>Book</title>
+          <source>
+            <id>urn:source</id>
+            <link href="https://example.com/book.epub" rel="http://opds-spec.org/acquisition/buy">
+              <opds:price currencycode="USD">9.99</opds:price>
+            </link>
+          </source>
+        </entry>
+      </feed>
+    `
+    const expected = {
+      title: { value: 'Catalog' },
+      id: 'urn:catalog',
+      entries: [
+        {
+          id: 'urn:book',
+          title: { value: 'Book' },
+          source: {
+            id: 'urn:source',
+            links: [
+              {
+                href: 'https://example.com/book.epub',
+                rel: 'http://opds-spec.org/acquisition/buy',
+                opds: { prices: [{ value: 9.99, currencyCode: 'USD' }] },
+              },
+            ],
+          },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   describe('namespace normalization integration', () => {
     it('should handle feeds with no namespace', () => {
       const value = `
