@@ -96,7 +96,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Administrative](/reference/namespaces/admin) | `<admin:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Pingback](/reference/namespaces/pingback) | `<pingback:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Trackback](/reference/namespaces/trackback) | `<trackback:*>` | RSS, Atom, RDF | ✅ | ✅ |
-| [Byline](/reference/namespaces/byline) | `<byline:*>` | RSS, Atom | ✅ | ✅ |
+| [Byline](/reference/namespaces/byline) | `<byline:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Source](/reference/namespaces/source) | `<source:*>` | RSS | ✅ | ✅ |
 | [blogChannel](/reference/namespaces/blogchannel) | `<blogChannel:*>` | RSS | ✅ | ✅ |
 | [YouTube](/reference/namespaces/yt) | `<yt:*>` | Atom | ✅ | ✅ |

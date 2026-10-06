@@ -14,7 +14,7 @@ The Byline namespace adds structured author identity, context, and content persp
     </tr>
     <tr>
       <th>Specification</th>
-      <td><a href="https://www.bylinespec.org/spec" target="_blank">Byline Specification</a></td>
+      <td><a href="https://bylinespec.org/spec" target="_blank">Byline Specification</a></td>
     </tr>
     <tr>
       <th>Prefix</th>
@@ -24,7 +24,8 @@ The Byline namespace adds structured author identity, context, and content persp
       <th>Available in</th>
       <td>
         <a href="/reference/feeds/rss">RSS</a>,
-        <a href="/reference/feeds/atom">Atom</a>
+        <a href="/reference/feeds/atom">Atom</a>,
+        <a href="/reference/feeds/rdf">RDF</a>
       </td>
     </tr>
     <tr>
