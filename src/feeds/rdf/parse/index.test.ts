@@ -1768,6 +1768,50 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with yandex namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:yandex="http://news.yandex.ru"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with Yandex News namespace</title>
+          <link>http://example.com</link>
+          <yandex:logo type="square">http://example.com/yandexsquarelogo.png</yandex:logo>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Council approves budget</title>
+          <link>http://example.com/item1</link>
+          <yandex:full-text><![CDATA[<p>The city council approved the budget.</p>]]></yandex:full-text>
+          <yandex:genre>message</yandex:genre>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with Yandex News namespace',
+      link: 'http://example.com',
+      yandex: {
+        logos: [{ type: 'square', value: 'http://example.com/yandexsquarelogo.png' }],
+      },
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Council approves budget',
+          link: 'http://example.com/item1',
+          yandex: {
+            fullText: '<p>The city council approved the budget.</p>',
+            genre: 'message',
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with geo namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
