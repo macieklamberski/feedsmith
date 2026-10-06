@@ -24,6 +24,7 @@ import {
 } from '../../../namespaces/feedburner/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces/geo/parse/utils.js'
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
+import { retrieveItemOrFeed as retrieveIcbmItemOrFeed } from '../../../namespaces/icbm/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
 import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
 import { retrieveItem as retrievePingbackItem } from '../../../namespaces/pingback/parse/utils.js'
@@ -133,6 +134,7 @@ export const parseItem: ParseUtilPartial<RdfFeed.Item<DateAny>> = (value, option
     trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    icbm: namespaces.has('icbm') ? retrieveIcbmItemOrFeed(value) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
 
@@ -198,6 +200,7 @@ export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, option
     admin: namespaces.has('admin') ? retrieveAdminFeed(channel) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(channel) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
+    icbm: namespaces.has('icbm') ? retrieveIcbmItemOrFeed(channel) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
 

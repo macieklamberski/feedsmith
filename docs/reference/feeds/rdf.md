@@ -36,6 +36,7 @@ RDF (Resource Description Framework) Site Summary is an early XML-based syndicat
         <a href="/reference/namespaces/trackback">Trackback</a>,
         <a href="/reference/namespaces/geo">W3C Basic Geo</a>,
         <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
+        <a href="/reference/namespaces/icbm">ICBM</a>,
         <a href="/reference/namespaces/rdf">RDF</a>,
         <a href="/reference/namespaces/xml">XML</a>
       </td>

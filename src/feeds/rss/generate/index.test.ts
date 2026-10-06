@@ -1151,6 +1151,43 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with icbm namespace', () => {
+    const value = {
+      title: 'Feed with icbm namespace',
+      description: 'Test feed with ICBM namespace',
+      icbm: {
+        latitude: 39.0298,
+        longitude: -77.07929,
+      },
+      items: [
+        {
+          title: 'Location item',
+          icbm: {
+            latitude: 37.1773363,
+            longitude: -3.5985570999999936,
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:icbm="http://postneo.com/icbm">
+  <channel>
+    <title>Feed with icbm namespace</title>
+    <description>Test feed with ICBM namespace</description>
+    <icbm:latitude>39.0298</icbm:latitude>
+    <icbm:longitude>-77.07929</icbm:longitude>
+    <item>
+      <title>Location item</title>
+      <icbm:latitude>37.1773363</icbm:latitude>
+      <icbm:longitude>-3.5985570999999936</icbm:longitude>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with xml namespace', () => {
     const value = {
       title: 'Feed with xml namespace',

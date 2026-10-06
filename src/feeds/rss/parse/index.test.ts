@@ -2329,6 +2329,74 @@ describe('parse', () => {
 
         expect(parse(value)).toEqual(expected)
       })
+
+      it('should parse icbm coordinates under a non-standard prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:pos="http://postneo.com/icbm">
+            <channel>
+              <title>Travel Log</title>
+              <link>https://example.com</link>
+              <description>Stops along the way</description>
+              <item>
+                <title>Joshua Tree</title>
+                <pos:latitude>33.92537</pos:latitude>
+                <pos:longitude>-115.92887</pos:longitude>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Travel Log',
+          link: 'https://example.com',
+          description: 'Stops along the way',
+          items: [
+            {
+              title: 'Joshua Tree',
+              icbm: {
+                latitude: 33.92537,
+                longitude: -115.92887,
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should parse icbm coordinates under a non-standard prefix with a trailing slash on the URI', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:pos="http://postneo.com/icbm/">
+            <channel>
+              <title>Travel Log</title>
+              <link>https://example.com</link>
+              <description>Stops along the way</description>
+              <item>
+                <title>Joshua Tree</title>
+                <pos:latitude>37.1773363</pos:latitude>
+                <pos:longitude>-3.5985570999999936</pos:longitude>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Travel Log',
+          link: 'https://example.com',
+          description: 'Stops along the way',
+          items: [
+            {
+              title: 'Joshua Tree',
+              icbm: {
+                latitude: 37.1773363,
+                longitude: -3.5985570999999936,
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
     })
 
     describe('feed-specific quirks', () => {

@@ -39,6 +39,7 @@ import {
   retrieveFeed as retrieveGooglePlayFeed,
   retrieveItem as retrieveGooglePlayItem,
 } from '../../../namespaces/googleplay/parse/utils.js'
+import { retrieveItemOrFeed as retrieveIcbmItemOrFeed } from '../../../namespaces/icbm/parse/utils.js'
 import {
   retrieveFeed as retrieveItunesFeed,
   retrieveItem as retrieveItunesItem,
@@ -433,6 +434,7 @@ export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, option
     sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    icbm: namespaces.has('icbm') ? retrieveIcbmItemOrFeed(value) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
 
@@ -496,6 +498,7 @@ export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, option
     blogChannel: namespaces.has('blogchannel') ? retrieveBlogChannelFeed(channel) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(channel) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
+    icbm: namespaces.has('icbm') ? retrieveIcbmItemOrFeed(channel) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
 
