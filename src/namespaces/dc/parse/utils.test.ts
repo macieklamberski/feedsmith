@@ -234,6 +234,73 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(value)).toBeUndefined()
   })
 
+  it('should read rdf:value from rdf:Description in dc:contributor', () => {
+    const value = {
+      'dc:contributor':
+        '<rdf:Description wiki:host="192.0.2.15"><rdf:value>JaneSmith</rdf:value></rdf:Description>',
+    }
+    const expected = {
+      contributors: ['JaneSmith'],
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should read rdf:value from rdf:Description in dc:subject', () => {
+    const value = {
+      'dc:subject': `
+        <rdf:Description>
+          <taxo:topic rdf:resource="https://example.com/category/section" />
+          <rdf:value>Articles</rdf:value>
+        </rdf:Description>
+      `,
+    }
+    const expected = {
+      subjects: ['Articles'],
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should decode entities in rdf:value', () => {
+    const value = {
+      'dc:subject':
+        '<rdf:Description><rdf:value>Theory &amp; Practice</rdf:value></rdf:Description>',
+    }
+    const expected = {
+      subjects: ['Theory & Practice'],
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should read the first rdf:value when rdf:Description holds several', () => {
+    const value = {
+      'dc:subject': `
+        <rdf:Description>
+          <rdf:value xml:lang="en">Biology</rdf:value>
+          <rdf:value xml:lang="sv">Biologi</rdf:value>
+        </rdf:Description>
+      `,
+    }
+    const expected = {
+      subjects: ['Biology'],
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
+  it('should keep the raw value when rdf:Description markup is malformed', () => {
+    const value = {
+      'dc:contributor': '<rdf:Description><rdf:value>JaneSmith</rdf:Description>',
+    }
+    const expected = {
+      contributors: ['<rdf:Description><rdf:value>JaneSmith</rdf:Description>'],
+    }
+
+    expect(retrieveItemOrFeed(value)).toEqual(expected)
+  })
+
   it.todo('should parse dates with custom parseDateFn', () => {
     // Pass options.parseDateFn that maps each date string to a Date instance.
     // Expected: dates contains the values returned by the custom parser instead of the raw strings.
