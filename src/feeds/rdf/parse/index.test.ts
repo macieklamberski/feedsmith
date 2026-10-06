@@ -1600,6 +1600,46 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with annotate namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:annotate="http://purl.org/rss/1.0/modules/annotate/"
+      >
+        <channel rdf:about="http://example.com/discuss/">
+          <title>Discussion Group</title>
+          <link>http://example.com/discuss/</link>
+          <description>Test feed with Annotation namespace</description>
+        </channel>
+        <item rdf:about="http://example.com/discuss/2">
+          <title>Re: Hello, World!</title>
+          <link>http://example.com/discuss/2</link>
+          <annotate:reference rdf:resource="http://example.com/discuss/1"/>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Discussion Group',
+      link: 'http://example.com/discuss/',
+      description: 'Test feed with Annotation namespace',
+      rdf: { about: 'http://example.com/discuss/' },
+      items: [
+        {
+          title: 'Re: Hello, World!',
+          link: 'http://example.com/discuss/2',
+          annotate: {
+            reference: 'http://example.com/discuss/1',
+          },
+          rdf: { about: 'http://example.com/discuss/2' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with wfw namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
