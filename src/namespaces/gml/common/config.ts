@@ -3,6 +3,10 @@ export const uris = [
   'http://www.opengis.net/gml/',
   'https://www.opengis.net/gml',
   'https://www.opengis.net/gml/',
+  'http://opengis.net/gml',
+  'http://opengis.net/gml/',
+  'https://opengis.net/gml',
+  'https://opengis.net/gml/',
 ]
 
 export const stopNodes = [
