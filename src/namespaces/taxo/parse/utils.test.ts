@@ -314,6 +314,27 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(value)).toEqual(expected)
   })
 
+  it('should pass options to Dublin Core on root topics', () => {
+    const value = {
+      channel: {},
+      'taxo:topic': {
+        '@about': 'https://example.com/category/xml',
+        'dc:date': { '#text': '2024-01-02T03:04:05Z' },
+      },
+    }
+    const options = { parseDateFn: (raw: string) => new Date(raw) }
+    const expected = {
+      topicDefinitions: [
+        {
+          about: 'https://example.com/category/xml',
+          dc: { dates: [new Date('2024-01-02T03:04:05Z')] },
+        },
+      ],
+    }
+
+    expect(retrieveFeed(value, options)).toEqual(expected)
+  })
+
   it('should return undefined for empty object', () => {
     expect(retrieveFeed({})).toBeUndefined()
   })

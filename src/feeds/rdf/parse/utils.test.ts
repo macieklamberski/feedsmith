@@ -1932,6 +1932,31 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
+  it('should handle taxo topics at the root without taxo in the channel', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+      },
+      'taxo:topic': {
+        '@about': 'https://example.com/category/xml',
+        'taxo:link': { '#text': 'https://example.com/category/xml' },
+      },
+    }
+    const expected = {
+      title: 'Example Feed',
+      taxo: {
+        topicDefinitions: [
+          {
+            about: 'https://example.com/category/xml',
+            link: 'https://example.com/category/xml',
+          },
+        ],
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
   it('should handle media namespace', () => {
     const value = {
       channel: {
