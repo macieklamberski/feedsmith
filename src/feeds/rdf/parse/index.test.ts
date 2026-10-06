@@ -1462,6 +1462,48 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with photo namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:photo="http://www.pheed.com/pheed/"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with photo namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with Pheed photo namespace</description>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Carwash basement</title>
+          <link>http://example.com/item1</link>
+          <photo:thumbnail>https://example.com/albums/Underwater/Carwash_basement.thumb.jpg</photo:thumbnail>
+          <photo:imgsrc>https://example.com/albums/Underwater/Carwash_basement.jpg</photo:imgsrc>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with photo namespace',
+      link: 'http://example.com',
+      description: 'Test feed with Pheed photo namespace',
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Carwash basement',
+          link: 'http://example.com/item1',
+          photo: {
+            thumbnail: 'https://example.com/albums/Underwater/Carwash_basement.thumb.jpg',
+            imgsrc: 'https://example.com/albums/Underwater/Carwash_basement.jpg',
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with opensearch namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>

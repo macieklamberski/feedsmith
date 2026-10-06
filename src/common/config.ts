@@ -61,6 +61,10 @@ import {
   uris as opensearchUris,
 } from '../namespaces/opensearch/common/config.js'
 import {
+  stopNodes as photoStopNodes,
+  uris as photoUris,
+} from '../namespaces/photo/common/config.js'
+import {
   stopNodes as pingbackStopNodes,
   uris as pingbackUris,
 } from '../namespaces/pingback/common/config.js'
@@ -148,6 +152,7 @@ export const namespaceUris = {
   podcast: podcastUris,
   psc: pscUris,
   media: mediaUris,
+  photo: photoUris,
   googleplay: googleplayUris,
   spotify: spotifyUris,
   acast: acastUris,
@@ -207,6 +212,7 @@ export const namespaceStopNodes = [
   ...itunesStopNodes,
   ...mediaStopNodes,
   ...opensearchStopNodes,
+  ...photoStopNodes,
   ...pingbackStopNodes,
   ...podcastStopNodes,
   ...prismStopNodes,
