@@ -105,6 +105,9 @@
         "comments": 177,
         "hitParade": [177, 155, 105, 33, 6, 3, 0]
       },
+      "taxo": {
+        "topics": ["http://example.org/topics/web", "http://example.org/topics/xml"]
+      },
       "media": {
         "contents": [
           {
@@ -698,6 +701,24 @@
     "updatePeriod": "hourly",
     "updateFrequency": 1,
     "updateBase": "2000-01-01T12:00+00:00"
+  },
+  "taxo": {
+    "topics": ["http://example.org/topics/web"],
+    "topicDefinitions": [
+      {
+        "about": "http://example.org/topics/web",
+        "link": "http://example.org/topics/web"
+      },
+      {
+        "about": "http://example.org/topics/xml",
+        "link": "http://example.org/topics/xml",
+        "topics": ["http://example.org/topics/web"],
+        "dc": {
+          "titles": ["XML"],
+          "descriptions": ["Topics about XML"]
+        }
+      }
+    ]
   },
   "media": {
     "contents": [

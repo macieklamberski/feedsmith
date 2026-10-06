@@ -742,6 +742,28 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle taxo namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'taxo:topics': {
+        bag: {
+          li: [
+            { '@resource': 'https://example.com/t:rss' },
+            { '@resource': 'https://example.com/t:xml' },
+          ],
+        },
+      },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      taxo: { topics: ['https://example.com/t:rss', 'https://example.com/t:xml'] },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle media namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },
@@ -1864,6 +1886,72 @@ describe('parseFeed', () => {
         },
       ],
       sy: { updateFrequency: 5 },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle taxo namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'taxo:topics': {
+          bag: { li: { '@resource': 'https://example.com/category/xml' } },
+        },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+      'taxo:topic': {
+        '@about': 'https://example.com/category/xml',
+        'taxo:link': { '#text': 'https://example.com/category/xml' },
+      },
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      taxo: {
+        topics: ['https://example.com/category/xml'],
+        topicDefinitions: [
+          {
+            about: 'https://example.com/category/xml',
+            link: 'https://example.com/category/xml',
+          },
+        ],
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle taxo topics at the root without taxo in the channel', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+      },
+      'taxo:topic': {
+        '@about': 'https://example.com/category/xml',
+        'taxo:link': { '#text': 'https://example.com/category/xml' },
+      },
+    }
+    const expected = {
+      title: 'Example Feed',
+      taxo: {
+        topicDefinitions: [
+          {
+            about: 'https://example.com/category/xml',
+            link: 'https://example.com/category/xml',
+          },
+        ],
+      },
     }
 
     expect(parseFeed(value)).toEqual(expected)
