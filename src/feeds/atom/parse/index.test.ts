@@ -428,6 +428,54 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should keep inline markup raw inside Shopify text elements', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom" xmlns:s="http://jadedpixel.com/-/spec/shopify">
+        <id>https://example.com/collections/all.atom</id>
+        <entry>
+          <id>https://example.com/products/1</id>
+          <s:type>Shoes &amp; <b>Boots</b></s:type>
+          <s:tag>Sale <i>50%</i></s:tag>
+        </entry>
+      </feed>
+    `
+    const expected = {
+      id: 'https://example.com/collections/all.atom',
+      entries: [
+        {
+          id: 'https://example.com/products/1',
+          shopify: {
+            type: 'Shoes & <b>Boots</b>',
+            tags: ['Sale <i>50%</i>'],
+          },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should not parse Shopify namespace when the s prefix is bound to another namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom" xmlns:s="http://purl.org/steeple">
+        <id>https://example.com/feed</id>
+        <entry>
+          <id>https://example.com/entry</id>
+          <s:type>Loafer</s:type>
+          <s:vendor>Example</s:vendor>
+        </entry>
+      </feed>
+    `
+    const expected = {
+      id: 'https://example.com/feed',
+      entries: [{ id: 'https://example.com/entry' }],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should correctly parse Atom feed with YouTube playlist', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
