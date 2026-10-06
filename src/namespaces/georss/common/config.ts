@@ -3,6 +3,10 @@ export const uris = [
   'http://www.georss.org/georss/',
   'https://www.georss.org/georss',
   'https://www.georss.org/georss/',
+  'http://georss.org/georss',
+  'http://georss.org/georss/',
+  'https://georss.org/georss',
+  'https://georss.org/georss/',
 ]
 
 export const stopNodes = [

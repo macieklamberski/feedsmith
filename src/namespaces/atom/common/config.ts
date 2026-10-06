@@ -3,8 +3,14 @@ export const uris = [
   'https://www.w3.org/2005/Atom',
   'http://www.w3.org/2005/Atom/',
   'https://www.w3.org/2005/Atom/',
+  'http://w3.org/2005/Atom',
+  'https://w3.org/2005/Atom',
+  'http://w3.org/2005/Atom/',
+  'https://w3.org/2005/Atom/',
   'http://purl.org/atom/ns#', // Official URI (Atom 0.3)
   'https://purl.org/atom/ns#',
+  'http://www.purl.org/atom/ns#',
+  'https://www.purl.org/atom/ns#',
 ]
 
 // The elements that can carry a type="xhtml" value with inline markup. Atom 0.3's tagline is left

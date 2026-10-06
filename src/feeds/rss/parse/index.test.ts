@@ -741,6 +741,38 @@ describe('parse', () => {
         expect(parse(value)).toEqual(expected)
       })
 
+      it('should work with www. variant and custom prefix', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0" xmlns:dublincore="http://www.purl.org/dc/elements/1.1/">
+            <channel>
+              <title>Test</title>
+              <link>http://example.com</link>
+              <description>Test</description>
+              <item>
+                <title>Item</title>
+                <dublincore:creator>John</dublincore:creator>
+              </item>
+            </channel>
+          </rss>
+        `
+        const expected = {
+          title: 'Test',
+          link: 'http://example.com',
+          description: 'Test',
+          items: [
+            {
+              title: 'Item',
+              dc: {
+                creators: ['John'],
+              },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
       it('should work with uppercase URI and custom prefix', () => {
         const value = `
           <?xml version="1.0" encoding="UTF-8"?>

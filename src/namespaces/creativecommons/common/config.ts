@@ -7,6 +7,8 @@ export const uris = [
   'https://cyber.law.harvard.edu/rss/creativeCommonsRssModule.html',
   'http://cyber.law.harvard.edu/rss/creativeCommonsRssModule',
   'https://cyber.law.harvard.edu/rss/creativeCommonsRssModule',
+  'http://cyber.law.harvard.edu/rss/creativeCommonsRssModule/',
+  'https://cyber.law.harvard.edu/rss/creativeCommonsRssModule/',
 ]
 
 export const stopNodes = ['*.creativecommons:license']
