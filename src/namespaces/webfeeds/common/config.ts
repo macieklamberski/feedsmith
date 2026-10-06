@@ -3,6 +3,10 @@ export const uris = [
   'https://webfeeds.org/rss/1.0',
   'http://webfeeds.org/rss/1.0/',
   'https://webfeeds.org/rss/1.0/',
+  'http://www.webfeeds.org/rss/1.0',
+  'https://www.webfeeds.org/rss/1.0',
+  'http://www.webfeeds.org/rss/1.0/',
+  'https://www.webfeeds.org/rss/1.0/',
 ]
 
 export const stopNodes = [
