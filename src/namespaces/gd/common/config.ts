@@ -1,6 +1,8 @@
 export const uris = [
   'http://schemas.google.com/g/2005', // Official URI
   'https://schemas.google.com/g/2005',
+  'http://schemas.google.com/g/2005/',
+  'https://schemas.google.com/g/2005/',
 ]
 
 export const stopNodes = [
