@@ -9,6 +9,7 @@ import type {
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AppNs } from '../../../namespaces/app/common/types.js'
 import type { ArxivNs } from '../../../namespaces/arxiv/common/types.js'
+import type { BylineNs } from '../../../namespaces/byline/common/types.js'
 import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { CreativeCommonsNs } from '../../../namespaces/creativecommons/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
@@ -147,6 +148,7 @@ export namespace AtomFeed {
       wfw?: WfwNs.Item
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
+      byline?: BylineNs.Item<TStrict>
       yt?: YtNs.Item
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
@@ -183,6 +185,7 @@ export namespace AtomFeed {
       creativeCommons?: CreativeCommonsNs.ItemOrFeed
       admin?: AdminNs.Feed
       pingback?: PingbackNs.Feed
+      byline?: BylineNs.Feed<TStrict>
       yt?: YtNs.Feed
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
