@@ -1729,6 +1729,27 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle cb namespace', () => {
+    const value = {
+      title: { '#text': 'Speech' },
+      'cb:speech': {
+        'cb:simpletitle': { '#text': 'Global developments and monetary policy' },
+        'cb:venue': { '#text': 'Finance seminar 2026' },
+      },
+    }
+    const expected = {
+      title: 'Speech',
+      cb: {
+        speech: {
+          simpleTitle: 'Global developments and monetary policy',
+          venue: 'Finance seminar 2026',
+        },
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle thr namespace', () => {
     const value = {
       title: { '#text': 'Reply Item' },

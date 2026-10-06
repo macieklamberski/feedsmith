@@ -761,6 +761,27 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle cb namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      'cb:news': {
+        'cb:simpletitle': { '#text': 'Term PRA operation' },
+        'cb:occurrencedate': { '#text': '2009-12-31' },
+      },
+    }
+    const expected = {
+      title: 'Example Entry',
+      cb: {
+        news: {
+          simpleTitle: 'Term PRA operation',
+          occurrenceDate: '2009-12-31',
+        },
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle wfw namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },

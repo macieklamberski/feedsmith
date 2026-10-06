@@ -17,6 +17,7 @@ import {
   stopNodes as blogchannelStopNodes,
   uris as blogchannelUris,
 } from '../namespaces/blogchannel/common/config.js'
+import { stopNodes as cbStopNodes, uris as cbUris } from '../namespaces/cb/common/config.js'
 import { stopNodes as ccStopNodes, uris as ccUris } from '../namespaces/cc/common/config.js'
 import {
   stopNodes as contentStopNodes,
@@ -157,6 +158,7 @@ export const namespaceUris = {
   arxiv: arxivUris,
   opensearch: opensearchUris,
   prism: prismUris,
+  cb: cbUris,
   cc: ccUris,
   creativeCommons: creativecommonsUris,
   thr: thrUris,
@@ -194,6 +196,7 @@ export const namespaceStopNodes = [
   ...arxivStopNodes,
   ...atomStopNodes,
   ...blogchannelStopNodes,
+  ...cbStopNodes,
   ...ccStopNodes,
   ...contentStopNodes,
   ...creativecommonsStopNodes,
