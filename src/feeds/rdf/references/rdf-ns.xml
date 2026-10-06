@@ -546,6 +546,8 @@
   </taxo:topic>
   <taxo:topic rdf:about="http://example.org/topics/xml">
     <taxo:link>http://example.org/topics/xml</taxo:link>
+    <dc:title>XML</dc:title>
+    <dc:description>Topics about XML</dc:description>
     <taxo:topics>
       <rdf:Bag>
         <rdf:li rdf:resource="http://example.org/topics/web"/>

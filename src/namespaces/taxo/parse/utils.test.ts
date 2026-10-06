@@ -101,6 +101,27 @@ describe('parseTopic', () => {
     expect(parseTopic(value)).toEqual(expected)
   })
 
+  it('should parse Dublin Core elements on topic', () => {
+    const value = {
+      '@about': 'https://example.com/category/xml',
+      'taxo:link': { '#text': 'https://example.com/category/xml' },
+      'dc:title': { '#text': 'XML' },
+      'dc:subject': { '#text': 'XML' },
+      'dc:description': { '#text': 'Directory category' },
+    }
+    const expected = {
+      about: 'https://example.com/category/xml',
+      link: 'https://example.com/category/xml',
+      dc: {
+        titles: ['XML'],
+        subjects: ['XML'],
+        descriptions: ['Directory category'],
+      },
+    }
+
+    expect(parseTopic(value)).toEqual(expected)
+  })
+
   it('should parse topic with only rdf:about', () => {
     const value = {
       '@about': 'https://example.com/category/xml',

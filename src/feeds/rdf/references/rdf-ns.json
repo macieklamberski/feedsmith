@@ -712,7 +712,11 @@
       {
         "about": "http://example.org/topics/xml",
         "link": "http://example.org/topics/xml",
-        "topics": ["http://example.org/topics/web"]
+        "topics": ["http://example.org/topics/web"],
+        "dc": {
+          "titles": ["XML"],
+          "descriptions": ["Topics about XML"]
+        }
       }
     ]
   },

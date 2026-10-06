@@ -1419,6 +1419,7 @@ describe('parse', () => {
         xmlns="http://purl.org/rss/1.0/"
         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
         xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
       >
         <channel rdf:about="https://example.com">
           <title>Feed with Taxonomy namespace</title>
@@ -1444,6 +1445,7 @@ describe('parse', () => {
         </item>
         <taxo:topic rdf:about="https://example.com/category/xml">
           <taxo:link>https://example.com/category/xml</taxo:link>
+          <dc:title>XML</dc:title>
           <taxo:topics>
             <rdf:Bag>
               <rdf:li rdf:resource="https://example.com/category/sgml"/>
@@ -1474,6 +1476,7 @@ describe('parse', () => {
             about: 'https://example.com/category/xml',
             link: 'https://example.com/category/xml',
             topics: ['https://example.com/category/sgml'],
+            dc: { titles: ['XML'] },
           },
         ],
       },

@@ -197,7 +197,9 @@ export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, option
     dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(channel, options) : undefined,
     sy: namespaces.has('sy') ? retrieveSyFeed(channel, options) : undefined,
     taxo:
-      namespaces.has('taxo') || rootNamespaces.has('taxo') ? retrieveTaxoFeed(value) : undefined,
+      namespaces.has('taxo') || rootNamespaces.has('taxo')
+        ? retrieveTaxoFeed(value, options)
+        : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
     feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerFeed(channel) : undefined,
     opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(channel) : undefined,
