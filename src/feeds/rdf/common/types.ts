@@ -23,6 +23,7 @@ import type { SlashNs } from '../../../namespaces/slash/common/types.js'
 import type { SyNs } from '../../../namespaces/sy/common/types.js'
 import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
+import type { WikiNs } from '../../../namespaces/wiki/common/types.js'
 import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 
 export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateAny>>
@@ -64,6 +65,7 @@ export namespace RdfFeed {
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       content?: ContentNs.Item
       slash?: SlashNs.Item
+      wiki?: WikiNs.Item
       media?: MediaNs.ItemOrFeed<TStrict>
       feedburner?: FeedBurnerNs.Item
       prism?: PrismNs.ItemOrFeed<TDate>
@@ -91,6 +93,7 @@ export namespace RdfFeed {
       dc?: DcNs.ItemOrFeed<TDate>
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       sy?: SyNs.Feed<TDate>
+      wiki?: WikiNs.Feed
       media?: MediaNs.ItemOrFeed<TStrict>
       feedburner?: FeedBurnerNs.Feed<TStrict>
       opensearch?: OpenSearchNs.Feed<TStrict>

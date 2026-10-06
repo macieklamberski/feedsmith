@@ -36,6 +36,7 @@ import type { SyNs } from '../../../namespaces/sy/common/types.js'
 import type { ThrNs } from '../../../namespaces/thr/common/types.js'
 import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
+import type { WikiNs } from '../../../namespaces/wiki/common/types.js'
 import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 
 export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateAny>>
@@ -143,6 +144,7 @@ export namespace RssFeed {
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       content?: ContentNs.Item
       slash?: SlashNs.Item
+      wiki?: WikiNs.Item
       itunes?: ItunesNs.Item
       podcast?: PodcastNs.Item<TStrict>
       psc?: PscNs.Item<TStrict>
@@ -195,6 +197,7 @@ export namespace RssFeed {
       dc?: DcNs.ItemOrFeed<TDate>
       dcterms?: DcTermsNs.ItemOrFeed<TDate>
       sy?: SyNs.Feed<TDate>
+      wiki?: WikiNs.Feed
       itunes?: ItunesNs.Feed<TStrict>
       podcast?: PodcastNs.Feed<TDate, TStrict>
       media?: MediaNs.ItemOrFeed<TStrict>

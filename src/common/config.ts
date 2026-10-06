@@ -99,6 +99,7 @@ import {
   uris as trackbackUris,
 } from '../namespaces/trackback/common/config.js'
 import { stopNodes as wfwStopNodes, uris as wfwUris } from '../namespaces/wfw/common/config.js'
+import { stopNodes as wikiStopNodes, uris as wikiUris } from '../namespaces/wiki/common/config.js'
 import { stopNodes as ytStopNodes, uris as ytUris } from '../namespaces/yt/common/config.js'
 
 export const parserConfig: X2jOptions = {
@@ -144,6 +145,7 @@ export const namespaceUris = {
   sy: syUris,
   content: contentUris,
   slash: slashUris,
+  wiki: wikiUris,
   itunes: itunesUris,
   podcast: podcastUris,
   psc: pscUris,
@@ -219,5 +221,6 @@ export const namespaceStopNodes = [
   ...thrStopNodes,
   ...trackbackStopNodes,
   ...wfwStopNodes,
+  ...wikiStopNodes,
   ...ytStopNodes,
 ]
