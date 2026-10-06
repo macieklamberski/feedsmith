@@ -10,6 +10,7 @@ import {
   parseString,
   retrieveText,
 } from '../../../common/utils.js'
+import { parseWhere } from '../../georss/parse/utils.js'
 import type { MediaNs } from '../common/types.js'
 
 export const parseRating: ParseUtilPartial<MediaNs.Rating> = (value) => {
@@ -338,18 +339,27 @@ export const parseScenes: ParseUtilPartial<Array<MediaNs.Scene>> = (value) => {
   return parseArrayOf(value?.['media:scene'], parseScene)
 }
 
+// See: https://www.rssboard.org/media-rss#media-peerlink, the nearest anchor to media:location.
 export const parseLocation: ParseUtilPartial<MediaNs.Location> = (value) => {
-  // For cases where the location is simply a string within the <media:location> tag.
-  if (isNonEmptyStringOrNumber(value) || isPlainObject(value)) {
-    const location = {
-      description: ((value) => parseString(retrieveText(value)))(value),
-    }
-
-    return trimObject(location)
+  // Some feeds carry the place as element text, with no description attribute.
+  if (isNonEmptyStringOrNumber(value)) {
+    return trimObject({ description: parseString(value) })
   }
 
-  // TODO: Extend parseLocation according to the specification of media:location:
-  // https://www.rssboard.org/media-rss#media-peerlink after implementing GeoRSS GML support.
+  if (!isPlainObject(value)) {
+    return
+  }
+
+  const location = {
+    description: parseString(value['@description']) ?? parseString(retrieveText(value)),
+    start: parseString(value['@start']),
+    end: parseString(value['@end']),
+    georss: trimObject({
+      where: parseSingularOf(value['georss:where'], parseWhere),
+    }),
+  }
+
+  return trimObject(location)
 }
 
 export const retrieveCommonElements: ParseUtilPartial<MediaNs.CommonElements> = (value) => {
