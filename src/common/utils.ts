@@ -315,7 +315,7 @@ export const limitArray = <T>(array: Array<T>, limit: number | undefined): Array
   return array.slice(0, limit)
 }
 
-export const parseSingular = <T>(value: T | Array<T>): T => {
+export const parseSingular = <T>(value: T | Array<T>): T | undefined => {
   return coerceSingular(value)
 }
 
