@@ -3,10 +3,18 @@ export const uris = [
   'https://www.rawvoice.com/rawvoiceRssModule/',
   'http://www.rawvoice.com/rawvoiceRssModule',
   'https://www.rawvoice.com/rawvoiceRssModule',
+  'http://rawvoice.com/rawvoiceRssModule/',
+  'https://rawvoice.com/rawvoiceRssModule/',
+  'http://rawvoice.com/rawvoiceRssModule',
+  'https://rawvoice.com/rawvoiceRssModule',
   'https://blubrry.com/developer/rawvoice-rss',
   'http://blubrry.com/developer/rawvoice-rss',
   'https://blubrry.com/developer/rawvoice-rss/',
   'http://blubrry.com/developer/rawvoice-rss/',
+  'https://www.blubrry.com/developer/rawvoice-rss',
+  'http://www.blubrry.com/developer/rawvoice-rss',
+  'https://www.blubrry.com/developer/rawvoice-rss/',
+  'http://www.blubrry.com/developer/rawvoice-rss/',
 ]
 
 export const stopNodes = [
