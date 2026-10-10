@@ -1209,6 +1209,74 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with Shopify namespace', () => {
+    const value = {
+      id: 'https://example.com/collections/all.atom',
+      title: { value: 'Example Shoes' },
+      updated: new Date('2026-06-22T22:07:56Z'),
+      entries: [
+        {
+          id: 'https://example.com/products/6671437103168',
+          title: { value: 'Elba Penny Loafer' },
+          updated: new Date('2026-06-22T22:07:56Z'),
+          shopify: {
+            type: 'Loafer',
+            vendor: 'Example Shoes',
+            tags: ['Category: Shoe', 'SP23'],
+            variants: [
+              {
+                id: 'https://example.com/products/6671437103168',
+                title: '6 / Blush Suede',
+                price: { value: 189, currency: 'USD' },
+                sku: '26996032',
+                grams: 454,
+              },
+              {
+                id: 'https://example.com/products/6671437103168',
+                title: '6.5 / Blush Suede',
+                price: { value: 189, currency: 'USD' },
+                sku: '27061568',
+                grams: 454,
+              },
+            ],
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:shopify="http://jadedpixel.com/-/spec/shopify">
+  <id>https://example.com/collections/all.atom</id>
+  <title>Example Shoes</title>
+  <updated>2026-06-22T22:07:56.000Z</updated>
+  <entry>
+    <id>https://example.com/products/6671437103168</id>
+    <title>Elba Penny Loafer</title>
+    <updated>2026-06-22T22:07:56.000Z</updated>
+    <shopify:type>Loafer</shopify:type>
+    <shopify:vendor>Example Shoes</shopify:vendor>
+    <shopify:tag>Category: Shoe</shopify:tag>
+    <shopify:tag>SP23</shopify:tag>
+    <shopify:variant>
+      <id>https://example.com/products/6671437103168</id>
+      <title>6 / Blush Suede</title>
+      <shopify:price currency="USD">189</shopify:price>
+      <shopify:sku>26996032</shopify:sku>
+      <shopify:grams>454</shopify:grams>
+    </shopify:variant>
+    <shopify:variant>
+      <id>https://example.com/products/6671437103168</id>
+      <title>6.5 / Blush Suede</title>
+      <shopify:price currency="USD">189</shopify:price>
+      <shopify:sku>27061568</shopify:sku>
+      <shopify:grams>454</shopify:grams>
+    </shopify:variant>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with geo namespace', () => {
     const value = {
       id: 'http://example.com/feed',

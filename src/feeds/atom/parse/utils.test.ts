@@ -1817,6 +1817,43 @@ describe('parseEntry', () => {
     expect(parseEntry(value)).toEqual(expected)
   })
 
+  it('should handle shopify namespace', () => {
+    const value = {
+      id: { '#text': 'https://example.com/products/6671437103168' },
+      title: { '#text': 'Elba Penny Loafer' },
+      'shopify:type': { '#text': 'Loafer' },
+      'shopify:vendor': { '#text': 'Example Shoes' },
+      'shopify:tag': [{ '#text': 'Category: Shoe' }, { '#text': 'SP23' }],
+      'shopify:variant': {
+        id: { '#text': 'https://example.com/products/6671437103168' },
+        title: { '#text': '6 / Blush Suede' },
+        'shopify:price': { '@currency': 'USD', '#text': '189.00' },
+        'shopify:sku': { '#text': '26996032' },
+        'shopify:grams': { '#text': '454' },
+      },
+    }
+    const expected = {
+      id: 'https://example.com/products/6671437103168',
+      title: { value: 'Elba Penny Loafer' },
+      shopify: {
+        type: 'Loafer',
+        vendor: 'Example Shoes',
+        tags: ['Category: Shoe', 'SP23'],
+        variants: [
+          {
+            id: 'https://example.com/products/6671437103168',
+            title: '6 / Blush Suede',
+            price: { value: 189, currency: 'USD' },
+            sku: '26996032',
+            grams: 454,
+          },
+        ],
+      },
+    }
+
+    expect(parseEntry(value)).toEqual(expected)
+  })
+
   it('should handle georss namespace', () => {
     const value = {
       id: { '#text': 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' },

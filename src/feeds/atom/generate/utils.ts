@@ -44,6 +44,7 @@ import {
 } from '../../../namespaces/pingback/generate/utils.js'
 import { generateItemOrFeed as generatePrismItemOrFeed } from '../../../namespaces/prism/generate/utils.js'
 import { generateItem as generatePscItem } from '../../../namespaces/psc/generate/utils.js'
+import { generateItem as generateShopifyItem } from '../../../namespaces/shopify/generate/utils.js'
 import { generateItem as generateSlashItem } from '../../../namespaces/slash/generate/utils.js'
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import {
@@ -312,6 +313,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
     ...generatePingbackItem(entry.pingback),
     ...generateTrackbackItem(entry.trackback),
     ...generateYtItem(entry.yt),
+    ...generateShopifyItem(entry.shopify),
     ...generateGeoItemOrFeed(entry.geo),
     ...generateGeoRssItemOrFeed(entry.georss),
     ...generateXmlItemOrFeed(entry.xml),
