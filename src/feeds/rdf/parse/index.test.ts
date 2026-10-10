@@ -1412,6 +1412,155 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with wiki namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:wiki="http://purl.org/rss/1.0/modules/wiki/"
+      >
+        <channel rdf:about="https://example.com/">
+          <title>Example Wiki</title>
+          <link>https://example.com/RecentChanges</link>
+          <description>RecentChanges at Example Wiki</description>
+          <wiki:interwiki>
+            <rdf:Description link="https://example.com/wiki.cgi?">
+              <rdf:value>ExampleWiki</rdf:value>
+            </rdf:Description>
+          </wiki:interwiki>
+        </channel>
+        <item rdf:about="https://example.com/SandBox#20260530145025">
+          <title>SandBox</title>
+          <link>https://example.com/SandBox?action=diff&amp;rev1=25&amp;rev2=24</link>
+          <dc:date>2026-05-30T14:50:25Z</dc:date>
+          <dc:contributor><rdf:Description wiki:host="192.0.2.10"><rdf:value>Self:MaryMcConnell</rdf:value></rdf:Description></dc:contributor>
+          <wiki:version>25</wiki:version>
+          <wiki:status>updated</wiki:status>
+          <wiki:importance>minor</wiki:importance>
+          <wiki:diff>https://example.com/SandBox?action=diff</wiki:diff>
+          <wiki:history>https://example.com/SandBox?action=info</wiki:history>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Example Wiki',
+      link: 'https://example.com/RecentChanges',
+      description: 'RecentChanges at Example Wiki',
+      rdf: { about: 'https://example.com/' },
+      wiki: {
+        interwiki: {
+          value: 'ExampleWiki',
+          link: 'https://example.com/wiki.cgi?',
+        },
+      },
+      items: [
+        {
+          title: 'SandBox',
+          link: 'https://example.com/SandBox?action=diff&rev1=25&rev2=24',
+          dc: {
+            contributors: [
+              '<rdf:Description wiki:host="192.0.2.10"><rdf:value>Self:MaryMcConnell</rdf:value></rdf:Description>',
+            ],
+            dates: ['2026-05-30T14:50:25Z'],
+          },
+          wiki: {
+            host: '192.0.2.10',
+            version: '25',
+            status: 'updated',
+            importance: 'minor',
+            diff: 'https://example.com/SandBox?action=diff',
+            history: 'https://example.com/SandBox?action=info',
+          },
+          rdf: { about: 'https://example.com/SandBox#20260530145025' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should keep inline markup raw inside wiki elements', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:wiki="http://purl.org/rss/1.0/modules/wiki/"
+      >
+        <channel rdf:about="https://example.com/">
+          <title>Example Wiki</title>
+        </channel>
+        <item rdf:about="https://example.com/SandBox">
+          <title>SandBox</title>
+          <wiki:version>v<b>23</b></wiki:version>
+          <wiki:status><b>updated</b></wiki:status>
+          <wiki:importance><b>minor</b></wiki:importance>
+          <wiki:diff>https://example.com/?a=diff&amp;b=<b>1</b></wiki:diff>
+          <wiki:history>https://example.com/?a=history&amp;b=<b>1</b></wiki:history>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Example Wiki',
+      rdf: { about: 'https://example.com/' },
+      items: [
+        {
+          title: 'SandBox',
+          wiki: {
+            version: 'v<b>23</b>',
+            status: '<b>updated</b>',
+            importance: '<b>minor</b>',
+            diff: 'https://example.com/?a=diff&b=<b>1</b>',
+            history: 'https://example.com/?a=history&b=<b>1</b>',
+          },
+          rdf: { about: 'https://example.com/SandBox' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should parse RDF with legacy usemod wiki namespace URI', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:modwiki="http://www.usemod.com/cgi-bin/mb.pl?ModWiki"
+      >
+        <channel rdf:about="https://example.com/">
+          <title>Example Wiki</title>
+          <modwiki:interwiki>ExampleWiki</modwiki:interwiki>
+        </channel>
+        <item rdf:about="https://example.com/SandBox">
+          <title>SandBox</title>
+          <modwiki:diff></modwiki:diff>
+          <modwiki:version>27</modwiki:version>
+          <modwiki:status>updated</modwiki:status>
+          <modwiki:importance>minor</modwiki:importance>
+          <modwiki:history></modwiki:history>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Example Wiki',
+      rdf: { about: 'https://example.com/' },
+      wiki: { interwiki: { value: 'ExampleWiki' } },
+      items: [
+        {
+          title: 'SandBox',
+          wiki: { version: '27', status: 'updated', importance: 'minor' },
+          rdf: { about: 'https://example.com/SandBox' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with media namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>

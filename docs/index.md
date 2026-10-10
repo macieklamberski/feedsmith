@@ -75,6 +75,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Syndication](/reference/namespaces/sy) | `<sy:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Content](/reference/namespaces/content) | `<content:*>` | RSS, RDF | ✅ | ✅ |
 | [Slash](/reference/namespaces/slash) | `<slash:*>` | RSS, Atom, RDF | ✅ | ✅ |
+| [Wiki](/reference/namespaces/wiki) | `<wiki:*>` | RSS, RDF | ✅ | ✅ |
 | [iTunes](/reference/namespaces/itunes) | `<itunes:*>` | RSS, Atom | ✅ | ✅ |
 | [Podcast Index](/reference/namespaces/podcast) | `<podcast:*>` | RSS | ✅ | ✅ |
 | [Podlove Simple Chapters](/reference/namespaces/psc) | `<psc:*>` | RSS, Atom | ✅ | ✅ |
