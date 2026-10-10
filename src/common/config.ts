@@ -48,6 +48,7 @@ import {
   stopNodes as googleplayStopNodes,
   uris as googleplayUris,
 } from '../namespaces/googleplay/common/config.js'
+import { stopNodes as icbmStopNodes, uris as icbmUris } from '../namespaces/icbm/common/config.js'
 import {
   stopNodes as itunesStopNodes,
   uris as itunesUris,
@@ -170,6 +171,7 @@ export const namespaceUris = {
   yt: ytUris,
   geo: geoUris,
   georss: georssUris,
+  icbm: icbmUris,
   rdf: rdfUris,
   rss: rssUris,
   rss2: rss2Uris,
@@ -204,6 +206,7 @@ export const namespaceStopNodes = [
   ...geoStopNodes,
   ...georssStopNodes,
   ...googleplayStopNodes,
+  ...icbmStopNodes,
   ...itunesStopNodes,
   ...mediaStopNodes,
   ...opensearchStopNodes,

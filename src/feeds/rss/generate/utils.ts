@@ -38,6 +38,7 @@ import {
   generateFeed as generateGooglePlayFeed,
   generateItem as generateGooglePlayItem,
 } from '../../../namespaces/googleplay/generate/utils.js'
+import { generateItemOrFeed as generateIcbmItemOrFeed } from '../../../namespaces/icbm/generate/utils.js'
 import {
   generateFeed as generateItunesFeed,
   generateItem as generateItunesItem,
@@ -254,6 +255,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
     ...generateSourceItem(item.sourceNs),
     ...generateGeoItemOrFeed(item.geo),
     ...generateGeoRssItemOrFeed(item.georss),
+    ...generateIcbmItemOrFeed(item.icbm),
     ...generateXmlItemOrFeed(item.xml),
   }
 
@@ -308,6 +310,7 @@ export const generateFeed: GenerateUtil<RssFeed.Feed<DateLike>> = (feed) => {
     ...generateBlogChannelFeed(feed.blogChannel),
     ...generateGeoItemOrFeed(feed.geo),
     ...generateGeoRssItemOrFeed(feed.georss),
+    ...generateIcbmItemOrFeed(feed.icbm),
     item: trimArray(feed.items, generateItem),
   }
 

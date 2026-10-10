@@ -1864,6 +1864,54 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with icbm namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:icbm="http://postneo.com/icbm"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with ICBM namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with ICBM namespace</description>
+          <icbm:latitude>39.02980</icbm:latitude>
+          <icbm:longitude>-77.07929</icbm:longitude>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Location item</title>
+          <link>http://example.com/item1</link>
+          <icbm:latitude>33.92537</icbm:latitude>
+          <icbm:longitude>-115.92887</icbm:longitude>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with ICBM namespace',
+      link: 'http://example.com',
+      description: 'Test feed with ICBM namespace',
+      icbm: {
+        latitude: 39.0298,
+        longitude: -77.07929,
+      },
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Location item',
+          link: 'http://example.com/item1',
+          icbm: {
+            latitude: 33.92537,
+            longitude: -115.92887,
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should handle alternating case items', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
