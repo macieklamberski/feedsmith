@@ -1095,6 +1095,25 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with yandex namespace properties', () => {
+    const value = {
+      title: 'Council approves budget',
+      yandex: {
+        fullText: 'The city council approved the budget on Tuesday.',
+        genre: 'message',
+        themeTags: ['krasnodar'],
+      },
+    }
+    const expected = {
+      title: 'Council approves budget',
+      'yandex:full-text': 'The city council approved the budget on Tuesday.',
+      'yandex:genre': 'message',
+      'yandex:theme_tags': ['krasnodar'],
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with geo namespace properties', () => {
     const value = {
       title: 'Example Location',
@@ -2041,6 +2060,45 @@ describe('generateFeed', () => {
           'blogChannel:blink': 'http://example.net/',
           'blogChannel:mySubscriptions': 'http://example.com/subscriptions.opml',
           'blogChannel:changes': 'http://example.com/changes.xml',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with yandex namespace properties', () => {
+    const value = {
+      title: 'City News',
+      description: 'Feed for Yandex News',
+      yandex: {
+        logos: [{ type: 'square', value: 'https://example.com/yandexsquarelogo.png' }],
+      },
+      items: [
+        {
+          title: 'Council approves budget',
+          yandex: {
+            fullText: 'The city council approved the budget on Tuesday.',
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:yandex': 'http://news.yandex.ru',
+        channel: {
+          title: 'City News',
+          description: 'Feed for Yandex News',
+          'yandex:logo': [
+            { '@type': 'square', '#text': 'https://example.com/yandexsquarelogo.png' },
+          ],
+          item: [
+            {
+              title: 'Council approves budget',
+              'yandex:full-text': 'The city council approved the budget on Tuesday.',
+            },
+          ],
         },
       },
     }

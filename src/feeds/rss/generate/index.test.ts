@@ -1093,6 +1093,49 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with yandex namespace', () => {
+    const value = {
+      title: 'City News',
+      description: 'Feed for Yandex News',
+      yandex: {
+        logos: [{ type: 'square', value: 'https://example.com/yandexsquarelogo.png' }],
+      },
+      items: [
+        {
+          title: 'Council approves budget',
+          yandex: {
+            fullText: '<p>The city council approved the budget.</p>',
+            genre: 'message',
+            related: {
+              links: [{ url: 'https://example.com/news/1', value: 'First reading' }],
+            },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:yandex="http://news.yandex.ru">
+  <channel>
+    <title>City News</title>
+    <description>Feed for Yandex News</description>
+    <yandex:logo type="square">https://example.com/yandexsquarelogo.png</yandex:logo>
+    <item>
+      <title>Council approves budget</title>
+      <yandex:full-text>
+        <![CDATA[<p>The city council approved the budget.</p>]]>
+      </yandex:full-text>
+      <yandex:genre>message</yandex:genre>
+      <yandex:related>
+        <link url="https://example.com/news/1">First reading</link>
+      </yandex:related>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with geo namespace', () => {
     const value = {
       title: 'Location Feed',
