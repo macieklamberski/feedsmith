@@ -2203,6 +2203,99 @@ describe('parse', () => {
 
         expect(parse(value)).toEqual(expected)
       })
+
+      it('should read rdf:value from rdf:Description in dc:subject (RW-NS30)', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rdf:RDF
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns="http://purl.org/rss/1.0/"
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/"
+          >
+            <channel rdf:about="https://example.com/journal">
+              <title>Journal</title>
+              <link>https://example.com/journal</link>
+              <description>Journal</description>
+            </channel>
+            <item rdf:about="https://example.com/journal/article/view/1">
+              <title>Article</title>
+              <dc:creator>Jane Smith</dc:creator>
+              <dc:subject>
+                <rdf:Description>
+                  <taxo:topic rdf:resource="https://example.com/category/section" />
+                  <rdf:value>Articles</rdf:value>
+                </rdf:Description>
+              </dc:subject>
+              <dc:subject>
+                <rdf:Description>
+                  <taxo:topic rdf:resource="https://example.com/category/keywords" />
+                  <rdf:value>self-efficacy, counseling</rdf:value>
+                </rdf:Description>
+              </dc:subject>
+            </item>
+          </rdf:RDF>
+        `
+        const expected = {
+          title: 'Journal',
+          link: 'https://example.com/journal',
+          description: 'Journal',
+          rdf: { about: 'https://example.com/journal' },
+          items: [
+            {
+              title: 'Article',
+              dc: {
+                creators: ['Jane Smith'],
+                subjects: ['Articles', 'self-efficacy, counseling'],
+              },
+              rdf: { about: 'https://example.com/journal/article/view/1' },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
+
+      it('should read rdf:value from rdf:Description in dc:contributor (RW-NS31)', () => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rdf:RDF
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns="http://purl.org/rss/1.0/"
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:wiki="http://purl.org/rss/1.0/modules/wiki/"
+          >
+            <channel rdf:about="https://example.com/wiki/">
+              <title>ExampleWiki</title>
+              <link>https://example.com/wiki/FrontPage</link>
+              <description>RecentChanges at ExampleWiki</description>
+            </channel>
+            <item rdf:about="https://example.com/wiki/FrontPage#20240907134009">
+              <title>FrontPage</title>
+              <dc:date>2024-09-07T13:40:09Z</dc:date>
+              <dc:contributor><rdf:Description wiki:host="192.0.2.15"><rdf:value>Self:JaneSmith</rdf:value></rdf:Description></dc:contributor>
+            </item>
+          </rdf:RDF>
+        `
+        const expected = {
+          title: 'ExampleWiki',
+          link: 'https://example.com/wiki/FrontPage',
+          description: 'RecentChanges at ExampleWiki',
+          rdf: { about: 'https://example.com/wiki/' },
+          items: [
+            {
+              title: 'FrontPage',
+              dc: {
+                contributors: ['Self:JaneSmith'],
+                dates: ['2024-09-07T13:40:09Z'],
+              },
+              rdf: { about: 'https://example.com/wiki/FrontPage#20240907134009' },
+            },
+          ],
+        }
+
+        expect(parse(value)).toEqual(expected)
+      })
     })
 
     describe('missing and empty elements', () => {
