@@ -47,6 +47,7 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
         <a href="/reference/namespaces/trackback">Trackback</a>,
         <a href="/reference/namespaces/source">Source</a>,
         <a href="/reference/namespaces/blogchannel">blogChannel</a>,
+        <a href="/reference/namespaces/blogger">Blogger</a>,
         <a href="/reference/namespaces/geo">W3C Basic Geo</a>,
         <a href="/reference/namespaces/georss">GeoRSS Simple</a>,
         <a href="/reference/namespaces/xml">XML</a>
