@@ -1557,6 +1557,61 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate RSS feed with image namespace properties', () => {
+    const value = {
+      title: 'Feed with image namespace',
+      description: 'A feed with item images and a favicon',
+      imageNs: {
+        favicon: {
+          about: 'https://example.com/favicon.ico',
+          size: 'small',
+          dc: { titles: ['Example Diary'] },
+        },
+      },
+      items: [
+        {
+          title: 'Item with image',
+          imageNs: {
+            item: {
+              about: 'https://example.com/images/topics/culture.jpg',
+              width: 80,
+              height: 50,
+            },
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+        '@xmlns:image': 'http://purl.org/rss/1.0/modules/image/',
+        '@xmlns:rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        channel: {
+          title: 'Feed with image namespace',
+          description: 'A feed with item images and a favicon',
+          'image:favicon': {
+            '@rdf:about': 'https://example.com/favicon.ico',
+            '@image:size': 'small',
+            'dc:title': ['Example Diary'],
+          },
+          item: [
+            {
+              title: 'Item with image',
+              'image:item': {
+                '@rdf:about': 'https://example.com/images/topics/culture.jpg',
+                'image:width': 80,
+                'image:height': 50,
+              },
+            },
+          ],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate RSS feed with googleplay namespace properties', () => {
     const value = {
       title: 'Podcast Feed',

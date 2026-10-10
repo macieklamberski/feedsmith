@@ -388,6 +388,54 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with image namespace', () => {
+    const value = {
+      title: 'Feed with image namespace',
+      description: 'Test feed with RSS 1.0 Image module',
+      imageNs: {
+        favicon: {
+          about: 'https://example.com/favicon.ico',
+          size: 'small',
+          dc: { titles: ['Example Diary'] },
+        },
+      },
+      items: [
+        {
+          title: 'Item with image',
+          imageNs: {
+            item: {
+              about: 'https://example.com/images/topics/culture.jpg',
+              width: 80,
+              height: 50,
+              dc: { titles: ['Culture'] },
+            },
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:image="http://purl.org/rss/1.0/modules/image/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <channel>
+    <title>Feed with image namespace</title>
+    <description>Test feed with RSS 1.0 Image module</description>
+    <image:favicon rdf:about="https://example.com/favicon.ico" image:size="small">
+      <dc:title>Example Diary</dc:title>
+    </image:favicon>
+    <item>
+      <title>Item with image</title>
+      <image:item rdf:about="https://example.com/images/topics/culture.jpg">
+        <image:width>80</image:width>
+        <image:height>50</image:height>
+        <dc:title>Culture</dc:title>
+      </image:item>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS feed with googleplay namespace', () => {
     const value: RssFeed.Feed<DateLike> = {
       title: 'Feed with GooglePlay namespace',
@@ -1565,6 +1613,68 @@ describe('generate', () => {
     <item>
       <title>Item</title>
       <enclosure url="https://example.com/file.mp3" length="1000" type="audio/mpeg"/>
+    </item>
+  </channel>
+</rss>
+`
+
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
+
+    it('should require image namespace about in strict mode', () => {
+      const value = {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [
+          {
+            title: 'Item',
+            imageNs: { item: { width: 80, height: 50 } },
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:image="http://purl.org/rss/1.0/modules/image/">
+  <channel>
+    <title>Test</title>
+    <link>https://example.com</link>
+    <description>Desc</description>
+    <item>
+      <title>Item</title>
+      <image:item>
+        <image:width>80</image:width>
+        <image:height>50</image:height>
+      </image:item>
+    </item>
+  </channel>
+</rss>
+`
+
+      // @ts-expect-error: This is for testing purposes.
+      expect(generate(value, { strict: true })).toEqual(expected)
+    })
+
+    it('should accept image namespace with about in strict mode', () => {
+      const value = {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+        items: [
+          {
+            title: 'Item',
+            imageNs: { item: { about: 'https://example.com/image.png' } },
+          },
+        ],
+      }
+      const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:image="http://purl.org/rss/1.0/modules/image/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <channel>
+    <title>Test</title>
+    <link>https://example.com</link>
+    <description>Desc</description>
+    <item>
+      <title>Item</title>
+      <image:item rdf:about="https://example.com/image.png"/>
     </item>
   </channel>
 </rss>

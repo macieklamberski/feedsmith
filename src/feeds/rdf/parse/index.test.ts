@@ -1462,6 +1462,62 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with image namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:image="http://purl.org/rss/1.0/modules/image/"
+      >
+        <channel rdf:about="http://example.com/rss.xml">
+          <image:favicon rdf:about="http://example.com/usrimg/favicon.gif" image:size="small">
+            <dc:title>Example Diary</dc:title>
+          </image:favicon>
+          <title>Example Diary</title>
+          <link>http://example.com</link>
+          <description>Test feed with Image namespace</description>
+        </channel>
+        <item rdf:about="http://example.com/edito/rencontres">
+          <title>Rencontres internationales</title>
+          <link>http://example.com/edito/rencontres</link>
+          <image:item rdf:about="http://example.com/edito/rencontres/image_thumb">
+            <dc:title>Rencontres internationales</dc:title>
+          </image:item>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Example Diary',
+      link: 'http://example.com',
+      description: 'Test feed with Image namespace',
+      imageNs: {
+        favicon: {
+          about: 'http://example.com/usrimg/favicon.gif',
+          size: 'small',
+          dc: { titles: ['Example Diary'] },
+        },
+      },
+      rdf: { about: 'http://example.com/rss.xml' },
+      items: [
+        {
+          title: 'Rencontres internationales',
+          link: 'http://example.com/edito/rencontres',
+          imageNs: {
+            item: {
+              about: 'http://example.com/edito/rencontres/image_thumb',
+              dc: { titles: ['Rencontres internationales'] },
+            },
+          },
+          rdf: { about: 'http://example.com/edito/rencontres' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with opensearch namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
