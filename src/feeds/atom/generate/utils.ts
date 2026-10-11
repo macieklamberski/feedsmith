@@ -18,6 +18,10 @@ import {
   generateAuthor as generateArxivAuthor,
   generateEntry as generateArxivEntry,
 } from '../../../namespaces/arxiv/generate/utils.js'
+import {
+  generateFeed as generateBylineFeed,
+  generateItem as generateBylineItem,
+} from '../../../namespaces/byline/generate/utils.js'
 import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
 import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
@@ -311,6 +315,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
     ...generateWfwItem(entry.wfw),
     ...generatePingbackItem(entry.pingback),
     ...generateTrackbackItem(entry.trackback),
+    ...generateBylineItem(entry.byline),
     ...generateYtItem(entry.yt),
     ...generateGeoItemOrFeed(entry.geo),
     ...generateGeoRssItemOrFeed(entry.georss),
@@ -381,6 +386,7 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
     ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
     ...generateAdminFeed(feed.admin),
     ...generatePingbackFeed(feed.pingback),
+    ...generateBylineFeed(feed.byline),
     ...generateYtFeed(feed.yt),
     ...generateGeoItemOrFeed(feed.geo),
     ...generateGeoRssItemOrFeed(feed.georss),

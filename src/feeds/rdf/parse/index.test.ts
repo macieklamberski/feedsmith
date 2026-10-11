@@ -1768,6 +1768,62 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RDF with byline namespace', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://purl.org/rss/1.0/"
+        xmlns:byline="https://bylinespec.org/1.0"
+      >
+        <channel rdf:about="http://example.com">
+          <title>Feed with Byline namespace</title>
+          <link>http://example.com</link>
+          <description>Test feed with Byline namespace</description>
+          <byline:contributors>
+            <byline:person id="annie">
+              <byline:name>Annie Park</byline:name>
+            </byline:person>
+          </byline:contributors>
+          <byline:organizations>
+            <byline:org id="ttr">
+              <byline:name>The Tech Review</byline:name>
+            </byline:org>
+          </byline:organizations>
+        </channel>
+        <item rdf:about="http://example.com/item1">
+          <title>Item title</title>
+          <link>http://example.com/item1</link>
+          <byline:author ref="annie"/>
+          <byline:role>staff</byline:role>
+        </item>
+      </rdf:RDF>
+    `
+    const expected = {
+      title: 'Feed with Byline namespace',
+      link: 'http://example.com',
+      description: 'Test feed with Byline namespace',
+      byline: {
+        contributors: [{ id: 'annie', name: 'Annie Park' }],
+        organizations: [{ id: 'ttr', name: 'The Tech Review' }],
+      },
+      rdf: { about: 'http://example.com' },
+      items: [
+        {
+          title: 'Item title',
+          link: 'http://example.com/item1',
+          byline: {
+            author: { ref: 'annie' },
+            role: 'staff',
+          },
+          rdf: { about: 'http://example.com/item1' },
+        },
+      ],
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should parse RDF with geo namespace', () => {
     const value = `
       <?xml version="1.0" encoding="UTF-8"?>
