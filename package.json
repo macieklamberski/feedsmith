@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "entities": "^7.0.1",
-    "fast-xml-parser": "~5.11.1"
+    "fast-xml-parser": "~5.11.2"
   },
   "devDependencies": {
     "@types/bun": "^1.4.2",
