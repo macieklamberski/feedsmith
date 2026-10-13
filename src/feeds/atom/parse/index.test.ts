@@ -241,6 +241,46 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse xhtml text constructs inside at:deleted-entry', () => {
+    const value = `
+      <?xml version="1.0" encoding="utf-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom" xmlns:at="http://purl.org/atompub/tombstones/1.0">
+        <id>example-feed</id>
+        <at:deleted-entry ref="tag:example.org,2005:/entries/2" when="2005-11-29T12:11:12Z">
+          <at:comment type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><p>Removed <b>spam</b></p></div></at:comment>
+          <source>
+            <id>tag:example.org,2005:/feed</id>
+            <title type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">Source <em>feed</em></div></title>
+          </source>
+        </at:deleted-entry>
+      </feed>
+    `
+    const expected = {
+      id: 'example-feed',
+      at: {
+        deletedEntries: [
+          {
+            ref: 'tag:example.org,2005:/entries/2',
+            when: '2005-11-29T12:11:12Z',
+            comment: {
+              value: '<p>Removed <b>spam</b></p>',
+              type: 'xhtml',
+            },
+            source: {
+              id: 'tag:example.org,2005:/feed',
+              title: {
+                value: 'Source <em>feed</em>',
+                type: 'xhtml',
+              },
+            },
+          },
+        ],
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should throw error for invalid input', () => {
     const throwing = () => parse('not a feed')
 
