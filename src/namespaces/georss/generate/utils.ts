@@ -1,6 +1,7 @@
 import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import { generateCdataString, generateNumber } from '../../../common/utils.js'
+import { generateWhere as generateGmlWhere } from '../../gml/generate/utils.js'
 import type { GeoRssNs } from '../common/types.js'
 
 export const generateLatLngPairs = (
@@ -77,6 +78,14 @@ export const generateCircle: GenerateUtil<GeoRssNs.Circle> = (circle) => {
   return `${center} ${circle.radius}`
 }
 
+export const generateWhere: GenerateUtil<GeoRssNs.Where> = (where) => {
+  if (!isPlainObject(where)) {
+    return
+  }
+
+  return generateGmlWhere(where.gml)
+}
+
 export const generateItemOrFeed: GenerateUtil<GeoRssNs.ItemOrFeed> = (itemOrFeed) => {
   if (!isPlainObject(itemOrFeed)) {
     return
@@ -88,6 +97,7 @@ export const generateItemOrFeed: GenerateUtil<GeoRssNs.ItemOrFeed> = (itemOrFeed
     'georss:polygon': generatePolygon(itemOrFeed.polygon),
     'georss:box': generateBox(itemOrFeed.box),
     'georss:circle': generateCircle(itemOrFeed.circle),
+    'georss:where': generateWhere(itemOrFeed.where),
     'georss:featureTypeTag': generateCdataString(itemOrFeed.featureTypeTag),
     'georss:relationshipTag': generateCdataString(itemOrFeed.relationshipTag),
     'georss:featureName': generateCdataString(itemOrFeed.featureName),

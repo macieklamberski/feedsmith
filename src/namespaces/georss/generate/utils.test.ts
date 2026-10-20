@@ -7,6 +7,7 @@ import {
   generateLine,
   generatePoint,
   generatePolygon,
+  generateWhere,
 } from './utils.js'
 
 describe('generateLatLngPairs', () => {
@@ -425,7 +426,59 @@ describe('generateCircle', () => {
   })
 })
 
+describe('generateWhere', () => {
+  it('should generate the GML geometry inside where', () => {
+    const value = {
+      gml: {
+        point: {
+          pos: { lat: 45.256, lng: -71.92 },
+        },
+      },
+    }
+    const expected = {
+      'gml:Point': {
+        'gml:pos': { '#text': '45.256 -71.92' },
+      },
+    }
+
+    expect(generateWhere(value)).toEqual(expected)
+  })
+
+  it('should return undefined without GML', () => {
+    expect(generateWhere({})).toBeUndefined()
+  })
+
+  it('should return undefined for non-object inputs', () => {
+    expect(generateWhere(undefined)).toBeUndefined()
+    // @ts-expect-error: This is for testing purposes.
+    expect(generateWhere(null)).toBeUndefined()
+  })
+})
+
 describe('generateItemOrFeed', () => {
+  it('should generate both the simple element and georss:where', () => {
+    const value = {
+      point: { lat: 45.256, lng: -71.92 },
+      where: {
+        gml: {
+          point: {
+            pos: { lat: 45.256, lng: -71.92 },
+          },
+        },
+      },
+    }
+    const expected = {
+      'georss:point': '45.256 -71.92',
+      'georss:where': {
+        'gml:Point': {
+          'gml:pos': { '#text': '45.256 -71.92' },
+        },
+      },
+    }
+
+    expect(generateItemOrFeed(value)).toEqual(expected)
+  })
+
   it('should generate itemOrFeed object with all geometric properties', () => {
     const value = {
       point: { lat: 45.256, lng: -71.92 },

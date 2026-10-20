@@ -47,4 +47,5 @@ The GeoRSS Simple namespace enables geographic tagging of RSS, Atom, and RDF fee
 
 ## Related
 
+- **[GML Namespace](/reference/namespaces/gml)** - Geometry written in GML inside `<georss:where>`
 - **[Parsing Namespaces](/parsing/namespaces)** - How namespace parsing works
