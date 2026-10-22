@@ -12,7 +12,7 @@
      xmlns:podcast="https://podcastindex.org/namespace/1.0"
      xmlns:psc="http://podlove.org/simple-chapters"
      xmlns:media="http://search.yahoo.com/mrss/"
-     xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/"
+     xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0"
      xmlns:spotify="http://www.spotify.com/ns/rss"
      xmlns:acast="https://schema.acast.com/1.0/"
      xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/"
