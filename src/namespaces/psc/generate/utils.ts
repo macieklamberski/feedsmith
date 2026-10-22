@@ -18,9 +18,14 @@ export const generateChapter: GenerateUtil<PscNs.Chapter> = (chapter) => {
   return trimObject(value)
 }
 
-export const generateChapters: GenerateUtil<Array<PscNs.Chapter>> = (chapters) => {
+export const generateChapters: GenerateUtil<PscNs.Chapters> = (chapters) => {
+  if (!isPlainObject(chapters)) {
+    return
+  }
+
   const value = {
-    'psc:chapter': trimArray(chapters, generateChapter),
+    '@version': generatePlainString(chapters.version),
+    'psc:chapter': trimArray(chapters.items, generateChapter),
   }
 
   return trimObject(value)

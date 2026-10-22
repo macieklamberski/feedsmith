@@ -12,8 +12,16 @@ export namespace PscNs {
     TStrict
   >
 
+  export type Chapters<TStrict extends boolean = false> = Strict<
+    {
+      version: Requirable<string> // Required in spec
+      items?: Array<Chapter<TStrict>>
+    },
+    TStrict
+  >
+
   export type Item<TStrict extends boolean = false> = {
-    chapters?: Array<Chapter<TStrict>>
+    chapters?: Chapters<TStrict>
   }
 }
 // #endregion reference
