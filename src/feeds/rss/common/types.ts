@@ -11,6 +11,7 @@ import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { ArxivNs } from '../../../namespaces/arxiv/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
 import type { BlogChannelNs } from '../../../namespaces/blogchannel/common/types.js'
+import type { BloggerNs } from '../../../namespaces/blogger/common/types.js'
 import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { ContentNs } from '../../../namespaces/content/common/types.js'
 import type { CreativeCommonsNs } from '../../../namespaces/creativecommons/common/types.js'
@@ -212,6 +213,7 @@ export namespace RssFeed {
       pingback?: PingbackNs.Feed
       sourceNs?: SourceNs.Feed<TStrict>
       blogChannel?: BlogChannelNs.Feed
+      blogger?: BloggerNs.Feed
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed

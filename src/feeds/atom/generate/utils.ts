@@ -18,6 +18,7 @@ import {
   generateAuthor as generateArxivAuthor,
   generateEntry as generateArxivEntry,
 } from '../../../namespaces/arxiv/generate/utils.js'
+import { generateFeed as generateBloggerFeed } from '../../../namespaces/blogger/generate/utils.js'
 import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
 import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
@@ -381,6 +382,7 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
     ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
     ...generateAdminFeed(feed.admin),
     ...generatePingbackFeed(feed.pingback),
+    ...generateBloggerFeed(feed.blogger),
     ...generateYtFeed(feed.yt),
     ...generateGeoItemOrFeed(feed.geo),
     ...generateGeoRssItemOrFeed(feed.georss),

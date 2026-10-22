@@ -17,6 +17,10 @@ import {
   stopNodes as blogchannelStopNodes,
   uris as blogchannelUris,
 } from '../namespaces/blogchannel/common/config.js'
+import {
+  stopNodes as bloggerStopNodes,
+  uris as bloggerUris,
+} from '../namespaces/blogger/common/config.js'
 import { stopNodes as ccStopNodes, uris as ccUris } from '../namespaces/cc/common/config.js'
 import {
   stopNodes as contentStopNodes,
@@ -167,6 +171,7 @@ export const namespaceUris = {
   trackback: trackbackUris,
   source: sourceUris,
   blogChannel: blogchannelUris,
+  blogger: bloggerUris,
   yt: ytUris,
   geo: geoUris,
   georss: georssUris,
@@ -194,6 +199,7 @@ export const namespaceStopNodes = [
   ...arxivStopNodes,
   ...atomStopNodes,
   ...blogchannelStopNodes,
+  ...bloggerStopNodes,
   ...ccStopNodes,
   ...contentStopNodes,
   ...creativecommonsStopNodes,

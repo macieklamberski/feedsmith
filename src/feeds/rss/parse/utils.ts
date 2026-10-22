@@ -23,6 +23,7 @@ import {
   retrieveFeed as retrieveAtomFeed,
 } from '../../../namespaces/atom/parse/utils.js'
 import { retrieveFeed as retrieveBlogChannelFeed } from '../../../namespaces/blogchannel/parse/utils.js'
+import { retrieveFeed as retrieveBloggerFeed } from '../../../namespaces/blogger/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
@@ -494,6 +495,7 @@ export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, option
     pingback: namespaces.has('pingback') ? retrievePingbackFeed(channel) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceFeed(channel) : undefined,
     blogChannel: namespaces.has('blogchannel') ? retrieveBlogChannelFeed(channel) : undefined,
+    blogger: namespaces.has('blogger') ? retrieveBloggerFeed(channel) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(channel) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(channel) : undefined,
     xml: retrieveXmlItemOrFeed(value),
