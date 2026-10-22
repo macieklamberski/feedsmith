@@ -573,6 +573,148 @@ describe('parsePerson', () => {
       })
     })
 
+    describe('angle brackets without an address', () => {
+      it('should keep an unclosed tag as part of the name', () => {
+        const value = 'John Doe <br>'
+        const expected = {
+          name: 'John Doe <br>',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+    })
+
+    describe('markup around the person', () => {
+      it('should strip tags around email (name)', () => {
+        const value = '<p>john@example.com (John Doe)</p>'
+        const expected = {
+          name: 'John Doe',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should strip tags around name <email>', () => {
+        const value = '<p>John Doe <john@example.com></p>'
+        const expected = {
+          name: 'John Doe',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should strip tags around unbracketed name and email', () => {
+        const value = '<p>John Doe john@example.com</p>'
+        const expected = {
+          name: 'John Doe',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should strip tags around the name only', () => {
+        const value = '<b>John Doe</b> (john@example.com)'
+        const expected = {
+          name: 'John Doe',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should strip tags when there is no address', () => {
+        const value = '<p>John Doe</p>'
+        const expected = {
+          name: 'John Doe',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should take email from a single mailto anchor', () => {
+        const value = '<a href="mailto:john@example.com">John Doe</a>'
+        const expected = {
+          name: 'John Doe',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should take link from a single anchor', () => {
+        const value = '<a href="https://example.com">John Doe</a>'
+        const expected = {
+          name: 'John Doe',
+          link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should take email and link from one anchor of each kind', () => {
+        const value =
+          '<a href="https://example.com">John Doe</a> (<a href="mailto:john@example.com">john@example.com</a>)'
+        const expected = {
+          name: 'John Doe',
+          email: 'john@example.com',
+          link: 'https://example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should ignore mailto anchors when there are several', () => {
+        const value =
+          '<a href="mailto:john@example.com">John Doe</a> and <a href="mailto:jane@example.com">Jane Smith</a>'
+        const expected = {
+          name: 'John Doe and Jane Smith',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should ignore link anchors when there are several', () => {
+        const value =
+          '<a href="https://example.com/john">John Doe</a> and <a href="https://example.com/jane">Jane Smith</a>'
+        const expected = {
+          name: 'John Doe and Jane Smith',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should prefer an address in the text over an anchor', () => {
+        const value = '<a href="mailto:press@example.com">John Doe</a> (john@example.com)'
+        const expected = {
+          name: 'John Doe',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should ignore an anchor with a relative href', () => {
+        const value = '<a href="/authors/john">John Doe</a>'
+        const expected = {
+          name: 'John Doe',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should handle an anchor with no text', () => {
+        const value = '<a href="mailto:john@example.com"></a>'
+        const expected = {
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+    })
+
     describe('nested brackets', () => {
       it('should handle nested parentheses', () => {
         const value = 'John ((nick)) <john@example.com>'
