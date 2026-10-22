@@ -544,6 +544,45 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with castbox namespace', () => {
+    const value = {
+      title: 'Feed with castbox namespace',
+      description: 'Test feed with Castbox namespace',
+      castbox: {
+        uid: '17834af78de544b6957678a2918ef04c',
+        pid: '1318014',
+        type: 'private',
+      },
+      items: [
+        {
+          title: 'Premium episode',
+          castbox: {
+            tid: '211277615',
+            episodePremium: true,
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:castbox="http://castbox.fm/dtds/podcast-1.0.dtd">
+  <channel>
+    <title>Feed with castbox namespace</title>
+    <description>Test feed with Castbox namespace</description>
+    <castbox:uid>17834af78de544b6957678a2918ef04c</castbox:uid>
+    <castbox:pid>1318014</castbox:pid>
+    <castbox:type>private</castbox:type>
+    <item>
+      <title>Premium episode</title>
+      <castbox:tid>211277615</castbox:tid>
+      <castbox:episode_premium>yes</castbox:episode_premium>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with feedburner namespace', () => {
     const value = {
       title: 'Feed with feedburner namespace',
