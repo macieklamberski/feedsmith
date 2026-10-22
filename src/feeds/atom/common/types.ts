@@ -18,6 +18,7 @@ import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { GooglePlayNs } from '../../../namespaces/googleplay/common/types.js'
 import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
+import type { LivejournalNs } from '../../../namespaces/livejournal/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
 import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
@@ -150,6 +151,7 @@ export namespace AtomFeed {
       yt?: YtNs.Item
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
+      livejournal?: LivejournalNs.Item
       xml?: XmlNs.ItemOrFeed
     },
     TStrict
@@ -186,6 +188,7 @@ export namespace AtomFeed {
       yt?: YtNs.Feed
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
+      livejournal?: LivejournalNs.Feed
       xml?: XmlNs.ItemOrFeed
     },
     TStrict

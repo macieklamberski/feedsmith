@@ -42,6 +42,10 @@ import {
   generateFeed as generateItunesFeed,
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
+import {
+  generateRssFeed as generateLivejournalFeed,
+  generateRssItem as generateLivejournalItem,
+} from '../../../namespaces/livejournal/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
 import { generateFeed as generateOpenSearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
 import {
@@ -254,6 +258,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
     ...generateSourceItem(item.sourceNs),
     ...generateGeoItemOrFeed(item.geo),
     ...generateGeoRssItemOrFeed(item.georss),
+    ...generateLivejournalItem(item.livejournal),
     ...generateXmlItemOrFeed(item.xml),
   }
 
@@ -308,6 +313,7 @@ export const generateFeed: GenerateUtil<RssFeed.Feed<DateLike>> = (feed) => {
     ...generateBlogChannelFeed(feed.blogChannel),
     ...generateGeoItemOrFeed(feed.geo),
     ...generateGeoRssItemOrFeed(feed.georss),
+    ...generateLivejournalFeed(feed.livejournal),
     item: trimArray(feed.items, generateItem),
   }
 
