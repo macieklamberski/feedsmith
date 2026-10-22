@@ -1783,6 +1783,23 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle yandex namespace', () => {
+    const value = {
+      title: { '#text': 'Council approves budget' },
+      'yandex:full-text': { '#text': 'The city council approved the budget on Tuesday.' },
+      'yandex:genre': { '#text': 'message' },
+    }
+    const expected = {
+      title: 'Council approves budget',
+      yandex: {
+        fullText: 'The city council approved the budget on Tuesday.',
+        genre: 'message',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle georss namespace', () => {
     const value = {
       title: { '#text': 'Location Item' },
@@ -2342,6 +2359,30 @@ describe('parseFeed', () => {
         accounts: [{ service: 'twitter', value: 'johndoe' }],
         blogroll: 'https://example.com/blogroll.opml',
         localTime: '2024-01-15 10:30:00',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle yandex namespace', () => {
+    const channel = {
+      title: { '#text': 'City News' },
+      link: { '#text': 'https://example.com' },
+      'yandex:logo': [
+        'https://example.com/yandexlogo.png',
+        { '@type': 'square', '#text': 'https://example.com/yandexsquarelogo.png' },
+      ],
+    }
+    const value = { channel }
+    const expected = {
+      title: 'City News',
+      link: 'https://example.com',
+      yandex: {
+        logos: [
+          { value: 'https://example.com/yandexlogo.png' },
+          { type: 'square', value: 'https://example.com/yandexsquarelogo.png' },
+        ],
       },
     }
 

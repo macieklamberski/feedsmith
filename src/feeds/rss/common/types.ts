@@ -37,6 +37,7 @@ import type { ThrNs } from '../../../namespaces/thr/common/types.js'
 import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 import type { XmlNs } from '../../../namespaces/xml/common/types.js'
+import type { YandexNs } from '../../../namespaces/yandex/common/types.js'
 
 export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateAny>>
 
@@ -161,6 +162,7 @@ export namespace RssFeed {
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
       sourceNs?: SourceNs.Item<TStrict>
+      yandex?: YandexNs.Item
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
@@ -212,6 +214,7 @@ export namespace RssFeed {
       pingback?: PingbackNs.Feed
       sourceNs?: SourceNs.Feed<TStrict>
       blogChannel?: BlogChannelNs.Feed
+      yandex?: YandexNs.Feed
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed

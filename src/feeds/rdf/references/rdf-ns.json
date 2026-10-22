@@ -514,6 +514,40 @@
         "ping": "https://example.com/trackback/123",
         "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
       },
+      "yandex": {
+        "fullText": "The city council approved the budget for the next year on Tuesday.",
+        "genre": "message",
+        "themeTags": ["krasnodar", "selskoe_khozyaystvo"],
+        "related": {
+          "type": "infinity",
+          "links": [
+            {
+              "url": "http://example.com/news/budget-first-reading",
+              "img": "http://example.com/images/budget.jpg",
+              "value": "Budget passes first reading"
+            },
+            {
+              "url": "http://example.com/news/council-session",
+              "value": "Council opens autumn session"
+            }
+          ]
+        },
+        "online": "http://example.com/translation.xml",
+        "tags": ["budget", "council"],
+        "officialComment": {
+          "commentText": {
+            "origin": "http://example.org/press/21/",
+            "originName": "City Administration",
+            "logo": "http://example.org/logo.png",
+            "anchor": "comment",
+            "value": "The budget keeps every social program funded."
+          },
+          "bindTos": [
+            "http://example.com/news/budget-second-reading",
+            "http://example.net/2024/05/12/budget"
+          ]
+        }
+      },
       "geo": {
         "lat": 37.8199,
         "long": -122.4783,
@@ -1125,6 +1159,24 @@
   "admin": {
     "errorReportsTo": "mailto:webmaster@example.com",
     "generatorAgent": "http://www.movabletype.org/?v=3.2"
+  },
+  "yandex": {
+    "logos": [
+      { "value": "http://example.com/yandexlogo.png" },
+      { "type": "square", "value": "http://example.com/yandexsquarelogo.png" }
+    ],
+    "analytics": [
+      { "type": "Yandex", "id": "12345678", "params": "{ 'section': 'news' }" },
+      { "type": "custom", "url": "http://example.com/counter/{random}" }
+    ],
+    "adNetworks": [
+      {
+        "type": "Yandex",
+        "id": "R-A-123456-1",
+        "turboAdId": "first_ad_place",
+        "value": "Advertising block"
+      }
+    ]
   },
   "geo": {
     "lat": 37.7749,

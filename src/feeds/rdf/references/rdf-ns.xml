@@ -18,6 +18,7 @@
   xmlns:admin="http://webns.net/mvcb/"
   xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
   xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+  xmlns:yandex="http://news.yandex.ru"
   xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
   xmlns:georss="http://www.georss.org/georss"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -249,6 +250,13 @@
     <!-- Admin Namespace: Channel Level Tags -->
     <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
     <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+
+    <!-- Yandex News Namespace: Channel Level Tags -->
+    <yandex:logo>http://example.com/yandexlogo.png</yandex:logo>
+    <yandex:logo type="square">http://example.com/yandexsquarelogo.png</yandex:logo>
+    <yandex:analytics type="Yandex" id="12345678" params="{ 'section': 'news' }"></yandex:analytics>
+    <yandex:analytics type="custom" url="http://example.com/counter/{random}"></yandex:analytics>
+    <yandex:adNetwork type="Yandex" id="R-A-123456-1" turbo-ad-id="first_ad_place">Advertising block</yandex:adNetwork>
 
     <!-- W3C Basic Geo Namespace: Channel Level Tags -->
     <geo:lat>37.7749</geo:lat>
@@ -504,6 +512,24 @@
     <trackback:ping rdf:resource="https://example.com/trackback/123"/>
     <trackback:about rdf:resource="https://blog1.com/trackback/456"/>
     <trackback:about rdf:resource="https://blog2.com/trackback/789"/>
+
+    <!-- Yandex News Namespace: Item Level Tags -->
+    <yandex:full-text>The city council approved the budget for the next year on Tuesday.</yandex:full-text>
+    <yandex:genre>message</yandex:genre>
+    <yandex:theme_tags>krasnodar</yandex:theme_tags>
+    <yandex:theme_tags>selskoe_khozyaystvo</yandex:theme_tags>
+    <yandex:related type="infinity">
+      <link url="http://example.com/news/budget-first-reading" img="http://example.com/images/budget.jpg">Budget passes first reading</link>
+      <link url="http://example.com/news/council-session">Council opens autumn session</link>
+    </yandex:related>
+    <yandex:online>http://example.com/translation.xml</yandex:online>
+    <yandex:tags>budget</yandex:tags>
+    <yandex:tags>council</yandex:tags>
+    <yandex:official-comment>
+      <yandex:comment-text origin="http://example.org/press/21/" origin-name="City Administration" logo="http://example.org/logo.png" anchor="comment">The budget keeps every social program funded.</yandex:comment-text>
+      <yandex:bind-to>http://example.com/news/budget-second-reading</yandex:bind-to>
+      <yandex:bind-to>http://example.net/2024/05/12/budget</yandex:bind-to>
+    </yandex:official-comment>
 
     <!-- W3C Basic Geo Namespace: Item Level Tags -->
     <geo:lat>37.8199</geo:lat>
