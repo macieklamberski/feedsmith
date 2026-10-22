@@ -186,6 +186,88 @@ describe('parse', () => {
     expect(parse(value)).toEqual(expected)
   })
 
+  it('should parse RSS item elements inside podcast:liveItem', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rss version="2.0" xmlns:podcast="https://podcastindex.org/namespace/1.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+        <channel>
+          <title>Live Podcast</title>
+          <podcast:liveItem status="live" start="2021-09-26T07:30:00.000-0600">
+            <title>Live Show</title>
+            <link>https://example.com/podcast/live</link>
+            <guid isPermaLink="true">https://example.com/live</guid>
+            <enclosure url="https://example.com/livestream.mp3" type="audio/mpeg" length="312"/>
+            <itunes:image href="https://example.com/live.jpg"/>
+            <podcast:contentLink href="https://example.com/html/livestream">Listen Live!</podcast:contentLink>
+          </podcast:liveItem>
+        </channel>
+      </rss>
+    `
+    const expected = {
+      title: 'Live Podcast',
+      podcast: {
+        liveItems: [
+          {
+            title: 'Live Show',
+            link: 'https://example.com/podcast/live',
+            guid: {
+              value: 'https://example.com/live',
+              isPermaLink: true,
+            },
+            enclosures: [
+              {
+                url: 'https://example.com/livestream.mp3',
+                length: 312,
+                type: 'audio/mpeg',
+              },
+            ],
+            itunes: {
+              image: 'https://example.com/live.jpg',
+            },
+            status: 'live',
+            start: '2021-09-26T07:30:00.000-0600',
+            contentLinks: [
+              {
+                href: 'https://example.com/html/livestream',
+                display: 'Listen Live!',
+              },
+            ],
+          },
+        ],
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
+  it('should keep unescaped markup in podcast:liveItem description', () => {
+    const value = `
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rss version="2.0" xmlns:podcast="https://podcastindex.org/namespace/1.0">
+        <channel>
+          <title>Live Podcast</title>
+          <podcast:liveItem status="live" start="2021-09-26T07:30:00.000-0600">
+            <description><p>Live <b>now</b></p></description>
+          </podcast:liveItem>
+        </channel>
+      </rss>
+    `
+    const expected = {
+      title: 'Live Podcast',
+      podcast: {
+        liveItems: [
+          {
+            description: '<p>Live <b>now</b></p>',
+            status: 'live',
+            start: '2021-09-26T07:30:00.000-0600',
+          },
+        ],
+      },
+    }
+
+    expect(parse(value)).toEqual(expected)
+  })
+
   it('should throw error for invalid input', () => {
     const throwing = () => parse('not a feed')
 
