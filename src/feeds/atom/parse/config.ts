@@ -6,3 +6,5 @@ export const stopNodes = [
   ...feedPaths.map((path) => `feed.${path}`),
   ...entryPaths.map((path) => `feed.entry.${path}`),
 ]
+
+export const attributeOnlyElements = ['link', 'category']

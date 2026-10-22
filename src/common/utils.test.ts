@@ -32,7 +32,9 @@ import {
   parseSingularOf,
   parseString,
   parseVerbatimString,
+  parseWithRepair,
   parseYesNoBoolean,
+  repairUnclosedElement,
   retrieveRdfResourceOrText,
   retrieveText,
   trimArray,
@@ -3681,5 +3683,173 @@ describe('parseJsonObject', () => {
     expect(parseJsonObject(null)).toBeUndefined()
     expect(parseJsonObject(undefined)).toBeUndefined()
     expect(parseJsonObject([1, 2, 3])).toBeUndefined()
+  })
+})
+
+describe('repairUnclosedElement', () => {
+  const attributeOnlyElements = ['atom:link']
+  const canonicalize = (name: string) => {
+    const lowered = name.toLowerCase()
+
+    return lowered === 'a10:link' ? 'atom:link' : lowered
+  }
+
+  it('should self-close an unclosed element named in the error', () => {
+    const value =
+      '<channel><atom:link href="https://example.com/feed.xml" rel="self"><item/></channel>'
+    const error = new Error('Unexpected end of atom:link')
+    const expected =
+      '<channel><atom:link href="https://example.com/feed.xml" rel="self"/><item/></channel>'
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements, canonicalize)).toBe(expected)
+  })
+
+  it('should leave an element with its closing tag untouched', () => {
+    const value =
+      '<channel><atom:link href="https://example.com/a"></atom:link><atom:link href="https://example.com/b"></channel>'
+    const error = new Error('Unexpected end of atom:link')
+    const expected =
+      '<channel><atom:link href="https://example.com/a"></atom:link><atom:link href="https://example.com/b"/></channel>'
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements, canonicalize)).toBe(expected)
+  })
+
+  it('should handle a greater-than sign inside an attribute value', () => {
+    const value = '<channel><atom:link title="a > b" href="https://example.com/feed.xml"></channel>'
+    const error = new Error('Unexpected end of atom:link')
+    const expected =
+      '<channel><atom:link title="a > b" href="https://example.com/feed.xml"/></channel>'
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements, canonicalize)).toBe(expected)
+  })
+
+  it('should leave an element closed after its content untouched', () => {
+    const value =
+      '<entry><category term="a"><category term="b">Label</category><title>Title</title></entry>'
+    const error = new Error('Unexpected end of category')
+    const expected =
+      '<entry><category term="a"/><category term="b">Label</category><title>Title</title></entry>'
+
+    expect(repairUnclosedElement(value, error, ['category'], canonicalize)).toBe(expected)
+  })
+
+  it('should leave the same text inside a CDATA section untouched', () => {
+    const value =
+      '<channel><atom:link href="https://example.com/feed.xml"><description><![CDATA[Add <atom:link href="https://example.com/feed.xml"> to the channel]]></description></channel>'
+    const error = new Error('Unexpected end of atom:link')
+    const expected =
+      '<channel><atom:link href="https://example.com/feed.xml"/><description><![CDATA[Add <atom:link href="https://example.com/feed.xml"> to the channel]]></description></channel>'
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements, canonicalize)).toBe(expected)
+  })
+
+  it('should leave the same text inside a comment untouched', () => {
+    const value =
+      '<channel><!-- <atom:link href="https://example.com/old.xml"> --><atom:link href="https://example.com/feed.xml"></channel>'
+    const error = new Error('Unexpected end of atom:link')
+    const expected =
+      '<channel><!-- <atom:link href="https://example.com/old.xml"> --><atom:link href="https://example.com/feed.xml"/></channel>'
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements, canonicalize)).toBe(expected)
+  })
+
+  it('should repair an element written with another prefix', () => {
+    const value = '<channel><a10:link href="https://example.com/feed.xml"><item/></channel>'
+    const error = new Error('Unexpected end of a10:link')
+    const expected = '<channel><a10:link href="https://example.com/feed.xml"/><item/></channel>'
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements, canonicalize)).toBe(expected)
+  })
+
+  it('should repair an element written in uppercase', () => {
+    const value = '<channel><ATOM:LINK HREF="https://example.com/feed.xml"><item/></channel>'
+    const error = new Error('Unexpected end of ATOM:LINK')
+    const expected = '<channel><ATOM:LINK HREF="https://example.com/feed.xml"/><item/></channel>'
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements, canonicalize)).toBe(expected)
+  })
+
+  it('should drop a stray slash left between attributes', () => {
+    const value =
+      '<channel><atom:link href="https://example.com/feed.xml" rel="self" / role="menuitem"><item/></channel>'
+    const error = new Error('Unexpected end of atom:link')
+    const expected =
+      '<channel><atom:link href="https://example.com/feed.xml" rel="self" role="menuitem"/><item/></channel>'
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements, canonicalize)).toBe(expected)
+  })
+
+  it('should return undefined for an element outside the list', () => {
+    const value = '<channel><description>Unclosed</channel>'
+    const error = new Error('Unexpected end of description')
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements, canonicalize)).toBeUndefined()
+  })
+
+  it('should return undefined for a different error', () => {
+    const value = '<channel><atom:link href="https://example.com/feed.xml"></channel>'
+    const error = new Error('Closing tag is not closed.')
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements, canonicalize)).toBeUndefined()
+  })
+
+  it('should return undefined when no unclosed element is found', () => {
+    const value = '<channel><atom:link href="https://example.com/feed.xml"/></channel>'
+    const error = new Error('Unexpected end of atom:link')
+
+    expect(repairUnclosedElement(value, error, attributeOnlyElements, canonicalize)).toBeUndefined()
+  })
+
+  it('should return undefined for a non-error value', () => {
+    const value = '<channel><atom:link href="https://example.com/feed.xml"></channel>'
+
+    expect(
+      repairUnclosedElement(
+        value,
+        'Unexpected end of atom:link',
+        attributeOnlyElements,
+        canonicalize,
+      ),
+    ).toBeUndefined()
+  })
+})
+
+describe('parseWithRepair', () => {
+  const attributeOnlyElements = ['atom:link']
+  const canonicalize = (name: string) => {
+    const lowered = name.toLowerCase()
+
+    return lowered === 'a10:link' ? 'atom:link' : lowered
+  }
+
+  it('should return the result when parsing succeeds', () => {
+    const value = '<channel/>'
+    const parse = (xml: string) => xml.length
+
+    expect(parseWithRepair(value, attributeOnlyElements, canonicalize, parse)).toBe(10)
+  })
+
+  it('should parse again with the repaired document', () => {
+    const value = '<channel><atom:link href="https://example.com/feed.xml"></channel>'
+    const expected = '<channel><atom:link href="https://example.com/feed.xml"/></channel>'
+    const parse = (xml: string) => {
+      if (xml === value) {
+        throw new Error('Unexpected end of atom:link')
+      }
+
+      return xml
+    }
+
+    expect(parseWithRepair(value, attributeOnlyElements, canonicalize, parse)).toBe(expected)
+  })
+
+  it('should rethrow the error when the document cannot be repaired', () => {
+    const value = '<channel><description>Unclosed</channel>'
+    const parse = () => {
+      throw new Error('Unexpected end of description')
+    }
+    const throwing = () => parseWithRepair(value, attributeOnlyElements, canonicalize, parse)
+
+    expect(throwing).toThrowError('Unexpected end of description')
   })
 })
