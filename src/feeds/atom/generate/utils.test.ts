@@ -2139,6 +2139,73 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with opds namespace properties', () => {
+    const value = {
+      id: 'https://example.com/catalog',
+      title: { value: 'Example Catalog' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      links: [
+        {
+          href: 'https://example.com/catalog?sort=new',
+          rel: 'http://opds-spec.org/facet',
+          opds: {
+            facetGroup: 'Sort By',
+            activeFacet: true,
+          },
+        },
+      ],
+      entries: [
+        {
+          id: 'urn:uuid:6409a00b-7bf2-405e-826c-3fdff0fd0734',
+          title: { value: 'Example Book' },
+          updated: new Date('2024-01-05T10:30:00Z'),
+          links: [
+            {
+              href: 'https://example.com/book.epub',
+              rel: 'http://opds-spec.org/acquisition/buy',
+              opds: {
+                prices: [{ value: 9.99, currencyCode: 'USD' }],
+              },
+            },
+          ],
+        },
+      ],
+    }
+    const expected = {
+      feed: {
+        '@xmlns': 'http://www.w3.org/2005/Atom',
+        '@xmlns:opds': 'http://opds-spec.org/2010/catalog',
+        id: 'https://example.com/catalog',
+        link: [
+          {
+            '@href': 'https://example.com/catalog?sort=new',
+            '@rel': 'http://opds-spec.org/facet',
+            '@opds:facetGroup': 'Sort By',
+            '@opds:activeFacet': true,
+          },
+        ],
+        title: { '#text': 'Example Catalog' },
+        updated: '2024-01-10T12:00:00.000Z',
+        entry: [
+          {
+            id: 'urn:uuid:6409a00b-7bf2-405e-826c-3fdff0fd0734',
+            link: [
+              {
+                '@href': 'https://example.com/book.epub',
+                '@rel': 'http://opds-spec.org/acquisition/buy',
+                'opds:price': [{ '#text': 9.99, '@currencycode': 'USD' }],
+              },
+            ],
+            title: { '#text': 'Example Book' },
+            updated: '2024-01-05T10:30:00.000Z',
+          },
+        ],
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with geo namespace properties', () => {
     const value = {
       id: 'http://example.com/feed',
