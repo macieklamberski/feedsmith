@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import { locales } from '../../../common/config.js'
 import { GenerateError } from '../../../common/errors.js'
+import locales from '../../../locales.json' with { type: 'json' }
 import { generate } from './index.js'
 
 describe('generate', () => {
@@ -206,7 +206,7 @@ describe('generate', () => {
       const throwing = () => generate({})
 
       expect(throwing).toThrowError(GenerateError)
-      expect(throwing).toThrowError(locales.invalidInputJson)
+      expect(throwing).toThrowError(locales.errors.invalidInputJson)
     })
   })
 

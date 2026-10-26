@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { locales } from './config.js'
+import locales from '../locales.json' with { type: 'json' }
 import { DetectError } from './errors.js'
 import { type AnyFeed, parse } from './parse.js'
 
@@ -230,14 +230,14 @@ describe('parse', () => {
     const value = '{"version":"https://jsonfeed.org/version/1.1","title":"Malformed'
     const throwing = () => parse(value)
 
-    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
+    expect(throwing).toThrowError(locales.errors.unrecognizedFeedFormat)
   })
 
   it('should reject JSON array string', () => {
     const value = '[{"version":"https://jsonfeed.org/version/1.1"}]'
     const throwing = () => parse(value)
 
-    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
+    expect(throwing).toThrowError(locales.errors.unrecognizedFeedFormat)
   })
 
   it('should parse valid RSS feed', () => {
@@ -302,49 +302,49 @@ describe('parse', () => {
   it('should throw error for invalid input', () => {
     const throwing = () => parse('not a feed')
 
-    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
+    expect(throwing).toThrowError(locales.errors.unrecognizedFeedFormat)
   })
 
   it('should throw error for empty string input', () => {
     const throwing = () => parse('')
 
-    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
+    expect(throwing).toThrowError(locales.errors.unrecognizedFeedFormat)
   })
 
   it('should throw error for whitespace-only string input', () => {
     const throwing = () => parse('   ')
 
-    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
+    expect(throwing).toThrowError(locales.errors.unrecognizedFeedFormat)
   })
 
   it('should handle null input', () => {
     const throwing = () => parse(null)
 
-    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
+    expect(throwing).toThrowError(locales.errors.unrecognizedFeedFormat)
   })
 
   it('should handle undefined input', () => {
     const throwing = () => parse(undefined)
 
-    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
+    expect(throwing).toThrowError(locales.errors.unrecognizedFeedFormat)
   })
 
   it('should handle array input', () => {
     const throwing = () => parse([])
 
-    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
+    expect(throwing).toThrowError(locales.errors.unrecognizedFeedFormat)
   })
 
   it('should handle empty object input', () => {
     const throwing = () => parse({})
 
-    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
+    expect(throwing).toThrowError(locales.errors.unrecognizedFeedFormat)
   })
 
   it('should handle number input', () => {
     const throwing = () => parse(123)
 
-    expect(throwing).toThrowError(locales.unrecognizedFeedFormat)
+    expect(throwing).toThrowError(locales.errors.unrecognizedFeedFormat)
   })
 
   describe('error types', () => {
@@ -352,7 +352,7 @@ describe('parse', () => {
       const throwing = () => parse('not a feed')
 
       expect(throwing).toThrow(DetectError)
-      expect(throwing).toThrow(locales.unrecognizedFeedFormat)
+      expect(throwing).toThrow(locales.errors.unrecognizedFeedFormat)
     })
   })
 

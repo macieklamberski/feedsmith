@@ -127,16 +127,6 @@ export const builderConfig: XmlBuilderOptions = {
   cdataPropName: '#cdata',
 }
 
-export const locales = {
-  unrecognizedFeedFormat: 'Unrecognized feed format',
-  invalidFeedFormat: 'Invalid feed format',
-  invalidOpmlFormat: 'Invalid OPML format',
-  invalidInputOpml: 'Invalid input OPML',
-  invalidInputAtom: 'Invalid input Atom',
-  invalidInputRss: 'Invalid input RSS',
-  invalidInputJson: 'Invalid input JSON',
-}
-
 export const namespaceUris = {
   atom: atomUris,
   dc: dcUris,

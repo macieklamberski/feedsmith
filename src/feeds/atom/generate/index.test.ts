@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
-import { locales } from '../../../common/config.js'
 import { GenerateError } from '../../../common/errors.js'
 import type { DateLike } from '../../../common/types.js'
+import locales from '../../../locales.json' with { type: 'json' }
 import type { AtomFeed } from '../common/types.js'
 import { generate } from './index.js'
 
@@ -315,7 +315,7 @@ describe('generate', () => {
       const throwing = () => generate(value)
 
       expect(throwing).toThrow(GenerateError)
-      expect(throwing).toThrow(locales.invalidInputAtom)
+      expect(throwing).toThrow(locales.errors.invalidInputAtom)
     })
   })
 

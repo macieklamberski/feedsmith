@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
-import { locales, namespaceUris } from '../../../common/config.js'
+import { namespaceUris } from '../../../common/config.js'
 import { DetectError, MalformedError, ParseError } from '../../../common/errors.js'
+import locales from '../../../locales.json' with { type: 'json' }
 import { parse } from './index.js'
 
 describe('parse', () => {
@@ -91,49 +92,49 @@ describe('parse', () => {
   it('should throw error for invalid input', () => {
     const throwing = () => parse('not a feed')
 
-    expect(throwing).toThrowError(locales.invalidFeedFormat)
+    expect(throwing).toThrowError(locales.errors.invalidFeedFormat)
   })
 
   it('should handle null input', () => {
     const throwing = () => parse(null)
 
-    expect(throwing).toThrowError(locales.invalidFeedFormat)
+    expect(throwing).toThrowError(locales.errors.invalidFeedFormat)
   })
 
   it('should handle undefined input', () => {
     const throwing = () => parse(undefined)
 
-    expect(throwing).toThrowError(locales.invalidFeedFormat)
+    expect(throwing).toThrowError(locales.errors.invalidFeedFormat)
   })
 
   it('should handle array input', () => {
     const throwing = () => parse([])
 
-    expect(throwing).toThrowError(locales.invalidFeedFormat)
+    expect(throwing).toThrowError(locales.errors.invalidFeedFormat)
   })
 
   it('should handle empty object input', () => {
     const throwing = () => parse({})
 
-    expect(throwing).toThrowError(locales.invalidFeedFormat)
+    expect(throwing).toThrowError(locales.errors.invalidFeedFormat)
   })
 
   it('should handle empty string input', () => {
     const throwing = () => parse('')
 
-    expect(throwing).toThrowError(locales.invalidFeedFormat)
+    expect(throwing).toThrowError(locales.errors.invalidFeedFormat)
   })
 
   it('should handle whitespace-only string input', () => {
     const throwing = () => parse('   \n  ')
 
-    expect(throwing).toThrowError(locales.invalidFeedFormat)
+    expect(throwing).toThrowError(locales.errors.invalidFeedFormat)
   })
 
   it('should handle number input', () => {
     const throwing = () => parse(123)
 
-    expect(throwing).toThrowError(locales.invalidFeedFormat)
+    expect(throwing).toThrowError(locales.errors.invalidFeedFormat)
   })
 
   describe('error types', () => {
@@ -141,7 +142,7 @@ describe('parse', () => {
       const throwing = () => parse('not a feed')
 
       expect(throwing).toThrowError(DetectError)
-      expect(throwing).toThrowError(locales.invalidFeedFormat)
+      expect(throwing).toThrowError(locales.errors.invalidFeedFormat)
     })
 
     it('should throw MalformedError for malformed XML', () => {
@@ -158,7 +159,7 @@ describe('parse', () => {
       const throwing = () => parse(value)
 
       expect(throwing).toThrowError(MalformedError)
-      expect(throwing).toThrowError(locales.invalidFeedFormat)
+      expect(throwing).toThrowError(locales.errors.invalidFeedFormat)
     })
 
     it('should throw ParseError for valid XML with invalid structure', () => {
@@ -172,7 +173,7 @@ describe('parse', () => {
       const throwing = () => parse(value)
 
       expect(throwing).toThrowError(ParseError)
-      expect(throwing).toThrowError(locales.invalidFeedFormat)
+      expect(throwing).toThrowError(locales.errors.invalidFeedFormat)
     })
   })
 

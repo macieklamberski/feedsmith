@@ -1,9 +1,10 @@
 import { XMLParser } from 'fast-xml-parser'
-import { locales, namespacePrefixes, namespaceUris, parserConfig } from '../../../common/config.js'
+import { namespacePrefixes, namespaceUris, parserConfig } from '../../../common/config.js'
 import { DetectError, MalformedError, ParseError } from '../../../common/errors.js'
 import type { ParseMainOptions, Unreliable } from '../../../common/types.js'
 import { createNamespaceResolver } from '../../../common/utils.js'
 import { detectAtomFeed } from '../../../index.js'
+import locales from '../../../locales.json' with { type: 'json' }
 import type { AtomFeed } from '../common/types.js'
 import { stopNodes } from './config.js'
 import { retrieveFeed } from './utils.js'
@@ -32,7 +33,7 @@ export const parse = <TDate = string>(
   options?: ParseMainOptions<TDate>,
 ): AtomFeed.Feed<TDate> => {
   if (!detectAtomFeed(value)) {
-    throw new DetectError(locales.invalidFeedFormat)
+    throw new DetectError(locales.errors.invalidFeedFormat)
   }
 
   let normalized: Unreliable
@@ -41,13 +42,13 @@ export const parse = <TDate = string>(
     namespaceOptions = createNamespaceOptions(value)
     normalized = parser.parse(value)
   } catch (error) {
-    throw new MalformedError(locales.invalidFeedFormat, { cause: error })
+    throw new MalformedError(locales.errors.invalidFeedFormat, { cause: error })
   }
 
   const parsed = retrieveFeed(normalized, options)
 
   if (!parsed) {
-    throw new ParseError(locales.invalidFeedFormat)
+    throw new ParseError(locales.errors.invalidFeedFormat)
   }
 
   return parsed as AtomFeed.Feed<TDate>

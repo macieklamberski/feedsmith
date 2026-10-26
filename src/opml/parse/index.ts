@@ -1,6 +1,6 @@
-import { locales } from '../../common/config.js'
 import { MalformedError, ParseError } from '../../common/errors.js'
 import type { Unreliable } from '../../common/types.js'
+import locales from '../../locales.json' with { type: 'json' }
 import type { Opml, ParseMainOptions } from '../common/types.js'
 import { parser } from './config.js'
 import { parseDocument } from './utils.js'
@@ -17,13 +17,13 @@ export const parse = <
   try {
     object = parser.parse(value)
   } catch (error) {
-    throw new MalformedError(locales.invalidOpmlFormat, { cause: error })
+    throw new MalformedError(locales.errors.invalidOpmlFormat, { cause: error })
   }
 
   const parsed = parseDocument(object, options)
 
   if (!parsed) {
-    throw new ParseError(locales.invalidOpmlFormat)
+    throw new ParseError(locales.errors.invalidOpmlFormat)
   }
 
   return parsed as Opml.Document<TDate, TExtra>
