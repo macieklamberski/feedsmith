@@ -156,6 +156,19 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should wrap text with special characters in CDATA', () => {
+    const value: GooglePlayNs.Feed = {
+      author: 'Smith & Jones',
+      owner: 'Smith & Jones <podcast@example.com>',
+    }
+    const expected = {
+      'googleplay:author': { '#cdata': 'Smith & Jones' },
+      'googleplay:owner': { '#cdata': 'Smith & Jones <podcast@example.com>' },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should ignore empty categories', () => {
     const value = {
       categories: ['Technology', '', '   ', 'Education'],
