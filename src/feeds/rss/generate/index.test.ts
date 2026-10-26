@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
-import { locales } from '../../../common/config.js'
 import { GenerateError } from '../../../common/errors.js'
 import type { DateLike } from '../../../common/types.js'
+import locales from '../../../locales.json' with { type: 'json' }
 import type { RssFeed } from '../common/types.js'
 import { parse } from '../parse/index.js'
 import { generate } from './index.js'
@@ -1820,7 +1820,7 @@ describe('generate', () => {
       const throwing = () => generate(value)
 
       expect(throwing).toThrowError(GenerateError)
-      expect(throwing).toThrowError(locales.invalidInputRss)
+      expect(throwing).toThrowError(locales.errors.invalidInputRss)
     })
   })
 })

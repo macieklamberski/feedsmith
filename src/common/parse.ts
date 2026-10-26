@@ -6,7 +6,7 @@ import type { RdfFeed } from '../feeds/rdf/common/types.js'
 import { parse as parseRdfFeed } from '../feeds/rdf/parse/index.js'
 import type { RssFeed } from '../feeds/rss/common/types.js'
 import { parse as parseRssFeed } from '../feeds/rss/parse/index.js'
-import { locales } from './config.js'
+import locales from '../locales.json' with { type: 'json' }
 import { detect } from './detect.js'
 import { DetectError } from './errors.js'
 import type { ParseMainOptions } from './types.js'
@@ -42,5 +42,5 @@ export const parse = <TDate = string>(
     return { format, feed: parseJsonFeed(input, options) }
   }
 
-  throw new DetectError(locales.unrecognizedFeedFormat)
+  throw new DetectError(locales.errors.unrecognizedFeedFormat)
 }

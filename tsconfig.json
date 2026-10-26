@@ -8,7 +8,8 @@
     "strict": true,
     "skipLibCheck": true,
     "isolatedModules": true,
-    "types": ["bun"]
+    "types": ["bun"],
+    "resolveJsonModule": true
   },
   "include": ["src"],
   "exclude": ["node_modules"]

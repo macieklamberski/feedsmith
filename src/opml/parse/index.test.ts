@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import { locales } from '../../common/config.js'
 import { MalformedError, ParseError } from '../../common/errors.js'
+import locales from '../../locales.json' with { type: 'json' }
 import { parse } from './index.js'
 
 describe('parse', () => {
@@ -105,7 +105,7 @@ describe('parse', () => {
       const throwing = () => parse('')
 
       expect(throwing).toThrow(ParseError)
-      expect(throwing).toThrow(locales.invalidOpmlFormat)
+      expect(throwing).toThrow(locales.errors.invalidOpmlFormat)
     })
 
     it('should throw MalformedError for invalid XML', () => {
@@ -120,7 +120,7 @@ describe('parse', () => {
       const throwing = () => parse(value)
 
       expect(throwing).toThrow(MalformedError)
-      expect(throwing).toThrow(locales.invalidOpmlFormat)
+      expect(throwing).toThrow(locales.errors.invalidOpmlFormat)
     })
 
     it('should throw ParseError for valid XML with invalid structure', () => {
@@ -128,7 +128,7 @@ describe('parse', () => {
       const throwing = () => parse(value)
 
       expect(throwing).toThrow(ParseError)
-      expect(throwing).toThrow(locales.invalidOpmlFormat)
+      expect(throwing).toThrow(locales.errors.invalidOpmlFormat)
     })
   })
 

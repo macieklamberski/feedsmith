@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import { locales } from '../../common/config.js'
 import { GenerateError } from '../../common/errors.js'
+import locales from '../../locales.json' with { type: 'json' }
 import { generate } from './index.js'
 
 describe('generate', () => {
@@ -228,7 +228,7 @@ describe('generate', () => {
       const throwing = () => generate(value)
 
       expect(throwing).toThrow(GenerateError)
-      expect(throwing).toThrow(locales.invalidInputOpml)
+      expect(throwing).toThrow(locales.errors.invalidInputOpml)
     })
 
     it('should throw GenerateError for body with empty outlines', () => {
@@ -240,7 +240,7 @@ describe('generate', () => {
       const throwing = () => generate(value)
 
       expect(throwing).toThrow(GenerateError)
-      expect(throwing).toThrow(locales.invalidInputOpml)
+      expect(throwing).toThrow(locales.errors.invalidInputOpml)
     })
   })
 
