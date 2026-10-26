@@ -15,10 +15,10 @@ describe('parse', () => {
   for (const [key, label] of Object.entries(versions)) {
     it(`should correctly parse Atom ${label} feed`, async () => {
       const reference = `${import.meta.dir}/../references/atom-${key}`
-      const input = await Bun.file(`${reference}.xml`).text()
+      const value = await Bun.file(`${reference}.xml`).text()
       const expected = await Bun.file(`${reference}.json`).json()
 
-      expect(parse(input)).toEqual(expected)
+      expect(parse(value)).toEqual(expected)
     })
   }
 
@@ -2677,6 +2677,7 @@ describe('parse', () => {
 
     describe('malformed XML resilience', () => {
       it('should handle BOM at start of feed (RW-E10)', () => {
+        // biome-ignore lint/plugin/useBlockFixture: The BOM must come before the XML declaration.
         const value = `\uFEFF<?xml version="1.0" encoding="UTF-8"?>
           <feed xmlns="http://www.w3.org/2005/Atom">
             <title>BOM Feed</title>

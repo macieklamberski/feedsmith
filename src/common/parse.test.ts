@@ -537,6 +537,7 @@ describe('parse', () => {
     })
 
     it('should parse RSS feed with a BOM before the XML declaration', () => {
+      // biome-ignore lint/plugin/useBlockFixture: The BOM must come before the XML declaration.
       const value = `\ufeff<?xml version="1.0"?>
         <rss version="2.0">
           <channel>

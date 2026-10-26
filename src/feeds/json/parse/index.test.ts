@@ -768,7 +768,7 @@ describe('parse', () => {
         const value = {
           version: 'https://jsonfeed.org/version/1.1',
           title: 'Blog',
-          custom_extension: { foo: 'bar' },
+          custom_extension: { theme: 'dark' },
           items: [
             {
               id: '1',

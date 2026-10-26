@@ -14,10 +14,10 @@ describe('generate', () => {
   for (const [key, label] of Object.entries(versions)) {
     it(`should correctly generate RSS ${label}`, async () => {
       const reference = `${import.meta.dir}/../references/rss-${key}`
-      const input = await Bun.file(`${reference}.json`).json()
+      const value = await Bun.file(`${reference}.json`).json()
       const expected = await Bun.file(`${reference}.xml`).text()
 
-      expect(generate(input)).toEqual(expected)
+      expect(generate(value)).toEqual(expected)
     })
   }
 

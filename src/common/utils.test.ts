@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import { type XMLBuilder, XMLParser } from 'fast-xml-parser'
+import type { Nullish } from 'trousse'
 import { namespacePrefixes, namespaceUris } from './config.js'
 import type { ParseUtilExact } from './types.js'
 import {
@@ -402,8 +403,8 @@ describe('retrieveRdfResourceOrText', () => {
   describe('with custom parse function', () => {
     it('should apply custom parse logic', () => {
       const customParse = (value: unknown): string | undefined => {
-        const str = parseString(value)
-        return str ? str.toUpperCase() : undefined
+        const parsed = parseString(value)
+        return parsed ? parsed.toUpperCase() : undefined
       }
 
       const value = {
@@ -489,7 +490,7 @@ describe('trimArray', () => {
     it('should filter out values that become null or undefined after parsing', () => {
       const value = [1, 2, 3, 4]
       const expected = [2, 4]
-      const parseEvenNumbers = (val: number) => (val % 2 === 0 ? val : null)
+      const parseEvenNumbers = (item: number) => (item % 2 === 0 ? item : null)
 
       expect(trimArray(value, parseEvenNumbers)).toEqual(expected)
     })
@@ -497,7 +498,7 @@ describe('trimArray', () => {
     it('should handle type transformations', () => {
       const value = [1, 2, 3]
       const expected = [{ value: 1 }, { value: 2 }, { value: 3 }]
-      const parseToObject = (val: number) => ({ value: val })
+      const parseToObject = (item: number) => ({ value: item })
 
       expect(trimArray(value, parseToObject)).toEqual(expected)
     })
@@ -505,8 +506,8 @@ describe('trimArray', () => {
     it('should combine parsing and filtering of nullish values', () => {
       const value = [1, null, 2, undefined, 3]
       const expected = [2, 4, 6]
-      const double = (val: number | null | undefined) => {
-        return val !== null && val !== undefined ? val * 2 : val
+      const double = (item: Nullish<number>) => {
+        return item !== null && item !== undefined ? item * 2 : item
       }
 
       expect(trimArray(value, double)).toEqual(expected)
@@ -522,20 +523,20 @@ describe('trimArray', () => {
     it('should handle complex parsing logic', () => {
       const value = ['a', 3, 'b', 6, null, true]
       const expected = ['A', 'B', 12, true]
-      const parseWithConditions = (val: unknown) => {
-        if (typeof val === 'string') {
-          return val.toUpperCase()
+      const parseWithConditions = (item: unknown) => {
+        if (typeof item === 'string') {
+          return item.toUpperCase()
         }
 
-        if (typeof val === 'number' && val > 5) {
-          return val * 2
+        if (typeof item === 'number' && item > 5) {
+          return item * 2
         }
 
-        if (typeof val === 'number') {
-          return null
+        if (typeof item === 'number') {
+          return
         }
 
-        return val
+        return item
       }
 
       expect(trimArray(value, parseWithConditions)).toEqual(expected)
