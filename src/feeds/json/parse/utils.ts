@@ -11,7 +11,11 @@ import {
 } from '../../../common/utils.js'
 import type { JsonFeed, ParseUtilPartial } from '../common/types.js'
 
-export const createCaseInsensitiveGetter = (value: Record<string, unknown>) => {
+type CaseInsensitiveGetter = (requestedKey: string) => unknown
+
+export const createCaseInsensitiveGetter = (
+  value: Record<string, unknown>,
+): CaseInsensitiveGetter => {
   return (requestedKey: string) => {
     if (requestedKey in value) {
       return value[requestedKey]

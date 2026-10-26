@@ -59,7 +59,9 @@ import {
 } from '../../../namespaces/yt/generate/utils.js'
 import type { AtomFeed, GenerateUtil } from '../common/types.js'
 
-export const createNamespaceSetter = (prefix: string | undefined) => {
+type NamespaceSetter = (key: string) => string
+
+export const createNamespaceSetter = (prefix: string | undefined): NamespaceSetter => {
   return (key: string) => (prefix ? `${prefix}${key}` : key)
 }
 

@@ -59,10 +59,12 @@ import {
 } from '../../../namespaces/yt/parse/utils.js'
 import type { AtomFeed, ParseUtilPartial } from '../common/types.js'
 
+type NamespaceGetter = (key: string) => Unreliable
+
 export const createNamespaceGetter = (
   value: Record<string, Unreliable>,
   prefix: string | undefined,
-) => {
+): NamespaceGetter => {
   if (!prefix) {
     return (key: string) => value[key]
   }

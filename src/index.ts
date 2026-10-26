@@ -1,3 +1,8 @@
+import type { AtomFeed } from './feeds/atom/common/types.js'
+import type { JsonFeed } from './feeds/json/common/types.js'
+import type { RdfFeed } from './feeds/rdf/common/types.js'
+import type { RssFeed } from './feeds/rss/common/types.js'
+
 export { detect as detectFeed } from './common/detect.js'
 export { DetectError, GenerateError, MalformedError, ParseError } from './common/errors.js'
 export type { AnyFeed } from './common/parse.js'
@@ -58,11 +63,6 @@ export { parse as parseOpml } from './opml/parse/index.js'
 
 // Deprecated aliases: declared here so JSDoc survives tsdown's .d.ts bundling.
 // Remove this block in 4.x.
-
-import type { AtomFeed } from './feeds/atom/common/types.js'
-import type { JsonFeed } from './feeds/json/common/types.js'
-import type { RdfFeed } from './feeds/rdf/common/types.js'
-import type { RssFeed } from './feeds/rss/common/types.js'
 
 /** @deprecated Use `RssFeed` instead. Will be removed in the next major version. */
 export namespace Rss {

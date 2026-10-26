@@ -20,11 +20,20 @@ import type {
   XmlStylesheet,
 } from './types.js'
 
+type NamespaceHooks = {
+  transformTagName: (name: string) => string
+  transformAttributeName: (name: string) => string
+  attributeValueProcessor: (attrName: string, value: unknown) => unknown
+  updateTag: (tagName: string) => string
+}
+
+type NamespaceHooksFactory = (document?: string) => NamespaceHooks
+
 export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | number => {
   return isNumber(value) || isNonEmptyString(value)
 }
 
-export const isXmlAttributeKey = (key: string) => {
+export const isXmlAttributeKey = (key: string): boolean => {
   // Matches the `@` (charCode 64) from attributeNamePrefix in config.ts.
   return key.charCodeAt(0) === 64
 }
@@ -98,7 +107,7 @@ const cdataEndTag = ']]>'
 const commentStartTag = '<!--'
 const commentEndTag = '-->'
 
-export const hasEntities = (text: string) => {
+export const hasEntities = (text: string): boolean => {
   const ampIndex = text.indexOf('&')
   return ampIndex !== -1 && text.indexOf(';', ampIndex) !== -1
 }
@@ -608,7 +617,7 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
   namespaceUris: T
   namespacePrefixes: Record<string, string>
   primaryNamespaces?: Array<keyof T>
-}) => {
+}): NamespaceHooksFactory => {
   const { namespaceUris, namespacePrefixes, primaryNamespaces } = options
 
   const primaryUris = new Set(
