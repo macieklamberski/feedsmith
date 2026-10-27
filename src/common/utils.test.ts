@@ -3284,13 +3284,14 @@ describe('createNamespaceResolver', () => {
       primaryNamespaces: primary,
     })
 
-    return (value: string) =>
-      new XMLParser({
+    return (value: string) => {
+      return new XMLParser({
         ignoreAttributes: false,
         attributeNamePrefix: '@',
         stopNodes,
         ...createNamespaceOptions(value),
       }).parse(value)
+    }
   }
 
   it('should canonicalize an alternate prefix declared on the root', () => {
