@@ -433,8 +433,14 @@ describe('parseText', () => {
   })
 
   it('should parse object with text and type', () => {
-    const value = { '#text': 'HTML content', '@type': 'html' }
-    const expected = { value: 'HTML content', type: 'html' }
+    const value = {
+      '#text': 'HTML content',
+      '@type': 'html',
+    }
+    const expected = {
+      value: 'HTML content',
+      type: 'html',
+    }
 
     expect(parseText(value)).toEqual(expected)
   })
@@ -444,13 +450,19 @@ describe('parseText', () => {
       '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>Rich content</p></div>',
       '@type': 'xhtml',
     }
-    const expected = { value: '<p>Rich content</p>', type: 'xhtml' }
+    const expected = {
+      value: '<p>Rich content</p>',
+      type: 'xhtml',
+    }
 
     expect(parseText(value)).toEqual(expected)
   })
 
   it('should return undefined for xhtml type with an empty div wrapper', () => {
-    const value = { '#text': '<xhtml:div/>', '@type': 'xhtml' }
+    const value = {
+      '#text': '<xhtml:div/>',
+      '@type': 'xhtml',
+    }
 
     expect(parseText(value)).toBeUndefined()
   })
@@ -667,7 +679,10 @@ describe('parseContent', () => {
   // Unlike parseText, which drops the whole construct when nothing is left, parseContent
   // keeps the remaining attributes, so an empty wrapper yields a content without a value.
   it('should keep the type but drop the value for a self-closing div wrapper', () => {
-    const value = { '#text': '<xhtml:div/>', '@type': 'xhtml' }
+    const value = {
+      '#text': '<xhtml:div/>',
+      '@type': 'xhtml',
+    }
     const expected = { type: 'xhtml' }
 
     expect(parseContent(value)).toEqual(expected)

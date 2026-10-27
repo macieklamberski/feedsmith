@@ -150,14 +150,23 @@ describe('generateText', () => {
   })
 
   it('should emit a value that is not well-formed XML as type html', () => {
-    const value = { value: '<p>Hello<br>world</p>', type: 'xhtml' }
-    const expected = { '#cdata': '<p>Hello<br>world</p>', '@type': 'html' }
+    const value = {
+      value: '<p>Hello<br>world</p>',
+      type: 'xhtml',
+    }
+    const expected = {
+      '#cdata': '<p>Hello<br>world</p>',
+      '@type': 'html',
+    }
 
     expect(generateText(value)).toEqual(expected)
   })
 
   it('should route a padded type to the same path as the emitted attribute', () => {
-    const value = { value: '<p>ok</p>', type: ' xhtml' }
+    const value = {
+      value: '<p>ok</p>',
+      type: ' xhtml',
+    }
     const expected = {
       '#text': '<div xmlns="http://www.w3.org/1999/xhtml"><p>ok</p></div>\n',
       '@type': 'xhtml',
@@ -167,7 +176,11 @@ describe('generateText', () => {
   })
 
   it('should leave attributes of a non-xhtml construct to the builder', () => {
-    const value = { value: 'plain', type: 'text', xml: { base: 'https://example.com/?a=1&b=2' } }
+    const value = {
+      value: 'plain',
+      type: 'text',
+      xml: { base: 'https://example.com/?a=1&b=2' },
+    }
     const expected = {
       '#text': 'plain',
       '@type': 'text',
@@ -185,7 +198,10 @@ describe('generateText', () => {
   })
 
   it('should generate text with value and type', () => {
-    const value = { value: 'HTML content', type: 'html' }
+    const value = {
+      value: 'HTML content',
+      type: 'html',
+    }
     const expected = {
       '#text': 'HTML content',
       '@type': 'html',
@@ -285,8 +301,14 @@ describe('generateContent', () => {
   })
 
   it('should emit a value that is not well-formed XML as type html', () => {
-    const value = { value: '<p>Hello<br>world</p>', type: 'xhtml' }
-    const expected = { '#cdata': '<p>Hello<br>world</p>', '@type': 'html' }
+    const value = {
+      value: '<p>Hello<br>world</p>',
+      type: 'xhtml',
+    }
+    const expected = {
+      '#cdata': '<p>Hello<br>world</p>',
+      '@type': 'html',
+    }
 
     expect(generateContent(value)).toEqual(expected)
   })

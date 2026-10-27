@@ -118,21 +118,30 @@ describe('generateLatLngPairs', () => {
 
 describe('generatePoint', () => {
   it('should generate valid point string', () => {
-    const value = { lat: 45.256, lng: -71.92 }
+    const value = {
+      lat: 45.256,
+      lng: -71.92,
+    }
     const expected = '45.256 -71.92'
 
     expect(generatePoint(value)).toBe(expected)
   })
 
   it('should handle integer coordinates', () => {
-    const value = { lat: 45, lng: -72 }
+    const value = {
+      lat: 45,
+      lng: -72,
+    }
     const expected = '45 -72'
 
     expect(generatePoint(value)).toBe(expected)
   })
 
   it('should handle zero coordinates', () => {
-    const value = { lat: 0, lng: 0 }
+    const value = {
+      lat: 0,
+      lng: 0,
+    }
     const expected = '0 0'
 
     expect(generatePoint(value)).toBe(expected)
@@ -151,7 +160,10 @@ describe('generatePoint', () => {
   })
 
   it('should return undefined for string coordinates', () => {
-    const value = { lat: '45.256', lng: '-71.92' }
+    const value = {
+      lat: '45.256',
+      lng: '-71.92',
+    }
 
     // @ts-expect-error: This is for testing purposes.
     expect(generatePoint(value)).toBeUndefined()

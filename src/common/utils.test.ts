@@ -128,8 +128,14 @@ describe('retrieveText', () => {
   })
 
   it('should return original value when #text property is null or undefined', () => {
-    const valueWithNullText = { '#text': null, other: 'property' }
-    const valueWithUndefinedText = { '#text': undefined, other: 'property' }
+    const valueWithNullText = {
+      '#text': null,
+      other: 'property',
+    }
+    const valueWithUndefinedText = {
+      '#text': undefined,
+      other: 'property',
+    }
 
     expect(retrieveText(valueWithNullText)).toEqual(valueWithNullText)
     expect(retrieveText(valueWithUndefinedText)).toEqual(valueWithUndefinedText)
@@ -168,7 +174,11 @@ describe('retrieveText', () => {
   })
 
   it('should handle object with #text property among others', () => {
-    const value = { '#text': 'Main text', title: 'Title', count: 42 }
+    const value = {
+      '#text': 'Main text',
+      title: 'Title',
+      count: 42,
+    }
 
     expect(retrieveText(value)).toBe('Main text')
   })
@@ -1561,7 +1571,11 @@ describe('parseSingular', () => {
   })
 
   it('should handle array-like objects correctly', () => {
-    const arrayLike = { 0: 'first', 1: 'second', length: 2 }
+    const arrayLike = {
+      0: 'first',
+      1: 'second',
+      length: 2,
+    }
 
     expect(parseSingular(arrayLike)).toEqual(arrayLike)
   })
@@ -1652,7 +1666,11 @@ describe('parseArray', () => {
   })
 
   it('should handle objects with sequential numeric keys starting from 0', () => {
-    const value1 = { 0: 'a', 1: 'b', 2: 'c' }
+    const value1 = {
+      0: 'a',
+      1: 'b',
+      2: 'c',
+    }
     const value2 = { 0: 'only one item' }
 
     expect(parseArray(value1)).toEqual(['a', 'b', 'c'])
@@ -1660,7 +1678,11 @@ describe('parseArray', () => {
   })
 
   it('should handle object with length property', () => {
-    const value1 = { 0: 'a', 1: 'b', length: 2 }
+    const value1 = {
+      0: 'a',
+      1: 'b',
+      length: 2,
+    }
     const value2 = { length: 3 }
 
     expect(parseArray(value1)).toEqual(['a', 'b'])
@@ -1668,10 +1690,23 @@ describe('parseArray', () => {
   })
 
   it('should return undefined for non-sequential or non-zero-indexed objects', () => {
-    const value1 = { 1: 'a', 2: 'b' }
-    const value2 = { 0: 'a', 2: 'b' }
-    const value3 = { a: 1, b: 2 }
-    const value4 = { 0: 'a', 1: 'b', 5: 'c' }
+    const value1 = {
+      1: 'a',
+      2: 'b',
+    }
+    const value2 = {
+      0: 'a',
+      2: 'b',
+    }
+    const value3 = {
+      a: 1,
+      b: 2,
+    }
+    const value4 = {
+      0: 'a',
+      1: 'b',
+      5: 'c',
+    }
 
     expect(parseArray(value1)).toBeUndefined()
     expect(parseArray(value2)).toBeUndefined()
@@ -3603,14 +3638,20 @@ describe('createNamespaceResolver', () => {
 
 describe('parseJsonObject', () => {
   it('should return object unchanged when input is object', () => {
-    const value = { title: 'Test', count: 42 }
+    const value = {
+      title: 'Test',
+      count: 42,
+    }
 
     expect(parseJsonObject(value)).toEqual(value)
   })
 
   it('should parse valid JSON string', () => {
     const value = '{"title":"Test","count":42}'
-    const expected = { title: 'Test', count: 42 }
+    const expected = {
+      title: 'Test',
+      count: 42,
+    }
 
     expect(parseJsonObject(value)).toEqual(expected)
   })
