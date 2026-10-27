@@ -49,10 +49,6 @@ export const parseLatLngPairs = (
     }
   }
 
-  if (points.length === 0) {
-    return
-  }
-
   return points
 }
 

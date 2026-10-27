@@ -414,6 +414,10 @@ describe('parseTypedText', () => {
 })
 
 describe('parseText', () => {
+  it('should return undefined for a string holding only a comment', () => {
+    expect(parseText('<!-- note -->')).toBeUndefined()
+  })
+
   it('should parse simple string value', () => {
     const value = 'Simple text'
     const expected = { value: 'Simple text' }
@@ -627,6 +631,10 @@ describe('parseText', () => {
 })
 
 describe('parseContent', () => {
+  it('should return undefined for a string holding only a comment', () => {
+    expect(parseContent('<!-- note -->')).toBeUndefined()
+  })
+
   it('should parse simple string value', () => {
     const value = 'Simple content'
     const expected = { value: 'Simple content' }
