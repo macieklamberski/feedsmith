@@ -28,7 +28,11 @@ export const parsePartner: ParseUtilPartial<SpotifyNs.Partner> = (value) => {
 
   const id = parseString(value['@id'])
 
-  return id ? { id } : undefined
+  if (!id) {
+    return
+  }
+
+  return { id }
 }
 
 export const parseSandbox: ParseUtilPartial<SpotifyNs.Sandbox> = (value) => {
@@ -38,7 +42,11 @@ export const parseSandbox: ParseUtilPartial<SpotifyNs.Sandbox> = (value) => {
 
   const enabled = parseBoolean(value['@enabled'])
 
-  return enabled !== undefined ? { enabled } : undefined
+  if (enabled === undefined) {
+    return
+  }
+
+  return { enabled }
 }
 
 export const parseFeedAccess: ParseUtilPartial<SpotifyNs.FeedAccess> = (value) => {
@@ -61,7 +69,11 @@ export const parseEntitlement: ParseUtilPartial<SpotifyNs.Entitlement> = (value)
 
   const name = parseString(value['@name'])
 
-  return name ? { name } : undefined
+  if (!name) {
+    return
+  }
+
+  return { name }
 }
 
 export const parseItemAccess: ParseUtilPartial<SpotifyNs.ItemAccess> = (value) => {

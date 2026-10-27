@@ -286,7 +286,11 @@ export const parseText: ParseUtilPartial<AtomFeed.Text> = (value) => {
   if (isNonEmptyString(value)) {
     const parsed = parseString(value)
 
-    return parsed ? { value: parsed } : undefined
+    if (!parsed) {
+      return
+    }
+
+    return { value: parsed }
   }
 
   if (!isPlainObject(value)) {
@@ -313,7 +317,11 @@ export const parseContent: ParseUtilPartial<AtomFeed.Content> = (value) => {
   if (isNonEmptyString(value)) {
     const parsed = parseString(value)
 
-    return parsed ? { value: parsed } : undefined
+    if (!parsed) {
+      return
+    }
+
+    return { value: parsed }
   }
 
   if (!isPlainObject(value)) {
