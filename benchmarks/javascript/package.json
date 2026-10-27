@@ -19,7 +19,6 @@
   },
   "devDependencies": {
     "@types/bun": "^1.4.2",
-    "@types/feedme": "^2.0.4",
-    "typescript": "^7.0.2"
+    "@types/feedme": "^2.0.4"
   }
 }
