@@ -49,7 +49,7 @@ export const parseLatLngPairs = (
     }
   }
 
-  return points.length > 0 ? points : undefined
+  return points
 }
 
 export const parsePoint: ParseUtilExact<GeoRssNs.Point> = (value) => {

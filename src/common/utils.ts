@@ -99,7 +99,11 @@ export const trimArray = <T, R = T>(
     }
   }
 
-  return result.length > 0 ? result : undefined
+  if (result.length === 0) {
+    return
+  }
+
+  return result
 }
 
 const cdataStartTag = '<![CDATA['

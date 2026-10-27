@@ -404,7 +404,11 @@ describe('retrieveRdfResourceOrText', () => {
     it('should apply custom parse logic', () => {
       const customParse = (value: unknown): string | undefined => {
         const parsed = parseString(value)
-        return parsed ? parsed.toUpperCase() : undefined
+        if (!parsed) {
+          return
+        }
+
+        return parsed.toUpperCase()
       }
 
       const value = {
@@ -1618,7 +1622,11 @@ describe('parseSingularOf', () => {
 
   it('should work with custom parse functions', () => {
     const parseUpperCase: ParseUtilExact<string> = (value) => {
-      return typeof value === 'string' ? value.toUpperCase() : undefined
+      if (typeof value !== 'string') {
+        return
+      }
+
+      return value.toUpperCase()
     }
 
     expect(parseSingularOf('hello', parseUpperCase)).toBe('HELLO')
@@ -1713,7 +1721,11 @@ describe('parseArrayOf', () => {
       return value.toString()
     }
 
-    return typeof value === 'string' ? value : undefined
+    if (typeof value !== 'string') {
+      return
+    }
+
+    return value
   }
 
   it('should handle string', () => {
@@ -3214,7 +3226,11 @@ describe('generateRdfResource', () => {
 
   it('should work with custom generate function', () => {
     const customGenerate = (value: string | undefined): string | undefined => {
-      return value ? value.toUpperCase() : undefined
+      if (!value) {
+        return
+      }
+
+      return value.toUpperCase()
     }
     const value = 'https://example.com'
     const expected = {
