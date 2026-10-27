@@ -61,7 +61,7 @@
     "fast-xml-parser": "~5.11.2"
   },
   "devDependencies": {
-    "@types/bun": "^1.4.3",
+    "@types/bun": "^1.4.4",
     "kvalita": "^1.30.0",
     "ogier": "^1.5.2",
     "trousse": "^2.10.0",
