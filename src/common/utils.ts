@@ -715,7 +715,8 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
 
       // indexOf jumps from one `xmlns:` occurrence to the next, and the sticky regex then reads
       // just the `prefix="uri"` pair at that spot, so no regex ever scans the document itself.
-      const declarationTailRegex = /([\w.-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/y
+      const declarationTailRegex =
+        /(?<prefix>[\w.-]+)\s*=\s*(?:"(?<doubleQuotedUri>[^"]*)"|'(?<singleQuotedUri>[^']*)')/y
 
       let index = head.indexOf('xmlns:', findRootIndex(head))
 
@@ -723,10 +724,10 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
         declarationTailRegex.lastIndex = index + 6
         const match = declarationTailRegex.exec(head)
 
-        if (match) {
-          const prefix = match[1].toLowerCase()
+        if (match?.groups) {
+          const prefix = match.groups.prefix.toLowerCase()
 
-          recordPrefix(prefix, match[2] ?? match[3])
+          recordPrefix(prefix, match.groups.doubleQuotedUri ?? match.groups.singleQuotedUri)
           seededPrefixes.add(prefix)
         }
 
