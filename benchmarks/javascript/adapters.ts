@@ -1,7 +1,8 @@
 import { Readable } from 'node:stream'
+import type { MaybePromise } from 'trousse'
 
 export type Format = 'rss' | 'atom' | 'rdf' | 'json' | 'opml'
-export type Adapter = (content: string, format: Format) => unknown | Promise<unknown>
+export type Adapter = (content: string, format: Format) => MaybePromise<unknown>
 export type AdapterFactory = () => Promise<Adapter>
 
 // Each factory dynamically imports only the library it benchmarks, so a subprocess loads

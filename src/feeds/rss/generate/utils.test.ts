@@ -1222,7 +1222,7 @@ describe('generateFeed', () => {
           webMaster: 'webmaster@example.com (Webmaster Name)',
           pubDate: 'Wed, 15 Mar 2023 12:00:00 GMT',
           lastBuildDate: 'Wed, 15 Mar 2023 12:00:00 GMT',
-          category: [{ '@domain': undefined, '#text': 'Technology' }],
+          category: [{ '#text': 'Technology' }],
           generator: 'Example Generator',
           docs: 'https://example.com/docs',
           cloud: {

@@ -83,7 +83,7 @@ const whitespaceRegex = /\s+/
 const commonSeparatorsRegex = /^[\s,\-|/:;]+|[\s,\-|/:;]+$/g
 const mailtoQueryRegex = /\?.*$/
 
-export const stripMailto = (value: string) => {
+export const stripMailto = (value: string): string => {
   const stripped = value.replace(mailtoRegex, '')
 
   if (stripped !== value) {
@@ -121,7 +121,7 @@ const parseSimplePerson = (raw: string): RssFeed.Person | undefined => {
 
 const parseUnbracketedPerson = (raw: string): RssFeed.Person | undefined => {
   // If no email/URL markers anywhere, the entire string is a name.
-  if (raw.indexOf('@') === -1 && raw.indexOf('://') === -1 && raw.indexOf('www.') === -1) {
+  if (!raw.includes('@') && !raw.includes('://') && !raw.includes('www.')) {
     return { name: raw }
   }
 

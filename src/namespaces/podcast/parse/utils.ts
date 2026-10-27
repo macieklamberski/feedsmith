@@ -258,7 +258,7 @@ export const parseImages: ParseUtilPartial<Array<PodcastNs.Image>> = (value) => 
     return
   }
 
-  const images = []
+  const images: Array<PodcastNs.Image> = []
   const segments = srcset.split(',')
 
   for (const segment of segments) {
