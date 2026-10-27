@@ -180,7 +180,7 @@ const decodeWithCdata = (text: string): string => {
 
 export const parseString: ParseUtilExact<string> = (value) => {
   if (typeof value === 'string') {
-    if (value === '') {
+    if (!value) {
       return
     }
 
@@ -200,7 +200,7 @@ export const parseString: ParseUtilExact<string> = (value) => {
 // constructs, whose entities stand for literal characters.
 export const parseVerbatimString: ParseUtilExact<string> = (value) => {
   if (typeof value === 'string') {
-    if (value === '') {
+    if (!value) {
       return
     }
 
@@ -802,7 +802,7 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
 
       const local = lowered.slice(colonIndex + 1)
 
-      return canonical === '' ? local : `${canonical}:${local}`
+      return canonical ? `${canonical}:${local}` : local
     }
 
     const transformTagName = (name: string) => {
@@ -846,7 +846,7 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
 
       const local = tagName.slice(colonIndex + 1)
 
-      return canonical === '' ? local : `${canonical}:${local}`
+      return canonical ? `${canonical}:${local}` : local
     }
 
     return { transformTagName, transformAttributeName, attributeValueProcessor, updateTag }

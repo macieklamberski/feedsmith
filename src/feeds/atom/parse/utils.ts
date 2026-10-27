@@ -135,7 +135,7 @@ export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
       continue
     }
 
-    if (typeof child['#text'] === 'string' && child['#text'].trim() === '') {
+    if (typeof child['#text'] === 'string' && !child['#text'].trim()) {
       continue
     }
 
@@ -149,7 +149,7 @@ export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
   const inner = divTexts[0]
 
   // A self-closing or empty wrapper is a construct with no content.
-  if (inner === '') {
+  if (!inner) {
     return
   }
 
