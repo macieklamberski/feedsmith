@@ -72,7 +72,10 @@ describe('generate', () => {
     })
 
     it('should accept feed with all required fields in strict mode', () => {
-      const value = { title: 'Test', items: [] }
+      const value = {
+        title: 'Test',
+        items: [],
+      }
       const expected = {
         version: 'https://jsonfeed.org/version/1.1',
         title: 'Test',
@@ -82,7 +85,10 @@ describe('generate', () => {
     })
 
     it('should require item id in strict mode', () => {
-      const value = { title: 'Test', items: [{ content_text: 'Hello' }] }
+      const value = {
+        title: 'Test',
+        items: [{ content_text: 'Hello' }],
+      }
       const expected = {
         version: 'https://jsonfeed.org/version/1.1',
         title: 'Test',
@@ -94,7 +100,10 @@ describe('generate', () => {
     })
 
     it('should accept items with content_html in strict mode', () => {
-      const value = { title: 'Test', items: [{ id: '1', content_html: '<p>Hello</p>' }] }
+      const value = {
+        title: 'Test',
+        items: [{ id: '1', content_html: '<p>Hello</p>' }],
+      }
       const expected = {
         version: 'https://jsonfeed.org/version/1.1',
         title: 'Test',
@@ -105,7 +114,10 @@ describe('generate', () => {
     })
 
     it('should accept items with content_text in strict mode', () => {
-      const value = { title: 'Test', items: [{ id: '1', content_text: 'Hello' }] }
+      const value = {
+        title: 'Test',
+        items: [{ id: '1', content_text: 'Hello' }],
+      }
       const expected = {
         version: 'https://jsonfeed.org/version/1.1',
         title: 'Test',

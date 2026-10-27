@@ -130,7 +130,11 @@ describe('createCaseInsensitiveGetter', () => {
 })
 
 describe('parseAuthor', () => {
-  const expectedFull = { name: 'John', url: 'link', avatar: '123' }
+  const expectedFull = {
+    name: 'John',
+    url: 'link',
+    avatar: '123',
+  }
 
   it('should handle Author object (with singular value)', () => {
     const value = {

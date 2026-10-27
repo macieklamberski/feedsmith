@@ -1498,7 +1498,11 @@ describe('generate', () => {
     })
 
     it('should accept feed with all required fields in strict mode', () => {
-      const value = { title: 'Test', link: 'https://example.com', description: 'Desc' }
+      const value = {
+        title: 'Test',
+        link: 'https://example.com',
+        description: 'Desc',
+      }
       const expected = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
   <channel>

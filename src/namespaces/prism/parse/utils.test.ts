@@ -1108,8 +1108,14 @@ describe('parseOriginPlatform', () => {
 
 describe('parsePlatformString', () => {
   it('should parse text with platform attribute', () => {
-    const value = { '#text': 'Summer Special', '@platform': 'web' }
-    const expected = { value: 'Summer Special', platform: 'web' }
+    const value = {
+      '#text': 'Summer Special',
+      '@platform': 'web',
+    }
+    const expected = {
+      value: 'Summer Special',
+      platform: 'web',
+    }
 
     expect(parsePlatformString(value)).toEqual(expected)
   })
@@ -1121,8 +1127,14 @@ describe('parsePlatformString', () => {
   })
 
   it('should parse rdf:resource attribute', () => {
-    const value = { '@rdf:resource': 'https://example.com/teaser', '@platform': 'web' }
-    const expected = { value: 'https://example.com/teaser', platform: 'web' }
+    const value = {
+      '@rdf:resource': 'https://example.com/teaser',
+      '@platform': 'web',
+    }
+    const expected = {
+      value: 'https://example.com/teaser',
+      platform: 'web',
+    }
 
     expect(parsePlatformString(value)).toEqual(expected)
   })
@@ -1142,8 +1154,14 @@ describe('parsePlatformString', () => {
 
 describe('parsePlatformDate', () => {
   it('should parse date with platform attribute', () => {
-    const value = { '#text': '2023-03-15', '@platform': 'web' }
-    const expected = { value: '2023-03-15', platform: 'web' }
+    const value = {
+      '#text': '2023-03-15',
+      '@platform': 'web',
+    }
+    const expected = {
+      value: '2023-03-15',
+      platform: 'web',
+    }
 
     expect(parsePlatformDate(value)).toEqual(expected)
   })
@@ -1155,8 +1173,14 @@ describe('parsePlatformDate', () => {
   })
 
   it('should apply custom parseDateFn', () => {
-    const value = { '#text': '2023-03-15T12:00:00Z', '@platform': 'web' }
-    const expected = { value: new Date('2023-03-15T12:00:00Z'), platform: 'web' }
+    const value = {
+      '#text': '2023-03-15T12:00:00Z',
+      '@platform': 'web',
+    }
+    const expected = {
+      value: new Date('2023-03-15T12:00:00Z'),
+      platform: 'web',
+    }
 
     expect(parsePlatformDate(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
   })
@@ -1172,15 +1196,27 @@ describe('parsePlatformDate', () => {
 
 describe('parseRating', () => {
   it('should parse rating with ratingSystem attribute', () => {
-    const value = { '#text': 'E', '@ratingsystem': 'ESRB' }
-    const expected = { value: 'E', ratingSystem: 'ESRB' }
+    const value = {
+      '#text': 'E',
+      '@ratingsystem': 'ESRB',
+    }
+    const expected = {
+      value: 'E',
+      ratingSystem: 'ESRB',
+    }
 
     expect(parseRating(value)).toEqual(expected)
   })
 
   it('should parse rdf:resource attribute', () => {
-    const value = { '@rdf:resource': 'https://example.com/esrb#E', '@ratingsystem': 'ESRB' }
-    const expected = { value: 'https://example.com/esrb#E', ratingSystem: 'ESRB' }
+    const value = {
+      '@rdf:resource': 'https://example.com/esrb#E',
+      '@ratingsystem': 'ESRB',
+    }
+    const expected = {
+      value: 'https://example.com/esrb#E',
+      ratingSystem: 'ESRB',
+    }
 
     expect(parseRating(value)).toEqual(expected)
   })

@@ -33,8 +33,14 @@ describe('generateOriginPlatform', () => {
 
 describe('generatePlatformString', () => {
   it('should generate text with platform attribute', () => {
-    const value = { value: 'Summer Special', platform: 'web' }
-    const expected = { '#text': 'Summer Special', '@platform': 'web' }
+    const value = {
+      value: 'Summer Special',
+      platform: 'web',
+    }
+    const expected = {
+      '#text': 'Summer Special',
+      '@platform': 'web',
+    }
 
     expect(generatePlatformString(value)).toEqual(expected)
   })
@@ -47,8 +53,14 @@ describe('generatePlatformString', () => {
   })
 
   it('should wrap HTML in CDATA', () => {
-    const value = { value: '<b>Summer</b> Special', platform: 'web' }
-    const expected = { '#cdata': '<b>Summer</b> Special', '@platform': 'web' }
+    const value = {
+      value: '<b>Summer</b> Special',
+      platform: 'web',
+    }
+    const expected = {
+      '#cdata': '<b>Summer</b> Special',
+      '@platform': 'web',
+    }
 
     expect(generatePlatformString(value)).toEqual(expected)
   })
@@ -66,8 +78,14 @@ describe('generatePlatformString', () => {
 
 describe('generatePlatformDate', () => {
   it('should generate date with platform attribute', () => {
-    const value = { value: new Date('2023-03-15T00:00:00Z'), platform: 'web' }
-    const expected = { '#text': '2023-03-15T00:00:00.000Z', '@platform': 'web' }
+    const value = {
+      value: new Date('2023-03-15T00:00:00Z'),
+      platform: 'web',
+    }
+    const expected = {
+      '#text': '2023-03-15T00:00:00.000Z',
+      '@platform': 'web',
+    }
 
     expect(generatePlatformDate(value)).toEqual(expected)
   })
@@ -92,8 +110,14 @@ describe('generatePlatformDate', () => {
 
 describe('generateRating', () => {
   it('should generate rating with ratingSystem attribute', () => {
-    const value = { value: 'E', ratingSystem: 'ESRB' }
-    const expected = { '#text': 'E', '@ratingSystem': 'ESRB' }
+    const value = {
+      value: 'E',
+      ratingSystem: 'ESRB',
+    }
+    const expected = {
+      '#text': 'E',
+      '@ratingSystem': 'ESRB',
+    }
 
     expect(generateRating(value)).toEqual(expected)
   })

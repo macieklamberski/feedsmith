@@ -51,8 +51,8 @@ export const adapterFactories: Record<string, AdapterFactory> = {
 
   feedparser: async () => {
     const { default: FeedParser } = await import('feedparser')
-    return (content) =>
-      new Promise((resolve, reject) => {
+    return (content) => {
+      return new Promise((resolve, reject) => {
         const stream = Readable.from([content])
         const feedparser = new FeedParser({})
         const items: Array<unknown> = []
@@ -68,6 +68,7 @@ export const adapterFactories: Record<string, AdapterFactory> = {
         feedparser.on('end', () => resolve(items))
         stream.pipe(feedparser)
       })
+    }
   },
 
   'podcast-feed-parser': async () => {
@@ -108,8 +109,8 @@ export const adapterFactories: Record<string, AdapterFactory> = {
 
   opmlparser: async () => {
     const { default: OpmlParser } = await import('opmlparser')
-    return (content) =>
-      new Promise((resolve, reject) => {
+    return (content) => {
+      return new Promise((resolve, reject) => {
         const stream = Readable.from([content])
         const parser = new OpmlParser({})
         const outlines: Array<unknown> = []
@@ -125,6 +126,7 @@ export const adapterFactories: Record<string, AdapterFactory> = {
         parser.on('end', () => resolve(outlines))
         stream.pipe(parser)
       })
+    }
   },
 
   feedsmith: async () => {

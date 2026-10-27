@@ -118,7 +118,10 @@ describe('generateItem', () => {
   })
 
   it('should handle empty strings', () => {
-    const value = { origLink: '', origEnclosureLink: 'https://example.com/audio.mp3' }
+    const value = {
+      origLink: '',
+      origEnclosureLink: 'https://example.com/audio.mp3',
+    }
     const expected = { 'feedburner:origEnclosureLink': 'https://example.com/audio.mp3' }
 
     expect(generateItem(value)).toEqual(expected)
