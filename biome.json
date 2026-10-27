@@ -1,3 +1,8 @@
 {
-  "extends": ["kvalita/biome", "kvalita/biome-library", "kvalita/biome-trousse"]
+  "extends": [
+    "kvalita/biome",
+    "kvalita/biome-library",
+    "kvalita/biome-trousse",
+    "kvalita/biome-locales"
+  ]
 }
