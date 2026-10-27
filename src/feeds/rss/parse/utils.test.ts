@@ -1109,8 +1109,9 @@ describe('parseTextInput', () => {
         coverDate: new Date('2023-03-15T12:00:00Z'),
       },
     }
+    const result = parseTextInput(value, { parseDateFn: (raw) => new Date(raw) })
 
-    expect(parseTextInput(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    expect(result).toEqual(expected)
   })
 })
 

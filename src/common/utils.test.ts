@@ -94,9 +94,12 @@ describe('isNonEmptyStringOrNumber', () => {
   })
 
   it('should return false for functions', () => {
-    expect(isNonEmptyStringOrNumber(() => {})).toBe(false)
+    const arrowResult = isNonEmptyStringOrNumber(() => {})
     // biome-ignore lint/complexity/useArrowFunction: It's for testing purposes.
-    expect(isNonEmptyStringOrNumber(function () {})).toBe(false)
+    const functionResult = isNonEmptyStringOrNumber(function () {})
+
+    expect(arrowResult).toBe(false)
+    expect(functionResult).toBe(false)
   })
 
   it('should return false for symbols', () => {
@@ -1462,28 +1465,32 @@ describe('parseDate', () => {
   it('should apply custom parseDateFn', () => {
     const value = '2023-03-15T12:00:00Z'
     const expected = new Date('2023-03-15T12:00:00Z')
+    const result = parseDate(value, (raw) => new Date(raw))
 
-    expect(parseDate(value, (raw) => new Date(raw))).toEqual(expected)
+    expect(result).toEqual(expected)
   })
 
   it('should apply custom parseDateFn returning number', () => {
     const value = '2023-03-15T12:00:00Z'
     const expected = 1678881600000
+    const result = parseDate(value, (raw) => new Date(raw).getTime())
 
-    expect(parseDate(value, (raw) => new Date(raw).getTime())).toBe(expected)
+    expect(result).toBe(expected)
   })
 
   it('should return undefined when parseDateFn is provided but value is empty', () => {
     const value = ''
+    const result = parseDate(value, (raw) => new Date(raw))
 
-    expect(parseDate(value, (raw) => new Date(raw))).toBeUndefined()
+    expect(result).toBeUndefined()
   })
 
   it('should normalize value before passing to parseDateFn', () => {
     const value = '  2023-03-15T12:00:00Z  '
     const expected = new Date('2023-03-15T12:00:00Z')
+    const result = parseDate(value, (raw) => new Date(raw))
 
-    expect(parseDate(value, (raw) => new Date(raw))).toEqual(expected)
+    expect(result).toEqual(expected)
   })
 
   it('should propagate error when parseDateFn throws', () => {
@@ -2967,7 +2974,10 @@ describe('generateNamespaceAttrs', () => {
     expect(generateNamespaceAttrs(42, namespaceUris)).toBeUndefined()
     expect(generateNamespaceAttrs(true, namespaceUris)).toBeUndefined()
     expect(generateNamespaceAttrs([], namespaceUris)).toBeUndefined()
-    expect(generateNamespaceAttrs(() => {}, namespaceUris)).toBeUndefined()
+
+    const result = generateNamespaceAttrs(() => {}, namespaceUris)
+
+    expect(result).toBeUndefined()
   })
 
   it('should detect namespaces in nested structures using recursive detection', () => {

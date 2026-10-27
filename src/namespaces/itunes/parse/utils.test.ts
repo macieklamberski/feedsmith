@@ -280,7 +280,10 @@ describe('parseOwner', () => {
     expect(parseOwner(123)).toBeUndefined()
     expect(parseOwner(true)).toBeUndefined()
     expect(parseOwner([])).toBeUndefined()
-    expect(parseOwner(() => {})).toBeUndefined()
+
+    const result = parseOwner(() => {})
+
+    expect(result).toBeUndefined()
   })
 })
 
@@ -587,7 +590,10 @@ describe('parseImage', () => {
     expect(parseImage(undefined)).toBeUndefined()
     expect(parseImage(true)).toBeUndefined()
     expect(parseImage([])).toBeUndefined()
-    expect(parseImage(() => {})).toBeUndefined()
+
+    const result = parseImage(() => {})
+
+    expect(result).toBeUndefined()
   })
 })
 
@@ -874,7 +880,10 @@ describe('retrieveItem', () => {
     expect(retrieveItem(123)).toBeUndefined()
     expect(retrieveItem(true)).toBeUndefined()
     expect(retrieveItem([])).toBeUndefined()
-    expect(retrieveItem(() => {})).toBeUndefined()
+
+    const result = retrieveItem(() => {})
+
+    expect(result).toBeUndefined()
   })
 
   it('should return undefined if all parsed properties are undefined', () => {
@@ -1197,7 +1206,10 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(123)).toBeUndefined()
     expect(retrieveFeed(true)).toBeUndefined()
     expect(retrieveFeed([])).toBeUndefined()
-    expect(retrieveFeed(() => {})).toBeUndefined()
+
+    const result = retrieveFeed(() => {})
+
+    expect(result).toBeUndefined()
   })
 
   it('should return undefined if all parsed properties are undefined', () => {

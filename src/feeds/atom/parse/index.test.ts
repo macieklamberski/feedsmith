@@ -1268,8 +1268,9 @@ describe('parse', () => {
           },
         ],
       }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
 
-      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+      expect(result).toEqual(expected)
     })
 
     it('should apply custom parseDateFn to dc namespace dates', () => {
@@ -1302,7 +1303,9 @@ describe('parse', () => {
           },
         ],
       }
-      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
     })
 
     it('should apply custom parseDateFn to thr link dates', () => {
@@ -1342,7 +1345,9 @@ describe('parse', () => {
           },
         ],
       }
-      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
     })
 
     it('should apply custom parseDateFn to app namespace dates', () => {
@@ -1375,7 +1380,9 @@ describe('parse', () => {
           },
         ],
       }
-      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
     })
 
     it('should propagate error when parseDateFn throws', () => {

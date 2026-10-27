@@ -425,7 +425,9 @@ describe('parse', () => {
           },
         ],
       }
-      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
     })
 
     it('should propagate error when parseDateFn throws', () => {

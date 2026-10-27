@@ -2009,7 +2009,9 @@ describe('parse', () => {
           },
         ],
       }
-      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
     })
 
     it('should apply custom parseDateFn to sy namespace dates', () => {
@@ -2035,7 +2037,9 @@ describe('parse', () => {
           updateBase: new Date('2023-03-15T12:00:00Z'),
         },
       }
-      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
+
+      expect(result).toEqual(expected)
     })
 
     it('should propagate error when parseDateFn throws', () => {

@@ -131,7 +131,10 @@ describe('retrieveItemOrFeed', () => {
     expect(retrieveItemOrFeed(123)).toBeUndefined()
     expect(retrieveItemOrFeed(true)).toBeUndefined()
     expect(retrieveItemOrFeed([])).toBeUndefined()
-    expect(retrieveItemOrFeed(() => {})).toBeUndefined()
+
+    const result = retrieveItemOrFeed(() => {})
+
+    expect(result).toBeUndefined()
   })
 
   it('should handle empty string values', () => {

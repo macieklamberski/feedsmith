@@ -1157,8 +1157,9 @@ describe('parsePlatformDate', () => {
   it('should apply custom parseDateFn', () => {
     const value = { '#text': '2023-03-15T12:00:00Z', '@platform': 'web' }
     const expected = { value: new Date('2023-03-15T12:00:00Z'), platform: 'web' }
+    const result = parsePlatformDate(value, { parseDateFn: (raw) => new Date(raw) })
 
-    expect(parsePlatformDate(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    expect(result).toEqual(expected)
   })
 
   it('should return undefined for empty object', () => {
@@ -1240,8 +1241,9 @@ describe('retrieveEmbargoDate', () => {
       'prism:releasetime': '2023-06-01T00:00:00Z',
     }
     const expected = new Date('2023-06-01T00:00:00Z')
+    const result = retrieveEmbargoDate(value, { parseDateFn: (raw) => new Date(raw) })
 
-    expect(retrieveEmbargoDate(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+    expect(result).toEqual(expected)
   })
 
   it('should return undefined when neither is present', () => {

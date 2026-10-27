@@ -578,8 +578,9 @@ describe('parse', () => {
           pubDate: new Date('Wed, 15 Mar 2023 12:00:00 GMT'),
         },
       }
+      const result = parse(value, { parseDateFn: (raw) => new Date(raw) })
 
-      expect(parse(value, { parseDateFn: (raw) => new Date(raw) })).toEqual(expected)
+      expect(result).toEqual(expected)
     })
   })
 

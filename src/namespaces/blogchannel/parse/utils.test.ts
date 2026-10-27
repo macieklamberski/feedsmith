@@ -148,7 +148,10 @@ describe('retrieveFeed', () => {
     expect(retrieveFeed(123)).toBeUndefined()
     expect(retrieveFeed(true)).toBeUndefined()
     expect(retrieveFeed([])).toBeUndefined()
-    expect(retrieveFeed(() => {})).toBeUndefined()
+
+    const result = retrieveFeed(() => {})
+
+    expect(result).toBeUndefined()
   })
 
   it('should return undefined if all parsed properties are undefined', () => {
