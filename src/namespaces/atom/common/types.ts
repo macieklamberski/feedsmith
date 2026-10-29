@@ -11,6 +11,7 @@ type NsKeys =
   | 'creativeCommons'
   | 'dc'
   | 'dcterms'
+  | 'gd'
   | 'geo'
   | 'georss'
   | 'googleplay'

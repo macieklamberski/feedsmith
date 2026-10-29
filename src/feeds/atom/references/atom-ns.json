@@ -17,6 +17,14 @@
           "name": "John Doe",
           "arxiv": {
             "affiliation": "New Mexico State University"
+          },
+          "gd": {
+            "image": {
+              "src": "https://example.com/img/b16-rounded.gif",
+              "rel": "http://schemas.google.com/g/2005#thumbnail",
+              "width": 16,
+              "height": 16
+            }
           }
         }
       ],
@@ -710,6 +718,225 @@
       "trackback": {
         "ping": "https://example.com/trackback/123",
         "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
+      },
+      "gd": {
+        "comments": {
+          "rel": "http://schemas.google.com/g/2005#regular",
+          "feedLink": {
+            "href": "https://example.com/posts/1/comments",
+            "rel": "replies",
+            "readOnly": true,
+            "countHint": 10,
+            "feed": {
+              "id": "https://example.com/posts/1/comments",
+              "title": {
+                "value": "Comments on Example Entry"
+              }
+            }
+          }
+        },
+        "deleted": true,
+        "emails": [
+          {
+            "address": "jo@example.com",
+            "displayName": "Jo March",
+            "label": "Work",
+            "rel": "http://schemas.google.com/g/2005#work",
+            "primary": true
+          }
+        ],
+        "eventStatus": "http://schemas.google.com/g/2005#event.confirmed",
+        "extendedProperties": [
+          {
+            "name": "blogger.itemClass",
+            "value": "pid-982403090",
+            "realm": "example.com"
+          },
+          {
+            "name": "com.example",
+            "xml": "<some_xml>value</some_xml>"
+          }
+        ],
+        "geoPt": {
+          "lat": 40.75,
+          "lon": -74,
+          "elev": 10,
+          "label": "Office",
+          "time": "2005-06-06T17:00:00Z"
+        },
+        "ims": [
+          {
+            "address": "jo@example.com",
+            "label": "Work",
+            "rel": "http://schemas.google.com/g/2005#work",
+            "protocol": "http://schemas.google.com/g/2005#JABBER",
+            "primary": true
+          }
+        ],
+        "money": {
+          "amount": 650,
+          "currencyCode": "EUR"
+        },
+        "name": {
+          "givenName": {
+            "value": "Jo",
+            "yomi": "dʒoʊ"
+          },
+          "additionalName": {
+            "value": "Ann",
+            "yomi": "æn"
+          },
+          "familyName": {
+            "value": "March",
+            "yomi": "mɑːrtʃ"
+          },
+          "namePrefix": "Ms",
+          "nameSuffix": "PhD",
+          "fullName": "Ms Jo Ann March, PhD"
+        },
+        "organizations": [
+          {
+            "label": "Work",
+            "rel": "http://schemas.google.com/g/2005#work",
+            "primary": true,
+            "orgDepartment": "Software Development",
+            "orgJobDescription": "Writes documentation",
+            "orgName": {
+              "value": "Example Inc",
+              "yomi": "ekusanpuru"
+            },
+            "orgSymbol": "EXMP",
+            "orgTitle": "Tech Writer",
+            "where": {
+              "valueString": "Building 40"
+            }
+          }
+        ],
+        "originalEvent": {
+          "id": "i8fl1nrv2bl57c1qgr3f0onmgg",
+          "href": "https://example.com/calendar/events/i8fl1nrv2bl57c1qgr3f0onmgg",
+          "when": {
+            "startTime": "2006-03-17T22:00:00Z"
+          }
+        },
+        "phoneNumbers": [
+          {
+            "value": "(425) 555-8080",
+            "label": "Desk",
+            "rel": "http://schemas.google.com/g/2005#work",
+            "uri": "tel:+1-425-555-8080",
+            "primary": true
+          }
+        ],
+        "postalAddresses": [
+          {
+            "value": "500 West 45th Street, New York, NY 10036",
+            "label": "Office",
+            "rel": "http://schemas.google.com/g/2005#work",
+            "primary": true
+          }
+        ],
+        "rating": {
+          "rel": "http://schemas.google.com/g/2005#overall",
+          "value": 4,
+          "average": 4.65,
+          "min": 1,
+          "max": 5,
+          "numRaters": 200
+        },
+        "recurrence": "RRULE:FREQ=DAILY;UNTIL=20060321T220000Z",
+        "recurrenceExceptions": [
+          {
+            "specialized": true,
+            "entryLink": {
+              "href": "https://example.com/calendar/events/i8fl1nrv2bl57c1qgr3f0onmgg_20060317"
+            },
+            "originalEvent": {
+              "id": "i8fl1nrv2bl57c1qgr3f0onmgg",
+              "href": "https://example.com/calendar/events/i8fl1nrv2bl57c1qgr3f0onmgg"
+            }
+          }
+        ],
+        "resourceId": "document:9749638",
+        "structuredPostalAddresses": [
+          {
+            "rel": "http://schemas.google.com/g/2005#home",
+            "mailClass": "http://schemas.google.com/g/2005#both",
+            "usage": "http://schemas.google.com/g/2005#general",
+            "label": "Home",
+            "primary": true,
+            "agent": "Jo March",
+            "housename": "The Pillars",
+            "street": "27, rue Pasteur",
+            "pobox": "BP 12",
+            "neighborhood": "Centre",
+            "city": "Cabourg",
+            "subregion": "Calvados",
+            "region": "Normandy",
+            "postcode": "14390",
+            "country": {
+              "value": "France",
+              "code": "FR"
+            },
+            "formattedAddress": "27, rue Pasteur, 14390 Cabourg, France"
+          }
+        ],
+        "transparency": "http://schemas.google.com/g/2005#event.opaque",
+        "visibility": "http://schemas.google.com/g/2005#event.public",
+        "whens": [
+          {
+            "startTime": "2005-06-06T17:00:00Z",
+            "endTime": "2005-06-06T18:00:00Z",
+            "valueString": "Weekly meeting",
+            "reminders": [
+              {
+                "absoluteTime": "2005-06-06T16:55:00Z"
+              },
+              {
+                "method": "email",
+                "days": 1
+              },
+              {
+                "method": "sms",
+                "hours": 2
+              },
+              {
+                "method": "alert",
+                "minutes": 15
+              }
+            ]
+          }
+        ],
+        "wheres": [
+          {
+            "rel": "http://schemas.google.com/g/2005#event",
+            "label": "Main venue",
+            "valueString": "Joe's Pub",
+            "entryLink": {
+              "href": "https://example.com/places/joes-pub",
+              "rel": "alternate",
+              "readOnly": true,
+              "entry": {
+                "id": "https://example.com/places/joes-pub",
+                "title": {
+                  "value": "Joe's Pub"
+                }
+              }
+            }
+          }
+        ],
+        "whos": [
+          {
+            "rel": "http://schemas.google.com/g/2005#event.attendee",
+            "email": "jo@example.com",
+            "valueString": "Jo",
+            "attendeeStatus": "http://schemas.google.com/g/2005#event.accepted",
+            "attendeeType": "http://schemas.google.com/g/2005#event.required",
+            "entryLink": {
+              "href": "https://example.com/contacts/jo"
+            }
+          }
+        ]
       },
       "yt": {
         "videoId": "dQw4w9WgXcQ",
@@ -1428,6 +1655,15 @@
   },
   "pingback": {
     "to": "https://example.com/pingback-service"
+  },
+  "gd": {
+    "wheres": [
+      {
+        "rel": "http://schemas.google.com/g/2005#event",
+        "label": "Main venue",
+        "valueString": "Building 41, Room X"
+      }
+    ]
   },
   "yt": {
     "channelId": "UCuAXFkgsw1L7xaCfnd5JJOw",

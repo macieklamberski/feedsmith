@@ -20,6 +20,7 @@
       xmlns:admin="http://webns.net/mvcb/"
       xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
       xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+      xmlns:gd="http://schemas.google.com/g/2005"
       xmlns:yt="http://www.youtube.com/xml/schemas/2015"
       xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
       xmlns:georss="http://www.georss.org/georss"
@@ -386,6 +387,9 @@
   <!-- Pingback Namespace: Feed Level Tags -->
   <pingback:to>https://example.com/pingback-service</pingback:to>
 
+  <!-- Google Data Namespace: Feed Level Tags -->
+  <gd:where rel="http://schemas.google.com/g/2005#event" label="Main venue" valueString="Building 41, Room X"/>
+
   <!-- YouTube Namespace: Feed Level Tags -->
   <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
   <yt:playlistId>PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf</yt:playlistId>
@@ -420,6 +424,9 @@
 
       <!-- arXiv Namespace: Author Level Tags -->
       <arxiv:affiliation>New Mexico State University</arxiv:affiliation>
+
+      <!-- Google Data Namespace: Author Level Tags -->
+      <gd:image src="https://example.com/img/b16-rounded.gif" rel="http://schemas.google.com/g/2005#thumbnail" width="16" height="16"/>
     </author>
 
     <!-- Dublin Core Namespace: Entry Level Tags -->
@@ -797,6 +804,86 @@
     <trackback:ping>https://example.com/trackback/123</trackback:ping>
     <trackback:about>https://blog1.com/trackback/456</trackback:about>
     <trackback:about>https://blog2.com/trackback/789</trackback:about>
+
+    <!-- Google Data Namespace: Entry Level Tags -->
+    <gd:comments rel="http://schemas.google.com/g/2005#regular">
+      <gd:feedLink href="https://example.com/posts/1/comments" rel="replies" readOnly="true" countHint="10">
+        <feed>
+          <id>https://example.com/posts/1/comments</id>
+          <title>Comments on Example Entry</title>
+        </feed>
+      </gd:feedLink>
+    </gd:comments>
+    <gd:deleted/>
+    <gd:email address="jo@example.com" displayName="Jo March" label="Work" rel="http://schemas.google.com/g/2005#work" primary="true"/>
+    <gd:eventStatus value="http://schemas.google.com/g/2005#event.confirmed"/>
+    <gd:extendedProperty name="blogger.itemClass" value="pid-982403090" realm="example.com"/>
+    <gd:extendedProperty name="com.example"><some_xml>value</some_xml></gd:extendedProperty>
+    <gd:geoPt lat="40.75" lon="-74" elev="10" label="Office" time="2005-06-06T17:00:00Z"/>
+    <gd:im address="jo@example.com" label="Work" rel="http://schemas.google.com/g/2005#work" protocol="http://schemas.google.com/g/2005#JABBER" primary="true"/>
+    <gd:money amount="650" currencyCode="EUR"/>
+    <gd:name>
+      <gd:givenName yomi="dʒoʊ">Jo</gd:givenName>
+      <gd:additionalName yomi="æn">Ann</gd:additionalName>
+      <gd:familyName yomi="mɑːrtʃ">March</gd:familyName>
+      <gd:namePrefix>Ms</gd:namePrefix>
+      <gd:nameSuffix>PhD</gd:nameSuffix>
+      <gd:fullName>Ms Jo Ann March, PhD</gd:fullName>
+    </gd:name>
+    <gd:organization label="Work" rel="http://schemas.google.com/g/2005#work" primary="true">
+      <gd:orgDepartment>Software Development</gd:orgDepartment>
+      <gd:orgJobDescription>Writes documentation</gd:orgJobDescription>
+      <gd:orgName yomi="ekusanpuru">Example Inc</gd:orgName>
+      <gd:orgSymbol>EXMP</gd:orgSymbol>
+      <gd:orgTitle>Tech Writer</gd:orgTitle>
+      <gd:where valueString="Building 40"/>
+    </gd:organization>
+    <gd:originalEvent id="i8fl1nrv2bl57c1qgr3f0onmgg" href="https://example.com/calendar/events/i8fl1nrv2bl57c1qgr3f0onmgg">
+      <gd:when startTime="2006-03-17T22:00:00Z"/>
+    </gd:originalEvent>
+    <gd:phoneNumber label="Desk" rel="http://schemas.google.com/g/2005#work" uri="tel:+1-425-555-8080" primary="true">(425) 555-8080</gd:phoneNumber>
+    <gd:postalAddress label="Office" rel="http://schemas.google.com/g/2005#work" primary="true">500 West 45th Street, New York, NY 10036</gd:postalAddress>
+    <gd:rating rel="http://schemas.google.com/g/2005#overall" value="4" average="4.65" min="1" max="5" numRaters="200"/>
+    <gd:recurrence>RRULE:FREQ=DAILY;UNTIL=20060321T220000Z</gd:recurrence>
+    <gd:recurrenceException specialized="true">
+      <gd:entryLink href="https://example.com/calendar/events/i8fl1nrv2bl57c1qgr3f0onmgg_20060317"/>
+      <gd:originalEvent id="i8fl1nrv2bl57c1qgr3f0onmgg" href="https://example.com/calendar/events/i8fl1nrv2bl57c1qgr3f0onmgg"/>
+    </gd:recurrenceException>
+    <gd:resourceId>document:9749638</gd:resourceId>
+    <gd:structuredPostalAddress rel="http://schemas.google.com/g/2005#home" mailClass="http://schemas.google.com/g/2005#both" usage="http://schemas.google.com/g/2005#general" label="Home" primary="true">
+      <gd:agent>Jo March</gd:agent>
+      <gd:housename>The Pillars</gd:housename>
+      <gd:street>27, rue Pasteur</gd:street>
+      <gd:pobox>BP 12</gd:pobox>
+      <gd:neighborhood>Centre</gd:neighborhood>
+      <gd:city>Cabourg</gd:city>
+      <gd:subregion>Calvados</gd:subregion>
+      <gd:region>Normandy</gd:region>
+      <gd:postcode>14390</gd:postcode>
+      <gd:country code="FR">France</gd:country>
+      <gd:formattedAddress>27, rue Pasteur, 14390 Cabourg, France</gd:formattedAddress>
+    </gd:structuredPostalAddress>
+    <gd:transparency value="http://schemas.google.com/g/2005#event.opaque"/>
+    <gd:visibility value="http://schemas.google.com/g/2005#event.public"/>
+    <gd:when startTime="2005-06-06T17:00:00Z" endTime="2005-06-06T18:00:00Z" valueString="Weekly meeting">
+      <gd:reminder absoluteTime="2005-06-06T16:55:00Z"/>
+      <gd:reminder method="email" days="1"/>
+      <gd:reminder method="sms" hours="2"/>
+      <gd:reminder method="alert" minutes="15"/>
+    </gd:when>
+    <gd:where rel="http://schemas.google.com/g/2005#event" label="Main venue" valueString="Joe's Pub">
+      <gd:entryLink href="https://example.com/places/joes-pub" rel="alternate" readOnly="true">
+        <entry>
+          <id>https://example.com/places/joes-pub</id>
+          <title>Joe's Pub</title>
+        </entry>
+      </gd:entryLink>
+    </gd:where>
+    <gd:who rel="http://schemas.google.com/g/2005#event.attendee" email="jo@example.com" valueString="Jo">
+      <gd:attendeeStatus value="http://schemas.google.com/g/2005#event.accepted"/>
+      <gd:attendeeType value="http://schemas.google.com/g/2005#event.required"/>
+      <gd:entryLink href="https://example.com/contacts/jo"/>
+    </gd:who>
 
     <!-- YouTube Namespace: Entry Level Tags -->
     <yt:videoId>dQw4w9WgXcQ</yt:videoId>

@@ -39,6 +39,7 @@ import {
   stopNodes as feedpressStopNodes,
   uris as feedpressUris,
 } from '../namespaces/feedpress/common/config.js'
+import { stopNodes as gdStopNodes, uris as gdUris } from '../namespaces/gd/common/config.js'
 import { stopNodes as geoStopNodes, uris as geoUris } from '../namespaces/geo/common/config.js'
 import {
   stopNodes as georssStopNodes,
@@ -157,6 +158,7 @@ export const namespaceUris = {
   trackback: trackbackUris,
   source: sourceUris,
   blogChannel: blogchannelUris,
+  gd: gdUris,
   yt: ytUris,
   geo: geoUris,
   georss: georssUris,
@@ -191,6 +193,7 @@ export const namespaceStopNodes = [
   ...dctermsStopNodes,
   ...feedburnerStopNodes,
   ...feedpressStopNodes,
+  ...gdStopNodes,
   ...geoStopNodes,
   ...georssStopNodes,
   ...googleplayStopNodes,
