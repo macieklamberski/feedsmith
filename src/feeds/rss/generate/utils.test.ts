@@ -2048,6 +2048,41 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate RSS feed with wikidot namespace properties', () => {
+    const value = {
+      title: 'Non-Disc Record',
+      description: 'Posts in the discussion thread',
+      items: [
+        {
+          title: 'Re: Non-Disc Record',
+          wikidot: {
+            authorName: 'Crayne',
+            authorUserId: '1346995',
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:wikidot': 'http://www.wikidot.com/rss-namespace',
+        channel: {
+          title: 'Non-Disc Record',
+          description: 'Posts in the discussion thread',
+          item: [
+            {
+              title: 'Re: Non-Disc Record',
+              'wikidot:authorName': 'Crayne',
+              'wikidot:authorUserId': '1346995',
+            },
+          ],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate RSS feed with geo namespace properties', () => {
     const value = {
       title: 'Example City Feed',

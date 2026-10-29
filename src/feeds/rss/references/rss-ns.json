@@ -953,6 +953,10 @@
         "inReplyTo": { "value": "did:plc:iwl32vekohccji6khfdt3clw", "isPermaLink": false },
         "comments": { "count": 2, "feedUrl": "http://example.org/item/1/comments.xml" }
       },
+      "wikidot": {
+        "authorName": "Crayne",
+        "authorUserId": "1346995"
+      },
       "geo": {
         "lat": 37.8199,
         "long": -122.4783,
