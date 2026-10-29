@@ -39,6 +39,10 @@ import {
   generateItem as generateGooglePlayItem,
 } from '../../../namespaces/googleplay/generate/utils.js'
 import {
+  generateFeed as generateImageFeed,
+  generateItem as generateImageItem,
+} from '../../../namespaces/image/generate/utils.js'
+import {
   generateFeed as generateItunesFeed,
   generateItem as generateItunesItem,
 } from '../../../namespaces/itunes/generate/utils.js'
@@ -238,6 +242,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
     ...generatePodcastItem(item.podcast),
     ...generatePscItem(item.psc),
     ...generateMediaItemOrFeed(item.media),
+    ...generateImageItem(item.imageNs),
     ...generateGooglePlayItem(item.googleplay),
     ...generateSpotifyItem(item.spotify),
     ...generateAcastItem(item.acast),
@@ -292,6 +297,7 @@ export const generateFeed: GenerateUtil<RssFeed.Feed<DateLike>> = (feed) => {
     ...generateItunesFeed(feed.itunes),
     ...generatePodcastFeed(feed.podcast),
     ...generateMediaItemOrFeed(feed.media),
+    ...generateImageFeed(feed.imageNs),
     ...generateGooglePlayFeed(feed.googleplay),
     ...generateSpotifyFeed(feed.spotify),
     ...generateAcastFeed(feed.acast),
