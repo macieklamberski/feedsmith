@@ -32,6 +32,10 @@ import { retrieveAbout as retrieveRdfAbout } from '../../../namespaces/rdf/parse
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
 import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
+import {
+  retrieveFeed as retrieveWebfeedsFeed,
+  retrieveItem as retrieveWebfeedsItem,
+} from '../../../namespaces/webfeeds/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
 import type { ParseUtilPartial, RdfFeed } from '../common/types.js'
@@ -126,6 +130,7 @@ export const parseItem: ParseUtilPartial<RdfFeed.Item<DateAny>> = (value, option
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
+    webfeeds: namespaces.has('webfeeds') ? retrieveWebfeedsItem(value) : undefined,
     prism: namespaces.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
@@ -192,6 +197,7 @@ export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, option
     sy: namespaces.has('sy') ? retrieveSyFeed(channel, options) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
     feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerFeed(channel) : undefined,
+    webfeeds: namespaces.has('webfeeds') ? retrieveWebfeedsFeed(channel) : undefined,
     opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(channel) : undefined,
     prism: namespaces.has('prism') ? retrievePrismItemOrFeed(channel, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(channel) : undefined,

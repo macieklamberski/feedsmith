@@ -27,6 +27,7 @@ import type { SlashNs } from '../../../namespaces/slash/common/types.js'
 import type { SyNs } from '../../../namespaces/sy/common/types.js'
 import type { ThrNs } from '../../../namespaces/thr/common/types.js'
 import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
+import type { WebfeedsNs } from '../../../namespaces/webfeeds/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 import type { YtNs } from '../../../namespaces/yt/common/types.js'
@@ -138,6 +139,7 @@ export namespace AtomFeed {
       media?: MediaNs.ItemOrFeed<TStrict>
       googleplay?: GooglePlayNs.Item<TStrict>
       feedburner?: FeedBurnerNs.Item
+      webfeeds?: WebfeedsNs.Item
       arxiv?: ArxivNs.Entry
       prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
@@ -177,6 +179,7 @@ export namespace AtomFeed {
       media?: MediaNs.ItemOrFeed<TStrict>
       googleplay?: GooglePlayNs.Feed<TStrict>
       feedburner?: FeedBurnerNs.Feed<TStrict>
+      webfeeds?: WebfeedsNs.Feed
       opensearch?: OpenSearchNs.Feed<TStrict>
       prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed

@@ -1729,6 +1729,33 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle webfeeds namespace', () => {
+    const value = {
+      title: { '#text': 'Example Item' },
+      'webfeeds:featuredimage': {
+        '@url': 'https://example.com/images/featured.svg',
+        '@height': '230',
+        '@width': '408',
+        '@type': 'image/svg',
+      },
+      'webfeeds:featuredvisual': { '#text': 'https://example.com/images/featured.jpg' },
+    }
+    const expected = {
+      title: 'Example Item',
+      webfeeds: {
+        featuredImage: {
+          url: 'https://example.com/images/featured.svg',
+          type: 'image/svg',
+          width: 408,
+          height: 230,
+        },
+        featuredVisual: 'https://example.com/images/featured.jpg',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle thr namespace', () => {
     const value = {
       title: { '#text': 'Reply Item' },
@@ -2296,6 +2323,28 @@ describe('parseFeed', () => {
       link: 'https://example.com',
       media: {
         copyright: { value: '2024 Example Corp' },
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle webfeeds namespace', () => {
+    const channel = {
+      title: { '#text': 'Webfeeds Feed' },
+      link: { '#text': 'https://example.com' },
+      'webfeeds:icon': { '#text': 'https://example.com/images/icon.png' },
+      'webfeeds:accentcolor': { '#text': '249F80' },
+      'webfeeds:related': { '@layout': 'card', '@target': 'browser' },
+    }
+    const value = { channel }
+    const expected = {
+      title: 'Webfeeds Feed',
+      link: 'https://example.com',
+      webfeeds: {
+        icon: 'https://example.com/images/icon.png',
+        accentColor: '249F80',
+        related: { layout: 'card', target: 'browser' },
       },
     }
 

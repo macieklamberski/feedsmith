@@ -18,6 +18,7 @@
      xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/"
      xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0"
      xmlns:feedpress="https://feed.press/xmlns"
+     xmlns:webfeeds="http://webfeeds.org/rss/1.0"
      xmlns:arxiv="http://arxiv.org/schemas/atom"
      xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
      xmlns:prism="http://prismstandard.org/namespaces/basic/3.0/"
@@ -341,6 +342,16 @@
     <feedpress:locale>en</feedpress:locale>
     <feedpress:podcastId>1234567890</feedpress:podcastId>
     <feedpress:cssFile>https://example.com/custom-feed-styles.css</feedpress:cssFile>
+
+    <!-- WebFeeds Namespace: Channel Level Tags -->
+    <webfeeds:cover image="https://example.com/images/cover.png"/>
+    <webfeeds:icon>https://example.com/images/icon.png</webfeeds:icon>
+    <webfeeds:logo>https://example.com/images/logo.svg</webfeeds:logo>
+    <webfeeds:accentColor>BE4825</webfeeds:accentColor>
+    <webfeeds:related layout="card" target="browser"/>
+    <webfeeds:analytics id="G-E1P00P5NYS" engine="GoogleAnalytics"/>
+    <webfeeds:partial>true</webfeeds:partial>
+    <webfeeds:wordmark>https://example.com/images/wordmark.svg</webfeeds:wordmark>
 
     <!-- OpenSearch Namespace: Channel Level Tags -->
     <opensearch:totalResults>1000</opensearch:totalResults>
@@ -803,6 +814,10 @@
       <feedburner:origLink>https://example.com/episode/original-article</feedburner:origLink>
       <feedburner:origEnclosureLink>https://example.com/audio/original-episode.mp3</feedburner:origEnclosureLink>
       <feedburner:awareness>https://feedburner.google.com/awareness/1.0/data/examplepodcast/episode</feedburner:awareness>
+
+      <!-- WebFeeds Namespace: Item Level Tags -->
+      <webfeeds:featuredImage url="https://example.com/images/featured.jpg" type="image/jpeg" width="1200" height="630"/>
+      <webfeeds:featuredVisual>https://example.com/images/featured.jpg</webfeeds:featuredVisual>
 
       <!-- arXiv Namespace: Item Level Tags -->
       <arxiv:comment>23 pages, 8 figures and 4 tables</arxiv:comment>

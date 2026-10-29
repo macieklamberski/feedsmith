@@ -149,6 +149,7 @@ export default defineConfig({
               { text: 'RawVoice', link: '/reference/namespaces/rawvoice' },
               { text: 'FeedBurner', link: '/reference/namespaces/feedburner' },
               { text: 'FeedPress', link: '/reference/namespaces/feedpress' },
+              { text: 'WebFeeds', link: '/reference/namespaces/webfeeds' },
               { text: 'arXiv', link: '/reference/namespaces/arxiv' },
               { text: 'OpenSearch', link: '/reference/namespaces/opensearch' },
               { text: 'PRISM', link: '/reference/namespaces/prism' },

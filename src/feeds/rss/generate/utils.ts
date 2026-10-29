@@ -70,6 +70,10 @@ import {
 import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/utils.js'
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
 import { generateItem as generateTrackbackItem } from '../../../namespaces/trackback/generate/utils.js'
+import {
+  generateFeed as generateWebfeedsFeed,
+  generateItem as generateWebfeedsItem,
+} from '../../../namespaces/webfeeds/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
 import { generateItemOrFeed as generateXmlItemOrFeed } from '../../../namespaces/xml/generate/utils.js'
 import type { GenerateUtil, RssFeed } from '../common/types.js'
@@ -243,6 +247,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
     ...generateAcastItem(item.acast),
     ...generateRawVoiceItem(item.rawvoice),
     ...generateFeedBurnerItem(item.feedburner),
+    ...generateWebfeedsItem(item.webfeeds),
     ...generateArxivEntry(item.arxiv),
     ...generatePrismItemOrFeed(item.prism),
     ...generateCc(item.cc),
@@ -298,6 +303,7 @@ export const generateFeed: GenerateUtil<RssFeed.Feed<DateLike>> = (feed) => {
     ...generateRawVoiceFeed(feed.rawvoice),
     ...generateFeedBurnerFeed(feed.feedburner),
     ...generateFeedPressFeed(feed.feedpress),
+    ...generateWebfeedsFeed(feed.webfeeds),
     ...generateOpenSearchFeed(feed.opensearch),
     ...generatePrismItemOrFeed(feed.prism),
     ...generateCc(feed.cc),

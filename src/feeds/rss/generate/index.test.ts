@@ -610,6 +610,60 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with webfeeds namespace', () => {
+    const value = {
+      title: 'Feed with webfeeds namespace',
+      description: 'Test feed with Webfeeds properties',
+      webfeeds: {
+        cover: { image: 'https://example.com/images/cover.png' },
+        icon: 'https://example.com/images/icon.png',
+        logo: 'https://example.com/images/logo.svg',
+        accentColor: 'BE4825',
+        related: { layout: 'card', target: 'browser' },
+        analytics: { id: 'G-E1P00P5NYS', engine: 'GoogleAnalytics' },
+        partial: true,
+        wordmark: 'https://example.com/images/wordmark.svg',
+      },
+      items: [
+        {
+          title: 'Item with a featured image',
+          webfeeds: {
+            featuredImage: {
+              url: 'https://example.com/images/featured.svg',
+              type: 'image/svg',
+              width: 408,
+              height: 230,
+            },
+            featuredVisual: 'https://example.com/images/featured.jpg',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:webfeeds="http://webfeeds.org/rss/1.0">
+  <channel>
+    <title>Feed with webfeeds namespace</title>
+    <description>Test feed with Webfeeds properties</description>
+    <webfeeds:cover image="https://example.com/images/cover.png"/>
+    <webfeeds:icon>https://example.com/images/icon.png</webfeeds:icon>
+    <webfeeds:logo>https://example.com/images/logo.svg</webfeeds:logo>
+    <webfeeds:accentColor>BE4825</webfeeds:accentColor>
+    <webfeeds:related layout="card" target="browser"/>
+    <webfeeds:analytics id="G-E1P00P5NYS" engine="GoogleAnalytics"/>
+    <webfeeds:partial>true</webfeeds:partial>
+    <webfeeds:wordmark>https://example.com/images/wordmark.svg</webfeeds:wordmark>
+    <item>
+      <title>Item with a featured image</title>
+      <webfeeds:featuredImage url="https://example.com/images/featured.svg" type="image/svg" width="408" height="230"/>
+      <webfeeds:featuredVisual>https://example.com/images/featured.jpg</webfeeds:featuredVisual>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with arxiv namespace', () => {
     const value = {
       title: 'Feed with arxiv namespace',
