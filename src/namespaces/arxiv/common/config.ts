@@ -3,6 +3,10 @@ export const uris = [
   'https://arxiv.org/schemas/atom',
   'http://arxiv.org/schemas/atom/',
   'https://arxiv.org/schemas/atom/',
+  'http://www.arxiv.org/schemas/atom',
+  'https://www.arxiv.org/schemas/atom',
+  'http://www.arxiv.org/schemas/atom/',
+  'https://www.arxiv.org/schemas/atom/',
 ]
 
 export const stopNodes = [

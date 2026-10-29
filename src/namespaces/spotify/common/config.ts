@@ -3,6 +3,10 @@ export const uris = [
   'https://www.spotify.com/ns/rss',
   'http://www.spotify.com/ns/rss/',
   'https://www.spotify.com/ns/rss/',
+  'http://spotify.com/ns/rss',
+  'https://spotify.com/ns/rss',
+  'http://spotify.com/ns/rss/',
+  'https://spotify.com/ns/rss/',
 ]
 
 export const stopNodes = ['*.spotify:countryoforigin']
