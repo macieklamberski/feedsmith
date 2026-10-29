@@ -28,6 +28,7 @@ import { retrieveItem as retrieveContentItem } from '../../../namespaces/content
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcItemOrFeed } from '../../../namespaces/dc/parse/utils.js'
 import { retrieveItemOrFeed as retrieveDcTermsItemOrFeed } from '../../../namespaces/dcterms/parse/utils.js'
+import { retrieveItem as retrieveEvItem } from '../../../namespaces/ev/parse/utils.js'
 import {
   retrieveFeed as retrieveFeedBurnerFeed,
   retrieveItem as retrieveFeedBurnerItem,
@@ -433,6 +434,7 @@ export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, option
     sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
+    ev: namespaces.has('ev') ? retrieveEvItem(value, options) : undefined,
     xml: retrieveXmlItemOrFeed(value),
   }
 
