@@ -20,6 +20,7 @@
       xmlns:admin="http://webns.net/mvcb/"
       xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
       xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+      xmlns:activity="http://activitystrea.ms/spec/1.0/"
       xmlns:yt="http://www.youtube.com/xml/schemas/2015"
       xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
       xmlns:georss="http://www.georss.org/georss"
@@ -420,6 +421,9 @@
 
       <!-- arXiv Namespace: Author Level Tags -->
       <arxiv:affiliation>New Mexico State University</arxiv:affiliation>
+
+      <!-- Activity Streams Namespace: Author Level Tags -->
+      <activity:object-type>http://activitystrea.ms/schema/1.0/person</activity:object-type>
     </author>
 
     <!-- Dublin Core Namespace: Entry Level Tags -->
@@ -797,6 +801,23 @@
     <trackback:ping>https://example.com/trackback/123</trackback:ping>
     <trackback:about>https://blog1.com/trackback/456</trackback:about>
     <trackback:about>https://blog2.com/trackback/789</trackback:about>
+
+    <!-- Activity Streams Namespace: Entry Level Tags -->
+    <activity:verb>http://activitystrea.ms/schema/1.0/post</activity:verb>
+    <activity:object-type>http://activitystrea.ms/schema/1.0/note</activity:object-type>
+    <activity:object>
+      <id>tag:example.com,2009:photo/1643</id>
+      <title>My Cat</title>
+      <link rel="alternate" type="text/html" href="https://example.com/photos/1643"/>
+      <link rel="preview" type="image/jpeg" href="https://example.com/photos/1643/thumb.jpg"/>
+      <activity:object-type>http://activitystrea.ms/schema/1.0/photo</activity:object-type>
+    </activity:object>
+    <activity:target>
+      <id>tag:example.com,2009:photo-album/2519</id>
+      <title>My Pets</title>
+      <link rel="alternate" type="text/html" href="https://example.com/albums/pets"/>
+      <activity:object-type>http://activitystrea.ms/schema/1.0/photo-album</activity:object-type>
+    </activity:target>
 
     <!-- YouTube Namespace: Entry Level Tags -->
     <yt:videoId>dQw4w9WgXcQ</yt:videoId>

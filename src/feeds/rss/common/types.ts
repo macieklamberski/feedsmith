@@ -7,6 +7,7 @@ import type {
   Strict,
 } from '../../../common/types.js'
 import type { AcastNs } from '../../../namespaces/acast/common/types.js'
+import type { ActivityNs } from '../../../namespaces/activity/common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { ArxivNs } from '../../../namespaces/arxiv/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
@@ -161,6 +162,7 @@ export namespace RssFeed {
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
       sourceNs?: SourceNs.Item<TStrict>
+      activity?: ActivityNs.Item
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed

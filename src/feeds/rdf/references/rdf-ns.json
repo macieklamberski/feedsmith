@@ -514,6 +514,10 @@
         "ping": "https://example.com/trackback/123",
         "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
       },
+      "activity": {
+        "verb": "http://activitystrea.ms/schema/1.0/post",
+        "objectType": "http://activitystrea.ms/schema/1.0/blog-entry"
+      },
       "geo": {
         "lat": 37.8199,
         "long": -122.4783,

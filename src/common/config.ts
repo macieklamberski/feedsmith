@@ -4,6 +4,10 @@ import {
   uris as acastUris,
 } from '../namespaces/acast/common/config.js'
 import {
+  stopNodes as activityStopNodes,
+  uris as activityUris,
+} from '../namespaces/activity/common/config.js'
+import {
   stopNodes as adminStopNodes,
   uris as adminUris,
 } from '../namespaces/admin/common/config.js'
@@ -157,6 +161,7 @@ export const namespaceUris = {
   trackback: trackbackUris,
   source: sourceUris,
   blogChannel: blogchannelUris,
+  activity: activityUris,
   yt: ytUris,
   geo: geoUris,
   georss: georssUris,
@@ -179,6 +184,7 @@ export const namespacePrefixes = Object.entries(namespaceUris).reduce(
 
 export const namespaceStopNodes = [
   ...acastStopNodes,
+  ...activityStopNodes,
   ...adminStopNodes,
   ...appStopNodes,
   ...arxivStopNodes,

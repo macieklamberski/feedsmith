@@ -15,6 +15,7 @@ import {
   generateFeed as generateAcastFeed,
   generateItem as generateAcastItem,
 } from '../../../namespaces/acast/generate/utils.js'
+import { generateItem as generateActivityItem } from '../../../namespaces/activity/generate/utils.js'
 import { generateFeed as generateAdminFeed } from '../../../namespaces/admin/generate/utils.js'
 import { generateEntry as generateArxivEntry } from '../../../namespaces/arxiv/generate/utils.js'
 import {
@@ -252,6 +253,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
     ...generatePingbackItem(item.pingback),
     ...generateTrackbackItem(item.trackback),
     ...generateSourceItem(item.sourceNs),
+    ...generateActivityItem(item.activity),
     ...generateGeoItemOrFeed(item.geo),
     ...generateGeoRssItemOrFeed(item.georss),
     ...generateXmlItemOrFeed(item.xml),

@@ -17,6 +17,9 @@
           "name": "John Doe",
           "arxiv": {
             "affiliation": "New Mexico State University"
+          },
+          "activity": {
+            "objectType": "http://activitystrea.ms/schema/1.0/person"
           }
         }
       ],
@@ -710,6 +713,47 @@
       "trackback": {
         "ping": "https://example.com/trackback/123",
         "abouts": ["https://blog1.com/trackback/456", "https://blog2.com/trackback/789"]
+      },
+      "activity": {
+        "verb": "http://activitystrea.ms/schema/1.0/post",
+        "objectType": "http://activitystrea.ms/schema/1.0/note",
+        "object": {
+          "id": "tag:example.com,2009:photo/1643",
+          "links": [
+            {
+              "href": "https://example.com/photos/1643",
+              "rel": "alternate",
+              "type": "text/html"
+            },
+            {
+              "href": "https://example.com/photos/1643/thumb.jpg",
+              "rel": "preview",
+              "type": "image/jpeg"
+            }
+          ],
+          "title": {
+            "value": "My Cat"
+          },
+          "activity": {
+            "objectType": "http://activitystrea.ms/schema/1.0/photo"
+          }
+        },
+        "target": {
+          "id": "tag:example.com,2009:photo-album/2519",
+          "links": [
+            {
+              "href": "https://example.com/albums/pets",
+              "rel": "alternate",
+              "type": "text/html"
+            }
+          ],
+          "title": {
+            "value": "My Pets"
+          },
+          "activity": {
+            "objectType": "http://activitystrea.ms/schema/1.0/photo-album"
+          }
+        }
       },
       "yt": {
         "videoId": "dQw4w9WgXcQ",
