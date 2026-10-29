@@ -840,6 +840,23 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with photo namespace properties', () => {
+    const value = {
+      title: 'Item with photo namespace',
+      photo: {
+        thumbnail: 'https://example.com/albums/Underwater/Carwash_basement.thumb.jpg',
+        imgsrc: 'https://example.com/albums/Underwater/Carwash_basement.jpg',
+      },
+    }
+    const expected = {
+      title: 'Item with photo namespace',
+      'photo:thumbnail': 'https://example.com/albums/Underwater/Carwash_basement.thumb.jpg',
+      'photo:imgsrc': 'https://example.com/albums/Underwater/Carwash_basement.jpg',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with googleplay namespace properties', () => {
     const value = {
       title: 'Item with Google Play properties',
@@ -1550,6 +1567,41 @@ describe('generateFeed', () => {
           'media:description': {
             '#text': 'Feed Media Description',
           },
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with photo namespace properties', () => {
+    const value = {
+      title: 'Natural Landscape Photographs',
+      description: 'A feed with photo properties',
+      items: [
+        {
+          title: 'Sunset over the bay',
+          photo: {
+            thumbnail: 'https://example.com/albums/Underwater/Carwash_basement.thumb.jpg',
+            imgsrc: 'https://example.com/albums/Underwater/Carwash_basement.jpg',
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:photo': 'http://www.pheed.com/pheed/',
+        channel: {
+          title: 'Natural Landscape Photographs',
+          description: 'A feed with photo properties',
+          item: [
+            {
+              title: 'Sunset over the bay',
+              'photo:thumbnail': 'https://example.com/albums/Underwater/Carwash_basement.thumb.jpg',
+              'photo:imgsrc': 'https://example.com/albums/Underwater/Carwash_basement.jpg',
+            },
+          ],
         },
       },
     }

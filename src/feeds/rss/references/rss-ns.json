@@ -722,6 +722,10 @@
           ]
         }
       },
+      "photo": {
+        "thumbnail": "https://example.com/photos/thumbs/understanding-xml-namespaces.jpg",
+        "imgsrc": "https://example.com/photos/understanding-xml-namespaces.jpg"
+      },
       "googleplay": {
         "author": "Episode Guest Speaker",
         "description": "A detailed episode about advanced programming techniques",

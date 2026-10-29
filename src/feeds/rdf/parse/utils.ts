@@ -26,6 +26,7 @@ import { retrieveItemOrFeed as retrieveGeoItemOrFeed } from '../../../namespaces
 import { retrieveItemOrFeed as retrieveGeoRssItemOrFeed } from '../../../namespaces/georss/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
 import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
+import { retrieveItem as retrievePhotoItem } from '../../../namespaces/photo/parse/utils.js'
 import { retrieveItem as retrievePingbackItem } from '../../../namespaces/pingback/parse/utils.js'
 import { retrieveItemOrFeed as retrievePrismItemOrFeed } from '../../../namespaces/prism/parse/utils.js'
 import { retrieveAbout as retrieveRdfAbout } from '../../../namespaces/rdf/parse/utils.js'
@@ -125,6 +126,7 @@ export const parseItem: ParseUtilPartial<RdfFeed.Item<DateAny>> = (value, option
     content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
+    photo: namespaces.has('photo') ? retrievePhotoItem(value) : undefined,
     feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
     prism: namespaces.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(value) : undefined,

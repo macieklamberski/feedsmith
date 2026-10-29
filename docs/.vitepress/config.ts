@@ -143,6 +143,7 @@ export default defineConfig({
               { text: 'Podcast Index', link: '/reference/namespaces/podcast' },
               { text: 'Podlove Simple Chapters', link: '/reference/namespaces/psc' },
               { text: 'Media RSS', link: '/reference/namespaces/media' },
+              { text: 'Pheed Photo', link: '/reference/namespaces/photo' },
               { text: 'Google Play Podcast', link: '/reference/namespaces/googleplay' },
               { text: 'Spotify', link: '/reference/namespaces/spotify' },
               { text: 'Acast', link: '/reference/namespaces/acast' },

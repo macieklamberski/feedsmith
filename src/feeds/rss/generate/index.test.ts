@@ -388,6 +388,37 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with photo namespace', () => {
+    const value = {
+      title: 'Feed with photo namespace',
+      description: 'Test feed with Pheed photo namespace',
+      items: [
+        {
+          title: 'Sunset over the bay',
+          photo: {
+            thumbnail: 'https://example.com/albums/Underwater/Carwash_basement.thumb.jpg',
+            imgsrc: 'https://example.com/albums/Underwater/Carwash_basement.jpg',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:photo="http://www.pheed.com/pheed/">
+  <channel>
+    <title>Feed with photo namespace</title>
+    <description>Test feed with Pheed photo namespace</description>
+    <item>
+      <title>Sunset over the bay</title>
+      <photo:thumbnail>https://example.com/albums/Underwater/Carwash_basement.thumb.jpg</photo:thumbnail>
+      <photo:imgsrc>https://example.com/albums/Underwater/Carwash_basement.jpg</photo:imgsrc>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS feed with googleplay namespace', () => {
     const value: RssFeed.Feed<DateLike> = {
       title: 'Feed with GooglePlay namespace',
