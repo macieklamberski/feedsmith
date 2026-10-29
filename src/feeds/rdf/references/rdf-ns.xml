@@ -13,6 +13,7 @@
   xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0"
   xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
   xmlns:prism="http://prismstandard.org/namespaces/basic/2.0/"
+  xmlns:cb="http://www.cbwiki.net/wiki/index.php/Specification_1.2/"
   xmlns:cc="http://creativecommons.org/ns#"
   xmlns:wfw="http://wellformedweb.org/CommentAPI/"
   xmlns:admin="http://webns.net/mvcb/"
@@ -485,6 +486,161 @@
     <prism:startingPage>425</prism:startingPage>
     <prism:endingPage>432</prism:endingPage>
     <prism:publicationDate>2023-03-15T00:00:00.000Z</prism:publicationDate>
+
+    <!-- RSS-CB Namespace: Item Level Tags -->
+    <cb:event>
+      <cb:simpleTitle>Interest rate announcement</cb:simpleTitle>
+      <cb:occurrenceDate>2026-09-02</cb:occurrenceDate>
+      <cb:institutionAbbrev>BOC</cb:institutionAbbrev>
+      <cb:audience>Economic Club of Canada</cb:audience>
+      <cb:keyword>monetary policy</cb:keyword>
+      <cb:keyword>interest rates</cb:keyword>
+      <cb:resource>
+        <cb:title>Press release</cb:title>
+        <cb:link>https://example.com/press-release</cb:link>
+        <cb:description>Policy rate decision and statement</cb:description>
+      </cb:resource>
+      <cb:person type="Speaker">
+        <cb:givenName>Jane</cb:givenName>
+        <cb:surname>Doe</cb:surname>
+        <cb:personalTitle>Ms</cb:personalTitle>
+        <cb:nameAsWritten>Jane Doe</cb:nameAsWritten>
+        <cb:role>
+          <cb:jobTitle>Governor</cb:jobTitle>
+          <cb:affiliation>Example Central Bank</cb:affiliation>
+          <cb:body>Example Central Bank</cb:body>
+        </cb:role>
+      </cb:person>
+      <cb:venue>Conference Centre</cb:venue>
+      <cb:locationAsWritten>Ottawa, Canada</cb:locationAsWritten>
+      <cb:locationCountry>CA</cb:locationCountry>
+      <cb:locationState>ON</cb:locationState>
+      <cb:locationCity>Ottawa</cb:locationCity>
+      <cb:eventDateEnd>2026-09-03</cb:eventDateEnd>
+    </cb:event>
+    <cb:news>
+      <cb:simpleTitle>Balance sheet items end of May 2026</cb:simpleTitle>
+      <cb:occurrenceDate>2026-06-30T07:00:00Z</cb:occurrenceDate>
+      <cb:institutionAbbrev>SNB</cb:institutionAbbrev>
+      <cb:keyword>balance sheet</cb:keyword>
+      <cb:resource>
+        <cb:title>Statistical release</cb:title>
+        <cb:link>https://example.com/statistical-release</cb:link>
+      </cb:resource>
+      <cb:person>
+        <cb:nameAsWritten>John Smith</cb:nameAsWritten>
+      </cb:person>
+    </cb:news>
+    <cb:paper>
+      <cb:simpleTitle>Foreign exchange interventions</cb:simpleTitle>
+      <cb:occurrenceDate>2022-06-06</cb:occurrenceDate>
+      <cb:institutionAbbrev>BOC</cb:institutionAbbrev>
+      <cb:keyword>exchange rates</cb:keyword>
+      <cb:resource>
+        <cb:title>Staff Working Paper 2022-25</cb:title>
+        <cb:link>https://example.com/swp2022-25.pdf</cb:link>
+      </cb:resource>
+      <cb:person>
+        <cb:nameAsWritten>Jane Doe</cb:nameAsWritten>
+      </cb:person>
+      <cb:person>
+        <cb:nameAsWritten>John Smith</cb:nameAsWritten>
+      </cb:person>
+      <cb:byline>Jane Doe and John Smith</cb:byline>
+      <cb:publicationDate>June 2022</cb:publicationDate>
+      <cb:publication>Staff Working Papers</cb:publication>
+      <cb:issue>2022-25</cb:issue>
+      <cb:JELCode>F31</cb:JELCode>
+      <cb:JELCode>F33</cb:JELCode>
+    </cb:paper>
+    <cb:speech>
+      <cb:simpleTitle>Global developments and monetary policy</cb:simpleTitle>
+      <cb:occurrenceDate>2026-06-24T09:25:00Z</cb:occurrenceDate>
+      <cb:institutionAbbrev>SNB</cb:institutionAbbrev>
+      <cb:audience>Finance committees</cb:audience>
+      <cb:keyword>inflation</cb:keyword>
+      <cb:resource>
+        <cb:title>Speech text</cb:title>
+        <cb:link>https://example.com/speech</cb:link>
+      </cb:resource>
+      <cb:person>
+        <cb:nameAsWritten>Jane Doe</cb:nameAsWritten>
+      </cb:person>
+      <cb:venue>Finance seminar 2026</cb:venue>
+      <cb:locationAsWritten>Basel, Switzerland</cb:locationAsWritten>
+      <cb:locationCountry>CH</cb:locationCountry>
+      <cb:locationState>BS</cb:locationState>
+      <cb:locationCity>Basel</cb:locationCity>
+    </cb:speech>
+    <cb:statistics>
+      <cb:country>CH</cb:country>
+      <cb:institutionAbbrev>SNB</cb:institutionAbbrev>
+      <cb:exchangeRate>
+        <cb:value frequency="daily" decimals="4" unit_mult="0" units="CHF">0.9227</cb:value>
+        <cb:observation>
+          <cb:value>0.9227</cb:value>
+          <cb:unit>CHF</cb:unit>
+          <cb:unit_mult>0</cb:unit_mult>
+          <cb:decimals>4</cb:decimals>
+        </cb:observation>
+        <cb:baseCurrency unit_mult="0">CHF</cb:baseCurrency>
+        <cb:targetCurrency>EUR</cb:targetCurrency>
+        <cb:rateType>Daily rates (11:00)</cb:rateType>
+        <cb:observationPeriod>
+          <cb:frequency>daily</cb:frequency>
+          <cb:period>2026-07-17</cb:period>
+        </cb:observationPeriod>
+      </cb:exchangeRate>
+      <cb:interestRate>
+        <cb:value frequency="daily" decimals="3">0.337</cb:value>
+        <cb:observation>
+          <cb:value>0.337</cb:value>
+          <cb:unit>percent</cb:unit>
+          <cb:unit_mult>0</cb:unit_mult>
+          <cb:decimals>3</cb:decimals>
+        </cb:observation>
+        <cb:rateName>R10</cb:rateName>
+        <cb:rateType>Spot interest rate for 10-year maturities</cb:rateType>
+        <cb:observationPeriod>
+          <cb:frequency>daily</cb:frequency>
+          <cb:period>2026-07-01</cb:period>
+        </cb:observationPeriod>
+      </cb:interestRate>
+      <cb:transaction>
+        <cb:value unit_mult="9" decimals="3">1.781</cb:value>
+        <cb:observation>
+          <cb:value>1.781</cb:value>
+          <cb:unit>USD</cb:unit>
+          <cb:unit_mult>9</cb:unit_mult>
+          <cb:decimals>3</cb:decimals>
+        </cb:observation>
+        <cb:transactionName>couponPurchase</cb:transactionName>
+        <cb:transactionType>permanent open market operations</cb:transactionType>
+        <cb:observationPeriod>
+          <cb:frequency>quarterly</cb:frequency>
+          <cb:period>Q4 2008</cb:period>
+        </cb:observationPeriod>
+        <cb:transactionTerm>1day</cb:transactionTerm>
+      </cb:transaction>
+      <cb:otherStatistic>
+        <cb:value frequency="weekly" decimals="1" unit_mult="9" units="USD">241.6</cb:value>
+        <cb:observation>
+          <cb:value>241.6</cb:value>
+          <cb:unit>USD</cb:unit>
+          <cb:unit_mult>9</cb:unit_mult>
+          <cb:decimals>1</cb:decimals>
+        </cb:observation>
+        <cb:publicationDate>Spring, 2007</cb:publicationDate>
+        <cb:topic>CP</cb:topic>
+        <cb:coverage>Manufacturing</cb:coverage>
+        <cb:observationPeriod>
+          <cb:frequency>weekly</cb:frequency>
+          <cb:period>2026-06-22</cb:period>
+        </cb:observationPeriod>
+        <cb:dataType>seasonally adjusted index, 1997 = 100</cb:dataType>
+      </cb:otherStatistic>
+    </cb:statistics>
+    <cb:custom><contact>Example contact</contact></cb:custom>
 
     <!-- ccREL Namespace: Item Level Tags -->
     <cc:license rdf:resource="https://creativecommons.org/licenses/by-sa/4.0/"/>

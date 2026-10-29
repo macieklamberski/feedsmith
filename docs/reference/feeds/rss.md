@@ -38,6 +38,7 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
         <a href="/reference/namespaces/arxiv">arXiv</a>,
         <a href="/reference/namespaces/opensearch">OpenSearch</a>,
         <a href="/reference/namespaces/prism">PRISM</a>,
+        <a href="/reference/namespaces/cb">RSS-CB</a>,
         <a href="/reference/namespaces/cc">ccREL</a>,
         <a href="/reference/namespaces/creativecommons">Creative Commons</a>,
         <a href="/reference/namespaces/thr">Atom Threading</a>,

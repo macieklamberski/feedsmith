@@ -29,6 +29,7 @@ RDF (Resource Description Framework) Site Summary is an early XML-based syndicat
         <a href="/reference/namespaces/feedburner">FeedBurner</a>,
         <a href="/reference/namespaces/opensearch">OpenSearch</a>,
         <a href="/reference/namespaces/prism">PRISM</a>,
+        <a href="/reference/namespaces/cb">RSS-CB</a>,
         <a href="/reference/namespaces/cc">ccREL</a>,
         <a href="/reference/namespaces/wfw">Comment API</a>,
         <a href="/reference/namespaces/admin">Administrative</a>,

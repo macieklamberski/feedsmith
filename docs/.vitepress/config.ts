@@ -152,6 +152,7 @@ export default defineConfig({
               { text: 'arXiv', link: '/reference/namespaces/arxiv' },
               { text: 'OpenSearch', link: '/reference/namespaces/opensearch' },
               { text: 'PRISM', link: '/reference/namespaces/prism' },
+              { text: 'RSS-CB', link: '/reference/namespaces/cb' },
               { text: 'ccREL', link: '/reference/namespaces/cc' },
               { text: 'Creative Commons', link: '/reference/namespaces/creativecommons' },
               { text: 'Atom Threading', link: '/reference/namespaces/thr' },

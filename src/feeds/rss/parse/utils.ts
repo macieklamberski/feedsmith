@@ -23,6 +23,7 @@ import {
   retrieveFeed as retrieveAtomFeed,
 } from '../../../namespaces/atom/parse/utils.js'
 import { retrieveFeed as retrieveBlogChannelFeed } from '../../../namespaces/blogchannel/parse/utils.js'
+import { retrieveItem as retrieveCbItem } from '../../../namespaces/cb/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
@@ -422,6 +423,7 @@ export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, option
     feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
     arxiv: namespaces.has('arxiv') ? retrieveArxivEntry(value) : undefined,
     prism: namespaces.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
+    cb: namespaces.has('cb') ? retrieveCbItem(value, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
     creativeCommons: namespaces.has('creativecommons')
       ? retrieveCreativeCommonsItemOrFeed(value)
