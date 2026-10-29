@@ -18,6 +18,7 @@ import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
 import type { FeedBurnerNs } from '../../../namespaces/feedburner/common/types.js'
 import type { FeedPressNs } from '../../../namespaces/feedpress/common/types.js'
+import type { FhNs } from '../../../namespaces/fh/common/types.js'
 import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { GooglePlayNs } from '../../../namespaces/googleplay/common/types.js'
@@ -208,6 +209,7 @@ export namespace RssFeed {
       prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
       creativeCommons?: CreativeCommonsNs.ItemOrFeed
+      fh?: FhNs.Feed
       admin?: AdminNs.Feed
       pingback?: PingbackNs.Feed
       sourceNs?: SourceNs.Feed<TStrict>
