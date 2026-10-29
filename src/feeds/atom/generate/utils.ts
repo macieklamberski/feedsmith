@@ -22,6 +22,7 @@ import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generat
 import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
 import { generateItemOrFeed as generateDcItemOrFeed } from '../../../namespaces/dc/generate/utils.js'
 import { generateItemOrFeed as generateDcTermsItemOrFeed } from '../../../namespaces/dcterms/generate/utils.js'
+import { generateItemOrFeed as generateFaItemOrFeed } from '../../../namespaces/fa/generate/utils.js'
 import {
   generateFeed as generateFeedBurnerFeed,
   generateItem as generateFeedBurnerItem,
@@ -260,6 +261,7 @@ export const generateSource: GenerateUtil<AtomFeed.Source<DateLike>> = (source, 
     [key('subtitle')]: generateText(source.subtitle),
     [key('title')]: generateText(source.title),
     [key('updated')]: generateRfc3339Date(source.updated),
+    ...generateFaItemOrFeed(source.fa),
   }
 
   return trimObject(value)
@@ -310,6 +312,7 @@ export const generateEntry: GenerateUtil<AtomFeed.Entry<DateLike>> = (entry, opt
     ...generateCreativeCommonsItemOrFeed(entry.creativeCommons),
     ...generateThrItem(entry.thr),
     ...generateAppEntry(entry.app),
+    ...generateFaItemOrFeed(entry.fa),
     ...generateWfwItem(entry.wfw),
     ...generatePingbackItem(entry.pingback),
     ...generateTrackbackItem(entry.trackback),
@@ -381,6 +384,7 @@ export const generateFeed: GenerateUtil<AtomFeed.Feed<DateLike>> = (feed, option
     ...generatePrismItemOrFeed(feed.prism),
     ...generateCc(feed.cc),
     ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
+    ...generateFaItemOrFeed(feed.fa),
     ...generateAdminFeed(feed.admin),
     ...generatePingbackFeed(feed.pingback),
     ...generateYtFeed(feed.yt),

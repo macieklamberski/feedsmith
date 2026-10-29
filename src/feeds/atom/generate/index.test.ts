@@ -1022,6 +1022,43 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with fa namespace', () => {
+    const value = {
+      id: 'https://example.com',
+      title: { value: 'Weather in Kebanyel' },
+      updated: new Date('2026-07-02T18:00:00Z'),
+      fa: {
+        maxAge: 10800000,
+      },
+      entries: [
+        {
+          id: 'https://example.com/42935/en#time_2026-07-02T18:00:00+00:00',
+          title: { value: 'At 21:00 the weather station reported +18.1 °C' },
+          updated: new Date('2026-07-02T18:00:00Z'),
+          fa: {
+            expires: new Date('2026-07-02T21:00:00Z'),
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:fa="http://purl.org/atompub/age/1.0">
+  <id>https://example.com</id>
+  <title>Weather in Kebanyel</title>
+  <updated>2026-07-02T18:00:00.000Z</updated>
+  <fa:max-age>10800000</fa:max-age>
+  <entry>
+    <id>https://example.com/42935/en#time_2026-07-02T18:00:00+00:00</id>
+    <title>At 21:00 the weather station reported +18.1 °C</title>
+    <updated>2026-07-02T18:00:00.000Z</updated>
+    <fa:expires>2026-07-02T21:00:00.000Z</fa:expires>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with wfw namespace', () => {
     const value = {
       id: 'https://example.com/blog',
