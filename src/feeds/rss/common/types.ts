@@ -8,6 +8,7 @@ import type {
 } from '../../../common/types.js'
 import type { AcastNs } from '../../../namespaces/acast/common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
+import type { AnnotateNs } from '../../../namespaces/annotate/common/types.js'
 import type { ArxivNs } from '../../../namespaces/arxiv/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
 import type { BlogChannelNs } from '../../../namespaces/blogchannel/common/types.js'
@@ -157,6 +158,7 @@ export namespace RssFeed {
       cc?: CcNs.ItemOrFeed
       creativeCommons?: CreativeCommonsNs.ItemOrFeed
       thr?: ThrNs.Item<TStrict>
+      annotate?: AnnotateNs.Item
       wfw?: WfwNs.Item
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item

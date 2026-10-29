@@ -930,6 +930,9 @@
           }
         ]
       },
+      "annotate": {
+        "reference": "https://example.com/posts/understanding-xml-namespaces"
+      },
       "wfw": {
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"

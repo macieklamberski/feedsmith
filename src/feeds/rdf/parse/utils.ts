@@ -10,6 +10,7 @@ import {
   trimArray,
 } from '../../../common/utils.js'
 import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
+import { retrieveItem as retrieveAnnotateItem } from '../../../namespaces/annotate/parse/utils.js'
 import {
   retrieveEntry as retrieveAtomEntry,
   retrieveFeed as retrieveAtomFeed,
@@ -128,6 +129,7 @@ export const parseItem: ParseUtilPartial<RdfFeed.Item<DateAny>> = (value, option
     feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
     prism: namespaces.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
     cc: namespaces.has('cc') ? retrieveCc(value) : undefined,
+    annotate: namespaces.has('annotate') ? retrieveAnnotateItem(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
     pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
