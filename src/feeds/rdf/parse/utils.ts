@@ -31,6 +31,10 @@ import { retrieveItemOrFeed as retrievePrismItemOrFeed } from '../../../namespac
 import { retrieveAbout as retrieveRdfAbout } from '../../../namespaces/rdf/parse/utils.js'
 import { retrieveItem as retrieveSlashItem } from '../../../namespaces/slash/parse/utils.js'
 import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/utils.js'
+import {
+  retrieveFeed as retrieveTaxoFeed,
+  retrieveItemOrFeed as retrieveTaxoItemOrFeed,
+} from '../../../namespaces/taxo/parse/utils.js'
 import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
 import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
@@ -124,6 +128,7 @@ export const parseItem: ParseUtilPartial<RdfFeed.Item<DateAny>> = (value, option
     dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(value, options) : undefined,
     content: namespaces.has('content') ? retrieveContentItem(value) : undefined,
     slash: namespaces.has('slash') ? retrieveSlashItem(value) : undefined,
+    taxo: namespaces.has('taxo') ? retrieveTaxoItemOrFeed(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
     feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
     prism: namespaces.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
@@ -178,6 +183,7 @@ export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, option
 
   const channel = parseSingular(value.channel as Unreliable)
   const namespaces = detectNamespaces(channel)
+  const rootNamespaces = detectNamespaces(value)
   const feed = {
     title: parseSingularOf(channel?.title, (value) => parseString(retrieveText(value))),
     link: parseSingularOf(channel?.link, (value) => parseString(retrieveText(value))),
@@ -190,6 +196,10 @@ export const parseFeed: ParseUtilPartial<RdfFeed.Feed<DateAny>> = (value, option
     dc: namespaces.has('dc') ? retrieveDcItemOrFeed(channel, options) : undefined,
     dcterms: namespaces.has('dcterms') ? retrieveDcTermsItemOrFeed(channel, options) : undefined,
     sy: namespaces.has('sy') ? retrieveSyFeed(channel, options) : undefined,
+    taxo:
+      namespaces.has('taxo') || rootNamespaces.has('taxo')
+        ? retrieveTaxoFeed(value, options)
+        : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(channel) : undefined,
     feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerFeed(channel) : undefined,
     opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(channel) : undefined,
