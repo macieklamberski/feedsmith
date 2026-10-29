@@ -217,6 +217,54 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate RSS with wiki namespace', () => {
+    const value = {
+      title: 'Feed with wiki namespace',
+      description: 'Test feed with Wiki namespace',
+      wiki: {
+        interwiki: {
+          value: 'ExampleWiki',
+          link: 'https://example.com/wiki.cgi?',
+        },
+      },
+      items: [
+        {
+          title: 'SandBox',
+          wiki: {
+            version: '24',
+            status: 'updated',
+            importance: 'minor',
+            diff: 'https://example.com/wiki?action=browse;diff=1;id=SandBox',
+            history: 'https://example.com/wiki?action=history;id=SandBox',
+          },
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:wiki="http://purl.org/rss/1.0/modules/wiki/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <channel>
+    <title>Feed with wiki namespace</title>
+    <description>Test feed with Wiki namespace</description>
+    <wiki:interwiki>
+      <rdf:Description link="https://example.com/wiki.cgi?">
+        <rdf:value>ExampleWiki</rdf:value>
+      </rdf:Description>
+    </wiki:interwiki>
+    <item>
+      <title>SandBox</title>
+      <wiki:version>24</wiki:version>
+      <wiki:status>updated</wiki:status>
+      <wiki:importance>minor</wiki:importance>
+      <wiki:diff>https://example.com/wiki?action=browse;diff=1;id=SandBox</wiki:diff>
+      <wiki:history>https://example.com/wiki?action=history;id=SandBox</wiki:history>
+    </item>
+  </channel>
+</rss>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate RSS with itunes namespace', () => {
     const value = {
       title: 'Feed with iTunes namespace',

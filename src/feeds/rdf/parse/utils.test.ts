@@ -742,6 +742,21 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle wiki namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'wiki:status': { '#text': 'updated' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      wiki: { status: 'updated' },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle media namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },
@@ -1864,6 +1879,21 @@ describe('parseFeed', () => {
         },
       ],
       sy: { updateFrequency: 5 },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle wiki namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'wiki:interwiki': { '#text': 'ExampleWiki' },
+      },
+    }
+    const expected = {
+      title: 'Example Feed',
+      wiki: { interwiki: { value: 'ExampleWiki' } },
     }
 
     expect(parseFeed(value)).toEqual(expected)

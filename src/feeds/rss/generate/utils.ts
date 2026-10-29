@@ -71,6 +71,10 @@ import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
 import { generateItem as generateTrackbackItem } from '../../../namespaces/trackback/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
+import {
+  generateFeed as generateWikiFeed,
+  generateItem as generateWikiItem,
+} from '../../../namespaces/wiki/generate/utils.js'
 import { generateItemOrFeed as generateXmlItemOrFeed } from '../../../namespaces/xml/generate/utils.js'
 import type { GenerateUtil, RssFeed } from '../common/types.js'
 
@@ -234,6 +238,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
     ...generateDcTermsItemOrFeed(item.dcterms),
     ...generateContentItem(item.content),
     ...generateSlashItem(item.slash),
+    ...generateWikiItem(item.wiki),
     ...generateItunesItem(item.itunes),
     ...generatePodcastItem(item.podcast),
     ...generatePscItem(item.psc),
@@ -289,6 +294,7 @@ export const generateFeed: GenerateUtil<RssFeed.Feed<DateLike>> = (feed) => {
     ...generateDcItemOrFeed(feed.dc),
     ...generateDcTermsItemOrFeed(feed.dcterms),
     ...generateSyFeed(feed.sy),
+    ...generateWikiFeed(feed.wiki),
     ...generateItunesFeed(feed.itunes),
     ...generatePodcastFeed(feed.podcast),
     ...generateMediaItemOrFeed(feed.media),

@@ -139,6 +139,7 @@ export default defineConfig({
               { text: 'Syndication', link: '/reference/namespaces/sy' },
               { text: 'Content', link: '/reference/namespaces/content' },
               { text: 'Slash', link: '/reference/namespaces/slash' },
+              { text: 'Wiki', link: '/reference/namespaces/wiki' },
               { text: 'iTunes', link: '/reference/namespaces/itunes' },
               { text: 'Podcast Index', link: '/reference/namespaces/podcast' },
               { text: 'Podlove Simple Chapters', link: '/reference/namespaces/psc' },
