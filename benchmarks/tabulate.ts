@@ -18,6 +18,7 @@ const main = () => {
     Performance: index === 0 ? 'baseline' : `${(result.mean / fastest).toFixed(2)}x slower`,
     // hyperfine omits the deviation for single-run commands.
     'Mean (ms)':
+      // biome-ignore lint/plugin/useIsPresent: The benchmarks do not depend on trousse.
       result.stddev != null
         ? `${format(result.mean)} ± ${format(result.stddev)}`
         : format(result.mean),
