@@ -391,6 +391,8 @@ export const generateXmlStylesheet = (stylesheet: XmlStylesheet): string | undef
   return `<?xml-stylesheet${attributes}?>`
 }
 
+const aposEntityRegex = /&apos;/g
+
 export const generateXml = (
   builder: XMLBuilder,
   value: string,
@@ -399,7 +401,7 @@ export const generateXml = (
   let body = builder.build(value)
 
   if (body.includes('&apos;')) {
-    body = body.replace(/&apos;/g, "'")
+    body = body.replace(aposEntityRegex, "'")
   }
 
   let declaration = '<?xml version="1.0" encoding="utf-8"?>'
