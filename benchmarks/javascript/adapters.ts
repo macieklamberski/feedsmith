@@ -1,5 +1,5 @@
 import { Readable } from 'node:stream'
-import { isPresent, type MaybePromise } from 'trousse'
+import type { MaybePromise } from 'trousse'
 
 export type Format = 'rss' | 'atom' | 'rdf' | 'json' | 'opml'
 export type Adapter = (content: string, format: Format) => MaybePromise<unknown>
@@ -60,7 +60,7 @@ export const adapterFactories: Record<string, AdapterFactory> = {
         feedparser.on('error', (error: Error) => reject(error))
         feedparser.on('readable', () => {
           let item: unknown = feedparser.read()
-          while (isPresent(item)) {
+          while (item !== null && item !== undefined) {
             items.push(item)
             item = feedparser.read()
           }
@@ -118,7 +118,7 @@ export const adapterFactories: Record<string, AdapterFactory> = {
         parser.on('error', (error: Error) => reject(error))
         parser.on('readable', () => {
           let item: unknown = parser.read()
-          while (isPresent(item)) {
+          while (item !== null && item !== undefined) {
             outlines.push(item)
             item = parser.read()
           }

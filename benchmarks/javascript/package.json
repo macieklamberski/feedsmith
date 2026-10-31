@@ -15,8 +15,7 @@
     "opml-to-json": "^1.0.1",
     "opmlparser": "^0.8.0",
     "podcast-feed-parser": "^1.0.4",
-    "rss-parser": "^3.13.0",
-    "trousse": "^3.4.0"
+    "rss-parser": "^3.13.0"
   },
   "devDependencies": {
     "@types/bun": "^1.4.2",
