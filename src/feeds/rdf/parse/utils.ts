@@ -1,4 +1,4 @@
-import { isPlainObject, trimObject } from 'trousse'
+import { coerceArray, isPlainObject, trimObject } from 'trousse'
 import type { DateAny, Unreliable } from '../../../common/types.js'
 import {
   detectNamespaces,
@@ -36,12 +36,12 @@ import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/u
 import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
 import type { ParseUtilPartial, RdfFeed } from '../common/types.js'
 
-const retrieveByAbout = (elements: unknown, resourceUri: string | undefined): unknown => {
+const retrieveByAbout = (elements: Unreliable, resourceUri: string | undefined): unknown => {
   if (!resourceUri) {
     return
   }
 
-  const array = Array.isArray(elements) ? elements : [elements]
+  const array = coerceArray(elements)
 
   return array.find((el) => parseString(el?.['@about']) === resourceUri)
 }

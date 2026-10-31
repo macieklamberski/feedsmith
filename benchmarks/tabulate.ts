@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs'
+import { isPresent } from 'trousse'
 
 // Renders a hyperfine --export-json file as a console.table in milliseconds, sorted fastest
 // first. Usage: bun tabulate.ts <json>.
@@ -17,10 +18,9 @@ const main = () => {
     Package: result.command,
     Performance: index === 0 ? 'baseline' : `${(result.mean / fastest).toFixed(2)}x slower`,
     // hyperfine omits the deviation for single-run commands.
-    'Mean (ms)':
-      result.stddev != null
-        ? `${format(result.mean)} ± ${format(result.stddev)}`
-        : format(result.mean),
+    'Mean (ms)': isPresent(result.stddev)
+      ? `${format(result.mean)} ± ${format(result.stddev)}`
+      : format(result.mean),
     Min: format(result.min),
     Max: format(result.max),
   }))
