@@ -4,6 +4,7 @@ import {
   coerceBoolean,
   coerceNumber,
   coerceSingular,
+  isFiniteNumber,
   isJsonLike,
   isNonEmptyString,
   isNumber,
@@ -389,6 +390,8 @@ export const generateXmlStylesheet = (stylesheet: XmlStylesheet): string | undef
   return `<?xml-stylesheet${attributes}?>`
 }
 
+const aposEntityRegex = /&apos;/g
+
 export const generateXml = (
   builder: XMLBuilder,
   value: string,
@@ -397,7 +400,7 @@ export const generateXml = (
   let body = builder.build(value)
 
   if (body.includes('&apos;')) {
-    body = body.replace(/&apos;/g, "'")
+    body = body.replace(aposEntityRegex, "'")
   }
 
   let declaration = '<?xml version="1.0" encoding="utf-8"?>'
@@ -556,7 +559,7 @@ export const generatePlainString: GenerateUtil<string> = (value) => {
 }
 
 export const generateNumber: GenerateUtil<number> = (value) => {
-  if (typeof value === 'number' && Number.isFinite(value)) {
+  if (isFiniteNumber(value)) {
     return value
   }
 }

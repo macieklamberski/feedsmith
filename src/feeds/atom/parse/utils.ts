@@ -82,6 +82,7 @@ export const createNamespaceGetter = (
 // SVG/MathML inside xhtml constructs has no observed real-world usage; extend to those bindings if
 // such feeds ever appear.
 const xhtmlDivStartRegex = /^\s*<(?:([a-zA-Z][\w.-]*):)?div[\s/>]/
+const dotRegex = /\./g
 
 // The wrapper is located by re-parsing the value with the div as a stop node, which hands back its
 // raw inner markup byte for byte while a real tag scan deals with a `>` inside a quoted attribute,
@@ -157,7 +158,7 @@ export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
 
   if (prefix) {
     // A prefix may contain dots, which are regex metacharacters when interpolated.
-    const escapedPrefix = prefix.replace(/\./g, '\\.')
+    const escapedPrefix = prefix.replace(dotRegex, '\\.')
 
     return inner.replace(new RegExp(`(</?)${escapedPrefix}:`, 'g'), '$1')
   }
@@ -237,6 +238,8 @@ export const mergeXhtmlDivXml = (
 // the same corruption the verbatim path exists to avoid. A section without its `]]>` terminator is
 // malformed XML and is left untouched.
 const cdataSectionRegex = /<!\[CDATA\[([\s\S]*?)\]\]>/g
+const ampersandRegex = /&/g
+const lessThanRegex = /</g
 
 export const escapeCdataSections = (value: Unreliable): Unreliable => {
   if (!isNonEmptyString(value)) {
@@ -244,7 +247,7 @@ export const escapeCdataSections = (value: Unreliable): Unreliable => {
   }
 
   return value.replace(cdataSectionRegex, (_, content: string) => {
-    return content.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    return content.replace(ampersandRegex, '&amp;').replace(lessThanRegex, '&lt;')
   })
 }
 

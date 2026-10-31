@@ -76,6 +76,7 @@ export const createNamespaceSetter = (prefix: string | undefined): NamespaceSett
 // flagging one too many only routes the value to the escaped fallback while missing one emits
 // markup that will not parse.
 const nonXmlEntityRegex = /&(?!(?:amp|lt|gt|quot|apos);|#\d+;|#x[0-9a-fA-F]+;)[^;\s&<]+;/
+const carriageReturnRegex = /\r/g
 
 export const generateXhtmlValue: GenerateUtil<string> = (value) => {
   if (!isNonEmptyString(value)) {
@@ -84,7 +85,7 @@ export const generateXhtmlValue: GenerateUtil<string> = (value) => {
 
   // A literal carriage return would be normalized away by the reading XML parser (XML §2.11); the
   // character reference survives, so the value round-trips exactly.
-  const inner = value.trim().replace(/\r/g, '&#13;')
+  const inner = value.trim().replace(carriageReturnRegex, '&#13;')
   const wrapped = `<div xmlns="http://www.w3.org/1999/xhtml">${inner}</div>`
 
   if (XMLValidator.validate(wrapped) !== true || nonXmlEntityRegex.test(wrapped)) {
