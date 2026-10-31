@@ -1,5 +1,5 @@
 import { Readable } from 'node:stream'
-import type { MaybePromise } from 'trousse'
+import { isPresent, type MaybePromise } from 'trousse'
 
 export type Format = 'rss' | 'atom' | 'rdf' | 'json' | 'opml'
 export type Adapter = (content: string, format: Format) => MaybePromise<unknown>
@@ -60,8 +60,7 @@ export const adapterFactories: Record<string, AdapterFactory> = {
         feedparser.on('error', (error: Error) => reject(error))
         feedparser.on('readable', () => {
           let item: unknown = feedparser.read()
-          // biome-ignore lint/plugin/useIsPresent: The benchmarks do not depend on trousse.
-          while (item !== null && item !== undefined) {
+          while (isPresent(item)) {
             items.push(item)
             item = feedparser.read()
           }
@@ -119,8 +118,7 @@ export const adapterFactories: Record<string, AdapterFactory> = {
         parser.on('error', (error: Error) => reject(error))
         parser.on('readable', () => {
           let item: unknown = parser.read()
-          // biome-ignore lint/plugin/useIsPresent: The benchmarks do not depend on trousse.
-          while (item !== null && item !== undefined) {
+          while (isPresent(item)) {
             outlines.push(item)
             item = parser.read()
           }
