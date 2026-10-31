@@ -5,6 +5,7 @@ import {
   coerceNumber,
   coerceSingular,
   isBoolean,
+  isFiniteNumber,
   isJsonLike,
   isNonEmptyString,
   isNumber,
@@ -556,7 +557,7 @@ export const generatePlainString: GenerateUtil<string> = (value) => {
 }
 
 export const generateNumber: GenerateUtil<number> = (value) => {
-  if (isNumber(value) && Number.isFinite(value)) {
+  if (isFiniteNumber(value)) {
     return value
   }
 }
