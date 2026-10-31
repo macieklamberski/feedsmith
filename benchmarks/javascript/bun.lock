@@ -18,7 +18,7 @@
         "opmlparser": "^0.8.0",
         "podcast-feed-parser": "^1.0.4",
         "rss-parser": "^3.13.0",
-        "trousse": "^3.3.0",
+        "trousse": "^3.4.0",
       },
       "devDependencies": {
         "@types/bun": "^1.4.2",
@@ -247,7 +247,7 @@
 
     "tr46": ["tr46@0.0.3", "", {}, "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw=="],
 
-    "trousse": ["trousse@3.3.0", "", { "dependencies": { "entities": "^8.1.0" } }, "sha512-67gOoNZ+bwVkFo78R9hb/nrkx0+wpYkh5F7e9nphwNJxVjOCgrzi8LaIptphnTop3/LOmyC3rESVQRW/hDc39g=="],
+    "trousse": ["trousse@3.4.0", "", { "dependencies": { "entities": "^8.1.0" } }, "sha512-J25d2rmdIDgGppV1m8qzEu3KErXBWYILAg6A/ZE9IBNGV80STKrv4DcmfHiIC2MVJ2honcZD6oc3cg+Y/VEdPw=="],
 
     "tunnel-agent": ["tunnel-agent@0.6.0", "", { "dependencies": { "safe-buffer": "^5.0.1" } }, "sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w=="],
 
