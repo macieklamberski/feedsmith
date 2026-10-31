@@ -1,4 +1,4 @@
-import { isPlainObject, trimObject } from 'trousse'
+import { isNumber, isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import { generateCdataString, generateNumber } from '../../../common/utils.js'
 import type { GeoRssNs } from '../common/types.js'
@@ -10,7 +10,7 @@ export const generateLatLngPairs = (
   const coordinates: Array<string> = []
 
   for (const point of points) {
-    if (typeof point.lat === 'number' && typeof point.lng === 'number') {
+    if (isNumber(point.lat) && isNumber(point.lng)) {
       coordinates.push(`${point.lat} ${point.lng}`)
     }
   }
@@ -64,7 +64,7 @@ export const generateBox: GenerateUtil<GeoRssNs.Box> = (box) => {
 }
 
 export const generateCircle: GenerateUtil<GeoRssNs.Circle> = (circle) => {
-  if (!isPlainObject(circle) || typeof circle.radius !== 'number') {
+  if (!isPlainObject(circle) || !isNumber(circle.radius)) {
     return
   }
 

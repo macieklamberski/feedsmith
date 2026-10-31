@@ -1,5 +1,5 @@
 import { XMLValidator } from 'fast-xml-parser'
-import { escapeHtml, isNonEmptyString, isPlainObject, trimObject } from 'trousse'
+import { escapeHtml, isNonEmptyString, isPlainObject, isString, trimObject } from 'trousse'
 import { namespaceUris } from '../../../common/config.js'
 import type { DateLike } from '../../../common/types.js'
 import {
@@ -110,8 +110,7 @@ const escapeStopNodeAttributes = <T extends Record<string, unknown>>(value: T): 
   for (const key in value) {
     const attribute = value[key]
 
-    escaped[key] =
-      isXmlAttributeKey(key) && typeof attribute === 'string' ? escapeHtml(attribute) : attribute
+    escaped[key] = isXmlAttributeKey(key) && isString(attribute) ? escapeHtml(attribute) : attribute
   }
 
   return escaped as T

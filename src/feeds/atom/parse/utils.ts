@@ -1,5 +1,5 @@
 import { XMLParser } from 'fast-xml-parser'
-import { isNonEmptyString, isPlainObject, parseUrl, trimObject } from 'trousse'
+import { isNonEmptyString, isPlainObject, isString, parseUrl, trimObject } from 'trousse'
 import type { DateAny, Unreliable } from '../../../common/types.js'
 import {
   detectNamespaces,
@@ -135,7 +135,7 @@ export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
       continue
     }
 
-    if (typeof child['#text'] === 'string' && !child['#text'].trim()) {
+    if (isString(child['#text']) && !child['#text'].trim()) {
       continue
     }
 
