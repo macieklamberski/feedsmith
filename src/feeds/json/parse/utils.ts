@@ -17,7 +17,7 @@ export const createCaseInsensitiveGetter = (
   value: Record<string, unknown>,
 ): CaseInsensitiveGetter => {
   return (requestedKey: string) => {
-    if (requestedKey in value) {
+    if (Object.hasOwn(value, requestedKey)) {
       return value[requestedKey]
     }
 
