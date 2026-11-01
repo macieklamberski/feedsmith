@@ -1,9 +1,26 @@
 version: 2
+
 updates:
   - package-ecosystem: bun
     directory: /
     schedule:
       interval: weekly
     cooldown:
-      default-days: 1
-    target-branch: main
+      default-days: 7
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: docker
+    directory: /docs/.docker
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
