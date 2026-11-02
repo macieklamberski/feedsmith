@@ -57,7 +57,7 @@
     "docs:build": "vitepress build docs"
   },
   "dependencies": {
-    "entities": "^7.0.1",
+    "entities": "^9.0.0",
     "fast-xml-parser": "~5.11.2"
   },
   "devDependencies": {
