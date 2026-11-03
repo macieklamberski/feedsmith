@@ -42,7 +42,7 @@ export const generateItem: GenerateUtil<GooglePlayNs.Item> = (item) => {
   }
 
   return trimObject({
-    'googleplay:author': generatePlainString(item.author),
+    'googleplay:author': generateCdataString(item.author),
     'googleplay:description': generateCdataString(item.description),
     'googleplay:explicit': generateExplicit(item.explicit),
     'googleplay:block': generateYesNoBoolean(item.block),
@@ -56,14 +56,14 @@ export const generateFeed: GenerateUtil<GooglePlayNs.Feed> = (feed) => {
   }
 
   return trimObject({
-    'googleplay:author': generatePlainString(feed.author),
+    'googleplay:author': generateCdataString(feed.author),
     'googleplay:description': generateCdataString(feed.description),
     'googleplay:explicit': generateExplicit(feed.explicit),
     'googleplay:block': generateYesNoBoolean(feed.block),
     'googleplay:image': generateImage(feed.image),
-    'googleplay:newFeedUrl': generatePlainString(feed.newFeedUrl),
-    'googleplay:email': generatePlainString(feed.email),
-    'googleplay:owner': generatePlainString(feed.owner),
+    'googleplay:newFeedUrl': generateCdataString(feed.newFeedUrl),
+    'googleplay:email': generateCdataString(feed.email),
+    'googleplay:owner': generateCdataString(feed.owner),
     'googleplay:category': trimArray(feed.categories, generateCategory),
   })
 }
