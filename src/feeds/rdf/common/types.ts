@@ -24,6 +24,7 @@ import type { SyNs } from '../../../namespaces/sy/common/types.js'
 import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 import type { XmlNs } from '../../../namespaces/xml/common/types.js'
+import type { YandexNs } from '../../../namespaces/yandex/common/types.js'
 
 export type ParseUtilPartial<R> = BaseParseUtilPartial<R, ParseMainOptions<DateAny>>
 
@@ -71,6 +72,7 @@ export namespace RdfFeed {
       wfw?: WfwNs.Item
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
+      yandex?: YandexNs.Item
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
@@ -97,6 +99,7 @@ export namespace RdfFeed {
       prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
       admin?: AdminNs.Feed
+      yandex?: YandexNs.Feed
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed

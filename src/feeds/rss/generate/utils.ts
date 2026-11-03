@@ -72,6 +72,10 @@ import { generateItem as generateThrItem } from '../../../namespaces/thr/generat
 import { generateItem as generateTrackbackItem } from '../../../namespaces/trackback/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
 import { generateItemOrFeed as generateXmlItemOrFeed } from '../../../namespaces/xml/generate/utils.js'
+import {
+  generateFeed as generateYandexFeed,
+  generateItem as generateYandexItem,
+} from '../../../namespaces/yandex/generate/utils.js'
 import type { GenerateUtil, RssFeed } from '../common/types.js'
 
 export const generatePerson: GenerateUtil<RssFeed.Person> = (person) => {
@@ -252,6 +256,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
     ...generatePingbackItem(item.pingback),
     ...generateTrackbackItem(item.trackback),
     ...generateSourceItem(item.sourceNs),
+    ...generateYandexItem(item.yandex),
     ...generateGeoItemOrFeed(item.geo),
     ...generateGeoRssItemOrFeed(item.georss),
     ...generateXmlItemOrFeed(item.xml),
@@ -306,6 +311,7 @@ export const generateFeed: GenerateUtil<RssFeed.Feed<DateLike>> = (feed) => {
     ...generatePingbackFeed(feed.pingback),
     ...generateSourceFeed(feed.sourceNs),
     ...generateBlogChannelFeed(feed.blogChannel),
+    ...generateYandexFeed(feed.yandex),
     ...generateGeoItemOrFeed(feed.geo),
     ...generateGeoRssItemOrFeed(feed.georss),
     item: trimArray(feed.items, generateItem),
