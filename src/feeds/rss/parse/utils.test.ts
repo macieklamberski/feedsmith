@@ -1647,6 +1647,19 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle wiki namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      'wiki:status': { '#text': 'updated' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      wiki: { status: 'updated' },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle itunes namespace', () => {
     const value = {
       title: { '#text': 'Podcast Episode' },
@@ -2241,6 +2254,22 @@ describe('parseFeed', () => {
       title: 'Example Feed',
       link: 'https://example.com',
       sy: { updateFrequency: 5 },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle wiki namespace', () => {
+    const channel = {
+      title: { '#text': 'Example Feed' },
+      link: { '#text': 'https://example.com' },
+      'wiki:interwiki': { '#text': 'OddMuse' },
+    }
+    const value = { channel }
+    const expected = {
+      title: 'Example Feed',
+      link: 'https://example.com',
+      wiki: { interwiki: { value: 'OddMuse' } },
     }
 
     expect(parseFeed(value)).toEqual(expected)

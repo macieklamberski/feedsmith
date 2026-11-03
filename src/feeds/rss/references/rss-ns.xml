@@ -8,6 +8,7 @@
      xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
      xmlns:content="http://purl.org/rss/1.0/modules/content/"
      xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+     xmlns:wiki="http://purl.org/rss/1.0/modules/wiki/"
      xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
      xmlns:podcast="https://podcastindex.org/namespace/1.0"
      xmlns:psc="http://podlove.org/simple-chapters"
@@ -128,6 +129,13 @@
     <sy:updatePeriod>hourly</sy:updatePeriod>
     <sy:updateFrequency>1</sy:updateFrequency>
     <sy:updateBase>2000-01-01T12:00:00.000Z</sy:updateBase>
+
+    <!-- Wiki Namespace: Channel Level Tags -->
+    <wiki:interwiki>
+      <rdf:Description link="http://openwiki.com/?">
+        <rdf:value>OpenWiki</rdf:value>
+      </rdf:Description>
+    </wiki:interwiki>
 
     <!-- iTunes Namespace: Channel Level Tags -->
     <itunes:image href="https://example.com/images/podcast-cover.jpg"/>
@@ -611,6 +619,14 @@
       <slash:department>not-an-ocean-unless-there-are-lobsters</slash:department>
       <slash:comments>177</slash:comments>
       <slash:hit_parade>177,155,105,33,6,3,0</slash:hit_parade>
+
+      <!-- Wiki Namespace: Item Level Tags -->
+      <dc:contributor><rdf:Description wiki:host="192.168.1.10"><rdf:value>Mary McConnell</rdf:value></rdf:Description></dc:contributor>
+      <wiki:version>v23</wiki:version>
+      <wiki:status>updated</wiki:status>
+      <wiki:importance>major</wiki:importance>
+      <wiki:diff>http://openwiki.com/?p=SandBox&amp;a=diff</wiki:diff>
+      <wiki:history>http://openwiki.com/?p=SandBox&amp;a=changes</wiki:history>
 
       <!-- iTunes Namespace: Item Level Tags -->
       <itunes:duration>1800</itunes:duration>

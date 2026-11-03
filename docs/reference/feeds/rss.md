@@ -25,6 +25,7 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
         <a href="/reference/namespaces/sy">Syndication</a>,
         <a href="/reference/namespaces/content">Content</a>,
         <a href="/reference/namespaces/slash">Slash</a>,
+        <a href="/reference/namespaces/wiki">Wiki</a>,
         <a href="/reference/namespaces/itunes">iTunes</a>,
         <a href="/reference/namespaces/podcast">Podcast Index</a>,
         <a href="/reference/namespaces/psc">Podlove Simple Chapters</a>,

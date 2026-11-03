@@ -26,7 +26,10 @@
         "subjects": ["Article, Tutorial, Example"],
         "descriptions": ["This article explores advanced concepts in technology"],
         "publishers": ["Example News Organization"],
-        "contributors": ["Assistant Editor Mike Thompson"],
+        "contributors": [
+          "Assistant Editor Mike Thompson",
+          "<rdf:Description wiki:host=\"192.168.1.10\"><rdf:value>Mary McConnell</rdf:value></rdf:Description>"
+        ],
         "dates": ["2022-01-01T12:00+00:00"],
         "types": ["Article"],
         "formats": ["text/html"],
@@ -104,6 +107,14 @@
         "department": "not-an-ocean-unless-there-are-lobsters",
         "comments": 177,
         "hitParade": [177, 155, 105, 33, 6, 3, 0]
+      },
+      "wiki": {
+        "host": "192.168.1.10",
+        "version": "v23",
+        "status": "updated",
+        "importance": "major",
+        "diff": "http://openwiki.com/?p=SandBox&a=diff",
+        "history": "http://openwiki.com/?p=SandBox&a=changes"
       },
       "media": {
         "contents": [
@@ -698,6 +709,12 @@
     "updatePeriod": "hourly",
     "updateFrequency": 1,
     "updateBase": "2000-01-01T12:00+00:00"
+  },
+  "wiki": {
+    "interwiki": {
+      "value": "OpenWiki",
+      "link": "http://openwiki.com/?"
+    }
   },
   "media": {
     "contents": [

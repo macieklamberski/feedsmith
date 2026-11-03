@@ -737,6 +737,21 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with wiki namespace properties', () => {
+    const value = {
+      title: 'Item with wiki namespace',
+      wiki: {
+        status: 'updated',
+      },
+    }
+    const expected = {
+      title: 'Item with wiki namespace',
+      'wiki:status': 'updated',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with itunes namespace properties', () => {
     const value = {
       title: 'Item with iTunes namespace',
@@ -1469,6 +1484,38 @@ describe('generateFeed', () => {
           'sy:updatePeriod': 'hourly',
           'sy:updateFrequency': 2,
           'sy:updateBase': '2023-01-01T00:00:00.000Z',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate wiki namespace properties and attributes', () => {
+    const value = {
+      title: 'Feed with wiki namespace',
+      description: 'Description',
+      wiki: {
+        interwiki: {
+          value: 'ExampleWiki',
+          link: 'https://example.com/wiki.cgi?',
+        },
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:wiki': 'http://purl.org/rss/1.0/modules/wiki/',
+        '@xmlns:rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        channel: {
+          title: 'Feed with wiki namespace',
+          description: 'Description',
+          'wiki:interwiki': {
+            'rdf:Description': {
+              '@link': 'https://example.com/wiki.cgi?',
+              'rdf:value': 'ExampleWiki',
+            },
+          },
         },
       },
     }
