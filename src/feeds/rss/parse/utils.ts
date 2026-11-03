@@ -17,6 +17,7 @@ import {
   retrieveItem as retrieveAcastItem,
 } from '../../../namespaces/acast/parse/utils.js'
 import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
+import { retrieveItem as retrieveAnnotateItem } from '../../../namespaces/annotate/parse/utils.js'
 import { retrieveEntry as retrieveArxivEntry } from '../../../namespaces/arxiv/parse/utils.js'
 import {
   retrieveEntry as retrieveAtomEntry,
@@ -427,6 +428,7 @@ export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, option
       ? retrieveCreativeCommonsItemOrFeed(value)
       : undefined,
     thr: namespaces.has('thr') ? retrieveThrItem(value) : undefined,
+    annotate: namespaces.has('annotate') ? retrieveAnnotateItem(value) : undefined,
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
     pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,

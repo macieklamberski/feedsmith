@@ -155,6 +155,7 @@ export default defineConfig({
               { text: 'ccREL', link: '/reference/namespaces/cc' },
               { text: 'Creative Commons', link: '/reference/namespaces/creativecommons' },
               { text: 'Atom Threading', link: '/reference/namespaces/thr' },
+              { text: 'Annotation', link: '/reference/namespaces/annotate' },
               { text: 'Atom Publishing Protocol', link: '/reference/namespaces/app' },
               { text: 'Comment API', link: '/reference/namespaces/wfw' },
               { text: 'Administrative', link: '/reference/namespaces/admin' },

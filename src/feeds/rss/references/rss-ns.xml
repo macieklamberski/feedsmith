@@ -24,6 +24,7 @@
      xmlns:cc="http://creativecommons.org/ns#"
      xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule"
      xmlns:thr="http://purl.org/syndication/thread/1.0"
+     xmlns:annotate="http://purl.org/rss/1.0/modules/annotate/"
      xmlns:wfw="http://wellformedweb.org/CommentAPI/"
      xmlns:admin="http://webns.net/mvcb/"
      xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
@@ -941,6 +942,9 @@
       <thr:total>100</thr:total>
       <thr:in-reply-to ref="urn:uuid:d5e9c5d0-4c0c-11ec-81d3-0242ac130003" href="https://example.com/posts/understanding-xml-namespaces" type="application/xhtml+xml"/>
       <thr:in-reply-to ref="urn:uuid:e7865b80-4c0c-11ec-81d3-0242ac130003" href="https://example.com/posts/understanding-xml-namespaces/comments/1" type="application/xhtml+xml"/>
+
+      <!-- Annotation Namespace: Item Level Tags -->
+      <annotate:reference rdf:resource="https://example.com/posts/understanding-xml-namespaces"/>
 
       <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
       <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
