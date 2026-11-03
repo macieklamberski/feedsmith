@@ -644,7 +644,7 @@ describe('generate', () => {
       ],
     }
     const expected = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0">
   <id>https://example.com/feed</id>
   <title>Feed with GooglePlay namespace</title>
   <updated>2023-03-15T12:00:00.000Z</updated>
