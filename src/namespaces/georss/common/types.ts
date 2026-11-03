@@ -55,3 +55,8 @@ export namespace GeoRssNs {
   }
 }
 // #endregion reference
+
+export type PairsCount = {
+  min?: number
+  max?: number
+}

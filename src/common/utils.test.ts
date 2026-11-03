@@ -39,6 +39,10 @@ import {
   trimArray,
 } from './utils.js'
 
+type ItemGroup = {
+  items: Array<number>
+}
+
 describe('isNonEmptyStringOrNumber', () => {
   it('should return true for non-empty strings', () => {
     expect(isNonEmptyStringOrNumber('hello')).toBe(true)
@@ -559,7 +563,7 @@ describe('trimArray', () => {
     it('should handle nested data structures with parsing', () => {
       const value = [{ items: [1, 2] }, { items: [3, 4] }]
       const expected = [1, 3]
-      const extractFirstItem = (obj: { items: Array<number> }) => {
+      const extractFirstItem = (obj: ItemGroup) => {
         return obj.items && obj.items.length > 0 ? obj.items[0] : null
       }
 

@@ -1,11 +1,11 @@
 import { isPlainObject, trimObject } from 'trousse'
 import type { GenerateUtil } from '../../../common/types.js'
 import { generateCdataString, generateNumber } from '../../../common/utils.js'
-import type { GeoRssNs } from '../common/types.js'
+import type { GeoRssNs, PairsCount } from '../common/types.js'
 
 export const generateLatLngPairs = (
   points: Array<GeoRssNs.Point>,
-  pairsCount?: { min?: number; max?: number },
+  pairsCount?: PairsCount,
 ): string | undefined => {
   const coordinates: Array<string> = []
 
