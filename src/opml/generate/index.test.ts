@@ -6,15 +6,13 @@ import { generate } from './index.js'
 describe('generate', () => {
   const references = ['category', 'directory', 'places', 'script', 'countries', 'subscriptions']
 
-  for (const reference of references) {
-    it(`should correctly generate ${reference} OPML from JSON`, async () => {
-      const path = `${import.meta.dir}/../references/${reference}`
-      const value = await Bun.file(`${path}.json`).json()
-      const expected = await Bun.file(`${path}.opml`).text()
+  it.each(references)('should correctly generate %s OPML from JSON', async (reference) => {
+    const path = `${import.meta.dir}/../references/${reference}`
+    const value = await Bun.file(`${path}.json`).json()
+    const expected = await Bun.file(`${path}.opml`).text()
 
-      expect(generate(value)).toBe(expected)
-    })
-  }
+    expect(generate(value)).toBe(expected)
+  })
 
   it('should generate minimal valid OPML', () => {
     const value = {

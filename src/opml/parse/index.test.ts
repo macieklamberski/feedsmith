@@ -6,15 +6,13 @@ import { parse } from './index.js'
 describe('parse', () => {
   const references = ['category', 'directory', 'places', 'script', 'countries', 'subscriptions']
 
-  for (const reference of references) {
-    it(`should correctly parse ${reference} OPML to JSON`, async () => {
-      const path = `${import.meta.dir}/../references/${reference}`
-      const value = await Bun.file(`${path}.opml`).text()
-      const expected = await Bun.file(`${path}.json`).json()
+  it.each(references)('should correctly parse %s OPML to JSON', async (reference) => {
+    const path = `${import.meta.dir}/../references/${reference}`
+    const value = await Bun.file(`${path}.opml`).text()
+    const expected = await Bun.file(`${path}.json`).json()
 
-      expect(parse(value)).toEqual(expected)
-    })
-  }
+    expect(parse(value)).toEqual(expected)
+  })
 
   it('should handle OPML with one outline', () => {
     const value = `

@@ -5,21 +5,19 @@ import locales from '../../../locales.json' with { type: 'json' }
 import { parse } from './index.js'
 
 describe('parse', () => {
-  const versions = {
-    '09': '0.9',
-    '10': '1.0',
-    ns: 'with namespaces',
-  }
+  const versions = [
+    { key: '09', label: '0.9' },
+    { key: '10', label: '1.0' },
+    { key: 'ns', label: 'with namespaces' },
+  ]
 
-  for (const [key, label] of Object.entries(versions)) {
-    it(`should correctly parse RDF ${label}`, async () => {
-      const reference = `${import.meta.dir}/../references/rdf-${key}`
-      const value = await Bun.file(`${reference}.xml`).text()
-      const expected = await Bun.file(`${reference}.json`).json()
+  it.each(versions)('should correctly parse RDF $label', async ({ key }) => {
+    const reference = `${import.meta.dir}/../references/rdf-${key}`
+    const value = await Bun.file(`${reference}.xml`).text()
+    const expected = await Bun.file(`${reference}.json`).json()
 
-      expect(parse(value)).toEqual(expected)
-    })
-  }
+    expect(parse(value)).toEqual(expected)
+  })
 
   it('should correctly parse RDF with mixed case tags', () => {
     const value = `
@@ -1113,29 +1111,27 @@ describe('parse', () => {
         ],
       }
 
-      for (const uri of namespaceUris.rdf) {
-        it(`should parse RDF feed with namespace URI: ${uri}`, () => {
-          const value = `
-            <?xml version="1.0" encoding="UTF-8"?>
-            <rdf:RDF
-              xmlns:rdf="${uri}"
-              xmlns="http://purl.org/rss/1.0/"
-            >
-              <channel rdf:about="http://example.com">
-                <title>Test Feed</title>
-                <link>http://example.com</link>
-                <description>Test Description</description>
-              </channel>
-              <item rdf:about="http://example.com/item1">
-                <title>Test Item</title>
-                <link>http://example.com/item1</link>
-              </item>
-            </rdf:RDF>
-          `
+      it.each(namespaceUris.rdf)('should parse RDF feed with namespace URI: %s', (uri) => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <rdf:RDF
+            xmlns:rdf="${uri}"
+            xmlns="http://purl.org/rss/1.0/"
+          >
+            <channel rdf:about="http://example.com">
+              <title>Test Feed</title>
+              <link>http://example.com</link>
+              <description>Test Description</description>
+            </channel>
+            <item rdf:about="http://example.com/item1">
+              <title>Test Item</title>
+              <link>http://example.com/item1</link>
+            </item>
+          </rdf:RDF>
+        `
 
-          expect(parse(value)).toEqual(expected)
-        })
-      }
+        expect(parse(value)).toEqual(expected)
+      })
     })
   })
 

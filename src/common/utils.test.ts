@@ -902,11 +902,9 @@ describe('parseString', () => {
         { value: '&#x00A9;', expected: '©', name: 'hex char ref &#x00A9; to ©' },
       ]
 
-      for (const { value, expected, name } of cases) {
-        it(`should decode ${name}`, () => {
-          expect(parseString(value)).toBe(expected)
-        })
-      }
+      it.each(cases)('should decode $name', ({ value, expected }) => {
+        expect(parseString(value)).toBe(expected)
+      })
     })
 
     describe('single-decode behavior (no double-decoding)', () => {
@@ -918,11 +916,9 @@ describe('parseString', () => {
         { value: '&lt; and &amp;lt;', expected: '< and &lt;', name: 'mixed single and double' },
       ]
 
-      for (const { value, expected, name } of cases) {
-        it(`should decode ${name}`, () => {
-          expect(parseString(value)).toBe(expected)
-        })
-      }
+      it.each(cases)('should decode $name', ({ value, expected }) => {
+        expect(parseString(value)).toBe(expected)
+      })
     })
 
     describe('CDATA verbatim passthrough (XML §2.7)', () => {
@@ -935,11 +931,9 @@ describe('parseString', () => {
         { value: '<![CDATA[]]]]>', expected: ']]', name: ']] inside CDATA (only ]]> ends it)' },
       ]
 
-      for (const { value, expected, name } of cases) {
-        it(`should preserve ${name}`, () => {
-          expect(parseString(value)).toBe(expected)
-        })
-      }
+      it.each(cases)('should preserve $name', ({ value, expected }) => {
+        expect(parseString(value)).toBe(expected)
+      })
     })
 
     describe('mixed content (CDATA + regular text)', () => {
@@ -966,11 +960,9 @@ describe('parseString', () => {
         },
       ]
 
-      for (const { value, expected, name } of cases) {
-        it(`should handle ${name}`, () => {
-          expect(parseString(value)).toBe(expected)
-        })
-      }
+      it.each(cases)('should handle $name', ({ value, expected }) => {
+        expect(parseString(value)).toBe(expected)
+      })
     })
 
     describe('real-world feed examples', () => {
@@ -1019,11 +1011,9 @@ describe('parseString', () => {
         },
       ]
 
-      for (const { value, expected, name } of cases) {
-        it(`should handle ${name}`, () => {
-          expect(parseString(value)).toBe(expected)
-        })
-      }
+      it.each(cases)('should handle $name', ({ value, expected }) => {
+        expect(parseString(value)).toBe(expected)
+      })
     })
   })
 })
