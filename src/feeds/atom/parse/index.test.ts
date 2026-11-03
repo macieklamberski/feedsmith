@@ -6,21 +6,19 @@ import type { AtomFeed } from '../common/types.js'
 import { parse } from './index.js'
 
 describe('parse', () => {
-  const versions = {
-    '03': '0.3',
-    '10': '1.0',
-    ns: 'with namespaces',
-  }
+  const versions = [
+    { key: '03', label: '0.3' },
+    { key: '10', label: '1.0' },
+    { key: 'ns', label: 'with namespaces' },
+  ]
 
-  for (const [key, label] of Object.entries(versions)) {
-    it(`should correctly parse Atom ${label} feed`, async () => {
-      const reference = `${import.meta.dir}/../references/atom-${key}`
-      const value = await Bun.file(`${reference}.xml`).text()
-      const expected = await Bun.file(`${reference}.json`).json()
+  it.each(versions)('should correctly parse Atom $label feed', async ({ key }) => {
+    const reference = `${import.meta.dir}/../references/atom-${key}`
+    const value = await Bun.file(`${reference}.xml`).text()
+    const expected = await Bun.file(`${reference}.json`).json()
 
-      expect(parse(value)).toEqual(expected)
-    })
-  }
+    expect(parse(value)).toEqual(expected)
+  })
 
   it('should correctly parse Atom 1.0 feed with mixed case tags', () => {
     const value = `
@@ -1132,25 +1130,23 @@ describe('parse', () => {
         ],
       }
 
-      for (const uri of namespaceUris.atom) {
-        it(`should parse Atom feed with namespace URI: ${uri}`, () => {
-          const value = `
-            <?xml version="1.0" encoding="UTF-8"?>
-            <feed xmlns="${uri}">
-              <title>Test Feed</title>
-              <id>urn:uuid:feed-id</id>
+      it.each(namespaceUris.atom)('should parse Atom feed with namespace URI: %s', (uri) => {
+        const value = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <feed xmlns="${uri}">
+            <title>Test Feed</title>
+            <id>urn:uuid:feed-id</id>
+            <updated>2024-01-01T00:00:00Z</updated>
+            <entry>
+              <title>Test Entry</title>
+              <id>urn:uuid:entry-id</id>
               <updated>2024-01-01T00:00:00Z</updated>
-              <entry>
-                <title>Test Entry</title>
-                <id>urn:uuid:entry-id</id>
-                <updated>2024-01-01T00:00:00Z</updated>
-              </entry>
-            </feed>
-          `
+            </entry>
+          </feed>
+        `
 
-          expect(parse(value)).toEqual(expected)
-        })
-      }
+        expect(parse(value)).toEqual(expected)
+      })
     })
 
     describe('with maxItems option', () => {

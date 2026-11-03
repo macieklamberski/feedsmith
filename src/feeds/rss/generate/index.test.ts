@@ -7,19 +7,15 @@ import { parse } from '../parse/index.js'
 import { generate } from './index.js'
 
 describe('generate', () => {
-  const versions = {
-    '20': '2.0',
-  }
+  const versions = [{ key: '20', label: '2.0' }]
 
-  for (const [key, label] of Object.entries(versions)) {
-    it(`should correctly generate RSS ${label}`, async () => {
-      const reference = `${import.meta.dir}/../references/rss-${key}`
-      const value = await Bun.file(`${reference}.json`).json()
-      const expected = await Bun.file(`${reference}.xml`).text()
+  it.each(versions)('should correctly generate RSS $label', async ({ key }) => {
+    const reference = `${import.meta.dir}/../references/rss-${key}`
+    const value = await Bun.file(`${reference}.json`).json()
+    const expected = await Bun.file(`${reference}.xml`).text()
 
-      expect(generate(value)).toEqual(expected)
-    })
-  }
+    expect(generate(value)).toEqual(expected)
+  })
 
   it.todo('should correctly generate RSS with namespaces', () => {
     // Generate from the references/rss-ns.json fixture and compare against

@@ -4,25 +4,23 @@ import locales from '../../../locales.json' with { type: 'json' }
 import { parse } from './index.js'
 
 describe('parse', () => {
-  const versions = {
-    '090': '0.90',
-    '091': '0.91',
-    '092': '0.92',
-    '093': '0.93',
-    '094': '0.94',
-    '20': '2.0',
-    ns: 'with namespaces',
-  }
+  const versions = [
+    { key: '090', label: '0.90' },
+    { key: '091', label: '0.91' },
+    { key: '092', label: '0.92' },
+    { key: '093', label: '0.93' },
+    { key: '094', label: '0.94' },
+    { key: '20', label: '2.0' },
+    { key: 'ns', label: 'with namespaces' },
+  ]
 
-  for (const [key, label] of Object.entries(versions)) {
-    it(`should correctly parse RSS ${label}`, async () => {
-      const reference = `${import.meta.dir}/../references/rss-${key}`
-      const value = await Bun.file(`${reference}.xml`).text()
-      const expected = await Bun.file(`${reference}.json`).json()
+  it.each(versions)('should correctly parse RSS $label', async ({ key }) => {
+    const reference = `${import.meta.dir}/../references/rss-${key}`
+    const value = await Bun.file(`${reference}.xml`).text()
+    const expected = await Bun.file(`${reference}.json`).json()
 
-      expect(parse(value)).toEqual(expected)
-    })
-  }
+    expect(parse(value)).toEqual(expected)
+  })
 
   it('should correctly parse RSS with mixed case tags', () => {
     const value = `
