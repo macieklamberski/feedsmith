@@ -1022,6 +1022,39 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with fh namespace', () => {
+    const value = {
+      id: 'https://example.com/feed/archive/2024/01',
+      title: { value: 'Feed with fh' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      fh: {
+        archive: true,
+      },
+      entries: [
+        {
+          id: 'https://example.com/entry/1',
+          title: { value: 'Entry title' },
+          updated: new Date('2024-01-05T10:30:00Z'),
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:fh="http://purl.org/syndication/history/1.0">
+  <id>https://example.com/feed/archive/2024/01</id>
+  <title>Feed with fh</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <fh:archive/>
+  <entry>
+    <id>https://example.com/entry/1</id>
+    <title>Entry title</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with wfw namespace', () => {
     const value = {
       id: 'https://example.com/blog',

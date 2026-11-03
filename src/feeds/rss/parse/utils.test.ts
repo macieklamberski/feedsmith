@@ -2302,6 +2302,26 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
+  it('should handle fh namespace', () => {
+    const channel = {
+      title: { '#text': 'Photo Album Feed' },
+      link: { '#text': 'https://example.com/album' },
+      'fh:prev': { '#text': 'https://example.com/rss/album?page=2' },
+      'fh:incremental': { '#text': 'true' },
+    }
+    const value = { channel }
+    const expected = {
+      title: 'Photo Album Feed',
+      link: 'https://example.com/album',
+      fh: {
+        incremental: true,
+        prev: 'https://example.com/rss/album?page=2',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
   it('should handle admin namespace', () => {
     const channel = {
       title: { '#text': 'Admin Feed' },

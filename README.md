@@ -102,6 +102,7 @@ Feedsmith aims to fully support all major feed formats and namespaces in complet
 | [Creative Commons](https://feedsmith.dev/reference/namespaces/creativecommons) | `<creativeCommons:*>` | RSS, Atom | ✅ | ✅ |
 | [Atom Threading](https://feedsmith.dev/reference/namespaces/thr) | `<thr:*>` | RSS, Atom | ✅ | ✅ |
 | [Atom Publishing Protocol](https://feedsmith.dev/reference/namespaces/app) | `<app:*>` | Atom | ✅ | ✅ |
+| [Feed History](https://feedsmith.dev/reference/namespaces/fh) | `<fh:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Comment API](https://feedsmith.dev/reference/namespaces/wfw) | `<wfw:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Administrative](https://feedsmith.dev/reference/namespaces/admin) | `<admin:*>` | RSS, Atom, RDF | ✅ | ✅ |
 | [Pingback](https://feedsmith.dev/reference/namespaces/pingback) | `<pingback:*>` | RSS, Atom, RDF | ✅ | ✅ |
