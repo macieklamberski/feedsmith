@@ -1209,6 +1209,69 @@ describe('generate', () => {
     expect(generate(value)).toEqual(expected)
   })
 
+  it('should generate Atom feed with opds namespace', () => {
+    const value = {
+      id: 'https://example.com/catalog',
+      title: { value: 'Example Catalog' },
+      updated: new Date('2024-01-10T12:00:00Z'),
+      links: [
+        {
+          href: 'https://example.com/catalog?sort=new',
+          rel: 'http://opds-spec.org/facet',
+          title: 'New Releases',
+          opds: {
+            facetGroup: 'Sort By',
+            activeFacet: true,
+          },
+        },
+      ],
+      entries: [
+        {
+          id: 'urn:uuid:6409a00b-7bf2-405e-826c-3fdff0fd0734',
+          title: { value: 'Example Book' },
+          updated: new Date('2024-01-05T10:30:00Z'),
+          links: [
+            {
+              href: 'https://example.com/book.epub',
+              rel: 'http://opds-spec.org/acquisition/buy',
+              type: 'application/epub+zip',
+              opds: {
+                prices: [{ value: 9.99, currencyCode: 'USD' }],
+                indirectAcquisitions: [
+                  {
+                    type: 'application/vnd.adobe.adept+xml',
+                    indirectAcquisitions: [{ type: 'application/epub+zip' }],
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+    }
+    const expected = `<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:opds="http://opds-spec.org/2010/catalog">
+  <id>https://example.com/catalog</id>
+  <link href="https://example.com/catalog?sort=new" rel="http://opds-spec.org/facet" title="New Releases" opds:facetGroup="Sort By" opds:activeFacet="true"/>
+  <title>Example Catalog</title>
+  <updated>2024-01-10T12:00:00.000Z</updated>
+  <entry>
+    <id>urn:uuid:6409a00b-7bf2-405e-826c-3fdff0fd0734</id>
+    <link href="https://example.com/book.epub" rel="http://opds-spec.org/acquisition/buy" type="application/epub+zip">
+      <opds:price currencycode="USD">9.99</opds:price>
+      <opds:indirectAcquisition type="application/vnd.adobe.adept+xml">
+        <opds:indirectAcquisition type="application/epub+zip"/>
+      </opds:indirectAcquisition>
+    </link>
+    <title>Example Book</title>
+    <updated>2024-01-05T10:30:00.000Z</updated>
+  </entry>
+</feed>
+`
+
+    expect(generate(value)).toEqual(expected)
+  })
+
   it('should generate Atom feed with geo namespace', () => {
     const value = {
       id: 'http://example.com/feed',

@@ -21,6 +21,8 @@ const personPaths = (parent: string) => [
   `${parent}.email`,
 ]
 
+// Link stays out of both lists: OPDS puts child elements inside it, which a stop node would
+// flatten to raw text.
 export const feedPaths = [
   ...personPaths('author'),
   'category',
@@ -28,7 +30,6 @@ export const feedPaths = [
   'generator',
   'icon',
   'id',
-  'link',
   'logo',
   'rights',
   'subtitle',
@@ -44,7 +45,6 @@ export const entryPaths = [
   'content',
   ...personPaths('contributor'),
   'id',
-  'link',
   'published',
   'issued', // Atom 0.3
   'created', // Atom 0.3
@@ -55,7 +55,6 @@ export const entryPaths = [
   'source.generator',
   'source.icon',
   'source.id',
-  'source.link',
   'source.logo',
   'source.rights',
   'source.subtitle',
