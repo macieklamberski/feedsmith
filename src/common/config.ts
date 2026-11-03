@@ -165,7 +165,7 @@ export const namespaceUris = {
   rss2: rss2Uris,
 }
 
-export const namespacePrefixes = Object.entries(namespaceUris).reduce(
+export const namespacePrefixes = Object.entries(namespaceUris).reduce<Record<string, string>>(
   (prefixes, [prefix, uris]) => {
     for (const uri of uris) {
       const normalizedUri = uri.toLowerCase()
@@ -174,7 +174,7 @@ export const namespacePrefixes = Object.entries(namespaceUris).reduce(
 
     return prefixes
   },
-  Object.create(null) as Record<string, string>,
+  Object.create(null),
 )
 
 export const namespaceStopNodes = [
