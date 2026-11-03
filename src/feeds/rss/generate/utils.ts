@@ -44,6 +44,7 @@ import {
 } from '../../../namespaces/itunes/generate/utils.js'
 import { generateItemOrFeed as generateMediaItemOrFeed } from '../../../namespaces/media/generate/utils.js'
 import { generateFeed as generateOpenSearchFeed } from '../../../namespaces/opensearch/generate/utils.js'
+import { generateItem as generatePhotoItem } from '../../../namespaces/photo/generate/utils.js'
 import {
   generateFeed as generatePingbackFeed,
   generateItem as generatePingbackItem,
@@ -238,6 +239,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
     ...generatePodcastItem(item.podcast),
     ...generatePscItem(item.psc),
     ...generateMediaItemOrFeed(item.media),
+    ...generatePhotoItem(item.photo),
     ...generateGooglePlayItem(item.googleplay),
     ...generateSpotifyItem(item.spotify),
     ...generateAcastItem(item.acast),

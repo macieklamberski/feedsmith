@@ -12,6 +12,7 @@
      xmlns:podcast="https://podcastindex.org/namespace/1.0"
      xmlns:psc="http://podlove.org/simple-chapters"
      xmlns:media="http://search.yahoo.com/mrss/"
+     xmlns:photo="http://www.pheed.com/pheed/"
      xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/"
      xmlns:spotify="http://www.spotify.com/ns/rss"
      xmlns:acast="https://schema.acast.com/1.0/"
@@ -772,6 +773,10 @@
       <media:status state="active" reason="approved"/>
       <media:price type="package" info="full access" price="9.99" currency="USD"/>
       <media:price type="subscription" info="monthly" price="4.99" currency="USD"/>
+
+      <!-- Pheed Photo Namespace: Item Level Tags -->
+      <photo:thumbnail>https://example.com/photos/thumbs/understanding-xml-namespaces.jpg</photo:thumbnail>
+      <photo:imgsrc>https://example.com/photos/understanding-xml-namespaces.jpg</photo:imgsrc>
 
       <!-- Google Play Podcasts Namespace: Item Level Tags -->
       <googleplay:author>Episode Guest Speaker</googleplay:author>

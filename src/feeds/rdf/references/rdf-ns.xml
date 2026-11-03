@@ -10,6 +10,7 @@
   xmlns:content="http://purl.org/rss/1.0/modules/content/"
   xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
   xmlns:media="http://search.yahoo.com/mrss/"
+  xmlns:photo="http://www.pheed.com/pheed/"
   xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0"
   xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
   xmlns:prism="http://prismstandard.org/namespaces/basic/2.0/"
@@ -469,6 +470,10 @@
       <media:statistics views="256789" favorites="3421" shares="1245" />
       <media:tags>cinematic, production, advanced, technical, demo</media:tags>
     </media:community>
+
+    <!-- Pheed Photo Namespace: Item Level Tags -->
+    <photo:thumbnail>https://example.com/photos/thumbs/understanding-xml-namespaces.jpg</photo:thumbnail>
+    <photo:imgsrc>https://example.com/photos/understanding-xml-namespaces.jpg</photo:imgsrc>
 
     <!-- FeedBurner Namespace: Item Level Tags -->
     <feedburner:origLink>https://example.org/posts/original-article</feedburner:origLink>

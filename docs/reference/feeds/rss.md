@@ -29,6 +29,7 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
         <a href="/reference/namespaces/podcast">Podcast Index</a>,
         <a href="/reference/namespaces/psc">Podlove Simple Chapters</a>,
         <a href="/reference/namespaces/media">Media RSS</a>,
+        <a href="/reference/namespaces/photo">Pheed Photo</a>,
         <a href="/reference/namespaces/googleplay">Google Play Podcast</a>,
         <a href="/reference/namespaces/spotify">Spotify</a>,
         <a href="/reference/namespaces/acast">Acast</a>,

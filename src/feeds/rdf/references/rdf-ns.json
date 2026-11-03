@@ -481,6 +481,10 @@
           ]
         }
       },
+      "photo": {
+        "thumbnail": "https://example.com/photos/thumbs/understanding-xml-namespaces.jpg",
+        "imgsrc": "https://example.com/photos/understanding-xml-namespaces.jpg"
+      },
       "feedburner": {
         "origLink": "https://example.org/posts/original-article",
         "origEnclosureLink": "https://example.org/audio/original-episode.mp3",

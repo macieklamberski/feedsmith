@@ -1729,6 +1729,25 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle photo namespace', () => {
+    const value = {
+      title: { '#text': 'Photo Item' },
+      'photo:thumbnail': {
+        '#text': 'https://example.com/albums/Underwater/Carwash_basement.thumb.jpg',
+      },
+      'photo:imgsrc': { '#text': 'https://example.com/albums/Underwater/Carwash_basement.jpg' },
+    }
+    const expected = {
+      title: 'Photo Item',
+      photo: {
+        thumbnail: 'https://example.com/albums/Underwater/Carwash_basement.thumb.jpg',
+        imgsrc: 'https://example.com/albums/Underwater/Carwash_basement.jpg',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle thr namespace', () => {
     const value = {
       title: { '#text': 'Reply Item' },

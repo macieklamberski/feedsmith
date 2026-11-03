@@ -16,6 +16,7 @@ import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
+import type { PhotoNs } from '../../../namespaces/photo/common/types.js'
 import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
 import type { PrismNs } from '../../../namespaces/prism/common/types.js'
 import type { RdfNs } from '../../../namespaces/rdf/common/types.js'
@@ -65,6 +66,7 @@ export namespace RdfFeed {
       content?: ContentNs.Item
       slash?: SlashNs.Item
       media?: MediaNs.ItemOrFeed<TStrict>
+      photo?: PhotoNs.Item
       feedburner?: FeedBurnerNs.Item
       prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed

@@ -45,6 +45,7 @@ import {
 } from '../../../namespaces/itunes/parse/utils.js'
 import { retrieveItemOrFeed as retrieveMediaItemOrFeed } from '../../../namespaces/media/parse/utils.js'
 import { retrieveFeed as retrieveOpenSearchFeed } from '../../../namespaces/opensearch/parse/utils.js'
+import { retrieveItem as retrievePhotoItem } from '../../../namespaces/photo/parse/utils.js'
 import {
   retrieveFeed as retrievePingbackFeed,
   retrieveItem as retrievePingbackItem,
@@ -415,6 +416,7 @@ export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, option
     podcast: namespaces.has('podcast') ? retrievePodcastItem(value) : undefined,
     psc: namespaces.has('psc') ? retrievePscItem(value) : undefined,
     media: namespaces.has('media') ? retrieveMediaItemOrFeed(value) : undefined,
+    photo: namespaces.has('photo') ? retrievePhotoItem(value) : undefined,
     googleplay: namespaces.has('googleplay') ? retrieveGooglePlayItem(value) : undefined,
     spotify: namespaces.has('spotify') ? retrieveSpotifyItem(value) : undefined,
     acast: namespaces.has('acast') ? retrieveAcastItem(value) : undefined,
