@@ -11,6 +11,7 @@ import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { ArxivNs } from '../../../namespaces/arxiv/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
 import type { BlogChannelNs } from '../../../namespaces/blogchannel/common/types.js'
+import type { CastboxNs } from '../../../namespaces/castbox/common/types.js'
 import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { ContentNs } from '../../../namespaces/content/common/types.js'
 import type { CreativeCommonsNs } from '../../../namespaces/creativecommons/common/types.js'
@@ -151,6 +152,7 @@ export namespace RssFeed {
       spotify?: SpotifyNs.Item<TStrict>
       acast?: AcastNs.Item
       rawvoice?: RawVoiceNs.Item<TStrict>
+      castbox?: CastboxNs.Item
       feedburner?: FeedBurnerNs.Item
       arxiv?: ArxivNs.Entry
       prism?: PrismNs.ItemOrFeed<TDate>
@@ -202,6 +204,7 @@ export namespace RssFeed {
       spotify?: SpotifyNs.Feed<TStrict>
       acast?: AcastNs.Feed
       rawvoice?: RawVoiceNs.Feed<TDate, TStrict>
+      castbox?: CastboxNs.Feed
       feedburner?: FeedBurnerNs.Feed<TStrict>
       feedpress?: FeedPressNs.Feed
       opensearch?: OpenSearchNs.Feed<TStrict>

@@ -23,6 +23,10 @@ import {
   retrieveFeed as retrieveAtomFeed,
 } from '../../../namespaces/atom/parse/utils.js'
 import { retrieveFeed as retrieveBlogChannelFeed } from '../../../namespaces/blogchannel/parse/utils.js'
+import {
+  retrieveFeed as retrieveCastboxFeed,
+  retrieveItem as retrieveCastboxItem,
+} from '../../../namespaces/castbox/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
@@ -419,6 +423,7 @@ export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, option
     spotify: namespaces.has('spotify') ? retrieveSpotifyItem(value) : undefined,
     acast: namespaces.has('acast') ? retrieveAcastItem(value) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceItem(value) : undefined,
+    castbox: namespaces.has('castbox') ? retrieveCastboxItem(value) : undefined,
     feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerItem(value) : undefined,
     arxiv: namespaces.has('arxiv') ? retrieveArxivEntry(value) : undefined,
     prism: namespaces.has('prism') ? retrievePrismItemOrFeed(value, options) : undefined,
@@ -482,6 +487,7 @@ export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, option
     spotify: namespaces.has('spotify') ? retrieveSpotifyFeed(channel) : undefined,
     acast: namespaces.has('acast') ? retrieveAcastFeed(channel) : undefined,
     rawvoice: namespaces.has('rawvoice') ? retrieveRawVoiceFeed(channel, options) : undefined,
+    castbox: namespaces.has('castbox') ? retrieveCastboxFeed(channel) : undefined,
     feedburner: namespaces.has('feedburner') ? retrieveFeedBurnerFeed(channel) : undefined,
     feedpress: namespaces.has('feedpress') ? retrieveFeedPressFeed(channel) : undefined,
     opensearch: namespaces.has('opensearch') ? retrieveOpenSearchFeed(channel) : undefined,
