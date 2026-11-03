@@ -16,6 +16,7 @@
       xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule"
       xmlns:thr="http://purl.org/syndication/thread/1.0"
       xmlns:app="http://www.w3.org/2007/app"
+      xmlns:fa="http://purl.org/atompub/age/1.0"
       xmlns:wfw="http://wellformedweb.org/CommentAPI/"
       xmlns:admin="http://webns.net/mvcb/"
       xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
@@ -378,6 +379,9 @@
 
   <!-- Creative Commons Namespace: Feed Level Tags -->
   <creativeCommons:license>http://creativecommons.org/licenses/by-nc-nd/2.0/</creativeCommons:license>
+
+  <!-- Atom Metadata Expiration Namespace: Feed Level Tags -->
+  <fa:max-age>10800000</fa:max-age>
 
   <!-- Admin Namespace: Feed Level Tags -->
   <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
@@ -782,6 +786,9 @@
     <app:control>
       <app:draft>yes</app:draft>
     </app:control>
+
+    <!-- Atom Metadata Expiration Namespace: Entry Level Tags -->
+    <fa:expires>2024-03-16T14:30:00.000Z</fa:expires>
 
     <!-- Well Formed Web CommentAPI Namespace: Entry Level Tags -->
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>
