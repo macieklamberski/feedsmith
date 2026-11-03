@@ -72,6 +72,7 @@ import { retrieveFeed as retrieveSyFeed } from '../../../namespaces/sy/parse/uti
 import { retrieveItem as retrieveThrItem } from '../../../namespaces/thr/parse/utils.js'
 import { retrieveItem as retrieveTrackbackItem } from '../../../namespaces/trackback/parse/utils.js'
 import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/utils.js'
+import { retrieveItem as retrieveWikidotItem } from '../../../namespaces/wikidot/parse/utils.js'
 import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
 import type { ParseUtilPartial, RssFeed } from '../common/types.js'
 
@@ -431,6 +432,7 @@ export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, option
     pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
+    wikidot: namespaces.has('wikidot') ? retrieveWikidotItem(value) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     xml: retrieveXmlItemOrFeed(value),

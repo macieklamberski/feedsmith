@@ -71,6 +71,7 @@ import { generateFeed as generateSyFeed } from '../../../namespaces/sy/generate/
 import { generateItem as generateThrItem } from '../../../namespaces/thr/generate/utils.js'
 import { generateItem as generateTrackbackItem } from '../../../namespaces/trackback/generate/utils.js'
 import { generateItem as generateWfwItem } from '../../../namespaces/wfw/generate/utils.js'
+import { generateItem as generateWikidotItem } from '../../../namespaces/wikidot/generate/utils.js'
 import { generateItemOrFeed as generateXmlItemOrFeed } from '../../../namespaces/xml/generate/utils.js'
 import type { GenerateUtil, RssFeed } from '../common/types.js'
 
@@ -252,6 +253,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
     ...generatePingbackItem(item.pingback),
     ...generateTrackbackItem(item.trackback),
     ...generateSourceItem(item.sourceNs),
+    ...generateWikidotItem(item.wikidot),
     ...generateGeoItemOrFeed(item.geo),
     ...generateGeoRssItemOrFeed(item.georss),
     ...generateXmlItemOrFeed(item.xml),
