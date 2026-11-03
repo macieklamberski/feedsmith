@@ -30,6 +30,7 @@
      xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
      xmlns:source="http://source.scripting.com/"
      xmlns:blogChannel="http://backend.userland.com/blogChannelModule"
+     xmlns:blogger="http://schemas.google.com/blogger/2008"
      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
      xmlns:georss="http://www.georss.org/georss"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -502,6 +503,9 @@
     <blogChannel:blink>http://recommended-site.com/</blogChannel:blink>
     <blogChannel:mySubscriptions>http://example.com/subscriptions.opml</blogChannel:mySubscriptions>
     <blogChannel:changes>http://example.com/changes.xml</blogChannel:changes>
+
+    <!-- Blogger Namespace: Channel Level Tags -->
+    <blogger:adultContent>true</blogger:adultContent>
 
     <!-- W3C Basic Geo Namespace: Channel Level Tags -->
     <geo:lat>37.7749</geo:lat>
