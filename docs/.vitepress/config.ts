@@ -165,6 +165,7 @@ export default defineConfig({
               { text: 'YouTube', link: '/reference/namespaces/yt' },
               { text: 'W3C Basic Geo', link: '/reference/namespaces/geo' },
               { text: 'GeoRSS Simple', link: '/reference/namespaces/georss' },
+              { text: 'Event', link: '/reference/namespaces/ev' },
               { text: 'RDF', link: '/reference/namespaces/rdf' },
               { text: 'XML', link: '/reference/namespaces/xml' },
             ],

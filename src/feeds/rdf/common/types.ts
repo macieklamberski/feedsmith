@@ -11,6 +11,7 @@ import type { CcNs } from '../../../namespaces/cc/common/types.js'
 import type { ContentNs } from '../../../namespaces/content/common/types.js'
 import type { DcNs } from '../../../namespaces/dc/common/types.js'
 import type { DcTermsNs } from '../../../namespaces/dcterms/common/types.js'
+import type { EvNs } from '../../../namespaces/ev/common/types.js'
 import type { FeedBurnerNs } from '../../../namespaces/feedburner/common/types.js'
 import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
@@ -73,6 +74,7 @@ export namespace RdfFeed {
       trackback?: TrackbackNs.Item
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
+      ev?: EvNs.Item<TDate, TStrict>
       xml?: XmlNs.ItemOrFeed
     },
     TStrict

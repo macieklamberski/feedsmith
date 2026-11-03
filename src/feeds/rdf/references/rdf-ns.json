@@ -555,6 +555,13 @@
         "floor": 4,
         "radius": 50000
       },
+      "ev": {
+        "startDate": "2026-11-14T19:30:00+01:00",
+        "endDate": "2026-11-14T22:00:00+01:00",
+        "location": "Town Hall, Main Street 12",
+        "organizer": "City Library",
+        "type": "concert"
+      },
       "rdf": {
         "about": "http://example.org/item/1"
       },
