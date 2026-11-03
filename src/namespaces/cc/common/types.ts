@@ -13,5 +13,19 @@ export namespace CcNs {
     legalcode?: string
     deprecatedOn?: string
   }
+
+  export type License = {
+    about?: string
+    permits?: Array<string>
+    requires?: Array<string>
+    prohibits?: Array<string>
+    jurisdiction?: string
+    legalcode?: string
+    deprecatedOn?: string
+  }
+
+  export type Feed = ItemOrFeed & {
+    licenses?: Array<License>
+  }
 }
 // #endregion reference
