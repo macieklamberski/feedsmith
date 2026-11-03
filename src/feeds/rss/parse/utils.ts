@@ -23,6 +23,10 @@ import {
   retrieveFeed as retrieveAtomFeed,
 } from '../../../namespaces/atom/parse/utils.js'
 import { retrieveFeed as retrieveBlogChannelFeed } from '../../../namespaces/blogchannel/parse/utils.js'
+import {
+  retrieveFeed as retrieveBylineFeed,
+  retrieveItem as retrieveBylineItem,
+} from '../../../namespaces/byline/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCc } from '../../../namespaces/cc/parse/utils.js'
 import { retrieveItem as retrieveContentItem } from '../../../namespaces/content/parse/utils.js'
 import { retrieveItemOrFeed as retrieveCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/parse/utils.js'
@@ -430,6 +434,7 @@ export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, option
     wfw: namespaces.has('wfw') ? retrieveWfwItem(value) : undefined,
     pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
+    byline: namespaces.has('byline') ? retrieveBylineItem(value) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
@@ -492,6 +497,7 @@ export const parseFeed: ParseUtilPartial<RssFeed.Feed<DateAny>> = (value, option
       : undefined,
     admin: namespaces.has('admin') ? retrieveAdminFeed(channel) : undefined,
     pingback: namespaces.has('pingback') ? retrievePingbackFeed(channel) : undefined,
+    byline: namespaces.has('byline') ? retrieveBylineFeed(channel) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceFeed(channel) : undefined,
     blogChannel: namespaces.has('blogchannel') ? retrieveBlogChannelFeed(channel) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(channel) : undefined,

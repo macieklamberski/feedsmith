@@ -780,6 +780,25 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle byline namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'byline:author': { '@ref': 'annie' },
+      'byline:perspective': { '#text': 'reporting' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      byline: {
+        author: { ref: 'annie' },
+        perspective: 'reporting',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle georss namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },
@@ -1966,6 +1985,40 @@ describe('parseFeed', () => {
       admin: {
         errorReportsTo: 'mailto:webmaster@example.com',
         generatorAgent: 'https://example.com/generator?v=3.2',
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle byline namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'byline:contributors': {
+          'byline:person': {
+            '@id': 'annie',
+            'byline:name': { '#text': 'Annie Park' },
+          },
+        },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      byline: {
+        contributors: [{ id: 'annie', name: 'Annie Park' }],
       },
     }
 

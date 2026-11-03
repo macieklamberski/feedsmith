@@ -22,6 +22,10 @@ import {
   generateFeed as generateAtomFeed,
 } from '../../../namespaces/atom/generate/utils.js'
 import { generateFeed as generateBlogChannelFeed } from '../../../namespaces/blogchannel/generate/utils.js'
+import {
+  generateFeed as generateBylineFeed,
+  generateItem as generateBylineItem,
+} from '../../../namespaces/byline/generate/utils.js'
 import { generateItemOrFeed as generateCc } from '../../../namespaces/cc/generate/utils.js'
 import { generateItem as generateContentItem } from '../../../namespaces/content/generate/utils.js'
 import { generateItemOrFeed as generateCreativeCommonsItemOrFeed } from '../../../namespaces/creativecommons/generate/utils.js'
@@ -251,6 +255,7 @@ export const generateItem: GenerateUtil<RssFeed.Item<DateLike>> = (item) => {
     ...generateWfwItem(item.wfw),
     ...generatePingbackItem(item.pingback),
     ...generateTrackbackItem(item.trackback),
+    ...generateBylineItem(item.byline),
     ...generateSourceItem(item.sourceNs),
     ...generateGeoItemOrFeed(item.geo),
     ...generateGeoRssItemOrFeed(item.georss),
@@ -304,6 +309,7 @@ export const generateFeed: GenerateUtil<RssFeed.Feed<DateLike>> = (feed) => {
     ...generateCreativeCommonsItemOrFeed(feed.creativeCommons),
     ...generateAdminFeed(feed.admin),
     ...generatePingbackFeed(feed.pingback),
+    ...generateBylineFeed(feed.byline),
     ...generateSourceFeed(feed.sourceNs),
     ...generateBlogChannelFeed(feed.blogChannel),
     ...generateGeoItemOrFeed(feed.geo),
