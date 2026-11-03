@@ -10,6 +10,7 @@
   xmlns:content="http://purl.org/rss/1.0/modules/content/"
   xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
   xmlns:media="http://search.yahoo.com/mrss/"
+  xmlns:image="http://purl.org/rss/1.0/modules/image/"
   xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0"
   xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
   xmlns:prism="http://prismstandard.org/namespaces/basic/2.0/"
@@ -217,6 +218,11 @@
       <media:statistics views="256789" favorites="3421" shares="1245" />
       <media:tags>cinematic, production, advanced, technical, demo</media:tags>
     </media:community>
+
+    <!-- Image Namespace: Channel Level Tags -->
+    <image:favicon rdf:about="https://example.org/favicon.ico" image:size="small">
+      <dc:title>Example Feed</dc:title>
+    </image:favicon>
 
     <!-- FeedBurner Namespace: Channel Level Tags -->
     <feedburner:info uri="examplerss"/>
@@ -469,6 +475,16 @@
       <media:statistics views="256789" favorites="3421" shares="1245" />
       <media:tags>cinematic, production, advanced, technical, demo</media:tags>
     </media:community>
+
+    <!-- Image Namespace: Item Level Tags -->
+    <image:item rdf:about="https://example.org/images/item-1.png" rdf:resource="https://example.org/item/1">
+      <image:width>100</image:width>
+      <image:height>65</image:height>
+      <dc:title>Example Item Image</dc:title>
+    </image:item>
+    <image:favicon rdf:about="https://example.org/item/1/favicon.ico" image:size="medium">
+      <dc:title>Example Item</dc:title>
+    </image:favicon>
 
     <!-- FeedBurner Namespace: Item Level Tags -->
     <feedburner:origLink>https://example.org/posts/original-article</feedburner:origLink>
