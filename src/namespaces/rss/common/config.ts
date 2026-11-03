@@ -3,4 +3,8 @@ export const uris = [
   'https://purl.org/rss/1.0/',
   'http://purl.org/rss/1.0',
   'https://purl.org/rss/1.0',
+  'http://www.purl.org/rss/1.0/',
+  'https://www.purl.org/rss/1.0/',
+  'http://www.purl.org/rss/1.0',
+  'https://www.purl.org/rss/1.0',
 ]

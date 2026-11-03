@@ -1,6 +1,8 @@
 export const uris = [
   'http://creativecommons.org/ns#', // Official URI
   'https://creativecommons.org/ns#',
+  'http://www.creativecommons.org/ns#',
+  'https://www.creativecommons.org/ns#',
   'http://web.resource.org/cc/',
   'https://web.resource.org/cc/',
   'http://web.resource.org/cc',

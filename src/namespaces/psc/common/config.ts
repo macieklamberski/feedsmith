@@ -3,4 +3,8 @@ export const uris = [
   'https://podlove.org/simple-chapters',
   'http://podlove.org/simple-chapters/',
   'https://podlove.org/simple-chapters/',
+  'http://www.podlove.org/simple-chapters',
+  'https://www.podlove.org/simple-chapters',
+  'http://www.podlove.org/simple-chapters/',
+  'https://www.podlove.org/simple-chapters/',
 ]
