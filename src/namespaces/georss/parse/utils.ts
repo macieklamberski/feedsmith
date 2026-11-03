@@ -7,14 +7,14 @@ import {
   parseString,
   retrieveText,
 } from '../../../common/utils.js'
-import type { GeoRssNs } from '../common/types.js'
+import type { GeoRssNs, PairsCount } from '../common/types.js'
 
 // See: https://docs.ogc.org/cs/17-002r1/17-002r1.html. Parsers treat commas as whitespace.
 const separatorRegex = /[\s,]+/
 
 export const parseLatLngPairs = (
   value: Unreliable,
-  pairsCount?: { min?: number; max?: number },
+  pairsCount?: PairsCount,
 ): Array<GeoRssNs.Point> | undefined => {
   const string = parseString(value)
 

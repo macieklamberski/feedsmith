@@ -30,6 +30,16 @@ type NamespaceHooks = {
 
 type NamespaceHooksFactory = (document?: string) => NamespaceHooks
 
+type NamespaceResolverOptions<T extends Record<string, Array<string>>> = {
+  namespaceUris: T
+  namespacePrefixes: Record<string, string>
+  primaryNamespaces?: Array<keyof T>
+}
+
+type GenerateXmlOptions = {
+  stylesheets?: Array<XmlStylesheet>
+}
+
 export const isNonEmptyStringOrNumber = (value: Unreliable): value is string | number => {
   return isNumber(value) || isNonEmptyString(value)
 }
@@ -395,7 +405,7 @@ const aposEntityRegex = /&apos;/g
 export const generateXml = (
   builder: XMLBuilder,
   value: string,
-  options?: { stylesheets?: Array<XmlStylesheet> },
+  options?: GenerateXmlOptions,
 ): string => {
   let body = builder.build(value)
 
@@ -620,11 +630,9 @@ const reservedPrefixes = ['xmlns', 'xml']
 //
 // The map is flat and first-wins: real feeds declare namespaces once, on the root, and re-binding a
 // prefix deeper in a document has no observed usage. Add scope tracking if such feeds ever appear.
-export const createNamespaceResolver = <T extends Record<string, Array<string>>>(options: {
-  namespaceUris: T
-  namespacePrefixes: Record<string, string>
-  primaryNamespaces?: Array<keyof T>
-}): NamespaceHooksFactory => {
+export const createNamespaceResolver = <T extends Record<string, Array<string>>>(
+  options: NamespaceResolverOptions<T>,
+): NamespaceHooksFactory => {
   const { namespaceUris, namespacePrefixes, primaryNamespaces } = options
 
   const primaryUris = new Set(
