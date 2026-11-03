@@ -5,6 +5,7 @@ import type {
   Requirable,
   Strict,
 } from '../../../common/types.js'
+import type { ActivityNs } from '../../../namespaces/activity/common/types.js'
 import type { AdminNs } from '../../../namespaces/admin/common/types.js'
 import type { AtomNs } from '../../../namespaces/atom/common/types.js'
 import type { CcNs } from '../../../namespaces/cc/common/types.js'
@@ -71,6 +72,7 @@ export namespace RdfFeed {
       wfw?: WfwNs.Item
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
+      activity?: ActivityNs.Item
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed

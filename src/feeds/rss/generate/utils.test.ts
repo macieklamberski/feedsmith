@@ -1095,6 +1095,23 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with activity namespace properties', () => {
+    const value = {
+      title: 'Item with activity namespace',
+      activity: {
+        verb: 'http://activitystrea.ms/schema/1.0/post',
+        objectType: 'http://activitystrea.ms/schema/1.0/blog-entry',
+      },
+    }
+    const expected = {
+      title: 'Item with activity namespace',
+      'activity:verb': 'http://activitystrea.ms/schema/1.0/post',
+      'activity:object-type': 'http://activitystrea.ms/schema/1.0/blog-entry',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with geo namespace properties', () => {
     const value = {
       title: 'Example Location',
@@ -2041,6 +2058,41 @@ describe('generateFeed', () => {
           'blogChannel:blink': 'http://example.net/',
           'blogChannel:mySubscriptions': 'http://example.com/subscriptions.opml',
           'blogChannel:changes': 'http://example.com/changes.xml',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with activity namespace properties', () => {
+    const value = {
+      title: 'Feed with activity namespace',
+      description: 'A feed with activity properties',
+      items: [
+        {
+          title: 'Item with activity namespace',
+          activity: {
+            verb: 'http://activitystrea.ms/schema/1.0/post',
+            objectType: 'http://activitystrea.ms/schema/1.0/blog-entry',
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:activity': 'http://activitystrea.ms/spec/1.0/',
+        channel: {
+          title: 'Feed with activity namespace',
+          description: 'A feed with activity properties',
+          item: [
+            {
+              title: 'Item with activity namespace',
+              'activity:verb': 'http://activitystrea.ms/schema/1.0/post',
+              'activity:object-type': 'http://activitystrea.ms/schema/1.0/blog-entry',
+            },
+          ],
         },
       },
     }

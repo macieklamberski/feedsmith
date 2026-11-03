@@ -16,6 +16,7 @@ import {
   retrieveFeed as retrieveAcastFeed,
   retrieveItem as retrieveAcastItem,
 } from '../../../namespaces/acast/parse/utils.js'
+import { retrieveItem as retrieveActivityItem } from '../../../namespaces/activity/parse/utils.js'
 import { retrieveFeed as retrieveAdminFeed } from '../../../namespaces/admin/parse/utils.js'
 import { retrieveEntry as retrieveArxivEntry } from '../../../namespaces/arxiv/parse/utils.js'
 import {
@@ -431,6 +432,7 @@ export const parseItem: ParseUtilPartial<RssFeed.Item<DateAny>> = (value, option
     pingback: namespaces.has('pingback') ? retrievePingbackItem(value) : undefined,
     trackback: namespaces.has('trackback') ? retrieveTrackbackItem(value) : undefined,
     sourceNs: namespaces.has('source') ? retrieveSourceItem(value) : undefined,
+    activity: namespaces.has('activity') ? retrieveActivityItem(value) : undefined,
     geo: namespaces.has('geo') ? retrieveGeoItemOrFeed(value) : undefined,
     georss: namespaces.has('georss') ? retrieveGeoRssItemOrFeed(value) : undefined,
     xml: retrieveXmlItemOrFeed(value),

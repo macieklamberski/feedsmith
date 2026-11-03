@@ -1783,6 +1783,23 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle activity namespace', () => {
+    const value = {
+      title: { '#text': 'Activity Item' },
+      'activity:verb': { '#text': 'http://activitystrea.ms/schema/1.0/post' },
+      'activity:object-type': { '#text': 'http://activitystrea.ms/schema/1.0/blog-entry' },
+    }
+    const expected = {
+      title: 'Activity Item',
+      activity: {
+        verb: 'http://activitystrea.ms/schema/1.0/post',
+        objectType: 'http://activitystrea.ms/schema/1.0/blog-entry',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle georss namespace', () => {
     const value = {
       title: { '#text': 'Location Item' },

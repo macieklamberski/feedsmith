@@ -162,6 +162,7 @@ export default defineConfig({
               { text: 'Trackback', link: '/reference/namespaces/trackback' },
               { text: 'Source', link: '/reference/namespaces/source' },
               { text: 'blogChannel', link: '/reference/namespaces/blogchannel' },
+              { text: 'Activity Streams', link: '/reference/namespaces/activity' },
               { text: 'YouTube', link: '/reference/namespaces/yt' },
               { text: 'W3C Basic Geo', link: '/reference/namespaces/geo' },
               { text: 'GeoRSS Simple', link: '/reference/namespaces/georss' },
