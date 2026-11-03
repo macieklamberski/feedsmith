@@ -23,6 +23,7 @@ import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.j
 import type { PingbackNs } from '../../../namespaces/pingback/common/types.js'
 import type { PrismNs } from '../../../namespaces/prism/common/types.js'
 import type { PscNs } from '../../../namespaces/psc/common/types.js'
+import type { ShopifyNs } from '../../../namespaces/shopify/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
 import type { SyNs } from '../../../namespaces/sy/common/types.js'
 import type { ThrNs } from '../../../namespaces/thr/common/types.js'
@@ -148,6 +149,7 @@ export namespace AtomFeed {
       pingback?: PingbackNs.Item
       trackback?: TrackbackNs.Item
       yt?: YtNs.Item
+      shopify?: ShopifyNs.Item
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
       xml?: XmlNs.ItemOrFeed
