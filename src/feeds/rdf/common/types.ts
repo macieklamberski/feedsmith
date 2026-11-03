@@ -22,6 +22,7 @@ import type { RdfNs } from '../../../namespaces/rdf/common/types.js'
 import type { SlashNs } from '../../../namespaces/slash/common/types.js'
 import type { SyNs } from '../../../namespaces/sy/common/types.js'
 import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
+import type { WebfeedsNs } from '../../../namespaces/webfeeds/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 
@@ -66,6 +67,7 @@ export namespace RdfFeed {
       slash?: SlashNs.Item
       media?: MediaNs.ItemOrFeed<TStrict>
       feedburner?: FeedBurnerNs.Item
+      webfeeds?: WebfeedsNs.Item
       prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
       wfw?: WfwNs.Item
@@ -93,6 +95,7 @@ export namespace RdfFeed {
       sy?: SyNs.Feed<TDate>
       media?: MediaNs.ItemOrFeed<TStrict>
       feedburner?: FeedBurnerNs.Feed<TStrict>
+      webfeeds?: WebfeedsNs.Feed
       opensearch?: OpenSearchNs.Feed<TStrict>
       prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
