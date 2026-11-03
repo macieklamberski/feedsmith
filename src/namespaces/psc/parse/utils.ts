@@ -18,8 +18,17 @@ export const parseChapter: ParseUtilPartial<PscNs.Chapter> = (value) => {
   return trimObject(chapter)
 }
 
-export const parseChapters: ParseUtilPartial<Array<PscNs.Chapter>> = (value) => {
-  return parseArrayOf(value?.['psc:chapter'], parseChapter)
+export const parseChapters: ParseUtilPartial<PscNs.Chapters> = (value) => {
+  if (!isPlainObject(value)) {
+    return
+  }
+
+  const chapters = {
+    version: parseString(value['@version']),
+    items: parseArrayOf(value['psc:chapter'], parseChapter),
+  }
+
+  return trimObject(chapters)
 }
 
 export const retrieveItem: ParseUtilPartial<PscNs.Item> = (value) => {

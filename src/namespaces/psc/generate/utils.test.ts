@@ -74,18 +74,22 @@ describe('generateChapter', () => {
 })
 
 describe('generateChapters', () => {
-  it('should generate chapters array', () => {
-    const value = [
-      {
-        start: '00:00:00.000',
-        title: 'Introduction',
-      },
-      {
-        start: '00:05:30.000',
-        title: 'Chapter 1',
-      },
-    ]
+  it('should generate the version attribute and the chapter list', () => {
+    const value = {
+      version: '1.2',
+      items: [
+        {
+          start: '00:00:00.000',
+          title: 'Introduction',
+        },
+        {
+          start: '00:05:30.000',
+          title: 'Chapter 1',
+        },
+      ],
+    }
     const expected = {
+      '@version': '1.2',
       'psc:chapter': [
         {
           '@start': '00:00:00.000',
@@ -101,8 +105,30 @@ describe('generateChapters', () => {
     expect(generateChapters(value)).toEqual(expected)
   })
 
-  it('should handle empty array', () => {
-    expect(generateChapters([])).toBeUndefined()
+  it('should generate the chapter list with no version', () => {
+    const value = {
+      items: [{ start: '00:00:00.000', title: 'Introduction' }],
+    }
+    const expected = {
+      'psc:chapter': [{ '@start': '00:00:00.000', '@title': 'Introduction' }],
+    }
+
+    expect(generateChapters(value)).toEqual(expected)
+  })
+
+  it('should generate a version with no chapters', () => {
+    const value = { version: '1.2' }
+    const expected = { '@version': '1.2' }
+
+    expect(generateChapters(value)).toEqual(expected)
+  })
+
+  it('should handle an empty chapter list', () => {
+    expect(generateChapters({ items: [] })).toBeUndefined()
+  })
+
+  it('should handle empty object', () => {
+    expect(generateChapters({})).toBeUndefined()
   })
 
   it('should handle undefined', () => {
@@ -113,23 +139,25 @@ describe('generateChapters', () => {
 describe('generateItem', () => {
   it('should generate valid item object with multiple chapters', () => {
     const value = {
-      chapters: [
-        {
-          start: '00:00:00.000',
-          title: 'Introduction',
-          href: 'https://example.com/intro',
-          image: 'https://example.com/intro.jpg',
-        },
-        {
-          start: '00:05:30.000',
-          title: 'Chapter 1',
-          href: 'https://example.com/chapter1',
-        },
-        {
-          start: '00:12:15.500',
-          title: 'Conclusion',
-        },
-      ],
+      chapters: {
+        items: [
+          {
+            start: '00:00:00.000',
+            title: 'Introduction',
+            href: 'https://example.com/intro',
+            image: 'https://example.com/intro.jpg',
+          },
+          {
+            start: '00:05:30.000',
+            title: 'Chapter 1',
+            href: 'https://example.com/chapter1',
+          },
+          {
+            start: '00:12:15.500',
+            title: 'Conclusion',
+          },
+        ],
+      },
     }
     const expected = {
       'psc:chapters': {
@@ -158,12 +186,14 @@ describe('generateItem', () => {
 
   it('should generate item with single chapter', () => {
     const value = {
-      chapters: [
-        {
-          start: '00:00:00.000',
-          title: 'Single Chapter',
-        },
-      ],
+      chapters: {
+        items: [
+          {
+            start: '00:00:00.000',
+            title: 'Single Chapter',
+          },
+        ],
+      },
     }
     const expected = {
       'psc:chapters': {
@@ -181,7 +211,9 @@ describe('generateItem', () => {
 
   it('should return undefined when chapters array is empty', () => {
     const value = {
-      chapters: [],
+      chapters: {
+        items: [],
+      },
     }
 
     expect(generateItem(value)).toBeUndefined()
