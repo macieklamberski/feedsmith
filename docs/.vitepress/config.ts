@@ -1,3 +1,4 @@
+import { join } from 'node:path'
 import { vitepress } from 'ogier/adapters'
 import { defineConfig } from 'vitepress'
 
@@ -9,16 +10,16 @@ const hostname = 'https://feedsmith.dev'
 const og = vitepress({
   site: {
     hostname,
-    favicon: { file: new URL('../public/favicon.svg', import.meta.url) },
+    favicon: { file: join(import.meta.dirname, '../public/favicon.svg') },
   },
   card: {
     header: {
       text: 'feedsmith',
-      icon: { file: new URL('../public/favicon.svg', import.meta.url) },
+      icon: { file: join(import.meta.dirname, '../public/favicon.svg') },
     },
     footer: {
       text: 'macieklamberski/feedsmith',
-      icon: { file: new URL('./github.svg', import.meta.url) },
+      icon: { file: join(import.meta.dirname, 'github.svg') },
     },
   },
   style: { background: { pattern: 'dots' } },
