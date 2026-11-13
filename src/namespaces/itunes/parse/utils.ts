@@ -1,4 +1,4 @@
-import { isPlainObject, trimObject } from 'trousse'
+import { isPlainObject, isString, trimObject } from 'trousse'
 import type { ParseUtilPartial } from '../../../common/types.js'
 import {
   isNonEmptyStringOrNumber,
@@ -49,7 +49,7 @@ export const parseExplicit: ParseUtilPartial<boolean> = (value) => {
     return boolean
   }
 
-  if (typeof value !== 'string') {
+  if (!isString(value)) {
     return
   }
 
