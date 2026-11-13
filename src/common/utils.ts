@@ -4,12 +4,15 @@ import {
   coerceBoolean,
   coerceNumber,
   coerceSingular,
+  isBoolean,
   isFiniteNumber,
   isJsonLike,
   isNonEmptyString,
   isNumber,
   isPlainObject,
   isPresent,
+  isString,
+  isValidDate,
   trimObject,
 } from 'trousse'
 import type {
@@ -194,7 +197,7 @@ const decodeWithCdata = (text: string): string => {
 }
 
 export const parseString: ParseUtilExact<string> = (value) => {
-  if (typeof value === 'string') {
+  if (isString(value)) {
     if (!value) {
       return
     }
@@ -204,7 +207,7 @@ export const parseString: ParseUtilExact<string> = (value) => {
     return string || undefined
   }
 
-  if (typeof value === 'number') {
+  if (isNumber(value)) {
     return value.toString()
   }
 }
@@ -214,7 +217,7 @@ export const parseString: ParseUtilExact<string> = (value) => {
 // it: JSON Feed's `content_html`, whose string comes straight out of JSON.parse, and Atom's xhtml
 // constructs, whose entities stand for literal characters.
 export const parseVerbatimString: ParseUtilExact<string> = (value) => {
-  if (typeof value === 'string') {
+  if (isString(value)) {
     if (!value) {
       return
     }
@@ -224,7 +227,7 @@ export const parseVerbatimString: ParseUtilExact<string> = (value) => {
     return string || undefined
   }
 
-  if (typeof value === 'number') {
+  if (isNumber(value)) {
     return value.toString()
   }
 }
@@ -232,7 +235,7 @@ export const parseVerbatimString: ParseUtilExact<string> = (value) => {
 // A raw XML value still carries its CDATA markers, comments and entities, so a string is read
 // through parseString before it is coerced.
 export const parseNumber: ParseUtilExact<number> = (value) => {
-  if (typeof value === 'string') {
+  if (isString(value)) {
     return coerceNumber(parseString(value))
   }
 
@@ -242,7 +245,7 @@ export const parseNumber: ParseUtilExact<number> = (value) => {
 const yesRegex = /^\p{White_Space}*yes\p{White_Space}*$/iu
 
 export const parseBoolean: ParseUtilExact<boolean> = (value) => {
-  if (typeof value === 'string') {
+  if (isString(value)) {
     return coerceBoolean(parseString(value))
   }
 
@@ -256,7 +259,7 @@ export const parseYesNoBoolean: ParseUtilExact<boolean> = (value) => {
     return boolean
   }
 
-  if (typeof value !== 'string') {
+  if (!isString(value)) {
     return
   }
 
@@ -435,20 +438,20 @@ export const generateRfc822Date: GenerateUtil<DateLike> = (value) => {
     return
   }
 
-  const isString = typeof value === 'string'
+  const isStringValue = isString(value)
 
-  if (isString && !isNonEmptyString(value)) {
+  if (isStringValue && !isNonEmptyString(value)) {
     return
   }
 
-  const date = isString ? new Date(value) : value
-  const isValid = !Number.isNaN(date.getTime())
+  const date = isStringValue ? new Date(value) : value
+  const isValid = isValidDate(date)
 
   if (isValid) {
     return date.toUTCString()
   }
 
-  if (isString) {
+  if (isStringValue) {
     return value
   }
 }
@@ -463,32 +466,32 @@ export const generateRfc3339Date: GenerateUtil<DateLike> = (value) => {
     return
   }
 
-  const isString = typeof value === 'string'
+  const isStringValue = isString(value)
 
-  if (isString && !isNonEmptyString(value)) {
+  if (isStringValue && !isNonEmptyString(value)) {
     return
   }
 
-  const date = isString ? new Date(value) : value
-  const isValid = !Number.isNaN(date.getTime())
+  const date = isStringValue ? new Date(value) : value
+  const isValid = isValidDate(date)
 
   if (isValid) {
     return date.toISOString()
   }
 
-  if (isString) {
+  if (isStringValue) {
     return value
   }
 }
 
 export const generateBoolean: GenerateUtil<boolean> = (value) => {
-  if (typeof value === 'boolean') {
+  if (isBoolean(value)) {
     return value
   }
 }
 
 export const generateYesNoBoolean: GenerateUtil<boolean> = (value) => {
-  if (typeof value !== 'boolean') {
+  if (!isBoolean(value)) {
     return
   }
 
@@ -751,7 +754,7 @@ export const createNamespaceResolver = <T extends Record<string, Array<string>>>
       // written, so both cases are checked.
       const firstCharCode = rawAttrName.charCodeAt(0)
 
-      if ((firstCharCode !== 120 && firstCharCode !== 88) || typeof value !== 'string') {
+      if ((firstCharCode !== 120 && firstCharCode !== 88) || !isString(value)) {
         return
       }
 
