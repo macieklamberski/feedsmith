@@ -9,15 +9,18 @@ const hostname = 'https://feedsmith.dev'
 const og = vitepress({
   site: {
     hostname,
+    // biome-ignore lint/plugin/noBareNewUrl: Resolves a file next to this module, so this cannot throw.
     favicon: { file: new URL('../public/favicon.svg', import.meta.url) },
   },
   card: {
     header: {
       text: 'feedsmith',
+      // biome-ignore lint/plugin/noBareNewUrl: Resolves a file next to this module, so this cannot throw.
       icon: { file: new URL('../public/favicon.svg', import.meta.url) },
     },
     footer: {
       text: 'macieklamberski/feedsmith',
+      // biome-ignore lint/plugin/noBareNewUrl: Resolves a file next to this module, so this cannot throw.
       icon: { file: new URL('./github.svg', import.meta.url) },
     },
   },
