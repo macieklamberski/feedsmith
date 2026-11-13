@@ -2373,7 +2373,8 @@ describe('parseFeed', () => {
       name: 'Editor Name',
     }
 
-    expect(parseFeed(value)?.managingEditor).toEqual(expected)
+    const managingEditor = parseFeed(value)?.managingEditor
+    expect(managingEditor).toEqual(expected)
   })
 
   it('should parse webMaster with name and email (RFC 2822 format)', () => {
@@ -2383,7 +2384,8 @@ describe('parseFeed', () => {
       name: 'Webmaster Name',
     }
 
-    expect(parseFeed(value)?.webMaster).toEqual(expected)
+    const webMaster = parseFeed(value)?.webMaster
+    expect(webMaster).toEqual(expected)
   })
 })
 
