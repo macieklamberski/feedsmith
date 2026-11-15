@@ -25,6 +25,7 @@ export const createCaseInsensitiveGetter = (
 
     // biome-ignore lint/suspicious/noForIn: Plain object; avoids per-call Object.keys allocation.
     for (const key in value) {
+      // biome-ignore lint/plugin/useAnyOfOrSameText: The key is folded once before the loop, and isAnyOf would fold and trim both sides per key.
       if (key.toLowerCase() === lowerKey) {
         return value[key]
       }
