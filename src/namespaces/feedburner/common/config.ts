@@ -3,6 +3,10 @@ export const uris = [
   'https://rssnamespace.org/feedburner/ext/1.0',
   'http://rssnamespace.org/feedburner/ext/1.0/',
   'https://rssnamespace.org/feedburner/ext/1.0/',
+  'http://www.rssnamespace.org/feedburner/ext/1.0',
+  'https://www.rssnamespace.org/feedburner/ext/1.0',
+  'http://www.rssnamespace.org/feedburner/ext/1.0/',
+  'https://www.rssnamespace.org/feedburner/ext/1.0/',
 ]
 
 export const stopNodes = [

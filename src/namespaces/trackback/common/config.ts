@@ -3,6 +3,10 @@ export const uris = [
   'https://madskills.com/public/xml/rss/module/trackback/',
   'http://madskills.com/public/xml/rss/module/trackback',
   'https://madskills.com/public/xml/rss/module/trackback',
+  'http://www.madskills.com/public/xml/rss/module/trackback/',
+  'https://www.madskills.com/public/xml/rss/module/trackback/',
+  'http://www.madskills.com/public/xml/rss/module/trackback',
+  'https://www.madskills.com/public/xml/rss/module/trackback',
 ]
 
 export const stopNodes = ['*.trackback:ping', '*.trackback:about']

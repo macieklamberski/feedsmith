@@ -3,6 +3,10 @@ export const uris = [
   'https://madskills.com/public/xml/rss/module/pingback/',
   'http://madskills.com/public/xml/rss/module/pingback',
   'https://madskills.com/public/xml/rss/module/pingback',
+  'http://www.madskills.com/public/xml/rss/module/pingback/',
+  'https://www.madskills.com/public/xml/rss/module/pingback/',
+  'http://www.madskills.com/public/xml/rss/module/pingback',
+  'https://www.madskills.com/public/xml/rss/module/pingback',
 ]
 
 export const stopNodes = [
