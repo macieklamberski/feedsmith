@@ -68,7 +68,8 @@ export const retrieveItem: ParseUtilPartial<GooglePlayNs.Item> = (value) => {
   return trimObject(item)
 }
 
-// See: https://www.google.com/schemas/play-podcasts/1.0/play-podcasts.xsd, which names it newFeedUrl.
+// See: https://www.google.com/schemas/play-podcasts/1.0/play-podcasts.xsd, which names it
+// newFeedUrl.
 export const retrieveNewFeedUrl: ParseUtilPartial<string> = (value) => {
   return (
     parseSingularOf(value['googleplay:new-feed-url'], (value) =>
