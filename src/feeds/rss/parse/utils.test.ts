@@ -2348,6 +2348,24 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
+  it('should handle blogger namespace', () => {
+    const channel = {
+      title: { '#text': 'Example Blog' },
+      link: { '#text': 'https://example.blogspot.com/' },
+      'blogger:adultcontent': { '#text': 'true' },
+    }
+    const value = { channel }
+    const expected = {
+      title: 'Example Blog',
+      link: 'https://example.blogspot.com/',
+      blogger: {
+        adultContent: true,
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
   it('should handle georss namespace', () => {
     const channel = {
       title: { '#text': 'Location Feed' },
