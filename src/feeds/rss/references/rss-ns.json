@@ -994,6 +994,10 @@
         "floor": 4,
         "radius": 50000
       },
+      "icbm": {
+        "latitude": 37.8199,
+        "longitude": -122.4783
+      },
       "xml": {
         "lang": "en-US",
         "base": "http://example.org/item/1/"
@@ -1968,6 +1972,10 @@
     "elev": 360,
     "floor": 4,
     "radius": 50000
+  },
+  "icbm": {
+    "latitude": 39.0298,
+    "longitude": -77.07929
   },
   "xml": {
     "lang": "en",
