@@ -722,6 +722,24 @@
           ]
         }
       },
+      "imageNs": {
+        "item": {
+          "about": "https://example.org/images/item-1.png",
+          "resource": "https://example.org/item/1",
+          "width": 100,
+          "height": 65,
+          "dc": {
+            "titles": ["Example Item Image"]
+          }
+        },
+        "favicon": {
+          "about": "https://example.org/item/1/favicon.ico",
+          "size": "medium",
+          "dc": {
+            "titles": ["Example Item"]
+          }
+        }
+      },
       "googleplay": {
         "author": "Episode Guest Speaker",
         "description": "A detailed episode about advanced programming techniques",
@@ -1654,6 +1672,15 @@
         { "name": "technical", "weight": 7 },
         { "name": "demo", "weight": 2 }
       ]
+    }
+  },
+  "imageNs": {
+    "favicon": {
+      "about": "https://example.org/favicon.ico",
+      "size": "small",
+      "dc": {
+        "titles": ["Example Feed"]
+      }
     }
   },
   "googleplay": {
