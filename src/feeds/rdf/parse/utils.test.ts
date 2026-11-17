@@ -761,6 +761,23 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle annotate namespace', () => {
+    const value = {
+      title: { '#text': 'Re: Hello, World!' },
+      link: { '#text': 'http://example.com/discuss/2' },
+      'annotate:reference': { '@rdf:resource': 'http://example.com/discuss/1' },
+    }
+    const expected = {
+      title: 'Re: Hello, World!',
+      link: 'http://example.com/discuss/2',
+      annotate: {
+        reference: 'http://example.com/discuss/1',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle wfw namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },

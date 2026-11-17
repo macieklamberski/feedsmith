@@ -501,6 +501,9 @@
         "license": "https://creativecommons.org/licenses/by-sa/4.0/",
         "attributionName": "Jack Jackson"
       },
+      "annotate": {
+        "reference": "https://example.com/posts/understanding-xml-namespaces"
+      },
       "wfw": {
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
