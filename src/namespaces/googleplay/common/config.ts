@@ -1,10 +1,16 @@
 export const uris = [
-  'https://www.google.com/schemas/play-podcasts/1.0/', // Official URI
+  'http://www.google.com/schemas/play-podcasts/1.0', // Official URI
+  'https://www.google.com/schemas/play-podcasts/1.0/',
   'http://www.google.com/schemas/play-podcasts/1.0/',
   'https://www.google.com/schemas/play-podcasts/1.0',
-  'http://www.google.com/schemas/play-podcasts/1.0',
+  'http://google.com/schemas/play-podcasts/1.0',
+  'https://google.com/schemas/play-podcasts/1.0/',
+  'http://google.com/schemas/play-podcasts/1.0/',
+  'https://google.com/schemas/play-podcasts/1.0',
   'https://www.google.com/schemas/play-podcasts/1.0/play-podcasts.xsd',
   'http://www.google.com/schemas/play-podcasts/1.0/play-podcasts.xsd',
+  'https://google.com/schemas/play-podcasts/1.0/play-podcasts.xsd',
+  'http://google.com/schemas/play-podcasts/1.0/play-podcasts.xsd',
 ]
 
 export const stopNodes = [

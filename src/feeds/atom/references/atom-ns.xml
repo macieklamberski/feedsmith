@@ -7,7 +7,7 @@
       xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
       xmlns:psc="http://podlove.org/simple-chapters"
       xmlns:media="http://search.yahoo.com/mrss/"
-      xmlns:googleplay="https://www.google.com/schemas/play-podcasts/1.0/"
+      xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0"
       xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0"
       xmlns:arxiv="http://arxiv.org/schemas/atom"
       xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
