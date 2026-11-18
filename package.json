@@ -64,8 +64,8 @@
     "@types/bun": "^1.4.4",
     "kvalita": "^1.41.0",
     "ogier": "^1.8.1",
-    "trousse": "^3.4.0",
-    "tsdown": "0.23.4",
+    "trousse": "^3.16.0",
+    "tsdown": "0.23.7",
     "vitepress": "^2.0.0-alpha.21"
   }
 }
