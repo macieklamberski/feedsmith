@@ -243,6 +243,21 @@ describe('escapeCdataSections', () => {
     expect(escapeCdataSections(value)).toBe(value)
   })
 
+  it('should leave an unterminated CDATA section after a terminated one untouched', () => {
+    const value = '<![CDATA[a < b]]> and <![CDATA[c < d'
+    const expected = 'a &lt; b and <![CDATA[c < d'
+
+    expect(escapeCdataSections(value)).toBe(expected)
+  })
+
+  it('should leave a long run of unterminated CDATA openers untouched in linear time', () => {
+    const value = '<![CDATA['.repeat(50000)
+    const start = performance.now()
+
+    expect(escapeCdataSections(value)).toBe(value)
+    expect(performance.now() - start).toBeLessThan(500)
+  })
+
   it('should return a value without CDATA sections unchanged', () => {
     const value = '<p>a &lt; b</p>'
 

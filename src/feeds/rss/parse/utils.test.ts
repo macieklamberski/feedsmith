@@ -61,6 +61,27 @@ describe('stripMailto', () => {
 
     expect(stripMailto(value)).toBe(expected)
   })
+
+  it('should keep a query string that a line break follows', () => {
+    const value = 'mailto:john@example.com?subject=feedback\nJohn Doe'
+    const expected = 'john@example.com?subject=feedback\nJohn Doe'
+
+    expect(stripMailto(value)).toBe(expected)
+  })
+
+  it('should strip a query string on the last line', () => {
+    const value = 'mailto:John Doe\njohn@example.com?subject=feedback'
+    const expected = 'John Doe\njohn@example.com'
+
+    expect(stripMailto(value)).toBe(expected)
+  })
+
+  it('should treat a carriage return as a line break before the query string', () => {
+    const value = 'mailto:John Doe?\rjohn@example.com?subject=feedback'
+    const expected = 'John Doe?\rjohn@example.com'
+
+    expect(stripMailto(value)).toBe(expected)
+  })
 })
 
 describe('parsePerson', () => {
@@ -156,6 +177,31 @@ describe('parsePerson', () => {
       const expected = { email: 'john@example.com' }
 
       expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should parse an email whose domain starts with a dot', () => {
+      const value = 'john@.example.com'
+      const expected = { email: 'john@.example.com' }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should parse a long run of question marks before a line break in linear time', () => {
+      const value = `mailto:${'?'.repeat(100000)}\nJohn Doe`
+      const expected = { name: value }
+      const start = performance.now()
+
+      expect(parsePerson(value)).toEqual(expected)
+      expect(performance.now() - start).toBeLessThan(500)
+    })
+
+    it('should parse a long dotted value holding a second @ as a name in linear time', () => {
+      const value = `john@example${'.com'.repeat(100000)}.@..com`
+      const expected = { name: value }
+      const start = performance.now()
+
+      expect(parsePerson(value)).toEqual(expected)
+      expect(performance.now() - start).toBeLessThan(500)
     })
   })
 
@@ -617,6 +663,25 @@ describe('parsePerson', () => {
         expect(parsePerson(value)).toEqual(expected)
       })
 
+      it('should not close a bracket with a closer of another type', () => {
+        const value = 'John (Doe] <john@example.com>'
+        const expected = {
+          name: 'John (Doe]',
+          email: 'john@example.com',
+        }
+
+        expect(parsePerson(value)).toEqual(expected)
+      })
+
+      it('should preserve a long run of unmatched parentheses in linear time', () => {
+        const value = `${'( '.repeat(99999)}(`
+        const expected = { name: value }
+        const start = performance.now()
+
+        expect(parsePerson(value)).toEqual(expected)
+        expect(performance.now() - start).toBeLessThan(500)
+      })
+
       it('should skip empty brackets and extract email', () => {
         const value = 'John () <john@example.com>'
         const expected = {
@@ -774,6 +839,42 @@ describe('parsePerson', () => {
       }
 
       expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should strip a separator ahead of the name when the email comes first', () => {
+      const value = 'john@example.com - John Doe'
+      const expected = {
+        name: 'John Doe',
+        email: 'john@example.com',
+      }
+
+      expect(parsePerson(value)).toEqual(expected)
+    })
+
+    it('should parse a long run of dots after www. in linear time', () => {
+      const link = `www.${'.'.repeat(200000)}`
+      const value = `${link} John`
+      const expected = {
+        name: 'John',
+        link,
+      }
+      const start = performance.now()
+
+      expect(parsePerson(value)).toEqual(expected)
+      expect(performance.now() - start).toBeLessThan(500)
+    })
+
+    it('should keep a long run of separators inside the name in linear time', () => {
+      const name = `John${','.repeat(200000)}Doe`
+      const value = `john@example.com ${name}`
+      const expected = {
+        name,
+        email: 'john@example.com',
+      }
+      const start = performance.now()
+
+      expect(parsePerson(value)).toEqual(expected)
+      expect(performance.now() - start).toBeLessThan(500)
     })
   })
 })

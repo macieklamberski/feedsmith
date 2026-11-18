@@ -75,25 +75,30 @@ import { retrieveItem as retrieveWfwItem } from '../../../namespaces/wfw/parse/u
 import { retrieveItemOrFeed as retrieveXmlItemOrFeed } from '../../../namespaces/xml/parse/utils.js'
 import type { ParseUtilPartial, RssFeed } from '../common/types.js'
 
-const emailRegex = /^[^\s@()<>[\]]+@[^\s@()<>[\]]+\.[^\s@()<>[\]]+$/
-const urlRegex = /^(?:https?:\/\/|www\.)[^\s]+\.[^\s]+$/
+// The run ahead of the required dot matches no dot: an open run there is quadratic on a long value.
+const emailRegex = /^[^\s@()<>[\]]+@[^\s@()<>[\]][^\s@()<>[\].]*\.[^\s@()<>[\]]+$/
+const urlRegex = /^(?:https?:\/\/|www\.)[^\s][^\s.]*\.[^\s]+$/
 const mailtoRegex = /^mailto:/i
 const hasBracketsRegex = /[<[(]/
 const whitespaceRegex = /\s+/
-const commonSeparatorsRegex = /^[\s,\-|/:;]+|[\s,\-|/:;]+$/g
-const mailtoQueryRegex = /\?.*$/
+// Anchored at the start: a regex anchored only at its end retries from every position.
+const leadingSeparatorsRegex = /^[\s,\-|/:;]+/
+const trailingSeparatorsRegex = /^([\s\S]*[^\s,\-|/:;])[\s,\-|/:;]*$/
+const mailtoQueryRegex =
+  /^(?<lines>[\s\S]*[\n\r\u2028\u2029])?(?<address>[^?\n\r\u2028\u2029]*)\?.*$/
 
 export const stripMailto = (value: string): string => {
   const stripped = value.replace(mailtoRegex, '')
 
-  if (stripped !== value) {
-    return stripped.replace(mailtoQueryRegex, '')
+  if (stripped !== value && stripped.includes('?')) {
+    return stripped.replace(mailtoQueryRegex, '$<lines>$<address>')
   }
 
   return stripped
 }
 
 const openBrackets = ['<', '(', '[']
+const closeBrackets = ['>', ')', ']']
 
 const closeBracketFor = (char: string) => {
   if (char === '<') {
@@ -146,8 +151,9 @@ const parseUnbracketedPerson = (raw: string): RssFeed.Person | undefined => {
     return { name: raw }
   }
 
+  const joinedName = nameParts.join(' ').replace(leadingSeparatorsRegex, '')
   const person = {
-    name: parseString(nameParts.join(' ').replace(commonSeparatorsRegex, '')),
+    name: parseString(joinedName.replace(trailingSeparatorsRegex, '$1')),
     email,
     link,
   }
@@ -159,6 +165,34 @@ const parseBracketedPerson = (raw: string): RssFeed.Person | undefined => {
   const person: RssFeed.Person = {}
   const nameParts: Array<string> = []
   const length = raw.length
+
+  // A typed array: V8 copies a plain array on each write far past its end, which is quadratic
+  // on nested brackets. 0 marks an opener without a closer, since no closer sits at index 0.
+  const closeIndexes = new Int32Array(length)
+  const unclosedIndexes: Record<string, Array<number>> = {
+    '>': [],
+    ')': [],
+    ']': [],
+  }
+
+  for (let index = 0; index < length; index++) {
+    const char = raw[index]
+
+    if (openBrackets.includes(char)) {
+      unclosedIndexes[closeBracketFor(char)].push(index)
+      continue
+    }
+
+    if (!closeBrackets.includes(char)) {
+      continue
+    }
+
+    const openIndex = unclosedIndexes[char].pop()
+
+    if (openIndex !== undefined) {
+      closeIndexes[openIndex] = index
+    }
+  }
 
   let hasUnbracketedName = false
   let i = 0
@@ -176,22 +210,12 @@ const parseBracketedPerson = (raw: string): RssFeed.Person | undefined => {
       closeBracket = closeBracketFor(char)
 
       const start = i + 1
-      let depth = 1
-      let end = start
+      const end = closeIndexes[i]
 
-      while (end < length && depth > 0) {
-        if (raw[end] === openBracket) {
-          depth++
-        } else if (raw[end] === closeBracket) {
-          depth--
-        }
-        end++
-      }
-
-      if (depth === 0) {
+      if (end > 0) {
         isBracketed = true
-        chunk = parseString(raw.slice(start, end - 1))
-        i = end
+        chunk = parseString(raw.slice(start, end))
+        i = end + 1
       } else {
         // Unmatched bracket: treat as literal text.
         const literalStart = i
