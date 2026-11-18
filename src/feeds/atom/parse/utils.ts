@@ -246,9 +246,18 @@ export const escapeCdataSections = (value: Unreliable): Unreliable => {
     return value
   }
 
-  return value.replace(cdataSectionRegex, (_, content: string) => {
+  // `includes` goes first: `lastIndexOf` walks backward, far slower on a value without `]]>`.
+  if (!value.includes(']]>')) {
+    return value
+  }
+
+  const closedEnd = value.lastIndexOf(']]>') + 3
+  const closed = value.slice(0, closedEnd)
+  const escaped = closed.replace(cdataSectionRegex, (_, content: string) => {
     return content.replace(ampersandRegex, '&amp;').replace(lessThanRegex, '&lt;')
   })
+
+  return `${escaped}${value.slice(closedEnd)}`
 }
 
 // Inside a genuine xhtml construct an escaped `&lt;` stands for that character and not for markup
