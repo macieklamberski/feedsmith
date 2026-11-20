@@ -28,6 +28,7 @@ Atom is a syndication format based on XML that provides a robust framework for w
         <a href="/reference/namespaces/media">Media RSS</a>,
         <a href="/reference/namespaces/googleplay">Google Play Podcast</a>,
         <a href="/reference/namespaces/feedburner">FeedBurner</a>,
+        <a href="/reference/namespaces/webfeeds">WebFeeds</a>,
         <a href="/reference/namespaces/arxiv">arXiv</a>,
         <a href="/reference/namespaces/opensearch">OpenSearch</a>,
         <a href="/reference/namespaces/prism">PRISM</a>,

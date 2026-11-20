@@ -35,6 +35,7 @@ import type { SpotifyNs } from '../../../namespaces/spotify/common/types.js'
 import type { SyNs } from '../../../namespaces/sy/common/types.js'
 import type { ThrNs } from '../../../namespaces/thr/common/types.js'
 import type { TrackbackNs } from '../../../namespaces/trackback/common/types.js'
+import type { WebfeedsNs } from '../../../namespaces/webfeeds/common/types.js'
 import type { WfwNs } from '../../../namespaces/wfw/common/types.js'
 import type { XmlNs } from '../../../namespaces/xml/common/types.js'
 
@@ -152,6 +153,7 @@ export namespace RssFeed {
       acast?: AcastNs.Item
       rawvoice?: RawVoiceNs.Item<TStrict>
       feedburner?: FeedBurnerNs.Item
+      webfeeds?: WebfeedsNs.Item
       arxiv?: ArxivNs.Entry
       prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
@@ -204,6 +206,7 @@ export namespace RssFeed {
       rawvoice?: RawVoiceNs.Feed<TDate, TStrict>
       feedburner?: FeedBurnerNs.Feed<TStrict>
       feedpress?: FeedPressNs.Feed
+      webfeeds?: WebfeedsNs.Feed
       opensearch?: OpenSearchNs.Feed<TStrict>
       prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed

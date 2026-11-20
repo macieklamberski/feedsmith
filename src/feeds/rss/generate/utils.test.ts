@@ -1765,6 +1765,45 @@ describe('generateFeed', () => {
     expect(generateFeed(value)).toEqual(expected)
   })
 
+  it('should generate RSS feed with webfeeds namespace properties', () => {
+    const value = {
+      title: 'Branded Feed',
+      description: 'A feed with Webfeeds properties',
+      webfeeds: {
+        icon: 'https://example.com/images/icon.png',
+        accentColor: 'BE4825',
+        related: { layout: 'card', target: 'browser' },
+      },
+      items: [
+        {
+          title: 'Item',
+          webfeeds: { featuredImage: { url: 'https://example.com/images/featured.jpg' } },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:webfeeds': 'http://webfeeds.org/rss/1.0',
+        channel: {
+          title: 'Branded Feed',
+          description: 'A feed with Webfeeds properties',
+          'webfeeds:icon': 'https://example.com/images/icon.png',
+          'webfeeds:accentColor': 'BE4825',
+          'webfeeds:related': { '@layout': 'card', '@target': 'browser' },
+          item: [
+            {
+              title: 'Item',
+              'webfeeds:featuredImage': { '@url': 'https://example.com/images/featured.jpg' },
+            },
+          ],
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
   it('should generate RSS feed with arxiv namespace properties', () => {
     const value = {
       title: 'arXiv Listing',
