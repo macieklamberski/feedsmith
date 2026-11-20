@@ -17,6 +17,10 @@ import {
   stopNodes as blogchannelStopNodes,
   uris as blogchannelUris,
 } from '../namespaces/blogchannel/common/config.js'
+import {
+  stopNodes as castboxStopNodes,
+  uris as castboxUris,
+} from '../namespaces/castbox/common/config.js'
 import { stopNodes as ccStopNodes, uris as ccUris } from '../namespaces/cc/common/config.js'
 import {
   stopNodes as contentStopNodes,
@@ -142,6 +146,7 @@ export const namespaceUris = {
   spotify: spotifyUris,
   acast: acastUris,
   rawvoice: rawvoiceUris,
+  castbox: castboxUris,
   feedburner: feedburnerUris,
   feedpress: feedpressUris,
   arxiv: arxivUris,
@@ -184,6 +189,7 @@ export const namespaceStopNodes = [
   ...arxivStopNodes,
   ...atomStopNodes,
   ...blogchannelStopNodes,
+  ...castboxStopNodes,
   ...ccStopNodes,
   ...contentStopNodes,
   ...creativecommonsStopNodes,
