@@ -56,6 +56,7 @@ import {
   stopNodes as mediaStopNodes,
   uris as mediaUris,
 } from '../namespaces/media/common/config.js'
+import { stopNodes as opdsStopNodes, uris as opdsUris } from '../namespaces/opds/common/config.js'
 import {
   stopNodes as opensearchStopNodes,
   uris as opensearchUris,
@@ -158,6 +159,7 @@ export const namespaceUris = {
   source: sourceUris,
   blogChannel: blogchannelUris,
   yt: ytUris,
+  opds: opdsUris,
   geo: geoUris,
   georss: georssUris,
   rdf: rdfUris,
@@ -196,6 +198,7 @@ export const namespaceStopNodes = [
   ...googleplayStopNodes,
   ...itunesStopNodes,
   ...mediaStopNodes,
+  ...opdsStopNodes,
   ...opensearchStopNodes,
   ...pingbackStopNodes,
   ...podcastStopNodes,
