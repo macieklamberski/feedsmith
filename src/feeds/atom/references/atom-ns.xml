@@ -20,6 +20,7 @@
       xmlns:admin="http://webns.net/mvcb/"
       xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
       xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+      xmlns:byline="https://bylinespec.org/1.0"
       xmlns:yt="http://www.youtube.com/xml/schemas/2015"
       xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
       xmlns:georss="http://www.georss.org/georss"
@@ -385,6 +386,28 @@
 
   <!-- Pingback Namespace: Feed Level Tags -->
   <pingback:to>https://example.com/pingback-service</pingback:to>
+
+  <!-- Byline Namespace: Feed Level Tags -->
+  <byline:contributors>
+    <byline:person id="annie">
+      <byline:name>Annie Park</byline:name>
+      <byline:context>Designer and photographer.</byline:context>
+      <byline:url>https://annie.example.com</byline:url>
+      <byline:avatar>https://annie.example.com/avatar.jpg</byline:avatar>
+      <byline:profile href="https://mastodon.social/@annie" rel="mastodon"/>
+      <byline:now>https://annie.example.com/now</byline:now>
+      <byline:uses>https://annie.example.com/uses</byline:uses>
+      <byline:theme color="#4A90A4" accent="#FF6B6B" style="light"/>
+    </byline:person>
+  </byline:contributors>
+  <byline:organizations>
+    <byline:org id="ttr">
+      <byline:name>The Tech Review</byline:name>
+      <byline:url>https://thetechreview.example.com</byline:url>
+      <byline:type>news</byline:type>
+      <byline:theme color="#1A1A2E" accent="#E94560" style="dark"/>
+    </byline:org>
+  </byline:organizations>
 
   <!-- YouTube Namespace: Feed Level Tags -->
   <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
@@ -797,6 +820,16 @@
     <trackback:ping>https://example.com/trackback/123</trackback:ping>
     <trackback:about>https://blog1.com/trackback/456</trackback:about>
     <trackback:about>https://blog2.com/trackback/789</trackback:about>
+
+    <!-- Byline Namespace: Entry Level Tags -->
+    <byline:author ref="annie"/>
+    <byline:role>staff</byline:role>
+    <byline:perspective>reporting</byline:perspective>
+    <byline:affiliation>
+      <byline:org-ref ref="ttr"/>
+      <byline:relationship>employed</byline:relationship>
+      <byline:title>Senior Engineer</byline:title>
+    </byline:affiliation>
 
     <!-- YouTube Namespace: Entry Level Tags -->
     <yt:videoId>dQw4w9WgXcQ</yt:videoId>
