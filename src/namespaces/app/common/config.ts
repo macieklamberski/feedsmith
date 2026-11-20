@@ -9,4 +9,6 @@ export const uris = [
   'https://w3.org/2007/app/',
 ]
 
-export const stopNodes = ['*.app:draft', '*.app:edited']
+// The collection title is an Atom text construct, so its inline xhtml markup must reach parseText
+// as raw text.
+export const stopNodes = ['*.app:draft', '*.app:edited', '*.app:collection.title']
