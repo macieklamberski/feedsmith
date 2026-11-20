@@ -1937,6 +1937,35 @@ describe('parseFeed', () => {
     expect(parseFeed(value)).toEqual(expected)
   })
 
+  it('should handle fh namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'fh:complete': '',
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      fh: {
+        complete: true,
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
   it('should handle admin namespace', () => {
     const value = {
       channel: {
