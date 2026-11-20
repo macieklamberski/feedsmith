@@ -698,6 +698,9 @@
           "draft": true
         }
       },
+      "fa": {
+        "expires": "2024-03-16T14:30:00.000Z"
+      },
       "wfw": {
         "comment": "https://example.com/posts/understanding-xml-namespaces/comment",
         "commentRss": "https://example.com/posts/understanding-xml-namespaces/comments/feed"
@@ -1421,6 +1424,9 @@
   },
   "creativeCommons": {
     "licenses": ["http://creativecommons.org/licenses/by-nc-nd/2.0/"]
+  },
+  "fa": {
+    "maxAge": 10800000
   },
   "admin": {
     "errorReportsTo": "mailto:webmaster@example.com",
