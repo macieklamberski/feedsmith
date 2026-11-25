@@ -136,7 +136,7 @@ export const unwrapXhtmlDiv = (value: Unreliable): Unreliable => {
       continue
     }
 
-    if (isString(child['#text']) && !child['#text'].trim()) {
+    if (isString(child['#text']) && !isNonEmptyString(child['#text'])) {
       continue
     }
 

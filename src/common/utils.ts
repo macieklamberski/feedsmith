@@ -13,6 +13,7 @@ import {
   isPresent,
   isString,
   isValidDate,
+  parseJson,
   trimObject,
 } from 'trousse'
 import type {
@@ -883,11 +884,9 @@ export const parseJsonObject = (value: unknown): unknown => {
   // JSON.parse rejects a leading BOM, which UTF-8 feed exports carry.
   const json = value.startsWith('\ufeff') ? value.slice(1) : value
 
-  try {
-    const parsed = JSON.parse(json)
+  const parsed = parseJson(json)
 
-    if (isPlainObject(parsed)) {
-      return parsed
-    }
-  } catch {}
+  if (isPlainObject(parsed)) {
+    return parsed
+  }
 }
