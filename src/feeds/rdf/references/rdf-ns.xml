@@ -18,6 +18,7 @@
   xmlns:admin="http://webns.net/mvcb/"
   xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
   xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+  xmlns:byline="https://bylinespec.org/1.0"
   xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
   xmlns:georss="http://www.georss.org/georss"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -249,6 +250,28 @@
     <!-- Admin Namespace: Channel Level Tags -->
     <admin:errorReportsTo rdf:resource="mailto:webmaster@example.com"/>
     <admin:generatorAgent rdf:resource="http://www.movabletype.org/?v=3.2"/>
+
+    <!-- Byline Namespace: Channel Level Tags -->
+    <byline:contributors>
+      <byline:person id="annie">
+        <byline:name>Annie Park</byline:name>
+        <byline:context>Designer and photographer.</byline:context>
+        <byline:url>https://annie.example.com</byline:url>
+        <byline:avatar>https://annie.example.com/avatar.jpg</byline:avatar>
+        <byline:profile href="https://mastodon.social/@annie" rel="mastodon"/>
+        <byline:now>https://annie.example.com/now</byline:now>
+        <byline:uses>https://annie.example.com/uses</byline:uses>
+        <byline:theme color="#4A90A4" accent="#FF6B6B" style="light"/>
+      </byline:person>
+    </byline:contributors>
+    <byline:organizations>
+      <byline:org id="ttr">
+        <byline:name>The Tech Review</byline:name>
+        <byline:url>https://thetechreview.example.com</byline:url>
+        <byline:type>news</byline:type>
+        <byline:theme color="#1A1A2E" accent="#E94560" style="dark"/>
+      </byline:org>
+    </byline:organizations>
 
     <!-- W3C Basic Geo Namespace: Channel Level Tags -->
     <geo:lat>37.7749</geo:lat>
@@ -504,6 +527,16 @@
     <trackback:ping rdf:resource="https://example.com/trackback/123"/>
     <trackback:about rdf:resource="https://blog1.com/trackback/456"/>
     <trackback:about rdf:resource="https://blog2.com/trackback/789"/>
+
+    <!-- Byline Namespace: Item Level Tags -->
+    <byline:author ref="annie"/>
+    <byline:role>staff</byline:role>
+    <byline:perspective>reporting</byline:perspective>
+    <byline:affiliation>
+      <byline:org-ref ref="ttr"/>
+      <byline:relationship>employed</byline:relationship>
+      <byline:title>Senior Engineer</byline:title>
+    </byline:affiliation>
 
     <!-- W3C Basic Geo Namespace: Item Level Tags -->
     <geo:lat>37.8199</geo:lat>

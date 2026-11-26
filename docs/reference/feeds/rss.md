@@ -45,6 +45,7 @@ RSS (Really Simple Syndication) is one of the most widely used web feed formats.
         <a href="/reference/namespaces/admin">Administrative</a>,
         <a href="/reference/namespaces/pingback">Pingback</a>,
         <a href="/reference/namespaces/trackback">Trackback</a>,
+        <a href="/reference/namespaces/byline">Byline</a>,
         <a href="/reference/namespaces/source">Source</a>,
         <a href="/reference/namespaces/blogchannel">blogChannel</a>,
         <a href="/reference/namespaces/geo">W3C Basic Geo</a>,
