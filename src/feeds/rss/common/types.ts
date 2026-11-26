@@ -21,6 +21,7 @@ import type { FeedPressNs } from '../../../namespaces/feedpress/common/types.js'
 import type { GeoNs } from '../../../namespaces/geo/common/types.js'
 import type { GeoRssNs } from '../../../namespaces/georss/common/types.js'
 import type { GooglePlayNs } from '../../../namespaces/googleplay/common/types.js'
+import type { IcbmNs } from '../../../namespaces/icbm/common/types.js'
 import type { ItunesNs } from '../../../namespaces/itunes/common/types.js'
 import type { MediaNs } from '../../../namespaces/media/common/types.js'
 import type { OpenSearchNs } from '../../../namespaces/opensearch/common/types.js'
@@ -163,6 +164,7 @@ export namespace RssFeed {
       sourceNs?: SourceNs.Item<TStrict>
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
+      icbm?: IcbmNs.ItemOrFeed
       xml?: XmlNs.ItemOrFeed
     },
     TStrict
@@ -214,6 +216,7 @@ export namespace RssFeed {
       blogChannel?: BlogChannelNs.Feed
       geo?: GeoNs.ItemOrFeed
       georss?: GeoRssNs.ItemOrFeed<TStrict>
+      icbm?: IcbmNs.ItemOrFeed
       xml?: XmlNs.ItemOrFeed
     },
     TStrict

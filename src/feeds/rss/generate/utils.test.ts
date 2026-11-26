@@ -1131,6 +1131,23 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with icbm namespace properties', () => {
+    const value = {
+      title: 'Item with icbm namespace',
+      icbm: {
+        latitude: 33.92537,
+        longitude: -115.92887,
+      },
+    }
+    const expected = {
+      title: 'Item with icbm namespace',
+      'icbm:latitude': 33.92537,
+      'icbm:longitude': -115.92887,
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should handle empty arrays', () => {
     const value = {
       title: 'Item with empty arrays',
@@ -2109,6 +2126,47 @@ describe('generateFeed', () => {
           description: 'A feed with geographic data',
           'georss:point': '45.256 -71.92',
           'georss:featureName': 'Boston',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with icbm namespace properties', () => {
+    const value = {
+      title: 'Feed with icbm namespace',
+      description: 'A feed with ICBM coordinates',
+      icbm: {
+        latitude: 39.0298,
+        longitude: -77.07929,
+      },
+      items: [
+        {
+          title: 'Item with icbm namespace',
+          icbm: {
+            latitude: 68.3495046,
+            longitude: 18.8304306,
+          },
+        },
+      ],
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:icbm': 'http://postneo.com/icbm',
+        channel: {
+          title: 'Feed with icbm namespace',
+          description: 'A feed with ICBM coordinates',
+          'icbm:latitude': 39.0298,
+          'icbm:longitude': -77.07929,
+          item: [
+            {
+              title: 'Item with icbm namespace',
+              'icbm:latitude': 68.3495046,
+              'icbm:longitude': 18.8304306,
+            },
+          ],
         },
       },
     }

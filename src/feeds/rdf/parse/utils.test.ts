@@ -797,6 +797,25 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle icbm namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'icbm:latitude': { '#text': '33.92537' },
+      'icbm:longitude': { '#text': '-115.92887' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      icbm: {
+        latitude: 33.92537,
+        longitude: -115.92887,
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle rdf namespace attributes', () => {
     const value = {
       '@rdf:about': 'http://example.com/item/1',
@@ -1995,6 +2014,37 @@ describe('parseFeed', () => {
       ],
       georss: {
         point: { lat: 40.689, lng: -74.044 },
+      },
+    }
+
+    expect(parseFeed(value)).toEqual(expected)
+  })
+
+  it('should handle icbm namespace', () => {
+    const value = {
+      channel: {
+        title: { '#text': 'Example Feed' },
+        'icbm:latitude': { '#text': '39.02980' },
+        'icbm:longitude': { '#text': '-77.07929' },
+      },
+      item: [
+        {
+          title: { '#text': 'Item 1' },
+          link: { '#text': 'https://example.com/item1' },
+        },
+      ],
+    }
+    const expected = {
+      title: 'Example Feed',
+      items: [
+        {
+          title: 'Item 1',
+          link: 'https://example.com/item1',
+        },
+      ],
+      icbm: {
+        latitude: 39.0298,
+        longitude: -77.07929,
       },
     }
 
