@@ -20,6 +20,7 @@
       xmlns:admin="http://webns.net/mvcb/"
       xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
       xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+      xmlns:blogger="http://schemas.google.com/blogger/2008"
       xmlns:yt="http://www.youtube.com/xml/schemas/2015"
       xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
       xmlns:georss="http://www.georss.org/georss"
@@ -385,6 +386,9 @@
 
   <!-- Pingback Namespace: Feed Level Tags -->
   <pingback:to>https://example.com/pingback-service</pingback:to>
+
+  <!-- Blogger Namespace: Feed Level Tags -->
+  <blogger:adultContent>true</blogger:adultContent>
 
   <!-- YouTube Namespace: Feed Level Tags -->
   <yt:channelId>UCuAXFkgsw1L7xaCfnd5JJOw</yt:channelId>
