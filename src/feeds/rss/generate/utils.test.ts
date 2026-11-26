@@ -944,6 +944,23 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with castbox namespace properties', () => {
+    const value = {
+      title: 'Item with Castbox properties',
+      castbox: {
+        tid: '211277615',
+        episodePremium: true,
+      },
+    }
+    const expected = {
+      title: 'Item with Castbox properties',
+      'castbox:tid': '211277615',
+      'castbox:episode_premium': 'yes',
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with prism namespace properties', () => {
     const value = {
       title: 'Item with PRISM namespace',
@@ -1690,6 +1707,33 @@ describe('generateFeed', () => {
             '#text': 'TV-PG',
           },
           'rawvoice:frequency': 'weekly',
+        },
+      },
+    }
+
+    expect(generateFeed(value)).toEqual(expected)
+  })
+
+  it('should generate RSS feed with castbox namespace properties', () => {
+    const value = {
+      title: 'Feed with Castbox namespace',
+      description: 'A feed with Castbox properties',
+      castbox: {
+        uid: '17834af78de544b6957678a2918ef04c',
+        pid: '1318014',
+        type: 'private',
+      },
+    }
+    const expected = {
+      rss: {
+        '@version': '2.0',
+        '@xmlns:castbox': 'http://castbox.fm/dtds/podcast-1.0.dtd',
+        channel: {
+          title: 'Feed with Castbox namespace',
+          description: 'A feed with Castbox properties',
+          'castbox:uid': '17834af78de544b6957678a2918ef04c',
+          'castbox:pid': '1318014',
+          'castbox:type': 'private',
         },
       },
     }
