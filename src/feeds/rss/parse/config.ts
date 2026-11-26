@@ -1,5 +1,21 @@
 import { namespaceStopNodes } from '../../../common/config.js'
 
+// A podcast:liveItem takes the same children as an item.
+const itemStopNodes = [
+  'title',
+  'link',
+  'description',
+  // INFO: Added support for nested *.name under author to support cases as described here:
+  // https://github.com/macieklamberski/feedsmith/issues/22.
+  'author.name',
+  'category',
+  'comments',
+  'enclosure',
+  'guid',
+  'pubdate',
+  'source',
+]
+
 // These elements can appear both inside <channel> and as direct children of <rss> in malformed
 // feeds, so stop nodes are generated for both paths.
 const sharedStopNodes = [
@@ -13,18 +29,8 @@ const sharedStopNodes = [
   'textinput.description',
   'textinput.name',
   'textinput.link',
-  'item.title',
-  'item.link',
-  'item.description',
-  // INFO: Added support for nested *.name under author to support cases as described here:
-  // https://github.com/macieklamberski/feedsmith/issues/22.
-  'item.author.name',
-  'item.category',
-  'item.comments',
-  'item.enclosure',
-  'item.guid',
-  'item.pubdate',
-  'item.source',
+  ...itemStopNodes.map((node) => `item.${node}`),
+  ...itemStopNodes.map((node) => `podcast:liveitem.${node}`),
 ]
 
 export const stopNodes = [
