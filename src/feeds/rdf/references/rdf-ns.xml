@@ -14,6 +14,7 @@
   xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
   xmlns:prism="http://prismstandard.org/namespaces/basic/2.0/"
   xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:annotate="http://purl.org/rss/1.0/modules/annotate/"
   xmlns:wfw="http://wellformedweb.org/CommentAPI/"
   xmlns:admin="http://webns.net/mvcb/"
   xmlns:pingback="http://madskills.com/public/xml/rss/module/pingback/"
@@ -489,6 +490,9 @@
     <!-- ccREL Namespace: Item Level Tags -->
     <cc:license rdf:resource="https://creativecommons.org/licenses/by-sa/4.0/"/>
     <cc:attributionName>Jack Jackson</cc:attributionName>
+
+    <!-- Annotation Namespace: Item Level Tags -->
+    <annotate:reference rdf:resource="https://example.com/posts/understanding-xml-namespaces"/>
 
     <!-- Well-Formed Web Comment API Namespace: Item Level Tags -->
     <wfw:comment>https://example.com/posts/understanding-xml-namespaces/comment</wfw:comment>

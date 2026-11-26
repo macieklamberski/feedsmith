@@ -1012,6 +1012,23 @@ describe('generateItem', () => {
     expect(generateItem(value)).toEqual(expected)
   })
 
+  it('should generate item with annotate namespace properties', () => {
+    const value = {
+      title: 'Item with annotation namespace',
+      annotate: {
+        reference: 'http://example.com/discuss/1',
+      },
+    }
+    const expected = {
+      title: 'Item with annotation namespace',
+      'annotate:reference': {
+        '@rdf:resource': 'http://example.com/discuss/1',
+      },
+    }
+
+    expect(generateItem(value)).toEqual(expected)
+  })
+
   it('should generate item with wfw namespace properties', () => {
     const value = {
       title: 'Item with wfw namespace',
