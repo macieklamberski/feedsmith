@@ -780,6 +780,25 @@ describe('parseItem', () => {
     expect(parseItem(value)).toEqual(expected)
   })
 
+  it('should handle activity namespace', () => {
+    const value = {
+      title: { '#text': 'Example Entry' },
+      link: { '#text': 'http://example.com' },
+      'activity:verb': { '#text': 'http://activitystrea.ms/schema/1.0/post' },
+      'activity:object-type': { '#text': 'http://activitystrea.ms/schema/1.0/blog-entry' },
+    }
+    const expected = {
+      title: 'Example Entry',
+      link: 'http://example.com',
+      activity: {
+        verb: 'http://activitystrea.ms/schema/1.0/post',
+        objectType: 'http://activitystrea.ms/schema/1.0/blog-entry',
+      },
+    }
+
+    expect(parseItem(value)).toEqual(expected)
+  })
+
   it('should handle georss namespace', () => {
     const value = {
       title: { '#text': 'Example Entry' },

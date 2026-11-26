@@ -39,6 +39,7 @@ Atom is a syndication format based on XML that provides a robust framework for w
         <a href="/reference/namespaces/admin">Administrative</a>,
         <a href="/reference/namespaces/pingback">Pingback</a>,
         <a href="/reference/namespaces/trackback">Trackback</a>,
+        <a href="/reference/namespaces/activity">Activity Streams</a>,
         <a href="/reference/namespaces/yt">YouTube</a>,
         <a href="/reference/namespaces/geo">W3C Basic Geo</a>,
         <a href="/reference/namespaces/georss">GeoRSS Simple</a>,

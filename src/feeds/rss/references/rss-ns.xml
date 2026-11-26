@@ -30,6 +30,7 @@
      xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
      xmlns:source="http://source.scripting.com/"
      xmlns:blogChannel="http://backend.userland.com/blogChannelModule"
+     xmlns:activity="http://activitystrea.ms/spec/1.0/"
      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
      xmlns:georss="http://www.georss.org/georss"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -964,6 +965,10 @@
       <source:linkFull>http://example.org/item/1/understanding-xml-namespaces-complete-guide</source:linkFull>
       <source:inReplyTo isPermaLink="false">did:plc:iwl32vekohccji6khfdt3clw</source:inReplyTo>
       <source:comments count="2" feedUrl="http://example.org/item/1/comments.xml"/>
+
+      <!-- Activity Streams Namespace: Item Level Tags -->
+      <activity:verb>http://activitystrea.ms/schema/1.0/post</activity:verb>
+      <activity:object-type>http://activitystrea.ms/schema/1.0/blog-entry</activity:object-type>
 
       <!-- W3C Basic Geo Namespace: Item Level Tags -->
       <geo:lat>37.8199</geo:lat>
