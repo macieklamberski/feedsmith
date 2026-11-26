@@ -181,6 +181,7 @@ export namespace AtomFeed {
       prism?: PrismNs.ItemOrFeed<TDate>
       cc?: CcNs.ItemOrFeed
       creativeCommons?: CreativeCommonsNs.ItemOrFeed
+      app?: AppNs.Feed<TStrict>
       admin?: AdminNs.Feed
       pingback?: PingbackNs.Feed
       yt?: YtNs.Feed
