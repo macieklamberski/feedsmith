@@ -16,6 +16,7 @@ type NsKeys =
   | 'googleplay'
   | 'itunes'
   | 'media'
+  | 'opds'
   | 'opensearch'
   | 'pingback'
   | 'psc'
