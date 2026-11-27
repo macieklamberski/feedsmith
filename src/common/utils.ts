@@ -15,6 +15,7 @@ import {
   isValidDate,
   parseJson,
   trimObject,
+  trimString,
 } from 'trousse'
 import type {
   DateAny,
@@ -203,9 +204,7 @@ export const parseString: ParseUtilExact<string> = (value) => {
       return
     }
 
-    const string = decodeWithCdata(stripComments(value)).trim()
-
-    return string || undefined
+    return trimString(decodeWithCdata(stripComments(value)))
   }
 
   if (isNumber(value)) {
@@ -223,9 +222,7 @@ export const parseVerbatimString: ParseUtilExact<string> = (value) => {
       return
     }
 
-    const string = value.trim()
-
-    return string || undefined
+    return trimString(value)
   }
 
   if (isNumber(value)) {

@@ -77,7 +77,7 @@ export const parseDuration: ParseUtilPartial<number> = (value) => {
   }
 
   // Handle HH:MM:SS and MM:SS format.
-  const match = string.match(durationRegex)
+  const match = durationRegex.exec(string)
 
   if (match) {
     const [, hours, minutes, seconds] = match
